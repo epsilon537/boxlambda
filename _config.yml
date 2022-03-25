@@ -22,7 +22,7 @@ title: BoxLambda
 email: ruben.lysens2@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   An FPGA based microcomputer sandbox for software and RTL experimentation
-baseurl: "boxlambda" # the subpath of your site, e.g. /blog
+#baseurl: "boxlambda" # the subpath of your site, e.g. /blog
 url: "epsilon537.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
 github_username:  epsilon537
