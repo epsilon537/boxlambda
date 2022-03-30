@@ -10,24 +10,24 @@ permalink: /documentation/
 Terms and Abbreviations
 -----------------------
 This section provides clarification for some of the more ambiguous terms and abbreviations used below.
-- **Console** : The physical terminal consisting of a screen, a keyboard and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
+- **Console**: The physical terminal consisting of a screen, a keyboard and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
 
-- **Hacker/Hacking** : See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
+- **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
 
-- **(Software) Image** : Snapshot of computer memory contents stored as a file.
+- **(Software) Image**: Snapshot of computer memory contents stored as a file.
 
 Goals
 -----
 
-- Create a sandbox for experimenting in software and (FPGA) hardware.    
+- Create a sandbox for experimenting with software and (FPGA) hardware.    
     - **Simplicity**: It should be easy to jump in and do something: create, hack, tinker.
         - It should be doable for a single person to develop a good understanding of the entire system, software and hardware.
-        - **Deterministic Behavior**: By design, it should be clear how long a operation, be it an instruction or a DMA transfer, is going to take.
+        - **Deterministic Behavior**: By design, it should be clear how long an operation, be it an instruction or a DMA transfer, is going to take.
         - **Single User/Single Tasking OS** booting to a console shell.
     - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components.
         - Support for **partial FPGA reconfiguration**.
 - Target Hardware is Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start) and/or the [Nexys-A7](https://digilent.com/reference/programmable-logic/nexys-a7/start).
-- The computer should support following peripherals:
+- The computer should support the following peripherals:
   - Keyboard
   - Mouse (optional)
   - Joystick (optional)
@@ -43,13 +43,13 @@ Requirement Analysis
 
 ### Simplicity
 
-Simplicity will be a strong guideline when making design choices. For instance, for instance it may mean that we decide against a popular-but-complex processor in favor of a more obscure-but-simple processor.
+Simplicity will be a strong guideline when making design choices. For instance, it may mean that we decide against a popular-but-complex processor in favor of a more obscure-but-simple processor.
 
 It is hard to make something simple. The Simplicity requirement will make system design harder not easier. For a case in point, see below.
 
 #### Deterministic Behavior
 
-Designing a deterministic system is more complex than designing a system that allows some slack in completion of operations. However, once such a system is in place, it becomes much easier to reason about it and design applications on top of it, especially applications with real-time requirements.
+Designing a deterministic system is more complex than designing a system that allows some slack in the completion of operations. However, once such a system is in place, it becomes much easier to reason about it and design applications on top of it, especially applications with real-time requirements.
 For instance, it would be pretty cool if the system is designed so that racing-the-beam becomes possible, i.e. time actions within an application's main loop so that they take place on a specific screen scan line and a specific column on that scan line. Think Commodore 64 split raster bars and sprite multiplexing.
 
 Note that deterministic behavior must be guaranteed only when required by the application. Less deterministic operations are perfectly acceptable when the application does not require full deterministic behavior. E.g. a deterministic application runs from Block RAM with known, fixed memory access latency, while a non-deterministic application may run from bursty external memory.
@@ -58,29 +58,29 @@ One consequence of the *Deterministic Behavior* requirement is that bus arbitrat
 
 #### Single User / Single Tasking OS
 
-We won't be running Linux, or any other multi-tasking OS for that matter. The platform will only run one application at a time and that application will be fully in charge of the entire system.
+We won't be running Linux or any other multitasking OS for that matter. The platform will only run one application at a time and that application will be fully in charge of the entire system.
 
-A Single User / Single Tasking OS will provide following services:
+A Single User / Single Tasking OS will provide the following services:
 
 - A console CLI shell allowing user and scripted access to:
 
 	- navigate the file system
 	- load/save software images to/from memory
 	- copy/move/delete files
-	- execute (transfer control to) applications in memory, optionally passing in command line arguments
+	- execute (transfer control to) applications in memory, optionally passing in command-line arguments
 	- peeking and poking into memory
 	
 - File System I/O kernel routines
-- Console I/O kernel routines: Input from physcially attached keyboard, output to physically attached screen.
+- Console I/O kernel routines: Input from a physically attached keyboard, output to a physically attached screen.
 - UART I/O kernel routines
 - Discovery and enumeration of hardware components. See Modular Architecture below.
 
 #### Not Boot-to-Basic
 
-I don't want to be pinned down to, or give preference to, any partical interepreted language, so we're not going going to Boot-to-Basic.
+I don't want to be pinned down to, or give preference to, any particular interpreted language, so we're not going going to Boot-to-Basic.
 We're not going for full-retro boot-to-Basic.
 
-I would like to allow open support for multiple interpreted language by letting the application image indicate in which language it's written, e.g. by specifying on the first line the path to the interpreter to use, as commonly used in Linux scripting: *#!/usr/bin/python, #!/usr/bin/ulisp, ...*
+I would like to allow open support for multiple interpreted languages by letting the application image indicate in which language it's written, e.g. by specifying on the first line the path to the interpreter to use, as commonly used in Linux scripting: *#!/usr/bin/python, #!/usr/bin/ulisp, ...*
 
 It should also be possible to directly execute binary images of course.
 
@@ -107,8 +107,8 @@ I currently have an **Arty A7 35T**, with the following PMODs for peripherals:
 
 I suspect that over time the project will outgrow this setup and I might move up to the **Nexys A7-100T**, also from Diligent. Compared to the Arty A7 35T, Nexys A7-100T has: 
 - A bigger FPGA: More logic slices and more Block RAM.
-- On board microSD card connector
-- On board PWM audio output connector
-- On board PDM microphone connector
+- Onboard microSD card connector
+- Onboard PWM audio output connector
+- Onboard PDM microphone connector
 - USB HID for keyboard and mouse, with a clever adapter so keyboard and mouse present themselves to the FPGA as PS/2 devices.
 - VGA connector
