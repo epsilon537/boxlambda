@@ -1,45 +1,10 @@
 ---
-layout: page
-title: Documentation
-permalink: /documentation/
+layout: post
+title: Requirement Analysis, First Pass.
+comments: true
 ---
 
-* TOC
-{:toc}
-
-Terms and Abbreviations
------------------------
-This section provides clarification for some of the more ambiguous terms and abbreviations used below.
-- **Console**: The physical terminal consisting of a screen, a keyboard and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
-
-- **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
-
-- **(Software) Image**: Snapshot of computer memory contents stored as a file.
-
-Goals
------
-
-- Create a sandbox for experimenting with software and (FPGA) hardware.    
-    - **Simplicity**: It should be easy to jump in and do something: create, hack, tinker.
-        - It should be doable for a single person to develop a good understanding of the entire system, software and hardware.
-        - **Deterministic Behavior**: By design, it should be clear how long an operation, be it an instruction or a DMA transfer, is going to take.
-        - **Single User/Single Tasking OS** booting to a console shell.
-    - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components.
-        - Support for **partial FPGA reconfiguration**.
-- Target Hardware is Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start) and/or the [Nexys-A7](https://digilent.com/reference/programmable-logic/nexys-a7/start).
-- The computer should support the following peripherals:
-  - Keyboard
-  - Mouse (optional)
-  - Joystick (optional)
-  - Serial port
-  - SD card storage
-  - VGA Display
-  - Audio output
-  
-- Sound and graphics should be sufficient to support retro-style 2D gameplay.
-
-Requirement Analysis
---------------------
+Let's make our first pass over the goals/requirements and clarify a bit what they mean.
 
 ### Simplicity
 
