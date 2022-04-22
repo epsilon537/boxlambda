@@ -36,7 +36,7 @@ You can find the source code for BoxLambda on GitHub: [https://github.com/epsilo
 
 Why?
 ---
-Does the world need another retro-style computer? Probably not, but I do. I'm a software engineer and I've been studying FPGA development for about a year now, specifically with the goal of starting this project.
+Does the world need another retro-style computer? Probably not, but I do. I'm a software engineer and I've been studying FPGA development for about a year now, specifically for this project.
 
 It's an ambitious project and at least half of it (the FPGA half) is in a realm with which I have very little experience. I don't know if the project will succeed. Maybe I'm too ambitious and too naive. We'll see. This Blog will document the journey.
 
@@ -44,5 +44,10 @@ What's up with that name, BoxLambda?
 ====================================
 "Box", as in, a physical box. "Lambda", as in, an anonymous function, a software concept. It's an attempt to convey that this project is both about hardware and software. Microsoft would have been a good fit too, but the name was taken.
 
-OK, that's enough for a first post I think. See you in the next one!
+Interesting Links
+-----------------
 
+[https://www.commanderx16.com](https://www.commanderx16.com/forum/index.php?/home/) : The Commander X16 is the 8-Bit Guy’s dream computer. This is the project that got me dreaming. I want to build a computer like this, but not exactly like this. I want to build my own.
+
+
+OK, that's enough for an introductory post I think. See you in the next one!

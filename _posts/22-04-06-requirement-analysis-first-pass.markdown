@@ -4,7 +4,10 @@ title: Requirement Analysis, First Pass.
 comments: true
 ---
 
-Let's make our first pass over the goals/requirements and clarify a bit what they mean.
+Every new project starts with an empty document, a blank sheet. It's a unique moment where you have complete freedom. As soon as you put something down in the document, you've made a choice and your options become limited. With each subsequent choice, you limit yourself more, until there are no more choices to make, at which point the project is complete. 
+So, in a way, this post, along with the previous one, are the two most important posts of the whole project. We're making our first choices, setting the direction of this project.
+
+Let's go over the project's goals/requirements and clarify a bit what they mean.
 
 ### Simplicity
 
@@ -19,7 +22,7 @@ For instance, it would be pretty cool if the system is designed so that racing-t
 
 Note that deterministic behavior must be guaranteed only when required by the application. Less deterministic operations are perfectly acceptable when the application does not require full deterministic behavior. E.g. a deterministic application runs from Block RAM with known, fixed memory access latency, while a non-deterministic application may run from bursty external memory.
 
-One consequence of the *Deterministic Behavior* requirement is that bus arbitration should be done using fixed time slots to be able to guarantee fixed timing, latency and bandwidth to each bus master.
+One consequence of the *Deterministic Behavior* requirement is that bus arbitration should be done using fixed time slots to be able to guarantee fixed timing, latency, and bandwidth to each bus master.
 
 #### Single User / Single Tasking OS
 
@@ -77,3 +80,7 @@ I suspect that over time the project will outgrow this setup and I might move up
 - Onboard PDM microphone connector
 - USB HID for keyboard and mouse, with a clever adapter so keyboard and mouse present themselves to the FPGA as PS/2 devices.
 - VGA connector
+
+### Interesting Links
+
+[https://www.linusakesson.net/programming/poems-for-bugs](https://www.linusakesson.net/programming/poems-for-bugs) : A great talk from Linus Akesson about C64 coding, explaining why to this day people are still compelled to develop games and demos for this wonderful machine. 

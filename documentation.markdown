@@ -10,15 +10,17 @@ permalink: /documentation/
 Terms and Abbreviations
 -----------------------
 This section provides clarification for some of the more ambiguous terms and abbreviations used below.
-- **Console**: The physical terminal consisting of a screen, a keyboard and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
+- **Console**: The physical terminal consisting of a screen, a keyboard, and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
 
 - **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
+
+- **ISA**: Instruction Set Architecture. The Instruction Set Architecture is the part of the processor that is visible to the programmer. 
+
+- **PSG**: Programmable Sound Generator.
 
 - **(Software) Image**: Snapshot of computer memory contents stored as a file.
 
 - **SoC**: System-on-a-Chip. A System-on-a-Chip is an integrated circuit that integrates all or most components of a computer or other electronic system.
-
-- **ISA**: Instruction Set Architecture. The Instruction Set Architecture is the part of the processor that is visible to the programmer. 
 
 Goals
 -----
@@ -58,7 +60,7 @@ For instance, it would be pretty cool if the system is designed so that racing-t
 
 Note that deterministic behavior must be guaranteed only when required by the application. Less deterministic operations are perfectly acceptable when the application does not require full deterministic behavior. E.g. a deterministic application runs from Block RAM with known, fixed memory access latency, while a non-deterministic application may run from bursty external memory.
 
-One consequence of the *Deterministic Behavior* requirement is that bus arbitration should be done using fixed time slots to be able to guarantee fixed timing, latency and bandwidth to each bus master.
+One consequence of the *Deterministic Behavior* requirement is that bus arbitration should be done using fixed time slots to be able to guarantee fixed timing, latency, and bandwidth to each bus master.
 
 #### Single User / Single Tasking OS
 
@@ -126,7 +128,7 @@ We're building a System-on-a-Chip (*System-on-an-FPGA*?). This section identifie
 
 The Bus, or interconnect, is the fabric stitching together the SoC internal components. For this project, the two most relevant SoC internal bus specifications are [ARM's AXI bus](https://developer.arm.com/documentation/ihi0022/latest) and the Open-Source [Wishbone bus](https://wishbone-interconnect.readthedocs.io/en/latest/).
 
-AXI is very powerful, very popular, and very complex. It scales up well to very big SoCs. However, I don't think it scales down very well to simple SoCs, such as BoxLambda, where low latency and low complexity are more important than high bandwidth and scalability. Hence, for this project I'm electing to go with **Wishbone**. 
+AXI is very powerful, very popular, and very complex. It scales up well to very big SoCs. However, I don't think it scales down very well to simple SoCs, such as BoxLambda, where low latency and low complexity are more important than high bandwidth and scalability. Hence, for this project, I'm electing to go with **Wishbone**. 
 
 We'll be using the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
 
@@ -136,23 +138,23 @@ Sticking to a well-defined internal bus specification certainly helps to meet th
 
 #### Processor Word Size
 
-Typical processor word sizes are 8-bit, 16-bit, 32-bit and 64-bit. Which word size is the best fit for Boxlambda?
+Typical processor word sizes are 8-bit, 16-bit, 32-bit, and 64-bit. Which word size is the best fit for Boxlambda?
 
 - **8-bit**: A *good* word size. 
   - *Pros*: 
 	- An 8-bit word (i.e. a *byte*) is a good natural fit for a pixel value, an ASCII character code, or small integer values. 
-	- 8-bit processors, their programs and their data are very compact. 
+	- 8-bit processors, their programs, and their data are very compact. 
 	- 8-bit processors side-step some of the alignment issues seen with larger word sizes.
   - *Cons*: 
 	- An 8-bit word is too small to conveniently hold the values you need in a typical program - think calculations and table indices. 
-	- Toolchain support for higher level languages is limited.
+	- Toolchain support for higher-level languages is limited.
 - **16-bit**: A clumsy compromise between 8-bit and 32-bits. Made sense when 32-bit processors were not readily available yet. Now, not so much.
 - **32-bit**: Another *good* word size.
   - *Pros*: 32-bit words can hold most real-world numbers and cover a huge address space. 32-bit machines generally have good toolchain support.
-  - *Cons*: Much bigger than its 8-bit counterpart, in terms of FPGA real-estate, program size as well as data size.
+  - *Cons*: Much bigger than its 8-bit counterpart, in terms of FPGA real estate, program size as well as data size.
 - **64-bit**: A big and clunky word size, way too big to handle conveniently, intended for specialized use cases that don't fit this project.
 
-I've decided to go for a **32-bit processor**. A 32-bit processor (and associated on-chip memory) will take a bigger chunk out of our FPGA real-estate, but I think it's worth it. I really like the convenience of 32-bit registers, and a 32-bit processor may come with a regular GCC toolchain.
+I've decided to go for a **32-bit processor**. A 32-bit processor (and associated on-chip memory) will take a bigger chunk out of our FPGA real estate, but I think it's worth it. I like the convenience of 32-bit registers, and a 32-bit processor may come with a regular GCC toolchain.
 
 #### Processor Features
 
@@ -177,8 +179,8 @@ With all that in mind, I think [**RISC-V**](https://riscv.org/) is a great optio
 There are a lot of RISC-V implementations to choose from. The [**Ibex**](https://github.com/lowRISC/ibex) project seems like a good choice:
 
 - 32-bit RISC-V.
-- High quality, well-documented implementation.
-- SystemVerilog based. My prefered HDL.
+- High-quality, well-documented implementation.
+- SystemVerilog based. My preferred HDL.
 - Supports a *small* two-stage pipeline parameterization.
 - Very active project.
 
@@ -186,15 +188,53 @@ There are a lot of RISC-V implementations to choose from. The [**Ibex**](https:/
 
 SDRAM memory access is pretty complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. 
 
-There exists a class of memory controllers, called **Static Memory Controllers**, that absorb these complexities and by design create a fixed schedule for a fixed use case, resulting in very predictable behavior. Static Memory Controllers are far off the beaten path however. **Dynamic Memory Controllers** are more common. Dynamic Memory Controllers can handle are variety of use cases with good performance *on average*. Unfortunately, they sacrifice predictability to achieve this flexibility.
+There exists a class of memory controllers, called **Static Memory Controllers**, that absorb these complexities and by design create a fixed schedule for a fixed use case, resulting in very predictable behavior. Static Memory Controllers are far off the beaten path, however. **Dynamic Memory Controllers** are more common. Dynamic Memory Controllers can handle a variety of use cases with good performance *on average*. Unfortunately, they sacrifice predictability to achieve this flexibility.
 
-Ideally, we would use an accessible, well documented, open-source, static memory controller design. Unfortunately, I can't find one. Rolling our own is not an option either. Doing so would require so much specific know-how, it would kill this project. Pragmatically, our best option is to use Xilinx's [**Memory Interface Generator** (MIG)](https://docs.xilinx.com/v/u/1.0-English/ug586_7Series_MIS) with the Arty A7 (or Nexys A7) parameters as [published by Diligent](https://github.com/Digilent/Arty/tree/master/Resources/Arty_MIG_DDR3?_ga=2.230252508.1917430070.1649263055-373952187.1630942771).
+Ideally, we would use an accessible, well-documented, open-source, static memory controller design. Unfortunately, I can't find one. Rolling our own is not an option either. Doing so would require so much specific know-how, that it would kill this project. Pragmatically, our best option is to use Xilinx's [**Memory Interface Generator** (MIG)](https://docs.xilinx.com/v/u/1.0-English/ug586_7Series_MIS) with the Arty A7 (or Nexys A7) parameters as [published by Diligent](https://github.com/Digilent/Arty/tree/master/Resources/Arty_MIG_DDR3?_ga=2.230252508.1917430070.1649263055-373952187.1630942771).
 
 The Xilinx memory controller falls squarely into the Dynamic Memory Controller class. How do we fit this into a platform that requires deterministic behavior? I think the best approach is to use a DMA engine to transfer data between SDRAM and on-chip memory. Fixed memory access latency to on-chip memory (from any bus master that requires it) can be guaranteed using an arbiter. We'll revisit this topic when we're discussing Boxlambda's architecture.
 
 ### The Graphics Subsystem
 
+If you're reading this, you must be into the build-your-own-computer thing, which probably means you're aware of the super cool [Commander X16](https://www.commanderx16.com) project. I like the elegant VERA (Video Embedded Retro Adapter) module that Frank van den Hoef created for the X16. Here's a high-level specification, taken from the Commander X16 website:
+
+VERA module specifications:
+
+- Video generator featuring:
+  - Multiple output formats (VGA, NTSC Composite, NTSC S-Video, RGB video) at a fixed resolution of 640x480@60Hz
+  - Support for 2 layers, both supporting:
+	- 1/2/4/8 bpp tile and bitmap modes
+	- Support for up to 128 sprites (with inter-sprite collision detection).
+  - Embedded video RAM of 128 KB.
+  - Palette with 256 colors selected from a total range of 4096 colors.
+- 16-channel stereo Programmable Sound Generator with multiple waveforms (Pulse, Sawtooth, Triangle, Noise)
+- High-quality PCM audio playback from a 4 KB FIFO buffer featuring up to 48kHz 16-bit stereo sound.
+- SecureDigital storage.
+
+Other features, not mentioned in the blurb, include: 
+
+- Fractional display scaling (scaling lower resolutions up to the 640x480 display resolution.
+- Horizontal and Vertical smooth scrolling
+
+Recently, Frank released the VERA verilog code under the generous MIT license. You can find the code here: 
+
+[https://github.com/fvdhoef/vera-module](https://github.com/fvdhoef/vera-module)
+
+I'm not particularly interested in VERA's PSG (Programmable Sound Generator) or the non-VGA output formats, so I might remove those from the build.
+
+The 128KB of video RAM will take a big chunk out of our available Block RAM resources, but we're getting a lot of bang for our buck.
+
+The VERA is designed as a separate FPGA with a SPI slave interface. Some modifications will be required to integrate it into our SoC.
+
 ### Sound
+
+A sound core would be a perfect candidate for Partial FPGA Reconfiguration. There are a lot of options (Wave-Table synthesis, FM synthesis, PSG...) and a lot of open-source cores available. It would be pretty cool if the software application can just download its synthesizer of choice as part of the program.
+
+Pretty much any core developed by [Jotego](https://github.com/jotego) sounds like a great idea.
+
+Technically, I don't have to select a sound core. We already have sound through VERA (PCM audio playback). I'm going to choose one anyway because I like retro sounds and I'd like to mess around a bit with one of the old-school PSG chips. I think I'll go for a dual YM2149, one for music, one for sound FX, in a game context. The YM2149 was the Atari ST's sound chip, so we'll have a large music and sound effects archive at our disposal. Jotego developed an FPGA clone of the YM2149, the JT49:
+
+[https://github.com/jotego/jt49](https://github.com/jotego/jt49)
 
 ### Storage
 
