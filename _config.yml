@@ -21,8 +21,8 @@
 title: BoxLambda
 email: ruben.lysens2@gmail.com
 description: An FPGA-based microcomputer sandbox for software and RTL experimentation.
-baseurl: "boxlambda" # the subpath of your site, e.g. /blog
-url: "epsilon537.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+#baseurl: "boxlambda" # the subpath of your site, e.g. /blog
+url: "epsilon537.github.io/boxlambda" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: 2Lysens 
 github_username:  epsilon537
 
