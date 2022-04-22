@@ -7,6 +7,9 @@ layout: default
 	<a href="{{ site.baseurl }}{{ page.previous.url }}" class="prev">← Previous Post</a>
     </span>
     {%- endif -%}
+    {%- if page.previous and page.next -%}
+    &nbsp;&nbsp;&nbsp;
+    {%- endif -%}
     {%- if page.next -%}
     <span class="post-next">
 	<a href="{{ site.baseurl }}{{ page.next.url }}" class="next">Next Post →</a>
