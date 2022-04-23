@@ -23,5 +23,5 @@ BoxLambda is a software-hardware cross-over project. The plan is to provide room
   
 - Sound and graphics should be sufficient to support retro-style 2D gameplay.
 
-You can find the GitHub page for BoxLambda at [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/).
+I'm keeping a project Blog and documentation [here](https://epsilon537.github.io/boxlambda/).
 
