@@ -8,12 +8,16 @@ layout: default
            rel="prev">← Previous Post</a>
     </span>
     {%- endif -%}
+    {%- if page.previous and page.next -%}
+    &nbsp;&nbsp;&nbsp;
+    {%- endif -%}
     {%- if page.next -%}
     <span class="post-next">
         <a href="{{ page.next.url }}"
            rel="next">Next Post →</a>
     </span>
     {%- endif -%}
+    <p><br></p>
 </div>
 
 <article class="post h-entry"
