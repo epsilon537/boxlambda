@@ -10,7 +10,7 @@ None of what's shown here is set in stone. The diagrams below contain some specu
 
 ## The Nexys Configuration
 
-![Nexys Draft Architecture Block Diagram](assets/Nexys_Arch_Diagram_Draft_Post.jpg){:class="img-responsive"}
+![Nexys Draft Architecture Block Diagram](../assets/Nexys_Arch_Diagram_Draft_Post.jpg){:class="img-responsive"}
 *BoxLambda Draft Architecture Block Diagram for Nexys A7-100T.*
 
 This is a draft architecture diagram showing the Nexys A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
@@ -74,7 +74,7 @@ Note that the CPU has memory-mapped access to DDR memory and can execute code di
 
 ## The Arty Configuration
 
-![Arty Draft Architecture Block Diagram](assets/Arty_Arch_Diagram_Draft_Post.jpg){:class="img-responsive"}
+![Arty Draft Architecture Block Diagram](../assets/Arty_Arch_Diagram_Draft_Post.jpg){:class="img-responsive"}
 *BoxLambda Draft Architecture Block Diagram for Arty A7-35T.*
 
 This is a draft architecture diagram showing the Arty A7-35T configuration.
