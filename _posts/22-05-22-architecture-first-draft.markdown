@@ -29,11 +29,20 @@ Note that, besides access to external and internal memory, the DMA Controller al
 
 Both the Processor Bus and the DMA bus are 32-bit pipelined mode Wishbone buses.
 
+#### The Interconnect
+
+A bus on a block diagram is just a line connecting blocks. In reality, the *Interconnect* consists of Cross Bars, Arbiters, Address Decoders, and Bridges. I will follow up with an architecture diagram showing the BoxLambda Interconnect details. 
+
+To build the Interconnect, I will make use of the components contributed by the gentlemen below:
+
+- **Alexforencich** published a collection of components that can be used to build an Interconnect: [https://github.com/alexforencich/verilog-wishbone/](https://github.com/alexforencich/verilog-wishbone/)
+- **ZipCPU** did the same. His components are well-documented, including cross-references with insightful articles on the ZipCPU website: [https://github.com/ZipCPU/wb2axip](https://github.com/ZipCPU/wb2axip)
+
 ### CPU Configuration
 
 The Ibex CPU configuration is shown as RV32IC, the I and the C indicating *Integer* and *Compressed* instruction set, respectively. I would like to include the extensions for integer multiplication and division (M) and bit manipulations (B) into the build as well. Those extensions are going to take up a considerable amount of space, however, and will also have an impact on timing closure. I'm going to defer the decision on those extensions until we have more insight into this project's FPGA utilization and timing.
 
-Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR. Data access also goes straight to DPRAM or DDR.
+Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
 
 ### The Black Box, and other Reconfigurable Partitions
 
@@ -61,7 +70,7 @@ A few new modules popped out of the woodwork:
 The Memory Controller is equipped with an AXI4 port. That's convenient because that's also what the DFX Controller uses to fetch the Reconfigurable Modules' bitstreams. 
 To hook up the system buses, we use a Wishbone to AXI bridge. This bridge will introduce additional memory access latency, but that should be acceptable because this path should not be used for latency-critical operations.
 
-Note that the CPU has memory-mapped access to DDR and can execute code directly from DDR. DDR access is not fully deterministic, however. CPU instructions executing from DDR will not have a fixed cycle count.
+Note that the CPU has memory-mapped access to DDR memory and can execute code directly from DDR memory. DDR memory access is not fully deterministic, however. CPU instructions executing from DDR will not have a fixed cycle count.
 
 ## The Arty Configuration
 
@@ -82,7 +91,7 @@ BoxLambda users can make up their minds on how they want to set up this system. 
 
 - *Deterministic* and/or Time-Critical CPU code and data reside in DPRAM.
 - Non-Time-Critical code and data reside in DDR memory.
-- The CPU accesses DPRAM, DDR, and hardware blocks via the Processor Bus.
+- The CPU accesses DPRAM, DDR memory, and hardware blocks via the Processor Bus.
 - DMA activity, if any, passes over the DMA bus.
 
 ## Loose Ends
