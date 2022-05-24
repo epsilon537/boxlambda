@@ -56,7 +56,9 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **SoC**: System-on-a-Chip. A System-on-a-Chip is an integrated circuit that integrates all or most components of a computer or other electronic system.
 
-- **SPI**: Serial Peripheral Interface, a synchronous serial communication interface specification used for short-distance communication
+- **SPI**: Serial Peripheral Interface, a synchronous serial communication interface specification used for short-distance communication.
+
+- **Synthesis**: Synthesis turns a module's Verilog/System Verilog/VHDL source code into a netlist of gates. The software equivalent of synthesis is compilation.
 
 - **USB HIB**: USB Human Interface device Class, a part of the USB specification for computer peripherals such as keyboards and mice.
 
@@ -351,7 +353,7 @@ Architecture
 
 ### The Nexys Configuration
 
-![Nexys Draft Architecture Block Diagram](assets/Nexys_Arch_Diagram_Draft_Post.jpg){:class="img-responsive"}
+![Nexys Draft Architecture Block Diagram](assets/Nexys_Arch_Diagram_Doc.png){:class="img-responsive"}
 *BoxLambda Draft Architecture Block Diagram for Nexys A7-100T.*
 
 This is an architecture diagram showing the Nexys A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
@@ -381,8 +383,7 @@ To build the Interconnect, I will make use of the components contributed by the 
 
 #### CPU Configuration
 
-The Ibex CPU configuration is shown as RV32IC, the I and the C indicating *Integer* and *Compressed* instruction set, respectively. I would like to include the extensions for integer multiplication and division (M) and bit manipulations (B) into the build as well. Those extensions are going to take up a considerable amount of space, however, and will also have an impact on timing closure. I'm going to defer the decision on those extensions until we have more insight into this project's FPGA utilization and timing.
-
+The Ibex CPU configuration is shown as RV32ICMB: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
 Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
 
 #### The Black Box, and other Reconfigurable Partitions
@@ -406,14 +407,14 @@ Note that the CPU has memory-mapped access to DDR memory and can execute code di
 
 ### The Arty Configuration
 
-![Arty Draft Architecture Block Diagram](assets/Arty_Arch_Diagram_Draft_Post.jpg){:class="img-responsive"}
+![Arty Draft Architecture Block Diagram](assets/Arty_Arch_Diagram_Doc.png){:class="img-responsive"}
 *BoxLambda Draft Architecture Block Diagram for Arty A7-35T.*
 
 This architecture diagram shows the Arty A7-35T configuration.
 
 DFX is not supported on the A7-35T. Neither is the Hierarchical Design Flow. This means we have to stick to a monolithic design. The RTL for all components is combined into one single design, which is synthesized, implemented, and turned into a single bitstream. There is still room for RTL experimentation in this build, but you won't be able to live-load it. It's going to require an update of the Full Configuration Bitstream.
 
-The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM has been reduced to 64KB, and the amount of DPRAM has been reduced to 128KB. 
+The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM and the amount of DPRAM have been reduced to 64KB. 
 
 All other components are the same as in the Nexys Configuration.
 
@@ -425,3 +426,40 @@ BoxLambda users can make up their minds on how they want to set up this system. 
 - Non-Time-Critical code and data reside in DDR memory.
 - The CPU accesses DPRAM, DDR memory, and hardware blocks via the Processor Bus.
 - DMA activity, if any, passes over the DMA bus.
+
+Estimated FPGA Utilization
+--------------------------
+
+**Estimated FPGA Resource Utilization on Nexys A7-100T:**
+
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
+|----------------|--------|------|---------------|-----|------|------------|-----------|-----------|
+|**Slice LUTs**|0|2122|3390|5673|277|380|205|205|
+|**Slice Registers**|0|1441|911|5060|311|167|185|185|
+|**Block RAM Tile**|64|41|0|0|0.5|0.5|0|0|
+|**DSPs**|0|2|1|0|0|0|0|0|
+
+| Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
+|----------------|-------|-------|--------|-------------|----------------------|----------------|------------------|
+|**Slice LUTs**|536|84|438|20.00%|15972|63400|25.19%|
+|**Slice Registers**|749|114|346|20.00%|11362.8|126800|8.96%|
+|**Block RAM Tile**|1|1|0|20.00%|129.6|135|96.00%|
+|**DSPs**|0|0|0|20.00%|3.6|240|1.50%|
+
+I added a 20% margin overall for the bus fabric and for components I haven't included yet.
+
+**Estimated FPGA Resource Utilization on Arty A7-35T:**
+
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
+|----------------|--------|------|---------------|-----|------|------------|-----------|-----------
+|**Slice LUTs**|0|2122|3390|5673|277|380|205|205
+|**Slice Registers**|0|1441|911|5060|311|167|185|185
+|**Block RAM Tile**|**16**|25|0|0|0.5|0.5|0|0
+|**DSPs**|0|2|1|0|0|0|0|0
+
+| Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
+|----------------|-------|-------|--------|-------------|----------------------|----------------|------------------
+|**Slice LUTs**|536|84|438|20.00%|15972|20800|76.79%
+|**Slice Registers**|749|114|346|20.00%|11362.8|41600|27.31%
+|**Block RAM Tile**|1|1|0|**10.00%**|48.4|50|**96.80%**
+|**DSPs**|0|0|0|20.00%|3.6|90|4.00%
