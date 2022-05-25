@@ -15,7 +15,7 @@ The synthesis tool turns a module's Verilog/System Verilog/VHDL source code into
 For most of the cores, synthesis was just a matter of pointing Vivado to the core's source tree and hitting the *Run Synthesis* button. There were a few exceptions:
 
 - VERA did not include the video, sprite, or palette RAM into the RTL source tree. I manually added those numbers into the utilization report.
-- The Ibex CPU uses a build system called *FuseSoc*. FuseSoc was easy to install and invoke. All the info was in the README for the Arty-A7 example build.
+- The Ibex CPU uses a build system called [FuseSoc](https://fusesoc.readthedocs.io/en/latest/). FuseSoc was easy to install and invoke. All the info was in the README for the Arty-A7 example build.
 - The Ibex CPU example build for the Arty A7 included 64KB of Block RAM. This RAM was part of the example, but not part of the CPU. I manually took that number out of the utilization report.
 - I modified the Ibex CPU example to include the (M)ultiplier and (B)it Manipulation extensions. Both are parameters, set in the top-level file:
 
@@ -31,18 +31,18 @@ I organized the utilization numbers from the different cores into a table and co
 
 **BoxLambda Estimated FPGA Resource Utilization on Nexys A7-100T:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------|
-|**Slice LUTs**|0|2122|3390|5673|277|380|205|205|
-|**Slice Registers**|0|1441|911|5060|311|167|185|185|
-|**Block RAM Tile**|64|41|0|0|0.5|0.5|0|0|
+|**Slice LUTs**|0|2122|3390|5673|554|380|205|205|
+|**Slice Registers**|0|1441|911|5060|622|167|185|185|
+|**Block RAM Tile**|64|41|0|0|1|0.5|0|0|
 |**DSPs**|0|2|1|0|0|0|0|0|
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|536|84|438|20.00%|15972|63400|25.19%|
-|**Slice Registers**|749|114|346|20.00%|11362.8|126800|8.96%|
-|**Block RAM Tile**|1|1|0|20.00%|129.6|135|96.00%|
+|**Slice LUTs**|536|84|438|20.00%|16304.4|63400|25.72%|
+|**Slice Registers**|749|114|346|20.00%|11736|126800|9.26%|
+|**Block RAM Tile**|1|1|0|20.00%|130.2|135|96.44%|
 |**DSPs**|0|0|0|20.00%|3.6|240|1.50%|
 
 I added a 20% margin overall for the bus fabric and for components I haven't included yet.
@@ -53,18 +53,18 @@ Overall it's an easy fit, with room to spare. All the pressure is on the Block R
 
 **BoxLambda Estimated FPGA Resource Utilization on Arty A7-35T, before adjustment:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------|
-|**Slice LUTs**|0|2122|3390|5673|277|380|205|205|
-|**Slice Registers**|0|1441|911|5060|311|167|185|185|
-|**Block RAM Tile**|32|25|0|0|0.5|0.5|0|0|
+|**Slice LUTs**|0|2122|3390|5673|554|380|205|205|
+|**Slice Registers**|0|1441|911|5060|622|167|185|185|
+|**Block RAM Tile**|32|25|0|0|1|0.5|0|0|
 |**DSPs**|0|2|1|0|0|0|0|0|
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|536|84|438|20.00%|15972|20800|76.79%|
-|**Slice Registers**|749|114|346|20.00%|11362.8|41600|27.31%|
-|**Block RAM Tile**|1|1|0|20.00%|72|50|**144.00%**|
+|**Slice LUTs**|536|84|438|20.00%|16304.4|20800|78.39%|
+|**Slice Registers**|749|114|346|20.00%|11736|41600|28.21%|
+|**Block RAM Tile**|1|1|0|20.00%|72.6|50|**145.20%**|
 |**DSPs**|0|0|0|20.00%|3.6|90|4.00%|
 
 On the Arty A7-35T it's a tight fit. Actually, the Block RAM doesn't fit at all.
@@ -72,22 +72,36 @@ If we reduce the amount of DPRAM to 64KB and reduce the margin on Block RAM to 1
 
 **BoxLambda Estimated FPGA Resource Utilization on Arty A7-35T, after adjustment:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------
-|**Slice LUTs**|0|2122|3390|5673|277|380|205|205
-|**Slice Registers**|0|1441|911|5060|311|167|185|185
-|**Block RAM Tile**|**16**|25|0|0|0.5|0.5|0|0
+|**Slice LUTs**|0|2122|3390|5673|554|380|205|205
+|**Slice Registers**|0|1441|911|5060|622|167|185|185
+|**Block RAM Tile**|**16**|25|0|0|1|0.5|0|0
 |**DSPs**|0|2|1|0|0|0|0|0
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------
-|**Slice LUTs**|536|84|438|20.00%|15972|20800|76.79%
-|**Slice Registers**|749|114|346|20.00%|11362.8|41600|27.31%
-|**Block RAM Tile**|1|1|0|**10.00%**|48.4|50|**96.80%**
+|**Slice LUTs**|536|84|438|20.00%|16304.4|20800|78.399%
+|**Slice Registers**|749|114|346|20.00%|11736|41600|28.21%
+|**Block RAM Tile**|1|1|0|**10.00%**|48.95|50|**97.90%**
 |**DSPs**|0|0|0|20.00%|3.6|90|4.00%
 
 Slice utilization is also fairly high. This might lead to some routing issues down the line.
 Still, these numbers are good enough to keep the Arty A7-35T in the running for the time being, at least as a kind of development/prototyping platform. I'm not ready yet to spend the cash on a Nexys A7-100T.
+
+Architecture Diagram Updates
+----------------------------
+Based on these synthesis results, I settled on the following modifications to the architecture diagrams:
+
+- Ibex processor parameterization RV32IMCB.
+- 64KB DPRAM on the Arty A7-35T.
+
+![Nexys Draft Architecture Block Diagram](../assets/Nexys_Arch_Diagram_Doc.png){:class="img-responsive"}
+*BoxLambda Draft Architecture Block Diagram for Nexys A7-100T.*
+
+
+![Arty Draft Architecture Block Diagram](../assets/Arty_Arch_Diagram_Doc.png){:class="img-responsive"}
+*BoxLambda Draft Architecture Block Diagram for Arty A7-35T.*
 
 Interesting Links
 -----------------

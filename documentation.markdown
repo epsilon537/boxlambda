@@ -10,6 +10,9 @@ permalink: /documentation/
 Terms and Abbreviations
 -----------------------
 This section provides clarification for some of the more ambiguous terms and abbreviations used below.
+
+- **AXI**: Advanced eXtensible Interface, ARM's SoC bus specification.
+
 - **Blitter**: A type of DMA often used in the context of 2D graphics, copying, combining, and/or modifying bitmap graphics in video memory.
 
 - **BPP**: Bits Per Pixel.
@@ -20,7 +23,9 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **DFX**: Dynamic Function Exchange, Xilinx's solution for Partial FPGA Reconfiguration ([https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf](https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf))
 
-- **DMA**: Direct Memory Access, a hardware assist component offloading memory copy operations from the CPU. 
+- **DMA**: Direct Memory Access, a hardware assist component offloading memory copy operations from the CPU.
+
+- **DSP**: Digital Signal Processing.
 
 - **DMAC**: DMA Controller.
 
@@ -32,6 +37,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
 
+- **Ibex**: The name of the Risc-V CPU core used by BoxLambda.
+
 - **Interconnect**: Wishbone terminology for the bus fabric.
 
 - **IRQ**: Interrupt Request.
@@ -40,17 +47,33 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **ISA**: Instruction Set Architecture. The Instruction Set Architecture is the part of the processor that is visible to the programmer.
 
+- **JTAG DTM**: JTAG based Debug Transport Module.
+
+- **JT49**: The name of Jotego's YM2149 compatible sound core implementation.
+
+- **LUT**: Look-Up Table.
+
+- **MIG**: Memory Interface Generator, a parameterizable Xilinx IP module used to generate a Memory Controller.
+
 - **MEMC**: Memory Controller.
 
 - **PIT**: Programmable Interval Timer.
 
+- **Praxos**: The name of the DMA Controller used by BoxLambda.
+
 - **PSG**: Programmable Sound Generator.
+
+- **PWM**: Pulse Width Modulation.
 
 - **RP**: Reconfigurable Partition. Part of Xilinx's DFX solution.
 
 - **RM**: Reconfigurable Module. Part of Xilinx's DFX solution.
 
 - **RTL**: Register-Transfer Level, an abstraction of a Digital Design, usually captured using a Hardware Description Language such as Verilog, SystemVerilog, or VHDL.
+
+- **RV32IMCB**: Risc-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
+
+- **Slice**: The basic logical unit of a Xilinx FPGA.
 
 - **(Software) Image**: Snapshot of computer memory contents stored as a file.
 
@@ -62,7 +85,15 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **USB HIB**: USB Human Interface device Class, a part of the USB specification for computer peripherals such as keyboards and mice.
 
+- **VERA**: Versatile Embedded Retro Adapter, the name of the graphics core used by BoxLambda.
+
+- **VRAM**: Video RAM.
+
 - **Wishbone**: An Open-Source SoC bus specification: [https://cdn.opencores.org/downloads/wbspec_b4.pdf](https://cdn.opencores.org/downloads/wbspec_b4.pdf)
+
+- **Xbar**: Cross-Bar, a type of interconnect used in SoC bus fabrics.
+
+- **YM2149**: An '80s era Yamaha sound chip. See also JT49.
 
 Goals
 -----
@@ -432,34 +463,35 @@ Estimated FPGA Utilization
 
 **Estimated FPGA Resource Utilization on Nexys A7-100T:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
+
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------|
-|**Slice LUTs**|0|2122|3390|5673|277|380|205|205|
-|**Slice Registers**|0|1441|911|5060|311|167|185|185|
-|**Block RAM Tile**|64|41|0|0|0.5|0.5|0|0|
+|**Slice LUTs**|0|2122|3390|5673|554|380|205|205|
+|**Slice Registers**|0|1441|911|5060|622|167|185|185|
+|**Block RAM Tile**|64|41|0|0|1|0.5|0|0|
 |**DSPs**|0|2|1|0|0|0|0|0|
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|536|84|438|20.00%|15972|63400|25.19%|
-|**Slice Registers**|749|114|346|20.00%|11362.8|126800|8.96%|
-|**Block RAM Tile**|1|1|0|20.00%|129.6|135|96.00%|
+|**Slice LUTs**|536|84|438|20.00%|16304.4|63400|25.72%|
+|**Slice Registers**|749|114|346|20.00%|11736|126800|9.26%|
+|**Block RAM Tile**|1|1|0|20.00%|130.2|135|96.44%|
 |**DSPs**|0|0|0|20.00%|3.6|240|1.50%|
 
 I added a 20% margin overall for the bus fabric and for components I haven't included yet.
 
 **Estimated FPGA Resource Utilization on Arty A7-35T:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------
-|**Slice LUTs**|0|2122|3390|5673|277|380|205|205
-|**Slice Registers**|0|1441|911|5060|311|167|185|185
-|**Block RAM Tile**|**16**|25|0|0|0.5|0.5|0|0
+|**Slice LUTs**|0|2122|3390|5673|554|380|205|205
+|**Slice Registers**|0|1441|911|5060|622|167|185|185
+|**Block RAM Tile**|**16**|25|0|0|1|0.5|0|0
 |**DSPs**|0|2|1|0|0|0|0|0
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------
-|**Slice LUTs**|536|84|438|20.00%|15972|20800|76.79%
-|**Slice Registers**|749|114|346|20.00%|11362.8|41600|27.31%
-|**Block RAM Tile**|1|1|0|**10.00%**|48.4|50|**96.80%**
+|**Slice LUTs**|536|84|438|20.00%|16304.4|20800|78.399%
+|**Slice Registers**|749|114|346|20.00%|11736|41600|28.21%
+|**Block RAM Tile**|1|1|0|**10.00%**|48.95|50|**97.90%**
 |**DSPs**|0|0|0|20.00%|3.6|90|4.00%
