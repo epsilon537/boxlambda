@@ -463,7 +463,6 @@ Estimated FPGA Utilization
 
 **Estimated FPGA Resource Utilization on Nexys A7-100T:**
 
-
 | Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------|
 |**Slice LUTs**|0|2122|3390|5673|554|380|205|205|
@@ -473,9 +472,9 @@ Estimated FPGA Utilization
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|536|84|438|20.00%|16304.4|63400|25.72%|
-|**Slice Registers**|749|114|346|20.00%|11736|126800|9.26%|
-|**Block RAM Tile**|1|1|0|20.00%|130.2|135|96.44%|
+|**Slice LUTs**|536|393|438|20.00%|16675.2|63400|26.30%|
+|**Slice Registers**|324|114|346|20.00%|11988|126800|9.45%|
+|**Block RAM Tile**|1|0|0|20.00%|129|135|95.56%|
 |**DSPs**|0|0|0|20.00%|3.6|240|1.50%|
 
 I added a 20% margin overall for the bus fabric and for components I haven't included yet.
@@ -491,7 +490,7 @@ I added a 20% margin overall for the bus fabric and for components I haven't inc
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------
-|**Slice LUTs**|536|84|438|20.00%|16304.4|20800|78.399%
-|**Slice Registers**|749|114|346|20.00%|11736|41600|28.21%
-|**Block RAM Tile**|1|1|0|**10.00%**|48.95|50|**97.90%**
+|**Slice LUTs**|536|393|438|20.00%|16675.4|20800|80.17%
+|**Slice Registers**|749|324|346|20.00%|11988|41600|28.82%
+|**Block RAM Tile**|1|0|0|**10.00%**|47.85|50|**95.70%**
 |**DSPs**|0|0|0|20.00%|3.6|90|4.00%

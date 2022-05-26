@@ -12,6 +12,10 @@ Synthesis is handled by **Vivado**, Xilinx's FPGA Design Suite. Vivado is free t
 
 The synthesis tool turns a module's Verilog/System Verilog/VHDL source code into a netlist of gates. In the process of doing so, the tool also generates a utilization report, relative to the available resources of the target FPGA. It's this utilization report we're after right now, not the generated netlist.
 
+Here's an example utilization report, generated during synthesis of the MIG core:
+
+[https://github.com/epsilon537/boxlambda/blob/main/doc/mig_7series_0_utilization_synth.rpt](https://github.com/epsilon537/boxlambda/blob/main/doc/mig_7series_0_utilization_synth.rpt)
+
 For most of the cores, synthesis was just a matter of pointing Vivado to the core's source tree and hitting the *Run Synthesis* button. There were a few exceptions:
 
 - VERA did not include the video, sprite, or palette RAM into the RTL source tree. I manually added those numbers into the utilization report.
@@ -40,9 +44,9 @@ I organized the utilization numbers from the different cores into a table and co
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|536|84|438|20.00%|16304.4|63400|25.72%|
-|**Slice Registers**|749|114|346|20.00%|11736|126800|9.26%|
-|**Block RAM Tile**|1|1|0|20.00%|130.2|135|96.44%|
+|**Slice LUTs**|536|393|438|20.00%|16675.2|63400|26.30%|
+|**Slice Registers**|324|114|346|20.00%|11988|126800|9.45%|
+|**Block RAM Tile**|1|0|0|20.00%|129|135|95.56%|
 |**DSPs**|0|0|0|20.00%|3.6|240|1.50%|
 
 I added a 20% margin overall for the bus fabric and for components I haven't included yet.
@@ -62,9 +66,9 @@ Overall it's an easy fit, with room to spare. All the pressure is on the Block R
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|536|84|438|20.00%|16304.4|20800|78.39%|
-|**Slice Registers**|749|114|346|20.00%|11736|41600|28.21%|
-|**Block RAM Tile**|1|1|0|20.00%|72.6|50|**145.20%**|
+|**Slice LUTs**|536|393|438|20.00%|16675.2|20800|80.17%|
+|**Slice Registers**|749|324|346|20.00%|11988|41600|28.82%|
+|**Block RAM Tile**|1|0|0|20.00%|71.4|50|**142.80%**|
 |**DSPs**|0|0|0|20.00%|3.6|90|4.00%|
 
 On the Arty A7-35T it's a tight fit. Actually, the Block RAM doesn't fit at all.
@@ -81,9 +85,9 @@ If we reduce the amount of DPRAM to 64KB and reduce the margin on Block RAM to 1
 
 | Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
 |----------------|-------|-------|--------|-------------|----------------------|----------------|------------------
-|**Slice LUTs**|536|84|438|20.00%|16304.4|20800|78.399%
-|**Slice Registers**|749|114|346|20.00%|11736|41600|28.21%
-|**Block RAM Tile**|1|1|0|**10.00%**|48.95|50|**97.90%**
+|**Slice LUTs**|536|393|438|20.00%|16675.4|20800|80.17%
+|**Slice Registers**|749|324|346|20.00%|11988|41600|28.82%
+|**Block RAM Tile**|1|0|0|**10.00%**|47.85|50|**95.70%**
 |**DSPs**|0|0|0|20.00%|3.6|90|4.00%
 
 Slice utilization is also fairly high. This might lead to some routing issues down the line.
