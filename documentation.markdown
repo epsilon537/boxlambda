@@ -257,6 +257,18 @@ There are a lot of RISC-V implementations to choose from. The [**Ibex**](https:/
 - Supports a *small* two-stage pipeline parameterization.
 - Very active project.
 
+#### The CPU Configuration
+
+The selected Ibex CPU configuration is RV32IMCB: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
+Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
+The Ibex core is instantiated with the following *M* and *B* parameters:
+
+ibex_top.sv:
+```
+    parameter rv32m_e      RV32M            = RV32MFast,
+    parameter rv32b_e      RV32B            = RV32BBalanced,
+```
+
 ### The Memory Controller
 
 SDRAM memory access is pretty complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. 
@@ -298,14 +310,6 @@ I'm not particularly interested in VERA's PSG (Programmable Sound Generator), or
 The 128KB of video RAM will take a big chunk out of our available Block RAM resources, but it'll be worth it. We're getting a lot of bang for our buck.
 
 Note that the VERA is designed as a separate FPGA with a SPI slave interface. Some modifications will be required to integrate it into our SoC.
-
-#### Xosera
-
-I also considered, but eventually dismissed, Xosera: 
-
-[https://hackaday.io/project/173731-xosera-fpga-based-retro-video-graphics](https://hackaday.io/project/173731-xosera-fpga-based-retro-video-graphics). 
-
-Xosera is a VERA-inspired video controller, but it is being developed independently by [Xarc](https://hackaday.io/Xark). I like the [Amiga-style Copper](https://en.wikipedia.org/wiki/Original_Chip_Set) processor that they added. Unfortunately, Xosera doesn't have hardware sprites. That's a showstopper for me. I'll keep my eye on this project though. It's an active project and features are still being added.
 
 ### Sound
 
@@ -374,7 +378,7 @@ ZipCPU comes to the rescue once again with a UART implementation with a Wishbone
 
 ### Miscellaneous Modules
 
-- **PIT, IRQ & GPIO**: a placeholder for Programmable Interval Timers, an Interrupt Controller, and General Purpose I/O. I haven't settled on specific modules yet. To be revisited.
+- **GPIO**: a placeholder for General Purpose I/O. I haven't settled on specific modules yet. To be revisited.
 - **DFX Controller**: The actual loading of a Reconfigurable Module into a Reconfigurable Partition is handled by the DFX Controller. DFX stands for **Dynamic Function Exchange** which is Xilinx-speak for Partial FPGA Reconfiguration.
 - **ICAP**: Internal Configuration Access Port. This module gives access to the FPGA configuration functionality built into Xilinx FPGAs. We'll use the ICAP to implement in-system updates of the Full Configuration Bitstream, loaded into the FPGA upon boot-up.
 - **Quad SPI Flash**: This is a module provided by Xilinx, giving access to the Flash Memory device attached through a Quad-SPI bus. The non-volatile Flash Memory will hold the Full Configuration Bitstream(s), System Firmware, and non-volatile system configuration parameters such as keyboard type.
@@ -411,11 +415,6 @@ To build the Interconnect, I will make use of the components contributed by the 
 
 - **Alexforencich** published a collection of components that can be used to build an Interconnect: [https://github.com/alexforencich/verilog-wishbone/](https://github.com/alexforencich/verilog-wishbone/)
 - **ZipCPU** did the same. His components are well-documented, including cross-references with insightful articles on the ZipCPU website: [https://github.com/ZipCPU/wb2axip](https://github.com/ZipCPU/wb2axip)
-
-#### CPU Configuration
-
-The Ibex CPU configuration is shown as RV32ICMB: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
-Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
 
 #### The Black Box, and other Reconfigurable Partitions
 
@@ -458,10 +457,84 @@ BoxLambda users can make up their minds on how they want to set up this system. 
 - The CPU accesses DPRAM, DDR memory, and hardware blocks via the Processor Bus.
 - DMA activity, if any, passes over the DMA bus.
 
+Interrupts
+----------
+
+The CPU supports the following interrupts (taken from [https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html](https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html)):
+
+**Ibex Interrupts:**
+
+| Interrupt Input Signal  | ID    | Description                                      |
+|-------------------------|-------|--------------------------------------------------|
+| ``irq_nm_i``            | 31    | Non-maskable interrupt (NMI)                     |
+| ``irq_fast_i[14:0]``    | 30:16 | 15 fast, local interrupts                        |
+| ``irq_external_i``      | 11    | Connected to platform-level interrupt controller |
+| ``irq_timer_i``         | 7     | Connected to timer module                        |
+| ``irq_software_i``      | 3     | Connected to memory-mapped (inter-processor)     |
+|                         |       | interrupt register                               |
+
+### The Timer
+
+The RISC-V spec includes a timer specification: RISC-V Machine Timer Registers (see RISC-V Privileged Specification, version 1.11, Section 3.1.10). The Ibex GitHub repository contains a compliant implementation as part of the *Simple System* example:
+
+[https://github.com/epsilon537/ibex/tree/master/examples/simple_system](https://github.com/epsilon537/ibex/tree/master/examples/simple_system)
+
+We'll be using this timer module implementation, so we don't need a separate PIT module.
+
+The Timer module flags interrupts via signal *irq_timer_i*. The CPU sees this as IRQ ID 7.
+
+### The Fast Local Interrupts
+
+We can freely assign 15 local interrupts. I've got the following list:
+
+- 1 interrupt line per Reconfigurable Module (RM), so 3 in total. The default RMs are VERA and a Dual JT49. VERA uses one interrupt line, JT49 uses none.
+- 1 interrupt line each for:
+  - wbuart
+  - sdspi
+  - wbi2c
+  - ps2_mouse
+  - ps2_keyboard
+  - Praxos DMA
+  - Quad SPI
+  - ICAP
+  - DFX Controller
+  - GPIO. 
+  
+  That's 10 interrupts in total.
+
+The interrupts are serviced in order of priority, the highest number being the highest priority.
+
+I have ordered the Fast Local interrupts as follows:
+
+**Fast Local Interrupt Assignments:**
+
+| Interrupt Input Signal  | ID    | Description                             |
+|=========================|=======|=========================================|
+| ``irq_fast_i[14]``      | 30    | RM_2 interrupt (Default: not assigned)  |
+| ``irq_fast_i[13]``      | 29    | RM_1 interrupt (Default: VERA IRQ)      |
+| ``irq_fast_i[12]``      | 28    | RM_0 interrupt (Default: not assigned)  |
+| ``irq_fast_i[11]``      | 27    | Praxos DMAC IRQ                         |
+| ``irq_fast_i[10]``      | 26    | sdspi IRQ                               |
+| ``irq_fast_i[9]``       | 25    | wbuart IRQ                              |
+| ``irq_fast_i[8]``       | 24    | ps2_keyboard IRQ                        |
+| ``irq_fast_i[7]``       | 23    | ps2_mouse IRQ                           |
+| ``irq_fast_i[6]``       | 22    | sbi2c IRQ                               |
+| ``irq_fast_i[5]``       | 21    | GPIO IRQ                                |
+| ``irq_fast_i[4]``       | 20    | Quad SPI IRQ                            |
+| ``irq_fast_i[3]``       | 19    | DFX Controller IRQ                      |
+| ``irq_fast_i[2]``       | 18    | ICAP IRQ                                |
+| ``irq_fast_i[1]``       | 17    | not assigned                            |
+| ``irq_fast_i[0]``       | 16    | not assigned                            |
+
+### The Platform Level Interrupt Controller.
+
+One interrupt line is reserved to connect an external interrupt controller. I don't have any use for it right now, however, so I'm going to leave this unassigned for the time being.
+
 Estimated FPGA Utilization
 --------------------------
 
 **Estimated FPGA Resource Utilization on Nexys A7-100T:**
+
 
 | Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------|
@@ -470,12 +543,12 @@ Estimated FPGA Utilization
 |**Block RAM Tile**|64|41|0|0|1|0.5|0|0|
 |**DSPs**|0|2|1|0|0|0|0|0|
 
-| Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
-|----------------|-------|-------|--------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|536|393|438|20.00%|16675.2|63400|26.30%|
-|**Slice Registers**|324|114|346|20.00%|11988|126800|9.45%|
-|**Block RAM Tile**|1|0|0|20.00%|129|135|95.56%|
-|**DSPs**|0|0|0|20.00%|3.6|240|1.50%|
+| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
+|----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------|
+|**Slice LUTs**|536|393|438|440|20.00%|17203.2|63400|27.13%|
+|**Slice Registers**|324|114|346|641|20.00%|12757.2|126800|10.06%|
+|**Block RAM Tile**|1|0|0|0|20.00%|129|135|95.56%|
+|**DSPs**|0|0|0|0|20.00%|3.6|240|1.50%|
 
 I added a 20% margin overall for the bus fabric and for components I haven't included yet.
 
@@ -488,9 +561,9 @@ I added a 20% margin overall for the bus fabric and for components I haven't inc
 |**Block RAM Tile**|**16**|25|0|0|1|0.5|0|0
 |**DSPs**|0|2|1|0|0|0|0|0
 
-| Resources Type | sdspi | wbi2c | wbuart | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
-|----------------|-------|-------|--------|-------------|----------------------|----------------|------------------
-|**Slice LUTs**|536|393|438|20.00%|16675.4|20800|80.17%
-|**Slice Registers**|749|324|346|20.00%|11988|41600|28.82%
-|**Block RAM Tile**|1|0|0|**10.00%**|47.85|50|**95.70%**
-|**DSPs**|0|0|0|20.00%|3.6|90|4.00%
+| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
+|----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------
+|**Slice LUTs**|536|393|438|440|20.00%|17203|20800|82.71%
+|**Slice Registers**|749|324|346|641|20.00%|12757|41600|30.67%
+|**Block RAM Tile**|1|0|0|0|**10.00%**|48|50|**95.70%**
+|**DSPs**|0|0|0|0|20.00%|4|90|4.00%
