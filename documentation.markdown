@@ -257,18 +257,6 @@ There are a lot of RISC-V implementations to choose from. The [**Ibex**](https:/
 - Supports a *small* two-stage pipeline parameterization.
 - Very active project.
 
-#### The CPU Configuration
-
-The selected Ibex CPU configuration is RV32IMCB: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
-Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
-The Ibex core is instantiated with the following *M* and *B* parameters:
-
-ibex_top.sv:
-```
-    parameter rv32m_e      RV32M            = RV32MFast,
-    parameter rv32b_e      RV32B            = RV32BBalanced,
-```
-
 ### The Memory Controller
 
 SDRAM memory access is pretty complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. 
@@ -567,3 +555,18 @@ I added a 20% margin overall for the bus fabric and for components I haven't inc
 |**Slice Registers**|749|324|346|641|20.00%|12757|41600|30.67%
 |**Block RAM Tile**|1|0|0|0|**10.00%**|48|50|**95.70%**
 |**DSPs**|0|0|0|0|20.00%|4|90|4.00%
+
+Component Details
+-----------------
+
+### The CPU Configuration
+
+I settled on RISC-V configuration **RV32IMCB**: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
+Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
+The Ibex core is instantiated with the following *M* and *B* parameters:
+
+ibex_top.sv:
+```
+    parameter rv32m_e      RV32M            = RV32MFast,
+    parameter rv32b_e      RV32B            = RV32BBalanced,
+```
