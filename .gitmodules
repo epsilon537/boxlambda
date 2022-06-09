@@ -1,0 +1,4 @@
+[submodule "fpga/ibex_wb"]
+	path = fpga/ibex_wb
+	url = https://github.com/epsilon537/ibex_wb
+	branch = boxlambda
