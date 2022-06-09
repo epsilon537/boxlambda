@@ -2,3 +2,11 @@
 	path = fpga/ibex_wb
 	url = https://github.com/epsilon537/ibex_wb
 	branch = boxlambda
+[submodule "fpga/ibex"]
+	path = fpga/ibex
+	url = https://github.com/epsilon537/ibex
+	branch = boxlambda
+[submodule "fpga/wbuart32"]
+	path = fpga/wbuart32
+	url = https://github.com/epsilon537/wbuart32
+	branch = boxlambda
