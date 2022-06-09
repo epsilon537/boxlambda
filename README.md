@@ -25,3 +25,6 @@ BoxLambda is a software-hardware cross-over project. The plan is to provide room
 
 I'm keeping a project Blog and documentation [here](https://epsilon537.github.io/boxlambda/).
 
+# Important Note
+
+This project is still in a unreleased state. Until further notice, everything you see here is work-in-progress, in flux, incomplete.
