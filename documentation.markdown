@@ -85,11 +85,17 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **USB HIB**: USB Human Interface device Class, a part of the USB specification for computer peripherals such as keyboards and mice.
 
+- **VCS**: Version Control Subsystem.
+
 - **VERA**: Versatile Embedded Retro Adapter, the name of the graphics core used by BoxLambda.
 
 - **VRAM**: Video RAM.
 
-- **Wishbone**: An Open-Source SoC bus specification: [https://cdn.opencores.org/downloads/wbspec_b4.pdf](https://cdn.opencores.org/downloads/wbspec_b4.pdf)
+- **WIP**: Work In Progress.
+
+- **Wishbone**: An Open-Source SoC bus specification: [https://cdn.opencores.org/downloads/wbspec_b4.pdf](https://cdn.opencores.org/downloads/wbspec_b4.pdf).
+
+- **WSL**: Windows Subsystem for Linx.
 
 - **Xbar**: Cross-Bar, a type of interconnect used in SoC bus fabrics.
 
@@ -524,17 +530,17 @@ Estimated FPGA Utilization
 **Estimated FPGA Resource Utilization on Nexys A7-100T:**
 
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
-|----------------|--------|------|---------------|-----|------|------------|-----------|-----------|
-|**Slice LUTs**|0|2122|3390|5673|554|380|205|205|
-|**Slice Registers**|0|1441|911|5060|622|167|185|185|
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
+|----------------|--------|------|---------------|-----------|------|------------|-----------|-----------|
+|**Slice LUTs**|0|2122|3390|5673|416|554|380|205|205|
+|**Slice Registers**|0|1441|911|426|5060|622|167|185|185|
 |**Block RAM Tile**|64|41|0|0|1|0.5|0|0|
 |**DSPs**|0|2|1|0|0|0|0|0|
 
 | Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
 |----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|536|393|438|440|20.00%|17203.2|63400|27.13%|
-|**Slice Registers**|324|114|346|641|20.00%|12757.2|126800|10.06%|
+|**Slice LUTs**|536|393|438|440|20.00%|17702|63400|27.92%|
+|**Slice Registers**|324|114|346|641|20.00%|13268|126800|10.46%|
 |**Block RAM Tile**|1|0|0|0|20.00%|129|135|95.56%|
 |**DSPs**|0|0|0|0|20.00%|3.6|240|1.50%|
 
@@ -542,17 +548,17 @@ I added a 20% margin overall for the bus fabric and for components I haven't inc
 
 **Estimated FPGA Resource Utilization on Arty A7-35T:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
-|----------------|--------|------|---------------|-----|------|------------|-----------|-----------
-|**Slice LUTs**|0|2122|3390|5673|554|380|205|205
-|**Slice Registers**|0|1441|911|5060|622|167|185|185
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
+|----------------|--------|------|---------------|-----------|------|------------|-----------|-----------
+|**Slice LUTs**|0|2122|3390|5673|416|554|380|205|205
+|**Slice Registers**|0|1441|911|426|5060|622|167|185|185
 |**Block RAM Tile**|**16**|25|0|0|1|0.5|0|0
 |**DSPs**|0|2|1|0|0|0|0|0
 
 | Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
 |----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------
-|**Slice LUTs**|536|393|438|440|20.00%|17203|20800|82.71%
-|**Slice Registers**|749|324|346|641|20.00%|12757|41600|30.67%
+|**Slice LUTs**|536|393|438|440|20.00%|17702|20800|85.11%
+|**Slice Registers**|749|324|346|641|20.00%|13268|41600|31.90%
 |**Block RAM Tile**|1|0|0|0|**10.00%**|48|50|**95.70%**
 |**DSPs**|0|0|0|0|20.00%|4|90|4.00%
 
@@ -570,3 +576,41 @@ ibex_top.sv:
     parameter rv32m_e      RV32M            = RV32MFast,
     parameter rv32b_e      RV32B            = RV32BBalanced,
 ```
+
+Git Workflow
+------------
+I'll be using the following directory layout in the BoxLambda repository:
+
+```
+boxlambda/doc
+boxlambda/fpga/ibex (ibex fork git submodule)
+boxlambda/fpga/wbuart32 (wbuart32 fork git submodule)
+boxlambda/fpga/<other FPGA git submodules>
+boxlambda/fpga/<BoxLambda FPGA specific files that don't fit in any of the git submodules> 
+boxlambda/sw/<SW fork git submodules>
+boxlambda/sw/<BoxLambda SW files that don't fit in any of the submodules> 
+```
+
+Each of the git submodules is a fork of a GitHub project discussed in earlier posts. For example, *boxlambda/fpga/ibex/* contains [my ibex fork](https://github.com/epsilon537/ibex), not the [original ibex repository](https://github.com/lowRISC/ibex).
+
+In each of the forked submodules, two branches are relevant:
+
+- **master**: I'm keeping the master branch in sync with the master branch of the repository I forked from. Having this branch makes it easy to pull in updates as well as to submit the occasional pull request to the original project.
+- **boxlambda**: On this branch, I'll be making changes for BoxLambda.
+
+In the BoxLambda repository itself, I have the following long-running branches:
+
+- **master**: I will submit releases to this branch. The master branch should always be in good shape.
+- **develop**: This is where the work is happening. Things will be in flux here. This branch will not always be in good shape.
+- **gh-pages**: This branch holds the BoxLambda Blog files. GitHub Pages are by default on the *gh-pages* branch of a GitHub project.
+- **boxlambda-gh-pages-wip**: This branch holds work-in-progress Blog updates. This branch also contains some config file modifs specifically for local previewing, which is why this is a long-running branch, rather than a topic branch. When updates are ready for release, I merge them to *gh-pages*. 
+
+Tools Versions
+--------------
+I'm currently using the following tools:
+
+- Vivado ML Edition V2021.2, Linux version.
+- Vivado Lab Edition V2021.2, Windows version (for the hardware server).
+- RISCV Compiler Toolchain **rv32imcb**. This is the cross compiler for building the code that'll run on the Ibex processor. I'm using the **20220210-1** pre-built binaries from *lowRISC*: 
+
+	[https://github.com/lowRISC/lowrisc-toolchains/releases](https://github.com/lowRISC/lowrisc-toolchains/releases)
