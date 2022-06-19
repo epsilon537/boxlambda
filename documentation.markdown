@@ -13,11 +13,15 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **AXI**: Advanced eXtensible Interface, ARM's SoC bus specification.
 
+- **Bitstream**: An FPGA Bitstream is a file containing the programming data associated with an FPGA chip.
+
 - **Blitter**: A type of DMA often used in the context of 2D graphics, copying, combining, and/or modifying bitmap graphics in video memory.
 
 - **BPP**: Bits Per Pixel.
 
 - **Console**: The physical terminal consisting of a screen, a keyboard, and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
+
+- **CPU**: Central Processing Unit.
 
 - **DAC**: Digital-to-Analog Converter.
 
@@ -31,7 +35,11 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **DPRAM**: Dual-Port RAM.
 
+- **DTM**: Debug Transport Module.
+
 - **FIFO**: First-In-First-out, an implementation of a queue.
+
+- **Fork**: A GitHub fork is a copy of a repository that sits in your account rather than the account from which you forked the data.
 
 - **GPIO**: General-Purpose Input/Output, an uncommitted pin used for input and/or output controllable by the user at run-time.
 
@@ -57,6 +65,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **MEMC**: Memory Controller.
 
+- **OpenOCD**: Open On-Chip Debugger, open-source software that interfaces with a hardware debugger's JTAG port.
+
 - **PIT**: Programmable Interval Timer.
 
 - **Praxos**: The name of the DMA Controller used by BoxLambda.
@@ -64,6 +74,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **PSG**: Programmable Sound Generator.
 
 - **PWM**: Pulse Width Modulation.
+
+- **Repo**: Repository.
 
 - **RP**: Reconfigurable Partition. Part of Xilinx's DFX solution.
 
@@ -176,7 +188,7 @@ Applications should be able to discover, with the help of the OS, whether a cert
 
 #### Partial FPGA Reconfiguration
 
-It would be very cool if a hardware component can be incrementally loaded into the FPGA, using Xilinx' *DFX* (Dynamic Function eXchange) feature. This would allow applications to be packaged along with specific hardware components (e.g. accelerators or peripherals) on which they depend.
+It would be very cool if a hardware component can be incrementally loaded into the FPGA, using Xilinx's *DFX* (Dynamic Function eXchange) feature. This would allow applications to be packaged along with specific hardware components (e.g. accelerators or peripherals) on which they depend.
 
 I'm considering this feature a stretch goal for the project.
 
@@ -198,8 +210,8 @@ I suspect that over time the project will outgrow this setup and I might move up
 - USB HID for keyboard and mouse, with a clever adapter so keyboard and mouse present themselves to the FPGA as PS/2 devices.
 - VGA connector
 
-Key Components
---------------
+Components Overview
+-------------------
 
 We're building a System-on-a-Chip (*System-on-an-FPGA*?). This section identifies the Key Components of the BoxLambda SoC.
 
@@ -255,13 +267,51 @@ With all that in mind, I think [**RISC-V**](https://riscv.org/) is a great optio
 - Well-documented.
 - Very fashionable. Let's ride that wave :-)
 
-There are a lot of RISC-V implementations to choose from. The [**Ibex**](https://github.com/lowRISC/ibex) project seems like a good choice:
+#### The CPU core: Ibex
+
+There are a lot of RISC-V implementations to choose from. The **Ibex** project seems like a good choice:
+
+[https://github.com/lowRISC/ibex](https://github.com/lowRISC/ibex)
 
 - 32-bit RISC-V.
 - High-quality, well-documented implementation.
 - SystemVerilog based. My preferred HDL.
 - Supports a *small* two-stage pipeline parameterization.
 - Very active project.
+
+Location of the *ibex* submodule in the BoxLambda repo: **boxlambda/fpga/ibex/**
+
+#### The Wishbone Wrapper: *wb_ibex*
+
+[https://github.com/epsilon537/ibex_wb](https://github.com/epsilon537/ibex_wb) forked from [https://github.com/batuhanates/ibex_wb](https://github.com/batuhanates/ibex_wb)
+
+The ibex RISCV core itself doesn't have Wishbone ports. *wb_ibex* wraps around the vanilla ibex core and attaches Wishbone port adapters to its instruction and data ports.
+
+The *ibex_wb* repo also includes an example SoC build consisting of an ibex core connected via a shared Wishbone bus to a wbuart32 core and an internal memory module, along with the software to run on that platform. This example SoC is the starting point for BoxLambda's implementation. See the **Test Builds** section below.
+
+Location of the *ibex_wb* submodule in the BoxLambda repo: **boxlambda/fpga/ibex_wb/**
+
+**boxlambda/fpga/ibex_wb/rtl/wb_ibex_core.sv**
+
+#### Ibex Core Configuration
+
+I settled on RISCV configuration **RV32IMCB**: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
+Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
+The Ibex core is instantiated with the following *M* and *B* parameters, as shown in the *ibex_wb* *ibex_soc* example:
+
+**boxlambda/fpga/ibex_wb/soc/fpga/arty-a7-35/rtl/ibex_soc.sv**:
+```
+wb_ibex_core #(
+  .RV32M(ibex_pkg::RV32MFast),
+  .RV32B(ibex_pkg::RV32BBalanced)
+  ,,,
+```
+
+#### The Debug Unit: *riscv-dbg*
+
+[https://github.com/epsilon537/riscv-dbg](https://github.com/epsilon537/riscv-dbg) forked from [https://github.com/pulp-platform/riscv-dbg](https://github.com/pulp-platform/riscv-dbg).
+
+*riscv-dbg* is a debug unit for the Ibex RISCV processor. The debug unit can be accessed via JTAG over DTM (Debug Transport Module). The plan is to bring up OpenOCD.
 
 ### The Memory Controller
 
@@ -335,7 +385,7 @@ I was ready to go with the Ant Micro selection when I happened across an old pos
 
 [https://github.com/esherriff/Praxos](https://github.com/esherriff/Praxos)
 
-Praxos has tiny CPU with a small amount of program and data memory embedded in the core, allowing you to write microcode specifying the DMA behavior you want: word/non-word alignment, incrementing/decrementing/non-incrementing source and/or destination address, strides between transfers, combining sources, barrel shifting... Maximum flexibility!
+Praxos has a tiny CPU with a small amount of program and data memory embedded in the core, allowing you to write microcode specifying the DMA behavior you want: word/non-word alignment, incrementing/decrementing/non-incrementing source and/or destination address, strides between transfers, combining sources, barrel shifting... Maximum flexibility!
 
 It's not perfect though. Praxos only has one bus master port, an Avalon port at that. It should be doable to slap a standard Wishbone port onto it, but in its current form, I think it won't be able to take advantage of Wishbone's pipelined burst mode. That's unfortunate for a DMAC. 
 
@@ -370,12 +420,14 @@ ZipCPU has an I2C core with a Wishbone port: [https://github.com/ZipCPU/wbi2c](h
 
 ZipCPU comes to the rescue once again with a UART implementation with a Wishbone interface: [https://github.com/ZipCPU/wbuart32](https://github.com/ZipCPU/wbuart32)
 
+Location of the *wbuart32* submodule in the BoxLambda repository: **boxlambda/fpga/wbuart32/**
+
 ### Miscellaneous Modules
 
-- **GPIO**: a placeholder for General Purpose I/O. I haven't settled on specific modules yet. To be revisited.
 - **DFX Controller**: The actual loading of a Reconfigurable Module into a Reconfigurable Partition is handled by the DFX Controller. DFX stands for **Dynamic Function Exchange** which is Xilinx-speak for Partial FPGA Reconfiguration.
 - **ICAP**: Internal Configuration Access Port. This module gives access to the FPGA configuration functionality built into Xilinx FPGAs. We'll use the ICAP to implement in-system updates of the Full Configuration Bitstream, loaded into the FPGA upon boot-up.
-- **Quad SPI Flash**: This is a module provided by Xilinx, giving access to the Flash Memory device attached through a Quad-SPI bus. The non-volatile Flash Memory will hold the Full Configuration Bitstream(s), System Firmware, and non-volatile system configuration parameters such as keyboard type.
+- **Quad SPI Flash**: This is a module provided by Xilinx, giving access to the Flash Memory device attached through a Quad-SPI bus. The non-volatile Flash Memory will hold the Full Configuration Bitstream(s), System Firmware, and non-volatile system configuration parameters such as keyboard type
+- **wb_gpio**: A simple GPIO core with a Wishbone interface, for sampling buttons and switches, and driving LEDs. *wb_gpio.v* is included in the *ibex_wb* submodule.
 
 Architecture
 ------------
@@ -473,8 +525,6 @@ The RISC-V spec includes a timer specification: RISC-V Machine Timer Registers (
 
 [https://github.com/epsilon537/ibex/tree/master/examples/simple_system](https://github.com/epsilon537/ibex/tree/master/examples/simple_system)
 
-We'll be using this timer module implementation, so we don't need a separate PIT module.
-
 The Timer module flags interrupts via signal *irq_timer_i*. The CPU sees this as IRQ ID 7.
 
 ### The Fast Local Interrupts
@@ -562,21 +612,6 @@ I added a 20% margin overall for the bus fabric and for components I haven't inc
 |**Block RAM Tile**|1|0|0|0|**10.00%**|48|50|**95.70%**
 |**DSPs**|0|0|0|0|20.00%|4|90|4.00%
 
-Component Details
------------------
-
-### The CPU Configuration
-
-I settled on RISC-V configuration **RV32IMCB**: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
-Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
-The Ibex core is instantiated with the following *M* and *B* parameters:
-
-ibex_top.sv:
-```
-    parameter rv32m_e      RV32M            = RV32MFast,
-    parameter rv32b_e      RV32B            = RV32BBalanced,
-```
-
 Git Workflow
 ------------
 I'll be using the following directory layout in the BoxLambda repository:
@@ -605,12 +640,47 @@ In the BoxLambda repository itself, I have the following long-running branches:
 - **gh-pages**: This branch holds the BoxLambda Blog files. GitHub Pages are by default on the *gh-pages* branch of a GitHub project.
 - **boxlambda-gh-pages-wip**: This branch holds work-in-progress Blog updates. This branch also contains some config file modifs specifically for local previewing, which is why this is a long-running branch, rather than a topic branch. When updates are ready for release, I merge them to *gh-pages*. 
 
-Tools Versions
---------------
-I'm currently using the following tools:
+Prerequisites
+-------------
 
-- Vivado ML Edition V2021.2, Linux version.
-- Vivado Lab Edition V2021.2, Windows version (for the hardware server).
+- Host OS: Linux or Linux WSL.
+- Vivado ML Edition V2021.2, Linux version:
+  
+  [https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html)
+  
+  Make sure you also install your Arty A7 or Nexys A7 board files. Digilent has excellent instructions for installing Vivado and Digilent board files:
+  
+  [https://digilent.com/reference/vivado/installing-vivado/v2019.2](https://digilent.com/reference/vivado/installing-vivado/v2019.2)
+
 - RISCV Compiler Toolchain **rv32imcb**. This is the cross compiler for building the code that'll run on the Ibex processor. I'm using the **20220210-1** pre-built binaries from *lowRISC*: 
-
 	[https://github.com/lowRISC/lowrisc-toolchains/releases](https://github.com/lowRISC/lowrisc-toolchains/releases)
+
+  Add the toolchain's *bin/* directory to your *PATH*. E.g.:
+
+```
+export RISCV_TOOLCHAIN=$HOME/lowrisc-toolchain-gcc-rv32imcb-20220210-1
+export PATH=$PATH:$RISCV_TOOLCHAIN/bin
+```
+
+Test Builds
+-----------
+
+### Hello World!
+
+Vivado project **boxlambda/fpga/vivado/hello_world/hello_world.xpr** contains a test SoC build consisting of a wb_ibex core, 64KB internal memory, a wbuart32 core, a timer, and a GPIO module.
+
+**boxlambda/fpga/ibex_wb/soc/fpga/arty-a7-35/sw/examples/** contains example SW for the test SoC.
+
+To build the *Hello World!* example, go through the following steps:
+
+0. Install the [prerequisites](documentation/#prerequisites). 
+1. **git clone https://github.com/epsilon537/boxlambda/**,
+2. **cd boxlambda**
+5. Switch to the *hello_world* tag: **git checkout hello_world**.
+4. Get the submodules: **git submodule update --init --recursive**.
+5. Build the software:
+   1. **cd fpga/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello**
+   2. **make**  
+6. Open project file *fpga/vivado/hello_world/hello_world.xpr* in Vivado.
+7. In Vivado, start a simulation, or synthesize the design and generate a bitstream to load onto your Arty A7-35T.
+
