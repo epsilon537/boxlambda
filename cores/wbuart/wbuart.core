@@ -1,0 +1,47 @@
+CAPI=2:
+name: boxlambda:components:wbuart:1.0.0
+description: wbuart, a FuseSoC example core
+
+filesets:
+  rtl:
+    files:
+      - sub/wbuart32/rtl/wbuart.v
+      - sub/wbuart32/rtl/txuart.v
+      - sub/wbuart32/rtl/rxuart.v
+      - sub/wbuart32/rtl/ufifo.v       
+    file_type: verilogSource
+
+  art_a7:
+    files:
+      - ooc.xdc: {file_type: xdc}
+      
+targets:
+  # The "default" target is special in FuseSoC and used in dependencies.
+  # The "&default" is a YAML anchor referenced later.
+  default: &default
+    filesets:
+      - rtl
+    toplevel: wbuart
+
+  # The "synth" target synthesizes the design. (It could have any name.)
+  synth:
+    <<: *default
+    description: Synthesize the design for an Arty A7 board
+    default_tool: vivado
+    filesets_append:
+      - art_a7
+    tools:
+      vivado:
+        part: xc7a35ticsg324-1L
+
+  lint:
+    <<: *default
+    default_tool: verilator
+    tools:
+      verilator:
+        mode: lint-only
+        verilator_options:
+          - "-Wall"
+          # RAM primitives wider than 64bit (required for ECC) fail to build in
+          # Verilator without increasing the unroll count (see Verilator#1266)
+          - "--unroll-count 72"
