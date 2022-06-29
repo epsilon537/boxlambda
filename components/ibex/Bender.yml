@@ -1,0 +1,77 @@
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: ibex
+
+  # The list of package authors and contributors. Optional.
+  # By convention, authors should be listed in the form shown below.
+  authors: ["Ruben Lysens <ruben.lysens2@gmail.com>"]
+  
+sources:
+  - target: standalone
+    files:
+      - rtl/ibex_top_wrap.sv
+
+  - target: any(synthesis, simulation)
+    defines:
+      PRIM_DEFAULT_IMPL: prim_pkg::ImplXilinx
+    include_dirs:
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl
+      - ../../sub/ibex/vendor/lowrisc_ip/dv/sv/dv_utils
+    files:
+      - ../../sub/ibex/shared/rtl/fpga/xilinx/clkgen_xil7series.sv
+      - ../../sub/ibex/dv/uvm/core_ibex/common/prim/prim_pkg.sv
+      - ../../sub/ibex/dv/uvm/core_ibex/common/prim/prim_clock_gating.sv      
+      - ../../sub/ibex/dv/uvm/core_ibex/common/prim/prim_buf.sv
+      - ../../sub/ibex/dv/uvm/core_ibex/common/prim/prim_clock_mux2.sv
+      - ../../sub/ibex/dv/uvm/core_ibex/common/prim/prim_flop.sv
+      - ../../sub/ibex/dv/uvm/core_ibex/common/prim/prim_ram_1p.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/rtl/prim_xilinx_clock_gating.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_ram_1p_pkg.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_pkg.sv      
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_cipher_pkg.sv      
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_buf.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_lfsr.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_prince.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_util_pkg.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_ram_1p_adv.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_ram_1p_scr.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_22_16_dec.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_22_16_enc.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_28_22_dec.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_28_22_enc.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_39_32_dec.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_39_32_enc.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_hamming_22_16_dec.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_hamming_22_16_enc.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_hamming_39_32_dec.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_inv_hamming_39_32_enc.sv
+      - ../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_subst_perm.sv
+      - ../../sub/ibex/rtl/ibex_pkg.sv
+      - ../../sub/ibex/rtl/ibex_alu.sv
+      - ../../sub/ibex/rtl/ibex_branch_predict.sv
+      - ../../sub/ibex/rtl/ibex_compressed_decoder.sv
+      - ../../sub/ibex/rtl/ibex_controller.sv
+      - ../../sub/ibex/rtl/ibex_core.sv
+      - ../../sub/ibex/rtl/ibex_counter.sv
+      - ../../sub/ibex/rtl/ibex_cs_registers.sv
+      - ../../sub/ibex/rtl/ibex_csr.sv
+      - ../../sub/ibex/rtl/ibex_decoder.sv
+      - ../../sub/ibex/rtl/ibex_dummy_instr.sv
+      - ../../sub/ibex/rtl/ibex_ex_block.sv
+      - ../../sub/ibex/rtl/ibex_fetch_fifo.sv
+      - ../../sub/ibex/rtl/ibex_icache.sv
+      - ../../sub/ibex/rtl/ibex_id_stage.sv
+      - ../../sub/ibex/rtl/ibex_if_stage.sv
+      - ../../sub/ibex/rtl/ibex_load_store_unit.sv
+      - ../../sub/ibex/rtl/ibex_lockstep.sv
+      - ../../sub/ibex/rtl/ibex_multdiv_fast.sv
+      - ../../sub/ibex/rtl/ibex_multdiv_slow.sv
+      - ../../sub/ibex/rtl/ibex_pmp.sv
+      - ../../sub/ibex/rtl/ibex_prefetch_buffer.sv
+      - ../../sub/ibex/rtl/ibex_register_file_fpga.sv
+      - ../../sub/ibex/rtl/ibex_wb_stage.sv            
+      - ../../sub/ibex/rtl/ibex_top.sv
+
+
+    

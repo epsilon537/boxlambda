@@ -1,0 +1,15 @@
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: ibex_wb_common
+
+  # The list of package authors and contributors. Optional.
+  # By convention, authors should be listed in the form shown below.
+  authors: ["Ruben Lysens <ruben.lysens2@gmail.com>"]
+  
+sources:
+  - target: any(synthesis, simulation)
+    files:
+      - ../../sub/ibex_wb/rtl/wb_pkg.sv
+      - ../../sub/ibex_wb/rtl/wb_if.sv
+    

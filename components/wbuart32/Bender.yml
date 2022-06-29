@@ -1,0 +1,24 @@
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: wbuart32
+
+  # The list of package authors and contributors. Optional.
+  # By convention, authors should be listed in the form shown below.
+  authors: ["Ruben Lysens <ruben.lysens2@gmail.com>"]
+
+dependencies:
+  # Path dependency.
+  ibex_wb_common: { path: "../../components/ibex_wb_common" }
+  
+sources:
+  - target: constraints
+    files:
+    - ooc.xdc
+  - target: any(synthesis, simulation)
+    files:
+      - ../../sub/wbuart32/rtl/rxuart.v
+      - ../../sub/wbuart32/rtl/txuart.v
+      - ../../sub/wbuart32/rtl/ufifo.v
+      - ../../sub/wbuart32/rtl/wbuart.v
+      - ../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_wbuart_wrap.sv
