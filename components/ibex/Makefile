@@ -3,8 +3,8 @@ VIVADO_TCL := $(TOP_DIR)/build_sys/vivado.tcl
 PRG_BITSTREAM_TCL := $(TOP_DIR)/build_sys/prg_bitstream.tcl
 PART = xc7a35ticsg324-1L
 BENDER_GEN_SCRIPT = generated/sources.tcl
-MEM_FILES := $(shell bender script flist -t memory)
-CONSTRAINTS := $(shell bender script flist -n -t constraints)
+MEM_FILES := $(shell bender update && bender script flist -t memory)
+CONSTRAINTS := $(shell bender update && bender script flist -n -t constraints)
 CONSTRAINTS_GEN_SCRIPT = generated/constraints.tcl
 MEM_FILES_GEN_SCRIPT = generated/mem_files.tcl
 IP_ADDRESS := $(shell grep nameserver /etc/resolv.conf | sed 's/nameserver //')
@@ -12,8 +12,8 @@ IP_ADDRESS := $(shell grep nameserver /etc/resolv.conf | sed 's/nameserver //')
 #Flags
 OOC = 1
 
-.PHONY: always
-always:
+.PHONY: bender_update
+bender_update:
 	bender update
 
 .PHONY: constraints
@@ -32,7 +32,7 @@ mem_files:
 %.mem :
 	$(MAKE) -C $(@D)
 
-$(BENDER_GEN_SCRIPT): always
+$(BENDER_GEN_SCRIPT): bender_update
 	mkdir -p generated
 	bender script -t synthesis -t standalone vivado > $(BENDER_GEN_SCRIPT)
 
