@@ -1,52 +1,14 @@
+#Path to the root of the repository
 TOP_DIR := ../..
-VIVADO_TCL := $(TOP_DIR)/build_sys/vivado.tcl
+
+#Include common Make flags and rules
+include $(TOP_DIR)/build_sys/common.mk
+
 PRG_BITSTREAM_TCL := $(TOP_DIR)/build_sys/prg_bitstream.tcl
-PART = xc7a35ticsg324-1L
-BENDER_GEN_SCRIPT = generated/sources.tcl
-MEM_FILES = $(shell bender update && bender script flist -t memory)
-CONSTRAINTS = $(shell bender update && bender script flist -n -t constraints)
-CONSTRAINTS_GEN_SCRIPT = generated/constraints.tcl
-MEM_FILES_GEN_SCRIPT = generated/mem_files.tcl
 IP_ADDRESS := $(shell grep nameserver /etc/resolv.conf | sed 's/nameserver //')
 
-default: dryrun
-
-.PHONY: bender_update
-bender_update:
-	bender update
-
-.PHONY: constraints
-constraints: $(CONSTRAINTS) 
-	$(RM) -f $(CONSTRAINTS_GEN_SCRIPT)
-	$(foreach constraint, $^, echo add_files -fileset constrs_1 $(constraint) >> $(CONSTRAINTS_GEN_SCRIPT))
-
-.PHONY: mem_files
-mem_files: $(MEM_FILES) 
-	$(RM) -f $(MEM_FILES_GEN_SCRIPT)
-	$(foreach mem_file, $(MEM_FILES), echo add_files -norecurse $(mem_file) >> $(MEM_FILES_GEN_SCRIPT))
-
-.PHONY: force
-force :
-
-%.mem : force
-	$(MAKE) -C $(@D)
-
-$(BENDER_GEN_SCRIPT): bender_update
-	mkdir -p generated
-	bender script -t synthesis vivado > $(BENDER_GEN_SCRIPT)
-
-.PHONY: synth dryrun
-dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files constraints
-	vivado -nolog -nojournal -mode batch -source $(VIVADO_TCL) \
-	-tclargs -project generated/project -cmd $@ -part $(PART) \
-	-sources $(BENDER_GEN_SCRIPT) -constraints $(CONSTRAINTS_GEN_SCRIPT) \
-	-mem_files $(MEM_FILES_GEN_SCRIPT) -outputDir generated
-
+#A rule to download the generated bitstream to target. There are many different ways to connect to a target. Below are the instructions for my
+#setup. Customize as needed for your own setup.
 .PHONY: run
 run:
 	vivado -nolog -nojournal -mode batch -source $(PRG_BITSTREAM_TCL) -tclargs -bitstream generated/project.runs/impl_1/*.bit -ip $(IP_ADDRESS)
-
-.PHONY: clean
-clean:
-	$(RM) *.log
-	$(RM) -rf generated

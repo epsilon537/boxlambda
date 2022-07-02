@@ -1,3 +1,5 @@
+#The top-level Makefile is currently only used to recursively clean the components and projects directories and to recursively run bender update across components and projects.
+
 COMPONENT_MAKEFILES = $(shell find components -name Makefile)
 PROJECT_MAKEFILES = $(shell find projects -name Makefile)
 

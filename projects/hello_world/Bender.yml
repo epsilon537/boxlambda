@@ -3,10 +3,6 @@ package:
   # The name of the package. Required.
   name: hello_world
 
-  # The list of package authors and contributors. Optional.
-  # By convention, authors should be listed in the form shown below.
-  authors: ["Ruben Lysens <ruben.lysens2@gmail.com>"]
-
 dependencies:
   # Path dependency.
   wb_gpio: { path: "../../components/wb_gpio" }
@@ -17,11 +13,13 @@ dependencies:
 sources:
   - target: constraints
     files:
-    - ../../sub/ibex_wb/soc/fpga/arty-a7-35/constrs/Arty-A7-35-Master.xdc
+      - ../../sub/ibex_wb/soc/fpga/arty-a7-35/constrs/Arty-A7-35-Master.xdc
   - target: memory
     files:
-    - ../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello/hello.mem    
+      - ../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello/hello.mem    
   - target: any(synthesis, simulation)
+    #spram and timer should be separate components, but since I won't use them
+    #as Boxlambda components, I'm leaving them here in the hello world example
     files:
       - ../../sub/ibex_wb/soc/common/rtl/wb_interconnect_sharedbus.sv
       - ../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/spramx32.sv      

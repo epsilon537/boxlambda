@@ -3,10 +3,6 @@ package:
   # The name of the package. Required.
   name: ibex_wb_core
 
-  # The list of package authors and contributors. Optional.
-  # By convention, authors should be listed in the form shown below.
-  authors: ["Ruben Lysens <ruben.lysens2@gmail.com>"]
-
 dependencies:
   # Path dependency.
   ibex: { path: "../../components/ibex" }

@@ -3,10 +3,6 @@ package:
   # The name of the package. Required.
   name: wb_gpio
 
-  # The list of package authors and contributors. Optional.
-  # By convention, authors should be listed in the form shown below.
-  authors: ["Ruben Lysens <ruben.lysens2@gmail.com>"]
-
 dependencies:
   # Path dependency.
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
@@ -17,4 +13,4 @@ sources:
     - ooc.xdc
   - target: any(synthesis, simulation)
     files:
-      - ../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_gpio.sv
+    - ../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_gpio.sv

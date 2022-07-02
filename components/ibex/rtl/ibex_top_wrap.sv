@@ -1,3 +1,5 @@
+//A wrapper module only used during ibex OOC synthesis. It instantiates ibex_top the way we want it.
+  
 module ibex_top_wrap import ibex_pkg::*;
   (
    // Clock and Reset

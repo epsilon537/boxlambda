@@ -3,12 +3,10 @@ package:
   # The name of the package. Required.
   name: ibex
 
-  # The list of package authors and contributors. Optional.
-  # By convention, authors should be listed in the form shown below.
-  authors: ["Ruben Lysens <ruben.lysens2@gmail.com>"]
-  
 sources:
-  - target: standalone
+  #This target is selected when building a component separately (i.e. running make synth in a component directory
+  #This target is not selected during a project build
+  - target: ooc
     files:
       - rtl/ibex_top_wrap.sv
 
