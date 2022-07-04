@@ -21,6 +21,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Console**: The physical terminal consisting of a screen, a keyboard, and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
 
+- **Constraints File**: A constraints file specifies the mapping of the top-level HDL module's input and output ports to physical pins of the FPGA. It also defines the clocks used by the given design. See [https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file](https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file).
+
 - **CPU**: Central Processing Unit.
 
 - **DAC**: Digital-to-Analog Converter.
@@ -37,6 +39,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **DTM**: Debug Transport Module.
 
+- **EDA tool**: A software tool to design electronic circuits, e.g. Vivado.
+
 - **FIFO**: First-In-First-out, an implementation of a queue.
 
 - **Fork**: A GitHub fork is a copy of a repository that sits in your account rather than the account from which you forked the data.
@@ -48,6 +52,10 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **Ibex**: The name of the Risc-V CPU core used by BoxLambda.
 
 - **Interconnect**: Wishbone terminology for the bus fabric.
+
+- **IP-XACT**: An XML format that defines and describes individual, re-usable electronic circuit designs to facilitate their use in creating integrated circuits.
+
+- **IP Package**: A Vivado file encapsulating an IP component using the IP-XACT file format.
 
 - **IRQ**: Interrupt Request.
 
@@ -61,9 +69,15 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **LUT**: Look-Up Table.
 
+- **Makefile**: A file used by the *Make* utility, defining a set of tasks to be executed, and defining dependencies between tasks. Makefiles are commonly used to create build systems.
+
+- **Memory File**: A file containing the initial contents of a Block RAM instance used in an FPGA design.
+
 - **MIG**: Memory Interface Generator, a parameterizable Xilinx IP module used to generate a Memory Controller.
 
 - **MEMC**: Memory Controller.
+
+- **OOC**: Vivado's OOC mode or OOC flow lets you synthesize, implement, and analyze design modules in a hierarchical design.
 
 - **OpenOCD**: Open On-Chip Debugger, open-source software that interfaces with a hardware debugger's JTAG port.
 
@@ -94,6 +108,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **SPI**: Serial Peripheral Interface, a synchronous serial communication interface specification used for short-distance communication.
 
 - **Synthesis**: Synthesis turns a module's Verilog/System Verilog/VHDL source code into a netlist of gates. The software equivalent of synthesis is compilation.
+
+- **Tcl**: The defacto standard embedded command language for EDA applications.
 
 - **USB HIB**: USB Human Interface device Class, a part of the USB specification for computer peripherals such as keyboards and mice.
 
@@ -614,19 +630,18 @@ I added a 20% margin overall for the bus fabric and for components I haven't inc
 
 Git Workflow
 ------------
-I'll be using the following directory layout in the BoxLambda repository:
+
+All GitHub repositories used by BoxLambda are instantiated in BoxLambda's repository as git submodules. The git submodules are located in the *sub/* directory:
 
 ```
-boxlambda/doc
-boxlambda/fpga/ibex (ibex fork git submodule)
-boxlambda/fpga/wbuart32 (wbuart32 fork git submodule)
-boxlambda/fpga/<other FPGA git submodules>
-boxlambda/fpga/<BoxLambda FPGA specific files that don't fit in any of the git submodules> 
-boxlambda/sw/<SW fork git submodules>
-boxlambda/sw/<BoxLambda SW files that don't fit in any of the submodules> 
+sub
+├── ibex
+├── ibex_wb
+├── wbuart32
+└── ...
 ```
 
-Each of the git submodules is a fork of a GitHub project discussed in earlier posts. For example, *boxlambda/fpga/ibex/* contains [my ibex fork](https://github.com/epsilon537/ibex), not the [original ibex repository](https://github.com/lowRISC/ibex).
+Each of the git submodules is a fork of a GitHub project discussed in earlier posts. For example, *boxlambda/projects/ibex/* contains [my ibex fork](https://github.com/epsilon537/ibex), not the [original ibex repository](https://github.com/lowRISC/ibex).
 
 In each of the forked submodules, two branches are relevant:
 
@@ -639,6 +654,110 @@ In the BoxLambda repository itself, I have the following long-running branches:
 - **develop**: This is where the work is happening. Things will be in flux here. This branch will not always be in good shape.
 - **gh-pages**: This branch holds the BoxLambda Blog files. GitHub Pages are by default on the *gh-pages* branch of a GitHub project.
 - **boxlambda-gh-pages-wip**: This branch holds work-in-progress Blog updates. This branch also contains some config file modifs specifically for local previewing, which is why this is a long-running branch, rather than a topic branch. When updates are ready for release, I merge them to *gh-pages*. 
+
+The Build System
+----------------
+
+Bender
+======
+
+The build system is makefile based but relies on Bender for dependency Management:
+
+[https://github.com/pulp-platform/bender](https://github.com/pulp-platform/bender)
+
+Central to Bender is the package manifest *bender.yml*. In the manifest, you specify the HDL sources that make up the package, dependencies, include paths, targets (e.g. synth, sim), and associated *defines*.
+A package directory is a directory containing a bender.yml file. When you run bender in that directory, you can ask it to generate a flat list of all the sources from the current package, and the packages it depends on. Optionally, it can generate that list, plus any *defines* associated with a given target, as a Tcl script. This makes integration with Vivado very easy.
+
+![Project View of the Build System](../assets/Project_Build_Diagram.drawio.png){:class="img-responsive"}
+
+*Project View of the Build System*
+
+Three Layers
+============
+
+The build system has three layers:
+
+1. **The Project Layer (top)**: *Hello World* is an example project. A project is the top layer of the build system. The bender.yml manifest contains the top-level files of an SoC build, the project's *.xdc* constraints file, memory files used by the SoC, and a list of *components* the project depends on. 
+2. **The Component Layer (middle)**: Components are the middle layer of the build system. They are the building blocks of an SoC. A component's sources, *defines*, and dependencies are defined in a bender.yml manifest. A component gets its HDL sources from its *rtl/* subdirectory and/or from *sub/*, the submodule layer. I'm considering each Wishbone Bus Master or Slave a component.
+3. **The Submodule Layer (bottom)**: Submodules are the bottom layer of the build system. They are the Git Submodules that BoxLambda is referencing, as [discussed previously](https://epsilon537.github.io/boxlambda/git-workflow-and-setup/).
+
+The repository's directory structure reflects the three layers:
+
+```
+boxlambda
+├── build_sys
+├── projects
+│   └── hello_world
+├── components
+│   ├── ibex
+│   ├── ibex_wb_common
+│   ├── ibex_wb_core
+│   ├── wb_gpio
+│   └── wbuart32
+└── sub
+    ├── ibex
+    ├── ibex_wb
+    └── wbuart32
+```
+
+The Project Build Makefile
+==========================
+
+A project directory, such as *projects/hello_world/*, contains a top-level Makefile, with the following build targets:
+
+- **dryrun**: Generate a Vivado project, but don't build it.
+- **synth**: Generate a Vivado project and synthesize it.
+- **impl**: Generate a Vidado project, synthesize it, and implement it.
+- **run**: Download the generated bitstream file to the target. Note: The script this build target executes is configured for my WSL-based setup. It may need customization for other setups.
+- **clean**: Remove all generated files in the current directory and subdirectories.
+
+#### What happens when you run *make synth*
+
+When you run *make synth*, the following happens:
+1. Make runs a *bender script* command. 
+2. The bender script command processes the current directory's package manifest (*bender.yml*), as well as the package manifests of any dependent components. 
+3. The bender script command emits a list of all the HDL sources that make up the project. 
+4. Make feeds this file list, along with a *.xdc* constraints file and any *.mem* memory files, into a *vivado.tcl* script. 
+5. The vivado.tcl script generates a Vivado project file containing all the HDL sources, constraints, and memory files. 
+6. The vivado.tcl script kicks off synthesis and generates timing and utilization reports when synthesis is complete.
+
+When you run *make impl*, the same thing happens, but after completing synthesis, the vivado.tcl script proceeds to kick off implementation and bitstream generation.
+
+![The Build System Files - arrows indicate information flow](../assets/Build_System_Files.drawio.png){:class="img-responsive"}
+
+*The Build System Files - arrows indicate information flow.*
+
+The relevant files are linked below. To avoid repeating identical rules and variables across Makefiles, a *build_sys/common.mk* include file is created which contains all reusable Makefile logic.
+
+- [build_sys/common.mk](https://github.com/epsilon537/boxlambda/blob/79a78e8425d80836294669aaa0efebf6b4cbdb99/build_sys/common.mk)
+- [projects/hello_world/Makefile](https://github.com/epsilon537/boxlambda/blob/79a78e8425d80836294669aaa0efebf6b4cbdb99/projects/hello_world/Makefile)
+- [projects/hello_world/Bender.yml](https://github.com/epsilon537/boxlambda/blob/79a78e8425d80836294669aaa0efebf6b4cbdb99/projects/hello_world/Bender.yml)
+- [build_sys/vivado.tcl](https://github.com/epsilon537/boxlambda/blob/79a78e8425d80836294669aaa0efebf6b4cbdb99/build_sys/vivado.tcl)
+
+A Component Build
+=================
+
+Components can also be synthesized, in Out-Of-Context (OOC) Mode. In OOC mode, the synthesizer is made aware that the top-level module's input and output ports are not tied to chip pins, i.e. that this is just a partial build.
+A component Makefile works the same as a project Makefile, but with an *OOC* Makeflag set and propagated to Vivado.
+
+![Component View of the Build System](../assets/Component_Build_Diagram.drawio.png){:class="img-responsive"}
+
+*Component View of the Build System*
+
+About Memory Files
+==================
+
+Memory files used by an FPGA build are typically generated from software. It would be annoying to have to build the hello world program, to generate a memory file, and then build the FPGA in a separate step. As a rule, a build system should start from sources, not from build artifacts created separately by other build systems. 
+
+To combine the software and FPGA build steps, the build system has a pattern rule for *.mem* memory files. Whenever the build system encounters such a file as a dependency, it goes to that file's directory and runs make there, to make sure that the *.mem* file gets generated.
+
+```
+#Pattern rule for memory files: Go to the memory file's directory and run Make there.
+%.mem : force
+	$(MAKE) -C $(@D)
+```
+
+The current mechanism just assumes that the default rule in the recursive make will do the right thing. It's a bit crude, but it's a start.
 
 Prerequisites
 -------------
@@ -662,25 +781,30 @@ export RISCV_TOOLCHAIN=$HOME/lowrisc-toolchain-gcc-rv32imcb-20220210-1
 export PATH=$PATH:$RISCV_TOOLCHAIN/bin
 ```
 
+- GNU Make version 4.2.1: [https://www.gnu.org/software/make/](https://www.gnu.org/software/make/)
+  
+  Please make sure make is in your *PATH*.
+  
+- Bender 0.25.2: [https://github.com/pulp-platform/bender](https://github.com/pulp-platform/bender)
+
+  Please add bender to your *PATH*.
+  
 Test Builds
 -----------
 
 ### Hello World!
 
-Vivado project **boxlambda/fpga/vivado/hello_world/hello_world.xpr** contains a test SoC build consisting of a wb_ibex core, 64KB internal memory, a wbuart32 core, a timer, and a GPIO module.
-
-**boxlambda/fpga/ibex_wb/soc/fpga/arty-a7-35/sw/examples/** contains example SW for the test SoC.
+Project directory **boxlambda/projects/hello_world/** contains a test SoC build consisting of a wb_ibex core, 64KB internal memory, a wbuart32 core, a timer, and a GPIO module.
 
 To build the *Hello World!* example, go through the following steps:
 
-0. Install the [prerequisites](documentation/#prerequisites). 
+0. Install the [prerequisites](../documentation/#prerequisites). 
 1. **git clone https://github.com/epsilon537/boxlambda/**,
 2. **cd boxlambda**
-5. Switch to the *hello_world* tag: **git checkout hello_world**.
+3. Switch to the *make_and_bender* tag: **git checkout make_and_bender**.
 4. Get the submodules: **git submodule update --init --recursive**.
-5. Build the software:
-   1. **cd fpga/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello**
-   2. **make**  
-6. Open project file *fpga/vivado/hello_world/hello_world.xpr* in Vivado.
-7. In Vivado, start a simulation, or synthesize the design and generate a bitstream to load onto your Arty A7-35T.
+5. Build the project:
+   1. **cd projects/hello_world**
+   2. **make impl**  
+6. Start Vivado and download the generated bitstream to your Arty A7-35T: *projects/hello_world/generated/project.runs/impl_1/ibex_soc.bit*
 
