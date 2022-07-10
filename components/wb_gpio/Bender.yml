@@ -12,5 +12,7 @@ sources:
     files:
     - ooc.xdc
   - target: any(synthesis, simulation)
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
     files:
     - ../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_gpio.sv

@@ -12,6 +12,8 @@ dependencies:
   
 sources:
   - target: constraints
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
     files:
       - ../../sub/ibex_wb/soc/fpga/arty-a7-35/constrs/Arty-A7-35-Master.xdc
   - target: memory

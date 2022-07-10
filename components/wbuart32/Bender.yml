@@ -12,6 +12,8 @@ sources:
     files:
       - ooc.xdc
   - target: any(synthesis, simulation)
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
     files:
       - ../../sub/wbuart32/rtl/rxuart.v
       - ../../sub/wbuart32/rtl/txuart.v

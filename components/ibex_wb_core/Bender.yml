@@ -10,6 +10,8 @@ dependencies:
   
 sources:
   - target: any(synthesis, simulation)
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
     files:
       - ../../sub/ibex_wb/rtl/wb_ibex_core.sv
       - ../../sub/ibex_wb/rtl/core_if.sv
