@@ -11,7 +11,15 @@ sources:
   - target: constraints
     files:
     - ooc.xdc
-  - target: any(synthesis, simulation)
+  - target: ooc
+    files:
+    - rtl/wb_gpio_wrapper.sv
+  - target: verilator
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
+    files:
+    - ../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_gpio.sv
+  - target: vivado
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:

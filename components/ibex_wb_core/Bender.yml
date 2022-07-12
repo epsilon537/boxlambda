@@ -9,7 +9,17 @@ dependencies:
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
   
 sources:
-  - target: any(synthesis, simulation)
+  - target: all(verilator,ooc)
+    files:
+      - rtl/ibex_wb_core_wrapper.sv    
+  - target: verilator
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
+    files:
+      - ../../sub/ibex_wb/rtl/wb_ibex_core.sv
+      - ../../sub/ibex_wb/rtl/core_if.sv
+      - ../../sub/ibex_wb/rtl/core2wb.sv    
+  - target: vivado
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:

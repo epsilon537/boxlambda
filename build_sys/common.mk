@@ -47,9 +47,9 @@ force :
 $(BENDER_GEN_SCRIPT): bender_update
 	mkdir -p generated
 ifdef OOC
-	bender script -t synthesis -t ooc vivado > $(BENDER_GEN_SCRIPT)
+	bender script -t ooc vivado > $(BENDER_GEN_SCRIPT)
 else
-	bender script -t synthesis vivado > $(BENDER_GEN_SCRIPT)
+	bender script vivado > $(BENDER_GEN_SCRIPT)
 endif
 
 #dryrun just creates the vivado project, but doesn't kick-off synthesis or implementation.
@@ -61,6 +61,17 @@ dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files constraints
 	-tclargs -project generated/project -cmd $@ -part $(PART) \
 	-sources $(BENDER_GEN_SCRIPT) -constraints $(CONSTRAINTS_GEN_SCRIPT) \
 	-mem_files $(MEM_FILES_GEN_SCRIPT) -outputDir generated
+
+.PHONY: lint
+lint:
+ifdef OOC
+	@bender script -t ooc verilator #FYI only.
+	verilator --lint-only --Wall -Wno-PINCONNECTEMPTY `bender script -t ooc verilator | tr '\n' ' '`
+else
+	@bender script verilator #FYI only.
+	verilator --lint-only --Wall -Wno-PINCONNECTEMPTY `bender script verilator | tr '\n' ' '`
+endif
+	@echo "Done. If no issues are found, verilator completes silently"
 
 .PHONY: clean
 clean:
