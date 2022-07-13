@@ -8,10 +8,7 @@ dependencies:
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
 
 sources:
-  - target: constraints
-    files:
-    - ooc.xdc
-  - target: ooc
+  - target: wb_gpio
     files:
     - rtl/wb_gpio_wrapper.sv
   - target: verilator

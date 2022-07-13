@@ -1,0 +1,9 @@
+`verilator_config
+lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_compressed_decoder.sv"
+lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_ibex_ibex_pkg_0.1/rtl/ibex_pkg.sv"
+lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_cipher_pkg_0.1/rtl/prim_cipher_pkg.sv"
+lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_generic_clock_gating_0/rtl/prim_generic_clock_gating.sv"
+lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_ram_1p_pkg_0/rtl/prim_ram_1p_pkg.sv"
+lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_ram_2p_pkg_0/rtl/prim_ram_2p_pkg.sv"
+lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_secded_0.1/rtl/prim_secded_pkg.sv"
+

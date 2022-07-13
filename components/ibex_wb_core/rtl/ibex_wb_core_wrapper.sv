@@ -76,9 +76,10 @@ module ibex_wb_core_wrapper
    assign o_data_we = data_wb.we;
    assign o_data_sel = data_wb.sel;
    assign o_data_data = data_wb.dat_m;
-
+   
    wb_ibex_core #(.RV32M(ibex_pkg::RV32MFast),
-		  .RV32B(ibex_pkg::RV32BBalanced))
+		  .RV32B(ibex_pkg::RV32BBalanced),
+		  .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA))
    wb_ibex_core_inst(.instr_wb(instr_wb),
 		     .data_wb(data_wb),
 		     .*);

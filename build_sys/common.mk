@@ -11,6 +11,8 @@ MEM_FILES_GEN_SCRIPT = generated/mem_files.tcl
 #List of .xdc constraint files referenced in the Bender package manifest
 CONSTRAINTS := $(shell bender update && bender script flist -n -t constraints)
 CONSTRAINTS_GEN_SCRIPT = generated/constraints.tcl
+#Verilator .vlt config files reference in the Bender package manifest
+VLT_FILES := $(TOP_DIR)/build_sys/lint_default.vlt $(shell bender update && bender script flist -t vlt)
 
 default: dryrun
 
@@ -47,7 +49,7 @@ force :
 $(BENDER_GEN_SCRIPT): bender_update
 	mkdir -p generated
 ifdef OOC
-	bender script -t ooc vivado > $(BENDER_GEN_SCRIPT)
+	bender script -t $(OOC) vivado > $(BENDER_GEN_SCRIPT)
 else
 	bender script vivado > $(BENDER_GEN_SCRIPT)
 endif
@@ -65,11 +67,13 @@ dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files constraints
 .PHONY: lint
 lint:
 ifdef OOC
-	@bender script -t ooc verilator #FYI only.
-	verilator --lint-only --Wall -Wno-PINCONNECTEMPTY `bender script -t ooc verilator | tr '\n' ' '`
+	@echo $(VLT_FILES)  #FYI only.
+	@bender script -t $(OOC) verilator #FYI only.
+	verilator --lint-only --Wall $(VLT_FILES) `bender script -t $(OOC) verilator | tr '\n' ' '`
 else
+	@echo $(VLT_FILES)  #FYI only.
 	@bender script verilator #FYI only.
-	verilator --lint-only --Wall -Wno-PINCONNECTEMPTY `bender script verilator | tr '\n' ' '`
+	verilator --lint-only --Wall $(VLT_FILES) `bender script verilator | tr '\n' ' '`
 endif
 	@echo "Done. If no issues are found, verilator completes silently"
 
