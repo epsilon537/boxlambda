@@ -1,2 +1,5 @@
 `verilator_config
+
+//Default Verilator lint settings.
+
 lint_off -rule PINCONNECTEMPTY

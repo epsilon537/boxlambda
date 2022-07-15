@@ -1,10 +1,12 @@
+#See https://epsilon537.github.io/boxlambda/documentation/#bender-targets for a list of used Bender targets.
+
 # Package metadata. Required.
 package:
   # The name of the package. Required.
   name: ibex_wb_common
   
 sources:
-  - target: any(synthesis, simulation)
+  - target: any(verilator, vivado)
     files:
       - ../../sub/ibex_wb/rtl/wb_pkg.sv
       - ../../sub/ibex_wb/rtl/wb_if.sv

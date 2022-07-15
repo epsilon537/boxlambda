@@ -1,3 +1,5 @@
+#See https://epsilon537.github.io/boxlambda/documentation/#bender-targets for a list of used Bender targets.
+
 # Package metadata. Required.
 package:
   # The name of the package. Required.

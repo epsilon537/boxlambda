@@ -1,14 +1,9 @@
+#See https://epsilon537.github.io/boxlambda/documentation/#bender-targets for a list of used Bender targets.
+
 # Package metadata. Required.
 package:
   # The name of the package. Required.
   name: ibex
-
-#Target <module name> is set when building a component separately (i.e. running make synth in a component directory).
-#Target vivado is set when synthesizing using vivado.
-#Target verilator is set when linting using verilator.
-#Target memory is set when retrieving memory files for this component or project.
-#Target constraints is set when retrieving xdc constraints files for this component or project.
-#Target vlt set is when retrieving .vlt verilator config files
 
 sources:
   - target: vlt
