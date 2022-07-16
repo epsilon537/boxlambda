@@ -67,6 +67,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **JT49**: The name of Jotego's YM2149 compatible sound core implementation.
 
+- **Linting**: Static Code Analysis.
+
 - **LUT**: Look-Up Table.
 
 - **Makefile**: A file used by the *Make* utility, defining a set of tasks to be executed, and defining dependencies between tasks. Makefiles are commonly used to create build systems.
@@ -658,8 +660,7 @@ In the BoxLambda repository itself, I have the following long-running branches:
 The Build System
 ----------------
 
-Bender
-======
+### Bender
 
 The build system is makefile based but relies on Bender for dependency Management:
 
@@ -672,8 +673,7 @@ A package directory is a directory containing a bender.yml file. When you run be
 
 *Project View of the Build System*
 
-Three Layers
-============
+### Three Layers
 
 The build system has three layers:
 
@@ -700,16 +700,16 @@ boxlambda
     └── wbuart32
 ```
 
-The Project Build Makefile
-==========================
+### The Project Build Makefile
 
-A project directory, such as *projects/hello_world/*, contains a top-level Makefile, with the following build targets:
+A project directory, such as *projects/hello_world/*, contains a Makefile, with the following build targets:
 
 - **dryrun**: Generate a Vivado project, but don't build it.
 - **synth**: Generate a Vivado project and synthesize it.
 - **impl**: Generate a Vidado project, synthesize it, and implement it.
 - **run**: Download the generated bitstream file to the target. Note: The script this build target executes is configured for my WSL-based setup. It may need customization for other setups.
 - **clean**: Remove all generated files in the current directory and subdirectories.
+- **lint**: Run Verilator lint checking on the project and all of its dependencies.
 
 #### What happens when you run *make synth*
 
@@ -734,18 +734,23 @@ The relevant files are linked below. To avoid repeating identical rules and vari
 - [projects/hello_world/Bender.yml](https://github.com/epsilon537/boxlambda/blob/79a78e8425d80836294669aaa0efebf6b4cbdb99/projects/hello_world/Bender.yml)
 - [build_sys/vivado.tcl](https://github.com/epsilon537/boxlambda/blob/79a78e8425d80836294669aaa0efebf6b4cbdb99/build_sys/vivado.tcl)
 
-A Component Build
-=================
+### The Component Makefile
 
-Components can also be synthesized, in Out-Of-Context (OOC) Mode. In OOC mode, the synthesizer is made aware that the top-level module's input and output ports are not tied to chip pins, i.e. that this is just a partial build.
-A component Makefile works the same as a project Makefile, but with an *OOC* Makeflag set and propagated to Vivado.
+A component Makefile works the same way as a project Makefile. Make targets **clean**, **lint** and **synth** are defined and do the same thing as in a project build. When you run **make synth**, keep in mind that you're running a partial synthesis. The component's input and output ports aren't hooked up to anything. 
 
 ![Component View of the Build System](../assets/Component_Build_Diagram.drawio.png){:class="img-responsive"}
 
 *Component View of the Build System*
 
-About Memory Files
-==================
+### The Root Makefile
+
+The Makefile at the root of the repository has the following targets defined:
+
+- **make clean**: Recursively run **make clean** in each component and project directory.
+- **make lint**: Recursively run **make lint** in each component and project directory.
+- **make synth**: Recursively run **make synth** in each component and project directory.
+
+### About Memory Files
 
 Memory files used by an FPGA build are typically generated from software. It would be annoying to have to build the hello world program, to generate a memory file, and then build the FPGA in a separate step. As a rule, a build system should start from sources, not from build artifacts created separately by other build systems. 
 
@@ -758,6 +763,31 @@ To combine the software and FPGA build steps, the build system has a pattern rul
 ```
 
 The current mechanism just assumes that the default rule in the recursive make will do the right thing. It's a bit crude, but it's a start.
+
+### Bender Targets
+
+Currently, the build system uses the following Bender targets:
+
+- ***module_name***: set when building a component separately (i.e. running **make synth** in a component directory). For example:
+
+```
+  - target: ibex_wb_core
+    files:
+      - rtl/ibex_wb_core_wrapper.sv    
+```
+
+- **vivado**: set when synthesizing using Vivado.
+- **verilator**: set when linting using Verilator.
+- **memory**: set when retrieving memory files for this component or project.
+- **constraints**: set when retrieving *.xdc* constraints files for this component or project.
+- **vlt**: set when retrieving *.vlt* verilator configuration files.
+
+### Verilator Lint Waivers
+
+Rather than add lint waivers to the source code of git submodules, the waivers are grouped into *.vlt* files that live in the corresponding component's subdirectory. This way we avoid making unnecessary code changes in the git submodules.
+
+For example:
+[components/ibex/lint.vlt](https://github.com/epsilon537/boxlambda/blob/60917b7521553e19760868957e6bf05069946a2f/components/ibex/lint.vlt)
 
 Prerequisites
 -------------
@@ -787,7 +817,11 @@ export PATH=$PATH:$RISCV_TOOLCHAIN/bin
   
 - Bender 0.25.2: [https://github.com/pulp-platform/bender](https://github.com/pulp-platform/bender)
 
-  Please add bender to your *PATH*.
+  Add bender to your *PATH*.
+
+- Verilator 4.216: [https://verilator.org/guide/latest/install.html](https://verilator.org/guide/latest/install.html)
+
+  Add verilator to your *PATH*.
   
 Test Builds
 -----------
@@ -801,7 +835,7 @@ To build the *Hello World!* example, go through the following steps:
 0. Install the [prerequisites](../documentation/#prerequisites). 
 1. **git clone https://github.com/epsilon537/boxlambda/**,
 2. **cd boxlambda**
-3. Switch to the *make_and_bender* tag: **git checkout make_and_bender**.
+3. Switch to the *warnings_and_lint* tag: **git checkout warnings_and_lint**.
 4. Get the submodules: **git submodule update --init --recursive**.
 5. Build the project:
    1. **cd projects/hello_world**
