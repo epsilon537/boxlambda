@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Git Workflow and Setup'
+title: 'Git Workflow and Setup.'
 comments: true
 ---
 
