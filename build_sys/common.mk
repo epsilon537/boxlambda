@@ -33,10 +33,10 @@ endif
 
 #Rule to generate TCL 'sub' script that adds memory files to the project
 .PHONY: mem_files
-mem_files:
+mem_files: $(MEM_FILES)
 	mkdir -p generated
 	$(RM) -f $(MEM_FILES_GEN_SCRIPT)
-	$(foreach mem_file, $(MEM_FILES), echo add_files -norecurse $(mem_file) >> $(MEM_FILES_GEN_SCRIPT))
+	$(foreach mem_file, $(MEM_FILES), cp $(mem_file) generated/ && echo add_files -norecurse $(mem_file) >> $(MEM_FILES_GEN_SCRIPT))
 
 .PHONY: force
 force :
@@ -54,9 +54,9 @@ else
 	bender script vivado > $(BENDER_GEN_SCRIPT)
 endif
 
-#dryrun just creates the vivado project, but doesn't kick-off synthesis or implementation.
-#synth generates the project and synthesizes it.
-#imple generates the project, synthesizes it and implements it.
+#dryrun just creates the vivado project/component, but doesn't kick-off synthesis or implementation.
+#synth generates the project/component and synthesizes it.
+#impl generates the project/component, synthesizes it and implements it.
 .PHONY: synth dryrun
 dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files constraints
 	vivado -nolog -nojournal -mode batch -source $(VIVADO_TCL) \
@@ -64,6 +64,7 @@ dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files constraints
 	-sources $(BENDER_GEN_SCRIPT) -constraints $(CONSTRAINTS_GEN_SCRIPT) \
 	-mem_files $(MEM_FILES_GEN_SCRIPT) -outputDir generated
 
+#Runs verilator lint on the project/component
 .PHONY: lint
 lint:
 ifdef OOC
@@ -77,7 +78,21 @@ else
 endif
 	@echo "Done. If no issues are found, verilator completes silently"
 
+#Build verilator model/testbench for project.
+.PHONY: sim
+sim: mem_files
+	@echo $(VLT_FILES)  #FYI only.
+	@bender script -t sim verilator #FYI only.
+	mkdir -p generated
+	verilator $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) -Wall -cc --trace --exe -Os -x-assign 0 --build --prefix Vmodel \
+	--Mdir generated $(VLT_FILES) `bender script flist -t sim` `bender script -t sim verilator | tr '\n' ' '`
+
+#Run verilator testbench for project
+.PHONY: test
+test: sim
+	cd generated && ./Vmodel && cd ..
+
 .PHONY: clean
 clean:
-	$(RM) *.log
+	$(RM) -f *.log
 	$(RM) -rf generated
