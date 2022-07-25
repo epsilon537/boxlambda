@@ -39,6 +39,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **DTM**: Debug Transport Module.
 
+- **DUT**: Device Under Test.
+
 - **EDA tool**: A software tool to design electronic circuits, e.g. Vivado.
 
 - **FIFO**: First-In-First-out, an implementation of a queue.
@@ -116,6 +118,10 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **USB HIB**: USB Human Interface device Class, a part of the USB specification for computer peripherals such as keyboards and mice.
 
 - **VCS**: Version Control Subsystem.
+
+- **Verilate**: To compile HDL to C++ using Verilator.
+
+- **Verilator**: An HDL to C++ compiler.
 
 - **VERA**: Versatile Embedded Retro Adapter, the name of the graphics core used by BoxLambda.
 
@@ -710,7 +716,9 @@ A project directory, such as *projects/hello_world/*, contains a Makefile, with 
 - **run**: Download the generated bitstream file to the target. Note: The script this build target executes is configured for my WSL-based setup. It may need customization for other setups.
 - **clean**: Remove all generated files in the current directory and subdirectories.
 - **lint**: Run Verilator lint checking on the project and all of its dependencies.
-
+- **make sim**: Build the project's Verilator test bench.
+- **make test**: Build the project's Verilator test bench, then run it in batch mode (non-interactive mode).
+  
 #### What happens when you run *make synth*
 
 When you run *make synth*, the following happens:
@@ -736,7 +744,7 @@ The relevant files are linked below. To avoid repeating identical rules and vari
 
 ### The Component Makefile
 
-A component Makefile works the same way as a project Makefile. Make targets **clean**, **lint** and **synth** are defined and do the same thing as in a project build. When you run **make synth**, keep in mind that you're running a partial synthesis. The component's input and output ports aren't hooked up to anything. 
+A component Makefile works the same way as a project Makefile. Make targets **clean**, **lint** and **synth** are defined, and do the same thing as in a project build. When you run **make synth**, keep in mind that you're running a partial synthesis. The component's input and output ports aren't hooked up to anything. 
 
 ![Component View of the Build System](../assets/Component_Build_Diagram.drawio.png){:class="img-responsive"}
 
@@ -749,6 +757,7 @@ The Makefile at the root of the repository has the following targets defined:
 - **make clean**: Recursively run **make clean** in each component and project directory.
 - **make lint**: Recursively run **make lint** in each component and project directory.
 - **make synth**: Recursively run **make synth** in each component and project directory.
+- **make test**: Recursively builds and runs the Verilator test bench in each project directory. *make test* fails if any of the executed test benches flag a test failure (via a non-zero return code).
 
 ### About Memory Files
 
@@ -789,6 +798,90 @@ Rather than add lint waivers to the source code of git submodules, the waivers a
 For example:
 [components/ibex/lint.vlt](https://github.com/epsilon537/boxlambda/blob/60917b7521553e19760868957e6bf05069946a2f/components/ibex/lint.vlt)
 
+Component/Project Directory Layout
+----------------------------------
+A component or project directory typically contains the following files and subdirectories:
+
+```
+<component/project>
+├── Makefile
+├── Bender.yml: The component/project Bender manifest.
+├── lint.vlt: Lint waivers.
+├── generated
+│   └── <files and directories generated during synthesis or verilation. 
+├── src
+│   └── <Boxlambda specific HDL sources for given component/project>
+└── sim
+    └── <C++ test bench code for given component/source>
+```
+
+The *generated/* directory is created by the build system. It is not version-controlled.
+
+Test Bench
+----------
+The focus should be on system-level testing rather than component-level verification. The components themselves have already been verified by their respective owners.
+
+Ideally, the test bench should allow for the following:
+- Execute system-level test cases in a reasonable time frame. With system-level test cases, I mean test cases where the DUT is the SoC.
+- A short lather-rinse-repeat cycle of making code changes and testing them on a system-level DUT.
+- Full signal visibility into the build, to aid test case development as well as debugging.
+- *Reasonably* easy automated testing. With the caveat that automated testing is never truly *easy*.
+
+### Verilator
+
+Boxlambda uses Verilator to create test benches. Verilator is a compiler. It compiles, or rather *verilates*, an HDL design into a C++ model. It then picks up any user-provided C++ testbench/wrapper code and compiles the whole thing into an executable, optionally with the ability to generate traces.
+
+C++ is not an ideal language for test case development, but it'll get the job done, and it's a compiled language, so it's *fast*. 
+
+### A simple Test Bench
+
+I created a proof-of-concept test bench for the *Hello World* build. I started from the example code included in the Verilator distribution:
+
+[https://github.com/verilator/verilator/blob/master/examples/make_tracing_c/sim_main.cpp](https://github.com/verilator/verilator/blob/master/examples/make_tracing_c/sim_main.cpp)
+
+I included *UARTSIM*, the UART co-simulation class that ZipCPU provides along with the UART Verilog implementation in the *wbuart32* repository:
+
+[https://github.com/epsilon537/wbuart32/tree/master/bench/cpp](https://github.com/epsilon537/wbuart32/tree/master/bench/cpp)
+
+The test bench does the following:
+1. Instantiate the verilated *Hello World* model and the UARTSIM co-simulation object.
+2. Optionally, controlled by a command-line option, enable tracing.
+3. Run the model for a fixed number of clock cycles.
+4. While running the model:
+   1. Feed the model's UART output to UARTSIM.
+   2. Capture and display the decoded UARTSIM output and the GPIO outputs.
+5. Pass/Fail criterium: After running the model for the set number of clock cycles, match the captured UART and GPIO outputs against expected results.
+
+As suggested by ZipCPU in his Verilog tutorial, I use *nCurses* for positional printing inside the terminal windows. This way, I can easily build a display that refreshes, rather than scrolls, whenever the model produces new UART or GPIO data to display.
+
+The test bench source code is located in [*projects/hello_world/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/6c3c0b36525cf3f0aef869f9b618759258c2106c/projects/hello_world/sim/sim_main.cpp).
+
+### Are we running in a Simulation?
+
+Software running on Ibex needs to know whether it's running in a simulation or on FPGA, so it can adjust timings such as the LED blink period.
+I'm using GPIO1 bits 3:0 for this purpose. In a simulation, I set these bits to *4'bf*. On FPGA I set them to something else.
+The *hello.c* test program includes the following check:
+
+```
+  //GPIO1 bits3:0 = 0xf indicate we're running inside a simulator.
+  if ((gpio_get_input(&gpio1) & 0xf) == GPIO1_SIM_INDICATOR)
+    uart_printf(&uart0, "This is a simulation.\n");    
+  else
+    uart_printf(&uart0, "This is not a simulation.\n");
+```
+
+### Files and command line options
+
+All files created by Verilator go in the *\<project_dir\>/generated/* subdirectory. The name of the generated executable is **Vmodel**.
+As you can see in the *sim_main.cpp* source code above, *Vmodel* accepts a few command line options:
+
+- **Vmodel -t**: Execute with waveform tracing enabled. The program generates a *.fst* trace file in the current directory. *.fst* files can be viewed with **gtkwave**.
+
+![Gtkwave View of Waveform Trace Generated by *Hello World* Verilator Test Bench](../assets/hello_world_gtkwave.jpg){:class="img-responsive"}
+*Gtkwave View of Waveform Trace Generated by *Hello World* Verilator Test Bench*
+
+- **Vmodel -i**: Run in interactive mode, vs. the default batch mode. In interactive mode, the program may wait for keypresses. Batch mode is used for non-interactive automated testing.
+
 Prerequisites
 -------------
 
@@ -822,11 +915,15 @@ export PATH=$PATH:$RISCV_TOOLCHAIN/bin
 - Verilator 4.216: [https://verilator.org/guide/latest/install.html](https://verilator.org/guide/latest/install.html)
 
   Add verilator to your *PATH*.
-  
+
+- Ncurses: ```sudo apt-get install libncurses5-dev libncursesw5-dev```
+
+- Gtkwave: [http://gtkwave.sourceforge.net/](http://gtkwave.sourceforge.net/)
+
 Test Builds
 -----------
 
-### Hello World!
+### Hello World on the Arty A7-35T
 
 Project directory **boxlambda/projects/hello_world/** contains a test SoC build consisting of a wb_ibex core, 64KB internal memory, a wbuart32 core, a timer, and a GPIO module.
 
@@ -835,10 +932,27 @@ To build the *Hello World!* example, go through the following steps:
 0. Install the [prerequisites](../documentation/#prerequisites). 
 1. **git clone https://github.com/epsilon537/boxlambda/**,
 2. **cd boxlambda**
-3. Switch to the *warnings_and_lint* tag: **git checkout warnings_and_lint**.
+3. Switch to the *testing_with_verilator* tag: ```git checkout testing_with_verilator```
 4. Get the submodules: **git submodule update --init --recursive**.
 5. Build the project:
    1. **cd projects/hello_world**
    2. **make impl**  
 6. Start Vivado and download the generated bitstream to your Arty A7-35T: *projects/hello_world/generated/project.runs/impl_1/ibex_soc.bit*
 
+### Hello World Verilator Build
+
+To try out the Verilator Test Bench for *Hello World*:
+
+0. Install the [prerequisites](../documentation/#prerequisites). 
+1. ```git clone https://github.com/epsilon537/boxlambda/```
+2. ```cd boxlambda```
+3. Switch to the *testing_with_verilator* tag: ```git checkout testing_with_verilator```
+4. Get the submodules: ```git submodule update --init --recursive```
+6. Build the testbench:
+   1. ```cd projects/hello_world```
+   2. ```make sim```
+7. Execute the testbench:
+   1. ```cd generated```
+   2. Without tracing (fast): ```./Vmodel -i```
+   3. With tracing (slow): ```./Vmodel -t```
+8. View the generated traces: ```gtkwave simx.fst```
