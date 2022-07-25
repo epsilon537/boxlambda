@@ -84,7 +84,7 @@ sim: mem_files
 	@echo $(VLT_FILES)  #FYI only.
 	@bender script -t sim verilator #FYI only.
 	mkdir -p generated
-	verilator $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) -Wall -cc --trace --exe -Os -x-assign 0 --build --prefix Vmodel \
+	verilator $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) -Wall -cc --trace-fst --exe -Os -x-assign 0 --build --prefix Vmodel \
 	--Mdir generated $(VLT_FILES) `bender script flist -t sim` `bender script -t sim verilator | tr '\n' ' '`
 
 #Run verilator testbench for project

@@ -16,7 +16,7 @@
 // Include model header, generated from Verilating "top.v"
 #include "Vmodel.h"
 
-#include "verilated_vcd_c.h"
+#include "verilated_fst_c.h"
 
 // From wbuart32
 #include "uartsim.h"
@@ -56,8 +56,8 @@ int main(int argc, char** argv, char** env) {
 
     // Verilator must compute traced signals
     contextp->traceEverOn(true);
-    
-    VerilatedVcdC* tfp = new VerilatedVcdC;
+
+    VerilatedFstC* tfp = new VerilatedFstC;
     
     // Pass arguments so Verilated code can see them, e.g. $value$plusargs
     // This needs to be called before you create any model
@@ -82,7 +82,7 @@ int main(int argc, char** argv, char** env) {
 	  case '?':
 	  case 'h':
 	  default :
-	    printf("\nUsage:\n");
+	    printf("\nVmodel Usage:\n");
 	    printf("-h: print this help\n");
 	    printf("-i: interactive mode.\n");
 	    printf("-t: enable tracing.\n");
@@ -109,7 +109,7 @@ int main(int argc, char** argv, char** env) {
     //Trace file
     if (tracing_enable) {
       top->trace(tfp, 99); //Trace 99 levels deep.
-      tfp->open("simx.vcd");
+      tfp->open("simx.fst");
     }
     
     // Set Vtop's input signals
@@ -128,8 +128,8 @@ int main(int argc, char** argv, char** env) {
     //Accumulate GPIO0 value changes as a string into this variable
     std::string gpio0String;
     
-    // Simulate for 1000000 timeprecision periods
-    while (contextp->time() < 1000000) {
+    // Simulate for 10000000 timeprecision periods
+    while (contextp->time() < 10000000) {
         // Historical note, before Verilator 4.200 Verilated::gotFinish()
         // was used above in place of contextp->gotFinish().
         // Most of the contextp-> calls can use Verilated:: calls instead;
@@ -171,7 +171,7 @@ int main(int argc, char** argv, char** env) {
 	if (tracing_enable)
 	  tfp->dump(contextp->time());
 
-	//Feed our model's uart_tx signal to the UART co-simulator.
+	//Feed our model's uart_tx signal and baud rate to the UART co-simulator.
 	(*uart)(top->uart_tx, top->rootp->ibex_soc__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 
 	//Detect and print changes to UART and GPIOs
@@ -222,7 +222,7 @@ int main(int argc, char** argv, char** env) {
 
     // Checks for automated testing.
     int res = 0;
-    std::string uartCheckString("Hello, World!\nSim.\n");
+    std::string uartCheckString("Hello, World!\nThis is a simulation.\n");
     if (uartCheckString.compare(uartRxStringPrev) != 0) {
       printf("UART check failed\n");
       printf("Expected: %s\n", uartCheckString.c_str());
