@@ -2,7 +2,7 @@
 TOP_DIR := ../..
 
 #Compile and link flag for Verilator testbench code.
-VERILATOR_CPPFLAGS = --top-module ibex_soc -CFLAGS "-I$(abspath $(TOP_DIR))/sub/wbuart32/bench/cpp/"
+VERILATOR_CPPFLAGS = --top-module sim_main -CFLAGS "-I$(abspath $(TOP_DIR))/sub/wbuart32/bench/cpp/ -I$(abspath $(TOP_DIR))/sub/riscv-dbg/tb/remote_bitbang -g"
 VERILATOR_LDFLAGS = -LDFLAGS "-lncurses"
 
 #Include common Make flags and rules
@@ -17,7 +17,7 @@ IP_ADDRESS := $(shell grep nameserver /etc/resolv.conf | sed 's/nameserver //')
 run:
 	vivado -nolog -nojournal -mode batch -source $(PRG_BITSTREAM_TCL) -tclargs -bitstream generated/project.runs/impl_1/*.bit -ip $(IP_ADDRESS)
 
-#Run verilator testbench for project
+#Run test script
 .PHONY: test
 test: sim
-	cd generated && ./Vmodel && cd ..
+	cd generated && source ../sim/test.sh

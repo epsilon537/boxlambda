@@ -1,0 +1,44 @@
+---
+packages:
+  ibex:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/projects/hello_dbg/../../components/ibex_wb_core/../../components/ibex
+    dependencies: []
+  ibex_wb_common:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/projects/hello_dbg/../../components/ibex_wb_common
+    dependencies: []
+  ibex_wb_core:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/projects/hello_dbg/../../components/ibex_wb_core
+    dependencies:
+      - ibex
+      - ibex_wb_common
+  riscv-dbg:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/projects/hello_dbg/../../components/riscv-dbg
+    dependencies:
+      - ibex_wb_common
+      - ibex_wb_core
+  wb_gpio:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/projects/hello_dbg/../../components/wb_gpio
+    dependencies:
+      - ibex_wb_common
+  wbuart32:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/projects/hello_dbg/../../components/wbuart32
+    dependencies:
+      - ibex_wb_common

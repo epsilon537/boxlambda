@@ -10,3 +10,18 @@
 	path = sub/wbuart32
 	url = https://github.com/epsilon537/wbuart32
 	branch = boxlambda
+[submodule "sub/riscv-dbg"]
+	path = sub/riscv-dbg
+	url = https://github.com/epsilon537/riscv-dbg
+[submodule "sub/tech_cells_generic"]
+	path = sub/tech_cells_generic
+	url = https://github.com/epsilon537/tech_cells_generic
+[submodule "sub/common_cells"]
+	path = sub/common_cells
+	url = https://github.com/epsilon537/common_cells
+[submodule "sub/common_verification"]
+	path = sub/common_verification
+	url = https://github.com/epsilon537/common_verification
+[submodule "sub/pulpino"]
+	path = sub/pulpino
+	url = https://github.com/epsilon537/pulpino

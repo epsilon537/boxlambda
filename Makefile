@@ -2,9 +2,8 @@
 
 COMPONENT_MAKEFILES = $(shell find components -name Makefile)
 PROJECT_MAKEFILES = $(shell find projects -name Makefile)
-#FIXME: temporarily exclude riscv-dbg from the list because not ready to make changes in there.
-#Will take care of this when we bring up riscv-dbg.
-SUB_MAKEFILES = $(shell find sub -not -path "sub/ibex_wb/riscv-dbg/*" -name Makefile)
+#Don't recurse into Pulpino or riscv-dbg
+SUB_MAKEFILES = $(shell find sub -not -path "sub/pulpino/*" -not -path "sub/riscv-dbg/*" -name Makefile)
 
 .PHONY: test
 test:

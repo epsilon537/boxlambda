@@ -6,11 +6,9 @@ package:
   name: ibex
 
 sources:
-  - target: vlt
-    files:
-    - lint.vlt  
   - target: verilator
     files:
+    - lint.vlt  
     - ../../sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_ibex_ibex_top_0.1/rtl/ibex_register_file_ff.sv
     defines:
       PRIM_DEFAULT_IMPL: prim_pkg::ImplGeneric

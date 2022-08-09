@@ -1,0 +1,44 @@
+
+package:
+  name: riscv-dbg
+
+dependencies:
+  ibex_wb_common: { path: "../ibex_wb_common" }
+  ibex_wb_core: { path: "../ibex_wb_core" }
+
+sources:
+  - target: verilator
+    include_dirs:
+    - ../../sub/common_cells/include    
+    files:
+    - lint.vlt
+    - ../../sub/riscv-dbg/src/dm_pkg.sv
+#    - rtl/fpnew_pkg.sv
+    - ../../sub/common_cells/src/cdc_reset_ctrlr_pkg.sv
+    - ../../sub/common_cells/src/cdc_2phase.sv
+    - ../../sub/common_cells/src/cdc_2phase_clearable.sv
+    - ../../sub/common_cells/src/cdc_reset_ctrlr.sv
+    - ../../sub/common_cells/src/cdc_4phase.sv
+    - ../../sub/common_cells/src/sync.sv
+    - ../../sub/common_cells/src/deprecated/fifo_v2.sv
+    - ../../sub/common_cells/src/fifo_v3.sv
+    - ../../sub/common_cells/src/rstgen.sv
+    - ../../sub/common_cells/src/rstgen_bypass.sv
+    - ../../sub/pulpino/rtl/components/cluster_clock_inverter.sv
+    - ../../sub/pulpino/rtl/components/pulp_clock_mux2.sv
+    - ../../sub/pulpino/rtl/components/cluster_clock_gating.sv
+    - ../../sub/riscv-dbg/debug_rom/debug_rom.sv
+    - ../../sub/riscv-dbg/debug_rom/debug_rom_one_scratch.sv    
+    - ../../sub/riscv-dbg/src/dm_csrs.sv
+    - ../../sub/riscv-dbg/src/dmi_cdc.sv
+    - ../../sub/riscv-dbg/src/dmi_jtag.sv
+    - ../../sub/riscv-dbg/src/dmi_jtag_tap.sv
+    - ../../sub/riscv-dbg/src/dm_mem.sv
+    - ../../sub/riscv-dbg/src/dm_sba.sv
+    - ../../sub/riscv-dbg/src/dm_top.sv
+    - ../../sub/ibex_wb/rtl/wb_dm_top.sv
+  - target: riscv-dbg
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
+    files:
+    - rtl/riscv_dbg_wrapper.sv

@@ -1,0 +1,93 @@
+// DESCRIPTION: Verilator output: Waivers generated with --waiver-output
+
+`verilator_config
+
+// Below you find suggested waivers. You have three options:
+//   1. Fix the reason for the linter warning
+//   2. Keep the waiver permanently if you are sure this is okay
+//   3. Keep the waiver temporarily to suppress the output
+
+lint_off -rule DECLFILENAME -file "*/sub/riscv-dbg/src/dm_pkg.sv" -match "Filename 'dm_pkg' does not match PACKAGE name: 'dm'"
+
+lint_off -rule DECLFILENAME -file "*/sub/common_cells/src/cdc_2phase_clearable.sv" -match "Filename 'cdc_2phase_clearable' does not match MODULE name: 'cdc_2phase_src_clearable'"
+
+lint_off -rule DECLFILENAME -file "*/sub/common_cells/src/cdc_reset_ctrlr.sv" -match "Filename 'cdc_reset_ctrlr' does not match MODULE name: 'cdc_reset_ctrlr_half'"
+
+lint_off -rule DECLFILENAME -file "*/sub/common_cells/src/cdc_4phase.sv" -match "Filename 'cdc_4phase' does not match MODULE name: 'cdc_4phase_src'"
+
+lint_off -rule WIDTH -file "*/sub/common_cells/src/cdc_2phase_clearable.sv" -match "Logical operator GENIF expects 1 bit on the If, but If's VARREF 'CLEAR_ON_ASYNC_RESET' generates 32 bits."
+
+lint_off -rule WIDTH -file "*/sub/common_cells/src/cdc_2phase_clearable.sv" -match "Logical operator GENIF expects 1 bit on the If, but If's VARREF 'CLEAR_ON_ASYNC_RESET' generates 32 bits."
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_pkg.sv" -match "Parameter is not used: 'ExceptionAddress'"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_pkg.sv" -match "Parameter is not used: 'CauseBreakpoint'"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_pkg.sv" -match "Parameter is not used: 'CauseTrigger'"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_pkg.sv" -match "Parameter is not used: 'CauseRequest'"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_pkg.sv" -match "Parameter is not used: 'CauseSingleStep'"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_pkg.sv" -match "Bits of signal are not used: 'imm'[0]"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_pkg.sv" -match "Bits of signal are not used: 'imm'[0]"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dmi_jtag.sv" -match "Bits of signal are not used: 'dmi_resp'[1:0]"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_csrs.sv" -match "Bits of signal are not used: 'havereset_d_aligned'[1]"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_csrs.sv" -match "Bits of signal are not used: 'a_abstractcs'[31:11,7:0]"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_mem.sv" -match "Bits of signal are not used: 'hartsel_i'[19:1]"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_mem.sv" -match "Bits of signal are not used: 'halted_d_aligned'[1]"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_mem.sv" -match "Bits of signal are not used: 'resuming_d_aligned'[1]"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_mem.sv" -match "Bits of signal are not used: 'ac_ar'[23]"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/src/dm_sba.sv" -match "Signal is not used: 'dmactive_i'"
+
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/debug_rom/debug_rom.sv" -match "Bits of signal are not used: 'addr_i'[63:8,2:0]"
+
+lint_off -rule UNUSED -file "*/sub/common_cells/src/fifo_v3.sv" -match "Signal is not used: 'testmode_i'"
+
+lint_off -rule UNUSED -file "*/sub/common_cells/src/cdc_reset_ctrlr.sv" -match "Parameter is not used: 'SYNC_STAGES'"
+
+lint_off -rule CMPCONST -file "*/sub/common_cells/src/deprecated/fifo_v2.sv" -match "Comparison is constant due to limited range"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/riscv-dbg/src/dm_top.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.inst_dm_top.data_valid'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/riscv-dbg/src/dm_top.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.inst_dm_top.sberror_valid'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/riscv-dbg/src/dm_top.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.inst_dm_top.sberror'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/riscv-dbg/src/dm_mem.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.inst_dm_top.__Vcellout__i_dm_mem__data_o'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/riscv-dbg/src/dm_sba.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.inst_dm_top.i_dm_sba.be_idx'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/riscv-dbg/src/dm_sba.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.inst_dm_top.i_dm_sba.addr_incr_en'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/riscv-dbg/src/dm_mem.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.inst_dm_top.i_dm_mem.going'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/riscv-dbg/src/dm_mem.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.inst_dm_top.i_dm_mem.exception'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/riscv-dbg/src/dm_mem.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.inst_dm_top.i_dm_mem.halted_aligned'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/common_cells/src/cdc_reset_ctrlr.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.dmi_jtag_inst.i_dmi_cdc.i_cdc_req.i_cdc_reset_ctrlr.i_cdc_reset_ctrlr_half_a.initiator_phase_transition_ack'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/common_cells/src/cdc_4phase.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.dmi_jtag_inst.i_dmi_cdc.i_cdc_req.i_cdc_reset_ctrlr.i_cdc_reset_ctrlr_half_a.i_state_transition_cdc_dst.data_valid'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/common_cells/src/cdc_reset_ctrlr.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.dmi_jtag_inst.i_dmi_cdc.i_cdc_req.i_cdc_reset_ctrlr.i_cdc_reset_ctrlr_half_b.initiator_phase_transition_ack'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/common_cells/src/cdc_4phase.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.dmi_jtag_inst.i_dmi_cdc.i_cdc_req.i_cdc_reset_ctrlr.i_cdc_reset_ctrlr_half_b.i_state_transition_cdc_dst.data_valid'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/common_cells/src/cdc_reset_ctrlr.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.dmi_jtag_inst.i_dmi_cdc.i_cdc_resp.i_cdc_reset_ctrlr.i_cdc_reset_ctrlr_half_a.initiator_phase_transition_ack'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/common_cells/src/cdc_4phase.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.dmi_jtag_inst.i_dmi_cdc.i_cdc_resp.i_cdc_reset_ctrlr.i_cdc_reset_ctrlr_half_a.i_state_transition_cdc_dst.data_valid'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/common_cells/src/cdc_reset_ctrlr.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.dmi_jtag_inst.i_dmi_cdc.i_cdc_resp.i_cdc_reset_ctrlr.i_cdc_reset_ctrlr_half_b.initiator_phase_transition_ack'"
+
+lint_off -rule IMPERFECTSCH -file "*/sub/common_cells/src/cdc_4phase.sv" -match "Imperfect scheduling of variable: 'riscv_dbg_wrapper.dmi_jtag_inst.i_dmi_cdc.i_cdc_resp.i_cdc_reset_ctrlr.i_cdc_reset_ctrlr_half_b.i_state_transition_cdc_dst.data_valid'"
+

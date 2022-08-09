@@ -1,3 +1,4 @@
+SHELL = /bin/bash
 #TCL script interfacing the build system with Vivado
 VIVADO_TCL := $(TOP_DIR)/build_sys/vivado.tcl
 #Currently Arty A7-35T only
@@ -6,13 +7,20 @@ PART = xc7a35ticsg324-1L
 BENDER_GEN_SCRIPT = generated/sources.tcl
 
 #List of memory files referenced in the Bender package manifest
-MEM_FILES := $(shell bender update && bender script flist -t memory)
+MEM_FILES := $(shell bender update && bender script flist -n -t memory)
 MEM_FILES_GEN_SCRIPT = generated/mem_files.tcl
 #List of .xdc constraint files referenced in the Bender package manifest
 CONSTRAINTS := $(shell bender update && bender script flist -n -t constraints)
 CONSTRAINTS_GEN_SCRIPT = generated/constraints.tcl
 #Verilator .vlt config files reference in the Bender package manifest
-VLT_FILES := $(TOP_DIR)/build_sys/lint_default.vlt $(shell bender update && bender script flist -t vlt)
+VLT_FILES := $(TOP_DIR)/build_sys/lint_default.vlt $(filter %.vlt, $(shell bender update && bender script flist -t verilator))
+#Verilator CPP files
+VLT_CPP_FILES = $(filter %.cpp %.c, $(shell bender update && bender script flist -t verilator))
+ifdef OOC
+MIN_T_OOC = -t $(OOC)
+else
+MIN_T_OOC =
+endif
 
 default: dryrun
 
@@ -48,11 +56,7 @@ force :
 #Rule to generate TCL 'sub' script that adds HDL source files to the project
 $(BENDER_GEN_SCRIPT): bender_update
 	mkdir -p generated
-ifdef OOC
-	bender script -t $(OOC) vivado > $(BENDER_GEN_SCRIPT)
-else
-	bender script vivado > $(BENDER_GEN_SCRIPT)
-endif
+	bender script $(MIN_T_OOC) vivado > $(BENDER_GEN_SCRIPT)
 
 #dryrun just creates the vivado project/component, but doesn't kick-off synthesis or implementation.
 #synth generates the project/component and synthesizes it.
@@ -67,30 +71,19 @@ dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files constraints
 #Runs verilator lint on the project/component
 .PHONY: lint
 lint:
-ifdef OOC
 	@echo $(VLT_FILES)  #FYI only.
-	@bender script -t $(OOC) verilator #FYI only.
-	verilator --lint-only --Wall $(VLT_FILES) `bender script -t $(OOC) verilator | tr '\n' ' '`
-else
-	@echo $(VLT_FILES)  #FYI only.
-	@bender script verilator #FYI only.
-	verilator --lint-only --Wall $(VLT_FILES) `bender script verilator | tr '\n' ' '`
-endif
+	@bender script $(MIN_T_OOC) verilator #FYI only.
+	verilator --lint-only $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) --Wall $(VLT_FILES) `bender script $(MIN_T_OOC) verilator | tr '\n' ' '`
 	@echo "Done. If no issues are found, verilator completes silently"
 
 #Build verilator model/testbench for project.
 .PHONY: sim
 sim: mem_files
 	@echo $(VLT_FILES)  #FYI only.
-	@bender script -t sim verilator #FYI only.
+	@bender script $(MIN_T_OOC) verilator #FYI only.
 	mkdir -p generated
 	verilator $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) -Wall -cc --trace-fst --exe -Os -x-assign 0 --build --prefix Vmodel \
-	--Mdir generated $(VLT_FILES) `bender script flist -t sim` `bender script -t sim verilator | tr '\n' ' '`
-
-#Run verilator testbench for project
-.PHONY: test
-test: sim
-	cd generated && ./Vmodel && cd ..
+	--Mdir generated $(VLT_FILES) $(VLT_CPP_FILES) `bender script $(MIN_T_OOC) verilator | tr '\n' ' '`
 
 .PHONY: clean
 clean:
