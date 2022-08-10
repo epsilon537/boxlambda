@@ -1,8 +1,9 @@
 #Path to the root of the repository
 TOP_DIR := ../..
+TOP_MODULE := ibex_soc
 
 #Compile and link flag for Verilator testbench code.
-VERILATOR_CPPFLAGS = --top-module ibex_soc -CFLAGS "-I$(abspath $(TOP_DIR))/sub/wbuart32/bench/cpp/"
+VERILATOR_CPPFLAGS = -CFLAGS "-I$(abspath $(TOP_DIR))/sub/wbuart32/bench/cpp/"
 VERILATOR_LDFLAGS = -LDFLAGS "-lncurses"
 
 #Include common Make flags and rules

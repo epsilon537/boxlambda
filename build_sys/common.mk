@@ -22,6 +22,9 @@ else
 MIN_T_OOC =
 endif
 
+TOP_MODULE_SIM ?= $(TOP_MODULE)
+TOP_MODULE_SYNTH ?= $(TOP_MODULE)
+
 default: dryrun
 
 #Whenever a bender package manifest has changed, bender update needs to be run.
@@ -66,14 +69,14 @@ dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files constraints
 	vivado -nolog -nojournal -mode batch -source $(VIVADO_TCL) \
 	-tclargs -project generated/project -cmd $@ -part $(PART) \
 	-sources $(BENDER_GEN_SCRIPT) -constraints $(CONSTRAINTS_GEN_SCRIPT) \
-	-mem_files $(MEM_FILES_GEN_SCRIPT) -outputDir generated
+	-mem_files $(MEM_FILES_GEN_SCRIPT) -outputDir generated -top $(TOP_MODULE_SYNTH)
 
 #Runs verilator lint on the project/component
 .PHONY: lint
 lint:
 	@echo $(VLT_FILES)  #FYI only.
 	@bender script $(MIN_T_OOC) verilator #FYI only.
-	verilator --lint-only $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) --Wall $(VLT_FILES) `bender script $(MIN_T_OOC) verilator | tr '\n' ' '`
+	verilator --lint-only $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) --top-module $(TOP_MODULE_SIM) --Wall $(VLT_FILES) `bender script $(MIN_T_OOC) verilator | tr '\n' ' '`
 	@echo "Done. If no issues are found, verilator completes silently"
 
 #Build verilator model/testbench for project.
@@ -82,7 +85,7 @@ sim: mem_files
 	@echo $(VLT_FILES)  #FYI only.
 	@bender script $(MIN_T_OOC) verilator #FYI only.
 	mkdir -p generated
-	verilator $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) -Wall -cc --trace-fst --exe -Os -x-assign 0 --build --prefix Vmodel \
+	verilator $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) --top-module $(TOP_MODULE_SIM) -Wall -cc --trace-fst --exe -Os -x-assign 0 --build --prefix Vmodel \
 	--Mdir generated $(VLT_FILES) $(VLT_CPP_FILES) `bender script $(MIN_T_OOC) verilator | tr '\n' ' '`
 
 .PHONY: clean

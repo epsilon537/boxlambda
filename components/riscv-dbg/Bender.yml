@@ -7,13 +7,18 @@ dependencies:
   ibex_wb_core: { path: "../ibex_wb_core" }
 
 sources:
+  - target: vivado
+    files:
+    - ../../sub/riscv-dbg/src/dmi_bscane_tap.sv
   - target: verilator
+    files:
+    - lint.vlt
+    - ../../sub/riscv-dbg/src/dmi_jtag_tap.sv
+  - target: any(verilator, vivado)
     include_dirs:
     - ../../sub/common_cells/include    
     files:
-    - lint.vlt
     - ../../sub/riscv-dbg/src/dm_pkg.sv
-#    - rtl/fpnew_pkg.sv
     - ../../sub/common_cells/src/cdc_reset_ctrlr_pkg.sv
     - ../../sub/common_cells/src/cdc_2phase.sv
     - ../../sub/common_cells/src/cdc_2phase_clearable.sv
@@ -31,8 +36,7 @@ sources:
     - ../../sub/riscv-dbg/debug_rom/debug_rom_one_scratch.sv    
     - ../../sub/riscv-dbg/src/dm_csrs.sv
     - ../../sub/riscv-dbg/src/dmi_cdc.sv
-    - ../../sub/riscv-dbg/src/dmi_jtag.sv
-    - ../../sub/riscv-dbg/src/dmi_jtag_tap.sv
+    - ../../sub/riscv-dbg/src/dmi_jtag.sv   
     - ../../sub/riscv-dbg/src/dm_mem.sv
     - ../../sub/riscv-dbg/src/dm_sba.sv
     - ../../sub/riscv-dbg/src/dm_top.sv

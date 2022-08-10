@@ -23,6 +23,7 @@ getopt argv -sources sources ""
 getopt argv -constraints constraints ""
 getopt argv -mem_files mem_files ""
 getopt argv -outputDir outputDir ""
+getopt argv -top top ""
 
 puts "project: $project"
 puts "part: $part"
@@ -41,6 +42,9 @@ puts "mem_files: $mem_files"
 
 puts "outputDir: $outputDir"
 
+#top specifies the top module name
+puts "top: $top"
+
 #We're using Vivado's project mode
 create_project $project -part $part -force
 source $sources
@@ -56,6 +60,8 @@ if {($constraints != "") && ([file exists $constraints] == 1)} {
 }
 
 update_compile_order -fileset sources_1
+
+set_property top $top [current_fileset]
 
 #The synthesis step
 if {($cmd == "synth") || ($cmd == "impl")} {

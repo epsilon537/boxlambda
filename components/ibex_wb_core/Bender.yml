@@ -11,7 +11,7 @@ dependencies:
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
   
 sources:
-  - target: verilator
+  - target: any(verilator, vivado)
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:
@@ -19,13 +19,6 @@ sources:
       - ../../sub/ibex_wb/rtl/core_if.sv
       - ../../sub/ibex_wb/rtl/core2wb.sv
       - ../../sub/ibex_wb/rtl/slave2wb.sv 
-  - target: vivado
-    defines:
-      NO_MODPORT_EXPRESSIONS: ~
-    files:
-      - ../../sub/ibex_wb/rtl/wb_ibex_core.sv
-      - ../../sub/ibex_wb/rtl/core_if.sv
-      - ../../sub/ibex_wb/rtl/core2wb.sv
   - target: ibex_wb_core
     files:
       - rtl/ibex_wb_core_wrapper.sv    
