@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#This a simple bash based shell script verifying OpenOCD based JTAG connectivity to a riscv32 target running 'Hello Word'.
+
 #Launch the verilator model
 ./Vmodel &
 sleep 3
@@ -14,6 +16,8 @@ rm -f gdb.log
 riscv32-unknown-elf-gdb --batch -x ../sim/test.gdb ../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello/hello.elf > gdb.log
 
 #Check if log contains given output, confirming we had a valid connection with the target.
+#When we reach this point, the SW running on target should be in its final state, which is an infinite loop. In this state,
+#the UART register contents (retrieved with GDB) should be 0x10010000.
 grep "$1 = 0x10010000" gdb.log
 if [ "$?" -ne "0" ]; then
   echo "Test Failed!"

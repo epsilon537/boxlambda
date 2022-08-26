@@ -1,7 +1,7 @@
 // DESCRIPTION: This files is based the hello_world test build, modified
 // to fit the hello_dbg test build. That means: no ncurses and
 // no UART or GPIO checks. The purpose of of the build is to allow
-// OpenOCD to connect to ti.
+// OpenOCD to connect to it.
 //
 // The hello_world test build in turn is based on Verilator example code, 
 //======================================================================

@@ -1,4 +1,6 @@
-//A simulator top-level wrapping around ibex_soc, instantiating SimJTAG
+//
+//  A simulator top-level wrapping around ibex_soc, instantiating SimJTAG.
+//
 module sim_main #(
 		  parameter int unsigned OPENOCD_PORT = 9999
 		  ) 

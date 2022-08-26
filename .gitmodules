@@ -19,9 +19,6 @@
 [submodule "sub/common_cells"]
 	path = sub/common_cells
 	url = https://github.com/epsilon537/common_cells
-[submodule "sub/common_verification"]
-	path = sub/common_verification
-	url = https://github.com/epsilon537/common_verification
 [submodule "sub/pulpino"]
 	path = sub/pulpino
 	url = https://github.com/epsilon537/pulpino
