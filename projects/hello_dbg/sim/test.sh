@@ -7,7 +7,7 @@
 sleep 3
 
 #Launch riscv-openocd and connect to the model
-openocd -f ../sim/dm_debug.cfg &
+openocd -f ../../../openocd/verilator_riscv_dbg.cfg &
 sleep 3
 
 #Launch gdb, connect to target via openocd, execute a via debug actions as indicated in test.gdb script.
