@@ -21,4 +21,4 @@ run:
 #Run test script
 .PHONY: test
 test: sim
-	cd generated && source ../sim/test.sh
+	cd generated && source ../test/test.sh

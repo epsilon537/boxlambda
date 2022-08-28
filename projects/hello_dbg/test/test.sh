@@ -13,7 +13,7 @@ sleep 3
 #Launch gdb, connect to target via openocd, execute a via debug actions as indicated in test.gdb script.
 #Collect result of actions in gdb.log
 rm -f gdb.log
-riscv32-unknown-elf-gdb --batch -x ../sim/test.gdb ../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello/hello.elf > gdb.log
+riscv32-unknown-elf-gdb --batch -x ../test/test.gdb ../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello/hello.elf > gdb.log
 
 #Check if log contains given output, confirming we had a valid connection with the target.
 #When we reach this point, the SW running on target should be in its final state, which is an infinite loop. In this state,
