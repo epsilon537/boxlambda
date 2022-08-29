@@ -19,6 +19,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **BPP**: Bits Per Pixel.
 
+- **BSCANE**: A Xilinx primitive giving access to and from the FPGA's JTAG scan chain.
+
 - **Console**: The physical terminal consisting of a screen, a keyboard, and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
 
 - **Constraints File**: A constraints file specifies the mapping of the top-level HDL module's input and output ports to physical pins of the FPGA. It also defines the clocks used by the given design. See [https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file](https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file).
@@ -47,11 +49,15 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Fork**: A GitHub fork is a copy of a repository that sits in your account rather than the account from which you forked the data.
 
+- **FTDI**: Future Technology Devices International Inc. The name has become synonymous with the USB-to-UART adapter ICs sold by this company.
+
 - **GPIO**: General-Purpose Input/Output, an uncommitted pin used for input and/or output controllable by the user at run-time.
 
 - **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
 
 - **Ibex**: The name of the Risc-V CPU core used by BoxLambda.
+
+- **IC**: Integrated Circuit.
 
 - **Interconnect**: Wishbone terminology for the bus fabric.
 
@@ -64,6 +70,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **ICAP**: Internal Configuration Access Port, a module giving access to the FPGA configuration functionality built into Xilinx FPGAs ([https://www.xilinx.com/products/intellectual-property/axi_hwicap.html](https://www.xilinx.com/products/intellectual-property/axi_hwicap.html))
 
 - **ISA**: Instruction Set Architecture. The Instruction Set Architecture is the part of the processor that is visible to the programmer.
+
+- **JTAG**: Joint Test Action Group, a standard designed to assist with device, board, and system testing, diagnosis, and fault isolation. Today JTAG is used as the primary means of accessing sub-blocks of ICs, making it an essential mechanism for debugging embedded systems.
 
 - **JTAG DTM**: JTAG based Debug Transport Module.
 
@@ -86,6 +94,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **OpenOCD**: Open On-Chip Debugger, open-source software that interfaces with a hardware debugger's JTAG port.
 
 - **PIT**: Programmable Interval Timer.
+
+- **PMOD**: Peripheral Module Interface, an open standard defined by Digilent for connecting peripheral modules to an FPGA.
 
 - **Praxos**: The name of the DMA Controller used by BoxLambda.
 
@@ -112,6 +122,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **SPI**: Serial Peripheral Interface, a synchronous serial communication interface specification used for short-distance communication.
 
 - **Synthesis**: Synthesis turns a module's Verilog/System Verilog/VHDL source code into a netlist of gates. The software equivalent of synthesis is compilation.
+
+- **TAP**: Test Access Port, a JTAG interface.
 
 - **Tcl**: The defacto standard embedded command language for EDA applications.
 
@@ -234,8 +246,191 @@ I suspect that over time the project will outgrow this setup and I might move up
 - USB HID for keyboard and mouse, with a clever adapter so keyboard and mouse present themselves to the FPGA as PS/2 devices.
 - VGA connector
 
-Components Overview
--------------------
+Architecture
+------------
+
+### The Nexys Configuration
+
+![Nexys Draft Architecture Block Diagram](assets/Nexys_Arch_Diagram_Doc.png){:class="img-responsive"}
+*BoxLambda Draft Architecture Block Diagram for Nexys A7-100T.*
+
+This is an architecture diagram showing the Nexys A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
+
+#### Internal RAM
+
+The system is configured with 256KB of Dual-Port RAM (DPRAM) and 128KB of Video RAM (inside the VERA module). The A7-100T has 607KB of Block RAM in total, so more than enough Block RAM should be left over for other purposes, e.g. for the *Black Box Module* (see below).
+
+The CPU has memory-mapped access to DPRAM. As long as no other Bus Masters are competing for access to the same bus, instructions executing from DPRAM will have a fixed cycle count.
+
+#### DMA Bus and Processor Bus
+
+The DPRAM is hooked up to two system buses: a **DMA bus** and a **Processor bus**. Bus masters (currently only CPU and DMAC) have access to both buses as well, but the intent is that the DMA Controller uses the DMA bus for MEMC<->DPRAM transfers and the CPU uses the processor bus for DPRAM access. This intent is not hardwired into the system, however. The DMA Controller can set up transfers over the processor bus, and the processor can access external memory over the DMA bus. The two system buses are there to give bus masters some flexibility to stay out of each other's way.
+
+Note that, besides access to external and internal memory, the DMA Controller also has access to VERA, the sound cores, and the SD SPI module via the DMA bus.
+
+Both the Processor Bus and the DMA bus are 32-bit pipelined mode Wishbone buses.
+
+#### The Interconnect
+
+A bus on a block diagram is just a line connecting blocks. In reality, the *Interconnect* consists of Cross Bars, Arbiters, Address Decoders, and Bridges. I will follow up with an architecture diagram showing the BoxLambda Interconnect details. 
+
+To build the Interconnect, I will make use of the components contributed by the gentlemen below:
+
+- **Alexforencich** published a collection of components that can be used to build an Interconnect: [https://github.com/alexforencich/verilog-wishbone/](https://github.com/alexforencich/verilog-wishbone/)
+- **ZipCPU** did the same. His components are well-documented, including cross-references with insightful articles on the ZipCPU website: [https://github.com/ZipCPU/wb2axip](https://github.com/ZipCPU/wb2axip)
+
+#### The Black Box, and other Reconfigurable Partitions
+
+The Black Box Partition is an empty area in the FPGA's floorplan. This is where you can insert your application-specific logic. Do you need hardware-assisted collision detection for your Bullet-Hell Shoot'em Up game? Put it in the Black Box. A DSP? A CORDIC core? More RAM? As long as it fits the floor plan, you can put it in the Black Box region. The Black Box has bus master and slave ports on both system buses.
+
+Notice that the Black Box sits inside RP\_0, Reconfigurable Partition 0. A **Reconfigurable Partition** is a region on the FPGA where you can dynamically load a **Reconfigurable Module** (RM) into. Going back to the previous examples, the collision detector, DSP, CORDIC core, or RAM module, would be Reconfigurable Modules. You can live-load one of them into RP\_0. 
+
+VERA and the two YM2149 cores are also placed into their specific Reconfigurable Partitions (RP\_1 resp. RP\_2), so you can swap those out for a different graphics and/or sound controller.
+
+The CPU, DMAC, MEMC, and I/O peripheral blocks are all part of the so-called *Static Design*. These can't be swapped out for other logic on a live system. Any changes in these blocks require an update of the **Full Configuration Bitstream** (as opposed to a **Partial Configuration Bitstream** containing a Reconfigurable Module).
+
+Reconfigurable Modules require a reconfigurable clocking strategy. That's the role of the *Clock Control* (clk_ctrl) module. The BoxLambda Clocking Strategy is a topic for a future post.
+
+#### External Memory Access
+
+The Memory Controller is equipped with an AXI4 port. That's convenient because that's also what the DFX Controller uses to fetch the Reconfigurable Modules' bitstreams. 
+To hook up the system buses, we use a Wishbone to AXI bridge. This bridge will introduce additional memory access latency, but that should be acceptable because this path should not be used for latency-critical operations.
+
+Note that the CPU has memory-mapped access to DDR memory and can execute code directly from DDR memory. DDR memory access is not fully deterministic, however. CPU instructions executing from DDR will not have a fixed cycle count.
+
+### The Arty A7 Configuration
+
+![Arty Draft Architecture Block Diagram](assets/Arty_Arch_Diagram_Doc.png){:class="img-responsive"}
+*BoxLambda Draft Architecture Block Diagram for Arty A7-35T.*
+
+This architecture diagram shows the Arty A7-35T configuration.
+
+DFX is not supported on the A7-35T. Neither is the Hierarchical Design Flow. This means we have to stick to a monolithic design. The RTL for all components is combined into one single design, which is synthesized, implemented, and turned into a single bitstream. There is still room for RTL experimentation in this build, but you won't be able to live-load it. It's going to require an update of the Full Configuration Bitstream.
+
+The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM and the amount of DPRAM have been reduced to 64KB. 
+
+All other components are the same as in the Nexys Configuration.
+
+### Example Software Usage Model
+
+BoxLambda users can make up their minds on how they want to set up this system. Here's one possible software configuration:
+
+- *Deterministic* and/or Time-Critical CPU code and data reside in DPRAM.
+- Non-Time-Critical code and data reside in DDR memory.
+- The CPU accesses DPRAM, DDR memory, and hardware blocks via the Processor Bus.
+- DMA activity, if any, passes over the DMA bus.
+
+Interrupts
+----------
+
+The CPU supports the following interrupts (taken from [https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html](https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html)):
+
+**Ibex Interrupts:**
+
+| Interrupt Input Signal  | ID    | Description                                      |
+-------------------------|-------|--------------------------------------------------|
+| ``irq_nm_i``            | 31    | Non-maskable interrupt (NMI)                     |
+| ``irq_fast_i[14:0]``    | 30:16 | 15 fast, local interrupts                        |
+| ``irq_external_i``      | 11    | Connected to platform-level interrupt controller |
+| ``irq_timer_i``         | 7     | Connected to timer module                        |
+| ``irq_software_i``      | 3     | Connected to memory-mapped (inter-processor)     |
+|                         |       | interrupt register                               |
+
+### The Timer
+
+The RISC-V spec includes a timer specification: RISC-V Machine Timer Registers (see RISC-V Privileged Specification, version 1.11, Section 3.1.10). The Ibex GitHub repository contains a compliant implementation as part of the *Simple System* example:
+
+[https://github.com/epsilon537/ibex/tree/master/examples/simple_system](https://github.com/epsilon537/ibex/tree/master/examples/simple_system)
+
+The Timer module flags interrupts via signal *irq_timer_i*. The CPU sees this as IRQ ID 7.
+
+### The Fast Local Interrupts
+
+We can freely assign 15 local interrupts. I've got the following list:
+
+- 1 interrupt line per Reconfigurable Module (RM), so 3 in total. The default RMs are VERA and a Dual JT49. VERA uses one interrupt line, JT49 uses none.
+- 1 interrupt line each for:
+  - wbuart
+  - sdspi
+  - wbi2c
+  - ps2_mouse
+  - ps2_keyboard
+  - Praxos DMA
+  - Quad SPI
+  - ICAP
+  - DFX Controller
+  - GPIO. 
+  
+  That's 10 interrupts in total.
+
+The interrupts are serviced in order of priority, the highest number being the highest priority.
+
+I have ordered the Fast Local interrupts as follows:
+
+**Fast Local Interrupt Assignments:**
+
+| Interrupt Input Signal  | ID    | Description                             |
+|=========================|=======|=========================================|
+| ``irq_fast_i[14]``      | 30    | RM_2 interrupt (Default: not assigned)  |
+| ``irq_fast_i[13]``      | 29    | RM_1 interrupt (Default: VERA IRQ)      |
+| ``irq_fast_i[12]``      | 28    | RM_0 interrupt (Default: not assigned)  |
+| ``irq_fast_i[11]``      | 27    | Praxos DMAC IRQ                         |
+| ``irq_fast_i[10]``      | 26    | sdspi IRQ                               |
+| ``irq_fast_i[9]``       | 25    | wbuart IRQ                              |
+| ``irq_fast_i[8]``       | 24    | ps2_keyboard IRQ                        |
+| ``irq_fast_i[7]``       | 23    | ps2_mouse IRQ                           |
+| ``irq_fast_i[6]``       | 22    | sbi2c IRQ                               |
+| ``irq_fast_i[5]``       | 21    | GPIO IRQ                                |
+| ``irq_fast_i[4]``       | 20    | Quad SPI IRQ                            |
+| ``irq_fast_i[3]``       | 19    | DFX Controller IRQ                      |
+| ``irq_fast_i[2]``       | 18    | ICAP IRQ                                |
+| ``irq_fast_i[1]``       | 17    | not assigned                            |
+| ``irq_fast_i[0]``       | 16    | not assigned                            |
+
+### The Platform Level Interrupt Controller.
+
+One interrupt line is reserved to connect an external interrupt controller. I don't have any use for it right now, however, so I'm going to leave this unassigned for the time being.
+
+Estimated FPGA Utilization
+--------------------------
+
+**Estimated FPGA Resource Utilization on Nexys A7-100T:**
+
+
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
+|----------------|--------|------|---------------|-----------|------|------------|-----------|-----------|
+|**Slice LUTs**|0|2122|3390|5673|416|554|380|205|205|
+|**Slice Registers**|0|1441|911|426|5060|622|167|185|185|
+|**Block RAM Tile**|64|41|0|0|1|0.5|0|0|
+|**DSPs**|0|2|1|0|0|0|0|0|
+
+| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
+|----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------|
+|**Slice LUTs**|536|393|438|440|20.00%|17702|63400|27.92%|
+|**Slice Registers**|324|114|346|641|20.00%|13268|126800|10.46%|
+|**Block RAM Tile**|1|0|0|0|20.00%|129|135|95.56%|
+|**DSPs**|0|0|0|0|20.00%|3.6|240|1.50%|
+
+I added a 20% margin overall for the bus fabric and for components I haven't included yet.
+
+**Estimated FPGA Resource Utilization on Arty A7-35T:**
+
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
+|----------------|--------|------|---------------|-----------|------|------------|-----------|-----------
+|**Slice LUTs**|0|2122|3390|5673|416|554|380|205|205
+|**Slice Registers**|0|1441|911|426|5060|622|167|185|185
+|**Block RAM Tile**|**16**|25|0|0|1|0.5|0|0
+|**DSPs**|0|2|1|0|0|0|0|0
+
+| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
+|----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------
+|**Slice LUTs**|536|393|438|440|20.00%|17702|20800|85.11%
+|**Slice Registers**|749|324|346|641|20.00%|13268|41600|31.90%
+|**Block RAM Tile**|1|0|0|0|**10.00%**|48|50|**95.70%**
+|**DSPs**|0|0|0|0|20.00%|4|90|4.00%
+
+Components
+----------
 
 We're building a System-on-a-Chip (*System-on-an-FPGA*?). This section identifies the Key Components of the BoxLambda SoC.
 
@@ -303,27 +498,31 @@ There are a lot of RISC-V implementations to choose from. The **Ibex** project s
 - Supports a *small* two-stage pipeline parameterization.
 - Very active project.
 
-Location of the *ibex* submodule in the BoxLambda repo: **boxlambda/fpga/ibex/**
+Location of the *Ibex* submodule in the BoxLambda repo: **sub/ibex/**
 
-#### The Wishbone Wrapper: *wb_ibex*
+The Ibex core:
+[sub/ibex/rtl/ibex_top.sv](https://github.com/epsilon537/ibex/blob/acdf41b2bf3ed2f33ed5c29e65c1625d22e4aab5/rtl/ibex_top.sv)
+
+#### The Wishbone Wrapper: *Ibex_WB*
 
 [https://github.com/epsilon537/ibex_wb](https://github.com/epsilon537/ibex_wb) forked from [https://github.com/batuhanates/ibex_wb](https://github.com/batuhanates/ibex_wb)
 
-The ibex RISCV core itself doesn't have Wishbone ports. *wb_ibex* wraps around the vanilla ibex core and attaches Wishbone port adapters to its instruction and data ports.
+The Ibex RISCV core itself doesn't have Wishbone ports. *Ibex_WB* wraps around the vanilla Ibex core and attaches Wishbone port adapters to its instruction and data ports.
 
-The *ibex_wb* repo also includes an example SoC build consisting of an ibex core connected via a shared Wishbone bus to a wbuart32 core and an internal memory module, along with the software to run on that platform. This example SoC is the starting point for BoxLambda's implementation. See the **Test Builds** section below.
+The *Ibex_WB* repo also includes an example SoC build consisting of an Ibex core connected via a shared Wishbone bus to a wbuart32 core and an internal memory module, along with the software to run on that platform. This example SoC is the starting point for BoxLambda's implementation. See the **Test Builds** section below.
 
-Location of the *ibex_wb* submodule in the BoxLambda repo: **boxlambda/fpga/ibex_wb/**
+Location of the *Ibex_WB* submodule in the BoxLambda repo: **sub/ibex/**
 
-**boxlambda/fpga/ibex_wb/rtl/wb_ibex_core.sv**
+The *wb_ibex_core*:
+[sub/ibex_wb/rtl/wb_ibex_core.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_ibex_core.sv)
 
 #### Ibex Core Configuration
 
 I settled on RISCV configuration **RV32IMCB**: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
 Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
-The Ibex core is instantiated with the following *M* and *B* parameters, as shown in the *ibex_wb* *ibex_soc* example:
+The Ibex core is instantiated with the following *M* and *B* parameters, as shown in the *Ibex_WB* *ibex_soc* example:
 
-**boxlambda/fpga/ibex_wb/soc/fpga/arty-a7-35/rtl/ibex_soc.sv**:
+**sub/ibex_wb/soc/fpga/arty-a7-35/rtl/ibex_soc.sv**:
 ```
 wb_ibex_core #(
   .RV32M(ibex_pkg::RV32MFast),
@@ -331,11 +530,138 @@ wb_ibex_core #(
   ,,,
 ```
 
-#### The Debug Unit: *riscv-dbg*
+### The Debug Unit: *RISCV-DBG*
 
 [https://github.com/epsilon537/riscv-dbg](https://github.com/epsilon537/riscv-dbg) forked from [https://github.com/pulp-platform/riscv-dbg](https://github.com/pulp-platform/riscv-dbg).
 
-*riscv-dbg* is a debug unit for the Ibex RISCV processor. The debug unit can be accessed via JTAG over DTM (Debug Transport Module). The plan is to bring up OpenOCD.
+#### RISCV OpenOCD
+
+OpenOCD is an open-source software package used to interface with a hardware debugger's JTAG port via one of many transport protocols. In our case, the hardware debug logic is implemented by a component called **riscv-dbg**. The overall setup looks like this:
+
+![OpenOCD General Setup](../assets/OpenOCD_Setup_General.drawio.png){:class="img-responsive"}
+
+*OpenOCD General Setup*
+
+BoxLambda uses the RISCV fork of OpenOCD: [https://github.com/riscv/riscv-openocd](https://github.com/riscv/riscv-openocd)
+
+#### The RISCV-DBG component
+
+RISCV-dbg is part of the [*PULP* platform](https://github.com/pulp-platform) and depends on three additional GitHub repositories that are part of this platform:
+- **common_cells**: [https://github.com/pulp-platform/common_cells](https://github.com/pulp-platform/common_cells)
+- **tech_cells_generic**: [https://github.com/pulp-platform/tech_cells_generic](https://github.com/pulp-platform/tech_cells_generic)
+- **pulpino**: [https://github.com/pulp-platform/pulpino](https://github.com/pulp-platform/pulpino)
+
+As their names suggest, *common_cells* and *tech_cells_generic* provide commonly used building blocks such as FIFOs, CDC logic, reset logic, etc. *Pulpino* is an entire RISCV-based SoC project. However, the riscv-dbg pulpino dependency is limited to just a few cells for clock management.
+
+I created git submodules for all of these repositories under the BoxLambda repository's *sub/* directory. I then created a riscv-dbg component directory with a Bender.yml manifest in it, referencing all the sources needed from those submodules: [components/riscv-dbg/Bender.yml](https://github.com/epsilon537/boxlambda/blob/951bca262fe66fa7433dd0282e7a0d52e93fac6b/components/riscv-dbg/Bender.yml).
+
+```
+boxlambda
+├── components
+│   └── riscv-dbg
+│       └── Bender.yml
+└── sub
+    ├── common_cells
+    ├── tech_cells_generic
+    ├── pulpino	
+    └── riscv-dbg
+
+```
+
+#### RISCV-DBG RTL Structure
+
+RISCV-DBG has two top-levels:
+- [sub/riscv-dbg/src/dm_top.sv](https://github.com/epsilon537/riscv-dbg/blob/b241f967f0dd105f7c5e020a395bbe0ec54e40e4/src/dm_top.sv)
+- [sub/riscv-dbg/src/dmi_jtag.sv](https://github.com/epsilon537/riscv-dbg/blob/b241f967f0dd105f7c5e020a395bbe0ec54e40e4/src/dmi_jtag.sv)
+
+Recall that BoxLambda uses a Wishbone interconnect. The Ibex_WB submodule implements a Wishbone wrapper for the Ibex RISCV core. It does the same for RISCV-DBG's *dm_top*:  
+[sub/ibex_wb/rtl/wb_dm_top.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_dm_top.sv)
+
+Refer to the *ibex_soc* example to see how RISCV-DBG is instantiated:  
+[sub/ibex_wb/soc/fpga/arty-a7-35/rtl/ibex_soc.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/soc/fpga/arty-a7-35/rtl/ibex_soc.sv)
+
+#### OpenOCD and RISCV-DBG on Verilator
+
+The JTAG transport protocol used on the Verilator Model is a simple socket-based protocol called **Remote Bitbang**.
+The remote bitbang spec is just one page: 
+
+[https://github.com/openocd-org/openocd/blob/master/doc/manual/jtag/drivers/remote_bitbang.txt](https://github.com/openocd-org/openocd/blob/master/doc/manual/jtag/drivers/remote_bitbang.txt)
+
+The Verilator setup looks like this:
+
+![BoxLambda OpenOCD Verilator Setup](../assets/OpenOCD_Setup_Verilator.drawio.png){:class="img-responsive"}
+
+*BoxLambda OpenOCD Verilator Setup*
+
+The **hello_dbg** project (directory *projects/hello_dbg/*) implements the OpenOCD Verilator setup shown above. The project contains the Hello World test build extended with the riscv-dbg component.
+The project directory also contains a [test script](https://github.com/epsilon537/boxlambda/blob/2a32d1f4100204f9df4e17ba7c6e4656afff8c47/projects/hello_dbg/test/test.sh) that goes through the following steps:
+1. Start the Verilator model
+2. Connect OpenOCD to the model
+3. Connect GDB to OpenOCD (and thus to the model)
+4. Execute a UART register dump on the target
+5. Check the UART register contents against expected results. 
+
+```
+boxlambda
+├── projects
+│   └── hello-dbg
+│       ├── Bender.yml
+│       ├── sim
+│       │   ├── sim_main.cpp
+│       │   └── sim_main.sv
+│       └── test
+│           ├── test.sh
+│           └── test.gdb 
+├── components
+│   └── riscv-dbg
+└── sub
+    ├── common_cells
+    ├── tech_cells_generic
+    ├── pulpino	
+    └── riscv-dbg
+
+```
+
+The OpenOCD configuration file for JTAG Debugging on Verilator is checked into the *openocd* directory:  
+[openocd/verilator_riscv_dbg.cfg](https://github.com/epsilon537/boxlambda/blob/f696f21b3e50f66678f4e32806a65abdbdf42455/openocd/verilator_riscv_dbg.cfg)
+
+To summarize:
+
+1. The above OpenOCD config file is used to connect to the JTAG TAP of a Verilator model.
+2. The JTAG TAP is implemented by a riscv-dbg core connected to an Ibex RISCV32 core.
+2. The JTAG TAP is used to debug the software running on the Ibex RISCV32 core.
+3. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called **remote_bitbang**.
+
+See the *Test Builds* section below for the steps needed to set up an OpenOCD JTAG debug session on Verilator.
+
+#### OpenOCD and RISCV-DBG on Arty-A7 FPGA
+
+The obvious approach would be to bring out the JTAG signals to PMOD pins and hook up a JTAG adapter. However, there's an alternative method that doesn't require a JTAG adapter. The riscv-dbg JTAG TAP can be hooked into the FPGA scan chain which is normally used to program the bitstream into the FPGA. On the Arty-A7, bitstream programming is done using the FTDI USB serial port, so no special adapters are needed.
+
+The riscv-dbg codebase lets you easily switch between a variant with external JTAG pins and a variant that hooks into the FPGA scan chain, by changing a single file:
+- **dmi_jtag_tap.sv**: hooks up the JTAG TAP to external pins
+- **dmi_bscane_tap.sv**: hooks the JTAG TAP into the FPGA scan chain. The Xilinx primitive used to hook into the scan chain do this is called BSCANE. Hence the name.
+
+Both files implement the same module name (*dmi_jtag_tap*) and the same module ports, so you can swap one for the other without further impact on the system. Lightweight polymorphism.
+
+On the OpenOCD side, the transport protocol for this Debug-Access-via-FPGA-scan-chain-over-FTDI is anti-climactically called **ftdi**.
+
+![BoxLambda OpenOCD Arty A7 FTDI Setup](../assets/OpenOCD_Setup_Arty_A7.drawio.png){:class="img-responsive"}
+
+*BoxLambda OpenOCD Arty A7 FTDI Setup*
+
+The OpenOCD configuration file for JTAG Debugging on Arty A7 is checked into the *openocd* directory:  
+[openocd/digilent_arty_a7.cfg](https://github.com/epsilon537/boxlambda/blob/102233debcb1e632e6a36c31a836c7619aaf8b29/openocd/digilent_arty_a7.cfg) 
+
+To summarize:
+
+1. The above OpenOCD config file is used to connect to the JTAG TAP of a riscv-dbg core...
+2. ...to debug the software running on a connected Ibex RISCV32 core.
+3. The riscv-dbg core's JTAG TAP is hooked into the Arty-A7's scan chain, normally used for loading a bitstream into the FPGA.
+4. The Arty-A7 FPGA scan chain is accessible through the board's FTDI-based USB serial port.
+5. The OpenOCD transport protocol name for this type of connection is **ftdi**.
+
+See the *Test Builds* section below for the steps needed to set up an OpenOCD JTAG debug session on the Arty A7.
 
 ### The Memory Controller
 
@@ -451,190 +777,7 @@ Location of the *wbuart32* submodule in the BoxLambda repository: **boxlambda/fp
 - **DFX Controller**: The actual loading of a Reconfigurable Module into a Reconfigurable Partition is handled by the DFX Controller. DFX stands for **Dynamic Function Exchange** which is Xilinx-speak for Partial FPGA Reconfiguration.
 - **ICAP**: Internal Configuration Access Port. This module gives access to the FPGA configuration functionality built into Xilinx FPGAs. We'll use the ICAP to implement in-system updates of the Full Configuration Bitstream, loaded into the FPGA upon boot-up.
 - **Quad SPI Flash**: This is a module provided by Xilinx, giving access to the Flash Memory device attached through a Quad-SPI bus. The non-volatile Flash Memory will hold the Full Configuration Bitstream(s), System Firmware, and non-volatile system configuration parameters such as keyboard type
-- **wb_gpio**: A simple GPIO core with a Wishbone interface, for sampling buttons and switches, and driving LEDs. *wb_gpio.v* is included in the *ibex_wb* submodule.
-
-Architecture
-------------
-
-### The Nexys Configuration
-
-![Nexys Draft Architecture Block Diagram](assets/Nexys_Arch_Diagram_Doc.png){:class="img-responsive"}
-*BoxLambda Draft Architecture Block Diagram for Nexys A7-100T.*
-
-This is an architecture diagram showing the Nexys A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
-
-#### Internal RAM
-
-The system is configured with 256KB of Dual-Port RAM (DPRAM) and 128KB of Video RAM (inside the VERA module). The A7-100T has 607KB of Block RAM in total, so more than enough Block RAM should be left over for other purposes, e.g. for the *Black Box Module* (see below).
-
-The CPU has memory-mapped access to DPRAM. As long as no other Bus Masters are competing for access to the same bus, instructions executing from DPRAM will have a fixed cycle count.
-
-#### DMA Bus and Processor Bus
-
-The DPRAM is hooked up to two system buses: a **DMA bus** and a **Processor bus**. Bus masters (currently only CPU and DMAC) have access to both buses as well, but the intent is that the DMA Controller uses the DMA bus for MEMC<->DPRAM transfers and the CPU uses the processor bus for DPRAM access. This intent is not hardwired into the system, however. The DMA Controller can set up transfers over the processor bus, and the processor can access external memory over the DMA bus. The two system buses are there to give bus masters some flexibility to stay out of each other's way.
-
-Note that, besides access to external and internal memory, the DMA Controller also has access to VERA, the sound cores, and the SD SPI module via the DMA bus.
-
-Both the Processor Bus and the DMA bus are 32-bit pipelined mode Wishbone buses.
-
-#### The Interconnect
-
-A bus on a block diagram is just a line connecting blocks. In reality, the *Interconnect* consists of Cross Bars, Arbiters, Address Decoders, and Bridges. I will follow up with an architecture diagram showing the BoxLambda Interconnect details. 
-
-To build the Interconnect, I will make use of the components contributed by the gentlemen below:
-
-- **Alexforencich** published a collection of components that can be used to build an Interconnect: [https://github.com/alexforencich/verilog-wishbone/](https://github.com/alexforencich/verilog-wishbone/)
-- **ZipCPU** did the same. His components are well-documented, including cross-references with insightful articles on the ZipCPU website: [https://github.com/ZipCPU/wb2axip](https://github.com/ZipCPU/wb2axip)
-
-#### The Black Box, and other Reconfigurable Partitions
-
-The Black Box Partition is an empty area in the FPGA's floorplan. This is where you can insert your application-specific logic. Do you need hardware-assisted collision detection for your Bullet-Hell Shoot'em Up game? Put it in the Black Box. A DSP? A CORDIC core? More RAM? As long as it fits the floor plan, you can put it in the Black Box region. The Black Box has bus master and slave ports on both system buses.
-
-Notice that the Black Box sits inside RP\_0, Reconfigurable Partition 0. A **Reconfigurable Partition** is a region on the FPGA where you can dynamically load a **Reconfigurable Module** (RM) into. Going back to the previous examples, the collision detector, DSP, CORDIC core, or RAM module, would be Reconfigurable Modules. You can live-load one of them into RP\_0. 
-
-VERA and the two YM2149 cores are also placed into their specific Reconfigurable Partitions (RP\_1 resp. RP\_2), so you can swap those out for a different graphics and/or sound controller.
-
-The CPU, DMAC, MEMC, and I/O peripheral blocks are all part of the so-called *Static Design*. These can't be swapped out for other logic on a live system. Any changes in these blocks require an update of the **Full Configuration Bitstream** (as opposed to a **Partial Configuration Bitstream** containing a Reconfigurable Module).
-
-Reconfigurable Modules require a reconfigurable clocking strategy. That's the role of the *Clock Control* (clk_ctrl) module. The BoxLambda Clocking Strategy is a topic for a future post.
-
-#### External Memory Access
-
-The Memory Controller is equipped with an AXI4 port. That's convenient because that's also what the DFX Controller uses to fetch the Reconfigurable Modules' bitstreams. 
-To hook up the system buses, we use a Wishbone to AXI bridge. This bridge will introduce additional memory access latency, but that should be acceptable because this path should not be used for latency-critical operations.
-
-Note that the CPU has memory-mapped access to DDR memory and can execute code directly from DDR memory. DDR memory access is not fully deterministic, however. CPU instructions executing from DDR will not have a fixed cycle count.
-
-### The Arty Configuration
-
-![Arty Draft Architecture Block Diagram](assets/Arty_Arch_Diagram_Doc.png){:class="img-responsive"}
-*BoxLambda Draft Architecture Block Diagram for Arty A7-35T.*
-
-This architecture diagram shows the Arty A7-35T configuration.
-
-DFX is not supported on the A7-35T. Neither is the Hierarchical Design Flow. This means we have to stick to a monolithic design. The RTL for all components is combined into one single design, which is synthesized, implemented, and turned into a single bitstream. There is still room for RTL experimentation in this build, but you won't be able to live-load it. It's going to require an update of the Full Configuration Bitstream.
-
-The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM and the amount of DPRAM have been reduced to 64KB. 
-
-All other components are the same as in the Nexys Configuration.
-
-### Example Software Usage Model
-
-BoxLambda users can make up their minds on how they want to set up this system. Here's one possible software configuration:
-
-- *Deterministic* and/or Time-Critical CPU code and data reside in DPRAM.
-- Non-Time-Critical code and data reside in DDR memory.
-- The CPU accesses DPRAM, DDR memory, and hardware blocks via the Processor Bus.
-- DMA activity, if any, passes over the DMA bus.
-
-Interrupts
-----------
-
-The CPU supports the following interrupts (taken from [https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html](https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html)):
-
-**Ibex Interrupts:**
-
-| Interrupt Input Signal  | ID    | Description                                      |
-|-------------------------|-------|--------------------------------------------------|
-| ``irq_nm_i``            | 31    | Non-maskable interrupt (NMI)                     |
-| ``irq_fast_i[14:0]``    | 30:16 | 15 fast, local interrupts                        |
-| ``irq_external_i``      | 11    | Connected to platform-level interrupt controller |
-| ``irq_timer_i``         | 7     | Connected to timer module                        |
-| ``irq_software_i``      | 3     | Connected to memory-mapped (inter-processor)     |
-|                         |       | interrupt register                               |
-
-### The Timer
-
-The RISC-V spec includes a timer specification: RISC-V Machine Timer Registers (see RISC-V Privileged Specification, version 1.11, Section 3.1.10). The Ibex GitHub repository contains a compliant implementation as part of the *Simple System* example:
-
-[https://github.com/epsilon537/ibex/tree/master/examples/simple_system](https://github.com/epsilon537/ibex/tree/master/examples/simple_system)
-
-The Timer module flags interrupts via signal *irq_timer_i*. The CPU sees this as IRQ ID 7.
-
-### The Fast Local Interrupts
-
-We can freely assign 15 local interrupts. I've got the following list:
-
-- 1 interrupt line per Reconfigurable Module (RM), so 3 in total. The default RMs are VERA and a Dual JT49. VERA uses one interrupt line, JT49 uses none.
-- 1 interrupt line each for:
-  - wbuart
-  - sdspi
-  - wbi2c
-  - ps2_mouse
-  - ps2_keyboard
-  - Praxos DMA
-  - Quad SPI
-  - ICAP
-  - DFX Controller
-  - GPIO. 
-  
-  That's 10 interrupts in total.
-
-The interrupts are serviced in order of priority, the highest number being the highest priority.
-
-I have ordered the Fast Local interrupts as follows:
-
-**Fast Local Interrupt Assignments:**
-
-| Interrupt Input Signal  | ID    | Description                             |
-|=========================|=======|=========================================|
-| ``irq_fast_i[14]``      | 30    | RM_2 interrupt (Default: not assigned)  |
-| ``irq_fast_i[13]``      | 29    | RM_1 interrupt (Default: VERA IRQ)      |
-| ``irq_fast_i[12]``      | 28    | RM_0 interrupt (Default: not assigned)  |
-| ``irq_fast_i[11]``      | 27    | Praxos DMAC IRQ                         |
-| ``irq_fast_i[10]``      | 26    | sdspi IRQ                               |
-| ``irq_fast_i[9]``       | 25    | wbuart IRQ                              |
-| ``irq_fast_i[8]``       | 24    | ps2_keyboard IRQ                        |
-| ``irq_fast_i[7]``       | 23    | ps2_mouse IRQ                           |
-| ``irq_fast_i[6]``       | 22    | sbi2c IRQ                               |
-| ``irq_fast_i[5]``       | 21    | GPIO IRQ                                |
-| ``irq_fast_i[4]``       | 20    | Quad SPI IRQ                            |
-| ``irq_fast_i[3]``       | 19    | DFX Controller IRQ                      |
-| ``irq_fast_i[2]``       | 18    | ICAP IRQ                                |
-| ``irq_fast_i[1]``       | 17    | not assigned                            |
-| ``irq_fast_i[0]``       | 16    | not assigned                            |
-
-### The Platform Level Interrupt Controller.
-
-One interrupt line is reserved to connect an external interrupt controller. I don't have any use for it right now, however, so I'm going to leave this unassigned for the time being.
-
-Estimated FPGA Utilization
---------------------------
-
-**Estimated FPGA Resource Utilization on Nexys A7-100T:**
-
-
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
-|----------------|--------|------|---------------|-----------|------|------------|-----------|-----------|
-|**Slice LUTs**|0|2122|3390|5673|416|554|380|205|205|
-|**Slice Registers**|0|1441|911|426|5060|622|167|185|185|
-|**Block RAM Tile**|64|41|0|0|1|0.5|0|0|
-|**DSPs**|0|2|1|0|0|0|0|0|
-
-| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
-|----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|536|393|438|440|20.00%|17702|63400|27.92%|
-|**Slice Registers**|324|114|346|641|20.00%|13268|126800|10.46%|
-|**Block RAM Tile**|1|0|0|0|20.00%|129|135|95.56%|
-|**DSPs**|0|0|0|0|20.00%|3.6|240|1.50%|
-
-I added a 20% margin overall for the bus fabric and for components I haven't included yet.
-
-**Estimated FPGA Resource Utilization on Arty A7-35T:**
-
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
-|----------------|--------|------|---------------|-----------|------|------------|-----------|-----------
-|**Slice LUTs**|0|2122|3390|5673|416|554|380|205|205
-|**Slice Registers**|0|1441|911|426|5060|622|167|185|185
-|**Block RAM Tile**|**16**|25|0|0|1|0.5|0|0
-|**DSPs**|0|2|1|0|0|0|0|0
-
-| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
-|----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------
-|**Slice LUTs**|536|393|438|440|20.00%|17702|20800|85.11%
-|**Slice Registers**|749|324|346|641|20.00%|13268|41600|31.90%
-|**Block RAM Tile**|1|0|0|0|**10.00%**|48|50|**95.70%**
-|**DSPs**|0|0|0|0|20.00%|4|90|4.00%
+- **wb_gpio**: A simple GPIO core with a Wishbone interface, for sampling buttons and switches, and driving LEDs. *wb_gpio.v* is included in the *Ibex_WB* submodule.
 
 Git Workflow
 ------------
@@ -759,6 +902,16 @@ The Makefile at the root of the repository has the following targets defined:
 - **make synth**: Recursively run **make synth** in each component and project directory.
 - **make test**: Recursively builds and runs the Verilator test bench in each project directory. *make test* fails if any of the executed test benches flag a test failure (via a non-zero return code).
 
+### Makefile Variables
+
+Component and Project Makefiles define the following Makefile variables:
+- **TOP_DIR**: Relative path to the root directory of the repository.
+- **TOP_MODULE**: Identifies the top RTL module of that particular build. This info is passed on to both Verilator and the Vivado synthesizer. Specifying the top module in a design avoids ambiguity and associated build warnings/errors.
+
+Additionally, component Makefiles define the following Makefile variable:
+- **OOC**: This is a flag indicating Out-of-Context Synthesis. The value corresponds to the Bender.yml target used to select OOC specific files and defines.
+
+
 ### About Memory Files
 
 Memory files used by an FPGA build are typically generated from software. It would be annoying to have to build the hello world program, to generate a memory file, and then build the FPGA in a separate step. As a rule, a build system should start from sources, not from build artifacts created separately by other build systems. 
@@ -789,7 +942,6 @@ Currently, the build system uses the following Bender targets:
 - **verilator**: set when linting using Verilator.
 - **memory**: set when retrieving memory files for this component or project.
 - **constraints**: set when retrieving *.xdc* constraints files for this component or project.
-- **vlt**: set when retrieving *.vlt* verilator configuration files.
 
 ### Verilator Lint Waivers
 
@@ -885,8 +1037,8 @@ As you can see in the *sim_main.cpp* source code above, *Vmodel* accepts a few c
 Prerequisites
 -------------
 
-- Host OS: Linux or Linux WSL.
-- Vivado ML Edition V2021.2, Linux version:
+- **Host OS**: Linux or Linux WSL.
+- **Vivado ML** Edition V2021.2, Linux version:
   
   [https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html)
   
@@ -904,55 +1056,189 @@ export RISCV_TOOLCHAIN=$HOME/lowrisc-toolchain-gcc-rv32imcb-20220210-1
 export PATH=$PATH:$RISCV_TOOLCHAIN/bin
 ```
 
-- GNU Make version 4.2.1: [https://www.gnu.org/software/make/](https://www.gnu.org/software/make/)
+- **GNU Make** version 4.2.1: [https://www.gnu.org/software/make/](https://www.gnu.org/software/make/)
   
   Please make sure make is in your *PATH*.
   
-- Bender 0.25.2: [https://github.com/pulp-platform/bender](https://github.com/pulp-platform/bender)
+- **Bender** 0.25.2: [https://github.com/pulp-platform/bender](https://github.com/pulp-platform/bender)
 
   Add bender to your *PATH*.
 
-- Verilator 4.216: [https://verilator.org/guide/latest/install.html](https://verilator.org/guide/latest/install.html)
+- **Verilator** 4.216: [https://verilator.org/guide/latest/install.html](https://verilator.org/guide/latest/install.html)
 
   Add verilator to your *PATH*.
 
-- Ncurses: ```sudo apt-get install libncurses5-dev libncursesw5-dev```
+- **Ncurses**: ```sudo apt-get install libncurses5-dev libncursesw5-dev libncursesw5```
 
-- Gtkwave: [http://gtkwave.sourceforge.net/](http://gtkwave.sourceforge.net/)
+- **Gtkwave**: [http://gtkwave.sourceforge.net/](http://gtkwave.sourceforge.net/)
+
+- **RISCV OpenOCD**
+
+  Build RISCV OpenOCD from source:
+  1. ```git clone https://github.com/riscv/riscv-openocd```
+  2. ```cd riscv-openocd```
+  3. ```git submodule update --init --recursive```
+  4. ```./bootstrap```
+  5. ```./configure --prefix=$RISCV --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi```
+  6. ```make```
+  7. ```sudo make install```
+  8. Add the install directory (*/usr/local/bin* in my case) to your PATH.  
+	 &nbsp;
 
 Test Builds
 -----------
 
+Before you try any of the Test Builds below, you need to set up the repository:
+
+   1. Install the [Prerequisites](../documentation/#prerequisites). 
+   1. Get the BoxLambda repository:
+```
+git clone https://github.com/epsilon537/boxlambda/
+cd boxlambda
+```
+   1. Switch to the *hello_dbg* tag: 
+```
+git checkout hello_dbg
+```
+   1. Get the submodules: 
+```
+git submodule update --init --recursive
+```
+
 ### Hello World on the Arty A7-35T
 
-Project directory **boxlambda/projects/hello_world/** contains a test SoC build consisting of a wb_ibex core, 64KB internal memory, a wbuart32 core, a timer, and a GPIO module.
+Project directory **boxlambda/projects/hello_world/** contains a test SoC build consisting of an Ibex_WB core, 64KB internal memory, a wbuart32 core, a timer, and a GPIO module.
 
 To build the *Hello World!* example, go through the following steps:
 
-0. Install the [prerequisites](../documentation/#prerequisites). 
-1. **git clone https://github.com/epsilon537/boxlambda/**,
-2. **cd boxlambda**
-3. Switch to the *testing_with_verilator* tag: ```git checkout testing_with_verilator```
-4. Get the submodules: **git submodule update --init --recursive**.
-5. Build the project:
-   1. **cd projects/hello_world**
-   2. **make impl**  
-6. Start Vivado and download the generated bitstream to your Arty A7-35T: *projects/hello_world/generated/project.runs/impl_1/ibex_soc.bit*
+1. Build the project:
+   1. ```cd projects/hello_world```
+   2. ```make impl```  
+1. Start Vivado and download the generated bitstream to your Arty A7-35T: *projects/hello_world/generated/project.runs/impl_1/ibex_soc.bit*
 
 ### Hello World Verilator Build
 
 To try out the Verilator Test Bench for *Hello World*:
 
-0. Install the [prerequisites](../documentation/#prerequisites). 
-1. ```git clone https://github.com/epsilon537/boxlambda/```
-2. ```cd boxlambda```
-3. Switch to the *testing_with_verilator* tag: ```git checkout testing_with_verilator```
-4. Get the submodules: ```git submodule update --init --recursive```
-6. Build the testbench:
+1. Build the testbench:
    1. ```cd projects/hello_world```
    2. ```make sim```
-7. Execute the testbench:
+1. Execute the testbench:
    1. ```cd generated```
    2. Without tracing (fast): ```./Vmodel -i```
    3. With tracing (slow): ```./Vmodel -t```
-8. View the generated traces: ```gtkwave simx.fst```
+1. View the generated traces: ```gtkwave simx.fst```
+
+### Connecting GDB to the Hello_DBG build on Arty A7
+
+1. Build the test project:
+```
+cd projects/hello_dbg
+make impl
+```
+1. Start Vivado and download the generated bitstream to your Arty A7-35T:  
+   *projects/hello_dbg/generated/project.runs/impl_1/ibex_soc.bit*
+1. Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
+1. If you're running on WSL, check the **When on WSL** note below.
+1. Start OpenOCD with the *digilent_arty_a7.cfg* config file: 
+```
+sudo openocd -f <boxlambda root directory>/openocd/digilent_arty_a7.cfg
+Info : clock speed 1000 kHz
+Info : JTAG tap: riscv.cpu tap/device found: 0x0362d093 (mfg: 0x049 (Xilinx), part: 0x362d, ver: 0x0)
+Info : [riscv.cpu] datacount=2 progbufsize=8
+Info : Examined RISC-V core; found 1 harts
+Info :  hart 0: XLEN=32, misa=0x40101106
+[riscv.cpu] Target successfully examined.
+Info : starting gdb server for riscv.cpu on 3333
+Info : Listening on port 3333 for gdb connections
+Ready for Remote Connections
+Info : Listening on port 6666 for tcl connections
+Info : Listening on port 4444 for telnet connections
+```
+1. Launch GDB with hello.elf:	
+```
+cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
+riscv32-unknown-elf-gdb hello.elf
+```
+1. Connect GDB to the target. From the GDB shell:
+```
+(gdb) target remote localhost:3333
+Remote debugging using localhost:3333
+0x00000c90 in delay_loop_ibex (loops=3125000) at ../../libs/soc/utils.c:12
+12              asm volatile(
+```
+
+#### When on WSL
+
+If you're running on WSL, you need to make sure that the USB port connected to the Arty A7 is forwarded to WSL. The following article describes how to do this:
+
+[https://docs.microsoft.com/en-us/windows/wsl/connect-usb](https://docs.microsoft.com/en-us/windows/wsl/connect-usb)
+
+On my machine, these are the steps:
+
+1. From a Windows Command Shell:
+	
+	```
+	C:\Users\ruben>usbipd wsl list
+	BUSID  VID:PID    DEVICE                                                        STATE
+	1-2    0403:6010  USB Serial Converter A, USB Serial Converter B                Not attached
+	1-3    0461:4d15  USB Input Device                                              Not attached
+	1-7    13d3:5666  USB2.0 HD UVC WebCam                                          Not attached
+	1-14   8087:0aaa  Intel(R) Wireless Bluetooth(R)                                Not attached
+
+	C:\Users\ruben>usbipd wsl attach --busid 1-2
+	```
+
+1. From a Linux shell on WSL:
+
+	```
+	epsilon@LAPTOP-BQA82C62:~$ lsusb
+	Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+	Bus 001 Device 002: ID 0403:6010 Future Technology Devices International, Ltd FT2232C/D/H Dual UART/FIFO IC
+	Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+	```
+
+### Connecting GDB to the Hello_DBG build on Verilator
+
+![OpenOCD JTAG Debug Session on Verilator](../assets/Verilator_Debug_Session.jpg){:class="img-responsive"}
+*OpenOCD JTAG Debug Session on Verilator*
+
+1. Build the test project:
+
+	```
+	cd projects/hello_dbg
+	make sim
+	```
+1. Launch the Verilator model:
+
+	```
+	cd generated
+	./Vmodel
+	```
+1. Start OpenOCD with the *verilator_riscv_dbg.cfg* config file:
+
+	```
+	openocd -f <boxlambda root directory>/openocd/verilator_riscv_dbg.cfg
+	Open On-Chip Debugger 0.11.0+dev-02372-g52177592f (2022-08-10-14:11)
+	Licensed under GNU GPL v2
+	For bug reports, read
+			http://openocd.org/doc/doxygen/bugs.html
+	TAP: riscv.cpu
+
+	[riscv.cpu] Target successfully examined.
+	Ready for Remote Connections on port 3333.
+	```
+1. Launch GDB with hello.elf:	
+
+	```
+	cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
+	riscv32-unknown-elf-gdb hello.elf
+	```
+1. Connect GDB to the target. From the GDB shell:
+
+	```
+	(gdb) target remote localhost:3333
+	Remote debugging using localhost:3333
+	0x000005fc in uart_tx_ready (module=<optimized out>) at ../../libs/soc/uart.c:31
+	31              return module->registers[UART_REG_FIFO] & 0x00010000;
+	```
