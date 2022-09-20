@@ -1,0 +1,18 @@
+site_name: BoxLambda Documentation
+theme:
+    name: readthedocs
+    collapse_navigation: False
+    titles_only: False
+nav:
+    - Home: index.md
+    - Terms and Abbreviations: terms-and-abbreviations.md
+    - Goals and Requirement Analysis: goals-and-requirement-analysis.md
+    - Architecture: architecture.md
+    - Components: components.md
+    - Interrupts: interrupts.md
+    - Estimated FPGA Utilization: estimated-fpga-utilization.md
+    - Git Workflow: git-workflow.md
+    - The Build System and Directory Layout: build-system.md
+    - The Test Bench: test-bench.md
+    - Installation and Test Builds: installation-and-test-builds.md
+
