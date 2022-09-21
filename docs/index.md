@@ -1,7 +1,9 @@
-BoxLambda
-=========
+About BoxLambda
+===============
 
-BoxLambda is an open-source project with the goal of creating a retro-style FPGA-based microcomputer. The microcomputer serves as a platform for software and RTL experimentation.
+![Nexys Draft Architecture Block Diagram](assets/Nexys_Arch_Diagram_Doc.png)
+
+**BoxLambda** is an open-source project with the goal of creating a retro-style FPGA-based microcomputer. The microcomputer serves as a platform for software and RTL experimentation.
 
 BoxLambda is a software-hardware cross-over project. The plan is to provide room for experimentation both on the FPGA RTL side and on the software side.
 
