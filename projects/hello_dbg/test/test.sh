@@ -2,8 +2,8 @@
 
 #This a simple bash based shell script verifying OpenOCD based JTAG connectivity to a riscv32 target running 'Hello Word'.
 
-#Launch the verilator model
-./Vmodel &
+#Launch the verilator model with -d option to attach debugger.
+./Vmodel -d &
 sleep 3
 
 #Launch riscv-openocd and connect to the model

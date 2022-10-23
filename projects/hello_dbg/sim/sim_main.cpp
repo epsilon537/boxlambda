@@ -24,6 +24,9 @@
 // From wbuart32
 #include "uartsim.h"
 
+// From riscv-dbg
+#include "sim_jtag.h"
+
 //To get access to the verilated model internals.
 #include "Vmodel___024root.h"
 
@@ -67,20 +70,28 @@ int main(int argc, char** argv, char** env) {
     contextp->commandArgs(argc, argv);
 
     bool tracing_enable = false;
-
+    bool attach_debugger = false;
+    
     // Command line processing
     for(;;) {
-	switch(getopt(argc, argv, "th")) {
+	switch(getopt(argc, argv, "thd")) {	  
 	  case 't':
 	    printf("Tracing enabled\n");
 	    tracing_enable = true;
+	    continue;
+
+	  case 'd':
+	    printf("Attach debugger.\n");
+	    attach_debugger = true;
 	    continue;
 
 	  case '?':
 	  case 'h':
 	  default :
 	    printf("\nVmodel Usage:\n");
+	    printf("-h: print this help\n");	    
 	    printf("-t: enable tracing.\n");
+	    printf("-d: attach debugger.\n");
 	    return 0;
 	    break;
 	    
@@ -113,6 +124,10 @@ int main(int argc, char** argv, char** env) {
     std::string uartRxStringPrev;
     //Accumulate GPIO0 value changes as a string into this variable
     std::string gpio0String;
+
+    //Bypass JTAG socket setup when attach debugger command line flag
+    //is not set.
+    jtag_set_bypass(!attach_debugger);
     
     // Simulate for 10000000 timeprecision periods
     while (1 /*contextp->time() < 10000000*/) {
