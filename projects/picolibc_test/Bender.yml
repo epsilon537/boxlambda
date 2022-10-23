@@ -3,7 +3,7 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: hello_world
+  name: picolibc_test
 
 dependencies:
   # Path dependency.
@@ -11,21 +11,27 @@ dependencies:
   wbuart32: { path: "../../components/wbuart32" }
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
   ibex_wb_core: { path: "../../components/ibex_wb_core" }
-  
+  riscv-dbg: { path: "../../components/riscv-dbg" }  
 sources:
   - target: constraints
     files:
       - ../../sub/ibex_wb/soc/fpga/arty-a7-35/constrs/Arty-A7-35-Master.xdc
   - target: memory
     files:
-      - ../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello/spram.mem    
+      - src/spram.mem
   - target: verilator
     files:
       - sim/sim_main.cpp
       - ../../sub/wbuart32/bench/cpp/uartsim.cpp
+      - ../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
+      - ../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c    
+      - lint.vlt
+      - ../../sub/riscv-dbg/tb/SimJTAG.sv
+      - sim/sim_main.sv
   - target: any(vivado,verilator)
     defines:
       NO_MODPORT_EXPRESSIONS: ~
+      DEBUG_MODULE_ACTIVE: ~
     #spram and timer should be separate components, but since I won't use them
     #as Boxlambda components, I'm leaving them here in the hello world example
     files:

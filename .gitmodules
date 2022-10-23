@@ -22,3 +22,6 @@
 [submodule "sub/pulpino"]
 	path = sub/pulpino
 	url = https://github.com/epsilon537/pulpino
+[submodule "sub/picolibc"]
+	path = sub/picolibc
+	url = https://github.com/epsilon537/picolibc

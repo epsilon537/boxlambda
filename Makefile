@@ -5,6 +5,27 @@ PROJECT_MAKEFILES = $(shell find projects -name Makefile)
 #Don't recurse into Pulpino or riscv-dbg
 SUB_MAKEFILES = $(shell find sub -not -path "sub/pulpino/*" -not -path "sub/riscv-dbg/*" -name Makefile)
 
+PICOLIBC_SUB_DIR= $(abspath sub/picolibc) #This is where the picolibc repository lives
+PICOLIBC_BUILD_DIR= sw/picolibc-build #This directory is used to build picolibc for our target.
+PICOLIBC_INSTALL_DIR= $(abspath sw/picolibc-install) #This is where picolibc is installed after it has been built.
+
+#'make setup' sets up the project for first use
+#- It sets up the git submodules used.
+#- It builds the picolibc library for Boxlambda. This is required as part of setup because picolibc has an installation step (ninja install) and uses absolute paths.
+.PHONY: setup
+setup: submodule-setup
+	rm -rf $(PICOLIBC_BUILD_DIR)
+	rm -rf $(PICOLIBC_INSTALL_DIR)
+	mkdir -p $(PICOLIBC_BUILD_DIR)
+	cd $(PICOLIBC_BUILD_DIR)
+	$(PICOLIBC_SUB_DIR)/scripts/do-rv32imc-configure -Dprefix=$(PICOLIBC_INSTALL_DIR) -Dspecsdir=$(PICOLIBC_INSTALL_DIR)
+	ninja
+	ninja install
+
+.PHONY: submodule-setup
+submodule-setup:
+	git submodule update --init --recursive
+
 .PHONY: test
 test:
 	$(foreach makefile, $(PROJECT_MAKEFILES), $(MAKE) -C $(dir $(makefile)) test && ) echo "Done"
