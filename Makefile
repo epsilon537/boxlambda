@@ -1,10 +1,10 @@
 #The top-level Makefile recursively runs the given target on component and project directories.
 
 COMPONENT_MAKEFILES = $(shell find components -name Makefile)
-PROJECT_MAKEFILES = $(shell find projects -name Makefile)
+PROJECT_MAKEFILES = $(shell find projects -name Makefile ! -path */src/*) #Exclude src/Makefiles (SW builds)
 #Don't recurse into Pulpino or riscv-dbg
 SUB_MAKEFILES = $(shell find sub -not -path "sub/pulpino/*" -not -path "sub/riscv-dbg/*" -name Makefile)
-
+SW_MAKEFILES = $(shell find . -path */src/Makefile -o -path ./sw/*/Makefile)
 PICOLIBC_SUB_DIR= $(abspath sub/picolibc) #This is where the picolibc repository lives
 PICOLIBC_BUILD_DIR= sw/picolibc-build #This directory is used to build picolibc for our target.
 PICOLIBC_INSTALL_DIR= $(abspath sw/picolibc-install) #This is where picolibc is installed after it has been built.
@@ -44,7 +44,7 @@ impl:
 
 .PHONY: clean
 clean: bender_update
-	$(foreach makefile, $(COMPONENT_MAKEFILES) $(PROJECT_MAKEFILES) $(SUB_MAKEFILES), \
+	$(foreach makefile, $(COMPONENT_MAKEFILES) $(PROJECT_MAKEFILES) $(SUB_MAKEFILES) $(SW_MAKEFILES), \
 	$(MAKE) -C $(dir $(makefile)) -q clean; if test $$? -le 1; then $(MAKE) -C $(dir $(makefile)) clean; fi;)
 
 .PHONY: bender_update

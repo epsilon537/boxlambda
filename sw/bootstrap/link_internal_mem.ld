@@ -1,7 +1,7 @@
 /*The picolibc link script (starting after the ENTRY directive below) expects these symbols to be set.*/
-__flash = 0x00000000; //'flash' is the read-only section of the image, containing code and read-only data
+__flash = 0x00000000; /*'flash' is the read-only section of the image, containing code and read-only data*/
 __flash_size = 32k;
-__ram = 0x00008000;   //'ram' is the read-write section of the image, containing data segments, bss and stack
+__ram = 0x00008000;   /*'ram' is the read-write section of the image, containing data segments, bss and stack*/
 __ram_size = 32k;
 __stack_size = 512;
 /*In other words: We have 64K of memory. We divide it into a 32K read-only section and a 32K read-write section. */
