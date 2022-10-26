@@ -147,7 +147,7 @@ Recall that BoxLambda uses a Wishbone interconnect. The Ibex_WB submodule implem
 [sub/ibex_wb/rtl/wb_dm_top.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_dm_top.sv)
 
 Refer to the *ibex_soc* example to see how RISCV-DBG is instantiated:  
-[sub/ibex_wb/soc/fpga/arty-a7-35/rtl/ibex_soc.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/soc/fpga/arty-a7-35/rtl/ibex_soc.sv)
+[sub/ibex_wb/soc/fpga/arty-a7-35/rtl/ibex_soc.sv](https://github.com/epsilon537/ibex_wb/blob/boxlambda/soc/fpga/arty-a7-35/rtl/ibex_soc.sv)
 
 #### OpenOCD and RISCV-DBG on Verilator
 
@@ -192,7 +192,7 @@ boxlambda
 ```
 
 The OpenOCD configuration file for JTAG Debugging on Verilator is checked into the *openocd* directory:  
-[openocd/verilator_riscv_dbg.cfg](https://github.com/epsilon537/boxlambda/blob/f696f21b3e50f66678f4e32806a65abdbdf42455/openocd/verilator_riscv_dbg.cfg)
+[openocd/verilator_riscv_dbg.cfg](https://github.com/epsilon537/boxlambda/blob/develop/openocd/verilator_riscv_dbg.cfg)
 
 To summarize:
 
@@ -220,7 +220,7 @@ On the OpenOCD side, the transport protocol for this Debug-Access-via-FPGA-scan-
 *BoxLambda OpenOCD Arty A7 FTDI Setup*
 
 The OpenOCD configuration file for JTAG Debugging on Arty A7 is checked into the *openocd* directory:  
-[openocd/digilent_arty_a7.cfg](https://github.com/epsilon537/boxlambda/blob/102233debcb1e632e6a36c31a836c7619aaf8b29/openocd/digilent_arty_a7.cfg) 
+[openocd/digilent_arty_a7.cfg](https://github.com/epsilon537/boxlambda/blob/develop/openocd/digilent_arty_a7.cfg) 
 
 To summarize:
 

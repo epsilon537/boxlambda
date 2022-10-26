@@ -1,24 +1,67 @@
-Installation and Test Builds
-============================
+Installation, Configuration and Test Builds
+===========================================
 Installation
 ------------
 
 Before you try any of the Test Builds below, you need to set up the repository:
 
-   1. Install the [Prerequisites](../documentation/#prerequisites). 
-   1. Get the BoxLambda repository:
+Install the [Prerequisites](../documentation/#prerequisites). 
+
+Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-   1. Switch to the *hello_dbg* tag: 
+Switch to the *openocd_loose_ends* tag: 
 ```
-git checkout hello_dbg
+git checkout openocd_loose_ends
 ```
-   1. Get the submodules: 
+Get the submodules: 
 ```
 git submodule update --init --recursive
 ```
+
+User-Level Access to the Arty A7 USB JTAG Adapter.
+--------------------------------------------------
+OpenOCD might not have permission to access the USB JTAG adapter when run at user-level. To fix this issue, you need to add a rule to **/etc/udev/rules.d**.
+Create a file with the name **99-openocd.rules** in the **/etc/udev/rules.d** directory. This file should have the following contents:
+
+```
+# Original FT2232 VID:PID
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="666", GROUP="plugdev"
+
+```
+
+On WSL
+------
+### USBIPD-WIN
+
+For USB device access to work at all on WSL, it's necessary to attach the USB device to WSL (by default, USB ports stay under native Windows control). This is done using **usbipd-win**, which can be installed from this location: 
+
+[https://github.com/dorssel/usbipd-win/releases](https://github.com/dorssel/usbipd-win/releases).
+
+Additional info about connecting USB devices to WSL can be found here: 
+
+[https://learn.microsoft.com/en-us/windows/wsl/connect-usb](https://learn.microsoft.com/en-us/windows/wsl/connect-usb).
+
+For convenience, I created a one-line Windows batch script that attaches the Arty USB JTAG port to WSL: 
+
+*boxlambda/wsl/usb_fwd_to_wsl.bat*:
+
+```
+usbipd wsl attach -i 0403:6010 -a
+```
+
+#### Udev
+
+On Ubuntu WSL, *udev*, the system service in charge of enforcing device permissions, isn't running by default. To fix this, add the following lines to **/etc/wsl.conf**:
+
+```
+[boot]
+command="service udev start"
+```
+
+Without *udev* running, OpenOCD or Vivado will not have access to the Arty USB JTAG adapter when executed at user-level.
 
 Test Builds
 -----------
@@ -29,38 +72,52 @@ Project directory **boxlambda/projects/hello_world/** contains a test SoC build 
 
 To build the *Hello World!* example, go through the following steps:
 
-1. Build the project:
-   1. ```cd projects/hello_world```
-   2. ```make impl```  
-1. Start Vivado and download the generated bitstream to your Arty A7-35T: *projects/hello_world/generated/project.runs/impl_1/ibex_soc.bit*
+Build the project:
+```
+cd projects/hello_world
+make impl
+```
+Download the bitstream to the target:
+```
+make run
+```
 
 ### Hello World Verilator Build
 
 To try out the Verilator Test Bench for *Hello World*:
 
-1. Build the testbench:
-   1. ```cd projects/hello_world```
-   2. ```make sim```
-1. Execute the testbench:
-   1. ```cd generated```
-   2. Without tracing (fast): ```./Vmodel -i```
-   3. With tracing (slow): ```./Vmodel -t```
-1. View the generated traces: ```gtkwave simx.fst```
+Build the testbench:
+```
+cd projects/hello_world
+make sim
+```
+Execute the testbench, with (```./Vmodel -i```) or without (```./Vmodel -t```) tracing:
+```
+cd generated
+./Vmodel -i/-t
+```
+View the generated traces: 
+```
+gtkwave simx.fst
+```
 
 ### Connecting GDB to the Hello_DBG build on Arty A7
 
-1. Build the test project:
+If you're running on WSL, check the [On WSL](installation-and-test-builds.md#on-wsl) section above to make sure that the USB JTAG adapter is visible and accessible in the WSL environment.
+
+Build and run the test project:
 ```
 cd projects/hello_dbg
 make impl
+make run
 ```
-1. Start Vivado and download the generated bitstream to your Arty A7-35T:  
-   *projects/hello_dbg/generated/project.runs/impl_1/ibex_soc.bit*
-1. Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
-1. If you're running on WSL, check the **When on WSL** note below.
-1. Start OpenOCD with the *digilent_arty_a7.cfg* config file: 
+
+Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
+
+Start OpenOCD with the *digilent_arty_a7.cfg* config file. 
+Note: If OpenOCD can't connect to the USB JTAG adapter, your USB device permissions might not be set correctly. Check the *User-Level Access to the Arty A7 USB JTAG Adapter* section above for a fix.
 ```
-sudo openocd -f <boxlambda root directory>/openocd/digilent_arty_a7.cfg
+openocd -f <boxlambda root directory>/openocd/digilent_arty_a7.cfg
 Info : clock speed 1000 kHz
 Info : JTAG tap: riscv.cpu tap/device found: 0x0362d093 (mfg: 0x049 (Xilinx), part: 0x362d, ver: 0x0)
 Info : [riscv.cpu] datacount=2 progbufsize=8
@@ -73,96 +130,55 @@ Ready for Remote Connections
 Info : Listening on port 6666 for tcl connections
 Info : Listening on port 4444 for telnet connections
 ```
-1. Launch GDB with hello.elf:	
+Launch GDB with hello.elf:	
 ```
 cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
 riscv32-unknown-elf-gdb hello.elf
 ```
-1. Connect GDB to the target. From the GDB shell:
+Connect GDB to the target. From the GDB shell:
 ```
 (gdb) target remote localhost:3333
 Remote debugging using localhost:3333
-0x00000c90 in delay_loop_ibex (loops=3125000) at ../../libs/soc/utils.c:12
-12              asm volatile(
+?? () at crt0.S:81
+81        jal x0, reset_handler
 ```
-
-#### When on WSL
-
-If you're running on WSL, you need to make sure that the USB port connected to the Arty A7 is forwarded to WSL. The following article describes how to do this:
-
-[https://docs.microsoft.com/en-us/windows/wsl/connect-usb](https://docs.microsoft.com/en-us/windows/wsl/connect-usb)
-
-On my machine, these are the steps:
-
-1. From a Windows Command Shell:
-	
-```
-C:\Users\ruben>usbipd wsl list
-BUSID  VID:PID    DEVICE                                                        STATE
-1-2    0403:6010  USB Serial Converter A, USB Serial Converter B                Not attached
-1-3    0461:4d15  USB Input Device                                              Not attached
-1-7    13d3:5666  USB2.0 HD UVC WebCam                                          Not attached
-1-14   8087:0aaa  Intel(R) Wireless Bluetooth(R)                                Not attached
-
-C:\Users\ruben>usbipd wsl attach --busid 1-2
-```
-
-1. From a Linux shell on WSL:
-
-```
-epsilon@LAPTOP-BQA82C62:~$ lsusb
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 001 Device 002: ID 0403:6010 Future Technology Devices International, Ltd FT2232C/D/H Dual UART/FIFO IC
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-```
+Notice that the CPU is stopped at the very first instruction of the boot sequence.
 
 ### Connecting GDB to the Hello_DBG build on Verilator
-
-![OpenOCD JTAG Debug Session on Verilator](assets/Verilator_Debug_Session.jpg)
-*OpenOCD JTAG Debug Session on Verilator*
-
-1. Build the test project:
-
-	```
-	cd projects/hello_dbg
-	make sim
-	```
-
-1. Launch the Verilator model:
-
-	```
-	cd generated
-	./Vmodel
-	```
-
-1. Start OpenOCD with the *verilator_riscv_dbg.cfg* config file:
-
-	```
-	openocd -f <boxlambda root directory>/openocd/verilator_riscv_dbg.cfg
-	Open On-Chip Debugger 0.11.0+dev-02372-g52177592f (2022-08-10-14:11)
-	Licensed under GNU GPL v2
-	For bug reports, read
-			http://openocd.org/doc/doxygen/bugs.html
-	TAP: riscv.cpu
-
-	[riscv.cpu] Target successfully examined.
-	Ready for Remote Connections on port 3333.
-	```
-
-1. Launch GDB with hello.elf:	
-
-	```
-	cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
-	riscv32-unknown-elf-gdb hello.elf
-	```
-1. Connect GDB to the target. From the GDB shell:
-
-	```
-	(gdb) target remote localhost:3333
-	Remote debugging using localhost:3333
-	0x000005fc in uart_tx_ready (module=<optimized out>) at ../../libs/soc/uart.c:31
-	31              return module->registers[UART_REG_FIFO] & 0x00010000;
-	```
+Build the test project:
+```
+cd projects/hello_dbg
+make sim
+```
+Launch the Verilator model with the *-d* flag to indicate that a debugger will be attached to the simulated processor:
+```
+cd generated
+./Vmodel -d
+```
+Start OpenOCD with the *verilator_riscv_dbg.cfg* config file:
+```
+openocd -f <boxlambda root directory>/openocd/verilator_riscv_dbg.cfg
+Open On-Chip Debugger 0.11.0+dev-02372-g52177592f (2022-08-10-14:11)
+Licensed under GNU GPL v2
+For bug reports, read
+		http://openocd.org/doc/doxygen/bugs.html
+TAP: riscv.cpu
+[riscv.cpu] Target successfully examined.
+Ready for Remote Connections on port 3333.
+```
+Launch GDB with hello.elf:
+```
+cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
+riscv32-unknown-elf-gdb hello.elf
+```
+Connect GDB to the target. From the GDB shell:
+```
+(gdb) target remote localhost:3333
+Remote debugging using localhost:3333
+?? () at crt0.S:81
+81        jal x0, reset_handler
+```
+Notice that the CPU is stopped at the very first instruction of the boot sequence.
 
 Prerequisites
 -------------
@@ -176,7 +192,7 @@ Prerequisites
   
   [https://digilent.com/reference/vivado/installing-vivado/v2019.2](https://digilent.com/reference/vivado/installing-vivado/v2019.2)
 
-- RISCV Compiler Toolchain **rv32imcb**. This is the cross compiler for building the code that'll run on the Ibex processor. I'm using the **20220210-1** pre-built binaries from *lowRISC*: 
+- RISCV Compiler Toolchain **rv32imcb**. This is the cross-compiler for building the code that'll run on the Ibex processor. I'm using the **20220210-1** pre-built binaries from *lowRISC*: 
 	[https://github.com/lowRISC/lowrisc-toolchains/releases](https://github.com/lowRISC/lowrisc-toolchains/releases)
 
   Add the toolchain's *bin/* directory to your *PATH*. E.g.:
@@ -206,12 +222,15 @@ export PATH=$PATH:$RISCV_TOOLCHAIN/bin
 
   Build RISCV OpenOCD from source:
   
-  1. ```git clone https://github.com/riscv/riscv-openocd```
-  2. ```cd riscv-openocd```
-  3. ```git submodule update --init --recursive```
-  4. ```./bootstrap```
-  5. ```./configure --prefix=$RISCV --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi```
-  6. ```make```
-  7. ```sudo make install```
-  8. Add the install directory (*/usr/local/bin* in my case) to your PATH.  
-	 &nbsp;
+```
+git clone https://github.com/riscv/riscv-openocd
+cd riscv-openocd
+git submodule update --init --recursive
+./bootstrap
+./configure --prefix=$RISCV --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi
+make
+sudo make install
+``` 
+
+  Add the install directory (*/usr/local/bin* in my case) to your PATH.  
+  &nbsp;
