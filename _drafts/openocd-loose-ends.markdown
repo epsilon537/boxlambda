@@ -67,7 +67,7 @@ User-Level Access to the Arty A7 USB JTAG Adapter.
 --------------------------------------------------
 OpenOCD access to the USB JTAG adapter works when run as root, but not when run at user-level. This indicates there's a permission problem. A Google search quickly shows that I have to add a rule to **/etc/udev/rules.d** to get user-level access to the Arty USB JTAG adapter. 
 
-I created a file, **/etc/rules.d/99-openocd.rules**, with the following contents:
+I created a file, **/etc/udev/rules.d/99-openocd.rules**, with the following contents:
 
 ```
 # Original FT2232 VID:PID
@@ -100,7 +100,9 @@ Additional info about connecting USB devices to WSL can be found here:
 
 [https://learn.microsoft.com/en-us/windows/wsl/connect-usb](https://learn.microsoft.com/en-us/windows/wsl/connect-usb).
 
-For convenience, I created a *usb_fwd_to_wsl.bat* script with the following contents:
+For convenience, I created a one-line Windows batch script that attaches the Arty USB JTAG port to WSL: 
+
+*\<boxlambda root directory\>/wsl/usb_fwd_to_wsl.bat*:
 
 ```
 usbipd wsl attach -i 0403:6010 -a

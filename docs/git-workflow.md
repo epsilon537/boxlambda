@@ -11,7 +11,7 @@ sub
 └── ...
 ```
 
-Each of the git submodules is a fork of a GitHub project discussed in earlier posts. For example, *boxlambda/projects/ibex/* contains [my ibex fork](https://github.com/epsilon537/ibex), not the [original ibex repository](https://github.com/lowRISC/ibex).
+Each of the git submodules is a fork of a GitHub project discussed in earlier posts. For example, *boxlambda/sub/ibex/* contains [my ibex fork](https://github.com/epsilon537/ibex), not the [original ibex repository](https://github.com/lowRISC/ibex).
 
 In each of the forked submodules, two branches are relevant:
 

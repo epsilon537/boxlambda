@@ -49,7 +49,7 @@ A project directory, such as *projects/hello_world/*, contains a Makefile, with 
 - **dryrun**: Generate a Vivado project, but don't build it.
 - **synth**: Generate a Vivado project and synthesize it.
 - **impl**: Generate a Vidado project, synthesize it, and implement it.
-- **run**: Download the generated bitstream file to the target. Note: The script this build target executes is configured for my WSL-based setup. It may need customization for other setups.
+- **run**: Download the generated bitstream file to the target. setups.
 - **clean**: Remove all generated files in the current directory and subdirectories.
 - **lint**: Run Verilator lint checking on the project and all of its dependencies.
 - **make sim**: Build the project's Verilator test bench.

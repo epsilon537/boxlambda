@@ -119,6 +119,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Tcl**: The defacto standard embedded command language for EDA applications.
 
+- **Udev**: Userspace /dev, a device manager for the Linux kernel.
+  
 - **USB HIB**: USB Human Interface device Class, a part of the USB specification for computer peripherals such as keyboards and mice.
 
 - **VCS**: Version Control Subsystem.
@@ -135,7 +137,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Wishbone**: An Open-Source SoC bus specification: [https://cdn.opencores.org/downloads/wbspec_b4.pdf](https://cdn.opencores.org/downloads/wbspec_b4.pdf).
 
-- **WSL**: Windows Subsystem for Linx.
+- **WSL**: Windows Subsystem for Linux.
 
 - **Xbar**: Cross-Bar, a type of interconnect used in SoC bus fabrics.
 
