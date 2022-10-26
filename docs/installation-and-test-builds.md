@@ -103,7 +103,7 @@ gtkwave simx.fst
 
 ### Connecting GDB to the Hello_DBG build on Arty A7
 
-If you're running on WSL, check the [On WSL](installation-and-test-builds.md#on_wsl) section above to make sure that the USB JTAG adapter is visible and accessible in the WSL environment.
+If you're running on WSL, check the [On WSL](installation-and-test-builds.md#on-wsl) section above to make sure that the USB JTAG adapter is visible and accessible in the WSL environment.
 
 Build and run the test project:
 ```
@@ -222,12 +222,15 @@ export PATH=$PATH:$RISCV_TOOLCHAIN/bin
 
   Build RISCV OpenOCD from source:
   
-  1. ```git clone https://github.com/riscv/riscv-openocd```
-  2. ```cd riscv-openocd```
-  3. ```git submodule update --init --recursive```
-  4. ```./bootstrap```
-  5. ```./configure --prefix=$RISCV --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi```
-  6. ```make```
-  7. ```sudo make install```
-  8. Add the install directory (*/usr/local/bin* in my case) to your PATH.  
-	 &nbsp;
+```
+git clone https://github.com/riscv/riscv-openocd
+cd riscv-openocd
+git submodule update --init --recursive
+./bootstrap
+./configure --prefix=$RISCV --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi
+make
+sudo make install
+``` 
+
+  Add the install directory (*/usr/local/bin* in my case) to your PATH.  
+  &nbsp;
