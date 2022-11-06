@@ -3,5 +3,5 @@
 #Excel backup
 ~$*
 #Picolibc generated files
-sw/picolbic-build/*
-sw/picolbic-install/*
+sw/picolibc-build/*
+sw/picolibc-install/*

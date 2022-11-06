@@ -5,9 +5,12 @@ PROJECT_MAKEFILES = $(shell find projects -name Makefile ! -path */src/*) #Exclu
 #Don't recurse into Pulpino or riscv-dbg
 SUB_MAKEFILES = $(shell find sub -not -path "sub/pulpino/*" -not -path "sub/riscv-dbg/*" -name Makefile)
 SW_MAKEFILES = $(shell find . -path */src/Makefile -o -path ./sw/*/Makefile)
-PICOLIBC_SUB_DIR= $(abspath sub/picolibc) #This is where the picolibc repository lives
-PICOLIBC_BUILD_DIR= sw/picolibc-build #This directory is used to build picolibc for our target.
-PICOLIBC_INSTALL_DIR= $(abspath sw/picolibc-install) #This is where picolibc is installed after it has been built.
+#This is where the picolibc repository lives
+PICOLIBC_SUB_DIR= $(abspath sub/picolibc)
+#This directory is used to build picolibc for our target.
+PICOLIBC_BUILD_DIR= sw/picolibc-build
+#This is where picolibc is installed after it has been built.
+PICOLIBC_INSTALL_DIR= $(abspath sw/picolibc-install)
 
 #'make setup' sets up the project for first use
 #- It sets up the git submodules used.
@@ -17,9 +20,9 @@ setup: submodule-setup
 	rm -rf $(PICOLIBC_BUILD_DIR)
 	rm -rf $(PICOLIBC_INSTALL_DIR)
 	mkdir -p $(PICOLIBC_BUILD_DIR)
-	cd $(PICOLIBC_BUILD_DIR)
-	$(PICOLIBC_SUB_DIR)/scripts/do-rv32imc-configure -Dprefix=$(PICOLIBC_INSTALL_DIR) -Dspecsdir=$(PICOLIBC_INSTALL_DIR)
-	ninja
+	cd $(PICOLIBC_BUILD_DIR) && \
+	$(PICOLIBC_SUB_DIR)/scripts/do-rv32imc-configure -Dprefix=$(PICOLIBC_INSTALL_DIR) -Dspecsdir=$(PICOLIBC_INSTALL_DIR) && \
+	ninja && \
 	ninja install
 
 .PHONY: submodule-setup
