@@ -16,7 +16,7 @@ C++ is not an ideal language for test case development, but it'll get the job do
 
 ### A simple Test Bench
 
-I created a proof-of-concept test bench for the *Hello World* build. I started from the example code included in the Verilator distribution:
+I created a proof-of-concept test bench for the *Hello World* and picolibc test builds. I started from the example code included in the Verilator distribution:
 
 [https://github.com/verilator/verilator/blob/master/examples/make_tracing_c/sim_main.cpp](https://github.com/verilator/verilator/blob/master/examples/make_tracing_c/sim_main.cpp)
 
@@ -25,17 +25,24 @@ I included *UARTSIM*, the UART co-simulation class that ZipCPU provides along wi
 [https://github.com/epsilon537/wbuart32/tree/master/bench/cpp](https://github.com/epsilon537/wbuart32/tree/master/bench/cpp)
 
 The test bench does the following:
+
 1. Instantiate the verilated *Hello World* model and the UARTSIM co-simulation object.
 2. Optionally, controlled by a command-line option, enable tracing.
-3. Run the model for a fixed number of clock cycles.
-4. While running the model:
-   1. Feed the model's UART output to UARTSIM.
-   2. Capture and display the decoded UARTSIM output and the GPIO outputs.
-5. Pass/Fail criterium: After running the model for the set number of clock cycles, match the captured UART and GPIO outputs against expected results.
+3. Optionally, controlled by a command-line option, wait for an OpenOCD connection.
+4. Run the model for a fixed number of clock cycles.
+5. While running the model:
+    1. Feed characters into UARTSIM's transmit path, i.e. towards the model.
+    2. Feed the model's UART output to UARTSIM and UARTSIMs output to the model's UART input.
+    3. Capture and display the decoded UARTSIM output and the GPIO outputs.
+   
+6. Pass/Fail criterium: After running the model for the set number of clock cycles, match the captured UART and GPIO outputs against the expected results.
 
 As suggested by ZipCPU in his Verilog tutorial, I use *nCurses* for positional printing inside the terminal windows. This way, I can easily build a display that refreshes, rather than scrolls, whenever the model produces new UART or GPIO data to display.
 
-The test bench source code is located in [*projects/hello_world/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/6c3c0b36525cf3f0aef869f9b618759258c2106c/projects/hello_world/sim/sim_main.cpp).
+Current test bench source code examples: 
+
+- [*projects/hello_world/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/6c3c0b36525cf3f0aef869f9b618759258c2106c/projects/hello_world/sim/sim_main.cpp).
+- [*projects/picolibc_test/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/develop/projects/picolibc_test/sim/sim_main.cpp).
 
 ### Are we running in a Simulation?
 

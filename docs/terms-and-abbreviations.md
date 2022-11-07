@@ -13,13 +13,23 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **BSCANE**: A Xilinx primitive giving access to and from the FPGA's JTAG scan chain.
 
+- **BSS**: Block Starting Symbol. Portion of an object file or executable holding zero-initialized data.
+
+- **Code Segment**: Portion of an object file or executable holding executable instructions.
+
 - **Console**: The physical terminal consisting of a screen, a keyboard, and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
 
-- **Constraints File**: A constraints file specifies the mapping of the top-level HDL module's input and output ports to physical pins of the FPGA. It also defines the clocks used by the given design. See [https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file](https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file).
+- **Constraints File**: A constraints file specifies the mapping of the top-level HDL module's input and output ports to the physical pins of the FPGA. It also defines the clocks used by the given design. See [https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file](https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file).
+
+- **CPP**: C Preprocessor, a macro processor used automatically by the C compiler.
 
 - **CPU**: Central Processing Unit.
 
+- **CRT0**: C Run-Time 0. A set of execution startup routines linked into a C program that performs any initialization work required before calling the program's *main()* function. 
+
 - **DAC**: Digital-to-Analog Converter.
+
+- **.data**/**Data Segment**: Portion of an object file or executable holding pre-initialized data.
 
 - **DFX**: Dynamic Function Exchange, Xilinx's solution for Partial FPGA Reconfiguration ([https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf](https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf))
 
@@ -43,6 +53,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **FTDI**: Future Technology Devices International Inc. The name has become synonymous with the USB-to-UART adapter ICs sold by this company.
 
+- **GCC**: GNU Compiler Collection. An optimizing compiler produced by the GNU Project.
+
 - **GPIO**: General-Purpose Input/Output, an uncommitted pin used for input and/or output controllable by the user at run-time.
 
 - **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
@@ -52,6 +64,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **IC**: Integrated Circuit.
 
 - **Interconnect**: Wishbone terminology for the bus fabric.
+
+- **IO**: Input/Output.
 
 - **IP-XACT**: An XML format that defines and describes individual, re-usable electronic circuit designs to facilitate their use in creating integrated circuits.
 
@@ -113,7 +127,17 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **SPI**: Serial Peripheral Interface, a synchronous serial communication interface specification used for short-distance communication.
 
+- **Stderr**: Standard Error. Name of the file object in the Standard C library associated with the standard error device.
+
+- **Stdin**: Standard Input. Name of the file object in the Standard C library associated with the standard input device.
+
+- **Stdout**: Standard Output. Name of the file object in the Standard C library associated with the standard output device.
+
+- **Stdio**: Standard Input and Output. *Stdio.h* is the Standard C Library header file containing input and output functions such as printf() and scanf().
+
 - **Synthesis**: Synthesis turns a module's Verilog/System Verilog/VHDL source code into a netlist of gates. The software equivalent of synthesis is compilation.
+
+- **.text**/**Text Segment**: See *Code Segment*.
 
 - **TAP**: Test Access Port, a JTAG interface.
 
@@ -121,7 +145,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Udev**: Userspace /dev, a device manager for the Linux kernel.
   
-- **USB HIB**: USB Human Interface device Class, a part of the USB specification for computer peripherals such as keyboards and mice.
+- **USB HID**: USB Human Interface Device class, a part of the USB specification for computer peripherals such as keyboards and mice.
 
 - **VCS**: Version Control Subsystem.
 

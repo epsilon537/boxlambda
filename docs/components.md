@@ -1,5 +1,5 @@
 Components
-----------
+==========
 
 We're building a System-on-a-Chip (*System-on-an-FPGA*?). This section identifies the Key Components of the BoxLambda SoC.
 
@@ -89,15 +89,21 @@ The *wb_ibex_core*:
 
 I settled on RISCV configuration **RV32IMCB**: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
 Note that there's no Instruction or Data Cache. Code executes directly from DPRAM or DDR memory. Data access also goes straight to DPRAM or DDR memory.
-The Ibex core is instantiated with the following *M* and *B* parameters, as shown in the *Ibex_WB* *ibex_soc* example:
+The Ibex core is instantiated with the following *M* and *B* parameters, as shown in the *Ibex_wb* *ibex_soc* example:
 
 **sub/ibex_wb/soc/fpga/arty-a7-35/rtl/ibex_soc.sv**:
 ```
 wb_ibex_core #(
   .RV32M(ibex_pkg::RV32MFast),
-  .RV32B(ibex_pkg::RV32BBalanced)
-  ,,,
+  .RV32B(ibex_pkg::RV32BBalanced),
+  ...
+  ) wb_ibex_core (
+  ...  
+  .boot_addr    (32'h0),
+  ...
 ```
+
+*Wb_ibex_core*'s *boot_addr* port is a misnomer. *Boot_addr* specifies the base address of the vector table. The Reset Vector, i.e. the first instruction executed when the processor comes out of reset, is at offset 0x80 relative to this base address. Hence, the *real* Boot Address for BoxLambda is address 0x80.
 
 ### The Debug Unit: *RISCV-DBG*
 

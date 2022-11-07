@@ -1,7 +1,7 @@
-The Build System and Directory Layout
+RTL Build System and Directory Layout
 =====================================
-The Build System
-----------------
+The RTL Build System
+--------------------
 ### Bender
 
 The build system is makefile based but relies on Bender for dependency Management:
