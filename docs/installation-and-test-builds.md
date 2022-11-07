@@ -12,18 +12,19 @@ Get the BoxLambda repository:
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-Switch to the *openocd_loose_ends* tag: 
+Switch to the *picolibc* tag: 
 ```
-git checkout openocd_loose_ends
+git checkout picolibc
 ```
-Get the submodules: 
+
+Set up the repository. This initializes the git submodules used and builds picolibc for BoxLambda: 
 ```
-git submodule update --init --recursive
+make setup
 ```
 
 User-Level Access to the Arty A7 USB JTAG Adapter.
 --------------------------------------------------
-OpenOCD might not have permission to access the USB JTAG adapter when run at user-level. To fix this issue, you need to add a rule to **/etc/udev/rules.d**.
+OpenOCD might not have permission to access the USB JTAG adapter when run at user level. To fix this issue, you need to add a rule to **/etc/udev/rules.d**.
 Create a file with the name **99-openocd.rules** in the **/etc/udev/rules.d** directory. This file should have the following contents:
 
 ```
@@ -61,7 +62,7 @@ On Ubuntu WSL, *udev*, the system service in charge of enforcing device permissi
 command="service udev start"
 ```
 
-Without *udev* running, OpenOCD or Vivado will not have access to the Arty USB JTAG adapter when executed at user-level.
+Without *udev* running, OpenOCD or Vivado will not have access to the Arty USB JTAG adapter when executed at user level.
 
 Test Builds
 -----------
@@ -180,6 +181,37 @@ Remote debugging using localhost:3333
 ```
 Notice that the CPU is stopped at the very first instruction of the boot sequence.
 
+### Build and Run the Picolibc Test Image on Verilator
+
+Build the test project:
+```
+cd projects/picolibc_test
+make sim
+```
+Execute the generated verilator model in interactive mode:
+```
+cd generated
+./Vmodel -i
+```
+You should see something like this:
+
+![Picolibc_test on Verilator](assets/picolibc_test_verilator.png)
+
+### Build and Run the Picolibc_test Image on Arty A7
+Build the test project:
+```
+cd projects/picolibc_test
+make impl
+```
+Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+Run the project:
+```
+make run
+```
+Verify the test program's output in the terminal. Enter a character to verify that stdin (standard input) is also working.
+
+![Picolibc_test on Arty - Putty Terminal](assets/picolibc_test_arty.png)
+
 Prerequisites
 -------------
 
@@ -227,7 +259,7 @@ git clone https://github.com/riscv/riscv-openocd
 cd riscv-openocd
 git submodule update --init --recursive
 ./bootstrap
-./configure --prefix=$RISCV --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi
+./configure --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi
 make
 sudo make install
 ``` 

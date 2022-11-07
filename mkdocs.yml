@@ -12,7 +12,7 @@ nav:
     - Interrupts: interrupts.md
     - Estimated FPGA Utilization: estimated-fpga-utilization.md
     - Git Workflow: git-workflow.md
-    - The Build System and Directory Layout: build-system.md
+    - The RTL Build System and Directory Layout: build-system.md
     - The Test Bench: test-bench.md
+    - Software: software.md
     - Installation and Test Builds: installation-and-test-builds.md
-
