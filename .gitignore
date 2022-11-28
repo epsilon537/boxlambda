@@ -2,6 +2,10 @@
 *~
 #Excel backup
 ~$*
+#Lint suggested waivers
+*.lint
 #Picolibc generated files
 sw/picolibc-build/*
 sw/picolibc-install/*
+#Emacs tags
+TAGS

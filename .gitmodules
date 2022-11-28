@@ -25,3 +25,6 @@
 [submodule "sub/picolibc"]
 	path = sub/picolibc
 	url = https://github.com/epsilon537/picolibc
+[submodule "sub/litex"]
+	path = sub/litex
+	url = https://github.com/epsilon537/litex

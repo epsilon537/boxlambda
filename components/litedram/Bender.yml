@@ -1,0 +1,17 @@
+#See https://epsilon537.github.io/boxlambda/documentation/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: litedram
+  
+sources:
+  - target: verilator
+    files:
+    - lint.vlt  
+    - sim/rtl/litedram.v
+    - common/rtl/litedram_wrapper.sv
+  - target: vivado
+    files:
+    - arty/rtl/litedram.v
+    - common/rtl/litedram_wrapper.sv

@@ -79,7 +79,7 @@ dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files constraints
 lint:
 	@echo $(VLT_FILES)  #FYI only.
 	@bender script $(MIN_T_OOC) verilator #FYI only.
-	verilator --lint-only $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) --top-module $(TOP_MODULE_SIM) --Wall $(VLT_FILES) `bender script $(MIN_T_OOC) verilator | tr '\n' ' '`
+	verilator --lint-only $(VERILATOR_CPPFLAGS) $(VERILATOR_LDFLAGS) --top-module $(TOP_MODULE_SIM) --Wall $(VLT_FILES) --waiver-output waiver.lint `bender script $(MIN_T_OOC) verilator | tr '\n' ' '`
 	@echo "Done. If no issues are found, verilator completes silently"
 
 #Build verilator model/testbench for project.

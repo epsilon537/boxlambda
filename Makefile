@@ -53,3 +53,7 @@ clean: bender_update
 .PHONY: bender_update
 bender_update: 
 	$(foreach makefile, $(COMPONENT_MAKEFILES) $(PROJECT_MAKEFILES), $(MAKE) -C $(dir $(makefile)) bender_update && ) echo "Done"
+
+.PHONY: tags
+tags:
+	ctags-universal -e -R .

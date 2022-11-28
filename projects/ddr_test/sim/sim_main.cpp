@@ -121,7 +121,7 @@ int main(int argc, char** argv, char** env) {
     // Construct the Verilated model, from Vmodel.h generated from Verilating "ibex_soc.sv".
     // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
     // "ibex_soc" will be the hierarchical name of the module.
-    const std::unique_ptr<Vmodel> top{new Vmodel{contextp.get(), "ibex_soc"}};
+    const std::unique_ptr<Vmodel> top{new Vmodel{contextp.get(), "ddr_test_soc"}};
 
     //Trace file
     if (tracing_enable) {
@@ -145,8 +145,8 @@ int main(int argc, char** argv, char** env) {
 
     jtag_set_bypass(!attach_debugger);
     
-    // When not in interactive mode, simulate for 2000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 2000000)) {
+    // When not in interactive mode, simulate for 10000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 10000000)) {
         // Historical note, before Verilator 4.200 Verilated::gotFinish()
         // was used above in place of contextp->gotFinish().
         // Most of the contextp-> calls can use Verilated:: calls instead;
@@ -192,14 +192,6 @@ int main(int argc, char** argv, char** env) {
         //and feed the UART co-simulator output to our model
         top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 
-        //In interactive mode, characters entered on stdin go to the UART
-        //(this is implemented in uartsim.cpp).
-        //In non-interactive mode (i.e. an automated test), enter a
-        //character into the UART every 100000 ticks.
-        if (!interactive_mode && ((contextp->time() % 100000) == 0)) {
-          uart->enterCharInTxPath(INPUT_TEST_CHAR);
-        }
-	
         //Detect and print changes to UART and GPIOs
         if ((uartRxStringPrev != uart->get_rx_string()) ||
             (uartTxStringPrev != uart->get_tx_string()) ||
@@ -216,10 +208,10 @@ int main(int argc, char** argv, char** env) {
           mvprintw(0, 0, "[%lld]", contextp->time());
           mvprintw(1, 0, "UART Out:");
           mvprintw(2, 0, uart->get_rx_string().c_str());
-          mvprintw(10, 0, "UART In:");
-          mvprintw(11, 0, uart->get_tx_string().c_str());
-          mvprintw(15, 0, "GPIO0: %x", top->gpio0);
-          mvprintw(16, 0, "GPIO1: %x", top->gpio1);
+          mvprintw(20, 0, "UART In:");
+          mvprintw(21, 0, uart->get_tx_string().c_str());
+          mvprintw(22, 0, "GPIO0: %x", top->gpio0);
+          mvprintw(23, 0, "GPIO1: %x", top->gpio1);
           refresh();
 
           //Update change detectors
@@ -247,15 +239,14 @@ int main(int argc, char** argv, char** env) {
 
     // Checks for automated testing.
     int res = 0;
-    std::string uartCheckString("printf in main() v=123, m=!!!!!!!!!.\nEnter character: Character entered: ");
-    uartCheckString.push_back(INPUT_TEST_CHAR);
-    
-    if (uartCheckString.compare(uartRxStringPrev) != 0) {
+    std::string uartCheckString("Memory Test successful.");
+
+    if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
       printf("UART check failed\n");
       printf("Expected: %s\n", uartCheckString.c_str());
       printf("Received: %s\n", uartRxStringPrev.c_str());
 
-      res = 1;  
+      res = 1;
     }
     else {
       printf("UART check passed.\n");
