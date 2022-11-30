@@ -208,10 +208,10 @@ int main(int argc, char** argv, char** env) {
           mvprintw(0, 0, "[%lld]", contextp->time());
           mvprintw(1, 0, "UART Out:");
           mvprintw(2, 0, uart->get_rx_string().c_str());
-          mvprintw(20, 0, "UART In:");
-          mvprintw(21, 0, uart->get_tx_string().c_str());
-          mvprintw(22, 0, "GPIO0: %x", top->gpio0);
-          mvprintw(23, 0, "GPIO1: %x", top->gpio1);
+          mvprintw(23, 0, "UART In:");
+          mvprintw(24, 0, uart->get_tx_string().c_str());
+          mvprintw(25, 0, "GPIO0: %x", top->gpio0);
+          mvprintw(26, 0, "GPIO1: %x", top->gpio1);
           refresh();
 
           //Update change detectors

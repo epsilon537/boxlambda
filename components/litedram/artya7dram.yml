@@ -36,12 +36,10 @@
         "wishbone_0" : {
             "type":  "wishbone",
             "block_until_ready": True,
-            "data_width": 32
         },
         "wishbone_1" : {
             "type":  "wishbone",
             "block_until_ready": True,
-            "data_width": 32
         },
     },
 }
