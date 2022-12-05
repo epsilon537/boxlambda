@@ -37,99 +37,47 @@ module litedram_wrapper (
                          );
 
    logic [23:0] user_port_wishbone_c_0_adr;
-   logic [31:0] user_port_wishbone_c_0_dat_w_1;
    logic [127:0] user_port_wishbone_c_0_dat_w;
    logic [127:0] user_port_wishbone_c_0_dat_r;
-   logic [3:0]   user_port_wishbone_c_0_sel_1;
    logic [15:0]  user_port_wishbone_c_0_sel;
    logic        user_port_wishbone_c_0_cyc;
    logic        user_port_wishbone_c_0_stb;
    logic        user_port_wishbone_c_0_ack;
    logic        user_port_wishbone_c_0_we;
    logic        user_port_wishbone_c_0_err;
-   logic        user_port_wishbone_c_0_ack_pending;
-
-   initial user_port_wishbone_c_0_stb = 0;
-   initial user_port_wishbone_c_0_ack_pending = 0;
-
-   always_ff @(posedge clk)
-     if (user_port_wishbone_p_0_rst) begin
-        user_port_wishbone_c_0_stb <= 1'b0;
-        user_port_wishbone_c_0_ack_pending <= 1'b0;
-     end
-     else
-       if (!user_port_wishbone_c_0_ack_pending) begin
-         if (user_port_wishbone_p_0_stb) begin
-            user_port_wishbone_c_0_ack_pending <= 1'b1;
-            user_port_wishbone_c_0_stb <= 1'b1;
-            user_port_wishbone_c_0_adr <= user_port_wishbone_p_0_adr[23:0];
-            user_port_wishbone_c_0_dat_w_1 <= user_port_wishbone_p_0_dat_w;
-            user_port_wishbone_c_0_sel_1 <= user_port_wishbone_p_0_sel;
-            user_port_wishbone_c_0_we <= user_port_wishbone_p_0_we;
-         end
-       end
-       else begin
-          if (user_port_wishbone_c_0_ack || user_port_wishbone_c_0_err) begin
-             user_port_wishbone_c_0_ack_pending <= 1'b0;
-             user_port_wishbone_c_0_stb <= 1'b0;
-          end
-       end
 
    assign user_port_wishbone_p_0_dat_r = user_port_wishbone_c_0_dat_r[31:0];
    assign user_port_wishbone_p_0_ack = user_port_wishbone_c_0_ack;
    assign user_port_wishbone_p_0_err = user_port_wishbone_c_0_err;
-   assign user_port_wishbone_p_0_stall = user_port_wishbone_c_0_ack_pending;
+   assign user_port_wishbone_p_0_stall = !user_port_wishbone_p_0_cyc ? 1'b0 : !user_port_wishbone_c_0_ack;
 
-   assign user_port_wishbone_c_0_dat_w = {96'b0,user_port_wishbone_c_0_dat_w_1};
-   assign user_port_wishbone_c_0_sel = {12'hfff, user_port_wishbone_c_0_sel_1};
+   assign user_port_wishbone_c_0_stb = user_port_wishbone_p_0_stb;
+   assign user_port_wishbone_c_0_adr = user_port_wishbone_p_0_adr[23:0];
+   assign user_port_wishbone_c_0_we = user_port_wishbone_p_0_we;
+   assign user_port_wishbone_c_0_dat_w = {96'b0,user_port_wishbone_p_0_dat_w};
+   assign user_port_wishbone_c_0_sel = {12'hfff, user_port_wishbone_p_0_sel};
    assign user_port_wishbone_c_0_cyc = user_port_wishbone_p_0_cyc;
 
    logic [23:0] user_port_wishbone_c_1_adr;
-   logic [31:0] user_port_wishbone_c_1_dat_w_1;
    logic [127:0] user_port_wishbone_c_1_dat_w;
    logic [127:0] user_port_wishbone_c_1_dat_r;
-   logic [3:0]   user_port_wishbone_c_1_sel_1;
    logic [15:0]  user_port_wishbone_c_1_sel;
    logic        user_port_wishbone_c_1_cyc;
    logic        user_port_wishbone_c_1_stb;
    logic        user_port_wishbone_c_1_ack;
    logic        user_port_wishbone_c_1_we;
    logic        user_port_wishbone_c_1_err;
-   logic        user_port_wishbone_c_1_ack_pending;
-
-   initial user_port_wishbone_c_1_stb = 0;
-   initial user_port_wishbone_c_1_ack_pending = 0;
-
-   always_ff @(posedge clk)
-     if (user_port_wishbone_p_1_rst) begin
-        user_port_wishbone_c_1_stb <= 1'b0;
-        user_port_wishbone_c_1_ack_pending <= 1'b0;
-     end
-     else
-       if (!user_port_wishbone_c_1_ack_pending) begin
-         if (user_port_wishbone_p_1_stb) begin
-            user_port_wishbone_c_1_ack_pending <= 1'b1;
-            user_port_wishbone_c_1_stb <= 1'b1;
-            user_port_wishbone_c_1_adr <= user_port_wishbone_p_1_adr[23:0];
-            user_port_wishbone_c_1_dat_w_1 <= user_port_wishbone_p_1_dat_w;
-            user_port_wishbone_c_1_sel_1 <= user_port_wishbone_p_1_sel;
-            user_port_wishbone_c_1_we <= user_port_wishbone_p_1_we;
-         end
-       end
-       else begin
-          if (user_port_wishbone_c_1_ack || user_port_wishbone_c_1_err) begin
-             user_port_wishbone_c_1_ack_pending <= 1'b0;
-             user_port_wishbone_c_1_stb <= 1'b0;
-          end
-       end
 
    assign user_port_wishbone_p_1_dat_r = user_port_wishbone_c_1_dat_r[31:0];
    assign user_port_wishbone_p_1_ack = user_port_wishbone_c_1_ack;
    assign user_port_wishbone_p_1_err = user_port_wishbone_c_1_err;
-   assign user_port_wishbone_p_1_stall = user_port_wishbone_c_1_ack_pending;
+   assign user_port_wishbone_p_1_stall = !user_port_wishbone_p_1_cyc ? 1'b0 : !user_port_wishbone_c_1_ack;
 
-   assign user_port_wishbone_c_1_dat_w = {96'b0,user_port_wishbone_c_1_dat_w_1};
-   assign user_port_wishbone_c_1_sel = {12'hfff, user_port_wishbone_c_1_sel_1};
+   assign user_port_wishbone_c_1_stb = user_port_wishbone_p_1_stb;
+   assign user_port_wishbone_c_1_adr = user_port_wishbone_p_1_adr[23:0];
+   assign user_port_wishbone_c_1_we = user_port_wishbone_p_1_we;
+   assign user_port_wishbone_c_1_dat_w = {96'b0,user_port_wishbone_p_1_dat_w};
+   assign user_port_wishbone_c_1_sel = {12'hfff, user_port_wishbone_p_1_sel};
    assign user_port_wishbone_c_1_cyc = user_port_wishbone_p_1_cyc;
 
    //We could also instantiated a pipeline->classic bridge for the ctrl port but I think that's overkill.
