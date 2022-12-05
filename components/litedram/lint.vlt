@@ -7654,7 +7654,3 @@ lint_off -rule COMBDLY -file "*/mnt/c/work/boxlambda/components/litedram/sim/rtl
 lint_off -rule COMBDLY -file "*/mnt/c/work/boxlambda/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
 lint_off -rule COMBDLY -file "*/mnt/c/work/boxlambda/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
-
-lint_off -rule IMPERFECTSCH -file "*/mnt/c/work/boxlambda/components/litedram/common/rtl/litedram_wrapper.sv" -match "Imperfect scheduling of variable: 'litedram_wrapper.user_port_wishbone_c_0_ack'"
-
-lint_off -rule IMPERFECTSCH -file "*/mnt/c/work/boxlambda/components/litedram/common/rtl/litedram_wrapper.sv" -match "Imperfect scheduling of variable: 'litedram_wrapper.user_port_wishbone_c_1_ack'"
