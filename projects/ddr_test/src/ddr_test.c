@@ -19,14 +19,23 @@ static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
 
-int code_is_in_ddr(void) {
-  uint32_t pc;
+static volatile unsigned int crc;
 
-  //Retrieve the program counter.
-  asm ("auipc %0, 0x0" : "=r" (pc));
-
-  //Return true is pc is in ddr region.
-  return (pc >= MAIN_RAM_BASE);
+void code_in_ddr(void) {
+  int i, j;
+  unsigned int byte, mask;
+  char *message = (char*)MAIN_RAM_BASE;
+   i = 0;
+   crc = 0xFFFFFFFF;
+   while (i<16) {
+      byte = message[i];            // Get next byte.
+      crc = crc ^ byte;
+      for (j = 7; j >= 0; j--) {    // Do eight times.
+         mask = -(crc & 1);
+         crc = (crc >> 1) ^ (0xEDB88320 & mask);
+      }
+      i = i + 1;
+   }
 }
 
 //_init is executed by picolibc startup code before main().
@@ -59,7 +68,7 @@ int main(void) {
     printf("SDRAM init failed!\n");
     while(1);
   }
-
+#if 1
   unsigned long memtest_size = ((gpio_get_input(&gpio1) & 0xf) == GPIO1_SIM_INDICATOR) ? MEMTEST_SIZE_SIM : MEMTEST_SIZE_ARTY;
 
   printf("Memory Test through port 0:\n");
@@ -81,23 +90,22 @@ int main(void) {
   else {
     printf("Memory port 1 test successful.\n");
   }
+#endif
 
   printf("DDR instruction access test:\n");
 
   //Copy code to DDR
-  int (*fptr)(void) =  (int (*)(void))((int)(code_is_in_ddr) | MAIN_RAM_BASE);
-
+  void (*fptr)(void);
+  fptr =  (void (*)(void))((int)(code_in_ddr) | MAIN_RAM_BASE);
   memcpy(fptr,
-         code_is_in_ddr,
-         ((char*)_init - (char*)code_is_in_ddr));
+         code_in_ddr,
+         32 + ((char*)_init - (char*)code_in_ddr));
 
-  if (fptr()) {
-    printf("Successfully executed code from DDR.\n");
-  }
-  else {
-    printf("Failed to execute code from DDR.\n");
-    while(1);
-  }
+  fptr = code_in_ddr; //(void (*)(void))((int)test_buf);
+  fptr();
+  fptr =  (void (*)(void))((int)(code_in_ddr) | MAIN_RAM_BASE);
+  fptr();
+  printf("Successfully executed code from DDR.\n");
 
   printf("Test completed successfully.\n");
 
