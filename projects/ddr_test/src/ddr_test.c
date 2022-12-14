@@ -61,7 +61,7 @@ int main(void) {
   else
     printf("This is not a simulation.\n");
 
-   if (sdram_init()) {
+  if (sdram_init()) {
     printf("SDRAM init OK.\n");
   }
   else {
@@ -69,7 +69,7 @@ int main(void) {
     while(1);
   }
 #if 1
-  unsigned long memtest_size = ((gpio_get_input(&gpio1) & 0xf) == GPIO1_SIM_INDICATOR) ? MEMTEST_SIZE_SIM : MEMTEST_SIZE_ARTY;
+  unsigned long memtest_size = MEMTEST_SIZE;
 
   printf("Memory Test through port 0:\n");
 
@@ -100,10 +100,6 @@ int main(void) {
   memcpy(fptr,
          code_in_ddr,
          32 + ((char*)_init - (char*)code_in_ddr));
-
-  fptr = code_in_ddr; //(void (*)(void))((int)test_buf);
-  fptr();
-  fptr =  (void (*)(void))((int)(code_in_ddr) | MAIN_RAM_BASE);
   fptr();
   printf("Successfully executed code from DDR.\n");
 

@@ -10,7 +10,9 @@ PART = xc7a35ticsg324-1L
 BENDER_GEN_SCRIPT = generated/sources.tcl
 
 #List of memory files referenced in the Bender package manifest
-MEM_FILES := $(shell bender update && bender script flist -n -t memory)
+MEM_FILES_SIM := $(shell bender update && bender script flist -n -t memory_sim)
+MEM_FILES_FPGA := $(shell bender update && bender script flist -n -t memory_fpga)
+
 MEM_FILES_GEN_SCRIPT = generated/mem_files.tcl
 #List of .xdc constraint files referenced in the Bender package manifest
 CONSTRAINTS := $(shell bender update && bender script flist -n -t constraints)
@@ -46,11 +48,16 @@ ifdef OOC
 endif
 
 #Rule to generate TCL 'sub' script that adds memory files to the project
-.PHONY: mem_files
-mem_files: $(MEM_FILES)
+.PHONY: mem_files_sim
+mem_files_sim: $(MEM_FILES_SIM)
+	mkdir -p generated
+	$(foreach mem_file, $(MEM_FILES_SIM), cp $(mem_file) generated/)
+
+.PHONY: mem_files_fpga
+mem_files_fpga: $(MEM_FILES_FPGA)
 	mkdir -p generated
 	$(RM) -f $(MEM_FILES_GEN_SCRIPT)
-	$(foreach mem_file, $(MEM_FILES), cp $(mem_file) generated/ && echo add_files -norecurse $(mem_file) >> $(MEM_FILES_GEN_SCRIPT))
+	$(foreach mem_file, $(MEM_FILES_FPGA), cp $(mem_file) generated/ && echo add_files -norecurse $(mem_file) >> $(MEM_FILES_GEN_SCRIPT))
 
 .PHONY: force
 force :
@@ -68,7 +75,7 @@ $(BENDER_GEN_SCRIPT): bender_update
 #synth generates the project/component and synthesizes it.
 #impl generates the project/component, synthesizes it and implements it.
 .PHONY: synth dryrun
-dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files constraints
+dryrun synth impl: $(BENDER_GEN_SCRIPT) mem_files_fpga constraints
 	vivado -nolog -nojournal -mode batch -source $(VIVADO_TCL) \
 	-tclargs -project generated/project -cmd $@ -part $(PART) \
 	-sources $(BENDER_GEN_SCRIPT) -constraints $(CONSTRAINTS_GEN_SCRIPT) \
@@ -84,7 +91,7 @@ lint:
 
 #Build verilator model/testbench for project.
 .PHONY: sim
-sim: mem_files
+sim: mem_files_sim
 	@echo $(VLT_FILES)  #FYI only.
 	@bender script $(MIN_T_OOC) verilator #FYI only.
 	mkdir -p generated

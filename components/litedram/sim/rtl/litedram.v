@@ -9,7 +9,7 @@
 // Filename   : litedram.v
 // Device     : 
 // LiteX sha1 : c717e4c8
-// Date       : 2022-11-29 17:38:33
+// Date       : 2022-12-13 14:14:52
 //------------------------------------------------------------------------------
 
 
@@ -870,9 +870,9 @@ wire soc_litedramcore_wants_refresh;
 wire soc_litedramcore_wants_zqcs;
 wire soc_litedramcore_timer_wait;
 wire soc_litedramcore_timer_done0;
-wire [9:0] soc_litedramcore_timer_count0;
+wire [8:0] soc_litedramcore_timer_count0;
 wire soc_litedramcore_timer_done1;
-reg  [9:0] soc_litedramcore_timer_count1 = 10'd781;
+reg  [8:0] soc_litedramcore_timer_count1 = 9'd390;
 wire soc_litedramcore_postponer_req_i;
 reg  soc_litedramcore_postponer_req_o = 1'd0;
 reg  soc_litedramcore_postponer_count = 1'd0;
@@ -884,9 +884,9 @@ reg  [5:0] soc_litedramcore_sequencer_counter = 6'd0;
 reg  soc_litedramcore_sequencer_count = 1'd0;
 wire soc_litedramcore_zqcs_timer_wait;
 wire soc_litedramcore_zqcs_timer_done0;
-wire [26:0] soc_litedramcore_zqcs_timer_count0;
+wire [25:0] soc_litedramcore_zqcs_timer_count0;
 wire soc_litedramcore_zqcs_timer_done1;
-reg  [26:0] soc_litedramcore_zqcs_timer_count1 = 27'd99999999;
+reg  [25:0] soc_litedramcore_zqcs_timer_count1 = 26'd49999999;
 reg  soc_litedramcore_zqcs_executer_start = 1'd0;
 reg  soc_litedramcore_zqcs_executer_done = 1'd0;
 reg  [4:0] soc_litedramcore_zqcs_executer_counter = 5'd0;
@@ -982,10 +982,10 @@ reg  soc_litedramcore_bankmachine0_twtpcon_ready = 1'd0;
 reg  [2:0] soc_litedramcore_bankmachine0_twtpcon_count = 3'd0;
 wire soc_litedramcore_bankmachine0_trccon_valid;
 reg  soc_litedramcore_bankmachine0_trccon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine0_trccon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine0_trccon_count = 2'd0;
 wire soc_litedramcore_bankmachine0_trascon_valid;
 reg  soc_litedramcore_bankmachine0_trascon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine0_trascon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine0_trascon_count = 2'd0;
 wire soc_litedramcore_bankmachine1_req_valid;
 wire soc_litedramcore_bankmachine1_req_ready;
 wire soc_litedramcore_bankmachine1_req_we;
@@ -1078,10 +1078,10 @@ reg  soc_litedramcore_bankmachine1_twtpcon_ready = 1'd0;
 reg  [2:0] soc_litedramcore_bankmachine1_twtpcon_count = 3'd0;
 wire soc_litedramcore_bankmachine1_trccon_valid;
 reg  soc_litedramcore_bankmachine1_trccon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine1_trccon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine1_trccon_count = 2'd0;
 wire soc_litedramcore_bankmachine1_trascon_valid;
 reg  soc_litedramcore_bankmachine1_trascon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine1_trascon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine1_trascon_count = 2'd0;
 wire soc_litedramcore_bankmachine2_req_valid;
 wire soc_litedramcore_bankmachine2_req_ready;
 wire soc_litedramcore_bankmachine2_req_we;
@@ -1174,10 +1174,10 @@ reg  soc_litedramcore_bankmachine2_twtpcon_ready = 1'd0;
 reg  [2:0] soc_litedramcore_bankmachine2_twtpcon_count = 3'd0;
 wire soc_litedramcore_bankmachine2_trccon_valid;
 reg  soc_litedramcore_bankmachine2_trccon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine2_trccon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine2_trccon_count = 2'd0;
 wire soc_litedramcore_bankmachine2_trascon_valid;
 reg  soc_litedramcore_bankmachine2_trascon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine2_trascon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine2_trascon_count = 2'd0;
 wire soc_litedramcore_bankmachine3_req_valid;
 wire soc_litedramcore_bankmachine3_req_ready;
 wire soc_litedramcore_bankmachine3_req_we;
@@ -1270,10 +1270,10 @@ reg  soc_litedramcore_bankmachine3_twtpcon_ready = 1'd0;
 reg  [2:0] soc_litedramcore_bankmachine3_twtpcon_count = 3'd0;
 wire soc_litedramcore_bankmachine3_trccon_valid;
 reg  soc_litedramcore_bankmachine3_trccon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine3_trccon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine3_trccon_count = 2'd0;
 wire soc_litedramcore_bankmachine3_trascon_valid;
 reg  soc_litedramcore_bankmachine3_trascon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine3_trascon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine3_trascon_count = 2'd0;
 wire soc_litedramcore_bankmachine4_req_valid;
 wire soc_litedramcore_bankmachine4_req_ready;
 wire soc_litedramcore_bankmachine4_req_we;
@@ -1366,10 +1366,10 @@ reg  soc_litedramcore_bankmachine4_twtpcon_ready = 1'd0;
 reg  [2:0] soc_litedramcore_bankmachine4_twtpcon_count = 3'd0;
 wire soc_litedramcore_bankmachine4_trccon_valid;
 reg  soc_litedramcore_bankmachine4_trccon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine4_trccon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine4_trccon_count = 2'd0;
 wire soc_litedramcore_bankmachine4_trascon_valid;
 reg  soc_litedramcore_bankmachine4_trascon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine4_trascon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine4_trascon_count = 2'd0;
 wire soc_litedramcore_bankmachine5_req_valid;
 wire soc_litedramcore_bankmachine5_req_ready;
 wire soc_litedramcore_bankmachine5_req_we;
@@ -1462,10 +1462,10 @@ reg  soc_litedramcore_bankmachine5_twtpcon_ready = 1'd0;
 reg  [2:0] soc_litedramcore_bankmachine5_twtpcon_count = 3'd0;
 wire soc_litedramcore_bankmachine5_trccon_valid;
 reg  soc_litedramcore_bankmachine5_trccon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine5_trccon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine5_trccon_count = 2'd0;
 wire soc_litedramcore_bankmachine5_trascon_valid;
 reg  soc_litedramcore_bankmachine5_trascon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine5_trascon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine5_trascon_count = 2'd0;
 wire soc_litedramcore_bankmachine6_req_valid;
 wire soc_litedramcore_bankmachine6_req_ready;
 wire soc_litedramcore_bankmachine6_req_we;
@@ -1558,10 +1558,10 @@ reg  soc_litedramcore_bankmachine6_twtpcon_ready = 1'd0;
 reg  [2:0] soc_litedramcore_bankmachine6_twtpcon_count = 3'd0;
 wire soc_litedramcore_bankmachine6_trccon_valid;
 reg  soc_litedramcore_bankmachine6_trccon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine6_trccon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine6_trccon_count = 2'd0;
 wire soc_litedramcore_bankmachine6_trascon_valid;
 reg  soc_litedramcore_bankmachine6_trascon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine6_trascon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine6_trascon_count = 2'd0;
 wire soc_litedramcore_bankmachine7_req_valid;
 wire soc_litedramcore_bankmachine7_req_ready;
 wire soc_litedramcore_bankmachine7_req_we;
@@ -1654,10 +1654,10 @@ reg  soc_litedramcore_bankmachine7_twtpcon_ready = 1'd0;
 reg  [2:0] soc_litedramcore_bankmachine7_twtpcon_count = 3'd0;
 wire soc_litedramcore_bankmachine7_trccon_valid;
 reg  soc_litedramcore_bankmachine7_trccon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine7_trccon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine7_trccon_count = 2'd0;
 wire soc_litedramcore_bankmachine7_trascon_valid;
 reg  soc_litedramcore_bankmachine7_trascon_ready = 1'd0;
-reg  [2:0] soc_litedramcore_bankmachine7_trascon_count = 3'd0;
+reg  [1:0] soc_litedramcore_bankmachine7_trascon_count = 2'd0;
 wire soc_litedramcore_ras_allowed;
 wire soc_litedramcore_cas_allowed;
 reg  soc_litedramcore_choose_cmd_want_reads = 1'd0;
@@ -1715,8 +1715,8 @@ reg  soc_litedramcore_trrdcon_ready = 1'd0;
 reg  soc_litedramcore_trrdcon_count = 1'd0;
 wire soc_litedramcore_tfawcon_valid;
 reg  soc_litedramcore_tfawcon_ready = 1'd1;
-wire [2:0] soc_litedramcore_tfawcon_count;
-reg  [4:0] soc_litedramcore_tfawcon_window = 5'd0;
+wire [1:0] soc_litedramcore_tfawcon_count;
+reg  [2:0] soc_litedramcore_tfawcon_window = 3'd0;
 wire soc_litedramcore_tccdcon_valid;
 reg  soc_litedramcore_tccdcon_ready = 1'd0;
 reg  soc_litedramcore_tccdcon_count = 1'd0;
@@ -1920,22 +1920,22 @@ wire [31:0] csr_interconnect_dat_w;
 wire [31:0] csr_interconnect_dat_r;
 reg  [1:0] litedramcore_refresher_state = 2'd0;
 reg  [1:0] litedramcore_refresher_next_state = 2'd0;
-reg  [3:0] litedramcore_bankmachine0_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine0_next_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine1_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine1_next_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine2_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine2_next_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine3_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine3_next_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine4_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine4_next_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine5_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine5_next_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine6_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine6_next_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine7_state = 4'd0;
-reg  [3:0] litedramcore_bankmachine7_next_state = 4'd0;
+reg  [2:0] litedramcore_bankmachine0_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine0_next_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine1_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine1_next_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine2_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine2_next_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine3_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine3_next_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine4_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine4_next_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine5_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine5_next_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine6_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine6_next_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine7_state = 3'd0;
+reg  [2:0] litedramcore_bankmachine7_next_state = 3'd0;
 reg  [3:0] litedramcore_multiplexer_state = 4'd0;
 reg  [3:0] litedramcore_multiplexer_next_state = 4'd0;
 wire [1:0] litedramcore_roundrobin0_request;
@@ -5219,7 +5219,7 @@ assign soc_litedramcore_bankmachine0_source_source_last = soc_litedramcore_bankm
 assign soc_litedramcore_bankmachine0_source_source_payload_we = soc_litedramcore_bankmachine0_pipe_valid_source_payload_we;
 assign soc_litedramcore_bankmachine0_source_source_payload_addr = soc_litedramcore_bankmachine0_pipe_valid_source_payload_addr;
 always @(*) begin
-	litedramcore_bankmachine0_next_state <= 4'd0;
+	litedramcore_bankmachine0_next_state <= 3'd0;
 	litedramcore_bankmachine0_next_state <= litedramcore_bankmachine0_state;
 	case (litedramcore_bankmachine0_state)
 		1'd1: begin
@@ -5237,7 +5237,7 @@ always @(*) begin
 		2'd3: begin
 			if (soc_litedramcore_bankmachine0_trccon_ready) begin
 				if (soc_litedramcore_bankmachine0_cmd_ready) begin
-					litedramcore_bankmachine0_next_state <= 3'd7;
+					litedramcore_bankmachine0_next_state <= 3'd6;
 				end
 			end
 		end
@@ -5247,15 +5247,9 @@ always @(*) begin
 			end
 		end
 		3'd5: begin
-			litedramcore_bankmachine0_next_state <= 3'd6;
-		end
-		3'd6: begin
 			litedramcore_bankmachine0_next_state <= 2'd3;
 		end
-		3'd7: begin
-			litedramcore_bankmachine0_next_state <= 4'd8;
-		end
-		4'd8: begin
+		3'd6: begin
 			litedramcore_bankmachine0_next_state <= 1'd0;
 		end
 		default: begin
@@ -5297,10 +5291,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -5320,10 +5310,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine0_refresh_req) begin
 			end else begin
@@ -5337,6 +5323,28 @@ always @(*) begin
 					end
 				end
 			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramcore_bankmachine0_row_close <= 1'd0;
+	case (litedramcore_bankmachine0_state)
+		1'd1: begin
+			soc_litedramcore_bankmachine0_row_close <= 1'd1;
+		end
+		2'd2: begin
+			soc_litedramcore_bankmachine0_row_close <= 1'd1;
+		end
+		2'd3: begin
+		end
+		3'd4: begin
+			soc_litedramcore_bankmachine0_row_close <= 1'd1;
+		end
+		3'd5: begin
+		end
+		3'd6: begin
+		end
+		default: begin
 		end
 	endcase
 end
@@ -5361,10 +5369,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -5386,10 +5390,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine0_refresh_req) begin
@@ -5432,10 +5432,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -5454,10 +5450,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine0_refresh_req) begin
@@ -5493,10 +5485,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine0_refresh_req) begin
 			end else begin
@@ -5531,10 +5519,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine0_refresh_req) begin
 			end else begin
@@ -5568,10 +5552,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine0_refresh_req) begin
@@ -5610,10 +5590,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -5635,10 +5611,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 		end
@@ -5665,10 +5637,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine0_refresh_req) begin
 			end else begin
@@ -5682,32 +5650,6 @@ always @(*) begin
 					end
 				end
 			end
-		end
-	endcase
-end
-always @(*) begin
-	soc_litedramcore_bankmachine0_row_close <= 1'd0;
-	case (litedramcore_bankmachine0_state)
-		1'd1: begin
-			soc_litedramcore_bankmachine0_row_close <= 1'd1;
-		end
-		2'd2: begin
-			soc_litedramcore_bankmachine0_row_close <= 1'd1;
-		end
-		2'd3: begin
-		end
-		3'd4: begin
-			soc_litedramcore_bankmachine0_row_close <= 1'd1;
-		end
-		3'd5: begin
-		end
-		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
-		default: begin
 		end
 	endcase
 end
@@ -5790,7 +5732,7 @@ assign soc_litedramcore_bankmachine1_source_source_last = soc_litedramcore_bankm
 assign soc_litedramcore_bankmachine1_source_source_payload_we = soc_litedramcore_bankmachine1_pipe_valid_source_payload_we;
 assign soc_litedramcore_bankmachine1_source_source_payload_addr = soc_litedramcore_bankmachine1_pipe_valid_source_payload_addr;
 always @(*) begin
-	litedramcore_bankmachine1_next_state <= 4'd0;
+	litedramcore_bankmachine1_next_state <= 3'd0;
 	litedramcore_bankmachine1_next_state <= litedramcore_bankmachine1_state;
 	case (litedramcore_bankmachine1_state)
 		1'd1: begin
@@ -5808,7 +5750,7 @@ always @(*) begin
 		2'd3: begin
 			if (soc_litedramcore_bankmachine1_trccon_ready) begin
 				if (soc_litedramcore_bankmachine1_cmd_ready) begin
-					litedramcore_bankmachine1_next_state <= 3'd7;
+					litedramcore_bankmachine1_next_state <= 3'd6;
 				end
 			end
 		end
@@ -5818,15 +5760,9 @@ always @(*) begin
 			end
 		end
 		3'd5: begin
-			litedramcore_bankmachine1_next_state <= 3'd6;
-		end
-		3'd6: begin
 			litedramcore_bankmachine1_next_state <= 2'd3;
 		end
-		3'd7: begin
-			litedramcore_bankmachine1_next_state <= 4'd8;
-		end
-		4'd8: begin
+		3'd6: begin
 			litedramcore_bankmachine1_next_state <= 1'd0;
 		end
 		default: begin
@@ -5871,10 +5807,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -5896,10 +5828,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine1_refresh_req) begin
@@ -5942,10 +5870,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -5964,10 +5888,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine1_refresh_req) begin
@@ -6003,10 +5923,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine1_refresh_req) begin
 			end else begin
@@ -6041,10 +5957,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine1_refresh_req) begin
 			end else begin
@@ -6078,10 +5990,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine1_refresh_req) begin
@@ -6120,10 +6028,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -6145,10 +6049,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 		end
@@ -6174,10 +6074,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine1_refresh_req) begin
@@ -6213,10 +6109,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -6239,10 +6131,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -6261,10 +6149,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine1_refresh_req) begin
@@ -6361,7 +6245,7 @@ assign soc_litedramcore_bankmachine2_source_source_last = soc_litedramcore_bankm
 assign soc_litedramcore_bankmachine2_source_source_payload_we = soc_litedramcore_bankmachine2_pipe_valid_source_payload_we;
 assign soc_litedramcore_bankmachine2_source_source_payload_addr = soc_litedramcore_bankmachine2_pipe_valid_source_payload_addr;
 always @(*) begin
-	litedramcore_bankmachine2_next_state <= 4'd0;
+	litedramcore_bankmachine2_next_state <= 3'd0;
 	litedramcore_bankmachine2_next_state <= litedramcore_bankmachine2_state;
 	case (litedramcore_bankmachine2_state)
 		1'd1: begin
@@ -6379,7 +6263,7 @@ always @(*) begin
 		2'd3: begin
 			if (soc_litedramcore_bankmachine2_trccon_ready) begin
 				if (soc_litedramcore_bankmachine2_cmd_ready) begin
-					litedramcore_bankmachine2_next_state <= 3'd7;
+					litedramcore_bankmachine2_next_state <= 3'd6;
 				end
 			end
 		end
@@ -6389,15 +6273,9 @@ always @(*) begin
 			end
 		end
 		3'd5: begin
-			litedramcore_bankmachine2_next_state <= 3'd6;
-		end
-		3'd6: begin
 			litedramcore_bankmachine2_next_state <= 2'd3;
 		end
-		3'd7: begin
-			litedramcore_bankmachine2_next_state <= 4'd8;
-		end
-		4'd8: begin
+		3'd6: begin
 			litedramcore_bankmachine2_next_state <= 1'd0;
 		end
 		default: begin
@@ -6436,10 +6314,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine2_refresh_req) begin
 			end else begin
@@ -6474,10 +6348,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine2_refresh_req) begin
 			end else begin
@@ -6511,10 +6381,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine2_refresh_req) begin
@@ -6553,10 +6419,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -6578,10 +6440,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 		end
@@ -6607,10 +6465,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine2_refresh_req) begin
@@ -6646,10 +6500,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -6672,10 +6522,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -6694,10 +6540,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine2_refresh_req) begin
@@ -6736,10 +6578,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -6761,10 +6599,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine2_refresh_req) begin
@@ -6807,10 +6641,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -6829,10 +6659,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine2_refresh_req) begin
@@ -6932,7 +6758,7 @@ assign soc_litedramcore_bankmachine3_source_source_last = soc_litedramcore_bankm
 assign soc_litedramcore_bankmachine3_source_source_payload_we = soc_litedramcore_bankmachine3_pipe_valid_source_payload_we;
 assign soc_litedramcore_bankmachine3_source_source_payload_addr = soc_litedramcore_bankmachine3_pipe_valid_source_payload_addr;
 always @(*) begin
-	litedramcore_bankmachine3_next_state <= 4'd0;
+	litedramcore_bankmachine3_next_state <= 3'd0;
 	litedramcore_bankmachine3_next_state <= litedramcore_bankmachine3_state;
 	case (litedramcore_bankmachine3_state)
 		1'd1: begin
@@ -6950,7 +6776,7 @@ always @(*) begin
 		2'd3: begin
 			if (soc_litedramcore_bankmachine3_trccon_ready) begin
 				if (soc_litedramcore_bankmachine3_cmd_ready) begin
-					litedramcore_bankmachine3_next_state <= 3'd7;
+					litedramcore_bankmachine3_next_state <= 3'd6;
 				end
 			end
 		end
@@ -6960,15 +6786,9 @@ always @(*) begin
 			end
 		end
 		3'd5: begin
-			litedramcore_bankmachine3_next_state <= 3'd6;
-		end
-		3'd6: begin
 			litedramcore_bankmachine3_next_state <= 2'd3;
 		end
-		3'd7: begin
-			litedramcore_bankmachine3_next_state <= 4'd8;
-		end
-		4'd8: begin
+		3'd6: begin
 			litedramcore_bankmachine3_next_state <= 1'd0;
 		end
 		default: begin
@@ -7010,10 +6830,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -7035,10 +6851,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 		end
@@ -7064,10 +6876,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine3_refresh_req) begin
@@ -7103,10 +6911,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -7129,10 +6933,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -7151,10 +6951,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine3_refresh_req) begin
@@ -7193,10 +6989,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -7218,10 +7010,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine3_refresh_req) begin
@@ -7264,10 +7052,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -7286,10 +7070,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine3_refresh_req) begin
@@ -7325,10 +7105,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine3_refresh_req) begin
 			end else begin
@@ -7363,10 +7139,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine3_refresh_req) begin
 			end else begin
@@ -7400,10 +7172,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine3_refresh_req) begin
@@ -7503,7 +7271,7 @@ assign soc_litedramcore_bankmachine4_source_source_last = soc_litedramcore_bankm
 assign soc_litedramcore_bankmachine4_source_source_payload_we = soc_litedramcore_bankmachine4_pipe_valid_source_payload_we;
 assign soc_litedramcore_bankmachine4_source_source_payload_addr = soc_litedramcore_bankmachine4_pipe_valid_source_payload_addr;
 always @(*) begin
-	litedramcore_bankmachine4_next_state <= 4'd0;
+	litedramcore_bankmachine4_next_state <= 3'd0;
 	litedramcore_bankmachine4_next_state <= litedramcore_bankmachine4_state;
 	case (litedramcore_bankmachine4_state)
 		1'd1: begin
@@ -7521,7 +7289,7 @@ always @(*) begin
 		2'd3: begin
 			if (soc_litedramcore_bankmachine4_trccon_ready) begin
 				if (soc_litedramcore_bankmachine4_cmd_ready) begin
-					litedramcore_bankmachine4_next_state <= 3'd7;
+					litedramcore_bankmachine4_next_state <= 3'd6;
 				end
 			end
 		end
@@ -7531,15 +7299,9 @@ always @(*) begin
 			end
 		end
 		3'd5: begin
-			litedramcore_bankmachine4_next_state <= 3'd6;
-		end
-		3'd6: begin
 			litedramcore_bankmachine4_next_state <= 2'd3;
 		end
-		3'd7: begin
-			litedramcore_bankmachine4_next_state <= 4'd8;
-		end
-		4'd8: begin
+		3'd6: begin
 			litedramcore_bankmachine4_next_state <= 1'd0;
 		end
 		default: begin
@@ -7581,10 +7343,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -7603,10 +7361,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine4_refresh_req) begin
@@ -7645,10 +7399,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -7670,10 +7420,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine4_refresh_req) begin
@@ -7716,10 +7462,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -7738,10 +7480,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine4_refresh_req) begin
@@ -7777,10 +7515,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine4_refresh_req) begin
 			end else begin
@@ -7815,10 +7549,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine4_refresh_req) begin
 			end else begin
@@ -7852,10 +7582,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine4_refresh_req) begin
@@ -7894,10 +7620,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -7919,10 +7641,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 		end
@@ -7948,10 +7666,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine4_refresh_req) begin
@@ -7986,10 +7700,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 		end
@@ -8074,7 +7784,7 @@ assign soc_litedramcore_bankmachine5_source_source_last = soc_litedramcore_bankm
 assign soc_litedramcore_bankmachine5_source_source_payload_we = soc_litedramcore_bankmachine5_pipe_valid_source_payload_we;
 assign soc_litedramcore_bankmachine5_source_source_payload_addr = soc_litedramcore_bankmachine5_pipe_valid_source_payload_addr;
 always @(*) begin
-	litedramcore_bankmachine5_next_state <= 4'd0;
+	litedramcore_bankmachine5_next_state <= 3'd0;
 	litedramcore_bankmachine5_next_state <= litedramcore_bankmachine5_state;
 	case (litedramcore_bankmachine5_state)
 		1'd1: begin
@@ -8092,7 +7802,7 @@ always @(*) begin
 		2'd3: begin
 			if (soc_litedramcore_bankmachine5_trccon_ready) begin
 				if (soc_litedramcore_bankmachine5_cmd_ready) begin
-					litedramcore_bankmachine5_next_state <= 3'd7;
+					litedramcore_bankmachine5_next_state <= 3'd6;
 				end
 			end
 		end
@@ -8102,15 +7812,9 @@ always @(*) begin
 			end
 		end
 		3'd5: begin
-			litedramcore_bankmachine5_next_state <= 3'd6;
-		end
-		3'd6: begin
 			litedramcore_bankmachine5_next_state <= 2'd3;
 		end
-		3'd7: begin
-			litedramcore_bankmachine5_next_state <= 4'd8;
-		end
-		4'd8: begin
+		3'd6: begin
 			litedramcore_bankmachine5_next_state <= 1'd0;
 		end
 		default: begin
@@ -8155,10 +7859,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -8180,10 +7880,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine5_refresh_req) begin
@@ -8226,10 +7922,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -8248,10 +7940,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine5_refresh_req) begin
@@ -8287,10 +7975,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine5_refresh_req) begin
 			end else begin
@@ -8325,10 +8009,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine5_refresh_req) begin
 			end else begin
@@ -8362,10 +8042,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine5_refresh_req) begin
@@ -8404,10 +8080,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -8429,10 +8101,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 		end
@@ -8458,10 +8126,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine5_refresh_req) begin
@@ -8497,10 +8161,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -8523,10 +8183,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -8545,10 +8201,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine5_refresh_req) begin
@@ -8645,7 +8297,7 @@ assign soc_litedramcore_bankmachine6_source_source_last = soc_litedramcore_bankm
 assign soc_litedramcore_bankmachine6_source_source_payload_we = soc_litedramcore_bankmachine6_pipe_valid_source_payload_we;
 assign soc_litedramcore_bankmachine6_source_source_payload_addr = soc_litedramcore_bankmachine6_pipe_valid_source_payload_addr;
 always @(*) begin
-	litedramcore_bankmachine6_next_state <= 4'd0;
+	litedramcore_bankmachine6_next_state <= 3'd0;
 	litedramcore_bankmachine6_next_state <= litedramcore_bankmachine6_state;
 	case (litedramcore_bankmachine6_state)
 		1'd1: begin
@@ -8663,7 +8315,7 @@ always @(*) begin
 		2'd3: begin
 			if (soc_litedramcore_bankmachine6_trccon_ready) begin
 				if (soc_litedramcore_bankmachine6_cmd_ready) begin
-					litedramcore_bankmachine6_next_state <= 3'd7;
+					litedramcore_bankmachine6_next_state <= 3'd6;
 				end
 			end
 		end
@@ -8673,15 +8325,9 @@ always @(*) begin
 			end
 		end
 		3'd5: begin
-			litedramcore_bankmachine6_next_state <= 3'd6;
-		end
-		3'd6: begin
 			litedramcore_bankmachine6_next_state <= 2'd3;
 		end
-		3'd7: begin
-			litedramcore_bankmachine6_next_state <= 4'd8;
-		end
-		4'd8: begin
+		3'd6: begin
 			litedramcore_bankmachine6_next_state <= 1'd0;
 		end
 		default: begin
@@ -8720,10 +8366,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine6_refresh_req) begin
 			end else begin
@@ -8758,10 +8400,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine6_refresh_req) begin
 			end else begin
@@ -8795,10 +8433,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine6_refresh_req) begin
@@ -8837,10 +8471,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -8862,10 +8492,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 		end
@@ -8891,10 +8517,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine6_refresh_req) begin
@@ -8930,10 +8552,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -8956,10 +8574,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -8978,10 +8592,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine6_refresh_req) begin
@@ -9020,10 +8630,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -9045,10 +8651,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine6_refresh_req) begin
@@ -9091,10 +8693,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -9113,10 +8711,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine6_refresh_req) begin
@@ -9216,7 +8810,7 @@ assign soc_litedramcore_bankmachine7_source_source_last = soc_litedramcore_bankm
 assign soc_litedramcore_bankmachine7_source_source_payload_we = soc_litedramcore_bankmachine7_pipe_valid_source_payload_we;
 assign soc_litedramcore_bankmachine7_source_source_payload_addr = soc_litedramcore_bankmachine7_pipe_valid_source_payload_addr;
 always @(*) begin
-	litedramcore_bankmachine7_next_state <= 4'd0;
+	litedramcore_bankmachine7_next_state <= 3'd0;
 	litedramcore_bankmachine7_next_state <= litedramcore_bankmachine7_state;
 	case (litedramcore_bankmachine7_state)
 		1'd1: begin
@@ -9234,7 +8828,7 @@ always @(*) begin
 		2'd3: begin
 			if (soc_litedramcore_bankmachine7_trccon_ready) begin
 				if (soc_litedramcore_bankmachine7_cmd_ready) begin
-					litedramcore_bankmachine7_next_state <= 3'd7;
+					litedramcore_bankmachine7_next_state <= 3'd6;
 				end
 			end
 		end
@@ -9244,15 +8838,9 @@ always @(*) begin
 			end
 		end
 		3'd5: begin
-			litedramcore_bankmachine7_next_state <= 3'd6;
-		end
-		3'd6: begin
 			litedramcore_bankmachine7_next_state <= 2'd3;
 		end
-		3'd7: begin
-			litedramcore_bankmachine7_next_state <= 4'd8;
-		end
-		4'd8: begin
+		3'd6: begin
 			litedramcore_bankmachine7_next_state <= 1'd0;
 		end
 		default: begin
@@ -9294,10 +8882,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -9319,10 +8903,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 		end
@@ -9348,10 +8928,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine7_refresh_req) begin
@@ -9387,10 +8963,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -9413,10 +8985,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -9435,10 +9003,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine7_refresh_req) begin
@@ -9477,10 +9041,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -9502,10 +9062,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine7_refresh_req) begin
@@ -9548,10 +9104,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 		end
 	endcase
@@ -9570,10 +9122,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine7_refresh_req) begin
@@ -9609,10 +9157,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine7_refresh_req) begin
 			end else begin
@@ -9647,10 +9191,6 @@ always @(*) begin
 		end
 		3'd6: begin
 		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
 		default: begin
 			if (soc_litedramcore_bankmachine7_refresh_req) begin
 			end else begin
@@ -9684,10 +9224,6 @@ always @(*) begin
 		3'd5: begin
 		end
 		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
 		end
 		default: begin
 			if (soc_litedramcore_bankmachine7_refresh_req) begin
@@ -9894,7 +9430,7 @@ assign soc_litedramcore_dfi_p2_odt = {1{soc_litedramcore_steerer5}};
 assign soc_litedramcore_dfi_p3_reset_n = 1'd1;
 assign soc_litedramcore_dfi_p3_cke = {1{soc_litedramcore_steerer6}};
 assign soc_litedramcore_dfi_p3_odt = {1{soc_litedramcore_steerer7}};
-assign soc_litedramcore_tfawcon_count = ((((soc_litedramcore_tfawcon_window[0] + soc_litedramcore_tfawcon_window[1]) + soc_litedramcore_tfawcon_window[2]) + soc_litedramcore_tfawcon_window[3]) + soc_litedramcore_tfawcon_window[4]);
+assign soc_litedramcore_tfawcon_count = ((soc_litedramcore_tfawcon_window[0] + soc_litedramcore_tfawcon_window[1]) + soc_litedramcore_tfawcon_window[2]);
 always @(*) begin
 	litedramcore_multiplexer_next_state <= 4'd0;
 	litedramcore_multiplexer_next_state <= litedramcore_multiplexer_state;
@@ -9990,34 +9526,6 @@ always @(*) begin
 	endcase
 end
 always @(*) begin
-	soc_litedramcore_en1 <= 1'd0;
-	case (litedramcore_multiplexer_state)
-		1'd1: begin
-			soc_litedramcore_en1 <= 1'd1;
-		end
-		2'd2: begin
-		end
-		2'd3: begin
-		end
-		3'd4: begin
-		end
-		3'd5: begin
-		end
-		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
-		4'd9: begin
-		end
-		4'd10: begin
-		end
-		default: begin
-		end
-	endcase
-end
-always @(*) begin
 	soc_litedramcore_steerer_sel0 <= 2'd0;
 	case (litedramcore_multiplexer_state)
 		1'd1: begin
@@ -10097,6 +9605,34 @@ always @(*) begin
 			if (1'd1) begin
 				soc_litedramcore_steerer_sel1 <= 1'd1;
 			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramcore_en0 <= 1'd0;
+	case (litedramcore_multiplexer_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		3'd4: begin
+		end
+		3'd5: begin
+		end
+		3'd6: begin
+		end
+		3'd7: begin
+		end
+		4'd8: begin
+		end
+		4'd9: begin
+		end
+		4'd10: begin
+		end
+		default: begin
+			soc_litedramcore_en0 <= 1'd1;
 		end
 	endcase
 end
@@ -10218,34 +9754,6 @@ always @(*) begin
 	endcase
 end
 always @(*) begin
-	soc_litedramcore_en0 <= 1'd0;
-	case (litedramcore_multiplexer_state)
-		1'd1: begin
-		end
-		2'd2: begin
-		end
-		2'd3: begin
-		end
-		3'd4: begin
-		end
-		3'd5: begin
-		end
-		3'd6: begin
-		end
-		3'd7: begin
-		end
-		4'd8: begin
-		end
-		4'd9: begin
-		end
-		4'd10: begin
-		end
-		default: begin
-			soc_litedramcore_en0 <= 1'd1;
-		end
-	endcase
-end
-always @(*) begin
 	soc_litedramcore_cmd_ready <= 1'd0;
 	case (litedramcore_multiplexer_state)
 		1'd1: begin
@@ -10341,6 +9849,34 @@ always @(*) begin
 	case (litedramcore_multiplexer_state)
 		1'd1: begin
 			soc_litedramcore_choose_req_want_writes <= 1'd1;
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		3'd4: begin
+		end
+		3'd5: begin
+		end
+		3'd6: begin
+		end
+		3'd7: begin
+		end
+		4'd8: begin
+		end
+		4'd9: begin
+		end
+		4'd10: begin
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramcore_en1 <= 1'd0;
+	case (litedramcore_multiplexer_state)
+		1'd1: begin
+			soc_litedramcore_en1 <= 1'd1;
 		end
 		2'd2: begin
 		end
@@ -10604,18 +10140,6 @@ always @(*) begin
 	endcase
 end
 always @(*) begin
-	soc_litedramnativeport1_cmd_valid <= 1'd0;
-	case (litedramcore_litedramwishbone2native1_state)
-		1'd1: begin
-		end
-		2'd2: begin
-		end
-		default: begin
-			soc_litedramnativeport1_cmd_valid <= (soc_interface1_wb_port_cyc & soc_interface1_wb_port_stb);
-		end
-	endcase
-end
-always @(*) begin
 	soc_litedramwishbone2native1_is_ongoing <= 1'd0;
 	case (litedramcore_litedramwishbone2native1_state)
 		1'd1: begin
@@ -10687,6 +10211,18 @@ always @(*) begin
 	endcase
 end
 always @(*) begin
+	soc_litedramnativeport1_cmd_valid <= 1'd0;
+	case (litedramcore_litedramwishbone2native1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		default: begin
+			soc_litedramnativeport1_cmd_valid <= (soc_interface1_wb_port_cyc & soc_interface1_wb_port_stb);
+		end
+	endcase
+end
+always @(*) begin
 	litedramcore_wishbone2csr_next_state <= 2'd0;
 	litedramcore_wishbone2csr_next_state <= litedramcore_wishbone2csr_state;
 	case (litedramcore_wishbone2csr_state)
@@ -10700,18 +10236,6 @@ always @(*) begin
 			if ((litedramcore_wishbone_cyc & litedramcore_wishbone_stb)) begin
 				litedramcore_wishbone2csr_next_state <= 1'd1;
 			end
-		end
-	endcase
-end
-always @(*) begin
-	litedramcore_wishbone_ack <= 1'd0;
-	case (litedramcore_wishbone2csr_state)
-		1'd1: begin
-		end
-		2'd2: begin
-			litedramcore_wishbone_ack <= 1'd1;
-		end
-		default: begin
 		end
 	endcase
 end
@@ -10811,6 +10335,18 @@ always @(*) begin
 		end
 	endcase
 end
+always @(*) begin
+	litedramcore_wishbone_ack <= 1'd0;
+	case (litedramcore_wishbone2csr_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			litedramcore_wishbone_ack <= 1'd1;
+		end
+		default: begin
+		end
+	endcase
+end
 assign litedramcore_wishbone_adr = soc_wb_bus_adr;
 assign litedramcore_wishbone_dat_w = soc_wb_bus_dat_w;
 assign soc_wb_bus_dat_r = litedramcore_wishbone_dat_r;
@@ -10825,28 +10361,28 @@ assign soc_wb_bus_err = litedramcore_wishbone_err;
 assign csrbank0_sel = (interface0_bank_bus_adr[13:9] == 1'd0);
 assign csrbank0_init_done0_r = interface0_bank_bus_dat_w[0];
 always @(*) begin
-	csrbank0_init_done0_re <= 1'd0;
-	if ((csrbank0_sel & (interface0_bank_bus_adr[8:0] == 1'd0))) begin
-		csrbank0_init_done0_re <= interface0_bank_bus_we;
-	end
-end
-always @(*) begin
 	csrbank0_init_done0_we <= 1'd0;
 	if ((csrbank0_sel & (interface0_bank_bus_adr[8:0] == 1'd0))) begin
 		csrbank0_init_done0_we <= (~interface0_bank_bus_we);
 	end
 end
-assign csrbank0_init_error0_r = interface0_bank_bus_dat_w[0];
 always @(*) begin
-	csrbank0_init_error0_we <= 1'd0;
-	if ((csrbank0_sel & (interface0_bank_bus_adr[8:0] == 1'd1))) begin
-		csrbank0_init_error0_we <= (~interface0_bank_bus_we);
+	csrbank0_init_done0_re <= 1'd0;
+	if ((csrbank0_sel & (interface0_bank_bus_adr[8:0] == 1'd0))) begin
+		csrbank0_init_done0_re <= interface0_bank_bus_we;
 	end
 end
+assign csrbank0_init_error0_r = interface0_bank_bus_dat_w[0];
 always @(*) begin
 	csrbank0_init_error0_re <= 1'd0;
 	if ((csrbank0_sel & (interface0_bank_bus_adr[8:0] == 1'd1))) begin
 		csrbank0_init_error0_re <= interface0_bank_bus_we;
+	end
+end
+always @(*) begin
+	csrbank0_init_error0_we <= 1'd0;
+	if ((csrbank0_sel & (interface0_bank_bus_adr[8:0] == 1'd1))) begin
+		csrbank0_init_error0_we <= (~interface0_bank_bus_we);
 	end
 end
 assign csrbank0_init_done0_w = soc_init_done_storage;
@@ -10854,28 +10390,28 @@ assign csrbank0_init_error0_w = soc_init_error_storage;
 assign csrbank1_sel = (interface1_bank_bus_adr[13:9] == 1'd1);
 assign csrbank1_dfii_control0_r = interface1_bank_bus_dat_w[3:0];
 always @(*) begin
-	csrbank1_dfii_control0_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 1'd0))) begin
-		csrbank1_dfii_control0_we <= (~interface1_bank_bus_we);
-	end
-end
-always @(*) begin
 	csrbank1_dfii_control0_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 1'd0))) begin
 		csrbank1_dfii_control0_re <= interface1_bank_bus_we;
 	end
 end
-assign csrbank1_dfii_pi0_command0_r = interface1_bank_bus_dat_w[5:0];
 always @(*) begin
-	csrbank1_dfii_pi0_command0_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 1'd1))) begin
-		csrbank1_dfii_pi0_command0_we <= (~interface1_bank_bus_we);
+	csrbank1_dfii_control0_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 1'd0))) begin
+		csrbank1_dfii_control0_we <= (~interface1_bank_bus_we);
 	end
 end
+assign csrbank1_dfii_pi0_command0_r = interface1_bank_bus_dat_w[5:0];
 always @(*) begin
 	csrbank1_dfii_pi0_command0_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 1'd1))) begin
 		csrbank1_dfii_pi0_command0_re <= interface1_bank_bus_we;
+	end
+end
+always @(*) begin
+	csrbank1_dfii_pi0_command0_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 1'd1))) begin
+		csrbank1_dfii_pi0_command0_we <= (~interface1_bank_bus_we);
 	end
 end
 assign soc_litedramcore_phaseinjector0_command_issue_r = interface1_bank_bus_dat_w[0];
@@ -10893,67 +10429,67 @@ always @(*) begin
 end
 assign csrbank1_dfii_pi0_address0_r = interface1_bank_bus_dat_w[13:0];
 always @(*) begin
-	csrbank1_dfii_pi0_address0_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 2'd3))) begin
-		csrbank1_dfii_pi0_address0_re <= interface1_bank_bus_we;
-	end
-end
-always @(*) begin
 	csrbank1_dfii_pi0_address0_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 2'd3))) begin
 		csrbank1_dfii_pi0_address0_we <= (~interface1_bank_bus_we);
 	end
 end
-assign csrbank1_dfii_pi0_baddress0_r = interface1_bank_bus_dat_w[2:0];
 always @(*) begin
-	csrbank1_dfii_pi0_baddress0_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd4))) begin
-		csrbank1_dfii_pi0_baddress0_we <= (~interface1_bank_bus_we);
+	csrbank1_dfii_pi0_address0_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 2'd3))) begin
+		csrbank1_dfii_pi0_address0_re <= interface1_bank_bus_we;
 	end
 end
+assign csrbank1_dfii_pi0_baddress0_r = interface1_bank_bus_dat_w[2:0];
 always @(*) begin
 	csrbank1_dfii_pi0_baddress0_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd4))) begin
 		csrbank1_dfii_pi0_baddress0_re <= interface1_bank_bus_we;
 	end
 end
-assign csrbank1_dfii_pi0_wrdata0_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank1_dfii_pi0_wrdata0_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd5))) begin
-		csrbank1_dfii_pi0_wrdata0_re <= interface1_bank_bus_we;
+	csrbank1_dfii_pi0_baddress0_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd4))) begin
+		csrbank1_dfii_pi0_baddress0_we <= (~interface1_bank_bus_we);
 	end
 end
+assign csrbank1_dfii_pi0_wrdata0_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
 	csrbank1_dfii_pi0_wrdata0_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd5))) begin
 		csrbank1_dfii_pi0_wrdata0_we <= (~interface1_bank_bus_we);
 	end
 end
-assign csrbank1_dfii_pi0_rddata_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank1_dfii_pi0_rddata_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd6))) begin
-		csrbank1_dfii_pi0_rddata_re <= interface1_bank_bus_we;
+	csrbank1_dfii_pi0_wrdata0_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd5))) begin
+		csrbank1_dfii_pi0_wrdata0_re <= interface1_bank_bus_we;
 	end
 end
+assign csrbank1_dfii_pi0_rddata_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
 	csrbank1_dfii_pi0_rddata_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd6))) begin
 		csrbank1_dfii_pi0_rddata_we <= (~interface1_bank_bus_we);
 	end
 end
-assign csrbank1_dfii_pi1_command0_r = interface1_bank_bus_dat_w[5:0];
 always @(*) begin
-	csrbank1_dfii_pi1_command0_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd7))) begin
-		csrbank1_dfii_pi1_command0_we <= (~interface1_bank_bus_we);
+	csrbank1_dfii_pi0_rddata_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd6))) begin
+		csrbank1_dfii_pi0_rddata_re <= interface1_bank_bus_we;
 	end
 end
+assign csrbank1_dfii_pi1_command0_r = interface1_bank_bus_dat_w[5:0];
 always @(*) begin
 	csrbank1_dfii_pi1_command0_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd7))) begin
 		csrbank1_dfii_pi1_command0_re <= interface1_bank_bus_we;
+	end
+end
+always @(*) begin
+	csrbank1_dfii_pi1_command0_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 3'd7))) begin
+		csrbank1_dfii_pi1_command0_we <= (~interface1_bank_bus_we);
 	end
 end
 assign soc_litedramcore_phaseinjector1_command_issue_r = interface1_bank_bus_dat_w[0];
@@ -10971,67 +10507,67 @@ always @(*) begin
 end
 assign csrbank1_dfii_pi1_address0_r = interface1_bank_bus_dat_w[13:0];
 always @(*) begin
-	csrbank1_dfii_pi1_address0_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd9))) begin
-		csrbank1_dfii_pi1_address0_re <= interface1_bank_bus_we;
-	end
-end
-always @(*) begin
 	csrbank1_dfii_pi1_address0_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd9))) begin
 		csrbank1_dfii_pi1_address0_we <= (~interface1_bank_bus_we);
 	end
 end
-assign csrbank1_dfii_pi1_baddress0_r = interface1_bank_bus_dat_w[2:0];
 always @(*) begin
-	csrbank1_dfii_pi1_baddress0_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd10))) begin
-		csrbank1_dfii_pi1_baddress0_re <= interface1_bank_bus_we;
+	csrbank1_dfii_pi1_address0_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd9))) begin
+		csrbank1_dfii_pi1_address0_re <= interface1_bank_bus_we;
 	end
 end
+assign csrbank1_dfii_pi1_baddress0_r = interface1_bank_bus_dat_w[2:0];
 always @(*) begin
 	csrbank1_dfii_pi1_baddress0_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd10))) begin
 		csrbank1_dfii_pi1_baddress0_we <= (~interface1_bank_bus_we);
 	end
 end
-assign csrbank1_dfii_pi1_wrdata0_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank1_dfii_pi1_wrdata0_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd11))) begin
-		csrbank1_dfii_pi1_wrdata0_we <= (~interface1_bank_bus_we);
+	csrbank1_dfii_pi1_baddress0_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd10))) begin
+		csrbank1_dfii_pi1_baddress0_re <= interface1_bank_bus_we;
 	end
 end
+assign csrbank1_dfii_pi1_wrdata0_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
 	csrbank1_dfii_pi1_wrdata0_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd11))) begin
 		csrbank1_dfii_pi1_wrdata0_re <= interface1_bank_bus_we;
 	end
 end
-assign csrbank1_dfii_pi1_rddata_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank1_dfii_pi1_rddata_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd12))) begin
-		csrbank1_dfii_pi1_rddata_re <= interface1_bank_bus_we;
+	csrbank1_dfii_pi1_wrdata0_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd11))) begin
+		csrbank1_dfii_pi1_wrdata0_we <= (~interface1_bank_bus_we);
 	end
 end
+assign csrbank1_dfii_pi1_rddata_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
 	csrbank1_dfii_pi1_rddata_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd12))) begin
 		csrbank1_dfii_pi1_rddata_we <= (~interface1_bank_bus_we);
 	end
 end
-assign csrbank1_dfii_pi2_command0_r = interface1_bank_bus_dat_w[5:0];
 always @(*) begin
-	csrbank1_dfii_pi2_command0_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd13))) begin
-		csrbank1_dfii_pi2_command0_re <= interface1_bank_bus_we;
+	csrbank1_dfii_pi1_rddata_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd12))) begin
+		csrbank1_dfii_pi1_rddata_re <= interface1_bank_bus_we;
 	end
 end
+assign csrbank1_dfii_pi2_command0_r = interface1_bank_bus_dat_w[5:0];
 always @(*) begin
 	csrbank1_dfii_pi2_command0_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd13))) begin
 		csrbank1_dfii_pi2_command0_we <= (~interface1_bank_bus_we);
+	end
+end
+always @(*) begin
+	csrbank1_dfii_pi2_command0_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd13))) begin
+		csrbank1_dfii_pi2_command0_re <= interface1_bank_bus_we;
 	end
 end
 assign soc_litedramcore_phaseinjector2_command_issue_r = interface1_bank_bus_dat_w[0];
@@ -11049,67 +10585,67 @@ always @(*) begin
 end
 assign csrbank1_dfii_pi2_address0_r = interface1_bank_bus_dat_w[13:0];
 always @(*) begin
-	csrbank1_dfii_pi2_address0_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd15))) begin
-		csrbank1_dfii_pi2_address0_we <= (~interface1_bank_bus_we);
-	end
-end
-always @(*) begin
 	csrbank1_dfii_pi2_address0_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd15))) begin
 		csrbank1_dfii_pi2_address0_re <= interface1_bank_bus_we;
 	end
 end
-assign csrbank1_dfii_pi2_baddress0_r = interface1_bank_bus_dat_w[2:0];
 always @(*) begin
-	csrbank1_dfii_pi2_baddress0_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd16))) begin
-		csrbank1_dfii_pi2_baddress0_re <= interface1_bank_bus_we;
+	csrbank1_dfii_pi2_address0_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 4'd15))) begin
+		csrbank1_dfii_pi2_address0_we <= (~interface1_bank_bus_we);
 	end
 end
+assign csrbank1_dfii_pi2_baddress0_r = interface1_bank_bus_dat_w[2:0];
 always @(*) begin
 	csrbank1_dfii_pi2_baddress0_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd16))) begin
 		csrbank1_dfii_pi2_baddress0_we <= (~interface1_bank_bus_we);
 	end
 end
-assign csrbank1_dfii_pi2_wrdata0_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank1_dfii_pi2_wrdata0_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd17))) begin
-		csrbank1_dfii_pi2_wrdata0_we <= (~interface1_bank_bus_we);
+	csrbank1_dfii_pi2_baddress0_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd16))) begin
+		csrbank1_dfii_pi2_baddress0_re <= interface1_bank_bus_we;
 	end
 end
+assign csrbank1_dfii_pi2_wrdata0_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
 	csrbank1_dfii_pi2_wrdata0_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd17))) begin
 		csrbank1_dfii_pi2_wrdata0_re <= interface1_bank_bus_we;
 	end
 end
-assign csrbank1_dfii_pi2_rddata_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank1_dfii_pi2_rddata_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd18))) begin
-		csrbank1_dfii_pi2_rddata_we <= (~interface1_bank_bus_we);
+	csrbank1_dfii_pi2_wrdata0_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd17))) begin
+		csrbank1_dfii_pi2_wrdata0_we <= (~interface1_bank_bus_we);
 	end
 end
+assign csrbank1_dfii_pi2_rddata_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
 	csrbank1_dfii_pi2_rddata_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd18))) begin
 		csrbank1_dfii_pi2_rddata_re <= interface1_bank_bus_we;
 	end
 end
-assign csrbank1_dfii_pi3_command0_r = interface1_bank_bus_dat_w[5:0];
 always @(*) begin
-	csrbank1_dfii_pi3_command0_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd19))) begin
-		csrbank1_dfii_pi3_command0_re <= interface1_bank_bus_we;
+	csrbank1_dfii_pi2_rddata_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd18))) begin
+		csrbank1_dfii_pi2_rddata_we <= (~interface1_bank_bus_we);
 	end
 end
+assign csrbank1_dfii_pi3_command0_r = interface1_bank_bus_dat_w[5:0];
 always @(*) begin
 	csrbank1_dfii_pi3_command0_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd19))) begin
 		csrbank1_dfii_pi3_command0_we <= (~interface1_bank_bus_we);
+	end
+end
+always @(*) begin
+	csrbank1_dfii_pi3_command0_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd19))) begin
+		csrbank1_dfii_pi3_command0_re <= interface1_bank_bus_we;
 	end
 end
 assign soc_litedramcore_phaseinjector3_command_issue_r = interface1_bank_bus_dat_w[0];
@@ -11127,54 +10663,54 @@ always @(*) begin
 end
 assign csrbank1_dfii_pi3_address0_r = interface1_bank_bus_dat_w[13:0];
 always @(*) begin
-	csrbank1_dfii_pi3_address0_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd21))) begin
-		csrbank1_dfii_pi3_address0_we <= (~interface1_bank_bus_we);
-	end
-end
-always @(*) begin
 	csrbank1_dfii_pi3_address0_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd21))) begin
 		csrbank1_dfii_pi3_address0_re <= interface1_bank_bus_we;
 	end
 end
-assign csrbank1_dfii_pi3_baddress0_r = interface1_bank_bus_dat_w[2:0];
 always @(*) begin
-	csrbank1_dfii_pi3_baddress0_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd22))) begin
-		csrbank1_dfii_pi3_baddress0_we <= (~interface1_bank_bus_we);
+	csrbank1_dfii_pi3_address0_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd21))) begin
+		csrbank1_dfii_pi3_address0_we <= (~interface1_bank_bus_we);
 	end
 end
+assign csrbank1_dfii_pi3_baddress0_r = interface1_bank_bus_dat_w[2:0];
 always @(*) begin
 	csrbank1_dfii_pi3_baddress0_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd22))) begin
 		csrbank1_dfii_pi3_baddress0_re <= interface1_bank_bus_we;
 	end
 end
-assign csrbank1_dfii_pi3_wrdata0_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank1_dfii_pi3_wrdata0_re <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd23))) begin
-		csrbank1_dfii_pi3_wrdata0_re <= interface1_bank_bus_we;
+	csrbank1_dfii_pi3_baddress0_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd22))) begin
+		csrbank1_dfii_pi3_baddress0_we <= (~interface1_bank_bus_we);
 	end
 end
+assign csrbank1_dfii_pi3_wrdata0_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
 	csrbank1_dfii_pi3_wrdata0_we <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd23))) begin
 		csrbank1_dfii_pi3_wrdata0_we <= (~interface1_bank_bus_we);
 	end
 end
-assign csrbank1_dfii_pi3_rddata_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
-	csrbank1_dfii_pi3_rddata_we <= 1'd0;
-	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd24))) begin
-		csrbank1_dfii_pi3_rddata_we <= (~interface1_bank_bus_we);
+	csrbank1_dfii_pi3_wrdata0_re <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd23))) begin
+		csrbank1_dfii_pi3_wrdata0_re <= interface1_bank_bus_we;
 	end
 end
+assign csrbank1_dfii_pi3_rddata_r = interface1_bank_bus_dat_w[31:0];
 always @(*) begin
 	csrbank1_dfii_pi3_rddata_re <= 1'd0;
 	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd24))) begin
 		csrbank1_dfii_pi3_rddata_re <= interface1_bank_bus_we;
+	end
+end
+always @(*) begin
+	csrbank1_dfii_pi3_rddata_we <= 1'd0;
+	if ((csrbank1_sel & (interface1_bank_bus_adr[8:0] == 5'd24))) begin
+		csrbank1_dfii_pi3_rddata_we <= (~interface1_bank_bus_we);
 	end
 end
 assign soc_litedramcore_sel = soc_litedramcore_storage[0];
@@ -12643,7 +12179,7 @@ always @(posedge sys_clk) begin
 	if ((soc_litedramcore_timer_wait & (~soc_litedramcore_timer_done0))) begin
 		soc_litedramcore_timer_count1 <= (soc_litedramcore_timer_count1 - 1'd1);
 	end else begin
-		soc_litedramcore_timer_count1 <= 10'd781;
+		soc_litedramcore_timer_count1 <= 9'd390;
 	end
 	soc_litedramcore_postponer_req_o <= 1'd0;
 	if (soc_litedramcore_postponer_req_i) begin
@@ -12675,14 +12211,14 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_cmd_payload_ras <= 1'd1;
 		soc_litedramcore_cmd_payload_we <= 1'd1;
 	end
-	if ((soc_litedramcore_sequencer_counter == 2'd3)) begin
+	if ((soc_litedramcore_sequencer_counter == 2'd2)) begin
 		soc_litedramcore_cmd_payload_a <= 11'd1024;
 		soc_litedramcore_cmd_payload_ba <= 1'd0;
 		soc_litedramcore_cmd_payload_cas <= 1'd1;
 		soc_litedramcore_cmd_payload_ras <= 1'd1;
 		soc_litedramcore_cmd_payload_we <= 1'd0;
 	end
-	if ((soc_litedramcore_sequencer_counter == 6'd35)) begin
+	if ((soc_litedramcore_sequencer_counter == 6'd34)) begin
 		soc_litedramcore_cmd_payload_a <= 1'd0;
 		soc_litedramcore_cmd_payload_ba <= 1'd0;
 		soc_litedramcore_cmd_payload_cas <= 1'd0;
@@ -12690,7 +12226,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_cmd_payload_we <= 1'd0;
 		soc_litedramcore_sequencer_done1 <= 1'd1;
 	end
-	if ((soc_litedramcore_sequencer_counter == 6'd35)) begin
+	if ((soc_litedramcore_sequencer_counter == 6'd34)) begin
 		soc_litedramcore_sequencer_counter <= 1'd0;
 	end else begin
 		if ((soc_litedramcore_sequencer_counter != 1'd0)) begin
@@ -12704,7 +12240,7 @@ always @(posedge sys_clk) begin
 	if ((soc_litedramcore_zqcs_timer_wait & (~soc_litedramcore_zqcs_timer_done0))) begin
 		soc_litedramcore_zqcs_timer_count1 <= (soc_litedramcore_zqcs_timer_count1 - 1'd1);
 	end else begin
-		soc_litedramcore_zqcs_timer_count1 <= 27'd99999999;
+		soc_litedramcore_zqcs_timer_count1 <= 26'd49999999;
 	end
 	soc_litedramcore_zqcs_executer_done <= 1'd0;
 	if ((soc_litedramcore_zqcs_executer_start & (soc_litedramcore_zqcs_executer_counter == 1'd0))) begin
@@ -12714,14 +12250,14 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_cmd_payload_ras <= 1'd1;
 		soc_litedramcore_cmd_payload_we <= 1'd1;
 	end
-	if ((soc_litedramcore_zqcs_executer_counter == 2'd3)) begin
+	if ((soc_litedramcore_zqcs_executer_counter == 2'd2)) begin
 		soc_litedramcore_cmd_payload_a <= 1'd0;
 		soc_litedramcore_cmd_payload_ba <= 1'd0;
 		soc_litedramcore_cmd_payload_cas <= 1'd0;
 		soc_litedramcore_cmd_payload_ras <= 1'd0;
 		soc_litedramcore_cmd_payload_we <= 1'd1;
 	end
-	if ((soc_litedramcore_zqcs_executer_counter == 5'd19)) begin
+	if ((soc_litedramcore_zqcs_executer_counter == 5'd18)) begin
 		soc_litedramcore_cmd_payload_a <= 1'd0;
 		soc_litedramcore_cmd_payload_ba <= 1'd0;
 		soc_litedramcore_cmd_payload_cas <= 1'd0;
@@ -12729,7 +12265,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_cmd_payload_we <= 1'd0;
 		soc_litedramcore_zqcs_executer_done <= 1'd1;
 	end
-	if ((soc_litedramcore_zqcs_executer_counter == 5'd19)) begin
+	if ((soc_litedramcore_zqcs_executer_counter == 5'd18)) begin
 		soc_litedramcore_zqcs_executer_counter <= 1'd0;
 	end else begin
 		if ((soc_litedramcore_zqcs_executer_counter != 1'd0)) begin
@@ -12772,7 +12308,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine0_pipe_valid_source_payload_addr <= soc_litedramcore_bankmachine0_pipe_valid_sink_payload_addr;
 	end
 	if (soc_litedramcore_bankmachine0_twtpcon_valid) begin
-		soc_litedramcore_bankmachine0_twtpcon_count <= 3'd5;
+		soc_litedramcore_bankmachine0_twtpcon_count <= 3'd4;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine0_twtpcon_ready <= 1'd1;
 		end else begin
@@ -12787,7 +12323,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine0_trccon_valid) begin
-		soc_litedramcore_bankmachine0_trccon_count <= 3'd5;
+		soc_litedramcore_bankmachine0_trccon_count <= 2'd3;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine0_trccon_ready <= 1'd1;
 		end else begin
@@ -12802,7 +12338,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine0_trascon_valid) begin
-		soc_litedramcore_bankmachine0_trascon_count <= 3'd4;
+		soc_litedramcore_bankmachine0_trascon_count <= 2'd2;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine0_trascon_ready <= 1'd1;
 		end else begin
@@ -12848,7 +12384,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine1_pipe_valid_source_payload_addr <= soc_litedramcore_bankmachine1_pipe_valid_sink_payload_addr;
 	end
 	if (soc_litedramcore_bankmachine1_twtpcon_valid) begin
-		soc_litedramcore_bankmachine1_twtpcon_count <= 3'd5;
+		soc_litedramcore_bankmachine1_twtpcon_count <= 3'd4;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine1_twtpcon_ready <= 1'd1;
 		end else begin
@@ -12863,7 +12399,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine1_trccon_valid) begin
-		soc_litedramcore_bankmachine1_trccon_count <= 3'd5;
+		soc_litedramcore_bankmachine1_trccon_count <= 2'd3;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine1_trccon_ready <= 1'd1;
 		end else begin
@@ -12878,7 +12414,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine1_trascon_valid) begin
-		soc_litedramcore_bankmachine1_trascon_count <= 3'd4;
+		soc_litedramcore_bankmachine1_trascon_count <= 2'd2;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine1_trascon_ready <= 1'd1;
 		end else begin
@@ -12924,7 +12460,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine2_pipe_valid_source_payload_addr <= soc_litedramcore_bankmachine2_pipe_valid_sink_payload_addr;
 	end
 	if (soc_litedramcore_bankmachine2_twtpcon_valid) begin
-		soc_litedramcore_bankmachine2_twtpcon_count <= 3'd5;
+		soc_litedramcore_bankmachine2_twtpcon_count <= 3'd4;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine2_twtpcon_ready <= 1'd1;
 		end else begin
@@ -12939,7 +12475,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine2_trccon_valid) begin
-		soc_litedramcore_bankmachine2_trccon_count <= 3'd5;
+		soc_litedramcore_bankmachine2_trccon_count <= 2'd3;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine2_trccon_ready <= 1'd1;
 		end else begin
@@ -12954,7 +12490,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine2_trascon_valid) begin
-		soc_litedramcore_bankmachine2_trascon_count <= 3'd4;
+		soc_litedramcore_bankmachine2_trascon_count <= 2'd2;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine2_trascon_ready <= 1'd1;
 		end else begin
@@ -13000,7 +12536,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine3_pipe_valid_source_payload_addr <= soc_litedramcore_bankmachine3_pipe_valid_sink_payload_addr;
 	end
 	if (soc_litedramcore_bankmachine3_twtpcon_valid) begin
-		soc_litedramcore_bankmachine3_twtpcon_count <= 3'd5;
+		soc_litedramcore_bankmachine3_twtpcon_count <= 3'd4;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine3_twtpcon_ready <= 1'd1;
 		end else begin
@@ -13015,7 +12551,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine3_trccon_valid) begin
-		soc_litedramcore_bankmachine3_trccon_count <= 3'd5;
+		soc_litedramcore_bankmachine3_trccon_count <= 2'd3;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine3_trccon_ready <= 1'd1;
 		end else begin
@@ -13030,7 +12566,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine3_trascon_valid) begin
-		soc_litedramcore_bankmachine3_trascon_count <= 3'd4;
+		soc_litedramcore_bankmachine3_trascon_count <= 2'd2;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine3_trascon_ready <= 1'd1;
 		end else begin
@@ -13076,7 +12612,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine4_pipe_valid_source_payload_addr <= soc_litedramcore_bankmachine4_pipe_valid_sink_payload_addr;
 	end
 	if (soc_litedramcore_bankmachine4_twtpcon_valid) begin
-		soc_litedramcore_bankmachine4_twtpcon_count <= 3'd5;
+		soc_litedramcore_bankmachine4_twtpcon_count <= 3'd4;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine4_twtpcon_ready <= 1'd1;
 		end else begin
@@ -13091,7 +12627,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine4_trccon_valid) begin
-		soc_litedramcore_bankmachine4_trccon_count <= 3'd5;
+		soc_litedramcore_bankmachine4_trccon_count <= 2'd3;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine4_trccon_ready <= 1'd1;
 		end else begin
@@ -13106,7 +12642,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine4_trascon_valid) begin
-		soc_litedramcore_bankmachine4_trascon_count <= 3'd4;
+		soc_litedramcore_bankmachine4_trascon_count <= 2'd2;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine4_trascon_ready <= 1'd1;
 		end else begin
@@ -13152,7 +12688,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine5_pipe_valid_source_payload_addr <= soc_litedramcore_bankmachine5_pipe_valid_sink_payload_addr;
 	end
 	if (soc_litedramcore_bankmachine5_twtpcon_valid) begin
-		soc_litedramcore_bankmachine5_twtpcon_count <= 3'd5;
+		soc_litedramcore_bankmachine5_twtpcon_count <= 3'd4;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine5_twtpcon_ready <= 1'd1;
 		end else begin
@@ -13167,7 +12703,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine5_trccon_valid) begin
-		soc_litedramcore_bankmachine5_trccon_count <= 3'd5;
+		soc_litedramcore_bankmachine5_trccon_count <= 2'd3;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine5_trccon_ready <= 1'd1;
 		end else begin
@@ -13182,7 +12718,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine5_trascon_valid) begin
-		soc_litedramcore_bankmachine5_trascon_count <= 3'd4;
+		soc_litedramcore_bankmachine5_trascon_count <= 2'd2;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine5_trascon_ready <= 1'd1;
 		end else begin
@@ -13228,7 +12764,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine6_pipe_valid_source_payload_addr <= soc_litedramcore_bankmachine6_pipe_valid_sink_payload_addr;
 	end
 	if (soc_litedramcore_bankmachine6_twtpcon_valid) begin
-		soc_litedramcore_bankmachine6_twtpcon_count <= 3'd5;
+		soc_litedramcore_bankmachine6_twtpcon_count <= 3'd4;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine6_twtpcon_ready <= 1'd1;
 		end else begin
@@ -13243,7 +12779,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine6_trccon_valid) begin
-		soc_litedramcore_bankmachine6_trccon_count <= 3'd5;
+		soc_litedramcore_bankmachine6_trccon_count <= 2'd3;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine6_trccon_ready <= 1'd1;
 		end else begin
@@ -13258,7 +12794,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine6_trascon_valid) begin
-		soc_litedramcore_bankmachine6_trascon_count <= 3'd4;
+		soc_litedramcore_bankmachine6_trascon_count <= 2'd2;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine6_trascon_ready <= 1'd1;
 		end else begin
@@ -13304,7 +12840,7 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine7_pipe_valid_source_payload_addr <= soc_litedramcore_bankmachine7_pipe_valid_sink_payload_addr;
 	end
 	if (soc_litedramcore_bankmachine7_twtpcon_valid) begin
-		soc_litedramcore_bankmachine7_twtpcon_count <= 3'd5;
+		soc_litedramcore_bankmachine7_twtpcon_count <= 3'd4;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine7_twtpcon_ready <= 1'd1;
 		end else begin
@@ -13319,7 +12855,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine7_trccon_valid) begin
-		soc_litedramcore_bankmachine7_trccon_count <= 3'd5;
+		soc_litedramcore_bankmachine7_trccon_count <= 2'd3;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine7_trccon_ready <= 1'd1;
 		end else begin
@@ -13334,7 +12870,7 @@ always @(posedge sys_clk) begin
 		end
 	end
 	if (soc_litedramcore_bankmachine7_trascon_valid) begin
-		soc_litedramcore_bankmachine7_trascon_count <= 3'd4;
+		soc_litedramcore_bankmachine7_trascon_count <= 2'd2;
 		if (1'd0) begin
 			soc_litedramcore_bankmachine7_trascon_ready <= 1'd1;
 		end else begin
@@ -14360,13 +13896,13 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_cmd_payload_cas <= 1'd0;
 		soc_litedramcore_cmd_payload_ras <= 1'd0;
 		soc_litedramcore_cmd_payload_we <= 1'd0;
-		soc_litedramcore_timer_count1 <= 10'd781;
+		soc_litedramcore_timer_count1 <= 9'd390;
 		soc_litedramcore_postponer_req_o <= 1'd0;
 		soc_litedramcore_postponer_count <= 1'd0;
 		soc_litedramcore_sequencer_done1 <= 1'd0;
 		soc_litedramcore_sequencer_counter <= 6'd0;
 		soc_litedramcore_sequencer_count <= 1'd0;
-		soc_litedramcore_zqcs_timer_count1 <= 27'd99999999;
+		soc_litedramcore_zqcs_timer_count1 <= 26'd49999999;
 		soc_litedramcore_zqcs_executer_done <= 1'd0;
 		soc_litedramcore_zqcs_executer_counter <= 5'd0;
 		soc_litedramcore_bankmachine0_level <= 5'd0;
@@ -14380,9 +13916,9 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine0_twtpcon_ready <= 1'd0;
 		soc_litedramcore_bankmachine0_twtpcon_count <= 3'd0;
 		soc_litedramcore_bankmachine0_trccon_ready <= 1'd0;
-		soc_litedramcore_bankmachine0_trccon_count <= 3'd0;
+		soc_litedramcore_bankmachine0_trccon_count <= 2'd0;
 		soc_litedramcore_bankmachine0_trascon_ready <= 1'd0;
-		soc_litedramcore_bankmachine0_trascon_count <= 3'd0;
+		soc_litedramcore_bankmachine0_trascon_count <= 2'd0;
 		soc_litedramcore_bankmachine1_level <= 5'd0;
 		soc_litedramcore_bankmachine1_produce <= 4'd0;
 		soc_litedramcore_bankmachine1_consume <= 4'd0;
@@ -14394,9 +13930,9 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine1_twtpcon_ready <= 1'd0;
 		soc_litedramcore_bankmachine1_twtpcon_count <= 3'd0;
 		soc_litedramcore_bankmachine1_trccon_ready <= 1'd0;
-		soc_litedramcore_bankmachine1_trccon_count <= 3'd0;
+		soc_litedramcore_bankmachine1_trccon_count <= 2'd0;
 		soc_litedramcore_bankmachine1_trascon_ready <= 1'd0;
-		soc_litedramcore_bankmachine1_trascon_count <= 3'd0;
+		soc_litedramcore_bankmachine1_trascon_count <= 2'd0;
 		soc_litedramcore_bankmachine2_level <= 5'd0;
 		soc_litedramcore_bankmachine2_produce <= 4'd0;
 		soc_litedramcore_bankmachine2_consume <= 4'd0;
@@ -14408,9 +13944,9 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine2_twtpcon_ready <= 1'd0;
 		soc_litedramcore_bankmachine2_twtpcon_count <= 3'd0;
 		soc_litedramcore_bankmachine2_trccon_ready <= 1'd0;
-		soc_litedramcore_bankmachine2_trccon_count <= 3'd0;
+		soc_litedramcore_bankmachine2_trccon_count <= 2'd0;
 		soc_litedramcore_bankmachine2_trascon_ready <= 1'd0;
-		soc_litedramcore_bankmachine2_trascon_count <= 3'd0;
+		soc_litedramcore_bankmachine2_trascon_count <= 2'd0;
 		soc_litedramcore_bankmachine3_level <= 5'd0;
 		soc_litedramcore_bankmachine3_produce <= 4'd0;
 		soc_litedramcore_bankmachine3_consume <= 4'd0;
@@ -14422,9 +13958,9 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine3_twtpcon_ready <= 1'd0;
 		soc_litedramcore_bankmachine3_twtpcon_count <= 3'd0;
 		soc_litedramcore_bankmachine3_trccon_ready <= 1'd0;
-		soc_litedramcore_bankmachine3_trccon_count <= 3'd0;
+		soc_litedramcore_bankmachine3_trccon_count <= 2'd0;
 		soc_litedramcore_bankmachine3_trascon_ready <= 1'd0;
-		soc_litedramcore_bankmachine3_trascon_count <= 3'd0;
+		soc_litedramcore_bankmachine3_trascon_count <= 2'd0;
 		soc_litedramcore_bankmachine4_level <= 5'd0;
 		soc_litedramcore_bankmachine4_produce <= 4'd0;
 		soc_litedramcore_bankmachine4_consume <= 4'd0;
@@ -14436,9 +13972,9 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine4_twtpcon_ready <= 1'd0;
 		soc_litedramcore_bankmachine4_twtpcon_count <= 3'd0;
 		soc_litedramcore_bankmachine4_trccon_ready <= 1'd0;
-		soc_litedramcore_bankmachine4_trccon_count <= 3'd0;
+		soc_litedramcore_bankmachine4_trccon_count <= 2'd0;
 		soc_litedramcore_bankmachine4_trascon_ready <= 1'd0;
-		soc_litedramcore_bankmachine4_trascon_count <= 3'd0;
+		soc_litedramcore_bankmachine4_trascon_count <= 2'd0;
 		soc_litedramcore_bankmachine5_level <= 5'd0;
 		soc_litedramcore_bankmachine5_produce <= 4'd0;
 		soc_litedramcore_bankmachine5_consume <= 4'd0;
@@ -14450,9 +13986,9 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine5_twtpcon_ready <= 1'd0;
 		soc_litedramcore_bankmachine5_twtpcon_count <= 3'd0;
 		soc_litedramcore_bankmachine5_trccon_ready <= 1'd0;
-		soc_litedramcore_bankmachine5_trccon_count <= 3'd0;
+		soc_litedramcore_bankmachine5_trccon_count <= 2'd0;
 		soc_litedramcore_bankmachine5_trascon_ready <= 1'd0;
-		soc_litedramcore_bankmachine5_trascon_count <= 3'd0;
+		soc_litedramcore_bankmachine5_trascon_count <= 2'd0;
 		soc_litedramcore_bankmachine6_level <= 5'd0;
 		soc_litedramcore_bankmachine6_produce <= 4'd0;
 		soc_litedramcore_bankmachine6_consume <= 4'd0;
@@ -14464,9 +14000,9 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine6_twtpcon_ready <= 1'd0;
 		soc_litedramcore_bankmachine6_twtpcon_count <= 3'd0;
 		soc_litedramcore_bankmachine6_trccon_ready <= 1'd0;
-		soc_litedramcore_bankmachine6_trccon_count <= 3'd0;
+		soc_litedramcore_bankmachine6_trccon_count <= 2'd0;
 		soc_litedramcore_bankmachine6_trascon_ready <= 1'd0;
-		soc_litedramcore_bankmachine6_trascon_count <= 3'd0;
+		soc_litedramcore_bankmachine6_trascon_count <= 2'd0;
 		soc_litedramcore_bankmachine7_level <= 5'd0;
 		soc_litedramcore_bankmachine7_produce <= 4'd0;
 		soc_litedramcore_bankmachine7_consume <= 4'd0;
@@ -14478,15 +14014,15 @@ always @(posedge sys_clk) begin
 		soc_litedramcore_bankmachine7_twtpcon_ready <= 1'd0;
 		soc_litedramcore_bankmachine7_twtpcon_count <= 3'd0;
 		soc_litedramcore_bankmachine7_trccon_ready <= 1'd0;
-		soc_litedramcore_bankmachine7_trccon_count <= 3'd0;
+		soc_litedramcore_bankmachine7_trccon_count <= 2'd0;
 		soc_litedramcore_bankmachine7_trascon_ready <= 1'd0;
-		soc_litedramcore_bankmachine7_trascon_count <= 3'd0;
+		soc_litedramcore_bankmachine7_trascon_count <= 2'd0;
 		soc_litedramcore_choose_cmd_grant <= 3'd0;
 		soc_litedramcore_choose_req_grant <= 3'd0;
 		soc_litedramcore_trrdcon_ready <= 1'd0;
 		soc_litedramcore_trrdcon_count <= 1'd0;
 		soc_litedramcore_tfawcon_ready <= 1'd1;
-		soc_litedramcore_tfawcon_window <= 5'd0;
+		soc_litedramcore_tfawcon_window <= 3'd0;
 		soc_litedramcore_tccdcon_ready <= 1'd0;
 		soc_litedramcore_tccdcon_count <= 1'd0;
 		soc_litedramcore_twtrcon_ready <= 1'd0;
@@ -14503,14 +14039,14 @@ always @(posedge sys_clk) begin
 		soc_litedramwishbone2native1_aborted <= 1'd0;
 		litedramcore_we <= 1'd0;
 		litedramcore_refresher_state <= 2'd0;
-		litedramcore_bankmachine0_state <= 4'd0;
-		litedramcore_bankmachine1_state <= 4'd0;
-		litedramcore_bankmachine2_state <= 4'd0;
-		litedramcore_bankmachine3_state <= 4'd0;
-		litedramcore_bankmachine4_state <= 4'd0;
-		litedramcore_bankmachine5_state <= 4'd0;
-		litedramcore_bankmachine6_state <= 4'd0;
-		litedramcore_bankmachine7_state <= 4'd0;
+		litedramcore_bankmachine0_state <= 3'd0;
+		litedramcore_bankmachine1_state <= 3'd0;
+		litedramcore_bankmachine2_state <= 3'd0;
+		litedramcore_bankmachine3_state <= 3'd0;
+		litedramcore_bankmachine4_state <= 3'd0;
+		litedramcore_bankmachine5_state <= 3'd0;
+		litedramcore_bankmachine6_state <= 3'd0;
+		litedramcore_bankmachine7_state <= 3'd0;
 		litedramcore_multiplexer_state <= 4'd0;
 		litedramcore_roundrobin0_grant <= 1'd0;
 		litedramcore_roundrobin1_grant <= 1'd0;
@@ -15084,5 +14620,5 @@ assign soc_litedramcore_bankmachine7_rdport_dat_r = storage_7[soc_litedramcore_b
 endmodule
 
 // -----------------------------------------------------------------------------
-//  Auto-Generated by LiteX on 2022-11-29 17:38:33.
+//  Auto-Generated by LiteX on 2022-12-13 14:14:53.
 //------------------------------------------------------------------------------

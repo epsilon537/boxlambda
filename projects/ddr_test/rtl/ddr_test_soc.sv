@@ -1,12 +1,12 @@
 `default_nettype none
 
 module ddr_test_soc(
-  input  wire       clk100mhz,
+  input  wire       ext_clk100,
    
   inout  wire [7:0] gpio0,
   inout  wire [3:0] gpio1,
   
-  input  wire       ck_rst_n,
+  input  wire       ext_rst_n,
   
   input  wire       uart_rx,
   output wire       uart_tx,
@@ -15,7 +15,29 @@ module ddr_test_soc(
   input  wire       trst_n,
   input  wire       tms,
   input  wire       tdi,
-  output wire       tdo
+  output wire       tdo,
+
+  output wire       pll_locked_led,
+  output wire       init_done_led,
+  output wire       init_err_led
+`ifdef SYNTHESIS
+  ,
+  output wire [13:0] ddram_a,
+  output wire [2:0] ddram_ba,
+  output wire ddram_ras_n,
+	output wire ddram_cas_n,
+	output wire ddram_we_n,
+	output wire ddram_cs_n,
+	output wire [1:0] ddram_dm,
+	inout  wire [15:0] ddram_dq,
+	inout  wire [1:0] ddram_dqs_p,
+	inout  wire [1:0] ddram_dqs_n,
+	output wire ddram_clk_p,
+	output wire ddram_clk_n,
+	output wire ddram_cke,
+	output wire ddram_odt,
+	output wire ddram_reset_n
+`endif  
   );
     
   typedef enum {
@@ -98,15 +120,16 @@ module ddr_test_soc(
   endfunction // wb_sizes
 
   localparam Wb_size wb_size = wb_sizes();
-    
-  logic clk;
-  logic rst_n;
+
+  //sys_clk is a 50MHz clock.  
+  logic sys_clk, sys_rst_n;
+
   //Non-Debug-Module-Reset, i.e. reset everything except Debug Module.
   //Driven by Debug Module itself to implement target reset function.
   logic ndmreset;
 
-  wb_if wbm[NrMaster](.rst(ndmreset | (~rst_n)), .*);
-  wb_if wbs[NrSlave](.rst(ndmreset | (~rst_n)), .*);
+  wb_if wbm[NrMaster](.rst(ndmreset | (~sys_rst_n)), .clk(sys_clk));
+  wb_if wbs[NrSlave](.rst(ndmreset | (~sys_rst_n)), .clk(sys_clk));
   
   // define the macro if you want to use debugger
 `ifdef DEBUG_MODULE_ACTIVE
@@ -132,7 +155,8 @@ module ddr_test_soc(
   assign tdo = tdo_oe ? tdo_o : 1'bz;
 
   wb_dm_top wb_dm (
-    .rst_n     (rst_n),
+    .clk       (sys_clk),
+    .rst_n     (sys_rst_n),
     .testmode  (1'b0),
     .ndmreset  (ndmreset),
     .dmactive  (dmactive),
@@ -145,8 +169,8 @@ module ddr_test_soc(
   dmi_jtag #(
         .IdcodeValue          ( 32'h249511C3    )
     ) dmi_jtag_inst (
-    .clk_i            (clk),
-    .rst_ni           (rst_n),
+    .clk_i            (sys_clk),
+    .rst_ni           (sys_rst_n),
     .testmode_i       (1'b0),
     .dmi_rst_no       (dmi_rst_n),
     .dmi_req_o        (dmi_req),
@@ -172,23 +196,13 @@ module ddr_test_soc(
    assign tdo = 1'bz;
 `endif
 
-`ifdef SYNTHESIS
-  clkgen_xil7series clkgen (
-    .IO_CLK     (clk100mhz),
-    .IO_RST_N   (ck_rst_n),
-    .clk_sys    (clk),
-    .rst_sys_n  (rst_n));
-`else
-   assign clk = clk100mhz;
-   assign rst_n = ck_rst_n;
-`endif
-   
   wb_ibex_core #(
     .RV32M(ibex_pkg::RV32MFast),
     .RV32B(ibex_pkg::RV32BBalanced),
     .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA)
   ) wb_ibex_core (
-    .rst_n        (rst_n & (~ndmreset)),
+    .clk          (sys_clk),
+    .rst_n        (sys_rst_n & (~ndmreset)),
     .instr_wb     (wbm[COREI_M]),
     .data_wb      (wbm[CORED_M]),
     .test_en      (1'b0),
@@ -248,10 +262,33 @@ module ddr_test_soc(
     .wb (wbs[TIMER_S]));
 
 `ifdef DRAM
+  logic pll_locked, sys_rst;
+
   litedram_wrapper litedram_wrapper_inst (
-	.clk(clk),
-	.init_done(),
-	.init_error(),
+	.clk(ext_clk100),
+  .rst(~ext_rst_n),
+  .sys_clk(sys_clk),
+	.sys_rst(sys_rst),
+	.pll_locked(pll_locked),
+`ifdef SYNTHESIS
+	.ddram_a(ddram_a),
+	.ddram_ba(ddram_ba),
+	.ddram_ras_n(ddram_ras_n),
+	.ddram_cas_n(ddram_cas_n),
+	.ddram_we_n(ddram_we_n),
+	.ddram_cs_n(ddram_cs_n),
+	.ddram_dm(ddram_dm),
+	.ddram_dq(ddram_dq),
+	.ddram_dqs_p(ddram_dqs_p),
+	.ddram_dqs_n(ddram_dqs_n),
+	.ddram_clk_p(ddram_clk_p),
+	.ddram_clk_n(ddram_clk_n),
+	.ddram_cke(ddram_cke),
+	.ddram_odt(ddram_odt),
+	.ddram_reset_n(ddram_reset_n),
+`endif
+	.init_done(init_done_led),
+	.init_error(init_err_led),
 	.wb_ctrl_adr(wbs[DDR_CTRL_S].adr),
 	.wb_ctrl_dat_w(wbs[DDR_CTRL_S].dat_m),
 	.wb_ctrl_dat_r(wbs[DDR_CTRL_S].dat_s),
@@ -283,8 +320,30 @@ module ddr_test_soc(
 	.user_port_wishbone_p_1_we(wbs[DDR_USR1_S].we),
 	.user_port_wishbone_p_1_err(wbs[DDR_USR1_S].err)
   );
-`endif
-endmodule
+  
+  //Take system out of reset when litedram says so, when pll is locked and when ext. reset is not asserted.
+  assign sys_rst_n = ext_rst_n & ~sys_rst & pll_locked;
+  assign pll_locked_led = pll_locked;
 
+`else //No DRAM:
+
+//LiteDRAM provides the clock generator. Without DRAM we have to provide one here.
+`ifdef SYNTHESIS
+  clkgen_xil7series clkgen (
+    .IO_CLK     (ext_clk100),
+    .IO_RST_N   (ext_rst_n),
+    .clk_sys    (sys_clk),
+    .rst_sys_n  (sys_rst_n));
+`else
+  assign clk = ext_clk100;
+  assign sys_rst_n = ext_rst_n;
+`endif //SYNTHESIS/No SYNTHESIS
+
+  assign pll_locked_led = 1'b1;
+  assign init_done_led = 1'b1;
+  assign init_err_led = 1'b0;
+`endif //DRAM/No DRAM.
+
+endmodule
 
 `resetall

@@ -1,17 +1,17 @@
 `verilator_config
 
-lint_off -rule ASSIGNDLY -file "*/mnt/c/work/boxlambda/projects/ddr_test/../../sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
+lint_off -rule ASSIGNDLY -file "*/sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
 
-lint_off -rule ASSIGNDLY -file "*/mnt/c/work/boxlambda/projects/ddr_test/../../sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
+lint_off -rule ASSIGNDLY -file "*/sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
 
-lint_off -rule ASSIGNDLY -file "*/mnt/c/work/boxlambda/projects/ddr_test/../../sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
+lint_off -rule ASSIGNDLY -file "*/sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
 
-lint_off -rule ASSIGNDLY -file "*/mnt/c/work/boxlambda/projects/ddr_test/../../sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
+lint_off -rule ASSIGNDLY -file "*/sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
 
-lint_off -rule ASSIGNDLY -file "*/mnt/c/work/boxlambda/projects/ddr_test/../../sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
+lint_off -rule ASSIGNDLY -file "*/sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
 
-lint_off -rule ASSIGNDLY -file "*/mnt/c/work/boxlambda/projects/ddr_test/../../sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
+lint_off -rule ASSIGNDLY -file "*/sub/riscv-dbg/tb/SimJTAG.sv" -match "Unsupported: Ignoring delay on this assignment/primitive."
 
-lint_off -rule UNUSED -file "*/mnt/c/work/boxlambda/projects/ddr_test/../../sub/riscv-dbg/tb/SimJTAG.sv" -match "Bits of signal are not used: 'random_bits'[31:1]"
+lint_off -rule UNUSED -file "*/sub/riscv-dbg/tb/SimJTAG.sv" -match "Bits of signal are not used: 'random_bits'[31:1]"
 
-lint_off -rule BLKSEQ -file "*/mnt/c/work/boxlambda/projects/ddr_test/../../sub/riscv-dbg/tb/SimJTAG.sv" -match "Blocking assignments (=) in sequential (flop or latch) block*"
+lint_off -rule BLKSEQ -file "*/sub/riscv-dbg/tb/SimJTAG.sv" -match "Blocking assignments (=) in sequential (flop or latch) block*"

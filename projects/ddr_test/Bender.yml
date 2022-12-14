@@ -17,10 +17,13 @@ dependencies:
 sources:
   - target: constraints
     files:
-      - ../../sub/ibex_wb/soc/fpga/arty-a7-35/constrs/Arty-A7-35-Master.xdc
-  - target: memory
+      - constrs/Arty-A7-35-Master.xdc
+  - target: memory_sim
     files:
-      - src/spram.mem
+      - src/sim/spram.mem
+  - target: memory_fpga
+    files:
+      - src/fpga/spram.mem      
   - target: verilator
     files:
       - sim/sim_main.cpp

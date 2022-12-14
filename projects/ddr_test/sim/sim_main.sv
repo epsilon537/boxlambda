@@ -39,17 +39,20 @@ module sim_main #(
 			     );
 
    ddr_test_soc dut (
-		 .clk100mhz(clk_i),
+		 .ext_clk100(clk_i),
+		 .ext_rst_n(rst_ni),
 		 .gpio0(gpio0),
 		 .gpio1(gpio1),
-		 .ck_rst_n(rst_ni),
 		 .uart_rx(uart_rx),
 		 .uart_tx(uart_tx),
 		 .tck(sim_jtag_tck),
 		 .trst_n(sim_jtag_trstn),
 		 .tms(sim_jtag_tms),
 		 .tdi(sim_jtag_tdi),
-		 .tdo(sim_jtag_tdo)
+		 .tdo(sim_jtag_tdo),
+		 .pll_locked_led(),
+		 .init_done_led(),
+		 .init_err_led()
 		 );
    
    always_comb begin : jtag_exit_handler

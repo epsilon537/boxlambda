@@ -1,5 +1,26 @@
 module litedram_wrapper (
 	input wire         clk,
+	input wire         rst,
+	output wire        sys_clk,
+	output wire        sys_rst,
+	output wire        pll_locked,
+`ifdef SYNTHESIS
+	output wire [13:0] ddram_a,
+	output wire [2:0] ddram_ba,
+	output wire ddram_ras_n,
+	output wire ddram_cas_n,
+	output wire ddram_we_n,
+	output wire ddram_cs_n,
+	output wire [1:0] ddram_dm,
+	inout  wire [15:0] ddram_dq,
+	inout  wire [1:0] ddram_dqs_p,
+	inout  wire [1:0] ddram_dqs_n,
+	output wire ddram_clk_p,
+	output wire ddram_clk_n,
+	output wire ddram_cke,
+	output wire ddram_odt,
+	output wire ddram_reset_n,
+`endif
 	output wire        init_done,
 	output wire        init_error,
 	input wire [31:0]  wb_ctrl_adr,
@@ -50,7 +71,7 @@ module litedram_wrapper (
    assign user_port_wishbone_p_0_stall = !user_port_wishbone_p_0_cyc ? 1'b0 : !user_port_wishbone_c_0_ack;
 
    assign user_port_wishbone_c_0_stb = user_port_wishbone_p_0_stb;
-   assign user_port_wishbone_c_0_adr = user_port_wishbone_p_0_adr[23:0];
+   assign user_port_wishbone_c_0_adr = user_port_wishbone_p_0_adr[25:2];
    assign user_port_wishbone_c_0_we = user_port_wishbone_p_0_we;
    assign user_port_wishbone_c_0_dat_w = {96'b0,user_port_wishbone_p_0_dat_w};
    assign user_port_wishbone_c_0_sel = {12'hfff, user_port_wishbone_p_0_sel};
@@ -72,33 +93,78 @@ module litedram_wrapper (
    assign user_port_wishbone_p_1_stall = !user_port_wishbone_p_1_cyc ? 1'b0 : !user_port_wishbone_c_1_ack;
 
    assign user_port_wishbone_c_1_stb = user_port_wishbone_p_1_stb;
-   assign user_port_wishbone_c_1_adr = user_port_wishbone_p_1_adr[23:0];
+   assign user_port_wishbone_c_1_adr = user_port_wishbone_p_1_adr[25:2];
    assign user_port_wishbone_c_1_we = user_port_wishbone_p_1_we;
    assign user_port_wishbone_c_1_dat_w = {96'b0,user_port_wishbone_p_1_dat_w};
    assign user_port_wishbone_c_1_sel = {12'hfff, user_port_wishbone_p_1_sel};
    assign user_port_wishbone_c_1_cyc = user_port_wishbone_p_1_cyc;
 
-   //We could also instantiated a pipeline->classic bridge for the ctrl port but I think that's overkill.
-   assign wb_ctrl_stall = 1'b0;
+   logic [29:0] ctrl_port_wishbone_c_adr;
+   logic [31:0] ctrl_port_wishbone_c_dat_w;
+   logic [31:0] ctrl_port_wishbone_c_dat_r;
+   logic [3:0]  ctrl_port_wishbone_c_sel;
+   logic        ctrl_port_wishbone_c_cyc;
+   logic        ctrl_port_wishbone_c_stb;
+   logic        ctrl_port_wishbone_c_ack;
+   logic        ctrl_port_wishbone_c_we;
+   logic        ctrl_port_wishbone_c_err;
+
+   assign wb_ctrl_dat_r = ctrl_port_wishbone_c_dat_r;
+   assign wb_ctrl_ack = ctrl_port_wishbone_c_ack;
+   assign wb_ctrl_err = ctrl_port_wishbone_c_err;
+   assign wb_ctrl_stall = !wb_ctrl_cyc ? 1'b0 : !ctrl_port_wishbone_c_ack;
+
+   assign ctrl_port_wishbone_c_stb = wb_ctrl_stb;
+   assign ctrl_port_wishbone_c_adr = wb_ctrl_adr[31:2]; //The liteDRAM control interface uses word addressing.
+   assign ctrl_port_wishbone_c_we = wb_ctrl_we;
+   assign ctrl_port_wishbone_c_dat_w = wb_ctrl_dat_w;
+   assign ctrl_port_wishbone_c_sel = wb_ctrl_sel;
+   assign ctrl_port_wishbone_c_cyc = wb_ctrl_cyc;
+   
+`ifndef SYNTHESIS
+   logic unused = &{rst};
+
+   assign pll_locked = 1'b1;
+`endif //not SYNTHESIS
 
    litedram litedram_inst (
-	.sim_trace(1'b0),
 	.clk(clk),
+`ifdef SYNTHESIS
+	.rst(rst),
+	.pll_locked(pll_locked),
+	.ddram_a(ddram_a),
+	.ddram_ba(ddram_ba),
+	.ddram_ras_n(ddram_ras_n),
+	.ddram_cas_n(ddram_cas_n),
+	.ddram_we_n(ddram_we_n),
+	.ddram_cs_n(ddram_cs_n),
+	.ddram_dm(ddram_dm),
+	.ddram_dq(ddram_dq),
+	.ddram_dqs_p(ddram_dqs_p),
+	.ddram_dqs_n(ddram_dqs_n),
+	.ddram_clk_p(ddram_clk_p),
+	.ddram_clk_n(ddram_clk_n),
+	.ddram_cke(ddram_cke),
+	.ddram_odt(ddram_odt),
+	.ddram_reset_n(ddram_reset_n),
+`else
+	.sim_trace(1'b0),
+`endif	
 	.init_done(init_done),
 	.init_error(init_error),
-	.wb_ctrl_adr(wb_ctrl_adr[29:0]),
-	.wb_ctrl_dat_w(wb_ctrl_dat_w),
-	.wb_ctrl_dat_r(wb_ctrl_dat_r),
-	.wb_ctrl_sel(wb_ctrl_sel),
-	.wb_ctrl_cyc(wb_ctrl_cyc),
-	.wb_ctrl_stb(wb_ctrl_stb),
-	.wb_ctrl_ack(wb_ctrl_ack),
-	.wb_ctrl_we(wb_ctrl_we),
+	.wb_ctrl_adr(ctrl_port_wishbone_c_adr[29:0]),
+	.wb_ctrl_dat_w(ctrl_port_wishbone_c_dat_w),
+	.wb_ctrl_dat_r(ctrl_port_wishbone_c_dat_r),
+	.wb_ctrl_sel(ctrl_port_wishbone_c_sel),
+	.wb_ctrl_cyc(ctrl_port_wishbone_c_cyc),
+	.wb_ctrl_stb(ctrl_port_wishbone_c_stb),
+	.wb_ctrl_ack(ctrl_port_wishbone_c_ack),
+	.wb_ctrl_we(ctrl_port_wishbone_c_we),
 	.wb_ctrl_cti(3'b0),
 	.wb_ctrl_bte(2'b0),
-	.wb_ctrl_err(wb_ctrl_err),
-	.user_clk(),
-	.user_rst(),
+	.wb_ctrl_err(ctrl_port_wishbone_c_err),
+	.user_clk(sys_clk),
+	.user_rst(sys_rst),
 	.user_port_wishbone_0_adr(user_port_wishbone_c_0_adr),
 	.user_port_wishbone_0_dat_w(user_port_wishbone_c_0_dat_w),
 	.user_port_wishbone_0_dat_r(user_port_wishbone_c_0_dat_r),
