@@ -101,10 +101,9 @@ int main(int argc, char** argv, char** env) {
     cbreak();
     noecho();
 
-    // Construct the Verilated model, from Vmodel.h generated from Verilating "ibex_soc.sv".
+    // Construct the Verilated model, from Vmodel.h generated from Verilating the project.
     // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
-    // "ibex_soc" will be the hierarchical name of the module.
-    const std::unique_ptr<Vmodel> top{new Vmodel{contextp.get(), "ibex_soc"}};
+    const std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 
     //Trace file
     if (tracing_enable) {

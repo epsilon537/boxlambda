@@ -118,10 +118,9 @@ int main(int argc, char** argv, char** env) {
     cbreak();
     noecho();
 
-    // Construct the Verilated model, from Vmodel.h generated from Verilating "ibex_soc.sv".
+    // Construct the Verilated model, from Vmodel.h generated from Verilating this project.
     // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
-    // "ibex_soc" will be the hierarchical name of the module.
-    const std::unique_ptr<Vmodel> top{new Vmodel{contextp.get(), "ddr_test_soc"}};
+    const std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 
     //Trace file
     if (tracing_enable) {
@@ -239,17 +238,17 @@ int main(int argc, char** argv, char** env) {
 
     // Checks for automated testing.
     int res = 0;
-    std::string uartCheckString("Memory Test successful.");
+    std::string uartCheckString("Test completed successfully.");
 
     if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
-      printf("UART check failed\n");
+      printf("Test failed\n");
       printf("Expected: %s\n", uartCheckString.c_str());
       printf("Received: %s\n", uartRxStringPrev.c_str());
 
       res = 1;
     }
     else {
-      printf("UART check passed.\n");
+      printf("Test passed.\n");
     }
 
     // Return completion status

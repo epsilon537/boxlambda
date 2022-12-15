@@ -18,10 +18,10 @@ sources:
       - ../../sub/ibex_wb/soc/fpga/arty-a7-35/constrs/Arty-A7-35-Master.xdc
   - target: memory_sim
     files:
-      - src/spram.mem
+      - ../../sw/projects/picolibc_test/spram.mem
   - target: memory_fpga
     files:
-      - src/spram.mem      
+      - ../../sw/projects/picolibc_test/spram.mem      
   - target: verilator
     files:
       - sim/sim_main.cpp
