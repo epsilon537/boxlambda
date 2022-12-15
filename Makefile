@@ -4,7 +4,7 @@ COMPONENT_MAKEFILES = $(shell find components -name Makefile)
 PROJECT_MAKEFILES = $(shell find projects -name Makefile ! -path */src/*) #Exclude src/Makefiles (SW builds)
 #Don't recurse into Pulpino or riscv-dbg
 SUB_MAKEFILES = $(shell find sub -not -path "sub/pulpino/*" -not -path "sub/riscv-dbg/*" -name Makefile)
-SW_MAKEFILES = $(shell find . -path */src/Makefile -o -path ./sw/*/Makefile)
+SW_MAKEFILES = $(shell find . -path "*/src/Makefile" -o -path "./sw/*/Makefile")
 #This is where the picolibc repository lives
 PICOLIBC_SUB_DIR= $(abspath sub/picolibc)
 #This directory is used to build picolibc for our target.

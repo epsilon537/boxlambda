@@ -20,10 +20,10 @@ sources:
       - constrs/Arty-A7-35-Master.xdc
   - target: memory_sim
     files:
-      - src/sim/spram.mem
+      - ../../sw/projects/ddr_test/sim/spram.mem
   - target: memory_fpga
     files:
-      - src/fpga/spram.mem      
+      - ../../sw/projects/ddr_test/fpga/spram.mem      
   - target: verilator
     files:
       - sim/sim_main.cpp

@@ -38,7 +38,7 @@ LINKER_SCRIPT = $(TOP_DIR)/sw/bootstrap/link_internal_mem.ld
 #Compile with picolibc specs to pull in picolibc library code.
 CFLAGS = --specs=$(TOP_DIR)/sw/picolibc-install/picolibc.specs $(CPPFLAGS) -Wall -g -O1
 
-LDFLAGS = $(CFLAGS) -T $(LINKER_SCRIPT) -Wl,--gc-sections -Wl,--Map,../$(PROGRAM).map
+LDFLAGS = $(CFLAGS) -T $(LINKER_SCRIPT) -Wl,--gc-sections -Wl,--Map,$(PROGRAM).map
 
 OBJS := $(addsuffix .o,$(basename $(SRCS)))
 
@@ -85,7 +85,7 @@ spram.mem : $(PROGRAM).mem
 .PHONY: clean
 clean:
 	$(RM) -f $(OBJS) $(DEPS) *.hex
-	$(RM) -f $(OUTFILES) *.map
+	$(RM) -f $(OUTFILES) $(PROGRAM).map
 
 .PHONY: force
 force:
