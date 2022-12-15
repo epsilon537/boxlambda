@@ -9,7 +9,7 @@
 // Filename   : litedram.v
 // Device     : 
 // LiteX sha1 : c717e4c8
-// Date       : 2022-12-13 14:14:52
+// Date       : 2022-12-15 15:53:14
 //------------------------------------------------------------------------------
 
 
@@ -35,19 +35,19 @@ module litedram (
 	output wire wb_ctrl_err,
 	output wire user_clk,
 	output wire user_rst,
-	input  wire [23:0] user_port_wishbone_0_adr,
-	input  wire [127:0] user_port_wishbone_0_dat_w,
-	output wire [127:0] user_port_wishbone_0_dat_r,
-	input  wire [15:0] user_port_wishbone_0_sel,
+	input  wire [25:0] user_port_wishbone_0_adr,
+	input  wire [31:0] user_port_wishbone_0_dat_w,
+	output wire [31:0] user_port_wishbone_0_dat_r,
+	input  wire [3:0] user_port_wishbone_0_sel,
 	input  wire user_port_wishbone_0_cyc,
 	input  wire user_port_wishbone_0_stb,
 	output wire user_port_wishbone_0_ack,
 	input  wire user_port_wishbone_0_we,
 	output wire user_port_wishbone_0_err,
-	input  wire [23:0] user_port_wishbone_1_adr,
-	input  wire [127:0] user_port_wishbone_1_dat_w,
-	output wire [127:0] user_port_wishbone_1_dat_r,
-	input  wire [15:0] user_port_wishbone_1_sel,
+	input  wire [25:0] user_port_wishbone_1_adr,
+	input  wire [31:0] user_port_wishbone_1_dat_w,
+	output wire [31:0] user_port_wishbone_1_dat_r,
+	input  wire [3:0] user_port_wishbone_1_sel,
 	input  wire user_port_wishbone_1_cyc,
 	input  wire user_port_wishbone_1_stb,
 	output wire user_port_wishbone_1_ack,
@@ -1748,23 +1748,222 @@ wire [2:0] soc_wb_bus_cti;
 wire [1:0] soc_wb_bus_bte;
 wire soc_wb_bus_err;
 reg  soc_user_enable0 = 1'd0;
+reg  soc_litedramnativeport0_cmd_valid0 = 1'd0;
+wire soc_litedramnativeport0_cmd_ready0;
+reg  soc_litedramnativeport0_cmd_payload_we0 = 1'd0;
+reg  [23:0] soc_litedramnativeport0_cmd_payload_addr0 = 24'd0;
+wire soc_litedramnativeport0_wdata_valid0;
+wire soc_litedramnativeport0_wdata_ready0;
+wire soc_litedramnativeport0_wdata_first0;
+wire soc_litedramnativeport0_wdata_last0;
+wire [127:0] soc_litedramnativeport0_wdata_payload_data0;
+wire [15:0] soc_litedramnativeport0_wdata_payload_we0;
+wire soc_litedramnativeport0_rdata_valid0;
+wire soc_litedramnativeport0_rdata_ready0;
+reg  soc_litedramnativeport0_rdata_first = 1'd0;
+reg  soc_litedramnativeport0_rdata_last = 1'd0;
+wire [127:0] soc_litedramnativeport0_rdata_payload_data0;
 wire soc_litedramnativeport0_flush;
-reg  soc_litedramnativeport0_cmd_valid = 1'd0;
-wire soc_litedramnativeport0_cmd_ready;
+reg  soc_litedramnativeport0_cmd_valid1 = 1'd0;
+reg  soc_litedramnativeport0_cmd_ready1 = 1'd0;
 wire soc_litedramnativeport0_cmd_last;
-wire soc_litedramnativeport0_cmd_payload_we;
-wire [23:0] soc_litedramnativeport0_cmd_payload_addr;
-reg  soc_litedramnativeport0_wdata_valid = 1'd0;
-wire soc_litedramnativeport0_wdata_ready;
-wire [127:0] soc_litedramnativeport0_wdata_payload_data;
-wire [15:0] soc_litedramnativeport0_wdata_payload_we;
-wire soc_litedramnativeport0_rdata_valid;
-wire soc_litedramnativeport0_rdata_ready;
-wire [127:0] soc_litedramnativeport0_rdata_payload_data;
-wire [23:0] soc_interface0_wb_port_adr;
-wire [127:0] soc_interface0_wb_port_dat_w;
-reg  [127:0] soc_interface0_wb_port_dat_r = 128'd0;
-wire [15:0] soc_interface0_wb_port_sel;
+wire soc_litedramnativeport0_cmd_payload_we1;
+wire [25:0] soc_litedramnativeport0_cmd_payload_addr1;
+reg  soc_litedramnativeport0_wdata_valid1 = 1'd0;
+wire soc_litedramnativeport0_wdata_ready1;
+reg  soc_litedramnativeport0_wdata_first1 = 1'd0;
+reg  soc_litedramnativeport0_wdata_last1 = 1'd0;
+wire [31:0] soc_litedramnativeport0_wdata_payload_data1;
+wire [3:0] soc_litedramnativeport0_wdata_payload_we1;
+reg  soc_litedramnativeport0_rdata_valid1 = 1'd0;
+wire soc_litedramnativeport0_rdata_ready1;
+reg  [31:0] soc_litedramnativeport0_rdata_payload_data1 = 32'd0;
+reg  [3:0] soc_litedramnativeportconverter0_sel = 4'd0;
+reg  soc_litedramnativeportconverter0_cmd_buffer_sink_valid = 1'd0;
+wire soc_litedramnativeportconverter0_cmd_buffer_sink_ready;
+reg  soc_litedramnativeportconverter0_cmd_buffer_sink_first = 1'd0;
+reg  soc_litedramnativeportconverter0_cmd_buffer_sink_last = 1'd0;
+reg  [3:0] soc_litedramnativeportconverter0_cmd_buffer_sink_payload_sel = 4'd0;
+reg  soc_litedramnativeportconverter0_cmd_buffer_sink_payload_we = 1'd0;
+wire soc_litedramnativeportconverter0_cmd_buffer_source_valid;
+wire soc_litedramnativeportconverter0_cmd_buffer_source_ready;
+wire soc_litedramnativeportconverter0_cmd_buffer_source_first;
+wire soc_litedramnativeportconverter0_cmd_buffer_source_last;
+wire [3:0] soc_litedramnativeportconverter0_cmd_buffer_source_payload_sel;
+wire soc_litedramnativeportconverter0_cmd_buffer_source_payload_we;
+reg  [25:0] soc_litedramnativeportconverter0_cmd_addr = 26'd0;
+reg  soc_litedramnativeportconverter0_cmd_we = 1'd0;
+reg  soc_litedramnativeportconverter0_cmd_last = 1'd0;
+wire soc_litedramnativeportconverter0_next_cmd;
+wire soc_litedramnativeportconverter0_addr_changed;
+wire soc_litedramnativeportconverter0_wdata_finished;
+reg  soc_litedramnativeportconverter0_rdata_finished = 1'd0;
+reg  soc_litedramnativeportconverter0_read_lock = 1'd0;
+reg  soc_litedramnativeportconverter0_read_unlocked = 1'd0;
+wire soc_litedramnativeportconverter0_rw_collision;
+wire soc_litedramnativeportconverter0_rdata_fifo_sink_valid;
+wire soc_litedramnativeportconverter0_rdata_fifo_sink_ready;
+wire soc_litedramnativeportconverter0_rdata_fifo_sink_first;
+wire soc_litedramnativeportconverter0_rdata_fifo_sink_last;
+wire [127:0] soc_litedramnativeportconverter0_rdata_fifo_sink_payload_data;
+wire soc_litedramnativeportconverter0_rdata_fifo_source_valid;
+wire soc_litedramnativeportconverter0_rdata_fifo_source_ready;
+wire soc_litedramnativeportconverter0_rdata_fifo_source_first;
+wire soc_litedramnativeportconverter0_rdata_fifo_source_last;
+wire [127:0] soc_litedramnativeportconverter0_rdata_fifo_source_payload_data;
+wire soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_we;
+wire soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_writable;
+wire soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_re;
+wire soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_readable;
+wire [129:0] soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_din;
+wire [129:0] soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_dout;
+reg  [1:0] soc_litedramnativeportconverter0_rdata_fifo_level = 2'd0;
+reg  soc_litedramnativeportconverter0_rdata_fifo_replace = 1'd0;
+reg  [1:0] soc_litedramnativeportconverter0_rdata_fifo_produce = 2'd0;
+reg  [1:0] soc_litedramnativeportconverter0_rdata_fifo_consume = 2'd0;
+reg  [1:0] soc_litedramnativeportconverter0_rdata_fifo_wrport_adr = 2'd0;
+wire [129:0] soc_litedramnativeportconverter0_rdata_fifo_wrport_dat_r;
+wire soc_litedramnativeportconverter0_rdata_fifo_wrport_we;
+wire [129:0] soc_litedramnativeportconverter0_rdata_fifo_wrport_dat_w;
+wire soc_litedramnativeportconverter0_rdata_fifo_do_read;
+wire [1:0] soc_litedramnativeportconverter0_rdata_fifo_rdport_adr;
+wire [129:0] soc_litedramnativeportconverter0_rdata_fifo_rdport_dat_r;
+wire [127:0] soc_litedramnativeportconverter0_rdata_fifo_fifo_in_payload_data;
+wire soc_litedramnativeportconverter0_rdata_fifo_fifo_in_first;
+wire soc_litedramnativeportconverter0_rdata_fifo_fifo_in_last;
+wire [127:0] soc_litedramnativeportconverter0_rdata_fifo_fifo_out_payload_data;
+wire soc_litedramnativeportconverter0_rdata_fifo_fifo_out_first;
+wire soc_litedramnativeportconverter0_rdata_fifo_fifo_out_last;
+wire soc_litedramnativeportconverter0_rdata_converter_sink_valid;
+wire soc_litedramnativeportconverter0_rdata_converter_sink_ready;
+wire soc_litedramnativeportconverter0_rdata_converter_sink_first;
+wire soc_litedramnativeportconverter0_rdata_converter_sink_last;
+wire [127:0] soc_litedramnativeportconverter0_rdata_converter_sink_payload_data;
+wire soc_litedramnativeportconverter0_rdata_converter_source_valid;
+reg  soc_litedramnativeportconverter0_rdata_converter_source_ready = 1'd0;
+wire soc_litedramnativeportconverter0_rdata_converter_source_first;
+wire soc_litedramnativeportconverter0_rdata_converter_source_last;
+wire [31:0] soc_litedramnativeportconverter0_rdata_converter_source_payload_data;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_sink_valid;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_sink_ready;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_sink_first;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_sink_last;
+reg  [127:0] soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data = 128'd0;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_source_valid;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_source_ready;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_source_first;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_source_last;
+reg  [31:0] soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_data = 32'd0;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_valid_token_count;
+reg  [1:0] soc_litedramnativeportconverter0_rdata_converter_converter_mux = 2'd0;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_first;
+wire soc_litedramnativeportconverter0_rdata_converter_converter_last;
+wire soc_litedramnativeportconverter0_rdata_converter_source_source_valid;
+wire soc_litedramnativeportconverter0_rdata_converter_source_source_ready;
+wire soc_litedramnativeportconverter0_rdata_converter_source_source_first;
+wire soc_litedramnativeportconverter0_rdata_converter_source_source_last;
+wire [31:0] soc_litedramnativeportconverter0_rdata_converter_source_source_payload_data;
+reg  [3:0] soc_litedramnativeportconverter0_rdata_chunk = 4'd1;
+wire soc_litedramnativeportconverter0_rdata_chunk_valid;
+wire soc_litedramnativeportconverter0_wdata_fifo_sink_valid;
+wire soc_litedramnativeportconverter0_wdata_fifo_sink_ready;
+wire soc_litedramnativeportconverter0_wdata_fifo_sink_first;
+wire soc_litedramnativeportconverter0_wdata_fifo_sink_last;
+wire [31:0] soc_litedramnativeportconverter0_wdata_fifo_sink_payload_data;
+wire [3:0] soc_litedramnativeportconverter0_wdata_fifo_sink_payload_we;
+wire soc_litedramnativeportconverter0_wdata_fifo_source_valid;
+reg  soc_litedramnativeportconverter0_wdata_fifo_source_ready = 1'd0;
+wire soc_litedramnativeportconverter0_wdata_fifo_source_first;
+wire soc_litedramnativeportconverter0_wdata_fifo_source_last;
+wire [31:0] soc_litedramnativeportconverter0_wdata_fifo_source_payload_data;
+wire [3:0] soc_litedramnativeportconverter0_wdata_fifo_source_payload_we;
+wire soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_we;
+wire soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_writable;
+wire soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_re;
+wire soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_readable;
+wire [37:0] soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_din;
+wire [37:0] soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_dout;
+reg  [1:0] soc_litedramnativeportconverter0_wdata_fifo_level = 2'd0;
+reg  soc_litedramnativeportconverter0_wdata_fifo_replace = 1'd0;
+reg  [1:0] soc_litedramnativeportconverter0_wdata_fifo_produce = 2'd0;
+reg  [1:0] soc_litedramnativeportconverter0_wdata_fifo_consume = 2'd0;
+reg  [1:0] soc_litedramnativeportconverter0_wdata_fifo_wrport_adr = 2'd0;
+wire [37:0] soc_litedramnativeportconverter0_wdata_fifo_wrport_dat_r;
+wire soc_litedramnativeportconverter0_wdata_fifo_wrport_we;
+wire [37:0] soc_litedramnativeportconverter0_wdata_fifo_wrport_dat_w;
+wire soc_litedramnativeportconverter0_wdata_fifo_do_read;
+wire [1:0] soc_litedramnativeportconverter0_wdata_fifo_rdport_adr;
+wire [37:0] soc_litedramnativeportconverter0_wdata_fifo_rdport_dat_r;
+wire [31:0] soc_litedramnativeportconverter0_wdata_fifo_fifo_in_payload_data;
+wire [3:0] soc_litedramnativeportconverter0_wdata_fifo_fifo_in_payload_we;
+wire soc_litedramnativeportconverter0_wdata_fifo_fifo_in_first;
+wire soc_litedramnativeportconverter0_wdata_fifo_fifo_in_last;
+wire [31:0] soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_data;
+wire [3:0] soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_we;
+wire soc_litedramnativeportconverter0_wdata_fifo_fifo_out_first;
+wire soc_litedramnativeportconverter0_wdata_fifo_fifo_out_last;
+wire soc_litedramnativeportconverter0_wdata_buffer_sink_sink_valid;
+wire soc_litedramnativeportconverter0_wdata_buffer_sink_sink_ready;
+reg  soc_litedramnativeportconverter0_wdata_buffer_sink_sink_first = 1'd0;
+reg  soc_litedramnativeportconverter0_wdata_buffer_sink_sink_last = 1'd0;
+wire [127:0] soc_litedramnativeportconverter0_wdata_buffer_sink_sink_payload_data;
+wire [15:0] soc_litedramnativeportconverter0_wdata_buffer_sink_sink_payload_we;
+wire soc_litedramnativeportconverter0_wdata_buffer_source_source_valid;
+wire soc_litedramnativeportconverter0_wdata_buffer_source_source_ready;
+wire soc_litedramnativeportconverter0_wdata_buffer_source_source_first;
+wire soc_litedramnativeportconverter0_wdata_buffer_source_source_last;
+wire [127:0] soc_litedramnativeportconverter0_wdata_buffer_source_source_payload_data;
+wire [15:0] soc_litedramnativeportconverter0_wdata_buffer_source_source_payload_we;
+wire soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_valid;
+wire soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_ready;
+wire soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_first;
+wire soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_last;
+wire [127:0] soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_payload_data;
+wire [15:0] soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_payload_we;
+reg  soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_valid = 1'd0;
+wire soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_ready;
+reg  soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_first = 1'd0;
+reg  soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_last = 1'd0;
+reg  [127:0] soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_payload_data = 128'd0;
+reg  [15:0] soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_payload_we = 16'd0;
+reg  soc_litedramnativeportconverter0_wdata_converter_sink_valid = 1'd0;
+wire soc_litedramnativeportconverter0_wdata_converter_sink_ready;
+reg  soc_litedramnativeportconverter0_wdata_converter_sink_first = 1'd0;
+reg  soc_litedramnativeportconverter0_wdata_converter_sink_last = 1'd0;
+reg  [31:0] soc_litedramnativeportconverter0_wdata_converter_sink_payload_data = 32'd0;
+reg  [3:0] soc_litedramnativeportconverter0_wdata_converter_sink_payload_we = 4'd0;
+wire soc_litedramnativeportconverter0_wdata_converter_source_valid;
+wire soc_litedramnativeportconverter0_wdata_converter_source_ready;
+wire soc_litedramnativeportconverter0_wdata_converter_source_first;
+wire soc_litedramnativeportconverter0_wdata_converter_source_last;
+reg  [127:0] soc_litedramnativeportconverter0_wdata_converter_source_payload_data = 128'd0;
+reg  [15:0] soc_litedramnativeportconverter0_wdata_converter_source_payload_we = 16'd0;
+wire soc_litedramnativeportconverter0_wdata_converter_converter_sink_valid;
+wire soc_litedramnativeportconverter0_wdata_converter_converter_sink_ready;
+wire soc_litedramnativeportconverter0_wdata_converter_converter_sink_first;
+wire soc_litedramnativeportconverter0_wdata_converter_converter_sink_last;
+wire [35:0] soc_litedramnativeportconverter0_wdata_converter_converter_sink_payload_data;
+wire soc_litedramnativeportconverter0_wdata_converter_converter_source_valid;
+wire soc_litedramnativeportconverter0_wdata_converter_converter_source_ready;
+reg  soc_litedramnativeportconverter0_wdata_converter_converter_source_first = 1'd0;
+reg  soc_litedramnativeportconverter0_wdata_converter_converter_source_last = 1'd0;
+reg  [143:0] soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_data = 144'd0;
+reg  [2:0] soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_valid_token_count = 3'd0;
+reg  [1:0] soc_litedramnativeportconverter0_wdata_converter_converter_demux = 2'd0;
+wire soc_litedramnativeportconverter0_wdata_converter_converter_load_part;
+reg  soc_litedramnativeportconverter0_wdata_converter_converter_strobe_all = 1'd0;
+wire soc_litedramnativeportconverter0_wdata_converter_source_source_valid;
+wire soc_litedramnativeportconverter0_wdata_converter_source_source_ready;
+wire soc_litedramnativeportconverter0_wdata_converter_source_source_first;
+wire soc_litedramnativeportconverter0_wdata_converter_source_source_last;
+wire [143:0] soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data;
+reg  [3:0] soc_litedramnativeportconverter0_wdata_chunk = 4'd1;
+wire soc_litedramnativeportconverter0_wdata_chunk_valid;
+reg  [15:0] soc_litedramnativeportconverter0_wdata_sel = 16'd0;
+wire [25:0] soc_interface0_wb_port_adr;
+wire [31:0] soc_interface0_wb_port_dat_w;
+reg  [31:0] soc_interface0_wb_port_dat_r = 32'd0;
+wire [3:0] soc_interface0_wb_port_sel;
 wire soc_interface0_wb_port_cyc;
 wire soc_interface0_wb_port_stb;
 reg  soc_interface0_wb_port_ack = 1'd0;
@@ -1773,23 +1972,222 @@ reg  soc_interface0_wb_port_err = 1'd0;
 reg  soc_litedramwishbone2native0_aborted = 1'd0;
 reg  soc_litedramwishbone2native0_is_ongoing = 1'd0;
 reg  soc_user_enable1 = 1'd0;
+reg  soc_litedramnativeport1_cmd_valid0 = 1'd0;
+wire soc_litedramnativeport1_cmd_ready0;
+reg  soc_litedramnativeport1_cmd_payload_we0 = 1'd0;
+reg  [23:0] soc_litedramnativeport1_cmd_payload_addr0 = 24'd0;
+wire soc_litedramnativeport1_wdata_valid0;
+wire soc_litedramnativeport1_wdata_ready0;
+wire soc_litedramnativeport1_wdata_first0;
+wire soc_litedramnativeport1_wdata_last0;
+wire [127:0] soc_litedramnativeport1_wdata_payload_data0;
+wire [15:0] soc_litedramnativeport1_wdata_payload_we0;
+wire soc_litedramnativeport1_rdata_valid0;
+wire soc_litedramnativeport1_rdata_ready0;
+reg  soc_litedramnativeport1_rdata_first = 1'd0;
+reg  soc_litedramnativeport1_rdata_last = 1'd0;
+wire [127:0] soc_litedramnativeport1_rdata_payload_data0;
 wire soc_litedramnativeport1_flush;
-reg  soc_litedramnativeport1_cmd_valid = 1'd0;
-wire soc_litedramnativeport1_cmd_ready;
+reg  soc_litedramnativeport1_cmd_valid1 = 1'd0;
+reg  soc_litedramnativeport1_cmd_ready1 = 1'd0;
 wire soc_litedramnativeport1_cmd_last;
-wire soc_litedramnativeport1_cmd_payload_we;
-wire [23:0] soc_litedramnativeport1_cmd_payload_addr;
-reg  soc_litedramnativeport1_wdata_valid = 1'd0;
-wire soc_litedramnativeport1_wdata_ready;
-wire [127:0] soc_litedramnativeport1_wdata_payload_data;
-wire [15:0] soc_litedramnativeport1_wdata_payload_we;
-wire soc_litedramnativeport1_rdata_valid;
-wire soc_litedramnativeport1_rdata_ready;
-wire [127:0] soc_litedramnativeport1_rdata_payload_data;
-wire [23:0] soc_interface1_wb_port_adr;
-wire [127:0] soc_interface1_wb_port_dat_w;
-reg  [127:0] soc_interface1_wb_port_dat_r = 128'd0;
-wire [15:0] soc_interface1_wb_port_sel;
+wire soc_litedramnativeport1_cmd_payload_we1;
+wire [25:0] soc_litedramnativeport1_cmd_payload_addr1;
+reg  soc_litedramnativeport1_wdata_valid1 = 1'd0;
+wire soc_litedramnativeport1_wdata_ready1;
+reg  soc_litedramnativeport1_wdata_first1 = 1'd0;
+reg  soc_litedramnativeport1_wdata_last1 = 1'd0;
+wire [31:0] soc_litedramnativeport1_wdata_payload_data1;
+wire [3:0] soc_litedramnativeport1_wdata_payload_we1;
+reg  soc_litedramnativeport1_rdata_valid1 = 1'd0;
+wire soc_litedramnativeport1_rdata_ready1;
+reg  [31:0] soc_litedramnativeport1_rdata_payload_data1 = 32'd0;
+reg  [3:0] soc_litedramnativeportconverter1_sel = 4'd0;
+reg  soc_litedramnativeportconverter1_cmd_buffer_sink_valid = 1'd0;
+wire soc_litedramnativeportconverter1_cmd_buffer_sink_ready;
+reg  soc_litedramnativeportconverter1_cmd_buffer_sink_first = 1'd0;
+reg  soc_litedramnativeportconverter1_cmd_buffer_sink_last = 1'd0;
+reg  [3:0] soc_litedramnativeportconverter1_cmd_buffer_sink_payload_sel = 4'd0;
+reg  soc_litedramnativeportconverter1_cmd_buffer_sink_payload_we = 1'd0;
+wire soc_litedramnativeportconverter1_cmd_buffer_source_valid;
+wire soc_litedramnativeportconverter1_cmd_buffer_source_ready;
+wire soc_litedramnativeportconverter1_cmd_buffer_source_first;
+wire soc_litedramnativeportconverter1_cmd_buffer_source_last;
+wire [3:0] soc_litedramnativeportconverter1_cmd_buffer_source_payload_sel;
+wire soc_litedramnativeportconverter1_cmd_buffer_source_payload_we;
+reg  [25:0] soc_litedramnativeportconverter1_cmd_addr = 26'd0;
+reg  soc_litedramnativeportconverter1_cmd_we = 1'd0;
+reg  soc_litedramnativeportconverter1_cmd_last = 1'd0;
+wire soc_litedramnativeportconverter1_next_cmd;
+wire soc_litedramnativeportconverter1_addr_changed;
+wire soc_litedramnativeportconverter1_wdata_finished;
+reg  soc_litedramnativeportconverter1_rdata_finished = 1'd0;
+reg  soc_litedramnativeportconverter1_read_lock = 1'd0;
+reg  soc_litedramnativeportconverter1_read_unlocked = 1'd0;
+wire soc_litedramnativeportconverter1_rw_collision;
+wire soc_litedramnativeportconverter1_rdata_fifo_sink_valid;
+wire soc_litedramnativeportconverter1_rdata_fifo_sink_ready;
+wire soc_litedramnativeportconverter1_rdata_fifo_sink_first;
+wire soc_litedramnativeportconverter1_rdata_fifo_sink_last;
+wire [127:0] soc_litedramnativeportconverter1_rdata_fifo_sink_payload_data;
+wire soc_litedramnativeportconverter1_rdata_fifo_source_valid;
+wire soc_litedramnativeportconverter1_rdata_fifo_source_ready;
+wire soc_litedramnativeportconverter1_rdata_fifo_source_first;
+wire soc_litedramnativeportconverter1_rdata_fifo_source_last;
+wire [127:0] soc_litedramnativeportconverter1_rdata_fifo_source_payload_data;
+wire soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_we;
+wire soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_writable;
+wire soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_re;
+wire soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_readable;
+wire [129:0] soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_din;
+wire [129:0] soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_dout;
+reg  [1:0] soc_litedramnativeportconverter1_rdata_fifo_level = 2'd0;
+reg  soc_litedramnativeportconverter1_rdata_fifo_replace = 1'd0;
+reg  [1:0] soc_litedramnativeportconverter1_rdata_fifo_produce = 2'd0;
+reg  [1:0] soc_litedramnativeportconverter1_rdata_fifo_consume = 2'd0;
+reg  [1:0] soc_litedramnativeportconverter1_rdata_fifo_wrport_adr = 2'd0;
+wire [129:0] soc_litedramnativeportconverter1_rdata_fifo_wrport_dat_r;
+wire soc_litedramnativeportconverter1_rdata_fifo_wrport_we;
+wire [129:0] soc_litedramnativeportconverter1_rdata_fifo_wrport_dat_w;
+wire soc_litedramnativeportconverter1_rdata_fifo_do_read;
+wire [1:0] soc_litedramnativeportconverter1_rdata_fifo_rdport_adr;
+wire [129:0] soc_litedramnativeportconverter1_rdata_fifo_rdport_dat_r;
+wire [127:0] soc_litedramnativeportconverter1_rdata_fifo_fifo_in_payload_data;
+wire soc_litedramnativeportconverter1_rdata_fifo_fifo_in_first;
+wire soc_litedramnativeportconverter1_rdata_fifo_fifo_in_last;
+wire [127:0] soc_litedramnativeportconverter1_rdata_fifo_fifo_out_payload_data;
+wire soc_litedramnativeportconverter1_rdata_fifo_fifo_out_first;
+wire soc_litedramnativeportconverter1_rdata_fifo_fifo_out_last;
+wire soc_litedramnativeportconverter1_rdata_converter_sink_valid;
+wire soc_litedramnativeportconverter1_rdata_converter_sink_ready;
+wire soc_litedramnativeportconverter1_rdata_converter_sink_first;
+wire soc_litedramnativeportconverter1_rdata_converter_sink_last;
+wire [127:0] soc_litedramnativeportconverter1_rdata_converter_sink_payload_data;
+wire soc_litedramnativeportconverter1_rdata_converter_source_valid;
+reg  soc_litedramnativeportconverter1_rdata_converter_source_ready = 1'd0;
+wire soc_litedramnativeportconverter1_rdata_converter_source_first;
+wire soc_litedramnativeportconverter1_rdata_converter_source_last;
+wire [31:0] soc_litedramnativeportconverter1_rdata_converter_source_payload_data;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_sink_valid;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_sink_ready;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_sink_first;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_sink_last;
+reg  [127:0] soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data = 128'd0;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_source_valid;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_source_ready;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_source_first;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_source_last;
+reg  [31:0] soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_data = 32'd0;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_valid_token_count;
+reg  [1:0] soc_litedramnativeportconverter1_rdata_converter_converter_mux = 2'd0;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_first;
+wire soc_litedramnativeportconverter1_rdata_converter_converter_last;
+wire soc_litedramnativeportconverter1_rdata_converter_source_source_valid;
+wire soc_litedramnativeportconverter1_rdata_converter_source_source_ready;
+wire soc_litedramnativeportconverter1_rdata_converter_source_source_first;
+wire soc_litedramnativeportconverter1_rdata_converter_source_source_last;
+wire [31:0] soc_litedramnativeportconverter1_rdata_converter_source_source_payload_data;
+reg  [3:0] soc_litedramnativeportconverter1_rdata_chunk = 4'd1;
+wire soc_litedramnativeportconverter1_rdata_chunk_valid;
+wire soc_litedramnativeportconverter1_wdata_fifo_sink_valid;
+wire soc_litedramnativeportconverter1_wdata_fifo_sink_ready;
+wire soc_litedramnativeportconverter1_wdata_fifo_sink_first;
+wire soc_litedramnativeportconverter1_wdata_fifo_sink_last;
+wire [31:0] soc_litedramnativeportconverter1_wdata_fifo_sink_payload_data;
+wire [3:0] soc_litedramnativeportconverter1_wdata_fifo_sink_payload_we;
+wire soc_litedramnativeportconverter1_wdata_fifo_source_valid;
+reg  soc_litedramnativeportconverter1_wdata_fifo_source_ready = 1'd0;
+wire soc_litedramnativeportconverter1_wdata_fifo_source_first;
+wire soc_litedramnativeportconverter1_wdata_fifo_source_last;
+wire [31:0] soc_litedramnativeportconverter1_wdata_fifo_source_payload_data;
+wire [3:0] soc_litedramnativeportconverter1_wdata_fifo_source_payload_we;
+wire soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_we;
+wire soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_writable;
+wire soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_re;
+wire soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_readable;
+wire [37:0] soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_din;
+wire [37:0] soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_dout;
+reg  [1:0] soc_litedramnativeportconverter1_wdata_fifo_level = 2'd0;
+reg  soc_litedramnativeportconverter1_wdata_fifo_replace = 1'd0;
+reg  [1:0] soc_litedramnativeportconverter1_wdata_fifo_produce = 2'd0;
+reg  [1:0] soc_litedramnativeportconverter1_wdata_fifo_consume = 2'd0;
+reg  [1:0] soc_litedramnativeportconverter1_wdata_fifo_wrport_adr = 2'd0;
+wire [37:0] soc_litedramnativeportconverter1_wdata_fifo_wrport_dat_r;
+wire soc_litedramnativeportconverter1_wdata_fifo_wrport_we;
+wire [37:0] soc_litedramnativeportconverter1_wdata_fifo_wrport_dat_w;
+wire soc_litedramnativeportconverter1_wdata_fifo_do_read;
+wire [1:0] soc_litedramnativeportconverter1_wdata_fifo_rdport_adr;
+wire [37:0] soc_litedramnativeportconverter1_wdata_fifo_rdport_dat_r;
+wire [31:0] soc_litedramnativeportconverter1_wdata_fifo_fifo_in_payload_data;
+wire [3:0] soc_litedramnativeportconverter1_wdata_fifo_fifo_in_payload_we;
+wire soc_litedramnativeportconverter1_wdata_fifo_fifo_in_first;
+wire soc_litedramnativeportconverter1_wdata_fifo_fifo_in_last;
+wire [31:0] soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_data;
+wire [3:0] soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_we;
+wire soc_litedramnativeportconverter1_wdata_fifo_fifo_out_first;
+wire soc_litedramnativeportconverter1_wdata_fifo_fifo_out_last;
+wire soc_litedramnativeportconverter1_wdata_buffer_sink_sink_valid;
+wire soc_litedramnativeportconverter1_wdata_buffer_sink_sink_ready;
+reg  soc_litedramnativeportconverter1_wdata_buffer_sink_sink_first = 1'd0;
+reg  soc_litedramnativeportconverter1_wdata_buffer_sink_sink_last = 1'd0;
+wire [127:0] soc_litedramnativeportconverter1_wdata_buffer_sink_sink_payload_data;
+wire [15:0] soc_litedramnativeportconverter1_wdata_buffer_sink_sink_payload_we;
+wire soc_litedramnativeportconverter1_wdata_buffer_source_source_valid;
+wire soc_litedramnativeportconverter1_wdata_buffer_source_source_ready;
+wire soc_litedramnativeportconverter1_wdata_buffer_source_source_first;
+wire soc_litedramnativeportconverter1_wdata_buffer_source_source_last;
+wire [127:0] soc_litedramnativeportconverter1_wdata_buffer_source_source_payload_data;
+wire [15:0] soc_litedramnativeportconverter1_wdata_buffer_source_source_payload_we;
+wire soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_valid;
+wire soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_ready;
+wire soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_first;
+wire soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_last;
+wire [127:0] soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_payload_data;
+wire [15:0] soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_payload_we;
+reg  soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_valid = 1'd0;
+wire soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_ready;
+reg  soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_first = 1'd0;
+reg  soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_last = 1'd0;
+reg  [127:0] soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_payload_data = 128'd0;
+reg  [15:0] soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_payload_we = 16'd0;
+reg  soc_litedramnativeportconverter1_wdata_converter_sink_valid = 1'd0;
+wire soc_litedramnativeportconverter1_wdata_converter_sink_ready;
+reg  soc_litedramnativeportconverter1_wdata_converter_sink_first = 1'd0;
+reg  soc_litedramnativeportconverter1_wdata_converter_sink_last = 1'd0;
+reg  [31:0] soc_litedramnativeportconverter1_wdata_converter_sink_payload_data = 32'd0;
+reg  [3:0] soc_litedramnativeportconverter1_wdata_converter_sink_payload_we = 4'd0;
+wire soc_litedramnativeportconverter1_wdata_converter_source_valid;
+wire soc_litedramnativeportconverter1_wdata_converter_source_ready;
+wire soc_litedramnativeportconverter1_wdata_converter_source_first;
+wire soc_litedramnativeportconverter1_wdata_converter_source_last;
+reg  [127:0] soc_litedramnativeportconverter1_wdata_converter_source_payload_data = 128'd0;
+reg  [15:0] soc_litedramnativeportconverter1_wdata_converter_source_payload_we = 16'd0;
+wire soc_litedramnativeportconverter1_wdata_converter_converter_sink_valid;
+wire soc_litedramnativeportconverter1_wdata_converter_converter_sink_ready;
+wire soc_litedramnativeportconverter1_wdata_converter_converter_sink_first;
+wire soc_litedramnativeportconverter1_wdata_converter_converter_sink_last;
+wire [35:0] soc_litedramnativeportconverter1_wdata_converter_converter_sink_payload_data;
+wire soc_litedramnativeportconverter1_wdata_converter_converter_source_valid;
+wire soc_litedramnativeportconverter1_wdata_converter_converter_source_ready;
+reg  soc_litedramnativeportconverter1_wdata_converter_converter_source_first = 1'd0;
+reg  soc_litedramnativeportconverter1_wdata_converter_converter_source_last = 1'd0;
+reg  [143:0] soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_data = 144'd0;
+reg  [2:0] soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_valid_token_count = 3'd0;
+reg  [1:0] soc_litedramnativeportconverter1_wdata_converter_converter_demux = 2'd0;
+wire soc_litedramnativeportconverter1_wdata_converter_converter_load_part;
+reg  soc_litedramnativeportconverter1_wdata_converter_converter_strobe_all = 1'd0;
+wire soc_litedramnativeportconverter1_wdata_converter_source_source_valid;
+wire soc_litedramnativeportconverter1_wdata_converter_source_source_ready;
+wire soc_litedramnativeportconverter1_wdata_converter_source_source_first;
+wire soc_litedramnativeportconverter1_wdata_converter_source_source_last;
+wire [143:0] soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data;
+reg  [3:0] soc_litedramnativeportconverter1_wdata_chunk = 4'd1;
+wire soc_litedramnativeportconverter1_wdata_chunk_valid;
+reg  [15:0] soc_litedramnativeportconverter1_wdata_sel = 16'd0;
+wire [25:0] soc_interface1_wb_port_adr;
+wire [31:0] soc_interface1_wb_port_dat_w;
+reg  [31:0] soc_interface1_wb_port_dat_r = 32'd0;
+wire [3:0] soc_interface1_wb_port_sel;
 wire soc_interface1_wb_port_cyc;
 wire soc_interface1_wb_port_stb;
 reg  soc_interface1_wb_port_ack = 1'd0;
@@ -1938,6 +2336,26 @@ reg  [2:0] litedramcore_bankmachine7_state = 3'd0;
 reg  [2:0] litedramcore_bankmachine7_next_state = 3'd0;
 reg  [3:0] litedramcore_multiplexer_state = 4'd0;
 reg  [3:0] litedramcore_multiplexer_next_state = 4'd0;
+reg  [1:0] litedramcore_clockdomainsrenamer0_state = 2'd0;
+reg  [1:0] litedramcore_clockdomainsrenamer0_next_state = 2'd0;
+reg  [25:0] soc_litedramnativeportconverter0_cmd_addr_clockdomainsrenamer0_next_value0 = 26'd0;
+reg  soc_litedramnativeportconverter0_cmd_addr_clockdomainsrenamer0_next_value_ce0 = 1'd0;
+reg  soc_litedramnativeportconverter0_cmd_we_clockdomainsrenamer0_next_value1 = 1'd0;
+reg  soc_litedramnativeportconverter0_cmd_we_clockdomainsrenamer0_next_value_ce1 = 1'd0;
+reg  soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value2 = 1'd0;
+reg  soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value_ce2 = 1'd0;
+reg  [3:0] soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value3 = 4'd0;
+reg  soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value_ce3 = 1'd0;
+reg  [1:0] litedramcore_clockdomainsrenamer1_state = 2'd0;
+reg  [1:0] litedramcore_clockdomainsrenamer1_next_state = 2'd0;
+reg  [25:0] soc_litedramnativeportconverter1_cmd_addr_clockdomainsrenamer1_next_value0 = 26'd0;
+reg  soc_litedramnativeportconverter1_cmd_addr_clockdomainsrenamer1_next_value_ce0 = 1'd0;
+reg  soc_litedramnativeportconverter1_cmd_we_clockdomainsrenamer1_next_value1 = 1'd0;
+reg  soc_litedramnativeportconverter1_cmd_we_clockdomainsrenamer1_next_value_ce1 = 1'd0;
+reg  soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value2 = 1'd0;
+reg  soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value_ce2 = 1'd0;
+reg  [3:0] soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value3 = 4'd0;
+reg  soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value_ce3 = 1'd0;
 wire [1:0] litedramcore_roundrobin0_request;
 reg  litedramcore_roundrobin0_grant = 1'd0;
 wire litedramcore_roundrobin0_ce;
@@ -5327,28 +5745,6 @@ always @(*) begin
 	endcase
 end
 always @(*) begin
-	soc_litedramcore_bankmachine0_row_close <= 1'd0;
-	case (litedramcore_bankmachine0_state)
-		1'd1: begin
-			soc_litedramcore_bankmachine0_row_close <= 1'd1;
-		end
-		2'd2: begin
-			soc_litedramcore_bankmachine0_row_close <= 1'd1;
-		end
-		2'd3: begin
-		end
-		3'd4: begin
-			soc_litedramcore_bankmachine0_row_close <= 1'd1;
-		end
-		3'd5: begin
-		end
-		3'd6: begin
-		end
-		default: begin
-		end
-	endcase
-end
-always @(*) begin
 	soc_litedramcore_bankmachine0_cmd_payload_ras <= 1'd0;
 	case (litedramcore_bankmachine0_state)
 		1'd1: begin
@@ -5650,6 +6046,28 @@ always @(*) begin
 					end
 				end
 			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramcore_bankmachine0_row_close <= 1'd0;
+	case (litedramcore_bankmachine0_state)
+		1'd1: begin
+			soc_litedramcore_bankmachine0_row_close <= 1'd1;
+		end
+		2'd2: begin
+			soc_litedramcore_bankmachine0_row_close <= 1'd1;
+		end
+		2'd3: begin
+		end
+		3'd4: begin
+			soc_litedramcore_bankmachine0_row_close <= 1'd1;
+		end
+		3'd5: begin
+		end
+		3'd6: begin
+		end
+		default: begin
 		end
 	endcase
 end
@@ -9900,60 +10318,60 @@ always @(*) begin
 		end
 	endcase
 end
-assign litedramcore_roundrobin0_request = {(((soc_litedramnativeport1_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid), (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid)};
+assign litedramcore_roundrobin0_request = {(((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 1'd0) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0), (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0)};
 assign litedramcore_roundrobin0_ce = ((~soc_litedramcore_interface_bank0_valid) & (~soc_litedramcore_interface_bank0_lock));
 assign soc_litedramcore_interface_bank0_addr = rhs_array_muxed12;
 assign soc_litedramcore_interface_bank0_we = rhs_array_muxed13;
 assign soc_litedramcore_interface_bank0_valid = rhs_array_muxed14;
-assign litedramcore_roundrobin1_request = {(((soc_litedramnativeport1_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid), (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid)};
+assign litedramcore_roundrobin1_request = {(((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 1'd1) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0), (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 1'd1) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0)};
 assign litedramcore_roundrobin1_ce = ((~soc_litedramcore_interface_bank1_valid) & (~soc_litedramcore_interface_bank1_lock));
 assign soc_litedramcore_interface_bank1_addr = rhs_array_muxed15;
 assign soc_litedramcore_interface_bank1_we = rhs_array_muxed16;
 assign soc_litedramcore_interface_bank1_valid = rhs_array_muxed17;
-assign litedramcore_roundrobin2_request = {(((soc_litedramnativeport1_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid), (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid)};
+assign litedramcore_roundrobin2_request = {(((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 2'd2) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0), (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 2'd2) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0)};
 assign litedramcore_roundrobin2_ce = ((~soc_litedramcore_interface_bank2_valid) & (~soc_litedramcore_interface_bank2_lock));
 assign soc_litedramcore_interface_bank2_addr = rhs_array_muxed18;
 assign soc_litedramcore_interface_bank2_we = rhs_array_muxed19;
 assign soc_litedramcore_interface_bank2_valid = rhs_array_muxed20;
-assign litedramcore_roundrobin3_request = {(((soc_litedramnativeport1_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid), (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid)};
+assign litedramcore_roundrobin3_request = {(((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 2'd3) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0), (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 2'd3) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0)};
 assign litedramcore_roundrobin3_ce = ((~soc_litedramcore_interface_bank3_valid) & (~soc_litedramcore_interface_bank3_lock));
 assign soc_litedramcore_interface_bank3_addr = rhs_array_muxed21;
 assign soc_litedramcore_interface_bank3_we = rhs_array_muxed22;
 assign soc_litedramcore_interface_bank3_valid = rhs_array_muxed23;
-assign litedramcore_roundrobin4_request = {(((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked9 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid), (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked8 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid)};
+assign litedramcore_roundrobin4_request = {(((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd4) & (~(((((((litedramcore_locked9 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0), (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd4) & (~(((((((litedramcore_locked8 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0)};
 assign litedramcore_roundrobin4_ce = ((~soc_litedramcore_interface_bank4_valid) & (~soc_litedramcore_interface_bank4_lock));
 assign soc_litedramcore_interface_bank4_addr = rhs_array_muxed24;
 assign soc_litedramcore_interface_bank4_we = rhs_array_muxed25;
 assign soc_litedramcore_interface_bank4_valid = rhs_array_muxed26;
-assign litedramcore_roundrobin5_request = {(((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked11 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid), (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked10 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid)};
+assign litedramcore_roundrobin5_request = {(((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd5) & (~(((((((litedramcore_locked11 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0), (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd5) & (~(((((((litedramcore_locked10 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0)};
 assign litedramcore_roundrobin5_ce = ((~soc_litedramcore_interface_bank5_valid) & (~soc_litedramcore_interface_bank5_lock));
 assign soc_litedramcore_interface_bank5_addr = rhs_array_muxed27;
 assign soc_litedramcore_interface_bank5_we = rhs_array_muxed28;
 assign soc_litedramcore_interface_bank5_valid = rhs_array_muxed29;
-assign litedramcore_roundrobin6_request = {(((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked13 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid), (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked12 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid)};
+assign litedramcore_roundrobin6_request = {(((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd6) & (~(((((((litedramcore_locked13 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0), (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd6) & (~(((((((litedramcore_locked12 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0)};
 assign litedramcore_roundrobin6_ce = ((~soc_litedramcore_interface_bank6_valid) & (~soc_litedramcore_interface_bank6_lock));
 assign soc_litedramcore_interface_bank6_addr = rhs_array_muxed30;
 assign soc_litedramcore_interface_bank6_we = rhs_array_muxed31;
 assign soc_litedramcore_interface_bank6_valid = rhs_array_muxed32;
-assign litedramcore_roundrobin7_request = {(((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked15 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid), (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked14 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid)};
+assign litedramcore_roundrobin7_request = {(((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd7) & (~(((((((litedramcore_locked15 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0), (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd7) & (~(((((((litedramcore_locked14 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0)};
 assign litedramcore_roundrobin7_ce = ((~soc_litedramcore_interface_bank7_valid) & (~soc_litedramcore_interface_bank7_lock));
 assign soc_litedramcore_interface_bank7_addr = rhs_array_muxed33;
 assign soc_litedramcore_interface_bank7_we = rhs_array_muxed34;
 assign soc_litedramcore_interface_bank7_valid = rhs_array_muxed35;
-assign soc_litedramnativeport0_cmd_ready = ((((((((1'd0 | (((litedramcore_roundrobin0_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank0_ready)) | (((litedramcore_roundrobin1_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank1_ready)) | (((litedramcore_roundrobin2_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank2_ready)) | (((litedramcore_roundrobin3_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank3_ready)) | (((litedramcore_roundrobin4_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked8 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank4_ready)) | (((litedramcore_roundrobin5_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked10 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank5_ready)) | (((litedramcore_roundrobin6_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked12 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank6_ready)) | (((litedramcore_roundrobin7_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked14 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0)))))) & soc_litedramcore_interface_bank7_ready));
-assign soc_litedramnativeport1_cmd_ready = ((((((((1'd0 | (((litedramcore_roundrobin0_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank0_ready)) | (((litedramcore_roundrobin1_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank1_ready)) | (((litedramcore_roundrobin2_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank2_ready)) | (((litedramcore_roundrobin3_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank3_ready)) | (((litedramcore_roundrobin4_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked9 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank4_ready)) | (((litedramcore_roundrobin5_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked11 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank5_ready)) | (((litedramcore_roundrobin6_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked13 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank6_ready)) | (((litedramcore_roundrobin7_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked15 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1)))))) & soc_litedramcore_interface_bank7_ready));
-assign soc_litedramnativeport0_wdata_ready = litedramcore_new_master_wdata_ready1;
-assign soc_litedramnativeport1_wdata_ready = litedramcore_new_master_wdata_ready3;
-assign soc_litedramnativeport0_rdata_valid = litedramcore_new_master_rdata_valid8;
-assign soc_litedramnativeport1_rdata_valid = litedramcore_new_master_rdata_valid17;
+assign soc_litedramnativeport0_cmd_ready0 = ((((((((1'd0 | (((litedramcore_roundrobin0_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank0_ready)) | (((litedramcore_roundrobin1_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 1'd1) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank1_ready)) | (((litedramcore_roundrobin2_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 2'd2) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank2_ready)) | (((litedramcore_roundrobin3_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 2'd3) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank3_ready)) | (((litedramcore_roundrobin4_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd4) & (~(((((((litedramcore_locked8 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank4_ready)) | (((litedramcore_roundrobin5_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd5) & (~(((((((litedramcore_locked10 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank5_ready)) | (((litedramcore_roundrobin6_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd6) & (~(((((((litedramcore_locked12 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank6_ready)) | (((litedramcore_roundrobin7_grant == 1'd0) & ((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd7) & (~(((((((litedramcore_locked14 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0)))))) & soc_litedramcore_interface_bank7_ready));
+assign soc_litedramnativeport1_cmd_ready0 = ((((((((1'd0 | (((litedramcore_roundrobin0_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 1'd0) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank0_ready)) | (((litedramcore_roundrobin1_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 1'd1) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank1_ready)) | (((litedramcore_roundrobin2_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 2'd2) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank2_ready)) | (((litedramcore_roundrobin3_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 2'd3) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank3_ready)) | (((litedramcore_roundrobin4_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd4) & (~(((((((litedramcore_locked9 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank4_ready)) | (((litedramcore_roundrobin5_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd5) & (~(((((((litedramcore_locked11 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank5_ready)) | (((litedramcore_roundrobin6_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd6) & (~(((((((litedramcore_locked13 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1)))))) & soc_litedramcore_interface_bank6_ready)) | (((litedramcore_roundrobin7_grant == 1'd1) & ((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd7) & (~(((((((litedramcore_locked15 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1)))))) & soc_litedramcore_interface_bank7_ready));
+assign soc_litedramnativeport0_wdata_ready0 = litedramcore_new_master_wdata_ready1;
+assign soc_litedramnativeport1_wdata_ready0 = litedramcore_new_master_wdata_ready3;
+assign soc_litedramnativeport0_rdata_valid0 = litedramcore_new_master_rdata_valid8;
+assign soc_litedramnativeport1_rdata_valid0 = litedramcore_new_master_rdata_valid17;
 always @(*) begin
 	soc_litedramcore_interface_wdata <= 128'd0;
 	case ({litedramcore_new_master_wdata_ready3, litedramcore_new_master_wdata_ready1})
 		1'd1: begin
-			soc_litedramcore_interface_wdata <= soc_litedramnativeport0_wdata_payload_data;
+			soc_litedramcore_interface_wdata <= soc_litedramnativeport0_wdata_payload_data0;
 		end
 		2'd2: begin
-			soc_litedramcore_interface_wdata <= soc_litedramnativeport1_wdata_payload_data;
+			soc_litedramcore_interface_wdata <= soc_litedramnativeport1_wdata_payload_data0;
 		end
 		default: begin
 			soc_litedramcore_interface_wdata <= 1'd0;
@@ -9964,55 +10382,1208 @@ always @(*) begin
 	soc_litedramcore_interface_wdata_we <= 16'd0;
 	case ({litedramcore_new_master_wdata_ready3, litedramcore_new_master_wdata_ready1})
 		1'd1: begin
-			soc_litedramcore_interface_wdata_we <= soc_litedramnativeport0_wdata_payload_we;
+			soc_litedramcore_interface_wdata_we <= soc_litedramnativeport0_wdata_payload_we0;
 		end
 		2'd2: begin
-			soc_litedramcore_interface_wdata_we <= soc_litedramnativeport1_wdata_payload_we;
+			soc_litedramcore_interface_wdata_we <= soc_litedramnativeport1_wdata_payload_we0;
 		end
 		default: begin
 			soc_litedramcore_interface_wdata_we <= 1'd0;
 		end
 	endcase
 end
-assign soc_litedramnativeport0_rdata_payload_data = soc_litedramcore_interface_rdata;
-assign soc_litedramnativeport1_rdata_payload_data = soc_litedramcore_interface_rdata;
-assign soc_litedramnativeport0_cmd_payload_addr = (soc_interface0_wb_port_adr - 1'd0);
-assign soc_litedramnativeport0_cmd_payload_we = soc_interface0_wb_port_we;
-assign soc_litedramnativeport0_cmd_last = (~soc_interface0_wb_port_we);
-assign soc_litedramnativeport0_flush = (~soc_interface0_wb_port_cyc);
+assign soc_litedramnativeport0_rdata_payload_data0 = soc_litedramcore_interface_rdata;
+assign soc_litedramnativeport1_rdata_payload_data0 = soc_litedramcore_interface_rdata;
+assign soc_litedramnativeportconverter0_cmd_buffer_source_ready = (soc_litedramnativeportconverter0_wdata_finished | soc_litedramnativeportconverter0_rdata_finished);
+assign soc_litedramnativeportconverter0_addr_changed = (soc_litedramnativeportconverter0_cmd_addr[25:2] != soc_litedramnativeport0_cmd_payload_addr1[25:2]);
+assign soc_litedramnativeportconverter0_rw_collision = ((soc_litedramnativeportconverter0_cmd_we & (soc_litedramnativeport0_cmd_valid1 & (~soc_litedramnativeport0_cmd_payload_we1))) & (~soc_litedramnativeportconverter0_addr_changed));
+assign soc_litedramnativeportconverter0_next_cmd = ((((soc_litedramnativeportconverter0_addr_changed | (soc_litedramnativeportconverter0_cmd_we != soc_litedramnativeport0_cmd_payload_we1)) | (soc_litedramnativeportconverter0_sel == 4'd15)) | soc_litedramnativeportconverter0_cmd_last) | soc_litedramnativeport0_flush);
+assign soc_litedramnativeportconverter0_rdata_fifo_sink_valid = soc_litedramnativeport0_rdata_valid0;
+assign soc_litedramnativeport0_rdata_ready0 = soc_litedramnativeportconverter0_rdata_fifo_sink_ready;
+assign soc_litedramnativeportconverter0_rdata_fifo_sink_first = soc_litedramnativeport0_rdata_first;
+assign soc_litedramnativeportconverter0_rdata_fifo_sink_last = soc_litedramnativeport0_rdata_last;
+assign soc_litedramnativeportconverter0_rdata_fifo_sink_payload_data = soc_litedramnativeport0_rdata_payload_data0;
+assign soc_litedramnativeportconverter0_rdata_converter_sink_valid = soc_litedramnativeportconverter0_rdata_fifo_source_valid;
+assign soc_litedramnativeportconverter0_rdata_fifo_source_ready = soc_litedramnativeportconverter0_rdata_converter_sink_ready;
+assign soc_litedramnativeportconverter0_rdata_converter_sink_first = soc_litedramnativeportconverter0_rdata_fifo_source_first;
+assign soc_litedramnativeportconverter0_rdata_converter_sink_last = soc_litedramnativeportconverter0_rdata_fifo_source_last;
+assign soc_litedramnativeportconverter0_rdata_converter_sink_payload_data = soc_litedramnativeportconverter0_rdata_fifo_source_payload_data;
+assign soc_litedramnativeportconverter0_rdata_chunk_valid = ((soc_litedramnativeportconverter0_cmd_buffer_source_payload_sel & soc_litedramnativeportconverter0_rdata_chunk) != 1'd0);
 always @(*) begin
-	soc_litedramnativeport0_wdata_valid <= 1'd0;
-	soc_litedramnativeport0_wdata_valid <= (soc_interface0_wb_port_stb & soc_interface0_wb_port_we);
-	if (1'd1) begin
-		if ((~soc_litedramwishbone2native0_is_ongoing)) begin
-			soc_litedramnativeport0_wdata_valid <= 1'd0;
+	soc_litedramnativeportconverter0_rdata_finished <= 1'd0;
+	if ((soc_litedramnativeportconverter0_cmd_buffer_source_valid & (~soc_litedramnativeportconverter0_cmd_buffer_source_payload_we))) begin
+		soc_litedramnativeportconverter0_rdata_finished <= ((soc_litedramnativeportconverter0_rdata_converter_source_valid & soc_litedramnativeportconverter0_rdata_converter_source_ready) & soc_litedramnativeportconverter0_rdata_chunk[3]);
+	end
+end
+always @(*) begin
+	soc_litedramnativeport0_rdata_valid1 <= 1'd0;
+	if ((soc_litedramnativeportconverter0_cmd_buffer_source_valid & (~soc_litedramnativeportconverter0_cmd_buffer_source_payload_we))) begin
+		if (soc_litedramnativeportconverter0_rdata_chunk_valid) begin
+			soc_litedramnativeport0_rdata_valid1 <= soc_litedramnativeportconverter0_rdata_converter_source_valid;
+		end else begin
 		end
 	end
 end
-assign soc_litedramnativeport0_wdata_payload_data = soc_interface0_wb_port_dat_w;
-assign soc_litedramnativeport0_wdata_payload_we = soc_interface0_wb_port_sel;
-assign soc_litedramnativeport0_rdata_ready = 1'd1;
+always @(*) begin
+	soc_litedramnativeportconverter0_rdata_converter_source_ready <= 1'd0;
+	if ((soc_litedramnativeportconverter0_cmd_buffer_source_valid & (~soc_litedramnativeportconverter0_cmd_buffer_source_payload_we))) begin
+		if (soc_litedramnativeportconverter0_rdata_chunk_valid) begin
+			soc_litedramnativeportconverter0_rdata_converter_source_ready <= soc_litedramnativeport0_rdata_ready1;
+		end else begin
+			soc_litedramnativeportconverter0_rdata_converter_source_ready <= 1'd1;
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeport0_rdata_payload_data1 <= 32'd0;
+	if ((soc_litedramnativeportconverter0_cmd_buffer_source_valid & (~soc_litedramnativeportconverter0_cmd_buffer_source_payload_we))) begin
+		if (soc_litedramnativeportconverter0_rdata_chunk_valid) begin
+			soc_litedramnativeport0_rdata_payload_data1 <= soc_litedramnativeportconverter0_rdata_converter_source_payload_data;
+		end else begin
+		end
+	end
+end
+assign soc_litedramnativeportconverter0_wdata_fifo_sink_valid = soc_litedramnativeport0_wdata_valid1;
+assign soc_litedramnativeport0_wdata_ready1 = soc_litedramnativeportconverter0_wdata_fifo_sink_ready;
+assign soc_litedramnativeportconverter0_wdata_fifo_sink_first = soc_litedramnativeport0_wdata_first1;
+assign soc_litedramnativeportconverter0_wdata_fifo_sink_last = soc_litedramnativeport0_wdata_last1;
+assign soc_litedramnativeportconverter0_wdata_fifo_sink_payload_data = soc_litedramnativeport0_wdata_payload_data1;
+assign soc_litedramnativeportconverter0_wdata_fifo_sink_payload_we = soc_litedramnativeport0_wdata_payload_we1;
+assign soc_litedramnativeport0_wdata_valid0 = soc_litedramnativeportconverter0_wdata_buffer_source_source_valid;
+assign soc_litedramnativeportconverter0_wdata_buffer_source_source_ready = soc_litedramnativeport0_wdata_ready0;
+assign soc_litedramnativeport0_wdata_first0 = soc_litedramnativeportconverter0_wdata_buffer_source_source_first;
+assign soc_litedramnativeport0_wdata_last0 = soc_litedramnativeportconverter0_wdata_buffer_source_source_last;
+assign soc_litedramnativeport0_wdata_payload_data0 = soc_litedramnativeportconverter0_wdata_buffer_source_source_payload_data;
+assign soc_litedramnativeport0_wdata_payload_we0 = soc_litedramnativeportconverter0_wdata_buffer_source_source_payload_we;
+assign soc_litedramnativeportconverter0_wdata_chunk_valid = ((soc_litedramnativeportconverter0_cmd_buffer_source_payload_sel & soc_litedramnativeportconverter0_wdata_chunk) != 1'd0);
+always @(*) begin
+	soc_litedramnativeportconverter0_wdata_fifo_source_ready <= 1'd0;
+	if ((soc_litedramnativeportconverter0_cmd_buffer_source_valid & soc_litedramnativeportconverter0_cmd_buffer_source_payload_we)) begin
+		if (soc_litedramnativeportconverter0_wdata_chunk_valid) begin
+			soc_litedramnativeportconverter0_wdata_fifo_source_ready <= soc_litedramnativeportconverter0_wdata_converter_sink_ready;
+		end else begin
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_wdata_converter_sink_payload_data <= 32'd0;
+	if ((soc_litedramnativeportconverter0_cmd_buffer_source_valid & soc_litedramnativeportconverter0_cmd_buffer_source_payload_we)) begin
+		if (soc_litedramnativeportconverter0_wdata_chunk_valid) begin
+			soc_litedramnativeportconverter0_wdata_converter_sink_payload_data <= soc_litedramnativeportconverter0_wdata_fifo_source_payload_data;
+		end else begin
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_wdata_converter_sink_payload_we <= 4'd0;
+	if ((soc_litedramnativeportconverter0_cmd_buffer_source_valid & soc_litedramnativeportconverter0_cmd_buffer_source_payload_we)) begin
+		if (soc_litedramnativeportconverter0_wdata_chunk_valid) begin
+			soc_litedramnativeportconverter0_wdata_converter_sink_payload_we <= soc_litedramnativeportconverter0_wdata_fifo_source_payload_we;
+		end else begin
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_wdata_converter_sink_valid <= 1'd0;
+	if ((soc_litedramnativeportconverter0_cmd_buffer_source_valid & soc_litedramnativeportconverter0_cmd_buffer_source_payload_we)) begin
+		if (soc_litedramnativeportconverter0_wdata_chunk_valid) begin
+			soc_litedramnativeportconverter0_wdata_converter_sink_valid <= soc_litedramnativeportconverter0_wdata_fifo_source_valid;
+		end else begin
+			soc_litedramnativeportconverter0_wdata_converter_sink_valid <= 1'd1;
+		end
+	end
+end
+assign soc_litedramnativeportconverter0_wdata_buffer_sink_sink_valid = soc_litedramnativeportconverter0_wdata_converter_source_valid;
+assign soc_litedramnativeportconverter0_wdata_buffer_sink_sink_payload_data = soc_litedramnativeportconverter0_wdata_converter_source_payload_data;
+assign soc_litedramnativeportconverter0_wdata_buffer_sink_sink_payload_we = (soc_litedramnativeportconverter0_wdata_converter_source_payload_we & soc_litedramnativeportconverter0_wdata_sel);
+assign soc_litedramnativeportconverter0_wdata_converter_source_ready = soc_litedramnativeportconverter0_wdata_buffer_sink_sink_ready;
+assign soc_litedramnativeportconverter0_wdata_finished = ((soc_litedramnativeportconverter0_wdata_converter_sink_valid & soc_litedramnativeportconverter0_wdata_converter_sink_ready) & soc_litedramnativeportconverter0_wdata_chunk[3]);
+assign soc_litedramnativeportconverter0_cmd_buffer_source_valid = soc_litedramnativeportconverter0_cmd_buffer_sink_valid;
+assign soc_litedramnativeportconverter0_cmd_buffer_sink_ready = soc_litedramnativeportconverter0_cmd_buffer_source_ready;
+assign soc_litedramnativeportconverter0_cmd_buffer_source_first = soc_litedramnativeportconverter0_cmd_buffer_sink_first;
+assign soc_litedramnativeportconverter0_cmd_buffer_source_last = soc_litedramnativeportconverter0_cmd_buffer_sink_last;
+assign soc_litedramnativeportconverter0_cmd_buffer_source_payload_sel = soc_litedramnativeportconverter0_cmd_buffer_sink_payload_sel;
+assign soc_litedramnativeportconverter0_cmd_buffer_source_payload_we = soc_litedramnativeportconverter0_cmd_buffer_sink_payload_we;
+always @(*) begin
+	litedramcore_clockdomainsrenamer0_next_state <= 2'd0;
+	litedramcore_clockdomainsrenamer0_next_state <= litedramcore_clockdomainsrenamer0_state;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+			if (soc_litedramnativeport0_cmd_ready0) begin
+				if (soc_litedramnativeportconverter0_cmd_we) begin
+					litedramcore_clockdomainsrenamer0_next_state <= 1'd0;
+				end else begin
+					litedramcore_clockdomainsrenamer0_next_state <= 2'd2;
+				end
+			end
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter0_next_cmd) begin
+				litedramcore_clockdomainsrenamer0_next_state <= 2'd3;
+			end else begin
+			end
+		end
+		2'd3: begin
+			if (soc_litedramnativeportconverter0_cmd_buffer_sink_ready) begin
+				if (soc_litedramnativeportconverter0_cmd_we) begin
+					litedramcore_clockdomainsrenamer0_next_state <= 1'd1;
+				end else begin
+					litedramcore_clockdomainsrenamer0_next_state <= 1'd0;
+				end
+			end
+		end
+		default: begin
+			if (soc_litedramnativeport0_cmd_ready1) begin
+				if (soc_litedramnativeport0_cmd_payload_we1) begin
+					litedramcore_clockdomainsrenamer0_next_state <= 2'd2;
+				end else begin
+					litedramcore_clockdomainsrenamer0_next_state <= 1'd1;
+				end
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value_ce2 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter0_next_cmd) begin
+			end else begin
+				soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value_ce2 <= 1'd1;
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport0_cmd_ready1) begin
+				soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value_ce2 <= 1'd1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeport0_cmd_payload_addr0 <= 24'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+			soc_litedramnativeport0_cmd_payload_addr0 <= soc_litedramnativeportconverter0_cmd_addr[25:2];
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_cmd_buffer_sink_valid <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+			soc_litedramnativeportconverter0_cmd_buffer_sink_valid <= 1'd1;
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value3 <= 4'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter0_next_cmd) begin
+			end else begin
+				if (soc_litedramnativeport0_cmd_valid1) begin
+					soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value3 <= (soc_litedramnativeportconverter0_sel | (1'd1 <<< soc_litedramnativeport0_cmd_payload_addr1[1:0]));
+				end
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport0_cmd_ready1) begin
+				soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value3 <= (1'd1 <<< soc_litedramnativeport0_cmd_payload_addr1[1:0]);
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_cmd_buffer_sink_payload_we <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+			soc_litedramnativeportconverter0_cmd_buffer_sink_payload_we <= soc_litedramnativeportconverter0_cmd_we;
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value_ce3 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter0_next_cmd) begin
+			end else begin
+				if (soc_litedramnativeport0_cmd_valid1) begin
+					soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value_ce3 <= 1'd1;
+				end
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport0_cmd_ready1) begin
+				soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value_ce3 <= 1'd1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeport0_cmd_valid0 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+			soc_litedramnativeport0_cmd_valid0 <= 1'd1;
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_cmd_addr_clockdomainsrenamer0_next_value0 <= 26'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport0_cmd_ready1) begin
+				soc_litedramnativeportconverter0_cmd_addr_clockdomainsrenamer0_next_value0 <= soc_litedramnativeport0_cmd_payload_addr1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeport0_cmd_ready1 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter0_next_cmd) begin
+			end else begin
+				soc_litedramnativeport0_cmd_ready1 <= soc_litedramnativeport0_cmd_valid1;
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			soc_litedramnativeport0_cmd_ready1 <= (soc_litedramnativeport0_cmd_valid1 & (~soc_litedramnativeportconverter0_read_lock));
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_cmd_addr_clockdomainsrenamer0_next_value_ce0 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport0_cmd_ready1) begin
+				soc_litedramnativeportconverter0_cmd_addr_clockdomainsrenamer0_next_value_ce0 <= 1'd1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeport0_cmd_payload_we0 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+			soc_litedramnativeport0_cmd_payload_we0 <= soc_litedramnativeportconverter0_cmd_we;
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_cmd_we_clockdomainsrenamer0_next_value1 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport0_cmd_ready1) begin
+				soc_litedramnativeportconverter0_cmd_we_clockdomainsrenamer0_next_value1 <= soc_litedramnativeport0_cmd_payload_we1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_cmd_we_clockdomainsrenamer0_next_value_ce1 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport0_cmd_ready1) begin
+				soc_litedramnativeportconverter0_cmd_we_clockdomainsrenamer0_next_value_ce1 <= 1'd1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value2 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter0_next_cmd) begin
+			end else begin
+				soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value2 <= soc_litedramnativeport0_cmd_last;
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport0_cmd_ready1) begin
+				soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value2 <= soc_litedramnativeport0_cmd_last;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_cmd_buffer_sink_payload_sel <= 4'd0;
+	case (litedramcore_clockdomainsrenamer0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+			soc_litedramnativeportconverter0_cmd_buffer_sink_payload_sel <= soc_litedramnativeportconverter0_sel;
+		end
+		default: begin
+		end
+	endcase
+end
+assign soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_din = {soc_litedramnativeportconverter0_rdata_fifo_fifo_in_last, soc_litedramnativeportconverter0_rdata_fifo_fifo_in_first, soc_litedramnativeportconverter0_rdata_fifo_fifo_in_payload_data};
+assign {soc_litedramnativeportconverter0_rdata_fifo_fifo_out_last, soc_litedramnativeportconverter0_rdata_fifo_fifo_out_first, soc_litedramnativeportconverter0_rdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_dout;
+assign {soc_litedramnativeportconverter0_rdata_fifo_fifo_out_last, soc_litedramnativeportconverter0_rdata_fifo_fifo_out_first, soc_litedramnativeportconverter0_rdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_dout;
+assign {soc_litedramnativeportconverter0_rdata_fifo_fifo_out_last, soc_litedramnativeportconverter0_rdata_fifo_fifo_out_first, soc_litedramnativeportconverter0_rdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_dout;
+assign soc_litedramnativeportconverter0_rdata_fifo_sink_ready = soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_writable;
+assign soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_we = soc_litedramnativeportconverter0_rdata_fifo_sink_valid;
+assign soc_litedramnativeportconverter0_rdata_fifo_fifo_in_first = soc_litedramnativeportconverter0_rdata_fifo_sink_first;
+assign soc_litedramnativeportconverter0_rdata_fifo_fifo_in_last = soc_litedramnativeportconverter0_rdata_fifo_sink_last;
+assign soc_litedramnativeportconverter0_rdata_fifo_fifo_in_payload_data = soc_litedramnativeportconverter0_rdata_fifo_sink_payload_data;
+assign soc_litedramnativeportconverter0_rdata_fifo_source_valid = soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_readable;
+assign soc_litedramnativeportconverter0_rdata_fifo_source_first = soc_litedramnativeportconverter0_rdata_fifo_fifo_out_first;
+assign soc_litedramnativeportconverter0_rdata_fifo_source_last = soc_litedramnativeportconverter0_rdata_fifo_fifo_out_last;
+assign soc_litedramnativeportconverter0_rdata_fifo_source_payload_data = soc_litedramnativeportconverter0_rdata_fifo_fifo_out_payload_data;
+assign soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_re = soc_litedramnativeportconverter0_rdata_fifo_source_ready;
+always @(*) begin
+	soc_litedramnativeportconverter0_rdata_fifo_wrport_adr <= 2'd0;
+	if (soc_litedramnativeportconverter0_rdata_fifo_replace) begin
+		soc_litedramnativeportconverter0_rdata_fifo_wrport_adr <= (soc_litedramnativeportconverter0_rdata_fifo_produce - 1'd1);
+	end else begin
+		soc_litedramnativeportconverter0_rdata_fifo_wrport_adr <= soc_litedramnativeportconverter0_rdata_fifo_produce;
+	end
+end
+assign soc_litedramnativeportconverter0_rdata_fifo_wrport_dat_w = soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_din;
+assign soc_litedramnativeportconverter0_rdata_fifo_wrport_we = (soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_we & (soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_writable | soc_litedramnativeportconverter0_rdata_fifo_replace));
+assign soc_litedramnativeportconverter0_rdata_fifo_do_read = (soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_readable & soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_re);
+assign soc_litedramnativeportconverter0_rdata_fifo_rdport_adr = soc_litedramnativeportconverter0_rdata_fifo_consume;
+assign soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_dout = soc_litedramnativeportconverter0_rdata_fifo_rdport_dat_r;
+assign soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_writable = (soc_litedramnativeportconverter0_rdata_fifo_level != 2'd3);
+assign soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_readable = (soc_litedramnativeportconverter0_rdata_fifo_level != 1'd0);
+assign soc_litedramnativeportconverter0_rdata_converter_converter_sink_valid = soc_litedramnativeportconverter0_rdata_converter_sink_valid;
+assign soc_litedramnativeportconverter0_rdata_converter_converter_sink_first = soc_litedramnativeportconverter0_rdata_converter_sink_first;
+assign soc_litedramnativeportconverter0_rdata_converter_converter_sink_last = soc_litedramnativeportconverter0_rdata_converter_sink_last;
+assign soc_litedramnativeportconverter0_rdata_converter_sink_ready = soc_litedramnativeportconverter0_rdata_converter_converter_sink_ready;
+always @(*) begin
+	soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data <= 128'd0;
+	soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data[31:0] <= soc_litedramnativeportconverter0_rdata_converter_sink_payload_data[31:0];
+	soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data[63:32] <= soc_litedramnativeportconverter0_rdata_converter_sink_payload_data[63:32];
+	soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data[95:64] <= soc_litedramnativeportconverter0_rdata_converter_sink_payload_data[95:64];
+	soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data[127:96] <= soc_litedramnativeportconverter0_rdata_converter_sink_payload_data[127:96];
+end
+assign soc_litedramnativeportconverter0_rdata_converter_source_valid = soc_litedramnativeportconverter0_rdata_converter_source_source_valid;
+assign soc_litedramnativeportconverter0_rdata_converter_source_first = soc_litedramnativeportconverter0_rdata_converter_source_source_first;
+assign soc_litedramnativeportconverter0_rdata_converter_source_last = soc_litedramnativeportconverter0_rdata_converter_source_source_last;
+assign soc_litedramnativeportconverter0_rdata_converter_source_source_ready = soc_litedramnativeportconverter0_rdata_converter_source_ready;
+assign {soc_litedramnativeportconverter0_rdata_converter_source_payload_data} = soc_litedramnativeportconverter0_rdata_converter_source_source_payload_data;
+assign soc_litedramnativeportconverter0_rdata_converter_source_source_valid = soc_litedramnativeportconverter0_rdata_converter_converter_source_valid;
+assign soc_litedramnativeportconverter0_rdata_converter_converter_source_ready = soc_litedramnativeportconverter0_rdata_converter_source_source_ready;
+assign soc_litedramnativeportconverter0_rdata_converter_source_source_first = soc_litedramnativeportconverter0_rdata_converter_converter_source_first;
+assign soc_litedramnativeportconverter0_rdata_converter_source_source_last = soc_litedramnativeportconverter0_rdata_converter_converter_source_last;
+assign soc_litedramnativeportconverter0_rdata_converter_source_source_payload_data = soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_data;
+assign soc_litedramnativeportconverter0_rdata_converter_converter_first = (soc_litedramnativeportconverter0_rdata_converter_converter_mux == 1'd0);
+assign soc_litedramnativeportconverter0_rdata_converter_converter_last = (soc_litedramnativeportconverter0_rdata_converter_converter_mux == 2'd3);
+assign soc_litedramnativeportconverter0_rdata_converter_converter_source_valid = soc_litedramnativeportconverter0_rdata_converter_converter_sink_valid;
+assign soc_litedramnativeportconverter0_rdata_converter_converter_source_first = (soc_litedramnativeportconverter0_rdata_converter_converter_sink_first & soc_litedramnativeportconverter0_rdata_converter_converter_first);
+assign soc_litedramnativeportconverter0_rdata_converter_converter_source_last = (soc_litedramnativeportconverter0_rdata_converter_converter_sink_last & soc_litedramnativeportconverter0_rdata_converter_converter_last);
+assign soc_litedramnativeportconverter0_rdata_converter_converter_sink_ready = (soc_litedramnativeportconverter0_rdata_converter_converter_last & soc_litedramnativeportconverter0_rdata_converter_converter_source_ready);
+always @(*) begin
+	soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_data <= 32'd0;
+	case (soc_litedramnativeportconverter0_rdata_converter_converter_mux)
+		1'd0: begin
+			soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_data <= soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data[31:0];
+		end
+		1'd1: begin
+			soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_data <= soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data[63:32];
+		end
+		2'd2: begin
+			soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_data <= soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data[95:64];
+		end
+		default: begin
+			soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_data <= soc_litedramnativeportconverter0_rdata_converter_converter_sink_payload_data[127:96];
+		end
+	endcase
+end
+assign soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_valid_token_count = soc_litedramnativeportconverter0_rdata_converter_converter_last;
+assign soc_litedramnativeportconverter0_wdata_converter_converter_sink_valid = soc_litedramnativeportconverter0_wdata_converter_sink_valid;
+assign soc_litedramnativeportconverter0_wdata_converter_converter_sink_first = soc_litedramnativeportconverter0_wdata_converter_sink_first;
+assign soc_litedramnativeportconverter0_wdata_converter_converter_sink_last = soc_litedramnativeportconverter0_wdata_converter_sink_last;
+assign soc_litedramnativeportconverter0_wdata_converter_sink_ready = soc_litedramnativeportconverter0_wdata_converter_converter_sink_ready;
+assign soc_litedramnativeportconverter0_wdata_converter_converter_sink_payload_data = {soc_litedramnativeportconverter0_wdata_converter_sink_payload_we, soc_litedramnativeportconverter0_wdata_converter_sink_payload_data};
+assign soc_litedramnativeportconverter0_wdata_converter_source_valid = soc_litedramnativeportconverter0_wdata_converter_source_source_valid;
+assign soc_litedramnativeportconverter0_wdata_converter_source_first = soc_litedramnativeportconverter0_wdata_converter_source_source_first;
+assign soc_litedramnativeportconverter0_wdata_converter_source_last = soc_litedramnativeportconverter0_wdata_converter_source_source_last;
+assign soc_litedramnativeportconverter0_wdata_converter_source_source_ready = soc_litedramnativeportconverter0_wdata_converter_source_ready;
+always @(*) begin
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_data <= 128'd0;
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_data[31:0] <= soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data[31:0];
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_data[63:32] <= soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data[67:36];
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_data[95:64] <= soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data[103:72];
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_data[127:96] <= soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data[139:108];
+end
+always @(*) begin
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_we <= 16'd0;
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_we[3:0] <= soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data[35:32];
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_we[7:4] <= soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data[71:68];
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_we[11:8] <= soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data[107:104];
+	soc_litedramnativeportconverter0_wdata_converter_source_payload_we[15:12] <= soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data[143:140];
+end
+assign soc_litedramnativeportconverter0_wdata_converter_source_source_valid = soc_litedramnativeportconverter0_wdata_converter_converter_source_valid;
+assign soc_litedramnativeportconverter0_wdata_converter_converter_source_ready = soc_litedramnativeportconverter0_wdata_converter_source_source_ready;
+assign soc_litedramnativeportconverter0_wdata_converter_source_source_first = soc_litedramnativeportconverter0_wdata_converter_converter_source_first;
+assign soc_litedramnativeportconverter0_wdata_converter_source_source_last = soc_litedramnativeportconverter0_wdata_converter_converter_source_last;
+assign soc_litedramnativeportconverter0_wdata_converter_source_source_payload_data = soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_data;
+assign soc_litedramnativeportconverter0_wdata_converter_converter_sink_ready = ((~soc_litedramnativeportconverter0_wdata_converter_converter_strobe_all) | soc_litedramnativeportconverter0_wdata_converter_converter_source_ready);
+assign soc_litedramnativeportconverter0_wdata_converter_converter_source_valid = soc_litedramnativeportconverter0_wdata_converter_converter_strobe_all;
+assign soc_litedramnativeportconverter0_wdata_converter_converter_load_part = (soc_litedramnativeportconverter0_wdata_converter_converter_sink_valid & soc_litedramnativeportconverter0_wdata_converter_converter_sink_ready);
+assign soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_din = {soc_litedramnativeportconverter0_wdata_fifo_fifo_in_last, soc_litedramnativeportconverter0_wdata_fifo_fifo_in_first, soc_litedramnativeportconverter0_wdata_fifo_fifo_in_payload_we, soc_litedramnativeportconverter0_wdata_fifo_fifo_in_payload_data};
+assign {soc_litedramnativeportconverter0_wdata_fifo_fifo_out_last, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_first, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_we, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_dout;
+assign {soc_litedramnativeportconverter0_wdata_fifo_fifo_out_last, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_first, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_we, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_dout;
+assign {soc_litedramnativeportconverter0_wdata_fifo_fifo_out_last, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_first, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_we, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_dout;
+assign {soc_litedramnativeportconverter0_wdata_fifo_fifo_out_last, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_first, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_we, soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_dout;
+assign soc_litedramnativeportconverter0_wdata_fifo_sink_ready = soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_writable;
+assign soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_we = soc_litedramnativeportconverter0_wdata_fifo_sink_valid;
+assign soc_litedramnativeportconverter0_wdata_fifo_fifo_in_first = soc_litedramnativeportconverter0_wdata_fifo_sink_first;
+assign soc_litedramnativeportconverter0_wdata_fifo_fifo_in_last = soc_litedramnativeportconverter0_wdata_fifo_sink_last;
+assign soc_litedramnativeportconverter0_wdata_fifo_fifo_in_payload_data = soc_litedramnativeportconverter0_wdata_fifo_sink_payload_data;
+assign soc_litedramnativeportconverter0_wdata_fifo_fifo_in_payload_we = soc_litedramnativeportconverter0_wdata_fifo_sink_payload_we;
+assign soc_litedramnativeportconverter0_wdata_fifo_source_valid = soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_readable;
+assign soc_litedramnativeportconverter0_wdata_fifo_source_first = soc_litedramnativeportconverter0_wdata_fifo_fifo_out_first;
+assign soc_litedramnativeportconverter0_wdata_fifo_source_last = soc_litedramnativeportconverter0_wdata_fifo_fifo_out_last;
+assign soc_litedramnativeportconverter0_wdata_fifo_source_payload_data = soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_data;
+assign soc_litedramnativeportconverter0_wdata_fifo_source_payload_we = soc_litedramnativeportconverter0_wdata_fifo_fifo_out_payload_we;
+assign soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_re = soc_litedramnativeportconverter0_wdata_fifo_source_ready;
+always @(*) begin
+	soc_litedramnativeportconverter0_wdata_fifo_wrport_adr <= 2'd0;
+	if (soc_litedramnativeportconverter0_wdata_fifo_replace) begin
+		soc_litedramnativeportconverter0_wdata_fifo_wrport_adr <= (soc_litedramnativeportconverter0_wdata_fifo_produce - 1'd1);
+	end else begin
+		soc_litedramnativeportconverter0_wdata_fifo_wrport_adr <= soc_litedramnativeportconverter0_wdata_fifo_produce;
+	end
+end
+assign soc_litedramnativeportconverter0_wdata_fifo_wrport_dat_w = soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_din;
+assign soc_litedramnativeportconverter0_wdata_fifo_wrport_we = (soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_we & (soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_writable | soc_litedramnativeportconverter0_wdata_fifo_replace));
+assign soc_litedramnativeportconverter0_wdata_fifo_do_read = (soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_readable & soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_re);
+assign soc_litedramnativeportconverter0_wdata_fifo_rdport_adr = soc_litedramnativeportconverter0_wdata_fifo_consume;
+assign soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_dout = soc_litedramnativeportconverter0_wdata_fifo_rdport_dat_r;
+assign soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_writable = (soc_litedramnativeportconverter0_wdata_fifo_level != 2'd3);
+assign soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_readable = (soc_litedramnativeportconverter0_wdata_fifo_level != 1'd0);
+assign soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_ready = ((~soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_valid) | soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_ready);
+assign soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_valid = soc_litedramnativeportconverter0_wdata_buffer_sink_sink_valid;
+assign soc_litedramnativeportconverter0_wdata_buffer_sink_sink_ready = soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_ready;
+assign soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_first = soc_litedramnativeportconverter0_wdata_buffer_sink_sink_first;
+assign soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_last = soc_litedramnativeportconverter0_wdata_buffer_sink_sink_last;
+assign soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_payload_data = soc_litedramnativeportconverter0_wdata_buffer_sink_sink_payload_data;
+assign soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_payload_we = soc_litedramnativeportconverter0_wdata_buffer_sink_sink_payload_we;
+assign soc_litedramnativeportconverter0_wdata_buffer_source_source_valid = soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_valid;
+assign soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_ready = soc_litedramnativeportconverter0_wdata_buffer_source_source_ready;
+assign soc_litedramnativeportconverter0_wdata_buffer_source_source_first = soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_first;
+assign soc_litedramnativeportconverter0_wdata_buffer_source_source_last = soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_last;
+assign soc_litedramnativeportconverter0_wdata_buffer_source_source_payload_data = soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_payload_data;
+assign soc_litedramnativeportconverter0_wdata_buffer_source_source_payload_we = soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_payload_we;
+assign soc_litedramnativeportconverter1_cmd_buffer_source_ready = (soc_litedramnativeportconverter1_wdata_finished | soc_litedramnativeportconverter1_rdata_finished);
+assign soc_litedramnativeportconverter1_addr_changed = (soc_litedramnativeportconverter1_cmd_addr[25:2] != soc_litedramnativeport1_cmd_payload_addr1[25:2]);
+assign soc_litedramnativeportconverter1_rw_collision = ((soc_litedramnativeportconverter1_cmd_we & (soc_litedramnativeport1_cmd_valid1 & (~soc_litedramnativeport1_cmd_payload_we1))) & (~soc_litedramnativeportconverter1_addr_changed));
+assign soc_litedramnativeportconverter1_next_cmd = ((((soc_litedramnativeportconverter1_addr_changed | (soc_litedramnativeportconverter1_cmd_we != soc_litedramnativeport1_cmd_payload_we1)) | (soc_litedramnativeportconverter1_sel == 4'd15)) | soc_litedramnativeportconverter1_cmd_last) | soc_litedramnativeport1_flush);
+assign soc_litedramnativeportconverter1_rdata_fifo_sink_valid = soc_litedramnativeport1_rdata_valid0;
+assign soc_litedramnativeport1_rdata_ready0 = soc_litedramnativeportconverter1_rdata_fifo_sink_ready;
+assign soc_litedramnativeportconverter1_rdata_fifo_sink_first = soc_litedramnativeport1_rdata_first;
+assign soc_litedramnativeportconverter1_rdata_fifo_sink_last = soc_litedramnativeport1_rdata_last;
+assign soc_litedramnativeportconverter1_rdata_fifo_sink_payload_data = soc_litedramnativeport1_rdata_payload_data0;
+assign soc_litedramnativeportconverter1_rdata_converter_sink_valid = soc_litedramnativeportconverter1_rdata_fifo_source_valid;
+assign soc_litedramnativeportconverter1_rdata_fifo_source_ready = soc_litedramnativeportconverter1_rdata_converter_sink_ready;
+assign soc_litedramnativeportconverter1_rdata_converter_sink_first = soc_litedramnativeportconverter1_rdata_fifo_source_first;
+assign soc_litedramnativeportconverter1_rdata_converter_sink_last = soc_litedramnativeportconverter1_rdata_fifo_source_last;
+assign soc_litedramnativeportconverter1_rdata_converter_sink_payload_data = soc_litedramnativeportconverter1_rdata_fifo_source_payload_data;
+assign soc_litedramnativeportconverter1_rdata_chunk_valid = ((soc_litedramnativeportconverter1_cmd_buffer_source_payload_sel & soc_litedramnativeportconverter1_rdata_chunk) != 1'd0);
+always @(*) begin
+	soc_litedramnativeport1_rdata_valid1 <= 1'd0;
+	if ((soc_litedramnativeportconverter1_cmd_buffer_source_valid & (~soc_litedramnativeportconverter1_cmd_buffer_source_payload_we))) begin
+		if (soc_litedramnativeportconverter1_rdata_chunk_valid) begin
+			soc_litedramnativeport1_rdata_valid1 <= soc_litedramnativeportconverter1_rdata_converter_source_valid;
+		end else begin
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_rdata_converter_source_ready <= 1'd0;
+	if ((soc_litedramnativeportconverter1_cmd_buffer_source_valid & (~soc_litedramnativeportconverter1_cmd_buffer_source_payload_we))) begin
+		if (soc_litedramnativeportconverter1_rdata_chunk_valid) begin
+			soc_litedramnativeportconverter1_rdata_converter_source_ready <= soc_litedramnativeport1_rdata_ready1;
+		end else begin
+			soc_litedramnativeportconverter1_rdata_converter_source_ready <= 1'd1;
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeport1_rdata_payload_data1 <= 32'd0;
+	if ((soc_litedramnativeportconverter1_cmd_buffer_source_valid & (~soc_litedramnativeportconverter1_cmd_buffer_source_payload_we))) begin
+		if (soc_litedramnativeportconverter1_rdata_chunk_valid) begin
+			soc_litedramnativeport1_rdata_payload_data1 <= soc_litedramnativeportconverter1_rdata_converter_source_payload_data;
+		end else begin
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_rdata_finished <= 1'd0;
+	if ((soc_litedramnativeportconverter1_cmd_buffer_source_valid & (~soc_litedramnativeportconverter1_cmd_buffer_source_payload_we))) begin
+		soc_litedramnativeportconverter1_rdata_finished <= ((soc_litedramnativeportconverter1_rdata_converter_source_valid & soc_litedramnativeportconverter1_rdata_converter_source_ready) & soc_litedramnativeportconverter1_rdata_chunk[3]);
+	end
+end
+assign soc_litedramnativeportconverter1_wdata_fifo_sink_valid = soc_litedramnativeport1_wdata_valid1;
+assign soc_litedramnativeport1_wdata_ready1 = soc_litedramnativeportconverter1_wdata_fifo_sink_ready;
+assign soc_litedramnativeportconverter1_wdata_fifo_sink_first = soc_litedramnativeport1_wdata_first1;
+assign soc_litedramnativeportconverter1_wdata_fifo_sink_last = soc_litedramnativeport1_wdata_last1;
+assign soc_litedramnativeportconverter1_wdata_fifo_sink_payload_data = soc_litedramnativeport1_wdata_payload_data1;
+assign soc_litedramnativeportconverter1_wdata_fifo_sink_payload_we = soc_litedramnativeport1_wdata_payload_we1;
+assign soc_litedramnativeport1_wdata_valid0 = soc_litedramnativeportconverter1_wdata_buffer_source_source_valid;
+assign soc_litedramnativeportconverter1_wdata_buffer_source_source_ready = soc_litedramnativeport1_wdata_ready0;
+assign soc_litedramnativeport1_wdata_first0 = soc_litedramnativeportconverter1_wdata_buffer_source_source_first;
+assign soc_litedramnativeport1_wdata_last0 = soc_litedramnativeportconverter1_wdata_buffer_source_source_last;
+assign soc_litedramnativeport1_wdata_payload_data0 = soc_litedramnativeportconverter1_wdata_buffer_source_source_payload_data;
+assign soc_litedramnativeport1_wdata_payload_we0 = soc_litedramnativeportconverter1_wdata_buffer_source_source_payload_we;
+assign soc_litedramnativeportconverter1_wdata_chunk_valid = ((soc_litedramnativeportconverter1_cmd_buffer_source_payload_sel & soc_litedramnativeportconverter1_wdata_chunk) != 1'd0);
+always @(*) begin
+	soc_litedramnativeportconverter1_wdata_fifo_source_ready <= 1'd0;
+	if ((soc_litedramnativeportconverter1_cmd_buffer_source_valid & soc_litedramnativeportconverter1_cmd_buffer_source_payload_we)) begin
+		if (soc_litedramnativeportconverter1_wdata_chunk_valid) begin
+			soc_litedramnativeportconverter1_wdata_fifo_source_ready <= soc_litedramnativeportconverter1_wdata_converter_sink_ready;
+		end else begin
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_wdata_converter_sink_valid <= 1'd0;
+	if ((soc_litedramnativeportconverter1_cmd_buffer_source_valid & soc_litedramnativeportconverter1_cmd_buffer_source_payload_we)) begin
+		if (soc_litedramnativeportconverter1_wdata_chunk_valid) begin
+			soc_litedramnativeportconverter1_wdata_converter_sink_valid <= soc_litedramnativeportconverter1_wdata_fifo_source_valid;
+		end else begin
+			soc_litedramnativeportconverter1_wdata_converter_sink_valid <= 1'd1;
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_wdata_converter_sink_payload_data <= 32'd0;
+	if ((soc_litedramnativeportconverter1_cmd_buffer_source_valid & soc_litedramnativeportconverter1_cmd_buffer_source_payload_we)) begin
+		if (soc_litedramnativeportconverter1_wdata_chunk_valid) begin
+			soc_litedramnativeportconverter1_wdata_converter_sink_payload_data <= soc_litedramnativeportconverter1_wdata_fifo_source_payload_data;
+		end else begin
+		end
+	end
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_wdata_converter_sink_payload_we <= 4'd0;
+	if ((soc_litedramnativeportconverter1_cmd_buffer_source_valid & soc_litedramnativeportconverter1_cmd_buffer_source_payload_we)) begin
+		if (soc_litedramnativeportconverter1_wdata_chunk_valid) begin
+			soc_litedramnativeportconverter1_wdata_converter_sink_payload_we <= soc_litedramnativeportconverter1_wdata_fifo_source_payload_we;
+		end else begin
+		end
+	end
+end
+assign soc_litedramnativeportconverter1_wdata_buffer_sink_sink_valid = soc_litedramnativeportconverter1_wdata_converter_source_valid;
+assign soc_litedramnativeportconverter1_wdata_buffer_sink_sink_payload_data = soc_litedramnativeportconverter1_wdata_converter_source_payload_data;
+assign soc_litedramnativeportconverter1_wdata_buffer_sink_sink_payload_we = (soc_litedramnativeportconverter1_wdata_converter_source_payload_we & soc_litedramnativeportconverter1_wdata_sel);
+assign soc_litedramnativeportconverter1_wdata_converter_source_ready = soc_litedramnativeportconverter1_wdata_buffer_sink_sink_ready;
+assign soc_litedramnativeportconverter1_wdata_finished = ((soc_litedramnativeportconverter1_wdata_converter_sink_valid & soc_litedramnativeportconverter1_wdata_converter_sink_ready) & soc_litedramnativeportconverter1_wdata_chunk[3]);
+assign soc_litedramnativeportconverter1_cmd_buffer_source_valid = soc_litedramnativeportconverter1_cmd_buffer_sink_valid;
+assign soc_litedramnativeportconverter1_cmd_buffer_sink_ready = soc_litedramnativeportconverter1_cmd_buffer_source_ready;
+assign soc_litedramnativeportconverter1_cmd_buffer_source_first = soc_litedramnativeportconverter1_cmd_buffer_sink_first;
+assign soc_litedramnativeportconverter1_cmd_buffer_source_last = soc_litedramnativeportconverter1_cmd_buffer_sink_last;
+assign soc_litedramnativeportconverter1_cmd_buffer_source_payload_sel = soc_litedramnativeportconverter1_cmd_buffer_sink_payload_sel;
+assign soc_litedramnativeportconverter1_cmd_buffer_source_payload_we = soc_litedramnativeportconverter1_cmd_buffer_sink_payload_we;
+always @(*) begin
+	litedramcore_clockdomainsrenamer1_next_state <= 2'd0;
+	litedramcore_clockdomainsrenamer1_next_state <= litedramcore_clockdomainsrenamer1_state;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+			if (soc_litedramnativeport1_cmd_ready0) begin
+				if (soc_litedramnativeportconverter1_cmd_we) begin
+					litedramcore_clockdomainsrenamer1_next_state <= 1'd0;
+				end else begin
+					litedramcore_clockdomainsrenamer1_next_state <= 2'd2;
+				end
+			end
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter1_next_cmd) begin
+				litedramcore_clockdomainsrenamer1_next_state <= 2'd3;
+			end else begin
+			end
+		end
+		2'd3: begin
+			if (soc_litedramnativeportconverter1_cmd_buffer_sink_ready) begin
+				if (soc_litedramnativeportconverter1_cmd_we) begin
+					litedramcore_clockdomainsrenamer1_next_state <= 1'd1;
+				end else begin
+					litedramcore_clockdomainsrenamer1_next_state <= 1'd0;
+				end
+			end
+		end
+		default: begin
+			if (soc_litedramnativeport1_cmd_ready1) begin
+				if (soc_litedramnativeport1_cmd_payload_we1) begin
+					litedramcore_clockdomainsrenamer1_next_state <= 2'd2;
+				end else begin
+					litedramcore_clockdomainsrenamer1_next_state <= 1'd1;
+				end
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_cmd_addr_clockdomainsrenamer1_next_value_ce0 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport1_cmd_ready1) begin
+				soc_litedramnativeportconverter1_cmd_addr_clockdomainsrenamer1_next_value_ce0 <= 1'd1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeport1_cmd_ready1 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter1_next_cmd) begin
+			end else begin
+				soc_litedramnativeport1_cmd_ready1 <= soc_litedramnativeport1_cmd_valid1;
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			soc_litedramnativeport1_cmd_ready1 <= (soc_litedramnativeport1_cmd_valid1 & (~soc_litedramnativeportconverter1_read_lock));
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_cmd_we_clockdomainsrenamer1_next_value1 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport1_cmd_ready1) begin
+				soc_litedramnativeportconverter1_cmd_we_clockdomainsrenamer1_next_value1 <= soc_litedramnativeport1_cmd_payload_we1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeport1_cmd_payload_we0 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+			soc_litedramnativeport1_cmd_payload_we0 <= soc_litedramnativeportconverter1_cmd_we;
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_cmd_we_clockdomainsrenamer1_next_value_ce1 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport1_cmd_ready1) begin
+				soc_litedramnativeportconverter1_cmd_we_clockdomainsrenamer1_next_value_ce1 <= 1'd1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeport1_cmd_payload_addr0 <= 24'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+			soc_litedramnativeport1_cmd_payload_addr0 <= soc_litedramnativeportconverter1_cmd_addr[25:2];
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_cmd_buffer_sink_valid <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+			soc_litedramnativeportconverter1_cmd_buffer_sink_valid <= 1'd1;
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value2 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter1_next_cmd) begin
+			end else begin
+				soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value2 <= soc_litedramnativeport1_cmd_last;
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport1_cmd_ready1) begin
+				soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value2 <= soc_litedramnativeport1_cmd_last;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value_ce2 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter1_next_cmd) begin
+			end else begin
+				soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value_ce2 <= 1'd1;
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport1_cmd_ready1) begin
+				soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value_ce2 <= 1'd1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeport1_cmd_valid0 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+			soc_litedramnativeport1_cmd_valid0 <= 1'd1;
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_cmd_buffer_sink_payload_sel <= 4'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+			soc_litedramnativeportconverter1_cmd_buffer_sink_payload_sel <= soc_litedramnativeportconverter1_sel;
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value3 <= 4'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter1_next_cmd) begin
+			end else begin
+				if (soc_litedramnativeport1_cmd_valid1) begin
+					soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value3 <= (soc_litedramnativeportconverter1_sel | (1'd1 <<< soc_litedramnativeport1_cmd_payload_addr1[1:0]));
+				end
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport1_cmd_ready1) begin
+				soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value3 <= (1'd1 <<< soc_litedramnativeport1_cmd_payload_addr1[1:0]);
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_cmd_buffer_sink_payload_we <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+			soc_litedramnativeportconverter1_cmd_buffer_sink_payload_we <= soc_litedramnativeportconverter1_cmd_we;
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value_ce3 <= 1'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeportconverter1_next_cmd) begin
+			end else begin
+				if (soc_litedramnativeport1_cmd_valid1) begin
+					soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value_ce3 <= 1'd1;
+				end
+			end
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport1_cmd_ready1) begin
+				soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value_ce3 <= 1'd1;
+			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_cmd_addr_clockdomainsrenamer1_next_value0 <= 26'd0;
+	case (litedramcore_clockdomainsrenamer1_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		2'd3: begin
+		end
+		default: begin
+			if (soc_litedramnativeport1_cmd_ready1) begin
+				soc_litedramnativeportconverter1_cmd_addr_clockdomainsrenamer1_next_value0 <= soc_litedramnativeport1_cmd_payload_addr1;
+			end
+		end
+	endcase
+end
+assign soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_din = {soc_litedramnativeportconverter1_rdata_fifo_fifo_in_last, soc_litedramnativeportconverter1_rdata_fifo_fifo_in_first, soc_litedramnativeportconverter1_rdata_fifo_fifo_in_payload_data};
+assign {soc_litedramnativeportconverter1_rdata_fifo_fifo_out_last, soc_litedramnativeportconverter1_rdata_fifo_fifo_out_first, soc_litedramnativeportconverter1_rdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_dout;
+assign {soc_litedramnativeportconverter1_rdata_fifo_fifo_out_last, soc_litedramnativeportconverter1_rdata_fifo_fifo_out_first, soc_litedramnativeportconverter1_rdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_dout;
+assign {soc_litedramnativeportconverter1_rdata_fifo_fifo_out_last, soc_litedramnativeportconverter1_rdata_fifo_fifo_out_first, soc_litedramnativeportconverter1_rdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_dout;
+assign soc_litedramnativeportconverter1_rdata_fifo_sink_ready = soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_writable;
+assign soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_we = soc_litedramnativeportconverter1_rdata_fifo_sink_valid;
+assign soc_litedramnativeportconverter1_rdata_fifo_fifo_in_first = soc_litedramnativeportconverter1_rdata_fifo_sink_first;
+assign soc_litedramnativeportconverter1_rdata_fifo_fifo_in_last = soc_litedramnativeportconverter1_rdata_fifo_sink_last;
+assign soc_litedramnativeportconverter1_rdata_fifo_fifo_in_payload_data = soc_litedramnativeportconverter1_rdata_fifo_sink_payload_data;
+assign soc_litedramnativeportconverter1_rdata_fifo_source_valid = soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_readable;
+assign soc_litedramnativeportconverter1_rdata_fifo_source_first = soc_litedramnativeportconverter1_rdata_fifo_fifo_out_first;
+assign soc_litedramnativeportconverter1_rdata_fifo_source_last = soc_litedramnativeportconverter1_rdata_fifo_fifo_out_last;
+assign soc_litedramnativeportconverter1_rdata_fifo_source_payload_data = soc_litedramnativeportconverter1_rdata_fifo_fifo_out_payload_data;
+assign soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_re = soc_litedramnativeportconverter1_rdata_fifo_source_ready;
+always @(*) begin
+	soc_litedramnativeportconverter1_rdata_fifo_wrport_adr <= 2'd0;
+	if (soc_litedramnativeportconverter1_rdata_fifo_replace) begin
+		soc_litedramnativeportconverter1_rdata_fifo_wrport_adr <= (soc_litedramnativeportconverter1_rdata_fifo_produce - 1'd1);
+	end else begin
+		soc_litedramnativeportconverter1_rdata_fifo_wrport_adr <= soc_litedramnativeportconverter1_rdata_fifo_produce;
+	end
+end
+assign soc_litedramnativeportconverter1_rdata_fifo_wrport_dat_w = soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_din;
+assign soc_litedramnativeportconverter1_rdata_fifo_wrport_we = (soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_we & (soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_writable | soc_litedramnativeportconverter1_rdata_fifo_replace));
+assign soc_litedramnativeportconverter1_rdata_fifo_do_read = (soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_readable & soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_re);
+assign soc_litedramnativeportconverter1_rdata_fifo_rdport_adr = soc_litedramnativeportconverter1_rdata_fifo_consume;
+assign soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_dout = soc_litedramnativeportconverter1_rdata_fifo_rdport_dat_r;
+assign soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_writable = (soc_litedramnativeportconverter1_rdata_fifo_level != 2'd3);
+assign soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_readable = (soc_litedramnativeportconverter1_rdata_fifo_level != 1'd0);
+assign soc_litedramnativeportconverter1_rdata_converter_converter_sink_valid = soc_litedramnativeportconverter1_rdata_converter_sink_valid;
+assign soc_litedramnativeportconverter1_rdata_converter_converter_sink_first = soc_litedramnativeportconverter1_rdata_converter_sink_first;
+assign soc_litedramnativeportconverter1_rdata_converter_converter_sink_last = soc_litedramnativeportconverter1_rdata_converter_sink_last;
+assign soc_litedramnativeportconverter1_rdata_converter_sink_ready = soc_litedramnativeportconverter1_rdata_converter_converter_sink_ready;
+always @(*) begin
+	soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data <= 128'd0;
+	soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data[31:0] <= soc_litedramnativeportconverter1_rdata_converter_sink_payload_data[31:0];
+	soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data[63:32] <= soc_litedramnativeportconverter1_rdata_converter_sink_payload_data[63:32];
+	soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data[95:64] <= soc_litedramnativeportconverter1_rdata_converter_sink_payload_data[95:64];
+	soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data[127:96] <= soc_litedramnativeportconverter1_rdata_converter_sink_payload_data[127:96];
+end
+assign soc_litedramnativeportconverter1_rdata_converter_source_valid = soc_litedramnativeportconverter1_rdata_converter_source_source_valid;
+assign soc_litedramnativeportconverter1_rdata_converter_source_first = soc_litedramnativeportconverter1_rdata_converter_source_source_first;
+assign soc_litedramnativeportconverter1_rdata_converter_source_last = soc_litedramnativeportconverter1_rdata_converter_source_source_last;
+assign soc_litedramnativeportconverter1_rdata_converter_source_source_ready = soc_litedramnativeportconverter1_rdata_converter_source_ready;
+assign {soc_litedramnativeportconverter1_rdata_converter_source_payload_data} = soc_litedramnativeportconverter1_rdata_converter_source_source_payload_data;
+assign soc_litedramnativeportconverter1_rdata_converter_source_source_valid = soc_litedramnativeportconverter1_rdata_converter_converter_source_valid;
+assign soc_litedramnativeportconverter1_rdata_converter_converter_source_ready = soc_litedramnativeportconverter1_rdata_converter_source_source_ready;
+assign soc_litedramnativeportconverter1_rdata_converter_source_source_first = soc_litedramnativeportconverter1_rdata_converter_converter_source_first;
+assign soc_litedramnativeportconverter1_rdata_converter_source_source_last = soc_litedramnativeportconverter1_rdata_converter_converter_source_last;
+assign soc_litedramnativeportconverter1_rdata_converter_source_source_payload_data = soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_data;
+assign soc_litedramnativeportconverter1_rdata_converter_converter_first = (soc_litedramnativeportconverter1_rdata_converter_converter_mux == 1'd0);
+assign soc_litedramnativeportconverter1_rdata_converter_converter_last = (soc_litedramnativeportconverter1_rdata_converter_converter_mux == 2'd3);
+assign soc_litedramnativeportconverter1_rdata_converter_converter_source_valid = soc_litedramnativeportconverter1_rdata_converter_converter_sink_valid;
+assign soc_litedramnativeportconverter1_rdata_converter_converter_source_first = (soc_litedramnativeportconverter1_rdata_converter_converter_sink_first & soc_litedramnativeportconverter1_rdata_converter_converter_first);
+assign soc_litedramnativeportconverter1_rdata_converter_converter_source_last = (soc_litedramnativeportconverter1_rdata_converter_converter_sink_last & soc_litedramnativeportconverter1_rdata_converter_converter_last);
+assign soc_litedramnativeportconverter1_rdata_converter_converter_sink_ready = (soc_litedramnativeportconverter1_rdata_converter_converter_last & soc_litedramnativeportconverter1_rdata_converter_converter_source_ready);
+always @(*) begin
+	soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_data <= 32'd0;
+	case (soc_litedramnativeportconverter1_rdata_converter_converter_mux)
+		1'd0: begin
+			soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_data <= soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data[31:0];
+		end
+		1'd1: begin
+			soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_data <= soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data[63:32];
+		end
+		2'd2: begin
+			soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_data <= soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data[95:64];
+		end
+		default: begin
+			soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_data <= soc_litedramnativeportconverter1_rdata_converter_converter_sink_payload_data[127:96];
+		end
+	endcase
+end
+assign soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_valid_token_count = soc_litedramnativeportconverter1_rdata_converter_converter_last;
+assign soc_litedramnativeportconverter1_wdata_converter_converter_sink_valid = soc_litedramnativeportconverter1_wdata_converter_sink_valid;
+assign soc_litedramnativeportconverter1_wdata_converter_converter_sink_first = soc_litedramnativeportconverter1_wdata_converter_sink_first;
+assign soc_litedramnativeportconverter1_wdata_converter_converter_sink_last = soc_litedramnativeportconverter1_wdata_converter_sink_last;
+assign soc_litedramnativeportconverter1_wdata_converter_sink_ready = soc_litedramnativeportconverter1_wdata_converter_converter_sink_ready;
+assign soc_litedramnativeportconverter1_wdata_converter_converter_sink_payload_data = {soc_litedramnativeportconverter1_wdata_converter_sink_payload_we, soc_litedramnativeportconverter1_wdata_converter_sink_payload_data};
+assign soc_litedramnativeportconverter1_wdata_converter_source_valid = soc_litedramnativeportconverter1_wdata_converter_source_source_valid;
+assign soc_litedramnativeportconverter1_wdata_converter_source_first = soc_litedramnativeportconverter1_wdata_converter_source_source_first;
+assign soc_litedramnativeportconverter1_wdata_converter_source_last = soc_litedramnativeportconverter1_wdata_converter_source_source_last;
+assign soc_litedramnativeportconverter1_wdata_converter_source_source_ready = soc_litedramnativeportconverter1_wdata_converter_source_ready;
+always @(*) begin
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_data <= 128'd0;
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_data[31:0] <= soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data[31:0];
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_data[63:32] <= soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data[67:36];
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_data[95:64] <= soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data[103:72];
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_data[127:96] <= soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data[139:108];
+end
+always @(*) begin
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_we <= 16'd0;
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_we[3:0] <= soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data[35:32];
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_we[7:4] <= soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data[71:68];
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_we[11:8] <= soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data[107:104];
+	soc_litedramnativeportconverter1_wdata_converter_source_payload_we[15:12] <= soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data[143:140];
+end
+assign soc_litedramnativeportconverter1_wdata_converter_source_source_valid = soc_litedramnativeportconverter1_wdata_converter_converter_source_valid;
+assign soc_litedramnativeportconverter1_wdata_converter_converter_source_ready = soc_litedramnativeportconverter1_wdata_converter_source_source_ready;
+assign soc_litedramnativeportconverter1_wdata_converter_source_source_first = soc_litedramnativeportconverter1_wdata_converter_converter_source_first;
+assign soc_litedramnativeportconverter1_wdata_converter_source_source_last = soc_litedramnativeportconverter1_wdata_converter_converter_source_last;
+assign soc_litedramnativeportconverter1_wdata_converter_source_source_payload_data = soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_data;
+assign soc_litedramnativeportconverter1_wdata_converter_converter_sink_ready = ((~soc_litedramnativeportconverter1_wdata_converter_converter_strobe_all) | soc_litedramnativeportconverter1_wdata_converter_converter_source_ready);
+assign soc_litedramnativeportconverter1_wdata_converter_converter_source_valid = soc_litedramnativeportconverter1_wdata_converter_converter_strobe_all;
+assign soc_litedramnativeportconverter1_wdata_converter_converter_load_part = (soc_litedramnativeportconverter1_wdata_converter_converter_sink_valid & soc_litedramnativeportconverter1_wdata_converter_converter_sink_ready);
+assign soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_din = {soc_litedramnativeportconverter1_wdata_fifo_fifo_in_last, soc_litedramnativeportconverter1_wdata_fifo_fifo_in_first, soc_litedramnativeportconverter1_wdata_fifo_fifo_in_payload_we, soc_litedramnativeportconverter1_wdata_fifo_fifo_in_payload_data};
+assign {soc_litedramnativeportconverter1_wdata_fifo_fifo_out_last, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_first, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_we, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_dout;
+assign {soc_litedramnativeportconverter1_wdata_fifo_fifo_out_last, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_first, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_we, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_dout;
+assign {soc_litedramnativeportconverter1_wdata_fifo_fifo_out_last, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_first, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_we, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_dout;
+assign {soc_litedramnativeportconverter1_wdata_fifo_fifo_out_last, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_first, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_we, soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_data} = soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_dout;
+assign soc_litedramnativeportconverter1_wdata_fifo_sink_ready = soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_writable;
+assign soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_we = soc_litedramnativeportconverter1_wdata_fifo_sink_valid;
+assign soc_litedramnativeportconverter1_wdata_fifo_fifo_in_first = soc_litedramnativeportconverter1_wdata_fifo_sink_first;
+assign soc_litedramnativeportconverter1_wdata_fifo_fifo_in_last = soc_litedramnativeportconverter1_wdata_fifo_sink_last;
+assign soc_litedramnativeportconverter1_wdata_fifo_fifo_in_payload_data = soc_litedramnativeportconverter1_wdata_fifo_sink_payload_data;
+assign soc_litedramnativeportconverter1_wdata_fifo_fifo_in_payload_we = soc_litedramnativeportconverter1_wdata_fifo_sink_payload_we;
+assign soc_litedramnativeportconverter1_wdata_fifo_source_valid = soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_readable;
+assign soc_litedramnativeportconverter1_wdata_fifo_source_first = soc_litedramnativeportconverter1_wdata_fifo_fifo_out_first;
+assign soc_litedramnativeportconverter1_wdata_fifo_source_last = soc_litedramnativeportconverter1_wdata_fifo_fifo_out_last;
+assign soc_litedramnativeportconverter1_wdata_fifo_source_payload_data = soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_data;
+assign soc_litedramnativeportconverter1_wdata_fifo_source_payload_we = soc_litedramnativeportconverter1_wdata_fifo_fifo_out_payload_we;
+assign soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_re = soc_litedramnativeportconverter1_wdata_fifo_source_ready;
+always @(*) begin
+	soc_litedramnativeportconverter1_wdata_fifo_wrport_adr <= 2'd0;
+	if (soc_litedramnativeportconverter1_wdata_fifo_replace) begin
+		soc_litedramnativeportconverter1_wdata_fifo_wrport_adr <= (soc_litedramnativeportconverter1_wdata_fifo_produce - 1'd1);
+	end else begin
+		soc_litedramnativeportconverter1_wdata_fifo_wrport_adr <= soc_litedramnativeportconverter1_wdata_fifo_produce;
+	end
+end
+assign soc_litedramnativeportconverter1_wdata_fifo_wrport_dat_w = soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_din;
+assign soc_litedramnativeportconverter1_wdata_fifo_wrport_we = (soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_we & (soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_writable | soc_litedramnativeportconverter1_wdata_fifo_replace));
+assign soc_litedramnativeportconverter1_wdata_fifo_do_read = (soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_readable & soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_re);
+assign soc_litedramnativeportconverter1_wdata_fifo_rdport_adr = soc_litedramnativeportconverter1_wdata_fifo_consume;
+assign soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_dout = soc_litedramnativeportconverter1_wdata_fifo_rdport_dat_r;
+assign soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_writable = (soc_litedramnativeportconverter1_wdata_fifo_level != 2'd3);
+assign soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_readable = (soc_litedramnativeportconverter1_wdata_fifo_level != 1'd0);
+assign soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_ready = ((~soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_valid) | soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_ready);
+assign soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_valid = soc_litedramnativeportconverter1_wdata_buffer_sink_sink_valid;
+assign soc_litedramnativeportconverter1_wdata_buffer_sink_sink_ready = soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_ready;
+assign soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_first = soc_litedramnativeportconverter1_wdata_buffer_sink_sink_first;
+assign soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_last = soc_litedramnativeportconverter1_wdata_buffer_sink_sink_last;
+assign soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_payload_data = soc_litedramnativeportconverter1_wdata_buffer_sink_sink_payload_data;
+assign soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_payload_we = soc_litedramnativeportconverter1_wdata_buffer_sink_sink_payload_we;
+assign soc_litedramnativeportconverter1_wdata_buffer_source_source_valid = soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_valid;
+assign soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_ready = soc_litedramnativeportconverter1_wdata_buffer_source_source_ready;
+assign soc_litedramnativeportconverter1_wdata_buffer_source_source_first = soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_first;
+assign soc_litedramnativeportconverter1_wdata_buffer_source_source_last = soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_last;
+assign soc_litedramnativeportconverter1_wdata_buffer_source_source_payload_data = soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_payload_data;
+assign soc_litedramnativeportconverter1_wdata_buffer_source_source_payload_we = soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_payload_we;
+assign soc_litedramnativeport0_cmd_payload_addr1 = (soc_interface0_wb_port_adr - 1'd0);
+assign soc_litedramnativeport0_cmd_payload_we1 = soc_interface0_wb_port_we;
+assign soc_litedramnativeport0_cmd_last = (~soc_interface0_wb_port_we);
+assign soc_litedramnativeport0_flush = (~soc_interface0_wb_port_cyc);
+always @(*) begin
+	soc_litedramnativeport0_wdata_valid1 <= 1'd0;
+	soc_litedramnativeport0_wdata_valid1 <= (soc_interface0_wb_port_stb & soc_interface0_wb_port_we);
+	if (1'd1) begin
+		if ((~soc_litedramwishbone2native0_is_ongoing)) begin
+			soc_litedramnativeport0_wdata_valid1 <= 1'd0;
+		end
+	end
+end
+assign soc_litedramnativeport0_wdata_payload_data1 = soc_interface0_wb_port_dat_w;
+assign soc_litedramnativeport0_wdata_payload_we1 = soc_interface0_wb_port_sel;
+assign soc_litedramnativeport0_rdata_ready1 = 1'd1;
 always @(*) begin
 	litedramcore_litedramwishbone2native0_next_state <= 2'd0;
 	litedramcore_litedramwishbone2native0_next_state <= litedramcore_litedramwishbone2native0_state;
 	case (litedramcore_litedramwishbone2native0_state)
 		1'd1: begin
-			if ((soc_litedramnativeport0_wdata_valid & soc_litedramnativeport0_wdata_ready)) begin
+			if ((soc_litedramnativeport0_wdata_valid1 & soc_litedramnativeport0_wdata_ready1)) begin
 				litedramcore_litedramwishbone2native0_next_state <= 1'd0;
 			end
 		end
 		2'd2: begin
-			if (soc_litedramnativeport0_rdata_valid) begin
+			if (soc_litedramnativeport0_rdata_valid1) begin
 				litedramcore_litedramwishbone2native0_next_state <= 1'd0;
 			end
 		end
 		default: begin
-			if (((soc_litedramnativeport0_cmd_valid & soc_litedramnativeport0_cmd_ready) & soc_interface0_wb_port_we)) begin
+			if (((soc_litedramnativeport0_cmd_valid1 & soc_litedramnativeport0_cmd_ready1) & soc_interface0_wb_port_we)) begin
 				litedramcore_litedramwishbone2native0_next_state <= 1'd1;
 			end
-			if (((soc_litedramnativeport0_cmd_valid & soc_litedramnativeport0_cmd_ready) & (~soc_interface0_wb_port_we))) begin
+			if (((soc_litedramnativeport0_cmd_valid1 & soc_litedramnativeport0_cmd_ready1) & (~soc_interface0_wb_port_we))) begin
 				litedramcore_litedramwishbone2native0_next_state <= 2'd2;
 			end
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramwishbone2native0_is_ongoing <= 1'd0;
+	case (litedramcore_litedramwishbone2native0_state)
+		1'd1: begin
+			soc_litedramwishbone2native0_is_ongoing <= 1'd1;
+		end
+		2'd2: begin
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_interface0_wb_port_dat_r <= 32'd0;
+	case (litedramcore_litedramwishbone2native0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			if (soc_litedramnativeport0_rdata_valid1) begin
+				soc_interface0_wb_port_dat_r <= soc_litedramnativeport0_rdata_payload_data1;
+			end
+		end
+		default: begin
+		end
+	endcase
+end
+always @(*) begin
+	soc_litedramnativeport0_cmd_valid1 <= 1'd0;
+	case (litedramcore_litedramwishbone2native0_state)
+		1'd1: begin
+		end
+		2'd2: begin
+		end
+		default: begin
+			soc_litedramnativeport0_cmd_valid1 <= (soc_interface0_wb_port_cyc & soc_interface0_wb_port_stb);
+		end
+	endcase
+end
+always @(*) begin
+	soc_interface0_wb_port_ack <= 1'd0;
+	case (litedramcore_litedramwishbone2native0_state)
+		1'd1: begin
+			if ((soc_litedramnativeport0_wdata_valid1 & soc_litedramnativeport0_wdata_ready1)) begin
+				soc_interface0_wb_port_ack <= (soc_interface0_wb_port_cyc & (~soc_litedramwishbone2native0_aborted));
+			end
+		end
+		2'd2: begin
+			if (soc_litedramnativeport0_rdata_valid1) begin
+				soc_interface0_wb_port_ack <= (soc_interface0_wb_port_cyc & (~soc_litedramwishbone2native0_aborted));
+			end
+		end
+		default: begin
 		end
 	endcase
 end
@@ -10044,121 +11615,69 @@ always @(*) begin
 		end
 	endcase
 end
-always @(*) begin
-	soc_litedramnativeport0_cmd_valid <= 1'd0;
-	case (litedramcore_litedramwishbone2native0_state)
-		1'd1: begin
-		end
-		2'd2: begin
-		end
-		default: begin
-			soc_litedramnativeport0_cmd_valid <= (soc_interface0_wb_port_cyc & soc_interface0_wb_port_stb);
-		end
-	endcase
-end
-always @(*) begin
-	soc_litedramwishbone2native0_is_ongoing <= 1'd0;
-	case (litedramcore_litedramwishbone2native0_state)
-		1'd1: begin
-			soc_litedramwishbone2native0_is_ongoing <= 1'd1;
-		end
-		2'd2: begin
-		end
-		default: begin
-		end
-	endcase
-end
-always @(*) begin
-	soc_interface0_wb_port_dat_r <= 128'd0;
-	case (litedramcore_litedramwishbone2native0_state)
-		1'd1: begin
-		end
-		2'd2: begin
-			if (soc_litedramnativeport0_rdata_valid) begin
-				soc_interface0_wb_port_dat_r <= soc_litedramnativeport0_rdata_payload_data;
-			end
-		end
-		default: begin
-		end
-	endcase
-end
-always @(*) begin
-	soc_interface0_wb_port_ack <= 1'd0;
-	case (litedramcore_litedramwishbone2native0_state)
-		1'd1: begin
-			if ((soc_litedramnativeport0_wdata_valid & soc_litedramnativeport0_wdata_ready)) begin
-				soc_interface0_wb_port_ack <= (soc_interface0_wb_port_cyc & (~soc_litedramwishbone2native0_aborted));
-			end
-		end
-		2'd2: begin
-			if (soc_litedramnativeport0_rdata_valid) begin
-				soc_interface0_wb_port_ack <= (soc_interface0_wb_port_cyc & (~soc_litedramwishbone2native0_aborted));
-			end
-		end
-		default: begin
-		end
-	endcase
-end
-assign soc_litedramnativeport1_cmd_payload_addr = (soc_interface1_wb_port_adr - 1'd0);
-assign soc_litedramnativeport1_cmd_payload_we = soc_interface1_wb_port_we;
+assign soc_litedramnativeport1_cmd_payload_addr1 = (soc_interface1_wb_port_adr - 1'd0);
+assign soc_litedramnativeport1_cmd_payload_we1 = soc_interface1_wb_port_we;
 assign soc_litedramnativeport1_cmd_last = (~soc_interface1_wb_port_we);
 assign soc_litedramnativeport1_flush = (~soc_interface1_wb_port_cyc);
 always @(*) begin
-	soc_litedramnativeport1_wdata_valid <= 1'd0;
-	soc_litedramnativeport1_wdata_valid <= (soc_interface1_wb_port_stb & soc_interface1_wb_port_we);
+	soc_litedramnativeport1_wdata_valid1 <= 1'd0;
+	soc_litedramnativeport1_wdata_valid1 <= (soc_interface1_wb_port_stb & soc_interface1_wb_port_we);
 	if (1'd1) begin
 		if ((~soc_litedramwishbone2native1_is_ongoing)) begin
-			soc_litedramnativeport1_wdata_valid <= 1'd0;
+			soc_litedramnativeport1_wdata_valid1 <= 1'd0;
 		end
 	end
 end
-assign soc_litedramnativeport1_wdata_payload_data = soc_interface1_wb_port_dat_w;
-assign soc_litedramnativeport1_wdata_payload_we = soc_interface1_wb_port_sel;
-assign soc_litedramnativeport1_rdata_ready = 1'd1;
+assign soc_litedramnativeport1_wdata_payload_data1 = soc_interface1_wb_port_dat_w;
+assign soc_litedramnativeport1_wdata_payload_we1 = soc_interface1_wb_port_sel;
+assign soc_litedramnativeport1_rdata_ready1 = 1'd1;
 always @(*) begin
 	litedramcore_litedramwishbone2native1_next_state <= 2'd0;
 	litedramcore_litedramwishbone2native1_next_state <= litedramcore_litedramwishbone2native1_state;
 	case (litedramcore_litedramwishbone2native1_state)
 		1'd1: begin
-			if ((soc_litedramnativeport1_wdata_valid & soc_litedramnativeport1_wdata_ready)) begin
+			if ((soc_litedramnativeport1_wdata_valid1 & soc_litedramnativeport1_wdata_ready1)) begin
 				litedramcore_litedramwishbone2native1_next_state <= 1'd0;
 			end
 		end
 		2'd2: begin
-			if (soc_litedramnativeport1_rdata_valid) begin
+			if (soc_litedramnativeport1_rdata_valid1) begin
 				litedramcore_litedramwishbone2native1_next_state <= 1'd0;
 			end
 		end
 		default: begin
-			if (((soc_litedramnativeport1_cmd_valid & soc_litedramnativeport1_cmd_ready) & soc_interface1_wb_port_we)) begin
+			if (((soc_litedramnativeport1_cmd_valid1 & soc_litedramnativeport1_cmd_ready1) & soc_interface1_wb_port_we)) begin
 				litedramcore_litedramwishbone2native1_next_state <= 1'd1;
 			end
-			if (((soc_litedramnativeport1_cmd_valid & soc_litedramnativeport1_cmd_ready) & (~soc_interface1_wb_port_we))) begin
+			if (((soc_litedramnativeport1_cmd_valid1 & soc_litedramnativeport1_cmd_ready1) & (~soc_interface1_wb_port_we))) begin
 				litedramcore_litedramwishbone2native1_next_state <= 2'd2;
 			end
 		end
 	endcase
 end
 always @(*) begin
-	soc_litedramwishbone2native1_is_ongoing <= 1'd0;
+	soc_litedramnativeport1_cmd_valid1 <= 1'd0;
 	case (litedramcore_litedramwishbone2native1_state)
 		1'd1: begin
-			soc_litedramwishbone2native1_is_ongoing <= 1'd1;
 		end
 		2'd2: begin
 		end
 		default: begin
+			soc_litedramnativeport1_cmd_valid1 <= (soc_interface1_wb_port_cyc & soc_interface1_wb_port_stb);
 		end
 	endcase
 end
 always @(*) begin
-	soc_interface1_wb_port_dat_r <= 128'd0;
+	soc_interface1_wb_port_ack <= 1'd0;
 	case (litedramcore_litedramwishbone2native1_state)
 		1'd1: begin
+			if ((soc_litedramnativeport1_wdata_valid1 & soc_litedramnativeport1_wdata_ready1)) begin
+				soc_interface1_wb_port_ack <= (soc_interface1_wb_port_cyc & (~soc_litedramwishbone2native1_aborted));
+			end
 		end
 		2'd2: begin
-			if (soc_litedramnativeport1_rdata_valid) begin
-				soc_interface1_wb_port_dat_r <= soc_litedramnativeport1_rdata_payload_data;
+			if (soc_litedramnativeport1_rdata_valid1) begin
+				soc_interface1_wb_port_ack <= (soc_interface1_wb_port_cyc & (~soc_litedramwishbone2native1_aborted));
 			end
 		end
 		default: begin
@@ -10194,31 +11713,28 @@ always @(*) begin
 	endcase
 end
 always @(*) begin
-	soc_interface1_wb_port_ack <= 1'd0;
+	soc_litedramwishbone2native1_is_ongoing <= 1'd0;
 	case (litedramcore_litedramwishbone2native1_state)
 		1'd1: begin
-			if ((soc_litedramnativeport1_wdata_valid & soc_litedramnativeport1_wdata_ready)) begin
-				soc_interface1_wb_port_ack <= (soc_interface1_wb_port_cyc & (~soc_litedramwishbone2native1_aborted));
-			end
+			soc_litedramwishbone2native1_is_ongoing <= 1'd1;
 		end
 		2'd2: begin
-			if (soc_litedramnativeport1_rdata_valid) begin
-				soc_interface1_wb_port_ack <= (soc_interface1_wb_port_cyc & (~soc_litedramwishbone2native1_aborted));
-			end
 		end
 		default: begin
 		end
 	endcase
 end
 always @(*) begin
-	soc_litedramnativeport1_cmd_valid <= 1'd0;
+	soc_interface1_wb_port_dat_r <= 32'd0;
 	case (litedramcore_litedramwishbone2native1_state)
 		1'd1: begin
 		end
 		2'd2: begin
+			if (soc_litedramnativeport1_rdata_valid1) begin
+				soc_interface1_wb_port_dat_r <= soc_litedramnativeport1_rdata_payload_data1;
+			end
 		end
 		default: begin
-			soc_litedramnativeport1_cmd_valid <= (soc_interface1_wb_port_cyc & soc_interface1_wb_port_stb);
 		end
 	endcase
 end
@@ -10236,6 +11752,18 @@ always @(*) begin
 			if ((litedramcore_wishbone_cyc & litedramcore_wishbone_stb)) begin
 				litedramcore_wishbone2csr_next_state <= 1'd1;
 			end
+		end
+	endcase
+end
+always @(*) begin
+	litedramcore_wishbone_dat_r <= 32'd0;
+	case (litedramcore_wishbone2csr_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			litedramcore_wishbone_dat_r <= litedramcore_dat_r;
+		end
+		default: begin
 		end
 	endcase
 end
@@ -10260,6 +11788,18 @@ always @(*) begin
 		end
 		default: begin
 			litedramcore_dat_w_wishbone2csr_next_value_ce0 <= 1'd1;
+		end
+	endcase
+end
+always @(*) begin
+	litedramcore_wishbone_ack <= 1'd0;
+	case (litedramcore_wishbone2csr_state)
+		1'd1: begin
+		end
+		2'd2: begin
+			litedramcore_wishbone_ack <= 1'd1;
+		end
+		default: begin
 		end
 	endcase
 end
@@ -10320,30 +11860,6 @@ always @(*) begin
 			if ((litedramcore_wishbone_cyc & litedramcore_wishbone_stb)) begin
 				litedramcore_we_wishbone2csr_next_value_ce2 <= 1'd1;
 			end
-		end
-	endcase
-end
-always @(*) begin
-	litedramcore_wishbone_dat_r <= 32'd0;
-	case (litedramcore_wishbone2csr_state)
-		1'd1: begin
-		end
-		2'd2: begin
-			litedramcore_wishbone_dat_r <= litedramcore_dat_r;
-		end
-		default: begin
-		end
-	endcase
-end
-always @(*) begin
-	litedramcore_wishbone_ack <= 1'd0;
-	case (litedramcore_wishbone2csr_state)
-		1'd1: begin
-		end
-		2'd2: begin
-			litedramcore_wishbone_ack <= 1'd1;
-		end
-		default: begin
 		end
 	endcase
 end
@@ -11319,10 +12835,10 @@ always @(*) begin
 	rhs_array_muxed12 <= 21'd0;
 	case (litedramcore_roundrobin0_grant)
 		1'd0: begin
-			rhs_array_muxed12 <= {soc_litedramnativeport0_cmd_payload_addr[23:10], soc_litedramnativeport0_cmd_payload_addr[6:0]};
+			rhs_array_muxed12 <= {soc_litedramnativeport0_cmd_payload_addr0[23:10], soc_litedramnativeport0_cmd_payload_addr0[6:0]};
 		end
 		default: begin
-			rhs_array_muxed12 <= {soc_litedramnativeport1_cmd_payload_addr[23:10], soc_litedramnativeport1_cmd_payload_addr[6:0]};
+			rhs_array_muxed12 <= {soc_litedramnativeport1_cmd_payload_addr0[23:10], soc_litedramnativeport1_cmd_payload_addr0[6:0]};
 		end
 	endcase
 end
@@ -11330,10 +12846,10 @@ always @(*) begin
 	rhs_array_muxed13 <= 1'd0;
 	case (litedramcore_roundrobin0_grant)
 		1'd0: begin
-			rhs_array_muxed13 <= soc_litedramnativeport0_cmd_payload_we;
+			rhs_array_muxed13 <= soc_litedramnativeport0_cmd_payload_we0;
 		end
 		default: begin
-			rhs_array_muxed13 <= soc_litedramnativeport1_cmd_payload_we;
+			rhs_array_muxed13 <= soc_litedramnativeport1_cmd_payload_we0;
 		end
 	endcase
 end
@@ -11341,10 +12857,10 @@ always @(*) begin
 	rhs_array_muxed14 <= 1'd0;
 	case (litedramcore_roundrobin0_grant)
 		1'd0: begin
-			rhs_array_muxed14 <= (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid);
+			rhs_array_muxed14 <= (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0);
 		end
 		default: begin
-			rhs_array_muxed14 <= (((soc_litedramnativeport1_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid);
+			rhs_array_muxed14 <= (((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 1'd0) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0);
 		end
 	endcase
 end
@@ -11352,10 +12868,10 @@ always @(*) begin
 	rhs_array_muxed15 <= 21'd0;
 	case (litedramcore_roundrobin1_grant)
 		1'd0: begin
-			rhs_array_muxed15 <= {soc_litedramnativeport0_cmd_payload_addr[23:10], soc_litedramnativeport0_cmd_payload_addr[6:0]};
+			rhs_array_muxed15 <= {soc_litedramnativeport0_cmd_payload_addr0[23:10], soc_litedramnativeport0_cmd_payload_addr0[6:0]};
 		end
 		default: begin
-			rhs_array_muxed15 <= {soc_litedramnativeport1_cmd_payload_addr[23:10], soc_litedramnativeport1_cmd_payload_addr[6:0]};
+			rhs_array_muxed15 <= {soc_litedramnativeport1_cmd_payload_addr0[23:10], soc_litedramnativeport1_cmd_payload_addr0[6:0]};
 		end
 	endcase
 end
@@ -11363,10 +12879,10 @@ always @(*) begin
 	rhs_array_muxed16 <= 1'd0;
 	case (litedramcore_roundrobin1_grant)
 		1'd0: begin
-			rhs_array_muxed16 <= soc_litedramnativeport0_cmd_payload_we;
+			rhs_array_muxed16 <= soc_litedramnativeport0_cmd_payload_we0;
 		end
 		default: begin
-			rhs_array_muxed16 <= soc_litedramnativeport1_cmd_payload_we;
+			rhs_array_muxed16 <= soc_litedramnativeport1_cmd_payload_we0;
 		end
 	endcase
 end
@@ -11374,10 +12890,10 @@ always @(*) begin
 	rhs_array_muxed17 <= 1'd0;
 	case (litedramcore_roundrobin1_grant)
 		1'd0: begin
-			rhs_array_muxed17 <= (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid);
+			rhs_array_muxed17 <= (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 1'd1) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0);
 		end
 		default: begin
-			rhs_array_muxed17 <= (((soc_litedramnativeport1_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid);
+			rhs_array_muxed17 <= (((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 1'd1) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0);
 		end
 	endcase
 end
@@ -11385,10 +12901,10 @@ always @(*) begin
 	rhs_array_muxed18 <= 21'd0;
 	case (litedramcore_roundrobin2_grant)
 		1'd0: begin
-			rhs_array_muxed18 <= {soc_litedramnativeport0_cmd_payload_addr[23:10], soc_litedramnativeport0_cmd_payload_addr[6:0]};
+			rhs_array_muxed18 <= {soc_litedramnativeport0_cmd_payload_addr0[23:10], soc_litedramnativeport0_cmd_payload_addr0[6:0]};
 		end
 		default: begin
-			rhs_array_muxed18 <= {soc_litedramnativeport1_cmd_payload_addr[23:10], soc_litedramnativeport1_cmd_payload_addr[6:0]};
+			rhs_array_muxed18 <= {soc_litedramnativeport1_cmd_payload_addr0[23:10], soc_litedramnativeport1_cmd_payload_addr0[6:0]};
 		end
 	endcase
 end
@@ -11396,10 +12912,10 @@ always @(*) begin
 	rhs_array_muxed19 <= 1'd0;
 	case (litedramcore_roundrobin2_grant)
 		1'd0: begin
-			rhs_array_muxed19 <= soc_litedramnativeport0_cmd_payload_we;
+			rhs_array_muxed19 <= soc_litedramnativeport0_cmd_payload_we0;
 		end
 		default: begin
-			rhs_array_muxed19 <= soc_litedramnativeport1_cmd_payload_we;
+			rhs_array_muxed19 <= soc_litedramnativeport1_cmd_payload_we0;
 		end
 	endcase
 end
@@ -11407,10 +12923,10 @@ always @(*) begin
 	rhs_array_muxed20 <= 1'd0;
 	case (litedramcore_roundrobin2_grant)
 		1'd0: begin
-			rhs_array_muxed20 <= (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid);
+			rhs_array_muxed20 <= (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 2'd2) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0);
 		end
 		default: begin
-			rhs_array_muxed20 <= (((soc_litedramnativeport1_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid);
+			rhs_array_muxed20 <= (((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 2'd2) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0);
 		end
 	endcase
 end
@@ -11418,10 +12934,10 @@ always @(*) begin
 	rhs_array_muxed21 <= 21'd0;
 	case (litedramcore_roundrobin3_grant)
 		1'd0: begin
-			rhs_array_muxed21 <= {soc_litedramnativeport0_cmd_payload_addr[23:10], soc_litedramnativeport0_cmd_payload_addr[6:0]};
+			rhs_array_muxed21 <= {soc_litedramnativeport0_cmd_payload_addr0[23:10], soc_litedramnativeport0_cmd_payload_addr0[6:0]};
 		end
 		default: begin
-			rhs_array_muxed21 <= {soc_litedramnativeport1_cmd_payload_addr[23:10], soc_litedramnativeport1_cmd_payload_addr[6:0]};
+			rhs_array_muxed21 <= {soc_litedramnativeport1_cmd_payload_addr0[23:10], soc_litedramnativeport1_cmd_payload_addr0[6:0]};
 		end
 	endcase
 end
@@ -11429,10 +12945,10 @@ always @(*) begin
 	rhs_array_muxed22 <= 1'd0;
 	case (litedramcore_roundrobin3_grant)
 		1'd0: begin
-			rhs_array_muxed22 <= soc_litedramnativeport0_cmd_payload_we;
+			rhs_array_muxed22 <= soc_litedramnativeport0_cmd_payload_we0;
 		end
 		default: begin
-			rhs_array_muxed22 <= soc_litedramnativeport1_cmd_payload_we;
+			rhs_array_muxed22 <= soc_litedramnativeport1_cmd_payload_we0;
 		end
 	endcase
 end
@@ -11440,10 +12956,10 @@ always @(*) begin
 	rhs_array_muxed23 <= 1'd0;
 	case (litedramcore_roundrobin3_grant)
 		1'd0: begin
-			rhs_array_muxed23 <= (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid);
+			rhs_array_muxed23 <= (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 2'd3) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0);
 		end
 		default: begin
-			rhs_array_muxed23 <= (((soc_litedramnativeport1_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid);
+			rhs_array_muxed23 <= (((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 2'd3) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0);
 		end
 	endcase
 end
@@ -11451,10 +12967,10 @@ always @(*) begin
 	rhs_array_muxed24 <= 21'd0;
 	case (litedramcore_roundrobin4_grant)
 		1'd0: begin
-			rhs_array_muxed24 <= {soc_litedramnativeport0_cmd_payload_addr[23:10], soc_litedramnativeport0_cmd_payload_addr[6:0]};
+			rhs_array_muxed24 <= {soc_litedramnativeport0_cmd_payload_addr0[23:10], soc_litedramnativeport0_cmd_payload_addr0[6:0]};
 		end
 		default: begin
-			rhs_array_muxed24 <= {soc_litedramnativeport1_cmd_payload_addr[23:10], soc_litedramnativeport1_cmd_payload_addr[6:0]};
+			rhs_array_muxed24 <= {soc_litedramnativeport1_cmd_payload_addr0[23:10], soc_litedramnativeport1_cmd_payload_addr0[6:0]};
 		end
 	endcase
 end
@@ -11462,10 +12978,10 @@ always @(*) begin
 	rhs_array_muxed25 <= 1'd0;
 	case (litedramcore_roundrobin4_grant)
 		1'd0: begin
-			rhs_array_muxed25 <= soc_litedramnativeport0_cmd_payload_we;
+			rhs_array_muxed25 <= soc_litedramnativeport0_cmd_payload_we0;
 		end
 		default: begin
-			rhs_array_muxed25 <= soc_litedramnativeport1_cmd_payload_we;
+			rhs_array_muxed25 <= soc_litedramnativeport1_cmd_payload_we0;
 		end
 	endcase
 end
@@ -11473,10 +12989,10 @@ always @(*) begin
 	rhs_array_muxed26 <= 1'd0;
 	case (litedramcore_roundrobin4_grant)
 		1'd0: begin
-			rhs_array_muxed26 <= (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked8 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid);
+			rhs_array_muxed26 <= (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd4) & (~(((((((litedramcore_locked8 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0);
 		end
 		default: begin
-			rhs_array_muxed26 <= (((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked9 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid);
+			rhs_array_muxed26 <= (((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd4) & (~(((((((litedramcore_locked9 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0);
 		end
 	endcase
 end
@@ -11484,10 +13000,10 @@ always @(*) begin
 	rhs_array_muxed27 <= 21'd0;
 	case (litedramcore_roundrobin5_grant)
 		1'd0: begin
-			rhs_array_muxed27 <= {soc_litedramnativeport0_cmd_payload_addr[23:10], soc_litedramnativeport0_cmd_payload_addr[6:0]};
+			rhs_array_muxed27 <= {soc_litedramnativeport0_cmd_payload_addr0[23:10], soc_litedramnativeport0_cmd_payload_addr0[6:0]};
 		end
 		default: begin
-			rhs_array_muxed27 <= {soc_litedramnativeport1_cmd_payload_addr[23:10], soc_litedramnativeport1_cmd_payload_addr[6:0]};
+			rhs_array_muxed27 <= {soc_litedramnativeport1_cmd_payload_addr0[23:10], soc_litedramnativeport1_cmd_payload_addr0[6:0]};
 		end
 	endcase
 end
@@ -11495,10 +13011,10 @@ always @(*) begin
 	rhs_array_muxed28 <= 1'd0;
 	case (litedramcore_roundrobin5_grant)
 		1'd0: begin
-			rhs_array_muxed28 <= soc_litedramnativeport0_cmd_payload_we;
+			rhs_array_muxed28 <= soc_litedramnativeport0_cmd_payload_we0;
 		end
 		default: begin
-			rhs_array_muxed28 <= soc_litedramnativeport1_cmd_payload_we;
+			rhs_array_muxed28 <= soc_litedramnativeport1_cmd_payload_we0;
 		end
 	endcase
 end
@@ -11506,10 +13022,10 @@ always @(*) begin
 	rhs_array_muxed29 <= 1'd0;
 	case (litedramcore_roundrobin5_grant)
 		1'd0: begin
-			rhs_array_muxed29 <= (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked10 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid);
+			rhs_array_muxed29 <= (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd5) & (~(((((((litedramcore_locked10 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0);
 		end
 		default: begin
-			rhs_array_muxed29 <= (((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked11 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid);
+			rhs_array_muxed29 <= (((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd5) & (~(((((((litedramcore_locked11 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0);
 		end
 	endcase
 end
@@ -11517,10 +13033,10 @@ always @(*) begin
 	rhs_array_muxed30 <= 21'd0;
 	case (litedramcore_roundrobin6_grant)
 		1'd0: begin
-			rhs_array_muxed30 <= {soc_litedramnativeport0_cmd_payload_addr[23:10], soc_litedramnativeport0_cmd_payload_addr[6:0]};
+			rhs_array_muxed30 <= {soc_litedramnativeport0_cmd_payload_addr0[23:10], soc_litedramnativeport0_cmd_payload_addr0[6:0]};
 		end
 		default: begin
-			rhs_array_muxed30 <= {soc_litedramnativeport1_cmd_payload_addr[23:10], soc_litedramnativeport1_cmd_payload_addr[6:0]};
+			rhs_array_muxed30 <= {soc_litedramnativeport1_cmd_payload_addr0[23:10], soc_litedramnativeport1_cmd_payload_addr0[6:0]};
 		end
 	endcase
 end
@@ -11528,10 +13044,10 @@ always @(*) begin
 	rhs_array_muxed31 <= 1'd0;
 	case (litedramcore_roundrobin6_grant)
 		1'd0: begin
-			rhs_array_muxed31 <= soc_litedramnativeport0_cmd_payload_we;
+			rhs_array_muxed31 <= soc_litedramnativeport0_cmd_payload_we0;
 		end
 		default: begin
-			rhs_array_muxed31 <= soc_litedramnativeport1_cmd_payload_we;
+			rhs_array_muxed31 <= soc_litedramnativeport1_cmd_payload_we0;
 		end
 	endcase
 end
@@ -11539,10 +13055,10 @@ always @(*) begin
 	rhs_array_muxed32 <= 1'd0;
 	case (litedramcore_roundrobin6_grant)
 		1'd0: begin
-			rhs_array_muxed32 <= (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked12 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid);
+			rhs_array_muxed32 <= (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd6) & (~(((((((litedramcore_locked12 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0);
 		end
 		default: begin
-			rhs_array_muxed32 <= (((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked13 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid);
+			rhs_array_muxed32 <= (((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd6) & (~(((((((litedramcore_locked13 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0);
 		end
 	endcase
 end
@@ -11550,10 +13066,10 @@ always @(*) begin
 	rhs_array_muxed33 <= 21'd0;
 	case (litedramcore_roundrobin7_grant)
 		1'd0: begin
-			rhs_array_muxed33 <= {soc_litedramnativeport0_cmd_payload_addr[23:10], soc_litedramnativeport0_cmd_payload_addr[6:0]};
+			rhs_array_muxed33 <= {soc_litedramnativeport0_cmd_payload_addr0[23:10], soc_litedramnativeport0_cmd_payload_addr0[6:0]};
 		end
 		default: begin
-			rhs_array_muxed33 <= {soc_litedramnativeport1_cmd_payload_addr[23:10], soc_litedramnativeport1_cmd_payload_addr[6:0]};
+			rhs_array_muxed33 <= {soc_litedramnativeport1_cmd_payload_addr0[23:10], soc_litedramnativeport1_cmd_payload_addr0[6:0]};
 		end
 	endcase
 end
@@ -11561,10 +13077,10 @@ always @(*) begin
 	rhs_array_muxed34 <= 1'd0;
 	case (litedramcore_roundrobin7_grant)
 		1'd0: begin
-			rhs_array_muxed34 <= soc_litedramnativeport0_cmd_payload_we;
+			rhs_array_muxed34 <= soc_litedramnativeport0_cmd_payload_we0;
 		end
 		default: begin
-			rhs_array_muxed34 <= soc_litedramnativeport1_cmd_payload_we;
+			rhs_array_muxed34 <= soc_litedramnativeport1_cmd_payload_we0;
 		end
 	endcase
 end
@@ -11572,10 +13088,10 @@ always @(*) begin
 	rhs_array_muxed35 <= 1'd0;
 	case (litedramcore_roundrobin7_grant)
 		1'd0: begin
-			rhs_array_muxed35 <= (((soc_litedramnativeport0_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked14 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid);
+			rhs_array_muxed35 <= (((soc_litedramnativeport0_cmd_payload_addr0[9:7] == 3'd7) & (~(((((((litedramcore_locked14 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))))) & soc_litedramnativeport0_cmd_valid0);
 		end
 		default: begin
-			rhs_array_muxed35 <= (((soc_litedramnativeport1_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked15 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid);
+			rhs_array_muxed35 <= (((soc_litedramnativeport1_cmd_payload_addr0[9:7] == 3'd7) & (~(((((((litedramcore_locked15 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd1))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd1))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd1))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd1))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd1))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd1))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd1))))) & soc_litedramnativeport1_cmd_valid0);
 		end
 	endcase
 end
@@ -13479,6 +14995,280 @@ always @(posedge sys_clk) begin
 	litedramcore_new_master_rdata_valid15 <= litedramcore_new_master_rdata_valid14;
 	litedramcore_new_master_rdata_valid16 <= litedramcore_new_master_rdata_valid15;
 	litedramcore_new_master_rdata_valid17 <= litedramcore_new_master_rdata_valid16;
+	if (soc_litedramnativeportconverter0_wdata_finished) begin
+		soc_litedramnativeportconverter0_read_lock <= 1'd0;
+		soc_litedramnativeportconverter0_read_unlocked <= 1'd1;
+	end else begin
+		if (((soc_litedramnativeportconverter0_rw_collision & (~soc_litedramnativeport0_cmd_valid0)) & (~soc_litedramnativeportconverter0_read_unlocked))) begin
+			soc_litedramnativeportconverter0_read_lock <= 1'd1;
+		end
+	end
+	if ((soc_litedramnativeport0_cmd_valid1 & soc_litedramnativeport0_cmd_ready1)) begin
+		soc_litedramnativeportconverter0_read_unlocked <= 1'd0;
+	end
+	if ((soc_litedramnativeportconverter0_rdata_converter_source_valid & soc_litedramnativeportconverter0_rdata_converter_source_ready)) begin
+		soc_litedramnativeportconverter0_rdata_chunk <= {soc_litedramnativeportconverter0_rdata_chunk[2:0], soc_litedramnativeportconverter0_rdata_chunk[3]};
+	end
+	if ((soc_litedramnativeportconverter0_wdata_converter_sink_valid & soc_litedramnativeportconverter0_wdata_converter_sink_ready)) begin
+		soc_litedramnativeportconverter0_wdata_chunk <= {soc_litedramnativeportconverter0_wdata_chunk[2:0], soc_litedramnativeportconverter0_wdata_chunk[3]};
+	end
+	if (((soc_litedramnativeportconverter0_cmd_buffer_source_valid & soc_litedramnativeportconverter0_cmd_buffer_source_payload_we) & soc_litedramnativeportconverter0_wdata_chunk[3])) begin
+		soc_litedramnativeportconverter0_wdata_sel <= {{4{soc_litedramnativeportconverter0_cmd_buffer_source_payload_sel[3]}}, {4{soc_litedramnativeportconverter0_cmd_buffer_source_payload_sel[2]}}, {4{soc_litedramnativeportconverter0_cmd_buffer_source_payload_sel[1]}}, {4{soc_litedramnativeportconverter0_cmd_buffer_source_payload_sel[0]}}};
+	end
+	litedramcore_clockdomainsrenamer0_state <= litedramcore_clockdomainsrenamer0_next_state;
+	if (soc_litedramnativeportconverter0_cmd_addr_clockdomainsrenamer0_next_value_ce0) begin
+		soc_litedramnativeportconverter0_cmd_addr <= soc_litedramnativeportconverter0_cmd_addr_clockdomainsrenamer0_next_value0;
+	end
+	if (soc_litedramnativeportconverter0_cmd_we_clockdomainsrenamer0_next_value_ce1) begin
+		soc_litedramnativeportconverter0_cmd_we <= soc_litedramnativeportconverter0_cmd_we_clockdomainsrenamer0_next_value1;
+	end
+	if (soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value_ce2) begin
+		soc_litedramnativeportconverter0_cmd_last <= soc_litedramnativeportconverter0_cmd_last_clockdomainsrenamer0_next_value2;
+	end
+	if (soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value_ce3) begin
+		soc_litedramnativeportconverter0_sel <= soc_litedramnativeportconverter0_sel_clockdomainsrenamer0_next_value3;
+	end
+	if (((soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_we & soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_writable) & (~soc_litedramnativeportconverter0_rdata_fifo_replace))) begin
+		if ((soc_litedramnativeportconverter0_rdata_fifo_produce == 2'd2)) begin
+			soc_litedramnativeportconverter0_rdata_fifo_produce <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter0_rdata_fifo_produce <= (soc_litedramnativeportconverter0_rdata_fifo_produce + 1'd1);
+		end
+	end
+	if (soc_litedramnativeportconverter0_rdata_fifo_do_read) begin
+		if ((soc_litedramnativeportconverter0_rdata_fifo_consume == 2'd2)) begin
+			soc_litedramnativeportconverter0_rdata_fifo_consume <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter0_rdata_fifo_consume <= (soc_litedramnativeportconverter0_rdata_fifo_consume + 1'd1);
+		end
+	end
+	if (((soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_we & soc_litedramnativeportconverter0_rdata_fifo_syncfifo0_writable) & (~soc_litedramnativeportconverter0_rdata_fifo_replace))) begin
+		if ((~soc_litedramnativeportconverter0_rdata_fifo_do_read)) begin
+			soc_litedramnativeportconverter0_rdata_fifo_level <= (soc_litedramnativeportconverter0_rdata_fifo_level + 1'd1);
+		end
+	end else begin
+		if (soc_litedramnativeportconverter0_rdata_fifo_do_read) begin
+			soc_litedramnativeportconverter0_rdata_fifo_level <= (soc_litedramnativeportconverter0_rdata_fifo_level - 1'd1);
+		end
+	end
+	if ((soc_litedramnativeportconverter0_rdata_converter_converter_source_valid & soc_litedramnativeportconverter0_rdata_converter_converter_source_ready)) begin
+		if (soc_litedramnativeportconverter0_rdata_converter_converter_last) begin
+			soc_litedramnativeportconverter0_rdata_converter_converter_mux <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter0_rdata_converter_converter_mux <= (soc_litedramnativeportconverter0_rdata_converter_converter_mux + 1'd1);
+		end
+	end
+	if (soc_litedramnativeportconverter0_wdata_converter_converter_source_ready) begin
+		soc_litedramnativeportconverter0_wdata_converter_converter_strobe_all <= 1'd0;
+	end
+	if (soc_litedramnativeportconverter0_wdata_converter_converter_load_part) begin
+		if (((soc_litedramnativeportconverter0_wdata_converter_converter_demux == 2'd3) | soc_litedramnativeportconverter0_wdata_converter_converter_sink_last)) begin
+			soc_litedramnativeportconverter0_wdata_converter_converter_demux <= 1'd0;
+			soc_litedramnativeportconverter0_wdata_converter_converter_strobe_all <= 1'd1;
+		end else begin
+			soc_litedramnativeportconverter0_wdata_converter_converter_demux <= (soc_litedramnativeportconverter0_wdata_converter_converter_demux + 1'd1);
+		end
+	end
+	if ((soc_litedramnativeportconverter0_wdata_converter_converter_source_valid & soc_litedramnativeportconverter0_wdata_converter_converter_source_ready)) begin
+		if ((soc_litedramnativeportconverter0_wdata_converter_converter_sink_valid & soc_litedramnativeportconverter0_wdata_converter_converter_sink_ready)) begin
+			soc_litedramnativeportconverter0_wdata_converter_converter_source_first <= soc_litedramnativeportconverter0_wdata_converter_converter_sink_first;
+			soc_litedramnativeportconverter0_wdata_converter_converter_source_last <= soc_litedramnativeportconverter0_wdata_converter_converter_sink_last;
+		end else begin
+			soc_litedramnativeportconverter0_wdata_converter_converter_source_first <= 1'd0;
+			soc_litedramnativeportconverter0_wdata_converter_converter_source_last <= 1'd0;
+		end
+	end else begin
+		if ((soc_litedramnativeportconverter0_wdata_converter_converter_sink_valid & soc_litedramnativeportconverter0_wdata_converter_converter_sink_ready)) begin
+			soc_litedramnativeportconverter0_wdata_converter_converter_source_first <= (soc_litedramnativeportconverter0_wdata_converter_converter_sink_first | soc_litedramnativeportconverter0_wdata_converter_converter_source_first);
+			soc_litedramnativeportconverter0_wdata_converter_converter_source_last <= (soc_litedramnativeportconverter0_wdata_converter_converter_sink_last | soc_litedramnativeportconverter0_wdata_converter_converter_source_last);
+		end
+	end
+	if (soc_litedramnativeportconverter0_wdata_converter_converter_load_part) begin
+		case (soc_litedramnativeportconverter0_wdata_converter_converter_demux)
+			1'd0: begin
+				soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_data[35:0] <= soc_litedramnativeportconverter0_wdata_converter_converter_sink_payload_data;
+			end
+			1'd1: begin
+				soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_data[71:36] <= soc_litedramnativeportconverter0_wdata_converter_converter_sink_payload_data;
+			end
+			2'd2: begin
+				soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_data[107:72] <= soc_litedramnativeportconverter0_wdata_converter_converter_sink_payload_data;
+			end
+			2'd3: begin
+				soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_data[143:108] <= soc_litedramnativeportconverter0_wdata_converter_converter_sink_payload_data;
+			end
+		endcase
+	end
+	if (soc_litedramnativeportconverter0_wdata_converter_converter_load_part) begin
+		soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_valid_token_count <= (soc_litedramnativeportconverter0_wdata_converter_converter_demux + 1'd1);
+	end
+	if (((soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_we & soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_writable) & (~soc_litedramnativeportconverter0_wdata_fifo_replace))) begin
+		if ((soc_litedramnativeportconverter0_wdata_fifo_produce == 2'd2)) begin
+			soc_litedramnativeportconverter0_wdata_fifo_produce <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter0_wdata_fifo_produce <= (soc_litedramnativeportconverter0_wdata_fifo_produce + 1'd1);
+		end
+	end
+	if (soc_litedramnativeportconverter0_wdata_fifo_do_read) begin
+		if ((soc_litedramnativeportconverter0_wdata_fifo_consume == 2'd2)) begin
+			soc_litedramnativeportconverter0_wdata_fifo_consume <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter0_wdata_fifo_consume <= (soc_litedramnativeportconverter0_wdata_fifo_consume + 1'd1);
+		end
+	end
+	if (((soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_we & soc_litedramnativeportconverter0_wdata_fifo_syncfifo0_writable) & (~soc_litedramnativeportconverter0_wdata_fifo_replace))) begin
+		if ((~soc_litedramnativeportconverter0_wdata_fifo_do_read)) begin
+			soc_litedramnativeportconverter0_wdata_fifo_level <= (soc_litedramnativeportconverter0_wdata_fifo_level + 1'd1);
+		end
+	end else begin
+		if (soc_litedramnativeportconverter0_wdata_fifo_do_read) begin
+			soc_litedramnativeportconverter0_wdata_fifo_level <= (soc_litedramnativeportconverter0_wdata_fifo_level - 1'd1);
+		end
+	end
+	if (((~soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_valid) | soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_ready)) begin
+		soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_valid <= soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_valid;
+		soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_first <= soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_first;
+		soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_last <= soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_last;
+		soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_payload_data <= soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_payload_data;
+		soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_payload_we <= soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_sink_payload_we;
+	end
+	if (soc_litedramnativeportconverter1_wdata_finished) begin
+		soc_litedramnativeportconverter1_read_lock <= 1'd0;
+		soc_litedramnativeportconverter1_read_unlocked <= 1'd1;
+	end else begin
+		if (((soc_litedramnativeportconverter1_rw_collision & (~soc_litedramnativeport1_cmd_valid0)) & (~soc_litedramnativeportconverter1_read_unlocked))) begin
+			soc_litedramnativeportconverter1_read_lock <= 1'd1;
+		end
+	end
+	if ((soc_litedramnativeport1_cmd_valid1 & soc_litedramnativeport1_cmd_ready1)) begin
+		soc_litedramnativeportconverter1_read_unlocked <= 1'd0;
+	end
+	if ((soc_litedramnativeportconverter1_rdata_converter_source_valid & soc_litedramnativeportconverter1_rdata_converter_source_ready)) begin
+		soc_litedramnativeportconverter1_rdata_chunk <= {soc_litedramnativeportconverter1_rdata_chunk[2:0], soc_litedramnativeportconverter1_rdata_chunk[3]};
+	end
+	if ((soc_litedramnativeportconverter1_wdata_converter_sink_valid & soc_litedramnativeportconverter1_wdata_converter_sink_ready)) begin
+		soc_litedramnativeportconverter1_wdata_chunk <= {soc_litedramnativeportconverter1_wdata_chunk[2:0], soc_litedramnativeportconverter1_wdata_chunk[3]};
+	end
+	if (((soc_litedramnativeportconverter1_cmd_buffer_source_valid & soc_litedramnativeportconverter1_cmd_buffer_source_payload_we) & soc_litedramnativeportconverter1_wdata_chunk[3])) begin
+		soc_litedramnativeportconverter1_wdata_sel <= {{4{soc_litedramnativeportconverter1_cmd_buffer_source_payload_sel[3]}}, {4{soc_litedramnativeportconverter1_cmd_buffer_source_payload_sel[2]}}, {4{soc_litedramnativeportconverter1_cmd_buffer_source_payload_sel[1]}}, {4{soc_litedramnativeportconverter1_cmd_buffer_source_payload_sel[0]}}};
+	end
+	litedramcore_clockdomainsrenamer1_state <= litedramcore_clockdomainsrenamer1_next_state;
+	if (soc_litedramnativeportconverter1_cmd_addr_clockdomainsrenamer1_next_value_ce0) begin
+		soc_litedramnativeportconverter1_cmd_addr <= soc_litedramnativeportconverter1_cmd_addr_clockdomainsrenamer1_next_value0;
+	end
+	if (soc_litedramnativeportconverter1_cmd_we_clockdomainsrenamer1_next_value_ce1) begin
+		soc_litedramnativeportconverter1_cmd_we <= soc_litedramnativeportconverter1_cmd_we_clockdomainsrenamer1_next_value1;
+	end
+	if (soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value_ce2) begin
+		soc_litedramnativeportconverter1_cmd_last <= soc_litedramnativeportconverter1_cmd_last_clockdomainsrenamer1_next_value2;
+	end
+	if (soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value_ce3) begin
+		soc_litedramnativeportconverter1_sel <= soc_litedramnativeportconverter1_sel_clockdomainsrenamer1_next_value3;
+	end
+	if (((soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_we & soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_writable) & (~soc_litedramnativeportconverter1_rdata_fifo_replace))) begin
+		if ((soc_litedramnativeportconverter1_rdata_fifo_produce == 2'd2)) begin
+			soc_litedramnativeportconverter1_rdata_fifo_produce <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter1_rdata_fifo_produce <= (soc_litedramnativeportconverter1_rdata_fifo_produce + 1'd1);
+		end
+	end
+	if (soc_litedramnativeportconverter1_rdata_fifo_do_read) begin
+		if ((soc_litedramnativeportconverter1_rdata_fifo_consume == 2'd2)) begin
+			soc_litedramnativeportconverter1_rdata_fifo_consume <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter1_rdata_fifo_consume <= (soc_litedramnativeportconverter1_rdata_fifo_consume + 1'd1);
+		end
+	end
+	if (((soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_we & soc_litedramnativeportconverter1_rdata_fifo_syncfifo1_writable) & (~soc_litedramnativeportconverter1_rdata_fifo_replace))) begin
+		if ((~soc_litedramnativeportconverter1_rdata_fifo_do_read)) begin
+			soc_litedramnativeportconverter1_rdata_fifo_level <= (soc_litedramnativeportconverter1_rdata_fifo_level + 1'd1);
+		end
+	end else begin
+		if (soc_litedramnativeportconverter1_rdata_fifo_do_read) begin
+			soc_litedramnativeportconverter1_rdata_fifo_level <= (soc_litedramnativeportconverter1_rdata_fifo_level - 1'd1);
+		end
+	end
+	if ((soc_litedramnativeportconverter1_rdata_converter_converter_source_valid & soc_litedramnativeportconverter1_rdata_converter_converter_source_ready)) begin
+		if (soc_litedramnativeportconverter1_rdata_converter_converter_last) begin
+			soc_litedramnativeportconverter1_rdata_converter_converter_mux <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter1_rdata_converter_converter_mux <= (soc_litedramnativeportconverter1_rdata_converter_converter_mux + 1'd1);
+		end
+	end
+	if (soc_litedramnativeportconverter1_wdata_converter_converter_source_ready) begin
+		soc_litedramnativeportconverter1_wdata_converter_converter_strobe_all <= 1'd0;
+	end
+	if (soc_litedramnativeportconverter1_wdata_converter_converter_load_part) begin
+		if (((soc_litedramnativeportconverter1_wdata_converter_converter_demux == 2'd3) | soc_litedramnativeportconverter1_wdata_converter_converter_sink_last)) begin
+			soc_litedramnativeportconverter1_wdata_converter_converter_demux <= 1'd0;
+			soc_litedramnativeportconverter1_wdata_converter_converter_strobe_all <= 1'd1;
+		end else begin
+			soc_litedramnativeportconverter1_wdata_converter_converter_demux <= (soc_litedramnativeportconverter1_wdata_converter_converter_demux + 1'd1);
+		end
+	end
+	if ((soc_litedramnativeportconverter1_wdata_converter_converter_source_valid & soc_litedramnativeportconverter1_wdata_converter_converter_source_ready)) begin
+		if ((soc_litedramnativeportconverter1_wdata_converter_converter_sink_valid & soc_litedramnativeportconverter1_wdata_converter_converter_sink_ready)) begin
+			soc_litedramnativeportconverter1_wdata_converter_converter_source_first <= soc_litedramnativeportconverter1_wdata_converter_converter_sink_first;
+			soc_litedramnativeportconverter1_wdata_converter_converter_source_last <= soc_litedramnativeportconverter1_wdata_converter_converter_sink_last;
+		end else begin
+			soc_litedramnativeportconverter1_wdata_converter_converter_source_first <= 1'd0;
+			soc_litedramnativeportconverter1_wdata_converter_converter_source_last <= 1'd0;
+		end
+	end else begin
+		if ((soc_litedramnativeportconverter1_wdata_converter_converter_sink_valid & soc_litedramnativeportconverter1_wdata_converter_converter_sink_ready)) begin
+			soc_litedramnativeportconverter1_wdata_converter_converter_source_first <= (soc_litedramnativeportconverter1_wdata_converter_converter_sink_first | soc_litedramnativeportconverter1_wdata_converter_converter_source_first);
+			soc_litedramnativeportconverter1_wdata_converter_converter_source_last <= (soc_litedramnativeportconverter1_wdata_converter_converter_sink_last | soc_litedramnativeportconverter1_wdata_converter_converter_source_last);
+		end
+	end
+	if (soc_litedramnativeportconverter1_wdata_converter_converter_load_part) begin
+		case (soc_litedramnativeportconverter1_wdata_converter_converter_demux)
+			1'd0: begin
+				soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_data[35:0] <= soc_litedramnativeportconverter1_wdata_converter_converter_sink_payload_data;
+			end
+			1'd1: begin
+				soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_data[71:36] <= soc_litedramnativeportconverter1_wdata_converter_converter_sink_payload_data;
+			end
+			2'd2: begin
+				soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_data[107:72] <= soc_litedramnativeportconverter1_wdata_converter_converter_sink_payload_data;
+			end
+			2'd3: begin
+				soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_data[143:108] <= soc_litedramnativeportconverter1_wdata_converter_converter_sink_payload_data;
+			end
+		endcase
+	end
+	if (soc_litedramnativeportconverter1_wdata_converter_converter_load_part) begin
+		soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_valid_token_count <= (soc_litedramnativeportconverter1_wdata_converter_converter_demux + 1'd1);
+	end
+	if (((soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_we & soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_writable) & (~soc_litedramnativeportconverter1_wdata_fifo_replace))) begin
+		if ((soc_litedramnativeportconverter1_wdata_fifo_produce == 2'd2)) begin
+			soc_litedramnativeportconverter1_wdata_fifo_produce <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter1_wdata_fifo_produce <= (soc_litedramnativeportconverter1_wdata_fifo_produce + 1'd1);
+		end
+	end
+	if (soc_litedramnativeportconverter1_wdata_fifo_do_read) begin
+		if ((soc_litedramnativeportconverter1_wdata_fifo_consume == 2'd2)) begin
+			soc_litedramnativeportconverter1_wdata_fifo_consume <= 1'd0;
+		end else begin
+			soc_litedramnativeportconverter1_wdata_fifo_consume <= (soc_litedramnativeportconverter1_wdata_fifo_consume + 1'd1);
+		end
+	end
+	if (((soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_we & soc_litedramnativeportconverter1_wdata_fifo_syncfifo1_writable) & (~soc_litedramnativeportconverter1_wdata_fifo_replace))) begin
+		if ((~soc_litedramnativeportconverter1_wdata_fifo_do_read)) begin
+			soc_litedramnativeportconverter1_wdata_fifo_level <= (soc_litedramnativeportconverter1_wdata_fifo_level + 1'd1);
+		end
+	end else begin
+		if (soc_litedramnativeportconverter1_wdata_fifo_do_read) begin
+			soc_litedramnativeportconverter1_wdata_fifo_level <= (soc_litedramnativeportconverter1_wdata_fifo_level - 1'd1);
+		end
+	end
+	if (((~soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_valid) | soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_ready)) begin
+		soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_valid <= soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_valid;
+		soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_first <= soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_first;
+		soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_last <= soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_last;
+		soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_payload_data <= soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_payload_data;
+		soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_payload_we <= soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_sink_payload_we;
+	end
 	if (litedramcore_roundrobin0_ce) begin
 		case (litedramcore_roundrobin0_grant)
 			1'd0: begin
@@ -14034,8 +15824,54 @@ always @(posedge sys_clk) begin
 		soc_init_error_storage <= 1'd0;
 		soc_init_error_re <= 1'd0;
 		soc_user_enable0 <= 1'd0;
+		soc_litedramnativeportconverter0_sel <= 4'd0;
+		soc_litedramnativeportconverter0_cmd_addr <= 26'd0;
+		soc_litedramnativeportconverter0_cmd_we <= 1'd0;
+		soc_litedramnativeportconverter0_cmd_last <= 1'd0;
+		soc_litedramnativeportconverter0_read_lock <= 1'd0;
+		soc_litedramnativeportconverter0_read_unlocked <= 1'd0;
+		soc_litedramnativeportconverter0_rdata_fifo_level <= 2'd0;
+		soc_litedramnativeportconverter0_rdata_fifo_produce <= 2'd0;
+		soc_litedramnativeportconverter0_rdata_fifo_consume <= 2'd0;
+		soc_litedramnativeportconverter0_rdata_converter_converter_mux <= 2'd0;
+		soc_litedramnativeportconverter0_rdata_chunk <= 4'd1;
+		soc_litedramnativeportconverter0_wdata_fifo_level <= 2'd0;
+		soc_litedramnativeportconverter0_wdata_fifo_produce <= 2'd0;
+		soc_litedramnativeportconverter0_wdata_fifo_consume <= 2'd0;
+		soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_valid <= 1'd0;
+		soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_payload_data <= 128'd0;
+		soc_litedramnativeportconverter0_wdata_buffer_pipe_valid_source_payload_we <= 16'd0;
+		soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_data <= 144'd0;
+		soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_valid_token_count <= 3'd0;
+		soc_litedramnativeportconverter0_wdata_converter_converter_demux <= 2'd0;
+		soc_litedramnativeportconverter0_wdata_converter_converter_strobe_all <= 1'd0;
+		soc_litedramnativeportconverter0_wdata_chunk <= 4'd1;
+		soc_litedramnativeportconverter0_wdata_sel <= 16'd0;
 		soc_litedramwishbone2native0_aborted <= 1'd0;
 		soc_user_enable1 <= 1'd0;
+		soc_litedramnativeportconverter1_sel <= 4'd0;
+		soc_litedramnativeportconverter1_cmd_addr <= 26'd0;
+		soc_litedramnativeportconverter1_cmd_we <= 1'd0;
+		soc_litedramnativeportconverter1_cmd_last <= 1'd0;
+		soc_litedramnativeportconverter1_read_lock <= 1'd0;
+		soc_litedramnativeportconverter1_read_unlocked <= 1'd0;
+		soc_litedramnativeportconverter1_rdata_fifo_level <= 2'd0;
+		soc_litedramnativeportconverter1_rdata_fifo_produce <= 2'd0;
+		soc_litedramnativeportconverter1_rdata_fifo_consume <= 2'd0;
+		soc_litedramnativeportconverter1_rdata_converter_converter_mux <= 2'd0;
+		soc_litedramnativeportconverter1_rdata_chunk <= 4'd1;
+		soc_litedramnativeportconverter1_wdata_fifo_level <= 2'd0;
+		soc_litedramnativeportconverter1_wdata_fifo_produce <= 2'd0;
+		soc_litedramnativeportconverter1_wdata_fifo_consume <= 2'd0;
+		soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_valid <= 1'd0;
+		soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_payload_data <= 128'd0;
+		soc_litedramnativeportconverter1_wdata_buffer_pipe_valid_source_payload_we <= 16'd0;
+		soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_data <= 144'd0;
+		soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_valid_token_count <= 3'd0;
+		soc_litedramnativeportconverter1_wdata_converter_converter_demux <= 2'd0;
+		soc_litedramnativeportconverter1_wdata_converter_converter_strobe_all <= 1'd0;
+		soc_litedramnativeportconverter1_wdata_chunk <= 4'd1;
+		soc_litedramnativeportconverter1_wdata_sel <= 16'd0;
 		soc_litedramwishbone2native1_aborted <= 1'd0;
 		litedramcore_we <= 1'd0;
 		litedramcore_refresher_state <= 2'd0;
@@ -14048,6 +15884,8 @@ always @(posedge sys_clk) begin
 		litedramcore_bankmachine6_state <= 3'd0;
 		litedramcore_bankmachine7_state <= 3'd0;
 		litedramcore_multiplexer_state <= 4'd0;
+		litedramcore_clockdomainsrenamer0_state <= 2'd0;
+		litedramcore_clockdomainsrenamer1_state <= 2'd0;
 		litedramcore_roundrobin0_grant <= 1'd0;
 		litedramcore_roundrobin1_grant <= 1'd0;
 		litedramcore_roundrobin2_grant <= 1'd0;
@@ -14617,8 +16455,80 @@ assign soc_litedramcore_bankmachine7_wrport_dat_r = storage_7_dat0;
 assign soc_litedramcore_bankmachine7_rdport_dat_r = storage_7[soc_litedramcore_bankmachine7_rdport_adr];
 
 
+//------------------------------------------------------------------------------
+// Memory storage_8: 3-words x 130-bit
+//------------------------------------------------------------------------------
+// Port 0 | Read: Sync  | Write: Sync | Mode: Read-First  | Write-Granularity: 130 
+// Port 1 | Read: Async | Write: ---- | 
+reg [129:0] storage_8[0:2];
+reg [129:0] storage_8_dat0;
+always @(posedge sys_clk) begin
+	if (soc_litedramnativeportconverter0_rdata_fifo_wrport_we)
+		storage_8[soc_litedramnativeportconverter0_rdata_fifo_wrport_adr] <= soc_litedramnativeportconverter0_rdata_fifo_wrport_dat_w;
+	storage_8_dat0 <= storage_8[soc_litedramnativeportconverter0_rdata_fifo_wrport_adr];
+end
+always @(posedge sys_clk) begin
+end
+assign soc_litedramnativeportconverter0_rdata_fifo_wrport_dat_r = storage_8_dat0;
+assign soc_litedramnativeportconverter0_rdata_fifo_rdport_dat_r = storage_8[soc_litedramnativeportconverter0_rdata_fifo_rdport_adr];
+
+
+//------------------------------------------------------------------------------
+// Memory storage_9: 3-words x 38-bit
+//------------------------------------------------------------------------------
+// Port 0 | Read: Sync  | Write: Sync | Mode: Read-First  | Write-Granularity: 38 
+// Port 1 | Read: Async | Write: ---- | 
+reg [37:0] storage_9[0:2];
+reg [37:0] storage_9_dat0;
+always @(posedge sys_clk) begin
+	if (soc_litedramnativeportconverter0_wdata_fifo_wrport_we)
+		storage_9[soc_litedramnativeportconverter0_wdata_fifo_wrport_adr] <= soc_litedramnativeportconverter0_wdata_fifo_wrport_dat_w;
+	storage_9_dat0 <= storage_9[soc_litedramnativeportconverter0_wdata_fifo_wrport_adr];
+end
+always @(posedge sys_clk) begin
+end
+assign soc_litedramnativeportconverter0_wdata_fifo_wrport_dat_r = storage_9_dat0;
+assign soc_litedramnativeportconverter0_wdata_fifo_rdport_dat_r = storage_9[soc_litedramnativeportconverter0_wdata_fifo_rdport_adr];
+
+
+//------------------------------------------------------------------------------
+// Memory storage_10: 3-words x 130-bit
+//------------------------------------------------------------------------------
+// Port 0 | Read: Sync  | Write: Sync | Mode: Read-First  | Write-Granularity: 130 
+// Port 1 | Read: Async | Write: ---- | 
+reg [129:0] storage_10[0:2];
+reg [129:0] storage_10_dat0;
+always @(posedge sys_clk) begin
+	if (soc_litedramnativeportconverter1_rdata_fifo_wrport_we)
+		storage_10[soc_litedramnativeportconverter1_rdata_fifo_wrport_adr] <= soc_litedramnativeportconverter1_rdata_fifo_wrport_dat_w;
+	storage_10_dat0 <= storage_10[soc_litedramnativeportconverter1_rdata_fifo_wrport_adr];
+end
+always @(posedge sys_clk) begin
+end
+assign soc_litedramnativeportconverter1_rdata_fifo_wrport_dat_r = storage_10_dat0;
+assign soc_litedramnativeportconverter1_rdata_fifo_rdport_dat_r = storage_10[soc_litedramnativeportconverter1_rdata_fifo_rdport_adr];
+
+
+//------------------------------------------------------------------------------
+// Memory storage_11: 3-words x 38-bit
+//------------------------------------------------------------------------------
+// Port 0 | Read: Sync  | Write: Sync | Mode: Read-First  | Write-Granularity: 38 
+// Port 1 | Read: Async | Write: ---- | 
+reg [37:0] storage_11[0:2];
+reg [37:0] storage_11_dat0;
+always @(posedge sys_clk) begin
+	if (soc_litedramnativeportconverter1_wdata_fifo_wrport_we)
+		storage_11[soc_litedramnativeportconverter1_wdata_fifo_wrport_adr] <= soc_litedramnativeportconverter1_wdata_fifo_wrport_dat_w;
+	storage_11_dat0 <= storage_11[soc_litedramnativeportconverter1_wdata_fifo_wrport_adr];
+end
+always @(posedge sys_clk) begin
+end
+assign soc_litedramnativeportconverter1_wdata_fifo_wrport_dat_r = storage_11_dat0;
+assign soc_litedramnativeportconverter1_wdata_fifo_rdport_dat_r = storage_11[soc_litedramnativeportconverter1_wdata_fifo_rdport_adr];
+
+
 endmodule
 
 // -----------------------------------------------------------------------------
-//  Auto-Generated by LiteX on 2022-12-13 14:14:53.
+//  Auto-Generated by LiteX on 2022-12-15 15:53:14.
 //------------------------------------------------------------------------------

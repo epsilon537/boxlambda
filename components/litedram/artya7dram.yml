@@ -35,10 +35,12 @@
     "user_ports": {
         "wishbone_0" : {
             "type":  "wishbone",
+            "data_width": 32,
             "block_until_ready": True,
         },
         "wishbone_1" : {
             "type":  "wishbone",
+            "data_width": 32,
             "block_until_ready": True,
         },
     },

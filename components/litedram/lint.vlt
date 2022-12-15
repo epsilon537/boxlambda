@@ -7,6 +7,110 @@
 //   2. Keep the waiver permanently if you are sure this is okay
 //   3. Keep the waiver temporarily to suppress the output
 
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator SHIFTL expects 4 bits on the LHS, but LHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 2 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 2 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator SHIFTL expects 4 bits on the LHS, but LHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 2 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 2 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator SUB expects 26 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator SUB expects 26 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Operator ASSIGNW expects 16 bits on the Assign RHS, but Assign RHS's VARREF 'user_port_wishbone_p_0_sel' generates 4 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Operator ASSIGNW expects 16 bits on the Assign RHS, but Assign RHS's VARREF 'user_port_wishbone_p_1_sel' generates 4 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Input port connection 'user_port_wishbone_0_sel' expects 4 bits on the pin connection, but pin connection's VARREF 'user_port_wishbone_c_0_sel' generates 16 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Input port connection 'user_port_wishbone_1_sel' expects 4 bits on the pin connection, but pin connection's VARREF 'user_port_wishbone_c_1_sel' generates 16 bits."
+
+lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_p_0_adr'[31:28,1:0]"
+
+lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_p_1_adr'[31:28,1:0]"
+
+lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_c_0_sel'[15:4]"
+
+lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_c_1_sel'[15:4]"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_wdata_valid0'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_wdata_first0'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_wdata_last0'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_rdata_ready0'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_cmd_buffer_source_first'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_cmd_buffer_source_last'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'soc_litedramnativeportconverter0_cmd_addr'[1:0]"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_rdata_fifo_wrport_dat_r'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_rdata_converter_source_first'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_rdata_converter_source_last'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_valid_token_count'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_fifo_source_first'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_fifo_source_last'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_fifo_wrport_dat_r'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_converter_source_first'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_converter_source_last'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_valid_token_count'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_wdata_valid0'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_wdata_first0'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_wdata_last0'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_rdata_ready0'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_cmd_buffer_source_first'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_cmd_buffer_source_last'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'soc_litedramnativeportconverter1_cmd_addr'[1:0]"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_rdata_fifo_wrport_dat_r'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_rdata_converter_source_first'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_rdata_converter_source_last'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_valid_token_count'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_fifo_source_first'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_fifo_source_last'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_fifo_wrport_dat_r'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_converter_source_first'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_converter_source_last'"
+
+lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_valid_token_count'"
+
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
@@ -680,6 +784,8 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNW expects 4 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 9 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 26 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
@@ -1815,7 +1921,101 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator SUB expects 24 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
@@ -1837,8 +2037,6 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator SUB expects 24 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
@@ -1862,6 +2060,10 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -1878,10 +2080,6 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -2317,6 +2515,8 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 6 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
+
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
@@ -2337,6 +2537,8 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
+
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
@@ -2349,19 +2551,51 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
 
@@ -2491,7 +2725,43 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 3 bits on the Case Item, but Case Item's CONST '2'h3' generates 2 bits."
 
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's REPLICATE generates 4 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator LT expects 3 bits on the LHS, but LHS's VARREF 'soc_litedramcore_tfawcon_count' generates 2 bits."
+
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
@@ -2588,6 +2858,8 @@ lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Op
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 9 bits on the Case Item, but Case Item's CONST '5'h17' generates 5 bits."
 
 lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 9 bits on the Case Item, but Case Item's CONST '5'h18' generates 5 bits."
+
+lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'wb_ctrl_adr'[1:0]"
 
 lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'sim_trace'"
 
@@ -2804,18 +3076,6 @@ lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "S
 lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_init_done_re'"
 
 lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_init_error_re'"
-
-lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_flush'"
-
-lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_cmd_last'"
-
-lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_rdata_ready'"
-
-lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_flush'"
-
-lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_cmd_last'"
-
-lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_rdata_ready'"
 
 lint_off -rule UNUSED -file "*/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'litedramcore_wishbone_adr'[29:14]"
 
@@ -6249,54 +6509,287 @@ lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "
 
 lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 26 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 6 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 3 bits on the Assign RHS, but Assign RHS's REPLICATE generates 4 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule WIDTH -file "*/components/litedram/sim/rtl/litedram.v" -match "Operator LT expects 3 bits on the LHS, but LHS's VARREF 'soc_litedramcore_tfawcon_count' generates 2 bits."
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'wb_ctrl_adr'[1:0]"
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_p_0_adr'[31:26,1:0]"
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_p_1_adr'[31:26,1:0]"
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_c_0_dat_r'[127:32]"
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
 
-lint_off -rule UNUSED -file "*/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_c_1_dat_r'[127:32]"
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+
+lint_off -rule COMBDLY -file "*/components/litedram/sim/rtl/litedram.v" -match "Delayed assignments (<=) in non-clocked (non flop or latch) block*"
+

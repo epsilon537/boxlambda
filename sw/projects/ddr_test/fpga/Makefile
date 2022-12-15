@@ -19,7 +19,7 @@ CPPFLAGS = -DCONFIG_CPU_NOP=\"nop\" \
            -DMAIN_RAM_BASE2=0x50000000UL \
            -DCSR_BASE=0x10030000 \
            -DSDRAM_TEST_DISABLE \
-           -DMEMTEST_SIZE=\(64*1024*1024\)
+           -DMEMTEST_SIZE=\(256*1024*1024\)
 
 #Contains bootstrap code such as vectors and code to glue libc to the platform
 LIBS = $(TOP_DIR)/sw/bootstrap/bootstrap.lib.o
