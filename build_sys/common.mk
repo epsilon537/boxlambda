@@ -10,6 +10,8 @@ PART = xc7a35ticsg324-1L
 BENDER_GEN_SCRIPT = generated/sources.tcl
 
 #List of memory files referenced in the Bender package manifest
+#The memory file used for FPGA and simulation are not necessarily the same.
+#We use two Bender targets: memory_sim and memory_fpga.
 MEM_FILES_SIM := $(shell bender update && bender script flist -n -t memory_sim)
 MEM_FILES_FPGA := $(shell bender update && bender script flist -n -t memory_fpga)
 

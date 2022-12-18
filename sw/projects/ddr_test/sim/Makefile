@@ -2,6 +2,8 @@
 TOP_DIR := ../../../..
 
 PROGRAM = ddr_test
+
+#Note that we're including litedram/sim/sw/here. Not the same path as in the fpga synthesis case.
 INCLUDES = -I$(TOP_DIR)/sw/bootstrap \
 	-I$(TOP_DIR)/sub/ibex_wb/soc/fpga/arty-a7-35/sw/libs/soc \
 	-I$(TOP_DIR)/sub/litex/litex/soc/software/liblitedram \
@@ -19,7 +21,7 @@ CPPFLAGS = -DCONFIG_CPU_NOP=\"nop\" \
            -DMAIN_RAM_BASE2=0x50000000UL \
            -DCSR_BASE=0x10030000 \
            -DSDRAM_TEST_DISABLE \
-           -DMEMTEST_SIZE=8192
+           -DMEMTEST_SIZE=32768
 
 #Contains bootstrap code such as vectors and code to glue libc to the platform
 LIBS = $(TOP_DIR)/sw/bootstrap/bootstrap.lib.o

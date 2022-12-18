@@ -1,7 +1,7 @@
 #The top-level Makefile recursively runs the given target on component and project directories.
 
 COMPONENT_MAKEFILES = $(shell find components -name Makefile)
-PROJECT_MAKEFILES = $(shell find projects -name Makefile ! -path */src/*) #Exclude src/Makefiles (SW builds)
+PROJECT_MAKEFILES = $(shell find projects -name Makefile)
 #Don't recurse into Pulpino or riscv-dbg
 SUB_MAKEFILES = $(shell find sub -not -path "sub/pulpino/*" -not -path "sub/riscv-dbg/*" -name Makefile)
 SW_MAKEFILES = $(shell find . -path "*/src/Makefile" -o -path "./sw/*/Makefile")

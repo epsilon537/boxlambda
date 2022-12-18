@@ -2,6 +2,8 @@
 TOP_DIR := ../../../..
 
 PROGRAM = ddr_test
+
+#Note that we're including litedram/art/sw here. Not the same path as in the simulation case.
 INCLUDES = -I$(TOP_DIR)/sw/bootstrap \
 	-I$(TOP_DIR)/sub/ibex_wb/soc/fpga/arty-a7-35/sw/libs/soc \
 	-I$(TOP_DIR)/sub/litex/litex/soc/software/liblitedram \

@@ -1,10 +1,13 @@
+/*This wrapper contains wishbone pipeline-to-classic adapters for all three ports as well as
+ *byte-to-word address line remapping.*/
 module litedram_wrapper (
-	input wire         clk,
-	input wire         rst,
-	output wire        sys_clk,
-	output wire        sys_rst,
+	input wire         clk, /*100MHz input clock.*/
+	input wire         rst, /*Asynchronous reset.*/
+	output wire        sys_clk, /*50MHz output clock, to be used as input clock for the rest of the system.*/
+	output wire        sys_rst, /*Synchronous reset signal for the system.*/
 	output wire        pll_locked,
 `ifdef SYNTHESIS
+    /*The DDR signals are not exported in the simulation model.*/
 	output wire [13:0] ddram_a,
 	output wire [2:0] ddram_ba,
 	output wire ddram_ras_n,
@@ -23,6 +26,8 @@ module litedram_wrapper (
 `endif
 	output wire        init_done,
 	output wire        init_error,
+
+	/*The control port for CSR reads and writes. Wishbone pipelined signals.*/
 	input wire [31:0]  wb_ctrl_adr,
 	input wire [31:0]  wb_ctrl_dat_w,
 	output wire [31:0] wb_ctrl_dat_r,
@@ -33,6 +38,8 @@ module litedram_wrapper (
 	output wire        wb_ctrl_ack,
 	input wire         wb_ctrl_we,
 	output wire        wb_ctrl_err,
+
+	/*32-bit user port. Wishbone pipelined signals.*/
 	input wire [31:0]  user_port_wishbone_p_0_adr,
 	input wire [31:0]  user_port_wishbone_p_0_dat_w,
 	output wire [31:0] user_port_wishbone_p_0_dat_r,
@@ -43,6 +50,8 @@ module litedram_wrapper (
 	output wire        user_port_wishbone_p_0_ack,
 	input wire         user_port_wishbone_p_0_we,
 	output wire        user_port_wishbone_p_0_err,
+
+	/*Another 32-bit user port. Wishbone pipelined signals.*/
 	input wire [31:0]  user_port_wishbone_p_1_adr,
 	input wire [31:0]  user_port_wishbone_p_1_dat_w,
 	output wire [31:0] user_port_wishbone_p_1_dat_r,
@@ -55,6 +64,7 @@ module litedram_wrapper (
 	output wire        user_port_wishbone_p_1_err
                          );
 
+   /*User port. Wishbone classic signals.*/
    logic [25:0] user_port_wishbone_c_0_adr;
    logic [31:0] user_port_wishbone_c_0_dat_w;
    logic [31:0] user_port_wishbone_c_0_dat_r;
@@ -68,15 +78,18 @@ module litedram_wrapper (
    assign user_port_wishbone_p_0_dat_r = user_port_wishbone_c_0_dat_r;
    assign user_port_wishbone_p_0_ack = user_port_wishbone_c_0_ack;
    assign user_port_wishbone_p_0_err = user_port_wishbone_c_0_err;
+   /*Straight out of the Wishbone B4 spec. This is how you interface a classic slave to a pipelined master.
+    *The stall signal ensures that the STB signal remains asserted until an ACK is received from the slave.*/
    assign user_port_wishbone_p_0_stall = !user_port_wishbone_p_0_cyc ? 1'b0 : !user_port_wishbone_c_0_ack;
 
    assign user_port_wishbone_c_0_stb = user_port_wishbone_p_0_stb;
-   assign user_port_wishbone_c_0_adr = user_port_wishbone_p_0_adr[27:2];
+   assign user_port_wishbone_c_0_adr = user_port_wishbone_p_0_adr[27:2]; /*LiteDRAM uses word addressing.*/
    assign user_port_wishbone_c_0_we = user_port_wishbone_p_0_we;
    assign user_port_wishbone_c_0_dat_w = user_port_wishbone_p_0_dat_w;
    assign user_port_wishbone_c_0_sel = user_port_wishbone_p_0_sel;
    assign user_port_wishbone_c_0_cyc = user_port_wishbone_p_0_cyc;
 
+   /*Same things for 2nd user port.*/
    logic [25:0] user_port_wishbone_c_1_adr;
    logic [31:0] user_port_wishbone_c_1_dat_w;
    logic [31:0] user_port_wishbone_c_1_dat_r;
@@ -99,6 +112,7 @@ module litedram_wrapper (
    assign user_port_wishbone_c_1_sel = user_port_wishbone_p_1_sel;
    assign user_port_wishbone_c_1_cyc = user_port_wishbone_p_1_cyc;
 
+   /*and again for the control port.*/
    logic [29:0] ctrl_port_wishbone_c_adr;
    logic [31:0] ctrl_port_wishbone_c_dat_w;
    logic [31:0] ctrl_port_wishbone_c_dat_r;
@@ -115,16 +129,16 @@ module litedram_wrapper (
    assign wb_ctrl_stall = !wb_ctrl_cyc ? 1'b0 : !ctrl_port_wishbone_c_ack;
 
    assign ctrl_port_wishbone_c_stb = wb_ctrl_stb;
-   assign ctrl_port_wishbone_c_adr = wb_ctrl_adr[31:2]; //The liteDRAM control interface uses word addressing.
+   assign ctrl_port_wishbone_c_adr = wb_ctrl_adr[31:2];
    assign ctrl_port_wishbone_c_we = wb_ctrl_we;
    assign ctrl_port_wishbone_c_dat_w = wb_ctrl_dat_w;
    assign ctrl_port_wishbone_c_sel = wb_ctrl_sel;
    assign ctrl_port_wishbone_c_cyc = wb_ctrl_cyc;
    
 `ifndef SYNTHESIS
-   logic unused = &{rst};
+   logic unused = &{rst}; /*Simulation model has no reset port...*/
 
-   assign pll_locked = 1'b1;
+   assign pll_locked = 1'b1; /*...and no PLL either.*/
 `endif //not SYNTHESIS
 
    litedram litedram_inst (

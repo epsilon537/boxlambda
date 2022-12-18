@@ -21,6 +21,9 @@ static struct gpio gpio1;
 
 static volatile unsigned int crc;
 
+/*This function will be copied to DDR memory.
+ *It generates a mix of DDR data and instruction accesses by computing
+ *a CRC over a chunk of DDR memory.*/
 void code_in_ddr(void) {
   int i, j;
   unsigned int byte, mask;
@@ -61,6 +64,7 @@ int main(void) {
   else
     printf("This is not a simulation.\n");
 
+  /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {
     printf("SDRAM init OK.\n");
   }
@@ -68,7 +72,7 @@ int main(void) {
     printf("SDRAM init failed!\n");
     while(1);
   }
-#if 1
+
   unsigned long memtest_size = MEMTEST_SIZE;
 
   printf("Memory Test through port 0:\n");
@@ -90,7 +94,6 @@ int main(void) {
   else {
     printf("Memory port 1 test successful.\n");
   }
-#endif
 
   printf("DDR instruction access test:\n");
 
@@ -100,6 +103,7 @@ int main(void) {
   memcpy(fptr,
          code_in_ddr,
          32 + ((char*)_init - (char*)code_in_ddr));
+  /*Execute the code in DDR*/
   fptr();
   printf("Successfully executed code from DDR.\n");
 

@@ -1,16 +1,19 @@
 `default_nettype none
 
 module ddr_test_soc(
-  input  wire       ext_clk100,
+  input  wire       ext_clk100, /*External 100MHz clock.*/
    
   inout  wire [7:0] gpio0,
   inout  wire [3:0] gpio1,
   
-  input  wire       ext_rst_n,
+  input  wire       ext_rst_n, /*External reset, asynchronous, active-low.*/
   
   input  wire       uart_rx,
   output wire       uart_tx,
   
+  /*These JTAG signals are not used on FPGA (they are used in simulation).
+   *On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the jtag tap module dmi_bscane_tap.sv.
+   */
   input  wire       tck,
   input  wire       trst_n,
   input  wire       tms,
@@ -21,7 +24,7 @@ module ddr_test_soc(
   output wire       init_done_led,
   output wire       init_err_led
 `ifdef SYNTHESIS
-  ,
+  , /*The simulation build doesn't export DDR pins.*/
   output wire [13:0] ddram_a,
   output wire [2:0] ddram_ba,
   output wire ddram_ras_n,
@@ -114,8 +117,8 @@ module ddr_test_soc(
     wb_sizes[TIMER_S]    = 32'h00010;
 `ifdef DRAM
     wb_sizes[DDR_CTRL_S] = 32'h10000;
-    wb_sizes[DDR_USR0_S]  = 32'h10000000;
-    wb_sizes[DDR_USR1_S]  = 32'h10000000;
+    wb_sizes[DDR_USR0_S]  = 32'h10000000; /*256MB*/
+    wb_sizes[DDR_USR1_S]  = 32'h10000000; /*256MB*/
 `endif
   endfunction // wb_sizes
 
@@ -265,10 +268,10 @@ module ddr_test_soc(
   logic pll_locked, sys_rst;
 
   litedram_wrapper litedram_wrapper_inst (
-	.clk(ext_clk100),
-  .rst(~ext_rst_n),
-  .sys_clk(sys_clk),
-	.sys_rst(sys_rst),
+	.clk(ext_clk100), /*100MHz External clock is input for LiteDRAM module.*/
+  .rst(~ext_rst_n), /*External reset goes into a reset synchronizer inside the litedram module. The output of that synchronizer is sys_rst.*/
+  .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock...*/
+	.sys_rst(sys_rst), /*...and system reset.*/
 	.pll_locked(pll_locked),
 `ifdef SYNTHESIS
 	.ddram_a(ddram_a),
@@ -299,6 +302,10 @@ module ddr_test_soc(
 	.wb_ctrl_ack(wbs[DDR_CTRL_S].ack),
 	.wb_ctrl_we(wbs[DDR_CTRL_S].we),
 	.wb_ctrl_err(wbs[DDR_CTRL_S].err),
+
+  /*Eventually we're going to have two system buses, but for the time being, to allow testing,
+   *we hook up both user ports to our one shared bus.
+   *Both ports address the same 256MB of DDR memory, one at base address 'h40000000, the other at 'h50000000.*/
 	.user_port_wishbone_p_0_adr(wbs[DDR_USR0_S].adr),
 	.user_port_wishbone_p_0_dat_w(wbs[DDR_USR0_S].dat_m),
 	.user_port_wishbone_p_0_dat_r(wbs[DDR_USR0_S].dat_s),
@@ -309,6 +316,7 @@ module ddr_test_soc(
 	.user_port_wishbone_p_0_ack(wbs[DDR_USR0_S].ack),
 	.user_port_wishbone_p_0_we(wbs[DDR_USR0_S].we),
 	.user_port_wishbone_p_0_err(wbs[DDR_USR0_S].err),
+
 	.user_port_wishbone_p_1_adr(wbs[DDR_USR1_S].adr),
 	.user_port_wishbone_p_1_dat_w(wbs[DDR_USR1_S].dat_m),
 	.user_port_wishbone_p_1_dat_r(wbs[DDR_USR1_S].dat_s),
@@ -321,8 +329,8 @@ module ddr_test_soc(
 	.user_port_wishbone_p_1_err(wbs[DDR_USR1_S].err)
   );
   
-  //Take system out of reset when litedram says so, when pll is locked and when ext. reset is not asserted.
-  assign sys_rst_n = ext_rst_n & ~sys_rst & pll_locked;
+  //Take system out of reset when litedram deasserts the (synchronized) sys_rst, when the pll is locked.
+  assign sys_rst_n = ~sys_rst & pll_locked;
   assign pll_locked_led = pll_locked;
 
 `else //No DRAM:

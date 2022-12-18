@@ -233,7 +233,7 @@ int main(int argc, char** argv, char** env) {
       printf("UART check passed.\n");
     }
     
-    std::string gpio0CheckString("F0F0F0F0F0F0F0F0F0F0");
+    std::string gpio0CheckString("F0F0F0F0");
     if (gpio0CheckString.compare(gpio0String) != 0) {
       printf("GPIO0 check failed\n");
       printf("Expected: %s\n", gpio0CheckString.c_str());

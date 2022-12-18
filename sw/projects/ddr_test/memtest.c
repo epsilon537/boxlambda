@@ -7,8 +7,7 @@
 #include <generated/soc.h>
 #include <generated/csr.h>
 
-//This version is based on litex/litex/soc/software/libbase/memtest.c, modified for the BoxLambda platform.
-
+//This memtest routine is based on litex/litex/soc/software/libbase/memtest.c, modified for the BoxLambda platform.
 
 //#define MEMTEST_BUS_DEBUG
 //#define MEMTEST_DATA_DEBUG
@@ -261,6 +260,7 @@ int memtest_data(unsigned int *addr, unsigned long size, int random, struct memt
 	return errors;
 }
 
+/*memspeed is stubbed out.*/
 void memspeed(unsigned int *addr, unsigned long size, bool read_only, bool random)
 {
 #if 0

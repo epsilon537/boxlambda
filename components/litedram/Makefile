@@ -9,6 +9,10 @@ OOC = litedram
 #Include common Make flags and rules
 include $(TOP_DIR)/build_sys/common.mk
 
+#Invoke Litex's liteDRAM generator script twice, once for FPGA and once for simulation
+#The generated code is checked in. The cores only need to be regenerated when the LiteDRAM YML configuration
+#file changes.
+.PHONY: gen_core
 gen_core:
 	litedram_gen artya7dram.yml --sim --gateware-dir sim/rtl --software-dir sim/sw --name litedram
 	litedram_gen artya7dram.yml --gateware-dir arty/rtl --software-dir arty/sw --name litedram
