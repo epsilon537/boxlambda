@@ -19,15 +19,17 @@ static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
 
+/*Making CRC variable of code_in_ddr() test routine volatile to make sure we also generate some data accesses
+ *to internal memory while executing from DDR.*/
 static volatile unsigned int crc;
 
 /*This function will be copied to DDR memory.
  *It generates a mix of DDR data and instruction accesses by computing
  *a CRC over a chunk of DDR memory.*/
-void code_in_ddr(void) {
+int code_in_ddr(char *message) {
   int i, j;
   unsigned int byte, mask;
-  char *message = (char*)MAIN_RAM_BASE;
+
    i = 0;
    crc = 0xFFFFFFFF;
    while (i<16) {
@@ -39,6 +41,8 @@ void code_in_ddr(void) {
       }
       i = i + 1;
    }
+
+   return crc;
 }
 
 //_init is executed by picolibc startup code before main().
@@ -98,14 +102,24 @@ int main(void) {
   printf("DDR instruction access test:\n");
 
   //Copy code to DDR
-  void (*fptr)(void);
-  fptr =  (void (*)(void))((int)(code_in_ddr) | MAIN_RAM_BASE);
+  int (*fptr)(char*);
+  fptr =  (int (*)(char*))((int)(code_in_ddr) | MAIN_RAM_BASE);
   memcpy(fptr,
          code_in_ddr,
          32 + ((char*)_init - (char*)code_in_ddr));
   /*Execute the code in DDR*/
-  fptr();
-  printf("Successfully executed code from DDR.\n");
+  int ext_mem_crc = fptr((char*)fptr);
+
+  /*Execute again in internal memory*/
+  int int_mem_crc = code_in_ddr((char*)code_in_ddr);
+
+  if (ext_mem_crc == int_mem_crc) {
+    printf("Successfully executed code from DDR.\n");
+  }
+  else {
+    printf("DDR code execution test failed!\n");
+    while(1);
+  }
 
   printf("Test completed successfully.\n");
 
