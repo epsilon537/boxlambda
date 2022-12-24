@@ -8,11 +8,11 @@ comments: true
 
 *LiteDRAM in the BoxLambda Architecture.*
 
-Initially, the plan was to use Xilinx's MIG (Memory Interface Generator) to generate a DDR Memory Controller for Boxlambda. At the time, that was (and maybe still is) the consensus online when I was looking for memory controller options for the Arty A7. 
+Initially, the plan was to use **Xilinx's MIG** (Memory Interface Generator) to generate a DDR Memory Controller for Boxlambda. At the time, that was (and maybe still is) the consensus online when I was looking for memory controller options for the Arty A7. 
 Meanwhile, [Reddit user yanangao suggested I take a look at project **LiteX** for a memory controller](https://www.reddit.com/r/FPGA/comments/uaquax/comment/i6he2rx/?utm_source=share&utm_medium=web2x&context=3). I took the advice and started playing around a bit with Litex. One thing led to another and, long story short, BoxLambda now has a DDR memory controller based on **LiteDRAM**, a core of the *LiteX* project. If you're interested in the longer story, read on.
 
 Recap
-=====
+-----
 This is a summary of the current state of BoxLambda. We have:
 - An Ibex RISCV core, a Wishbone shared bus, a Debug Core, internal memory, a timer, two GPIO ports, and a UART core.
 - A Picolibc-based standard C environment for software running on the Ibex RISCV core.
@@ -22,7 +22,7 @@ This is a summary of the current state of BoxLambda. We have:
 - A Linux Makefile and Bender-based RTL build system.
 
 LiteX and LiteDRAM
-==================
+------------------
 [LiteX](https://github.com/enjoy-digital/litex) is an Open Source SoC Builder framework for FPGAs. You specify which CPU, memory, interconnect, and peripherals you want. The framework then generates the SoC and the software to go along with it. Here's an example (with semi-randomly picked settings):
 
 ```
@@ -79,14 +79,14 @@ You can more or less *see* the Verilog equivalent. However, the fact that this i
 LiteX is not an all-or-nothing proposition. LiteX cores, such as the LiteDRAM memory controller, can be integrated into traditional design flows. That's what I'll be doing.
 
 Why choose LiteDRAM over Xilinx MIG?
-------------------------------------
+====================================
 
 - LiteDRAM is open-source, scoring good karma points. All the benefits of open-source apply: Full access to all code, access to the maintainers, many eyeballs, the option to make changes as you please, submit bug fixes, etc.
 - The LiteDRAM simulation model, the entire test SoC in fact, runs nicely in Verilator. That's a must-have for me. 
 - The LiteDRAM core, configured for BoxLambda, is 50% smaller than the equivalent MIG core: 3016 LUTs and 2530 registers vs. 5673 LUTs and 5060 registers.
   
 Generating a LiteDRAM core
-==========================
+--------------------------
 LiteDRAM is a highly configurable core (because of Migen). For an overview of the core's features, please take a look at the LiteDRAM repository's README file:
 
 [https://github.com/enjoy-digital/litedram/blob/master/README.md](https://github.com/enjoy-digital/litedram/blob/master/README.md)
@@ -225,7 +225,7 @@ module litedram (
 );
 ```
 
-Worth noting:
+Some points worth noting about this interface:
 - A Wishbone control port is generated along with the two requested user ports. LiteDRAM CSR register access is done through this control port.
 - All three Wishbone ports are *classic* Wishbone ports, not *pipelined*. There is no *stall* signal.
 - The Wishbone port addresses are word addresses, not byte addresses.
@@ -233,9 +233,11 @@ Worth noting:
 - On FPGA, the LiteDRAM module takes an asynchronous reset (*rst*) and provides a synchronized reset (*user_rst*). The module contains a reset synchronizer.
 
 Integrating the LiteDRAM core
-=============================
+-----------------------------
+
 *Litedram_wrapper*
-------------------
+==================
+
 I created a *litedram_wrapper.sv* module around litedram.v:
 
 [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv)
@@ -251,7 +253,7 @@ This wrapper contains:
 ```
 
 How long to STB?
-----------------
+================
 One Rookie mistake I made early on was to just set the Wishbone *stall* signal to 0. I figured that, as long as I didn't generate multiple outstanding transactions, that should work just fine. That's not the case, however. Wishbone transactions to the LiteDRAM core would just block. The reason is that in classic Wishbone, STB has to remain asserted until an ACK or ERR is signaled by the slave. Pipelined Wishbone doesn't work that way. In pipelined Wishbone, as long as the slave is not stalling, a single access STB only remains asserted for one clock cycle.
 
 ![Classic Wishbone transaction.](../assets/wishbone_classic_transaction.png)
@@ -265,7 +267,7 @@ One Rookie mistake I made early on was to just set the Wishbone *stall* signal t
 Hence the pipelined-to-classic Wishbone adapter in *litedram_wrapper*.
 
 More Wishbone Issues: Core2WB and WB_Interconnect_SharedBus
------------------------------------------------------------
+===========================================================
 With the *litedram_wrapper* in place, Wishbone transactions still weren't working properly. Waveform analysis shows that, from the point of view of *litedram_wrapper*, the Wishbone Bus Master wasn't well-behaved. That problem could either come from the Ibex memory-interface-to-wishbone adapter, *core2wb.sv*, or the Wishbone shared bus implementation used by the test build, *wb_interconnect_shared_bus.sv*, or both.
 
 This is the Ibex Memory Interface specification:
@@ -297,8 +299,9 @@ The job of *core2wb* is to adapt that interface to a pipelined Wishbone bus mast
 With those changes in place, Ibex instruction and data transactions to LiteDRAM are working fine.
 
 *ddr_test_soc*
---------------
-[<BoxLambda>/projects/ddr_test/rtl/ddr_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/projects/ddr_test/rtl/ddr_test_soc.sv) has the test build's top-level. It's based on the previous test build's top-level, extended with the LiteDRAM wrapper instance. 
+==============
+
+[/projects/ddr_test/rtl/ddr_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/projects/ddr_test/rtl/ddr_test_soc.sv) has the test build's top-level. It's based on the previous test build's top-level, extended with the LiteDRAM wrapper instance. 
 
 ```
   litedram_wrapper litedram_wrapper_inst (
@@ -364,30 +367,38 @@ With those changes in place, Ibex instruction and data transactions to LiteDRAM 
   );
 ```
 
-Clock and Reset generation is now done by LiteDRAM. LiteDRAM accepts the external clock and reset signal and provides the system clock and synchronized system reset. Previous BoxLambda test builds had a separate CRG instance for that. 
+Clock and Reset generation is now done by LiteDRAM. LiteDRAM accepts the external clock and reset signal and provides the system clock and synchronized system reset. Previous BoxLambda test builds had a separate Clock-and-Reset-Generator instance for that. 
 
 In this test build, both user ports are hooked up to the same shared bus. That doesn't make a lot of sense of course. I'm just doing this to verify connectivity over both buses. Eventually, BoxLambda is going to have two buses and LiteDRAM will be hooked up to both.
 
 LiteDRAM Initialization
-=======================
+-----------------------
 When the *litedram_gen.py* script generates the LiteDRAM Verilog core (based on the given *.yml* configuration file), it also generates the core's CSR register accessors for software:
 - For FPGA: [https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/arty/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/arty/sw/include/generated)
 - For simulation: [https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/sim/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/sim/sw/include/generated)
   
-The most relevant files are **csr.h** and **sdram_phy.h**. They contain the register definitions and constants used by the memory initialization code. Unfortunately, these accessors are not the same for the FPGA and the simulated LiteDRAM cores. We're going to have to use separate software builds for FPGA and simulation.
+The most relevant files are **csr.h** and **sdram_phy.h**. They contain the register definitions and constants used by the memory initialization code. Unfortunately, these accessors are *not* the same for the FPGA and the simulated LiteDRAM cores. We're going to have to use separate software builds for FPGA and simulation.
 
-*Sdram_phy.h* also contains a function called *init_sequence()*. This function gets invoked as part of a more elaborate initialization function called *sdram_init()*. *Sdram_init()* is *not* part of the generated code, however. It's part of *liblitedram*, which is part of the base Litex repository, *not* the LiteDRAM repository:
+*Sdram_init()*
+==============
+*Sdram_phy.h* also contains a function called *init_sequence()*. This function gets invoked as part of a more elaborate initialization function called *sdram_init()*. *Sdram_init()* is *not* part of the generated code, however. It's part of *sdram.c*, which is part of *liblitedram*, which is part of the base Litex repository, *not* the LiteDRAM repository:
 
 [https://github.com/epsilon537/litex/tree/master/litex/soc/software/liblitedram](https://github.com/epsilon537/litex/tree/master/litex/soc/software/liblitedram)
 
-I found that whole bit rather confusing. Why provide only part of the initialization code in the generated software layer, and not the entire *sdram_init()* function? Maybe the additional initialization actions taken by *sdram_init()* are optional? I couldn't find any documentation about this. I just did what I thought was best based on code reading.
+![sdram_init()](../assets/sdram_init.drawio.png)
 
-To get things to build correctly, I had to tweak some CPPFLAGS. The resulting Makefiles are checked-in here:
+*sdram_init() vs. init_sequence().*
+
+It's not clear to me why the *liblitedram* is not part of the LiteDRAM repository, but's not a big deal. I integrated the *sdram_init()* function from *liblitedram* in the BoxLambda code base and it's working fine.
+
+To get things to build, I added Litex as a git submodule, to get access to *liblitedram*. I also tweaked some *CPPFLAGS* and include paths. The resulting Makefiles are checked-in here:
 - FPGA: [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile)
 - Sim: [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile)
 
+It's worth noting that *liblitedram* expects a standard C environment, which I added in [the previous BoxLambda update](https://epsilon537.github.io/boxlambda/libc-for-boxlambda/).
+
 DDR Test
-========
+--------
 The DDR test program is located here:
 
 [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c)
@@ -397,7 +408,8 @@ The program boots from internal memory. It invokes *sdram_init()*, then performs
 The memory test function used is a slightly modified version of the *memtest()* function provided by Litex in *liblitedram*.
 
 Relevant Files
-==============
+--------------
+- [https://github.com/enjoy-digital/litex/blob/master/litex/soc/software/liblitedram/sdram.c](https://github.com/enjoy-digital/litex/blob/master/litex/soc/software/liblitedram/sdram.c)
 - [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv)
 - [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/rtl/litedram.v](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/rtl/litedram.v)
 - [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/rtl/litedram.v](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/rtl/litedram.v)
@@ -412,10 +424,10 @@ Relevant Files
 - [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/sdram_phy.h](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/sdram_phy.h)
   
 Try It Out
-==========
+----------
 
 Repository setup
-----------------
+================
    1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#prerequisites). 
    2. Get the BoxLambda repository:
 ```
@@ -432,7 +444,7 @@ make setup
 ```
 
 Build and Run the DDR Test Image on Verilator
----------------------------------------------
+=============================================
    1. Build the test project:
 ```
 cd projects/ddr_test
@@ -450,7 +462,7 @@ cd generated
 *DDR Test on Verilator.* 
 
 Build and Run the DDR Test Image on Arty A7
--------------------------------------------
+===========================================
    1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#on-wsl) section.
    2. Build the test project:
 ```
