@@ -10,7 +10,7 @@ Goals
         - **Single User/Single Tasking OS** booting to a console shell.
     - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components.
         - Support for **partial FPGA reconfiguration**.
-- Target Hardware is Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start) and/or the [Nexys-A7](https://digilent.com/reference/programmable-logic/nexys-a7/start).
+- Target Hardware is Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start).
 - The computer should support the following peripherals:
   - Keyboard
   - Mouse (optional)
@@ -88,10 +88,4 @@ I currently have an **Arty A7 35T**, with the following PMODs for peripherals:
 - [Pmod VGA: Video Graphics Array](https://digilent.com/shop/pmod-vga-video-graphics-array/) 
 - [Wii Nunchuck Adapter](https://www.reichelt.com/be/en/arduino-8211-wiichuck-nunchuck-adapter-ard-wii-nunchuck-p282673.html?CCOUNTRY=661&LANGUAGE=nl&GROUPID=9020&START=0&OFFSET=16&SID=93757c8e4582e90848068d74dbb71d4a2c938ebd13432dc6b9c96&LANGUAGE=EN&&r=1)
 
-I suspect that over time the project will outgrow this setup and I might move up to the **Nexys A7-100T**, also from Diligent. Compared to the Arty A7 35T, Nexys A7-100T has: 
-- A bigger FPGA: More logic slices and more Block RAM.
-- Onboard microSD card connector
-- Onboard PWM audio output connector
-- Onboard PDM microphone connector
-- USB HID for keyboard and mouse, with a clever adapter so keyboard and mouse present themselves to the FPGA as PS/2 devices.
-- VGA connector
+I suspect that over time the project will outgrow this setup and I might move up to the **Arty A7-100T**.

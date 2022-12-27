@@ -1,5 +1,43 @@
 Software Components
 ===================
+LiteDRAM Initialization
+-----------------------
+When the *litedram_gen.py* script generates the LiteDRAM Verilog core (based on the given *.yml* configuration file), it also generates the core's CSR register accessors for software:
+
+- For FPGA: [https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/arty/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/arty/sw/include/generated)
+- For simulation: [https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/sim/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/sim/sw/include/generated)
+  
+The most relevant files are **csr.h** and **sdram_phy.h**. They contain the register definitions and constants used by the memory initialization code. Unfortunately, these accessors are *not* the same for the FPGA and the simulated LiteDRAM cores. We're going to have to use separate software builds for FPGA and simulation.
+
+### *Sdram_init()*
+
+*Sdram_phy.h* also contains a function called *init_sequence()*. This function gets invoked as part of a more elaborate initialization function called *sdram_init()*. *Sdram_init()* is *not* part of the generated code, however. It's part of *sdram.c*, which is part of *liblitedram*, which is part of the base Litex repository, *not* the LiteDRAM repository:
+
+[https://github.com/epsilon537/litex/tree/master/litex/soc/software/liblitedram](https://github.com/epsilon537/litex/tree/master/litex/soc/software/liblitedram)
+
+![sdram_init()](assets/sdram_init.drawio.png)
+
+*sdram_init() vs. init_sequence().*
+
+It's not clear to me why the *liblitedram* is not part of the LiteDRAM repository but's not a big deal. I integrated the *sdram_init()* function from *liblitedram* in the BoxLambda code base and it's working fine.
+
+To get things to build, I added Litex as a git submodule, to get access to *liblitedram*. I also tweaked some *CPPFLAGS* and include paths. The resulting Makefiles are checked-in here:
+
+- FPGA: [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile)
+- Sim: [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile)
+
+It's worth noting that *liblitedram* expects a standard C environment.
+
+### The DDR Test Application
+
+The DDR test program is located here:
+
+[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c)
+
+The program boots from internal memory. It invokes *sdram_init()*, then performs a memory test over user port 0, followed by user port 1. Finally, the program verifies CPU instruction execution from DDR by relocating a test function from internal memory to DDR and branching to it.
+
+The memory test function used is a slightly modified version of the *memtest()* function provided by Litex in *liblitedram*.
+
 Picolibc
 --------
 BoxLambda uses the Picolibc standard C library implementation.
@@ -201,7 +239,7 @@ __stack_size = 512;
 
 I can't say that I like this link map. There's no good reason to split internal memory in two this way, I don't like the symbol names being used, and I don't understand half of what's going on in this very big and complicated link map file. Now is not the time to design a new link map for BoxLambda though. We don't even have external memory defined yet. To be revisited.
 
-### Linking against the picolibc library
+### Linking against the Picolibc library
 
 To link the picolibc library into an application image, the picolibc *spec file* needs to be passed to GCC. The code snippet below is taken from the *picolibc_test* program's [Makefile](https://github.com/epsilon537/boxlambda/blob/develop/projects/picolibc_test/src/Makefile):
 
@@ -210,9 +248,9 @@ To link the picolibc library into an application image, the picolibc *spec file*
 CFLAGS = --specs=$(TOP_DIR)/sw/picolibc-install/picolibc.specs -Wall -g -O1
 ```
 
-### The Test Application
+### The Picolibc Test Application
 
-The test application program running on the Ibex processor is located in [boxlambda/projects/picolibc_test/src/picolibc_test.c](https://github.com/epsilon537/boxlambda/blob/develop/projects/picolibc_test/src/picolibc_test.c)
+The test application program running on the Ibex processor is located in [sw/projects/picolibc_test/picolibc_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/picolibc_test/picolibc_test.c)
 
 ```
 #include <stdio.h>

@@ -3,59 +3,49 @@ Components
 
 We're building a System-on-a-Chip (*System-on-an-FPGA*?). This section identifies the Key Components of the BoxLambda SoC.
 
-### The Bus
+### The Wishbone Interconnect
 
-The Bus, or interconnect, is the fabric stitching together the SoC internal components. For this project, the two most relevant SoC internal bus specifications are [ARM's AXI bus](https://developer.arm.com/documentation/ihi0022/latest) and the Open-Source [Wishbone bus](https://wishbone-interconnect.readthedocs.io/en/latest/).
+The Bus, or Interconnect, is the fabric stitching together the SoC internal components. For this project, the two most relevant SoC internal bus specifications are [ARM's AXI bus](https://developer.arm.com/documentation/ihi0022/latest) and the Open-Source [Wishbone bus](https://wishbone-interconnect.readthedocs.io/en/latest/).
 
 AXI is very powerful, very popular, and very complex. It scales up well to very big SoCs. However, I don't think it scales down very well to simple SoCs, such as BoxLambda, where low latency and low complexity are more important than high bandwidth and scalability. Hence, for this project, I'm electing to go with **Wishbone**. 
 
-We'll be using the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
+We'll be using Wishbone in *Pipelined Mode*, as specified in the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
 
-Sticking to a well-defined internal bus specification certainly helps to meet the Modular Architecture Requirement. Whether we can also accommodate Partial FPGA Reconfiguration using a Wishbone Interconnect remains to be seen.
+#### Bus Width and Clock Frequency
 
-### The Processor
+We'll be using a 32-bit data bus. 
 
-#### Processor Word Size
+The Bus Fabric is part of the 50MHz System Clock Domain.
 
-Typical processor word sizes are 8-bit, 16-bit, 32-bit, and 64-bit. Which word size is the best fit for Boxlambda?
+#### From Ibex to LiteDRAM
 
-- **8-bit**: A *good* word size. 
-  - *Pros*: 
-	- An 8-bit word (i.e. a *byte*) is a good natural fit for a pixel value, an ASCII character code, or small integer values. 
-	- 8-bit processors, their programs, and their data are very compact. 
-	- 8-bit processors side-step some of the alignment issues seen with larger word sizes.
-  - *Cons*: 
-	- An 8-bit word is too small to conveniently hold the values you need in a typical program - think calculations and table indices. 
-	- Toolchain support for higher-level languages is limited.
-- **16-bit**: A clumsy compromise between 8-bit and 32-bits. Made sense when 32-bit processors were not readily available yet. Now, not so much.
-- **32-bit**: Another *good* word size.
-  - *Pros*: 32-bit words can hold most real-world numbers and cover a huge address space. 32-bit machines generally have good toolchain support.
-  - *Cons*: Much bigger than its 8-bit counterpart, in terms of FPGA real estate, program size as well as data size.
-- **64-bit**: A big and clunky word size, way too big to handle conveniently, intended for specialized use cases that don't fit this project.
+This is the Ibex Memory Interface specification:
 
-I've decided to go for a **32-bit processor**. A 32-bit processor (and associated on-chip memory) will take a bigger chunk out of our FPGA real estate, but I think it's worth it. I like the convenience of 32-bit registers, and a 32-bit processor may come with a regular GCC toolchain.
+[https://ibex-core.readthedocs.io/en/latest/03_reference/load_store_unit.html#load-store-unit](https://ibex-core.readthedocs.io/en/latest/03_reference/load_store_unit.html#load-store-unit)
 
-#### Processor Features
+There are two such interfaces. One for data, one for instructions.
 
-Next to a 32-bit word size, we're looking for the following features for our microprocessor: 
+The job of *core2wb* is to adapt that interface to a pipelined Wishbone bus master interface. That Wishbone bus master in turn requests access to the shared bus. It's up to *wb_interconnect_shared_bus* to grant the bus to one of the requesting bus masters and direct the transaction to the selected slave. If either one of those modules has a bug, that will result in an incorrectly behaving bus master, from the point of view of the bus slave.
 
-- Ease of programming, meaning:
-  - Easy and well-documented *Instruction Set Architectures* (ISA). We want to be able to program the machine at assembly language level.
-  - Shallow Pipeline: It is relatively easy to reason about the behavior of a processor with a two-stage pipeline. It is not very easy to reason about the behavior of a processor with a six-stage pipeline.
-  - Good toolchain support, such as GCC, so we can build a software ecosystem for our machine.
-- An accessible and well-documented implementation.
-- Has to fit our FPGA, with enough space to fit the other components.
-  
-With all that in mind, I think [**RISC-V**](https://riscv.org/) is a great option.
+![Ibex to LiteDRAM.](assets/Ibex_to_LiteDRAM.drawio.png)
 
-- Great ISA, building on lessons learned from previous popular processor architectures.
-- 32-bit support.
-- GCC toolchain support.
-- Open-Source.
-- Well-documented.
-- Very fashionable. Let's ride that wave :-)
+*From Ibex to LiteDRAM.*
 
-#### The CPU core: Ibex
+*core2wb.sv* and *wb_interconnect_shared_bus.sv* are part of the *ibex_wb* repository. The *ibex_wb* repository no longer appears to be actively maintained. I looked long and hard at the implementation of the two modules and ultimately decided that I couldn't figure out the author's reasoning. I decided to re-implement both modules: 
+
+- *Core2wb* has two states: *Idle* and *Transaction Ongoing*. In the Idle state, when Ibex signals a transaction request (core.req), the Ibex memory interface signals get registered, a single access pipelined Wishbone transaction is generated and *core2wb* goes to *Transaction Ongoing* state. When a WB ACK or ERR response is received, core2wb goes back to idle. While *Transaction Ongoing* state, the memory interface grant (*gnt*) signal is held low, so further transaction requests are stalled until *core2wb* is idle again Multiple outstanding transactions are currently not supported. I hope to add that capability someday.
+
+![Core2WB State Diagram.](assets/core2wb_fsm.drawio.png)
+
+*Core2WB State Diagram.* 
+
+- *WB_interconnect_shared_bus* also has two states: In the _Idle_ state, a priority arbiter monitors the CYC signal of participating Bus Masters. When one or more Bus Masters assert CYC, the arbiter grants access to the lowest order Bus Master and goes to *Transaction Ongoing* state. When that Bus Master de-asserts CYC again, we go back to Idle state. Slave selection and forwarding of WB signals is done with combinatorial logic.
+
+![WB_Interconnect_Shared_Bus State Diagram.](assets/wb_shared_bus_fsm.drawio.png)
+
+*WB_Interconnect_Shared_Bus State Diagram.* 
+
+### RISCV Ibex Processor
 
 There are a lot of RISC-V implementations to choose from. The **Ibex** project seems like a good choice:
 
@@ -72,7 +62,7 @@ Location of the *Ibex* submodule in the BoxLambda repo: **sub/ibex/**
 The Ibex core:
 [sub/ibex/rtl/ibex_top.sv](https://github.com/epsilon537/ibex/blob/acdf41b2bf3ed2f33ed5c29e65c1625d22e4aab5/rtl/ibex_top.sv)
 
-#### The Wishbone Wrapper: *Ibex_WB*
+#### Ibex Wishbone Wrapper: *Ibex_WB*
 
 [https://github.com/epsilon537/ibex_wb](https://github.com/epsilon537/ibex_wb) forked from [https://github.com/batuhanates/ibex_wb](https://github.com/batuhanates/ibex_wb)
 
@@ -105,7 +95,11 @@ wb_ibex_core #(
 
 *Wb_ibex_core*'s *boot_addr* port is a misnomer. *Boot_addr* specifies the base address of the vector table. The Reset Vector, i.e. the first instruction executed when the processor comes out of reset, is at offset 0x80 relative to this base address. Hence, the *real* Boot Address for BoxLambda is address 0x80.
 
-### The Debug Unit: *RISCV-DBG*
+##### Ibex Clock Frequency
+
+The Ibex core is part of the 50MHz System Clock Domain.
+
+### Debug Unit: *RISCV-DBG*
 
 [https://github.com/epsilon537/riscv-dbg](https://github.com/epsilon537/riscv-dbg) forked from [https://github.com/pulp-platform/riscv-dbg](https://github.com/pulp-platform/riscv-dbg).
 
@@ -238,15 +232,196 @@ To summarize:
 
 See the *Test Builds* section below for the steps needed to set up an OpenOCD JTAG debug session on the Arty A7.
 
-### The Memory Controller
+#### RISCV-DBG Clock Frequency
+
+*Dm_top* and *dmi_jtag* are part of the 50MHz System Clock domain.
+The JTAG clock *tck* is driven via a *BSCANE2* primitive by the FPGA's JTAG chain. The BSCANE2 primitive is instantiated in the *dmi_bscane_tap* module.
+  
+### LiteDRAM Memory Controller
 
 SDRAM memory access is pretty complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. 
 
 There exists a class of memory controllers, called **Static Memory Controllers**, that absorb these complexities and by design create a fixed schedule for a fixed use case, resulting in very predictable behavior. Static Memory Controllers are far off the beaten path, however. **Dynamic Memory Controllers** are more common. Dynamic Memory Controllers can handle a variety of use cases with good performance *on average*. Unfortunately, they sacrifice predictability to achieve this flexibility.
 
-Ideally, we would use an accessible, well-documented, open-source, static memory controller design. Unfortunately, I can't find one. Rolling our own is not an option either. Doing so would require so much specific know-how, that it would kill this project. Pragmatically, our best option is to use Xilinx's [**Memory Interface Generator** (MIG)](https://docs.xilinx.com/v/u/1.0-English/ug586_7Series_MIS) with the Arty A7 (or Nexys A7) parameters as [published by Diligent](https://github.com/Digilent/Arty/tree/master/Resources/Arty_MIG_DDR3?_ga=2.230252508.1917430070.1649263055-373952187.1630942771).
+Ideally, we would use an accessible, well-documented, open-source, static memory controller design. Unfortunately, I can't find one. Rolling our own is not an option either. Doing so would require so much specific know-how, that it would kill this project.
+I decided to use the LiteDRAM memory controller:
 
-The Xilinx memory controller falls squarely into the Dynamic Memory Controller class. How do we fit this into a platform that requires deterministic behavior? I think the best approach is to use a DMA engine to transfer data between SDRAM and on-chip memory. Fixed memory access latency to on-chip memory (from any bus master that requires it) can be guaranteed using an arbiter. We'll revisit this topic when we're discussing Boxlambda's architecture.
+[https://github.com/enjoy-digital/litedram](https://github.com/enjoy-digital/litedram)
+
+The LiteDRAM memory controller falls squarely into the Dynamic Memory Controller class. How do we fit this into a platform that requires deterministic behavior? I think the best approach is to use a DMA engine to transfer data between SDRAM and on-chip memory. Fixed memory access latency to on-chip memory (from any bus master that requires it) can be guaranteed using an arbiter.
+
+#### Why choose LiteDRAM over Xilinx MIG?
+
+- LiteDRAM is open-source, scoring good karma points. All the benefits of open-source apply: Full access to all code, access to the maintainers, many eyeballs, the option to make changes as you please, submit bug fixes, etc.
+- The LiteDRAM simulation model, the entire test SoC, in fact, runs nicely in Verilator. That's a must-have for me. 
+- The LiteDRAM core, configured for BoxLambda, is 50% smaller than the equivalent MIG core: 3016 LUTs and 2530 registers vs. 5673 LUTs and 5060 registers.
+
+#### Generating a LiteDRAM core
+
+LiteDRAM is a highly configurable core. For an overview of the core's features, please take a look at the LiteDRAM repository's README file:
+
+[https://github.com/enjoy-digital/litedram/blob/master/README.md](https://github.com/enjoy-digital/litedram/blob/master/README.md)
+
+You specify the configuration details in a *.yml* file. A Python script parses that *.yml* file and generates the core's Verilog as well as a CSR register access layer for software.
+
+Details are a bit sparse, but luckily example configurations are provided:
+
+[https://github.com/enjoy-digital/litedram/tree/master/examples](https://github.com/enjoy-digital/litedram/tree/master/examples)
+
+Starting from the *arty.yml* example, I created the following LiteDRAM configuration file for BoxLambda:
+
+```
+#This is a LiteDRAM configuration file for the Arty A7.
+{
+    # General ------------------------------------------------------------------
+    "speedgrade": -1,          # FPGA speedgrade
+    "cpu":        "None",      # CPU type (ex vexriscv, serv, None) - We only want to generate the LiteDRAM memory controller, no CPU.
+    "memtype":    "DDR3",      # DRAM type
+    "uart":       "rs232",     # Type of UART interface (rs232, fifo) - not relevant in this configuration.
+
+    # PHY ----------------------------------------------------------------------
+    "cmd_latency":     0,             # Command additional latency
+    "sdram_module":    "MT41K128M16", # SDRAM modules of the board or SO-DIMM
+    "sdram_module_nb": 2,             # Number of byte groups
+    "sdram_rank_nb":   1,             # Number of ranks
+    "sdram_phy":       "A7DDRPHY",    # Type of FPGA PHY
+
+    # Electrical ---------------------------------------------------------------
+    "rtt_nom": "60ohm",  # Nominal termination
+    "rtt_wr":  "60ohm",  # Write termination
+    "ron":     "34ohm",  # Output driver impedance
+
+    # Frequency ----------------------------------------------------------------
+    # The generated LiteDRAM module contains clock generation primitives, for its own purposes, but also for the rest
+    # of the system. The system clock is output by the LiteDRAM module and is supposed to be used as the main input clock
+    # for the rest of the system. I set the system clock to 50MHz because I couldn't get timing closure at 100MHz.
+    "input_clk_freq":   100e6, # Input clock frequency
+    "sys_clk_freq":     50e6, # System clock frequency (DDR_clk = 4 x sys_clk)
+    "iodelay_clk_freq": 200e6, # IODELAYs reference clock frequency
+
+    # Core ---------------------------------------------------------------------
+    "cmd_buffer_depth": 16,    # Depth of the command buffer
+
+    # User Ports ---------------------------------------------------------------
+    # We generate two wishbone ports, because BoxLambda has two system buses.
+    # Note that these are _classic_ wishbone ports, while BoxLamdba uses a _pipelined_ wisbone bus.
+    # A pipelined-to-classic wishbone adapter is needed to interface correctly to the bus.
+    # At some point it would be nice to have an actual pipelined wishbone frontend, with actual pipelining capability.
+    "user_ports": {
+        "wishbone_0" : {
+            "type":  "wishbone",
+            "data_width": 32, #Set data width to 32. If not specificied it defaults to 128 bits.
+            "block_until_ready": True,
+        },
+        "wishbone_1" : {
+            "type":  "wishbone",
+            "data_width": 32, #Set data width to 32. If not specificied it defaults to 128 bits.
+            "block_until_ready": True,
+        },
+    },
+}
+```
+
+Some points about the above:
+- The *PHY layer*, *Electrical* and *Core* sections I left exactly as-is in the given Arty example.
+- In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
+- In the *Frequency* section, I set *sys_clk_freq* to 50MHz. 50MHz has been the system clock frequency in the previous BoxLambda test builds as well. Also, I haven't been able to close timing at 100MHz. 
+- In the *User Ports* section, I specified two 32-bit Wishbone ports. In the [BoxLambda Architecture Diagram](https://boxlambda.readthedocs.io/en/latest/architecture/#the-arty-a7-configuration), you'll see that BoxLambda has two system buses. The memory controller is hooked up to both.
+
+I generate two LiteDRAM core variants from this configuration: 
+
+- For simulation: ```litedram_gen artya7dram.yml --sim --gateware-dir sim/rtl --software-dir sim/sw --name litedram```
+- For FPGA: ```litedram_gen artya7dram.yml --gateware-dir arty/rtl --software-dir arty/sw --name litedram```
+
+The generated core has the following interface:
+
+```
+module litedram (
+`ifndef SYNTHESIS    
+  input  wire sim_trace, /*Simulation only.*/
+`endif
+	input  wire clk,
+`ifdef SYNTHESIS  
+	input  wire rst,       /*FPGA only...*/
+	output wire pll_locked,
+	output wire [13:0] ddram_a,
+	output wire [2:0] ddram_ba,
+	output wire ddram_ras_n,
+	output wire ddram_cas_n,
+	output wire ddram_we_n,
+	output wire ddram_cs_n,
+	output wire [1:0] ddram_dm,
+	inout  wire [15:0] ddram_dq,
+	inout  wire [1:0] ddram_dqs_p,
+	inout  wire [1:0] ddram_dqs_n,
+	output wire ddram_clk_p,
+	output wire ddram_clk_n,
+	output wire ddram_cke,
+	output wire ddram_odt,
+	output wire ddram_reset_n,
+`endif  
+	output wire init_done,  /*FPGA/Simulation common ports...*/
+	output wire init_error,
+	input  wire [29:0] wb_ctrl_adr,
+	input  wire [31:0] wb_ctrl_dat_w,
+	output wire [31:0] wb_ctrl_dat_r,
+	input  wire [3:0] wb_ctrl_sel,
+	input  wire wb_ctrl_cyc,
+	input  wire wb_ctrl_stb,
+	output wire wb_ctrl_ack,
+	input  wire wb_ctrl_we,
+	input  wire [2:0] wb_ctrl_cti,
+	input  wire [1:0] wb_ctrl_bte,
+	output wire wb_ctrl_err,
+	output wire user_clk,
+	output wire user_rst,
+	input  wire [25:0] user_port_wishbone_0_adr,
+	input  wire [31:0] user_port_wishbone_0_dat_w,
+	output wire [31:0] user_port_wishbone_0_dat_r,
+	input  wire [3:0] user_port_wishbone_0_sel,
+	input  wire user_port_wishbone_0_cyc,
+	input  wire user_port_wishbone_0_stb,
+	output wire user_port_wishbone_0_ack,
+	input  wire user_port_wishbone_0_we,
+	output wire user_port_wishbone_0_err,
+	input  wire [25:0] user_port_wishbone_1_adr,
+	input  wire [31:0] user_port_wishbone_1_dat_w,
+	output wire [31:0] user_port_wishbone_1_dat_r,
+	input  wire [3:0] user_port_wishbone_1_sel,
+	input  wire user_port_wishbone_1_cyc,
+	input  wire user_port_wishbone_1_stb,
+	output wire user_port_wishbone_1_ack,
+	input  wire user_port_wishbone_1_we,
+	output wire user_port_wishbone_1_err
+);
+```
+
+Some points worth noting about this interface:
+- A Wishbone control port is generated along with the two requested user ports. LiteDRAM CSR register access is done through this control port.
+- All three Wishbone ports are *classic* Wishbone ports, not *pipelined*. There is no *stall* signal.
+- The Wishbone port addresses are word addresses, not byte addresses.
+- The LiteDRAM module takes an external input clock (*clk*) and generates a 50MHz system clock (*user_clk*). The module contains a clock generator.
+- On FPGA, the LiteDRAM module takes an asynchronous reset (*rst*) and provides a synchronized reset (*user_rst*). The module contains a reset synchronizer.
+
+#### *Litedram_wrapper*
+
+I created a *litedram_wrapper.sv* module around litedram.v:
+
+[https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv)
+
+This wrapper contains:
+- byte-to-word address adaptation on all three Wishbone ports.
+- Pipelined-to-Classic Wishbone adaptation. The adapter logic comes straight out of the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The *stall* signal is used to avoid pipelining:
+  
+```
+  /*Straight out of the Wishbone B4 spec. This is how you interface a classic slave to a pipelined master.
+   *The stall signal ensures that the STB signal remains asserted until an ACK is received from the slave.*/
+   assign user_port_wishbone_p_0_stall = !user_port_wishbone_p_0_cyc ? 1'b0 : !user_port_wishbone_c_0_ack;
+```
+
+##### LiteDRAM Clock Frequency
+
+See [Clocks and Reset](clocks_and_reset.md)
 
 ### The Graphics Subsystem
 
@@ -332,8 +507,6 @@ The SD Card Controller has a Wishbone slave port.
 FreeCores has PS/2 keyboard and mouse modules: [https://github.com/freecores/ps2](https://github.com/freecores/ps2)
 
 These cores don't have a Wishbone slave port, so we're going to have to add that ourselves.
-
-Note that the Nexys A7 has a USB HID host interface for keyboard and mouse which, with the help of clever firmware on a PIC24 microcontroller, presents itself to the FPGA as a PS/2 interface. See the [Nexys A7 Reference Manual](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual) for more details.
 
 ### I2C
 

@@ -3,6 +3,8 @@ Terms and Abbreviations
 
 This section provides clarification for some of the more ambiguous terms and abbreviations used elsewhere in the documentation.
 
+- **ACK**: A Wishbone Bus Signal.
+  
 - **AXI**: Advanced eXtensible Interface, ARM's SoC bus specification.
 
 - **Bitstream**: An FPGA Bitstream is a file containing the programming data associated with an FPGA chip.
@@ -27,9 +29,15 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **CRT0**: C Run-Time 0. A set of execution startup routines linked into a C program that performs any initialization work required before calling the program's *main()* function. 
 
+- **CSR**: Control and Status Register.
+  
+- **CYC**: A Wishbone Bus Signal.
+
 - **DAC**: Digital-to-Analog Converter.
 
 - **.data**/**Data Segment**: Portion of an object file or executable holding pre-initialized data.
+
+- **DDR SDRAM**: Double Data Rate SDRAM.
 
 - **DFX**: Dynamic Function Exchange, Xilinx's solution for Partial FPGA Reconfiguration ([https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf](https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf))
 
@@ -47,6 +55,10 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **EDA tool**: A software tool to design electronic circuits, e.g. Vivado.
 
+- **ERR**: A Wishbone Bus Signal.
+  
+- **FHDL**: Fragmented Hardware Description Language, a Python-based HDL. Used by Migen and LiteX.
+
 - **FIFO**: First-In-First-out, an implementation of a queue.
 
 - **Fork**: A GitHub fork is a copy of a repository that sits in your account rather than the account from which you forked the data.
@@ -61,6 +73,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Ibex**: The name of the Risc-V CPU core used by BoxLambda.
 
+- **I/F**: Interface.
+  
 - **IC**: Integrated Circuit.
 
 - **Interconnect**: Wishbone terminology for the bus fabric.
@@ -85,6 +99,10 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Linting**: Static Code Analysis.
 
+- **LiteDRAM**: A small-footprint and configurable DRAM core. Part of LiteX.
+
+- **LiteX**: A Migen and Python-based SoC Builder framework.
+    
 - **LUT**: Look-Up Table.
 
 - **Makefile**: A file used by the *Make* utility, defining a set of tasks to be executed, and defining dependencies between tasks. Makefiles are commonly used to create build systems.
@@ -95,6 +113,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **MEMC**: Memory Controller.
 
+- **Migen**: A Python-based toolbox for building digital hardware. Built on FHDL.
+  
 - **OOC**: Vivado's OOC mode or OOC flow lets you synthesize, implement, and analyze design modules in a hierarchical design.
 
 - **OpenOCD**: Open On-Chip Debugger, open-source software that interfaces with a hardware debugger's JTAG port.
@@ -119,6 +139,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **RV32IMCB**: Risc-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
 
+- **SDRAM**: Synchronous dynamic random-access memory. A DRAM where the operation of its external pin interface is coordinated by an externally supplied clock signal. 
+
 - **Slice**: The basic logical unit of a Xilinx FPGA.
 
 - **(Software) Image**: Snapshot of computer memory contents stored as a file.
@@ -126,6 +148,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **SoC**: System-on-a-Chip. A System-on-a-Chip is an integrated circuit that integrates all or most components of a computer or other electronic system.
 
 - **SPI**: Serial Peripheral Interface, a synchronous serial communication interface specification used for short-distance communication.
+
+- **STB**: A Wishbone bus signal.
 
 - **Stderr**: Standard Error. Name of the file object in the Standard C library associated with the standard error device.
 
@@ -141,6 +165,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **TAP**: Test Access Port, a JTAG interface.
 
+- **TCK**: Test Clock. JTAG Clock Signal.
+  
 - **Tcl**: The defacto standard embedded command language for EDA applications.
 
 - **Udev**: Userspace /dev, a device manager for the Linux kernel.
@@ -156,6 +182,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **VERA**: Versatile Embedded Retro Adapter, the name of the graphics core used by BoxLambda.
 
 - **VRAM**: Video RAM.
+
+- **WB**: Wishbone.
 
 - **WIP**: Work In Progress.
 

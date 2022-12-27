@@ -82,7 +82,7 @@ Why choose LiteDRAM over Xilinx MIG?
 ====================================
 
 - LiteDRAM is open-source, scoring good karma points. All the benefits of open-source apply: Full access to all code, access to the maintainers, many eyeballs, the option to make changes as you please, submit bug fixes, etc.
-- The LiteDRAM simulation model, the entire test SoC in fact, runs nicely in Verilator. That's a must-have for me. 
+- The LiteDRAM simulation model, the entire DDR test SoC, runs nicely in Verilator. That's a must-have for me. 
 - The LiteDRAM core, configured for BoxLambda, is 50% smaller than the equivalent MIG core: 3016 LUTs and 2530 registers vs. 5673 LUTs and 5060 registers.
   
 Generating a LiteDRAM core
@@ -260,7 +260,7 @@ One Rookie mistake I made early on was to just set the Wishbone *stall* signal t
 
 *Classic Wishbone transaction (Illustration taken from Wishbone B4 spec).*
 
-![Classic Wishbone transaction.](../assets/wishbone_classic_transaction.png)
+![Classic Wishbone transaction.](../assets/wishbone_pipelined_transaction.png)
 
 *Pipelined Wishbone transaction - single access (Illustration taken from Wishbone B4 spec).*
 
@@ -478,11 +478,13 @@ make run
 
 ![ddr_test on Arty - Putty Terminal](../assets/ddr_test_arty.png)
 
-*DDR Test on Arty A7-35T.*/
+*DDR Test on Arty A7-35T.*
 
 Other Changes
 -------------
 
+- To minimize the differences with the Arty A7-35T (*Little* BoxLambda), I decided to use the Arty A7-100T rather than the Nexys A7 as the *Big* BoxLambda variant.
+  
 - I noticed belatedly that I didn't create a constraint for the *tck* JTAG clock, so no timing analysis could be done on the JTAG logic. I added the following to the *.xdc* constraints file. Vivado's timing analysis is much happier now.
 
 ```

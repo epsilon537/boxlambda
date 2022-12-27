@@ -181,7 +181,7 @@ Remote debugging using localhost:3333
 ```
 Notice that the CPU is stopped at the very first instruction of the boot sequence.
 
-### Build and Run the Picolibc Test Image on Verilator
+### Picolibc Test Image on Verilator
 
 Build the test project:
 ```
@@ -197,7 +197,7 @@ You should see something like this:
 
 ![Picolibc_test on Verilator](assets/picolibc_test_verilator.png)
 
-### Build and Run the Picolibc_test Image on Arty A7
+### Picolibc_test Image on Arty A7
 Build the test project:
 ```
 cd projects/picolibc_test
@@ -212,6 +212,43 @@ Verify the test program's output in the terminal. Enter a character to verify th
 
 ![Picolibc_test on Arty - Putty Terminal](assets/picolibc_test_arty.png)
 
+### DDR Test Image on Verilator
+Build the test project:
+```
+cd projects/ddr_test
+make sim
+```
+Execute the generated verilator model in interactive mode:
+```
+cd generated
+./Vmodel -i
+```
+You should see something like this:
+
+![ddr_test on Verilator](assets/ddr_test_verilator.png)
+
+*DDR Test on Verilator.* 
+
+### DDR Test Image on Arty A7
+If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#on-wsl) section.
+
+Build the test project:
+```
+cd projects/ddr_test
+make impl
+```
+Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+
+Run the project:
+```
+make run
+```
+Verify the test program's output in the terminal. You should see something like this:
+
+![ddr_test on Arty - Putty Terminal](assets/ddr_test_arty.png)
+
+*DDR Test on Arty A7-35T.*
+
 Prerequisites
 -------------
 
@@ -220,7 +257,7 @@ Prerequisites
   
   [https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html)
   
-  Make sure you also install your Arty A7 or Nexys A7 board files. Digilent has excellent instructions for installing Vivado and Digilent board files:
+  Make sure you also install your Arty A7 board files. Digilent has excellent instructions for installing Vivado and Digilent board files:
   
   [https://digilent.com/reference/vivado/installing-vivado/v2019.2](https://digilent.com/reference/vivado/installing-vivado/v2019.2)
 
@@ -266,3 +303,8 @@ sudo make install
 
   Add the install directory (*/usr/local/bin* in my case) to your PATH.  
   &nbsp;
+
+- **LiteX**: The installation instructions are on the LiteX Wiki:
+
+[https://github.com/enjoy-digital/litex/wiki/Installation](https://github.com/enjoy-digital/litex/wiki/Installation)
+
