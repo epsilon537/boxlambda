@@ -3,6 +3,7 @@ The Test Bench
 The focus should be on system-level testing rather than component-level verification. The components themselves have already been verified by their respective owners.
 
 Ideally, the test bench should allow for the following:
+
 - Execute system-level test cases in a reasonable time frame. With system-level test cases, I mean test cases where the DUT is the SoC.
 - A short lather-rinse-repeat cycle of making code changes and testing them on a system-level DUT.
 - Full signal visibility into the build, to aid test case development as well as debugging.
@@ -16,7 +17,7 @@ C++ is not an ideal language for test case development, but it'll get the job do
 
 ### A simple Test Bench
 
-I created a proof-of-concept test bench for the *Hello World* and picolibc test builds. I started from the example code included in the Verilator distribution:
+The proof-of-concept test bench for BoxLambda is based on the example code included in the Verilator distribution:
 
 [https://github.com/verilator/verilator/blob/master/examples/make_tracing_c/sim_main.cpp](https://github.com/verilator/verilator/blob/master/examples/make_tracing_c/sim_main.cpp)
 
@@ -43,6 +44,7 @@ Current test bench source code examples:
 
 - [*projects/hello_world/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/6c3c0b36525cf3f0aef869f9b618759258c2106c/projects/hello_world/sim/sim_main.cpp).
 - [*projects/picolibc_test/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/develop/projects/picolibc_test/sim/sim_main.cpp).
+- [*projects/ddr_test/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/projects/ddr_test/sim/sim_main.cpp)
 
 ### Are we running in a Simulation?
 

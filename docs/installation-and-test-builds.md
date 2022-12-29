@@ -12,9 +12,9 @@ Get the BoxLambda repository:
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-Switch to the *picolibc* tag: 
+Switch to the **enter_litedram** tag: 
 ```
-git checkout picolibc
+git checkout enter_litedram
 ```
 
 Set up the repository. This initializes the git submodules used and builds picolibc for BoxLambda: 
@@ -253,6 +253,7 @@ Prerequisites
 -------------
 
 - **Host OS**: Linux or Linux WSL.
+  
 - **Vivado ML** Edition V2021.2, Linux version:
   
   [https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html)
@@ -261,50 +262,62 @@ Prerequisites
   
   [https://digilent.com/reference/vivado/installing-vivado/v2019.2](https://digilent.com/reference/vivado/installing-vivado/v2019.2)
 
-- RISCV Compiler Toolchain **rv32imcb**. This is the cross-compiler for building the code that'll run on the Ibex processor. I'm using the **20220210-1** pre-built binaries from *lowRISC*: 
+- RISCV Compiler Toolchain **rv32imcb**. This is the cross-compiler for building the code that'll run on the Ibex processor. I'm using the **20220210-1** pre-built binaries from *lowRISC*:
+   
 	[https://github.com/lowRISC/lowrisc-toolchains/releases](https://github.com/lowRISC/lowrisc-toolchains/releases)
 
   Add the toolchain's *bin/* directory to your *PATH*. E.g.:
 
 ```
-export RISCV_TOOLCHAIN=$HOME/lowrisc-toolchain-gcc-rv32imcb-20220210-1
-export PATH=$PATH:$RISCV_TOOLCHAIN/bin
+  export RISCV_TOOLCHAIN=$HOME/lowrisc-toolchain-gcc-rv32imcb-20220210-1
+  export PATH=$PATH:$RISCV_TOOLCHAIN/bin
 ```
 
-- **GNU Make** version 4.2.1: [https://www.gnu.org/software/make/](https://www.gnu.org/software/make/)
+- **GNU Make** version 4.2.1: 
+  
+  [https://www.gnu.org/software/make/](https://www.gnu.org/software/make/)
   
   Please make sure make is in your *PATH*.
   
-- **Bender** 0.25.2: [https://github.com/pulp-platform/bender](https://github.com/pulp-platform/bender)
+- **Bender** 0.25.2: 
+  
+  [https://github.com/pulp-platform/bender](https://github.com/pulp-platform/bender)
 
   Add bender to your *PATH*.
 
-- **Verilator** 4.216: [https://verilator.org/guide/latest/install.html](https://verilator.org/guide/latest/install.html)
+- **Verilator** 4.216: 
+  
+  [https://verilator.org/guide/latest/install.html](https://verilator.org/guide/latest/install.html)
 
   Add verilator to your *PATH*.
 
-- **Ncurses**: ```sudo apt-get install libncurses5-dev libncursesw5-dev libncursesw5```
+- **Ncurses**:
+  
+```
+  sudo apt-get install libncurses5-dev libncursesw5-dev libncursesw5
+```
 
-- **Gtkwave**: [http://gtkwave.sourceforge.net/](http://gtkwave.sourceforge.net/)
+- **Gtkwave**: 
+  
+  [http://gtkwave.sourceforge.net/](http://gtkwave.sourceforge.net/)
 
 - **RISCV OpenOCD**
 
   Build RISCV OpenOCD from source:
   
 ```
-git clone https://github.com/riscv/riscv-openocd
-cd riscv-openocd
-git submodule update --init --recursive
-./bootstrap
-./configure --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi
-make
-sudo make install
+  git clone https://github.com/riscv/riscv-openocd
+  cd riscv-openocd
+  git submodule update --init --recursive
+  ./bootstrap
+  ./configure --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi
+  make
+  sudo make install
 ``` 
-
   Add the install directory (*/usr/local/bin* in my case) to your PATH.  
-  &nbsp;
 
 - **LiteX**: The installation instructions are on the LiteX Wiki:
 
-[https://github.com/enjoy-digital/litex/wiki/Installation](https://github.com/enjoy-digital/litex/wiki/Installation)
+  [https://github.com/enjoy-digital/litex/wiki/Installation](https://github.com/enjoy-digital/litex/wiki/Installation)
 
+  &nbsp;

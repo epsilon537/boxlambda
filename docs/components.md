@@ -7,7 +7,7 @@ We're building a System-on-a-Chip (*System-on-an-FPGA*?). This section identifie
 
 The Bus, or Interconnect, is the fabric stitching together the SoC internal components. For this project, the two most relevant SoC internal bus specifications are [ARM's AXI bus](https://developer.arm.com/documentation/ihi0022/latest) and the Open-Source [Wishbone bus](https://wishbone-interconnect.readthedocs.io/en/latest/).
 
-AXI is very powerful, very popular, and very complex. It scales up well to very big SoCs. However, I don't think it scales down very well to simple SoCs, such as BoxLambda, where low latency and low complexity are more important than high bandwidth and scalability. Hence, for this project, I'm electing to go with **Wishbone**. 
+**AXI** is very powerful, very popular, and very complex. It scales up well to very big SoCs. However, I don't think it scales down very well to simple SoCs, such as BoxLambda, where low latency and low complexity are more important than high bandwidth and scalability. Hence, for this project, I'm electing to go with **Wishbone**. 
 
 We'll be using Wishbone in *Pipelined Mode*, as specified in the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
 
@@ -17,34 +17,6 @@ We'll be using a 32-bit data bus.
 
 The Bus Fabric is part of the 50MHz System Clock Domain.
 
-#### From Ibex to LiteDRAM
-
-This is the Ibex Memory Interface specification:
-
-[https://ibex-core.readthedocs.io/en/latest/03_reference/load_store_unit.html#load-store-unit](https://ibex-core.readthedocs.io/en/latest/03_reference/load_store_unit.html#load-store-unit)
-
-There are two such interfaces. One for data, one for instructions.
-
-The job of *core2wb* is to adapt that interface to a pipelined Wishbone bus master interface. That Wishbone bus master in turn requests access to the shared bus. It's up to *wb_interconnect_shared_bus* to grant the bus to one of the requesting bus masters and direct the transaction to the selected slave. If either one of those modules has a bug, that will result in an incorrectly behaving bus master, from the point of view of the bus slave.
-
-![Ibex to LiteDRAM.](assets/Ibex_to_LiteDRAM.drawio.png)
-
-*From Ibex to LiteDRAM.*
-
-*core2wb.sv* and *wb_interconnect_shared_bus.sv* are part of the *ibex_wb* repository. The *ibex_wb* repository no longer appears to be actively maintained. I looked long and hard at the implementation of the two modules and ultimately decided that I couldn't figure out the author's reasoning. I decided to re-implement both modules: 
-
-- *Core2wb* has two states: *Idle* and *Transaction Ongoing*. In the Idle state, when Ibex signals a transaction request (core.req), the Ibex memory interface signals get registered, a single access pipelined Wishbone transaction is generated and *core2wb* goes to *Transaction Ongoing* state. When a WB ACK or ERR response is received, core2wb goes back to idle. While *Transaction Ongoing* state, the memory interface grant (*gnt*) signal is held low, so further transaction requests are stalled until *core2wb* is idle again Multiple outstanding transactions are currently not supported. I hope to add that capability someday.
-
-![Core2WB State Diagram.](assets/core2wb_fsm.drawio.png)
-
-*Core2WB State Diagram.* 
-
-- *WB_interconnect_shared_bus* also has two states: In the _Idle_ state, a priority arbiter monitors the CYC signal of participating Bus Masters. When one or more Bus Masters assert CYC, the arbiter grants access to the lowest order Bus Master and goes to *Transaction Ongoing* state. When that Bus Master de-asserts CYC again, we go back to Idle state. Slave selection and forwarding of WB signals is done with combinatorial logic.
-
-![WB_Interconnect_Shared_Bus State Diagram.](assets/wb_shared_bus_fsm.drawio.png)
-
-*WB_Interconnect_Shared_Bus State Diagram.* 
-
 ### RISCV Ibex Processor
 
 There are a lot of RISC-V implementations to choose from. The **Ibex** project seems like a good choice:
@@ -53,7 +25,7 @@ There are a lot of RISC-V implementations to choose from. The **Ibex** project s
 
 - 32-bit RISC-V.
 - High-quality, well-documented implementation.
-- SystemVerilog based. My preferred HDL.
+- SystemVerilog based.
 - Supports a *small* two-stage pipeline parameterization.
 - Very active project.
 
@@ -68,12 +40,40 @@ The Ibex core:
 
 The Ibex RISCV core itself doesn't have Wishbone ports. *Ibex_WB* wraps around the vanilla Ibex core and attaches Wishbone port adapters to its instruction and data ports.
 
-The *Ibex_WB* repo also includes an example SoC build consisting of an Ibex core connected via a shared Wishbone bus to a wbuart32 core and an internal memory module, along with the software to run on that platform. This example SoC is the starting point for BoxLambda's implementation. See the **Test Builds** section below.
+The *Ibex_WB* repo also includes an example SoC build consisting of an Ibex core connected via a shared Wishbone bus to a wbuart32 core and an internal memory module, along with the software to run on that platform. This example SoC is the starting point for BoxLambda's implementation. See the [Test Builds section](installation-and-test-builds.md#test-builds).
 
 Location of the *Ibex_WB* submodule in the BoxLambda repo: **sub/ibex/**
 
 The *wb_ibex_core*:
 [sub/ibex_wb/rtl/wb_ibex_core.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_ibex_core.sv)
+
+###### From Ibex to LiteDRAM
+
+This is the Ibex Memory Interface specification:
+
+[https://ibex-core.readthedocs.io/en/latest/03_reference/load_store_unit.html#load-store-unit](https://ibex-core.readthedocs.io/en/latest/03_reference/load_store_unit.html#load-store-unit)
+
+There are two such interfaces. One for data, one for instructions.
+
+The job of *core2wb* is to adapt that interface to a pipelined Wishbone bus master interface. That Wishbone bus master in turn requests access to the shared bus. It's up to *wb_interconnect_shared_bus* to grant the bus to one of the requesting bus masters and direct the transaction to the selected slave. If either one of those modules has a bug, that will result in an incorrectly behaving bus master, from the point of view of the bus slave.
+
+![Ibex to LiteDRAM.](assets/Ibex_to_LiteDRAM.drawio.png)
+
+*From Ibex to LiteDRAM.*
+
+The *ibex_wb* repository no longer appears to be actively maintained. I looked long and hard at the implementation of the two modules and ultimately decided that I couldn't figure out the author's reasoning. I decided to re-implement both modules: 
+
+- [Core2wb](https://github.com/epsilon537/ibex_wb/blob/master/rtl/core2wb.sv) has two states: *Idle* and *Transaction Ongoing*. In the Idle state, when Ibex signals a transaction request (core.req), the Ibex memory interface signals get registered, a single access pipelined Wishbone transaction is generated and *core2wb* goes to *Transaction Ongoing* state. When a WB ACK or ERR response is received, core2wb goes back to idle. While *Transaction Ongoing* state, the memory interface grant (*gnt*) signal is held low, so further transaction requests are stalled until *core2wb* is idle again Multiple outstanding transactions are currently not supported. I hope to add that capability someday.
+
+![Core2WB State Diagram.](assets/core2wb_fsm.drawio.png)
+
+*Core2WB State Diagram.* 
+
+- [WB_interconnect_shared_bus](https://github.com/epsilon537/ibex_wb/blob/master/soc/common/rtl/wb_interconnect_sharedbus.sv) also has two states: In the _Idle_ state, a priority arbiter monitors the CYC signal of participating Bus Masters. When one or more Bus Masters assert CYC, the arbiter grants access to the lowest order Bus Master and goes to *Transaction Ongoing* state. When that Bus Master de-asserts CYC again, we go back to Idle state. Slave selection and forwarding of WB signals is done with combinatorial logic.
+
+![WB_Interconnect_Shared_Bus State Diagram.](assets/wb_shared_bus_fsm.drawio.png)
+
+*WB_Interconnect_Shared_Bus State Diagram.* 
 
 #### Ibex Core Configuration
 
@@ -201,7 +201,7 @@ To summarize:
 2. The JTAG TAP is used to debug the software running on the Ibex RISCV32 core.
 3. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called **remote_bitbang**.
 
-See the *Test Builds* section below for the steps needed to set up an OpenOCD JTAG debug session on Verilator.
+See the [Test Builds section](installation-and-test-builds.md#test-builds) for the steps needed to set up an OpenOCD JTAG debug session on Verilator.
 
 #### OpenOCD and RISCV-DBG on Arty-A7 FPGA
 
@@ -230,7 +230,7 @@ To summarize:
 4. The Arty-A7 FPGA scan chain is accessible through the board's FTDI-based USB serial port.
 5. The OpenOCD transport protocol name for this type of connection is **ftdi**.
 
-See the *Test Builds* section below for the steps needed to set up an OpenOCD JTAG debug session on the Arty A7.
+See the [Test Builds section](installation-and-test-builds.md#test-builds) for the steps needed to set up an OpenOCD JTAG debug session on the Arty A7.
 
 #### RISCV-DBG Clock Frequency
 
@@ -243,10 +243,7 @@ SDRAM memory access is pretty complicated. Memory access requests get queued in 
 
 There exists a class of memory controllers, called **Static Memory Controllers**, that absorb these complexities and by design create a fixed schedule for a fixed use case, resulting in very predictable behavior. Static Memory Controllers are far off the beaten path, however. **Dynamic Memory Controllers** are more common. Dynamic Memory Controllers can handle a variety of use cases with good performance *on average*. Unfortunately, they sacrifice predictability to achieve this flexibility.
 
-Ideally, we would use an accessible, well-documented, open-source, static memory controller design. Unfortunately, I can't find one. Rolling our own is not an option either. Doing so would require so much specific know-how, that it would kill this project.
-I decided to use the LiteDRAM memory controller:
-
-[https://github.com/enjoy-digital/litedram](https://github.com/enjoy-digital/litedram)
+I decided to use the **LiteDRAM** memory controller: [https://github.com/enjoy-digital/litedram](https://github.com/enjoy-digital/litedram)
 
 The LiteDRAM memory controller falls squarely into the Dynamic Memory Controller class. How do we fit this into a platform that requires deterministic behavior? I think the best approach is to use a DMA engine to transfer data between SDRAM and on-chip memory. Fixed memory access latency to on-chip memory (from any bus master that requires it) can be guaranteed using an arbiter.
 
@@ -323,6 +320,7 @@ Starting from the *arty.yml* example, I created the following LiteDRAM configura
 ```
 
 Some points about the above:
+
 - The *PHY layer*, *Electrical* and *Core* sections I left exactly as-is in the given Arty example.
 - In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
 - In the *Frequency* section, I set *sys_clk_freq* to 50MHz. 50MHz has been the system clock frequency in the previous BoxLambda test builds as well. Also, I haven't been able to close timing at 100MHz. 
@@ -397,6 +395,7 @@ module litedram (
 ```
 
 Some points worth noting about this interface:
+
 - A Wishbone control port is generated along with the two requested user ports. LiteDRAM CSR register access is done through this control port.
 - All three Wishbone ports are *classic* Wishbone ports, not *pipelined*. There is no *stall* signal.
 - The Wishbone port addresses are word addresses, not byte addresses.
@@ -410,6 +409,7 @@ I created a *litedram_wrapper.sv* module around litedram.v:
 [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv)
 
 This wrapper contains:
+
 - byte-to-word address adaptation on all three Wishbone ports.
 - Pipelined-to-Classic Wishbone adaptation. The adapter logic comes straight out of the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The *stall* signal is used to avoid pipelining:
   

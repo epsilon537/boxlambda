@@ -71,7 +71,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
 
-- **Ibex**: The name of the Risc-V CPU core used by BoxLambda.
+- **Ibex**: The name of the RISC-V CPU core used by BoxLambda.
 
 - **I/F**: Interface.
   

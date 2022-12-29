@@ -9,7 +9,7 @@ comments: true
 *LiteDRAM in the BoxLambda Architecture.*
 
 Initially, the plan was to use **Xilinx's MIG** (Memory Interface Generator) to generate a DDR Memory Controller for Boxlambda. At the time, that was (and maybe still is) the consensus online when I was looking for memory controller options for the Arty A7. 
-Meanwhile, [Reddit user yanangao suggested I take a look at project **LiteX** for a memory controller](https://www.reddit.com/r/FPGA/comments/uaquax/comment/i6he2rx/?utm_source=share&utm_medium=web2x&context=3). I took the advice and started playing around a bit with Litex. One thing led to another and, long story short, BoxLambda now has a DDR memory controller based on **LiteDRAM**, a core of the *LiteX* project. If you're interested in the longer story, read on.
+Meanwhile, Reddit user yanangao suggested I take a look at project **LiteX** for a memory controller. I took the advice and started playing around a bit with Litex. One thing led to another and, long story short, BoxLambda now has a DDR memory controller based on **LiteDRAM**, a core of the *LiteX* project. If you're interested in the longer story, read on.
 
 Recap
 -----
@@ -87,7 +87,7 @@ Why choose LiteDRAM over Xilinx MIG?
   
 Generating a LiteDRAM core
 --------------------------
-LiteDRAM is a highly configurable core (because of Migen). For an overview of the core's features, please take a look at the LiteDRAM repository's README file:
+LiteDRAM is a highly configurable core (because of Migen). For an overview of the core's features, take a look at the LiteDRAM repository's README file:
 
 [https://github.com/enjoy-digital/litedram/blob/master/README.md](https://github.com/enjoy-digital/litedram/blob/master/README.md)
 
@@ -238,7 +238,7 @@ Integrating the LiteDRAM core
 *Litedram_wrapper*
 ==================
 
-I created a *litedram_wrapper.sv* module around litedram.v:
+I created a *litedram_wrapper* module around *litedram.v*:
 
 [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv)
 
@@ -266,8 +266,8 @@ One Rookie mistake I made early on was to just set the Wishbone *stall* signal t
 
 Hence the pipelined-to-classic Wishbone adapter in *litedram_wrapper*.
 
-More Wishbone Issues: Core2WB and WB_Interconnect_SharedBus
-===========================================================
+More Wishbone Issues: *Core2WB* and *WB_Interconnect_SharedBus*
+===============================================================
 With the *litedram_wrapper* in place, Wishbone transactions still weren't working properly. Waveform analysis shows that, from the point of view of *litedram_wrapper*, the Wishbone Bus Master wasn't well-behaved. That problem could either come from the Ibex memory-interface-to-wishbone adapter, *core2wb.sv*, or the Wishbone shared bus implementation used by the test build, *wb_interconnect_shared_bus.sv*, or both.
 
 This is the Ibex Memory Interface specification:
@@ -282,15 +282,15 @@ The job of *core2wb* is to adapt that interface to a pipelined Wishbone bus mast
 
 *From Ibex to LiteDRAM.*
 
-*core2wb.sv* and *wb_interconnect_shared_bus.sv* are part of the *ibex_wb* repository. The *ibex_wb* repository no longer appears to be actively maintained. I looked long and hard at the implementation of the two modules and ultimately decided that I couldn't figure out the author's reasoning. I decided to re-implement both modules: 
+*core2wb.sv* and *wb_interconnect_shared_bus.sv* are part of the [ibex_wb](https://github.com/epsilon537/ibex_wb) repository. The *ibex_wb* repository no longer appears to be actively maintained. I looked long and hard at the implementation of the two modules and ultimately decided that I couldn't figure out the author's reasoning. I decided to re-implement both modules: 
 
-- *Core2wb* has two states: *Idle* and *Transaction Ongoing*. In the Idle state, when Ibex signals a transaction request (core.req), the Ibex memory interface signals get registered, a single access pipelined Wishbone transaction is generated and *core2wb* goes to *Transaction Ongoing* state. When a WB ACK or ERR response is received, core2wb goes back to idle. While *Transaction Ongoing* state, the memory interface grant (*gnt*) signal is held low, so further transaction requests are stalled until *core2wb* is idle again Multiple outstanding transactions are currently not supported. I hope to add that capability someday.
+- [Core2wb](https://github.com/epsilon537/ibex_wb/blob/master/rtl/core2wb.sv) has two states: *Idle* and *Transaction Ongoing*. In the Idle state, when Ibex signals a transaction request (core.req), the Ibex memory interface signals get registered, a single access pipelined Wishbone transaction is generated and *core2wb* goes to *Transaction Ongoing* state. When a WB ACK or ERR response is received, core2wb goes back to idle. While *Transaction Ongoing* state, the memory interface grant (*gnt*) signal is held low, so further transaction requests are stalled until *core2wb* is idle again Multiple outstanding transactions are currently not supported. I hope to add that capability someday.
 
 ![Core2WB State Diagram.](../assets/core2wb_fsm.drawio.png)
 
 *Core2WB State Diagram.* 
 
-- *WB_interconnect_shared_bus* also has two states: In the _Idle_ state, a priority arbiter monitors the CYC signal of participating Bus Masters. When one or more Bus Masters assert CYC, the arbiter grants access to the lowest order Bus Master and goes to *Transaction Ongoing* state. When that Bus Master de-asserts CYC again, we go back to Idle state. Slave selection and forwarding of WB signals is done with combinatorial logic.
+- [WB_interconnect_shared_bus](https://github.com/epsilon537/ibex_wb/blob/master/soc/common/rtl/wb_interconnect_sharedbus.sv) also has two states: In the _Idle_ state, a priority arbiter monitors the CYC signal of participating Bus Masters. When one or more Bus Masters assert CYC, the arbiter grants access to the lowest order Bus Master and goes to *Transaction Ongoing* state. When that Bus Master de-asserts CYC again, we go back to Idle state. Slave selection and forwarding of WB signals is done with combinatorial logic.
 
 ![WB_Interconnect_Shared_Bus State Diagram.](../assets/wb_shared_bus_fsm.drawio.png)
 
@@ -483,7 +483,7 @@ make run
 Other Changes
 -------------
 
-- To minimize the differences with the Arty A7-35T (*Little* BoxLambda), I decided to use the Arty A7-100T rather than the Nexys A7 as the *Big* BoxLambda variant.
+- To minimize the differences with the Arty A7-35T (*Little BoxLambda*), I decided to use the Arty A7-100T rather than the Nexys A7 as the *Big BoxLambda* variant.
   
 - I noticed belatedly that I didn't create a constraint for the *tck* JTAG clock, so no timing analysis could be done on the JTAG logic. I added the following to the *.xdc* constraints file. Vivado's timing analysis is much happier now.
 
@@ -493,9 +493,9 @@ Other Changes
 create_clock -period 1000.000 -name dmi_jtag_inst/i_dmi_jtag_tap/tck_o -waveform {0.000 500.000} [get_pins dmi_jtag_inst/i_dmi_jtag_tap/i_tap_dtmcs/TCK]
 ```
 
-- I have merged the development branch to the master branch. Going forward, I intend to do that every time I put down a 'release' label for a new Blog post.
+- I have merged the development branch to the master branch. Going forward, I intend to do that every time I put down a release label for a new Blog post.
   
 Interesting Links
 -----------------
-[https://github.com/antonblanchard/microwatt](https://github.com/antonblanchard/microwatt): An Open-Source FPGA SoC by Anton Blanchard using LiteDRAM. I found it helpful to look at that code base to figure out how to integrate LiteDRAM into BoxLanmbda.
+[https://github.com/antonblanchard/microwatt](https://github.com/antonblanchard/microwatt): An Open-Source FPGA SoC by Anton Blanchard using LiteDRAM. I found it helpful to look at that code base to figure out how to integrate LiteDRAM into BoxLambda.
 

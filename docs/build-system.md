@@ -98,10 +98,12 @@ The Makefile at the root of the repository has the following targets defined:
 ### Makefile Variables
 
 Component and Project Makefiles define the following Makefile variables:
+
 - **TOP_DIR**: Relative path to the root directory of the repository.
 - **TOP_MODULE**: Identifies the top RTL module of that particular build. This info is passed on to both Verilator and the Vivado synthesizer. Specifying the top module in a design avoids ambiguity and associated build warnings/errors.
 
 Additionally, component Makefiles define the following Makefile variable:
+
 - **OOC**: This is a flag indicating Out-of-Context Synthesis. The value corresponds to the Bender.yml target used to select OOC specific files and defines.
 
 
@@ -133,7 +135,8 @@ Currently, the build system uses the following Bender targets:
 
 - **vivado**: set when synthesizing using Vivado.
 - **verilator**: set when linting using Verilator.
-- **memory**: set when retrieving memory files for this component or project.
+- **memory_sim**: set when retrieving memory files for simulation builds of this component or project.
+- **memory_fpga**: set when retrieving memory files for FPGA builds of this component or project. 
 - **constraints**: set when retrieving *.xdc* constraints files for this component or project.
 
 ### Verilator Lint Waivers
@@ -154,8 +157,8 @@ A component or project directory typically contains the following files and subd
 ├── lint.vlt: Lint waivers.
 ├── generated
 │   └── <files and directories generated during synthesis or verilation. 
-├── src
-│   └── <Boxlambda specific HDL sources for given component/project>
+├── rtl
+│   └── <Boxlambda specific RTL sources for given component/project>
 └── sim
     └── <C++ test bench code for given component/source>
 ```
