@@ -6,3 +6,6 @@ site
 .jekyll-metadata
 *.bkp
 vendor
+.editorconfig
+settings.json
+

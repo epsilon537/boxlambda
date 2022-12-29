@@ -9,6 +9,7 @@ nav:
     - Goals and Requirement Analysis: goals-and-requirement-analysis.md
     - Architecture: architecture.md
     - Components: components.md
+    - Clocks and Reset: clocks_and_reset.md
     - Interrupts: interrupts.md
     - Estimated FPGA Utilization: estimated-fpga-utilization.md
     - Git Workflow: git-workflow.md

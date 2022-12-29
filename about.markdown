@@ -4,7 +4,7 @@ title: About BoxLambda
 permalink: /about/
 ---
 
-![Nexys Draft Architecture Block Diagram](assets/Nexys_Arch_Diagram_Doc.png)
+![Draft Architecture Block Diagram](assets/Arch_Diagram_About.png)
 
 **BoxLambda** is an open-source project with the goal of creating a retro-style FPGA-based microcomputer. The microcomputer serves as a platform for software and RTL experimentation.
 
@@ -19,7 +19,7 @@ BoxLambda is a software-hardware cross-over project. The plan is to provide room
         - **Single User/Single Tasking OS** booting to a console shell.
     - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components.
         - Support for partial FPGA reconfiguration.
-- Target Hardware is Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start) and/or the [Nexys-A7](https://digilent.com/reference/programmable-logic/nexys-a7/start).
+- Target Hardware is Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start).
 - The computer should support the following peripherals:
   - Keyboard
   - Mouse (optional)

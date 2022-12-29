@@ -1,12 +1,12 @@
 Architecture
 ------------
 
-### The Nexys Configuration
+### The Arty A7-100T Configuration
 
-![Nexys Draft Architecture Block Diagram](assets/Nexys_Arch_Diagram_Doc.png)
-*BoxLambda Draft Architecture Block Diagram for Nexys A7-100T.*
+![Draft Architecture Block Diagram for Arty A7-100T](assets/Arch_Diagram_Big.drawio.png)
+*BoxLambda Draft Architecture Block Diagram for Arty A7-100T.*
 
-This is an architecture diagram showing the Nexys A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
+This is an architecture diagram showing the Arty A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
 
 #### Internal RAM
 
@@ -26,11 +26,6 @@ Both the Processor Bus and the DMA bus are 32-bit pipelined mode Wishbone buses.
 
 A bus on a block diagram is just a line connecting blocks. In reality, the *Interconnect* consists of Cross Bars, Arbiters, Address Decoders, and Bridges. I will follow up with an architecture diagram showing the BoxLambda Interconnect details. 
 
-To build the Interconnect, I will make use of the components contributed by the gentlemen below:
-
-- **Alexforencich** published a collection of components that can be used to build an Interconnect: [https://github.com/alexforencich/verilog-wishbone/](https://github.com/alexforencich/verilog-wishbone/)
-- **ZipCPU** did the same. His components are well-documented, including cross-references with insightful articles on the ZipCPU website: [https://github.com/ZipCPU/wb2axip](https://github.com/ZipCPU/wb2axip)
-
 #### The Black Box, and other Reconfigurable Partitions
 
 The Black Box Partition is an empty area in the FPGA's floorplan. This is where you can insert your application-specific logic. Do you need hardware-assisted collision detection for your Bullet-Hell Shoot'em Up game? Put it in the Black Box. A DSP? A CORDIC core? More RAM? As long as it fits the floor plan, you can put it in the Black Box region. The Black Box has bus master and slave ports on both system buses.
@@ -45,14 +40,17 @@ Reconfigurable Modules require a reconfigurable clocking strategy. That's the ro
 
 #### External Memory Access
 
-The Memory Controller is equipped with an AXI4 port. That's convenient because that's also what the DFX Controller uses to fetch the Reconfigurable Modules' bitstreams. 
-To hook up the system buses, we use a Wishbone to AXI bridge. This bridge will introduce additional memory access latency, but that should be acceptable because this path should not be used for latency-critical operations.
+The Memory Controller is equipped with three Wishbone ports:
+
+- a Control Port, attached to the Processor Bus.
+- a User Port, attached to the Processor Bus.
+- another User Ports, attached to the DMA Bus.
 
 Note that the CPU has memory-mapped access to DDR memory and can execute code directly from DDR memory. DDR memory access is not fully deterministic, however. CPU instructions executing from DDR will not have a fixed cycle count.
 
-### The Arty A7 Configuration
+### The Arty A7-35T Configuration
 
-![Arty Draft Architecture Block Diagram](assets/Arty_Arch_Diagram_Doc.png)
+![Draft Architecture Block Diagram for Arty A7-35T](assets/Arch_Diagram_Little.drawio.png)
 *BoxLambda Draft Architecture Block Diagram for Arty A7-35T.*
 
 This architecture diagram shows the Arty A7-35T configuration.
@@ -61,7 +59,7 @@ DFX is not supported on the A7-35T. Neither is the Hierarchical Design Flow. Thi
 
 The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM and the amount of DPRAM have been reduced to 64KB. 
 
-All other components are the same as in the Nexys Configuration.
+All other components are the same as in the Arty A7-100T Configuration.
 
 ### Example Software Usage Model
 
