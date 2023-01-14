@@ -9,3 +9,6 @@ sw/picolibc-build/*
 sw/picolibc-install/*
 #Emacs tags
 TAGS
+#vscode
+.vscode/*
+

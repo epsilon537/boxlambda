@@ -1,0 +1,36 @@
+---
+packages:
+  ibex:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/gw/projects/hello_world/../../components/ibex_wb_core/../../components/ibex
+    dependencies: []
+  ibex_wb_common:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/gw/projects/hello_world/../../components/ibex_wb_common
+    dependencies: []
+  ibex_wb_core:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/gw/projects/hello_world/../../components/ibex_wb_core
+    dependencies:
+      - ibex
+      - ibex_wb_common
+  wb_gpio:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/gw/projects/hello_world/../../components/wb_gpio
+    dependencies:
+      - ibex_wb_common
+  wbuart32:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/gw/projects/hello_world/../../components/wbuart32
+    dependencies:
+      - ibex_wb_common

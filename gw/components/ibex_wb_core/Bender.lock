@@ -1,0 +1,14 @@
+---
+packages:
+  ibex:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/gw/components/ibex_wb_core/../../components/ibex
+    dependencies: []
+  ibex_wb_common:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/gw/components/ibex_wb_core/../../components/ibex_wb_common
+    dependencies: []

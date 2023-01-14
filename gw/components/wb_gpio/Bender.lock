@@ -1,0 +1,8 @@
+---
+packages:
+  ibex_wb_common:
+    revision: ~
+    version: ~
+    source:
+      Path: /mnt/c/work/boxlambda/gw/components/wb_gpio/../../components/ibex_wb_common
+    dependencies: []
