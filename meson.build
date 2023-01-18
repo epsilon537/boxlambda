@@ -69,14 +69,11 @@ subdir('sw/projects/hello_world')
 subdir('sw/projects/picolibc_test')
 subdir('sw/projects/ddr_test')
 
-gw_components = [
-    'gw/components/ibex',
-    'gw/components/ibex_wb_core',
-    'gw/components/wb_gpio',
-    'gw/components/wbuart32',
-    'gw/components/riscv_dbg',
-    'gw/components/litedram'
-]
-
+subdir('gw/components/ibex')
+subdir('gw/components/ibex_wb_core')
+subdir('gw/components/wb_gpio')
+subdir('gw/components/wbuart32')
+subdir('gw/components/riscv_dbg')
+subdir('gw/components/litedram')
 
 subdir('gw/projects/hello_world')
