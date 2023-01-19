@@ -12,3 +12,7 @@ TAGS
 #vscode
 .vscode/*
 
+#build trees
+build
+
+

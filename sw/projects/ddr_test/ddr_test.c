@@ -9,7 +9,7 @@
 #include "platform.h"
 #include "utils.h"
 #include "sdram.h"
-#include "memtest.h"
+#include "libbase/memtest.h"
 
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 

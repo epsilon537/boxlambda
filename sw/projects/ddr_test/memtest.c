@@ -1,5 +1,5 @@
-#include "memtest.h"
-#include "lfsr.h"
+#include "libbase/memtest.h"
+#include "libbase/lfsr.h"
 
 #include <stdio.h>
 #include <system.h>
