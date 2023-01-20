@@ -14,7 +14,7 @@ function(link_internal_create_mem _tgt)
     )
 
     set_target_properties(${_tgt} PROPERTIES LINK_DEPENDS ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld)
-    set_target_properties(${_tgt} PROPERTIES ADDITIONAL_CLEAN_FILES ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map)
+    set_target_properties(${_tgt} PROPERTIES ADDITIONAL_CLEAN_FILES ${_tgt}.map)
 
     add_custom_command(
         TARGET
