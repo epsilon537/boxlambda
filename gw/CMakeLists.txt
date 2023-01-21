@@ -10,4 +10,4 @@ else()
 endif()
 
 add_subdirectory(components)
-
+add_subdirectory(projects)

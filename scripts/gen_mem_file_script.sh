@@ -1,10 +1,8 @@
 #! /bin/sh
 
-INFILE=$1
-OUTFILE=$2
+IN_MEM_FILE=$1
+OUT_MEM_FILE=$2
+SCRIPT_FILE_NAME=$3
 
-INFILE_BASENAME=$(basename $INFILE)
-OUTDIR=$(dirname $OUTFILE)
-
-cp $INFILE $OUTDIR 
-echo "add_files -norecurse $OUTDIR/$INFILE_BASENAME" > $OUTFILE
+cp $IN_MEM_FILE $OUT_MEM_FILE
+echo "add_files -norecurse $OUT_MEM_FILE" > $SCRIPT_FILE_NAME

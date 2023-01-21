@@ -9,21 +9,7 @@ VIVADO_SCRIPT=$3
 
 CONSTRAINTS_SCRIPT="$4"
 
-#if [ -z $4 ]
-#then
-#    CONSTRAINTS_SCRIPT=""
-#else
-#    CONSTRAINTS_SCRIPT="-constraints `cat $4`"
-#fi
-
 MEM_FILES_SCRIPT="$5"
-
-#if [ -z $5 ]
-#then
-#    MEM_FILES_SCRIPT=""
-#else
-#    MEM_FILES_SCRIPT="-mem_files `cat $5`"
-#fi
 
 OUT_DIR=$6
 

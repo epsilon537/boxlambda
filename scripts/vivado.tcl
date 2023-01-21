@@ -34,10 +34,10 @@ puts "cmd: $cmd"
 #sources is a generated TCL script adding HDL sources to the Vivado project
 puts "sources: $sources"
 
-#constraints is a generated TCL script add a constraints file to the Vivado project
+#constraints is a generated TCL script that adds a constraints file to the Vivado project
 puts "constraints: $constraints"
 
-#mem_files is a generated TCL script to add memory files to the Vivado project
+#mem_files is a generated TCL script that adds memory files to the Vivado project
 puts "mem_files: $mem_files"
 
 puts "outputDir: $outputDir"
@@ -51,12 +51,22 @@ source $sources
 
 #Only source the mem_file script if it's passed in and actually exists.
 if {($mem_files != "") && ([file exists $mem_files] == 1)} {
+    puts "sourcing mem_files script." 
+    puts $mem_files
     source $mem_files
+} else {
+    puts "mem file script not passed in, or file does not exist." 
+    puts $mem_files
 }
 
 #Only source the constraints script if it's passed in and actually exists.
 if {($constraints != "") && ([file exists $constraints] == 1)} {
+    puts "sourcing constraints script." 
+    puts $constraints
     source $constraints
+} else {
+    puts "contraints script not passed in, or file does not exist." 
+    puts $constraints
 }
 
 set_property source_mgmt_mode None [current_project]
@@ -64,6 +74,9 @@ set_property source_mgmt_mode None [current_project]
 update_compile_order -fileset sources_1
 
 set_property top $top [current_fileset]
+
+#Suppress INFO messages
+set_msg_config -severity INFO -suppress
 
 #The synthesis step
 if {($cmd == "synth") || ($cmd == "impl")} {

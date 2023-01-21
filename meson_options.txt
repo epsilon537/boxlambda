@@ -1,2 +1,0 @@
-option('sim', type: 'boolean', value: false,
-description: 'Set to true for simulation builds.')

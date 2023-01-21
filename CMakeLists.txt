@@ -21,6 +21,8 @@ endif()
 
 message("Build Type: ${CMAKE_BUILD_TYPE}.")
 
+enable_testing()
+
 add_subdirectory(sw)
 add_subdirectory(gw)
 
