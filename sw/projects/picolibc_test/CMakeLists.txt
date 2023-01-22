@@ -1,4 +1,5 @@
 add_executable(picolibc_test
+	EXCLUDE_FROM_ALL
 	picolibc_test.c
 )
 

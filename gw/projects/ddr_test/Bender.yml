@@ -29,11 +29,11 @@ sources:
   - target: verilator
     files:
       - sim/sim_main.cpp
-      - ../../sub/wbuart32/bench/cpp/uartsim.cpp
-      - ../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
-      - ../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c
+      - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
+      - ../../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
+      - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c
       - lint.vlt
-      - ../../sub/riscv-dbg/tb/SimJTAG.sv
+      - ../../../sub/riscv-dbg/tb/SimJTAG.sv
       - sim/sim_main.sv
   - target: any(vivado,verilator)
     defines:
@@ -43,8 +43,8 @@ sources:
     #spram and timer should be separate components, but since I won't use them
     #as Boxlambda components, I'm leaving them here in the hello world example
     files:
-      - ../../sub/ibex_wb/soc/common/rtl/wb_interconnect_sharedbus.sv
-      - ../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/spramx32.sv      
-      - ../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_spramx32.sv
-      - ../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_timer.sv
+      - ../../../sub/ibex_wb/soc/common/rtl/wb_interconnect_sharedbus.sv
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/spramx32.sv      
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_spramx32.sv
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_timer.sv
       - rtl/ddr_test_soc.sv

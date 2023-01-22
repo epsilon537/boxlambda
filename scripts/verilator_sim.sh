@@ -9,17 +9,17 @@ if [ -z "$5" ]
 then
     CFLAGS=""
 else
-    CFLAGS="-CFLAGS $5"
+    CFLAGS="$5"
 fi
 
 if [ -z "$6" ]
 then
     LDFLAGS=""
 else
-    LDFLAGS="-LDFLAGS $6"
+    LDFLAGS="$6"
 fi
 
 OUTDIR="$7"
 
-verilator $CFLAGS $LDFLAGS --top-module $TOP_MODULE -Wall -cc --trace-fst --exe -Os -x-assign 0 --build --prefix Vmodel \
+verilator -CFLAGS "$CFLAGS" -LDFLAGS "$LDFLAGS" --top-module $TOP_MODULE -Wall -cc --trace-fst --exe -Os -x-assign 0 --build --prefix Vmodel \
 --Mdir $OUTDIR $VLT_FILES $VLT_CPP_FILES $VERILATOR_SCRIPT

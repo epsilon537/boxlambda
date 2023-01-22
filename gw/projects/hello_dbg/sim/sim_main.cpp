@@ -128,7 +128,6 @@ int main(int argc, char** argv, char** env) {
     //is not set.
     jtag_set_bypass(!attach_debugger);
     
-    // Simulate for 10000000 timeprecision periods
     while (1 /*contextp->time() < 10000000*/) {
         // Historical note, before Verilator 4.200 Verilated::gotFinish()
         // was used above in place of contextp->gotFinish().

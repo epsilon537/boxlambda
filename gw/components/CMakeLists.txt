@@ -55,6 +55,7 @@ function (gw_component_rules)
     )
 
     add_custom_target(${_ooc_target}_lint
+        ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND

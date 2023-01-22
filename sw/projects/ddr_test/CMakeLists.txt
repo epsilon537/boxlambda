@@ -1,4 +1,5 @@
 add_executable(ddr_test
+	EXCLUDE_FROM_ALL
 	ddr_test.c
     memtest.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/libs/soc/gpio.c

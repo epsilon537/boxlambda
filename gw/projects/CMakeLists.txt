@@ -9,6 +9,7 @@ function (gw_project_rules)
     set(options)
     set(oneValueArgs NAME TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_OUT VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
     set(multiValueArgs)
+    
     cmake_parse_arguments(gw_project_rules
         "${options}"
         "${oneValueArgs}"
@@ -20,7 +21,7 @@ function (gw_project_rules)
     set(_prj_name ${gw_project_rules_PROJECT_NAME})
     set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET}) 
     set(_mem_file_out ${gw_project_rules_MEM_FILE_OUT}) 
-    set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS}) 
+    set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS})
     set(_verilator_ld_flags ${gw_project_rules_VERILATOR_LD_FLAGS})
 
     # Dummy output which is never actually produced. Anything that depends on
@@ -59,10 +60,12 @@ function (gw_project_rules)
     )
 
     add_custom_target(${_prj_name}_lint
+        ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
             ${PROJECT_SOURCE_DIR}/scripts/verilator_lint_check.sh ${_top_module} ${_prj_name}.vlts ${_prj_name}.waiver ${_prj_name}.verilator_script ${_verilator_cpp_flags} ${_verilator_ld_flags}
+        COMMAND_EXPAND_LISTS
         DEPENDS
             ${_prj_name}.vlts
             ${_prj_name}.verilator_script
@@ -134,6 +137,7 @@ function (gw_project_rules)
         "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt")
 
         add_custom_target(${_prj_name}_bit
+            ALL
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             COMMAND
@@ -183,6 +187,7 @@ function (gw_project_rules)
         )
 
         add_custom_target(${_prj_name}_sim
+            ALL
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
@@ -197,3 +202,6 @@ function (gw_project_rules)
 endfunction()
 
 add_subdirectory(hello_world)
+add_subdirectory(hello_dbg)
+add_subdirectory(picolibc_test)
+add_subdirectory(ddr_test)
