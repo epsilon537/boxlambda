@@ -1,4 +1,10 @@
-#! /bin/sh
+#! /bin/bash
+
+if [[ "$#" == 0  || "$1" == "-h" ]]
+then
+  echo "$0 <verilator script> <vlts file> <vlt cpp files> <top_module>"
+  exit 1
+fi
 
 VERILATOR_SCRIPT=`cat $1`
 VLT_FILES=`cat $2`

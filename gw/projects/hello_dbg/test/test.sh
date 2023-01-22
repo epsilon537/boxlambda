@@ -2,6 +2,12 @@
 
 #This a simple bash based shell script verifying OpenOCD based JTAG connectivity to a riscv32 target running 'Hello Word'.
 
+if [[ "$#" == 0  || "$1" == "-h" ]]
+then
+  echo "$0 <boxlambda src root dir>"
+  exit 1
+fi
+
 SRC_ROOT_DIR="$1"
 
 #Launch the verilator model with -d option to attach debugger.

@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 #BASEDIR is the location of the current script, i.e. the scripts directory
 BASEDIR=$(dirname "$0")

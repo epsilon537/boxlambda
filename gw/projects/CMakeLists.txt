@@ -154,6 +154,16 @@ function (gw_project_rules)
         set_target_properties(${_prj_name}_bit PROPERTIES ADDITIONAL_CLEAN_FILES 
         "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt;imp_timing.rpt;imp_util.rpt")
 
+        add_custom_target(${_prj_name}_load
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            COMMAND
+                ${PROJECT_SOURCE_DIR}/scripts/vivado_load_bitstream.sh
+            COMMENT
+                "Loading bitstream to target."
+            VERBATIM
+        )
+
     else() #sim:
         add_custom_command(
             OUTPUT

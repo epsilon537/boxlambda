@@ -1,4 +1,11 @@
-#! /bin/sh
+#! /bin/bash
+
+if [[ "$#" == 0  || "$1" == "-h" ]]
+then
+  echo "$0 <boxlambda src root dir> <outfile>"
+  exit 1
+fi
+
 
 # $1 = meson.current_source_dir()
 SRC_DIR="$1"

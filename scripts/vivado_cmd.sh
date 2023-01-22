@@ -1,4 +1,10 @@
-#! /bin/sh
+#! /bin/bash
+
+if [[ "$#" == 0  || "$1" == "-h" ]]
+then
+  echo "$0 <boxlambda src root dir> synth|impl <part> <vivado script> <constraints script> <mem_files_script> <output dir> <top module>"
+  exit 1
+fi
 
 #impl or synth command
 CMD=$1

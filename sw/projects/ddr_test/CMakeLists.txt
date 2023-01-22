@@ -41,4 +41,4 @@ else() #fpga:
 	target_compile_definitions(ddr_test PRIVATE -DMEMTEST_SIZE=\(256*1024*1024\))
 endif()
 
-link_internal_create_mem(ddr_test)
+link_internal_create_mem_file(ddr_test)

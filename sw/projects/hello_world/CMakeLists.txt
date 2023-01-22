@@ -8,4 +8,4 @@ add_executable(hello_world
 target_compile_options(hello_world
 	PRIVATE -g)
 
-link_internal_create_mem(hello_world)
+link_internal_create_mem_file(hello_world)

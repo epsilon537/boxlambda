@@ -1,4 +1,10 @@
-#! /bin/sh
+#! /bin/bash
+
+if [[ "$#" == 0  || "$1" == "-h" ]]
+then
+  echo "$0 <top module> <.vlts file> <waiver file> <verilator script>"
+  exit 1
+fi
 
 TOP_MODULE="$1"
 VLT_FILES_FILE="$2"
