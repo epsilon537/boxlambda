@@ -60,7 +60,6 @@ function (gw_project_rules)
     )
 
     add_custom_target(${_prj_name}_lint
-        ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
@@ -75,6 +74,8 @@ function (gw_project_rules)
             "Lint check."
         VERBATIM
     )
+
+    add_dependencies(lint_all ${_prj_name}_lint)
 
     add_custom_command(
             OUTPUT

@@ -9,5 +9,7 @@ else()
     message(FATAL_ERROR "Invalid part number: ${BL_TARGET_FPGA}.")
 endif()
 
+add_custom_target(lint_all ALL)
+
 add_subdirectory(components)
 add_subdirectory(projects)

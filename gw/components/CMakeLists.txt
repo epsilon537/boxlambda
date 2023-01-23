@@ -55,7 +55,6 @@ function (gw_component_rules)
     )
 
     add_custom_target(${_ooc_target}_lint
-        ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
@@ -69,6 +68,8 @@ function (gw_component_rules)
             "Lint check."
         VERBATIM
     )
+
+    add_dependencies(lint_all ${_ooc_target}_lint)
 
     if(CMAKE_BUILD_TYPE STREQUAL "fpga")
         add_custom_command(
