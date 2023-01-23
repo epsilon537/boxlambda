@@ -1,16 +1,23 @@
-#Set link internal settings for given target and add byproduct command generating a .mem file.
+#Function for SW project builds:
+#Set link-for-internal-memory settings for given target and add byproduct command generating a .mem file.
 function(link_internal_create_mem_file _tgt)
     target_link_libraries(${_tgt} bootstrap)
 
+    #Link-for-internal-memory implies linking in the bootstrap object library.
     target_link_options(${_tgt}
         PRIVATE
             -T${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld
            "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
     )
 
-    set_target_properties(${_tgt} PROPERTIES LINK_DEPENDS ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld)
-    set_target_properties(${_tgt} PROPERTIES ADDITIONAL_CLEAN_FILES ${_tgt}.map)
+    #Link script. Also make sure that the generated .map file gets cleaned up.
+    set_target_properties(${_tgt} 
+        PROPERTIES 
+            LINK_DEPENDS ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld
+            ADDITIONAL_CLEAN_FILES ${_tgt}.map
+    )
 
+    #.mem file generation commands.
     add_custom_command(
         TARGET
             ${_tgt}
@@ -29,6 +36,7 @@ function(link_internal_create_mem_file _tgt)
     )
 endfunction()
 
+#SW project builds:
 add_subdirectory(hello_world)
 add_subdirectory(picolibc_test)
 add_subdirectory(ddr_test)

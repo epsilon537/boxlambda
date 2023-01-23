@@ -1,5 +1,8 @@
 #! /bin/bash
 
+#This script verilates a design, i.e. it generates an Vmodel executable.
+#This script is used by the build system.
+
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
   echo "$0 <verilator script> <vlts file> <vlt cpp files> <top_module>"

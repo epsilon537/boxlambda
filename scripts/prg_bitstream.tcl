@@ -1,6 +1,4 @@
-#Simple script hacked together to download a bitstream to an IP connected target (i.e. you have hw_server running somewhere on your network).
-#Pretty much wired my own current setup. I haven't made any attempt yet to system-ize and/or product-ize it.
-#Customize as needed for your own setup.
+#Simple script hacked together to download a bitstream to a connected target 
 
 proc getopt {_argv name {_var ""} {default ""}} {
      upvar 1 $_argv argv $_var var

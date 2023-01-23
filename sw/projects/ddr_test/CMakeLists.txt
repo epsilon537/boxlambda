@@ -24,6 +24,7 @@ target_compile_definitions(ddr_test
 		-DSDRAM_TEST_DISABLE
 )
 
+#The memory controller SW interface is different between simulation and FPGA targets.
 if(CMAKE_BUILD_TYPE STREQUAL "sim")
 	target_include_directories(ddr_test
 		PRIVATE
@@ -41,4 +42,5 @@ else() #fpga:
 	target_compile_definitions(ddr_test PRIVATE -DMEMTEST_SIZE=\(256*1024*1024\))
 endif()
 
+#Function defined in parent CMakeLists.txt file:
 link_internal_create_mem_file(ddr_test)

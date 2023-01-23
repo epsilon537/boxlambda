@@ -1,3 +1,5 @@
+# CMake cross-compiler toolchain file.
+
 # the name of the target operating system
 set(CMAKE_SYSTEM_NAME Generic)
 

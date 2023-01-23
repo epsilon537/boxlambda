@@ -1,5 +1,9 @@
 #! /bin/bash
 
+#This script extracts the constraints file from the nearest bender.yml manifest and generates a tcl subscript
+#to be included in the main vivado.tcl script.
+#This script is used by the build system.
+
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
   echo "$0 <boxlambda src root dir> <outfile>"

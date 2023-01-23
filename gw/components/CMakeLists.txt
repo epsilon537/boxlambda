@@ -1,4 +1,4 @@
-#Function grouping gw component build rules.
+#Function grouping gateware component build rules.
 #TOP_MODULE: name of top module when synthesizing or linting component "Out Of Context" (OOC). Standalone in other words.
 #OOC_TARGET: name of Bender target set when synthesizing or linting component "Out Of Context" (OOC). Standalone in other words.
 #VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty. 
@@ -69,6 +69,7 @@ function (gw_component_rules)
         VERBATIM
     )
 
+    #Include lint target in the lint_all dependency list.
     add_dependencies(lint_all ${_ooc_target}_lint)
 
     if(CMAKE_BUILD_TYPE STREQUAL "fpga")
@@ -98,11 +99,13 @@ function (gw_component_rules)
             VERBATIM
         )
 
+        #A bunch of generated files to clean up when running make clean.
         set_target_properties(${_ooc_target}_synth PROPERTIES ADDITIONAL_CLEAN_FILES 
             "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt")
     endif()
 endfunction()
 
+#Gateware components:
 add_subdirectory(wbuart32)
 add_subdirectory(riscv-dbg)
 add_subdirectory(wb_gpio)

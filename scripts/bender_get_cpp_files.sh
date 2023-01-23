@@ -1,5 +1,9 @@
 #! /bin/bash
 
+#This script extracts just the .c/.cpp files to be verilated from the nearest bender.yml manifest and writes
+#those file paths in an output file.
+#This script is used by the build system.
+
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
   echo "$0 <boxlambda src root dir> <outfile>"

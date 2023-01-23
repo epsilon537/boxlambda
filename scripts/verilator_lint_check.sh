@@ -1,5 +1,8 @@
 #! /bin/bash
 
+#This script performs a lint check using verilator.
+#This script is used by the build system.
+
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
   echo "$0 <top module> <.vlts file> <waiver file> <verilator script>"

@@ -1,5 +1,9 @@
 #! /bin/bash
 
+#This script extracts the files to be verilated from the nearest bender.yml manifest and generates 
+#a verilator script.
+#This script is used by the build system.
+
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
   echo "$0 <boxlambda src root dir> <outfile>"

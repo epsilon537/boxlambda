@@ -1,4 +1,4 @@
-#Function grouping gw project build rules.
+#Function grouping gateware project build rules.
 #TOP_MODULE: name of top module when synthesizing or linting component "Out Of Context" (OOC). Standalone in other words.
 #PROJECT_NAME: project name, e.g. hello_dbg
 #MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
@@ -75,6 +75,7 @@ function (gw_project_rules)
         VERBATIM
     )
 
+    #Include lint target in the lint_all dependency list.
     add_dependencies(lint_all ${_prj_name}_lint)
 
     add_custom_command(
@@ -134,9 +135,11 @@ function (gw_project_rules)
             VERBATIM
         )
 
+        #A bunch of generated files that need to be cleaned up as part of make clean.
         set_target_properties(${_prj_name}_synth PROPERTIES ADDITIONAL_CLEAN_FILES 
         "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt")
 
+        #Add the bitstream generation target to make all (ALL property).
         add_custom_target(${_prj_name}_bit
             ALL
             WORKING_DIRECTORY
@@ -148,10 +151,11 @@ function (gw_project_rules)
                 ${_prj_name}.constraints_script.tcl 
                 ${_prj_name}.mem_file_script.tcl
             COMMENT
-                "Project synthesis."
+                "Project implementation and bitstream generation."
             VERBATIM
         )
 
+        #A bunch of generated files that need to be cleaned up as part of make clean.
         set_target_properties(${_prj_name}_bit PROPERTIES ADDITIONAL_CLEAN_FILES 
         "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt;imp_timing.rpt;imp_util.rpt")
 

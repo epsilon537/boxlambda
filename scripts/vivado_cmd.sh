@@ -1,5 +1,8 @@
 #! /bin/bash
 
+#This script is used to synthesize and/or implement a design using Vivado.
+#This script is used by the build system.
+
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
   echo "$0 <boxlambda src root dir> synth|impl <part> <vivado script> <constraints script> <mem_files_script> <output dir> <top module>"
