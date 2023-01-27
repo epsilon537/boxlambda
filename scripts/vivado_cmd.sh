@@ -27,6 +27,8 @@ TOP_MODULE=$7
 BASEDIR=$(dirname "$0")
 
 vivado -nolog -nojournal -mode batch -source $BASEDIR/vivado.tcl \
+	-notrace \
 	-tclargs -project $OUT_DIR/project -cmd $CMD -part $PART \
 	-sources $VIVADO_SCRIPT -constraints $CONSTRAINTS_SCRIPT \
 	-mem_files $MEM_FILES_SCRIPT -outputDir $OUT_DIR -top $TOP_MODULE
+

@@ -49,7 +49,9 @@ function (gw_project_rules)
         OUTPUT
             ${_prj_name}.verilator_script
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.verilator_script ${_prj_name}
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.verilator_script ${CMAKE_CURRENT_BINARY_DIR}/Vmodel ${_prj_name}
+        BYPRODUCTS
+            ${_prj_name}.verilator_script.dep
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
@@ -96,8 +98,10 @@ function (gw_project_rules)
         add_custom_command(
             OUTPUT
                 ${_prj_name}.vivado_script.tcl
+            BYPRODUCTS
+                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_name}.vivado_script.tcl.dep
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.vivado_script.tcl ${_prj_name}
+                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.vivado_script.tcl ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${_prj_name}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
@@ -121,7 +125,9 @@ function (gw_project_rules)
             VERBATIM
         )
 
-        add_custom_target(${_prj_name}_synth
+        add_custom_command(
+            OUTPUT
+                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             COMMAND
@@ -130,9 +136,20 @@ function (gw_project_rules)
                 ${_prj_name}.vivado_script.tcl 
                 ${_prj_name}.constraints_script.tcl 
                 ${_prj_name}.mem_file_script.tcl
+            DEPFILE
+                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_name}.vivado_script.tcl.dep
             COMMENT
                 "Project synthesis."
             VERBATIM
+        )
+
+        add_custom_target(${_prj_name}_synth
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS
+                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+            COMMENT
+                "Project synthesis target."
         )
 
         #A bunch of generated files that need to be cleaned up as part of make clean.
@@ -196,6 +213,8 @@ function (gw_project_rules)
                 ${_prj_name}.vlts 
                 ${_prj_name}.cpp_files
                 ${_mem_file_out}
+            DEPFILE
+                ${_prj_name}.verilator_script.dep
             COMMENT
                 "Generating Verilator Vmodel."
             VERBATIM

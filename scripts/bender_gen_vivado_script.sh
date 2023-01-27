@@ -6,7 +6,7 @@
 
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
-  echo "$0 <boxlambda src root dir> <outfile>"
+  echo "$0 <boxlambda src root dir> <outfile> <depfile target> <optional OOC target>"
   exit 1
 fi
 
@@ -16,14 +16,31 @@ SRC_DIR="$1"
 # $2 = output file, a vivado tcl script
 OUTFILE="$2"
 
-# $3 = optional OOC target
+# $3 = depfile target
+DEPFILE_TGT="$3"
+
+# $4 = optional OOC target
 #-z tests for empty string.
-if [ -z "$3" ]
+if [ -z "$4" ]
 then
   MIN_T_OOC=""
 else
-  MIN_T_OOC="-t$3"
+  MIN_T_OOC="-t$4"
 fi
 
 bender -d $SRC_DIR update
-bender -d $SRC_DIR script $MIN_T_OOC vivado > $OUTFILE
+bender -d $SRC_DIR script $MIN_T_OOC vivado > $OUTFILE.tmp
+sort "$OUTFILE.tmp" > "$OUTFILE.tmp.sorted"
+
+if cmp --silent -- "$OUTFILE.sorted" "$OUTFILE.tmp.sorted"; then
+  echo "No vivado script changes detected."
+else
+  echo "Updating vivado script".
+  cp $OUTFILE.tmp.sorted $OUTFILE.sorted
+  cp $OUTFILE.tmp $OUTFILE
+fi
+
+rm $OUTFILE.tmp*
+
+#Generate a depfile: Prepend each line with <target> :
+bender -d $SRC_DIR script $MIN_T_OOC -t vivado flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep

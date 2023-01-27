@@ -24,6 +24,8 @@ function (gw_component_rules)
     add_custom_command(
         OUTPUT always_rebuild
         COMMAND cmake -E echo
+        COMMENT
+            "always_rebuild dummy command."
     )
 
     add_custom_command(
@@ -44,7 +46,7 @@ function (gw_component_rules)
         OUTPUT
             ${_ooc_target}.verilator_script
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_ooc_target}.verilator_script ${_ooc_target}
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_ooc_target}.verilator_script "" ${_ooc_target}
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
@@ -75,9 +77,11 @@ function (gw_component_rules)
     if(CMAKE_BUILD_TYPE STREQUAL "fpga")
         add_custom_command(
             OUTPUT
-                ${_ooc_target}.vivado_script
+                ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script
+            BYPRODUCTS
+                ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script.dep
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_ooc_target}.vivado_script ${_ooc_target}
+                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_ooc_target}.vivado_script ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${_ooc_target}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
@@ -87,16 +91,29 @@ function (gw_component_rules)
             VERBATIM
         )
 
-        add_custom_target(${_ooc_target}_synth
-            WORKING_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}
+        add_custom_command(
+            OUTPUT
+                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
             COMMAND
                 ${PROJECT_SOURCE_DIR}/scripts/vivado_cmd.sh synth ${PART} ${_ooc_target}.vivado_script "" "" ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
-                ${_ooc_target}.vivado_script
+                ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script
+            DEPFILE
+                ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script.dep
             COMMENT
                 "Component OOC synthesis."
             VERBATIM
+        )
+
+        add_custom_target(${_ooc_target}_synth
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS
+                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+            COMMENT
+                "Component OOC synthesis target."
         )
 
         #A bunch of generated files to clean up when running make clean.

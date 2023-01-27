@@ -16,13 +16,20 @@ SRC_DIR="$1"
 # $2 = output file, containing constraints tcl script for vivado
 OUTFILE="$2"
 
-rm -f $OUTFILE
-
 bender -d $SRC_DIR update
 
 CONSTRAINTS=`bender -d $SRC_DIR script flist -n -t constraints`
 
 for constraint in $CONSTRAINTS
 do
-    echo add_files -fileset constrs_1 $constraint >> $OUTFILE
+    echo add_files -fileset constrs_1 $constraint >> $OUTFILE.tmp
 done
+
+if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
+  echo "No constraint filelist changes detected."
+else
+  echo "Updating constraint filelist".
+  cp $OUTFILE.tmp $OUTFILE
+fi
+
+rm -f $OUTFILE.tmp

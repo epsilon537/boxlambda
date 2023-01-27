@@ -25,5 +25,15 @@ BASEDIR=$(dirname "$0")
 BENDER_VLT=`bender -d $SRC_DIR script flist -t verilator | grep ".vlt$" | tr '\n' ' '`
 
 #'return' the default vlt and the lint.vlt retrieved from the bender manifest (if it has one).
-echo "$BASEDIR/lint_default.vlt $BENDER_VLT" > "$OUTFILE"
+echo "$BASEDIR/lint_default.vlt $BENDER_VLT" > "$OUTFILE.tmp"
+
+if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
+  echo "No .vlt changes detected."
+else
+  echo "Updating .vlt list".
+  cp $OUTFILE.tmp $OUTFILE
+fi
+
+rm $OUTFILE.tmp
+
 

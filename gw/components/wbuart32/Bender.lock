@@ -1,8 +1,7 @@
----
 packages:
   ibex_wb_common:
-    revision: ~
-    version: ~
+    revision: null
+    version: null
     source:
-      Path: /home/epsilon/work/boxlambda/gw/components/wbuart32/../../components/ibex_wb_common
+      Path: ../../components/ibex_wb_common
     dependencies: []
