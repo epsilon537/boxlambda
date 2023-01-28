@@ -1,5 +1,5 @@
 #Function grouping gateware project build rules.
-#TOP_MODULE: name of top module when synthesizing or linting component "Out Of Context" (OOC). Standalone in other words.
+#TOP_MODULE: name of top module.
 #PROJECT_NAME: project name, e.g. hello_dbg
 #MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
 #MEM_FILE_OUT: .mem file created by this function, and expected by the project build, e.g. spram.mem
@@ -127,15 +127,31 @@ function (gw_project_rules)
 
         add_custom_command(
             OUTPUT
-                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+                ${CMAKE_CURRENT_BINARY_DIR}/project.dep
+            COMMAND
+                ${PROJECT_SOURCE_DIR}/scripts/vivado_create_project.sh ${PART} ${_prj_name}.vivado_script.tcl ${_prj_name}.constraints_script.tcl ${_prj_name}.mem_file_script.tcl ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
+            BYPRODUCTS
+                ${CMAKE_CURRENT_BINARY_DIR}/project.xpr
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
-            COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/vivado_cmd.sh synth ${PART} ${_prj_name}.vivado_script.tcl ${_prj_name}.constraints_script.tcl ${_prj_name}.mem_file_script.tcl ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
             DEPENDS
-                ${_prj_name}.vivado_script.tcl 
+                ${_prj_name}.vivado_script.tcl
                 ${_prj_name}.constraints_script.tcl 
                 ${_prj_name}.mem_file_script.tcl
+            COMMENT
+                "Creating Vivado project."
+            VERBATIM
+        )
+
+        add_custom_command(
+            OUTPUT
+                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+            COMMAND
+                ${PROJECT_SOURCE_DIR}/scripts/vivado_synth.sh ${CMAKE_CURRENT_BINARY_DIR}
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS
+                ${CMAKE_CURRENT_BINARY_DIR}/project.dep
             DEPFILE
                 ${CMAKE_CURRENT_BINARY_DIR}/${_prj_name}.vivado_script.tcl.dep
             COMMENT
@@ -156,24 +172,33 @@ function (gw_project_rules)
         set_target_properties(${_prj_name}_synth PROPERTIES ADDITIONAL_CLEAN_FILES 
         "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt")
 
-        #Add the bitstream generation target to make all (ALL property).
-        add_custom_target(${_prj_name}_bit
-            ALL
+        add_custom_command(
+            OUTPUT
+                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/impl_1/${_top_module}.bit
+            COMMAND
+                ${PROJECT_SOURCE_DIR}/scripts/vivado_impl.sh ${CMAKE_CURRENT_BINARY_DIR}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
-            COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/vivado_cmd.sh impl ${PART} ${_prj_name}.vivado_script.tcl ${_prj_name}.constraints_script.tcl ${_prj_name}.mem_file_script.tcl ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
             DEPENDS
-                ${_prj_name}.vivado_script.tcl 
-                ${_prj_name}.constraints_script.tcl 
-                ${_prj_name}.mem_file_script.tcl
+                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
             COMMENT
-                "Project implementation and bitstream generation."
+                "Project implementation."
             VERBATIM
         )
 
+        #Add the bitstream generation target to make all (ALL property).
+        add_custom_target(${_prj_name}_impl
+            ALL
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS
+                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/impl_1/${_top_module}.bit
+            COMMENT
+                "Project implementation target."
+        )
+
         #A bunch of generated files that need to be cleaned up as part of make clean.
-        set_target_properties(${_prj_name}_bit PROPERTIES ADDITIONAL_CLEAN_FILES 
+        set_target_properties(${_prj_name}_impl PROPERTIES ADDITIONAL_CLEAN_FILES 
         "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt;imp_timing.rpt;imp_util.rpt")
 
         add_custom_target(${_prj_name}_load

@@ -18,7 +18,6 @@ proc getopt {_argv name {_var ""} {default ""}} {
 #Command line arguments accepted by the script
 getopt argv -project project ""
 getopt argv -part part "unknown"
-getopt argv -cmd cmd ""
 getopt argv -sources sources ""
 getopt argv -constraints constraints ""
 getopt argv -mem_files mem_files ""
@@ -27,9 +26,6 @@ getopt argv -top top ""
 
 puts "project: $project"
 puts "part: $part"
-
-#synth or impl, or something else like 'dryrun' if you just want to generate the Vivado project without actually kicking off synthesis or implementation.
-puts "cmd: $cmd"
 
 #sources is a generated TCL script adding HDL sources to the Vivado project
 puts "sources: $sources"
@@ -77,29 +73,5 @@ set_property top $top [current_fileset]
 
 #Suppress INFO messages
 set_msg_config -severity INFO -suppress
-
-#The synthesis step
-if {($cmd == "synth") || ($cmd == "impl")} {
-    # Launch Synthesis
-    launch_runs synth_1
-    wait_on_run synth_1 ; #wait for synthesis to complete before continuing
-    open_run synth_1 -name netlist_1
-    # Generate a timing and utilization report and write to disk
-    report_timing_summary -quiet -delay_type max -report_unconstrained -check_timing_verbose \
-	-max_paths 10 -input_pins -file $outputDir/syn_timing.rpt
-    report_utilization -quiet -file $outputDir/syn_util.rpt
-}
-
-#The implementation step
-if {$cmd == "impl"} {
-    # Launch Implementation
-    launch_runs impl_1 -to_step write_bitstream
-    wait_on_run impl_1 ; #wait for implementation to complete before continuing
-    # Generate a timing and utilization reports and write to disk
-    open_run impl_1
-    report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose \
-    -max_paths 10 -input_pins -file $outputDir/imp_timing.rpt
-    report_utilization -quiet -file $outputDir/imp_util.rpt
-}
 
 close_project

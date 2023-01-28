@@ -93,13 +93,29 @@ function (gw_component_rules)
 
         add_custom_command(
             OUTPUT
-                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+                ${CMAKE_CURRENT_BINARY_DIR}/project.dep
+            BYPRODUCTS
+                ${CMAKE_CURRENT_BINARY_DIR}/project.xpr
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/vivado_cmd.sh synth ${PART} ${_ooc_target}.vivado_script "" "" ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
+                ${PROJECT_SOURCE_DIR}/scripts/vivado_cmd.sh vivado_create_project ${PART} ${_ooc_target}.vivado_script "" "" ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
                 ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script
+            COMMENT
+                "Creating Vivado project."
+            VERBATIM
+        )
+
+        add_custom_command(
+            OUTPUT
+                ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+            COMMAND
+                ${PROJECT_SOURCE_DIR}/scripts/vivado_synth.sh ${CMAKE_CURRENT_BINARY_DIR}
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS
+                ${CMAKE_CURRENT_BINARY_DIR}/project.dep
             DEPFILE
                 ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script.dep
             COMMENT
