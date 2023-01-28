@@ -18,7 +18,7 @@ function (gw_project_rules)
     )
 
     set(_top_module ${gw_project_rules_TOP_MODULE}) 
-    set(_prj_name ${gw_project_rules_PROJECT_NAME})
+    set(_prj_comp_name ${gw_project_rules_PROJECT_NAME})
     set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET}) 
     set(_mem_file_out ${gw_project_rules_MEM_FILE_OUT}) 
     set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS})
@@ -33,9 +33,9 @@ function (gw_project_rules)
 
     add_custom_command(
         OUTPUT
-            ${_prj_name}.vlts
+            ${_prj_comp_name}.vlts
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_get_vlts.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.vlts
+            ${PROJECT_SOURCE_DIR}/scripts/bender_get_vlts.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vlts
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
@@ -47,81 +47,81 @@ function (gw_project_rules)
 
     add_custom_command(
         OUTPUT
-            ${_prj_name}.verilator_script
+            ${_prj_comp_name}.verilator_sources
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.verilator_script ${CMAKE_CURRENT_BINARY_DIR}/Vmodel ${_prj_name}
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.verilator_sources ${CMAKE_CURRENT_BINARY_DIR}/Vmodel ${_prj_comp_name}
         BYPRODUCTS
-            ${_prj_name}.verilator_script.dep
+            ${_prj_comp_name}.verilator_sources.dep
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
             always_rebuild
         COMMENT
-            "Generating verilator script."
+            "Generating verilator source list."
         VERBATIM
     )
 
-    add_custom_target(${_prj_name}_lint
+    add_custom_target(${_prj_comp_name}_lint
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/verilator_lint_check.sh ${_top_module} ${_prj_name}.vlts ${_prj_name}.waiver ${_prj_name}.verilator_script ${_verilator_cpp_flags} ${_verilator_ld_flags}
+            ${PROJECT_SOURCE_DIR}/scripts/verilator_lint_check.sh ${_top_module} ${_prj_comp_name}.vlts ${_prj_comp_name}.waiver ${_prj_comp_name}.verilator_sources ${_verilator_cpp_flags} ${_verilator_ld_flags}
         COMMAND_EXPAND_LISTS
         DEPENDS
-            ${_prj_name}.vlts
-            ${_prj_name}.verilator_script
+            ${_prj_comp_name}.vlts
+            ${_prj_comp_name}.verilator_sources
         BYPRODUCTS 
-            ${_prj_name}.waiver
+            ${_prj_comp_name}.waiver
         COMMENT
             "Lint check."
         VERBATIM
     )
 
     #Include lint target in the lint_all dependency list.
-    add_dependencies(lint_all ${_prj_name}_lint)
+    add_dependencies(lint_all ${_prj_comp_name}_lint)
 
     add_custom_command(
             OUTPUT
-                ${_prj_name}.mem_file_script.tcl ${_mem_file_out}
+                ${_prj_comp_name}.mem_file_list ${_mem_file_out}
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/gen_mem_file_script.sh $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/${_mem_file_out} ${_prj_name}.mem_file_script.tcl
+                ${PROJECT_SOURCE_DIR}/scripts/gen_mem_file_list.sh $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/${_mem_file_out} ${_prj_comp_name}.mem_file_list
             DEPENDS
                 ${_mem_file_tgt}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT
-                "Generating mem file script."
+                "Generating mem file list."
             VERBATIM
         )
 
     if(CMAKE_BUILD_TYPE STREQUAL "fpga")
         add_custom_command(
             OUTPUT
-                ${_prj_name}.vivado_script.tcl
+                ${_prj_comp_name}.vivado_sources
             BYPRODUCTS
-                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_name}.vivado_script.tcl.dep
+                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.vivado_sources.dep
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.vivado_script.tcl ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${_prj_name}
+                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vivado_sources ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${_prj_comp_name}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
                 always_rebuild
             COMMENT
-                "Generating vivado script."
+                "Generating vivado source list."
             VERBATIM
         )
 
         add_custom_command(
             OUTPUT
-                ${_prj_name}.constraints_script.tcl
+                ${_prj_comp_name}.constraints_file_list
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_constraints_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.constraints_script.tcl
+                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_constraints_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.constraints_file_list
             DEPENDS
                 always_rebuild
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT
-                "Generating constraints script."
+                "Generating constraints file list."
             VERBATIM
         )
 
@@ -129,15 +129,15 @@ function (gw_project_rules)
             OUTPUT
                 ${CMAKE_CURRENT_BINARY_DIR}/project.dep
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/vivado_create_project.sh ${PART} ${_prj_name}.vivado_script.tcl ${_prj_name}.constraints_script.tcl ${_prj_name}.mem_file_script.tcl ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
+                ${PROJECT_SOURCE_DIR}/scripts/vivado_create_project.sh ${PART} ${_prj_comp_name}.vivado_sources ${_prj_comp_name}.constraints_file_list ${_prj_comp_name}.mem_file_list ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
             BYPRODUCTS
                 ${CMAKE_CURRENT_BINARY_DIR}/project.xpr
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
-                ${_prj_name}.vivado_script.tcl
-                ${_prj_name}.constraints_script.tcl 
-                ${_prj_name}.mem_file_script.tcl
+                ${_prj_comp_name}.vivado_sources
+                ${_prj_comp_name}.constraints_file_list
+                ${_prj_comp_name}.mem_file_list
             COMMENT
                 "Creating Vivado project."
             VERBATIM
@@ -153,13 +153,13 @@ function (gw_project_rules)
             DEPENDS
                 ${CMAKE_CURRENT_BINARY_DIR}/project.dep
             DEPFILE
-                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_name}.vivado_script.tcl.dep
+                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.vivado_sources.dep
             COMMENT
                 "Project synthesis."
             VERBATIM
         )
 
-        add_custom_target(${_prj_name}_synth
+        add_custom_target(${_prj_comp_name}_synth
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
@@ -169,7 +169,7 @@ function (gw_project_rules)
         )
 
         #A bunch of generated files that need to be cleaned up as part of make clean.
-        set_target_properties(${_prj_name}_synth PROPERTIES ADDITIONAL_CLEAN_FILES 
+        set_target_properties(${_prj_comp_name}_synth PROPERTIES ADDITIONAL_CLEAN_FILES 
         "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt")
 
         add_custom_command(
@@ -187,7 +187,7 @@ function (gw_project_rules)
         )
 
         #Add the bitstream generation target to make all (ALL property).
-        add_custom_target(${_prj_name}_impl
+        add_custom_target(${_prj_comp_name}_impl
             ALL
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
@@ -198,10 +198,10 @@ function (gw_project_rules)
         )
 
         #A bunch of generated files that need to be cleaned up as part of make clean.
-        set_target_properties(${_prj_name}_impl PROPERTIES ADDITIONAL_CLEAN_FILES 
+        set_target_properties(${_prj_comp_name}_impl PROPERTIES ADDITIONAL_CLEAN_FILES 
         "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt;imp_timing.rpt;imp_util.rpt")
 
-        add_custom_target(${_prj_name}_load
+        add_custom_target(${_prj_comp_name}_load
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             COMMAND
@@ -214,9 +214,9 @@ function (gw_project_rules)
     else() #sim:
         add_custom_command(
             OUTPUT
-                ${_prj_name}.cpp_files
+                ${_prj_comp_name}.cpp_files
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bender_get_cpp_files.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.cpp_files
+                ${PROJECT_SOURCE_DIR}/scripts/bender_get_cpp_files.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.cpp_files
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
@@ -230,22 +230,22 @@ function (gw_project_rules)
             OUTPUT
                 Vmodel
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/verilator_sim.sh ${_prj_name}.verilator_script ${_prj_name}.vlts ${_prj_name}.cpp_files ${_top_module} ${_verilator_cpp_flags} ${_verilator_ld_flags} ${CMAKE_CURRENT_BINARY_DIR}
+                ${PROJECT_SOURCE_DIR}/scripts/verilator_sim.sh ${_prj_comp_name}.verilator_sources ${_prj_comp_name}.vlts ${_prj_comp_name}.cpp_files ${_top_module} ${_verilator_cpp_flags} ${_verilator_ld_flags} ${CMAKE_CURRENT_BINARY_DIR}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
-                ${_prj_name}.verilator_script 
-                ${_prj_name}.vlts 
-                ${_prj_name}.cpp_files
+                ${_prj_comp_name}.verilator_sources 
+                ${_prj_comp_name}.vlts 
+                ${_prj_comp_name}.cpp_files
                 ${_mem_file_out}
             DEPFILE
-                ${_prj_name}.verilator_script.dep
+                ${_prj_comp_name}.verilator_sources.dep
             COMMENT
                 "Generating Verilator Vmodel."
             VERBATIM
         )
 
-        add_custom_target(${_prj_name}_sim
+        add_custom_target(${_prj_comp_name}_sim
             ALL
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
@@ -256,7 +256,7 @@ function (gw_project_rules)
             VERBATIM
         )
 
-        set_target_properties(${_prj_name}_sim PROPERTIES ADDITIONAL_CLEAN_FILES ".")
+        set_target_properties(${_prj_comp_name}_sim PROPERTIES ADDITIONAL_CLEAN_FILES ".")
     endif()    
 endfunction()
 

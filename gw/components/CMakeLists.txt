@@ -1,11 +1,11 @@
 #Function grouping gateware component build rules.
 #TOP_MODULE: name of top module when synthesizing or linting component "Out Of Context" (OOC). Standalone in other words.
-#OOC_TARGET: name of Bender target set when synthesizing or linting component "Out Of Context" (OOC). Standalone in other words.
+#COMPONENT_NAME: name of component, e.g. wbuart32
 #VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty. 
 #VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty. 
 function (gw_component_rules)
     set(options)
-    set(oneValueArgs NAME TOP_MODULE OOC_TARGET VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
+    set(oneValueArgs NAME TOP_MODULE COMPONENT_NAME VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
     set(multiValueArgs)
     cmake_parse_arguments(gw_component_rules
         "${options}"
@@ -15,7 +15,7 @@ function (gw_component_rules)
     )
 
     set(_top_module ${gw_component_rules_TOP_MODULE}) 
-    set(_ooc_target ${gw_component_rules_OOC_TARGET}) 
+    set(_prj_comp_name ${gw_component_rules_COMPONENT_NAME}) 
     set(_verilator_cpp_flags ${gw_component_rules_VERILATOR_CPP_FLAGS}) 
     set(_verilator_ld_flags ${gw_component_rules_VERILATOR_LD_FLAGS})
 
@@ -30,9 +30,9 @@ function (gw_component_rules)
 
     add_custom_command(
         OUTPUT
-            ${_ooc_target}.vlts
+            ${_prj_comp_name}.vlts
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_get_vlts.sh ${CMAKE_CURRENT_LIST_DIR} ${_ooc_target}.vlts
+            ${PROJECT_SOURCE_DIR}/scripts/bender_get_vlts.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vlts
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
@@ -44,50 +44,50 @@ function (gw_component_rules)
 
     add_custom_command(
         OUTPUT
-            ${_ooc_target}.verilator_script
+            ${_prj_comp_name}.verilator_sources
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_ooc_target}.verilator_script "" ${_ooc_target}
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.verilator_sources "" ${_prj_comp_name}
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
             always_rebuild
         COMMENT
-            "Generating verilator script."
+            "Generating verilator source list."
         VERBATIM
     )
 
-    add_custom_target(${_ooc_target}_lint
+    add_custom_target(${_prj_comp_name}_lint
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/verilator_lint_check.sh ${_top_module} ${_ooc_target}.vlts ${_ooc_target}.waiver ${_ooc_target}.verilator_script ${_verilator_cpp_flags} ${_verilator_ld_flags}
+            ${PROJECT_SOURCE_DIR}/scripts/verilator_lint_check.sh ${_top_module} ${_prj_comp_name}.vlts ${_prj_comp_name}.waiver ${_prj_comp_name}.verilator_sources ${_verilator_cpp_flags} ${_verilator_ld_flags}
         DEPENDS
-            ${_ooc_target}.vlts
-            ${_ooc_target}.verilator_script
+            ${_prj_comp_name}.vlts
+            ${_prj_comp_name}.verilator_sources
         BYPRODUCTS 
-            ${_ooc_target}.waiver
+            ${_prj_comp_name}.waiver
         COMMENT
             "Lint check."
         VERBATIM
     )
 
     #Include lint target in the lint_all dependency list.
-    add_dependencies(lint_all ${_ooc_target}_lint)
+    add_dependencies(lint_all ${_prj_comp_name}_lint)
 
     if(CMAKE_BUILD_TYPE STREQUAL "fpga")
         add_custom_command(
             OUTPUT
-                ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script
+                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.vivado_sources
             BYPRODUCTS
-                ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script.dep
+                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.vivado_sources.dep
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_script.sh ${CMAKE_CURRENT_LIST_DIR} ${_ooc_target}.vivado_script ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${_ooc_target}
+                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vivado_sources ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${_prj_comp_name}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
                 always_rebuild
             COMMENT
-                "Generating vivado script."
+                "Generating vivado source list."
             VERBATIM
         )
 
@@ -97,11 +97,11 @@ function (gw_component_rules)
             BYPRODUCTS
                 ${CMAKE_CURRENT_BINARY_DIR}/project.xpr
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/vivado_cmd.sh vivado_create_project ${PART} ${_ooc_target}.vivado_script "" "" ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
+                ${PROJECT_SOURCE_DIR}/scripts/vivado_create_project.sh ${PART} ${_prj_comp_name}.vivado_sources "" "" ${CMAKE_CURRENT_BINARY_DIR} ${_top_module}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
-                ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script
+                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.vivado_sources
             COMMENT
                 "Creating Vivado project."
             VERBATIM
@@ -117,13 +117,13 @@ function (gw_component_rules)
             DEPENDS
                 ${CMAKE_CURRENT_BINARY_DIR}/project.dep
             DEPFILE
-                ${CMAKE_CURRENT_BINARY_DIR}/${_ooc_target}.vivado_script.dep
+                ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.vivado_sources.dep
             COMMENT
                 "Component OOC synthesis."
             VERBATIM
         )
 
-        add_custom_target(${_ooc_target}_synth
+        add_custom_target(${_prj_comp_name}_synth
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
@@ -133,7 +133,7 @@ function (gw_component_rules)
         )
 
         #A bunch of generated files to clean up when running make clean.
-        set_target_properties(${_ooc_target}_synth PROPERTIES ADDITIONAL_CLEAN_FILES 
+        set_target_properties(${_prj_comp_name}_synth PROPERTIES ADDITIONAL_CLEAN_FILES 
             "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt")
     endif()
 endfunction()

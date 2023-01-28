@@ -28,9 +28,9 @@ BENDER_VLT=`bender -d $SRC_DIR script flist -t verilator | grep ".vlt$" | tr '\n
 echo "$BASEDIR/lint_default.vlt $BENDER_VLT" > "$OUTFILE.tmp"
 
 if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
-  echo "No .vlt changes detected."
+  echo "No .vlt file list changes detected."
 else
-  echo "Updating .vlt list".
+  echo "Updating .vlt file list".
   cp $OUTFILE.tmp $OUTFILE
 fi
 

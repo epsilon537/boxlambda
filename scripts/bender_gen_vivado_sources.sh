@@ -33,9 +33,9 @@ bender -d $SRC_DIR script $MIN_T_OOC vivado > $OUTFILE.tmp
 sort "$OUTFILE.tmp" > "$OUTFILE.tmp.sorted"
 
 if cmp --silent -- "$OUTFILE.sorted" "$OUTFILE.tmp.sorted"; then
-  echo "No vivado script changes detected."
+  echo "No vivado source list changes detected."
 else
-  echo "Updating vivado script".
+  echo "Updating vivado source list".
   cp $OUTFILE.tmp.sorted $OUTFILE.sorted
   cp $OUTFILE.tmp $OUTFILE
 fi
@@ -43,4 +43,4 @@ fi
 rm $OUTFILE.tmp*
 
 #Generate a depfile: Prepend each line with <target> :
-bender -d $SRC_DIR script $MIN_T_OOC -t vivado flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
+bender -d $SRC_DIR script $MIN_T_OOC -t constraints -t vivado flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep

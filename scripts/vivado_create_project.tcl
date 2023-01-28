@@ -51,7 +51,7 @@ if {($mem_files != "") && ([file exists $mem_files] == 1)} {
     puts $mem_files
     source $mem_files
 } else {
-    puts "mem file script not passed in, or file does not exist." 
+    puts "mem file script not passed in, or file does not exist. For components this is expected." 
     puts $mem_files
 }
 
@@ -61,7 +61,7 @@ if {($constraints != "") && ([file exists $constraints] == 1)} {
     puts $constraints
     source $constraints
 } else {
-    puts "contraints script not passed in, or file does not exist." 
+    puts "contraints script not passed in, or file does not exist. For components this is expected." 
     puts $constraints
 }
 

@@ -36,9 +36,9 @@ sort "$OUTFILE.tmp.split" > "$OUTFILE.tmp.sorted"
 cat "$OUTFILE.tmp.split" | tr '\n' ' ' > "$OUTFILE.tmp"
 
 if cmp --silent -- "$OUTFILE.sorted" "$OUTFILE.tmp.sorted"; then
-  echo "No verilator script changes detected."
+  echo "No verilator source list changes detected."
 else
-  echo "Updating verilator script".
+  echo "Updating verilator source list".
   cp $OUTFILE.tmp.sorted $OUTFILE.sorted
   cp $OUTFILE.tmp $OUTFILE
 fi
