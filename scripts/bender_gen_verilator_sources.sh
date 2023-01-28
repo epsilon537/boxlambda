@@ -31,19 +31,16 @@ fi
 
 bender -d $SRC_DIR update
 
-bender -d $SRC_DIR script $MIN_T_OOC verilator > "$OUTFILE.tmp.split"
-sort "$OUTFILE.tmp.split" > "$OUTFILE.tmp.sorted"
-cat "$OUTFILE.tmp.split" | tr '\n' ' ' > "$OUTFILE.tmp"
+bender -d $SRC_DIR script $MIN_T_OOC verilator | tr '\n' ' ' > "$OUTFILE.tmp"
 
-if cmp --silent -- "$OUTFILE.sorted" "$OUTFILE.tmp.sorted"; then
+if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
   echo "No verilator source list changes detected."
 else
   echo "Updating verilator source list".
-  cp $OUTFILE.tmp.sorted $OUTFILE.sorted
   cp $OUTFILE.tmp $OUTFILE
 fi
 
-rm $OUTFILE.tmp*
+rm $OUTFILE.tmp
 
 #If depfile target is given...
 if [ -n "$DEPFILE_TGT" ]

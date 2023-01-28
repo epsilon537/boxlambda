@@ -10,13 +10,6 @@ function(link_internal_create_mem_file _tgt)
            "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
     )
 
-    #Link script. Also make sure that the generated .map file gets cleaned up.
-    set_target_properties(${_tgt} 
-        PROPERTIES 
-            LINK_DEPENDS ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld
-            ADDITIONAL_CLEAN_FILES ${_tgt}.map
-    )
-
     #.mem file generation commands.
     add_custom_command(
         TARGET

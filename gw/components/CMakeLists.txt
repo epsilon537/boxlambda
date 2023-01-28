@@ -131,10 +131,6 @@ function (gw_component_rules)
             COMMENT
                 "Component OOC synthesis target."
         )
-
-        #A bunch of generated files to clean up when running make clean.
-        set_target_properties(${_prj_comp_name}_synth PROPERTIES ADDITIONAL_CLEAN_FILES 
-            "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt")
     endif()
 endfunction()
 

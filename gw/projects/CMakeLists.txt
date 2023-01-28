@@ -168,10 +168,6 @@ function (gw_project_rules)
                 "Project synthesis target."
         )
 
-        #A bunch of generated files that need to be cleaned up as part of make clean.
-        set_target_properties(${_prj_comp_name}_synth PROPERTIES ADDITIONAL_CLEAN_FILES 
-        "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt")
-
         add_custom_command(
             OUTPUT
                 ${CMAKE_CURRENT_BINARY_DIR}/project.runs/impl_1/${_top_module}.bit
@@ -196,10 +192,6 @@ function (gw_project_rules)
             COMMENT
                 "Project implementation target."
         )
-
-        #A bunch of generated files that need to be cleaned up as part of make clean.
-        set_target_properties(${_prj_comp_name}_impl PROPERTIES ADDITIONAL_CLEAN_FILES 
-        "project.cache;project.runs;project.xpr;project.ip_user_files;project.hw;syn_timing.rpt;syn_util.rpt;imp_timing.rpt;imp_util.rpt")
 
         add_custom_target(${_prj_comp_name}_load
             WORKING_DIRECTORY
@@ -256,7 +248,6 @@ function (gw_project_rules)
             VERBATIM
         )
 
-        set_target_properties(${_prj_comp_name}_sim PROPERTIES ADDITIONAL_CLEAN_FILES ".")
     endif()    
 endfunction()
 
