@@ -23,11 +23,11 @@ puts "bitstream: $bitstream"
 open_hw_manager
 connect_hw_server -allow_non_jtag
 open_hw_target
-current_hw_device [get_hw_devices xc7a35t_0]
-refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a35t_0] 0]
-set_property PROBES.FILE {} [get_hw_devices xc7a35t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a35t_0]
-set_property PROGRAM.FILE $bitstream [get_hw_devices xc7a35t_0]
-program_hw_devices [get_hw_devices xc7a35t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a35t_0] 0]
+current_hw_device [get_hw_devices xc7a*]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a*] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7a*]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7a*]
+set_property PROGRAM.FILE $bitstream [get_hw_devices xc7a*]
+program_hw_devices [get_hw_devices xc7a*]
+refresh_hw_device [lindex [get_hw_devices xc7a*] 0]
 close_hw_manager

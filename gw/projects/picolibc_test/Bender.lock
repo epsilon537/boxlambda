@@ -1,44 +1,43 @@
----
 packages:
   ibex:
-    revision: ~
-    version: ~
+    revision: null
+    version: null
     source:
-      Path: /home/epsilon/work/boxlambda/gw/projects/picolibc_test/../../components/ibex_wb_core/../../components/ibex
+      Path: ../../components/ibex_wb_core/../../components/ibex
     dependencies: []
   ibex_wb_common:
-    revision: ~
-    version: ~
+    revision: null
+    version: null
     source:
-      Path: /home/epsilon/work/boxlambda/gw/projects/picolibc_test/../../components/ibex_wb_common
+      Path: ../../components/ibex_wb_common
     dependencies: []
   ibex_wb_core:
-    revision: ~
-    version: ~
+    revision: null
+    version: null
     source:
-      Path: /home/epsilon/work/boxlambda/gw/projects/picolibc_test/../../components/ibex_wb_core
+      Path: ../../components/ibex_wb_core
     dependencies:
-      - ibex
-      - ibex_wb_common
+    - ibex
+    - ibex_wb_common
   riscv-dbg:
-    revision: ~
-    version: ~
+    revision: null
+    version: null
     source:
-      Path: /home/epsilon/work/boxlambda/gw/projects/picolibc_test/../../components/riscv-dbg
+      Path: ../../components/riscv-dbg
     dependencies:
-      - ibex_wb_common
-      - ibex_wb_core
+    - ibex_wb_common
+    - ibex_wb_core
   wb_gpio:
-    revision: ~
-    version: ~
+    revision: null
+    version: null
     source:
-      Path: /home/epsilon/work/boxlambda/gw/projects/picolibc_test/../../components/wb_gpio
+      Path: ../../components/wb_gpio
     dependencies:
-      - ibex_wb_common
+    - ibex_wb_common
   wbuart32:
-    revision: ~
-    version: ~
+    revision: null
+    version: null
     source:
-      Path: /home/epsilon/work/boxlambda/gw/projects/picolibc_test/../../components/wbuart32
+      Path: ../../components/wbuart32
     dependencies:
-      - ibex_wb_common
+    - ibex_wb_common
