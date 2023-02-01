@@ -47,23 +47,17 @@ source $sources
 
 #Only source the mem_file script if it's passed in and actually exists.
 if {($mem_files != "") && ([file exists $mem_files] == 1)} {
-    puts "sourcing mem_files script." 
+    puts "sourcing mem files list." 
     puts $mem_files
     source $mem_files
-} else {
-    puts "mem file script not passed in, or file does not exist. For components this is expected." 
-    puts $mem_files
-}
+} 
 
 #Only source the constraints script if it's passed in and actually exists.
 if {($constraints != "") && ([file exists $constraints] == 1)} {
-    puts "sourcing constraints script." 
+    puts "sourcing constraints file list." 
     puts $constraints
     source $constraints
-} else {
-    puts "contraints script not passed in, or file does not exist. For components this is expected." 
-    puts $constraints
-}
+} 
 
 set_property source_mgmt_mode None [current_project]
 
