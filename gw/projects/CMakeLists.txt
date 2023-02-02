@@ -54,6 +54,7 @@ function (gw_project_rules)
         )
     endif()
 
+    #Build rules, shared with gateware components : lint target, Vivado synthesis
     gw_common_rules(
         TOP_MODULE
             ${_top_module}
@@ -70,9 +71,11 @@ function (gw_project_rules)
     )
 
     if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+        #Build Vivado command string for the vivado_impl tcl script.
         vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl.tcl
             -project project.xpr -outputDir $OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
 
+        #Custom command executing the vivado implementation command string.
         add_custom_command(
             OUTPUT
                 ${CMAKE_CURRENT_BINARY_DIR}/project.runs/impl_1/${_top_module}.bit
@@ -98,9 +101,11 @@ function (gw_project_rules)
                 "Project implementation target."
         )
 
+        #Build Vivado command string for the prg_bitstream tcl script.
         vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
             -bitstream ./project.runs/impl_1/*.bit)
 
+        #Custom command executing the vivado prg_bitstream command string.
         add_custom_target(${_prj_name}_load
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}

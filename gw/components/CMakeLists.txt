@@ -20,6 +20,8 @@ function (gw_component_rules)
     set(_verilator_cpp_flags ${gw_component_rules_VERILATOR_CPP_FLAGS})
     set(_verilator_ld_flags ${gw_componeny_rules_VERILATOR_LD_FLAGS})
 
+    #Forward to gw_common_rules() function. gw_common_rules() build logic is shared between 
+    #gw components and projects.
     gw_common_rules(
         TOP_MODULE
             ${_top_module}

@@ -14,6 +14,10 @@ endif()
 #A top-level target aggregating all lint targets.
 add_custom_target(lint_all ALL)
 
+#This function builds a Vivado command string.
+#cmd: the output string variable.
+#tcl_script: the tcl script Vivado should execute
+#ARGN: Variables argument list to be passed to the tcl script.
 function(vivado_cmd cmd tcl_script)
     list(JOIN ARGN " " _tcl_args)
     set(${cmd} "vivado -nolog -nojournal -mode batch -notrace -source ${tcl_script} -tclargs ${_tcl_args}" PARENT_SCOPE)
@@ -120,18 +124,27 @@ function (gw_common_rules)
             VERBATIM
         )
 
+        #Build Vivado command string for the vivado_create_project tcl script.
         vivado_cmd(create_project_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_create_project.tcl
                     -project project.xpr 
                     -part ${PART} -sources ${_prj_comp_name}.vivado_sources
                     -outputDir ${CMAKE_CURRENT_BINARY_DIR} -top ${_top_module})
 
+        #If a constraints file list is given, append it to the Vivado command string.
         if (NOT ${_constraints_file_list} STREQUAL "")
             string(APPEND create_project_cmd " -constraints " ${_constraints_file_list})
         endif()
+        #If a mem file list is given, append it to the Vivado command string.
         if (NOT ${_mem_file_list} STREQUAL "")
             string(APPEND create_project_cmd " -mem_files " ${_mem_file_list})
         endif()
 
+        #Custom command executing the create_project command string.
+        #Notice that a dummy project.dep output is generated along with the actual project.xpr output.
+        #This is because project.xpr modification time updates every time we open the project file for synthesis or
+        #implementation. We can't use project.xpr as a dependency to detect if a re-synthesis is needed.
+        #project.dep on the other hand is only touched when the Vivado project file is actually created, so that one
+        #can be used as a dependency by the synthesis target.
         add_custom_command(
             OUTPUT
                 ${CMAKE_CURRENT_BINARY_DIR}/project.dep
@@ -152,9 +165,11 @@ function (gw_common_rules)
             VERBATIM
         )
 
+        #Build Vivado command string for the vivado_synth tcl script.
         vivado_cmd(synth_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_synth.tcl
             -project project.xpr -outputDir $OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
 
+        #Custom command executing the vivado synthesis command string.
         add_custom_command(
             OUTPUT
                 ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
