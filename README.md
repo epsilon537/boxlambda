@@ -11,7 +11,7 @@ BoxLambda is a software-hardware cross-over project. The plan is to provide room
         - **Single User/Single Tasking OS** booting to a console shell.
     - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components.
         - Support for partial FPGA reconfiguration.
-- Target Hardware is Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start) and/or the [Nexys-A7](https://digilent.com/reference/programmable-logic/nexys-a7/start).
+- Target Hardware is Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start) 
 - The computer should support the following peripherals:
   - Keyboard
   - Mouse (optional)
@@ -23,7 +23,17 @@ BoxLambda is a software-hardware cross-over project. The plan is to provide room
   
 - Sound and graphics should be sufficient to support retro-style 2D gameplay.
 
-I'm keeping a project Blog and documentation [here](https://epsilon537.github.io/boxlambda/).
+# Project Blog 
+
+[https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/).
+
+# Project Documentation 
+
+[https://boxlambda.readthedocs.io/en/latest/](https://boxlambda.readthedocs.io/en/latest/).
+
+# Setup and Build Instructions
+
+[https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/).
 
 # Important Note
 
