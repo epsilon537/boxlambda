@@ -25,6 +25,19 @@ endif()
 
 message("Build Type: ${CMAKE_BUILD_TYPE}.")
 
+#make regen rule, to complete remove and regenerate the build tree.
+add_custom_target(regen
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND
+        rm -rf sw && rm -rf gw
+    COMMAND
+        ${CMAKE_COMMAND} .
+    COMMENT
+        "Removing and regenerating build tree."
+    VERBATIM
+)
+
 enable_testing()
 
 #The software tree
