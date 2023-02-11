@@ -64,6 +64,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **Fork**: A GitHub fork is a copy of a repository that sits in your account rather than the account from which you forked the data.
 
 - **FTDI**: Future Technology Devices International Inc. The name has become synonymous with the USB-to-UART adapter ICs sold by this company.
+  
+- **Gateware**: [Gateware comprises the description (of behaviour, structure and/or connections) of digital logic gates, a high level abstraction thereof, and/or the implementation thereof in (re)configurable logic devices (such as FPGAs and ASICs)](https://www.gateware.org/definition-of-gateware).
 
 - **GCC**: GNU Compiler Collection. An optimizing compiler produced by the GNU Project.
 

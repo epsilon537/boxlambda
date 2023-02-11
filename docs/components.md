@@ -116,19 +116,21 @@ BoxLambda uses the RISCV fork of OpenOCD: [https://github.com/riscv/riscv-openoc
 #### The RISCV-DBG component
 
 RISCV-dbg is part of the [*PULP* platform](https://github.com/pulp-platform) and depends on three additional GitHub repositories that are part of this platform:
+
 - **common_cells**: [https://github.com/pulp-platform/common_cells](https://github.com/pulp-platform/common_cells)
 - **tech_cells_generic**: [https://github.com/pulp-platform/tech_cells_generic](https://github.com/pulp-platform/tech_cells_generic)
 - **pulpino**: [https://github.com/pulp-platform/pulpino](https://github.com/pulp-platform/pulpino)
 
 As their names suggest, *common_cells* and *tech_cells_generic* provide commonly used building blocks such as FIFOs, CDC logic, reset logic, etc. *Pulpino* is an entire RISCV-based SoC project. However, the riscv-dbg pulpino dependency is limited to just a few cells for clock management.
 
-I created git submodules for all of these repositories under the BoxLambda repository's *sub/* directory. I then created a riscv-dbg component directory with a Bender.yml manifest in it, referencing all the sources needed from those submodules: [components/riscv-dbg/Bender.yml](https://github.com/epsilon537/boxlambda/blob/951bca262fe66fa7433dd0282e7a0d52e93fac6b/components/riscv-dbg/Bender.yml).
+I created git submodules for all of these repositories under the BoxLambda repository's *sub/* directory. I also created a riscv-dbg component directory with a Bender.yml manifest in it, referencing all the sources needed from those submodules: [gw/components/riscv-dbg/Bender.yml](https://github.com/epsilon537/boxlambda/blob/master/gw/components/riscv-dbg/Bender.yml).
 
 ```
 boxlambda
-├── components
-│   └── riscv-dbg
-│       └── Bender.yml
+├── gw
+│   └── components
+│       └── riscv-dbg
+│           └── Bender.yml
 └── sub
     ├── common_cells
     ├── tech_cells_generic
@@ -140,6 +142,7 @@ boxlambda
 #### RISCV-DBG RTL Structure
 
 RISCV-DBG has two top-levels:
+
 - [sub/riscv-dbg/src/dm_top.sv](https://github.com/epsilon537/riscv-dbg/blob/b241f967f0dd105f7c5e020a395bbe0ec54e40e4/src/dm_top.sv)
 - [sub/riscv-dbg/src/dmi_jtag.sv](https://github.com/epsilon537/riscv-dbg/blob/b241f967f0dd105f7c5e020a395bbe0ec54e40e4/src/dmi_jtag.sv)
 
@@ -162,8 +165,9 @@ The Verilator setup looks like this:
 
 *BoxLambda OpenOCD Verilator Setup*
 
-The **hello_dbg** project (directory *projects/hello_dbg/*) implements the OpenOCD Verilator setup shown above. The project contains the Hello World test build extended with the riscv-dbg component.
-The project directory also contains a [test script](https://github.com/epsilon537/boxlambda/blob/2a32d1f4100204f9df4e17ba7c6e4656afff8c47/projects/hello_dbg/test/test.sh) that goes through the following steps:
+The **hello_dbg** project (directory *gw/projects/hello_dbg/*) implements the OpenOCD Verilator setup shown above. The project contains the Hello World test build extended with the riscv-dbg component.
+The project directory also contains a [test script](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/hello_dbg/test/test.sh) that goes through the following steps:
+
 1. Start the Verilator model
 2. Connect OpenOCD to the model
 3. Connect GDB to OpenOCD (and thus to the model)
@@ -172,17 +176,18 @@ The project directory also contains a [test script](https://github.com/epsilon53
 
 ```
 boxlambda
-├── projects
-│   └── hello-dbg
-│       ├── Bender.yml
-│       ├── sim
-│       │   ├── sim_main.cpp
-│       │   └── sim_main.sv
-│       └── test
-│           ├── test.sh
-│           └── test.gdb 
-├── components
-│   └── riscv-dbg
+├── gw
+│   ├── projects
+│   │   └── hello-dbg
+│   │       ├── Bender.yml
+│   │       ├── sim
+│   │       │   ├── sim_main.cpp
+│   │       │   └── sim_main.sv
+│   │       └── test
+│   │           ├── test.sh
+│   │           └── test.gdb 
+│   └── components
+│       └── riscv-dbg
 └── sub
     ├── common_cells
     ├── tech_cells_generic
@@ -191,8 +196,7 @@ boxlambda
 
 ```
 
-The OpenOCD configuration file for JTAG Debugging on Verilator is checked into the *openocd* directory:  
-[openocd/verilator_riscv_dbg.cfg](https://github.com/epsilon537/boxlambda/blob/develop/openocd/verilator_riscv_dbg.cfg)
+The OpenOCD configuration file for JTAG Debugging on Verilator is checked into the *scripts/* directory: [scripts/verilator_riscv_dbg.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/verilator_riscv_dbg.openocd.cfg)
 
 To summarize:
 
@@ -208,6 +212,7 @@ See the [Test Builds section](installation-and-test-builds.md#test-builds) for t
 The obvious approach would be to bring out the JTAG signals to PMOD pins and hook up a JTAG adapter. However, there's an alternative method that doesn't require a JTAG adapter. The riscv-dbg JTAG TAP can be hooked into the FPGA scan chain which is normally used to program the bitstream into the FPGA. On the Arty-A7, bitstream programming is done using the FTDI USB serial port, so no special adapters are needed.
 
 The riscv-dbg codebase lets you easily switch between a variant with external JTAG pins and a variant that hooks into the FPGA scan chain, by changing a single file:
+
 - **dmi_jtag_tap.sv**: hooks up the JTAG TAP to external pins
 - **dmi_bscane_tap.sv**: hooks the JTAG TAP into the FPGA scan chain. The Xilinx primitive used to hook into the scan chain do this is called BSCANE. Hence the name.
 
@@ -219,8 +224,7 @@ On the OpenOCD side, the transport protocol for this Debug-Access-via-FPGA-scan-
 
 *BoxLambda OpenOCD Arty A7 FTDI Setup*
 
-The OpenOCD configuration file for JTAG Debugging on Arty A7 is checked into the *openocd* directory:  
-[openocd/digilent_arty_a7.cfg](https://github.com/epsilon537/boxlambda/blob/develop/openocd/digilent_arty_a7.cfg) 
+The OpenOCD configuration file for JTAG Debugging on Arty A7 is checked into the *scripts/* directory: [scripts/digilent_arty_a7.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7.openocd.cfg) 
 
 To summarize:
 
@@ -406,7 +410,7 @@ Some points worth noting about this interface:
 
 I created a *litedram_wrapper.sv* module around litedram.v:
 
-[https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv)
+[https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv)
 
 This wrapper contains:
 
@@ -518,7 +522,7 @@ ZipCPU has an I2C core with a Wishbone port: [https://github.com/ZipCPU/wbi2c](h
 
 ZipCPU comes to the rescue once again with a UART implementation with a Wishbone interface: [https://github.com/ZipCPU/wbuart32](https://github.com/ZipCPU/wbuart32)
 
-Location of the *wbuart32* submodule in the BoxLambda repository: **boxlambda/fpga/wbuart32/**
+Location of the *wbuart32* submodule in the BoxLambda repository: **boxlambda/sub/wbuart32/**
 
 ### Miscellaneous Modules
 
