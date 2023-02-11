@@ -87,14 +87,14 @@ Get the BoxLambda repository:
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-Switch to the **enter_litedram** tag: 
+Switch to the **boxlambda_cmake** tag: 
 ```
-git checkout enter_litedram
+git checkout boxlambda_cmake
 ```
 
-Set up the repository. This initializes the git submodules used and builds picolibc for BoxLambda: 
+Set up the repository. This initializes the git submodules used and creates the default build trees: 
 ```
-make setup
+./boxlambda_setup.sh
 ```
 
 User-Level Access to the Arty A7 USB JTAG Adapter.
@@ -122,7 +122,7 @@ Additional info about connecting USB devices to WSL can be found here:
 
 For convenience, I created a one-line Windows batch script that attaches the Arty USB JTAG port to WSL: 
 
-*boxlambda/wsl/usb_fwd_to_wsl.bat*:
+*boxlambda/scripts/usb_fwd_to_wsl.bat*:
 
 ```
 usbipd wsl attach -i 0403:6010 -a
@@ -144,18 +144,18 @@ Test Builds
 
 ### Hello World on the Arty A7-35T
 
-Project directory **boxlambda/projects/hello_world/** contains a test SoC build consisting of an Ibex_WB core, 64KB internal memory, a wbuart32 core, a timer, and a GPIO module.
+Project directory **boxlambda/gw/projects/hello_world/** contains a test SoC build consisting of an Ibex_WB core, 64KB internal memory, a wbuart32 core, a timer, and a GPIO module.
 
 To build the *Hello World!* example, go through the following steps:
 
 Build the project:
 ```
-cd projects/hello_world
-make impl
+cd build/arty-a7-[35|100]/gw/projects/hello_world
+make hello_world_impl
 ```
 Download the bitstream to the target:
 ```
-make run
+make hello_world_load
 ```
 
 ### Hello World Verilator Build
@@ -164,12 +164,11 @@ To try out the Verilator Test Bench for *Hello World*:
 
 Build the testbench:
 ```
-cd projects/hello_world
-make sim
+cd build/sim/gw/projects/hello_world
+make hello_world_sim
 ```
 Execute the testbench, with (```./Vmodel -i```) or without (```./Vmodel -t```) tracing:
 ```
-cd generated
 ./Vmodel -i/-t
 ```
 View the generated traces: 
@@ -183,9 +182,9 @@ If you're running on WSL, check the [On WSL](installation-and-test-builds.md#on-
 
 Build and run the test project:
 ```
-cd projects/hello_dbg
-make impl
-make run
+cd build/arty-a7-[35|100]/gw/projects/hello_dbg
+make hello_dbg_impl
+make hello_dbg_load
 ```
 
 Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
@@ -193,7 +192,7 @@ Verify that the *Hello World* test program is running: The four LEDs on the Arty
 Start OpenOCD with the *digilent_arty_a7.cfg* config file. 
 Note: If OpenOCD can't connect to the USB JTAG adapter, your USB device permissions might not be set correctly. Check the *User-Level Access to the Arty A7 USB JTAG Adapter* section above for a fix.
 ```
-openocd -f <boxlambda root directory>/openocd/digilent_arty_a7.cfg
+openocd -f <boxlambda root directory>/scripts/digilent_arty_a7.cfg
 Info : clock speed 1000 kHz
 Info : JTAG tap: riscv.cpu tap/device found: 0x0362d093 (mfg: 0x049 (Xilinx), part: 0x362d, ver: 0x0)
 Info : [riscv.cpu] datacount=2 progbufsize=8
@@ -208,8 +207,8 @@ Info : Listening on port 4444 for telnet connections
 ```
 Launch GDB with hello.elf:	
 ```
-cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
-riscv32-unknown-elf-gdb hello.elf
+cd <boxlambda root directory>/build/arty-a7-[35|100]/sw/projects/hello_world
+riscv32-unknown-elf-gdb hello_world
 ```
 Connect GDB to the target. From the GDB shell:
 ```
@@ -223,17 +222,16 @@ Notice that the CPU is stopped at the very first instruction of the boot sequenc
 ### Connecting GDB to the Hello_DBG build on Verilator
 Build the test project:
 ```
-cd projects/hello_dbg
-make sim
+cd build/sim/gw/projects/hello_dbg
+make hello_dbg_sim
 ```
 Launch the Verilator model with the *-d* flag to indicate that a debugger will be attached to the simulated processor:
 ```
-cd generated
 ./Vmodel -d
 ```
 Start OpenOCD with the *verilator_riscv_dbg.cfg* config file:
 ```
-openocd -f <boxlambda root directory>/openocd/verilator_riscv_dbg.cfg
+openocd -f <boxlambda root directory>/scripts/verilator_riscv_dbg.cfg
 Open On-Chip Debugger 0.11.0+dev-02372-g52177592f (2022-08-10-14:11)
 Licensed under GNU GPL v2
 For bug reports, read
@@ -244,8 +242,8 @@ Ready for Remote Connections on port 3333.
 ```
 Launch GDB with hello.elf:
 ```
-cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
-riscv32-unknown-elf-gdb hello.elf
+cd <boxlambda root directory>/build/sim/sw/projects/hello_world
+riscv32-unknown-elf-gdb hello_world
 ```
 Connect GDB to the target. From the GDB shell:
 ```
@@ -260,12 +258,11 @@ Notice that the CPU is stopped at the very first instruction of the boot sequenc
 
 Build the test project:
 ```
-cd projects/picolibc_test
-make sim
+cd build/sim/gw/projects/picolibc_test
+make picolibc_test_sim
 ```
 Execute the generated verilator model in interactive mode:
 ```
-cd generated
 ./Vmodel -i
 ```
 You should see something like this:
@@ -275,13 +272,13 @@ You should see something like this:
 ### Picolibc_test Image on Arty A7
 Build the test project:
 ```
-cd projects/picolibc_test
-make impl
+cd build/arty-a7-[35|100]/gw/projects/picolibc_test
+make picolibc_test_impl
 ```
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
 Run the project:
 ```
-make run
+make picolibc_test_load
 ```
 Verify the test program's output in the terminal. Enter a character to verify that stdin (standard input) is also working.
 
@@ -290,12 +287,11 @@ Verify the test program's output in the terminal. Enter a character to verify th
 ### DDR Test Image on Verilator
 Build the test project:
 ```
-cd projects/ddr_test
-make sim
+cd build/sim/gw/projects/ddr_test
+make ddr_test_sim
 ```
 Execute the generated verilator model in interactive mode:
 ```
-cd generated
 ./Vmodel -i
 ```
 You should see something like this:
@@ -309,14 +305,14 @@ If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxla
 
 Build the test project:
 ```
-cd projects/ddr_test
-make impl
+cd build/arty-a7-[35|100]/gw/projects/ddr_test
+make ddr_test_impl
 ```
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Run the project:
 ```
-make run
+make ddr_test_load
 ```
 Verify the test program's output in the terminal. You should see something like this:
 

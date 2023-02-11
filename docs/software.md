@@ -4,8 +4,8 @@ LiteDRAM Initialization
 -----------------------
 When the *litedram_gen.py* script generates the LiteDRAM Verilog core (based on the given *.yml* configuration file), it also generates the core's CSR register accessors for software:
 
-- For FPGA: [https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/arty/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/arty/sw/include/generated)
-- For simulation: [https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/sim/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/sim/sw/include/generated)
+- For FPGA: [https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/arty/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/arty/sw/include/generated)
+- For simulation: [https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/sim/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/sim/sw/include/generated)
   
 The most relevant files are **csr.h** and **sdram_phy.h**. They contain the register definitions and constants used by the memory initialization code. Unfortunately, these accessors are *not* the same for the FPGA and the simulated LiteDRAM cores. We're going to have to use separate software builds for FPGA and simulation.
 
@@ -21,12 +21,11 @@ The most relevant files are **csr.h** and **sdram_phy.h**. They contain the regi
 
 It's not clear to me why the *liblitedram* is not part of the LiteDRAM repository but's not a big deal. I integrated the *sdram_init()* function from *liblitedram* in the BoxLambda code base and it's working fine.
 
-To get things to build, I added Litex as a git submodule, to get access to *liblitedram*. I also tweaked some *CPPFLAGS* and include paths. The resulting Makefiles are checked-in here:
+To get things to build, I added Litex as a git submodule, to get access to *liblitedram*. I also tweaked some *CPPFLAGS* and include paths. The resulting CMakeList is checked in here:
 
-- FPGA: [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile)
-- Sim: [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile)
+[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/CMakeLists.txt)
 
-It's worth noting that *liblitedram* expects a standard C environment.
+Note: *liblitedram* expects a standard C environment.
 
 ### The DDR Test Application
 
@@ -101,31 +100,13 @@ The differences between the derived scripts and the base scripts are minimal:
 - They are referencing the *riscv32-unknown-elf* GCC toolchain used by BoxLambda.
 - The *-march* flag is set to *rv32imc* (no 'a' - atomic instructions). 
 
-#### make setup
+#### picolibc_build.sh
 ![Building Picolibc.](assets/building_picolibc.drawio.png)
 
 With the configuration scripts in place, we can build and install the picolibc library. We have to supply a build directory and an install directory.
 I put the build directory in **boxlambda/sw/picolibc-build** and the install directory in **boxlambda/sw/picolibc-install**.
 
-I grouped the picolibc build and install instructions in a *setup* rule in the top-level Makefile:
-
-```
-PICOLIBC_SUB_DIR= $(abspath sub/picolibc) #This is where the picolibc repository lives
-PICOLIBC_BUILD_DIR= sw/picolibc-build #This directory is used to build picolibc for our target.
-PICOLIBC_INSTALL_DIR= $(abspath sw/picolibc-install) #This is where picolibc is installed after it has been built.
-
-setup: submodule-setup
-    mkdir -p $(PICOLIBC_BUILD_DIR)
-    cd $(PICOLIBC_BUILD_DIR)
-    $(PICOLIBC_SUB_DIR)/scripts/do-rv32imc-configure -Dprefix=$(PICOLIBC_INSTALL_DIR) -Dspecsdir=$(PICOLIBC_INSTALL_DIR)
-    ninja
-    ninja install
-```
-
-Ideally, I would just check in the picolibc install directory. However, that won't work because the generated files contain absolute paths. This means that a **make setup** step is necessary to set up the BoxLambda repository. Besides building and installing picolibc, this step will also set up the git submodules used by BoxLambda.
-This also means that, before *make setup* is run, the *boxlambda/sw/picolibc-build* and *boxlambda/sw/picolibc-install* directories won't even exist. They are not part of the git repository.
-
-Note that *make setup* does not make any modifications outside of the BoxLambda directory tree.
+I grouped the picolibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc_build.sh) shell script. The picolibc install directory is checked in so there's no need to run the *picolibc_build.sh* as part of the repository setup. The script is only needed in case we want to regenerate the picolibc library (e.g. after updating to a newer version of the library).
 
 ### Bootstrap - Some Glue Required
 
@@ -140,7 +121,7 @@ Picolibc is a relatively generic code base that needs to be tied to the platform
 
 More detail for each of these follows in the subsections below. I have grouped them into a single software component called **bootstrap**:
 
-[https://github.com/epsilon537/boxlambda/tree/develop/sw/bootstrap](https://github.com/epsilon537/boxlambda/tree/develop/sw/bootstrap)
+[https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap)
 
 An application wishing to use the standard C library has to link in this bootstrap component along with the picolibc library itself. 
 
@@ -148,7 +129,7 @@ An application wishing to use the standard C library has to link in this bootstr
 
 The vector table is a table with code entry points for all sorts of CPU events: interrupts, exceptions, etc. The Boot/Reset Vector, i.e. the very first instruction executed when the CPU comes out of reset, is part of this table.
 
-I'm using the Vector Table from the *Hello World* example program included in the *ibex_wb* repository. The Vector Table file is located at [boxlambda/sw/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/develop/sw/bootstrap/vectors.S).
+I'm using the Vector Table from the *Hello World* example program included in the *ibex_wb* repository. The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S).
 
 The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to **_start**, the entry point into picolibc's **crt0** module.
 
@@ -209,7 +190,7 @@ void set_stdio_to_uart(struct uart *uart) {
 }
 ```
 
-[boxlambda/sw/bootstrap/stdio_to_uart.c](https://github.com/epsilon537/boxlambda/blob/develop/sw/bootstrap/stdio_to_uart.c)
+[boxlambda/sw/components/bootstrap/stdio_to_uart.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/stdio_to_uart.c)
 
 The **set_stdio_to_uart()** function is to be called from the application, before any standard library calls that require standard IO. The application needs to provide a pointer to an initialized *uart* object.
 
@@ -235,17 +216,26 @@ __ram_size = 32k;
 __stack_size = 512;
 ```
 
-[boxlambda/sw/bootstrap/link_internal_mem.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/bootstrap/link_internal_mem.ld)
+[boxlambda/sw/components/bootstrap/link_internal_mem.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_internal_mem.ld)
 
 I can't say that I like this link map. There's no good reason to split internal memory in two this way, I don't like the symbol names being used, and I don't understand half of what's going on in this very big and complicated link map file. Now is not the time to design a new link map for BoxLambda though. We don't even have external memory defined yet. To be revisited.
 
-### Linking against the Picolibc library
+### Linking against the Picolibc library: The Picolibc GCC specs file
 
-To link the picolibc library into an application image, the picolibc *spec file* needs to be passed to GCC. The code snippet below is taken from the *picolibc_test* program's [Makefile](https://github.com/epsilon537/boxlambda/blob/develop/projects/picolibc_test/src/Makefile):
+To link the picolibc library into an application image, the picolibc *spec file* needs to be passed to GCC. The Picolibc GCC specs file expects absolute paths, however. I'm using CMake's *configure_file()* to replace placeholders 
+in [scripts/picolibc.specs.in](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc.specs.in) with the project source directory's absolute path. The resulting *picolibc.specs* is written in the root of the build tree. This way, the Picolibc library build for BoxLambda can be checked into the source tree and the user won't need to build and install it from source when setting up BoxLambda.
+
+The code snippet below is taken from the SW [CMakeList](https://github.com/epsilon537/boxlambda/blob/master/sw/CMakeLists.txt):
 
 ```
-#Compile with picolibc specs to pull in picolibc library code.
-CFLAGS = --specs=$(TOP_DIR)/sw/picolibc-install/picolibc.specs -Wall -g -O1
+#The GCC specs file expects absolute paths. I'm using configure_file() to replace placeholders 
+#in picolibc.specs.in with PROJECT_SOURCE_DIR. The resulting picolibc.specs is written in the root of the build tree.
+configure_file(${PROJECT_SOURCE_DIR}/scripts/picolibc.specs.in picolibc.specs @ONLY)
+
+#Set the generated specs files as standard compile and link options.
+set(SPECS "--specs=${CMAKE_CURRENT_BINARY_DIR}/picolibc.specs")
+add_compile_options(${SPECS})
+add_link_options(${SPECS} "LINKER:--gc-sections")
 ```
 
 ### The Picolibc Test Application

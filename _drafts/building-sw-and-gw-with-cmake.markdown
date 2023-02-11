@@ -104,7 +104,7 @@ make <gw component or project name>_<action>
 ```
 where *action* is one of the following:
 
-- **lint**: Lint check the given gateware component or project.
+- **lint**: Lint-check the given gateware component or project.
 - **sim**: Build the Verilator simulation model (*Vmodel*) of the given gateware project. This action only exists in the *sim/* build tree.
 - **synth**: Synthesize the given gateware component or project. This action only exists in the *arty-a7* build trees.
 - **impl**: Implement the given gateware project and generate its bitstream. This action only exists in the *arty-a7* build trees.
@@ -121,7 +121,7 @@ cd <boxlambda_root_dir>/build/arty-a7-35 && make hello_world_synth
 cd <boxlambda_root_dir>/build/arty-a7-100 && make hello_dbg_impl && make hello_dbg_load
 ```
 
-The build directory tree mimics the source tree. When a build has completed, a gateware project's Verilator model or the Vivado project files can be found under that project's directory. E.g.:
+The build directory tree mimics the source tree. When a build has been completed, a gateware project's Verilator model or the Vivado project files can be found under that project's directory. E.g.:
 ```
 $ cd build/arty-a7-35/gw/projects/hello_world
 $ make hello_world_synth
@@ -133,9 +133,29 @@ Makefile             hello_world.vivado_sources         project.hw             s
 cmake_install.cmake  hello_world.vivado_sources.dep     project.ip_user_files  syn_timing.rpt
 ```
 
+What happens when you run *make hello_world_synth*
+==================================================
+When you run *make hello_world_synth*, the following happens:
+
+1. Make determines if (re)synthesis is needed. If synthesis is up-to-date, no further action is taken.
+1. Make runs a *bender script* command on the bender.yml file in the *gw/projects/hello_world/* directory. The *bender script* command is wrapped in the *scripts/bender_gen_vivado_source.sh* shell script.
+2. The bender script command processes that bender.yml manifest, as well as the bender.yml manifests of any dependent components. 
+3. The bender script command emits a list of all the HDL sources that make up the project.
+4. Similarly, the *scripts/bender_gen_constraints_file_list.sh* and *scripts/bender_gen_mem_file_list.sh* emits the .xdc constraints and .mem memory files for the project. 
+5. Make feeds these file lists into a *vivado_create_project.tcl* script. 
+6. The *vivado_create_project.tcl* script creates a Vivado project.
+7. Make kicks off the *vivado_synth.tcl* script which opens the Vivado project and starts synthesis.
+
+When you run *make hello_world_impl*, the following happens:
+
+1. Make determines if (re)implementation and bitstream generation is needed. If the bitstream file is up-to-date, no further action is taken. Make will also run the *hello_world_synth* rule above because it's a dependency of *hello_world_impl*.
+2. Make kicks off the *vivado_impl.tcl* script which opens the Vivado project, picks up the synthesis checkpoint, and starts implementation.
+
+See the BoxLambda documentation [Bender section](https://boxlambda.readthedocs.io/en/latest/build-system/#bender) of for more info on how BoxLambda uses Bender.
+
 Building Software
 -----------------
-The software corresponding with a gateware project automatically gets compiled, converted to a memory file, and included in the gateware project as part of the build process. The software projects can also be built independently. From the build directory just type: `make <sw project name>`. For example:
+The software corresponding with a gateware project automatically gets compiled, converted to a memory file, and included in the gateware project as part of the build process. Software projects can also be built independently. From the build directory just type: `make <sw project name>`. For example:
 
  ```
  $ cd sim/sw/projects/hello_world/
@@ -221,6 +241,8 @@ gw_component_rules(
 ```
 
 The component's sources, definitions, and dependencies are still defined in its *bender.yml* manifest. The CMake build system interfaces with Bender through a set of scripts to extract the necessary info and pass it on to Vivado or Verilator.
+
+See the BoxLambda documentation [Bender section](https://boxlambda.readthedocs.io/en/latest/build-system/#bender) of for more info on how BoxLambda uses Bender.
 
 A Gateware Project CMakeList
 ============================
@@ -325,9 +347,9 @@ Picolibc GCC specs file
 The Picolibc GCC specs file expects absolute paths. I'm using CMake's *configure_file()* to replace placeholders 
 in [scripts/picolibc.specs.in](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc.specs.in) with the project source directory's absolute path. The resulting *picolibc.specs* is written in the root of the build tree. This way, the Picolibc library build for BoxLambda can be checked into the source tree and the user won't need to build and install it from source when setting up BoxLambda.
 
-Bender Interaction
-==================
-GNU Make, CMake's backend, uses the modification date of dependencies to decide if a build rule should be triggered, e.g. an object gets rebuilt when the corresponding source code has a more recent modification date than the object file itself. With Bender, however, a component's or project's *bender.yml* file is just the tip of a tree. The Bender target and package dependencies also have to be considered. Simply listing the bender.yml file as a dependency is not good enough. Instead I'm using the Bender script output as a dependency:
+Bender Interaction Hack
+=======================
+GNU Make, CMake's backend, uses the modification date of dependencies to decide if a build rule should be triggered, e.g. an object gets rebuilt when the corresponding source code has a more recent modification date than the object file itself. With Bender, however, a component's or project's *bender.yml* file is just the tip of a tree. The Bender target and package dependencies also have to be considered. Simply listing the bender.yml file as a dependency is not good enough. Instead, I'm using the Bender script output as a dependency:
 
 1. The build system runs the *bender script* command.
 2. The output of that command is stored in a temporary file. 
@@ -364,7 +386,7 @@ cd boxlambda
 ```
    1. Switch to the *boxlambda_cmake* tag: 
 ```
-git checkout cmake
+git checkout boxlambda_cmake
 ```
    1. Set up the repository. This initializes the git submodules used and creates the default build trees: 
 ```
@@ -375,7 +397,7 @@ Build and Run the DDR Test Image on Verilator
 =============================================
    1. Build the ddr_test project:
 ```
-cd build/sim/projects/ddr_test
+cd build/sim/gw/projects/ddr_test
 make ddr_test_sim
 ```
    2. Execute the generated verilator model in interactive mode:
@@ -393,7 +415,7 @@ Build and Run the DDR Test Image on Arty A7
    1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#on-wsl) section.
    2. Build the ddr_test project:
 ```
-cd build/arty-a7-[35|100]/projects/ddr_test
+cd build/arty-a7-[35|100]/gw/projects/ddr_test
 make ddr_test_impl
 ```
    3. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
