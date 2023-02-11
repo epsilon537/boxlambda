@@ -13,4 +13,4 @@ cmake --preset=arty-a7-35
 cmake --preset=arty-a7-100
 
 echo
-echo "Setup complete. In directory build/fpga or build/sim, type 'make help' to see available build target for FPGA resp. simulation."
+echo "Setup complete."
