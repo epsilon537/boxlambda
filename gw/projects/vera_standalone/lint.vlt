@@ -1,0 +1,9 @@
+`verilator_config
+
+lint_off -rule UNUSED -file "*/gw/projects/vera_standalone/sim/sprite_ram.v" -match "Signal is not used: 'rst_i'"
+
+lint_off -rule UNUSED -file "*/gw/projects/vera_standalone/sim/sprite_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
+
+lint_off -rule UNUSED -file "*/gw/projects/vera_standalone/sim/sprite_ram.v" -match "Signal is not used: 'rd_en_i'"
+
+lint_off -rule UNUSED -file "*/gw/projects/vera_standalone/sim/sprite_ram.v" -match "Signal is not used: 'rd_clk_en_i'"

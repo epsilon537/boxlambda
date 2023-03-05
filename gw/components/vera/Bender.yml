@@ -1,0 +1,28 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: vera
+  
+sources:
+  - target: vera
+    files:
+    - ../../../sub/vera-module/fpga/source/sim/sprite_ram.v
+  - target: verilator
+    files:
+     - lint.vlt
+     - ../../../sub/vera-module/fpga/source/top.v
+     - ../../../sub/vera-module/fpga/source/reset_sync.v
+     - ../../../sub/vera-module/fpga/source/main_ram.v
+     - ../../../sub/vera-module/fpga/source/dpram.v
+     - ../../../sub/vera-module/fpga/source/sim/palette_ram.v
+     - ../../../sub/vera-module/fpga/source/graphics/composer.v
+     - ../../../sub/vera-module/fpga/source/graphics/layer_line_buffer.v
+     - ../../../sub/vera-module/fpga/source/graphics/layer_renderer.v
+     - ../../../sub/vera-module/fpga/source/graphics/sprite_line_buffer.v
+     - ../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v
+     - ../../../sub/vera-module/fpga/source/video/video_vga.v
+     - ../../../sub/vera-module/fpga/source/vram_if.v
+
+

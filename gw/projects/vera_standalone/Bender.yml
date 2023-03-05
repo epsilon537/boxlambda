@@ -1,0 +1,17 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: vera_standalone
+
+dependencies:
+  # Path dependency.
+  vera: { path: "../../components/vera" }
+  
+sources:
+  - target: verilator
+    files:
+      - sim/sprite_ram.v
+      - sim/sim_main.cpp
+      - lint.vlt

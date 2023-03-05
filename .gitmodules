@@ -28,3 +28,6 @@
 [submodule "sub/litex"]
 	path = sub/litex
 	url = https://github.com/epsilon537/litex
+[submodule "sub/vera-module"]
+	path = sub/vera-module
+	url = https://github.com/epsilon537/vera-module
