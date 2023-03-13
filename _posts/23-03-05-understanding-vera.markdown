@@ -4,19 +4,30 @@ title: 'Understanding VERA.'
 comments: true
 ---
 
-Frank van den Hoef's [VERA Versatile Embedded Retro Adapter](https://github.com/fvdhoef/vera-module), used by the Commander X16 project, is a standalone FPGA with an 8-bit external bus interface.
-I spent some time studying its Video Controller implementation, out of interest, and because I need a good understanding of VERA to be able to integrate it properly into the BoxLambda SoC.
+*Updated 13 March 2023: Parts of this article have been updated since the original post:*
+
+- *Replaced the term Main RAM with VRAM.*
+- *Added a Video RAM section.*
+- *Added the FPGA device targeted by VERA.*
+- *Indicated that collision detection is limited to Sprite-to-Sprite collision detection.*
+- *Some rewording.*
+  
+Frank van den Hoef's [VERA Versatile Embedded Retro Adapter](https://github.com/fvdhoef/vera-module), used by the Commander X16 project, is a standalone FPGA with an 8-bit external bus interface. I spent some time studying VERA's Video Controller implementation, out of interest, and because I need a good understanding of VERA to be able to integrate it properly into the BoxLambda SoC.
 
 Video Generator Features
 ------------------------
 VERA supports PSG Audio, PCM Audio, and a SPI Controller for storage, but I'll be focusing on just the video generator aspect of VERA. Furthermore, I'll focus on just the VGA data path, while VERA does support NTSC Composite, NTSC S-Video, and RGB video as well.
 
-The VERA VGA video generator has the following features (taken from [VERA's Programmer's Reference](https://github.com/fvdhoef/vera-module/blob/rev4/doc/VERA%20Programmer's%20Reference.md)):
+The VERA VGA video generator has the following features:
   - Multiple output formats (VGA, NTSC Composite, NTSC S-Video, RGB video) at a fixed resolution of 640x480@60Hz.
   - Support for 2 layers, both supporting either tile or Bitmap Mode.
   - Support for up to 128 sprites.
-  - Embedded video RAM of 128KB.
+  - Embedded video RAM (VRAM) of 128KB.
   - Palette with 256 colors selected from a total range of 4096 colors.
+
+The above list is taken from [VERA's Programmer's Reference](https://github.com/fvdhoef/vera-module/blob/rev4/doc/VERA%20Programmer's%20Reference.md). If you haven't done so yet, it's a good idea to go through that document. It's brief and to the point. It'll give you a good understanding of VERA's capabilities and how it presents itself to a CPU.
+
+The FPGA targeted by VERA is a [Lattice ICE40UP5K](https://www.latticesemi.com/en/Products/FPGAandCPLD/iCE40UltraPlus). This FPGA has 5280 LUTs, 1024Kbit of SPRAM, and 120Kbit of EBR RAM.
 
 Overview
 --------
@@ -35,7 +46,11 @@ The easiest way to understand what's going on is by going through the diagram fr
 3. The Composer block in turn pulls the necessary data from three **Line Buffers**: one for each layer and one for sprites. The Composer and video_vga blocks operate at VGA pixel clock rate, i.e. 640 pixels worth of data flows when a scanline is being drawn. No data flows during horizontal or vertical retrace.
 4. The Line Buffers exist to give the renderers some leeway. The **Layer Renderers**, for instance, need to produce 640 pixels worth of data each scanline but they have 800 pixels worth of time to do so (the horizontal retrace time is 'extra time'). For the **Sprite Renderer**, the numbers are a bit different, but the concept is the same.
 5. The renderers contain the bulk of VERA's video generation logic. There are two identical Layer Renderer blocks and one Sprite Renderer. The Layer Renderers implement the different tile and Bitmap Modes, retrieve the necessary data from the **vram_if** block and store the rendered output data in their respective Line Buffers. The Sprite Renderer does the same thing for sprites.
-6. The vram_if block contains 128KB of video memory. It has four ports: one for each renderer and one for the CPU (via the external bus). An arbiter gives a port access to the video memory based on that port's priority. The CPU/external bus has the highest priority, then layer 0, layer 1, and finally sprites, in that order.
+6. The vram_if block contains 128KB of embedded video memory and an arbiter. It has four ports: one for each renderer and one for the CPU (via the external bus).
+
+Video RAM
+---------
+The video RAM (VRAM) consists of four blocks of on-chip Single Port RAM. Each block holds 16384 16-bit words. A module named **main_ram** organizes these four blocks into a memory of 32768 32-bit words. A port-based priority scheduler inside the **vram_if** block arbitrates access to this 32-bit memory. The CPU/external bus has the highest priority, then the layer 0 renderer, the layer 1 renderer, and finally the sprite renderer, in that order.
 
 The Composer
 ------------
@@ -51,14 +66,14 @@ The Layer Renderer
 ------------------
 The Layer Render's implementation is, conceptually at least, reasonably straightforward:
 
-1. Depending on the scanline index and the current position in the Line Buffer, it retrieves the appropriate map entry from Main RAM (assuming Tile Mode).
-2. It retrieves the corresponding tile pixel data, also from Main RAM.
+1. Depending on the scanline index and the current position in the Line Buffer, it retrieves the appropriate map entry from VRAM (assuming Tile Mode).
+2. It retrieves the corresponding tile pixel data, also from VRAM.
 3. It writes out the pixel data to the next few positions in the Line Buffer.
 
-Steps 1 and 2 are always sequential, but as much as possible they overlap with step 3, i.e. while pixel data is being rendered out to the Line Buffer, new map and/or tile data is being retrieved from Main RAM.
+Steps 1 and 2 are always sequential, but as much as possible they overlap with step 3, i.e. while pixel data is being rendered out to the Line Buffer, new map and/or tile data is being retrieved from VRAM.
 
 Below you see the waveform of the Layer Renderer operating in 8bpp Tile Mode, 8 pixel wide tiles. One full FSM (Finite State Machine) cycle is shown, i.e. the pattern between the two vertical cursors is repeating.
-You can see the Main RAM reads (*buf_strobe* and *bus_ack*) happening in parallel with the Line Buffer writes (*lb_wridx_r*). You can also see how the Renderer FSM cycles through its states (*fetch map*, *wait fetch map*, *fetch tile*, *wait fetch tile*, *render*, etc.).
+You can see the VRAM reads (*buf_strobe* and *bus_ack*) happening in parallel with the Line Buffer writes (*lb_wridx_r*). You can also see how the Renderer FSM cycles through its states (*fetch map*, *wait fetch map*, *fetch tile*, *wait fetch tile*, *render*, etc.).
 
 ![Layer Rendering Waveform.](../assets/layer_render_l0_only_tile_mode_8bpp_tile_w_8.jpg)
 
@@ -68,7 +83,7 @@ Other Layer Renderer Responsibilities
 =====================================
 Other responsibilities of the Layer Renderer include:
 
-- Bitmap Mode: Simpler than Tile Mode, but more expensive in terms of required memory resources. In Bitmap Mode, Main RAM holds a frame buffer.
+- Bitmap Mode: Simpler than Tile Mode, but more expensive in terms of required memory resources. In Bitmap Mode, VRAM holds a frame buffer.
 - Handling of vertical and horizontal scrolling.
 - Handling of the different colors-depths: 8bpp, 4bpp, 2bpp, 1bpp.
 - Handling of the different tile widths and heights.
@@ -84,12 +99,12 @@ The Sprite Renderer
 The Sprite Renderer's operation is a bit more complicated:
 
 1. The **Sprite Attribute RAM** is scanned front-to-back to find the next sprite ID that is active on the current scanline.
-2. When an active Sprite has been found, its pixel data for the current scanline is retrieved from Main RAM.
+2. When an active Sprite has been found, its pixel data for the current scanline is retrieved from VRAM.
 3. The pixel data is written out to the correct positions in the Line Buffer. That means there may be multiple overlapping writes into the Sprite Line Buffer. The Sprite Line Buffer is written in Sprite ID order, at the position determined by the sprite's X-coordinate.
 
 The sequence of scanning the sprite attribute RAM, retrieving sprite pixel data, and rendering it out to the Line Buffer is entirely sequential. There is no pipelining.
 
-In the waveform below, you can see two sprites getting rendered out on a scanline: sprite ID 4 at position 192, and sprite ID 5 at position 256. The two sprites have 8bpp color depth and are 8 pixels wide. You can see that, for each sprite, two Main RAM read operations are performed (*bus_strobe* and *bus_ack* signals), and 8 entries are accessed in the Sprite Line Buffer (*linebuf_idx_r*).
+In the waveform below, you can see two sprites getting rendered out on a scanline: sprite ID 4 at position 192, and sprite ID 5 at position 256. The two sprites have 8bpp color depth and are 8 pixels wide. You can see that, for each sprite, two VRAM read operations are performed (*bus_strobe* and *bus_ack* signals), and 8 entries are accessed in the Sprite Line Buffer (*linebuf_idx_r*).
 
 ![Sprite Rendering Waveform.](../assets/spr_render_8bpp_8w.jpg)
 
@@ -99,7 +114,7 @@ Other Sprite Renderer Responsibilities
 ======================================
 Other responsibilities of the Sprite Renderer include:
 - Decoding and handling of sprite attributes: color-depth, width, height, z-depth, and collision mask.
-- Collision Detection.
+- Sprite-to-Sprite Collision Detection.
 - Handling pixel transparency.
 
 The Sprite Line Buffer
@@ -114,12 +129,12 @@ Renderer Performance and Bus Utilization
 ----------------------------------------
 By studying waveforms such as those above, it's easy to figure out how much time a renderer needs to render one scanline.
 
-In the layer renderer waveform above, it takes 19 clock cycles and 5 Main RAM reads to render 16 pixels. That means it takes 19x640/16 = 760 cycles to render one scanline. That's fine. The renderer has 800 clock cycles at its disposal to render one scanline (640 pixel-clocks + 160 pixel-clocks worth of Hsync). The Main RAM bus utilization for this configuration is (5/19)x100% = 26%. This is for 8bpp Tile Mode with 8x8 pixel tiles.
+In the layer renderer waveform above, it takes 19 clock cycles and 5 VRAM reads to render 16 pixels. That means it takes 19x640/16 = 760 cycles to render one scanline. That's fine. The renderer has 800 clock cycles at its disposal to render one scanline (640 pixel-clocks + 160 pixel-clocks worth of Hsync). The VRAM bus utilization for this configuration is (5/19)x100% = 26%. This is for 8bpp Tile Mode with 8x8 pixel tiles.
 
 A similar analysis can be made for the other layer modes: different color depths, different tile sizes, and Bitmap Modes. Here are some results:
 
 
-| Mode | Cycles per Scanline (out of 800 cycles available) | Main RAM Bus Utilization |
+| Mode | Cycles per Scanline (out of 800 cycles available) | VRAM Bus Utilization |
 |-------------------------|-------|---------------------------------------------------|
 | 8bpp Tile Mode, 8x8 pixel tiles | 760 | 26% |
 | 8bpp Tile Mode, 16x16 pixel tiles | 700 | 26% |
@@ -136,8 +151,8 @@ Looking at the sprite rendering waveform above, you'll see that it takes 15 cloc
 So, how many sprites can be rendered onto one scanline? It depends on several factors:
 
 - **Sprite Width**: Obviously, larger width means more pixels per sprite to render.
-- **Color Depth**: 8bpp requires more Main RAM reads per pixel than 4bpp.
-- **Main RAM bus utilization**: When Layers 0 and 1 are enabled in a heavy-duty mode, they generate a significant load on the RAM bus, creating more bus contention opportunities for the Sprite Renderer, which is the lowest priority port on the bus.
+- **Color Depth**: 8bpp requires more VRAM reads per pixel than 4bpp.
+- **VRAM bus utilization**: When Layers 0 and 1 are enabled in a heavy-duty mode, they generate a significant load on the RAM bus, creating more bus contention opportunities for the Sprite Renderer, which is the lowest priority port on the bus.
 - **Position of the sprites in the Sprite Attribute RAM**. The Sprite Attribute RAM is scanned sequentially from start to end to find the sprites that are active on the given scanline. If all the active sprites are located towards the end of the Sprite Attribute RAM, more time will be spent searching, and less time is available for rendering.
 
 I measured several sprite rendering configurations and organized them into the following table:
@@ -153,7 +168,7 @@ One final aspect I looked at is the behavior of the system with everything maxed
 - Layer 1 enabled in 8bpp Tile Mode with 8x8 tiles.
 - The maximum number of 8bpp sprites enabled.
 
-In this configuration, the Main RAM bus is maximally loaded. Will the system hold up, i.e. will the renderers be able to render out a scanline within their cycle budgets? We know the Sprite Renderer has built-in protection to prevent overruns, but what about the Layer Renderers? 
+In this configuration, the VRAM bus is maximally loaded. Will the system hold up, i.e. will the renderers be able to render out a scanline within their cycle budgets? We know the Sprite Renderer has built-in protection to prevent overruns, but what about the Layer Renderers? 
 
 It looks like it's working out fine:
 
@@ -163,9 +178,9 @@ It looks like it's working out fine:
 
 As you can see, both Layer Renderers reach Line Buffer index 640, i.e. the end of the scanline, about 31 cycles before the start of the next scanline.
 
-External Bus Load on the Main RAM Bus
+External Bus Load on the VRAM Bus
 -------------------------------------
-In the simulations I've done, I didn't include any load on the Main RAM bus coming from the external bus. I don't expect any issues in the Commander X16 configuration. The 65c02 CPU runs at 8MHz and can generate a load or a store instruction once every four clock cycles. That corresponds to about 12.5 25MHz clock cycles. In other words, the maximum load from the external bus on the Main RAM bus is (1/12.5)x100% = 8%. The maximum load on the Main RAM bus from the renderers combined is 26%+26%+13% = 65%. There's enough bus bandwidth left for that 8% load coming from the 65c02.
+In the simulations I've done, I didn't include any load on the VRAM bus coming from the external bus. I don't expect any issues in the Commander X16 configuration. The 65c02 CPU runs at 8MHz and can generate a load or a store instruction once every four clock cycles. That corresponds to about 12.5 25MHz clock cycles. In other words, the maximum load from the external bus on the VRAM bus is (1/12.5)x100% = 8%. The maximum load on the VRAM bus from the renderers combined is 26%+26%+13% = 65%. There's enough bus bandwidth left for that 8% load coming from the 65c02.
 
 In other configurations, however, e.g. when the external bus is replaced with a Wishbone slave port in an SoC, it's a different matter entirely. That's a topic for a future post.
 
