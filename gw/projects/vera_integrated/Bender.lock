@@ -1,0 +1,7 @@
+packages:
+  vera:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/vera
+    dependencies: []

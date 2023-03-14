@@ -1,0 +1,12 @@
+#This build has an SDL dependency. VERA's VGA output is rendered onto an SDL window.
+find_package(SDL2 REQUIRED)
+
+#gw_project_rules() function is defined in the parent CMakeLists.txt.
+gw_project_rules(
+    TOP_MODULE top
+    PROJECT_NAME vera_integrated
+    VERILATOR_CPP_FLAGS 
+        -I${SDL2_INCLUDE_DIRS}
+    VERILATOR_LD_FLAGS 
+        "-lncurses ${SDL2_LIBRARIES}"
+)
