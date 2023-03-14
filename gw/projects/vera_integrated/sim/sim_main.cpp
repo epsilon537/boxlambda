@@ -121,6 +121,15 @@ int load_bin_file_into_vram(const char* vram_bin_filename) {
   return 0;
 }
 
+void generate_8bpp_8x8_tiles() {
+  //Just generate 8x8 blocks of different colors
+  for (int jj=0;jj<16;jj++) {
+    for (int ii=0; ii<64; ii++) {
+      vram_wr(jj*64+ii, jj);
+    }
+  }
+}
+
 int main(int argc, char** argv, char** env) {
     // Prevent unused variable warnings
     if (false && argc && argv && env) {}
@@ -209,22 +218,30 @@ int main(int argc, char** argv, char** env) {
       tick();
     }
 
+#if 0
     //If a vram.bin file is given, load it into memory and poke it into VERA's VRAM
     if (vram_bin_filename) {
       if (load_bin_file_into_vram(vram_bin_filename) < 0)
         exit(-1);
     }
+#endif
 
+    generate_8bpp_8x8_tiles();
+    
     //Fill VRAM map area with all characters
     for (int ii=0; ii<128*128/2; ii++) {
-        vram_wr(VRAM_MAP_BASE+ii*2, ii&0xff);
-        vram_wr(VRAM_MAP_BASE+ii*2+1, 0x01);
-      }
+      vram_wr(VRAM_MAP_BASE+ii*2, 2 /*ii&0xff*/);
+      vram_wr(VRAM_MAP_BASE+ii*2+1, 0 /*0x01*/);
+    }
 
-    ext_bus_wr(VERA_DC_VIDEO, 0x11); //sprite disable, Layer 1 disable, Layer 0 enable, VGA output mode.
-    ext_bus_wr(VERA_L0_CONFIG, 0xc0); //map size 128x128, tile mode, 1bpp.
-    ext_bus_wr(VERA_L0_TILEBASE, 0x2); //tile base address 0, tile height/width 16x8.
+    ext_bus_wr(VERA_DC_VIDEO, 0x71); //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
+    ext_bus_wr(VERA_L0_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
+    ext_bus_wr(VERA_L0_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
     ext_bus_wr(VERA_L0_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
+    ext_bus_wr(VERA_L1_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
+    ext_bus_wr(VERA_L1_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
+    ext_bus_wr(VERA_L1_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
+    ext_bus_wr(VERA_CTRL, 0); //Sprite Bank 0
 
     //Curses setup
     initscr();
@@ -258,6 +275,16 @@ int main(int argc, char** argv, char** env) {
           SDL_SetRenderTarget(sdl_renderer, sdl_display);
           sdl_x = 0;
           sdl_y++;
+
+          if (sdl_y == 1) {
+            ext_bus_wr(VERA_CTRL, 0); //Sprite Bank 0
+            sdl_x = 7; //ext_bus_wr takes 7 ticks.
+          }
+
+          if (sdl_y == 240) {
+            ext_bus_wr(VERA_CTRL, 1<<2); //Sprite Bank 1
+            sdl_x = 7; //ext_bus_wr takes 7 ticks.
+          }
         }
 
         //Render the VGA rgb output. Convert RGB4:4:4 to RGB8:8:8.
