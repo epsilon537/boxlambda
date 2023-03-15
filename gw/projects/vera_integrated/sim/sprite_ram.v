@@ -36,6 +36,14 @@ module sprite_ram(
             mem[i] = 0;
         end
 
+`ifdef __ICARUS__
+    `define ICARUS_OR_VERILATOR
+`endif
+`ifdef VERILATOR
+    `define ICARUS_OR_VERILATOR
+`endif
+
+`ifdef ICARUS_OR_VERILATOR
         for (i=0; i<32; i++) begin
             mem[i*2][11:0]  = 12'('h40>>5);   // addr
             mem[i*2][15]    = 1;       // mode: 8bpp
@@ -51,7 +59,7 @@ module sprite_ram(
         end
 
         for (i=0; i<32; i++) begin
-            mem[64+i*2][11:0]  = 12'('h40>>5);   // addr
+            mem[64+i*2][11:0]  = 12'('h1000>>5);   // addr
             mem[64+i*2][15]    = 1;       // mode: 8bpp
             mem[64+i*2][25:16] = 10'('d70*i);  // x
             mem[64+i*2+1][9:0]   = 10'd300;   // y
@@ -63,6 +71,7 @@ module sprite_ram(
             mem[64+i*2+1][29:28] = 2'd3;    // width: 64
             mem[64+i*2+1][31:30] = 2'd3;    // height: 64
         end
+`endif
     end
 
 endmodule

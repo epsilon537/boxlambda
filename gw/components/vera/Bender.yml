@@ -8,15 +8,19 @@ package:
 sources:
   - target: vera
     files:
-    - ../../../sub/vera-module/fpga/source/sim/sprite_ram.v
+     - ../../../sub/vera-module/fpga/source/sim/sprite_ram.v
+  - target: memory
+    files:
+     - ../../../sub/vera-module/fpga/source/palette_ram.mem
   - target: verilator
     files:
      - lint.vlt
      - ../../../sub/vera-module/fpga/source/top.v
      - ../../../sub/vera-module/fpga/source/reset_sync.v
-     - ../../../sub/vera-module/fpga/source/main_ram.v
+     - ../../../sub/vera-module/fpga/source/main_ram_generic.v
+     - ../../../sub/vera-module/fpga/source/spram_byte_write_ram_wr_first.v
      - ../../../sub/vera-module/fpga/source/dpram.v
-     - ../../../sub/vera-module/fpga/source/sim/palette_ram.v
+     - ../../../sub/vera-module/fpga/source/palette_ram.v
      - ../../../sub/vera-module/fpga/source/graphics/composer.v
      - ../../../sub/vera-module/fpga/source/graphics/layer_line_buffer.v
      - ../../../sub/vera-module/fpga/source/graphics/layer_renderer.v

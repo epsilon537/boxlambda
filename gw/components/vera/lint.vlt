@@ -140,3 +140,10 @@ lint_off -rule IMPERFECTSCH -file "*/sub/vera-module/fpga/source/reset_sync.v" -
 
 lint_off -rule IMPERFECTSCH -file "*/sub/vera-module/fpga/source/reset_sync.v" -match "Imperfect scheduling of variable: 'top.reset_sync_clk25.dff_rr'"
 
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rst_i'"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_en_i'"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_clk_en_i'"

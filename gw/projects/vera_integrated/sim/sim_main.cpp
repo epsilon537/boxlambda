@@ -130,6 +130,12 @@ void generate_8bpp_8x8_tiles() {
   }
 }
 
+void generate_8bpp_64x64_sprite() {
+  for (int ii=0; ii<64*64; ii++) {
+      vram_wr(0x1000+ii, 3);
+    } 
+}
+
 int main(int argc, char** argv, char** env) {
     // Prevent unused variable warnings
     if (false && argc && argv && env) {}
@@ -227,7 +233,8 @@ int main(int argc, char** argv, char** env) {
 #endif
 
     generate_8bpp_8x8_tiles();
-    
+    generate_8bpp_64x64_sprite();
+
     //Fill VRAM map area with all characters
     for (int ii=0; ii<128*128/2; ii++) {
       vram_wr(VRAM_MAP_BASE+ii*2, 2 /*ii&0xff*/);
