@@ -6,12 +6,10 @@
 
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
-  echo "$0 <boxlambda src root dir> <outfile> <depfile target> <optional OOC target>"
+  echo "$0 <src dir> <outfile> <depfile target> <optional OOC target>"
   exit 1
 fi
 
-
-# $1 = meson.current_source_dir()
 SRC_DIR="$1"
 
 # $2 = output file, containing verilator script

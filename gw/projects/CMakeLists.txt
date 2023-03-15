@@ -24,19 +24,37 @@ function (gw_project_rules)
     set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS})
     set(_verilator_ld_flags ${gw_project_rules_VERILATOR_LD_FLAGS})
 
-    add_custom_command(
-        OUTPUT
-            ${_prj_name}.mem_file_list ${_mem_file_out}
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/gen_mem_file_list.sh $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/${_mem_file_out} ${_prj_name}.mem_file_list
-        DEPENDS
-            ${_mem_file_tgt}
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT
-            "Generating mem file list."
-        VERBATIM
-    )
+    if (NOT ${_mem_file_tgt} STREQUAL "")
+        add_custom_command(
+            OUTPUT
+                ${_prj_name}.mem_file_list ${_mem_file_out}
+            COMMAND
+                ${PROJECT_SOURCE_DIR}/scripts/gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/${_mem_file_out}
+            DEPENDS
+                ${_mem_file_tgt}
+                always_rebuild
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT
+                "Generating mem file list."
+            VERBATIM
+        )
+    else()
+        add_custom_command(
+            OUTPUT
+                ${_prj_name}.mem_file_list
+            COMMAND
+                ${PROJECT_SOURCE_DIR}/scripts/gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list
+            DEPENDS
+                ${_mem_file_tgt}
+                always_rebuild
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT
+                "Generating mem file list."
+            VERBATIM
+        )
+    endif()
 
     if(CMAKE_BUILD_TYPE STREQUAL "fpga")
         add_custom_command(
@@ -139,6 +157,7 @@ function (gw_project_rules)
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
+                ${_prj_name}.mem_file_list
                 ${_prj_name}.verilator_sources 
                 ${_prj_name}.vlts 
                 ${_prj_name}.cpp_files
