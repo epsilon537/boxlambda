@@ -1,5 +1,7 @@
-#This build has an SDL dependency. VERA's VGA output is rendered onto an SDL window.
-find_package(SDL2 REQUIRED)
+if(CMAKE_BUILD_TYPE STREQUAL "sim")
+    #This build has an SDL dependency. VERA's VGA output is rendered onto an SDL window.
+    find_package(SDL2 REQUIRED)
+endif()
 
 #gw_project_rules() function is defined in the parent CMakeLists.txt.
 gw_project_rules(

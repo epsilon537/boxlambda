@@ -10,6 +10,13 @@ dependencies:
   vera: { path: "../../components/vera" }
   
 sources:
+  - target: constraints
+    files:
+      - constrs/vera_test_constraints.xdc
+
+  - target: vivado
+    files:
+      - ../../../sub/vera-module/fpga/source/sprite_ram.v
   - target: verilator
     files:
       - sim/sprite_ram.v

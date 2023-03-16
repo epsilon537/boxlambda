@@ -18,14 +18,6 @@ sources:
   - target: constraints
     files:
       - constrs/Arty-A7-35-Master.xdc
-  #Separate memory files for simulation and FPGA. The LiteDRAM CSR register layout is different between the simulated LiteDRAM
-  #and the FPGA version.
-  - target: memory_sim
-    files:
-      - ../../sw/projects/ddr_test/sim/spram.mem
-  - target: memory_fpga
-    files:
-      - ../../sw/projects/ddr_test/fpga/spram.mem      
   - target: verilator
     files:
       - sim/sim_main.cpp
