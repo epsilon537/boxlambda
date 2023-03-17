@@ -25,6 +25,8 @@
 #define VRAM_SIZE_BYTES (128*1024)
 #define VRAM_MAP_BASE 0x10000
 
+#define WB_ACK_TIMEOUT 100
+
 //SDL objects:
 #define SDL_WINDOW_WIDTH 800
 
@@ -67,29 +69,64 @@ static void tick() {
     tfp->dump(contextp->time());
 }
 
-//A very crude external bus write implementation.
-void ext_bus_wr(unsigned addr, unsigned data) {
-  top->extbus_a = addr;      /* Address */
-  top->extbus_d = data;      /* Data (bi-directional) */
+//A very crude wishbone bus write implementation.
+void wb_wr(unsigned addr, unsigned data) {
+  top->wb_adr = addr;      
+  top->wb_dat_w = data;    
 
-  top->extbus_cs_n = 0;   /* Chip select */
-  top->extbus_wr_n = 0;   /* Write strobe */
+  top->wb_cyc = 1;
+  top->wb_stb = 1;  
+  top->wb_we = 1;
   
-  tick();
-  tick();
+  while (!top->wb_ack)
+    tick();
 
-  top->extbus_cs_n = !0;   /* Chip select */
-  top->extbus_wr_n = !0;   /* Write strobe */
+  top->wb_cyc = 0;
+  top->wb_stb = 0;  
+  top->wb_we = 0;
+
   tick();
   tick();
 }
 
+//A very crude wishbone bus read implementation.
+int wb_rd(unsigned addr, unsigned char &data) {
+  unsigned char res;
+
+  top->wb_adr = addr;
+  top->wb_cyc = 1;
+  top->wb_stb = 1;  
+  top->wb_we = 0;
+  
+  int timeout_counter=0;
+
+  while (!top->wb_ack && (timeout_counter++ < WB_ACK_TIMEOUT))
+    tick();
+
+  if (timeout_counter >= WB_ACK_TIMEOUT) {
+    printf("wb_ack timeout!\r\n");
+    res = -1;
+  }
+  else {
+    data = top->wb_dat_r;
+    res = 0;
+  }
+
+  top->wb_cyc = 0;
+  top->wb_stb = 0;  
+  top->wb_we = 0;
+
+  tick();
+  
+  return res;
+}
+
 //This function writes the given data byte to the given address in VERA's VRAM.
 void vram_wr(unsigned addr, unsigned char data) {
-  ext_bus_wr(VERA_ADDR_L, addr&0xff);
-  ext_bus_wr(VERA_ADDR_M, (addr>>8)&0xff);
-  ext_bus_wr(VERA_ADDR_H, (addr>>16)&1);
-  ext_bus_wr(VERA_DATA0, data);
+  wb_wr(VERA_ADDR_L, addr&0xff);
+  wb_wr(VERA_ADDR_M, (addr>>8)&0xff);
+  wb_wr(VERA_ADDR_H, (addr>>16)&1);
+  wb_wr(VERA_DATA0, data);
 }
 
 //Returns <0 if unsuccessful
@@ -131,6 +168,20 @@ void generate_8bpp_64x64_sprite() {
   for (int ii=0; ii<64*64; ii++) {
       vram_wr(0x1000+ii, 3);
     } 
+}
+
+void cleanup() {
+  //SDL clean-up.
+  SDL_DestroyRenderer(sdl_renderer);
+  SDL_DestroyWindow(sdl_window);
+  SDL_Quit();
+
+  //Close trace file.
+  if (tracing_enable)
+    tfp->close();
+
+  // Final model cleanup
+  top->final();
 }
 
 int main(int argc, char** argv, char** env) {
@@ -206,11 +257,11 @@ int main(int argc, char** argv, char** env) {
     // Set Vtop's input signals
     
     // External bus interface
-    top->extbus_cs_n = !0;   /* Chip select */
-    top->extbus_rd_n = !0;   /* Read strobe */
-    top->extbus_wr_n = !0;   /* Write strobe */
-    top->extbus_a = 0;      /* Address */
-    top->extbus_d = 0;      /* Data (bi-directional) */
+    top->wb_cyc = 0;
+    top->wb_we = 0;
+    top->wb_stb = 0;
+    top->wb_adr = 0;   
+    top->wb_dat_w = 0;    
 
     top->reset = 1;
     tick();
@@ -235,14 +286,31 @@ int main(int argc, char** argv, char** env) {
       vram_wr(VRAM_MAP_BASE+ii*2+1, 0 /*0x01*/);
     }
 
-    ext_bus_wr(VERA_DC_VIDEO, 0x71); //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
-    ext_bus_wr(VERA_L0_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
-    ext_bus_wr(VERA_L0_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
-    ext_bus_wr(VERA_L0_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
-    ext_bus_wr(VERA_L1_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
-    ext_bus_wr(VERA_L1_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
-    ext_bus_wr(VERA_L1_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
-    ext_bus_wr(VERA_CTRL, 0); //Sprite Bank 0
+    unsigned char read_back_val=0;
+
+    wb_wr(VERA_DC_VIDEO, 0x71); //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
+    if (wb_rd(VERA_DC_VIDEO, read_back_val) < 0) {
+      printf("VERA_DC_VIDEO read back failed.\n\r");
+      cleanup();
+      exit(-1);
+    }
+
+    if (read_back_val != 0x71) {
+      printf("VERA_DC_VIDEO read back incorrectly: 0x%x\n\r", read_back_val);
+      cleanup();
+      exit(-1);
+    }
+    else {
+      printf("VERA_DC_VIDEO read back OK\n\r");
+    }
+
+    wb_wr(VERA_L0_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
+    wb_wr(VERA_L0_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
+    wb_wr(VERA_L0_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
+    wb_wr(VERA_L1_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
+    wb_wr(VERA_L1_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
+    wb_wr(VERA_L1_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
+    wb_wr(VERA_CTRL, 0); //Sprite Bank 0
 
     //Curses setup
     initscr();
@@ -278,13 +346,13 @@ int main(int argc, char** argv, char** env) {
           sdl_y++;
 
           if (sdl_y == 1) {
-            ext_bus_wr(VERA_CTRL, 0); //Sprite Bank 0
-            sdl_x = 7; //ext_bus_wr takes 7 ticks.
+            wb_wr(VERA_CTRL, 0); //Sprite Bank 0
+            sdl_x = 7; //wb_wr takes 7 ticks.
           }
 
           if (sdl_y == 240) {
-            ext_bus_wr(VERA_CTRL, 1<<2); //Sprite Bank 1
-            sdl_x = 7; //ext_bus_wr takes 7 ticks.
+            wb_wr(VERA_CTRL, 1<<2); //Sprite Bank 1
+            sdl_x = 7; //wb_wr takes 7 ticks.
           }
         }
 
@@ -305,21 +373,11 @@ int main(int argc, char** argv, char** env) {
 	      //mvprintw(0, 0, "[%lld %d %d]", contextp->time(), sdl_x, sdl_y);
 	      //refresh();
     }
-
-    //Close trace file.
-    if (tracing_enable)
-      tfp->close();
     
-    // Final model cleanup
-    top->final();
+    cleanup();
 
     // End curses.
     endwin();
-
-    //SDL clean-up.
-    SDL_DestroyRenderer(sdl_renderer);
-    SDL_DestroyWindow(sdl_window);
-    SDL_Quit();
 
     return 0;
 }

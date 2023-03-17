@@ -147,3 +147,17 @@ lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match
 lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_en_i'"
 
 lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Bits of signal are not used: 'wb_adr'[31:5]"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Bits of signal are not used: 'wb_dat_w'[31:8]"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not used: 'wb_sel'"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rst_i'"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_en_i'"
+
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
