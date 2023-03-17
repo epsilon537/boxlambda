@@ -55,12 +55,12 @@ double sc_time_stamp() { return 0; }
 
 //Advance simulation by one clock cycle
 static void tick() {
-  top->clk25 = 1;
+  top->clk = 1;
   contextp->timeInc(1);
   top->eval();
   if (tracing_enable)
     tfp->dump(contextp->time());
-  top->clk25 = 0;
+  top->clk = 0;
   contextp->timeInc(1);
   top->eval();
   if (tracing_enable)
@@ -77,12 +77,9 @@ void ext_bus_wr(unsigned addr, unsigned data) {
   
   tick();
   tick();
-  tick();
 
   top->extbus_cs_n = !0;   /* Chip select */
   top->extbus_wr_n = !0;   /* Write strobe */
-  tick();
-  tick();
   tick();
   tick();
 }
@@ -215,14 +212,11 @@ int main(int argc, char** argv, char** env) {
     top->extbus_a = 0;      /* Address */
     top->extbus_d = 0;      /* Data (bi-directional) */
 
-    top->clk25 = 0;
-    contextp->timeInc(1);  // 1 timeprecision period passes...
-    top->eval();
-
-    //Let the synchronizer do its work. Spin until we come out of reset.
-    while(contextp->time() < 1000) {
-      tick();
-    }
+    top->reset = 1;
+    tick();
+    tick();
+    tick();
+    top->reset = 0;
 
 #if 0
     //If a vram.bin file is given, load it into memory and poke it into VERA's VRAM

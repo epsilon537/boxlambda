@@ -1,6 +1,6 @@
 ## Clock Constraints
-set_property -dict {PACKAGE_PIN E3 IOSTANDARD LVCMOS33} [get_ports clk25]
-create_clock -period 20.000 -name sys_clk_pin -waveform {0.000 10.000} -add [get_ports clk25]
+set_property -dict {PACKAGE_PIN E3 IOSTANDARD LVCMOS33} [get_ports clk]
+create_clock -period 20.000 -name sys_clk_pin -waveform {0.000 10.000} -add [get_ports clk]
 
 ## Pmod Header JB
 set_property -dict { PACKAGE_PIN E15   IOSTANDARD LVCMOS33 } [get_ports { vga_r[0] }]; #IO_L11P_T1_SRCC_15 Sch=jb_p[1]
@@ -46,7 +46,7 @@ set_property -dict { PACKAGE_PIN R17   IOSTANDARD LVCMOS33 } [get_ports { extbus
 set_property -dict { PACKAGE_PIN P17   IOSTANDARD LVCMOS33 } [get_ports { extbus_wr_n }]; #IO_L12P_T1_MRCC_14           Sch=ck_io[13]
 
 set_property -dict { PACKAGE_PIN U11   IOSTANDARD LVCMOS33 } [get_ports { extbus_cs_n }]; #IO_L19N_T3_A09_D25_VREF_14 	Sch=ck_io[26]
-#set_property -dict { PACKAGE_PIN V16   IOSTANDARD LVCMOS33 } [get_ports { ck_io27 }]; #IO_L16N_T2_A15_D31_14 		Sch=ck_io[27]
+set_property -dict { PACKAGE_PIN V16   IOSTANDARD LVCMOS33 } [get_ports { reset }]; #IO_L16N_T2_A15_D31_14 		Sch=ck_io[27]
 #set_property -dict { PACKAGE_PIN M13   IOSTANDARD LVCMOS33 } [get_ports { ck_io28 }]; #IO_L6N_T0_D08_VREF_14 		Sch=ck_io[28]
 #set_property -dict { PACKAGE_PIN R10   IOSTANDARD LVCMOS33 } [get_ports { ck_io29 }]; #IO_25_14 		 			Sch=ck_io[29]
 #set_property -dict { PACKAGE_PIN R11   IOSTANDARD LVCMOS33 } [get_ports { ck_io30 }]; #IO_0_14  		 			Sch=ck_io[30]
