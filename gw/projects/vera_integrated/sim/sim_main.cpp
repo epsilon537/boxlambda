@@ -254,6 +254,33 @@ int vram_rd_byte(unsigned addr, unsigned char& data) {
   return res;
 }
 
+//This function writes the given rgb triple to the given position in VERA's Palette RAM.
+void palette_ram_wr(unsigned idx, unsigned char r, unsigned char g, unsigned char b) {
+  top->wb_adr = (idx<<2) | VERA_PALETTE_BASE;      
+  top->wb_dat_w = (((unsigned)r)<<8) | (((unsigned)g)<<4) | ((unsigned)b);    
+
+  top->wb_cyc = 1;
+  top->wb_stb = 1;  
+  top->wb_we = 1;
+  top->wb_sel = 0x3;
+
+  while (!top->wb_ack)
+    tick();
+
+  top->wb_cyc = 0;
+  top->wb_stb = 0;  
+  top->wb_we = 0;
+  top->wb_sel = 0;
+
+  tick();
+}
+
+void setup_palette_ram(void) {
+  for (unsigned ii=0; ii<256; ii++) {
+    palette_ram_wr(ii, ((ii>>4)&3)<<2, ((ii>>2)&3)<<2, (ii&3)<<2);
+  }
+}
+
 //This function writes the given data word to the given address in VERA's Sprite RAM.
 void sprite_ram_wr(unsigned addr, unsigned data) {
   top->wb_adr = addr | VERA_SPRITES_BASE;      
@@ -460,7 +487,8 @@ int main(int argc, char** argv, char** env) {
     generate_8bpp_8x8_tiles();
     generate_8bpp_64x64_sprite();
     setup_sprite_ram();
-
+    setup_palette_ram();
+    
     //Fill VRAM map area
     for (int ii=0; ii<128*128/(2*4); ii++) {
       vram_wr(VRAM_MAP_BASE+ii*4, 0x00020002);
