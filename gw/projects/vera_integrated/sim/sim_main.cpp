@@ -23,7 +23,7 @@
 #include "vera.h"
 
 #define VRAM_SIZE_BYTES (128*1024)
-#define VRAM_MAP_BASE 0x10000
+#define VRAM_MAP_BASE (0x10000|VERA_VRAM_BASE)
 
 #define WB_ACK_TIMEOUT 100
 
@@ -55,6 +55,20 @@ std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 // Legacy function required only so linking works on Cygwin and MSVC++
 double sc_time_stamp() { return 0; }
 
+void cleanup() {
+  //SDL clean-up.
+  SDL_DestroyRenderer(sdl_renderer);
+  SDL_DestroyWindow(sdl_window);
+  SDL_Quit();
+
+  //Close trace file.
+  if (tracing_enable)
+    tfp->close();
+
+  // Final model cleanup
+  top->final();
+}
+
 //Advance simulation by one clock cycle
 static void tick() {
   top->clk = 1;
@@ -77,13 +91,15 @@ void wb_wr(unsigned addr, unsigned data) {
   top->wb_cyc = 1;
   top->wb_stb = 1;  
   top->wb_we = 1;
-  
+  top->wb_sel = 0xf;
+
   while (!top->wb_ack)
     tick();
 
   top->wb_cyc = 0;
   top->wb_stb = 0;  
   top->wb_we = 0;
+  top->wb_sel = 0xf;
 
   tick();
   tick();
@@ -121,12 +137,173 @@ int wb_rd(unsigned addr, unsigned char &data) {
   return res;
 }
 
+//This function writes the given data word to the given address in VERA's VRAM.
+void vram_wr(unsigned addr, unsigned data) {
+  top->wb_adr = addr | VERA_VRAM_BASE;      
+  top->wb_dat_w = data;    
+
+  top->wb_cyc = 1;
+  top->wb_stb = 1;  
+  top->wb_we = 1;
+  top->wb_sel = 0xf;
+
+  while (!top->wb_ack)
+    tick();
+
+  top->wb_cyc = 0;
+  top->wb_stb = 0;  
+  top->wb_we = 0;
+  top->wb_sel = 0;
+
+  tick();
+}
+
 //This function writes the given data byte to the given address in VERA's VRAM.
-void vram_wr(unsigned addr, unsigned char data) {
-  wb_wr(VERA_ADDR_L, addr&0xff);
-  wb_wr(VERA_ADDR_M, (addr>>8)&0xff);
-  wb_wr(VERA_ADDR_H, (addr>>16)&1);
-  wb_wr(VERA_DATA0, data);
+void vram_wr_byte(unsigned addr, unsigned char data) {
+  unsigned addr_aligned = addr & (~3);
+  unsigned byte_shift = (addr-addr_aligned);
+  unsigned byte_enable = 1<<byte_shift;
+
+  top->wb_adr = addr_aligned | VERA_VRAM_BASE;      
+  top->wb_dat_w = ((unsigned)data)<<(byte_shift*8);    
+
+  top->wb_cyc = 1;
+  top->wb_stb = 1;  
+  top->wb_we  = 1;
+  top->wb_sel = byte_enable;
+
+  while (!top->wb_ack)
+    tick();
+
+  top->wb_cyc = 0;
+  top->wb_stb = 0;  
+  top->wb_we = 0;
+  top->wb_sel = 0;
+
+  tick();
+}
+
+int vram_rd(unsigned addr, unsigned& data) {
+  int res=0;
+
+  top->wb_adr = addr | VERA_VRAM_BASE;      
+
+  top->wb_cyc = 1;
+  top->wb_stb = 1;  
+  top->wb_we = 0;
+  top->wb_sel = 0xf;
+
+  int timeout_counter=0;
+
+  while (!top->wb_ack && (timeout_counter++ < WB_ACK_TIMEOUT))
+    tick();
+
+  if (timeout_counter >= WB_ACK_TIMEOUT) {
+    printf("wb_ack timeout!\r\n");
+    res = -1;
+  }
+  else {
+    data = top->wb_dat_r;
+    res = 0;
+  }
+
+  top->wb_cyc = 0;
+  top->wb_stb = 0;  
+  top->wb_we = 0;
+  top->wb_sel = 0;
+
+  tick();
+
+  return res;
+}
+
+int vram_rd_byte(unsigned addr, unsigned char& data) {
+  int res=0;
+  unsigned addr_aligned = addr & (~3);
+  unsigned byte_shift = (addr-addr_aligned);
+  unsigned byte_enable = 1<<byte_shift;
+
+  top->wb_adr = addr_aligned | VERA_VRAM_BASE;      
+
+  top->wb_cyc = 1;
+  top->wb_stb = 1;  
+  top->wb_we = 0;
+  top->wb_sel = byte_enable;
+
+  int timeout_counter=0;
+
+  while (!top->wb_ack && (timeout_counter++ < WB_ACK_TIMEOUT))
+    tick();
+
+  if (timeout_counter >= WB_ACK_TIMEOUT) {
+    printf("wb_ack timeout!\r\n");
+    res = -1;
+  }
+  else {
+    data = (unsigned char)(top->wb_dat_r>>(byte_shift*8));
+    res = 0;
+  }
+
+  top->wb_cyc = 0;
+  top->wb_stb = 0;  
+  top->wb_we = 0;
+  top->wb_sel = 0;
+
+  tick();
+
+  return res;
+}
+
+//This function writes the given data word to the given address in VERA's Sprite RAM.
+void sprite_ram_wr(unsigned addr, unsigned data) {
+  top->wb_adr = addr | VERA_SPRITES_BASE;      
+  top->wb_dat_w = data;    
+
+  top->wb_cyc = 1;
+  top->wb_stb = 1;  
+  top->wb_we = 1;
+  top->wb_sel = 0xf;
+
+  while (!top->wb_ack)
+    tick();
+
+  top->wb_cyc = 0;
+  top->wb_stb = 0;  
+  top->wb_we = 0;
+  top->wb_sel = 0;
+
+  tick();
+}
+
+void setup_sprite_ram() {
+  int i;
+  unsigned v,w;
+
+  for (i=0; i<32; i++) {
+    v = (0x40>>5); // addr
+    v |= (1<<15); // mode: 8bpp
+    v |= ((16*i)<<16); //x
+    w = 3; //y
+    w |= (3<<18); //z
+    //width:8
+    //height:8
+
+    sprite_ram_wr(i*8, v);
+    sprite_ram_wr(i*8 + 4, w);
+  }
+
+  for (i=0; i<32; i++) {
+    v = (0x1000>>5); // addr
+    v |= (1<<15); // mode: 8bpp
+    v |= ((70*i)<<16); //x
+    w = 300; //y
+    w |= (3<<18); //z
+    w |= (3<<28); //width:64
+    w |= (3<<30); //heigth
+
+    sprite_ram_wr(64*4 + i*8, v);
+    sprite_ram_wr(64*4 + i*8 + 4, w);
+  }
 }
 
 //Returns <0 if unsuccessful
@@ -140,8 +317,9 @@ int load_bin_file_into_vram(const char* vram_bin_filename) {
   if (f) {
     n = fread(buffer, 1, VRAM_SIZE_BYTES, f);
 
-    for (int ii=0; ii<n; ii++) {
-      vram_wr(ii, buffer[ii]);
+    for (int ii=0; ii<n/4; ii++) {
+      vram_wr(ii*4, 
+        (unsigned)(buffer[ii*4+3]<<24)|(unsigned)(buffer[ii*4+2]<<16)|(unsigned)(buffer[ii*4+2]<<8)|(unsigned)buffer[ii*4]);
     }
   }   
   else
@@ -156,32 +334,34 @@ int load_bin_file_into_vram(const char* vram_bin_filename) {
 }
 
 void generate_8bpp_8x8_tiles() {
+  unsigned char data=0;
+
   //Just generate 8x8 blocks of different colors
   for (int jj=0;jj<16;jj++) {
     for (int ii=0; ii<64; ii++) {
-      vram_wr(jj*64+ii, jj);
+      vram_wr_byte(jj*64+ii, jj);
+
+      if (vram_rd_byte(jj*64+ii, data) < 0) {
+        printf("VRAM read ack timeout.\n\r");
+        cleanup();
+        exit(-1);
+      }
+
+      if (data != jj) {
+        printf("VRAM read back mismatch addr: 0x%x: 0x%x vs. 0x%x.\n\r", jj*64+ii, data, jj);
+        cleanup();
+        exit(-1);
+      }
     }
   }
+
+  printf("VRAM readback OK.\n\r");
 }
 
 void generate_8bpp_64x64_sprite() {
-  for (int ii=0; ii<64*64; ii++) {
-      vram_wr(0x1000+ii, 3);
+  for (int ii=0; ii<64*64/4; ii++) {
+      vram_wr(0x1000+ii*4, 0x03030303);
     } 
-}
-
-void cleanup() {
-  //SDL clean-up.
-  SDL_DestroyRenderer(sdl_renderer);
-  SDL_DestroyWindow(sdl_window);
-  SDL_Quit();
-
-  //Close trace file.
-  if (tracing_enable)
-    tfp->close();
-
-  // Final model cleanup
-  top->final();
 }
 
 int main(int argc, char** argv, char** env) {
@@ -279,11 +459,11 @@ int main(int argc, char** argv, char** env) {
 
     generate_8bpp_8x8_tiles();
     generate_8bpp_64x64_sprite();
+    setup_sprite_ram();
 
-    //Fill VRAM map area with all characters
-    for (int ii=0; ii<128*128/2; ii++) {
-      vram_wr(VRAM_MAP_BASE+ii*2, 2 /*ii&0xff*/);
-      vram_wr(VRAM_MAP_BASE+ii*2+1, 0 /*0x01*/);
+    //Fill VRAM map area
+    for (int ii=0; ii<128*128/(2*4); ii++) {
+      vram_wr(VRAM_MAP_BASE+ii*4, 0x00020002);
     }
 
     unsigned char read_back_val=0;
@@ -324,8 +504,8 @@ int main(int argc, char** argv, char** env) {
     while (!top->vga_vsync)
       tick(); //Advance one clock period.
       
-    // When not in interactive mode, simulate for 10000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 10000000)) {
+    // When not in interactive mode, simulate for 100000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 100000000)) {
         // Evaluate model
         tick();
 

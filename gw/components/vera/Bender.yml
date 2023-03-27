@@ -6,9 +6,6 @@ package:
   name: vera
   
 sources:
-  - target: vera
-    files:
-     - ../../../sub/vera-module/fpga/source/sprite_ram.v
   - target: memory
     files:
      - ../../../sub/vera-module/fpga/source/palette_ram.mem
@@ -20,6 +17,7 @@ sources:
      - ../../../sub/vera-module/fpga/source/main_ram_generic.v
      - ../../../sub/vera-module/fpga/source/spram_byte_write_ram_wr_first.v
      - ../../../sub/vera-module/fpga/source/dpram.v
+     - ../../../sub/vera-module/fpga/source/sprite_ram.v
      - ../../../sub/vera-module/fpga/source/palette_ram.v
      - ../../../sub/vera-module/fpga/source/graphics/composer.v
      - ../../../sub/vera-module/fpga/source/graphics/layer_line_buffer.v
