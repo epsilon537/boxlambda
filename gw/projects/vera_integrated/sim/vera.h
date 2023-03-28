@@ -43,6 +43,6 @@
 #define VERA_PALETTE_BASE  0x2000
 #define VERA_SPRITES_BASE  0x1000
 
-#define VERA_VRAM_BASE   0x100000
+#define VERA_VRAM_BASE    0x40000
 
 #endif //VERA_H

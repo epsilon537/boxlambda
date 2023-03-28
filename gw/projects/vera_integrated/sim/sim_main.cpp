@@ -85,7 +85,7 @@ static void tick() {
 
 //A very crude wishbone bus write implementation.
 void wb_wr(unsigned addr, unsigned data) {
-  top->wb_adr = addr;      
+  top->wb_adr = addr>>2;      
   top->wb_dat_w = data;    
 
   top->wb_cyc = 1;
@@ -109,7 +109,7 @@ void wb_wr(unsigned addr, unsigned data) {
 int wb_rd(unsigned addr, unsigned char &data) {
   unsigned char res;
 
-  top->wb_adr = addr;
+  top->wb_adr = addr>>2;
   top->wb_cyc = 1;
   top->wb_stb = 1;  
   top->wb_we = 0;
@@ -139,7 +139,7 @@ int wb_rd(unsigned addr, unsigned char &data) {
 
 //This function writes the given data word to the given address in VERA's VRAM.
 void vram_wr(unsigned addr, unsigned data) {
-  top->wb_adr = addr | VERA_VRAM_BASE;      
+  top->wb_adr = (addr | VERA_VRAM_BASE)>>2;      
   top->wb_dat_w = data;    
 
   top->wb_cyc = 1;
@@ -164,7 +164,7 @@ void vram_wr_byte(unsigned addr, unsigned char data) {
   unsigned byte_shift = (addr-addr_aligned);
   unsigned byte_enable = 1<<byte_shift;
 
-  top->wb_adr = addr_aligned | VERA_VRAM_BASE;      
+  top->wb_adr = (addr_aligned | VERA_VRAM_BASE)>>2;      
   top->wb_dat_w = ((unsigned)data)<<(byte_shift*8);    
 
   top->wb_cyc = 1;
@@ -186,7 +186,7 @@ void vram_wr_byte(unsigned addr, unsigned char data) {
 int vram_rd(unsigned addr, unsigned& data) {
   int res=0;
 
-  top->wb_adr = addr | VERA_VRAM_BASE;      
+  top->wb_adr = (addr | VERA_VRAM_BASE)>>2;      
 
   top->wb_cyc = 1;
   top->wb_stb = 1;  
@@ -223,7 +223,7 @@ int vram_rd_byte(unsigned addr, unsigned char& data) {
   unsigned byte_shift = (addr-addr_aligned);
   unsigned byte_enable = 1<<byte_shift;
 
-  top->wb_adr = addr_aligned | VERA_VRAM_BASE;      
+  top->wb_adr = (addr_aligned | VERA_VRAM_BASE)>>2;      
 
   top->wb_cyc = 1;
   top->wb_stb = 1;  
@@ -256,7 +256,7 @@ int vram_rd_byte(unsigned addr, unsigned char& data) {
 
 //This function writes the given rgb triple to the given position in VERA's Palette RAM.
 void palette_ram_wr(unsigned idx, unsigned char r, unsigned char g, unsigned char b) {
-  top->wb_adr = (idx<<2) | VERA_PALETTE_BASE;      
+  top->wb_adr = ((idx<<2) | VERA_PALETTE_BASE)>>2;      
   top->wb_dat_w = (((unsigned)r)<<8) | (((unsigned)g)<<4) | ((unsigned)b);    
 
   top->wb_cyc = 1;
@@ -283,7 +283,7 @@ void setup_palette_ram(void) {
 
 //This function writes the given data word to the given address in VERA's Sprite RAM.
 void sprite_ram_wr(unsigned addr, unsigned data) {
-  top->wb_adr = addr | VERA_SPRITES_BASE;      
+  top->wb_adr = (addr | VERA_SPRITES_BASE)>>2;      
   top->wb_dat_w = data;    
 
   top->wb_cyc = 1;
