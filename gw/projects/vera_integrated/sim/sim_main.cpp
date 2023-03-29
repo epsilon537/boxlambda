@@ -344,10 +344,10 @@ void setup_sprite_ram() {
   int i;
   unsigned v,w;
 
-  for (i=0; i<32; i++) {
-    v = (0x40>>5); // addr
+  for (i=0; i<64; i++) {
+    v = (0x1c0>>5); // addr
     v |= (1<<15); // mode: 8bpp
-    v |= ((16*i)<<16); //x
+    v |= ((8*i)<<16); //x
     w = 16; //y
     w |= (3<<18); //z
     //width:8
@@ -357,7 +357,7 @@ void setup_sprite_ram() {
     sprite_ram_wr(i*8 + 4, w);
   }
 
-  for (i=0; i<32; i++) {
+  for (i=0; i<64; i++) {
     v = (0x1000>>5); // addr
     v |= (1<<15); // mode: 8bpp
     v |= ((70*i)<<16); //x
@@ -366,8 +366,8 @@ void setup_sprite_ram() {
     w |= (3<<28); //width:64
     w |= (3<<30); //heigth
 
-    sprite_ram_wr(64*4 + i*8, v);
-    sprite_ram_wr(64*4 + i*8 + 4, w);
+    sprite_ram_wr(64*8 + i*8, v);
+    sprite_ram_wr(64*8 + i*8 + 4, w);
   }
 }
 
@@ -404,7 +404,7 @@ void generate_8bpp_8x8_tiles() {
   //Just generate 8x8 blocks of different colors
   for (int jj=0;jj<16;jj++) {
     for (int ii=0; ii<64; ii++) {
-      vram_wr_byte(jj*64+ii, jj);
+      vram_wr_byte(jj*64+ii, (ii%8 >= 4) ? jj : 0);
 
       if (vram_rd_byte(jj*64+ii, data) < 0) {
         printf("VRAM read ack timeout.\n\r");
@@ -412,8 +412,8 @@ void generate_8bpp_8x8_tiles() {
         exit(-1);
       }
 
-      if (data != jj) {
-        printf("VRAM read back mismatch addr: 0x%x: 0x%x vs. 0x%x.\n\r", jj*64+ii, data, jj);
+      if (data != ((ii%8 >= 4) ? jj : 0)) {
+        printf("VRAM read back mismatch addr: 0x%x: 0x%x vs. 0x%x.\n\r", jj*64+ii, data, ((ii%8 >= 4) ? jj : 0));
         cleanup();
         exit(-1);
       }
@@ -578,8 +578,8 @@ int main(int argc, char** argv, char** env) {
         // Evaluate model
         tick();
         
-        //if (contextp->time() % 100 == 0)
-        //  vram_wr(0,0); //Stress the bus by writing all the time.
+        if (contextp->time() % 10 == 0)
+          vram_wr(0,0); //Stress the bus by writing all the time.
 
         if (sdl_y == 1) {
           wb_wr(VERA_CTRL, 0); //Sprite Bank 0
