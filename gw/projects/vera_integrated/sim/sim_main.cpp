@@ -37,6 +37,11 @@ SDL_Texture *sdl_display;
 
 int sdl_x=0/*750*/, sdl_y=0/*523*/;
 
+bool vsync_prev = false; 
+bool hsync_prev = false;
+bool exit_req = false;
+bool render = false;
+
 bool tracing_enable = false;
 
 // Used for tracing.
@@ -70,7 +75,7 @@ void cleanup() {
 }
 
 //Advance simulation by one clock cycle
-static void tick() {
+static void tick(void) {
   top->clk = 1;
   contextp->timeInc(1);
   top->eval();
@@ -81,6 +86,39 @@ static void tick() {
   top->eval();
   if (tracing_enable)
     tfp->dump(contextp->time());
+
+  if (!render)
+    return;
+
+  //Clear the screen during Vsync
+  if (top->vga_vsync && !vsync_prev) {
+    SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 0);
+    SDL_RenderClear(sdl_renderer);
+    sdl_y = 0;
+  }
+
+  //Render to SDL's back buffer at each Hsync.
+  if (top->vga_hsync && !hsync_prev) {
+    SDL_SetRenderTarget(sdl_renderer, NULL);
+    SDL_RenderCopy(sdl_renderer, sdl_display, NULL, NULL);
+    SDL_RenderPresent(sdl_renderer);
+    SDL_SetRenderTarget(sdl_renderer, sdl_display);
+    sdl_x = 0;
+    sdl_y++;
+  }
+
+  //Render the VGA rgb output. Convert RGB4:4:4 to RGB8:8:8.
+  SDL_SetRenderDrawColor(sdl_renderer, (Uint8)(top->vga_r<<4), (Uint8)(top->vga_g<<4), (Uint8)(top->vga_b<<4), 255);
+  SDL_RenderDrawPoint(sdl_renderer, sdl_x>>1, sdl_y);
+  
+  ++sdl_x;
+
+  //Exit if user closes the SDL window.
+  if (SDL_PollEvent(&sdl_event) && sdl_event.type == SDL_QUIT)
+    exit_req = true;
+
+  vsync_prev = top->vga_vsync;
+  hsync_prev = top->vga_hsync;
 }
 
 //A very crude wishbone bus write implementation.
@@ -310,7 +348,7 @@ void setup_sprite_ram() {
     v = (0x40>>5); // addr
     v |= (1<<15); // mode: 8bpp
     v |= ((16*i)<<16); //x
-    w = 3; //y
+    w = 16; //y
     w |= (3<<18); //z
     //width:8
     //height:8
@@ -490,8 +528,9 @@ int main(int argc, char** argv, char** env) {
     setup_palette_ram();
     
     //Fill VRAM map area
-    for (int ii=0; ii<128*128/(2*4); ii++) {
-      vram_wr(VRAM_MAP_BASE+ii*4, 0x00020002);
+    for (int ii=0; ii<128*128*2; ii+=2) {
+      vram_wr_byte(VRAM_MAP_BASE+ii, (unsigned char)ii&0xf);
+      vram_wr_byte(VRAM_MAP_BASE+ii+1, 0);
     }
 
     unsigned char read_back_val=0;
@@ -525,57 +564,30 @@ int main(int argc, char** argv, char** env) {
     cbreak();
     noecho();
 
-    bool vsync_prev = false; 
-    bool hsync_prev = false;
-
     //Wait for Vsync before starting the rendering
     while (!top->vga_vsync)
       tick(); //Advance one clock period.
-      
+
+    render = true;
+
     // When not in interactive mode, simulate for 100000000 timeprecision periods
     while (interactive_mode || (contextp->time() < 100000000)) {
-        // Evaluate model
-        tick();
-
-        //Clear the screen during Vsync
-        if (top->vga_vsync && !vsync_prev) {
-          SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 0);
-          SDL_RenderClear(sdl_renderer);
-          sdl_y = 0;
-        }
-
-        //Render to SDL's back buffer at each Hsync.
-        if (top->vga_hsync && !hsync_prev) {
-          SDL_SetRenderTarget(sdl_renderer, NULL);
-          SDL_RenderCopy(sdl_renderer, sdl_display, NULL, NULL);
-          SDL_RenderPresent(sdl_renderer);
-          SDL_SetRenderTarget(sdl_renderer, sdl_display);
-          sdl_x = 0;
-          sdl_y++;
-
-          if (sdl_y == 1) {
-            wb_wr(VERA_CTRL, 0); //Sprite Bank 0
-            sdl_x = 7; //wb_wr takes 7 ticks.
-          }
-
-          if (sdl_y == 240) {
-            wb_wr(VERA_CTRL, 1<<2); //Sprite Bank 1
-            sdl_x = 7; //wb_wr takes 7 ticks.
-          }
-        }
-
-        //Render the VGA rgb output. Convert RGB4:4:4 to RGB8:8:8.
-        SDL_SetRenderDrawColor(sdl_renderer, (Uint8)(top->vga_r<<4), (Uint8)(top->vga_g<<4), (Uint8)(top->vga_b<<4), 255);
-        SDL_RenderDrawPoint(sdl_renderer, sdl_x, sdl_y);
-        
-        ++sdl_x;
-
-        //Exit if user closes the SDL window.
-        if (SDL_PollEvent(&sdl_event) && sdl_event.type == SDL_QUIT)
+        if (exit_req)
           break;
 
-        vsync_prev = top->vga_vsync;
-        hsync_prev = top->vga_hsync;
+        // Evaluate model
+        tick();
+        
+        //if (contextp->time() % 100 == 0)
+        //  vram_wr(0,0); //Stress the bus by writing all the time.
+
+        if (sdl_y == 1) {
+          wb_wr(VERA_CTRL, 0); //Sprite Bank 0
+        }
+
+        if (sdl_y == 240) {
+          wb_wr(VERA_CTRL, 1<<2); //Sprite Bank 1
+        }
 
         //Positional printing using ncurses.
 	      //mvprintw(0, 0, "[%lld %d %d]", contextp->time(), sdl_x, sdl_y);
