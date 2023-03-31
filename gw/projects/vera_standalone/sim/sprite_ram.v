@@ -36,20 +36,42 @@ module sprite_ram(
             mem[i] = 0;
         end
 
-        for (i=(256-2*128); i<256; i=i+2) begin
-            mem[i][11:0]  = 'h100;   // addr
-            mem[i][15]    = 1;       // mode: 8bpp
-            mem[i][25:16] = 10'(32*i);  // x
-            mem[i+1][9:0]   = 10'd3;   // y
-            mem[i+1][16]    = 0;       // hflip
-            mem[i+1][17]    = 0;       // vflip
-            mem[i+1][19:18] = 2'd3;    // z
-            mem[i+1][23:20] = 0;       // collision mask
-            mem[i+1][27:24] = 0;       // palette offset
-            mem[i+1][29:28] = 2'd0;    // width: 8
-            mem[i+1][31:30] = 2'd0;    // height: 8
+`ifdef __ICARUS__
+    `define ICARUS_OR_VERILATOR
+`endif
+`ifdef VERILATOR
+    `define ICARUS_OR_VERILATOR
+`endif
+
+`ifdef ICARUS_OR_VERILATOR
+        for (i=0; i<32; i++) begin
+            mem[i*2][11:0]  = 12'('h40>>5);   // addr
+            mem[i*2][15]    = 1;       // mode: 8bpp
+            mem[i*2][25:16] = 10'('d16*i);  // x
+            mem[i*2+1][9:0]   = 10'd3;   // y
+            mem[i*2+1][16]    = 0;       // hflip
+            mem[i*2+1][17]    = 0;       // vflip
+            mem[i*2+1][19:18] = 2'd3;    // z
+            mem[i*2+1][23:20] = 0;       // collision mask
+            mem[i*2+1][27:24] = 0;       // palette offset
+            mem[i*2+1][29:28] = 2'd0;    // width: 8
+            mem[i*2+1][31:30] = 2'd0;    // height: 8
         end
 
+        for (i=0; i<32; i++) begin
+            mem[64+i*2][11:0]  = 12'('h1000>>5);   // addr
+            mem[64+i*2][15]    = 1;       // mode: 8bpp
+            mem[64+i*2][25:16] = 10'('d70*i);  // x
+            mem[64+i*2+1][9:0]   = 10'd300;   // y
+            mem[64+i*2+1][16]    = 0;       // hflip
+            mem[64+i*2+1][17]    = 0;       // vflip
+            mem[64+i*2+1][19:18] = 2'd3;    // z
+            mem[64+i*2+1][23:20] = 0;       // collision mask
+            mem[64+i*2+1][27:24] = 0;       // palette offset
+            mem[64+i*2+1][29:28] = 2'd3;    // width: 64
+            mem[64+i*2+1][31:30] = 2'd3;    // height: 64
+        end
+`endif
     end
 
 endmodule

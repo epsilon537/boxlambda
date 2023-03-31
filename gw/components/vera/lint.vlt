@@ -1,6 +1,6 @@
 `verilator_config
 
-lint_off -rule NULLPORT -file "*/sub/vera-module/fpga/source/top.v" -match "Null port on module (perhaps extraneous comma)"
+lint_off -rule NULLPORT -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Null port on module (perhaps extraneous comma)"
 
 lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/main_ram.v" -match "Bit extraction of array[16383:0] requires 14 bit index, not 15 bits."
 
@@ -48,35 +48,35 @@ lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/graphics/composer.v" -
 
 lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/sim/sprite_ram.v" -match "Operator ASSIGN expects 2 bits on the Assign RHS, but Assign RHS's CONST '3'h1' generates 3 bits."
 
-lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/top.v" -match "Operator ADD expects 17 bits on the RHS, but RHS's VARREF 'increment' generates 10 bits."
+lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Operator ADD expects 17 bits on the RHS, but RHS's VARREF 'increment' generates 10 bits."
 
-lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/top.v" -match "Operator SUB expects 17 bits on the RHS, but RHS's VARREF 'increment' generates 10 bits."
+lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Operator SUB expects 17 bits on the RHS, but RHS's VARREF 'increment' generates 10 bits."
 
-lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/top.v" -match "Operator CASE expects 3 bits on the Case expression, but Case expression's SEL generates 2 bits."
+lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Operator CASE expects 3 bits on the Case expression, but Case expression's SEL generates 2 bits."
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not used: '__pinNumber14'"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not used: '__pinNumber14'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not used: 'audio_fifo_reset_r'"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not used: 'audio_fifo_reset_r'"
 
-lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not driven: 'audio_fifo_full'"
+lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not driven: 'audio_fifo_full'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not used: 'audio_fifo_write_r'"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not used: 'audio_fifo_write_r'"
 
-lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not driven: 'audio_fifo_low'"
+lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not driven: 'audio_fifo_low'"
 
-lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not driven: 'audio_fifo_empty'"
+lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not driven: 'audio_fifo_empty'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not used: 'spi_txdata'"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not used: 'spi_txdata'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not used: 'spi_txstart'"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not used: 'spi_txstart'"
 
-lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not driven: 'spi_busy'"
+lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not driven: 'spi_busy'"
 
-lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not driven: 'spi_rxdata'"
+lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not driven: 'spi_rxdata'"
 
-lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not driven: 'composer_display_current_field'"
+lint_off -rule UNDRIVEN -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not driven: 'composer_display_current_field'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Bits of signal are not used: 'palette_rgb_data'[15:12]"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Bits of signal are not used: 'palette_rgb_data'[15:12]"
 
 lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sim/palette_ram.v" -match "Signal is not used: 'rst_i'"
 
@@ -110,7 +110,7 @@ lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_rende
 
 lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'hflipped_xcnt_next'[1:0]"
 
-lint_off -rule CASEINCOMPLETE -file "*/sub/vera-module/fpga/source/top.v" -match "Case values incompletely covered (example pattern 0x4)"
+lint_off -rule CASEINCOMPLETE -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Case values incompletely covered (example pattern 0x4)"
 
 lint_off -rule CASEINCOMPLETE -file "*/sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Case values incompletely covered (example pattern 0x6)"
 
@@ -124,7 +124,7 @@ lint_off -rule CASEINCOMPLETE -file "*/sub/vera-module/fpga/source/graphics/spri
 
 lint_off -rule CASEINCOMPLETE -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Case values incompletely covered (example pattern 0x4)"
 
-lint_off -rule LATCH -file "*/sub/vera-module/fpga/source/top.v" -match "Latch inferred for signal 'top.sprite_attr_bytesel' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Latch inferred for signal 'top.sprite_attr_bytesel' (not all control paths of combinational always assign a value)*"
 
 lint_off -rule BLKSEQ -file "*/sub/vera-module/fpga/source/main_ram.v" -match "Blocking assignments (=) in sequential (flop or latch) block*"
 
@@ -148,11 +148,11 @@ lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match
 
 lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Bits of signal are not used: 'wb_adr'[31:7,1:0]"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Bits of signal are not used: 'wb_adr'[31:7,1:0]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Bits of signal are not used: 'wb_dat_w'[31:8]"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Bits of signal are not used: 'wb_dat_w'[31:8]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/top.v" -match "Signal is not used: 'wb_sel'"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Signal is not used: 'wb_sel'"
 
 lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rst_i'"
 

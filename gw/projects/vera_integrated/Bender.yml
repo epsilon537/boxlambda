@@ -7,13 +7,38 @@ package:
 
 dependencies:
   # Path dependency.
+  wb_gpio: { path: "../../components/wb_gpio" }
+  wbuart32: { path: "../../components/wbuart32" }
+  ibex_wb_common: { path: "../../components/ibex_wb_common" }
+  ibex_wb_core: { path: "../../components/ibex_wb_core" }
+  riscv-dbg: { path: "../../components/riscv-dbg" }
+  litedram: { path: "../../components/litedram" }
   vera: { path: "../../components/vera" }
-  
+
 sources:
   - target: constraints
     files:
-      - constrs/vera_test_constraints.xdc
+      - constrs/Arty-A7-35-Master.xdc
   - target: verilator
     files:
       - sim/sim_main.cpp
+      - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
+      - ../../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
+      - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c
       - lint.vlt
+      - ../../../sub/riscv-dbg/tb/SimJTAG.sv
+      - sim/sim_main.sv
+  - target: any(vivado,verilator)
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
+      DEBUG_MODULE_ACTIVE: ~
+      DRAM: ~
+      VERA: ~
+    #spram and timer should be separate components, but since I won't use them
+    #as Boxlambda components, I'm leaving them here in the hello world example
+    files:
+      - ../../../sub/ibex_wb/soc/common/rtl/wb_interconnect_sharedbus.sv
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/spramx32.sv      
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_spramx32.sv
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_timer.sv
+      - rtl/vera_test_soc.sv

@@ -20,12 +20,16 @@
 //To get access to the verilated model internals.
 #include "Vmodel___024root.h"
 
-#include "vera.h"
+// From wbuart32
+#include "uartsim.h"
 
-#define VRAM_SIZE_BYTES (128*1024)
-#define VRAM_MAP_BASE (0x10000|VERA_VRAM_BASE)
+// From riscv-dbg
+#include "sim_jtag.h"
 
-#define WB_ACK_TIMEOUT 100
+//We set GPIO1 bits 3:0 to 0xf to indicate to RISCV SW that this is a simulation.
+static const int GPIO1_SIM_INDICATOR = 0xf; 
+
+static const char INPUT_TEST_CHAR = 's';
 
 //SDL objects:
 #define SDL_WINDOW_WIDTH 800
@@ -44,6 +48,9 @@ bool render = false;
 
 bool tracing_enable = false;
 
+//Uart co-simulation from wbuart32.
+std::unique_ptr<UARTSIM> uart{new UARTSIM(0)};
+
 // Used for tracing.
 VerilatedFstC* tfp = new VerilatedFstC;
 
@@ -57,10 +64,22 @@ std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
 std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 
+//Initialize GPIO change detectors
+unsigned char gpio0Prev = 0, gpio1Prev = 0;
+//Initialize UART rx and tx change detector
+std::string uartRxStringPrev;
+std::string uartTxStringPrev;
+
+//Accumulate GPIO0 value changes as a string into this variable
+std::string gpio0String;
+
 // Legacy function required only so linking works on Cygwin and MSVC++
 double sc_time_stamp() { return 0; }
 
 void cleanup() {
+  // End curses.
+  endwin();
+  
   //SDL clean-up.
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
@@ -76,16 +95,20 @@ void cleanup() {
 
 //Advance simulation by one clock cycle
 static void tick(void) {
-  top->clk = 1;
+  top->clk_i = 1;
   contextp->timeInc(1);
   top->eval();
   if (tracing_enable)
     tfp->dump(contextp->time());
-  top->clk = 0;
+  top->clk_i = 0;
   contextp->timeInc(1);
   top->eval();
   if (tracing_enable)
     tfp->dump(contextp->time());
+
+  //Exit if user closes the SDL window.
+  if (SDL_PollEvent(&sdl_event) && sdl_event.type == SDL_QUIT)
+    exit_req = true;
 
   if (!render)
     return;
@@ -113,320 +136,43 @@ static void tick(void) {
   
   ++sdl_x;
 
-  //Exit if user closes the SDL window.
-  if (SDL_PollEvent(&sdl_event) && sdl_event.type == SDL_QUIT)
-    exit_req = true;
-
   vsync_prev = top->vga_vsync;
   hsync_prev = top->vga_hsync;
-}
 
-//A very crude wishbone bus write implementation.
-void wb_wr(unsigned addr, unsigned data) {
-  top->wb_adr = addr>>2;      
-  top->wb_dat_w = data;    
+  //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
+  //and feed the UART co-simulator output to our model
+  top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 
-  top->wb_cyc = 1;
-  top->wb_stb = 1;  
-  top->wb_we = 1;
-  top->wb_sel = 0xf;
+  //Detect and print changes to UART and GPIOs
+  if ((uartRxStringPrev != uart->get_rx_string()) ||
+      (uartTxStringPrev != uart->get_tx_string()) ||
+      (gpio0Prev != top->gpio0) ||
+      (gpio1Prev != top->gpio1)) {
 
-  while (!top->wb_ack)
-    tick();
+    if (gpio0Prev != top->gpio0) {
+      //Single digit int to hex conversion and accumulation into gpio0String.
+      static const char* digits = "0123456789ABCDEF";
+      gpio0String.push_back(digits[top->gpio0&0xf]);
+    };
 
-  top->wb_cyc = 0;
-  top->wb_stb = 0;  
-  top->wb_we = 0;
-  top->wb_sel = 0xf;
+    //Positional printing using ncurses.
+    mvprintw(0, 0, "[%lld]", contextp->time());
+    mvprintw(1, 0, "UART Out:");
+    mvprintw(2, 0, uart->get_rx_string().c_str());
+    mvprintw(23, 0, "UART In:");
+    mvprintw(24, 0, uart->get_tx_string().c_str());
+    mvprintw(25, 0, "GPIO0: %x", top->gpio0);
+    mvprintw(26, 0, "GPIO1: %x", top->gpio1);
+    refresh();
 
-  tick();
-  tick();
-}
+    //Update change detectors
+    uartRxStringPrev = uart->get_rx_string();
+    uartTxStringPrev = uart->get_tx_string();
 
-//A very crude wishbone bus read implementation.
-int wb_rd(unsigned addr, unsigned char &data) {
-  unsigned char res;
-
-  top->wb_adr = addr>>2;
-  top->wb_cyc = 1;
-  top->wb_stb = 1;  
-  top->wb_we = 0;
-  
-  int timeout_counter=0;
-
-  while (!top->wb_ack && (timeout_counter++ < WB_ACK_TIMEOUT))
-    tick();
-
-  if (timeout_counter >= WB_ACK_TIMEOUT) {
-    printf("wb_ack timeout!\r\n");
-    res = -1;
-  }
-  else {
-    data = top->wb_dat_r;
-    res = 0;
+    gpio0Prev = top->gpio0;
+    gpio1Prev = top->gpio1;
   }
 
-  top->wb_cyc = 0;
-  top->wb_stb = 0;  
-  top->wb_we = 0;
-
-  tick();
-  
-  return res;
-}
-
-//This function writes the given data word to the given address in VERA's VRAM.
-void vram_wr(unsigned addr, unsigned data) {
-  top->wb_adr = (addr | VERA_VRAM_BASE)>>2;      
-  top->wb_dat_w = data;    
-
-  top->wb_cyc = 1;
-  top->wb_stb = 1;  
-  top->wb_we = 1;
-  top->wb_sel = 0xf;
-
-  while (!top->wb_ack)
-    tick();
-
-  top->wb_cyc = 0;
-  top->wb_stb = 0;  
-  top->wb_we = 0;
-  top->wb_sel = 0;
-
-  tick();
-}
-
-//This function writes the given data byte to the given address in VERA's VRAM.
-void vram_wr_byte(unsigned addr, unsigned char data) {
-  unsigned addr_aligned = addr & (~3);
-  unsigned byte_shift = (addr-addr_aligned);
-  unsigned byte_enable = 1<<byte_shift;
-
-  top->wb_adr = (addr_aligned | VERA_VRAM_BASE)>>2;      
-  top->wb_dat_w = ((unsigned)data)<<(byte_shift*8);    
-
-  top->wb_cyc = 1;
-  top->wb_stb = 1;  
-  top->wb_we  = 1;
-  top->wb_sel = byte_enable;
-
-  while (!top->wb_ack)
-    tick();
-
-  top->wb_cyc = 0;
-  top->wb_stb = 0;  
-  top->wb_we = 0;
-  top->wb_sel = 0;
-
-  tick();
-}
-
-int vram_rd(unsigned addr, unsigned& data) {
-  int res=0;
-
-  top->wb_adr = (addr | VERA_VRAM_BASE)>>2;      
-
-  top->wb_cyc = 1;
-  top->wb_stb = 1;  
-  top->wb_we = 0;
-  top->wb_sel = 0xf;
-
-  int timeout_counter=0;
-
-  while (!top->wb_ack && (timeout_counter++ < WB_ACK_TIMEOUT))
-    tick();
-
-  if (timeout_counter >= WB_ACK_TIMEOUT) {
-    printf("wb_ack timeout!\r\n");
-    res = -1;
-  }
-  else {
-    data = top->wb_dat_r;
-    res = 0;
-  }
-
-  top->wb_cyc = 0;
-  top->wb_stb = 0;  
-  top->wb_we = 0;
-  top->wb_sel = 0;
-
-  tick();
-
-  return res;
-}
-
-int vram_rd_byte(unsigned addr, unsigned char& data) {
-  int res=0;
-  unsigned addr_aligned = addr & (~3);
-  unsigned byte_shift = (addr-addr_aligned);
-  unsigned byte_enable = 1<<byte_shift;
-
-  top->wb_adr = (addr_aligned | VERA_VRAM_BASE)>>2;      
-
-  top->wb_cyc = 1;
-  top->wb_stb = 1;  
-  top->wb_we = 0;
-  top->wb_sel = byte_enable;
-
-  int timeout_counter=0;
-
-  while (!top->wb_ack && (timeout_counter++ < WB_ACK_TIMEOUT))
-    tick();
-
-  if (timeout_counter >= WB_ACK_TIMEOUT) {
-    printf("wb_ack timeout!\r\n");
-    res = -1;
-  }
-  else {
-    data = (unsigned char)(top->wb_dat_r>>(byte_shift*8));
-    res = 0;
-  }
-
-  top->wb_cyc = 0;
-  top->wb_stb = 0;  
-  top->wb_we = 0;
-  top->wb_sel = 0;
-
-  tick();
-
-  return res;
-}
-
-//This function writes the given rgb triple to the given position in VERA's Palette RAM.
-void palette_ram_wr(unsigned idx, unsigned char r, unsigned char g, unsigned char b) {
-  top->wb_adr = ((idx<<2) | VERA_PALETTE_BASE)>>2;      
-  top->wb_dat_w = (((unsigned)r)<<8) | (((unsigned)g)<<4) | ((unsigned)b);    
-
-  top->wb_cyc = 1;
-  top->wb_stb = 1;  
-  top->wb_we = 1;
-  top->wb_sel = 0x3;
-
-  while (!top->wb_ack)
-    tick();
-
-  top->wb_cyc = 0;
-  top->wb_stb = 0;  
-  top->wb_we = 0;
-  top->wb_sel = 0;
-
-  tick();
-}
-
-void setup_palette_ram(void) {
-  for (unsigned ii=0; ii<256; ii++) {
-    palette_ram_wr(ii, ((ii>>4)&3)<<2, ((ii>>2)&3)<<2, (ii&3)<<2);
-  }
-}
-
-//This function writes the given data word to the given address in VERA's Sprite RAM.
-void sprite_ram_wr(unsigned addr, unsigned data) {
-  top->wb_adr = (addr | VERA_SPRITES_BASE)>>2;      
-  top->wb_dat_w = data;    
-
-  top->wb_cyc = 1;
-  top->wb_stb = 1;  
-  top->wb_we = 1;
-  top->wb_sel = 0xf;
-
-  while (!top->wb_ack)
-    tick();
-
-  top->wb_cyc = 0;
-  top->wb_stb = 0;  
-  top->wb_we = 0;
-  top->wb_sel = 0;
-
-  tick();
-}
-
-void setup_sprite_ram() {
-  int i;
-  unsigned v,w;
-
-  for (i=0; i<64; i++) {
-    v = (0x1c0>>5); // addr
-    v |= (1<<15); // mode: 8bpp
-    v |= ((8*i)<<16); //x
-    w = 16; //y
-    w |= (3<<18); //z
-    //width:8
-    //height:8
-
-    sprite_ram_wr(i*8, v);
-    sprite_ram_wr(i*8 + 4, w);
-  }
-
-  for (i=0; i<64; i++) {
-    v = (0x1000>>5); // addr
-    v |= (1<<15); // mode: 8bpp
-    v |= ((70*i)<<16); //x
-    w = 300; //y
-    w |= (3<<18); //z
-    w |= (3<<28); //width:64
-    w |= (3<<30); //heigth
-
-    sprite_ram_wr(64*8 + i*8, v);
-    sprite_ram_wr(64*8 + i*8 + 4, w);
-  }
-}
-
-//Returns <0 if unsuccessful
-int load_bin_file_into_vram(const char* vram_bin_filename) {
-  static unsigned char buffer[VRAM_SIZE_BYTES];
-  int n;
-
-  printf("Loading into VRAM: %s\n\r", vram_bin_filename);
-
-  FILE *f = fopen(vram_bin_filename, "rb");
-  if (f) {
-    n = fread(buffer, 1, VRAM_SIZE_BYTES, f);
-
-    for (int ii=0; ii<n/4; ii++) {
-      vram_wr(ii*4, 
-        (unsigned)(buffer[ii*4+3]<<24)|(unsigned)(buffer[ii*4+2]<<16)|(unsigned)(buffer[ii*4+2]<<8)|(unsigned)buffer[ii*4]);
-    }
-  }   
-  else
-  {
-    printf("File not found: %s\n\r", vram_bin_filename);
-    return -1;
-  }
-
-  printf("Done\n\r");
-  fclose(f);
-  return 0;
-}
-
-void generate_8bpp_8x8_tiles() {
-  unsigned char data=0;
-
-  //Just generate 8x8 blocks of different colors
-  for (int jj=0;jj<16;jj++) {
-    for (int ii=0; ii<64; ii++) {
-      vram_wr_byte(jj*64+ii, (ii%8 >= 4) ? jj : 0);
-
-      if (vram_rd_byte(jj*64+ii, data) < 0) {
-        printf("VRAM read ack timeout.\n\r");
-        cleanup();
-        exit(-1);
-      }
-
-      if (data != ((ii%8 >= 4) ? jj : 0)) {
-        printf("VRAM read back mismatch addr: 0x%x: 0x%x vs. 0x%x.\n\r", jj*64+ii, data, ((ii%8 >= 4) ? jj : 0));
-        cleanup();
-        exit(-1);
-      }
-    }
-  }
-
-  printf("VRAM readback OK.\n\r");
-}
-
-void generate_8bpp_64x64_sprite() {
-  for (int ii=0; ii<64*64/4; ii++) {
-      vram_wr(0x1000+ii*4, 0x03030303);
-    } 
 }
 
 int main(int argc, char** argv, char** env) {
@@ -450,27 +196,20 @@ int main(int argc, char** argv, char** env) {
 
     bool attach_debugger = false;
     bool interactive_mode = false;
-    char *vram_bin_filename = NULL;
 
     // Command line processing
     for(;;) {
-      switch(getopt(argc, argv, "thf:")) {
+      switch(getopt(argc, argv, "th")) {
       case 't':
         printf("Tracing enabled\n");
         tracing_enable = true;
         continue;
-
-      case 'f':
-        vram_bin_filename = optarg;
-        continue;
-
       case '?':
       case 'h':
       default :
         printf("\nVmodel Usage:\n");
         printf("-h: print this help\n");
         printf("-t: enable tracing.\n");
-        printf("-f <vram.bin>: load given bin file into vram.\n");
         return 0;
         break;
 	    
@@ -499,74 +238,41 @@ int main(int argc, char** argv, char** env) {
       tfp->open("simx.fst");
     }
     
-    // Set Vtop's input signals
-    
-    // External bus interface
-    top->wb_cyc = 0;
-    top->wb_we = 0;
-    top->wb_stb = 0;
-    top->wb_adr = 0;   
-    top->wb_dat_w = 0;    
-
-    top->reset = 1;
-    tick();
-    tick();
-    tick();
-    top->reset = 0;
-
-#if 0
-    //If a vram.bin file is given, load it into memory and poke it into VERA's VRAM
-    if (vram_bin_filename) {
-      if (load_bin_file_into_vram(vram_bin_filename) < 0)
-        exit(-1);
-    }
-#endif
-
-    generate_8bpp_8x8_tiles();
-    generate_8bpp_64x64_sprite();
-    setup_sprite_ram();
-    setup_palette_ram();
-    
-    //Fill VRAM map area
-    for (int ii=0; ii<128*128*2; ii+=2) {
-      vram_wr_byte(VRAM_MAP_BASE+ii, (unsigned char)ii&0xf);
-      vram_wr_byte(VRAM_MAP_BASE+ii+1, 0);
-    }
-
-    unsigned char read_back_val=0;
-
-    wb_wr(VERA_DC_VIDEO, 0x71); //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
-    if (wb_rd(VERA_DC_VIDEO, read_back_val) < 0) {
-      printf("VERA_DC_VIDEO read back failed.\n\r");
-      cleanup();
-      exit(-1);
-    }
-
-    if (read_back_val != 0x71) {
-      printf("VERA_DC_VIDEO read back incorrectly: 0x%x\n\r", read_back_val);
-      cleanup();
-      exit(-1);
-    }
-    else {
-      printf("VERA_DC_VIDEO read back OK\n\r");
-    }
-
-    wb_wr(VERA_L0_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
-    wb_wr(VERA_L0_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
-    wb_wr(VERA_L0_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
-    wb_wr(VERA_L1_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
-    wb_wr(VERA_L1_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
-    wb_wr(VERA_L1_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
-    wb_wr(VERA_CTRL, 0); //Sprite Bank 0
-
     //Curses setup
     initscr();
     cbreak();
     noecho();
 
+    jtag_set_bypass(!attach_debugger);
+
+    // Set Vtop's input signals
+    top->clk_i = 0;
+    top->uart_rx = 0;
+    top->rst_ni = !1;
+    tick();
+    tick();
+    tick();
+    tick();
+    top->rst_ni = !0;
+    tick();
+    tick();
+    tick();
+    tick();
+  
+    mvprintw(27, 0, "Waiting for Vsync...\n\r");
+    refresh();
+
     //Wait for Vsync before starting the rendering
-    while (!top->vga_vsync)
+    while (!top->vga_vsync) {
       tick(); //Advance one clock period.
+      if (exit_req) {
+        cleanup();
+        exit(-1);
+      }
+    }
+
+    mvprintw(27, 0, "Done.\n\r");
+    refresh();
 
     render = true;
 
@@ -576,22 +282,7 @@ int main(int argc, char** argv, char** env) {
           break;
 
         // Evaluate model
-        tick();
-        
-        if (contextp->time() % 10 == 0)
-          vram_wr(0,0); //Stress the bus by writing all the time.
-
-        if (sdl_y == 1) {
-          wb_wr(VERA_CTRL, 0); //Sprite Bank 0
-        }
-
-        if (sdl_y == 240) {
-          wb_wr(VERA_CTRL, 1<<2); //Sprite Bank 1
-        }
-
-        //Positional printing using ncurses.
-	      //mvprintw(0, 0, "[%lld %d %d]", contextp->time(), sdl_x, sdl_y);
-	      //refresh();
+        tick();        
     }
     
     cleanup();

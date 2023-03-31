@@ -12,7 +12,7 @@ sources:
   - target: any(verilator, vivado)
     files:
      - lint.vlt
-     - ../../../sub/vera-module/fpga/source/top.v
+     - ../../../sub/vera-module/fpga/source/vera_top.v
      - ../../../sub/vera-module/fpga/source/reset_sync.v
      - ../../../sub/vera-module/fpga/source/main_ram_generic.v
      - ../../../sub/vera-module/fpga/source/spram_byte_write_ram_wr_first.v
