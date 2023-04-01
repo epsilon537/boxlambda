@@ -1,7 +1,6 @@
 add_executable(vera_test
 	EXCLUDE_FROM_ALL
 	vera_test.c
-	vera_hal.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/libs/soc/gpio.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/libs/soc/utils.c
 	../../../sub/litex/litex/soc/software/liblitedram/sdram.c
@@ -14,6 +13,11 @@ target_include_directories(vera_test
 			../../../sub/litex/litex/soc/software/include
 			../../../sub/litex/litex/soc/software
     		../../../sub/litex/litex/soc/cores/cpu/ibex
+)
+
+target_compile_options(vera_test
+	PRIVATE
+		-O2
 )
 
 target_compile_definitions(vera_test

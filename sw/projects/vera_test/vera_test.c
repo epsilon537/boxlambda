@@ -10,7 +10,7 @@
 #include "utils.h"
 #include "sdram.h"
 //#include "libbase/memtest.h"
-#include "vera_hal.h"
+#include "vera.h"
 
 #define VRAM_SIZE_BYTES (128*1024)
 #define VRAM_MAP_BASE (0x10000)
@@ -22,6 +22,44 @@ static struct uart uart0;
 static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
+
+//A very crude wishbone bus write implementation.
+void vera_wr(unsigned addr, unsigned data) {
+  *(volatile unsigned *)(addr) = data;
+}
+
+//A very crude wishbone bus read implementation.
+unsigned char vera_rd(unsigned addr) {
+  return (unsigned char)(*(unsigned volatile *)(addr));  
+}
+
+//This function writes the given data word to the given address in VERA's VRAM.
+void vram_wr(unsigned addr, unsigned data) {
+  *(volatile unsigned *)(addr+VERA_VRAM_BASE) = data;
+}
+
+//This function writes the given data byte to the given address in VERA's VRAM.
+void vram_wr_byte(unsigned addr, unsigned char data) {
+  *(volatile unsigned char *)(addr+VERA_VRAM_BASE) = data;
+}
+
+unsigned vram_rd(unsigned addr) {
+  return (*(volatile unsigned *)(addr+VERA_VRAM_BASE));  
+}
+
+unsigned char vram_rd_byte(unsigned addr) {
+  return (*(volatile unsigned char *)(addr+VERA_VRAM_BASE));  
+}
+
+//This function writes the given rgb triple to the given position in VERA's Palette RAM.
+void palette_ram_wr(unsigned idx, unsigned char r, unsigned char g, unsigned char b) {
+  *(volatile unsigned *)(idx*4+VERA_PALETTE_BASE) = (((unsigned)r)<<8) | (((unsigned)g)<<4) | ((unsigned)b);
+}
+
+//This function writes the given data word to the given address in VERA's Sprite RAM.
+void sprite_ram_wr(unsigned addr, unsigned data) {
+  *(volatile unsigned *)(addr+VERA_SPRITES_BASE) = data;
+}
 
 int generate_8bpp_8x8_tiles() {
   unsigned char data=0;
@@ -104,13 +142,9 @@ int main(void) {
   gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
   gpio_set_direction(&gpio1, 0x00000000); //4 inputs
 
-  //GPIO1 bits3:0 = 0xf indicate we're running inside a simulator.
-  if ((gpio_get_input(&gpio1) & 0xf) == GPIO1_SIM_INDICATOR)
-    printf("This is a simulation.\n");
-  else
-    printf("This is not a simulation.\n");
-
   unsigned char read_back_val=0;
+
+  printf("Setting up VERA registers...\n");
 
   vera_wr(VERA_DC_VIDEO, 0x71); //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
   read_back_val = vera_rd(VERA_DC_VIDEO);
@@ -129,6 +163,8 @@ int main(void) {
   vera_wr(VERA_L1_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
   vera_wr(VERA_L1_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
   vera_wr(VERA_CTRL, 0); //Sprite Bank 0
+  
+  printf("Setting up VRAM...\n");
 
   generate_8bpp_8x8_tiles();
   generate_8bpp_64x64_sprite();
@@ -141,22 +177,20 @@ int main(void) {
     vram_wr_byte(VRAM_MAP_BASE+ii+1, 0);
   }
 
-  /*sdram_init() is provided by the Litex code base.*/
-  if (sdram_init()) {
-    printf("SDRAM init OK.\n");
-  }
-  else {
-    printf("SDRAM init failed!\n");
-    while(1);
-  }
+  unsigned int scanline;
 
-  for (;;) {
-    gpio_set_output(&gpio0, leds);
-    leds ^= 0xF;
+  printf("Starting loop...\n");
 
-    if ((gpio_get_input(&gpio1) & 0xf) == GPIO1_SIM_INDICATOR)
-      usleep(500 * 10); //Sleep less when we're running inside a simulator.
-    else
-      usleep(500 * 1000);
-  }
+  while (1) {
+    scanline = (unsigned int)vera_rd(VERA_IEN) & 0x40;
+    scanline <<= 2;
+    scanline |= (unsigned int)vera_rd(VERA_IRQ_LINE_L);
+
+    if (scanline > 240) {
+      vera_wr(VERA_CTRL, 1<<2);
+    }
+    else {
+      vera_wr(VERA_CTRL, 0);
+    }
+ }
 }

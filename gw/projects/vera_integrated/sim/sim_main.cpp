@@ -44,7 +44,6 @@ int sdl_x=0/*750*/, sdl_y=0/*523*/;
 bool vsync_prev = false; 
 bool hsync_prev = false;
 bool exit_req = false;
-bool render = false;
 
 bool tracing_enable = false;
 
@@ -79,7 +78,7 @@ double sc_time_stamp() { return 0; }
 void cleanup() {
   // End curses.
   endwin();
-  
+
   //SDL clean-up.
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
@@ -109,9 +108,6 @@ static void tick(void) {
   //Exit if user closes the SDL window.
   if (SDL_PollEvent(&sdl_event) && sdl_event.type == SDL_QUIT)
     exit_req = true;
-
-  if (!render)
-    return;
 
   //Clear the screen during Vsync
   if (top->vga_vsync && !vsync_prev) {
@@ -145,15 +141,7 @@ static void tick(void) {
 
   //Detect and print changes to UART and GPIOs
   if ((uartRxStringPrev != uart->get_rx_string()) ||
-      (uartTxStringPrev != uart->get_tx_string()) ||
-      (gpio0Prev != top->gpio0) ||
-      (gpio1Prev != top->gpio1)) {
-
-    if (gpio0Prev != top->gpio0) {
-      //Single digit int to hex conversion and accumulation into gpio0String.
-      static const char* digits = "0123456789ABCDEF";
-      gpio0String.push_back(digits[top->gpio0&0xf]);
-    };
+      (uartTxStringPrev != uart->get_tx_string())) {
 
     //Positional printing using ncurses.
     mvprintw(0, 0, "[%lld]", contextp->time());
@@ -161,18 +149,12 @@ static void tick(void) {
     mvprintw(2, 0, uart->get_rx_string().c_str());
     mvprintw(23, 0, "UART In:");
     mvprintw(24, 0, uart->get_tx_string().c_str());
-    mvprintw(25, 0, "GPIO0: %x", top->gpio0);
-    mvprintw(26, 0, "GPIO1: %x", top->gpio1);
     refresh();
 
     //Update change detectors
     uartRxStringPrev = uart->get_rx_string();
     uartTxStringPrev = uart->get_tx_string();
-
-    gpio0Prev = top->gpio0;
-    gpio1Prev = top->gpio1;
   }
-
 }
 
 int main(int argc, char** argv, char** env) {
@@ -273,8 +255,6 @@ int main(int argc, char** argv, char** env) {
 
     mvprintw(27, 0, "Done.\n\r");
     refresh();
-
-    render = true;
 
     // When not in interactive mode, simulate for 100000000 timeprecision periods
     while (interactive_mode || (contextp->time() < 100000000)) {
