@@ -6,7 +6,7 @@
 
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
-  echo "$0 <src dir> <outfile>"
+  echo "$0 <src dir> <outfile> <bl_target_fpga>"
   exit 1
 fi
 
@@ -15,13 +15,16 @@ SRC_DIR="$1"
 # $2 = output file containing the .vlt file list
 OUTFILE="$2"
 
+# $3 = BL_TARGET_FPGA
+BL_TARGET_FPGA="$3"
+
 bender -d $SRC_DIR update
 
 #BASEDIR is the location of the current script, i.e. the scripts directory
 BASEDIR=$(dirname "$0")
 
 #Get all files from bender verilator target, filter out the .vlt files, and put everything on one line,
-BENDER_VLT=`bender -d $SRC_DIR script flist -t verilator | grep ".vlt$" | tr '\n' ' '`
+BENDER_VLT=`bender -d $SRC_DIR script flist -t BL_TARGET_FPGA -t verilator | grep ".vlt$" | tr '\n' ' '`
 
 #'return' the default vlt and the lint.vlt retrieved from the bender manifest (if it has one).
 echo "$BASEDIR/lint_default.vlt $BENDER_VLT" > "$OUTFILE.tmp"

@@ -95,3 +95,6 @@ lint_off -rule LATCH -file "*/gw/components/vera/../../../sub/vera-module/fpga/s
 
 lint_off -rule BLKSEQ -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Blocking assignments (=) in sequential (flop or latch) block*"
 
+lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/main_ram_generic.v" -match "Input port connection 'addra' expects 14 bits on the pin connection, but pin connection's VARREF 'bus_addr' generates 15 bits."
+
+lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/main_ram_generic.v" -match "Bits of signal are not used: 'bus_addr'[14]"

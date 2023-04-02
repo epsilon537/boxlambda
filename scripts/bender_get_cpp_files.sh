@@ -6,7 +6,7 @@
 
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
-  echo "$0 <src dir> <outfile>"
+  echo "$0 <src dir> <outfile> <bl_target_fpga>"
   exit 1
 fi
 
@@ -15,10 +15,13 @@ SRC_DIR="$1"
 # $2 = output file containing the cpp file list
 OUTFILE="$2"
 
+# $3 = BL_TARGET_FPGA
+BL_TARGET_FPGA="$3"
+
 bender -d $SRC_DIR update
 
 #Get all files from bender verilator target, filter out the cpp and c file, and put everything on one line,
-bender -d $SRC_DIR script flist -t verilator | grep "\.cpp$\|\.c$" | tr '\n' ' ' > "$OUTFILE.tmp"
+bender -d $SRC_DIR script flist -t $BL_TARGET_FPGA -t verilator | grep "\.cpp$\|\.c$" | tr '\n' ' ' > "$OUTFILE.tmp"
 
 if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
   echo "No cpp filelist changes detected."

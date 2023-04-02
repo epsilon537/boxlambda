@@ -6,7 +6,7 @@
 
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
-  echo "$0 <src dir> <outfile>"
+  echo "$0 <src dir> <outfile> <bl_target_fpga>"
   exit 1
 fi
 
@@ -15,9 +15,12 @@ SRC_DIR="$1"
 # $2 = output file, containing constraints tcl script for vivado
 OUTFILE="$2"
 
+# $3 = BL_TARGET_FPGA
+BL_TARGET_FPGA="$3"
+
 bender -d $SRC_DIR update
 
-CONSTRAINTS=`bender -d $SRC_DIR script flist -n -t constraints`
+CONSTRAINTS=`bender -d $SRC_DIR script flist -n -t $BL_TARGET_FPGA -t constraints`
 
 for constraint in $CONSTRAINTS
 do

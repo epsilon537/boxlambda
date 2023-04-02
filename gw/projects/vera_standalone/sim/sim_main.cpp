@@ -22,8 +22,8 @@
 
 #include "vera.h"
 
-#define VRAM_SIZE_BYTES (128*1024)
-#define VRAM_MAP_BASE (0x10000|VERA_VRAM_BASE)
+#define VRAM_SIZE_BYTES (64*1024)
+#define VRAM_MAP_BASE (0x8000|VERA_VRAM_BASE)
 
 #define WB_ACK_TIMEOUT 100
 

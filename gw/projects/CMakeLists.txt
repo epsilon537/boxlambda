@@ -61,7 +61,7 @@ function (gw_project_rules)
             OUTPUT
                 ${_prj_name}.constraints_file_list
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_constraints_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.constraints_file_list
+                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_constraints_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.constraints_file_list ${BL_TARGET_FPGA}
             DEPENDS
                 always_rebuild
             WORKING_DIRECTORY
@@ -139,7 +139,7 @@ function (gw_project_rules)
             OUTPUT
                 ${_prj_name}.cpp_files
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bender_get_cpp_files.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.cpp_files
+                ${PROJECT_SOURCE_DIR}/scripts/bender_get_cpp_files.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.cpp_files ${BL_TARGET_FPGA}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS

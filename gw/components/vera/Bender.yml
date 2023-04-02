@@ -9,12 +9,22 @@ sources:
   - target: memory
     files:
      - ../../../sub/vera-module/fpga/source/palette_ram.mem
+  - target: arty-a7-35
+    defines:
+      VRAM_SIZE_BYTES: (64*1024)
+    files:
+      - ../../../sub/vera-module/fpga/source/main_ram_generic.v
+
+  - target: arty-a7-100
+    defines:
+      VRAM_SIZE_BYTES: (128*1024)
+    files:
+      - ../../../sub/vera-module/fpga/source/main_ram_generic.v
   - target: any(verilator, vivado)
     files:
      - lint.vlt
      - ../../../sub/vera-module/fpga/source/vera_top.v
      - ../../../sub/vera-module/fpga/source/reset_sync.v
-     - ../../../sub/vera-module/fpga/source/main_ram_generic.v
      - ../../../sub/vera-module/fpga/source/spram_byte_write_ram_wr_first.v
      - ../../../sub/vera-module/fpga/source/dpram.v
      - ../../../sub/vera-module/fpga/source/sprite_ram.v

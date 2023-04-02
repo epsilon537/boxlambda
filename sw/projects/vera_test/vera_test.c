@@ -13,7 +13,7 @@
 #include "vera.h"
 
 #define VRAM_SIZE_BYTES (128*1024)
-#define VRAM_MAP_BASE (0x10000)
+#define VRAM_MAP_BASE (0x8000)
 
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
