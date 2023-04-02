@@ -22,11 +22,8 @@ gw_project_rules(
         "-g -lncurses ${SDL2_LIBRARIES}"
 )
 
-#Add testcase
-#add_test(NAME vera_integrated_test
-#    COMMAND ./Vmodel
-#    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-#)
-
-#This test requires a longer timeout.
-#set_tests_properties(vera_integrated_test PROPERTIES TIMEOUT 200) 
+#Add testcase. This one's a script, not just the Verilator Vmodel executable.
+add_test(NAME vera_integrated_test
+    COMMAND ${CMAKE_CURRENT_LIST_DIR}/test/test.sh ${PROJECT_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)

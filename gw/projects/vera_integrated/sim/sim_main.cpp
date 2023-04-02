@@ -72,6 +72,9 @@ std::string uartTxStringPrev;
 //Accumulate GPIO0 value changes as a string into this variable
 std::string gpio0String;
 
+unsigned framecount = 0;
+FILE *frameFile = 0;
+
 // Legacy function required only so linking works on Cygwin and MSVC++
 double sc_time_stamp() { return 0; }
 
@@ -114,6 +117,18 @@ static void tick(void) {
     SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 0);
     SDL_RenderClear(sdl_renderer);
     sdl_y = 0;
+    ++framecount;
+
+    if (framecount == 2)
+      frameFile = fopen("frame.bin", "wb");
+
+    if (framecount == 3) {
+      mvprintw(0, 0, "[%lld]", contextp->time());
+      mvprintw(23, 0, "Closing frame file...\n\r");
+      refresh();
+      fclose(frameFile);
+      frameFile = 0;
+    }
   }
 
   //Render to SDL's back buffer at each Hsync.
@@ -126,10 +141,20 @@ static void tick(void) {
     sdl_y++;
   }
 
+  static Uint8 pixel[4];
+
+  pixel[0] = (Uint8)(top->vga_r<<4);
+  pixel[1] = (Uint8)(top->vga_g<<4);
+  pixel[2] = (Uint8)(top->vga_b<<4);
+  pixel[3] = 255;
+  
   //Render the VGA rgb output. Convert RGB4:4:4 to RGB8:8:8.
-  SDL_SetRenderDrawColor(sdl_renderer, (Uint8)(top->vga_r<<4), (Uint8)(top->vga_g<<4), (Uint8)(top->vga_b<<4), 255);
+  SDL_SetRenderDrawColor(sdl_renderer, pixel[0], pixel[1], pixel[2], pixel[3]);
   SDL_RenderDrawPoint(sdl_renderer, sdl_x>>1, sdl_y);
   
+  if (frameFile)
+    fwrite(pixel, 1, 4, frameFile);
+
   ++sdl_x;
 
   vsync_prev = top->vga_vsync;
@@ -147,8 +172,6 @@ static void tick(void) {
     mvprintw(0, 0, "[%lld]", contextp->time());
     mvprintw(1, 0, "UART Out:");
     mvprintw(2, 0, uart->get_rx_string().c_str());
-    mvprintw(23, 0, "UART In:");
-    mvprintw(24, 0, uart->get_tx_string().c_str());
     refresh();
 
     //Update change detectors
@@ -256,8 +279,8 @@ int main(int argc, char** argv, char** env) {
     mvprintw(27, 0, "Done.\n\r");
     refresh();
 
-    // When not in interactive mode, simulate for 100000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 100000000)) {
+    // When not in interactive mode, simulate for 6000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 6000000)) {
         if (exit_req)
           break;
 
@@ -270,5 +293,20 @@ int main(int argc, char** argv, char** env) {
     // End curses.
     endwin();
 
-    return 0;
+    // Checks for automated testing.
+    int res = 0;
+    std::string uartCheckString("VERA Read Back Test successful.");
+
+    if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
+      printf("Test failed\n");
+      printf("Expected: %s\n", uartCheckString.c_str());
+      printf("Received: %s\n", uartRxStringPrev.c_str());
+
+      res = 1;
+    }
+    else {
+      printf("Test passed.\n");
+    }
+
+    return res;
 }

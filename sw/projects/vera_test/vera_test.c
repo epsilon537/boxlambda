@@ -78,7 +78,7 @@ int generate_8bpp_8x8_tiles() {
     }
   }
 
-  printf("VRAM readback OK.\n\r");
+  printf("VRAM read back OK.\n\r");
   return 0;
 }
 
@@ -143,6 +143,7 @@ int main(void) {
   gpio_set_direction(&gpio1, 0x00000000); //4 inputs
 
   unsigned read_back_val=0;
+  unsigned read_back_err=0;
 
   printf("Setting up VERA registers...\n");
 
@@ -151,6 +152,7 @@ int main(void) {
 
   if (read_back_val != 0x71) {
     printf("VERA_DC_VIDEO read back incorrectly: 0x%x\n\r", read_back_val);
+    read_back_err = 1;
   }
   else {
     printf("VERA_DC_VIDEO read back OK\n\r");
@@ -174,7 +176,9 @@ int main(void) {
 
   printf("Setting up VRAM...\n");
 
-  generate_8bpp_8x8_tiles();
+  if (generate_8bpp_8x8_tiles() < 0)
+    read_back_err = 1;
+
   generate_8bpp_64x64_sprite();
   setup_sprite_ram();
   setup_palette_ram();
@@ -184,6 +188,11 @@ int main(void) {
     vram_wr_byte(VRAM_MAP_BASE+ii, (unsigned char)ii&0xf);
     vram_wr_byte(VRAM_MAP_BASE+ii+1, 0);
   }
+
+  if (read_back_err == 0)
+    printf("VERA Read Back Test successful.\n");
+  else
+    printf("VERA Read Back Test faile.\n");
 
   unsigned int scanline;
 
