@@ -144,7 +144,7 @@ void wb_wr(unsigned addr, unsigned data) {
 }
 
 //A very crude wishbone bus read implementation.
-int wb_rd(unsigned addr, unsigned char &data) {
+int wb_rd(unsigned addr, unsigned &data) {
   unsigned char res;
 
   top->wb_adr = addr>>2;
@@ -533,7 +533,7 @@ int main(int argc, char** argv, char** env) {
       vram_wr_byte(VRAM_MAP_BASE+ii+1, 0);
     }
 
-    unsigned char read_back_val=0;
+    unsigned read_back_val=0;
 
     wb_wr(VERA_DC_VIDEO, 0x71); //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
     if (wb_rd(VERA_DC_VIDEO, read_back_val) < 0) {
@@ -586,7 +586,7 @@ int main(int argc, char** argv, char** env) {
         }
 
         if (sdl_y == 240) {
-          wb_wr(VERA_CTRL, 1<<2); //Sprite Bank 1
+          wb_wr(VERA_CTRL, 1); //Sprite Bank 1
         }
 
         //Positional printing using ncurses.

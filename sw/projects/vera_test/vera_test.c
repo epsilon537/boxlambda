@@ -29,8 +29,8 @@ void vera_wr(unsigned addr, unsigned data) {
 }
 
 //A very crude wishbone bus read implementation.
-unsigned char vera_rd(unsigned addr) {
-  return (unsigned char)(*(unsigned volatile *)(addr));  
+unsigned vera_rd(unsigned addr) {
+  return *(unsigned volatile *)(addr);  
 }
 
 //This function writes the given data word to the given address in VERA's VRAM.
@@ -67,12 +67,12 @@ int generate_8bpp_8x8_tiles() {
   //Just generate 8x8 blocks of different colors
   for (int jj=0;jj<16;jj++) {
     for (int ii=0; ii<64; ii++) {
-      vram_wr_byte(jj*64+ii, (ii%8 >= 4) ? jj : 0);
+      vram_wr_byte(jj*64+ii, (ii<32) ? ((ii%8 >= 4) ? jj : 0) : 0);
 
       data = vram_rd_byte(jj*64+ii);
 
-      if (data != ((ii%8 >= 4) ? jj : 0)) {
-        printf("VRAM read back mismatch addr: 0x%x: 0x%x vs. 0x%x.\n\r", jj*64+ii, data, ((ii%8 >= 4) ? jj : 0));
+      if (data != ((ii<32) ? ((ii%8 >= 4) ? jj : 0) : 0)) {
+        printf("VRAM read back mismatch addr: 0x%x: 0x%x vs. 0x%x.\n\r", jj*64+ii, data, ((ii<32) ? ((ii%8 >= 4) ? jj : 0) : 0));
         return -1;
       }
     }
@@ -142,7 +142,7 @@ int main(void) {
   gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
   gpio_set_direction(&gpio1, 0x00000000); //4 inputs
 
-  unsigned char read_back_val=0;
+  unsigned read_back_val=0;
 
   printf("Setting up VERA registers...\n");
 
@@ -159,11 +159,19 @@ int main(void) {
   vera_wr(VERA_L0_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
   vera_wr(VERA_L0_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
   vera_wr(VERA_L0_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
+  vera_wr(VERA_L0_HSCROLL, 4);
+  vera_wr(VERA_L0_VSCROLL, 4);
+
   vera_wr(VERA_L1_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
   vera_wr(VERA_L1_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
   vera_wr(VERA_L1_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
+  vera_wr(VERA_L1_HSCROLL, 4);
+  vera_wr(VERA_L1_VSCROLL, 4);
   vera_wr(VERA_CTRL, 0); //Sprite Bank 0
   
+  vera_wr(VERA_DC_HSCALE, 92);
+  vera_wr(VERA_DC_VSCALE, 92);
+
   printf("Setting up VRAM...\n");
 
   generate_8bpp_8x8_tiles();
@@ -182,15 +190,13 @@ int main(void) {
   printf("Starting loop...\n");
 
   while (1) {
-    scanline = (unsigned int)vera_rd(VERA_IEN) & 0x40;
-    scanline <<= 2;
-    scanline |= (unsigned int)vera_rd(VERA_IRQ_LINE_L);
+    scanline = vera_rd(VERA_SCANLINE);
 
-    if (scanline > 240) {
-      vera_wr(VERA_CTRL, 1<<2);
-    }
-    else {
+    if (scanline == 479) {
       vera_wr(VERA_CTRL, 0);
+    }
+    if (scanline == 240 ) {
+      vera_wr(VERA_CTRL, 1);
     }
  }
 }
