@@ -5,96 +5,44 @@
 //   2. Keep the waiver permanently if you are sure this is okay
 //   3. Keep the waiver temporarily to suppress the output
 
-lint_off -rule PINCONNECTEMPTY -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/vera_top.v" -match "Cell pin connected by name with empty reference: 'current_field'"
+lint_off -rule PINCONNECTEMPTY -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Cell pin connected by name with empty reference: 'current_field'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Operator LTE expects 10 bits on the RHS, but RHS's REPLICATE generates 9 bits."
+lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/main_ram_generic.v" -match "Input port connection 'addra' expects 14 bits on the pin connection, but pin connection's VARREF 'bus_addr' generates 15 bits."
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Operator CASE expects 3 bits on the Case expression, but Case expression's SEL generates 2 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Bits of signal are not used: 'wrdata_r'[31:12]"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Operator CASE expects 3 bits on the Case expression, but Case expression's SEL generates 2 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Bits of signal are not used: 'palette_rgb_data'[15:12]"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Operator COND expects 4 bits on the Conditional False, but Conditional False's SEL generates 3 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rst_i'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Operator SUB expects 10 bits on the RHS, but RHS's VARREF 'subtile_hscroll' generates 4 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Operator COND expects 10 bits on the Conditional True, but Conditional True's CONST '9'h2' generates 9 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_en_i'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Operator COND expects 10 bits on the Conditional False, but Conditional False's CONST '9'h1' generates 9 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Operator COND expects 10 bits on the Conditional True, but Conditional True's CONST '9'h1' generates 9 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rst_i'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Operator COND expects 10 bits on the Conditional False, but Conditional False's CONST '9'h0' generates 9 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Operator EQ expects 10 bits on the RHS, but RHS's VARREF 'irqline' generates 9 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_en_i'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Operator GTE expects 10 bits on the RHS, but RHS's VARREF 'active_vstart' generates 9 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Operator LT expects 10 bits on the RHS, but RHS's VARREF 'active_vstop' generates 9 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/composer.v" -match "Bits of signal are not used: 'sprite_lb_rddata'[15:10]"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Operator GTE expects 10 bits on the RHS, but RHS's VARREF 'active_vstart' generates 9 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/layer_line_buffer.v" -match "Signal is not used: 'rst'"
 
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Operator ADD expects 17 bits on the RHS, but RHS's VARREF 'frac_x_incr_int' generates 8 bits."
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_line_buffer.v" -match "Bits of signal are not used: 'wr_addr_1'[1:0]"
 
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/vera_top.v" -match "Bits of signal are not used: 'wrdata_r'[31:12]"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_line_buffer.v" -match "Bits of signal are not used: 'wr_addr_2'[1:0]"
 
-lint_off -rule UNDRIVEN -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/vera_top.v" -match "Signal is not driven: 'composer_display_current_field'"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'sprite_attr'[14:12]"
 
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/vera_top.v" -match "Bits of signal are not used: 'palette_rgb_data'[15:12]"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'linebuf_rddata'[11:10]"
 
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rst_i'"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'hflipped_xcnt'[5:3]"
 
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'hflipped_xcnt_next'[1:0]"
 
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_en_i'"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rst_i'"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_en_i'"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Bits of signal are not used: 'sprite_lb_rddata'[15:10]"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_line_buffer.v" -match "Signal is not used: 'rst'"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_line_buffer.v" -match "Bits of signal are not used: 'wr_addr_1'[1:0]"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_line_buffer.v" -match "Bits of signal are not used: 'wr_addr_2'[1:0]"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'sprite_attr'[14:12]"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'linebuf_rddata'[11:10]"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'hflipped_xcnt'[5:3]"
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'hflipped_xcnt_next'[1:0]"
-
-lint_off -rule CASEINCOMPLETE -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Case values incompletely covered (example pattern 0x6)"
-
-lint_off -rule CASEINCOMPLETE -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Case values incompletely covered (example pattern 0x4)"
-
-lint_off -rule CASEINCOMPLETE -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Case values incompletely covered (example pattern 0x6)"
-
-lint_off -rule CASEINCOMPLETE -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Case values incompletely covered (example pattern 0x4)"
-
-lint_off -rule CASEINCOMPLETE -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Case values incompletely covered (example pattern 0x2)"
-
-lint_off -rule CASEINCOMPLETE -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Case values incompletely covered (example pattern 0x4)"
-
-lint_off -rule LATCH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Latch inferred for signal 'vera_top.l0_renderer.cur_pixel_data_8bpp' (not all control paths of combinational always assign a value)*"
-
-lint_off -rule LATCH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/layer_renderer.v" -match "Latch inferred for signal 'vera_top.l1_renderer.cur_pixel_data_8bpp' (not all control paths of combinational always assign a value)*"
-
-lint_off -rule LATCH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Latch inferred for signal 'vera_top.sprite_renderer.sprite_idx_tmp' (not all control paths of combinational always assign a value)*"
-
-lint_off -rule LATCH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Latch inferred for signal 'vera_top.sprite_renderer.cur_pixel_data_8bpp' (not all control paths of combinational always assign a value)*"
-
-lint_off -rule BLKSEQ -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/graphics/composer.v" -match "Blocking assignments (=) in sequential (flop or latch) block*"
-
-lint_off -rule WIDTH -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/main_ram_generic.v" -match "Input port connection 'addra' expects 14 bits on the pin connection, but pin connection's VARREF 'bus_addr' generates 15 bits."
-
-lint_off -rule UNUSED -file "*/gw/components/vera/../../../sub/vera-module/fpga/source/main_ram_generic.v" -match "Bits of signal are not used: 'bus_addr'[14]"
+lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/main_ram_generic.v" -match "Bits of signal are not used: 'bus_addr'[14]"

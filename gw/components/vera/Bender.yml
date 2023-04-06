@@ -20,9 +20,11 @@ sources:
       VRAM_SIZE_BYTES: (128*1024)
     files:
       - ../../../sub/vera-module/fpga/source/main_ram_generic.v
-  - target: any(verilator, vivado)
+  - target: verilator
     files:
      - lint.vlt
+  - target: any(verilator, vivado)
+    files:
      - ../../../sub/vera-module/fpga/source/vera_top.v
      - ../../../sub/vera-module/fpga/source/reset_sync.v
      - ../../../sub/vera-module/fpga/source/spram_byte_write_ram_wr_first.v
