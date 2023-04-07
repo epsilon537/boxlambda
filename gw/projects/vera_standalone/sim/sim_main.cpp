@@ -37,8 +37,8 @@ SDL_Texture *sdl_display;
 
 int sdl_x=0/*750*/, sdl_y=0/*523*/;
 
-bool vsync_prev = false; 
-bool hsync_prev = false;
+bool vsync_prev = true; 
+bool hsync_prev = true;
 bool exit_req = false;
 bool render = false;
 
@@ -91,14 +91,14 @@ static void tick(void) {
     return;
 
   //Clear the screen during Vsync
-  if (top->vga_vsync && !vsync_prev) {
+  if (!top->vga_vsync && vsync_prev) {
     SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 0);
     SDL_RenderClear(sdl_renderer);
     sdl_y = 0;
   }
 
   //Render to SDL's back buffer at each Hsync.
-  if (top->vga_hsync && !hsync_prev) {
+  if (!top->vga_hsync && hsync_prev) {
     SDL_SetRenderTarget(sdl_renderer, NULL);
     SDL_RenderCopy(sdl_renderer, sdl_display, NULL, NULL);
     SDL_RenderPresent(sdl_renderer);
