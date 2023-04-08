@@ -8,7 +8,7 @@ add_executable(vera_test
 
 target_include_directories(vera_test
 		PRIVATE
-			../../../sub/vera-module/misc
+			../../../sub/vera_wishbone/misc
     		../../../sub/litex/litex/soc/software/liblitedram
 			../../../sub/litex/litex/soc/software/include
 			../../../sub/litex/litex/soc/software

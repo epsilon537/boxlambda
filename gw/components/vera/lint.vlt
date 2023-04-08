@@ -5,44 +5,44 @@
 //   2. Keep the waiver permanently if you are sure this is okay
 //   3. Keep the waiver temporarily to suppress the output
 
-lint_off -rule PINCONNECTEMPTY -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Cell pin connected by name with empty reference: 'current_field'"
+lint_off -rule PINCONNECTEMPTY -file "*/sub/vera_wishbone/fpga/source/vera_top.v" -match "Cell pin connected by name with empty reference: 'current_field'"
 
-lint_off -rule WIDTH -file "*/sub/vera-module/fpga/source/main_ram_generic.v" -match "Input port connection 'addra' expects 14 bits on the pin connection, but pin connection's VARREF 'bus_addr' generates 15 bits."
+lint_off -rule WIDTH -file "*/sub/vera_wishbone/fpga/source/main_ram_generic.v" -match "Input port connection 'addra' expects 14 bits on the pin connection, but pin connection's VARREF 'bus_addr' generates 15 bits."
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Bits of signal are not used: 'wrdata_r'[31:12]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/vera_top.v" -match "Bits of signal are not used: 'wrdata_r'[31:12]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/vera_top.v" -match "Bits of signal are not used: 'palette_rgb_data'[15:12]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/vera_top.v" -match "Bits of signal are not used: 'palette_rgb_data'[15:12]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rst_i'"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/sprite_ram.v" -match "Signal is not used: 'rst_i'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/sprite_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_en_i'"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_en_i'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/sprite_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rst_i'"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/palette_ram.v" -match "Signal is not used: 'rst_i'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/palette_ram.v" -match "Signal is not used: 'wr_clk_en_i'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_en_i'"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_en_i'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/palette_ram.v" -match "Signal is not used: 'rd_clk_en_i'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/composer.v" -match "Bits of signal are not used: 'sprite_lb_rddata'[15:10]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/graphics/composer.v" -match "Bits of signal are not used: 'sprite_lb_rddata'[15:10]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/layer_line_buffer.v" -match "Signal is not used: 'rst'"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/graphics/layer_line_buffer.v" -match "Signal is not used: 'rst'"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_line_buffer.v" -match "Bits of signal are not used: 'wr_addr_1'[1:0]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/graphics/sprite_line_buffer.v" -match "Bits of signal are not used: 'wr_addr_1'[1:0]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_line_buffer.v" -match "Bits of signal are not used: 'wr_addr_2'[1:0]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/graphics/sprite_line_buffer.v" -match "Bits of signal are not used: 'wr_addr_2'[1:0]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'sprite_attr'[14:12]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'sprite_attr'[14:12]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'linebuf_rddata'[11:10]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'linebuf_rddata'[11:10]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'hflipped_xcnt'[5:3]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'hflipped_xcnt'[5:3]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'hflipped_xcnt_next'[1:0]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/graphics/sprite_renderer.v" -match "Bits of signal are not used: 'hflipped_xcnt_next'[1:0]"
 
-lint_off -rule UNUSED -file "*/sub/vera-module/fpga/source/main_ram_generic.v" -match "Bits of signal are not used: 'bus_addr'[14]"
+lint_off -rule UNUSED -file "*/sub/vera_wishbone/fpga/source/main_ram_generic.v" -match "Bits of signal are not used: 'bus_addr'[14]"

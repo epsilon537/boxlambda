@@ -8,7 +8,7 @@ gw_project_rules(
     TOP_MODULE vera_top
     PROJECT_NAME vera_standalone
     VERILATOR_CPP_FLAGS 
-        "-I${PROJECT_SOURCE_DIR}/sub/vera-module/misc -I${SDL2_INCLUDE_DIRS}"
+        "-I${PROJECT_SOURCE_DIR}/sub/vera_wishbone/misc -I${SDL2_INCLUDE_DIRS}"
     VERILATOR_LD_FLAGS 
         "-lncurses ${SDL2_LIBRARIES}"
 )
