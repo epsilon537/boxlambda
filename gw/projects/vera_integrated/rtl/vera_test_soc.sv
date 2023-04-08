@@ -342,7 +342,7 @@ module vera_test_soc(
 `endif //DRAM/No DRAM.
 
 `ifdef VERA
-  vera_top vera_inst(
+  vera_top #(`VRAM_SIZE_BYTES) vera_inst(
     .clk(sys_clk),
     .reset(ndmreset | (~sys_rst_n)),
 	  .wb_adr(wbs[VERA_S].adr[18:2]),
