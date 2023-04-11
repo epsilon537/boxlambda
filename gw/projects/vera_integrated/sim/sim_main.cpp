@@ -7,6 +7,7 @@
 
 #include <string>
 
+// SDL for rendering VGA output
 #include <SDL2/SDL.h>
 
 // Include common routines
@@ -26,11 +27,6 @@
 // From riscv-dbg
 #include "sim_jtag.h"
 
-//We set GPIO1 bits 3:0 to 0xf to indicate to RISCV SW that this is a simulation.
-static const int GPIO1_SIM_INDICATOR = 0xf; 
-
-static const char INPUT_TEST_CHAR = 's';
-
 //SDL objects:
 #define SDL_WINDOW_WIDTH 800
 
@@ -39,11 +35,11 @@ SDL_Renderer *sdl_renderer;
 SDL_Window *sdl_window;
 SDL_Texture *sdl_display;
 
-int sdl_x=0/*750*/, sdl_y=0/*523*/;
+int sdl_2x=0/*750*/, sdl_y=0/*523*/;
 
 bool vsync_prev = true; 
 bool hsync_prev = true;
-bool exit_req = false;
+bool exit_req = false; //Will be set to true when SDL window is closed by user.
 
 bool tracing_enable = false;
 
@@ -63,22 +59,18 @@ std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
 std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 
-//Initialize GPIO change detectors
-unsigned char gpio0Prev = 0, gpio1Prev = 0;
 //Initialize UART rx and tx change detector
 std::string uartRxStringPrev;
-std::string uartTxStringPrev;
 
-//Accumulate GPIO0 value changes as a string into this variable
-std::string gpio0String;
-
+//A frame counter is used to determine when to start and stop recording the contents of one frame to a file.
 unsigned framecount = 0;
 FILE *frameFile = 0;
 
 // Legacy function required only so linking works on Cygwin and MSVC++
 double sc_time_stamp() { return 0; }
 
-void cleanup() {
+//Clean-up logic.
+static void cleanup() {
   // End curses.
   endwin();
 
@@ -97,11 +89,14 @@ void cleanup() {
 
 //Advance simulation by one clock cycle
 static void tick(void) {
+  //High phase
   top->clk_i = 1;
   contextp->timeInc(1);
   top->eval();
   if (tracing_enable)
     tfp->dump(contextp->time());
+  
+  //Low phase
   top->clk_i = 0;
   contextp->timeInc(1);
   top->eval();
@@ -112,16 +107,18 @@ static void tick(void) {
   if (SDL_PollEvent(&sdl_event) && sdl_event.type == SDL_QUIT)
     exit_req = true;
 
-  //Clear the screen during Vsync
+  //Clear the screen during Vsync. Note that Vsync is active low.
   if (!top->vga_vsync && vsync_prev) {
     SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 0);
     SDL_RenderClear(sdl_renderer);
     sdl_y = 0;
     ++framecount;
 
+    //Start frame recording on frame 2.
     if (framecount == 2)
       frameFile = fopen("frame.bin", "wb");
 
+    //Stop frame recording on frame 3.
     if (framecount == 3) {
       mvprintw(0, 0, "[%lld]", contextp->time());
       mvprintw(23, 0, "Closing frame file...\n\r");
@@ -131,31 +128,37 @@ static void tick(void) {
     }
   }
 
-  //Render to SDL's back buffer at each Hsync.
+  //Render to SDL's back buffer at each Hsync. Note that Hsync is active low.
   if (!top->vga_hsync && hsync_prev) {
     SDL_SetRenderTarget(sdl_renderer, NULL);
     SDL_RenderCopy(sdl_renderer, sdl_display, NULL, NULL);
     SDL_RenderPresent(sdl_renderer);
     SDL_SetRenderTarget(sdl_renderer, sdl_display);
-    sdl_x = 0;
+    sdl_2x = 0;
     sdl_y++;
   }
 
+  //A pixel buffer for recording to file.
   static Uint8 pixel[4];
 
+  //Convert RGB4:4:4 to RGB8:8:8.
   pixel[0] = (Uint8)(top->vga_r<<4);
   pixel[1] = (Uint8)(top->vga_g<<4);
   pixel[2] = (Uint8)(top->vga_b<<4);
   pixel[3] = 255;
   
-  //Render the VGA rgb output. Convert RGB4:4:4 to RGB8:8:8.
+  //Render the VGA rgb output.
   SDL_SetRenderDrawColor(sdl_renderer, pixel[0], pixel[1], pixel[2], pixel[3]);
-  SDL_RenderDrawPoint(sdl_renderer, sdl_x>>1, sdl_y);
+
+  //sdl_2x increments at clock rate (50MHz), i.e. twice the pixel clock rate.
+  //=> the pixel's x position corresponds to sdl_2x right shifted by 1.
+  SDL_RenderDrawPoint(sdl_renderer, sdl_2x>>1, sdl_y);
   
   if (frameFile)
     fwrite(pixel, 1, 4, frameFile);
 
-  ++sdl_x;
+  //sdl_2x increments at clock rate (50MHz), i.e. twice the pixel clock rate.
+  ++sdl_2x;
 
   vsync_prev = top->vga_vsync;
   hsync_prev = top->vga_hsync;
@@ -164,9 +167,8 @@ static void tick(void) {
   //and feed the UART co-simulator output to our model
   top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 
-  //Detect and print changes to UART and GPIOs
-  if ((uartRxStringPrev != uart->get_rx_string()) ||
-      (uartTxStringPrev != uart->get_tx_string())) {
+  //Detect and print changes to UART
+  if (uartRxStringPrev != uart->get_rx_string()) {
 
     //Positional printing using ncurses.
     mvprintw(0, 0, "[%lld]", contextp->time());
@@ -176,7 +178,6 @@ static void tick(void) {
 
     //Update change detectors
     uartRxStringPrev = uart->get_rx_string();
-    uartTxStringPrev = uart->get_tx_string();
   }
 }
 
@@ -204,10 +205,14 @@ int main(int argc, char** argv, char** env) {
 
     // Command line processing
     for(;;) {
-      switch(getopt(argc, argv, "th")) {
+      switch(getopt(argc, argv, "ith")) {
       case 't':
         printf("Tracing enabled\n");
         tracing_enable = true;
+        continue;
+      case 'i':
+        printf("Interactive mode enabled\n");
+        interactive_mode = true;
         continue;
       case '?':
       case 'h':
@@ -215,6 +220,7 @@ int main(int argc, char** argv, char** env) {
         printf("\nVmodel Usage:\n");
         printf("-h: print this help\n");
         printf("-t: enable tracing.\n");
+        printf("-i: enable interactive mode.\n");
         return 0;
         break;
 	    
@@ -250,7 +256,7 @@ int main(int argc, char** argv, char** env) {
 
     jtag_set_bypass(!attach_debugger);
 
-    // Set Vtop's input signals
+    // Assert reset for a couple of clock cycles.
     top->clk_i = 0;
     top->uart_rx = 0;
     top->rst_ni = !1;
@@ -264,21 +270,6 @@ int main(int argc, char** argv, char** env) {
     tick();
     tick();
   
-    mvprintw(27, 0, "Waiting for Vsync...\n\r");
-    refresh();
-
-    //Wait for Vsync before starting the rendering
-    while (!top->vga_vsync) {
-      tick(); //Advance one clock period.
-      if (exit_req) {
-        cleanup();
-        exit(-1);
-      }
-    }
-
-    mvprintw(27, 0, "Done.\n\r");
-    refresh();
-
     // When not in interactive mode, simulate for 6000000 timeprecision periods
     while (interactive_mode || (contextp->time() < 6000000)) {
         if (exit_req)
@@ -290,12 +281,9 @@ int main(int argc, char** argv, char** env) {
     
     cleanup();
 
-    // End curses.
-    endwin();
-
     // Checks for automated testing.
     int res = 0;
-    std::string uartCheckString("VERA Read Back Test successful.");
+    std::string uartCheckString("VERA Read Back Tests successful.");
 
     if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
       printf("Test failed\n");

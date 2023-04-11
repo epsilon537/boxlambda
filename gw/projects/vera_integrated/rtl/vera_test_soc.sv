@@ -1,7 +1,7 @@
 `default_nettype none
 
 module vera_test_soc(
-  input  wire       ext_clk100, /*External 100MHz clock.*/
+  input  wire       ext_clk, /*External clock: 100MHz on FPGA, 50MHz in simulation.*/
    
   inout  wire [7:0] gpio0,
   inout  wire [3:0] gpio1,
@@ -50,9 +50,7 @@ module vera_test_soc(
   );
     
   typedef enum {
-`ifdef DEBUG_MODULE_ACTIVE		
     DM_M,
-`endif
     COREI_M,
     CORED_M
   } wb_master_e;
@@ -70,11 +68,7 @@ module vera_test_soc(
     DDR_USR1_S
 } wb_slave_e;
 
-`ifdef DEBUG_MODULE_ACTIVE
   localparam NrMaster = 3;
-`else
-  localparam NrMaster = 2;
-`endif  
   localparam NrSlave  = 10;
 
   typedef logic [31:0] Wb_base_addr [NrSlave];
@@ -257,10 +251,10 @@ module vera_test_soc(
   logic pll_locked, sys_rst;
 
   litedram_wrapper litedram_wrapper_inst (
-	.clk(ext_clk100), /*100MHz External clock is input for LiteDRAM module.*/
+	.clk(ext_clk), /*External clock is input for LiteDRAM module. On FPGA this is a 100MHz clock, in simulation it's a 50MHz clock.*/
   .rst(~ext_rst_n), /*External reset goes into a reset synchronizer inside the litedram module. The output of that synchronizer is sys_rst.*/
-  .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock...*/
-	.sys_rst(sys_rst), /*...and system reset.*/
+  .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock. On FPGA a divide-by-2 of the ext_clk is done. In simulation sys_clk = ext_clk.*/
+	.sys_rst(sys_rst), /*LiteDRAM outputs system reset.*/
 	.pll_locked(pll_locked),
 `ifdef SYNTHESIS
 	.ddram_a(ddram_a),
@@ -326,13 +320,15 @@ module vera_test_soc(
 
 //LiteDRAM provides the clock generator. Without DRAM we have to provide one here.
 `ifdef SYNTHESIS
+  //This clkgen does a divide-by-2 of the 100MHz ext_clk => sys_clk runs at 50MHz.
   clkgen_xil7series clkgen (
-    .IO_CLK     (ext_clk100),
+    .IO_CLK     (ext_clk),
     .IO_RST_N   (ext_rst_n),
     .clk_sys    (sys_clk),
     .rst_sys_n  (sys_rst_n));
 `else
-  assign clk = ext_clk100;
+  //In simulation ext_clk runs at 50MHz and sys_clk = ext_clk;
+  assign sys_clk = ext_clk;
   assign sys_rst_n = ext_rst_n;
 `endif //SYNTHESIS/No SYNTHESIS
 

@@ -60,7 +60,11 @@ std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 // Legacy function required only so linking works on Cygwin and MSVC++
 double sc_time_stamp() { return 0; }
 
-void cleanup() {
+//Clean-up logic.
+static void cleanup() {
+  // End curses.
+  endwin();
+
   //SDL clean-up.
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
@@ -221,6 +225,7 @@ void vram_wr_byte(unsigned addr, unsigned char data) {
   tick();
 }
 
+//Read a word from VRAM.
 int vram_rd(unsigned addr, unsigned& data) {
   int res=0;
 
@@ -255,6 +260,7 @@ int vram_rd(unsigned addr, unsigned& data) {
   return res;
 }
 
+//Read a byte from VRAM.
 int vram_rd_byte(unsigned addr, unsigned char& data) {
   int res=0;
   unsigned addr_aligned = addr & (~3);
@@ -371,33 +377,6 @@ void setup_sprite_ram() {
   }
 }
 
-//Returns <0 if unsuccessful
-int load_bin_file_into_vram(const char* vram_bin_filename) {
-  static unsigned char buffer[VRAM_SIZE_BYTES];
-  int n;
-
-  printf("Loading into VRAM: %s\n\r", vram_bin_filename);
-
-  FILE *f = fopen(vram_bin_filename, "rb");
-  if (f) {
-    n = fread(buffer, 1, VRAM_SIZE_BYTES, f);
-
-    for (int ii=0; ii<n/4; ii++) {
-      vram_wr(ii*4, 
-        (unsigned)(buffer[ii*4+3]<<24)|(unsigned)(buffer[ii*4+2]<<16)|(unsigned)(buffer[ii*4+2]<<8)|(unsigned)buffer[ii*4]);
-    }
-  }   
-  else
-  {
-    printf("File not found: %s\n\r", vram_bin_filename);
-    return -1;
-  }
-
-  printf("Done\n\r");
-  fclose(f);
-  return 0;
-}
-
 void generate_8bpp_8x8_tiles() {
   unsigned char data=0;
 
@@ -450,18 +429,13 @@ int main(int argc, char** argv, char** env) {
 
     bool attach_debugger = false;
     bool interactive_mode = false;
-    char *vram_bin_filename = NULL;
-
+    
     // Command line processing
     for(;;) {
-      switch(getopt(argc, argv, "thf:")) {
+      switch(getopt(argc, argv, "th")) {
       case 't':
         printf("Tracing enabled\n");
         tracing_enable = true;
-        continue;
-
-      case 'f':
-        vram_bin_filename = optarg;
         continue;
 
       case '?':
@@ -470,7 +444,6 @@ int main(int argc, char** argv, char** env) {
         printf("\nVmodel Usage:\n");
         printf("-h: print this help\n");
         printf("-t: enable tracing.\n");
-        printf("-f <vram.bin>: load given bin file into vram.\n");
         return 0;
         break;
 	    
@@ -514,14 +487,6 @@ int main(int argc, char** argv, char** env) {
     tick();
     top->reset = 0;
 
-#if 0
-    //If a vram.bin file is given, load it into memory and poke it into VERA's VRAM
-    if (vram_bin_filename) {
-      if (load_bin_file_into_vram(vram_bin_filename) < 0)
-        exit(-1);
-    }
-#endif
-
     generate_8bpp_8x8_tiles();
     generate_8bpp_64x64_sprite();
     setup_sprite_ram();
@@ -533,16 +498,16 @@ int main(int argc, char** argv, char** env) {
       vram_wr_byte(VRAM_MAP_BASE+ii+1, 0);
     }
 
-    unsigned read_back_val=0;
-
-    wb_wr(VERA_DC_VIDEO, 0x71); //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
+    unsigned read_back_val = 0;
+    unsigned dc_video_val = 0x71; //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
+    wb_wr(VERA_DC_VIDEO, dc_video_val); 
     if (wb_rd(VERA_DC_VIDEO, read_back_val) < 0) {
       printf("VERA_DC_VIDEO read back failed.\n\r");
       cleanup();
       exit(-1);
     }
 
-    if (read_back_val != 0x71) {
+    if (read_back_val != dc_video_val) {
       printf("VERA_DC_VIDEO read back incorrectly: 0x%x\n\r", read_back_val);
       cleanup();
       exit(-1);
@@ -578,8 +543,7 @@ int main(int argc, char** argv, char** env) {
         // Evaluate model
         tick();
         
-        //if (contextp->time() % 10 == 0)
-          vram_wr(0,0); //Stress the bus by writing all the time.
+        vram_wr(0,0); //Stress the bus by writing all the time.
 
         if (sdl_y == 1) {
           wb_wr(VERA_CTRL, 0); //Sprite Bank 0
@@ -595,9 +559,6 @@ int main(int argc, char** argv, char** env) {
     }
     
     cleanup();
-
-    // End curses.
-    endwin();
 
     return 0;
 }

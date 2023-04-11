@@ -9,58 +9,16 @@
 #include "platform.h"
 #include "utils.h"
 #include "sdram.h"
-//#include "libbase/memtest.h"
 #include "vera.h"
+#include "vera_hal.h"
 
-#define VRAM_SIZE_BYTES (128*1024)
-#define VRAM_MAP_BASE (0x8000)
-
-#define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
-
-static struct uart uart0;
+#define VRAM_MAP_BASE (0x8000) //Relative to VERA base address.
 
 static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
 
-//A very crude wishbone bus write implementation.
-void vera_wr(unsigned addr, unsigned data) {
-  *(volatile unsigned *)(addr) = data;
-}
-
-//A very crude wishbone bus read implementation.
-unsigned vera_rd(unsigned addr) {
-  return *(unsigned volatile *)(addr);  
-}
-
-//This function writes the given data word to the given address in VERA's VRAM.
-void vram_wr(unsigned addr, unsigned data) {
-  *(volatile unsigned *)(addr+VERA_VRAM_BASE) = data;
-}
-
-//This function writes the given data byte to the given address in VERA's VRAM.
-void vram_wr_byte(unsigned addr, unsigned char data) {
-  *(volatile unsigned char *)(addr+VERA_VRAM_BASE) = data;
-}
-
-unsigned vram_rd(unsigned addr) {
-  return (*(volatile unsigned *)(addr+VERA_VRAM_BASE));  
-}
-
-unsigned char vram_rd_byte(unsigned addr) {
-  return (*(volatile unsigned char *)(addr+VERA_VRAM_BASE));  
-}
-
-//This function writes the given rgb triple to the given position in VERA's Palette RAM.
-void palette_ram_wr(unsigned idx, unsigned char r, unsigned char g, unsigned char b) {
-  *(volatile unsigned *)(idx*4+VERA_PALETTE_BASE) = (((unsigned)r)<<8) | (((unsigned)g)<<4) | ((unsigned)b);
-}
-
-//This function writes the given data word to the given address in VERA's Sprite RAM.
-void sprite_ram_wr(unsigned addr, unsigned data) {
-  *(volatile unsigned *)(addr+VERA_SPRITES_BASE) = data;
-}
-
+//Returns 0 if OK, <0 if error.
 int generate_8bpp_8x8_tiles() {
   unsigned char data=0;
 
@@ -82,40 +40,22 @@ int generate_8bpp_8x8_tiles() {
   return 0;
 }
 
-void generate_8bpp_64x64_sprite() {
+void generate_8bpp_64x64_sprite(unsigned vram_addr) {
   for (int ii=0; ii<64*64/4; ii++) {
-      vram_wr(0x1000+ii*4, 0x03030303);
+      vram_wr(vram_addr+ii*4, 0x03030303);
     } 
 }
 
-void setup_sprite_ram() {
+void setup_sprite_attr_ram() {
   int i;
   unsigned v,w;
 
   for (i=0; i<64; i++) {
-    v = (0x1c0>>5); // addr
-    v |= (1<<15); // mode: 8bpp
-    v |= ((8*i)<<16); //x
-    w = 16; //y
-    w |= (3<<18); //z
-    //width:8
-    //height:8
-
-    sprite_ram_wr(i*8, v);
-    sprite_ram_wr(i*8 + 4, w);
+    sprite_attr_wr(i, 0x1c0, 1, 8*i, 16, 3, 0, 0);
   }
 
   for (i=0; i<64; i++) {
-    v = (0x1000>>5); // addr
-    v |= (1<<15); // mode: 8bpp
-    v |= ((70*i)<<16); //x
-    w = 300; //y
-    w |= (3<<18); //z
-    w |= (3<<28); //width:64
-    w |= (3<<30); //heigth
-
-    sprite_ram_wr(64*8 + i*8, v);
-    sprite_ram_wr(64*8 + i*8 + 4, w);
+    sprite_attr_wr(i+64, 0x1000, 1, 70*i, 300, 3, 3, 3);
   }
 }
 
@@ -134,8 +74,6 @@ void _init(void) {
 }
 
 int main(void) {
-  uint32_t leds = 0xF;
-
   gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
   gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
 
@@ -147,40 +85,41 @@ int main(void) {
 
   printf("Setting up VERA registers...\n");
 
-  vera_wr(VERA_DC_VIDEO, 0x71); //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
-  read_back_val = vera_rd(VERA_DC_VIDEO);
+  unsigned dc_video_reg = 0x71; //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
+  vera_reg_wr(VERA_DC_VIDEO, dc_video_reg); 
+  read_back_val = vera_reg_rd(VERA_DC_VIDEO);
 
-  if (read_back_val != 0x71) {
-    printf("VERA_DC_VIDEO read back incorrectly: 0x%x\n\r", read_back_val);
+  if (read_back_val != dc_video_reg) {
+    printf("VERA_DC_VIDEO read back incorrectly: 0x%x, expected 0x%x\n\r", read_back_val, dc_video_reg);
     read_back_err = 1;
   }
   else {
     printf("VERA_DC_VIDEO read back OK\n\r");
   }
 
-  vera_wr(VERA_L0_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
-  vera_wr(VERA_L0_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
-  vera_wr(VERA_L0_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
-  vera_wr(VERA_L0_HSCROLL, 4);
-  vera_wr(VERA_L0_VSCROLL, 4);
+  vera_reg_wr(VERA_L0_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
+  vera_reg_wr(VERA_L0_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
+  vera_reg_wr(VERA_L0_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
+  vera_reg_wr(VERA_L0_HSCROLL, 4);
+  vera_reg_wr(VERA_L0_VSCROLL, 4);
 
-  vera_wr(VERA_L1_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
-  vera_wr(VERA_L1_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
-  vera_wr(VERA_L1_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
-  vera_wr(VERA_L1_HSCROLL, 4);
-  vera_wr(VERA_L1_VSCROLL, 4);
-  vera_wr(VERA_CTRL, 0); //Sprite Bank 0
+  vera_reg_wr(VERA_L1_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
+  vera_reg_wr(VERA_L1_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
+  vera_reg_wr(VERA_L1_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
+  vera_reg_wr(VERA_L1_HSCROLL, 4);
+  vera_reg_wr(VERA_L1_VSCROLL, 4);
+  vera_reg_wr(VERA_CTRL, 0); //Sprite Bank 0
   
-  vera_wr(VERA_DC_HSCALE, 92);
-  vera_wr(VERA_DC_VSCALE, 92);
+  vera_reg_wr(VERA_DC_HSCALE, 92);
+  vera_reg_wr(VERA_DC_VSCALE, 92);
 
   printf("Setting up VRAM...\n");
 
   if (generate_8bpp_8x8_tiles() < 0)
     read_back_err = 1;
 
-  generate_8bpp_64x64_sprite();
-  setup_sprite_ram();
+  generate_8bpp_64x64_sprite(/*vram_addr=*/0x1000);
+  setup_sprite_attr_ram();
   setup_palette_ram();
 
   //Fill VRAM map area
@@ -190,22 +129,30 @@ int main(void) {
   }
 
   if (read_back_err == 0)
-    printf("VERA Read Back Test successful.\n");
+    printf("VERA Read Back Tests successful.\n");
   else
-    printf("VERA Read Back Test faile.\n");
+    printf("VERA Read Back Tests failed.\n");
 
   unsigned int scanline;
 
   printf("Starting loop...\n");
 
   while (1) {
-    scanline = vera_rd(VERA_SCANLINE);
+    scanline = vera_reg_rd(VERA_SCANLINE);
 
+    //Switch to sprite bank 0 at scanline 479
     if (scanline == 479) {
-      vera_wr(VERA_CTRL, 0);
+      vera_reg_wr(VERA_CTRL, 0);
     }
+
+    //Switch to sprite bank 1 at scanline 240
     if (scanline == 240 ) {
-      vera_wr(VERA_CTRL, 1);
+      vera_reg_wr(VERA_CTRL, 1);
     }
+
+    vram_wr(0,0); //Stress the bus by writing all the time.
+    vram_wr(0,0); //Stress the bus by writing all the time.
+    vram_wr(0,0); //Stress the bus by writing all the time.
+    vram_wr(0,0); //Stress the bus by writing all the time.
  }
 }
