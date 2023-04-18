@@ -77,6 +77,12 @@ Prerequisites
   
     On other distros, please use your distro's package installer to get version 3.23 or later.
 
+- **SDL2**
+  [https://wiki.libsdl.org/SDL2/Installation](https://wiki.libsdl.org/SDL2/Installation)
+  Also, make sure to set environment variable **SDL2_DIR** to point to the SDL2 directory containing files *SDL2Config.cmake* or *sdl2-config.cmake*. In my case (Ubuntu WSL), I added the following line to my *~/.bashrc*:
+
+    `export SDL2_DIR=/usr/lib/x86_64-linux-gnu/cmake/SDL2/`
+
 Installation
 ------------
 
