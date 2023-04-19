@@ -66,7 +66,7 @@ Note:
 
 Time Slot Scheduled Access to VRAM
 ==================================
-Four ports are accessing VRAM: two Layer Renderers, the Sprite Renderer, and the CPU. The original VERA code uses a priority scheduler to decide which port gets access when two or more ports are competing for access. The CPU port had the highest priority, then the Layer Renderers, and finally the Sprite Renderer. However, the high-speed, memory-mapped Wishbone interface makes it all too easy for the CPU to oversubscribe the VRAM bus and starve the other ports of bandwidth. This would result in tearing artifacts and other rendering errors. To avoid this issue, the scheduler is modified so that each port in turn gets a timeslot to access VRAM. There are four equal time slot *beats*. Each port is assigned one slot. 
+Four ports are accessing VRAM: two Layer Renderers, the Sprite Renderer, and the CPU. The original VERA code uses a priority scheduler to decide which port gets access when two or more ports are competing for access. The CPU port had the highest priority, then the Layer Renderers, and finally the Sprite Renderer. However, the high-speed, memory-mapped Wishbone interface makes it all too easy for the CPU to oversubscribe the VRAM bus and starve the other ports of bandwidth. This would result in tearing artifacts and other rendering errors. To avoid this issue, the priority scheduler is replaced with a time slot scheduler. There are four equal time slot *beats*. Each port is assigned one slot during which it can access VRAM. The duration of a time slot is one clock cycle. 
 
 ![Time Slot Scheduled VRAM Access.](../assets/vram_if_timeslot_scheduling.drawio.png)
 
@@ -86,11 +86,11 @@ Sprite Banking may help with sprite multiplexing or animation: While one sprite 
 
 ![Double Buffering with Sprite Banks.](../assets/sprite_banking_double_buffering.drawio.png)
 
-*Double Buffering with Sprite Banks.*
+*Double Buffering with Sprite Banks Example.*
 
 ![Sprite Multiplexing with Sprite Banks.](../assets/sprite_banking_muxing.drawio.png)
 
-*Sprite Multiplexing with Sprite Banks.*
+*Sprite Multiplexing with Sprite Banks Example.*
 
 A Fixed Sprite-Pixels-per-Scanline Limit
 ========================================
@@ -368,6 +368,8 @@ I reshuffled the various bitfields in VERA's register space for convenient acces
 
 All registers are 32-bit wide, but higher order bits 31-12 are currently not in use.
 
+For a description of these registers, refer to the [VERA Programmer's Reference](https://github.com/epsilon537/vera_wishbone/blob/boxlambda/doc/VERA%20Programmer's%20Reference.md).
+
 The VERA Wishbone Repo
 ----------------------
 The revised VERA repository is called **vera_wishbone**:
@@ -378,13 +380,13 @@ VERA Wishbone's feature summary:
   - 32-bit pipelined Wishbone slave interface.
   - VGA output format at a fixed resolution of 640x480@60Hz (same as original VERA).
   - Support for 2 layers, both supporting either tile or bitmap mode (same as original VERA).
-  - Support for 2 banks of 64 sprites, max. 512 sprite pixels per scanline.
+  - Support for 2 banks of 64 sprites. Guaranteed max. of 512 sprite pixels per scanline.
   - Configurable Embedded video RAM size of up to 128kB.
   - Palette with 256 colors selected from a total range of 4096 colors (same as original VERA).
 
-![The Revised VERA Block Diagram.](../assets/vera_wishbone.drawio.png)
+![The VERA Wishbone Block Diagram.](../assets/vera_wishbone.drawio.png)
 
-*The Revised VERA Block Diagram.*
+*The VERA Wishbone Block Diagram.*
 
 The *vera_wishbone* top-level interface is straightforward:
 
@@ -536,7 +538,7 @@ Vera_integrated on the Arty A7
    
 ![Arty A7 Setup for vera_integrated Test SoC.](../assets/vera_fpga_test_setup.jpg)
 
-*Arty A7 Setup for vera_integrated Test SoC.*
+*Arty A7 Setup for the vera_integrated Test SoC.*
 
 Conclusion
 ----------

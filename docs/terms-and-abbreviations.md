@@ -47,6 +47,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **DMAC**: DMA Controller.
 
+- **Double Buffering**:  A technique for drawing graphics that shows no stutter, tearing, or other rendering artifacts. Buffer A is being displayed while buffer B is being updated.
+  
 - **DPRAM**: Dual-Port RAM.
 
 - **DTM**: Debug Transport Module.
@@ -65,7 +67,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **FTDI**: Future Technology Devices International Inc. The name has become synonymous with the USB-to-UART adapter ICs sold by this company.
   
-- **Gateware**: [Gateware comprises the description (of behaviour, structure and/or connections) of digital logic gates, a high level abstraction thereof, and/or the implementation thereof in (re)configurable logic devices (such as FPGAs and ASICs)](https://www.gateware.org/definition-of-gateware).
+- **Gateware**: [Gateware comprises the description (of behavior, structure and/or connections) of digital logic gates, a high-level abstraction thereof, and/or the implementation thereof in (re)configurable logic devices (such as FPGAs and ASICs)](https://www.gateware.org/definition-of-gateware).
 
 - **GCC**: GNU Compiler Collection. An optimizing compiler produced by the GNU Project.
 
@@ -111,6 +113,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Memory File**: A file containing the initial contents of a Block RAM instance used in an FPGA design.
 
+- **Memory Mapped IO**: Memory-mapped I/O uses the same address space to address both main memory and I/O devices. The memory and registers of the I/O devices are mapped to (associated with) address values. So a memory address may refer to either a portion of physical RAM or instead to the memory and registers of the I/O device.
+  
 - **MIG**: Memory Interface Generator, a parameterizable Xilinx IP module used to generate a Memory Controller.
 
 - **MEMC**: Memory Controller.
@@ -141,6 +145,10 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **RV32IMCB**: Risc-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
 
+- **Scan Line**: One line in the raster scanning pattern of the VGA display.
+
+- **SDL**: Simple DirectMedia Layer is a cross-platform development library designed to provide low-level access to audio, keyboard, mouse, joystick, and graphics.
+  
 - **SDRAM**: Synchronous dynamic random-access memory. A DRAM where the operation of its external pin interface is coordinated by an externally supplied clock signal. 
 
 - **Slice**: The basic logical unit of a Xilinx FPGA.
@@ -151,6 +159,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **SPI**: Serial Peripheral Interface, a synchronous serial communication interface specification used for short-distance communication.
 
+- **Sprite**:  A computer graphic that may be moved on-screen and otherwise manipulated as a single entity.
+  
 - **STB**: A Wishbone bus signal.
 
 - **Stderr**: Standard Error. Name of the file object in the Standard C library associated with the standard error device.
@@ -182,6 +192,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **Verilator**: An HDL to C++ compiler.
 
 - **VERA**: Versatile Embedded Retro Adapter, the name of the graphics core used by BoxLambda.
+
+- **VGA**: Video Graphics Array, a computer chipset standard for displaying color graphics.
 
 - **VRAM**: Video RAM.
 
