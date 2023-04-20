@@ -8,7 +8,17 @@ nav:
     - Terms and Abbreviations: terms-and-abbreviations.md
     - Goals and Requirement Analysis: goals-and-requirement-analysis.md
     - Architecture: architecture.md
-    - Components: components.md
+    - Components:
+        - Wishbone Interconnect: components_wb_interconnect.md
+        - RISCV Ibex Processor: components_ibex.md
+        - RISCV-DBG Debug Core: components_riscv_dbg.md
+        - LiteDRAM Memory Controller: components_litedram.md
+        - VERA (Wishbone) Graphics: components_vera.md
+        - Sound: components_sound.md
+        - DMA: components_dma.md
+        - Serial Port: components_serial.md
+        - I2C: components_i2c.md
+        - Miscellaneous: components_misc.md
     - Clocks and Reset: clocks_and_reset.md
     - Interrupts: interrupts.md
     - Estimated FPGA Utilization: estimated-fpga-utilization.md
