@@ -31,3 +31,6 @@
 [submodule "sub/vera_wishbone"]
 	path = sub/vera_wishbone
 	url = https://github.com/epsilon537/vera_wishbone
+[submodule "sub/sdspi"]
+	path = sub/sdspi
+	url = https://github.com/epsilon537/sdspi
