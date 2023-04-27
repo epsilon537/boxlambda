@@ -35,6 +35,7 @@ function (gw_component_rules)
 endfunction()
 
 #Gateware components:
+add_subdirectory(sdspi)
 add_subdirectory(vera)
 add_subdirectory(wbuart32)
 add_subdirectory(riscv-dbg)

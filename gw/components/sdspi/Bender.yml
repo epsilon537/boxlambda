@@ -1,0 +1,21 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: sdspi
+  
+sources:
+  - target: verilator
+    files:
+     - lint.vlt
+  - target: any(verilator, vivado)
+    files:
+     - ../../../sub/sdspi/rtl/sdspi.v
+     - ../../../sub/sdspi/rtl/llsdspi.v
+     - ../../../sub/sdspi/rtl/spicmd.v
+     - ../../../sub/sdspi/rtl/spirxdata.v
+     - ../../../sub/sdspi/rtl/spitxdata.v
+
+
+
