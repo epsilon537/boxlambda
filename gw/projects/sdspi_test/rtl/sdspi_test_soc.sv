@@ -392,6 +392,8 @@ module sdspi_test_soc(
 		// And some wires for debugging it all
 		.o_debug()
 	);
+
+  assign wbs[SDSPI_S].err = 1'b0;
 `endif //SDSPI
 endmodule
 

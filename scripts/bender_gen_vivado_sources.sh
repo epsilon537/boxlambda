@@ -43,4 +43,4 @@ fi
 rm $OUTFILE.tmp
 
 #Generate a depfile: Prepend each line with <target> :
-bender -d $SRC_DIR script $MIN_T_OOC -t constraints -t vivado flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
+bender -d $SRC_DIR script $MIN_T_OOC -t $BL_TARGET_FPGA -t constraints -t vivado flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep

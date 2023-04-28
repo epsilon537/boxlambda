@@ -34,3 +34,6 @@
 [submodule "sub/sdspi"]
 	path = sub/sdspi
 	url = https://github.com/epsilon537/sdspi
+[submodule "sub/fatfs"]
+	path = sub/fatfs
+	url = https://github.com/epsilon537/fatfs
