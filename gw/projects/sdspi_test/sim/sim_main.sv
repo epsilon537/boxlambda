@@ -76,7 +76,7 @@ module sim_main #(
   		 .sdspi_sck(sdspi_sck), 
   		 .sdspi_mosi(sdspi_mosi),
 		 .sdspi_miso(sdspi_miso), 
-  		 .sdspi_card_detect(sdspi_card_detect)   	
+  		 .sdspi_card_detect_n(~sdspi_card_detect)   	
 		);
    
    always_comb begin : jtag_exit_handler

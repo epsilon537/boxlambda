@@ -4,7 +4,9 @@
 #include <stdio.h>
 
 static unsigned wb_read(unsigned a) {
-    return *(volatile unsigned *)(a);
+    unsigned v = *(volatile unsigned *)(a);
+    printf("WB-READM(%08x) => %08x\n", a, v);
+    return v;
 }
 
 static void wb_write(unsigned a, unsigned v) {

@@ -34,6 +34,10 @@ static int sdspi_test(void) {
 	unsigned v;
 	unsigned	boot_sector[128], test_sector[128], buf[128];
 
+	// Clear any prior pending errors
+	wb_write(SDSPI_DATA_ADDR, 0);
+	wb_write(SDSPI_CMD_ADDR, SDSPI_CLEARERR);
+	
 	v = sdspi_read_aux();
 	if (SDSPI_PRESENTN & wb_read(SDSPI_CMD_ADDR)) {
 		printf("Waiting for the card assertion to be registered\n");
@@ -44,16 +48,18 @@ static int sdspi_test(void) {
 	//
 	// GO_IDLE
 	printf("SEND_GO_IDLE\n");
-	if (0x01 != sdspi_sdcmd(SDSPI_GO_IDLE,0)) {
-		printf("Go idle failed.\n");
+	v = sdspi_sdcmd(SDSPI_GO_IDLE,0);
+	if (0x01 != v) {
+		printf("Go idle failed. v=0x%x\n",v);
 		return -1;
   	}
 
 	//
 	// SEND_IF_COND
 	printf("SEND_IF_COND\n");
-	if (0 != sdspi_sdcmd(SDSPI_READREG | SDSPI_CMD + 8, 0x01a5)) {
-		printf("send_if_cond failed\n");
+	v = sdspi_sdcmd(SDSPI_READREG | SDSPI_CMD + 8, 0x01a5);
+	if (0 != v) {
+		printf("send_if_cond failed. v=0x%x\n", v);
 		return -1;
 	}
 
@@ -65,13 +71,15 @@ static int sdspi_test(void) {
 	//
 	// Wait for the card to start up
 	do {
-		if (0 != sdspi_sdcmd(SDSPI_ACMD,0) & 0x01) {
-		printf("ACMD failed.\n");
+		v = sdspi_sdcmd(SDSPI_ACMD,0);
+		if (0 != v & 0x01) {
+		printf("ACMD failed. v=0x%x\n", v);
 		return -1;
 		}
 
-		if (0 != ((v = sdspi_sdcmd(SDSPI_CMD + 41, 0x40000000))&~1)) {
-			printf("cmd+41 failed\n");
+		v = sdspi_sdcmd(SDSPI_CMD + 41, 0x40000000);
+		if (0 != (v & ~1)) {
+			printf("cmd+41 failed. v=0x%x\n", v);
 			return -1;
 		}
 

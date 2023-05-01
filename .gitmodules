@@ -37,3 +37,6 @@
 [submodule "sub/fatfs"]
 	path = sub/fatfs
 	url = https://github.com/epsilon537/fatfs
+[submodule "sub/zbasic"]
+	path = sub/zbasic
+	url = https://github.com/epsilon537/zbasic

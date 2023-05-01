@@ -23,6 +23,7 @@ module sdspi_test_soc(
   output wire       pll_locked_led,
   output wire       init_done_led,
   output wire       init_err_led
+`ifdef DRAM
 `ifdef SYNTHESIS
   , /*The simulation build doesn't export DDR pins.*/
   output wire [13:0] ddram_a,
@@ -41,6 +42,7 @@ module sdspi_test_soc(
 	output wire ddram_odt,
 	output wire ddram_reset_n
 `endif  
+`endif
   , // VGA interface
   output wire  [3:0] vga_r,       
   output wire  [3:0] vga_g,       
@@ -52,7 +54,7 @@ module sdspi_test_soc(
   output wire  sdspi_sck, 
   output wire  sdspi_mosi,
 	input	 wire	 sdspi_miso, 
-  input  wire  sdspi_card_detect
+  input  wire  sdspi_card_detect_n
   );
     
   typedef enum {
@@ -367,12 +369,16 @@ module sdspi_test_soc(
     .vga_hsync(vga_hsync),
     .vga_vsync(vga_vsync)
     );
+`else
+  assign vga_r = 0;
+  assign vga_g = 0;
+  assign vga_b = 0;
+  assign vga_hsync = 0;
+  assign vga_vsync = 0;
 `endif //VERA
 
 `ifdef SDSPI
-  sdspi #(
-		.INITIAL_CLKDIV(8'd62) //FIXME: check: spec says fspi = fclk/2(clkdiv+1), but code comment omits factor 2. Target: 400kHz.
-  ) sdspi_inst (
+  sdspi sdspi_inst (
 		.i_clk(sys_clk), .i_sd_reset(ndmreset | (~sys_rst_n)),
 		// Wishbone interface
 		.i_wb_cyc(wbs[SDSPI_S].cyc), .i_wb_stb(wbs[SDSPI_S].stb), .i_wb_we(wbs[SDSPI_S].we),
@@ -384,7 +390,7 @@ module sdspi_test_soc(
 		.o_wb_data(wbs[SDSPI_S].dat_s),
 		// SDCard interface
 		.o_cs_n(sdspi_cs_n), .o_sck(sdspi_sck), .o_mosi(sdspi_mosi),
-		.i_miso(sdspi_miso), .i_card_detect(sdspi_card_detect),
+		.i_miso(sdspi_miso), .i_card_detect(~sdspi_card_detect_n),
 		// Interrupt
 		.o_int(),
 		// .. and whether or not we can use the SPI port
