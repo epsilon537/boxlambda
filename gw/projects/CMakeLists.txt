@@ -82,6 +82,8 @@ function (gw_project_rules)
             ${_prj_name}.constraints_file_list
         MEM_FILE_LIST
             ${_prj_name}.mem_file_list
+        MEM_FILE_DEP
+            ${_mem_file_tgt}
         VERILATOR_CPP_FLAGS
             ${_verilator_cpp_flags}
         VERILATOR_LD_FLAGS
@@ -161,7 +163,7 @@ function (gw_project_rules)
                 ${_prj_name}.verilator_sources 
                 ${_prj_name}.vlts 
                 ${_prj_name}.cpp_files
-                ${_mem_file_out}
+                ${_mem_file_tgt}
             DEPFILE
                 ${_prj_name}.verilator_sources.dep
             COMMENT
