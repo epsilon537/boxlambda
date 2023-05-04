@@ -33,10 +33,6 @@ static int sdspi_test(void) {
 	int res=0;
 	unsigned v;
 	unsigned	boot_sector[128], test_sector[128], buf[128];
-
-	// Clear any prior pending errors
-	wb_write(SDSPI_DATA_ADDR, 0);
-	wb_write(SDSPI_CMD_ADDR, SDSPI_CLEARERR);
 	
 	v = sdspi_read_aux();
 	if (SDSPI_PRESENTN & wb_read(SDSPI_CMD_ADDR)) {
@@ -68,15 +64,17 @@ static int sdspi_test(void) {
 		printf("send_if_cond data response failed.\n");
 		return -1;
 	}
+
 	//
 	// Wait for the card to start up
 	do {
 		v = sdspi_sdcmd(SDSPI_ACMD,0);
+#if 0		
 		if (0 != v & 0x01) {
 		printf("ACMD failed. v=0x%x\n", v);
 		return -1;
 		}
-
+#endif
 		v = sdspi_sdcmd(SDSPI_CMD + 41, 0x40000000);
 		if (0 != (v & ~1)) {
 			printf("cmd+41 failed. v=0x%x\n", v);

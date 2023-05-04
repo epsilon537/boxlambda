@@ -1,11 +1,11 @@
 #FPGA and simulation builds have different top-levels.
 if(CMAKE_BUILD_TYPE STREQUAL "fpga")
     set(top_module sdspi_test_soc)
-    set(sw_project sdspi_test_hw)
 else()
-    set(top_module sim_main)
-    set(sw_project sdspi_test_ver)
+    set(top_module sim_main)    
 endif()
+
+set(sw_project sdspi_test)
 
 #gw_project_rules() function is defined in the parent CMakeLists.txt.
 gw_project_rules(
@@ -19,7 +19,7 @@ gw_project_rules(
         -lncurses
 )
 
-#Add testcase. This one's a script, not just the Verilator Vmodel executable.
+#Add testcase.
 add_test(NAME sdspi_test_test
     COMMAND ./Vmodel -s ${CMAKE_CURRENT_LIST_DIR}/test/sdcard.img
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

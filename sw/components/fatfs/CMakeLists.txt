@@ -10,6 +10,11 @@ target_sources(fatfs
 
 )
 
+target_compile_options(fatfs
+	PRIVATE
+		-O2 -g
+)
+
 #Paths to include files users of fatfs are expected to use.
 target_include_directories(fatfs
     PUBLIC

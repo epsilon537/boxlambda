@@ -151,7 +151,10 @@ int main(int argc, char** argv, char** env) {
 
     // Command line processing
     for(;;) {
-      switch(getopt(argc, argv, "iths:")) {
+      switch(getopt(argc, argv, "aiths:")) {
+      case 'a':
+        attach_debugger = true;
+        continue;
       case 's':
         sd_img_filename = optarg;
         continue;
@@ -168,6 +171,7 @@ int main(int argc, char** argv, char** env) {
       default :
         printf("\nVmodel Usage:\n");
         printf("-h: print this help\n");
+        printf("-a: attach debugger.\n");
         printf("-t: enable tracing.\n");
         printf("-i: enable interactive mode.\n");
         printf("-s <sdcard.img>\n");

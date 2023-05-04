@@ -45,8 +45,8 @@ sources:
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       SDSPI: ~
-      DRAM: ~
-      VERA: ~
+      #DRAM: ~
+      #VERA: ~
       
     #spram and timer should be separate components, but since I won't use them
     #as Boxlambda components, I'm leaving them here in the hello world example
