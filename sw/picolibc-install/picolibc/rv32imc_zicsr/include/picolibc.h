@@ -57,6 +57,9 @@
 /* Use bitfields in packed structs */
 #define _HAVE_BITFIELDS_IN_PACKED_STRUCTS
 
+/* Compiler has __builtin_add_overflow */
+#define _HAVE_BUILTIN_ADD_OVERFLOW
+
 /* The compiler supports __builtin_alloca */
 #define _HAVE_BUILTIN_ALLOCA
 
@@ -142,8 +145,6 @@
 #define _HAVE_WEAK_ATTRIBUTE
 
 #undef _ICONV_ENABLE_EXTERNAL_CCS
-
-#define _ICONV_FROM_ENCODING_
 
 #define _ICONV_FROM_ENCODING_BIG5
 
@@ -244,8 +245,6 @@
 #define _ICONV_FROM_ENCODING_WIN_1257
 
 #define _ICONV_FROM_ENCODING_WIN_1258
-
-#define _ICONV_TO_ENCODING_
 
 #define _ICONV_TO_ENCODING_BIG5
 
@@ -352,9 +351,6 @@
 
 #define _IO_FLOAT_EXACT
 
-/* long double is the same as double */
-#undef _LDBL_EQ_DBL
-
 #define _LITE_EXIT
 
 #undef _MB_CAPABLE
@@ -368,14 +364,19 @@
 /* The newlib version in string format. */
 #define _NEWLIB_VERSION "4.1.0"
 
+/* Use atomics for signal/raise for re-entrancy */
+#define _PICOLIBC_ATOMIC_SIGNAL
+
 /* The Picolibc minor version number. */
-#define _PICOLIBC_MINOR__ 7
+#define _PICOLIBC_MINOR__ 8
 
 /* The Picolibc version in string format. */
-#define _PICOLIBC_VERSION "1.7.8"
+#define _PICOLIBC_VERSION "1.8.1"
 
 /* The Picolibc major version number. */
 #define _PICOLIBC__ 1
+
+#define _PICO_EXIT
 
 #undef _REENT_GLOBAL_ATEXIT
 
@@ -385,7 +386,11 @@
 
 #define _WANT_IO_C99_FORMATS
 
+#undef _WANT_IO_LONG_DOUBLE
+
 #undef _WANT_IO_LONG_LONG
+
+#undef _WANT_IO_PERCENT_B
 
 #undef _WANT_IO_POS_ARGS
 
@@ -429,13 +434,13 @@
 #undef __PICOLIBC_CRT_RUNTIME_SIZE
 
 /* The Picolibc minor version number. */
-#define __PICOLIBC_MINOR__ 7
+#define __PICOLIBC_MINOR__ 8
 
 /* The Picolibc patch level. */
-#define __PICOLIBC_PATCHLEVEL__ 8
+#define __PICOLIBC_PATCHLEVEL__ 1
 
 /* The Picolibc version in string format. */
-#define __PICOLIBC_VERSION__ "1.7.8"
+#define __PICOLIBC_VERSION__ "1.8.1"
 
 /* The Picolibc major version number. */
 #define __PICOLIBC__ 1

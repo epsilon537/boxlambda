@@ -22,5 +22,5 @@
 crtend%O%s
 
 *startfile:
-%{-picolibc-prefix=*:%*/picolibc/rv32imc_zicsr/lib/crt0%{-crt0=*:-%*%O;:%O}%s; -picolibc-buildtype=*:/home/epsilon/work/boxlambda/sw/picolibc-install/picolibc/rv32imc_zicsr/lib/%*/crt0%{-crt0=*:-%*%O;:%O}%s; :/home/epsilon/work/boxlambda/sw/picolibc-install/picolibc/rv32imc_zicsr/lib/crt0%{-crt0=*:-%*%O;:%O}%s} crtbegin%O%s
+%{-picolibc-prefix=*:%*/picolibc/rv32imc_zicsr/lib/%{-crt0=*:crt0-%*%O%s; :crt0%O%s}; -picolibc-buildtype=*:/home/epsilon/work/boxlambda/sw/picolibc-install/picolibc/rv32imc_zicsr/lib/%*/%{-crt0=*:crt0-%*%O%s; :crt0%O%s}; :/home/epsilon/work/boxlambda/sw/picolibc-install/picolibc/rv32imc_zicsr/lib/%{-crt0=*:crt0-%*%O%s; :crt0%O%s}} crtbegin%O%s
 
