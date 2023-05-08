@@ -6,26 +6,21 @@
 
 #include "stdio_to_uart.h"
 #include "uart.h"
-//#include "gpio.h"
 #include "platform.h"
 #include "utils.h"
 #include "ff.h"
 
-#define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
-
 #define DISK_DEV_NUM       "0:"
 #define STR_ROOT_DIRECTORY ""
 const char *file_name = STR_ROOT_DIRECTORY "Basic.bin";
+const char *text_file_name = STR_ROOT_DIRECTORY "log.txt";
+
 /** Size of the file to write/read.*/
 #define DATA_SIZE 2048
 static uint8_t data_buffer[DATA_SIZE];
 #define TEST_SIZE   (4 * 1024)
 
 static struct uart uart0;
-
-static struct uart uart0;
-//static struct gpio gpio0;
-//static struct gpio gpio1;
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
@@ -35,6 +30,8 @@ void _init(void) {
   set_stdio_to_uart(&uart0);
 }
 
+//This FatFs test function is derived from avrxml/asf's run_fatfs_test.
+//
 //Returns 0 if OK. Negative on error
 static int fatfs_test(void)
 {
@@ -52,16 +49,7 @@ static int fatfs_test(void)
 	static FATFS fs;
 	static FIL file_object;
 
-	/* Format disk */
-	//res = f_mkfs("",
-	//		0, 0,
-	//		512); /* AllocSize */
-
-	//if (res != FR_OK) {
-	//	printf("FatFS make file system error! %d\n", res);
-	//	return -1;
-	//}
-
+	printf("Mounting...\n");
 	/* Clear file system object */
 	memset(&fs, 0, sizeof(FATFS));
 	res = f_mount(&fs, "", 1);
@@ -70,6 +58,7 @@ static int fatfs_test(void)
     	return -1;
 	}
 
+	printf("Opendir...\n");
 	/* Test if the disk is formated */
 	res = f_opendir(&dirs, STR_ROOT_DIRECTORY);
 	if (res != FR_OK) {
@@ -77,6 +66,7 @@ static int fatfs_test(void)
     	return -1;
 	}
 
+	printf("Creating file...\n");
 	/* Create a new file */
 	res = f_open(&file_object, (char const *)file_name,
 			FA_CREATE_ALWAYS | FA_WRITE);
@@ -94,6 +84,7 @@ static int fatfs_test(void)
 		}
 	}
 
+	printf("Writing...\n");
 	for (i = 0; i < TEST_SIZE; i += DATA_SIZE) {
 		res = f_write(&file_object, data_buffer, DATA_SIZE,
 				&byte_written);
@@ -105,6 +96,7 @@ static int fatfs_test(void)
 	}
 
 	/* Close the file */
+	printf("Closing file...\n");
 	res = f_close(&file_object);
 	if (res != FR_OK) {
 		printf("FatFS file close error!\n");
@@ -112,7 +104,7 @@ static int fatfs_test(void)
 	}
 
 	/* Open the file */
-
+	printf("Re-opening file for reading...\n");
 	res = f_open(&file_object, (char const *)file_name,
 			FA_OPEN_EXISTING | FA_READ);
 	if (res != FR_OK) {
@@ -121,6 +113,7 @@ static int fatfs_test(void)
 	}
 
 	/* Read file */
+	printf("Reading...\n");
 	memset(data_buffer, 0, DATA_SIZE);
 	byte_to_read = f_size(&file_object);
 
@@ -133,6 +126,7 @@ static int fatfs_test(void)
 	}
 
 	/* Close the file*/
+	printf("Closing file...\n");
 	res = f_close(&file_object);
 	if (res != FR_OK) {
 		printf("FatFS file close error!\n");
@@ -140,6 +134,7 @@ static int fatfs_test(void)
 	}
 
 	/* Compare read data with the expected data */
+	printf("Comparing...\n");
 	for (i = 0; i < sizeof(data_buffer); i++) {
 		if (!((((i & 1) == 0) && (data_buffer[i] == (i & 0x55))) ||
 				(data_buffer[i] == (i & 0xAA)))) {
@@ -148,18 +143,34 @@ static int fatfs_test(void)
 		}
 	}
 
+	/* Create a new file */
+	printf("f_printf test...\n");
+	res = f_open(&file_object, (char const *)text_file_name,
+			FA_CREATE_ALWAYS | FA_WRITE);
+	if (res != FR_OK) {
+		printf("FatFS file open error!\n");
+    	return -1;
+	}
+
+	res = f_printf(&file_object, "This is a test.\n");
+	if (res < 0) {
+		printf("FatFS f_printf error!\n");
+		return -1;
+	}
+
+	/* Close the file*/
+	res = f_close(&file_object);
+	if (res != FR_OK) {
+		printf("FatFS file close error!\n");
+    	return -1;
+	}
+
   printf("FatFS Test Completed Successfully!\n");
   return 0;
 }
 
 int main(void) {
   uint32_t leds = 0xF;
-
-  //gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
-  //gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
-
-  //gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
-  //gpio_set_direction(&gpio1, 0x00000000); //4 inputs
 
   printf("Starting fatfs_test...\n");
   fatfs_test();

@@ -1,6 +1,6 @@
 add_executable(sdspi_test
 	EXCLUDE_FROM_ALL
-	sdspi_test_hw.c
+	main.c
 	sdtest.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/libs/soc/gpio.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/libs/soc/utils.c
@@ -9,6 +9,7 @@ add_executable(sdspi_test
 target_compile_definitions(sdspi_test
 	PRIVATE
 		-DCONFIG_CPU_NOP="nop"
+		-DSDSPI_CPU_ENDIANNESS=LITTLE_ENDIAN
 )
 
 target_include_directories(sdspi_test

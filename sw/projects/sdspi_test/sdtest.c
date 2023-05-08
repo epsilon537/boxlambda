@@ -35,7 +35,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Note: This version of sdspi test has been modified for BoxLambda.
+// Note: This version of sdtest.c is derived from sdtest.c in ZipCPU's zbasic repository.
+// It checks low-level access to the SD card. It works in simulation (using sdspicim co-simulator)
+// and on the Arty A7 using Digilent's SDCard PMOD plugged into the JD connector.
 //
 #include <stdio.h>
 #include <stdlib.h>
@@ -179,7 +181,7 @@ int sdspi_test(void) {
 
 	printf("Changing clock to high speed\n");
 
-	_sdcard->sd_data = 0x40001;	//2^^4 bytes FIFO size. 25MHz clock
+	_sdcard->sd_data = 0x40001;	//2^^4 bytes FIFO size. 12.5MHz clock
 	_sdcard->sd_ctrl = SDSPI_SETAUX; // Write config data, read last config data
 	_sdcard->sd_ctrl = SDSPI_READAUX; // Read config data, read last config data
 	if ((v = _sdcard->sd_data) != 0x09040001) {
@@ -261,7 +263,7 @@ int sdspi_test(void) {
 	//   Requires reading from FIFO
 	//   First, set the FIFO length of interest
 	printf(" CMD10 - SEND_CID_COND\n");
-	_sdcard->sd_data = 0x040001;	// 2^^4 bytes FIFO size, 25MHz clock
+	_sdcard->sd_data = 0x040001;	// 2^^4 bytes FIFO size, 12.5MHz clock
 	_sdcard->sd_ctrl = SDSPI_SETAUX; // Write config data, read last config data
 	_sdcard->sd_ctrl = SDSPI_READAUX; // Read config data
 	_sdcard->sd_data = 0x0;
@@ -311,7 +313,7 @@ int sdspi_test(void) {
 
 	printf("  CMD10 - SEND_CID_COND\n");
 	// One last shot at the SEND_CID_COND command, looking at the CRC
-	_sdcard->sd_data = 0x040001;	// 2^^4 bytes FIFO size, 25MHz clock
+	_sdcard->sd_data = 0x040001;	// 2^^4 bytes FIFO size, 12.5MHz clock
 	_sdcard->sd_ctrl = SDSPI_SETAUX;// Write config data, read last config data
 	_sdcard->sd_data = 0x0;	// Read from position zero
 	_sdcard->sd_ctrl = (SDSPI_CLEARERR|SDSPI_ALTFIFO|SDSPI_FIFO_OP|SDSPI_CMD)+10; // 0x0184a;
@@ -337,7 +339,7 @@ int sdspi_test(void) {
 
 	printf("  CMD55 - Read SCR\n");
 	// Let's read the SCR register: SD Card Configuration register
-	_sdcard->sd_data = 0x30001;	    // 2^^3 byte FIFO size, 25MHz clock
+	_sdcard->sd_data = 0x30001;	    // 2^^3 byte FIFO size, 12.5MHz clock
 	_sdcard->sd_ctrl = SDSPI_SETAUX;// Write config data, read last config data
 	_sdcard->sd_data = 0;
 	_sdcard->sd_ctrl = (SDSPI_CLEARERR|SDSPI_ACMD); // Go to alt command set
@@ -372,7 +374,7 @@ int sdspi_test(void) {
 	printf("Read a sector\n");
 	// Now, let's try reading from the card (gasp!)  Let's read from
 	// position zero (wherever that is)
-	_sdcard->sd_data = 0x090001;	// 2^^9 byte FIFO size, 25MHz clock
+	_sdcard->sd_data = 0x090001;	// 2^^9 byte FIFO size, 12.5MHz clock
 	_sdcard->sd_ctrl = SDSPI_SETAUX;// Write config data, read last config data
 	_sdcard->sd_data = 0x0;	// Read from position zero
 	_sdcard->sd_ctrl = SDSPI_READ_SECTOR;	// CMD 17, into FIFO 0
@@ -413,7 +415,7 @@ int sdspi_test(void) {
 //
 //
 	// For our next test, let us write and then read sector 2.
-	_sdcard->sd_data = 0x090001;	// 512 byte block length, 25MHz clock
+	_sdcard->sd_data = 0x090001;	// 2^^9 byte FIFO size, 12.5MHz clock
 
 	// Write config data, read last config data
 	// This also resets our FIFO to the beginning, so we can start

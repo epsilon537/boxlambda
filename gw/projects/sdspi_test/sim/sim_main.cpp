@@ -63,9 +63,6 @@ double sc_time_stamp() { return 0; }
 
 //Clean-up logic.
 static void cleanup() {
-  // End curses.
-  //endwin();
-
   //Close trace file.
   if (tracing_enable)
     tfp->close();
@@ -113,11 +110,7 @@ static void tick(void) {
 
   //Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n')  {
-    //Positional printing using ncurses.
-    //mvprintw(0, 0, "[%lld]", contextp->time());
-    //printf("UART Out:\n");
     printf("%s", uart->get_rx_string().c_str());
-    //refresh();
 
     //Update change detectors
     uartRxStringPrev = uart->get_rx_string();
@@ -191,11 +184,6 @@ int main(int argc, char** argv, char** env) {
       tfp->open("simx.fst");
     }
     
-    //Curses setup
-    //initscr();
-    //cbreak();
-    //noecho();
-
     jtag_set_bypass(!attach_debugger);
 
     printf("SD Image File: %s\n", sd_img_filename);
@@ -205,6 +193,7 @@ int main(int argc, char** argv, char** env) {
       exit(-1);
     }
 
+    //Set SD card detect.
     top->sdspi_card_detect = 1;
     // Assert reset for a couple of clock cycles.
     top->clk_i = 0;
