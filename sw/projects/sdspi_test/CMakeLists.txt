@@ -9,7 +9,7 @@ add_executable(sdspi_test
 target_compile_definitions(sdspi_test
 	PRIVATE
 		-DCONFIG_CPU_NOP="nop"
-		-DSDSPI_CPU_ENDIANNESS=LITTLE_ENDIAN
+		-DSDSPI_CPU_IS_LITTLE_ENDIAN
 )
 
 target_include_directories(sdspi_test

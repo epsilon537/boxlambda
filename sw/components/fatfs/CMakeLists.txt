@@ -14,7 +14,7 @@ target_sources(fatfs
 
 target_compile_definitions(fatfs
 	PRIVATE
-		-DSDSPI_CPU_ENDIANNESS=LITTLE_ENDIAN
+		-DSDSPI_CPU_IS_LITTLE_ENDIAN
 )
 
 #We have to turn on optimizations or we won't fit in the on-chip RAM link map.

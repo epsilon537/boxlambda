@@ -30,6 +30,12 @@ void _init(void) {
   set_stdio_to_uart(&uart0);
 }
 
+//_exit is executed by the picolibc exit function. 
+//An implementation has to be provided to be able to user assert().
+void	_exit (int status) {
+	while (1);
+}
+
 //This FatFs test function is derived from avrxml/asf's run_fatfs_test.
 //
 //Returns 0 if OK. Negative on error
@@ -170,12 +176,10 @@ static int fatfs_test(void)
 }
 
 int main(void) {
-  uint32_t leds = 0xF;
+  	uint32_t leds = 0xF;
 
-  printf("Starting fatfs_test...\n");
-  fatfs_test();
+	printf("Starting fatfs_test...\n");
+	fatfs_test();
 
-  while(1);
-
-  return 0;
+	return 0;
 }

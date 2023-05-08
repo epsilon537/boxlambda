@@ -73,6 +73,9 @@ void _init(void) {
   set_stdio_to_uart(&uart0);
 }
 
+//_exit is executed by the picolibc exit function. 
+//An implementation has to be provided to be able to user assert().
+
 int main(void) {
   gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
   gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs

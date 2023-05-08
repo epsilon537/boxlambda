@@ -27,6 +27,12 @@ void _init(void) {
   set_stdio_to_uart(&uart0);
 }
 
+//_exit is executed by the picolibc exit function. 
+//An implementation has to be provided to be able to user assert().
+void	_exit (int status) {
+	while (1);
+}
+
 int main(void) {
   uint32_t leds = 0xF;
 
