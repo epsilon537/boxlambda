@@ -378,7 +378,7 @@ module sdspi_test_soc(
 `endif //VERA
 
 `ifdef SDSPI
-  sdspi sdspi_inst (
+  sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
 		.i_clk(sys_clk), .i_sd_reset(ndmreset | (~sys_rst_n)),
 		// Wishbone interface
 		.i_wb_cyc(wbs[SDSPI_S].cyc), .i_wb_stb(wbs[SDSPI_S].stb), .i_wb_we(wbs[SDSPI_S].we),
