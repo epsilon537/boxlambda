@@ -14,6 +14,7 @@ nav:
         - RISCV-DBG Debug Core: components_riscv_dbg.md
         - LiteDRAM Memory Controller: components_litedram.md
         - VERA (Wishbone) Graphics: components_vera.md
+        - Storage: components_storage.md
         - Sound: components_sound.md
         - DMA: components_dma.md
         - Serial Port: components_serial.md
