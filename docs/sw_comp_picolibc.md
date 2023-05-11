@@ -1,50 +1,24 @@
-Software Components
-===================
-LiteDRAM Initialization
------------------------
-When the *litedram_gen.py* script generates the LiteDRAM Verilog core (based on the given *.yml* configuration file), it also generates the core's CSR register accessors for software:
+## Picolibc
 
-- For FPGA: [https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/arty/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/arty/sw/include/generated)
-- For simulation: [https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/sim/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/sim/sw/include/generated)
+- **PicoLibc Version**: 1.8.1
   
-The most relevant files are **csr.h** and **sdram_phy.h**. They contain the register definitions and constants used by the memory initialization code. Unfortunately, these accessors are *not* the same for the FPGA and the simulated LiteDRAM cores. We're going to have to use separate software builds for FPGA and simulation.
+- **PicoLibc Repo**, BoxLambda fork, *boxlambda* branch:
+    [https://github.com/epsilon537/picolibc](https://github.com/epsilon537/picolibc)
 
-### *Sdram_init()*
+- **PicoLibc Submodule in the BoxLambda Directory Tree**: 
+    boxlambda/sub/picolibc/.
 
-*Sdram_phy.h* also contains a function called *init_sequence()*. This function gets invoked as part of a more elaborate initialization function called *sdram_init()*. *Sdram_init()* is *not* part of the generated code, however. It's part of *sdram.c*, which is part of *liblitedram*, which is part of the base Litex repository, *not* the LiteDRAM repository:
+- **PicoLibc Website**:
+    [https://keithp.com/picolibc/](https://keithp.com/picolibc/)
 
-[https://github.com/epsilon537/litex/tree/master/litex/soc/software/liblitedram](https://github.com/epsilon537/litex/tree/master/litex/soc/software/liblitedram)
+- **Bootstrap Software Component in the BoxLambda Directory Tree**: 
+  [boxlambda/sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap)
 
-![sdram_init()](assets/sdram_init.drawio.png)
-
-*sdram_init() vs. init_sequence().*
-
-It's not clear to me why the *liblitedram* is not part of the LiteDRAM repository but's not a big deal. I integrated the *sdram_init()* function from *liblitedram* in the BoxLambda code base and it's working fine.
-
-To get things to build, I added Litex as a git submodule, to get access to *liblitedram*. I also tweaked some *CPPFLAGS* and include paths. The resulting CMakeList is checked in here:
-
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/CMakeLists.txt)
-
-Note: *liblitedram* expects a standard C environment.
-
-### The DDR Test Application
-
-The DDR test program is located here:
-
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c)
-
-The program boots from internal memory. It invokes *sdram_init()*, then performs a memory test over user port 0, followed by user port 1. Finally, the program verifies CPU instruction execution from DDR by relocating a test function from internal memory to DDR and branching to it.
-
-The memory test function used is a slightly modified version of the *memtest()* function provided by Litex in *liblitedram*.
-
-Picolibc
---------
 BoxLambda uses the Picolibc standard C library implementation.
 [Picolibc](https://github.com/picolibc/picolibc) is a Newlib variant, blended with AVR libc, optimized for systems with limited memory.
 [Newlib](https://www.sourceware.org/newlib/) is the de-facto standard C library implementation for embedded systems. 
 
 ### Building Picolibc
-A BoxLambda Picolibc fork has been added as a git submodule to BoxLambda's repository: [sub/picolibc/](https://github.com/epsilon537/picolibc/tree/3cd5bea5ad034d574670a7a85b2221d26224b588).
 
 #### Picolibc Configuration Scripts - RV32IMC
 A Picolibc build for a new system requires configuration scripts for that system in the [picolibc/scripts/](https://github.com/epsilon537/picolibc/tree/3cd5bea5ad034d574670a7a85b2221d26224b588/scripts) directory. The scripts are named after the selected processor configuration. They specify such things as the compiler toolchain to use, GCC processor architecture flags, and CPP preprocessor flags tweaking specific library features. 
@@ -106,7 +80,7 @@ The differences between the derived scripts and the base scripts are minimal:
 With the configuration scripts in place, we can build and install the picolibc library. We have to supply a build directory and an install directory.
 I put the build directory in **boxlambda/sw/picolibc-build** and the install directory in **boxlambda/sw/picolibc-install**.
 
-I grouped the picolibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc_build.sh) shell script. The picolibc install directory is checked in so there's no need to run the *picolibc_build.sh* as part of the repository setup. The script is only needed in case we want to regenerate the picolibc library (e.g. after updating to a newer version of the library).
+I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc_build.sh) shell script. The PicoLibc install directory is checked in so there's no need to run the *picolibc_build.sh* as part of the repository setup. The script is only needed in case we want to regenerate the PicoLibc library (e.g. after updating to a newer version of the library).
 
 ### Bootstrap - Some Glue Required
 
@@ -123,7 +97,7 @@ More detail for each of these follows in the subsections below. I have grouped t
 
 [https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap)
 
-An application wishing to use the standard C library has to link in this bootstrap component along with the picolibc library itself. 
+An application wishing to use the standard C library has to link in this bootstrap component along with the PicoLibc library itself. 
 
 #### The Vector Table
 
@@ -131,13 +105,13 @@ The vector table is a table with code entry points for all sorts of CPU events: 
 
 I'm using the Vector Table from the *Hello World* example program included in the *ibex_wb* repository. The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S).
 
-The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to **_start**, the entry point into picolibc's **crt0** module.
+The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to **_start**, the entry point into PicoLibc's **crt0** module.
 
 *Crt0*, C-Run-Time-0, is the Standard C library code in charge of setting up a C environment (zeroing the BSS segment, setting up the stack, etc.) before calling **main()**.
 
 #### Standard Input, Output, and Error
 
-The picolibc integrator needs to supply *stdin*, *stdout*, and *stderr* instances and associated *getc()* and *putc()* implementations to connect them to an actual IO device.
+The PicoLibc integrator needs to supply *stdin*, *stdout*, and *stderr* instances and associated *getc()* and *putc()* implementations to connect them to an actual IO device.
 We'll be using the UART as our IO device for the time being. Down the road, we can extend that with keyboard input and screen output implementation.
 
 ```
@@ -198,9 +172,9 @@ The **set_stdio_to_uart()** function is to be called from the application, befor
 
 We have to tell the linker where in memory to place the program code, data, and stack.
 
-I'm using the Link Map provided by picolibc, slightly modified to include the vector table.
+I'm using the Link Map provided by PicoLibc, slightly modified to include the vector table.
 
-The picolibc link map expects the user to define the following symbols:
+The PicoLibc link map expects the user to define the following symbols:
 
 - **__flash** and **__flash_size**: The location and size of the read-only section of the image, containing code and read-only data,
 - **__ram** and **__ram_size**: The location and size of the read-write section of the image, containing data segments, bss, and stack.
@@ -222,7 +196,7 @@ I can't say that I like this link map. There's no good reason to split internal 
 
 ### Linking against the Picolibc library: The Picolibc GCC specs file
 
-To link the picolibc library into an application image, the picolibc *spec file* needs to be passed to GCC. The Picolibc GCC specs file expects absolute paths, however. I'm using CMake's *configure_file()* to replace placeholders 
+To link the PicoLibc library into an application image, the PicoLibc *spec file* needs to be passed to GCC. The Picolibc GCC specs file expects absolute paths, however. I'm using CMake's *configure_file()* to replace placeholders 
 in [scripts/picolibc.specs.in](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc.specs.in) with the project source directory's absolute path. The resulting *picolibc.specs* is written in the root of the build tree. This way, the Picolibc library build for BoxLambda can be checked into the source tree and the user won't need to build and install it from source when setting up BoxLambda.
 
 The code snippet below is taken from the SW [CMakeList](https://github.com/epsilon537/boxlambda/blob/master/sw/CMakeLists.txt):
@@ -280,15 +254,12 @@ int main(void) {
 ```
 
 
-Notice the **_init()** function. This function is executed by the picolibc startup code before calling **main()**. This is where we set up the UART and stdio.
+Notice the **_init()** function. This function is executed by the PicoLibc startup code before calling **main()**. This is where we set up the UART and stdio.
 
 ### Footprint
 
-A quick examination of the test program *picolibc_test.elf* file shows:
+|                        | Code (KB) | RO-Data (KB) | RW-Data (KB) |
+| ---------------------- | ----------| ------------ | ------------ |
+| Picolibc + GCC         | 9.6       | 1.3          | 0.1          |
+| Stack                  | 0         | 0            | 0.5          |
 
-- a .text (code) segment size of 0x2a38 = 10.5Kbytes
-- a .data (initialized data) segment size of 0x28 = 40 bytes
-- a .bss (zero-initialized data) segment size of 0x18 = 24 bytes
-- a .stack size of 0x200 = 512 bytes
-
-This all fits comfortably within our 64KB internal memory.

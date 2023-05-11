@@ -1,6 +1,6 @@
 ## RISCV-DBG Debug Core
 
-- **RISCV-DBG Repo**: 
+- **RISCV-DBG Repo**, BoxLambda fork, *boxlambda* branch: 
   [https://github.com/epsilon537/riscv-dbg](https://github.com/epsilon537/riscv-dbg).
 
 - **RISV-DBG Submodule in the BoxLambda Directory Tree**: 
@@ -111,7 +111,7 @@ To summarize:
 2. The JTAG TAP is used to debug the software running on the Ibex RISCV32 core.
 3. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called **remote_bitbang**.
 
-See the [Test Builds section](installation-and-test-builds.md#test-builds) for the steps needed to set up an OpenOCD JTAG debug session on Verilator.
+See the **Test Builds** section for the steps needed to set up an OpenOCD JTAG debug session on Verilator.
 
 ### OpenOCD and RISCV-DBG on Arty-A7 FPGA
 
@@ -140,7 +140,7 @@ To summarize:
 4. The Arty-A7 FPGA scan chain is accessible through the board's FTDI-based USB serial port.
 5. The OpenOCD transport protocol name for this type of connection is **ftdi**.
 
-See the [Test Builds section](installation-and-test-builds.md#test-builds) for the steps needed to set up an OpenOCD JTAG debug session on the Arty A7.
+See the **Test Builds** section for the steps needed to set up an OpenOCD JTAG debug session on the Arty A7.
 
 ### RISCV-DBG Clock Frequency
 

@@ -147,6 +147,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Scan Line**: One line in the raster scanning pattern of the VGA display.
 
+- **SD**: Secure Digital, a proprietary non-volatile flash memory card format developed by the SD Association (SDA) for use in portable devices. 
+
 - **SDL**: Simple DirectMedia Layer is a cross-platform development library designed to provide low-level access to audio, keyboard, mouse, joystick, and graphics.
   
 - **SDRAM**: Synchronous dynamic random-access memory. A DRAM where the operation of its external pin interface is coordinated by an externally supplied clock signal. 

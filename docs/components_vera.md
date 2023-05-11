@@ -1,6 +1,6 @@
 ## VERA (Wishbone) Graphics
 
-- **VERA Wishbone Repo**: 
+- **VERA Wishbone Repo**, BoxLambda fork, *boxlambda* branch: 
   [https://github.com/epsilon537/vera_wishbone](https://github.com/epsilon537/vera_wishbone).
 
 - **VERA Wishbone Submodule in the BoxLambda Directory Tree**: 

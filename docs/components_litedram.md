@@ -1,6 +1,6 @@
 ## LiteDRAM Memory Controller
 
-- **LiteX Repo**: 
+- **LiteX Repo**, BoxLambda fork, *master* branch: 
   [https://github.com/epsilon537/litex](https://github.com/epsilon537/litex).
 
 - **LiteX Submodule in the BoxLambda Directory Tree**: 
@@ -94,7 +94,7 @@ Some points about the above:
 - The *PHY layer*, *Electrical* and *Core* sections I left exactly as-is in the given Arty example.
 - In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
 - In the *Frequency* section, I set *sys_clk_freq* to 50MHz. 50MHz has been the system clock frequency in the previous BoxLambda test builds as well. Also, I haven't been able to close timing at 100MHz. 
-- In the *User Ports* section, I specified two 32-bit Wishbone ports. In the [BoxLambda Architecture Diagram](https://boxlambda.readthedocs.io/en/latest/architecture/#the-arty-a7-configuration), you'll see that BoxLambda has two system buses. The memory controller is hooked up to both.
+- In the *User Ports* section, I specified two 32-bit Wishbone ports. In the [BoxLambda Architecture Diagram](architecture.md#the-arty-a7-configuration), you'll see that BoxLambda has two system buses. The memory controller is hooked up to both.
 
 I generate two LiteDRAM core variants from this configuration: 
 

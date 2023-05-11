@@ -1,6 +1,6 @@
 ## RISCV Ibex Processor
 
-- **Ibex Repo**: 
+- **Ibex Repo**, BoxLambda fork, *boxlambda* branch: 
   [https://github.com/epsilon537/ibex](https://github.com/epsilon537/ibex).
 
 - **Ibex Submodule in the BoxLambda Directory Tree**: 
@@ -14,7 +14,7 @@
 
 ### Ibex Wishbone Wrapper: *Ibex_WB*
 
-- **Ibex WB Repo**: 
+- **Ibex WB Repo**, BoxLambda fork, *boxlambda* branch: 
   [https://github.com/epsilon537/ibex_wb](https://github.com/epsilon537/ibex_wb).
 
 - **Ibex WB Submodule in the BoxLambda Directory Tree**: 
@@ -29,7 +29,7 @@
 
 The Ibex RISCV core itself doesn't have Wishbone ports. *Ibex_WB* wraps around the vanilla Ibex core and attaches Wishbone port adapters to its instruction and data ports.
 
-The *Ibex_WB* repo also includes an example SoC build consisting of an Ibex core connected via a shared Wishbone bus to a wbuart32 core and an internal memory module, along with the software to run on that platform. This example SoC is the starting point for BoxLambda's implementation. See the [Test Builds section](installation-and-test-builds.md#test-builds).
+The *Ibex_WB* repo also includes an example SoC build consisting of an Ibex core connected via a shared Wishbone bus to a wbuart32 core and an internal memory module, along with the software to run on that platform. This example SoC is the starting point for BoxLambda's implementation. See the **Test Builds** section.
 
 #### From Ibex to LiteDRAM
 

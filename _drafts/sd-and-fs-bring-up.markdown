@@ -73,7 +73,7 @@ sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
 	);
 ```
 
-The Wishbone signals plug straight into the test SoC's system bus. The SDCard interface signal goes straight to the top-level ports.
+The Wishbone signals plug straight into the test SoC's system bus. The SD Card interface signals go straight to the top-level ports.
 I currently don't have interrupts hooked up.
 
 
@@ -358,7 +358,7 @@ FatFS Test on Arty A7
 	f_printf test...
 	FatFS Test Completed Successfully!
 	```
-6. One of the steps taken by the test program is to create a **LOG.TXT** file with the contents *This is a test*. Eject the SD card, insert it into your PC, and verify that *LOG.TXT* exists with the expected contents.
+7. One of the steps taken by the test program is to create a **LOG.TXT** file with the contents *This is a test*. Eject the SD card, insert it into your PC, and verify that *LOG.TXT* exists with the expected contents.
 
 Other Changes
 -------------
