@@ -82,7 +82,7 @@ I currently don't have interrupts hooked up.
 
 *SDSPI Simplified Block Diagram.*
 
-I've been studying the core's internals a bit and created the above simplified block diagram. I won't be going into the details here, however. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
+I've been studying the core's internals a bit and created the above, simplified block diagram. I won't be going into the details here, however. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
 
 SDSPISIM
 ========
@@ -117,7 +117,7 @@ FatFs
 -----
 [FatFs](http://elm-chan.org/fsw/ff/00index_e.html) is a lightweight software library for small systems that implements FAT file system support. It's written in ANSI C89 and has no dependencies other than a minimal C environment. It'll compile out of the box in virtually any environment.
 
-FatFs itself does not provide the device/media-specific _Storage Device_ Controls*. Those have to come from the device implementer. Conveniently, the SDSPI repo does provide these functions for FatFs. Three files are provided: [sdcard.c, sdcard.h and diskio.c](https://github.com/ZipCPU/sdspi/tree/master/sw).
+FatFs itself does not provide the device/media-specific _Storage Device_ Controls*. Those have to come from the device implementer. Conveniently, the SDSPI repo does provide these functions for FatFs. Three files are provided: [sdcard.c, sdcard.h, and diskio.c](https://github.com/ZipCPU/sdspi/tree/master/sw).
 
 Note: These three files have a dependency on a **board.h** header file which is not part of the SDSPI repo. An example *board.h* can again be found in the [Zbasic repo](https://github.com/ZipCPU/zbasic/blob/master/sw/zlib/board.h). I checked the BoxLambda version into the [boxlambda branch of the BoxLambda fork of the SDSPI repo](https://github.com/epsilon537/sdspi/blob/boxlambda/sw/board.h).
 
@@ -150,7 +150,7 @@ Relative to the default settings, I modified the following:
 - **Enable FF_USE_FIND**: filtered directory read functions, *f_findfirst()* and *f_findnext()*.
 - **Enable FF_USE_STRFUNC**: string functions, *f_gets()*, *f_putc()*, *f_puts()*, and *f_printf()*.
 - **Enable FF_FS_RPATH**: support for relative paths.
-- **Enable FF_FS_NORTC**: i.e I *disabled* the timestamp feature. I will revisit this when I bring up RTC on BoxLambda.
+- **Enable FF_FS_NORTC**: I *disabled* the timestamp feature. I will revisit this when I bring up RTC on BoxLambda.
   
 [https://github.com/epsilon537/fatfs/blob/boxlambda/source/ffconf.h](https://github.com/epsilon537/fatfs/blob/boxlambda/source/ffconf.h)
 
@@ -160,7 +160,7 @@ FatFs itself does not provide a test suite, but I found a simple test sequence i
 
 With the endianness fix in place, *fatfs_test is* working fine, both in Verilator and on FPGA.
 
-See [instructions below](#fatfs-test-on-verilator) for building and runnning the *fatfs_test* project.
+See [instructions below](#fatfs-test-on-verilator) for building and running the *fatfs_test* project.
 
 Memory Footprint
 ----------------
@@ -366,6 +366,6 @@ I updated the *Picolibc* installation for BoxLambda to version 1.8.1. This made 
 
 Conclusion
 ----------
-Bringing up an SD Card controller and a file system turned out to be straightforward thanks to Dan Gisselquist's [SDSPI](https://github.com/ZipCPU/sdspi) repo. The repo not only contains a SDSPI core, but also a test bench with a co-simulator, excellent documentation, and low-level driver code to hook into [FatFs](http://elm-chan.org/fsw/ff/00index_e.html). To top it off, FatFs itself expects nothing more than a minimal C environment, so it compiles out of the box in virtually any environment.
+Bringing up an SD Card controller and a file system turned out to be straightforward thanks to Dan Gisselquist's [SDSPI](https://github.com/ZipCPU/sdspi) repo. The repo not only contains an SDSPI core, but also a test bench with a co-simulator, excellent documentation, and low-level driver code to hook into [FatFs](http://elm-chan.org/fsw/ff/00index_e.html). To top it off, FatFs itself expects nothing more than a minimal C environment, so it compiles out of the box in virtually any environment.
 
 Next up is **Sound**. I suspect that nut won't be so easy to crack.
