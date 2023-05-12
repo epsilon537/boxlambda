@@ -219,7 +219,7 @@ Try It Out
 
 Repository setup
 ================
-   0. Install the [Prerequisites](../documentation/#prerequisites). 
+   0. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
    1. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

@@ -181,7 +181,7 @@ I did make a small change to *hello.c*: After printing out *Hello world*, the pr
 
 To build the project:
 
-0. Install the [prerequisites](../documentation/#prerequisites). 
+0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
 1. **git clone https://github.com/epsilon537/boxlambda/**,
 2. **cd boxlambda**
 3. Switch to the *make_and_bender* tag: **git checkout make_and_bender**.

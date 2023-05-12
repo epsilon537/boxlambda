@@ -282,7 +282,7 @@ Try It Out
 
 To try out the proof-of-concept Verilator Test Bench:
 
-0. Install the [prerequisites](../documentation/#prerequisites). 
+0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
 1. ```git clone https://github.com/epsilon537/boxlambda/```
 2. ```cd boxlambda```
 3. Switch to the *testing_with_verilator* tag: ```git checkout testing_with_verilator```

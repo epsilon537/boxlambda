@@ -122,7 +122,7 @@ Try It Out
 
 To try out the latest code:
 
-0. Install the [prerequisites](../documentation/#prerequisites). 
+0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
 1. **git clone https://github.com/epsilon537/boxlambda/**,
 2. **cd boxlambda**
 3. Switch to the *warnings_and_lint* tag: **git checkout warnings_and_lint**.

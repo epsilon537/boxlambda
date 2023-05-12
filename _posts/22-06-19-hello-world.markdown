@@ -127,7 +127,7 @@ First Iteration complete
 ------------------------
 The build is rough around the edges. Vivado reports synthesis and implementation warnings. The *.xpr* project file is just a blob of files without organization. But I do have a tiny, working project. The first iteration is complete. Feel free to try it out:
 
-0. Install the [prerequisites](../documentation/#prerequisites). 
+0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
 1. **git clone https://github.com/epsilon537/boxlambda/**,
 2. **cd boxlambda**
 5. Switch to the *hello_world* tag: **git checkout hello_world**.

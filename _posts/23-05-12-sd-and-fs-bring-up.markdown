@@ -252,7 +252,7 @@ SDSPI Test on Verilator
 
 SDSPI Test on Arty A7
 ======================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#on-wsl) section.
+1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 2. Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert an SD card into the card reader. 
    
    Note that this is a destructive test. The contents of the SD card will be destroyed.
@@ -327,7 +327,7 @@ FatFS Test on Verilator
 
 FatFS Test on Arty A7
 =====================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#on-wsl) section.
+1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 2. Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert a FAT-formatted SD card into the card reader. 
    
    Note that this is a destructive test. The contents of the SD card will be destroyed.

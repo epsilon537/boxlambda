@@ -466,7 +466,7 @@ Try It Out
 
 Setup
 =====
-1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#prerequisites). 
+1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
 1. Get the BoxLambda repository:
 	```
 	git clone https://github.com/epsilon537/boxlambda/
