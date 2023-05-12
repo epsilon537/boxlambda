@@ -232,7 +232,7 @@ I had to make a few minor modifications in the VERA code base to be able to make
 Try It Out
 ----------
 
-1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#prerequisites). 
+1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

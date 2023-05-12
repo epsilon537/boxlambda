@@ -428,7 +428,7 @@ Try It Out
 
 Repository setup
 ================
-   1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#prerequisites). 
+   1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
    2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
@@ -463,7 +463,7 @@ cd generated
 
 Build and Run the DDR Test Image on Arty A7
 ===========================================
-   1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#on-wsl) section.
+   1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
    2. Build the test project:
 ```
 cd projects/ddr_test

@@ -45,6 +45,8 @@ Current test bench source code examples:
 - [*gw/projects/hello_world/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/hello_world/sim/sim_main.cpp).
 - [*gw/projects/picolibc_test/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/picolibc_test/sim/sim_main.cpp).
 - [*gw/projects/ddr_test/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/ddr_test/sim/sim_main.cpp)
+- [*gw/projects/vera_integrated*](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/vera_integrated)
+- [*gw/projects/sdspi_test*](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/sdspi_test)
 
 Are we running in a Simulation?
 -------------------------------

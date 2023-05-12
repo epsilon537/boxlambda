@@ -166,7 +166,7 @@ void set_stdio_to_uart(struct uart *uart) {
 
 [boxlambda/sw/components/bootstrap/stdio_to_uart.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/stdio_to_uart.c)
 
-The **set_stdio_to_uart()** function is to be called from the application, before any standard library calls that require standard IO. The application needs to provide a pointer to an initialized *uart* object.
+The **set_stdio_to_uart()** function is to be called from the application before any standard library calls that require standard IO. The application needs to provide a pointer to an initialized *uart* object.
 
 #### The Link Map
 

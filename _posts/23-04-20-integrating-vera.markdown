@@ -523,7 +523,7 @@ Vera_integrated on Verilator
 
 Vera_integrated on the Arty A7
 ================================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation-and-test-builds/#on-wsl) section.
+1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 1. Hook up a VGA display to the Arty A7 PMOD ports JB and JC using [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start).
 7. Build the vera_integrated project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 	```
