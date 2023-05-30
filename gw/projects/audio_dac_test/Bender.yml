@@ -1,0 +1,25 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: audio_dac_test
+
+dependencies:
+  # Path dependency.
+  audio_dac: { path: "../../components/audio_dac" }
+  ibex: { path: "../../components/ibex" } # For the clock generator
+
+sources:
+  - target: constraints
+    files:
+      - constrs/Arty-A7-35-Master.xdc
+  - target: memory
+    files:
+    - rtl/sin_table.mem #Not currently used, but leaving it in here in case I want to experiment with different waveform LUTs.
+  - target: any(verilator, vivado)
+    files:
+      - rtl/sin_rom.sv #Not currently used, but leaving it in here in case I want to experiment with different waveform LUTs.
+      - rtl/audio_dac_test.sv
+      - sim/sim_main.cpp
+      - lint.vlt

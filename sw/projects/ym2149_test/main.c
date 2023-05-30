@@ -9,13 +9,16 @@
 #include "gpio.h"
 #include "platform.h"
 #include "utils.h"
-#include "sdtest.h"
-
+#include "ym2149_sys_regs.h"
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
 static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
+
+void ym2149_sys_reg_wr(unsigned reg_offset, unsigned val) {
+  ((unsigned volatile*)(YM2149_SYS_BASE))[reg_offset] = val;
+}
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
@@ -40,11 +43,17 @@ int main(void) {
   gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
   gpio_set_direction(&gpio1, 0x00000000); //4 inputs
 
-  if (sdspi_test() == 0)
-    printf("SDSPI Test successful.\n");
-  else
-    printf("SDSPI Test failed.\n");
-    
+  printf("YM2149 test.\n");
+
+  unsigned addrs[] = {  0,  1,  2,  3,    4, 5,  6,    7 ,  8,  9, 10, 11, 12, 13,    16  , 17,   18, 19,   20, 21, 22,   23, 24, 25, 26, 27, 28, 29, 128,129, 130,131,132,133, 134, 135, 136, 137 } ;
+  unsigned vals[]  = { 0x1c,1,0xfd, 0, 0xef, 0,  0, 0xf8 , 15,  15, 15,  1,  0, 13,   0xd5,  0, 0xbe,  0, 0xb3,  0,  0, 0xf8, 15, 15, 15,  1,  0, 13,  64, 64,  64, 64, 64, 64, 128,   0,  25, 128 } ;
+
+  for (int ii=0; ii<(sizeof(addrs)/sizeof(addrs[0])); ii++) {
+    ym2149_sys_reg_wr(addrs[ii], vals[ii]);
+  }
+
+  printf("YM2149 config complete.\n");
+
   while(1);
 
   return 0;

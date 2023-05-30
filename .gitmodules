@@ -40,3 +40,9 @@
 [submodule "sub/zbasic"]
 	path = sub/zbasic
 	url = https://github.com/epsilon537/zbasic
+[submodule "sub/jt49"]
+	path = sub/jt49
+	url = https://github.com/epsilon537/jt49
+[submodule "sub/ym2149_psg_system"]
+	path = sub/ym2149_psg_system
+	url = https://github.com/epsilon537/YM2149_PSG_system

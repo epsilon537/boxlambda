@@ -1,0 +1,13 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: audio_dac
+
+sources:
+  - target: any(verilator, vivado)
+    defines:
+      SECOND_ORDER_DAC: ~
+    files:
+    - rtl/one_bit_dac.sv

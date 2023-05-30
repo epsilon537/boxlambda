@@ -35,6 +35,8 @@ function (gw_component_rules)
 endfunction()
 
 #Gateware components:
+add_subdirectory(audio_dac)
+add_subdirectory(ym2149)
 add_subdirectory(sdspi)
 add_subdirectory(vera)
 add_subdirectory(wbuart32)

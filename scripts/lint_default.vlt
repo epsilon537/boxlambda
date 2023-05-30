@@ -9,3 +9,5 @@ lint_off -rule PINCONNECTEMPTY
 //Functionally, it will still simulate correctly, however.
 
 lint_off -rule UNOPTFLAT
+
+//lint_off -rule TIMESCALE_MOD

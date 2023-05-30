@@ -1,0 +1,29 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: ym2149
+  
+sources:
+  - target: verilator
+    files:
+     - lint.vlt
+  - target: any(verilator, vivado)
+    include_dirs:
+    - ../../../sub/ym2149_psg_system/
+    files:
+     - ../../../sub/ym2149_psg_system/YM2149_PSG_system_wb.sv
+     - ../../../sub/ym2149_psg_system/YM2149_PSG_system.sv
+    #  - ../../../sub/ym2149_psg_system/BHG_FP_clk_divider.v
+    #  - ../../../sub/ym2149_psg_system/BHG_jt49.v
+    #  - ../../../sub/ym2149_psg_system/BHG_audio_filter_mixer.sv
+    #  - ../../../sub/ym2149_psg_system/I2S_transmitter.sv
+    #  - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_cen.v
+    #  - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_div.v
+    #  - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_noise.v
+    #  - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_eg.v
+    #  - ../../../sub/ym2149_psg_system/BHG_jt49_exp.v
+
+
+

@@ -19,24 +19,13 @@
 //To get access to the verilated model internals.
 #include "Vmodel___024root.h"
 
-// From wbuart32
-#include "uartsim.h"
-
-// From riscv-dbg
-#include "sim_jtag.h"
-
-// SDSPI simulation model
-#include "sdspisim.h"
-
-const char	DEFAULT_SDIMAGE_FILENAME[] = "sdcard.img";
+const char	DEFAULT_DAC_OUT_FILENAME[] = "dac_out.py";
+const char	DEFAULT_PCM_OUT_FILENAME[] = "pcm_out.py";
+FILE *dacOutFile = 0;
+FILE *pcmOutFile = 0;
+int dacOutputCounter = 0; 
 
 bool tracing_enable = false;
-
-//Uart co-simulation from wbuart32.
-std::unique_ptr<UARTSIM> uart{new UARTSIM(0)};
-
-//SDPI co-simulattion
-std::unique_ptr<SDSPISIM>	sdspi{new SDSPISIM(true)};
 
 // Used for tracing.
 VerilatedFstC* tfp = new VerilatedFstC;
@@ -51,14 +40,17 @@ std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
 std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 
-//Initialize UART rx and tx change detector
-std::string uartRxStringPrev;
-
 // Legacy function required only so linking works on Cygwin and MSVC++
 double sc_time_stamp() { return 0; }
 
 //Clean-up logic.
 static void cleanup() {
+  //Close output files
+  fprintf(dacOutFile, "]\n");
+  fclose(dacOutFile);
+  fprintf(pcmOutFile, "]\n");
+  fclose(pcmOutFile);
+  
   //Close trace file.
   if (tracing_enable)
     tfp->close();
@@ -67,51 +59,28 @@ static void cleanup() {
   top->final();
 }
 
-//Returns 0 if OK, negative on error.
-static int setupSDSPISim(const char *sdcard_image) {
-		if (0 != access(sdcard_image, R_OK)) {
-			printf("Cannot open %s for reading\n", sdcard_image);
-			return -1;
-		} if (0 != access(sdcard_image, W_OK)) {
-			printf("Cannot open %s for writing\n", sdcard_image);
-			return -2;
-		}
-
-		sdspi->load(sdcard_image);
-    return 0;
-}
-
 //Advance simulation by one clock cycle
 static void tick(void) {
   //High phase
-  top->clk_i = 1;
+  top->ext_clk = 1;
   contextp->timeInc(1);
   top->eval();
   if (tracing_enable)
     tfp->dump(contextp->time());
   
   //Low phase
-  top->clk_i = 0;
+  top->ext_clk = 0;
   contextp->timeInc(1);
   top->eval();
   if (tracing_enable)
     tfp->dump(contextp->time());
 
-  //Feed SDSPI co-sim
-  top->sdspi_miso = (*sdspi)(top->sdspi_cs_n, top->sdspi_sck, top->sdspi_mosi);
-
-  //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
-  //and feed the UART co-simulator output to our model
-  top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
-
-  //Detect and print changes to UART
-  if (uart->get_rx_string().back() == '\n')  {
-    printf("%s", uart->get_rx_string().c_str());
-
-    //Update change detectors
-    uartRxStringPrev = uart->get_rx_string();
-
-    uart->clear_rx_string();
+  //Capture output signals every 4 clocks, i.e. 12.5MHz
+  ++dacOutputCounter;
+  if (dacOutputCounter%4 == 0) {
+    dacOutputCounter = 0;
+    fprintf(dacOutFile, "  %d,\n", top->audio_out);
+    fprintf(pcmOutFile, "  %d,\n", short(top->pcm_out));
   }
 }
 
@@ -134,19 +103,13 @@ int main(int argc, char** argv, char** env) {
     // This needs to be called before you create any model
     contextp->commandArgs(argc, argv);
 
-    bool attach_debugger = false;
     bool interactive_mode = false;
-    const char *sd_img_filename = DEFAULT_SDIMAGE_FILENAME;
-
+    const char *dac_out_filename = DEFAULT_DAC_OUT_FILENAME;
+    const char *pcm_out_filename = DEFAULT_PCM_OUT_FILENAME;
+    
     // Command line processing
     for(;;) {
-      switch(getopt(argc, argv, "aiths:")) {
-      case 'a':
-        attach_debugger = true;
-        continue;
-      case 's':
-        sd_img_filename = optarg;
-        continue;
+      switch(getopt(argc, argv, "aith")) {
       case 't':
         printf("Tracing enabled\n");
         tracing_enable = true;
@@ -160,10 +123,8 @@ int main(int argc, char** argv, char** env) {
       default :
         printf("\nVmodel Usage:\n");
         printf("-h: print this help\n");
-        printf("-a: attach debugger.\n");
         printf("-t: enable tracing.\n");
         printf("-i: enable interactive mode.\n");
-        printf("-s <sdcard.img>\n");
         return 0;
         break;
 	    
@@ -180,33 +141,39 @@ int main(int argc, char** argv, char** env) {
       tfp->open("simx.fst");
     }
     
-    jtag_set_bypass(!attach_debugger);
-
-    printf("SD Image File: %s\n", sd_img_filename);
-
-    if(setupSDSPISim(sd_img_filename) < 0) {
-      cleanup();
-      exit(-1);
+    printf("DAC Output File: %s\n", dac_out_filename);
+    printf("PCM Output File: %s\n", pcm_out_filename);
+    
+    dacOutFile = fopen(dac_out_filename, "w");
+    if (dacOutFile == NULL) {
+      printf("Unable to open DAC output file\n");
+      return -1;
     }
+    fprintf(dacOutFile, "dacdata = [\n");
 
-    //Set SD card detect.
-    top->sdspi_card_detect = 1;
+    pcmOutFile = fopen(pcm_out_filename, "w");
+    if (pcmOutFile == NULL) {
+      printf("Unable to open PCM output file\n");
+      return -1;
+    }
+    fprintf(pcmOutFile, "pcmdata = [\n");
+
     // Assert reset for a couple of clock cycles.
-    top->clk_i = 0;
-    top->uart_rx = 0;
-    top->rst_ni = !1;
+    top->ext_clk = 0;
+    top->ext_rst_n = !1;
     tick();
     tick();
     tick();
     tick();
-    top->rst_ni = !0;
+    top->ext_rst_n = !0;
+    top->sw = 4;
     tick();
     tick();
     tick();
     tick();
   
-    // When not in interactive mode, simulate for 150000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 150000000)) {
+    // When not in interactive mode, simulate for 50000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 50000000)) {
         // Evaluate model
         tick();        
     }
@@ -215,18 +182,6 @@ int main(int argc, char** argv, char** env) {
 
     // Checks for automated testing.
     int res = 0;
-    std::string uartCheckString("SDSPI Test successful.");
-
-    if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
-      printf("Test failed\n");
-      printf("Expected: %s\n", uartCheckString.c_str());
-      printf("Received: %s\n", uartRxStringPrev.c_str());
-
-      res = 1;
-    }
-    else {
-      printf("Test passed.\n");
-    }
 
     return res;
 }
