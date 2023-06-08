@@ -1,12 +1,12 @@
 #Function for SW project builds:
 #Set link-for-internal-memory settings for given target and add byproduct command generating a .mem file.
-function(link_internal_create_mem_file _tgt)
+function(link_internal_create_mem_file _tgt _link_script)
     target_link_libraries(${_tgt} bootstrap)
 
     #Link-for-internal-memory implies linking in the bootstrap object library.
     target_link_options(${_tgt}
         PRIVATE
-            -T${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld
+            -T${_link_script}
            "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
     )
 
@@ -37,3 +37,4 @@ add_subdirectory(vera_test)
 add_subdirectory(sdspi_test)
 add_subdirectory(fatfs_test)
 add_subdirectory(ym2149_test)
+add_subdirectory(stsound_test)

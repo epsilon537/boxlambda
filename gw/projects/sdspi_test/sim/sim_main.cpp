@@ -35,7 +35,7 @@ bool tracing_enable = false;
 //Uart co-simulation from wbuart32.
 std::unique_ptr<UARTSIM> uart{new UARTSIM(0)};
 
-//SDPI co-simulattion
+//SDPI co-simulation
 std::unique_ptr<SDSPISIM>	sdspi{new SDSPISIM(true)};
 
 // Used for tracing.
@@ -194,12 +194,18 @@ int main(int argc, char** argv, char** env) {
     // Assert reset for a couple of clock cycles.
     top->clk_i = 0;
     top->uart_rx = 0;
-    top->rst_ni = !1;
+    //Ibex needs to see a negedge on rst_ni to reset, so we start high, go low, then go back high.
+    top->rst_ni = 1;
     tick();
     tick();
     tick();
     tick();
-    top->rst_ni = !0;
+    top->rst_ni = 0;
+    tick();
+    tick();
+    tick();
+    tick();
+    top->rst_ni = 1;
     tick();
     tick();
     tick();

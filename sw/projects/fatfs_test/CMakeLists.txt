@@ -14,6 +14,6 @@ target_compile_options(fatfs_test
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_internal_create_mem_file(fatfs_test)
+link_internal_create_mem_file(fatfs_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
 
 target_link_libraries(fatfs_test fatfs)

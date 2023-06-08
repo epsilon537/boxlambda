@@ -259,12 +259,18 @@ int main(int argc, char** argv, char** env) {
     // Assert reset for a couple of clock cycles.
     top->clk_i = 0;
     top->uart_rx = 0;
-    top->rst_ni = !1;
+    //Ibex needs to see a negedge on rst_ni to reset, so we start high, go low, then go back high.
+    top->rst_ni = 1;
     tick();
     tick();
     tick();
     tick();
-    top->rst_ni = !0;
+    top->rst_ni = 0;
+    tick();
+    tick();
+    tick();
+    tick();
+    top->rst_ni = 1;
     tick();
     tick();
     tick();

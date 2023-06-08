@@ -25,15 +25,22 @@
 // From riscv-dbg
 #include "sim_jtag.h"
 
-const char	DEFAULT_PCM_FILENAME[] = "pcmdata.py";
+// SDSPI simulation model
+#include "sdspisim.h"
+
+const char	DEFAULT_SDIMAGE_FILENAME[] = "sdcard.img";
+
+const char	DEFAULT_PCM_OUT_FILENAME[] = "pcm_out.py";
 FILE *pcmFile = 0;
 int pcmOutputCounter = 0; //Used to implement divide-by-1024 to get a 48.8kHz rate.
-int pcmLoggingEnable = 0;
 
 bool tracing_enable = false;
 
 //Uart co-simulation from wbuart32.
 std::unique_ptr<UARTSIM> uart{new UARTSIM(0)};
+
+//SDPI co-simulation
+std::unique_ptr<SDSPISIM>	sdspi{new SDSPISIM(true)};
 
 // Used for tracing.
 VerilatedFstC* tfp = new VerilatedFstC;
@@ -68,6 +75,20 @@ static void cleanup() {
   top->final();
 }
 
+//Returns 0 if OK, negative on error.
+static int setupSDSPISim(const char *sdcard_image) {
+		if (0 != access(sdcard_image, R_OK)) {
+			printf("Cannot open %s for reading\n", sdcard_image);
+			return -1;
+		} if (0 != access(sdcard_image, W_OK)) {
+			printf("Cannot open %s for writing\n", sdcard_image);
+			return -2;
+		}
+
+		sdspi->load(sdcard_image);
+    return 0;
+}
+
 //Advance simulation by one clock cycle
 static void tick(void) {
   //High phase
@@ -84,6 +105,9 @@ static void tick(void) {
   if (tracing_enable)
     tfp->dump(contextp->time());
 
+  //Feed SDSPI co-sim
+  top->sdspi_miso = (*sdspi)(top->sdspi_cs_n, top->sdspi_sck, top->sdspi_mosi);
+
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
   top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
@@ -97,17 +121,11 @@ static void tick(void) {
 
     uart->clear_rx_string();
   }
-
-  //Log PCM output at 48.8kHz once there is activity
-  if (top->sound)
-    pcmLoggingEnable = 1;
-
+  
   ++pcmOutputCounter;
   if (pcmOutputCounter == 1024) {
     pcmOutputCounter = 0;
-    if (pcmLoggingEnable) {
-      fprintf(pcmFile, "  %d,\n", top->sound);
-    }
+    fprintf(pcmFile, "  %d,\n", top->pcm_out);
   }
 }
 
@@ -132,7 +150,8 @@ int main(int argc, char** argv, char** env) {
 
     bool attach_debugger = false;
     bool interactive_mode = false;
-    const char *pcm_filename = DEFAULT_PCM_FILENAME;
+    const char *pcm_filename = DEFAULT_PCM_OUT_FILENAME;
+    const char *sd_img_filename = DEFAULT_SDIMAGE_FILENAME;
 
     // Command line processing
     for(;;) {
@@ -178,6 +197,13 @@ int main(int argc, char** argv, char** env) {
     
     jtag_set_bypass(!attach_debugger);
 
+    printf("SD Image File: %s\n", sd_img_filename);
+
+    if(setupSDSPISim(sd_img_filename) < 0) {
+      cleanup();
+      exit(-1);
+    }
+
     printf("PCM Output File: %s\n", pcm_filename);
     pcmFile = fopen(pcm_filename, "w");
     if (pcmFile == NULL) {
@@ -186,22 +212,30 @@ int main(int argc, char** argv, char** env) {
     }
     fprintf(pcmFile, "pcmdata = [\n");
 
+    //Set SD card detect.
+    top->sdspi_card_detect = 1;
     // Assert reset for a couple of clock cycles.
     top->clk_i = 0;
     top->uart_rx = 0;
-    top->rst_ni = !1;
+    //Ibex needs to see a negedge on rst_ni to reset, so we start high, go low, then go back high.
+    top->rst_ni = 1;
     tick();
     tick();
     tick();
     tick();
-    top->rst_ni = !0;
+    top->rst_ni = 0;
+    tick();
+    tick();
+    tick();
+    tick();
+    top->rst_ni = 1;
     tick();
     tick();
     tick();
     tick();
   
-    // When not in interactive mode, simulate for 50000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 50000000)) {
+    // When not in interactive mode, simulate for 500000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 500000000)) {
         // Evaluate model
         tick();        
     }

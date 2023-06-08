@@ -46,3 +46,6 @@
 [submodule "sub/ym2149_psg_system"]
 	path = sub/ym2149_psg_system
 	url = https://github.com/epsilon537/YM2149_PSG_system
+[submodule "sub/StSound"]
+	path = sub/StSound
+	url = https://github.com/epsilon537/StSound

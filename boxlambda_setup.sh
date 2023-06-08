@@ -8,7 +8,8 @@ echo "Retrieving git submodules..."
 git submodule update --init --recursive
 
 echo "Creating build build trees..."
-cmake --preset=sim
+cmake --preset=sim-a7-35
+cmake --preset=sim-a7-100
 cmake --preset=arty-a7-35
 cmake --preset=arty-a7-100
 

@@ -3,7 +3,7 @@
     "configurePresets": [
         {
             "name": "arty-a7-100",
-            "displayName": "Arty A7 100T build.",
+            "displayName": "Arty A7 100T FPGA build.",
             "binaryDir": "build/arty-a7-100",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "fpga",
@@ -13,7 +13,7 @@
         },
         {
             "name": "arty-a7-35",
-            "displayName": "Arty A7 35T build.",
+            "displayName": "Arty A7 35T FPGA build.",
             "binaryDir": "build/arty-a7-35",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "fpga",
@@ -22,13 +22,23 @@
             }
         },
         {
-            "name": "sim",
-            "displayName": "Verilator simulation build.",
-            "binaryDir": "build/sim",
+            "name": "sim-a7-35",
+            "displayName": "Arty A7 35T Verilator simulation build.",
+            "binaryDir": "build/sim-a7-35",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "sim",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-35"
+            }
+        },
+        {
+            "name": "sim-a7-100",
+            "displayName": "Arty A7 100T Verilator simulation build.",
+            "binaryDir": "build/sim-a7-100",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "sim",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
+                "BL_TARGET_FPGA": "arty-a7-100"
             }
         }
     ]

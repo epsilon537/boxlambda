@@ -113,7 +113,7 @@ module ym2149_dac_test_soc(
   //These are address range sizes in bytes
   function Wb_size wb_sizes();
     wb_sizes[DM_S]       = 32'h10000;
-    wb_sizes[RAM_S]      = 32'h10000;
+    wb_sizes[RAM_S]      = `DPRAM_SIZE_BYTES;
     wb_sizes[GPIO0_S]    = 32'h00010;
     wb_sizes[GPIO1_S]    = 32'h00010;
     wb_sizes[SDSPI_S]    = 32'h00010;
@@ -156,10 +156,13 @@ module ym2149_dac_test_soc(
   logic          dmi_resp_valid;
   logic          dmi_resp_ready;
   dm::dmi_resp_t dmi_resp;
-  //logic          tdo_o;
-  //logic          tdo_oe;
 
-  //assign tdo = tdo_oe ? tdo_o : 1'bz;
+`ifdef VERILATOR
+  logic          tdo_o;
+  logic          tdo_oe;
+
+  assign tdo = tdo_oe ? tdo_o : 1'bz;
+`endif
 
   wb_dm_top wb_dm (
     .clk       (sys_clk),
@@ -186,12 +189,22 @@ module ym2149_dac_test_soc(
     .dmi_resp_i       (dmi_resp),
     .dmi_resp_ready_o (dmi_resp_ready),
     .dmi_resp_valid_i (dmi_resp_valid),
+`ifdef VERILATOR
+    .tck_i            (tck),
+    .tms_i            (tms),
+    .trst_ni          (trst_n),
+    .td_i             (tdi),
+    .td_o             (tdo_o),
+    .tdo_oe_o         (tdo_oe)
+`else
     .tck_i            (1'b0),
     .tms_i            (1'b0),
     .trst_ni          (1'b1),
     .td_i             (1'b0),
     .td_o             (),
-    .tdo_oe_o         ());
+    .tdo_oe_o         ()
+`endif
+    );
 
    logic 	 unused = &{1'b0, dmactive, 1'b0};
 `else
@@ -415,7 +428,7 @@ module ym2149_dac_test_soc(
 `endif //SDSPI
 
 `ifdef YM2149
-  wire signed  [15:0] sound;
+  wire signed  [15:0] ym2149_sound;
 
   YM2149_PSG_system_wb #(
     .CLK_IN_HZ(50000000),   // Input clock frequency
@@ -445,7 +458,7 @@ module ym2149_dac_test_soc(
       .i2s_sclk(),
       .i2s_lrclk(),   // I2S L/R output
       .i2s_data(),    // I2S serial audio out
-      .sound(sound),  // parallel   audio out, mono or left channel
+      .sound(ym2149_sound),  // parallel   audio out, mono or left channel
       .sound_right()  // parallel   audio out, right channel
   );
 
@@ -456,12 +469,12 @@ module ym2149_dac_test_soc(
   one_bit_dac dac_inst (
     .clk(sys_clk),      // 50MHz clock
     .clk_en(cpt4==0),   // 12.5MHz clock enable
-    .in(sound),     // input
+    .in(ym2149_sound),     // input
     .out(audio_out)     // one bit out modulated at 12.5MHz
   );
 
 `ifdef VERILATOR
-  assign pcm_out = sound;
+  assign pcm_out = ym2149_sound;
 `endif
   assign audio_gain = 1'b1;
   assign audio_shutdown_n = 1'b1;

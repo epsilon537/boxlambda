@@ -25,11 +25,13 @@ sources:
   - target: arty-a7-35
     defines:
       VRAM_SIZE_BYTES: (64*1024)
+      DPRAM_SIZE_BYTES: (64*1024)
     files:
       - rtl/ym2149_dac_test_soc.sv
   - target: arty-a7-100
     defines:
       VRAM_SIZE_BYTES: (128*1024)
+      DPRAM_SIZE_BYTES: (256*1024)
     files:
       - rtl/ym2149_dac_test_soc.sv
   - target: verilator

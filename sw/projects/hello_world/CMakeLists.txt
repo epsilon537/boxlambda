@@ -11,4 +11,4 @@ target_compile_options(hello_world
 	PRIVATE -g)
 
 #Function defined in parent CMakeLists.txt file:
-link_internal_create_mem_file(hello_world)
+link_internal_create_mem_file(hello_world ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)

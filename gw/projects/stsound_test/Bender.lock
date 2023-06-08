@@ -1,4 +1,10 @@
 packages:
+  audio_dac:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/audio_dac
+    dependencies: []
   ibex:
     revision: null
     version: null

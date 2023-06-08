@@ -3,7 +3,7 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: ym2149_test
+  name: stsound_test
 
 dependencies:
   # Path dependency.
@@ -16,40 +16,33 @@ dependencies:
   vera: { path: "../../components/vera" }
   sdspi: { path: "../../components/sdspi" }
   ym2149: { path: "../../components/ym2149" }
+  audio_dac: { path: "../../components/audio_dac" }
 
 sources:
   - target: constraints
     files:
       - constrs/Arty-A7-35-Master.xdc
-  - target: arty-a7-35
-    defines:
-      VRAM_SIZE_BYTES: (64*1024)
-    files:
-      - rtl/ym2149_test_soc.sv
-  - target: arty-a7-100
-    defines:
-      VRAM_SIZE_BYTES: (128*1024)
-    files:
-      - rtl/ym2149_test_soc.sv
   - target: verilator
     files:
       - sim/sim_main.cpp
       - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
+      - ../../../sub/sdspi/bench/cpp/sdspisim.cpp
       - ../../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
       - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c
       - lint.vlt
       - ../../../sub/riscv-dbg/tb/SimJTAG.sv
-      - sim/sim_main.sv
+      - ../ym2149_dac_test/sim/sim_main.sv
   - target: any(vivado,verilator)
     defines:
+      VRAM_SIZE_BYTES: (128*1024)
+      DPRAM_SIZE_BYTES: (256*1024)
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       YM2149: ~
       USE_DUAL_PSG: ~
-      #SDSPI: ~
+      SDSPI: ~
       #DRAM: ~
-      #VERA: ~
-      
+      #VERA: ~      
     #spram and timer should be separate components, but since I won't use them
     #as Boxlambda components, I'm leaving them here in the hello world example
     files:
@@ -57,4 +50,6 @@ sources:
       - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/spramx32.sv      
       - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_spramx32.sv
       - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_timer.sv
+      - ../ym2149_dac_test/rtl/ym2149_dac_test_soc.sv
+
 
