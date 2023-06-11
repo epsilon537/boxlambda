@@ -15,7 +15,6 @@ gw_project_rules(
     TOP_MODULE ${top_module}
     PROJECT_NAME vera_integrated
     MEM_FILE_TARGET vera_test
-    MEM_FILE_OUT spram.mem
     VERILATOR_CPP_FLAGS 
         "-g -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang -I${SDL2_INCLUDE_DIRS}"
     VERILATOR_LD_FLAGS 

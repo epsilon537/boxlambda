@@ -28,12 +28,11 @@ endfunction()
 #PRJ_COMP_NAME: project or component name, e.g. wbuart32
 #CONSTRAINTS_FILE_LIST: Constraints file list, if any. 
 #MEM_FILE_LIST: Mem file list, if any.
-#MEM_FILE_DEP: Mem file dependency, if any.
 #VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty. 
 #VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty. 
 function (gw_common_rules)
     set(options)
-    set(oneValueArgs TOP_MODULE PRJ_COMP_NAME CONSTRAINTS_FILE_LIST MEM_FILE_LIST MEM_FILE_DEP VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
+    set(oneValueArgs TOP_MODULE PRJ_COMP_NAME CONSTRAINTS_FILE_LIST MEM_FILE_LIST VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
     set(multiValueArgs)
     
     cmake_parse_arguments(gw_common_rules
@@ -47,7 +46,6 @@ function (gw_common_rules)
     set(_prj_comp_name ${gw_common_rules_PRJ_COMP_NAME})
     set(_constraints_file_list ${gw_common_rules_CONSTRAINTS_FILE_LIST})
     set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
-    set(_mem_file_dep ${gw_common_rules_MEM_FILE_DEP})
     set(_verilator_cpp_flags ${gw_common_rules_VERILATOR_CPP_FLAGS})
     set(_verilator_ld_flags ${gw_common_rules_VERILATOR_LD_FLAGS})
 
@@ -162,7 +160,6 @@ function (gw_common_rules)
                 ${_prj_comp_name}.vivado_sources
                 ${_constraints_file_list}
                 ${_mem_file_list}
-                ${_mem_file_dep}
             COMMENT
                 "Creating Vivado project."
             VERBATIM

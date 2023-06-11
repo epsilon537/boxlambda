@@ -10,7 +10,6 @@ gw_project_rules(
     TOP_MODULE ${top_module}
     PROJECT_NAME hello_dbg
     MEM_FILE_TARGET hello_world
-    MEM_FILE_OUT spram.mem
     VERILATOR_CPP_FLAGS 
         "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
     VERILATOR_LD_FLAGS 
