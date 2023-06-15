@@ -15,7 +15,7 @@ dependencies:
 sources:
   - target: constraints
     files:
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7/constrs/Arty-A7-35-Master.xdc
+      - ../hello_dbg/constrs/Arty-A7-35-Master.xdc
   - target: verilator
     files:
       - sim/sim_main.cpp
