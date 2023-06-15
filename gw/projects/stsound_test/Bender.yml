@@ -47,9 +47,9 @@ sources:
     #as Boxlambda components, I'm leaving them here in the hello world example
     files:
       - ../../../sub/ibex_wb/soc/common/rtl/wb_interconnect_sharedbus.sv
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/spramx32.sv      
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_spramx32.sv
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_timer.sv
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/spramx32.sv      
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_spramx32.sv
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_timer.sv
       - ../ym2149_dac_test/rtl/ym2149_dac_test_soc.sv
 
 

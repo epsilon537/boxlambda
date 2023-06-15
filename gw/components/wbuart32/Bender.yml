@@ -26,5 +26,5 @@ sources:
       - ../../../sub/wbuart32/rtl/txuart.v
       - ../../../sub/wbuart32/rtl/ufifo.v
       - ../../../sub/wbuart32/rtl/wbuart.v
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_wbuart_wrap.sv
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_wbuart_wrap.sv
 

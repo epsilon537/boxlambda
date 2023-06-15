@@ -1,9 +1,9 @@
 #hello_world is a bit weird: all source files are taken from the ibex_wb submodule.
 add_executable(hello_world
 	EXCLUDE_FROM_ALL
-    ../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello/hello.c
-	../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/libs/soc/gpio.c
-	../../../sub/ibex_wb/soc/fpga/arty-a7-35/sw/libs/soc/utils.c
+    ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/examples/hello/hello.c
+	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
+	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
 #Setting the -g flag for the hello_dbg build testing GDB access.

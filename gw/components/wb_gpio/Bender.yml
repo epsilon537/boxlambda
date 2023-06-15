@@ -17,9 +17,9 @@ sources:
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:
-    - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_gpio.sv
+    - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_gpio.sv
   - target: vivado
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:
-    - ../../../sub/ibex_wb/soc/fpga/arty-a7-35/rtl/wb_gpio.sv
+    - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_gpio.sv
