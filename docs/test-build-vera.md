@@ -4,8 +4,8 @@
 
 Build the *vera_integrated* project:
 ```
-cd build/sim/gw/projects/vera_integrated
-make vera_integrated_sim
+cd build/sim-a7-100/gw/projects/vera_integrated
+make vera_integrated_sim_sw
 ```
 Execute the generated Verilator model:
 ```
@@ -30,7 +30,7 @@ Hook up a VGA display to the Arty A7 PMOD ports JB and JC using [Diligent's VGA 
 Build the vera_integrated project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```
 cd build/arty-a7-35/gw/projects/vera_integrated
-make vera_integrated_impl
+make vera_integrated_bit_sw
 ```
 
 Download the generated bitstream file to the Arty A7:

@@ -4,8 +4,8 @@
 
 Build the test project:
 ```
-cd build/sim/gw/projects/picolibc_test
-make picolibc_test_sim
+cd build/sim-a7-100/gw/projects/picolibc_test
+make picolibc_test_sim_sw
 ```
 Execute the generated verilator model in interactive mode:
 ```
@@ -19,7 +19,7 @@ You should see something like this:
 Build the test project:
 ```
 cd build/arty-a7-[35|100]/gw/projects/picolibc_test
-make picolibc_test_impl
+make picolibc_test_bit_sw
 ```
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
 Run the project:

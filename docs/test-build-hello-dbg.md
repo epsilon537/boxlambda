@@ -5,7 +5,7 @@
 Build and run the test project:
 ```
 cd build/arty-a7-[35|100]/gw/projects/hello_dbg
-make hello_dbg_impl
+make hello_dbg_bit_sw
 make hello_dbg_load
 ```
 
@@ -44,8 +44,8 @@ Notice that the CPU is stopped at the very first instruction of the boot sequenc
 ### Connecting GDB to the Hello_DBG build on Verilator
 Build the test project:
 ```
-cd build/sim/gw/projects/hello_dbg
-make hello_dbg_sim
+cd build/sim-a7-100/gw/projects/hello_dbg
+make hello_dbg_sim_sw
 ```
 Launch the Verilator model with the *-d* flag to indicate that a debugger will be attached to the simulated processor:
 ```
@@ -64,7 +64,7 @@ Ready for Remote Connections on port 3333.
 ```
 Launch GDB with hello.elf:
 ```
-cd <boxlambda root directory>/build/sim/sw/projects/hello_world
+cd <boxlambda root directory>/build/sim-a7-100/sw/projects/hello_world
 riscv32-unknown-elf-gdb hello_world
 ```
 Connect GDB to the target. From the GDB shell:

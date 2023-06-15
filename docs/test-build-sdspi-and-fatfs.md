@@ -5,8 +5,8 @@
 Build the *sdspi_test* project:
    
 ```
-cd build/sim/gw/projects/sdspi_test
-make sdspi_test_sim
+cd build/sim-a7-100/gw/projects/sdspi_test
+make sdspi_test_sim_sw
 ```
 
 Create and format the SD Card image file (or just use the *sdcard.img* files checked into the *test/* subdirectory of the *sdspi_test* project):
@@ -58,7 +58,7 @@ Build the *sdspi_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a
 	
 ```
 cd build/arty-a7-35/gw/projects/sdspi_test
-make sdspi_test_impl
+make sdspi_test_bit_sw
 ```
 
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
@@ -93,8 +93,8 @@ SDSPI Test successful.
 Build the *fatfs_test* project:
 
 ```
-cd build/sim/gw/projects/fatfs_test
-make fatfs_test_sim
+cd build/sim-a7-100/gw/projects/fatfs_test
+make fatfs_test_sim_sw
 ```
 
 Create and format the SD Card image file (or just use the *sdcard.img* files checked into the *test/* subdirectory of the *fatfs_test* project):
@@ -146,7 +146,7 @@ Build the *fatfs_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a
 
 ```
 cd build/arty-a7-35/gw/projects/fatfs_test
-make fatfs_test_impl
+make fatfs_test_bit_sw
 ```
 
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.

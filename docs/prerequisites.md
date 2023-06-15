@@ -2,13 +2,13 @@
 
 - **Host OS**: Linux or Linux WSL.
   
-- **Vivado ML** Edition V2021.2, Linux version:
+- **Vivado ML** Edition V2023.1, Linux version:
   
-    [https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2021-1.html)
+    [https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2023-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2023-1.html)
     
     Make sure you also install your Arty A7 board files. Digilent has excellent instructions for installing Vivado and Digilent board files:
     
-    [https://digilent.com/reference/vivado/installing-vivado/v2019.2](https://digilent.com/reference/vivado/installing-vivado/v2019.2)
+    [https://digilent.com/reference/programmable-logic/guides/installing-vivado-and-vitis](https://digilent.com/reference/programmable-logic/guides/installing-vivado-and-vitis)
 
 - RISCV Compiler Toolchain **rv32imcb**. This is the cross-compiler for building the code that'll run on the Ibex processor. I'm using the **20220210-1** pre-built binaries from *lowRISC*:
    
@@ -73,6 +73,13 @@
     On Ubuntu, follow these instructions: [https://apt.kitware.com/](https://apt.kitware.com/)
   
     On other distros, please use your distro's package installer to get version 3.23 or later.
+
+    Make sure that the correct CMake version is first in your PATH. The Vivado */tools/Xilinx/Vivado/2023.1/settings64.sh* script adds an old version of CMake to your path. I override that by re-adding */usr/bin* to the front of the PATH after sourcing the Vivado script:
+
+```
+    source /tools/Xilinx/Vivado/2023.1/settings64.sh
+    export PATH=/usr/bin:$PATH
+```
 
 - **SDL2**: [https://wiki.libsdl.org/SDL2/Installation](https://wiki.libsdl.org/SDL2/Installation)
   

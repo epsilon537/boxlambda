@@ -3,8 +3,8 @@
 ### DDR Test Image on Verilator
 Build the test project:
 ```
-cd build/sim/gw/projects/ddr_test
-make ddr_test_sim
+cd build/sim-a7-100/gw/projects/ddr_test
+make ddr_test_sim_sw
 ```
 Execute the generated verilator model in interactive mode:
 ```
@@ -21,7 +21,7 @@ You should see something like this:
 Build the test project:
 ```
 cd build/arty-a7-[35|100]/gw/projects/ddr_test
-make ddr_test_impl
+make ddr_test_bit_sw
 ```
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
 

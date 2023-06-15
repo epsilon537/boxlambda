@@ -9,7 +9,7 @@ To build the *Hello World!* example, go through the following steps:
 Build the project:
 ```
 cd build/arty-a7-[35|100]/gw/projects/hello_world
-make hello_world_impl
+make hello_world_bit_sw
 ```
 Download the bitstream to the target:
 ```
@@ -22,8 +22,8 @@ To try out the Verilator Test Bench for *Hello World*:
 
 Build the testbench:
 ```
-cd build/sim/gw/projects/hello_world
-make hello_world_sim
+cd build/sim-a7-100/gw/projects/hello_world
+make hello_world_sim_sw
 ```
 Execute the testbench, with (```./Vmodel -i```) or without (```./Vmodel -t```) tracing:
 ```
