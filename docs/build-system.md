@@ -118,7 +118,7 @@ where *action* is one of the following:
 - **_bit**: Implement the given gateware project and generate its bitstream. Note that only the gateware is built, not the SW project running on top of this gateware. The internal memory reserved for the SW program will be left empty. See the *bit_sw* action below. 
     - Depends on: *_synth* target above
     - Build tree: *arty-a7-\** build trees. Gateware project directories only.
-- **_bit_sw**: Build the give gateware project as well as the associated software project. The generated SW image memory file is merged into the FPGA bitstream file. 
+- **_bit_sw**: Build the give gateware project as well as the associated software project. The generated SW image memory file is merged into the FPGA bitstream file. See [UpdateMem and XPM Memories](#updatemem-and-xpm-memories).
     - Depends on: *_bit* target above and on the software target associated with the gateware project. 
     - Build tree: *arty-a7-\** build trees. Gateware project directories only.
 - **_load**: Load the gateware project's bitstream file onto the connected target.
@@ -148,6 +148,37 @@ Makefile             hello_world.vivado_sources         project.hw             s
 cmake_install.cmake  hello_world.vivado_sources.dep     project.ip_user_files  syn_timing.rpt
 ```
 
+#### UpdateMem and XPM Memories
+
+A change in the contents of a *.mem* file does not require full FPGA resynthesis and reimplementation. The memory contents exist somewhere in the FPGA bitstream file. With the tool **UpdateMEM**, Vivado provides a way to merge new memory contents into the bitstream file, post-implementation. There is a catch, however. *UpdateMEM* works with memories implemented using Xilinx **XPM** macros.
+
+When Vivado implements an XPM memory such as *xpm_memory_spram*, a so-called **MMI** file, or **Memory Map Information** file is generated. An MMI file describes how individual block RAMs make up a contiguous logical data space. The *UpdateMem* tool needs this information to determine the locations in the bitstream file to update.
+
+![Merging a .mem file into a bitstream file.](assets/merge_mem_file_into_bitstream_file.drawio.png)
+
+*Merging a .mem file into a Bitstream File.*
+
+*UpdateMem* also requires the instance path of the embedded processor associated with the memory in question. In case of BoxLambda, this path is:
+
+```
+wb_spram/xpm_memory_spram_inst/xpm_memory_base_inst
+```
+
+As an aside, the easiest way to determine this processor path is by running *UpdateMem* with a dummy path. *UpdateMem* will then suggest a path:
+
+```
+$ updatemem -bit ibex_soc.bit -meminfo ibex_soc.mmi -data spram.mem -proc i_dont_know -out ibex_soc.out.bit
+
+****** updatemem v2023.1 (64-bit)
+...
+source /tools/Xilinx/Vivado/2023.1/scripts/updatemem/main.tcl -notrace
+Command: update_mem -meminfo ibex_soc.mmi -data spram.mem -proc i_dont_know -bit ibex_soc.bit -out ibex_soc.out.bit
+0 Infos, 0 Warnings, 0 Critical Warnings and 1 Errors encountered.
+update_mem failed
+ERROR: [Updatemem 57-85] Invalid processor specification of: i_dont_know. 
+The known processors are: wb_spram/xpm_memory_spram_inst/xpm_memory_base_inst
+```
+
 #### What happens when you run *make hello_world_synth*
 
 ![Gateware Build Targets.](assets/gw_build_targets.drawio.png)
@@ -173,7 +204,7 @@ When you run *make hello_world_bit*, the following happens:
 When you run *make hello_world_bit_sw*, the following happens:
 
 1. Make will run the *hello_world_bit* rule and the *hello_world* software build rule because *hello_world_bit_sw* depends on those. 
-2. If there were any changes to the bitstream file or the software image, the latest software is merged into the latest bitstream file. 
+2. If there were any changes to the bitstream file or the software image, the latest software is merged into the latest bitstream file. See [UpdateMem and XPM Memories](#updatemem-and-xpm-memories).
 
 ### Verilator Lint Waivers
 
@@ -199,7 +230,7 @@ A component or project directory typically contains the following files and subd
 
 Building Software
 -----------------
-The software corresponding with a gateware project automatically gets compiled, converted to a memory file, and included in the gateware project as part of the build process (see gateware build rules **bit_sw** and **sim_sw**). Software projects can also be built independently. From the build directory just type: *make <sw project name\>*. For example:
+The software corresponding with a gateware project automatically gets compiled, converted to a memory file, and included in the gateware project as part of the build process (see gateware build rules **<project\>_bit_sw** and **<project\>_sim_sw**). Software projects can also be built independently. From the build directory just type: *make <sw project name\>*. For example:
 
 ```
 $ cd sim-a7-100/sw/projects/hello_world/
@@ -354,7 +385,7 @@ The CMake build definitions are located as close as possible to the part of the 
 
 ### Cross-Compilation
 
-RISC-V cross-compilation is set up by passing in a *toolchain file* to CMake. The toolchain file is located in [scripts/toolchain.cmake](https://github.com/epsilon537/boxlambda/blob/master/scripts/toolchain.cmake).
+RISC-V cross-compilation for C and C++ is set up by passing in a *toolchain file* to CMake. The toolchain file is located in [scripts/toolchain.cmake](https://github.com/epsilon537/boxlambda/blob/master/scripts/toolchain.cmake).
 
 ### Bender Interaction Hack
 

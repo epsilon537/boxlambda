@@ -9,9 +9,9 @@ Get the BoxLambda repository:
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-Switch to the **integrating_vera** tag: 
+Switch to the **updatemem** tag: 
 ```
-git checkout integrating_vera
+git checkout updatemem
 ```
 
 Set up the repository. This initializes the git submodules used and creates the default build trees: 

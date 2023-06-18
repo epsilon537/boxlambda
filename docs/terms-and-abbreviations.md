@@ -120,6 +120,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **MEMC**: Memory Controller.
 
 - **Migen**: A Python-based toolbox for building digital hardware. Built on FHDL.
+
+- **MMI**: Memory Map Information file. An MMI file is an XML file that syntactically describes how individual block RAMs make up a contiguous logical data space. 
   
 - **OOC**: Vivado's OOC mode or OOC flow lets you synthesize, implement, and analyze design modules in a hierarchical design.
 
@@ -208,6 +210,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **WSL**: Windows Subsystem for Linux.
 
 - **Xbar**: Cross-Bar, a type of interconnect used in SoC bus fabrics.
+
+- *XPM*: Xilinx Parameterized Macros.
 
 - **YM2149**: An '80s era Yamaha sound chip. See also JT49.
 

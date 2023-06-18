@@ -1,0 +1,13 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@import "minima";
+
+.site-title::before {
+	content: url("favicon.png");
+	display: inline-block;
+	position: relative;
+	width: 64px;
+	top: 5px;
+}

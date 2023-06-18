@@ -3,6 +3,13 @@ theme:
     name: readthedocs
     collapse_navigation: False
     titles_only: False
+    logo: assets/logo.png
+    favicon: images/favicon.png
+    features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+
 nav:
     - About: index.md
     - Terms and Abbreviations: terms-and-abbreviations.md
