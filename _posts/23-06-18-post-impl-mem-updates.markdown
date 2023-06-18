@@ -50,7 +50,7 @@ BoxLambda Implementation
 Instantiating the XPM Memory
 ============================
 
-For Boxlamdba's internal memory I'm using the *xpm_memory_spram* macro, instantiated as follows:
+For Boxlambda's internal memory I'm using the *xpm_memory_spram* macro, instantiated as follows:
 
 ```
 xpm_memory_spram #(
