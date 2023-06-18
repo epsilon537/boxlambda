@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Post-Implementation Memory Updates'
+title: 'Post-Implementation Memory Updates.'
 comments: true
 ---
 
