@@ -49,3 +49,6 @@
 [submodule "sub/StSound"]
 	path = sub/StSound
 	url = https://github.com/epsilon537/StSound
+[submodule "sub/Praxos"]
+	path = sub/Praxos
+	url = https://github.com/epsilon537/Praxos
