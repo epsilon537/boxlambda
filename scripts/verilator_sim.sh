@@ -30,5 +30,5 @@ fi
 
 OUTDIR="$7"
 
-verilator -CFLAGS "$CFLAGS" -LDFLAGS "$LDFLAGS" --top-module $TOP_MODULE -Wall -cc --trace-fst --exe -Os -x-assign 0 --build --prefix Vmodel \
+verilator -CFLAGS "$CFLAGS" -LDFLAGS "$LDFLAGS" --no-timing --top-module $TOP_MODULE -Wall -cc --trace-fst --exe -x-assign 0 --build --prefix Vmodel \
 --Mdir $OUTDIR $VLT_FILES $VLT_CPP_FILES $VERILATOR_SCRIPT

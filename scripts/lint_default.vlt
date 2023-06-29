@@ -7,7 +7,8 @@ lint_off -rule PINCONNECTEMPTY
 //FIXME. Ideally, this should be turned on and code generating this warning should be fixed.
 //Verilated models with UNOPTFLAT warnings will run much slower than code without such warnings.
 //Functionally, it will still simulate correctly, however.
-
 lint_off -rule UNOPTFLAT
 
-//lint_off -rule TIMESCALE_MOD
+//We run with --no-timing. Turn off delay related warnings.
+lint_off -rule STMTDLY
+lint_off -rule ASSIGNDLY
