@@ -2,40 +2,52 @@
 #include "utils.h"
 #include "stdio_to_uart.h"
 #include "uart.h"
+#include "gpio.h"
 #include "ff.h"
 #include "platform.h"
 #include <stdio.h>
 #include <string.h>
+#include "ym2149_sys_regs.h"
 
 #define YM2149_SYS_BASE 0x10001000
 
-#define DISK_DEV_NUM       "0:"
+#define DISK_DEV_NUM "0:"
 #define STR_ROOT_DIRECTORY ""
 
 const char *root_dir_name = STR_ROOT_DIRECTORY;
 const char *ym_file_name = STR_ROOT_DIRECTORY "ancool1.ym";
 
 static struct uart uart0;
+static struct gpio gpio0;
+static struct gpio gpio1;
+
+unsigned mval = 10;
+unsigned bass = 25;
+unsigned treble = 32;
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-//_init is executed by picolibc startup code before main().
-void _init(void) {
-  //Set up UART and tie stdio to it.
-  uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-  uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-  set_stdio_to_uart(&uart0);
+	//_init is executed by picolibc startup code before main().
+	void _init(void)
+	{
+		// Set up UART and tie stdio to it.
+		uart_init(&uart0, (volatile void *)PLATFORM_UART_BASE);
+		uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
+		set_stdio_to_uart(&uart0);
 
-  mtime_start();
-}
+		mtime_start();
+	}
 
-//_exit is executed by the picolibc exit function. 
-//An implementation has to be provided to be able to user assert().
-void	_exit (int status) {
-	while (1);
-}
+	//_exit is executed by the picolibc exit function.
+	// An implementation has to be provided to be able to user assert().
+	void _exit(int status)
+	{
+		while (1)
+			;
+	}
 
 #ifdef __cplusplus
 }
@@ -46,9 +58,8 @@ FILINFO Finfo;
 char Lfname[512];
 #endif
 
-static
-FRESULT scan_files (
-	const char* path		/* Pointer to the path name working buffer */
+static FRESULT scan_files(
+	const char *path /* Pointer to the path name working buffer */
 )
 {
 	DIR dirs;
@@ -56,10 +67,13 @@ FRESULT scan_files (
 	BYTE i;
 	char *fn;
 
-	if ((res = f_opendir(&dirs, path)) == FR_OK) {
+	if ((res = f_opendir(&dirs, path)) == FR_OK)
+	{
 		i = strlen(path);
-		while (((res = f_readdir(&dirs, &Finfo)) == FR_OK) && Finfo.fname[0]) {
-			if (Finfo.fname[0] == '.') continue;
+		while (((res = f_readdir(&dirs, &Finfo)) == FR_OK) && Finfo.fname[0])
+		{
+			if (Finfo.fname[0] == '.')
+				continue;
 #if USE_LFN
 			fn = *Finfo.lfname ? Finfo.lfname : Finfo.fname;
 #else
@@ -72,20 +86,24 @@ FRESULT scan_files (
 	return res;
 }
 
-void ym2149_sys_reg_wr(unsigned reg_offset, unsigned val) {
-  ((unsigned volatile*)(YM2149_SYS_BASE))[reg_offset] = val;
-}
+int main(void)
+{
+	static CYmMusic cyMusic((volatile ymint *)YM2149_SYS_BASE);
 
-int main(void) {
-    static CYmMusic cyMusic((volatile ymint*)YM2149_SYS_BASE);
-
-    FRESULT res;
+	FRESULT res;
 	static DIR dirs;
 
-	unsigned addrs[] = { 128,129, 130,131,132,133, 134, 135, 136, 137 } ;
-  	unsigned vals[]  = {  50, 50,  50, 64, 64, 64, 10,   0,  25, 25 } ;
+	gpio_init(&gpio0, (volatile void *)PLATFORM_GPIO0_BASE);
+	gpio_set_direction(&gpio0, 0x0000000F); // 4 inputs, 4 outputs
 
-	for (int ii=0; ii<(sizeof(addrs)/sizeof(addrs[0])); ii++) {
+	gpio_init(&gpio1, (volatile void *)PLATFORM_GPIO1_BASE);
+	gpio_set_direction(&gpio1, 0x00000000); // 4 inputs
+
+	unsigned addrs[] = {128, 129, 130, 131, 132, 133, 134, 135, 136, 137};
+	unsigned vals[] = {50, 50, 50, 64, 64, 64, mval, 0, bass, treble};
+
+	for (int ii = 0; ii < (sizeof(addrs) / sizeof(addrs[0])); ii++)
+	{
 		ym2149_sys_reg_wr(addrs[ii], vals[ii]);
 	}
 
@@ -98,18 +116,20 @@ int main(void) {
 	/* Clear file system object */
 	memset(&fs, 0, sizeof(FATFS));
 	res = f_mount(&fs, "", 1);
-	if (res != FR_OK) {
+	if (res != FR_OK)
+	{
 		printf("FatFS mount error! %d\n", res);
-    	return -1;
+		return -1;
 	}
 
 	printf("Listing directory contents...\n");
 	scan_files(root_dir_name);
 
 	printf("Loading YM file: %s ...\n", ym_file_name);
-    if (!cyMusic.load(ym_file_name)) {
+	if (!cyMusic.load(ym_file_name))
+	{
 		printf("CyMusic load failed!\n");
-    	return -1;
+		return -1;
 	}
 
 	printf("Starting playback...\n");
@@ -118,14 +138,85 @@ int main(void) {
 	uint32_t prevTimeClocks = mtime_get32();
 	uint32_t curTimeClocks;
 
-	while (1) {
+	while (1)
+	{
 		curTimeClocks = mtime_get32();
 
-		if (cc2us(curTimeClocks-prevTimeClocks) >= 20000) {
+		if (cc2us(curTimeClocks - prevTimeClocks) >= 20000)
+		{
 			prevTimeClocks = curTimeClocks;
 			cyMusic.player();
+
+			if (gpio_get_input(&gpio0) & 0x10)
+			{
+				if (gpio_get_input(&gpio1) & 0x01)
+				{
+					if (mval < 255)
+						++mval;
+
+					ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
+
+					printf("mval: %d\n", mval);
+				}
+
+				if (gpio_get_input(&gpio1) & 0x02)
+				{
+					if (mval > 0)
+						--mval;
+
+					ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
+
+					printf("mval: %d\n", mval);
+				}
+			}
+
+			if (gpio_get_input(&gpio0) & 0x20)
+			{
+				if (gpio_get_input(&gpio1) & 0x01)
+				{
+					if (bass < 63)
+						++bass;
+
+					ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
+
+					printf("bass: %d\n", bass);
+				}
+
+				if (gpio_get_input(&gpio1) & 0x02)
+				{
+					if (bass > 1)
+						--bass;
+
+					ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
+
+					printf("bass: %d\n", bass);
+				}
+			}
+
+			if (gpio_get_input(&gpio0) & 0x40)
+			{
+				if (gpio_get_input(&gpio1) & 0x01)
+				{
+					if (treble < 255)
+						++treble;
+
+					ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
+
+					printf("treble: %d\n", treble);
+				}
+
+				if (gpio_get_input(&gpio1) & 0x02)
+				{
+					if (treble > 0)
+						--treble;
+
+					ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
+
+					printf("treble: %d\n", treble);
+				}
+			}
 		}
 	}
 
-    return 0;
+	return 0;
 }

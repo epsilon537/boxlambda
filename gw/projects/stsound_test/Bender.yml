@@ -21,7 +21,7 @@ dependencies:
 sources:
   - target: constraints
     files:
-      - constrs/Arty-A7-35-Master.xdc
+      - ../ym2149_dac_test/constrs/Arty-A7-35-Master.xdc
   - target: verilator
     files:
       - sim/sim_main.cpp

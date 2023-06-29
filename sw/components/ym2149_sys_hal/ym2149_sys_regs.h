@@ -48,5 +48,9 @@
 #define FILTER_MIXER_BASS_OFFSET (128+8)
 #define FILTER_MIXER_TREB_OFFSET (128+9)
 
+inline void ym2149_sys_reg_wr(unsigned reg_offset, unsigned val)
+{
+	((unsigned volatile *)(YM2149_SYS_BASE))[reg_offset] = val;
+}
 
 #endif //YM2149_SYS_REGS_H

@@ -15,5 +15,10 @@ target_compile_options(ym2149_test
 		-O2
 )
 
+target_include_directories(ym2149_test
+    PRIVATE
+	${PROJECT_SOURCE_DIR}/sw/components/ym2149_sys_hal/
+)
+
 #Function defined in parent CMakeLists.txt file:
 link_internal_create_mem_file(ym2149_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
