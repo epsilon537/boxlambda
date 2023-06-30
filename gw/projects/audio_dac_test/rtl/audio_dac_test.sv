@@ -10,7 +10,7 @@ module audio_dac_test (
   output wire       audio_shutdown_n
 `ifdef VERILATOR
   ,output wire [15:0] pcm_out
-  ,output wire acc1_overflow
+  ,output wire acc1_overflow /*In simulation we check for accumulator overflows*/
   ,output wire acc2_overflow
 `endif
 );
