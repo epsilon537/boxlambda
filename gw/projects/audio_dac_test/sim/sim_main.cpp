@@ -25,6 +25,8 @@ FILE *dacOutFile = 0;
 FILE *pcmOutFile = 0;
 int dacOutputCounter = 0; 
 
+bool overflowDetected = false;
+
 bool tracing_enable = false;
 
 // Used for tracing.
@@ -74,6 +76,17 @@ static void tick(void) {
   top->eval();
   if (tracing_enable)
     tfp->dump(contextp->time());
+
+  //Detect overflows
+  if (top->acc1_overflow) {
+    overflowDetected = true;
+    printf("time: %ld: acc1 overflow!\n", contextp->time());
+  }
+
+  if (top->acc2_overflow) {
+    overflowDetected = true;
+    printf("time: %ld: acc2 overflow!\n", contextp->time());
+  }
 
   //Capture output signals every 4 clocks, i.e. 12.5MHz
   ++dacOutputCounter;
@@ -180,8 +193,8 @@ int main(int argc, char** argv, char** env) {
     
     cleanup();
 
-    // Checks for automated testing.
-    int res = 0;
-
-    return res;
+    if (!overflowDetected)
+      printf("No overflows detected.\n");
+      
+    return overflowDetected;
 }

@@ -10,6 +10,8 @@ module audio_dac_test (
   output wire       audio_shutdown_n
 `ifdef VERILATOR
   ,output wire [15:0] pcm_out
+  ,output wire acc1_overflow
+  ,output wire acc2_overflow
 `endif
 );
 
@@ -75,6 +77,10 @@ one_bit_dac dac_inst (
   .clk_en(cpt4_r==2'b00),   // 12.5MHz clock enable
   .in(audio_pcm),     // input
   .out(audio_out)     // one bit out modulated at 12.5MHz
+`ifdef VERILATOR
+  ,.acc1_overflow(acc1_overflow)
+  ,.acc2_overflow(acc2_overflow)
+`endif
   );
 
 always_ff @(posedge sys_clk)

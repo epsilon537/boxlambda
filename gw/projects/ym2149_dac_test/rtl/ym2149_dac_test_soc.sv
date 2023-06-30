@@ -61,6 +61,8 @@ module ym2149_dac_test_soc(
   output wire       audio_shutdown_n
 `ifdef VERILATOR
   ,output wire [15:0] pcm_out
+  ,output wire acc1_overflow
+  ,output wire acc2_overflow  
 `endif
   );
     
@@ -471,6 +473,10 @@ module ym2149_dac_test_soc(
     .clk_en(cpt4==0),   // 12.5MHz clock enable
     .in(ym2149_sound),     // input
     .out(audio_out)     // one bit out modulated at 12.5MHz
+`ifdef VERILATOR
+   ,.acc1_overflow(acc1_overflow)
+   ,.acc2_overflow(acc2_overflow)
+`endif    
   );
 
 `ifdef VERILATOR

@@ -1,38 +1,73 @@
+#!/usr/bin/env python3
+import sys
 from dac_out import *
 from pcm_out import *
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy
+import getopt
 
-sos = scipy.signal.butter(N=3, Wn=25000, btype='lowpass', fs=12500000, output='sos')
+def dac_test(plot):
 
-y_pcm = np.array(pcmdata)
-y_norm_pcm = y_pcm/32768
-filtered_pcm = scipy.signal.sosfilt(sos, y_norm_pcm)
-filtered_pcm_norm = np.linalg.norm(filtered_pcm)
-filtered_pcm /= filtered_pcm_norm
-mags_pcm = np.abs(np.fft.fft(filtered_pcm))
-mags_pcm_db = 20*np.log10(mags_pcm)
-#freqs = np.fft.fftfreq(len(y_norm),d=1/12500000.0)
-#print("Freqs:")
-#print(freqs[0:10])
+    sos = scipy.signal.butter(N=3, Wn=25000, btype='lowpass', fs=12500000, output='sos')
 
-y_dac = np.array(dacdata)
-y_norm_dac = y_dac - 0.5
-filtered_dac = scipy.signal.sosfilt(sos, y_norm_dac)
-filtered_dac_norm = np.linalg.norm(filtered_dac)
-filtered_dac /= filtered_dac_norm
-mags_dac = np.abs(np.fft.fft(filtered_dac))
-mags_dac_db = 20*np.log10(mags_dac)
+    y_pcm = np.array(pcmdata)
+    y_norm_pcm = y_pcm/32768
+    filtered_pcm = scipy.signal.sosfilt(sos, y_norm_pcm)
+    filtered_pcm_norm = np.linalg.norm(filtered_pcm)
+    filtered_pcm /= filtered_pcm_norm
+    mags_pcm = np.abs(np.fft.fft(filtered_pcm))
+    mags_pcm_db = 20*np.log10(mags_pcm)
+    normalized_mags_pcm = mags_pcm / np.linalg.norm(mags_pcm)
 
-print("Correlation: ")
-print(np.correlate(a=filtered_pcm, v=filtered_dac)[0])
+    y_dac = np.array(dacdata)
+    y_norm_dac = y_dac - 0.5
+    filtered_dac = scipy.signal.sosfilt(sos, y_norm_dac)
+    filtered_dac_norm = np.linalg.norm(filtered_dac)
+    filtered_dac /= filtered_dac_norm
+    mags_dac = np.abs(np.fft.fft(filtered_dac))
+    mags_dac_db = 20*np.log10(mags_dac)
+    normalized_mags_dac = mags_dac / np.linalg.norm(mags_dac)
 
-plt.figure(1)
-plt.plot(filtered_dac[0:15000])
-plt.plot(filtered_pcm[0:15000])
-plt.figure(2)
-plt.plot(mags_dac_db[0:15000])
-plt.plot(mags_pcm_db[0:15000])
-plt.show()
+    time_dom_corr = np.correlate(a=filtered_pcm, v=filtered_dac)[0]
+    freq_dom_corr = np.correlate(a=normalized_mags_pcm, v=normalized_mags_dac)[0]
 
+    print("Time Domain Correlation: %f"%time_dom_corr)
+    print("Frequency Domain Correlation: %f"%freq_dom_corr)
+
+    if plot:
+        plt.figure(1)
+        plt.plot(filtered_dac[0:30000])
+        plt.plot(filtered_pcm[0:30000])
+        plt.figure(2)
+        plt.plot(mags_dac_db[0:15000])
+        plt.plot(mags_pcm_db[0:15000])
+        plt.show()
+
+    return (time_dom_corr > 0.99) and (freq_dom_corr > 0.99)
+
+if __name__ == "__main__":
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hp", ["help", "plot"])
+    except getopt.GetoptError as err:
+        # print help information and exit:
+        print("Usage: dac_test.py [-h(elp)] [-p(lot)]")
+        sys.exit(2)
+
+    plot = False
+
+    for o, a in opts:
+        if o == "-v":
+            verbose = True
+        elif o in ("-h", "--help"):
+            print("Usage: dac_test.py [-h(elp)] [-p(lot)]")
+            sys.exit()
+        elif o in ("-p", "--plot"):
+            plot = True
+        else:
+            assert False, "unhandled option"
+
+    if dac_test(plot=plot):
+        sys.exit(0)
+    else:
+        sys.exit(-1)

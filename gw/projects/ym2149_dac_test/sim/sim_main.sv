@@ -27,7 +27,9 @@ module sim_main #(
 	output wire       audio_out,
 	output wire       audio_gain,
 	output wire       audio_shutdown_n,
-	output wire [15:0] pcm_out
+	output wire [15:0] pcm_out,
+	output wire acc1_overflow,
+    output wire acc2_overflow  
     );
    
    // jtag openocd bridge signals
@@ -86,7 +88,9 @@ module sim_main #(
 		.audio_out(audio_out),
   		.audio_gain(audio_gain),
   		.audio_shutdown_n(audio_shutdown_n),
-  		.pcm_out(pcm_out)
+  		.pcm_out(pcm_out),
+		.acc1_overflow(acc1_overflow),
+		.acc2_overflow(acc2_overflow)
 		);
    
    always_comb begin : jtag_exit_handler

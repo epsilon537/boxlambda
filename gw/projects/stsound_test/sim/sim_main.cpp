@@ -122,6 +122,13 @@ static void tick(void) {
     uart->clear_rx_string();
   }
   
+  //Detect overflows
+  if (top->acc1_overflow)
+    printf("time: %ld: acc1 overflow!\n", contextp->time());
+
+  if (top->acc2_overflow)
+    printf("time: %ld: acc2 overflow!\n", contextp->time());
+
   ++pcmOutputCounter;
   if (pcmOutputCounter == 1024) {
     pcmOutputCounter = 0;
