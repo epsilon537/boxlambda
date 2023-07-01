@@ -19,7 +19,7 @@ static struct gpio gpio1;
 
 unsigned mval = 10;
 unsigned bass = 25;
-unsigned treble = 32;
+unsigned treble = 128;
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {

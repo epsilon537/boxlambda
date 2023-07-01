@@ -31,6 +31,8 @@ FILE *dacOutFile = 0;
 FILE *pcmOutFile = 0;
 int dacOutputCounter = 0; 
 
+bool overflowDetected = false;
+
 bool tracing_enable = false;
 
 //Uart co-simulation from wbuart32.
@@ -102,12 +104,16 @@ static void tick(void) {
   }
 
   //Detect overflows
-  if (top->acc1_overflow)
+  if (top->acc1_overflow) {
+    overflowDetected = true;
     printf("time: %ld: acc1 overflow!\n", contextp->time());
+  }
 
-  if (top->acc2_overflow)
+  if (top->acc2_overflow) {
+    overflowDetected = true;
     printf("time: %ld: acc2 overflow!\n", contextp->time());
-
+  }
+  
   //Capture output signals every 4 clocks, i.e. 12.5MHz
   ++dacOutputCounter;
   if (dacOutputCounter%4 == 0) {
@@ -227,20 +233,8 @@ int main(int argc, char** argv, char** env) {
     
     cleanup();
 
-    // Checks for automated testing.
-    int res = 0;
-    std::string uartCheckString("YM2149 Test successful.");
-
-    if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
-      printf("Test failed\n");
-      printf("Expected: %s\n", uartCheckString.c_str());
-      printf("Received: %s\n", uartRxStringPrev.c_str());
-
-      res = 1;
-    }
-    else {
-      printf("Test passed.\n");
-    }
-
-    return res;
+    if (!overflowDetected)
+      printf("No overflows detected.\n");
+      
+    return overflowDetected;
 }
