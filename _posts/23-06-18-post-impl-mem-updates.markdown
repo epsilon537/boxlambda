@@ -4,6 +4,8 @@ title: 'Post-Implementation Memory Updates.'
 comments: true
 ---
 
+*Updated 18 July 2023: Added the RAM_DECOMP("power") section.*
+
 I've been working on the integration of a sound synthesizer core and player software for that core. I'm still relying heavily on my Verilator test bench, but increasingly, I'm hitting the limits of that environment. Evaluating a 30-second fragment of a chiptune requires 30s simulation time, which in my case translates to 75 minutes in real-time. Not impossible, but inconvenient when you have to re-test frequently, e.g. due to software changes. 
 
 On the Arty FPGA, the 30s chiptune test executes in real-time, but Vivado synthesis and implementation of the project takes 10 minutes on my system. Again, doable, but inconvenient, especially considering that in my current flow, a software change requires FPGA resynthesis and reimplementation. The generated software image is a *.mem* file for an internal memory. This *.mem* file has to be included in the Vivado project like any other input file, before synthesis.     
@@ -44,6 +46,12 @@ OK. Easy enough. I have to use `wb_spram/xpm_memory_spram_inst/xpm_memory_base_i
 
 Out of curiosity, I also tested with an XPM memory that's not hooked up to any processor. I just hooked up the memory to GPIOs. Sure enough, a .MMI file got generated and I was able to update the memory's contents in the bitstream file using *UpdateMEM*. *UpdateMEM* can be used on processorless systems and on memories that are not associated with any processor.
 
+RAM_DECOMP("power")
+-------------------
+For XPM memories up to 64KB, *Updatemem* works fine. However, with an XPM memory size of 256KB, Vivado switches to a different, less straightforward, memory layout and *Updatemem* no longer updates the bitstream correctly. To work around that issue, I instantiate the XPM memory with the **RAM_DECOMP** attribute set to *"power"*. This forces Vivado to stick to a straighforward memory layout for bigger memory sizes, so *Updatemem* can still update the bitstream correctly.
+
+One drawback of this workaround is that the XPM memory *RAM_DECOMP* attribute has only been introduced in the V2023.1 edition of Vivado. It won't work on earlier versions.
+
 BoxLambda Implementation
 ------------------------
 
@@ -62,6 +70,7 @@ xpm_memory_spram #(
    .MEMORY_OPTIMIZATION("true"),  // String
    .MEMORY_PRIMITIVE("auto"),     // String
    .MEMORY_SIZE(size*8),          // DECIMAL, memory size in bits
+   .RAM_DECOMP("power"),          // String, for updatemem compatibility
    .MESSAGE_CONTROL(0),           // DECIMAL
    .READ_DATA_WIDTH_A(32),        // DECIMAL
    .READ_LATENCY_A(1),            // DECIMAL
