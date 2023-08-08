@@ -11,10 +11,12 @@ make hello_dbg_load
 
 Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
 
-Start OpenOCD with the *digilent_arty_a7.cfg* config file. 
+Start OpenOCD with the *digilent_arty_a7_[35|100].cfg* config file. 
+
 Note: If OpenOCD can't connect to the USB JTAG adapter, your USB device permissions might not be set correctly. Check the *User-Level Access to the Arty A7 USB JTAG Adapter* section above for a fix.
 ```
-openocd -f <boxlambda root directory>/scripts/digilent_arty_a7.cfg
+openocd -f <boxlambda root directory>/scripts/digilent_arty_a7_[35|100].cfg
+
 Info : clock speed 1000 kHz
 Info : JTAG tap: riscv.cpu tap/device found: 0x0362d093 (mfg: 0x049 (Xilinx), part: 0x362d, ver: 0x0)
 Info : [riscv.cpu] datacount=2 progbufsize=8
@@ -44,7 +46,7 @@ Notice that the CPU is stopped at the very first instruction of the boot sequenc
 ### Connecting GDB to the Hello_DBG build on Verilator
 Build the test project:
 ```
-cd build/sim-a7-100/gw/projects/hello_dbg
+cd build/sim-a7-[35|100]/gw/projects/hello_dbg
 make hello_dbg_sim_sw
 ```
 Launch the Verilator model with the *-d* flag to indicate that a debugger will be attached to the simulated processor:
@@ -64,7 +66,7 @@ Ready for Remote Connections on port 3333.
 ```
 Launch GDB with hello.elf:
 ```
-cd <boxlambda root directory>/build/sim-a7-100/sw/projects/hello_world
+cd <boxlambda root directory>/build/sim-a7-[35|100]/sw/projects/hello_world
 riscv32-unknown-elf-gdb hello_world
 ```
 Connect GDB to the target. From the GDB shell:

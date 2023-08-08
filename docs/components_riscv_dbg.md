@@ -130,7 +130,10 @@ On the OpenOCD side, the transport protocol for this Debug-Access-via-FPGA-scan-
 
 *BoxLambda OpenOCD Arty A7 FTDI Setup*
 
-The OpenOCD configuration file for JTAG Debugging on Arty A7 is checked into the *scripts/* directory: [scripts/digilent_arty_a7.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7.openocd.cfg) 
+The OpenOCD configuration file for JTAG Debugging on Arty A7 is checked into the *scripts/* directory:
+
+- Arty-A7-35T: [scripts/digilent_arty_a7_35.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7_35.openocd.cfg) 
+- Art-A7-100T: [scripts/digilent_arty_a7_100.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7_100.openocd.cfg) 
 
 To summarize:
 
