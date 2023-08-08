@@ -45,5 +45,7 @@ add_subdirectory(wb_gpio)
 add_subdirectory(litedram)
 add_subdirectory(ibex_wb_core)
 add_subdirectory(ibex)
+add_subdirectory(reset_ctrl)
+
 
 
