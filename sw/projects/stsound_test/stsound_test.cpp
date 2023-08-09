@@ -23,7 +23,7 @@ static struct gpio gpio1;
 
 unsigned mval = 10;
 unsigned bass = 25;
-unsigned treble = 32;
+unsigned treble = 128;
 
 #ifdef __cplusplus
 extern "C"
@@ -88,8 +88,6 @@ static FRESULT scan_files(
 
 int main(void)
 {
-	static CYmMusic cyMusic((volatile ymint *)YM2149_SYS_BASE);
-
 	FRESULT res;
 	static DIR dirs;
 
@@ -125,6 +123,8 @@ int main(void)
 	printf("Listing directory contents...\n");
 	scan_files(root_dir_name);
 
+	static CYmMusic cyMusic((volatile ymint *)YM2149_SYS_BASE);
+
 	printf("Loading YM file: %s ...\n", ym_file_name);
 	if (!cyMusic.load(ym_file_name))
 	{
@@ -132,7 +132,9 @@ int main(void)
 		return -1;
 	}
 
+	cyMusic.setLoopMode(true);
 	printf("Starting playback...\n");
+
 	cyMusic.play();
 
 	uint32_t prevTimeClocks = mtime_get32();

@@ -9,3 +9,4 @@ lint_off -rule UNUSED
 lint_off -rule WIDTH
 
 
+lint_off -rule SYNCASYNCNET

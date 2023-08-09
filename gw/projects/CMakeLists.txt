@@ -62,7 +62,7 @@ function (gw_project_rules_vivado)
         DEPENDS
             ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
         COMMENT
-            "Implementating project and generating bitstream."
+            "Implementing project and generating bitstream."
         VERBATIM
     )
 
