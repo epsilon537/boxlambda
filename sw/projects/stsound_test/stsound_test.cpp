@@ -10,6 +10,8 @@
 #include "ym2149_sys_regs.h"
 
 #define YM2149_SYS_BASE 0x10001000
+#define YM2149_PSG_0 (YM2149_SYS_BASE+PSG0_CHA_TONE_PERIOD_FINE_OFFSET*4)
+#define YM2149_PSG_1 (YM2149_SYS_BASE+PSG1_CHA_TONE_PERIOD_FINE_OFFSET*4)
 
 #define DISK_DEV_NUM "0:"
 #define STR_ROOT_DIRECTORY ""
@@ -97,8 +99,12 @@ int main(void)
 	gpio_init(&gpio1, (volatile void *)PLATFORM_GPIO1_BASE);
 	gpio_set_direction(&gpio1, 0x00000000); // 4 inputs
 
-	unsigned addrs[] = {128, 129, 130, 131, 132, 133, 134, 135, 136, 137};
-	unsigned vals[] = {50, 50, 50, 64, 64, 64, mval, 0, bass, treble};
+	unsigned addrs[] = {FILTER_MIXER_VOLA_OFFSET, FILTER_MIXER_VOLB_OFFSET, FILTER_MIXER_VOLC_OFFSET, 
+						FILTER_MIXER_VOLD_OFFSET, FILTER_MIXER_VOLE_OFFSET, FILTER_MIXER_VOLF_OFFSET, 
+						FILTER_MIXER_MVOL_OFFSET, FILTER_MIXER_INV_OFFSET, FILTER_MIXER_BASS_OFFSET, FILTER_MIXER_TREB_OFFSET};
+	unsigned vals[] = {50, 50, 50, 
+					   50, 50, 50, 
+					   mval, 0, bass, treble};
 
 	for (int ii = 0; ii < (sizeof(addrs) / sizeof(addrs[0])); ii++)
 	{
@@ -123,19 +129,32 @@ int main(void)
 	printf("Listing directory contents...\n");
 	scan_files(root_dir_name);
 
-	static CYmMusic cyMusic((volatile ymint *)YM2149_SYS_BASE);
+	static CYmMusic cyMusic_psg_0((volatile ymint *)YM2149_PSG_0);
+	static CYmMusic cyMusic_psg_1((volatile ymint *)YM2149_PSG_1);
+	CYmMusic* cyMusicp = 0;
+
+	if (gpio_get_input(&gpio0) & 0x80)
+	{
+		printf("Switching to PSG_0\n");
+		cyMusicp = &cyMusic_psg_0;
+	}
+	else
+	{	
+		printf("Switching to PSG_1\n");
+		cyMusicp = &cyMusic_psg_1;
+	}
 
 	printf("Loading YM file: %s ...\n", ym_file_name);
-	if (!cyMusic.load(ym_file_name))
+	if (!cyMusicp->load(ym_file_name))
 	{
 		printf("CyMusic load failed!\n");
 		return -1;
 	}
 
-	cyMusic.setLoopMode(true);
+	cyMusicp->setLoopMode(true);
 	printf("Starting playback...\n");
 
-	cyMusic.play();
+	cyMusicp->play();
 
 	uint32_t prevTimeClocks = mtime_get32();
 	uint32_t curTimeClocks;
@@ -147,7 +166,7 @@ int main(void)
 		if (cc2us(curTimeClocks - prevTimeClocks) >= 20000)
 		{
 			prevTimeClocks = curTimeClocks;
-			cyMusic.player();
+			cyMusicp->player();
 
 			if (gpio_get_input(&gpio0) & 0x10)
 			{
