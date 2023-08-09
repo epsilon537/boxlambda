@@ -13,11 +13,22 @@ dependencies:
   ibex_wb_core: { path: "../../components/ibex_wb_core" }
   riscv-dbg: { path: "../../components/riscv-dbg" }
   litedram: { path: "../../components/litedram" }
-  
+  reset_ctrl: { path: "../../components/reset_ctrl" }
+
 sources:
   - target: constraints
     files:
       - constrs/Arty-A7-35-Master.xdc
+  - target: arty-a7-35
+    defines:
+      DPRAM_SIZE_BYTES: (64*1024)
+    files:
+      - rtl/ddr_test_soc.sv
+  - target: arty-a7-100
+    defines:
+      DPRAM_SIZE_BYTES: (256*1024)
+    files:
+      - rtl/ddr_test_soc.sv
   - target: verilator
     files:
       - sim/sim_main.cpp
@@ -39,4 +50,3 @@ sources:
       - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/spramx32.sv      
       - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_spramx32.sv
       - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_timer.sv
-      - rtl/ddr_test_soc.sv
