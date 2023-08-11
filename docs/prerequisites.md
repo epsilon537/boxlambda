@@ -101,3 +101,30 @@ Also, make sure to set environment variable **SDL2_DIR** to point to the SDL2 di
 ```
 export SDL2_DIR=/usr/lib/x86_64-linux-gnu/cmake/SDL2/
 ```
+
+### PortAudio
+```
+sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
+sudo apt-get install ffmpeg
+```
+
+### Chromaprint
+```
+sudo apt-get install libchromaprint-tools
+```
+
+### Python 3
+```
+sudo apt-get install python-is-python3
+```
+
+### Pip
+```
+sudo apt-get install python3-pip
+```
+
+### NumPy, SciPy, SoundDevice, and Matplotlib
+```
+pip3 install numpy scipy sounddevice matplotlib
+```
+
