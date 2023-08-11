@@ -25,6 +25,7 @@ REF_WAV="$SRC_ROOT_DIR/gw/projects/stsound_test/test/ref.wav"
 
 echo "Launching python script analyzing model data..."
 PYTHONPATH="." 
+PYTHONPYCACHEPREFIX="."
 $SRC_ROOT_DIR/gw/projects/stsound_test/test/stsound_test.py -r $REF_WAV
 
 if [ "$?" -ne "0" ]; then
