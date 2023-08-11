@@ -162,12 +162,15 @@ int main(int argc, char** argv, char** env) {
 
     // Command line processing
     for(;;) {
-      switch(getopt(argc, argv, "aithf:")) {
+      switch(getopt(argc, argv, "aithf:s:")) {
       case 'a':
         attach_debugger = true;
         continue;
       case 'f':
         pcm_filename = optarg;
+        continue;
+      case 's':
+        sd_img_filename = optarg;
         continue;
       case 't':
         printf("Tracing enabled\n");
@@ -186,6 +189,7 @@ int main(int argc, char** argv, char** env) {
         printf("-t: enable tracing.\n");
         printf("-i: enable interactive mode.\n");
         printf("-f <output pcm file>\n");
+        printf("-s <sdcard.img>\n");
         return 0;
         break;
 	    
@@ -251,7 +255,7 @@ int main(int argc, char** argv, char** env) {
 
     // Checks for automated testing.
     int res = 0;
-    std::string uartCheckString("YM2149 Test successful.");
+    std::string uartCheckString("Starting playback...");
 
     if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
       printf("Test failed\n");
