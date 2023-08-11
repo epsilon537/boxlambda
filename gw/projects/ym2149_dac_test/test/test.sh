@@ -19,7 +19,9 @@ if [ "$?" -ne "0" ]; then
 fi
 
 echo "Launching python script analyzing model data..."
-PYTHONPATH="." $SRC_ROOT_DIR/gw/projects/ym2149_dac_test/test/ym2149_test.py
+PYTHONPYCACHEPREFIX="."
+PYTHONPATH="." 
+$SRC_ROOT_DIR/gw/projects/ym2149_dac_test/test/ym2149_test.py
 
 if [ "$?" -ne "0" ]; then
   echo "Test Failed!"
