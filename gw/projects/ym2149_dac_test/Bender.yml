@@ -49,7 +49,6 @@ sources:
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       YM2149: ~
-      USE_DUAL_PSG: ~
       #SDSPI: ~
       #DRAM: ~
       #VERA: ~

@@ -19,8 +19,8 @@ if [ "$?" -ne "0" ]; then
 fi
 
 echo "Launching python script analyzing model data..."
-PYTHONPYCACHEPREFIX="."
-PYTHONPATH="." 
+export PYTHONPYCACHEPREFIX="." #To make sure no pycache files are generated in the source tree.
+export PYTHONPATH="." 
 $SRC_ROOT_DIR/gw/projects/ym2149_dac_test/test/ym2149_test.py
 
 if [ "$?" -ne "0" ]; then

@@ -16,10 +16,10 @@ sources:
       - constrs/Arty-A7-35-Master.xdc
   - target: memory
     files:
-    - rtl/sin_table.mem #Not currently used, but leaving it in here in case I want to experiment with different waveform LUTs.
+    - rtl/sin_table.mem
   - target: any(verilator, vivado)
     files:
-      - rtl/sin_rom.sv #Not currently used, but leaving it in here in case I want to experiment with different waveform LUTs.
+      - rtl/sin_rom.sv
       - rtl/audio_dac_test.sv
       - sim/sim_main.cpp
       - lint.vlt

@@ -1,4 +1,4 @@
-/* Second order 1-bit delta-sigma DAC.*/
+/* 1-bit delta-sigma DAC.*/
 module one_bit_dac #(
 	parameter W=16
 	) (
@@ -69,9 +69,9 @@ module one_bit_dac #(
   end
   
   assign out = acc2_r[4];
-`endif
 
-`ifdef FIRST_ORDER_DAC
+`else //FIRST_ORDER_DAC implementation:
+
   //This code is taken from the book 'FPGA prototyping by Systemverilog Examples' by Chu, Pong P.
 
   localparam BIAS = 2**(W-1);  //{1'b1, (W-2){1'b0}};

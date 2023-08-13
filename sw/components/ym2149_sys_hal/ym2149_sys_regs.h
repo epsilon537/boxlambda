@@ -1,8 +1,12 @@
 #ifndef YM2149_SYS_REGS_H
 #define YM2149_SYS_REGS_H
 
+/*
+ * Dual YM2149 hardware access layer.
+ */
 #define YM2149_SYS_BASE 0x10001000
 
+//PSG0 registers
 #define PSG0_CHA_TONE_PERIOD_FINE_OFFSET   0  // 8 BITS
 #define PSG0_CHA_TONE_PERIOD_COARSE_OFFSET 1  // 4 BITS
 #define PSG0_CHB_TONE_PERIOD_FINE_OFFSET   2  // 8 BITS
@@ -20,6 +24,7 @@
 #define PSG0_IO_PORT_A_OFFSET              14 // 8 BITS
 #define PSG0_IO_PORT_B_OFFSET              15 // 8 BITS
 
+//PSG1 registers
 #define PSG1_CHA_TONE_PERIOD_FINE_OFFSET   (16+0)  // 8 BITS
 #define PSG1_CHA_TONE_PERIOD_COARSE_OFFSET (16+1)  // 4 BITS
 #define PSG1_CHB_TONE_PERIOD_FINE_OFFSET   (16+2)  // 8 BITS
@@ -37,15 +42,23 @@
 #define PSG1_IO_PORT_A_OFFSET              (16+14) // 8 BITS
 #define PSG1_IO_PORT_B_OFFSET              (16+15) // 8 BITS
 
+//Audio Mixer registers
+//Individual channel volumes
 #define FILTER_MIXER_VOLA_OFFSET (128+0)
 #define FILTER_MIXER_VOLB_OFFSET (128+1)
 #define FILTER_MIXER_VOLC_OFFSET (128+2)
 #define FILTER_MIXER_VOLD_OFFSET (128+3)
 #define FILTER_MIXER_VOLE_OFFSET (128+4)
 #define FILTER_MIXER_VOLF_OFFSET (128+5)
+
+//Master volume
 #define FILTER_MIXER_MVOL_OFFSET (128+6)
 #define FILTER_MIXER_INV_OFFSET  (128+7)
+
+//Bass
 #define FILTER_MIXER_BASS_OFFSET (128+8)
+
+//Treble
 #define FILTER_MIXER_TREB_OFFSET (128+9)
 
 inline void ym2149_sys_reg_wr(unsigned reg_offset, unsigned val)

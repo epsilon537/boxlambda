@@ -19,8 +19,9 @@ if [ "$?" -ne "0" ]; then
 fi
 
 echo "Launching python script analyzing model data..."
-PYTHONPATH="." $SRC_ROOT_DIR/gw/projects/audio_dac_test/test/dac_test.py
-
+export PYTHONPYCACHEPREFIX="." #To make sure no pycache files are generated in the source tree.
+export PYTHONPATH="." 
+$SRC_ROOT_DIR/gw/projects/audio_dac_test/test/dac_test.py
 
 if [ "$?" -ne "0" ]; then
   echo "Test Failed!"

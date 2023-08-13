@@ -7,7 +7,7 @@ import sys
 import getopt
 import scipy
 
-#Pitches we want to detect
+# The test program running on the system generates the following 6 pitches.
 REF_HZ = [440.00, 493.88, 523.55, 587.33, 659.25, 698.46]
 
 def pitch_test(plot):
@@ -30,13 +30,11 @@ def pitch_test(plot):
     peak_freqs = np.sort(freqs[peak_bins])
     deviations = (peak_freqs - REF_HZ)/REF_HZ
 
-
     print("Detected pitches: ")
     print(peak_freqs)
 
     print("Expected pitches:")
     print(REF_HZ)
-
 
     print("Relative Deviations:")
     print(deviations)

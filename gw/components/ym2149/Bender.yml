@@ -10,6 +10,10 @@ sources:
     files:
      - lint.vlt
   - target: any(verilator, vivado)
+    defines:
+      #USE_STEREO: ~ #Mono
+      #USE_I2S: ~ #BoxLambda uses as 1-bit DAC
+      USE_DUAL_PSG: ~
     include_dirs:
     - ../../../sub/ym2149_psg_system/
     files:

@@ -18,7 +18,6 @@ module sin_rom
       $readmemh("sin_table.mem", ram);
       
    // body
-   // write operation
    always_ff @(posedge clk)
    begin
       data_reg <= ram[addr_r];

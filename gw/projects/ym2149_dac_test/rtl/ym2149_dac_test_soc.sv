@@ -1,5 +1,6 @@
 `default_nettype none
 
+//BoxLambda Test SoC including dual YM2149 system and 1-bit audio DAC.
 module ym2149_dac_test_soc(
   input  wire       ext_clk, /*External clock: 100MHz on FPGA, 50MHz in simulation.*/
    
@@ -60,6 +61,7 @@ module ym2149_dac_test_soc(
   output wire       audio_gain,
   output wire       audio_shutdown_n
 `ifdef VERILATOR
+   // Audio interface signals only used in simulation
   ,output wire [15:0] pcm_out
   ,output wire acc1_overflow
   ,output wire acc2_overflow  
@@ -462,11 +464,10 @@ reset_ctrl reset_ctrl_inst(
     .CLK_IN_HZ(50000000),   // Input clock frequency
     .CLK_PSG_HZ(2000000),   // PSG clock frequency
     .YM2149_DAC_BITS(10),   // PSG DAC bit precision, 8 through 14 bits, the higher the bits, the higher the dynamic range.
-                                                 // 10 bits almost perfectly replicates the YM2149 DA converter's Normalized voltage.
-                                                 // With 8 bits, the lowest volumes settings will be slightly louder than normal.
-                                                 // With 12 bits, the lowest volume settings will be too quiet.
-
-    .MIXER_DAC_BITS(16)         // The number of DAC bits for the BHG_jt49_filter_mixer output.
+                            // 10 bits almost perfectly replicates the YM2149 DA converter's Normalized voltage.
+                            // With 8 bits, the lowest volumes settings will be slightly louder than normal.
+                            // With 12 bits, the lowest volume settings will be too quiet.
+    .MIXER_DAC_BITS(16)     // The number of DAC bits for the BHG_jt49_filter_mixer output.
   ) ym2149_sys_inst (
       .clk(sys_clk),
       .clk_i2s(1'b0),
@@ -482,33 +483,32 @@ reset_ctrl reset_ctrl_inst(
       .wb_ack(wbs[YM2149_S].ack),
       .wb_we(wbs[YM2149_S].we),
       .wb_err(wbs[YM2149_S].err),    
-
-      .i2s_sclk(),
-      .i2s_lrclk(),   // I2S L/R output
-      .i2s_data(),    // I2S serial audio out
+      .i2s_sclk(),     // I2S is not used.
+      .i2s_lrclk(),   
+      .i2s_data(),     
       .sound(ym2149_sound),  // parallel   audio out, mono or left channel
       .sound_right()  // parallel   audio out, right channel
   );
 
-  reg [1:0] cpt4;
+  reg [1:0] div_by_4_ctr; //Divide-clock-by-4 counter.
   always_ff @(posedge sys_clk)
-    cpt4 <= cpt4 - 1;
+    div_by_4_ctr <= div_by_4_ctr - 1;
 
   one_bit_dac dac_inst (
-    .clk(sys_clk),      // 50MHz clock
-    .clk_en(cpt4==0),   // 12.5MHz clock enable
-    .in(ym2149_sound),     // input
-    .out(audio_out)     // one bit out modulated at 12.5MHz
+    .clk(sys_clk),              // 50MHz clock
+    .clk_en(div_by_4_ctr==0),   // 12.5MHz clock enable
+    .in(ym2149_sound),          // input 16 PCM audio signal.
+    .out(audio_out)             // one bit output signal, modulated at 12.5MHz
 `ifdef VERILATOR
-   ,.acc1_overflow(acc1_overflow)
-   ,.acc2_overflow(acc2_overflow)
+   ,.acc1_overflow(acc1_overflow) //In simulation, check DAC accumulators for overflow.
+   ,.acc2_overflow(acc2_overflow) //In simulation, check DAC accumulators for overflow.
 `endif    
   );
 
 `ifdef VERILATOR
   assign pcm_out = ym2149_sound;
 `endif
-  assign audio_gain = 1'b1;
+  assign audio_gain = 1'b1; //PMOD Amp gain fixed at 6dB.
   assign audio_shutdown_n = 1'b1;
 
 `endif //YM2149

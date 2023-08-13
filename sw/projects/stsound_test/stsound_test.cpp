@@ -9,6 +9,9 @@
 #include <string.h>
 #include "ym2149_sys_regs.h"
 
+//This test program loads a .ym music file from the SD card and plays it back on one of the
+//two YM2149 PSGs using the STsound library.
+
 #define YM2149_SYS_BASE 0x10001000
 #define YM2149_PSG_0 (YM2149_SYS_BASE+PSG0_CHA_TONE_PERIOD_FINE_OFFSET*4)
 #define YM2149_PSG_1 (YM2149_SYS_BASE+PSG1_CHA_TONE_PERIOD_FINE_OFFSET*4)
@@ -47,8 +50,7 @@ extern "C"
 	// An implementation has to be provided to be able to user assert().
 	void _exit(int status)
 	{
-		while (1)
-			;
+		while (1);
 	}
 
 #ifdef __cplusplus
@@ -60,6 +62,7 @@ FILINFO Finfo;
 char Lfname[512];
 #endif
 
+//This function lists the given path's directory contents.
 static FRESULT scan_files(
 	const char *path /* Pointer to the path name working buffer */
 )
@@ -99,6 +102,7 @@ int main(void)
 	gpio_init(&gpio1, (volatile void *)PLATFORM_GPIO1_BASE);
 	gpio_set_direction(&gpio1, 0x00000000); // 4 inputs
 
+	//Program the audio mixer registers
 	unsigned addrs[] = {FILTER_MIXER_VOLA_OFFSET, FILTER_MIXER_VOLB_OFFSET, FILTER_MIXER_VOLC_OFFSET, 
 						FILTER_MIXER_VOLD_OFFSET, FILTER_MIXER_VOLE_OFFSET, FILTER_MIXER_VOLF_OFFSET, 
 						FILTER_MIXER_MVOL_OFFSET, FILTER_MIXER_INV_OFFSET, FILTER_MIXER_BASS_OFFSET, FILTER_MIXER_TREB_OFFSET};
@@ -129,6 +133,7 @@ int main(void)
 	printf("Listing directory contents...\n");
 	scan_files(root_dir_name);
 
+	//Instantiate two PSGs. Based on switch 3 setting, the music will play on one or the other.
 	static CYmMusic cyMusic_psg_0((volatile ymint *)YM2149_PSG_0);
 	static CYmMusic cyMusic_psg_1((volatile ymint *)YM2149_PSG_1);
 	CYmMusic* cyMusicp = 0;
@@ -163,11 +168,14 @@ int main(void)
 	{
 		curTimeClocks = mtime_get32();
 
+		//Every 20ms...
 		if (cc2us(curTimeClocks - prevTimeClocks) >= 20000)
 		{
 			prevTimeClocks = curTimeClocks;
-			cyMusicp->player();
+			cyMusicp->player(); //'tick' the music player.
 
+			//Set switch 0, 1 or 2 to select volume, bass or treble control.
+    		//Then press buttons 0 or 1 to increase/decrease.
 			if (gpio_get_input(&gpio0) & 0x10)
 			{
 				if (gpio_get_input(&gpio1) & 0x01)
@@ -176,7 +184,6 @@ int main(void)
 						++mval;
 
 					ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
-
 					printf("mval: %d\n", mval);
 				}
 
@@ -186,7 +193,6 @@ int main(void)
 						--mval;
 
 					ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
-
 					printf("mval: %d\n", mval);
 				}
 			}
@@ -199,7 +205,6 @@ int main(void)
 						++bass;
 
 					ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
-
 					printf("bass: %d\n", bass);
 				}
 
@@ -209,7 +214,6 @@ int main(void)
 						--bass;
 
 					ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
-
 					printf("bass: %d\n", bass);
 				}
 			}
@@ -222,7 +226,6 @@ int main(void)
 						++treble;
 
 					ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
-
 					printf("treble: %d\n", treble);
 				}
 
@@ -232,7 +235,6 @@ int main(void)
 						--treble;
 
 					ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
-
 					printf("treble: %d\n", treble);
 				}
 			}
