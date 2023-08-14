@@ -8,6 +8,6 @@ package:
 sources:
   - target: any(verilator, vivado)
     defines:
-      SECOND_ORDER_DAC: ~
+      SECOND_ORDER_DAC: ~ #If not set, a 1st order DAC implementation is selected.
     files:
     - rtl/one_bit_dac.sv

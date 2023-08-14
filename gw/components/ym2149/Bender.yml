@@ -10,20 +10,23 @@ sources:
     files:
      - lint.vlt
   - target: any(verilator, vivado)
+    defines:
+      #USE_STEREO: ~ #Mono
+      #USE_I2S: ~ #BoxLambda uses as 1-bit DAC
+      USE_DUAL_PSG: ~
     include_dirs:
     - ../../../sub/ym2149_psg_system/
     files:
      - ../../../sub/ym2149_psg_system/YM2149_PSG_system_wb.sv
      - ../../../sub/ym2149_psg_system/YM2149_PSG_system.sv
-    #  - ../../../sub/ym2149_psg_system/BHG_FP_clk_divider.v
-    #  - ../../../sub/ym2149_psg_system/BHG_jt49.v
-    #  - ../../../sub/ym2149_psg_system/BHG_audio_filter_mixer.sv
-    #  - ../../../sub/ym2149_psg_system/I2S_transmitter.sv
-    #  - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_cen.v
-    #  - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_div.v
-    #  - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_noise.v
-    #  - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_eg.v
-    #  - ../../../sub/ym2149_psg_system/BHG_jt49_exp.v
+     - ../../../sub/ym2149_psg_system/BHG_FP_clk_divider.v
+     - ../../../sub/ym2149_psg_system/BHG_jt49.v
+     - ../../../sub/ym2149_psg_system/BHG_audio_filter_mixer.sv
+     - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_cen.v
+     - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_div.v
+     - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_noise.v
+     - ../../../sub/ym2149_psg_system/jt49_hdl/jt49_eg.v
+     - ../../../sub/ym2149_psg_system/BHG_jt49_exp.sv
 
 
 

@@ -1,7 +1,7 @@
 `default_nettype none
 
 module ddr_test_soc(
-  input  wire       ext_clk100, /*External 100MHz clock.*/
+  input  wire       ext_clk, /*External clock: 100MHz on FPGA, 50MHz in simulation.*/
    
   inout  wire [7:0] gpio0,
   inout  wire [3:0] gpio1,
@@ -10,7 +10,7 @@ module ddr_test_soc(
   
   input  wire       uart_rx,
   output wire       uart_tx,
-  
+`ifdef VERILATOR  
   /*These JTAG signals are not used on FPGA (they are used in simulation).
    *On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the jtag tap module dmi_bscane_tap.sv.
    */
@@ -19,10 +19,11 @@ module ddr_test_soc(
   input  wire       tms,
   input  wire       tdi,
   output wire       tdo,
-
+`endif
   output wire       pll_locked_led,
   output wire       init_done_led,
   output wire       init_err_led
+`ifdef DRAM
 `ifdef SYNTHESIS
   , /*The simulation build doesn't export DDR pins.*/
   output wire [13:0] ddram_a,
@@ -41,64 +42,45 @@ module ddr_test_soc(
 	output wire ddram_odt,
 	output wire ddram_reset_n
 `endif  
+`endif
   );
     
   typedef enum {
-`ifdef DEBUG_MODULE_ACTIVE		
     DM_M,
-`endif
     COREI_M,
     CORED_M
   } wb_master_e;
 
   typedef enum {
-`ifdef DEBUG_MODULE_ACTIVE
-    DM_S,
-`endif
     RAM_S,
     GPIO0_S,
     GPIO1_S,
+    RESET_CTRL_S,
     UART_S,
-    TIMER_S
-`ifdef DRAM
-    ,DDR_CTRL_S
-    ,DDR_USR0_S
-    ,DDR_USR1_S
-`endif
-  } wb_slave_e;
+    TIMER_S,
+    DDR_CTRL_S,
+    DM_S,
+    DDR_USR0_S,
+    DDR_USR1_S
+} wb_slave_e;
 
-`ifdef DEBUG_MODULE_ACTIVE
   localparam NrMaster = 3;
-`ifdef DRAM
-  localparam NrSlave = 9;
-`else
-  localparam NrSlave = 6;
-`endif
-`else
-  localparam NrMaster = 2;
-`ifdef DRAM
-  localparam NrSlave = 8;
-`else
-  localparam NrSlave = 5;
-`endif
-`endif
-   
+  localparam NrSlave  = 10;
+
   typedef logic [31:0] Wb_base_addr [NrSlave];
 
   function Wb_base_addr wb_base_addresses();
-`ifdef DEBUG_MODULE_ACTIVE
-     wb_base_addresses[DM_S]       = 32'h1A110000;
-`endif
-     wb_base_addresses[RAM_S]      = 32'h00000000;
-     wb_base_addresses[GPIO0_S]    = 32'h10000000;
-     wb_base_addresses[GPIO1_S]    = 32'h10000010;
-     wb_base_addresses[UART_S]     = 32'h10010000;
-     wb_base_addresses[TIMER_S]    = 32'h10020000;
-`ifdef DRAM
-     wb_base_addresses[DDR_CTRL_S] = 32'h10030000;
-     wb_base_addresses[DDR_USR0_S] = 32'h40000000;
-     wb_base_addresses[DDR_USR1_S] = 32'h50000000;
-`endif
+     wb_base_addresses[RAM_S]        = 32'h00000000;
+     wb_base_addresses[GPIO0_S]      = 32'h10000000;
+     wb_base_addresses[GPIO1_S]      = 32'h10000010;
+     wb_base_addresses[RESET_CTRL_S] = 32'h10000030;
+     wb_base_addresses[UART_S]       = 32'h10010000;
+     wb_base_addresses[TIMER_S]      = 32'h10020000;
+     wb_base_addresses[DDR_CTRL_S]   = 32'h10030000;
+     wb_base_addresses[DM_S]         = 32'h1A110000;
+     wb_base_addresses[DDR_USR0_S]   = 32'h40000000;
+     wb_base_addresses[DDR_USR1_S]   = 32'h50000000;
+
   endfunction // wb_base_addresses
 
   localparam Wb_base_addr wb_base_addr = wb_base_addresses();
@@ -107,32 +89,31 @@ module ddr_test_soc(
 
   //These are address range sizes in bytes
   function Wb_size wb_sizes();
-`ifdef DEBUG_MODULE_ACTIVE
-    wb_sizes[DM_S]       = 32'h10000;
-`endif
-    wb_sizes[RAM_S]      = 32'h10000;
-    wb_sizes[GPIO0_S]    = 32'h00010;
-    wb_sizes[GPIO1_S]    = 32'h00010;
-    wb_sizes[UART_S]     = 32'h00010;
-    wb_sizes[TIMER_S]    = 32'h00010;
-`ifdef DRAM
-    wb_sizes[DDR_CTRL_S] = 32'h10000;
-    wb_sizes[DDR_USR0_S]  = 32'h10000000; /*256MB*/
-    wb_sizes[DDR_USR1_S]  = 32'h10000000; /*256MB*/
-`endif
+    wb_sizes[DM_S]         = 32'h10000;
+    wb_sizes[RAM_S]        = `DPRAM_SIZE_BYTES;
+    wb_sizes[GPIO0_S]      = 32'h00010;
+    wb_sizes[GPIO1_S]      = 32'h00010;
+    wb_sizes[RESET_CTRL_S] = 32'h00004;
+    wb_sizes[UART_S]       = 32'h00010;
+    wb_sizes[TIMER_S]      = 32'h00010;
+    wb_sizes[DDR_CTRL_S]   = 32'h10000;
+    wb_sizes[DDR_USR0_S]   = 32'h10000000; /*256MB*/
+    wb_sizes[DDR_USR1_S]   = 32'h10000000; /*256MB*/
   endfunction // wb_sizes
 
   localparam Wb_size wb_size = wb_sizes();
 
   //sys_clk is a 50MHz clock.  
-  logic sys_clk, sys_rst_n;
+  logic sys_clk;
 
-  //Non-Debug-Module-Reset, i.e. reset everything except Debug Module.
-  //Driven by Debug Module itself to implement target reset function.
-  logic ndmreset;
+  //ndmreset_req: Non-Debug Module reset requested by Debug Module
+  //ndmreset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
+  //dmreset: Debug-Module Reset issued by Reset Controller.
+  logic ndmreset_req, ndmreset, dmreset;
+  logic por_completed; //Indicates Power-On Reset has been completed.
 
-  wb_if wbm[NrMaster](.rst(ndmreset | (~sys_rst_n)), .clk(sys_clk));
-  wb_if wbs[NrSlave](.rst(ndmreset | (~sys_rst_n)), .clk(sys_clk));
+  wb_if wbm[NrMaster](.rst(ndmreset), .clk(sys_clk));
+  wb_if wbs[NrSlave](.rst(dmreset), .clk(sys_clk));
   
   // define the macro if you want to use debugger
 `ifdef DEBUG_MODULE_ACTIVE
@@ -152,16 +133,19 @@ module ddr_test_soc(
   logic          dmi_resp_valid;
   logic          dmi_resp_ready;
   dm::dmi_resp_t dmi_resp;
+
+`ifdef VERILATOR
   logic          tdo_o;
   logic          tdo_oe;
 
   assign tdo = tdo_oe ? tdo_o : 1'bz;
+`endif
 
   wb_dm_top wb_dm (
     .clk       (sys_clk),
-    .rst_n     (sys_rst_n),
+    .rst_n     (~dmreset),
     .testmode  (1'b0),
-    .ndmreset  (ndmreset),
+    .ndmreset  (ndmreset_req),
     .dmactive  (dmactive),
     .debug_req (debug_req),
     .wbm       (wbm[DM_M]),
@@ -173,7 +157,7 @@ module ddr_test_soc(
         .IdcodeValue          ( 32'h249511C3    )
     ) dmi_jtag_inst (
     .clk_i            (sys_clk),
-    .rst_ni           (sys_rst_n),
+    .rst_ni           (~dmreset),
     .testmode_i       (1'b0),
     .dmi_rst_no       (dmi_rst_n),
     .dmi_req_o        (dmi_req),
@@ -182,21 +166,28 @@ module ddr_test_soc(
     .dmi_resp_i       (dmi_resp),
     .dmi_resp_ready_o (dmi_resp_ready),
     .dmi_resp_valid_i (dmi_resp_valid),
+`ifdef VERILATOR
     .tck_i            (tck),
     .tms_i            (tms),
     .trst_ni          (trst_n),
     .td_i             (tdi),
     .td_o             (tdo_o),
-    .tdo_oe_o         (tdo_oe));
+    .tdo_oe_o         (tdo_oe)
+`else
+    .tck_i            (1'b0),
+    .tms_i            (1'b0),
+    .trst_ni          (1'b1),
+    .td_i             (1'b0),
+    .td_o             (),
+    .tdo_oe_o         ()
+`endif
+    );
 
    logic 	 unused = &{1'b0, dmactive, 1'b0};
 `else
-   logic 	 unused = &{1'b0, tck, trst_n, tms, tdi,1'b0};
    logic 	 debug_req;
-
-   assign ndmreset = 1'b0;
+   assign ndmreset_req = 1'b0;
    assign debug_req = 1'b0;
-   assign tdo = 1'bz;
 `endif
 
   wb_ibex_core #(
@@ -205,7 +196,7 @@ module ddr_test_soc(
     .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA)
   ) wb_ibex_core (
     .clk          (sys_clk),
-    .rst_n        (sys_rst_n & (~ndmreset)),
+    .rst_n        (~ndmreset),
     .instr_wb     (wbm[COREI_M]),
     .data_wb      (wbm[CORED_M]),
     .test_en      (1'b0),
@@ -217,7 +208,7 @@ module ddr_test_soc(
     .irq_fast     (15'b0),
     .irq_nm       (1'b0),
     .debug_req    (debug_req),
-    .fetch_enable (4'b1),
+    .fetch_enable ({3'b0, por_completed}), //Only start fetch after POR has been completed.
     .core_sleep   (),
     .*);
 
@@ -264,15 +255,16 @@ module ddr_test_soc(
   wb_timer timer (
     .wb (wbs[TIMER_S]));
 
+  logic pll_locked;
 `ifdef DRAM
-  logic pll_locked, sys_rst;
+  logic pll_locked_i, litedram_rst_o;
 
   litedram_wrapper litedram_wrapper_inst (
-	.clk(ext_clk100), /*100MHz External clock is input for LiteDRAM module.*/
-  .rst(~ext_rst_n), /*External reset goes into a reset synchronizer inside the litedram module. The output of that synchronizer is sys_rst.*/
-  .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock...*/
-	.sys_rst(sys_rst), /*...and system reset.*/
-	.pll_locked(pll_locked),
+	.clk(ext_clk), /*External clock is input for LiteDRAM module. On FPGA this is a 100MHz clock, in simulation it's a 50MHz clock.*/
+  .rst(1'b0), /*Never reset LiteDRAM.*/
+  .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock. On FPGA a divide-by-2 of the ext_clk is done. In simulation sys_clk = ext_clk.*/
+	.sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
+	.pll_locked(pll_locked_i),
 `ifdef SYNTHESIS
 	.ddram_a(ddram_a),
 	.ddram_ba(ddram_ba),
@@ -329,28 +321,51 @@ module ddr_test_soc(
 	.user_port_wishbone_p_1_err(wbs[DDR_USR1_S].err)
   );
   
-  //Take system out of reset when litedram deasserts the (synchronized) sys_rst, when the pll is locked.
-  assign sys_rst_n = ~sys_rst & pll_locked;
-  assign pll_locked_led = pll_locked;
-
+  //pll_locked is fed to the reset controller. Asserted when litedram controlled indicates reset is deasserted and pll is locked.
+  assign pll_locked = ~litedram_rst_o & pll_locked_i;
 `else //No DRAM:
 
 //LiteDRAM provides the clock generator. Without DRAM we have to provide one here.
 `ifdef SYNTHESIS
+  //This clkgen does a divide-by-2 of the 100MHz ext_clk => sys_clk runs at 50MHz.
   clkgen_xil7series clkgen (
-    .IO_CLK     (ext_clk100),
-    .IO_RST_N   (ext_rst_n),
+    .IO_CLK     (ext_clk),
+    .IO_RST_N   (1'b1),
     .clk_sys    (sys_clk),
-    .rst_sys_n  (sys_rst_n));
+    .rst_sys_n  (pll_locked));
 `else
-  assign clk = ext_clk100;
-  assign sys_rst_n = ext_rst_n;
+  //In simulation ext_clk runs at 50MHz and sys_clk = ext_clk;
+  assign sys_clk = ext_clk;
+  assign pll_locked = 1'b1;
 `endif //SYNTHESIS/No SYNTHESIS
 
-  assign pll_locked_led = 1'b1;
   assign init_done_led = 1'b1;
   assign init_err_led = 1'b0;
 `endif //DRAM/No DRAM.
+
+assign pll_locked_led = pll_locked;
+
+//Reset Controller
+reset_ctrl reset_ctrl_inst(
+  .clk(sys_clk),
+  .pll_locked_i(pll_locked),
+  .ndm_reset_i(ndmreset_req),
+  .ext_reset_i(~ext_rst_n), //asynchronous external reset
+  .ndm_reset_o(ndmreset),
+  .dm_reset_o(dmreset),
+  .por_completed_o(por_completed),
+  //32-bit pipelined Wishbone slave interface.
+  .wb_adr(wbs[RESET_CTRL_S].adr[2]),
+  .wb_dat_w(wbs[RESET_CTRL_S].dat_m),
+  .wb_dat_r(wbs[RESET_CTRL_S].dat_s),
+  .wb_sel(wbs[RESET_CTRL_S].sel),
+  .wb_stall(wbs[RESET_CTRL_S].stall),
+  .wb_cyc(wbs[RESET_CTRL_S].cyc),
+  .wb_stb(wbs[RESET_CTRL_S].stb),
+  .wb_ack(wbs[RESET_CTRL_S].ack),
+  .wb_we(wbs[RESET_CTRL_S].we),
+  .wb_err(wbs[RESET_CTRL_S].err)
+);
 
 endmodule
 

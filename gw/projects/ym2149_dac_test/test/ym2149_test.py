@@ -1,38 +1,46 @@
-from pcmdata import *
+#!/usr/bin/env python3
+
+from dac_out import *
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import getopt
+import scipy
+
+# The test program running on the system generates the following 6 pitches.
+REF_HZ = [440.00, 493.88, 523.55, 587.33, 659.25, 698.46]
 
 def pitch_test(plot):
-    y = np.array(pcmdata)
-    y_ac = y - 32768.0
-    y_norm = y_ac / 32768.0
-        
-    ref_hz = [440.00, 493.88, 523.55, 587.33, 659.25, 698.46]
+    #3rd order low pass butterworth filter
+    #Cut-off at 25kHz, sampling frequency 12.5MHz
+    sos = scipy.signal.butter(N=3, Wn=25000, btype='lowpass', fs=12500000, output='sos')
 
-    mags = np.abs(np.fft.fft(y_norm))
-    freqs = np.fft.fftfreq(len(y_norm),d=1/48800.0)
+    #Raw normalized DAC output
+    y_norm_dac_raw = np.array(dacdata) - 0.5
+    y_filtered = scipy.signal.sosfilt(sos, y_norm_dac_raw)
+
+    mags = np.abs(np.fft.fft(y_filtered))
+    #d is the sample spacing, i.e. the inverse of the sampling rate, 12.5MHz.
+    freqs = np.fft.fftfreq(len(y_filtered),d=1/12500000.0)
+
+    #Analyze the frequency bins up to 1000Hz.
     bin_width_hz = freqs[1] - freqs[0]
     top_bin = int(1000/bin_width_hz)
     peak_bins = np.argsort(mags[0:top_bin])[::-1][0:6]
     peak_freqs = np.sort(freqs[peak_bins])
-    deviations = (peak_freqs - ref_hz)/ref_hz
-
+    deviations = (peak_freqs - REF_HZ)/REF_HZ
 
     print("Detected pitches: ")
     print(peak_freqs)
 
     print("Expected pitches:")
-    print(ref_hz)
-
+    print(REF_HZ)
 
     print("Relative Deviations:")
     print(deviations)
 
-    plt.magnitude_spectrum(y_norm, Fs=48800)
-
     if (plot):
+        plt.plot(mags[0:top_bin])
         plt.show()
 
     if (np.max(np.abs(deviations)) < 0.2):

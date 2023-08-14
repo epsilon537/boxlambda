@@ -8,7 +8,7 @@
 #
 #This script is used by the build system.
 
-if [[ "$#" == 0  || "$1" == "-h" ]]
+if [[ "$#" < 2  || "$1" == "-h" ]]
 then
   echo "$0 <src dir> <script file>"
   exit 1

@@ -10,7 +10,7 @@
 %{!ftls-model:-ftls-model=local-exec} %(picolibc_cc1) 
 
 *cc1plus:
--isystem %{-picolibc-prefix=*:%*/picolibc/rv32imc_zicsr/include/; -picolibc-buildtype=*:@PROJECT_SOURCE_DIR/@sw/picolibc-install/picolibc/rv32imc_zicsr/include/%*; :@PROJECT_SOURCE_DIR@/sw/picolibc-install/picolibc/rv32imc_zicsr/include} %{!ftls-model:-ftls-model=local-exec} %(picolibc_cc1plus)  
+-isystem %{-picolibc-prefix=*:%*/picolibc/rv32imc_zicsr/include/; -picolibc-buildtype=*:@PROJECT_SOURCE_DIR@/sw/picolibc-install/picolibc/rv32imc_zicsr/include/%*; :@PROJECT_SOURCE_DIR@/sw/picolibc-install/picolibc/rv32imc_zicsr/include} %{!ftls-model:-ftls-model=local-exec} %(picolibc_cc1plus)  
 
 *link:
 %{DPICOLIBC_FLOAT_PRINTF_SCANF:--defsym=vfprintf=__f_vfprintf} %{DPICOLIBC_FLOAT_PRINTF_SCANF:--defsym=vfscanf=__f_vfscanf} %{DPICOLIBC_DOUBLE_PRINTF_SCANF:--defsym=vfprintf=__d_vfprintf} %{DPICOLIBC_DOUBLE_PRINTF_SCANF:--defsym=vfscanf=__d_vfscanf} %{DPICOLIBC_INTEGER_PRINTF_SCANF:--defsym=vfprintf=__i_vfprintf} %{DPICOLIBC_INTEGER_PRINTF_SCANF:--defsym=vfscanf=__i_vfscanf} -L%{-picolibc-prefix=*:%*/picolibc/rv32imc_zicsr/lib; -picolibc-buildtype=*:@PROJECT_SOURCE_DIR@/sw/picolibc-install/picolibc/rv32imc_zicsr/lib/%*; :@PROJECT_SOURCE_DIR@/sw/picolibc-install/picolibc/rv32imc_zicsr/lib} %{!T:-Tpicolibc.ld} %(picolibc_link) --gc-sections 

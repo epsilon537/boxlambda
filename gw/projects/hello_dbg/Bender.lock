@@ -19,6 +19,18 @@ packages:
     dependencies:
     - ibex
     - ibex_wb_common
+  litedram:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/litedram
+    dependencies: []
+  reset_ctrl:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/reset_ctrl
+    dependencies: []
   riscv-dbg:
     revision: null
     version: null

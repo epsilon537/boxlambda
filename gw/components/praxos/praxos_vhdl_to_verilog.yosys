@@ -1,0 +1,3 @@
+ghdl -fsynopsys ../../../sub/Praxos/ip/praxos/praxos_alu.vhd ../../../sub/Praxos/ip/praxos/praxos_cpu.vhd ../../../sub/Praxos/ip/praxos/praxos_decode.vhd ../../../sub/Praxos/ip/praxos/praxos_dm.vhd ../../../sub/Praxos/ip/praxos/praxos_pm.vhd ../../../sub/Praxos/ip/praxos/praxos_application_image.vhd -e praxos_cpu
+write_verilog rtl/praxos_generated.v
+

@@ -28,6 +28,6 @@ else
     LDFLAGS="-LDFLAGS $6"
 fi
 
-verilator --lint-only $CFLAGS $LDFLAGS --top-module $TOP_MODULE --Wall `cat $VLT_FILES_FILE` --waiver-output $WAIVER_FILE `cat $VERILATOR_SCRIPT`
+verilator --lint-only $CFLAGS $LDFLAGS --no-timing --top-module $TOP_MODULE --Wall `cat $VLT_FILES_FILE` --waiver-output $WAIVER_FILE `cat $VERILATOR_SCRIPT`
 
 echo "Done. If no issues are found, verilator completes silently"

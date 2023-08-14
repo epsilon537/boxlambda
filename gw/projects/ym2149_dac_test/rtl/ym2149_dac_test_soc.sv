@@ -1,5 +1,6 @@
 `default_nettype none
 
+//BoxLambda Test SoC including dual YM2149 system and 1-bit audio DAC.
 module ym2149_dac_test_soc(
   input  wire       ext_clk, /*External clock: 100MHz on FPGA, 50MHz in simulation.*/
    
@@ -60,7 +61,10 @@ module ym2149_dac_test_soc(
   output wire       audio_gain,
   output wire       audio_shutdown_n
 `ifdef VERILATOR
+   // Audio interface signals only used in simulation
   ,output wire [15:0] pcm_out
+  ,output wire acc1_overflow
+  ,output wire acc2_overflow  
 `endif
   );
     
@@ -75,6 +79,7 @@ module ym2149_dac_test_soc(
     GPIO0_S,
     GPIO1_S,
     SDSPI_S,
+    RESET_CTRL_S,
     YM2149_S,
     UART_S,
     TIMER_S,
@@ -91,18 +96,19 @@ module ym2149_dac_test_soc(
   typedef logic [31:0] Wb_base_addr [NrSlave];
 
   function Wb_base_addr wb_base_addresses();
-     wb_base_addresses[RAM_S]      = 32'h00000000;
-     wb_base_addresses[GPIO0_S]    = 32'h10000000;
-     wb_base_addresses[GPIO1_S]    = 32'h10000010;
-     wb_base_addresses[SDSPI_S]    = 32'h10000020;
-     wb_base_addresses[YM2149_S]   = 32'h10001000;
-     wb_base_addresses[UART_S]     = 32'h10010000;
-     wb_base_addresses[TIMER_S]    = 32'h10020000;
-     wb_base_addresses[DDR_CTRL_S] = 32'h10030000;
-     wb_base_addresses[VERA_S]     = 32'h10100000;
-     wb_base_addresses[DM_S]       = 32'h1A110000;
-     wb_base_addresses[DDR_USR0_S] = 32'h40000000;
-     wb_base_addresses[DDR_USR1_S] = 32'h50000000;
+     wb_base_addresses[RAM_S]        = 32'h00000000;
+     wb_base_addresses[GPIO0_S]      = 32'h10000000;
+     wb_base_addresses[GPIO1_S]      = 32'h10000010;
+     wb_base_addresses[SDSPI_S]      = 32'h10000020;
+     wb_base_addresses[RESET_CTRL_S] = 32'h10000030;
+     wb_base_addresses[YM2149_S]     = 32'h10001000;
+     wb_base_addresses[UART_S]       = 32'h10010000;
+     wb_base_addresses[TIMER_S]      = 32'h10020000;
+     wb_base_addresses[DDR_CTRL_S]   = 32'h10030000;
+     wb_base_addresses[VERA_S]       = 32'h10100000;
+     wb_base_addresses[DM_S]         = 32'h1A110000;
+     wb_base_addresses[DDR_USR0_S]   = 32'h40000000;
+     wb_base_addresses[DDR_USR1_S]   = 32'h50000000;
 
   endfunction // wb_base_addresses
 
@@ -112,31 +118,34 @@ module ym2149_dac_test_soc(
 
   //These are address range sizes in bytes
   function Wb_size wb_sizes();
-    wb_sizes[DM_S]       = 32'h10000;
-    wb_sizes[RAM_S]      = `DPRAM_SIZE_BYTES;
-    wb_sizes[GPIO0_S]    = 32'h00010;
-    wb_sizes[GPIO1_S]    = 32'h00010;
-    wb_sizes[SDSPI_S]    = 32'h00010;
-    wb_sizes[YM2149_S]   = 32'h00400;
-    wb_sizes[UART_S]     = 32'h00010;
-    wb_sizes[TIMER_S]    = 32'h00010;
-    wb_sizes[DDR_CTRL_S] = 32'h10000;
-    wb_sizes[VERA_S]     = 32'h80000;
-    wb_sizes[DDR_USR0_S]  = 32'h10000000; /*256MB*/
-    wb_sizes[DDR_USR1_S]  = 32'h10000000; /*256MB*/
+    wb_sizes[DM_S]         = 32'h10000;
+    wb_sizes[RAM_S]        = `DPRAM_SIZE_BYTES;
+    wb_sizes[GPIO0_S]      = 32'h00010;
+    wb_sizes[GPIO1_S]      = 32'h00010;
+    wb_sizes[SDSPI_S]      = 32'h00010;
+    wb_sizes[RESET_CTRL_S] = 32'h00004;
+    wb_sizes[YM2149_S]     = 32'h00400;
+    wb_sizes[UART_S]       = 32'h00010;
+    wb_sizes[TIMER_S]      = 32'h00010;
+    wb_sizes[DDR_CTRL_S]   = 32'h10000;
+    wb_sizes[VERA_S]       = 32'h80000;
+    wb_sizes[DDR_USR0_S]   = 32'h10000000; /*256MB*/
+    wb_sizes[DDR_USR1_S]   = 32'h10000000; /*256MB*/
   endfunction // wb_sizes
 
   localparam Wb_size wb_size = wb_sizes();
 
   //sys_clk is a 50MHz clock.  
-  logic sys_clk, sys_rst_n;
+  logic sys_clk;
 
-  //Non-Debug-Module-Reset, i.e. reset everything except Debug Module.
-  //Driven by Debug Module itself to implement target reset function.
-  logic ndmreset;
+  //ndmreset_req: Non-Debug Module reset requested by Debug Module
+  //ndmreset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
+  //dmreset: Debug-Module Reset issued by Reset Controller.
+  logic ndmreset_req, ndmreset, dmreset;
+  logic por_completed; //Indicates Power-On Reset has been completed.
 
-  wb_if wbm[NrMaster](.rst(ndmreset | (~sys_rst_n)), .clk(sys_clk));
-  wb_if wbs[NrSlave](.rst(ndmreset | (~sys_rst_n)), .clk(sys_clk));
+  wb_if wbm[NrMaster](.rst(ndmreset), .clk(sys_clk));
+  wb_if wbs[NrSlave](.rst(dmreset), .clk(sys_clk));
   
   // define the macro if you want to use debugger
 `ifdef DEBUG_MODULE_ACTIVE
@@ -166,9 +175,9 @@ module ym2149_dac_test_soc(
 
   wb_dm_top wb_dm (
     .clk       (sys_clk),
-    .rst_n     (sys_rst_n),
+    .rst_n     (~dmreset),
     .testmode  (1'b0),
-    .ndmreset  (ndmreset),
+    .ndmreset  (ndmreset_req),
     .dmactive  (dmactive),
     .debug_req (debug_req),
     .wbm       (wbm[DM_M]),
@@ -180,7 +189,7 @@ module ym2149_dac_test_soc(
         .IdcodeValue          ( 32'h249511C3    )
     ) dmi_jtag_inst (
     .clk_i            (sys_clk),
-    .rst_ni           (sys_rst_n),
+    .rst_ni           (~dmreset),
     .testmode_i       (1'b0),
     .dmi_rst_no       (dmi_rst_n),
     .dmi_req_o        (dmi_req),
@@ -209,8 +218,7 @@ module ym2149_dac_test_soc(
    logic 	 unused = &{1'b0, dmactive, 1'b0};
 `else
    logic 	 debug_req;
-
-   assign ndmreset = 1'b0;
+   assign ndmreset_req = 1'b0;
    assign debug_req = 1'b0;
 `endif
 
@@ -220,7 +228,7 @@ module ym2149_dac_test_soc(
     .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA)
   ) wb_ibex_core (
     .clk          (sys_clk),
-    .rst_n        (sys_rst_n & (~ndmreset)),
+    .rst_n        (~ndmreset),
     .instr_wb     (wbm[COREI_M]),
     .data_wb      (wbm[CORED_M]),
     .test_en      (1'b0),
@@ -232,7 +240,7 @@ module ym2149_dac_test_soc(
     .irq_fast     (15'b0),
     .irq_nm       (1'b0),
     .debug_req    (debug_req),
-    .fetch_enable (4'b1),
+    .fetch_enable ({3'b0, por_completed}), //Only start fetch after POR has been completed.
     .core_sleep   (),
     .*);
 
@@ -279,15 +287,16 @@ module ym2149_dac_test_soc(
   wb_timer timer (
     .wb (wbs[TIMER_S]));
 
+  logic pll_locked;
 `ifdef DRAM
-  logic pll_locked, sys_rst;
+  logic pll_locked_i, litedram_rst_o;
 
   litedram_wrapper litedram_wrapper_inst (
 	.clk(ext_clk), /*External clock is input for LiteDRAM module. On FPGA this is a 100MHz clock, in simulation it's a 50MHz clock.*/
-  .rst(~ext_rst_n), /*External reset goes into a reset synchronizer inside the litedram module. The output of that synchronizer is sys_rst.*/
+  .rst(1'b1), /*Never reset LiteDRAM.*/
   .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock. On FPGA a divide-by-2 of the ext_clk is done. In simulation sys_clk = ext_clk.*/
-	.sys_rst(sys_rst), /*LiteDRAM outputs system reset.*/
-	.pll_locked(pll_locked),
+	.sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
+	.pll_locked(pll_locked_i),
 `ifdef SYNTHESIS
 	.ddram_a(ddram_a),
 	.ddram_ba(ddram_ba),
@@ -344,10 +353,8 @@ module ym2149_dac_test_soc(
 	.user_port_wishbone_p_1_err(wbs[DDR_USR1_S].err)
   );
   
-  //Take system out of reset when litedram deasserts the (synchronized) sys_rst, when the pll is locked.
-  assign sys_rst_n = ~sys_rst & pll_locked;
-  assign pll_locked_led = pll_locked;
-
+  //pll_locked is fed to the reset controller. Asserted when litedram controlled indicates reset is deasserted and pll is locked.
+  assign pll_locked = ~litedram_rst_o & pll_locked_i;
 `else //No DRAM:
 
 //LiteDRAM provides the clock generator. Without DRAM we have to provide one here.
@@ -355,24 +362,47 @@ module ym2149_dac_test_soc(
   //This clkgen does a divide-by-2 of the 100MHz ext_clk => sys_clk runs at 50MHz.
   clkgen_xil7series clkgen (
     .IO_CLK     (ext_clk),
-    .IO_RST_N   (ext_rst_n),
+    .IO_RST_N   (1'b1),
     .clk_sys    (sys_clk),
-    .rst_sys_n  (sys_rst_n));
+    .rst_sys_n  (pll_locked));
 `else
   //In simulation ext_clk runs at 50MHz and sys_clk = ext_clk;
   assign sys_clk = ext_clk;
-  assign sys_rst_n = ext_rst_n;
+  assign pll_locked = 1'b1;
 `endif //SYNTHESIS/No SYNTHESIS
 
-  assign pll_locked_led = 1'b1;
   assign init_done_led = 1'b1;
   assign init_err_led = 1'b0;
 `endif //DRAM/No DRAM.
 
+assign pll_locked_led = pll_locked;
+
+//Reset Controller
+reset_ctrl reset_ctrl_inst(
+  .clk(sys_clk),
+  .pll_locked_i(pll_locked),
+  .ndm_reset_i(ndmreset_req),
+  .ext_reset_i(~ext_rst_n), //asynchronous external reset
+  .ndm_reset_o(ndmreset),
+  .dm_reset_o(dmreset),
+  .por_completed_o(por_completed),
+  //32-bit pipelined Wishbone slave interface.
+  .wb_adr(wbs[RESET_CTRL_S].adr[2]),
+  .wb_dat_w(wbs[RESET_CTRL_S].dat_m),
+  .wb_dat_r(wbs[RESET_CTRL_S].dat_s),
+  .wb_sel(wbs[RESET_CTRL_S].sel),
+  .wb_stall(wbs[RESET_CTRL_S].stall),
+  .wb_cyc(wbs[RESET_CTRL_S].cyc),
+  .wb_stb(wbs[RESET_CTRL_S].stb),
+  .wb_ack(wbs[RESET_CTRL_S].ack),
+  .wb_we(wbs[RESET_CTRL_S].we),
+  .wb_err(wbs[RESET_CTRL_S].err)
+);
+
 `ifdef VERA
   vera_top #(`VRAM_SIZE_BYTES) vera_inst(
     .clk(sys_clk),
-    .reset(ndmreset | (~sys_rst_n)),
+    .reset(ndmreset),
 	  .wb_adr(wbs[VERA_S].adr[18:2]),
     .wb_dat_w(wbs[VERA_S].dat_m),
     .wb_dat_r(wbs[VERA_S].dat_s),
@@ -400,7 +430,7 @@ module ym2149_dac_test_soc(
 
 `ifdef SDSPI
   sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
-		.i_clk(sys_clk), .i_sd_reset(ndmreset | (~sys_rst_n)),
+		.i_clk(sys_clk), .i_sd_reset(ndmreset),
 		// Wishbone interface
 		.i_wb_cyc(wbs[SDSPI_S].cyc), .i_wb_stb(wbs[SDSPI_S].stb), .i_wb_we(wbs[SDSPI_S].we),
 		.i_wb_addr(wbs[SDSPI_S].adr[3:2]),
@@ -434,15 +464,14 @@ module ym2149_dac_test_soc(
     .CLK_IN_HZ(50000000),   // Input clock frequency
     .CLK_PSG_HZ(2000000),   // PSG clock frequency
     .YM2149_DAC_BITS(10),   // PSG DAC bit precision, 8 through 14 bits, the higher the bits, the higher the dynamic range.
-                                                 // 10 bits almost perfectly replicates the YM2149 DA converter's Normalized voltage.
-                                                 // With 8 bits, the lowest volumes settings will be slightly louder than normal.
-                                                 // With 12 bits, the lowest volume settings will be too quiet.
-
-    .MIXER_DAC_BITS(16)         // The number of DAC bits for the BHG_jt49_filter_mixer output.
+                            // 10 bits almost perfectly replicates the YM2149 DA converter's Normalized voltage.
+                            // With 8 bits, the lowest volumes settings will be slightly louder than normal.
+                            // With 12 bits, the lowest volume settings will be too quiet.
+    .MIXER_DAC_BITS(16)     // The number of DAC bits for the BHG_jt49_filter_mixer output.
   ) ym2149_sys_inst (
       .clk(sys_clk),
       .clk_i2s(1'b0),
-      .rst(ndmreset | (~sys_rst_n)),
+      .rst(ndmreset),
       // Wishbone interface
       .wb_adr(wbs[YM2149_S].adr[9:2]),
       .wb_dat_w(wbs[YM2149_S].dat_m),
@@ -454,29 +483,32 @@ module ym2149_dac_test_soc(
       .wb_ack(wbs[YM2149_S].ack),
       .wb_we(wbs[YM2149_S].we),
       .wb_err(wbs[YM2149_S].err),    
-
-      .i2s_sclk(),
-      .i2s_lrclk(),   // I2S L/R output
-      .i2s_data(),    // I2S serial audio out
+      .i2s_sclk(),     // I2S is not used.
+      .i2s_lrclk(),   
+      .i2s_data(),     
       .sound(ym2149_sound),  // parallel   audio out, mono or left channel
       .sound_right()  // parallel   audio out, right channel
   );
 
-  reg [1:0] cpt4;
+  reg [1:0] div_by_4_ctr; //Divide-clock-by-4 counter.
   always_ff @(posedge sys_clk)
-    cpt4 <= cpt4 - 1;
+    div_by_4_ctr <= div_by_4_ctr - 1;
 
   one_bit_dac dac_inst (
-    .clk(sys_clk),      // 50MHz clock
-    .clk_en(cpt4==0),   // 12.5MHz clock enable
-    .in(ym2149_sound),     // input
-    .out(audio_out)     // one bit out modulated at 12.5MHz
+    .clk(sys_clk),              // 50MHz clock
+    .clk_en(div_by_4_ctr==0),   // 12.5MHz clock enable
+    .in(ym2149_sound),          // input 16 PCM audio signal.
+    .out(audio_out)             // one bit output signal, modulated at 12.5MHz
+`ifdef VERILATOR
+   ,.acc1_overflow(acc1_overflow) //In simulation, check DAC accumulators for overflow.
+   ,.acc2_overflow(acc2_overflow) //In simulation, check DAC accumulators for overflow.
+`endif    
   );
 
 `ifdef VERILATOR
   assign pcm_out = ym2149_sound;
 `endif
-  assign audio_gain = 1'b1;
+  assign audio_gain = 1'b1; //PMOD Amp gain fixed at 6dB.
   assign audio_shutdown_n = 1'b1;
 
 `endif //YM2149

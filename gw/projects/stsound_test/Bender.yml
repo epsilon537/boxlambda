@@ -1,5 +1,7 @@
 #See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
 
+# Stsound_test reuses the ym2149_dac_test project gateware build, with different software.
+
 # Package metadata. Required.
 package:
   # The name of the package. Required.
@@ -17,11 +19,12 @@ dependencies:
   sdspi: { path: "../../components/sdspi" }
   ym2149: { path: "../../components/ym2149" }
   audio_dac: { path: "../../components/audio_dac" }
+  reset_ctrl: { path: "../../components/reset_ctrl" }
 
 sources:
   - target: constraints
     files:
-      - constrs/Arty-A7-35-Master.xdc
+      - ../ym2149_dac_test/constrs/Arty-A7-35-Master.xdc
   - target: verilator
     files:
       - sim/sim_main.cpp
@@ -39,7 +42,6 @@ sources:
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       YM2149: ~
-      USE_DUAL_PSG: ~
       SDSPI: ~
       #DRAM: ~
       #VERA: ~      

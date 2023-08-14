@@ -1,12 +1,14 @@
 add_executable(stsound_test
 	EXCLUDE_FROM_ALL
 	stsound_test.cpp
-	${PROJECT_SOURCE_DIR}/sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
+	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
+	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
 target_include_directories(stsound_test
     PRIVATE
 	${PROJECT_SOURCE_DIR}/sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/
+	${PROJECT_SOURCE_DIR}/sw/components/ym2149_sys_hal/
 )
 
 target_compile_options(stsound_test

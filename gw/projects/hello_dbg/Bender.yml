@@ -3,7 +3,7 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: hello_world
+  name: hello_dbg
 
 dependencies:
   # Path dependency.
@@ -11,24 +11,37 @@ dependencies:
   wbuart32: { path: "../../components/wbuart32" }
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
   ibex_wb_core: { path: "../../components/ibex_wb_core" }
-  riscv-dbg: { path: "../../components/riscv-dbg" }  
+  riscv-dbg: { path: "../../components/riscv-dbg" }
+  litedram: { path: "../../components/litedram" }
+  reset_ctrl: { path: "../../components/reset_ctrl" }  
 sources:
   - target: constraints
     files:
-      - constrs/Arty-A7-35-Master.xdc
+      - ../ddr_test/constrs/Arty-A7-35-Master.xdc
+  - target: arty-a7-35
+    defines:
+      DPRAM_SIZE_BYTES: (64*1024)
+    files:
+      - ../ddr_test/rtl/ddr_test_soc.sv
+  - target: arty-a7-100
+    defines:
+      DPRAM_SIZE_BYTES: (256*1024)
+    files:
+      - ../ddr_test/rtl/ddr_test_soc.sv
   - target: verilator
     files:
       - sim/sim_main.cpp
       - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
       - ../../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
       - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c    
-      - lint.vlt
+      - ../ddr_test/lint.vlt
       - ../../../sub/riscv-dbg/tb/SimJTAG.sv
-      - sim/sim_main.sv
+      - ../ddr_test/sim/sim_main.sv
   - target: any(vivado,verilator)
     defines:
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
+      DRAM: ~
     #spram and timer should be separate components, but since I won't use them
     #as Boxlambda components, I'm leaving them here in the hello world example
     files:
@@ -36,5 +49,4 @@ sources:
       - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/spramx32.sv      
       - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_spramx32.sv
       - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_timer.sv
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/ibex_soc.sv
     

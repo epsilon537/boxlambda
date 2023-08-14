@@ -62,7 +62,7 @@ function (gw_project_rules_vivado)
         DEPENDS
             ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
         COMMENT
-            "Implementating project and generating bitstream."
+            "Implementing project and generating bitstream."
         VERBATIM
     )
 
@@ -319,6 +319,6 @@ add_subdirectory(sdspi_test)
 add_subdirectory(fatfs_test)
 add_subdirectory(audio_dac_test)
 add_subdirectory(ym2149_dac_test)
-if ((CMAKE_BUILD_TYPE STREQUAL "sim") AND (BL_TARGET_FPGA STREQUAL "arty-a7-100"))
+if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
     add_subdirectory(stsound_test)
 endif()

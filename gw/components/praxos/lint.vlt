@@ -1,0 +1,83 @@
+// DESCRIPTION: Verilator output: Waivers generated with --waiver-output
+
+`verilator_config
+
+// Below you find suggested waivers. You have three options:
+//   1. Fix the reason for the linter warning
+//   2. Keep the waiver permanently if you are sure this is okay
+//   3. Keep the waiver temporarily to suppress the output
+
+lint_off -rule DECLFILENAME -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Filename 'praxos_generated' does not match MODULE name: 'praxos_alu'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Bits of signal are not used: '_18_'[31:8]"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Signal is not driven, nor used: '_4_'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Bits of signal are not used: '_16_'[31:8]"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Signal is not used: 'clk'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Signal is not driven, nor used: '_2_'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Signal is not driven, nor used: '_3_'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Signal is not used: 'rom'"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+
+lint_off -rule CASEOVERLAP -file "*/gw/components/praxos/rtl/praxos_generated.v" -match "Case values overlap (example pattern 0x3)"
+

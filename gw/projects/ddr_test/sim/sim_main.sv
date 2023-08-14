@@ -39,7 +39,7 @@ module sim_main #(
 			     );
 
    ddr_test_soc dut (
-		 .ext_clk100(clk_i),
+		 .ext_clk(clk_i),
 		 .ext_rst_n(rst_ni),
 		 .gpio0(gpio0),
 		 .gpio1(gpio1),
