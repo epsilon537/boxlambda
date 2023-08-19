@@ -93,4 +93,9 @@ The SDSPI core's register interface, the initialization sequence, and the overal
 
 *Sdtest.c* runs on the RISCV processor that's part of the SDSPI Test SoC.
 
+### SDSPI Clock Frequency
+
+The SDSPI core is part of the 50MHz System Clock Domain.
+
+The SPI bus speed is software-configurable through a clock divider setting in the SDSPI core. The minimum value of this divider is 4. Given BoxLambda's 50MHz system clock rate, this limits the bus speed to 12.5MHz.
 

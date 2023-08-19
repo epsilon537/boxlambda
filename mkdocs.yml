@@ -28,7 +28,7 @@ nav:
         - LiteDRAM Memory Controller: components_litedram.md
         - VERA (Wishbone) Graphics: components_vera.md
         - SDSPI SD Card Controller: components_sdspi.md
-        - Sound: components_sound.md
+        - Dual YM2149 PSG Sound Core: components_dual_ym2149.md
         - DMA: components_dma.md
         - Keyboard and Mouse: components_keyboard_and_mouse.md
         - Serial Port: components_serial.md
@@ -38,6 +38,7 @@ nav:
         - LiteDRAM Initialization: sw_comp_litedram_initialization.md
         - PicoLibc: sw_comp_picolibc.md
         - FatFs: sw_comp_fat_fs.md
+        - ST-Sound: sw_comp_st_sound.md
     - Installation and Test Builds:
         - Prerequisites: prerequisites.md
         - Installation: installation.md
@@ -48,3 +49,4 @@ nav:
             - DDR Test: test-build-ddr.md
             - VERA Test: test-build-vera.md
             - SDSPI and FatFS Test: test-build-sdspi-and-fatfs.md
+            - YM2149 PSG, Audio DAC, and ST-Sound Test: test-build-ym2149.md

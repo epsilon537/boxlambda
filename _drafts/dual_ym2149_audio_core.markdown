@@ -231,6 +231,7 @@ Relevant Files and Directories
 - [sub/StSound](https://github.com/epsilon537/StSound): The ST-Sound Library repo.
 - [sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound): The BoxLambda port of the ST-Sound Library.
 - [gw/projects/stsound_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/stsound_test): The ST-Sound Test project.
+- [sw/components/ym2149_sys_hal/ym2149_sys_regs.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ym2149_sys_hal/ym2149_sys_regs.h): YM2419 PSG system register interface.
   
 Try It Out
 ----------
@@ -502,16 +503,16 @@ ST-Sound Test on Arty A7
 	make stsound_test_load
 	```
 8. You should hear the chiptune play. In the terminal window you should see the following:
-```
-Mounting...
-CID: 534d5402:47323341:7d604971:3168018d
-Listing directory contents...
-...
-/ANCOOL1.YM
-Switching to PSG_1
-Loading YM file: ancool1.ym ...
-Starting playback... 
-``` 
+  ```
+  Mounting...
+  CID: 534d5402:47323341:7d604971:3168018d
+  Listing directory contents...
+  ...
+  /ANCOOL1.YM
+  Switching to PSG_1
+  Loading YM file: ancool1.ym ...
+  Starting playback... 
+  ``` 
 9. There are a few controls you can play around with:
    - Set SW0 (leaving SW1 and SW2 off), then press buttons 0/1 to increase/decrease the volume.
    - Set SW1 (leaving SW0 and SW2 off), then press buttons 0/1 to increase/decrease the bass level.

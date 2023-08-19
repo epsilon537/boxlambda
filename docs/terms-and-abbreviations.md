@@ -39,6 +39,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **DDR SDRAM**: Double Data Rate SDRAM.
 
+- **Delta-Sigma Modulation**: A method used for Digital-to-Analog and Analog-to-Digital conversion. See [https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html).
+  
 - **DFX**: Dynamic Function Exchange, Xilinx's solution for Partial FPGA Reconfiguration ([https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf](https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf))
 
 - **DMA**: Direct Memory Access, a hardware assist component offloading memory copy operations from the CPU.
@@ -58,6 +60,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **EDA tool**: A software tool to design electronic circuits, e.g. Vivado.
 
 - **ERR**: A Wishbone Bus Signal.
+
+- **FFT**: Fast Fourier Transform, a technique used to convert a digital signal into its frequency components.
   
 - **FHDL**: Fragmented Hardware Description Language, a Python-based HDL. Used by Migen and LiteX.
 
@@ -75,6 +79,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
 
+- **I2S**: A serial bus interface specially designed for communicating digital audio data between integrated circuits (ICs). The I2S protocol sends pulse-code modulation (PCM) audio data from a controller to a target.
+ 
 - **Ibex**: The name of the RISC-V CPU core used by BoxLambda.
 
 - **I/F**: Interface.
@@ -127,6 +133,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **OpenOCD**: Open On-Chip Debugger, open-source software that interfaces with a hardware debugger's JTAG port.
 
+- **PCM**: Pulse-Code Modulation. PCM data are digital audio samples.
+  
 - **PIT**: Programmable Interval Timer.
 
 - **PMOD**: Peripheral Module Interface, an open standard defined by Digilent for connecting peripheral modules to an FPGA.
@@ -137,6 +145,10 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **PWM**: Pulse Width Modulation.
 
+- **PDM**: Pulse Density Modulation.
+  
+- **RC Filter**: A simple low-pass filter network consisting of a resistor and a capacitor.
+  
 - **Repo**: Repository.
 
 - **RP**: Reconfigurable Partition. Part of Xilinx's DFX solution.
@@ -157,6 +169,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Slice**: The basic logical unit of a Xilinx FPGA.
 
+- **SNDH**: A music file format used on Atari ST.
+  
 - **(Software) Image**: Snapshot of computer memory contents stored as a file.
 
 - **SoC**: System-on-a-Chip. A System-on-a-Chip is an integrated circuit that integrates all or most components of a computer or other electronic system.
@@ -175,6 +189,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Stdio**: Standard Input and Output. *Stdio.h* is the Standard C Library header file containing input and output functions such as printf() and scanf().
 
+- **ST-Sound**: A software library used to play YM music files. See [https://github.com/arnaud-carre/StSound](https://github.com/arnaud-carre/StSound).
+  
 - **Synthesis**: Synthesis turns a module's Verilog/System Verilog/VHDL source code into a netlist of gates. The software equivalent of synthesis is compilation.
 
 - **.text**/**Text Segment**: See *Code Segment*.
@@ -211,7 +227,9 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Xbar**: Cross-Bar, a type of interconnect used in SoC bus fabrics.
 
-- *XPM*: Xilinx Parameterized Macros.
+- **XPM**: Xilinx Parameterized Macros.
 
+- **YM**: A music file format for the YM2149 chip. See [http://leonard.oxg.free.fr/ymformat.html](http://leonard.oxg.free.fr/ymformat.html).
+  
 - **YM2149**: An '80s era Yamaha sound chip. See also JT49.
 
