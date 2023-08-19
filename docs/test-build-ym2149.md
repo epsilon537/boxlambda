@@ -24,11 +24,11 @@ PYTHONPATH="." ../../../../../gw/projects/audio_dac_test/test/dac_test.py -p
 Time Domain Correlation: 1.000000
 Frequency Domain Correlation: 1.000000
 ```
-![Audio DAC Test Frequency Magnitude Plot.](../assets/audio_dac_test_freq_mag_plot.jpg)
+![Audio DAC Test Frequency Magnitude Plot.](assets/audio_dac_test_freq_mag_plot.jpg)
 
 *Audio DAC Test Frequency Magnitude Plot.*
 
-![Audio DAC Test Time Domain Plot.](../assets/audio_dac_test_time_domain_plot.jpg)
+![Audio DAC Test Time Domain Plot.](assets/audio_dac_test_time_domain_plot.jpg)
 
 *Audio DAC Test Time Domain Plot.*
 
@@ -122,7 +122,7 @@ Relative Deviations:
 [ 0.          0.00024297 -0.00296056 -0.00226449 -0.00189609 -0.00065859]
 ```
 
-![Dual YM2149 6-channel Pitch Test Frequency Spectrum Plot.](../assets/ym2149_6ch_pitch_test.jpg)
+![Dual YM2149 6-channel Pitch Test Frequency Spectrum Plot.](assets/ym2149_6ch_pitch_test.jpg)
 
 *Dual YM2149 6-channel Pitch Test Frequency Spectrum Plot.*
 
