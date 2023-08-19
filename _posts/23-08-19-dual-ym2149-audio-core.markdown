@@ -194,7 +194,7 @@ The ST-Sound Test Project
 -------------------------
 The ST-Sound test project uses the same test SoC build as the YM2149 DAC test project [above](#the-ym2149-dac-test-project---a-chord-of-six-pitches), but the software is different. The software build uses the BoxLambda *stsound* and *fatfs* libraries to load and play a YM file from an attached SD card. The Arty's switches and buttons can be used to control master volume, treble, and bass.
 
-{% include youtubePlayer.html id=page.youtubeId %}
+{% include youtubeplayer.html id=page.youtubeId %}
 
 Audio Fingerprinting
 ====================
