@@ -1,3 +1,5 @@
+`timescale 1 ns/1 ps
+
 module av2wb (
 	input wire clk,
 	input wire rst_n,
@@ -24,72 +26,60 @@ module av2wb (
 	input wire wb_err
 );
 
-logic transaction_ongoing;
+logic cyc_reg, cyc_next;
 logic stb_reg, stb_next;
+logic we_reg, we_next;
 
-initial transaction_ongoing = 1'b0;
-initial stb_reg = 1'b0;
+initial begin
+	cyc_reg = 1'b0;
+	stb_reg = 1'b0;
+	we_reg = 1'b0;
+end
 
 always_comb begin
-	stb_next = av_read || av_write;
-	if (stb_reg && !wb_stall)
-		stb_next = 1'b0;
-	if (wb_ack || wb_err)
-		stb_next = 1'b0;
+	stb_next = stb_reg;
+	we_next = we_reg;
+	cyc_next = cyc_reg;
+
+	if (!cyc_reg) begin /*New transaction*/
+		if (av_read || av_write) begin
+			stb_next = 1'b1;
+			we_next = av_write;
+			cyc_next = 1'b1;
+		end
+	end
+	else begin /*Ongoing transaction*/
+		if (wb_ack||wb_err)
+			cyc_next = 1'b0;
+
+		if (stb_reg && !wb_stall) begin
+			stb_next = 1'b0;
+			we_next = 1'b0;
+		end
+	end
 end
 
 /*One transfer per WB CYC bus cycle.*/
 always_ff @(posedge clk)
 	if (!rst_n) begin
-		transaction_ongoing <= 1'b0;
+		cyc_reg <= 1'b0;
 		stb_reg <= 1'b0;
+		we_reg <= 1'b0;
 	end
 	else begin
+		cyc_reg <= cyc_next;
 		stb_reg <= stb_next;
-		if (transaction_ongoing) begin
-			/*pipelined WB: During a transaction STB should only be high for one clock cycle 
-			*after master has been granted access by WB slave or WB interconnect  (through !stall).
-			*As long as we're stalled, STB remains asserted.*/
-			//if (!wb_stall)
-			//	stb <= 1'b0; 
-
-			/*We don't do multiple transfers per transaction. A transaction ends when WB ack or
-			*error is received, i.e. when the slave has accepted (or errored) the write data or
-			*returned the read data.*/
-			if (wb_ack || wb_err) begin
-				transaction_ongoing <= 1'b0;
-				//stb <= 1'b0;
-			end
-		end
-		else begin
-			/*av_read or av_write indicate the CPU wants to initiate a transaction.*/
-			if (av_read || av_write) begin
-			   	/*Register the relevant signals so they hold their data for as long as we want to
-				*for the purpose of this adapter.*/
-				transaction_ongoing <= 1'b1;
-				//stb <= 1'b1;
-			end
-		end
+		we_reg <= we_next;
 	end
 
-//read data is valid when we have a transaction ongoing and the slave asserts ack.
-//av_waitrequest goes low in that case.
-assign av_waitrequest = !(wb_ack & transaction_ongoing);
+assign av_waitrequest = ~wb_ack;
 assign av_readdata  = wb_dat_r;
 
-assign wb_cyc = av_read || av_write;
-assign wb_stb = stb_reg;
+assign wb_cyc = cyc_next;
+assign wb_stb = stb_next;
 assign wb_adr = av_address;
-assign wb_we = av_write;
+assign wb_we = we_next;
 assign wb_sel = av_byteenable;
 assign wb_dat_w  = av_writedata;
-
-// dump signals
-`ifdef COCOTB_SIM
-initial begin
-	$dumpfile ("av2wb.vcd");
-	$dumpvars (0, av2wb);
-end
-`endif
 
 endmodule

@@ -1,0 +1,50 @@
+.EQU src_addr_io_port 16 ;IO port 16 (GP0) contains source address
+.EQU dst_addr_io_port 17 ;IO port 17 (GP1) contains destination address
+.EQU word_count_io_port 18 ;IO port 18 (GP2) contains number of words to copy.
+;IO port 19 (GP3) set to 1 by host to kick off copy, set to 2 by Praxos when busy, set to 0 by Praxos when complete.
+.EQU copy_ctrl_status_io_port 19 
+.EQU COPY_CTRL_BUSY 2
+.EQU COPY_CTRL_DONE 0
+;
+.EQU src_addr_ptr 0 ;DM 0 contains source address ptr
+.EQU dst_addr_ptr 1 ;DM 1 contains destination address ptr
+.EQU word_count 2 ;DM 2 contains number of words left to copy
+;
+;Check for copy kick-off
+@wait_for_kick_off  in copy_ctrl_status_io_port
+                    brz wait_for_kick_off
+;
+;Indicate that we're busy
+                    ld# COPY_CTRL_BUSY
+                    out copy_ctrl_status_io_port
+;
+;Initialise DM variables
+                    in src_addr_io_port 
+                    st src_addr_ptr
+;
+                    in dst_addr_io_port 17 
+                    st dst_addr_ptr
+;
+                    in word_count_io_port 
+                    st word_count
+;
+@copy_loop          ld word_count
+                    brz copy_done
+                    sub# 1
+                    st word_count
+;
+                    ild src_addr_ptr
+                    busrw 0
+                    iadd# 1
+                    ist src_addr_ptr
+;
+                    ild dst_addr_ptr
+                    busww 0
+                    iadd# 1
+                    ist dst_addr_ptr
+;
+                    br copy_loop
+;
+@copy_done          ld# COPY_CTRL_DONE
+                    out copy_ctrl_status_io_port
+                    br wait_for_kick_off

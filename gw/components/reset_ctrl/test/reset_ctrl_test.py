@@ -158,7 +158,7 @@ async def por_followed_by_ndm_reset_followed_by_ext_reset_followed_by_WB_reset_t
     dm_reset_task = cocotb.start_soon(wait_for_dm_reset(dut))
 
     await Timer(50, units="ns")
-
+    await RisingEdge(dut.clk)
     dut.wb_adr.value = 0
     dut.wb_dat_w.value = 3
     dut.wb_cyc.value = 1
@@ -166,12 +166,13 @@ async def por_followed_by_ndm_reset_followed_by_ext_reset_followed_by_WB_reset_t
     dut.wb_we.value = 1
 
     await RisingEdge(dut.wb_ack)
-    await Timer(50, units="ns")
+    await RisingEdge(dut.clk)
     dut.wb_adr.value = 0
     dut.wb_dat_w.value = 0
     dut.wb_cyc.value = 0
     dut.wb_stb.value = 0
     dut.wb_we.value = 0
+    
     await Timer(50, units="ns")
 
     assert dut.wb_ack.value == 0

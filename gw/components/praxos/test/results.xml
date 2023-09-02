@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1693655360" />
+    <testcase name="praxos_wordcopy_tes" classname="praxos_wordcopy_test" file="/home/epsilon/work/boxlambda/gw/components/praxos/test/praxos_wordcopy_test.py" lineno="112" time="0.4441523551940918" sim_time_ns="748.001" ratio_time="1684.1090478359126" />
+  </testsuite>
+</testsuites>

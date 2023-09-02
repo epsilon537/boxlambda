@@ -1,10 +1,12 @@
+`timescale 1 ns/1 ps
+
 module praxos_ctrl
 (
     input                                     clk,
     input                                     rst_n,
 
     //32-bit pipelined Wishbone interface.
-    input wire [5:0]                          wb_adr,
+    input wire [4:0]                          wb_adr,
 	input wire [31:0]                         wb_dat_w,
 	output wire [31:0]                        wb_dat_r,
 	input wire [3:0]                          wb_sel,
@@ -21,19 +23,17 @@ module praxos_ctrl
 
     //Praxos PM access
     output wire                               praxos_rst_n,
-    output wire [7:0]                         praxos_pm_wr_addr,
-	output wire                               praxos_pm_wr,
-	output wire [35:0]                        praxos_pm_wr_data,
+    output reg [7:0]                          praxos_pm_wr_addr,
+	output reg                                praxos_pm_wr,
+	output reg [35:0]                         praxos_pm_wr_data,
 
     //Praxos Port I/O
-    input wire [5:0]                         praxos_port_addr,
+    input wire [4:0]                          praxos_port_addr,
 	input wire                                praxos_port_rd,
     input wire                                praxos_port_wr,
     input wire [31:0]                         praxos_port_wr_data,
     output wire [31:0]                        praxos_port_rd_data
 );
-
-parameter CTRL_REG_RST_N_BIT=32'd1;
 
 logic [31:0] gp_reg[0:15];
 logic [31:0] ctrl_reg;
@@ -41,14 +41,15 @@ logic [31:0] pm_addr_reg;
 logic [35:0] pm_data_reg;
 logic [31:0] irq_in_reg;
 logic [31:0] irq_out_reg, irq_out_next;
-logic praxos_pm_wr_reg;
 logic [31:0] wb_dat_r_i;
 logic [31:0] praxos_port_rd_data_i;
 
 //WB handshake
 logic do_ack_reg;
-logic do_wb_wr = wb_cyc & wb_stb & wb_we;
-logic do_wb_rd = wb_cyc & wb_stb & !wb_we;
+logic do_wb_wr, do_wb_rd;
+
+assign do_wb_wr = wb_cyc & wb_stb & wb_we;
+assign do_wb_rd = wb_cyc & wb_stb & !wb_we;
 
 logic unused = &{wb_sel};
 
@@ -60,13 +61,8 @@ always @(posedge clk) begin
 end
 
 assign wb_ack = do_ack_reg & wb_cyc;
-assign wb_stall = !wb_cyc ? 1'b0 : !wb_ack;
+assign wb_stall = 1'b0; //!wb_cyc ? 1'b0 : !wb_ack;
 assign wb_err = 1'b0;
-
-//Praxos PM access
-assign praxos_pm_wr = praxos_pm_wr_reg;
-assign praxos_pm_wr_data = pm_data_reg;
-assign praxos_pm_wr_addr = pm_addr_reg[7:0];
 
 //Reset Control
 assign praxos_rst_n = ctrl_reg[0];
@@ -76,9 +72,10 @@ assign irq_out = |irq_out_reg;
 always_comb begin
     for (int i=0; i<32; i++) begin
         irq_out_next[i] = irq_out_reg[i];
-        if (do_wb_wr && (wb_adr[5:0]==6'd0) && wb_dat_w[i])
+        //Ack IRQ by writing to WB register 0
+        if (do_wb_wr && (wb_adr[4:0]==6'd0) && wb_dat_w[i])
             irq_out_next[i] = 1'b0;
-        if (praxos_port_wr && (praxos_port_addr[5:0]==6'd0) && praxos_port_wr_data[i])
+        if (praxos_port_wr && (praxos_port_addr[4:0]==5'd0) && praxos_port_wr_data[i])
             irq_out_next[i] = 1'b1;
     end   
 end
@@ -103,35 +100,27 @@ always_ff @(posedge clk) begin
         gp_reg[14] <= 32'b0;
         gp_reg[15] <= 32'b0;
 
-        ctrl_reg <= CTRL_REG_RST_N_BIT;
+        ctrl_reg <= 32'b0;
 
-        pm_addr_reg <= 32'b0;
-        pm_data_reg <= 36'b0;
+        praxos_pm_wr_addr <= 32'b0;
+        praxos_pm_wr_data <= 36'b0;
 
         irq_in_reg <= 32'b0;
         irq_out_reg <= 32'b0;
 
-        praxos_pm_wr_reg <= 1'b0;
+        praxos_pm_wr <= 1'b0;
     end
     else begin
-        praxos_pm_wr_reg <= 1'b0;
-
         irq_in_reg <= irq_in;
         irq_out_reg <= irq_out_next;
+        praxos_pm_wr <= 1'b0;
 
         if (do_wb_wr) begin
-            case(wb_adr[4:0])
-                5'd3: begin
-                    pm_data_reg[31:0] <= wb_dat_w;
-                end
-                5'd4: begin
-                    pm_data_reg[35:32] <= wb_dat_w[3:0];
-                end
-                5'd5: begin
-                    //A write to the address register serves as write command
-                    praxos_pm_wr_reg <= 1'b1;
-                    pm_addr_reg <= wb_dat_w;
-                end
+            case(wb_adr)
+                5'd2: praxos_pm_wr_data[31:0] <= wb_dat_w;
+                5'd3: praxos_pm_wr_data[35:32] <= wb_dat_w[3:0];
+                5'd4: praxos_pm_wr_addr <= wb_dat_w;
+                5'd5: praxos_pm_wr <= 1'b1;
                 5'd6: ctrl_reg <= wb_dat_w;
                 5'd16: gp_reg[0] <= wb_dat_w;
                 5'd17: gp_reg[1] <= wb_dat_w;
@@ -154,7 +143,7 @@ always_ff @(posedge clk) begin
         end
         
         if (praxos_port_wr) begin
-            case(praxos_port_addr[4:0])
+            case(praxos_port_addr)
                 5'd16: gp_reg[0] <= praxos_port_wr_data;
                 5'd17: gp_reg[1] <= praxos_port_wr_data;
                 5'd18: gp_reg[2] <= praxos_port_wr_data;
@@ -177,16 +166,16 @@ always_ff @(posedge clk) begin
     end
 end
 
-//WB and PRaxos register reads
+//WB and Praxos register reads
 always_comb begin
     if (do_wb_rd) begin
-        case(wb_adr[4:0])
+        case(wb_adr)
             5'd0: wb_dat_r_i = irq_out_reg;
             5'd1: wb_dat_r_i = irq_in_reg;
             5'd2: wb_dat_r_i = pm_data_reg[31:0];
             5'd3: wb_dat_r_i = {28'd0,pm_data_reg[35:32]};
             5'd4: wb_dat_r_i = pm_addr_reg[31:0];
-            5'd5: wb_dat_r_i = ctrl_reg;
+            5'd6: wb_dat_r_i = ctrl_reg;
             5'd16: wb_dat_r_i = gp_reg[0];
             5'd17: wb_dat_r_i = gp_reg[1];
             5'd18: wb_dat_r_i = gp_reg[2];
@@ -207,7 +196,7 @@ always_comb begin
         endcase
     end
     if (praxos_port_rd) begin
-        case(praxos_port_addr[4:0])
+        case(praxos_port_addr)
             5'd1: praxos_port_rd_data_i = irq_in_reg;
             5'd16: praxos_port_rd_data_i = gp_reg[0]; 
             5'd17: praxos_port_rd_data_i = gp_reg[1]; 

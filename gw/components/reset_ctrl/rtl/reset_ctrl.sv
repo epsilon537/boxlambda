@@ -79,7 +79,7 @@ module reset_ctrl (
 
     assign wb_dat_r = 0;
     assign wb_ack = do_ack_reg & wb_cyc;
-    assign wb_stall = !wb_cyc ? 1'b0 : !wb_ack;
+    assign wb_stall = 1'b0; //!wb_cyc ? 1'b0 : !wb_ack;
     assign wb_err = 1'b0;
 
     //Wishbone triggered ndm and/or dm reset

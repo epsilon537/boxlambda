@@ -1,10 +1,12 @@
+`timescale 1 ns/1 ps
+
 module praxos_top
 (
     input                                     clk,
     input                                     rst_n,
 
     //32-bit pipelined Wishbone slave interface.
-    input wire [5:0]                          wb_s_adr,
+    input wire [4:0]                          wb_s_adr,
 	input wire [31:0]                         wb_s_dat_w,
 	output wire [31:0]                        wb_s_dat_r,
 	input wire [3:0]                          wb_s_sel,
@@ -51,7 +53,7 @@ logic av_write;
 logic av_read;
 logic av_waitrequest;
 
-logic unused = &{praxos_port_addr[15:6]};
+logic unused = &{praxos_port_addr[15:5]};
 
 praxos_ctrl praxos_ctrl_inst(
     .clk(clk),
@@ -80,7 +82,7 @@ praxos_ctrl praxos_ctrl_inst(
 	.praxos_pm_wr_data(praxos_pm_wr_data),
 
     //Praxos Port I/O
-    .praxos_port_addr(praxos_port_addr[5:0]),
+    .praxos_port_addr(praxos_port_addr[4:0]),
 	.praxos_port_rd(praxos_port_rd),
     .praxos_port_wr(praxos_port_wr),
     .praxos_port_wr_data(praxos_port_wr_data),
