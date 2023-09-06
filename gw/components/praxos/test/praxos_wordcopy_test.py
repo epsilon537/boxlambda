@@ -5,7 +5,10 @@ from cocotb.clock import Clock
 import random
 import os
 from pathlib import Path
-from cocotb.runner import get_runner
+from cocotb.runner import *
+from cocotb_genDumpModule import *
+
+wb_transactions = []
 
 async def init(dut):
     #For simplicity's sake, pretend we have a 1ns clock period.
@@ -85,11 +88,13 @@ async def wb_slave_emulator(dut):
             dut._log.info("WB: stb detected")
         
             if dut.wb_m_we.value == 1:
-                dut._log.info("WB write, addr: 0x%x, data: 0x%x", int(dut.wb_m_adr.value), int(dut.wb_m_dat_w.value))       
+                dut._log.info("WB write, addr: 0x%x, data: 0x%x", int(dut.wb_m_adr.value), int(dut.wb_m_dat_w.value))
+                wb_transactions.append(('write', int(dut.wb_m_adr.value), int(dut.wb_m_dat_w.value)))       
             else:
                 dat_r = random.randint(0, 0xffffffff)
                 dut.wb_m_dat_r.value = dat_r
                 dut._log.info("WB read, addr: 0x%x, data: 0x%x", int(dut.wb_m_adr.value), dat_r)
+                wb_transactions.append(('read', int(dut.wb_m_adr.value), dat_r))
 
             dut.wb_m_stall.value = 1    
             responseDelay = random.randint(1, 10)
@@ -110,7 +115,7 @@ async def wb_slave_emulator(dut):
 
 #gp reg access: wb write - praxos read
 @cocotb.test()
-async def praxos_wordcopy_tes(dut):
+async def praxos_wordcopy_test(dut):
     await init(dut)
 
     pm_data = PRAXOS_WORDCOPY_PROG
@@ -139,8 +144,8 @@ async def praxos_wordcopy_tes(dut):
     
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)
-    srcAddr = random.randint(0, 0x70000000)
-    dstAddr = random.randint(0x80000000, 0xf0000000)
+    srcAddr = random.randint(0, 0x70000000) & ~3
+    dstAddr = random.randint(0x80000000, 0xf0000000) & ~3
 
     dut._log.info("Test: Configuring DMA request.")
     dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
@@ -163,30 +168,43 @@ async def praxos_wordcopy_tes(dut):
             res = resNew
             dut._log.info("gp_reg[3] = %s", res)
     
+    #Check the recorded transactions
+    assert len(wb_transactions) == numWords*2
+    for ii in range(0, len(wb_transactions), 2):
+        rw, addr, dat_r = wb_transactions[ii]
+        assert rw == 'read'
+        assert addr == (srcAddr>>2)+ (ii/2)
+        
+        rw, addr, dat_w = wb_transactions[ii+1]
+        assert rw == 'write'
+        assert addr == (dstAddr>>2)+ (ii/2)
+        assert dat_w == dat_r
+
 def praxos_wordcopy_test_runner():
     hdl_toplevel_lang = "verilog"
-    sim ="icarus"
-
+    sim = "icarus"
+    build_dir= 'praxos_wordcopy_test_sim_build'
     proj_path = Path(__file__).resolve().parent
-
-    verilog_sources = []
-    vhdl_sources = []
+    top = "praxos_top"
+    test_module = "praxos_wordcopy_test,"
 
     verilog_sources = [proj_path / "../rtl/praxos_ctrl.sv", 
                        proj_path / "../rtl/av2wb.sv", 
                        proj_path / "../rtl/praxos_generated.v",
-                       proj_path / "../rtl/praxos_top.sv"]
-    
+                       proj_path / "../rtl/praxos_top.sv", 
+                       genDumpModule(build_dir, top)]
+
     runner = get_runner(sim)
     runner.build(
         verilog_sources=verilog_sources,
-        vhdl_sources=vhdl_sources,
-        hdl_toplevel="praxos_top",
+        vhdl_sources= [],
+        hdl_toplevel= top,
         always=True,
-        build_dir='praxos_wordcopy_test_sim_build'
+        build_dir=build_dir
     )
 
-    runner.test(hdl_toplevel="praxos_top", test_module="praxos_wordcopy_test,", waves=True, verbose=True, gui=True)
+    res = runner.test(hdl_toplevel=top, test_module=test_module, plusargs=['-fst'])
+    check_results_file(res)
 
 if __name__ == "__main__":
     praxos_wordcopy_test_runner()

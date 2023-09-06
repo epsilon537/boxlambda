@@ -6,8 +6,11 @@ then
   exit 1
 fi
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+echo "Script directory: $SCRIPT_DIR"
 PYTHON_SCRIPT="$1"
-export PYTHONPATH="."
+export PYTHONPATH=".:$SCRIPT_DIR:$PYTHONPATH"
+echo "PYTHONPATH: $PYTHONPATH"
 export PYTHONDONTWRITEBYTECODE=1
 
 `cocotb-config --python-bin` -B $PYTHON_SCRIPT

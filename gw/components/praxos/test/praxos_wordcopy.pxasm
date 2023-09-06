@@ -19,10 +19,14 @@
                     out copy_ctrl_status_io_port
 ;
 ;Initialise DM variables
-                    in src_addr_io_port 
+                    in src_addr_io_port
+                    shr0
+                    shr0 
                     st src_addr_ptr
 ;
                     in dst_addr_io_port 17 
+                    shr0
+                    shr0
                     st dst_addr_ptr
 ;
                     in word_count_io_port 

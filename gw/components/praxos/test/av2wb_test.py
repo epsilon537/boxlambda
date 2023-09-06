@@ -5,7 +5,8 @@ from cocotb.triggers import FallingEdge, RisingEdge, Timer
 from cocotb.clock import Clock
 import random
 from pathlib import Path
-from cocotb.runner import get_runner
+from cocotb.runner import *
+from cocotb_genDumpModule import *
 
 async def init(dut):
     #For simplicity's sake, pretend we have a 1ns clock period.
@@ -129,25 +130,25 @@ async def av_write_test(dut):
 
 def av2wb_test_runner():
     hdl_toplevel_lang = "verilog"
-    sim ="icarus"
-
+    sim = "icarus"
+    build_dir= 'av2wb_sim_build'
     proj_path = Path(__file__).resolve().parent
+    top= "av2wb"
 
-    verilog_sources = []
-    vhdl_sources = []
+    verilog_sources = [proj_path / "../rtl/av2wb.sv", 
+                       genDumpModule(build_dir, top)]
 
-    verilog_sources = [proj_path / "../rtl/av2wb.sv"]
-    
     runner = get_runner(sim)
     runner.build(
         verilog_sources=verilog_sources,
-        vhdl_sources=vhdl_sources,
-        hdl_toplevel="av2wb",
+        vhdl_sources= [],
+        hdl_toplevel= top,
         always=True,
-        build_dir='av2wb_sim_build'
+        build_dir=build_dir
     )
 
-    runner.test(hdl_toplevel="av2wb", test_module="av2wb_test,")
+    res = runner.test(hdl_toplevel=top, test_module="av2wb_test,", plusargs=['-fst'])
+    check_results_file(res)
 
 if __name__ == "__main__":
     av2wb_test_runner()
