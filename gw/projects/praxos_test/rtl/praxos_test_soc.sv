@@ -1,7 +1,7 @@
 `default_nettype none
 
-//BoxLambda Test SoC including dual YM2149 system and 1-bit audio DAC.
-module ym2149_dac_test_soc(
+//BoxLambda Test SoC including Praxos DMA.
+module praxos_test_soc(
   input  wire       ext_clk, /*External clock: 100MHz on FPGA, 50MHz in simulation.*/
    
   inout  wire [7:0] gpio0,
@@ -71,7 +71,8 @@ module ym2149_dac_test_soc(
   typedef enum {
     DM_M,
     COREI_M,
-    CORED_M
+    CORED_M,
+    PRAXOS_M
   } wb_master_e;
 
   typedef enum {
@@ -80,6 +81,7 @@ module ym2149_dac_test_soc(
     GPIO1_S,
     SDSPI_S,
     RESET_CTRL_S,
+    PRAXOS_S,
     YM2149_S,
     UART_S,
     TIMER_S,
@@ -90,8 +92,8 @@ module ym2149_dac_test_soc(
     DDR_USR1_S
 } wb_slave_e;
 
-  localparam NrMaster = 3;
-  localparam NrSlave  = 13;
+  localparam NrMaster = 4;
+  localparam NrSlave  = 14;
 
   typedef logic [31:0] Wb_base_addr [NrSlave];
 
@@ -101,6 +103,7 @@ module ym2149_dac_test_soc(
      wb_base_addresses[GPIO1_S]      = 32'h10000010;
      wb_base_addresses[SDSPI_S]      = 32'h10000020;
      wb_base_addresses[RESET_CTRL_S] = 32'h10000030;
+     wb_base_addresses[PRAXOS_S]     = 32'h10000100;
      wb_base_addresses[YM2149_S]     = 32'h10001000;
      wb_base_addresses[UART_S]       = 32'h10010000;
      wb_base_addresses[TIMER_S]      = 32'h10020000;
@@ -124,6 +127,7 @@ module ym2149_dac_test_soc(
     wb_sizes[GPIO1_S]      = 32'h00010;
     wb_sizes[SDSPI_S]      = 32'h00010;
     wb_sizes[RESET_CTRL_S] = 32'h00004;
+    wb_sizes[PRAXOS_S]     = 32'h00080;
     wb_sizes[YM2149_S]     = 32'h00400;
     wb_sizes[UART_S]       = 32'h00010;
     wb_sizes[TIMER_S]      = 32'h00010;
@@ -511,8 +515,50 @@ reset_ctrl reset_ctrl_inst(
   assign audio_gain = 1'b1; //PMOD Amp gain fixed at 6dB.
   assign audio_shutdown_n = 1'b1;
 
+`else
+`ifdef VERILATOR
+  assign pcm_out = 1'b0;
+  assign acc1_overflow = 1'b0;
+  assign acc2_overflow = 1'b0;
+`endif
+  assign audio_out = 1'b0;
+  assign audio_gain = 1'b0;
+  assign audio_shutdown_n = 1'b0;
 `endif //YM2149
 
+`ifdef PRAXOS
+  praxos_top praxos_inst (
+    .clk(sys_clk),
+    .rst(ndmreset),
+    //32-bit pipelined Wishbone slave interface.
+    .wb_s_adr(wbs[PRAXOS_S].adr[6:2]),
+	  .wb_s_dat_w(wbs[PRAXOS_S].dat_m),
+    .wb_s_dat_r(wbs[PRAXOS_S].dat_s),
+    .wb_s_sel(wbs[PRAXOS_S].sel),
+    .wb_s_stall(wbs[PRAXOS_S].stall),
+    .wb_s_cyc(wbs[PRAXOS_S].cyc),
+    .wb_s_stb(wbs[PRAXOS_S].stb),
+    .wb_s_ack(wbs[PRAXOS_S].ack),
+    .wb_s_we(wbs[PRAXOS_S].we),
+    .wb_s_err(wbs[PRAXOS_S].err), 
+    //IRQs - TBD
+    .irq_in(32'b0),
+    .irq_out(),
+    //32-bit pipelined Wishbone master interface.
+    .wb_m_adr(wbm[PRAXOS_M].adr[31:2]), //Praxos outputs a word address, convert to byte address.
+	  .wb_m_dat_w(wbm[PRAXOS_M].dat_m),
+	  .wb_m_dat_r(wbm[PRAXOS_M].dat_s),
+	  .wb_m_sel(wbm[PRAXOS_M].sel),
+    .wb_m_stall(wbm[PRAXOS_M].stall),
+	  .wb_m_cyc(wbm[PRAXOS_M].cyc),
+	  .wb_m_stb(wbm[PRAXOS_M].stb),
+	  .wb_m_ack(wbm[PRAXOS_M].ack),
+	  .wb_m_we(wbm[PRAXOS_M].we),
+	  .wb_m_err(wbm[PRAXOS_M].err)
+  );
+
+  assign wbm[PRAXOS_M].adr[1:0] = 2'b0; //byte address lsbs are 0.
+`endif //PRAXOS
 endmodule
 
 `resetall

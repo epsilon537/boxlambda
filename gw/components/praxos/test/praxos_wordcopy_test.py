@@ -14,9 +14,9 @@ async def init(dut):
     #For simplicity's sake, pretend we have a 1ns clock period.
     cocotb.start_soon(Clock(dut.clk, 1, units="ns").start())
 
-    dut.rst_n.value = 0
+    dut.rst.value = 1
     await Timer(1, units="ns")  # wait 1 clock
-    dut.rst_n.value = 1
+    dut.rst.value = 0
     await Timer(1, units="ns")  # wait 1 clock
 
     dut.wb_s_adr.value = 0

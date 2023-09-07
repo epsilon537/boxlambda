@@ -72,6 +72,9 @@ async def wb_slave_emulator(dut):
             dut._log.info("WB: signalling ACK, clearing stall.")
             dut.wb_ack.value = 1 #ACK
             dut.wb_stall.value = 0
+            await RisingEdge(dut.clk)
+            assert dut.wb_stb.value == 1, 'WB: stb deasserted too soon.'
+            assert dut.wb_cyc.value == 1, 'WB: cyc deasserted too soon.'
             while True:
                 await RisingEdge(dut.clk)
                 if dut.wb_stb.value == 0:
@@ -91,7 +94,7 @@ async def av_read_test(dut):
     av_read_response_task = cocotb.start_soon(wait_for_read_response(dut))
 
     dut._log.info("Test: Initiating AV read...")
-    dut.av_address.value = random.randint(0, 0xffffffff)
+    dut.av_address.value = random.randint(0, 0x3fffffff)
     dut.av_read.value = 1
     dut.av_write.value = 0
     dut.av_byteenable.value = random.randint(1, 0xf)
@@ -115,7 +118,7 @@ async def av_write_test(dut):
     av_write_response_task = cocotb.start_soon(wait_for_write_response(dut))
 
     dut._log.info("Test: Initiating AV write...")
-    dut.av_address.value = random.randint(0, 0xffffffff)
+    dut.av_address.value = random.randint(0, 0x3fffffff)
     dut.av_writedata.value = random.randint(0, 0xffffffff)
     dut.av_read.value = 0
     dut.av_write.value = 1

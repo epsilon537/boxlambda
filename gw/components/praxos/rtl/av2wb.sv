@@ -1,4 +1,6 @@
+`ifdef __ICARUS__
 `timescale 1 ns/1 ps
+`endif
 
 module av2wb (
 	input wire clk,
@@ -14,7 +16,7 @@ module av2wb (
 	output wire av_waitrequest,
 
 	//WB Master
-	output wire [31:0] wb_adr,
+	output wire [29:0] wb_adr, //This is a word address
 	output wire [31:0] wb_dat_w,
 	input wire [31:0] wb_dat_r,
 	output wire [3:0] wb_sel,
@@ -25,6 +27,8 @@ module av2wb (
 	output wire wb_we,
 	input wire wb_err
 );
+
+logic unused = &{av_address[31:30]}; //Can't use the top bits. wb_adr is 30-bits.
 
 logic cyc_reg, cyc_next;
 logic stb_reg, stb_next;
@@ -75,10 +79,10 @@ always_ff @(posedge clk)
 assign av_waitrequest = ~wb_ack;
 assign av_readdata  = wb_dat_r;
 
-assign wb_cyc = cyc_next;
-assign wb_stb = stb_next;
-assign wb_adr = av_address;
-assign wb_we = we_next;
+assign wb_cyc = cyc_next | cyc_reg;
+assign wb_stb = stb_next | stb_reg;
+assign wb_adr = av_address[29:0];
+assign wb_we = we_next | we_reg;
 assign wb_sel = av_byteenable;
 assign wb_dat_w  = av_writedata;
 

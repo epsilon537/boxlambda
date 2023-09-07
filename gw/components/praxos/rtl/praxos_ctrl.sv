@@ -1,4 +1,6 @@
+`ifdef __ICARUS__
 `timescale 1 ns/1 ps
+`endif
 
 module praxos_ctrl
 (
@@ -37,8 +39,6 @@ module praxos_ctrl
 
 logic [31:0] gp_reg[0:15];
 logic [31:0] ctrl_reg;
-logic [31:0] pm_addr_reg;
-logic [35:0] pm_data_reg;
 logic [31:0] irq_in_reg;
 logic [31:0] irq_out_reg, irq_out_next;
 logic [31:0] wb_dat_r_i;
@@ -73,7 +73,7 @@ always_comb begin
     for (int i=0; i<32; i++) begin
         irq_out_next[i] = irq_out_reg[i];
         //Ack IRQ by writing to WB register 0
-        if (do_wb_wr && (wb_adr[4:0]==6'd0) && wb_dat_w[i])
+        if (do_wb_wr && (wb_adr[4:0]==5'd0) && wb_dat_w[i])
             irq_out_next[i] = 1'b0;
         if (praxos_port_wr && (praxos_port_addr[4:0]==5'd0) && praxos_port_wr_data[i])
             irq_out_next[i] = 1'b1;
@@ -102,7 +102,7 @@ always_ff @(posedge clk) begin
 
         ctrl_reg <= 32'b0;
 
-        praxos_pm_wr_addr <= 32'b0;
+        praxos_pm_wr_addr <= 8'b0;
         praxos_pm_wr_data <= 36'b0;
 
         irq_in_reg <= 32'b0;
@@ -119,7 +119,7 @@ always_ff @(posedge clk) begin
             case(wb_adr)
                 5'd2: praxos_pm_wr_data[31:0] <= wb_dat_w;
                 5'd3: praxos_pm_wr_data[35:32] <= wb_dat_w[3:0];
-                5'd4: praxos_pm_wr_addr <= wb_dat_w;
+                5'd4: praxos_pm_wr_addr <= wb_dat_w[7:0];
                 5'd5: praxos_pm_wr <= 1'b1;
                 5'd6: ctrl_reg <= wb_dat_w;
                 5'd16: gp_reg[0] <= wb_dat_w;
@@ -172,9 +172,9 @@ always_comb begin
         case(wb_adr)
             5'd0: wb_dat_r_i = irq_out_reg;
             5'd1: wb_dat_r_i = irq_in_reg;
-            5'd2: wb_dat_r_i = pm_data_reg[31:0];
-            5'd3: wb_dat_r_i = {28'd0,pm_data_reg[35:32]};
-            5'd4: wb_dat_r_i = pm_addr_reg[31:0];
+            5'd2: wb_dat_r_i = praxos_pm_wr_data[31:0];
+            5'd3: wb_dat_r_i = {28'd0, praxos_pm_wr_data[35:32]};
+            5'd4: wb_dat_r_i = {24'b0, praxos_pm_wr_addr[7:0]};
             5'd6: wb_dat_r_i = ctrl_reg;
             5'd16: wb_dat_r_i = gp_reg[0];
             5'd17: wb_dat_r_i = gp_reg[1];

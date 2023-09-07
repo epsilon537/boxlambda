@@ -1,9 +1,11 @@
+`ifdef __ICARUS__
 `timescale 1 ns/1 ps
+`endif
 
 module praxos_top
 (
     input                                     clk,
-    input                                     rst_n,
+    input                                     rst,
 
     //32-bit pipelined Wishbone slave interface.
     input wire [4:0]                          wb_s_adr,
@@ -22,7 +24,7 @@ module praxos_top
     output wire                               irq_out,
 
     //32-bit pipelined Wishbone master interface.
-    output wire [31:0] wb_m_adr,
+    output wire [29:0] wb_m_adr,
 	output wire [31:0] wb_m_dat_w,
 	input wire [31:0] wb_m_dat_r,
 	output wire [3:0] wb_m_sel,
@@ -57,7 +59,7 @@ logic unused = &{praxos_port_addr[15:5]};
 
 praxos_ctrl praxos_ctrl_inst(
     .clk(clk),
-    .rst_n(rst_n),
+    .rst_n(~rst),
 
     //32-bit pipelined Wishbone interface.
     .wb_adr(wb_s_adr),
@@ -114,7 +116,7 @@ praxos_cpu praxos_cpu_inst(
 
 av2wb av2wb_inst(
 	.clk(clk),
-	.rst_n(rst_n),
+	.rst_n(~rst),
 
 	//Avalon Slave
 	.av_address(av_address),
