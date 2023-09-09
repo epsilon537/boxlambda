@@ -1,0 +1,180 @@
+;constants
+.EQU CALL_RET -1
+
+;DM offsets
+.EQU sp 0
+.EQU const_3 1
+.EQU read_byte_lane_jump_table_0 2
+.EQU read_byte_lane_jump_table_1 3
+.EQU read_byte_lane_jump_table_2 4
+.EQU read_byte_lane_jump_table_3 5
+.EQU src_addr_byte_offset 6
+.EQU src_word_addr 7
+.EQU byte_to_copy 8
+.EQU dst_word_addr 9
+.EQU dst_addr_byte_offset 10
+.EQU write_byte_lane_jump_table_0 11
+.EQU write_byte_lane_jump_table_1 12
+.EQU write_byte_lane_jump_table_2 13
+.EQU write_byte_lane_jump_table_3 14
+;
+.EQU src_addr_io_port 16
+.EQU dst_addr_io_port 17
+;
+;Set up constants in DM
+    ld# 3 
+    st const_3
+;Set up read_byte_lane jump table
+    ild# read_byte_lane_0
+    ist read_byte_lane_jump_table_0
+    ild# read_byte_lane_1
+    ist read_byte_lane_jump_table_1
+    ild# read_byte_lane_2
+    ist read_byte_lane_jump_table_2
+    ild# read_byte_lane_3
+    ist read_byte_lane_jump_table_3
+;Set up write_byte_lane jump table
+    ild# write_byte_lane_0
+    ist write_byte_lane_jump_table_0
+    ild# write_byte_lane_1
+    ist write_byte_lane_jump_table_1
+    ild# write_byte_lane_2
+    ist write_byte_lane_jump_table_2
+    ild# write_byte_lane_3
+    ist write_byte_lane_jump_table_3
+;
+    ild# 0 ;Init stack pointer DM location
+    ist sp
+;
+    in src_addr_io_port ;Compute word address
+    shr0
+    shr0
+    st src_word_addr
+    ;
+    in src_addr_io_port ;Compute byte offset
+    and const_3
+    st src_addr_byte_offset
+    ;
+    ild src_addr_byte_offset
+    ldi read_byte_lane_jump_table_0 ;indexed jump-table look-up
+    ild# -1 ;Create stack frame for return address
+    jal 0 ;store link addr on stack and jump
+;
+@byte_read  in dst_addr_io_port ;Compute word address
+            shr0
+            shr0
+            st dst_word_addr
+            in dst_addr_io_port ;Compute byte offset
+            and const_3
+            st dst_addr_byte_offset
+            ;
+            ild dst_addr_byte_offset
+            ldi write_byte_lane_jump_table_0 ;indexed jump-table look-up
+            ild# -1 ;Create stack frame for return address
+            jal 0 ;store link addr on stack and jump
+;
+@byte_copied    br byte_copied
+;
+@read_byte_lane_0   ild src_word_addr ;Set index register to word to read
+                    busrb0 0
+                    st byte_to_copy
+                    br byte_read
+;
+@read_byte_lane_1   ild src_word_addr ;Set index register to word to read
+                    busrb1 0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    st byte_to_copy
+                    br byte_read
+;
+@read_byte_lane_2   ild src_word_addr ;Set index register to word to read
+                    busrb2 0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    st byte_to_copy
+                    br byte_read
+;
+@read_byte_lane_3   ild src_word_addr ;Set index register to word to read
+                    busrb3 0
+                    rol
+                    rol
+                    rol
+                    rol
+                    rol
+                    rol
+                    rol
+                    rol
+                    st byte_to_copy
+                    br byte_read
+;
+@write_byte_lane_0  ild dst_word_addr ;Set index register to word to write
+                    ld byte_to_copy
+                    buswb0 0
+                    br byte_copied
+;
+@write_byte_lane_1  ild dst_word_addr ;Set index register to word to read
+                    ld byte_to_copy
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    buswb1 0
+                    br byte_copied
+;
+@write_byte_lane_2  ild dst_word_addr ;Set index register to word to read
+                    ld byte_to_copy
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    shl0
+                    buswb2 0
+                    br byte_copied
+;
+@write_byte_lane_3  ild dst_word_addr ;Set index register to word to write
+                    ld byte_to_copy
+                    ror
+                    ror
+                    ror
+                    ror
+                    ror
+                    ror
+                    ror
+                    ror
+                    buswb3 0
+                    br byte_copied

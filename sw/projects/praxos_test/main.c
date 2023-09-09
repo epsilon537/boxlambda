@@ -9,7 +9,7 @@
 #include "gpio.h"
 #include "platform.h"
 #include "utils.h"
-#include "praxos_wordcopy_prog.h"
+#include "praxos_wordcopy.h"
 #include "praxos_regs.h"
 
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
@@ -18,7 +18,7 @@ static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
 
-static unsigned long long praxos_wordcopy_prog[] = PRAXOS_WORDCOPY_PROG;
+static unsigned long long praxos_wordcopy[] = PRAXOS_WORDCOPY;
 
 static unsigned srcBuf[32], dstBuf[32];
 
@@ -48,9 +48,9 @@ int main(void) {
   printf("Load Praxos Program...\n");
 
   //Load the program into memory
-  for (int ii=0; ii<sizeof(praxos_wordcopy_prog)/sizeof(praxos_wordcopy_prog[0]); ii++) {
-    praxos_sys_reg_wr(PRAXOS_PM_DATA_LO, (unsigned)praxos_wordcopy_prog[ii]);
-    praxos_sys_reg_wr(PRAXOS_PM_DATA_HI, (unsigned)(praxos_wordcopy_prog[ii]>>32));
+  for (int ii=0; ii<sizeof(praxos_wordcopy)/sizeof(praxos_wordcopy[0]); ii++) {
+    praxos_sys_reg_wr(PRAXOS_PM_DATA_LO, (unsigned)praxos_wordcopy[ii]);
+    praxos_sys_reg_wr(PRAXOS_PM_DATA_HI, (unsigned)(praxos_wordcopy[ii]>>32));
     praxos_sys_reg_wr(PRAXOS_PM_ADDR, ii);
     praxos_sys_reg_wr(PRAXOS_PM_WR, 0);
   }

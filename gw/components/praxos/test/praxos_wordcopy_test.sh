@@ -11,7 +11,7 @@ fi
 SRC_ROOT_DIR="$1"
 
 echo "Assembling praxos program..."
-$SRC_ROOT_DIR/scripts/praxos_asm.sh $SRC_ROOT_DIR/gw/components/praxos/test/praxos_wordcopy.pxasm praxos_wordcopy_prog
+$SRC_ROOT_DIR/scripts/praxos_asm.sh $SRC_ROOT_DIR/gw/components/praxos/test/praxos_wordcopy.pxasm
 
 if [ "$?" -ne "0" ]; then
   echo "Test Failed!"

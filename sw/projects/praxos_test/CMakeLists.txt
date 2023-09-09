@@ -1,8 +1,8 @@
 add_custom_command(
   OUTPUT
-    ${CMAKE_CURRENT_BINARY_DIR}/praxos_wordcopy_prog.h
+    ${CMAKE_CURRENT_BINARY_DIR}/praxos_wordcopy.h
   COMMAND
-  	${PROJECT_SOURCE_DIR}/scripts/praxos_asm.sh ${PROJECT_SOURCE_DIR}/gw/components/praxos/test/praxos_wordcopy.pxasm praxos_wordcopy_prog
+  	${PROJECT_SOURCE_DIR}/scripts/praxos_asm.sh ${PROJECT_SOURCE_DIR}/gw/components/praxos/test/praxos_wordcopy.pxasm
   WORKING_DIRECTORY
   	${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS
@@ -15,7 +15,7 @@ add_executable(praxos_test
 	main.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
-	${CMAKE_CURRENT_BINARY_DIR}/praxos_wordcopy_prog.h
+	${CMAKE_CURRENT_BINARY_DIR}/praxos_wordcopy.h
 )
 
 target_compile_definitions(praxos_test
