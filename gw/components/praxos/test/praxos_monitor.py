@@ -117,7 +117,7 @@ async def wb_slave_emulator(dut):
 
 async def monitor_task(dut):
     count = 0
-    while count < 400:
+    while count < 8000:
         count += 1
         await RisingEdge(dut.clk)
         acc = dut.praxos_cpu_inst.acc
@@ -148,6 +148,9 @@ async def pre_start_actions(dut):
     dstAddr = random.randint(0, 0x70000000)
     print("dstAddr = 0x%x"%(dstAddr))
     await with_timeout(wb_write(dut, 17, dstAddr), 30, 'ns')
+    numBytes = 32
+    print("numBytes = 0x%x"%(numBytes))
+    await with_timeout(wb_write(dut, 18, numBytes), 30, 'ns')
 
 async def post_start_actions(dut):
     pass

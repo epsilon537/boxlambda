@@ -17,9 +17,11 @@
 .EQU write_byte_lane_jump_table_1 12
 .EQU write_byte_lane_jump_table_2 13
 .EQU write_byte_lane_jump_table_3 14
+.EQU num_bytes 15
 ;
 .EQU src_addr_io_port 16
 .EQU dst_addr_io_port 17
+.EQU num_bytes_io_port 18
 ;
 ;Set up constants in DM
     ld# 3 
@@ -50,30 +52,54 @@
     shr0
     shr0
     st src_word_addr
-    ;
     in src_addr_io_port ;Compute byte offset
     and const_3
     st src_addr_byte_offset
-    ;
+;
+    in dst_addr_io_port ;Compute word address
+    shr0
+    shr0
+    st dst_word_addr
+    in dst_addr_io_port ;Compute byte offset
+    and const_3
+    st dst_addr_byte_offset
+;
+    in num_bytes_io_port 
+    st num_bytes ;Store num. bytes to copy in DM
+;
+@copy_loop  ld num_bytes
+            brz copy_done
+            sub# 1
+            st num_bytes
+;
     ild src_addr_byte_offset
     ldi read_byte_lane_jump_table_0 ;indexed jump-table look-up
     ild# -1 ;Create stack frame for return address
     jal 0 ;store link addr on stack and jump
 ;
-@byte_read  in dst_addr_io_port ;Compute word address
-            shr0
-            shr0
-            st dst_word_addr
-            in dst_addr_io_port ;Compute byte offset
-            and const_3
-            st dst_addr_byte_offset
-            ;
-            ild dst_addr_byte_offset
+@byte_read  ild dst_addr_byte_offset
             ldi write_byte_lane_jump_table_0 ;indexed jump-table look-up
             ild# -1 ;Create stack frame for return address
             jal 0 ;store link addr on stack and jump
 ;
-@byte_copied    br byte_copied
+@byte_copied    ld src_addr_byte_offset
+                add# 1
+                and const_3
+                st src_addr_byte_offset
+                brnz inc_dst
+                ld src_word_addr
+                add# 1
+                st src_word_addr
+;
+@inc_dst ld dst_addr_byte_offset
+            add# 1
+            and const_3
+            st dst_addr_byte_offset
+            brnz copy_loop
+            ld src_word_addr
+            add# 1
+            st src_word_addr
+            br copy_loop
 ;
 @read_byte_lane_0   ild src_word_addr ;Set index register to word to read
                     busrb0 0
@@ -178,3 +204,5 @@
                     ror
                     buswb3 0
                     br byte_copied
+;
+@copy_done  br copy_done
