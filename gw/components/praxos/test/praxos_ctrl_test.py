@@ -4,8 +4,7 @@ from cocotb.clock import Clock
 import random
 import os
 from pathlib import Path
-from cocotb.runner import *
-from cocotb_genDumpModule import *
+from cocotb_boxlambda import *
 
 async def init(dut):
     #For simplicity's sake, pretend we have a 1ns clock period.
@@ -232,27 +231,10 @@ async def irq_out_test(dut):
     res = await with_timeout(wb_read(dut, 0), 30, 'ns')
     assert res == 0
 
-def praxos_ctrl_test_runner():
-    hdl_toplevel_lang = "verilog"
-    sim = "icarus"
-    build_dir= 'praxos_ctrl_sim_build'
-    proj_path = Path(__file__).resolve().parent
-    top= "praxos_ctrl"
-
-    verilog_sources = [proj_path / "../rtl/praxos_ctrl.sv", 
-                       genDumpModule(build_dir, top)]
-
-    runner = get_runner(sim)
-    runner.build(
-        verilog_sources=verilog_sources,
-        vhdl_sources= [],
-        hdl_toplevel= top,
-        always=True,
-        build_dir=build_dir
-    )
-
-    res = runner.test(hdl_toplevel=top, test_module="praxos_ctrl_test,", plusargs=['-fst'])
-    check_results_file(res)
-
 if __name__ == "__main__":
-    praxos_ctrl_test_runner()
+    proj_path = Path(__file__).resolve().parent
+    verilog_sources = [proj_path / "../rtl/praxos_ctrl.sv"]
+    
+    test_runner(verilog_sources=verilog_sources, 
+                test_module_filename=__file__, 
+                top="praxos_ctrl")
