@@ -78,7 +78,8 @@
     ild# -1 ;Create stack frame for return address
     jal 0 ;store link addr on stack and jump
 ;
-@byte_read  ild dst_addr_byte_offset
+@byte_read  st byte_to_copy
+            ild dst_addr_byte_offset
             ldi write_byte_lane_jump_table_0 ;indexed jump-table look-up
             ild# -1 ;Create stack frame for return address
             jal 0 ;store link addr on stack and jump
@@ -92,7 +93,7 @@
                 add# 1
                 st src_word_addr
 ;
-@inc_dst ld dst_addr_byte_offset
+@inc_dst    ld dst_addr_byte_offset
             add# 1
             and const_3
             st dst_addr_byte_offset
@@ -104,22 +105,18 @@
 ;
 @read_byte_lane_0   ild src_word_addr ;Set index register to word to read
                     busrb0 0
-                    st byte_to_copy
                     br byte_read
 ;
 @read_byte_lane_1   ild src_word_addr ;Set index register to word to read
                     busrb1 0
-                    st byte_to_copy
                     br byte_read
 ;
 @read_byte_lane_2   ild src_word_addr ;Set index register to word to read
                     busrb2 0
-                    st byte_to_copy
                     br byte_read
 ;
 @read_byte_lane_3   ild src_word_addr ;Set index register to word to read
                     busrb3 0
-                    st byte_to_copy
                     br byte_read
 ;
 @write_byte_lane_0  ild src_addr_byte_offset
