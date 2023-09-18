@@ -1,3 +1,7 @@
+`ifdef __ICARUS__
+`timescale 1 ns/1 ps
+`endif
+
 module picorv_dma_top #(
     parameter BASE_ADDR = 32'h2000
 ) (
@@ -62,7 +66,7 @@ module picorv_dma_top #(
     logic        ram_valid;
 	logic        ram_ready;
 	logic [ 3:0] ram_wstrb;
-	logic [23:2] ram_addr;
+	logic [$clog2(MEM_SZ_WORDS)+1:2] ram_addr;
 	logic [31:0] ram_wdata;
 	logic  [31:0] ram_rdata;
 
@@ -74,7 +78,8 @@ module picorv_dma_top #(
     logic picorv_rst_n;
     logic do_ack_wbs;
     logic do_wbs_wr_mem, do_wbs_wr_reg, do_wbs_rd_reg; //, do_wbs_rd_mem;
-    logic [31:0] wbs_dat_r_reg, wbs_dat_r_mem;
+    logic [31:0] wbs_dat_r_reg;
+    logic [31:0] wbs_dat_r_mem;
 
     logic unused = &{wbm_stall_i, wbs_sel, iomem_addr};
 
@@ -98,7 +103,7 @@ module picorv_dma_top #(
 
     //PicoRV access to core's registers.
 	assign reg_we = |reg_wstrb;
-    assign reg_valid = mem_valid && ((mem_addr >= PICO_REG_BASE_ADDR) || (mem_addr < (PICO_REG_BASE_ADDR + 4*REG_SZ_WORDS)));
+    assign reg_valid = mem_valid && ((mem_addr >= PICO_REG_BASE_ADDR) && (mem_addr < (PICO_REG_BASE_ADDR + 4*REG_SZ_WORDS)));
 	assign reg_wstrb = mem_wstrb;
 	assign reg_addr = mem_addr;
 	assign reg_wdata = mem_wdata;
@@ -113,9 +118,9 @@ module picorv_dma_top #(
 	assign iomem_wdata = mem_wdata;
 
     //PicoRV access to local program and data memory
-	assign ram_valid = mem_valid && ((mem_addr > PICO_MEM_BASE_ADDR) || (mem_addr < PICO_REG_BASE_ADDR));
+	assign ram_valid = mem_valid && ((mem_addr >= PICO_MEM_BASE_ADDR) && (mem_addr < PICO_REG_BASE_ADDR));
 	assign ram_wstrb = mem_wstrb;
-	assign ram_addr = mem_addr[23:2];
+	assign ram_addr = mem_addr[$clog2(MEM_SZ_WORDS)+1:2];
 	assign ram_wdata = mem_wdata;
 
     always @(posedge clk)
@@ -346,11 +351,15 @@ module picorv_dma_top #(
         .WORDS(MEM_SZ_WORDS)
     ) pico_mem_inst (
         .clk(clk),
-		.wen(picorv_rst_n ?  do_wbs_wr_mem ? wbs_sel : 4'b0 : ram_valid ? ram_wstrb : 4'b0),
-		.addr(picorv_rst_n ? 22'(wbs_adr) : ram_addr[23:2]), //WBS address are word addresses, PicoRV addresses are byte addresses.
-		.wdata(picorv_rst_n ? wbs_dat_w : ram_wdata),
-		.rdata(picorv_rst_n ? wbs_dat_r_mem : ram_rdata)
+		.wen(picorv_rst_n ? ram_valid ? ram_wstrb : 4'b0 : do_wbs_wr_mem ? wbs_sel : 4'b0),
+		.addr({ (22-$clog2(MEM_SZ_WORDS))'(1'b0), 
+                picorv_rst_n ?  ram_addr[$clog2(MEM_SZ_WORDS)+1:2] : 
+                                $clog2(MEM_SZ_WORDS)'(wbs_adr)}), //WBS address are word addresses, PicoRV addresses are byte addresses.
+		.wdata(picorv_rst_n ? ram_wdata : wbs_dat_w),
+		.rdata(ram_rdata)
     );
+
+    assign wbs_dat_r_mem = ram_rdata;
 
     //WB master interworking logic below is based on picorv32_wb
     localparam IDLE = 2'b00;

@@ -1,0 +1,17 @@
+    .text
+    .balign 4
+    .globl _start
+_start:
+    li t0, 0x11111111
+    mv a0, zero
+    li a1, 0x3040
+    li a2, 0x3080
+loop:
+    add a0, a0, t0
+    sw a0, 0(a1)
+
+    addi a1, a1, 4
+    blt a1, a2, loop
+
+spin:
+    j spin

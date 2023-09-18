@@ -1,0 +1,12 @@
+    .text
+    .balign 4
+    .globl _start
+_start:
+    li a1, 0x3000
+loop:
+    lw t0, 4(a1)
+    beqz t0, loop
+    sw t0, 0(a1)
+
+spin:
+    j spin

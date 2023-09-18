@@ -7,7 +7,9 @@ function(link_internal_create_mem_file _tgt _link_script)
     target_link_options(${_tgt}
         PRIVATE
             -T${_link_script}
-           "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
+            "--specs=${CMAKE_BINARY_DIR}/sw/picolibc.specs"
+            "LINKER:--gc-sections"
+            "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
     )
 
     #.mem file generation commands.

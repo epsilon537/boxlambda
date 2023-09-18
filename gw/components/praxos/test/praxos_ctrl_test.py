@@ -43,7 +43,13 @@ async def wb_read(dut, addr):
     dut.wb_we.value = 0
     stall_check_task = cocotb.start_soon(wb_stall_check(dut))
 
-    await RisingEdge(dut.wb_ack)
+    ackDetected = False
+    while not ackDetected:
+        await RisingEdge(dut.clk)
+        if dut.wb_ack.value == 1:
+            dut._log.info("WBS: ack detected")
+            ackDetected = True
+
     stall_check_task.kill()
     assert dut.wb_err.value == 0
     res = dut.wb_dat_r.value
@@ -64,7 +70,13 @@ async def wb_write(dut, addr, val):
 
     stall_check_task = cocotb.start_soon(wb_stall_check(dut))
 
-    await RisingEdge(dut.wb_ack)
+    ackDetected = False
+    while not ackDetected:
+        await RisingEdge(dut.clk)
+        if dut.wb_ack.value == 1:
+            dut._log.info("WBS: ack detected")
+            ackDetected = True
+            
     stall_check_task.kill()
     assert dut.wb_err.value == 0
     
