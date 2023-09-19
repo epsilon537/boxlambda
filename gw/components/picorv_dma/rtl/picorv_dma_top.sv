@@ -387,7 +387,7 @@ module picorv_dma_top #(
 						wbm_adr_o <= iomem_addr[31:2];
 						wbm_dat_o <= iomem_wdata;
 						wbm_we_o <= we;
-						wbm_sel_o <= iomem_wstrb;
+						wbm_sel_o <= we ? iomem_wstrb : 4'b1111;
 
 						wbm_stb_o <= 1'b1;
 						wbm_cyc_o <= 1'b1;

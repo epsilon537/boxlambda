@@ -13,6 +13,8 @@ add_custom_target(picorv_dma_test
             picorv_wr_gp_regs
             picorv_gp_regs_copy
             picorv_irq_in_out
+            picorv_wordcopy
+            picorv_bytecopy
         VERBATIM
     )
 

@@ -7,7 +7,13 @@ from pathlib import Path
 from cocotb_boxlambda import *
 import struct
 
+wb_transactions = []
+
 async def init(dut):
+    global wb_transactions
+
+    wb_transactions = []
+
     #For simplicity's sake, pretend we have a 1ns clock period.
     cocotb.start_soon(Clock(dut.clk, 1, units="ns").start())
 
@@ -41,6 +47,24 @@ def loadBinaryIntoWords(binfile):
             words.append(word)
     
     return words
+
+def selToMask(sel):
+    mask = 0
+    if sel&1:
+        mask |= 0xff
+    if sel&2:
+        mask |= 0xff00
+    if sel&4:
+        mask |= 0xff0000
+    if sel&8:
+        mask |= 0xff000000
+    
+    return mask
+
+async def timeout_check(dut):
+    await Timer(20000, units="ns")
+    #We should never reach this point
+    assert False, "Transaction timeout!"
 
 async def wb_stall_check(dut):
     await RisingEdge(dut.clk)
@@ -97,6 +121,40 @@ async def wb_write(dut, addr, val):
     
     await RisingEdge(dut.clk)
     dut.wbs_cyc.value = 0
+
+async def wb_slave_emulator(dut):
+    while True:
+        await RisingEdge(dut.clk)
+        if dut.wbm_stb_o.value == 1:
+            dut._log.info("WB: stb detected")
+        
+            if dut.wbm_we_o.value == 1:
+                dut._log.info("WB write, addr: 0x%x, data: 0x%x, sel: 0x%x", 
+                              int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o.value))
+                wb_transactions.append(('write', int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o)))       
+            else:
+                dat_r = random.randint(0, 0xffffffff)
+                dut.wbm_dat_i.value = dat_r
+                dut._log.info("WB read, addr: 0x%x, data: 0x%x, sel: 0x%x", 
+                              int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o))
+                wb_transactions.append(('read', int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o)))
+
+            dut.wbm_stall_i.value = 1    
+            responseDelay = random.randint(1, 10)
+            dut._log.info("WB: stalling %d ns", responseDelay)
+            await Timer(responseDelay, units="ns")  # wait a random amount of time before responding
+            await RisingEdge(dut.clk)
+            dut._log.info("WB: signalling ACK, clearing stall.")
+            dut.wbm_ack_i.value = 1 #ACK
+            dut.wbm_stall_i.value = 0
+            stdDeassertDetected = False
+            while not stdDeassertDetected:
+                await RisingEdge(dut.clk)
+                if dut.wbm_stb_o.value == 0:
+                    dut._log.info("WB: stb deassert detected")
+                    dut.wbm_ack_i.value = 0
+                    await Timer(1, units="ns")
+                    stdDeassertDetected = True
 
 @cocotb.test()
 async def picorv_reset(dut):
@@ -244,8 +302,117 @@ async def irq_in_out_ack(dut):
     assert dut.irq_out.value == 0
 
 #WBM R/W word access
+@cocotb.test()
+async def wordcopy_test(dut):
+    await init(dut)
+
+    #One extra ../ because the test runs from the sim_build subdirectory
+    pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy.picobin")
+
+    wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut))
+
+    #Write PM memory
+    for ii in range(len(pm_data)):
+        await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
+    
+    #Write the register taking picorv out of reset
+    await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
+    
+    #Ask Praxos to copy a number of words
+    numWords = random.randint(1, 16)
+    srcAddr = random.randint(0x00004000, 0x70000000) & ~3
+    dstAddr = random.randint(0x80000000, 0xf0000000) & ~3
+
+    dut._log.info("Test: Configuring DMA request.")
+    dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
+
+    await with_timeout(wb_write(dut, 0x410, srcAddr), 30, 'ns')
+    await with_timeout(wb_write(dut, 0x411, dstAddr), 30, 'ns')
+    await with_timeout(wb_write(dut, 0x412, numWords), 30, 'ns')
+
+    dut._log.info("Test: Kicking off DMA.")
+    #Kick off the copy
+    await with_timeout(wb_write(dut, 0x413, 1), 30, 'ns')
+
+    timeout_task = cocotb.start_soon(timeout_check(dut))
+
+    #Wait for completion
+    res = 1
+    while res != 0:
+        resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
+        if resNew != res:
+            res = resNew
+            dut._log.info("gp_reg[3] = %s", res)
+    
+    #Check the recorded transactions
+    assert len(wb_transactions) == numWords*2
+    for ii in range(0, len(wb_transactions), 2):
+        rw, addr, dat_r, sel = wb_transactions[ii]
+        assert rw == 'read'
+        assert addr == (srcAddr>>2)+ (ii/2)
+        assert sel == 0xf
+
+        rw, addr, dat_w, sel = wb_transactions[ii+1]
+        assert rw == 'write'
+        assert addr == (dstAddr>>2)+ (ii/2)
+        assert dat_w == dat_r
+        assert sel == 0xf
 
 #WBM R/W byte access
+@cocotb.test()
+async def bytecopy_test(dut):
+    await init(dut)
+
+    #One extra ../ because the test runs from the sim_build subdirectory
+    pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_bytecopy.picobin")
+
+    wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut))
+
+    #Write PM memory
+    for ii in range(len(pm_data)):
+        await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
+    
+    #Write the register taking picorv out of reset
+    await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
+    
+    #Ask Praxos to copy a number of words
+    numBytes = random.randint(1, 16)
+    srcAddr = random.randint(0x00004000, 0x70000000)
+    dstAddr = random.randint(0x80000000, 0xf0000000)
+
+    dut._log.info("Test: Configuring DMA request.")
+    dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numBytes, srcAddr, dstAddr)
+
+    await with_timeout(wb_write(dut, 0x410, srcAddr), 30, 'ns')
+    await with_timeout(wb_write(dut, 0x411, dstAddr), 30, 'ns')
+    await with_timeout(wb_write(dut, 0x412, numBytes), 30, 'ns')
+
+    dut._log.info("Test: Kicking off DMA.")
+    #Kick off the copy
+    await with_timeout(wb_write(dut, 0x413, 1), 30, 'ns')
+
+    timeout_task = cocotb.start_soon(timeout_check(dut))
+
+    #Wait for completion
+    res = 1
+    while res != 0:
+        resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
+        if resNew != res:
+            res = resNew
+            dut._log.info("gp_reg[3] = %s", res)
+    
+    #Check the recorded transactions
+    assert len(wb_transactions) == numBytes*2
+    for ii in range(0, len(wb_transactions), 2):
+        rw, addr, dat_r, sel = wb_transactions[ii]
+        assert rw == 'read'
+        assert sel == 0xf
+        assert addr == (srcAddr + (ii>>1))>>2
+        
+        rw, addr, dat_w, sel = wb_transactions[ii+1]
+        assert rw == 'write'
+        assert sel == (1<<(((dstAddr + (ii>>1))%4)))
+        assert addr == (dstAddr + (ii>>1))>>2
 
 if __name__ == "__main__":
     proj_path = Path(__file__).resolve().parent

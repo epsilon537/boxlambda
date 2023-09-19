@@ -1,0 +1,26 @@
+    .text
+    .balign 4
+    .globl _start
+_start:
+    li a0, 0x3040   /*gp-base*/
+wait_start:
+    lw a1, 12(a0)   /*GP3: ctrl-status*/
+    beqz a1, wait_start
+    li a1, 3
+    sw a1, 12(a0)   /*set to 'Busy'*/
+
+    lw a1, 0(a0)    /*GP0: src pointer*/
+    lw a2, 4(a0)    /*GP1: dst pointer*/
+    lw a3, 8(a0)    /*GP2: num words*/
+    slli a3, a3, 2
+    add a3, a3, a1 
+loop:
+    lw t0, 0(a1)
+    sw t0, 0(a2)
+    addi a1, a1, 4
+    addi a2, a2, 4
+    bltu a1, a3, loop
+
+    sw zero, 12(a0) /*set to 'Done'*/
+spin:
+    j spin

@@ -18,3 +18,19 @@ add_executable(picorv_irq_in_out
 )
 
 link_gen_picobin(picorv_irq_in_out)
+
+add_executable(picorv_wordcopy
+	EXCLUDE_FROM_ALL
+    wordcopy.picoasm
+)
+
+link_gen_picobin(picorv_wordcopy)
+
+add_executable(picorv_bytecopy
+	EXCLUDE_FROM_ALL
+    bytecopy.picoasm
+)
+
+link_gen_picobin(picorv_bytecopy)
+
+
