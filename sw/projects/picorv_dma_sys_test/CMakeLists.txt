@@ -5,7 +5,7 @@ add_executable(picorv_dma_sys_test
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
-add_dependencies(picorv_dma_sys_test picorv_wordcopy)
+add_dependencies(picorv_dma_sys_test picorv_wordcopy picorv_bytecopy)
 
 target_compile_definitions(picorv_dma_sys_test
 	PRIVATE

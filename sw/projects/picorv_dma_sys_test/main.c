@@ -10,6 +10,7 @@
 #include "platform.h"
 #include "utils.h"
 #include "picorv_wordcopy.h"
+#include "picorv_bytecopy.h"
 #include "picorv_dma_hal.h"
 
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
@@ -19,6 +20,7 @@ static struct gpio gpio0;
 static struct gpio gpio1;
 
 static unsigned srcBuf[32], dstBuf[32];
+static unsigned char srcBufBytes[36], dstBufBytes[36];
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
@@ -79,7 +81,55 @@ int main(void) {
   }
   else {
     printf("PicoRV Wordcopy test failed.\n");
+    return 0;
   }
 
+  printf("Putting PicoRV back into reset...\n");
+  picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 0);
+
+  printf("Load PicoRV Program...\n");
+
+  picorv_load_program(picorv_bytecopy_picobin, picorv_bytecopy_picobin_len);
+
+  printf("Taking PicoRV out of reset...\n");
+  picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 1);
+
+  //Fill source buffer with some random data and destination with 0s
+  for (int ii=0; ii<36; ii++) {
+    srcBufBytes[ii] = (unsigned char)rand();
+    dstBufBytes[ii] = 0;
+  }
+
+  unsigned char* srcPtr = srcBufBytes + 1;
+  unsigned char* dstPtr = dstBufBytes + 3;
+
+  printf("Configuring DMA request.\n");
+  printf("numBytes = %d, srcAddr = 0x%x, dstAddr = 0x%x\n", 32, (unsigned)(srcPtr), (unsigned)(dstPtr));
+
+  picorv_gp_reg_wr(0, (unsigned)srcPtr);
+  picorv_gp_reg_wr(1, (unsigned)dstPtr);
+  picorv_gp_reg_wr(2, 32);
+
+  printf("Kicking off DMA...\n");
+  picorv_gp_reg_wr(3, 1);
+    
+  printf("Waiting for completion...\n");
+  dmaBusy = 1;
+
+  while(dmaBusy) {
+    dmaBusy = picorv_gp_reg_rd(3);
+  }
+
+  printf("Checking result...\n");
+  if (!memcmp(srcPtr, dstPtr, 32)) {
+    printf("PicoRV Bytecopy test successful.\n");
+  }
+  else {
+    printf("PicoRV Bytecopy test failed.\n");
+    return 0;
+  }
+
+  printf("PicoRV Word and Bytecopy test successful.\n");
+  
   return 0;
 }

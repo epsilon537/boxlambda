@@ -166,7 +166,7 @@ int main(int argc, char** argv, char** env) {
     }
     
     int res = 0;
-    std::string uartCheckString("PicoRV Wordcopy test successful.");
+    std::string uartCheckString("PicoRV Word and Bytecopy test successful.");
 
     if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
       printf("Test failed\n");
