@@ -1,5 +1,6 @@
 #ifndef PRAXOS_REGS_H
-#define _REGS_H
+#define PRAXOS_REGS_H
+
 
 /*
  * Praxos DMA hardware access layer.
@@ -14,6 +15,10 @@
 #define PRAXOS_PM_WR 5
 #define PRAXOS_CTRL 6
 #define PRAXOS_GP_BASE 16
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 inline void praxos_sys_reg_wr(unsigned reg_offset, unsigned val)
 {
@@ -34,4 +39,9 @@ inline unsigned praxos_gp_reg_rd(unsigned gp_reg_offset)
 {
 	return ((unsigned volatile *)(PRAXOS_BASE))[PRAXOS_GP_BASE + gp_reg_offset];
 }
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif //PRAXOS_REGS_H

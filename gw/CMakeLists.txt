@@ -78,7 +78,6 @@ function (gw_common_rules)
         COMMAND
             ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.verilator_sources ${CMAKE_CURRENT_BINARY_DIR}/Vmodel ${BL_TARGET_FPGA} ${_prj_comp_name}
         BYPRODUCTS
-
             ${_prj_comp_name}.verilator_sources.dep
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}

@@ -4,8 +4,8 @@
 _start:
     li t0, 0x11111111
     mv a0, zero
-    li a1, 0x3040
-    li a2, 0x3080
+    li a1, 0x10003040
+    li a2, 0x10003080
 loop:
     add a0, a0, t0
     sw a0, 0(a1)

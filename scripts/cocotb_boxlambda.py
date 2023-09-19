@@ -16,7 +16,7 @@ def genDumpModule(buildDir, top):
 
     return buildDir+"/dumpWaves.v"
 
-def test_runner(verilog_sources, test_module_filename, top):
+def test_runner(verilog_sources, test_module_filename, top, testcase=None):
     hdl_toplevel_lang = "verilog"
     sim = "icarus"
     test_module = os.path.basename(os.path.splitext(test_module_filename)[0])
@@ -33,5 +33,5 @@ def test_runner(verilog_sources, test_module_filename, top):
         build_dir=build_dir
     )
 
-    res = runner.test(hdl_toplevel=top, test_module=test_module+",", plusargs=['-fst'])
+    res = runner.test(hdl_toplevel=top, test_module=test_module+",", testcase=testcase, plusargs=['-fst'])
     check_results_file(res)

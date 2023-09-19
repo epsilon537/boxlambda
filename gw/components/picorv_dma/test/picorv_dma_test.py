@@ -32,6 +32,7 @@ async def init(dut):
     dut.wbm_dat_i.value = 0
     dut.wbm_ack_i.value = 0
     dut.wbm_stall_i.value = 0
+    dut.wbm_err_i.value = 0
 
     await Timer(1, units="ns")  # wait 1 clock
 
@@ -320,7 +321,7 @@ async def wordcopy_test(dut):
     
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)
-    srcAddr = random.randint(0x00004000, 0x70000000) & ~3
+    srcAddr = random.randint(0x10004000, 0x70000000) & ~3
     dstAddr = random.randint(0x80000000, 0xf0000000) & ~3
 
     dut._log.info("Test: Configuring DMA request.")
@@ -377,7 +378,7 @@ async def bytecopy_test(dut):
     
     #Ask Praxos to copy a number of words
     numBytes = random.randint(1, 16)
-    srcAddr = random.randint(0x00004000, 0x70000000)
+    srcAddr = random.randint(0x10004000, 0x70000000)
     dstAddr = random.randint(0x80000000, 0xf0000000)
 
     dut._log.info("Test: Configuring DMA request.")

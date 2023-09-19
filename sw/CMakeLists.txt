@@ -14,7 +14,7 @@ function(link_gen_picobin _tgt)
     #Text section should start at 0x2000.
     target_link_options(${_tgt}
         PRIVATE
-            -Ttext 0x2000)
+            -Ttext 0x10002000)
 
     #binary file generation command.
     add_custom_command(
@@ -23,12 +23,15 @@ function(link_gen_picobin _tgt)
         POST_BUILD
         COMMAND
             ${CMAKE_OBJCOPY} -O binary ${_tgt} ${_tgt}.picobin
+        COMMAND
+            xxd -i ${_tgt}.picobin > ${_tgt}.h
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         BYPRODUCTS 
             ${_tgt}.picobin
+            ${_tgt}.h
         COMMENT
-            "Converting picorv32 executable to binary."
+            "Converting picorv32 executable to binary and header file."
         VERBATIM
     )
 endfunction()

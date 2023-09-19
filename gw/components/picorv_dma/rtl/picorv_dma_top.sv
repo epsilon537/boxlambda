@@ -3,7 +3,7 @@
 `endif
 
 module picorv_dma_top #(
-    parameter BASE_ADDR = 32'h2000
+    parameter BASE_ADDR = 32'h10002000
 ) (
     input logic clk,
     input logic rst,
@@ -17,6 +17,7 @@ module picorv_dma_top #(
 	input logic wbm_ack_i,
     input logic wbm_stall_i,
 	output logic wbm_cyc_o,
+    input logic wbm_err_i,
 
     //32-bit pipelined Wishbone interface.
     input logic [10:0] wbs_adr,
@@ -81,7 +82,7 @@ module picorv_dma_top #(
     logic [31:0] wbs_dat_r_reg;
     logic [31:0] wbs_dat_r_mem;
 
-    logic unused = &{wbm_stall_i, wbs_sel, iomem_addr};
+    logic unused = &{wbm_stall_i, wbs_sel, iomem_addr, wbm_err_i};
 
     //WB slave handshake
     assign do_wbs_wr_reg = wbs_cyc && wbs_stb && wbs_we && (wbs_adr >= 11'(WBS_REG_BASE_ADDR));

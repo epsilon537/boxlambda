@@ -47,5 +47,5 @@ rm $OUTFILE.tmp
 if [ -n "$DEPFILE_TGT" ]
 then
   #Generate a depfile: Prepend each line with <target> :
-  bender -d $SRC_DIR script $MIN_T_OOC -t verilator flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
+  bender -d $SRC_DIR script -t $BL_TARGET_FPGA $MIN_T_OOC -t verilator flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
 fi

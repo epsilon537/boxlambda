@@ -2,7 +2,7 @@
     .balign 4
     .globl _start
 _start:
-    li a0, 0x3040   /*gp-base*/
+    li a0, 0x10003040   /*gp-base*/
 wait_start:
     lw a1, 12(a0)   /*GP3: ctrl-status*/
     beqz a1, wait_start

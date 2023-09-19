@@ -2,7 +2,7 @@
     .balign 4
     .globl _start
 _start:
-    li a1, 0x3000
+    li a1, 0x10003000
 loop:
     lw t0, 4(a1)
     beqz t0, loop
