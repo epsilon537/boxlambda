@@ -55,7 +55,7 @@ module picorv_dma_top #(
 	logic [ 3:0] reg_wstrb;
 	logic [31:0] reg_addr;
 	logic [31:0] reg_wdata;
-	logic  [31:0] reg_rdata;
+	logic [31:0] reg_rdata;
 
     logic mem_valid;
 	logic mem_ready;
@@ -79,8 +79,7 @@ module picorv_dma_top #(
     logic picorv_rst_n;
     logic do_ack_wbs;
     logic do_wbs_wr_mem, do_wbs_wr_reg, do_wbs_rd_reg; //, do_wbs_rd_mem;
-    logic [31:0] wbs_dat_r_reg;
-    logic [31:0] wbs_dat_r_mem;
+    logic [31:0] wbs_dat_read_from_reg;
 
     logic unused = &{wbm_stall_i, wbs_sel, iomem_addr, wbm_err_i};
 
@@ -97,7 +96,7 @@ module picorv_dma_top #(
         end
     end
 
-    assign wbs_dat_r = (wbs_adr < 11'(WBS_REG_BASE_ADDR)) ? wbs_dat_r_mem : wbs_dat_r_reg;
+    assign wbs_dat_r = (wbs_adr < 11'(WBS_REG_BASE_ADDR)) ? ram_rdata : wbs_dat_read_from_reg;
     assign wbs_ack = do_ack_wbs & wbs_cyc;
     assign wbs_stall = 1'b0; //!wb_cyc ? 1'b0 : !wb_ack;
     assign wbs_err = 1'b0;
@@ -232,52 +231,49 @@ module picorv_dma_top #(
     
     //WBS and PicoRV register reads
     always_comb begin
-        if (do_wbs_rd_reg) begin
-            case(wbs_adr) //wbs address is a word address.
-                11'(WBS_REG_BASE_ADDR): wbs_dat_r_reg = irq_out_reg;
-                11'(WBS_REG_BASE_ADDR+1): wbs_dat_r_reg = irq_in_reg;
-                11'(WBS_REG_BASE_ADDR+2): wbs_dat_r_reg = ctrl_reg;
-                11'(WBS_REG_BASE_ADDR+16): wbs_dat_r_reg = gp_reg[0];
-                11'(WBS_REG_BASE_ADDR+17): wbs_dat_r_reg = gp_reg[1];
-                11'(WBS_REG_BASE_ADDR+18): wbs_dat_r_reg = gp_reg[2];
-                11'(WBS_REG_BASE_ADDR+19): wbs_dat_r_reg = gp_reg[3];
-                11'(WBS_REG_BASE_ADDR+20): wbs_dat_r_reg = gp_reg[4];
-                11'(WBS_REG_BASE_ADDR+21): wbs_dat_r_reg = gp_reg[5];
-                11'(WBS_REG_BASE_ADDR+22): wbs_dat_r_reg = gp_reg[6];
-                11'(WBS_REG_BASE_ADDR+23): wbs_dat_r_reg = gp_reg[7];
-                11'(WBS_REG_BASE_ADDR+24): wbs_dat_r_reg = gp_reg[8];
-                11'(WBS_REG_BASE_ADDR+25): wbs_dat_r_reg = gp_reg[9];
-                11'(WBS_REG_BASE_ADDR+26): wbs_dat_r_reg = gp_reg[10];
-                11'(WBS_REG_BASE_ADDR+27): wbs_dat_r_reg = gp_reg[11];
-                11'(WBS_REG_BASE_ADDR+28): wbs_dat_r_reg = gp_reg[12];
-                11'(WBS_REG_BASE_ADDR+29): wbs_dat_r_reg = gp_reg[13];
-                11'(WBS_REG_BASE_ADDR+30): wbs_dat_r_reg = gp_reg[14];
-                11'(WBS_REG_BASE_ADDR+31): wbs_dat_r_reg = gp_reg[15];
-                default: wbs_dat_r_reg = 32'd0;
-            endcase
-        end
-        if (!reg_we && reg_valid) begin
-            case(reg_addr) //PicoRV address is a byte address.
-                PICO_REG_BASE_ADDR+1*4: reg_rdata = irq_in_reg;
-                PICO_REG_BASE_ADDR+16*4: reg_rdata = gp_reg[0]; 
-                PICO_REG_BASE_ADDR+17*4: reg_rdata = gp_reg[1]; 
-                PICO_REG_BASE_ADDR+18*4: reg_rdata = gp_reg[2]; 
-                PICO_REG_BASE_ADDR+19*4: reg_rdata = gp_reg[3]; 
-                PICO_REG_BASE_ADDR+20*4: reg_rdata = gp_reg[4]; 
-                PICO_REG_BASE_ADDR+21*4: reg_rdata = gp_reg[5]; 
-                PICO_REG_BASE_ADDR+22*4: reg_rdata = gp_reg[6]; 
-                PICO_REG_BASE_ADDR+23*4: reg_rdata = gp_reg[7]; 
-                PICO_REG_BASE_ADDR+24*4: reg_rdata = gp_reg[8]; 
-                PICO_REG_BASE_ADDR+25*4: reg_rdata = gp_reg[9]; 
-                PICO_REG_BASE_ADDR+26*4: reg_rdata = gp_reg[10]; 
-                PICO_REG_BASE_ADDR+27*4: reg_rdata = gp_reg[11]; 
-                PICO_REG_BASE_ADDR+28*4: reg_rdata = gp_reg[12]; 
-                PICO_REG_BASE_ADDR+29*4: reg_rdata = gp_reg[13]; 
-                PICO_REG_BASE_ADDR+30*4: reg_rdata = gp_reg[14]; 
-                PICO_REG_BASE_ADDR+31*4: reg_rdata = gp_reg[15];
-                default: reg_rdata = 32'd0; 
-            endcase
-        end
+        case(wbs_adr) //wbs address is a word address.
+            11'(WBS_REG_BASE_ADDR): wbs_dat_read_from_reg = irq_out_reg;
+            11'(WBS_REG_BASE_ADDR+1): wbs_dat_read_from_reg = irq_in_reg;
+            11'(WBS_REG_BASE_ADDR+2): wbs_dat_read_from_reg = ctrl_reg;
+            11'(WBS_REG_BASE_ADDR+16): wbs_dat_read_from_reg = gp_reg[0];
+            11'(WBS_REG_BASE_ADDR+17): wbs_dat_read_from_reg = gp_reg[1];
+            11'(WBS_REG_BASE_ADDR+18): wbs_dat_read_from_reg = gp_reg[2];
+            11'(WBS_REG_BASE_ADDR+19): wbs_dat_read_from_reg = gp_reg[3];
+            11'(WBS_REG_BASE_ADDR+20): wbs_dat_read_from_reg = gp_reg[4];
+            11'(WBS_REG_BASE_ADDR+21): wbs_dat_read_from_reg = gp_reg[5];
+            11'(WBS_REG_BASE_ADDR+22): wbs_dat_read_from_reg = gp_reg[6];
+            11'(WBS_REG_BASE_ADDR+23): wbs_dat_read_from_reg = gp_reg[7];
+            11'(WBS_REG_BASE_ADDR+24): wbs_dat_read_from_reg = gp_reg[8];
+            11'(WBS_REG_BASE_ADDR+25): wbs_dat_read_from_reg = gp_reg[9];
+            11'(WBS_REG_BASE_ADDR+26): wbs_dat_read_from_reg = gp_reg[10];
+            11'(WBS_REG_BASE_ADDR+27): wbs_dat_read_from_reg = gp_reg[11];
+            11'(WBS_REG_BASE_ADDR+28): wbs_dat_read_from_reg = gp_reg[12];
+            11'(WBS_REG_BASE_ADDR+29): wbs_dat_read_from_reg = gp_reg[13];
+            11'(WBS_REG_BASE_ADDR+30): wbs_dat_read_from_reg = gp_reg[14];
+            11'(WBS_REG_BASE_ADDR+31): wbs_dat_read_from_reg = gp_reg[15];
+            default: wbs_dat_read_from_reg = 32'd0;
+        endcase
+        
+        case(reg_addr) //PicoRV address is a byte address.
+            PICO_REG_BASE_ADDR+1*4: reg_rdata = irq_in_reg;
+            PICO_REG_BASE_ADDR+16*4: reg_rdata = gp_reg[0]; 
+            PICO_REG_BASE_ADDR+17*4: reg_rdata = gp_reg[1]; 
+            PICO_REG_BASE_ADDR+18*4: reg_rdata = gp_reg[2]; 
+            PICO_REG_BASE_ADDR+19*4: reg_rdata = gp_reg[3]; 
+            PICO_REG_BASE_ADDR+20*4: reg_rdata = gp_reg[4]; 
+            PICO_REG_BASE_ADDR+21*4: reg_rdata = gp_reg[5]; 
+            PICO_REG_BASE_ADDR+22*4: reg_rdata = gp_reg[6]; 
+            PICO_REG_BASE_ADDR+23*4: reg_rdata = gp_reg[7]; 
+            PICO_REG_BASE_ADDR+24*4: reg_rdata = gp_reg[8]; 
+            PICO_REG_BASE_ADDR+25*4: reg_rdata = gp_reg[9]; 
+            PICO_REG_BASE_ADDR+26*4: reg_rdata = gp_reg[10]; 
+            PICO_REG_BASE_ADDR+27*4: reg_rdata = gp_reg[11]; 
+            PICO_REG_BASE_ADDR+28*4: reg_rdata = gp_reg[12]; 
+            PICO_REG_BASE_ADDR+29*4: reg_rdata = gp_reg[13]; 
+            PICO_REG_BASE_ADDR+30*4: reg_rdata = gp_reg[14]; 
+            PICO_REG_BASE_ADDR+31*4: reg_rdata = gp_reg[15];
+            default: reg_rdata = 32'd0; 
+        endcase
     end
 
     picorv32 #(
@@ -359,8 +355,6 @@ module picorv_dma_top #(
 		.wdata(picorv_rst_n ? ram_wdata : wbs_dat_w),
 		.rdata(ram_rdata)
     );
-
-    assign wbs_dat_r_mem = ram_rdata;
 
     //WB master interworking logic below is based on picorv32_wb
     localparam IDLE = 2'b00;

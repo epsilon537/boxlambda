@@ -26,14 +26,14 @@ sources:
       - constrs/Arty-A7-35-Master.xdc
   - target: arty-a7-35
     defines:
-      VRAM_SIZE_BYTES: (64*1024)
-      DPRAM_SIZE_BYTES: (64*1024)
+      VRAM_SIZE_BYTES: 65536
+      DPRAM_SIZE_BYTES: 65536
     files:
       - rtl/picorv_dma_test_soc.sv
   - target: arty-a7-100
     defines:
-      VRAM_SIZE_BYTES: (128*1024)
-      DPRAM_SIZE_BYTES: (256*1024)
+      VRAM_SIZE_BYTES: 131072
+      DPRAM_SIZE_BYTES: 262144
     files:
       - rtl/picorv_dma_test_soc.sv
   - target: verilator
@@ -49,10 +49,10 @@ sources:
     defines:
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
-      #YM2149: ~
-      #SDSPI: ~
-      #DRAM: ~
-      #VERA: ~
+      YM2149: ~
+      SDSPI: ~
+      DRAM: ~
+      VERA: ~
       PICORV_DMA: ~      
     #spram and timer should be separate components, but since I won't use them
     #as Boxlambda components, I'm leaving them here in the hello world example

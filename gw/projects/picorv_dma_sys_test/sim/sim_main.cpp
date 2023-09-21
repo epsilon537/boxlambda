@@ -159,14 +159,14 @@ int main(int argc, char** argv, char** env) {
     //Take the system out of reset.
     top->rst_ni = 1;
     
-    // When not in interactive mode, simulate for 5000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 5000000)) {
+    // When not in interactive mode, simulate for 20000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 20000000)) {
       // Evaluate model
       tick();        
     }
     
     int res = 0;
-    std::string uartCheckString("PicoRV Word and Bytecopy test successful.");
+    std::string uartCheckString("PicoRV DMA tests successful.");
 
     if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
       printf("Test failed\n");

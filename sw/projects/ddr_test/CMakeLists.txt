@@ -4,43 +4,15 @@ add_executable(ddr_test
     memtest.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
-	../../../sub/litex/litex/soc/software/liblitedram/sdram.c
 )
 
-target_include_directories(ddr_test
-		PRIVATE
-    		../../../sub/litex/litex/soc/software/liblitedram
-			../../../sub/litex/litex/soc/software/include
-			../../../sub/litex/litex/soc/software
-    		../../../sub/litex/litex/soc/cores/cpu/ibex
-)
-
-target_compile_definitions(ddr_test
-	PRIVATE
-		-DCONFIG_CPU_NOP="nop"
-		-DMAIN_RAM_BASE=0x40000000UL
-		-DMAIN_RAM_BASE2=0x50000000UL
-		-DCSR_BASE=0x10030000
-		-DSDRAM_TEST_DISABLE
-)
-
-#The memory controller SW interface is different between simulation and FPGA targets.
 if(CMAKE_BUILD_TYPE STREQUAL "sim")
-	target_include_directories(ddr_test
-		PRIVATE
-			../../../gw/components/litedram/sim/sw/include
-	)
-
 	target_compile_definitions(ddr_test PRIVATE -DMEMTEST_SIZE=32768)
-
 else() #fpga:
-	target_include_directories(ddr_test
-		PRIVATE
-			../../../gw/components/litedram/arty/sw/include
-	)
-
 	target_compile_definitions(ddr_test PRIVATE -DMEMTEST_SIZE=\(256*1024*1024\))
 endif()
 
 #Function defined in parent CMakeLists.txt file:
 link_internal_create_mem_file(ddr_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
+
+target_link_libraries(ddr_test sdram)

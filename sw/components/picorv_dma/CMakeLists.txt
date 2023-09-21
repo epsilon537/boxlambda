@@ -13,7 +13,7 @@ target_compile_options(picorv_dma
 )
 
 #Paths to include files users of picorv_dma are expected to use.
-target_include_directories(bootstrap
+target_include_directories(picorv_dma
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}
 )

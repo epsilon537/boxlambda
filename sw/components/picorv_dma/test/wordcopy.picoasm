@@ -22,5 +22,4 @@ loop:
     bltu a1, a3, loop
 
     sw zero, 12(a0) /*set to 'Done'*/
-spin:
-    j spin
+    j wait_start

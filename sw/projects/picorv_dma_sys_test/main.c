@@ -12,6 +12,8 @@
 #include "picorv_wordcopy.h"
 #include "picorv_bytecopy.h"
 #include "picorv_dma_hal.h"
+#include "sdram.h"
+#include "vera_hal.h"
 
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
@@ -19,8 +21,13 @@ static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
 
-static unsigned srcBuf[32], dstBuf[32];
+static unsigned srcBufWords[32], dstBufWords[32];
 static unsigned char srcBufBytes[36], dstBufBytes[36];
+
+unsigned char* srcPtrBytes;
+unsigned char* dstPtrBytes;
+unsigned* srcPtrWords;
+unsigned* dstPtrWords;
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
@@ -36,6 +43,24 @@ void	_exit (int status) {
 	while (1);
 }
 
+static void dma_copy(void* src, void* dst, unsigned numElems) {
+  printf("Configuring DMA request.\n");
+  printf("numElems = %d, srcAddr = 0x%x, dstAddr = 0x%x\n", numElems, (unsigned)src, (unsigned)dst);
+
+  picorv_gp_reg_wr(0, (unsigned)src);
+  picorv_gp_reg_wr(1, (unsigned)dst);
+  picorv_gp_reg_wr(2, numElems);
+
+  printf("Kicking off DMA...\n");
+  picorv_gp_reg_wr(3, 1);
+    
+  printf("Waiting for completion...\n");
+  int dmaBusy = 1;
+  while(dmaBusy) {
+    dmaBusy = picorv_gp_reg_rd(3);
+  }
+}
+
 int main(void) {
   //Switches
   gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
@@ -45,38 +70,79 @@ int main(void) {
   gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
   gpio_set_direction(&gpio1, 0x00000000); //4 inputs
 
-  printf("Load PicoRV Program...\n");
+  /*sdram_init() is provided by the Litex code base.*/
+  if (sdram_init()) {
+    printf("SDRAM init OK.\n");
+  }
+  else {
+    printf("SDRAM init failed!\n");
+    while(1);
+  }
+
+  printf("Load PicoRV WordCopy Program...\n");
 
   picorv_load_program(picorv_wordcopy_picobin, picorv_wordcopy_picobin_len);
 
   printf("Taking PicoRV out of reset...\n");
   picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 1);
 
+  printf("Internal memory wordcopy test\n");
+
+  srcPtrWords = srcBufWords;
+  dstPtrWords = dstBufWords;
+
   //Fill source buffer with some random data and destination with 0s
   for (int ii=0; ii<32; ii++) {
-    srcBuf[ii] = (unsigned)rand();
-    dstBuf[ii] = 0;
+    srcPtrWords[ii] = (unsigned)rand();
+    dstPtrWords[ii] = 0;
   }
 
-  printf("Configuring DMA request.\n");
-  printf("numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x\n", 32, (unsigned)srcBuf, (unsigned)dstBuf);
-
-  picorv_gp_reg_wr(0, (unsigned)srcBuf);
-  picorv_gp_reg_wr(1, (unsigned)dstBuf);
-  picorv_gp_reg_wr(2, 32);
-
-  printf("Kicking off DMA...\n");
-  picorv_gp_reg_wr(3, 1);
-    
-  printf("Waiting for completion...\n");
-  int dmaBusy = 1;
-
-  while(dmaBusy) {
-    dmaBusy = picorv_gp_reg_rd(3);
-  }
+  dma_copy(srcPtrWords, dstPtrWords, 32);
 
   printf("Checking result...\n");
-  if (!memcmp(srcBuf, dstBuf, 32*sizeof(unsigned))) {
+  if (!memcmp(srcPtrWords, dstPtrWords, 32*sizeof(unsigned))) {
+    printf("PicoRV Wordcopy test successful.\n");
+  }
+  else {
+    printf("PicoRV Wordcopy test failed.\n");
+    return 0;
+  }
+
+  printf("External memory wordcopy test\n");
+  srcPtrWords = (unsigned*)MAIN_RAM_BASE;
+  dstPtrWords = (unsigned*)(MAIN_RAM_BASE + 1024);
+
+  //Fill source buffer with some random data and destination with 0s
+  for (int ii=0; ii<32; ii++) {
+    srcPtrWords[ii] = (unsigned)rand();
+    dstPtrWords[ii] = 0;
+  }
+
+  dma_copy(srcPtrWords, dstPtrWords, 32);
+
+  printf("Checking result...\n");
+  if (!memcmp(srcPtrWords, dstPtrWords, 32*sizeof(unsigned))) {
+    printf("PicoRV Wordcopy test successful.\n");
+  }
+  else {
+    printf("PicoRV Wordcopy test failed.\n");
+    return 0;
+  }
+
+  printf("External memory wordcopy to VRAM test\n");
+  srcPtrWords = (unsigned*)MAIN_RAM_BASE;
+  dstPtrWords = (unsigned*)VERA_VRAM_BASE;
+
+  //Fill source buffer with some random data and destination with 0s
+  for (int ii=0; ii<32; ii++) {
+    srcPtrWords[ii] = (unsigned)rand();
+    dstPtrWords[ii] = 0;
+  }
+
+  dma_copy(srcPtrWords, dstPtrWords, 32);
+
+  printf("Checking result...\n");
+  if (!memcmp(srcPtrWords, dstPtrWords, 32*sizeof(unsigned))) {
     printf("PicoRV Wordcopy test successful.\n");
   }
   else {
@@ -87,12 +153,14 @@ int main(void) {
   printf("Putting PicoRV back into reset...\n");
   picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 0);
 
-  printf("Load PicoRV Program...\n");
+  printf("Load PicoRV ByteCopy Program...\n");
 
   picorv_load_program(picorv_bytecopy_picobin, picorv_bytecopy_picobin_len);
 
   printf("Taking PicoRV out of reset...\n");
   picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 1);
+
+  printf("Internal memory bytecopy test\n");
 
   //Fill source buffer with some random data and destination with 0s
   for (int ii=0; ii<36; ii++) {
@@ -100,28 +168,13 @@ int main(void) {
     dstBufBytes[ii] = 0;
   }
 
-  unsigned char* srcPtr = srcBufBytes + 1;
-  unsigned char* dstPtr = dstBufBytes + 3;
+  srcPtrBytes = srcBufBytes + 1;
+  dstPtrBytes = dstBufBytes + 3;
 
-  printf("Configuring DMA request.\n");
-  printf("numBytes = %d, srcAddr = 0x%x, dstAddr = 0x%x\n", 32, (unsigned)(srcPtr), (unsigned)(dstPtr));
-
-  picorv_gp_reg_wr(0, (unsigned)srcPtr);
-  picorv_gp_reg_wr(1, (unsigned)dstPtr);
-  picorv_gp_reg_wr(2, 32);
-
-  printf("Kicking off DMA...\n");
-  picorv_gp_reg_wr(3, 1);
-    
-  printf("Waiting for completion...\n");
-  dmaBusy = 1;
-
-  while(dmaBusy) {
-    dmaBusy = picorv_gp_reg_rd(3);
-  }
+  dma_copy(srcPtrBytes, dstPtrBytes, 32);
 
   printf("Checking result...\n");
-  if (!memcmp(srcPtr, dstPtr, 32)) {
+  if (!memcmp(srcPtrBytes, dstPtrBytes, 32)) {
     printf("PicoRV Bytecopy test successful.\n");
   }
   else {
@@ -129,7 +182,49 @@ int main(void) {
     return 0;
   }
 
-  printf("PicoRV Word and Bytecopy test successful.\n");
-  
+  printf("External memory bytecopy test\n");
+  srcPtrBytes = (unsigned char*)MAIN_RAM_BASE+1;
+  dstPtrBytes = (unsigned char*)(MAIN_RAM_BASE + 1024 + 3);
+
+  //Fill source buffer with some random data and destination with 0s
+  for (int ii=0; ii<32; ii++) {
+    srcPtrBytes[ii] = (unsigned char)rand();
+    dstPtrBytes[ii] = 0;
+  }
+
+  dma_copy(srcPtrBytes, dstPtrBytes, 32);
+
+  printf("Checking result...\n");
+  if (!memcmp(srcPtrBytes, dstPtrBytes, 32)) {
+    printf("PicoRV Bytecopy test successful.\n");
+  }
+  else {
+    printf("PicoRV Bytecopy test failed.\n");
+    return 0;
+  }
+
+  printf("External memory bytecopy to VRAM test\n");
+  srcPtrBytes = (unsigned char*)MAIN_RAM_BASE+1;
+  dstPtrBytes = (unsigned char*)(VERA_VRAM_BASE + 3);
+
+  //Fill source buffer with some random data and destination with 0s
+  for (int ii=0; ii<32; ii++) {
+    srcPtrBytes[ii] = (unsigned char)rand();
+    dstPtrBytes[ii] = 0;
+  }
+
+  dma_copy(srcPtrBytes, dstPtrBytes, 32);
+
+  printf("Checking result...\n");
+  if (!memcmp(srcPtrBytes, dstPtrBytes, 32)) {
+    printf("PicoRV Bytecopy test successful.\n");
+  }
+  else {
+    printf("PicoRV Bytecopy test failed.\n");
+    return 0;
+  }
+
+  printf("PicoRV DMA tests successful.\n");
+
   return 0;
 }

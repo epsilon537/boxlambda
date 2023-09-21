@@ -8,13 +8,12 @@ add_executable(sdspi_test
 
 target_compile_definitions(sdspi_test
 	PRIVATE
-		-DCONFIG_CPU_NOP="nop"
 		-DSDSPI_CPU_IS_LITTLE_ENDIAN
 )
 
 target_include_directories(sdspi_test
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/sub/sdspi/sw/
+    	${PROJECT_SOURCE_DIR}/sub/sdspi/sw/
 )
 
 #Function defined in parent CMakeLists.txt file:

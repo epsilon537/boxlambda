@@ -5,11 +5,6 @@ add_executable(ym2149_test
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
-target_compile_definitions(ym2149_test
-	PRIVATE
-		-DCONFIG_CPU_NOP="nop"
-)
-
 target_compile_options(ym2149_test
 	PRIVATE
 		-O2

@@ -71,8 +71,10 @@ module picorv_dma_test_soc(
   typedef enum {
     DM_M,
     COREI_M,
-    CORED_M,
-    PICORV_M
+    CORED_M
+  `ifdef PICORV_DMA
+    ,PICORV_M
+  `endif
   } wb_master_e;
 
   typedef enum {
@@ -92,7 +94,11 @@ module picorv_dma_test_soc(
     DDR_USR1_S
 } wb_slave_e;
 
+`ifdef PICORV_DMA
   localparam NrMaster = 4;
+`else
+  localparam NrMaster = 3;
+`endif
   localparam NrSlave  = 14;
 
   typedef logic [31:0] Wb_base_addr [NrSlave];
@@ -297,7 +303,7 @@ module picorv_dma_test_soc(
 
   litedram_wrapper litedram_wrapper_inst (
 	.clk(ext_clk), /*External clock is input for LiteDRAM module. On FPGA this is a 100MHz clock, in simulation it's a 50MHz clock.*/
-  .rst(1'b1), /*Never reset LiteDRAM.*/
+  .rst(1'b0), /*Never reset LiteDRAM.*/
   .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock. On FPGA a divide-by-2 of the ext_clk is done. In simulation sys_clk = ext_clk.*/
 	.sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
 	.pll_locked(pll_locked_i),
@@ -527,7 +533,10 @@ reset_ctrl reset_ctrl_inst(
 `endif //YM2149
 
 `ifdef PICORV_DMA
-  picorv_dma_top picorv_dma_inst (
+  picorv_dma_top #(
+      .BASE_ADDR(wb_base_addr[PICORV_S])
+    )
+    picorv_dma_inst (
     .clk(sys_clk),
     .rst(ndmreset),
     //32-bit pipelined Wishbone master interface.

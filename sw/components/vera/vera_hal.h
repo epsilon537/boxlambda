@@ -1,15 +1,22 @@
 #ifndef VERA_HAL_H
 #define VERA_HAL_H
 
+#include "vera.h"
+
+#define VERA_BASE 0x10100000
+#define VERA_VRAM_BASE (VERA_BASE + VERA_VRAM_OFFSET)
+#define VERA_PALETTE_BASE (VERA_BASE + VERA_PALETTE_OFFSET)
+#define VERA_SPRITES_BASE (VERA_BASE + VERA_SPRITES_OFFSET)
+
 /*A low-level Hardware Access Layer for VERA.*/
 //VERA register write
 inline void vera_reg_wr(unsigned addr, unsigned data) {
-  *(volatile unsigned *)(addr) = data;
+  *(volatile unsigned *)(VERA_BASE + addr) = data;
 }
 
 //VERA register read
 inline unsigned vera_reg_rd(unsigned addr) {
-  return *(unsigned volatile *)(addr);  
+  return *(unsigned volatile *)(VERA_BASE + addr);  
 }
 
 //VERA VRAM word write
@@ -38,20 +45,7 @@ inline void palette_ram_wr(unsigned idx, unsigned char r, unsigned char g, unsig
 }
 
 //Crude sprite attributes write function.
-inline void sprite_attr_wr(unsigned sprite_id, unsigned addr, unsigned mode, unsigned x, unsigned y, 
-                    unsigned z, unsigned width, unsigned height) {
-  unsigned v,w;
-
-  v = (addr>>5);
-  v |= (mode<<15);
-  v |= (x<<16); //x
-  w = y; //y
-  w |= (z<<18); //z
-  w |= (width<<28); //width:64
-  w |= (height<<30); //height
-
-  *(volatile unsigned *)(VERA_SPRITES_BASE + sprite_id*8) = v;
-  *(volatile unsigned *)(VERA_SPRITES_BASE + sprite_id*8 + 4) = w;
-}
+void sprite_attr_wr(unsigned sprite_id, unsigned addr, unsigned mode, unsigned x, unsigned y, 
+                    unsigned z, unsigned width, unsigned height);
 
 #endif //VERA_HAL_H
