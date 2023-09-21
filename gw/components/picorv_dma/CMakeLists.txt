@@ -15,6 +15,7 @@ add_custom_target(picorv_dma_test
             picorv_irq_in_out
             picorv_wordcopy
             picorv_bytecopy
+            picorv_progmem_data_access
         VERBATIM
     )
 

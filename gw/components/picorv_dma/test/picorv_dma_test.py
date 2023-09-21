@@ -359,6 +359,8 @@ async def wordcopy_test(dut):
         assert dat_w == dat_r
         assert sel == 0xf
 
+    timeout_task.kill()
+
 #WBM R/W byte access
 @cocotb.test()
 async def bytecopy_test(dut):
@@ -414,6 +416,50 @@ async def bytecopy_test(dut):
         assert rw == 'write'
         assert sel == (1<<(((dstAddr + (ii>>1))%4)))
         assert addr == (dstAddr + (ii>>1))>>2
+
+    timeout_task.kill()
+
+@cocotb.test()
+async def picorv_progmem_data_access(dut):
+    await init(dut)
+
+    #One extra ../ because the test runs from the sim_build subdirectory
+    pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_progmem_data_access.picobin")
+
+    wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut))
+
+    #Write PM memory
+    for ii in range(len(pm_data)):
+        await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
+    
+    #Write the register taking picorv out of reset
+    await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
+    
+    dut._log.info("Test: Configuring value to store in progrmem.")
+
+    testval = random.randint(1, 0xffffffff)
+    
+    await with_timeout(wb_write(dut, 0x410, testval), 30, 'ns')
+
+    dut._log.info("Test: Kicking off the program.")
+    await with_timeout(wb_write(dut, 0x413, 1), 30, 'ns')
+
+    timeout_task = cocotb.start_soon(timeout_check(dut))
+
+    #Wait for completion
+    res = 1
+    while res != 0:
+        resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
+        if resNew != res:
+            res = resNew
+            dut._log.info("gp_reg[3] = %s", res)
+    
+    #Check the transaction
+    res = await with_timeout(wb_read(dut, 0x411), 30, 'ns')
+
+    assert(res == testval)
+
+    timeout_task.kill()
 
 if __name__ == "__main__":
     proj_path = Path(__file__).resolve().parent

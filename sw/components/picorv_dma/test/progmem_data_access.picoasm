@@ -1,0 +1,25 @@
+    .text
+    .balign 4
+    .globl _start
+_start:
+    li a0, 0x10003040   /*gp-base*/
+    lui a4, %hi(var)
+    addi a4, a4, %lo(var)
+wait_start:
+    lw a1, 12(a0)   /*GP3: ctrl-status*/
+    beqz a1, wait_start
+    li a1, 3
+    sw a1, 12(a0)   /*set to 'Busy'*/
+
+    lw a1, 0(a0)    /*GP0: word to store*/
+    sw a1, 0(a4)    /*store the word in prog mem*/
+    lw a2, 0(a4)    /*load the word again from prog mem*/
+    sw a2, 4(a0)    /*store the word in GP1*/ 
+
+    sw zero, 12(a0)   /*set to 'Done'*/
+loop:
+    j loop
+    
+    .balign 4
+var:
+    .word 0

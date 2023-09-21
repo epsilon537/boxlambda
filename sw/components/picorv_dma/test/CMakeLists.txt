@@ -33,4 +33,10 @@ add_executable(picorv_bytecopy
 
 link_gen_picobin(picorv_bytecopy)
 
+add_executable(picorv_progmem_data_access
+	EXCLUDE_FROM_ALL
+    progmem_data_access.picoasm
+)
+
+link_gen_picobin(picorv_progmem_data_access)
 
