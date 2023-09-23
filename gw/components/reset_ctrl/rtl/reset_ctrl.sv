@@ -1,3 +1,7 @@
+`ifdef __ICARUS__
+`timescale 1 ns/1 ps
+`endif
+
 /* BoxLambda Reset Controller.*/
 module reset_ctrl (
     input logic clk,
@@ -21,15 +25,24 @@ module reset_ctrl (
 	output logic                               wb_err
     );
 
+    localparam [4:0] RESET_REASON_POR = 1;
+    localparam [4:0] RESET_REASON_WB_NDM = 2;
+    localparam [4:0] RESET_REASON_WB_DM = 4;
+    localparam [4:0] RESET_REASON_NDM = 8;
+    localparam [4:0] RESET_REASON_EXT = 16;
+
     //Power on Reset
     typedef enum {wait_for_pll_lock, wait_assert_por, assert_por, por_completed} por_state;
     por_state por_state_reg;
     logic [2:0] counter;
     logic por;
+    
+    logic [4:0] reset_reason_reg, reset_reason_next;
 
     initial begin
         por_state_reg = wait_for_pll_lock;
         counter = 3'b0;
+        reset_reason_reg = 5'b0;
     end
 
     always_ff @(posedge clk)
@@ -65,8 +78,14 @@ module reset_ctrl (
     );
 
     //WB handshake
+    logic wb_adr_reg;
     logic do_ack_reg, do_wb_wr;
     logic unused = &{wb_sel, wb_adr, wb_dat_w[31:2]};
+
+    initial begin
+        wb_adr_reg = 1'b0;
+    end
+
 
     assign do_wb_wr = wb_cyc & wb_stb & wb_we;
 
@@ -74,10 +93,11 @@ module reset_ctrl (
         do_ack_reg <= 1'b0;
         if (wb_stb) begin
             do_ack_reg <= 1'b1;
+            wb_adr_reg <= wb_adr;
         end
     end
 
-    assign wb_dat_r = 0;
+    assign wb_dat_r = {27'b0, reset_reason_reg};
     assign wb_ack = do_ack_reg & wb_cyc;
     assign wb_stall = 1'b0; //!wb_cyc ? 1'b0 : !wb_ack;
     assign wb_err = 1'b0;
@@ -87,6 +107,27 @@ module reset_ctrl (
     assign wb_ndm_reset = do_wb_wr & wb_dat_w[0];
     assign wb_dm_reset = do_wb_wr & wb_dat_w[1];
     
+    always_comb begin
+        reset_reason_next = reset_reason_reg;
+        if (por)
+            reset_reason_next = reset_reason_next | RESET_REASON_POR;
+        if (wb_ndm_reset)
+            reset_reason_next = reset_reason_next | RESET_REASON_WB_NDM;
+        if (wb_dm_reset)
+            reset_reason_next = reset_reason_next | RESET_REASON_WB_DM;
+        if (ndm_reset_i)
+            reset_reason_next = reset_reason_next | RESET_REASON_NDM;
+        if (ext_reset_conditioned)
+            reset_reason_next = reset_reason_next | RESET_REASON_EXT;
+        //An access to the reset reason register resets it.
+        if (wb_adr_reg && do_ack_reg)
+            reset_reason_next = 5'b0;
+    end
+
+    always @(posedge clk) begin
+            reset_reason_reg <= reset_reason_next;
+    end
+
     //Non-Debug Module reset
     assign ndm_reset_o = por | ext_reset_conditioned | ndm_reset_i | wb_ndm_reset;
 

@@ -1,3 +1,7 @@
+`ifdef __ICARUS__
+`timescale 1 ns/1 ps
+`endif
+
 //based on https://alchitry.com/metastability-and-debouncing-verilog
 module button_conditioner (
     input logic clk,
