@@ -1,3 +1,7 @@
+#The following are PicoRV assembly test programs for the programmable picorv_dma core.
+#Through the modules in the cmake subdirectory, CMake is aware of the .picoasm extension
+#and the ASM_PICO variables selecting the proper toolchain and compile/link flags.
+
 add_executable(picorv_wr_gp_regs
 	EXCLUDE_FROM_ALL
     wr_gp_regs.picoasm

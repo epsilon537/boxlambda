@@ -9,35 +9,50 @@ extern "C" {
  * PicoRV DMA hardware access layer.
  */
 #define PICORV_BASE 0x10002000
+
+//Program Memory Base Address and size
 #define PICORV_PROG_MEM_BASE PICORV_BASE
+#define PICORV_PROG_SIZE_BYTES 4096
+
+//System Registers Base Address.
 #define PICORV_SYS_REG_BASE (PICORV_BASE+0x1000)
+
+//General Purpose Registers Base Address.
 #define PICORV_GP_REG_BASE (PICORV_SYS_REG_BASE + 16*4)
 
+//Output IRQ register
 #define PICORV_SYS_REG_IRQ_OUT 0
+//Input IRQ register
 #define PICORV_SYS_REG_IRQ_IN 1
+//Control register
 #define PICORV_SYS_REG_CTRL 2
 
+//Write to System Register
 inline void picorv_sys_reg_wr(unsigned reg_offset, unsigned val)
 {
 	((unsigned volatile *)(PICORV_SYS_REG_BASE))[reg_offset] = val;
 }
 
+//Read from System Register
 inline unsigned picorv_sys_reg_rd(unsigned reg_offset)
 {
 	return ((unsigned volatile *)(PICORV_SYS_REG_BASE))[reg_offset];
 }
 
+//Write to General Purpose Register
 inline void picorv_gp_reg_wr(unsigned gp_reg_offset, unsigned val)
 {
 	((unsigned volatile *)(PICORV_GP_REG_BASE))[gp_reg_offset] = val;
 }
 
+//Read from General Purpose Register
 inline unsigned picorv_gp_reg_rd(unsigned gp_reg_offset)
 {
 	return ((unsigned volatile *)(PICORV_GP_REG_BASE))[gp_reg_offset];
 }
 
-//progLen must be a multiple of 4 and <= 0x1000.
+//Load a PicoRV program into Program Memory.
+//progLen must be a multiple of 4 and <= PICORV_PROG_SIZE_BYTES.
 void picorv_load_program(unsigned char *progData, unsigned progLen);
 
 #ifdef __cplusplus

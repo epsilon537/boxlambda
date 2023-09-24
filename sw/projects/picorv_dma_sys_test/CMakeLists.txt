@@ -1,3 +1,5 @@
+#PicoRV_DMA system test program
+
 add_executable(picorv_dma_sys_test
 	EXCLUDE_FROM_ALL
 	main.c
@@ -5,6 +7,7 @@ add_executable(picorv_dma_sys_test
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
+#Dependency on two PicoRV test assembly programs
 add_dependencies(picorv_dma_sys_test picorv_wordcopy picorv_bytecopy)
 
 target_compile_options(picorv_dma_sys_test
@@ -18,7 +21,7 @@ target_include_directories(picorv_dma_sys_test
 		${CMAKE_BINARY_DIR}/sw/components/picorv_dma/test/
 )
 
-#Function defined in parent CMakeLists.txt file:
-link_internal_create_mem_file(picorv_dma_sys_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
+link_internal_create_mem_file(picorv_dma_sys_test 
+	${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
 
 target_link_libraries(picorv_dma_sys_test picorv_dma sdram vera)

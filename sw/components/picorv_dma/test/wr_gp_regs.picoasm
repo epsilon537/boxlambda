@@ -1,11 +1,20 @@
+/*Write a word pattern in all general purpose registers.*/
+
     .text
     .balign 4
     .globl _start
+    /*Starting address of the General Purpose register range*/
+    .equ GP_REGS_BASE_ADDR, 0x10003040
+    /*End sentinel, pointing right past the last GP register.*/
+    .equ GP_REGS_END_ADDR, 0x10003080
+    .equ START_PATTERN, 0x11111111
+
 _start:
-    li t0, 0x11111111
+    li t0, START_PATTERN
     mv a0, zero
-    li a1, 0x10003040
-    li a2, 0x10003080
+    li a1, GP_REGS_BASE_ADDR
+    li a2, GP_REGS_END_ADDR
+    
 loop:
     add a0, a0, t0
     sw a0, 0(a1)

@@ -6,9 +6,10 @@ void picorv_load_program(unsigned char *progData, unsigned progLen) {
 	unsigned progWord;
 
 	assert((progLen&3) == 0);
-	assert(progLen <= 0x1000);
+	assert(progLen <= PICORV_PROG_SIZE_BYTES);
 
 	for (int ii=0; ii<progLen; ii+=4) {
+		//Byte to little endian word conversion.
 		progWord = 0;
 		progWord |= (unsigned)progData[ii];
 		progWord |= (unsigned)(progData[ii+1])<<8;

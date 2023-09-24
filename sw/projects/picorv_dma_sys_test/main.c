@@ -9,7 +9,9 @@
 #include "gpio.h"
 #include "platform.h"
 #include "utils.h"
+//PicoRV wordcopy program
 #include "picorv_wordcopy.h"
+//PicoRV bytecopy program
 #include "picorv_bytecopy.h"
 #include "picorv_dma_hal.h"
 #include "sdram.h"
@@ -17,10 +19,19 @@
 
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
+#define PICORV_GP_REG_SRC 0
+#define PICORV_GP_REG_DST 1
+#define PICORV_GP_REG_NUM_ELEMS 2
+#define PICORV_GP_REG_CTRL_STAT 3
+
+#define DMA_START 1
+#define DMA_BUSY 2
+
 static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
 
+//Some data bufers to copy from/to.
 static unsigned srcBufWords[32], dstBufWords[32];
 static unsigned char srcBufBytes[36], dstBufBytes[36];
 
@@ -43,21 +54,24 @@ void	_exit (int status) {
 	while (1);
 }
 
+//Copy <numElems> elements from <src> address to dst address.
+//An element is a word or a byte depending on whether the wordcopy or the bytecopy program
+//is installed into PicoRV.
 static void dma_copy(void* src, void* dst, unsigned numElems) {
   printf("Configuring DMA request.\n");
   printf("numElems = %d, srcAddr = 0x%x, dstAddr = 0x%x\n", numElems, (unsigned)src, (unsigned)dst);
 
-  picorv_gp_reg_wr(0, (unsigned)src);
-  picorv_gp_reg_wr(1, (unsigned)dst);
-  picorv_gp_reg_wr(2, numElems);
+  picorv_gp_reg_wr(PICORV_GP_REG_SRC, (unsigned)src);
+  picorv_gp_reg_wr(PICORV_GP_REG_DST, (unsigned)dst);
+  picorv_gp_reg_wr(PICORV_GP_REG_NUM_ELEMS, numElems);
 
   printf("Kicking off DMA...\n");
-  picorv_gp_reg_wr(3, 1);
+  picorv_gp_reg_wr(PICORV_GP_REG_CTRL_STAT, DMA_START);
     
   printf("Waiting for completion...\n");
-  int dmaBusy = 1;
+  int dmaBusy = DMA_BUSY;
   while(dmaBusy) {
-    dmaBusy = picorv_gp_reg_rd(3);
+    dmaBusy = picorv_gp_reg_rd(PICORV_GP_REG_CTRL_STAT);
   }
 }
 
@@ -204,8 +218,8 @@ int main(void) {
   }
 
   printf("External memory bytecopy to VRAM test\n");
-  srcPtrBytes = (unsigned char*)MAIN_RAM_BASE+1;
-  dstPtrBytes = (unsigned char*)(VERA_VRAM_BASE + 3);
+  srcPtrBytes = (unsigned char*)MAIN_RAM_BASE+1; //+1 to create an unaligned address.
+  dstPtrBytes = (unsigned char*)(VERA_VRAM_BASE + 3); //+3 to create another unaligned address.
 
   //Fill source buffer with some random data and destination with 0s
   for (int ii=0; ii<32; ii++) {

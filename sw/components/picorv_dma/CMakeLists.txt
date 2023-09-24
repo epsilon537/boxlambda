@@ -1,7 +1,6 @@
 add_library(picorv_dma)
 
-#FatFs source plus two source files from sdspi tying FatFs to the SDSPI controller
-#or in other words, implementing the 'Media Access Interface' for FatFs.
+#picorv_dma hardware access layer.
 target_sources(picorv_dma
     PRIVATE
     picorv_dma_hal.c

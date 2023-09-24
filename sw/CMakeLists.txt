@@ -9,14 +9,15 @@ set(SPECS "--specs=${CMAKE_CURRENT_BINARY_DIR}/picolibc.specs")
 add_compile_options(
     $<$<COMPILE_LANGUAGE:CXX,C,ASM>:${SPECS}>)
 
-#Function for picorv32 builds to link and generate binary
+#Function for picorv32 builds (picorv_dma microcode) to link and generate binary
 function(link_gen_picobin _tgt)
-    #Text section should start at 0x2000.
+    #Text section should start at 0x10002000.
     target_link_options(${_tgt}
         PRIVATE
             -Ttext 0x10002000)
 
-    #binary file generation command.
+    #Binary file generation command.
+    #Also generates C header file containing generated binary as a C array.
     add_custom_command(
         TARGET
             ${_tgt}

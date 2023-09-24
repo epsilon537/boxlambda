@@ -21,13 +21,6 @@ else
     CFLAGS="-CFLAGS $5"
 fi
 
-if [ -z "$6" ]
-then
-    LDFLAGS=""
-else
-    LDFLAGS="-LDFLAGS $6"
-fi
+echo "If no issues are found, verilator will complete silently."
 
-verilator --lint-only $CFLAGS $LDFLAGS --no-timing --top-module $TOP_MODULE --Wall `cat $VLT_FILES_FILE` --waiver-output $WAIVER_FILE `cat $VERILATOR_SCRIPT`
-
-echo "Done. If no issues are found, verilator completes silently"
+verilator --lint-only $CFLAGS --no-timing --top-module $TOP_MODULE --Wall `cat $VLT_FILES_FILE` --waiver-output $WAIVER_FILE `cat $VERILATOR_SCRIPT`

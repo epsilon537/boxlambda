@@ -7,21 +7,26 @@ from pathlib import Path
 from cocotb_boxlambda import *
 import struct
 
+#Cocotb-based unit testcases for picorv_dma
+
 wb_transactions = []
 
 async def init(dut):
     global wb_transactions
 
+    #Clear the wishbone transaction list.
     wb_transactions = []
 
     #For simplicity's sake, pretend we have a 1ns clock period.
     cocotb.start_soon(Clock(dut.clk, 1, units="ns").start())
 
+    #Assert reset
     dut.rst.value = 1
     await Timer(10, units="ns")  # wait 10 clocks
     dut.rst.value = 0
     await Timer(1, units="ns")  # wait 1 clock
 
+    #Initial values for input signals
     dut.wbs_adr.value = 0
     dut.wbs_dat_w.value = 0
     dut.wbs_sel.value = 0
@@ -36,6 +41,7 @@ async def init(dut):
 
     await Timer(1, units="ns")  # wait 1 clock
 
+#Function loading given binary file into a list of 32-bit words.
 def loadBinaryIntoWords(binfile):
     words=[]
 
@@ -49,30 +55,20 @@ def loadBinaryIntoWords(binfile):
     
     return words
 
-def selToMask(sel):
-    mask = 0
-    if sel&1:
-        mask |= 0xff
-    if sel&2:
-        mask |= 0xff00
-    if sel&4:
-        mask |= 0xff0000
-    if sel&8:
-        mask |= 0xff000000
-    
-    return mask
-
+#Asynchronous timeout task. The test fails if this task isn't killed before the timeout is reached.
 async def timeout_check(dut):
     await Timer(20000, units="ns")
     #We should never reach this point
     assert False, "Transaction timeout!"
 
+#Asynchronous task deasserting WB STB signal when slave no longer stalls.
 async def wb_stall_check(dut):
     await RisingEdge(dut.clk)
     if dut.wbs_stall.value == 1:
         await FallingEdge(dut.wbs_stall)
     dut.wbs_stb.value = 0
 
+#Wishbone word read transaction
 async def wb_read(dut, addr):
     await RisingEdge(dut.clk)
         
@@ -99,6 +95,7 @@ async def wb_read(dut, addr):
     
     return res
 
+#Wishone word write transaction
 async def wb_write(dut, addr, val):
     await RisingEdge(dut.clk)
     dut.wbs_adr.value = addr
@@ -123,6 +120,8 @@ async def wb_write(dut, addr, val):
     await RisingEdge(dut.clk)
     dut.wbs_cyc.value = 0
 
+#Asynchronous task emulating a Wishbone slave. Received transactions are recorded in a
+#wb_transactions list.
 async def wb_slave_emulator(dut):
     while True:
         await RisingEdge(dut.clk)
@@ -134,6 +133,7 @@ async def wb_slave_emulator(dut):
                               int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o.value))
                 wb_transactions.append(('write', int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o)))       
             else:
+                #Return random data to read transactions
                 dat_r = random.randint(0, 0xffffffff)
                 dut.wbm_dat_i.value = dat_r
                 dut._log.info("WB read, addr: 0x%x, data: 0x%x, sel: 0x%x", 
@@ -141,9 +141,9 @@ async def wb_slave_emulator(dut):
                 wb_transactions.append(('read', int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o)))
 
             dut.wbm_stall_i.value = 1    
-            responseDelay = random.randint(1, 10)
+            responseDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
             dut._log.info("WB: stalling %d ns", responseDelay)
-            await Timer(responseDelay, units="ns")  # wait a random amount of time before responding
+            await Timer(responseDelay, units="ns")
             await RisingEdge(dut.clk)
             dut._log.info("WB: signalling ACK, clearing stall.")
             dut.wbm_ack_i.value = 1 #ACK
@@ -152,11 +152,12 @@ async def wb_slave_emulator(dut):
             while not stdDeassertDetected:
                 await RisingEdge(dut.clk)
                 if dut.wbm_stb_o.value == 0:
-                    dut._log.info("WB: stb deassert detected")
+                    dut._log.info("WB: stb deassert detected.")
                     dut.wbm_ack_i.value = 0
                     await Timer(1, units="ns")
                     stdDeassertDetected = True
 
+#Test PicoRV reset
 @cocotb.test()
 async def picorv_reset(dut):
     await init(dut)
@@ -185,7 +186,7 @@ async def picorv_reset(dut):
     res = await with_timeout(wb_read(dut, 0x402), 30, 'ns')
     assert res == 0
 
-#WBS access to program memory
+#Test WB slave access to program memory
 @cocotb.test()
 async def wbs_access_to_program_memory(dut):
     await init(dut)
@@ -194,6 +195,7 @@ async def wbs_access_to_program_memory(dut):
 
     #Write PM memory
     for ii in range(1024):
+        #Fill with random data
         pm_data[ii] = random.randint(0, 0xffffffff)
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
     
@@ -208,6 +210,7 @@ async def wbs_access_to_program_memory(dut):
 async def pico_wr_wbs_rd(dut):
     await init(dut)
 
+    #Load PicoRV program that writes 0x11111111, 0x2222222... to GP regs 0, 1...
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wr_gp_regs.picobin")
 
@@ -218,7 +221,7 @@ async def pico_wr_wbs_rd(dut):
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
     
-    #Read the last GP register
+    #Read the last GP register until it becomes non-zero, or until we give up.
     gp15val=0
     retryCount = 0
     while gp15val == 0:
@@ -232,11 +235,12 @@ async def pico_wr_wbs_rd(dut):
         gpval = await with_timeout(wb_read(dut, 0x410+ii), 30, 'ns')
         assert gpval == 0x11111111*(ii+1)
 
-#WBS write - pico read access to GP registers.
+#WB slave write - pico read access to GP registers.
 @cocotb.test()
 async def wbs_wr_pico_rd(dut):
     await init(dut)
 
+    #Load PicoRV program that copies GP0 to GP1, GP2 to GP3, etc.
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_gp_regs_copy.picobin")
 
@@ -254,7 +258,7 @@ async def wbs_wr_pico_rd(dut):
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
     
-    #Read the last GP register to see if it becomes non-zero
+    #Keep reading the last GP register until it becomes non-zero, or until we give up.
     gp15val=0
     retryCount = 0
     while gp15val == 0:
@@ -269,11 +273,12 @@ async def wbs_wr_pico_rd(dut):
         dut._log.info("WB read, addr: 0x%x, data: 0x%x, ref: 0x%x", 0x410+ii, res, gp_reg_vals[ii-1])
         assert int(res) == gp_reg_vals[ii-1]
 
-#IRQ in, out, ack
+#Test IRQ in, IRQ out and IRQ ack
 @cocotb.test()
 async def irq_in_out_ack(dut):
     await init(dut)
 
+    #Load PicoRV program that waits for input IRQs, then copies them to output IRQ register
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_irq_in_out.picobin")
 
@@ -287,12 +292,16 @@ async def irq_in_out_ack(dut):
     #Wait some time
     await ClockCycles(dut.clk, random.randint(0,100))
 
-    #Set input interrupts
+    #Set some input interrupts
     irqval = random.randint(1,0x7fffffff)
-    dut.irq_in = irqval
+    dut.irq_in.value = irqval
 
     #Wait for output interrupt
     await with_timeout(RisingEdge(dut.irq_out), 300, 'ns')
+
+    #Read output IRQ register
+    irqOutReg = await with_timeout(wb_read(dut, 0x400), 30, 'ns')
+    assert irqOutReg == irqval
 
     #Acknowledge irq by writing to reg 0
     await with_timeout(wb_write(dut, 0x400, irqval), 30, 'ns')
@@ -302,11 +311,13 @@ async def irq_in_out_ack(dut):
     #irq out should be low now.
     assert dut.irq_out.value == 0
 
-#WBM R/W word access
+#WB Master R/W word access
 @cocotb.test()
 async def wordcopy_test(dut):
     await init(dut)
 
+    #Load PicoRV program that copies a configurable number of words from 
+    #a configurable source address to a configurable destination address.
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy.picobin")
 
@@ -321,6 +332,7 @@ async def wordcopy_test(dut):
     
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)
+    #Generate word aligned address values
     srcAddr = random.randint(0x10004000, 0x70000000) & ~3
     dstAddr = random.randint(0x80000000, 0xf0000000) & ~3
 
@@ -348,11 +360,12 @@ async def wordcopy_test(dut):
     #Check the recorded transactions
     assert len(wb_transactions) == numWords*2
     for ii in range(0, len(wb_transactions), 2):
+        #Word Read...
         rw, addr, dat_r, sel = wb_transactions[ii]
         assert rw == 'read'
         assert addr == (srcAddr>>2)+ (ii/2)
         assert sel == 0xf
-
+        #Alternated with write.
         rw, addr, dat_w, sel = wb_transactions[ii+1]
         assert rw == 'write'
         assert addr == (dstAddr>>2)+ (ii/2)
@@ -361,11 +374,13 @@ async def wordcopy_test(dut):
 
     timeout_task.kill()
 
-#WBM R/W byte access
+#WB Master R/W byte access
 @cocotb.test()
 async def bytecopy_test(dut):
     await init(dut)
 
+    #Load PicoRV program that copies a configurable number of bytes from 
+    #a configurable source address to a configurable destination address.
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_bytecopy.picobin")
 
@@ -378,13 +393,13 @@ async def bytecopy_test(dut):
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
     
-    #Ask Praxos to copy a number of words
+    #Ask Praxos to copy a number of bytes
     numBytes = random.randint(1, 16)
     srcAddr = random.randint(0x10004000, 0x70000000)
     dstAddr = random.randint(0x80000000, 0xf0000000)
 
     dut._log.info("Test: Configuring DMA request.")
-    dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numBytes, srcAddr, dstAddr)
+    dut._log.info("Test: numBytes = %d, srcAddr = 0x%x, dstAddr = 0x%x", numBytes, srcAddr, dstAddr)
 
     await with_timeout(wb_write(dut, 0x410, srcAddr), 30, 'ns')
     await with_timeout(wb_write(dut, 0x411, dstAddr), 30, 'ns')
@@ -406,12 +421,14 @@ async def bytecopy_test(dut):
     
     #Check the recorded transactions
     assert len(wb_transactions) == numBytes*2
+    
     for ii in range(0, len(wb_transactions), 2):
+        #Byte Read...
         rw, addr, dat_r, sel = wb_transactions[ii]
         assert rw == 'read'
         assert sel == 0xf
         assert addr == (srcAddr + (ii>>1))>>2
-        
+        #Alternated with write.
         rw, addr, dat_w, sel = wb_transactions[ii+1]
         assert rw == 'write'
         assert sel == (1<<(((dstAddr + (ii>>1))%4)))
@@ -419,10 +436,13 @@ async def bytecopy_test(dut):
 
     timeout_task.kill()
 
+#Test PicoRV data access to Program Memory
 @cocotb.test()
 async def picorv_progmem_data_access(dut):
     await init(dut)
 
+    #Load PicoRV program that reads a word from GP0, copies it to a location in Program Memory,
+    #reads the words back from Program Memory, and finally stores it in GP1.
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_progmem_data_access.picobin")
 
@@ -436,10 +456,8 @@ async def picorv_progmem_data_access(dut):
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
     
     dut._log.info("Test: Configuring value to store in progrmem.")
-
-    testval = random.randint(1, 0xffffffff)
-    
-    await with_timeout(wb_write(dut, 0x410, testval), 30, 'ns')
+    gp0val = random.randint(1, 0xffffffff)
+    await with_timeout(wb_write(dut, 0x410, gp0val), 30, 'ns')
 
     dut._log.info("Test: Kicking off the program.")
     await with_timeout(wb_write(dut, 0x413, 1), 30, 'ns')
@@ -455,17 +473,20 @@ async def picorv_progmem_data_access(dut):
             dut._log.info("gp_reg[3] = %s", res)
     
     #Check the transaction
-    res = await with_timeout(wb_read(dut, 0x411), 30, 'ns')
+    gp1val = await with_timeout(wb_read(dut, 0x411), 30, 'ns')
 
-    assert(res == testval)
+    assert(gp1val == gp0val)
 
     timeout_task.kill()
 
 if __name__ == "__main__":
+    #Cocotb Test Runner setup: pass in the verilog sources and the top-level.
+    #The runner discovers and executes the testcases.
     proj_path = Path(__file__).resolve().parent
     verilog_sources = [proj_path / "../../../../sub/picorv32/picosoc/picosoc_mem.v",
                        proj_path / "../../../../sub/picorv32/picorv32.v",
                        proj_path / "../rtl/picorv_dma_top.sv"]
+    #Wrapper function defined in scripts/cocotb_lambda.py
     test_runner(verilog_sources=verilog_sources, 
                 test_module_filename=__file__, 
                 top="picorv_dma_top")

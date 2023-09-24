@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#This wrapper shell scripts sets up the enviroment for running a CocoTB test script.
+
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
   echo "$0 <cocotb python test script>"
