@@ -1,0 +1,42 @@
+/*Word Copy test program*/
+
+    .text
+    .balign 4
+    .globl _start
+    /*Starting address of the General Purpose register range*/
+    .equ GP_REGS_BASE_ADDR, 0x10003040
+    /*GP register offsets*/
+    .equ GP0, 0
+    .equ GP1, 4
+    .equ GP2, 8
+    .equ GP3, 12
+    /*Status register values*/
+    .equ STAT_START, 1
+    .equ STAT_BUSY, 3
+    .equ STAT_DONE, 0
+
+_start:
+    li a0, GP_REGS_BASE_ADDR
+
+wait_start:
+    lw a1, GP3(a0)   /*GP3: ctrl-status*/
+    beqz a1, wait_start
+    li a1, STAT_BUSY
+    sw a1, GP3(a0)   /*set status to 'Busy'*/
+
+    lw a1, GP0(a0)    /*GP0: src pointer*/
+    lw a2, GP1(a0)    /*GP1: dst pointer*/
+    lw a3, GP2(a0)    /*GP2: num words*/
+    slli a3, a3, 2    /*Multiple by 4 to convert to byte address offset.*/
+    add a3, a3, a1 
+    
+loop:
+    /*Copy word by word*/
+    lw t0, 0(a1)
+    sw t0, 0(a2)
+    addi a1, a1, 4
+    addi a2, a2, 4
+    bltu a1, a3, loop
+
+    sw zero, GP3(a0) /*set to 'Done'*/
+    j wait_start

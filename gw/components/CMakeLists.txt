@@ -46,6 +46,9 @@ add_subdirectory(litedram)
 add_subdirectory(ibex_wb_core)
 add_subdirectory(ibex)
 add_subdirectory(reset_ctrl)
+add_subdirectory(praxos)
+add_subdirectory(picorv_dma)
+
 
 
 

@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
-  
+
 project(BoxLambda VERSION 0.1.0 LANGUAGES C CXX ASM)
+
+#Add the cmake subdirectory to CMake's module path. The ASM_PICO dialect is defined there.
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
+
+#Enable picorv32 assembler dialect, associated with .picoasm file extension.
+#We want to keep this separate from the regular host processor assembler settings associated
+#with .s and .S files.
+enable_language(ASM_PICO)
 
 #Build systems like Ninja can handle multiple configurations in one build tree.
 #We currently don't support that.

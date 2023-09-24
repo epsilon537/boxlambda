@@ -52,3 +52,6 @@
 [submodule "sub/Praxos"]
 	path = sub/Praxos
 	url = https://github.com/epsilon537/Praxos
+[submodule "sub/picorv32"]
+	path = sub/picorv32
+	url = https://github.com/epsilon537/picorv32

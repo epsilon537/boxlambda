@@ -28,4 +28,9 @@ target_include_directories(stsound
     ${PROJECT_SOURCE_DIR}/sub/StSound/StSoundLibrary/LZH
 )
 
+target_include_directories(stsound
+    PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}
+)
+
 target_link_libraries(stsound fatfs)

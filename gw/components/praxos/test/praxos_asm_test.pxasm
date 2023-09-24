@@ -1,0 +1,250 @@
+;constants
+.EQU CALL_RET -1
+
+;DM offsets
+.EQU sp 0
+.EQU const_3 1
+.EQU read_byte_lane_jump_table_0 2
+.EQU read_byte_lane_jump_table_1 3
+.EQU read_byte_lane_jump_table_2 4
+.EQU read_byte_lane_jump_table_3 5
+.EQU src_addr_byte_offset 6
+.EQU src_word_addr 7
+.EQU byte_to_copy 8
+.EQU dst_word_addr 9
+.EQU dst_addr_byte_offset 10
+.EQU write_byte_lane_jump_table_0 11
+.EQU write_byte_lane_jump_table_1 12
+.EQU write_byte_lane_jump_table_2 13
+.EQU write_byte_lane_jump_table_3 14
+.EQU num_bytes 15
+.EQU src_addr_byte_offset_tmp 16
+;
+.EQU src_addr_io_port 16
+.EQU dst_addr_io_port 17
+.EQU num_bytes_io_port 18
+;
+;Set up constants in DM
+    ld# 3 
+    st const_3
+;Set up read_byte_lane jump table
+    ild# read_byte_lane_0
+    ist read_byte_lane_jump_table_0
+    ild# read_byte_lane_1
+    ist read_byte_lane_jump_table_1
+    ild# read_byte_lane_2
+    ist read_byte_lane_jump_table_2
+    ild# read_byte_lane_3
+    ist read_byte_lane_jump_table_3
+;Set up write_byte_lane jump table
+    ild# write_byte_lane_0
+    ist write_byte_lane_jump_table_0
+    ild# write_byte_lane_1
+    ist write_byte_lane_jump_table_1
+    ild# write_byte_lane_2
+    ist write_byte_lane_jump_table_2
+    ild# write_byte_lane_3
+    ist write_byte_lane_jump_table_3
+;
+    ild# 0 ;Init stack pointer DM location
+    ist sp
+;
+    in src_addr_io_port ;Compute word address
+    shr0
+    shr0
+    st src_word_addr
+    in src_addr_io_port ;Compute byte offset
+    and const_3
+    st src_addr_byte_offset
+;
+    in dst_addr_io_port ;Compute word address
+    shr0
+    shr0
+    st dst_word_addr
+    in dst_addr_io_port ;Compute byte offset
+    and const_3
+    st dst_addr_byte_offset
+;
+    in num_bytes_io_port 
+    st num_bytes ;Store num. bytes to copy in DM
+;
+@copy_loop  ld num_bytes
+            brz copy_done
+            sub# 1
+            st num_bytes
+;
+    ild src_addr_byte_offset
+    ldi read_byte_lane_jump_table_0 ;indexed jump-table look-up
+    ild# -1 ;Create stack frame for return address
+    jal 0 ;store link addr on stack and jump
+;
+@byte_read  st byte_to_copy
+            ild dst_addr_byte_offset
+            ldi write_byte_lane_jump_table_0 ;indexed jump-table look-up
+            ild# -1 ;Create stack frame for return address
+            jal 0 ;store link addr on stack and jump
+;
+@byte_copied    ld src_addr_byte_offset
+                add# 1
+                and const_3
+                st src_addr_byte_offset
+                brnz inc_dst
+                ld src_word_addr
+                add# 1
+                st src_word_addr
+;
+@inc_dst    ld dst_addr_byte_offset
+            add# 1
+            and const_3
+            st dst_addr_byte_offset
+            brnz copy_loop
+            ld src_word_addr
+            add# 1
+            st src_word_addr
+            br copy_loop
+;
+@read_byte_lane_0   ild src_word_addr ;Set index register to word to read
+                    busrb0 0
+                    br byte_read
+;
+@read_byte_lane_1   ild src_word_addr ;Set index register to word to read
+                    busrb1 0
+                    br byte_read
+;
+@read_byte_lane_2   ild src_word_addr ;Set index register to word to read
+                    busrb2 0
+                    br byte_read
+;
+@read_byte_lane_3   ild src_word_addr ;Set index register to word to read
+                    busrb3 0
+                    br byte_read
+;
+@write_byte_lane_0  ild src_addr_byte_offset
+                    ld byte_to_copy
+@wr_lane_0_shift    iadd# -1
+                    brin wr_lane_0_shift_done
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    shr0
+                    br wr_lane_0_shift
+@wr_lane_0_shift_done   ild dst_word_addr ;Set index register to word to write
+                        buswb0 0
+                        br byte_copied
+;
+@write_byte_lane_1  ld src_addr_byte_offset
+                    st src_addr_byte_offset_tmp
+@wr_lane_1_shift_loop   sub# 1
+                        brz wr_lane_1_shift_done
+                        brp wr_lane_1_right_shift
+                        ld byte_to_copy
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        st byte_to_copy
+                        br wr_lane_1_shift_done
+@wr_lane_1_right_shift  ld byte_to_copy
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        st byte_to_copy
+                        ld src_addr_byte_offset_tmp
+                        sub# 1
+                        st src_addr_byte_offset_tmp
+                        br wr_lane_1_shift_loop
+@wr_lane_1_shift_done   ild dst_word_addr ;Set index register to word to read
+                        ld byte_to_copy
+                        buswb1 0
+                        br byte_copied
+;
+@write_byte_lane_2  ld src_addr_byte_offset
+                    st src_addr_byte_offset_tmp
+@wr_lane_2_shift_loop   sub# 2
+                        brz wr_lane_2_shift_done
+                        brp wr_lane_2_right_shift
+                        ld byte_to_copy
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        st byte_to_copy
+                        ld src_addr_byte_offset_tmp
+                        add# 1
+                        st src_addr_byte_offset_tmp
+                        br wr_lane_2_shift_loop
+@wr_lane_2_right_shift  ld byte_to_copy
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        st byte_to_copy
+                        ld src_addr_byte_offset_tmp
+                        sub# 1
+                        st src_addr_byte_offset_tmp
+                        br wr_lane_2_shift_loop
+@wr_lane_2_shift_done   ild dst_word_addr ;Set index register to word to read
+                        ld byte_to_copy
+                        buswb2 0
+                        br byte_copied
+;
+@write_byte_lane_3  ld src_addr_byte_offset
+                    st src_addr_byte_offset_tmp
+@wr_lane_3_shift_loop   sub# 3
+                        brz wr_lane_3_shift_done
+                        brp wr_lane_3_right_shift
+                        ld byte_to_copy
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        shl0
+                        st byte_to_copy
+                        ld src_addr_byte_offset_tmp
+                        add# 1
+                        st src_addr_byte_offset_tmp
+                        br wr_lane_3_shift_loop
+@wr_lane_3_right_shift  ld byte_to_copy
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        shr0
+                        st byte_to_copy
+                        ld src_addr_byte_offset_tmp
+                        sub# 1
+                        st src_addr_byte_offset_tmp
+                        br wr_lane_3_shift_loop
+@wr_lane_3_shift_done   ild dst_word_addr ;Set index register to word to read
+                        ld byte_to_copy
+                        buswb3 0
+                        br byte_copied
+;
+@copy_done  br copy_done

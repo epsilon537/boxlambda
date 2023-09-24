@@ -1,6 +1,10 @@
 #ifndef YM2149_SYS_REGS_H
 #define YM2149_SYS_REGS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Dual YM2149 hardware access layer.
  */
@@ -65,5 +69,9 @@ inline void ym2149_sys_reg_wr(unsigned reg_offset, unsigned val)
 {
 	((unsigned volatile *)(YM2149_SYS_BASE))[reg_offset] = val;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //YM2149_SYS_REGS_H

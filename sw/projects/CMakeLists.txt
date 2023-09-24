@@ -7,7 +7,9 @@ function(link_internal_create_mem_file _tgt _link_script)
     target_link_options(${_tgt}
         PRIVATE
             -T${_link_script}
-           "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
+            "--specs=${CMAKE_BINARY_DIR}/sw/picolibc.specs"
+            "LINKER:--gc-sections"
+            "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
     )
 
     #.mem file generation commands.
@@ -38,3 +40,5 @@ add_subdirectory(sdspi_test)
 add_subdirectory(fatfs_test)
 add_subdirectory(ym2149_test)
 add_subdirectory(stsound_test)
+add_subdirectory(praxos_test)
+add_subdirectory(picorv_dma_sys_test)

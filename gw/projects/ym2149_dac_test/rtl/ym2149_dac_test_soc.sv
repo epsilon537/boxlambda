@@ -91,7 +91,7 @@ module ym2149_dac_test_soc(
 } wb_slave_e;
 
   localparam NrMaster = 3;
-  localparam NrSlave  = 12;
+  localparam NrSlave  = 13;
 
   typedef logic [31:0] Wb_base_addr [NrSlave];
 

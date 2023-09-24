@@ -9,7 +9,6 @@
 #include "platform.h"
 #include "utils.h"
 #include "sdram.h"
-#include "vera.h"
 #include "vera_hal.h"
 
 #define VRAM_MAP_BASE (0x8000) //Relative to VERA base address.

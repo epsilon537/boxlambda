@@ -3,11 +3,6 @@ add_executable(fatfs_test
 	fatfs_test.c
 )
 
-target_compile_definitions(fatfs_test
-	PRIVATE
-		-DCONFIG_CPU_NOP="nop"
-)
-
 target_compile_options(fatfs_test
 	PRIVATE
 		-O2 -g

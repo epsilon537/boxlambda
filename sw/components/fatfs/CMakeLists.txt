@@ -9,7 +9,6 @@ target_sources(fatfs
     ../../../sub/fatfs/source/ffunicode.c     
     ../../../sub/sdspi/sw/diskio.c
     ../../../sub/sdspi/sw/sdcard.c
-
 )
 
 target_compile_definitions(fatfs

@@ -1,0 +1,20 @@
+    /*Wait for IRQ-in, then copy IRQ-in to IRQ-out*/
+    .text
+    .balign 4
+    .globl _start
+    .equ SYS_REG_BASE, 0x10003000
+    /*IRQ-in register offset*/
+    .equ IRQ_IN, 4
+    /*IRQ-out register offset*/
+    .equ IRQ_OUT, 0
+_start:
+    li a1, SYS_REG_BASE
+loop:
+    lw t0, IRQ_IN(a1)
+    /*Spin until not zero.*/
+    beqz t0, loop
+    /*Copy the IRQ-in value to the IRQ output register*/
+    sw t0, IRQ_OUT(a1)
+
+spin:
+    j spin
