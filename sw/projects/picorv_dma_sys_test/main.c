@@ -122,9 +122,30 @@ int main(void) {
     return 0;
   }
 
-  printf("External memory wordcopy test\n");
+  printf("External memory wordcopy test, port 0\n");
   srcPtrWords = (unsigned*)MAIN_RAM_BASE;
   dstPtrWords = (unsigned*)(MAIN_RAM_BASE + 1024);
+
+  //Fill source buffer with some random data and destination with 0s
+  for (int ii=0; ii<32; ii++) {
+    srcPtrWords[ii] = (unsigned)rand();
+    dstPtrWords[ii] = 0;
+  }
+
+  dma_copy(srcPtrWords, dstPtrWords, 32);
+
+  printf("Checking result...\n");
+  if (!memcmp(srcPtrWords, dstPtrWords, 32*sizeof(unsigned))) {
+    printf("PicoRV Wordcopy test successful.\n");
+  }
+  else {
+    printf("PicoRV Wordcopy test failed.\n");
+    return 0;
+  }
+
+  printf("External memory wordcopy test, port 1\n");
+  srcPtrWords = (unsigned*)MAIN_RAM_BASE2;
+  dstPtrWords = (unsigned*)(MAIN_RAM_BASE2 + 1024);
 
   //Fill source buffer with some random data and destination with 0s
   for (int ii=0; ii<32; ii++) {
@@ -196,9 +217,30 @@ int main(void) {
     return 0;
   }
 
-  printf("External memory bytecopy test\n");
+  printf("External memory bytecopy test, port 0.\n");
   srcPtrBytes = (unsigned char*)MAIN_RAM_BASE+1;
   dstPtrBytes = (unsigned char*)(MAIN_RAM_BASE + 1024 + 3);
+
+  //Fill source buffer with some random data and destination with 0s
+  for (int ii=0; ii<32; ii++) {
+    srcPtrBytes[ii] = (unsigned char)rand();
+    dstPtrBytes[ii] = 0;
+  }
+
+  dma_copy(srcPtrBytes, dstPtrBytes, 32);
+
+  printf("Checking result...\n");
+  if (!memcmp(srcPtrBytes, dstPtrBytes, 32)) {
+    printf("PicoRV Bytecopy test successful.\n");
+  }
+  else {
+    printf("PicoRV Bytecopy test failed.\n");
+    return 0;
+  }
+
+  printf("External memory bytecopy test, port 1.\n");
+  srcPtrBytes = (unsigned char*)MAIN_RAM_BASE2+1;
+  dstPtrBytes = (unsigned char*)(MAIN_RAM_BASE2 + 1024 + 3);
 
   //Fill source buffer with some random data and destination with 0s
   for (int ii=0; ii<32; ii++) {

@@ -13,8 +13,8 @@ add_custom_target(picorv_dma_test ALL
         COMMENT
             "Dummy target to collect test dependencies."
         DEPENDS
-            picorv_wr_gp_regs
-            picorv_gp_regs_copy
+            picorv_wr_hir_regs
+            picorv_hir_regs_copy
             picorv_irq_in_out
             picorv_wordcopy
             picorv_bytecopy

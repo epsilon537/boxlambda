@@ -8,17 +8,29 @@ module picorv_dma_top #(
     input logic clk,
     input logic rst,
 
-    //32-bit pipelined Wishbone master interface.
-    output logic [29:0] wbm_adr_o,
-	output logic [31:0] wbm_dat_o,
-	input logic [31:0] wbm_dat_i,
-	output logic wbm_we_o,
-	output logic [3:0] wbm_sel_o,
-	output logic wbm_stb_o,
-	input logic wbm_ack_i,
-    input logic wbm_stall_i,
-	output logic wbm_cyc_o,
-    input logic wbm_err_i,
+    //32-bit pipelined Wishbone master interface 0.
+    output logic [29:0] wbm0_adr_o,
+	output logic [31:0] wbm0_dat_o,
+	input logic [31:0] wbm0_dat_i,
+	output logic wbm0_we_o,
+	output logic [3:0] wbm0_sel_o,
+	output logic wbm0_stb_o,
+	input logic wbm0_ack_i,
+    input logic wbm0_stall_i,
+	output logic wbm0_cyc_o,
+    input logic wbm0_err_i,
+
+    //32-bit pipelined Wishbone master interface 1.
+    output logic [29:0] wbm1_adr_o,
+	output logic [31:0] wbm1_dat_o,
+	input logic [31:0] wbm1_dat_i,
+	output logic wbm1_we_o,
+	output logic [3:0] wbm1_sel_o,
+	output logic wbm1_stb_o,
+	input logic wbm1_ack_i,
+    input logic wbm1_stall_i,
+	output logic wbm1_cyc_o,
+    input logic wbm1_err_i,
 
     //32-bit pipelined Wishbone slave interface.
     input logic [10:0] wbs_adr,
@@ -41,8 +53,20 @@ module picorv_dma_top #(
     localparam integer REG_SZ_WORDS = 32; //Register Space.
     localparam integer WBS_REG_BASE_ADDR = MEM_SZ_WORDS; //Register base address as see by WB slave.
     localparam integer PICO_REG_BASE_ADDR = BASE_ADDR+MEM_SZ_WORDS*4; //Register base address as seen by PicoRV.
-    localparam integer PICO_MEM_BASE_ADDR = BASE_ADDR; //Memory base address as seen by PicoRV
+    localparam integer PICO_MEM_BASE_ADDR = BASE_ADDR; //Program Memory base address as seen by PicoRV.
+    localparam integer WBM_DMA_BUS_BASE_ADDR = 32'h50000000/4; //WBM addresses from here on go to WBM1.
     logic trap;
+
+    //Wisbone master signals, to be further dispatched to wbm0 or wbm1.
+    logic [29:0] wbm_adr_o;
+	logic [31:0] wbm_dat_o;
+	logic [31:0] wbm_dat_i;
+	logic wbm_we_o;
+	logic [3:0] wbm_sel_o;
+	logic wbm_stb_o;
+	logic wbm_ack_i;
+    logic wbm_stall_i;
+	logic wbm_cyc_o;
 
     //Non-local memory access signals, i.e. memory accesses that will be turned Wishbone bus master transactions.
     logic        iomem_valid;
@@ -92,7 +116,7 @@ module picorv_dma_top #(
     logic do_wbs_wr_mem, do_wbs_wr_reg;
     logic [31:0] wbs_dat_read_from_reg;
 
-    logic unused = &{wbm_stall_i, wbs_sel, iomem_addr, wbm_err_i};
+    logic unused = &{wbm_stall_i, wbs_sel, iomem_addr, wbm0_err_i, wbm1_err_i};
 
     //WB slave handshake
     assign do_wbs_wr_reg = wbs_cyc && wbs_stb && wbs_we && (wbs_adr >= 11'(WBS_REG_BASE_ADDR));
@@ -439,4 +463,30 @@ module picorv_dma_top #(
 			endcase
 		end
 	end
+
+    //Dispatch to WBM0 or WBM1 based on address.
+    logic sel_wbm0;
+    assign sel_wbm0 = (wbm_adr_o < 30'(WBM_DMA_BUS_BASE_ADDR));
+
+    assign wbm0_adr_o = wbm_adr_o;
+    assign wbm1_adr_o = wbm_adr_o;
+	assign wbm0_dat_o = wbm_dat_o;
+    assign wbm1_dat_o = wbm_dat_o;
+    
+	assign wbm_dat_i = sel_wbm0 ? wbm0_dat_i : wbm1_dat_i;
+	
+    assign wbm0_we_o = wbm_we_o;
+    assign wbm1_we_o = wbm_we_o;
+    assign wbm0_sel_o = wbm_sel_o;
+    assign wbm1_sel_o = wbm_sel_o;
+    
+	assign wbm0_stb_o = sel_wbm0 ? wbm_stb_o : 1'b0;
+    assign wbm1_stb_o = !sel_wbm0 ? wbm_stb_o : 1'b0;
+
+	assign wbm_ack_i = sel_wbm0 ? wbm0_ack_i : wbm1_ack_i;
+    assign wbm_stall_i = sel_wbm0 ? wbm0_stall_i : wbm1_stall_i;
+
+	assign wbm0_cyc_o = sel_wbm0 ? wbm_cyc_o : 1'b0;
+    assign wbm1_cyc_o = !sel_wbm0 ? wbm_cyc_o : 1'b0;
+
 endmodule
