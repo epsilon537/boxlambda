@@ -73,7 +73,8 @@ module picorv_dma_test_soc(
     COREI_M,
     CORED_M
   `ifdef PICORV_DMA
-    ,PICORV_M
+    ,PICORV_0_M
+    ,PICORV_1_M
   `endif
   } wb_master_e;
 
@@ -95,7 +96,7 @@ module picorv_dma_test_soc(
 } wb_slave_e;
 
 `ifdef PICORV_DMA
-  localparam NrMaster = 4;
+  localparam NrMaster = 5;
 `else
   localparam NrMaster = 3;
 `endif
@@ -539,17 +540,28 @@ reset_ctrl reset_ctrl_inst(
     picorv_dma_inst (
     .clk(sys_clk),
     .rst(ndmreset),
-    //32-bit pipelined Wishbone master interface.
-    .wbm_adr_o(wbm[PICORV_M].adr[31:2]), //PicoRV outputs a word address, convert to byte address.
-	  .wbm_dat_o(wbm[PICORV_M].dat_m),
-	  .wbm_dat_i(wbm[PICORV_M].dat_s),
-	  .wbm_sel_o(wbm[PICORV_M].sel),
-    .wbm_stall_i(wbm[PICORV_M].stall),
-	  .wbm_cyc_o(wbm[PICORV_M].cyc),
-	  .wbm_stb_o(wbm[PICORV_M].stb),
-	  .wbm_ack_i(wbm[PICORV_M].ack),
-	  .wbm_we_o(wbm[PICORV_M].we),
-	  .wbm_err_i(wbm[PICORV_M].err),
+    //32-bit pipelined Wishbone master interface 0.
+    .wbm0_adr_o(wbm[PICORV_0_M].adr[31:2]), //PicoRV outputs a word address, convert to byte address.
+	  .wbm0_dat_o(wbm[PICORV_0_M].dat_m),
+	  .wbm0_dat_i(wbm[PICORV_0_M].dat_s),
+	  .wbm0_sel_o(wbm[PICORV_0_M].sel),
+    .wbm0_stall_i(wbm[PICORV_0_M].stall),
+	  .wbm0_cyc_o(wbm[PICORV_0_M].cyc),
+	  .wbm0_stb_o(wbm[PICORV_0_M].stb),
+	  .wbm0_ack_i(wbm[PICORV_0_M].ack),
+	  .wbm0_we_o(wbm[PICORV_0_M].we),
+	  .wbm0_err_i(wbm[PICORV_0_M].err),
+    //32-bit pipelined Wishbone master interface 1.
+    .wbm1_adr_o(wbm[PICORV_1_M].adr[31:2]), //PicoRV outputs a word address, convert to byte address.
+	  .wbm1_dat_o(wbm[PICORV_1_M].dat_m),
+	  .wbm1_dat_i(wbm[PICORV_1_M].dat_s),
+	  .wbm1_sel_o(wbm[PICORV_1_M].sel),
+    .wbm1_stall_i(wbm[PICORV_1_M].stall),
+	  .wbm1_cyc_o(wbm[PICORV_1_M].cyc),
+	  .wbm1_stb_o(wbm[PICORV_1_M].stb),
+	  .wbm1_ack_i(wbm[PICORV_1_M].ack),
+	  .wbm1_we_o(wbm[PICORV_1_M].we),
+	  .wbm1_err_i(wbm[PICORV_1_M].err),
     //32-bit pipelined Wishbone slave interface.
     .wbs_adr(wbs[PICORV_S].adr[12:2]),
 	  .wbs_dat_w(wbs[PICORV_S].dat_m),
@@ -566,7 +578,8 @@ reset_ctrl reset_ctrl_inst(
     .irq_out()
   );
 
-  assign wbm[PICORV_M].adr[1:0] = 2'b0; //byte address lsbs are 0.
+  assign wbm[PICORV_0_M].adr[1:0] = 2'b0; //byte address lsbs are 0.
+  assign wbm[PICORV_1_M].adr[1:0] = 2'b0; //byte address lsbs are 0.
 `endif //PICORV
 endmodule
 
