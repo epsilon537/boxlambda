@@ -3,7 +3,9 @@
 `endif
 
 module picorv_dma_top #(
-    parameter BASE_ADDR = 32'h10002000
+    parameter BASE_ADDR = 32'h10002000,
+    /*WBM transactions with address lower than WBM1_BASE_ADDR go to WBM0, else to WBM1.*/
+    parameter WBM1_BASE_ADDR = 32'h50000000 
 ) (
     input logic clk,
     input logic rst,
@@ -466,7 +468,7 @@ module picorv_dma_top #(
 
     //Dispatch to WBM0 or WBM1 based on address.
     logic sel_wbm0;
-    assign sel_wbm0 = (wbm_adr_o < 30'(WBM_DMA_BUS_BASE_ADDR));
+    assign sel_wbm0 = (wbm_adr_o < 30'(WBM1_BASE_ADDR/4));
 
     assign wbm0_adr_o = wbm_adr_o;
     assign wbm1_adr_o = wbm_adr_o;
