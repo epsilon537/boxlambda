@@ -535,7 +535,8 @@ reset_ctrl reset_ctrl_inst(
 
 `ifdef PICORV_DMA
   picorv_dma_top #(
-      .BASE_ADDR(wb_base_addr[PICORV_S])
+      .BASE_ADDR(wb_base_addr[PICORV_S]),
+      .WBM1_BASE_ADDR(wb_base_addr[DDR_USR1_S]) 
     )
     picorv_dma_inst (
     .clk(sys_clk),
