@@ -178,7 +178,7 @@ async def wb1_slave_emulator(dut):
             else:
                 #Return random data to read transactions
                 dat_r = random.randint(0, 0xffffffff)
-                dut.wbm0_dat_i.value = dat_r
+                dut.wbm1_dat_i.value = dat_r
                 dut._log.info("WB1 read, addr: 0x%x, data: 0x%x, sel: 0x%x", 
                               int(dut.wbm1_adr_o.value), dat_r, int(dut.wbm1_sel_o))
                 wb1_transactions.append(('read', int(dut.wbm1_adr_o.value), dat_r, int(dut.wbm1_sel_o)))
@@ -378,7 +378,7 @@ async def wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, srcTran
     
     #Check the recorded transactions
     assert len(srcTransactions) == numWords
-    assert len(dstTansactions) == numWords
+    assert len(dstTransactions) == numWords
 
     for ii in range(0, len(srcTransactions)):
         #Word Read...
@@ -425,12 +425,12 @@ async def wb0_to_wb1_wordcopy_test(dut):
 
     wb0_transactions = []
     wb1_transactions = []
-    wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wb0_transactions, wb1_transactions)
+    await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wb0_transactions, wb1_transactions)
 
     #For good measure, test the other directions as well
     wb1_transactions = []
     wb0_transactions = []
-    wb_to_wb_wordcopy_test_helper(dut, numWords, dstAddr, srcAddr, wb1_transactions, wb0_transactions)
+    await wb_to_wb_wordcopy_test_helper(dut, numWords, dstAddr, srcAddr, wb1_transactions, wb0_transactions)
 
 async def wb_to_wb_bytecopy_test_helper(dut, numBytes, srcAddr, dstAddr, srcTransactions, dstTransactions):
     dut._log.info("Test: Configuring DMA request.")
