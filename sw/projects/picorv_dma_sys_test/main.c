@@ -19,10 +19,10 @@
 
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
-#define PICORV_GP_REG_SRC 0
-#define PICORV_GP_REG_DST 1
-#define PICORV_GP_REG_NUM_ELEMS 2
-#define PICORV_GP_REG_CTRL_STAT 3
+#define PICORV_HIR_REG_SRC PICORV_HIR_0
+#define PICORV_HIR_REG_DST PICORV_HIR_1
+#define PICORV_HIR_REG_NUM_ELEMS PICORV_HIR_2
+#define PICORV_HIR_REG_CTRL_STAT PICORV_HIR_3
 
 #define DMA_START 1
 #define DMA_BUSY 2
@@ -61,17 +61,17 @@ static void dma_copy(void* src, void* dst, unsigned numElems) {
   printf("Configuring DMA request.\n");
   printf("numElems = %d, srcAddr = 0x%x, dstAddr = 0x%x\n", numElems, (unsigned)src, (unsigned)dst);
 
-  picorv_gp_reg_wr(PICORV_GP_REG_SRC, (unsigned)src);
-  picorv_gp_reg_wr(PICORV_GP_REG_DST, (unsigned)dst);
-  picorv_gp_reg_wr(PICORV_GP_REG_NUM_ELEMS, numElems);
+  picorv_hir_reg_wr(PICORV_HIR_REG_SRC, (unsigned)src);
+  picorv_hir_reg_wr(PICORV_HIR_REG_DST, (unsigned)dst);
+  picorv_hir_reg_wr(PICORV_HIR_REG_NUM_ELEMS, numElems);
 
   printf("Kicking off DMA...\n");
-  picorv_gp_reg_wr(PICORV_GP_REG_CTRL_STAT, DMA_START);
+  picorv_hir_reg_wr(PICORV_HIR_REG_CTRL_STAT, DMA_START);
     
   printf("Waiting for completion...\n");
   int dmaBusy = DMA_BUSY;
   while(dmaBusy) {
-    dmaBusy = picorv_gp_reg_rd(PICORV_GP_REG_CTRL_STAT);
+    dmaBusy = picorv_hir_reg_rd(PICORV_HIR_REG_CTRL_STAT);
   }
 }
 

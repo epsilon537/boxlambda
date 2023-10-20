@@ -7,6 +7,10 @@ from pathlib import Path
 from cocotb_boxlambda import *
 import struct
 
+#Set to True to have WB slave ACK right away, without stalls. Useful for performance testing.
+
+FAST_SLAVE = False
+
 #Cocotb-based unit testcases for picorv_dma
 
 wb0_transactions = []
@@ -146,10 +150,12 @@ async def wb0_slave_emulator(dut):
                               int(dut.wbm0_adr_o.value), dat_r, int(dut.wbm0_sel_o))
                 wb0_transactions.append(('read', int(dut.wbm0_adr_o.value), dat_r, int(dut.wbm0_sel_o)))
 
-            dut.wbm0_stall_i.value = 1    
-            responseDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
-            dut._log.info("WB0: stalling %d ns", responseDelay)
-            await Timer(responseDelay, units="ns")
+            if not FAST_SLAVE:
+                dut.wbm0_stall_i.value = 1    
+                responseDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
+                dut._log.info("WB0: stalling %d ns", responseDelay)
+                await Timer(responseDelay, units="ns")
+
             await RisingEdge(dut.clk)
             dut._log.info("WB0: signalling ACK, clearing stall.")
             dut.wbm0_ack_i.value = 1 #ACK
@@ -183,10 +189,11 @@ async def wb1_slave_emulator(dut):
                               int(dut.wbm1_adr_o.value), dat_r, int(dut.wbm1_sel_o))
                 wb1_transactions.append(('read', int(dut.wbm1_adr_o.value), dat_r, int(dut.wbm1_sel_o)))
 
-            dut.wbm1_stall_i.value = 1    
-            responseDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
-            dut._log.info("WB1: stalling %d ns", responseDelay)
-            await Timer(responseDelay, units="ns")
+            if not FAST_SLAVE:
+                dut.wbm1_stall_i.value = 1    
+                responseDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
+                dut._log.info("WB1: stalling %d ns", responseDelay)
+                await Timer(responseDelay, units="ns")
             await RisingEdge(dut.clk)
             dut._log.info("WB1: signalling ACK, clearing stall.")
             dut.wbm1_ack_i.value = 1 #ACK
@@ -558,4 +565,5 @@ if __name__ == "__main__":
     #Wrapper function defined in scripts/cocotb_lambda.py
     test_runner(verilog_sources=verilog_sources, 
                 test_module_filename=__file__, 
-                top="picorv_dma_top")
+                top="picorv_dma_top",
+                testcase='wb0_to_wb1_wordcopy_test')
