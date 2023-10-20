@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'A PicoRV32-based Soft DMA Controller.'
+title: 'An attempt at a PicoRV32-based Soft DMA Controller.'
 comments: true
 ---
 
@@ -16,7 +16,7 @@ I added a processor-based DMA Controller to BoxLambda. The goal is to use it for
 - Scatter-Gather.
 - Bit manipulations such as bit-masking and rotation on the data being transferred.
   
-Hence the processor-based approach. I started with the [Praxos](https://github.com/esherriff/Praxos) DMA controller but was unhappy with the outcome. I settled on the [PicoRV32](https://github.com/YosysHQ/picorv32) RISC-V processor instead.
+Hence the processor-based approach. I started with the [Praxos](https://github.com/esherriff/Praxos) DMA controller but was unhappy with the outcome. To address the shortcomings I saw with Praxos, I moved to the [PicoRV32](https://github.com/YosysHQ/picorv32) RISC-V processor. This works well, but as you'll see, in its current form it's slow.
 
 Recap
 -----
@@ -211,7 +211,7 @@ Depending on the test case, the test script will load a different *Picoasm* prog
 
 Please be aware that I'm an absolute newbie when it comes to CocoTB. Do not take that script as an example of a 'good' CocotB test module. I'm pretty sure that if I look back at this script after getting more experience with the tool, I'll cringe. Anyway, this is what I was able to whip with my current understanding of CocoTB. It works and it was a big help to get the core up and running. It was a pleasure to write the test cases. Writing Python code is just much easier, faster, and less tedious than writing in C/C++, or Verilog.
 
-I'm using [Icarus](https://steveicarus.github.io/iverilog/) as the behind-the-scenes Simulator for CocoTB. CocoTB does support Verilator, but that's still in an experimental phase.
+I'm using [Icarus](https://steveicarus.github.io/iverilog/) as the behind-the-scenes simulator for CocoTB. CocoTB does support Verilator, but that's still in an experimental phase.
 
 I intend to keep my SoC-level system test cases in Verilator, because a Verilator model runs so fast. For unit testing, however, CocoTB is now my go-to platform.
 
@@ -299,17 +299,17 @@ This is the waveform of the DMA core copying words from port 0 to port 1, using 
 
 *Waveform of PicoRV wordcopy from port 0 to port 1.*
 
-With two very responsive Wishbone slaves, it still takes 35 clock cycles to copy one word. That is slow. With loop unrolling this can be improved to 20 clock cycles to copy one word. Better, but nothing to brag about.
+Using two fast Wishbone slaves, it takes 35 clock cycles to copy one word. Note that the actual word read and word write transactions only take 6 cycles. The rest, 29 cycles, is overhead. Bus utilization is at 17%. That's not good.
 
-For BoxLambda's purposes, I'd be happy if the DMA controller could keep up with blitting a video frame buffer of 320x240x8bpp at a 25Hz frame rate. That boils down to:
+With some loop unrolling in the assembly microcode, I can get to 20 clock cycles to copy one word, or 30% bus utilization. Better, but still nothing to brag about.
 
-(320 x 240) pixels x 8 bits/pixel x 25 frame/s = 15.36 Mbps.
+If I double the PicoRV's clock speed, the amount of overhead would be cut in half and I would be able to achieve 46% bus utilization (6 clock cycles utilization, 7 clock cycles overhead).
 
-If we assume 60 clock cycles to copy a word, accounting for a slower slave port and some software overhead, we get:
+Another option would be to add some logic to allow the PicoRV to kick off a short burst of read or write transactions, e.g. 4 words at a time. In that case, I would get 4x6 clock cycles utilization and 7 clock cycles overhead. That's 77% bus utilization. I can live with that.
 
-(32 bits / 60 clock cycles) x 50MHz = 26.55 Mbps.
+For slower slaves, bus utilization will increase further, because the slave response time starts to dominate. E.g. if it takes 10 clock cycles for a wishbone read or write transaction, we get 4x20 clock cycles utilization and 7 clock cycles overhead (assuming previous optimizations are implemented), or 92% bus utilization. Actual throughput would go down, however, because the slave is slow.
 
-That's borderline OK, I would say. I'm glad I'm just building a retro-style computer. Using a simple processor as a DMA engine has its drawbacks. To get real performance, the DMA core needs to support block transfers, transactions on multiple ports simultaneously, and it probably should not be using a processor as its FSM.
+In the case of external memory, the slave is not slow, but latency is high. The best way to improve throughput for such slaves is through block transfers with multiple outstanding reads or writes. This requires additional logic on the bus master side, the bus slave side, and the bus fabric in between. I'm keeping this on my wishlist, as a stretch goal.
 
 Praxos
 ------
@@ -463,6 +463,5 @@ make picorv_dma_sys_test_load
 
 Conclusion
 ----------
-A PicoRV-based DMA controller is very flexible. It can easily handle all the use cases I have in mind for BoxLambda, and then some. This flexibility comes at a price, however. The PicoRV32 DMA core is not very fast. It remains to be seen how well it'll hold up in the actual BoxLambda system.
+A PicoRV-based DMA controller is very flexible. It can easily handle all the use cases I have in mind for BoxLambda, and then some. This flexibility comes at a price, however. The PicoRV32 DMA core as presented here is slow. A number of possible improvements have been identified, which I'll tackle in the next post. Make it work first, then make it fast.
 
-The big piece currently missing in BoxLambda's system is the actual bus fabric, i.e. the Processor Bus and the DMA Bus with the bus masters and slaves hooked up as shown in the [Architecture Diagram](https://boxlambda.readthedocs.io/en/latest/architecture/). Once that's in place, I'll be able to do some real performance testing and identify bottlenecks. That will be the topic of the next post.

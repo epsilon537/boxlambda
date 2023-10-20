@@ -4,7 +4,9 @@ Terms and Abbreviations
 This section provides clarification for some of the more ambiguous terms and abbreviations used elsewhere in the documentation.
 
 - **ACK**: A Wishbone Bus Signal.
-  
+
+- **API**: Application Programming Interface.
+
 - **AXI**: Advanced eXtensible Interface, ARM's SoC bus specification.
 
 - **Bitstream**: An FPGA Bitstream is a file containing the programming data associated with an FPGA chip.
@@ -17,6 +19,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **BSS**: Block Starting Symbol. Portion of an object file or executable holding zero-initialized data.
 
+- **CoCoTB**: An open-source coroutine-based cosimulation testbench environment for verifying VHDL and SystemVerilog RTL using Python. See [https://www.cocotb.org/](https://www.cocotb.org/).
+  
 - **Code Segment**: Portion of an object file or executable holding executable instructions.
 
 - **Console**: The physical terminal consisting of a screen, a keyboard, and optionally a mouse. Console I/O means input/output from/to these physically attached devices.
@@ -79,14 +83,20 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
 
+- **HAL**: Hardware Access Layer. A low-level Software API to access the hardware, or in this case, gateware.
+  
+- **HIR**: Host Interface Registers. The register interface the DMA core presents to the host processor.
+  
 - **I2S**: A serial bus interface specially designed for communicating digital audio data between integrated circuits (ICs). The I2S protocol sends pulse-code modulation (PCM) audio data from a controller to a target.
  
 - **Ibex**: The name of the RISC-V CPU core used by BoxLambda.
 
-- **I/F**: Interface.
-  
 - **IC**: Integrated Circuit.
 
+- **Icarus**: Open-Source Verilog simulator. See [https://steveicarus.github.io/iverilog/](https://steveicarus.github.io/iverilog/). Used as the behind-the-scenes simulator when running CoCoTB. 
+
+- **I/F**: Interface.
+  
 - **Interconnect**: Wishbone terminology for the bus fabric.
 
 - **IO**: Input/Output.
@@ -134,12 +144,12 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **OpenOCD**: Open On-Chip Debugger, open-source software that interfaces with a hardware debugger's JTAG port.
 
 - **PCM**: Pulse-Code Modulation. PCM data are digital audio samples.
-  
+
+- **PicoRV32**: A size-optimized RISC-V CPU, used as a *soft* DMA controller in BoxLambda.
+    
 - **PIT**: Programmable Interval Timer.
 
 - **PMOD**: Peripheral Module Interface, an open standard defined by Digilent for connecting peripheral modules to an FPGA.
-
-- **Praxos**: The name of the DMA Controller used by BoxLambda.
 
 - **PSG**: Programmable Sound Generator.
 
@@ -159,6 +169,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **RV32IMCB**: Risc-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
 
+- **Scatter-Gather DMA**: DMA data transfers from one non-contiguous block of memory to another by means of a series of smaller contiguous block transfers.
+ 
 - **Scan Line**: One line in the raster scanning pattern of the VGA display.
 
 - **SD**: Secure Digital, a proprietary non-volatile flash memory card format developed by the SD Association (SDA) for use in portable devices. 
@@ -218,6 +230,10 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **VRAM**: Video RAM.
 
 - **WB**: Wishbone.
+
+- **WBM**: Wishbone Bus Master.
+
+- **WBS**: Wishbone Bus Slave.
 
 - **WIP**: Work In Progress.
 
