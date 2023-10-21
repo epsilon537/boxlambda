@@ -29,7 +29,7 @@ nav:
         - VERA (Wishbone) Graphics: components_vera.md
         - SDSPI SD Card Controller: components_sdspi.md
         - Dual YM2149 PSG Sound Core: components_dual_ym2149.md
-        - DMA Controller: components_dma.md
+        - PicoRV DMA Controller: components_picorv_dma.md
         - Keyboard and Mouse: components_keyboard_and_mouse.md
         - Serial Port: components_serial.md
         - I2C: components_i2c.md
