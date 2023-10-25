@@ -55,3 +55,6 @@
 [submodule "sub/picorv32"]
 	path = sub/picorv32
 	url = https://github.com/epsilon537/picorv32
+[submodule "sub/litedram"]
+	path = sub/litedram
+	url = https://github.com/epsilon537/litedram
