@@ -9,12 +9,17 @@ import struct
 
 #Set to True to have WB slave ACK right away, without stalls. Useful for performance testing.
 
-FAST_SLAVE = False
+FAST_SLAVE = True
 
 #Cocotb-based unit testcases for picorv_dma
 
 wb0_transactions = []
 wb1_transactions = []
+
+async def sys_clk_div(dut):
+    while True:
+        await RisingEdge(dut.sys_clkx2)
+        dut.sys_clk.value = not dut.sys_clk.value 
 
 async def init(dut):
     global wb0_transactions, wb1_transactions
@@ -23,8 +28,12 @@ async def init(dut):
     wb0_transactions = []
     wb1_transactions = []
 
+    dut.sys_clk.value = 0
+    dut.sys_clkx2.value = 0
+
     #For simplicity's sake, pretend we have a 1ns clock period.
-    cocotb.start_soon(Clock(dut.clk, 1, units="ns").start())
+    cocotb.start_soon(Clock(dut.sys_clkx2, 1, units="ns").start())
+    cocotb.start_soon(sys_clk_div(dut))
 
     #Assert reset
     dut.rst.value = 1
@@ -73,14 +82,14 @@ async def timeout_check(dut):
 
 #Asynchronous task deasserting WB STB signal when slave no longer stalls.
 async def wb_stall_check(dut):
-    await RisingEdge(dut.clk)
+    await RisingEdge(dut.sys_clk)
     if dut.wbs_stall.value == 1:
         await FallingEdge(dut.wbs_stall)
     dut.wbs_stb.value = 0
 
 #Wishbone word read transaction
 async def wb_read(dut, addr):
-    await RisingEdge(dut.clk)
+    await RisingEdge(dut.sys_clk)
         
     dut.wbs_adr.value = addr
     dut.wbs_sel.value = 0xf
@@ -91,7 +100,7 @@ async def wb_read(dut, addr):
 
     ackDetected = False
     while not ackDetected:
-        await RisingEdge(dut.clk)
+        await RisingEdge(dut.sys_clk)
         if dut.wbs_ack.value == 1:
             #dut._log.info("WBS: ack detected")
             ackDetected = True
@@ -100,14 +109,14 @@ async def wb_read(dut, addr):
     assert dut.wbs_err.value == 0
     res = dut.wbs_dat_r.value
     
-    await RisingEdge(dut.clk)
+    await RisingEdge(dut.sys_clk)
     dut.wbs_cyc.value = 0
     
     return res
 
 #Wishone word write transaction
 async def wb_write(dut, addr, val):
-    await RisingEdge(dut.clk)
+    await RisingEdge(dut.sys_clk)
     dut.wbs_adr.value = addr
     dut.wbs_dat_w.value = val
     dut.wbs_sel.value = 0xf
@@ -119,7 +128,7 @@ async def wb_write(dut, addr, val):
 
     ackDetected = False
     while not ackDetected:
-        await RisingEdge(dut.clk)
+        await RisingEdge(dut.sys_clk)
         if dut.wbs_ack.value == 1:
             #dut._log.info("WBS: ack detected")
             ackDetected = True
@@ -127,14 +136,14 @@ async def wb_write(dut, addr, val):
     stall_check_task.kill()
     assert dut.wbs_err.value == 0
     
-    await RisingEdge(dut.clk)
+    await RisingEdge(dut.sys_clk)
     dut.wbs_cyc.value = 0
 
 #Asynchronous task emulating a Wishbone slave. Received transactions are recorded in a
 #wb0_transactions list. This Wishbone slave is attached to dut master port 0.
 async def wb0_slave_emulator(dut):
     while True:
-        await RisingEdge(dut.clk)
+        await RisingEdge(dut.sys_clk)
         if dut.wbm0_stb_o.value == 1:
             dut._log.info("WB0: stb detected")
         
@@ -156,13 +165,13 @@ async def wb0_slave_emulator(dut):
                 dut._log.info("WB0: stalling %d ns", responseDelay)
                 await Timer(responseDelay, units="ns")
 
-            await RisingEdge(dut.clk)
+            await RisingEdge(dut.sys_clk)
             dut._log.info("WB0: signalling ACK, clearing stall.")
             dut.wbm0_ack_i.value = 1 #ACK
             dut.wbm0_stall_i.value = 0
             stdDeassertDetected = False
             while not stdDeassertDetected:
-                await RisingEdge(dut.clk)
+                await RisingEdge(dut.sys_clk)
                 if dut.wbm0_stb_o.value == 0:
                     dut._log.info("WB0: stb deassert detected.")
                     dut.wbm0_ack_i.value = 0
@@ -173,7 +182,7 @@ async def wb0_slave_emulator(dut):
 #wb1_transactions list. This Wishbone slave is attached to dut master port 1.
 async def wb1_slave_emulator(dut):
     while True:
-        await RisingEdge(dut.clk)
+        await RisingEdge(dut.sys_clk)
         if dut.wbm1_stb_o.value == 1:
             dut._log.info("WB1: stb detected")
         
@@ -194,13 +203,13 @@ async def wb1_slave_emulator(dut):
                 responseDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
                 dut._log.info("WB1: stalling %d ns", responseDelay)
                 await Timer(responseDelay, units="ns")
-            await RisingEdge(dut.clk)
+            await RisingEdge(dut.sys_clk)
             dut._log.info("WB1: signalling ACK, clearing stall.")
             dut.wbm1_ack_i.value = 1 #ACK
             dut.wbm1_stall_i.value = 0
             stdDeassertDetected = False
             while not stdDeassertDetected:
-                await RisingEdge(dut.clk)
+                await RisingEdge(dut.sys_clk)
                 if dut.wbm1_stb_o.value == 0:
                     dut._log.info("WB1: stb deassert detected.")
                     dut.wbm1_ack_i.value = 0
@@ -277,7 +286,7 @@ async def pico_wr_wbs_rd(dut):
     while hir15val == 0:
         retryCount += 1
         assert retryCount < 100
-        await ClockCycles(dut.clk, 100)
+        await ClockCycles(dut.sys_clk, 100)
         hir15val = await with_timeout(wb_read(dut, 0x410+15), 30, 'ns')
 
     #Now read all other hir register and see if the patterns match
@@ -314,7 +323,7 @@ async def wbs_wr_pico_rd(dut):
     while hir15val == 0:
         retryCount += 1
         assert retryCount < 100
-        await ClockCycles(dut.clk, 100)
+        await ClockCycles(dut.sys_clk, 100)
         hir15val = await with_timeout(wb_read(dut, 0x410+15), 30, 'ns')
 
     #Now read all odd hir register and see if the patterns match
@@ -340,7 +349,7 @@ async def irq_in_out_ack(dut):
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
     
     #Wait some time
-    await ClockCycles(dut.clk, random.randint(0,100))
+    await ClockCycles(dut.sys_clk, random.randint(0,100))
 
     #Set some input interrupts
     irqval = random.randint(1,0x7fffffff)
@@ -356,7 +365,7 @@ async def irq_in_out_ack(dut):
     #Acknowledge irq by writing to reg 0
     await with_timeout(wb_write(dut, 0x400, irqval), 30, 'ns')
 
-    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.sys_clk, 1)
 
     #irq out should be low now.
     assert dut.irq_out.value == 0

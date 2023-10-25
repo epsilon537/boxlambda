@@ -48,6 +48,9 @@ extern "C" void litex_sim_init(void **out)
     user_clk[0].signal = &sim->user_clk;
     litex_sim_register_pads(user_clk, (char*)"user_clk", 0);
 
+    user_clkx2[0].signal = &sim->user_clkx2;
+    litex_sim_register_pads(user_clkx2, (char*)"user_clkx2", 0);
+
     user_rst[0].signal = &sim->user_rst;
     litex_sim_register_pads(user_rst, (char*)"user_rst", 0);
 

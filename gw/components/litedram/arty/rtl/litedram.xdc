@@ -487,6 +487,9 @@ set_property LOC X [get_ports {wb_ctrl_err}]
 # user_clk:0
 set_property LOC X [get_ports {user_clk}]
 
+# user_clkx2:0
+set_property LOC X [get_ports {user_clkx2}]
+
 # user_rst:0
 set_property LOC X [get_ports {user_rst}]
 

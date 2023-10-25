@@ -1,7 +1,7 @@
 `default_nettype none
 
 module ddr_test_soc(
-  input  wire       ext_clk, /*External clock: 100MHz on FPGA, 50MHz in simulation.*/
+  input  wire       ext_clk, /*External clock: 100MHz.*/
    
   inout  wire [7:0] gpio0,
   inout  wire [3:0] gpio1,
@@ -93,7 +93,7 @@ module ddr_test_soc(
     wb_sizes[RAM_S]        = `DPRAM_SIZE_BYTES;
     wb_sizes[GPIO0_S]      = 32'h00010;
     wb_sizes[GPIO1_S]      = 32'h00010;
-    wb_sizes[RESET_CTRL_S] = 32'h00004;
+    wb_sizes[RESET_CTRL_S] = 32'h00008;
     wb_sizes[UART_S]       = 32'h00010;
     wb_sizes[TIMER_S]      = 32'h00010;
     wb_sizes[DDR_CTRL_S]   = 32'h10000;
@@ -260,9 +260,10 @@ module ddr_test_soc(
   logic pll_locked_i, litedram_rst_o;
 
   litedram_wrapper litedram_wrapper_inst (
-	.clk(ext_clk), /*External clock is input for LiteDRAM module. On FPGA this is a 100MHz clock, in simulation it's a 50MHz clock.*/
+	.clk(ext_clk), /*External clock is input for LiteDRAM module. 100MHz.*/
   .rst(1'b0), /*Never reset LiteDRAM.*/
-  .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock. On FPGA a divide-by-2 of the ext_clk is done. In simulation sys_clk = ext_clk.*/
+  .sys_clkx2(), /*Not used.*/
+  .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock. Divide-by-2 of the ext_clk.*/
 	.sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
 	.pll_locked(pll_locked_i),
 `ifdef SYNTHESIS

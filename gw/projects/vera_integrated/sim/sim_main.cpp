@@ -89,19 +89,23 @@ static void cleanup() {
 
 //Advance simulation by one clock cycle
 static void tick(void) {
-  //High phase
-  top->clk_i = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  //Low phase
-  top->clk_i = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
+  //Tick twice: Input clock is 100MHz, BoxLambda's system clock runs at 50MHz.
+  //->Advance two input clock cycles at a time.
+  for (int ii=0; ii<2;ii++) {
+    //High phase
+    top->clk_i = 1;
+    contextp->timeInc(1);
+    top->eval();
+    if (tracing_enable)
+      tfp->dump(contextp->time());
+    
+    //Low phase
+    top->clk_i = 0;
+    contextp->timeInc(1);
+    top->eval();
+    if (tracing_enable)
+      tfp->dump(contextp->time());
+  }
 
   //Exit if user closes the SDL window.
   if (SDL_PollEvent(&sdl_event) && sdl_event.type == SDL_QUIT)
@@ -276,8 +280,8 @@ int main(int argc, char** argv, char** env) {
     tick();
     tick();
   
-    // When not in interactive mode, simulate for 6000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 6000000)) {
+    // When not in interactive mode, simulate for 12000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 12000000)) {
         if (exit_req)
           break;
 

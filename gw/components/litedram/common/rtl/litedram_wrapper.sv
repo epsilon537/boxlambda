@@ -4,6 +4,7 @@ module litedram_wrapper (
 	input wire         clk, /*100MHz input clock.*/
 	input wire         rst, /*Asynchronous reset.*/
 	output wire        sys_clk, /*50MHz output clock, to be used as input clock for the rest of the system.*/
+	output wire        sys_clkx2, /*100MHz output clock, i.e. twice the rate of sys_clk, in phase with sys_clk.*/
 	output wire        sys_rst, /*Synchronous reset signal for the system.*/
 	output wire        pll_locked,
 `ifdef SYNTHESIS
@@ -177,6 +178,7 @@ module litedram_wrapper (
 	.wb_ctrl_cti(3'b0),
 	.wb_ctrl_bte(2'b0),
 	.wb_ctrl_err(ctrl_port_wishbone_c_err),
+	.user_clkx2(sys_clkx2),
 	.user_clk(sys_clk),
 	.user_rst(sys_rst),
 	.user_port_wishbone_0_adr(user_port_wishbone_c_0_adr),

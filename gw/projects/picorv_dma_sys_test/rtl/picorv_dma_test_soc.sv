@@ -2,7 +2,7 @@
 
 //BoxLambda Test SoC including PicoRV DMA.
 module picorv_dma_test_soc(
-  input  wire       ext_clk, /*External clock: 100MHz on FPGA, 50MHz in simulation.*/
+  input  wire       ext_clk, /*External clock: 100MHz.*/
    
   inout  wire [7:0] gpio0,
   inout  wire [3:0] gpio1,
@@ -132,7 +132,7 @@ module picorv_dma_test_soc(
     wb_sizes[GPIO0_S]      = 32'h00010;
     wb_sizes[GPIO1_S]      = 32'h00010;
     wb_sizes[SDSPI_S]      = 32'h00010;
-    wb_sizes[RESET_CTRL_S] = 32'h00004;
+    wb_sizes[RESET_CTRL_S] = 32'h00008;
     wb_sizes[YM2149_S]     = 32'h00400;
     wb_sizes[PICORV_S]     = 32'h01080;
     wb_sizes[UART_S]       = 32'h00010;
@@ -146,8 +146,8 @@ module picorv_dma_test_soc(
 
   localparam Wb_size wb_size = wb_sizes();
 
-  //sys_clk is a 50MHz clock.  
-  logic sys_clk;
+  //sys_clk is a 50MHz clock. sys_clkx2 is a 100MHz clock, phase-aligned with sys_clk.
+  logic sys_clk, sys_clkx2;
 
   //ndmreset_req: Non-Debug Module reset requested by Debug Module
   //ndmreset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
@@ -228,7 +228,7 @@ module picorv_dma_test_soc(
 
    logic 	 unused = &{1'b0, dmactive, 1'b0};
 `else
-   logic 	 debug_req;
+   logic 	debug_req;
    assign ndmreset_req = 1'b0;
    assign debug_req = 1'b0;
 `endif
@@ -303,10 +303,11 @@ module picorv_dma_test_soc(
   logic pll_locked_i, litedram_rst_o;
 
   litedram_wrapper litedram_wrapper_inst (
-	.clk(ext_clk), /*External clock is input for LiteDRAM module. On FPGA this is a 100MHz clock, in simulation it's a 50MHz clock.*/
+	.clk(ext_clk), /*100MHz External clock is input for LiteDRAM module.*/
   .rst(1'b0), /*Never reset LiteDRAM.*/
-  .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock. On FPGA a divide-by-2 of the ext_clk is done. In simulation sys_clk = ext_clk.*/
-	.sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
+  .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock.*/
+	.sys_clkx2(sys_clkx2), /*LiteDRAM also outputs a 100MHz clock aligned with sys_clk.*/
+  .sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
 	.pll_locked(pll_locked_i),
 `ifdef SYNTHESIS
 	.ddram_a(ddram_a),
@@ -369,21 +370,17 @@ module picorv_dma_test_soc(
 `else //No DRAM:
 
 //LiteDRAM provides the clock generator. Without DRAM we have to provide one here.
-`ifdef SYNTHESIS
-  //This clkgen does a divide-by-2 of the 100MHz ext_clk => sys_clk runs at 50MHz.
-  clkgen_xil7series clkgen (
-    .IO_CLK     (ext_clk),
-    .IO_RST_N   (1'b1),
-    .clk_sys    (sys_clk),
-    .rst_sys_n  (pll_locked));
-`else
-  //In simulation ext_clk runs at 50MHz and sys_clk = ext_clk;
-  assign sys_clk = ext_clk;
-  assign pll_locked = 1'b1;
-`endif //SYNTHESIS/No SYNTHESIS
+boxlambda_clk_gen clkgen (
+  .IO_CLK     (ext_clk),
+  .IO_RST_N   (1'b1),
+  .clk_sys    (sys_clk),
+  .clk_sysx2  (sys_clkx2),
+  .locked  (pll_locked)
+);
 
-  assign init_done_led = 1'b1;
-  assign init_err_led = 1'b0;
+assign init_done_led = 1'b1;
+assign init_err_led = 1'b0;
+
 `endif //DRAM/No DRAM.
 
 assign pll_locked_led = pll_locked;
@@ -441,7 +438,8 @@ reset_ctrl reset_ctrl_inst(
 
 `ifdef SDSPI
   sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
-		.i_clk(sys_clk), .i_sd_reset(ndmreset),
+		.i_clk(sys_clk), 
+    .i_sd_reset(ndmreset),
 		// Wishbone interface
 		.i_wb_cyc(wbs[SDSPI_S].cyc), .i_wb_stb(wbs[SDSPI_S].stb), .i_wb_we(wbs[SDSPI_S].we),
 		.i_wb_addr(wbs[SDSPI_S].adr[3:2]),
@@ -539,7 +537,8 @@ reset_ctrl reset_ctrl_inst(
       .WBM1_BASE_ADDR(wb_base_addr[DDR_USR1_S]) 
     )
     picorv_dma_inst (
-    .clk(sys_clk),
+    .sys_clk(sys_clk),
+    .sys_clkx2(sys_clkx2),
     .rst(ndmreset),
     //32-bit pipelined Wishbone master interface 0.
     .wbm0_adr_o(wbm[PICORV_0_M].adr[31:2]), //PicoRV outputs a word address, convert to byte address.

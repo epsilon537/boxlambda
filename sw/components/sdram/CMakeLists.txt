@@ -3,6 +3,7 @@ add_library(sdram)
 target_sources(sdram
     PRIVATE
     ../../../sub/litex/litex/soc/software/liblitedram/sdram.c
+    ../../../sub/litex/litex/soc/software/liblitedram/accessors.c
 )
 
 target_compile_definitions(sdram

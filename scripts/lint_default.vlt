@@ -3,6 +3,7 @@
 //Default Verilator lint settings.
 
 lint_off -rule PINCONNECTEMPTY
+lint_off -rule TIMESCALEMOD
 
 //FIXME. Ideally, this should be turned on and code generating this warning should be fixed.
 //Verilated models with UNOPTFLAT warnings will run much slower than code without such warnings.

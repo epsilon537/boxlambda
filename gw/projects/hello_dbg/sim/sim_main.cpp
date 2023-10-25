@@ -154,21 +154,24 @@ int main(int argc, char** argv, char** env) {
 	  }
 	}
 	
-        // Evaluate model
-	top->clk_i = 1;
-	top->eval();
-	
-	if (tracing_enable)
-	  tfp->dump(contextp->time());
+  //Tick twice: Input clock is 100MHz, BoxLambda's system clock runs at 50MHz.
+  //->Advance two input clock cycles at a time.
+  for (int ii=0; ii<2; ii++) {
+    // Evaluate model
+    top->clk_i = 1;
+    top->eval();
 
-	contextp->timeInc(1);
-	
-	top->gpio1 = GPIO1_SIM_INDICATOR; //Indicate to SW that this is a simulation.
-	top->clk_i = 0;
-	top->eval();
-	
-	if (tracing_enable)
-	  tfp->dump(contextp->time());
+    if (tracing_enable)
+      tfp->dump(contextp->time());
+
+    contextp->timeInc(1);
+
+    top->clk_i = 0;
+    top->eval();
+
+    if (tracing_enable)
+      tfp->dump(contextp->time());
+  }
 
 	//Feed our model's uart_tx signal and baud rate to the UART co-simulator.
 	(*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);

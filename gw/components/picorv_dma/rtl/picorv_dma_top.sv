@@ -7,7 +7,8 @@ module picorv_dma_top #(
     /*WBM transactions with address lower than WBM1_BASE_ADDR go to WBM0, else to WBM1.*/
     parameter WBM1_BASE_ADDR = 32'h50000000 
 ) (
-    input logic clk,
+    input logic sys_clk,
+    input logic sys_clkx2,
     input logic rst,
 
     //32-bit pipelined Wishbone master interface 0.
@@ -56,7 +57,7 @@ module picorv_dma_top #(
     localparam integer WBS_REG_BASE_ADDR = MEM_SZ_WORDS; //Register base address as see by WB slave.
     localparam integer PICO_REG_BASE_ADDR = BASE_ADDR+MEM_SZ_WORDS*4; //Register base address as seen by PicoRV.
     localparam integer PICO_MEM_BASE_ADDR = BASE_ADDR; //Program Memory base address as seen by PicoRV.
-    localparam integer WBM_DMA_BUS_BASE_ADDR = 32'h50000000/4; //WBM addresses from here on go to WBM1.
+    
     logic trap;
 
     //Wisbone master signals, to be further dispatched to wbm0 or wbm1.
@@ -124,7 +125,7 @@ module picorv_dma_top #(
     assign do_wbs_wr_reg = wbs_cyc && wbs_stb && wbs_we && (wbs_adr >= 11'(WBS_REG_BASE_ADDR));
     assign do_wbs_wr_mem = wbs_cyc && wbs_stb && wbs_we && (wbs_adr < 11'(WBS_REG_BASE_ADDR));
     
-    always @(posedge clk) begin
+    always_ff @(posedge sys_clk) begin
         do_ack_wbs <= 1'b0;
         if (wbs_stb) begin
             do_ack_wbs <= 1'b1;
@@ -143,7 +144,7 @@ module picorv_dma_top #(
 	assign reg_addr = mem_addr;
 	assign reg_wdata = mem_wdata;
 
-    always @(posedge clk)
+    always @(posedge sys_clk)
 	    reg_ready <= reg_valid && !reg_ready && (reg_addr >= PICO_REG_BASE_ADDR) && (reg_addr < (PICO_REG_BASE_ADDR + 4*REG_SZ_WORDS));
 
     //PicoRV access to system memory space outside of this core.
@@ -158,7 +159,7 @@ module picorv_dma_top #(
 	assign ram_addr = mem_addr[$clog2(MEM_SZ_WORDS)+1:2];
 	assign ram_wdata = mem_wdata;
 
-    always @(posedge clk)
+    always_ff @(posedge sys_clkx2)
         if (picorv_rst_n) //When not in reset, PicoRV gets RAM access
 		    ram_ready <= ram_valid && !mem_ready;
         else begin //When in reset, PicoRV does not have RAM access.
@@ -190,7 +191,7 @@ module picorv_dma_top #(
     end
 
     //Register writes incoming from WBS and PicoRV.
-    always_ff @(posedge clk) begin
+    always_ff @(posedge sys_clk) begin
         if (rst) begin
             gp_reg[0] <= 32'b0;
             gp_reg[1] <= 32'b0;
@@ -341,7 +342,7 @@ module picorv_dma_top #(
 	    .PROGADDR_IRQ(32'h 0000_0000),
 	    .STACKADDR(PICO_MEM_BASE_ADDR + MEM_SZ_WORDS*4 - 32'h4)
     ) picorv32_inst (
-        .clk(clk), 
+        .clk(sys_clkx2), 
         .resetn(picorv_rst_n), //PicoRV reset is controlled through ctrl registers, not system reset.
         .trap(trap),
 
@@ -397,7 +398,7 @@ module picorv_dma_top #(
     picosoc_mem #(
         .WORDS(MEM_SZ_WORDS)
     ) pico_mem_inst (
-        .clk(clk),
+        .clk(sys_clkx2),
 		.wen(picorv_rst_n ? ram_wen : wbs_wen),
 		.addr(picosoc_mem_addr_mux), 
 		.wdata(picorv_rst_n ? ram_wdata : wbs_dat_w),
@@ -414,7 +415,7 @@ module picorv_dma_top #(
 	logic we;
 	assign we = (iomem_wstrb[0] | iomem_wstrb[1] | iomem_wstrb[2] | iomem_wstrb[3]);
 
-	always @(posedge clk) begin
+	always @(posedge sys_clk) begin
 		if (rst) begin
 			wbm_adr_o <= 0;
 			wbm_dat_o <= 0;

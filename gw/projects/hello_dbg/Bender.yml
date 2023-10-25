@@ -34,7 +34,7 @@ sources:
       - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
       - ../../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
       - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c    
-      - ../ddr_test/lint.vlt
+      - lint.vlt
       - ../../../sub/riscv-dbg/tb/SimJTAG.sv
       - ../ddr_test/sim/sim_main.sv
   - target: any(vivado,verilator)

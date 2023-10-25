@@ -48,6 +48,7 @@ add_subdirectory(ibex)
 add_subdirectory(reset_ctrl)
 add_subdirectory(praxos)
 add_subdirectory(picorv_dma)
+add_subdirectory(boxlambda_clk_gen)
 
 
 

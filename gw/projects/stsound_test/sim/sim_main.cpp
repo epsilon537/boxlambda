@@ -95,19 +95,23 @@ static int setupSDSPISim(const char *sdcard_image) {
 
 //Advance simulation by one clock cycle
 static void tick(void) {
-  //High phase
-  top->clk_i = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  //Low phase
-  top->clk_i = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
+  //Tick twice: Input clock is 100MHz, BoxLambda's system clock runs at 50MHz.
+  //->Advance two input clock cycles at a time.
+  for (int ii=0; ii<2;ii++) {
+    //High phase
+    top->clk_i = 1;
+    contextp->timeInc(1);
+    top->eval();
+    if (tracing_enable)
+      tfp->dump(contextp->time());
+    
+    //Low phase
+    top->clk_i = 0;
+    contextp->timeInc(1);
+    top->eval();
+    if (tracing_enable)
+      tfp->dump(contextp->time());
+  }
 
   //Feed SDSPI co-sim
   top->sdspi_miso = (*sdspi)(top->sdspi_cs_n, top->sdspi_sck, top->sdspi_mosi);
@@ -240,8 +244,8 @@ int main(int argc, char** argv, char** env) {
     //Take system out of reset.
     top->rst_ni = 1;
     
-    // When not in interactive mode, simulate for 500000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 500000000)) {
+    // When not in interactive mode, simulate for 1000000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 1000000000)) {
         // Evaluate model
         tick();        
     }

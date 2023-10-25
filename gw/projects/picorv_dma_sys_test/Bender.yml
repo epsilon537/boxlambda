@@ -19,6 +19,7 @@ dependencies:
   audio_dac: { path: "../../components/audio_dac" }
   reset_ctrl: { path: "../../components/reset_ctrl" }
   picorv_dma: { path: "../../components/picorv_dma" }
+  boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
   
 sources:
   - target: constraints

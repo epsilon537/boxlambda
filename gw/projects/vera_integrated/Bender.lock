@@ -1,4 +1,10 @@
 packages:
+  boxlambda_clk_gen:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/boxlambda_clk_gen
+    dependencies: []
   ibex:
     revision: null
     version: null
@@ -24,6 +30,12 @@ packages:
     version: null
     source:
       Path: ../../components/litedram
+    dependencies: []
+  reset_ctrl:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/reset_ctrl
     dependencies: []
   riscv-dbg:
     revision: null
