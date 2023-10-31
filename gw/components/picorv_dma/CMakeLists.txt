@@ -19,12 +19,19 @@ add_custom_target(picorv_dma_test ALL
             picorv_wordcopy
             picorv_bytecopy
             picorv_progmem_data_access
+            picorv_wordcopy_burst
         VERBATIM
     )
 
 #A CocoTB-based test program.
 add_test(NAME picorv_dma_cocotb_test
     COMMAND ${PROJECT_SOURCE_DIR}/scripts/cocotb_test.sh ${CMAKE_CURRENT_LIST_DIR}/test/picorv_dma_test.py
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+#A CocoTB-based test program.
+add_test(NAME picorv_burst_fsm_cocotb_test
+    COMMAND ${PROJECT_SOURCE_DIR}/scripts/cocotb_test.sh ${CMAKE_CURRENT_LIST_DIR}/test/picorv_burst_fsm_test.py
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 

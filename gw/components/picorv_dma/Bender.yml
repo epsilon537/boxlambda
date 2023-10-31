@@ -14,6 +14,7 @@ sources:
     - ../../../sub/picorv32/picosoc/picosoc_mem.v
     - ../../../sub/picorv32/picorv32.v
     - rtl/picorv_dma_top.sv
+    - rtl/picorv_burst_fsm.sv
   
 
 

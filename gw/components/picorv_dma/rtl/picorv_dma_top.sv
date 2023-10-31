@@ -54,10 +54,13 @@ module picorv_dma_top #(
 );
     localparam integer MEM_SZ_WORDS = 1024; //PicoRV Program and data memory size
     localparam integer REG_SZ_WORDS = 32; //Register Space.
-    localparam integer WBS_REG_BASE_ADDR = MEM_SZ_WORDS; //Register base address as see by WB slave.
+    localparam integer WBS_REG_BASE_ADDR = MEM_SZ_WORDS; //Register base address as seen by WB slave.
     localparam integer PICO_REG_BASE_ADDR = BASE_ADDR+MEM_SZ_WORDS*4; //Register base address as seen by PicoRV.
     localparam integer PICO_MEM_BASE_ADDR = BASE_ADDR; //Program Memory base address as seen by PicoRV.
     
+    localparam integer BURST_REG_BASE_ADDR = (PICO_REG_BASE_ADDR + REG_SZ_WORDS*4); //Burst FSM register base address as seen by PicoRV.
+    //localparam integer BURST_REG_SZ_WORDS = 6; //Burst Register Space.
+
     logic trap;
 
     //Wisbone master signals, to be further dispatched to wbm0 or wbm1.
@@ -71,13 +74,14 @@ module picorv_dma_top #(
     logic wbm_stall_i;
 	logic wbm_cyc_o;
 
-    //Non-local memory access signals, i.e. memory accesses that will be turned Wishbone bus master transactions.
-    logic        iomem_valid;
-	logic        iomem_ready;
-	logic [ 3:0] iomem_wstrb;
-	logic [31:2] iomem_addr;
-	logic [31:0] iomem_wdata;
-	logic  [31:0] iomem_rdata;
+    //Memory access signals for the burst FSM module, 
+    //i.e. memory accesses that will go to burst FSM registers or be turned into Wishbone bus master transactions.
+    logic        burst_fsm_valid;
+	logic        burst_fsm_ready;
+	logic [ 3:0] burst_fsm_wstrb;
+	logic [31:2] burst_fsm_addr;
+	logic [31:0] burst_fsm_wdata;
+	logic  [31:0] burst_fsm_rdata;
 
     //Local system- and general purpose register access signals.
     logic        reg_we;
@@ -88,7 +92,7 @@ module picorv_dma_top #(
 	logic [31:0] reg_wdata;
 	logic [31:0] reg_rdata;
 
-    //'memory' access signals from PicoRV. Will be categorized into iomem_, reg_, or ram_
+    //'memory' access signals from PicoRV. Will be categorized into burst_fsm_, reg_, or ram_
     logic mem_valid;
 	logic mem_ready;
     logic [31:0] mem_addr;
@@ -119,7 +123,7 @@ module picorv_dma_top #(
     logic do_wbs_wr_mem, do_wbs_wr_reg;
     logic [31:0] wbs_dat_read_from_reg;
 
-    logic unused = &{wbm_stall_i, wbs_sel, iomem_addr, wbm0_err_i, wbm1_err_i};
+    logic unused = &{wbm_stall_i, wbs_sel, burst_fsm_addr, wbm0_err_i, wbm1_err_i};
 
     //WB slave handshake
     assign do_wbs_wr_reg = wbs_cyc && wbs_stb && wbs_we && (wbs_adr >= 11'(WBS_REG_BASE_ADDR));
@@ -147,17 +151,17 @@ module picorv_dma_top #(
     always @(posedge sys_clk)
 	    reg_ready <= reg_valid && !reg_ready && (reg_addr >= PICO_REG_BASE_ADDR) && (reg_addr < (PICO_REG_BASE_ADDR + 4*REG_SZ_WORDS));
 
-    //PicoRV access to system memory space outside of this core.
-	assign iomem_valid = mem_valid && ((mem_addr < PICO_MEM_BASE_ADDR) || (mem_addr > (PICO_REG_BASE_ADDR + 4*REG_SZ_WORDS)));
-	assign iomem_wstrb = mem_wstrb;
-	assign iomem_addr = mem_addr[31:2];
-	assign iomem_wdata = mem_wdata;
-
     //PicoRV access to local program and data memory
 	assign ram_valid = mem_valid && ((mem_addr >= PICO_MEM_BASE_ADDR) && (mem_addr < PICO_REG_BASE_ADDR));
 	assign ram_wstrb = mem_wstrb;
 	assign ram_addr = mem_addr[$clog2(MEM_SZ_WORDS)+1:2];
 	assign ram_wdata = mem_wdata;
+
+    //PicoRV access to system memory space outside of this core.
+    assign burst_fsm_valid = mem_valid && ~reg_valid && ~ram_valid;
+	assign burst_fsm_wstrb = mem_wstrb;
+	assign burst_fsm_addr = mem_addr[31:2];
+	assign burst_fsm_wdata = mem_wdata;
 
     always_ff @(posedge sys_clkx2)
         if (picorv_rst_n) //When not in reset, PicoRV gets RAM access
@@ -167,8 +171,8 @@ module picorv_dma_top #(
         end
 
     //Return signal mux.
-    assign mem_ready = (reg_valid && reg_ready) || (iomem_valid && iomem_ready) || (ram_valid && ram_ready);
-	assign mem_rdata = (reg_valid && reg_ready) ? reg_rdata : (iomem_valid && iomem_ready) ? iomem_rdata : (ram_valid && ram_ready) ? ram_rdata : 32'h 0000_0000;
+    assign mem_ready = (reg_valid && reg_ready) || (burst_fsm_valid && burst_fsm_ready) || (ram_valid && ram_ready);
+	assign mem_rdata = (reg_valid && reg_ready) ? reg_rdata : (burst_fsm_valid && burst_fsm_ready) ? burst_fsm_rdata : (ram_valid && ram_ready) ? ram_rdata : 32'h 0000_0000;
 
     //Reset Control via ctrl register bit 0.
     assign picorv_rst_n = ctrl_reg[0];
@@ -405,67 +409,40 @@ module picorv_dma_top #(
 		.rdata(ram_rdata)
     );
 
-    //WB master interworking logic below is based on picorv32_wb
-    localparam IDLE = 2'b00;
-	localparam WBSTART = 2'b01;
-	localparam WBEND = 2'b10;
+    picorv_burst_fsm #( 
+        .BURST_REG_BASE_ADDR(BURST_REG_BASE_ADDR)
+    ) picorv_burst_fsm_instance (
+        .clk(sys_clk),
+        .rst(rst),
 
-	logic [1:0] state;
+        //picorv interface
+        .picorv_valid_i(burst_fsm_valid),
+        .picorv_rdy_o(burst_fsm_ready),
 
-	logic we;
-	assign we = (iomem_wstrb[0] | iomem_wstrb[1] | iomem_wstrb[2] | iomem_wstrb[3]);
+        .picorv_addr_i(burst_fsm_addr),
+        .picorv_wdata_i(burst_fsm_wdata),
+        .picorv_wstrb_i(burst_fsm_wstrb),
+        .picorv_rdata_o(burst_fsm_rdata),
 
-	always @(posedge sys_clk) begin
-		if (rst) begin
-			wbm_adr_o <= 0;
-			wbm_dat_o <= 0;
-			wbm_we_o <= 0;
-			wbm_sel_o <= 0;
-			wbm_stb_o <= 0;
-			wbm_cyc_o <= 0;
-			state <= IDLE;
-		end else begin
-			case (state)
-				IDLE: begin
-					if (iomem_valid) begin
-						wbm_adr_o <= iomem_addr[31:2];
-						wbm_dat_o <= iomem_wdata;
-						wbm_we_o <= we;
-						wbm_sel_o <= we ? iomem_wstrb : 4'b1111;
+        //32-bit pipelined Wishbone master interface.
+        .wbm_adr_o(wbm_adr_o),
+        .wbm_dat_o(wbm_dat_o),
+        .wbm_dat_i(wbm_dat_i),
+        .wbm_we_o(wbm_we_o),
+        .wbm_sel_o(wbm_sel_o),
+        .wbm_stb_o(wbm_stb_o),
+        .wbm_ack_i(wbm_ack_i),
+        .wbm_stall_i(wbm_stall_i),
+        .wbm_cyc_o(wbm_cyc_o),
+        .wbm_err_i(1'b0),
 
-						wbm_stb_o <= 1'b1;
-						wbm_cyc_o <= 1'b1;
-						state <= WBSTART;
-					end else begin
-						iomem_ready <= 1'b0;
-
-						wbm_stb_o <= 1'b0;
-						wbm_cyc_o <= 1'b0;
-						wbm_we_o <= 1'b0;
-					end
-				end
-				WBSTART:begin
-					if (wbm_ack_i) begin
-						iomem_rdata <= wbm_dat_i;
-						iomem_ready <= 1'b1;
-
-						state <= WBEND;
-
-						wbm_stb_o <= 1'b0;
-						wbm_cyc_o <= 1'b0;
-						wbm_we_o <= 1'b0;
-					end
-				end
-				WBEND: begin
-					iomem_ready <= 1'b0;
-
-					state <= IDLE;
-				end
-				default:
-					state <= IDLE;
-			endcase
-		end
-	end
+        //Burst registers.
+        .burst_reg_0_o(),
+        .burst_reg_1_o(),
+        .burst_reg_2_o(),
+        .burst_reg_3_o(),
+        .burst_reg_4_o()
+    );
 
     //Dispatch to WBM0 or WBM1 based on address.
     logic sel_wbm0;

@@ -74,3 +74,15 @@ target_include_directories(picorv_progmem_data_access
 
 link_gen_picobin(picorv_progmem_data_access)
 
+add_executable(picorv_wordcopy_burst
+	EXCLUDE_FROM_ALL
+    wordcopy_burst.picoasm
+)
+
+target_include_directories(picorv_wordcopy_burst
+    PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/..
+)
+
+link_gen_picobin(picorv_wordcopy_burst)
+

@@ -23,8 +23,20 @@
 .equ HIR14, 56
 .equ HIR15, 60
 
+/*Burst register offsets*/
+.equ BURST0, 0
+.equ BURST1, 4
+.equ BURST2, 8
+.equ BURST3, 12
+.equ BURST4, 16
+.equ BURST_OFFSET, 20
+
 /*Starting address of the System Registers*/
-.equ SYS_REG_BASE, 0x10003000
+.equ SYS_REGS_BASE_ADDR, 0x10003000
+
+/*Starting address of the Burst Registers*/
+.equ BURST_REGS_BASE_ADDR, 0x10003080
+
 /*IRQ-in register offset*/
 .equ IRQ_IN, 4
 /*IRQ-out register offset*/
