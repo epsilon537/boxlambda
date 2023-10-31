@@ -655,6 +655,42 @@ async def wb0_to_wb1_wordcopy_burst_test(dut):
         wb0_slave_task.kill()
         wb1_slave_task.kill()
         
+#WB Master R/W burst word access, without stalls and delays in slave
+@cocotb.test()
+async def wb0_to_wb1_wordcopy_burst_test_fast(dut):
+    global wb0_transactions, wb1_transactions
+
+    for offset in range(4):
+        await init(dut)
+
+        #Load PicoRV program that copies a configurable number of words from 
+        #a configurable source address to a configurable destination address.
+        #One extra ../ because the test runs from the sim_build subdirectory
+        pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_burst.picobin")
+
+        wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
+        wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=False))
+
+        #Write PM memory
+        for ii in range(len(pm_data)):
+            await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
+        
+        #Write the register taking picorv out of reset
+        await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
+        
+        #Ask Praxos to copy a number of words
+        numWords = random.randint(1, 16)*16
+        #Generate word aligned address values
+        srcAddr = random.randint(0x10004000, 0x47ffffff) & ~3
+        dstAddr = offset + (random.randint(0x58000000, 0x5fffffff) & ~3)
+
+        wb0_transactions = []
+        wb1_transactions = []
+        await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wb0_transactions, wb1_transactions, offset)
+
+        wb0_slave_task.kill()
+        wb1_slave_task.kill()
+        
 
 if __name__ == "__main__":
     #Cocotb Test Runner setup: pass in the verilog sources and the top-level.

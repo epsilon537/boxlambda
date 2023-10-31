@@ -29,23 +29,18 @@ wait_start:
     or a2, a2, a5          /*Set msb to engage burst mode*/
     lw a3, HIR2(a0)        /*HIR2: num words*/
                            /*To keep the test program simple, I'm not handling the edge cases. num words is*/
-                           /*assumed to be a multiple of 16.*/
+                           /*assumed to be a multiple of 4.*/
     slli a3, a3, 2         /*Multiple by 4 to convert to byte address offset.*/
     add a3, a3, a1 
     
 loop:
-    /*Copy 4-word burst by 4-word burst , unrolled 4 times*/
+    /*Copy 4-word burst by 4-word burst*/
     lw t0, 0(a1)
     sw t0, 0(a2)
-    lw t0, 16(a1)
-    sw t0, 16(a2)
-    lw t0, 32(a1)
-    sw t0, 32(a2)
-    lw t0, 48(a1)
-    sw t0, 48(a2)
-    addi a1, a1, 64
-    addi a2, a2, 64
+    addi a1, a1, 16
+    addi a2, a2, 16
     bltu a1, a3, loop
 
+    sw zero, BURST4(a4) /*Do one more write to a burst register to ensure last burst transaction completed.*/
     sw zero, HIR3(a0) /*set to 'Done'*/
     j wait_start

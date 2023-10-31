@@ -9,6 +9,11 @@ import struct
 import pdb
 
 OFFSET_BURST_REG_OFFSET = 5
+BURST_REG_4_OFFSET = 4
+BURST_REG_3_OFFSET = 3
+BURST_REG_2_OFFSET = 2
+BURST_REG_1_OFFSET = 1
+BURST_REG_0_OFFSET = 0
 
 #Cocotb-based unit testcases for picorv_dma
 
@@ -303,11 +308,21 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_0(dut):
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
         addr_list.extend([addr, addr+1, addr+2, addr+3])
-        read_words.append(dut.burst_reg_0_o.value)
-        read_words.append(dut.burst_reg_1_o.value)
-        read_words.append(dut.burst_reg_2_o.value)
-        read_words.append(dut.burst_reg_3_o.value)
+        burst_reg_0 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 0), 30*4, 'ns')
+        burst_reg_1 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 1), 30*4, 'ns')
+        burst_reg_2 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 2), 30*4, 'ns')
+        burst_reg_3 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 3), 30*4, 'ns')
+        
+        read_words.append(burst_reg_0)
+        read_words.append(burst_reg_1)
+        read_words.append(burst_reg_2)
+        read_words.append(burst_reg_3)
+
     
+    #Do one more write to a burst register to ensure the last burst is entirely completed out before
+    #We start checking
+    await with_timeout(picorv_write(dut, (0x10002020>>2) + BURST_REG_4_OFFSET, 0), 30*4, 'ns')
+
     assert len(wb_transactions) == numWords
 
     for ii in range(0, numWords):
@@ -346,10 +361,16 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_1(dut):
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
         addr_list.extend([addr, addr+1, addr+2, addr+3])
-        read_words.append((dut.burst_reg_0_o.value>>8) | ((dut.burst_reg_1_o.value&0xff)<<24))
-        read_words.append((dut.burst_reg_1_o.value>>8) | ((dut.burst_reg_2_o.value&0xff)<<24))
-        read_words.append((dut.burst_reg_2_o.value>>8) | ((dut.burst_reg_3_o.value&0xff)<<24))
-        read_words.append((dut.burst_reg_3_o.value>>8) | ((dut.burst_reg_4_o.value&0xff)<<24))
+        burst_reg_0 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 0), 30*4, 'ns')
+        burst_reg_1 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 1), 30*4, 'ns')
+        burst_reg_2 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 2), 30*4, 'ns')
+        burst_reg_3 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 3), 30*4, 'ns')
+        burst_reg_4 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 4), 30*4, 'ns')
+
+        read_words.append((burst_reg_0>>8) | ((burst_reg_1&0xff)<<24))
+        read_words.append((burst_reg_1>>8) | ((burst_reg_2&0xff)<<24))
+        read_words.append((burst_reg_2>>8) | ((burst_reg_3&0xff)<<24))
+        read_words.append((burst_reg_3>>8) | ((burst_reg_4&0xff)<<24))
     
     assert len(wb_transactions) == numWords
 
@@ -389,11 +410,17 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_2(dut):
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
         addr_list.extend([addr, addr+1, addr+2, addr+3])
-        read_words.append((dut.burst_reg_0_o.value>>16) | ((dut.burst_reg_1_o.value&0xffff)<<16))
-        read_words.append((dut.burst_reg_1_o.value>>16) | ((dut.burst_reg_2_o.value&0xffff)<<16))
-        read_words.append((dut.burst_reg_2_o.value>>16) | ((dut.burst_reg_3_o.value&0xffff)<<16))
-        read_words.append((dut.burst_reg_3_o.value>>16) | ((dut.burst_reg_4_o.value&0xffff)<<16))
-    
+        burst_reg_0 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 0), 30*4, 'ns')
+        burst_reg_1 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 1), 30*4, 'ns')
+        burst_reg_2 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 2), 30*4, 'ns')
+        burst_reg_3 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 3), 30*4, 'ns')
+        burst_reg_4 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 4), 30*4, 'ns')
+
+        read_words.append((burst_reg_0>>16) | ((burst_reg_1&0xffff)<<16))
+        read_words.append((burst_reg_1>>16) | ((burst_reg_2&0xffff)<<16))
+        read_words.append((burst_reg_2>>16) | ((burst_reg_3&0xffff)<<16))
+        read_words.append((burst_reg_3>>16) | ((burst_reg_4&0xffff)<<16))
+
     assert len(wb_transactions) == numWords
 
     for ii in range(0, numWords):
@@ -432,11 +459,17 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_3(dut):
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
         addr_list.extend([addr, addr+1, addr+2, addr+3])
-        read_words.append((dut.burst_reg_0_o.value>>24) | ((dut.burst_reg_1_o.value&0xffffff)<<8))
-        read_words.append((dut.burst_reg_1_o.value>>24) | ((dut.burst_reg_2_o.value&0xffffff)<<8))
-        read_words.append((dut.burst_reg_2_o.value>>24) | ((dut.burst_reg_3_o.value&0xffffff)<<8))
-        read_words.append((dut.burst_reg_3_o.value>>24) | ((dut.burst_reg_4_o.value&0xffffff)<<8))
-    
+        burst_reg_0 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 0), 30*4, 'ns')
+        burst_reg_1 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 1), 30*4, 'ns')
+        burst_reg_2 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 2), 30*4, 'ns')
+        burst_reg_3 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 3), 30*4, 'ns')
+        burst_reg_4 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 4), 30*4, 'ns')
+
+        read_words.append((burst_reg_0>>24) | ((burst_reg_1&0xffffff)<<8))
+        read_words.append((burst_reg_1>>24) | ((burst_reg_2&0xffffff)<<8))
+        read_words.append((burst_reg_2>>24) | ((burst_reg_3&0xffffff)<<8))
+        read_words.append((burst_reg_3>>24) | ((burst_reg_4&0xffffff)<<8))
+
     assert len(wb_transactions) == numWords
 
     for ii in range(0, numWords):
@@ -474,11 +507,17 @@ async def picorv_read_burst_test_wo_stalls_and_delays_offset_0(dut):
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
         addr_list.extend([addr, addr+1, addr+2, addr+3])
-        read_words.append(dut.burst_reg_0_o.value)
-        read_words.append(dut.burst_reg_1_o.value)
-        read_words.append(dut.burst_reg_2_o.value)
-        read_words.append(dut.burst_reg_3_o.value)
-    
+
+        burst_reg_0 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 0), 30*4, 'ns')
+        burst_reg_1 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 1), 30*4, 'ns')
+        burst_reg_2 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 2), 30*4, 'ns')
+        burst_reg_3 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 3), 30*4, 'ns')
+        
+        read_words.append(burst_reg_0)
+        read_words.append(burst_reg_1)
+        read_words.append(burst_reg_2)
+        read_words.append(burst_reg_3)
+
     assert len(wb_transactions) == numWords
 
     for ii in range(0, numWords):
@@ -515,10 +554,17 @@ async def picorv_read_burst_test_wo_stalls_and_delays_offset_1(dut):
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
         addr_list.extend([addr, addr+1, addr+2, addr+3])
-        read_words.append((dut.burst_reg_0_o.value>>8) | ((dut.burst_reg_1_o.value&0xff)<<24))
-        read_words.append((dut.burst_reg_1_o.value>>8) | ((dut.burst_reg_2_o.value&0xff)<<24))
-        read_words.append((dut.burst_reg_2_o.value>>8) | ((dut.burst_reg_3_o.value&0xff)<<24))
-        read_words.append((dut.burst_reg_3_o.value>>8) | ((dut.burst_reg_4_o.value&0xff)<<24))
+
+        burst_reg_0 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 0), 30*4, 'ns')
+        burst_reg_1 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 1), 30*4, 'ns')
+        burst_reg_2 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 2), 30*4, 'ns')
+        burst_reg_3 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 3), 30*4, 'ns')
+        burst_reg_4 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 4), 30*4, 'ns')
+
+        read_words.append((burst_reg_0>>8) | ((burst_reg_1&0xff)<<24))
+        read_words.append((burst_reg_1>>8) | ((burst_reg_2&0xff)<<24))
+        read_words.append((burst_reg_2>>8) | ((burst_reg_3&0xff)<<24))
+        read_words.append((burst_reg_3>>8) | ((burst_reg_4&0xff)<<24))
     
     assert len(wb_transactions) == numWords
 
@@ -556,11 +602,18 @@ async def picorv_read_burst_test_wo_stalls_and_delays_offset_2(dut):
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
         addr_list.extend([addr, addr+1, addr+2, addr+3])
-        read_words.append((dut.burst_reg_0_o.value>>16) | ((dut.burst_reg_1_o.value&0xffff)<<16))
-        read_words.append((dut.burst_reg_1_o.value>>16) | ((dut.burst_reg_2_o.value&0xffff)<<16))
-        read_words.append((dut.burst_reg_2_o.value>>16) | ((dut.burst_reg_3_o.value&0xffff)<<16))
-        read_words.append((dut.burst_reg_3_o.value>>16) | ((dut.burst_reg_4_o.value&0xffff)<<16))
-    
+        
+        burst_reg_0 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 0), 30*4, 'ns')
+        burst_reg_1 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 1), 30*4, 'ns')
+        burst_reg_2 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 2), 30*4, 'ns')
+        burst_reg_3 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 3), 30*4, 'ns')
+        burst_reg_4 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 4), 30*4, 'ns')
+
+        read_words.append((burst_reg_0>>16) | ((burst_reg_1&0xffff)<<16))
+        read_words.append((burst_reg_1>>16) | ((burst_reg_2&0xffff)<<16))
+        read_words.append((burst_reg_2>>16) | ((burst_reg_3&0xffff)<<16))
+        read_words.append((burst_reg_3>>16) | ((burst_reg_4&0xffff)<<16))
+
     assert len(wb_transactions) == numWords
 
     for ii in range(0, numWords):
@@ -597,20 +650,27 @@ async def picorv_read_burst_test_wo_stalls_and_delays_offset_3(dut):
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
         addr_list.extend([addr, addr+1, addr+2, addr+3])
-        read_words.append((dut.burst_reg_0_o.value>>24) | ((dut.burst_reg_1_o.value&0xffffff)<<8))
-        read_words.append((dut.burst_reg_1_o.value>>24) | ((dut.burst_reg_2_o.value&0xffffff)<<8))
-        read_words.append((dut.burst_reg_2_o.value>>24) | ((dut.burst_reg_3_o.value&0xffffff)<<8))
-        read_words.append((dut.burst_reg_3_o.value>>24) | ((dut.burst_reg_4_o.value&0xffffff)<<8))
-    
+        
+        burst_reg_0 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 0), 30*4, 'ns')
+        burst_reg_1 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 1), 30*4, 'ns')
+        burst_reg_2 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 2), 30*4, 'ns')
+        burst_reg_3 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 3), 30*4, 'ns')
+        burst_reg_4 = await with_timeout(picorv_read(dut, (0x10002020>>2) + 4), 30*4, 'ns')
+
+        read_words.append((burst_reg_0>>24) | ((burst_reg_1&0xffffff)<<8))
+        read_words.append((burst_reg_1>>24) | ((burst_reg_2&0xffffff)<<8))
+        read_words.append((burst_reg_2>>24) | ((burst_reg_3&0xffffff)<<8))
+        read_words.append((burst_reg_3>>24) | ((burst_reg_4&0xffffff)<<8))
+
     assert len(wb_transactions) == numWords
 
     for ii in range(0, numWords):
         #Word Read...
         rw, addr, dat_r, sel = wb_transactions[ii]
         assert rw == 'read'
-        assert addr == addr_list[ii]
+        assert addr == addr_list[ii], "ii=%d"%ii
         assert sel == 0xf
-        assert read_words[ii] == dat_r
+        assert read_words[ii] == dat_r, "ii=%d"%ii
 
     wb_slave_task.kill()
 
@@ -676,13 +736,17 @@ async def picorv_write_burst_test_w_stalls_and_delays(dut):
         written_words.append(wr_data_list[2])
         written_words.append(wr_data_list[3])
     
+    #Do one more write to a burst register to ensure the burst is entirely written out before
+    #We start checking
+    await with_timeout(picorv_write(dut, (0x10002020>>2) + BURST_REG_4_OFFSET, 0), 30*4, 'ns')
+
     assert len(wb_transactions) == numWords
 
     for ii in range(0, numWords):
         #Word Read...
         rw, addr, dat, sel = wb_transactions[ii]
         assert rw == 'write'
-        assert addr == addr_list[ii]
+        assert addr == addr_list[ii], "ii={}".format(ii)
         assert sel == 0xf
         assert written_words[ii] == dat
 
@@ -726,13 +790,17 @@ async def picorv_write_burst_test_wo_stalls_and_delays(dut):
         written_words.append(wr_data_list[2])
         written_words.append(wr_data_list[3])
     
+    #Do one more write to a burst register to ensure the burst is entirely written out before
+    #We start checking
+    await with_timeout(picorv_write(dut, (0x10002020>>2) + BURST_REG_4_OFFSET, 0), 30*4, 'ns')
+
     assert len(wb_transactions) == numWords
 
     for ii in range(0, numWords):
         #Word Read...
         rw, addr, dat, sel = wb_transactions[ii]
         assert rw == 'write'
-        assert addr == addr_list[ii]
+        assert addr == addr_list[ii], "ii={}".format(ii)
         assert sel == 0xf
         assert written_words[ii] == dat
 
@@ -746,5 +814,4 @@ if __name__ == "__main__":
     #Wrapper function defined in scripts/cocotb_lambda.py
     test_runner(verilog_sources=verilog_sources, 
                 test_module_filename=__file__, 
-                top="picorv_burst_fsm",
-                testcase="picorv_write_burst_test_w_stalls_and_delays")
+                top="picorv_burst_fsm")

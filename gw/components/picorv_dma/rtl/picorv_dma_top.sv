@@ -434,14 +434,7 @@ module picorv_dma_top #(
         .wbm_ack_i(wbm_ack_i),
         .wbm_stall_i(wbm_stall_i),
         .wbm_cyc_o(wbm_cyc_o),
-        .wbm_err_i(1'b0),
-
-        //Burst registers.
-        .burst_reg_0_o(),
-        .burst_reg_1_o(),
-        .burst_reg_2_o(),
-        .burst_reg_3_o(),
-        .burst_reg_4_o()
+        .wbm_err_i(1'b0)
     );
 
     //Dispatch to WBM0 or WBM1 based on address.
