@@ -472,8 +472,8 @@ async def wb0_to_wb1_wordcopy_test(dut):
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)
     #Generate word aligned address values
-    srcAddr = random.randint(0x10004000, 0x47ffffff) & ~3
-    dstAddr = random.randint(0x58000000, 0x5fffffff) & ~3
+    srcAddr = random.randint(0x10004000, 0x47ff0000) & ~3
+    dstAddr = random.randint(0x58000000, 0x5fff0000) & ~3
 
     wb0_transactions = []
     wb1_transactions = []
@@ -555,8 +555,8 @@ async def wb_to_wb_bytecopy_test(dut):
     
     #Ask Praxos to copy a number of bytes
     numBytes = random.randint(1, 16)
-    srcAddr = random.randint(0x10004000, 0x4fffffff)
-    dstAddr = random.randint(0x50000000, 0x5fffffff)
+    srcAddr = random.randint(0x10004000, 0x4fff0000)
+    dstAddr = random.randint(0x50000000, 0x5fff0000)
 
     wb0_transactions = []
     wb1_transactions = []
@@ -643,8 +643,8 @@ async def wb0_to_wb1_wordcopy_burst_test(dut):
         #Ask Praxos to copy a number of words
         numWords = random.randint(1, 16)*16
         #Generate word aligned address values
-        srcAddr = random.randint(0x10004000, 0x47ffffff) & ~3
-        dstAddr = offset + (random.randint(0x58000000, 0x5fffffff) & ~3)
+        srcAddr = random.randint(0x10004000, 0x47ff0000) & ~3
+        dstAddr = offset + (random.randint(0x58000000, 0x5fff0000) & ~3)
 
         wb0_transactions = []
         wb1_transactions = []
@@ -681,12 +681,74 @@ async def wb0_to_wb1_wordcopy_burst_test_fast(dut):
         #Ask Praxos to copy a number of words
         numWords = random.randint(1, 16)*16
         #Generate word aligned address values
-        srcAddr = random.randint(0x10004000, 0x47ffffff) & ~3
-        dstAddr = offset + (random.randint(0x58000000, 0x5fffffff) & ~3)
+        srcAddr = random.randint(0x10004000, 0x47ff0000) & ~3
+        dstAddr = offset + (random.randint(0x58000000, 0x5fff0000) & ~3)
 
         wb0_transactions = []
         wb1_transactions = []
         await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wb0_transactions, wb1_transactions, offset)
+
+        wb0_slave_task.kill()
+        wb1_slave_task.kill()
+        
+#WB Master R/W burst word access, on one bus, without stalls and delays in slave
+@cocotb.test()
+async def wb0_to_wb0_wordcopy_burst_test_fast(dut):
+    global wb0_transactions, wb1_transactions
+
+    for offset in range(4):
+        await init(dut)
+
+        #Load PicoRV program that copies a configurable number of words from 
+        #a configurable source address to a configurable destination address.
+        #One extra ../ because the test runs from the sim_build subdirectory
+        pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_burst.picobin")
+
+        wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
+        wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=False))
+
+        #Write PM memory
+        for ii in range(len(pm_data)):
+            await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
+        
+        #Write the register taking picorv out of reset
+        await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
+        
+        #Ask Praxos to copy a number of words
+        numWords = random.randint(1, 16)*16
+        #Generate word aligned address values
+        srcAddr = random.randint(0x10004000, 0x43ff0000) & ~3
+        dstAddr = offset + (random.randint(0x44000000, 0x4fff0000) & ~3)
+
+        wb0_transactions = []
+        wb1_transactions = []
+        
+        dut._log.info("Test: Configuring DMA request.")
+        dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
+
+        await with_timeout(wb_write(dut, 0x410, srcAddr), 30, 'ns')
+        await with_timeout(wb_write(dut, 0x411, dstAddr), 30, 'ns')
+        await with_timeout(wb_write(dut, 0x412, numWords), 30, 'ns')
+
+        dut._log.info("Test: Kicking off DMA.")
+        #Kick off the copy
+        await with_timeout(wb_write(dut, 0x413, 1), 30, 'ns')
+
+        timeout_task = cocotb.start_soon(timeout_check(dut))
+
+        #Wait for completion
+        res = 1
+        while res != 0:
+            resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
+            if resNew != res:
+                res = resNew
+                dut._log.info("hir_reg[3] = %s", res)
+        
+        #Check the recorded transactions
+        assert len(wb0_transactions) == numWords*2
+        assert len(wb1_transactions) == 0
+
+        timeout_task.kill()
 
         wb0_slave_task.kill()
         wb1_slave_task.kill()
