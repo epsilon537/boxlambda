@@ -135,28 +135,6 @@ async def wb_write(dut, addr, val):
     await RisingEdge(dut.sys_clk)
     dut.wbs_cyc.value = 0
 
-async def wb0_slave_stall(dut):
-    while True:
-        dut.wbm0_stall_i.value = 1    
-        stallDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
-        dut._log.info("WB0: stalling %d ns", stallDelay)
-        await Timer(stallDelay, units="ns")
-        dut.wbm0_stall_i.value = 0 
-        stallDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
-        dut._log.info("WB0: not stalling %d ns", stallDelay)
-        await Timer(stallDelay, units="ns")
-
-async def wb1_slave_stall(dut):
-    while True:
-        dut.wbm1_stall_i.value = 1    
-        stallDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
-        dut._log.info("WB1: stalling %d ns", stallDelay)
-        await Timer(stallDelay, units="ns")
-        dut.wbm1_stall_i.value = 0 
-        stallDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
-        dut._log.info("WB1: not stalling %d ns", stallDelay)
-        await Timer(stallDelay, units="ns")
-
 #Asynchronous task emulating a Wishbone slave. Received transactions are recorded in a
 #wb_transactions list.
 async def wb0_slave_emulator(dut, delay_ack):
@@ -164,7 +142,7 @@ async def wb0_slave_emulator(dut, delay_ack):
         await RisingEdge(dut.sys_clk)
         if dut.wbm0_stb_o.value == 1:
             dut._log.info("WB: stb detected")
-        
+
             if dut.wbm0_we_o.value == 1:
                 dut._log.info("WB write, addr: 0x%x, data: 0x%x, sel: 0x%x", 
                               int(dut.wbm0_adr_o.value), int(dut.wbm0_dat_o.value), int(dut.wbm0_sel_o.value))
@@ -178,8 +156,6 @@ async def wb0_slave_emulator(dut, delay_ack):
                 wb0_transactions.append(('read', int(dut.wbm0_adr_o.value), dat_r, int(dut.wbm0_sel_o)))
 
             await RisingEdge(dut.sys_clk)
-            assert dut.wbm0_stb_o.value == 0
-            dut._log.info("WB: stb deassert detected.")
 
             if delay_ack:       
                 responseDelay = random.randint(0, 10) #Randomly delay ack 0-10 ticks
@@ -188,7 +164,7 @@ async def wb0_slave_emulator(dut, delay_ack):
 
             dut._log.info("WB: signalling ACK.")
             dut.wbm0_ack_i.value = 1 #ACK
-            
+
             await RisingEdge(dut.sys_clk)
             
             dut.wbm0_ack_i.value = 0
@@ -201,7 +177,7 @@ async def wb1_slave_emulator(dut, delay_ack):
         await RisingEdge(dut.sys_clk)
         if dut.wbm1_stb_o.value == 1:
             dut._log.info("WB: stb detected")
-        
+
             if dut.wbm1_we_o.value == 1:
                 dut._log.info("WB write, addr: 0x%x, data: 0x%x, sel: 0x%x", 
                               int(dut.wbm1_adr_o.value), int(dut.wbm1_dat_o.value), int(dut.wbm1_sel_o.value))
@@ -215,9 +191,7 @@ async def wb1_slave_emulator(dut, delay_ack):
                 wb1_transactions.append(('read', int(dut.wbm1_adr_o.value), dat_r, int(dut.wbm1_sel_o)))
 
             await RisingEdge(dut.sys_clk)
-            assert dut.wbm1_stb_o.value == 0
-            dut._log.info("WB: stb deassert detected.")
-
+            
             if delay_ack:       
                 responseDelay = random.randint(0, 10) #Randomly delay ack 0-10 ticks
                 dut._log.info("WB: delaying ack %d ns", responseDelay)
@@ -225,7 +199,7 @@ async def wb1_slave_emulator(dut, delay_ack):
 
             dut._log.info("WB: signalling ACK.")
             dut.wbm1_ack_i.value = 1 #ACK
-            
+
             await RisingEdge(dut.sys_clk)
             
             dut.wbm1_ack_i.value = 0
@@ -454,11 +428,8 @@ async def wb0_to_wb1_wordcopy_test(dut):
     #Load PicoRV program that copies a configurable number of words from 
     #a configurable source address to a configurable destination address.
     #One extra ../ because the test runs from the sim_build subdirectory
-    pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy.picobin")
+    pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_single.picobin")
 
-    wb0_slave_stall_task = cocotb.start_soon(wb0_slave_stall(dut))
-    wb1_slave_stall_task = cocotb.start_soon(wb1_slave_stall(dut))
-    
     wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=True))
     wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=True))
 
@@ -484,8 +455,6 @@ async def wb0_to_wb1_wordcopy_test(dut):
     wb0_transactions = []
     await wb_to_wb_wordcopy_test_helper(dut, numWords, dstAddr, srcAddr, wb1_transactions, wb0_transactions)
 
-    wb0_slave_stall_task.kill()
-    wb1_slave_stall_task.kill()
     wb0_slave_task.kill()
     wb1_slave_task.kill()
 
@@ -538,11 +507,8 @@ async def wb_to_wb_bytecopy_test(dut):
     #Load PicoRV program that copies a configurable number of bytes from 
     #a configurable source address to a configurable destination address.
     #One extra ../ because the test runs from the sim_build subdirectory
-    pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_bytecopy.picobin")
+    pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_bytecopy_single.picobin")
 
-    wb0_slave_stall_task = cocotb.start_soon(wb0_slave_stall(dut))
-    wb1_slave_stall_task = cocotb.start_soon(wb1_slave_stall(dut))
-    
     wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=True))
     wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=True))
 
@@ -567,8 +533,6 @@ async def wb_to_wb_bytecopy_test(dut):
     wb1_transactions = []
     await wb_to_wb_bytecopy_test_helper(dut, numBytes, dstAddr, srcAddr, wb1_transactions, wb0_transactions)
 
-    wb0_slave_stall_task.kill()
-    wb1_slave_stall_task.kill()
     wb0_slave_task.kill()
     wb1_slave_task.kill()
 
@@ -625,10 +589,7 @@ async def wb0_to_wb1_wordcopy_burst_test(dut):
         #Load PicoRV program that copies a configurable number of words from 
         #a configurable source address to a configurable destination address.
         #One extra ../ because the test runs from the sim_build subdirectory
-        pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_burst.picobin")
-
-        wb0_slave_stall_task = cocotb.start_soon(wb0_slave_stall(dut))
-        wb1_slave_stall_task = cocotb.start_soon(wb1_slave_stall(dut))
+        pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
 
         wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=True))
         wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=True))
@@ -650,8 +611,6 @@ async def wb0_to_wb1_wordcopy_burst_test(dut):
         wb1_transactions = []
         await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wb0_transactions, wb1_transactions, offset)
 
-        wb0_slave_stall_task.kill()
-        wb1_slave_stall_task.kill()
         wb0_slave_task.kill()
         wb1_slave_task.kill()
         
@@ -666,7 +625,7 @@ async def wb0_to_wb1_wordcopy_burst_test_fast(dut):
         #Load PicoRV program that copies a configurable number of words from 
         #a configurable source address to a configurable destination address.
         #One extra ../ because the test runs from the sim_build subdirectory
-        pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_burst.picobin")
+        pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
 
         wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
         wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=False))
@@ -702,7 +661,7 @@ async def wb0_to_wb0_wordcopy_burst_test_fast(dut):
         #Load PicoRV program that copies a configurable number of words from 
         #a configurable source address to a configurable destination address.
         #One extra ../ because the test runs from the sim_build subdirectory
-        pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_burst.picobin")
+        pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
 
         wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
         wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=False))

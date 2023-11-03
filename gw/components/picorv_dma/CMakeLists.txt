@@ -16,10 +16,10 @@ add_custom_target(picorv_dma_test ALL
             picorv_wr_hir_regs
             picorv_hir_regs_copy
             picorv_irq_in_out
-            picorv_wordcopy
-            picorv_bytecopy
+            picorv_wordcopy_single
+            picorv_bytecopy_single
             picorv_progmem_data_access
-            picorv_wordcopy_burst
+            picorv_burst_fsm_test
         VERBATIM
     )
 

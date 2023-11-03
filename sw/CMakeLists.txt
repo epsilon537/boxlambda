@@ -37,6 +37,26 @@ function(link_gen_picobin _tgt)
     )
 endfunction()
 
+function(build_picoasm _tgt _src)
+    add_custom_command(
+        OUTPUT
+            ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.picoasm
+        COMMAND
+            ${TOOLCHAIN_PREFIX}cpp -o ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.picoasm ${_src} 
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_SOURCE_DIR}
+        DEPENDS
+            ${_src}
+    )
+
+    add_executable(${_tgt}
+	    EXCLUDE_FROM_ALL
+        ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.picoasm
+    )
+
+    link_gen_picobin(${_tgt})
+endfunction()
+
 add_subdirectory(components)
 add_subdirectory(projects)
 

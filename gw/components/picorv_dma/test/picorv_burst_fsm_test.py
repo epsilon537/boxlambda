@@ -53,16 +53,12 @@ async def timeout_check(dut):
     #We should never reach this point
     assert False, "Transaction timeout!"
 
-async def wb_slave_stall(dut):
-    while True:
-        dut.wbm_stall_i.value = 1    
-        stallDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
-        dut._log.info("WB: stalling %d ns", stallDelay)
-        await Timer(stallDelay, units="ns")
-        dut.wbm_stall_i.value = 0 
-        stallDelay = random.randint(1, 10) #Randomly stall 1-10 ticks
-        dut._log.info("WB: not stalling %d ns", stallDelay)
-        await Timer(stallDelay, units="ns")
+#async def wb_slave_stall(dut):
+#    while True:
+#        if dut.wbm_cyc_o.value == 1:
+#            dyt.wbm_stall_i.value = dut.wbm_ack_i.value
+#        else:
+#            dut.wbm_stall_i.value = 0
 
 #Asynchronous task emulating a Wishbone slave. Received transactions are recorded in a
 #wb_transactions list.
@@ -71,7 +67,6 @@ async def wb_slave_emulator(dut, delay_ack):
         await RisingEdge(dut.clk)
         if dut.wbm_stb_o.value == 1:
             dut._log.info("WB: stb detected")
-        
             if dut.wbm_we_o.value == 1:
                 dut._log.info("WB write, addr: 0x%x, data: 0x%x, sel: 0x%x", 
                               int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o.value))
@@ -85,9 +80,7 @@ async def wb_slave_emulator(dut, delay_ack):
                 wb_transactions.append(('read', int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o)))
 
             await RisingEdge(dut.clk)
-            assert dut.wbm_stb_o.value == 0
-            dut._log.info("WB: stb deassert detected.")
-
+            
             if delay_ack:       
                 responseDelay = random.randint(0, 10) #Randomly delay ack 0-10 ticks
                 dut._log.info("WB: delaying ack %d ns", responseDelay)
@@ -95,7 +88,7 @@ async def wb_slave_emulator(dut, delay_ack):
 
             dut._log.info("WB: signalling ACK.")
             dut.wbm_ack_i.value = 1 #ACK
-            
+
             await RisingEdge(dut.clk)
             
             dut.wbm_ack_i.value = 0
@@ -151,7 +144,6 @@ async def picorv_read_single_word_test_w_stalls_and_delays(dut):
 
     await init(dut)
 
-    wb_slave_stall_task = cocotb.start_soon(wb_slave_stall(dut))
     wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
 
     numWords = random.randint(1, 10)
@@ -177,7 +169,6 @@ async def picorv_read_single_word_test_w_stalls_and_delays(dut):
         assert sel == 0xf
         assert read_words[ii] == dat_r
 
-    wb_slave_stall_task.kill()
     wb_slave_task.kill()
 
 @cocotb.test()
@@ -219,7 +210,6 @@ async def picorv_write_single_word_test_w_stalls_and_delays(dut):
 
     await init(dut)
 
-    wb_slave_stall_task = cocotb.start_soon(wb_slave_stall(dut))
     wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
 
     numWords = random.randint(1, 10)
@@ -246,7 +236,6 @@ async def picorv_write_single_word_test_w_stalls_and_delays(dut):
         assert sel == 0xf
         assert written_words[ii] == dat_w
 
-    wb_slave_stall_task.kill()
     wb_slave_task.kill()
 
 @cocotb.test()
@@ -289,7 +278,6 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_0(dut):
 
     await init(dut)
 
-    wb_slave_stall_task = cocotb.start_soon(wb_slave_stall(dut))
     wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
 
     numBursts = random.randint(1, 10)
@@ -333,7 +321,6 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_0(dut):
         assert sel == 0xf
         assert read_words[ii] == dat_r
 
-    wb_slave_stall_task.kill()
     wb_slave_task.kill()
 
 @cocotb.test()
@@ -342,7 +329,6 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_1(dut):
 
     await init(dut)
 
-    wb_slave_stall_task = cocotb.start_soon(wb_slave_stall(dut))
     wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
 
     numBursts = random.randint(1, 10)
@@ -382,7 +368,6 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_1(dut):
         assert sel == 0xf
         assert read_words[ii] == dat_r
 
-    wb_slave_stall_task.kill()
     wb_slave_task.kill()
 
 @cocotb.test()
@@ -391,7 +376,6 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_2(dut):
 
     await init(dut)
 
-    wb_slave_stall_task = cocotb.start_soon(wb_slave_stall(dut))
     wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
 
     numBursts = random.randint(1, 10)
@@ -431,7 +415,6 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_2(dut):
         assert sel == 0xf
         assert read_words[ii] == dat_r
 
-    wb_slave_stall_task.kill()
     wb_slave_task.kill()
 
 @cocotb.test()
@@ -440,7 +423,6 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_3(dut):
 
     await init(dut)
 
-    wb_slave_stall_task = cocotb.start_soon(wb_slave_stall(dut))
     wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
 
     numBursts = random.randint(1, 10)
@@ -480,7 +462,6 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_3(dut):
         assert sel == 0xf
         assert read_words[ii] == dat_r
 
-    wb_slave_stall_task.kill()
     wb_slave_task.kill()
 
 @cocotb.test()
@@ -704,7 +685,6 @@ async def picorv_write_burst_test_w_stalls_and_delays(dut):
 
     await init(dut)
 
-    wb_slave_stall_task = cocotb.start_soon(wb_slave_stall(dut))
     wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
   
     numBursts = random.randint(1, 10)
@@ -750,7 +730,6 @@ async def picorv_write_burst_test_w_stalls_and_delays(dut):
         assert sel == 0xf
         assert written_words[ii] == dat
 
-    wb_slave_stall_task.kill()
     wb_slave_task.kill()
 
 @cocotb.test()

@@ -8,7 +8,7 @@ add_executable(picorv_dma_sys_test
 )
 
 #Dependency on two PicoRV test assembly programs
-add_dependencies(picorv_dma_sys_test picorv_wordcopy picorv_bytecopy)
+add_dependencies(picorv_dma_sys_test picorv_wordcopy_single picorv_bytecopy_single)
 
 target_compile_options(picorv_dma_sys_test
 	PRIVATE
