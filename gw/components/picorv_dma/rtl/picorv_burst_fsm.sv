@@ -39,38 +39,93 @@ logic unused = &{wbm_err_i};
 typedef enum {IDLE, SINGLE, BURST, LOCAL } Single_Burst_State_Type;
 Single_Burst_State_Type sb_state;
 
-logic [31:0] burst_reg [0:5];
+logic picorv_rdy;
+logic [31:0] picorv_rdata;
+logic [31:2] wbm_adr;
+logic [31:0] wbm_dat;
+logic wbm_we;
+logic [3:0] wbm_sel;
+logic wbm_stb;
+logic wbm_cyc;
 
-logic wr_req;
+logic [31:0] burst_reg [0:5];
 logic [1:0] burst_phase;
 logic [2:0] burst_phase_ext;
 logic addr_in_burst_reg_range;
-logic [2:0] burst_reg_sel;
+logic [2:0] burst_reg_selector;
 
 logic [1:0] offset;
 logic [31:2] picorv_addr_reg;
 logic [ 3:0] picorv_wstrb_reg;
 logic picorv_rdy_reg;
+logic wbm_stb_reg, wbm_cyc_reg;
+
+assign picorv_rdy_o = picorv_rdy;
+assign picorv_rdata_o = picorv_rdata;
+assign wbm_adr_o = wbm_adr;
+assign wbm_dat_o = wbm_dat;
+assign wbm_we_o = wbm_we;
+assign wbm_sel_o = wbm_sel;
+assign wbm_stb_o = wbm_stb;
+assign wbm_cyc_o = wbm_cyc;
 
 assign burst_phase_ext = {1'b0, burst_phase};
 assign offset = burst_reg[OFFSET_BURST_REG][1:0];
 assign addr_in_burst_reg_range = (picorv_addr_i >= 30'(BURST_REG_BASE_WORD_ADDR)) && (picorv_addr_i < 30'(NUM_BURST_REGS+BURST_REG_BASE_WORD_ADDR));
-assign burst_reg_sel = picorv_addr_i[4:2]; 
-assign wr_req = |picorv_wstrb_reg;
-assign wbm_we_o = wr_req;
-assign wbm_adr_o = picorv_addr_reg + {28'b0, burst_phase};
-assign wbm_dat_o = (sb_state == BURST) ? burst_reg[burst_phase_ext] : picorv_wdata_i;
-assign wbm_sel_o = wr_req ? picorv_wstrb_reg : 4'b1111;
-assign picorv_rdata_o = addr_in_burst_reg_range ? burst_reg[burst_reg_sel] : wbm_dat_i;
-assign picorv_rdy_o = (sb_state == SINGLE) ? wbm_ack_i : picorv_rdy_reg;
+assign burst_reg_selector = picorv_addr_i[4:2]; 
+
+always_comb begin
+    case (sb_state)
+        IDLE: begin
+            picorv_rdy=1'b0;
+            picorv_rdata = 32'b0;
+            wbm_adr = {1'b0, picorv_addr_i[30:2]};
+            wbm_dat = picorv_wdata_i;
+            wbm_we = |picorv_wstrb_i;
+            wbm_sel = wbm_we ? picorv_wstrb_i : 4'b1111;
+            wbm_stb = picorv_valid_i && ~addr_in_burst_reg_range && ~picorv_addr_i[31];
+            wbm_cyc = picorv_valid_i && ~addr_in_burst_reg_range && ~picorv_addr_i[31];
+        end
+        SINGLE: begin
+            picorv_rdy = wbm_ack_i;
+            picorv_rdata = wbm_dat_i;
+            wbm_adr = {1'b0, picorv_addr_i[30:2]};
+            wbm_dat = picorv_wdata_i;
+            wbm_we = |picorv_wstrb_i;
+            wbm_sel = wbm_we ? picorv_wstrb_i : 4'b1111;
+            wbm_stb = wbm_stb_reg;
+            wbm_cyc = 1'b1;
+        end
+        BURST: begin
+            picorv_rdy = picorv_rdy_reg;
+            picorv_rdata = wbm_dat_i;
+            wbm_adr = picorv_addr_reg + {28'b0, burst_phase};
+            wbm_dat = burst_reg[burst_phase_ext];
+            wbm_we = |picorv_wstrb_reg;
+            wbm_sel = wbm_we ? picorv_wstrb_reg : 4'b1111;
+            wbm_stb = wbm_stb_reg;
+            wbm_cyc = wbm_cyc_reg;
+        end
+        LOCAL: begin
+            picorv_rdy = 1'b1;
+            picorv_rdata = burst_reg[burst_reg_selector];
+            wbm_adr = 30'b0;
+            wbm_dat = 32'b0;
+            wbm_we = 1'b0;
+            wbm_sel = 4'b0;
+            wbm_stb = 1'b0;
+            wbm_cyc = 1'b0;
+        end
+    endcase
+end
 
 always_ff @(posedge clk) begin
     if (rst) begin
         sb_state <= IDLE;
         burst_phase <= 2'd0;
         picorv_rdy_reg <= 1'b0;
-        wbm_stb_o <= 1'b0;
-        wbm_cyc_o <= 1'b0;
+        wbm_stb_reg <= 1'b0;
+        wbm_cyc_reg <= 1'b0;
 
         for (int ii=0; ii<NUM_BURST_REGS; ii = ii+1) begin
             burst_reg[ii] <= 32'b0;
@@ -80,14 +135,11 @@ always_ff @(posedge clk) begin
         case (sb_state)
             IDLE: begin
                 if (picorv_valid_i) begin
-                    picorv_addr_reg <= {1'b0, picorv_addr_i[30:2]};
-                    picorv_wstrb_reg <= picorv_wstrb_i;
-
                     if (addr_in_burst_reg_range) begin
+                        /*Write?*/
                         if (picorv_wstrb_i != 4'b0) begin
-                            burst_reg[burst_reg_sel] <= picorv_wdata_i;
+                            burst_reg[burst_reg_selector] <= picorv_wdata_i;
                         end
-                        picorv_rdy_reg <= 1'b1;
                         sb_state <= LOCAL;
                     end
                     else begin
@@ -95,6 +147,7 @@ always_ff @(posedge clk) begin
                             sb_state <= SINGLE;
                         end
                         else begin
+                            /*Read? Copy burst reg 4 to 0*/
                             if (picorv_wstrb_i == 4'b0) begin
                                 burst_reg[0] <= burst_reg[4];
                             end
@@ -103,16 +156,18 @@ always_ff @(posedge clk) begin
                             burst_phase <= 2'd0;
                         end
                         
-                        wbm_cyc_o <= 1'b1;
-                        wbm_stb_o <= 1'b1;
+                        picorv_addr_reg <= {1'b0, picorv_addr_i[30:2]};
+                        picorv_wstrb_reg <= picorv_wstrb_i;
+                        wbm_cyc_reg <= 1'b1;
+                        wbm_stb_reg <= 1'b1;
                     end
                 end
             end
             SINGLE: begin
                 if (~wbm_stall_i) begin
-                    wbm_stb_o <= 1'b0;
+                    wbm_stb_reg <= 1'b0;
                     if (wbm_ack_i) begin
-                        wbm_cyc_o <= 1'b0;
+                        wbm_cyc_reg <= 1'b0;
                         sb_state <= IDLE;
                     end
                 end
@@ -120,9 +175,10 @@ always_ff @(posedge clk) begin
             BURST: begin
                 picorv_rdy_reg <= 1'b0;
                 if (~wbm_stall_i) begin
-                    wbm_stb_o <= 1'b0;
+                    wbm_stb_reg <= 1'b0;
                     if (wbm_ack_i) begin
-                        if (~wr_req) begin
+                        /*Read?*/
+                        if (picorv_wstrb_reg == 4'b0) begin
                             case (offset)
                                 2'd0: begin
                                     burst_reg[burst_phase_ext] <= wbm_dat_i;
@@ -144,17 +200,16 @@ always_ff @(posedge clk) begin
                         if (burst_phase == 2'd3) begin
                             burst_phase <= 2'd0;
                             sb_state <= IDLE;
-                            wbm_cyc_o <= 1'b0;
+                            wbm_cyc_reg <= 1'b0;
                         end
                         else begin
                             burst_phase <= burst_phase + 2'd1;
-                            wbm_stb_o <= 1'b1;
+                            wbm_stb_reg <= 1'b1;
                         end    
                     end
                 end
             end
             LOCAL: begin /*End phase to allow picorv_valid to go to 0.*/
-                picorv_rdy_reg <= 1'b0;
                 sb_state <= IDLE;
             end
         endcase
