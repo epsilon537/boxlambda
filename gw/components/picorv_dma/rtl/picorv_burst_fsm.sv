@@ -106,7 +106,7 @@ always_comb begin
             wbm_stb = wbm_stb_reg;
             wbm_cyc = wbm_cyc_reg;
         end
-        LOCAL: begin
+        default: begin /*LOCAL:*/
             picorv_rdy = 1'b1;
             picorv_rdata = burst_reg[burst_reg_selector];
             wbm_adr = 30'b0;

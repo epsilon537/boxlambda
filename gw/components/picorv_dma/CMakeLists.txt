@@ -17,6 +17,7 @@ add_custom_target(picorv_dma_test ALL
             picorv_hir_regs_copy
             picorv_irq_in_out
             picorv_wordcopy_single
+            picorv_wordcopy_single_unrolled
             picorv_bytecopy_single
             picorv_progmem_data_access
             picorv_burst_fsm_test

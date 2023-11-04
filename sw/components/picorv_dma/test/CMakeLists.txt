@@ -30,6 +30,13 @@ target_include_directories(picorv_wordcopy_single
         ${CMAKE_CURRENT_LIST_DIR}/..
 )
 
+build_picoasm(picorv_wordcopy_single_unrolled wordcopy_single_unrolled.picoasm)
+
+target_include_directories(picorv_wordcopy_single_unrolled
+    PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/..
+)
+
 build_picoasm(picorv_bytecopy_single bytecopy_single.picoasm)
 
 target_include_directories(picorv_bytecopy_single
