@@ -1,12 +1,12 @@
-[submodule "fpga/ibex_wb"]
+[submodule "sub/ibex_wb"]
 	path = sub/ibex_wb
 	url = https://github.com/epsilon537/ibex_wb
 	branch = boxlambda
-[submodule "fpga/ibex"]
+[submodule "sub/ibex"]
 	path = sub/ibex
 	url = https://github.com/epsilon537/ibex
 	branch = boxlambda
-[submodule "fpga/wbuart32"]
+[submodule "sub/wbuart32"]
 	path = sub/wbuart32
 	url = https://github.com/epsilon537/wbuart32
 	branch = boxlambda
@@ -37,12 +37,6 @@
 [submodule "sub/fatfs"]
 	path = sub/fatfs
 	url = https://github.com/epsilon537/fatfs
-[submodule "sub/zbasic"]
-	path = sub/zbasic
-	url = https://github.com/epsilon537/zbasic
-[submodule "sub/jt49"]
-	path = sub/jt49
-	url = https://github.com/epsilon537/jt49
 [submodule "sub/ym2149_psg_system"]
 	path = sub/ym2149_psg_system
 	url = https://github.com/epsilon537/YM2149_PSG_system
