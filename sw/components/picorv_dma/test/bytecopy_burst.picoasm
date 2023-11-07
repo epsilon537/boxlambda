@@ -30,6 +30,7 @@
     .equ STAT_DONE, 0
 
 _start:
+    /*Set up constants.*/
     li hir_base, HIR_REGS_BASE_ADDR
     li burst_base, BURST_REGS_BASE_ADDR
     li msb_set, 0x80000000
@@ -50,8 +51,9 @@ wait_start:
     lw dst, HIR1(hir_base)        /*HIR1: dst pointer*/
     lw num_elems, HIR2(hir_base)  /*HIR2: num bytes*/
     add single_end, num_elems, src /*Turn num_elems into single end pointer.*/
-    bltu num_elems, twenty_four, single_loop_start 
+    bltu num_elems, twenty_four, single_loop_start /*Less than 24 bytes to copy? Just do a regular byte-by-byte copy.*/
     
+    /*Copy byte by byte until src is word-aligned.*/
     andi tmp, src, 3
     beqz tmp, src_is_aligned
 
@@ -78,13 +80,17 @@ wait_start:
     andi tmp, src, 3
     sub num_elems, num_elems, one
 
+    /*At this point, src is word aligned.*/
 src_is_aligned:
+    /*dst-to-src byte offset*/
     andi offset, dst, 3
     sw offset, BURST_OFFSET(burst_base)
+    /*Handle the pre-loading of the burst 4 register and the byte writes required*/
+    /*to come to an aligned dst ptr. There are four offset cases.*/
     beq offset, zero, offset_zero
     beq offset, two, offset_two
     beq offset, three, offset_three
-offset_one:
+offset_one: /*offset 1: copy 3 bytes byte-by-byte, store 4th byte in burst 4 register.*/
     lw tmp, 0(src)
     sb tmp, 0(dst)
     srai tmp, tmp, 8
@@ -97,7 +103,7 @@ offset_one:
     addi dst, dst, 3
     sub num_elems, num_elems, four
     j burst
-offset_two:
+offset_two: /*offset 2: copy 2 bytes byte-by-byte, store 3rd and 4th byte in burst 4 register.*/
     lw tmp, 0(src)
     sb tmp, 0(dst)
     srai tmp, tmp, 8
@@ -108,7 +114,7 @@ offset_two:
     addi dst, dst, 2
     sub num_elems, num_elems, four
     j burst
-offset_three:
+offset_three: /*offset 3: copy 1 byte, store 2nd, 3rd and 4th byte in burst 4 register.*/
     lw tmp, 0(src)
     sb tmp, 0(dst)
     srai tmp, tmp, 8
@@ -116,7 +122,7 @@ offset_three:
     addi src, src, 4
     addi dst, dst, 1
     sub num_elems, num_elems, four
-offset_zero:
+offset_zero: /*offset 0: everything is aligned. Ready to go.*/
 burst:
     and burst_end, num_elems, mask_4_lsb /*Nearest lower burst boundary*/
     add burst_end, burst_end, src        /*Turn into burst end pointer.*/
@@ -135,7 +141,8 @@ burst_loop:
     xor src, src, msb_set  /*Clear msb again to turn off burst mode.*/
     xor dst, dst, msb_set  /*Clear msb again to turn off burst mode.*/
 
-    lw tmp, BURST4(burst_base) /*Copy left-over bytes*/
+    /*Write out the remaining bytes in the burst 4 register.*/
+    lw tmp, BURST4(burst_base) 
     beq offset, zero, single_loop_start
     sb tmp, 0(dst)
     sub offset, offset, one
@@ -151,11 +158,11 @@ burst_loop:
     sub offset, offset, one
     addi dst, dst, 1
 
+    /*Copy remaining bytes byte-by-byte until we get to the end pointer.*/
 single_loop_start:
     bgeu src, single_end, end
 
 single_loop:
-    /*Copy remaining single byte by byte.*/
     lb tmp, 0(src)
     addi src, src, 1
     sb tmp, 0(dst)

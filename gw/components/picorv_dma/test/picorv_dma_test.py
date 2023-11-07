@@ -27,7 +27,7 @@ async def init(dut):
     dut.sys_clk.value = 0
     dut.sys_clkx2.value = 0
 
-    #For simplicity's sake, pretend we have a 1ns clock period.
+    #We have two clocks: sys_clk, and sys_clkx2. sys_clkx2 ticks at twice the rate of sys_clk.
     cocotb.start_soon(Clock(dut.sys_clkx2, 1, units="ns").start())
     cocotb.start_soon(sys_clk_div(dut))
 
@@ -359,6 +359,8 @@ async def irq_in_out_ack(dut):
     #irq out should be low now.
     assert dut.irq_out.value == 0
 
+#Configure and kick off DMA wordcopy, wait for completion, check result, take into account byte offset of destination
+#relative to source.
 async def wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, srcTransactions, dstTransactions, offset=0):
     dut._log.info("Test: Configuring DMA request.")
     dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
@@ -409,7 +411,7 @@ async def wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, srcTran
         dstByteList.append((dat_r>>16)&0xff)
         dstByteList.append((dat_r>>24)&0xff)
 
-    #Remove last <offset> items from the byte lista.
+    #Remove last <offset> items from the byte list.
     for ii in range(offset):
         srcByteList.pop(-1)
         dstByteList.pop(-1)
@@ -418,7 +420,7 @@ async def wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, srcTran
 
     timeout_task.kill()
 
-#WB Master R/W word access
+#WB Master R/W word access using single/individual transactions, i.e. not burst mode.
 @cocotb.test()
 async def wb0_to_wb1_wordcopy_test(dut):
     global wb0_transactions, wb1_transactions
@@ -497,7 +499,7 @@ async def wb_to_wb_bytecopy_test_helper(dut, numBytes, srcAddr, dstAddr, srcTran
 
     timeout_task.kill()
 
-#WB Master R/W byte access
+#WB Master R/W byte access, using individual byte transactions, not burst mode.
 @cocotb.test()
 async def wb_to_wb_bytecopy_test(dut):
     global wb0_transactions, wb1_transactions
@@ -583,11 +585,13 @@ async def picorv_progmem_data_access(dut):
 async def wb0_to_wb1_wordcopy_burst_test(dut):
     global wb0_transactions, wb1_transactions
 
+    #Test all four offset cases.
     for offset in range(4):
         await init(dut)
 
         #Load PicoRV program that copies a configurable number of words from 
-        #a configurable source address to a configurable destination address.
+        #a configurable source address to a configurable destination address, using burst mode and
+        #byte-offset between source and destination.
         #One extra ../ because the test runs from the sim_build subdirectory
         pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
 
@@ -614,7 +618,7 @@ async def wb0_to_wb1_wordcopy_burst_test(dut):
         wb0_slave_task.kill()
         wb1_slave_task.kill()
         
-#WB Master R/W burst word access, without stalls and delays in slave
+#WB Master R/W burst word access, without delays in slave. Read from WB port 0, write to WB port 1.
 @cocotb.test()
 async def wb0_to_wb1_wordcopy_burst_test_fast(dut):
     global wb0_transactions, wb1_transactions
@@ -623,8 +627,8 @@ async def wb0_to_wb1_wordcopy_burst_test_fast(dut):
         await init(dut)
 
         #Load PicoRV program that copies a configurable number of words from 
-        #a configurable source address to a configurable destination address.
-        #One extra ../ because the test runs from the sim_build subdirectory
+        #a configurable source address to a configurable destination address, using burst mode and
+        #byte-offset between source and destination.
         pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
 
         wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
@@ -650,7 +654,7 @@ async def wb0_to_wb1_wordcopy_burst_test_fast(dut):
         wb0_slave_task.kill()
         wb1_slave_task.kill()
         
-#WB Master R/W burst word access, on one bus, without stalls and delays in slave
+#WB Master R/W burst word access, on one bus, without delays in slave. Read from and write to WB port 0. Performance test.
 @cocotb.test()
 async def wb0_to_wb0_wordcopy_burst_test_fast(dut):
     global wb0_transactions, wb1_transactions
@@ -659,8 +663,8 @@ async def wb0_to_wb0_wordcopy_burst_test_fast(dut):
         await init(dut)
 
         #Load PicoRV program that copies a configurable number of words from 
-        #a configurable source address to a configurable destination address.
-        #One extra ../ because the test runs from the sim_build subdirectory
+        #a configurable source address to a configurable destination address, using burst mode and
+        #byte-offset between source and destination.
         pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
 
         wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
@@ -712,7 +716,7 @@ async def wb0_to_wb0_wordcopy_burst_test_fast(dut):
         wb0_slave_task.kill()
         wb1_slave_task.kill()
         
-#WB Master R/W sinlge word access, on one bus, without stalls and delays in slave
+#WB Master R/W single word access, on WB port 0, without delays in slave. Performance test.
 @cocotb.test()
 async def wb0_to_wb0_wordcopy_single_test_fast(dut):
     global wb0_transactions, wb1_transactions
@@ -721,8 +725,8 @@ async def wb0_to_wb0_wordcopy_single_test_fast(dut):
     await init(dut)
 
     #Load PicoRV program that copies a configurable number of words from 
-    #a configurable source address to a configurable destination address.
-    #One extra ../ because the test runs from the sim_build subdirectory
+    #a configurable source address to a configurable destination address, using
+    #single/individual word transactions, i.e. non-burst-mode.
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_single.picobin")
 
     wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
@@ -779,12 +783,12 @@ async def wb0_to_wb0_wordcopy_single_test_fast(dut):
 async def wb0_to_wb0_wordcopy_single_unrolled_test_fast(dut):
     global wb0_transactions, wb1_transactions
 
-    
     await init(dut)
 
     #Load PicoRV program that copies a configurable number of words from 
-    #a configurable source address to a configurable destination address.
-    #One extra ../ because the test runs from the sim_build subdirectory
+    #a configurable source address to a configurable destination address, using
+    #single/individual word transactions, i.e. non-burst-mode.
+    #This program variant uses 4x loop unrolling in the wordcopy loop.
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_single_unrolled.picobin")
 
     wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))

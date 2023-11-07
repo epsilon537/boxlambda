@@ -10,7 +10,7 @@
 #include "platform.h"
 #include "utils.h"
 
-//PicoRV wordcopy programs
+//PicoRV copy programs
 #include "picorv_wordcopy_single.h"
 #include "picorv_wordcopy_burst.h"
 #include "picorv_bytecopy_single.h"
@@ -19,71 +19,45 @@
 #include "sdram.h"
 #include "vera_hal.h"
 
-// #define BYTE_ONLY
-// #define WORD_ONLY
-// #define SINGLE_ONLY
-#define BURST_ONLY
-#define LOCAL_MEM_ONLY
-// #define EXT_MEM0_ONLY
-// #define EXT_MEM1_ONLY
-// #define VRAM_MEM_ONLY
+/*This test program is a multiple-nested-loop iterating over various vectors (PicoRV program, src aligned, dst alignment
+ *number of elements to copy, etc.). At the heart of the loop is a parameterized DMA copy routine and some checks verifying
+ *that the copy was complete without going out of bounds.
+ *Through various defines, the test vectors can be constrained to make test exeuction time more manageable.
+ */
+
+// Limit testing to aligned pointers only.
 // #define ALIGNED_ONLY
+
+// Stop test execution as soon as a failure is encountered.
 #define STOP_ON_FAIL
+
+// Enable detailed logging.
 //#define DETAILED_LOGS
 
+//Define or undefine these to limit to byte or wordcopy only.
 #define BYTE_COPY
 #define WORD_COPY
-#define SINGLE_COPY
-#define BURST_COPY
-#define LOCAL_MEM_COPY
-#define EXT_MEM0_COPY
-#define EXT_MEM1_COPY
-#define VRAM_MEM_COPY
 
+//Define or undefine these to limit to single or burst mode only.
+//#define SINGLE_COPY
+#define BURST_COPY
+
+//Define or undefine these to limit src and dest memory types.
+#define LOCAL_MEM_COPY
+//#define EXT_MEM0_COPY
+#define EXT_MEM1_COPY
+//#define VRAM_MEM_COPY
+
+//Define or undefine these to limit src and dest offset test vectors.
 #define OFFSET_0
 #define OFFSET_1
 #define OFFSET_2
 #define OFFSET_3
 
-#ifdef BYTE_ONLY
-#undef WORD_COPY
-#endif
-#ifdef WORD_ONLY
-#undef BYTE_COPY
-#endif
-
-#ifdef SINGLE_ONLY
-#undef BURST_COPY
-#endif
-#ifdef BURST_ONLY
-#undef SINGLE_COPY
-#endif
-
-#ifdef LOCAL_MEM_ONLY
-#undef EXT_MEM0_COPY
-#undef EXT_MEM1_COPY
-#undef VRAM_MEM_COPY
-#endif
-#ifdef EXT_MEM0_ONLY
-#undef LOCAL_MEM_COPY
-#undef EXT_MEM1_COPY
-#undef VRAM_MEM_COPY
-#endif
-#ifdef EXT_MEM1_ONLY
-#undef LOCAL_MEM_COPY
-#undef EXT_MEM0_COPY
-#undef VRAM_MEM_COPY
-#endif
-#ifdef VRAM_MEM_ONLY
-#undef LOCAL_MEM_COPY
-#undef EXT_MEM0_COPY
-#undef EXT_MEM1_COPY
-#endif
-
 #ifdef ALIGNED_ONLY
 #undef OFFSET_1
 #undef OFFSET_2
-#under OFFSET_3
+#undef OFFSET_3
 #endif
 
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
@@ -103,6 +77,7 @@ static struct gpio gpio1;
 //Some data bufers to copy from/to.
 static unsigned srcBufLocal[64], dstBufLocal[64];
 
+//A struct hold PicoRV program attributes.
 typedef struct {
     const char *name;
     unsigned char *progDat; 
@@ -110,6 +85,7 @@ typedef struct {
     unsigned elemSize;
 } Program;
 
+//PicoRV program test vector.
 Program programs[] = {
 #ifdef WORD_COPY
 #ifdef SINGLE_COPY
@@ -129,11 +105,13 @@ Program programs[] = {
 #endif /*BYTE_COPY*/
 };
 
+//Struct hold memory type attributes.
 typedef struct {
     const char* name;
     char* ptr;
 } MemType;
 
+//Source memory type test vector.
 MemType srcMems[] = {
 #ifdef LOCAL_MEM_COPY
     {
@@ -141,7 +119,7 @@ MemType srcMems[] = {
         (unsigned char*)srcBufLocal
     },
 #endif
-#if 0 //def EXT_MEM0_COPY
+#ifdef EXT_MEM0_COPY
     {
         "EXT_MEM_0",
         (unsigned char*)MAIN_RAM_BASE
@@ -153,7 +131,7 @@ MemType srcMems[] = {
         (unsigned char*)MAIN_RAM_BASE2
     },
 #endif
-#if 0 //def VRAM_MEM_COPY
+#ifdef VRAM_MEM_COPY
     {
         "VRAM",
         (unsigned char*)VERA_VRAM_BASE
@@ -161,6 +139,7 @@ MemType srcMems[] = {
 #endif
 };
 
+//Destination memory type test vector.
 MemType dstMems[] = {
 #ifdef LOCAL_MEM_COPY
     {
@@ -168,7 +147,7 @@ MemType dstMems[] = {
         (unsigned char*)dstBufLocal
     },
 #endif
-#if 0 //def EXT_MEM0_COPY
+#ifdef EXT_MEM0_COPY
     {
         "EXT_MEM_0",
         (unsigned char*)(MAIN_RAM_BASE+64*4)
@@ -188,6 +167,7 @@ MemType dstMems[] = {
 #endif
 };
 
+//Source pointer offsets test vector.
 unsigned srcOffsets[] = {
 #ifdef OFFSET_0
     0,
@@ -203,6 +183,7 @@ unsigned srcOffsets[] = {
 #endif
 };
 
+//Destination pointer offsets test vector.
 unsigned dstOffsets[] = {
 #ifdef OFFSET_0
     0,
@@ -218,6 +199,7 @@ unsigned dstOffsets[] = {
 #endif
 };
 
+//Number of elements test vector.
 unsigned numElems[] = {
 #ifdef ONE_SIZE_ONLY
     32
@@ -240,9 +222,12 @@ void	_exit (int status) {
 	while (1);
 }
 
-//Returns 1 if success, 0 if fail.
-int dmaTest(unsigned char* srcBase, unsigned srcOffset, unsigned char* dstBase, unsigned dstOffset, unsigned numElems, unsigned elemSize) {
+//Parameterized dma test function. Returns 1 if success, 0 if failed.
+int dmaTest(unsigned char* srcBase, unsigned srcOffset, unsigned char* dstBase, unsigned dstOffset, 
+            unsigned numElems, unsigned elemSize) {
     unsigned char* srcPtr = srcBase + srcOffset*elemSize;
+    //Offset destination pointer deeper into its buffer so we have room to check for out-of-bounds accesses before
+    //the destination start pointer.
     unsigned char* dstPtr = dstBase + 8*elemSize + dstOffset*elemSize;
 
     //Fill source buffer with some random data and destination with 0x55s
@@ -280,8 +265,9 @@ int dmaTest(unsigned char* srcBase, unsigned srcOffset, unsigned char* dstBase, 
 #ifdef DETAILED_LOGS
         printf("Memcmp successful.\n");
 #endif
-        int oob=0;
+        int oob=0; /*out-of-bounds access detected flag.*/
 
+        //check bytes before the destination start pointer.
         for (int idx=-1; idx>-8; idx--) {
             if (dstPtr[idx] != 0x55) {
                 printf("Out of bounds write at idx %d\n", idx);
@@ -289,6 +275,7 @@ int dmaTest(unsigned char* srcBase, unsigned srcOffset, unsigned char* dstBase, 
             }
         }
 
+        //check bytes after the destination end pointer.
         for (int idx = numElems*elemSize; idx<numElems*elemSize+8; idx++) {
             if (dstPtr[idx] != 0x55) {
                 printf("Out of bounds write at idx %d\n", idx);
@@ -308,7 +295,7 @@ int dmaTest(unsigned char* srcBase, unsigned srcOffset, unsigned char* dstBase, 
         printf("Memcmp failed.\n");
         printf("numElems = %d, srcAddr = 0x%x, dstAddr = 0x%x\n", numElems, (unsigned)srcPtr, (unsigned)dstPtr);
         
-        for (int ii=0; ii<numElems; ii++) {
+        for (int ii=0; ii<numElems*elemSize; ii++) {
             printf("[%d] 0x%x vs. 0x%x\n", ii, srcPtr[ii], dstPtr[ii]);
         }
 
@@ -317,7 +304,7 @@ int dmaTest(unsigned char* srcBase, unsigned srcOffset, unsigned char* dstBase, 
 }
 
 int main(void) {
-  //Switches
+//Switches
   gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
   gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
 
@@ -336,6 +323,9 @@ int main(void) {
 
   int numFailedTests = 0;
 
+  //Nested loop of test vectors.
+
+  //PicoRV program
   for (int progIdx = 0; progIdx < sizeof(programs)/sizeof(Program); progIdx++) {
     Program *pp = &programs[progIdx];
 
@@ -348,6 +338,7 @@ int main(void) {
 
     unsigned elemSize = pp->elemSize;
 
+    //Source memory type.
     for (int srcMemIdx = 0; srcMemIdx < sizeof(srcMems)/sizeof(MemType); srcMemIdx++) {
         MemType *srcMemType = &srcMems[srcMemIdx];
 
@@ -355,11 +346,13 @@ int main(void) {
 
         unsigned char *srcMemBase = srcMemType->ptr;
 
+        //Source offset.
         for (int srcOffsetIdx=0; srcOffsetIdx < sizeof(srcOffsets)/sizeof(unsigned); srcOffsetIdx++) {
             unsigned srcOffset = srcOffsets[srcOffsetIdx];
 #ifdef DETAILED_LOGS
             printf("srcOffset = %d\n", srcOffset);
 #endif
+            //Destination memory type.
             for (int dstMemIdx = 0; dstMemIdx < sizeof(dstMems)/sizeof(MemType); dstMemIdx++) {
                 MemType *dstMemType = &dstMems[dstMemIdx];
 
@@ -367,11 +360,13 @@ int main(void) {
 
                 unsigned char *dstMemBase = dstMemType->ptr;
 
+                //Destination offset.
                 for (int dstOffsetIdx=0; dstOffsetIdx < sizeof(dstOffsets)/sizeof(unsigned); dstOffsetIdx++) {
                     unsigned dstOffset = dstOffsets[dstOffsetIdx];
 #ifdef DETAILED_LOGS
                     printf("dstOffset = %d\n", dstOffset);
 #endif            
+                    //Number of elements to copy.
                     for (int numElemsIdx=0; numElemsIdx < sizeof(numElems)/sizeof(unsigned); numElemsIdx++) {
                         unsigned nElems = numElems[numElemsIdx];
 #ifdef DETAILED_LOGS

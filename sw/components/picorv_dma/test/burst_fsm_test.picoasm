@@ -1,6 +1,17 @@
 .include "picoasm_hal.h"
 
 /*Word Copy Burst Mode test program*/
+/*This is just the core of a DMA copy routine using burst mode.*/
+/*Edge case, handling of initial and final words/bytes etc. are not handled here.*/
+/*This is just the bare minimal copy loop exercising the PicoRV_Burst_FSM logic.*/
+
+#define hir_base x1
+#define burst_base x2
+#define msb_set x3
+#define tmp x4
+#define src x5
+#define dst x6
+#define end_ptr x7
 
     .text
     .balign 4
@@ -11,36 +22,36 @@
     .equ STAT_DONE, 0
 
 _start:
-    li a0, HIR_REGS_BASE_ADDR
-    li a4, BURST_REGS_BASE_ADDR
-    li a5, 0x80000000
+    li hir_base, HIR_REGS_BASE_ADDR
+    li burst_base, BURST_REGS_BASE_ADDR
+    li msb_set, 0x80000000
 wait_start:
-    lw a1, HIR3(a0)   /*HIR3: ctrl-status*/
-    beqz a1, wait_start
-    li a1, STAT_BUSY
-    sw a1, HIR3(a0)   /*set status to 'Busy'*/
+    lw tmp, HIR3(hir_base)   /*HIR3: ctrl-status*/
+    beqz tmp, wait_start
+    li tmp, STAT_BUSY
+    sw tmp, HIR3(hir_base)   /*set status to 'Busy'*/
 
-    lw a1, HIR0(a0)        /*HIR0: src pointer*/
-    or a1, a1, a5          /*Set msb to engage burst mode*/
-    lw a2, HIR1(a0)        /*HIR1: dst pointer - may be misaligned*/
-    andi a6, a2, 3         /*src-to-dst offset*/
-    sw a6, BURST_OFFSET(a4) 
-    sub a2, a2, a6         /*make dst word aligned*/
-    or a2, a2, a5          /*Set msb to engage burst mode*/
-    lw a3, HIR2(a0)        /*HIR2: num words*/
-                           /*To keep the test program simple, I'm not handling the edge cases. num words is*/
-                           /*assumed to be a multiple of 4.*/
-    slli a3, a3, 2         /*Multiple by 4 to convert to byte address offset.*/
-    add a3, a3, a1 
+    lw src, HIR0(hir_base)        /*HIR0: src pointer*/
+    or src, src, msb_set          /*Set msb to engage burst mode*/
+    lw dst, HIR1(hir_base)        /*HIR1: dst pointer - may be misaligned*/
+    andi tmp, dst, 3              /*dst-to-src byte offset*/
+    sw tmp, BURST_OFFSET(burst_base) 
+    sub dst, dst, tmp             /*make dst word aligned*/
+    or dst, dst, msb_set          /*Set msb to engage burst mode*/
+    lw end_ptr, HIR2(hir_base)    /*HIR2: num words*/
+    /*To keep the test program simple, I'm not handling the edge cases. num words is*/
+    /*assumed to be a multiple of 4.*/
+    slli end_ptr, end_ptr, 2      /*Multiple by 4 to convert to byte address offset.*/
+    add end_ptr, end_ptr, src 
     
 loop:
     /*Copy 4-word burst by 4-word burst*/
-    lw t0, 0(a1)
-    sw t0, 0(a2)
-    addi a1, a1, 16
-    addi a2, a2, 16
-    bltu a1, a3, loop
+    lw tmp, 0(src)
+    sw tmp, 0(dst)
+    addi src, src, 16
+    addi dst, dst, 16
+    bltu src, end_ptr, loop
 
-    sw zero, BURST4(a4) /*Do one more write to a burst register to ensure last burst transaction completed.*/
-    sw zero, HIR3(a0) /*set to 'Done'*/
+    sw zero, BURST4(burst_base) /*Do one more write to a burst register to ensure last burst transaction completed.*/
+    sw zero, HIR3(hir_base)     /*set to 'Done'*/
     j wait_start

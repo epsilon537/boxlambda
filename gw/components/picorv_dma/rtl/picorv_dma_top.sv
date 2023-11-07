@@ -409,6 +409,7 @@ module picorv_dma_top #(
 		.rdata(ram_rdata)
     );
 
+    /*Module turning PicoRV requests into individual or 4-word-burst Wishbone transactions.*/
     picorv_burst_fsm #( 
         .BURST_REG_BASE_ADDR(BURST_REG_BASE_ADDR)
     ) picorv_burst_fsm_instance (

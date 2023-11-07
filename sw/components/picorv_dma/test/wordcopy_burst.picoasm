@@ -23,20 +23,21 @@
     .equ STAT_DONE, 0
 
 _start:
+    /*Set up constants.*/
     li hir_base, HIR_REGS_BASE_ADDR
     li burst_base, BURST_REGS_BASE_ADDR
-    sw zero, BURST_OFFSET(burst_base) /*no src-to-dest alignment offset.*/
+    sw zero, BURST_OFFSET(burst_base)    /*no src-to-dest alignment offset.*/
     li msb_set, 0x80000000
-    li mask_4_lsb, 0xfffffff0 /*mask to clear 4 lsbs*/
+    li mask_4_lsb, 0xfffffff0            /*mask to clear 4 lsbs*/
     li stat_busy, STAT_BUSY
 wait_start:
-    lw tmp, HIR3(hir_base)   /*HIR3: ctrl-status*/
+    lw tmp, HIR3(hir_base)               /*HIR3: ctrl-status*/
     beqz tmp, wait_start
-    sw stat_busy, HIR3(hir_base)   /*set status to 'Busy'*/
+    sw stat_busy, HIR3(hir_base)         /*set status to 'Busy'*/
 
-    lw src, HIR0(hir_base)        /*HIR0: src pointer*/
-    lw dst, HIR1(hir_base)        /*HIR1: dst pointer*/
-    lw num_elems, HIR2(hir_base)  /*HIR2: num words*/
+    lw src, HIR0(hir_base)               /*HIR0: src pointer*/
+    lw dst, HIR1(hir_base)               /*HIR1: dst pointer*/
+    lw num_elems, HIR2(hir_base)         /*HIR2: num words*/
     slli num_elems, num_elems, 2         /*Multiple by 4 to convert to byte address offset.*/
     add single_end, num_elems, src       /*Turn into single end pointer.*/
     and burst_end, num_elems, mask_4_lsb /*Nearest lower burst boundary*/
@@ -58,11 +59,11 @@ burst_loop:
     xor src, src, msb_set  /*Clear msb again to turn off burst mode.*/
     xor dst, dst, msb_set  /*Clear msb again to turn off burst mode.*/
 
+    /*Copy remaining words word-by-word until we get to the end pointer.*/
 single_loop_start:
     bgeu src, single_end, end
 
 single_loop:
-    /*Copy remaining single word by word.*/
     lw tmp, 0(src)
     addi src, src, 4
     sw tmp, 0(dst)

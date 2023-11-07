@@ -17,7 +17,7 @@ target_compile_definitions(sdram
 
 target_compile_options(sdram
 	PRIVATE
-		-O2
+		-O2 -g
 )
 
 target_include_directories(sdram

@@ -15,7 +15,7 @@ BURST_REG_2_OFFSET = 2
 BURST_REG_1_OFFSET = 1
 BURST_REG_0_OFFSET = 0
 
-#Cocotb-based unit testcases for picorv_dma
+#Cocotb-based unit testcases for picorv_burst_fsm module.
 
 wb_transactions = []
 
@@ -52,13 +52,6 @@ async def timeout_check(dut):
     await Timer(20000, units="ns")
     #We should never reach this point
     assert False, "Transaction timeout!"
-
-#async def wb_slave_stall(dut):
-#    while True:
-#        if dut.wbm_cyc_o.value == 1:
-#            dyt.wbm_stall_i.value = dut.wbm_ack_i.value
-#        else:
-#            dut.wbm_stall_i.value = 0
 
 #Asynchronous task emulating a Wishbone slave. Received transactions are recorded in a
 #wb_transactions list.
@@ -102,7 +95,6 @@ async def picorv_read(dut, addr):
     dut.picorv_wstrb_i.value = 0
     dut.picorv_valid_i.value = 1
 
-    
     rdyDetected = False
     while not rdyDetected:
         await RisingEdge(dut.clk)
@@ -308,7 +300,7 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_0(dut):
 
     
     #Do one more write to a burst register to ensure the last burst is entirely completed out before
-    #We start checking
+    #We start checking.
     await with_timeout(picorv_write(dut, (0x10002020>>2) + BURST_REG_4_OFFSET, 0), 30*4, 'ns')
 
     assert len(wb_transactions) == numWords
@@ -656,7 +648,7 @@ async def picorv_read_burst_test_wo_stalls_and_delays_offset_3(dut):
     wb_slave_task.kill()
 
 @cocotb.test()
-async def picorv_burst_reg_write_read(dut):
+async def picorv_burst_reg_write_read_back(dut):
     
     await init(dut)
 
