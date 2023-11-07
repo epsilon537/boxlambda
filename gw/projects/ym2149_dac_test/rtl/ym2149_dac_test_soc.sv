@@ -2,7 +2,7 @@
 
 //BoxLambda Test SoC including dual YM2149 system and 1-bit audio DAC.
 module ym2149_dac_test_soc(
-  input  wire       ext_clk, /*External clock: 100MHz on FPGA, 50MHz in simulation.*/
+  input  wire       ext_clk, /*100 External clock.*/
    
   inout  wire [7:0] gpio0,
   inout  wire [3:0] gpio1,
@@ -123,7 +123,7 @@ module ym2149_dac_test_soc(
     wb_sizes[GPIO0_S]      = 32'h00010;
     wb_sizes[GPIO1_S]      = 32'h00010;
     wb_sizes[SDSPI_S]      = 32'h00010;
-    wb_sizes[RESET_CTRL_S] = 32'h00004;
+    wb_sizes[RESET_CTRL_S] = 32'h00008;
     wb_sizes[YM2149_S]     = 32'h00400;
     wb_sizes[UART_S]       = 32'h00010;
     wb_sizes[TIMER_S]      = 32'h00010;
@@ -295,7 +295,8 @@ module ym2149_dac_test_soc(
 	.clk(ext_clk), /*External clock is input for LiteDRAM module. On FPGA this is a 100MHz clock, in simulation it's a 50MHz clock.*/
   .rst(1'b1), /*Never reset LiteDRAM.*/
   .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock. On FPGA a divide-by-2 of the ext_clk is done. In simulation sys_clk = ext_clk.*/
-	.sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
+	.sys_clkx2(), /*Not used.*/
+  .sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
 	.pll_locked(pll_locked_i),
 `ifdef SYNTHESIS
 	.ddram_a(ddram_a),
@@ -357,19 +358,14 @@ module ym2149_dac_test_soc(
   assign pll_locked = ~litedram_rst_o & pll_locked_i;
 `else //No DRAM:
 
-//LiteDRAM provides the clock generator. Without DRAM we have to provide one here.
-`ifdef SYNTHESIS
-  //This clkgen does a divide-by-2 of the 100MHz ext_clk => sys_clk runs at 50MHz.
-  clkgen_xil7series clkgen (
+  //LiteDRAM provides the clock generator. Without DRAM we have to provide one here.
+  boxlambda_clk_gen clkgen (
     .IO_CLK     (ext_clk),
     .IO_RST_N   (1'b1),
     .clk_sys    (sys_clk),
-    .rst_sys_n  (pll_locked));
-`else
-  //In simulation ext_clk runs at 50MHz and sys_clk = ext_clk;
-  assign sys_clk = ext_clk;
-  assign pll_locked = 1'b1;
-`endif //SYNTHESIS/No SYNTHESIS
+    .clk_sysx2  (), //Not used.
+    .locked  (pll_locked)
+  );
 
   assign init_done_led = 1'b1;
   assign init_err_led = 1'b0;

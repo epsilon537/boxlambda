@@ -2,17 +2,17 @@
 
 add_executable(picorv_dma_sys_test
 	EXCLUDE_FROM_ALL
-	main.c
+	picorv_dma_sys_test.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
 #Dependency on two PicoRV test assembly programs
-add_dependencies(picorv_dma_sys_test picorv_wordcopy picorv_bytecopy)
+add_dependencies(picorv_dma_sys_test picorv_wordcopy_single picorv_bytecopy_single)
 
 target_compile_options(picorv_dma_sys_test
 	PRIVATE
-		-O2
+		-O2 -g
 )
 
 target_include_directories(picorv_dma_sys_test
@@ -24,4 +24,4 @@ target_include_directories(picorv_dma_sys_test
 link_internal_create_mem_file(picorv_dma_sys_test 
 	${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
 
-target_link_libraries(picorv_dma_sys_test picorv_dma sdram vera)
+target_link_libraries(picorv_dma_sys_test picorv_dma vera sdram)

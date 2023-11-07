@@ -4,9 +4,12 @@
 create_project -force -name litedram -part 
 set_msg_config -id {Common 17-55} -new_severity {Warning}
 
+# Add project commands
+
+
 # Add Sources
 
-read_verilog {/mnt/c/work/boxlambda/components/litedram/arty/rtl/litedram.v}
+read_verilog {/home/epsilon/work/boxlambda/gw/components/litedram/arty/rtl/litedram.v}
 
 # Add EDIFs
 
@@ -31,6 +34,10 @@ synth_design -directive default -top litedram -part
 report_timing_summary -file litedram_timing_synth.rpt
 report_utilization -hierarchical -file litedram_utilization_hierarchical_synth.rpt
 report_utilization -file litedram_utilization_synth.rpt
+write_checkpoint -force litedram_synth.dcp
+
+# Add pre-optimize commands
+
 
 # Optimize design
 
@@ -50,6 +57,7 @@ report_utilization -file litedram_utilization_place.rpt
 report_io -file litedram_io.rpt
 report_control_sets -verbose -file litedram_control_sets.rpt
 report_clock_utilization -file litedram_clock_utilization.rpt
+write_checkpoint -force litedram_place.dcp
 
 # Add pre-routing commands
 

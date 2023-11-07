@@ -42,6 +42,11 @@ struct pad_s user_clk[] = {
     { NULL, 0, NULL }
 };
 
+struct pad_s user_clkx2[] = {
+    { (char*)"user_clkx2", 1, NULL },
+    { NULL, 0, NULL }
+};
+
 struct pad_s user_rst[] = {
     { (char*)"user_rst", 1, NULL },
     { NULL, 0, NULL }

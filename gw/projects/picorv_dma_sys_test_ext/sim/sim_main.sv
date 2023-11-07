@@ -57,7 +57,7 @@ module sim_main #(
 			     .exit                 ( sim_jtag_exit        )
 			     );
 
-   praxos_test_soc dut (
+   picorv_dma_test_soc dut (
 		 .ext_clk(clk_i),
 		 .ext_rst_n(rst_ni),
 		 .gpio0(gpio0),

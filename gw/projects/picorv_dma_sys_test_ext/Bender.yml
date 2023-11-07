@@ -3,7 +3,7 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: praxos_test
+  name: picorv_dma_sys_test
 
 dependencies:
   # Path dependency.
@@ -18,24 +18,25 @@ dependencies:
   ym2149: { path: "../../components/ym2149" }
   audio_dac: { path: "../../components/audio_dac" }
   reset_ctrl: { path: "../../components/reset_ctrl" }
-  praxos: { path: "../../components/praxos" }
+  picorv_dma: { path: "../../components/picorv_dma" }
+  boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
   
 sources:
   - target: constraints
     files:
-      - constrs/Arty-A7-35-Master.xdc
+      - ../picorv_dma_sys_test/constrs/Arty-A7-35-Master.xdc
   - target: arty-a7-35
     defines:
-      VRAM_SIZE_BYTES: (64*1024)
-      DPRAM_SIZE_BYTES: (64*1024)
+      VRAM_SIZE_BYTES: 65536
+      DPRAM_SIZE_BYTES: 65536
     files:
-      - rtl/praxos_test_soc.sv
+      - ../picorv_dma_sys_test/rtl/picorv_dma_test_soc.sv
   - target: arty-a7-100
     defines:
-      VRAM_SIZE_BYTES: (128*1024)
-      DPRAM_SIZE_BYTES: (256*1024)
+      VRAM_SIZE_BYTES: 131072
+      DPRAM_SIZE_BYTES: 262144
     files:
-      - rtl/praxos_test_soc.sv
+      - ../picorv_dma_sys_test/rtl/picorv_dma_test_soc.sv
   - target: verilator
     files:
       - sim/sim_main.cpp
@@ -49,11 +50,11 @@ sources:
     defines:
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
-      #YM2149: ~
-      #SDSPI: ~
-      #DRAM: ~
-      #VERA: ~
-      PRAXOS: ~      
+      YM2149: ~
+      SDSPI: ~
+      DRAM: ~
+      VERA: ~
+      PICORV_DMA: ~      
     #spram and timer should be separate components, but since I won't use them
     #as Boxlambda components, I'm leaving them here in the hello world example
     files:

@@ -5,6 +5,12 @@ packages:
     source:
       Path: ../../components/audio_dac
     dependencies: []
+  boxlambda_clk_gen:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/boxlambda_clk_gen
+    dependencies: []
   ibex:
     revision: null
     version: null
@@ -31,11 +37,11 @@ packages:
     source:
       Path: ../../components/litedram
     dependencies: []
-  praxos:
+  picorv_dma:
     revision: null
     version: null
     source:
-      Path: ../../components/praxos
+      Path: ../../components/picorv_dma
     dependencies: []
   reset_ctrl:
     revision: null

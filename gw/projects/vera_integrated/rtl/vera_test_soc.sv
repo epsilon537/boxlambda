@@ -59,6 +59,7 @@ module vera_test_soc(
     RAM_S,
     GPIO0_S,
     GPIO1_S,
+    RESET_CTRL_S,
     UART_S,
     TIMER_S,
     DDR_CTRL_S,
@@ -69,7 +70,7 @@ module vera_test_soc(
 } wb_slave_e;
 
   localparam NrMaster = 3;
-  localparam NrSlave  = 10;
+  localparam NrSlave  = 11;
 
   typedef logic [31:0] Wb_base_addr [NrSlave];
 
@@ -77,6 +78,7 @@ module vera_test_soc(
      wb_base_addresses[RAM_S]      = 32'h00000000;
      wb_base_addresses[GPIO0_S]    = 32'h10000000;
      wb_base_addresses[GPIO1_S]    = 32'h10000010;
+     wb_base_addresses[RESET_CTRL_S] = 32'h10000030;
      wb_base_addresses[UART_S]     = 32'h10010000;
      wb_base_addresses[TIMER_S]    = 32'h10020000;
      wb_base_addresses[DDR_CTRL_S] = 32'h10030000;
@@ -97,6 +99,7 @@ module vera_test_soc(
     wb_sizes[RAM_S]      = 32'h10000;
     wb_sizes[GPIO0_S]    = 32'h00010;
     wb_sizes[GPIO1_S]    = 32'h00010;
+    wb_sizes[RESET_CTRL_S] = 32'h00008;
     wb_sizes[UART_S]     = 32'h00010;
     wb_sizes[TIMER_S]    = 32'h00010;
     wb_sizes[DDR_CTRL_S] = 32'h10000;
@@ -108,14 +111,16 @@ module vera_test_soc(
   localparam Wb_size wb_size = wb_sizes();
 
   //sys_clk is a 50MHz clock.  
-  logic sys_clk, sys_rst_n;
+  logic sys_clk;
 
-  //Non-Debug-Module-Reset, i.e. reset everything except Debug Module.
-  //Driven by Debug Module itself to implement target reset function.
-  logic ndmreset;
+  //ndmreset_req: Non-Debug Module reset requested by Debug Module
+  //ndmreset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
+  //dmreset: Debug-Module Reset issued by Reset Controller.
+  logic ndmreset_req, ndmreset, dmreset;
+  logic por_completed; //Indicates Power-On Reset has been completed.
 
-  wb_if wbm[NrMaster](.rst(ndmreset | (~sys_rst_n)), .clk(sys_clk));
-  wb_if wbs[NrSlave](.rst(~sys_rst_n), .clk(sys_clk));
+  wb_if wbm[NrMaster](.rst(ndmreset), .clk(sys_clk));
+  wb_if wbs[NrSlave](.rst(dmreset), .clk(sys_clk));
 
   // define the macro if you want to use debugger
 `ifdef DEBUG_MODULE_ACTIVE
@@ -142,9 +147,9 @@ module vera_test_soc(
 
   wb_dm_top wb_dm (
     .clk       (sys_clk),
-    .rst_n     (sys_rst_n),
+    .rst_n     (~dmreset),
     .testmode  (1'b0),
-    .ndmreset  (ndmreset),
+    .ndmreset  (ndmreset_req),
     .dmactive  (dmactive),
     .debug_req (debug_req),
     .wbm       (wbm[DM_M]),
@@ -156,7 +161,7 @@ module vera_test_soc(
         .IdcodeValue          ( 32'h249511C3    )
     ) dmi_jtag_inst (
     .clk_i            (sys_clk),
-    .rst_ni           (sys_rst_n),
+    .rst_ni           (~dmreset),
     .testmode_i       (1'b0),
     .dmi_rst_no       (dmi_rst_n),
     .dmi_req_o        (dmi_req),
@@ -174,12 +179,9 @@ module vera_test_soc(
 
    logic 	 unused = &{1'b0, dmactive, 1'b0};
 `else
-   logic 	 unused = &{1'b0, tck, trst_n, tms, tdi,1'b0};
-   logic 	 debug_req;
-
-   assign ndmreset = 1'b0;
+   logic 	debug_req;
+   assign ndmreset_req = 1'b0;
    assign debug_req = 1'b0;
-   assign tdo = 1'bz;
 `endif
 
   wb_ibex_core #(
@@ -188,7 +190,7 @@ module vera_test_soc(
     .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA)
   ) wb_ibex_core (
     .clk          (sys_clk),
-    .rst_n        (sys_rst_n & (~ndmreset)),
+    .rst_n        (~ndmreset),
     .instr_wb     (wbm[COREI_M]),
     .data_wb      (wbm[CORED_M]),
     .test_en      (1'b0),
@@ -199,8 +201,7 @@ module vera_test_soc(
     .irq_external (1'b0),
     .irq_fast     (15'b0),
     .irq_nm       (1'b0),
-    .debug_req    (debug_req),
-    .fetch_enable (4'b1),
+    .fetch_enable ({3'b0, por_completed}), //Only start fetch after POR has been completed.
     .core_sleep   (),
     .*);
 
@@ -247,15 +248,18 @@ module vera_test_soc(
   wb_timer timer (
     .wb (wbs[TIMER_S]));
 
+  logic pll_locked;
+
 `ifdef DRAM
-  logic pll_locked, sys_rst;
+  logic pll_locked_i, litedram_rst_o;
 
   litedram_wrapper litedram_wrapper_inst (
 	.clk(ext_clk), /*External clock is input for LiteDRAM module. On FPGA this is a 100MHz clock, in simulation it's a 50MHz clock.*/
-  .rst(~ext_rst_n), /*External reset goes into a reset synchronizer inside the litedram module. The output of that synchronizer is sys_rst.*/
+  .rst(1'b0), /*Never reset LiteDRAM.*/
   .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock. On FPGA a divide-by-2 of the ext_clk is done. In simulation sys_clk = ext_clk.*/
-	.sys_rst(sys_rst), /*LiteDRAM outputs system reset.*/
-	.pll_locked(pll_locked),
+	.sys_clkx2(), /*Not used.*/
+  .sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
+	.pll_locked(pll_locked_i),
 `ifdef SYNTHESIS
 	.ddram_a(ddram_a),
 	.ddram_ba(ddram_ba),
@@ -312,35 +316,52 @@ module vera_test_soc(
 	.user_port_wishbone_p_1_err(wbs[DDR_USR1_S].err)
   );
   
-  //Take system out of reset when litedram deasserts the (synchronized) sys_rst, when the pll is locked.
-  assign sys_rst_n = ~sys_rst & pll_locked;
-  assign pll_locked_led = pll_locked;
+  //pll_locked is fed to the reset controller. Asserted when litedram controlled indicates reset is deasserted and pll is locked.
+  assign pll_locked = ~litedram_rst_o & pll_locked_i;
 
 `else //No DRAM:
 
-//LiteDRAM provides the clock generator. Without DRAM we have to provide one here.
-`ifdef SYNTHESIS
-  //This clkgen does a divide-by-2 of the 100MHz ext_clk => sys_clk runs at 50MHz.
-  clkgen_xil7series clkgen (
+  //LiteDRAM provides the clock generator. Without DRAM we have to provide one here.
+  boxlambda_clk_gen clkgen (
     .IO_CLK     (ext_clk),
-    .IO_RST_N   (ext_rst_n),
+    .IO_RST_N   (1'b1),
     .clk_sys    (sys_clk),
-    .rst_sys_n  (sys_rst_n));
-`else
-  //In simulation ext_clk runs at 50MHz and sys_clk = ext_clk;
-  assign sys_clk = ext_clk;
-  assign sys_rst_n = ext_rst_n;
-`endif //SYNTHESIS/No SYNTHESIS
+    .clk_sysx2  (sys_clkx2),
+    .locked  (pll_locked)
+  );
 
-  assign pll_locked_led = 1'b1;
   assign init_done_led = 1'b1;
   assign init_err_led = 1'b0;
 `endif //DRAM/No DRAM.
 
+assign pll_locked_led = pll_locked;
+
+//Reset Controller
+reset_ctrl reset_ctrl_inst(
+  .clk(sys_clk),
+  .pll_locked_i(pll_locked),
+  .ndm_reset_i(ndmreset_req),
+  .ext_reset_i(~ext_rst_n), //asynchronous external reset
+  .ndm_reset_o(ndmreset),
+  .dm_reset_o(dmreset),
+  .por_completed_o(por_completed),
+  //32-bit pipelined Wishbone slave interface.
+  .wb_adr(wbs[RESET_CTRL_S].adr[2]),
+  .wb_dat_w(wbs[RESET_CTRL_S].dat_m),
+  .wb_dat_r(wbs[RESET_CTRL_S].dat_s),
+  .wb_sel(wbs[RESET_CTRL_S].sel),
+  .wb_stall(wbs[RESET_CTRL_S].stall),
+  .wb_cyc(wbs[RESET_CTRL_S].cyc),
+  .wb_stb(wbs[RESET_CTRL_S].stb),
+  .wb_ack(wbs[RESET_CTRL_S].ack),
+  .wb_we(wbs[RESET_CTRL_S].we),
+  .wb_err(wbs[RESET_CTRL_S].err)
+);
+
 `ifdef VERA
   vera_top #(`VRAM_SIZE_BYTES) vera_inst(
     .clk(sys_clk),
-    .reset(ndmreset | (~sys_rst_n)),
+    .reset(ndmreset),
 	  .wb_adr(wbs[VERA_S].adr[18:2]),
     .wb_dat_w(wbs[VERA_S].dat_m),
     .wb_dat_r(wbs[VERA_S].dat_s),

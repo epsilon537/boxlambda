@@ -73,6 +73,10 @@ int main(void) {
     printf("This is a simulation.\n");
   else
     printf("This is not a simulation.\n");
+  
+  //while(gpio_get_input(&gpio0) & 0x10) {
+  //  printf(".\n");
+ // }
 
   /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {

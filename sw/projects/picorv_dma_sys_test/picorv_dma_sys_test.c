@@ -10,9 +10,9 @@
 #include "platform.h"
 #include "utils.h"
 //PicoRV wordcopy program
-#include "picorv_wordcopy.h"
+#include "picorv_wordcopy_single.h"
 //PicoRV bytecopy program
-#include "picorv_bytecopy.h"
+#include "picorv_bytecopy_single.h"
 #include "picorv_dma_hal.h"
 #include "sdram.h"
 #include "vera_hal.h"
@@ -95,7 +95,7 @@ int main(void) {
 
   printf("Load PicoRV WordCopy Program...\n");
 
-  picorv_load_program(picorv_wordcopy_picobin, picorv_wordcopy_picobin_len);
+  picorv_load_program(picorv_wordcopy_single_picobin, picorv_wordcopy_single_picobin_len);
 
   printf("Taking PicoRV out of reset...\n");
   picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 1);
@@ -190,7 +190,7 @@ int main(void) {
 
   printf("Load PicoRV ByteCopy Program...\n");
 
-  picorv_load_program(picorv_bytecopy_picobin, picorv_bytecopy_picobin_len);
+  picorv_load_program(picorv_bytecopy_single_picobin, picorv_bytecopy_single_picobin_len);
 
   printf("Taking PicoRV out of reset...\n");
   picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 1);

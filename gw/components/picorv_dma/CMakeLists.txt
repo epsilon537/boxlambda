@@ -16,15 +16,23 @@ add_custom_target(picorv_dma_test ALL
             picorv_wr_hir_regs
             picorv_hir_regs_copy
             picorv_irq_in_out
-            picorv_wordcopy
-            picorv_bytecopy
+            picorv_wordcopy_single
+            picorv_wordcopy_single_unrolled
+            picorv_bytecopy_single
             picorv_progmem_data_access
+            picorv_burst_fsm_test
         VERBATIM
     )
 
-#A CocoTB-based test program.
+#A CocoTB-based test program testing the PicoRV_DMA core.
 add_test(NAME picorv_dma_cocotb_test
     COMMAND ${PROJECT_SOURCE_DIR}/scripts/cocotb_test.sh ${CMAKE_CURRENT_LIST_DIR}/test/picorv_dma_test.py
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+#A CocoTB-based test program testing just the PicoRV_Burst_FSM module.
+add_test(NAME picorv_burst_fsm_cocotb_test
+    COMMAND ${PROJECT_SOURCE_DIR}/scripts/cocotb_test.sh ${CMAKE_CURRENT_LIST_DIR}/test/picorv_burst_fsm_test.py
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 

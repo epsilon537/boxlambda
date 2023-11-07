@@ -61,20 +61,24 @@ static void cleanup() {
 
 //Advance simulation by one clock cycle
 static void tick(void) {
-  //High phase
-  top->clk_i = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
+  //Tick twice: Input clock is 100MHz, BoxLambda's system clock runs at 50MHz.
+  //->Advance two input clock cycles at a time.
+  for (int ii=0; ii<2;ii++) {
+    //High phase
+    top->clk_i = 1;
+    contextp->timeInc(1);
+    top->eval();
+    if (tracing_enable)
+      tfp->dump(contextp->time());
+    
+    //Low phase
+    top->clk_i = 0;
+    contextp->timeInc(1);
+    top->eval();
+    if (tracing_enable)
+      tfp->dump(contextp->time());
+  }
   
-  //Low phase
-  top->clk_i = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
   top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
@@ -159,14 +163,14 @@ int main(int argc, char** argv, char** env) {
     //Take the system out of reset.
     top->rst_ni = 1;
     
-    // When not in interactive mode, simulate for 5000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 5000000)) {
+    // When not in interactive mode, simulate for 400000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 400000000)) {
       // Evaluate model
       tick();        
     }
     
     int res = 0;
-    std::string uartCheckString("Praxos Wordcopy test successful.");
+    std::string uartCheckString("All tests.");
 
     if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
       printf("Test failed\n");

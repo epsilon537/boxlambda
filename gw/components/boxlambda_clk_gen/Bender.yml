@@ -1,0 +1,11 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: boxlambda_clk_gen
+
+sources:
+  - target: any(verilator, vivado)
+    files:
+    - rtl/boxlambda_clk_gen.sv

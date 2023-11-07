@@ -13,7 +13,7 @@ module reset_ctrl (
     output logic por_completed_o, //indicates that Power On Reset has been completed.
 
     //32-bit pipelined Wishbone slave interface.
-    input logic                                wb_adr, //2 register addrsses
+    input logic                                wb_adr, //2 register addresses
 	input logic [31:0]                         wb_dat_w,
 	output logic [31:0]                        wb_dat_r,
 	input logic [3:0]                          wb_sel,
