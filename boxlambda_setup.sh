@@ -6,6 +6,7 @@
 
 echo "Retrieving git submodules..."
 git submodule update --init --recursive
+git submodule foreach git pull origin boxlambda
 
 echo "Creating build build trees..."
 cmake --preset=sim-a7-35
