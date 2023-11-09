@@ -7,351 +7,351 @@
 //   2. Keep the waiver permanently if you are sure this is okay
 //   3. Keep the waiver temporarily to suppress the output
 
-lint_off -rule DECLFILENAME -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Filename 'picorv32' does not match MODULE name: 'picorv32_regs'"
+lint_off -rule DECLFILENAME -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Filename 'picorv32' does not match MODULE name: 'picorv32_regs'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_read'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_read'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_write'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_write'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_addr'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_addr'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_wdata'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_wdata'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_wstrb'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_la_wstrb'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'pcpi_valid'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'pcpi_valid'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'pcpi_insn'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'pcpi_insn'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'pcpi_rs1'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'pcpi_rs1'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'pcpi_rs2'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'pcpi_rs2'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'eoi'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'eoi'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'trace_valid'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'trace_valid'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'trace_data'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'trace_data'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_insn_addr'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_insn_addr'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_valid'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_valid'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_instr'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_instr'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_ready'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_ready'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_addr'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_addr'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_wdata'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_wdata'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_wstrb'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_wstrb'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_rdata'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_mem_rdata'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'mem_busy'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'mem_busy'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_rs1val'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_rs1val'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_rs2val'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_rs2val'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_rs1val_valid'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_rs1val_valid'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_rs2val_valid'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_rs2val_valid'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_valid_insn'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_valid_insn'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_ascii_state'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Signal is not used: 'dbg_ascii_state'"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule BLKSEQ -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
+lint_off -rule BLKSEQ -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Blocking assignment '=' in sequential logic process*"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'trap'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'trap'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_read'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_read'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_write'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_write'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_addr'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_addr'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_wdata'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_wdata'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_wstrb'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'mem_la_wstrb'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_valid'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_valid'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_insn'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_insn'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_rs1'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_rs1'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_rs2'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_rs2'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_wr'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_wr'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_rd'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_rd'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_wait'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_wait'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_ready'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'pcpi_ready'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'eoi'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'eoi'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'trace_valid'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'trace_valid'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'trace_data'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Cell has missing pin: 'trace_data'"
 
-lint_off -rule DECLFILENAME -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Filename 'picosoc' does not match MODULE name: 'picosoc_regs'"
+lint_off -rule DECLFILENAME -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Filename 'picosoc' does not match MODULE name: 'picosoc_regs'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_read'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_read'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_write'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_write'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_addr'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_addr'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_wdata'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_wdata'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_wstrb'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_wstrb'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_read'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_read'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_write'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_write'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_addr'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_addr'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_wdata'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_wdata'"
 
-lint_off -rule PINMISSING -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_wstrb'"
+lint_off -rule PINMISSING -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Cell has missing pin: 'mem_la_wstrb'"
 
-lint_off -rule PINCONNECTEMPTY -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_instr'"
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Cell pin connected by name with empty reference: 'mem_instr'"
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'mem_state' generates 2 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'mem_state' generates 2 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'mem_state' generates 2 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'mem_state' generates 2 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 30 bits on the RHS, but RHS's VARREF 'mem_la_firstword_xfer' generates 1 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 30 bits on the RHS, but RHS's VARREF 'mem_la_firstword_xfer' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 6 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 6 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 6 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 6 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 10 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 10 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 20 bits on the Assign RHS, but Assign RHS's SIGNED generates 6 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 20 bits on the Assign RHS, but Assign RHS's SIGNED generates 6 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 6 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 6 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 8 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 8 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 8 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 12 bits on the Assign RHS, but Assign RHS's SIGNED generates 8 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's REPLICATE generates 47 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's REPLICATE generates 47 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 21 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 21 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's COND generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's COND generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 12 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 12 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGOR expects 1 bit on the RHS, but RHS's SEL generates 5 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGOR expects 1 bit on the RHS, but RHS's SEL generates 5 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's REPLICATE generates 6 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's REPLICATE generates 6 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 32 or 5 bits on the RHS, but RHS's SEL generates 3 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's REPLICATE generates 6 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's REPLICATE generates 6 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator IF expects 1 bit on the If, but If's SEL generates 5 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator IF expects 1 bit on the If, but If's SEL generates 5 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 11 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 11 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 13 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 13 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator SHIFTL expects 32 bits on the LHS, but LHS's SEL generates 20 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator SHIFTL expects 32 bits on the LHS, but LHS's SEL generates 20 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 12 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 12 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 13 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 13 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 12 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 12 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'bx' generates 1 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'bx' generates 1 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SHIFTRS generates 33 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's SHIFTRS generates 33 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGN expects 1 bits on the Assign RHS, but Assign RHS's CONST '?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGN expects 1 bits on the Assign RHS, but Assign RHS's CONST '?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' generates 32 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's REPLICATE generates 4 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's REPLICATE generates 4 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's REPLICATE generates 4 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's REPLICATE generates 4 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'alu_out_0' generates 1 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'alu_out_0' generates 1 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGOR expects 1 bit on the RHS, but RHS's VARREF 'irq_state' generates 2 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGOR expects 1 bit on the RHS, but RHS's VARREF 'irq_state' generates 2 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator OR expects 32 bits on the RHS, but RHS's VARREF 'latched_compr' generates 1 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator OR expects 32 bits on the RHS, but RHS's VARREF 'latched_compr' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNW expects 6 bits on the Assign RHS, but Assign RHS's VARREF 'latched_rd' generates 5 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNW expects 6 bits on the Assign RHS, but Assign RHS's VARREF 'latched_rd' generates 5 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 6 bits on the Conditional True, but Conditional True's VARREF 'decoded_rs1' generates 5 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 6 bits on the Conditional True, but Conditional True's VARREF 'decoded_rs1' generates 5 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 6 bits on the Conditional False, but Conditional False's VARREF 'decoded_rs' generates 5 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 6 bits on the Conditional False, but Conditional False's VARREF 'decoded_rs' generates 5 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 32 or 6 bits on the Conditional True, but Conditional True's VARREF 'decoded_rs2' generates 5 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 32 or 6 bits on the Conditional True, but Conditional True's VARREF 'decoded_rs2' generates 5 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'latched_rd' generates 5 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'latched_rd' generates 5 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGN expects 5 bits on the Assign RHS, but Assign RHS's CONST '?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGN expects 5 bits on the Assign RHS, but Assign RHS's CONST '?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' generates 32 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'decoded_rs1' generates 5 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'decoded_rs1' generates 5 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'decoded_rs2' generates 5 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'decoded_rs2' generates 5 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'decoded_rs' generates 5 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'decoded_rs' generates 5 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's AND generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's AND generates 32 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's CONST '?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's CONST '?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' generates 32 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator IF expects 1 bit on the If, but If's VARREF 'pcpi_timeout_counter' generates 4 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator IF expects 1 bit on the If, but If's VARREF 'pcpi_timeout_counter' generates 4 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'pcpi_timeout_counter' generates 4 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'pcpi_timeout_counter' generates 4 bits."
 
-lint_off -rule WIDTHXZEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Unsized constant being X/Z extended to 64 bits: ?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+lint_off -rule WIDTHXZEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Unsized constant being X/Z extended to 64 bits: ?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-lint_off -rule WIDTHXZEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Unsized constant being X/Z extended to 64 bits: ?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+lint_off -rule WIDTHXZEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Unsized constant being X/Z extended to 64 bits: ?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'timer' generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'timer' generates 32 bits."
 
-lint_off -rule WIDTHXZEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Unsized constant being X/Z extended to 36 bits: ?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+lint_off -rule WIDTHXZEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Unsized constant being X/Z extended to 36 bits: ?32?bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator IF expects 1 bit on the If, but If's NOT generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator IF expects 1 bit on the If, but If's NOT generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator AND expects 36 bits on the LHS, but LHS's VARREF 'current_pc' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator AND expects 36 bits on the LHS, but LHS's VARREF 'current_pc' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator AND expects 36 bits on the RHS, but RHS's CONST '32'hfffffffe' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator AND expects 36 bits on the RHS, but RHS's CONST '32'hfffffffe' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 36 bits on the Conditional True, but Conditional True's VARREF 'alu_out_q' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 36 bits on the Conditional True, but Conditional True's VARREF 'alu_out_q' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 36 bits on the Conditional False, but Conditional False's VARREF 'reg_out' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 36 bits on the Conditional False, but Conditional False's VARREF 'reg_out' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator OR expects 32 bits on the RHS, but RHS's SEL generates 1 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator OR expects 32 bits on the RHS, but RHS's SEL generates 1 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's OR generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's OR generates 32 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator IF expects 1 bit on the If, but If's VARREF 'irq_pending' generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator IF expects 1 bit on the If, but If's VARREF 'irq_pending' generates 32 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGOR expects 1 bit on the RHS, but RHS's VARREF 'irq_state' generates 2 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGOR expects 1 bit on the RHS, but RHS's VARREF 'irq_state' generates 2 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's VARREF 'cpuregs_rs2' generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's VARREF 'cpuregs_rs2' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator OR expects 32 bits on the LHS, but LHS's VARREF 'latched_rd' generates 5 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator OR expects 32 bits on the LHS, but LHS's VARREF 'latched_rd' generates 5 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's OR generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's OR generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 32 bits on the Conditional True, but Conditional True's VARREF 'decoded_rs2' generates 5 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator COND expects 32 bits on the Conditional True, but Conditional True's VARREF 'decoded_rs2' generates 5 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's VARREF 'cpuregs_rs2' generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's VARREF 'cpuregs_rs2' generates 32 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's VARREF 'cpuregs_rs2' generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's VARREF 'cpuregs_rs2' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 36 bits on the LHS, but LHS's VARREF 'reg_op1' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 36 bits on the LHS, but LHS's VARREF 'reg_op1' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 36 bits on the RHS, but RHS's VARREF 'decoded_imm' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 36 bits on the RHS, but RHS's VARREF 'decoded_imm' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator AND expects 36 bits on the RHS, but RHS's CONST '32'hffffffff' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator AND expects 36 bits on the RHS, but RHS's CONST '32'hffffffff' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 36 bits on the LHS, but LHS's VARREF 'reg_op1' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 36 bits on the LHS, but LHS's VARREF 'reg_op1' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 36 bits on the RHS, but RHS's VARREF 'decoded_imm' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ADD expects 36 bits on the RHS, but RHS's VARREF 'decoded_imm' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator AND expects 36 bits on the RHS, but RHS's CONST '32'hffffffff' generates 32 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator AND expects 36 bits on the RHS, but RHS's CONST '32'hffffffff' generates 32 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 16 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 16 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 8 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SIGNED generates 8 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'timer' generates 32 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'timer' generates 32 bits."
 
-lint_off -rule UNUSEDPARAM -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Parameter is not used: 'REGS_INIT_ZERO'"
+lint_off -rule UNUSEDPARAM -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Parameter is not used: 'REGS_INIT_ZERO'"
 
-lint_off -rule UNUSEDPARAM -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Parameter is not used: 'regfile_size'"
+lint_off -rule UNUSEDPARAM -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Parameter is not used: 'regfile_size'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Bits of signal are not used: 'waddr'[5]"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Bits of signal are not used: 'waddr'[5]"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Bits of signal are not used: 'raddr1'[5]"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Bits of signal are not used: 'raddr1'[5]"
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Bits of signal are not used: 'raddr2'[5]"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc.v" -match "Bits of signal are not used: 'raddr2'[5]"
 
-lint_off -rule CASEOVERLAP -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Case values overlap (example pattern 0x0)"
+lint_off -rule CASEOVERLAP -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Case values overlap (example pattern 0x0)"
 
-lint_off -rule CASEINCOMPLETE -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Case values incompletely covered (example pattern 0x1)"
+lint_off -rule CASEINCOMPLETE -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Case values incompletely covered (example pattern 0x1)"
 
-lint_off -rule CASEINCOMPLETE -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Case values incompletely covered (example pattern 0x0)"
+lint_off -rule CASEINCOMPLETE -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Case values incompletely covered (example pattern 0x0)"
 
-lint_off -rule LATCH -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Latch inferred for signal 'picorv_dma_top.picorv32_inst.mem_la_wdata' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Latch inferred for signal 'picorv_dma_top.picorv32_inst.mem_la_wdata' (not all control paths of combinational always assign a value)*"
 
-lint_off -rule LATCH -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Latch inferred for signal 'picorv_dma_top.picorv32_inst.mem_la_wstrb' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Latch inferred for signal 'picorv_dma_top.picorv32_inst.mem_la_wstrb' (not all control paths of combinational always assign a value)*"
 
-lint_off -rule LATCH -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Latch inferred for signal 'picorv_dma_top.picorv32_inst.mem_rdata_word' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/gw/components/picorv_dma/../../../sub/picorv32/picorv32.v" -match "Latch inferred for signal 'picorv_dma_top.picorv32_inst.mem_rdata_word' (not all control paths of combinational always assign a value)*"
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
+lint_off -rule WIDTHTRUNC -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bit extraction of array[1023:0] requires 10 bit index, not 22 bits."
 
-lint_off -rule UNUSEDSIGNAL -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bits of signal are not used: 'addr'[21:10]"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/picorv_dma/../../../sub/picorv32/picosoc/picosoc_mem.v" -match "Bits of signal are not used: 'addr'[21:10]"
 
-lint_off -rule LATCH -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Latch inferred for signal 'picorv_dma_top.wbs_dat_r_reg' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Latch inferred for signal 'picorv_dma_top.wbs_dat_r_reg' (not all control paths of combinational always assign a value)*"
 
-lint_off -rule LATCH -file "*/home/epsilon/work/boxlambda/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Latch inferred for signal 'picorv_dma_top.reg_rdata' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/gw/components/picorv_dma/rtl/picorv_dma_top.sv" -match "Latch inferred for signal 'picorv_dma_top.reg_rdata' (not all control paths of combinational always assign a value)*"
 
