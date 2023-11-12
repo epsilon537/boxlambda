@@ -4,6 +4,8 @@ title: 'An attempt at a PicoRV32-based Soft DMA Controller.'
 comments: true
 ---
 
+*Updated 9 November 2023: Corrected performance number: Bus utilization for 4x unrolled wordcopy is 25%, not 30%.*
+
 ![PicoRV-based DMA Controller in the BoxLambda Architecture.](../assets/Arch_Diagram_PICORV_DMA_focus.png)
 
 *The PicoRV-based DMA Controller in the BoxLambda Architecture.*
@@ -301,7 +303,7 @@ This is the waveform of the DMA core copying words from port 0 to port 1, using 
 
 Using two fast Wishbone slaves, it takes 35 clock cycles to copy one word. Note that the actual word read and word write transactions only take 6 cycles. The rest, 29 cycles, is overhead. Bus utilization is at 17%. That's not good.
 
-With some loop unrolling in the assembly microcode, I can get to 20 clock cycles to copy one word, or 30% bus utilization. Better, but still nothing to brag about.
+With 4x unrolling in the assembly microcode, I can get to 24 clock cycles to copy one word, or 25% bus utilization. Better, but still nothing to brag about.
 
 If I double the PicoRV's clock speed, the amount of overhead would be cut in half and I would be able to achieve 46% bus utilization (6 clock cycles utilization, 7 clock cycles overhead).
 
