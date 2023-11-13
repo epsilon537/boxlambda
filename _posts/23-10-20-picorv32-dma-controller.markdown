@@ -4,8 +4,10 @@ title: 'An attempt at a PicoRV32-based Soft DMA Controller.'
 comments: true
 ---
 
-*Updated 9 November 2023: Corrected performance number: Bus utilization for 4x unrolled wordcopy is 25%, not 30%.*
-
+*Updated 13 November 2023: Corrected performance number:*
+- *Bus utilization for 4x unrolled wordcopy is 25%, not 30%.*
+- *Fixed broken picorv_dma tag.*
+  
 ![PicoRV-based DMA Controller in the BoxLambda Architecture.](../assets/Arch_Diagram_PICORV_DMA_focus.png)
 
 *The PicoRV-based DMA Controller in the BoxLambda Architecture.*

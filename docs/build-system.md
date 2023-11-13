@@ -417,3 +417,32 @@ The article tells you to create three files in the CMake modules directory (*cma
 [https://github.com/epsilon537/boxlambda/tree/master/cmake](https://github.com/epsilon537/boxlambda/tree/master/cmake)
 
 A new filename extension is needed for PicoRV assembly files because CMake toolchain selection is done based on the filename extension. I decided to go for **.picoasm** for the source code and **.picobin** for the generated binaries.
+
+*.Picoasm* assembly files use CPP as a preprocessor. CPP *#defines* allow the programmer to assign names to registers, making writing RISC-V assembly code more manageable:
+
+```
+#define hir_base x1
+#define burst_base x2
+#define msb_set x3
+#define mask_4_lsb x4
+#define src x5
+#define dst x6
+#define num_elems x7
+#define burst_end x8
+#define single_end x9
+#define stat_busy x10
+#define tmp x11
+...
+_start:
+    /*Set up constants.*/
+    li hir_base, HIR_REGS_BASE_ADDR
+    li burst_base, BURST_REGS_BASE_ADDR
+    sw zero, BURST_OFFSET(burst_base)    /*no src-to-dest alignment offset.*/
+    li msb_set, 0x80000000
+    li mask_4_lsb, 0xfffffff0            /*mask to clear 4 lsbs*/
+    li stat_busy, STAT_BUSY
+wait_start:
+    lw tmp, HIR3(hir_base)               /*HIR3: ctrl-status*/
+    beqz tmp, wait_start
+...
+```

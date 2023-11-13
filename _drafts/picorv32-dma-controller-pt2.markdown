@@ -35,11 +35,11 @@ Optimization 1: Doubling the PicoRV32 clock frequency
 
 Looking at the bus transaction waveform of a wordcopy operation, it's clear that the PicoRV is 'losing' a lot of time between transactions. Doubling the PicoRV's clock frequency, i.e. running it at 100MHz, will cut this time in half. A clock frequency of 100MHz is still far below the PicoRV's 250-450MHz *Fmax* on 7-Series Xilinx, so timing closure will not be a problem.
 
-So far, all of BoxLamdba has been running in a single 50MHz clock domain, *sys_clk*. I introduced a new, 100MHz clock domain, **sys_clk2x**. *Sys_clk2x* runs at exactly twice the rate of *sys_clk* so they stay in phase and I don't have to insert CDC synchronization logic.
+So far, all of BoxLamdba has been running in a single 50MHz clock domain, *sys_clk*. I introduced a new, 100MHz clock domain, **sys_clkx2**. *Sys_clkx2* runs at exactly twice the rate of *sys_clk* so they stay in phase and I don't have to insert CDC synchronization logic.
 
 It was a straightforward change. The only issue was the LiteDRAM Memory Controller. LiteDRAM insists on owning the PLL primitive and generating the system clock. This approach allows LiteDRAM to generate additional clocks needed to implement the DDR PHY (When I wrote that all of BoxLamdba runs in a single 50MHz clock domain, that wasn't entirely true. Parts of the memory controller are running at 100 and 200MHz). The downside of this approach is that to introduce an additional clock domain, I have to make a change in the LiteDRAM memory controller. LiteDRAM is code-generated, so I have to make the change in the master source code, the LiteX Migen/Python code base. It wasn't a big deal, but I would have preferred to introduce the new clock domain in a separate Clock-and-Reset generator module.
 
-Currently, I'm just running the PicoRV and its program memory in the new *sys_clk2x* clock domain. I plan to switch over Ibex and possibly internal memory to the new clock domain as well. The rest of the system, including the Wishbone bus fabric will remain at 50MHz.
+Currently, I'm just running the PicoRV and its program memory in the new *sys_clkx2* clock domain. I plan to switch over Ibex and possibly internal memory to the new clock domain as well. The rest of the system, including the Wishbone bus fabric will remain at 50MHz.
 
 ![Waveform of PicoRV 4x unrolled wordcopy.](../assets/picorv_doubled_cpu_clock_waveform.png)
 
@@ -98,7 +98,7 @@ A couple of things are worth noting:
 
 *The PicoRV Burst FSM Module's FSM.*
 
-![PicoRV Burst FSM.](../assets/PicoRV_DMA_Block_Diagram.png)
+![PicoRV Burst FSM.](../assets/PicoRV_DMA_Block_Diagram_New.png)
 
 *The PicoRV Burst FSM in the PicoRV DMA Core.*
 
@@ -271,7 +271,7 @@ PicoRV DMA Extended System Test on Arty A7
 ==========================================
 1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 2. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-3. Build the *picorv_dma_sys_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+3. Build the project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```
 cd build/arty-a7-100/gw/projects/picorv_dma_sys_test_ext
 make picorv_dma_sys_test_ext_bit_sw

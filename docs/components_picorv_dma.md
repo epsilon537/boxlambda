@@ -46,7 +46,7 @@ With a processor-based DMA Controller, these scenarios can easily be implemented
 
 ### The PicoRV DMA Core Block Diagram
 
-![The PicoRV DMA Core Block Diagram.](assets/PicoRV_DMA_Block_Diagram.png)
+![The PicoRV DMA Core Block Diagram.](assets/PicoRV_DMA_Block_Diagram_New.png)
 
 *The PicoRV DMA Core Block Diagram.*
 
@@ -54,15 +54,15 @@ The DMA core's top-level is located here:
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/rtl/picorv_dma_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/rtl/picorv_dma_top.sv)
 
-Memory accesses coming from the PicoRV processor are mapped into three address spaces:
+Memory accesses coming from the PicoRV processor are mapped into the following address spaces:
 
-- 0x10002000-0x10003000: PicoRV **Program Memory**, or to be more accurate, Program Memory and Local Data.
-- 0x10003000-0x10003080: The DMA Core's **System Registers** and **Host Interface Registers** (HIR), not to be confused with PicoRV's own registers (x0-x31).
-- All other memory accesses are considered non-local and are turned into Wishbone Bus Master (WBM) transactions. These WBM transactions are dispatched to WBM port 0 or port 1 based on a cut-off address (0x50000000). The intent is to attach port 0 to the Processor Bus and port 1 to the DMA Bus. See BoxLambda's [Architecture Diagram](architecture.md#architecture).
+- **0x10002000-0x10003000**: PicoRV **Program Memory**, or to be more accurate, Program Memory and Local Data. 
+- **0x10003000-0x10003080**: The DMA Core's **System Registers** and **Host Interface Registers** (HIR), not to be confused with PicoRV's own registers (x0-x31).
+- **0x10003080-0x10003098**: The DMA Core's **Burst Registers**, used in Burst Mode. See the [Burst Mode](#burst-mode) section below.
+- **All other memory accesses with address < 0x80000000**: These are considered non-local and are turned into **Single** Wishbone Bus Master (WBM) transactions, as opposed to **Burst** Wishbone transactions, the next line item. *Single* transactions are straightforward. A single PicoRV load or store (*lw/lb/sw/sb*) request gets turned into a single read or write Wishbone transaction.  These WBM transactions are dispatched to WBM port 0 or port 1 based on a cut-off address (0x50000000). Port 0 is attached to the Processor Bus and port 1 to the DMA Bus. See BoxLambda's [Architecture Diagram](architecture.md#architecture).
+- **Memory accesses with address > 0x80000000**: These are handled as *Burst* transactions: A single PicoRV load or store request (*lw/sw*) gets turned into a burst of four Wishbone read or write transactions. The address MSB is cleared in these Wishbone transactions so they map to the same address space as memory accesses with address < 0x80000000. See the [Burst Mode](#burst-mode) section below. As is the case for *Single* transactions, the WBM transactions are dispatched to WBM port 0 or port 1 based on cut-off address 0x50000000.
 
-These address spaces match with the world view of BoxLambda's Ibex RISC-V host processor.
-
-Through the Wishbone Slave (WBS) port, the Host Processor has access to PicoRV's Program Memory, the System Registers, and the Host Interface Registers. 
+Through the Wishbone Slave (WBS) port, the Host Processor has access to PicoRV's Program Memory, the System Registers, and the Host Interface Registers. The Burst Registers are not directly accessible by the Host Processor.
 
 Host processor access to PicoRV's Program Memory is only enabled when the PicoRV is held in reset. PicoRV reset is controlled through one of the System Registers, the **Control Register**. 
 
@@ -85,9 +85,40 @@ The intended usage is as follows:
    
 Note that although I primarily intend to use the PicoRV DMA core for DMA purposes, it can be used as a general-purpose auxiliary processor as well. All it takes is to load a microprogram that consists of a single jump to the main program in on-chip or external memory.
 
+### Burst Mode
+
+In the most common DMA scenario, copying contiguous blocks of data, the data just passes unmodified through the PicoRV, which is a bottleneck. Instead, what we can do is, when the PicoRV issues a read transaction, have a little FSM module turn that into a burst of, say, 4 read transactions and store the result in a few **Burst Registers**. When the PicoRV issues a write transaction, the FSM can then write the contents of the burst registers to the address specified by the PicoRV. Additionally, this FSM can absorb a byte offset between source and destination, by storing the read words with a configurable byte offset in the Burst Registers. This way unaligned copies can be also handled efficiently.
+
+![PicoRV DMA Burst Mode Sequence.](assets/PicoRV_DMA_Burst_Reg_R_W.png)
+
+*PicoRV DMA Burst Mode Sequence with 1-byte alignment offset. The top row shows a Burst Read and the bottom row a subsequent Burst Write.*
+
+In the diagram above, the top row shows a burst of four words being read and stored, with byte offset, in *Burst Registers*. The bottom row shows those four words being written out, from the burst registers to their destination. In this example, the destination-to-source byte offset is one byte.
+
+A couple of things are worth noting:
+
+- The burst read sequence and the burst write sequence are triggered by a PicoRV word read / word write request.
+- These PicoRV word read / word write requests are *Posted Reads* and *Posted Writes*, i.e. the transaction completes immediately toward the PicoRV. The PicoRV does not stall until the entire burst is read or written. The PicoRV will only stall when a new read or write request is posted before a previous burst transaction has been completed. The posted burst transactions give the PicoRV copy-loop a few clock cycles of breathing room to do pointer arithmetic etc. without causing delays in the data path.  
+
+![PicoRV instructions vs. Burst Transaction.](assets/picorv_racing_burst_transactions.png)
+
+*The PicoRV Instruction Sequence vs. Wishbone Transactions in Burst Mode.*
+
+- The address MSB is used to distinguish between Burst Mode transactions and regular transactions.
+
+![PicoRV Burst FSM Block Diagram.](assets/PicoRV_Burst_FSM_Block_Diagram.png)
+
+*Block Diagram of the PicoRV Burst FSM Module.*
+
+![PicoRV Burst FSM.](assets/PicoRV_DMA_Burst_FSM.png)
+
+*The PicoRV Burst FSM Module's FSM.*
+
+The Burst FSM module Verilog code can be found here: [picorv_burst_fsm.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/rtl/picorv_burst_fsm.sv).
+
 ### Example
 
-A simple word copy microprogram can look like this:
+A simple word copy microprogram, using *Single* mode transactions, looks like this:
 
 ```
 .include "picoasm_hal.h"
@@ -143,22 +174,46 @@ while(dmaBusy)
     dmaBusy = picorv_gp_reg_rd(PICORV_GP_REG_CTRL_STAT);
 ```
 
+#### Burst Mode Programs
+
+[Wordcopy_burst.picoasm](https://github.com/epsilon537/boxlambda/blob/master/sw/components/picorv_dma/test/wordcopy_burst.picoasm) is a PicoRV assembly program for doing word-aligned DMA copies, using Burst Mode.
+This is the core loop:
+
+```
+    ...
+    or src, src, msb_set                 /*Set msb to engage burst mode*/
+    or dst, dst, msb_set                 /*Set msb to engage burst mode*/
+    or burst_end, burst_end, msb_set     /*Set msb to engage burst mode*/
+
+burst_loop:
+    /*Copy 4-word burst by 4-word burst*/
+    lw tmp, 0(src)
+    addi src, src, 16
+    sw tmp, 0(dst)
+    addi dst, dst, 16
+    bltu src, burst_end, burst_loop
+    ...
+```
+
+[Bytecopy_burst.picoasm](https://github.com/epsilon537/boxlambda/blob/master/sw/components/picorv_dma/test/bytecopy_burst.picoasm) is a PicoRV assembly program implementing byte copy / unaligned word copy using Burst Mode. The core loop of the program is identical to the one shown above. However, it does require quite a bit of set-up code and wind-down code to handle all the alignment cases as well as transfer sizes that are not necessarily a multiple of 4 words.
+
 ### Performance
 
-This is the waveform of the DMA core copying words from port 0 to port 1, using the naive word copy program:
+In *Single* mode, 4x unrolled word copy results in a bus utilization of 60%.
 
-![Waveform of PicoRV wordcopy from port 0 to port 1.](assets/picorv_wordcopy_waveform.jpg)
+![PicoRV32 4x unrolled Word Copy, Single Mode.](assets/picorv_dma_wb0_to_wb0_wordcopy_single_unrolled.png)
 
-*Waveform of PicoRV wordcopy from port 0 to port 1.*
+*PicoRV32 4x unrolled Word Copy, Single Mode.*
 
-Using two fast Wishbone slaves, it takes 35 clock cycles to copy one word. Note that the actual word read and word write transactions only take 6 cycles. The rest, 29 cycles, is overhead. Bus utilization is at 17%. That's not good.
+A DMA wordcopy using Burst Mode results in 92% bus utilization.
 
-With some loop unrolling in the assembly microcode, I can get to 20 clock cycles to copy one word, or 30% bus utilization. Better, but still nothing to brag about.
+![PicoRV32 Word Copy Using Burst Mode.](assets/picorv_dma_wb0_to_wb0_wordcopy_burst.png)
 
-If I double the PicoRV's clock speed, the amount of overhead would be cut in half and I would be able to achieve 46% bus utilization (6 clock cycles utilization, 7 clock cycles overhead).
+*PicoRV32 Word Copy Using Burst Mode.*
 
-Another option would be to add some logic to allow the PicoRV to kick off a short burst of read or write transactions, e.g. 4 words at a time. In that case, I would get 4x6 clock cycles utilization and 7 clock cycles overhead. That's 77% bus utilization. I can live with that.
+### The PicoRV DMA Core Clock Frequencies
 
-For slower slaves, bus utilization will increase further, because the slave response time starts to dominate. E.g. if it takes 10 clock cycles for a wishbone read or write transaction, we get 4x20 clock cycles utilization and 7 clock cycles overhead (assuming previous optimizations are implemented), or 92% bus utilization. Actual throughput would go down, however, because the slave is slow.
+The PicoRV DMA core uses two clocks:
 
-In the case of external memory, the slave is not slow, but latency is high. The best way to improve throughput for such slaves is through block transfers with multiple outstanding reads or writes. This requires additional logic on the bus master side, the bus slave side, and the bus fabric in between. I'm keeping this on my wishlist, as a stretch goal.
+- The PicoRV CPU and Program memory run in the 100MHz *sys_clkx2* domain.
+- The rest of the core (Burst FSM, Wishbone, registers...) runs in the 50MHz *sys_clk* domain.

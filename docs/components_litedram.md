@@ -21,7 +21,7 @@ The LiteDRAM memory controller falls squarely into the Dynamic Memory Controller
 
 - LiteDRAM is open-source, scoring good karma points. All the benefits of open-source apply: Full access to all code, access to the maintainers, many eyeballs, the option to make changes as you please, submit bug fixes, etc.
 - The LiteDRAM simulation model, the entire test SoC, in fact, runs nicely in Verilator. That's a must-have for me. 
-- The LiteDRAM core, configured for BoxLambda, is 50% smaller than the equivalent MIG core: 3016 LUTs and 2530 registers vs. 5673 LUTs and 5060 registers.
+- The LiteDRAM core, configured for BoxLambda, is almost 50% smaller than the equivalent MIG core: 3036 LUTs and 2681 registers vs. 5673 LUTs and 5060 registers.
 
 ### Generating a LiteDRAM core
 
@@ -93,7 +93,7 @@ Some points about the above:
 
 - The *PHY layer*, *Electrical* and *Core* sections I left exactly as-is in the given Arty example.
 - In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
-- In the *Frequency* section, I set *sys_clk_freq* to 50MHz. 50MHz has been the system clock frequency in the previous BoxLambda test builds as well. Also, I haven't been able to close timing at 100MHz. 
+- In the *Frequency* section, I set *sys_clk_freq* to 50MHz. The generated core will also provide a double-rate 100MHz clock next to this 50MHz clock.  
 - In the *User Ports* section, I specified two 32-bit Wishbone ports. In the [BoxLambda Architecture Diagram](architecture.md#the-arty-a7-configuration), you'll see that BoxLambda has two system buses. The memory controller is hooked up to both.
 
 I generate two LiteDRAM core variants from this configuration: 
@@ -141,6 +141,7 @@ module litedram (
 	input  wire [2:0] wb_ctrl_cti,
 	input  wire [1:0] wb_ctrl_bte,
 	output wire wb_ctrl_err,
+	output wire user_clkx2,
 	output wire user_clk,
 	output wire user_rst,
 	input  wire [25:0] user_port_wishbone_0_adr,
@@ -169,8 +170,8 @@ Some points worth noting about this interface:
 - A Wishbone control port is generated along with the two requested user ports. LiteDRAM CSR register access is done through this control port.
 - All three Wishbone ports are *classic* Wishbone ports, not *pipelined*. There is no *stall* signal.
 - The Wishbone port addresses are word addresses, not byte addresses.
-- The LiteDRAM module takes an external input clock (*clk*) and generates a 50MHz system clock (*user_clk*). The module contains a clock generator.
-- On FPGA, the LiteDRAM module takes an asynchronous reset (*rst*) and provides a synchronized reset (*user_rst*). The module contains a reset synchronizer.
+- The LiteDRAM module takes an external input clock (*clk*) and generates both a 50MHz system clock (*user_clk*) and a 100MHz double-rate system clock (*user_clkx2*). The LiteDRAM module contains a PLL clock primitive.
+- The double-rate system clock is a modification for BoxLambda. The vanilla LiteDRAM/LiteX code base only generates one *user_clk*.
 
 ### *Litedram_wrapper*
 
