@@ -3,6 +3,9 @@ layout: post
 title: 'An attempt at a PicoRV32-based Soft DMA Controller - Optimizations.'
 comments: true
 ---
+
+*Updated 16 November 2023: Added FPGA resource utilization.*
+ 
 ![PicoRV DMA Bus Utilization.](../assets/PicoRV_Bus_Utilization.png)
 
 *The PicoRV DMA Bus Utilization Improvements from Optimizations.*
@@ -109,6 +112,21 @@ A DMA wordcopy using Burst Mode results in 92% bus utilization.
 ![PicoRV32 Word Copy Using Burst Mode.](../assets/picorv_dma_wb0_to_wb0_wordcopy_burst.png)
 
 *PicoRV32 Word Copy Using Burst Mode.*
+
+Utilization on Arty A7
+======================
+
+Burst Mode comes at a price. This was the FPGA resource utilization of the PicoRV DMA core before adding Burst Mode:
+
+| Slice LUTs | Slice Registers | Block RAM tiles | DSPs |
+|------------|-----------------|-----------------|------|
+| 2088       | 1230            | 1               | 0    |
+
+This is the current utilization:
+
+| Slice LUTs | Slice Registers | Block RAM tiles | DSPs |
+|------------|-----------------|-----------------|------|
+| 2522       | 1359            | 1               | 0    |
 
 PicoRV Burst Mode Programs
 ==========================
