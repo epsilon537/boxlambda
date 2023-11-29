@@ -348,12 +348,15 @@ assign pll_locked_led = pll_locked;
 
 //Reset Controller
 reset_ctrl reset_ctrl_inst(
-  .clk(sys_clk),
-  .pll_locked_i(pll_locked),
+  .sys_clk(sys_clk),
+  .usb_clk(1'b0), //Not used.
+  .sys_pll_locked_i(pll_locked),
+  .usb_pll_locked_i(1'b1),
   .ndm_reset_i(ndmreset_req),
   .ext_reset_i(~ext_rst_n), //asynchronous external reset
   .ndm_reset_o(ndmreset),
   .dm_reset_o(dmreset),
+  .usb_reset_o(), //Not used.
   .por_completed_o(por_completed),
   //32-bit pipelined Wishbone slave interface.
   .wb_adr(wbs[RESET_CTRL_S].adr[2]),

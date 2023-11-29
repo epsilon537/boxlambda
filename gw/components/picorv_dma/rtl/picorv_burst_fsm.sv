@@ -116,7 +116,7 @@ always_comb begin
         BURST: begin
             picorv_rdy = picorv_rdy_reg;
             picorv_rdata = wbm_dat_i;
-            wbm_adr = picorv_addr_reg + {28'b0, burst_phase};
+            wbm_adr = picorv_addr_reg;
             wbm_dat = burst_reg[burst_phase_ext];
             wbm_we = |picorv_wstrb_reg;
             wbm_sel = wbm_we ? picorv_wstrb_reg : 4'b1111;
@@ -226,6 +226,7 @@ always_ff @(posedge clk) begin
                             wbm_cyc_reg <= 1'b0;
                         end
                         else begin
+                            picorv_addr_reg <= picorv_addr_reg + 30'd1;
                             burst_phase <= burst_phase + 2'd1;
                             wbm_stb_reg <= 1'b1;
                         end    

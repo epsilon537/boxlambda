@@ -2,17 +2,19 @@
 // Licensed under the Apache License, Version 2.0, see LICENSE for details.
 // SPDX-License-Identifier: Apache-2.0
 
-// This module is based on lowRISC's clkgen_xil7series in the ibex repo, modified with an additional
-// output clock: clk_sysx2.
+// This module is based on lowRISC's clkgen_xil7series in the ibex repo, modified with two additional
+// output clocks: clk_sysx2 and clk_usb.
 // IO_CLK input clock is the 100MHz external clock.
 // clk_sys frequency is half in the input clock frequency -> 50MHz 
 // clk_sysx2 is double clk_sys, phase aligned with clk_sys -> 100MHz
+// clk_usb frequency is 12MHz
 module boxlambda_clk_gen (
-    input IO_CLK,
-    input IO_RST_N,
-    output clk_sys,
-    output clk_sysx2,
-    output locked
+    input wire IO_CLK,
+    input wire IO_RST_N,
+    output wire clk_sys,
+    output wire clk_sysx2,
+    output wire clk_usb,
+    output wire locked
 );
 `ifdef SYNTHESIS
   logic locked_pll;
@@ -23,6 +25,8 @@ module boxlambda_clk_gen (
   logic clk_50_unbuf;
   logic clk_fb_buf;
   logic clk_fb_unbuf;
+  logic clk_12_unbuf;
+  logic clk_12_buf;
 
   // input buffer
   IBUF io_clk_ibuf(
@@ -43,12 +47,15 @@ module boxlambda_clk_gen (
     .CLKOUT1_DIVIDE       (12),
     .CLKOUT1_PHASE        (0.000),
     .CLKOUT1_DUTY_CYCLE   (0.500),
+    .CLKOUT2_DIVIDE       (100),
+    .CLKOUT2_PHASE        (0.000),
+    .CLKOUT2_DUTY_CYCLE   (0.500),
     .CLKIN1_PERIOD        (10)
   ) pll (
     .CLKFBOUT            (clk_fb_unbuf),
     .CLKOUT0             (clk_50_unbuf),
     .CLKOUT1             (clk_100_unbuf),
-    .CLKOUT2             (),
+    .CLKOUT2             (clk_12_unbuf),
     .CLKOUT3             (),
     .CLKOUT4             (),
     .CLKOUT5             (),
@@ -88,23 +95,33 @@ module boxlambda_clk_gen (
     .O (clk_100_buf)
   );
 
+  BUFG clk_12_bufg (
+    .I (clk_12_unbuf),
+    .O (clk_12_buf)
+  );
+
   // outputs
   // clock
   assign clk_sys = clk_50_buf;
   assign clk_sysx2 = clk_100_buf;
+  assign clk_usb = clk_12_buf;
 
   // PLL lock ouput
   assign locked = locked_pll & IO_RST_N;
 `else //Simulation:
   logic clk_sys_reg;
+  logic [2:0] div_by_8_count;
+
   initial begin
     clk_sys_reg = 1'b0;
   end
 
   always_ff @(posedge IO_CLK) begin
     clk_sys_reg <= ~clk_sys_reg;
+    div_by_8_count <= div_by_8_count + 3'd1;
   end
 
+  assign clk_usb = (div_by_8_count < 3'd4);
   assign clk_sys = clk_sys_reg;
   assign clk_sysx2 = IO_CLK;
   assign locked = IO_RST_N;

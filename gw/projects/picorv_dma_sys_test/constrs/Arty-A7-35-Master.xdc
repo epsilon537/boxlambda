@@ -11,6 +11,10 @@ create_clock -add -name ext_clk_pin -period 10.00 [get_ports { ext_clk }];
 #Note that the JTAG top-level ports (incl. TCK) are not used in a synthesized design. They are driven by BSCANE2 instead.
 create_clock -period 1000.000 -name dmi_jtag_inst/i_dmi_jtag_tap/tck_o -waveform {0.000 500.000} [get_pins dmi_jtag_inst/i_dmi_jtag_tap/i_tap_dtmcs/TCK]
 
+set_clock_groups -asynchronous \
+-group [get_clocks -include_generated_clock ext_clk_pin] \
+-group [get_clocks -include_generated_clock dmi_jtag_inst/i_dmi_jtag_tap/tck_o]
+
 ## Switches
 set_property -dict { PACKAGE_PIN A8    IOSTANDARD LVCMOS33 } [get_ports { gpio0[4] }]; #IO_L12N_T1_MRCC_16 Sch=sw[0]
 set_property -dict { PACKAGE_PIN C11   IOSTANDARD LVCMOS33 } [get_ports { gpio0[5] }]; #IO_L13P_T2_MRCC_16 Sch=sw[1]
