@@ -51,3 +51,6 @@
 [submodule "sub/litedram"]
 	path = sub/litedram
 	url = https://github.com/epsilon537/litedram
+[submodule "sub/usb_hid_host"]
+	path = sub/usb_hid_host
+	url = https://github.com/epsilon537/usb_hid_host

@@ -1,0 +1,97 @@
+packages:
+  audio_dac:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/audio_dac
+    dependencies: []
+  boxlambda_clk_gen:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/boxlambda_clk_gen
+    dependencies: []
+  ibex:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/ibex_wb_core/../../components/ibex
+    dependencies: []
+  ibex_wb_common:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/ibex_wb_common
+    dependencies: []
+  ibex_wb_core:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/ibex_wb_core
+    dependencies:
+    - ibex
+    - ibex_wb_common
+  litedram:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/litedram
+    dependencies: []
+  picorv_dma:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/picorv_dma
+    dependencies: []
+  reset_ctrl:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/reset_ctrl
+    dependencies: []
+  riscv-dbg:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/riscv-dbg
+    dependencies:
+    - ibex_wb_common
+    - ibex_wb_core
+  sdspi:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/sdspi
+    dependencies: []
+  usb_hid_host:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/usb_hid_host
+    dependencies: []
+  vera:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/vera
+    dependencies: []
+  wb_gpio:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/wb_gpio
+    dependencies:
+    - ibex_wb_common
+  wbuart32:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/wbuart32
+    dependencies:
+    - ibex_wb_common
+  ym2149:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/ym2149
+    dependencies: []

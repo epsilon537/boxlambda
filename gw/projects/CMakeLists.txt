@@ -324,3 +324,5 @@ if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
 endif()
 add_subdirectory(picorv_dma_sys_test)
 add_subdirectory(picorv_dma_sys_test_ext)
+add_subdirectory(usb_hid_sys_test)
+
