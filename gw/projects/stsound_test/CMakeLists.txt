@@ -1,6 +1,6 @@
 #FPGA and simulation builds have different top-levels.
 if(CMAKE_BUILD_TYPE STREQUAL "fpga")
-    set(top_module ym2149_dac_test_soc)
+    set(top_module top)
 else()
     set(top_module sim_main)    
 endif()

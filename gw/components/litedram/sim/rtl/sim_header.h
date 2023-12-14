@@ -65,19 +65,6 @@ struct pad_s user_port_wishbone_0[] = {
     { NULL, 0, NULL }
 };
 
-struct pad_s user_port_wishbone_1[] = {
-    { (char*)"adr", 26, NULL },
-    { (char*)"dat_w", 32, NULL },
-    { (char*)"dat_r", 32, NULL },
-    { (char*)"sel", 4, NULL },
-    { (char*)"cyc", 1, NULL },
-    { (char*)"stb", 1, NULL },
-    { (char*)"ack", 1, NULL },
-    { (char*)"we", 1, NULL },
-    { (char*)"err", 1, NULL },
-    { NULL, 0, NULL }
-};
-
 #ifndef __cplusplus
 void litex_sim_init(void **out);
 #endif

@@ -44,9 +44,8 @@
 
 //Define or undefine these to limit src and dest memory types.
 #define LOCAL_MEM_COPY
-//#define EXT_MEM0_COPY
-#define EXT_MEM1_COPY
-//#define VRAM_MEM_COPY
+#define EXT_MEM0_COPY
+#define VRAM_MEM_COPY
 
 //Define or undefine these to limit src and dest offset test vectors.
 #define OFFSET_0
@@ -125,12 +124,6 @@ MemType srcMems[] = {
         (unsigned char*)MAIN_RAM_BASE
     },
 #endif
-#ifdef EXT_MEM1_COPY
-    {
-        "EXT_MEM_1",
-        (unsigned char*)MAIN_RAM_BASE2
-    },
-#endif
 #ifdef VRAM_MEM_COPY
     {
         "VRAM",
@@ -151,12 +144,6 @@ MemType dstMems[] = {
     {
         "EXT_MEM_0",
         (unsigned char*)(MAIN_RAM_BASE+64*4)
-    },
-#endif
-#ifdef EXT_MEM1_COPY
-    {
-        "EXT_MEM_1",
-        (unsigned char*)(MAIN_RAM_BASE2+64*4)
     },
 #endif
 #ifdef VRAM_MEM_COPY

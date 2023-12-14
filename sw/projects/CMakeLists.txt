@@ -33,7 +33,6 @@ endfunction()
 
 #SW project builds:
 add_subdirectory(hello_world)
-add_subdirectory(picolibc_test)
 add_subdirectory(ddr_test)
 add_subdirectory(vera_test)
 add_subdirectory(sdspi_test)

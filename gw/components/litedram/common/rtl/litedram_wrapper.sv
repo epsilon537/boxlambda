@@ -1,7 +1,6 @@
-/*This wrapper contains wishbone pipeline-to-classic adapters for all three ports as well as
- *byte-to-word address line remapping.*/
+/*This wrapper contains wishbone pipeline-to-classic adapters for the ctrl and user port.*/
 module litedram_wrapper (
-	input wire         clk, /*100MHz input clock.*/
+	input wire         clk, /*50MHz input clock.*/
 	input wire         rst, /*Asynchronous reset.*/
 	output wire        sys_clk, /*50MHz output clock, to be used as input clock for the rest of the system.*/
 	output wire        sys_clkx2, /*100MHz output clock, i.e. twice the rate of sys_clk, in phase with sys_clk.*/
@@ -29,7 +28,7 @@ module litedram_wrapper (
 	output wire        init_error,
 
 	/*The control port for CSR reads and writes. Wishbone pipelined signals.*/
-	input wire [31:0]  wb_ctrl_adr,
+	input wire [27:0]  wb_ctrl_adr,
 	input wire [31:0]  wb_ctrl_dat_w,
 	output wire [31:0] wb_ctrl_dat_r,
 	input wire [3:0]   wb_ctrl_sel,
@@ -41,7 +40,7 @@ module litedram_wrapper (
 	output wire        wb_ctrl_err,
 
 	/*32-bit user port. Wishbone pipelined signals.*/
-	input wire [31:0]  user_port_wishbone_p_0_adr,
+	input wire [27:0]  user_port_wishbone_p_0_adr,
 	input wire [31:0]  user_port_wishbone_p_0_dat_w,
 	output wire [31:0] user_port_wishbone_p_0_dat_r,
 	input wire [3:0]   user_port_wishbone_p_0_sel,
@@ -50,19 +49,7 @@ module litedram_wrapper (
 	input wire         user_port_wishbone_p_0_stb,
 	output wire        user_port_wishbone_p_0_ack,
 	input wire         user_port_wishbone_p_0_we,
-	output wire        user_port_wishbone_p_0_err,
-
-	/*Another 32-bit user port. Wishbone pipelined signals.*/
-	input wire [31:0]  user_port_wishbone_p_1_adr,
-	input wire [31:0]  user_port_wishbone_p_1_dat_w,
-	output wire [31:0] user_port_wishbone_p_1_dat_r,
-	input wire [3:0]   user_port_wishbone_p_1_sel,
-	output wire        user_port_wishbone_p_1_stall,
-	input wire         user_port_wishbone_p_1_cyc,
-	input wire         user_port_wishbone_p_1_stb,
-	output wire        user_port_wishbone_p_1_ack,
-	input wire         user_port_wishbone_p_1_we,
-	output wire        user_port_wishbone_p_1_err
+	output wire        user_port_wishbone_p_0_err
                          );
 
    /*User port. Wishbone classic signals.*/
@@ -84,34 +71,11 @@ module litedram_wrapper (
    assign user_port_wishbone_p_0_stall = !user_port_wishbone_p_0_cyc ? 1'b0 : !user_port_wishbone_c_0_ack;
 
    assign user_port_wishbone_c_0_stb = user_port_wishbone_p_0_stb;
-   assign user_port_wishbone_c_0_adr = user_port_wishbone_p_0_adr[27:2]; /*LiteDRAM uses word addressing.*/
+   assign user_port_wishbone_c_0_adr = user_port_wishbone_p_0_adr[25:0];
    assign user_port_wishbone_c_0_we = user_port_wishbone_p_0_we;
    assign user_port_wishbone_c_0_dat_w = user_port_wishbone_p_0_dat_w;
    assign user_port_wishbone_c_0_sel = user_port_wishbone_p_0_sel;
    assign user_port_wishbone_c_0_cyc = user_port_wishbone_p_0_cyc;
-
-   /*Same things for 2nd user port.*/
-   logic [25:0] user_port_wishbone_c_1_adr;
-   logic [31:0] user_port_wishbone_c_1_dat_w;
-   logic [31:0] user_port_wishbone_c_1_dat_r;
-   logic [3:0]  user_port_wishbone_c_1_sel;
-   logic        user_port_wishbone_c_1_cyc;
-   logic        user_port_wishbone_c_1_stb;
-   logic        user_port_wishbone_c_1_ack;
-   logic        user_port_wishbone_c_1_we;
-   logic        user_port_wishbone_c_1_err;
-
-   assign user_port_wishbone_p_1_dat_r = user_port_wishbone_c_1_dat_r;
-   assign user_port_wishbone_p_1_ack = user_port_wishbone_c_1_ack;
-   assign user_port_wishbone_p_1_err = user_port_wishbone_c_1_err;
-   assign user_port_wishbone_p_1_stall = !user_port_wishbone_p_1_cyc ? 1'b0 : !user_port_wishbone_c_1_ack;
-
-   assign user_port_wishbone_c_1_stb = user_port_wishbone_p_1_stb;
-   assign user_port_wishbone_c_1_adr = user_port_wishbone_p_1_adr[27:2];
-   assign user_port_wishbone_c_1_we = user_port_wishbone_p_1_we;
-   assign user_port_wishbone_c_1_dat_w = user_port_wishbone_p_1_dat_w;
-   assign user_port_wishbone_c_1_sel = user_port_wishbone_p_1_sel;
-   assign user_port_wishbone_c_1_cyc = user_port_wishbone_p_1_cyc;
 
    /*and again for the control port.*/
    logic [29:0] ctrl_port_wishbone_c_adr;
@@ -130,14 +94,14 @@ module litedram_wrapper (
    assign wb_ctrl_stall = !wb_ctrl_cyc ? 1'b0 : !ctrl_port_wishbone_c_ack;
 
    assign ctrl_port_wishbone_c_stb = wb_ctrl_stb;
-   assign ctrl_port_wishbone_c_adr = wb_ctrl_adr[31:2];
+   assign ctrl_port_wishbone_c_adr = {2'b00, wb_ctrl_adr};
    assign ctrl_port_wishbone_c_we = wb_ctrl_we;
    assign ctrl_port_wishbone_c_dat_w = wb_ctrl_dat_w;
    assign ctrl_port_wishbone_c_sel = wb_ctrl_sel;
    assign ctrl_port_wishbone_c_cyc = wb_ctrl_cyc;
    
 `ifndef SYNTHESIS
-   logic unused = &{rst}; /*Simulation model has no reset port...*/
+   logic unused = &{rst, user_port_wishbone_p_0_adr[27:26]}; /*Simulation model has no reset port...*/
 
    assign pll_locked = 1'b1; /*...and no PLL either.*/
 `endif //not SYNTHESIS
@@ -167,7 +131,7 @@ module litedram_wrapper (
 `endif	
 	.init_done(init_done),
 	.init_error(init_error),
-	.wb_ctrl_adr(ctrl_port_wishbone_c_adr[29:0]),
+	.wb_ctrl_adr(ctrl_port_wishbone_c_adr),
 	.wb_ctrl_dat_w(ctrl_port_wishbone_c_dat_w),
 	.wb_ctrl_dat_r(ctrl_port_wishbone_c_dat_r),
 	.wb_ctrl_sel(ctrl_port_wishbone_c_sel),
@@ -189,15 +153,6 @@ module litedram_wrapper (
 	.user_port_wishbone_0_stb(user_port_wishbone_c_0_stb),
 	.user_port_wishbone_0_ack(user_port_wishbone_c_0_ack),
 	.user_port_wishbone_0_we(user_port_wishbone_c_0_we),
-	.user_port_wishbone_0_err(user_port_wishbone_c_0_err),
-	.user_port_wishbone_1_adr(user_port_wishbone_c_1_adr),
-	.user_port_wishbone_1_dat_w(user_port_wishbone_c_1_dat_w),
-	.user_port_wishbone_1_dat_r(user_port_wishbone_c_1_dat_r),
-	.user_port_wishbone_1_sel(user_port_wishbone_c_1_sel),
-	.user_port_wishbone_1_cyc(user_port_wishbone_c_1_cyc),
-	.user_port_wishbone_1_stb(user_port_wishbone_c_1_stb),
-	.user_port_wishbone_1_ack(user_port_wishbone_c_1_ack),
-	.user_port_wishbone_1_we(user_port_wishbone_c_1_we),
-	.user_port_wishbone_1_err(user_port_wishbone_c_1_err)
-				           );
+	.user_port_wishbone_0_err(user_port_wishbone_c_0_err)
+	);
    endmodule

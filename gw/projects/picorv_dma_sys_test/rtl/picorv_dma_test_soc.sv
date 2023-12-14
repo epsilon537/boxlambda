@@ -115,8 +115,8 @@ module picorv_dma_test_soc(
      wb_base_addresses[UART_S]       = 32'h10010000;
      wb_base_addresses[TIMER_S]      = 32'h10020000;
      wb_base_addresses[DDR_CTRL_S]   = 32'h10030000;
+     wb_base_addresses[DM_S]         = 32'h10040000;
      wb_base_addresses[VERA_S]       = 32'h10100000;
-     wb_base_addresses[DM_S]         = 32'h1A110000;
      wb_base_addresses[DDR_USR0_S]   = 32'h40000000;
      wb_base_addresses[DDR_USR1_S]   = 32'h50000000;
 
@@ -138,8 +138,8 @@ module picorv_dma_test_soc(
     wb_sizes[UART_S]       = 32'h00010;
     wb_sizes[TIMER_S]      = 32'h00010;
     wb_sizes[DDR_CTRL_S]   = 32'h10000;
-    wb_sizes[VERA_S]       = 32'h80000;
     wb_sizes[DM_S]         = 32'h10000;
+    wb_sizes[VERA_S]       = 32'h80000;
     wb_sizes[DDR_USR0_S]   = 32'h10000000; /*256MB*/
     wb_sizes[DDR_USR1_S]   = 32'h10000000; /*256MB*/
   endfunction // wb_sizes
@@ -236,7 +236,9 @@ module picorv_dma_test_soc(
   wb_ibex_core #(
     .RV32M(ibex_pkg::RV32MFast),
     .RV32B(ibex_pkg::RV32BBalanced),
-    .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA)
+    .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA),
+    .DmHaltAddr(wb_base_addr[DM_S]+32'h00000800),
+    .DmExceptionAddr(wb_base_addr[DM_S]+32'h00000808)
   ) wb_ibex_core (
     .clk          (sys_clk),
     .rst_n        (~ndmreset),

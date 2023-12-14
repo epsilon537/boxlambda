@@ -1,0 +1,49 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: boxlambda_soc
+
+dependencies:
+  # Path dependency.
+  wb_dp_ram: { path: "../../components/wb_dp_ram" }
+  wbxbar: { path: "../../components/wbxbar" }
+  wb_gpio: { path: "../../components/wb_gpio" }
+  wbuart32: { path: "../../components/wbuart32" }
+  ibex_wb_common: { path: "../../components/ibex_wb_common" }
+  ibex_wb_core: { path: "../../components/ibex_wb_core" }
+  riscv-dbg: { path: "../../components/riscv-dbg" }
+  litedram: { path: "../../components/litedram" }
+  vera: { path: "../../components/vera" }
+  sdspi: { path: "../../components/sdspi" }
+  ym2149: { path: "../../components/ym2149" }
+  audio_dac: { path: "../../components/audio_dac" }
+  reset_ctrl: { path: "../../components/reset_ctrl" }
+  picorv_dma: { path: "../../components/picorv_dma" }
+  boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
+  blackbox: { path: "../../components/blackbox" }
+
+sources:
+  #co-sim stuffs.
+  - target: verilator
+    files:
+      - lint.vlt
+      - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
+      - ../../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
+      - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c
+      - ../../../sub/riscv-dbg/tb/SimJTAG.sv
+      - ../../../sub/sdspi/bench/cpp/sdspisim.cpp  
+  #timer should be a separate component, but since I won't use it
+  #as a Boxlambda component, I'm leaving it here in for the time being
+  - target: any(vivado, verilator)
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
+    files:
+      - rtl/boxlambda_soc.sv
+      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_timer.sv
+
+
+
+
+

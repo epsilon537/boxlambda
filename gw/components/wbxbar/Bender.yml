@@ -1,0 +1,27 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: wbxbar
+  
+sources:
+  - target: verilator
+    files:
+     - lint.vlt
+  
+  - target: wbxbar
+    files:
+     - rtl/wbxbar_ooc.sv
+
+  - target: any(vivado, verilator)
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
+    files:
+      - ../../../sub/wb2axip/rtl/wbxbar.v
+      - ../../../sub/wb2axip/rtl/addrdecode.v
+      - ../../../sub/wb2axip/rtl/skidbuffer.v
+
+
+
+

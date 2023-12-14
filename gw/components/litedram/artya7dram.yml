@@ -28,16 +28,15 @@
     # The generated LiteDRAM module contains clock generation primitives, for its own purposes, but also for the rest
     # of the system. The system clock is output by the LiteDRAM module and is supposed to be used as the main input clock
     # for the rest of the system. I set the system clock to 50MHz because I couldn't get timing closure at 100MHz.
-    "input_clk_freq":   100e6, # Input clock frequency
+    "input_clk_freq":  100e6, # Input clock frequency
     "sys_clk_freq":     50e6, # System clock frequency (DDR_clk = 4 x sys_clk)
     "iodelay_clk_freq": 200e6, # IODELAYs reference clock frequency
 
     # Core ---------------------------------------------------------------------
     "cmd_buffer_depth": 16,    # Depth of the command buffer
 
-    # User Ports ---------------------------------------------------------------
-    # We generate two wishbone ports, because BoxLambda has two system buses.
-    # Note that these are _classic_ wishbone ports, while BoxLamdba uses a _pipelined_ wisbone bus.
+    # User Port ---------------------------------------------------------------
+    # Note that this is a _classic_ wishbone port, while BoxLamdba uses a _pipelined_ wisbone bus.
     # A pipelined-to-classic wishbone adapter is needed to interface correctly to the bus.
     # At some point it would be nice to have an actual pipelined wishbone frontend, with actual pipelining capability.
     "user_ports": {
@@ -45,11 +44,6 @@
             "type":  "wishbone",
             "data_width": 32, #Set data width to 32. If not specificied it defaults to 128 bits.
             "block_until_ready": True,
-        },
-        "wishbone_1" : {
-            "type":  "wishbone",
-            "data_width": 32, #Set data width to 32. If not specificied it defaults to 128 bits.
-            "block_until_ready": True,
-        },
+        }
     },
 }
