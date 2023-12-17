@@ -269,7 +269,7 @@ module boxlambda_soc #(
 		.AW(AW), .DW(32),
 		.SLAVE_ADDR(XBAR_SLAVE_ADDRS),
 		.SLAVE_MASK(XBAR_SLAVE_ADDR_MASKS),
-		.OPT_DBLBUFFER(1'b0),
+		.OPT_DBLBUFFER(1'b1),
 		.OPT_LOWPOWER(1'b0)) 
     wb_xbar (
 		.i_clk(sys_clk), .i_reset(ndm_reset),

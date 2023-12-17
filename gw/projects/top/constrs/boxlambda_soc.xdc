@@ -12,8 +12,7 @@ create_clock -add -name ext_clk_pin -period 10.00 [get_ports { ext_clk_100 }];
 create_clock -period 1000.000 -name tck_o -waveform {0.000 500.000} [get_pins boxlambda_soc_inst/GENERATE_DEBUG_MODULE.dmi_jtag_inst/i_dmi_jtag_tap/i_tap_dtmcs/TCK]
 
 set_clock_groups -asynchronous \
--group [get_clocks -include_generated_clock clk_50_unbuf] \
--group [get_clocks -include_generated_clock tck_o]
+-group [get_clocks -include_generated_clock clkout1] -group [get_clocks -include_generated_clock tck_o]
 
 ## Switches
 set_property -dict { PACKAGE_PIN A8    IOSTANDARD LVCMOS33 } [get_ports { gpio0[4] }]; #IO_L12N_T1_MRCC_16 Sch=sw[0]
