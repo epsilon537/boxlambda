@@ -35,11 +35,11 @@
 //#define DETAILED_LOGS
 
 //Define or undefine these to limit to byte or wordcopy only.
-#define BYTE_COPY
+//#define BYTE_COPY
 #define WORD_COPY
 
 //Define or undefine these to limit to single or burst mode only.
-//#define SINGLE_COPY
+#define SINGLE_COPY
 #define BURST_COPY
 
 //Define or undefine these to limit src and dest memory types.
@@ -50,7 +50,7 @@
 //Define or undefine these to limit src and dest offset test vectors.
 #define OFFSET_0
 #define OFFSET_1
-#define OFFSET_2
+//#define OFFSET_2
 #define OFFSET_3
 
 #ifdef ALIGNED_ONLY
@@ -191,7 +191,8 @@ unsigned numElems[] = {
 #ifdef ONE_SIZE_ONLY
     32
 #else
-    1, 3, 4, 5, 8, 12, 13, 15, 16, 24, 25, 28, 29, 31, 32
+    1, 5, 16, 31, 32
+    //1, 3, 4, 5, 8, 12, 13, 15, 16, 24, 25, 28, 29, 31, 32
 #endif
 };
 

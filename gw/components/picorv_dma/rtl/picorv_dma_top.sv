@@ -56,7 +56,7 @@ module picorv_dma_top #(
 	logic [ 3:0] burst_fsm_wstrb;
 	logic [31:2] burst_fsm_addr;
 	logic [31:0] burst_fsm_wdata;
-	logic  [31:0] burst_fsm_rdata;
+	logic [31:0] burst_fsm_rdata;
 
     //Local system- and general purpose register access signals.
     logic        reg_we;
@@ -81,7 +81,7 @@ module picorv_dma_top #(
 	logic [ 3:0] ram_wstrb;
 	logic [$clog2(MEM_SZ_WORDS)+1:2] ram_addr;
 	logic [31:0] ram_wdata;
-	logic  [31:0] ram_rdata;
+	logic  [31:0] ram_rdata, wbs_ram_rdata;
 
     logic [31:0] gp_reg[0:15]; //16 general purpose registers
 
@@ -98,7 +98,7 @@ module picorv_dma_top #(
     logic do_wbs_wr_mem, do_wbs_wr_reg;
     logic [31:0] wbs_dat_read_from_reg;
 
-    logic unused = &{wbm_stall_i, wbs_sel, burst_fsm_addr, wbm_err_i};
+    logic unused = &{wbs_sel, burst_fsm_addr, wbm_err_i};
 
     //WB slave handshake
     assign do_wbs_wr_reg = wbs_cyc && wbs_stb && wbs_we && (wbs_adr >= 11'(WBS_REG_BASE_ADDR));
@@ -107,11 +107,12 @@ module picorv_dma_top #(
     always_ff @(posedge sys_clk) begin
         do_ack_wbs <= 1'b0;
         if (wbs_stb) begin
+            wbs_ram_rdata <= ram_rdata;
             do_ack_wbs <= 1'b1;
         end
     end
 
-    assign wbs_dat_r = (wbs_adr < 11'(WBS_REG_BASE_ADDR)) ? ram_rdata : wbs_dat_read_from_reg;
+    assign wbs_dat_r = (wbs_adr < 11'(WBS_REG_BASE_ADDR)) ? wbs_ram_rdata : wbs_dat_read_from_reg;
     assign wbs_ack = do_ack_wbs & wbs_cyc;
     assign wbs_stall = 1'b0;
     assign wbs_err = 1'b0;
@@ -384,6 +385,15 @@ module picorv_dma_top #(
 		.rdata(ram_rdata)
     );
 
+    logic [31:0] burst_fsm_rdata_xfer;
+    logic burst_fsm_ready_xfer;
+    
+    //Register writes incoming from WBS and PicoRV.
+    always_ff @(posedge sys_clkx2) begin
+        burst_fsm_rdata <= burst_fsm_rdata_xfer;
+        burst_fsm_ready <= burst_fsm_ready_xfer;
+    end
+
     /*Module turning PicoRV requests into individual or 4-word-burst Wishbone transactions.*/
     picorv_burst_fsm #( 
         .BURST_REG_BASE_ADDR(BURST_REG_BASE_ADDR)
@@ -393,12 +403,12 @@ module picorv_dma_top #(
 
         //picorv interface
         .picorv_valid_i(burst_fsm_valid),
-        .picorv_rdy_o(burst_fsm_ready),
+        .picorv_rdy_o(burst_fsm_ready_xfer),
 
         .picorv_addr_i(burst_fsm_addr),
         .picorv_wdata_i(burst_fsm_wdata),
         .picorv_wstrb_i(burst_fsm_wstrb),
-        .picorv_rdata_o(burst_fsm_rdata),
+        .picorv_rdata_o(burst_fsm_rdata_xfer),
 
         //32-bit pipelined Wishbone master interface.
         .wbm_adr_o(wbm_adr_o),
