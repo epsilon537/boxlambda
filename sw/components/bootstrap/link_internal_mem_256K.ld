@@ -26,7 +26,7 @@ emem (wxa!ri)   : ORIGIN = DEFINED(__emem  ) ? __emem   : 0x20000000, LENGTH = D
 
 PHDRS
 {
-text PT_LOAD;
+cmem PT_LOAD;
 dmem PT_LOAD;
 dmem_init PT_LOAD;
 tls PT_TLS;
@@ -41,7 +41,7 @@ KEEP (*(.vectors)) /*add vectors to the start of the .init section.*/
 KEEP (*(.text.init.enter))
 KEEP (*(.data.init.enter))
 KEEP (*(SORT_BY_NAME(.init) SORT_BY_NAME(.init.*)))
-} >cmem AT>cmem :text
+} >cmem AT>cmem :cmem
 
 .text : {
 
@@ -87,7 +87,7 @@ PROVIDE_HIDDEN ( __fini_array_start = . );
 KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
 KEEP (*(.fini_array .dtors))
 PROVIDE_HIDDEN ( __fini_array_end = . );
-} >cmem AT>cmem :text
+} >cmem AT>cmem :cmem
 
 /* additional sections when compiling with C++ exception support */
 /*
@@ -95,7 +95,7 @@ PROVIDE_HIDDEN ( __fini_array_end = . );
 *(.gcc_except_table *.gcc_except_table.*)
 KEEP (*(.eh_fdmeme .eh_fdmeme.*))
 *(.ARM.extab* .gnu.linkonce.armextab.*)
-} >cmem AT>cmem :text
+} >cmem AT>cmem :cmem
 
 .except_unordered : {
 . = ALIGN(8);
@@ -103,8 +103,12 @@ KEEP (*(.eh_fdmeme .eh_fdmeme.*))
 PROVIDE(__exidx_start = .);
 *(.ARM.exidx*)
 PROVIDE(__exidx_end = .);
-} >cmem AT>cmem :text
+} >cmem AT>cmem :cmem
 */
+
+.cmem_bss (NOLOAD) : {
+*(.cmem_bss)
+} >cmem AT>cmem :cmem
 
 /*
 * Data values which are preserved across reset
@@ -119,7 +123,6 @@ PROVIDE(__preserve_end__ = .);
 .data : ALIGN_WITH_INPUT {
 *(.data .data.*)
 *(.gnu.linkonce.d.*)
-
 /* Need to pre-align so that the symbols come after padding */
 . = ALIGN(8);
 
@@ -129,6 +132,10 @@ PROVIDE( __global_pointer$ = . + 0x800 );
 } >dmem AT>cmem :dmem_init
 PROVIDE(__data_start = ADDR(.data));
 PROVIDE(__data_source = LOADADDR(.data));
+
+.dmem_text : ALIGN_WITH_INPUT {
+*(.dmem_text)
+} >dmem AT>cmem :dmem_init
 
 /* Thread local initialized data. This gets
 * space allocated as it is expected to be placed
