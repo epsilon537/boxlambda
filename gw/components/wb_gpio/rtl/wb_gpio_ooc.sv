@@ -1,25 +1,5 @@
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 06/21/2022 06:15:36 PM
-// Design Name: 
-// Module Name: wb_gpio_wrapper
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-
-module wb_gpio_wrapper #(
+//wb_gpio wrapper for Out of Context Synthesis
+module wb_gpio_ooc #(
     parameter size = 32
   )(
     inout logic [size-1:0] gpio,
@@ -27,7 +7,7 @@ module wb_gpio_wrapper #(
     // Wishbone inputs
     input logic 	   i_wb_cyc,
     input logic 	   i_wb_stb, i_wb_we,
-    input logic [31:0] 	   i_wb_addr,
+    input logic [27:0] 	   i_wb_addr,
     input logic [31:0] 	   i_wb_data,
     input logic [3:0] 	   i_wb_sel,
     output logic           o_wb_err, 	   

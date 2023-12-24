@@ -10,11 +10,11 @@
 // clk_12 frequency is 12MHz
 module boxlambda_clk_gen (
     input wire ext_clk_100,
-    input wire IO_RST_N,
+    input wire rst_n,
     output wire clk_50,
     output wire clk_100,
     output wire clk_12,
-    output wire locked
+    output wire locked //PLL locked indication.
 );
 `ifdef SYNTHESIS
   logic locked_pll;
@@ -107,7 +107,7 @@ module boxlambda_clk_gen (
   assign clk_12 = clk_12_buf;
 
   // PLL lock ouput
-  assign locked = locked_pll & IO_RST_N;
+  assign locked = locked_pll & rst_n;
 `else //Simulation:
   logic clk_50_reg;
   logic [2:0] div_by_8_count;
@@ -125,6 +125,6 @@ module boxlambda_clk_gen (
   assign clk_12 = (div_by_8_count < 3'd4);
   assign clk_50 = clk_50_reg;
   assign clk_100 = ext_clk_100;
-  assign locked = IO_RST_N;
+  assign locked = rst_n;
 `endif
 endmodule

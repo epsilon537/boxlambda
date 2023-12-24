@@ -16,7 +16,7 @@ sources:
 
   - target: wbuart32
     files:
-     - rtl/wb_wbuart_wrap_wrap.sv
+     - rtl/wb_wbuart_ooc.sv
      
   - target: any(vivado, verilator)
     defines:

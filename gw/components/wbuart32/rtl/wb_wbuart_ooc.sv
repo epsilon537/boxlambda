@@ -1,9 +1,10 @@
-module wb_wbuart_wrap_wrap
+//wb_uart wrapper for Out of Context synthesis.
+module wb_wbuart_ooc
   ( input logic 	   i_clk, i_reset,
     // Wishbone inputs
     input logic 	   i_wb_cyc,
     input logic 	   i_wb_stb, i_wb_we,
-    input logic [31:0] 	   i_wb_addr,
+    input logic [27:0] 	   i_wb_addr,
     input logic [31:0] 	   i_wb_data,
     input logic [3:0] 	   i_wb_sel,
     output logic           o_wb_err, 	   

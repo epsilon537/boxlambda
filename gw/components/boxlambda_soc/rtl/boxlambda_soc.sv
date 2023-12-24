@@ -1,5 +1,6 @@
+/*The parameterized BoxLambda SoC.*/
 module boxlambda_soc #(
-		parameter DPRAM_BYTE_ADDR_MASK = 'h1ffff,
+		parameter DPRAM_BYTE_ADDR_MASK = 'h1ffff, /*DPRAM size as a mask value. Used both from CMEM and DMEM.*/
         parameter VRAM_SIZE_BYTES = 131072,
         parameter DEBUG_MODULE_ACTIVE = 1,
         parameter DRAM_ACTIVE = 1,
@@ -10,8 +11,8 @@ module boxlambda_soc #(
         parameter CMEM_FILE = "",
         parameter DMEM_FILE = ""
     ) (
-    input  wire       ext_clk_100,
-    input  wire       ext_rst_n,
+    input  wire       ext_clk_100, //100MHz external clock.
+    input  wire       ext_rst_n,   //External reset pin.
     
 `ifdef VERILATOR  
   /*These JTAG signals are not used on FPGA (they are used in simulation).
@@ -23,9 +24,9 @@ module boxlambda_soc #(
     input  wire       tdi,
     output wire       tdo,
 `endif
-    output wire       pll_locked_led,
-    output wire       init_done_led,
-    output wire       init_err_led,
+    output wire       pll_locked_led, //PLL locked indication.
+    output wire       init_done_led, //LiteDRAM initialization done indication.
+    output wire       init_err_led, //LiteDRAM initialization error indication.
 `ifdef SYNTHESIS
     /*The simulation build doesn't export DDR pins.*/
     output wire [13:0] ddram_a,
@@ -73,42 +74,47 @@ module boxlambda_soc #(
     inout  wire [3:0] gpio1
     );
 
+    //Enum of Bus Masters attached to the cross bar.
     typedef enum {
-        COREI_M,
-        CORED_M,
-        PICORV_M,
-        BLACKBOX_M,
-        DM_M
+        COREI_M, /*Ibex CPU instruction port.*/
+        CORED_M, /*Ibex CPU data port.*/
+        PICORV_M, /*PicoRV DMA.*/
+        BLACKBOX_M, /*Black Box Bus Master.*/
+        DM_M /*Debug Module Bus Master port.*/
     } wb_xbar_master_e;
 
+    //Enum of Bus Slaves attached to the cross bar.
     typedef enum {
-        CMEM_0_S,
-        DMEM_0_S,
-        CMEM_1_S,
-        DMEM_1_S,
-        SHARED_BUS_S,
-        VERA_S,
-        BLACKBOX_S,
-        DDR_USR_S
+        CMEM_0_S, /*CMEM port 0. Typically used by CPU.*/
+        DMEM_0_S, /*DMEM port 0. Typically used by CPU.*/
+        CMEM_1_S, /*CMEM port 1. Typically used by DMA.*/
+        DMEM_1_S, /*DMEM port 1. Typically used by DMA.*/
+        SHARED_BUS_S, /*Connection to the shared bus.*/
+        VERA_S, /*VERA slave port.*/
+        BLACKBOX_S, /*Black Box Slave.*/
+        DDR_USR_S /*LiteDRAM data port.*/
     } wb_xbar_slave_e;
 
+    //Enum of Bus Slaves attached to the shared bus.
     typedef enum {
-        GPIO_0_S,
-        GPIO_1_S,
-        SDSPI_S,
-        RESET_CTRL_S,
-        YM2149_S,
-        PICORV_S,
-        UART_S,
-        TIMER_S,
-        DDR_CTRL_S,
-        DM_S
+        GPIO_0_S, /*GPIO 0*/
+        GPIO_1_S, /*GPIO 1*/
+        SDSPI_S, /*SDSPI*/
+        RESET_CTRL_S, /*Reset Control Module.*/
+        YM2149_S, /*Dual YM2149 PSG core.*/
+        PICORV_S, /*PicoRV DMA slave port.*/
+        UART_S, /*UART.*/
+        TIMER_S, /*Timer Module.*/
+        DDR_CTRL_S, /*LiteDRAM control port.*/
+        DM_S /*Debug Module slave port.*/
     } wb_shared_bus_slave_e;
 
+    /*We used a word-addressing Wishbone bus. The Dual Port RAM word address bus width is equal to the 
+     *number of bits of the Dual Port RAM Byte Address mask minus 2.*/
     localparam DPRAM_AW = $clog2(DPRAM_BYTE_ADDR_MASK)-2;
 
-    localparam AW=28; //Bus address width
-    localparam DW=32; //Bus data width
+    localparam AW=28; //Wishbone Bus address width. Note that we use word addressing.
+    localparam DW=32; //Wishbone Bus data width.
     localparam NUM_XBAR_MASTERS = 5;
     localparam NUM_XBAR_SLAVES  = 8;
     localparam NUM_SHARED_BUS_MASTERS = 1;
@@ -116,6 +122,7 @@ module boxlambda_soc #(
 
     localparam PICORV_BASE_ADDRESS = 'h10002000;
 
+    //Shared bus slave addresses. Right shift by two to convert byte address values to word address values.
     localparam [NUM_SHARED_BUS_SLAVES*AW-1:0] SHARED_BUS_SLAVE_ADDRS = {
         /*DM_S*/            {AW'('h10040000>>2)},
         /*DDR_CTRL_S*/      {AW'('h10030000>>2)},
@@ -126,9 +133,10 @@ module boxlambda_soc #(
         /*RESET_CTRL_S*/    {AW'('h10000030>>2)},
         /*SDSPI_S*/         {AW'('h10000020>>2)},
         /*GPIO_1_S*/        {AW'('h10000010>>2)},
-        /*GPIO_0_S*/        {AW'('h10000000>>2)} //Convert byte address to word adress and cast to size.
+        /*GPIO_0_S*/        {AW'('h10000000>>2)}
     };
 
+    //Shared bus slave address mask. Right-shift by two to convert byte size to word size.
     localparam [NUM_SHARED_BUS_SLAVES*AW-1:0] SHARED_BUS_SLAVE_ADDR_MASKS = {
         /*DM_S*/            {AW'(~('h0000ffff>>2))},   
         /*DDR_CTRL_S*/      {AW'(~('h0000ffff>>2))},
@@ -139,9 +147,10 @@ module boxlambda_soc #(
         /*RESET_CTRL_S*/    {AW'(~('h00000007>>2))},
         /*SDSPI_S*/         {AW'(~('h0000000f>>2))},
         /*GPIO_1_S*/        {AW'(~('h0000000f>>2))},
-        /*GPIO_0_S*/        {AW'(~('h0000000f>>2))} //Convert byte address mask to inverted word adress mask and cast to size.
+        /*GPIO_0_S*/        {AW'(~('h0000000f>>2))}
     };
 
+    //Crossbar slave addresses. Right shift by two to convert byte address values to word address values.
     localparam [NUM_XBAR_SLAVES*AW-1:0] XBAR_SLAVE_ADDRS = {
         /*DDR_USR_S*/       {AW'('h20000000>>2)},
         /*BLACKBOX_S*/      {AW'('h10200000>>2)},
@@ -150,9 +159,10 @@ module boxlambda_soc #(
         /*DMEM_1_S*/        {AW'('h00120000>>2)},
         /*CMEM_1_S*/        {AW'('h00100000>>2)},
         /*DMEM_0_S*/        {AW'('h00020000>>2)},
-        /*CMEM_0_S*/        {AW'('h00000000>>2)} //Convert byte address to word adress and cast to size.
+        /*CMEM_0_S*/        {AW'('h00000000>>2)}
     };
 
+    //Crossbar slave address mask. Right-shift by two to convert byte size to word size.
     localparam [NUM_XBAR_SLAVES*AW-1:0]	XBAR_SLAVE_ADDR_MASKS = {
         /*DDR_USR_S*/       {AW'(~('h0fffffff>>2))},
         /*BLACKBOX_S*/      {AW'(~('h000fffff>>2))},
@@ -161,10 +171,12 @@ module boxlambda_soc #(
         /*DMEM_1_S*/        {AW'(~(DPRAM_BYTE_ADDR_MASK>>2))},
         /*CMEM_1_S*/        {AW'(~(DPRAM_BYTE_ADDR_MASK>>2))},
         /*DMEM_0_S*/        {AW'(~(DPRAM_BYTE_ADDR_MASK>>2))},
-        /*CMEM_0_S*/        {AW'(~(DPRAM_BYTE_ADDR_MASK>>2))} //Convert byte address mask to inverted word adress mask and cast to size.
+        /*CMEM_0_S*/        {AW'(~(DPRAM_BYTE_ADDR_MASK>>2))}
     };
 
+    //Clock signals.
     logic sys_clk, sys_clk_2x, clk_usb, clk_50, clk_100;
+    //PLL lock signals.
     logic usb_pll_locked, sys_pll_locked, pre_pll_locked, litedram_pll_locked;
 
     //ndm_reset_req: Non-Debug Module reset requested by Debug Module
@@ -172,12 +184,16 @@ module boxlambda_soc #(
     //dm_reset: Debug-Module Reset issued by Reset Controller.
     logic ndm_reset_req, ndm_reset, dm_reset;
     logic por_completed; //Indicates Power-On Reset has been completed.
-	logic debug_req;
+	logic debug_req; //Debug Request signal.
 
+    //The crossbar wishbone bus master interfaces.
     wb_if xbar_wbm[NUM_XBAR_MASTERS](.rst(ndm_reset), .clk(sys_clk));
+    //The crossbar wishbone bus slave interfaces.
     wb_if xbar_wbs[NUM_XBAR_SLAVES](.rst(dm_reset), .clk(sys_clk));
+    //The shared bus wishbone bus slave interfaces. (I didn't bother to create a shared bus bus master interface).
     wb_if shared_bus_wbs[NUM_SHARED_BUS_SLAVES](.rst(dm_reset), .clk(sys_clk));
 
+    //The bus master port vectors of the crossbar wbxbar instance.
 	logic	[NUM_XBAR_MASTERS-1:0]	xbar_mcyc, xbar_mstb, xbar_mwe;
 	logic	[NUM_XBAR_MASTERS*AW-1:0]	xbar_maddr;
 	logic	[NUM_XBAR_MASTERS*DW-1:0]   xbar_mdata_w;
@@ -188,6 +204,7 @@ module boxlambda_soc #(
 	logic	[NUM_XBAR_MASTERS*DW-1:0]	xbar_mdata_r;
 	logic	[NUM_XBAR_MASTERS-1:0]	xbar_merr;
 	
+    //The bus slave port vectors of the crossbar wbxbar instance.
 	logic	[NUM_XBAR_SLAVES-1:0]	xbar_scyc, xbar_sstb, xbar_swe;
 	logic	[NUM_XBAR_SLAVES*AW-1:0] xbar_saddr;
 	logic	[NUM_XBAR_SLAVES*DW-1:0] xbar_sdata_w;
@@ -197,6 +214,7 @@ module boxlambda_soc #(
 	logic	[NUM_XBAR_SLAVES*DW-1:0]	xbar_sdata_r;
 	logic	[NUM_XBAR_SLAVES-1:0]	xbar_serr;
 
+    //The bus master port vectors of the shared bus wbxbar instance.
 	logic	[NUM_SHARED_BUS_MASTERS-1:0]	shared_bus_mcyc, shared_bus_mstb, shared_bus_mwe;
 	logic	[NUM_SHARED_BUS_MASTERS*AW-1:0]	shared_bus_maddr;
 	logic	[NUM_SHARED_BUS_MASTERS*DW-1:0]   shared_bus_mdata_w;
@@ -207,6 +225,7 @@ module boxlambda_soc #(
 	logic	[NUM_SHARED_BUS_MASTERS*DW-1:0]	shared_bus_mdata_r;
 	logic	[NUM_SHARED_BUS_MASTERS-1:0]	shared_bus_merr;
 	
+    //The bus slave port vectors of the shared bus wbxbar instance.
 	logic	[NUM_SHARED_BUS_SLAVES-1:0]	shared_bus_scyc, shared_bus_sstb, shared_bus_swe;
 	logic	[NUM_SHARED_BUS_SLAVES*AW-1:0] shared_bus_saddr;
 	logic	[NUM_SHARED_BUS_SLAVES*DW-1:0] shared_bus_sdata_w;
@@ -216,7 +235,8 @@ module boxlambda_soc #(
 	logic	[NUM_SHARED_BUS_SLAVES*DW-1:0]	shared_bus_sdata_r;
 	logic	[NUM_SHARED_BUS_SLAVES-1:0]	shared_bus_serr;
 
-    generate 
+    generate
+        //Connect the slaves to the shared bus. 
         genvar ii;
         for(ii=0; ii<NUM_SHARED_BUS_SLAVES; ii=ii+1)
         begin : CONNECT_SLAVES_TO_SHARED_BUS
@@ -233,6 +253,7 @@ module boxlambda_soc #(
             assign shared_bus_serr[ii] = shared_bus_wbs[ii].err;         
         end
 
+        //Connect the slaves to the crossbar.
         for(ii=0; ii<NUM_XBAR_SLAVES; ii=ii+1)
         begin : CONNECT_SLAVES_TO_XBAR
             assign xbar_wbs[ii].cyc = xbar_scyc[ii];
@@ -248,6 +269,7 @@ module boxlambda_soc #(
             assign xbar_serr[ii] = xbar_wbs[ii].err;         
         end
 
+        //Connect the masters to the crossbar.
         for(ii=0; ii<NUM_XBAR_MASTERS; ii=ii+1)
         begin : CONNECT_MASTERS_TO_XBAR
             assign xbar_mcyc[ii] = xbar_wbm[ii].cyc;
@@ -264,6 +286,7 @@ module boxlambda_soc #(
         end
     endgenerate
 
+    //The crossbar wbxbar instance.
     wbxbar #(
 		.NM(NUM_XBAR_MASTERS), .NS(NUM_XBAR_SLAVES),
 		.AW(AW), .DW(32),
@@ -294,7 +317,7 @@ module boxlambda_soc #(
 		.i_sstall(xbar_sstall), .i_sack(xbar_sack),
 		.i_sdata(xbar_sdata_r),
 		.i_serr(xbar_serr)
-        );
+    );
 
     /*Xbar to shared bus signals*/
     assign shared_bus_mcyc = xbar_scyc[SHARED_BUS_S];
@@ -310,6 +333,7 @@ module boxlambda_soc #(
 	assign xbar_sdata_r[(SHARED_BUS_S+1)*DW-1:SHARED_BUS_S*DW] = shared_bus_mdata_r;
 	assign xbar_serr[SHARED_BUS_S] = shared_bus_merr;
 
+    //The shared bus wbxbar instance.
     wbxbar #(
 		.NM(NUM_SHARED_BUS_MASTERS), .NS(NUM_SHARED_BUS_SLAVES),
 		.AW(AW), .DW(32),
@@ -340,19 +364,19 @@ module boxlambda_soc #(
 		.i_sstall(shared_bus_sstall), .i_sack(shared_bus_sack),
 		.i_sdata(shared_bus_sdata_r),
 		.i_serr(shared_bus_serr)
-        );
+    );
 
     //Reset Controller
     reset_ctrl reset_ctrl_inst(
         .sys_clk(sys_clk),
-        .usb_clk(clk_usb), //Not used.
+        .usb_clk(clk_usb), //Not used yet.
         .sys_pll_locked_i(sys_pll_locked),
         .usb_pll_locked_i(usb_pll_locked),
         .ndm_reset_i(ndm_reset_req),
         .ext_reset_i(~ext_rst_n), //asynchronous external reset
         .ndm_reset_o(ndm_reset),
         .dm_reset_o(dm_reset),
-        .usb_reset_o(), //Not used.
+        .usb_reset_o(), //Not used yet.
         .por_completed_o(por_completed),
         //32-bit pipelined Wishbone slave interface.
         .wb_adr(shared_bus_wbs[RESET_CTRL_S].adr[0]),
@@ -365,19 +389,23 @@ module boxlambda_soc #(
         .wb_ack(shared_bus_wbs[RESET_CTRL_S].ack),
         .wb_we(shared_bus_wbs[RESET_CTRL_S].we),
         .wb_err(shared_bus_wbs[RESET_CTRL_S].err)
-        );
+    );
 
+    /*First-stage clock generator. If LiteDRAM is synthesized-in, it includes a Second-stage clock generator.
+     *If LiteDRAM is not synthesized-in, this first-stage clock generator provides the system clock
+     */
     boxlambda_clk_gen clkgen (
-        .ext_clk_100 (ext_clk_100),
-        .IO_RST_N    (1'b1),
-        .clk_50      (clk_50),
-        .clk_100     (clk_100),
-        .clk_12      (clk_usb),
-        .locked      (pre_pll_locked)
+        .ext_clk_100 (ext_clk_100), //100MHz external clock.
+        .rst_n       (1'b1),
+        .clk_50      (clk_50), //50MHz clock
+        .clk_100     (clk_100), //100MHz clock
+        .clk_12      (clk_usb), //12 MHz USB clock
+        .locked      (pre_pll_locked) //PLL lock indication.
     );
 
     assign usb_pll_locked = pre_pll_locked;
     
+    /*The Debug Modules.*/
     generate if (DEBUG_MODULE_ACTIVE)
     begin : GENERATE_DEBUG_MODULE
         logic          dmactive;
@@ -416,8 +444,8 @@ module boxlambda_soc #(
             .*);
 
         dmi_jtag #(
-                .IdcodeValue(32'h249511C3)
-            ) dmi_jtag_inst (
+            .IdcodeValue(32'h249511C3)
+        ) dmi_jtag_inst (
             .clk_i            (sys_clk),
             .rst_ni           (~dm_reset),
             .testmode_i       (1'b0),
@@ -453,6 +481,7 @@ module boxlambda_soc #(
     end
     endgenerate
 
+    /*The Ibex CPU.*/
     wb_ibex_core #(
         .RV32M(ibex_pkg::RV32MFast),
         .RV32B(ibex_pkg::RV32BBalanced),
@@ -477,6 +506,7 @@ module boxlambda_soc #(
         .core_sleep   (),
         .*);
     
+    //CMEM (Code Mem.) Dual Port Memory
     wb_dp_ram_wrapper #(
         .ADDR_WIDTH(DPRAM_AW),
         .INIT_FILE(CMEM_FILE)
@@ -509,6 +539,7 @@ module boxlambda_soc #(
         .b_cyc_i(xbar_wbs[CMEM_1_S].cyc)    // CYC_I cycle input
     );
 
+    //DMEM (Data Mem.) Dual Port Memory.
     wb_dp_ram_wrapper #(
         .ADDR_WIDTH(DPRAM_AW),
         .INIT_FILE(DMEM_FILE)
@@ -541,10 +572,12 @@ module boxlambda_soc #(
         .b_cyc_i(xbar_wbs[DMEM_1_S].cyc)    // CYC_I cycle input
     );
 
+    //Black Box Placeholder - does nothing.
     blackbox bb_inst (
         .wbm(xbar_wbm[BLACKBOX_M]),
         .wbs(xbar_wbs[BLACKBOX_S]));
 
+    //The UART.
     wb_wbuart_wrap #(
         .HARDWARE_FLOW_CONTROL_PRESENT  (1'b0),
         .INITIAL_SETUP                  (31'd25),
@@ -560,9 +593,11 @@ module boxlambda_soc #(
         .o_uart_rxfifo_int(),
         .o_uart_txfifo_int());
 
+    //The Timer module.
     wb_timer timer (
         .wb (shared_bus_wbs[TIMER_S]));
 
+    //Two GPIO modules.
     wb_gpio #(
         .size (8)
     ) wb_gpio0 (
@@ -575,17 +610,18 @@ module boxlambda_soc #(
         .gpio (gpio1),
         .wb (shared_bus_wbs[GPIO_1_S]));
 
+    //LiteDRAM.
     generate if (DRAM_ACTIVE)
     begin : GENERATE_DRAM_MODULE
         logic litedram_pll_locked_i, litedram_rst_o;
 
         litedram_wrapper litedram_wrapper_inst (
-            .clk(clk_100), /*100MHz input clock.*/
+            .clk(clk_100), /*100MHz input clock, coming for the First-stage clock generator..*/
             .rst(1'b0), /*Never reset LiteDRAM.*/
             .sys_clkx2(sys_clk_2x), /*LiteDRAM outputs 100MHz double rate system clock. In phase with sys_clk.*/
             .sys_clk(sys_clk), /*LiteDRAM outputs 50MHz system clock.*/
             .sys_rst(litedram_rst_o), /*LiteDRAM outputs system reset.*/
-            .pll_locked(litedram_pll_locked_i),
+            .pll_locked(litedram_pll_locked_i), /*LiteDRAM PLL lock indication.*/
 `ifdef SYNTHESIS
             .ddram_a(ddram_a),
             .ddram_ba(ddram_ba),
@@ -629,13 +665,14 @@ module boxlambda_soc #(
             .user_port_wishbone_p_0_err(xbar_wbs[DDR_USR_S].err)
         );
         
-        //pll_locked is fed to the reset controller. Asserted when litedram controlled indicates reset is deasserted and pll is locked.
+        /*sys_pll_locked is fed to the reset controller. Asserted when Litedram controller indicates reset is 
+         *deasserted and pll is locked.*/
         assign litedram_pll_locked = ~litedram_rst_o & litedram_pll_locked_i;
         assign sys_pll_locked = litedram_pll_locked;
     end
-    else begin //No DRAM:
-        assign sys_clk = clk_50;
-        assign sys_clk_2x = clk_100;
+    else begin //No DRAM: In this case the Stage-1 clock generator provide the system clock.
+        assign sys_clk = clk_50; //50MHz system clock.
+        assign sys_clk_2x = clk_100; //100MHz double-rate system clock.
         assign litedram_pll_locked = 1'b1;
         assign init_done_led = 1'b1;
         assign init_err_led = 1'b0;
@@ -645,6 +682,7 @@ module boxlambda_soc #(
 
     assign pll_locked_led = sys_pll_locked;
     
+    //Vera Graphics.
     generate if (VERA_ACTIVE)
     begin : GENERATE_VERA_MODULE
         vera_top #(VRAM_SIZE_BYTES) vera_inst(
@@ -666,10 +704,18 @@ module boxlambda_soc #(
             .vga_b(vga_b),       
             .vga_hsync(vga_hsync),
             .vga_vsync(vga_vsync)
-            );
+        );
+    end
+    else begin : NO_VGA
+        assign vga_r = 4'b0;       
+        assign vga_g = 4'b0;     
+        assign vga_b = 4'b0;       
+        assign vga_hsync = 1'b0;   
+        assign vga_vsync = 1'b0;   
     end
     endgenerate
 
+    //SDSPI module.
     generate if (SDSPI_ACTIVE)
     begin : GENERATE_SDSPI_MODULE
         sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
@@ -696,8 +742,14 @@ module boxlambda_soc #(
 
         assign shared_bus_wbs[SDSPI_S].err = 1'b0;
     end
+    else begin : NO_SDSPI
+        assign sdspi_cs_n = 1'b0; 
+        assign sdspi_sck = 1'b0; 
+        assign sdspi_mosi = 1'b0;
+    end
     endgenerate
 
+    //The Dual YM2149 PSG core and 1-bit audio DAC.
     generate if (YM2149_ACTIVE)
     begin : GENERATE_YM2149_MODULE
         wire signed  [15:0] ym2149_sound;
@@ -753,8 +805,19 @@ module boxlambda_soc #(
         assign audio_gain = 1'b1; //PMOD Amp gain fixed at 6dB.
         assign audio_shutdown_n = 1'b1;
     end
+    else begin : NO_AUDIO
+        assign audio_out = 1'b0;
+        assign audio_gain =1'b0;
+        assign audio_shutdown_n = 1'b0;
+`ifdef VERILATOR
+        assign pcm_out = 16'b0;
+        assign acc1_overflow = 1'b0;
+        assign acc2_overflow = 1'b0;  
+`endif
+    end
     endgenerate
 
+    //The PicoRV DMA module.
     generate if (PICORV_ACTIVE)
     begin : GENERATE_PICORV_MODULE
         picorv_dma_top #(

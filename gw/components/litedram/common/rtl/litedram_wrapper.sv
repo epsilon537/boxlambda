@@ -1,6 +1,6 @@
 /*This wrapper contains wishbone pipeline-to-classic adapters for the ctrl and user port.*/
 module litedram_wrapper (
-	input wire         clk, /*50MHz input clock.*/
+	input wire         clk, /*100MHz input clock.*/
 	input wire         rst, /*Asynchronous reset.*/
 	output wire        sys_clk, /*50MHz output clock, to be used as input clock for the rest of the system.*/
 	output wire        sys_clkx2, /*100MHz output clock, i.e. twice the rate of sys_clk, in phase with sys_clk.*/

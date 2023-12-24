@@ -1,4 +1,5 @@
-module ibex_wb_core_wrapper
+//ibex_wb_core wrapper for Out Of Context synthesis.
+module ibex_wb_core_ooc
    (input logic 	clk, rst,
     // Wishbone inputs
     input logic 	i_instr_wb_err, 
@@ -7,7 +8,7 @@ module ibex_wb_core_wrapper
     input logic [31:0] 	i_instr_wb_data,
 
     // Wishbone outputs
-    output logic [31:0] o_instr_addr,
+    output logic [27:0] o_instr_addr,
     output logic 	o_instr_cyc,
     output logic 	o_instr_stb,
     output logic 	o_instr_we,
@@ -22,7 +23,7 @@ module ibex_wb_core_wrapper
     output logic [31:0] o_data_data,
 
     // Wishbone outputs
-    output logic [31:0] o_data_addr,
+    output logic [27:0] o_data_addr,
     output logic 	o_data_cyc,
     output logic 	o_data_stb,
     output logic 	o_data_we,

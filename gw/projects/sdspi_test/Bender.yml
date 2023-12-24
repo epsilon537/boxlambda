@@ -19,11 +19,11 @@ sources:
       DPRAM_SIZE_BYTES: 65536
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
-      YM2149: ~
+      #YM2149: ~
       SDSPI: ~
-      DRAM: ~
-      VERA: ~
-      PICORV_DMA: ~
+      #DRAM: ~
+      #VERA: ~
+      #PICORV_DMA: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../top/rtl/top.sv
@@ -33,11 +33,11 @@ sources:
       DPRAM_SIZE_BYTES: 262144
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
-      YM2149: ~
+      #YM2149: ~
       SDSPI: ~
-      DRAM: ~
-      VERA: ~
-      PICORV_DMA: ~
+      #DRAM: ~
+      #VERA: ~
+      #PICORV_DMA: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../top/rtl/top.sv

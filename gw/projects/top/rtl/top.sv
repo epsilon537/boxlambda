@@ -1,3 +1,4 @@
+//The BoxLambda top-level used by most gw/projects builds.
 module top (
     input  wire       ext_clk_100,
     input  wire       ext_rst_n,
@@ -78,11 +79,13 @@ module top (
         .SDSPI_ACTIVE(0),
 `endif
 `ifndef YM2149
-        .SDSPI_ACTIVE(0),
+        .YM2149_ACTIVE(0),
 `endif
 `ifndef PICORV_DMA
         .PICORV_ACTIVE(0),
 `endif
+        /*We don't specify a dmem.mem. The data segment is copied into DMEM from a load segment that's part of the cmem.mem
+         *image. This copy operation is part of the PicoLibc start-up code.*/
         .CMEM_FILE("cmem.mem")
     ) boxlambda_soc_inst (.*);
 endmodule

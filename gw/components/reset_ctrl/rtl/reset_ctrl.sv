@@ -47,6 +47,7 @@ module reset_ctrl (
     
     logic [5:0] reset_reason_reg, reset_reason_next;
     
+    //Transfer pipes for clock domain crossing.
     (* ASYNC_REG = "TRUE" *) logic [1:0] usb_pll_locked_xfer_pipe;
     logic usb_pll_locked_synced;
     (* ASYNC_REG = "TRUE" *) logic [1:0] usb_reset_xfer_pipe;
@@ -125,7 +126,7 @@ module reset_ctrl (
     //Always return the reset reason register contents
     assign wb_dat_r = {26'b0, reset_reason_reg};
     assign wb_ack = do_ack_reg & wb_cyc;
-    assign wb_stall = 1'b0; //!wb_cyc ? 1'b0 : !wb_ack;
+    assign wb_stall = 1'b0;
     assign wb_err = 1'b0;
 
     //Wishbone triggered ndm and/or dm reset

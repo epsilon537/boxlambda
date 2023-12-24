@@ -6,4 +6,5 @@ lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lo
 lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_ram_1p_pkg_0/rtl/prim_ram_1p_pkg.sv"
 lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_ram_2p_pkg_0/rtl/prim_ram_2p_pkg.sv"
 lint_off -rule UNUSED -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_secded_0.1/rtl/prim_secded_pkg.sv"
+lint_off -rule UNUSEDSIGNAL -file "*/sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_controller.sv" -match "Signal is not used: 'prev_pc_id_i'"
 

@@ -107,7 +107,7 @@ module picorv_dma_top #(
     always_ff @(posedge sys_clk) begin
         do_ack_wbs <= 1'b0;
         if (wbs_stb) begin
-            wbs_ram_rdata <= ram_rdata;
+            wbs_ram_rdata <= ram_rdata; //wbs_ram_register needed for timing closure.
             do_ack_wbs <= 1'b1;
         end
     end
@@ -390,8 +390,8 @@ module picorv_dma_top #(
     
     //Register writes incoming from WBS and PicoRV.
     always_ff @(posedge sys_clkx2) begin
-        burst_fsm_rdata <= burst_fsm_rdata_xfer;
-        burst_fsm_ready <= burst_fsm_ready_xfer;
+        burst_fsm_rdata <= burst_fsm_rdata_xfer; //Transfer register needed for timing closure.
+        burst_fsm_ready <= burst_fsm_ready_xfer; //Transfer register needed for timing closure.
     end
 
     /*Module turning PicoRV requests into individual or 4-word-burst Wishbone transactions.*/

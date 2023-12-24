@@ -12,7 +12,7 @@ dependencies:
 sources:
   - target: wb_gpio
     files:
-    - rtl/wb_gpio_wrapper.sv
+    - rtl/wb_gpio_ooc.sv
   - target: verilator
     defines:
       NO_MODPORT_EXPRESSIONS: ~

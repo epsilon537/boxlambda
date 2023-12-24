@@ -20,7 +20,7 @@ sources:
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       YM2149: ~
-      SDSPI: ~
+      #SDSPI: ~
       DRAM: ~
       VERA: ~
       PICORV_DMA: ~
@@ -34,7 +34,7 @@ sources:
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       YM2149: ~
-      SDSPI: ~
+      #SDSPI: ~
       DRAM: ~
       VERA: ~
       PICORV_DMA: ~
