@@ -3,37 +3,23 @@
 `endif
 
 module picorv_dma_top #(
-    parameter BASE_ADDR = 32'h10002000,
-    /*WBM transactions with address lower than WBM1_BASE_ADDR go to WBM0, else to WBM1.*/
-    parameter WBM1_BASE_ADDR = 32'h50000000 
+    parameter BASE_ADDR = 32'h10002000
 ) (
     input logic sys_clk,
     input logic sys_clkx2,
     input logic rst,
 
-    //32-bit pipelined Wishbone master interface 0.
-    output logic [29:0] wbm0_adr_o,
-	output logic [31:0] wbm0_dat_o,
-	input logic [31:0] wbm0_dat_i,
-	output logic wbm0_we_o,
-	output logic [3:0] wbm0_sel_o,
-	output logic wbm0_stb_o,
-	input logic wbm0_ack_i,
-    input logic wbm0_stall_i,
-	output logic wbm0_cyc_o,
-    input logic wbm0_err_i,
-
-    //32-bit pipelined Wishbone master interface 1.
-    output logic [29:0] wbm1_adr_o,
-	output logic [31:0] wbm1_dat_o,
-	input logic [31:0] wbm1_dat_i,
-	output logic wbm1_we_o,
-	output logic [3:0] wbm1_sel_o,
-	output logic wbm1_stb_o,
-	input logic wbm1_ack_i,
-    input logic wbm1_stall_i,
-	output logic wbm1_cyc_o,
-    input logic wbm1_err_i,
+    //32-bit pipelined Wishbone master interface.
+    output logic [29:0] wbm_adr_o,
+	output logic [31:0] wbm_dat_o,
+	input logic [31:0] wbm_dat_i,
+	output logic wbm_we_o,
+	output logic [3:0] wbm_sel_o,
+	output logic wbm_stb_o,
+	input logic wbm_ack_i,
+    input logic wbm_stall_i,
+	output logic wbm_cyc_o,
+    input logic wbm_err_i,
 
     //32-bit pipelined Wishbone slave interface.
     input logic [10:0] wbs_adr,
@@ -63,17 +49,6 @@ module picorv_dma_top #(
 
     logic trap;
 
-    //Wisbone master signals, to be further dispatched to wbm0 or wbm1.
-    logic [29:0] wbm_adr_o;
-	logic [31:0] wbm_dat_o;
-	logic [31:0] wbm_dat_i;
-	logic wbm_we_o;
-	logic [3:0] wbm_sel_o;
-	logic wbm_stb_o;
-	logic wbm_ack_i;
-    logic wbm_stall_i;
-	logic wbm_cyc_o;
-
     //Memory access signals for the burst FSM module, 
     //i.e. memory accesses that will go to burst FSM registers or be turned into Wishbone bus master transactions.
     logic        burst_fsm_valid;
@@ -81,7 +56,7 @@ module picorv_dma_top #(
 	logic [ 3:0] burst_fsm_wstrb;
 	logic [31:2] burst_fsm_addr;
 	logic [31:0] burst_fsm_wdata;
-	logic  [31:0] burst_fsm_rdata;
+	logic [31:0] burst_fsm_rdata;
 
     //Local system- and general purpose register access signals.
     logic        reg_we;
@@ -106,7 +81,7 @@ module picorv_dma_top #(
 	logic [ 3:0] ram_wstrb;
 	logic [$clog2(MEM_SZ_WORDS)+1:2] ram_addr;
 	logic [31:0] ram_wdata;
-	logic  [31:0] ram_rdata;
+	logic  [31:0] ram_rdata, wbs_ram_rdata;
 
     logic [31:0] gp_reg[0:15]; //16 general purpose registers
 
@@ -123,7 +98,7 @@ module picorv_dma_top #(
     logic do_wbs_wr_mem, do_wbs_wr_reg;
     logic [31:0] wbs_dat_read_from_reg;
 
-    logic unused = &{wbm_stall_i, wbs_sel, burst_fsm_addr, wbm0_err_i, wbm1_err_i};
+    logic unused = &{wbs_sel, burst_fsm_addr, wbm_err_i};
 
     //WB slave handshake
     assign do_wbs_wr_reg = wbs_cyc && wbs_stb && wbs_we && (wbs_adr >= 11'(WBS_REG_BASE_ADDR));
@@ -132,11 +107,12 @@ module picorv_dma_top #(
     always_ff @(posedge sys_clk) begin
         do_ack_wbs <= 1'b0;
         if (wbs_stb) begin
+            wbs_ram_rdata <= ram_rdata; //wbs_ram_register needed for timing closure.
             do_ack_wbs <= 1'b1;
         end
     end
 
-    assign wbs_dat_r = (wbs_adr < 11'(WBS_REG_BASE_ADDR)) ? ram_rdata : wbs_dat_read_from_reg;
+    assign wbs_dat_r = (wbs_adr < 11'(WBS_REG_BASE_ADDR)) ? wbs_ram_rdata : wbs_dat_read_from_reg;
     assign wbs_ack = do_ack_wbs & wbs_cyc;
     assign wbs_stall = 1'b0;
     assign wbs_err = 1'b0;
@@ -409,6 +385,15 @@ module picorv_dma_top #(
 		.rdata(ram_rdata)
     );
 
+    logic [31:0] burst_fsm_rdata_xfer;
+    logic burst_fsm_ready_xfer;
+    
+    //Register writes incoming from WBS and PicoRV.
+    always_ff @(posedge sys_clkx2) begin
+        burst_fsm_rdata <= burst_fsm_rdata_xfer; //Transfer register needed for timing closure.
+        burst_fsm_ready <= burst_fsm_ready_xfer; //Transfer register needed for timing closure.
+    end
+
     /*Module turning PicoRV requests into individual or 4-word-burst Wishbone transactions.*/
     picorv_burst_fsm #( 
         .BURST_REG_BASE_ADDR(BURST_REG_BASE_ADDR)
@@ -418,12 +403,12 @@ module picorv_dma_top #(
 
         //picorv interface
         .picorv_valid_i(burst_fsm_valid),
-        .picorv_rdy_o(burst_fsm_ready),
+        .picorv_rdy_o(burst_fsm_ready_xfer),
 
         .picorv_addr_i(burst_fsm_addr),
         .picorv_wdata_i(burst_fsm_wdata),
         .picorv_wstrb_i(burst_fsm_wstrb),
-        .picorv_rdata_o(burst_fsm_rdata),
+        .picorv_rdata_o(burst_fsm_rdata_xfer),
 
         //32-bit pipelined Wishbone master interface.
         .wbm_adr_o(wbm_adr_o),
@@ -437,30 +422,5 @@ module picorv_dma_top #(
         .wbm_cyc_o(wbm_cyc_o),
         .wbm_err_i(1'b0)
     );
-
-    //Dispatch to WBM0 or WBM1 based on address.
-    logic sel_wbm0;
-    assign sel_wbm0 = (wbm_adr_o < 30'(WBM1_BASE_ADDR/4));
-
-    assign wbm0_adr_o = wbm_adr_o;
-    assign wbm1_adr_o = wbm_adr_o;
-	assign wbm0_dat_o = wbm_dat_o;
-    assign wbm1_dat_o = wbm_dat_o;
-    
-	assign wbm_dat_i = sel_wbm0 ? wbm0_dat_i : wbm1_dat_i;
-	
-    assign wbm0_we_o = wbm_we_o;
-    assign wbm1_we_o = wbm_we_o;
-    assign wbm0_sel_o = wbm_sel_o;
-    assign wbm1_sel_o = wbm_sel_o;
-    
-	assign wbm0_stb_o = sel_wbm0 ? wbm_stb_o : 1'b0;
-    assign wbm1_stb_o = !sel_wbm0 ? wbm_stb_o : 1'b0;
-
-	assign wbm_ack_i = sel_wbm0 ? wbm0_ack_i : wbm1_ack_i;
-    assign wbm_stall_i = sel_wbm0 ? wbm0_stall_i : wbm1_stall_i;
-
-	assign wbm0_cyc_o = sel_wbm0 ? wbm_cyc_o : 1'b0;
-    assign wbm1_cyc_o = !sel_wbm0 ? wbm_cyc_o : 1'b0;
 
 endmodule

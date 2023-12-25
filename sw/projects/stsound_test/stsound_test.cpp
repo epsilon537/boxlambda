@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "ym2149_sys_regs.h"
+#include "sdram.h"
 
 //This test program loads a .ym music file from the SD card and plays it back on one of the
 //two YM2149 PSGs using the STsound library.
@@ -102,6 +103,14 @@ int main(void)
 	gpio_init(&gpio1, (volatile void *)PLATFORM_GPIO1_BASE);
 	gpio_set_direction(&gpio1, 0x00000000); // 4 inputs
 
+	/*sdram_init() is provided by the Litex code base.*/
+	if (sdram_init()) {
+		printf("SDRAM init OK.\n");
+	}
+	else {
+		printf("SDRAM init failed!\n");
+		while(1);
+	}
 	//Program the audio mixer registers
 	unsigned addrs[] = {FILTER_MIXER_VOLA_OFFSET, FILTER_MIXER_VOLB_OFFSET, FILTER_MIXER_VOLC_OFFSET, 
 						FILTER_MIXER_VOLD_OFFSET, FILTER_MIXER_VOLE_OFFSET, FILTER_MIXER_VOLF_OFFSET, 

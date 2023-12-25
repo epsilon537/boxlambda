@@ -214,11 +214,11 @@ function (gw_project_rules_verilator)
         #Custom command copying the SW image to its proper place in the gateware build directory
         add_custom_command(
             OUTPUT
-                spram.mem
+                cmem.mem
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             COMMAND
-                cp $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/spram.mem
+                cp $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/cmem.mem
             DEPENDS
                 ${_mem_file_tgt}
             COMMENT
@@ -232,7 +232,7 @@ function (gw_project_rules_verilator)
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
-                spram.mem
+                cmem.mem
                 ${_prj_name}_sim
             COMMENT
                 "Verilator Vmodel + SW image target."
@@ -308,12 +308,7 @@ function (gw_project_rules)
 endfunction()
 
 add_subdirectory(hello_world)
-add_subdirectory(hello_dbg)
-add_subdirectory(picolibc_test)
 add_subdirectory(ddr_test)
-if(CMAKE_BUILD_TYPE STREQUAL "sim")
-    add_subdirectory(vera_standalone)
-endif()
 add_subdirectory(vera_integrated)
 add_subdirectory(sdspi_test)
 add_subdirectory(fatfs_test)
@@ -322,5 +317,5 @@ add_subdirectory(ym2149_dac_test)
 if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
     add_subdirectory(stsound_test)
 endif()
-add_subdirectory(picorv_dma_sys_test)
 add_subdirectory(picorv_dma_sys_test_ext)
+add_subdirectory(dual_port_ram_test)

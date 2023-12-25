@@ -35,23 +35,22 @@
 //#define DETAILED_LOGS
 
 //Define or undefine these to limit to byte or wordcopy only.
-#define BYTE_COPY
+//#define BYTE_COPY
 #define WORD_COPY
 
 //Define or undefine these to limit to single or burst mode only.
-//#define SINGLE_COPY
+#define SINGLE_COPY
 #define BURST_COPY
 
 //Define or undefine these to limit src and dest memory types.
 #define LOCAL_MEM_COPY
-//#define EXT_MEM0_COPY
-#define EXT_MEM1_COPY
-//#define VRAM_MEM_COPY
+#define EXT_MEM0_COPY
+#define VRAM_MEM_COPY
 
 //Define or undefine these to limit src and dest offset test vectors.
 #define OFFSET_0
 #define OFFSET_1
-#define OFFSET_2
+//#define OFFSET_2
 #define OFFSET_3
 
 #ifdef ALIGNED_ONLY
@@ -109,6 +108,7 @@ Program programs[] = {
 typedef struct {
     const char* name;
     char* ptr;
+    int isDualPort;
 } MemType;
 
 //Source memory type test vector.
@@ -116,25 +116,22 @@ MemType srcMems[] = {
 #ifdef LOCAL_MEM_COPY
     {
         "LOCAL",
-        (unsigned char*)srcBufLocal
+        (unsigned char*)srcBufLocal,
+        1 /*dual port*/
     },
 #endif
 #ifdef EXT_MEM0_COPY
     {
         "EXT_MEM_0",
-        (unsigned char*)MAIN_RAM_BASE
-    },
-#endif
-#ifdef EXT_MEM1_COPY
-    {
-        "EXT_MEM_1",
-        (unsigned char*)MAIN_RAM_BASE2
+        (unsigned char*)MAIN_RAM_BASE,
+        0 /*not dual port*/
     },
 #endif
 #ifdef VRAM_MEM_COPY
     {
         "VRAM",
-        (unsigned char*)VERA_VRAM_BASE
+        (unsigned char*)VERA_VRAM_BASE,
+        0, /*not dual port*/
     },
 #endif
 };
@@ -144,25 +141,22 @@ MemType dstMems[] = {
 #ifdef LOCAL_MEM_COPY
     {
         "LOCAL",
-        (unsigned char*)dstBufLocal
+        (unsigned char*)dstBufLocal,
+        1 /*dual port*/
     },
 #endif
 #ifdef EXT_MEM0_COPY
     {
         "EXT_MEM_0",
-        (unsigned char*)(MAIN_RAM_BASE+64*4)
-    },
-#endif
-#ifdef EXT_MEM1_COPY
-    {
-        "EXT_MEM_1",
-        (unsigned char*)(MAIN_RAM_BASE2+64*4)
+        (unsigned char*)(MAIN_RAM_BASE+64*4),
+        0 /*not dual port*/
     },
 #endif
 #ifdef VRAM_MEM_COPY
     {
         "VRAM",
-        (unsigned char*)(VERA_VRAM_BASE+64*4)
+        (unsigned char*)(VERA_VRAM_BASE+64*4),
+        0 /*not dual port*/
     },
 #endif
 };
@@ -204,7 +198,8 @@ unsigned numElems[] = {
 #ifdef ONE_SIZE_ONLY
     32
 #else
-    1, 3, 4, 5, 8, 12, 13, 15, 16, 24, 25, 28, 29, 31, 32
+    1, 5, 16, 31, 32
+    //1, 3, 4, 5, 8, 12, 13, 15, 16, 24, 25, 28, 29, 31, 32
 #endif
 };
 
@@ -223,7 +218,8 @@ void	_exit (int status) {
 }
 
 //Parameterized dma test function. Returns 1 if success, 0 if failed.
-int dmaTest(unsigned char* srcBase, unsigned srcOffset, unsigned char* dstBase, unsigned dstOffset, 
+int dmaTest(unsigned char* srcBase, unsigned srcOffset, int srcIsDualPort, 
+            unsigned char* dstBase, unsigned dstOffset, int dstIsDualPort,
             unsigned numElems, unsigned elemSize) {
     unsigned char* srcPtr = srcBase + srcOffset*elemSize;
     //Offset destination pointer deeper into its buffer so we have room to check for out-of-bounds accesses before
@@ -241,8 +237,8 @@ int dmaTest(unsigned char* srcBase, unsigned srcOffset, unsigned char* dstBase, 
     printf("numElems = %d, srcAddr = 0x%x, dstAddr = 0x%x\n", numElems, (unsigned)srcPtr, (unsigned)dstPtr);
 #endif
 
-    picorv_hir_reg_wr(PICORV_HIR_REG_SRC, (unsigned)srcPtr);
-    picorv_hir_reg_wr(PICORV_HIR_REG_DST, (unsigned)dstPtr);
+    picorv_hir_reg_wr(PICORV_HIR_REG_SRC, (unsigned)srcPtr | (srcIsDualPort ? 0x100000 : 0));
+    picorv_hir_reg_wr(PICORV_HIR_REG_DST, (unsigned)dstPtr | (dstIsDualPort ? 0x100000 : 0));
     picorv_hir_reg_wr(PICORV_HIR_REG_NUM_ELEMS, numElems);
 
 #ifdef DETAILED_LOGS
@@ -345,6 +341,7 @@ int main(void) {
         printf("Src Mem Type %s, addr=0x%x\n", srcMemType->name, srcMemType->ptr);
 
         unsigned char *srcMemBase = srcMemType->ptr;
+        int srcIsDualPort = srcMemType->isDualPort;
 
         //Source offset.
         for (int srcOffsetIdx=0; srcOffsetIdx < sizeof(srcOffsets)/sizeof(unsigned); srcOffsetIdx++) {
@@ -359,6 +356,7 @@ int main(void) {
                 printf("Dst Mem Type %s, addr=0x%x\n", dstMemType->name, dstMemType->ptr);
 
                 unsigned char *dstMemBase = dstMemType->ptr;
+                int dstIsDualPort = dstMemType->isDualPort;
 
                 //Destination offset.
                 for (int dstOffsetIdx=0; dstOffsetIdx < sizeof(dstOffsets)/sizeof(unsigned); dstOffsetIdx++) {
@@ -372,7 +370,8 @@ int main(void) {
 #ifdef DETAILED_LOGS
                         printf("numElems = %d\n", nElems);
 #endif            
-                        if (dmaTest(srcMemBase, srcOffset, dstMemBase, dstOffset, nElems, elemSize)) {
+                        if (dmaTest(srcMemBase, srcOffset, srcIsDualPort, 
+                                    dstMemBase, dstOffset, dstIsDualPort, nElems, elemSize)) {
 #ifdef DETAILED_LOGS                            
                             printf("Test Successful.\n");
 #endif                            

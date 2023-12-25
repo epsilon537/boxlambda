@@ -171,7 +171,7 @@ static int fatfs_test(void)
     	return -1;
 	}
 
-  printf("FatFS Test Completed Successfully!\n");
+  printf("Test Successful.\n");
   return 0;
 }
 

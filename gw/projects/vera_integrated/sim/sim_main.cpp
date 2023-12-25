@@ -124,7 +124,7 @@ static void tick(void) {
 
     //Stop frame recording on frame 3.
     if (framecount == 3) {
-      mvprintw(0, 0, "[%lld]", contextp->time());
+      mvprintw(0, 0, "[%lud]", contextp->time());
       mvprintw(23, 0, "Closing frame file...\n\r");
       refresh();
       fclose(frameFile);
@@ -169,15 +169,16 @@ static void tick(void) {
 
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
-  top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
+  top->uart_rx = (*uart)(top->uart_tx,
+  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 
   //Detect and print changes to UART
   if (uartRxStringPrev != uart->get_rx_string()) {
 
     //Positional printing using ncurses.
-    mvprintw(0, 0, "[%lld]", contextp->time());
+    mvprintw(0, 0, "[%lud]", contextp->time());
     mvprintw(1, 0, "UART Out:");
-    mvprintw(2, 0, uart->get_rx_string().c_str());
+    mvprintw(2, 0, "%s", uart->get_rx_string().c_str());
     refresh();
 
     //Update change detectors

@@ -1,4 +1,4 @@
-SRC_DIR = /mnt/c/work/litex/litex/litex/build/sim/core
+SRC_DIR = /home/epsilon/work/boxlambda/sub/litex/litex/build/sim/core
 INC_DIR = 
-TAPCFG_DIRECTORY = /mnt/c/work/litex/pythondata-misc-tapcfg/pythondata_misc_tapcfg/data
+TAPCFG_DIRECTORY = /home/epsilon/work/boxlambda/sub/pythondata-misc-tapcfg/pythondata_misc_tapcfg/data
 

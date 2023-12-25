@@ -106,7 +106,8 @@ static void tick(void) {
 
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
-  top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
+  top->uart_rx = (*uart)(top->uart_tx, 
+  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 
   //Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n')  {
@@ -225,7 +226,7 @@ int main(int argc, char** argv, char** env) {
 
     // Checks for automated testing.
     int res = 0;
-    std::string uartCheckString("SDSPI Test successful.");
+    std::string uartCheckString("Test Successful.");
 
     if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
       printf("Test failed\n");

@@ -1,11 +1,12 @@
 #FPGA and simulation builds have different top-levels.
 if(CMAKE_BUILD_TYPE STREQUAL "fpga")
-    set(top_module vera_test_soc)
+    set(top_module top)
 else()
     set(top_module sim_main)
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "sim")
+    SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
     #This build has an SDL dependency. VERA's VGA output is rendered onto an SDL window.
     find_package(SDL2 REQUIRED)
 endif()

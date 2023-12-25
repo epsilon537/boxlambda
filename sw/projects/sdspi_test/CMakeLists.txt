@@ -1,6 +1,6 @@
 add_executable(sdspi_test
 	EXCLUDE_FROM_ALL
-	main.c
+	sdspi_test_main.c
 	sdtest.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
 	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c

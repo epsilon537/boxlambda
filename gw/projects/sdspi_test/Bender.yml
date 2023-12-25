@@ -7,54 +7,44 @@ package:
 
 dependencies:
   # Path dependency.
-  wb_gpio: { path: "../../components/wb_gpio" }
-  wbuart32: { path: "../../components/wbuart32" }
-  ibex_wb_common: { path: "../../components/ibex_wb_common" }
-  ibex_wb_core: { path: "../../components/ibex_wb_core" }
-  riscv-dbg: { path: "../../components/riscv-dbg" }
-  litedram: { path: "../../components/litedram" }
-  vera: { path: "../../components/vera" }
-  sdspi: { path: "../../components/sdspi" }
-  reset_ctrl: { path: "../../components/reset_ctrl" }
-  boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
-
+  boxlambda_soc: { path: "../../components/boxlambda_soc" }
+  
 sources:
   - target: constraints
     files:
-      - constrs/Arty-A7-35-Master.xdc
+      - ../top/constrs/boxlambda_soc.xdc
   - target: arty-a7-35
     defines:
-      VRAM_SIZE_BYTES: (64*1024)
-    files:
-      - rtl/sdspi_test_soc.sv
-  - target: arty-a7-100
-    defines:
-      VRAM_SIZE_BYTES: (128*1024)
-    files:
-      - rtl/sdspi_test_soc.sv
-  - target: verilator
-    files:
-      - sim/sim_main.cpp
-      - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
-      - ../../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
-      - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c
-      - lint.vlt
-      - ../../../sub/riscv-dbg/tb/SimJTAG.sv
-      - ../../../sub/sdspi/bench/cpp/sdspisim.cpp
-      - sim/sim_main.sv
-  - target: any(vivado,verilator)
-    defines:
+      VRAM_SIZE_BYTES: 65536
+      DPRAM_SIZE_BYTES: 65536
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
+      #YM2149: ~
       SDSPI: ~
       #DRAM: ~
       #VERA: ~
-      
-    #spram and timer should be separate components, but since I won't use them
-    #as Boxlambda components, I'm leaving them here in the hello world example
+      #PICORV_DMA: ~
+      #TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../../../sub/ibex_wb/soc/common/rtl/wb_interconnect_sharedbus.sv
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/spramx32.sv      
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_spramx32.sv
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_timer.sv
+      - ../top/rtl/top.sv
+  - target: arty-a7-100
+    defines:
+      VRAM_SIZE_BYTES: 131072
+      DPRAM_SIZE_BYTES: 262144
+      NO_MODPORT_EXPRESSIONS: ~
+      DEBUG_MODULE_ACTIVE: ~
+      #YM2149: ~
+      SDSPI: ~
+      #DRAM: ~
+      #VERA: ~
+      #PICORV_DMA: ~
+      #TRACE_ALL_INSTRUCTIONS: ~
+    files:
+      - ../top/rtl/top.sv
+  - target: verilator
+    files:
+      - sim/sim_main.cpp
+      - ../top/sim/sim_main.sv
+      - ../top/lint.vlt
+            
 

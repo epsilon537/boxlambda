@@ -15,7 +15,6 @@
 
 static struct uart uart0;
 
-static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
 
@@ -99,16 +98,6 @@ int main(void) {
     printf("Memory port 0 test successful.\n");
   }
 
-  printf("Memory Test through port 1:\n");
-
-  if(!memtest((unsigned int *) MAIN_RAM_BASE2, memtest_size)) {
-    printf("Memory port 1 test failed!\n");
-    while(1);
-  }
-  else {
-    printf("Memory port 1 test successful.\n");
-  }
-
   printf("DDR instruction access test:\n");
 
   //Copy code to DDR
@@ -131,7 +120,7 @@ int main(void) {
     while(1);
   }
 
-  printf("Test completed successfully.\n");
+  printf("Test Successful.\n");
 
   for (;;) {
     gpio_set_output(&gpio0, leds);

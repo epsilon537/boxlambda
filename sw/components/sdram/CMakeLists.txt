@@ -9,8 +9,7 @@ target_sources(sdram
 target_compile_definitions(sdram
     PUBLIC
         -DCONFIG_CPU_NOP="nop"
-        -DMAIN_RAM_BASE=0x40000000UL
-        -DMAIN_RAM_BASE2=0x50000000UL
+        -DMAIN_RAM_BASE=0x20000000UL
         -DCSR_BASE=0x10030000
         -DSDRAM_TEST_DISABLE
 )

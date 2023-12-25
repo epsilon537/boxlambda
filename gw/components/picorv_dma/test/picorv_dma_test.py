@@ -9,8 +9,8 @@ import struct
 
 #Cocotb-based unit testcases for picorv_dma
 
-wb0_transactions = []
-wb1_transactions = []
+wbr_transactions = []
+wbw_transactions = []
 
 async def sys_clk_div(dut):
     while True:
@@ -18,11 +18,11 @@ async def sys_clk_div(dut):
         dut.sys_clk.value = not dut.sys_clk.value 
 
 async def init(dut):
-    global wb0_transactions, wb1_transactions
+    global wbr_transactions, wbw_transactions
 
     #Clear the wishbone transaction lists.
-    wb0_transactions = []
-    wb1_transactions = []
+    wbr_transactions = []
+    wbw_transactions = []
 
     dut.sys_clk.value = 0
     dut.sys_clkx2.value = 0
@@ -45,14 +45,10 @@ async def init(dut):
     dut.wbs_stb.value = 0
     dut.wbs_we.value = 0
     dut.irq_in.value = 0
-    dut.wbm0_dat_i.value = 0
-    dut.wbm0_ack_i.value = 0
-    dut.wbm0_stall_i.value = 0
-    dut.wbm0_err_i.value = 0
-    dut.wbm1_dat_i.value = 0
-    dut.wbm1_ack_i.value = 0
-    dut.wbm1_stall_i.value = 0
-    dut.wbm1_err_i.value = 0
+    dut.wbm_dat_i.value = 0
+    dut.wbm_ack_i.value = 0
+    dut.wbm_stall_i.value = 0
+    dut.wbm_err_i.value = 0
 
     await Timer(1, units="ns")  # wait 1 clock
 
@@ -137,23 +133,23 @@ async def wb_write(dut, addr, val):
 
 #Asynchronous task emulating a Wishbone slave. Received transactions are recorded in a
 #wb_transactions list.
-async def wb0_slave_emulator(dut, delay_ack):
+async def wb_slave_emulator(dut, delay_ack):
     while True:
         await RisingEdge(dut.sys_clk)
-        if dut.wbm0_stb_o.value == 1:
+        if dut.wbm_stb_o.value == 1:
             dut._log.info("WB: stb detected")
 
-            if dut.wbm0_we_o.value == 1:
+            if dut.wbm_we_o.value == 1:
                 dut._log.info("WB write, addr: 0x%x, data: 0x%x, sel: 0x%x", 
-                              int(dut.wbm0_adr_o.value), int(dut.wbm0_dat_o.value), int(dut.wbm0_sel_o.value))
-                wb0_transactions.append(('write', int(dut.wbm0_adr_o.value), int(dut.wbm0_dat_o.value), int(dut.wbm0_sel_o)))       
+                              int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o.value))
+                wbw_transactions.append(('write', int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o)))       
             else:
                 #Return random data to read transactions
                 dat_r = random.randint(0, 0xffffffff)
-                dut.wbm0_dat_i.value = dat_r
+                dut.wbm_dat_i.value = dat_r
                 dut._log.info("WB read, addr: 0x%x, data: 0x%x, sel: 0x%x", 
-                              int(dut.wbm0_adr_o.value), dat_r, int(dut.wbm0_sel_o))
-                wb0_transactions.append(('read', int(dut.wbm0_adr_o.value), dat_r, int(dut.wbm0_sel_o)))
+                              int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o))
+                wbr_transactions.append(('read', int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o)))
 
             await RisingEdge(dut.sys_clk)
 
@@ -163,46 +159,11 @@ async def wb0_slave_emulator(dut, delay_ack):
                 await ClockCycles(dut.sys_clk, responseDelay)
 
             dut._log.info("WB: signalling ACK.")
-            dut.wbm0_ack_i.value = 1 #ACK
+            dut.wbm_ack_i.value = 1 #ACK
 
             await RisingEdge(dut.sys_clk)
             
-            dut.wbm0_ack_i.value = 0
-            await Timer(1, units="ns")
-
-#Asynchronous task emulating a Wishbone slave. Received transactions are recorded in a
-#wb_transactions list.
-async def wb1_slave_emulator(dut, delay_ack):
-    while True:
-        await RisingEdge(dut.sys_clk)
-        if dut.wbm1_stb_o.value == 1:
-            dut._log.info("WB: stb detected")
-
-            if dut.wbm1_we_o.value == 1:
-                dut._log.info("WB write, addr: 0x%x, data: 0x%x, sel: 0x%x", 
-                              int(dut.wbm1_adr_o.value), int(dut.wbm1_dat_o.value), int(dut.wbm1_sel_o.value))
-                wb1_transactions.append(('write', int(dut.wbm1_adr_o.value), int(dut.wbm1_dat_o.value), int(dut.wbm1_sel_o)))       
-            else:
-                #Return random data to read transactions
-                dat_r = random.randint(0, 0xffffffff)
-                dut.wbm1_dat_i.value = dat_r
-                dut._log.info("WB read, addr: 0x%x, data: 0x%x, sel: 0x%x", 
-                              int(dut.wbm1_adr_o.value), dat_r, int(dut.wbm1_sel_o))
-                wb1_transactions.append(('read', int(dut.wbm1_adr_o.value), dat_r, int(dut.wbm1_sel_o)))
-
-            await RisingEdge(dut.sys_clk)
-            
-            if delay_ack:       
-                responseDelay = random.randint(0, 10) #Randomly delay ack 0-10 ticks
-                dut._log.info("WB: delaying ack %d ns", responseDelay)
-                await ClockCycles(dut.sys_clk, responseDelay)
-
-            dut._log.info("WB: signalling ACK.")
-            dut.wbm1_ack_i.value = 1 #ACK
-
-            await RisingEdge(dut.sys_clk)
-            
-            dut.wbm1_ack_i.value = 0
+            dut.wbm_ack_i.value = 0
             await Timer(1, units="ns")
 
 #Test PicoRV reset
@@ -422,8 +383,8 @@ async def wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, srcTran
 
 #WB Master R/W word access using single/individual transactions, i.e. not burst mode.
 @cocotb.test()
-async def wb0_to_wb1_wordcopy_test(dut):
-    global wb0_transactions, wb1_transactions
+async def wb_to_wb_wordcopy_test(dut):
+    global wbr_transactions, wbw_transactions
 
     await init(dut)
 
@@ -432,9 +393,8 @@ async def wb0_to_wb1_wordcopy_test(dut):
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_single.picobin")
 
-    wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=True))
-    wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=True))
-
+    wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
+    
     #Write PM memory
     for ii in range(len(pm_data)):
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
@@ -448,17 +408,11 @@ async def wb0_to_wb1_wordcopy_test(dut):
     srcAddr = random.randint(0x10004000, 0x47ff0000) & ~3
     dstAddr = random.randint(0x58000000, 0x5fff0000) & ~3
 
-    wb0_transactions = []
-    wb1_transactions = []
-    await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wb0_transactions, wb1_transactions)
+    wbr_transactions = []
+    wbw_transactions = []
+    await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wbr_transactions, wbw_transactions)
 
-    #For good measure, test the other directions as well
-    wb1_transactions = []
-    wb0_transactions = []
-    await wb_to_wb_wordcopy_test_helper(dut, numWords, dstAddr, srcAddr, wb1_transactions, wb0_transactions)
-
-    wb0_slave_task.kill()
-    wb1_slave_task.kill()
+    wb_slave_task.kill()
 
 async def wb_to_wb_bytecopy_test_helper(dut, numBytes, srcAddr, dstAddr, srcTransactions, dstTransactions):
     dut._log.info("Test: Configuring DMA request.")
@@ -502,7 +456,7 @@ async def wb_to_wb_bytecopy_test_helper(dut, numBytes, srcAddr, dstAddr, srcTran
 #WB Master R/W byte access, using individual byte transactions, not burst mode.
 @cocotb.test()
 async def wb_to_wb_bytecopy_test(dut):
-    global wb0_transactions, wb1_transactions
+    global wbr_transactions, wbw_transactions
 
     await init(dut)
 
@@ -511,8 +465,7 @@ async def wb_to_wb_bytecopy_test(dut):
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_bytecopy_single.picobin")
 
-    wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=True))
-    wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=True))
+    wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
 
     #Write PM memory
     for ii in range(len(pm_data)):
@@ -526,17 +479,12 @@ async def wb_to_wb_bytecopy_test(dut):
     srcAddr = random.randint(0x10004000, 0x4fff0000)
     dstAddr = random.randint(0x50000000, 0x5fff0000)
 
-    wb0_transactions = []
-    wb1_transactions = []
-    await wb_to_wb_bytecopy_test_helper(dut, numBytes, srcAddr, dstAddr, wb0_transactions, wb1_transactions)
+    wbr_transactions = []
+    wbw_transactions = []
+    await wb_to_wb_bytecopy_test_helper(dut, numBytes, srcAddr, dstAddr, wbr_transactions, wbw_transactions)
 
-    #For good measure, do it the other way around as well
-    wb0_transactions = []
-    wb1_transactions = []
-    await wb_to_wb_bytecopy_test_helper(dut, numBytes, dstAddr, srcAddr, wb1_transactions, wb0_transactions)
-
-    wb0_slave_task.kill()
-    wb1_slave_task.kill()
+    wb_slave_task.kill()
+    wb_slave_task.kill()
 
 #Test PicoRV data access to Program Memory
 @cocotb.test()
@@ -582,8 +530,8 @@ async def picorv_progmem_data_access(dut):
 
 #WB Master R/W burst word access
 @cocotb.test()
-async def wb0_to_wb1_wordcopy_burst_test(dut):
-    global wb0_transactions, wb1_transactions
+async def wb_to_wb_wordcopy_burst_test(dut):
+    global wbr_transactions, wbw_transactions
 
     #Test all four offset cases.
     for offset in range(4):
@@ -595,8 +543,7 @@ async def wb0_to_wb1_wordcopy_burst_test(dut):
         #One extra ../ because the test runs from the sim_build subdirectory
         pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
 
-        wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=True))
-        wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=True))
+        wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
 
         #Write PM memory
         for ii in range(len(pm_data)):
@@ -611,17 +558,16 @@ async def wb0_to_wb1_wordcopy_burst_test(dut):
         srcAddr = random.randint(0x10004000, 0x47ff0000) & ~3
         dstAddr = offset + (random.randint(0x58000000, 0x5fff0000) & ~3)
 
-        wb0_transactions = []
-        wb1_transactions = []
-        await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wb0_transactions, wb1_transactions, offset)
+        wbr_transactions = []
+        wbw_transactions = []
+        await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wbr_transactions, wbw_transactions, offset)
 
-        wb0_slave_task.kill()
-        wb1_slave_task.kill()
+        wb_slave_task.kill()
         
 #WB Master R/W burst word access, without delays in slave. Read from WB port 0, write to WB port 1.
 @cocotb.test()
-async def wb0_to_wb1_wordcopy_burst_test_fast(dut):
-    global wb0_transactions, wb1_transactions
+async def wb_to_wb_wordcopy_burst_test_fast(dut):
+    global wbr_transactions, wbw_transactions
 
     for offset in range(4):
         await init(dut)
@@ -631,8 +577,7 @@ async def wb0_to_wb1_wordcopy_burst_test_fast(dut):
         #byte-offset between source and destination.
         pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
 
-        wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
-        wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=False))
+        wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=False))
 
         #Write PM memory
         for ii in range(len(pm_data)):
@@ -647,17 +592,16 @@ async def wb0_to_wb1_wordcopy_burst_test_fast(dut):
         srcAddr = random.randint(0x10004000, 0x47ff0000) & ~3
         dstAddr = offset + (random.randint(0x58000000, 0x5fff0000) & ~3)
 
-        wb0_transactions = []
-        wb1_transactions = []
-        await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wb0_transactions, wb1_transactions, offset)
+        wbr_transactions = []
+        wbw_transactions = []
+        await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wbr_transactions, wbw_transactions, offset)
 
-        wb0_slave_task.kill()
-        wb1_slave_task.kill()
+        wb_slave_task.kill()
         
 #WB Master R/W burst word access, on one bus, without delays in slave. Read from and write to WB port 0. Performance test.
 @cocotb.test()
-async def wb0_to_wb0_wordcopy_burst_test_fast(dut):
-    global wb0_transactions, wb1_transactions
+async def wb_to_wb_wordcopy_burst_test_fast(dut):
+    global wbr_transactions, wbw_transactions
 
     for offset in range(4):
         await init(dut)
@@ -667,8 +611,7 @@ async def wb0_to_wb0_wordcopy_burst_test_fast(dut):
         #byte-offset between source and destination.
         pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
 
-        wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
-        wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=False))
+        wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=False))
 
         #Write PM memory
         for ii in range(len(pm_data)):
@@ -683,8 +626,8 @@ async def wb0_to_wb0_wordcopy_burst_test_fast(dut):
         srcAddr = random.randint(0x10004000, 0x43ff0000) & ~3
         dstAddr = offset + (random.randint(0x44000000, 0x4fff0000) & ~3)
 
-        wb0_transactions = []
-        wb1_transactions = []
+        wbr_transactions = []
+        wbw_transactions = []
         
         dut._log.info("Test: Configuring DMA request.")
         dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
@@ -708,18 +651,17 @@ async def wb0_to_wb0_wordcopy_burst_test_fast(dut):
                 dut._log.info("hir_reg[3] = %s", res)
         
         #Check the recorded transactions
-        assert len(wb0_transactions) == numWords*2
-        assert len(wb1_transactions) == 0
+        assert len(wbr_transactions) == numWords
+        assert len(wbw_transactions) == numWords
 
         timeout_task.kill()
 
-        wb0_slave_task.kill()
-        wb1_slave_task.kill()
+        wb_slave_task.kill()
         
 #WB Master R/W single word access, on WB port 0, without delays in slave. Performance test.
 @cocotb.test()
-async def wb0_to_wb0_wordcopy_single_test_fast(dut):
-    global wb0_transactions, wb1_transactions
+async def wb_to_wb_wordcopy_single_test_fast(dut):
+    global wbr_transactions, wbw_transactions
 
     
     await init(dut)
@@ -729,8 +671,7 @@ async def wb0_to_wb0_wordcopy_single_test_fast(dut):
     #single/individual word transactions, i.e. non-burst-mode.
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_single.picobin")
 
-    wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
-    wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=False))
+    wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=False))
 
     #Write PM memory
     for ii in range(len(pm_data)):
@@ -745,8 +686,8 @@ async def wb0_to_wb0_wordcopy_single_test_fast(dut):
     srcAddr = random.randint(0x10004000, 0x43ff0000) & ~3
     dstAddr = random.randint(0x44000000, 0x4fff0000) & ~3
 
-    wb0_transactions = []
-    wb1_transactions = []
+    wbr_transactions = []
+    wbw_transactions = []
     
     dut._log.info("Test: Configuring DMA request.")
     dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
@@ -770,18 +711,17 @@ async def wb0_to_wb0_wordcopy_single_test_fast(dut):
             dut._log.info("hir_reg[3] = %s", res)
     
     #Check the recorded transactions
-    assert len(wb0_transactions) == numWords*2
-    assert len(wb1_transactions) == 0
+    assert len(wbr_transactions) == numWords
+    assert len(wbw_transactions) == numWords
 
     timeout_task.kill()
 
-    wb0_slave_task.kill()
-    wb1_slave_task.kill()
+    wb_slave_task.kill()
 
 #WB Master single word access, on one bus, without stalls and delays in slave
 @cocotb.test()
-async def wb0_to_wb0_wordcopy_single_unrolled_test_fast(dut):
-    global wb0_transactions, wb1_transactions
+async def wb_to_wb_wordcopy_single_unrolled_test_fast(dut):
+    global wbr_transactions, wbw_transactions
 
     await init(dut)
 
@@ -791,8 +731,7 @@ async def wb0_to_wb0_wordcopy_single_unrolled_test_fast(dut):
     #This program variant uses 4x loop unrolling in the wordcopy loop.
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_single_unrolled.picobin")
 
-    wb0_slave_task = cocotb.start_soon(wb0_slave_emulator(dut, delay_ack=False))
-    wb1_slave_task = cocotb.start_soon(wb1_slave_emulator(dut, delay_ack=False))
+    wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=False))
 
     #Write PM memory
     for ii in range(len(pm_data)):
@@ -807,8 +746,8 @@ async def wb0_to_wb0_wordcopy_single_unrolled_test_fast(dut):
     srcAddr = random.randint(0x10004000, 0x43ff0000) & ~3
     dstAddr = random.randint(0x44000000, 0x4fff0000) & ~3
 
-    wb0_transactions = []
-    wb1_transactions = []
+    wbr_transactions = []
+    wbw_transactions = []
     
     dut._log.info("Test: Configuring DMA request.")
     dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
@@ -832,13 +771,11 @@ async def wb0_to_wb0_wordcopy_single_unrolled_test_fast(dut):
             dut._log.info("hir_reg[3] = %s", res)
     
     #Check the recorded transactions
-    assert len(wb0_transactions) == numWords*2
-    assert len(wb1_transactions) == 0
+    assert len(wbr_transactions) == numWords
+    assert len(wbw_transactions) == numWords
 
     timeout_task.kill()
-
-    wb0_slave_task.kill()
-    wb1_slave_task.kill()
+    wb_slave_task.kill()
 
 if __name__ == "__main__":
     #Cocotb Test Runner setup: pass in the verilog sources and the top-level.

@@ -65,16 +65,5 @@ extern "C" void litex_sim_init(void **out)
     user_port_wishbone_0[8].signal = &sim->user_port_wishbone_0_err;
     litex_sim_register_pads(user_port_wishbone_0, (char*)"user_port_wishbone_0", 0);
 
-    user_port_wishbone_1[0].signal = &sim->user_port_wishbone_1_adr;
-    user_port_wishbone_1[1].signal = &sim->user_port_wishbone_1_dat_w;
-    user_port_wishbone_1[2].signal = &sim->user_port_wishbone_1_dat_r;
-    user_port_wishbone_1[3].signal = &sim->user_port_wishbone_1_sel;
-    user_port_wishbone_1[4].signal = &sim->user_port_wishbone_1_cyc;
-    user_port_wishbone_1[5].signal = &sim->user_port_wishbone_1_stb;
-    user_port_wishbone_1[6].signal = &sim->user_port_wishbone_1_ack;
-    user_port_wishbone_1[7].signal = &sim->user_port_wishbone_1_we;
-    user_port_wishbone_1[8].signal = &sim->user_port_wishbone_1_err;
-    litex_sim_register_pads(user_port_wishbone_1, (char*)"user_port_wishbone_1", 0);
-
     *out=sim;
 }

@@ -51,3 +51,9 @@
 [submodule "sub/litedram"]
 	path = sub/litedram
 	url = https://github.com/epsilon537/litedram
+[submodule "sub/wb2axip"]
+	path = sub/wb2axip
+	url = https://github.com/epsilon537/wb2axip
+[submodule "sub/verilog-wishbone"]
+	path = sub/verilog-wishbone
+	url = https://github.com/epsilon537/verilog-wishbone

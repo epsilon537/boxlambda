@@ -1,5 +1,21 @@
 `verilator_config
 
+// DESCRIPTION: Verilator output: Waivers generated with --waiver-output
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
@@ -13,6 +29,20 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -62,28 +92,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
-
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
@@ -97,12 +105,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -152,6 +154,20 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
 
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
 
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
@@ -166,20 +182,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
@@ -193,34 +195,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -269,6 +243,28 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -283,6 +279,12 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -378,12 +380,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
 
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
@@ -391,38 +387,6 @@ lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -m
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
 
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -455,20 +419,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
-
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -552,12 +502,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
 
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
@@ -585,6 +529,64 @@ lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -m
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
 
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p0_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p1_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p2_address' generates 14 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'soc_ddrphy_dfi_p3_address' generates 14 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -1614,58 +1616,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h7' generates 3 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h3' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h5' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h6' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h7' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h3' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h5' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h6' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h7' generates 3 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
@@ -1744,6 +1694,36 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h7' generates 3 bits."
 
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h3' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h5' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h6' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h7' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
@@ -1771,6 +1751,28 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h6' generates 3 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h7' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h2' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '2'h3' generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h4' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h5' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h6' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '3'h7' generates 3 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 4 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -1788,22 +1790,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
@@ -1817,14 +1803,10 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 128 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
 
@@ -1837,14 +1819,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -1872,55 +1846,7 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 2 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h0' generates 1 bits."
-
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 2 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator SHIFTL expects 4 bits on the LHS, but LHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -1960,43 +1886,9 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator SUB expects 26 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -2005,6 +1897,18 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'litedramcore_wishbone_adr' generates 30 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -2300,17 +2204,9 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
-
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits."
 
@@ -2672,22 +2568,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 2 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
-
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'csrbank0_init_done0_w' generates 1 bits."
@@ -2784,12 +2664,6 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 9 bits on the Case Item, but Case Item's CONST '5'h18' generates 5 bits."
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'wb_ctrl_adr'[1:0]"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_p_0_adr'[31:28,1:0]"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/common/rtl/litedram_wrapper.sv" -match "Bits of signal are not used: 'user_port_wishbone_p_1_adr'[31:28,1:0]"
-
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'sim_trace'"
 
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'csrbank0_init_done0_we'"
@@ -2839,6 +2713,38 @@ lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" 
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'csrbank1_dfii_pi3_wrdata0_we'"
 
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'interface0_bank_bus_dat_w'[31:1]"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin0_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin0_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin1_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin1_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin2_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin2_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin3_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin3_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin4_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin4_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin5_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin5_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin6_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin6_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin7_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin7_request'"
 
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'litedramcore_wishbone_adr'[29:14]"
 
@@ -3092,73 +2998,39 @@ lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" 
 
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramcore_zqcs_timer_count0'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_rdata_ready0'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'soc_litedramnativeportconverter_cmd_addr'[1:0]"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_wdata_first0'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_cmd_buffer_source_first'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_wdata_last0'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_cmd_buffer_source_last'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport0_wdata_valid0'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_rdata_converter_converter_source_payload_valid_token_count'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_rdata_ready0'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_rdata_converter_source_first'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_wdata_first0'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_rdata_converter_source_last'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_wdata_last0'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_rdata_fifo_wrport_dat_r'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeport1_wdata_valid0'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_wdata_converter_converter_source_payload_valid_token_count'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'soc_litedramnativeportconverter0_cmd_addr'[1:0]"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_wdata_converter_source_first'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_cmd_buffer_source_first'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_wdata_converter_source_last'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_cmd_buffer_source_last'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_wdata_fifo_source_first'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_rdata_converter_converter_source_payload_valid_token_count'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_wdata_fifo_source_last'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_rdata_converter_source_first'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter_wdata_fifo_wrport_dat_r'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_rdata_converter_source_last'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_port_rdata_ready'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_rdata_fifo_wrport_dat_r'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_port_wdata_first'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_converter_converter_source_payload_valid_token_count'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_port_wdata_last'"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_converter_source_first'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_converter_source_last'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_fifo_source_first'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_fifo_source_last'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter0_wdata_fifo_wrport_dat_r'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'soc_litedramnativeportconverter1_cmd_addr'[1:0]"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_cmd_buffer_source_first'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_cmd_buffer_source_last'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_rdata_converter_converter_source_payload_valid_token_count'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_rdata_converter_source_first'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_rdata_converter_source_last'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_rdata_fifo_wrport_dat_r'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_converter_converter_source_payload_valid_token_count'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_converter_source_first'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_converter_source_last'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_fifo_source_first'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_fifo_source_last'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_litedramnativeportconverter1_wdata_fifo_wrport_dat_r'"
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'soc_port_wdata_valid'"
 
 lint_off -rule CASEINCOMPLETE -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Case values incompletely covered (example pattern 0x0)"
 
@@ -3275,188 +3147,6 @@ lint_off -rule CASEINCOMPLETE -file "*/gw/components/litedram/sim/rtl/litedram.v
 lint_off -rule CASEINCOMPLETE -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Case values incompletely covered (example pattern 0x2)"
 
 lint_off -rule CASEINCOMPLETE -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Case values incompletely covered (example pattern 0x19)"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
 
 lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
 

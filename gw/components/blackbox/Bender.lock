@@ -1,0 +1,7 @@
+packages:
+  ibex_wb_common:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/ibex_wb_common
+    dependencies: []
