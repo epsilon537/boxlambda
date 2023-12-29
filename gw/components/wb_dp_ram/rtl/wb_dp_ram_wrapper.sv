@@ -43,9 +43,6 @@ module wb_dp_ram_wrapper #
     logic [3:0]             a_ram_we, b_ram_we;
     logic                   a_ack, b_ack;
 
-    assign a_ram_we   = {4{a_we_i&a_cyc_i}} & a_sel_i;
-    assign b_ram_we   = {4{b_we_i&b_cyc_i}} & b_sel_i;
-
     /* Wishbone control */
     assign a_valid    = a_cyc_i & a_stb_i;
     assign b_valid    = b_cyc_i & b_stb_i;
@@ -53,7 +50,10 @@ module wb_dp_ram_wrapper #
     assign a_err_o   = 1'b0;
     assign b_stall_o = 1'b0;
     assign b_err_o   = 1'b0;
-    
+
+    assign a_ram_we   = {4{a_we_i&a_valid}} & a_sel_i;
+    assign b_ram_we   = {4{b_we_i&b_valid}} & b_sel_i;
+
     always_ff @(posedge clk) begin
         if (rst) begin
             a_ack <= 1'b0;
