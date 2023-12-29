@@ -1,7 +1,7 @@
 //A top-level of Out-of-Context synthesis of a wbxbar module.
 module	wbxbar_ooc #(
-	parameter	NM = 2, NS=8,
-	parameter	AW = 30, DW=32,
+	parameter	NM = 6, NS=21,
+	parameter	AW = 28, DW=32,
 	parameter	[NS*AW-1:0]	SLAVE_ADDR = {
 		{ 3'b111, {(AW-3){1'b0}} },
 		{ 3'b110, {(AW-3){1'b0}} },
@@ -40,6 +40,6 @@ module	wbxbar_ooc #(
 		.AW(AW), .DW(DW),
 		.SLAVE_ADDR(SLAVE_ADDR),
 		.SLAVE_MASK(SLAVE_MASK),
-		.OPT_DBLBUFFER(1'b1),
+		.OPT_DBLBUFFER(1'b0),
 		.OPT_LOWPOWER(1'b0)  ) wbxbar_inst(.*);
 endmodule	

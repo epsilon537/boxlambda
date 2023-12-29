@@ -31,11 +31,11 @@ static struct gpio gpio1;
 
 /*Create some data buffers in CMEM by mapping them to the .cmem_bss segment.*/
 char cmem_str[32] __attribute__ ((section (".cmem_bss")));
-int cmem_buf_0[256]  __attribute__ ((section (".cmem_bss")));
-int cmem_buf_1[256]  __attribute__ ((section (".cmem_bss")));
+volatile int cmem_buf_0[256]  __attribute__ ((section (".cmem_bss")));
+volatile int cmem_buf_1[256]  __attribute__ ((section (".cmem_bss")));
 /*Also create some data buffers in DMEM (default BSS segment).*/
-int dmem_buf_0[256];
-int dmem_buf_1[256];
+volatile int dmem_buf_0[256];
+volatile int dmem_buf_1[256];
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
@@ -90,7 +90,7 @@ void dmaCopyStart(unsigned char* srcPtr, unsigned char* dstPtr, unsigned numElem
     picorv_hir_reg_wr(PICORV_HIR_REG_CTRL_STAT, DMA_START);    
 }
 
-int dualCopyTest(unsigned* src_0, unsigned* dst_0, unsigned* src_1, unsigned* dst_1) {
+int dualCopyTest(volatile unsigned* src_0, volatile unsigned* dst_0, volatile unsigned* src_1, volatile unsigned* dst_1) {
     //Fill source buffers with some random data and destination with 0x55s
     for (int ii=0; ii<256; ii++) {
         src_0[ii] = (unsigned)rand();
@@ -110,7 +110,7 @@ int dualCopyTest(unsigned* src_0, unsigned* dst_0, unsigned* src_1, unsigned* ds
     waitDMAcomplete();
 
     //Check the copy.
-    if (memcmp(src_0, dst_0, 256*sizeof(unsigned))) {
+    if (memcmp((void*)src_0, (void*)dst_0, 256*sizeof(unsigned))) {
         printf("DMA copy failed.\n");
 
         for (int ii=0; ii<256; ii++) {
@@ -120,7 +120,7 @@ int dualCopyTest(unsigned* src_0, unsigned* dst_0, unsigned* src_1, unsigned* ds
         return -1;
     }
 
-    if (memcmp(src_1, dst_1, 256*sizeof(unsigned))) {
+    if (memcmp((void*)src_1, (void*)dst_1, 256*sizeof(unsigned))) {
         printf("Memcpy failed.\n");
 
         for (int ii=0; ii<256; ii++) {
@@ -142,10 +142,43 @@ int main(void) {
     gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
     gpio_set_direction(&gpio1, 0x00000000); //4 inputs
 
+    gpio_clear_pin(&gpio0, 1);
+
     printf("Executing code from DMEM...\n");
     code_in_dmem((char*)&code_in_dmem);
 
-    printf("CMEM data access...\n");
+    printf("CMEM word copy...\n");
+
+    volatile int *src = cmem_buf_0;
+    volatile int *dst = cmem_buf_1;
+    volatile int *end = &src[256];
+
+    gpio_set_pin(&gpio0, 1);
+
+    while (src < end) {
+        *dst = *src;
+        ++src;
+        ++dst;
+    }
+
+    gpio_clear_pin(&gpio0, 1);
+
+    printf("DMEM word copy...\n");
+
+    src = dmem_buf_0;
+    dst = dmem_buf_1;
+    end = &src[256];
+
+    gpio_set_pin(&gpio0, 1);
+
+    while (src < end) {
+        *dst = *src;
+        ++src;
+        ++dst;
+    }
+    
+    gpio_clear_pin(&gpio0, 1);
+
     char *test_str = "Hello CMEM!";
     strcpy(cmem_str, test_str);
     printf("%s\n", cmem_str);
