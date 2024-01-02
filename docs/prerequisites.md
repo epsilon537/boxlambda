@@ -81,7 +81,7 @@ To install the BoxLambda fork of LiteX, go through the following steps:
 
 ```
 cd <boxlamdba src tree>/sub/litex
-./litex_setup.py --dev --init --install --user
+./litex_setup.py --init --install --user
 ```
 
 ### CMake
@@ -101,6 +101,8 @@ export PATH=/usr/bin:$PATH
 
 ### SDL2
 
+SDL2 is needed to run Verilator simulation testcases involving the VERA graphics core.
+
 [https://wiki.libsdl.org/SDL2/Installation](https://wiki.libsdl.org/SDL2/Installation)
   
 Also, make sure to set environment variable **SDL2_DIR** to point to the SDL2 directory containing files *SDL2Config.cmake* or *sdl2-config.cmake*. In my case (Ubuntu WSL), I added the following line to my *~/.bashrc*:
@@ -110,12 +112,18 @@ export SDL2_DIR=/usr/lib/x86_64-linux-gnu/cmake/SDL2/
 ```
 
 ### PortAudio
+
+PortAudio is needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
+
 ```
 sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
 sudo apt-get install ffmpeg
 ```
 
 ### Chromaprint
+
+PortAudio is needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
+
 ```
 sudo apt-get install libchromaprint-tools
 ```
@@ -131,6 +139,9 @@ sudo apt-get install python3-pip
 ```
 
 ### NumPy, SciPy, SoundDevice, and Matplotlib
+
+These Python modules are needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
+
 ```
 pip3 install numpy scipy sounddevice matplotlib
 ```
