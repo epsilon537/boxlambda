@@ -30,13 +30,10 @@ Adding Submodules
 I use the following sequence to add a git submodule:
 
 1. I fork the repo in GitHub.
-2. Still in GitHub, in the forked repo, I create a **boxlambda** branch.
+2. Still in GitHub, in the forked repo, I create a **boxlambda** branch and make it the default branch.
 3. In the root directory of my local boxlambda repo, I run the following commands:
 ```
     git submodule add <URL to forked repo> sub/<submodule name>
-    cd sub/<submodule name>
-    git checkout --track origin/boxlambda
-    cd ../..
     git add .
     git commit -m 'Add submodule <submodule name>`
 ```

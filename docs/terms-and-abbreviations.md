@@ -19,8 +19,12 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **BSS**: Block Starting Symbol. Portion of an object file or executable holding zero-initialized data.
 
+- **Bus Arbiter**: In a Shared Bus Interconnect, a Bus Arbiter decides which of the requesting bus masters get to access the bus. 
+
 - **CDC**: Clock Domain Crossing. The traversal of a signal in a synchronous digital circuit from one clock domain into another.
 
+- **CMEM**: Code Memory. One of BoxLambda's internal memories. Holds CPU text (instructions) and load segments.
+  
 - **CoCoTB**: An open-source coroutine-based cosimulation testbench environment for verifying VHDL and SystemVerilog RTL using Python. See [https://www.cocotb.org/](https://www.cocotb.org/).
   
 - **Code Segment**: Portion of an object file or executable holding executable instructions.
@@ -34,6 +38,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **CPU**: Central Processing Unit.
 
 - **CRT0**: C Run-Time 0. A set of execution startup routines linked into a C program that performs any initialization work required before calling the program's *main()* function. 
+
+- **Crossbar Interconnect**:  An M x N crossbar is a switching fabric which allows M inputs (bus masters) to connect to N outputs (bus slaves) without blocking. Blocking only occurs when two inputs (bus masters) want to talk to the same output (bus slave).
 
 - **CSR**: Control and Status Register.
   
@@ -56,6 +62,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **DSP**: Digital Signal Processing.
 
 - **DMAC**: DMA Controller.
+
+- **DMEM**: Data Memory. One of BoxLambda's internal memories. Holds CPU data and BSS segments.
 
 - **Double Buffering**:  A technique for drawing graphics that shows no stutter, tearing, or other rendering artifacts. Buffer A is being displayed while buffer B is being updated.
   
@@ -87,6 +95,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **GPIO**: General-Purpose Input/Output, an uncommitted pin used for input and/or output controllable by the user at run-time.
 
+- **Harvard Architecture**: A computer architecture with separate memories and buses for instructions and data. BoxLambda's main CPU, the Ibex processor, uses a Harvard Architecture.
+   
 - **Hacker/Hacking**: See [http://www.paulgraham.com/gba.html](http://www.paulgraham.com/gba.html)
 
 - **HAL**: Hardware Access Layer. A low-level Software API to access the hardware, or in this case, gateware.
@@ -148,6 +158,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **MMI**: Memory Map Information file. An MMI file is an XML file that syntactically describes how individual block RAMs make up a contiguous logical data space. 
 
 - **MSB**: Most Significant Bit.
+
+- **MUX**: Multiplexer.
     
 - **OOC**: Vivado's OOC mode or OOC flow lets you synthesize, implement, and analyze design modules in a hierarchical design.
 
@@ -195,6 +207,8 @@ This section provides clarification for some of the more ambiguous terms and abb
   
 - **SDRAM**: Synchronous dynamic random-access memory. A DRAM where the operation of its external pin interface is coordinated by an externally supplied clock signal. 
 
+- **Shared Bus Interconnect**: A type of Interconnect where one bus master at a time can access a common bus and connect to one of the bus slaves that are attached to that bus. A Bus Arbiter decides which of the requesting bus masters get to access the bus. 
+  
 - **Slice**: The basic logical unit of a Xilinx FPGA.
 
 - **SNDH**: A music file format used on Atari ST.
@@ -243,6 +257,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **VGA**: Video Graphics Array, a computer chipset standard for displaying color graphics.
 
+- **Von Neumann Architecture**: A computer architecture where the CPU has access to one memory (via one bus) storing both instructions and data. The PicoRV processor in BoxLambda's DMA Controller uses a Von Neumann architecture.
+   
 - **VRAM**: Video RAM.
 
 - **WB**: Wishbone.
@@ -259,7 +275,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Xbar**: Cross-Bar, a type of interconnect used in SoC bus fabrics.
 
-- **XPM**: Xilinx Parameterized Macros.
+- **XPM**: Xilinx Parameterized Macro.
 
 - **YM**: A music file format for the YM2149 chip. See [http://leonard.oxg.free.fr/ymformat.html](http://leonard.oxg.free.fr/ymformat.html).
   

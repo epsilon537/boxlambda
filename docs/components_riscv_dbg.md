@@ -55,8 +55,8 @@ RISCV-DBG has two top-levels:
 Recall that BoxLambda uses a Wishbone interconnect. The Ibex_WB submodule implements a Wishbone wrapper for the Ibex RISCV core. It does the same for RISCV-DBG's *dm_top*:  
 [sub/ibex_wb/rtl/wb_dm_top.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_dm_top.sv)
 
-Refer to the *ibex_soc* example to see how RISCV-DBG is instantiated:  
-[sub/ibex_wb/soc/fpga/arty-a7-35/rtl/ibex_soc.sv](https://github.com/epsilon537/ibex_wb/blob/boxlambda/soc/fpga/arty-a7-35/rtl/ibex_soc.sv)
+Refer to the *boxlambda_soc.sv* module to see how RISCV-DBG is instantiated:
+[gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)  
 
 ### OpenOCD and RISCV-DBG on Verilator
 
@@ -119,8 +119,8 @@ The obvious approach would be to bring out the JTAG signals to PMOD pins and hoo
 
 The riscv-dbg codebase lets you easily switch between a variant with external JTAG pins and a variant that hooks into the FPGA scan chain, by changing a single file:
 
-- **dmi_jtag_tap.sv**: hooks up the JTAG TAP to external pins
-- **dmi_bscane_tap.sv**: hooks the JTAG TAP into the FPGA scan chain. The Xilinx primitive used to hook into the scan chain do this is called BSCANE. Hence the name.
+- [dmi_jtag_tap.sv](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_jtag_tap.sv): hooks up the JTAG TAP to external pins
+- [dmi_bscane_tap.sv](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_bscane_tap.sv): hooks the JTAG TAP into the FPGA scan chain. The Xilinx primitive used to hook into the scan chain do this is called BSCANE. Hence the name.
 
 Both files implement the same module name (*dmi_jtag_tap*) and the same module ports, so you can swap one for the other without further impact on the system. Lightweight polymorphism. It sounds cool, but it feels a bit forced. One annoying consequence is that although the JTAG ports are listed at the top-level, they are not used when building the BSCANE variant. The BSCANE primitive internally provides the actual JTAG ports. Anyway, that's the RISCV-DBG design. I'll go with it. By default, BoxLambda builds the BSCANE variant on the Arty-A7.
 
@@ -148,4 +148,5 @@ See the **Test Builds** section for the steps needed to set up an OpenOCD JTAG d
 ### RISCV-DBG Clock Frequency
 
 *Dm_top* and *dmi_jtag* are part of the 50MHz System Clock domain.
-The JTAG clock *tck* is driven via a *BSCANE2* primitive by the FPGA's JTAG chain. The BSCANE2 primitive is instantiated in the *dmi_bscane_tap* module.
+
+The JTAG clock *tck* is driven via a *BSCANE2* primitive by the FPGA's JTAG chain. The BSCANE2 primitive is instantiated in the [dmi_bscane_tap](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_bscane_tap.sv) module.

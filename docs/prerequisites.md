@@ -99,7 +99,7 @@ source /tools/Xilinx/Vivado/2023.1/settings64.sh
 export PATH=/usr/bin:$PATH
 ```
 
-### SDL2
+### SDL2 (optional)
 
 SDL2 is needed to run Verilator simulation testcases involving the VERA graphics core.
 
@@ -111,7 +111,7 @@ Also, make sure to set environment variable **SDL2_DIR** to point to the SDL2 di
 export SDL2_DIR=/usr/lib/x86_64-linux-gnu/cmake/SDL2/
 ```
 
-### PortAudio
+### PortAudio (optional)
 
 PortAudio is needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
 
@@ -120,7 +120,7 @@ sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp
 sudo apt-get install ffmpeg
 ```
 
-### Chromaprint
+### Chromaprint (optional)
 
 PortAudio is needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
 
@@ -128,17 +128,17 @@ PortAudio is needed to run Verilator simulation testcases involving the YM2149 P
 sudo apt-get install libchromaprint-tools
 ```
 
-### Python 3
+### Python 3 (optional)
 ```
 sudo apt-get install python-is-python3
 ```
 
-### Pip
+### Pip (optional)
 ```
 sudo apt-get install python3-pip
 ```
 
-### NumPy, SciPy, SoundDevice, and Matplotlib
+### NumPy, SciPy, SoundDevice, and Matplotlib (optional)
 
 These Python modules are needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
 

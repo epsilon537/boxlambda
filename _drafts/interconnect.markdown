@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'The Interconnect and Harvard Architecture.'
+title: 'The Interconnect, Harvard Architecture, and Dual Port RAM.'
 comments: true
 ---
 
@@ -15,7 +15,7 @@ I parked the task of adding keyboard and mouse support to the project and switch
 2. I've had some architectural modifications in the back of my mind for a while. If I was going to implement the architecture, I had to bring those modifications to the foreground.
 3. The first change is that I wanted to use a crossbar-based interconnect instead of two shared buses.
 4. The second architectural change is that I wanted to move to a Harvard architecture, i.e. independent paths for instruction fetches and data accesses coming from the Ibex processor.
-5. I wanted to switch over the existing test builds to this architecture without having to reimplement the architecture for each test build separately. In other words, I want each test build to use the BoxLambda SoC as a component. 
+5. As an indirect consequence a few other changes came along, such as Word Addressing and defining the BoxLambda SoC as a component.
 
 The result is a bit of an architectural overhaul, further discussed below.
 
@@ -50,9 +50,9 @@ This approach has some drawbacks, however:
 - The CPU has two bus master ports, one for instructions, and one for data. There's also a *Black Box* bus master, to be loaded onto a live system using DFX. If I want to allow simultaneous transactions from all of these bus masters, I would have to create not two, but four shared buses.
 - The bus masters and key bus slaves such as VERA and LiteDRAM need ports on all of these shared buses. The bus masters have to be equipped with bus dispatchers to connect to the shared buses. The bus slaves have to be equipped with MUXes.
 
-To avoid having to add all those buses, ports, dispatchers, and MUXes, I decided to modify the architecture and use a Crossbar Interconnect instead. A Crossbar Interconnect creates on-demand channels between bus masters and slaves and can maintain multiple such channels. A Crossbar Interconnect can accept transactions from multiple Bus Masters simultaneously, as long as they don't target the same slave port. E.g. without getting in each other's way, the CPU can access internal memory while the DMA controller moves data from external memory to VERA.
+To avoid having to add all those buses, ports, dispatchers, and MUXes, I decided to modify the architecture and use a Crossbar Interconnect instead. A Crossbar Interconnect creates on-demand channels between bus masters and slaves and can maintain multiple such channels. A Crossbar Interconnect can accept transactions from multiple bus masters simultaneously, as long as they don't target the same slave port. E.g. without getting in each other's way, the CPU can access internal memory while the DMA controller moves data from external memory to VERA.
 
-![Crossbar Example.](../assets/CrossbarExample.png)
+![Crossbar Example.](../assets/CrossBarExample.png)
 
 *Crossbar Interconnect Example.*
 
@@ -66,9 +66,9 @@ The WBXBAR Crossbar is well-documented in this ZipCPU Blog post:
 
 [https://zipcpu.com/blog/2019/07/17/crossbar.html](https://zipcpu.com/blog/2019/07/17/crossbar.html)
 
-Crossbar Interconnect Size
-==========================
-The size of a Crossbar Interconnect increases quickly with the number of ports, however. A NxN square Crossbar has N^2 nodes. If I put all Bus Masters and Slaves on a single WBXBAR instance, the Crossbar uses 5717 LUTs and 2505 Slice Registers. As a compromise, I put the *Slow* slaves on a Shared Bus and attached that bus to a Crossbar Interconnect consisting of Bus Masters and *Fast* slaves (read: memories).
+Crossbar *and* Shared Bus
+=========================
+The size of a Crossbar Interconnect increases quickly with the number of ports, however. A NxN square Crossbar has N^2 nodes. If I put all bus masters and slaves on a single WBXBAR instance, the Crossbar uses 5717 LUTs and 2505 Slice Registers. As a compromise, I put the *slow* slaves on a Shared Bus and attached that bus to a Crossbar Interconnect consisting of bus masters and *fast* slaves (read: memories).
 In this configuration, the entire interconnect requires 2846 LUTs and 2022 Slice Registers.
 
 | Interconnect Configuration | LUTs  | Slice Registers |
@@ -82,9 +82,11 @@ The resulting configuration looks like this:
 
 *Revised BoxLambda Architecture - Arty A7-100T Configuration.*
 
+Note that the shared bus is just another WBXBAR instance. A crossbar instance with one bus master port is equivalent to a shared bus instance with one bus master port.
+
 Two Dual Port Memories
 ----------------------
-In the modified BoxLambda Architecture I replaced the single Dual Port memory instance with two Dual Port instances: CMEM and DMEM. The two instances create a Harvard Architecture (see below). By making the memories Dual Port I allow simultaneous memory access from both the CPU and the DMA Controller.
+In the modified BoxLambda Architecture I replaced the single Dual Port memory instance with two Dual Port instances: CMEM and DMEM. The two instances create a Harvard Architecture (see below). The RAMs are Dual Port to allow simultaneous memory access from both the CPU and the DMA Controller.
 
 Harvard vs. Von Neumann
 =======================
@@ -94,7 +96,7 @@ Harvard vs. Von Neumann
 
 In a Von Neumann Architecture, the CPU has access to one memory that stores both instructions and data. Instruction Fetch and Data Access transactions share one memory bus. In a Harvard Architecture, Instruction Memory is separate from Data Memory. Instruction Fetch and Data Access transactions can be executed independently.
 
-The Ibex processor has a separate Instruction and Data port. In the original BoxLambda architecture, both ports were connected to a shared bus, effectively creating a Von Neumann Architecture. In such a configuration, the waveform of a word copy operation looks like this:
+The Ibex processor has separate Instruction and Data ports. In the original BoxLambda architecture, both ports were connected to a shared bus, effectively creating a Von Neumann Architecture. In such a configuration, the waveform of a word copy operation looks like this:
 
 ![Word Copy in Von Neumann Architecture.](../assets/vonNeuMannWaveform.png)
 
@@ -110,8 +112,53 @@ By contrast, if you connect the Instruction and Data Ports to two separate memor
 
 Instruction fetches go to CMEM port 0. Data accesses go to DMEM port 0. In this configuration, it takes 24 clock cycles to copy one word. That's a 33% performance improvement.
 
+The DPRAM Modules
+=================
+A [wb_dpram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv) module selects one of two DPRAM implementations depending on whether we're targeting simulation or FPGA synthesis.
+
+On FPGA, I'm using an **XPM_MEMORY_TDPRAM** instance. Using a XPM macro for internal memory allows me to do post-synthesis memory updates, as described [here](https://boxlambda.readthedocs.io/en/latest/build-system/#updatemem-and-xpm-memories).
+
+Here is the XPM_MEMORY_TDPRAM documentation: 
+
+[https://docs.xilinx.com/r/en-US/ug974-vivado-ultrascale-libraries/XPM_MEMORY_TDPRAM](https://docs.xilinx.com/r/en-US/ug974-vivado-ultrascale-libraries/XPM_MEMORY_TDPRAM)
+
+I did run into a spurious write issue with XPM_MEMORY_TDPRAM. To avoid the issue, I had to qualify the Write Enable (*wea/web*) signals with the *valid* signals even though the valid signals were already going to the module's Memory Enable ports (*ena/enb*):
+
+```
+    assign a_valid    = a_cyc_i & a_stb_i;
+    assign b_valid    = b_cyc_i & b_stb_i;
+    ...
+    assign a_ram_we   = {4{a_we_i&a_valid}} & a_sel_i;
+    assign b_ram_we   = {4{b_we_i&b_valid}} & b_sel_i;
+    ...
+    .ena(a_valid),                       // 1-bit input: Memory enable signal for port A. Must be high on clock
+                                        // cycles when read or write operations are initiated. Pipelined
+                                        // internally.
+
+    .enb(b_valid),                       // 1-bit input: Memory enable signal for port B. Must be high on clock
+                                        // cycles when read or write operations are initiated. Pipelined
+                                        // internally.
+    ...
+    .wea(a_ram_we),                     // WRITE_DATA_WIDTH_A/BYTE_WRITE_WIDTH_A-bit input: Write enable vector
+                                        // for port A input data port dina. 1 bit wide when word-wide writes are
+                                        // used. In byte-wide write configurations, each bit controls the
+                                        // writing one byte of dina to address addra. For example, to
+                                        // synchronously write only bits [15-8] of dina when WRITE_DATA_WIDTH_A
+                                        // is 32, wea would be 4'b0010.
+
+    .web(b_ram_we)                      // WRITE_DATA_WIDTH_B/BYTE_WRITE_WIDTH_B-bit input: Write enable vector
+                                        // for port B input data port dinb. 1 bit wide when word-wide writes are
+                                        // used. In byte-wide write configurations, each bit controls the
+                                        // writing one byte of dinb to address addrb. For example, to
+                                        // synchronously write only bits [15-8] of dinb when WRITE_DATA_WIDTH_B
+                                        // is 32, web would be 4'b0010.
+    ...
+```
+
+In simulation, I'm using Alex Forencich's [wb_dp_ram.v](https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_dp_ram.v) module.
+
 Link Script Changes
--------------------
+===================
 The new memory organization required some Link Script changes:
 - For the Arty A7 100T configuration, the amount of internal memory set aside for data is smaller than before. 128 KB vs. 192 KB. For some SW builds I was running out of heap memory as a result. To fix this, I mapped the heap to external memory, of which we have plenty.
 - I created a **.cmem_bss** section, mapped to CMEM, so it is still possible to put data in CMEM by assigning it to this section.
@@ -129,8 +176,33 @@ int code_in_dmem(char *message) {
 ...
 ```  
 
-BoxLambda as a Component
-------------------------
+Dual Port RAM Test
+==================
+I added a test build, *gw/projects/dual_port_ram_test/* to verify access to the dual port memories. The test program checks instruction and data access to both of the memories. The program also includes a test exercising both ports of the Dual Port RAM simultaneously. One port is accessed by the CPU, and the other port by the DMA Controller.
+
+![DPRAM simultaneous access.](../assets/dpram_simultaneous_access.png)
+
+*Both DPRAM ports being accessed simultaneously.*
+
+Other Changes
+-------------
+
+Word Addressing
+===============
+The previous BoxLambda test SoCs contained a combination of *Byte Addressing* and *Word Addressing* bus masters as well as a combination of *Byte Addressable* and *Word Addressable* slaves. Add four Byte Enable signals to that picture and things can get pretty confusing. To avoid this ambiguity and confusion, I switched everything over to Word Addressing. BoxLambda now uses a 28-bit Word Address Bus.
+
+![Byte vs. Word Addressing.](../assets/byte_vs_word_addressing.png)
+
+*Byte Addressing (left) vs. Word Addressing (right).*
+
+Note that you can still address a byte using a Word Addressing bus. That's what the Byte Enables are for:
+
+![Word Addressing a byte with byte enables.](../assets/addressing_a_byte_w_byte_enables.png)
+
+*Addressing a byte using Word Addressing and Byte Enables.*
+
+BoxLambda SoC as a Component
+============================
 So far, each *gw/project/* build defined its own Test SoC. Each new Test SoC copied the previous one and added its own logic so I ended up with a progression going from very simple SoCs (*hello_world*) to very complete SoCs (*picorv_dma_sys_test*).
 
 Going forward, I'll be maintaining just one SoC module: 
@@ -215,24 +287,14 @@ module boxlambda_soc #(
     );
 ```
 
-Different *gw/project/* builds still exist. They just differ in the way they instantiate *boxlambda_soc*, including or excluding specific subcomponents. All *gw/projects*
+Different *gw/project/* builds still exist. They just differ in the way they instantiate *boxlambda_soc*, including or excluding specific subcomponents. Most *gw/projects*
  reference the same [top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/top/rtl/top.sv), but with a different combination of *defines* in their *Bender.yml* manifest.
 
+![BoxLambda SoC Component Build Diagram.](../assets/BoxLambda_SoC_Component_Build_Diagram.png)
+
+*Build Diagram with BoxLambda SoC component and top.sv.*
+
 *Gw/project/* builds also differ in the software program they run on the SoC. This is specified in the *gw/project/*'s CMakefile.
-
-Timing Violations
------------------
-After all this refactoring, I still had two timing violations:
-- a setup violation in the return data path from the PicoRV DMA's Program memory to the Wishbone slave port. I fixed this issue by inserting a register stage in the *sys_clk* clock domain.
-- a setup violation in the return data path from the Wishbone bus master port to the PicoRV. I fixed this issue by inserting a register stage in the PicoRV's *sysclkx2* clock domain.
-
-Dual Port RAM Test
-------------------
-I added a test build, *gw/projects/dual_port_ram_test/* to verify access to the dual port memories. The test program checks instruction and data access to both of the memories. The program also includes a test exercising both ports of the Dual Port RAM simultaneously. One port is accessed by the CPU, and the other port by the DMA Controller.
-
-![DPRAM simultaneous access.](../assets/dpram_simultaneous_access.png)
-
-*Both DPRAM ports being accessed simultaneously.*
 
 Try It Out
 ----------
@@ -293,5 +355,12 @@ make dual_port_ram_test_load
 
 Conclusion
 ----------
-Every significant project I've worked on over time accumulates tasks that I consider important but not urgent. These tasks often get deferred because they are mostly non-functional improvements. They don't add features. Invariably, however, there comes this point where these tasks no longer let themselves be deferred. They have to be tackled before further progress can be made. The planned work grinds to a halt for a while as I process these now-blocking tasks. The result is usually an overhaul. When done, barring any regressions, the system still does the same things as before. It just does it better and I'm in a good position again to add new functionality. BoxLambda went through such a phase just now and is starting to look like a system.
+After all this refactoring, I still had two timing violations:
+- a setup violation in the return data path from the PicoRV DMA's Program memory to the Wishbone slave port. I fixed this issue by inserting a register stage in the *sys_clk* clock domain.
+- a setup violation in the return data path from the Wishbone bus master port to the PicoRV. I fixed this issue by inserting a register stage in the PicoRV's *sysclkx2* clock domain.
 
+Every significant project I've worked on over time accumulates tasks that I consider important but not urgent. These tasks often get deferred because they are mostly non-functional improvements. They don't add features. Invariably, however, there comes this point where these tasks no longer let themselves be deferred. They have to be tackled before further progress can be made. The planned work grinds to a halt for a while as I process these now-blocking tasks. The result is usually an overhaul. When done, barring any regressions, the system still does the same things as before. It just does it better and I'm in a good position again to add new functionality.
+
+References
+----------
+[Dynamic interconnection networks: the crossbar switch](https://www.site.uottawa.ca/~mbolic/ceg4131/Report%20Crossbar%20switches.pdf).

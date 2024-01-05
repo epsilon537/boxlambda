@@ -17,7 +17,7 @@ Boxlambda uses Verilator to create system test benches. Verilator is a compiler.
 
 C++ is not an ideal language for test case development, but it'll get the job done, and it's a compiled language, so it's *fast*. 
 
-### A simple Test Bench
+### A Simple Test Bench
 
 The proof-of-concept system test bench for BoxLambda is based on the example code included in the Verilator distribution:
 
@@ -42,14 +42,16 @@ The test bench does the following:
 
 As suggested by ZipCPU in his Verilog tutorial, I use *nCurses* for positional printing inside the terminal windows. This way, I can easily build a display that refreshes, rather than scrolls, whenever the model produces new UART or GPIO data to display.
 
-Current test bench source code examples: 
+This is the source code of the proof-of-concept test bench:
 
-- [*gw/projects/hello_world/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/hello_world/sim/sim_main.cpp).
-- [*gw/projects/picolibc_test/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/picolibc_test/sim/sim_main.cpp).
-- [*gw/projects/ddr_test/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/ddr_test/sim/sim_main.cpp)
-- [*gw/projects/vera_integrated*](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/vera_integrated)
-- [*gw/projects/sdspi_test*](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/sdspi_test)
+[https://github.com/epsilon537/boxlambda/blob/master/gw/projects/hello_world/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/hello_world/sim/sim_main.cpp)
 
+Other, more elaborate system test benches include: 
+
+- [*gw/projects/vera_integrated/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/vera_integrated/sim/sim_main.cpp): This test bench captures the DUT's VGA output and renders it to an SDL frame buffer.
+- [*gw/projects/sdspi_test/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/sim/sim_main.cpp): This test bench includes ZipCPU's SDSPISIM co-simulator.
+- [*gw/projects/ym2149_dac_test/sim/sim_main.cpp*](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/ym2149_dac_test/sim/sim_main.cpp): This test bench captures the Audio DAC bitstream and PSG's PCM output and saves it off to two Python files for further analysis by a Python script.
+  
 ### Are we running in a Simulation?
 
 Software running on Ibex needs to know whether it's running in a simulation or on FPGA, so it can adjust timings such as the LED blink period.

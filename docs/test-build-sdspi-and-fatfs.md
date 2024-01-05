@@ -50,7 +50,7 @@ SDSPI Test successful.
 
 ### SDSPI Test on Arty A7
 
-Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert an SD card into the card reader. 
+Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
    
 Note that this is a destructive test. The contents of the SD card will be destroyed.
 
@@ -138,7 +138,7 @@ sudo umount /mnt/sd
 
 ### FatFS Test on Arty A7
 
-Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert a FAT-formatted SD card into the card reader. 
+Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
    
 Note that this is a destructive test. The contents of the SD card will be destroyed.
 

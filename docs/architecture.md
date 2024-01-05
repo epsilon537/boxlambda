@@ -3,32 +3,42 @@ Architecture
 
 ### The Arty A7-100T Configuration
 
-![Draft Architecture Block Diagram for Arty A7-100T](assets/Arch_Diagram_Big.drawio.png)
-*BoxLambda Draft Architecture Block Diagram for Arty A7-100T.*
+![Architecture Block Diagram for Arty A7-100T](assets/Arch_Diagram_Big.png)
+*BoxLambda Architecture Block Diagram for Arty A7-100T.*
 
-This is an architecture diagram showing the Arty A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
+This is diagram shows the Arty A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
 
 #### Internal RAM
 
-The system is configured with 256KB of Dual-Port RAM (DPRAM) and 128KB of Video RAM (inside the VERA module). The A7-100T has 607KB of Block RAM in total, so more than enough Block RAM should be left over for other purposes, e.g. for the *Black Box Module* (see below).
+The system is equipped with two Dual-Port RAMs (DPRAMs), 128 KB each. Additionally, the VERA module includes 128 KB of Video RAM. 
 
-The CPU has memory-mapped access to DPRAM. As long as no other Bus Masters are competing for access to the same bus, instructions executing from DPRAM will have a fixed cycle count.
+The Dual-Port RAMs combined with the Crossbar Interconnect (see [below](#the-crossbar-interconnect)) ensure that the DMA controller can access the RAMs without stalling the CPU. Instructions executing from DPRAM should have a fixed cycle count.
 
-#### DMA Bus and Processor Bus
+Two Dual-Port RAMs are used instead of one to allow a **Harvard Architecture**, i.e. separate RAMs and associated signal paths for instructions and data. The DPRAM called CMEM holds CPU instructions, DMEM contains data. 
 
-The DPRAM is hooked up to two system buses: a **DMA bus** and a **Processor bus**. Bus masters (currently only CPU and DMAC) have access to both buses as well, but the intent is that the DMA Controller uses the DMA bus for MEMC<->DPRAM transfers and the CPU uses the processor bus for DPRAM access. This intent is not hardwired into the system, however. The DMA Controller can set up transfers over the processor bus, and the processor can access external memory over the DMA bus. The two system buses are there to give bus masters some flexibility to stay out of each other's way.
+#### The CPU
 
-Note that, besides access to external and internal memory, the DMA Controller also has access to VERA, the sound cores, and the SD SPI module via the DMA bus.
-
-Both the Processor Bus and the DMA bus are 32-bit pipelined mode Wishbone buses.
+The CPU is an Ibex RISCV32 processor. It has separate Instruction and Data ports, supporting a Harvard Architecture.
 
 #### The Interconnect
 
-A bus on a block diagram is just a line connecting blocks. In reality, the *Interconnect* consists of Cross Bars, Arbiters, Address Decoders, and Bridges. I will follow up with an architecture diagram showing the BoxLambda Interconnect details. 
+The Interconnect fabric is 32-bit pipelined Wishbone-based and consists of a Crossbar and Shared Bus combination.
+
+###### The Crossbar Interconnect
+
+The bus masters and RAMs (including VERA graphics and LiteDRAM external memory controller) are connected to a Crossbar Interconnect. A Crossbar Interconnect creates on-demand channels between bus masters and slaves and can maintain multiple such channels. A Crossbar Interconnect can accept transactions from multiple bus masters simultaneously, as long as they don't target the same slave port. E.g. without getting in each other's way, the CPU can access internal memory while the DMA controller moves data from external memory to VERA.
+
+![Crossbar Example.](assets/CrossBarExample.png)
+
+*Crossbar Interconnect Example.*
+
+###### The Shared Bus
+
+A big crossbar interconnect takes up a lot of FPGA resources. The fabric size grows with the square of the number of bus master and slave pairs attached to it. A shared bus, on the other hand, grows linearly with the number of bus masters and slaves attached to it. A disadvantage of a shared bus, however, is that only one bus master at a time can access the bus. Multiple bus masters on a shared bus will be stalling each other. As a compromise, I put the *slow* slaves on a shared bus and attached that bus to the crossbar interconnect consisting of the bus masters and *fast* slaves (read: memories).
 
 #### The Black Box, and other Reconfigurable Partitions
 
-The Black Box Partition is an empty area in the FPGA's floorplan. This is where you can insert your application-specific logic. Do you need hardware-assisted collision detection for your Bullet-Hell Shoot'em Up game? Put it in the Black Box. A DSP? A CORDIC core? More RAM? As long as it fits the floor plan, you can put it in the Black Box region. The Black Box has bus master and slave ports on both system buses.
+The Black Box Partition is an empty area in the FPGA's floorplan. This is where you can insert your application-specific logic. Do you need hardware-assisted collision detection for your Bullet-Hell Shoot'em Up game? Put it in the Black Box. A DSP? A CORDIC core? More RAM? As long as it fits the floor plan, you can put it in the Black Box region.
 
 Notice that the Black Box sits inside RP\_0, Reconfigurable Partition 0. A **Reconfigurable Partition** is a region on the FPGA where you can dynamically load a **Reconfigurable Module** (RM) into. Going back to the previous examples, the collision detector, DSP, CORDIC core, or RAM module, would be Reconfigurable Modules. You can live-load one of them into RP\_0. 
 
@@ -40,33 +50,23 @@ Reconfigurable Modules require a reconfigurable clocking strategy. That's the ro
 
 #### External Memory Access
 
-The Memory Controller is equipped with three Wishbone ports:
+The Memory Controller is equipped with two Wishbone ports:
 
-- a Control Port, attached to the Processor Bus.
-- a User Port, attached to the Processor Bus.
-- another User Ports, attached to the DMA Bus.
+- a Control Port, attached to the Shared Bus.
+- a User Port, attached to the Crossbar.
 
-Note that the CPU has memory-mapped access to DDR memory and can execute code directly from DDR memory. DDR memory access is not fully deterministic, however. CPU instructions executing from DDR will not have a fixed cycle count.
+The CPU has memory-mapped access to DDR memory and can execute code directly from DDR memory. DDR memory access is not fully deterministic, however. CPU instructions executing from DDR will not have a fixed cycle count.
 
 ### The Arty A7-35T Configuration
 
-![Draft Architecture Block Diagram for Arty A7-35T](assets/Arch_Diagram_Little.drawio.png)
-*BoxLambda Draft Architecture Block Diagram for Arty A7-35T.*
+![Draft Architecture Block Diagram for Arty A7-35T](assets/Arch_Diagram_Little.png)
+*BoxLambda Architecture Block Diagram for Arty A7-35T.*
 
 This architecture diagram shows the Arty A7-35T configuration.
 
 DFX is not supported on the A7-35T. Neither is the Hierarchical Design Flow. This means we have to stick to a monolithic design. The RTL for all components is combined into one single design, which is synthesized, implemented, and turned into a single bitstream. There is still room for RTL experimentation in this build, but you won't be able to live-load it. It's going to require an update of the Full Configuration Bitstream.
 
-The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM and the amount of DPRAM have been reduced to 64KB. 
+The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM has been reduced to 64 KB and the two of DPRAMs are reduced to 32 KB each. 
 
 All other components are the same as in the Arty A7-100T Configuration.
-
-### Example Software Usage Model
-
-BoxLambda users can make up their minds on how they want to set up this system. Here's one possible software configuration:
-
-- *Deterministic* and/or Time-Critical CPU code and data reside in DPRAM.
-- Non-Time-Critical code and data reside in DDR memory.
-- The CPU accesses DPRAM, DDR memory, and hardware blocks via the Processor Bus.
-- DMA activity, if any, passes over the DMA bus.
 

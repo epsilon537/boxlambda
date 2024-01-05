@@ -31,6 +31,6 @@ The DDR test program is located here:
 
 [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c)
 
-The program boots from internal memory. It invokes *sdram_init()*, then performs a memory test over user port 0, followed by user port 1. Finally, the program verifies CPU instruction execution from DDR by relocating a test function from internal memory to DDR and branching to it.
+The program boots from internal memory. It invokes *sdram_init()*, performs a memory test, and verifies CPU instruction execution from DDR by relocating a test function from internal memory to DDR and branching to it.
 
 The memory test function used is a slightly modified version of the *memtest()* function provided by Litex in *liblitedram*.

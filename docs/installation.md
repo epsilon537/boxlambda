@@ -1,17 +1,21 @@
 ## Installation
 
-Before you try any of the Test Builds below, you need to set up the repository:
+Before you try any of the test builds, you need to:
 
-Install the [Prerequisites](prerequisites.md). 
+1. [Install the Prerequisites](prerequisites.md).
+2. [Hook Up the Peripherals (PMODs)](pmods.md).
+3. [Set up the repository](#setting-up-the-repository).
+
+### Setting Up the Repository.
 
 Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-Switch to the **updatemem** tag: 
+Switch to the **interconnect** tag: 
 ```
-git checkout updatemem
+git checkout interconnect
 ```
 
 Set up the repository. This initializes the git submodules used and creates the default build trees: 
@@ -47,7 +51,7 @@ For convenience, I created a one-line Windows batch script that attaches the Art
 *boxlambda/scripts/usb_fwd_to_wsl.bat*:
 
 ```
-usbipd wsl attach -i 0403:6010 -a
+usbipd attach -i 0403:6010 -a -w
 ```
 
 #### Udev

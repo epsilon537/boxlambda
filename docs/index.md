@@ -4,7 +4,7 @@ About BoxLambda
 - **GitHub**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
 - **Project Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
 
-![BoxLambda Draft Architecture Block Diagram](assets/Arch_Diagram_About.png)
+![BoxLambda Architecture Block Diagram](assets/Arch_Diagram_Big.png)
 
 **BoxLambda** is an open-source project with the goal of creating a retro-style FPGA-based microcomputer. The microcomputer serves as a platform for software and RTL experimentation.
 

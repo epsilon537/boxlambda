@@ -25,7 +25,7 @@ The terminal window should look like this:
 
 ### Vera_integrated on the Arty A7
 
-Hook up a VGA display to the Arty A7 PMOD ports JB and JC using [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start).
+Hook up the VGA PMOD as described [here](pmods.md#vga-pmod).
 
 Build the vera_integrated project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```

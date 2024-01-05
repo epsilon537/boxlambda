@@ -168,31 +168,39 @@ void set_stdio_to_uart(struct uart *uart) {
 
 The **set_stdio_to_uart()** function is to be called from the application before any standard library calls that require standard IO. The application needs to provide a pointer to an initialized *uart* object.
 
-#### The Link Map
+#### The Link Script
 
 We have to tell the linker where in memory to place the program code, data, and stack.
 
-I'm using the Link Map provided by PicoLibc, slightly modified to include the vector table.
+The link script is based on the one provided by PicoLibc, with modifications for BoxLambda's *CMEM*/*DMEM* Harvard architecture and heap in *EMEM* external memory.
 
-The PicoLibc link map expects the user to define the following symbols:
+The link script expects the following symbols to be set at the beginning of the script:
 
-- **__flash** and **__flash_size**: The location and size of the read-only section of the image, containing code and read-only data,
-- **__ram** and **__ram_size**: The location and size of the read-write section of the image, containing data segments, bss, and stack.
+- **__cmem** and **__cmem_size**: CMEM or *code memory* contains text (instructions) and load segments.
+- **__dmem** and **__dmem_size**: DMEM or *data memory* contains data segments, BSS and stack. 
+- **__emem** and **__emem_size**: EMEM stands for *external memory*. The heap will be placed here.  
+- **__heap_size**: The heap size.
 - **__stack_size**: The stack size.
 
-I created a link map file for BoxLambda's internal memory since that's all we've got for the time being. I dedicated the first half (32KB) to the read-only section and the 2nd half (32KB) to the read-write section:
-
+In the link script, I also defined a **.cmem_bss** section, mapped to CMEM, so it is still possible to put data in CMEM by assigning it to this section.
 ```
-__flash = 0x00000000; /*'flash' is the read-only section of the image, containing code and read-only data*/
-__flash_size = 32k;
-__ram = 0x00008000;   /*'ram' is the read-write section of the image, containing data segments, bss and stack*/
-__ram_size = 32k;
-__stack_size = 512;
+/*Create some data buffers in CMEM by mapping them to the .cmem_bss segment.*/
+char cmem_str[32] __attribute__ ((section (".cmem_bss")));
 ```
 
-[boxlambda/sw/components/bootstrap/link_internal_mem.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_internal_mem.ld)
+Similarly, I created a **.dmem_text** section so code can still be put in DMEM if needed.
+```
+/*This function executes from DMEM.*/
+__attribute__ ((section(".dmem_text")))
+int code_in_dmem(char *message) {
+    int i, j;
+...
+```  
 
-I can't say that I like this link map. There's no good reason to split internal memory in two this way, I don't like the symbol names being used, and I don't understand half of what's going on in this very big and complicated link map file. Now is not the time to design a new link map for BoxLambda though. We don't even have external memory defined yet. To be revisited.
+I created two variants of this link script:
+
+- [link_internal_mem_64K.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_internal_mem_64K.ld): 32 KB CMEM, 32 KB DMEM, 128 MB heap, and 512 bytes of stack
+- [link_internal_mem_256K.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_internal_mem_256K.ld): 128 KB CMEM, 128 KB DMEM, 128 MB heap, and 512 bytes of stack.
 
 ### Linking against the Picolibc library: The Picolibc GCC specs file
 

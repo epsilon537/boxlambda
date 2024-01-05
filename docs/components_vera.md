@@ -241,4 +241,4 @@ The VERA gateware component in the BoxLambda tree, [boxlambda/gw/components/vera
 
 ### VERA Wishbone Clock Frequency
 
-The VERA Wishbone core operates at **50MHz**, BoxLambda's system clock frequency. However, the **video_vga** and **composer** modules need to run at 25MHz, the 640x480@60Hz VGA pixel clock rate. These blocks use a toggling clock enable signal to do so ([clock enables are preferred over clock dividers](https://electronics.stackexchange.com/questions/222972/advantage-of-clock-enable-over-clock-division)).
+The VERA Wishbone core operates at **50MHz**, BoxLambda's system clock frequency. However, the **video_vga** and **composer** modules need to run at 25MHz, the 640x480@60Hz VGA pixel clock rate. These blocks use a toggling clock enable signal to do so. [Clock enables are preferred over clock dividers](https://electronics.stackexchange.com/questions/222972/advantage-of-clock-enable-over-clock-division).

@@ -32,19 +32,20 @@ Other than the SPI signals (*SCK*, *MISO*, *MOSI*, *CS*), the MicroSD card inter
 
 ### SDSPI Core
 
-**Sdspi_test** is a test SoC containing the SDSPI core along with other BoxLambda components. The SDSPI core is instantiated in the [sdspi_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/rtl/sdspi_test_soc.sv) top-level module as follows:
+**Sdspi_test** is a test SoC containing the SDSPI core along with other BoxLambda components. The SDSPI core is instantiated in the [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv) module as follows:
 
 ```
 sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
-		.i_clk(sys_clk), .i_sd_reset(ndmreset | (~sys_rst_n)),
+		.i_clk(sys_clk), 
+		.i_sd_reset(ndm_reset),
 		// Wishbone interface
-		.i_wb_cyc(wbs[SDSPI_S].cyc), .i_wb_stb(wbs[SDSPI_S].stb), .i_wb_we(wbs[SDSPI_S].we),
-		.i_wb_addr(wbs[SDSPI_S].adr[3:2]),
-		.i_wb_data(wbs[SDSPI_S].dat_m),
-		.i_wb_sel(wbs[SDSPI_S].sel),
-		.o_wb_stall(wbs[SDSPI_S].stall),
-		.o_wb_ack(wbs[SDSPI_S].ack),
-		.o_wb_data(wbs[SDSPI_S].dat_s),
+		.i_wb_cyc(shared_bus_wbs[SDSPI_S].cyc), .i_wb_stb(shared_bus_wbs[SDSPI_S].stb), .i_wb_we(shared_bus_wbs[SDSPI_S].we),
+		.i_wb_addr(shared_bus_wbs[SDSPI_S].adr[1:0]),
+		.i_wb_data(shared_bus_wbs[SDSPI_S].dat_m),
+		.i_wb_sel(shared_bus_wbs[SDSPI_S].sel),
+		.o_wb_stall(shared_bus_wbs[SDSPI_S].stall),
+		.o_wb_ack(shared_bus_wbs[SDSPI_S].ack),
+		.o_wb_data(shared_bus_wbs[SDSPI_S].dat_s),
 		// SDCard interface
 		.o_cs_n(sdspi_cs_n), .o_sck(sdspi_sck), .o_mosi(sdspi_mosi),
 		.i_miso(sdspi_miso), .i_card_detect(~sdspi_card_detect_n),

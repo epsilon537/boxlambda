@@ -38,7 +38,7 @@ The plots show both the filtered PCM and DAC output signals, but because they ov
 
 If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 
-Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) to the upper row of the Arty A7 PMOD port JA. 
+Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
 Build the *audio_dac_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```
@@ -63,45 +63,7 @@ Execute the generated Verilator model. You should see the following output:
 ./Vmodel
 DAC Output File: dac_out.py
 PCM Output File: pcm_out.py
-
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX   BHG_FP_clk_divider.v settings/results.   XXX
-XXX   https://github.com/BrianHGinc            XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX   USE_FLOATING_DIVIDE = 1
-XXX   Set INPUT_CLK_HZ    = 50000000 Hz.
-XXX   Set OUTPUT_CLK_HZ   = 2000000 Hz.
-XXX   --------------------------------------------- (Floats only accurate to 2 decimal places)
-XXX   True output freq    = 2000000.000000 Hz.
-XXX   Frequency error     = 0.000000 ppm.
-XXX   Periodic jitter     = +/- 0.000000 ns.
-XXX   ---------------------------------------------
-XXX   Integer Divider     = 25.
-XXX   Divider Fraction    = 0/65536.           OutHz = InHz/(ID+(DF/65536))
-XXX   ~Divider to 6dp.    = 25.000000.
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX  BrianHG's BHG_jt49_exp.v is using 10 bit DAC LUT table.  XXX
-XXX  https://github.com/BrianHGinc                            XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX  dlut[0:31] = '{    0,    1,    2,    3,    5,    6,    8,   11,   XXX
-XXX                   14,   17,   21,   26,   32,   39,   48,   58,   XXX
-XXX                   70,   84,  101,  121,  145,  174,  208,  248,   XXX
-XXX                  297,  354,  423,  505,  603,  719,  858, 1023}   XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX  BrianHG's BHG_jt49_exp.v is using 10 bit DAC LUT table.  XXX
-XXX  https://github.com/BrianHGinc                            XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX  dlut[0:31] = '{    0,    1,    2,    3,    5,    6,    8,   11,   XXX
-XXX                   14,   17,   21,   26,   32,   39,   48,   58,   XXX
-XXX                   70,   84,  101,  121,  145,  174,  208,  248,   XXX
-XXX                  297,  354,  423,  505,  603,  719,  858, 1023}   XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+...
 YM2149 test.
 YM2149 config complete.                 
 No overflows detected.
@@ -130,7 +92,7 @@ Relative Deviations:
 
 If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 
-Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) to the upper row of the Arty A7 PMOD port JA.
+Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
 
@@ -158,43 +120,7 @@ Execute the generated Verilator model. Pass in the SD card image that's checked 
 SD Image File: ../../../../../gw/projects/stsound_test/test/sdcard.img
 SDCARD: NBLOCKS = 131072
 PCM Output File: pcm_out.py
-
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX   BHG_FP_clk_divider.v settings/results.   XXX
-XXX   https://github.com/BrianHGinc            XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX   USE_FLOATING_DIVIDE = 1
-XXX   Set INPUT_CLK_HZ    = 50000000 Hz.
-XXX   Set OUTPUT_CLK_HZ   = 2000000 Hz.
-XXX   --------------------------------------------- (Floats only accurate to 2 decimal places)
-XXX   True output freq    = 2000000.000000 Hz.
-XXX   Frequency error     = 0.000000 ppm.
-XXX   Periodic jitter     = +/- 0.000000 ns.
-XXX   ---------------------------------------------
-XXX   Integer Divider     = 25.
-XXX   Divider Fraction    = 0/65536.           OutHz = InHz/(ID+(DF/65536))
-XXX   ~Divider to 6dp.    = 25.000000.
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX  BrianHG's BHG_jt49_exp.v is using 10 bit DAC LUT table.  XXX
-XXX  https://github.com/BrianHGinc                            XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX  dlut[0:31] = '{    0,    1,    2,    3,    5,    6,    8,   11,   XXX
-XXX                   14,   17,   21,   26,   32,   39,   48,   58,   XXX
-XXX                   70,   84,  101,  121,  145,  174,  208,  248,   XXX
-XXX                  297,  354,  423,  505,  603,  719,  858, 1023}   XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX  BrianHG's BHG_jt49_exp.v is using 10 bit DAC LUT table.  XXX
-XXX  https://github.com/BrianHGinc                            XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXX  dlut[0:31] = '{    0,    1,    2,    3,    5,    6,    8,   11,   XXX
-XXX                   14,   17,   21,   26,   32,   39,   48,   58,   XXX
-XXX                   70,   84,  101,  121,  145,  174,  208,  248,   XXX
-XXX                  297,  354,  423,  505,  603,  719,  858, 1023}   XXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+...
 SDSPI: CMDIDX = 6 -- WE HAVE A COMMAND # 0! [ 40 00 00 00 00 95 ]
 SDSPI: Received a command 0x40 (0) arg 0x0
 SDSPI: CMDIDX = 6 -- WE HAVE A COMMAND # 8! [ 48 00 00 01 a5 69 ]
@@ -241,9 +167,9 @@ Match with correlation of 100.00% at offset 0
 
 If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 
-Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) to the upper row of the Arty A7 PMOD port JA.
+Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
-Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD**.
+Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
 
 Locate YM file **ANCOOL1.YM** in directory **boxlambda/sub/StSound/YmSampleFiles/**. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.  
 

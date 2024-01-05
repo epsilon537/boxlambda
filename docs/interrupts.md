@@ -33,7 +33,7 @@ We can freely assign 15 local interrupts. I've got the following list:
   - wbi2c
   - ps2_mouse
   - ps2_keyboard
-  - Praxos DMA
+  - PicoRV DMA
   - Quad SPI
   - ICAP
   - DFX Controller
@@ -52,7 +52,7 @@ I have ordered the Fast Local interrupts as follows:
 | ``irq_fast_i[14]``      | 30    | RM_2 interrupt (Default: not assigned)  |
 | ``irq_fast_i[13]``      | 29    | RM_1 interrupt (Default: VERA IRQ)      |
 | ``irq_fast_i[12]``      | 28    | RM_0 interrupt (Default: not assigned)  |
-| ``irq_fast_i[11]``      | 27    | Praxos DMAC IRQ                         |
+| ``irq_fast_i[11]``      | 27    | PICORV DMAC IRQ                         |
 | ``irq_fast_i[10]``      | 26    | sdspi IRQ                               |
 | ``irq_fast_i[9]``       | 25    | wbuart IRQ                              |
 | ``irq_fast_i[8]``       | 24    | ps2_keyboard IRQ                        |

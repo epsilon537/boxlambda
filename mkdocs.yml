@@ -1,14 +1,17 @@
 site_name: BoxLambda Documentation
 theme:
     name: readthedocs
-    collapse_navigation: False
+    collapse_navigation: True
     titles_only: False
     logo: assets/boxlambda_logo_simple_white.png
     favicon: images/favicon.png
     features:
+    - navigation.instant
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.top
+    - navigation.sections
+    - toc.follow
 
 nav:
     - About: index.md
@@ -19,11 +22,19 @@ nav:
     - Interrupts: interrupts.md
     - Estimated FPGA Utilization: estimated-fpga-utilization.md
     - Git Workflow: git-workflow.md
-    - The Build System and Directory Layout: build-system.md
+    - The Build System and Directory Layout:
+        - The Directory Structure: build_sys_dir_struct.md
+        - The Gateware Build Structure: build_sys_gw_build_struct.md
+        - Building Software: build_sys_building_sw.md
+        - Make All, Clean and Regen: build_sys_make_all_etc.md
+        - Creating Additional Build Trees: build_sys_creating_build_trees.md
+        - The CMakeLists: build_sys_cmakelists.md
     - The Test Bench: test-bench.md
     - Gateware Components:
+        - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
         - RISCV Ibex Processor: components_ibex.md
+        - Dual Port RAM: components_dpram.md
         - RISCV-DBG Debug Core: components_riscv_dbg.md
         - LiteDRAM Memory Controller: components_litedram.md
         - VERA (Wishbone) Graphics: components_vera.md
@@ -41,16 +52,17 @@ nav:
         - ST-Sound: sw_comp_st_sound.md
         - YM2149 HAL: sw_comp_ym2149_hal.md
         - PicoRV DMA HAL: sw_comp_picorv_dma_hal.md
-    - Installation and Test Builds:
+    - Installation:
         - Prerequisites: prerequisites.md
+        - Peripherals (PMODs): pmods.md
         - Installation: installation.md
-        - Test Builds: 
-            - Hello World: test-build-hello-world.md
-            - Hello Debugger: test-build-hello-dbg.md
-            - PicoLibc Test: test-build-picolibc.md
-            - DDR Test: test-build-ddr.md
-            - VERA Test: test-build-vera.md
-            - SDSPI and FatFS Test: test-build-sdspi-and-fatfs.md
-            - YM2149 PSG, Audio DAC, and ST-Sound Test: test-build-ym2149.md
-            - PicoRV DMA Test: test-build-picorv-dma.md
+    - Test Builds: 
+        - Hello World: test-build-hello-world.md
+        - DDR Test: test-build-ddr.md
+        - VERA Test: test-build-vera.md
+        - SDSPI and FatFS Test: test-build-sdspi-and-fatfs.md
+        - YM2149 PSG, Audio DAC, and ST-Sound Test: test-build-ym2149.md
+        - PicoRV DMA Test: test-build-picorv-dma.md
+        - Dual Port RAM Test: test-build-dpram.md
+
 

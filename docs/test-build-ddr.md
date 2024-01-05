@@ -1,6 +1,7 @@
 ## DDR Test
 
 ### DDR Test Image on Verilator
+
 Build the test project:
 ```
 cd build/sim-a7-100/gw/projects/ddr_test
@@ -12,11 +13,26 @@ Execute the generated verilator model in interactive mode:
 ```
 You should see something like this:
 
-![ddr_test on Verilator](assets/ddr_test_verilator.png)
-
-*DDR Test on Verilator.* 
+```
+This is a simulation.
+Initializing SDRAM @0x20000000...
+Switching SDRAM to software control.
+Switching SDRAM to hardware control.
+SDRAM init OK.
+Memory Test through port 0:
+Memtest at 0x20000000 (32.0KiB)...
+  Write: 0x20000000-0x20008000 32.0KiB
+   Read: 0x20000000-0x20008000 32.0KiB
+Memtest OK
+Memory port 0 test successful.
+DDR instruction access test:
+Successfully executed code from DDR.
+Test Successful.
+```
 
 ### DDR Test Image on Arty A7
+
+If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 
 Build the test project:
 ```
@@ -33,4 +49,4 @@ Verify the test program's output in the terminal. You should see something like 
 
 ![ddr_test on Arty - Putty Terminal](assets/ddr_test_arty.png)
 
-*DDR Test on Arty A7-35T.*
+*DDR Test on Arty A7.*
