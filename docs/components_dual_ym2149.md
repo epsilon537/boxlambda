@@ -56,7 +56,7 @@ For the most part, I was able to use the *YM2149_PSG_system* code as-is. I just 
 
 - I added a Wishbone front end.
 - I made I2S support optional, controlled by a *USE_I2S* define.
-- Rather than have the top-level YM2149_PSG_system module include the Verilog files of the submodules it depends on, I added all required modules separately to the BoxLambda project in a *Bender.yml* manifest (see [here](build-system.md#bender) for more info on Bender). BoxLambda's build system dependency checking doesn't work well will Verilog modules including other Verilog modules.
+- Rather than have the top-level YM2149_PSG_system module include the Verilog files of the submodules it depends on, I added all required modules separately to the BoxLambda project in a *Bender.yml* manifest (see [here](build_sys_gw_build_struct.md#bender) for more info on Bender). BoxLambda's build system dependency checking doesn't work well will Verilog modules including other Verilog modules.
 - I made a few code tweaks to pacify Vivado's synthesizer.
 
 I forked the *YM2149_PSG_system* repo to track my changes:

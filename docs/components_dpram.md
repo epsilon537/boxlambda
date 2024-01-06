@@ -58,7 +58,7 @@ In simulation, I'm using Alex Forencich's [wb_dp_ram.v](https://github.com/epsil
 
 BoxLambda's internal memory consists of two Dual Port instances: **CMEM** and **DMEM**. The two instances create a Harvard Architecture (see below). The RAMs are Dual Port to allow simultaneous memory access from both the CPU and the DMA Controller.
 
-![Harvard vs. Von Neumann Architecture.](../assets/HarvardvsVonNeumann.png)
+![Harvard vs. Von Neumann Architecture.](assets/HarvardvsVonNeumann.png)
 
 *Harvard vs. Von Neumann Architecture.*
 

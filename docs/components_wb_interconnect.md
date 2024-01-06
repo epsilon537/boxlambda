@@ -26,13 +26,13 @@ BoxLambda uses a crossbar and shared bus combination. Refer to the [Architecture
 
 BoxLambda uses Word Addressing, as opposed to Byte Addressing.
 
-![Byte vs. Word Addressing.](../assets/byte_vs_word_addressing.png)
+![Byte vs. Word Addressing.](assets/byte_vs_word_addressing.png)
 
 *Byte Addressing (left) vs. Word Addressing (right).*
 
 Note that you can still address a byte using a Word Addressing bus. That's what the Byte Enables are for:
 
-![Word Addressing a byte with byte enables.](../assets/addressing_a_byte_w_byte_enables.png)
+![Word Addressing a byte with byte enables.](assets/addressing_a_byte_w_byte_enables.png)
 
 *Addressing a byte using Word Addressing and Byte Enables.*
 
