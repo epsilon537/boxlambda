@@ -18,7 +18,7 @@
 - **YM2419_PSG_system Register interface**:
     [sw/components/ym2149_sys_hal/ym2149_sys_regs.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ym2149_sys_hal/ym2149_sys_regs.h)
   
-A sound core is a perfect candidate for Partial FPGA Reconfiguration. There are a lot of options (Wave-Table synthesis, FM synthesis, PSG...) and a lot of open-source cores available. It would be pretty cool if the software application can just download its synthesizer of choice as part of the program.
+A sound core is a perfect candidate for Partial FPGA Reconfiguration. There are a lot of options (Wave-Table synthesis, FM synthesis, PSG...) and a lot of open-source cores available. It would be pretty cool if the software application could just download its synthesizer of choice as part of the program.
 
 Pretty much any core developed by [Jotego](https://github.com/jotego) sounds like a great idea.
 
@@ -28,7 +28,7 @@ I added a Dual [**YM2149**](https://en.wikipedia.org/wiki/General_Instrument_AY-
 
 A Programmable Sound Generator is a chip that generates sound by combining multiple basic waveforms (channels). Typical waveforms used are square waves, triangular waves, and noise. The shape, frequency, and volume of the different waveforms are configured by the CPU through a register interface.
 
-PSGs chips usually also include one or more envelope generators that control the variation of the sound's volume over time (ramp up, hold, ramp down, etc.). Different envelope shapes and associated parameters can be configured through the register interface.
+PSG chips usually also include one or more envelope generators that control the variation of the sound's volume over time (ramp up, hold, ramp down, etc.). Different envelope shapes and associated parameters can be configured through the register interface.
 
 ### The YM2149
 

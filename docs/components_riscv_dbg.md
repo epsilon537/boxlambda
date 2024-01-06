@@ -1,4 +1,4 @@
-## RISCV-DBG Debug Core
+## The RISCV-DBG Debug Core
 
 - **RISCV-DBG Repo**, BoxLambda fork, *boxlambda* branch: 
   [https://github.com/epsilon537/riscv-dbg](https://github.com/epsilon537/riscv-dbg).

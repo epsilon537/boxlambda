@@ -27,7 +27,7 @@ I'm using RISCV ISA-string **rv32imc** as the base name for the new scripts I'm 
 
 ```
 riscv32-unknown-elf-gcc -Q --help=target
-The following options are target specific:
+The following options are target-specific:
   -mabi=                                ilp32
   -malign-data=                         xlen
   -march=                               rv32imc

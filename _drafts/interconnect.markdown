@@ -15,7 +15,7 @@ I parked the task of adding keyboard and mouse support to the project and switch
 2. I've had some architectural modifications in the back of my mind for a while. If I was going to implement the architecture, I had to bring those modifications to the foreground.
 3. The first change is that I wanted to use a crossbar-based interconnect instead of two shared buses.
 4. The second architectural change is that I wanted to move to a Harvard architecture, i.e. independent paths for instruction fetches and data accesses coming from the Ibex processor.
-5. As an indirect consequence a few other changes came along, such as Word Addressing and defining the BoxLambda SoC as a component.
+5. As an indirect consequence, a few other changes came along, such as Word Addressing and defining the BoxLambda SoC as a component.
 
 The result is a bit of an architectural overhaul, further discussed below.
 
@@ -112,11 +112,11 @@ By contrast, if you connect the Instruction and Data Ports to two separate memor
 
 Instruction fetches go to CMEM port 0. Data accesses go to DMEM port 0. In this configuration, it takes 24 clock cycles to copy one word. That's a 33% performance improvement.
 
-The DPRAM Modules
-=================
+The Dual-Port RAM Modules
+=========================
 A [wb_dpram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv) module selects one of two DPRAM implementations depending on whether we're targeting simulation or FPGA synthesis.
 
-On FPGA, I'm using an **XPM_MEMORY_TDPRAM** instance. Using a XPM macro for internal memory allows me to do post-synthesis memory updates, as described [here](https://boxlambda.readthedocs.io/en/latest/build-system/#updatemem-and-xpm-memories).
+On FPGA, I'm using an **XPM_MEMORY_TDPRAM** instance. Using an XPM macro for internal memory allows me to do post-synthesis memory image updates in the bitstream file, as described [here](https://boxlambda.readthedocs.io/en/latest/build-system/#updatemem-and-xpm-memories).
 
 Here is the XPM_MEMORY_TDPRAM documentation: 
 

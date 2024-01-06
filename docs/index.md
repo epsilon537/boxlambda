@@ -6,7 +6,7 @@ About BoxLambda
 
 ![BoxLambda Architecture Block Diagram](assets/Arch_Diagram_Big.png)
 
-**BoxLambda** is an open-source project with the goal of creating a retro-style FPGA-based microcomputer. The microcomputer serves as a platform for software and RTL experimentation.
+**BoxLambda** is a project creating a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for software and RTL experimentation.
 
 BoxLambda is a software-hardware cross-over project. The plan is to provide room for experimentation both on the FPGA RTL side and on the software side.
 
@@ -21,13 +21,13 @@ Key Goals
         - Support for partial FPGA reconfiguration.
 - Target Hardware is Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start).
 - The computer should support the following peripherals:
-  - Keyboard
-  - Mouse (optional)
-  - Joystick (optional)
-  - Serial port
-  - SD card storage
-  - VGA Display
-  - Audio output
+    - Keyboard
+    - Mouse (optional)
+    - Joystick (optional)
+    - Serial port
+    - SD card storage
+    - VGA Display
+    - Audio output
   
 - Sound and graphics should be sufficient to support retro-style 2D gameplay.
 

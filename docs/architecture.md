@@ -6,7 +6,7 @@ Architecture
 ![Architecture Block Diagram for Arty A7-100T](assets/Arch_Diagram_Big.png)
 *BoxLambda Architecture Block Diagram for Arty A7-100T.*
 
-This is diagram shows the Arty A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
+This diagram shows the Arty A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
 
 #### Internal RAM
 
@@ -36,7 +36,7 @@ The bus masters and RAMs (including VERA graphics and LiteDRAM external memory c
 
 A big crossbar interconnect takes up a lot of FPGA resources. The fabric size grows with the square of the number of bus master and slave pairs attached to it. A shared bus, on the other hand, grows linearly with the number of bus masters and slaves attached to it. A disadvantage of a shared bus, however, is that only one bus master at a time can access the bus. Multiple bus masters on a shared bus will be stalling each other. As a compromise, I put the *slow* slaves on a shared bus and attached that bus to the crossbar interconnect consisting of the bus masters and *fast* slaves (read: memories).
 
-#### The Black Box, and other Reconfigurable Partitions
+#### The Black Box, and Other Reconfigurable Partitions
 
 The Black Box Partition is an empty area in the FPGA's floorplan. This is where you can insert your application-specific logic. Do you need hardware-assisted collision detection for your Bullet-Hell Shoot'em Up game? Put it in the Black Box. A DSP? A CORDIC core? More RAM? As long as it fits the floor plan, you can put it in the Black Box region.
 
@@ -66,7 +66,7 @@ This architecture diagram shows the Arty A7-35T configuration.
 
 DFX is not supported on the A7-35T. Neither is the Hierarchical Design Flow. This means we have to stick to a monolithic design. The RTL for all components is combined into one single design, which is synthesized, implemented, and turned into a single bitstream. There is still room for RTL experimentation in this build, but you won't be able to live-load it. It's going to require an update of the Full Configuration Bitstream.
 
-The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM has been reduced to 64 KB and the two of DPRAMs are reduced to 32 KB each. 
+The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM has been reduced to 64 KB, and the two Dual Port RAMs are reduced to 32 KB each. 
 
 All other components are the same as in the Arty A7-100T Configuration.
 

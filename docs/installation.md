@@ -25,7 +25,7 @@ Set up the repository. This initializes the git submodules used and creates the 
 
 ### User-Level Access to the Arty A7 USB JTAG Adapter.
 
-OpenOCD might not have permission to access the USB JTAG adapter when run at user level. To fix this issue, you need to add a rule to **/etc/udev/rules.d**.
+OpenOCD might not have permission to access the USB JTAG adapter when run at the user level. To fix this issue, you need to add a rule to **/etc/udev/rules.d**.
 Create a file with the name **99-openocd.rules** in the **/etc/udev/rules.d** directory. This file should have the following contents:
 
 ```
@@ -63,4 +63,4 @@ On Ubuntu WSL, *udev*, the system service in charge of enforcing device permissi
 command="service udev start"
 ```
 
-Without *udev* running, OpenOCD or Vivado will not have access to the Arty USB JTAG adapter when executed at user level.
+Without *udev* running, OpenOCD or Vivado will not have access to the Arty USB JTAG adapter when executed at the user level.

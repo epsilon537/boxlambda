@@ -1,4 +1,4 @@
-## The Dual Port RAM Modules
+## The Dual-Port RAM Modules
 
 - **DPRAM Repo**, BoxLambda fork, *boxlambda* branch:
     [https://github.com/epsilon537/verilog-wishbone](https://github.com/epsilon537/verilog-wishbone).
@@ -17,7 +17,7 @@
 
 The *wb_dpram_wrapper.sv* module selects one of two DPRAM implementations depending on whether we're targeting simulation or FPGA synthesis.
 
-On FPGA, I'm using an **XPM_MEMORY_TDPRAM** instance. Using a XPM macro for internal memory allows me to do post-synthesis memory updates, as described [here](build_sys_gw_build_struct.md#updatemem-and-xpm-memories).
+On FPGA, I'm using an **XPM_MEMORY_TDPRAM** instance. Using an XPM macro for internal memory allows me to do post-synthesis memory image updates in the bitstream file, as described [here](build_sys_gw_build_struct.md#updatemem-and-xpm-memories).
 
 I did run into a spurious write issue with XPM_MEMORY_TDPRAM. To avoid the issue, I had to qualify the Write Enable (*wea/web*) signals with the *valid* signals even though the valid signals were already going to the module's Memory Enable ports (*ena/enb*):
 
@@ -64,7 +64,7 @@ BoxLambda's internal memory consists of two Dual Port instances: **CMEM** and **
 
 In a Von Neumann Architecture, the CPU has access to one memory that stores both instructions and data. Instruction Fetch and Data Access transactions share one memory bus. In a Harvard Architecture, Instruction Memory is separate from Data Memory. Instruction Fetch and Data Access transactions can be executed independently.
 
-The Ibex processor has separate Instruction and Data ports. When accessing internal memory, the instruction port by default targets CMEM and the data port by default targets DMEM. These defaults can be overridden by mapping data to the **.cmem_bss** section and code to the **.dmem_text** section. See the [Link Script](sw_comp_picolibc.md#the-link-script) section for details.
+The Ibex processor has separate Instruction and Data ports. When accessing internal memory, the instruction port by default targets CMEM, and the data port by default targets DMEM. These defaults can be overridden by mapping data to the **.cmem_bss** section and code to the **.dmem_text** section. See the [Link Script](sw_comp_picolibc.md#the-link-script) section for details.
 
 ### DPRAM Clock Frequency
 

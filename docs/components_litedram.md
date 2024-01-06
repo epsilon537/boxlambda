@@ -75,7 +75,7 @@ Starting from the *arty.yml* example, I created the following LiteDRAM configura
     "user_ports": {
         "wishbone_0" : {
             "type":  "wishbone",
-            "data_width": 32, #Set data width to 32. If not specificied it defaults to 128 bits.
+            "data_width": 32, #Set data width to 32. If not specified, it defaults to 128 bits.
             "block_until_ready": True,
         }
     },
@@ -84,7 +84,7 @@ Starting from the *arty.yml* example, I created the following LiteDRAM configura
 
 Some points about the above:
 
-- The *PHY layer*, *Electrical* and *Core* sections I left exactly as-is in the given Arty example.
+- The *PHY layer*, *Electrical*, and *Core* sections I left exactly as-is in the given Arty example.
 - In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
 - In the *Frequency* section, I set *sys_clk_freq* to 50MHz. The generated core will also provide a double-rate 100MHz clock next to this 50MHz clock.  
 - In the *User Ports* section, I specified one 32-bit Wishbone port.

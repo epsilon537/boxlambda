@@ -50,4 +50,4 @@ The WBXBAR crossbar module is well-documented in this ZipCPU Blog post:
 
 [https://zipcpu.com/blog/2019/07/17/crossbar.html](https://zipcpu.com/blog/2019/07/17/crossbar.html)
 
-At the top of this page you'll find a link to the BoxLambda fork of WBXBAR. It contains a few minor code tweaks in the for-loop generators to make Vivado happy.
+At the top of this page, you'll find a link to the BoxLambda fork of WBXBAR. It contains a few minor code tweaks in the for-loop generators to make Vivado happy.

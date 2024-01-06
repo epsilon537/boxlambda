@@ -86,13 +86,13 @@ module boxlambda_soc #(
     );
 ```
 
-The [Gateware Build Structure](build_sys_gw_build_struct.md#the-gateware-build-structure) section describes the three layer gateware build structure. The diagram below shows how the BoxLambda SoC component fits in that build structure.
+The [Gateware Build Structure](build_sys_gw_build_struct.md#the-gateware-build-structure) section describes the three-layer gateware build structure. The diagram below shows how the BoxLambda SoC component fits in that build structure.
 
 ![BoxLambda SoC Component Build Diagram.](assets/BoxLambda_SoC_Component_Build_Diagram.png)
 
 *Build Diagram with BoxLambda SoC component and top.sv.*
 
 Different *gw/project/* builds reference this *boxlambda_soc* component. The project builds differ in the way they instantiate the *boxlambda_soc* module, including or excluding specific subcomponents. Most *gw/projects*
- reference the same [top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/top/rtl/top.sv) module, but with a different combination of *defines* in their *Bender.yml* manifest.
+ reference the same [top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/top/rtl/top.sv) module but with a different combination of *defines* in their *Bender.yml* manifest.
 
 *Gw/project/* builds also differ in the software program they run on the SoC. This is specified in the *gw/project/*'s CMakefile.

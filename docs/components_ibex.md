@@ -48,7 +48,7 @@ Multiple outstanding transactions are currently not supported. I hope to add tha
 
 ### Ibex Core Configuration
 
-I settled on RISCV configuration **RV32IMCB**: The **(I)nteger** and **(C)ompressed** instruction set are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
+I settled on RISCV configuration **RV32IMCB**: The **(I)nteger** and **(C)ompressed** instruction sets are fixed in Ibex. **(M)ultiplication and Division** and **(B)it Manipulation** are enabled optional extensions.
 Note that there's no Instruction or Data Cache. Code executes directly from the CMEM DPRAM or DDR memory. Data access goes straight to DMEM DPRAM or DDR memory.
 
 The Ibex core is instantiated with the following *M* and *B* parameters (see [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)):

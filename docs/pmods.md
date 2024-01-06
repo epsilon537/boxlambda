@@ -18,7 +18,7 @@ Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd
 
 ### Audio PMOD
 
-To make space for keyboard and mouse, I moved the audio PMOD to the ChipKit header of the Arty A7 board. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) as follows:
+To make space for the keyboard and mouse, I moved the audio PMOD to the ChipKit header of the Arty A7 board. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) as follows:
 
 - PMOD Pin 1 (*AIN*) to ChipKit IO 0.
 - PMOD Pin 2 (*GAIN*) to ChipKit IO 1.

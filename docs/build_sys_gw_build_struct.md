@@ -2,7 +2,7 @@ The Gateware Build Structure
 ----------------------------
 ### Bender
 
-The build system is CMake based but relies on Bender for gateware package dependency Management:
+The build system is CMake-based but relies on Bender for gateware package dependency Management:
 
 [https://github.com/pulp-platform/bender](https://github.com/pulp-platform/bender)
 
@@ -51,7 +51,7 @@ where *action* is one of the following:
     - Depends on: gateware sources.
     - Build tree: *sim-a7-\** build trees. Gateware component and project directories.
 - **_sim**: Build the Verilator simulation model (*Vmodel*) of the given gateware project. Note that only the gateware is built, not the SW project running on top of this gateware. See the *_sim_sw* target below. 
-    - Depends on: gareware sources.
+    - Depends on: gateware sources.
     - Build tree: *sim-a7-\** build trees. Gateware projects directories only.
 - **_sim_sw**: Build the Verilator simulation model (*Vmodel*) of the given gateware project as well as the associated software project. The SW image memory file is copied into its proper place in the gateware build directory so it gets picked when the Verilator model executes. 
     - Depends on: *sim* target above and the software target. 
@@ -102,7 +102,7 @@ When Vivado implements an XPM memory such as *xpm_memory_tdpram*, a so-called **
 
 *Merging a .mem file into a Bitstream File.*
 
-*UpdateMem* also requires instance path of the memory in question. In case of BoxLambda, this path is:
+*UpdateMem* also requires the instance path of the memory in question. In the case of BoxLambda, this path is:
 
 ```
 boxlambda_soc_inst/cmem/xpm_memory_tdpram_inst/xpm_memory_base_inst
@@ -120,7 +120,7 @@ When you run *make hello_world_synth*, the following happens:
 1. Make runs a *bender script* command on the bender.yml file in the *gw/projects/hello_world/* directory. The *bender script* command is wrapped in the *scripts/bender_gen_vivado_source.sh* shell script.
 2. The bender script command processes that bender.yml manifest, as well as the bender.yml manifests of any dependent components. 
 3. The bender script command emits a list of all the HDL sources that make up the project.
-4. Similarly, the *scripts/bender_gen_constraints_file_list.sh* and *scripts/bender_gen_mem_file_list.sh* emits the *.xdc* constraints and .mem memory file list for the project. 
+4. Similarly, the *scripts/bender_gen_constraints_file_list.sh* and *scripts/bender_gen_mem_file_list.sh* emit the *.xdc* constraints and .mem memory file list for the project. 
 5. Make feeds these file lists into a *vivado_create_project.tcl* script. 
 6. The *vivado_create_project.tcl* script creates a Vivado project.
 7. Make kicks off the *vivado_synth.tcl* script which opens the Vivado project and starts synthesis. The output of synthesis is a *.dcp* checkpoint file.
@@ -128,7 +128,7 @@ When you run *make hello_world_synth*, the following happens:
 When you run *make hello_world_bit*, the following happens:
 
 1. Make will first run the *hello_world_synth* rules because *hello_world_bit* depends on *hello_world_synth*. Make determines if FPGA (re)implementation and bitstream generation are needed. If the bitstream file is up-to-date, no further action is taken. 
-2. Make kicks off the *vivado_impl.tcl* script which opens the Vivado project, picks up the synthesis checkpoint *.dcp* file and starts implementation.
+2. Make kicks off the *vivado_impl.tcl* script which opens the Vivado project, picks up the synthesis checkpoint *.dcp* file, and starts implementation.
 
 When you run *make hello_world_bit_sw*, the following happens:
 

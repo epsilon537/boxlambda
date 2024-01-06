@@ -17,7 +17,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **BSCANE**: A Xilinx primitive giving access to and from the FPGA's JTAG scan chain.
 
-- **BSS**: Block Starting Symbol. Portion of an object file or executable holding zero-initialized data.
+- **BSS**: Block Starting Symbol. The portion of an object file or executable holding zero-initialized data.
 
 - **Bus Arbiter**: In a Shared Bus Interconnect, a Bus Arbiter decides which of the requesting bus masters get to access the bus. 
 
@@ -39,7 +39,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **CRT0**: C Run-Time 0. A set of execution startup routines linked into a C program that performs any initialization work required before calling the program's *main()* function. 
 
-- **Crossbar Interconnect**:  An M x N crossbar is a switching fabric which allows M inputs (bus masters) to connect to N outputs (bus slaves) without blocking. Blocking only occurs when two inputs (bus masters) want to talk to the same output (bus slave).
+- **Crossbar Interconnect**:  An M x N crossbar is a switching fabric that allows M inputs (bus masters) to connect to N outputs (bus slaves) without blocking. Blocking only occurs when two inputs (bus masters) want to talk to the same output (bus slave).
 
 - **CSR**: Control and Status Register.
   
@@ -197,7 +197,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **RV32IMCB**: Risc-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
 
-- **Scatter-Gather DMA**: DMA data transfers from one non-contiguous block of memory to another by means of a series of smaller contiguous block transfers.
+- **Scatter-Gather DMA**: DMA data transfers from one non-contiguous block of memory to another using a series of smaller contiguous block transfers.
  
 - **Scan Line**: One line in the raster scanning pattern of the VGA display.
 
