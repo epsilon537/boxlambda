@@ -70,6 +70,12 @@ packages:
     source:
       Path: ../../components/sdspi
     dependencies: []
+  usb_hid_host:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/usb_hid_host
+    dependencies: []
   vera:
     revision: null
     version: null

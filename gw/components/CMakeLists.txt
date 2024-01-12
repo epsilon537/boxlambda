@@ -52,6 +52,7 @@ add_subdirectory(wbxbar)
 add_subdirectory(wb_dp_ram)
 add_subdirectory(boxlambda_soc)
 add_subdirectory(blackbox)
+add_subdirectory(usb_hid_host)
 
 
 

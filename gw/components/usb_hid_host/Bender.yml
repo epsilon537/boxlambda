@@ -1,0 +1,23 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: usb_hid_host
+  
+sources:
+  - target: verilator
+    files:
+     - lint.vlt
+  - target: memory
+    files:
+     - ../../../sub/usb_hid_host/src/usb_hid_host_rom.hex
+  - target: any(verilator, vivado)
+    files:
+     - ../../../sub/usb_hid_host/src/usb_hid_host.v
+     - ../../../sub/usb_hid_host/src/usb_hid_host_rom.v
+     - ../../../sub/usb_hid_host/src/wb_usb_hid_host.v
+
+
+
+

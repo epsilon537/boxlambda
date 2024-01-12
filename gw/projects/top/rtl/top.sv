@@ -48,6 +48,12 @@ module top (
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
 
+     // USB HID
+    inout wire usb1_dm, 
+    inout wire usb1_dp,
+    inout wire usb2_dm, 
+    inout wire usb2_dp,
+
     // Audio interface
     output wire       audio_out,
     output wire       audio_gain,
@@ -83,6 +89,9 @@ module top (
 `endif
 `ifndef PICORV_DMA
         .PICORV_ACTIVE(0),
+`endif
+`ifndef USB_HID
+        .USB_HID_ACTIVE(0),
 `endif
         /*We don't specify a dmem.mem. The data segment is copied into DMEM from a load segment that's part of the cmem.mem
          *image. This copy operation is part of the PicoLibc start-up code.*/

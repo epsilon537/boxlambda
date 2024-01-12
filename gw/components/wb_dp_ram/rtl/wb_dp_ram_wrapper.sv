@@ -6,7 +6,7 @@
  */
 module wb_dp_ram_wrapper #
 (
-    parameter ADDR_WIDTH = 16,                // width of word addressed address bus in bits
+    parameter ADDR_WIDTH = 14,                // width of word addressed address bus in bits
     parameter INIT_FILE  = ""
 )
 (

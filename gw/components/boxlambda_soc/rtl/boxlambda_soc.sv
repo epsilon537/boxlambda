@@ -8,6 +8,7 @@ module boxlambda_soc #(
         parameter SDSPI_ACTIVE = 1,
         parameter YM2149_ACTIVE = 1,
         parameter PICORV_ACTIVE = 1,
+        parameter USB_HID_ACTIVE = 1,
         parameter CMEM_FILE = "",
         parameter DMEM_FILE = ""
     ) (
@@ -57,6 +58,11 @@ module boxlambda_soc #(
     output wire  sdspi_mosi,
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
+     // USB HID
+    inout wire usb1_dm, 
+    inout wire usb1_dp,
+    inout wire usb2_dm, 
+    inout wire usb2_dp,
     // Audio interface
     output wire       audio_out,
     output wire       audio_gain,
@@ -106,7 +112,9 @@ module boxlambda_soc #(
         UART_S, /*UART.*/
         TIMER_S, /*Timer Module.*/
         DDR_CTRL_S, /*LiteDRAM control port.*/
-        DM_S /*Debug Module slave port.*/
+        DM_S, /*Debug Module slave port.*/
+        USB_HID_0_S, /*USB HID keyboard or mouse*/
+        USB_HID_1_S  /*USB HID keyboard or mouse*/
     } wb_shared_bus_slave_e;
 
     /*We used a word-addressing Wishbone bus. The Dual Port RAM word address bus width is equal to the 
@@ -118,12 +126,14 @@ module boxlambda_soc #(
     localparam NUM_XBAR_MASTERS = 5;
     localparam NUM_XBAR_SLAVES  = 8;
     localparam NUM_SHARED_BUS_MASTERS = 1;
-    localparam NUM_SHARED_BUS_SLAVES = 10;
+    localparam NUM_SHARED_BUS_SLAVES = 12;
 
     localparam PICORV_BASE_ADDRESS = 'h10002000;
 
     //Shared bus slave addresses. Right shift by two to convert byte address values to word address values.
     localparam [NUM_SHARED_BUS_SLAVES*AW-1:0] SHARED_BUS_SLAVE_ADDRS = {
+        /*USB_HID_1*/       {AW'('h10000080>>2)},
+        /*USB_HID_0*/       {AW'('h10000040>>2)},
         /*DM_S*/            {AW'('h10040000>>2)},
         /*DDR_CTRL_S*/      {AW'('h10030000>>2)},
         /*TIMER_S*/         {AW'('h10020000>>2)},
@@ -138,6 +148,8 @@ module boxlambda_soc #(
 
     //Shared bus slave address mask. Right-shift by two to convert byte size to word size.
     localparam [NUM_SHARED_BUS_SLAVES*AW-1:0] SHARED_BUS_SLAVE_ADDR_MASKS = {
+        /*USB_HID_1_S*/     {AW'(~('h0000003f>>2))}, 
+        /*USB_HID_0_S*/     {AW'(~('h0000003f>>2))}, 
         /*DM_S*/            {AW'(~('h0000ffff>>2))},   
         /*DDR_CTRL_S*/      {AW'(~('h0000ffff>>2))},
         /*TIMER_S*/         {AW'(~('h0000000f>>2))},
@@ -182,7 +194,8 @@ module boxlambda_soc #(
     //ndm_reset_req: Non-Debug Module reset requested by Debug Module
     //ndm_reset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
     //dm_reset: Debug-Module Reset issued by Reset Controller.
-    logic ndm_reset_req, ndm_reset, dm_reset;
+    //usbreset: Reset of the USB clock domain.
+    logic ndm_reset_req, ndm_reset, dm_reset, usb_reset;
     logic por_completed; //Indicates Power-On Reset has been completed.
 	logic debug_req; //Debug Request signal.
 
@@ -369,14 +382,14 @@ module boxlambda_soc #(
     //Reset Controller
     reset_ctrl reset_ctrl_inst(
         .sys_clk(sys_clk),
-        .usb_clk(clk_usb), //Not used yet.
+        .usb_clk(clk_usb),
         .sys_pll_locked_i(sys_pll_locked),
         .usb_pll_locked_i(usb_pll_locked),
         .ndm_reset_i(ndm_reset_req),
         .ext_reset_i(~ext_rst_n), //asynchronous external reset
         .ndm_reset_o(ndm_reset),
         .dm_reset_o(dm_reset),
-        .usb_reset_o(), //Not used yet.
+        .usb_reset_o(usb_reset),
         .por_completed_o(por_completed),
         //32-bit pipelined Wishbone slave interface.
         .wb_adr(shared_bus_wbs[RESET_CTRL_S].adr[0]),
@@ -856,4 +869,51 @@ module boxlambda_soc #(
     end
     endgenerate
 
+    generate if (USB_HID_ACTIVE)
+    begin : GENERATE_USB_HID_MODULES
+        wb_usb_hid_host wb_usb_hid0_host_inst (
+            .wb_clk(sys_clk),                  // Wishbone clock - assumed to be faster than usb_clock, e.g. 50MHz.
+            .usb_clk(clk_usb),		            // 12MHz clock
+            .usb_rst_n(~usb_reset),           // USB clock domain active low reset
+            .sys_rst_n(~ndm_reset),          // System clock domain active low reset
+            .usb_dm(usb1_dm), 
+            .usb_dp(usb1_dp),            // USB D- and D+ input/output
+            .irq(),     
+            
+            //32-bit pipelined Wishbone slave interface.
+            .wbs_adr(shared_bus_wbs[USB_HID_0_S].adr[3:0]),
+            .wbs_dat_w(shared_bus_wbs[USB_HID_0_S].dat_m),
+            .wbs_dat_r(shared_bus_wbs[USB_HID_0_S].dat_s),
+            .wbs_sel(shared_bus_wbs[USB_HID_0_S].sel),
+            .wbs_stall(shared_bus_wbs[USB_HID_0_S].stall),
+            .wbs_cyc(shared_bus_wbs[USB_HID_0_S].cyc),
+            .wbs_stb(shared_bus_wbs[USB_HID_0_S].stb),
+            .wbs_ack(shared_bus_wbs[USB_HID_0_S].ack),
+            .wbs_we(shared_bus_wbs[USB_HID_0_S].we),
+            .wbs_err(shared_bus_wbs[USB_HID_0_S].err)
+        );
+
+        wb_usb_hid_host wb_usb_hid1_host_inst (
+            .wb_clk(sys_clk),                  // Wishbone clock - assumed to be faster than usb_clock, e.g. 50MHz.
+            .usb_clk(clk_usb),		            // 12MHz clock
+            .usb_rst_n(~usb_reset),           // USB clock domain active low reset
+            .sys_rst_n(~ndm_reset),          // System clock domain active low reset
+            .usb_dm(usb2_dm), 
+            .usb_dp(usb2_dp),               // USB D- and D+ input/output
+            .irq(),     
+            
+            //32-bit pipelined Wishbone slave interface.
+            .wbs_adr(shared_bus_wbs[USB_HID_1_S].adr[3:0]),
+            .wbs_dat_w(shared_bus_wbs[USB_HID_1_S].dat_m),
+            .wbs_dat_r(shared_bus_wbs[USB_HID_1_S].dat_s),
+            .wbs_sel(shared_bus_wbs[USB_HID_1_S].sel),
+            .wbs_stall(shared_bus_wbs[USB_HID_1_S].stall),
+            .wbs_cyc(shared_bus_wbs[USB_HID_1_S].cyc),
+            .wbs_stb(shared_bus_wbs[USB_HID_1_S].stb),
+            .wbs_ack(shared_bus_wbs[USB_HID_1_S].ack),
+            .wbs_we(shared_bus_wbs[USB_HID_1_S].we),
+            .wbs_err(shared_bus_wbs[USB_HID_1_S].err)
+        );
+    end
+    endgenerate
 endmodule
