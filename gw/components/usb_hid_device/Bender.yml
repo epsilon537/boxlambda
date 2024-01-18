@@ -1,0 +1,50 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: usb_hid_device
+
+dependencies:
+  # Path dependency.
+  async_fifo: { path: "../../components/async_fifo" }
+
+sources:
+  - target: memory
+    files:
+     - ../../../sub/USB/firmware/j1.hex
+  - target: verilator
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
+    files:
+     - lint.vlt
+     - ../../../sub/USB/rtl/types.sv
+     - ../../../sub/USB/rtl/ioaddr.sv
+     - ../../../sub/USB/rtl/top_usb_device.sv
+     - ../../../sub/USB/rtl/board_io.sv
+     - ../../../sub/USB/rtl/interfaces.sv
+     - ../../../sub/USB/rtl/usb_cdr.sv
+     - ../../../sub/USB/rtl/usb_device_controller.sv
+     - ../../../sub/USB/rtl/usb_filter.sv
+     - ../../../sub/USB/rtl/usb_reset.sv
+     - ../../../sub/USB/rtl/usb_rx.sv
+     - ../../../sub/USB/rtl/usb_sie.sv
+     - ../../../sub/USB/rtl/usb_transceiver.sv
+     - ../../../sub/USB/rtl/usb_tx.sv
+     - ../../../sub/USB/rtl/wb_intercon.sv
+     - ../../../sub/USB/rtl/sync_reset.sv
+     - ../../../sub/USB/sim/fifo16x8_show_ahead.v
+     - ../../../sub/USB/sim/fifo16x8.v
+     - ../../../sub/USB/J1_WB/rtl/j1_types.sv
+     - ../../../sub/USB/J1_WB/rtl/j1_wb.sv
+     - ../../../sub/USB/J1_WB/rtl/register_file.sv
+     - ../../../sub/USB/J1_WB/rtl/interfaces.sv
+     - ../../../sub/USB/J1_WB/misc/wb_rom.sv
+     - ../../../sub/USB/J1_WB/misc/rom.v
+     - ../../../sub/USB/J1_WB/misc/wb_ram.sv
+     - ../../../sub/USB/J1_WB/misc/spram.v
+
+    
+
+
+

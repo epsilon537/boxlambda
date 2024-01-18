@@ -47,31 +47,33 @@ extern "C" {
 #define USB_HID_REPORT_0 7
 #define USB_HID_REPORT_1 8
 
+#define USB_HID_TRIGGER_BRANCH 9
+
 //Write to Register
 inline void usb_hid0_reg_wr(unsigned reg_offset, unsigned val)
 {
-	assert(reg_offset <= USB_HID_REPORT_1);
+	assert(reg_offset <= USB_HID_TRIGGER_BRANCH);
 	((unsigned volatile *)(USB_HID0_BASE))[reg_offset] = val;
 }
 
 //Read from Register
 inline unsigned usb_hid0_reg_rd(unsigned reg_offset)
 {
-	assert(reg_offset <= USB_HID_REPORT_1);
+	assert(reg_offset <= USB_HID_TRIGGER_BRANCH);
 	return ((unsigned volatile *)(USB_HID0_BASE))[reg_offset];
 }
 
 //Write to Register
 inline void usb_hid1_reg_wr(unsigned reg_offset, unsigned val)
 {
-	assert(reg_offset <= USB_HID_REPORT_1);
+	assert(reg_offset <= USB_HID_TRIGGER_BRANCH);
 	((unsigned volatile *)(USB_HID1_BASE))[reg_offset] = val;
 }
 
 //Read from Register
 inline unsigned usb_hid1_reg_rd(unsigned reg_offset)
 {
-	assert(reg_offset <= USB_HID_REPORT_1);
+	assert(reg_offset <= USB_HID_TRIGGER_BRANCH);
 	return ((unsigned volatile *)(USB_HID1_BASE))[reg_offset];
 }
 

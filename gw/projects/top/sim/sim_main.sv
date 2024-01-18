@@ -95,6 +95,8 @@ module sim_main #(
   		.usb1_dp(usb1_dp),
   		.usb2_dm(usb2_dm), 
   		.usb2_dp(usb2_dp),
+		.usb1_dm_snoop(),
+    	.usb1_dp_snoop(),
 		 
 		// ym2149 interface
 		.audio_out(audio_out),

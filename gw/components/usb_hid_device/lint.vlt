@@ -1,0 +1,86 @@
+`verilator_config
+lint_off -rule PINCONNECTEMPTY -file "*/sub/USB/rtl/top_usb_device.sv" -match "Cell pin connected by name with empty reference: 'hex'"
+
+lint_off -rule DECLFILENAME -file "*/sub/USB/rtl/interfaces.sv" -match "Filename 'interfaces' does not match IFACE name: 'if_transceiver'"
+
+lint_off -rule PINCONNECTEMPTY -file "*/sub/USB/sim/fifo16x8_show_ahead.v" -match "Cell pin connected by name with empty reference: 'awfull'"
+
+lint_off -rule PINCONNECTEMPTY -file "*/sub/USB/sim/fifo16x8_show_ahead.v" -match "Cell pin connected by name with empty reference: 'arempty'"
+
+lint_off -rule PINCONNECTEMPTY -file "*/sub/USB/sim/fifo16x8.v" -match "Cell pin connected by name with empty reference: 'awfull'"
+
+lint_off -rule PINCONNECTEMPTY -file "*/sub/USB/sim/fifo16x8.v" -match "Cell pin connected by name with empty reference: 'arempty'"
+
+lint_off -rule DECLFILENAME -file "*/sub/USB/J1_WB/rtl/interfaces.sv" -match "Filename 'interfaces' does not match IFACE name: 'if_wb'"
+
+lint_off -rule ASCRANGE -file "*/sub/USB/rtl/usb_reset.sv" -match "Ascending bit range vector: left < right of bit range: [1:13]"
+
+lint_off -rule ASCRANGE -file "*/sub/USB/rtl/usb_filter.sv" -match "Ascending bit range vector: left < right of bit range: [0:5]"
+
+lint_off -rule ASCRANGE -file "*/sub/USB/rtl/usb_filter.sv" -match "Ascending bit range vector: left < right of bit range: [0:5]"
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the LHS, but LHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the RHS, but RHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the RHS, but RHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the RHS, but RHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the RHS, but RHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the LHS, but LHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the RHS, but RHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the RHS, but RHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the RHS, but RHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_filter.sv" -match "Operator ADD expects 3 bits on the RHS, but RHS's SEL generates 1 bits."
+
+lint_off -rule WIDTHTRUNC -file "*/sub/USB/rtl/usb_sie.sv" -match "Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's VARREF 'wb_dat_i' generates 16 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_sie.sv" -match "Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's VARXREF 'q' generates 8 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/rtl/usb_sie.sv" -match "Operator SHIFTL expects 12 bits on the LHS, but LHS's SEL generates 11 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Operator ASSIGN expects 5 bits on the Assign RHS, but Assign RHS's SIGNED generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Operator ASSIGN expects 5 bits on the Assign RHS, but Assign RHS's SIGNED generates 2 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Operator SHIFTL expects 16 bits on the LHS, but LHS's VARREF 'npc' generates 13 bits."
+
+lint_off -rule ASCRANGE -file "*/sub/USB/rtl/sync_reset.sv" -match "Ascending bit range vector: left < right of bit range: [1:3]"
+
+lint_off -rule ASCRANGE -file "*/sub/USB/rtl/board_io.sv" -match "Ascending bit range vector: left < right of bit range: [0:3]"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/USB/rtl/board_io.sv" -match "Bits of signal are not used: 'wb_dat_i'[15:10]"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/USB/rtl/usb_sie.sv" -match "Bits of signal are not used: 'wb_dat_i'[15:8]"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/USB/rtl/interfaces.sv" -match "Signal is not used: 'rx_error'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/USB/sim/fifo16x8_show_ahead.v" -match "Signal is not used: 'aclr'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/USB/sim/fifo16x8.v" -match "Signal is not used: 'aclr'"
+
+lint_off -rule CASEINCOMPLETE -file "*/sub/USB/rtl/board_io.sv" -match "Case values incompletely covered (example pattern 0x1)"
+
+lint_off -rule CASEINCOMPLETE -file "*/sub/USB/rtl/board_io.sv" -match "Case values incompletely covered (example pattern 0x0)"
+
+lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'top_usb_device.cpu.unnamedblk1.op' (not all control paths of combinational always assign a value)*"
+
+lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'top_usb_device.cpu.unnamedblk2.dd' (not all control paths of combinational always assign a value)*"
+
+lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'top_usb_device.cpu.unnamedblk2.rd' (not all control paths of combinational always assign a value)*"
+
+lint_off -rule LATCH -file "*/sub/USB/rtl/usb_cdr.sv" -match "Latch inferred for signal 'top_usb_device.usb_device_controller.usb_transceiver.usb_cdr.eop_next' (not all control paths of combinational always assign a value)*"
+
+lint_off -rule SYNCASYNCNET -file "*/sub/USB/rtl/top_usb_device.sv" -match "Signal flopped as both synchronous and async: 'top_usb_device.reset'*"
+
+lint_off -rule UNOPTFLAT -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Signal unoptimizable: Circular combinational logic: 'top_usb_device.cpu.mem_addr_sel'"
+
+lint_off -rule UNOPTFLAT -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Signal unoptimizable: Circular combinational logic: 'top_usb_device.cpu.pc'"
+
+lint_off -rule UNOPTFLAT -file "*/sub/USB/J1_WB/rtl/interfaces.sv" -match "Signal unoptimizable: Circular combinational logic: 'top_usb_device.wbm.we'"

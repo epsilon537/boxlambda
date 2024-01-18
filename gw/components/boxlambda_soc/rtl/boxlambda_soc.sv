@@ -59,10 +59,17 @@ module boxlambda_soc #(
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
      // USB HID
-    inout wire usb1_dm, 
-    inout wire usb1_dp,
-    inout wire usb2_dm, 
-    inout wire usb2_dp,
+    input wire usb1_dm_i, 
+    input wire usb1_dp_i,
+    output wire usb1_dm_o, 
+    output wire usb1_dp_o,
+    output wire usb1_oe,
+    input wire usb2_dm_i, 
+    input wire usb2_dp_i,
+    output wire usb2_dm_o, 
+    output wire usb2_dp_o,
+    output wire usb2_oe,
+    
     // Audio interface
     output wire       audio_out,
     output wire       audio_gain,
@@ -876,8 +883,11 @@ module boxlambda_soc #(
             .usb_clk(clk_usb),		            // 12MHz clock
             .usb_rst_n(~usb_reset),           // USB clock domain active low reset
             .sys_rst_n(~ndm_reset),          // System clock domain active low reset
-            .usb_dm(usb1_dm), 
-            .usb_dp(usb1_dp),            // USB D- and D+ input/output
+            .usb_dm_i(usb1_dm_i), 
+            .usb_dp_i(usb1_dp_i),            // USB D- and D+ input
+            .usb_dm_o(usb1_dm_o), 
+            .usb_dp_o(usb1_dp_o),            // USB D- and D+ output
+            .usb_oe(usb1_oe),
             .irq(),     
             
             //32-bit pipelined Wishbone slave interface.
@@ -898,8 +908,11 @@ module boxlambda_soc #(
             .usb_clk(clk_usb),		            // 12MHz clock
             .usb_rst_n(~usb_reset),           // USB clock domain active low reset
             .sys_rst_n(~ndm_reset),          // System clock domain active low reset
-            .usb_dm(usb2_dm), 
-            .usb_dp(usb2_dp),               // USB D- and D+ input/output
+            .usb_dm_i(usb2_dm_i), 
+            .usb_dp_i(usb2_dp_i),            // USB D- and D+ input
+            .usb_dm_o(usb2_dm_o), 
+            .usb_dp_o(usb2_dp_o),            // USB D- and D+ output
+            .usb_oe(usb2_oe),
             .irq(),     
             
             //32-bit pipelined Wishbone slave interface.

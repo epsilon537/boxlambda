@@ -59,26 +59,7 @@ static void cleanup() {
   top->final();
 }
 
-//Advance simulation by one clock cycle
-static void tick(void) {
-  //Tick twice: Input clock is 100MHz, BoxLambda's system clock runs at 50MHz.
-  //->Advance two input clock cycles at a time.
-  for (int ii=0; ii<2;ii++) {
-    //High phase
-    top->clk_i = 1;
-    contextp->timeInc(1);
-    top->eval();
-    if (tracing_enable)
-      tfp->dump(contextp->time());
-    
-    //Low phase
-    top->clk_i = 0;
-    contextp->timeInc(1);
-    top->eval();
-    if (tracing_enable)
-      tfp->dump(contextp->time());
-  }
-  
+static void tick50(void) {
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
   top->uart_rx = (*uart)(top->uart_tx, 
@@ -93,6 +74,237 @@ static void tick(void) {
 
     uart->clear_rx_string();
   }
+}
+
+//Advance simulation by one clock cycle
+static void tick(void) {
+  top->clk_6 = 1;
+
+  top->clk_50 = 1;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  top->clk_50 = 0;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  tick50();
+
+  top->clk_50 = 1;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  top->clk_50 = 0;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  tick50();
+
+  top->clk_50 = 1;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  top->clk_50 = 0;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  tick50();
+
+  top->clk_50 = 1;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  top->clk_50 = 0;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  tick50();
+
+  top->clk_6 = 0;
+
+  top->clk_50 = 1;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  top->clk_50 = 0;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  tick50();
+
+  top->clk_50 = 1;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  top->clk_50 = 0;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  tick50();
+
+  top->clk_50 = 1;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  top->clk_50 = 0;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  tick50();
+
+  top->clk_50 = 1;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  top->clk_50 = 0;
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+
+  tick50();
 }
 
 int main(int argc, char** argv, char** env) {
@@ -158,14 +370,17 @@ int main(int argc, char** argv, char** env) {
     jtag_set_bypass(!attach_debugger);
 
     // Assert reset for a couple of clock cycles.
-    top->clk_i = 0;
+    top->clk_100 = 0;
+    top->clk_50 = 0;
+    top->clk_6 = 0;
+    
     top->uart_rx = 0;
 
     //Take the system out of reset.
     top->rst_ni = 1;
     
-    // When not in interactive mode, simulate for 40000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 40000000)) {
+    // When not in interactive mode, simulate for 400000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 400000000)) {
       // Evaluate model
       tick();        
     }
