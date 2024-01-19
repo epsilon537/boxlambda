@@ -16,14 +16,15 @@ lint_off -rule UNUSED
 
 lint_off -rule BLKSEQ -file "*/sub/riscv-dbg/tb/SimJTAG.sv" -match "Blocking assignments (=) in sequential (flop or latch) block*"
 
-lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'cpu.unnamedblk1.op' (not all control paths of combinational always assign a value)*"
-lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'cpu.unnamedblk2.dd' (not all control paths of combinational always assign a value)*"
-lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'cpu.unnamedblk2.rd' (not all control paths of combinational always assign a value)*"
 lint_off -rule LATCH -file "*/sub/USB/rtl/usb_cdr.sv" -match "Latch inferred for signal 'usb_device_controller.usb_transceiver.usb_cdr.eop_next' (not all control paths of combinational always assign a value)*"
-lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'cpu.unnamedblk1.op' (not all control paths of combinational always assign a value)*"
-lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'cpu.unnamedblk2.dd' (not all control paths of combinational always assign a value)*"
-lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'cpu.unnamedblk2.rd' (not all control paths of combinational always assign a value)*"
 lint_off -rule LATCH -file "*/sub/USB/rtl/usb_cdr.sv" -match "Latch inferred for signal 'usb_device_controller.usb_transceiver.usb_cdr.eop_next' (not all control paths of combinational always assign a value)*"
+
+lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'sim_main.usb_device_1.cpu.unnamedblk1.op' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'sim_main.usb_device_1.cpu.unnamedblk2.dd' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'sim_main.usb_device_1.cpu.unnamedblk2.rd' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'sim_main.usb_device_2.cpu.unnamedblk1.op' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'sim_main.usb_device_2.cpu.unnamedblk2.dd' (not all control paths of combinational always assign a value)*"
+lint_off -rule LATCH -file "*/sub/USB/J1_WB/rtl/j1_wb.sv" -match "Latch inferred for signal 'sim_main.usb_device_2.cpu.unnamedblk2.rd' (not all control paths of combinational always assign a value)*"
 
 lint_off -rule MULTIDRIVEN -file "*/gw/projects/usb_hid_sys_test/sim/sim_main.sv" -match "Variable also written to in always_comb (IEEE 1800-2017 9.2.2.2): 'usb1_dm_device'*"
 lint_off -rule MULTIDRIVEN -file "*/gw/projects/usb_hid_sys_test/sim/sim_main.sv" -match "Variable also written to in always_comb (IEEE 1800-2017 9.2.2.2): 'usb1_dp_device'*"

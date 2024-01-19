@@ -12,7 +12,9 @@ dependencies:
 sources:
   - target: memory
     files:
-     - ../../../sub/USB/firmware/j1.hex
+     - ../../../sub/USB/firmware_keyboard/j1_keyboard.hex
+     - ../../../sub/USB/firmware_mouse/j1_mouse.hex
+
   - target: verilator
     defines:
       NO_MODPORT_EXPRESSIONS: ~

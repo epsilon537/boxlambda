@@ -151,7 +151,7 @@ module sim_main #(
 	 endcase
    end
 
-   top_usb_device usb_device_1 (
+   top_usb_device #(.J1_ROM_INIT_FILE("j1_mouse.hex")) usb_device_1 (
 	.clk(clk_50),
 	.usb_clk(clk_6),
 	.reset_in_n(rst_ni),
@@ -163,7 +163,7 @@ module sim_main #(
 	.ledg(ledg_1),
 	.ledr(ledr_1));
    
-   top_usb_device usb_device_2 (
+   top_usb_device #(.J1_ROM_INIT_FILE("j1_keyboard.hex")) usb_device_2 (
 	.clk(clk_50),
 	.usb_clk(clk_6),
 	.reset_in_n(rst_ni),
