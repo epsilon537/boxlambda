@@ -62,7 +62,7 @@ int main(void) {
 
       if ((usb0_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_KEYB) {
         printf("USB0: Keyboard detected. Setting Leds...\n");
-        usb_hid0_reg_wr(USB_HID_LEDS, 0xff);
+        usb_hid0_reg_wr(USB_HID_LEDS, 0x1);
         usb_hid0_reg_wr(USB_HID_TRIGGER_BRANCH, 0);
       }
 
@@ -81,7 +81,7 @@ int main(void) {
 
       if ((usb1_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_KEYB) {
         printf("USB1: Keyboard detected. Setting Leds...\n");
-        usb_hid1_reg_wr(USB_HID_LEDS, 0xff);
+        usb_hid1_reg_wr(USB_HID_LEDS, 0x1);
         usb_hid1_reg_wr(USB_HID_TRIGGER_BRANCH, 0);
       }
 
