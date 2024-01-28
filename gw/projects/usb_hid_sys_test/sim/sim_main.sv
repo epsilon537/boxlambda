@@ -9,10 +9,10 @@ module sim_main #(
 	input logic      clk_6,
     input logic      rst_ni,
 	// usb_device leds
-	output wire        ledg_1,
-	output wire        ledr_1,
-	output wire        ledg_2,
-	output wire        ledr_2,
+	output wire  [7:0] ledg_0,
+	output wire  [9:0] ledr_0,
+	output wire  [7:0] ledg_1,
+	output wire  [9:0] ledr_1,
 	// // VGA interface
 	output wire  [3:0] vga_r,       
 	output wire  [3:0] vga_g,       
@@ -38,17 +38,25 @@ module sim_main #(
     inout wire [3:0] gpio1
     );
    
+   reg usb0_dm_host_i; 
+   reg usb0_dp_host_i;
+   
+   reg usb0_dm_device_i; 
+   reg usb0_dp_device_i;
+   
    reg usb1_dm_host_i; 
    reg usb1_dp_host_i;
    
    reg usb1_dm_device_i; 
    reg usb1_dp_device_i;
    
-   reg usb2_dm_host_i; 
-   reg usb2_dp_host_i;
-   
-   reg usb2_dm_device_i; 
-   reg usb2_dp_device_i;
+   reg usb0_dm_host_o; 
+   reg usb0_dp_host_o;
+   reg usb0_oe_host;
+
+   reg usb0_dm_device_o; 
+   reg usb0_dp_device_o;
+   reg usb0_oe_device;
    
    reg usb1_dm_host_o; 
    reg usb1_dp_host_o;
@@ -57,14 +65,6 @@ module sim_main #(
    reg usb1_dm_device_o; 
    reg usb1_dp_device_o;
    reg usb1_oe_device;
-   
-   reg usb2_dm_host_o; 
-   reg usb2_dp_host_o;
-   reg usb2_oe_host;
-
-   reg usb2_dm_device_o; 
-   reg usb2_dp_device_o;
-   reg usb2_oe_device;
 
    // jtag openocd bridge signals
    logic 	     sim_jtag_tck;
@@ -92,6 +92,36 @@ module sim_main #(
 			     );
 
    always_comb begin
+	 case ({usb0_oe_host, usb0_oe_device})
+	 2'b00: begin
+	  	usb0_dp_host_i = 1'b0;
+	  	usb0_dm_host_i = 1'b1;
+	  	usb0_dp_device_i = 1'b0;
+	  	usb0_dm_device_i = 1'b1;
+	 end
+	 2'b01: begin
+		usb0_dp_host_i = usb0_dp_device_o;
+	  	usb0_dm_host_i = usb0_dm_device_o;
+		usb0_dp_device_i = 1'b0;
+	  	usb0_dm_device_i = 1'b1;
+	 end
+	 2'b10: begin
+		usb0_dp_host_i = 1'b0;
+	  	usb0_dm_host_i = 1'b1;
+		usb0_dp_device_i = usb0_dp_host_o;
+	  	usb0_dm_device_i = usb0_dm_host_o;
+	 end
+	 2'b11: begin
+	 	$display("usb0 output enable conflict");
+		usb0_dp_host_i = usb0_dp_device_o;
+	  	usb0_dm_host_i = usb0_dm_device_o;
+		usb0_dp_device_i = usb0_dp_host_o;
+	  	usb0_dm_device_i = usb0_dm_host_o;
+	 end
+	 endcase
+   end
+
+   always_comb begin
 	 case ({usb1_oe_host, usb1_oe_device})
 	 2'b00: begin
 	  	usb1_dp_host_i = 1'b0;
@@ -112,7 +142,7 @@ module sim_main #(
 	  	usb1_dm_device_i = usb1_dm_host_o;
 	 end
 	 2'b11: begin
-	 	$display("USB1 output enable conflict");
+	 	$display("usb1 output enable conflict");
 		usb1_dp_host_i = usb1_dp_device_o;
 	  	usb1_dm_host_i = usb1_dm_device_o;
 		usb1_dp_device_i = usb1_dp_host_o;
@@ -121,37 +151,19 @@ module sim_main #(
 	 endcase
    end
 
-   always_comb begin
-	 case ({usb2_oe_host, usb2_oe_device})
-	 2'b00: begin
-	  	usb2_dp_host_i = 1'b0;
-	  	usb2_dm_host_i = 1'b1;
-	  	usb2_dp_device_i = 1'b0;
-	  	usb2_dm_device_i = 1'b1;
-	 end
-	 2'b01: begin
-		usb2_dp_host_i = usb2_dp_device_o;
-	  	usb2_dm_host_i = usb2_dm_device_o;
-		usb2_dp_device_i = 1'b0;
-	  	usb2_dm_device_i = 1'b1;
-	 end
-	 2'b10: begin
-		usb2_dp_host_i = 1'b0;
-	  	usb2_dm_host_i = 1'b1;
-		usb2_dp_device_i = usb2_dp_host_o;
-	  	usb2_dm_device_i = usb2_dm_host_o;
-	 end
-	 2'b11: begin
-	 	$display("usb2 output enable conflict");
-		usb2_dp_host_i = usb2_dp_device_o;
-	  	usb2_dm_host_i = usb2_dm_device_o;
-		usb2_dp_device_i = usb2_dp_host_o;
-	  	usb2_dm_device_i = usb2_dm_host_o;
-	 end
-	 endcase
-   end
-
-   top_usb_device #(.J1_ROM_INIT_FILE("j1_mouse.hex")) usb_device_1 (
+   top_usb_device #(.J1_ROM_INIT_FILE("j1_mouse.hex")) usb_device_0 (
+	.clk(clk_50),
+	.usb_clk(clk_6),
+	.reset_in_n(rst_ni),
+	.dm_i(usb0_dm_device_i),
+	.dp_i(usb0_dp_device_i),
+	.dm_o(usb0_dm_device_o),
+	.dp_o(usb0_dp_device_o),
+	.usb_oe(usb0_oe_device),
+	.ledg(ledg_0),
+	.ledr(ledr_0));
+   
+   top_usb_device #(.J1_ROM_INIT_FILE("j1_keyboard.hex")) usb_device_1 (
 	.clk(clk_50),
 	.usb_clk(clk_6),
 	.reset_in_n(rst_ni),
@@ -162,18 +174,6 @@ module sim_main #(
 	.usb_oe(usb1_oe_device),
 	.ledg(ledg_1),
 	.ledr(ledr_1));
-   
-   top_usb_device #(.J1_ROM_INIT_FILE("j1_keyboard.hex")) usb_device_2 (
-	.clk(clk_50),
-	.usb_clk(clk_6),
-	.reset_in_n(rst_ni),
-	.dm_i(usb2_dm_device_i),
-	.dp_i(usb2_dp_device_i),
-	.dm_o(usb2_dm_device_o),
-	.dp_o(usb2_dp_device_o),
-	.usb_oe(usb2_oe_device),
-	.ledg(ledg_2),
-	.ledr(ledr_2));
 
    top dut (
 		.ext_clk_100(clk_100),
@@ -205,16 +205,16 @@ module sim_main #(
 		.gpio0(gpio0),
 		.gpio1(gpio1),		 
 
-		.usb1_dm_i(usb1_dm_host_i), 
+		.usb0_dm_i(usb0_dm_host_i), 
+  		.usb0_dp_i(usb0_dp_host_i),
+		.usb0_dm_o(usb0_dm_host_o), 
+  		.usb0_dp_o(usb0_dp_host_o),
+		.usb0_oe(usb0_oe_host),
+  		.usb1_dm_i(usb1_dm_host_i), 
   		.usb1_dp_i(usb1_dp_host_i),
 		.usb1_dm_o(usb1_dm_host_o), 
   		.usb1_dp_o(usb1_dp_host_o),
 		.usb1_oe(usb1_oe_host),
-  		.usb2_dm_i(usb2_dm_host_i), 
-  		.usb2_dp_i(usb2_dp_host_i),
-		.usb2_dm_o(usb2_dm_host_o), 
-  		.usb2_dp_o(usb2_dp_host_o),
-		.usb2_oe(usb2_oe_host),
 		 
 		// ym2149 interface
 		.audio_out(audio_out),

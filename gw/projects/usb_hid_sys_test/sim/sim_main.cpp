@@ -27,6 +27,11 @@
 
 bool tracing_enable = false;
 
+int prev_ledg_0 = 0;
+int prev_ledr_0 = 0;
+int prev_ledg_1 = 0;
+int prev_ledr_1 = 0;
+
 //Uart co-simulation from wbuart32.
 std::unique_ptr<UARTSIM> uart{new UARTSIM(0)};
 
@@ -73,6 +78,30 @@ static void tick50(void) {
     uartRxStringPrev = uart->get_rx_string();
 
     uart->clear_rx_string();
+  }
+
+  if (top->ledg_1 != prev_ledg_1) {
+    printf("ledg_1 = %d\n", top->ledg_1);
+
+    prev_ledg_1 = top->ledg_1;
+  }
+
+  if (top->ledr_0 != prev_ledr_0) {
+    printf("ledr_0 = %d\n", top->ledr_0);
+
+    prev_ledr_0 = top->ledr_0;
+  }
+
+  if (top->ledg_1 != prev_ledg_1) {
+    printf("ledg_1 = %d\n", top->ledg_1);
+
+    prev_ledg_1 = top->ledg_1;
+  }
+
+  if (top->ledr_1 != prev_ledr_1) {
+    printf("ledr_1 = %d\n", top->ledr_1);
+
+    prev_ledr_1 = top->ledr_1;
   }
 }
 
@@ -377,6 +406,10 @@ int main(int argc, char** argv, char** env) {
     top->uart_rx = 0;
 
     //Take the system out of reset.
+    top->rst_ni = 0;
+    for (int ii=0;ii<32;ii++) {
+      tick();
+    }
     top->rst_ni = 1;
     
     // When not in interactive mode, simulate for 400000000 timeprecision periods

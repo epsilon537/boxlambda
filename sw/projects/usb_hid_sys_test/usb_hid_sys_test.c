@@ -59,6 +59,17 @@ int main(void) {
 
     if (usb0_status != usb0_status_prev) {
       printf("USB0 status change: 0x%x\n", usb0_status);
+
+      if ((usb0_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_KEYB) {
+        printf("USB0: Keyboard detected. Setting Leds...\n");
+        usb_hid0_reg_wr(USB_HID_LEDS, 0xff);
+        usb_hid0_reg_wr(USB_HID_TRIGGER_BRANCH, 0);
+      }
+
+      if ((usb0_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_MOUSE) {
+        printf("USB0: Mouse detected.\n");
+      }
+
       usb0_status_prev = usb0_status;
     }
 
@@ -67,6 +78,17 @@ int main(void) {
 
     if (usb1_status != usb1_status_prev) {
       printf("USB1 status change: 0x%x\n", usb1_status);
+
+      if ((usb1_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_KEYB) {
+        printf("USB1: Keyboard detected. Setting Leds...\n");
+        usb_hid1_reg_wr(USB_HID_LEDS, 0xff);
+        usb_hid1_reg_wr(USB_HID_TRIGGER_BRANCH, 0);
+      }
+
+      if ((usb1_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_MOUSE) {
+        printf("USB1: Mouse detected.\n");
+      }
+
       usb1_status_prev = usb1_status;
     }
 

@@ -49,31 +49,36 @@ extern "C" {
 
 #define USB_HID_TRIGGER_BRANCH 9
 
+//Keyboard LEDs register
+#define USB_HID_LEDS 10
+
+#define USB_HID_MAX_REG_OFFSET USB_HID_LEDS
+
 //Write to Register
 inline void usb_hid0_reg_wr(unsigned reg_offset, unsigned val)
 {
-	assert(reg_offset <= USB_HID_TRIGGER_BRANCH);
+	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);
 	((unsigned volatile *)(USB_HID0_BASE))[reg_offset] = val;
 }
 
 //Read from Register
 inline unsigned usb_hid0_reg_rd(unsigned reg_offset)
 {
-	assert(reg_offset <= USB_HID_TRIGGER_BRANCH);
+	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);
 	return ((unsigned volatile *)(USB_HID0_BASE))[reg_offset];
 }
 
 //Write to Register
 inline void usb_hid1_reg_wr(unsigned reg_offset, unsigned val)
 {
-	assert(reg_offset <= USB_HID_TRIGGER_BRANCH);
+	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);
 	((unsigned volatile *)(USB_HID1_BASE))[reg_offset] = val;
 }
 
 //Read from Register
 inline unsigned usb_hid1_reg_rd(unsigned reg_offset)
 {
-	assert(reg_offset <= USB_HID_TRIGGER_BRANCH);
+	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);
 	return ((unsigned volatile *)(USB_HID1_BASE))[reg_offset];
 }
 
