@@ -11,6 +11,8 @@
 #include "utils.h"
 #include "usb_hid_hal.h"
 
+#define LED_TO_SET USB_HID_LED_NUM_LOCK
+
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
 static struct uart uart0;
@@ -31,6 +33,81 @@ void	_exit (int status) {
 	while (1);
 }
 
+//Returns usb_status
+static unsigned check_usb(USB_HID_Host_t *usb, unsigned usb_status_prev) {
+
+  assert(usb);
+
+  unsigned usb_status = usb_hid_reg_rd(usb, USB_HID_STATUS);
+  unsigned usb_typ = usb_status & USB_HID_STATUS_USB_TYP_MSK;
+  
+  if (usb_status != usb_status_prev) {
+    printf("USB%d: Status change: 0x%x -> 0x%x\n", usb->id, usb_status_prev, usb_status);
+
+    if (usb_status & USB_HID_STATUS_CONN_ERR_BIT) {
+      printf("  Connection Error!\n");
+    }
+
+    switch (usb_status & USB_HID_STATUS_USB_TYP_MSK) {
+      case USB_TYP_KEYB:
+        printf("  Keyboard detected. Setting Leds...\n");
+        usb_hid_set_leds(usb, LED_TO_SET);
+        break;
+      case USB_TYP_MOUSE:
+        printf("  Mouse detected.\n");
+        break;
+      case USB_TYP_GAME:
+        printf("  Gamepad detected.\n");
+        break;
+      default:
+        printf("  Unknown device detected.\n");
+        break;
+    }
+
+    usb_status_prev = usb_status;
+  }
+
+  unsigned isr = usb_hid_reg_rd(usb, USB_HID_ISR);
+  usb_hid_reg_wr(usb, USB_HID_ISR, isr);
+
+  if (isr & USB_HID_IRQ_BIT_USB_REPORT) {
+    unsigned key_mod;
+    unsigned keys;
+    unsigned mouse;
+    unsigned game;
+    USB_HID_Report_t report;
+
+    usb_hid_get_report(usb, &report);
+    
+    switch (usb_typ) {
+      case USB_TYP_KEYB:
+        printf("USB%d keyboard report: 0x%x%x\n", usb->id, report.report0, report.report1);
+        key_mod = usb_hid_reg_rd(usb, USB_HID_KEY_MODS);
+        keys = usb_hid_reg_rd(usb, USB_HID_KEYS);
+        printf("  Key mods: 0x%x Keys: 0x%x\n", key_mod, keys);
+        break;
+      case USB_TYP_MOUSE:
+        printf("USB%d mouse report: 0x%x%x\n", usb->id, report.report0, report.report1);
+        mouse = usb_hid_reg_rd(usb, USB_HID_MOUSE);
+        printf("  Mouse: 0x%x\n", mouse);
+        break;
+      case USB_TYP_GAME:
+        printf("USB%d gamepad report: 0x%x%x\n", usb->id, report.report0, report.report1);
+        game = usb_hid_reg_rd(usb, USB_HID_GAME);
+        printf("  Game: 0x%x\n", game);
+        break;
+      default:
+        printf("USB%d unknown report: 0x%x%x\n", usb->id, report.report0, report.report1);
+        break;
+    }
+  }
+
+  return usb_status;
+}
+
+unsigned usb0_status_prev = 0;
+unsigned usb1_status_prev = 0;
+
 int main(void) {
   //Switches
   gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
@@ -40,113 +117,11 @@ int main(void) {
   gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
   gpio_set_direction(&gpio1, 0x00000000); //4 inputs
 
-  unsigned usb0_status = 0;
-  unsigned usb0_status_prev = 0;
-  unsigned usb1_status = 0;
-  unsigned usb1_status_prev = 0;
-  unsigned usb0_typ=0, usb1_typ=0;
-  unsigned key_mod=0;
-  unsigned keys=0;
-  unsigned mouse=0;
-  unsigned game=0;
-  unsigned rept[2] = {0,0};
-
   printf("USB HID Test Start.\n");
 
   while (1) {
-    usb0_status = usb_hid0_reg_rd(USB_HID_STATUS);
-    usb0_typ = usb0_status & USB_HID_STATUS_USB_TYP_MSK;
-
-    if (usb0_status != usb0_status_prev) {
-      printf("USB0 status change: 0x%x\n", usb0_status);
-
-      if ((usb0_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_KEYB) {
-        printf("USB0: Keyboard detected. Setting Leds...\n");
-        usb_hid0_reg_wr(USB_HID_LEDS, 0x1);
-        usb_hid0_reg_wr(USB_HID_TRIGGER_BRANCH, 0);
-      }
-
-      if ((usb0_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_MOUSE) {
-        printf("USB0: Mouse detected.\n");
-      }
-
-      usb0_status_prev = usb0_status;
-    }
-
-    usb1_status = usb_hid1_reg_rd(USB_HID_STATUS);
-    usb1_typ = usb1_status & USB_HID_STATUS_USB_TYP_MSK;
-
-    if (usb1_status != usb1_status_prev) {
-      printf("USB1 status change: 0x%x\n", usb1_status);
-
-      if ((usb1_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_KEYB) {
-        printf("USB1: Keyboard detected. Setting Leds...\n");
-        usb_hid1_reg_wr(USB_HID_LEDS, 0x1);
-        usb_hid1_reg_wr(USB_HID_TRIGGER_BRANCH, 0);
-      }
-
-      if ((usb1_status & USB_HID_STATUS_USB_TYP_MSK) == USB_TYP_MOUSE) {
-        printf("USB1: Mouse detected.\n");
-      }
-
-      usb1_status_prev = usb1_status;
-    }
-
-    unsigned isr0 = usb_hid0_reg_rd(USB_HID_ISR);
-    usb_hid0_reg_wr(USB_HID_ISR, isr0);
-
-    if (isr0 & USB_HID_IRQ_BIT_USB_REPORT) {
-      rept[0] = usb_hid0_reg_rd(USB_HID_REPORT_0);
-      rept[1] = usb_hid0_reg_rd(USB_HID_REPORT_1);
-
-      printf("USB0 report: 0x%x%x\n", rept[1], rept[0]);
-      
-      switch (usb0_typ) {
-        case USB_TYP_KEYB:
-          key_mod = usb_hid0_reg_rd(USB_HID_KEY_MODS);
-          keys = usb_hid0_reg_rd(USB_HID_KEYS);
-          printf("USB0: Key mods: 0x%x Keys: 0x%x\n", key_mod, keys);
-          break;
-        case USB_TYP_MOUSE:
-          mouse = usb_hid0_reg_rd(USB_HID_MOUSE);
-          printf("USB0: Mouse: 0x%x\n", mouse);
-          break;
-        case USB_TYP_GAME:
-          game = usb_hid0_reg_rd(USB_HID_GAME);
-          printf("USB0: Game: 0x%x\n", game);
-          break;
-        default:
-          break;
-      }
-    }
-
-    unsigned isr1 = usb_hid1_reg_rd(USB_HID_ISR);
-    usb_hid1_reg_wr(USB_HID_ISR, isr1);
-
-    if (isr1 & USB_HID_IRQ_BIT_USB_REPORT) {
-      rept[0] = usb_hid1_reg_rd(USB_HID_REPORT_0);
-      rept[1] = usb_hid1_reg_rd(USB_HID_REPORT_1);
-
-      printf("USB1 report: 0x%x%x\n", rept[1], rept[0]);
-  
-      switch (usb1_typ) {
-        case USB_TYP_KEYB:
-          key_mod = usb_hid1_reg_rd(USB_HID_KEY_MODS);
-          keys = usb_hid1_reg_rd(USB_HID_KEYS);
-          printf("USB1: Key mods: 0x%x Keys: 0x%x\n", key_mod, keys);
-          break;
-        case USB_TYP_MOUSE:
-          mouse = usb_hid1_reg_rd(USB_HID_MOUSE);
-          printf("USB1: Mouse: 0x%x\n", mouse);
-          break;
-        case USB_TYP_GAME:
-          game = usb_hid1_reg_rd(USB_HID_GAME);
-          printf("USB1: Game: 0x%x\n", game);
-          break;
-        default:
-          break;
-      }
-    }
+    usb0_status_prev = check_usb(usb0, usb0_status_prev);
+    usb1_status_prev = check_usb(usb1, usb1_status_prev);
   }
 
   return 0;

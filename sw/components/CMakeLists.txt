@@ -5,4 +5,5 @@ add_subdirectory(fatfs)
 add_subdirectory(stsound)
 add_subdirectory(picorv_dma/test)
 add_subdirectory(picorv_dma)
+add_subdirectory(usb_hid)
 

@@ -7,6 +7,18 @@
 extern "C" {
 #endif
 
+#ifndef IN
+#define IN
+#endif
+
+#ifndef OUT
+#define OUT
+#endif
+
+#ifndef INOUT
+#define INOUT
+#endif
+
 /*
  * USB HID hardware access layer.
  */
@@ -54,33 +66,44 @@ extern "C" {
 
 #define USB_HID_MAX_REG_OFFSET USB_HID_LEDS
 
+typedef struct USB_HID_Host_t {
+	unsigned volatile *base_addr;
+	unsigned id;
+} USB_HID_Host_t;
+
+/*These two are initialized in usb_hid_hal.c*/
+extern USB_HID_Host_t *usb0;
+extern USB_HID_Host_t *usb1;
+
 //Write to Register
-inline void usb_hid0_reg_wr(unsigned reg_offset, unsigned val)
+inline void usb_hid_reg_wr(IN USB_HID_Host_t *usb, unsigned reg_offset, unsigned val)
 {
+	assert(usb);
 	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);
-	((unsigned volatile *)(USB_HID0_BASE))[reg_offset] = val;
+	usb->base_addr[reg_offset] = val;
 }
 
 //Read from Register
-inline unsigned usb_hid0_reg_rd(unsigned reg_offset)
+inline unsigned usb_hid_reg_rd(IN USB_HID_Host_t *usb, unsigned reg_offset)
 {
+	assert(usb);
 	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);
-	return ((unsigned volatile *)(USB_HID0_BASE))[reg_offset];
+	return usb->base_addr[reg_offset];
 }
 
-//Write to Register
-inline void usb_hid1_reg_wr(unsigned reg_offset, unsigned val)
-{
-	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);
-	((unsigned volatile *)(USB_HID1_BASE))[reg_offset] = val;
-}
+typedef struct USB_HID_Report_t {
+	unsigned report0;
+	unsigned report1;
+} USB_HID_Report_t;
 
-//Read from Register
-inline unsigned usb_hid1_reg_rd(unsigned reg_offset)
-{
-	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);
-	return ((unsigned volatile *)(USB_HID1_BASE))[reg_offset];
-}
+void usb_hid_get_report(IN USB_HID_Host_t *usb, OUT USB_HID_Report_t *report);
+
+#define USB_HID_LED_NUM_LOCK (1<<0)
+#define USB_HID_LED_CAPS_LOCK (1<<1)
+#define USB_HID_LED_SCROLL_LOCK (1<<2)
+#define USB_HID_LED_COMPOSE (1<<3)
+
+void usb_hid_set_leds(IN USB_HID_Host_t *usb, unsigned char leds);
 
 #ifdef __cplusplus
 }
