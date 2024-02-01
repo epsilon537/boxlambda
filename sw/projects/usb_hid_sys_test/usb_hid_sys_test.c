@@ -11,7 +11,7 @@
 #include "utils.h"
 #include "usb_hid_hal.h"
 
-#define LED_TO_SET USB_HID_LED_NUM_LOCK
+#define LED_TO_SET USB_HID_LED_CAPS_LOCK
 
 #define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
@@ -19,12 +19,17 @@ static struct uart uart0;
 static struct gpio gpio0;
 static struct gpio gpio1;
 
+static unsigned leds = 1;
+static unsigned prevTimeClocks;
+
 //_init is executed by picolibc startup code before main().
 void _init(void) {
   //Set up UART and tie stdio to it.
   uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
   uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
   set_stdio_to_uart(&uart0);
+
+  mtime_start();
 }
 
 //_exit is executed by the picolibc exit function. 
@@ -50,8 +55,7 @@ static unsigned check_usb(USB_HID_Host_t *usb, unsigned usb_status_prev) {
 
     switch (usb_status & USB_HID_STATUS_USB_TYP_MSK) {
       case USB_TYP_KEYB:
-        printf("  Keyboard detected. Setting Leds...\n");
-        usb_hid_set_leds(usb, LED_TO_SET);
+        printf("  Keyboard detected.\n");
         break;
       case USB_TYP_MOUSE:
         printf("  Mouse detected.\n");
@@ -65,6 +69,22 @@ static unsigned check_usb(USB_HID_Host_t *usb, unsigned usb_status_prev) {
     }
 
     usb_status_prev = usb_status;
+  }
+
+  if (usb_typ == USB_TYP_KEYB) {
+    unsigned curTimeClocks = mtime_get32();
+
+    //Every 100ms...
+    if (cc2us(curTimeClocks - prevTimeClocks) >= 100000) {
+      leds <<= 1;
+      if (leds == 8) {
+        leds = 1;
+      }
+
+      usb_hid_set_leds(usb, leds);
+
+      prevTimeClocks = curTimeClocks;
+    }
   }
 
   unsigned isr = usb_hid_reg_rd(usb, USB_HID_ISR);
@@ -116,6 +136,9 @@ int main(void) {
   //Buttons
   gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
   gpio_set_direction(&gpio1, 0x00000000); //4 inputs
+
+  //Initialize 'previous time' for LED update tracking.
+  prevTimeClocks = mtime_get32();
 
   printf("USB HID Test Start.\n");
 

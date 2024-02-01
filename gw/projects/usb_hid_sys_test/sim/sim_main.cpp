@@ -32,6 +32,8 @@ int prev_ledr_0 = 0;
 int prev_ledg_1 = 0;
 int prev_ledr_1 = 0;
 
+int ledg_acc = 0;
+
 //Uart co-simulation from wbuart32.
 std::unique_ptr<UARTSIM> uart{new UARTSIM(0)};
 
@@ -48,8 +50,8 @@ std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
 std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 
-//Initialize UART rx and tx change detector
-std::string uartRxStringPrev;
+//Initialize UART rx buffer
+std::string uartRxString;
 
 // Legacy function required only so linking works on Cygwin and MSVC++
 double sc_time_stamp() { return 0; }
@@ -75,14 +77,14 @@ static void tick50(void) {
     printf("%s", uart->get_rx_string().c_str());
 
     //Update change detectors
-    uartRxStringPrev = uart->get_rx_string();
+    uartRxString += uart->get_rx_string();
 
     uart->clear_rx_string();
   }
 
   if (top->ledg_1 != prev_ledg_1) {
     printf("ledg_1 = %d\n", top->ledg_1);
-
+    ledg_acc |= top->ledg_1;
     prev_ledg_1 = top->ledg_1;
   }
 
@@ -412,27 +414,51 @@ int main(int argc, char** argv, char** env) {
     }
     top->rst_ni = 1;
     
-    // When not in interactive mode, simulate for 400000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 400000000)) {
+    // When not in interactive mode, simulate for 200000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 200000000)) {
       // Evaluate model
       tick();        
     }
     
+    //Count keyboard reports
+    int numKeyboardReports = 0;
+    int pos=0;
+    
+    while (pos != std::string::npos) {
+      pos = uartRxString.find("keyboard report", pos); 
+      if (pos != std::string::npos) {
+        ++numKeyboardReports;
+        ++pos;
+      }
+    }
+
+    //Count mouse reports
+    int numMouseReports = 0;
+    pos = 0;
+
+    while (pos != std::string::npos) {
+      pos = uartRxString.find("mouse report", pos);
+      if (pos != std::string::npos) {
+        ++numMouseReports;
+        ++pos;
+      }
+    } 
+
     int res = 0;
-    std::string uartCheckString("PicoRV DMA tests successful.");
 
-    if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
-      printf("Test failed\n");
-      printf("Expected: %s\n", uartCheckString.c_str());
-      printf("Received: %s\n", uartRxStringPrev.c_str());
-
-      res = 1;
+    //We want at least 10 keyboard reports, 10 mouse reports and all leds turned on;
+    if ((numKeyboardReports >= 10) &&
+        (numMouseReports >= 10) &&
+        (ledg_acc == 0x7)) {
+      printf("Test passed.\n");
+      res = 0;
     }
     else {
-      printf("Test passed.\n");
+      printf("Test failed: numKeyboardReports: %d, numMouseReports: %d, LED acc.: 0x%x\n", 
+            numKeyboardReports, numMouseReports, ledg_acc);
+      res = 1;
     }
 
     cleanup();
-
     return 0;
 }
