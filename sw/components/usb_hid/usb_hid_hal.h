@@ -59,10 +59,8 @@ extern "C" {
 #define USB_HID_REPORT_0 7
 #define USB_HID_REPORT_1 8
 
-#define USB_HID_TRIGGER_BRANCH 9
-
-//Keyboard LEDs register
-#define USB_HID_LEDS 10
+//Keyboard LEDs register. Writes to this register will be forwarded to the USB device using a SetProtocol transaction.
+#define USB_HID_LEDS 9
 
 #define USB_HID_MAX_REG_OFFSET USB_HID_LEDS
 

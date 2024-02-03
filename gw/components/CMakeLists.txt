@@ -54,7 +54,6 @@ add_subdirectory(boxlambda_soc)
 add_subdirectory(blackbox)
 add_subdirectory(usb_hid_host)
 add_subdirectory(usb_hid_device)
-add_subdirectory(async_fifo)
 
 
 

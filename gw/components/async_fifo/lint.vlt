@@ -1,4 +1,0 @@
-`verilator_config
-lint_off -rule UNUSEDSIGNAL -file "*/sub/async_fifo/rtl/fifomem.v" -match "Signal is not used: 'rclk'"
-lint_off -rule UNUSEDSIGNAL -file "*/sub/async_fifo/rtl/fifomem.v" -match "Signal is not used: 'rclken'"
-lint_off -rule UNUSEDSIGNAL -file "*/sub/async_fifo/rtl/fifomem.v" -match "Signal is not driven, nor used: 'rdata_r'"

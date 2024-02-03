@@ -1,10 +1,4 @@
 packages:
-  async_fifo:
-    revision: null
-    version: null
-    source:
-      Path: ../../components/usb_hid_device/../../components/async_fifo
-    dependencies: []
   audio_dac:
     revision: null
     version: null
@@ -104,8 +98,7 @@ packages:
     version: null
     source:
       Path: ../../components/usb_hid_device
-    dependencies:
-    - async_fifo
+    dependencies: []
   usb_hid_host:
     revision: null
     version: null

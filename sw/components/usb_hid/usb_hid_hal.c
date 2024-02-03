@@ -8,7 +8,6 @@ USB_HID_Host_t *usb1 = &usb_host_1;
 
 void usb_hid_set_leds(USB_HID_Host_t *usb, unsigned char leds) {
     usb_hid_reg_wr(usb, USB_HID_LEDS, leds);
-    usb_hid_reg_wr(usb, USB_HID_TRIGGER_BRANCH, 0);
 }
 
 void usb_hid_get_report(USB_HID_Host_t *usb, USB_HID_Report_t *report) {

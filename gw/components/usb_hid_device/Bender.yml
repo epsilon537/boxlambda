@@ -5,10 +5,6 @@ package:
   # The name of the package. Required.
   name: usb_hid_device
 
-dependencies:
-  # Path dependency.
-  async_fifo: { path: "../../components/async_fifo" }
-
 sources:
   - target: memory
     files:
@@ -45,7 +41,13 @@ sources:
      - ../../../sub/USB/J1_WB/misc/rom.v
      - ../../../sub/USB/J1_WB/misc/wb_ram.sv
      - ../../../sub/USB/J1_WB/misc/spram.v
-
+     - ../../../sub/USB/async_fifo/rtl/async_fifo.v
+     - ../../../sub/USB/async_fifo/rtl/sync_r2w.v
+     - ../../../sub/USB/async_fifo/rtl/sync_w2r.v
+     - ../../../sub/USB/async_fifo/rtl/wptr_full.v
+     - ../../../sub/USB/async_fifo/rtl/fifomem.v
+     - ../../../sub/USB/async_fifo/rtl/rptr_empty.v
+     - ../../../sub/USB/async_fifo/rtl/sync_ptr.v
     
 
 
