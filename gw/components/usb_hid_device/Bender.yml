@@ -8,46 +8,47 @@ package:
 sources:
   - target: memory
     files:
-     - ../../../sub/USB/firmware_keyboard/j1_keyboard.hex
-     - ../../../sub/USB/firmware_mouse/j1_mouse.hex
+     - ../../../sub/usb_hid_device/firmware_keyboard/j1_keyboard.hex
+     - ../../../sub/usb_hid_device/firmware_mouse/j1_mouse.hex
 
   - target: verilator
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:
      - lint.vlt
-     - ../../../sub/USB/rtl/types.sv
-     - ../../../sub/USB/rtl/ioaddr.sv
-     - ../../../sub/USB/rtl/top_usb_device.sv
-     - ../../../sub/USB/rtl/board_io.sv
-     - ../../../sub/USB/rtl/interfaces.sv
-     - ../../../sub/USB/rtl/usb_cdr.sv
-     - ../../../sub/USB/rtl/usb_device_controller.sv
-     - ../../../sub/USB/rtl/usb_filter.sv
-     - ../../../sub/USB/rtl/usb_reset.sv
-     - ../../../sub/USB/rtl/usb_rx.sv
-     - ../../../sub/USB/rtl/usb_sie.sv
-     - ../../../sub/USB/rtl/usb_transceiver.sv
-     - ../../../sub/USB/rtl/usb_tx.sv
-     - ../../../sub/USB/rtl/wb_intercon.sv
-     - ../../../sub/USB/rtl/sync_reset.sv
-     - ../../../sub/USB/sim/fifo16x8_show_ahead.v
-     - ../../../sub/USB/sim/fifo16x8.v
-     - ../../../sub/USB/J1_WB/rtl/j1_types.sv
-     - ../../../sub/USB/J1_WB/rtl/j1_wb.sv
-     - ../../../sub/USB/J1_WB/rtl/register_file.sv
-     - ../../../sub/USB/J1_WB/rtl/interfaces.sv
-     - ../../../sub/USB/J1_WB/misc/wb_rom.sv
-     - ../../../sub/USB/J1_WB/misc/rom.v
-     - ../../../sub/USB/J1_WB/misc/wb_ram.sv
-     - ../../../sub/USB/J1_WB/misc/spram.v
-     - ../../../sub/USB/async_fifo/rtl/async_fifo.v
-     - ../../../sub/USB/async_fifo/rtl/sync_r2w.v
-     - ../../../sub/USB/async_fifo/rtl/sync_w2r.v
-     - ../../../sub/USB/async_fifo/rtl/wptr_full.v
-     - ../../../sub/USB/async_fifo/rtl/fifomem.v
-     - ../../../sub/USB/async_fifo/rtl/rptr_empty.v
-     - ../../../sub/USB/async_fifo/rtl/sync_ptr.v
+     - ../../../sub/usb_hid_device/rtl/types.sv
+     - ../../../sub/usb_hid_device/rtl/ioaddr.sv
+     - ../../../sub/usb_hid_device/rtl/top_usb_device.sv
+     - ../../../sub/usb_hid_device/rtl/board_io.sv
+     - ../../../sub/usb_hid_device/rtl/interfaces.sv
+     - ../../../sub/usb_hid_device/rtl/usb_cdr.sv
+     - ../../../sub/usb_hid_device/rtl/usb_device_controller.sv
+     - ../../../sub/usb_hid_device/rtl/usb_filter.sv
+     - ../../../sub/usb_hid_device/rtl/usb_reset.sv
+     - ../../../sub/usb_hid_device/rtl/usb_rx.sv
+     - ../../../sub/usb_hid_device/rtl/usb_sie.sv
+     - ../../../sub/usb_hid_device/rtl/usb_transceiver.sv
+     - ../../../sub/usb_hid_device/rtl/usb_tx.sv
+     - ../../../sub/usb_hid_device/rtl/wb_intercon.sv
+     - ../../../sub/usb_hid_device/rtl/sync_reset.sv
+     - ../../../sub/usb_hid_device/sim/fifo16x8_show_ahead.v
+     - ../../../sub/usb_hid_device/sim/fifo16x8.v
+     - ../../../sub/usb_hid_device/J1_WB/rtl/j1_types.sv
+     - ../../../sub/usb_hid_device/J1_WB/rtl/j1_wb.sv
+     - ../../../sub/usb_hid_device/J1_WB/rtl/register_file.sv
+     - ../../../sub/usb_hid_device/J1_WB/rtl/interfaces.sv
+     - ../../../sub/usb_hid_device/J1_WB/misc/wb_rom.sv
+     - ../../../sub/usb_hid_device/J1_WB/misc/rom.v
+     - ../../../sub/usb_hid_device/J1_WB/misc/wb_ram.sv
+     - ../../../sub/usb_hid_device/J1_WB/misc/spram.v
+     - ../../../sub/usb_hid_device/async_fifo/rtl/async_fifo.v
+     - ../../../sub/usb_hid_device/async_fifo/rtl/sync_r2w.v
+     - ../../../sub/usb_hid_device/async_fifo/rtl/sync_w2r.v
+     - ../../../sub/usb_hid_device/async_fifo/rtl/wptr_full.v
+     - ../../../sub/usb_hid_device/async_fifo/rtl/fifomem.v
+     - ../../../sub/usb_hid_device/async_fifo/rtl/rptr_empty.v
+     - ../../../sub/usb_hid_device/async_fifo/rtl/sync_ptr.v
+
     
 
 
