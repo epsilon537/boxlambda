@@ -60,6 +60,6 @@
 [submodule "sub/usb_hid_host"]
 	path = sub/usb_hid_host
 	url = https://github.com/epsilon537/usb_hid_host
-[submodule "sub/USB"]
-	path = sub/USB
-	url = https://github.com/epsilon537/USB
+[submodule "sub/usb_hid_device"]
+	path = sub/usb_hid_device
+	url = https://github.com/epsilon537/usb_hid_device
