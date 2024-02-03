@@ -63,6 +63,3 @@
 [submodule "sub/USB"]
 	path = sub/USB
 	url = https://github.com/epsilon537/USB
-[submodule "sub/async_fifo"]
-	path = sub/async_fifo
-	url = https://github.com/epsilon537/async_fifo
