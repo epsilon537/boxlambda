@@ -81,7 +81,7 @@ static unsigned check_usb(USB_HID_Host_t *usb, unsigned usb_status_prev) {
         leds = 1;
       }
 
-      usb_hid_set_leds(usb, leds);
+      usb_hid_reg_wr(usb, USB_HID_LEDS, leds);
 
       prevTimeClocks = curTimeClocks;
     }

@@ -48,7 +48,7 @@ module top (
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
 
-     // USB HID
+     // USB HID: On Verilator, we use separate input and output ports. On FPGA, the USB ports are bidirectional.
 `ifdef VERILATOR
     input wire usb0_dm_i, 
     input wire usb0_dp_i,
@@ -63,11 +63,11 @@ module top (
 `else
     inout wire usb0_dm, 
     inout wire usb0_dp,
-    output wire usb0_dm_snoop,
+    output wire usb0_dm_snoop, //Snooping the USB0 port, for test/debug purposes.
     output wire usb0_dp_snoop,
     inout wire usb1_dm, 
     inout wire usb1_dp,
-    output wire usb1_dm_snoop,
+    output wire usb1_dm_snoop, //Snooping the USB1 ports, for test/debug purposes.
     output wire usb1_dp_snoop,
 `endif
     // Audio interface
@@ -99,6 +99,7 @@ module top (
     wire usb1_dp_o;
     wire usb1_oe;
 
+    //(De)Muxing unidirectional to bidirectional ports.
     assign usb0_dm_i = usb0_dm;
     assign usb0_dp_i = usb0_dp;
     assign usb0_dm = usb0_oe ? usb0_dm_o : 1'bZ;
@@ -106,6 +107,7 @@ module top (
     assign usb0_dm_snoop = usb0_dm;
     assign usb0_dp_snoop = usb0_dp;
 
+    //(De)Muxing unidirectional to bidirectional ports.
     assign usb1_dm_i = usb1_dm;
     assign usb1_dp_i = usb1_dp;
     assign usb1_dm = usb1_oe ? usb1_dm_o : 1'bZ;

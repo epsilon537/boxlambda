@@ -58,7 +58,7 @@ module boxlambda_soc #(
     output wire  sdspi_mosi,
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
-     // USB HID
+     // USB HID, two ports.
     input wire usb0_dm_i, 
     input wire usb0_dp_i,
     output wire usb0_dm_o, 
@@ -194,7 +194,7 @@ module boxlambda_soc #(
     };
 
     //Clock signals.
-    logic sys_clk, sys_clk_2x, clk_usb, clk_50, clk_100;
+    logic sys_clk, sys_clk_2x, usb_clk, clk_50, clk_100;
     //PLL lock signals.
     logic usb_pll_locked, sys_pll_locked, pre_pll_locked, litedram_pll_locked;
 
@@ -388,16 +388,16 @@ module boxlambda_soc #(
 
     //Reset Controller
     reset_ctrl reset_ctrl_inst(
-        .sys_clk(sys_clk),
-        .usb_clk(clk_usb),
-        .sys_pll_locked_i(sys_pll_locked),
-        .usb_pll_locked_i(usb_pll_locked),
-        .ndm_reset_i(ndm_reset_req),
-        .ext_reset_i(~ext_rst_n), //asynchronous external reset
-        .ndm_reset_o(ndm_reset),
-        .dm_reset_o(dm_reset),
-        .usb_reset_o(usb_reset),
-        .por_completed_o(por_completed),
+        .sys_clk(sys_clk), //50MHz system clock
+        .usb_clk(usb_clk), //12MHz USB clock
+        .sys_pll_locked_i(sys_pll_locked), //System Clock PLL locked indication (input)
+        .usb_pll_locked_i(usb_pll_locked), //USB Clock PLL locked indication (input)
+        .ndm_reset_i(ndm_reset_req), //non-debug-module reset request input
+        .ext_reset_i(~ext_rst_n), //asynchronous external reset input
+        .ndm_reset_o(ndm_reset), //non-debug-module domain reset ouput
+        .dm_reset_o(dm_reset), //debug-module domain reset output
+        .usb_reset_o(usb_reset), //usb domain reset output
+        .por_completed_o(por_completed), //Power-On-Reset completion indication (output).
         //32-bit pipelined Wishbone slave interface.
         .wb_adr(shared_bus_wbs[RESET_CTRL_S].adr[0]),
         .wb_dat_w(shared_bus_wbs[RESET_CTRL_S].dat_m),
@@ -415,12 +415,14 @@ module boxlambda_soc #(
      *If LiteDRAM is not synthesized-in, this first-stage clock generator provides the system clock
      */
     boxlambda_clk_gen clkgen (
-        .ext_clk_100 (ext_clk_100), //100MHz external clock.
+        .ext_clk_100 (ext_clk_100), //100MHz external clock input.
         .rst_n       (1'b1),
-        .clk_50      (clk_50), //50MHz clock
-        .clk_100     (clk_100), //100MHz clock
-        .clk_12      (clk_usb), //12 MHz USB clock
-        .locked      (pre_pll_locked) //PLL lock indication.
+        .clk_50      (clk_50), //50MHz clock output
+        .clk_100     (clk_100), //100MHz clock output
+        .clk_12      (usb_clk), //12 MHz USB clock output
+        .locked      (pre_pll_locked) //PLL lock indication outpt. It's called pre-PLL because LiteDRAM (when included in the build)
+                                      //introduces a second-stage PLL hanging off clk_50. The LiteDRAM PLL provides the system clock.
+                                      //When LiteDRAM is not included in the build, clk_50 becomes the system clock.
     );
 
     assign usb_pll_locked = pre_pll_locked;
@@ -685,12 +687,12 @@ module boxlambda_soc #(
             .user_port_wishbone_p_0_err(xbar_wbs[DDR_USR_S].err)
         );
         
-        /*sys_pll_locked is fed to the reset controller. Asserted when Litedram controller indicates reset is 
-         *deasserted and pll is locked.*/
+        /*sys_pll_locked is fed to the reset controller. It's asserted when Litedram controller indicates reset is 
+         *deasserted and the PLL is locked.*/
         assign litedram_pll_locked = ~litedram_rst_o & litedram_pll_locked_i;
         assign sys_pll_locked = litedram_pll_locked;
     end
-    else begin //No DRAM: In this case the Stage-1 clock generator provide the system clock.
+    else begin //No DRAM: In this case the Stage-1 clock generator provides the system clock.
         assign sys_clk = clk_50; //50MHz system clock.
         assign sys_clk_2x = clk_100; //100MHz double-rate system clock.
         assign litedram_pll_locked = 1'b1;
@@ -876,17 +878,18 @@ module boxlambda_soc #(
     end
     endgenerate
 
+    //Two USB HID host cores
     generate if (USB_HID_ACTIVE)
     begin : GENERATE_USB_HID_MODULES
         wb_usb_hid_host wb_usb_hid0_host_inst (
-            .wb_clk(sys_clk),                  // Wishbone clock - assumed to be faster than usb_clock, e.g. 50MHz.
-            .usb_clk(clk_usb),		            // 12MHz clock
-            .usb_rst_n(~usb_reset),           // USB clock domain active low reset
-            .sys_rst_n(~ndm_reset),          // System clock domain active low reset
+            .wb_clk(sys_clk),                  // Wishbone clock is in the system clock domain.
+            .usb_clk(usb_clk),		           // 12MHz USB clock.
+            .usb_rst_n(~usb_reset),            // USB clock domain active low reset
+            .sys_rst_n(~ndm_reset),            // System clock domain active low reset
             .usb_dm_i(usb0_dm_i), 
-            .usb_dp_i(usb0_dp_i),            // USB D- and D+ input
+            .usb_dp_i(usb0_dp_i),              // USB D- and D+ input
             .usb_dm_o(usb0_dm_o), 
-            .usb_dp_o(usb0_dp_o),            // USB D- and D+ output
+            .usb_dp_o(usb0_dp_o),              // USB D- and D+ output
             .usb_oe(usb0_oe),
             .irq(),     
             
@@ -904,14 +907,14 @@ module boxlambda_soc #(
         );
 
         wb_usb_hid_host wb_usb_hid1_host_inst (
-            .wb_clk(sys_clk),                  // Wishbone clock - assumed to be faster than usb_clock, e.g. 50MHz.
-            .usb_clk(clk_usb),		            // 12MHz clock
-            .usb_rst_n(~usb_reset),           // USB clock domain active low reset
-            .sys_rst_n(~ndm_reset),          // System clock domain active low reset
+            .wb_clk(sys_clk),                  // Wishbone clock is in the system clock domain.
+            .usb_clk(usb_clk),		           // 12MHz clock
+            .usb_rst_n(~usb_reset),            // USB clock domain active low reset
+            .sys_rst_n(~ndm_reset),            // System clock domain active low reset
             .usb_dm_i(usb1_dm_i), 
-            .usb_dp_i(usb1_dp_i),            // USB D- and D+ input
+            .usb_dp_i(usb1_dp_i),              // USB D- and D+ input
             .usb_dm_o(usb1_dm_o), 
-            .usb_dp_o(usb1_dp_o),            // USB D- and D+ output
+            .usb_dp_o(usb1_dp_o),              // USB D- and D+ output
             .usb_oe(usb1_oe),
             .irq(),     
             

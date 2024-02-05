@@ -66,7 +66,30 @@ static void cleanup() {
   top->final();
 }
 
+//One clock cycle of the 100MHz clock.
+static void tick100(void) {
+  top->clk_100 = 1;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+  
+  top->clk_100 = 0;
+  contextp->timeInc(1);
+  top->eval();
+  if (tracing_enable)
+    tfp->dump(contextp->time());
+}
+
+//One clock cycle of the 50MHz clock.
 static void tick50(void) {
+  //Two 100MHz clock cycles in one 50MHz clock cycle.
+  top->clk_50 = 1;
+  tick100();
+
+  top->clk_50 = 0;
+  tick100();
+
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
   top->uart_rx = (*uart)(top->uart_tx, 
@@ -76,15 +99,16 @@ static void tick50(void) {
   if (uart->get_rx_string().back() == '\n')  {
     printf("%s", uart->get_rx_string().c_str());
 
-    //Update change detectors
+    //Accumulate the UART output in a uartRxString buffer, for analysis when the test has completed.
     uartRxString += uart->get_rx_string();
 
     uart->clear_rx_string();
   }
 
+  //These LEDS come from the USB device cores. The ledg LEDS correspond to USB keyboard LEDs.
   if (top->ledg_1 != prev_ledg_1) {
     printf("ledg_1 = %d\n", top->ledg_1);
-    ledg_acc |= top->ledg_1;
+    ledg_acc |= top->ledg_1; //Keep track of which keyboard LEDs have been turned on.
     prev_ledg_1 = top->ledg_1;
   }
 
@@ -107,235 +131,28 @@ static void tick50(void) {
   }
 }
 
-//Advance simulation by one clock cycle
-static void tick(void) {
+static void tick6(void) {
   top->clk_6 = 1;
 
-  top->clk_50 = 1;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
-  top->clk_50 = 0;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
+  //8 50MHz clock cycles in one 6.25MHz clock cycle.
 
   tick50();
-
-  top->clk_50 = 1;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
-  top->clk_50 = 0;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
   tick50();
-
-  top->clk_50 = 1;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
-  top->clk_50 = 0;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
   tick50();
-
-  top->clk_50 = 1;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
-  top->clk_50 = 0;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
   tick50();
 
   top->clk_6 = 0;
 
-  top->clk_50 = 1;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
-  top->clk_50 = 0;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
   tick50();
-
-  top->clk_50 = 1;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
-  top->clk_50 = 0;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
   tick50();
-
-  top->clk_50 = 1;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
-  top->clk_50 = 0;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
   tick50();
-
-  top->clk_50 = 1;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
-  top->clk_50 = 0;
-  top->clk_100 = 1;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-  
-  top->clk_100 = 0;
-  contextp->timeInc(1);
-  top->eval();
-  if (tracing_enable)
-    tfp->dump(contextp->time());
-
   tick50();
+}
+
+//We have a 6.25Mhz clock (for USB), a 50MHz clock, and a 100MHz clock.
+//Advance simulation by one 6.25Mhz clock cycle.
+static void tick(void) {
+  tick6(); 
 }
 
 int main(int argc, char** argv, char** env) {
@@ -407,11 +224,12 @@ int main(int argc, char** argv, char** env) {
     
     top->uart_rx = 0;
 
-    //Take the system out of reset.
     top->rst_ni = 0;
     for (int ii=0;ii<32;ii++) {
       tick();
     }
+
+    //Take the system out of reset.
     top->rst_ni = 1;
     
     // When not in interactive mode, simulate for 200000000 timeprecision periods
@@ -420,7 +238,7 @@ int main(int argc, char** argv, char** env) {
       tick();        
     }
     
-    //Count keyboard reports
+    //Count keyboard reports in the UARTRxString buffer.
     int numKeyboardReports = 0;
     int pos=0;
     
@@ -432,7 +250,7 @@ int main(int argc, char** argv, char** env) {
       }
     }
 
-    //Count mouse reports
+    //Count mouse reports in the UARTRxString buffer.
     int numMouseReports = 0;
     pos = 0;
 
@@ -446,7 +264,7 @@ int main(int argc, char** argv, char** env) {
 
     int res = 0;
 
-    //We want at least 10 keyboard reports, 10 mouse reports and all leds turned on;
+    //We want at least 10 keyboard reports, 10 mouse reports and all leds turned on at least once;
     if ((numKeyboardReports >= 10) &&
         (numMouseReports >= 10) &&
         (ledg_acc == 0x7)) {

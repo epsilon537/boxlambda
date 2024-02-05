@@ -36,6 +36,7 @@ module sim_main #(
     output wire      uart_tx,  
 	inout wire [7:0] gpio0,
     inout wire [3:0] gpio1
+	// The USB interface is not added here. The USB HID host signals are connected directly to a USB HID device module below.
     );
    
    reg usb0_dm_host_i; 
@@ -91,6 +92,7 @@ module sim_main #(
 			     .exit                 ( sim_jtag_exit        )
 			     );
 
+   //Emulate USB low-speed pull-ups and pull-downs for USB port 0.
    always_comb begin
 	 case ({usb0_oe_host, usb0_oe_device})
 	 2'b00: begin
@@ -121,6 +123,7 @@ module sim_main #(
 	 endcase
    end
 
+   //Emulate USB low-speed pull-ups and pull-downs for USB port 1.
    always_comb begin
 	 case ({usb1_oe_host, usb1_oe_device})
 	 2'b00: begin
@@ -151,9 +154,12 @@ module sim_main #(
 	 endcase
    end
 
+   //USB HID device connected to USB port 0 is a simulated mouse.
    top_usb_device #(.J1_ROM_INIT_FILE("j1_mouse.hex")) usb_device_0 (
 	.clk(clk_50),
-	.usb_clk(clk_6),
+	.usb_clk(clk_6), //This is actually a 6.25MHz clock. It should be 6MHz to maintain a correct low-speed USB data rate,
+	                 //but it's fine, because in simulation, BoxLambda's USD HID host core runs at 12.5MHz instead of 12MHz,
+					 //i.e. USB host and device are off by the same amount in simulation.
 	.reset_in_n(rst_ni),
 	.dm_i(usb0_dm_device_i),
 	.dp_i(usb0_dp_device_i),
@@ -163,6 +169,7 @@ module sim_main #(
 	.ledg(ledg_0),
 	.ledr(ledr_0));
    
+   //USB HID device connected to USB port 0 is a simulated keyboard.
    top_usb_device #(.J1_ROM_INIT_FILE("j1_keyboard.hex")) usb_device_1 (
 	.clk(clk_50),
 	.usb_clk(clk_6),
