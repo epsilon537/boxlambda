@@ -84,3 +84,9 @@ lint_off -rule UNOPTFLAT -file "*/sub/usb_hid_device/J1_WB/rtl/j1_wb.sv" -match 
 lint_off -rule UNOPTFLAT -file "*/sub/usb_hid_device/J1_WB/rtl/j1_wb.sv" -match "Signal unoptimizable: Circular combinational logic: 'top_usb_device.cpu.pc'"
 
 lint_off -rule UNOPTFLAT -file "*/sub/usb_hid_device/J1_WB/rtl/interfaces.sv" -match "Signal unoptimizable: Circular combinational logic: 'top_usb_device.wbm.we'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/usb_hid_device/async_fifo/rtl/fifomem.v" -match "Signal is not used: 'rclk'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/usb_hid_device/async_fifo/rtl/fifomem.v" -match "Signal is not used: 'rclken'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/usb_hid_device/async_fifo/rtl/fifomem.v" -match "Signal is not driven, nor used: 'rdata_r'"

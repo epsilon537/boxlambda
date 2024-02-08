@@ -45,7 +45,8 @@ static unsigned check_usb(USB_HID_Host_t *usb, unsigned usb_status_prev) {
 
   unsigned usb_status = usb_hid_reg_rd(usb, USB_HID_STATUS);
   unsigned usb_typ = usb_status & USB_HID_STATUS_USB_TYP_MSK;
-  
+  unsigned isr;
+
   if (usb_status != usb_status_prev) {
     printf("USB%d: Status change: 0x%x -> 0x%x\n", usb->id, usb_status_prev, usb_status);
 
@@ -83,11 +84,24 @@ static unsigned check_usb(USB_HID_Host_t *usb, unsigned usb_status_prev) {
 
       usb_hid_reg_wr(usb, USB_HID_LEDS, leds);
 
+      //Check the LED_REPORT bit gets set in the ISR register.
+      isr = 0;
+      int counter = 0;
+      while ((isr & USB_HID_IRQ_BIT_LED_REPORT)==0) {
+        isr = usb_hid_reg_rd(usb, USB_HID_ISR);
+        ++counter;
+        if (counter > 1000) {
+          printf("Led Report IRQ not received.\n");
+        }
+      }
+
+      usb_hid_reg_wr(usb, USB_HID_ISR, isr);
+
       prevTimeClocks = curTimeClocks;
     }
   }
 
-  unsigned isr = usb_hid_reg_rd(usb, USB_HID_ISR);
+  isr = usb_hid_reg_rd(usb, USB_HID_ISR);
   usb_hid_reg_wr(usb, USB_HID_ISR, isr);
 
   if (isr & USB_HID_IRQ_BIT_USB_REPORT) {

@@ -1,7 +1,1 @@
-packages:
-  async_fifo:
-    revision: null
-    version: null
-    source:
-      Path: ../../components/async_fifo
-    dependencies: []
+packages: {}

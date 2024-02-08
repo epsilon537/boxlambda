@@ -58,7 +58,7 @@ module boxlambda_soc #(
     output wire  sdspi_mosi,
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
-     // USB HID, two ports.
+    // USB HID, two ports.
     input wire usb0_dm_i, 
     input wire usb0_dp_i,
     output wire usb0_dm_o, 
@@ -699,6 +699,14 @@ module boxlambda_soc #(
         assign init_done_led = 1'b1;
         assign init_err_led = 1'b0;
         assign sys_pll_locked = pre_pll_locked;
+`ifdef SYNTHESIS
+        //Shut up, DRC.
+        OBUFDS OBUFDS(
+    	    .I(1'b0),
+	        .O(ddram_clk_p),
+	.       OB(ddram_clk_n)
+        );
+`endif
     end
     endgenerate
 
@@ -930,6 +938,14 @@ module boxlambda_soc #(
             .wbs_we(shared_bus_wbs[USB_HID_1_S].we),
             .wbs_err(shared_bus_wbs[USB_HID_1_S].err)
         );
+    end
+    else begin
+        assign usb0_dm_o = 1'b0; 
+        assign usb0_dp_o = 1'b0;
+        assign usb0_oe = 1'b0;
+        assign usb1_dm_o = 1'b0; 
+        assign usb1_dp_o = 1'b0;
+        assign usb1_oe = 1'b0;
     end
     endgenerate
 endmodule

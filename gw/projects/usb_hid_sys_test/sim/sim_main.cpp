@@ -262,11 +262,24 @@ int main(int argc, char** argv, char** env) {
       }
     } 
 
+    //Count 'Led Report IRQ not received' reports in the UARTRxString buffer.
+    int numMissingIRQs = 0;
+    pos = 0;
+
+    while (pos != std::string::npos) {
+      pos = uartRxString.find("Led Report IRQ not received", pos);
+      if (pos != std::string::npos) {
+        ++numMissingIRQs;
+        ++pos;
+      }
+    } 
+
     int res = 0;
 
-    //We want at least 10 keyboard reports, 10 mouse reports and all leds turned on at least once;
+    //We want at least 10 keyboard reports, 10 mouse reports, 0 missing IRQs and all leds turned on at least once;
     if ((numKeyboardReports >= 10) &&
         (numMouseReports >= 10) &&
+        (numMissingIRQs == 0) &&
         (ledg_acc == 0x7)) {
       printf("Test passed.\n");
       res = 0;

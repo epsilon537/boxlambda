@@ -32,7 +32,7 @@ extern "C" {
 #define USB_HID_ISR 1
 //Fields:
 #define USB_HID_IRQ_BIT_USB_REPORT (1<<0)
-
+#define USB_HID_IRQ_BIT_LED_REPORT (1<<1)
 //Register:
 #define USB_HID_STATUS 2
 //Fields:

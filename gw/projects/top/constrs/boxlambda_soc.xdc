@@ -11,7 +11,9 @@ create_clock -add -name ext_clk_pin -period 10.00 [get_ports { ext_clk_100 }];
 #Note that the JTAG top-level ports (incl. TCK) are not used in a synthesized design. They are driven by BSCANE2 instead.
 create_clock -period 1000.000 -name tck_o -waveform {0.000 500.000} [get_pins boxlambda_soc_inst/GENERATE_DEBUG_MODULE.dmi_jtag_inst/i_dmi_jtag_tap/i_tap_dtmcs/TCK]
 
-set_clock_groups -asynchronous \
+#Set to quiet so we don't get a critical warning when LiteDRAM is not included in the build, in which case
+#clkout1 does not exist.
+set_clock_groups -quiet -asynchronous \
 -group [get_clocks -include_generated_clock clkout1] -group [get_clocks -include_generated_clock tck_o]
 
 ## Switches

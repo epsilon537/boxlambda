@@ -13,7 +13,7 @@ module sim_main #(
 	output wire  [9:0] ledr_0,
 	output wire  [7:0] ledg_1,
 	output wire  [9:0] ledr_1,
-	// // VGA interface
+	// VGA interface
 	output wire  [3:0] vga_r,       
 	output wire  [3:0] vga_g,       
 	output wire  [3:0] vga_b,       

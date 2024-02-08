@@ -100,20 +100,20 @@ module top (
     wire usb1_oe;
 
     //(De)Muxing unidirectional to bidirectional ports.
-    assign usb0_dm_i = usb0_dm;
-    assign usb0_dp_i = usb0_dp;
+    assign usb0_dm_i = usb0_oe ? 1'bZ : usb0_dm;
+    assign usb0_dp_i = usb0_oe ? 1'bZ : usb0_dp;
     assign usb0_dm = usb0_oe ? usb0_dm_o : 1'bZ;
     assign usb0_dp = usb0_oe ? usb0_dp_o : 1'bZ;
-    assign usb0_dm_snoop = usb0_dm;
-    assign usb0_dp_snoop = usb0_dp;
+    assign usb0_dm_snoop = usb0_oe ? usb0_dm_o : usb0_dm_i;
+    assign usb0_dp_snoop = usb0_oe ? usb0_dp_o : usb0_dp_i;
 
     //(De)Muxing unidirectional to bidirectional ports.
-    assign usb1_dm_i = usb1_dm;
-    assign usb1_dp_i = usb1_dp;
+    assign usb1_dm_i = usb1_oe ? 1'bZ : usb1_dm;
+    assign usb1_dp_i = usb1_oe ? 1'bZ : usb1_dp;
     assign usb1_dm = usb1_oe ? usb1_dm_o : 1'bZ;
     assign usb1_dp = usb1_oe ? usb1_dp_o : 1'bZ;
-    assign usb1_dm_snoop = usb1_dm;
-    assign usb1_dp_snoop = usb1_dp;
+    assign usb1_dm_snoop = usb1_oe ? usb1_dm_o : usb1_dm_i;
+    assign usb1_dp_snoop = usb1_oe ? usb1_dp_o : usb1_dp_i;
 `endif
 
     boxlambda_soc #(
