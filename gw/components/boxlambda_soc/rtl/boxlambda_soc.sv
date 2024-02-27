@@ -889,11 +889,11 @@ module boxlambda_soc #(
     //Two USB HID host cores
     generate if (USB_HID_ACTIVE)
     begin : GENERATE_USB_HID_MODULES
-        wb_usb_hid_host wb_usb_hid0_host_inst (
+        usb_hid_host_top usb_hid0_host_inst (
             .wb_clk(sys_clk),                  // Wishbone clock is in the system clock domain.
             .usb_clk(usb_clk),		           // 12MHz USB clock.
             .usb_rst_n(~usb_reset),            // USB clock domain active low reset
-            .sys_rst_n(~ndm_reset),            // System clock domain active low reset
+            .wb_rst_n(~ndm_reset),            // System clock domain active low reset
             .usb_dm_i(usb0_dm_i), 
             .usb_dp_i(usb0_dp_i),              // USB D- and D+ input
             .usb_dm_o(usb0_dm_o), 
@@ -914,11 +914,11 @@ module boxlambda_soc #(
             .wbs_err(shared_bus_wbs[USB_HID_0_S].err)
         );
 
-        wb_usb_hid_host wb_usb_hid1_host_inst (
+        usb_hid_host_top usb_hid1_host_inst (
             .wb_clk(sys_clk),                  // Wishbone clock is in the system clock domain.
             .usb_clk(usb_clk),		           // 12MHz clock
             .usb_rst_n(~usb_reset),            // USB clock domain active low reset
-            .sys_rst_n(~ndm_reset),            // System clock domain active low reset
+            .wb_rst_n(~ndm_reset),            // System clock domain active low reset
             .usb_dm_i(usb1_dm_i), 
             .usb_dp_i(usb1_dp_i),              // USB D- and D+ input
             .usb_dm_o(usb1_dm_o), 

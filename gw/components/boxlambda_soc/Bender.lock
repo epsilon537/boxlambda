@@ -18,6 +18,12 @@ packages:
     source:
       Path: ../../components/boxlambda_clk_gen
     dependencies: []
+  cdc_cells:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/usb_hid_host/../cdc_cells
+    dependencies: []
   ibex:
     revision: null
     version: null
@@ -75,7 +81,8 @@ packages:
     version: null
     source:
       Path: ../../components/usb_hid_host
-    dependencies: []
+    dependencies:
+    - cdc_cells
   vera:
     revision: null
     version: null

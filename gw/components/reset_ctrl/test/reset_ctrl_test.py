@@ -350,7 +350,11 @@ if __name__ == "__main__":
     #The runner discovers the testcases.
     proj_path = Path(__file__).resolve().parent
     verilog_sources = [proj_path / "../rtl/button_conditioner.sv",
-                       proj_path / "../rtl/reset_ctrl.sv"]
+                       proj_path / "../rtl/reset_ctrl.sv",
+                       proj_path / "../../cdc_cells/rtl/sync3.sv",
+                       proj_path / "../../cdc_cells/rtl/syncpls.sv",
+                       proj_path / "../../cdc_cells/rtl/pls2tgl.sv",
+                       proj_path / "../../cdc_cells/rtl/tgl2pls.sv"]
     #Defined in scripts/cocotb_boxlambda.py
     test_runner(verilog_sources=verilog_sources, 
                 test_module_filename=__file__, 

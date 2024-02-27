@@ -102,7 +102,7 @@ extern USB_HID_Host_t *usb0; //USB port 0.
 extern USB_HID_Host_t *usb1; //USB port 1.
 
 //Write to Register
-inline void usb_hid_reg_wr(IN USB_HID_Host_t *usb, unsigned reg_offset, unsigned val)
+static inline void usb_hid_reg_wr(IN USB_HID_Host_t *usb, unsigned reg_offset, unsigned val)
 {
 	assert(usb);
 	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);
@@ -110,7 +110,7 @@ inline void usb_hid_reg_wr(IN USB_HID_Host_t *usb, unsigned reg_offset, unsigned
 }
 
 //Read from Register
-inline unsigned usb_hid_reg_rd(IN USB_HID_Host_t *usb, unsigned reg_offset)
+static inline unsigned usb_hid_reg_rd(IN USB_HID_Host_t *usb, unsigned reg_offset)
 {
 	assert(usb);
 	assert(reg_offset <= USB_HID_MAX_REG_OFFSET);

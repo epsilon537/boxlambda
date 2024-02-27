@@ -4,7 +4,11 @@
 package:
   # The name of the package. Required.
   name: usb_hid_host
-  
+
+dependencies:
+  # Path dependency.
+  cdc_cells: { path: "../cdc_cells" }
+
 sources:
   - target: verilator
     files:
@@ -16,7 +20,8 @@ sources:
     files:
      - ../../../sub/usb_hid_host/src/usb_hid_host.v
      - ../../../sub/usb_hid_host/src/usb_hid_host_rom.v
-     - ../../../sub/usb_hid_host/src/wb_usb_hid_host.v
+     - rtl/wb_usb_hid_host.sv
+     - rtl/usb_hid_host_top.sv
 
 
 

@@ -72,7 +72,7 @@ static unsigned check_usb(USB_HID_Host_t *usb, unsigned usb_status_prev) {
     usb_status_prev = usb_status;
   }
 
-  if (usb_typ == USB_TYP_KEYB) {
+  if ((gpio_get_input(&gpio0) & 0x10) && (usb_typ == USB_TYP_KEYB)) {
     unsigned curTimeClocks = mtime_get32();
 
     //Every 100ms...
@@ -88,6 +88,8 @@ static unsigned check_usb(USB_HID_Host_t *usb, unsigned usb_status_prev) {
       isr = 0;
       int counter = 0;
       while ((isr & USB_HID_IRQ_BIT_LED_REPORT)==0) {
+        usleep(1000);
+
         isr = usb_hid_reg_rd(usb, USB_HID_ISR);
         ++counter;
         if (counter > 1000) {
@@ -95,7 +97,7 @@ static unsigned check_usb(USB_HID_Host_t *usb, unsigned usb_status_prev) {
         }
       }
 
-      usb_hid_reg_wr(usb, USB_HID_ISR, isr);
+      usb_hid_reg_wr(usb, USB_HID_ISR, USB_HID_IRQ_BIT_LED_REPORT);
 
       prevTimeClocks = curTimeClocks;
     }
@@ -156,6 +158,10 @@ int main(void) {
 
   printf("USB HID Test Start.\n");
 
+  //Enable interrupts
+  usb_hid_reg_wr(usb0, USB_HID_IEN, 3);
+  usb_hid_reg_wr(usb1, USB_HID_IEN, 3);
+  
   while (1) {
     usb0_status_prev = check_usb(usb0, usb0_status_prev);
     usb1_status_prev = check_usb(usb1, usb1_status_prev);
