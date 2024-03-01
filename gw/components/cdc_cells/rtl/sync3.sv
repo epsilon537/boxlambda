@@ -14,7 +14,7 @@ module sync3 (
         q = 1'b0;
     end
 
-    always_ff @(posedge clk or negedge rst_n)
+    always_ff @(posedge clk)
         if (!rst_n) {q,xfer_pipe} <= '0;
         else {q, xfer_pipe} <= {xfer_pipe, d};
         

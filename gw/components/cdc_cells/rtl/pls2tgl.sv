@@ -12,7 +12,7 @@ module pls2tgl (
     
     initial q = 1'b0;
     
-    always_ff @(posedge clk or negedge rst_n)
+    always_ff @(posedge clk)
         if (!rst_n) q <= '0;
         else q <= pulse ^ q;
         
