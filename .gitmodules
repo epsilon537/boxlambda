@@ -57,3 +57,9 @@
 [submodule "sub/verilog-wishbone"]
 	path = sub/verilog-wishbone
 	url = https://github.com/epsilon537/verilog-wishbone
+[submodule "sub/usb_hid_host"]
+	path = sub/usb_hid_host
+	url = https://github.com/epsilon537/usb_hid_host
+[submodule "sub/usb_hid_device"]
+	path = sub/usb_hid_device
+	url = https://github.com/epsilon537/usb_hid_device

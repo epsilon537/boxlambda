@@ -8,6 +8,7 @@ module boxlambda_soc #(
         parameter SDSPI_ACTIVE = 1,
         parameter YM2149_ACTIVE = 1,
         parameter PICORV_ACTIVE = 1,
+        parameter USB_HID_ACTIVE = 1,
         parameter CMEM_FILE = "",
         parameter DMEM_FILE = ""
     ) (
@@ -57,6 +58,18 @@ module boxlambda_soc #(
     output wire  sdspi_mosi,
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
+    // USB HID, two ports.
+    input wire usb0_dm_i, 
+    input wire usb0_dp_i,
+    output wire usb0_dm_o, 
+    output wire usb0_dp_o,
+    output wire usb0_oe,
+    input wire usb1_dm_i, 
+    input wire usb1_dp_i,
+    output wire usb1_dm_o, 
+    output wire usb1_dp_o,
+    output wire usb1_oe,
+    
     // Audio interface
     output wire       audio_out,
     output wire       audio_gain,
@@ -106,7 +119,9 @@ module boxlambda_soc #(
         UART_S, /*UART.*/
         TIMER_S, /*Timer Module.*/
         DDR_CTRL_S, /*LiteDRAM control port.*/
-        DM_S /*Debug Module slave port.*/
+        DM_S, /*Debug Module slave port.*/
+        USB_HID_0_S, /*USB HID keyboard or mouse*/
+        USB_HID_1_S  /*USB HID keyboard or mouse*/
     } wb_shared_bus_slave_e;
 
     /*We used a word-addressing Wishbone bus. The Dual Port RAM word address bus width is equal to the 
@@ -118,12 +133,14 @@ module boxlambda_soc #(
     localparam NUM_XBAR_MASTERS = 5;
     localparam NUM_XBAR_SLAVES  = 8;
     localparam NUM_SHARED_BUS_MASTERS = 1;
-    localparam NUM_SHARED_BUS_SLAVES = 10;
+    localparam NUM_SHARED_BUS_SLAVES = 12;
 
     localparam PICORV_BASE_ADDRESS = 'h10002000;
 
     //Shared bus slave addresses. Right shift by two to convert byte address values to word address values.
     localparam [NUM_SHARED_BUS_SLAVES*AW-1:0] SHARED_BUS_SLAVE_ADDRS = {
+        /*USB_HID_1*/       {AW'('h10000080>>2)},
+        /*USB_HID_0*/       {AW'('h10000040>>2)},
         /*DM_S*/            {AW'('h10040000>>2)},
         /*DDR_CTRL_S*/      {AW'('h10030000>>2)},
         /*TIMER_S*/         {AW'('h10020000>>2)},
@@ -138,6 +155,8 @@ module boxlambda_soc #(
 
     //Shared bus slave address mask. Right-shift by two to convert byte size to word size.
     localparam [NUM_SHARED_BUS_SLAVES*AW-1:0] SHARED_BUS_SLAVE_ADDR_MASKS = {
+        /*USB_HID_1_S*/     {AW'(~('h0000003f>>2))}, 
+        /*USB_HID_0_S*/     {AW'(~('h0000003f>>2))}, 
         /*DM_S*/            {AW'(~('h0000ffff>>2))},   
         /*DDR_CTRL_S*/      {AW'(~('h0000ffff>>2))},
         /*TIMER_S*/         {AW'(~('h0000000f>>2))},
@@ -175,14 +194,15 @@ module boxlambda_soc #(
     };
 
     //Clock signals.
-    logic sys_clk, sys_clk_2x, clk_usb, clk_50, clk_100;
+    logic sys_clk, sys_clk_2x, usb_clk, clk_50, clk_100;
     //PLL lock signals.
     logic usb_pll_locked, sys_pll_locked, pre_pll_locked, litedram_pll_locked;
 
     //ndm_reset_req: Non-Debug Module reset requested by Debug Module
     //ndm_reset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
     //dm_reset: Debug-Module Reset issued by Reset Controller.
-    logic ndm_reset_req, ndm_reset, dm_reset;
+    //usbreset: Reset of the USB clock domain.
+    logic ndm_reset_req, ndm_reset, dm_reset, usb_reset;
     logic por_completed; //Indicates Power-On Reset has been completed.
 	logic debug_req; //Debug Request signal.
 
@@ -368,16 +388,16 @@ module boxlambda_soc #(
 
     //Reset Controller
     reset_ctrl reset_ctrl_inst(
-        .sys_clk(sys_clk),
-        .usb_clk(clk_usb), //Not used yet.
-        .sys_pll_locked_i(sys_pll_locked),
-        .usb_pll_locked_i(usb_pll_locked),
-        .ndm_reset_i(ndm_reset_req),
-        .ext_reset_i(~ext_rst_n), //asynchronous external reset
-        .ndm_reset_o(ndm_reset),
-        .dm_reset_o(dm_reset),
-        .usb_reset_o(), //Not used yet.
-        .por_completed_o(por_completed),
+        .sys_clk(sys_clk), //50MHz system clock
+        .usb_clk(usb_clk), //12MHz USB clock
+        .sys_pll_locked_i(sys_pll_locked), //System Clock PLL locked indication (input)
+        .usb_pll_locked_i(usb_pll_locked), //USB Clock PLL locked indication (input)
+        .ndm_reset_i(ndm_reset_req), //non-debug-module reset request input
+        .ext_reset_i(~ext_rst_n), //asynchronous external reset input
+        .ndm_reset_o(ndm_reset), //non-debug-module domain reset ouput
+        .dm_reset_o(dm_reset), //debug-module domain reset output
+        .usb_reset_o(usb_reset), //usb domain reset output
+        .por_completed_o(por_completed), //Power-On-Reset completion indication (output).
         //32-bit pipelined Wishbone slave interface.
         .wb_adr(shared_bus_wbs[RESET_CTRL_S].adr[0]),
         .wb_dat_w(shared_bus_wbs[RESET_CTRL_S].dat_m),
@@ -395,12 +415,14 @@ module boxlambda_soc #(
      *If LiteDRAM is not synthesized-in, this first-stage clock generator provides the system clock
      */
     boxlambda_clk_gen clkgen (
-        .ext_clk_100 (ext_clk_100), //100MHz external clock.
+        .ext_clk_100 (ext_clk_100), //100MHz external clock input.
         .rst_n       (1'b1),
-        .clk_50      (clk_50), //50MHz clock
-        .clk_100     (clk_100), //100MHz clock
-        .clk_12      (clk_usb), //12 MHz USB clock
-        .locked      (pre_pll_locked) //PLL lock indication.
+        .clk_50      (clk_50), //50MHz clock output
+        .clk_100     (clk_100), //100MHz clock output
+        .clk_12      (usb_clk), //12 MHz USB clock output
+        .locked      (pre_pll_locked) //PLL lock indication outpt. It's called pre-PLL because LiteDRAM (when included in the build)
+                                      //introduces a second-stage PLL hanging off clk_50. The LiteDRAM PLL provides the system clock.
+                                      //When LiteDRAM is not included in the build, clk_50 becomes the system clock.
     );
 
     assign usb_pll_locked = pre_pll_locked;
@@ -665,18 +687,26 @@ module boxlambda_soc #(
             .user_port_wishbone_p_0_err(xbar_wbs[DDR_USR_S].err)
         );
         
-        /*sys_pll_locked is fed to the reset controller. Asserted when Litedram controller indicates reset is 
-         *deasserted and pll is locked.*/
+        /*sys_pll_locked is fed to the reset controller. It's asserted when Litedram controller indicates reset is 
+         *deasserted and the PLL is locked.*/
         assign litedram_pll_locked = ~litedram_rst_o & litedram_pll_locked_i;
         assign sys_pll_locked = litedram_pll_locked;
     end
-    else begin //No DRAM: In this case the Stage-1 clock generator provide the system clock.
+    else begin //No DRAM: In this case the Stage-1 clock generator provides the system clock.
         assign sys_clk = clk_50; //50MHz system clock.
         assign sys_clk_2x = clk_100; //100MHz double-rate system clock.
         assign litedram_pll_locked = 1'b1;
         assign init_done_led = 1'b1;
         assign init_err_led = 1'b0;
         assign sys_pll_locked = pre_pll_locked;
+`ifdef SYNTHESIS
+        //Shut up, DRC.
+        OBUFDS OBUFDS(
+    	    .I(1'b0),
+	        .O(ddram_clk_p),
+	.       OB(ddram_clk_n)
+        );
+`endif
     end
     endgenerate
 
@@ -856,4 +886,66 @@ module boxlambda_soc #(
     end
     endgenerate
 
+    //Two USB HID host cores
+    generate if (USB_HID_ACTIVE)
+    begin : GENERATE_USB_HID_MODULES
+        usb_hid_host_top usb_hid0_host_inst (
+            .wb_clk(sys_clk),                  // Wishbone clock is in the system clock domain.
+            .usb_clk(usb_clk),		           // 12MHz USB clock.
+            .usb_rst_n(~usb_reset),            // USB clock domain active low reset
+            .wb_rst_n(~ndm_reset),            // System clock domain active low reset
+            .usb_dm_i(usb0_dm_i), 
+            .usb_dp_i(usb0_dp_i),              // USB D- and D+ input
+            .usb_dm_o(usb0_dm_o), 
+            .usb_dp_o(usb0_dp_o),              // USB D- and D+ output
+            .usb_oe(usb0_oe),
+            .irq(),     
+            
+            //32-bit pipelined Wishbone slave interface.
+            .wbs_adr(shared_bus_wbs[USB_HID_0_S].adr[3:0]),
+            .wbs_dat_w(shared_bus_wbs[USB_HID_0_S].dat_m),
+            .wbs_dat_r(shared_bus_wbs[USB_HID_0_S].dat_s),
+            .wbs_sel(shared_bus_wbs[USB_HID_0_S].sel),
+            .wbs_stall(shared_bus_wbs[USB_HID_0_S].stall),
+            .wbs_cyc(shared_bus_wbs[USB_HID_0_S].cyc),
+            .wbs_stb(shared_bus_wbs[USB_HID_0_S].stb),
+            .wbs_ack(shared_bus_wbs[USB_HID_0_S].ack),
+            .wbs_we(shared_bus_wbs[USB_HID_0_S].we),
+            .wbs_err(shared_bus_wbs[USB_HID_0_S].err)
+        );
+
+        usb_hid_host_top usb_hid1_host_inst (
+            .wb_clk(sys_clk),                  // Wishbone clock is in the system clock domain.
+            .usb_clk(usb_clk),		           // 12MHz clock
+            .usb_rst_n(~usb_reset),            // USB clock domain active low reset
+            .wb_rst_n(~ndm_reset),            // System clock domain active low reset
+            .usb_dm_i(usb1_dm_i), 
+            .usb_dp_i(usb1_dp_i),              // USB D- and D+ input
+            .usb_dm_o(usb1_dm_o), 
+            .usb_dp_o(usb1_dp_o),              // USB D- and D+ output
+            .usb_oe(usb1_oe),
+            .irq(),     
+            
+            //32-bit pipelined Wishbone slave interface.
+            .wbs_adr(shared_bus_wbs[USB_HID_1_S].adr[3:0]),
+            .wbs_dat_w(shared_bus_wbs[USB_HID_1_S].dat_m),
+            .wbs_dat_r(shared_bus_wbs[USB_HID_1_S].dat_s),
+            .wbs_sel(shared_bus_wbs[USB_HID_1_S].sel),
+            .wbs_stall(shared_bus_wbs[USB_HID_1_S].stall),
+            .wbs_cyc(shared_bus_wbs[USB_HID_1_S].cyc),
+            .wbs_stb(shared_bus_wbs[USB_HID_1_S].stb),
+            .wbs_ack(shared_bus_wbs[USB_HID_1_S].ack),
+            .wbs_we(shared_bus_wbs[USB_HID_1_S].we),
+            .wbs_err(shared_bus_wbs[USB_HID_1_S].err)
+        );
+    end
+    else begin
+        assign usb0_dm_o = 1'b0; 
+        assign usb0_dp_o = 1'b0;
+        assign usb0_oe = 1'b0;
+        assign usb1_dm_o = 1'b0; 
+        assign usb1_dp_o = 1'b0;
+        assign usb1_oe = 1'b0;
+    end
+    endgenerate
 endmodule

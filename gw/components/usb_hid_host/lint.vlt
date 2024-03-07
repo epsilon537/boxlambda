@@ -1,0 +1,14 @@
+`verilator_config
+
+// Below you find suggested waivers. You have three options:
+//   1. Fix the reason for the linter warning
+//   2. Keep the waiver permanently if you are sure this is okay
+//   3. Keep the waiver temporarily to suppress the output
+
+lint_off -rule PINCONNECTEMPTY -file "*/gw/components/usb_hid_host/../../../sub/usb_hid_host/src/usb_hid_host.v" -match "Cell pin connected by name with empty reference: 'usb_oe'"
+
+lint_off -rule DECLFILENAME -file "*/gw/components/usb_hid_host/../../../sub/usb_hid_host/src/usb_hid_host.v" -match "Filename 'usb_hid_host' does not match MODULE name: 'ukp'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/usb_hid_host/../../../sub/usb_hid_host/src/usb_hid_host.v" -match "Bits of signal are not used: 'save_b'[3]"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/usb_hid_host/../../../sub/usb_hid_host/src/usb_hid_host_rom.v" -match "Bits of signal are not used: 'adr'[13:10]"

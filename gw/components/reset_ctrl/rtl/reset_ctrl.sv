@@ -36,45 +36,40 @@ module reset_ctrl (
     localparam [5:0] RESET_REASON_EXT = 16;
     localparam [5:0] RESET_REASON_WB_USB = 32;
 
-    //Registered ndm and dm outputs.
-    logic ndm_reset_o_reg, dm_reset_o_reg;
+    //Registered ndm, dm, and usb reset outputs.
+    logic ndm_reset_o_reg, dm_reset_o_reg, usb_reset_o_reg;
 
     //Power on Reset state machine states
     typedef enum {wait_for_pll_lock, wait_assert_por, assert_por, por_completed} por_state;
     por_state por_state_reg;
     logic [5:0] por_assert_counter;
-    logic por;
-    
+    logic wb_por; //Power-On Reset signal in WB clock domain
+    logic usb_por; //Power-On Reset signal in USB clock domain
+
     logic [5:0] reset_reason_reg, reset_reason_next;
     
-    //Transfer pipes for clock domain crossing.
-    (* ASYNC_REG = "TRUE" *) logic [1:0] usb_pll_locked_xfer_pipe;
-    logic usb_pll_locked_synced;
-    (* ASYNC_REG = "TRUE" *) logic [1:0] usb_reset_xfer_pipe;
-    logic usb_reset_synced;
-
     initial begin
         por_state_reg = wait_for_pll_lock;
         por_assert_counter = 6'b000000;
         reset_reason_reg = 6'b0;
-        usb_pll_locked_synced = 1'b0;
-        usb_pll_locked_xfer_pipe = 2'b00;
-        usb_reset_synced = 1'b0;
-        usb_reset_xfer_pipe = 2'b00; 
         ndm_reset_o_reg = 1'b0;
         dm_reset_o_reg = 1'b0;
     end
 
-    //Synchronize the usb_pll_locked signal
-    always @(posedge sys_clk) begin
-	    {usb_pll_locked_synced, usb_pll_locked_xfer_pipe} <= {usb_pll_locked_xfer_pipe, usb_pll_locked_i};
-    end
+    logic wb_usb_pll_locked; //USB PLL locked signal in WB clock domain.
+
+    //Synchronize the usb_pll_locked signal to the WB clock domain.
+    sync3 usb_pll_locked_sync (
+        .q(wb_usb_pll_locked),
+        .d(usb_pll_locked_i),
+        .clk(sys_clk),
+        .rst_n(1'b1));
 
     always_ff @(posedge sys_clk)
         case (por_state_reg)
             wait_for_pll_lock:
                 //When PLL lock achieved, move to next state
-                if (sys_pll_locked_i && usb_pll_locked_synced)
+                if (sys_pll_locked_i && wb_usb_pll_locked)
                     por_state_reg <= wait_assert_por;
             wait_assert_por:
                 begin
@@ -94,16 +89,18 @@ module reset_ctrl (
             por_completed:;
         endcase
 
-    assign por = (por_state_reg == assert_por);
+    assign wb_por = (por_state_reg == assert_por);
     assign por_completed_o = (por_state_reg == por_completed);
 
-    //Synchronize and debounce external reset
-    logic ext_reset_conditioned;
+    //Debounced external reset synchronized to WB clock domain.
+    logic wb_ext_reset_conditioned;
+    //Debounced external reset synchronized to USB clock domain.
+    logic usb_ext_reset_conditioned;
 
     button_conditioner button_conditioner_instr (
         .clk(sys_clk),
         .btn(ext_reset_i),
-        .out(ext_reset_conditioned)
+        .out(wb_ext_reset_conditioned)
     );
 
     //WB handshake
@@ -115,7 +112,7 @@ module reset_ctrl (
 
     assign do_wb_wr = wb_cyc & wb_stb & wb_we;
 
-    always @(posedge sys_clk) begin
+    always_ff @(posedge sys_clk) begin
         do_ack_reg <= 1'b0;
         if (wb_stb) begin
             do_ack_reg <= 1'b1;
@@ -130,56 +127,39 @@ module reset_ctrl (
     assign wb_err = 1'b0;
 
     //Wishbone triggered ndm and/or dm reset
-    logic wb_ndm_reset, wb_dm_reset, wb_usb_reset;
-    logic [5:0] wb_usb_reset_count;
-    logic wb_usb_reset_reg;
+    logic wb_ndm_reset_stb, wb_dm_reset_stb, wb_usb_reset_stb;
+    //Wishbone triggered usb reset in USB clock domain.
+    logic usb_wb_reset_stb;
 
-    initial begin
-        wb_usb_reset_reg = 1'b0;
-        wb_usb_reset_count = 6'b000000;
-    end
-
-    assign wb_ndm_reset = do_wb_wr & wb_dat_w[0];
-    assign wb_dm_reset = do_wb_wr & wb_dat_w[1];
-    assign wb_usb_reset = do_wb_wr & wb_dat_w[2];
+    assign wb_ndm_reset_stb = do_wb_wr & wb_dat_w[0];
+    assign wb_dm_reset_stb = do_wb_wr & wb_dat_w[1];
+    assign wb_usb_reset_stb = do_wb_wr & wb_dat_w[2];
 
     //Keep track of the reset reason.
     always_comb begin
         reset_reason_next = reset_reason_reg;
-        if (por)
+        if (wb_por)
             reset_reason_next = reset_reason_next | RESET_REASON_POR;
-        if (wb_ndm_reset)
+        if (wb_ndm_reset_stb)
             reset_reason_next = reset_reason_next | RESET_REASON_WB_NDM;
-        if (wb_dm_reset)
+        if (wb_dm_reset_stb)
             reset_reason_next = reset_reason_next | RESET_REASON_WB_DM;
         if (ndm_reset_i)
             reset_reason_next = reset_reason_next | RESET_REASON_NDM;
-        if (ext_reset_conditioned)
+        if (wb_ext_reset_conditioned)
             reset_reason_next = reset_reason_next | RESET_REASON_EXT;
-        if (wb_usb_reset)
+        if (wb_usb_reset_stb)
             reset_reason_next = reset_reason_next | RESET_REASON_WB_USB;
         //An access to the reset reason register resets it.
         if (wb_adr_reg && do_ack_reg)
             reset_reason_next = 6'b0;
     end
 
-    always @(posedge sys_clk) begin
+    //Register the ndm and dm reset outputs and update reset_reason state/
+    always_ff @(posedge sys_clk) begin
         reset_reason_reg <= reset_reason_next;
-
-        if (!wb_usb_reset_reg) begin
-            wb_usb_reset_reg <= wb_usb_reset;
-        end
-        else begin
-            wb_usb_reset_count <= wb_usb_reset_count + 6'b000001;
-            if (wb_usb_reset_count == 6'b111111)
-                wb_usb_reset_reg <= 1'b0;
-        end
-    end
-
-    //Register the ndm and dm reset outputs
-    always @(posedge sys_clk) begin
-        ndm_reset_o_reg <= por | ext_reset_conditioned | ndm_reset_i | wb_ndm_reset;
-        dm_reset_o_reg <= por | ext_reset_conditioned | wb_dm_reset;
+        ndm_reset_o_reg <= wb_por | wb_ext_reset_conditioned | ndm_reset_i | wb_ndm_reset_stb;
+        dm_reset_o_reg <= wb_por | wb_ext_reset_conditioned | wb_dm_reset_stb;
     end
 
     //Non-Debug Module reset output
@@ -188,11 +168,34 @@ module reset_ctrl (
     //Debug Module reset output
     assign dm_reset_o = dm_reset_o_reg;
 
-    //USB Module reset output, in usb_clk clock domain.
-    //Synchronize the usb_reset signal
-    always @(posedge usb_clk) begin
-	    {usb_reset_synced, usb_reset_xfer_pipe} <= {usb_reset_xfer_pipe, por | ext_reset_conditioned | wb_usb_reset_reg};
-    end
+    //Sync usb_reset_stb from WB domain to USB domain.
+    syncpls usb_wb_reset_sync (
+        .t_clk(sys_clk), //transmitting clock.
+        .t_rst_n(1'b1), //reset in t_clk domain.
+        .t_pulse(wb_usb_reset_stb), //input pulse in t_clk domain.
+        .r_clk(usb_clk), //receiving clock.
+        .r_rst_n(1'b1), //reset in r_clk_domain.
+        .r_pulse(usb_wb_reset_stb));
 
-    assign usb_reset_o = usb_reset_synced;
+    //Sync WB domain ext_reset to USB domain
+    sync3 usb_ext_reset_sync (
+        .q(usb_ext_reset_conditioned),
+        .d(wb_ext_reset_conditioned),
+        .clk(usb_clk),
+        .rst_n(1'b1));
+
+    //Sync WB domain POR to USB domain.
+    sync3 usb_por_sync (
+        .q(usb_por),
+        .d(wb_por),
+        .clk(usb_clk),
+        .rst_n(1'b1));
+
+    //Register the usb reset output
+    initial usb_reset_o_reg = 1'b0;
+
+    always_ff @(posedge usb_clk)
+        usb_reset_o_reg <= usb_wb_reset_stb | usb_por | usb_ext_reset_conditioned;
+
+    assign usb_reset_o = usb_reset_o_reg;
 endmodule

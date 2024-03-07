@@ -18,6 +18,17 @@ module sim_main #(
   	output wire  sdspi_mosi,
 	input  wire	 sdspi_miso, 
   	input  wire  sdspi_card_detect,
+	// USB HID, two ports.
+    input wire usb0_dm_i, 
+    input wire usb0_dp_i,
+    output wire usb0_dm_o, 
+    output wire usb0_dp_o,
+    output wire usb0_oe,
+    input wire usb1_dm_i, 
+    input wire usb1_dp_i,
+    output wire usb1_dm_o, 
+    output wire usb1_dp_o,
+    output wire usb1_oe,
 	// Audio interface
 	output wire       audio_out,
 	output wire       audio_gain,
@@ -85,7 +96,18 @@ module sim_main #(
 		.uart_tx(uart_tx),
 		.gpio0(gpio0),
 		.gpio1(gpio1),		 
-         
+
+		.usb0_dm_i(usb0_dm_i), 
+  		.usb0_dp_i(usb0_dp_i),
+		.usb0_dm_o(usb0_dm_o), 
+  		.usb0_dp_o(usb0_dp_o),
+		.usb0_oe(usb0_oe),
+  		.usb1_dm_i(usb1_dm_i), 
+  		.usb1_dp_i(usb1_dp_i),
+		.usb1_dm_o(usb1_dm_o), 
+  		.usb1_dp_o(usb1_dp_o),
+		.usb1_oe(usb1_oe),
+		 
 		// ym2149 interface
 		.audio_out(audio_out),
   		.audio_gain(audio_gain),

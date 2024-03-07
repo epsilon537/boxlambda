@@ -1,4 +1,3 @@
-#hello_world is a bit weird: all source files are taken from the ibex_wb submodule.
 add_executable(hello_world
 	EXCLUDE_FROM_ALL
     hello.c

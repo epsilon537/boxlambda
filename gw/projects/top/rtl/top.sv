@@ -48,6 +48,28 @@ module top (
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
 
+     // USB HID: On Verilator, we use separate input and output ports. On FPGA, the USB ports are bidirectional.
+`ifdef VERILATOR
+    input wire usb0_dm_i, 
+    input wire usb0_dp_i,
+    output wire usb0_dm_o, 
+    output wire usb0_dp_o,
+    output wire usb0_oe,
+    input wire usb1_dm_i, 
+    input wire usb1_dp_i,
+    output wire usb1_dm_o, 
+    output wire usb1_dp_o,
+    output wire usb1_oe,
+`else
+    inout wire usb0_dm, 
+    inout wire usb0_dp,
+    output wire usb0_dm_snoop, //Snooping the USB0 port, for test/debug purposes.
+    output wire usb0_dp_snoop,
+    inout wire usb1_dm, 
+    inout wire usb1_dp,
+    output wire usb1_dm_snoop, //Snooping the USB1 ports, for test/debug purposes.
+    output wire usb1_dp_snoop,
+`endif
     // Audio interface
     output wire       audio_out,
     output wire       audio_gain,
@@ -64,6 +86,35 @@ module top (
     inout  wire [7:0] gpio0,
     inout  wire [3:0] gpio1
     );
+
+`ifndef VERILATOR
+    wire usb0_dm_i; 
+    wire usb0_dp_i;
+    wire usb0_dm_o; 
+    wire usb0_dp_o;
+    wire usb0_oe;
+    wire usb1_dm_i; 
+    wire usb1_dp_i;
+    wire usb1_dm_o; 
+    wire usb1_dp_o;
+    wire usb1_oe;
+
+    //(De)Muxing unidirectional to bidirectional ports.
+    assign usb0_dm_i = usb0_oe ? 1'bZ : usb0_dm;
+    assign usb0_dp_i = usb0_oe ? 1'bZ : usb0_dp;
+    assign usb0_dm = usb0_oe ? usb0_dm_o : 1'bZ;
+    assign usb0_dp = usb0_oe ? usb0_dp_o : 1'bZ;
+    assign usb0_dm_snoop = usb0_oe ? usb0_dm_o : usb0_dm_i;
+    assign usb0_dp_snoop = usb0_oe ? usb0_dp_o : usb0_dp_i;
+
+    //(De)Muxing unidirectional to bidirectional ports.
+    assign usb1_dm_i = usb1_oe ? 1'bZ : usb1_dm;
+    assign usb1_dp_i = usb1_oe ? 1'bZ : usb1_dp;
+    assign usb1_dm = usb1_oe ? usb1_dm_o : 1'bZ;
+    assign usb1_dp = usb1_oe ? usb1_dp_o : 1'bZ;
+    assign usb1_dm_snoop = usb1_oe ? usb1_dm_o : usb1_dm_i;
+    assign usb1_dp_snoop = usb1_oe ? usb1_dp_o : usb1_dp_i;
+`endif
 
     boxlambda_soc #(
 		.DPRAM_BYTE_ADDR_MASK(`DPRAM_SIZE_BYTES/2-1), /*Divide by 2. DPRAM is split into two equal-size instances.*/
@@ -83,6 +134,9 @@ module top (
 `endif
 `ifndef PICORV_DMA
         .PICORV_ACTIVE(0),
+`endif
+`ifndef USB_HID
+        .USB_HID_ACTIVE(0),
 `endif
         /*We don't specify a dmem.mem. The data segment is copied into DMEM from a load segment that's part of the cmem.mem
          *image. This copy operation is part of the PicoLibc start-up code.*/

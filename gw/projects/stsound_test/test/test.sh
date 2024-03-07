@@ -10,10 +10,10 @@ fi
 
 SRC_ROOT_DIR="$1"
 
-# rm -f pcm_out.py
+rm -f pcm_out.py
 rm -f test.wav
 
-# echo "Launching Vmodel..."
+echo "Launching Vmodel..."
 ./Vmodel -s $SRC_ROOT_DIR/gw/projects/stsound_test/test/sdcard.img
 
 if [ "$?" -ne "0" ]; then

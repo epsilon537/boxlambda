@@ -5,6 +5,10 @@ package:
   # The name of the package. Required.
   name: reset_ctrl
 
+dependencies:
+  # Path dependency.
+  cdc_cells: { path: "../cdc_cells" }
+
 sources:
   - target: any(verilator, vivado)
     files:

@@ -23,6 +23,7 @@ dependencies:
   picorv_dma: { path: "../../components/picorv_dma" }
   boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
   blackbox: { path: "../../components/blackbox" }
+  usb_hid_host: { path: "../../components/usb_hid_host" }
 
 sources:
   #co-sim stuffs.

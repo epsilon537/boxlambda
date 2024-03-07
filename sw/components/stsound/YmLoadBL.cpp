@@ -42,6 +42,10 @@
 #include "LZH/LZH.H"
 #include "ff.h"
 
+#define UNPACKED_SONG_BUFFER_SZ_BYTES 65536
+
+static ymu8 unpackedSongBuffer[UNPACKED_SONG_BUFFER_SZ_BYTES];
+
 static ymu16 ymVolumeTable[16] =
 	{62, 161, 265, 377, 580, 774, 1155, 1575, 2260, 3088, 4570, 6233, 9330, 13187, 21220, 32767};
 
@@ -120,7 +124,6 @@ yms32 ReadBigEndian32(ymu8 *pBig)
 unsigned char *CYmMusic::depackFile(ymu32 checkOriginalSize)
 {
 	lzhHeader_t *pHeader;
-	ymu8 *pNew;
 	ymu8 *pSrc;
 
 	pHeader = (lzhHeader_t *)pBigMalloc;
@@ -134,10 +137,8 @@ unsigned char *CYmMusic::depackFile(ymu32 checkOriginalSize)
 	fileSize = (ymu32)-1;
 
 	fileSize = ReadLittleEndian32((ymu8 *)&pHeader->original);
-	pNew = (ymu8 *)malloc(fileSize);
-	if (!pNew)
-	{
-		setLastError("MALLOC Failed !");
+	if (fileSize > UNPACKED_SONG_BUFFER_SZ_BYTES) {
+		setLastError("Unpacked song larger than local memory buffer (64KB) !");
 		free(pBigMalloc);
 		pBigMalloc = NULL;
 		return NULL;
@@ -157,26 +158,22 @@ unsigned char *CYmMusic::depackFile(ymu32 checkOriginalSize)
 	{
 		// alloc space for depacker and depack data
 		static CLzhDepacker depacker;
-		const bool bRet = depacker.LzUnpack(pSrc, packedSize, pNew, fileSize);
+		const bool bRet = depacker.LzUnpack(pSrc, packedSize, unpackedSongBuffer, fileSize);
 
 		if (!bRet)
 		{ // depacking error
 			setLastError("LH5 Depacking Error !");
-			free(pNew);
-			pNew = NULL;
 		}
 	}
 	else
 	{
 		setLastError("LH5 Depacking Error !");
-		free(pNew);
-		pNew = NULL;
 	}
 
 	// Free up source buffer, whatever depacking fail or success
 	free(pBigMalloc);
 
-	return pNew;
+	return unpackedSongBuffer;
 }
 
 static ymint fileSizeGet(FIL *h)

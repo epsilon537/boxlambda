@@ -1,6 +1,6 @@
 //A top-level of Out-of-Context synthesis of a wbxbar module.
 module	wbxbar_ooc #(
-	parameter	NM = 6, NS=21,
+	parameter	NM = 6, NS=8,
 	parameter	AW = 28, DW=32,
 	parameter	[NS*AW-1:0]	SLAVE_ADDR = {
 		{ 3'b111, {(AW-3){1'b0}} },
