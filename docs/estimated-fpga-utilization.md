@@ -11,21 +11,19 @@ Estimated FPGA Resource Utilization on Arty A7-100T
 |**Block RAM Tile**|64|40|0|0|0|1|
 |**DSPs**|0|0|1|0|2|0|
 
-| Resources Type | PicoRV DMA | sdspi | wbi2c | wbuart | Quad SPI | ps2 keyb.+mouse |
+| Resources Type | PicoRV DMA | sdspi | wbi2c | wbuart | Quad SPI | 2xUSB HID |
 |----------------|------------|-------|-------|--------|----------|-----------|
-|**Slice LUTs**|2522|536|393|438|440|410|
-|**Slice Registers**|1359|749|324|346|641|370|
-|**Block RAM Tile**|1|1|0|0|0|0|
+|**Slice LUTs**|2522|536|393|438|440|694|
+|**Slice Registers**|1359|749|324|346|641|988|
+|**Block RAM Tile**|1|1|0|0|0|1|
 |**DSPs**|0|0|0|0|0|0|
 
-| Resources Type | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
-|----------------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|20.00%|24893|63400|39%|
-|**Slice Registers**|20.00%|11483|126800|9%|
-|**Block RAM Tile**|20.00%|128|135|**95%**|
-|**DSPs**|20.00%|4|240|1.67%|
-
-I added a 20% margin overall for the bus fabric and for components I haven't included yet.
+| Resources Type | Interconnect | Total | Avl. Resources | Pct. Utilization |
+|----------------|-------------|--------|----------------|------------------|
+|**Slice LUTs**|2846|23874|63400|38%|
+|**Slice Registers**|2022|12209|126800|10%|
+|**Block RAM Tile**|0|108|135|80%|
+|**DSPs**|0|3|240|1%|
 
 Estimated FPGA Resource Utilization on Arty A7-35T
 --------------------------------------------------
@@ -37,16 +35,18 @@ Estimated FPGA Resource Utilization on Arty A7-35T
 |**Block RAM Tile**|**16**|24|0|0|0|1|
 |**DSPs**|0|0|1|0|2|0|
 
-| Resources Type | PicoRV DMA | sdspi | wbi2c | wbuart | Quad SPI | ps2 keyb.+mouse |
+| Resources Type | PicoRV DMA | sdspi | wbi2c | wbuart | Quad SPI | 2xUSB HID |
 |----------------|------------|-------|-------|--------|----------|-----------|
-|**Slice LUTs**|2522|536|393|438|440|410|
-|**Slice Registers**|1359|749|324|346|641|370|
-|**Block RAM Tile**|1|1|0|0|0|0|
+|**Slice LUTs**|2522|536|393|438|440|694|
+|**Slice Registers**|1359|749|324|346|641|988|
+|**Block RAM Tile**|1|1|0|0|0|1|
 |**DSPs**|0|0|0|0|0|0|
 
-| Resources Type | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization |
-|----------------|-------------|----------------------|----------------|------------------|
-|**Slice LUTs**|**5.00%**|20376|20800|**98%**
-|**Slice Registers**|20.00%|11461|41600|28%
-|**Block RAM Tile**|**10.00%**|47|50|**94%**
-|**DSPs**|20.00%|4|90|4.44%
+| Resources Type | Interconnect | Total | Avl. Resources | Pct. Utilization |
+|----------------|--------------|-------|----------------|------------------|
+|**Slice LUTs**|2115|21807|20800|**105%**|
+|**Slice Registers**|1488|11657|41600|28%|
+|**Block RAM Tile**|0|44|50|**88%**|
+|**DSPs**|0|4|90|4.44%|
+
+It looks like we might not be able to fit all components in the A7-35T configuration. However, keep in mind that these are estimates. The numbers associated with the individual components don't necessarily add up when you combine these components into a SoC. There will be some gains and losses. The outcome can be also tweaked a bit depending on routing strategy settings, etc. It's going to be a tight fit for sure, but it might just work out. 
