@@ -90,7 +90,6 @@ UKP processor inside the *usb_hid_host* core just recognizes a handful of instru
 
 *Keyboard LED control in the usb_hid_host core.*
 
-
 To add USB keyboard LED control to the usb_hid_host core, I implemented the following changes in the UKP processor:
 - I extended the UKP opcode width from 4 bits to 5 bits. This gave me space to add new instructions.
 - I added a conditional *Branch Request* (**br**) instruction and a *req_branch_stb* input port to the UKP module. Through the *req_branch_stb* signal, the user (usb_hid_host) can request the branch to be taken. When the branch has been taken, an ack_req_branch_stb is sent back to the user.
@@ -124,7 +123,7 @@ I found the toggle-pulse generation technique in Figure 20 of the document very 
 
 *MCP CDC technique using Toggle-Pulse.*
 
-In both directions, USB->System Clock and System Clock->USB, I'm using an MCP strategy to pass signals across the clock domains. In the System Clock->USB direction (fast->slow clock), I'm using feedback. Keyboard LED update requests are acknowledged.
+In both directions, USB to System Clock and System Clock to USB, I'm using a Multi-Cycle Path (MCP) strategy to pass signals across the clock domains. In the System Clock to USB direction (fast to slow clock), I'm using feedback. Keyboard LED update requests are acknowledged.
 
 USB HID Device Emulation
 ------------------------
@@ -337,13 +336,13 @@ References
 
 [SwapForth](https://github.com/jamesbowman/swapforth)
 
-[The original NAND2Mario usb_hid_host core](https://github.com/nand2mario/usb_hid_host)
+[The original NAND2Mario usb_hid_host repo](https://github.com/nand2mario/usb_hid_host)
 
-[The usb_hid_host_core fork with keyboard LED control support](https://github.com/epsilon537/usb_hid_host)
+[The usb_hid_host repo fork with keyboard LED control support](https://github.com/epsilon537/usb_hid_host)
 
-[The original USB device core from Pbing](https://github.com/pbing/USB)
+[The original USB device repo from Pbing](https://github.com/pbing/USB)
 
-[The USB device core fork with keyboard emulation support](https://github.com/epsilon537/usb_hid_device)
+[The USB device repo fork with keyboard emulation support](https://github.com/epsilon537/usb_hid_device)
 
 
 

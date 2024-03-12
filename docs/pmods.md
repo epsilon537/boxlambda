@@ -30,3 +30,19 @@ To make space for the keyboard and mouse, I moved the audio PMOD to the ChipKit 
 ![Audio PMOD Setup.](assets/audio_pmod.jpg)
 
 *Audio PMOD Setup.*
+
+### USB Host PMOD
+
+I'm using the following PMOD from Machdyne:
+
+![USB Host Dual Socket PMOD.](assets/usb_host_dual_socket_pmod.jpg)
+
+*The Machdyne USB host dual socket PMOD.*
+
+[https://machdyne.com/product/usb-host-dual-socket-pmod/](https://machdyne.com/product/usb-host-dual-socket-pmod/)
+
+Hook up the PMOD to port **JA** and connect a keyboard and/or a mouse.
+
+![USB PMOD Setup](assets/usb_pmod_setup.jpg)
+
+*Arty A7 Setup with USB PMOD attached to port JA.*

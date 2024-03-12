@@ -32,7 +32,7 @@ BoxLambda has the following synchronous **Reset Domains**:
 
 BoxLambda has the following **Reset Sources**:
 
-- **Power-On Reset**: Asserted for a number of clock cycles after Power-On.
+- **Power-On Reset**: Asserted for several clock cycles after Power-On.
 - **External Reset**: Connected to a reset button on the Arty A7 board.
 - **Non-Debug Module Reset Request**: issued by the Debug Module.
 - **Software Reset**: Reset of *dm_reset*, *ndm_reset*, or *usb_reset* domain triggered by software by writing to a *reset_ctrl* register.
@@ -49,7 +49,7 @@ The reset_ctrl module code is located here:
 
 ### Reset Controller Registers
 
-Software can trigger resets by writing to the *Reset Control Register* and retrieve the reason of the most recent reset by reading from the *Reset Reason Register*:
+Software can trigger resets by writing to the *Reset Control Register* and retrieve the reason for the most recent reset by reading from the *Reset Reason Register*:
 
 | Address | Name | Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 |---------|------|-------|-------|-------|-------|-------|-------|-------|-------|

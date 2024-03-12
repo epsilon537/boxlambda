@@ -19,9 +19,11 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **BSS**: Block Starting Symbol. The portion of an object file or executable holding zero-initialized data.
 
-- **Bus Arbiter**: In a Shared Bus Interconnect, a Bus Arbiter decides which of the requesting bus masters get to access the bus. 
+- **Bus Arbiter**: In a Shared Bus Interconnect, a Bus Arbiter decides which of the requesting bus masters gets to access the bus. 
 
 - **CDC**: Clock Domain Crossing. The traversal of a signal in a synchronous digital circuit from one clock domain into another.
+
+- **Clock Domain**: A section of the design that is driven by one clock, or in some cases, multiple coupled clocks.
 
 - **CMEM**: Code Memory. One of BoxLambda's internal memories. Holds CPU text (instructions) and load segments.
   
@@ -36,6 +38,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **CPP**: C Preprocessor, a macro processor used by the C compiler and the PicoRV *.picoasm* file assembler.
 
 - **CPU**: Central Processing Unit.
+
+- **CRC**: Cyclic Redundancy Check, a checksum algorithm.
 
 - **CRT0**: C Run-Time 0. A set of execution startup routines linked into a C program that performs any initialization work required before calling the program's *main()* function. 
 
@@ -59,6 +63,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **DMA**: Direct Memory Access, a hardware assist component offloading memory copy operations from the CPU.
 
+- **DM Reset**: Debug Module Reset signal/domain.
+  
 - **DSP**: Digital Signal Processing.
 
 - **DMAC**: DMA Controller.
@@ -84,6 +90,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **FIFO**: First-In-First-out, an implementation of a queue.
 
 - **Fork**: A GitHub fork is a copy of a repository that sits in your account rather than the account from which you forked the data.
+
+- **Forth**: A stack-based programming language.
 
 - **FTDI**: Future Technology Devices International Inc. The name has become synonymous with the USB-to-UART adapter ICs sold by this company.
 
@@ -127,6 +135,10 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **ISA**: Instruction Set Architecture. The Instruction Set Architecture is the part of the processor that is visible to the programmer.
 
+- **ISR**: Interrupt Service Routine.
+
+- **J1**: A small Forth CPU core.
+
 - **JTAG**: Joint Test Action Group, a standard designed to assist with device, board, and system testing, diagnosis, and fault isolation. Today JTAG is used as the primary means of accessing sub-blocks of ICs, making it an essential mechanism for debugging embedded systems.
 
 - **JTAG DTM**: JTAG based Debug Transport Module.
@@ -142,6 +154,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **LSB**: Least Significant Bit.
       
 - **LUT**: Look-Up Table.
+
+- **MCP**: Multi-Cycle Path, a technique for safely passing multiple CDC signals.
 
 - **Makefile**: A file used by the *Make* utility, defining a set of tasks to be executed, and defining dependencies between tasks. Makefiles are commonly used to create build systems.
 
@@ -160,6 +174,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **MSB**: Most Significant Bit.
 
 - **MUX**: Multiplexer.
+
+- **NDM Reset**: Non-Debug Module reset signal/domain.
     
 - **OOC**: Vivado's OOC mode or OOC flow lets you synthesize, implement, and analyze design modules in a hierarchical design.
 
@@ -179,6 +195,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **PMOD**: Peripheral Module Interface, an open standard defined by Digilent for connecting peripheral modules to an FPGA.
 
+- **POR**: Power-On Reset.
+
 - **PSG**: Programmable Sound Generator.
 
 - **PWM**: Pulse Width Modulation.
@@ -187,7 +205,9 @@ This section provides clarification for some of the more ambiguous terms and abb
   
 - **RC Filter**: A simple low-pass filter network consisting of a resistor and a capacitor.
   
-- **Repo**: Repository.
+- **Repo**: (Git) Repository.
+
+- **Reset Domain**: A subdomain of a Clock Domain reset by a specific reset signal, e.g. debug module reset domain, non-debug module reset domain, USB reset domain.
 
 - **RP**: Reconfigurable Partition. Part of Xilinx's DFX solution.
 
@@ -207,7 +227,7 @@ This section provides clarification for some of the more ambiguous terms and abb
   
 - **SDRAM**: Synchronous dynamic random-access memory. A DRAM where the operation of its external pin interface is coordinated by an externally supplied clock signal. 
 
-- **Shared Bus Interconnect**: A type of Interconnect where one bus master at a time can access a common bus and connect to one of the bus slaves that are attached to that bus. A Bus Arbiter decides which of the requesting bus masters get to access the bus. 
+- **Shared Bus Interconnect**: A type of Interconnect where one bus master at a time can access a common bus and connect to one of the bus slaves that are attached to that bus. A Bus Arbiter decides which of the requesting bus masters gets to access the bus. 
   
 - **Slice**: The basic logical unit of a Xilinx FPGA.
 
@@ -244,8 +264,12 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **Tcl**: The defacto standard embedded command language for EDA applications.
 
 - **Udev**: Userspace /dev, a device manager for the Linux kernel.
+
+- **UKP**: A tiny 5-bit processor used in the usb_hid_host core.
   
 - **USB HID**: USB Human Interface Device class, a part of the USB specification for computer peripherals such as keyboards and mice.
+
+- **USB HIDBP**: USB HID Boot Protocol.
 
 - **VCS**: Version Control Subsystem.
 
@@ -256,6 +280,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **VERA**: Versatile Embedded Retro Adapter, the name of the graphics core used by BoxLambda.
 
 - **VGA**: Video Graphics Array, a computer chipset standard for displaying color graphics.
+
+- **VM**: Virtual Machine, a virtual environment that functions as a virtual computer system.
 
 - **Von Neumann Architecture**: A computer architecture where the CPU has access to one memory (via one bus) storing both instructions and data. The PicoRV processor in BoxLambda's DMA Controller uses a Von Neumann architecture.
    

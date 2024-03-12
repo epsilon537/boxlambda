@@ -36,7 +36,7 @@ The plots show both the filtered PCM and DAC output signals, but because they ov
 
 ### Audio DAC Test on Arty A7
 
-If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
+If you're running on WSL, check the [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
@@ -90,7 +90,7 @@ Relative Deviations:
 
 ### YM2149 DAC Test on Arty A7
 
-If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
+If you're running on WSL, check the [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
@@ -165,7 +165,7 @@ Match with correlation of 100.00% at offset 0
 
 ### ST-Sound Test on Arty A7
 
-If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
+If you're running on WSL, check the [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 

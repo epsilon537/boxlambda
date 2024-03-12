@@ -49,4 +49,4 @@ Estimated FPGA Resource Utilization on Arty A7-35T
 |**Block RAM Tile**|0|44|50|**88%**|
 |**DSPs**|0|4|90|4.44%|
 
-It looks like we might not be able to fit all components in the A7-35T configuration. However, keep in mind that these are estimates. The numbers associated with the individual components don't necessarily add up when you combine these components into a SoC. There will be some gains and losses. The outcome can be also tweaked a bit depending on routing strategy settings, etc. It's going to be a tight fit for sure, but it might just work out. 
+It looks like we might not be able to fit all components in the A7-35T configuration. However, keep in mind that these numbers are estimates. The utilization numbers associated with the individual components don't necessarily add up when you combine these components into a SoC. There will be some gains and losses. The outcome can be also tweaked a bit depending on routing strategy settings, etc. It's going to be a tight fit for sure, but it might just work out. 

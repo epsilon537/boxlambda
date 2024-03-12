@@ -32,7 +32,7 @@ Test Successful.
 
 ### DDR Test Image on Arty A7
 
-If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
+If you're running on WSL, check the [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 
 Build the test project:
 ```

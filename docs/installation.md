@@ -13,11 +13,6 @@ Get the BoxLambda repository:
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-Switch to the **interconnect** tag: 
-```
-git checkout interconnect
-```
-
 Set up the repository. This initializes the git submodules used and creates the default build trees: 
 ```
 ./boxlambda_setup.sh
