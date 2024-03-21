@@ -505,3 +505,10 @@ set_property CFGBVS VCCO [current_design]
 set_clock_groups -asynchronous \
 -group [get_clocks -include_generated_clock clk_12_unbuf] \
 -group [get_clocks -include_generated_clock clk_100_unbuf]
+
+# Bitstream configuration options
+set_property BITSTREAM.GENERAL.COMPRESS False [current_design]
+set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]
+set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR No [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+set_property BITSTREAM.CONFIG.SPI_FALL_EDGE YES [current_design]

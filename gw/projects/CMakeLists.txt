@@ -51,6 +51,7 @@ function (gw_project_rules_vivado)
     vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl.tcl
         -project project.xpr -outputDir $OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
 
+
     #Custom command executing the vivado implementation command string.
     add_custom_command(
         OUTPUT
@@ -66,13 +67,28 @@ function (gw_project_rules_vivado)
         VERBATIM
     )
 
+    #Custom command converting the bitstream file into a .bin file ready for flashing.
+    add_custom_command(
+        OUTPUT
+            ./project.runs/impl_1/${_top_module}.bit.bin
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND
+            ${PROJECT_SOURCE_DIR}/scripts/bit2bin.sh ./project.runs/impl_1/${_top_module}.bit
+        DEPENDS
+            ./project.runs/impl_1/${_top_module}.bit
+        COMMENT
+            "Converting bitstream to .bin."
+        VERBATIM
+    )
+
     #Add the bitstream generation target to make all (ALL property).
     add_custom_target(${_prj_name}_bit
         ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
-            ${CMAKE_CURRENT_BINARY_DIR}/project.runs/impl_1/${_top_module}.bit
+            ${CMAKE_CURRENT_BINARY_DIR}/project.runs/impl_1/${_top_module}.bit.bin
         COMMENT
             "Project implementation and bitstream generation target."
     )
@@ -94,13 +110,28 @@ function (gw_project_rules_vivado)
             VERBATIM
         )
 
+        #Custom command converting the bitstream file into a .bin file ready for flashing.
+        add_custom_command(
+            OUTPUT
+                ./project.runs/impl_1/${_top_module}.sw.bit.bin
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            COMMAND
+                ${PROJECT_SOURCE_DIR}/scripts/bit2bin.sh ./project.runs/impl_1/${_top_module}.sw.bit
+            DEPENDS
+                ./project.runs/impl_1/${_top_module}.sw.bit
+            COMMENT
+                "Converting bitstream to .bin."
+            VERBATIM
+        )
+
         #Add the bitstream-with-sw-image target
         add_custom_target(${_prj_name}_bit_sw
             ALL
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
-                ./project.runs/impl_1/${_top_module}.sw.bit
+                ./project.runs/impl_1/${_top_module}.sw.bit.bin
             COMMENT
                 "Bitstream + SW image target."
         )
@@ -108,10 +139,18 @@ function (gw_project_rules_vivado)
         #Build Vivado command string for the prg_bitstream tcl script.
         vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
             -bitstream ./project.runs/impl_1/${_top_module}.sw.bit)
+        
+        #Build Vivado command string for the flash_bitstream tcl script.
+        vivado_cmd(flash_cmd ${PROJECT_SOURCE_DIR}/scripts/flash_bitstream.tcl
+            -bin ./project.runs/impl_1/${_top_module}.sw.bit.bin)
     else()
         #Build Vivado command string for the prg_bitstream tcl script.
         vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
             -bitstream ./project.runs/impl_1/${_top_module}.bit)
+
+        #Build Vivado command string for the flash_bitstream tcl script.
+        vivado_cmd(flash_cmd ${PROJECT_SOURCE_DIR}/scripts/flash_bitstream.tcl
+            -bin ./project.runs/impl_1/${_top_module}.bit.bin)
     endif()
 
     #Custom command executing the vivado prg_bitstream command string.
@@ -122,6 +161,17 @@ function (gw_project_rules_vivado)
             bash -c ${load_cmd}
         COMMENT
             "Loading bitstream to target."
+        VERBATIM
+    )
+    
+    #Custom command executing the vivado flash_bitstream command string.
+    add_custom_target(${_prj_name}_flash
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND
+            bash -c ${flash_cmd}
+        COMMENT
+            "Flashing bitstream to target."
         VERBATIM
     )
 endfunction()
