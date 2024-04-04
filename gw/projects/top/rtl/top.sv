@@ -48,6 +48,20 @@ module top (
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
 
+    // Quad SPI interface
+    // On Verilator, we use separate input an output ports. On FPGA, the data ports are bidirectional
+`ifdef VERILATOR
+    output wire qspi_cs_n,
+    output wire [3:0] qspi_dq_out,
+    input wire [3:0] qspi_dq_in,
+    output wire qspi_sck,
+    output wire [1:0] qspi_mod,  
+`else    
+    output wire qspi_cs_n,
+    inout  wire [3:0] qspi_dq,
+    output wire qspi_sck,    
+`endif
+
      // USB HID: On Verilator, we use separate input and output ports. On FPGA, the USB ports are bidirectional.
 `ifdef VERILATOR
     input wire usb0_dm_i, 
@@ -116,6 +130,22 @@ module top (
     assign usb1_dp_snoop = usb1_oe ? usb1_dp_o : usb1_dp_i;
 `endif
 
+    // Quad SPI interface
+	wire [3:0] qspi_dat_o;
+    wire [3:0] qspi_dat_i;
+
+`ifdef VERILATOR
+    assign qspi_dq_out = qspi_dat_o;
+    assign qspi_dat_i = qspi_dq_in;
+`else
+    assign qspi_dq = 
+        qspi_mod[1] ? {2'b11, 1'bz, qspi_dat_o[0]} : 
+            qspi_mod[0] ? 4'bzzzz : qspi_dat_o[3:0];
+    assign qspi_dat_i = 
+        qspi_mod[1] ? {2'bzz, qspi_dq[1], 1'bz} : 
+            qspi_mod[0] ? qspi_dq : 4'bzzzz;
+`endif
+        
     boxlambda_soc #(
 		.DPRAM_BYTE_ADDR_MASK(`DPRAM_SIZE_BYTES/2-1), /*Divide by 2. DPRAM is split into two equal-size instances.*/
         .VRAM_SIZE_BYTES(`VRAM_SIZE_BYTES),
@@ -137,6 +167,9 @@ module top (
 `endif
 `ifndef USB_HID
         .USB_HID_ACTIVE(0),
+`endif
+`ifndef QSPI_FLASH
+        .QUAD_SPI_FLASH_ACTIVE(0),
 `endif
         /*We don't specify a dmem.mem. The data segment is copied into DMEM from a load segment that's part of the cmem.mem
          *image. This copy operation is part of the PicoLibc start-up code.*/

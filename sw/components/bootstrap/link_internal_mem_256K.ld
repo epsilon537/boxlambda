@@ -26,14 +26,6 @@ MEMORY
     emem (wxa!ri)   : ORIGIN = __emem, LENGTH = __emem_size
 }
 
-PHDRS
-{
-    cmem PT_LOAD;
-    dmem PT_LOAD;
-    dmem_init PT_LOAD;
-    tls PT_TLS;
-}
-
 SECTIONS
 {
     PROVIDE(__stack = ORIGIN(dmem) + LENGTH(dmem));
@@ -43,7 +35,7 @@ SECTIONS
         KEEP (*(.text.init.enter))
         KEEP (*(.data.init.enter))
         KEEP (*(SORT_BY_NAME(.init) SORT_BY_NAME(.init.*)))
-    } >cmem AT>cmem :cmem
+    } >cmem
 
     .text : {
         /* code */
@@ -57,19 +49,6 @@ SECTIONS
         PROVIDE (__etext = __text_end);
         PROVIDE (_etext = __text_end);
         PROVIDE (etext = __text_end);
-
-        /* read-only data */
-        *(.rdata)
-        *(.rodata .rodata.*)
-        *(.gnu.linkonce.r.*)
-
-        *(.srodata.cst16)
-        *(.srodata.cst8)
-        *(.srodata.cst4)
-        *(.srodata.cst2)
-        *(.srodata .srodata.*)
-        *(.data.rel.ro .data.rel.ro.*)
-        *(.got .got.*)
 
         /* Need to pre-align so that the symbols come after padding */
         . = ALIGN(8);
@@ -88,14 +67,14 @@ SECTIONS
         KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
         KEEP (*(.fini_array .dtors))
         PROVIDE_HIDDEN ( __fini_array_end = . );
-    } >cmem AT>cmem :cmem
+    } >cmem
 
    /*BSS data can be mapped to cmem by assigning it to this segment.*/
     .cmem_bss (NOLOAD) : {
         *(.cmem_bss)
-    } >cmem AT>cmem :cmem
+    } >cmem
 
-   /*
+/*
     * Data values which are preserved across reset
     */
     .preserve (NOLOAD) : {
@@ -103,25 +82,38 @@ SECTIONS
         KEEP(*(SORT_BY_NAME(.preserve.*)))
         KEEP(*(.preserve))
         PROVIDE(__preserve_end__ = .);
-    } >dmem AT>dmem :dmem
+    } >dmem
 
     .data : ALIGN_WITH_INPUT {
         *(.data .data.*)
         *(.gnu.linkonce.d.*)
+
         /* Need to pre-align so that the symbols come after padding */
         . = ALIGN(8);
 
         PROVIDE( __global_pointer$ = . + 0x800 );
+        /* read-only data */
+        *(.rdata)
+        *(.rodata .rodata.*)
+        *(.gnu.linkonce.r.*)
+
+        *(.srodata.cst16)
+        *(.srodata.cst8)
+        *(.srodata.cst4)
+        *(.srodata.cst2)
+        *(.srodata .srodata.*)
+        *(.data.rel.ro .data.rel.ro.*)
+        *(.got .got.*)
+
         *(.sdata .sdata.* .sdata2.*)
         *(.gnu.linkonce.s.*)
-    } >dmem AT>cmem :dmem_init
+
+        /*Code can be mapped to DMEM by assigning it to this segment.*/
+        *(.dmem_text)
+    } >dmem AT>cmem
+
     PROVIDE(__data_start = ADDR(.data));
     PROVIDE(__data_source = LOADADDR(.data));
-
-   /*Code can be mapped to DMEM by assigning it to this segment.*/
-    .dmem_text : ALIGN_WITH_INPUT {
-        *(.dmem_text)
-    } >dmem AT>cmem :dmem_init
 
     /* Thread local initialized data. This gets
     * space allocated as it is expected to be placed
@@ -135,7 +127,7 @@ SECTIONS
         *(.tdata .tdata.* .gnu.linkonce.td.*)
         PROVIDE(__data_end = .);
         PROVIDE(__tdata_end = .);
-    } >dmem AT>cmem :tls :dmem_init
+    } >dmem AT>cmem
     PROVIDE( __tls_base = ADDR(.tdata));
     PROVIDE( __tdata_start = ADDR(.tdata));
     PROVIDE( __tdata_source = LOADADDR(.tdata) );
@@ -152,7 +144,7 @@ SECTIONS
         *(.tcommon)
         PROVIDE( __tls_end = . );
         PROVIDE( __tbss_end = . );
-    } >dmem AT>dmem :tls :dmem
+    } >dmem
     PROVIDE( __bss_start = ADDR(.tbss));
     PROVIDE( __tbss_start = ADDR(.tbss));
     PROVIDE( __tbss_size = SIZEOF(.tbss) );
@@ -169,7 +161,7 @@ SECTIONS
     */
     .tbss_space (NOLOAD) : {
         . = . + SIZEOF(.tbss);
-    } >dmem AT>dmem :dmem
+    } >dmem
 
     .bss (NOLOAD) : {
         *(.sbss*)
@@ -178,7 +170,7 @@ SECTIONS
         *(.gnu.linkonce.b.*)
         *(COMMON)
         __bss_end = .;
-    } >dmem AT>dmem :dmem
+    } >dmem
 
     PROVIDE( __end = __bss_end );
     PROVIDE( _end = __bss_end );
@@ -196,7 +188,7 @@ SECTIONS
     /* Define a stack region to make sure it fits in memory */
     .stack (NOLOAD) : {
        . += (DEFINED(__stack_size) ? __stack_size : 0x800);
-    } >dmem :dmem
+    } >dmem
 
     /* Throw away C++ exception handling information */
 

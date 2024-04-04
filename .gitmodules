@@ -63,3 +63,6 @@
 [submodule "sub/usb_hid_device"]
 	path = sub/usb_hid_device
 	url = https://github.com/epsilon537/usb_hid_device
+[submodule "sub/qspiflash"]
+	path = sub/qspiflash
+	url = https://github.com/epsilon537/qspiflash

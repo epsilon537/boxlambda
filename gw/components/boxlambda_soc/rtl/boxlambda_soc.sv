@@ -9,6 +9,7 @@ module boxlambda_soc #(
         parameter YM2149_ACTIVE = 1,
         parameter PICORV_ACTIVE = 1,
         parameter USB_HID_ACTIVE = 1,
+        parameter QUAD_SPI_FLASH_ACTIVE = 1,
         parameter CMEM_FILE = "",
         parameter DMEM_FILE = ""
     ) (
@@ -58,6 +59,13 @@ module boxlambda_soc #(
     output wire  sdspi_mosi,
 	input  wire	 sdspi_miso, 
     input  wire  sdspi_card_detect_n,
+    // Quad SPI interface
+    output wire qspi_sck,
+    output wire qspi_cs_n,
+    output wire	[1:0] qspi_mod,
+	output wire [3:0] qspi_dat_o,
+    input wire [3:0] qspi_dat_i,
+
     // USB HID, two ports.
     input wire usb0_dm_i, 
     input wire usb0_dp_i,
@@ -114,14 +122,16 @@ module boxlambda_soc #(
         GPIO_1_S, /*GPIO 1*/
         SDSPI_S, /*SDSPI*/
         RESET_CTRL_S, /*Reset Control Module.*/
+        USB_HID_0_S, /*USB HID keyboard or mouse*/
+        USB_HID_1_S, /*USB HID keyboard or mouse*/
+        FLASH_CTRL_S, /*Flash controller control port*/
         YM2149_S, /*Dual YM2149 PSG core.*/
         PICORV_S, /*PicoRV DMA slave port.*/
         UART_S, /*UART.*/
         TIMER_S, /*Timer Module.*/
         DDR_CTRL_S, /*LiteDRAM control port.*/
         DM_S, /*Debug Module slave port.*/
-        USB_HID_0_S, /*USB HID keyboard or mouse*/
-        USB_HID_1_S  /*USB HID keyboard or mouse*/
+        FLASH_USR_S /*Flash controller user port*/
     } wb_shared_bus_slave_e;
 
     /*We used a word-addressing Wishbone bus. The Dual Port RAM word address bus width is equal to the 
@@ -133,20 +143,22 @@ module boxlambda_soc #(
     localparam NUM_XBAR_MASTERS = 5;
     localparam NUM_XBAR_SLAVES  = 8;
     localparam NUM_SHARED_BUS_MASTERS = 1;
-    localparam NUM_SHARED_BUS_SLAVES = 12;
+    localparam NUM_SHARED_BUS_SLAVES = 14;
 
     localparam PICORV_BASE_ADDRESS = 'h10002000;
 
     //Shared bus slave addresses. Right shift by two to convert byte address values to word address values.
     localparam [NUM_SHARED_BUS_SLAVES*AW-1:0] SHARED_BUS_SLAVE_ADDRS = {
-        /*USB_HID_1*/       {AW'('h10000080>>2)},
-        /*USB_HID_0*/       {AW'('h10000040>>2)},
+        /*FLASH_USR_S*/     {AW'('h11000000>>2)},
         /*DM_S*/            {AW'('h10040000>>2)},
         /*DDR_CTRL_S*/      {AW'('h10030000>>2)},
         /*TIMER_S*/         {AW'('h10020000>>2)},
         /*UART_S*/          {AW'('h10010000>>2)},
         /*PICORV_S*/        {AW'(PICORV_BASE_ADDRESS>>2)},
         /*YM2149_S*/        {AW'('h10001000>>2)},
+        /*FLASH_CTRL_S*/    {AW'('h100000C0>>2)},
+        /*USB_HID_1_S*/     {AW'('h10000080>>2)},
+        /*USB_HID_0_S*/     {AW'('h10000040>>2)},
         /*RESET_CTRL_S*/    {AW'('h10000030>>2)},
         /*SDSPI_S*/         {AW'('h10000020>>2)},
         /*GPIO_1_S*/        {AW'('h10000010>>2)},
@@ -155,14 +167,16 @@ module boxlambda_soc #(
 
     //Shared bus slave address mask. Right-shift by two to convert byte size to word size.
     localparam [NUM_SHARED_BUS_SLAVES*AW-1:0] SHARED_BUS_SLAVE_ADDR_MASKS = {
-        /*USB_HID_1_S*/     {AW'(~('h0000003f>>2))}, 
-        /*USB_HID_0_S*/     {AW'(~('h0000003f>>2))}, 
+        /*FLASH_USR_S*/     {AW'(~('h00ffffff>>2))},
         /*DM_S*/            {AW'(~('h0000ffff>>2))},   
         /*DDR_CTRL_S*/      {AW'(~('h0000ffff>>2))},
         /*TIMER_S*/         {AW'(~('h0000000f>>2))},
         /*UART_S*/          {AW'(~('h0000000f>>2))},
         /*PICORV_S*/        {AW'(~('h00001fff>>2))},
         /*YM2149_S*/        {AW'(~('h000003ff>>2))},
+        /*FLASH_CTRL_S*/    {AW'(~('h00000007>>2))}, 
+        /*USB_HID_1_S*/     {AW'(~('h0000003f>>2))}, 
+        /*USB_HID_0_S*/     {AW'(~('h0000003f>>2))}, 
         /*RESET_CTRL_S*/    {AW'(~('h00000007>>2))},
         /*SDSPI_S*/         {AW'(~('h0000000f>>2))},
         /*GPIO_1_S*/        {AW'(~('h0000000f>>2))},
@@ -172,8 +186,8 @@ module boxlambda_soc #(
     //Crossbar slave addresses. Right shift by two to convert byte address values to word address values.
     localparam [NUM_XBAR_SLAVES*AW-1:0] XBAR_SLAVE_ADDRS = {
         /*DDR_USR_S*/       {AW'('h20000000>>2)},
-        /*BLACKBOX_S*/      {AW'('h10200000>>2)},
-        /*VERA_S*/          {AW'('h10100000>>2)},
+        /*BLACKBOX_S*/      {AW'('h13000000>>2)},
+        /*VERA_S*/          {AW'('h12000000>>2)},
         /*SHARED_BUS_S*/    {AW'('h10000000>>2)},
         /*DMEM_1_S*/        {AW'('h00120000>>2)},
         /*CMEM_1_S*/        {AW'('h00100000>>2)},
@@ -186,7 +200,7 @@ module boxlambda_soc #(
         /*DDR_USR_S*/       {AW'(~('h0fffffff>>2))},
         /*BLACKBOX_S*/      {AW'(~('h000fffff>>2))},
         /*VERA_S*/          {AW'(~('h0007ffff>>2))},
-        /*SHARED_BUS_S*/    {AW'(~('h000fffff>>2))},
+        /*SHARED_BUS_S*/    {AW'(~('h01ffffff>>2))},
         /*DMEM_1_S*/        {AW'(~(DPRAM_BYTE_ADDR_MASK>>2))},
         /*CMEM_1_S*/        {AW'(~(DPRAM_BYTE_ADDR_MASK>>2))},
         /*DMEM_0_S*/        {AW'(~(DPRAM_BYTE_ADDR_MASK>>2))},
@@ -946,6 +960,64 @@ module boxlambda_soc #(
         assign usb1_dm_o = 1'b0; 
         assign usb1_dp_o = 1'b0;
         assign usb1_oe = 1'b0;
+    end
+    endgenerate
+
+    //Quad SPI Flash Core
+    generate if (QUAD_SPI_FLASH_ACTIVE)
+    begin : GENERATE_QUAD_SPI_FLASH_MODULE
+        wire flash_wb_cyc;
+        wire flash_wb_stb;
+		wire flash_cfg_stb;
+        wire flash_wb_we;
+		wire [21:0]	flash_wb_addr;
+		wire [31:0]	flash_wb_dat_m;
+		wire flash_wb_stall;
+		wire flash_wb_ack;
+		wire [31:0] flash_wb_dat_s;
+
+        assign flash_wb_cyc = shared_bus_wbs[FLASH_USR_S].cyc | shared_bus_wbs[FLASH_CTRL_S].cyc;
+        assign flash_wb_stb = shared_bus_wbs[FLASH_USR_S].stb;
+        assign flash_cfg_stb = shared_bus_wbs[FLASH_CTRL_S].stb;
+        assign flash_wb_we = shared_bus_wbs[FLASH_USR_S].cyc ? shared_bus_wbs[FLASH_USR_S].we : shared_bus_wbs[FLASH_CTRL_S].we;
+        assign flash_wb_addr = shared_bus_wbs[FLASH_USR_S].cyc ? shared_bus_wbs[FLASH_USR_S].adr[21:0] : shared_bus_wbs[FLASH_CTRL_S].adr[21:0];
+        assign flash_wb_dat_m = shared_bus_wbs[FLASH_USR_S].cyc ? shared_bus_wbs[FLASH_USR_S].dat_m : shared_bus_wbs[FLASH_CTRL_S].dat_m;
+
+        assign shared_bus_wbs[FLASH_USR_S].stall = flash_wb_stall;
+        assign shared_bus_wbs[FLASH_CTRL_S].stall = flash_wb_stall;
+        assign shared_bus_wbs[FLASH_USR_S].ack = flash_wb_ack;
+        assign shared_bus_wbs[FLASH_CTRL_S].ack = flash_wb_ack;
+        assign shared_bus_wbs[FLASH_USR_S].dat_s = flash_wb_dat_s;
+        assign shared_bus_wbs[FLASH_CTRL_S].dat_s = flash_wb_dat_s;
+
+        qflexpress qflexpress_inst (
+            .i_clk(sys_clk),
+            .i_reset(ndm_reset),
+            //This is a hack: These are actually two WB ports with all signals shared
+            //except the STB signal.
+            .i_wb_cyc(flash_wb_cyc), 
+            .i_wb_stb(flash_wb_stb),
+            .i_cfg_stb(flash_cfg_stb), 
+            .i_wb_we(flash_wb_we),
+            .i_wb_addr(flash_wb_addr),
+            .i_wb_data(flash_wb_dat_m),
+            //
+            .o_wb_stall(flash_wb_stall),
+            .o_wb_ack(flash_wb_ack),
+            .o_wb_data(flash_wb_dat_s),
+            //
+            .o_qspi_sck(qspi_sck),
+            .o_qspi_cs_n(qspi_cs_n),
+            .o_qspi_mod(qspi_mod),
+            .o_qspi_dat(qspi_dat_o),
+            .i_qspi_dat(qspi_dat_i)
+        );
+    end
+    else begin
+        assign qspi_sck = 1'b0;
+        assign qspi_cs_n = 1'b1;
+	    assign qspi_dat_o = 4'b1111;
+        assign qspi_mod = 2'b00;
     end
     endgenerate
 endmodule
