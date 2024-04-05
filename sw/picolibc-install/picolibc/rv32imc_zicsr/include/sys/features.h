@@ -86,6 +86,9 @@ extern "C" {
  * _ISOC11_SOURCE or gcc -std=c11 or g++ -std=c++11
  * 	ISO C11
  *
+ * _ISOC2x_SOURCE or gcc -std=c2x or g++ -std=c++20
+ * 	ISO C11
+ *
  * _ATFILE_SOURCE (implied by _POSIX_C_SOURCE >= 200809L)
  *	"at" functions
  *
@@ -100,8 +103,11 @@ extern "C" {
  * _DEFAULT_SOURCE (or none of the above)
  * 	POSIX-1.2008 with BSD and SVr4 extensions
  *
- * _FORTIFY_SOURCE = 1 or 2
+ * _FORTIFY_SOURCE = 1, 2 or 3
  * 	Object Size Checking function wrappers
+ *
+ * _ZEPHYR_SOURCE
+ *      Zephyr. ISO C + a small selection of other APIs.
  */
 
 #ifdef _GNU_SOURCE
@@ -113,6 +119,8 @@ extern "C" {
 #define	_ISOC99_SOURCE		1
 #undef _ISOC11_SOURCE
 #define	_ISOC11_SOURCE		1
+#undef _ISOC2X_SOURCE
+#define	_ISOC2X_SOURCE		1
 #undef _POSIX_SOURCE
 #define	_POSIX_SOURCE		1
 #undef _POSIX_C_SOURCE
@@ -123,10 +131,25 @@ extern "C" {
 #define	_XOPEN_SOURCE_EXTENDED	1
 #endif /* _GNU_SOURCE */
 
+/* When building for Zephyr, set _ZEPHYR_SOURCE unless some other API
+ * indicator is set by the application. Don't check __STRICT_ANSI__ as that
+ * is set by the compiler for -std=cxx, or _POSIX_C_SOURCE as Zephyr defines
+ * that for picolibc currently.
+ */
+
+#if defined(__ZEPHYR__) && !defined(_ZEPHYR_SOURCE) &&                  \
+    !defined(_GNU_SOURCE)&&                                             \
+    !defined(_BSD_SOURCE) &&                                            \
+    !defined(_SVID_SOURCE) &&                                           \
+    !defined(_DEFAULT_SOURCE)
+#define _ZEPHYR_SOURCE      1
+#endif
+
 #if defined(_BSD_SOURCE) || defined(_SVID_SOURCE) || \
    (!defined(__STRICT_ANSI__) && !defined(_ANSI_SOURCE) && \
    !defined(_ISOC99_SOURCE) && !defined(_POSIX_SOURCE) && \
-   !defined(_POSIX_C_SOURCE) && !defined(_XOPEN_SOURCE))
+   !defined(_POSIX_C_SOURCE) && !defined(_XOPEN_SOURCE) && \
+   !defined(_ZEPHYR_SOURCE))
 #undef _DEFAULT_SOURCE
 #define	_DEFAULT_SOURCE		1
 #endif
@@ -156,6 +179,15 @@ extern "C" {
 #if defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200809
 #undef _ATFILE_SOURCE
 #define	_ATFILE_SOURCE		1
+#endif
+
+#ifdef _ZEPHYR_SOURCE
+#undef _ISOC99_SOURCE
+#define	_ISOC99_SOURCE		1
+#undef _ISOC11_SOURCE
+#define	_ISOC11_SOURCE		1
+#undef _ANSI_SOURCE
+#define _ANSI_SOURCE            1
 #endif
 
 /*
@@ -214,6 +246,11 @@ extern "C" {
  * 	g++ -std=c++11 or newer (on by default since GCC 6), or with
  * 	_ISOC11_SOURCE.
  *
+ * __ISO_C_VISIBLE >= 2020
+ * 	ISO C2x; enabled with gcc -std=c2x or newer,
+ * 	g++ -std=c++20 or newer, or with
+ * 	_ISOC2X_SOURCE.
+ *
  * __ATFILE_VISIBLE
  *	"at" functions; enabled by default, with _ATFILE_SOURCE,
  * 	_POSIX_C_SOURCE >= 200809L, or _XOPEN_SOURCE >= 700.
@@ -236,7 +273,10 @@ extern "C" {
  * 	GNU extensions; enabled with _GNU_SOURCE.
  *
  * __SSP_FORTIFY_LEVEL
- * 	Object Size Checking; defined to 0 (off), 1, or 2.
+ * 	Object Size Checking; defined to 0 (off), 1, 2 or 3.
+ *
+ * __ZEPHYR_VISIBLE
+ *      Zephyr extensions; enabled with _ZEPHYR_SOURCE.
  *
  * In all cases above, "enabled by default" means either by defining
  * _DEFAULT_SOURCE, or by not defining any of the public feature test macros.
@@ -260,7 +300,16 @@ extern "C" {
 #define	__GNU_VISIBLE		0
 #endif
 
-#if defined(_ISOC11_SOURCE) || \
+#ifdef _ZEPHYR_SOURCE
+#define __ZEPHYR_VISIBLE        1
+#else
+#define __ZEPHYR_VISIBLE        0
+#endif
+
+#if defined(_ISOC2X_SOURCE) || \
+  (__STDC_VERSION__ - 0) > 201710L || (__cplusplus - 0) >= 202002L
+#define __ISO_C_VISIBLE		2020
+#elif defined(_ISOC11_SOURCE) || \
   (__STDC_VERSION__ - 0) >= 201112L || (__cplusplus - 0) >= 201103L
 #define	__ISO_C_VISIBLE		2011
 #elif defined(_ISOC99_SOURCE) || (_POSIX_C_SOURCE - 0) >= 200112L || \
@@ -321,7 +370,13 @@ extern "C" {
 #if _FORTIFY_SOURCE > 0 && !defined(__cplusplus) && !defined(__lint__) && \
    (__OPTIMIZE__ > 0 || defined(__clang__)) && __GNUC_PREREQ__(4, 1) && \
    !defined(_LIBC)
-#  if _FORTIFY_SOURCE > 1
+#  if _FORTIFY_SOURCE > 2 && defined(__has_builtin)
+#    if __has_builtin(__builtin_dynamic_object_size)
+#      define __SSP_FORTIFY_LEVEL 3
+#    else
+#      define __SSP_FORTIFY_LEVEL 2
+#    endif
+#  elif _FORTIFY_SOURCE > 1
 #    define __SSP_FORTIFY_LEVEL 2
 #  else
 #    define __SSP_FORTIFY_LEVEL 1

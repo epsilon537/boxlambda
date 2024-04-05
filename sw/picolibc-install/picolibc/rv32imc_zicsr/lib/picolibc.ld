@@ -42,16 +42,21 @@ ENTRY(_start)
 
 MEMORY
 {
-	flash (rx!w) : ORIGIN = DEFINED(__flash) ? __flash : 0x00000000, LENGTH = DEFINED(__flash_size) ? __flash_size : 0x00008000
-	ram (w!rx)   : ORIGIN = DEFINED(__ram  ) ? __ram   : 0x00008000, LENGTH = DEFINED(__ram_size  ) ? __ram_size   : 0x00008000
+	flash (rx!w) :
+		ORIGIN = DEFINED(__flash) ? __flash : 0x00000000,
+		LENGTH = DEFINED(__flash_size) ? __flash_size : 0x00008000
+	ram (w!rx) :
+		ORIGIN = DEFINED(__ram) ? __ram : 0x00008000,
+		LENGTH = DEFINED(__ram_size) ? __ram_size : 0x00008000
 }
 
 PHDRS
 {
 	text PT_LOAD;
-	ram PT_LOAD;
 	ram_init PT_LOAD;
-	tls PT_TLS;
+	ram PT_LOAD;
+	tls_init PT_TLS;
+        tls PT_TLS;
 }
 
 SECTIONS
@@ -78,19 +83,6 @@ SECTIONS
 		PROVIDE (_etext = __text_end);
 		PROVIDE (etext = __text_end);
 
-		/* read-only data */
-		*(.rdata)
-		*(.rodata .rodata.*)
-		*(.gnu.linkonce.r.*)
-
-		*(.srodata.cst16)
-		*(.srodata.cst8)
-		*(.srodata.cst4)
-		*(.srodata.cst2)
-		*(.srodata .srodata.*)
-		*(.data.rel.ro .data.rel.ro.*)
-		*(.got .got.*)
-
 		/* Need to pre-align so that the symbols come after padding */
 		. = ALIGN(8);
 
@@ -111,6 +103,38 @@ SECTIONS
 
 	} >flash AT>flash :text
 
+	.rodata : {
+
+		/* read-only data */
+		*(.rdata)
+		*(.rodata .rodata.*)
+		*(.gnu.linkonce.r.*)
+
+		*(.srodata.cst16)
+		*(.srodata.cst8)
+		*(.srodata.cst4)
+		*(.srodata.cst2)
+		*(.srodata .srodata.*)
+
+	} >flash AT>flash :text
+
+	.data.rel.ro : {
+
+		/* data that needs relocating */
+		*(.data.rel.ro .data.rel.ro.*)
+
+	} >flash AT>flash :text
+
+	/*
+	 * Needs to be in its own segment with the PLT entries first
+	 * so that the linker will compute the offsets to those
+	 * entries correctly.
+	 */
+	.got : {
+		*(.got.plt)
+		*(.got)
+	} >flash AT>flash :text
+
 	.toc : {
 		*(.toc .toc.*)
 	} >flash AT>flash :text
@@ -119,8 +143,17 @@ SECTIONS
 	/*
 	.except_ordered : {
 		*(.gcc_except_table *.gcc_except_table.*)
-		KEEP (*(.eh_frame .eh_frame.*))
 		*(.ARM.extab* .gnu.linkonce.armextab.*)
+	} >flash AT>flash :text
+	.eh_frame_hdr : {
+		PROVIDE_HIDDEN ( __eh_frame_hdr_start = . );
+		*(.eh_frame_hdr) *(.eh_frame_entry .eh_frame_entry.*)
+		PROVIDE_HIDDEN ( __eh_frame_hdr_end = . );
+	} >flash AT>flash :text
+	.eh_frame : {
+		PROVIDE_HIDDEN ( __eh_frame_start = . );
+		KEEP (*(.eh_frame .eh_frame.*))
+		PROVIDE_HIDDEN ( __eh_frame_end = . );
 	} >flash AT>flash :text
 
 	.except_unordered : {
@@ -142,7 +175,7 @@ SECTIONS
 		PROVIDE(__preserve_end__ = .);
 	} >ram AT>ram :ram
 
-	.data : ALIGN_WITH_INPUT {
+	.data :  ALIGN_WITH_INPUT  {
 		*(.data .data.*)
 		*(.gnu.linkonce.d.*)
 
@@ -150,6 +183,7 @@ SECTIONS
 		. = ALIGN(8);
 
 		PROVIDE( __global_pointer$ = . + 0x800 );
+		PROVIDE( _gp = . + 0x8000);
 		*(.sdata .sdata.* .sdata2.*)
 		*(.gnu.linkonce.s.*)
 	} >ram AT>flash :ram_init
@@ -162,20 +196,23 @@ SECTIONS
 	 * allocated at runtime. We're slightly abusing that
 	 * by placing the data in flash where it will be copied
 	 * into the allocate ram addresses by the existing
-	 * data initialization code in crt0
+	 * data initialization code in crt0.
+	 * BFD includes .tbss alignment when computing .tdata
+	 * alignment, but for ld.lld we have to explicitly pad
+	 * as it only guarantees usage as a TLS template works
+	 * rather than supporting this use case.
 	 */
-	.tdata : ALIGN_WITH_INPUT {
+	.tdata : /* For ld.lld:  ALIGN(__tls_align) */  ALIGN_WITH_INPUT  {
 		*(.tdata .tdata.* .gnu.linkonce.td.*)
 		PROVIDE(__data_end = .);
 		PROVIDE(__tdata_end = .);
-	} >ram AT>flash :tls :ram_init
+	} >ram AT>flash :tls_init :ram_init
 	PROVIDE( __tls_base = ADDR(.tdata));
 	PROVIDE( __tdata_start = ADDR(.tdata));
 	PROVIDE( __tdata_source = LOADADDR(.tdata) );
 	PROVIDE( __tdata_source_end = LOADADDR(.tdata) + SIZEOF(.tdata) );
 	PROVIDE( __data_source_end = __tdata_source_end );
 	PROVIDE( __tdata_size = SIZEOF(.tdata) );
-	PROVIDE( __tls_align = MAX(ALIGNOF(.tdata),ALIGNOF(.tbss)) );
 
 	PROVIDE( __edata = __data_end );
 	PROVIDE( _edata = __data_end );
@@ -195,23 +232,22 @@ SECTIONS
 	PROVIDE( __tbss_size = SIZEOF(.tbss) );
 	PROVIDE( __tls_size = __tls_end - __tls_base );
 	PROVIDE( __tls_align = MAX(ALIGNOF(.tdata), ALIGNOF(.tbss)) );
+	PROVIDE( __tls_size_align = (__tls_size + __tls_align - 1) & ~(__tls_align - 1));
 	PROVIDE( __arm32_tls_tcb_offset = MAX(8, __tls_align) );
 	PROVIDE( __arm64_tls_tcb_offset = MAX(16, __tls_align) );
 
 	/*
-	 * The linker special cases .tbss segments which are
-	 * identified as segments which are not loaded and are
-	 * thread_local.
-	 *
-	 * For these segments, the linker does not advance 'dot'
-	 * across them.  We actually need memory allocated for tbss,
-	 * so we create a special segment here just to make room
+	 * Unlike ld.lld, ld.bfd does not advance the location counter for
+	 * .tbss, but we actually need memory allocated for .tbss as we use
+	 * it for the initial TLS storage.
+	 * Create special section here just to make room.
 	 */
-	.tbss_space (NOLOAD) : {
+        
+        .tbss_space (NOLOAD) : {
 		. = ADDR(.tbss);
 		. = . + SIZEOF(.tbss);
 	} >ram AT>ram :ram
-
+	
 	.bss (NOLOAD) : {
 		*(.sbss*)
 		*(.gnu.linkonce.sb.*)
@@ -225,7 +261,7 @@ SECTIONS
 	} >ram AT>ram :ram
 	PROVIDE( __non_tls_bss_start = ADDR(.bss) );
 	PROVIDE( __end = __bss_end );
-	PROVIDE( _end = __bss_end );
+	_end = __bss_end;
 	PROVIDE( end = __bss_end );
 	PROVIDE( __bss_size = __bss_end - __bss_start );
 
@@ -233,6 +269,11 @@ SECTIONS
 	PROVIDE (__heap_start = __end);
 	PROVIDE (__heap_end = __stack - (DEFINED(__stack_size) ? __stack_size : 0x00000200));
 	PROVIDE (__heap_size = __heap_end - __heap_start);
+
+        /* Allow a minimum heap size to be specified */
+        .heap (NOLOAD) : {
+                . += (DEFINED(__heap_size_min) ? __heap_size_min : 0);
+        } >ram :ram
 
 	/* Define a stack region to make sure it fits in memory */
 	.stack (NOLOAD) : {

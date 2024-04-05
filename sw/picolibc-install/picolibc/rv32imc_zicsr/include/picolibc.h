@@ -35,9 +35,23 @@
 /* Use tiny stdio from gcc avr */
 #define TINY_STDIO
 
+#define _ASSERT_VERBOSE
+
 #undef _ATEXIT_DYNAMIC_ALLOC
 
 #define _ELIX_LEVEL 4
+
+/* The default printf functions is the double variant */
+#define _FORMAT_DEFAULT_DOUBLE
+
+/* The default printf functions is the float variant */
+#undef _FORMAT_DEFAULT_FLOAT
+
+/* The default printf functions is the integer variant */
+#undef _FORMAT_DEFAULT_INTEGER
+
+/* The default printf functions is the minimal variant */
+#undef _FORMAT_DEFAULT_MINIMAL
 
 #undef _FSEEK_OPTIMIZATION
 
@@ -62,6 +76,9 @@
 
 /* The compiler supports __builtin_alloca */
 #define _HAVE_BUILTIN_ALLOCA
+
+/* Compiler has __builtin_complex */
+#define _HAVE_BUILTIN_COMPLEX
 
 /* The compiler supports __builtin_copysign */
 #define _HAVE_BUILTIN_COPYSIGN
@@ -108,6 +125,9 @@
 /* The compiler supports __builtin_isnanl */
 #define _HAVE_BUILTIN_ISNANL
 
+/* The compiler supports __builtin_issignalingl */
+#undef _HAVE_BUILTIN_ISSIGNALINGL
+
 /* Compiler has __builtin_mul_overflow */
 #define _HAVE_BUILTIN_MUL_OVERFLOW
 
@@ -138,6 +158,9 @@
 
 /* _set_tls and _init_tls functions available */
 #define _HAVE_PICOLIBC_TLS_API
+
+/* Use Raspberry Pi RP2040 CPUID register to index thread local storage value */
+#undef _HAVE_PICOLIBC_TLS_RP2040
 
 /* Semihost APIs supported */
 #define _HAVE_SEMIHOST
@@ -371,18 +394,23 @@
 #define _PICOLIBC_MINOR__ 8
 
 /* The Picolibc version in string format. */
-#define _PICOLIBC_VERSION "1.8.1"
+#define _PICOLIBC_VERSION "1.8.6"
 
 /* The Picolibc major version number. */
 #define _PICOLIBC__ 1
 
 #define _PICO_EXIT
 
+/* avoid software division in decimal conversion */
+#define _PRINTF_SMALL_ULTOA
+
 #undef _REENT_GLOBAL_ATEXIT
 
 #define _RETARGETABLE_LOCKING
 
 #undef _UNBUF_STREAM_OPT
+
+#undef _WANT_FAST_BUFIO
 
 #define _WANT_IO_C99_FORMATS
 
@@ -396,6 +424,8 @@
 
 /* math library sets errno */
 #undef _WANT_MATH_ERRNO
+
+#undef _WANT_MINIMAL_IO_LONG_LONG
 
 #undef _WANT_REENT_SMALL
 
@@ -437,10 +467,10 @@
 #define __PICOLIBC_MINOR__ 8
 
 /* The Picolibc patch level. */
-#define __PICOLIBC_PATCHLEVEL__ 1
+#define __PICOLIBC_PATCHLEVEL__ 6
 
 /* The Picolibc version in string format. */
-#define __PICOLIBC_VERSION__ "1.8.1"
+#define __PICOLIBC_VERSION__ "1.8.6"
 
 /* The Picolibc major version number. */
 #define __PICOLIBC__ 1

@@ -31,6 +31,7 @@ packages:
     - ibex_wb_core
     - litedram
     - picorv_dma
+    - qspiflash
     - reset_ctrl
     - riscv-dbg
     - sdspi
@@ -78,6 +79,12 @@ packages:
     version: null
     source:
       Path: ../../components/boxlambda_soc/../../components/picorv_dma
+    dependencies: []
+  qspiflash:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/boxlambda_soc/../../components/qspiflash
     dependencies: []
   reset_ctrl:
     revision: null
