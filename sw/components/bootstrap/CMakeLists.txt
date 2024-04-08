@@ -5,6 +5,7 @@ add_library(bootstrap OBJECT)
 target_sources(bootstrap
     PRIVATE
         vectors.S
+        crt0.c
         stdio_to_uart.c
         ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/uart.c
 )
@@ -17,6 +18,6 @@ target_include_directories(bootstrap
 )
 
 target_compile_options(bootstrap
-	PRIVATE
-		-O2
+ PRIVATE
+  -O2
 )

@@ -1,4 +1,4 @@
-#The GCC specs file expects absolute paths. I'm using configure_file() to replace placeholders 
+#The GCC specs file expects absolute paths. I'm using configure_file() to replace placeholders
 #in picolibc.specs.in with PROJECT_SOURCE_DIR. The resulting picolibc.specs is written in the root of the build tree.
 configure_file(${PROJECT_SOURCE_DIR}/scripts/picolibc.specs.in picolibc.specs @ONLY)
 
@@ -8,6 +8,10 @@ set(SPECS "--specs=${CMAKE_CURRENT_BINARY_DIR}/picolibc.specs")
 #Use the picolibc specs for all compilations except picorv assembly.
 add_compile_options(
     $<$<COMPILE_LANGUAGE:CXX,C,ASM>:${SPECS}>)
+
+#Don't use Picolibc's crt0. We provide our own crt0 in sw/components/bootstrap
+add_link_options(
+    -nostartfiles)
 
 #Function for picorv32 builds (picorv_dma microcode) to link and generate binary
 function(link_gen_picobin _tgt)
@@ -28,7 +32,7 @@ function(link_gen_picobin _tgt)
             xxd -i ${_tgt}.picobin > ${_tgt}.h
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
-        BYPRODUCTS 
+        BYPRODUCTS
             ${_tgt}.picobin
             ${_tgt}.h
         COMMENT
@@ -42,7 +46,7 @@ function(build_picoasm _tgt _src)
         OUTPUT
             ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.picoasm
         COMMAND
-            ${TOOLCHAIN_PREFIX}cpp -o ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.picoasm ${_src} 
+            ${TOOLCHAIN_PREFIX}cpp -o ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.picoasm ${_src}
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_SOURCE_DIR}
         DEPENDS
@@ -50,7 +54,7 @@ function(build_picoasm _tgt _src)
     )
 
     add_executable(${_tgt}
-	    EXCLUDE_FROM_ALL
+     EXCLUDE_FROM_ALL
         ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.picoasm
     )
 
