@@ -23,7 +23,7 @@ target_include_directories(dual_port_ram_test
 )
 
 link_internal_create_mem_file(dual_port_ram_test
-	${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
+	${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld)
 
 target_link_libraries(dual_port_ram_test 
 	picorv_dma)

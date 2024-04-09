@@ -12,9 +12,9 @@ target_compile_definitions(sdspi_test
 )
 
 target_include_directories(sdspi_test
-    PRIVATE
-    	${PROJECT_SOURCE_DIR}/sub/sdspi/sw/
+				PRIVATE
+					${PROJECT_SOURCE_DIR}/sub/sdspi/sw/
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_internal_create_mem_file(sdspi_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
+link_internal_create_mem_file(sdspi_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld)

@@ -12,7 +12,7 @@ target_compile_options(qspi_flash_test
 		-O2 -g
 )
 
-link_internal_create_mem_file(qspi_flash_test 
-	${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
+link_internal_create_mem_file(qspi_flash_test
+	${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld)
 
-target_link_libraries(qspi_flash_test flashdrvr sdram)	
+target_link_libraries(qspi_flash_test flashdrvr sdram)

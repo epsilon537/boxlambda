@@ -11,6 +11,6 @@ target_compile_options(vera_test
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_internal_create_mem_file(vera_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
+link_internal_create_mem_file(vera_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld)
 
 target_link_libraries(vera_test vera sdram)

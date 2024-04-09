@@ -33,17 +33,25 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <string.h>
+/*Based on picolibc's crt0.h, with modifications for BoxLambda*/
+
 #include <picotls.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
+
+/*Boxlambda:*/
+extern char __code_source[];
+extern char __code_start[];
+extern char __code_size[];
 
 extern char __data_source[];
 extern char __data_start[];
 extern char __data_end[];
 extern char __data_size[];
+extern char __cmem_bss_start[];
+extern char __cmem_bss_size[];
 extern char __bss_start[];
-extern char __bss_end[];
 extern char __bss_size[];
 extern char __tls_base[];
 extern char __tdata_end[];
@@ -58,12 +66,10 @@ extern char __tls_end[];
  * code
  */
 
-void
-_start(void);
+void _start(void);
 
 /* This is the application entry point */
-int
-main(int, char **);
+int main(int, char **);
 
 #ifdef _HAVE_INITFINI_ARRAY
 extern void __libc_init_array(void);
@@ -88,52 +94,56 @@ extern void __libc_init_array(void);
 #define CONSTRUCTORS 1
 #endif
 
-static inline void
-__start(void)
-{
-	memcpy(__data_start, __data_source, (uintptr_t) __data_size);
-	memset(__bss_start, '\0', (uintptr_t) __bss_size);
+static inline void __start(void) {
+  /*BoxLambda: Copy code segment if needed.*/
+  if (__code_start != __code_source) {
+    memcpy(__code_start, __code_source, (uintptr_t)__code_size);
+  }
+
+  memcpy(__data_start, __data_source, (uintptr_t)__data_size);
+  memset(__bss_start, '\0', (uintptr_t)__bss_size);
+  memset(__cmem_bss_start, '\0', (uintptr_t)__cmem_bss_size);
 #ifdef PICOLIBC_TLS
-	_set_tls(__tls_base);
+  _set_tls(__tls_base);
 #endif
 #if defined(_HAVE_INITFINI_ARRAY) && CONSTRUCTORS
-	__libc_init_array();
+  __libc_init_array();
 #endif
 
 #ifdef CRT0_SEMIHOST
-#define CMDLINE_LEN     1024
-#define ARGV_LEN        64
-        static char cmdline[CMDLINE_LEN];
-        static char *argv[ARGV_LEN];
-        int argc = 0;
+#define CMDLINE_LEN 1024
+#define ARGV_LEN 64
+  static char cmdline[CMDLINE_LEN];
+  static char *argv[ARGV_LEN];
+  int argc = 0;
 
-        argv[argc++] = "program-name";
-        if (sys_semihost_get_cmdline(cmdline, sizeof(cmdline)) == 0)
-        {
-            char *c = cmdline;
+  argv[argc++] = "program-name";
+  if (sys_semihost_get_cmdline(cmdline, sizeof(cmdline)) == 0) {
+    char *c = cmdline;
 
-            while (*c && argc < ARGV_LEN - 1) {
-                argv[argc++] = c;
-                while (*c && *c != ' ')
-                    c++;
-                if (!*c)
-                    break;
-                *c = '\0';
-                while (*++c == ' ')
-                    ;
-            }
-        }
-        argv[argc] = NULL;
+    while (*c && argc < ARGV_LEN - 1) {
+      argv[argc++] = c;
+      while (*c && *c != ' ')
+        c++;
+      if (!*c)
+        break;
+      *c = '\0';
+      while (*++c == ' ')
+        ;
+    }
+  }
+  argv[argc] = NULL;
 #else
 #define argv NULL
 #define argc 0
 #endif
 
-	int ret = main(argc, argv);
+  int ret = main(argc, argv);
 #ifdef CRT0_EXIT
-	exit(ret);
+  exit(ret);
 #else
-	(void) ret;
-	for(;;);
+  (void)ret;
+  for (;;)
+    ;
 #endif
 }

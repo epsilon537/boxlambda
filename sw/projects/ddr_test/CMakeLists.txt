@@ -18,6 +18,6 @@ target_compile_options(ddr_test
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_internal_create_mem_file(ddr_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
+link_internal_create_mem_file(ddr_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld)
 
 target_link_libraries(ddr_test sdram)

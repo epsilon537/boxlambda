@@ -2,12 +2,12 @@
 /*'cmem' or 'code memory' contains code and read-only data. You can still put bss data in cmem by assigning it
  *to the .cmem_bss section. I did not (yet?) add a .cmem_data section.*/
 __cmem = 0x00000000; 
-__cmem_size = 32k;
+//__cmem_size = 32k;
 
 /*'dmem' or 'data memory' contains data segments, bss and stack. You can put code in dmem by assigning it
  *to the .dmem_text section.*/
 __dmem = 0x00020000;
-__dmem_size = 32k;
+//__dmem_size = 32k;
 __stack_size = 512;
 
 /*'emem' the the external memory section. The heap will be placed here.*/
@@ -67,12 +67,22 @@ SECTIONS
         KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
         KEEP (*(.fini_array .dtors))
         PROVIDE_HIDDEN ( __fini_array_end = . );
+
+        PROVIDE(__code_end = .);
     } >cmem
 
    /*BSS data can be mapped to cmem by assigning it to this segment.*/
     .cmem_bss (NOLOAD) : {
         *(.cmem_bss)
+        __cmem_bss_end = .;
     } >cmem
+
+    PROVIDE(__cmem_bss_start = ADDR(.cmem_bss));
+    PROVIDE(__cmem_bss_size = __cmem_bss_end - __cmem_bss_start );
+
+    PROVIDE(__code_start = ADDR(.init));
+    PROVIDE(__code_source = LOADADDR(.init));
+    PROVIDE( __code_size = __code_end - __code_start );
 
 /*
     * Data values which are preserved across reset

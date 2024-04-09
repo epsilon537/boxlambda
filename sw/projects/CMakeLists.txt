@@ -8,6 +8,8 @@ function(link_internal_create_mem_file _tgt _link_script)
         PRIVATE
             -T${_link_script}
             "--specs=${CMAKE_BINARY_DIR}/sw/picolibc.specs"
+            "LINKER:--defsym=__cmem_size=${CMEM_SIZE}"
+            "LINKER:--defsym=__dmem_size=${DMEM_SIZE}"
             "LINKER:--gc-sections"
             "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
     )
@@ -23,7 +25,7 @@ function(link_internal_create_mem_file _tgt _link_script)
             ${PROJECT_SOURCE_DIR}/sub/ibex_wb/scripts/hex2vmem.pl < ${_tgt}.hex > ${_tgt}.mem
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
-        BYPRODUCTS 
+        BYPRODUCTS
             ${_tgt}.hex ${_tgt}.mem
         COMMENT
             "Converting executable to mem."
