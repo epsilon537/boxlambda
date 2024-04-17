@@ -1,12 +1,12 @@
 ## The RISCV-DBG Debug Core
 
-- **RISCV-DBG Repo**, BoxLambda fork, *boxlambda* branch: 
+- **RISCV-DBG Repo**, BoxLambda fork, *boxlambda* branch:
   [https://github.com/epsilon537/riscv-dbg](https://github.com/epsilon537/riscv-dbg).
 
-- **RISV-DBG Submodule in the BoxLambda Directory Tree**: 
+- **RISV-DBG Submodule in the BoxLambda Directory Tree**:
   boxlambda/sub/riscv-dbg/.
 
-- **RISCV-DBG Gateware Component in the BoxLambda Directory Tree**: 
+- **RISCV-DBG Gateware Component in the BoxLambda Directory Tree**:
   [boxlambda/gw/components/riscv-dbg](https://github.com/epsilon537/boxlambda/tree/master/gw/components/riscv-dbg)
 
 ### RISCV OpenOCD
@@ -40,7 +40,7 @@ boxlambda
 └── sub
     ├── common_cells
     ├── tech_cells_generic
-    ├── pulpino	
+    ├── pulpino
     └── riscv-dbg
 
 ```
@@ -52,16 +52,16 @@ RISCV-DBG has two top-levels:
 - [sub/riscv-dbg/src/dm_top.sv](https://github.com/epsilon537/riscv-dbg/blob/b241f967f0dd105f7c5e020a395bbe0ec54e40e4/src/dm_top.sv)
 - [sub/riscv-dbg/src/dmi_jtag.sv](https://github.com/epsilon537/riscv-dbg/blob/b241f967f0dd105f7c5e020a395bbe0ec54e40e4/src/dmi_jtag.sv)
 
-Recall that BoxLambda uses a Wishbone interconnect. The Ibex_WB submodule implements a Wishbone wrapper for the Ibex RISCV core. It does the same for RISCV-DBG's *dm_top*:  
+Recall that BoxLambda uses a Wishbone interconnect. The Ibex_WB submodule implements a Wishbone wrapper for the Ibex RISCV core. It does the same for RISCV-DBG's *dm_top*:
 [sub/ibex_wb/rtl/wb_dm_top.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_dm_top.sv)
 
 Refer to the *boxlambda_soc.sv* module to see how RISCV-DBG is instantiated:
-[gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)  
+[gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)
 
 ### OpenOCD and RISCV-DBG on Verilator
 
 The JTAG transport protocol used on the Verilator Model is a simple socket-based protocol called **Remote Bitbang**.
-The remote bitbang spec is just one page: 
+The remote bitbang spec is just one page:
 
 [https://github.com/openocd-org/openocd/blob/master/doc/manual/jtag/drivers/remote_bitbang.txt](https://github.com/openocd-org/openocd/blob/master/doc/manual/jtag/drivers/remote_bitbang.txt)
 
@@ -71,33 +71,33 @@ The Verilator setup looks like this:
 
 *BoxLambda OpenOCD Verilator Setup*
 
-The **hello_dbg** project (directory *gw/projects/hello_dbg/*) implements the OpenOCD Verilator setup shown above. The project contains the Hello World test build extended with the riscv-dbg component.
-The project directory also contains a [test script](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/hello_dbg/test/test.sh) that goes through the following steps:
+The **hello_world** project (directory *gw/projects/hello_world/*) implements the OpenOCD Verilator setup shown above.
+The project directory contains a [test script](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/hello_world/test/test.sh) that goes through the following steps:
 
 1. Start the Verilator model
 2. Connect OpenOCD to the model
 3. Connect GDB to OpenOCD (and thus to the model)
 4. Execute a UART register dump on the target
-5. Check the UART register contents against expected results. 
+5. Check the UART register contents against expected results.
 
 ```
 boxlambda
 ├── gw
 │   ├── projects
-│   │   └── hello-dbg
+│   │   └── hello_world
 │   │       ├── Bender.yml
 │   │       ├── sim
 │   │       │   ├── sim_main.cpp
 │   │       │   └── sim_main.sv
 │   │       └── test
 │   │           ├── test.sh
-│   │           └── test.gdb 
+│   │           └── test.gdb
 │   └── components
 │       └── riscv-dbg
 └── sub
     ├── common_cells
     ├── tech_cells_generic
-    ├── pulpino	
+    ├── pulpino
     └── riscv-dbg
 
 ```
@@ -111,7 +111,9 @@ To summarize:
 2. The JTAG TAP is used to debug the software running on the Ibex RISCV32 core.
 3. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called **remote_bitbang**.
 
-See the **Test Builds** section for the steps needed to set up an OpenOCD JTAG debug session on Verilator.
+#### Starting a debug session on Verilator
+
+See [here](test-build-hello-world.md#connecting-gdb-to-the-hello-world-build-on-verilator) for an example of the steps needed to set up an OpenOCD JTAG debug session on Verilator.
 
 ### OpenOCD and RISCV-DBG on Arty-A7 FPGA
 
@@ -132,8 +134,8 @@ On the OpenOCD side, the transport protocol for this Debug-Access-via-FPGA-scan-
 
 The OpenOCD configuration file for JTAG Debugging on Arty A7 is checked into the *scripts/* directory:
 
-- Arty-A7-35T: [scripts/digilent_arty_a7_35.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7_35.openocd.cfg) 
-- Art-A7-100T: [scripts/digilent_arty_a7_100.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7_100.openocd.cfg) 
+- Arty-A7-35T: [scripts/digilent_arty_a7_35.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7_35.openocd.cfg)
+- Art-A7-100T: [scripts/digilent_arty_a7_100.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7_100.openocd.cfg)
 
 To summarize:
 
@@ -143,7 +145,9 @@ To summarize:
 4. The Arty-A7 FPGA scan chain is accessible through the board's FTDI-based USB serial port.
 5. The OpenOCD transport protocol name for this type of connection is **ftdi**.
 
-See the **Test Builds** section for the steps needed to set up an OpenOCD JTAG debug session on the Arty A7.
+#### Starting a debug session on the Arty A7
+
+See [here](test-build-hello-world.md#connecting-gdb-to-the-hello-world-build-on-arty-a7) for an example of the steps needed to set up an OpenOCD JTAG debug session on Verilator.
 
 ### RISCV-DBG Clock Frequency
 

@@ -29,6 +29,17 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="666",
 
 ```
 
+### On Linux
+
+#### Serial Port
+Your mileage may vary but on my Ubuntu system, when I plug in my Arty A7, the serial port shows up at **/dev/ttyUSB1**. 
+
+Serial Port Settings: **115200 8N1**
+
+I'm using **Putty** terminal emulator. In *terminal options* I have enabled following options:
+- *Implicit CR in every LF*
+- *Implicit LF in every CR*
+
 ### On WSL
 
 #### USBIPD-WIN

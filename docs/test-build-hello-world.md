@@ -18,7 +18,7 @@ make hello_world_load
 
 Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
 
-Start OpenOCD with the *digilent_arty_a7_[35|100].cfg* config file. 
+Start OpenOCD with the *digilent_arty_a7_[35|100].cfg* config file.
 
 Note: If OpenOCD can't connect to the USB JTAG adapter, your USB device permissions might not be set correctly. Check the *User-Level Access to the Arty A7 USB JTAG Adapter* section above for a fix.
 ```
@@ -36,14 +36,14 @@ Ready for Remote Connections
 Info : Listening on port 6666 for tcl connections
 Info : Listening on port 4444 for telnet connections
 ```
-Launch GDB with hello.elf:	
+Launch GDB with hello.elf:
 ```
 cd <boxlambda root directory>/build/arty-a7-[35|100]/sw/projects/hello_world
 riscv32-unknown-elf-gdb hello_world
 ```
 Connect GDB to the target. From the GDB shell:
 ```
-(gdb) target remote localhost:3333
+(gdb) target extended-remote localhost:3333
 Remote debugging using localhost:3333
 ?? () at crt0.S:81
 81        jal x0, reset_handler
@@ -63,7 +63,7 @@ Execute the testbench, with (```./Vmodel -i```) or without (```./Vmodel -t```) t
 ```
 ./Vmodel -i/-t
 ```
-View the generated traces: 
+View the generated traces:
 ```
 gtkwave simx.fst
 ```
@@ -93,7 +93,7 @@ riscv32-unknown-elf-gdb hello_world
 ```
 Connect GDB to the target. From the GDB shell:
 ```
-(gdb) target remote localhost:3333
+(gdb) target extended-remote localhost:3333
 Remote debugging using localhost:3333
 ?? () at crt0.S:81
 81        jal x0, reset_handler

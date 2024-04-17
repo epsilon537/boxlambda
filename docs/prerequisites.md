@@ -7,7 +7,7 @@ Linux or Linux WSL.
 ### Vivado
 
 **Vivado ML** Edition V2023.1, Linux version:
-  
+
 [https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2023-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2023-1.html)
 
 Make sure you also install your Arty A7 board files. Digilent has excellent instructions for installing Vivado and Digilent board files:
@@ -29,44 +29,28 @@ export PATH=$PATH:$RISCV_TOOLCHAIN/bin
 
 ### GNU Make
 
-Version 4.2.1: 
-  
-[https://www.gnu.org/software/make/](https://www.gnu.org/software/make/)
+Version 4.2.1 or later.
 
-Please make sure make is in your *PATH*.
+```
+sudo apt-get install make
+```
 
 ### Bender
 
-Version 0.27.1: 
-  
-[https://github.com/pulp-platform/bender/releases/tag/v0.27.1](https://github.com/pulp-platform/bender/releases/tag/v0.27.1)
+Version 0.28.1:
+
+[https://github.com/pulp-platform/bender/releases/tag/v0.28.1](https://github.com/pulp-platform/bender/releases/tag/v0.28.1)
 
 Add bender to your *PATH*.
 
 ### OSS CAD Suite (CoCoTB, iverilog, GTKWave)
 
-Version 2023-06-21.
+Version 2024-03-18.
 
 Installation instructions: [https://github.com/YosysHQ/oss-cad-suite-build#installation](https://github.com/YosysHQ/oss-cad-suite-build#installation)
 
-### RISCV OpenOCD
-
-Build RISCV OpenOCD from source:
-    
-```
-git clone https://github.com/riscv/riscv-openocd
-cd riscv-openocd
-git submodule update --init --recursive
-./bootstrap
-./configure --disable-werror --disable-wextra --enable-remote-bitbang --enable-ftdi --prefix=$HOME/.local
-make
-make install
-```
-
-Add the install directory (`$HOME/.local` in my case) to your PATH *before* the OSS CAD Suite path. We want to make sure the RISCV OpenOCD version gets picked up by the environment, *not* the OpenOCD version that comes with OSS CAD Suite. 
-
 ### Ncurses
-  
+
 ```
 sudo apt-get install libncurses5-dev libncursesw5-dev libncursesw5
 ```
@@ -74,16 +58,19 @@ sudo apt-get install libncurses5-dev libncursesw5-dev libncursesw5
 ### CMake
 
 Version 3.24 or later.
-  
-On Ubuntu, follow these instructions: [https://apt.kitware.com/](https://apt.kitware.com/)
 
-On other distros, please use your distro's package installer to get version 3.23 or later.
+On Ubuntu, follow these instructions: [https://apt.kitware.com/](https://apt.kitware.com/)
 
 Make sure that the correct CMake version is first in your PATH. The Vivado */tools/Xilinx/Vivado/2023.1/settings64.sh* script adds an old version of CMake to your path. I override that by re-adding */usr/bin* to the front of the PATH after sourcing the Vivado script:
 
 ```
 source /tools/Xilinx/Vivado/2023.1/settings64.sh
 export PATH=/usr/bin:$PATH
+```
+
+### Pip
+```
+sudo apt-get install python3-pip
 ```
 
 ### LiteX (optional)
@@ -104,8 +91,8 @@ cd <boxlamdba src tree>/sub/litex
 SDL2 is needed to run Verilator simulation testcases involving the VERA graphics core.
 
 [https://wiki.libsdl.org/SDL2/Installation](https://wiki.libsdl.org/SDL2/Installation)
-  
-Also, make sure to set environment variable **SDL2_DIR** to point to the SDL2 directory containing files *SDL2Config.cmake* or *sdl2-config.cmake*. In my case (Ubuntu WSL), I added the following line to my *~/.bashrc*:
+
+Also, make sure to set environment variable **SDL2_DIR** to point to the SDL2 directory containing files *SDL2Config.cmake* or *sdl2-config.cmake*. In my case (Ubuntu 22.04), I added the following line to my *~/.bashrc*:
 
 ```
 export SDL2_DIR=/usr/lib/x86_64-linux-gnu/cmake/SDL2/
@@ -116,26 +103,15 @@ export SDL2_DIR=/usr/lib/x86_64-linux-gnu/cmake/SDL2/
 PortAudio is needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
 
 ```
-sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
-sudo apt-get install ffmpeg
+sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0 ffmpeg
 ```
 
 ### Chromaprint (optional)
 
-PortAudio is needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
+Chromaprint is needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
 
 ```
 sudo apt-get install libchromaprint-tools
-```
-
-### Python 3 (optional)
-```
-sudo apt-get install python-is-python3
-```
-
-### Pip (optional)
-```
-sudo apt-get install python3-pip
 ```
 
 ### NumPy, SciPy, SoundDevice, and Matplotlib (optional)
@@ -148,10 +124,10 @@ pip3 install numpy scipy sounddevice matplotlib
 
 ### Perl (optional)
 
-Perl is only required if you would like to tinker with the usb_hid_host firmware.
+Perl is only required if you would like to tinker with the usb_hid_host firmware. Your system most likely already has Perl installed. If not:
 
 ```
-sudo apt-get install perl* on Ubuntu). 
+sudo apt-get install perl.
 ```
 
 ### Gforth (optional)
@@ -161,3 +137,12 @@ Gforth is only required if you would like to tinker with the usb_hid_device firm
 ```
 sudo apt-get install gforth
 ```
+### Ninja and Meson (optional)
+
+Ninja and Meson are only required if you want to rebuild the Picolibc library.
+
+```
+sudo apt-get install ninja-build
+sudo apt-get install meson
+```
+

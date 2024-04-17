@@ -89,6 +89,7 @@ I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](h
 *Picolibc on BoxLambda.*
 
 Picolibc is a relatively generic code base that needs to be tied to the platform it's running on to function properly. To bring up the library on BoxLambda, we need to supply three pieces of code:
+
 - A Vector Table
 - A Link Map
 - Standard IO Setup
@@ -220,9 +221,9 @@ add_compile_options(${SPECS})
 add_link_options(${SPECS} "LINKER:--gc-sections")
 ```
 
-### The Picolibc Test Application
+### Example
 
-The test application program running on the Ibex processor is located in [sw/projects/picolibc_test/picolibc_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/picolibc_test/picolibc_test.c)
+Here's an example application program using Picolibc:
 
 ```
 #include <stdio.h>
