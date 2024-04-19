@@ -16,9 +16,9 @@ function (gw_project_rules_vivado)
         ${ARGN}
     )
 
-    set(_top_module ${gw_project_rules_TOP_MODULE}) 
+    set(_top_module ${gw_project_rules_TOP_MODULE})
     set(_prj_name ${gw_project_rules_PROJECT_NAME})
-    set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET}) 
+    set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
     set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
 
     add_custom_command(
@@ -139,7 +139,7 @@ function (gw_project_rules_vivado)
         #Build Vivado command string for the prg_bitstream tcl script.
         vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
             -bitstream ./project.runs/impl_1/${_top_module}.sw.bit)
-        
+
         #Build Vivado command string for the flash_bitstream tcl script.
         vivado_cmd(flash_cmd ${PROJECT_SOURCE_DIR}/scripts/flash_bitstream.tcl
             -bin ./project.runs/impl_1/${_top_module}.sw.bit.bin)
@@ -163,7 +163,7 @@ function (gw_project_rules_vivado)
             "Loading bitstream to target."
         VERBATIM
     )
-    
+
     #Custom command executing the vivado flash_bitstream command string.
     add_custom_target(${_prj_name}_flash
         WORKING_DIRECTORY
@@ -180,14 +180,14 @@ endfunction()
 #TOP_MODULE: name of top module, e.g. ibex_soc
 #PROJECT_NAME: project name, e.g. hello_dbg
 #MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
-#MEM_FILE_LIST: Mem file list, if any. 
-#VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty. 
+#MEM_FILE_LIST: Mem file list, if any.
+#VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty.
 #VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty.
 function (gw_project_rules_verilator)
     set(options)
     set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
     set(multiValueArgs)
-    
+
     cmake_parse_arguments(gw_project_rules
         "${options}"
         "${oneValueArgs}"
@@ -195,10 +195,10 @@ function (gw_project_rules_verilator)
         ${ARGN}
     )
 
-    set(_top_module ${gw_project_rules_TOP_MODULE}) 
+    set(_top_module ${gw_project_rules_TOP_MODULE})
     set(_prj_name ${gw_project_rules_PROJECT_NAME})
     set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
-    set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST}) 
+    set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
     set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS})
     set(_verilator_ld_flags ${gw_project_rules_VERILATOR_LD_FLAGS})
 
@@ -239,8 +239,8 @@ function (gw_project_rules_verilator)
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
             ${_prj_name}.mem_file_list
-            ${_prj_name}.verilator_sources 
-            ${_prj_name}.vlts 
+            ${_prj_name}.verilator_sources
+            ${_prj_name}.vlts
             ${_prj_name}.cpp_files
         DEPFILE
             ${_prj_name}.verilator_sources.dep
@@ -287,20 +287,20 @@ function (gw_project_rules_verilator)
             COMMENT
                 "Verilator Vmodel + SW image target."
         )
-    endif()    
+    endif()
 endfunction()
 
 #Function grouping gateware project build rules.
 #TOP_MODULE: name of top module, e.g. ibex_soc
 #PROJECT_NAME: project name, e.g. hello_dbg
 #MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
-#VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty. 
-#VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty. 
+#VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty.
+#VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty.
 function (gw_project_rules)
     set(options)
     set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
     set(multiValueArgs)
-    
+
     cmake_parse_arguments(gw_project_rules
         "${options}"
         "${oneValueArgs}"
@@ -308,9 +308,9 @@ function (gw_project_rules)
         ${ARGN}
     )
 
-    set(_top_module ${gw_project_rules_TOP_MODULE}) 
+    set(_top_module ${gw_project_rules_TOP_MODULE})
     set(_prj_name ${gw_project_rules_PROJECT_NAME})
-    set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET}) 
+    set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
     set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS})
     set(_verilator_ld_flags ${gw_project_rules_VERILATOR_LD_FLAGS})
 
@@ -337,7 +337,7 @@ function (gw_project_rules)
             MEM_FILE_TARGET
                 ${_mem_file_tgt}
             MEM_FILE_LIST
-                ${_prj_name}.mem_file_list 
+                ${_prj_name}.mem_file_list
         )
     else()
         gw_project_rules_verilator(
@@ -348,7 +348,7 @@ function (gw_project_rules)
             MEM_FILE_TARGET
                 ${_mem_file_tgt}
             MEM_FILE_LIST
-                ${_prj_name}.mem_file_list  
+                ${_prj_name}.mem_file_list
             VERILATOR_CPP_FLAGS
                 ${_verilator_cpp_flags}
             VERILATOR_LD_FLAGS

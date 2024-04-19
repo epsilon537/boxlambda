@@ -8,7 +8,7 @@ package:
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
-  
+
 sources:
   - target: constraints
     files:
@@ -46,5 +46,4 @@ sources:
       - sim/sim_main.cpp
       - ../top/sim/sim_main.sv
       - ../top/lint.vlt
-            
 

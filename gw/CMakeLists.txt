@@ -34,7 +34,7 @@ function (gw_common_rules)
     set(options)
     set(oneValueArgs TOP_MODULE PRJ_COMP_NAME CONSTRAINTS_FILE_LIST MEM_FILE_LIST VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
     set(multiValueArgs)
-    
+
     cmake_parse_arguments(gw_common_rules
         "${options}"
         "${oneValueArgs}"

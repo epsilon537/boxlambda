@@ -8,7 +8,7 @@ package:
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
-  
+
 sources:
   - target: constraints
     files:
@@ -25,7 +25,7 @@ sources:
       VERA: ~
       PICORV_DMA: ~
       QSPI_FLASH: ~
-      #TRACE_ALL_INSTRUCTIONS: ~
+      # TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../top/rtl/top.sv
   - target: arty-a7-100
@@ -40,7 +40,7 @@ sources:
       VERA: ~
       PICORV_DMA: ~
       QSPI_FLASH: ~
-      #TRACE_ALL_INSTRUCTIONS: ~
+      # TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../top/rtl/top.sv
   - target: verilator
@@ -48,5 +48,5 @@ sources:
       - sim/sim_main.cpp
       - ../top/sim/sim_main.sv
       - ../top/lint.vlt
-            
+
 
