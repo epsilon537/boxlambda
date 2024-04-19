@@ -3,7 +3,7 @@
 #running a 'Hello World' test build.
 
 #Connect to openocd (which is connected to the target.
-target remote localhost:3333
+target extended-remote localhost:3333
 
 #Continue to main()
 b main
