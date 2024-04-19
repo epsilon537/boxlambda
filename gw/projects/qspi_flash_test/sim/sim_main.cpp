@@ -1,12 +1,12 @@
-//#include <curses.h>
-#include <getopt.h>
+// #include <curses.h>
 #include <fcntl.h>
+#include <getopt.h>
 
 // For std::unique_ptr
 #include <memory>
 
-#include <string>
 #include <stdio.h>
+#include <string>
 
 // Include common routines
 #include <verilated.h>
@@ -16,7 +16,7 @@
 
 #include "verilated_fst_c.h"
 
-//To get access to the verilated model internals.
+// To get access to the verilated model internals.
 #include "Vmodel___024root.h"
 
 // From wbuart32
@@ -28,38 +28,42 @@
 // From qspiflash
 #include "flashsim.h"
 
-const char	*DEV_RANDOM = "/dev/urandom";
+const char *DEV_RANDOM = "/dev/urandom";
+const unsigned FLASH_SW_IMG_OFFSET = 0x400000;
 
 bool tracing_enable = false;
+bool prev_xip_mode = false;
+bool prev_quad_mode = false;
 
-//QSPI Flash co-simulation from qspiflash.
+// QSPI Flash co-simulation from qspiflash.
 std::unique_ptr<FLASHSIM> flash{new FLASHSIM()};
 
-//Uart co-simulation from wbuart32.
+// Uart co-simulation from wbuart32.
 std::unique_ptr<UARTSIM> uart{new UARTSIM(0)};
 
 // Used for tracing.
-VerilatedFstC* tfp = new VerilatedFstC;
+VerilatedFstC *tfp = new VerilatedFstC;
 
 // Construct a VerilatedContext to hold simulation time, etc.
 // Multiple modules (made later below with Vtop) may share the same
 // context to share time, or modules may have different contexts if
 // they should be independent from each other.
-std::unique_ptr<VerilatedContext> contextp{new VerilatedContext}; 
+std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 
-// Construct the Verilated model, from Vmodel.h generated from Verilating this project.
-// Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
+// Construct the Verilated model, from Vmodel.h generated from Verilating this
+// project. Using unique_ptr is similar to "Vmodel* top = new Vmodel" then
+// deleting at end.
 std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 
-//Initialize UART rx and tx change detector
+// Initialize UART rx and tx change detector
 std::string uartRxStringPrev;
 
 // Legacy function required only so linking works on Cygwin and MSVC++
 double sc_time_stamp() { return 0; }
 
-//Clean-up logic.
-static void cleanup() {  
-  //Close trace file.
+// Clean-up logic.
+static void cleanup() {
+  // Close trace file.
   if (tracing_enable)
     tfp->close();
 
@@ -67,138 +71,166 @@ static void cleanup() {
   top->final();
 }
 
-//Advance simulation by one clock cycle
+// Advance simulation by one clock cycle
 static void tick(void) {
-  //Tick twice: Input clock is 100MHz, BoxLambda's system clock runs at 50MHz.
+  // Tick twice: Input clock is 100MHz, BoxLambda's system clock runs at 50MHz.
   //->Advance two input clock cycles at a time.
-  for (int ii=0; ii<2;ii++) {
-    //High phase
+  for (int ii = 0; ii < 2; ii++) {
+    // High phase
     top->clk_i = 1;
     contextp->timeInc(1);
     top->eval();
     if (tracing_enable)
       tfp->dump(contextp->time());
-    
-    //Low phase
+
+    // Low phase
     top->clk_i = 0;
     contextp->timeInc(1);
     top->eval();
     if (tracing_enable)
       tfp->dump(contextp->time());
   }
-  
-  //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
-  //and feed the UART co-simulator output to our model
-  top->uart_rx = (*uart)(top->uart_tx, 
-  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 
-  //Detect and print changes to UART
-  if (uart->get_rx_string().back() == '\n')  {
+  // Feed our model's uart_tx signal and baud rate to the UART co-simulator.
+  // and feed the UART co-simulator output to our model
+  top->uart_rx = (*uart)(
+      top->uart_tx,
+      top->rootp
+          ->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
+
+  // Detect and print changes to UART
+  if (uart->get_rx_string().back() == '\n') {
     printf("%s", uart->get_rx_string().c_str());
 
-    //Update change detectors
+    // Update change detectors
     uartRxStringPrev = uart->get_rx_string();
 
     uart->clear_rx_string();
   }
 
-  //Feed our model's qspi flash signal to the flash co-simulator.
+  // Feed our model's qspi flash signal to the flash co-simulator.
   top->qspi_dq_in = (*flash)(top->qspi_cs_n, top->qspi_sck, top->qspi_dq_out);
+
+//  bool new_xip_mode = flash->xip_mode();
+//
+//  if (new_xip_mode != prev_xip_mode) {
+//      printf("XIP mode change: old: %d, new: %d\n", prev_xip_mode, new_xip_mode);
+//      prev_xip_mode = new_xip_mode;
+//  }
+
+  bool new_quad_mode = flash->quad_mode();
+
+  if (new_quad_mode != prev_quad_mode) {
+      printf("Quad mode change: old: %d, new: %d\n", prev_quad_mode, new_quad_mode);
+      prev_quad_mode = new_quad_mode;
+  }
 }
 
-int main(int argc, char** argv, char** env) {
-    // Prevent unused variable warnings
-    if (false && argc && argv && env) {}
+int main(int argc, char **argv, char **env) {
+  // Prevent unused variable warnings
+  if (false && argc && argv && env) {
+  }
 
-    // Set debug level, 0 is off, 9 is highest presently used
-    // May be overridden by commandArgs argument parsing
-    contextp->debug(0);
+  // Set debug level, 0 is off, 9 is highest presently used
+  // May be overridden by commandArgs argument parsing
+  contextp->debug(0);
 
-    // Randomization reset policy
-    // May be overridden by commandArgs argument parsing
-    contextp->randReset(2);
+  // Randomization reset policy
+  // May be overridden by commandArgs argument parsing
+  contextp->randReset(2);
 
-    // Verilator must compute traced signals
-    contextp->traceEverOn(true);
-    
-    // Pass arguments so Verilated code can see them, e.g. $value$plusargs
-    // This needs to be called before you create any model
-    contextp->commandArgs(argc, argv);
+  // Verilator must compute traced signals
+  contextp->traceEverOn(true);
 
-    flash->debug(true);
-	  flash->load(DEV_RANDOM);
-	  flash->set(0, 0);
+  // Pass arguments so Verilated code can see them, e.g. $value$plusargs
+  // This needs to be called before you create any model
+  contextp->commandArgs(argc, argv);
 
-    bool attach_debugger = false;
-    bool interactive_mode = false;
+  bool attach_debugger = false;
+  bool interactive_mode = false;
+  const char *flash_img_filename = 0;
 
-    // Command line processing
-    for(;;) {
-      switch(getopt(argc, argv, "aith")) {
-      case 'a':
-        attach_debugger = true;
-        continue;
-      case 't':
-        printf("Tracing enabled\n");
-        tracing_enable = true;
-        continue;
-      case 'i':
-        printf("Interactive mode enabled\n");
-        interactive_mode = true;
-        continue;
-      case '?':
-      case 'h':
-      default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-a: attach debugger.\n");
-        printf("-t: enable tracing.\n");
-        printf("-i: enable interactive mode.\n");
-        return 0;
-        break;
-	    
-      case -1:
-        break;
-      }
+  // Command line processing
+  for (;;) {
+    switch (getopt(argc, argv, "aithf:")) {
+    case 'a':
+      attach_debugger = true;
+      continue;
+    case 'f':
+      flash_img_filename = optarg;
+      continue;
+    case 't':
+      printf("Tracing enabled\n");
+      tracing_enable = true;
+      continue;
+    case 'i':
+      printf("Interactive mode enabled\n");
+      interactive_mode = true;
+      continue;
+    case '?':
+    case 'h':
+    default:
+      printf("\nVmodel Usage:\n");
+      printf("-h: print this help\n");
+      printf("-f <flash_sw.img>\n");
+      printf("-a: attach debugger.\n");
+      printf("-t: enable tracing.\n");
+      printf("-i: enable interactive mode.\n");
+      return 0;
+      break;
 
+    case -1:
       break;
     }
 
-    //Trace file
-    if (tracing_enable) {
-      top->trace(tfp, 99); //Trace 99 levels deep.
-      tfp->open("simx.fst");
-    }
-    
-    jtag_set_bypass(!attach_debugger);
+    break;
+  }
 
-    top->clk_i = 0;
-    top->uart_rx = 0;
+//  flash->debug(true);
+  if (!flash_img_filename) {
+    flash->load(DEV_RANDOM);
+  } else {
+    printf("Flash SW Image File: %s\n", flash_img_filename);
+    flash->load(FLASH_SW_IMG_OFFSET, flash_img_filename);
+  }
 
-    //Take the system out of reset.
-    top->rst_ni = 1;
-    
-    // When not in interactive mode, simulate for 50000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 50000000)) {
-      // Evaluate model
-      tick();        
-    }
-    
-    int res = 0;
-    std::string uartCheckString("Test Successful.");
+//  printf("Flash XIP mode: %d\n", flash->xip_mode());
+  printf("Flash Quad mode: %d\n", flash->quad_mode());
 
-    if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
-      printf("Test failed\n");
-      printf("Expected: %s\n", uartCheckString.c_str());
-      printf("Received: %s\n", uartRxStringPrev.c_str());
+  // Trace file
+  if (tracing_enable) {
+    top->trace(tfp, 99); // Trace 99 levels deep.
+    tfp->open("simx.fst");
+  }
 
-      res = 1;
-    }
-    else {
-      printf("Test passed.\n");
-    }
+  jtag_set_bypass(!attach_debugger);
 
-    cleanup();
+  top->clk_i = 0;
+  top->uart_rx = 0;
 
-    return 0;
+  // Take the system out of reset.
+  top->rst_ni = 1;
+
+  // When not in interactive mode, simulate for 500000000 timeprecision periods
+  while (interactive_mode || (contextp->time() < 500000000)) {
+    // Evaluate model
+    tick();
+  }
+
+  int res = 0;
+  std::string uartCheckString("Test Successful.");
+
+  if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
+    printf("Test failed\n");
+    printf("Expected: %s\n", uartCheckString.c_str());
+    printf("Received: %s\n", uartRxStringPrev.c_str());
+
+    res = 1;
+  } else {
+    printf("Test passed.\n");
+  }
+
+  cleanup();
+
+  return 0;
 }
