@@ -10,13 +10,15 @@ sources:
   - target: vivado
     files:
     - ../../../sub/riscv-dbg/src/dmi_bscane_tap.sv
+    - ../../../sub/tech_cells_generic/src/fpga/tc_clk_xilinx.sv
   - target: verilator
     files:
     - lint.vlt
     - ../../../sub/riscv-dbg/src/dmi_jtag_tap.sv
+    - ../../../sub/tech_cells_generic/src/rtl/tc_clk.sv
   - target: any(verilator, vivado)
     include_dirs:
-    - ../../../sub/common_cells/include    
+    - ../../../sub/common_cells/include
     files:
     - ../../../sub/riscv-dbg/src/dm_pkg.sv
     - ../../../sub/common_cells/src/cdc_reset_ctrlr_pkg.sv
@@ -33,10 +35,10 @@ sources:
     - ../../../sub/pulpino/rtl/components/pulp_clock_mux2.sv
     - ../../../sub/pulpino/rtl/components/cluster_clock_gating.sv
     - ../../../sub/riscv-dbg/debug_rom/debug_rom.sv
-    - ../../../sub/riscv-dbg/debug_rom/debug_rom_one_scratch.sv    
+    - ../../../sub/riscv-dbg/debug_rom/debug_rom_one_scratch.sv
     - ../../../sub/riscv-dbg/src/dm_csrs.sv
     - ../../../sub/riscv-dbg/src/dmi_cdc.sv
-    - ../../../sub/riscv-dbg/src/dmi_jtag.sv   
+    - ../../../sub/riscv-dbg/src/dmi_jtag.sv
     - ../../../sub/riscv-dbg/src/dm_mem.sv
     - ../../../sub/riscv-dbg/src/dm_sba.sv
     - ../../../sub/riscv-dbg/src/dm_top.sv
