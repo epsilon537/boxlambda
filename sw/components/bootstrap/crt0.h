@@ -35,10 +35,10 @@
 
 /*Based on picolibc's crt0.h, with modifications for BoxLambda*/
 
-#include <picotls.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <picotls.h>
 
 /*Boxlambda:*/
 extern char __code_source[];
@@ -75,15 +75,6 @@ int main(int, char **);
 extern void __libc_init_array(void);
 #endif
 
-/* After the architecture-specific chip initialization is done, this
- * function initializes the data and bss segments. Note that a static
- * block of TLS data is carefully interleaved with the regular data
- * and bss segments in picolibc.ld so that this one operation
- * initializes both. Then it runs the application code, starting with
- * any initialization functions, followed by the main application
- * entry point and finally any cleanup functions
- */
-
 #include <picotls.h>
 #include <stdio.h>
 #ifdef CRT0_SEMIHOST
@@ -94,56 +85,3 @@ extern void __libc_init_array(void);
 #define CONSTRUCTORS 1
 #endif
 
-static inline void __start(void) {
-  /*BoxLambda: Copy code segment if needed.*/
-  if (__code_start != __code_source) {
-    memcpy(__code_start, __code_source, (uintptr_t)__code_size);
-  }
-
-  memcpy(__data_start, __data_source, (uintptr_t)__data_size);
-  memset(__bss_start, '\0', (uintptr_t)__bss_size);
-  memset(__cmem_bss_start, '\0', (uintptr_t)__cmem_bss_size);
-#ifdef PICOLIBC_TLS
-  _set_tls(__tls_base);
-#endif
-#if defined(_HAVE_INITFINI_ARRAY) && CONSTRUCTORS
-  __libc_init_array();
-#endif
-
-#ifdef CRT0_SEMIHOST
-#define CMDLINE_LEN 1024
-#define ARGV_LEN 64
-  static char cmdline[CMDLINE_LEN];
-  static char *argv[ARGV_LEN];
-  int argc = 0;
-
-  argv[argc++] = "program-name";
-  if (sys_semihost_get_cmdline(cmdline, sizeof(cmdline)) == 0) {
-    char *c = cmdline;
-
-    while (*c && argc < ARGV_LEN - 1) {
-      argv[argc++] = c;
-      while (*c && *c != ' ')
-        c++;
-      if (!*c)
-        break;
-      *c = '\0';
-      while (*++c == ' ')
-        ;
-    }
-  }
-  argv[argc] = NULL;
-#else
-#define argv NULL
-#define argc 0
-#endif
-
-  int ret = main(argc, argv);
-#ifdef CRT0_EXIT
-  exit(ret);
-#else
-  (void)ret;
-  for (;;)
-    ;
-#endif
-}

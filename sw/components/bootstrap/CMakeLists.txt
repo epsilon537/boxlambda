@@ -19,5 +19,8 @@ target_include_directories(bootstrap
 
 target_compile_options(bootstrap
  PRIVATE
+  -g
   -O2
+  -mno-save-restore
+  -fno-tree-loop-distribute-patterns
 )

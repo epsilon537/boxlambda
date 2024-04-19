@@ -3,7 +3,6 @@
  *to the .cmem_bss section. I did not (yet?) add a .cmem_data section.*/
 __cmem = 0x00000000;
 /*__cmem_size is passed in as a linker option*/
-
 /*'dmem' or 'data memory' contains data segments, bss and stack. You can put code in dmem by assigning it
  *to the .dmem_text section.*/
 __dmem = 0x00020000;
@@ -16,12 +15,17 @@ __emem = 0x20000000;
 __emem_size = 256m; /*256MB external memory.*/
 __heap_size = 128m; /*of which 128MB is used as heap currently.*/
 
+/*flash memory section.*/
+__flash = 0x11400000; /*0x1100000 + 4MB for the bitstream*/
+__flash_size = 12m; /*16MB flash memory minus 4mb reserved for the bitstream*/
+
 /*What follows is derived from picolibc.ld.*/
 
 ENTRY(_start)
 
 MEMORY
 {
+    flash : ORIGIN = __flash, LENGTH = __flash_size
     cmem : ORIGIN = __cmem, LENGTH = __cmem_size
     dmem : ORIGIN = __dmem, LENGTH = __dmem_size
     emem : ORIGIN = __emem, LENGTH = __emem_size
@@ -31,15 +35,15 @@ SECTIONS
 {
     PROVIDE(__stack = ORIGIN(dmem) + LENGTH(dmem));
 
-    .text : {
-        /*code start and source are the same in internal mem link map.*/
-        PROVIDE(__code_start = .);
-        PROVIDE(__code_source = .);
-
-        KEEP (*(.vectors)) /*add vectors to the start of the .init section.*/
+    .flash : {
         KEEP (*(.text.init.enter))
-        KEEP (*(.data.init.enter))
         KEEP (*(SORT_BY_NAME(.init) SORT_BY_NAME(.init.*)))
+        KEEP (*(.data.init.enter))
+    } >flash
+
+    .text : {
+        PROVIDE(__code_start = ADDR(.text));
+        KEEP (*(.vectors)) /*add vectors to the start of CMEM.*/
         /* code */
         *(.text.unlikely .text.unlikely.*)
         *(.text.startup .text.startup.*)
@@ -71,9 +75,7 @@ SECTIONS
         PROVIDE_HIDDEN ( __fini_array_end = . );
 
         PROVIDE(__code_end = .);
-    } >cmem
-
-    PROVIDE( __code_size = __code_end - __code_start );
+    } >cmem AT>flash
 
    /*BSS data can be mapped to cmem by assigning it to this segment.*/
     .cmem_bss (NOLOAD) : {
@@ -84,7 +86,10 @@ SECTIONS
     PROVIDE(__cmem_bss_start = ADDR(.cmem_bss));
     PROVIDE(__cmem_bss_size = __cmem_bss_end - __cmem_bss_start );
 
-   /*
+    PROVIDE(__code_source = LOADADDR(.text));
+    PROVIDE(__code_size = __code_end - __code_start );
+
+/*
     * Data values which are preserved across reset
     */
     .preserve (NOLOAD) : {
@@ -120,7 +125,7 @@ SECTIONS
 
         /*Code can be mapped to DMEM by assigning it to this segment.*/
         *(.dmem_text)
-    } >dmem AT>cmem
+    } >dmem AT>flash
 
     PROVIDE(__data_start = ADDR(.data));
     PROVIDE(__data_source = LOADADDR(.data));
@@ -137,7 +142,8 @@ SECTIONS
         *(.tdata .tdata.* .gnu.linkonce.td.*)
         PROVIDE(__data_end = .);
         PROVIDE(__tdata_end = .);
-    } >dmem AT>cmem
+    } >dmem AT>flash
+
     PROVIDE( __tls_base = ADDR(.tdata));
     PROVIDE( __tdata_start = ADDR(.tdata));
     PROVIDE( __tdata_source = LOADADDR(.tdata) );
@@ -155,6 +161,7 @@ SECTIONS
         PROVIDE( __tls_end = . );
         PROVIDE( __tbss_end = . );
     } >dmem
+
     PROVIDE( __bss_start = ADDR(.tbss));
     PROVIDE( __tbss_start = ADDR(.tbss));
     PROVIDE( __tbss_size = SIZEOF(.tbss) );
