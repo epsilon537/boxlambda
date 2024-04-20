@@ -1,4 +1,4 @@
-## Hello World
+## (Debugging) Hello World
 
 ### Hello World on the Arty A7
 
@@ -68,7 +68,6 @@ View the generated traces:
 gtkwave simx.fst
 ```
 
-
 #### Connecting GDB to the Hello World build on Verilator
 
 Launch the Verilator model with the *-d* flag to indicate that a debugger will be attached to the simulated processor:
@@ -99,3 +98,13 @@ Remote debugging using localhost:3333
 81        jal x0, reset_handler
 ```
 Notice that the CPU is stopped at the very first instruction of the boot sequence.
+
+##### *Ignoring Packet Error, Continuing...*
+
+When GDB is connected to a Verilator target, you might occasionally get an annoying *'Ignoring packet error, continuing...'* message in the GDB console. This happens because GDB interaction with a running Verilator model is slow. You can avoid the message by increasing GDB's **remotetimeout** value. The default value is 2 (seconds). On my system, increasing the value to 10 does the trick. In the GDB console, or in your ~/.gdbinit file, enter the following command:
+
+```
+set remotetimeout 10
+```
+
+
