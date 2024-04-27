@@ -4,10 +4,10 @@
 package:
   # The name of the package. Required.
   name: ibex_wb_common
-  
+
 sources:
   - target: any(verilator, vivado)
     files:
       - ../../../sub/ibex_wb/rtl/wb_pkg.sv
       - ../../../sub/ibex_wb/rtl/wb_if.sv
-    
+

@@ -5,23 +5,23 @@
 #MEM_FILE_LIST: Mem file list, if any.
 
 function (gw_project_rules_vivado)
-    set(options)
-    set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST )
-    set(multiValueArgs)
+  set(options)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST )
+  set(multiValueArgs)
 
-    cmake_parse_arguments(gw_project_rules
+  cmake_parse_arguments(gw_project_rules
         "${options}"
         "${oneValueArgs}"
         "${multiValueArgs}"
         ${ARGN}
     )
 
-    set(_top_module ${gw_project_rules_TOP_MODULE})
-    set(_prj_name ${gw_project_rules_PROJECT_NAME})
-    set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
-    set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
+  set(_top_module ${gw_project_rules_TOP_MODULE})
+  set(_prj_name ${gw_project_rules_PROJECT_NAME})
+  set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
+  set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
 
-    add_custom_command(
+  add_custom_command(
         OUTPUT
             ${_prj_name}.constraints_file_list
         COMMAND
@@ -35,8 +35,8 @@ function (gw_project_rules_vivado)
         VERBATIM
     )
 
-    #Build rules, shared with gateware components : lint target, Vivado synthesis
-    gw_common_rules(
+  #Build rules, shared with gateware components : lint target, Vivado synthesis
+  gw_common_rules(
         TOP_MODULE
             ${_top_module}
         PRJ_COMP_NAME
@@ -47,13 +47,13 @@ function (gw_project_rules_vivado)
             ${_prj_name}.constraints_file_list
     )
 
-    #Build Vivado command string for the vivado_impl tcl script.
-    vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl.tcl
+  #Build Vivado command string for the vivado_impl tcl script.
+  vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl.tcl
         -project project.xpr -outputDir $OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
 
 
-    #Custom command executing the vivado implementation command string.
-    add_custom_command(
+  #Custom command executing the vivado implementation command string.
+  add_custom_command(
         OUTPUT
             ${CMAKE_CURRENT_BINARY_DIR}/project.runs/impl_1/${_top_module}.bit
         COMMAND
@@ -67,8 +67,8 @@ function (gw_project_rules_vivado)
         VERBATIM
     )
 
-    #Custom command converting the bitstream file into a .bin file ready for flashing.
-    add_custom_command(
+  #Custom command converting the bitstream file into a .bin file ready for flashing.
+  add_custom_command(
         OUTPUT
             ./project.runs/impl_1/${_top_module}.bit.bin
         WORKING_DIRECTORY
@@ -82,8 +82,8 @@ function (gw_project_rules_vivado)
         VERBATIM
     )
 
-    #Add the bitstream generation target to make all (ALL property).
-    add_custom_target(${_prj_name}_bit
+  #Add the bitstream generation target to make all (ALL property).
+  add_custom_target(${_prj_name}_bit
         ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
@@ -93,9 +93,9 @@ function (gw_project_rules_vivado)
             "Project implementation and bitstream generation target."
     )
 
-    if (NOT ${_mem_file_tgt} STREQUAL "")
-        #Custom command updating the SW memory file in the bitstream.
-        add_custom_command(
+  if (NOT ${_mem_file_tgt} STREQUAL "")
+    #Custom command updating the SW memory file in the bitstream.
+    add_custom_command(
             OUTPUT
                 ./project.runs/impl_1/${_top_module}.sw.bit
             WORKING_DIRECTORY
@@ -110,8 +110,8 @@ function (gw_project_rules_vivado)
             VERBATIM
         )
 
-        #Custom command converting the bitstream file into a .bin file ready for flashing.
-        add_custom_command(
+    #Custom command converting the bitstream file into a .bin file ready for flashing.
+    add_custom_command(
             OUTPUT
                 ./project.runs/impl_1/${_top_module}.sw.bit.bin
             WORKING_DIRECTORY
@@ -125,8 +125,8 @@ function (gw_project_rules_vivado)
             VERBATIM
         )
 
-        #Add the bitstream-with-sw-image target
-        add_custom_target(${_prj_name}_bit_sw
+    #Add the bitstream-with-sw-image target
+    add_custom_target(${_prj_name}_bit_sw
             ALL
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
@@ -136,25 +136,25 @@ function (gw_project_rules_vivado)
                 "Bitstream + SW image target."
         )
 
-        #Build Vivado command string for the prg_bitstream tcl script.
-        vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
+    #Build Vivado command string for the prg_bitstream tcl script.
+    vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
             -bitstream ./project.runs/impl_1/${_top_module}.sw.bit)
 
-        #Build Vivado command string for the flash_bitstream tcl script.
-        vivado_cmd(flash_cmd ${PROJECT_SOURCE_DIR}/scripts/flash_bitstream.tcl
+    #Build Vivado command string for the flash_bitstream tcl script.
+    vivado_cmd(flash_cmd ${PROJECT_SOURCE_DIR}/scripts/flash_bitstream.tcl
             -bin ./project.runs/impl_1/${_top_module}.sw.bit.bin)
-    else()
-        #Build Vivado command string for the prg_bitstream tcl script.
-        vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
+  else()
+    #Build Vivado command string for the prg_bitstream tcl script.
+    vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
             -bitstream ./project.runs/impl_1/${_top_module}.bit)
 
-        #Build Vivado command string for the flash_bitstream tcl script.
-        vivado_cmd(flash_cmd ${PROJECT_SOURCE_DIR}/scripts/flash_bitstream.tcl
+    #Build Vivado command string for the flash_bitstream tcl script.
+    vivado_cmd(flash_cmd ${PROJECT_SOURCE_DIR}/scripts/flash_bitstream.tcl
             -bin ./project.runs/impl_1/${_top_module}.bit.bin)
-    endif()
+  endif()
 
-    #Custom command executing the vivado prg_bitstream command string.
-    add_custom_target(${_prj_name}_load
+  #Custom command executing the vivado prg_bitstream command string.
+  add_custom_target(${_prj_name}_load
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
@@ -164,8 +164,8 @@ function (gw_project_rules_vivado)
         VERBATIM
     )
 
-    #Custom command executing the vivado flash_bitstream command string.
-    add_custom_target(${_prj_name}_flash
+  #Custom command executing the vivado flash_bitstream command string.
+  add_custom_target(${_prj_name}_flash
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
@@ -184,26 +184,26 @@ endfunction()
 #VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty.
 #VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty.
 function (gw_project_rules_verilator)
-    set(options)
-    set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
-    set(multiValueArgs)
+  set(options)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
+  set(multiValueArgs)
 
-    cmake_parse_arguments(gw_project_rules
+  cmake_parse_arguments(gw_project_rules
         "${options}"
         "${oneValueArgs}"
         "${multiValueArgs}"
         ${ARGN}
     )
 
-    set(_top_module ${gw_project_rules_TOP_MODULE})
-    set(_prj_name ${gw_project_rules_PROJECT_NAME})
-    set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
-    set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
-    set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS})
-    set(_verilator_ld_flags ${gw_project_rules_VERILATOR_LD_FLAGS})
+  set(_top_module ${gw_project_rules_TOP_MODULE})
+  set(_prj_name ${gw_project_rules_PROJECT_NAME})
+  set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
+  set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
+  set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS})
+  set(_verilator_ld_flags ${gw_project_rules_VERILATOR_LD_FLAGS})
 
-    #Build rules, shared with gateware components : lint target, Vivado synthesis
-    gw_common_rules(
+  #Build rules, shared with gateware components : lint target, Vivado synthesis
+  gw_common_rules(
         TOP_MODULE
             ${_top_module}
         PRJ_COMP_NAME
@@ -216,7 +216,7 @@ function (gw_project_rules_verilator)
             ${_verilator_ld_flags}
     )
 
-    add_custom_command(
+  add_custom_command(
         OUTPUT
             ${_prj_name}.cpp_files
         COMMAND
@@ -230,7 +230,7 @@ function (gw_project_rules_verilator)
         VERBATIM
     )
 
-    add_custom_command(
+  add_custom_command(
         OUTPUT
             Vmodel
         COMMAND
@@ -249,7 +249,7 @@ function (gw_project_rules_verilator)
         VERBATIM
     )
 
-    add_custom_target(${_prj_name}_sim
+  add_custom_target(${_prj_name}_sim
         ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
@@ -260,9 +260,9 @@ function (gw_project_rules_verilator)
         VERBATIM
     )
 
-    if (NOT ${_mem_file_tgt} STREQUAL "")
-        #Custom command copying the SW image to its proper place in the gateware build directory
-        add_custom_command(
+  if (NOT ${_mem_file_tgt} STREQUAL "")
+    #Custom command copying the SW image to its proper place in the gateware build directory
+    add_custom_command(
             OUTPUT
                 cmem.mem
             WORKING_DIRECTORY
@@ -276,8 +276,8 @@ function (gw_project_rules_verilator)
             VERBATIM
         )
 
-        #Verilator model + SW image target
-        add_custom_target(${_prj_name}_sim_sw
+    #Verilator model + SW image target
+    add_custom_target(${_prj_name}_sim_sw
             ALL
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
@@ -287,7 +287,7 @@ function (gw_project_rules_verilator)
             COMMENT
                 "Verilator Vmodel + SW image target."
         )
-    endif()
+  endif()
 endfunction()
 
 #Function grouping gateware project build rules.
@@ -297,24 +297,24 @@ endfunction()
 #VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty.
 #VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty.
 function (gw_project_rules)
-    set(options)
-    set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
-    set(multiValueArgs)
+  set(options)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
+  set(multiValueArgs)
 
-    cmake_parse_arguments(gw_project_rules
+  cmake_parse_arguments(gw_project_rules
         "${options}"
         "${oneValueArgs}"
         "${multiValueArgs}"
         ${ARGN}
     )
 
-    set(_top_module ${gw_project_rules_TOP_MODULE})
-    set(_prj_name ${gw_project_rules_PROJECT_NAME})
-    set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
-    set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS})
-    set(_verilator_ld_flags ${gw_project_rules_VERILATOR_LD_FLAGS})
+  set(_top_module ${gw_project_rules_TOP_MODULE})
+  set(_prj_name ${gw_project_rules_PROJECT_NAME})
+  set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
+  set(_verilator_cpp_flags ${gw_project_rules_VERILATOR_CPP_FLAGS})
+  set(_verilator_ld_flags ${gw_project_rules_VERILATOR_LD_FLAGS})
 
-    add_custom_command(
+  add_custom_command(
         OUTPUT
             ${_prj_name}.mem_file_list
         COMMAND
@@ -328,8 +328,8 @@ function (gw_project_rules)
         VERBATIM
     )
 
-    if(CMAKE_BUILD_TYPE STREQUAL "fpga")
-        gw_project_rules_vivado(
+  if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+    gw_project_rules_vivado(
             TOP_MODULE
                 ${_top_module}
             PROJECT_NAME
@@ -339,8 +339,8 @@ function (gw_project_rules)
             MEM_FILE_LIST
                 ${_prj_name}.mem_file_list
         )
-    else()
-        gw_project_rules_verilator(
+  else()
+    gw_project_rules_verilator(
             TOP_MODULE
                 ${_top_module}
             PROJECT_NAME
@@ -354,7 +354,7 @@ function (gw_project_rules)
             VERILATOR_LD_FLAGS
                 ${_verilator_ld_flags}
         )
-    endif()
+  endif()
 endfunction()
 
 add_subdirectory(hello_world)
@@ -365,9 +365,10 @@ add_subdirectory(fatfs_test)
 add_subdirectory(audio_dac_test)
 add_subdirectory(ym2149_dac_test)
 if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-    add_subdirectory(stsound_test)
+  add_subdirectory(stsound_test)
 endif()
 add_subdirectory(picorv_dma_sys_test_ext)
 add_subdirectory(dual_port_ram_test)
 add_subdirectory(usb_hid_sys_test)
-add_subdirectory(qspi_flash_test)
+add_subdirectory(spiflash_test)
+

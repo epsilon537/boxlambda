@@ -3,7 +3,11 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: qspiflash
+  name: spiflash
+
+dependencies:
+  # Path dependency.
+  wbxbar: { path: "../wbxbar" }
 
 sources:
   - target: verilator
@@ -11,7 +15,7 @@ sources:
      - lint.vlt
   - target: any(verilator, vivado)
     files:
-     - ../../../sub/qspiflash/rtl/qflexpress.v
+     - ../../../sub/qspiflash/rtl/spixpress.v
 
 
 

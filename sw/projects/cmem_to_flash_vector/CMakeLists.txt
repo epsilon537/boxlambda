@@ -11,7 +11,7 @@ target_link_options(cmem_to_flash_vector
       "LINKER:--defsym=__cmem_size=${CMEM_SIZE}"
       "LINKER:--defsym=__dmem_size=${DMEM_SIZE}"
       "LINKER:--gc-sections"
-      -T${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem.ld
+      -T${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld
       "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/cmem_to_flash_vector.map"
 )
 

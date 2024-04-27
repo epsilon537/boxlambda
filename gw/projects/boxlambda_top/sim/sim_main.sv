@@ -18,12 +18,11 @@ module sim_main #(
     output wire         sdspi_mosi,
     input  wire         sdspi_miso,
     input  wire         sdspi_card_detect,
-    // QSPI Flash interface
-    output wire         qspi_cs_n,
-    output wire  [ 3:0] qspi_dq_out,
-    input  wire  [ 3:0] qspi_dq_in,
-    output wire         qspi_sck,
-    output wire  [ 1:0] qspi_mod,
+    // Flash SPI interface
+    output wire         spiflash_cs_n,
+    output wire         spiflash_mosi,
+    input  wire         spiflash_miso,
+    output wire         spiflash_sck,
     // USB HID, two ports.
     input  wire         usb0_dm_i,
     input  wire         usb0_dp_i,
@@ -73,7 +72,7 @@ module sim_main #(
       .exit           (sim_jtag_exit)
   );
 
-  top dut (
+  boxlambda_top dut (
       .ext_clk_100(clk_i),
       .ext_rst_n(rst_ni),
       .tck(sim_jtag_tck),
@@ -96,12 +95,11 @@ module sim_main #(
       .sdspi_mosi(sdspi_mosi),
       .sdspi_miso(sdspi_miso),
       .sdspi_card_detect_n(~sdspi_card_detect),
-      // QSPI Flash interface
-      .qspi_cs_n(qspi_cs_n),
-      .qspi_dq_out(qspi_dq_out),
-      .qspi_dq_in(qspi_dq_in),
-      .qspi_sck(qspi_sck),
-      .qspi_mod(qspi_mod),
+      // Flash SPI interface
+      .spiflash_cs_n(spiflash_cs_n),
+      .spiflash_mosi(spiflash_mosi),
+      .spiflash_miso(spiflash_miso),
+      .spiflash_sck(spiflash_sck),
       // UART and GPIO
       .uart_rx(uart_rx),
       .uart_tx(uart_tx),

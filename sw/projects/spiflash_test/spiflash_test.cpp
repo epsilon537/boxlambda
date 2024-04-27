@@ -32,7 +32,7 @@ void _init(void) {
   mtime_start();
 }
 
-//_exit is executed by the picolibc exit function. 
+//_exit is executed by the picolibc exit function.
 //An implementation has to be provided to be able to user assert().
 void	_exit (int status) {
 	while (1);
@@ -63,27 +63,42 @@ int main(void) {
 
   {
     static FLASHDRVR flashdrvr;
-    printf("flash id: 0x%x\n", flashdrvr.flashid());
+
+    printf("Reading one byte from FLASHBASE+0x800000:\n");
+    volatile char x = *(volatile char *)(FLASHBASE+0x800000);
+    printf("Read back value = 0x%x\n", x);
 
     static const int TEST_STR_LEN=13;
     static const char testStr[TEST_STR_LEN] = "Hello World.";
 
-    printf("Writing to FLASHBASE:\n");
-    flashdrvr.write(FLASHBASE, TEST_STR_LEN, testStr);
+    printf("Writing to FLASHBASE+0x800000:\n");
+    flashdrvr.write(FLASHBASE+0x800000, TEST_STR_LEN, testStr);
 
-    printf("Reading back from FLASHBASE:\n");
+    for (int ii=0; ii<TEST_STR_LEN; ++ii) {
+      printf("Written [%d]: 0x%x\n", ii, testStr[ii]);
+    }
+
+    printf("Reading back from FLASHBASE+0x800000:\n");
 
     static char readbackStr[TEST_STR_LEN+1] = "             ";
-    memcpy(readbackStr, (const char*)FLASHBASE, TEST_STR_LEN);
+    memcpy(readbackStr, (const char*)(FLASHBASE+0x800000), TEST_STR_LEN);
 
-    printf("Read back string: %s\n", readbackStr);
-    
+    for (int ii=0; ii<TEST_STR_LEN; ++ii) {
+      printf("Read back [%d]: 0x%x\n", ii, readbackStr[ii]);
+    }
+
+    memcpy(readbackStr, (const char*)(FLASHBASE+0x800000), TEST_STR_LEN);
+
+    for (int ii=0; ii<TEST_STR_LEN; ++ii) {
+      printf("Read back [%d]: 0x%x\n", ii, readbackStr[ii]);
+    }
+
     if (strncmp(readbackStr, testStr, TEST_STR_LEN) == 0) {
       printf("Test Successful.\n");
     } else {
       printf("Strings don't match!\n");
       return -1;
-    } 
+    }
   }
 
   return 0;

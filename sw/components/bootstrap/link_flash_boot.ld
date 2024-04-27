@@ -16,8 +16,9 @@ __emem_size = 256m; /*256MB external memory.*/
 __heap_size = 128m; /*of which 128MB is used as heap currently.*/
 
 /*flash memory section.*/
-__flash = 0x11400000; /*0x1100000 + 4MB for the bitstream*/
-__flash_size = 12m; /*16MB flash memory minus 4mb reserved for the bitstream*/
+__flash = 0x11400000; /*0x1100000 is base of flash memory + 4MB offset for the bitstream*/
+__flash_size = 4m; /*Allow 4MB of flash memory, i.e. the range 0x11400000-0x11800000, for software images.*/
+/*This still leaves 0x11800000 0x12000000 (8mb) available for other non-volatile data storage.*/
 
 /*What follows is derived from picolibc.ld.*/
 

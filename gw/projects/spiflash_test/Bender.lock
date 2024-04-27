@@ -31,10 +31,10 @@ packages:
     - ibex_wb_core
     - litedram
     - picorv_dma
-    - qspiflash
     - reset_ctrl
     - riscv-dbg
     - sdspi
+    - spiflash
     - usb_hid_host
     - vera
     - wb_dp_ram
@@ -80,12 +80,6 @@ packages:
     source:
       Path: ../../components/boxlambda_soc/../../components/picorv_dma
     dependencies: []
-  qspiflash:
-    revision: null
-    version: null
-    source:
-      Path: ../../components/boxlambda_soc/../../components/qspiflash
-    dependencies: []
   reset_ctrl:
     revision: null
     version: null
@@ -107,6 +101,13 @@ packages:
     source:
       Path: ../../components/boxlambda_soc/../../components/sdspi
     dependencies: []
+  spiflash:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/boxlambda_soc/../../components/spiflash
+    dependencies:
+    - wbxbar
   usb_hid_host:
     revision: null
     version: null

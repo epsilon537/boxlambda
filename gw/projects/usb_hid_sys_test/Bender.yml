@@ -9,7 +9,7 @@ dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
   usb_hid_device: { path: "../../components/usb_hid_device" }
-  
+
 sources:
   - target: constraints
     files:
@@ -28,7 +28,7 @@ sources:
       USB_HID:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../top/rtl/top.sv
+      - ../boxlambda_top/rtl/boxlambda_top.sv
   - target: arty-a7-100
     defines:
       VRAM_SIZE_BYTES: 131072
@@ -43,11 +43,11 @@ sources:
       USB_HID: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../top/rtl/top.sv
+      - ../boxlambda_top/rtl/boxlambda_top.sv
   - target: verilator
     files:
       - sim/sim_main.cpp
       - sim/sim_main.sv
       - lint.vlt
-            
+
 

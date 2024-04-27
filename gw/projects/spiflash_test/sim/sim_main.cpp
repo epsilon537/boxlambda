@@ -32,11 +32,9 @@ const char *DEV_RANDOM = "/dev/urandom";
 const unsigned FLASH_SW_IMG_OFFSET = 0x400000;
 
 bool tracing_enable = false;
-bool prev_xip_mode = false;
-bool prev_quad_mode = false;
 
 // QSPI Flash co-simulation from qspiflash.
-std::unique_ptr<FLASHSIM> flash{new FLASHSIM()};
+std::unique_ptr<FLASHSIM> flash{new FLASHSIM(24/*lglen*/, false/*debug*/, 0/*rddelay*/, 0/*ndummy*/)};
 
 // Uart co-simulation from wbuart32.
 std::unique_ptr<UARTSIM> uart{new UARTSIM(0)};
@@ -83,12 +81,28 @@ static void tick(void) {
     if (tracing_enable)
       tfp->dump(contextp->time());
 
+    {
+      // Feed our model's spi flash signals to the flash co-simulator.
+      // Convert from qspi interface expected by flashsim to single spi mosi/miso.
+      int spiflash_dat = top->spiflash_mosi;
+      spiflash_dat = (*flash)(top->spiflash_cs_n, top->spiflash_sck, spiflash_dat);
+      top->spiflash_miso = (spiflash_dat>>1)&1;
+    }
+
     // Low phase
     top->clk_i = 0;
     contextp->timeInc(1);
     top->eval();
     if (tracing_enable)
       tfp->dump(contextp->time());
+
+    {
+      // Feed our model's spi flash signals to the flash co-simulator.
+      // Convert from qspi interface expected by flashsim to single spi mosi/miso.
+      int spiflash_dat = top->spiflash_mosi;
+      spiflash_dat = (*flash)(top->spiflash_cs_n, top->spiflash_sck, spiflash_dat);
+      top->spiflash_miso = (spiflash_dat>>1)&1;
+    }
   }
 
   // Feed our model's uart_tx signal and baud rate to the UART co-simulator.
@@ -108,22 +122,6 @@ static void tick(void) {
     uart->clear_rx_string();
   }
 
-  // Feed our model's qspi flash signal to the flash co-simulator.
-  top->qspi_dq_in = (*flash)(top->qspi_cs_n, top->qspi_sck, top->qspi_dq_out);
-
-//  bool new_xip_mode = flash->xip_mode();
-//
-//  if (new_xip_mode != prev_xip_mode) {
-//      printf("XIP mode change: old: %d, new: %d\n", prev_xip_mode, new_xip_mode);
-//      prev_xip_mode = new_xip_mode;
-//  }
-
-  bool new_quad_mode = flash->quad_mode();
-
-  if (new_quad_mode != prev_quad_mode) {
-      printf("Quad mode change: old: %d, new: %d\n", prev_quad_mode, new_quad_mode);
-      prev_quad_mode = new_quad_mode;
-  }
 }
 
 int main(int argc, char **argv, char **env) {
@@ -188,14 +186,11 @@ int main(int argc, char **argv, char **env) {
 
 //  flash->debug(true);
   if (!flash_img_filename) {
-    flash->load(DEV_RANDOM);
+    flash->load(0, DEV_RANDOM);
   } else {
     printf("Flash SW Image File: %s\n", flash_img_filename);
     flash->load(FLASH_SW_IMG_OFFSET, flash_img_filename);
   }
-
-//  printf("Flash XIP mode: %d\n", flash->xip_mode());
-  printf("Flash Quad mode: %d\n", flash->quad_mode());
 
   // Trace file
   if (tracing_enable) {
@@ -211,8 +206,8 @@ int main(int argc, char **argv, char **env) {
   // Take the system out of reset.
   top->rst_ni = 1;
 
-  // When not in interactive mode, simulate for 500000000 timeprecision periods
-  while (interactive_mode || (contextp->time() < 500000000)) {
+  // When not in interactive mode, simulate for 100000000 timeprecision periods
+  while (interactive_mode || (contextp->time() < 100000000)) {
     // Evaluate model
     tick();
   }

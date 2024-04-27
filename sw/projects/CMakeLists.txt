@@ -46,6 +46,6 @@ add_subdirectory(stsound_test)
 add_subdirectory(picorv_dma_sys_test_ext)
 add_subdirectory(dual_port_ram_test)
 add_subdirectory(usb_hid_sys_test)
-add_subdirectory(qspi_flash_test)
+add_subdirectory(spiflash_test)
 add_subdirectory(cmem_to_flash_vector)
 

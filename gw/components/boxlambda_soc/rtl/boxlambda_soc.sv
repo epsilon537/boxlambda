@@ -9,7 +9,7 @@ module boxlambda_soc #(
     parameter YM2149_ACTIVE = 1,
     parameter PICORV_ACTIVE = 1,
     parameter USB_HID_ACTIVE = 1,
-    parameter QUAD_SPI_FLASH_ACTIVE = 1,
+    parameter SPIFLASH_ACTIVE = 1,
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""
 ) (
@@ -26,9 +26,9 @@ module boxlambda_soc #(
     input  wire        tdi,
     output wire        tdo,
 `endif
-    output wire        pll_locked_led,       //PLL locked indication.
-    output wire        init_done_led,        //LiteDRAM initialization done indication.
-    output wire        init_err_led,         //LiteDRAM initialization error indication.
+    output wire        pll_locked_led,      //PLL locked indication.
+    output wire        init_done_led,       //LiteDRAM initialization done indication.
+    output wire        init_err_led,        //LiteDRAM initialization error indication.
 `ifdef SYNTHESIS
     /*The simulation build doesn't export DDR pins.*/
     output wire [13:0] ddram_a,
@@ -59,12 +59,12 @@ module boxlambda_soc #(
     output wire        sdspi_mosi,
     input  wire        sdspi_miso,
     input  wire        sdspi_card_detect_n,
-    // Quad SPI interface
-    output wire        qspi_sck,
-    output wire        qspi_cs_n,
-    output wire [ 1:0] qspi_mod,
-    output wire [ 3:0] qspi_dat_o,
-    input  wire [ 3:0] qspi_dat_i,
+
+    // Flash SPI interface
+    output wire spiflash_sck,
+    output wire spiflash_cs_n,
+    output wire spiflash_mosi,
+    input  wire spiflash_miso,
 
     // USB HID, two ports.
     input  wire usb0_dm_i,
@@ -994,9 +994,10 @@ module boxlambda_soc #(
     end
   endgenerate
 
-  //Quad SPI Flash Core
+  //Flash SPI Core
   generate
-    if (QUAD_SPI_FLASH_ACTIVE) begin : GENERATE_QUAD_SPI_FLASH_MODULE
+    if (SPIFLASH_ACTIVE) begin : GENERATE_SPIFLASH_MODULE
+      wire o_spiflash_sck;
       wire flash_wb_cyc;
       wire flash_wb_stb;
       wire flash_cfg_stb;
@@ -1021,9 +1022,13 @@ module boxlambda_soc #(
       assign shared_bus_wbs[FLASH_USR_S].dat_s = flash_wb_dat_s;
       assign shared_bus_wbs[FLASH_CTRL_S].dat_s = flash_wb_dat_s;
 
-      qflexpress qflexpress_inst (
-          .i_clk(sys_clk),
+      spixpress #(
+          .OPT_PIPE(1'b0),
+          .OPT_CFG (1'b1)
+      ) spixpress_inst (
+          .i_clk  (sys_clk),
           .i_reset(ndm_reset),
+
           //This is a hack: These are actually two WB ports with all signals shared
           //except the STB signal.
           .i_wb_cyc(flash_wb_cyc),
@@ -1037,17 +1042,38 @@ module boxlambda_soc #(
           .o_wb_ack(flash_wb_ack),
           .o_wb_data(flash_wb_dat_s),
           //
-          .o_qspi_sck(qspi_sck),
-          .o_qspi_cs_n(qspi_cs_n),
-          .o_qspi_mod(qspi_mod),
-          .o_qspi_dat(qspi_dat_o),
-          .i_qspi_dat(qspi_dat_i)
+          .o_spi_cs_n(spiflash_cs_n),
+          .o_spi_sck(o_spiflash_sck),
+          .o_spi_mosi(spiflash_mosi),
+          .i_spi_miso(spiflash_miso)
       );
+
+`ifdef VERILATOR
+      assign spiflash_sck = o_spiflash_sck & ~sys_clk;
+`else
+      /* When o_spiflash_sck is enabled, the ODDR primitive in the
+       * configuration below outputs an inverted sys_clk signal on
+       * the o_spiflash_sck pin. This ensures that mosi and miso are
+       * stable on the rising edge of o_spiflash_sck. This is what the
+       * flash device expects.*/
+      ODDR #(
+          .DDR_CLK_EDGE("OPPOSITE_EDGE"),
+          .INIT(1'b0),  // Initial value of Q: 1'b0 or 1'b1
+          .SRTYPE("SYNC")  // Set/Reset type: "SYNC" or "ASYNC"
+      ) ODDR_inst (
+          .Q(spiflash_sck),  // 1-bit DDR output
+          .C(sys_clk),  // 1-bit clock input
+          .CE(1'b1),  // 1-bit clock enable input
+          .D1(1'b0),  // 1-bit data input (positive edge)
+          .D2(o_spiflash_sck),  // 1-bit data input (negative edge)
+          .R(ndm_reset),  // 1-bit reset
+          .S(1'b0)  // 1-bit set
+      );
+`endif
     end else begin
-      assign qspi_sck   = 1'b0;
-      assign qspi_cs_n  = 1'b1;
-      assign qspi_dat_o = 4'b1111;
-      assign qspi_mod   = 2'b00;
+      assign spiflash_sck  = 1'b0;
+      assign spiflash_cs_n = 1'b1;
+      assign spiflash_mosi = 1'b0;
     end
   endgenerate
 endmodule

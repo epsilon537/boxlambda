@@ -1,0 +1,7 @@
+packages:
+  wbxbar:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/wbxbar
+    dependencies: []

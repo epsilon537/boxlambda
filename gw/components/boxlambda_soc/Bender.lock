@@ -56,12 +56,6 @@ packages:
     source:
       Path: ../../components/picorv_dma
     dependencies: []
-  qspiflash:
-    revision: null
-    version: null
-    source:
-      Path: ../../components/qspiflash
-    dependencies: []
   reset_ctrl:
     revision: null
     version: null
@@ -83,6 +77,13 @@ packages:
     source:
       Path: ../../components/sdspi
     dependencies: []
+  spiflash:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/spiflash
+    dependencies:
+    - wbxbar
   usb_hid_host:
     revision: null
     version: null

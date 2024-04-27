@@ -4,7 +4,7 @@
 package:
   # The name of the package. Required.
   name: cdc_cells
-  
+
 sources:
   - target: verilator
     files:

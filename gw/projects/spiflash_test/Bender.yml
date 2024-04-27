@@ -3,7 +3,7 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: qspi_flash_test
+  name: spiflash_test
 
 dependencies:
   # Path dependency.
@@ -24,10 +24,10 @@ sources:
       DRAM: ~
       VERA: ~
       PICORV_DMA: ~
-      QSPI_FLASH: ~
+      SPIFLASH: ~
       # TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../top/rtl/top.sv
+      - ../boxlambda_top/rtl/boxlambda_top.sv
   - target: arty-a7-100
     defines:
       VRAM_SIZE_BYTES: 131072
@@ -39,14 +39,14 @@ sources:
       DRAM: ~
       VERA: ~
       PICORV_DMA: ~
-      QSPI_FLASH: ~
+      SPIFLASH: ~
       # TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../top/rtl/top.sv
+      - ../boxlambda_top/rtl/boxlambda_top.sv
   - target: verilator
     files:
       - sim/sim_main.cpp
-      - ../top/sim/sim_main.sv
-      - ../top/lint.vlt
+      - ../boxlambda_top/sim/sim_main.sv
+      - ../boxlambda_top/lint.vlt
 
 
