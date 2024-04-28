@@ -546,7 +546,7 @@ module boxlambda_soc #(
       .RV32M(ibex_pkg::RV32MFast),
       .RV32B(ibex_pkg::RV32BBalanced),
       .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA),
-      .BranchTargetALU(1'b1),
+      .BranchTargetALU(1'b0),
       .WritebackStage(1'b0),
       .DbgTriggerEn(1'b1),
       .DmHaltAddr({2'b00, SHARED_BUS_SLAVE_ADDRS[(DM_S+1)*AW-1:DM_S*AW], 2'b00} + 32'h00000800),
