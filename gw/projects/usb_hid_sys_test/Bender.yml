@@ -13,7 +13,7 @@ dependencies:
 sources:
   - target: constraints
     files:
-      - ../top/constrs/boxlambda_soc.xdc
+      - ../boxlambda_top/constrs/boxlambda_soc.xdc
   - target: arty-a7-35
     defines:
       VRAM_SIZE_BYTES: 65536
