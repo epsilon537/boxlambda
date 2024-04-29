@@ -24,6 +24,7 @@ sources:
       DRAM: ~
       VERA: ~
       PICORV_DMA: ~
+      SPIFLASH: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_top/rtl/boxlambda_top.sv
@@ -38,6 +39,7 @@ sources:
       DRAM: ~
       VERA: ~
       PICORV_DMA: ~
+      SPIFLASH: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_top/rtl/boxlambda_top.sv

@@ -34,8 +34,8 @@ void _init(void) {
 
 //_exit is executed by the picolibc exit function.
 //An implementation has to be provided to be able to user assert().
-void	_exit (int status) {
-	while (1);
+void  _exit (int status) {
+  while (1);
 }
 #ifdef __cplusplus
 }
@@ -50,6 +50,9 @@ int main(void) {
   gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
   gpio_set_direction(&gpio1, 0x00000000); //4 inputs
 
+  //We need SDRAM in this build because the flashdriver requires
+  //heap memory, which is located in SDRAM.
+
   /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {
     printf("SDRAM init OK.\n");
@@ -61,44 +64,39 @@ int main(void) {
 
   printf("Starting test...\n");
 
-  {
-    static FLASHDRVR flashdrvr;
+  //Create the flashdriver object.
+  static FLASHDRVR flashdrvr;
 
-    printf("Reading one byte from FLASHBASE+0x800000:\n");
-    volatile char x = *(volatile char *)(FLASHBASE+0x800000);
-    printf("Read back value = 0x%x\n", x);
+  printf("Reading one byte from FLASHBASE+0x800000:\n");
+  volatile char x = *(volatile char *)(FLASHBASE+0x800000);
+  printf("Read back value = 0x%x\n", x);
 
-    static const int TEST_STR_LEN=13;
-    static const char testStr[TEST_STR_LEN] = "Hello World.";
+  //Read the flash id
+  printf("flash id: 0x%x\n", flashdrvr.flashid());
 
-    printf("Writing to FLASHBASE+0x800000:\n");
-    flashdrvr.write(FLASHBASE+0x800000, TEST_STR_LEN, testStr);
+  static const int TEST_STR_LEN=13;
+  static const char testStr[TEST_STR_LEN] = "Hello World.";
 
-    for (int ii=0; ii<TEST_STR_LEN; ++ii) {
-      printf("Written [%d]: 0x%x\n", ii, testStr[ii]);
-    }
+  printf("Writing to FLASHBASE+0x800000:\n");
+  flashdrvr.write(FLASHBASE+0x800000, TEST_STR_LEN, testStr);
 
-    printf("Reading back from FLASHBASE+0x800000:\n");
+  for (int ii=0; ii<TEST_STR_LEN; ++ii) {
+    printf("Written [%d]: 0x%x\n", ii, testStr[ii]);
+  }
 
-    static char readbackStr[TEST_STR_LEN+1] = "             ";
-    memcpy(readbackStr, (const char*)(FLASHBASE+0x800000), TEST_STR_LEN);
+  static char readbackStr[TEST_STR_LEN+1] = "             ";
+  printf("Reading back from FLASHBASE+0x800000:\n");
+  memcpy(readbackStr, (const char*)(FLASHBASE+0x800000), TEST_STR_LEN);
 
-    for (int ii=0; ii<TEST_STR_LEN; ++ii) {
-      printf("Read back [%d]: 0x%x\n", ii, readbackStr[ii]);
-    }
+  for (int ii=0; ii<TEST_STR_LEN; ++ii) {
+    printf("Read back [%d]: 0x%x\n", ii, readbackStr[ii]);
+  }
 
-    memcpy(readbackStr, (const char*)(FLASHBASE+0x800000), TEST_STR_LEN);
-
-    for (int ii=0; ii<TEST_STR_LEN; ++ii) {
-      printf("Read back [%d]: 0x%x\n", ii, readbackStr[ii]);
-    }
-
-    if (strncmp(readbackStr, testStr, TEST_STR_LEN) == 0) {
-      printf("Test Successful.\n");
-    } else {
-      printf("Strings don't match!\n");
-      return -1;
-    }
+  if (strncmp(readbackStr, testStr, TEST_STR_LEN) == 0) {
+    printf("Test Successful.\n");
+  } else {
+    printf("Strings don't match!\n");
+    return -1;
   }
 
   return 0;

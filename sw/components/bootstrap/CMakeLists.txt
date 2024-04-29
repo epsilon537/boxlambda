@@ -17,6 +17,11 @@ target_include_directories(bootstrap
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
+#We don't want to used the save/restore prologue/epilogue function optimization in the bootstrap component.
+#These functions end up in different code sections and end up confusing the crt0 early startup code.
+#We also turns off the tree-loop-distribute-patterns for the bootstrap component. We don't want the compiler
+#to detect memory copy / memory set patterns in the early bootstrap code and replace them with calls to
+#memcpy/memset.
 target_compile_options(bootstrap
  PRIVATE
   -g

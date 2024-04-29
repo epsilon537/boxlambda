@@ -33,7 +33,7 @@ const unsigned FLASH_SW_IMG_OFFSET = 0x400000;
 
 bool tracing_enable = false;
 
-// QSPI Flash co-simulation from qspiflash.
+// SPI Flash co-simulation object from qspiflash repo.
 std::unique_ptr<FLASHSIM> flash{new FLASHSIM(24/*lglen*/, false/*debug*/, 0/*rddelay*/, 0/*ndummy*/)};
 
 // Uart co-simulation from wbuart32.
@@ -71,6 +71,8 @@ static void cleanup() {
 
 // Advance simulation by one clock cycle
 static void tick(void) {
+  int spiflash_dat;
+
   // Tick twice: Input clock is 100MHz, BoxLambda's system clock runs at 50MHz.
   //->Advance two input clock cycles at a time.
   for (int ii = 0; ii < 2; ii++) {
@@ -81,13 +83,11 @@ static void tick(void) {
     if (tracing_enable)
       tfp->dump(contextp->time());
 
-    {
-      // Feed our model's spi flash signals to the flash co-simulator.
-      // Convert from qspi interface expected by flashsim to single spi mosi/miso.
-      int spiflash_dat = top->spiflash_mosi;
-      spiflash_dat = (*flash)(top->spiflash_cs_n, top->spiflash_sck, spiflash_dat);
-      top->spiflash_miso = (spiflash_dat>>1)&1;
-    }
+    // Feed our model's spi flash signals to the flash co-simulator.
+    // Convert from qspi interface expected by flashsim to single spi mosi/miso.
+    spiflash_dat = top->spiflash_mosi;
+    spiflash_dat = (*flash)(top->spiflash_cs_n, top->spiflash_sck, spiflash_dat);
+    top->spiflash_miso = (spiflash_dat>>1)&1;
 
     // Low phase
     top->clk_i = 0;
@@ -96,13 +96,11 @@ static void tick(void) {
     if (tracing_enable)
       tfp->dump(contextp->time());
 
-    {
-      // Feed our model's spi flash signals to the flash co-simulator.
-      // Convert from qspi interface expected by flashsim to single spi mosi/miso.
-      int spiflash_dat = top->spiflash_mosi;
-      spiflash_dat = (*flash)(top->spiflash_cs_n, top->spiflash_sck, spiflash_dat);
-      top->spiflash_miso = (spiflash_dat>>1)&1;
-    }
+    // Feed our model's spi flash signals to the flash co-simulator.
+    // Convert from qspi interface expected by flashsim to single spi mosi/miso.
+    spiflash_dat = top->spiflash_mosi;
+    spiflash_dat = (*flash)(top->spiflash_cs_n, top->spiflash_sck, spiflash_dat);
+    top->spiflash_miso = (spiflash_dat>>1)&1;
   }
 
   // Feed our model's uart_tx signal and baud rate to the UART co-simulator.
@@ -121,7 +119,6 @@ static void tick(void) {
 
     uart->clear_rx_string();
   }
-
 }
 
 int main(int argc, char **argv, char **env) {
@@ -184,12 +181,18 @@ int main(int argc, char **argv, char **env) {
     break;
   }
 
-//  flash->debug(true);
+  //  flash->debug(true);
   if (!flash_img_filename) {
-    flash->load(0, DEV_RANDOM);
+    if (flash->load(0, DEV_RANDOM) < 0) {
+      printf("Error loading dev_random.\n");
+      return -1;
+    }
   } else {
     printf("Flash SW Image File: %s\n", flash_img_filename);
-    flash->load(FLASH_SW_IMG_OFFSET, flash_img_filename);
+    if (flash->load(FLASH_SW_IMG_OFFSET, flash_img_filename) < 0) {
+      printf("Error loading dev_random.\n");
+      return -1;
+    }
   }
 
   // Trace file
@@ -229,3 +232,4 @@ int main(int argc, char **argv, char **env) {
 
   return 0;
 }
+

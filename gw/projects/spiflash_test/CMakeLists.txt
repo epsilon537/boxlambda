@@ -25,7 +25,7 @@ endif()
 
 #Add testcase.
 add_test(NAME spiflash_test_test
-    COMMAND ./Vmodel
+    COMMAND ./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test.bin
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 

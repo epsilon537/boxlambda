@@ -1,10 +1,13 @@
-#Startup vector code intended for initial CMEM RAM contents. The code branches to flash-based startup code.
+# This SW project builds the startup vector code intended for initial CMEM RAM contents.
+# The Ibex RISCV CPU boots from 0x80, which is located in CMEM.
+# The vector code initializes CPU registers and branches to flash-based startup code (0x11400000).
+# The same vector.S code is used as for SW builds that are linked to boot from CMEM.
 
 add_executable(cmem_to_flash_vector
     EXCLUDE_FROM_ALL
       ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/vectors.S)
 
-#Link-for-internal-memory implies linking in the bootstrap object library.
+#Externally define some linker symbols: _start, __cmem_size and __dmem_size.
 target_link_options(cmem_to_flash_vector
     PRIVATE
       "LINKER:--defsym=_start=0x11400000"
@@ -15,7 +18,7 @@ target_link_options(cmem_to_flash_vector
       "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/cmem_to_flash_vector.map"
 )
 
-#.mem file generation commands.
+#.mem and .bin file generation commands.
 add_custom_command(
     TARGET
       cmem_to_flash_vector

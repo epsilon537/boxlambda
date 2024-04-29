@@ -1,4 +1,13 @@
 /*
+ * Epsilon, April 2024:
+ * This version of crt0 is derived from picolibc's crt0 implementation
+ * for RISCV.
+ * The original file can be found here:
+ *
+ * https://github.com/picolibc/picolibc/blob/main/picocrt/machine/riscv/crt0.c
+ *
+ * This is the original license header:
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  *
  * Copyright © 2020 Sebastian Meyer
@@ -35,30 +44,36 @@
 
 #include "crt0.h"
 
+/* BoxLambda: Early CRT0 shouldn't have libc dependencies because
+ * libc is part of a yet-to-be-relocated linker section.
+ * Instead, CRT0 relies on a simple local implementation of
+ * memcpy and memset for section relocation and BSS clearing.
+ */
 static void local_memcpy(char *dst, char *src, unsigned num_bytes);
 static void local_memset(char *dst, char val, unsigned num_bytes);
 
 /* After the architecture-specific chip initialization is done, this
- * function initializes the data and bss segments. Note that a static
- * block of TLS data is carefully interleaved with the regular data
- * and bss segments in picolibc.ld so that this one operation
- * initializes both. Then it runs the application code, starting with
- * any initialization functions, followed by the main application
- * entry point and finally any cleanup functions
- */
+ * function initializes the data and bss segments.
+ * This function is placed in the .init section. For SW images,
+ * linked to boot from flash, this code will execute directly from
+ * flash memory.*/
 static void __attribute__((used)) __section(".init") _cstart(void) {
-  /*BoxLambda: Copy code segment if needed.*/
+  /* BoxLambda: Copy code segment if needed. For SW images linked
+   * to boot from CMEM, __code_start and __code_source will be the
+   * same and no code relocation is performed. */
   if (__code_start != __code_source) {
     local_memcpy(__code_start, __code_source, (uintptr_t)__code_size);
   }
 
+  /*data segment*/
   local_memcpy(__data_start, __data_source, (uintptr_t)__data_size);
+  /*(DMEM) BSS segment*/
   local_memset(__bss_start, '\0', (uintptr_t)__bss_size);
+  /*CMEM BSS segment*/
   local_memset(__cmem_bss_start, '\0', (uintptr_t)__cmem_bss_size);
 
-/* BoxLambda: code and data has now been relocated, we can now make
- * non-local function calls.
- */
+/* BoxLambda: code and data has now been relocated, at this point we
+ * can make non-local function calls. */
 #ifdef PICOLIBC_TLS
   _set_tls(__tls_base);
 #endif
@@ -104,9 +119,11 @@ static void __attribute__((used)) __section(".init") _cstart(void) {
 #endif
 }
 
-/* BoxLambda: we're booting from flash. The C library hasn't been
- * relocated to CMEM yet so we need a local variant of memcpy.
- */
+/* BoxLambda:
+ * Place these two functions in .init section so they execute
+ * from flash memory (in case the SW image is linked to boot
+ * from flash at least. For SW images linked to boot from CMEM,
+ * the .init section is placed in CMEM).*/
 static void __attribute__((used)) __section(".init")
     local_memcpy(char *dst, char *src, unsigned num_bytes) {
   char *end = dst + num_bytes;
@@ -116,9 +133,6 @@ static void __attribute__((used)) __section(".init")
   }
 }
 
-/* BoxLambda: we're booting from flash. The C library hasn't been
- * relocated to CMEM yet so we need a local variant of memset.
- */
 static void __attribute__((used)) __section(".init")
     local_memset(char *dst, char val, unsigned num_bytes) {
   char *end = dst + num_bytes;

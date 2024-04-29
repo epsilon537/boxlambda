@@ -1,13 +1,24 @@
-/*The picolibc link script (starting after the ENTRY directive below) expects these symbols to be set.*/
-/*'cmem' or 'code memory' contains code and read-only data. You can still put bss data in cmem by assigning it
- *to the .cmem_bss section. I did not (yet?) add a .cmem_data section.*/
+/* This link script is derived from the picolibc link script. It creates a SW image that
+ * boots from flash memory.
+ * In this type of image, all load sections are placed in flash memory. From there, the code
+ * sections are relocated to CMEM. The data sections are relocated to DMEM.
+ *
+ * The link script (starting after the ENTRY directive below) expects the following symbols
+ * to be set:
+ *
+ * 'cmem' or 'code memory' contains code. You can also put BSS data in
+ * cmem by assigning it to the .cmem_bss section. I did not (yet) add a .cmem_data section.
+ */
 __cmem = 0x00000000;
-/*__cmem_size is passed in as a linker option*/
-/*'dmem' or 'data memory' contains data segments, bss and stack. You can put code in dmem by assigning it
- *to the .dmem_text section.*/
-__dmem = 0x00020000;
-/*__dmem_size is passed in as a linker option*/
+/*__cmem_size is no longer specified here. It is now passed in as a linker option*/
 
+/* 'dmem' or 'data memory' contains data segments, bss and stack. You can put code in dmem
+ * by assigning it
+ * to the .dmem_text section.*/
+__dmem = 0x00020000;
+/*__dmem_size is no longer specified here. It is now passed in as a linker option*/
+
+/* stack:*/
 __stack_size = 512;
 
 /*'emem' the the external memory section. The heap will be placed here.*/
@@ -15,12 +26,11 @@ __emem = 0x20000000;
 __emem_size = 256m; /*256MB external memory.*/
 __heap_size = 128m; /*of which 128MB is used as heap currently.*/
 
-/*flash memory section.*/
+/* flash memory section:*/
 __flash = 0x11400000; /*0x1100000 is base of flash memory + 4MB offset for the bitstream*/
-__flash_size = 4m; /*Allow 4MB of flash memory, i.e. the range 0x11400000-0x11800000, for software images.*/
-/*This still leaves 0x11800000 0x12000000 (8mb) available for other non-volatile data storage.*/
-
-/*What follows is derived from picolibc.ld.*/
+/* Allow 4MB of flash memory, i.e. the range 0x11400000-0x11800000, for software images.
+ * This still leaves 0x11800000 0x12000000 (8mb) available for other non-volatile data storage.*/
+__flash_size = 4m;
 
 ENTRY(_start)
 
@@ -34,6 +44,7 @@ MEMORY
 
 SECTIONS
 {
+    /*Place the stack at the end of dmem.*/
     PROVIDE(__stack = ORIGIN(dmem) + LENGTH(dmem));
 
     .flash : {
@@ -77,20 +88,18 @@ SECTIONS
 
         PROVIDE(__code_end = .);
     } >cmem AT>flash
+    PROVIDE(__code_source = LOADADDR(.text));
+    PROVIDE(__code_size = __code_end - __code_start );
 
    /*BSS data can be mapped to cmem by assigning it to this segment.*/
     .cmem_bss (NOLOAD) : {
         *(.cmem_bss)
         __cmem_bss_end = .;
     } >cmem
-
     PROVIDE(__cmem_bss_start = ADDR(.cmem_bss));
     PROVIDE(__cmem_bss_size = __cmem_bss_end - __cmem_bss_start );
 
-    PROVIDE(__code_source = LOADADDR(.text));
-    PROVIDE(__code_size = __code_end - __code_start );
-
-/*
+   /*
     * Data values which are preserved across reset
     */
     .preserve (NOLOAD) : {
@@ -131,7 +140,7 @@ SECTIONS
     PROVIDE(__data_start = ADDR(.data));
     PROVIDE(__data_source = LOADADDR(.data));
 
-    /* Thread local initialized data. This gets
+   /* Thread local initialized data. This gets
     * space allocated as it is expected to be placed
     * in dmem to be used as a template for TLS data blocks
     * allocated at runtime. We're slightly abusing that
@@ -205,7 +214,7 @@ SECTIONS
 
     /* Define a stack region to make sure it fits in memory */
     .stack (NOLOAD) : {
-       . += (DEFINED(__stack_size) ? __stack_size : 0x800);
+       . += __stack_size;
     } >dmem
 
     /* Throw away C++ exception handling information */
@@ -217,3 +226,4 @@ SECTIONS
         *(.ARM.exidx*)
     }
 }
+

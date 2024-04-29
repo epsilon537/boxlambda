@@ -1,5 +1,13 @@
 /*
+ * Epsilon, April 2024:
+ * This version of crt0 is derived from picolibc's crt0 implementation
+ * for RISCV.
+ * The original file can be found here:
  * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * https://github.com/picolibc/picolibc/blob/main/picocrt/machine/riscv/crt0.c
+ *
+ * This is the original license header:
  *
  * Copyright © 2019 Keith Packard
  *
@@ -33,14 +41,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*Based on picolibc's crt0.h, with modifications for BoxLambda*/
-
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <picotls.h>
 
-/*Boxlambda:*/
+/*Boxlambda added:*/
 extern char __code_source[];
 extern char __code_start[];
 extern char __code_size[];
@@ -49,6 +55,7 @@ extern char __data_source[];
 extern char __data_start[];
 extern char __data_end[];
 extern char __data_size[];
+/*Boxlambda added:*/
 extern char __cmem_bss_start[];
 extern char __cmem_bss_size[];
 extern char __bss_start[];
