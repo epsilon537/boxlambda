@@ -18,11 +18,11 @@ make hello_world_load
 
 Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
 
-Start OpenOCD with the *digilent_arty_a7_[35|100].cfg* config file.
+Start OpenOCD with the *arty_a7_[35|100]t.openocd.cfg* config file.
 
 Note: If OpenOCD can't connect to the USB JTAG adapter, your USB device permissions might not be set correctly. Check the *User-Level Access to the Arty A7 USB JTAG Adapter* section above for a fix.
 ```
-openocd -f <boxlambda root directory>/scripts/digilent_arty_a7_[35|100].cfg
+openocd -f <boxlambda root directory>/scripts/arty_a7_[35|100]t.openocd.cfg
 
 Info : clock speed 1000 kHz
 Info : JTAG tap: riscv.cpu tap/device found: 0x0362d093 (mfg: 0x049 (Xilinx), part: 0x362d, ver: 0x0)
@@ -74,9 +74,9 @@ Launch the Verilator model with the *-d* flag to indicate that a debugger will b
 ```
 ./Vmodel -d
 ```
-Start OpenOCD with the *verilator_riscv_dbg.cfg* config file:
+Start OpenOCD with the *verilator.openocd.cfg* config file:
 ```
-openocd -f <boxlambda root directory>/scripts/verilator_riscv_dbg.cfg
+openocd -f <boxlambda root directory>/scripts/verilator.openocd.cfg
 Open On-Chip Debugger 0.11.0+dev-02372-g52177592f (2022-08-10-14:11)
 Licensed under GNU GPL v2
 For bug reports, read

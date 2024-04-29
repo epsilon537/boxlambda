@@ -17,8 +17,6 @@ OpenOCD is an open-source software package used to interface with a hardware deb
 
 *OpenOCD General Setup*
 
-BoxLambda uses the RISCV fork of OpenOCD: [https://github.com/riscv/riscv-openocd](https://github.com/riscv/riscv-openocd)
-
 ### The RISCV-DBG component
 
 RISCV-dbg is part of the [*PULP* platform](https://github.com/pulp-platform) and depends on three additional GitHub repositories that are part of this platform:
@@ -102,7 +100,7 @@ boxlambda
 
 ```
 
-The OpenOCD configuration file for JTAG Debugging on Verilator is checked into the *scripts/* directory: [scripts/verilator_riscv_dbg.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/verilator_riscv_dbg.openocd.cfg)
+The OpenOCD configuration file for JTAG Debugging on Verilator is checked into the *scripts/* directory: [scripts/verilator.openocd.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/verilator.openocd.cfg)
 
 To summarize:
 
@@ -134,8 +132,8 @@ On the OpenOCD side, the transport protocol for this Debug-Access-via-FPGA-scan-
 
 The OpenOCD configuration file for JTAG Debugging on Arty A7 is checked into the *scripts/* directory:
 
-- Arty-A7-35T: [scripts/digilent_arty_a7_35.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7_35.openocd.cfg)
-- Art-A7-100T: [scripts/digilent_arty_a7_100.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/digilent_arty_a7_100.openocd.cfg)
+- Arty-A7-35T: [scripts/arty_a7_35t.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/arty_a7_35t.openocd.cfg)
+- Art-A7-100T: [scripts/arty_a7_100t.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/arty_a7_100t.openocd.cfg)
 
 To summarize:
 

@@ -1,6 +1,6 @@
 ## The BoxLambda SoC Component
 
-- **BoxLambda SoC Component in the BoxLambda Directory Tree**: 
+- **BoxLambda SoC Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/boxlambda_soc](https://github.com/epsilon537/boxlambda/tree/master/gw/components/boxlambda_soc)
 
 - **BoxLambda SoC Module**:
@@ -24,8 +24,8 @@ module boxlambda_soc #(
     ) (
     input  wire       ext_clk_100, //100MHz external clock.
     input  wire       ext_rst_n,   //External reset pin.
-    
-`ifdef VERILATOR  
+
+`ifdef VERILATOR
   /*These JTAG signals are not used on FPGA (they are used in simulation).
    *On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the jtag tap module dmi_bscane_tap.sv.
    */
@@ -57,16 +57,16 @@ module boxlambda_soc #(
     output wire ddram_reset_n,
 `endif
     // VGA interface
-    output wire  [3:0] vga_r,       
-    output wire  [3:0] vga_g,       
-    output wire  [3:0] vga_b,       
-    output wire        vga_hsync,   
-    output wire        vga_vsync,   
+    output wire  [3:0] vga_r,
+    output wire  [3:0] vga_g,
+    output wire  [3:0] vga_b,
+    output wire        vga_hsync,
+    output wire        vga_vsync,
     // SDSPI interface
-    output wire  sdspi_cs_n, 
-    output wire  sdspi_sck, 
+    output wire  sdspi_cs_n,
+    output wire  sdspi_sck,
     output wire  sdspi_mosi,
-    input  wire	 sdspi_miso, 
+    input  wire	 sdspi_miso,
     input  wire  sdspi_card_detect_n,
     // Audio interface
     output wire       audio_out,
@@ -76,7 +76,7 @@ module boxlambda_soc #(
     // Audio interface signals only used in simulation
     output wire [15:0] pcm_out,
     output wire acc1_overflow,
-    output wire acc2_overflow,  
+    output wire acc2_overflow,
 `endif
     // UART and GPIO
     input  wire       uart_rx,
@@ -90,9 +90,9 @@ The [Gateware Build Structure](build_sys_gw_build_struct.md#the-gateware-build-s
 
 ![BoxLambda SoC Component Build Diagram.](assets/BoxLambda_SoC_Component_Build_Diagram.png)
 
-*Build Diagram with BoxLambda SoC component and top.sv.*
+*Build Diagram with BoxLambda SoC component and boxlambda_top.sv.*
 
 Different *gw/project/* builds reference this *boxlambda_soc* component. The project builds differ in the way they instantiate the *boxlambda_soc* module, including or excluding specific subcomponents. Most *gw/projects*
- reference the same [top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/top/rtl/top.sv) module but with a different combination of *defines* in their *Bender.yml* manifest.
+ reference the same [boxlambda_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_top/rtl/boxlambda_top.sv) module but with a different combination of *defines* in their *Bender.yml* manifest.
 
 *Gw/project/* builds also differ in the software program they run on the SoC. This is specified in the *gw/project/*'s CMakefile.
