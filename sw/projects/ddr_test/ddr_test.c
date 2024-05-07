@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "stdio_to_uart.h"
 #include "uart.h"
@@ -52,10 +53,36 @@ void _init(void) {
   set_stdio_to_uart(&uart0);
 }
 
-//_exit is executed by the picolibc exit function. 
+//_exit is executed by the picolibc exit function.
 //An implementation has to be provided to be able to user assert().
 void	_exit (int status) {
 	while (1);
+}
+
+//Adding this specific test because this used to fail.
+static int doubleWriteTest() {
+  void *dst = malloc(sizeof(unsigned));
+  unsigned val1 = 0xffffffff;
+  unsigned val2 = 0x11111111;
+
+  asm inline volatile (
+    "sw %1, 0(%0) \n\t"
+    "sw %2, 0(%0)"
+    :
+    : "r" (dst), "r" (val1), "r" (val2));
+
+  unsigned res = *(volatile int *)dst;
+
+  free(dst);
+
+  if (res != val2) {
+    printf("Double write test failed: Read: 0x%x, expected 0x%x\n", res, val2);
+    return 0;
+  }
+  else {
+    printf("Double write test OK.\n");
+    return 1;
+  }
 }
 
 int main(void) {
@@ -72,10 +99,6 @@ int main(void) {
     printf("This is a simulation.\n");
   else
     printf("This is not a simulation.\n");
-  
-  //while(gpio_get_input(&gpio0) & 0x10) {
-  //  printf(".\n");
- // }
 
   /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {
@@ -84,6 +107,11 @@ int main(void) {
   else {
     printf("SDRAM init failed!\n");
     while(1);
+  }
+
+  if (doubleWriteTest() == 0) {
+    printf("Test failed.\n");
+    while (1);
   }
 
   unsigned long memtest_size = MEMTEST_SIZE;
