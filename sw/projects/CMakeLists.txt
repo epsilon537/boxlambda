@@ -1,4 +1,23 @@
 #Function for SW project builds:
+
+function(add_flash_sw_target _tgt)
+  if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
+    set(_board arty_a7_100t)
+  else()
+    set(_board arty_a7_35t)
+  endif()
+
+  add_custom_target(${_tgt}_flash_sw
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND
+            ${PROJECT_SOURCE_DIR}/scripts/flash_sw.sh ${_board} ${_tgt}.bin
+        COMMENT
+            "Flashing SW to target."
+        VERBATIM
+  )
+endfunction()
+
 #Set link-for-internal-memory settings for given target and add byproduct command generating a .mem file.
 function(link_internal_create_mem_file _tgt _link_script)
   target_link_libraries(${_tgt} bootstrap)

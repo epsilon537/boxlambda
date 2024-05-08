@@ -18,6 +18,8 @@ link_internal_create_mem_file(spiflash_test
 
 target_link_libraries(spiflash_test flashdrvr sdram)
 
+add_flash_sw_target(spiflash_test)
+
 #RAM build variant:
 
 add_executable(spiflash_test_ram

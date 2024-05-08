@@ -21,6 +21,12 @@ function (gw_project_rules_vivado)
   set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
   set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
 
+  if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
+    set(_board arty_a7_100t)
+  else()
+    set(_board arty_a7_35t)
+  endif()
+
   add_custom_command(
         OUTPUT
             ${_prj_name}.constraints_file_list
@@ -135,45 +141,32 @@ function (gw_project_rules_vivado)
             COMMENT
                 "Bitstream + SW image target."
         )
-
-    #Build Vivado command string for the prg_bitstream tcl script.
-    vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
-            -bitstream ./project.runs/impl_1/${_top_module}.sw.bit)
-
-    #Build Vivado command string for the flash_bitstream tcl script.
-    vivado_cmd(flash_cmd ${PROJECT_SOURCE_DIR}/scripts/flash_bitstream.tcl
-            -bin ./project.runs/impl_1/${_top_module}.sw.bit.bin)
+    set(_bit_file ./project.runs/impl_1/${_top_module}.sw.bit)
   else()
-    #Build Vivado command string for the prg_bitstream tcl script.
-    vivado_cmd(load_cmd ${PROJECT_SOURCE_DIR}/scripts/prg_bitstream.tcl
-            -bitstream ./project.runs/impl_1/${_top_module}.bit)
-
-    #Build Vivado command string for the flash_bitstream tcl script.
-    vivado_cmd(flash_cmd ${PROJECT_SOURCE_DIR}/scripts/flash_bitstream.tcl
-            -bin ./project.runs/impl_1/${_top_module}.bit.bin)
+    set(_bit_file ./project.runs/impl_1/${_top_module}.bit)
   endif()
 
   #Custom command executing the vivado prg_bitstream command string.
   add_custom_target(${_prj_name}_load
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        COMMAND
-            bash -c ${load_cmd}
-        COMMENT
-            "Loading bitstream to target."
-        VERBATIM
-    )
+          WORKING_DIRECTORY
+              ${CMAKE_CURRENT_BINARY_DIR}
+          COMMAND
+              ${PROJECT_SOURCE_DIR}/scripts/load_gw.sh ${_board} ${_bit_file}
+          COMMENT
+              "Loading bitstream to target."
+          VERBATIM
+      )
 
   #Custom command executing the vivado flash_bitstream command string.
-  add_custom_target(${_prj_name}_flash
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        COMMAND
-            bash -c ${flash_cmd}
-        COMMENT
-            "Flashing bitstream to target."
-        VERBATIM
-    )
+  add_custom_target(${_prj_name}_flash_gw
+          WORKING_DIRECTORY
+              ${CMAKE_CURRENT_BINARY_DIR}
+          COMMAND
+              ${PROJECT_SOURCE_DIR}/scripts/flash_gw.sh ${_board} ${_bit_file}.bin
+          COMMENT
+              "Flashing bitstream to target."
+          VERBATIM
+      )
 endfunction()
 
 #Function grouping gateware project build rules for Verilator builds.
