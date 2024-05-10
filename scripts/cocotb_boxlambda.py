@@ -15,13 +15,14 @@ def genDumpModule(buildDir, top):
         f.write('initial begin\n')
         f.write('   $dumpfile("waves.fst");\n')
         f.write('   $dumpvars;\n')
+        f.write('   #1;\n')
         f.write('end\n')
         f.write('endmodule\n')
 
     return buildDir+"/dumpWaves.v"
 
 #Pass in list of verilog source, the filename of the CocoTB Python test module, the top-level module
-#and optionally a specific testcase to run (by default all tests in the test module will be run). 
+#and optionally a specific testcase to run (by default all tests in the test module will be run).
 def test_runner(verilog_sources, test_module_filename, top, testcase=None):
     hdl_toplevel_lang = "verilog"
     sim = "icarus"
@@ -37,7 +38,8 @@ def test_runner(verilog_sources, test_module_filename, top, testcase=None):
         vhdl_sources= [],
         hdl_toplevel= top,
         always=True,
-        build_dir=build_dir
+        build_dir=build_dir,
+        build_args=['-s', 'cocotb_iverilog_dump']
     )
 
     res = runner.test(hdl_toplevel=top, test_module=test_module+",", testcase=testcase, plusargs=['-fst'])

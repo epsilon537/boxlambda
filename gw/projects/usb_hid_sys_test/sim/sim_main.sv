@@ -25,10 +25,10 @@ module sim_main #(
     output wire         sdspi_mosi,
     input  wire         sdspi_miso,
     input  wire         sdspi_card_detect,
-    // SPI Flash interface
+    // Flash SPI interface
     output wire         spiflash_cs_n,
-    output wire  [ 3:0] spiflash_dq_out,
-    input  wire  [ 3:0] spiflash_dq_in,
+    output wire         spiflash_mosi,
+    input  wire         spiflash_miso,
     output wire         spiflash_sck,
     // Audio interface
     output wire         audio_out,
@@ -220,10 +220,10 @@ module sim_main #(
       .sdspi_mosi(sdspi_mosi),
       .sdspi_miso(sdspi_miso),
       .sdspi_card_detect_n(~sdspi_card_detect),
-      // SPI Flash interface
+      // Flash SPI interface
       .spiflash_cs_n(spiflash_cs_n),
-      .spiflash_dq_out(spiflash_dq_out),
-      .spiflash_dq_in(spiflash_dq_in),
+      .spiflash_mosi(spiflash_mosi),
+      .spiflash_miso(spiflash_miso),
       .spiflash_sck(spiflash_sck),
       // UART and GPIO
       .uart_rx(uart_rx),

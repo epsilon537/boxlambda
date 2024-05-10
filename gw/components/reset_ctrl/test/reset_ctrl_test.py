@@ -90,7 +90,7 @@ async def wb_stall_check(dut):
 #Wishbone word read transaction task.
 async def wb_read(dut, addr):
     await RisingEdge(dut.sys_clk)
-        
+
     dut.wb_adr.value = addr
     dut.wb_sel.value = 0xf
     dut.wb_cyc.value = 1
@@ -108,10 +108,10 @@ async def wb_read(dut, addr):
     stall_check_task.kill()
     assert dut.wb_err.value == 0
     res = dut.wb_dat_r.value
-    
+
     await RisingEdge(dut.sys_clk)
     dut.wb_cyc.value = 0
-    
+
     return res
 
 #Wishbone word write transaction task.
@@ -135,7 +135,7 @@ async def wb_write(dut, addr, val):
 
     stall_check_task.kill()
     assert dut.wb_err.value == 0
-    
+
     await RisingEdge(dut.sys_clk)
     dut.wb_cyc.value = 0
 
@@ -148,7 +148,7 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
     dut.wb_cyc.value = 0
     dut.wb_stb.value = 0
     dut.wb_we.value = 0
-	
+
     dut.sys_clk.value = 0
     dut.usb_clk.value = 0
     dut.sys_pll_locked_i.value = 0
@@ -275,9 +275,9 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
 
     #Wishbone triggered DM/NDM reset
     dut._log.info("WB DM/NDM reset test.")
-    assert dut.ndm_reset_o == 0
-    assert dut.dm_reset_o == 0
-    assert dut.usb_reset_o == 0
+    assert dut.ndm_reset_o.value == 0
+    assert dut.dm_reset_o.value == 0
+    assert dut.usb_reset_o.value == 0
 
     ndm_reset_task = cocotb.start_soon(wait_for_ndm_reset(dut))
     dm_reset_task = cocotb.start_soon(wait_for_dm_reset(dut))
@@ -309,9 +309,9 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
 
     #Wishbone triggered USB reset
     dut._log.info("WB USB reset test.")
-    assert dut.ndm_reset_o == 0
-    assert dut.dm_reset_o == 0
-    assert dut.usb_reset_o == 0
+    assert dut.ndm_reset_o.value == 0
+    assert dut.dm_reset_o.value == 0
+    assert dut.usb_reset_o.value == 0
 
     ndm_reset_task = cocotb.start_soon(wait_for_ndm_reset(dut))
     dm_reset_task = cocotb.start_soon(wait_for_dm_reset(dut))
@@ -356,6 +356,6 @@ if __name__ == "__main__":
                        proj_path / "../../cdc_cells/rtl/pls2tgl.sv",
                        proj_path / "../../cdc_cells/rtl/tgl2pls.sv"]
     #Defined in scripts/cocotb_boxlambda.py
-    test_runner(verilog_sources=verilog_sources, 
-                test_module_filename=__file__, 
+    test_runner(verilog_sources=verilog_sources,
+                test_module_filename=__file__,
                 top="reset_ctrl")

@@ -3,5 +3,5 @@ packages:
     revision: null
     version: null
     source:
-      Path: ../../components/wbxbar
+      Path: ../wbxbar
     dependencies: []

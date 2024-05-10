@@ -1,6 +1,42 @@
 `verilator_config
 
-// DESCRIPTION: Verilator output: Waivers generated with --waiver-output
+lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's SEL generates 30 bits."
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'interface0_bte'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'interface0_cti'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin0_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin0_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin1_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin1_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin2_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin2_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin3_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin3_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin4_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin4_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin5_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin5_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin6_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin6_request'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin7_ce'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_roundrobin7_request'"
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
 
@@ -1824,9 +1860,9 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator SHIFTL expects 4 bits on the LHS, but LHS's CONST '1'h1' generates 1 bits."
-
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator SHIFTL expects 4 bits on the LHS, but LHS's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -1894,17 +1930,15 @@ lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
-lint_off -rule WIDTHTRUNC -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's VARREF 'litedramcore_wishbone_adr' generates 30 bits."
+lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator ASSIGNDLY expects 14 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator NEQ expects 4 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits."
-
-lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
 lint_off -rule WIDTHEXPAND -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Operator CASE expects 2 bits on the Case Item, but Case Item's CONST '1'h1' generates 1 bits."
 
@@ -2714,44 +2748,6 @@ lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" 
 
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'interface0_bank_bus_dat_w'[31:1]"
 
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin0_ce'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin0_request'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin1_ce'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin1_request'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin2_ce'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin2_request'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin3_ce'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin3_request'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin4_ce'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin4_request'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin5_ce'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin5_request'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin6_ce'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin6_request'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin7_ce'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_litedramcore_roundrobin7_request'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'litedramcore_wishbone_adr'[29:14]"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_wishbone_bte'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Signal is not used: 'litedramcore_wishbone_cti'"
-
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'slice_proxy0'[2:0]"
 
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Bits of signal are not used: 'slice_proxy1'[2:0]"
@@ -3147,16 +3143,6 @@ lint_off -rule CASEINCOMPLETE -file "*/gw/components/litedram/sim/rtl/litedram.v
 lint_off -rule CASEINCOMPLETE -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Case values incompletely covered (example pattern 0x2)"
 
 lint_off -rule CASEINCOMPLETE -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Case values incompletely covered (example pattern 0x19)"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
-
-lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
 
 lint_off -rule COMBDLY -file "*/gw/components/litedram/sim/rtl/litedram.v" -match "Non-blocking assignment '<=' in combinational logic process*"
 
