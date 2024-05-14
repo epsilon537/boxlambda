@@ -9,12 +9,12 @@ target_sources(flashdrvr
     byteswap.cpp
 )
 
-#R_FLASHCFG: Address of the configuation register of the flash core.
+#R_FLASHCFG: Address of the configuration register of the flash core.
 #R_FLASH: Base address of flash memory.
 #R_FLASH_LEN: Length of flash memory.
 target_compile_definitions(flashdrvr
  PUBLIC
-  -DR_FLASHCFG=0x100000C0 -DR_FLASH=0x11000000 -DR_FLASH_LEN=0x01000000
+  -DR_FLASHCFG=0x100000C0 -DR_FLASH=0x11000000 -DR_FLASH_LEN=0x01000000 -DFLASH_ACCESS
 )
 
 target_compile_options(flashdrvr
