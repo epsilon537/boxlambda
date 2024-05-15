@@ -209,8 +209,8 @@ int main(int argc, char **argv, char **env) {
   // Take the system out of reset.
   top->rst_ni = 1;
 
-  // When not in interactive mode, simulate for 100000000 timeprecision periods
-  while (interactive_mode || (contextp->time() < 100000000)) {
+  // When not in interactive mode, simulate for 150000000 timeprecision periods
+  while (interactive_mode || (contextp->time() < 150000000)) {
     // Evaluate model
     tick();
   }

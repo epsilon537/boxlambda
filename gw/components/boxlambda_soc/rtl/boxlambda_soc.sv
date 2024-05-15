@@ -997,7 +997,6 @@ module boxlambda_soc #(
   //Flash SPI Core
   generate
     if (SPIFLASH_ACTIVE) begin : GENERATE_SPIFLASH_MODULE
-      wire o_spiflash_sck;
       wire flash_wb_cyc;
       wire flash_wb_stb;
       wire flash_cfg_stb;
@@ -1022,13 +1021,9 @@ module boxlambda_soc #(
       assign shared_bus_wbs[FLASH_USR_S].dat_s = flash_wb_dat_s;
       assign shared_bus_wbs[FLASH_CTRL_S].dat_s = flash_wb_dat_s;
 
-      spixpress #(
-          .OPT_PIPE(1'b0),
-          .OPT_CFG (1'b1)
-      ) spixpress_inst (
-          .i_clk  (sys_clk),
+      spiflash spiflash_inst (
+          .i_clk(sys_clk),
           .i_reset(ndm_reset),
-
           //This is a hack: These are actually two WB ports with all signals shared
           //except the STB signal.
           .i_wb_cyc(flash_wb_cyc),
@@ -1043,33 +1038,10 @@ module boxlambda_soc #(
           .o_wb_data(flash_wb_dat_s),
           //
           .o_spi_cs_n(spiflash_cs_n),
-          .o_spi_sck(o_spiflash_sck),
+          .o_spi_sck(spiflash_sck),
           .o_spi_mosi(spiflash_mosi),
           .i_spi_miso(spiflash_miso)
       );
-
-`ifdef VERILATOR
-      assign spiflash_sck = o_spiflash_sck & ~sys_clk;
-`else
-      /* When o_spiflash_sck is enabled, the ODDR primitive in the
-       * configuration below outputs an inverted sys_clk signal on
-       * the o_spiflash_sck pin. This ensures that mosi and miso are
-       * stable on the rising edge of o_spiflash_sck. This is what the
-       * flash device expects.*/
-      ODDR #(
-          .DDR_CLK_EDGE("OPPOSITE_EDGE"),
-          .INIT(1'b0),  // Initial value of Q: 1'b0 or 1'b1
-          .SRTYPE("SYNC")  // Set/Reset type: "SYNC" or "ASYNC"
-      ) ODDR_inst (
-          .Q(spiflash_sck),  // 1-bit DDR output
-          .C(sys_clk),  // 1-bit clock input
-          .CE(1'b1),  // 1-bit clock enable input
-          .D1(1'b0),  // 1-bit data input (positive edge)
-          .D2(o_spiflash_sck),  // 1-bit data input (negative edge)
-          .R(ndm_reset),  // 1-bit reset
-          .S(1'b0)  // 1-bit set
-      );
-`endif
     end else begin
       assign spiflash_sck  = 1'b0;
       assign spiflash_cs_n = 1'b1;

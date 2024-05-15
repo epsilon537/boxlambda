@@ -1,7 +1,1 @@
-packages:
-  wbxbar:
-    revision: null
-    version: null
-    source:
-      Path: ../wbxbar
-    dependencies: []
+packages: {}

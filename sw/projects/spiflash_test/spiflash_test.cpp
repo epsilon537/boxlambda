@@ -92,12 +92,34 @@ int main(void) {
     printf("Read back [%d]: 0x%x\n", ii, readbackStr[ii]);
   }
 
-  if (strncmp(readbackStr, testStr, TEST_STR_LEN) == 0) {
-    printf("Test Successful.\n");
-  } else {
-    printf("Strings don't match!\n");
-    return -1;
+ /*Do it again, to make sure we haven't been reading back stale data from a previous test.*/
+
+  static const char testStr2[TEST_STR_LEN] = ".dlroW olleH";
+
+  printf("Writing to FLASHBASE+0x800000:\n");
+  flashdrvr.write(FLASHBASE+0x800000, TEST_STR_LEN, testStr2);
+
+  for (int ii=0; ii<TEST_STR_LEN; ++ii) {
+    printf("Written [%d]: 0x%x\n", ii, testStr2[ii]);
   }
 
-  return 0;
+  static char readbackStr2[TEST_STR_LEN+1] = "             ";
+  printf("Reading back from FLASHBASE+0x800000:\n");
+  memcpy(readbackStr2, (const char*)(FLASHBASE+0x800000), TEST_STR_LEN);
+
+  for (int ii=0; ii<TEST_STR_LEN; ++ii) {
+    printf("Read back [%d]: 0x%x\n", ii, readbackStr2[ii]);
+  }
+
+  int res = -1;
+
+  if ((strncmp(readbackStr, testStr, TEST_STR_LEN) == 0) && (strncmp(readbackStr2, testStr2, TEST_STR_LEN) == 0)) {
+    printf("Test Successful.\n");
+    res = 0;
+  } else {
+    printf("Strings don't match!\n");
+  }
+
+  return res;
 }
+
