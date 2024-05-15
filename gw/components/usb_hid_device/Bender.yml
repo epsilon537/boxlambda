@@ -49,7 +49,7 @@ sources:
      - ../../../sub/usb_hid_device/async_fifo/rtl/rptr_empty.v
      - ../../../sub/usb_hid_device/async_fifo/rtl/sync_ptr.v
 
-    
+
 
 
 

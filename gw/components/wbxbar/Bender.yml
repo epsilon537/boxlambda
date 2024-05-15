@@ -4,12 +4,12 @@
 package:
   # The name of the package. Required.
   name: wbxbar
-  
+
 sources:
   - target: verilator
     files:
      - lint.vlt
-  
+
   - target: wbxbar
     files:
      - rtl/wbxbar_ooc.sv
@@ -21,6 +21,7 @@ sources:
       - ../../../sub/wb2axip/rtl/wbxbar.v
       - ../../../sub/wb2axip/rtl/addrdecode.v
       - ../../../sub/wb2axip/rtl/skidbuffer.v
+      - ../../../sub/wb2axip/rtl/wbarbiter.v
 
 
 

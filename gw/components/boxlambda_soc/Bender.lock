@@ -77,6 +77,13 @@ packages:
     source:
       Path: ../../components/sdspi
     dependencies: []
+  spiflash:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/spiflash
+    dependencies:
+    - wbxbar
   usb_hid_host:
     revision: null
     version: null

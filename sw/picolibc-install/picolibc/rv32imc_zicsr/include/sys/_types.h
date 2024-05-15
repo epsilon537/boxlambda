@@ -50,12 +50,21 @@ SUCH DAMAGE.
 #define __need_size_t
 #define __need_wint_t
 #include <stddef.h>
+
+/* The Arm Compiler doesn't define wint_t as part of stddef.h so
+ * define it here.
+ */
+#if defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6100100)
+typedef __WINT_TYPE__ wint_t;
+#endif
+
 #include <newlib.h>
 #include <sys/config.h>
 #include <machine/_types.h>
 
 #ifndef __machine_blkcnt_t_defined
 typedef long __blkcnt_t;
+typedef __int64_t __blkcnt64_t;
 #endif
 
 #ifndef __machine_blksize_t_defined
@@ -114,6 +123,7 @@ typedef unsigned long __ino_t;
 #else
 typedef unsigned short __ino_t;
 #endif
+typedef __uint64_t      __ino64_t;
 #endif
 
 #ifndef __machine_mode_t_defined
@@ -140,6 +150,7 @@ __extension__ typedef long long _off64_t;
 typedef _off64_t __off_t;
 #else
 typedef _off_t __off_t;
+typedef __uint64_t __off64_t;
 #endif
 
 typedef _off64_t __loff_t;

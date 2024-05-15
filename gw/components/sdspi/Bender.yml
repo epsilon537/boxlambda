@@ -4,7 +4,7 @@
 package:
   # The name of the package. Required.
   name: sdspi
-  
+
 sources:
   - target: verilator
     files:

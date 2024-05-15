@@ -147,6 +147,12 @@ extern FILE *const stdin;
 extern FILE *const stdout;
 extern FILE *const stderr;
 
+/* The stdin, stdout, and stderr symbols are described as macros in the C
+ * standard. */
+#define stdin stdin
+#define stdout stdout
+#define stderr stderr
+
 #define EOF	(-1)
 
 #define	_IOFBF	0		/* setvbuf should set fully buffered */
@@ -282,6 +288,17 @@ int	ferror(FILE *__stream);
 #define BUFSIZ 512
 #endif
 
+/*
+ * We don't have any way of knowing any underlying POSIX limits,
+ * so just use a reasonably small values here
+ */
+#ifndef FOPEN_MAX
+#define FOPEN_MAX 32
+#endif
+#ifndef FILENAME_MAX
+#define FILENAME_MAX 1024
+#endif
+
 __extension__ typedef _fpos_t fpos_t;
 int fgetpos(FILE *stream, fpos_t *pos);
 FILE *fopen(const char *path, const char *mode) __malloc_like_with_free(fclose, 1);
@@ -339,10 +356,83 @@ __printf_float(float f)
 	return u.u;
 }
 
-#ifdef PICOLIBC_FLOAT_PRINTF_SCANF
-#define printf_float(x) __printf_float(x)
+#if !defined(PICOLIBC_DOUBLE_PRINTF_SCANF) && \
+    !defined(PICOLIBC_FLOAT_PRINTF_SCANF) && \
+    !defined(PICOLIBC_LONG_LONG_PRINTF_SCANF) && \
+    !defined(PICOLIBC_INTEGER_PRINTF_SCANF) && \
+    !defined(PICOLIBC_MINIMAL_PRINTF_SCANF)
+#if defined(_FORMAT_DEFAULT_FLOAT)
+#define PICOLIBC_FLOAT_PRINTF_SCANF
+#elif defined(_FORMAT_DEFAULT_LONG_LONG)
+#define PICOLIBC_LONG_LONG_PRINTF_SCANF
+#elif defined(_FORMAT_DEFAULT_INTEGER)
+#define PICOLIBC_INTEGER_PRINTF_SCANF
+#elif defined(_FORMAT_DEFAULT_MINIMAL)
+#define PICOLIBC_MINIMAL_PRINTF_SCANF
 #else
-#define printf_float(x) ((double) (x))
+#define PICOLIBC_DOUBLE_PRINTF_SCANF
+#endif
+#endif
+
+#if defined(PICOLIBC_MINIMAL_PRINTF_SCANF)
+# define printf_float(x) ((double) (x))
+# if defined(_WANT_MINIMAL_IO_LONG_LONG) || __SIZEOF_LONG_LONG__ == __SIZEOF_LONG__
+#  define _HAS_IO_LONG_LONG
+# endif
+# ifdef _WANT_IO_C99_FORMATS
+#  define _HAS_IO_C99_FORMATS
+# endif
+#elif defined(PICOLIBC_INTEGER_PRINTF_SCANF)
+# define printf_float(x) ((double) (x))
+# if defined(_WANT_IO_LONG_LONG) || __SIZEOF_LONG_LONG__ == __SIZEOF_LONG__
+#  define _HAS_IO_LONG_LONG
+# endif
+# ifdef _WANT_IO_POS_ARGS
+#  define _HAS_IO_POS_ARGS
+# endif
+# ifdef _WANT_IO_C99_FORMATS
+#  define _HAS_IO_C99_FORMATS
+# endif
+# ifdef _WANT_IO_PERCENT_B
+#  define _HAS_IO_PERCENT_B
+# endif
+#elif defined(PICOLIBC_LONG_LONG_PRINTF_SCANF)
+# define printf_float(x) ((double) (x))
+# define _HAS_IO_LONG_LONG
+# ifdef _WANT_IO_POS_ARGS
+#  define _HAS_IO_POS_ARGS
+# endif
+# ifdef _WANT_IO_C99_FORMATS
+#  define _HAS_IO_C99_FORMATS
+# endif
+# ifdef _WANT_IO_PERCENT_B
+#  define _HAS_IO_PERCENT_B
+# endif
+#elif defined(PICOLIBC_FLOAT_PRINTF_SCANF)
+# define printf_float(x) __printf_float(x)
+# define _HAS_IO_LONG_LONG
+# define _HAS_IO_POS_ARGS
+# define _HAS_IO_C99_FORMATS
+# ifdef _WANT_IO_PERCENT_B
+#  define _HAS_IO_PERCENT_B
+# endif
+# define _HAS_IO_FLOAT
+#else
+# define printf_float(x) ((double) (x))
+# define _HAS_IO_LONG_LONG
+# define _HAS_IO_POS_ARGS
+# define _HAS_IO_C99_FORMATS
+# define _HAS_IO_DOUBLE
+# ifdef _WANT_IO_PERCENT_B
+#  define _HAS_IO_PERCENT_B
+# endif
+# ifdef _WANT_IO_LONG_DOUBLE
+#  define _HAS_IO_LONG_DOUBLE
+# endif
+#endif
+
+#if __SSP_FORTIFY_LEVEL > 0
+#include <ssp/stdio.h>
 #endif
 
 #endif /* _STDIO_H_ */

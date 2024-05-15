@@ -8,11 +8,11 @@ package:
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
-  
+
 sources:
   - target: constraints
     files:
-      - ../top/constrs/boxlambda_soc.xdc
+      - ../boxlambda_top/constrs/boxlambda_soc.xdc
   - target: arty-a7-35
     defines:
       VRAM_SIZE_BYTES: 65536
@@ -24,9 +24,10 @@ sources:
       DRAM: ~
       VERA: ~
       PICORV_DMA: ~
+      SPIFLASH: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../top/rtl/top.sv
+      - ../boxlambda_top/rtl/boxlambda_top.sv
   - target: arty-a7-100
     defines:
       VRAM_SIZE_BYTES: 131072
@@ -38,13 +39,14 @@ sources:
       DRAM: ~
       VERA: ~
       PICORV_DMA: ~
+      SPIFLASH: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../top/rtl/top.sv
+      - ../boxlambda_top/rtl/boxlambda_top.sv
   - target: verilator
     files:
       - sim/sim_main.cpp
-      - ../top/sim/sim_main.sv
-      - ../top/lint.vlt
-            
+      - ../boxlambda_top/sim/sim_main.sv
+      - ../boxlambda_top/lint.vlt
+
 

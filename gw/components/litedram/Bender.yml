@@ -4,11 +4,11 @@
 package:
   # The name of the package. Required.
   name: litedram
-  
+
 sources:
   - target: verilator
     files:
-    - lint.vlt  
+    - lint.vlt
     - sim/rtl/litedram.v
     - common/rtl/litedram_wrapper.sv
   - target: vivado

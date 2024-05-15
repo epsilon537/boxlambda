@@ -15,7 +15,7 @@ wbw_transactions = []
 async def sys_clk_div(dut):
     while True:
         await RisingEdge(dut.sys_clkx2)
-        dut.sys_clk.value = not dut.sys_clk.value 
+        dut.sys_clk.value = 0 if (dut.sys_clk.value == 1) else 1
 
 async def init(dut):
     global wbr_transactions, wbw_transactions
@@ -50,7 +50,7 @@ async def init(dut):
     dut.wbm_stall_i.value = 0
     dut.wbm_err_i.value = 0
 
-    await Timer(1, units="ns")  # wait 1 clock
+    await Timer(10, units="ns")  # wait 10 clocks
 
 #Function loading given binary file into a list of 32-bit words.
 def loadBinaryIntoWords(binfile):
@@ -63,7 +63,7 @@ def loadBinaryIntoWords(binfile):
                 break
             word = struct.unpack("I", bytes)[0]
             words.append(word)
-    
+
     return words
 
 #Asynchronous timeout task. The test fails if this task isn't killed before the timeout is reached.
@@ -82,7 +82,7 @@ async def wb_stall_check(dut):
 #Wishbone word read transaction
 async def wb_read(dut, addr):
     await RisingEdge(dut.sys_clk)
-        
+
     dut.wbs_adr.value = addr
     dut.wbs_sel.value = 0xf
     dut.wbs_cyc.value = 1
@@ -100,10 +100,10 @@ async def wb_read(dut, addr):
     stall_check_task.kill()
     assert dut.wbs_err.value == 0
     res = dut.wbs_dat_r.value
-    
+
     await RisingEdge(dut.sys_clk)
     dut.wbs_cyc.value = 0
-    
+
     return res
 
 #Wishone word write transaction
@@ -127,7 +127,7 @@ async def wb_write(dut, addr, val):
 
     stall_check_task.kill()
     assert dut.wbs_err.value == 0
-    
+
     await RisingEdge(dut.sys_clk)
     dut.wbs_cyc.value = 0
 
@@ -140,20 +140,20 @@ async def wb_slave_emulator(dut, delay_ack):
             dut._log.info("WB: stb detected")
 
             if dut.wbm_we_o.value == 1:
-                dut._log.info("WB write, addr: 0x%x, data: 0x%x, sel: 0x%x", 
+                dut._log.info("WB write, addr: 0x%x, data: 0x%x, sel: 0x%x",
                               int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o.value))
-                wbw_transactions.append(('write', int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o)))       
+                wbw_transactions.append(('write', int(dut.wbm_adr_o.value), int(dut.wbm_dat_o.value), int(dut.wbm_sel_o.value)))
             else:
                 #Return random data to read transactions
                 dat_r = random.randint(0, 0xffffffff)
                 dut.wbm_dat_i.value = dat_r
-                dut._log.info("WB read, addr: 0x%x, data: 0x%x, sel: 0x%x", 
-                              int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o))
-                wbr_transactions.append(('read', int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o)))
+                dut._log.info("WB read, addr: 0x%x, data: 0x%x, sel: 0x%x",
+                              int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o.value))
+                wbr_transactions.append(('read', int(dut.wbm_adr_o.value), dat_r, int(dut.wbm_sel_o.value)))
 
             await RisingEdge(dut.sys_clk)
 
-            if delay_ack:       
+            if delay_ack:
                 responseDelay = random.randint(0, 10) #Randomly delay ack 0-10 ticks
                 dut._log.info("WB: delaying ack %d ns", responseDelay)
                 await ClockCycles(dut.sys_clk, responseDelay)
@@ -162,7 +162,7 @@ async def wb_slave_emulator(dut, delay_ack):
             dut.wbm_ack_i.value = 1 #ACK
 
             await RisingEdge(dut.sys_clk)
-            
+
             dut.wbm_ack_i.value = 0
             await Timer(1, units="ns")
 
@@ -177,11 +177,11 @@ async def picorv_reset(dut):
     #Read the register
     res = await with_timeout(wb_read(dut, 0x402), 30, 'ns')
     assert res == 0
-    
+
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
     assert dut.picorv_rst_n.value == 1
-    
+
     #Read the register
     res = await with_timeout(wb_read(dut, 0x402), 30, 'ns')
     assert res == 1
@@ -207,14 +207,14 @@ async def wbs_access_to_program_memory(dut):
         #Fill with random data
         pm_data[ii] = random.randint(0, 0xffffffff)
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-    
+
     #Read back from PM memory
     for ii in range(1024):
         res = await with_timeout(wb_read(dut, ii), 30, 'ns')
-        dut._log.info("WB read, addr: 0x%x, data: 0x%x, ref: 0x%x", ii, res, pm_data[ii])
+        dut._log.info("WB read, addr: 0x%x, data: 0x%x, ref: 0x%x", ii, res.integer, pm_data[ii])
         assert int(res) == pm_data[ii]
 
-#Pico write - WBS read access to HIR (Host Interface Registers).        
+#Pico write - WBS read access to HIR (Host Interface Registers).
 @cocotb.test()
 async def pico_wr_wbs_rd(dut):
     await init(dut)
@@ -226,10 +226,10 @@ async def pico_wr_wbs_rd(dut):
     #Write PM memory
     for ii in range(len(pm_data)):
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-    
+
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-    
+
     #Read the last hir register until it becomes non-zero, or until we give up.
     hir15val=0
     retryCount = 0
@@ -256,8 +256,8 @@ async def wbs_wr_pico_rd(dut):
     #Write PM memory
     for ii in range(len(pm_data)):
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-    
-    hir_reg_vals = [0]*16 
+
+    hir_reg_vals = [0]*16
 
     #Write pattern to even registers
     for ii in range(0, 16, 2):
@@ -266,7 +266,7 @@ async def wbs_wr_pico_rd(dut):
 
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-    
+
     #Keep reading the last hir register until it becomes non-zero, or until we give up.
     hir15val=0
     retryCount = 0
@@ -279,7 +279,7 @@ async def wbs_wr_pico_rd(dut):
     #Now read all odd hir register and see if the patterns match
     for ii in range(1, 16, 2):
         res = await with_timeout(wb_read(dut, 0x410+ii), 30, 'ns')
-        dut._log.info("WB read, addr: 0x%x, data: 0x%x, ref: 0x%x", 0x410+ii, res, hir_reg_vals[ii-1])
+        dut._log.info("WB read, addr: 0x%x, data: 0x%x, ref: 0x%x", 0x410+ii, res.integer, hir_reg_vals[ii-1])
         assert int(res) == hir_reg_vals[ii-1]
 
 #Test IRQ in, IRQ out and IRQ ack
@@ -294,10 +294,10 @@ async def irq_in_out_ack(dut):
     #Write PM memory
     for ii in range(len(pm_data)):
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-    
+
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-    
+
     #Wait some time
     await ClockCycles(dut.sys_clk, random.randint(0,100))
 
@@ -342,8 +342,8 @@ async def wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, srcTran
         resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
         if resNew != res:
             res = resNew
-            dut._log.info("hir_reg[3] = %s", res)
-    
+            dut._log.info("hir_reg[3] = %s", res.integer)
+
     #Check the recorded transactions
     assert len(srcTransactions) == numWords
     assert len(dstTransactions) == numWords
@@ -388,20 +388,20 @@ async def wb_to_wb_wordcopy_test(dut):
 
     await init(dut)
 
-    #Load PicoRV program that copies a configurable number of words from 
+    #Load PicoRV program that copies a configurable number of words from
     #a configurable source address to a configurable destination address.
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_single.picobin")
 
     wb_slave_task = cocotb.start_soon(wb_slave_emulator(dut, delay_ack=True))
-    
+
     #Write PM memory
     for ii in range(len(pm_data)):
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-    
+
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-    
+
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)
     #Generate word aligned address values
@@ -434,8 +434,8 @@ async def wb_to_wb_bytecopy_test_helper(dut, numBytes, srcAddr, dstAddr, srcTran
         resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
         if resNew != res:
             res = resNew
-            dut._log.info("hir_reg[3] = %s", res)
-    
+            dut._log.info("hir_reg[3] = %s", res.integer)
+
     #Check the recorded transactions
     assert len(srcTransactions) == numBytes
     assert len(dstTransactions) == numBytes
@@ -460,7 +460,7 @@ async def wb_to_wb_bytecopy_test(dut):
 
     await init(dut)
 
-    #Load PicoRV program that copies a configurable number of bytes from 
+    #Load PicoRV program that copies a configurable number of bytes from
     #a configurable source address to a configurable destination address.
     #One extra ../ because the test runs from the sim_build subdirectory
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_bytecopy_single.picobin")
@@ -470,10 +470,10 @@ async def wb_to_wb_bytecopy_test(dut):
     #Write PM memory
     for ii in range(len(pm_data)):
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-    
+
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-    
+
     #Ask Praxos to copy a number of bytes
     numBytes = random.randint(1, 16)
     srcAddr = random.randint(0x10004000, 0x4fff0000)
@@ -499,10 +499,10 @@ async def picorv_progmem_data_access(dut):
     #Write PM memory
     for ii in range(len(pm_data)):
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-    
+
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-    
+
     dut._log.info("Test: Configuring value to store in progrmem.")
     hir0val = random.randint(1, 0xffffffff)
     await with_timeout(wb_write(dut, 0x410, hir0val), 30, 'ns')
@@ -518,8 +518,8 @@ async def picorv_progmem_data_access(dut):
         resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
         if resNew != res:
             res = resNew
-            dut._log.info("hir_reg[3] = %s", res)
-    
+            dut._log.info("hir_reg[3] = %s", res.integer)
+
     #Check the transaction
     hir1val = await with_timeout(wb_read(dut, 0x411), 30, 'ns')
 
@@ -537,7 +537,7 @@ async def wb_to_wb_wordcopy_burst_test(dut):
     for offset in range(4):
         await init(dut)
 
-        #Load PicoRV program that copies a configurable number of words from 
+        #Load PicoRV program that copies a configurable number of words from
         #a configurable source address to a configurable destination address, using burst mode and
         #byte-offset between source and destination.
         #One extra ../ because the test runs from the sim_build subdirectory
@@ -548,10 +548,10 @@ async def wb_to_wb_wordcopy_burst_test(dut):
         #Write PM memory
         for ii in range(len(pm_data)):
             await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-        
+
         #Write the register taking picorv out of reset
         await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-        
+
         #Ask Praxos to copy a number of words
         numWords = random.randint(1, 16)*16
         #Generate word aligned address values
@@ -563,7 +563,7 @@ async def wb_to_wb_wordcopy_burst_test(dut):
         await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wbr_transactions, wbw_transactions, offset)
 
         wb_slave_task.kill()
-        
+
 #WB Master R/W burst word access, without delays in slave. Read from WB port 0, write to WB port 1.
 @cocotb.test()
 async def wb_to_wb_wordcopy_burst_test_fast(dut):
@@ -572,7 +572,7 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
     for offset in range(4):
         await init(dut)
 
-        #Load PicoRV program that copies a configurable number of words from 
+        #Load PicoRV program that copies a configurable number of words from
         #a configurable source address to a configurable destination address, using burst mode and
         #byte-offset between source and destination.
         pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
@@ -582,10 +582,10 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
         #Write PM memory
         for ii in range(len(pm_data)):
             await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-        
+
         #Write the register taking picorv out of reset
         await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-        
+
         #Ask Praxos to copy a number of words
         numWords = random.randint(1, 16)*16
         #Generate word aligned address values
@@ -597,7 +597,7 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
         await wb_to_wb_wordcopy_test_helper(dut, numWords, srcAddr, dstAddr, wbr_transactions, wbw_transactions, offset)
 
         wb_slave_task.kill()
-        
+
 #WB Master R/W burst word access, on one bus, without delays in slave. Read from and write to WB port 0. Performance test.
 @cocotb.test()
 async def wb_to_wb_wordcopy_burst_test_fast(dut):
@@ -606,7 +606,7 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
     for offset in range(4):
         await init(dut)
 
-        #Load PicoRV program that copies a configurable number of words from 
+        #Load PicoRV program that copies a configurable number of words from
         #a configurable source address to a configurable destination address, using burst mode and
         #byte-offset between source and destination.
         pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_burst_fsm_test.picobin")
@@ -616,10 +616,10 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
         #Write PM memory
         for ii in range(len(pm_data)):
             await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-        
+
         #Write the register taking picorv out of reset
         await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-        
+
         #Ask Praxos to copy a number of words
         numWords = random.randint(1, 16)*16
         #Generate word aligned address values
@@ -628,7 +628,7 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
 
         wbr_transactions = []
         wbw_transactions = []
-        
+
         dut._log.info("Test: Configuring DMA request.")
         dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
 
@@ -648,8 +648,8 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
             resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
             if resNew != res:
                 res = resNew
-                dut._log.info("hir_reg[3] = %s", res)
-        
+                dut._log.info("hir_reg[3] = %s", res.integer)
+
         #Check the recorded transactions
         assert len(wbr_transactions) == numWords
         assert len(wbw_transactions) == numWords
@@ -657,16 +657,16 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
         timeout_task.kill()
 
         wb_slave_task.kill()
-        
+
 #WB Master R/W single word access, on WB port 0, without delays in slave. Performance test.
 @cocotb.test()
 async def wb_to_wb_wordcopy_single_test_fast(dut):
     global wbr_transactions, wbw_transactions
 
-    
+
     await init(dut)
 
-    #Load PicoRV program that copies a configurable number of words from 
+    #Load PicoRV program that copies a configurable number of words from
     #a configurable source address to a configurable destination address, using
     #single/individual word transactions, i.e. non-burst-mode.
     pm_data = loadBinaryIntoWords("../../../../sw/components/picorv_dma/test/picorv_wordcopy_single.picobin")
@@ -676,10 +676,10 @@ async def wb_to_wb_wordcopy_single_test_fast(dut):
     #Write PM memory
     for ii in range(len(pm_data)):
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-    
+
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-    
+
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)*16
     #Generate word aligned address values
@@ -688,7 +688,7 @@ async def wb_to_wb_wordcopy_single_test_fast(dut):
 
     wbr_transactions = []
     wbw_transactions = []
-    
+
     dut._log.info("Test: Configuring DMA request.")
     dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
 
@@ -708,8 +708,8 @@ async def wb_to_wb_wordcopy_single_test_fast(dut):
         resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
         if resNew != res:
             res = resNew
-            dut._log.info("hir_reg[3] = %s", res)
-    
+            dut._log.info("hir_reg[3] = %s", res.integer)
+
     #Check the recorded transactions
     assert len(wbr_transactions) == numWords
     assert len(wbw_transactions) == numWords
@@ -725,7 +725,7 @@ async def wb_to_wb_wordcopy_single_unrolled_test_fast(dut):
 
     await init(dut)
 
-    #Load PicoRV program that copies a configurable number of words from 
+    #Load PicoRV program that copies a configurable number of words from
     #a configurable source address to a configurable destination address, using
     #single/individual word transactions, i.e. non-burst-mode.
     #This program variant uses 4x loop unrolling in the wordcopy loop.
@@ -736,10 +736,10 @@ async def wb_to_wb_wordcopy_single_unrolled_test_fast(dut):
     #Write PM memory
     for ii in range(len(pm_data)):
         await with_timeout(wb_write(dut, ii, pm_data[ii]), 30, 'ns')
-    
+
     #Write the register taking picorv out of reset
     await with_timeout(wb_write(dut, 0x402, 1), 30, 'ns')
-    
+
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)*16
     #Generate word aligned address values
@@ -748,7 +748,7 @@ async def wb_to_wb_wordcopy_single_unrolled_test_fast(dut):
 
     wbr_transactions = []
     wbw_transactions = []
-    
+
     dut._log.info("Test: Configuring DMA request.")
     dut._log.info("Test: numWords = %d, srcAddr = 0x%x, dstAddr = 0x%x", numWords, srcAddr, dstAddr)
 
@@ -768,8 +768,8 @@ async def wb_to_wb_wordcopy_single_unrolled_test_fast(dut):
         resNew = await with_timeout(wb_read(dut, 0x413), 30, 'ns')
         if resNew != res:
             res = resNew
-            dut._log.info("hir_reg[3] = %s", res)
-    
+            dut._log.info("hir_reg[3] = %s", res.integer)
+
     #Check the recorded transactions
     assert len(wbr_transactions) == numWords
     assert len(wbw_transactions) == numWords
@@ -786,6 +786,6 @@ if __name__ == "__main__":
                        proj_path / "../rtl/picorv_dma_top.sv",
                        proj_path / "../rtl/picorv_burst_fsm.sv"]
     #Wrapper function defined in scripts/cocotb_lambda.py
-    test_runner(verilog_sources=verilog_sources, 
-                test_module_filename=__file__, 
+    test_runner(verilog_sources=verilog_sources,
+                test_module_filename=__file__,
                 top="picorv_dma_top")

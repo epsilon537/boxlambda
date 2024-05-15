@@ -13,3 +13,5 @@ lint_off -rule UNOPTFLAT
 //We run with --no-timing. Turn off delay related warnings.
 lint_off -rule STMTDLY
 lint_off -rule ASSIGNDLY
+
+lint_off -rule GENUNNAMED

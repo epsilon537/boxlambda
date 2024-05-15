@@ -42,6 +42,7 @@
 
 #define __BALL  0x0001          /* bufio buf is allocated by stdio */
 #define __BLBF  0x0002          /* bufio is line buffered */
+#define __BFALL 0x0004          /* FILE is allocated by stdio */
 
 struct __file_bufio {
         struct __file_ext xfile;
@@ -102,6 +103,15 @@ static inline void __bufio_unlock(FILE *f) {
 	(void) f;
 	__lock_release(((struct __file_bufio *) f)->lock);
 }
+
+int
+__bufio_flush_locked(FILE *f);
+
+int
+__bufio_fill_locked(FILE *f);
+
+int
+__bufio_setdir_locked(FILE *f, uint8_t dir);
 
 int
 __bufio_flush(FILE *f);

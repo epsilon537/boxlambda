@@ -8,7 +8,7 @@ package:
 dependencies:
   # Path dependency.
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
-  
+
 sources:
   - target: verilator
     files:
@@ -17,7 +17,7 @@ sources:
   - target: wbuart32
     files:
      - rtl/wb_wbuart_ooc.sv
-     
+
   - target: any(vivado, verilator)
     defines:
       NO_MODPORT_EXPRESSIONS: ~

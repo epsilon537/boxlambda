@@ -54,6 +54,12 @@ int     chown (const char *__path, uid_t __owner, gid_t __group);
 int     chroot (const char *__path);
 #endif
 int     close (int __fildes);
+#if defined(__CYGWIN__) && (__BSD_VISIBLE || __GNU_VISIBLE)
+/* Available on FreeBSD (__BSD_VISIBLE) and Linux (__GNU_VISIBLE). */
+int     close_range (unsigned int __firstfd, unsigned int __lastfd, int __flags);
+/*      CLOSE_RANGE_UNSHARE (1 << 1) */ /* Linux-specific, not supported. */
+#define CLOSE_RANGE_CLOEXEC (1 << 2)
+#endif
 #if __POSIX_VISIBLE >= 199209
 size_t	confstr (int __name, char *__buf, size_t __len);
 #endif
@@ -231,6 +237,14 @@ int     setpgid (pid_t __pid, pid_t __pgid);
 #if __SVID_VISIBLE || __XSI_VISIBLE >= 500
 int     setpgrp (void);
 #endif
+#if defined(__CYGWIN__) && __BSD_VISIBLE
+/* Stub for Linux libbsd compatibility. */
+#define initsetproctitle(c, a, e) setproctitle_init((c), (a), (e))
+static inline void setproctitle_init (int, char *[], char *[]) {}
+
+void setproctitle (const char *, ...)
+		   _ATTRIBUTE ((__format__ (__printf__, 1, 2)));
+#endif
 #if __BSD_VISIBLE || __XSI_VISIBLE >= 4
 int	setregid (gid_t __rgid, gid_t __egid);
 int	setreuid (uid_t __ruid, uid_t __euid);
@@ -340,6 +354,10 @@ int	unlinkat (int, const char *, int);
 # define	SEEK_SET	0
 # define	SEEK_CUR	1
 # define	SEEK_END	2
+#if __GNU_VISIBLE
+# define	SEEK_DATA	3
+# define	SEEK_HOLE	4
+#endif
 
 #include <sys/features.h>
 

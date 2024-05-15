@@ -4,7 +4,7 @@
 package:
   # The name of the package. Required.
   name: picorv_dma
-  
+
 sources:
   - target: verilator
     files:
@@ -15,11 +15,11 @@ sources:
     - ../../../sub/picorv32/picorv32.v
     - rtl/picorv_dma_top.sv
     - rtl/picorv_burst_fsm.sv
-  
 
 
 
-     
+
+
 
 
 

@@ -70,6 +70,8 @@ int code_in_dmem(char *message) {
         i = i + 1;
     }
 
+    printf("Returning back to CMEM.\n");
+
     return crc;
 }
 
@@ -144,7 +146,7 @@ int main(void) {
 
     gpio_clear_pin(&gpio0, 1);
 
-    printf("Executing code from DMEM...\n");
+    printf("Executing code from DMEM... (0x%x)\n", &code_in_dmem);
     code_in_dmem((char*)&code_in_dmem);
 
     printf("CMEM word copy...\n");

@@ -15,8 +15,11 @@ echo "Launching Vmodel..."
 ./Vmodel -a &
 sleep 3
 
+#Record Vmodel's process id so we can use it later to kill the process
+VMODEL_PROCESS_ID=`jobs -p`
+
 #Launch riscv-openocd and connect to the model
-openocd -f $SRC_ROOT_DIR/scripts/verilator_riscv_dbg.openocd.cfg &
+openocd -f $SRC_ROOT_DIR/scripts/verilator.openocd.cfg &
 sleep 3
 
 #Launch gdb, connect to target via openocd, execute a via debug actions as indicated in test.gdb script.
@@ -24,6 +27,9 @@ sleep 3
 rm -f gdb.log
 echo "Launching gdb..."
 riscv32-unknown-elf-gdb --batch -x $SRC_ROOT_DIR/gw/projects/hello_world/test/test.gdb ../../../sw/projects/hello_world/hello_world > gdb.log
+
+#Kill the Vmodel process so it doesn't linger forever in the background.
+kill -9 $VMODEL_PROCESS_ID
 
 #Check if log contains given output, confirming we had a valid connection with the target.
 #When we reach this point, the SW running on target should be in its final state, which is an infinite loop. In this state,

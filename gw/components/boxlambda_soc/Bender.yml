@@ -1,4 +1,4 @@
-#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+# See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
 
 # Package metadata. Required.
 package:
@@ -24,17 +24,19 @@ dependencies:
   boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
   blackbox: { path: "../../components/blackbox" }
   usb_hid_host: { path: "../../components/usb_hid_host" }
+  spiflash: { path: "../../components/spiflash"}
 
 sources:
   #co-sim stuffs.
   - target: verilator
     files:
       - lint.vlt
+      - ../../../sub/qspiflash/bench/cpp/flashsim.cpp
       - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
       - ../../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
       - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c
       - ../../../sub/riscv-dbg/tb/SimJTAG.sv
-      - ../../../sub/sdspi/bench/cpp/sdspisim.cpp  
+      - ../../../sub/sdspi/bench/cpp/sdspisim.cpp
   #timer should be a separate component, but since I won't use it
   #as a Boxlambda component, I'm leaving it here in for the time being
   - target: any(vivado, verilator)
