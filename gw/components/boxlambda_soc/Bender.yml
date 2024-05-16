@@ -31,7 +31,6 @@ sources:
   - target: verilator
     files:
       - lint.vlt
-      - ../../../sub/qspiflash/bench/cpp/flashsim.cpp
       - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
       - ../../../sub/riscv-dbg/tb/remote_bitbang/sim_jtag.c
       - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c

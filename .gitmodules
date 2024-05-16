@@ -42,9 +42,6 @@
 [submodule "sub/StSound"]
 	path = sub/StSound
 	url = https://github.com/epsilon537/StSound
-[submodule "sub/Praxos"]
-	path = sub/Praxos
-	url = https://github.com/epsilon537/Praxos
 [submodule "sub/picorv32"]
 	path = sub/picorv32
 	url = https://github.com/epsilon537/picorv32
@@ -63,6 +60,3 @@
 [submodule "sub/usb_hid_device"]
 	path = sub/usb_hid_device
 	url = https://github.com/epsilon537/usb_hid_device
-[submodule "sub/qspiflash"]
-	path = sub/qspiflash
-	url = https://github.com/epsilon537/qspiflash
