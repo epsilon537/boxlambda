@@ -1021,7 +1021,9 @@ module boxlambda_soc #(
       assign shared_bus_wbs[FLASH_USR_S].dat_s = flash_wb_dat_s;
       assign shared_bus_wbs[FLASH_CTRL_S].dat_s = flash_wb_dat_s;
 
-      spiflash spiflash_inst (
+      spiflash #(
+          .SCK_CLKDIV(2)
+      ) spiflash_inst (
           .i_clk(sys_clk),
           .i_reset(ndm_reset),
           //This is a hack: These are actually two WB ports with all signals shared

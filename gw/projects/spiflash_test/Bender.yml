@@ -46,6 +46,7 @@ sources:
   - target: verilator
     files:
       - sim/sim_main.cpp
+      - ../../components/spiflash/sim/flashsim.cpp
       - ../boxlambda_top/sim/sim_main.sv
       - ../boxlambda_top/lint.vlt
 
