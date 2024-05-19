@@ -14,7 +14,7 @@ create_clock -period 1000.000 -name tck_o -waveform {0.000 500.000} [get_pins bo
 #Set to quiet so we don't get a critical warning when LiteDRAM is not included in the build, in which case
 #clkout1 does not exist.
 set_clock_groups -quiet -asynchronous \
--group [get_clocks -include_generated_clock clkout1] -group [get_clocks -include_generated_clock tck_o]
+-group [get_clocks -include_generated_clock main_clkout1] -group [get_clocks -include_generated_clock tck_o]
 
 ## Switches
 set_property -dict { PACKAGE_PIN A8    IOSTANDARD LVCMOS33 } [get_ports { gpio0[4] }]; #IO_L12N_T1_MRCC_16 Sch=sw[0]
@@ -209,12 +209,12 @@ set_property -dict { PACKAGE_PIN C2    IOSTANDARD LVCMOS33 } [get_ports { ext_rs
 #set_property -dict { PACKAGE_PIN H17   IOSTANDARD LVCMOS33 } [get_ports { eth_txd[3] }]; #IO_L18P_T2_A24_15 Sch=eth_txd[3]
 
 ## SPI Flash
-set_property -dict { PACKAGE_PIN L13   IOSTANDARD LVCMOS33 } [get_ports { spiflash_cs_n }];  #IO_L6P_T0_FCS_B_14 Sch=qspi_cs
-set_property -dict { PACKAGE_PIN K17   IOSTANDARD LVCMOS33 } [get_ports { spiflash_mosi }]; #IO_L1P_T0_D00_MOSI_14 Sch=qspi_dq[0]
-set_property -dict { PACKAGE_PIN K18   IOSTANDARD LVCMOS33 } [get_ports { spiflash_miso }]; #IO_L1N_T0_D01_DIN_14 Sch=qspi_dq[1]
-#set_property -dict { PACKAGE_PIN L14   IOSTANDARD LVCMOS33 } [get_ports { qspi_dq[2] }]; #IO_L2P_T0_D02_14 Sch=qspi_dq[2]
-#set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { qspi_dq[3] }]; #IO_L2N_T0_D03_14 Sch=qspi_dq[3]
-set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 } [get_ports { spiflash_sck }];
+set_property -dict { PACKAGE_PIN L13   IOSTANDARD LVCMOS33 IOB TRUE} [get_ports { spiflash_cs_n }];  #IO_L6P_T0_FCS_B_14 Sch=qspi_cs
+set_property -dict { PACKAGE_PIN K17   IOSTANDARD LVCMOS33 IOB TRUE} [get_ports { spiflash_mosi }]; #IO_L1P_T0_D00_MOSI_14 Sch=qspi_dq[0]
+set_property -dict { PACKAGE_PIN K18   IOSTANDARD LVCMOS33 IOB TRUE} [get_ports { spiflash_miso }]; #IO_L1N_T0_D01_DIN_14 Sch=qspi_dq[1]
+#set_property -dict { PACKAGE_PIN L14   IOSTANDARD LVCMOS33 IOB TRUE} [get_ports { qspi_dq[2] }]; #IO_L2P_T0_D02_14 Sch=qspi_dq[2]
+#set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 IOB TRUE} [get_ports { qspi_dq[3] }]; #IO_L2N_T0_D03_14 Sch=qspi_dq[3]
+set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 IOB TRUE} [get_ports { spiflash_sck }];
 
 ## Power Measurements
 #set_property -dict { PACKAGE_PIN B17   IOSTANDARD LVCMOS33     } [get_ports { vsnsvu_n }]; #IO_L7N_T1_AD2N_15 Sch=ad_n[2]

@@ -61,6 +61,11 @@ public:
     bool    erase_sector(const unsigned sector, const bool verify_erase=true);
     bool    page_program(const unsigned addr, const unsigned len,
             const char *data, const bool verify_write=true);
+
+   /* Write the given block of data to the given flash memory address.
+    * Note that flash memory is divided into 4KB segments. Writing to a segment
+    * will destroy all previous contents of that segment.
+    */
     bool    write(const unsigned addr, const unsigned len,
             const char *data, const bool verify=false);
 
