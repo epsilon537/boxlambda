@@ -7,8 +7,8 @@ target_sources(picorv_dma
 )
 
 target_compile_options(picorv_dma
-	PRIVATE
-		-O2 -g
+ PRIVATE
+  -O2 -g
 )
 
 #Paths to include files users of picorv_dma are expected to use.

@@ -7,8 +7,8 @@ target_sources(usb_hid
 )
 
 target_compile_options(usb_hid
-	PRIVATE
-		-O2 -g
+ PRIVATE
+  -O2 -g
 )
 
 #Paths to include files users of usb_hid are expected to use.
