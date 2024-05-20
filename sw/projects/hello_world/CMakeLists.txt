@@ -10,4 +10,4 @@ target_compile_options(hello_world
  PRIVATE -g)
 
 #Function defined in parent CMakeLists.txt file:
-link_internal_create_mem_file(hello_world ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+link_and_create_mem_file(hello_world ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)

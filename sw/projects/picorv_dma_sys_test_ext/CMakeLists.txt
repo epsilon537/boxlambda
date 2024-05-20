@@ -26,7 +26,7 @@ target_include_directories(picorv_dma_sys_test_ext
   ${CMAKE_BINARY_DIR}/sw/components/picorv_dma/test/
 )
 
-link_internal_create_mem_file(picorv_dma_sys_test_ext
+link_and_create_mem_file(picorv_dma_sys_test_ext
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
 target_link_libraries(picorv_dma_sys_test_ext picorv_dma vera sdram)

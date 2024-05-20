@@ -12,7 +12,7 @@ target_compile_options(usb_hid_sys_test
   -O2 -g
 )
 
-link_internal_create_mem_file(usb_hid_sys_test
+link_and_create_mem_file(usb_hid_sys_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
 target_link_libraries(usb_hid_sys_test usb_hid)

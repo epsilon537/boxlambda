@@ -17,4 +17,4 @@ target_include_directories(sdspi_test
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_internal_create_mem_file(sdspi_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+link_and_create_mem_file(sdspi_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)

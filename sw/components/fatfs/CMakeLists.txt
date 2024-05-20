@@ -6,20 +6,20 @@ target_sources(fatfs
     PRIVATE
     ../../../sub/fatfs/source/ff.c
     ../../../sub/fatfs/source/ffsystem.c
-    ../../../sub/fatfs/source/ffunicode.c     
+    ../../../sub/fatfs/source/ffunicode.c
     ../../../sub/sdspi/sw/diskio.c
     ../../../sub/sdspi/sw/sdcard.c
 )
 
 target_compile_definitions(fatfs
-	PRIVATE
-		-DSDSPI_CPU_IS_LITTLE_ENDIAN
+ PRIVATE
+  -DSDSPI_CPU_IS_LITTLE_ENDIAN
 )
 
 #We have to turn on optimizations or we won't fit in the on-chip RAM link map.
 target_compile_options(fatfs
-	PRIVATE
-		-O2 -g
+ PRIVATE
+  -O2 -g
 )
 
 target_include_directories(fatfs

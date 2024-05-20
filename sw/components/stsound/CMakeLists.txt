@@ -3,10 +3,10 @@ add_library(stsound)
 target_sources(stsound
     PRIVATE
     YmLoadBL.cpp
-    YmMusicBL.cpp 
+    YmMusicBL.cpp
     Ym2149ExBL.cpp
-    ../../../sub/StSound/StSoundLibrary/YmUserInterface.cpp 
-    ../../../sub/StSound/StSoundLibrary/LZH/LzhLib.cpp    
+    ../../../sub/StSound/StSoundLibrary/YmUserInterface.cpp
+    ../../../sub/StSound/StSoundLibrary/LZH/LzhLib.cpp
 )
 
 #target_compile_definitions(stsound
@@ -16,8 +16,8 @@ target_sources(stsound
 
 #We have to turn on optimizations or we won't fit in the on-chip RAM link map.
 target_compile_options(stsound
-	PRIVATE
-		-O2 -g
+ PRIVATE
+  -O2 -g
 )
 
 target_include_directories(stsound

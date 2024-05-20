@@ -15,14 +15,14 @@ add_link_options(
 
 #Function for picorv32 builds (picorv_dma microcode) to link and generate binary
 function(link_gen_picobin _tgt)
-    #Text section should start at 0x10002000.
-    target_link_options(${_tgt}
+  #Text section should start at 0x10002000.
+  target_link_options(${_tgt}
         PRIVATE
             -Ttext 0x10002000)
 
-    #Binary file generation command.
-    #Also generates C header file containing generated binary as a C array.
-    add_custom_command(
+  #Binary file generation command.
+  #Also generates C header file containing generated binary as a C array.
+  add_custom_command(
         TARGET
             ${_tgt}
         POST_BUILD
@@ -42,7 +42,7 @@ function(link_gen_picobin _tgt)
 endfunction()
 
 function(build_picoasm _tgt _src)
-    add_custom_command(
+  add_custom_command(
         OUTPUT
             ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.picoasm
         COMMAND
@@ -53,12 +53,12 @@ function(build_picoasm _tgt _src)
             ${_src}
     )
 
-    add_executable(${_tgt}
+  add_executable(${_tgt}
      EXCLUDE_FROM_ALL
         ${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.picoasm
     )
 
-    link_gen_picobin(${_tgt})
+  link_gen_picobin(${_tgt})
 endfunction()
 
 add_subdirectory(components)

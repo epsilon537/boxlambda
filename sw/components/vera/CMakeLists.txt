@@ -6,8 +6,8 @@ target_sources(vera
 )
 
 target_compile_options(vera
-	PRIVATE
-		-O2 -g
+ PRIVATE
+  -O2 -g
 )
 
 target_include_directories(vera

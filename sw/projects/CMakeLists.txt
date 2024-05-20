@@ -19,7 +19,7 @@ function(add_flash_sw_target _tgt)
 endfunction()
 
 #Set link-for-internal-memory settings for given target and add byproduct command generating a .mem file.
-function(link_internal_create_mem_file _tgt _link_script)
+function(link_and_create_mem_file _tgt _link_script)
   target_link_libraries(${_tgt} bootstrap)
 
   #Link-for-internal-memory implies linking in the bootstrap object library.
