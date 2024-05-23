@@ -62,6 +62,5 @@ plugins:
 exclude:
    - docs/
    - tmp/
-
-exclude: [vendor]
+   - vendor/bundle/
 
