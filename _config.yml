@@ -63,5 +63,3 @@ exclude:
    - docs/
    - tmp/
 
-exclude: [vendor]
-
