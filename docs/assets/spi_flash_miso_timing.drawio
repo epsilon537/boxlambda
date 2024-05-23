@@ -1,0 +1,209 @@
+<mxfile host="Electron" modified="2024-05-20T09:22:48.667Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.0 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="Arrf1Ld2ysUFasrzYxPc" version="24.4.0" type="device">
+  <diagram name="Page-1" id="1imY3O7ISClY2-lY78LY">
+    <mxGraphModel dx="2200" dy="1929" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-1" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint y="320" as="sourcePoint" />
+            <mxPoint y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-2" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="320" as="sourcePoint" />
+            <mxPoint x="20" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-3" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="320" as="sourcePoint" />
+            <mxPoint x="340" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-4" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="320" as="sourcePoint" />
+            <mxPoint x="360" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-5" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="620" y="320" as="sourcePoint" />
+            <mxPoint x="620" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-11" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-180" y="280" as="sourcePoint" />
+            <mxPoint x="760" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-14" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;t=4.5ns,&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;SCK Falling Edge&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;leaves FPGA&lt;/font&gt;&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry x="-1" y="30" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-40" y="180" as="sourcePoint" />
+            <mxPoint y="240" as="targetPoint" />
+            <mxPoint x="-25" y="-13" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-15" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;t=5 ns,&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;SCK Falling Edge arrives&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;at SPI Flash&lt;/font&gt;&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry x="-1" y="-36" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="130" y="170" as="sourcePoint" />
+            <mxPoint x="20" y="240" as="targetPoint" />
+            <mxPoint x="39" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-16" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-10" y="300" as="sourcePoint" />
+            <mxPoint x="40" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-17" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-40" y="300" as="sourcePoint" />
+            <mxPoint y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-18" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Δt=0.5ns,&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;trace&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;propagation&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;delay&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;align=left;" parent="1" edge="1">
+          <mxGeometry x="1" y="73" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="60" y="300" as="sourcePoint" />
+            <mxPoint x="20" y="300" as="targetPoint" />
+            <mxPoint x="-20" y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-31" value="" style="group" parent="1" vertex="1" connectable="0">
+          <mxGeometry x="300" y="300" width="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-28" value="" style="endArrow=none;html=1;rounded=0;" parent="Uy51RD-MOvbj5sy6wigk-31" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="30" as="sourcePoint" />
+            <mxPoint x="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-29" value="" style="endArrow=classic;html=1;rounded=0;" parent="Uy51RD-MOvbj5sy6wigk-31" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint as="sourcePoint" />
+            <mxPoint x="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-30" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Δt=0.5ns,&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;trace&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;propagation&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;delay&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;align=right;" parent="Uy51RD-MOvbj5sy6wigk-31" edge="1">
+          <mxGeometry x="1" y="80" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" as="sourcePoint" />
+            <mxPoint x="60" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-32" value="&lt;font style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;Δt=8ns,&lt;/font&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;SPI Flash &lt;br&gt;clock low&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;to output&lt;br&gt;valid delay&lt;/div&gt;" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry x="0.0625" y="-60" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="300" as="sourcePoint" />
+            <mxPoint x="340" y="300" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-33" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;t=13 ns,&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;Output Data (Slave-Out)&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;leaves SPI Flash&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry x="-1" y="-36" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="80" as="sourcePoint" />
+            <mxPoint x="340" y="240" as="targetPoint" />
+            <mxPoint x="39" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-34" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;t=13.5 ns,&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;SPI Flash Output arrives&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;at FPGA (Master-In)&lt;/font&gt;&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry x="-1" y="-36" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="80" as="sourcePoint" />
+            <mxPoint x="360" y="240" as="targetPoint" />
+            <mxPoint x="39" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-35" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;t=20ns,&lt;/font&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;system clock edge&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;latching Master-In&lt;/span&gt;&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;align=left;" parent="1" edge="1">
+          <mxGeometry x="-1" y="30" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="180" as="sourcePoint" />
+            <mxPoint x="620" y="240" as="targetPoint" />
+            <mxPoint x="-25" y="-13" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-36" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;t&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="730" y="285" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-70" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-160" y="320" as="sourcePoint" />
+            <mxPoint x="-160" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-71" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-180" y="320" as="sourcePoint" />
+            <mxPoint x="-180" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-73" value="&lt;font style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;Δt=4ns,&lt;/font&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;output pad&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;delay&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;align=left;" parent="1" edge="1">
+          <mxGeometry x="0.6" y="40" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-10" y="300" as="sourcePoint" />
+            <mxPoint x="-160" y="300" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-74" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-200" y="300" as="sourcePoint" />
+            <mxPoint x="-180" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-75" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-140" y="300" as="sourcePoint" />
+            <mxPoint x="-190" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-76" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Δt=0.5ns,&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;clock to out&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;delay of&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;OLOGIC FF&lt;/div&gt;" style="edgeLabel;html=1;align=right;verticalAlign=middle;resizable=0;points=[];" parent="Uy51RD-MOvbj5sy6wigk-75" vertex="1" connectable="0">
+          <mxGeometry x="0.4" y="3" relative="1" as="geometry">
+            <mxPoint x="15" y="57" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-78" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;t=0.5ns,&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;SCK falling edge&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;arrives at input&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;of the IOB output buffer&lt;/font&gt;&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry x="-1" y="-61" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-90" y="40" as="sourcePoint" />
+            <mxPoint x="-160" y="240" as="targetPoint" />
+            <mxPoint x="48" y="-40" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-79" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="320" as="sourcePoint" />
+            <mxPoint x="420" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-80" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;t=15ns, Master-In&lt;/font&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;&amp;nbsp;arrives&lt;/span&gt;&lt;div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;at ILOGIC D pin&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;labelBackgroundColor=none;" parent="1" edge="1">
+          <mxGeometry x="-1" y="70" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="500" y="160" as="sourcePoint" />
+            <mxPoint x="420" y="240" as="targetPoint" />
+            <mxPoint x="21" y="-49" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-82" value="&lt;font style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;Δt=5ns,&lt;/font&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;slack&lt;/div&gt;" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry y="-30" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="300" as="sourcePoint" />
+            <mxPoint x="620" y="300" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-83" value="&lt;font style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;Δt=1.5ns,&lt;/font&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;input pad&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; font-size: 18px;&quot;&gt;delay&lt;/div&gt;" style="endArrow=classic;startArrow=classic;html=1;rounded=0;align=left;" parent="1" edge="1">
+          <mxGeometry x="-0.3333" y="-50" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="300" as="sourcePoint" />
+            <mxPoint x="420" y="300" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uy51RD-MOvbj5sy6wigk-94" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;t=0ns,&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;system clock edge&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;releasing SCK&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Falling Edge&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;(SCK is a regular&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;data port, not&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;an FPGA clock resource)&lt;/font&gt;&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry x="-1" y="81" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-280" y="210" as="sourcePoint" />
+            <mxPoint x="-180" y="240" as="targetPoint" />
+            <mxPoint x="-18" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

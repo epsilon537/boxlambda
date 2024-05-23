@@ -43,7 +43,7 @@ Version 0.28.1:
 
 Add bender to your *PATH*.
 
-### OSS CAD Suite (CoCoTB, iverilog, GTKWave)
+### OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD)
 
 Version 2024-03-18.
 

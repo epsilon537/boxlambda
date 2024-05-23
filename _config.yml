@@ -8,7 +8,7 @@
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 #
-# If you need help with YAML syntax, here are some quick references for you: 
+# If you need help with YAML syntax, here are some quick references for you:
 # https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
 # https://learnxinyminutes.com/docs/yaml/
 #
@@ -23,7 +23,7 @@ email: ruben.lysens2@gmail.com
 description: An FPGA-based microcomputer sandbox for software and RTL experimentation.
 baseurl: /boxlambda # the subpath of your site, e.g. /blog
 url: epsilon537.github.io # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: 2Lysens 
+twitter_username: 2Lysens
 github_username:  epsilon537
 
 permalink: /:title/
@@ -39,7 +39,7 @@ plugins:
   - jekyll-paginate
   - jekyll-seo-tag
   - jekyll-sitemap
-  
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
@@ -61,3 +61,7 @@ plugins:
 #   - vendor/ruby/
 exclude:
    - docs/
+   - tmp/
+
+exclude: [vendor]
+
