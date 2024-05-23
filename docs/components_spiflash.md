@@ -82,7 +82,7 @@ The BoxLambda version of the Spiflash core and Flashsim co-simulator can be foun
 
 The SPI Flash core has a 32-bit Wishbone read interface. Through this interface, the user can request the core to read 32-bit words at a time from Flash memory. At SPI level, the transaction looks like this:
 
-![Word read SPI Flash Transaction](../assets/spiflash_word_read.png)
+![Word read SPI Flash Transaction](assets/spiflash_word_read.png)
 
 *Reading a 32-bit word from SPI Flash. 8 (C)ommand bits, followed by 24 (A)ddress bits, followed by 32 (D)ata bits.*
 
