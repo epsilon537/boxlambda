@@ -4,7 +4,7 @@ title: About BoxLambda
 permalink: /about/
 ---
 
-![Draft Architecture Block Diagram](assets/Arch_Diagram_About.png)
+![Draft Architecture Block Diagram](../assets/Arch_Diagram_About.png)
 
 **BoxLambda** is a project creating a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for software and RTL experimentation.
 
@@ -12,7 +12,7 @@ BoxLambda is a software-hardware cross-over project. The plan is to provide room
 
 # Key Goals
 
-- Create a sandbox for experimenting with software and (FPGA) HW.    
+- Create a sandbox for experimenting with software and (FPGA) HW.
     - **Simplicity**: It should be easy to jump in and do something: create, hack, tinker.
         - It should be doable for a single person to develop a good understanding of the entire system, software and hardware.
         - **Deterministic Behavior**: By design, it should be clear how long an operation, be it an instruction or a DMA transfer, is going to take.
@@ -28,7 +28,7 @@ BoxLambda is a software-hardware cross-over project. The plan is to provide room
   - SD card storage
   - VGA Display
   - Audio output
-  
+
 - Sound and graphics should be sufficient to support retro-style 2D gameplay.
 
 You can find the source code for BoxLambda on GitHub: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/).
