@@ -108,7 +108,7 @@ static void tick(void) {
   top->uart_rx = (*uart)(
       top->uart_tx,
       top->rootp
-          ->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
+          ->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wbuart_inst__DOT__uart_setup);
 
   // Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n') {

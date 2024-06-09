@@ -60,3 +60,6 @@
 [submodule "sub/usb_hid_device"]
 	path = sub/usb_hid_device
 	url = https://github.com/epsilon537/usb_hid_device
+[submodule "sub/gpio"]
+	path = sub/gpio
+	url = https://github.com/epsilon537/gpio

@@ -3,20 +3,12 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: wbuart32
-
-dependencies:
-  # Path dependency.
-  ibex_wb_common: { path: "../../components/ibex_wb_common" }
+  name: wbuart
 
 sources:
   - target: verilator
     files:
      - lint.vlt
-
-  - target: wbuart32
-    files:
-     - rtl/wb_wbuart_ooc.sv
 
   - target: any(vivado, verilator)
     defines:
@@ -26,5 +18,4 @@ sources:
       - ../../../sub/wbuart32/rtl/txuart.v
       - ../../../sub/wbuart32/rtl/ufifo.v
       - ../../../sub/wbuart32/rtl/wbuart.v
-      - ../../../sub/ibex_wb/soc/fpga/arty-a7/rtl/wb_wbuart_wrap.sv
 

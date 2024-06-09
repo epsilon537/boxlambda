@@ -106,8 +106,7 @@ packages:
     version: null
     source:
       Path: ../../components/boxlambda_soc/../../components/spiflash
-    dependencies:
-    - wbxbar
+    dependencies: []
   usb_hid_host:
     revision: null
     version: null

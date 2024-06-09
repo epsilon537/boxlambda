@@ -1,0 +1,21 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: wb_timer
+
+sources:
+  - target: verilator
+    files:
+     - lint.vlt
+
+  - target: any(vivado, verilator)
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
+    include_dirs:
+      - ../../../sub/ibex/vendor/lowrisc_ip/ip/prim/rtl
+    files:
+      - rtl/wb_timer.sv
+      - ../../../sub/ibex/shared/rtl/timer.sv
+

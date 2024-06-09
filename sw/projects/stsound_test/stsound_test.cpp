@@ -44,7 +44,7 @@ extern "C"
 		uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
 		set_stdio_to_uart(&uart0);
 
-		mtime_start();
+		mcycle_start();
 	}
 
 	//_exit is executed by the picolibc exit function.
@@ -112,11 +112,11 @@ int main(void)
 		while(1);
 	}
 	//Program the audio mixer registers
-	unsigned addrs[] = {FILTER_MIXER_VOLA_OFFSET, FILTER_MIXER_VOLB_OFFSET, FILTER_MIXER_VOLC_OFFSET, 
-						FILTER_MIXER_VOLD_OFFSET, FILTER_MIXER_VOLE_OFFSET, FILTER_MIXER_VOLF_OFFSET, 
+	unsigned addrs[] = {FILTER_MIXER_VOLA_OFFSET, FILTER_MIXER_VOLB_OFFSET, FILTER_MIXER_VOLC_OFFSET,
+						FILTER_MIXER_VOLD_OFFSET, FILTER_MIXER_VOLE_OFFSET, FILTER_MIXER_VOLF_OFFSET,
 						FILTER_MIXER_MVOL_OFFSET, FILTER_MIXER_INV_OFFSET, FILTER_MIXER_BASS_OFFSET, FILTER_MIXER_TREB_OFFSET};
-	unsigned vals[] = {50, 50, 50, 
-					   50, 50, 50, 
+	unsigned vals[] = {50, 50, 50,
+					   50, 50, 50,
 					   mval, 0, bass, treble};
 
 	for (int ii = 0; ii < (sizeof(addrs) / sizeof(addrs[0])); ii++)
@@ -153,7 +153,7 @@ int main(void)
 		cyMusicp = &cyMusic_psg_0;
 	}
 	else
-	{	
+	{
 		printf("Switching to PSG_1\n");
 		cyMusicp = &cyMusic_psg_1;
 	}
@@ -170,12 +170,12 @@ int main(void)
 
 	cyMusicp->play();
 
-	uint32_t prevTimeClocks = mtime_get32();
+	uint32_t prevTimeClocks = mcycle_get32();
 	uint32_t curTimeClocks;
 
 	while (1)
 	{
-		curTimeClocks = mtime_get32();
+		curTimeClocks = mcycle_get32();
 
 		//Every 20ms...
 		if (cc2us(curTimeClocks - prevTimeClocks) >= 20000)

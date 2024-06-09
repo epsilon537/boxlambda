@@ -11,6 +11,8 @@
 #define single_end x9
 #define stat_busy x10
 #define tmp x11
+#define sys_regs_base x12
+#define one x13
 
 /*Word Copy using burst mode*/
 
@@ -24,6 +26,8 @@
 
 _start:
     /*Set up constants.*/
+    li sys_regs_base, SYS_REGS_BASE_ADDR /*for IRQ generation.*/
+    li one, 1
     li hir_base, HIR_REGS_BASE_ADDR
     li burst_base, BURST_REGS_BASE_ADDR
     sw zero, BURST_OFFSET(burst_base)    /*no src-to-dest alignment offset.*/
@@ -42,7 +46,7 @@ wait_start:
     add single_end, num_elems, src       /*Turn into single end pointer.*/
     and burst_end, num_elems, mask_4_lsb /*Nearest lower burst boundary*/
     add burst_end, burst_end, src        /*Turn into burst end pointer.*/
-    
+
     bgeu src, burst_end, single_loop_start
     or src, src, msb_set                 /*Set msb to engage burst mode*/
     or dst, dst, msb_set                 /*Set msb to engage burst mode*/
@@ -73,4 +77,8 @@ single_loop:
 end:
     sw zero, BURST4(burst_base) /*Do one more write to a burst register to ensure last burst transaction completed.*/
     sw zero, HIR3(hir_base) /*set to 'Done'*/
+
+    /*Generate IRQ to host*/
+    sw one, IRQ_OUT(sys_regs_base)
+
     j wait_start

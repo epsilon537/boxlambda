@@ -29,7 +29,7 @@ void _init(void) {
   uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
   set_stdio_to_uart(&uart0);
 
-  mtime_start();
+  mcycle_start();
 }
 
 //_exit is executed by the picolibc exit function.

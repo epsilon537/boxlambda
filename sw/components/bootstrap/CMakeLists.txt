@@ -7,6 +7,7 @@ target_sources(bootstrap
         vectors.S
         crt0.c
         stdio_to_uart.c
+        interrupts.c
         ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/uart.c
 )
 

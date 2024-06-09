@@ -39,6 +39,7 @@ packages:
     - vera
     - wb_dp_ram
     - wb_gpio
+    - wb_timer
     - wbuart32
     - wbxbar
     - ym2149
@@ -106,8 +107,7 @@ packages:
     version: null
     source:
       Path: ../../components/boxlambda_soc/../../components/spiflash
-    dependencies:
-    - wbxbar
+    dependencies: []
   usb_hid_host:
     revision: null
     version: null
@@ -134,6 +134,12 @@ packages:
       Path: ../../components/boxlambda_soc/../../components/wb_gpio
     dependencies:
     - ibex_wb_common
+  wb_timer:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/boxlambda_soc/../../components/wb_timer
+    dependencies: []
   wbuart32:
     revision: null
     version: null

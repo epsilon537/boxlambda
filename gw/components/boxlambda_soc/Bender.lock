@@ -82,8 +82,7 @@ packages:
     version: null
     source:
       Path: ../../components/spiflash
-    dependencies:
-    - wbxbar
+    dependencies: []
   usb_hid_host:
     revision: null
     version: null
@@ -110,13 +109,18 @@ packages:
       Path: ../../components/wb_gpio
     dependencies:
     - ibex_wb_common
-  wbuart32:
+  wb_timer:
     revision: null
     version: null
     source:
-      Path: ../../components/wbuart32
-    dependencies:
-    - ibex_wb_common
+      Path: ../../components/wb_timer
+    dependencies: []
+  wbuart:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/wbuart
+    dependencies: []
   wbxbar:
     revision: null
     version: null
