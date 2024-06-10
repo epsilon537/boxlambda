@@ -153,23 +153,36 @@ int main(void) {
   int done = 0;
   char rxc = 0; //Receive character.
 
+  printf("Please enter a character.\n");
+
   while (!done) {
     //The test bench will insert some characters into the UART.
     if (uart_rx_irq_fired) {
       printf("UART RX IRQ received.\n");
       uart_rx_irq_fired = 0;
-      ++uart_rx_irq_count;
-      if (uart_rx_irq_count == 2) {
-        uart_irq_dis(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
-      }
 
       assert(picorv_sys_reg_rd(PICORV_SYS_REG_IRQ_OUT) & (1<<IRQ_ID_UART));
       picorv_sys_reg_wr(PICORV_SYS_REG_IRQ_OUT, 1<<IRQ_ID_UART);
 
       rxc = getc(stdin); //Pull the received character out of the FIFO.
       printf("Received character: %c\n", rxc);
-    }
 
+      ++uart_rx_irq_count;
+      if (uart_rx_irq_count == 2) {
+        uart_irq_dis(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
+        done = 1;
+      }
+      else {
+        printf("Please enter another character.\n");
+      }
+    }
+  }
+
+  printf("Please enter 8 characters. They will be echoed when all 8 characters are received.\n");
+
+  done = 0;
+
+  while (!done) {
     //Fires when the RX FIFO is half full.
     if (uart_rx_fifo_irq_fired ) {
       printf("UART RX FIFO IRQ received.\n");
@@ -184,11 +197,14 @@ int main(void) {
         rxc = uart_rx(&uart0);
         printf("Received character: %c\n", rxc);
       }
-    }
 
-    //When both interrupts are received twice, this test phase is done.
-    if ((uart_rx_irq_count == 2) && (uart_rx_fifo_irq_count == 2)) {
-      done = 1;
+      //When the interrupt is received twice, this test phase is done.
+      if (uart_rx_fifo_irq_count == 2) {
+        done = 1;
+      }
+      else {
+        printf("Please enter 8 characters again. They will be echoed when all 8 characters are received.\n");
+      }
     }
   }
 
