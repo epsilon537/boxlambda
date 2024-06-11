@@ -15,11 +15,10 @@
 #include "picorv_dma_hal.h"
 #include "picorv_irq_in_out.h"
 
-#define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
+#define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
 static struct uart uart0;
-static struct gpio gpio0;
-static struct gpio gpio1;
+static struct gpio gpio;
 
 
 //_init is executed by picolibc startup code before main().
@@ -78,12 +77,8 @@ void _timer_irq_handler(void) {
 
 int main(void) {
   //Switches
-  gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
-  gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
-
-  //Buttons
-  gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
-  gpio_set_direction(&gpio1, 0x00000000); //4 inputs
+  gpio_init(&gpio, (volatile void *)GPIO_BASE);
+  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
 
   printf("Load PicoRV Program picorv_irq_in_out.\n");
   //This test program just ors any recevied interrupts into the irq_out

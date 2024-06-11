@@ -90,8 +90,10 @@ module boxlambda_soc #(
     // UART and GPIO
     input  wire        uart_rx,
     output wire        uart_tx,
-    inout  wire [ 7:0] gpio0,
-    inout  wire [ 3:0] gpio1
+    input  wire [23:0] gp_in,
+    output wire [23:0] gp_out,
+    output wire [23:0] gp_oe,
+    input  wire        gp_clk
 );
 
   //Enum of Bus Masters attached to the cross bar.
@@ -117,13 +119,12 @@ module boxlambda_soc #(
 
   //Enum of Bus Slaves attached to the shared bus.
   typedef enum {
-    GPIO_0_S,  /*GPIO 0*/
-    GPIO_1_S,  /*GPIO 1*/
     SDSPI_S,  /*SDSPI*/
     USB_HID_0_S,  /*USB HID keyboard or mouse*/
     USB_HID_1_S,  /*USB HID keyboard or mouse*/
     FLASH_CTRL_S,  /*Flash controller control port*/
     RESET_CTRL_S,  /*Reset Control Module.*/
+    GPIO_S,  /*GPIO*/
     YM2149_S,  /*Dual YM2149 PSG core.*/
     PICORV_S,  /*PicoRV DMA slave port.*/
     UART_S,  /*UART.*/
@@ -161,7 +162,7 @@ module boxlambda_soc #(
   localparam NUM_XBAR_MASTERS = 5;
   localparam NUM_XBAR_SLAVES = 8;
   localparam NUM_SHARED_BUS_MASTERS = 1;
-  localparam NUM_SHARED_BUS_SLAVES = 14;
+  localparam NUM_SHARED_BUS_SLAVES = 13;
 
   localparam PICORV_BASE_ADDRESS = 'h10002000;
 
@@ -174,13 +175,12 @@ module boxlambda_soc #(
     /*UART_S*/{AW'('h10010000 >> 2)},
     /*PICORV_S*/{AW'(PICORV_BASE_ADDRESS >> 2)},
     /*YM2149_S*/{AW'('h10001000 >> 2)},
+    /*GPIO_S*/{AW'('h10000100 >> 2)},
     /*RESET_CTRL_S*/{AW'('h100000D0 >> 2)},
     /*FLASH_CTRL_S*/{AW'('h100000C0 >> 2)},
     /*USB_HID_1_S*/{AW'('h10000080 >> 2)},
     /*USB_HID_0_S*/{AW'('h10000040 >> 2)},
-    /*SDSPI_S*/{AW'('h10000020 >> 2)},
-    /*GPIO_1_S*/{AW'('h10000010 >> 2)},
-    /*GPIO_0_S*/{AW'('h10000000 >> 2)}
+    /*SDSPI_S*/{AW'('h10000020 >> 2)}
   };
 
   //Shared bus slave address mask. Right-shift by two to convert byte size to word size.
@@ -192,13 +192,12 @@ module boxlambda_soc #(
     /*UART_S*/{AW'(~('h0000001f >> 2))},
     /*PICORV_S*/{AW'(~('h00001fff >> 2))},
     /*YM2149_S*/{AW'(~('h000003ff >> 2))},
+    /*GPIO_S*/{AW'(~('h0000003f >> 2))},
     /*RESET_CTRL_S*/{AW'(~('h00000007 >> 2))},
     /*FLASH_CTRL_S*/{AW'(~('h00000007 >> 2))},
     /*USB_HID_1_S*/{AW'(~('h0000003f >> 2))},
     /*USB_HID_0_S*/{AW'(~('h0000003f >> 2))},
-    /*SDSPI_S*/{AW'(~('h0000001f >> 2))},
-    /*GPIO_1_S*/{AW'(~('h0000000f >> 2))},
-    /*GPIO_0_S*/{AW'(~('h0000000f >> 2))}
+    /*SDSPI_S*/{AW'(~('h0000001f >> 2))}
   };
 
   //Crossbar slave addresses. Right shift by two to convert byte address values to word address values.
@@ -707,19 +706,26 @@ module boxlambda_soc #(
       .timer_irq_o(timer_irq)
   );
 
-  //Two GPIO modules.
-  wb_gpio #(
-      .size(8)
-  ) wb_gpio0 (
-      .gpio(gpio0),
-      .wb  (shared_bus_wbs[GPIO_0_S])
-  );
-
-  wb_gpio #(
-      .size(4)
-  ) wb_gpio1 (
-      .gpio(gpio1),
-      .wb  (shared_bus_wbs[GPIO_1_S])
+  //The GPIO module
+  gpio_top gpio_inst (
+      // WISHBONE Interface
+      .wb_clk_i(sys_clk),
+      .wb_rst_i(ndm_reset),
+      .wb_cyc_i(shared_bus_wbs[GPIO_S].cyc),
+      .wb_adr_i(shared_bus_wbs[GPIO_S].adr[3:0]),
+      .wb_dat_i(shared_bus_wbs[GPIO_S].dat_m),
+      .wb_sel_i(shared_bus_wbs[GPIO_S].sel),
+      .wb_we_i(shared_bus_wbs[GPIO_S].we),
+      .wb_stb_i(shared_bus_wbs[GPIO_S].stb),
+      .wb_dat_o(shared_bus_wbs[GPIO_S].dat_s),
+      .wb_ack_o(shared_bus_wbs[GPIO_S].ack),
+      .wb_err_o(shared_bus_wbs[GPIO_S].err),
+      .wb_inta_o(fast_irqs[IRQ_ID_GPIO]),
+      // External GPIO Interface
+      .ext_pad_i(gp_in),
+      .ext_pad_o(gp_out),
+      .ext_padoe_o(gp_oe),
+      .clk_pad_i(gp_clk)
   );
 
   //LiteDRAM.
@@ -1114,7 +1120,6 @@ module boxlambda_soc #(
   assign fast_irqs[IRQ_ID_NA_0] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_1] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_2] = 1'b0;
-  assign fast_irqs[IRQ_ID_GPIO] = 1'b0;
   assign fast_irqs[IRQ_ID_I2C]  = 1'b0;
   assign fast_irqs[IRQ_ID_DFX]  = 1'b0;
   assign fast_irqs[IRQ_ID_ICAP] = 1'b0;

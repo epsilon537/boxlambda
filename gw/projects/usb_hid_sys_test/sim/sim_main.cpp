@@ -90,8 +90,8 @@ static void tick50(void) {
   top->clk_50 = 0;
   tick100();
 
-  //Set GPIO0 bit 4 (switch 0) to indicate to SW we want rotating keyboard LEDs
-  top->gpio0 = 0x10;
+  //Set GPIO bit 4 (switch 0) to indicate to SW we want rotating keyboard LEDs
+  top->gp_in = 0x000010;
 
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model

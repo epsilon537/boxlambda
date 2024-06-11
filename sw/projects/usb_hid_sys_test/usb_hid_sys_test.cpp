@@ -14,11 +14,10 @@
 
 #define LED_TO_SET USB_HID_LED_CAPS_LOCK
 
-#define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
+#define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
 static struct uart uart0;
-static struct gpio gpio0;
-static struct gpio gpio1;
+static struct gpio gpio;
 
 static unsigned leds = 1;
 static unsigned prevTimeClocks;
@@ -115,7 +114,7 @@ static void check_usb(USB_HID_Host_t *usb, unsigned &usb_status_prev, volatile u
     usb_status_prev = usb_status;
   }
 
-  if ((gpio_get_input(&gpio0) & 0x10) && (usb_typ == USB_TYP_KEYB)) {
+  if ((gpio_get_input(&gpio) & 0x10) && (usb_typ == USB_TYP_KEYB)) {
     unsigned curTimeClocks = mcycle_get32();
 
     //Every 100ms...
@@ -182,12 +181,8 @@ static void check_usb(USB_HID_Host_t *usb, unsigned &usb_status_prev, volatile u
 
 int main(void) {
   //Switches
-  gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
-  gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
-
-  //Buttons
-  gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
-  gpio_set_direction(&gpio1, 0x00000000); //4 inputs
+  gpio_init(&gpio, (volatile void *)GPIO_BASE);
+  gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
 
   printf("Enabling IRQs\n");
   enable_global_irq(); //Enable global IRQ line at the CPU

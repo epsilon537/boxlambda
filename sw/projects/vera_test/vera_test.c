@@ -15,8 +15,7 @@
 #define VRAM_MAP_BASE (0x8000) //Relative to VERA base address.
 
 static struct uart uart0;
-static struct gpio gpio0;
-static struct gpio gpio1;
+static struct gpio gpio;
 
 int frame_counter = 0;
 volatile unsigned vsync_irq_fired=0;
@@ -108,11 +107,8 @@ void _init(void) {
 //An implementation has to be provided to be able to user assert().
 
 int main(void) {
-  gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
-  gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
-
-  gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
-  gpio_set_direction(&gpio1, 0x00000000); //4 inputs
+  gpio_init(&gpio, (volatile void *)GPIO_BASE);
+  gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
 
   unsigned read_back_val=0;
   unsigned read_back_err=0;

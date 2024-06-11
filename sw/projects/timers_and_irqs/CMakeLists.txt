@@ -2,7 +2,6 @@
 add_executable(timers_and_irqs
  EXCLUDE_FROM_ALL
  timers_and_irqs.c
- ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
  ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
@@ -25,4 +24,5 @@ target_include_directories(timers_and_irqs
 link_and_create_mem_file(timers_and_irqs
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(timers_and_irqs timer picorv_dma)
+target_link_libraries(timers_and_irqs timer picorv_dma gpio)
+

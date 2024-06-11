@@ -60,7 +60,7 @@
 #undef OFFSET_3
 #endif
 
-#define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
+#define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
 #define PICORV_HIR_REG_SRC PICORV_HIR_0
 #define PICORV_HIR_REG_DST PICORV_HIR_1
@@ -71,8 +71,7 @@
 #define DMA_BUSY 2
 
 static struct uart uart0;
-static struct gpio gpio0;
-static struct gpio gpio1;
+static struct gpio gpio;
 
 //Some data bufers to copy from/to.
 static unsigned srcBufLocal[64], dstBufLocal[64];
@@ -313,12 +312,8 @@ int dmaTest(unsigned char* srcBase, unsigned srcOffset, int srcIsDualPort,
 
 int main(void) {
   //Switches
-  gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
-  gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
-
-  //Buttons
-  gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
-  gpio_set_direction(&gpio1, 0x00000000); //4 inputs
+  gpio_init(&gpio, (volatile void *) GPIO_BASE);
+  gpio_set_direction(&gpio, 0x0000000F);
 
   /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {

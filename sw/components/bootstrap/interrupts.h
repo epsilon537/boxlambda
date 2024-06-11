@@ -27,8 +27,8 @@ void _icap_irq_handler(void) __attribute__((interrupt("machine")));
 
 void _timer_irq_handler(void) __attribute__((interrupt("machine")));
 
-/* Exception Handler - this one is _not_ weakly bound. Defined in interrupts.c.*/
-void _exc_handler(void);
+/* Exception Handler */
+void _exc_handler(void) __attribute__((interrupt("machine")));
 
 /* Disable the global interrupt line at CPU level.*/
 static inline void disable_global_irq(void) {
@@ -40,7 +40,7 @@ static inline void enable_global_irq(void) {
   CSR_SET_BITS_IMM_MSTATUS(MSTATUS_MIE_BIT_MASK);
 }
 
-/*RISCV Inerrupt IDs.*/
+/*RISCV Interrupt IDs.*/
 #define IRQ_ID_FAST_14 30
 #define IRQ_ID_FAST_13 29
 #define IRQ_ID_FAST_12 28

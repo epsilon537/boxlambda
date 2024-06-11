@@ -24,6 +24,12 @@ packages:
     source:
       Path: ../../components/reset_ctrl/../cdc_cells
     dependencies: []
+  gpio:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/gpio
+    dependencies: []
   ibex:
     revision: null
     version: null
@@ -102,13 +108,6 @@ packages:
     source:
       Path: ../../components/wb_dp_ram
     dependencies: []
-  wb_gpio:
-    revision: null
-    version: null
-    source:
-      Path: ../../components/wb_gpio
-    dependencies:
-    - ibex_wb_common
   wb_timer:
     revision: null
     version: null

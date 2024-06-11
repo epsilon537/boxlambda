@@ -8,4 +8,5 @@ add_subdirectory(picorv_dma)
 add_subdirectory(usb_hid)
 add_subdirectory(flashdrvr)
 add_subdirectory(timer)
+add_subdirectory(gpio)
 

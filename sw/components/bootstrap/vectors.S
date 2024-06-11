@@ -122,4 +122,6 @@ _rm_2_irq_handler:
 .weak _timer_irq_handler
 _timer_irq_handler:
   jal x0, _exc_handler //If the IRQ handler does not get overridden and the IRQ fires, jump to the exception handler.
-
+.weak _exc_handler
+_exc_handler:          //_exc_handler is overridden in the bootstrap SW module.
+  jal x0, _exc_handler

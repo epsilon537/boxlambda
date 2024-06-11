@@ -1,0 +1,23 @@
+`verilator_config
+
+lint_off -rule WIDTHEXPAND -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'rgpio_out' generates 24 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'rgpio_oe' generates 24 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'rgpio_inte' generates 24 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'rgpio_ptrig' generates 24 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'rgpio_nec' generates 24 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'rgpio_eclk' generates 24 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'rgpio_ints' generates 24 bits."
+
+lint_off -rule WIDTHEXPAND -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'rgpio_in' generates 24 bits."
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Bits of signal are not used: 'wb_dat_i'[31:24]"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Signal is not driven, nor used: 'rgpio_aux_sel'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/sub/gpio/rtl/verilog/gpio_top.v" -match "Signal is not driven, nor used: 'pext_clk'"

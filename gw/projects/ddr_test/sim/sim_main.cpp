@@ -25,8 +25,8 @@
 // From riscv-dbg
 #include "sim_jtag.h"
 
-//We set GPIO1 bits 3:0 to 0xf to indicate to RISCV SW that this is a simulation.
-#define GPIO1_SIM_INDICATOR 0xf
+//We set GPIO bits 7:4 to 0xf to indicate to RISCV SW that this is a simulation.
+#define GPIO_SIM_INDICATOR 0x0000f0
 
 bool tracing_enable = false;
 
@@ -82,7 +82,7 @@ static void tick(void) {
       tfp->dump(contextp->time());
   }
 
-  top->gpio1 = GPIO1_SIM_INDICATOR; //Indicate to SW that this is a simulation.
+  top->gp_in = GPIO_SIM_INDICATOR; //Indicate to SW that this is a simulation.
 
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model

@@ -27,6 +27,7 @@ packages:
     - audio_dac
     - blackbox
     - boxlambda_clk_gen
+    - gpio
     - ibex_wb_common
     - ibex_wb_core
     - litedram
@@ -38,9 +39,8 @@ packages:
     - usb_hid_host
     - vera
     - wb_dp_ram
-    - wb_gpio
     - wb_timer
-    - wbuart32
+    - wbuart
     - wbxbar
     - ym2149
   cdc_cells:
@@ -48,6 +48,12 @@ packages:
     version: null
     source:
       Path: ../../components/boxlambda_soc/../../components/reset_ctrl/../cdc_cells
+    dependencies: []
+  gpio:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/boxlambda_soc/../../components/gpio
     dependencies: []
   ibex:
     revision: null
@@ -127,26 +133,18 @@ packages:
     source:
       Path: ../../components/boxlambda_soc/../../components/wb_dp_ram
     dependencies: []
-  wb_gpio:
-    revision: null
-    version: null
-    source:
-      Path: ../../components/boxlambda_soc/../../components/wb_gpio
-    dependencies:
-    - ibex_wb_common
   wb_timer:
     revision: null
     version: null
     source:
       Path: ../../components/boxlambda_soc/../../components/wb_timer
     dependencies: []
-  wbuart32:
+  wbuart:
     revision: null
     version: null
     source:
-      Path: ../../components/boxlambda_soc/../../components/wbuart32
-    dependencies:
-    - ibex_wb_common
+      Path: ../../components/boxlambda_soc/../../components/wbuart
+    dependencies: []
   wbxbar:
     revision: null
     version: null

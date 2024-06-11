@@ -3,7 +3,6 @@
 add_executable(spiflash_test
  EXCLUDE_FROM_ALL
  spiflash_test.cpp
- ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
  ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
@@ -16,7 +15,7 @@ target_compile_options(spiflash_test
 link_and_create_mem_file(spiflash_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(spiflash_test flashdrvr sdram)
+target_link_libraries(spiflash_test flashdrvr sdram gpio)
 
 add_flash_sw_target(spiflash_test)
 
@@ -25,7 +24,6 @@ add_flash_sw_target(spiflash_test)
 add_executable(spiflash_test_ram
  EXCLUDE_FROM_ALL
  spiflash_test.cpp
- ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
  ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
@@ -38,5 +36,5 @@ target_compile_options(spiflash_test_ram
 link_and_create_mem_file(spiflash_test_ram
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(spiflash_test_ram flashdrvr sdram)
+target_link_libraries(spiflash_test_ram flashdrvr sdram gpio)
 
