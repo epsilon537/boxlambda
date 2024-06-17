@@ -8,7 +8,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 
 //PicoRV copy programs
 #include "picorv_wordcopy_single.h"

@@ -7,7 +7,7 @@
 #include "stdio_to_uart.h"
 #include "uart.h"
 #include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 #include "ff.h"
 
 #define DISK_DEV_NUM       "0:"
@@ -30,7 +30,7 @@ void _init(void) {
   set_stdio_to_uart(&uart0);
 }
 
-//_exit is executed by the picolibc exit function. 
+//_exit is executed by the picolibc exit function.
 //An implementation has to be provided to be able to user assert().
 void	_exit (int status) {
 	while (1);

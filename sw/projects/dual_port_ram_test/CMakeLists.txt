@@ -3,7 +3,6 @@
 add_executable(dual_port_ram_test
  EXCLUDE_FROM_ALL
  dual_port_ram_test.c
- ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
 #Dependency on two PicoRV test assembly programs
@@ -19,10 +18,11 @@ target_include_directories(dual_port_ram_test
     PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/sw/components/picorv_dma/test/
+  ${PROJECT_SOURCE_DIR}/sw/components/platform/
 )
 
 link_and_create_mem_file(dual_port_ram_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(dual_port_ram_test picorv_dma gpio)
+target_link_libraries(dual_port_ram_test picorv_dma gpio mcycle)
 

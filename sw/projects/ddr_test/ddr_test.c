@@ -8,7 +8,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 #include "sdram.h"
 #include "libbase/memtest.h"
 

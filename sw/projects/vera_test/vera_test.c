@@ -7,7 +7,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 #include "sdram.h"
 #include "vera_hal.h"
 #include "interrupts.h"
@@ -101,6 +101,12 @@ void _init(void) {
   uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
   set_stdio_to_uart(&uart0);
   disable_all_irqs();
+}
+
+//_exit is executed by the picolibc exit function.
+//An implementation has to be provided to be able to user assert().
+void	_exit (int status) {
+	while (1);
 }
 
 //_exit is executed by the picolibc exit function.

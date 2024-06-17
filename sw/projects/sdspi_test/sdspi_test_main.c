@@ -8,7 +8,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 #include "sdtest.h"
 #include "interrupts.h"
 

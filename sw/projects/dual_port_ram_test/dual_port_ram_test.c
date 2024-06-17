@@ -10,7 +10,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 
 /*PicoRV register mapping for the wordcopy_burst program.*/
 #define PICORV_HIR_REG_SRC PICORV_HIR_0

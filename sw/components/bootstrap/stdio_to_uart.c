@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include "stdio_to_uart.h"
-#include "platform.h"
 #include "uart.h"
 
 static struct uart *uartp = 0;
 
 static int uart_putc(char c, FILE *file) {
   int res;
-  
+
   (void) file;		/* Not used in this function */
 
   if (!uartp) {
@@ -18,7 +17,7 @@ static int uart_putc(char c, FILE *file) {
     uart_tx(uartp, (uint8_t)c);
     res = (int)c;
   }
-  
+
   return res;
 }
 
@@ -33,7 +32,7 @@ static int uart_getc(FILE *file) {
     while (!uart_rx_ready(uartp));
     c = (int)uart_rx(uartp);
   }
-  
+
   return c;
 }
 

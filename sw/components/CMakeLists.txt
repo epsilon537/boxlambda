@@ -9,4 +9,6 @@ add_subdirectory(usb_hid)
 add_subdirectory(flashdrvr)
 add_subdirectory(timer)
 add_subdirectory(gpio)
+add_subdirectory(uart)
+add_subdirectory(mcycle)
 

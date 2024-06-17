@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include "platform.h"
 #include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
-#include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 #include "timer.h"
 #include "interrupts.h"
 #include "picorv_dma_hal.h"

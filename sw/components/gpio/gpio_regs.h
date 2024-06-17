@@ -8,7 +8,6 @@ extern "C" {
 /*
  * GPIO Hardware Access Layer
  */
-#define GPIO_BASE 0x10000100
 
 //GPIO registers
 #define GPIO_RGPIO_IN      0
