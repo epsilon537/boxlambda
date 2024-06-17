@@ -15,11 +15,8 @@
 #include "picorv_dma_hal.h"
 #include "picorv_irq_in_out.h"
 
-#define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
-
 static struct uart uart0;
 static struct gpio gpio;
-
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
@@ -43,6 +40,32 @@ volatile int uart_rx_irq_fired = 0;
 volatile int uart_rx_fifo_irq_fired = 0;
 volatile int uart_tx_fifo_empty_fired = 0;
 volatile int uart_tx_fifo_half_empty_fired = 0;
+volatile int gpio_irq_fired = 0;
+
+void _gpio_irq_handler(void) {
+  uint32_t isr = gpio_get_irq_status(&gpio);
+
+  //Clear interrupt(s)
+  gpio_irq_ack(&gpio, isr);
+
+  gpio_irq_fired = 1;
+
+  //Check pins 8-11. Drive pins 0-3.
+  for (uint8_t ii=0; ii<4 ; ii++) {
+    uint8_t in_pin = ii+8;
+    uint8_t out_pin = ii;
+
+    if (isr & (1<<in_pin)) {
+      int pin_ptrig = gpio_get_ptrig_pin(&gpio, in_pin);
+
+      //Now trigger on opposite edge
+      gpio_set_ptrig_pin(&gpio, in_pin, pin_ptrig ? 0 : 1);
+
+      //Make output (led) track input
+      gpio_set_pin_value(&gpio, out_pin, pin_ptrig);
+    }
+  }
+}
 
 void _uart_irq_handler(void) {
   unsigned ien = uart_get_ien(&uart0);
@@ -88,17 +111,13 @@ int main(void) {
   printf("Taking PicoRV out of reset...\n");
   picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 1);
 
-  printf("Enabling IRQs\n");
+  printf("Enabling Ibex IRQs\n");
   enable_global_irq();
   enable_irq(IRQ_ID_TIMER);
   enable_irq(IRQ_ID_UART);
+  enable_irq(IRQ_ID_GPIO);
 
-  //Clear any pending IRQs in the UART core, then enable received IRQs.
-  uart_irq_ack(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
-  uart_irq_ack(&uart0, UART_IRQ_RX_FIFO_HALF_FULL_MASK);
-  uart_irq_en(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
-  uart_irq_en(&uart0, UART_IRQ_RX_FIFO_HALF_FULL_MASK);
-
+  //----------------------------------------------
   printf("Setting timer...\n");
 
   timer_irq_fired = 0;
@@ -120,10 +139,15 @@ int main(void) {
   assert(picorv_sys_reg_rd(PICORV_SYS_REG_IRQ_OUT) & (1<<IRQ_ID_TIMER));
   picorv_sys_reg_wr(PICORV_SYS_REG_IRQ_OUT, 1<<IRQ_ID_TIMER);
 
+  printf("Timer Test Successful.\n");
+
+  //----------------------------------------------
+
   printf("Testing UART TX IRQs...\n");
 
   //This is enough to fill the UART TX FIFO more than halfway.
   uart_tx_string(&uart0, "0123456789\n");
+
   //Clear any pending Tx interrupts before enabling them in the UART core.
   uart_irq_ack(&uart0, UART_IRQ_TX_FIFO_EMPTY_MASK);
   uart_irq_ack(&uart0, UART_IRQ_TX_FIFO_HALF_EMPTY_MASK);
@@ -137,11 +161,21 @@ int main(void) {
   assert(picorv_sys_reg_rd(PICORV_SYS_REG_IRQ_OUT) & (1<<IRQ_ID_UART));
   picorv_sys_reg_wr(PICORV_SYS_REG_IRQ_OUT, 1<<IRQ_ID_UART);
   while (!uart_tx_fifo_empty_fired); //Wait until completely empty.
-
+  //Disable UART TX IRQs again.
   uart_irq_dis(&uart0, UART_IRQ_TX_FIFO_EMPTY_MASK);
   uart_irq_dis(&uart0, UART_IRQ_TX_FIFO_HALF_EMPTY_MASK);
 
-  printf("UART TX IRQs received.\n");
+  printf("UART TX IRQ test successful.\n");
+
+  //----------------------------------------------
+
+  printf("Testing UART RX IRQs...\n");
+
+  //Clear any pending IRQs in the UART core, then enable receive IRQs.
+  uart_irq_ack(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
+  uart_irq_ack(&uart0, UART_IRQ_RX_FIFO_HALF_FULL_MASK);
+  uart_irq_en(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
+  uart_irq_en(&uart0, UART_IRQ_RX_FIFO_HALF_FULL_MASK);
 
   int uart_rx_irq_count = 0;
   int uart_rx_fifo_irq_count = 0;
@@ -173,9 +207,9 @@ int main(void) {
     }
   }
 
-  printf("Please enter 8 characters. They will be echoed when all 8 characters are received.\n");
-
   done = 0;
+
+  printf("Please enter 8 characters. They will be echoed when all 8 characters are received.\n");
 
   while (!done) {
     //Fires when the RX FIFO is half full.
@@ -195,6 +229,7 @@ int main(void) {
 
       //When the interrupt is received twice, this test phase is done.
       if (uart_rx_fifo_irq_count == 2) {
+        printf("UART RX IRQ Test Successful.\n");
         done = 1;
       }
       else {
@@ -203,9 +238,22 @@ int main(void) {
     }
   }
 
-  disable_global_irq();
+  //----------------------------------------------
 
-  printf("Test Successful.\n");
+  printf("Testing GPIO IRQs...\n");
+
+  //Enable GPIO IRQs on pins 8-11 (buttons) positive edge
+  gpio_irq_enable(&gpio, 0xf00, 0xf00);
+
+  printf("Push some buttons. The LEDS should track the button presses/releases.\n");
+
+  while (1) {
+    if (gpio_irq_fired) {
+      printf("GPIO IRQ received.\n");
+      gpio_irq_fired = 0;
+    }
+  }
+
   return 0;
 }
 

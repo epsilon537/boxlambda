@@ -3,7 +3,7 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: timers_and irqs
+  name: gpios_timers_and irqs
 
 dependencies:
   # Path dependency.
