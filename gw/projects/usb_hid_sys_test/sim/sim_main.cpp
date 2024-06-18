@@ -100,7 +100,7 @@ static void tick50(void) {
 
   //Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n')  {
-    printf("%s", uart->get_rx_string().c_str());
+    printf("DUT: %s", uart->get_rx_string().c_str());
 
     //Accumulate the UART output in a uartRxString buffer, for analysis when the test has completed.
     uartRxString += uart->get_rx_string();
@@ -110,25 +110,25 @@ static void tick50(void) {
 
   //These LEDS come from the USB device cores. The ledg LEDS correspond to USB keyboard LEDs.
   if (top->ledg_1 != prev_ledg_1) {
-    printf("ledg_1 = %d\n", top->ledg_1);
+    printf("SIM: ledg_1 = %d\n", top->ledg_1);
     ledg_acc |= top->ledg_1; //Keep track of which keyboard LEDs have been turned on.
     prev_ledg_1 = top->ledg_1;
   }
 
   if (top->ledr_0 != prev_ledr_0) {
-    printf("ledr_0 = %d\n", top->ledr_0);
+    printf("SIM: ledr_0 = %d\n", top->ledr_0);
 
     prev_ledr_0 = top->ledr_0;
   }
 
   if (top->ledg_1 != prev_ledg_1) {
-    printf("ledg_1 = %d\n", top->ledg_1);
+    printf("SIM: ledg_1 = %d\n", top->ledg_1);
 
     prev_ledg_1 = top->ledg_1;
   }
 
   if (top->ledr_1 != prev_ledr_1) {
-    printf("ledr_1 = %d\n", top->ledr_1);
+    printf("SIM: ledr_1 = %d\n", top->ledr_1);
 
     prev_ledr_1 = top->ledr_1;
   }
@@ -187,21 +187,21 @@ int main(int argc, char** argv, char** env) {
         attach_debugger = true;
         continue;
       case 't':
-        printf("Tracing enabled\n");
+        printf("SIM: Tracing enabled\n");
         tracing_enable = true;
         continue;
       case 'i':
-        printf("Interactive mode enabled\n");
+        printf("SIM: Interactive mode enabled\n");
         interactive_mode = true;
         continue;
       case '?':
       case 'h':
       default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-a: attach debugger.\n");
-        printf("-t: enable tracing.\n");
-        printf("-i: enable interactive mode.\n");
+        printf("SIM: \nVmodel Usage:\n");
+        printf("SIM: -h: print this help\n");
+        printf("SIM: -a: attach debugger.\n");
+        printf("SIM: -t: enable tracing.\n");
+        printf("SIM: -i: enable interactive mode.\n");
         return 0;
         break;
 
@@ -284,11 +284,11 @@ int main(int argc, char** argv, char** env) {
         (numMouseReports >= 10) &&
         (numMissingIRQs == 0) &&
         (ledg_acc == 0x7)) {
-      printf("Test passed.\n");
+      printf("SIM: Test passed.\n");
       res = 0;
     }
     else {
-      printf("Test failed: numKeyboardReports: %d, numMouseReports: %d, LED acc.: 0x%x\n",
+      printf("SIM: Test failed: numKeyboardReports: %d, numMouseReports: %d, LED acc.: 0x%x\n",
             numKeyboardReports, numMouseReports, ledg_acc);
       res = 1;
     }

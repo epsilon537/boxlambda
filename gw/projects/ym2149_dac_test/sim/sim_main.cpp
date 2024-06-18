@@ -102,7 +102,7 @@ static void tick(void) {
 
   //Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n')  {
-    printf("%s", uart->get_rx_string().c_str());
+    printf("DUT: %s", uart->get_rx_string().c_str());
 
     //Update change detectors
     uartRxStringPrev = uart->get_rx_string();
@@ -113,13 +113,13 @@ static void tick(void) {
   //Detect DAC accomulator overflows
   if (top->acc1_overflow) {
     overflowDetected = true;
-    printf("time: %ld: acc1 overflow!\n", contextp->time());
+    printf("SIM: time: %ld: acc1 overflow!\n", contextp->time());
   }
 
   //Detect DAC accomulator overflows
   if (top->acc2_overflow) {
     overflowDetected = true;
-    printf("time: %ld: acc2 overflow!\n", contextp->time());
+    printf("SIM: time: %ld: acc2 overflow!\n", contextp->time());
   }
 
   //Capture output signals every 4 clocks, i.e. 12.5MHz
@@ -162,21 +162,21 @@ int main(int argc, char** argv, char** env) {
         attach_debugger = true;
         continue;
       case 't':
-        printf("Tracing enabled\n");
+        printf("SIM: Tracing enabled\n");
         tracing_enable = true;
         continue;
       case 'i':
-        printf("Interactive mode enabled\n");
+        printf("SIM: Interactive mode enabled\n");
         interactive_mode = true;
         continue;
       case '?':
       case 'h':
       default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-a: attach debugger.\n");
-        printf("-t: enable tracing.\n");
-        printf("-i: enable interactive mode.\n");
+        printf("SIM: \nVmodel Usage:\n");
+        printf("SIM: -h: print this help\n");
+        printf("SIM: -a: attach debugger.\n");
+        printf("SIM: -t: enable tracing.\n");
+        printf("SIM: -i: enable interactive mode.\n");
         return 0;
         break;
 
@@ -195,19 +195,19 @@ int main(int argc, char** argv, char** env) {
 
     jtag_set_bypass(!attach_debugger);
 
-    printf("DAC Output File: %s\n", dac_out_filename);
-    printf("PCM Output File: %s\n", pcm_out_filename);
+    printf("SIM: DAC Output File: %s\n", dac_out_filename);
+    printf("SIM: PCM Output File: %s\n", pcm_out_filename);
 
     dacOutFile = fopen(dac_out_filename, "w");
     if (dacOutFile == NULL) {
-      printf("Unable to open DAC output file\n");
+      printf("SIM: Unable to open DAC output file\n");
       return -1;
     }
     fprintf(dacOutFile, "dacdata = [\n");
 
     pcmOutFile = fopen(pcm_out_filename, "w");
     if (pcmOutFile == NULL) {
-      printf("Unable to open PCM output file\n");
+      printf("SIM: Unable to open PCM output file\n");
       return -1;
     }
     fprintf(pcmOutFile, "pcmdata = [\n");
@@ -228,7 +228,7 @@ int main(int argc, char** argv, char** env) {
     cleanup();
 
     if (!overflowDetected)
-      printf("No overflows detected.\n");
+      printf("SIM: No overflows detected.\n");
 
     return overflowDetected;
 }

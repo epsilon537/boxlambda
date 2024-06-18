@@ -91,7 +91,7 @@ static void tick(void) {
 
   //Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n')  {
-    printf("%s", uart->get_rx_string().c_str());
+    printf("DUT: %s", uart->get_rx_string().c_str());
 
     //Update change detectors
     uartRxStringPrev = uart->get_rx_string();
@@ -129,21 +129,21 @@ int main(int argc, char** argv, char** env) {
         attach_debugger = true;
         continue;
       case 't':
-        printf("Tracing enabled\n");
+        printf("SIM: Tracing enabled\n");
         tracing_enable = true;
         continue;
       case 'i':
-        printf("Interactive mode enabled\n");
+        printf("SIM: Interactive mode enabled\n");
         interactive_mode = true;
         continue;
       case '?':
       case 'h':
       default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-a: attach debugger.\n");
-        printf("-t: enable tracing.\n");
-        printf("-i: enable interactive mode.\n");
+        printf("SIM: \nVmodel Usage:\n");
+        printf("SIM: -h: print this help\n");
+        printf("SIM: -a: attach debugger.\n");
+        printf("SIM: -t: enable tracing.\n");
+        printf("SIM: -i: enable interactive mode.\n");
         return 0;
         break;
 
@@ -178,14 +178,14 @@ int main(int argc, char** argv, char** env) {
     std::string uartCheckString("Test Successful.");
 
     if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
-      printf("Test failed\n");
-      printf("Expected: %s\n", uartCheckString.c_str());
-      printf("Received: %s\n", uartRxStringPrev.c_str());
+      printf("SIM: Test failed\n");
+      printf("SIM: Expected: %s\n", uartCheckString.c_str());
+      printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
 
       res = 1;
     }
     else {
-      printf("Test passed.\n");
+      printf("SIM: Test passed.\n");
     }
 
     cleanup();

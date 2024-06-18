@@ -212,20 +212,20 @@ int main(int argc, char** argv, char** env) {
     for(;;) {
       switch(getopt(argc, argv, "ith")) {
       case 't':
-        printf("Tracing enabled\n");
+        printf("SIM: Tracing enabled\n");
         tracing_enable = true;
         continue;
       case 'i':
-        printf("Interactive mode enabled\n");
+        printf("SIM: Interactive mode enabled\n");
         interactive_mode = true;
         continue;
       case '?':
       case 'h':
       default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-t: enable tracing.\n");
-        printf("-i: enable interactive mode.\n");
+        printf("SIM: \nVmodel Usage:\n");
+        printf("SIM: -h: print this help\n");
+        printf("SIM: -t: enable tracing.\n");
+        printf("SIM: -i: enable interactive mode.\n");
         return 0;
         break;
 
@@ -281,9 +281,9 @@ int main(int argc, char** argv, char** env) {
     std::string uartCheckString1("Read Back Tests successful.");
 
     if (uartRxStringPrev.find(uartCheckString1) == std::string::npos) {
-      printf("Test failed\n");
-      printf("Expected: %s\n", uartCheckString1.c_str());
-      printf("Received: %s\n", uartRxStringPrev.c_str());
+      printf("SIM: Test failed\n");
+      printf("SIM: Expected: %s\n", uartCheckString1.c_str());
+      printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
 
       return -1;
     }
@@ -291,13 +291,13 @@ int main(int argc, char** argv, char** env) {
     std::string uartCheckString2("Sprite Collision IRQ received.");
 
     if (uartRxStringPrev.find(uartCheckString2) == std::string::npos) {
-      printf("Test failed\n");
-      printf("Expected: %s\n", uartCheckString2.c_str());
-      printf("Received: %s\n", uartRxStringPrev.c_str());
+      printf("SIM: Test failed\n");
+      printf("SIM: Expected: %s\n", uartCheckString2.c_str());
+      printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
 
       return -1;
     }
 
-    printf("Test passed.\n");
+    printf("SIM: Test passed.\n");
     return 0;
 }

@@ -112,7 +112,7 @@ static void tick(void) {
 
   // Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n') {
-    printf("%s", uart->get_rx_string().c_str());
+    printf("DUT: %s", uart->get_rx_string().c_str());
 
     // Update change detectors
     uartRxStringPrev = uart->get_rx_string();
@@ -155,22 +155,22 @@ int main(int argc, char **argv, char **env) {
       flash_img_filename = optarg;
       continue;
     case 't':
-      printf("Tracing enabled\n");
+      printf("SIM: Tracing enabled\n");
       tracing_enable = true;
       continue;
     case 'i':
-      printf("Interactive mode enabled\n");
+      printf("SIM: Interactive mode enabled\n");
       interactive_mode = true;
       continue;
     case '?':
     case 'h':
     default:
-      printf("\nVmodel Usage:\n");
-      printf("-h: print this help\n");
-      printf("-f <flash_sw.img>\n");
-      printf("-a: attach debugger.\n");
-      printf("-t: enable tracing.\n");
-      printf("-i: enable interactive mode.\n");
+      printf("SIM: \nVmodel Usage:\n");
+      printf("SIM: -h: print this help\n");
+      printf("SIM: -f <flash_sw.img>\n");
+      printf("SIM: -a: attach debugger.\n");
+      printf("SIM: -t: enable tracing.\n");
+      printf("SIM: -i: enable interactive mode.\n");
       return 0;
       break;
 
@@ -184,13 +184,13 @@ int main(int argc, char **argv, char **env) {
   //  flash->debug(true);
   if (!flash_img_filename) {
     if (flash->load(0, DEV_RANDOM) < 0) {
-      printf("Error loading dev_random.\n");
+      printf("SIM: Error loading dev_random.\n");
       return -1;
     }
   } else {
-    printf("Flash SW Image File: %s\n", flash_img_filename);
+    printf("SIM: Flash SW Image File: %s\n", flash_img_filename);
     if (flash->load(FLASH_SW_IMG_OFFSET, flash_img_filename) < 0) {
-      printf("Error loading dev_random.\n");
+      printf("SIM: Error loading dev_random.\n");
       return -1;
     }
   }
@@ -219,13 +219,13 @@ int main(int argc, char **argv, char **env) {
   std::string uartCheckString("Test Successful.");
 
   if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
-    printf("Test failed\n");
-    printf("Expected: %s\n", uartCheckString.c_str());
-    printf("Received: %s\n", uartRxStringPrev.c_str());
+    printf("SIM: Test failed\n");
+    printf("SIM: Expected: %s\n", uartCheckString.c_str());
+    printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
 
     res = 1;
   } else {
-    printf("Test passed.\n");
+    printf("SIM: Test passed.\n");
   }
 
   cleanup();

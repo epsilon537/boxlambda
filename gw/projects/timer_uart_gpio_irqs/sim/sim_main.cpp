@@ -89,7 +89,7 @@ static void tick(unsigned gp_in) {
 
   //Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n')  {
-    printf("DUT: %s", uart->get_rx_string().c_str());
+    printf("SIM: DUT: %s", uart->get_rx_string().c_str());
 
     //Update change detectors
     uartRxStringPrev += uart->get_rx_string();
@@ -112,11 +112,11 @@ static int timer_test(void) {
   }
 
   if (!done) {
-    printf("Timer test failed.\n");
+    printf("SIM: Timer test failed.\n");
     return -1;
   }
 
-  printf("SIM: Timer test successful. Time = %lu\n", contextp->time());
+  printf("SIM: SIM: Timer test successful. Time = %lu\n", contextp->time());
 
   return 0;
 }
@@ -135,11 +135,11 @@ static int uart_tx_irq_test(void) {
   }
 
   if (!done) {
-    printf("UART TX IRQ test failed.\n");
+    printf("SIM: UART TX IRQ test failed.\n");
     return -1;
   }
 
-  printf("SIM: UART TX IRQ test successful. Time = %lu\n", contextp->time());
+  printf("SIM: SIM: UART TX IRQ test successful. Time = %lu\n", contextp->time());
 
   return 0;
 }
@@ -158,11 +158,11 @@ static int uart_rx_irq_test_single(void) {
   }
 
   if (!done) {
-    printf("UART RX IRQ test failed (1).\n");
+    printf("SIM: UART RX IRQ test failed (1).\n");
     return -1;
   }
 
-  printf("SIM: inserting uart character (1). Time = %lu\n", contextp->time());
+  printf("SIM: SIM: inserting uart character (1). Time = %lu\n", contextp->time());
   //Enter a single character into the UART
   uart->enterCharInTxPath('a');
 
@@ -182,11 +182,11 @@ static int uart_rx_irq_test_single(void) {
   }
 
   if (!done) {
-    printf("UART RX IRQ test failed (2).\n");
+    printf("SIM: UART RX IRQ test failed (2).\n");
     return -1;
   }
 
-  printf("SIM: inserting uart character (2). Time = %lu\n", contextp->time());
+  printf("SIM: SIM: inserting uart character (2). Time = %lu\n", contextp->time());
   //Enter a single character into the UART
   uart->enterCharInTxPath('b');
 
@@ -207,11 +207,11 @@ static int uart_rx_irq_test_seq(void) {
   }
 
   if (!done) {
-    printf("UART RX IRQ test failed (3).\n");
+    printf("SIM: UART RX IRQ test failed (3).\n");
     return -1;
   }
 
-  printf("SIM: inserting character sequence. Time = %lu\n", contextp->time());
+  printf("SIM: SIM: inserting character sequence. Time = %lu\n", contextp->time());
 
   done = 0;
 
@@ -226,7 +226,7 @@ static int uart_rx_irq_test_seq(void) {
     //Enter character sequence into the UART
     if (uart->enterCharInTxPath(*strPtr) != -1) {
       if (strPtr == strPtrEnd) {
-        printf("SIM: finished inserting uart string (1).\n");
+        printf("SIM: SIM: finished inserting uart string (1).\n");
         done = 1;
         strPtr = &strToSend[0]; //Reset strPtr to the beginning.
       }
@@ -249,11 +249,11 @@ static int uart_rx_irq_test_seq(void) {
   }
 
   if (!done) {
-    printf("UART RX IRQ test failed (4).\n");
+    printf("SIM: UART RX IRQ test failed (4).\n");
     return -1;
   }
 
-  printf("SIM: Inserting character sequence again. Time = %lu\n", contextp->time());
+  printf("SIM: SIM: Inserting character sequence again. Time = %lu\n", contextp->time());
 
   done = 0;
 
@@ -264,7 +264,7 @@ static int uart_rx_irq_test_seq(void) {
     //Enter character sequence into the UART
     if (uart->enterCharInTxPath(*strPtr) != -1) {
       if (strPtr == strPtrEnd) {
-        printf("SIM: finished inserting uart string (2).\n");
+        printf("SIM: SIM: finished inserting uart string (2).\n");
         done = 1;
         strPtr = &strToSend[0]; //Reset strPtr to the beginning.
       }
@@ -287,7 +287,7 @@ static int uart_rx_irq_test_seq(void) {
   }
 
   if (!done) {
-    printf("UART RX IRQ test failed (5).\n");
+    printf("SIM: UART RX IRQ test failed (5).\n");
     return -1;
   }
 
@@ -309,11 +309,11 @@ int gpio_test(void) {
   }
 
   if (!done) {
-    printf("GPIO test failed (1).\n");
+    printf("SIM: GPIO test failed (1).\n");
     return -1;
   }
 
-  printf("SIM: Testing GPIO. Time = %lu\n", contextp->time());
+  printf("SIM: SIM: Testing GPIO. Time = %lu\n", contextp->time());
 
   done = 0;
 
@@ -332,21 +332,21 @@ int gpio_test(void) {
     }
 
     if (!led0turnedOn && button0pushed && ((top->gp_out & 1) == 1) && ((top->gp_oe & 1) == 1)) {
-      printf("SIM: LED 0 turned on.\n");
+      printf("SIM: SIM: LED 0 turned on.\n");
 
       gp_in = 0; //Release button 0 again.
       led0turnedOn = 1; //Indicate that LED 0 has been turned on.
     }
 
     if (led0turnedOn && !button1pushed && ((top->gp_out & 1) == 0) && ((top->gp_oe & 1) == 1)) {
-       printf("SIM: LED 0 turned off.\n");
+       printf("SIM: SIM: LED 0 turned off.\n");
 
        gp_in = 0x200; //Push button 1
        button1pushed = 1; //Indicate that button 1 has been pushed.
     }
 
     if (!led1turnedOn && button1pushed && ((top->gp_out & 2) == 2) && ((top->gp_oe & 2) == 2)) {
-      printf("SIM: LED 1 turned on.\n");
+      printf("SIM: SIM: LED 1 turned on.\n");
 
       gp_in = 0; //Release button again.
       led1turnedOn = 1; //Indicate that LED 1 has been turned on.
@@ -354,8 +354,8 @@ int gpio_test(void) {
 
     if (led1turnedOn && ((top->gp_out & 2) == 0) && ((top->gp_oe & 2) == 2)) {
       if (!done) {
-        printf("SIM: LED 1 turned off.\n");
-        printf("SIM: GPIO test OK.\n");
+        printf("SIM: SIM: LED 1 turned off.\n");
+        printf("SIM: SIM: GPIO test OK.\n");
       }
 
       done = 1;
@@ -363,11 +363,11 @@ int gpio_test(void) {
   }
 
   if (!done) {
-    printf("SIM: GPIO test failed.\n");
+    printf("SIM: SIM: GPIO test failed.\n");
     return -1;
   }
 
-  printf("SIM: GPIO test successful. Time = %lu\n", contextp->time());
+  printf("SIM: SIM: GPIO test successful. Time = %lu\n", contextp->time());
 
   return 0;
 }
@@ -400,16 +400,16 @@ int main(int argc, char** argv, char** env) {
         attach_debugger = true;
         continue;
       case 't':
-        printf("Tracing enabled\n");
+        printf("SIM: Tracing enabled\n");
         tracing_enable = true;
         continue;
       case '?':
       case 'h':
       default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-a: attach debugger.\n");
-        printf("-t: enable tracing.\n");
+        printf("SIM: \nVmodel Usage:\n");
+        printf("SIM: -h: print this help\n");
+        printf("SIM: -a: attach debugger.\n");
+        printf("SIM: -t: enable tracing.\n");
         return 0;
         break;
 
@@ -460,7 +460,7 @@ int main(int argc, char** argv, char** env) {
     if (uart_rx_irq_test_seq() != 0)
       return -1;
 
-    printf("SIM: UART RX IRQ tests successful. Time = %lu\n", contextp->time());
+    printf("SIM: SIM: UART RX IRQ tests successful. Time = %lu\n", contextp->time());
 
     /*
      * GPIO IRQ test - simulate push buttons and verify LED tracking the buttons being pushed.
@@ -468,7 +468,7 @@ int main(int argc, char** argv, char** env) {
     if (gpio_test() != 0)
       return -1;
 
-    printf("Test passed.\n");
+    printf("SIM: Test passed.\n");
 
     cleanup();
 
