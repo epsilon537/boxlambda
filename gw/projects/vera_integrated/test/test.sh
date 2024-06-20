@@ -10,6 +10,10 @@ SRC_ROOT_DIR="$1"
 
 ./Vmodel
 
+# Workaround for newline not working in terminal after running Vmodel.
+# This has something to do with this VModel being SDL and/or curses based.
+reset
+
 RES="$?"
 echo "RES=$RES"
 if [ "$RES" -ne "0" ]; then

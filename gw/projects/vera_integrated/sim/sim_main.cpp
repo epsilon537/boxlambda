@@ -288,7 +288,9 @@ int main(int argc, char** argv, char** env) {
       return -1;
     }
 
-    std::string uartCheckString2("Sprite Collision IRQ received.");
+
+    /* V<sprite-bank#> indicates a Vsync IRQ, L = Line IRQ, C = collision IRQ. */
+    std::string uartCheckString2("LV0LV0(Forcing sprite collision)LCV0LCV0L");
 
     if (uartRxStringPrev.find(uartCheckString2) == std::string::npos) {
       printf("SIM: Test failed\n");

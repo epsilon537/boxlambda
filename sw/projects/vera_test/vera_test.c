@@ -17,7 +17,7 @@
 static struct uart uart0;
 static struct gpio gpio;
 
-int frame_counter = 0;
+volatile unsigned frame_counter = 0;
 volatile unsigned vsync_irq_fired=0;
 volatile unsigned line_irq_fired=0;
 volatile unsigned sprcol_irq_fired=0;
@@ -179,29 +179,29 @@ int main(void) {
   vera_reg_wr(VERA_ISR, VERA_IRQ_MSK_VSYNC|VERA_IRQ_MSK_LINE|VERA_IRQ_MSK_SPRCOL); //Clear any pending IRQs in the VERA core.
   vera_reg_wr(VERA_IEN, VERA_IRQ_MSK_VSYNC|VERA_IRQ_MSK_LINE|VERA_IRQ_MSK_SPRCOL); //Enable all 3 IRQ sources in the VERA core.
 
-  printf("Starting loop...\n");
+  printf("Starting loop... V<sprite-bank#> indicates a Vsync IRQ, L = Line IRQ, C = collision IRQ.\n");
 
   //The sim_main.cpp test bench checks for the presence of the trace prints below as part of the pass-fail criteria.
   while (1) {
     if (vsync_irq_fired) {
       vsync_irq_fired = 0;
-      printf("Vsync IRQ received. Sprite bank switched to %d. frame_counter=%d\n", vera_reg_rd(VERA_CTRL), frame_counter);
+      printf("V%d", vera_reg_rd(VERA_CTRL));
 
       //After two frames, move the sprites, to create sprite collisions.
       if (frame_counter == 2) {
-        printf("Forcing sprite collision.\n");
+        printf("(Forcing sprite collision)");
         setup_sprite_attr_ram(1);
       }
     }
 
     if (line_irq_fired) {
       line_irq_fired = 0;
-      printf("Line IRQ received. Sprite bank switched to %d.\n", vera_reg_rd(VERA_CTRL));
+      printf("L", vera_reg_rd(VERA_CTRL));
     }
 
     if (sprcol_irq_fired) {
       sprcol_irq_fired = 0;
-      printf("Sprite Collision IRQ received.\n");
+      printf("C");
     }
 
     vram_wr(0,0); //Stress the bus by writing all the time.
