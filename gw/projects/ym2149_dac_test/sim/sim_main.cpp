@@ -31,7 +31,7 @@ const char	DEFAULT_DAC_OUT_FILENAME[] = "dac_out.py";
 const char	DEFAULT_PCM_OUT_FILENAME[] = "pcm_out.py";
 FILE *dacOutFile = 0;
 FILE *pcmOutFile = 0;
-int dacOutputCounter = 0; 
+int dacOutputCounter = 0;
 
 bool overflowDetected = false;
 
@@ -47,7 +47,7 @@ VerilatedFstC* tfp = new VerilatedFstC;
 // Multiple modules (made later below with Vtop) may share the same
 // context to share time, or modules may have different contexts if
 // they should be independent from each other.
-std::unique_ptr<VerilatedContext> contextp{new VerilatedContext}; 
+std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 
 // Construct the Verilated model, from Vmodel.h generated from Verilating this project.
 // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
@@ -66,7 +66,7 @@ static void cleanup() {
   fclose(dacOutFile);
   fprintf(pcmOutFile, "]\n");
   fclose(pcmOutFile);
-  
+
   //Close trace file.
   if (tracing_enable)
     tfp->close();
@@ -86,7 +86,7 @@ static void tick(void) {
     top->eval();
     if (tracing_enable)
       tfp->dump(contextp->time());
-    
+
     //Low phase
     top->clk_i = 0;
     contextp->timeInc(1);
@@ -97,12 +97,12 @@ static void tick(void) {
 
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
-  top->uart_rx = (*uart)(top->uart_tx, 
-  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
+  top->uart_rx = (*uart)(top->uart_tx,
+  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wbuart_inst__DOT__uart_setup);
 
   //Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n')  {
-    printf("%s", uart->get_rx_string().c_str());
+    printf("DUT: %s", uart->get_rx_string().c_str());
 
     //Update change detectors
     uartRxStringPrev = uart->get_rx_string();
@@ -113,15 +113,15 @@ static void tick(void) {
   //Detect DAC accomulator overflows
   if (top->acc1_overflow) {
     overflowDetected = true;
-    printf("time: %ld: acc1 overflow!\n", contextp->time());
+    printf("SIM: time: %ld: acc1 overflow!\n", contextp->time());
   }
 
   //Detect DAC accomulator overflows
   if (top->acc2_overflow) {
     overflowDetected = true;
-    printf("time: %ld: acc2 overflow!\n", contextp->time());
+    printf("SIM: time: %ld: acc2 overflow!\n", contextp->time());
   }
-  
+
   //Capture output signals every 4 clocks, i.e. 12.5MHz
   ++dacOutputCounter;
   if (dacOutputCounter%4 == 0) {
@@ -145,7 +145,7 @@ int main(int argc, char** argv, char** env) {
 
     // Verilator must compute traced signals
     contextp->traceEverOn(true);
-    
+
     // Pass arguments so Verilated code can see them, e.g. $value$plusargs
     // This needs to be called before you create any model
     contextp->commandArgs(argc, argv);
@@ -162,24 +162,24 @@ int main(int argc, char** argv, char** env) {
         attach_debugger = true;
         continue;
       case 't':
-        printf("Tracing enabled\n");
+        printf("SIM: Tracing enabled\n");
         tracing_enable = true;
         continue;
       case 'i':
-        printf("Interactive mode enabled\n");
+        printf("SIM: Interactive mode enabled\n");
         interactive_mode = true;
         continue;
       case '?':
       case 'h':
       default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-a: attach debugger.\n");
-        printf("-t: enable tracing.\n");
-        printf("-i: enable interactive mode.\n");
+        printf("SIM: \nVmodel Usage:\n");
+        printf("SIM: -h: print this help\n");
+        printf("SIM: -a: attach debugger.\n");
+        printf("SIM: -t: enable tracing.\n");
+        printf("SIM: -i: enable interactive mode.\n");
         return 0;
         break;
-	    
+
       case -1:
         break;
       }
@@ -192,22 +192,22 @@ int main(int argc, char** argv, char** env) {
       top->trace(tfp, 99); //Trace 99 levels deep.
       tfp->open("simx.fst");
     }
-    
+
     jtag_set_bypass(!attach_debugger);
 
-    printf("DAC Output File: %s\n", dac_out_filename);
-    printf("PCM Output File: %s\n", pcm_out_filename);
-    
+    printf("SIM: DAC Output File: %s\n", dac_out_filename);
+    printf("SIM: PCM Output File: %s\n", pcm_out_filename);
+
     dacOutFile = fopen(dac_out_filename, "w");
     if (dacOutFile == NULL) {
-      printf("Unable to open DAC output file\n");
+      printf("SIM: Unable to open DAC output file\n");
       return -1;
     }
     fprintf(dacOutFile, "dacdata = [\n");
 
     pcmOutFile = fopen(pcm_out_filename, "w");
     if (pcmOutFile == NULL) {
-      printf("Unable to open PCM output file\n");
+      printf("SIM: Unable to open PCM output file\n");
       return -1;
     }
     fprintf(pcmOutFile, "pcmdata = [\n");
@@ -218,17 +218,17 @@ int main(int argc, char** argv, char** env) {
 
     //Take the system out of reset.
     top->rst_ni = 1;
-    
+
     // When not in interactive mode, simulate for 50000000 timeprecision periods
     while (interactive_mode || (contextp->time() < 50000000)) {
       // Evaluate model
-      tick();        
+      tick();
     }
-    
+
     cleanup();
 
     if (!overflowDetected)
-      printf("No overflows detected.\n");
-      
+      printf("SIM: No overflows detected.\n");
+
     return overflowDetected;
 }

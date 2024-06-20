@@ -2,9 +2,7 @@
 
 add_executable(usb_hid_sys_test
  EXCLUDE_FROM_ALL
- usb_hid_sys_test.c
- ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
- ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
+ usb_hid_sys_test.cpp
 )
 
 target_compile_options(usb_hid_sys_test
@@ -12,7 +10,12 @@ target_compile_options(usb_hid_sys_test
   -O2 -g
 )
 
+target_include_directories(usb_hid_sys_test
+    PRIVATE
+  ${PROJECT_SOURCE_DIR}/sw/components/platform/
+)
+
 link_and_create_mem_file(usb_hid_sys_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(usb_hid_sys_test usb_hid)
+target_link_libraries(usb_hid_sys_test usb_hid gpio mcycle)

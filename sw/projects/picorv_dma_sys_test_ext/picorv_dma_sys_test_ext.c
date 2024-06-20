@@ -8,7 +8,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 
 //PicoRV copy programs
 #include "picorv_wordcopy_single.h"
@@ -18,6 +18,7 @@
 #include "picorv_dma_hal.h"
 #include "sdram.h"
 #include "vera_hal.h"
+#include "interrupts.h"
 
 /*This test program is a multiple-nested-loop iterating over various vectors (PicoRV program, src aligned, dst alignment
  *number of elements to copy, etc.). At the heart of the loop is a parameterized DMA copy routine and some checks verifying
@@ -59,7 +60,7 @@
 #undef OFFSET_3
 #endif
 
-#define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
+#define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
 #define PICORV_HIR_REG_SRC PICORV_HIR_0
 #define PICORV_HIR_REG_DST PICORV_HIR_1
@@ -70,8 +71,7 @@
 #define DMA_BUSY 2
 
 static struct uart uart0;
-static struct gpio gpio0;
-static struct gpio gpio1;
+static struct gpio gpio;
 
 //Some data bufers to copy from/to.
 static unsigned srcBufLocal[64], dstBufLocal[64];
@@ -79,7 +79,7 @@ static unsigned srcBufLocal[64], dstBufLocal[64];
 //A struct hold PicoRV program attributes.
 typedef struct {
     const char *name;
-    unsigned char *progDat; 
+    unsigned char *progDat;
     unsigned progLen;
     unsigned elemSize;
 } Program;
@@ -100,7 +100,7 @@ Program programs[] = {
 #endif
 #ifdef BURST_COPY
     {"BYTECOPY_BURST", picorv_bytecopy_burst_picobin, sizeof(picorv_bytecopy_burst_picobin), 1},
-#endif 
+#endif
 #endif /*BYTE_COPY*/
 };
 
@@ -211,14 +211,24 @@ void _init(void) {
   set_stdio_to_uart(&uart0);
 }
 
-//_exit is executed by the picolibc exit function. 
+//_exit is executed by the picolibc exit function.
 //An implementation has to be provided to be able to user assert().
 void	_exit (int status) {
 	while (1);
 }
 
+//Instead of polling for DMA copy-complete status, let's use interrupts.
+//This way, DMA interrupt handling also gets some test coverage.
+volatile int dma_irq_fired = 0;
+
+void _dmac_irq_handler(void) {
+  /*Acknowledge IRQ at the source*/
+  picorv_sys_reg_wr(PICORV_SYS_REG_IRQ_OUT, 1);
+  dma_irq_fired = 1;
+}
+
 //Parameterized dma test function. Returns 1 if success, 0 if failed.
-int dmaTest(unsigned char* srcBase, unsigned srcOffset, int srcIsDualPort, 
+int dmaTest(unsigned char* srcBase, unsigned srcOffset, int srcIsDualPort,
             unsigned char* dstBase, unsigned dstOffset, int dstIsDualPort,
             unsigned numElems, unsigned elemSize) {
     unsigned char* srcPtr = srcBase + srcOffset*elemSize;
@@ -245,14 +255,15 @@ int dmaTest(unsigned char* srcBase, unsigned srcOffset, int srcIsDualPort,
     printf("Kicking off DMA...\n");
 #endif
     picorv_hir_reg_wr(PICORV_HIR_REG_CTRL_STAT, DMA_START);
-    
+
 #ifdef DETAILED_LOGS
     printf("Waiting for completion...\n");
 #endif
-    int dmaBusy = DMA_BUSY;
-    while(dmaBusy) {
-        dmaBusy = picorv_hir_reg_rd(PICORV_HIR_REG_CTRL_STAT);
-    }
+    /*Of course, we could just poll the DMA status, but we want to test IRQ generation as well.*/
+    while (!dma_irq_fired);
+    dma_irq_fired = 0;
+    /*Assert that DMA is no longer busy*/
+    assert(picorv_hir_reg_rd(PICORV_HIR_REG_CTRL_STAT) == 0);
 
 #ifdef DETAILED_LOGS
     printf("Checking result...\n");
@@ -290,7 +301,7 @@ int dmaTest(unsigned char* srcBase, unsigned srcOffset, int srcIsDualPort,
     else {
         printf("Memcmp failed.\n");
         printf("numElems = %d, srcAddr = 0x%x, dstAddr = 0x%x\n", numElems, (unsigned)srcPtr, (unsigned)dstPtr);
-        
+
         for (int ii=0; ii<numElems*elemSize; ii++) {
             printf("[%d] 0x%x vs. 0x%x\n", ii, srcPtr[ii], dstPtr[ii]);
         }
@@ -300,13 +311,9 @@ int dmaTest(unsigned char* srcBase, unsigned srcOffset, int srcIsDualPort,
 }
 
 int main(void) {
-//Switches
-  gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
-  gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
-
-  //Buttons
-  gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
-  gpio_set_direction(&gpio1, 0x00000000); //4 inputs
+  //Switches
+  gpio_init(&gpio, (volatile void *) GPIO_BASE);
+  gpio_set_direction(&gpio, 0x0000000F);
 
   /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {
@@ -316,6 +323,13 @@ int main(void) {
     printf("SDRAM init failed!\n");
     while(1);
   }
+
+  printf("Enabling IRQs\n");
+  enable_global_irq(); //Enable the global IRQ at CPU level.
+  enable_irq(IRQ_ID_DMAC); //Enable the DMA IRQ at CPU level.
+  //Note that there's no IRQ ENABLE register at DMA core level, i.e. at DMA core level,
+  //IRQs are always enabled. This behaviour can be customized by defining ISR and IEN
+  //Host Interface (HIR) registers.
 
   int numFailedTests = 0;
 
@@ -363,25 +377,25 @@ int main(void) {
                     unsigned dstOffset = dstOffsets[dstOffsetIdx];
 #ifdef DETAILED_LOGS
                     printf("dstOffset = %d\n", dstOffset);
-#endif            
+#endif
                     //Number of elements to copy.
                     for (int numElemsIdx=0; numElemsIdx < sizeof(numElems)/sizeof(unsigned); numElemsIdx++) {
                         unsigned nElems = numElems[numElemsIdx];
 #ifdef DETAILED_LOGS
                         printf("numElems = %d\n", nElems);
-#endif            
-                        if (dmaTest(srcMemBase, srcOffset, srcIsDualPort, 
+#endif
+                        if (dmaTest(srcMemBase, srcOffset, srcIsDualPort,
                                     dstMemBase, dstOffset, dstIsDualPort, nElems, elemSize)) {
-#ifdef DETAILED_LOGS                            
+#ifdef DETAILED_LOGS
                             printf("Test Successful.\n");
-#endif                            
+#endif
                         }
                         else {
                             printf("Test Failed.\n");
                             ++numFailedTests;
 #ifdef STOP_ON_FAIL
                             return 0;
-#endif                            
+#endif
                         }
                     }
                 }

@@ -13,6 +13,7 @@ target_compile_options(vera
 target_include_directories(vera
     PUBLIC
         ${PROJECT_SOURCE_DIR}/sub/vera_wishbone/misc
+        ${PROJECT_SOURCE_DIR}/sw/components/bootstrap #For interrupts.h
         ${CMAKE_CURRENT_LIST_DIR}
 )
 

@@ -10,7 +10,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 
 /*PicoRV register mapping for the wordcopy_burst program.*/
 #define PICORV_HIR_REG_SRC PICORV_HIR_0
@@ -26,8 +26,7 @@
 #include "picorv_dma_hal.h"
 
 static struct uart uart0;
-static struct gpio gpio0;
-static struct gpio gpio1;
+static struct gpio gpio;
 
 /*Create some data buffers in CMEM by mapping them to the .cmem_bss segment.*/
 char cmem_str[32] __attribute__ ((section (".cmem_bss")));
@@ -45,7 +44,7 @@ void _init(void) {
   set_stdio_to_uart(&uart0);
 }
 
-//_exit is executed by the picolibc exit function. 
+//_exit is executed by the picolibc exit function.
 //An implementation has to be provided to be able to user assert().
 void	_exit (int status) {
 	while (1);
@@ -89,7 +88,7 @@ void dmaCopyStart(unsigned char* srcPtr, unsigned char* dstPtr, unsigned numElem
     picorv_hir_reg_wr(PICORV_HIR_REG_DST, (unsigned)dstPtr | 0x100000);
     picorv_hir_reg_wr(PICORV_HIR_REG_NUM_ELEMS, numElems);
 
-    picorv_hir_reg_wr(PICORV_HIR_REG_CTRL_STAT, DMA_START);    
+    picorv_hir_reg_wr(PICORV_HIR_REG_CTRL_STAT, DMA_START);
 }
 
 int dualCopyTest(volatile unsigned* src_0, volatile unsigned* dst_0, volatile unsigned* src_1, volatile unsigned* dst_1) {
@@ -102,13 +101,13 @@ int dualCopyTest(volatile unsigned* src_0, volatile unsigned* dst_0, volatile un
     }
 
     //Kick off DMA.
-    dmaCopyStart((unsigned char*)src_0, (unsigned char*)dst_0, 256, sizeof(int)); 
-    
+    dmaCopyStart((unsigned char*)src_0, (unsigned char*)dst_0, 256, sizeof(int));
+
     //Simultaneously do a memcpy.
     for (int ii=0; ii<256; ii++) {
         dst_1[ii] = src_1[ii];
     }
-    
+
     waitDMAcomplete();
 
     //Check the copy.
@@ -137,14 +136,10 @@ int dualCopyTest(volatile unsigned* src_0, volatile unsigned* dst_0, volatile un
 
 int main(void) {
     //Switches
-    gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
-    gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
+    gpio_init(&gpio, (volatile void *)GPIO_BASE);
+    gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
 
-    //Buttons
-    gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
-    gpio_set_direction(&gpio1, 0x00000000); //4 inputs
-
-    gpio_clear_pin(&gpio0, 1);
+    gpio_clear_pin(&gpio, 1);
 
     printf("Executing code from DMEM... (0x%x)\n", &code_in_dmem);
     code_in_dmem((char*)&code_in_dmem);
@@ -155,7 +150,7 @@ int main(void) {
     volatile int *dst = cmem_buf_1;
     volatile int *end = &src[256];
 
-    gpio_set_pin(&gpio0, 1);
+    gpio_set_pin(&gpio, 1);
 
     while (src < end) {
         *dst = *src;
@@ -163,7 +158,7 @@ int main(void) {
         ++dst;
     }
 
-    gpio_clear_pin(&gpio0, 1);
+    gpio_clear_pin(&gpio, 1);
 
     printf("DMEM word copy...\n");
 
@@ -171,15 +166,15 @@ int main(void) {
     dst = dmem_buf_1;
     end = &src[256];
 
-    gpio_set_pin(&gpio0, 1);
+    gpio_set_pin(&gpio, 1);
 
     while (src < end) {
         *dst = *src;
         ++src;
         ++dst;
     }
-    
-    gpio_clear_pin(&gpio0, 1);
+
+    gpio_clear_pin(&gpio, 1);
 
     char *test_str = "Hello CMEM!";
     strcpy(cmem_str, test_str);
@@ -188,7 +183,7 @@ int main(void) {
         printf("CMEM data access failed!\n");
         return -1;
     }
-    
+
     printf("Load PicoRV Program wordcopy_burst\n");
     picorv_load_program(picorv_wordcopy_burst_picobin, sizeof(picorv_wordcopy_burst_picobin));
     printf("Taking PicoRV out of reset...\n");

@@ -24,6 +24,12 @@ packages:
     source:
       Path: ../../components/reset_ctrl/../cdc_cells
     dependencies: []
+  gpio:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/gpio
+    dependencies: []
   ibex:
     revision: null
     version: null
@@ -82,8 +88,7 @@ packages:
     version: null
     source:
       Path: ../../components/spiflash
-    dependencies:
-    - wbxbar
+    dependencies: []
   usb_hid_host:
     revision: null
     version: null
@@ -103,20 +108,18 @@ packages:
     source:
       Path: ../../components/wb_dp_ram
     dependencies: []
-  wb_gpio:
+  wb_timer:
     revision: null
     version: null
     source:
-      Path: ../../components/wb_gpio
-    dependencies:
-    - ibex_wb_common
-  wbuart32:
+      Path: ../../components/wb_timer
+    dependencies: []
+  wbuart:
     revision: null
     version: null
     source:
-      Path: ../../components/wbuart32
-    dependencies:
-    - ibex_wb_common
+      Path: ../../components/wbuart
+    dependencies: []
   wbxbar:
     revision: null
     version: null

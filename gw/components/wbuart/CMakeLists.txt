@@ -1,5 +1,5 @@
 #gw_component_rules() function is defined in the parent CMakeLists.txt.
 gw_component_rules(
-    TOP_MODULE wb_gpio_ooc 
-    COMPONENT_NAME wb_gpio 
+    TOP_MODULE wbuart
+    COMPONENT_NAME wbuart
 )

@@ -11,8 +11,8 @@ loop:
     lw t0, IRQ_IN(a1)
     /*Spin until not zero.*/
     beqz t0, loop
-    /*Copy the IRQ-in value to the IRQ output register*/
+    /*Or the IRQ-in value into the IRQ output register*/
+    lw t1, IRQ_OUT(a1)
+    or t0, t0, t1
     sw t0, IRQ_OUT(a1)
-
-spin:
-    j spin
+    j loop

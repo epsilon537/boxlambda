@@ -17,6 +17,7 @@
 #define offset x15
 #define mask_4_lsb x16
 #define twenty_four x17
+#define sys_regs_base x18
 
 /*Byte Copy, any alignment, using burst mode*/
 
@@ -32,6 +33,7 @@
 _start:
     /*Set up constants.*/
     li hir_base, HIR_REGS_BASE_ADDR
+    li sys_regs_base, SYS_REGS_BASE_ADDR /*for IRQ generation.*/
     li burst_base, BURST_REGS_BASE_ADDR
     li msb_set, 0x80000000
     li stat_busy, STAT_BUSY
@@ -52,7 +54,7 @@ wait_start:
     lw num_elems, HIR2(hir_base)  /*HIR2: num bytes*/
     add single_end, num_elems, src /*Turn num_elems into single end pointer.*/
     bltu num_elems, twenty_four, single_loop_start /*Less than 24 bytes to copy? Just do a regular byte-by-byte copy.*/
-    
+
     /*Copy byte by byte until src is word-aligned.*/
     andi tmp, src, 3
     beqz tmp, src_is_aligned
@@ -142,7 +144,7 @@ burst_loop:
     xor dst, dst, msb_set  /*Clear msb again to turn off burst mode.*/
 
     /*Write out the remaining bytes in the burst 4 register.*/
-    lw tmp, BURST4(burst_base) 
+    lw tmp, BURST4(burst_base)
     beq offset, zero, single_loop_start
     sb tmp, 0(dst)
     sub offset, offset, one
@@ -172,4 +174,8 @@ single_loop:
 end:
     sw zero, BURST4(burst_base) /*Do one more write to a burst register to ensure last burst transaction completed.*/
     sw zero, HIR3(hir_base) /*set to 'Done'*/
+
+    /*Generate IRQ to host*/
+    sw one, IRQ_OUT(sys_regs_base)
+
     j wait_start

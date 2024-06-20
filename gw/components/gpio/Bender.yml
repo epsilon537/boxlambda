@@ -1,0 +1,17 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: gpio
+
+sources:
+  - target: verilator
+    files:
+    - lint.vlt
+  - target: any(vivado, verilator)
+    include_dirs:
+    - ../../../sub/gpio/rtl/verilog
+    - ../../../sub/gpio/bench/verilog
+    files:
+    - ../../../sub/gpio/rtl/verilog/gpio_top.v

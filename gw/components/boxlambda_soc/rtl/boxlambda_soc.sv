@@ -13,9 +13,8 @@ module boxlambda_soc #(
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""
 ) (
-    input wire ext_clk_100,  //100MHz external clock.
-    input wire ext_rst_n,    //External reset pin.
-
+    input  wire        ext_clk_100,         //100MHz external clock.
+    input  wire        ext_rst_n,           //External reset pin.
 `ifdef VERILATOR
     /*These JTAG signals are not used on FPGA (they are used in simulation).
    *On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the jtag tap module dmi_bscane_tap.sv.
@@ -91,8 +90,10 @@ module boxlambda_soc #(
     // UART and GPIO
     input  wire        uart_rx,
     output wire        uart_tx,
-    inout  wire [ 7:0] gpio0,
-    inout  wire [ 3:0] gpio1
+    input  wire [23:0] gp_in,
+    output wire [23:0] gp_out,
+    output wire [23:0] gp_oe,
+    input  wire        gp_clk
 );
 
   //Enum of Bus Masters attached to the cross bar.
@@ -118,13 +119,12 @@ module boxlambda_soc #(
 
   //Enum of Bus Slaves attached to the shared bus.
   typedef enum {
-    GPIO_0_S,  /*GPIO 0*/
-    GPIO_1_S,  /*GPIO 1*/
     SDSPI_S,  /*SDSPI*/
-    RESET_CTRL_S,  /*Reset Control Module.*/
     USB_HID_0_S,  /*USB HID keyboard or mouse*/
     USB_HID_1_S,  /*USB HID keyboard or mouse*/
     FLASH_CTRL_S,  /*Flash controller control port*/
+    RESET_CTRL_S,  /*Reset Control Module.*/
+    GPIO_S,  /*GPIO*/
     YM2149_S,  /*Dual YM2149 PSG core.*/
     PICORV_S,  /*PicoRV DMA slave port.*/
     UART_S,  /*UART.*/
@@ -134,8 +134,27 @@ module boxlambda_soc #(
     FLASH_USR_S  /*Flash controller user port*/
   } wb_shared_bus_slave_e;
 
+  //Fast IRQ IDs
+  typedef enum {
+    IRQ_ID_ICAP,
+    IRQ_ID_DFX,
+    IRQ_ID_NA_0,
+    IRQ_ID_NA_1,
+    IRQ_ID_NA_2,
+    IRQ_ID_UART,
+    IRQ_ID_I2C,
+    IRQ_ID_USB_HID_0,
+    IRQ_ID_USB_HID_1,
+    IRQ_ID_GPIO,
+    IRQ_ID_SDSPI,
+    IRQ_ID_DMAC,
+    IRQ_ID_RM_0,
+    IRQ_ID_RM_1,  /*VERA*/
+    IRQ_ID_RM_2
+  } fast_irq_ids_e;
+
   /*We used a word-addressing Wishbone bus. The Dual Port RAM word address bus width is equal to the
-     *number of bits of the Dual Port RAM Byte Address mask minus 2.*/
+   *number of bits of the Dual Port RAM Byte Address mask minus 2.*/
   localparam DPRAM_AW = $clog2(DPRAM_BYTE_ADDR_MASK) - 2;
 
   localparam AW = 28;  //Wishbone Bus address width. Note that we use word addressing.
@@ -143,7 +162,7 @@ module boxlambda_soc #(
   localparam NUM_XBAR_MASTERS = 5;
   localparam NUM_XBAR_SLAVES = 8;
   localparam NUM_SHARED_BUS_MASTERS = 1;
-  localparam NUM_SHARED_BUS_SLAVES = 14;
+  localparam NUM_SHARED_BUS_SLAVES = 13;
 
   localparam PICORV_BASE_ADDRESS = 'h10002000;
 
@@ -156,13 +175,12 @@ module boxlambda_soc #(
     /*UART_S*/{AW'('h10010000 >> 2)},
     /*PICORV_S*/{AW'(PICORV_BASE_ADDRESS >> 2)},
     /*YM2149_S*/{AW'('h10001000 >> 2)},
+    /*GPIO_S*/{AW'('h10000100 >> 2)},
+    /*RESET_CTRL_S*/{AW'('h100000D0 >> 2)},
     /*FLASH_CTRL_S*/{AW'('h100000C0 >> 2)},
     /*USB_HID_1_S*/{AW'('h10000080 >> 2)},
     /*USB_HID_0_S*/{AW'('h10000040 >> 2)},
-    /*RESET_CTRL_S*/{AW'('h10000030 >> 2)},
-    /*SDSPI_S*/{AW'('h10000020 >> 2)},
-    /*GPIO_1_S*/{AW'('h10000010 >> 2)},
-    /*GPIO_0_S*/{AW'('h10000000 >> 2)}
+    /*SDSPI_S*/{AW'('h10000020 >> 2)}
   };
 
   //Shared bus slave address mask. Right-shift by two to convert byte size to word size.
@@ -170,17 +188,16 @@ module boxlambda_soc #(
     /*FLASH_USR_S*/{AW'(~('h00ffffff >> 2))},
     /*DM_S*/{AW'(~('h0000ffff >> 2))},
     /*DDR_CTRL_S*/{AW'(~('h0000ffff >> 2))},
-    /*TIMER_S*/{AW'(~('h0000000f >> 2))},
-    /*UART_S*/{AW'(~('h0000000f >> 2))},
+    /*TIMER_S*/{AW'(~('h000003ff >> 2))},
+    /*UART_S*/{AW'(~('h0000001f >> 2))},
     /*PICORV_S*/{AW'(~('h00001fff >> 2))},
     /*YM2149_S*/{AW'(~('h000003ff >> 2))},
+    /*GPIO_S*/{AW'(~('h0000003f >> 2))},
+    /*RESET_CTRL_S*/{AW'(~('h00000007 >> 2))},
     /*FLASH_CTRL_S*/{AW'(~('h00000007 >> 2))},
     /*USB_HID_1_S*/{AW'(~('h0000003f >> 2))},
     /*USB_HID_0_S*/{AW'(~('h0000003f >> 2))},
-    /*RESET_CTRL_S*/{AW'(~('h00000007 >> 2))},
-    /*SDSPI_S*/{AW'(~('h0000000f >> 2))},
-    /*GPIO_1_S*/{AW'(~('h0000000f >> 2))},
-    /*GPIO_0_S*/{AW'(~('h0000000f >> 2))}
+    /*SDSPI_S*/{AW'(~('h0000001f >> 2))}
   };
 
   //Crossbar slave addresses. Right shift by two to convert byte address values to word address values.
@@ -211,6 +228,11 @@ module boxlambda_soc #(
   logic sys_clk, sys_clk_2x, usb_clk, clk_50, clk_100;
   //PLL lock signals.
   logic usb_pll_locked, sys_pll_locked, pre_pll_locked, litedram_pll_locked;
+
+  //Fast IRQ bit vector
+  logic [14:0] fast_irqs;
+  //Timer IRQ
+  logic timer_irq;
 
   //ndm_reset_req: Non-Debug Module reset requested by Debug Module
   //ndm_reset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
@@ -430,7 +452,7 @@ module boxlambda_soc #(
       .usb_pll_locked_i(usb_pll_locked),  //USB Clock PLL locked indication (input)
       .ndm_reset_i(ndm_reset_req),  //non-debug-module reset request input
       .ext_reset_i(~ext_rst_n),  //asynchronous external reset input
-      .ndm_reset_o(ndm_reset),  //non-debug-module domain reset ouput
+      .ndm_reset_o(ndm_reset),  //non-debug-module domain reset output
       .dm_reset_o(dm_reset),  //debug-module domain reset output
       .usb_reset_o(usb_reset),  //usb domain reset output
       .por_completed_o(por_completed),  //Power-On-Reset completion indication (output).
@@ -560,9 +582,9 @@ module boxlambda_soc #(
       .hart_id     (32'h0),
       .boot_addr   (32'h0),
       .irq_software(1'b0),
-      .irq_timer   (1'b0),
-      .irq_external(1'b0),
-      .irq_fast    (15'b0),
+      .irq_timer   (timer_irq),
+      .irq_external(),
+      .irq_fast    (fast_irqs),
       .irq_nm      (1'b0),
       .debug_req   (debug_req),
       .fetch_enable({3'b0, por_completed}),  //Only start fetch after POR has been completed.
@@ -643,38 +665,67 @@ module boxlambda_soc #(
   );
 
   //The UART.
-  wb_wbuart_wrap #(
+  wbuart #(
       .HARDWARE_FLOW_CONTROL_PRESENT(1'b0),
       .INITIAL_SETUP                (31'd25),
       .LGFLEN                       (4'd4)
-  ) wb_uart (
-      .wb (shared_bus_wbs[UART_S]),
-      .i_uart_rx (uart_rx),
-      .o_uart_tx (uart_tx),
-      .i_cts_n   (1'b0),
+  ) wbuart_inst (
+      .i_clk(sys_clk),
+      .i_reset(ndm_reset),
+      .i_wb_cyc(shared_bus_wbs[UART_S].cyc),
+      .i_wb_stb(shared_bus_wbs[UART_S].stb),
+      .i_wb_we(shared_bus_wbs[UART_S].we),
+      .i_wb_addr(shared_bus_wbs[UART_S].adr[2:0]),
+      .i_wb_data(shared_bus_wbs[UART_S].dat_m),
+      .i_wb_sel(shared_bus_wbs[UART_S].sel),
+      .o_wb_stall(shared_bus_wbs[UART_S].stall),
+      .o_wb_ack(shared_bus_wbs[UART_S].ack),
+      .o_wb_err(shared_bus_wbs[UART_S].err),
+      .o_wb_data(shared_bus_wbs[UART_S].dat_s),
+      .i_uart_rx(uart_rx),
+      .o_uart_tx(uart_tx),
+      .i_cts_n(1'b0),
       .o_rts_n(),
-      .o_uart_rx_int(),
-      .o_uart_tx_int(),
-      .o_uart_rxfifo_int(),
-      .o_uart_txfifo_int()
+      .o_uart_int(fast_irqs[IRQ_ID_UART])
   );
 
   //The Timer module.
-  wb_timer timer (.wb(shared_bus_wbs[TIMER_S]));
-
-  //Two GPIO modules.
-  wb_gpio #(
-      .size(8)
-  ) wb_gpio0 (
-      .gpio(gpio0),
-      .wb  (shared_bus_wbs[GPIO_0_S])
+  wb_timer wb_timer_inst (
+      .clk_i(sys_clk),
+      .rst_i(ndm_reset),
+      .wb_cyc_i(shared_bus_wbs[TIMER_S].cyc),
+      .wb_stb_i(shared_bus_wbs[TIMER_S].stb),
+      .wb_we_i(shared_bus_wbs[TIMER_S].we),
+      .wb_addr_i(shared_bus_wbs[TIMER_S].adr[7:0]),
+      .wb_data_i(shared_bus_wbs[TIMER_S].dat_m),
+      .wb_sel_i(shared_bus_wbs[TIMER_S].sel),
+      .wb_stall_o(shared_bus_wbs[TIMER_S].stall),
+      .wb_ack_o(shared_bus_wbs[TIMER_S].ack),
+      .wb_err_o(shared_bus_wbs[TIMER_S].err),
+      .wb_data_o(shared_bus_wbs[TIMER_S].dat_s),
+      .timer_irq_o(timer_irq)
   );
 
-  wb_gpio #(
-      .size(4)
-  ) wb_gpio1 (
-      .gpio(gpio1),
-      .wb  (shared_bus_wbs[GPIO_1_S])
+  //The GPIO module
+  gpio_top gpio_inst (
+      // WISHBONE Interface
+      .wb_clk_i(sys_clk),
+      .wb_rst_i(ndm_reset),
+      .wb_cyc_i(shared_bus_wbs[GPIO_S].cyc),
+      .wb_adr_i(shared_bus_wbs[GPIO_S].adr[3:0]),
+      .wb_dat_i(shared_bus_wbs[GPIO_S].dat_m),
+      .wb_sel_i(shared_bus_wbs[GPIO_S].sel),
+      .wb_we_i(shared_bus_wbs[GPIO_S].we),
+      .wb_stb_i(shared_bus_wbs[GPIO_S].stb),
+      .wb_dat_o(shared_bus_wbs[GPIO_S].dat_s),
+      .wb_ack_o(shared_bus_wbs[GPIO_S].ack),
+      .wb_err_o(shared_bus_wbs[GPIO_S].err),
+      .wb_inta_o(fast_irqs[IRQ_ID_GPIO]),
+      // External GPIO Interface
+      .ext_pad_i(gp_in),
+      .ext_pad_o(gp_out),
+      .ext_padoe_o(gp_oe),
+      .clk_pad_i(gp_clk)
   );
 
   //LiteDRAM.
@@ -759,6 +810,10 @@ module boxlambda_soc #(
   //Vera Graphics.
   generate
     if (VERA_ACTIVE) begin : GENERATE_VERA_MODULE
+      logic vera_irq_n;
+
+      assign fast_irqs[IRQ_ID_RM_1] = ~vera_irq_n;
+
       vera_top #(VRAM_SIZE_BYTES) vera_inst (
           .clk(sys_clk),
           .reset(ndm_reset),
@@ -772,7 +827,7 @@ module boxlambda_soc #(
           .wb_ack(xbar_wbs[VERA_S].ack),
           .wb_we(xbar_wbs[VERA_S].we),
           .wb_err(xbar_wbs[VERA_S].err),
-          .irq_n(),
+          .irq_n(vera_irq_n),
           .vga_r(vga_r),
           .vga_g(vga_g),
           .vga_b(vga_b),
@@ -785,6 +840,7 @@ module boxlambda_soc #(
       assign vga_b = 4'b0;
       assign vga_hsync = 1'b0;
       assign vga_vsync = 1'b0;
+      assign fast_irqs[IRQ_ID_RM_1] = 1'b0;
     end
   endgenerate
 
@@ -800,7 +856,7 @@ module boxlambda_soc #(
           .i_wb_cyc(shared_bus_wbs[SDSPI_S].cyc),
           .i_wb_stb(shared_bus_wbs[SDSPI_S].stb),
           .i_wb_we(shared_bus_wbs[SDSPI_S].we),
-          .i_wb_addr(shared_bus_wbs[SDSPI_S].adr[1:0]),
+          .i_wb_addr(shared_bus_wbs[SDSPI_S].adr[2:0]),
           .i_wb_data(shared_bus_wbs[SDSPI_S].dat_m),
           .i_wb_sel(shared_bus_wbs[SDSPI_S].sel),
           .o_wb_stall(shared_bus_wbs[SDSPI_S].stall),
@@ -813,7 +869,7 @@ module boxlambda_soc #(
           .i_miso(sdspi_miso),
           .i_card_detect(~sdspi_card_detect_n),
           // Interrupt
-          .o_int(),
+          .o_int(fast_irqs[IRQ_ID_SDSPI]),
           // .. and whether or not we can use the SPI port
           .i_bus_grant(1'b1),
           // And some wires for debugging it all
@@ -823,8 +879,9 @@ module boxlambda_soc #(
       assign shared_bus_wbs[SDSPI_S].err = 1'b0;
     end else begin : NO_SDSPI
       assign sdspi_cs_n = 1'b0;
-      assign sdspi_sck  = 1'b0;
+      assign sdspi_sck = 1'b0;
       assign sdspi_mosi = 1'b0;
+      assign fast_irqs[IRQ_ID_SDSPI] = 1'b0;
     end
   endgenerate
 
@@ -925,10 +982,14 @@ module boxlambda_soc #(
           .wbs_ack(shared_bus_wbs[PICORV_S].ack),
           .wbs_we(shared_bus_wbs[PICORV_S].we),
           .wbs_err(shared_bus_wbs[PICORV_S].err),
-          //IRQs - TBD
-          .irq_in(32'b0),
-          .irq_out()
+          //Input IRQs - PicoRV DMAC receives the same 32 IRQs with the same IRQ_IDs (bit
+          //positions) as the Ibex CPU. The bit position assigned to the DMAC
+          //itself is cleared, however.
+          .irq_in({1'b0, fast_irqs & ~(1'b1 << IRQ_ID_DMAC), 8'b0, timer_irq, 7'b0}),
+          .irq_out(fast_irqs[IRQ_ID_DMAC])
       );
+    end else begin
+      assign fast_irqs[IRQ_ID_DMAC] = 1'b0;
     end
   endgenerate
 
@@ -936,16 +997,16 @@ module boxlambda_soc #(
   generate
     if (USB_HID_ACTIVE) begin : GENERATE_USB_HID_MODULES
       usb_hid_host_top usb_hid0_host_inst (
-          .wb_clk   (sys_clk),     // Wishbone clock is in the system clock domain.
-          .usb_clk  (usb_clk),     // 12MHz USB clock.
-          .usb_rst_n(~usb_reset),  // USB clock domain active low reset
-          .wb_rst_n (~ndm_reset),  // System clock domain active low reset
+          .wb_clk   (sys_clk),                     // Wishbone clock is in the system clock domain.
+          .usb_clk  (usb_clk),                     // 12MHz USB clock.
+          .usb_rst_n(~usb_reset),                  // USB clock domain active low reset
+          .wb_rst_n (~ndm_reset),                  // System clock domain active low reset
           .usb_dm_i (usb0_dm_i),
-          .usb_dp_i (usb0_dp_i),   // USB D- and D+ input
+          .usb_dp_i (usb0_dp_i),                   // USB D- and D+ input
           .usb_dm_o (usb0_dm_o),
-          .usb_dp_o (usb0_dp_o),   // USB D- and D+ output
+          .usb_dp_o (usb0_dp_o),                   // USB D- and D+ output
           .usb_oe   (usb0_oe),
-          .irq      (),
+          .irq      (fast_irqs[IRQ_ID_USB_HID_0]),
 
           //32-bit pipelined Wishbone slave interface.
           .wbs_adr(shared_bus_wbs[USB_HID_0_S].adr[3:0]),
@@ -961,16 +1022,16 @@ module boxlambda_soc #(
       );
 
       usb_hid_host_top usb_hid1_host_inst (
-          .wb_clk   (sys_clk),     // Wishbone clock is in the system clock domain.
-          .usb_clk  (usb_clk),     // 12MHz clock
-          .usb_rst_n(~usb_reset),  // USB clock domain active low reset
-          .wb_rst_n (~ndm_reset),  // System clock domain active low reset
+          .wb_clk   (sys_clk),                     // Wishbone clock is in the system clock domain.
+          .usb_clk  (usb_clk),                     // 12MHz clock
+          .usb_rst_n(~usb_reset),                  // USB clock domain active low reset
+          .wb_rst_n (~ndm_reset),                  // System clock domain active low reset
           .usb_dm_i (usb1_dm_i),
-          .usb_dp_i (usb1_dp_i),   // USB D- and D+ input
+          .usb_dp_i (usb1_dp_i),                   // USB D- and D+ input
           .usb_dm_o (usb1_dm_o),
-          .usb_dp_o (usb1_dp_o),   // USB D- and D+ output
+          .usb_dp_o (usb1_dp_o),                   // USB D- and D+ output
           .usb_oe   (usb1_oe),
-          .irq      (),
+          .irq      (fast_irqs[IRQ_ID_USB_HID_1]),
 
           //32-bit pipelined Wishbone slave interface.
           .wbs_adr(shared_bus_wbs[USB_HID_1_S].adr[3:0]),
@@ -987,10 +1048,12 @@ module boxlambda_soc #(
     end else begin
       assign usb0_dm_o = 1'b0;
       assign usb0_dp_o = 1'b0;
-      assign usb0_oe   = 1'b0;
+      assign usb0_oe = 1'b0;
       assign usb1_dm_o = 1'b0;
       assign usb1_dp_o = 1'b0;
-      assign usb1_oe   = 1'b0;
+      assign usb1_oe = 1'b0;
+      assign fast_irqs[IRQ_ID_USB_HID_0] = 1'b0;
+      assign fast_irqs[IRQ_ID_USB_HID_1] = 1'b0;
     end
   endgenerate
 
@@ -1050,4 +1113,14 @@ module boxlambda_soc #(
       assign spiflash_mosi = 1'b0;
     end
   endgenerate
+
+  //Set the remaining bits in the fast_irq vector to 0
+  assign fast_irqs[IRQ_ID_RM_2] = 1'b0;
+  assign fast_irqs[IRQ_ID_RM_0] = 1'b0;
+  assign fast_irqs[IRQ_ID_NA_0] = 1'b0;
+  assign fast_irqs[IRQ_ID_NA_1] = 1'b0;
+  assign fast_irqs[IRQ_ID_NA_2] = 1'b0;
+  assign fast_irqs[IRQ_ID_I2C]  = 1'b0;
+  assign fast_irqs[IRQ_ID_DFX]  = 1'b0;
+  assign fast_irqs[IRQ_ID_ICAP] = 1'b0;
 endmodule

@@ -37,7 +37,7 @@ SDL_Texture *sdl_display;
 
 int sdl_2x=0/*750*/, sdl_y=0/*523*/;
 
-bool vsync_prev = true; 
+bool vsync_prev = true;
 bool hsync_prev = true;
 bool exit_req = false; //Will be set to true when SDL window is closed by user.
 
@@ -53,7 +53,7 @@ VerilatedFstC* tfp = new VerilatedFstC;
 // Multiple modules (made later below with Vtop) may share the same
 // context to share time, or modules may have different contexts if
 // they should be independent from each other.
-std::unique_ptr<VerilatedContext> contextp{new VerilatedContext}; 
+std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 
 // Construct the Verilated model, from Vmodel.h generated from Verilating this project.
 // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
@@ -98,7 +98,7 @@ static void tick(void) {
     top->eval();
     if (tracing_enable)
       tfp->dump(contextp->time());
-    
+
     //Low phase
     top->clk_i = 0;
     contextp->timeInc(1);
@@ -150,14 +150,14 @@ static void tick(void) {
   pixel[1] = (Uint8)(top->vga_g<<4);
   pixel[2] = (Uint8)(top->vga_b<<4);
   pixel[3] = 255;
-  
+
   //Render the VGA rgb output.
   SDL_SetRenderDrawColor(sdl_renderer, pixel[0], pixel[1], pixel[2], pixel[3]);
 
   //sdl_2x increments at clock rate (50MHz), i.e. twice the pixel clock rate.
   //=> the pixel's x position corresponds to sdl_2x right shifted by 1.
   SDL_RenderDrawPoint(sdl_renderer, sdl_2x>>1, sdl_y);
-  
+
   if (frameFile)
     fwrite(pixel, 1, 4, frameFile);
 
@@ -170,7 +170,7 @@ static void tick(void) {
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
   top->uart_rx = (*uart)(top->uart_tx,
-  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
+  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wbuart_inst__DOT__uart_setup);
 
   //Detect and print changes to UART
   if (uartRxStringPrev != uart->get_rx_string()) {
@@ -200,7 +200,7 @@ int main(int argc, char** argv, char** env) {
 
     // Verilator must compute traced signals
     contextp->traceEverOn(true);
-    
+
     // Pass arguments so Verilated code can see them, e.g. $value$plusargs
     // This needs to be called before you create any model
     contextp->commandArgs(argc, argv);
@@ -212,23 +212,23 @@ int main(int argc, char** argv, char** env) {
     for(;;) {
       switch(getopt(argc, argv, "ith")) {
       case 't':
-        printf("Tracing enabled\n");
+        printf("SIM: Tracing enabled\n");
         tracing_enable = true;
         continue;
       case 'i':
-        printf("Interactive mode enabled\n");
+        printf("SIM: Interactive mode enabled\n");
         interactive_mode = true;
         continue;
       case '?':
       case 'h':
       default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-t: enable tracing.\n");
-        printf("-i: enable interactive mode.\n");
+        printf("SIM: \nVmodel Usage:\n");
+        printf("SIM: -h: print this help\n");
+        printf("SIM: -t: enable tracing.\n");
+        printf("SIM: -i: enable interactive mode.\n");
         return 0;
         break;
-	    
+
       case -1:
         break;
       }
@@ -253,7 +253,7 @@ int main(int argc, char** argv, char** env) {
       top->trace(tfp, 99); //Trace 99 levels deep.
       tfp->open("simx.fst");
     }
-    
+
     //Curses setup
     initscr();
     cbreak();
@@ -261,51 +261,45 @@ int main(int argc, char** argv, char** env) {
 
     jtag_set_bypass(!attach_debugger);
 
-    // Assert reset for a couple of clock cycles.
     top->clk_i = 0;
     top->uart_rx = 0;
-    //Ibex needs to see a negedge on rst_ni to reset, so we start high, go low, then go back high.
+    //Take the system out of reset.
     top->rst_ni = 1;
-    tick();
-    tick();
-    tick();
-    tick();
-    top->rst_ni = 0;
-    tick();
-    tick();
-    tick();
-    tick();
-    top->rst_ni = 1;
-    tick();
-    tick();
-    tick();
-    tick();
-  
-    // When not in interactive mode, simulate for 12000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 12000000)) {
+
+    // When not in interactive mode, simulate for 19000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 19000000)) {
         if (exit_req)
           break;
 
         // Evaluate model
-        tick();        
+        tick();
     }
-    
+
     cleanup();
 
     // Checks for automated testing.
-    int res = 0;
-    std::string uartCheckString("VERA Read Back Tests successful.");
+    std::string uartCheckString1("Read Back Tests successful.");
 
-    if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
-      printf("Test failed\n");
-      printf("Expected: %s\n", uartCheckString.c_str());
-      printf("Received: %s\n", uartRxStringPrev.c_str());
+    if (uartRxStringPrev.find(uartCheckString1) == std::string::npos) {
+      printf("SIM: Test failed\n");
+      printf("SIM: Expected: %s\n", uartCheckString1.c_str());
+      printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
 
-      res = 1;
-    }
-    else {
-      printf("Test passed.\n");
+      return -1;
     }
 
-    return res;
+
+    /* V<sprite-bank#> indicates a Vsync IRQ, L = Line IRQ, C = collision IRQ. */
+    std::string uartCheckString2("LV0LV0(Forcing sprite collision)LCV0LCV0L");
+
+    if (uartRxStringPrev.find(uartCheckString2) == std::string::npos) {
+      printf("SIM: Test failed\n");
+      printf("SIM: Expected: %s\n", uartCheckString2.c_str());
+      printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
+
+      return -1;
+    }
+
+    printf("SIM: Test passed.\n");
+    return 0;
 }

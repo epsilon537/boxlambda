@@ -7,13 +7,12 @@ target_sources(bootstrap
         vectors.S
         crt0.c
         stdio_to_uart.c
-        ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/uart.c
+        interrupts.c
 )
 
 #Paths to include files users of bootstrap are expected to use.
 target_include_directories(bootstrap
     PUBLIC
-        ../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
@@ -29,3 +28,5 @@ target_compile_options(bootstrap
   -mno-save-restore
   -fno-tree-loop-distribute-patterns
 )
+
+target_link_libraries(bootstrap uart)

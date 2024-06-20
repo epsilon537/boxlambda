@@ -12,6 +12,8 @@
 
 _start:
     li a0, HIR_REGS_BASE_ADDR
+    li a4, SYS_REGS_BASE_ADDR /*For IRQ generation.*/
+    li a5, 1
 
 wait_start:
     lw a1, HIR3(a0)   /*HIR3: ctrl-status*/
@@ -23,8 +25,8 @@ wait_start:
     lw a2, HIR1(a0)    /*HIR1: dst pointer*/
     lw a3, HIR2(a0)    /*HIR2: num words*/
     slli a3, a3, 2    /*Multiple by 4 to convert to byte address offset.*/
-    add a3, a3, a1 
-    
+    add a3, a3, a1
+
 loop:
     /*Copy word by word*/
     lw t0, 0(a1)
@@ -34,4 +36,9 @@ loop:
     bltu a1, a3, loop
 
     sw zero, HIR3(a0) /*set to 'Done'*/
+
+    /*Generate IRQ to host.*/
+    sw a5, IRQ_OUT(a4)
+
     j wait_start
+

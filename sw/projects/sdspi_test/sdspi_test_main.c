@@ -8,14 +8,14 @@
 #include "uart.h"
 #include "gpio.h"
 #include "platform.h"
-#include "utils.h"
+#include "mcycle.h"
 #include "sdtest.h"
+#include "interrupts.h"
 
-#define GPIO1_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
+#define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
 static struct uart uart0;
-static struct gpio gpio0;
-static struct gpio gpio1;
+static struct gpio gpio;
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
@@ -23,9 +23,10 @@ void _init(void) {
   uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
   uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
   set_stdio_to_uart(&uart0);
+  disable_all_irqs();
 }
 
-//_exit is executed by the picolibc exit function. 
+//_exit is executed by the picolibc exit function.
 //An implementation has to be provided to be able to user assert().
 void	_exit (int status) {
 	while (1);
@@ -34,17 +35,16 @@ void	_exit (int status) {
 int main(void) {
   uint32_t leds = 0xF;
 
-  gpio_init(&gpio0, (volatile void *) PLATFORM_GPIO0_BASE);
-  gpio_set_direction(&gpio0, 0x0000000F); //4 inputs, 4 outputs
+  gpio_init(&gpio, (volatile void *)GPIO_BASE);
+  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
 
-  gpio_init(&gpio1, (volatile void *) PLATFORM_GPIO1_BASE);
-  gpio_set_direction(&gpio1, 0x00000000); //4 inputs
+  enable_global_irq();
 
   if (sdspi_test() == 0)
     printf("Test Successful.\n");
   else
     printf("SDSPI Test failed.\n");
-    
+
   while(1);
 
   return 0;

@@ -87,10 +87,16 @@ module boxlambda_top (
     output wire        acc2_overflow,
 `endif
 
-    input  wire       uart_rx,
-    output wire       uart_tx,
-    inout  wire [7:0] gpio0,
-    inout  wire [3:0] gpio1
+    input  wire        uart_rx,
+    output wire        uart_tx,
+`ifdef VERILATOR
+    input  wire [23:0] gp_in,
+    output wire [23:0] gp_out,
+    output wire [23:0] gp_oe,
+`else
+    inout  wire [23:0] gpio,
+`endif
+    input  wire        gp_clk
 );
 
 `ifndef VERILATOR
@@ -104,6 +110,19 @@ module boxlambda_top (
   wire usb1_dm_o;
   wire usb1_dp_o;
   wire usb1_oe;
+
+  wire [23:0] gp_in;
+  wire [23:0] gp_out;
+  wire [23:0] gp_oe;
+
+  //(De)Muxing unidirectional to bidirectional ports.
+  generate
+    genvar ii;
+    for (ii = 0; ii < 24; ii = ii + 1) begin : GPIO_MUX
+      assign gp_in[ii] = gp_oe[ii] ? 1'bZ : gpio[ii];
+      assign gpio[ii]  = gp_oe[ii] ? gp_out[ii] : 1'bZ;
+    end
+  endgenerate
 
   //(De)Muxing unidirectional to bidirectional ports.
   assign usb0_dm_i = usb0_oe ? 1'bZ : usb0_dm;

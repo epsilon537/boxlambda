@@ -1,0 +1,10 @@
+
+#ifndef PLATFORM_H
+#define PLATFORM_H
+
+#define PLATFORM_CLK_FREQ		(50ULL * 1000 * 1000)
+#define GPIO_BASE 0x10000100
+#define PLATFORM_UART_BASE		0x10010000
+
+#endif /* PLATFORM_H */
+

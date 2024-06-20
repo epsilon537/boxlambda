@@ -43,8 +43,10 @@ module sim_main #(
     output wire         acc2_overflow,
     input  wire         uart_rx,
     output wire         uart_tx,
-    inout  wire  [ 7:0] gpio0,
-    inout  wire  [ 3:0] gpio1
+    input  wire  [23:0] gp_in,
+    output wire  [23:0] gp_out,
+    output wire  [23:0] gp_oe,
+    input  wire         gp_clk
 );
 
   // jtag openocd bridge signals
@@ -103,8 +105,10 @@ module sim_main #(
       // UART and GPIO
       .uart_rx(uart_rx),
       .uart_tx(uart_tx),
-      .gpio0(gpio0),
-      .gpio1(gpio1),
+      .gp_in(gp_in),
+      .gp_out(gp_out),
+      .gp_oe(gp_oe),
+      .gp_clk(gp_clk),
 
       .usb0_dm_i(usb0_dm_i),
       .usb0_dp_i(usb0_dp_i),

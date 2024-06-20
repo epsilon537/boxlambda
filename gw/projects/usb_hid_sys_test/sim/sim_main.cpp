@@ -44,7 +44,7 @@ VerilatedFstC* tfp = new VerilatedFstC;
 // Multiple modules (made later below with Vtop) may share the same
 // context to share time, or modules may have different contexts if
 // they should be independent from each other.
-std::unique_ptr<VerilatedContext> contextp{new VerilatedContext}; 
+std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 
 // Construct the Verilated model, from Vmodel.h generated from Verilating this project.
 // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
@@ -57,7 +57,7 @@ std::string uartRxString;
 double sc_time_stamp() { return 0; }
 
 //Clean-up logic.
-static void cleanup() {  
+static void cleanup() {
   //Close trace file.
   if (tracing_enable)
     tfp->close();
@@ -73,7 +73,7 @@ static void tick100(void) {
   top->eval();
   if (tracing_enable)
     tfp->dump(contextp->time());
-  
+
   top->clk_100 = 0;
   contextp->timeInc(1);
   top->eval();
@@ -90,17 +90,17 @@ static void tick50(void) {
   top->clk_50 = 0;
   tick100();
 
-  //Set GPIO0 bit 4 (switch 0) to indicate to SW we want rotating keyboard LEDs 
-  top->gpio0 = 0x10;
+  //Set GPIO bit 4 (switch 0) to indicate to SW we want rotating keyboard LEDs
+  top->gp_in = 0x000010;
 
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
-  top->uart_rx = (*uart)(top->uart_tx, 
-  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
+  top->uart_rx = (*uart)(top->uart_tx,
+  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wbuart_inst__DOT__uart_setup);
 
   //Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n')  {
-    printf("%s", uart->get_rx_string().c_str());
+    printf("DUT: %s", uart->get_rx_string().c_str());
 
     //Accumulate the UART output in a uartRxString buffer, for analysis when the test has completed.
     uartRxString += uart->get_rx_string();
@@ -110,25 +110,25 @@ static void tick50(void) {
 
   //These LEDS come from the USB device cores. The ledg LEDS correspond to USB keyboard LEDs.
   if (top->ledg_1 != prev_ledg_1) {
-    printf("ledg_1 = %d\n", top->ledg_1);
+    printf("SIM: ledg_1 = %d\n", top->ledg_1);
     ledg_acc |= top->ledg_1; //Keep track of which keyboard LEDs have been turned on.
     prev_ledg_1 = top->ledg_1;
   }
 
   if (top->ledr_0 != prev_ledr_0) {
-    printf("ledr_0 = %d\n", top->ledr_0);
+    printf("SIM: ledr_0 = %d\n", top->ledr_0);
 
     prev_ledr_0 = top->ledr_0;
   }
 
   if (top->ledg_1 != prev_ledg_1) {
-    printf("ledg_1 = %d\n", top->ledg_1);
+    printf("SIM: ledg_1 = %d\n", top->ledg_1);
 
     prev_ledg_1 = top->ledg_1;
   }
 
   if (top->ledr_1 != prev_ledr_1) {
-    printf("ledr_1 = %d\n", top->ledr_1);
+    printf("SIM: ledr_1 = %d\n", top->ledr_1);
 
     prev_ledr_1 = top->ledr_1;
   }
@@ -155,7 +155,7 @@ static void tick6(void) {
 //We have a 6.25Mhz clock (for USB), a 50MHz clock, and a 100MHz clock.
 //Advance simulation by one 6.25Mhz clock cycle.
 static void tick(void) {
-  tick6(); 
+  tick6();
 }
 
 int main(int argc, char** argv, char** env) {
@@ -172,7 +172,7 @@ int main(int argc, char** argv, char** env) {
 
     // Verilator must compute traced signals
     contextp->traceEverOn(true);
-    
+
     // Pass arguments so Verilated code can see them, e.g. $value$plusargs
     // This needs to be called before you create any model
     contextp->commandArgs(argc, argv);
@@ -187,24 +187,24 @@ int main(int argc, char** argv, char** env) {
         attach_debugger = true;
         continue;
       case 't':
-        printf("Tracing enabled\n");
+        printf("SIM: Tracing enabled\n");
         tracing_enable = true;
         continue;
       case 'i':
-        printf("Interactive mode enabled\n");
+        printf("SIM: Interactive mode enabled\n");
         interactive_mode = true;
         continue;
       case '?':
       case 'h':
       default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-a: attach debugger.\n");
-        printf("-t: enable tracing.\n");
-        printf("-i: enable interactive mode.\n");
+        printf("SIM: \nVmodel Usage:\n");
+        printf("SIM: -h: print this help\n");
+        printf("SIM: -a: attach debugger.\n");
+        printf("SIM: -t: enable tracing.\n");
+        printf("SIM: -i: enable interactive mode.\n");
         return 0;
         break;
-	    
+
       case -1:
         break;
       }
@@ -217,14 +217,14 @@ int main(int argc, char** argv, char** env) {
       top->trace(tfp, 99); //Trace 99 levels deep.
       tfp->open("simx.fst");
     }
-    
+
     jtag_set_bypass(!attach_debugger);
 
     // Assert reset for a couple of clock cycles.
     top->clk_100 = 0;
     top->clk_50 = 0;
     top->clk_6 = 0;
-    
+
     top->uart_rx = 0;
 
     top->rst_ni = 0;
@@ -234,19 +234,19 @@ int main(int argc, char** argv, char** env) {
 
     //Take the system out of reset.
     top->rst_ni = 1;
-    
+
     // When not in interactive mode, simulate for 200000000 timeprecision periods
     while (interactive_mode || (contextp->time() < 200000000)) {
       // Evaluate model
-      tick();        
+      tick();
     }
-    
+
     //Count keyboard reports in the UARTRxString buffer.
     int numKeyboardReports = 0;
     int pos=0;
-    
+
     while (pos != std::string::npos) {
-      pos = uartRxString.find("keyboard report", pos); 
+      pos = uartRxString.find("keyboard report", pos);
       if (pos != std::string::npos) {
         ++numKeyboardReports;
         ++pos;
@@ -263,7 +263,7 @@ int main(int argc, char** argv, char** env) {
         ++numMouseReports;
         ++pos;
       }
-    } 
+    }
 
     //Count 'Led Report IRQ not received' reports in the UARTRxString buffer.
     int numMissingIRQs = 0;
@@ -275,7 +275,7 @@ int main(int argc, char** argv, char** env) {
         ++numMissingIRQs;
         ++pos;
       }
-    } 
+    }
 
     int res = 0;
 
@@ -284,11 +284,11 @@ int main(int argc, char** argv, char** env) {
         (numMouseReports >= 10) &&
         (numMissingIRQs == 0) &&
         (ledg_acc == 0x7)) {
-      printf("Test passed.\n");
+      printf("SIM: Test passed.\n");
       res = 0;
     }
     else {
-      printf("Test failed: numKeyboardReports: %d, numMouseReports: %d, LED acc.: 0x%x\n", 
+      printf("SIM: Test failed: numKeyboardReports: %d, numMouseReports: %d, LED acc.: 0x%x\n",
             numKeyboardReports, numMouseReports, ledg_acc);
       res = 1;
     }

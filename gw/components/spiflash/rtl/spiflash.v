@@ -84,21 +84,21 @@ module spiflash #(
 ) (
     // {{{
     input  wire        i_clk,
-    i_reset,
+    input  wire        i_reset,
     //
     input  wire        i_wb_cyc,
-    i_wb_stb,
-    i_cfg_stb,
-    i_wb_we,
+    input  wire        i_wb_stb,
+    input  wire        i_cfg_stb,
+    input  wire        i_wb_we,
     input  wire [21:0] i_wb_addr,
     input  wire [31:0] i_wb_data,
     output reg         o_wb_stall,
-    o_wb_ack,
+    output reg         o_wb_ack,
     output reg  [31:0] o_wb_data,
     //
     output reg         o_spi_cs_n,
-    o_spi_sck,
-    o_spi_mosi,
+    output reg         o_spi_sck,
+    output reg         o_spi_mosi,
     input  wire        i_spi_miso
     // }}}
 );

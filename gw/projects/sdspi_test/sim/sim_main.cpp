@@ -45,7 +45,7 @@ VerilatedFstC* tfp = new VerilatedFstC;
 // Multiple modules (made later below with Vtop) may share the same
 // context to share time, or modules may have different contexts if
 // they should be independent from each other.
-std::unique_ptr<VerilatedContext> contextp{new VerilatedContext}; 
+std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 
 // Construct the Verilated model, from Vmodel.h generated from Verilating this project.
 // Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
@@ -70,10 +70,10 @@ static void cleanup() {
 //Returns 0 if OK, negative on error.
 static int setupSDSPISim(const char *sdcard_image) {
 		if (0 != access(sdcard_image, R_OK)) {
-			printf("Cannot open %s for reading\n", sdcard_image);
+			printf("SIM: Cannot open %s for reading\n", sdcard_image);
 			return -1;
 		} if (0 != access(sdcard_image, W_OK)) {
-			printf("Cannot open %s for writing\n", sdcard_image);
+			printf("SIM: Cannot open %s for writing\n", sdcard_image);
 			return -2;
 		}
 
@@ -92,7 +92,7 @@ static void tick(void) {
     top->eval();
     if (tracing_enable)
       tfp->dump(contextp->time());
-    
+
     //Low phase
     top->clk_i = 0;
     contextp->timeInc(1);
@@ -106,12 +106,12 @@ static void tick(void) {
 
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model
-  top->uart_rx = (*uart)(top->uart_tx, 
-  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
+  top->uart_rx = (*uart)(top->uart_tx,
+  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wbuart_inst__DOT__uart_setup);
 
   //Detect and print changes to UART
   if (uart->get_rx_string().back() == '\n')  {
-    printf("%s", uart->get_rx_string().c_str());
+    printf("DUT: %s", uart->get_rx_string().c_str());
 
     //Update change detectors
     uartRxStringPrev = uart->get_rx_string();
@@ -134,7 +134,7 @@ int main(int argc, char** argv, char** env) {
 
     // Verilator must compute traced signals
     contextp->traceEverOn(true);
-    
+
     // Pass arguments so Verilated code can see them, e.g. $value$plusargs
     // This needs to be called before you create any model
     contextp->commandArgs(argc, argv);
@@ -153,25 +153,25 @@ int main(int argc, char** argv, char** env) {
         sd_img_filename = optarg;
         continue;
       case 't':
-        printf("Tracing enabled\n");
+        printf("SIM: Tracing enabled\n");
         tracing_enable = true;
         continue;
       case 'i':
-        printf("Interactive mode enabled\n");
+        printf("SIM: Interactive mode enabled\n");
         interactive_mode = true;
         continue;
       case '?':
       case 'h':
       default :
-        printf("\nVmodel Usage:\n");
-        printf("-h: print this help\n");
-        printf("-a: attach debugger.\n");
-        printf("-t: enable tracing.\n");
-        printf("-i: enable interactive mode.\n");
-        printf("-s <sdcard.img>\n");
+        printf("SIM: \nVmodel Usage:\n");
+        printf("SIM: -h: print this help\n");
+        printf("SIM: -a: attach debugger.\n");
+        printf("SIM: -t: enable tracing.\n");
+        printf("SIM: -i: enable interactive mode.\n");
+        printf("SIM: -s <sdcard.img>\n");
         return 0;
         break;
-	    
+
       case -1:
         break;
       }
@@ -184,10 +184,10 @@ int main(int argc, char** argv, char** env) {
       top->trace(tfp, 99); //Trace 99 levels deep.
       tfp->open("simx.fst");
     }
-    
+
     jtag_set_bypass(!attach_debugger);
 
-    printf("SD Image File: %s\n", sd_img_filename);
+    printf("SIM: SD Image File: %s\n", sd_img_filename);
 
     if(setupSDSPISim(sd_img_filename) < 0) {
       cleanup();
@@ -215,13 +215,13 @@ int main(int argc, char** argv, char** env) {
     tick();
     tick();
     tick();
-  
+
     // When not in interactive mode, simulate for 300000000 timeprecision periods
     while (interactive_mode || (contextp->time() < 300000000)) {
         // Evaluate model
-        tick();        
+        tick();
     }
-    
+
     cleanup();
 
     // Checks for automated testing.
@@ -229,14 +229,14 @@ int main(int argc, char** argv, char** env) {
     std::string uartCheckString("Test Successful.");
 
     if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
-      printf("Test failed\n");
-      printf("Expected: %s\n", uartCheckString.c_str());
-      printf("Received: %s\n", uartRxStringPrev.c_str());
+      printf("SIM: Test failed\n");
+      printf("SIM: Expected: %s\n", uartCheckString.c_str());
+      printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
 
       res = 1;
     }
     else {
-      printf("Test passed.\n");
+      printf("SIM: Test passed.\n");
     }
 
     return res;

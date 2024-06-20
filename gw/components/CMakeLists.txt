@@ -39,9 +39,9 @@ add_subdirectory(audio_dac)
 add_subdirectory(ym2149)
 add_subdirectory(sdspi)
 add_subdirectory(vera)
-add_subdirectory(wbuart32)
+add_subdirectory(wbuart)
 add_subdirectory(riscv-dbg)
-add_subdirectory(wb_gpio)
+add_subdirectory(gpio)
 add_subdirectory(litedram)
 add_subdirectory(ibex_wb_core)
 add_subdirectory(ibex)
@@ -56,11 +56,5 @@ add_subdirectory(usb_hid_host)
 add_subdirectory(usb_hid_device)
 add_subdirectory(cdc_cells)
 add_subdirectory(spiflash)
-
-
-
-
-
-
-
+add_subdirectory(wb_timer)
 
