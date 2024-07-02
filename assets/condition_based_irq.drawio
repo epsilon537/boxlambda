@@ -1,0 +1,199 @@
+<mxfile host="Electron" modified="2024-06-25T08:31:19.011Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="ZcO132gKkgx56FByoR7N" version="24.5.3" type="device">
+  <diagram name="Page-1" id="SOJ3r4OxMs76CuXjOSab">
+    <mxGraphModel dx="1350" dy="1929" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="IKTOr-LaJqYRIasCOozO-1" value="UART" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="200" y="200" width="120" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;fillStyle=hatch;" parent="1" vertex="1">
+          <mxGeometry x="220" y="320" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-3" value="Rx FIFO" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;fillStyle=hatch;fontSize=18;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="220" y="280" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;fillColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="220" y="240" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-5" value="CPU&lt;div&gt;in M-Mode&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="180" y="-40" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-6" value="IRQ = 0" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=18;" parent="1" target="IKTOr-LaJqYRIasCOozO-5" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="260" y="200" as="sourcePoint" />
+            <mxPoint x="310" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-7" value="UART" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="600" y="200" width="120" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-8" value="&#39;H&#39;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;fillStyle=hatch;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="620" y="320" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-9" value="Rx FIFO" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;fillStyle=hatch;fontSize=18;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="620" y="280" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-10" value="" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;fillColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="620" y="240" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-11" value="CPU&lt;div style=&quot;font-size: 18px;&quot;&gt;enters uart_irq_handler().&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="580" y="-40" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-12" value="IRQ = 1" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=18;" parent="1" target="IKTOr-LaJqYRIasCOozO-11" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="660" y="200" as="sourcePoint" />
+            <mxPoint x="710" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-16" value="UART" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="800" y="200" width="120" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-18" value="Rx FIFO" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;fillStyle=hatch;fontSize=18;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="820" y="280" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-19" value="" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;fillColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="820" y="240" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-20" value="CPU&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;uart_irq_handler()&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;reads character from FIFO.&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="780" y="-40" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-23" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.333;entryY=0.2;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="IKTOr-LaJqYRIasCOozO-16" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="840" y="80" as="sourcePoint" />
+            <mxPoint x="820" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-24" value="UART" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="200" width="120" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-26" value="Rx FIFO" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;fillStyle=hatch;fontSize=18;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="1020" y="280" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-27" value="" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;fillColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="1020" y="240" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-28" value="CPU&lt;div style=&quot;font-size: 18px;&quot;&gt;uart_irq_handler()&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;returns from interrupt (iret).&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="980" y="-40" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-29" value="IRQ = 0" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=18;" parent="1" target="IKTOr-LaJqYRIasCOozO-28" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1060" y="200" as="sourcePoint" />
+            <mxPoint x="1110" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-32" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;fillStyle=hatch;fontSize=18;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="1020" y="320" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-33" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="483" y="160" as="sourcePoint" />
+            <mxPoint x="543" y="120" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="513" y="160" />
+              <mxPoint x="513" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-35" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="942" y="160" as="sourcePoint" />
+            <mxPoint x="882" y="120" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="912" y="160" />
+              <mxPoint x="912" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-36" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="160" as="sourcePoint" />
+            <mxPoint x="320" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-37" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="670" y="120" as="sourcePoint" />
+            <mxPoint x="710" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-39" value="UART" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="400" y="200" width="120" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-41" value="Rx FIFO" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;fillStyle=hatch;fontSize=18;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="420" y="280" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-42" value="" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;fillColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="420" y="240" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-43" value="CPU&lt;div&gt;in M-Mode&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="380" y="-40" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-44" value="IRQ = 0-&amp;gt;1" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=18;" parent="1" target="IKTOr-LaJqYRIasCOozO-43" edge="1">
+          <mxGeometry y="-30" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="200" as="sourcePoint" />
+            <mxPoint x="510" y="150" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-38" value="A character&lt;div style=&quot;font-size: 18px;&quot;&gt;arrives.&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;fontSize=18;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" edge="1">
+          <mxGeometry x="-1" y="-40" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="410" as="sourcePoint" />
+            <mxPoint x="460" y="360" as="targetPoint" />
+            <mxPoint x="-40" y="40" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-48" value="&#39;H&#39;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;fillStyle=hatch;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="420" y="320" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-49" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;&#39;H&#39;&lt;/font&gt;" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry y="20" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="830" y="160" as="sourcePoint" />
+            <mxPoint x="830" y="120" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-50" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;fillStyle=hatch;fontSize=18;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="820" y="320" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-52" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1079" y="160" as="sourcePoint" />
+            <mxPoint x="1119" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IKTOr-LaJqYRIasCOozO-21" value="IRQ = 1-&amp;gt;0" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=18;" parent="1" target="IKTOr-LaJqYRIasCOozO-20" edge="1">
+          <mxGeometry y="-39" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="860" y="200" as="sourcePoint" />
+            <mxPoint x="910" y="150" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d5noaTedCDIWe17VvIJk-1" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#9999FF;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="201" as="sourcePoint" />
+            <mxPoint x="380" y="201" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d5noaTedCDIWe17VvIJk-2" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#9999FF;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="540" y="200" as="sourcePoint" />
+            <mxPoint x="580" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d5noaTedCDIWe17VvIJk-3" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#9999FF;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="741" y="200" as="sourcePoint" />
+            <mxPoint x="781" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d5noaTedCDIWe17VvIJk-4" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#9999FF;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="940" y="200" as="sourcePoint" />
+            <mxPoint x="980" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

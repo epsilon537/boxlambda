@@ -11,8 +11,7 @@ The CPU supports the following interrupts (taken from [https://ibex-core.readthe
 | ``irq_fast_i[14:0]``    | 30:16 | 15 fast, local interrupts                        |
 | ``irq_external_i``      | 11    | Connected to platform-level interrupt controller |
 | ``irq_timer_i``         | 7     | Connected to timer module                        |
-| ``irq_software_i``      | 3     | Connected to memory-mapped (inter-processor)     |
-|                         |       | interrupt register                               |
+| ``irq_software_i``      | 3     | Connected to memory-mapped (inter-processor) interrupt register    |
 
 ### The Timer
 
@@ -28,18 +27,17 @@ We can freely assign 15 local interrupts. I've got the following list:
 
 - 1 interrupt line per Reconfigurable Module (RM), so 3 in total. The default RMs are VERA and a Dual JT49. VERA uses one interrupt line, JT49 uses none.
 - 1 interrupt line each for:
-  - wbuart
-  - sdspi
-  - wbi2c
-  - ps2_mouse
-  - ps2_keyboard
-  - PicoRV DMA
-  - Quad SPI
-  - ICAP
-  - DFX Controller
-  - GPIO. 
-  
-  That's 10 interrupts in total.
+    - UART
+    - GPIO
+    - SDSPI
+    - USB_HID_0
+    - USB_HID_1
+    - I2C
+    - PicoRV DMA
+    - ICAP
+    - DFX Controller
+
+  That's 12 interrupts in total.
 
 The interrupts are serviced in order of priority, the highest number being the highest priority.
 
@@ -48,22 +46,22 @@ I have ordered the Fast Local interrupts as follows:
 **Fast Local Interrupt Assignments:**
 
 | Interrupt Input Signal  | ID    | Description                             |
--------------------------|-------|-----------------------------------------|
+|-------------------------|-------|-----------------------------------------|
 | ``irq_fast_i[14]``      | 30    | RM_2 interrupt (Default: not assigned)  |
 | ``irq_fast_i[13]``      | 29    | RM_1 interrupt (Default: VERA IRQ)      |
 | ``irq_fast_i[12]``      | 28    | RM_0 interrupt (Default: not assigned)  |
 | ``irq_fast_i[11]``      | 27    | PICORV DMAC IRQ                         |
-| ``irq_fast_i[10]``      | 26    | sdspi IRQ                               |
-| ``irq_fast_i[9]``       | 25    | wbuart IRQ                              |
-| ``irq_fast_i[8]``       | 24    | ps2_keyboard IRQ                        |
-| ``irq_fast_i[7]``       | 23    | ps2_mouse IRQ                           |
-| ``irq_fast_i[6]``       | 22    | sbi2c IRQ                               |
-| ``irq_fast_i[5]``       | 21    | GPIO IRQ                                |
-| ``irq_fast_i[4]``       | 20    | Quad SPI IRQ                            |
-| ``irq_fast_i[3]``       | 19    | DFX Controller IRQ                      |
-| ``irq_fast_i[2]``       | 18    | ICAP IRQ                                |
-| ``irq_fast_i[1]``       | 17    | not assigned                            |
-| ``irq_fast_i[0]``       | 16    | not assigned                            |
+| ``irq_fast_i[10]``      | 26    | SDSPI IRQ                               |
+| ``irq_fast_i[9]``       | 25    | GPIO                                    |
+| ``irq_fast_i[8]``       | 24    | usb_hid_1 IRQ                           |
+| ``irq_fast_i[7]``       | 23    | usb_hid_0 IRQ                           |
+| ``irq_fast_i[6]``       | 22    | I2C IRQ                                 |
+| ``irq_fast_i[5]``       | 21    | UART                                    |
+| ``irq_fast_i[4]``       | 20    | not assigned                            |
+| ``irq_fast_i[3]``       | 19    | not assigned                            |
+| ``irq_fast_i[2]``       | 18    | not assigned                            |
+| ``irq_fast_i[1]``       | 17    | DFX Controller IRQ                      |
+| ``irq_fast_i[0]``       | 16    | ICAP IRQ                                |
 
 ### The Platform Level Interrupt Controller.
 

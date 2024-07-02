@@ -13,10 +13,10 @@ The following clocks are present in the SoC:
 - 200MHz reference clock for IODELAYs, generated and used the LiteDRAM core.
 - **tck**: JTAG clock, driven via a *BSCANE2* primitive by the FPGA's JTAG chain. The *BSCANE2* primitive is instantiated in the *dmi_bscane_tap* module.
 - **usb_clk**: 12MHz clock for the USB HID Host cores.
-  
+
 ## Reset
 
-- **Reset Controller Component in the BoxLambda Directory Tree**: 
+- **Reset Controller Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/reset_ctrl](https://github.com/epsilon537/boxlambda/tree/master/gw/components/reset_ctrl)
 
 - **Reset Controller Top-Level**:

@@ -3,49 +3,50 @@ Estimated FPGA Utilization
 
 Estimated FPGA Resource Utilization on Arty A7-100T
 ----------------------------------------------------
-
-| Resources Type | DPRAMs | Vera | Ibex | riscv-dbg | LiteDRAM | 2xYM2149+DAC |
-|----------------|--------|------|------|-----------|----------|--------------|
-|**Slice LUTs**|1758|1261|3466|838|2537|887|
-|**Slice Registers**|28|867|937|958|2166|867|
-|**Block RAM Tile**|64|40|0|0|0|1|
-|**DSPs**|0|0|1|0|2|0|
-
-| Resources Type | PicoRV DMA | sdspi | wbi2c | wbuart | SPI Flash | 2xUSB HID |
-|----------------|------------|-------|-------|--------|-----------|-----------|
-|**Slice LUTs**|2522|536|393|438|48|694|
-|**Slice Registers**|1359|749|324|346|77|988|
-|**Block RAM Tile**|1|1|0|0|0|1|
-|**DSPs**|0|0|0|0|0|0|
-
-| Resources Type | Interconnect | Total | Avl. Resources | Pct. Utilization |
-|----------------|-------------|--------|----------------|------------------|
-|**Slice LUTs**|2846|16157|63400|25%|
-|**Slice Registers**|2022|11136|126800|9%|
-|**Block RAM Tile**|0|108|135|80%|
-|**DSPs**|0|3|240|1%|
+| Component | **Slice LUTS** | **Slice Registers** | **Block RAM Tiles** | **DSPs** |
+|-----------|----------------|---------------------|---------------------|----------|
+| CMEM+DMEM | 1758 | 28 | 64 | 0 |
+| VERA | 1705 | 867 | 40 | 0 |
+| Ibex CPU | 3466 | 937 | 0 | 1 |
+| RISCV-DBG | 838 | 958 | 0 | 0 |
+| LiteDRAM | 2537 | 2166 | 0 | 0 |
+| 2xYM2149+DAC | 887 | 867 | 1 | 2 |
+| PicoRV DMA | 2522 | 1359 | 1 | 0 |
+| SDSPI | 527 | 753 | 1 | 0 |
+| WBI2C | 393 | 324 | 0 | 0 |
+| WBUART | 454 | 359 | 0 | 0 |
+| SPI Flash | 48 | 77 | 0 | 0 |
+| 2xUSB HID | 694 | 988 | 1 | 0 |
+| GPIO | 239 | 320 | 0 | 0 |
+| WB Timer | 121 | 163 | 0 | 0 |
+| Interconnect | 2846 | 2022 | 0 | 0 |
+|              |      |      |   |   |
+| Total Used   | 19035 | 12188 | 108 | 3 |
+| Avl. Resources | 63400 | 126800 | 135 | 240 |
+| **Pct. Utilization** | **30%** | **10%** | **80%** | **1%** |
 
 Estimated FPGA Resource Utilization on Arty A7-35T
 --------------------------------------------------
 
-| Resources Type |  DPRAMs | Vera | Ibex | riscv-dbg | LiteDRAM | 2xYM2149+DAC |
-|----------------|---------|------|------|-----------|----------|--------------|
-|**Slice LUTs**|422|1261|3466|838|2537|887|
-|**Slice Registers**|10|867|937|958|2166|867|
-|**Block RAM Tile**|**16**|24|0|0|0|1|
-|**DSPs**|0|0|1|0|2|0|
-
-| Resources Type | PicoRV DMA | sdspi | wbi2c | wbuart | SPI Flash | 2xUSB HID |
-|----------------|------------|-------|-------|--------|-----------|-----------|
-|**Slice LUTs**|2522|536|393|438|48|694|
-|**Slice Registers**|1359|749|324|346|77|988|
-|**Block RAM Tile**|1|1|0|0|0|1|
-|**DSPs**|0|0|0|0|0|0|
-
-| Resources Type | Interconnect | Total | Avl. Resources | Pct. Utilization |
-|----------------|--------------|-------|----------------|------------------|
-|**Slice LUTs**|2115|16157|20800|78%|
-|**Slice Registers**|1488|11136|41600|27%|
-|**Block RAM Tile**|0|44|50|88%|
-|**DSPs**|0|4|90|4.44%|
+| Component | **Slice LUTS** | **Slice Registers** | **Block RAM Tiles** | **DSPs** |
+|-----------|----------------|---------------------|---------------------|----------|
+| CMEM+DMEM | 422 | 10 | 16 | 0 |
+| VERA | 1705 | 867 | 24 | 0 |
+| Ibex CPU | 3466 | 937 | 0 | 1 |
+| RISCV-DBG | 838 | 958 | 0 | 0 |
+| LiteDRAM | 2537 | 2166 | 0 | 0 |
+| 2xYM2149+DAC | 887 | 867 | 1 | 2 |
+| PicoRV DMA | 2522 | 1359 | 1 | 0 |
+| SDSPI | 527 | 753 | 1 | 0 |
+| WBI2C | 393 | 324 | 0 | 0 |
+| WBUART | 454 | 359 | 0 | 0 |
+| SPI Flash | 48 | 77 | 0 | 0 |
+| 2xUSB HID | 694 | 988 | 1 | 0 |
+| GPIO | 239 | 320 | 0 | 0 |
+| WB Timer | 121 | 163 | 0 | 0 |
+| Interconnect | 2115 | 1488 | 0 | 0 |
+|              |      |      |   |   |
+| Total Used   | 16968 | 11636 | 44 | 4 |
+| Avl. Resources | 20800 | 41600 | 50 | 90 |
+| **Pct. Utilization** | **82%** | **27%** | **88%** | **4%** |
 

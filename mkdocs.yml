@@ -44,8 +44,10 @@ nav:
         - PicoRV DMA Controller: components_picorv_dma.md
         - USB HID Keyboard and Mouse: components_usb_hid.md
         - Serial Port: components_serial.md
+        - GPIO: components_gpio.md
+        - Timer: components_timer.md
         - I2C: components_i2c.md
-        - Miscellaneous: components_misc.md
+        - Dynamic Function Exchange: components_dfx.md
     - Software Components:
         - LiteDRAM Initialization: sw_comp_litedram_initialization.md
         - PicoLibc and Bootstrap: sw_comp_picolibc.md

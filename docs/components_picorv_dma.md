@@ -3,10 +3,10 @@
 - **PicoRV32 Repo**, BoxLambda fork, *boxlambda* branch:
     [https://github.com/epsilon537/picorv32](https://github.com/epsilon537/picorv32)
 
-- **PicoRV32 Submodule in the BoxLambda Directory Tree**: 
+- **PicoRV32 Submodule in the BoxLambda Directory Tree**:
     boxlambda/sub/picorv32/.
 
-- **PicoRV DMA Component in the BoxLambda Directory Tree**: 
+- **PicoRV DMA Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/picorv_dma](https://github.com/epsilon537/boxlambda/tree/master/gw/components/picorv_dma)
 
 - **PicoRV DMA Core Top-Level**:
@@ -23,7 +23,7 @@ The goal of the DMA Controller is to use it for data transfers between external 
 - Different block sizes and strides, both in source and destination.
 - Scatter-Gather.
 - Bit manipulations such as bit-masking and rotation on the data being transferred.
-  
+
 To achieve these goals I decided to take a processor-based approach, using the [PicoRV32](https://github.com/YosysHQ/picorv32) RISC-V processor.
 
 ### Transfer Scenarios
@@ -56,7 +56,7 @@ The DMA core's top-level is located here:
 
 Memory accesses coming from the PicoRV processor are mapped into the following address spaces:
 
-- **0x10002000-0x10003000**: PicoRV **Program Memory**, or to be more accurate, Program Memory and Local Data. 
+- **0x10002000-0x10003000**: PicoRV **Program Memory**, or to be more accurate, Program Memory and Local Data.
 - **0x10003000-0x10003080**: The DMA Core's **System Registers** and **Host Interface Registers** (HIR), not to be confused with PicoRV's own registers (x0-x31).
 - **0x10003080-0x10003098**: The DMA Core's **Burst Registers**, used in Burst Mode. See the [Burst Mode](#burst-mode) section below.
 - **All other memory accesses with address < 0x80000000**: These are considered non-local and are turned into **Single** Wishbone Bus Master (WBM) transactions, as opposed to **Burst** Wishbone transactions, the next line item. *Single* transactions are straightforward. A single PicoRV load or store (*lw/lb/sw/sb*) request gets turned into a single read or write Wishbone transaction.  These WBM transactions are dispatched to WBM port 0 or port 1 based on a cut-off address (0x50000000). Port 0 is attached to the Processor Bus and port 1 to the DMA Bus. See BoxLambda's [Architecture Diagram](architecture.md#architecture).
@@ -64,14 +64,14 @@ Memory accesses coming from the PicoRV processor are mapped into the following a
 
 Through the Wishbone Slave (WBS) port, the Host Processor has access to PicoRV's Program Memory, the System Registers, and the Host Interface Registers. The Burst Registers are not directly accessible by the Host Processor.
 
-Host processor access to PicoRV's Program Memory is only enabled when the PicoRV is held in reset. PicoRV reset is controlled through one of the System Registers, the **Control Register**. 
+Host processor access to PicoRV's Program Memory is only enabled when the PicoRV is held in reset. PicoRV reset is controlled through one of the System Registers, the **Control Register**.
 
 The 16 Host Interface Registers serve as the communication interface between the Host Processor and the DMA Controller. They are general-purpose registers. Their role is decided by the program that gets loaded into PicoRV's Program Memory.
 
 System Registers **IRQ_in** and **IRQ_out** are for interrupt handling and interrupt reporting respectively:
 
 - *IRQ_in* register: System interrupts get registered here. The PicoRV itself is configured without interrupt handling support. Instead, the program loop is expected to poll the IRQ_in register if interrupt handling is required.
-- *IRQ_out* register: The PicoRV can set IRQs in this register. If any bits in the *IRQ_out* register are set, the core sets the **irq_out** output signal.
+- *IRQ_out* register: The PicoRV can set IRQs in this register. If any bits in the *IRQ_out* register are set, the core sets the **irq_out** output signal. The host CPU acknowledges interrupts by setting the corresponding bits to one in the *IRQ_out* register.
 
 #### Usage
 
@@ -82,7 +82,7 @@ The intended usage is as follows:
 - The Host Processor configures DMA requests and the PicoRV reports status through the Host Interface Registers. The role of the different registers is determined by the application-specific microprogram running on the PicoRV.
 - Flow Control can be implemented through interrupts, or by having the PicoRV poll the given slave using the slave's register interface.
 - Rate Control can be implemented through interrupts or PicoRV internal timing.
-   
+
 Note that although I primarily intend to use the PicoRV DMA core for DMA purposes, it can be used as a general-purpose auxiliary processor as well. All it takes is to load a microprogram that consists of a single jump to the main program in on-chip or external memory.
 
 ### Burst Mode
@@ -98,7 +98,7 @@ In the diagram above, the top row shows a burst of four words being read and sto
 A couple of things are worth noting:
 
 - The burst read sequence and the burst write sequence are triggered by a PicoRV word read / word write request.
-- These PicoRV word read / word write requests are *Posted Reads* and *Posted Writes*, i.e. the transaction completes immediately toward the PicoRV. The PicoRV does not stall until the entire burst is read or written. The PicoRV will only stall when a new read or write request is posted before a previous burst transaction has been completed. The posted burst transactions give the PicoRV copy-loop a few clock cycles of breathing room to do pointer arithmetic etc. without causing delays in the data path.  
+- These PicoRV word read / word write requests are *Posted Reads* and *Posted Writes*, i.e. the transaction completes immediately toward the PicoRV. The PicoRV does not stall until the entire burst is read or written. The PicoRV will only stall when a new read or write request is posted before a previous burst transaction has been completed. The posted burst transactions give the PicoRV copy-loop a few clock cycles of breathing room to do pointer arithmetic etc. without causing delays in the data path.
 
 ![PicoRV instructions vs. Burst Transaction.](assets/picorv_racing_burst_transactions.png)
 
@@ -141,7 +141,7 @@ wait_start:
     lw a2, HIR1(a0)    /*HIR1: dst pointer*/
     lw a3, HIR2(a0)    /*HIR2: num words*/
     slli a3, a3, 2    /*Multiple by 4 to convert to byte address offset.*/
-    add a3, a3, a1    
+    add a3, a3, a1
 loop:
     /*Copy word by word*/
     lw t0, 0(a1)

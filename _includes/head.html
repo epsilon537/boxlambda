@@ -9,4 +9,15 @@
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
     {%- include google-analytics.html -%}
   {%- endif -%}
+  <!-- mathjax -->
+  {% if page.mathjax %}
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML">
+          MathJax.Hub.Config({
+              tex2jax: {
+                  inlineMath: [["$", "$"], ["\\(", "\\)"]],
+                  processEscapes: true
+              }
+          });
+      </script>
+  {% endif %}
 </head>

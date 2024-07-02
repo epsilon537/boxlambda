@@ -28,6 +28,7 @@ github_username:  epsilon537
 
 permalink: /:title/
 markdown: kramdown
+mathjax: true
 paginate: 5
 paginate_path: "/:num/"
 date_format: "%b %-d, %Y"
