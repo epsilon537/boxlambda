@@ -7,7 +7,7 @@
 
 if [[ "$#" > 0 && "$1" == "-h" ]]
 then
-  echo "$0 [-h] [-s]" 
+  echo "$0 [-h] [-s]"
   echo "-h: Show help."
   echo "-s: Check out all submodules to boxlambda branch head (instead of detached head)."
   exit 1
@@ -20,6 +20,7 @@ git submodule update --init --recursive
 if [[ "$#" > 0 && "$1" == "-s" ]]
 then
     echo "Recursively checking out submodules to HEAD of boxlambda branch."
+    git submodule foreach --recursive git pull
     git submodule foreach --recursive git checkout boxlambda
 fi
 
