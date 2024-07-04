@@ -1,6 +1,5 @@
 
 #include "mcycle.h"
-#include "platform.h"
 
 #include <stdint.h>
 

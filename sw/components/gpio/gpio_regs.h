@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#define GPIO_BASE 0x10000100
+
 /*
  * GPIO Hardware Access Layer
  */

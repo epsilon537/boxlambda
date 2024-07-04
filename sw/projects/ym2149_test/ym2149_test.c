@@ -7,7 +7,6 @@
 #include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
-#include "platform.h"
 #include "mcycle.h"
 #include "ym2149_sys_regs.h"
 

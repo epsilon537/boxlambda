@@ -18,11 +18,10 @@ target_include_directories(dual_port_ram_test
     PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/sw/components/picorv_dma/test/
-  ${PROJECT_SOURCE_DIR}/sw/components/platform/
 )
 
 link_and_create_mem_file(dual_port_ram_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(dual_port_ram_test picorv_dma gpio mcycle)
+target_link_libraries(dual_port_ram_test picorv_dma gpio riscv)
 

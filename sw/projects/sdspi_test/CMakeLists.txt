@@ -12,10 +12,9 @@ target_compile_definitions(sdspi_test
 target_include_directories(sdspi_test
     PRIVATE
      ${PROJECT_SOURCE_DIR}/sub/sdspi/sw/
-  ${PROJECT_SOURCE_DIR}/sw/components/platform/
 )
 
 #Function defined in parent CMakeLists.txt file:
 link_and_create_mem_file(sdspi_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(sdspi_test gpio mcycle)
+target_link_libraries(sdspi_test gpio riscv interrupts)

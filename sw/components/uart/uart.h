@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdarg.h>
 
+#define PLATFORM_UART_BASE		0x10010000
+
 #define PAD_RIGHT 1
 #define PAD_ZERO  2
 

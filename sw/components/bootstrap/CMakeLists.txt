@@ -7,7 +7,6 @@ target_sources(bootstrap
         vectors.S
         crt0.c
         stdio_to_uart.c
-        interrupts.c
 )
 
 #Paths to include files users of bootstrap are expected to use.

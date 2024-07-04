@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "platform.h"
 #include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
