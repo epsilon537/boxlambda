@@ -8,6 +8,7 @@
 extern "C" {
 #endif
 
+#define PLATFORM_CLK_FREQ		(50ULL * 1000 * 1000)
 
 /**
  * Sleeps for microseconds.

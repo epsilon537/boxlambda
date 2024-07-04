@@ -10,5 +10,6 @@ add_subdirectory(flashdrvr)
 add_subdirectory(timer)
 add_subdirectory(gpio)
 add_subdirectory(uart)
-add_subdirectory(mcycle)
+add_subdirectory(riscv)
+add_subdirectory(interrupts)
 

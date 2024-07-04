@@ -4,7 +4,6 @@
 #include "uart.h"
 #include "gpio.h"
 #include "ff.h"
-#include "platform.h"
 #include <stdio.h>
 #include <string.h>
 #include "ym2149_sys_regs.h"

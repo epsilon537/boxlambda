@@ -9,7 +9,6 @@
 #include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
-#include "platform.h"
 #include "mcycle.h"
 
 /*PicoRV register mapping for the wordcopy_burst program.*/

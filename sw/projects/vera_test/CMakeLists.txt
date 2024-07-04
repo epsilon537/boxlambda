@@ -8,12 +8,7 @@ target_compile_options(vera_test
   -O2
 )
 
-target_include_directories(vera_test
-    PRIVATE
-  ${PROJECT_SOURCE_DIR}/sw/components/platform/
-)
-
 #Function defined in parent CMakeLists.txt file:
 link_and_create_mem_file(vera_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(vera_test vera sdram gpio mcycle)
+target_link_libraries(vera_test vera sdram gpio riscv interrupts)
