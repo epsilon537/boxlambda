@@ -3,7 +3,7 @@ Goals and Requirement Analysis
 Goals
 -----
 
-- Create a sandbox for experimenting with software and (FPGA) hardware.    
+- Create a sandbox for experimenting with software and (FPGA) hardware.
     - **Simplicity**: It should be easy to jump in and do something: create, hack, tinker.
         - It should be doable for a single person to develop a good understanding of the entire system, software and hardware.
         - **Deterministic Behavior**: By design, it should be clear how long an operation, be it an instruction or a DMA transfer, is going to take.
@@ -19,7 +19,7 @@ Goals
     - SD card storage
     - VGA Display
     - Audio output
-  
+
 - Sound and graphics should be sufficient to support retro-style 2D gameplay.
 
 Requirement Analysis
@@ -48,7 +48,7 @@ A single-user / single-tasking OS will provide the following services:
 	- copy/move/delete files
 	- execute (transfer control to) applications in memory, optionally passing in command-line arguments
 	- peeking and poking into memory
-	
+
 - File System I/O kernel routines
 - Console I/O kernel routines: Input from a physically attached keyboard, output to a physically attached screen.
 - UART I/O kernel routines
@@ -76,14 +76,12 @@ I'm considering this feature a stretch goal for the project.
 
 ### Target Hardware and Peripherals
 
-I'm currently maintaining a **Big** and a **Little** Configuration. The Big Configuration has more internal memory and more space for optional components than the *Little* Configuration. The *Big* configuration runs on an **Arty A7 100T**. The *Little* Configuration uses an **Arty A7 35T**. 
+I'm currently maintaining a **Big** and a **Little** Configuration. The Big Configuration has more internal memory and more space for optional components than the *Little* Configuration. The *Big* configuration runs on an **Arty A7 100T**. The *Little* Configuration uses an **Arty A7 35T**.
 
 The following PMODs are used for peripherals:
 
 - [Pmod MicroSD: microSD Card Slot](https://digilent.com/shop/pmod-microsd-microsd-card-slot/)
-- [Pmod PS2: Keyboard/mouse connector](https://digilent.com/shop/pmod-ps2-keyboard-mouse-connector/) 
-- [Pmod AMP2: Audio Amplifier](https://digilent.com/shop/pmod-amp2-audio-amplifier/) 
-- [Pmod VGA: Video Graphics Array](https://digilent.com/shop/pmod-vga-video-graphics-array/) 
-- [Wii Nunchuck Adapter](https://www.reichelt.com/be/en/arduino-8211-wiichuck-nunchuck-adapter-ard-wii-nunchuck-p282673.html?CCOUNTRY=661&LANGUAGE=nl&GROUPID=9020&START=0&OFFSET=16&SID=93757c8e4582e90848068d74dbb71d4a2c938ebd13432dc6b9c96&LANGUAGE=EN&&r=1)
-
-I might switch to a [USB PMOD](https://machdyne.com/product/usb-host-dual-socket-pmod/) for keyboard, mouse, and gamepad, instead of the PS2 Pmods and Nunchuck Adapter.
+- [Pmod USB: keyboard/mouse/gamepad port](https://machdyne.com/product/usb-host-dual-socket-pmod/)
+- [Pmod AMP2: Audio Amplifier](https://digilent.com/shop/pmod-amp2-audio-amplifier/)
+- [Pmod VGA: Video Graphics Array](https://digilent.com/shop/pmod-vga-video-graphics-array/)
+- [Pmod RTCC: Real-time Clock/Calendar](https://digilent.com/shop/pmod-rtcc-real-time-clock-calendar/)
