@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-07-02T15:13:01.703Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="DFQVJ4j-8ZboqL7yI20h" version="24.5.3" type="device">
+<mxfile host="Electron" modified="2024-06-25T08:31:19.011Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="ZcO132gKkgx56FByoR7N" version="24.5.3" type="device">
   <diagram name="Page-1" id="SOJ3r4OxMs76CuXjOSab">
     <mxGraphModel dx="1350" dy="1929" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -16,7 +16,7 @@
         <mxCell id="IKTOr-LaJqYRIasCOozO-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;fillColor=#000000;" parent="1" vertex="1">
           <mxGeometry x="220" y="240" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="IKTOr-LaJqYRIasCOozO-5" value="CPU" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
+        <mxCell id="IKTOr-LaJqYRIasCOozO-5" value="CPU&lt;div&gt;in M-Mode&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="180" y="-40" width="160" height="120" as="geometry" />
         </mxCell>
         <mxCell id="IKTOr-LaJqYRIasCOozO-6" value="IRQ = 0" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=18;" parent="1" target="IKTOr-LaJqYRIasCOozO-5" edge="1">
@@ -126,7 +126,7 @@
         <mxCell id="IKTOr-LaJqYRIasCOozO-42" value="" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;fillColor=#000000;" parent="1" vertex="1">
           <mxGeometry x="420" y="240" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="IKTOr-LaJqYRIasCOozO-43" value="CPU" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
+        <mxCell id="IKTOr-LaJqYRIasCOozO-43" value="CPU&lt;div&gt;in M-Mode&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="380" y="-40" width="160" height="120" as="geometry" />
         </mxCell>
         <mxCell id="IKTOr-LaJqYRIasCOozO-44" value="IRQ = 0-&amp;gt;1" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=18;" parent="1" target="IKTOr-LaJqYRIasCOozO-43" edge="1">

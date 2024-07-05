@@ -37,13 +37,13 @@ A core, e.g. a UART, may raise an interrupt request (IRQ) when it detects an eve
 
 Note that in the condition-based interrupt example, there is no explicit interrupt acknowledgment. The IRQ is de-asserted when the FIFO is empty.
 
-- **Event-Based Interrupts**: A core implementing event-based interrupts will assert its IRQ line when a specific event happens. The IRQ line remains asserted until the CPU clears/acknowledges the event by writing to an interrupt register inside the core. E.g. a UART core that implements event-based interrupts will assert its IRQ line when the RX FIFO goes from an empty to a non-empty state. The IRQ line remains asserted until the CPU writes a 1 into the Rx_Data_Avl bit position of the UART core's Interrupt Status Register.
+- **Event-Based Interrupts**: A core implementing event-based interrupts will assert its IRQ line when a specific event happens. The IRQ line remains asserted until the CPU clears/acknowledges the event by writing to an interrupt register inside the core. E.g. a UART core that implements event-based interrupts will assert its IRQ line when the RX FIFO goes from an empty to a non-empty state. The IRQ line remains asserted until the CPU writes a 1 into the *Rx_Data_Avl* bit position of the UART core's Interrupt Status Register.
 
 ![Event-Based Interrupts](../assets/event_based_irq.png)
 
 *Event-Based Interrupt Example.*
 
-In the event-based interrupt example, the interrupt is explicitly acknowledged by a write to the ISR register. Also, the interrupt handler routine *may* read the received character from the Rx FIFO, but this is not required. Retrieving the character from the Rx FIFO may be deferred to a later time when the CPU is back in Machine Mode. In the event-based protocol, interrupt handling is decoupled from handling the condition that triggered the interrupt.
+In the event-based interrupt example, the interrupt is explicitly acknowledged by a write to the ISR register. Also, the interrupt handler routine *may* read the received character from the Rx FIFO, but this is not required. Retrieving the character from the Rx FIFO may be deferred to a later time when the CPU is no longer in interrupted mode. In the event-based protocol, interrupt handling is decoupled from handling the condition that triggered the interrupt.
 
 WBUART and SDSPI Interrupt Protocol Modification
 ================================================
@@ -55,7 +55,7 @@ In the case of wbuart, I added an Interrupt Enable (IEN) register and an Interru
 - **ISR[2]**: The UART Tx FIFO goes from half-full to less than half-full.
 - **ISR[3]**: The UART Tx FIFO goes from non-empty to empty.
 
-ISR bits get cleared by the CPU writing a 1 into the bit position of the event it wants to acknowledge. When any of the IEN-enabled ISR bits are set, the wbuart core's IRQ line is asserted.
+ISR bits get cleared by the CPU writing a 1 into the bit position of the event it wants to acknowledge. When any IEN-enabled ISR bits are set, the wbuart core's IRQ line is asserted.
 
 The modification of the sdspi is almost identical. Here, the events are:
 - **ISR[0]**: The device transitioned from a *busy* state to an *idle* state.
@@ -65,7 +65,7 @@ Most other cores on the BoxLambda SoC already implement the event-based protocol
 
 Edge Triggered Interrupt Controllers connected to a Level-Sensitive CPU
 =======================================================================
-The terms *Condition-based* and *Event-based* interrupt are just terms I came up with for the purpose of this discussion. Some would say that the generally accepted term for what I'm calling *Condition-Based* is *Level-Triggered*, while the official name of an *Event-Based* interrupt is *Edge-Triggered* interrupt. Depending on your perspective, there's some truth to that. Different people have different takes on these terms. You can find the Wikipedia definition of edge- and level-triggered [here](https://en.wikipedia.org/wiki/Interrupt#Triggering_methods).
+The terms *Condition-based* and *Event-based* interrupt are just terms I came up with for this discussion. Some would say that the generally accepted term for what I'm calling *Condition-Based* is *Level-Triggered*, while the official name of an *Event-Based* interrupt is *Edge-Triggered* interrupt. Depending on your perspective, there's some truth to that. Different people have different takes on these terms. You can find the Wikipedia definition of edge- and level-triggered [here](https://en.wikipedia.org/wiki/Interrupt#Triggering_methods).
 
 The Ibex CPU is level-sensitive, no question about that. It responds to the levels of the incoming IRQ lines. It does not register edges or pulses.
 
@@ -129,7 +129,7 @@ Briefly, the Ibex core has:
 
 RISC-V defines 32 IRQ IDs. Ibex maps the timer interrupt to IRQ ID 7 and the fast interrupts to IRQ IDs 16 to 31.
 
-I'm using the same mapping to connect the IRQs to the [PicoRV DMA Controller](https://boxlambda.readthedocs.io/en/latest/components_picorv_dma/), i.e. Ibex and PicoRV are seeing the same set of interrupts with the same IRQ_IDs/ISR bit positions. Note, however, that the PicoRV doesn't directly support interrupts. The PicoRV microcode detects signaled interrupts by polling its Interrupt Status Register. Check the PicoRV DMA Controller link earlier in this paragraph for more details.
+I'm using the same mapping to connect the IRQs to the [PicoRV DMA Controller](https://boxlambda.readthedocs.io/en/latest/components_picorv_dma/), i.e. Ibex and PicoRV see the same set of interrupts with the same IRQ_IDs/ISR bit positions. Note, however, that the PicoRV doesn't directly support interrupts. The PicoRV microcode detects signaled interrupts by polling its Interrupt Status Register. Check the PicoRV DMA Controller link earlier in this paragraph for more details.
 
 This table lists the BoxLambda interrupts and the events they report:
 
@@ -180,13 +180,13 @@ To be able to access the CSRs easily from C/C++ I'm using Five Embeddev's *riscv
 
 [https://github.com/five-embeddev/riscv-csr-access](https://github.com/five-embeddev/riscv-csr-access)
 
-The library consists of a single .h file, which I copied into BoxLambda's bootstrap component directory for the time being:
+The library consists of a single .h file, which I copied into BoxLambda's *riscv* software component directory:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/riscv-csr.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/riscv-csr.h)
+[https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/riscv-csr.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/riscv-csr.h)
 
 Vectored Mode
 =============
-Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the IRQ_ID by four and adding it to the vector table base address. The vector table base address is specified in the *mtvec* CSR. In BoxLambda, I'm leaving it at 0, so the interrupt entry point address is simply the IRQ_ID*4.
+Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the IRQ_ID by four and adding it to the vector table base address. The vector table base address is specified in the *mtvec* CSR. In BoxLambda, I'm leaving it at 0, so the interrupt entry point address is simply IRQ_ID*4.
 
 \\[
 \textrm{BoxLambda Interrupt Entry Point Address} = \textrm{IRQ_ID}\times4
@@ -240,11 +240,11 @@ _rm_2_irq_handler:
 _timer_irq_handler:
   jal x0, _exc_handler //If the IRQ handler does not get overridden and the IRQ fires, jump to the exception handler.
 .weak _exc_handler
-_exc_handler:          //_exc_handler is overridden in the bootstrap SW module.
+_exc_handler:          //_exc_handler is overridden in the interrupts SW module.
   jal x0, _exc_handler
 ```
 
-As you can see, the weak bindings jump to *_exc_handler*, and the default _exc_handler jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/interrupts.h):
+As you can see, the weak bindings jump to *_exc_handler*, and the default _exc_handler jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
 
 ```
 void _rm_2_irq_handler(void) __attribute__((interrupt("machine")));
@@ -263,8 +263,8 @@ void _icap_irq_handler(void) __attribute__((interrupt("machine")));
 void _timer_irq_handler(void) __attribute__((interrupt("machine")));
 ```
 
-The *interrupt("machine")* Attribute
-====================================
+The Interrupt("machine") Attribute
+==================================
 
 Regarding the *interrupt("machine")* attribute in the function declarations above, interrupt service routines require a special entry and exit code sequence. An interrupt service routine needs to save and restore all CPU registers it's modifying to ensure the interrupted code can continue normally when the CPU returns from the interrupt. Also, instead of a regular return, an interrupt service routine should execute a return-from-interrupt when done. These concepts can't be expressed in regular C language, but GCC comes to the resource with the *interrupt("machine")* attribute. This attribute ensures the function receives the proper prologue and epilogue code to make it behave as an interrupt service routine.
 
@@ -330,7 +330,7 @@ Enabling Interrupts
 ===================
 To receive interrupts, you need to enable the global CPU interrupt, *mstatus.MIE*, as well as the specific Machine Interrupts you want to receive by setting their bits in the MIE CSR.
 
-[Interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/interrupts.h) defines functions to enable and disable global as well as specific machine interrupts:
+[Interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h) defines functions to enable and disable global as well as specific machine interrupts:
 
 ```
 /* Disable the global interrupt line at CPU level.*/
@@ -367,30 +367,14 @@ I haven't tested it, but RISC-V supports interrupt nesting. You can find more in
 
 [https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html#nested-interrupt-exception-handling](https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html#nested-interrupt-exception-handling)
 
-Interrupts.h
-------------
-Interrupts.h has been mentioned a few times in the previous sections. It's part of the *bootstrap* software component and implements the interrupt HAL, so to speak:
+The Interrupt API
+-----------------
+*Interrupts.h* provides the interrupt API:
 - It defines all IRQ_IDs.
 - It declares, but does not define (that's up to application code), all interrupt service routines.
 - It provides functions to enable/disable global and machine interrupts.
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/interrupts.h)
-
-Other Changes
--------------
-The GPIO core I've been using in BoxLamdba until recently was a simple core that didn't support interrupt handling. I replaced it with this *Opencores* core:
-
-[https://github.com/xfguo/gpio](https://github.com/xfguo/gpio)
-
-![GPIO Core Block Diagram](../assets/gpio_core_diagram.jpg)
-
-*GPIO Core Block Diagram.*
-
-Each input on this GPIO core can be configured to generate an IRQ when a rising or falling edge is detected.
-
-Here is the spec:
-
-[https://github.com/xfguo/gpio/blob/master/doc/gpio_spec.pdf](https://github.com/xfguo/gpio/blob/master/doc/gpio_spec.pdf)
+[https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h)
 
 Testing
 -------
@@ -413,6 +397,22 @@ This is the test program running on Ibex:
 And this is the verilator test bench code:
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/projects/timer_uart_gpio_irqs/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/timer_uart_gpio_irqs/sim/sim_main.cpp)
+
+Other Changes
+-------------
+The GPIO core I've been using in BoxLamdba until recently was a simple core that didn't support interrupt handling. I replaced it with this *Opencores* core:
+
+[https://github.com/xfguo/gpio](https://github.com/xfguo/gpio)
+
+![GPIO Core Block Diagram](../assets/gpio_core_diagram.jpg)
+
+*GPIO Core Block Diagram.*
+
+Each input on this GPIO core can be configured to generate an IRQ when a rising or falling edge is detected.
+
+Here is the spec:
+
+[https://github.com/xfguo/gpio/blob/master/doc/gpio_spec.pdf](https://github.com/xfguo/gpio/blob/master/doc/gpio_spec.pdf)
 
 Try It Yourself
 ---------------

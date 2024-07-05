@@ -125,9 +125,11 @@ An application wishing to use the standard C library has to link in this bootstr
 
 The vector table is a table with code entry points for all sorts of CPU events: interrupts, exceptions, etc. The Boot/Reset Vector, i.e. the very first instruction executed when the CPU comes out of reset, is part of this table.
 
-I'm using the Vector Table from the *Hello World* example program included in the *ibex_wb* repository. The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S).
+The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S).
 
 The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to **_start**, the entry point into the **crt0** module.
+
+For more info on vectors.S, check the [Interrupt Handling](sw_comp_irqs.md) page.
 
 #### Crt0
 
@@ -240,7 +242,7 @@ MEMORY
   - Data, BSS, and stack sections go to *dmem*.
   - The *.cmem_bss* section goes to *cmem*.
   - The heap goes to *emem*.
-- Symbols to be used by the CRT0 code for section relocation, BSS initialization, etc. For BoxLambda, the key symbols are:
+- Symbols used by the CRT0 code for section relocation, BSS initialization, etc. For BoxLambda, the key symbols are:
     - *__code_source / __code_start / __code_size*: source address, destination address, and size of the code section to relocate from flash to CMEM. In the Boot-from-CMEM sequence, *__code_source* and *__code_start* point to the same CMEM address.
     - *__data_source / __data_start / __data_size*: source address, destination address, and size of the data section to relocate from flash or CMEM to DMEM.
     - *__bss_start / __bss_size*: Address and size of BSS section in DMEM to zero out.
@@ -261,7 +263,7 @@ BoxLambda has two linker scripts:
 - [link_cmem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_cmem_boot.ld): For software images that boot from CMEM.
 - [link_flash_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_flash_boot.ld): For software images that boot from Flash.
 
-BoxLambda does not have separate linker scripts for the Arty-A7-35T and the Arty-A7-100T. The CMEM and DMEM sizes are passed to the linker via symbols defined by the build system. They are not defined inside the linker script, so the same script can be used for the Arty-A7-35T and the Arty-A7-100T.
+BoxLambda does not have separate linker scripts for the Arty-A7-35T and the Arty-A7-100T. The CMEM and DMEM sizes are passed to the linker via symbols defined by the build system. They are not defined inside the linker script, which means the same script can be used for the Arty-A7-35T and the Arty-A7-100T.
 
 ```
   #Pass linker script and picolibc specs to linker, and define __cmem_size and __dmem_size symbols.
@@ -304,7 +306,7 @@ BoxLambda currently supports two boot sequences: **Boot-from-Flash** and **Boot-
 *The Software Boot-from-Flash Sequence.*
 
 Note that, technically, BoxLambda doesn't boot from Flash Memory. It boots from CMEM at address offset 0x80. There, it executes the early startup code defined in *vectors.S* before jumping to the CRT0 code located in Flash Memory.
-I could have just pointed the Ibex Boot Vector to Flash Memory, but because I already have so many test programs that execute directly from CMEM, I decided to keep the Boot-from-CMEM feature, and from there branch to Flash Memory if so desired. The CMEM software program that just branches to the flash boot code (i.e. containing just *vectors.S*) is located here:
+I could have just pointed the Ibex Boot Vector to Flash Memory. However, I already have so many test programs that execute directly from CMEM, I decided to keep the Boot-from-CMEM feature, and from there branch to Flash Memory if so desired. The CMEM software program that branches to the flash boot code (i.e. containing just *vectors.S*) is located here:
 
 [https://github.com/epsilon537/boxlambda/tree/master/sw/projects/cmem_to_flash_vector](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/cmem_to_flash_vector)
 

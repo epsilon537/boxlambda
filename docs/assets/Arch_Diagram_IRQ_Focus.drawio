@@ -1,10 +1,10 @@
-<mxfile host="Electron" modified="2024-07-04T11:17:07.566Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="DP25t2IHZtXNbDOlF-HI" version="24.5.3" type="device">
+<mxfile host="Electron" modified="2024-06-22T13:06:18.460Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="NMz-XtCL0Z9ly9UAK822" version="24.5.3" type="device">
   <diagram id="0d0418cf-194d-6f34-59b4-59e4f961d9f4" name="Page-1">
     <mxGraphModel dx="2200" dy="1929" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="AC4Yjh_FDViJJu1EFxwh-1" value="wb_i2c" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;" parent="1" vertex="1">
+        <mxCell id="AC4Yjh_FDViJJu1EFxwh-1" value="wb_i2c" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;" vertex="1" parent="1">
           <mxGeometry x="1" y="440" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="vOdKWW2uF6KcDU7mGMfG-1" value="Wishbone&lt;br&gt;Arbiter" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;fontStyle=1" parent="1" vertex="1">
@@ -298,7 +298,7 @@
             <mxPoint x="190" y="320" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FLBWLRREEo4RobXQaIjN-513" value="USB HID" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#ffff88;strokeColor=#36393d;strokeWidth=3;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="FLBWLRREEo4RobXQaIjN-513" value="USB HID" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fillColor=#ffff88;strokeColor=#36393d;strokeWidth=3;fontStyle=0" parent="1" vertex="1">
           <mxGeometry x="-321" y="280" width="111" height="50" as="geometry" />
         </mxCell>
         <mxCell id="FLBWLRREEo4RobXQaIjN-528" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;wb_timer&lt;br style=&quot;font-size: 20px;&quot;&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffff88;strokeColor=#36393d;strokeWidth=3;fontStyle=1;fontSize=20;" parent="1" vertex="1">

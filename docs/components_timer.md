@@ -11,7 +11,10 @@ The Timer module is part of the **Ibex** RISCV repo. See the [Ibex Component pag
 - **Timer Spec**: See section 3.1.15 (*Machine Timer Registers*) of the RISC-V Privileged Specification:
     [https://riscv.org/wp-content/uploads/2017/05/riscv-privileged-v1.10.pdf](https://riscv.org/wp-content/uploads/2017/05/riscv-privileged-v1.10.pdf)
 
-The Timer component is a basic timer peripheral capable of generating interrupts based on the RISC-V Machine Timer Registers.
+**Wb_timer** is a basic timer module capable of generating interrupts based on the RISC-V **Machine Timer** Registers. The RISC-V spec defines two Machine Time Registers:
+
+- **Mtime** is a 64-bit real-time counter. The RISC-V spec doesn't specify the frequency. In BoxLambda it's running at 50MHz, the system clock frequency. Mtime is a Wishbone-accessible register.
+- **Mtimecmp** is a 64-bit timer compare register. When *mtime* is greater than or equal to *mtimecmp*, a timer interrupt is posted. The interrupt is cleared by writing to the mtimecmp register and setting it to a value greater than *mtime*. Mtimecmp is a Wishbone-accessible register.
 
 ### Timer Clock Frequency
 

@@ -57,6 +57,9 @@ nav:
         - PicoRV DMA HAL: sw_comp_picorv_dma_hal.md
         - USB HID: sw_comp_usb_hid.md
         - Flash Driver: sw_comp_flashdrvr.md
+        - Timer: sw_comp_timer.md
+        - RISC-V: sw_comp_riscv.md
+        - Interrupt Handling: sw_comp_irqs.md
     - Installation:
         - Prerequisites: prerequisites.md
         - Peripherals (PMODs): pmods.md
@@ -71,4 +74,6 @@ nav:
         - Dual Port RAM Test: test-build-dpram.md
         - USB HID Keyboard and Mouse Test: test-build-usb-hid.md
         - SPI Flash Test: test-build-spi-flash.md
+        - Timer, UART, and GPIO Interrupt Test: test-build-timer-uart-gpio-irqs.md
+
 

@@ -1,7 +1,7 @@
 Terms and Abbreviations
 =======================
 
-This section provides clarification for some of the more ambiguous terms and abbreviations used elsewhere in the documentation.
+This section clarifies for some of the more ambiguous terms and abbreviations used elsewhere in the documentation.
 
 - **ACK**: A Wishbone Bus Signal.
 
@@ -23,7 +23,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **CDC**: Clock Domain Crossing. The traversal of a signal in a synchronous digital circuit from one clock domain into another.
 
-- **Clock Domain**: A section of the design that is driven by one clock, or in some cases, multiple coupled clocks.
+- **Clock Domain**: A section of the design driven by one clock, or in some cases, multiple coupled clocks.
 
 - **CMEM**: Code Memory. One of BoxLambda's internal memories. Holds CPU text (instructions) and load segments.
 
@@ -91,7 +91,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **FIFO**: First-In-First-out, an implementation of a queue.
 
-- **Fork**: A GitHub fork is a copy of a repository that sits in your account rather than the account from which you forked the data.
+- **Fork**: A GitHub fork is a copy of a repository sitting in your account rather than the account from which you forked the data.
 
 - **Forth**: A stack-based programming language.
 
@@ -121,6 +121,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **Icarus**: Open-Source Verilog simulator. See [https://steveicarus.github.io/iverilog/](https://steveicarus.github.io/iverilog/). Used as the behind-the-scenes simulator when running CoCoTB.
 
+- **IEN**: Interrupt Enable Register.
+
 - **I/F**: Interface.
 
 - **Interconnect**: Wishbone terminology for the bus fabric.
@@ -139,7 +141,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **ISA**: Instruction Set Architecture. The Instruction Set Architecture is the part of the processor that is visible to the programmer.
 
-- **ISR**: Interrupt Service Routine.
+- **ISR**: Interrupt Service Routine or Interrupt Status Register depending on the context.
 
 - **J1**: A small Forth CPU core.
 
@@ -159,6 +161,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **LUT**: Look-Up Table.
 
+- **Machine Mode**: One of the four RISC-V privilege levels. It's the only mode used in BoxLambda.
+
 - **MCP**: Multi-Cycle Path, a technique for safely passing multiple CDC signals.
 
 - **Makefile**: A file used by the *Make* utility, defining a set of tasks to be executed, and defining dependencies between tasks. Makefiles are commonly used to create build systems.
@@ -169,17 +173,27 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **MIG**: Memory Interface Generator, a parameterizable Xilinx IP module used to generate a Memory Controller.
 
+- **MiniEdgeIC**: A 'mini' Edge Triggered Interrupt Controller consisting of an Interrupt Status (ISR) and an Interrupt Enable (IEN) Register.
+
 - **MEMC**: Memory Controller.
 
 - **Migen**: A Python-based toolbox for building digital hardware. Built on FHDL.
 
 - **MMI**: Memory Map Information file. An MMI file is an XML file that syntactically describes how individual block RAMs make up a contiguous logical data space.
 
+- **Mtime**: Machine Timer Register, part of the RISC-V Timer Module.
+
+- **Mtimecmp**: Machine Timer Compare Register, part of the RISC-V Timer Module.
+
 - **MSB**: Most Significant Bit.
 
 - **MUX**: Multiplexer.
 
 - **NDM Reset**: Non-Debug Module reset signal/domain.
+
+- **Nested Interrupt**: A higher priority interrupt that occurs during the execution of another interrupt service routine.
+
+- **NMI**: Non-Maskable Interrupt.
 
 - **OLOGIC**: A dedicated synchronous block sending data out of the FPGA through the IOB (Xilinx terminology. See [Arty A7 Reference Manual](https://digilent.com/reference/programmable-logic/arty-a7/reference-manual)).
 
@@ -225,13 +239,13 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **RV32IMCB**: Risc-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
 
-- **Scatter-Gather DMA**: DMA data transfers from one non-contiguous block of memory to another using a series of smaller contiguous block transfers.
+- **Scatter-Gather DMA**: DMA data transfers from one non-contiguous memory block to another using a series of smaller contiguous block transfers.
 
 - **Scan Line**: One line in the raster scanning pattern of the VGA display.
 
 - **SD**: Secure Digital, a proprietary non-volatile flash memory card format developed by the SD Association (SDA) for use in portable devices.
 
-- **SDL**: Simple DirectMedia Layer is a cross-platform development library designed to provide low-level access to audio, keyboard, mouse, joystick, and graphics.
+- **SDL**: Simple DirectMedia Layer is a cross-platform development library that provides low-level access to audio, keyboard, mouse, joystick, and graphics.
 
 - **SDRAM**: Synchronous dynamic random-access memory. A DRAM where the operation of its external pin interface is coordinated by an externally supplied clock signal.
 
@@ -281,6 +295,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **VCS**: Version Control Subsystem.
 
+- **Vectored Mode**: a RISC-V interrupt handling mode. In vectored mode, each interrupt has a separate entry point in a vector table.
+
 - **Verilate**: To compile HDL to C++ using Verilator.
 
 - **Verilator**: An HDL to C++ compiler.
@@ -291,7 +307,7 @@ This section provides clarification for some of the more ambiguous terms and abb
 
 - **VM**: Virtual Machine, a virtual environment that functions as a virtual computer system.
 
-- **Von Neumann Architecture**: A computer architecture where the CPU has access to one memory (via one bus) storing both instructions and data. The PicoRV processor in BoxLambda's DMA Controller uses a Von Neumann architecture.
+- **Von Neumann Architecture**: A computer architecture where the CPU accesses one memory (via one bus) storing both instructions and data. The PicoRV processor in BoxLambda's DMA Controller uses a Von Neumann architecture.
 
 - **VRAM**: Video RAM.
 
@@ -300,6 +316,8 @@ This section provides clarification for some of the more ambiguous terms and abb
 - **WBM**: Wishbone Bus Master.
 
 - **WBS**: Wishbone Bus Slave.
+
+- **Weak Binding**: A software symbol definition that may be overruled by a non-weak re-definition.
 
 - **WIP**: Work In Progress.
 
