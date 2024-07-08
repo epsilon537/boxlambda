@@ -66,3 +66,6 @@
 [submodule "sub/i2c"]
 	path = sub/i2c
 	url = https://github.com/epsilon537/i2c
+[submodule "sub/wbi2c"]
+	path = sub/wbi2c
+	url = https://github.com/epsilon537/wbi2c
