@@ -10,11 +10,12 @@ module boxlambda_soc #(
     parameter PICORV_ACTIVE = 1,
     parameter USB_HID_ACTIVE = 1,
     parameter SPIFLASH_ACTIVE = 1,
+    parameter I2C_ACTIVE = 1,
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""
 ) (
-    input  wire        ext_clk_100,         //100MHz external clock.
-    input  wire        ext_rst_n,           //External reset pin.
+    input  wire        ext_clk_100,     //100MHz external clock.
+    input  wire        ext_rst_n,       //External reset pin.
 `ifdef VERILATOR
     /*These JTAG signals are not used on FPGA (they are used in simulation).
    *On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the jtag tap module dmi_bscane_tap.sv.
@@ -25,9 +26,9 @@ module boxlambda_soc #(
     input  wire        tdi,
     output wire        tdo,
 `endif
-    output wire        pll_locked_led,      //PLL locked indication.
-    output wire        init_done_led,       //LiteDRAM initialization done indication.
-    output wire        init_err_led,        //LiteDRAM initialization error indication.
+    output wire        pll_locked_led,  //PLL locked indication.
+    output wire        init_done_led,   //LiteDRAM initialization done indication.
+    output wire        init_err_led,    //LiteDRAM initialization error indication.
 `ifdef SYNTHESIS
     /*The simulation build doesn't export DDR pins.*/
     output wire [13:0] ddram_a,
@@ -52,18 +53,25 @@ module boxlambda_soc #(
     output wire [ 3:0] vga_b,
     output wire        vga_hsync,
     output wire        vga_vsync,
+
     // SDSPI interface
-    output wire        sdspi_cs_n,
-    output wire        sdspi_sck,
-    output wire        sdspi_mosi,
-    input  wire        sdspi_miso,
-    input  wire        sdspi_card_detect_n,
+    output wire sdspi_cs_n,
+    output wire sdspi_sck,
+    output wire sdspi_mosi,
+    input  wire sdspi_miso,
+    input  wire sdspi_card_detect_n,
 
     // Flash SPI interface
     output wire spiflash_sck,
     output wire spiflash_cs_n,
     output wire spiflash_mosi,
     input  wire spiflash_miso,
+
+    // I2C signals
+    input  wire i2c_scl_i,
+    input  wire i2c_sda_i,
+    output wire i2c_scl_o,
+    output wire i2c_sda_o,
 
     // USB HID, two ports.
     input  wire usb0_dm_i,
@@ -125,6 +133,7 @@ module boxlambda_soc #(
     FLASH_CTRL_S,  /*Flash controller control port*/
     RESET_CTRL_S,  /*Reset Control Module.*/
     GPIO_S,  /*GPIO*/
+    I2C_S,  /*I2C*/
     YM2149_S,  /*Dual YM2149 PSG core.*/
     PICORV_S,  /*PicoRV DMA slave port.*/
     UART_S,  /*UART.*/
@@ -162,7 +171,7 @@ module boxlambda_soc #(
   localparam NUM_XBAR_MASTERS = 5;
   localparam NUM_XBAR_SLAVES = 8;
   localparam NUM_SHARED_BUS_MASTERS = 1;
-  localparam NUM_SHARED_BUS_SLAVES = 13;
+  localparam NUM_SHARED_BUS_SLAVES = 14;
 
   localparam PICORV_BASE_ADDRESS = 'h10002000;
 
@@ -175,6 +184,7 @@ module boxlambda_soc #(
     /*UART_S*/{AW'('h10010000 >> 2)},
     /*PICORV_S*/{AW'(PICORV_BASE_ADDRESS >> 2)},
     /*YM2149_S*/{AW'('h10001000 >> 2)},
+    /*I2C_S*/{AW'('h10000200 >> 2)},
     /*GPIO_S*/{AW'('h10000100 >> 2)},
     /*RESET_CTRL_S*/{AW'('h100000D0 >> 2)},
     /*FLASH_CTRL_S*/{AW'('h100000C0 >> 2)},
@@ -192,6 +202,7 @@ module boxlambda_soc #(
     /*UART_S*/{AW'(~('h0000001f >> 2))},
     /*PICORV_S*/{AW'(~('h00001fff >> 2))},
     /*YM2149_S*/{AW'(~('h000003ff >> 2))},
+    /*I2C_S*/{AW'(~('h000000ff >> 2))},
     /*GPIO_S*/{AW'(~('h0000003f >> 2))},
     /*RESET_CTRL_S*/{AW'(~('h00000007 >> 2))},
     /*FLASH_CTRL_S*/{AW'(~('h00000007 >> 2))},
@@ -1114,13 +1125,48 @@ module boxlambda_soc #(
     end
   endgenerate
 
+  //I2C Core
+  generate
+    if (I2C_ACTIVE) begin : GENERATE_I2C_MODULE
+      wbi2cmaster i2cmaster_inst (
+          .i_clk(sys_clk),
+          .i_reset(ndm_reset),
+          // Wishbone
+          // Input bus wires
+          .i_wb_cyc(shared_bus_wbs[I2C_S].cyc),
+          .i_wb_stb(shared_bus_wbs[I2C_S].stb),
+          .i_wb_we(shared_bus_wbs[I2C_S].we),
+          .i_wb_addr(shared_bus_wbs[I2C_S].adr[5:0]),
+          .i_wb_data(shared_bus_wbs[I2C_S].dat_m),
+          .i_wb_sel(shared_bus_wbs[I2C_S].sel),
+          // Output bus wires
+          .o_wb_stall(shared_bus_wbs[I2C_S].stall),
+          .o_wb_ack(shared_bus_wbs[I2C_S].ack),
+          .o_wb_data(shared_bus_wbs[I2C_S].dat_s),
+          // I2C clock and data wires
+          .i_i2c_scl(i2c_scl_i),
+          .i_i2c_sda(i2c_sda_i),
+          .o_i2c_scl(i2c_scl_o),
+          .o_i2c_sda(i2c_sda_o),
+          // And our output interrupt
+          .o_int(fast_irqs[IRQ_ID_I2C]),
+          // And some debug wires
+          .o_dbg()
+      );
+    end else begin
+      assign i2c_scl_o = 1'b1;
+      assign i2c_sda_o = 1'b1;
+      assign fast_irqs[IRQ_ID_I2C] = 1'b0;
+    end
+    assign shared_bus_wbs[I2C_S].err = 1'b0;
+  endgenerate
+
   //Set the remaining bits in the fast_irq vector to 0
   assign fast_irqs[IRQ_ID_RM_2] = 1'b0;
   assign fast_irqs[IRQ_ID_RM_0] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_0] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_1] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_2] = 1'b0;
-  assign fast_irqs[IRQ_ID_I2C]  = 1'b0;
   assign fast_irqs[IRQ_ID_DFX]  = 1'b0;
   assign fast_irqs[IRQ_ID_ICAP] = 1'b0;
 endmodule

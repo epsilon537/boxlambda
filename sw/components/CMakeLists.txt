@@ -12,4 +12,5 @@ add_subdirectory(gpio)
 add_subdirectory(uart)
 add_subdirectory(riscv)
 add_subdirectory(interrupts)
+add_subdirectory(i2c_master)
 

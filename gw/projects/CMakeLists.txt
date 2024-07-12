@@ -365,4 +365,5 @@ add_subdirectory(dual_port_ram_test)
 add_subdirectory(usb_hid_sys_test)
 add_subdirectory(spiflash_test)
 add_subdirectory(timer_uart_gpio_irqs)
+add_subdirectory(i2c_test)
 

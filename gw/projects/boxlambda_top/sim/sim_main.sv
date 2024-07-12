@@ -23,6 +23,11 @@ module sim_main #(
     output wire         spiflash_mosi,
     input  wire         spiflash_miso,
     output wire         spiflash_sck,
+    // I2C signals
+    input  wire         i2c_scl_i,
+    input  wire         i2c_sda_i,
+    output wire         i2c_scl_o,
+    output wire         i2c_sda_o,
     // USB HID, two ports.
     input  wire         usb0_dm_i,
     input  wire         usb0_dp_i,
@@ -109,17 +114,22 @@ module sim_main #(
       .gp_out(gp_out),
       .gp_oe(gp_oe),
       .gp_clk(gp_clk),
-
+      // I2C signals
+      .i2c_scl_i(i2c_scl_i),
+      .i2c_sda_i(i2c_sda_i),
+      .i2c_scl_o(i2c_scl_o),
+      .i2c_sda_o(i2c_sda_o),
+      // USB signals
       .usb0_dm_i(usb0_dm_i),
       .usb0_dp_i(usb0_dp_i),
       .usb0_dm_o(usb0_dm_o),
       .usb0_dp_o(usb0_dp_o),
-      .usb0_oe  (usb0_oe),
+      .usb0_oe(usb0_oe),
       .usb1_dm_i(usb1_dm_i),
       .usb1_dp_i(usb1_dp_i),
       .usb1_dm_o(usb1_dm_o),
       .usb1_dp_o(usb1_dp_o),
-      .usb1_oe  (usb1_oe),
+      .usb1_oe(usb1_oe),
 
       // ym2149 interface
       .audio_out(audio_out),

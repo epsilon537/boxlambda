@@ -28,7 +28,7 @@ packages:
     - blackbox
     - boxlambda_clk_gen
     - gpio
-    - i2c
+    - i2c_master
     - ibex_wb_common
     - ibex_wb_core
     - litedram
@@ -56,11 +56,11 @@ packages:
     source:
       Path: ../../components/boxlambda_soc/../../components/gpio
     dependencies: []
-  i2c:
+  i2c_master:
     revision: null
     version: null
     source:
-      Path: ../../components/boxlambda_soc/../../components/i2c
+      Path: ../../components/boxlambda_soc/../../components/i2c_master
     dependencies: []
   ibex:
     revision: null
