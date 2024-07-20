@@ -63,8 +63,8 @@ module boxlambda_top (
 `else
     inout  wire i2c_scl,
     inout  wire i2c_sda,
-    output wire i2c_scl_pup, //SCL pull-up pin
-    output wire i2c_sda_pup, //SDA pull-up pin
+    output wire i2c_scl_pup,  //SCL pull-up pin
+    output wire i2c_sda_pup,  //SDA pull-up pin
 `endif
 
     // USB HID: On Verilator, we use separate input and output ports. On FPGA, the USB ports are bidirectional.
@@ -128,20 +128,18 @@ module boxlambda_top (
   wire [23:0] gp_out;
   wire [23:0] gp_oe;
 
-  wire scl_pad_i;,     // SCL-line input
-  wire scl_pad_o;     // SCL-line output (always 1'b0)
-  wire scl_padoen_o;  // SCL-line output enable (active low)
-  wire sda_pad_i;     // SDA-line input
-  wire sda_pad_o;     // SDA-line output (always 1'b0)
-  wire sda_padoen_o;  // SDA-line output enable (active low)
+  wire i2c_scl_i;     // SCL-line input
+  wire i2c_scl_o;     // SCL-line output (always 1'b0)
+  wire i2c_sda_i;     // SDA-line input
+  wire i2c_sda_o;     // SDA-line output (always 1'b0)
 
   //(De)Muxing unidirectional to bidirectional I2C ports.
   assign i2c_scl = i2c_scl_o ? 1'bZ : 1'b0;
   assign i2c_sda = i2c_sda_o ? 1'bZ : 1'b0;
   assign i2c_scl_i = i2c_scl_o ? i2c_scl : 1'b0;
   assign i2c_sda_i = i2c_sda_o ? i2c_sda : 1'b0;
-  assign i2c_scl_pup = 1'b1; //SCL pull-up pin.
-  assign i2c_sda_pup = 1'b1; //SDA pull-up pin.
+  assign i2c_scl_pup = 1'b1;  //SCL pull-up pin.
+  assign i2c_sda_pup = 1'b1;  //SDA pull-up pin.
 
   //(De)Muxing unidirectional to bidirectional GPIO ports.
   generate

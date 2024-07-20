@@ -202,7 +202,7 @@ module boxlambda_soc #(
     /*UART_S*/{AW'(~('h0000001f >> 2))},
     /*PICORV_S*/{AW'(~('h00001fff >> 2))},
     /*YM2149_S*/{AW'(~('h000003ff >> 2))},
-    /*I2C_S*/{AW'(~('h000000ff >> 2))},
+    /*I2C_S*/{AW'(~('h000001ff >> 2))},
     /*GPIO_S*/{AW'(~('h0000003f >> 2))},
     /*RESET_CTRL_S*/{AW'(~('h00000007 >> 2))},
     /*FLASH_CTRL_S*/{AW'(~('h00000007 >> 2))},
@@ -1128,7 +1128,10 @@ module boxlambda_soc #(
   //I2C Core
   generate
     if (I2C_ACTIVE) begin : GENERATE_I2C_MODULE
-      wbi2cmaster i2cmaster_inst (
+      wbi2cmaster #(
+          .MEM_ADDR_BITS(8),
+          .LITTLE_ENDIAN(1'b1)
+      ) i2cmaster_inst (
           .i_clk(sys_clk),
           .i_reset(ndm_reset),
           // Wishbone
@@ -1136,7 +1139,7 @@ module boxlambda_soc #(
           .i_wb_cyc(shared_bus_wbs[I2C_S].cyc),
           .i_wb_stb(shared_bus_wbs[I2C_S].stb),
           .i_wb_we(shared_bus_wbs[I2C_S].we),
-          .i_wb_addr(shared_bus_wbs[I2C_S].adr[5:0]),
+          .i_wb_addr(shared_bus_wbs[I2C_S].adr[6:0]),
           .i_wb_data(shared_bus_wbs[I2C_S].dat_m),
           .i_wb_sel(shared_bus_wbs[I2C_S].sel),
           // Output bus wires

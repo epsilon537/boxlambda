@@ -47,6 +47,7 @@ void uart_tx(struct uart * module, uint8_t byte);
 
 void uart_tx_string(struct uart * module, const char *str);
 
+/*Returns non-zero if data available.*/
 int uart_rx_ready(struct uart * module);
 
 uint8_t uart_rx(struct uart * module);
