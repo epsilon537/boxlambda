@@ -66,3 +66,12 @@
 [submodule "sub/wbi2c"]
 	path = sub/wbi2c
 	url = https://github.com/epsilon537/wbi2c
+[submodule "sub/embedded-cli"]
+	path = sub/embedded-cli
+	url = https://github.com/epsilon537/embedded-cli
+[submodule "sub/MCP79412RTC"]
+	path = sub/MCP79412RTC
+	url = https://github.com/epsilon537/MCP79412RTC
+[submodule "sub/Time"]
+	path = sub/Time
+	url = https://github.com/epsilon537/Time
