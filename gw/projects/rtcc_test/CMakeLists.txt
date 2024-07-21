@@ -16,9 +16,3 @@ gw_project_rules(
         -lncurses
 )
 
-#Add testcase.
-add_test(NAME i2c_test_test
-    COMMAND ./Vmodel
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
-

@@ -23,6 +23,17 @@ class I2C {
      * @brief Initialize library for main function
      */
     void begin();
+
+    /*
+     * @brief Enable interrupt generation when bus goes from busy to idle
+     */
+    void enableIRQ(bool enable);
+
+    /*
+     * @brief Acknowledge IRQ
+     */
+    void ackIRQ();
+
     /*!
      * @brief Set I2C bus clock speed. Default value (i.e. the bus clock frequency
      * used if you don't call this function): 100000Hz.

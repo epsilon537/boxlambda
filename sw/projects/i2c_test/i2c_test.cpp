@@ -10,6 +10,7 @@
 #include "mcycle.h"
 #include "i2c.h"
 #include "sdram.h"
+#include "interrupts.h"
 
 #define EMBEDDED_CLI_IMPL
 #include "embedded_cli.h"
@@ -26,7 +27,14 @@
 static struct uart uart0;
 static struct gpio gpio;
 
+volatile int i2c_irqs_fired = 0;
+
 extern "C" {
+  void _i2c_irq_handler(void) {
+    i2c.ackIRQ();
+    ++i2c_irqs_fired;
+  }
+
   //_init is executed by picolibc startup code before main().
   void _init(void) {
     //Set up UART and tie stdio to it.
@@ -176,24 +184,13 @@ extern "C" {
   }
 }
 
-int main(void) {
-  uint32_t leds = 0xF;
-
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
-
-  printf("\n\n");
-
-  /*sdram_init() is provided by the Litex code base.*/
-  if (sdram_init()) {
-    printf("SDRAM init OK.\n");
-  }
-  else {
-    printf("SDRAM init failed!\n");
-    while(1);
-  }
+int test(void) {
+  printf("Enabling IRQs\n");
+  enable_global_irq();
+  enable_irq(IRQ_ID_I2C);
 
   i2c.begin();
+  i2c.enableIRQ(true);
 
   //GPIO bits 7:4 = 0xf indicate we're running inside a simulator.
   if ((gpio_get_input(&gpio) & 0xf0) == GPIO_SIM_INDICATOR) {
@@ -209,7 +206,7 @@ int main(void) {
 
   uint8_t write_string[TEST_STRING_SIZE] = "I2C test string";
 
-  printf("Sending test string.\n");
+  printf("Sending test string to I2C slave.\n");
 
   i2c.beginTransmission(I2C_SLAVE_ADDR);
   i2c.write(I2C_SLAVE_SRAM_START_ADDR);
@@ -243,9 +240,44 @@ int main(void) {
     for (int ii=0; ii<TEST_STRING_SIZE; ii++) {
       printf("Sent: 0x%x Received: 0x%x\n", write_string[ii], readback_string[ii]);
     }
+
+    return -1;
   }
   else {
+    printf("OK.\n");
+  }
+
+  printf("I2C IRQS received: %d\n", i2c_irqs_fired);
+  if (i2c_irqs_fired != 2) {
+    printf("Expected 2 I2C IRQS.\n");
+    return -2;
+  }
+
+  return 0;
+}
+
+int main(void) {
+  uint32_t leds = 0xF;
+
+  gpio_init(&gpio, (volatile void *)GPIO_BASE);
+  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
+
+  printf("\n\n");
+
+  /*sdram_init() is provided by the Litex code base.*/
+  if (sdram_init()) {
+    printf("SDRAM init OK.\n");
+  }
+  else {
+    printf("SDRAM init failed!\n");
+    while(1);
+  }
+
+  if (!test()) {
     printf("Test Successful.\n");
+  }
+  else {
+    printf("Test failed.\n");
   }
 
   printf("Push btn[0] to start CLI.\n");

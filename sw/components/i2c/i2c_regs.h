@@ -6,6 +6,7 @@
 #define I2C_MASTER_BASE 0x10000200
 
 //I2C Master Registers
+// Command Register:
 #define I2C_MASTER_CMD 0
 #define I2C_MASTER_CMD_BUSY 0x80000000
 #define I2C_MASTER_CMD_ERR  0x40000000
@@ -18,11 +19,19 @@
 #define I2C_MASTER_CMD_NUM_BYTES_OFFSET 0
 #define I2C_MASTER_CMD_NUM_BYTES_MASK 0xff /*Number of bytes to read/write*/
 
-// r_speed ... the programmable number of system clocks per I2C
+// Speed Register: the programmable number of system clocks per I2C
 // wait state.  Nominally, this is one quarter the clock period of the
 // I2C bus.
 #define I2C_MASTER_SPD 4
 #define I2C_MASTER_SPD_MASK 0xfffff /*Max. 20 bits*/
+
+// ISR Register
+#define I2C_ISR 8
+#define I2C_ISR_BUSY 0x00000001 // Set when I2C goes from busy to idle
+
+// IEN Register
+#define I2C_IEN 12
+#define I2C_IEN_BUSY 0x00000001 // Set to enable IRQ generation when I2C goes from busy to idle.
 
 #define I2C_MASTER_MEM_BASE 256 /*Address offset of the 128 byte memory buffer*/
 #define I2C_MASTER_MEM_SIZE_BYTES 256

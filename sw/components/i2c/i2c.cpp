@@ -30,6 +30,15 @@ void I2C::begin() {
   slaveAddr_ = SLAVE_ADDR_UNASSIGNED;
 }
 
+void I2C::enableIRQ(bool enable) {
+  i2c_master_reg_wr(I2C_IEN, enable ? I2C_IEN_BUSY : 0);
+}
+
+void I2C::ackIRQ() {
+  i2c_master_reg_wr(I2C_ISR, I2C_ISR_BUSY);
+}
+
+
 void I2C::setClock(uint32_t clockSpeedHz) {
   uint32_t ticks_per_i2c_bit = PLATFORM_CLK_FREQ / (4*clockSpeedHz);
 
