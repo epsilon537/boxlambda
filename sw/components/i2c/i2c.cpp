@@ -63,6 +63,8 @@ void I2C::beginTransmission(uint8_t slaveAddr) {
  * @return Returns the error code if there was one
  */
 uint8_t I2C::endTransmission() {
+  uint8_t res = 0;
+
   assert(slaveAddr_ != SLAVE_ADDR_UNASSIGNED);
   assert(bufStartIdx_ != BUF_IDX_UNKNOWN);
 
@@ -89,9 +91,11 @@ uint8_t I2C::endTransmission() {
     //memset((void*)(i2c_master_buf_ptr_ + bufStartIdx_), 0, numBytes_);
 
     slaveAddr_ = SLAVE_ADDR_UNASSIGNED;
+
+    res = i2cError_() ? 1 : 0;
   }
 
-  return i2cError_() ? 1 : 0;
+  return res;
 }
 
 /*!

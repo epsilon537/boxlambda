@@ -40,6 +40,7 @@ class I2C {
      * @param clockSpeedHz I2C bus clock frequency in Hz. Minimum value: 50Hz.
      */
     void setClock(uint32_t clockSpeedHz);
+
     /*!
      * @brief Start recording a new transaction.
      * @param slaveAddr Secondary device address
