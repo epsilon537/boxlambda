@@ -6,6 +6,7 @@
 #define I2C_MASTER_BASE 0x10000200
 
 //I2C Master Registers
+
 // Command Register:
 #define I2C_MASTER_CMD 0
 #define I2C_MASTER_CMD_BUSY 0x80000000
@@ -13,7 +14,7 @@
 #define I2C_MASTER_CMD_SLV_ADDR_OFFSET 17
 #define I2C_MASTER_CMD_SLV_ADDR_MASK 0x00fe0000
 #define I2C_MASTER_CMD_RD   0x00010000
-#define I2C_MASTER_CMD_WR   0x00000000
+#define I2C_MASTER_CMD_WR   0x00000000            /*For symmetry with CMD_RD. Does nothing.*/
 #define I2C_MASTER_CMD_START_ADDR_OFFSET 8
 #define I2C_MASTER_CMD_START_ADDR_MASK 0x0000ff00 /*Initial address to read from or write to.*/
 #define I2C_MASTER_CMD_NUM_BYTES_OFFSET 0
@@ -25,11 +26,11 @@
 #define I2C_MASTER_SPD 4
 #define I2C_MASTER_SPD_MASK 0xfffff /*Max. 20 bits*/
 
-// ISR Register
+// Interrupt Status Register
 #define I2C_ISR 8
 #define I2C_ISR_BUSY 0x00000001 // Set when I2C goes from busy to idle
 
-// IEN Register
+// Interrupt Enable Register
 #define I2C_IEN 12
 #define I2C_IEN_BUSY 0x00000001 // Set to enable IRQ generation when I2C goes from busy to idle.
 

@@ -11,24 +11,28 @@
 #include "i2c.h"
 #include "sdram.h"
 #include "interrupts.h"
-#include "cli.h"
+#include "i2c_cli.h"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 #define TEST_STRING_SIZE 16
 
 #define I2C_SLAVE_ADDR 0x6F
+//On Verilator, the I2C slave is a memory device. On FPGA, the MCP79412 RTCC slave
+//also has an SRAM memory at address 0x20
 #define I2C_SLAVE_SRAM_START_ADDR 0x20
 
+//The I2C slave co-sim expects this bus speed
 #define I2C_SPEED_SIM_HZ (PLATFORM_CLK_FREQ/40)
+//On FPGA, we use the typical 100KHz I2C bus speed.
 #define I2C_SPEED_FPGA_HZ 100000
 
 static struct uart uart0;
 static struct gpio gpio;
 
-volatile int i2c_irqs_fired = 0;
+volatile int i2c_irqs_fired = 0; //Keep track of the number of I2C IRQs received.
 
 extern "C" {
-  //Just count and acknowledge interrupts
+  //Just count and acknowledge interrupt
   void _i2c_irq_handler(void) {
     i2c.ackIRQ();
     ++i2c_irqs_fired;
@@ -59,12 +63,12 @@ int test(void) {
 
   //GPIO bits 7:4 = 0xf indicate we're running inside a simulator.
   if ((gpio_get_input(&gpio) & 0xf0) == GPIO_SIM_INDICATOR) {
-    printf("This is a simulation.\n");
+    printf("This is a simulation. Setting simulation I2C clock.\n");
 
     i2c.setClock(I2C_SPEED_SIM_HZ);
   }
   else {
-    printf("This is not a simulation.\n");
+    printf("This is not a simulation. Setting 100kHz I2C clock.\n");
 
     i2c.setClock(I2C_SPEED_FPGA_HZ);
   }
@@ -86,7 +90,8 @@ int test(void) {
   char readback_string[TEST_STRING_SIZE] = "               ";
 
   i2c.beginTransmission(I2C_SLAVE_ADDR);
-  i2c.write(I2C_SLAVE_SRAM_START_ADDR);
+  res = i2c.write(I2C_SLAVE_SRAM_START_ADDR);
+  assert(res==1);
   res = i2c.endTransmission();
   assert(res==0);
 
@@ -108,15 +113,16 @@ int test(void) {
 
     return -1;
   }
-  else {
-    printf("OK.\n");
-  }
+
+  printf("OK.\n");
 
   printf("I2C IRQS received: %d\n", i2c_irqs_fired);
   if (i2c_irqs_fired != 2) {
     printf("Expected 2 I2C IRQS.\n");
     return -2;
   }
+
+  printf("OK.\n");
 
   return 0;
 }
@@ -149,6 +155,6 @@ int main(void) {
 
   while ((gpio_get_input(&gpio) & 0x0100) == 0);
 
-  cli(&uart0);
+  i2c_cli(&uart0);
 }
 

@@ -7,11 +7,11 @@
 
 class I2C {
   private:
-    uint32_t slaveAddr_;
-    uint32_t bufStartIdx_;
-    uint32_t readIdx_;
-    uint32_t numBytes_;
-    volatile uint8_t *i2c_master_buf_ptr_;
+    uint32_t slaveAddr_; //7 bit slave address.
+    uint32_t bufStartIdx_; //Starting index/address of an I2C read or write transaction.
+    uint32_t readIdx_; //Keeps track of current read position of read() method.
+    uint32_t numBytes_; //Number of bytes to send or receive over I2C.
+    volatile uint8_t *i2c_master_buf_ptr_; //Pointer to the 256 byte memory buffer in the I2C master core. Holds the data to send / received.
 
     bool isBusy_();
     bool i2cError_();
@@ -37,13 +37,13 @@ class I2C {
     /*!
      * @brief Set I2C bus clock speed. Default value (i.e. the bus clock frequency
      * used if you don't call this function): 100000Hz.
-     * @param clockSpeedHz I2C bus clock frequency in Hz. Minimum value: 50Hz.
+     * @param clockSpeedHz I2C bus clock frequency in Hz.
      */
     void setClock(uint32_t clockSpeedHz);
 
     /*!
      * @brief Start recording a new transaction.
-     * @param slaveAddr Secondary device address
+     * @param slaveAddr I2C slave address
      */
     void beginTransmission(uint8_t slaveAddr);
 
@@ -55,20 +55,21 @@ class I2C {
 
     /*!
      * @brief Setup for receiving from secondary
-     * @param slaveAddr Secondary device address
-     * @param numBytes How many bytes to request
-     * @return Returns 0, if there was an error, returns the error code
+     * @param slaveAddr I2C slave address. Expected to be the same as the preceding begin/endTransmission pair.
+     * @param numBytes How many bytes to request.
+     * @return Returns 0, if there was an error, returns the error code.
      */
     uint8_t requestFrom(uint8_t slaveAddr, uint8_t numBytes);
 
     /*!
      * @brief Returns bytes received (via requestFrom) one at a time.
+     *        Wraps around when numBytes have been read.
      * @return Returns the data
      */
     uint8_t read(void);
 
     /*!
-     * @brief Buffers up one byte of data to send
+     * @brief Buffers up one byte of data to send.
      * @param b Data to send
      * @return Returns 1 when successful
      */

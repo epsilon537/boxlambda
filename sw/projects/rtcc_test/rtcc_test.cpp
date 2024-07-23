@@ -12,16 +12,7 @@
 #include "MCP79412RTC.h"
 #include "sdram.h"
 
-#include "cli.h"
-
-#define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
-#define TEST_STRING_SIZE 16
-
-#define I2C_SLAVE_ADDR 0x6F
-#define I2C_SLAVE_SRAM_START_ADDR 0x20
-
-#define I2C_SPEED_SIM 40
-#define I2C_SPEED_FPGA 1000
+#include "i2c_cli.h"
 
 static struct uart uart0;
 static struct gpio gpio;
@@ -44,6 +35,7 @@ extern "C" {
 }
 
 void rtcc_test(void) {
+  /*Time elements structure*/
   tmElements_t tmElements;
   /*Some bogus initial values.*/
   tmElements.Second = 1;
@@ -64,11 +56,11 @@ void rtcc_test(void) {
 
     RTC.vbaten(true);
     RTC.write(tmElements);
-  }
 
-  if (!RTC.isRunning()) {
-    printf("RTC is not running. Aborting...\n");
-    return;
+    if (!RTC.isRunning()) {
+      printf("RTC oscillator failed to start. Aborting...\n");
+      return;
+    }
   }
 
   printf("Polling time in a loop. Push btn[0] to end loop and start CLI.\n");
@@ -95,7 +87,7 @@ void rtcc_test(void) {
 int main(void) {
   uint32_t leds = 0xF;
 
-  printf("Delaying start 1s...\n");
+  printf("Delaying start by 1s...\n");
   usleep(1000000);
   printf("Starting...\n");
 

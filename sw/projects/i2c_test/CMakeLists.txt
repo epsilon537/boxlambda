@@ -2,7 +2,7 @@
 add_executable(i2c_test
  EXCLUDE_FROM_ALL
  i2c_test.cpp
- cli.cpp
+ i2c_cli.cpp
 )
 
 target_compile_options(i2c_test

@@ -2,7 +2,7 @@
 add_executable(rtcc_test_ram
  EXCLUDE_FROM_ALL
  rtcc_test.cpp
- ${PROJECT_SOURCE_DIR}/sw/projects/i2c_test/cli.cpp
+ ${PROJECT_SOURCE_DIR}/sw/projects/i2c_test/i2c_cli.cpp
 )
 
 target_compile_options(rtcc_test_ram
@@ -23,7 +23,7 @@ target_include_directories(rtcc_test_ram
 add_executable(rtcc_test
  EXCLUDE_FROM_ALL
  rtcc_test.cpp
- ${PROJECT_SOURCE_DIR}/sw/projects/i2c_test/cli.cpp
+ ${PROJECT_SOURCE_DIR}/sw/projects/i2c_test/i2c_cli.cpp
 )
 
 target_compile_options(rtcc_test

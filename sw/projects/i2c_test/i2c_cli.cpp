@@ -1,4 +1,4 @@
-#include "cli.h"
+#include "i2c_cli.h"
 
 #define EMBEDDED_CLI_IMPL
 #include "embedded_cli.h"
@@ -138,22 +138,23 @@ extern "C" {
     }
   }
 
+  //Connect embedded-CLI output to our UART
   static void writeChar(EmbeddedCli *embeddedCli, char c) {
     assert(uartp);
 
+    //Wait until there's space...
     while (!uart_tx_ready(uartp));
     uart_tx(uartp, (uint8_t)c);
   }
 }
 
-void cli(struct uart *uart) {
-  assert(uart);
-
+void i2c_cli(struct uart *uart) {
   printf("Starting CLI...\n");
 
   EmbeddedCliConfig *config = embeddedCliDefaultConfig();
   config->maxBindingCount = 16;
 
+  assert(uart);
   uartp = uart;
 
   EmbeddedCli *cli = embeddedCliNew(config);
@@ -193,7 +194,7 @@ void cli(struct uart *uart) {
 
   embeddedCliAddBinding(cli, {
         "beginTransmission",          // command name (spaces are not allowed)
-        "beginTransmission <hex slaveAddr>",   // Optional help for a command (NULL for no help)
+        "I2C beginTransmission <hex slaveAddr>",   // Optional help for a command (NULL for no help)
         true,              // flag whether to tokenize arguments (see below)
         nullptr,            // optional pointer to any application context
         beginTransmission               // binding function
@@ -201,7 +202,7 @@ void cli(struct uart *uart) {
 
   embeddedCliAddBinding(cli, {
         "endTransmission",          // command name (spaces are not allowed)
-        "endTransmission",   // Optional help for a command (NULL for no help)
+        "I2C endTransmission",   // Optional help for a command (NULL for no help)
         true,              // flag whether to tokenize arguments (see below)
         nullptr,            // optional pointer to any application context
         endTransmission               // binding function
@@ -209,7 +210,7 @@ void cli(struct uart *uart) {
 
   embeddedCliAddBinding(cli, {
         "requestFrom",          // command name (spaces are not allowed)
-        "requestFrom <hex slaveAddr> <num. bytes>",   // Optional help for a command (NULL for no help)
+        "I2C requestFrom <hex slaveAddr> <num. bytes>",   // Optional help for a command (NULL for no help)
         true,              // flag whether to tokenize arguments (see below)
         nullptr,           // optional pointer to any application context
         requestFrom        // binding function
@@ -217,7 +218,7 @@ void cli(struct uart *uart) {
 
   embeddedCliAddBinding(cli, {
         "i2cread",          // command name (spaces are not allowed)
-        "i2cread",   // Optional help for a command (NULL for no help)
+        "i2cread next byte",   // Optional help for a command (NULL for no help)
         true,              // flag whether to tokenize arguments (see below)
         nullptr,           // optional pointer to any application context
         i2cread        // binding function
@@ -225,13 +226,13 @@ void cli(struct uart *uart) {
 
   embeddedCliAddBinding(cli, {
         "i2cwrite",          // command name (spaces are not allowed)
-        "i2cwrite <hex value>",   // Optional help for a command (NULL for no help)
+        "i2cwrite <hex byte value>",   // Optional help for a command (NULL for no help)
         true,              // flag whether to tokenize arguments (see below)
         nullptr,           // optional pointer to any application context
         i2cwrite           // binding function
   });
 
-  // provide all chars to cli
+  // provide all input chars to cli
   while (1) {
     while (uart_rx_ready(uartp)) {
       embeddedCliReceiveChar(cli, (char)uart_rx(uartp));

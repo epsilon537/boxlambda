@@ -1,3 +1,5 @@
+#Embedded-CLI library
+
 add_library(embedded-cli)
 
 target_sources(embedded-cli

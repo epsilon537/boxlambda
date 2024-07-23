@@ -1,3 +1,5 @@
+#Real-Time Clock and Calendar Library, interfacing with MCP79412 via I2C
+
 add_library(rtcc)
 
 target_sources(rtcc
