@@ -12,7 +12,10 @@
 #include "MCP79412RTC.h"
 #include "sdram.h"
 
+#include "rtcc_cli.h"
 #include "i2c_cli.h"
+#include "peek_poke_cli.h"
+#include "embedded_cli_setup.h"
 
 static struct uart uart0;
 static struct gpio gpio;
@@ -106,7 +109,12 @@ int main(void) {
   /* Run the RTCC test. After test we can fall through to CLI.*/
   rtcc_test();
 
-  /*If we get here, the test fell through unsuccessfully.*/
-  cli(&uart0);
+  EmbeddedCli *cli = createEmbeddedCli(&uart0);
+
+  add_peek_poke_cli(cli);
+  add_i2c_cli(cli);
+  add_rtcc_cli(cli);
+
+  embeddedCliStartLoop();
 }
 

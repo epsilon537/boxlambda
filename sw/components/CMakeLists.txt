@@ -15,5 +15,6 @@ add_subdirectory(interrupts)
 add_subdirectory(i2c)
 add_subdirectory(rtcc)
 add_subdirectory(timelib)
-add_subdirectory(embedded-cli)
+add_subdirectory(embedded_cli)
+add_subdirectory(peek_poke_cli)
 

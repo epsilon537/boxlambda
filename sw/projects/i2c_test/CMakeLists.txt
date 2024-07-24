@@ -13,5 +13,5 @@ target_compile_options(i2c_test
 link_and_create_mem_file(i2c_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(i2c_test sdram i2c gpio embedded-cli riscv interrupts)
+target_link_libraries(i2c_test sdram i2c gpio embedded_cli riscv interrupts peek_poke_cli)
 

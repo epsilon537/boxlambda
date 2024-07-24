@@ -11,7 +11,9 @@
 #include "i2c.h"
 #include "sdram.h"
 #include "interrupts.h"
+#include "embedded_cli_setup.h"
 #include "i2c_cli.h"
+#include "peek_poke_cli.h"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 #define TEST_STRING_SIZE 16
@@ -155,6 +157,11 @@ int main(void) {
 
   while ((gpio_get_input(&gpio) & 0x0100) == 0);
 
-  i2c_cli(&uart0);
+  EmbeddedCli *cli = createEmbeddedCli(&uart0);
+
+  add_peek_poke_cli(cli);
+  add_i2c_cli(cli);
+
+  embeddedCliStartLoop();
 }
 

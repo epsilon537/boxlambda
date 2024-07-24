@@ -1,9 +1,9 @@
 #ifndef I2C_CLI_H
 #define I2C_CLI_H
 
-#include "uart.h"
+#include "embedded_cli.h"
 
-/*Enter the I2C CLI. This function does not return.*/
-void i2c_cli(struct uart *uart);
+/*Add I2C commands to the CLI*/
+void add_i2c_cli(EmbeddedCli* cli);
 
 #endif /*I2C_CLI*/
