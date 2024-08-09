@@ -88,8 +88,6 @@ void rtcc_test(void) {
 }
 
 int main(void) {
-  uint32_t leds = 0xF;
-
   printf("Delaying start by 1s...\n");
   usleep(1000000);
   printf("Starting...\n");

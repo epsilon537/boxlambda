@@ -33,6 +33,8 @@ static struct gpio gpio;
 
 volatile int i2c_irqs_fired = 0; //Keep track of the number of I2C IRQs received.
 
+bool isSimulation = false;
+
 extern "C" {
   //Just count and acknowledge interrupt
   void _i2c_irq_handler(void) {
@@ -67,12 +69,57 @@ int test(void) {
   if ((gpio_get_input(&gpio) & 0xf0) == GPIO_SIM_INDICATOR) {
     printf("This is a simulation. Setting simulation I2C clock.\n");
 
+    isSimulation = true;
     i2c.setClock(I2C_SPEED_SIM_HZ);
   }
   else {
     printf("This is not a simulation. Setting 100kHz I2C clock.\n");
 
+    isSimulation = false;
     i2c.setClock(I2C_SPEED_FPGA_HZ);
+  }
+
+  if (isSimulation) {
+    printf("Reading slave registers' initial contents (endianness test).\n");
+
+    //Read from slave
+    char readback_string[TEST_STRING_SIZE];
+    uint8_t res;
+
+    i2c.beginTransmission(I2C_SLAVE_ADDR);
+    res = i2c.write(0); //Start at address 0.
+    assert(res==1);
+    res = i2c.endTransmission();
+    assert(res==0);
+
+    res = i2c.requestFrom(I2C_SLAVE_ADDR, TEST_STRING_SIZE);
+    assert(res == 0);
+
+    for (int ii=0; ii<TEST_STRING_SIZE; ii++) {
+      readback_string[ii] = i2c.read();
+    }
+
+    // Check contents. The byte values are expected to be the same as the byte addresses.
+    // This test will fail if there's an endianness mismatch somewhere.
+    bool mismatch = false;
+
+    for (int ii=0; ii<TEST_STRING_SIZE; ii++) {
+      if (readback_string[ii] != (char)ii) {
+        mismatch = true;
+      }
+    }
+
+    if (mismatch) {
+      printf("Mismatch!\n");
+
+      for (int ii=0; ii<TEST_STRING_SIZE; ii++) {
+        printf("Expected: 0x%x Received: 0x%x\n", ii, readback_string[ii]);
+      }
+
+      return -3;
+    }
+
+    printf("OK.\n");
   }
 
   uint8_t write_string[TEST_STRING_SIZE] = "I2C test string";
@@ -118,9 +165,11 @@ int test(void) {
 
   printf("OK.\n");
 
+  int expectedIrqs = isSimulation ? 3 : 2;
+
   printf("I2C IRQS received: %d\n", i2c_irqs_fired);
-  if (i2c_irqs_fired != 2) {
-    printf("Expected 2 I2C IRQS.\n");
+  if (i2c_irqs_fired != expectedIrqs) {
+    printf("Expected %d I2C IRQS.\n", expectedIrqs);
     return -2;
   }
 

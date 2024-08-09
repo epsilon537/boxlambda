@@ -128,10 +128,10 @@ module boxlambda_top (
   wire [23:0] gp_out;
   wire [23:0] gp_oe;
 
-  wire i2c_scl_i;     // SCL-line input
-  wire i2c_scl_o;     // SCL-line output (always 1'b0)
-  wire i2c_sda_i;     // SDA-line input
-  wire i2c_sda_o;     // SDA-line output (always 1'b0)
+  wire i2c_scl_i;     // SCL-line input to I2C core
+  wire i2c_scl_o;     // SCL-line output from I2C core
+  wire i2c_sda_i;     // SDA-line input to I2C core
+  wire i2c_sda_o;     // SDA-line output from I2C core
 
   //(De)Muxing unidirectional to bidirectional I2C ports.
   assign i2c_scl = i2c_scl_o ? 1'bZ : 1'b0;

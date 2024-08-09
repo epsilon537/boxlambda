@@ -11,7 +11,7 @@ class I2C {
     uint32_t bufStartIdx_; //Starting index/address of an I2C read or write transaction.
     uint32_t readIdx_; //Keeps track of current read position of read() method.
     uint32_t numBytes_; //Number of bytes to send or receive over I2C.
-    volatile uint8_t *i2c_master_buf_ptr_; //Pointer to the 256 byte memory buffer in the I2C master core. Holds the data to send / received.
+    volatile uint8_t *i2c_mem_; //Pointer to the 256 byte memory buffer in the I2C master core. Holds the data to send / received.
 
     bool isBusy_();
     bool i2cError_();

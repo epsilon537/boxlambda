@@ -367,4 +367,5 @@ add_subdirectory(spiflash_test)
 add_subdirectory(timer_uart_gpio_irqs)
 add_subdirectory(i2c_test)
 add_subdirectory(rtcc_test)
+add_subdirectory(reset_test)
 

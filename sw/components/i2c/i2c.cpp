@@ -13,7 +13,7 @@
 //Singleton
 I2C i2c;
 
-I2C::I2C() : i2c_master_buf_ptr_((volatile uint8_t*)(I2C_MASTER_BASE + I2C_MASTER_MEM_BASE)), slaveAddr_(SLAVE_ADDR_UNASSIGNED), bufStartIdx_(BUF_IDX_UNKNOWN), readIdx_(BUF_IDX_UNKNOWN), numBytes_(0) {}
+I2C::I2C() : i2c_mem_((volatile uint8_t*)(I2C_MASTER_BASE + I2C_MASTER_MEM_BASE)), slaveAddr_(SLAVE_ADDR_UNASSIGNED), bufStartIdx_(BUF_IDX_UNKNOWN), readIdx_(BUF_IDX_UNKNOWN), numBytes_(0) {}
 
 bool I2C::isBusy_() {
   return (i2c_master_reg_rd(I2C_MASTER_CMD) & (I2C_MASTER_CMD_BUSY | I2C_MASTER_CMD_NUM_BYTES_MASK)) != 0;
@@ -81,7 +81,9 @@ uint8_t I2C::endTransmission() {
     /* Clear the I2C local buffer, to make sure that a read from slave actually reads from
      * slave instead of returning stale buffer data.
      */
-    memset((void*)(i2c_master_buf_ptr_ + bufStartIdx_), 0, numBytes_);
+    for (int ii=0;ii<numBytes_;ii++) {
+      i2c_mem_[(bufStartIdx_+ii) & 0xff] = 0;
+    }
 
     slaveAddr_ = SLAVE_ADDR_UNASSIGNED;
 
@@ -125,7 +127,7 @@ uint8_t I2C::read(void) {
     readIdx_ = bufStartIdx_;
   }
 
-  return i2c_master_buf_ptr_[readIdx_++];
+  return i2c_mem_[(readIdx_++)&0xff];
 }
 
 uint8_t I2C::write(uint8_t b) {
@@ -138,7 +140,7 @@ uint8_t I2C::write(uint8_t b) {
   }
 
   if (bufStartIdx_+numBytes_ < I2C_MASTER_MEM_SIZE_BYTES) {
-    i2c_master_buf_ptr_[bufStartIdx_+numBytes_] = b;
+    i2c_mem_[(bufStartIdx_+numBytes_) & 0xff] = b;
     ++numBytes_;
     return 1;
   }
