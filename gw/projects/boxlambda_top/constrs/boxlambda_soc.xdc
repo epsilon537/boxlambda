@@ -33,7 +33,7 @@ set_property -dict { PACKAGE_PIN G4    IOSTANDARD LVCMOS33 } [get_ports { init_d
 #set_property -dict { PACKAGE_PIN J2    IOSTANDARD LVCMOS33 } [get_ports { led2_g }]; #IO_L22N_T3_35 Sch=led2_g
 set_property -dict { PACKAGE_PIN J3    IOSTANDARD LVCMOS33 } [get_ports { init_err_led }]; #IO_L22P_T3_35 Sch=led2_r
 #set_property -dict { PACKAGE_PIN K2    IOSTANDARD LVCMOS33 } [get_ports { led3_b }]; #IO_L23P_T3_35 Sch=led3_b
-#set_property -dict { PACKAGE_PIN H6    IOSTANDARD LVCMOS33 } [get_ports { led3_g }]; #IO_L24P_T3_35 Sch=led3_g
+set_property -dict { PACKAGE_PIN H6    IOSTANDARD LVCMOS33 } [get_ports { sd_card_detect_led }]; #IO_L24P_T3_35 Sch=led3_g
 #set_property -dict { PACKAGE_PIN K1    IOSTANDARD LVCMOS33 } [get_ports { wb_ctrl_err }]; #IO_L23N_T3_35 Sch=led3_r
 
 ## LEDs

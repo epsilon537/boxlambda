@@ -14,8 +14,8 @@ module boxlambda_soc #(
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""
 ) (
-    input  wire        ext_clk_100,     //100MHz external clock.
-    input  wire        ext_rst_n,       //External reset pin.
+    input  wire        ext_clk_100,         //100MHz external clock.
+    input  wire        ext_rst_n,           //External reset pin.
 `ifdef VERILATOR
     /*These JTAG signals are not used on FPGA (they are used in simulation).
    *On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the jtag tap module dmi_bscane_tap.sv.
@@ -26,9 +26,10 @@ module boxlambda_soc #(
     input  wire        tdi,
     output wire        tdo,
 `endif
-    output wire        pll_locked_led,  //PLL locked indication.
-    output wire        init_done_led,   //LiteDRAM initialization done indication.
-    output wire        init_err_led,    //LiteDRAM initialization error indication.
+    output wire        pll_locked_led,      //PLL locked indication.
+    output wire        init_done_led,       //LiteDRAM initialization done indication.
+    output wire        init_err_led,        //LiteDRAM initialization error indication.
+    output wire        sd_card_detect_led,
 `ifdef SYNTHESIS
     /*The simulation build doesn't export DDR pins.*/
     output wire [13:0] ddram_a,
@@ -888,11 +889,13 @@ module boxlambda_soc #(
       );
 
       assign shared_bus_wbs[SDSPI_S].err = 1'b0;
+      assign sd_card_detect_led = ~sdspi_card_detect_n;
     end else begin : NO_SDSPI
       assign sdspi_cs_n = 1'b0;
       assign sdspi_sck = 1'b0;
       assign sdspi_mosi = 1'b0;
       assign fast_irqs[IRQ_ID_SDSPI] = 1'b0;
+      assign sd_card_detect_led = 1'b0;
     end
   endgenerate
 

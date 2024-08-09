@@ -16,6 +16,7 @@ module boxlambda_top (
     output wire        pll_locked_led,
     output wire        init_done_led,
     output wire        init_err_led,
+    output wire        sd_card_detect_led,
 `ifdef SYNTHESIS
     /*The simulation build doesn't export DDR pins.*/
     output wire [13:0] ddram_a,

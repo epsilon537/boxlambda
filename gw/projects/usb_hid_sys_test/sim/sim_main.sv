@@ -210,6 +210,7 @@ module sim_main #(
       .pll_locked_led(),
       .init_done_led(),
       .init_err_led(),
+      .sd_card_detect_led(),
       // VGA interface
       .vga_r(vga_r),
       .vga_g(vga_g),
