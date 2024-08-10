@@ -210,6 +210,7 @@ module sim_main #(
       .pll_locked_led(),
       .init_done_led(),
       .init_err_led(),
+      .sd_card_detect_led(),
       // VGA interface
       .vga_r(vga_r),
       .vga_g(vga_g),
@@ -234,17 +235,22 @@ module sim_main #(
       .gp_out(gp_out),
       .gp_oe(gp_oe),
       .gp_clk(gp_clk),
-
+      // I2C signals
+      .i2c_scl_i(1'b1),
+      .i2c_sda_i(1'b1),
+      .i2c_scl_o(),
+      .i2c_sda_o(),
+      // USB signals
       .usb0_dm_i(usb0_dm_host_i),
       .usb0_dp_i(usb0_dp_host_i),
       .usb0_dm_o(usb0_dm_host_o),
       .usb0_dp_o(usb0_dp_host_o),
-      .usb0_oe  (usb0_oe_host),
+      .usb0_oe(usb0_oe_host),
       .usb1_dm_i(usb1_dm_host_i),
       .usb1_dp_i(usb1_dp_host_i),
       .usb1_dm_o(usb1_dm_host_o),
       .usb1_dp_o(usb1_dp_host_o),
-      .usb1_oe  (usb1_oe_host),
+      .usb1_oe(usb1_oe_host),
 
       // ym2149 interface
       .audio_out(audio_out),

@@ -57,4 +57,5 @@ add_subdirectory(usb_hid_device)
 add_subdirectory(cdc_cells)
 add_subdirectory(spiflash)
 add_subdirectory(wb_timer)
+add_subdirectory(i2c_master)
 

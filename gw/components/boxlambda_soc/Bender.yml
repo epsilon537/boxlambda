@@ -26,6 +26,7 @@ dependencies:
   usb_hid_host: { path: "../../components/usb_hid_host" }
   spiflash: { path: "../../components/spiflash"}
   wb_timer: { path: "../../components/wb_timer"}
+  i2c_master: { path: "../../components/i2c_master"}
 
 sources:
   #co-sim stuffs.
@@ -37,6 +38,7 @@ sources:
       - ../../../sub/riscv-dbg/tb/remote_bitbang/remote_bitbang.c
       - ../../../sub/riscv-dbg/tb/SimJTAG.sv
       - ../../../sub/sdspi/bench/cpp/sdspisim.cpp
+      - ../../../sub/wbi2c/bench/cpp/i2csim.cpp
   - target: any(vivado, verilator)
     defines:
       NO_MODPORT_EXPRESSIONS: ~

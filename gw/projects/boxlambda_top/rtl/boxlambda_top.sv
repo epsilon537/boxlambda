@@ -16,6 +16,7 @@ module boxlambda_top (
     output wire        pll_locked_led,
     output wire        init_done_led,
     output wire        init_err_led,
+    output wire        sd_card_detect_led,
 `ifdef SYNTHESIS
     /*The simulation build doesn't export DDR pins.*/
     output wire [13:0] ddram_a,
@@ -53,6 +54,19 @@ module boxlambda_top (
     output wire spiflash_cs_n,
     output wire spiflash_mosi,
     input  wire spiflash_miso,
+
+    // I2C signals
+`ifdef VERILATOR
+    input  wire i2c_scl_i,
+    input  wire i2c_sda_i,
+    output wire i2c_scl_o,
+    output wire i2c_sda_o,
+`else
+    inout  wire i2c_scl,
+    inout  wire i2c_sda,
+    output wire i2c_scl_pup,  //SCL pull-up pin
+    output wire i2c_sda_pup,  //SDA pull-up pin
+`endif
 
     // USB HID: On Verilator, we use separate input and output ports. On FPGA, the USB ports are bidirectional.
 `ifdef VERILATOR
@@ -115,7 +129,20 @@ module boxlambda_top (
   wire [23:0] gp_out;
   wire [23:0] gp_oe;
 
-  //(De)Muxing unidirectional to bidirectional ports.
+  wire i2c_scl_i;     // SCL-line input to I2C core
+  wire i2c_scl_o;     // SCL-line output from I2C core
+  wire i2c_sda_i;     // SDA-line input to I2C core
+  wire i2c_sda_o;     // SDA-line output from I2C core
+
+  //(De)Muxing unidirectional to bidirectional I2C ports.
+  assign i2c_scl = i2c_scl_o ? 1'bZ : 1'b0;
+  assign i2c_sda = i2c_sda_o ? 1'bZ : 1'b0;
+  assign i2c_scl_i = i2c_scl_o ? i2c_scl : 1'b0;
+  assign i2c_sda_i = i2c_sda_o ? i2c_sda : 1'b0;
+  assign i2c_scl_pup = 1'b1;  //SCL pull-up pin.
+  assign i2c_sda_pup = 1'b1;  //SDA pull-up pin.
+
+  //(De)Muxing unidirectional to bidirectional GPIO ports.
   generate
     genvar ii;
     for (ii = 0; ii < 24; ii = ii + 1) begin : GPIO_MUX
@@ -124,7 +151,7 @@ module boxlambda_top (
     end
   endgenerate
 
-  //(De)Muxing unidirectional to bidirectional ports.
+  //(De)Muxing unidirectional to bidirectional USB ports.
   assign usb0_dm_i = usb0_oe ? 1'bZ : usb0_dm;
   assign usb0_dp_i = usb0_oe ? 1'bZ : usb0_dp;
   assign usb0_dm = usb0_oe ? usb0_dm_o : 1'bZ;
@@ -132,7 +159,7 @@ module boxlambda_top (
   assign usb0_dm_snoop = usb0_oe ? usb0_dm_o : usb0_dm_i;
   assign usb0_dp_snoop = usb0_oe ? usb0_dp_o : usb0_dp_i;
 
-  //(De)Muxing unidirectional to bidirectional ports.
+  //(De)Muxing unidirectional to bidirectional USB ports.
   assign usb1_dm_i = usb1_oe ? 1'bZ : usb1_dm;
   assign usb1_dp_i = usb1_oe ? 1'bZ : usb1_dp;
   assign usb1_dm = usb1_oe ? usb1_dm_o : 1'bZ;
@@ -165,6 +192,9 @@ module boxlambda_top (
 `endif
 `ifndef SPIFLASH
       .SPIFLASH_ACTIVE(0),
+`endif
+`ifndef I2C
+      .I2C_ACTIVE(0),
 `endif
       /*We don't specify a dmem.mem. The data segment is copied into DMEM from a load segment that's part of the cmem.mem
          *image. This copy operation is part of the PicoLibc start-up code.*/
