@@ -30,11 +30,11 @@ packages:
     source:
       Path: ../../components/gpio
     dependencies: []
-  i2c:
+  i2c_master:
     revision: null
     version: null
     source:
-      Path: ../../components/i2c
+      Path: ../../components/i2c_master
     dependencies: []
   ibex:
     revision: null
