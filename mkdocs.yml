@@ -1,4 +1,13 @@
 site_name: BoxLambda Documentation
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
 theme:
     name: readthedocs
     collapse_navigation: True
@@ -20,7 +29,8 @@ nav:
     - Architecture: architecture.md
     - Clocks and Reset: clocks_and_reset.md
     - Interrupts: interrupts.md
-    - Estimated FPGA Utilization: estimated-fpga-utilization.md
+    - LEDs: leds.md
+    - FPGA Resource Utilization: fpga-resource-utilization.md
     - Git Workflow: git-workflow.md
     - The Build System and Directory Layout:
         - The Directory Structure: build_sys_dir_struct.md
@@ -47,6 +57,7 @@ nav:
         - GPIO: components_gpio.md
         - Timer: components_timer.md
         - I2C: components_i2c.md
+        - RTCC: components_rtcc.md
         - Dynamic Function Exchange: components_dfx.md
     - Software Components:
         - LiteDRAM Initialization: sw_comp_litedram_initialization.md
@@ -60,6 +71,9 @@ nav:
         - Timer: sw_comp_timer.md
         - RISC-V: sw_comp_riscv.md
         - Interrupt Handling: sw_comp_irqs.md
+        - I2C: sw_comp_i2c.md
+        - Real-Time Clock and Calendar: sw_comp_rtcc.md
+        - CLI: sw_comp_cli.md
     - Installation:
         - Prerequisites: prerequisites.md
         - Peripherals (PMODs): pmods.md
@@ -75,5 +89,8 @@ nav:
         - USB HID Keyboard and Mouse Test: test-build-usb-hid.md
         - SPI Flash Test: test-build-spi-flash.md
         - Timer, UART, and GPIO Interrupt Test: test-build-timer-uart-gpio-irqs.md
+        - I2C Test: test-build-i2c.md
+        - Real-Time Clock and Calendar Test: test-build-rtcc.md
+        - Reset Test: test-build-reset.md
 
 

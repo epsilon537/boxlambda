@@ -10,7 +10,7 @@ Hook up [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start)
 
 ### MicroSD PMOD
 
-Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert an SD card into the card reader. 
+Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert an SD card into the card reader.
 
 ![MicroSD PMOD Setup.](assets/microsd_pmod.jpg)
 
@@ -20,12 +20,14 @@ Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd
 
 To make space for the keyboard and mouse, I moved the audio PMOD to the ChipKit header of the Arty A7 board. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) as follows:
 
-- PMOD Pin 1 (*AIN*) to ChipKit IO 0.
-- PMOD Pin 2 (*GAIN*) to ChipKit IO 1.
-- PMOD Pin 3 Not Connected.
-- PMOD Pin 4 (*~SHUTDOWN*) to ChipKit IO 3.
-- PMOD Pin 5 (*GND*) to Ground.
-- PMOD Pin 6 (*VCC*) to 3V3.
+| Audio PMOD Pin | Arty A7 Board Pin |
+|----------------|-------------------|
+| 1 (*AIN*) | ChipKit Header IO0 |
+| 2 (*GAIN*) | ChipKit Header IO1 |
+| 3 | Not Connected |
+| 4 (*~SHUTDOWN*) | ChipKit Header IO3 |
+| 5 (*GND*) | ChipKit Header GND |
+| 6 (*VCC*) | ChipKit Header 3V3 |
 
 ![Audio PMOD Setup.](assets/audio_pmod.jpg)
 
@@ -46,3 +48,23 @@ Hook up the PMOD to port **JA** and connect a keyboard and/or a mouse.
 ![USB PMOD Setup](assets/usb_pmod_setup.jpg)
 
 *Arty A7 Setup with USB PMOD attached to port JA.*
+
+### RTCC PMOD
+
+The Real-Time Clock and Calendar PMOD is from Digilent:
+
+[https://digilent.com/shop/pmod-rtcc-real-time-clock-calendar/](https://digilent.com/shop/pmod-rtcc-real-time-clock-calendar/)
+
+There aren't enough PMOD ports on the Arty A7 to accommodate all BoxLambda peripherals. Instead of using a PMOD port, I hooked up the RTCC PMOD to the I2C pins of the ChipKit Header:
+
+| RTCC PMOD Pin | Arty A7 Board Pin |
+|----------|-------------|
+| 1 (*SCL*) | ChipKit Header SCL |
+| 2 (*SDA*) | ChipKit Header SDA |
+| 3 (*GND*) | ChipKit Header GND |
+| 4 (*VCC*) | ChipKit Header IOREF |
+
+![RTCC PMOD Setup.](assets/rtcc_pmod.jpg)
+
+*RTCC PMOD Setup.*
+

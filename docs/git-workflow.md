@@ -34,7 +34,6 @@ I use the following sequence to add a git submodule:
 3. In the root directory of my local boxlambda repo, I run the following commands:
 ```
     git submodule add <URL to forked repo> sub/<submodule name>
-    git add .
     git commit -m 'Add submodule <submodule name>`
     cd sub/<submodule name>
     git remote set-url origin git@github.com:epsilon537/<repo name>.git

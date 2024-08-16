@@ -1,7 +1,7 @@
 Terms and Abbreviations
 =======================
 
-This section clarifies for some of the more ambiguous terms and abbreviations used elsewhere in the documentation.
+This section clarifies some of the more ambiguous terms and abbreviations used elsewhere in the documentation.
 
 - **ACK**: A Wishbone Bus Signal.
 
@@ -22,6 +22,8 @@ This section clarifies for some of the more ambiguous terms and abbreviations us
 - **Bus Arbiter**: In a Shared Bus Interconnect, a Bus Arbiter decides which of the requesting bus masters gets to access the bus.
 
 - **CDC**: Clock Domain Crossing. The traversal of a signal in a synchronous digital circuit from one clock domain into another.
+
+- **CLI**: Command Line Interface.
 
 - **Clock Domain**: A section of the design driven by one clock, or in some cases, multiple coupled clocks.
 
@@ -112,6 +114,12 @@ This section clarifies for some of the more ambiguous terms and abbreviations us
 - **HAL**: Hardware Access Layer. A low-level Software API to access the hardware, or in this case, gateware.
 
 - **HIR**: Host Interface Registers. The register interface the DMA core presents to the host processor.
+
+- **I2C**: Inter-Integrated-circuit. A bidirectional two-wire synchronous serial bus requiring only two wires to transmit information between devices connected to the bus.
+
+- **I2C Slave Address**: An I2C bus supports multiple slave devices. Each slave device has a unique address, distinguishing it from the other slaves on the bus. This address is what I'm calling the *Slave Address*.
+
+- **I2C Slave Register Address**: Most I2C slave devices implement multiple byte-wide configuration or status registers. These registers are addressed using the first byte of an I2C data frame (i.e. the first byte following the address frame). This address is called the *Slave Register Address*.
 
 - **I2S**: A serial bus interface specially designed for communicating digital audio data between integrated circuits (ICs). The I2S protocol sends pulse-code modulation (PCM) audio data from a controller to a target.
 
@@ -205,6 +213,8 @@ This section clarifies for some of the more ambiguous terms and abbreviations us
 
 - **PCM**: Pulse-Code Modulation. PCM data are digital audio samples.
 
+- **PDM**: Pulse Density Modulation.
+
 - **.picoasm**: PicoRV assembly source code file extension.
 
 - **.picobin**: PicoRV program binary file extension.
@@ -221,9 +231,9 @@ This section clarifies for some of the more ambiguous terms and abbreviations us
 
 - **PSG**: Programmable Sound Generator.
 
-- **PWM**: Pulse Width Modulation.
+- **PUP**: Pull-Up Pin.
 
-- **PDM**: Pulse Density Modulation.
+- **PWM**: Pulse Width Modulation.
 
 - **RC Filter**: A simple low-pass filter network consisting of a resistor and a capacitor.
 
@@ -235,6 +245,8 @@ This section clarifies for some of the more ambiguous terms and abbreviations us
 
 - **RM**: Reconfigurable Module. Part of Xilinx's DFX solution.
 
+- **RTCC**: Real-Time Clock and Calendar.
+
 - **RTL**: Register-Transfer Level, an abstraction of a Digital Design, usually captured using a Hardware Description Language such as Verilog, SystemVerilog, or VHDL.
 
 - **RV32IMCB**: Risc-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
@@ -243,7 +255,11 @@ This section clarifies for some of the more ambiguous terms and abbreviations us
 
 - **Scan Line**: One line in the raster scanning pattern of the VGA display.
 
+- **SCL**: I2C Serial Clock line.
+
 - **SD**: Secure Digital, a proprietary non-volatile flash memory card format developed by the SD Association (SDA) for use in portable devices.
+
+- **SDA**: I2C Serial Data Line.
 
 - **SDL**: Simple DirectMedia Layer is a cross-platform development library that provides low-level access to audio, keyboard, mouse, joystick, and graphics.
 
