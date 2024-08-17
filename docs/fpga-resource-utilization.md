@@ -1,8 +1,8 @@
-Estimated FPGA Utilization
-==========================
+FPGA Resource Utilization
+=========================
 
-Estimated FPGA Resource Utilization on Arty A7-100T
-----------------------------------------------------
+Resource Utilization on Arty A7-100T
+------------------------------------
 | Component | **Slice LUTS** | **Slice Registers** | **Block RAM Tiles** | **DSPs** |
 |-----------|----------------|---------------------|---------------------|----------|
 | CMEM+DMEM | 1758 | 28 | 64 | 0 |
@@ -13,7 +13,7 @@ Estimated FPGA Resource Utilization on Arty A7-100T
 | 2xYM2149+DAC | 887 | 867 | 1 | 2 |
 | PicoRV DMA | 2522 | 1359 | 1 | 0 |
 | SDSPI | 527 | 753 | 1 | 0 |
-| WBI2C | 393 | 324 | 0 | 0 |
+| WBI2C | 415 | 326 | 0 | 0 |
 | WBUART | 454 | 359 | 0 | 0 |
 | SPI Flash | 48 | 77 | 0 | 0 |
 | 2xUSB HID | 694 | 988 | 1 | 0 |
@@ -21,12 +21,12 @@ Estimated FPGA Resource Utilization on Arty A7-100T
 | WB Timer | 121 | 163 | 0 | 0 |
 | Interconnect | 2846 | 2022 | 0 | 0 |
 |              |      |      |   |   |
-| Total Used   | 19035 | 12188 | 108 | 3 |
+| Total Used   | 19057 | 12190 | 108 | 3 |
 | Avl. Resources | 63400 | 126800 | 135 | 240 |
 | **Pct. Utilization** | **30%** | **10%** | **80%** | **1%** |
 
-Estimated FPGA Resource Utilization on Arty A7-35T
---------------------------------------------------
+Resource Utilization on Arty A7-35T
+-----------------------------------
 
 | Component | **Slice LUTS** | **Slice Registers** | **Block RAM Tiles** | **DSPs** |
 |-----------|----------------|---------------------|---------------------|----------|
@@ -38,7 +38,7 @@ Estimated FPGA Resource Utilization on Arty A7-35T
 | 2xYM2149+DAC | 887 | 867 | 1 | 2 |
 | PicoRV DMA | 2522 | 1359 | 1 | 0 |
 | SDSPI | 527 | 753 | 1 | 0 |
-| WBI2C | 393 | 324 | 0 | 0 |
+| WBI2C | 415 | 326 | 0 | 0 |
 | WBUART | 454 | 359 | 0 | 0 |
 | SPI Flash | 48 | 77 | 0 | 0 |
 | 2xUSB HID | 694 | 988 | 1 | 0 |
@@ -46,7 +46,7 @@ Estimated FPGA Resource Utilization on Arty A7-35T
 | WB Timer | 121 | 163 | 0 | 0 |
 | Interconnect | 2115 | 1488 | 0 | 0 |
 |              |      |      |   |   |
-| Total Used   | 16968 | 11636 | 44 | 4 |
+| Total Used   | 16990 | 11638 | 44 | 4 |
 | Avl. Resources | 20800 | 41600 | 50 | 90 |
-| **Pct. Utilization** | **82%** | **27%** | **88%** | **4%** |
+| **Pct. Utilization** | **82%** | **28%** | **88%** | **4%** |
 
