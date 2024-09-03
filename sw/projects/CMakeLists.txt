@@ -71,4 +71,6 @@ add_subdirectory(timer_uart_gpio_irqs)
 add_subdirectory(i2c_test)
 add_subdirectory(rtcc_test)
 add_subdirectory(reset_test)
+add_subdirectory(j1b_test)
+add_subdirectory(dfx_test)
 

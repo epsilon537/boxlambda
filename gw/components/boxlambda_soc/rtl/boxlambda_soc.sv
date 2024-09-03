@@ -11,6 +11,7 @@ module boxlambda_soc #(
     parameter USB_HID_ACTIVE = 1,
     parameter SPIFLASH_ACTIVE = 1,
     parameter I2C_ACTIVE = 1,
+    parameter DFX_ACTIVE = 1,
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""
 ) (
@@ -105,13 +106,19 @@ module boxlambda_soc #(
     input  wire        gp_clk
 );
 
+  //Enum of Bus Master attached to the DM/DFX Wishbone arbiter
+  typedef enum {
+    DM_M, /*Debug Module Bus Master port.*/
+    DFX_M, /*DFX Controller Bus Master port.*/
+  } wb_arbiter_master_e;
+
   //Enum of Bus Masters attached to the cross bar.
   typedef enum {
     COREI_M,  /*Ibex CPU instruction port.*/
     CORED_M,  /*Ibex CPU data port.*/
     PICORV_M,  /*PicoRV DMA.*/
-    BLACKBOX_M,  /*Black Box Bus Master.*/
-    DM_M  /*Debug Module Bus Master port.*/
+    RM0_M,  /*Reconfigurable Module 0 Bus Master.*/
+    ARBITER_M  /*Wishbone Arbiter Bus Master port.*/
   } wb_xbar_master_e;
 
   //Enum of Bus Slaves attached to the cross bar.
@@ -122,7 +129,7 @@ module boxlambda_soc #(
     DMEM_1_S,  /*DMEM port 1. Typically used by DMA.*/
     SHARED_BUS_S,  /*Connection to the shared bus.*/
     VERA_S,  /*VERA slave port.*/
-    BLACKBOX_S,  /*Black Box Slave.*/
+    RM0_S,  /*Reconfigurable Module 0 Slave.*/
     DDR_USR_S  /*LiteDRAM data port.*/
   } wb_xbar_slave_e;
 
@@ -169,6 +176,9 @@ module boxlambda_soc #(
 
   localparam AW = 28;  //Wishbone Bus address width. Note that we use word addressing.
   localparam DW = 32;  //Wishbone Bus data width.
+
+  localparam NUM_ARBITER_MASTERS = 2; //Number of bus masters connected to the DM/DFX Wishbone arbiter. Has to be 2.
+  localparam NUM_ARBITER_SLAVES = 1; //Number of bus slaves attached to the DM/DFX Wishbone arbiter. Has to be 1.
   localparam NUM_XBAR_MASTERS = 5;
   localparam NUM_XBAR_SLAVES = 8;
   localparam NUM_SHARED_BUS_MASTERS = 1;
@@ -215,7 +225,7 @@ module boxlambda_soc #(
   //Crossbar slave addresses. Right shift by two to convert byte address values to word address values.
   localparam [NUM_XBAR_SLAVES*AW-1:0] XBAR_SLAVE_ADDRS = {
     /*DDR_USR_S*/{AW'('h20000000 >> 2)},
-    /*BLACKBOX_S*/{AW'('h13000000 >> 2)},
+    /*RM0_S*/{AW'('h13000000 >> 2)},
     /*VERA_S*/{AW'('h12000000 >> 2)},
     /*SHARED_BUS_S*/{AW'('h10000000 >> 2)},
     /*DMEM_1_S*/{AW'('h00120000 >> 2)},
@@ -227,7 +237,7 @@ module boxlambda_soc #(
   //Crossbar slave address mask. Right-shift by two to convert byte size to word size.
   localparam [NUM_XBAR_SLAVES*AW-1:0] XBAR_SLAVE_ADDR_MASKS = {
     /*DDR_USR_S*/{AW'(~('h0fffffff >> 2))},
-    /*BLACKBOX_S*/{AW'(~('h000fffff >> 2))},
+    /*RM0_S*/{AW'(~('h000fffff >> 2))},
     /*VERA_S*/{AW'(~('h0007ffff >> 2))},
     /*SHARED_BUS_S*/{AW'(~('h01ffffff >> 2))},
     /*DMEM_1_S*/{AW'(~(DPRAM_BYTE_ADDR_MASK >> 2))},
@@ -254,11 +264,18 @@ module boxlambda_soc #(
   logic por_completed;  //Indicates Power-On Reset has been completed.
   logic debug_req;  //Debug Request signal.
 
+  //The DM/DFX arbiter bus master interfaces.
+  wb_if arbiter_wbm[NUM_ARBITER_MASTERS] (
+      .rst(ndm_reset),
+      .clk(sys_clk)
+  );
+
   //The crossbar wishbone bus master interfaces.
   wb_if xbar_wbm[NUM_XBAR_MASTERS] (
       .rst(ndm_reset),
       .clk(sys_clk)
   );
+
   //The crossbar wishbone bus slave interfaces.
   wb_if xbar_wbs[NUM_XBAR_SLAVES] (
       .rst(dm_reset),
@@ -359,6 +376,49 @@ module boxlambda_soc #(
       assign xbar_wbm[ii].err = xbar_merr[ii];
     end
   endgenerate
+
+  //The DM/DFX arbiter instance.
+  wbarbiter #(
+      .AW(AW)
+  ) wb_arbiter (
+      .i_clk(sys_clk),
+      .i_reset(ndm_reset),
+      // Bus A
+      .i_a_cyc(arbiter_wbm[DM_M].cyc),
+      .i_a_stb(arbiter_wbm[DM_M].stb),
+      .i_a_we(arbiter_wbm[DM_M].we),
+      .i_a_adr(arbiter_wbm[DM_M].adr),
+      .i_a_dat(arbiter_wbm[DM_M].dat_m),
+      .i_a_sel(arbiter_wbm[DM_M].sel),
+      .o_a_ack(arbiter_wbm[DM_M].ack),
+      .o_a_stall(arbiter_wbm[DM_M].stall),
+      .o_a_err(arbiter_wbm[DM_M].err),
+      // Bus B
+      .i_b_cyc(arbiter_wbm[DFX_M].cyc),
+      .i_b_stb(arbiter_wbm[DFX_M].stb),
+      .i_b_we(arbiter_wbm[DFX_M].we),
+      .i_b_adr(arbiter_wbm[DFX_M].adr),
+      .i_b_dat(arbiter_wbm[DFX_M].dat_m),
+      .i_b_sel(arbiter_wbm[DFX_M].sel),
+      .o_b_ack(arbiter_wbm[DFX_M].ack),
+      .o_b_stall(arbiter_wbm[DFX_M].stall),
+      .o_b_err(arbiter_wbm[DFX_M].err),
+      // Combined/arbitrated bus
+      .o_cyc(xbar_wbm[ARBITER_M].cyc),
+      .o_stb(xbar_wbm[ARBITER_M].stb),
+      .o_we(xbar_wbm[ARBITER_M].we),
+      .o_adr(xbar_wbm[ARBITER_M].adr),
+      .o_dat(xbar_wbm[ARBITER_M].dat_m),
+      .o_sel(xbar_wbm[ARBITER_M].sel),
+      .i_ack(xbar_wbm[ARBITER_M].ack),
+      .i_stall(xbar_wbm[ARBITER_M].stall),
+      .i_err(xbar_wbm[ARBITER_M].err)
+  );
+
+  //The return data signal. For some reason this isn't included in the arbiter
+  //module.
+  assign arbiter_wbm[DM_M].dat_s = xbar_wbm[ARBITER_M].dat_s;
+  assign arbiter_wbm[DFX_M].dat_s = xbar_wbm[ARBITER_M].dat_s;
 
   //The crossbar wbxbar instance.
   wbxbar #(
@@ -497,6 +557,20 @@ module boxlambda_soc #(
 
   assign usb_pll_locked = pre_pll_locked;
 
+  /*The DFX Controller.*/
+  generate
+    if (DFX_ACTIVE) begin : GENERATE_DFX_CONTROLLER
+    end
+    else begin
+      arbiter_wbm[DFX_M].adr = 0;
+      arbiter_wbm[DFX_M].dat_m = 0;
+      arbiter_wbm[DFX_M].sel =0;
+      arbiter_wbm[DFX_M].cyc = 0;
+      arbiter_wbm[DFX_M].stb = 0;
+      arbiter_wbm[DFX_M].we = 0;
+    end
+  endgenerate
+
   /*The Debug Modules.*/
   generate
     if (DEBUG_MODULE_ACTIVE) begin : GENERATE_DEBUG_MODULE
@@ -532,7 +606,7 @@ module boxlambda_soc #(
           .ndmreset (ndm_reset_req),
           .dmactive (dmactive),
           .debug_req(debug_req),
-          .wbm      (xbar_wbm[DM_M]),
+          .wbm      (arbiter_wbm[DM_M]),
           .wbs      (shared_bus_wbs[DM_S]),
           .dmi_rst_n(dmi_rst_n),
           .*
@@ -670,10 +744,36 @@ module boxlambda_soc #(
       .b_cyc_i(xbar_wbs[DMEM_1_S].cyc)  // CYC_I cycle input
   );
 
-  //Black Box Placeholder - does nothing.
-  blackbox bb_inst (
-      .wbm(xbar_wbm[BLACKBOX_M]),
-      .wbs(xbar_wbs[BLACKBOX_S])
+  //Reconfigurable Module 0 Interface
+  rm0 rm0_inst (
+      .sys_clk(sys_clk),
+      .rst(ndm_reset),
+      //32-bit pipelined Wishbone master interface 0.
+      .wbm_adr_o(xbar_wbm[RM0_M].adr),
+      .wbm_dat_o(xbar_wbm[RM0_M].dat_m),
+      .wbm_dat_i(xbar_wbm[RM0_M].dat_s),
+      .wbm_sel_o(xbar_wbm[RM0_M].sel),
+      .wbm_stall_i(xbar_wbm[RM0_M].stall),
+      .wbm_cyc_o(xbar_wbm[RM0_M].cyc),
+      .wbm_stb_o(xbar_wbm[RM0_M].stb),
+      .wbm_ack_i(xbar_wbm[RM0_M].ack),
+      .wbm_we_o(xbar_wbm[RM0_M].we),
+      .wbm_err_i(xbar_wbm[RM0_M].err),
+      //32-bit pipelined Wishbone slave interface.
+      .wbs_adr(xbar_wbs[RM0_S].adr[19:0]),
+      .wbs_dat_w(xbar_wbs[RM0_S].dat_m),
+      .wbs_dat_r(xbar_wbs[RM0_S].dat_s),
+      .wbs_sel(xbar_wbs[RM0_S].sel),
+      .wbs_stall(xbar_wbs[RM0_S].stall),
+      .wbs_cyc(xbar_wbs[RM0_S].cyc),
+      .wbs_stb(xbar_wbs[RM0_S].stb),
+      .wbs_ack(xbar_wbs[RM0_S].ack),
+      .wbs_we(xbar_wbs[RM0_S].we),
+      .wbs_err(xbar_wbs[RM0_S].err),
+      //Input IRQs - RM0 receives the same 32 IRQs with the same IRQ_IDs (bit
+      //positions) as the Ibex CPU. The bit position assigned to the RM_0 itself is cleared, however.
+      .irq_in({1'b0, fast_irqs & ~(1'b1 << IRQ_ID_RM_0), 8'b0, timer_irq, 7'b0}),
+      .irq_out(fast_irqs[IRQ_ID_RM_0])
   );
 
   //The UART.
@@ -1169,10 +1269,10 @@ module boxlambda_soc #(
 
   //Set the remaining bits in the fast_irq vector to 0
   assign fast_irqs[IRQ_ID_RM_2] = 1'b0;
-  assign fast_irqs[IRQ_ID_RM_0] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_0] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_1] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_2] = 1'b0;
   assign fast_irqs[IRQ_ID_DFX]  = 1'b0;
   assign fast_irqs[IRQ_ID_ICAP] = 1'b0;
 endmodule
+

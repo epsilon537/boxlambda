@@ -1,0 +1,18 @@
++====================+===================+=====================================================================================+
+| Launch Setup Clock | Launch Hold Clock | Pin                                                                                 |
++====================+===================+=====================================================================================+
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[17]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[26]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[2]/D  |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[13]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[15]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[25]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[3]/D  |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[1]/D  |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[11]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[22]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[7]/D  |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[27]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[19]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[4]/D  |
++--------------------+-------------------+-------------------------------------------------------------------------------------+

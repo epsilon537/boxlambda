@@ -5,13 +5,12 @@ packages:
     source:
       Path: ../../components/boxlambda_soc/../../components/audio_dac
     dependencies: []
-  blackbox:
+  blackbox0_empty:
     revision: null
     version: null
     source:
-      Path: ../../components/boxlambda_soc/../../components/blackbox
-    dependencies:
-    - ibex_wb_common
+      Path: ../../components/blackbox0_empty
+    dependencies: []
   boxlambda_clk_gen:
     revision: null
     version: null
@@ -25,7 +24,6 @@ packages:
       Path: ../../components/boxlambda_soc
     dependencies:
     - audio_dac
-    - blackbox
     - boxlambda_clk_gen
     - gpio
     - i2c_master

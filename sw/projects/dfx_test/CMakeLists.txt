@@ -1,0 +1,23 @@
+#Reset test program
+
+add_executable(dfx_test
+ EXCLUDE_FROM_ALL
+ dfx_test.cpp
+)
+
+target_compile_options(dfx_test
+ PRIVATE
+  -O2 -g
+)
+
+target_include_directories(dfx_test
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/sw/components/reset/
+)
+
+#reset_test is linked as CMEM memory image.
+link_and_create_mem_file(dfx_test
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+
+target_link_libraries(dfx_test sdram gpio riscv j1b_hal)
+

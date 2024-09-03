@@ -8,6 +8,7 @@ package:
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
+  blackbox0_empty: { path: "../../components/blackbox0_empty" }
 
 sources:
   - target: constraints

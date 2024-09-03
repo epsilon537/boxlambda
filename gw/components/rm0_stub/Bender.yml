@@ -1,0 +1,14 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: rm0_stub
+
+sources:
+  - target: verilator
+    files:
+     - lint.vlt
+  - target: any(verilator, vivado)
+    files:
+    - rtl/rm0.sv

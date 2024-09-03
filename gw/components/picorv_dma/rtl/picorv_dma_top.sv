@@ -10,7 +10,7 @@ module picorv_dma_top #(
     input logic rst,
 
     //32-bit pipelined Wishbone master interface.
-    output logic [29:0] wbm_adr_o,
+    output logic [27:0] wbm_adr_o,
     output logic [31:0] wbm_dat_o,
     input logic [31:0] wbm_dat_i,
     output logic wbm_we_o,

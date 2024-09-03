@@ -6,6 +6,10 @@ package:
   name: wb_dp_ram
 
 sources:
+  - target: memory
+    files:
+     - ../../../sw/projects/cmem_to_flash_vector/cmem.mem
+
   - target: verilator
     files:
      - lint.vlt

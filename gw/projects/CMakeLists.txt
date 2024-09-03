@@ -6,7 +6,7 @@
 
 function (gw_project_rules_vivado)
   set(options)
-  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST )
+  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_project_rules
@@ -19,7 +19,7 @@ function (gw_project_rules_vivado)
   set(_top_module ${gw_project_rules_TOP_MODULE})
   set(_prj_name ${gw_project_rules_PROJECT_NAME})
   set(_mem_file_tgt ${gw_project_rules_MEM_FILE_TARGET})
-  set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
+  set(_mem_file_list ${gw_project_rules_MEM_FILE_LIST})
 
   if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
     set(_board arty_a7_100t)
@@ -47,10 +47,13 @@ function (gw_project_rules_vivado)
             ${_top_module}
         PRJ_COMP_NAME
             ${_prj_name}
+        OOC
+            "0"
         MEM_FILE_LIST
             ${_prj_name}.mem_file_list
         CONSTRAINTS_FILE_LIST
             ${_prj_name}.constraints_file_list
+            ${_prj_name}.vivado_ip_file_list
     )
 
   #Build Vivado command string for the vivado_impl tcl script.
@@ -370,4 +373,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
   add_subdirectory(rtcc_test)
 endif()
 add_subdirectory(reset_test)
+add_subdirectory(j1b_test)
+add_subdirectory(dfx_test)
 

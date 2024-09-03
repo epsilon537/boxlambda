@@ -145,7 +145,7 @@ async def picorv_read_single_word_test_w_stalls_and_delays(dut):
     addr_list=[]
     for w in range(numWords):
         #Generate word aligned address value
-        addr = random.randint(0x20000000, 0x4fffffff) >> 2
+        addr = random.randint(0x02000000, 0x04ffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         addr_list.append(addr)
         res = await with_timeout(picorv_read(dut, addr), 30, 'ns')
@@ -178,7 +178,7 @@ async def picorv_read_single_word_test_wo_stalls_and_delays(dut):
     addr_list=[]
     for w in range(numWords):
         #Generate word aligned address value
-        addr = random.randint(0x20000000, 0x4fffffff) >> 2
+        addr = random.randint(0x02000000, 0x04ffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         addr_list.append(addr)
         res = await with_timeout(picorv_read(dut, addr), 30, 'ns')
@@ -212,7 +212,7 @@ async def picorv_write_single_word_test_w_stalls_and_delays(dut):
 
     for w in range(numWords):
         #Generate word aligned address value
-        addr = random.randint(0x20000000, 0x4fffffff) >> 2
+        addr = random.randint(0x02000000, 0x04ffffff) >> 2
         val = random.randint(0x0,0xffffffff)
         written_words.append(val)
         dut._log.info("write word addr 0x%x", addr)
@@ -246,7 +246,7 @@ async def picorv_write_single_word_test_wo_stalls_and_delays(dut):
 
     for w in range(numWords):
         #Generate word aligned address value
-        addr = random.randint(0x20000000, 0x4fffffff) >> 2
+        addr = random.randint(0x02000000, 0x04ffffff) >> 2
         val = random.randint(0x0,0xffffffff)
         written_words.append(val)
         dut._log.info("write word addr 0x%x", addr)
@@ -283,7 +283,7 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_0(dut):
 
     for w in range(numBursts):
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000+0x0fffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
@@ -334,7 +334,7 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_1(dut):
 
     for w in range(numBursts):
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000+0x0fffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
@@ -381,7 +381,7 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_2(dut):
 
     for w in range(numBursts):
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000+0xfffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
@@ -428,7 +428,7 @@ async def picorv_read_burst_test_w_stalls_and_delays_offset_3(dut):
 
     for w in range(numBursts):
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000+0x0fffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
@@ -475,7 +475,7 @@ async def picorv_read_burst_test_wo_stalls_and_delays_offset_0(dut):
 
     for w in range(numBursts):
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000+0x0fffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
@@ -522,7 +522,7 @@ async def picorv_read_burst_test_wo_stalls_and_delays_offset_1(dut):
 
     for w in range(numBursts):
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000+0x0fffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
@@ -570,7 +570,7 @@ async def picorv_read_burst_test_wo_stalls_and_delays_offset_2(dut):
 
     for w in range(numBursts):
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000+0x0fffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
@@ -618,7 +618,7 @@ async def picorv_read_burst_test_wo_stalls_and_delays_offset_3(dut):
 
     for w in range(numBursts):
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000+0x0fffffff) >> 2
         dut._log.info("read word addr 0x%x", addr)
         await with_timeout(picorv_read(dut, addr), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
@@ -698,7 +698,7 @@ async def picorv_write_burst_test_w_stalls_and_delays(dut):
             await with_timeout(picorv_write(dut, (0x10002020>>2) + ii, data), 30*4, 'ns')
 
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000+0x0fffffff) >> 2
         dut._log.info("write word addr 0x%x", addr)
         await with_timeout(picorv_write(dut, addr, 0), 30*4, 'ns')
         addr &= (0x7fffffff>>2)
@@ -751,7 +751,7 @@ async def picorv_write_burst_test_wo_stalls_and_delays(dut):
             await with_timeout(picorv_write(dut, (0x10002020>>2) + ii, data), 30*4, 'ns')
 
         #Generate word aligned address value
-        addr = random.randint(0x80000000, 0xffffffff) >> 2
+        addr = random.randint(0x80000000, 0x80000000 + 0x0fffffff) >> 2
         dut._log.info("write word addr 0x%x", addr)
         await with_timeout(picorv_write(dut, addr, 0), 30*4, 'ns')
         addr &= (0x7fffffff>>2)

@@ -1,0 +1,616 @@
+#-----------------------------------------------------------
+# Vivado v2023.1 (64-bit)
+# SW Build 3865809 on Sun May  7 15:04:56 MDT 2023
+# IP Build 3864474 on Sun May  7 20:36:21 MDT 2023
+# SharedData Build 3865790 on Sun May 07 13:33:03 MDT 2023
+# Start of session at: Sat Aug 31 10:24:12 2024
+# Process ID: 559128
+# Current directory: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.runs/dfx_controller_0_synth_1
+# Command line: vivado -log dfx_controller_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source dfx_controller_0.tcl
+# Log file: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.runs/dfx_controller_0_synth_1/dfx_controller_0.vds
+# Journal file: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.runs/dfx_controller_0_synth_1/vivado.jou
+# Running On: asustuf, OS: Linux, CPU Frequency: 3401.354 MHz, CPU Physical cores: 6, Host memory: 16615 MB
+#-----------------------------------------------------------
+source dfx_controller_0.tcl -notrace
+create_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 1284.223 ; gain = 8.023 ; free physical = 1552 ; free virtual = 9739
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: dfx_controller_0
+Command: synth_design -top dfx_controller_0 -part xc7a100ticsg324-1L -incremental_mode off -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a100ti'
+INFO: [Device 21-403] Loading part xc7a100ticsg324-1L
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 559238
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 2034.680 ; gain = 379.668 ; free physical = 532 ; free virtual = 8719
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'dfx_controller_0' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/synth/dfx_controller_0.vhd:106]
+	Parameter C_XDEVICEFAMILY bound to: artix7 - type: string 
+INFO: [Synth 8-3491] module 'dfx_controller_dfx_controller_0' declared at '/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_dfx_controller_0.vhd:78' bound to instance 'U0' of component 'dfx_controller_dfx_controller_0' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/synth/dfx_controller_0.vhd:216]
+INFO: [Synth 8-3919] null assignment ignored
+INFO: [Synth 8-3919] null assignment ignored
+INFO: [Synth 8-638] synthesizing module 'srl_fifo_f' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:1000]
+INFO: [Synth 8-638] synthesizing module 'srl_fifo_rbu_f' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:697]
+INFO: [Synth 8-638] synthesizing module 'cntr_incr_decr_addn_f' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:143]
+INFO: [Synth 8-256] done synthesizing module 'cntr_incr_decr_addn_f' (0#1) [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:143]
+INFO: [Synth 8-638] synthesizing module 'dynshreg_f' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:397]
+INFO: [Synth 8-256] done synthesizing module 'dynshreg_f' (0#1) [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:397]
+INFO: [Synth 8-256] done synthesizing module 'srl_fifo_rbu_f' (0#1) [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:697]
+INFO: [Synth 8-256] done synthesizing module 'srl_fifo_f' (0#1) [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:1000]
+INFO: [Synth 8-638] synthesizing module 'srl_fifo_f__parameterized0' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:1000]
+INFO: [Synth 8-638] synthesizing module 'srl_fifo_rbu_f__parameterized0' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:697]
+INFO: [Synth 8-638] synthesizing module 'dynshreg_f__parameterized0' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:397]
+INFO: [Synth 8-256] done synthesizing module 'dynshreg_f__parameterized0' (0#1) [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:397]
+INFO: [Synth 8-256] done synthesizing module 'srl_fifo_rbu_f__parameterized0' (0#1) [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:697]
+INFO: [Synth 8-256] done synthesizing module 'srl_fifo_f__parameterized0' (0#1) [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_srl_fifo_v1_0_rfs.vhd:1000]
+INFO: [Synth 8-6157] synthesizing module 'xpm_fifo_async' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:2151]
+INFO: [Synth 8-6157] synthesizing module 'xpm_fifo_base' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:55]
+INFO: [Synth 8-6157] synthesizing module 'xpm_memory_base' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv:56]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_memory_base' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv:56]
+INFO: [Synth 8-6157] synthesizing module 'xpm_cdc_gray' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:283]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_cdc_gray' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:283]
+INFO: [Synth 8-6157] synthesizing module 'xpm_fifo_reg_vec' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1885]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_fifo_reg_vec' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1885]
+INFO: [Synth 8-6157] synthesizing module 'xpm_cdc_gray__parameterized0' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:283]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_cdc_gray__parameterized0' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:283]
+INFO: [Synth 8-6157] synthesizing module 'xpm_fifo_reg_vec__parameterized0' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1885]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_fifo_reg_vec__parameterized0' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1885]
+INFO: [Synth 8-6157] synthesizing module 'xpm_fifo_rst' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1619]
+INFO: [Synth 8-6157] synthesizing module 'xpm_cdc_sync_rst' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:1058]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_cdc_sync_rst' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:1058]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_fifo_rst' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1619]
+INFO: [Synth 8-6157] synthesizing module 'xpm_fifo_reg_bit' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1907]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_fifo_reg_bit' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1907]
+INFO: [Synth 8-6157] synthesizing module 'xpm_counter_updn' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_counter_updn' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6157] synthesizing module 'xpm_counter_updn__parameterized0' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_counter_updn__parameterized0' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6157] synthesizing module 'xpm_counter_updn__parameterized1' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_counter_updn__parameterized1' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_fifo_base' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:55]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_fifo_async' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:2151]
+INFO: [Synth 8-638] synthesizing module 'cdc_sync' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:106]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 'REG_P_IN_cdc_from' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:219]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 'REG_P_IN2_cdc_to' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:232]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 'P_IN_CROSS2SCNDRY_s_out_d2' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:269]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 'P_IN_CROSS2SCNDRY_s_out_d3' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:279]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 'P_IN_CROSS2SCNDRY_s_out_d4' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:289]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 'P_IN_CROSS2SCNDRY_s_out_d5' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:299]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 'P_IN_CROSS2SCNDRY_s_out_d6' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:309]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 'P_IN_CROSS2SCNDRY_s_out_d7' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:320]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 'P_IN_CROSS2SCNDRY_scndry_out' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:330]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 's_rst_d1' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:339]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 's_rst_d2' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:347]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 's_rst_d3' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:355]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 's_rst_d4' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:364]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 's_rst_d5' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:374]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 's_rst_d6' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:383]
+	Parameter INIT bound to: 1'b0 
+INFO: [Synth 8-113] binding component instance 's_rst_d7' to cell 'FDR' [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:392]
+INFO: [Synth 8-256] done synthesizing module 'cdc_sync' (0#1) [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/hdl/lib_cdc_v1_0_rfs.vhd:106]
+INFO: [Synth 8-6157] synthesizing module 'xpm_fifo_sync' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1955]
+INFO: [Synth 8-6157] synthesizing module 'xpm_fifo_base__parameterized0' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:55]
+INFO: [Synth 8-6157] synthesizing module 'xpm_memory_base__parameterized0' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv:56]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_memory_base__parameterized0' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv:56]
+INFO: [Synth 8-226] default block is never used [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1207]
+INFO: [Synth 8-226] default block is never used [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1274]
+INFO: [Synth 8-226] default block is never used [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1296]
+INFO: [Synth 8-6157] synthesizing module 'xpm_counter_updn__parameterized2' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_counter_updn__parameterized2' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6157] synthesizing module 'xpm_fifo_rst__parameterized0' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1619]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_fifo_rst__parameterized0' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1619]
+INFO: [Synth 8-6157] synthesizing module 'xpm_counter_updn__parameterized3' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_counter_updn__parameterized3' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6157] synthesizing module 'xpm_counter_updn__parameterized4' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_counter_updn__parameterized4' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6157] synthesizing module 'xpm_counter_updn__parameterized5' [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_counter_updn__parameterized5' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1859]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_fifo_base__parameterized0' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:55]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_fifo_sync' (0#1) [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1955]
+INFO: [Synth 8-256] done synthesizing module 'dfx_controller_0' (0#1) [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/synth/dfx_controller_0.vhd:106]
+WARNING: [Synth 8-6014] Unused sequential element dest_out_bin_ff_reg was removed.  [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:417]
+WARNING: [Synth 8-6014] Unused sequential element dest_out_bin_ff_reg was removed.  [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:417]
+WARNING: [Synth 8-6014] Unused sequential element gen_rd_b.gen_doutb_pipe.enb_pipe_reg[0] was removed.  [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv:3071]
+WARNING: [Synth 8-6014] Unused sequential element gen_fwft.empty_fwft_fb_reg was removed.  [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv:1391]
+WARNING: [Synth 8-7129] Port rd_clk in module xpm_fifo_rst__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sleep in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rsta in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port regcea in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port injectsbiterra in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port injectdbiterra in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port clkb in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port web[0] in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[2] in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[1] in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[0] in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port injectsbiterrb in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port injectdbiterrb in module xpm_memory_base__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port prmry_resetn in module cdc_sync is either unconnected or has no load
+WARNING: [Synth 8-7129] Port prmry_vect_in[0] in module cdc_sync is either unconnected or has no load
+WARNING: [Synth 8-7129] Port scndry_resetn in module cdc_sync is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sleep in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rsta in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port regcea in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port injectsbiterra in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port injectdbiterra in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port clkb in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rstb in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port enb in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port regceb in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port web[0] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[33] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[32] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[31] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[30] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[29] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[28] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[27] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[26] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[25] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[24] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[23] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[22] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[21] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[20] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[19] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[18] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[17] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[16] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[15] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[14] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[13] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[12] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[11] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[10] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[9] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[8] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[7] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[6] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[5] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[4] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[3] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[2] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[1] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dinb[0] in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port injectsbiterrb in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port injectdbiterrb in module xpm_memory_base is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[31] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[30] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[29] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[28] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[27] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[26] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[25] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[24] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[23] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[22] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[21] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[20] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[19] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[18] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[17] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[16] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[15] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[14] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[13] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[12] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[11] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[10] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[9] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[8] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[5] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[4] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[3] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[2] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[1] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port icap_i[0] in module dfx_controller_dfx_controller_0_icap_if_0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port clk in module decompress is either unconnected or has no load
+WARNING: [Synth 8-7129] Port reset_n in module decompress is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s2mm_aclk in module dfx_controller_dma_s2mm_omit_wrap is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s2mm_aresetn in module dfx_controller_dma_s2mm_omit_wrap is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s2mm_cmdsts_awclk in module dfx_controller_dma_s2mm_omit_wrap is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s2mm_cmdsts_aresetn in module dfx_controller_dma_s2mm_omit_wrap is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s2mm_cmd_wvalid in module dfx_controller_dma_s2mm_omit_wrap is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s2mm_cmd_wdata[71] in module dfx_controller_dma_s2mm_omit_wrap is either unconnected or has no load
+INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2153.617 ; gain = 498.605 ; free physical = 368 ; free virtual = 8556
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2171.430 ; gain = 516.418 ; free physical = 364 ; free virtual = 8552
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2171.430 ; gain = 516.418 ; free physical = 364 ; free virtual = 8552
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00.05 ; elapsed = 00:00:00.06 . Memory (MB): peak = 2177.367 ; gain = 0.000 ; free physical = 356 ; free virtual = 8544
+INFO: [Netlist 29-17] Analyzing 48 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0_ooc.xdc] for cell 'U0'
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0_ooc.xdc] for cell 'U0'
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0.xdc] for cell 'U0'
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0.xdc] for cell 'U0'
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.runs/dfx_controller_0_synth_1/dont_touch.xdc]
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.runs/dfx_controller_0_synth_1/dont_touch.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_gray.tcl]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/dfx_controller_0_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/dfx_controller_0_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/tcl/xpm_fifo_rst.tcl]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/dfx_controller_0_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/dfx_controller_0_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_fifo/tcl/xpm_fifo_rst.tcl]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/dfx_controller_0_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/dfx_controller_0_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+INFO: [Project 1-1714] 8 XPM XDC files have been applied to the design.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2302.180 ; gain = 0.000 ; free physical = 331 ; free virtual = 8519
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 48 instances were transformed.
+  FDR => FDRE: 48 instances
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.08 ; elapsed = 00:00:00.05 . Memory (MB): peak = 2302.180 ; gain = 0.000 ; free physical = 331 ; free virtual = 8519
+INFO: [Designutils 20-5008] Incremental synthesis strategy off
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 351 ; free virtual = 8540
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a100ticsg324-1L
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 351 ; free virtual = 8540
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property BLOCK_SYNTH.USER_PROVIDED = rt::set_parameter constPropDram false for U0/i_vsm_VS_0. (constraint file  /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0.xdc, line 56).
+Applied set_property KEEP_HIERARCHY = SOFT for U0. (constraint file  /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.runs/dfx_controller_0_synth_1/dont_touch.xdc, line 9).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/i_cp0/i_bs_fifo/\gnuram_async_fifo.xpm_fifo_base_inst /\gen_cdc_pntr.rd_pntr_cdc_inst . (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/i_cp0/i_bs_fifo/\gnuram_async_fifo.xpm_fifo_base_inst /\gen_cdc_pntr.wr_pntr_cdc_inst . (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/i_cp0/i_bs_fifo/\gnuram_async_fifo.xpm_fifo_base_inst /\gen_cdc_pntr.rd_pntr_cdc_dc_inst . (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/i_cp0/i_bs_fifo/\gnuram_async_fifo.xpm_fifo_base_inst /\gen_cdc_pntr.wr_pntr_cdc_dc_inst . (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/i_cp0/i_bs_fifo/\gnuram_async_fifo.xpm_fifo_base_inst /xpm_fifo_rst_inst/\gen_rst_ic.rrst_wr_inst . (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/i_cp0/i_bs_fifo/\gnuram_async_fifo.xpm_fifo_base_inst /xpm_fifo_rst_inst/\gen_rst_ic.wrst_rd_inst . (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/i_cp0/i_bs_fifo. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/i_cp0/\blk_id_fifo.xpm_fifo_sync_inst . (constraint file  auto generated constraint).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 351 ; free virtual = 8540
+---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'current_state_reg' in module 'axi_lite_if'
+INFO: [Synth 8-802] inferred FSM for state register 'sig_pcc_sm_state_reg' in module 'dfx_controller_dma_pcc'
+INFO: [Synth 8-802] inferred FSM for state register 'b_fsm.fsm_cs_reg' in module 'dfx_controller_dfx_controller_0_fetch'
+INFO: [Synth 8-802] inferred FSM for state register 'gen_rst_ic.curr_wrst_state_reg' in module 'xpm_fifo_rst'
+INFO: [Synth 8-802] inferred FSM for state register 'gen_rst_ic.curr_rrst_state_reg' in module 'xpm_fifo_rst'
+INFO: [Synth 8-802] inferred FSM for state register 'gen_fwft.curr_fwft_state_reg' in module 'xpm_fifo_base__parameterized0'
+INFO: [Synth 8-802] inferred FSM for state register 'cp_fsm_cs_reg' in module 'dfx_controller_dfx_controller_0_icap_if_0'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 st_idle |                            00001 |                              000
+                 st_read |                            10000 |                              001
+            st_read_resp |                            00100 |                              011
+                st_write |                            01000 |                              010
+           st_write_resp |                            00010 |                              100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'current_state_reg' using encoding 'one-hot' in module 'axi_lite_if'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    init |                         00000001 |                              000
+            wait_for_cmd |                         00000010 |                              001
+                  calc_1 |                         00000100 |                              010
+                  calc_2 |                         00001000 |                              011
+                  calc_3 |                         00010000 |                              100
+       wait_on_xfer_push |                         00100000 |                              101
+             chk_if_done |                         01000000 |                              110
+              error_trap |                         10000000 |                              111
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'sig_pcc_sm_state_reg' using encoding 'one-hot' in module 'dfx_controller_dma_pcc'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  st_por |                              110 |                              000
+         st_wait_for_req |                              001 |                              001
+    st_bad_config_error1 |                              101 |                              010
+st_bad_config_error_wait |                              100 |                              100
+st_bad_config_error_done |                              011 |                              011
+             st_load_dma |                              010 |                              101
+ st_wait_for_tx_to_start |                              000 |                              110
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'b_fsm.fsm_cs_reg' using encoding 'sequential' in module 'dfx_controller_dfx_controller_0_fetch'
+INFO: [Synth 8-5552] Implemented safe state 'default_state' for state register 'gen_rst_ic.curr_wrst_state_reg' in module 'xpm_fifo_rst'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+*
+               WRST_IDLE |                            00001 |                              000
+                 WRST_IN |                            00010 |                              010
+                WRST_OUT |                            00100 |                              111
+               WRST_EXIT |                            01000 |                              110
+            WRST_GO2IDLE |                            10000 |                              100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'gen_rst_ic.curr_wrst_state_reg' using encoding 'one-hot' in module 'xpm_fifo_rst'
+INFO: [Synth 8-5552] Implemented safe state 'default_state' for state register 'gen_rst_ic.curr_rrst_state_reg' in module 'xpm_fifo_rst'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+*
+               RRST_IDLE |                               00 |                               00
+                 RRST_IN |                               01 |                               10
+                RRST_OUT |                               10 |                               11
+               RRST_EXIT |                               11 |                               01
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'gen_rst_ic.curr_rrst_state_reg' using encoding 'sequential' in module 'xpm_fifo_rst'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 invalid |                               00 |                               00
+            stage1_valid |                               01 |                               10
+       both_stages_valid |                               10 |                               11
+            stage2_valid |                               11 |                               01
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'gen_fwft.curr_fwft_state_reg' using encoding 'sequential' in module 'xpm_fifo_base__parameterized0'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  st_por |                             0101 |                             0000
+          st_wait_for_bs |                             0100 |                             0001
+   st_wait_for_icap_done |                             0010 |                             0100
+             st_icap_req |                             0011 |                             0010
+             st_fetch_bs |                             0000 |                             0011
+        st_send_desync_0 |                             0001 |                             0101
+        st_send_desync_1 |                             1000 |                             0110
+        st_send_desync_2 |                             0110 |                             0111
+        st_send_desync_3 |                             0111 |                             1000
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'cp_fsm_cs_reg' using encoding 'sequential' in module 'dfx_controller_dfx_controller_0_icap_if_0'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:18 ; elapsed = 00:00:19 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 338 ; free virtual = 8527
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 240 (col length:80)
+BRAMs: 270 (col length: RAMB18 80 RAMB36 40)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-6026] Ignoring keep related attribute (keep/mark_debug/dont_touch) applied on memory
+WARNING: [Synth 8-6026] Ignoring keep related attribute (keep/mark_debug/dont_touch) applied on memory
+WARNING: [Synth 8-6026] Ignoring keep related attribute (keep/mark_debug/dont_touch) applied on memory
+WARNING: [Synth 8-6026] Ignoring keep related attribute (keep/mark_debug/dont_touch) applied on memory
+WARNING: [Synth 8-6026] Ignoring keep related attribute (keep/mark_debug/dont_touch) applied on memory
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 333 ; free virtual = 8523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:28 ; elapsed = 00:00:29 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 339 ; free virtual = 8528
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:28 ; elapsed = 00:00:29 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 338 ; free virtual = 8527
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:29 ; elapsed = 00:00:30 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 339 ; free virtual = 8529
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:fetch_gnt to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[31] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[30] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[29] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[28] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[27] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[26] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[25] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[24] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[23] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[22] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[21] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[20] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[19] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[18] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[17] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[16] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[15] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[14] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[13] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[12] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[11] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[10] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[9] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[8] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[7] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[1] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:reg_addr[0] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[31] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[30] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[29] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[28] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[27] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[26] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[25] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[24] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[23] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[22] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[21] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[20] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[19] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[18] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[17] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[15] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[14] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:s_axis_ctrl_tdata[13] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:cp_rm_id_in[0] to constant 0
+INFO: [Synth 8-3295] tying undriven pin i_vsm_VS_0:cp_bs_id_in[0] to constant 0
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 336 ; free virtual = 8526
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:33 ; elapsed = 00:00:34 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 336 ; free virtual = 8526
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:34 ; elapsed = 00:00:35 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 337 ; free virtual = 8527
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:34 ; elapsed = 00:00:35 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 337 ; free virtual = 8527
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:34 ; elapsed = 00:00:35 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 337 ; free virtual = 8526
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:34 ; elapsed = 00:00:35 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 337 ; free virtual = 8527
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |CARRY4   |    50|
+|2     |LUT1     |    17|
+|3     |LUT2     |   161|
+|4     |LUT3     |   216|
+|5     |LUT4     |   153|
+|6     |LUT5     |   173|
+|7     |LUT6     |   287|
+|8     |MUXF7    |     2|
+|9     |RAM16X1S |    79|
+|10    |RAM32M   |     7|
+|11    |SRL16E   |   177|
+|12    |FDR      |    16|
+|13    |FDRE     |  1141|
+|14    |FDSE     |    48|
++------+---------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:34 ; elapsed = 00:00:35 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 337 ; free virtual = 8527
+---------------------------------------------------------------------------------
+
+Report Applied BLOCK_SYNTH Properties: 
++--------+--------------+-------------------------------------------------------+
+|Inst ID |Instance Name |Applied BLOCK_SYNTH Properties                         |
++--------+--------------+-------------------------------------------------------+
+|1       |U0/i_vsm_VS_0 |"USER_PROVIDED rt::set_parameter constPropDram false"  |
++--------+--------------+-------------------------------------------------------+
+
+Report BLOCK_SYNTH Property Instance Level Cell Usage: 
++------+---------+-----------+
+|      |Cell     |Inst ID: 1 |
++------+---------+-----------+
+|1     |FDRE     |        270|
+|2     |RAM16X1S |         79|
+|3     |LUT6     |        104|
+|4     |FDSE     |          3|
+|5     |LUT2     |         29|
+|6     |LUT5     |         53|
+|7     |LUT3     |         17|
+|8     |LUT4     |         27|
+|9     |LUT1     |          3|
+|10    |MUXF7    |          2|
++------+---------+-----------+
+NOTE: Inst IDs in this report represent instances and are taken from the Report Applied BLOCK_SYNTH Properties.
+
+Synthesis finished with 0 errors, 0 critical warnings and 6 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:31 ; elapsed = 00:00:33 . Memory (MB): peak = 2302.180 ; gain = 516.418 ; free physical = 336 ; free virtual = 8525
+Synthesis Optimization Complete : Time (s): cpu = 00:00:34 ; elapsed = 00:00:35 . Memory (MB): peak = 2302.180 ; gain = 647.168 ; free physical = 336 ; free virtual = 8525
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00.03 ; elapsed = 00:00:00.03 . Memory (MB): peak = 2302.180 ; gain = 0.000 ; free physical = 619 ; free virtual = 8808
+INFO: [Netlist 29-17] Analyzing 154 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2302.180 ; gain = 0.000 ; free physical = 627 ; free virtual = 8817
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 102 instances were transformed.
+  FDR => FDRE: 16 instances
+  RAM16X1S => RAM32X1S (RAMS32): 79 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 7 instances
+
+Synth Design complete | Checksum: 11fcfc27
+INFO: [Common 17-83] Releasing license: Synthesis
+169 Infos, 110 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:41 ; elapsed = 00:00:39 . Memory (MB): peak = 2302.180 ; gain = 985.238 ; free physical = 628 ; free virtual = 8818
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 1871.383; main = 1545.265; forked = 375.568
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3255.926; main = 2302.184; forked = 985.758
+INFO: [Common 17-1381] The checkpoint '/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.runs/dfx_controller_0_synth_1/dfx_controller_0.dcp' has been generated.
+INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP dfx_controller_0, cache-ID = 6f25a32114a9f824
+INFO: [Coretcl 2-1174] Renamed 91 cell refs.
+INFO: [Common 17-1381] The checkpoint '/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.runs/dfx_controller_0_synth_1/dfx_controller_0.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file dfx_controller_0_utilization_synth.rpt -pb dfx_controller_0_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Sat Aug 31 10:25:06 2024...

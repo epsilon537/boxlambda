@@ -405,8 +405,8 @@ async def wb_to_wb_wordcopy_test(dut):
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)
     #Generate word aligned address values
-    srcAddr = random.randint(0x10004000, 0x47ff0000) & ~3
-    dstAddr = random.randint(0x58000000, 0x5fff0000) & ~3
+    srcAddr = random.randint(0x01000400, 0x047ff000) & ~3
+    dstAddr = random.randint(0x05800000, 0x05fff000) & ~3
 
     wbr_transactions = []
     wbw_transactions = []
@@ -476,8 +476,8 @@ async def wb_to_wb_bytecopy_test(dut):
 
     #Ask Praxos to copy a number of bytes
     numBytes = random.randint(1, 16)
-    srcAddr = random.randint(0x10004000, 0x4fff0000)
-    dstAddr = random.randint(0x50000000, 0x5fff0000)
+    srcAddr = random.randint(0x01000400, 0x04fff000)
+    dstAddr = random.randint(0x05000000, 0x05fff000)
 
     wbr_transactions = []
     wbw_transactions = []
@@ -555,8 +555,8 @@ async def wb_to_wb_wordcopy_burst_test(dut):
         #Ask Praxos to copy a number of words
         numWords = random.randint(1, 16)*16
         #Generate word aligned address values
-        srcAddr = random.randint(0x10004000, 0x47ff0000) & ~3
-        dstAddr = offset + (random.randint(0x58000000, 0x5fff0000) & ~3)
+        srcAddr = random.randint(0x01000400, 0x047ff000) & ~3
+        dstAddr = offset + (random.randint(0x05800000, 0x05fff000) & ~3)
 
         wbr_transactions = []
         wbw_transactions = []
@@ -589,8 +589,8 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
         #Ask Praxos to copy a number of words
         numWords = random.randint(1, 16)*16
         #Generate word aligned address values
-        srcAddr = random.randint(0x10004000, 0x47ff0000) & ~3
-        dstAddr = offset + (random.randint(0x58000000, 0x5fff0000) & ~3)
+        srcAddr = random.randint(0x01000400, 0x047ff000) & ~3
+        dstAddr = offset + (random.randint(0x05800000, 0x05fff000) & ~3)
 
         wbr_transactions = []
         wbw_transactions = []
@@ -623,8 +623,8 @@ async def wb_to_wb_wordcopy_burst_test_fast(dut):
         #Ask Praxos to copy a number of words
         numWords = random.randint(1, 16)*16
         #Generate word aligned address values
-        srcAddr = random.randint(0x10004000, 0x43ff0000) & ~3
-        dstAddr = offset + (random.randint(0x44000000, 0x4fff0000) & ~3)
+        srcAddr = random.randint(0x01000400, 0x043ff000) & ~3
+        dstAddr = offset + (random.randint(0x04400000, 0x04fff000) & ~3)
 
         wbr_transactions = []
         wbw_transactions = []
@@ -683,8 +683,8 @@ async def wb_to_wb_wordcopy_single_test_fast(dut):
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)*16
     #Generate word aligned address values
-    srcAddr = random.randint(0x10004000, 0x43ff0000) & ~3
-    dstAddr = random.randint(0x44000000, 0x4fff0000) & ~3
+    srcAddr = random.randint(0x01000400, 0x043ff000) & ~3
+    dstAddr = random.randint(0x04400000, 0x04fff000) & ~3
 
     wbr_transactions = []
     wbw_transactions = []
@@ -743,8 +743,8 @@ async def wb_to_wb_wordcopy_single_unrolled_test_fast(dut):
     #Ask Praxos to copy a number of words
     numWords = random.randint(1, 16)*16
     #Generate word aligned address values
-    srcAddr = random.randint(0x10004000, 0x43ff0000) & ~3
-    dstAddr = random.randint(0x44000000, 0x4fff0000) & ~3
+    srcAddr = random.randint(0x01000400, 0x043ff000) & ~3
+    dstAddr = random.randint(0x04400000, 0x04fff000) & ~3
 
     wbr_transactions = []
     wbw_transactions = []

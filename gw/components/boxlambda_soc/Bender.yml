@@ -9,6 +9,7 @@ dependencies:
   # Path dependency.
   wb_dp_ram: { path: "../../components/wb_dp_ram" }
   wbxbar: { path: "../../components/wbxbar" }
+  wbarbiter: { path: "../../components/wbarbiter" }
   gpio: { path: "../../components/gpio" }
   wbuart: { path: "../../components/wbuart" }
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
@@ -22,13 +23,18 @@ dependencies:
   reset_ctrl: { path: "../../components/reset_ctrl" }
   picorv_dma: { path: "../../components/picorv_dma" }
   boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
-  blackbox: { path: "../../components/blackbox" }
   usb_hid_host: { path: "../../components/usb_hid_host" }
   spiflash: { path: "../../components/spiflash"}
   wb_timer: { path: "../../components/wb_timer"}
   i2c_master: { path: "../../components/i2c_master"}
+  wb_dfx_controller: { path: "../../components/wb_dfx_controller"}
 
 sources:
+  #OOC
+  - target: boxlambda_soc
+    files:
+     - ../rm0_empty/rtl/rm0.sv
+
   #co-sim stuffs.
   - target: verilator
     files:

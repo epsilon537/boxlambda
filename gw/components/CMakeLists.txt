@@ -5,7 +5,7 @@
 #VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty.
 function (gw_component_rules)
   set(options)
-  set(oneValueArgs TOP_MODULE COMPONENT_NAME VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
+  set(oneValueArgs TOP_MODULE COMPONENT_NAME VIVADO_IP_FILE_LIST VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_component_rules
@@ -18,7 +18,7 @@ function (gw_component_rules)
   set(_top_module ${gw_component_rules_TOP_MODULE})
   set(_comp_name ${gw_component_rules_COMPONENT_NAME})
   set(_verilator_cpp_flags ${gw_component_rules_VERILATOR_CPP_FLAGS})
-  set(_verilator_ld_flags ${gw_componeny_rules_VERILATOR_LD_FLAGS})
+  set(_verilator_ld_flags ${gw_component_rules_VERILATOR_LD_FLAGS})
 
   #Forward to gw_common_rules() function. gw_common_rules() build logic is shared between
   #gw components and projects.
@@ -27,6 +27,8 @@ function (gw_component_rules)
             ${_top_module}
         PRJ_COMP_NAME
             ${_comp_name}
+        OOC
+            "1"
         VERILATOR_CPP_FLAGS
             ${_verilator_cpp_flags}
         VERILATOR_LD_FLAGS
@@ -49,13 +51,17 @@ add_subdirectory(reset_ctrl)
 add_subdirectory(picorv_dma)
 add_subdirectory(boxlambda_clk_gen)
 add_subdirectory(wbxbar)
+add_subdirectory(wbarbiter)
 add_subdirectory(wb_dp_ram)
 add_subdirectory(boxlambda_soc)
-add_subdirectory(blackbox)
+add_subdirectory(rm0_empty)
+add_subdirectory(rm0_stub)
+add_subdirectory(rm0_j1b)
 add_subdirectory(usb_hid_host)
 add_subdirectory(usb_hid_device)
 add_subdirectory(cdc_cells)
 add_subdirectory(spiflash)
 add_subdirectory(wb_timer)
 add_subdirectory(i2c_master)
+add_subdirectory(wb_dfx_controller)
 

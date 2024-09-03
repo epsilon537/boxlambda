@@ -1,0 +1,19 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: wbarbiter
+
+sources:
+  - target: verilator
+    files:
+     - lint.vlt
+
+  - target: any(vivado, verilator)
+    files:
+      - ../../../sub/wb2axip/rtl/wbarbiter.v
+
+
+
+
