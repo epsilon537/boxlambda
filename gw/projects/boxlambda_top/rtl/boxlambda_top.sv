@@ -196,6 +196,9 @@ module boxlambda_top (
 `ifndef I2C
       .I2C_ACTIVE(0),
 `endif
+`ifndef DFX
+      .DFX_ACTIVE(0),
+`endif
       /*We don't specify a dmem.mem. The data segment is copied into DMEM from a load segment that's part of the cmem.mem
          *image. This copy operation is part of the PicoLibc start-up code.*/
       .CMEM_FILE("cmem.mem")

@@ -106,7 +106,8 @@ packages:
     version: null
     source:
       Path: ../../components/wb_dfx_controller
-    dependencies: []
+    dependencies:
+    - wbxbar
   wb_dp_ram:
     revision: null
     version: null
@@ -118,12 +119,6 @@ packages:
     version: null
     source:
       Path: ../../components/wb_timer
-    dependencies: []
-  wbarbiter:
-    revision: null
-    version: null
-    source:
-      Path: ../../components/wbarbiter
     dependencies: []
   wbuart:
     revision: null

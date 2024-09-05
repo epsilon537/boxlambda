@@ -3,13 +3,13 @@
 # SW Build 3865809 on Sun May  7 15:04:56 MDT 2023
 # IP Build 3864474 on Sun May  7 20:36:21 MDT 2023
 # SharedData Build 3865790 on Sun May 07 13:33:03 MDT 2023
-# Start of session at: Sat Aug 31 10:18:19 2024
-# Process ID: 557194
+# Start of session at: Wed Sep  4 16:14:10 2024
+# Process ID: 1954920
 # Current directory: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller
 # Command line: vivado
 # Log file: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/vivado.log
 # Journal file: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/vivado.jou
-# Running On: asustuf, OS: Linux, CPU Frequency: 3965.547 MHz, CPU Physical cores: 6, Host memory: 16615 MB
+# Running On: asustuf, OS: Linux, CPU Frequency: 1213.902 MHz, CPU Physical cores: 6, Host memory: 16615 MB
 #-----------------------------------------------------------
 start_gui
 WARNING: [Board 49-26] cannot add Board Part digilentinc.com:arty-s7-25:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/arty-s7-25/E.0/board.xml as part xc7s25csga324-1 specified in board_part file is either invalid or not available
@@ -112,7 +112,6 @@ WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 avail
 WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670/2.0/board.xml as part xczu67dr-fsve1156-2-i specified in board_part file is either invalid or not available
 WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670ld/1.0/board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
 open_project /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.xpr
-INFO: [Project 1-313] Project file moved from '/home/epsilon/work/boxlambda/gw/components/dfx_controller/rtl/managed_ip_project' since last save.
 INFO: [filemgmt 56-3] Default IP Output Path : Could not find the directory '/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.gen/sources_1'.
 Scanning sources...
 Finished scanning sources
@@ -166,16 +165,15 @@ WARNING: [IP_Flow 19-4331] Invalid usage of property - Setting enabled property 
 WARNING: [IP_Flow 19-4331] Invalid usage of property - Setting enabled property is not allowed in procedure init_gui
 WARNING: [IP_Flow 19-4331] Invalid usage of property - Setting enabled property is not allowed in procedure init_gui
 set_property -dict [list \
-  CONFIG.ALL_PARAMS {HAS_AXI_LITE_IF 1 RESET_ACTIVE_LEVEL 1 CP_FIFO_DEPTH 32 CP_FIFO_TYPE lutram CDC_STAGES 2 VS {VS_0 {ID 0 NAME VS_0 RM {RM_1 {ID 1 NAME RM_1 BS {0 {ID 0 ADDR 0 SIZE 0 CLEAR 0}} RESET_REQUIRED high} rm_stub {ID 0 NAME rm_stub BS {0 {ID 0 ADDR 0 SIZE 0 CLEAR 0}} RESET_REQUIRED high}} POR_RM rm_stub HAS_AXIS_STATUS 0 START_IN_SHUTDOWN 1 SHUTDOWN_ON_ERROR 0 HAS_AXIS_CONTROL 0 HAS_POR_RM 1}} CP_FAMILY 7series DIRTY 0} \
-  CONFIG.GUI_RM_RESET_REQUIRED {high} \
-  CONFIG.GUI_SELECT_RM {1} \
+  CONFIG.ALL_PARAMS {HAS_AXI_LITE_IF 1 RESET_ACTIVE_LEVEL 1 CP_FIFO_DEPTH 16 CP_FIFO_TYPE lutram CDC_STAGES 2 VS {VS_0 {ID 0 NAME VS_0 RM {RM_1 {ID 1 NAME RM_1 BS {0 {ID 0 ADDR 0 SIZE 0 CLEAR 0}} RESET_REQUIRED high} rm_stub {ID 0 NAME rm_stub BS {0 {ID 0 ADDR 0 SIZE 0 CLEAR 0}} RESET_REQUIRED high}} POR_RM rm_stub HAS_AXIS_STATUS 0 START_IN_SHUTDOWN 1 SHUTDOWN_ON_ERROR 0 HAS_AXIS_CONTROL 0 HAS_POR_RM 1}} CP_FAMILY 7series DIRTY 0} \
+  CONFIG.GUI_CP_FIFO_DEPTH {16} \
 ] [get_ips dfx_controller_0]
 generate_target all [get_files  /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0.xci]
 INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'dfx_controller_0'...
 INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'dfx_controller_0'...
 CONFIG.HAS_AXI_LITE_IF                       1
 CONFIG.RESET_ACTIVE_LEVEL                    1
-CONFIG.CP_FIFO_DEPTH                         32
+CONFIG.CP_FIFO_DEPTH                         16
 CONFIG.CP_FIFO_TYPE                          lutram
 CONFIG.CP_ARBITRATION_PROTOCOL               0
 CONFIG.CP_COMPRESSION                        0
@@ -216,8 +214,8 @@ export_ip_user_files -of_objects [get_files /home/epsilon/work/boxlambda/gw/dfx/
 reset_run dfx_controller_0_synth_1
 launch_runs dfx_controller_0_synth_1 -jobs 6
 INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: dfx_controller_0
-[Sat Aug 31 10:24:09 2024] Launched dfx_controller_0_synth_1...
+[Wed Sep  4 16:18:28 2024] Launched dfx_controller_0_synth_1...
 Run output will be captured here: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.runs/dfx_controller_0_synth_1/runme.log
 export_simulation -of_objects [get_files /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0.xci] -directory /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/ip_user_files/sim_scripts -ip_user_files_dir /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/ip_user_files -ipstatic_source_dir /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/ip_user_files/ipstatic -lib_map_path [list {modelsim=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/modelsim} {questa=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/questa} {xcelium=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/xcelium} {vcs=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/vcs} {riviera=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
 exit
-INFO: [Common 17-206] Exiting Vivado at Sat Aug 31 10:27:04 2024...
+INFO: [Common 17-206] Exiting Vivado at Thu Sep  5 10:28:54 2024...

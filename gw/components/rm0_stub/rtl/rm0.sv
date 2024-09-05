@@ -33,6 +33,8 @@ module rm0 (
     output wire irq_out
 );
 
+  logic unused = &{wbm_dat_i, wbm_ack_i, wbm_stall_i, wbm_err_i, wbs_adr, wbs_dat_w, wbs_sel, wbs_we};
+
   //Just acknowledge incoming transactions.
   always_ff @(posedge sys_clk) begin
     wbs_ack <= wbs_stb & wbs_cyc;

@@ -108,8 +108,8 @@ module boxlambda_soc #(
 
   //Enum of Bus Master attached to the DM/DFX Wishbone arbiter
   typedef enum {
-    DM_M, /*Debug Module Bus Master port.*/
-    DFX_M, /*DFX Controller Bus Master port.*/
+    DM_M,  /*Debug Module Bus Master port.*/
+    DFX_M  /*DFX Controller Bus Master port.*/
   } wb_arbiter_master_e;
 
   //Enum of Bus Masters attached to the cross bar.
@@ -141,6 +141,7 @@ module boxlambda_soc #(
     FLASH_CTRL_S,  /*Flash controller control port*/
     RESET_CTRL_S,  /*Reset Control Module.*/
     GPIO_S,  /*GPIO*/
+    DFX_S,  /*DFX Controller*/
     I2C_S,  /*I2C*/
     YM2149_S,  /*Dual YM2149 PSG core.*/
     PICORV_S,  /*PicoRV DMA slave port.*/
@@ -153,7 +154,7 @@ module boxlambda_soc #(
 
   //Fast IRQ IDs
   typedef enum {
-    IRQ_ID_ICAP,
+    IRQ_ID_NA_3,
     IRQ_ID_DFX,
     IRQ_ID_NA_0,
     IRQ_ID_NA_1,
@@ -182,7 +183,7 @@ module boxlambda_soc #(
   localparam NUM_XBAR_MASTERS = 5;
   localparam NUM_XBAR_SLAVES = 8;
   localparam NUM_SHARED_BUS_MASTERS = 1;
-  localparam NUM_SHARED_BUS_SLAVES = 14;
+  localparam NUM_SHARED_BUS_SLAVES = 15;
 
   localparam PICORV_BASE_ADDRESS = 'h10002000;
 
@@ -195,6 +196,7 @@ module boxlambda_soc #(
     /*UART_S*/{AW'('h10010000 >> 2)},
     /*PICORV_S*/{AW'(PICORV_BASE_ADDRESS >> 2)},
     /*YM2149_S*/{AW'('h10001000 >> 2)},
+    /*DFX_S*/{AW'('h10000400 >> 2)},
     /*I2C_S*/{AW'('h10000200 >> 2)},
     /*GPIO_S*/{AW'('h10000100 >> 2)},
     /*RESET_CTRL_S*/{AW'('h100000D0 >> 2)},
@@ -213,6 +215,7 @@ module boxlambda_soc #(
     /*UART_S*/{AW'(~('h0000001f >> 2))},
     /*PICORV_S*/{AW'(~('h00001fff >> 2))},
     /*YM2149_S*/{AW'(~('h000003ff >> 2))},
+    /*DFX_S*/{AW'(~('h0000007f >> 2))},
     /*I2C_S*/{AW'(~('h000001ff >> 2))},
     /*GPIO_S*/{AW'(~('h0000003f >> 2))},
     /*RESET_CTRL_S*/{AW'(~('h00000007 >> 2))},
@@ -260,7 +263,8 @@ module boxlambda_soc #(
   //ndm_reset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
   //dm_reset: Debug-Module Reset issued by Reset Controller.
   //usbreset: Reset of the USB clock domain.
-  logic ndm_reset_req, ndm_reset, dm_reset, usb_reset;
+  //rm0_reset: Reset fo Reconfigurable Module 0.
+  logic ndm_reset_req, ndm_reset, dm_reset, usb_reset, rm0_reset;
   logic por_completed;  //Indicates Power-On Reset has been completed.
   logic debug_req;  //Debug Request signal.
 
@@ -417,7 +421,7 @@ module boxlambda_soc #(
 
   //The return data signal. For some reason this isn't included in the arbiter
   //module.
-  assign arbiter_wbm[DM_M].dat_s = xbar_wbm[ARBITER_M].dat_s;
+  assign arbiter_wbm[DM_M].dat_s  = xbar_wbm[ARBITER_M].dat_s;
   assign arbiter_wbm[DFX_M].dat_s = xbar_wbm[ARBITER_M].dat_s;
 
   //The crossbar wbxbar instance.
@@ -560,14 +564,44 @@ module boxlambda_soc #(
   /*The DFX Controller.*/
   generate
     if (DFX_ACTIVE) begin : GENERATE_DFX_CONTROLLER
-    end
-    else begin
-      arbiter_wbm[DFX_M].adr = 0;
-      arbiter_wbm[DFX_M].dat_m = 0;
-      arbiter_wbm[DFX_M].sel =0;
-      arbiter_wbm[DFX_M].cyc = 0;
-      arbiter_wbm[DFX_M].stb = 0;
-      arbiter_wbm[DFX_M].we = 0;
+      wb_dfx_controller dfx_controller_inst (
+          .clk(sys_clk),
+          .rst(ndm_reset),
+          //32-bit pipelined Wishbone master interface.
+          .wbm_adr_o(arbiter_wbm[DFX_M].adr),
+          .wbm_dat_o(arbiter_wbm[DFX_M].dat_m),
+          .wbm_dat_i(arbiter_wbm[DFX_M].dat_s),
+          .wbm_we_o(arbiter_wbm[DFX_M].we),
+          .wbm_sel_o(arbiter_wbm[DFX_M].sel),
+          .wbm_stb_o(arbiter_wbm[DFX_M].stb),
+          .wbm_ack_i(arbiter_wbm[DFX_M].ack),
+          .wbm_stall_i(arbiter_wbm[DFX_M].stall),
+          .wbm_cyc_o(arbiter_wbm[DFX_M].cyc),
+          .wbm_err_i(arbiter_wbm[DFX_M].err),
+          //32-bit pipelined Wishbone slave interface.
+          .wbs_adr(shared_bus_wbs[DFX_S].adr[4:0]),
+          .wbs_dat_w(shared_bus_wbs[DFX_S].dat_m),
+          .wbs_dat_r(shared_bus_wbs[DFX_S].dat_s),
+          .wbs_sel(shared_bus_wbs[DFX_S].sel),
+          .wbs_stall(shared_bus_wbs[DFX_S].stall),
+          .wbs_cyc(shared_bus_wbs[DFX_S].cyc),
+          .wbs_stb(shared_bus_wbs[DFX_S].stb),
+          .wbs_ack(shared_bus_wbs[DFX_S].ack),
+          .wbs_we(shared_bus_wbs[DFX_S].we),
+          .wbs_err(shared_bus_wbs[DFX_S].err),
+          .vsm_VS_0_rm_reset(rm0_reset),
+          .vsm_VS_0_event_error(fast_irqs[IRQ_ID_DFX])
+      );
+    end else begin
+      assign arbiter_wbm[DFX_M].adr = 0;
+      assign arbiter_wbm[DFX_M].dat_m = 0;
+      assign arbiter_wbm[DFX_M].sel = 0;
+      assign arbiter_wbm[DFX_M].cyc = 0;
+      assign arbiter_wbm[DFX_M].stb = 0;
+      assign arbiter_wbm[DFX_M].we = 0;
+      assign fast_irqs[IRQ_ID_DFX] = 1'b0;
+
+      assign rm0_reset = ndm_reset;
     end
   endgenerate
 
@@ -747,7 +781,7 @@ module boxlambda_soc #(
   //Reconfigurable Module 0 Interface
   rm0 rm0_inst (
       .sys_clk(sys_clk),
-      .rst(ndm_reset),
+      .rst(rm0_reset),
       //32-bit pipelined Wishbone master interface 0.
       .wbm_adr_o(xbar_wbm[RM0_M].adr),
       .wbm_dat_o(xbar_wbm[RM0_M].dat_m),
@@ -1272,7 +1306,6 @@ module boxlambda_soc #(
   assign fast_irqs[IRQ_ID_NA_0] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_1] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_2] = 1'b0;
-  assign fast_irqs[IRQ_ID_DFX]  = 1'b0;
-  assign fast_irqs[IRQ_ID_ICAP] = 1'b0;
+  assign fast_irqs[IRQ_ID_NA_3] = 1'b0;
 endmodule
 

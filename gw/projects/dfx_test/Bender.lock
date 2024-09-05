@@ -31,6 +31,7 @@ packages:
     - spiflash
     - usb_hid_host
     - vera
+    - wb_dfx_controller
     - wb_dp_ram
     - wb_timer
     - wbuart
@@ -132,6 +133,13 @@ packages:
     source:
       Path: ../../components/boxlambda_soc/../../components/vera
     dependencies: []
+  wb_dfx_controller:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/boxlambda_soc/../../components/wb_dfx_controller
+    dependencies:
+    - wbxbar
   wb_dp_ram:
     revision: null
     version: null

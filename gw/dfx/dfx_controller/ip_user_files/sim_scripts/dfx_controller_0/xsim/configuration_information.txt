@@ -2,7 +2,7 @@ Core Configuration Properties
 =============================
 CONFIG.HAS_AXI_LITE_IF                       1
 CONFIG.RESET_ACTIVE_LEVEL                    1
-CONFIG.CP_FIFO_DEPTH                         32
+CONFIG.CP_FIFO_DEPTH                         16
 CONFIG.CP_FIFO_TYPE                          lutram
 CONFIG.CP_ARBITRATION_PROTOCOL               0
 CONFIG.CP_COMPRESSION                        0
@@ -39,7 +39,7 @@ CONFIG.VS.VS_0.RM.RM_1.BS.0.CLEAR            0
 dfx_controller_v1_0::set_property -dict [list \
                                CONFIG.HAS_AXI_LITE_IF                       1 \
                                CONFIG.RESET_ACTIVE_LEVEL                    1 \
-                               CONFIG.CP_FIFO_DEPTH                         32 \
+                               CONFIG.CP_FIFO_DEPTH                         16 \
                                CONFIG.CP_FIFO_TYPE                          lutram \
                                CONFIG.CP_ARBITRATION_PROTOCOL               0 \
                                CONFIG.CP_COMPRESSION                        0 \

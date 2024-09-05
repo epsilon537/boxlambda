@@ -1,0 +1,2354 @@
+#-----------------------------------------------------------
+# Vivado v2023.1 (64-bit)
+# SW Build 3865809 on Sun May  7 15:04:56 MDT 2023
+# IP Build 3864474 on Sun May  7 20:36:21 MDT 2023
+# SharedData Build 3865790 on Sun May 07 13:33:03 MDT 2023
+# Start of session at: Thu Sep  5 11:19:16 2024
+# Process ID: 2242236
+# Current directory: /home/epsilon/work/boxlambda/gw/dfx
+# Command line: vivado -mode gui
+# Log file: /home/epsilon/work/boxlambda/gw/dfx/vivado.log
+# Journal file: /home/epsilon/work/boxlambda/gw/dfx/vivado.jou
+# Running On: asustuf, OS: Linux, CPU Frequency: 3601.161 MHz, CPU Physical cores: 6, Host memory: 16615 MB
+#-----------------------------------------------------------
+start_gui
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:arty-s7-25:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/arty-s7-25/E.0/board.xml as part xc7s25csga324-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:arty-s7-50:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/arty-s7-50/B.0/board.xml as part xc7s50csga324-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:arty-z7-10:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/arty-z7-10/A.0/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:arty-z7-20:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/arty-z7-20/A.0/board.xml as part xc7z020clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:cmod-s7-25:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/cmod-s7-25/B.0/board.xml as part xc7s25csga225-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:cora-z7-07s:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/cora-z7-07s/B.0/board.xml as part xc7z007sclg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:cora-z7-10:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/cora-z7-10/B.0/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:eclypse-z7:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/eclypse-z7/A.0/board.xml as part xc7z020clg484-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:eclypse-z7:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/eclypse-z7/B.0/board.xml as part xc7z020clg484-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:genesys2:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/genesys2/H/board.xml as part xc7k325tffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:gzu_3eg:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/genesys-zu-3eg/B.0/board.xml as part xczu3eg-sfvc784-1-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:gzu_3eg:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/genesys-zu-3eg/D.0/board.xml as part xczu3eg-sfvc784-1-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:gzu_5ev:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/genesys-zu-5ev/C.0/board.xml as part xczu5ev-sfvc784-1-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:sword:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/sword/C.0/board.xml as part xc7k325tffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zedboard:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zedboard/1.3/board.xml as part xc7z020clg484-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zybo-z7-10:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zybo-z7-10/A.0/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zybo-z7-20:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zybo-z7-20/A.0/board.xml as part xc7z020clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zybo:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zybo/B.3/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zybo:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zybo/B.4/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26c:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26c/1.2/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26c:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26c/1.3/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26c:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26c/1.4/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26i:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26i/1.2/board.xml as part xck26-sfvc784-2lvi-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26i:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26i/1.3/board.xml as part xck26-sfvc784-2lvi-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26i:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26i/1.4/board.xml as part xck26-sfvc784-2lvi-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kc705:part0:1.6 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kc705/1.6/board.xml as part xc7k325tffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu105:part0:1.6 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu105/1.6/board.xml as part xcku040-ffva1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu105:part0:1.7 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu105/1.7/board.xml as part xcku040-ffva1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu116/1.4/board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.5 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu116/1.5/board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu1500:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu1500/1.2/board.xml as part xcku115-flvb2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kr260_som:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kr260_som/1.0/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kr260_som:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kr260_som/1.1/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kv260_som:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kv260_som/1.2/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kv260_som:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kv260_som/1.3/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kv260_som:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kv260_som/1.4/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:sp701:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/sp701/1.0/board.xml as part xc7s100fgga676-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:sp701:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/sp701/1.1/board.xml as part xc7s100fgga676-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vc707:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vc707/1.4/board.xml as part xc7vx485tffg1761-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vc709:part0:1.8 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vc709/1.8/board.xml as part xc7vx690tffg1761-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:2.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/2.2/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/3.0/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/3.1/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/3.2/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190_newl/production/1.0/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190_newl/production/1.1/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu108:part0:1.6 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu108/1.6/board.xml as part xcvu095-ffva2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu108:part0:1.7 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu108/1.7/board.xml as part xcvu095-ffva2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu110:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu110/1.4/board.xml as part xcvu190-flgc2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.0/board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.3/board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.4/board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu128:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu128/production/1.0/board.xml as part xcvu37p-fsvh2892-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu129:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu129/production/1.0/board.xml as part xcvu29p-fsga2577-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu1525:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu1525/1.3/board.xml as part xcvu9p-fsgd2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_a/1.0/board.xml as part xcve2802-vsvh1760-2lp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_a/1.1/board.xml as part xcve2802-vsvh1760-2lp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es_revb:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_b/1.0/board.xml as part xcve2802-vsvh1760-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es_revb:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_b/1.1/board.xml as part xcve2802-vsvh1760-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vermeo_t1_mpsoc:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vermeo_t1_mpsoc/1.0/board.xml as part xczu19eg-ffvd1760-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vermeo_t1_rfsoc:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vermeo_t1_rfsoc/1.0/board.xml as part xczu21dr-ffvd1156-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.0/board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158_es:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/es/1.0/board.xml as part xcvh1582-vsva3697-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158_es:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/es/1.1/board.xml as part xcvh1582-vsva3697-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:2.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/2.2/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.0/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.1/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.2/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180_newl/production/1.0/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180_newl/production/1.1/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/production/1.0/board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/production/1.1/board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/es/1.2/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/es/1.3/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es_revb:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120_revb/es/1.0/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es_revb:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120_revb/es/1.1/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.0/board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.1/board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180_es:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/es/1.0/board.xml as part xcvp1802-lsvc4072-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180_es:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/es/1.1/board.xml as part xcvp1802-lsvc4072-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zc702:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zc702/1.4/board.xml as part xc7z020clg484-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zc706:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zc706/1.4/board.xml as part xc7z045ffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu102:part0:3.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu102/3.3/board.xml as part xczu9eg-ffvb1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu102:part0:3.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu102/3.4/board.xml as part xczu9eg-ffvb1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu104:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu104/1.1/board.xml as part xczu7ev-ffvc1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu106:part0:2.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu106/2.4/board.xml as part xczu7ev-ffvc1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu106:part0:2.5 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu106/2.5/board.xml as part xczu7ev-ffvc1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu106:part0:2.6 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu106/2.6/board.xml as part xczu7ev-ffvc1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu111:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu111/1.2/board.xml as part xczu28dr-ffvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu111:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu111/1.3/board.xml as part xczu28dr-ffvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu111:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu111/1.4/board.xml as part xczu28dr-ffvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu1275:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu1275/1.0/board.xml as part xczu29dr-ffvf1760-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu1285:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu1285/1.0/board.xml as part xczu39dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208/production/2.0/board.xml as part xczu48dr-fsvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208ld/production/2.0/board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216/production/2.0/board.xml as part xczu49dr-ffvf1760-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216ld/production/2.0/board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670/2.0/board.xml as part xczu67dr-fsve1156-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670ld/1.0/board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+set part "xc7a100ticsg324-1L"
+xc7a100ticsg324-1L
+set inst boxlambda_soc_inst/rm0_inst
+boxlambda_soc_inst/rm0_inst
+create_project -in_memory -part $part
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/tools/Xilinx/Vivado/2023.1/data/ip'.
+Project
+add_files -norecurse /home/epsilon/work/boxlambda/build/arty-a7-100/gw/projects/dfx_test/project.runs/synth_1/boxlambda_top.dcp
+/home/epsilon/work/boxlambda/build/arty-a7-100/gw/projects/dfx_test/project.runs/synth_1/boxlambda_top.dcp
+add_files -fileset constrs_1 -norecurse /home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc
+/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc
+add_files -norecurse /home/epsilon/work/boxlambda/build/arty-a7-100/gw/components/rm0_j1b/project.runs/synth_1/rm0.dcp
+/home/epsilon/work/boxlambda/build/arty-a7-100/gw/components/rm0_j1b/project.runs/synth_1/rm0.dcp
+import_ip ./dfx_controller/dfx_controller_0/dfx_controller_0.xci
+/home/epsilon/work/boxlambda/gw/dfx/.srcs/sources_1/ip/dfx_controller_0/dfx_controller_0.xci
+set_property SCOPED_TO_CELLS {boxlambda_soc_inst/rm0_inst} [get_files /home/epsilon/work/boxlambda/build/arty-a7-100/gw/components/rm0_j1b/project.runs/synth_1/rm0.dcp]
+link_design -mode default -reconfig_partitions {boxlambda_soc_inst/rm0_inst} -part $part -top boxlambda_top
+Command: link_design -mode default -reconfig_partitions boxlambda_soc_inst/rm0_inst -part xc7a100ticsg324-1L -top boxlambda_top
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xc7a100ticsg324-1L
+INFO: [Project 1-454] Reading design checkpoint '/home/epsilon/work/boxlambda/build/arty-a7-100/gw/components/rm0_j1b/project.runs/synth_1/rm0.dcp' for cell 'boxlambda_soc_inst/rm0_inst'
+INFO: [Project 1-454] Reading design checkpoint '/home/epsilon/work/boxlambda/gw/dfx/.gen/sources_1/ip/dfx_controller_0/dfx_controller_0.dcp' for cell 'boxlambda_soc_inst/GENERATE_DFX_CONTROLLER.dfx_controller_inst/dfx_controller_inst'
+Netlist sorting complete. Time (s): cpu = 00:00:00.22 ; elapsed = 00:00:00.22 . Memory (MB): peak = 7984.906 ; gain = 0.000 ; free physical = 5257 ; free virtual = 9658
+INFO: [Netlist 29-17] Analyzing 1779 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2023.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/.gen/sources_1/ip/dfx_controller_0/dfx_controller_0.xdc] for cell 'boxlambda_soc_inst/GENERATE_DFX_CONTROLLER.dfx_controller_inst/dfx_controller_inst/U0'
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/.gen/sources_1/ip/dfx_controller_0/dfx_controller_0.xdc] for cell 'boxlambda_soc_inst/GENERATE_DFX_CONTROLLER.dfx_controller_inst/dfx_controller_inst/U0'
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc]
+INFO: [Timing 38-35] Done setting XDC timing constraints. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:16]
+INFO: [Timing 38-2] Deriving generated clocks [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:16]
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc]
+WARNING: [XPM_CDC_GRAY: TCL-1000] The source and destination clocks are the same. 
+     Instance: boxlambda_soc_inst/GENERATE_DFX_CONTROLLER.dfx_controller_inst/dfx_controller_inst/U0/i_cp0/i_bs_fifo/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: Xilinx recommends that you remove these modules. 
+ 2) Xilinx IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_gray.tcl:16]
+WARNING: [XPM_CDC_GRAY: TCL-1000] The source and destination clocks are the same. 
+     Instance: boxlambda_soc_inst/GENERATE_DFX_CONTROLLER.dfx_controller_inst/dfx_controller_inst/U0/i_cp0/i_bs_fifo/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: Xilinx recommends that you remove these modules. 
+ 2) Xilinx IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_gray.tcl:16]
+WARNING: [XPM_CDC_GRAY: TCL-1000] The source and destination clocks are the same. 
+     Instance: boxlambda_soc_inst/GENERATE_DFX_CONTROLLER.dfx_controller_inst/dfx_controller_inst/U0/i_cp0/i_bs_fifo/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_dc_inst 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: Xilinx recommends that you remove these modules. 
+ 2) Xilinx IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_gray.tcl:16]
+WARNING: [XPM_CDC_GRAY: TCL-1000] The source and destination clocks are the same. 
+     Instance: boxlambda_soc_inst/GENERATE_DFX_CONTROLLER.dfx_controller_inst/dfx_controller_inst/U0/i_cp0/i_bs_fifo/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_dc_inst 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: Xilinx recommends that you remove these modules. 
+ 2) Xilinx IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [/tools/Xilinx/Vivado/2023.1/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_gray.tcl:16]
+INFO: [Project 1-1714] 10 XPM XDC files have been applied to the design.
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 8738.281 ; gain = 0.000 ; free physical = 4665 ; free virtual = 9066
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 297 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 42 instances
+  IOBUFDS => IOBUFDS (IBUFDS, INV, OBUFTDS(x2)): 2 instances
+  OBUFDS => OBUFDS_DUAL_BUF (INV, OBUFDS(x2)): 1 instance 
+  RAM16X1D => RAM32X1D (RAMD32(x2)): 1 instance 
+  RAM16X1S => RAM32X1S (RAMS32): 79 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 94 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 14 instances
+  RAM64X1D => RAM64X1D (RAMD64E(x2)): 64 instances
+
+12 Infos, 4 Warnings, 0 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:34 ; elapsed = 00:00:20 . Memory (MB): peak = 8844.324 ; gain = 1200.496 ; free physical = 4590 ; free virtual = 8992
+design_1
+write_checkpoint -force ./Checkpoint/boxlambda_top_link_rm0_j1b.dcp
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Write XDEF Complete: Time (s): cpu = 00:00:00.44 ; elapsed = 00:00:00.1 . Memory (MB): peak = 8844.324 ; gain = 0.000 ; free physical = 4572 ; free virtual = 8977
+INFO: [Common 17-1381] The checkpoint '/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/boxlambda_top_link_rm0_j1b.dcp' has been generated.
+/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/boxlambda_top_link_rm0_j1b.dcp
+create_pblock pblock_rm0_inst
+pblock_rm0_inst
+add_cells_to_pblock [get_pblocks pblock_rm0_inst] [get_cells -quiet [list boxlambda_soc_inst/rm0_inst]]
+resize_pblock [get_pblocks pblock_rm0_inst] -add {SLICE_X6Y100:SLICE_X45Y149}
+resize_pblock [get_pblocks pblock_rm0_inst] -add {DSP48_X0Y40:DSP48_X0Y59}
+resize_pblock [get_pblocks pblock_rm0_inst] -add {RAMB18_X0Y40:RAMB18_X0Y59}
+resize_pblock [get_pblocks pblock_rm0_inst] -add {RAMB36_X0Y20:RAMB36_X0Y29}
+set_property RESET_AFTER_RECONFIG true [get_pblocks pblock_rm0_inst]
+set_property SNAPPING_MODE ON [get_pblocks pblock_rm0_inst]
+opt_design
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Project 1-461] DRC finished with 0 Errors, 4 Warnings
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:01 . Memory (MB): peak = 8885.039 ; gain = 34.848 ; free physical = 4541 ; free virtual = 8950
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 15aa2b4ad
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.75 . Memory (MB): peak = 8885.039 ; gain = 0.000 ; free physical = 4539 ; free virtual = 8948
+
+Starting Logic Optimization Task
+
+Phase 1 Retarget
+INFO: [Opt 31-1566] Pulled 23 inverters resulting in an inversion of 158 pins
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 1 Retarget | Checksum: c804a090
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:01 . Memory (MB): peak = 9110.793 ; gain = 0.000 ; free physical = 4287 ; free virtual = 8697
+INFO: [Opt 31-389] Phase Retarget created 14 cells and removed 49 cells
+INFO: [Opt 31-1021] In phase Retarget, 72 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 2 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 2 Constant propagation | Checksum: 1829cfd2a
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:02 . Memory (MB): peak = 9110.793 ; gain = 0.000 ; free physical = 4287 ; free virtual = 8696
+INFO: [Opt 31-389] Phase Constant propagation created 38 cells and removed 92 cells
+INFO: [Opt 31-1021] In phase Constant propagation, 70 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 3 Sweep
+Phase 3 Sweep | Checksum: fad6d840
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:02 . Memory (MB): peak = 9110.793 ; gain = 0.000 ; free physical = 4286 ; free virtual = 8696
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 144 cells
+INFO: [Opt 31-1021] In phase Sweep, 1100 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 4 BUFG optimization
+Phase 4 BUFG optimization | Checksum: fad6d840
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:02 . Memory (MB): peak = 9110.793 ; gain = 0.000 ; free physical = 4284 ; free virtual = 8694
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 5 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 5 Shift Register Optimization | Checksum: 1f248b118
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:03 . Memory (MB): peak = 9110.793 ; gain = 0.000 ; free physical = 4283 ; free virtual = 8693
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 6 Post Processing Netlist
+Phase 6 Post Processing Netlist | Checksum: 1f248b118
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:03 . Memory (MB): peak = 9110.793 ; gain = 0.000 ; free physical = 4283 ; free virtual = 8693
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Post Processing Netlist, 70 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |              14  |              49  |                                             72  |
+|  Constant propagation         |              38  |              92  |                                             70  |
+|  Sweep                        |               0  |             144  |                                           1100  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                             70  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00.06 ; elapsed = 00:00:00.06 . Memory (MB): peak = 9110.793 ; gain = 0.000 ; free physical = 4282 ; free virtual = 8692
+Ending Logic Optimization Task | Checksum: 1f961e78d
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:03 . Memory (MB): peak = 9110.793 ; gain = 0.000 ; free physical = 4282 ; free virtual = 8692
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Running Vector-less Activity Propagation...
+
+Finished Running Vector-less Activity Propagation
+INFO: [Pwropt 34-9] Applying IDT optimizations ...
+INFO: [Pwropt 34-10] Applying ODC optimizations ...
+
+
+Starting PowerOpt Patch Enables Task
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 123 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+INFO: [Pwropt 34-201] Structural ODC has moved 0 WE to EN ports
+Number of BRAM Ports augmented: 1 newly gated: 3 Total Ports: 246
+Ending PowerOpt Patch Enables Task | Checksum: 9cffb917
+
+Time (s): cpu = 00:00:00.51 ; elapsed = 00:00:00.51 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3895 ; free virtual = 8311
+Ending Power Optimization Task | Checksum: 9cffb917
+
+Time (s): cpu = 00:00:24 ; elapsed = 00:00:12 . Memory (MB): peak = 9626.340 ; gain = 515.547 ; free physical = 3895 ; free virtual = 8311
+
+Starting Final Cleanup Task
+
+Starting Logic Optimization Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Logic Optimization Task | Checksum: ad7fe7cd
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:02 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3906 ; free virtual = 8322
+Ending Final Cleanup Task | Checksum: ad7fe7cd
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:04 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3904 ; free virtual = 8320
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3904 ; free virtual = 8320
+Ending Netlist Obfuscation Task | Checksum: ad7fe7cd
+
+Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3903 ; free virtual = 8320
+INFO: [Common 17-83] Releasing license: Implementation
+28 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:46 ; elapsed = 00:00:24 . Memory (MB): peak = 9626.340 ; gain = 776.148 ; free physical = 3903 ; free virtual = 8320
+1
+place_design
+Command: place_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors, 4 Warnings
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+Starting Placer Task
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 8 CPUs
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3912 ; free virtual = 8331
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: 31d991c5
+
+Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3912 ; free virtual = 8331
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3912 ; free virtual = 8331
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: 10c51816c
+
+Time (s): cpu = 00:00:11 ; elapsed = 00:00:04 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3904 ; free virtual = 8327
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: 17fc69742
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:10 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3895 ; free virtual = 8321
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: 17fc69742
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:10 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3895 ; free virtual = 8321
+Phase 1 Placer Initialization | Checksum: 17fc69742
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:10 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3895 ; free virtual = 8321
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+Phase 2.1 Floorplanning | Checksum: 1af744042
+
+Time (s): cpu = 00:00:42 ; elapsed = 00:00:12 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3914 ; free virtual = 8340
+
+Phase 2.2 Update Timing before SLR Path Opt
+Phase 2.2 Update Timing before SLR Path Opt | Checksum: 124e9882f
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:15 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3910 ; free virtual = 8337
+
+Phase 2.3 Post-Processing in Floorplanning
+Phase 2.3 Post-Processing in Floorplanning | Checksum: 124e9882f
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:15 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3910 ; free virtual = 8336
+
+Phase 2.4 Global Placement Core
+
+Phase 2.4.1 UpdateTiming Before Physical Synthesis
+Phase 2.4.1 UpdateTiming Before Physical Synthesis | Checksum: 1e47f1d1d
+
+Time (s): cpu = 00:02:15 ; elapsed = 00:00:37 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3936 ; free virtual = 8363
+
+Phase 2.4.2 Physical Synthesis In Placer
+INFO: [Physopt 32-1035] Found 56 LUTNM shape to break, 949 LUT instances to create LUTNM shape
+INFO: [Physopt 32-1044] Break lutnm for timing: one critical 49, two critical 7, total 56, new lutff created 0
+INFO: [Physopt 32-1138] End 1 Pass. Optimized 433 nets or LUTs. Breaked 56 LUTs, combined 377 existing LUTs and moved 0 existing LUT
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-46] Identified 5 candidate nets for critical-cell optimization.
+INFO: [Physopt 32-571] Net boxlambda_soc_inst/wb_xbar/GEN_DOWNSTREAM[7].o_saddr_reg[221]_0[2] was not replicated.
+INFO: [Physopt 32-571] Net boxlambda_soc_inst/wb_xbar/GEN_DOWNSTREAM[7].o_saddr_reg[221]_0[4] was not replicated.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-456] No candidate cells for DSP register optimization found in the design.
+INFO: [Physopt 32-775] End 2 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-1123] No candidate cells found for Shift Register to Pipeline optimization
+INFO: [Physopt 32-775] End 2 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-677] No candidate cells for Shift Register optimization found in the design
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-526] No candidate cells for BRAM register optimization found in the design
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-846] No candidate cells for URAM register optimization found in the design
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-846] No candidate cells for URAM register optimization found in the design
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-949] No candidate nets found for dynamic/static region interface net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3933 ; free virtual = 8362
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                                     |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  LUT Combining                                    |           56  |            377  |                   433  |           0  |           1  |  00:00:01  |
+|  Retime                                           |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Very High Fanout                                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Critical Cell                                    |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                                     |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Shift Register to Pipeline                       |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Shift Register                                   |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  BRAM Register                                    |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  URAM Register                                    |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Dynamic/Static Region Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                                            |           56  |            377  |                   433  |           0  |          10  |  00:00:01  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.4.2 Physical Synthesis In Placer | Checksum: 219bec112
+
+Time (s): cpu = 00:02:27 ; elapsed = 00:00:41 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3922 ; free virtual = 8351
+Phase 2.4 Global Placement Core | Checksum: 1a2e82ee0
+
+Time (s): cpu = 00:02:32 ; elapsed = 00:00:42 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3918 ; free virtual = 8347
+Phase 2 Global Placement | Checksum: 1a2e82ee0
+
+Time (s): cpu = 00:02:32 ; elapsed = 00:00:42 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3918 ; free virtual = 8348
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: 18da4fcde
+
+Time (s): cpu = 00:02:42 ; elapsed = 00:00:45 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 3891 ; free virtual = 8322
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: 18fde442a
+
+Time (s): cpu = 00:03:01 ; elapsed = 00:00:49 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4053 ; free virtual = 8494
+
+Phase 3.3 Area Swap Optimization
+Phase 3.3 Area Swap Optimization | Checksum: 22c3f23c9
+
+Time (s): cpu = 00:03:03 ; elapsed = 00:00:50 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4051 ; free virtual = 8492
+
+Phase 3.4 Pipeline Register Optimization
+Phase 3.4 Pipeline Register Optimization | Checksum: 22c3f23c9
+
+Time (s): cpu = 00:03:03 ; elapsed = 00:00:50 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4051 ; free virtual = 8492
+
+Phase 3.5 Fast Optimization
+Phase 3.5 Fast Optimization | Checksum: 15a502ade
+
+Time (s): cpu = 00:03:26 ; elapsed = 00:00:55 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4123 ; free virtual = 8515
+
+Phase 3.6 Small Shape Detail Placement
+
+Phase 3.6.1 Place Remaining
+Phase 3.6.1 Place Remaining | Checksum: 12a64309b
+
+Time (s): cpu = 00:03:40 ; elapsed = 00:01:06 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4102 ; free virtual = 8492
+Phase 3.6 Small Shape Detail Placement | Checksum: 12a64309b
+
+Time (s): cpu = 00:03:40 ; elapsed = 00:01:06 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4102 ; free virtual = 8491
+
+Phase 3.7 Re-assign LUT pins
+Phase 3.7 Re-assign LUT pins | Checksum: 15ee4b2d3
+
+Time (s): cpu = 00:03:44 ; elapsed = 00:01:11 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4104 ; free virtual = 8493
+
+Phase 3.8 Pipeline Register Optimization
+Phase 3.8 Pipeline Register Optimization | Checksum: 15ee4b2d3
+
+Time (s): cpu = 00:03:44 ; elapsed = 00:01:11 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4104 ; free virtual = 8494
+
+Phase 3.9 Fast Optimization
+Phase 3.9 Fast Optimization | Checksum: 1e92a63a9
+
+Time (s): cpu = 00:04:15 ; elapsed = 00:01:19 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4112 ; free virtual = 8501
+Phase 3 Detail Placement | Checksum: 1e92a63a9
+
+Time (s): cpu = 00:04:15 ; elapsed = 00:01:19 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4131 ; free virtual = 8519
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: 20063fcad
+
+Phase 4.1.1.1 BUFG Insertion
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 8 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=-1.234 | TNS=-12.051 |
+Phase 1 Physical Synthesis Initialization | Checksum: 2391080d7
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:02 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4133 ; free virtual = 8522
+INFO: [Place 46-33] Processed net boxlambda_soc_inst/reset_ctrl_inst/ndm_reset_o, BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-33] Processed net boxlambda_soc_inst/GENERATE_DRAM_MODULE.litedram_wrapper_inst/litedram_inst/FDPE_3_0, BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-33] Processed net boxlambda_soc_inst/rm0_inst/ram/nram/mem_reg_4_4[0], BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-33] Processed net boxlambda_soc_inst/rm0_inst/ram/nram/E[0], BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-56] BUFG insertion identified 4 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 4, Skipped due to Timing Degradation: 0, Skipped due to netlist editing failed: 0.
+Ending Physical Synthesis Task | Checksum: 2391080d7
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:03 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4133 ; free virtual = 8521
+Phase 4.1.1.1 BUFG Insertion | Checksum: 20063fcad
+
+Time (s): cpu = 00:04:48 ; elapsed = 00:01:28 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4133 ; free virtual = 8521
+
+Phase 4.1.1.2 Post Placement Timing Optimization
+INFO: [Place 30-746] Post Placement Timing Summary WNS=0.253. For the most accurate timing information please run report_timing.
+Phase 4.1.1.2 Post Placement Timing Optimization | Checksum: 1714c7f73
+
+Time (s): cpu = 00:05:31 ; elapsed = 00:01:52 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4077 ; free virtual = 8489
+
+Time (s): cpu = 00:05:31 ; elapsed = 00:01:52 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4077 ; free virtual = 8489
+Phase 4.1 Post Commit Optimization | Checksum: 1714c7f73
+
+Time (s): cpu = 00:05:31 ; elapsed = 00:01:52 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4076 ; free virtual = 8488
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: 1714c7f73
+
+Time (s): cpu = 00:05:32 ; elapsed = 00:01:52 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4077 ; free virtual = 8489
+
+Phase 4.3 Placer Reporting
+
+Phase 4.3.1 Print Estimated Congestion
+INFO: [Place 30-612] Post-Placement Estimated Congestion 
+ ____________________________________________________
+|           | Global Congestion | Short Congestion  |
+| Direction | Region Size       | Region Size       |
+|___________|___________________|___________________|
+|      North|                4x4|                4x4|
+|___________|___________________|___________________|
+|      South|                2x2|                8x8|
+|___________|___________________|___________________|
+|       East|                2x2|                1x1|
+|___________|___________________|___________________|
+|       West|                2x2|                4x4|
+|___________|___________________|___________________|
+
+Phase 4.3.1 Print Estimated Congestion | Checksum: 1714c7f73
+
+Time (s): cpu = 00:05:32 ; elapsed = 00:01:52 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4077 ; free virtual = 8489
+Phase 4.3 Placer Reporting | Checksum: 1714c7f73
+
+Time (s): cpu = 00:05:32 ; elapsed = 00:01:52 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4076 ; free virtual = 8489
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4076 ; free virtual = 8489
+
+Time (s): cpu = 00:05:32 ; elapsed = 00:01:52 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4076 ; free virtual = 8489
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: ce9f1832
+
+Time (s): cpu = 00:05:33 ; elapsed = 00:01:53 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4076 ; free virtual = 8489
+Ending Placer Task | Checksum: c0dfcbf3
+
+Time (s): cpu = 00:05:33 ; elapsed = 00:01:53 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4076 ; free virtual = 8488
+INFO: [Common 17-83] Releasing license: Implementation
+45 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:05:48 ; elapsed = 00:01:56 . Memory (MB): peak = 9626.340 ; gain = 0.000 ; free physical = 4080 ; free virtual = 8493
+route_design
+Command: route_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+Running DRC as a precondition to command route_design
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+
+Starting Routing Task
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 8 CPUs
+
+Phase 1 Build RT Design
+Checksum: PlaceDB: 66089684 ConstDB: 0 ShapeSum: 5ad7356f RouteDB: 0
+WARNING: [Constraints 18-8777] Unable to split tiles. All required files are not available.
+Post Restoration Checksum: NetGraph: baa52f33 | NumContArr: 41ff1812 | Constraints: 7e4236d0 | Timing: 0
+Phase 1 Build RT Design | Checksum: 17ae67e15
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:31 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 4051 ; free virtual = 8470
+
+Phase 2 Router Initialization
+
+Phase 2.1 Fix Topology Constraints
+Phase 2.1 Fix Topology Constraints | Checksum: 17ae67e15
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:32 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 4051 ; free virtual = 8470
+
+Phase 2.2 Pre Route Cleanup
+Phase 2.2 Pre Route Cleanup | Checksum: 17ae67e15
+
+Time (s): cpu = 00:00:57 ; elapsed = 00:00:32 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 4051 ; free virtual = 8470
+ Number of Nodes with overlaps = 0
+
+Phase 2.3 Update Timing
+Phase 2.3 Update Timing | Checksum: 2032fc629
+
+Time (s): cpu = 00:01:29 ; elapsed = 00:00:42 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 4038 ; free virtual = 8462
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.321  | TNS=0.000  | WHS=-0.786 | THS=-455.812|
+
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0 %
+  Global Horizontal Routing Utilization  = 0 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 35048
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 34842
+  Number of Partially Routed Nets     = 206
+  Number of Node Overlaps             = 0
+
+Phase 2 Router Initialization | Checksum: 1ebfde534
+
+Time (s): cpu = 00:01:43 ; elapsed = 00:00:45 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 4036 ; free virtual = 8455
+
+Phase 3 Initial Routing
+
+Phase 3.1 Global Routing
+Phase 3.1 Global Routing | Checksum: 1ebfde534
+
+Time (s): cpu = 00:01:43 ; elapsed = 00:00:45 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 4036 ; free virtual = 8455
+Phase 3 Initial Routing | Checksum: 2229087c2
+
+Time (s): cpu = 00:02:14 ; elapsed = 00:00:51 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 4003 ; free virtual = 8423
+INFO: [Route 35-580] Design has 2 pins with tight setup and hold constraints.
+
+The top 5 pins with tight setup and hold constraints:
+
++====================+===================+=====================================================================================+
+| Launch Setup Clock | Launch Hold Clock | Pin                                                                                 |
++====================+===================+=====================================================================================+
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[27]/D |
+| main_clkout1       | main_clkout1      | boxlambda_soc_inst/GENERATE_PICORV_MODULE.picorv_dma_inst/burst_fsm_rdata_reg[8]/D  |
++--------------------+-------------------+-------------------------------------------------------------------------------------+
+
+File with complete list of pins: tight_setup_hold_pins.txt
+
+
+Phase 4 Rip-up And Reroute
+
+Phase 4.1 Global Iteration 0
+ Number of Nodes with overlaps = 11388
+ Number of Nodes with overlaps = 3894
+ Number of Nodes with overlaps = 1807
+ Number of Nodes with overlaps = 695
+ Number of Nodes with overlaps = 293
+ Number of Nodes with overlaps = 171
+ Number of Nodes with overlaps = 48
+ Number of Nodes with overlaps = 36
+ Number of Nodes with overlaps = 11
+ Number of Nodes with overlaps = 16
+ Number of Nodes with overlaps = 8
+ Number of Nodes with overlaps = 3
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=-0.057 | TNS=-0.057 | WHS=N/A    | THS=N/A    |
+
+Phase 4.1 Global Iteration 0 | Checksum: 1ec90b167
+
+Time (s): cpu = 00:09:33 ; elapsed = 00:04:51 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3416 ; free virtual = 8067
+
+Phase 4.2 Global Iteration 1
+ Number of Nodes with overlaps = 3048
+ Number of Nodes with overlaps = 884
+ Number of Nodes with overlaps = 438
+ Number of Nodes with overlaps = 135
+ Number of Nodes with overlaps = 84
+ Number of Nodes with overlaps = 28
+ Number of Nodes with overlaps = 3
+ Number of Nodes with overlaps = 3
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 4.2 Global Iteration 1 | Checksum: 2b1a9602b
+
+Time (s): cpu = 00:12:49 ; elapsed = 00:06:05 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3365 ; free virtual = 8065
+Phase 4 Rip-up And Reroute | Checksum: 2b1a9602b
+
+Time (s): cpu = 00:12:49 ; elapsed = 00:06:05 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3365 ; free virtual = 8065
+
+Phase 5 Delay and Skew Optimization
+
+Phase 5.1 Delay CleanUp
+
+Phase 5.1.1 Update Timing
+Phase 5.1.1 Update Timing | Checksum: 2bd84c057
+
+Time (s): cpu = 00:12:59 ; elapsed = 00:06:10 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3274 ; free virtual = 8081
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 5.1 Delay CleanUp | Checksum: 2bd84c057
+
+Time (s): cpu = 00:12:59 ; elapsed = 00:06:11 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3277 ; free virtual = 8074
+
+Phase 5.2 Clock Skew Optimization
+Phase 5.2 Clock Skew Optimization | Checksum: 2bd84c057
+
+Time (s): cpu = 00:13:00 ; elapsed = 00:06:11 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3237 ; free virtual = 8044
+Phase 5 Delay and Skew Optimization | Checksum: 2bd84c057
+
+Time (s): cpu = 00:13:00 ; elapsed = 00:06:11 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3253 ; free virtual = 8063
+
+Phase 6 Post Hold Fix
+
+Phase 6.1 Hold Fix Iter
+
+Phase 6.1.1 Update Timing
+Phase 6.1.1 Update Timing | Checksum: 2831d3bde
+
+Time (s): cpu = 00:13:10 ; elapsed = 00:06:16 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3209 ; free virtual = 8014
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=0.016  | THS=0.000  |
+
+Phase 6.1 Hold Fix Iter | Checksum: 2b806a421
+
+Time (s): cpu = 00:13:10 ; elapsed = 00:06:16 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3209 ; free virtual = 8014
+Phase 6 Post Hold Fix | Checksum: 2b806a421
+
+Time (s): cpu = 00:13:10 ; elapsed = 00:06:16 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3208 ; free virtual = 8013
+
+Phase 7 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 13.3107 %
+  Global Horizontal Routing Utilization  = 14.8582 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 7 Route finalize | Checksum: 30478bf48
+
+Time (s): cpu = 00:13:11 ; elapsed = 00:06:16 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3207 ; free virtual = 8012
+
+Phase 8 Verifying routed nets
+
+ Verification completed successfully
+Phase 8 Verifying routed nets | Checksum: 30478bf48
+
+Time (s): cpu = 00:13:11 ; elapsed = 00:06:16 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3206 ; free virtual = 8011
+
+Phase 9 Depositing Routes
+Phase 9 Depositing Routes | Checksum: 322a9734c
+
+Time (s): cpu = 00:13:21 ; elapsed = 00:06:24 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3328 ; free virtual = 8081
+
+Phase 10 Post Router Timing
+INFO: [Route 35-57] Estimated Timing Summary | WNS=0.204  | TNS=0.000  | WHS=0.016  | THS=0.000  |
+
+INFO: [Route 35-327] The final timing numbers are based on the router estimated timing analysis. For a complete and accurate timing signoff, please run report_timing_summary.
+Phase 10 Post Router Timing | Checksum: 322a9734c
+
+Time (s): cpu = 00:13:31 ; elapsed = 00:06:27 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3346 ; free virtual = 8091
+INFO: [Route 35-16] Router Completed Successfully
+
+Phase 11 Post-Route Event Processing
+Phase 11 Post-Route Event Processing | Checksum: 10be4a3ff
+
+Time (s): cpu = 00:13:42 ; elapsed = 00:06:32 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3356 ; free virtual = 8096
+
+Time (s): cpu = 00:13:42 ; elapsed = 00:06:32 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3356 ; free virtual = 8096
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Implementation
+15 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:13:58 ; elapsed = 00:06:35 . Memory (MB): peak = 9640.090 ; gain = 13.750 ; free physical = 3358 ; free virtual = 8097
+update_design -cell boxlambda_soc_inst/rm0_inst -black_box
+INFO: [Constraints 18-11778] Running 'update_design -black_box' on cell boxlambda_soc_inst/rm0_inst. The cell has HD.RECONFIGURABLE property set to true and it will be turned into a black-box cell after this command.
+update_design: Time (s): cpu = 00:00:06 ; elapsed = 00:00:05 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3383 ; free virtual = 8070
+lock_design -level routing
+Locking Netlist...
+Locking Placement...
+Locking Routing...
+lock_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:05 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3383 ; free virtual = 8070
+write_checkpoint -force Checkpoint/static_route_design.dcp
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Write XDEF Complete: Time (s): cpu = 00:00:09 ; elapsed = 00:00:04 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3328 ; free virtual = 8068
+INFO: [Common 17-1381] The checkpoint '/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design.dcp' has been generated.
+write_checkpoint: Time (s): cpu = 00:00:20 ; elapsed = 00:00:09 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3322 ; free virtual = 8024
+/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design.dcp
+close_project
+create_project -in_memory -part $part
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/tools/Xilinx/Vivado/2023.1/data/ip'.
+Project
+add_files ./Checkpoint/static_route_design.dcp
+/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design.dcp
+add_files ../../build/arty-a7-100/gw/components/rm0_j1b/project.runs/synth_1/rm0.dcp
+/home/epsilon/work/boxlambda/build/arty-a7-100/gw/components/rm0_j1b/project.runs/synth_1/rm0.dcp
+set_property SCOPED_TO_CELLS {boxlambda_soc_inst/rm0_inst} [get_files ../../build/arty-a7-100/gw/components/rm0_j1b/project.runs/synth_1/rm0.dcp]
+link_design -mode default -reconfig_partitions {boxlambda_soc_inst/rm0_inst} -part $part -top boxlambda_top
+Command: link_design -mode default -reconfig_partitions boxlambda_soc_inst/rm0_inst -part xc7a100ticsg324-1L -top boxlambda_top
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Project 1-454] Reading design checkpoint '/home/epsilon/work/boxlambda/build/arty-a7-100/gw/components/rm0_j1b/project.runs/synth_1/rm0.dcp' for cell 'boxlambda_soc_inst/rm0_inst'
+Netlist sorting complete. Time (s): cpu = 00:00:00.24 ; elapsed = 00:00:00.24 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3379 ; free virtual = 8062
+INFO: [Netlist 29-17] Analyzing 1779 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2023.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top_early.xdc]
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top_early.xdc]
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top.xdc]
+INFO: [Timing 38-35] Done setting XDC timing constraints. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:16]
+INFO: [Timing 38-2] Deriving generated clocks [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:16]
+WARNING: [Vivado 12-627] No clocks matched 'clk_12_unbuf'. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+CRITICAL WARNING: [Vivado 12-4739] set_clock_groups:No valid object(s) found for '-group [get_clocks -include_generated_clock clk_12_unbuf]'. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+Resolution: Check if the specified object(s) exists in the current design. If it does, ensure that the correct design hierarchy was specified for the object. If you are working with clocks, make sure create_clock was used to create the clock object before it is referenced.
+CRITICAL WARNING: [Vivado 12-4739] set_clock_groups:No valid object(s) found for '-group '. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+Resolution: Check if the specified object(s) exists in the current design. If it does, ensure that the correct design hierarchy was specified for the object. If you are working with clocks, make sure create_clock was used to create the clock object before it is referenced.
+CRITICAL WARNING: [Vivado 12-5201] set_clock_groups: cannot set the clock group when only one non-empty group remains. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top.xdc]
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top_late.xdc]
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top_late.xdc]
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF Files: Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3377 ; free virtual = 8063
+Restored from archive | CPU: 3.150000 secs | Memory: 34.865028 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3377 ; free virtual = 8063
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3375 ; free virtual = 8062
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 297 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 42 instances
+  IOBUFDS => IOBUFDS (IBUFDS, INV, OBUFTDS(x2)): 2 instances
+  OBUFDS => OBUFDS_DUAL_BUF (INV, OBUFDS(x2)): 1 instance 
+  RAM16X1D => RAM32X1D (RAMD32(x2)): 1 instance 
+  RAM16X1S => RAM32X1S (RAMS32): 79 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 94 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 14 instances
+  RAM64X1D => RAM64X1D (RAMD64E(x2)): 64 instances
+
+10 Infos, 1 Warnings, 3 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:23 ; elapsed = 00:00:15 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3392 ; free virtual = 8078
+design_1
+opt_design
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Project 1-461] DRC finished with 0 Errors, 4 Warnings
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:02 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3396 ; free virtual = 8070
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 207076fa4
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3394 ; free virtual = 8067
+
+Starting Logic Optimization Task
+
+Phase 1 Retarget
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 1 Retarget | Checksum: 1e46a5bf8
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:03 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3386 ; free virtual = 8059
+INFO: [Opt 31-389] Phase Retarget created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Retarget, 1867 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 2 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 2 Constant propagation | Checksum: 2a162e792
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:04 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3387 ; free virtual = 8061
+INFO: [Opt 31-389] Phase Constant propagation created 24 cells and removed 48 cells
+INFO: [Opt 31-1021] In phase Constant propagation, 73 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 3 Sweep
+Phase 3 Sweep | Checksum: 20c9f93fb
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:06 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3387 ; free virtual = 8060
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Sweep, 116163 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 4 BUFG optimization
+Phase 4 BUFG optimization | Checksum: 20c9f93fb
+
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:07 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3382 ; free virtual = 8055
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 5 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 5 Shift Register Optimization | Checksum: 2aa4772f6
+
+Time (s): cpu = 00:00:11 ; elapsed = 00:00:07 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3379 ; free virtual = 8052
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 6 Post Processing Netlist
+Phase 6 Post Processing Netlist | Checksum: 2aa4772f6
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:08 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3383 ; free virtual = 8056
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Post Processing Netlist, 71 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |               0  |               0  |                                           1867  |
+|  Constant propagation         |              24  |              48  |                                             73  |
+|  Sweep                        |               0  |               0  |                                         116163  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                             71  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00.09 ; elapsed = 00:00:00.09 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3382 ; free virtual = 8056
+Ending Logic Optimization Task | Checksum: 26ac31fc6
+
+Time (s): cpu = 00:00:13 ; elapsed = 00:00:09 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3380 ; free virtual = 8053
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Pwropt 34-232] Skipping BRAM gating because all BRAMs are in high frequency (i.e. period < 3.12 ns) clock domains.
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 123 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+Ending Power Optimization Task | Checksum: 26ac31fc6
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3365 ; free virtual = 8038
+
+Starting Final Cleanup Task
+Ending Final Cleanup Task | Checksum: 26ac31fc6
+
+Time (s): cpu = 00:00:00.69 ; elapsed = 00:00:00.67 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3366 ; free virtual = 8039
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3366 ; free virtual = 8039
+Ending Netlist Obfuscation Task | Checksum: 26ac31fc6
+
+Time (s): cpu = 00:00:00.77 ; elapsed = 00:00:00.66 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3367 ; free virtual = 8040
+INFO: [Common 17-83] Releasing license: Implementation
+23 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:27 ; elapsed = 00:00:18 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3367 ; free virtual = 8040
+1
+place_design
+Command: place_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors, 4 Warnings
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+Starting Placer Task
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 8 CPUs
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3372 ; free virtual = 8045
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: 124a594fa
+
+Time (s): cpu = 00:00:00.36 ; elapsed = 00:00:00.37 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3372 ; free virtual = 8045
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3372 ; free virtual = 8045
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: 1390041e2
+
+Time (s): cpu = 00:00:20 ; elapsed = 00:00:16 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3357 ; free virtual = 8042
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: f121ca60
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:23 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3351 ; free virtual = 8037
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: f121ca60
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:24 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3350 ; free virtual = 8036
+Phase 1 Placer Initialization | Checksum: f121ca60
+
+Time (s): cpu = 00:00:53 ; elapsed = 00:00:27 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3347 ; free virtual = 8033
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+Phase 2.1 Floorplanning | Checksum: 136dfbe30
+
+Time (s): cpu = 00:01:08 ; elapsed = 00:00:29 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3353 ; free virtual = 8039
+
+Phase 2.2 Update Timing before SLR Path Opt
+Phase 2.2 Update Timing before SLR Path Opt | Checksum: 1431804eb
+
+Time (s): cpu = 00:01:21 ; elapsed = 00:00:31 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3352 ; free virtual = 8038
+
+Phase 2.3 Post-Processing in Floorplanning
+Phase 2.3 Post-Processing in Floorplanning | Checksum: 1431804eb
+
+Time (s): cpu = 00:01:21 ; elapsed = 00:00:32 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3352 ; free virtual = 8038
+
+Phase 2.4 Global Placement Core
+
+Phase 2.4.1 UpdateTiming Before Physical Synthesis
+Phase 2.4.1 UpdateTiming Before Physical Synthesis | Checksum: a5d41859
+
+Time (s): cpu = 00:02:03 ; elapsed = 00:00:42 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3368 ; free virtual = 8054
+
+Phase 2.4.2 Physical Synthesis In Placer
+INFO: [Physopt 32-1035] Found 0 LUTNM shape to break, 61 LUT instances to create LUTNM shape
+INFO: [Physopt 32-1044] Break lutnm for timing: one critical 0, two critical 0, total 0, new lutff created 0
+INFO: [Physopt 32-1138] End 1 Pass. Optimized 27 nets or LUTs. Breaked 0 LUT, combined 27 existing LUTs and moved 0 existing LUT
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-670] No setup violation found.  DSP Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register to Pipeline Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  BRAM Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  URAM Register Optimization was not performed.
+INFO: [Physopt 32-949] No candidate nets found for dynamic/static region interface net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3363 ; free virtual = 8048
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                                     |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  LUT Combining                                    |            0  |             27  |                    27  |           0  |           1  |  00:00:00  |
+|  Retime                                           |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Very High Fanout                                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                                     |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register to Pipeline                       |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register                                   |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  BRAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  URAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Dynamic/Static Region Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                                            |            0  |             27  |                    27  |           0  |           4  |  00:00:00  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.4.2 Physical Synthesis In Placer | Checksum: a60f88ba
+
+Time (s): cpu = 00:02:18 ; elapsed = 00:00:45 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3355 ; free virtual = 8040
+Phase 2.4 Global Placement Core | Checksum: 1e03d5b7f
+
+Time (s): cpu = 00:02:20 ; elapsed = 00:00:46 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3355 ; free virtual = 8041
+Phase 2 Global Placement | Checksum: 1e03d5b7f
+
+Time (s): cpu = 00:02:20 ; elapsed = 00:00:46 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3355 ; free virtual = 8041
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: 1e3d99503
+
+Time (s): cpu = 00:02:23 ; elapsed = 00:00:47 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3353 ; free virtual = 8039
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: 20ab44a9a
+
+Time (s): cpu = 00:02:25 ; elapsed = 00:00:48 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3351 ; free virtual = 8037
+
+Phase 3.3 Area Swap Optimization
+Phase 3.3 Area Swap Optimization | Checksum: 1e83949f5
+
+Time (s): cpu = 00:02:26 ; elapsed = 00:00:48 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3351 ; free virtual = 8036
+
+Phase 3.4 Pipeline Register Optimization
+Phase 3.4 Pipeline Register Optimization | Checksum: 1e83949f5
+
+Time (s): cpu = 00:02:26 ; elapsed = 00:00:48 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3351 ; free virtual = 8036
+
+Phase 3.5 Small Shape Detail Placement
+Phase 3.5 Small Shape Detail Placement | Checksum: e3aaeba6
+
+Time (s): cpu = 00:02:30 ; elapsed = 00:00:50 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3350 ; free virtual = 8036
+
+Phase 3.6 Re-assign LUT pins
+Phase 3.6 Re-assign LUT pins | Checksum: d9f094f2
+
+Time (s): cpu = 00:02:30 ; elapsed = 00:00:51 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3347 ; free virtual = 8033
+
+Phase 3.7 Pipeline Register Optimization
+Phase 3.7 Pipeline Register Optimization | Checksum: d9f094f2
+
+Time (s): cpu = 00:02:31 ; elapsed = 00:00:51 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3346 ; free virtual = 8032
+Phase 3 Detail Placement | Checksum: d9f094f2
+
+Time (s): cpu = 00:02:31 ; elapsed = 00:00:52 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3346 ; free virtual = 8031
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: f25ac3b4
+
+Phase 4.1.1.1 BUFG Insertion
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 8 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=0.203 | TNS=0.000 |
+Phase 1 Physical Synthesis Initialization | Checksum: 16081b020
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:02 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3355 ; free virtual = 8041
+INFO: [Place 46-33] Processed net boxlambda_soc_inst/rm0_inst/ram/nram/mem_reg_4_4[0], BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-33] Processed net boxlambda_soc_inst/rm0_inst/ram/nram/E[0], BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-56] BUFG insertion identified 2 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 2, Skipped due to Timing Degradation: 0, Skipped due to netlist editing failed: 0.
+Ending Physical Synthesis Task | Checksum: 2211da699
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:03 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3351 ; free virtual = 8037
+Phase 4.1.1.1 BUFG Insertion | Checksum: f25ac3b4
+
+Time (s): cpu = 00:03:07 ; elapsed = 00:01:02 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3349 ; free virtual = 8035
+
+Phase 4.1.1.2 Post Placement Timing Optimization
+INFO: [Place 30-746] Post Placement Timing Summary WNS=0.203. For the most accurate timing information please run report_timing.
+Phase 4.1.1.2 Post Placement Timing Optimization | Checksum: 1705ab7b3
+
+Time (s): cpu = 00:03:08 ; elapsed = 00:01:03 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3350 ; free virtual = 8036
+
+Time (s): cpu = 00:03:08 ; elapsed = 00:01:03 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3350 ; free virtual = 8036
+Phase 4.1 Post Commit Optimization | Checksum: 1705ab7b3
+
+Time (s): cpu = 00:03:09 ; elapsed = 00:01:03 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3350 ; free virtual = 8036
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: 230f6ae2c
+
+Time (s): cpu = 00:03:10 ; elapsed = 00:01:04 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3351 ; free virtual = 8036
+
+Phase 4.3 Placer Reporting
+
+Phase 4.3.1 Print Estimated Congestion
+INFO: [Place 30-612] Post-Placement Estimated Congestion 
+ ____________________________________________________
+|           | Global Congestion | Short Congestion  |
+| Direction | Region Size       | Region Size       |
+|___________|___________________|___________________|
+|      North|                4x4|                4x4|
+|___________|___________________|___________________|
+|      South|                2x2|                4x4|
+|___________|___________________|___________________|
+|       East|                2x2|                1x1|
+|___________|___________________|___________________|
+|       West|                4x4|                4x4|
+|___________|___________________|___________________|
+
+Phase 4.3.1 Print Estimated Congestion | Checksum: 230f6ae2c
+
+Time (s): cpu = 00:03:11 ; elapsed = 00:01:05 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3349 ; free virtual = 8035
+Phase 4.3 Placer Reporting | Checksum: 230f6ae2c
+
+Time (s): cpu = 00:03:12 ; elapsed = 00:01:06 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3347 ; free virtual = 8034
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3347 ; free virtual = 8034
+
+Time (s): cpu = 00:03:12 ; elapsed = 00:01:06 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3347 ; free virtual = 8034
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: 22a6e9f22
+
+Time (s): cpu = 00:03:12 ; elapsed = 00:01:06 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3347 ; free virtual = 8033
+Ending Placer Task | Checksum: 19514033c
+
+Time (s): cpu = 00:03:13 ; elapsed = 00:01:07 . Memory (MB): peak = 9640.090 ; gain = 0.000 ; free physical = 3331 ; free virtual = 8017
+INFO: [Common 17-83] Releasing license: Implementation
+31 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:03:27 ; elapsed = 00:01:11 . Memory (MB): peak = 9644.262 ; gain = 4.172 ; free physical = 3320 ; free virtual = 8006
+route_design
+Command: route_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+Running DRC as a precondition to command route_design
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+
+Starting Routing Task
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 8 CPUs
+
+Phase 1 Build RT Design
+Checksum: PlaceDB: 3270d45e ConstDB: 0 ShapeSum: a2073865 RouteDB: c09bf679
+Post Restoration Checksum: NetGraph: fdff1d53 | NumContArr: d4425de8 | Constraints: 48e7d217 | Timing: 0
+Phase 1 Build RT Design | Checksum: 21b294d52
+
+Time (s): cpu = 00:00:59 ; elapsed = 00:00:32 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3261 ; free virtual = 7948
+
+Phase 2 Router Initialization
+
+Phase 2.1 Fix Topology Constraints
+Phase 2.1 Fix Topology Constraints | Checksum: 21b294d52
+
+Time (s): cpu = 00:00:59 ; elapsed = 00:00:33 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3261 ; free virtual = 7948
+
+Phase 2.2 Pre Route Cleanup
+Phase 2.2 Pre Route Cleanup | Checksum: 21b294d52
+
+Time (s): cpu = 00:00:59 ; elapsed = 00:00:33 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3261 ; free virtual = 7948
+ Number of Nodes with overlaps = 0
+
+Phase 2.3 Update Timing
+Phase 2.3 Update Timing | Checksum: 1bc75c8a2
+
+Time (s): cpu = 00:01:32 ; elapsed = 00:00:42 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3237 ; free virtual = 7924
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=-0.219 | THS=-219.854|
+
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0 %
+  Global Horizontal Routing Utilization  = 0 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 3559
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 3444
+  Number of Partially Routed Nets     = 115
+  Number of Node Overlaps             = 0
+
+Phase 2 Router Initialization | Checksum: 1bd0d5bf9
+
+Time (s): cpu = 00:01:43 ; elapsed = 00:00:45 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3230 ; free virtual = 7919
+
+Phase 3 Initial Routing
+
+Phase 3.1 Global Routing
+Phase 3.1 Global Routing | Checksum: 1bd0d5bf9
+
+Time (s): cpu = 00:01:43 ; elapsed = 00:00:45 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3230 ; free virtual = 7919
+Phase 3 Initial Routing | Checksum: 24586d6c1
+
+Time (s): cpu = 00:01:46 ; elapsed = 00:00:46 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3230 ; free virtual = 7918
+
+Phase 4 Rip-up And Reroute
+
+Phase 4.1 Global Iteration 0
+ Number of Nodes with overlaps = 400
+ Number of Nodes with overlaps = 3
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 4.1 Global Iteration 0 | Checksum: 1d8198b66
+
+Time (s): cpu = 00:02:05 ; elapsed = 00:00:53 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3246 ; free virtual = 7935
+
+Phase 4.2 Global Iteration 1
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 4.2 Global Iteration 1 | Checksum: 10395c327
+
+Time (s): cpu = 00:02:13 ; elapsed = 00:00:57 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3247 ; free virtual = 7935
+Phase 4 Rip-up And Reroute | Checksum: 10395c327
+
+Time (s): cpu = 00:02:14 ; elapsed = 00:00:57 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3247 ; free virtual = 7935
+
+Phase 5 Delay and Skew Optimization
+
+Phase 5.1 Delay CleanUp
+Phase 5.1 Delay CleanUp | Checksum: 10395c327
+
+Time (s): cpu = 00:02:14 ; elapsed = 00:00:57 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3246 ; free virtual = 7934
+
+Phase 5.2 Clock Skew Optimization
+Phase 5.2 Clock Skew Optimization | Checksum: 10395c327
+
+Time (s): cpu = 00:02:14 ; elapsed = 00:00:57 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3246 ; free virtual = 7934
+Phase 5 Delay and Skew Optimization | Checksum: 10395c327
+
+Time (s): cpu = 00:02:14 ; elapsed = 00:00:57 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3247 ; free virtual = 7935
+
+Phase 6 Post Hold Fix
+
+Phase 6.1 Hold Fix Iter
+
+Phase 6.1.1 Update Timing
+Phase 6.1.1 Update Timing | Checksum: 17e446b22
+
+Time (s): cpu = 00:02:24 ; elapsed = 00:01:01 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3246 ; free virtual = 7934
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=0.016  | THS=0.000  |
+
+Phase 6.1 Hold Fix Iter | Checksum: 10160c825
+
+Time (s): cpu = 00:02:24 ; elapsed = 00:01:01 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3246 ; free virtual = 7934
+Phase 6 Post Hold Fix | Checksum: 10160c825
+
+Time (s): cpu = 00:02:24 ; elapsed = 00:01:01 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3246 ; free virtual = 7934
+
+Phase 7 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0.8082 %
+  Global Horizontal Routing Utilization  = 0.700341 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 7 Route finalize | Checksum: fc7f0408
+
+Time (s): cpu = 00:02:25 ; elapsed = 00:01:02 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3246 ; free virtual = 7934
+
+Phase 8 Verifying routed nets
+
+ Verification completed successfully
+Phase 8 Verifying routed nets | Checksum: fc7f0408
+
+Time (s): cpu = 00:02:25 ; elapsed = 00:01:02 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3247 ; free virtual = 7935
+
+Phase 9 Depositing Routes
+Phase 9 Depositing Routes | Checksum: 14f5aed28
+
+Time (s): cpu = 00:02:33 ; elapsed = 00:01:08 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3221 ; free virtual = 7909
+
+Phase 10 Post Router Timing
+INFO: [Route 35-57] Estimated Timing Summary | WNS=0.204  | TNS=0.000  | WHS=0.016  | THS=0.000  |
+
+INFO: [Route 35-327] The final timing numbers are based on the router estimated timing analysis. For a complete and accurate timing signoff, please run report_timing_summary.
+Phase 10 Post Router Timing | Checksum: 14f5aed28
+
+Time (s): cpu = 00:02:42 ; elapsed = 00:01:10 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3219 ; free virtual = 7907
+INFO: [Route 35-16] Router Completed Successfully
+
+Phase 11 Post-Route Event Processing
+Phase 11 Post-Route Event Processing | Checksum: 17df8eaff
+
+Time (s): cpu = 00:02:51 ; elapsed = 00:01:14 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3217 ; free virtual = 7905
+
+Time (s): cpu = 00:02:51 ; elapsed = 00:01:14 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3217 ; free virtual = 7905
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Implementation
+13 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:03:13 ; elapsed = 00:01:18 . Memory (MB): peak = 9781.211 ; gain = 76.930 ; free physical = 3216 ; free virtual = 7904
+write_checkpoint -force ./Checkpoint/boxlambda_top_route_design_w_rm0_j1b.dcp
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Write XDEF Complete: Time (s): cpu = 00:00:10 ; elapsed = 00:00:04 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3084 ; free virtual = 7829
+INFO: [Common 17-1381] The checkpoint '/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/boxlambda_top_route_design_w_rm0_j1b.dcp' has been generated.
+write_checkpoint: Time (s): cpu = 00:00:13 ; elapsed = 00:00:06 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3085 ; free virtual = 7790
+/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/boxlambda_top_route_design_w_rm0_j1b.dcp
+write_checkpoint -force -cell boxlambda_soc_inst/rm0_inst ./Checkpoint/rm0_j1b_route_design.dcp
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Write XDEF Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3116 ; free virtual = 7826
+INFO: [Common 17-1381] The checkpoint '/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/rm0_j1b_route_design.dcp' has been generated.
+/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/rm0_j1b_route_design.dcp
+close_project
+create_project -in_memory -part $part
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/tools/Xilinx/Vivado/2023.1/data/ip'.
+Project
+add_files ./Checkpoint/static_route_design.dcp
+/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design.dcp
+add_files ../../build/arty-a7-100/gw/components/rm0_stub/project.runs/synth_1/rm0.dcp
+/home/epsilon/work/boxlambda/build/arty-a7-100/gw/components/rm0_stub/project.runs/synth_1/rm0.dcp
+set_property SCOPED_TO_CELLS {boxlambda_soc_inst/rm0_inst} [get_files ../../build/arty-a7-100/gw/components/rm0_stub/project.runs/synth_1/rm0.dcp]
+link_design -mode default -reconfig_partitions {boxlambda_soc_inst/rm0_inst} -part $part -top boxlambda_top
+Command: link_design -mode default -reconfig_partitions boxlambda_soc_inst/rm0_inst -part xc7a100ticsg324-1L -top boxlambda_top
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Project 1-454] Reading design checkpoint '/home/epsilon/work/boxlambda/build/arty-a7-100/gw/components/rm0_stub/project.runs/synth_1/rm0.dcp' for cell 'boxlambda_soc_inst/rm0_inst'
+Netlist sorting complete. Time (s): cpu = 00:00:00.21 ; elapsed = 00:00:00.21 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3144 ; free virtual = 7857
+INFO: [Netlist 29-17] Analyzing 1704 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2023.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top_early.xdc]
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top_early.xdc]
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top.xdc]
+INFO: [Timing 38-35] Done setting XDC timing constraints. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:16]
+INFO: [Timing 38-2] Deriving generated clocks [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:16]
+WARNING: [Vivado 12-627] No clocks matched 'clk_12_unbuf'. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+CRITICAL WARNING: [Vivado 12-4739] set_clock_groups:No valid object(s) found for '-group [get_clocks -include_generated_clock clk_12_unbuf]'. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+Resolution: Check if the specified object(s) exists in the current design. If it does, ensure that the correct design hierarchy was specified for the object. If you are working with clocks, make sure create_clock was used to create the clock object before it is referenced.
+CRITICAL WARNING: [Vivado 12-4739] set_clock_groups:No valid object(s) found for '-group '. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+Resolution: Check if the specified object(s) exists in the current design. If it does, ensure that the correct design hierarchy was specified for the object. If you are working with clocks, make sure create_clock was used to create the clock object before it is referenced.
+CRITICAL WARNING: [Vivado 12-5201] set_clock_groups: cannot set the clock group when only one non-empty group remains. [/home/epsilon/work/boxlambda/gw/projects/boxlambda_top/constrs/boxlambda_soc.xdc:509]
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top.xdc]
+Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top_late.xdc]
+Finished Parsing XDC File [/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/static_route_design/boxlambda_top_late.xdc]
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF Files: Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3147 ; free virtual = 7860
+Restored from archive | CPU: 3.240000 secs | Memory: 36.707817 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3147 ; free virtual = 7860
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3145 ; free virtual = 7858
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 297 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 42 instances
+  IOBUFDS => IOBUFDS (IBUFDS, INV, OBUFTDS(x2)): 2 instances
+  OBUFDS => OBUFDS_DUAL_BUF (INV, OBUFDS(x2)): 1 instance 
+  RAM16X1D => RAM32X1D (RAMD32(x2)): 1 instance 
+  RAM16X1S => RAM32X1S (RAMS32): 79 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 94 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 14 instances
+  RAM64X1D => RAM64X1D (RAMD64E(x2)): 64 instances
+
+10 Infos, 1 Warnings, 3 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:20 ; elapsed = 00:00:14 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3142 ; free virtual = 7855
+design_1
+opt_design
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Project 1-461] DRC finished with 0 Errors, 4 Warnings
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:02 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3135 ; free virtual = 7850
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 1a478a256
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3073 ; free virtual = 7800
+
+Starting Logic Optimization Task
+
+Phase 1 Retarget
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 1 Retarget | Checksum: 1a478a256
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:03 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3108 ; free virtual = 7822
+INFO: [Opt 31-389] Phase Retarget created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Retarget, 1899 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 2 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 2 Constant propagation | Checksum: 1a478a256
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:04 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3114 ; free virtual = 7829
+INFO: [Opt 31-389] Phase Constant propagation created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Constant propagation, 105 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 3 Sweep
+Phase 3 Sweep | Checksum: 1a478a256
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:05 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3115 ; free virtual = 7829
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Sweep, 116163 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 4 BUFG optimization
+Phase 4 BUFG optimization | Checksum: 1a478a256
+
+Time (s): cpu = 00:00:09 ; elapsed = 00:00:06 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3118 ; free virtual = 7833
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 5 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 5 Shift Register Optimization | Checksum: 1a478a256
+
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:07 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3120 ; free virtual = 7834
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 6 Post Processing Netlist
+Phase 6 Post Processing Netlist | Checksum: 1a478a256
+
+Time (s): cpu = 00:00:11 ; elapsed = 00:00:08 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3128 ; free virtual = 7842
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Post Processing Netlist, 103 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |               0  |               0  |                                           1899  |
+|  Constant propagation         |               0  |               0  |                                            105  |
+|  Sweep                        |               0  |               0  |                                         116163  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                            103  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00.08 ; elapsed = 00:00:00.08 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3127 ; free virtual = 7842
+Ending Logic Optimization Task | Checksum: 1ece7d47b
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:09 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3130 ; free virtual = 7845
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Pwropt 34-232] Skipping BRAM gating because all BRAMs are in high frequency (i.e. period < 3.12 ns) clock domains.
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 115 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+Ending Power Optimization Task | Checksum: 1cbb2ccfa
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3129 ; free virtual = 7844
+
+Starting Final Cleanup Task
+Ending Final Cleanup Task | Checksum: 1cbb2ccfa
+
+Time (s): cpu = 00:00:00.7 ; elapsed = 00:00:00.65 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3130 ; free virtual = 7845
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3130 ; free virtual = 7845
+Ending Netlist Obfuscation Task | Checksum: 1cbb2ccfa
+
+Time (s): cpu = 00:00:00.73 ; elapsed = 00:00:00.68 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3131 ; free virtual = 7846
+INFO: [Common 17-83] Releasing license: Implementation
+23 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:25 ; elapsed = 00:00:17 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3131 ; free virtual = 7846
+1
+place_design
+Command: place_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors, 4 Warnings
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+Starting Placer Task
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 8 CPUs
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3126 ; free virtual = 7841
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: e5f8edf5
+
+Time (s): cpu = 00:00:00.35 ; elapsed = 00:00:00.35 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3129 ; free virtual = 7844
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3129 ; free virtual = 7844
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: 1100e09b4
+
+Time (s): cpu = 00:00:16 ; elapsed = 00:00:15 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3121 ; free virtual = 7837
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: 1464609e6
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:22 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3122 ; free virtual = 7838
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: 1464609e6
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:22 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3121 ; free virtual = 7837
+Phase 1 Placer Initialization | Checksum: 1464609e6
+
+Time (s): cpu = 00:00:48 ; elapsed = 00:00:25 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3125 ; free virtual = 7841
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+Phase 2.1 Floorplanning | Checksum: 1dded6163
+
+Time (s): cpu = 00:01:01 ; elapsed = 00:00:27 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3127 ; free virtual = 7844
+
+Phase 2.2 Update Timing before SLR Path Opt
+Phase 2.2 Update Timing before SLR Path Opt | Checksum: 17abf37f5
+
+Time (s): cpu = 00:01:14 ; elapsed = 00:00:30 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3125 ; free virtual = 7849
+
+Phase 2.3 Post-Processing in Floorplanning
+Phase 2.3 Post-Processing in Floorplanning | Checksum: 17abf37f5
+
+Time (s): cpu = 00:01:14 ; elapsed = 00:00:30 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3123 ; free virtual = 7847
+
+Phase 2.4 Global Placement Core
+
+Phase 2.4.1 UpdateTiming Before Physical Synthesis
+Phase 2.4.1 UpdateTiming Before Physical Synthesis | Checksum: 12955cb5a
+
+Time (s): cpu = 00:01:34 ; elapsed = 00:00:34 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3105 ; free virtual = 7824
+
+Phase 2.4.2 Physical Synthesis In Placer
+INFO: [Physopt 32-1044] Break lutnm for timing: one critical 0, two critical 0, total 0, new lutff created 0
+INFO: [Physopt 32-1138] End 1 Pass. Optimized 0 net or LUT. Breaked 0 LUT, combined 0 existing LUT and moved 0 existing LUT
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-670] No setup violation found.  DSP Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register to Pipeline Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  BRAM Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  URAM Register Optimization was not performed.
+INFO: [Physopt 32-949] No candidate nets found for dynamic/static region interface net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3075 ; free virtual = 7811
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                                     |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  LUT Combining                                    |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Retime                                           |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Very High Fanout                                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                                     |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register to Pipeline                       |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register                                   |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  BRAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  URAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Dynamic/Static Region Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                                            |            0  |              0  |                     0  |           0  |           4  |  00:00:00  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.4.2 Physical Synthesis In Placer | Checksum: 12955cb5a
+
+Time (s): cpu = 00:01:35 ; elapsed = 00:00:35 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3080 ; free virtual = 7815
+Phase 2.4 Global Placement Core | Checksum: 1d2617c3b
+
+Time (s): cpu = 00:01:37 ; elapsed = 00:00:36 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3058 ; free virtual = 7794
+Phase 2 Global Placement | Checksum: 1d2617c3b
+
+Time (s): cpu = 00:01:38 ; elapsed = 00:00:36 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3070 ; free virtual = 7806
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: 171c682b0
+
+Time (s): cpu = 00:01:40 ; elapsed = 00:00:38 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3089 ; free virtual = 7817
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: 110adab41
+
+Time (s): cpu = 00:01:41 ; elapsed = 00:00:39 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3087 ; free virtual = 7815
+
+Phase 3.3 Area Swap Optimization
+Phase 3.3 Area Swap Optimization | Checksum: 15bfd52b0
+
+Time (s): cpu = 00:01:43 ; elapsed = 00:00:39 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3086 ; free virtual = 7814
+
+Phase 3.4 Pipeline Register Optimization
+Phase 3.4 Pipeline Register Optimization | Checksum: 15bfd52b0
+
+Time (s): cpu = 00:01:43 ; elapsed = 00:00:39 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3089 ; free virtual = 7818
+
+Phase 3.5 Small Shape Detail Placement
+Phase 3.5 Small Shape Detail Placement | Checksum: 184ad83bb
+
+Time (s): cpu = 00:01:45 ; elapsed = 00:00:40 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3089 ; free virtual = 7817
+
+Phase 3.6 Re-assign LUT pins
+Phase 3.6 Re-assign LUT pins | Checksum: 184ad83bb
+
+Time (s): cpu = 00:01:45 ; elapsed = 00:00:41 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3089 ; free virtual = 7817
+
+Phase 3.7 Pipeline Register Optimization
+Phase 3.7 Pipeline Register Optimization | Checksum: 184ad83bb
+
+Time (s): cpu = 00:01:46 ; elapsed = 00:00:41 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3087 ; free virtual = 7815
+Phase 3 Detail Placement | Checksum: 184ad83bb
+
+Time (s): cpu = 00:01:46 ; elapsed = 00:00:41 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 3088 ; free virtual = 7816
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: 1d01d659f
+
+Phase 4.1.1.1 BUFG Insertion
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 8 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=0.203 | TNS=0.000 |
+Phase 1 Physical Synthesis Initialization | Checksum: 1b37de4fe
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:02 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2918 ; free virtual = 7690
+INFO: [Place 46-56] BUFG insertion identified 0 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 0, Skipped due to Timing Degradation: 0, Skipped due to netlist editing failed: 0.
+Ending Physical Synthesis Task | Checksum: 21869f294
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:03 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2927 ; free virtual = 7699
+Phase 4.1.1.1 BUFG Insertion | Checksum: 1d01d659f
+
+Time (s): cpu = 00:02:20 ; elapsed = 00:00:52 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2926 ; free virtual = 7699
+
+Phase 4.1.1.2 Post Placement Timing Optimization
+INFO: [Place 30-746] Post Placement Timing Summary WNS=0.203. For the most accurate timing information please run report_timing.
+Phase 4.1.1.2 Post Placement Timing Optimization | Checksum: 1521d81a0
+
+Time (s): cpu = 00:02:21 ; elapsed = 00:00:52 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2942 ; free virtual = 7705
+
+Time (s): cpu = 00:02:21 ; elapsed = 00:00:52 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2942 ; free virtual = 7705
+Phase 4.1 Post Commit Optimization | Checksum: 1521d81a0
+
+Time (s): cpu = 00:02:21 ; elapsed = 00:00:52 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2943 ; free virtual = 7704
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: 1b7098f36
+
+Time (s): cpu = 00:02:23 ; elapsed = 00:00:53 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2946 ; free virtual = 7708
+
+Phase 4.3 Placer Reporting
+
+Phase 4.3.1 Print Estimated Congestion
+INFO: [Place 30-612] Post-Placement Estimated Congestion 
+ ____________________________________________________
+|           | Global Congestion | Short Congestion  |
+| Direction | Region Size       | Region Size       |
+|___________|___________________|___________________|
+|      North|                4x4|                4x4|
+|___________|___________________|___________________|
+|      South|                2x2|                4x4|
+|___________|___________________|___________________|
+|       East|                2x2|                1x1|
+|___________|___________________|___________________|
+|       West|                4x4|                4x4|
+|___________|___________________|___________________|
+
+Phase 4.3.1 Print Estimated Congestion | Checksum: 1b7098f36
+
+Time (s): cpu = 00:02:24 ; elapsed = 00:00:54 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2952 ; free virtual = 7704
+Phase 4.3 Placer Reporting | Checksum: 1b7098f36
+
+Time (s): cpu = 00:02:24 ; elapsed = 00:00:55 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2966 ; free virtual = 7716
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2966 ; free virtual = 7716
+
+Time (s): cpu = 00:02:24 ; elapsed = 00:00:55 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2966 ; free virtual = 7716
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: 18ebb2f9f
+
+Time (s): cpu = 00:02:25 ; elapsed = 00:00:56 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2972 ; free virtual = 7722
+Ending Placer Task | Checksum: 16f4dc18e
+
+Time (s): cpu = 00:02:26 ; elapsed = 00:00:56 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2982 ; free virtual = 7732
+INFO: [Common 17-83] Releasing license: Implementation
+28 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:02:40 ; elapsed = 00:01:01 . Memory (MB): peak = 9781.211 ; gain = 0.000 ; free physical = 2983 ; free virtual = 7735
+route_design
+Command: route_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+Running DRC as a precondition to command route_design
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+
+
+Starting Routing Task
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 8 CPUs
+
+Phase 1 Build RT Design
+Checksum: PlaceDB: 744832ab ConstDB: 0 ShapeSum: 9619814d RouteDB: 64ec0d96
+Post Restoration Checksum: NetGraph: b82f5041 | NumContArr: 7a79e30f | Constraints: f0f712db | Timing: 0
+Phase 1 Build RT Design | Checksum: 223a0462b
+
+Time (s): cpu = 00:01:01 ; elapsed = 00:00:36 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2935 ; free virtual = 7723
+
+Phase 2 Router Initialization
+
+Phase 2.1 Fix Topology Constraints
+Phase 2.1 Fix Topology Constraints | Checksum: 223a0462b
+
+Time (s): cpu = 00:01:01 ; elapsed = 00:00:36 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2941 ; free virtual = 7733
+
+Phase 2.2 Pre Route Cleanup
+Phase 2.2 Pre Route Cleanup | Checksum: 223a0462b
+
+Time (s): cpu = 00:01:02 ; elapsed = 00:00:36 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2947 ; free virtual = 7734
+ Number of Nodes with overlaps = 0
+
+Phase 2.3 Update Timing
+Phase 2.3 Update Timing | Checksum: 20e169ea8
+
+Time (s): cpu = 00:01:33 ; elapsed = 00:00:45 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2959 ; free virtual = 7747
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=-0.219 | THS=-145.141|
+
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0 %
+  Global Horizontal Routing Utilization  = 0 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 206
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 91
+  Number of Partially Routed Nets     = 115
+  Number of Node Overlaps             = 0
+
+Phase 2 Router Initialization | Checksum: 2b69ff14d
+
+Time (s): cpu = 00:01:42 ; elapsed = 00:00:47 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2957 ; free virtual = 7745
+
+Phase 3 Initial Routing
+
+Phase 3.1 Global Routing
+Phase 3.1 Global Routing | Checksum: 2b69ff14d
+
+Time (s): cpu = 00:01:42 ; elapsed = 00:00:47 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2956 ; free virtual = 7744
+Phase 3 Initial Routing | Checksum: 295e9d0d2
+
+Time (s): cpu = 00:01:43 ; elapsed = 00:00:48 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2956 ; free virtual = 7744
+
+Phase 4 Rip-up And Reroute
+
+Phase 4.1 Global Iteration 0
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 4.1 Global Iteration 0 | Checksum: 2eec0b04c
+
+Time (s): cpu = 00:01:59 ; elapsed = 00:00:53 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2896 ; free virtual = 7706
+Phase 4 Rip-up And Reroute | Checksum: 2eec0b04c
+
+Time (s): cpu = 00:01:59 ; elapsed = 00:00:53 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2896 ; free virtual = 7706
+
+Phase 5 Delay and Skew Optimization
+
+Phase 5.1 Delay CleanUp
+
+Phase 5.1.1 Update Timing
+Phase 5.1.1 Update Timing | Checksum: 216610b79
+
+Time (s): cpu = 00:02:07 ; elapsed = 00:00:57 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2884 ; free virtual = 7680
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 5.1 Delay CleanUp | Checksum: 216610b79
+
+Time (s): cpu = 00:02:08 ; elapsed = 00:00:57 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2883 ; free virtual = 7680
+
+Phase 5.2 Clock Skew Optimization
+Phase 5.2 Clock Skew Optimization | Checksum: 216610b79
+
+Time (s): cpu = 00:02:08 ; elapsed = 00:00:57 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2883 ; free virtual = 7679
+Phase 5 Delay and Skew Optimization | Checksum: 216610b79
+
+Time (s): cpu = 00:02:08 ; elapsed = 00:00:57 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2884 ; free virtual = 7681
+
+Phase 6 Post Hold Fix
+
+Phase 6.1 Hold Fix Iter
+
+Phase 6.1.1 Update Timing
+Phase 6.1.1 Update Timing | Checksum: 2435fd473
+
+Time (s): cpu = 00:02:18 ; elapsed = 00:01:02 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2895 ; free virtual = 7694
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.204  | TNS=0.000  | WHS=0.016  | THS=0.000  |
+
+Phase 6.1 Hold Fix Iter | Checksum: 2435fd473
+
+Time (s): cpu = 00:02:18 ; elapsed = 00:01:02 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2895 ; free virtual = 7694
+Phase 6 Post Hold Fix | Checksum: 2435fd473
+
+Time (s): cpu = 00:02:18 ; elapsed = 00:01:02 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2894 ; free virtual = 7693
+
+Phase 7 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0.0100535 %
+  Global Horizontal Routing Utilization  = 0.0144217 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 7 Route finalize | Checksum: 2435fd473
+
+Time (s): cpu = 00:02:19 ; elapsed = 00:01:02 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2894 ; free virtual = 7693
+
+Phase 8 Verifying routed nets
+
+ Verification completed successfully
+Phase 8 Verifying routed nets | Checksum: 2435fd473
+
+Time (s): cpu = 00:02:19 ; elapsed = 00:01:02 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2906 ; free virtual = 7705
+
+Phase 9 Depositing Routes
+Phase 9 Depositing Routes | Checksum: 2ba6f5fcd
+
+Time (s): cpu = 00:02:27 ; elapsed = 00:01:08 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2910 ; free virtual = 7705
+
+Phase 10 Post Router Timing
+INFO: [Route 35-57] Estimated Timing Summary | WNS=0.204  | TNS=0.000  | WHS=0.016  | THS=0.000  |
+
+INFO: [Route 35-327] The final timing numbers are based on the router estimated timing analysis. For a complete and accurate timing signoff, please run report_timing_summary.
+Phase 10 Post Router Timing | Checksum: 2ba6f5fcd
+
+Time (s): cpu = 00:02:35 ; elapsed = 00:01:10 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2916 ; free virtual = 7711
+INFO: [Route 35-16] Router Completed Successfully
+
+Phase 11 Post-Route Event Processing
+Phase 11 Post-Route Event Processing | Checksum: 12879b456
+
+Time (s): cpu = 00:02:43 ; elapsed = 00:01:14 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2913 ; free virtual = 7709
+
+Time (s): cpu = 00:02:43 ; elapsed = 00:01:14 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2913 ; free virtual = 7709
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Implementation
+13 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:03:02 ; elapsed = 00:01:18 . Memory (MB): peak = 9849.504 ; gain = 68.293 ; free physical = 2914 ; free virtual = 7710
+write_checkpoint -force ./Checkpoint/boxlambda_top_route_design_w_rm0_stub.dcp
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Write XDEF Complete: Time (s): cpu = 00:00:09 ; elapsed = 00:00:04 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2867 ; free virtual = 7744
+INFO: [Common 17-1381] The checkpoint '/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/boxlambda_top_route_design_w_rm0_stub.dcp' has been generated.
+write_checkpoint: Time (s): cpu = 00:00:12 ; elapsed = 00:00:06 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2852 ; free virtual = 7694
+/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/boxlambda_top_route_design_w_rm0_stub.dcp
+write_checkpoint -force -cell boxlambda_soc_inst/rm0_inst ./Checkpoint/rm0_stub_route_design.dcp
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Write XDEF Complete: Time (s): cpu = 00:00:00.28 ; elapsed = 00:00:00.27 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2898 ; free virtual = 7717
+INFO: [Common 17-1381] The checkpoint '/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/rm0_stub_route_design.dcp' has been generated.
+/home/epsilon/work/boxlambda/gw/dfx/Checkpoint/rm0_stub_route_design.dcp
+close_project
+pr_verify ./Checkpoint/boxlambda_top_route_design_w_rm0_stub.dcp ./Checkpoint/boxlambda_top_route_design_w_rm0_j1b.dcp
+Command: pr_verify ./Checkpoint/boxlambda_top_route_design_w_rm0_stub.dcp ./Checkpoint/boxlambda_top_route_design_w_rm0_j1b.dcp
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/tools/Xilinx/Vivado/2023.1/data/ip'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/tools/Xilinx/Vivado/2023.1/data/ip'.
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:arty-s7-25:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/arty-s7-25/E.0/board.xml as part xc7s25csga324-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:arty-s7-50:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/arty-s7-50/B.0/board.xml as part xc7s50csga324-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:arty-z7-10:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/arty-z7-10/A.0/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:arty-z7-20:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/arty-z7-20/A.0/board.xml as part xc7z020clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:cmod-s7-25:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/cmod-s7-25/B.0/board.xml as part xc7s25csga225-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:cora-z7-07s:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/cora-z7-07s/B.0/board.xml as part xc7z007sclg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:cora-z7-10:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/cora-z7-10/B.0/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:eclypse-z7:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/eclypse-z7/A.0/board.xml as part xc7z020clg484-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:eclypse-z7:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/eclypse-z7/B.0/board.xml as part xc7z020clg484-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:genesys2:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/genesys2/H/board.xml as part xc7k325tffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:gzu_3eg:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/genesys-zu-3eg/B.0/board.xml as part xczu3eg-sfvc784-1-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:gzu_3eg:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/genesys-zu-3eg/D.0/board.xml as part xczu3eg-sfvc784-1-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:gzu_5ev:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/genesys-zu-5ev/C.0/board.xml as part xczu5ev-sfvc784-1-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:sword:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/sword/C.0/board.xml as part xc7k325tffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zedboard:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zedboard/1.3/board.xml as part xc7z020clg484-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zybo-z7-10:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zybo-z7-10/A.0/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zybo-z7-20:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zybo-z7-20/A.0/board.xml as part xc7z020clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zybo:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zybo/B.3/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part digilentinc.com:zybo:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/boards/board_files/zybo/B.4/board.xml as part xc7z010clg400-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26c:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26c/1.2/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26c:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26c/1.3/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26c:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26c/1.4/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26i:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26i/1.2/board.xml as part xck26-sfvc784-2lvi-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26i:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26i/1.3/board.xml as part xck26-sfvc784-2lvi-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:k26i:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/k26i/1.4/board.xml as part xck26-sfvc784-2lvi-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kc705:part0:1.6 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kc705/1.6/board.xml as part xc7k325tffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu105:part0:1.6 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu105/1.6/board.xml as part xcku040-ffva1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu105:part0:1.7 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu105/1.7/board.xml as part xcku040-ffva1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu116/1.4/board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.5 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu116/1.5/board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu1500:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu1500/1.2/board.xml as part xcku115-flvb2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kr260_som:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kr260_som/1.0/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kr260_som:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kr260_som/1.1/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kv260_som:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kv260_som/1.2/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kv260_som:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kv260_som/1.3/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kv260_som:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kv260_som/1.4/board.xml as part xck26-sfvc784-2lv-c specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:sp701:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/sp701/1.0/board.xml as part xc7s100fgga676-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:sp701:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/sp701/1.1/board.xml as part xc7s100fgga676-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vc707:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vc707/1.4/board.xml as part xc7vx485tffg1761-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vc709:part0:1.8 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vc709/1.8/board.xml as part xc7vx690tffg1761-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:2.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/2.2/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/3.0/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/3.1/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/3.2/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190_newl/production/1.0/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190_newl/production/1.1/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu108:part0:1.6 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu108/1.6/board.xml as part xcvu095-ffva2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu108:part0:1.7 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu108/1.7/board.xml as part xcvu095-ffva2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu110:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu110/1.4/board.xml as part xcvu190-flgc2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.0/board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.3/board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.4/board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu128:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu128/production/1.0/board.xml as part xcvu37p-fsvh2892-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu129:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu129/production/1.0/board.xml as part xcvu29p-fsga2577-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu1525:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu1525/1.3/board.xml as part xcvu9p-fsgd2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_a/1.0/board.xml as part xcve2802-vsvh1760-2lp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_a/1.1/board.xml as part xcve2802-vsvh1760-2lp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es_revb:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_b/1.0/board.xml as part xcve2802-vsvh1760-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es_revb:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_b/1.1/board.xml as part xcve2802-vsvh1760-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vermeo_t1_mpsoc:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vermeo_t1_mpsoc/1.0/board.xml as part xczu19eg-ffvd1760-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vermeo_t1_rfsoc:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vermeo_t1_rfsoc/1.0/board.xml as part xczu21dr-ffvd1156-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.0/board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158_es:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/es/1.0/board.xml as part xcvh1582-vsva3697-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158_es:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/es/1.1/board.xml as part xcvh1582-vsva3697-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:2.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/2.2/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.0/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.1/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.2/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180_newl/production/1.0/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180_newl/production/1.1/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/production/1.0/board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/production/1.1/board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/es/1.2/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/es/1.3/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es_revb:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120_revb/es/1.0/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es_revb:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120_revb/es/1.1/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.0/board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.1/board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180_es:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/es/1.0/board.xml as part xcvp1802-lsvc4072-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180_es:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/es/1.1/board.xml as part xcvp1802-lsvc4072-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zc702:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zc702/1.4/board.xml as part xc7z020clg484-1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zc706:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zc706/1.4/board.xml as part xc7z045ffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu102:part0:3.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu102/3.3/board.xml as part xczu9eg-ffvb1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu102:part0:3.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu102/3.4/board.xml as part xczu9eg-ffvb1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu104:part0:1.1 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu104/1.1/board.xml as part xczu7ev-ffvc1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu106:part0:2.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu106/2.4/board.xml as part xczu7ev-ffvc1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu106:part0:2.5 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu106/2.5/board.xml as part xczu7ev-ffvc1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu106:part0:2.6 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu106/2.6/board.xml as part xczu7ev-ffvc1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu111:part0:1.2 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu111/1.2/board.xml as part xczu28dr-ffvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu111:part0:1.3 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu111/1.3/board.xml as part xczu28dr-ffvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu111:part0:1.4 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu111/1.4/board.xml as part xczu28dr-ffvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu1275:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu1275/1.0/board.xml as part xczu29dr-ffvf1760-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu1285:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu1285/1.0/board.xml as part xczu39dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208/production/2.0/board.xml as part xczu48dr-fsvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208ld/production/2.0/board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216/production/2.0/board.xml as part xczu49dr-ffvf1760-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216ld/production/2.0/board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670:part0:2.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670/2.0/board.xml as part xczu67dr-fsve1156-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at /tools/Xilinx/Vivado/2023.1/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670ld/1.0/board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+Netlist sorting complete. Time (s): cpu = 00:00:00.24 ; elapsed = 00:00:00.23 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2796 ; free virtual = 7647
+INFO: [Netlist 29-17] Analyzing 1704 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2023.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF Files: Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2815 ; free virtual = 7658
+Restored from archive | CPU: 3.420000 secs | Memory: 33.030846 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2815 ; free virtual = 7658
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2797 ; free virtual = 7641
+INFO: [Project 1-604] Checkpoint was created with Vivado v2023.1 (64-bit) build 3865809
+Netlist sorting complete. Time (s): cpu = 00:00:00.24 ; elapsed = 00:00:00.23 . Memory (MB): peak = 9849.504 ; gain = 0.000 ; free physical = 2902 ; free virtual = 7753
+INFO: [Netlist 29-17] Analyzing 1779 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2023.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF Files: Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 9885.316 ; gain = 0.000 ; free physical = 2839 ; free virtual = 7683
+Restored from archive | CPU: 4.020000 secs | Memory: 48.894211 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 9885.316 ; gain = 0.000 ; free physical = 2839 ; free virtual = 7683
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 9885.316 ; gain = 0.000 ; free physical = 2829 ; free virtual = 7673
+INFO: [Project 1-604] Checkpoint was created with Vivado v2023.1 (64-bit) build 3865809
+INFO: [Constraints 18-1020] PR Verify Summary:
+DCP1: ./Checkpoint/boxlambda_top_route_design_w_rm0_stub.dcp
+  Number of reconfigurable modules compared = 1
+  Number of partition pins compared         = 207
+  Number of static tiles compared           = 1632
+  Number of static sites compared           = 6125
+  Number of static cells compared           = 36117
+  Number of static routed nodes compared    = 589539
+  Number of static routed pips compared     = 554890
+
+DCP2: ./Checkpoint/boxlambda_top_route_design_w_rm0_j1b.dcp
+  Number of reconfigurable modules compared = 1
+  Number of partition pins compared         = 207
+  Number of static tiles compared           = 1632
+  Number of static sites compared           = 6125
+  Number of static cells compared           = 36117
+  Number of static routed nodes compared    = 589539
+  Number of static routed pips compared     = 554890
+INFO: [Vivado 12-3253] PR_VERIFY: check points ./Checkpoint/boxlambda_top_route_design_w_rm0_stub.dcp and ./Checkpoint/boxlambda_top_route_design_w_rm0_j1b.dcp are compatible
+pr_verify: Time (s): cpu = 00:00:42 ; elapsed = 00:00:34 . Memory (MB): peak = 9991.316 ; gain = 141.812 ; free physical = 2741 ; free virtual = 7612
+close_project
+ERROR: [Common 17-53] User Exception: No open project. Please create or open a project before executing this command.
+open_checkpoint ./Checkpoint/boxlambda_top_route_design_w_rm0_j1b.dcp
+Command: open_checkpoint ./Checkpoint/boxlambda_top_route_design_w_rm0_j1b.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 9991.316 ; gain = 0.000 ; free physical = 2614 ; free virtual = 7344
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/tools/Xilinx/Vivado/2023.1/data/ip'.
+Netlist sorting complete. Time (s): cpu = 00:00:00.28 ; elapsed = 00:00:00.27 . Memory (MB): peak = 9991.316 ; gain = 0.000 ; free physical = 2609 ; free virtual = 7342
+INFO: [Netlist 29-17] Analyzing 1779 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2023.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF Files: Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 9991.316 ; gain = 0.000 ; free physical = 2620 ; free virtual = 7352
+Restored from archive | CPU: 3.680000 secs | Memory: 45.290375 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 9991.316 ; gain = 0.000 ; free physical = 2620 ; free virtual = 7352
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 9991.316 ; gain = 0.000 ; free physical = 2620 ; free virtual = 7352
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 297 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 42 instances
+  IOBUFDS => IOBUFDS (IBUFDS, INV, OBUFTDS(x2)): 2 instances
+  OBUFDS => OBUFDS_DUAL_BUF (INV, OBUFDS(x2)): 1 instance 
+  RAM16X1D => RAM32X1D (RAMD32(x2)): 1 instance 
+  RAM16X1S => RAM32X1S (RAMS32): 79 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 94 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 14 instances
+  RAM64X1D => RAM64X1D (RAMD64E(x2)): 64 instances
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2023.1 (64-bit) build 3865809
+open_checkpoint: Time (s): cpu = 00:00:18 ; elapsed = 00:00:13 . Memory (MB): peak = 9991.316 ; gain = 0.000 ; free physical = 2611 ; free virtual = 7344
+checkpoint_boxlambda_top_route_design_w_rm0_j1b
+write_bitstream -force ./Bitstreams/Config_rm0_j1b.bit
+Command: write_bitstream -force ./Bitstreams/Config_rm0_j1b.bit
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+Running DRC as a precondition to command write_bitstream
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 8 threads
+WARNING: [DRC BUFC-1] Input Buffer Connections: Input buffer boxlambda_soc_inst/GENERATE_DRAM_MODULE.litedram_wrapper_inst/litedram_inst/IOBUFDS/IBUFDS has no loads. It is recommended to have an input buffer drive an internal load.
+WARNING: [DRC BUFC-1] Input Buffer Connections: Input buffer boxlambda_soc_inst/GENERATE_DRAM_MODULE.litedram_wrapper_inst/litedram_inst/IOBUFDS_1/IBUFDS has no loads. It is recommended to have an input buffer drive an internal load.
+WARNING: [DRC DPIP-1] Input pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed input boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+WARNING: [DRC DPIP-1] Input pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed input boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+WARNING: [DRC DPIP-1] Input pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed input boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/C[47:0] is not pipelined. Pipelining DSP48 input will improve performance.
+WARNING: [DRC DPOP-1] PREG Output pipelining: DSP boxlambda_soc_inst/GENERATE_YM2149_MODULE.ym2149_sys_inst/ym2149_psg_sys_inst/FMIX_LEFT/dc_offset0 output boxlambda_soc_inst/GENERATE_YM2149_MODULE.ym2149_sys_inst/ym2149_psg_sys_inst/FMIX_LEFT/dc_offset0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+WARNING: [DRC DPOP-1] PREG Output pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed output boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+WARNING: [DRC DPOP-2] MREG Output pipelining: DSP boxlambda_soc_inst/GENERATE_YM2149_MODULE.ym2149_sys_inst/ym2149_psg_sys_inst/FMIX_LEFT/m_audio_out_reg multiplier stage boxlambda_soc_inst/GENERATE_YM2149_MODULE.ym2149_sys_inst/ym2149_psg_sys_inst/FMIX_LEFT/m_audio_out_reg/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+WARNING: [DRC DPOP-2] MREG Output pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed multiplier stage boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+WARNING: [DRC PDRC-62] SLICEM_5lutO5_B5: Dangling output pin O5 on site SLICE_X34Y102:B5LUT. For this programming the O5 output pin should have a signal.
+INFO: [Vivado 12-3199] DRC finished with 0 Errors, 10 Warnings
+INFO: [Vivado 12-3200] Please refer to the DRC report (report_drc) for more information.
+Partition "pblock_rm0_inst" Reconfigurable Module "boxlambda_soc_inst/rm0_inst"
+INFO: [Designutils 20-2272] Running write_bitstream with 8 threads.
+Loading data files...
+Loading site data...
+Loading route data...
+Processing options...
+Creating bitmap...
+Creating bitstream...
+Writing bitstream ./Bitstreams/Config_rm0_j1b.bit...
+Process Partition "pblock_rm0_inst"
+INFO: [Designutils 20-2272] Running write_bitstream with 8 threads.
+Loading data files...
+Loading site data...
+Loading route data...
+Processing options...
+Partition "pblock_rm0_inst" has RESET_AFTER_RECONFIG = TRUE.
+Creating bitmap...
+Creating bitstream...
+Partial bitstream contains 4742240 bits.
+Writing bitstream ./Bitstreams/Config_rm0_j1b_pblock_rm0_inst_partial.bit...
+INFO: [Vivado 12-1842] Bitgen Completed Successfully.
+INFO: [Project 1-1876] WebTalk data collection is mandatory when using a ULT device. To see the specific WebTalk data collected for your design, open the usage_statistics_webtalk.html or usage_statistics_webtalk.xml file in the implementation directory.
+INFO: [Common 17-83] Releasing license: Implementation
+10 Infos, 10 Warnings, 0 Critical Warnings and 0 Errors encountered.
+write_bitstream completed successfully
+write_bitstream: Time (s): cpu = 00:01:55 ; elapsed = 00:00:45 . Memory (MB): peak = 10101.949 ; gain = 110.633 ; free physical = 2226 ; free virtual = 7011
+./Bitstreams/Config_rm0_j1b.bit
+close_project
+open_checkpoint ./Checkpoint/boxlambda_top_route_design_w_rm0_stub.dcp
+Command: open_checkpoint ./Checkpoint/boxlambda_top_route_design_w_rm0_stub.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 10101.949 ; gain = 0.000 ; free physical = 2336 ; free virtual = 7121
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/tools/Xilinx/Vivado/2023.1/data/ip'.
+Netlist sorting complete. Time (s): cpu = 00:00:00.21 ; elapsed = 00:00:00.22 . Memory (MB): peak = 10101.949 ; gain = 0.000 ; free physical = 2338 ; free virtual = 7123
+INFO: [Netlist 29-17] Analyzing 1704 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2023.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF Files: Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 10101.949 ; gain = 0.000 ; free physical = 2287 ; free virtual = 7071
+Restored from archive | CPU: 3.310000 secs | Memory: 38.705292 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 10101.949 ; gain = 0.000 ; free physical = 2287 ; free virtual = 7071
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 10101.949 ; gain = 0.000 ; free physical = 2289 ; free virtual = 7073
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 297 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 42 instances
+  IOBUFDS => IOBUFDS (IBUFDS, INV, OBUFTDS(x2)): 2 instances
+  OBUFDS => OBUFDS_DUAL_BUF (INV, OBUFDS(x2)): 1 instance 
+  RAM16X1D => RAM32X1D (RAMD32(x2)): 1 instance 
+  RAM16X1S => RAM32X1S (RAMS32): 79 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 94 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 14 instances
+  RAM64X1D => RAM64X1D (RAMD64E(x2)): 64 instances
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2023.1 (64-bit) build 3865809
+open_checkpoint: Time (s): cpu = 00:00:17 ; elapsed = 00:00:12 . Memory (MB): peak = 10138.953 ; gain = 37.004 ; free physical = 2284 ; free virtual = 7068
+checkpoint_boxlambda_top_route_design_w_rm0_stub
+write_bitstream -force ./Bitstreams/Config_rm0_stub.bit
+Command: write_bitstream -force ./Bitstreams/Config_rm0_stub.bit
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a100ti'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a100ti'
+Running DRC as a precondition to command write_bitstream
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 8 threads
+WARNING: [DRC BUFC-1] Input Buffer Connections: Input buffer boxlambda_soc_inst/GENERATE_DRAM_MODULE.litedram_wrapper_inst/litedram_inst/IOBUFDS/IBUFDS has no loads. It is recommended to have an input buffer drive an internal load.
+WARNING: [DRC BUFC-1] Input Buffer Connections: Input buffer boxlambda_soc_inst/GENERATE_DRAM_MODULE.litedram_wrapper_inst/litedram_inst/IOBUFDS_1/IBUFDS has no loads. It is recommended to have an input buffer drive an internal load.
+WARNING: [DRC DPIP-1] Input pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed input boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+WARNING: [DRC DPIP-1] Input pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed input boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+WARNING: [DRC DPIP-1] Input pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed input boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/C[47:0] is not pipelined. Pipelining DSP48 input will improve performance.
+WARNING: [DRC DPOP-1] PREG Output pipelining: DSP boxlambda_soc_inst/GENERATE_YM2149_MODULE.ym2149_sys_inst/ym2149_psg_sys_inst/FMIX_LEFT/dc_offset0 output boxlambda_soc_inst/GENERATE_YM2149_MODULE.ym2149_sys_inst/ym2149_psg_sys_inst/FMIX_LEFT/dc_offset0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+WARNING: [DRC DPOP-1] PREG Output pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed output boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+WARNING: [DRC DPOP-2] MREG Output pipelining: DSP boxlambda_soc_inst/GENERATE_YM2149_MODULE.ym2149_sys_inst/ym2149_psg_sys_inst/FMIX_LEFT/m_audio_out_reg multiplier stage boxlambda_soc_inst/GENERATE_YM2149_MODULE.ym2149_sys_inst/ym2149_psg_sys_inst/FMIX_LEFT/m_audio_out_reg/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+WARNING: [DRC DPOP-2] MREG Output pipelining: DSP boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed multiplier stage boxlambda_soc_inst/wb_ibex_core/u_top/u_ibex_core/ex_block_i/gen_multdiv_fast.multdiv_i/mac_res_signed/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+INFO: [Vivado 12-3199] DRC finished with 0 Errors, 9 Warnings
+INFO: [Vivado 12-3200] Please refer to the DRC report (report_drc) for more information.
+Partition "pblock_rm0_inst" Reconfigurable Module "boxlambda_soc_inst/rm0_inst"
+INFO: [Designutils 20-2272] Running write_bitstream with 8 threads.
+Loading data files...
+Loading site data...
+Loading route data...
+Processing options...
+Creating bitmap...
+Creating bitstream...
+Writing bitstream ./Bitstreams/Config_rm0_stub.bit...
+Process Partition "pblock_rm0_inst"
+INFO: [Designutils 20-2272] Running write_bitstream with 8 threads.
+Loading data files...
+Loading site data...
+Loading route data...
+Processing options...
+Partition "pblock_rm0_inst" has RESET_AFTER_RECONFIG = TRUE.
+Creating bitmap...
+Creating bitstream...
+Partial bitstream contains 4742240 bits.
+Writing bitstream ./Bitstreams/Config_rm0_stub_pblock_rm0_inst_partial.bit...
+INFO: [Vivado 12-1842] Bitgen Completed Successfully.
+INFO: [Project 1-1876] WebTalk data collection is mandatory when using a ULT device. To see the specific WebTalk data collected for your design, open the usage_statistics_webtalk.html or usage_statistics_webtalk.xml file in the implementation directory.
+INFO: [Common 17-83] Releasing license: Implementation
+10 Infos, 9 Warnings, 0 Critical Warnings and 0 Errors encountered.
+write_bitstream completed successfully
+write_bitstream: Time (s): cpu = 00:01:49 ; elapsed = 00:00:40 . Memory (MB): peak = 10234.000 ; gain = 95.047 ; free physical = 2303 ; free virtual = 7092
+./Bitstreams/Config_rm0_stub.bit
+close_project
+exit
+INFO: [Common 17-206] Exiting Vivado at Thu Sep  5 11:54:12 2024...

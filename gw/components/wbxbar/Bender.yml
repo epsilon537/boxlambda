@@ -22,6 +22,10 @@ sources:
       - ../../../sub/wb2axip/rtl/addrdecode.v
       - ../../../sub/wb2axip/rtl/skidbuffer.v
       - ../../../sub/wb2axip/rtl/wbarbiter.v
+      - ../../../sub/wb2axip/rtl/aximrd2wbsp.v
+      - ../../../sub/wb2axip/rtl/wbm2axilite.v
+      - ../../../sub/wb2axip/rtl/axi_addr.v
+      - ../../../sub/wb2axip/rtl/sfifo.v
 
 
 

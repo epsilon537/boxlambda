@@ -1,0 +1,27 @@
+#-----------------------------------------------------------
+# Vivado v2023.1 (64-bit)
+# SW Build 3865809 on Sun May  7 15:04:56 MDT 2023
+# IP Build 3864474 on Sun May  7 20:36:21 MDT 2023
+# SharedData Build 3865790 on Sun May 07 13:33:03 MDT 2023
+# Start of session at: Sat Aug 31 10:18:19 2024
+# Process ID: 557194
+# Current directory: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller
+# Command line: vivado
+# Log file: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/vivado.log
+# Journal file: /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/vivado.jou
+# Running On: asustuf, OS: Linux, CPU Frequency: 3965.547 MHz, CPU Physical cores: 6, Host memory: 16615 MB
+#-----------------------------------------------------------
+start_gui
+open_project /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.xpr
+set_property -dict [list \
+  CONFIG.ALL_PARAMS {HAS_AXI_LITE_IF 1 RESET_ACTIVE_LEVEL 1 CP_FIFO_DEPTH 32 CP_FIFO_TYPE lutram CDC_STAGES 2 VS {VS_0 {ID 0 NAME VS_0 RM {RM_1 {ID 1 NAME RM_1 BS {0 {ID 0 ADDR 0 SIZE 0 CLEAR 0}} RESET_REQUIRED high} rm_stub {ID 0 NAME rm_stub BS {0 {ID 0 ADDR 0 SIZE 0 CLEAR 0}} RESET_REQUIRED high}} POR_RM rm_stub HAS_AXIS_STATUS 0 START_IN_SHUTDOWN 1 SHUTDOWN_ON_ERROR 0 HAS_AXIS_CONTROL 0 HAS_POR_RM 1}} CP_FAMILY 7series DIRTY 0} \
+  CONFIG.GUI_RM_RESET_REQUIRED {high} \
+  CONFIG.GUI_SELECT_RM {1} \
+] [get_ips dfx_controller_0]
+generate_target all [get_files  /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0.xci]
+catch { config_ip_cache -export [get_ips -all dfx_controller_0] }
+export_ip_user_files -of_objects [get_files /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0.xci] -no_script -sync -force -quiet
+reset_run dfx_controller_0_synth_1
+launch_runs dfx_controller_0_synth_1 -jobs 6
+wait_on_run dfx_controller_0_synth_1
+export_simulation -of_objects [get_files /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/dfx_controller_0/dfx_controller_0.xci] -directory /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/ip_user_files/sim_scripts -ip_user_files_dir /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/ip_user_files -ipstatic_source_dir /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/ip_user_files/ipstatic -lib_map_path [list {modelsim=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/modelsim} {questa=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/questa} {xcelium=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/xcelium} {vcs=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/vcs} {riviera=/home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
