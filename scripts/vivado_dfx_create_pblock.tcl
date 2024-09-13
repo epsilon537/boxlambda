@@ -56,7 +56,7 @@ write_bitstream -force -bin_file ./Bitstreams/Config_rm0_stub
 close_project
 create_project -in_memory -part $part
 source [get_property REPOSITORY [get_ipdefs *dfx_controller:1.0]]/xilinx/dfx_controller_v1_0/tcl/api.tcl
-dfx_controller_v1_0::format_bin_for_icap -i ./Bitstreams/Config_rm0_j1b_pblock_rm0_inst_partial.bin
-dfx_controller_v1_0::format_bin_for_icap -i ./Bitstreams/Config_rm0_stub_pblock_rm0_inst_partial.bin
+dfx_controller_v1_0::format_bin_for_icap -bs 1 -i ./Bitstreams/Config_rm0_j1b_pblock_rm0_inst_partial.bin
+dfx_controller_v1_0::format_bin_for_icap -bs 1 -i ./Bitstreams/Config_rm0_stub_pblock_rm0_inst_partial.bin
 close_project
 

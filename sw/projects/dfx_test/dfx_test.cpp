@@ -12,18 +12,15 @@
 #include "gpio.h"
 #include "mcycle.h"
 #include "sdram.h"
-#include "j1b_hal.h"
-#include "j1b_nuc.h"
 #include "embedded_cli_setup.h"
 #include "peek_poke_cli.h"
 #include "dfx_cli.h"
 #include "ymodem_cli.h"
 #include "mem_fs_cli.h"
+#include "j1b_cli.h"
 #include "ff.h"
 
 #define STR_ROOT_DIRECTORY ""
-
-static unsigned j1b_nuc_prg[] = J1B_NUC_PRG;
 
 #define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
@@ -87,14 +84,6 @@ int main(void) {
     return -1;
   }
 
-  printf("J1B program length in bytes: %d\n", sizeof(j1b_nuc_prg));
-
-  j1b_load_program((unsigned char*)j1b_nuc_prg, sizeof(j1b_nuc_prg));
-
-  printf("Taking J1B out of reset...\n");
-
-  j1b_reg_wr(J1B_REG_CTRL, J1B_REG_CTRL_RST_N);
-
   printf("Starting CLI...\n");
 
   EmbeddedCli *cli = createEmbeddedCli(&uart0);
@@ -103,44 +92,9 @@ int main(void) {
   add_dfx_cli(cli);
   add_mem_fs_cli(cli);
   add_ymodem_cli(cli, &uart0);
+  add_j1b_cli(cli, &uart0);
 
   embeddedCliStartLoop();
-
-  // unsigned socUartRx;
-  // unsigned j1bUartRx;
-
-  // char testString[] = "42 EMIT\n";
-
-  // printf("Sending test string: %s\n", testString);
-
-  // for (int ii=0; ii<sizeof(testString); ii++) {
-  //   while(j1b_reg_rd(J1B_REG_UART_TX_TO_J1B) & J1B_REG_UART_TX_TO_J1B_DATA_WAITING);
-
-  //   j1b_reg_wr(J1B_REG_UART_TX_TO_J1B, testString[ii]);
-
-  //   j1bUartRx = j1b_reg_rd(J1B_REG_UART_RX_FROM_J1B);
-  //   if (j1bUartRx&J1B_REG_UART_RX_FROM_J1B_DATA_AVL) {
-  //      uart_tx(&uart0, (j1bUartRx&J1B_REG_UART_RX_FROM_J1B_RX_DATA_MSK));
-  //   }
-  // }
-
-  // printf("Test string sent. Forwarding UART...\n");
-
-  // for (;;) {
-  //   if (uart_rx_ready(&uart0)) {
-  //     socUartRx = (char)uart_rx(&uart0);
-
-  //     while(j1b_reg_rd(J1B_REG_UART_TX_TO_J1B) & J1B_REG_UART_TX_TO_J1B_DATA_WAITING);
-
-  //     j1b_reg_wr(J1B_REG_UART_TX_TO_J1B, socUartRx);
-  //   }
-
-  //   j1bUartRx = j1b_reg_rd(J1B_REG_UART_RX_FROM_J1B);
-  //   if (j1bUartRx&J1B_REG_UART_RX_FROM_J1B_DATA_AVL) {
-  //      while(!uart_tx_ready(&uart0));
-  //      uart_tx(&uart0, (j1bUartRx&J1B_REG_UART_RX_FROM_J1B_RX_DATA_MSK));
-  //   }
-  // }
 
   return 0;
 }

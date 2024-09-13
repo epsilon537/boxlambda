@@ -4,6 +4,7 @@ add_executable(dfx_test
  EXCLUDE_FROM_ALL
  dfx_test.cpp
  dfx_cli.cpp
+ j1b_cli.cpp
 )
 
 target_compile_options(dfx_test

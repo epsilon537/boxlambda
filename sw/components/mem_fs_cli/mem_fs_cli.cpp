@@ -54,9 +54,9 @@ extern "C" {
     }
   }
 
-  static void mem2file(EmbeddedCli *cli, char *args, void *context) {
+  static void save(EmbeddedCli *cli, char *args, void *context) {
     if (embeddedCliGetTokenCount(args) < 3) {
-        printf("Argument missing: mem2file <filename> <address> <size in bytes>\n");
+        printf("Argument missing: save <filename> <address> <size in bytes>\n");
     }
     else {
       const char *filename = embeddedCliGetToken(args, 1);
@@ -90,11 +90,11 @@ extern "C" {
     }
   }
 
-  static void file2mem(EmbeddedCli *cli, char *args, void *context) {
+  static void load(EmbeddedCli *cli, char *args, void *context) {
 
     uint16_t tokenCount = embeddedCliGetTokenCount(args);
     if (tokenCount < 1) {
-        printf("Argument missing: file2mem <filename> [address]\n");
+        printf("Argument missing: load <filename> [address]\n");
     }
     else {
       const char *filename = embeddedCliGetToken(args, 1);
@@ -190,19 +190,19 @@ void add_mem_fs_cli(EmbeddedCli* cli) {
   });
 
   embeddedCliAddBinding(cli, {
-        "mem2file",          // command name (spaces are not allowed)
-        "mem2file <filename> <address> <size in bytes> : write memory contents to file.",   // Optional help for a command (NULL for no help)
+        "save",          // command name (spaces are not allowed)
+        "save <filename> <address> <size in bytes> : write memory contents to file.",   // Optional help for a command (NULL for no help)
         true,              // flag whether to tokenize arguments (see below)
         nullptr,            // optional pointer to any application context
-        mem2file               // binding function
+        save               // binding function
   });
 
   embeddedCliAddBinding(cli, {
-        "file2mem",          // command name (spaces are not allowed)
-        "file2mem <filename> [address] : read file into memory. Alloc mem. buf. if addr. not given.",   // Optional help for a command (NULL for no help)
+        "load",          // command name (spaces are not allowed)
+        "load <filename> [address] : read file into memory. Alloc mem. buf. if addr. not given.",   // Optional help for a command (NULL for no help)
         true,              // flag whether to tokenize arguments (see below)
         nullptr,            // optional pointer to any application context
-        file2mem               // binding function
+        load               // binding function
   });
 
   embeddedCliAddBinding(cli, {

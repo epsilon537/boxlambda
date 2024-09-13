@@ -44,17 +44,23 @@ extern "C" {
 
 #define J1B_REG_GP_FROM_J1B 19
 
+#define J1B_REG_SIGNATURE 20
+
+#define J1B_SIG_VALUE 0xf041011b
+
+#define J1B_REG_MAX J1B_REG_SIGNATURE
+
 //Write to Register
 inline void j1b_reg_wr(unsigned reg_offset, unsigned val)
 {
-	assert(reg_offset <= J1B_REG_UART_RX_FROM_J1B);
+	assert(reg_offset <= J1B_REG_MAX);
 	((unsigned volatile *)(J1B_REG_BASE))[reg_offset] = val;
 }
 
 //Read from Register
 inline unsigned j1b_reg_rd(unsigned reg_offset)
 {
-	assert(reg_offset <= J1B_REG_UART_RX_FROM_J1B);
+	assert(reg_offset <= J1B_REG_MAX);
 	return ((unsigned volatile *)(J1B_REG_BASE))[reg_offset];
 }
 

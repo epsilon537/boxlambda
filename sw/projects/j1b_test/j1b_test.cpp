@@ -66,6 +66,19 @@ int main(void) {
     while(1);
   }
 
+  printf("Reading J1B core signature register...\n");
+
+  uint32_t sig = j1b_reg_rd(J1B_REG_SIGNATURE);
+
+  printf("Read signature value: 0x%x\n", sig);
+
+  if (sig != J1B_SIG_VALUE) {
+    printf("Incorrect signature! Expected 0x%x. Aborting...\n", J1B_SIG_VALUE);
+    return -1;
+  }
+
+  printf("Signature correct.\n");
+
   printf("J1B program length in bytes: %d\n", sizeof(j1b_nuc_prg));
 
   j1b_load_program((unsigned char*)j1b_nuc_prg, sizeof(j1b_nuc_prg));

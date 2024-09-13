@@ -33,6 +33,7 @@ module rm0 (
     output wire irq_out
 );
 
+  localparam [31:0] J1B_SIGNATURE = 32'hf041011b;  //Signature register value.
   localparam MHZ = 50;
   localparam integer MEM_SZ_WORDS = 8192;  //J1B Program and data memory size
   localparam integer WBS_REG_BASE_ADDR = MEM_SZ_WORDS;  //Register base address as seen by WB slave.
@@ -222,6 +223,7 @@ module rm0 (
           wbs_dat_r_reg <= {23'b0, j1b_uart_rx_data_avl, j1b_uart_rx_data};
           14'(WBS_REG_BASE_ADDR + 18): wbs_dat_r_reg <= {23'b0, j1b_uart_tx_busy, j1b_uart_tx_data};
           14'(WBS_REG_BASE_ADDR + 19): wbs_dat_r_reg <= j1b_gp_out;
+          14'(WBS_REG_BASE_ADDR + 20): wbs_dat_r_reg <= J1B_SIGNATURE;
           default: ;
         endcase
 

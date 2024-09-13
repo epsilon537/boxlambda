@@ -9,22 +9,26 @@
 
 extern "C" {
   static void ymodem_rx(EmbeddedCli *cli, char *args, void *context) {
+    uint32_t addr, buf_size, ymodem_rx_size;
 
     if (embeddedCliGetTokenCount(args) < 2) {
-      printf("Argument missing: ymodem_rx  <buf hex addr.> <buf. size in bytes>\n");
+      addr = (uint32_t)malloc(YMODEM_RX_BUF_SIZE_BYTES);
+
+      ymodem_rx_size = ymodem_receive((unsigned char*)addr, YMODEM_RX_BUF_SIZE_BYTES);
+
+      addr = (uint32_t)realloc((void*)addr, ymodem_rx_size);
     }
     else {
       const char *addrString = embeddedCliGetToken(args, 1);
       const char *sizeString = embeddedCliGetToken(args, 2);
-      uint32_t addr, buf_size;
 
       sscanf(addrString, "%08X", &addr);
       sscanf(sizeString, "%d", &buf_size);
 
-      uint32_t ymodem_rx_size = ymodem_receive((unsigned char*)addr, buf_size);
-
-      printf("Ymodem received %d bytes into buffer at address 0x%x.\n", ymodem_rx_size, addr);
+      ymodem_rx_size = ymodem_receive((unsigned char*)addr, buf_size);
     }
+
+    printf("Ymodem received %d bytes into buffer at address 0x%x.\n", ymodem_rx_size, addr);
   }
 
   static void ymodem_tx(EmbeddedCli *cli, char *args, void *context) {
@@ -55,7 +59,7 @@ void add_ymodem_cli(EmbeddedCli* cli, struct uart* uart) {
 
   embeddedCliAddBinding(cli, {
         "ymodem_rx",          // command name (spaces are not allowed)
-        "ymodem_rx <buf. hex addr.> <buf. size>: Ymodem receive into given memory buffer.",   // Optional help for a command (NULL for no help)
+        "ymodem_rx [<buf. hex addr.> <buf. size>]: Ymodem rx into given buf.. Alloc. buffer if not provided.",   // Optional help for a command (NULL for no help)
         true,              // flag whether to tokenize arguments (see below)
         nullptr,            // optional pointer to any application context
         ymodem_rx               // binding function
