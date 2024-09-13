@@ -19,7 +19,7 @@ static void writeChar(EmbeddedCli *embeddedCli, char c) {
 EmbeddedCli* createEmbeddedCli(struct uart *uart) {
   if (cli == 0) {
     EmbeddedCliConfig *config = embeddedCliDefaultConfig();
-    config->maxBindingCount = 16;
+    config->maxBindingCount = 24;
 
     assert(uart);
     uartp = uart;

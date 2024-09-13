@@ -121,6 +121,30 @@ module wb_dfx_controller (
       .i_axi_rresp(s_axi_rresp)
   );
 
+  logic rm_shutdown_req;
+  logic rm_decouple;
+  logic sw_shutdown_req;
+  logic sw_startup_req;
+
+  ila_0 ila_inst (
+      .clk(clk),  // input wire clk
+      .probe0({wbm_cyc_o, wbm_stall_i, wbm_stb_o, wbm_ack_i, wbm_adr_o, wbm_dat_i}),
+      .probe1({
+        m_axi_arlen,
+        m_axi_arsize,
+        m_axi_arburst,
+        m_axi_araddr,
+        m_axi_arvalid,
+        m_axi_arready,
+        icap_csib,
+        rm_shutdown_req,
+        rm_decouple,
+        vsm_VS_0_rm_reset,
+        sw_shutdown_req,
+        sw_startup_req
+      })  // input wire [63:0]  probe1
+  );
+
   // ICAPE2: Internal Configuration Access Port
   //         7 Series
   ICAPE2 ICAPE2_inst (
@@ -154,13 +178,13 @@ module wb_dfx_controller (
       .icap_rdwrb              (icap_rdwrb),            // output wire icap_rdwrb
       .icap_i                  (icap_o),                // input wire [31 : 0] icap_i
       .icap_o                  (icap_i),                // output wire [31 : 0] icap_o
-      .vsm_VS_0_rm_shutdown_req(),                      // output wire vsm_VS_0_rm_shutdown_req
+      .vsm_VS_0_rm_shutdown_req(rm_shutdown_req),       // output wire vsm_VS_0_rm_shutdown_req
       .vsm_VS_0_rm_shutdown_ack(1'b1),                  // input wire vsm_VS_0_rm_shutdown_ack
-      .vsm_VS_0_rm_decouple    (),                      // output wire vsm_VS_0_rm_decouple
+      .vsm_VS_0_rm_decouple    (rm_decouple),           // output wire vsm_VS_0_rm_decouple
       .vsm_VS_0_rm_reset       (vsm_VS_0_rm_reset),     // output wire vsm_VS_0_rm_reset
       .vsm_VS_0_event_error    (vsm_VS_0_event_error),  // output wire vsm_VS_0_event_error
-      .vsm_VS_0_sw_shutdown_req(),                      // output wire vsm_VS_0_sw_shutdown_req
-      .vsm_VS_0_sw_startup_req (),                      // output wire vsm_VS_0_sw_startup_req
+      .vsm_VS_0_sw_shutdown_req(sw_shutdown_req),       // output wire vsm_VS_0_sw_shutdown_req
+      .vsm_VS_0_sw_startup_req (sw_startup_req),        // output wire vsm_VS_0_sw_startup_req
       .s_axi_reg_awaddr        (s_axi_awaddr),          // input wire [31 : 0] s_axi_reg_awaddr
       .s_axi_reg_awvalid       (s_axi_awvalid),         // input wire s_axi_reg_awvalid
       .s_axi_reg_awready       (s_axi_awready),         // output wire s_axi_reg_awready

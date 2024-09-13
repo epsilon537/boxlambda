@@ -13,6 +13,7 @@ sources:
   - target: all(vivado_ip, arty-a7-100)
     files:
       - ../../dfx/dfx_controller/dfx_controller_0/dfx_controller_0.xci
+      - ../../dfx/ila/ila_0/ila_0.xci
 
   - target: verilator
     files:

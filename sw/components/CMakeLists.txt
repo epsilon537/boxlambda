@@ -18,4 +18,7 @@ add_subdirectory(rtcc)
 add_subdirectory(timelib)
 add_subdirectory(embedded_cli)
 add_subdirectory(peek_poke_cli)
+add_subdirectory(ymodem)
+add_subdirectory(ymodem_cli)
+add_subdirectory(mem_fs_cli)
 

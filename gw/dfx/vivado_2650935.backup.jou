@@ -1,0 +1,15 @@
+#-----------------------------------------------------------
+# Vivado v2023.1 (64-bit)
+# SW Build 3865809 on Sun May  7 15:04:56 MDT 2023
+# IP Build 3864474 on Sun May  7 20:36:21 MDT 2023
+# SharedData Build 3865790 on Sun May 07 13:33:03 MDT 2023
+# Start of session at: Thu Sep 12 13:54:51 2024
+# Process ID: 2650935
+# Current directory: /home/epsilon/work/boxlambda/gw/dfx
+# Command line: vivado -mode gui
+# Log file: /home/epsilon/work/boxlambda/gw/dfx/vivado.log
+# Journal file: /home/epsilon/work/boxlambda/gw/dfx/vivado.jou
+# Running On: asustuf, OS: Linux, CPU Frequency: 3550.771 MHz, CPU Physical cores: 6, Host memory: 16615 MB
+#-----------------------------------------------------------
+start_gui
+open_project /home/epsilon/work/boxlambda/gw/dfx/dfx_controller/managed_ip_project/managed_ip_project.xpr

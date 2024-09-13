@@ -141,8 +141,8 @@ module boxlambda_soc #(
     FLASH_CTRL_S,  /*Flash controller control port*/
     RESET_CTRL_S,  /*Reset Control Module.*/
     GPIO_S,  /*GPIO*/
-    DFX_S,  /*DFX Controller*/
     I2C_S,  /*I2C*/
+    DFX_S,  /*DFX Controller*/
     YM2149_S,  /*Dual YM2149 PSG core.*/
     PICORV_S,  /*PicoRV DMA slave port.*/
     UART_S,  /*UART.*/
