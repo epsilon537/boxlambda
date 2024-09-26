@@ -1,9 +1,0 @@
-// DESCRIPTION: Verilator output: Waivers generated with --waiver-output
-
-`verilator_config
-
-lint_off -rule DECLFILENAME -file "*/gw/components/rm0_j1b/rtl/rm0.sv" -match "Filename 'rm0' does not match MODULE name: 'ram32k'"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/rm0_j1b/rtl/rm0.sv" -match "Bits of signal are not used: 'wbs_adr'[19:14]"
-
-lint_off -rule UNUSEDSIGNAL -file "*/gw/components/rm0_j1b/rtl/rm0.sv" -match "Bits of signal are not used: 'j1b_dout_'[31:8]"

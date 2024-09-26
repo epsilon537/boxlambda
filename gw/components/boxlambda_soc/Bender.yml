@@ -32,7 +32,7 @@ sources:
   #OOC
   - target: boxlambda_soc
     files:
-     - ../rm0_stub/rtl/rm0.sv
+     - ../vs0_stub/rtl/vs0.sv
 
   #co-sim stuffs.
   - target: verilator

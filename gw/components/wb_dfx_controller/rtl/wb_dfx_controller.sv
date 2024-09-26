@@ -31,7 +31,7 @@ module wb_dfx_controller (
     output logic vsm_VS_0_event_error
 );
 
-  logic [   1:0] unused;
+  logic [   1:0] unused_wbm_adr;
 
   //ICAP:
   logic          icap_csib;
@@ -126,6 +126,7 @@ module wb_dfx_controller (
   logic sw_shutdown_req;
   logic sw_startup_req;
 
+`ifdef SYNTHESIS
   ila_0 ila_inst (
       .clk(clk),  // input wire clk
       .probe0({wbm_cyc_o, wbm_stall_i, wbm_stb_o, wbm_ack_i, wbm_adr_o, wbm_dat_i}),
@@ -144,6 +145,9 @@ module wb_dfx_controller (
         sw_startup_req
       })  // input wire [63:0]  probe1
   );
+`else
+  logic unused = &{rm_shutdown_req, rm_decouple, sw_shutdown_req, sw_startup_req};
+`endif
 
   // ICAPE2: Internal Configuration Access Port
   //         7 Series
@@ -233,7 +237,7 @@ module wb_dfx_controller (
       // Wishbone channel
       .o_wb_cyc(wbm_cyc_o),
       .o_wb_stb(wbm_stb_o),
-      .o_wb_addr({unused, wbm_adr_o}),
+      .o_wb_addr({unused_wbm_adr, wbm_adr_o}),
       .o_wb_sel(wbm_sel_o),
       .i_wb_stall(wbm_stall_i),
       .i_wb_ack(wbm_ack_i),

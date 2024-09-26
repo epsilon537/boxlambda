@@ -102,12 +102,6 @@ packages:
     dependencies:
     - ibex_wb_common
     - ibex_wb_core
-  rm0_j1b:
-    revision: null
-    version: null
-    source:
-      Path: ../../components/rm0_j1b
-    dependencies: []
   sdspi:
     revision: null
     version: null
@@ -132,6 +126,12 @@ packages:
     version: null
     source:
       Path: ../../components/boxlambda_soc/../../components/vera
+    dependencies: []
+  vs0_j1b:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/vs0_j1b
     dependencies: []
   wb_dfx_controller:
     revision: null

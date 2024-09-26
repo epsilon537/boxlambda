@@ -8,7 +8,7 @@ package:
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
-  rm0_j1b: { path: "../../components/rm0_j1b" }
+  vs0_j1b: { path: "../../components/vs0_j1b" }
 
 sources:
   - target: constraints

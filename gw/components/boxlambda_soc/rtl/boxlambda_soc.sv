@@ -117,7 +117,7 @@ module boxlambda_soc #(
     COREI_M,  /*Ibex CPU instruction port.*/
     CORED_M,  /*Ibex CPU data port.*/
     PICORV_M,  /*PicoRV DMA.*/
-    RM0_M,  /*Reconfigurable Module 0 Bus Master.*/
+    VS0_M,  /*Virtual Socket 0 Bus Master.*/
     ARBITER_M  /*Wishbone Arbiter Bus Master port.*/
   } wb_xbar_master_e;
 
@@ -129,7 +129,7 @@ module boxlambda_soc #(
     DMEM_1_S,  /*DMEM port 1. Typically used by DMA.*/
     SHARED_BUS_S,  /*Connection to the shared bus.*/
     VERA_S,  /*VERA slave port.*/
-    RM0_S,  /*Reconfigurable Module 0 Slave.*/
+    VS0_S,  /*Virtual Socket 0 Slave.*/
     DDR_USR_S  /*LiteDRAM data port.*/
   } wb_xbar_slave_e;
 
@@ -166,7 +166,7 @@ module boxlambda_soc #(
     IRQ_ID_GPIO,
     IRQ_ID_SDSPI,
     IRQ_ID_DMAC,
-    IRQ_ID_RM_0,
+    IRQ_ID_VS_0,
     IRQ_ID_RM_1,  /*VERA*/
     IRQ_ID_RM_2
   } fast_irq_ids_e;
@@ -228,7 +228,7 @@ module boxlambda_soc #(
   //Crossbar slave addresses. Right shift by two to convert byte address values to word address values.
   localparam [NUM_XBAR_SLAVES*AW-1:0] XBAR_SLAVE_ADDRS = {
     /*DDR_USR_S*/{AW'('h20000000 >> 2)},
-    /*RM0_S*/{AW'('h13000000 >> 2)},
+    /*VS0_S*/{AW'('h13000000 >> 2)},
     /*VERA_S*/{AW'('h12000000 >> 2)},
     /*SHARED_BUS_S*/{AW'('h10000000 >> 2)},
     /*DMEM_1_S*/{AW'('h00120000 >> 2)},
@@ -240,7 +240,7 @@ module boxlambda_soc #(
   //Crossbar slave address mask. Right-shift by two to convert byte size to word size.
   localparam [NUM_XBAR_SLAVES*AW-1:0] XBAR_SLAVE_ADDR_MASKS = {
     /*DDR_USR_S*/{AW'(~('h0fffffff >> 2))},
-    /*RM0_S*/{AW'(~('h000fffff >> 2))},
+    /*VS0_S*/{AW'(~('h000fffff >> 2))},
     /*VERA_S*/{AW'(~('h0007ffff >> 2))},
     /*SHARED_BUS_S*/{AW'(~('h01ffffff >> 2))},
     /*DMEM_1_S*/{AW'(~(DPRAM_BYTE_ADDR_MASK >> 2))},
@@ -263,8 +263,8 @@ module boxlambda_soc #(
   //ndm_reset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
   //dm_reset: Debug-Module Reset issued by Reset Controller.
   //usbreset: Reset of the USB clock domain.
-  //rm0_reset: Reset fo Reconfigurable Module 0.
-  logic ndm_reset_req, ndm_reset, dm_reset, usb_reset, rm0_reset;
+  //vs0_reset: Reset fo Virtual Socket 0.
+  logic ndm_reset_req, ndm_reset, dm_reset, usb_reset, vs0_reset;
   logic por_completed;  //Indicates Power-On Reset has been completed.
   logic debug_req;  //Debug Request signal.
 
@@ -589,7 +589,7 @@ module boxlambda_soc #(
           .wbs_ack(shared_bus_wbs[DFX_S].ack),
           .wbs_we(shared_bus_wbs[DFX_S].we),
           .wbs_err(shared_bus_wbs[DFX_S].err),
-          .vsm_VS_0_rm_reset(rm0_reset),
+          .vsm_VS_0_rm_reset(vs0_reset),
           .vsm_VS_0_event_error(fast_irqs[IRQ_ID_DFX])
       );
     end else begin
@@ -601,7 +601,7 @@ module boxlambda_soc #(
       assign arbiter_wbm[DFX_M].we = 0;
       assign fast_irqs[IRQ_ID_DFX] = 1'b0;
 
-      assign rm0_reset = ndm_reset;
+      assign vs0_reset = ndm_reset;
     end
   endgenerate
 
@@ -778,36 +778,36 @@ module boxlambda_soc #(
       .b_cyc_i(xbar_wbs[DMEM_1_S].cyc)  // CYC_I cycle input
   );
 
-  //Reconfigurable Module 0 Interface
-  rm0 rm0_inst (
+  //Virtual Socket 0 Interface
+  vs0 vs0_inst (
       .sys_clk(sys_clk),
-      .rst(rm0_reset),
+      .rst(vs0_reset),
       //32-bit pipelined Wishbone master interface 0.
-      .wbm_adr_o(xbar_wbm[RM0_M].adr),
-      .wbm_dat_o(xbar_wbm[RM0_M].dat_m),
-      .wbm_dat_i(xbar_wbm[RM0_M].dat_s),
-      .wbm_sel_o(xbar_wbm[RM0_M].sel),
-      .wbm_stall_i(xbar_wbm[RM0_M].stall),
-      .wbm_cyc_o(xbar_wbm[RM0_M].cyc),
-      .wbm_stb_o(xbar_wbm[RM0_M].stb),
-      .wbm_ack_i(xbar_wbm[RM0_M].ack),
-      .wbm_we_o(xbar_wbm[RM0_M].we),
-      .wbm_err_i(xbar_wbm[RM0_M].err),
+      .wbm_adr_o(xbar_wbm[VS0_M].adr),
+      .wbm_dat_o(xbar_wbm[VS0_M].dat_m),
+      .wbm_dat_i(xbar_wbm[VS0_M].dat_s),
+      .wbm_sel_o(xbar_wbm[VS0_M].sel),
+      .wbm_stall_i(xbar_wbm[VS0_M].stall),
+      .wbm_cyc_o(xbar_wbm[VS0_M].cyc),
+      .wbm_stb_o(xbar_wbm[VS0_M].stb),
+      .wbm_ack_i(xbar_wbm[VS0_M].ack),
+      .wbm_we_o(xbar_wbm[VS0_M].we),
+      .wbm_err_i(xbar_wbm[VS0_M].err),
       //32-bit pipelined Wishbone slave interface.
-      .wbs_adr(xbar_wbs[RM0_S].adr[19:0]),
-      .wbs_dat_w(xbar_wbs[RM0_S].dat_m),
-      .wbs_dat_r(xbar_wbs[RM0_S].dat_s),
-      .wbs_sel(xbar_wbs[RM0_S].sel),
-      .wbs_stall(xbar_wbs[RM0_S].stall),
-      .wbs_cyc(xbar_wbs[RM0_S].cyc),
-      .wbs_stb(xbar_wbs[RM0_S].stb),
-      .wbs_ack(xbar_wbs[RM0_S].ack),
-      .wbs_we(xbar_wbs[RM0_S].we),
-      .wbs_err(xbar_wbs[RM0_S].err),
-      //Input IRQs - RM0 receives the same 32 IRQs with the same IRQ_IDs (bit
-      //positions) as the Ibex CPU. The bit position assigned to the RM_0 itself is cleared, however.
-      .irq_in({1'b0, fast_irqs & ~(1'b1 << IRQ_ID_RM_0), 8'b0, timer_irq, 7'b0}),
-      .irq_out(fast_irqs[IRQ_ID_RM_0])
+      .wbs_adr(xbar_wbs[VS0_S].adr[19:0]),
+      .wbs_dat_w(xbar_wbs[VS0_S].dat_m),
+      .wbs_dat_r(xbar_wbs[VS0_S].dat_s),
+      .wbs_sel(xbar_wbs[VS0_S].sel),
+      .wbs_stall(xbar_wbs[VS0_S].stall),
+      .wbs_cyc(xbar_wbs[VS0_S].cyc),
+      .wbs_stb(xbar_wbs[VS0_S].stb),
+      .wbs_ack(xbar_wbs[VS0_S].ack),
+      .wbs_we(xbar_wbs[VS0_S].we),
+      .wbs_err(xbar_wbs[VS0_S].err),
+      //Input IRQs - VS0 receives the same 32 IRQs with the same IRQ_IDs (bit
+      //positions) as the Ibex CPU. The bit position assigned to the VS_0 itself is cleared, however.
+      .irq_in({1'b0, fast_irqs & ~(1'b1 << IRQ_ID_VS_0), 8'b0, timer_irq, 7'b0}),
+      .irq_out(fast_irqs[IRQ_ID_VS_0])
   );
 
   //The UART.
