@@ -10,18 +10,18 @@ static struct uart* uartp = 0;
 
 extern "C" {
   static void j1b_boot(EmbeddedCli *cli, char *args, void *context) {
-    // printf("Reading core signature register...\n");
+    printf("Reading core signature register...\n");
 
-    // uint32_t sig = j1b_reg_rd(J1B_REG_SIGNATURE);
+    uint32_t sig = j1b_reg_rd(J1B_REG_SIGNATURE);
 
-    // printf("Read signature value: 0x%x\n", sig);
+    printf("Read signature value: 0x%x\n", sig);
 
-    // if (sig != J1B_SIG_VALUE) {
-    //   printf("Incorrect signature! Expected 0x%x. Aborting...\n", J1B_SIG_VALUE);
-    //   return;
-    // }
+    if (sig != J1B_SIG_VALUE) {
+      printf("Incorrect signature! Expected 0x%x. Aborting...\n", J1B_SIG_VALUE);
+      return;
+    }
 
-    // printf("Signature correct.\n");
+    printf("Signature correct.\n");
 
     printf("J1B program length in bytes: %d\n", sizeof(j1b_nuc_prg));
 

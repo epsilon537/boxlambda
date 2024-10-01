@@ -3,13 +3,13 @@
 # SW Build 3865809 on Sun May  7 15:04:56 MDT 2023
 # IP Build 3864474 on Sun May  7 20:36:21 MDT 2023
 # SharedData Build 3865790 on Sun May 07 13:33:03 MDT 2023
-# Start of session at: Sat Sep 21 14:52:17 2024
-# Process ID: 994320
+# Start of session at: Mon Sep 30 17:57:23 2024
+# Process ID: 71869
 # Current directory: /home/epsilon/work/boxlambda/gw/dfx
 # Command line: vivado -mode gui
 # Log file: /home/epsilon/work/boxlambda/gw/dfx/vivado.log
 # Journal file: /home/epsilon/work/boxlambda/gw/dfx/vivado.jou
-# Running On: asustuf, OS: Linux, CPU Frequency: 1133.057 MHz, CPU Physical cores: 6, Host memory: 16615 MB
+# Running On: ptr-d6bjo4p2ihcck7yxpxi.18120a2.ip6.access.telenet.be, OS: Linux, CPU Frequency: 4807.597 MHz, CPU Physical cores: 16, Host memory: 32846 MB
 #-----------------------------------------------------------
 start_gui
 set part "xc7a100ticsg324-1L"

@@ -19,7 +19,7 @@ gw_project_rules(
     VERILATOR_CPP_FLAGS
         "-g -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang -I${SDL2_INCLUDE_DIRS}"
     VERILATOR_LD_FLAGS
-        "-g -lncurses ${SDL2_LIBRARIES}"
+        "-g -lncurses -lSDL2"
 )
 
 #Add testcase. This one's a script, not just the Verilator Vmodel executable.
