@@ -1,18 +1,19 @@
-#FPGA and simulation builds have different top-levels.
 if(CMAKE_BUILD_TYPE STREQUAL "fpga")
-  set(top_module boxlambda_top)
+  #gw_project_rules_vivado() function is defined in the parent CMakeLists.txt.
+  gw_project_rules_vivado(
+      TOP_MODULE boxlambda_top
+      PROJECT_NAME j1b_test
+      MEM_FILE_TARGET j1b_test_ram
+  )
 else()
-  set(top_module sim_main)
+  #gw_project_rules_verilator() function is defined in the parent CMakeLists.txt.
+  gw_project_rules_verilator(
+      TOP_MODULE sim_main
+      PROJECT_NAME j1b_test
+      MEM_FILE_TARGET j1b_test_ram
+      VERILATOR_CPP_FLAGS
+          "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
+      VERILATOR_LD_FLAGS
+          -lncurses
+  )
 endif()
-
-#gw_project_rules() function is defined in the parent CMakeLists.txt.
-gw_project_rules(
-    TOP_MODULE ${top_module}
-    PROJECT_NAME j1b_test
-    MEM_FILE_TARGET j1b_test_ram
-    VERILATOR_CPP_FLAGS
-        "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang -I${PROJECT_SOURCE_DIR}/sub/wbi2c/bench/cpp"
-    VERILATOR_LD_FLAGS
-        -lncurses
-)
-

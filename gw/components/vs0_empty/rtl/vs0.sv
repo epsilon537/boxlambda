@@ -16,7 +16,7 @@ module vs0 (
     input logic wbm_err_i,
 
     //32-bit pipelined Wishbone slave interface.
-    input logic [19:0] wbs_adr,
+    input logic [17:0] wbs_adr,
     input logic [31:0] wbs_dat_w,
     output logic [31:0] wbs_dat_r,
     input logic [3:0] wbs_sel,

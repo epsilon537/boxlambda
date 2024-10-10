@@ -506,9 +506,7 @@ set_property CFGBVS VCCO [current_design]
 
 # The 12MHz USB clock domain is asynchronous relative to the 100MHz clock domain going into
 # LiteDRAM producing the 50 and 100MHz sysclk trees.
-set_clock_groups -asynchronous \
--group [get_clocks -include_generated_clock clk_12_unbuf] \
--group [get_clocks -include_generated_clock clk_100_unbuf]
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clock clk_12_unbuf] -group [get_clocks -include_generated_clock clk_100_unbuf]
 
 # Bitstream configuration options
 set_property BITSTREAM.GENERAL.COMPRESS False [current_design]
@@ -516,3 +514,4 @@ set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]
 set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR No [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
 set_property BITSTREAM.CONFIG.SPI_FALL_EDGE YES [current_design]
+

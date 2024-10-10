@@ -11,7 +11,7 @@ dependencies:
   ibex: { path: "../../components/ibex" } # For the clock generator
 
 sources:
-  - target: constraints
+  - target: prj_constraints
     files:
       - constrs/Arty-A7-35-Master.xdc
   - target: memory

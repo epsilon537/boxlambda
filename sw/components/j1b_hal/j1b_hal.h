@@ -2,6 +2,7 @@
 #define J1B_HAL_H
 
 #include <assert.h>
+#include "vs0_hal.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,7 +11,7 @@ extern "C" {
 /*
  * J1B hardware access layer.
  */
-#define J1B_BASE 0x13000000
+#define J1B_BASE VS0_BASE
 
 //Program Memory Base Address and size
 #define J1B_PROG_MEM_BASE J1B_BASE
@@ -44,11 +45,9 @@ extern "C" {
 
 #define J1B_REG_GP_FROM_J1B 19
 
-#define J1B_REG_SIGNATURE 20
-
 #define J1B_SIG_VALUE 0xf041011b
 
-#define J1B_REG_MAX J1B_REG_SIGNATURE
+#define J1B_REG_MAX J1B_REG_GP_FROM_J1B
 
 //Write to Register
 inline void j1b_reg_wr(unsigned reg_offset, unsigned val)

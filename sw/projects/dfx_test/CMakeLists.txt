@@ -16,9 +16,9 @@ target_include_directories(dfx_test
   PRIVATE
   ${PROJECT_SOURCE_DIR}/sw/components/reset/
   ${PROJECT_SOURCE_DIR}/sw/components/dfx/
+  ${PROJECT_SOURCE_DIR}/sw/components/vs0_hal/
 )
 
-#spiflash_test is linked as a flash memory image.
 link_and_create_mem_file(dfx_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 

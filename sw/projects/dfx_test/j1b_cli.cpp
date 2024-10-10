@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "embedded_cli.h"
+#include "vs0_hal.h"
 #include "j1b_hal.h"
 #include "j1b_nuc.h"
 
@@ -12,7 +13,7 @@ extern "C" {
   static void j1b_boot(EmbeddedCli *cli, char *args, void *context) {
     printf("Reading core signature register...\n");
 
-    uint32_t sig = j1b_reg_rd(J1B_REG_SIGNATURE);
+    uint32_t sig = vs0_reg_rd(VS0_REG_SIGNATURE);
 
     printf("Read signature value: 0x%x\n", sig);
 

@@ -11,7 +11,7 @@ dependencies:
   usb_hid_device: { path: "../../components/usb_hid_device" }
 
 sources:
-  - target: constraints
+  - target: prj_constraints
     files:
       - ../boxlambda_top/constrs/boxlambda_soc.xdc
   - target: all(arty-a7-35, not(vivado_ip))

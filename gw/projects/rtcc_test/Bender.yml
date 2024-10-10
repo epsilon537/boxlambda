@@ -10,7 +10,7 @@ dependencies:
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
 
 sources:
-  - target: constraints
+  - target: prj_constraints
     files:
       - ../boxlambda_top/constrs/boxlambda_soc.xdc
   - target: all(arty-a7-35, not(vivado_ip))

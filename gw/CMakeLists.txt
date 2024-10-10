@@ -20,19 +20,19 @@ add_custom_target(lint_all ALL)
 #ARGN: Variables argument list to be passed to the tcl script.
 function(vivado_cmd cmd tcl_script)
   list(JOIN ARGN " " _tcl_args)
-  set(${cmd} "vivado -nolog -nojournal -mode batch -notrace -source ${tcl_script} -tclargs ${_tcl_args}" PARENT_SCOPE)
+  set(${cmd} "vivado -mode batch -source ${tcl_script} -tclargs ${_tcl_args}" PARENT_SCOPE)
 endfunction()
 
 #Function grouping common gateware build rules.
 #TOP_MODULE: name of top module.
 #PRJ_COMP_NAME: project or component name, e.g. wbuart32
-#CONSTRAINTS_FILE_LIST: Constraints file list, if any.
+#PRJ_CONSTRAINTS_FILE_LIST: Constraints file list, if any.
 #MEM_FILE_LIST: Mem file list, if any.
 #VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty.
 #VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty.
 function (gw_common_rules)
   set(options)
-  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC CONSTRAINTS_FILE_LIST MEM_FILE_LIST VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
+  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC PRJ_CONSTRAINTS_FILE_LIST MEM_FILE_LIST VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_common_rules
@@ -44,7 +44,7 @@ function (gw_common_rules)
 
   set(_top_module ${gw_common_rules_TOP_MODULE})
   set(_prj_comp_name ${gw_common_rules_PRJ_COMP_NAME})
-  set(_constraints_file_list ${gw_common_rules_CONSTRAINTS_FILE_LIST})
+  set(_prj_constraints_file_list ${gw_common_rules_PRJ_CONSTRAINTS_FILE_LIST})
   set(_ooc ${gw_common_rules_OOC})
   set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
   set(_verilator_cpp_flags ${gw_common_rules_VERILATOR_CPP_FLAGS})
@@ -114,7 +114,7 @@ function (gw_common_rules)
             BYPRODUCTS
                 ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.vivado_sources.dep
             COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vivado_sources ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${BL_TARGET_FPGA} ${_prj_comp_name}
+                ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_sources_and_deps.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vivado_sources ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${BL_TARGET_FPGA} ${_prj_comp_name}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
@@ -144,15 +144,14 @@ function (gw_common_rules)
                     -ooc ${_ooc}
                     -part ${PART} -sources ${_prj_comp_name}.vivado_sources
                     -vivado_ips ${_prj_comp_name}.vivado_ip_file_list
-                    -outputDir ${CMAKE_CURRENT_BINARY_DIR} -top ${_top_module})
-
+                    -top ${_top_module})
     #If a constraints file list is given, append it to the Vivado command string.
-    if (NOT ${_constraints_file_list} STREQUAL "")
-      string(APPEND create_project_cmd " -constraints " ${_constraints_file_list})
+    if (NOT ${_prj_constraints_file_list} STREQUAL "")
+        string(APPEND create_project_cmd " -prj_constraints " ${_prj_constraints_file_list})
     endif()
     #If a mem file list is given, append it to the Vivado command string.
     if (NOT ${_mem_file_list} STREQUAL "")
-      string(APPEND create_project_cmd " -mem_files " ${_mem_file_list})
+        string(APPEND create_project_cmd " -mem_files " ${_mem_file_list})
     endif()
 
     #Custom command executing the create_project command string.
@@ -175,7 +174,7 @@ function (gw_common_rules)
             DEPENDS
                 ${_prj_comp_name}.vivado_ip_file_list
                 ${_prj_comp_name}.vivado_sources
-                ${_constraints_file_list}
+                ${_prj_constraints_file_list}
                 ${_mem_file_list}
             COMMENT
                 "Creating Vivado project."

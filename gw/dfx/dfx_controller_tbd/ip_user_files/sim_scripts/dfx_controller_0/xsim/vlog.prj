@@ -1,5 +1,0 @@
-
-verilog xil_defaultlib "glbl.v"
-
-# Do not sort compile order
-nosort

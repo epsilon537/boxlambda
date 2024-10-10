@@ -3,8 +3,20 @@
 #include <stdio.h>
 #include "embedded_cli.h"
 #include "dfx_hal.h"
+#include "vs0_hal.h"
+#include "ff.h"
+#include <stdlib.h>
 
+#define CORE_REG_SIG 
 extern "C" {
+  static void dfx_read_core_sig(EmbeddedCli *cli, char *args, void *context) {
+    printf("Reading core signature register...\n");
+
+    uint32_t sig = vs0_reg_rd(VS0_REG_SIGNATURE);
+
+    printf("Read signature value: 0x%x\n", sig);
+  }
+
   static void dfx_control(EmbeddedCli *cli, char *args, void *context) {
     if (embeddedCliGetTokenCount(args) < 3) {
         printf("Argument(s) missing: dfx_control <cmd> <extra byte> <extra halfword>.\n");
@@ -146,6 +158,65 @@ extern "C" {
       }
     }
   }
+
+  static void dfx_load_module(EmbeddedCli *cli, char *args, void *context) {
+
+    uint16_t tokenCount = embeddedCliGetTokenCount(args);
+    if (tokenCount < 1) {
+        printf("Argument missing: dfx_load_module <filename>\n");
+    }
+    else {
+      const char *filename = embeddedCliGetToken(args, 1);
+	    FIL file_object;
+      uint32_t addr;
+      uint32_t size;
+
+      /* Open the file */
+      FRESULT res = f_open(&file_object, (char const *)filename, FA_OPEN_EXISTING | FA_READ);
+      if (res != FR_OK) {
+        printf("FatFS file open error! Error code: %d\n", res);
+        return;
+      }
+
+      size = f_size(&file_object);
+
+      addr = (uint32_t)malloc(size);
+      assert(addr);
+
+      printf("Loading file %s, size: %d bytes, into memory at address 0x%x.\n", filename, size, addr);
+
+      /* Read file */
+      UINT bytes_read;
+      res = f_read(&file_object, (void*)addr, size, &bytes_read);
+      if (res != FR_OK) {
+        printf("FatFS file read error! Error code: %d\n", res);
+        return;
+      }
+
+      /* Close the file*/
+      f_close(&file_object);
+
+      /* Temporarily shut down the DFX Controller */
+      dfx_reg_wr(DFX_CONTROL_REG, 0);
+
+      /* Point BS_INFO register 0 to the memory buffer holding the module */
+      dfx_reg_wr(DFX_BS_ADDRESS_0_REG, addr);
+      dfx_reg_wr(DFX_BS_SIZE_0_REG, size);
+
+      /* Turn the DFX Controller back on */
+      dfx_reg_wr(DFX_CONTROL_REG, 1);
+
+      printf("Issuing DFX trigger...\n");
+
+      /* Issue a trigger (index 0) to kick off the loading of the module into the virtual socket*/
+      dfx_reg_wr(DFX_SW_TRIGGER_REG, 0);
+
+      /* Release the memory buffer */
+      free((void*)addr);
+
+      printf("Done.\n");
+    }
+  }
 }
 
 void add_dfx_cli(EmbeddedCli* cli) {
@@ -205,6 +276,22 @@ void add_dfx_cli(EmbeddedCli* cli) {
         true,              // flag whether to tokenize arguments (see below)
         nullptr,            // optional pointer to any application context
         dfx_bs_info_set               // binding function
+  });
+
+  embeddedCliAddBinding(cli, {
+        "dfx_read_core_sig",          // command name (spaces are not allowed)
+        "Read core's signature register",   // Optional help for a command (NULL for no help)
+        true,              // flag whether to tokenize arguments (see below)
+        nullptr,            // optional pointer to any application context
+        dfx_read_core_sig  // binding function
+  });
+
+  embeddedCliAddBinding(cli, {
+        "dfx_load_module",          // command name (spaces are not allowed)
+        "dfx_load_module <filename>",   // Optional help for a command (NULL for no help)
+        true,              // flag whether to tokenize arguments (see below)
+        nullptr,            // optional pointer to any application context
+        dfx_load_module  // binding function
   });
 }
 

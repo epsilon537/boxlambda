@@ -11,7 +11,7 @@ dependencies:
   vs0_stub: { path: "../../components/vs0_stub" }
 
 sources:
-  - target: constraints
+  - target: prj_constraints
     files:
       - ../boxlambda_top/constrs/boxlambda_soc.xdc
   - target: all(arty-a7-35, not(vivado_ip))

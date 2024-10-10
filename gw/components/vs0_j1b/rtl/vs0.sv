@@ -16,7 +16,7 @@ module vs0 (
     input logic wbm_err_i,
 
     //32-bit pipelined Wishbone slave interface.
-    input logic [19:0] wbs_adr,
+    input logic [17:0] wbs_adr,
     input logic [31:0] wbs_dat_w,
     output logic [31:0] wbs_dat_r,
     input logic [3:0] wbs_sel,
@@ -81,9 +81,9 @@ module vs0 (
   assign wbm_cyc_o = 1'b0;
 
   //WB slave handshake
-  assign do_wbs_rd_reg = wbs_cyc && wbs_stb && (~wbs_we) && (wbs_adr[13:0] >= 14'(WBS_REG_BASE_ADDR));
-  assign do_wbs_wr_reg = wbs_cyc && wbs_stb && wbs_we && (wbs_adr[13:0] >= 14'(WBS_REG_BASE_ADDR));
-  assign do_wbs_wr_mem = wbs_cyc && wbs_stb && wbs_we && (wbs_adr[13:0] < 14'(WBS_REG_BASE_ADDR));
+  assign do_wbs_rd_reg = wbs_cyc && wbs_stb && (~wbs_we) && (wbs_adr >= 18'(WBS_REG_BASE_ADDR));
+  assign do_wbs_wr_reg = wbs_cyc && wbs_stb && wbs_we && (wbs_adr >= 18'(WBS_REG_BASE_ADDR));
+  assign do_wbs_wr_mem = wbs_cyc && wbs_stb && wbs_we && (wbs_adr < 18'(WBS_REG_BASE_ADDR));
 
   always_ff @(posedge sys_clk) begin
     do_ack_wbs <= 1'b0;
@@ -93,7 +93,7 @@ module vs0 (
     end
   end
 
-  assign wbs_dat_r = (wbs_adr[13:0] < 14'(WBS_REG_BASE_ADDR)) ? wbs_dat_r_mem : wbs_dat_r_reg;
+  assign wbs_dat_r = (wbs_adr < 18'(WBS_REG_BASE_ADDR)) ? wbs_dat_r_mem : wbs_dat_r_reg;
   assign wbs_ack   = do_ack_wbs & wbs_cyc;
   assign wbs_stall = 1'b0;
   assign wbs_err   = 1'b0;
@@ -107,7 +107,7 @@ module vs0 (
     for (int i = 0; i < 32; i++) begin
       irq_out_next[i] = irq_out_reg[i];
       //Ack IRQ by writing 1 to corresponding bit in register 0 (IRQ_OUT)
-      if (do_wbs_wr_reg && (wbs_adr[13:0] == 14'(WBS_REG_BASE_ADDR + 0)) && wbs_dat_w[i])
+      if (do_wbs_wr_reg && (wbs_adr == 18'(WBS_REG_BASE_ADDR + 0)) && wbs_dat_w[i])
         irq_out_next[i] = 1'b0;
     end
     //No IRQ support currently.
@@ -204,30 +204,30 @@ module vs0 (
 
       //WBS register writes
       if (do_wbs_wr_reg) begin
-        case (wbs_adr[13:0])  //wbs address is a word address.
-          14'(WBS_REG_BASE_ADDR + 2): ctrl_reg <= wbs_dat_w;
-          14'(WBS_REG_BASE_ADDR + 16):
+        case (wbs_adr)  //wbs address is a word address.
+          18'(WBS_REG_BASE_ADDR + 2): ctrl_reg <= wbs_dat_w;
+          18'(WBS_REG_BASE_ADDR + 16):
           {j1b_uart_rx_data_avl, j1b_uart_rx_data} <= {1'b1, wbs_dat_w[7:0]};
-          14'(WBS_REG_BASE_ADDR + 17): j1b_gp_in <= wbs_dat_w;
+          18'(WBS_REG_BASE_ADDR + 17): j1b_gp_in <= wbs_dat_w;
           default: ;
         endcase
       end
 
       //WBS register read
       if (do_wbs_rd_reg) begin
-        case (wbs_adr[13:0])
-          14'(WBS_REG_BASE_ADDR): wbs_dat_r_reg <= irq_out_reg;
-          14'(WBS_REG_BASE_ADDR + 1): wbs_dat_r_reg <= irq_in_reg;
-          14'(WBS_REG_BASE_ADDR + 2): wbs_dat_r_reg <= ctrl_reg;
-          14'(WBS_REG_BASE_ADDR + 16):
+        case (wbs_adr)
+          18'(WBS_REG_BASE_ADDR): wbs_dat_r_reg <= irq_out_reg;
+          18'(WBS_REG_BASE_ADDR + 1): wbs_dat_r_reg <= irq_in_reg;
+          18'(WBS_REG_BASE_ADDR + 2): wbs_dat_r_reg <= ctrl_reg;
+          18'(WBS_REG_BASE_ADDR + 16):
           wbs_dat_r_reg <= {23'b0, j1b_uart_rx_data_avl, j1b_uart_rx_data};
-          14'(WBS_REG_BASE_ADDR + 18): wbs_dat_r_reg <= {23'b0, j1b_uart_tx_busy, j1b_uart_tx_data};
-          14'(WBS_REG_BASE_ADDR + 19): wbs_dat_r_reg <= j1b_gp_out;
-          14'(WBS_REG_BASE_ADDR + 20): wbs_dat_r_reg <= J1B_SIGNATURE;
+          18'(WBS_REG_BASE_ADDR + 18): wbs_dat_r_reg <= {23'b0, j1b_uart_tx_busy, j1b_uart_tx_data};
+          18'(WBS_REG_BASE_ADDR + 19): wbs_dat_r_reg <= j1b_gp_out;
+          18'h3ffff: wbs_dat_r_reg <= J1B_SIGNATURE;
           default: ;
         endcase
 
-        if (wbs_adr[13:0] == 14'(WBS_REG_BASE_ADDR + 18)) j1b_uart_tx_busy <= 1'b0;
+        if (wbs_adr == 18'(WBS_REG_BASE_ADDR + 18)) j1b_uart_tx_busy <= 1'b0;
       end
 
       //J1B register reads

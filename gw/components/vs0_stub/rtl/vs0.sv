@@ -16,7 +16,7 @@ module vs0 (
     input logic wbm_err_i,
 
     //32-bit pipelined Wishbone slave interface.
-    input logic [19:0] wbs_adr,
+    input logic [17:0] wbs_adr,
     input logic [31:0] wbs_dat_w,
     output logic [31:0] wbs_dat_r,
     input logic [3:0] wbs_sel,
@@ -32,6 +32,8 @@ module vs0 (
     //Output IRQ signal
     output wire irq_out
 );
+
+  localparam [31:0] STUB_SIGNATURE = 32'h0000510b;  //Signature register value.
 
   logic unused = &{wbm_dat_i, wbm_ack_i, wbm_stall_i, wbm_err_i, wbs_adr, wbs_dat_w, wbs_sel, wbs_we};
 
@@ -50,6 +52,6 @@ module vs0 (
 
   assign wbs_stall = 1'b0;
   assign wbs_err   = 1'b0;
-  assign wbs_dat_r = 32'b0;
+  assign wbs_dat_r = STUB_SIGNATURE;
   assign irq_out   = 1'b0;
 endmodule

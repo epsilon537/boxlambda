@@ -11,9 +11,12 @@ dependencies:
   vs0_empty: { path: "../../components/vs0_empty" }
 
 sources:
-  - target: constraints
+  - target: prj_constraints
     files:
       - ../boxlambda_top/constrs/boxlambda_soc.xdc
+  - target: dfx_constraints
+    files:
+      - ../boxlambda_top/constrs/vs0_pblock.xdc
   - target: all(arty-a7-35, not(vivado_ip))
     defines:
       VRAM_SIZE_BYTES: 65536

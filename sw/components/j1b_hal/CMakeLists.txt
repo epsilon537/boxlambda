@@ -15,4 +15,5 @@ target_compile_options(j1b_hal
 target_include_directories(j1b_hal
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}
+        ${PROJECT_SOURCE_DIR}/sw/components/vs0_hal
 )
