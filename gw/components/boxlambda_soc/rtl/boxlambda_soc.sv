@@ -118,7 +118,7 @@ module boxlambda_soc #(
     CORED_M,  /*Ibex CPU data port.*/
     PICORV_M,  /*PicoRV DMA.*/
     VS0_M,  /*Virtual Socket 0 Bus Master.*/
-    ARBITER_M  /*Wishbone Arbiter Bus Master port.*/
+    ARBITER_M  /*DM/DFX Wishbone Arbiter Bus Master port.*/
   } wb_xbar_master_e;
 
   //Enum of Bus Slaves attached to the cross bar.
@@ -178,8 +178,8 @@ module boxlambda_soc #(
   localparam AW = 28;  //Wishbone Bus address width. Note that we use word addressing.
   localparam DW = 32;  //Wishbone Bus data width.
 
-  localparam NUM_ARBITER_MASTERS = 2; //Number of bus masters connected to the DM/DFX Wishbone arbiter. Has to be 2.
-  localparam NUM_ARBITER_SLAVES = 1; //Number of bus slaves attached to the DM/DFX Wishbone arbiter. Has to be 1.
+  localparam NUM_ARBITER_MASTERS = 2; //Number of bus masters connected to the DM/DFX Wishbone arbiter. Has to be 2 (the arbiter arbitrates between 2 ports only).
+  localparam NUM_ARBITER_SLAVES = 1; //Number of bus slaves attached to the DM/DFX Wishbone arbiter. Has to be 1 (the arbiter has only one 'output' port).
   localparam NUM_XBAR_MASTERS = 5;
   localparam NUM_XBAR_SLAVES = 8;
   localparam NUM_SHARED_BUS_MASTERS = 1;
@@ -263,7 +263,7 @@ module boxlambda_soc #(
   //ndm_reset: Non-Debug-Module-Reset issued by Reset Controller i.e. reset everything except Debug Module.
   //dm_reset: Debug-Module Reset issued by Reset Controller.
   //usbreset: Reset of the USB clock domain.
-  //vs0_reset: Reset fo Virtual Socket 0.
+  //vs0_reset: Reset of Virtual Socket 0, controlled by the DFX controller.
   logic ndm_reset_req, ndm_reset, dm_reset, usb_reset, vs0_reset;
   logic por_completed;  //Indicates Power-On Reset has been completed.
   logic debug_req;  //Debug Request signal.
@@ -419,8 +419,7 @@ module boxlambda_soc #(
       .i_err(xbar_wbm[ARBITER_M].err)
   );
 
-  //The return data signal. For some reason this isn't included in the arbiter
-  //module.
+  //The return data signal. For some reason this isn't included in the arbiter module.
   assign arbiter_wbm[DM_M].dat_s  = xbar_wbm[ARBITER_M].dat_s;
   assign arbiter_wbm[DFX_M].dat_s = xbar_wbm[ARBITER_M].dat_s;
 

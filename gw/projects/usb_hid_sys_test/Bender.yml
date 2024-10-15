@@ -9,6 +9,7 @@ dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
   usb_hid_device: { path: "../../components/usb_hid_device" }
+  vs0_stub: { path: "../../components/vs0_stub" }
 
 sources:
   - target: prj_constraints

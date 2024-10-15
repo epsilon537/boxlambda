@@ -126,7 +126,7 @@ module wb_dfx_controller (
   logic sw_shutdown_req;
   logic sw_startup_req;
 
-`ifdef SYNTHESIS
+`ifdef IF_WE_NEED_AN_ILA_HERE
   ila_0 ila_inst (
       .clk(clk),  // input wire clk
       .probe0({wbm_cyc_o, wbm_stall_i, wbm_stb_o, wbm_ack_i, wbm_adr_o, wbm_dat_i}),

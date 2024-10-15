@@ -21,13 +21,18 @@ add_custom_target(lint_all ALL)
 function(vivado_cmd cmd tcl_script)
   list(JOIN ARGN " " _tcl_args)
 
+  #Note the VIVADO_FLAGS environment variable here. By default Vivado generates
+  #quite a lot of logs and traces. You can use VIVADO_FLAGS to turn that off.
+  #I currently have the following Vivado flags in my .bashrc
+  #VIVADO_FLAGS=-nolog -nojournal -notrace
+  #When I'm debugging build issues, I just unset VIVADO_FLAGS.
   set(${cmd} "vivado -mode batch $VIVADO_FLAGS -source ${tcl_script} -tclargs ${_tcl_args}" PARENT_SCOPE)
 endfunction()
 
 #Function grouping common gateware build rules.
 #TOP_MODULE: name of top module.
 #PRJ_COMP_NAME: project or component name, e.g. wbuart32
-#PRJ_CONSTRAINTS_FILE_LIST: Constraints file list, if any.
+#PRJ_CONSTRAINTS_FILE_LIST: Project constraints file list, if any.
 #MEM_FILE_LIST: Mem file list, if any.
 #VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty.
 #VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty.
@@ -125,6 +130,7 @@ function (gw_common_rules)
             VERBATIM
         )
 
+    #Extract any Vivado IPs (.xci files) referenced in the bender manifest
     add_custom_command(
           OUTPUT
               ${_prj_comp_name}.vivado_ip_file_list

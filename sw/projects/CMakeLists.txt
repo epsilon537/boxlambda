@@ -39,9 +39,9 @@ function(link_and_create_mem_file _tgt _link_script)
             ${_tgt}
         POST_BUILD
         COMMAND
-            ${CMAKE_OBJCOPY} -O verilog --interleave-width=4 --interleave=4 --byte=0 ${_tgt} ${_tgt}.hex
+            riscv32-unknown-elf-objcopy -O verilog --interleave-width=4 --interleave=4 --byte=0 ${_tgt} ${_tgt}.hex
         COMMAND
-            ${CMAKE_OBJCOPY} -O binary ${_tgt} ${_tgt}.bin
+             riscv32-unknown-elf-objcopy -O binary ${_tgt} ${_tgt}.bin
         COMMAND
             ${PROJECT_SOURCE_DIR}/sub/ibex_wb/scripts/hex2vmem.pl < ${_tgt}.hex > ${_tgt}.mem
         WORKING_DIRECTORY
