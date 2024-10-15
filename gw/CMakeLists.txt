@@ -20,7 +20,8 @@ add_custom_target(lint_all ALL)
 #ARGN: Variables argument list to be passed to the tcl script.
 function(vivado_cmd cmd tcl_script)
   list(JOIN ARGN " " _tcl_args)
-  set(${cmd} "vivado -mode batch -source ${tcl_script} -tclargs ${_tcl_args}" PARENT_SCOPE)
+
+  set(${cmd} "vivado -mode batch $VIVADO_FLAGS -source ${tcl_script} -tclargs ${_tcl_args}" PARENT_SCOPE)
 endfunction()
 
 #Function grouping common gateware build rules.

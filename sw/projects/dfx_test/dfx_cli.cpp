@@ -51,7 +51,7 @@ extern "C" {
     uint32_t rm_id = (status_reg & DFX_STATUS_RM_ID_MASK)>>DFX_STATUS_RM_ID_OFFSET;
     uint32_t shutdown = (status_reg & DFX_STATUS_SHUTDOWN) ? 1 : 0;
     uint32_t err = (status_reg & DFX_STATUS_ERR_MASK) >> DFX_STATUS_ERR_OFFSET;
-    uint32_t state = (status_reg & DFX_STATUS_ERR_MASK);
+    uint32_t state = (status_reg & DFX_STATUS_STATE_MASK);
 
     printf("DFX_STATUS: RM_ID: %d, Shutdown: %d, Err: %d, State: %d\n", rm_id, shutdown, err, state);
   }
@@ -197,19 +197,42 @@ extern "C" {
       f_close(&file_object);
 
       /* Temporarily shut down the DFX Controller */
-      dfx_reg_wr(DFX_CONTROL_REG, 0);
+      dfx_reg_wr(DFX_CONTROL_REG, DFX_CONTROL_CMD_SHUTDOWN);
 
       /* Point BS_INFO register 0 to the memory buffer holding the module */
       dfx_reg_wr(DFX_BS_ADDRESS_0_REG, addr);
       dfx_reg_wr(DFX_BS_SIZE_0_REG, size);
 
       /* Turn the DFX Controller back on */
-      dfx_reg_wr(DFX_CONTROL_REG, 1);
+      dfx_reg_wr(DFX_CONTROL_REG, DFX_CONTROL_CMD_RESTART_NOT_STAT);
 
       printf("Issuing DFX trigger...\n");
 
       /* Issue a trigger (index 0) to kick off the loading of the module into the virtual socket*/
       dfx_reg_wr(DFX_SW_TRIGGER_REG, 0);
+
+      printf("DFX loading...\n");
+
+      /* Check the state */
+      uint32_t status_reg=0;
+      uint32_t err=0;
+      uint32_t state=0, prev_state=0;
+
+      while (state != DFX_STATUS_STATE_VS_FULL) {
+        status_reg = dfx_reg_rd(DFX_STATUS_REG);
+        state = (status_reg & DFX_STATUS_STATE_MASK);
+        err = (status_reg & DFX_STATUS_ERR_MASK) >> DFX_STATUS_ERR_OFFSET;
+
+        if (err != DFX_STATUS_ERR_NO_ERR) {
+          printf("DFX error: %d\n", err);
+          break;
+        }
+
+        if (state != prev_state) {
+          printf("DFX state: %d\n", state);
+          prev_state = state;
+        }
+      }
 
       /* Release the memory buffer */
       free((void*)addr);
