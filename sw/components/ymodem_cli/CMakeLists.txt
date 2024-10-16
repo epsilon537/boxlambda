@@ -18,4 +18,4 @@ target_include_directories(ymodem_cli
        ${CMAKE_CURRENT_LIST_DIR}
 )
 
-target_link_libraries(ymodem_cli embedded_cli ymodem)
+target_link_libraries(ymodem_cli embedded_cli ymodem fatfs)
