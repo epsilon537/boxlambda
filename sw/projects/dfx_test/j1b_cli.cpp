@@ -13,6 +13,7 @@
 static struct uart* uartp = 0;
 
 extern "C" {
+  /* CLI command to load a J1B firmware image from disk and use it to boot the J1B core. */
   static void j1b_boot(EmbeddedCli *cli, char *args, void *context) {
     uint16_t tokenCount = embeddedCliGetTokenCount(args);
 
@@ -46,9 +47,7 @@ extern "C" {
       }
 
       size = f_size(&file_object);
-
       addr = (uint32_t)malloc(size);
-
       printf("Loading file %s, size: %d bytes, into memory at address 0x%x.\n", filename, size, addr);
 
       /* Read file */
@@ -64,6 +63,7 @@ extern "C" {
 
       printf("Booting J1B...\n");
 
+      //Load the program into the J1B's program memory.
       j1b_load_program((unsigned char*)addr, size);
 
       printf("Taking J1B out of reset...\n");
@@ -74,6 +74,7 @@ extern "C" {
     }
   }
 
+  //CLI command to forward all interaction on the serial port console to the J1B core.
   static void j1b_fwd_uart(EmbeddedCli *cli, char *args, void *context) {
     printf("Reading core signature register...\n");
 
@@ -100,6 +101,7 @@ extern "C" {
 
 
     for (;;) {
+      //Check if a character is waiting in the UART (does not block).
       if (uart_rx_ready(uartp)) {
         socUartRx = (char)uart_rx(uartp);
 
@@ -108,11 +110,13 @@ extern "C" {
           break;
         }
 
+        //Wait until there's space for a character in the J1B UART received direction.
         while(j1b_reg_rd(J1B_REG_UART_TX_TO_J1B) & J1B_REG_UART_TX_TO_J1B_DATA_WAITING);
 
         j1b_reg_wr(J1B_REG_UART_TX_TO_J1B, socUartRx);
       }
 
+      //Check for output waiting in the J1B UART transmit direction.
       j1bUartRx = j1b_reg_rd(J1B_REG_UART_RX_FROM_J1B);
       if (j1bUartRx&J1B_REG_UART_RX_FROM_J1B_DATA_AVL) {
          while(!uart_tx_ready(uartp));
@@ -122,6 +126,7 @@ extern "C" {
   }
 }
 
+//Call this function to hook the above functions into the embedded-CLI instance running on the system.
 void add_j1b_cli(EmbeddedCli* cli, struct uart* uart) {
   assert(cli);
   assert(uart);

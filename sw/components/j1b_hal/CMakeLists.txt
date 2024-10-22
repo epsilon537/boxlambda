@@ -1,3 +1,10 @@
+# Hardware Access Layer for the J1B DFX demo component.
+#
+# J1B is a tiny 32-bit stack processor designed to run Forth. J1B is part of
+# the SwapForth environment.
+#
+# For example usage of this HAL, see j1b_cli.cpp and/or j1b_test.cpp.
+
 add_library(j1b_hal)
 
 #j1b_hal hardware access layer.

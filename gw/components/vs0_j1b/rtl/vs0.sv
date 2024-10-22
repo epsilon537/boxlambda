@@ -1,4 +1,29 @@
-/*This is a J1B realization of a Reconfigurable Module in Virtual Socket 0. vs0 resides on the crossbar with a Wishbone master and slave port, and irq inputs and output. */
+/* This is a J1B realization of a Reconfigurable Module fitting in Virtual Socket 0 VS0). 
+ * VS0 resides on the crossbar with a Wishbone master and slave port, and irq inputs and output.
+ * Reconfigurable Modules and Virtual sockets are part of the Dynamic Function
+ * Exchange (DFX) a.k.a. Partial FPGA Reconfiguration framework. Refer to
+ * BoxLambda's documentation for more info.
+ *
+ * J1B is is a 32 bit, minimum instruction set stack processor, in other words
+ * a Forth CPU. J1B is the CPU component of the SwapForth environment.
+ *
+ * I put minimal effort into integrating the J1B into BoxLambda. My goal was
+ * to demonstrate DFX, not so much J1B itself. As such, I just hooked up the J1B core
+ * to the WB slave port of VS0 so that its serial port interface can be
+ * accessed from the Ibex processor. If I were to integrate the J1B into
+ * BoxLambda properly (I might at some point), I would hook up the WB master
+ * port as well so that the J1B has full system access).
+ *
+ * The Wishbone frontend of this J1B core is similar to that of the PicoRV DMA
+ * core. The host CPU (Ibex) sees a memory and a register interface. The host
+ * CPU loads the J1B firmware into the memory, then it takes the core out of
+ * reset via a control register. The register interface is hooked up to the J1B
+ * serial port interface through which the user can interfact with the Forth
+ * REPL.
+ *
+ * This module is derived from the xilinx-top module in the swapforth repo. 
+ *
+ */
 module vs0 (
     input logic sys_clk,
     input logic rst,
@@ -33,8 +58,12 @@ module vs0 (
     output wire irq_out
 );
 
+  /* The idea is that the host can figure out which module is running in the
+  * virtual socket, by querying its signature register. Each reconfigurable
+  *module is supposed to have a unique signature value.
+  */
   localparam [31:0] J1B_SIGNATURE = 32'hf041011b;  //Signature register value.
-  localparam MHZ = 50;
+  localparam MHZ = 50;  //For the J1B counter and UART.
   localparam integer MEM_SZ_WORDS = 8192;  //J1B Program and data memory size
   localparam integer WBS_REG_BASE_ADDR = MEM_SZ_WORDS;  //Register base address as seen by WB slave.
 
@@ -46,6 +75,7 @@ module vs0 (
   logic [31:0] j1b_gp_in, j1b_gp_out;
 
   wire [15:0] j1b_mem_addr;
+  //Note: j1b_mem_din, J1B memory data in, is program memory data out.
   wire [31:0] j1b_mem_din;
   wire j1b_wen;
   wire [31:0] j1b_dout;
@@ -65,6 +95,7 @@ module vs0 (
   logic [31:0] irq_in_reg;
   logic [31:0] irq_out_reg, irq_out_next;
 
+  // Wishbone registers.
   logic do_ack_wbs;
   logic do_wbs_wr_mem, do_wbs_wr_reg;
   logic do_wbs_rd_reg;
@@ -88,11 +119,14 @@ module vs0 (
   always_ff @(posedge sys_clk) begin
     do_ack_wbs <= 1'b0;
     if (wbs_stb) begin
-      wbs_dat_r_mem <= j1b_mem_din;  //wbs_ram_register needed for timing closure.
+      //wbs_dat_r_mem register needed for timing closure.
+      //j1b_mem_din is program memory out, btw.
+      wbs_dat_r_mem <= j1b_mem_din;
       do_ack_wbs <= 1'b1;
     end
   end
 
+  //Select between program memory read and register read.
   assign wbs_dat_r = (wbs_adr < 18'(WBS_REG_BASE_ADDR)) ? wbs_dat_r_mem : wbs_dat_r_reg;
   assign wbs_ack   = do_ack_wbs & wbs_cyc;
   assign wbs_stall = 1'b0;
@@ -205,9 +239,12 @@ module vs0 (
       //WBS register writes
       if (do_wbs_wr_reg) begin
         case (wbs_adr)  //wbs address is a word address.
+          //Control register.
           18'(WBS_REG_BASE_ADDR + 2): ctrl_reg <= wbs_dat_w;
+          //J1B UART data in and UART data available flag.
           18'(WBS_REG_BASE_ADDR + 16):
           {j1b_uart_rx_data_avl, j1b_uart_rx_data} <= {1'b1, wbs_dat_w[7:0]};
+          //J1B GP in.
           18'(WBS_REG_BASE_ADDR + 17): j1b_gp_in <= wbs_dat_w;
           default: ;
         endcase
@@ -216,17 +253,26 @@ module vs0 (
       //WBS register read
       if (do_wbs_rd_reg) begin
         case (wbs_adr)
+          //IRQ output register
           18'(WBS_REG_BASE_ADDR): wbs_dat_r_reg <= irq_out_reg;
+          //IRA input register
           18'(WBS_REG_BASE_ADDR + 1): wbs_dat_r_reg <= irq_in_reg;
+          //Control register
           18'(WBS_REG_BASE_ADDR + 2): wbs_dat_r_reg <= ctrl_reg;
+          //J1B UART data in and data-in available flag.
           18'(WBS_REG_BASE_ADDR + 16):
           wbs_dat_r_reg <= {23'b0, j1b_uart_rx_data_avl, j1b_uart_rx_data};
+          //J1B UART data out and busy flag. The busy flag is a data-out
+          //available flag.
           18'(WBS_REG_BASE_ADDR + 18): wbs_dat_r_reg <= {23'b0, j1b_uart_tx_busy, j1b_uart_tx_data};
+          //GP out register.
           18'(WBS_REG_BASE_ADDR + 19): wbs_dat_r_reg <= j1b_gp_out;
+          //The signature register, way at the end of the address range.
           18'h3ffff: wbs_dat_r_reg <= J1B_SIGNATURE;
           default: ;
         endcase
 
+        //The uart_tx_busy bit (data out avaible) is read-reset.
         if (wbs_adr == 18'(WBS_REG_BASE_ADDR + 18)) j1b_uart_tx_busy <= 1'b0;
       end
 

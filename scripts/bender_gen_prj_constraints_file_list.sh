@@ -1,8 +1,8 @@
 #! /bin/bash
 
-#This script extracts the prj_constraints file from the nearest bender.yml manifest and generates a tcl subscript
-#to be included in the main vivado.tcl script.
-#This script is used by the build system.
+# This script is used by the build system. It extracts the project constraints
+# file from the nearest bender.yml manifest and generates a tcl subscript to be
+# included in the main vivado_create_project.tcl script.
 
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then

@@ -2,13 +2,13 @@
 #include <assert.h>
 #include <stdio.h>
 #include "embedded_cli.h"
-#include "dfx_hal.h"
+#include "dfx_controller_hal.h"
 #include "vs0_hal.h"
 #include "ff.h"
 #include <stdlib.h>
 
-#define CORE_REG_SIG 
 extern "C" {
+  //CLI command to read the signature register of the core currently occupying Virtual Socket 0 (VS0).
   static void dfx_read_core_sig(EmbeddedCli *cli, char *args, void *context) {
     printf("Reading core signature register...\n");
 
@@ -17,6 +17,7 @@ extern "C" {
     printf("Read signature value: 0x%x\n", sig);
   }
 
+  //CLI command to write to the DFX Control register.
   static void dfx_control(EmbeddedCli *cli, char *args, void *context) {
     if (embeddedCliGetTokenCount(args) < 3) {
         printf("Argument(s) missing: dfx_control <cmd> <extra byte> <extra halfword>.\n");
@@ -46,6 +47,7 @@ extern "C" {
     }
   }
 
+  //CLI command to read the DFX status register.
   static void dfx_status(EmbeddedCli *cli, char *args, void *context) {
     uint32_t status_reg = dfx_reg_rd(DFX_STATUS_REG);
     uint32_t rm_id = (status_reg & DFX_STATUS_RM_ID_MASK)>>DFX_STATUS_RM_ID_OFFSET;
@@ -56,6 +58,7 @@ extern "C" {
     printf("DFX_STATUS: RM_ID: %d, Shutdown: %d, Err: %d, State: %d\n", rm_id, shutdown, err, state);
   }
 
+  //CLI command to read the DFX trigger register.
   static void dfx_trig_get(EmbeddedCli *cli, char *args, void *context) {
     uint32_t sw_trig_reg = dfx_reg_rd(DFX_SW_TRIGGER_REG);
     uint32_t sw_trig_pending = (sw_trig_reg & DFX_SW_TRIGGER_PENDING) ? 1 : 0;
@@ -69,6 +72,7 @@ extern "C" {
     printf("TRIGGER_0: %d, TRIGGER_1: %d\n", trig_0_reg, trig_1_reg);
   }
 
+  //CLI command to write to the DFX trigger register.
   static void dfx_trig_set(EmbeddedCli *cli, char *args, void *context) {
     if (embeddedCliGetTokenCount(args) < 1) {
         printf("Argument(s) missing: dfx_trig_set <trig_id>\n");
@@ -89,6 +93,7 @@ extern "C" {
     }
   }
 
+  //CLI command to read the DFX RM info register.
   static void dfx_rm_info_get(EmbeddedCli *cli, char *args, void *context) {
     uint32_t rm_bs_idx_reg = dfx_reg_rd(DFX_RM_BS_INDEX_0_REG);
     uint32_t rm_ctrl_reg = dfx_reg_rd(DFX_RM_CONTROL_0_REG);
@@ -111,6 +116,7 @@ extern "C" {
            rm_bs_idx_reg, rst_duration, rst_required, startup_required, shutdown_required);
   }
 
+  //CLI command to read the DFX BS info register.
   static void dfx_bs_info_get(EmbeddedCli *cli, char *args, void *context) {
     uint32_t bs_addr = dfx_reg_rd(DFX_BS_ADDRESS_0_REG);
     uint32_t bs_size = dfx_reg_rd(DFX_BS_SIZE_0_REG);
@@ -123,6 +129,7 @@ extern "C" {
     printf("BS1: addr: 0x%x, size: %d.\n", bs_addr, bs_size);
   }
 
+  //CLI command to write to the DFX BS info register.
   static void dfx_bs_info_set(EmbeddedCli *cli, char *args, void *context) {
     if (embeddedCliGetTokenCount(args) < 3) {
         printf("Argument(s) missing: dfx_bs_info_set <idx> <hex addr> <size in bytes>\n");
@@ -159,6 +166,9 @@ extern "C" {
     }
   }
 
+  /* CLI command to DFX load a reconfigurable module from disk into Virtual
+   * Socket 0 (VS0). This function combines a number of register level
+   * interactions with the DFX controller. */
   static void dfx_load_module(EmbeddedCli *cli, char *args, void *context) {
 
     uint16_t tokenCount = embeddedCliGetTokenCount(args);
@@ -178,8 +188,8 @@ extern "C" {
         return;
       }
 
+      /* Allocate a memory buffer to store the file's contents. */
       size = f_size(&file_object);
-
       addr = (uint32_t)malloc(size);
       assert(addr);
 
@@ -196,7 +206,7 @@ extern "C" {
       /* Close the file*/
       f_close(&file_object);
 
-      /* Temporarily shut down the DFX Controller */
+      /* Temporarily shut down the DFX Controller so we can write to the DFX BS INFO 0 register. */
       dfx_reg_wr(DFX_CONTROL_REG, DFX_CONTROL_CMD_SHUTDOWN);
 
       /* Point BS_INFO register 0 to the memory buffer holding the module */
@@ -218,11 +228,13 @@ extern "C" {
       uint32_t err=0;
       uint32_t state=0, prev_state=0;
 
+      /* The DFX controller is going to cycle through a few states and, hopefully, end up in the VS_FULL state. */
       while (state != DFX_STATUS_STATE_VS_FULL) {
         status_reg = dfx_reg_rd(DFX_STATUS_REG);
         state = (status_reg & DFX_STATUS_STATE_MASK);
         err = (status_reg & DFX_STATUS_ERR_MASK) >> DFX_STATUS_ERR_OFFSET;
 
+        //Abort if we detecte an error.
         if (err != DFX_STATUS_ERR_NO_ERR) {
           printf("DFX error: %d\n", err);
           break;
@@ -242,6 +254,7 @@ extern "C" {
   }
 }
 
+//Call this function to hooked the above functions in the embedded-CLI instance running on the system.
 void add_dfx_cli(EmbeddedCli* cli) {
   assert(cli);
 

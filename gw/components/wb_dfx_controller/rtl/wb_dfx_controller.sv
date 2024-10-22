@@ -1,4 +1,11 @@
-//DFX Controller with Wishbone interface
+/* The Dynamic Function eXchange (DFX) Controller Xilinx IP provides management functions for DFX designs (designs 
+ * that support partial FPGA reconfiguration).
+ * When software trigger events occur, the DFX Controller pulls partial bitstreams from memory and delivers them to an
+ * internal configuration access port (ICAP).  The IP also assists with logical decoupling and startup events, 
+ * customizable per Reconfigurable Partition.
+ *
+ * wb_dfx_controller is a DFX controller with a Wishbone frontend.
+ */
 module wb_dfx_controller (
     input logic clk,
     input logic rst,
@@ -27,18 +34,24 @@ module wb_dfx_controller (
     input logic wbs_we,
     output logic wbs_err,
 
+    //The DFX controller drives VS0 (Virtual Socket 0) reset.
     output logic vsm_VS_0_rm_reset,
+
+    //An error indication register
     output logic vsm_VS_0_event_error
 );
 
   logic [   1:0] unused_wbm_adr;
 
-  //ICAP:
+  //ICAP signals:
   logic          icap_csib;
   logic          icap_rdwrb;
   logic [31 : 0] icap_i;
   logic [31 : 0] icap_o;
 
+  //The DFX controller bus signals are AXI based. We'll need to do some
+  //AXI-to-Wishbone interworking.
+  //
   //Master AXI:
   logic [31 : 0] m_axi_araddr;
   logic [ 7 : 0] m_axi_arlen;
@@ -77,7 +90,7 @@ module wb_dfx_controller (
   logic [  31:0] s_axi_rdata;
   logic [   1:0] s_axi_rresp;
 
-  //Wishbone bridge to DFX Controller's AXI-lite slave register interface.
+  //Wishbone bridge to the DFX Controller's AXI-lite slave register interface.
   wbm2axilite #(
       .C_AXI_ADDR_WIDTH(32)  // AXI Address width
   ) wbm2axilite_inst (
@@ -126,7 +139,7 @@ module wb_dfx_controller (
   logic sw_shutdown_req;
   logic sw_startup_req;
 
-`ifdef IF_WE_NEED_AN_ILA_HERE
+`ifdef IN_CASE_WE_NEED_ILA_FOR_DEBUG
   ila_0 ila_inst (
       .clk(clk),  // input wire clk
       .probe0({wbm_cyc_o, wbm_stall_i, wbm_stb_o, wbm_ack_i, wbm_adr_o, wbm_dat_i}),
@@ -207,6 +220,10 @@ module wb_dfx_controller (
       .s_axi_reg_rready        (s_axi_rready)           // input wire s_axi_reg_rready
   );
 
+  /* AXI master to Wishbone bridge
+   * The DFX controller loads the Reconfigurabl Module bitstreams through this
+   * interface.
+   */
   aximrd2wbsp #(
       .C_AXI_ID_WIDTH  (2),   // The AXI id width used for R&W
       .C_AXI_DATA_WIDTH(32),  // Width of the AXI R&W data
@@ -245,6 +262,7 @@ module wb_dfx_controller (
       .i_wb_err(wbm_err_i)
   );
 
+  //The bus master interface is only used for reading, not for writing.
   assign wbm_dat_o = 0;
   assign wbm_we_o  = 0;
 

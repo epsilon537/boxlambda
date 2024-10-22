@@ -8,15 +8,25 @@ extern "C" {
 #endif
 
 /*
- * VS0 hardware access layer.
+ * Virtual Socket 0 abstract hardware access layer.
+ * This HAL contains some definitions that are common across all Virtual Socket 0
+ * component variants (vs0_j1b, vs0_stub,...)
  */
+
+//Base address of the VS0 memory space.
 #define VS0_BASE 0x13000000
+//Size in words of the VS0 memory space.
 #define VS0_SIZE_WORDS (0x100000>>2)
 
+//VS0 signature register offset used to identify exactl which VS0 module is
+//active in the system.
 #define VS0_REG_SIGNATURE (VS0_SIZE_WORDS-1)
 
 #define VS0_REG_MAX VS0_REG_SIGNATURE
 
+/* Technically, this belong into a separata HAL called vs0_stub because it applies */
+/* to the vs0_stub component only. This is the only definition specific to the */
+/* vs0_stub component, however, so I'm just going to keep it here for the time being. */
 #define VS0_STUB_SIG_VALUE 0x0000510b
 
 //Write to Register

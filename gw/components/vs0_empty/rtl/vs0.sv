@@ -5,7 +5,7 @@
  * Synthesis of the static portion of a DFX (Dynamic Function Exchange,
  * a.k.a. Partial FPGA Reconfiguration) build expects an empty module
  * for each virtual socket (reconfigurable partition) in the design, to nail
- * down the interface of that virtual socke.
+ * down the interface of that virtual socket.
  * In the BoxLambda build system, the DFX enabled build project (e.g. dfx_test)
  * pulls in the empty module component as a Bender dependency.
  *

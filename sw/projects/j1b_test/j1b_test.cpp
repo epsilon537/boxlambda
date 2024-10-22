@@ -1,5 +1,5 @@
-// This test program checks if SW can retrieve the reset reason
-// from the reset controller and if SW can trigger a reset.
+// This test program boots the J1B core and forwards the UART to this core
+// so the user can interact with J1B's Forth REPL.
 
 #include <stdint.h>
 #include <stdio.h>
@@ -12,9 +12,12 @@
 #include "gpio.h"
 #include "mcycle.h"
 #include "sdram.h"
+#include "vs0_hal.h" //To read the core signature register.
 #include "j1b_hal.h"
 #include "j1b_nuc.h"
 
+/* This is the Forth run-time firmware image to be loaded into the J1B core
+ * before taking it out of reset. */
 static unsigned j1b_nuc_prg[] = J1B_NUC_PRG;
 
 #define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
@@ -68,9 +71,7 @@ int main(void) {
 
   printf("Reading J1B core signature register...\n");
 
-  uint32_t sig = j1b_reg_rd(J1B_REG_SIGNATURE);
-
-  printf("Read signature value: 0x%x\n", sig);
+  uint32_t sig = vs0_reg_rd(VS0_REG_SIGNATURE);
 
   if (sig != J1B_SIG_VALUE) {
     printf("Incorrect signature! Expected 0x%x. Aborting...\n", J1B_SIG_VALUE);

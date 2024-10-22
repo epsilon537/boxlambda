@@ -1,5 +1,6 @@
-// This test program checks if SW can retrieve the reset reason
-// from the reset controller and if SW can trigger a reset.
+/* DFX test program to run on the dfx_test gateware build. The program presents */
+/* a CLI through which the user can live-load reconfigurable modules such as the */
+/* vs0_j1b core into the VS0 'black box' slot/partition of the BoxLambda SoC. */
 
 #include <stdint.h>
 #include <stdio.h>
@@ -88,10 +89,16 @@ int main(void) {
 
   EmbeddedCli *cli = createEmbeddedCli(&uart0);
 
+  //CLI command for peeking an poking memory/registers
   add_peek_poke_cli(cli);
+  //DFX - Dynamic Function Exchange CLI commands through which the user can live-load the bitstream of a
+  //gateware component into the VS0 black box slot/partition of the BoxLambda SoC.
   add_dfx_cli(cli);
+  //CLI commands to interact with the filesystem.
   add_mem_fs_cli(cli);
+  //CLI commands to transfer files via the ymodem serial protocol.
   add_ymodem_cli(cli, &uart0);
+  //CLI commands to interact with the J1B core after it's been loaded into the system using the DFX CLI.
   add_j1b_cli(cli, &uart0);
 
   embeddedCliStartLoop();

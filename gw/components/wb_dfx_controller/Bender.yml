@@ -12,6 +12,8 @@ dependencies:
 sources:
   - target: all(vivado_ip, arty-a7-100)
     files:
+      # An xci file is a Vivado IP file. Xilinx does not provide the source code
+      # of its DFX controller core.
       - ../../ip/dfx_controller/dfx_controller_0.xci
       #- ../../ip/ila/ila_0.xci
 
@@ -24,7 +26,4 @@ sources:
   - target: any(vivado, verilator)
     files:
       - rtl/wb_dfx_controller.sv
-
-
-
 

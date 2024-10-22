@@ -1,13 +1,20 @@
-#We're using Vivado's project mode
+# TCL script used by the build system to implement a (non-DFX) Vivado project.
+
+#BoxLambda uses Vivado's project mode. All projects are called project.xpr.
 open_project project.xpr
 
+#Open the synthesis checkpoint
 open_run synth_1
 
+#Route the project
 opt_design
 place_design
 route_design
 
+#Create the bitstream file
 write_bitstream -force -bin_file project
+
+#Generate the .mmi file to be used for post-synthesis memory updates.
 write_mem_info -force project
 
 # Generate a timing and utilization reports and write to disk

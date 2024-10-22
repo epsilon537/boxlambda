@@ -1,12 +1,17 @@
 /*
- * Wishbone dual port RAM wrapper around two implementations: On simulation a generic implementations is used, on
- * the Arty an XPM wrapper is used.
+ * Wishbone dual port RAM wrapper around two implementations: In simulation, a generic implementations is used. On
+ * FPGA, a Vivado XPM wrapper is used.
  * When Vivado synthesizes an XPM memory instance, it produces a .mmi file for that memory.
- *This .mmi file can be used for post-implementation updates of the memory contents in the FPGA bitstream.
+ * This .mmi file can be used for post-implementation updates of the memory contents in the FPGA bitstream.
  */
 module wb_dp_ram_wrapper #(
     parameter ADDR_WIDTH = 14,  // width of word addressed address bus in bits
-    parameter INIT_FILE  = ""
+    parameter INIT_FILE  = ""   // This parameter used to be used only when building on verilator, 
+                                // Vivado builds relying stricly on .mmi based post-implementation
+                                // memory updates. Now, INIT_FILEs can also be passed into Vivado
+                                // builds at synthesis time. This allow for instance for a default 
+                                // memory image (e.g. a jump-to-flash stub) that can later, 
+                                // post-imp, be overwritten by a custom test build image.
 ) (
     input wire clk,
     input wire rst,
@@ -77,7 +82,7 @@ module wb_dp_ram_wrapper #(
       .ECC_MODE("no_ecc"),  // String
       .ECC_TYPE("none"),  // String
       .IGNORE_INIT_SYNTH(0),  // DECIMAL
-      .MEMORY_INIT_FILE(INIT_FILE == "" ? "none" : INIT_FILE),  // String
+      .MEMORY_INIT_FILE(INIT_FILE == "" ? "none" : INIT_FILE),  // if an INIT_FILE is specified, used it.
       .MEMORY_INIT_PARAM(""),  // String
       .MEMORY_OPTIMIZATION("true"),  // String
       .MEMORY_PRIMITIVE("block"),  // String

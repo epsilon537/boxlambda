@@ -2,6 +2,9 @@
 #ifndef J1B_NUC_H
 #define J1B_NUC_H
 
+/* This is the Forth run-time firmware image to be loaded into the J1B core
+ * before taking it out of reset. */
+
 #define J1B_NUC_PRG { \
   0x45F345FE,\
   0x628F8001,\

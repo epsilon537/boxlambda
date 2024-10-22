@@ -1,4 +1,5 @@
-#Ymodem CLI commands
+# This is an embedded-CLI client component defining CLI commands to transfer files to
+# and from BoxLambda using the ymodem protocol.
 
 add_library(ymodem_cli)
 

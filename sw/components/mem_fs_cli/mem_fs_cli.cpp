@@ -7,15 +7,18 @@
 
 #define STR_ROOT_DIRECTORY ""
 
+/* mem_fs_cli is an embedded_cli client component providing convenience commands */
+/* for file system access and memory management. */
+
 extern "C" {
-  /* List contents of a directory */
+  /* Helper function listing contents of a directory */
   static FRESULT list_dir(const char *path) {
     FRESULT res;
     DIR dir;
     FILINFO fno;
     int nfile, ndir;
 
-    res = f_opendir(&dir, path);                       /* Open the directory */
+    res = f_opendir(&dir, path); /* Open the directory */
     if (res == FR_OK) {
         nfile = ndir = 0;
         for (;;) {
@@ -37,6 +40,7 @@ extern "C" {
     return res;
   }
 
+  //CLI command to remove a file.
   static void rm(EmbeddedCli *cli, char *args, void *context) {
     if (embeddedCliGetTokenCount(args) < 1) {
         printf("Argument missing: rm <filename>\n");
@@ -54,6 +58,7 @@ extern "C" {
     }
   }
 
+  //CLI command to save to contents of a given memory range to a file.
   static void save(EmbeddedCli *cli, char *args, void *context) {
     if (embeddedCliGetTokenCount(args) < 3) {
         printf("Argument missing: save <filename> <address> <size in bytes>\n");
@@ -90,6 +95,7 @@ extern "C" {
     }
   }
 
+  //CLI command to load the contents of a given file into memory.
   static void load(EmbeddedCli *cli, char *args, void *context) {
 
     uint16_t tokenCount = embeddedCliGetTokenCount(args);
@@ -135,6 +141,7 @@ extern "C" {
     }
   }
 
+  //CLI command to list the current directory's contents.
   static void ls(EmbeddedCli *cli, char *args, void *context) {
     FRESULT res =list_dir(STR_ROOT_DIRECTORY);
     if (res != FR_OK) {
@@ -143,6 +150,8 @@ extern "C" {
     }
   }
 
+  //CLI command to allocate a block of memory using the C run-times memory
+  //allocator.
   static void allocBuf(EmbeddedCli *cli, char *args, void *context) {
 
     if (embeddedCliGetTokenCount(args) < 1) {
@@ -159,8 +168,9 @@ extern "C" {
     }
   }
 
+  //CLI command to release/free an memory block previously allocated using the
+  //allocBuf command above.
   static void relBuf(EmbeddedCli *cli, char *args, void *context) {
-
 
     if (embeddedCliGetTokenCount(args) < 1) {
         printf("Argument missing: reBuf <address>\n");
@@ -178,6 +188,8 @@ extern "C" {
   }
 }
 
+//Call this function to hook the above CLI commands into the embedded CLI instance
+//running on the system.
 void add_mem_fs_cli(EmbeddedCli* cli) {
   assert(cli);
 

@@ -1,8 +1,9 @@
 #! /bin/bash
 
-#This script extracts the files to be synthesized from the nearest bender.yml manifest and generates
-#a tcl sub script to be included in the main vivado.tcl script as well as a dependency file list.
-#This script is used by the build system.
+# This script is used by the build system. It does the following:
+# - extract the files to be synthesized from the nearest bender.yml manifest 
+# - generate a tcl subscript to be included in the main vivado_create_project.tcl script
+# - generate a dependency file list.
 
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
@@ -10,12 +11,13 @@ then
   exit 1
 fi
 
+# $1 = source directory
 SRC_DIR="$1"
 
 # $2 = output file, a vivado tcl script
 OUTFILE="$2"
 
-# $3 = depfile target
+# $3 = target to be used in the generated
 DEPFILE_TGT="$3"
 
 # $4 = BL_TARGET_FPGA
@@ -44,3 +46,4 @@ rm $OUTFILE.tmp
 
 #Generate a depfile: Prepend each line with <target> :
 bender -d $SRC_DIR script $MIN_T_OOC -t $BL_TARGET_FPGA -t prj_constraints -t dfx_constraints -t vivado flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
+

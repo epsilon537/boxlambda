@@ -1,3 +1,6 @@
+/* This is an embedded-CLI client component defining CLI commandis to transfer files to
+ * and from BoxLambda using the ymodem protocol. */
+
 #include <assert.h>
 #include <stdio.h>
 #include "embedded_cli.h"
@@ -9,6 +12,7 @@
 #define YMODEM_RX_BUF_SIZE_BYTES (4*1024*1024)
 
 extern "C" {
+  //CLI command to receive a file via ymodem.
   static void ymodem_rx(EmbeddedCli *cli, char *args, void *context) {
     uint32_t addr, buf_size, ymodem_rx_size;
 
@@ -51,6 +55,7 @@ extern "C" {
     }
   }
 
+  //CLI command to send a file via ymodem.
   static void ymodem_tx_buf(EmbeddedCli *cli, char *args, void *context) {
 
     if (embeddedCliGetTokenCount(args) < 3) {
@@ -72,6 +77,8 @@ extern "C" {
   }
 }
 
+/* Call this function to hook the ymodem CLI commanded into the embedded-cli */
+/* instance running on the system. */
 void add_ymodem_cli(EmbeddedCli* cli, struct uart* uart) {
   assert(cli);
 

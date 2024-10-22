@@ -1,4 +1,5 @@
-#Filesystem CLI commands
+# mem_fs_cli is an embedded_cli client component providing convenience commands
+# for file system access and memory management.
 
 add_library(mem_fs_cli)
 

@@ -9,7 +9,7 @@
 #define VERA_PALETTE_BASE (VERA_BASE + VERA_PALETTE_OFFSET)
 #define VERA_SPRITES_BASE (VERA_BASE + VERA_SPRITES_OFFSET)
 
-/* Tie the VERA IRQ to the VS_1 (Reconfigurable Module 1) IRQ handler. */
+/* Tie the VERA IRQ to the VS_1 (Virtual Socket 1) IRQ handler. */
 #define IRQ_ID_VERA IRQ_ID_VS_1
 
 #define _vera_irq_handler _vs_1_irq_handler

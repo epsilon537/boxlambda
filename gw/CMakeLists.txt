@@ -147,7 +147,6 @@ function (gw_common_rules)
 
     #Build Vivado command string for the vivado_create_project tcl script.
     vivado_cmd(create_project_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_create_project.tcl
-                    -project project.xpr
                     -ooc ${_ooc}
                     -part ${PART} -sources ${_prj_comp_name}.vivado_sources
                     -vivado_ips ${_prj_comp_name}.vivado_ip_file_list
