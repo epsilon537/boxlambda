@@ -25,6 +25,9 @@ function(link_and_create_mem_file _tgt _link_script)
   #Link-for-internal-memory implies linking in the bootstrap object library.
   target_link_options(${_tgt}
         PRIVATE
+            # Don't use Picolibc's crt0. We provide our own crt0 in
+            # sw/components/bootstrap
+            -nostartfiles
             -T${_link_script}
             "--specs=${CMAKE_BINARY_DIR}/sw/picolibc.specs"
             "LINKER:--defsym=__cmem_size=${CMEM_SIZE}"

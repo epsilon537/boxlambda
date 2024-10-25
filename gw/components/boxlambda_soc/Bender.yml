@@ -49,6 +49,7 @@ sources:
       - ../../../sub/riscv-dbg/tb/SimJTAG.sv
       - ../../../sub/sdspi/bench/cpp/sdspisim.cpp
       - ../../../sub/wbi2c/bench/cpp/i2csim.cpp
+
   - target: any(vivado, verilator)
     defines:
       NO_MODPORT_EXPRESSIONS: ~

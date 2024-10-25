@@ -32,10 +32,14 @@ getopt argv -staticDcp staticDcp ""
 # Basename of the generated output files
 getopt argv -outputBaseName outputBaseName ""
 
+# FPGA part name, e.g. xc7a100ticsg324-1L
+getopt argv -part part ""
+
 puts "vsCellInst: $vsCellInst"
 puts "vsDcp: $vsDcp"
 puts "staticDcp: $staticDcp"
 puts "outputBaseName: $outputBaseName"
+puts "part: $part"
 
 if {![file exists $vsDcp]} {
   error "vsDcp not found: $vsDcp"
@@ -44,10 +48,6 @@ if {![file exists $vsDcp]} {
 if {![file exists $staticDcp]} {
   error "staticDcp not found: $staticDcp"
 }
-
-# Retrieve the FPGA part number from the static design checkpoint 
-read_checkpoint $staticDcp
-set part [get_property PART [current_project]]
 
 # Create an implementation project
 create_project -force -part $part rm_impl_project

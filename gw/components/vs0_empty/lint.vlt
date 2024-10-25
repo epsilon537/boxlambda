@@ -1,1 +1,49 @@
 `verilator_config
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'sys_clk'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'rst'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbm_adr_o'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbm_dat_o'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbm_dat_i'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbm_we_o'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbm_sel_o'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbm_stb_o'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbm_ack_i'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbm_stall_i'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbm_cyc_o'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbm_err_i'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbs_adr'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbs_dat_w'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbs_dat_r'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbs_sel'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbs_stall'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbs_cyc'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbs_stb'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbs_ack'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'wbs_we'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'wbs_err'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not used: 'irq_in'"
+
+lint_off -rule UNDRIVEN -file "*/gw/components/vs0_empty/rtl/vs0.sv" -match "Signal is not driven: 'irq_out'"

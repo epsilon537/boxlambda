@@ -36,7 +36,7 @@ function (gw_project_rules_dfx_vivado)
         OUTPUT
             ${_prj_name}.mem_file_list
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list vivado
         DEPENDS
             always_rebuild
         WORKING_DIRECTORY
@@ -62,7 +62,7 @@ function (gw_project_rules_dfx_vivado)
     )
 
   #Build rules, shared with gateware components : lint target, Vivado synthesis
-  gw_common_rules(
+  gw_common_rules_vivado(
         TOP_MODULE
             ${_top_module}
         PRJ_COMP_NAME
@@ -174,7 +174,7 @@ function (gw_project_rules_vivado)
         OUTPUT
             ${_prj_name}.mem_file_list
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list vivado
         DEPENDS
             always_rebuild
         WORKING_DIRECTORY
@@ -200,7 +200,7 @@ function (gw_project_rules_vivado)
     )
 
   #Build rules, shared with gateware components : lint target, Vivado synthesis
-  gw_common_rules(
+  gw_common_rules_vivado(
         TOP_MODULE
             ${_top_module}
         PRJ_COMP_NAME
@@ -335,7 +335,7 @@ function (gw_project_rules_verilator)
   set(_top_module ${gw_project_rules_verilator_TOP_MODULE})
   set(_prj_name ${gw_project_rules_verilator_PROJECT_NAME})
   set(_mem_file_tgt ${gw_project_rules_verilator_MEM_FILE_TARGET})
-  set(_mem_file_list ${gw_common_rules_verilator_MEM_FILE_LIST})
+  set(_mem_file_list ${gw_project_rules_verilator_MEM_FILE_LIST})
   set(_verilator_cpp_flags ${gw_project_rules_verilator_VERILATOR_CPP_FLAGS})
   set(_verilator_ld_flags ${gw_project_rules_verilator_VERILATOR_LD_FLAGS})
 
@@ -344,7 +344,7 @@ function (gw_project_rules_verilator)
         OUTPUT
             ${_prj_name}.mem_file_list
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list verilator
         DEPENDS
             always_rebuild
         WORKING_DIRECTORY
@@ -355,7 +355,7 @@ function (gw_project_rules_verilator)
     )
 
   #Build rules, shared with gateware components : lint target, Vivado synthesis
-  gw_common_rules(
+  gw_common_rules_verilator(
         TOP_MODULE
             ${_top_module}
         PRJ_COMP_NAME
@@ -364,8 +364,6 @@ function (gw_project_rules_verilator)
             ${_prj_name}.mem_file_list
         VERILATOR_CPP_FLAGS
             ${_verilator_cpp_flags}
-        VERILATOR_LD_FLAGS
-            ${_verilator_ld_flags}
     )
 
   #Extract .c and .cpp files from Bender.yml manifest.
@@ -461,7 +459,9 @@ add_subdirectory(timer_uart_gpio_irqs)
 add_subdirectory(i2c_test)
 if(CMAKE_BUILD_TYPE STREQUAL "fpga")
   add_subdirectory(rtcc_test)
-  add_subdirectory(dfx_test)
+  if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
+    add_subdirectory(dfx_test)
+  endif()
 endif()
 add_subdirectory(reset_test)
 add_subdirectory(j1b_test)

@@ -167,8 +167,8 @@ module boxlambda_soc #(
     IRQ_ID_SDSPI,
     IRQ_ID_DMAC,
     IRQ_ID_VS_0,
-    IRQ_ID_RM_1,  /*VERA*/
-    IRQ_ID_RM_2
+    IRQ_ID_VS_1,  /*VERA*/
+    IRQ_ID_VS_2
   } fast_irq_ids_e;
 
   /*We used a word-addressing Wishbone bus. The Dual Port RAM word address bus width is equal to the
@@ -957,7 +957,7 @@ module boxlambda_soc #(
     if (VERA_ACTIVE) begin : GENERATE_VERA_MODULE
       logic vera_irq_n;
 
-      assign fast_irqs[IRQ_ID_RM_1] = ~vera_irq_n;
+      assign fast_irqs[IRQ_ID_VS_1] = ~vera_irq_n;
 
       vera_top #(VRAM_SIZE_BYTES) vera_inst (
           .clk(sys_clk),
@@ -985,7 +985,7 @@ module boxlambda_soc #(
       assign vga_b = 4'b0;
       assign vga_hsync = 1'b0;
       assign vga_vsync = 1'b0;
-      assign fast_irqs[IRQ_ID_RM_1] = 1'b0;
+      assign fast_irqs[IRQ_ID_VS_1] = 1'b0;
     end
   endgenerate
 
@@ -1301,7 +1301,7 @@ module boxlambda_soc #(
   endgenerate
 
   //Set the remaining bits in the fast_irq vector to 0
-  assign fast_irqs[IRQ_ID_RM_2] = 1'b0;
+  assign fast_irqs[IRQ_ID_VS_2] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_0] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_1] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_2] = 1'b0;

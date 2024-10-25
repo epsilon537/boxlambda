@@ -1,4 +1,3 @@
-#include <curses.h>
 #include <getopt.h>
 #include <fcntl.h>
 
@@ -71,9 +70,6 @@ double sc_time_stamp() { return 0; }
 
 //Clean-up logic.
 static void cleanup() {
-  // End curses.
-  endwin();
-
   //SDL clean-up.
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
@@ -124,9 +120,7 @@ static void tick(void) {
 
     //Stop frame recording on frame 3.
     if (framecount == 3) {
-      mvprintw(0, 0, "[%lud]", contextp->time());
-      mvprintw(23, 0, "Closing frame file...\n\r");
-      refresh();
+      //printf("SIM: Closing frame file...\n");
       fclose(frameFile);
       frameFile = 0;
     }
@@ -173,16 +167,13 @@ static void tick(void) {
   top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wbuart_inst__DOT__uart_setup);
 
   //Detect and print changes to UART
-  if (uartRxStringPrev != uart->get_rx_string()) {
-
-    //Positional printing using ncurses.
-    mvprintw(0, 0, "[%lud]", contextp->time());
-    mvprintw(1, 0, "UART Out:");
-    mvprintw(2, 0, "%s", uart->get_rx_string().c_str());
-    refresh();
-
+  if (!uart->get_rx_string().empty())  {
+    printf("%s", uart->get_rx_string().c_str());
+    fflush(stdout);
     //Update change detectors
-    uartRxStringPrev = uart->get_rx_string();
+    uartRxStringPrev += uart->get_rx_string();
+
+    uart->clear_rx_string();
   }
 }
 
@@ -254,11 +245,6 @@ int main(int argc, char** argv, char** env) {
       tfp->open("simx.fst");
     }
 
-    //Curses setup
-    initscr();
-    cbreak();
-    noecho();
-
     jtag_set_bypass(!attach_debugger);
 
     top->clk_i = 0;
@@ -275,28 +261,24 @@ int main(int argc, char** argv, char** env) {
         tick();
     }
 
+    printf("\n");
     cleanup();
 
     // Checks for automated testing.
     std::string uartCheckString1("Read Back Tests successful.");
 
     if (uartRxStringPrev.find(uartCheckString1) == std::string::npos) {
+      printf("SIM: did not find expected string: %s\n", uartCheckString1.c_str());
       printf("SIM: Test failed\n");
-      printf("SIM: Expected: %s\n", uartCheckString1.c_str());
-      printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
-
       return -1;
     }
 
-
     /* V<sprite-bank#> indicates a Vsync IRQ, L = Line IRQ, C = collision IRQ. */
-    std::string uartCheckString2("LV0LV0(Forcing sprite collision)LCV0LCV0L");
+    std::string uartCheckString2("LV0LV0(Forcing sprite collision)LV0CLV0CL");
 
     if (uartRxStringPrev.find(uartCheckString2) == std::string::npos) {
+      printf("SIM: did not find expected string: %s\n", uartCheckString2.c_str());
       printf("SIM: Test failed\n");
-      printf("SIM: Expected: %s\n", uartCheckString2.c_str());
-      printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
-
       return -1;
     }
 

@@ -25,10 +25,10 @@ then
 fi
 
 echo "Creating build build trees..."
-cmake --preset=sim-a7-35
-cmake --preset=sim-a7-100
-cmake --preset=arty-a7-35
-cmake --preset=arty-a7-100
+cmake --fresh --preset=sim-a7-35
+cmake --fresh --preset=sim-a7-100
+cmake --fresh --preset=arty-a7-35
+cmake --fresh --preset=arty-a7-100
 
 echo
 echo "Setup complete."

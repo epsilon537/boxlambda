@@ -22,8 +22,9 @@ function (gw_rm_rules_dfx)
   vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl_dfx_rm.tcl
         -vsCellInst ${_vs_inst}
         -vsDcp $<TARGET_PROPERTY:${_comp_name}_synth,BINARY_DIR>/project.runs/synth_1/*.dcp
-        -staticDcp $<TARGET_PROPERTY:${_ref_dfx_prj}_bit,BINARY_DIR>/${_ref_dfx_prj}.static_route.dcp
-        -outputBaseName ${_comp_name})
+        -staticDcp $<TARGET_PROPERTY:${_ref_dfx_prj}_bit,BINARY_DIR>/dfx_project.static_route.dcp
+        -outputBaseName ${_comp_name}
+        -part ${PART})
 
   #Custom command executing the vivado implementation command string.
   add_custom_command(
@@ -36,7 +37,7 @@ function (gw_rm_rules_dfx)
         DEPENDS
             ${_comp_name}_synth
             ${_ref_dfx_prj}_bit
-            $<TARGET_PROPERTY:${_ref_dfx_prj}_bit,BINARY_DIR>/${_ref_dfx_prj}.static_route.dcp
+            $<TARGET_PROPERTY:${_ref_dfx_prj}_bit,BINARY_DIR>/dfx_project.static_route.dcp
         COMMENT
             "Implementing DFX Reconfigurable Module and generating bitstream(s)."
         VERBATIM
@@ -57,11 +58,9 @@ endfunction()
 #Function grouping gateware component build rules.
 #TOP_MODULE: name of top module.
 #COMPONENT_NAME: component name, e.g. wbuart32
-#VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty.
-#VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty.
 function (gw_component_rules)
   set(options)
-  set(oneValueArgs TOP_MODULE COMPONENT_NAME VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
+  set(oneValueArgs TOP_MODULE COMPONENT_NAME)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_component_rules
@@ -73,23 +72,28 @@ function (gw_component_rules)
 
   set(_top_module ${gw_component_rules_TOP_MODULE})
   set(_comp_name ${gw_component_rules_COMPONENT_NAME})
-  set(_verilator_cpp_flags ${gw_component_rules_VERILATOR_CPP_FLAGS})
-  set(_verilator_ld_flags ${gw_component_rules_VERILATOR_LD_FLAGS})
 
-  #Forward to gw_common_rules() function. gw_common_rules() build logic is shared between
-  #gw components and projects.
-  gw_common_rules(
-        TOP_MODULE
-            ${_top_module}
-        PRJ_COMP_NAME
-            ${_comp_name}
-        OOC
-            "1"
-        VERILATOR_CPP_FLAGS
-            ${_verilator_cpp_flags}
-        VERILATOR_LD_FLAGS
-            ${_verilator_ld_flags}
-    )
+  if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+    #Forward to gw_common_rules() function. gw_common_rules() build logic is shared between
+    #gw components and projects.
+    gw_common_rules_vivado(
+          TOP_MODULE
+              ${_top_module}
+          PRJ_COMP_NAME
+              ${_comp_name}
+          OOC
+              "1"
+      )
+  else()
+    #Forward to gw_common_rules() function. gw_common_rules() build logic is shared between
+    #gw components and projects.
+    gw_common_rules_verilator(
+          TOP_MODULE
+              ${_top_module}
+          PRJ_COMP_NAME
+              ${_comp_name}
+      )
+  endif()
 endfunction()
 
 #Gateware components:

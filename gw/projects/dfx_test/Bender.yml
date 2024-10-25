@@ -8,7 +8,8 @@ package:
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
-  #vs0_empty: { path: "../../components/vs0_empty" }
+  # For synthesis, dfx_test depends on the empty vs0 component.
+  vs0_empty: { path: "../../components/vs0_empty" }
 
 sources:
   - target: prj_constraints
@@ -17,22 +18,6 @@ sources:
   - target: dfx_constraints
     files:
       - ../boxlambda_top/constrs/vs0_pblock.xdc
-  - target: all(arty-a7-35, not(vivado_ip))
-    defines:
-      VRAM_SIZE_BYTES: 65536
-      DPRAM_SIZE_BYTES: 65536
-      NO_MODPORT_EXPRESSIONS: ~
-      DEBUG_MODULE_ACTIVE: ~
-      YM2149: ~
-      SDSPI: ~
-      DRAM: ~
-      VERA: ~
-      PICORV_DMA: ~
-      SPIFLASH: ~
-      I2C: ~
-      #TRACE_ALL_INSTRUCTIONS: ~
-    files:
-      - ../boxlambda_top/rtl/boxlambda_top.sv
   - target: all(arty-a7-100, not(vivado_ip))
     defines:
       VRAM_SIZE_BYTES: 131072
@@ -44,6 +29,7 @@ sources:
       DRAM: ~
       VERA: ~
       PICORV_DMA: ~
+      USB_HID:  ~
       SPIFLASH: ~
       I2C: ~
       DFX: ~

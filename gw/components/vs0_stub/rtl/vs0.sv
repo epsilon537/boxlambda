@@ -35,7 +35,7 @@ module vs0 (
 
   localparam [31:0] STUB_SIGNATURE = 32'h0000510b;  //Signature register value.
 
-  logic unused = &{wbm_dat_i, wbm_ack_i, wbm_stall_i, wbm_err_i, wbs_adr, wbs_dat_w, wbs_sel, wbs_we};
+  logic unused = &{rst, irq_in, wbm_dat_i, wbm_ack_i, wbm_stall_i, wbm_err_i, wbs_adr, wbs_dat_w, wbs_sel, wbs_we};
 
   //Just acknowledge incoming transactions.
   always_ff @(posedge sys_clk) begin

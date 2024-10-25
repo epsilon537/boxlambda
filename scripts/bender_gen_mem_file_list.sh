@@ -14,10 +14,11 @@ fi
 
 SRC_DIR=$1
 SCRIPT_FILE_NAME=$2
+TARGET=$3
 
 echo "#Memory files" > $SCRIPT_FILE_NAME.tmp
 
-MEM_FILE_LIST=`bender -d $SRC_DIR script -t memory flist`
+MEM_FILE_LIST=`bender -d $SRC_DIR script -t $TARGET -t memory flist`
 for f in $MEM_FILE_LIST
 do
 	cp $f .

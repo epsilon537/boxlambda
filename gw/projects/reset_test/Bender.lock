@@ -5,12 +5,6 @@ packages:
     source:
       Path: ../../components/boxlambda_soc/../../components/audio_dac
     dependencies: []
-  blackbox0_empty:
-    revision: null
-    version: null
-    source:
-      Path: ../../components/blackbox0_empty
-    dependencies: []
   boxlambda_clk_gen:
     revision: null
     version: null
@@ -37,6 +31,7 @@ packages:
     - spiflash
     - usb_hid_host
     - vera
+    - wb_dfx_controller
     - wb_dp_ram
     - wb_timer
     - wbuart
@@ -132,6 +127,19 @@ packages:
     source:
       Path: ../../components/boxlambda_soc/../../components/vera
     dependencies: []
+  vs0_stub:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/vs0_stub
+    dependencies: []
+  wb_dfx_controller:
+    revision: null
+    version: null
+    source:
+      Path: ../../components/boxlambda_soc/../../components/wb_dfx_controller
+    dependencies:
+    - wbxbar
   wb_dp_ram:
     revision: null
     version: null
