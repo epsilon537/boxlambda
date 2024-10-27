@@ -15,7 +15,8 @@ route_design
 write_bitstream -force -bin_file project
 
 #Generate the .mmi file to be used for post-synthesis memory updates.
-write_mem_info -force project
+#-quiet to silently ignore errors. Not all projects use .xpms that can produce .mmi files.
+write_mem_info -quiet -force project
 
 # Generate a timing and utilization reports and write to disk
 report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose \

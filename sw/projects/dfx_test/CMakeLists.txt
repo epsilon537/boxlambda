@@ -4,6 +4,13 @@
 
 # Note that this directory also contains a nuc.bin file. This is the Forth run-time firmware image to be loaded into
 # the J1B core after it has been DFX loaded into the SoC.
+# nuc.bin is generated as follows:
+# 1. cd sub/swapforth/j1b
+# 2. make build/nuc_rev.bin
+# 3. cp build/nuc_rev.bin ../../../sw/projects/dfx_test/nuc.bin
+#
+# Step 2 above first builds the swapforth run-time firmware for the J1B as a hex file. Then this hex file
+# is converted to a little endian binary file.
 
 add_executable(dfx_test
  EXCLUDE_FROM_ALL

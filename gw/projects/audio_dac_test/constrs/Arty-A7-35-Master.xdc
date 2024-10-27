@@ -19,7 +19,7 @@ set_property -dict { PACKAGE_PIN A10   IOSTANDARD LVCMOS33 } [get_ports { sw[3] 
 
 ## RGB LEDs
 #set_property -dict { PACKAGE_PIN E1    IOSTANDARD LVCMOS33 } [get_ports { pll_locked_led }]; #IO_L18N_T2_35 Sch=led0_b
-set_property -dict { PACKAGE_PIN F6    IOSTANDARD LVCMOS33 } [get_ports { reset_negedge_led }]; #IO_L19N_T3_VREF_35 Sch=led0_g
+#set_property -dict { PACKAGE_PIN F6    IOSTANDARD LVCMOS33 } [get_ports { reset_negedge_led }]; #IO_L19N_T3_VREF_35 Sch=led0_g
 #set_property -dict { PACKAGE_PIN G6    IOSTANDARD LVCMOS33 } [get_ports { led0_r }]; #IO_L19P_T3_35 Sch=led0_r
 #set_property -dict { PACKAGE_PIN G4    IOSTANDARD LVCMOS33 } [get_ports { init_done_led }]; #IO_L20P_T3_35 Sch=led1_b
 #set_property -dict { PACKAGE_PIN J4    IOSTANDARD LVCMOS33 } [get_ports { reset_led_2 }]; #IO_L21P_T3_DQS_35 Sch=led1_g
