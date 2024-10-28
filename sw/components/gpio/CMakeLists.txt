@@ -7,7 +7,7 @@ target_sources(gpio
 
 target_compile_options(gpio
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 #Paths to include files users of usb_hid are expected to use.

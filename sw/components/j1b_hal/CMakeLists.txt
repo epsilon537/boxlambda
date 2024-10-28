@@ -15,7 +15,7 @@ target_sources(j1b_hal
 
 target_compile_options(j1b_hal
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 #Paths to include files users of j1b_hal are expected to use.

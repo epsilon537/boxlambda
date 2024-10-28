@@ -18,7 +18,7 @@ sources:
   - target: dfx_constraints
     files:
       - ../boxlambda_top/constrs/vs0_pblock.xdc
-  - target: all(arty-a7-100, not(vivado_ip))
+  - target: arty-a7-100
     defines:
       VRAM_SIZE_BYTES: 131072
       DPRAM_SIZE_BYTES: 262144

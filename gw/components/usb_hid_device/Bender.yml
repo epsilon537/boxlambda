@@ -6,7 +6,7 @@ package:
   name: usb_hid_device
 
 sources:
-  - target: memory
+  - target: any(memory_vivado, memory_verilator)
     files:
      - ../../../sub/usb_hid_device/firmware_keyboard/j1_keyboard.hex
      - ../../../sub/usb_hid_device/firmware_mouse/j1_mouse.hex

@@ -6,7 +6,7 @@ package:
   name: vera
 
 sources:
-  - target: memory
+  - target: any(memory_vivado, memory_verilator)
     files:
      - ../../../sub/vera_wishbone/fpga/source/palette_ram.mem
   - target: verilator

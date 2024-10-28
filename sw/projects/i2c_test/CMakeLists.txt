@@ -7,7 +7,7 @@ add_executable(i2c_test
 
 target_compile_options(i2c_test
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 link_and_create_mem_file(i2c_test

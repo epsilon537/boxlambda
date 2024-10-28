@@ -15,7 +15,7 @@ sources:
   - target: prj_constraints
     files:
       - ../boxlambda_top/constrs/boxlambda_soc.xdc
-  - target: all(arty-a7-35, not(vivado_ip))
+  - target: arty-a7-35
     defines:
       VRAM_SIZE_BYTES: 65536
       DPRAM_SIZE_BYTES: 65536
@@ -30,7 +30,7 @@ sources:
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_top/rtl/boxlambda_top.sv
-  - target: all(arty-a7-100, not(vivado_ip))
+  - target: arty-a7-100
     defines:
       VRAM_SIZE_BYTES: 131072
       DPRAM_SIZE_BYTES: 262144

@@ -9,7 +9,7 @@ target_sources(peek_poke_cli
 
 target_compile_options(peek_poke_cli
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 #Paths to include files users of usb_hid are expected to use.

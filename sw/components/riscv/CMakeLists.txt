@@ -7,7 +7,7 @@ target_sources(riscv
 
 target_compile_options(riscv
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 target_include_directories(riscv

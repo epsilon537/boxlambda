@@ -13,7 +13,7 @@ add_executable(j1b_test_ram
 
 target_compile_options(j1b_test_ram
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 target_include_directories(j1b_test_ram
@@ -34,7 +34,7 @@ add_executable(j1b_test
 
 target_compile_options(j1b_test
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 target_include_directories(j1b_test
@@ -45,7 +45,7 @@ target_include_directories(j1b_test
 link_and_create_mem_file(j1b_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(j1b_test sdram gpio riscv j1b_hal)
+target_link_libraries(j1b_test gpio riscv j1b_hal)
 
 add_flash_sw_target(j1b_test)
 

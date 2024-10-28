@@ -12,15 +12,19 @@ gw_component_rules(
     COMPONENT_NAME vs0_j1b
 )
 
-# vs0_J1B is a DFX component. Next to lint check and synthesis, defined in gw_component_rules(), a DFX Reconfigurable
-# Module needs to be implemented and turned into a bitsteam that can be live-loaded onto a DFX-enabled system. The
-# build rules to do that are defined in the gw_rm_rules_dfx() function. Calling this function with the parameters
-# given below results in a vs0_j1b_bit target being defined. Building that target results in a DFX partial bitstream
-# of the vs0_j1b component.
-gw_rm_rules_dfx(
-  COMPONENT_NAME vs0_j1b
-  #Specify where in the SoC, this component plugs into.
-  VS_INST boxlambda_soc_inst/vs0_inst
-  #Specify the reference project definign the static portion of the DFX build.
-  REF_DFX_PROJECT dfx_test
-)
+if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+if(BL_TARGET_FPGA STREQUAL "arty-a7-100")
+  # vs0_J1B is a DFX component. Next to lint check and synthesis, defined in gw_component_rules(), a DFX Reconfigurable
+  # Module needs to be implemented and turned into a bitsteam that can be live-loaded onto a DFX-enabled system. The
+  # build rules to do that are defined in the gw_rm_rules_dfx() function. Calling this function with the parameters
+  # given below results in a vs0_j1b_bit target being defined. Building that target results in a DFX partial bitstream
+  # of the vs0_j1b component.
+  gw_rm_rules_dfx(
+    COMPONENT_NAME vs0_j1b
+    #Specify where in the SoC, this component plugs into.
+    VS_INST boxlambda_soc_inst/vs0_inst
+    #Specify the reference project definign the static portion of the DFX build.
+    REF_DFX_PROJECT dfx_test
+  )
+endif()
+endif()

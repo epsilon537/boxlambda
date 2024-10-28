@@ -9,7 +9,7 @@ target_sources(rtcc
 
 target_compile_options(rtcc
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 target_include_directories(rtcc

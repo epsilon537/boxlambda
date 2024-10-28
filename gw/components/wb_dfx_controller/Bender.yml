@@ -10,7 +10,7 @@ dependencies:
   wbxbar: { path: "../../components/wbxbar" }
 
 sources:
-  - target: all(vivado_ip, arty-a7-100)
+  - target: vivado_ip_arty-a7-100
     files:
       # An xci file is a Vivado IP file. Xilinx does not provide the source code
       # of its DFX controller core.

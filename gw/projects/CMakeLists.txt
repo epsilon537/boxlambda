@@ -92,7 +92,7 @@ function (gw_project_rules_dfx_vivado)
             dfx_project.bin
             dfx_project.static_route.dcp
         COMMAND
-            bash -c ${impl_cmd}
+            bash -c ${impl_cmd} 2>&1 | tee impl.log
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
@@ -221,7 +221,7 @@ function (gw_project_rules_vivado)
         OUTPUT
             project.bin
         COMMAND
-            bash -c ${impl_cmd}
+            bash -c ${impl_cmd} 2>&1 | tee impl.log
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
@@ -464,5 +464,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
   endif()
 endif()
 add_subdirectory(reset_test)
-add_subdirectory(j1b_test)
+if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
+  add_subdirectory(j1b_test)
+endif()
 

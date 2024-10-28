@@ -15,7 +15,7 @@ route_design
 write_bitstream -force -bin_file project
 
 #Generate the .mmi file to be used for post-synthesis memory updates.
-#-quiet to silently ignore errors. Not all projects use .xpms that can produce .mmi files.
+#-quiet to silently ignore errors. Not all project can produce .mmi files.
 write_mem_info -quiet -force project
 
 # Generate a timing and utilization reports and write to disk

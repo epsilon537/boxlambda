@@ -11,7 +11,6 @@
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
-#include "sdram.h"
 #include "vs0_hal.h" //To read the core signature register.
 #include "j1b_hal.h"
 #include "j1b_nuc.h"
@@ -56,18 +55,6 @@ int main(void) {
   //Switches and LEDs
   gpio_init(&gpio, (volatile void *)GPIO_BASE);
   gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
-
-  //We need SDRAM in this build because the flashdriver requires
-  //heap memory, which is located in SDRAM.
-
-  /*sdram_init() is provided by the Litex code base.*/
-  if (sdram_init()) {
-    printf("SDRAM init OK.\n");
-  }
-  else {
-    printf("SDRAM init failed!\n");
-    while(1);
-  }
 
   printf("Reading J1B core signature register...\n");
 
