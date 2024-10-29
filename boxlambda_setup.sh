@@ -20,8 +20,9 @@ git submodule update --init --recursive
 if [[ "$#" > 0 && "$1" == "-s" ]]
 then
     echo "Recursively checking out submodules to HEAD of boxlambda branch."
-    git submodule foreach --recursive git pull
     git submodule foreach --recursive git checkout boxlambda
+    echo "Recursively pulling from remote."
+    git submodule foreach --recursive git pull
 fi
 
 echo "Creating build build trees..."
