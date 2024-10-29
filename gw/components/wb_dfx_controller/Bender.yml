@@ -1,0 +1,29 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: wb_dfx_controller
+
+dependencies:
+  # Path dependency.
+  wbxbar: { path: "../../components/wbxbar" }
+
+sources:
+  - target: vivado_ip_arty-a7-100
+    files:
+      # An xci file is a Vivado IP file. Xilinx does not provide the source code
+      # of its DFX controller core.
+      - ../../ip/dfx_controller/dfx_controller_0.xci
+      #- ../../ip/ila/ila_0.xci
+
+  - target: verilator
+    files:
+     - lint.vlt
+     - ../../ip/dfx_controller/dfx_controller_0_stub.v
+     - rtl/ICAPE2_stub.v
+
+  - target: any(vivado, verilator)
+    files:
+      - rtl/wb_dfx_controller.sv
+

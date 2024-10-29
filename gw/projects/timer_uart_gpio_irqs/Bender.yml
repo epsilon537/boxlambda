@@ -8,15 +8,16 @@ package:
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
+  vs0_stub: { path: "../../components/vs0_stub" }
 
 sources:
-  - target: constraints
+  - target: prj_constraints
     files:
       - ../boxlambda_top/constrs/boxlambda_soc.xdc
-  - target: arty-a7-35
+  - target: arty-a7-100
     defines:
-      VRAM_SIZE_BYTES: 65536
-      DPRAM_SIZE_BYTES: 65536
+      VRAM_SIZE_BYTES: 131072
+      DPRAM_SIZE_BYTES: 262144
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       YM2149: ~
@@ -25,13 +26,14 @@ sources:
       VERA: ~
       PICORV_DMA: ~
       SPIFLASH: ~
+      I2C: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_top/rtl/boxlambda_top.sv
-  - target: arty-a7-100
+  - target: arty-a7-35
     defines:
-      VRAM_SIZE_BYTES: 131072
-      DPRAM_SIZE_BYTES: 262144
+      VRAM_SIZE_BYTES: 65536
+      DPRAM_SIZE_BYTES: 65536
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       YM2149: ~

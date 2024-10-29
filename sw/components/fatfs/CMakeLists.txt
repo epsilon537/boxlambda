@@ -19,7 +19,7 @@ target_compile_definitions(fatfs
 #We have to turn on optimizations or we won't fit in the on-chip RAM link map.
 target_compile_options(fatfs
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 target_include_directories(fatfs

@@ -5,7 +5,7 @@ add_executable(vera_test
 
 target_compile_options(vera_test
  PRIVATE
-  -O2
+  -O2 -g
 )
 
 #Function defined in parent CMakeLists.txt file:

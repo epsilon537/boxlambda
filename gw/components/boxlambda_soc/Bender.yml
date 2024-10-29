@@ -22,13 +22,23 @@ dependencies:
   reset_ctrl: { path: "../../components/reset_ctrl" }
   picorv_dma: { path: "../../components/picorv_dma" }
   boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
-  blackbox: { path: "../../components/blackbox" }
   usb_hid_host: { path: "../../components/usb_hid_host" }
   spiflash: { path: "../../components/spiflash"}
   wb_timer: { path: "../../components/wb_timer"}
   i2c_master: { path: "../../components/i2c_master"}
+  wb_dfx_controller: { path: "../../components/wb_dfx_controller"}
 
 sources:
+  #OOC
+  #Pulling in the vs0 stub to satisfy the lint checker.
+  #vs0_empty is no good because of undriven signals.
+  #FIXME: I would have prefered to use a target specific dependency instead of 
+  #pulling in a module, but I haven't been able to figure out the bender syntax
+  #for doing that.
+  - target: boxlambda_soc
+    files:
+      - ../vs0_stub/rtl/vs0.sv
+
   #co-sim stuffs.
   - target: verilator
     files:
@@ -39,13 +49,11 @@ sources:
       - ../../../sub/riscv-dbg/tb/SimJTAG.sv
       - ../../../sub/sdspi/bench/cpp/sdspisim.cpp
       - ../../../sub/wbi2c/bench/cpp/i2csim.cpp
+
   - target: any(vivado, verilator)
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:
       - rtl/boxlambda_soc.sv
-
-
-
 
 

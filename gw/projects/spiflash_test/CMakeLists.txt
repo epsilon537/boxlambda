@@ -1,31 +1,38 @@
-#FPGA and simulation builds have different top-levels.
+#This is a dummy target. It doesn't build anything. It just collects the spiflash_test
+#sw executable as a dependency for the testcase below. Sadly, add_test() doesn't have a DEPENDS attribute.
+#This means you need to run 'make spiflash_test_collect', before running ctest.
+add_custom_target(spiflash_test_collect ALL
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT
+            "Dummy target to collect test dependencies."
+        DEPENDS
+            spiflash_test
+        VERBATIM
+    )
+
 if(CMAKE_BUILD_TYPE STREQUAL "fpga")
-  set(top_module boxlambda_top)
+  #gw_project_rules_vivado() function is defined in the parent CMakeLists.txt.
+  gw_project_rules_vivado(
+      TOP_MODULE boxlambda_top
+      PROJECT_NAME spiflash_test
+      MEM_FILE_TARGET cmem_to_flash_vector
+  )
 else()
-  set(top_module sim_main)
+  #gw_project_rules_verilator() function is defined in the parent CMakeLists.txt.
+  gw_project_rules_verilator(
+      TOP_MODULE sim_main
+      PROJECT_NAME spiflash_test
+      MEM_FILE_TARGET cmem_to_flash_vector
+      VERILATOR_CPP_FLAGS
+          "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang -I${PROJECT_SOURCE_DIR}/gw/components/spiflash/sim/"
+      VERILATOR_LD_FLAGS
+          -lncurses
+  )
+
+  #Add testcase.
+  add_test(NAME spiflash_test_test
+      COMMAND ./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test.bin
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
 endif()
-
-#gw_project_rules() function is defined in the parent CMakeLists.txt.
-gw_project_rules(
-    TOP_MODULE ${top_module}
-    PROJECT_NAME spiflash_test
-    MEM_FILE_TARGET cmem_to_flash_vector #spiflash_test_ram
-    VERILATOR_CPP_FLAGS
-        "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang/ -I${PROJECT_SOURCE_DIR}/gw/components/spiflash/sim/"
-    VERILATOR_LD_FLAGS
-        -lncurses
-)
-
-#Add the SW image to be loaded from flash as a dependency.
-if(CMAKE_BUILD_TYPE STREQUAL "fpga")
-  add_dependencies(spiflash_test_bit_sw spiflash_test)
-else()
-  add_dependencies(spiflash_test_sim_sw spiflash_test)
-endif()
-
-#Add testcase.
-add_test(NAME spiflash_test_test
-    COMMAND ./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test.bin
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
-

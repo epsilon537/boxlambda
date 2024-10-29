@@ -7,7 +7,7 @@ target_sources(i2c
 
 target_compile_options(i2c
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 #Paths to include files users of usb_hid are expected to use.

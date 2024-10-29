@@ -9,10 +9,6 @@ set(SPECS "--specs=${CMAKE_CURRENT_BINARY_DIR}/picolibc.specs")
 add_compile_options(
     $<$<COMPILE_LANGUAGE:CXX,C,ASM>:${SPECS}>)
 
-#Don't use Picolibc's crt0. We provide our own crt0 in sw/components/bootstrap
-add_link_options(
-    -nostartfiles)
-
 #Function for picorv32 builds (picorv_dma microcode) to link and generate binary
 function(link_gen_picobin _tgt)
   #Text section should start at 0x10002000.

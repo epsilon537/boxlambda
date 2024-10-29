@@ -10,7 +10,7 @@ target_sources(embedded_cli
 
 target_compile_options(embedded_cli
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 #Paths to include files users of usb_hid are expected to use.

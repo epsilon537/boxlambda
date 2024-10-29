@@ -16,7 +16,7 @@ target_compile_definitions(sdram
 
 target_compile_options(sdram
  PRIVATE
-  -O2 -g
+  -O2 -g -ffunction-sections
 )
 
 target_include_directories(sdram

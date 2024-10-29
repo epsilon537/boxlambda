@@ -1,7 +1,7 @@
 #ifndef I2C_MASTER_REGS_H
 #define I2C_MASTER_REGS_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 #define I2C_MASTER_BASE 0x10000200
 

@@ -12,9 +12,9 @@ extern "C" {
  * provide a definition for the corresponding function below.
  * It'll overrule the weak binding.
  */
-void _rm_2_irq_handler(void) __attribute__((interrupt("machine")));
-void _rm_1_irq_handler(void) __attribute__((interrupt("machine")));
-void _rm_0_irq_handler(void) __attribute__((interrupt("machine")));
+void _vs_2_irq_handler(void) __attribute__((interrupt("machine")));
+void _vs_1_irq_handler(void) __attribute__((interrupt("machine")));
+void _vs_0_irq_handler(void) __attribute__((interrupt("machine")));
 void _dmac_irq_handler(void) __attribute__((interrupt("machine")));
 void _sdspi_irq_handler(void) __attribute__((interrupt("machine")));
 void _gpio_irq_handler(void) __attribute__((interrupt("machine")));
@@ -59,9 +59,9 @@ static inline void enable_global_irq(void) {
 #define IRQ_ID_TIMER 7
 
 /*Assignment of interrupts from BoxLambda components to RISCV fast IRQs*/
-#define IRQ_ID_RM_2 IRQ_ID_FAST_14
-#define IRQ_ID_RM_1 IRQ_ID_FAST_13
-#define IRQ_ID_RM_0 IRQ_ID_FAST_12
+#define IRQ_ID_VS_2 IRQ_ID_FAST_14
+#define IRQ_ID_VS_1 IRQ_ID_FAST_13
+#define IRQ_ID_VS_0 IRQ_ID_FAST_12
 #define IRQ_ID_DMAC IRQ_ID_FAST_11
 #define IRQ_ID_SDSPI IRQ_ID_FAST_10
 #define IRQ_ID_GPIO IRQ_ID_FAST_09

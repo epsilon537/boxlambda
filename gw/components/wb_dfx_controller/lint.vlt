@@ -1,0 +1,96 @@
+`verilator_config
+
+lint_off -rule DECLFILENAME -file "*/dfx_controller_0_stub.v" -match "Filename 'dfx_controller_0_stub' does not match MODULE name: 'dfx_controller_0'"
+
+lint_off -rule DECLFILENAME -file "*/gw/components/wb_dfx_controller/rtl/ICAPE2_stub.v" -match "Filename 'ICAPE2_stub' does not match MODULE name: 'ICAPE2'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'm_axi_mem_araddr'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'm_axi_mem_arlen'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'm_axi_mem_arsize'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'm_axi_mem_arburst'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'm_axi_mem_arprot'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'm_axi_mem_arcache'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'm_axi_mem_aruser'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'm_axi_mem_arvalid'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'm_axi_mem_arready'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'm_axi_mem_rdata'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'm_axi_mem_rresp'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'm_axi_mem_rlast'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'm_axi_mem_rvalid'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'm_axi_mem_rready'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'clk'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'reset'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'icap_clk'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'icap_reset'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'icap_csib'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'icap_rdwrb'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'icap_i'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'icap_o'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'vsm_VS_0_rm_shutdown_req'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 'vsm_VS_0_rm_shutdown_ack'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'vsm_VS_0_rm_decouple'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'vsm_VS_0_rm_reset'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'vsm_VS_0_event_error'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'vsm_VS_0_sw_shutdown_req'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 'vsm_VS_0_sw_startup_req'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 's_axi_reg_awaddr'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 's_axi_reg_awvalid'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 's_axi_reg_awready'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 's_axi_reg_wdata'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 's_axi_reg_wvalid'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 's_axi_reg_wready'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 's_axi_reg_bresp'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 's_axi_reg_bvalid'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 's_axi_reg_bready'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 's_axi_reg_araddr'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 's_axi_reg_arvalid'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 's_axi_reg_arready'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 's_axi_reg_rdata'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 's_axi_reg_rresp'"
+
+lint_off -rule UNDRIVEN -file "*/dfx_controller_0_stub.v" -match "Signal is not driven: 's_axi_reg_rvalid'"
+
+lint_off -rule UNUSEDSIGNAL -file "*/dfx_controller_0_stub.v" -match "Signal is not used: 's_axi_reg_rready'"
+

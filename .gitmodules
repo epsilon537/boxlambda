@@ -75,3 +75,6 @@
 [submodule "sub/Time"]
 	path = sub/Time
 	url = https://github.com/epsilon537/Time
+[submodule "sub/swapforth"]
+	path = sub/swapforth
+	url = https://github.com/epsilon537/swapforth

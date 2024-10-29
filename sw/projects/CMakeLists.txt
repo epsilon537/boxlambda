@@ -25,6 +25,9 @@ function(link_and_create_mem_file _tgt _link_script)
   #Link-for-internal-memory implies linking in the bootstrap object library.
   target_link_options(${_tgt}
         PRIVATE
+            # Don't use Picolibc's crt0. We provide our own crt0 in
+            # sw/components/bootstrap
+            -nostartfiles
             -T${_link_script}
             "--specs=${CMAKE_BINARY_DIR}/sw/picolibc.specs"
             "LINKER:--defsym=__cmem_size=${CMEM_SIZE}"
@@ -39,9 +42,9 @@ function(link_and_create_mem_file _tgt _link_script)
             ${_tgt}
         POST_BUILD
         COMMAND
-            ${CMAKE_OBJCOPY} -O verilog --interleave-width=4 --interleave=4 --byte=0 ${_tgt} ${_tgt}.hex
+            riscv32-unknown-elf-objcopy -O verilog --interleave-width=4 --interleave=4 --byte=0 ${_tgt} ${_tgt}.hex
         COMMAND
-            ${CMAKE_OBJCOPY} -O binary ${_tgt} ${_tgt}.bin
+             riscv32-unknown-elf-objcopy -O binary ${_tgt} ${_tgt}.bin
         COMMAND
             ${PROJECT_SOURCE_DIR}/sub/ibex_wb/scripts/hex2vmem.pl < ${_tgt}.hex > ${_tgt}.mem
         WORKING_DIRECTORY
@@ -71,4 +74,6 @@ add_subdirectory(timer_uart_gpio_irqs)
 add_subdirectory(i2c_test)
 add_subdirectory(rtcc_test)
 add_subdirectory(reset_test)
+add_subdirectory(j1b_test)
+add_subdirectory(dfx_test)
 

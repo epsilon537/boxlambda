@@ -1,37 +1,27 @@
-#TCL script to interface the build system to vivado.
-proc getopt {_argv name {_var ""} {default ""}} {
-     upvar 1 $_argv argv $_var var
-     set pos [lsearch -regexp $argv ^$name]
-     if {$pos>=0} {
-         set to $pos
-         if {$_var ne ""} {
-             set var [lindex $argv [incr to]]
-         }
-         set argv [lreplace $argv $pos $to]
-         return 1
-     } else {
-         if {[llength [info level 0]] == 5} {set var $default}
-         return 0
-     }
-}
+# TCL script used by the build system to implement a (non-DFX) Vivado project.
 
-#Command line arguments accepted by the script
-getopt argv -project project ""
-getopt argv -outputDir outputDir ""
+#BoxLambda uses Vivado's project mode. All projects are called project.xpr.
+open_project project.xpr
 
-puts "project: $project"
-puts "outputDir: $outputDir"
+#Open the synthesis checkpoint
+open_run synth_1
 
-#We're using Vivado's project mode
-open_project $project
+#Route the project
+opt_design
+place_design
+route_design
 
-# Launch Implementation
-launch_runs impl_1 -to_step write_bitstream
-wait_on_run impl_1 ; #wait for implementation to complete before continuing
+#Create the bitstream file
+write_bitstream -force -bin_file project
+
+#Generate the .mmi file to be used for post-synthesis memory updates.
+#-quiet to silently ignore errors. Not all project can produce .mmi files.
+write_mem_info -quiet -force project
+
 # Generate a timing and utilization reports and write to disk
-open_run impl_1
 report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose \
--max_paths 10 -input_pins -file $outputDir/imp_timing.rpt
-report_utilization -quiet -file $outputDir/imp_util.rpt
+-max_paths 10 -input_pins -file imp_timing.rpt
+report_utilization -quiet -file imp_util.rpt
 
 close_project
+
