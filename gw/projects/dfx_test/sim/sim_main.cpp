@@ -25,6 +25,9 @@
 // From riscv-dbg
 #include "sim_jtag.h"
 
+//We set GPIO bits 7:4 to 0xf to indicate to RISCV SW that this is a simulation.
+#define GPIO_SIM_INDICATOR 0x0000f0
+
 bool tracing_enable = false;
 
 // Uart co-simulation from wbuart32.
@@ -61,7 +64,7 @@ static void cleanup() {
 }
 
 // Advance simulation by one clock cycle
-static void tick(unsigned gp_in, unsigned rst_ni) {
+static void tick(unsigned rst_ni) {
   // Tick twice: Input clock is 100MHz, BoxLambda's system clock runs at 50MHz.
   //->Advance two input clock cycles at a time.
   for (int ii = 0; ii < 2; ii++) {
@@ -80,8 +83,7 @@ static void tick(unsigned gp_in, unsigned rst_ni) {
       tfp->dump(contextp->time());
   }
 
-  //The main() drives the GPIO inputs via the gp_in argument.
-  top->gp_in = gp_in;
+  top->gp_in = GPIO_SIM_INDICATOR; //Indicate to SW that this is a simulation.
 
   //The test sequence in main() drives the external reset input via the rst_ni variable
   top->rst_ni = rst_ni;
@@ -103,25 +105,23 @@ static void tick(unsigned gp_in, unsigned rst_ni) {
   }
 }
 
-int j1b_test() {
+int dfx_test() {
   int done = 0;
-  unsigned gp_in = 0;
   unsigned rst_ni = 1;
 
   while (!done && (contextp->time() < 150000000)) {
     // Evaluate model
-    tick(gp_in, rst_ni);
+    tick(rst_ni);
 
-    // The J1B response to '42 emit':
-    std::string uartCheckString(" * ok");
+    std::string uartCheckString("Read signature value: 0x510b");
     if (uartRxStringPrev.find(uartCheckString) != std::string::npos) {
-      printf("SIM: String matched.\n");
+      printf("SIM: String matched. Moving on...\n");
       done = 1;
     }
   }
 
   if (!done) {
-    printf("SIM: J1B response string not detected. Test failed.\n");
+    printf("SIM: VS0 core signature not detected. Test failed.\n");
     return -1;
   }
 
@@ -192,7 +192,7 @@ int main(int argc, char **argv, char **env) {
   top->rst_ni = 1;
 
   // Run the test sequence
-  int res = j1b_test();
+  int res = dfx_test();
 
   if (res == 0) {
     printf("SIM: Test passed.\n");

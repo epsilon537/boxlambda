@@ -37,3 +37,26 @@ target_link_libraries(dfx_test sdram gpio embedded_cli riscv interrupts peek_pok
 
 add_flash_sw_target(dfx_test)
 
+add_executable(dfx_test_ram
+ EXCLUDE_FROM_ALL
+ dfx_test.cpp
+ dfx_cli.cpp
+ j1b_cli.cpp
+)
+
+target_compile_options(dfx_test_ram
+ PRIVATE
+  -O2 -g
+)
+
+target_include_directories(dfx_test_ram
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/sw/components/dfx/
+  ${PROJECT_SOURCE_DIR}/sw/components/vs0_hal/
+)
+
+link_and_create_mem_file(dfx_test_ram
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+
+target_link_libraries(dfx_test_ram sdram gpio embedded_cli riscv interrupts peek_poke_cli j1b_hal fatfs ymodem_cli mem_fs_cli)
+
