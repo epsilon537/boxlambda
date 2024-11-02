@@ -58,6 +58,9 @@ module vs0 (
     output wire irq_out
 );
 
+// The static design portion of a DFX build expects to see an empty module 
+// declaration for Virtual Socket 0. That is what this ifndef is for.
+`ifndef DFX_SYNTHESIZE_EMPTY_MODULE
   /* The idea is that the host can figure out which module is running in the
   * virtual socket, by querying its signature register. Each reconfigurable
   *module is supposed to have a unique signature value.
@@ -389,5 +392,6 @@ module bram_tdp #(
     end
   end
 
+`endif
 endmodule
 

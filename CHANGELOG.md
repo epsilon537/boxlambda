@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Swapforth fork as a submodule.
 - Build system support for Vivado IP (.xci) dependencies.
 - Build system support for DFX projects.
-- Virtual socket gateware components vs0_empty/stub/j1b.
+- Virtual socket gateware components vs0_stub/j1b.
 - Wb_dfx_controller gateware component.
 - Wb_arbiter to arbitrate between DFX controller and Debug Module accessing the xbar.
 - DFX example/test project gw/projects/dfx_test + sw/projects/dfx_test.
@@ -49,6 +49,7 @@ Dependency of FindSDL2 CMake module is too brittle/distro-dependant.
 
 - *Project*_lint target from arty_\* build trees.
 - Verilator flags from CMake gw_component_rules().
+- Bender.lock file generation.
 
 [dfx]: https://github.com/epsilon537/boxlambda/compare/i2c_rtcc...dfx
 
