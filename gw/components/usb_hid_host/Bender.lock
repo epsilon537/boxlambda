@@ -1,7 +1,0 @@
-packages:
-  cdc_cells:
-    revision: null
-    version: null
-    source:
-      Path: ../cdc_cells
-    dependencies: []

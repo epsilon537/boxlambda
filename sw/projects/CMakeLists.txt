@@ -1,4 +1,4 @@
-#Function for SW project builds:
+#Function adding a *_flash_sw target/rule for SW project builds:
 
 function(add_flash_sw_target _tgt)
   if (BL_TARGET_FPGA STREQUAL "arty-a7-100")

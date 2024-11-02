@@ -8,8 +8,7 @@ package:
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
-  # For synthesis, dfx_test depends on the empty vs0 component.
-  vs0_empty: { path: "../../components/vs0_empty" }
+  vs0_stub: { path: "../../components/vs0_stub" }
 
 sources:
   - target: prj_constraints

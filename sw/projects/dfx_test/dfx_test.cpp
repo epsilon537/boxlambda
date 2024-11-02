@@ -20,10 +20,11 @@
 #include "mem_fs_cli.h"
 #include "j1b_cli.h"
 #include "ff.h"
+#include "vs0_hal.h"
 
 #define STR_ROOT_DIRECTORY ""
 
-#define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
+#define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
 static struct uart uart0;
 static struct gpio gpio;
@@ -60,6 +61,10 @@ int main(void) {
   gpio_init(&gpio, (volatile void *)GPIO_BASE);
   gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
 
+  //GPIO bits 7:4 = 0xf indicate we're running inside a simulator.
+  if ((gpio_get_input(&gpio) & 0xf0) == GPIO_SIM_INDICATOR)
+    printf("This is a simulation.\n");
+
   //We need SDRAM in this build because the flashdriver requires
   //heap memory, which is located in SDRAM.
 
@@ -72,18 +77,27 @@ int main(void) {
     while(1);
   }
 
-  printf("Mounting filesystem...\n");
+  //Don't mount the file system in simulation.
+  if ((gpio_get_input(&gpio) & 0xf0) != GPIO_SIM_INDICATOR) {
+    printf("Mounting filesystem...\n");
 
-  static FATFS fs;
+    static FATFS fs;
 
-  /* Clear file system object */
-  memset(&fs, 0, sizeof(FATFS));
+    /* Clear file system object */
+    memset(&fs, 0, sizeof(FATFS));
 
-  FRESULT res = f_mount(&fs, "", 1);
-  if (res != FR_OK) {
-    printf("FatFS mount error! %d\n", res);
-    return -1;
+    FRESULT res = f_mount(&fs, "", 1);
+    if (res != FR_OK) {
+      printf("FatFS mount error! %d\n", res);
+      return -1;
+    }
   }
+
+  printf("Reading VS0 core signature register...\n");
+
+  uint32_t sig = vs0_reg_rd(VS0_REG_SIGNATURE);
+
+  printf("Read signature value: 0x%x\n", sig);
 
   printf("Starting CLI...\n");
 

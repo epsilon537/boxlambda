@@ -18,9 +18,10 @@ OUTFILE="$2"
 # $3 = BL_TARGET_FPGA
 BL_TARGET_FPGA="$3"
 
-bender -d $SRC_DIR update
-
 PRJ_CONSTRAINTS=`bender -d $SRC_DIR script flist -n -t prj_constraints`
+
+#Remove the generated Bender.lock file to keep the source tree clean.
+rm -f $SRC_DIR/Bender.lock
 
 for constraint in $PRJ_CONSTRAINTS
 do

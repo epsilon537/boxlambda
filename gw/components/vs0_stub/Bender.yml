@@ -6,9 +6,24 @@ package:
   name: vs0_stub
 
 sources:
-  - target: verilator
+     # target not(vs0_stub) means not OOC, and target vivado means vivado synthesis
+     # -> Static design synthesis of a DFX build. The static design expects to see 
+     # an empty vs0 module declaration.
+  - target: all(not(vs0_stub), vivado)
+    defines:
+      DFX_SYNTHESIZE_EMPTY_MODULE: ~
     files:
-     - lint.vlt
-  - target: any(verilator, vivado)
+      - rtl/vs0.sv
+
+     # This target means OOC synthesis of the vs0_stub. In this case we do want to see
+     # the actual module logic, i.e. no DFX_SYNTHESIZE_EMPTY_MODULE.
+  - target: all(vs0_stub, vivado)
+    files:
+      - rtl/vs0.sv
+
+  - target: verilator
+     # On verilator there is no DFX. We always want to see the module logic
+     # -> no DFX_SYNTHESIZE_EMPTY_MODULE.
     files:
     - rtl/vs0.sv
+    - lint.vlt

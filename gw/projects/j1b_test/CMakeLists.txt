@@ -16,4 +16,10 @@ else()
       VERILATOR_LD_FLAGS
           -lncurses
   )
+
+  #Add testcase.
+  add_test(NAME j1b_test
+      COMMAND ./Vmodel
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
 endif()

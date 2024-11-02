@@ -18,6 +18,7 @@
 # software image on flash, to boot from. The software image that does with this 
 # hardware image is sw/projects/dfx_test.
 
+if(CMAKE_BUILD_TYPE STREQUAL "fpga")
 #gw_project_rules_dfx_vivado() function is defined in the parent CMakeLists.txt.
 gw_project_rules_dfx_vivado(
     TOP_MODULE boxlambda_top
@@ -26,4 +27,22 @@ gw_project_rules_dfx_vivado(
     VS_INST boxlambda_soc_inst/vs0_inst
     VS_DEFAULT_COMPONENT vs0_stub
 )
+else()
+  #gw_project_rules_verilator() function is defined in the parent CMakeLists.txt.
+  gw_project_rules_verilator(
+      TOP_MODULE sim_main
+      PROJECT_NAME dfx_test
+      MEM_FILE_TARGET dfx_test_ram
+      VERILATOR_CPP_FLAGS
+          "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
+      VERILATOR_LD_FLAGS
+          -lncurses
+  )
+
+  #Add testcase.
+  add_test(NAME dfx_test
+      COMMAND ./Vmodel
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
+endif()
 

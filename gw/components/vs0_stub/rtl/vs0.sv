@@ -42,6 +42,10 @@ module vs0 (
     output wire irq_out
 );
 
+  // The static design portion of a DFX build expects to see an empty module 
+  // declaration for Virtual Socket 0. That is what this ifndef is for.
+`ifndef DFX_SYNTHESIZE_EMPTY_MODULE
+
   localparam [31:0] STUB_SIGNATURE = 32'h0000510b;  //Signature register value.
 
   logic unused = &{rst, irq_in, wbm_dat_i, wbm_ack_i, wbm_stall_i, wbm_err_i, wbs_adr, wbs_dat_w, wbs_sel, wbs_we};
@@ -63,4 +67,6 @@ module vs0 (
   assign wbs_err   = 1'b0;
   assign wbs_dat_r = STUB_SIGNATURE;
   assign irq_out   = 1'b0;
+`endif
+
 endmodule

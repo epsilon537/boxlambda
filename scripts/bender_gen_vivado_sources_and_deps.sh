@@ -32,7 +32,6 @@ else
   MIN_T_OOC="-t$5"
 fi
 
-bender -d $SRC_DIR update
 bender -d $SRC_DIR script -t $BL_TARGET_FPGA $MIN_T_OOC vivado > $OUTFILE.tmp
 
 if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
@@ -46,4 +45,7 @@ rm $OUTFILE.tmp
 
 #Generate a depfile: Prepend each line with <target> :
 bender -d $SRC_DIR script $MIN_T_OOC -t $BL_TARGET_FPGA -t prj_constraints -t dfx_constraints -t vivado flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
+
+#Remove the generated Bender.lock file to keep the source tree clean.
+rm -f $SRC_DIR/Bender.lock
 

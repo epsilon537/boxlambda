@@ -30,8 +30,6 @@ else
   MIN_T_OOC="-t$5"
 fi
 
-bender -d $SRC_DIR update
-
 bender -d $SRC_DIR script -t $BL_TARGET_FPGA $MIN_T_OOC verilator | tr '\n' ' ' > "$OUTFILE.tmp"
 
 if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
@@ -49,3 +47,7 @@ then
   #Generate a depfile: Prepend each line with <target> :
   bender -d $SRC_DIR script -t $BL_TARGET_FPGA $MIN_T_OOC -t verilator flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
 fi
+
+#Remove the generated Bender.lock file to keep the source tree clean.
+rm -f $SRC_DIR/Bender.lock
+
