@@ -18,9 +18,10 @@ OUTFILE="$2"
 # $3 = BL_TARGET_FPGA
 BL_TARGET_FPGA="$3"
 
-bender -d $SRC_DIR update
-
 vivado_ips=`bender -d $SRC_DIR script flist -t  vivado_ip_$BL_TARGET_FPGA`
+
+#Remove the generated Bender.lock file to keep the source tree clean.
+rm -f $SRC_DIR/Bender.lock
 
 touch $OUTFILE.tmp
 

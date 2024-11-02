@@ -81,7 +81,7 @@ function (gw_project_rules_dfx_vivado)
   vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl_dfx_prj.tcl
         -vsCellInst ${_vs_inst}
         -vsDefaultDcp $<TARGET_PROPERTY:${_vs_default_comp}_synth,BINARY_DIR>/project.runs/synth_1/*.dcp
-        -vsPblockConstr `bender -d ${CMAKE_CURRENT_LIST_DIR} script flist -n -t dfx_constraints`)
+        -vsPblockConstr `${PROJECT_SOURCE_DIR}/scripts/bender_get_dfx_constraints.sh ${CMAKE_CURRENT_LIST_DIR}`)
 
   #Custom command executing the vivado implementation command string.
   #Note that in the dependencies, both the _synth build rule and the .dcp synthesis checkpoint file

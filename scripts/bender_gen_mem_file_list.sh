@@ -20,6 +20,10 @@ TARGET=$3
 echo "#Memory files" > $SCRIPT_FILE_NAME.tmp
 
 MEM_FILE_LIST=`bender -d $SRC_DIR script -t memory_$TARGET flist`
+
+#Remove the generated Bender.lock file to keep the source tree clean.
+rm -f $SRC_DIR/Bender.lock
+
 for f in $MEM_FILE_LIST
 do
 	cp $f .

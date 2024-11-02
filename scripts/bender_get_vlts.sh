@@ -18,13 +18,14 @@ OUTFILE="$2"
 # $3 = BL_TARGET_FPGA
 BL_TARGET_FPGA="$3"
 
-bender -d $SRC_DIR update
-
 #BASEDIR is the location of the current script, i.e. the scripts directory
 BASEDIR=$(dirname "$0")
 
 #Get all files from bender verilator target, filter out the .vlt files, and put everything on one line,
 BENDER_VLT=`bender -d $SRC_DIR script flist -t BL_TARGET_FPGA -t verilator | grep ".vlt$" | tr '\n' ' '`
+
+#Remove the generated Bender.lock file to keep the source tree clean.
+rm -f $SRC_DIR/Bender.lock
 
 #'return' the default vlt and the lint.vlt retrieved from the bender manifest (if it has one).
 echo "$BASEDIR/lint_default.vlt $BENDER_VLT" > "$OUTFILE.tmp"

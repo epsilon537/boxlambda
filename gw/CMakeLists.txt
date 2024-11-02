@@ -39,18 +39,18 @@ function (gw_common_rules_vivado)
   set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC PRJ_CONSTRAINTS_FILE_LIST MEM_FILE_LIST)
   set(multiValueArgs)
 
-  cmake_parse_arguments(gw_common_rules
+  cmake_parse_arguments(gw_common_rules_vivado
         "${options}"
         "${oneValueArgs}"
         "${multiValueArgs}"
         ${ARGN}
     )
 
-  set(_top_module ${gw_common_rules_TOP_MODULE})
-  set(_prj_comp_name ${gw_common_rules_PRJ_COMP_NAME})
-  set(_prj_constraints_file_list ${gw_common_rules_PRJ_CONSTRAINTS_FILE_LIST})
-  set(_ooc ${gw_common_rules_OOC})
-  set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
+  set(_top_module ${gw_common_rules_vivado_TOP_MODULE})
+  set(_prj_comp_name ${gw_common_rules_vivado_PRJ_COMP_NAME})
+  set(_prj_constraints_file_list ${gw_common_rules_vivado_PRJ_CONSTRAINTS_FILE_LIST})
+  set(_ooc ${gw_common_rules_vivado_OOC})
+  set(_mem_file_list ${gw_common_rules_vivado_MEM_FILE_LIST})
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
@@ -175,17 +175,17 @@ function (gw_common_rules_verilator)
   set(oneValueArgs TOP_MODULE PRJ_COMP_NAME MEM_FILE_LIST VERILATOR_CPP_FLAGS)
   set(multiValueArgs)
 
-  cmake_parse_arguments(gw_common_rules
+  cmake_parse_arguments(gw_common_rules_verilator
         "${options}"
         "${oneValueArgs}"
         "${multiValueArgs}"
         ${ARGN}
     )
 
-  set(_top_module ${gw_common_rules_TOP_MODULE})
-  set(_prj_comp_name ${gw_common_rules_PRJ_COMP_NAME})
-  set(_mem_file_list ${gw_common_rules_MEM_FILE_LIST})
-  set(_verilator_cpp_flags ${gw_common_rules_VERILATOR_CPP_FLAGS})
+  set(_top_module ${gw_common_rules_verilator_TOP_MODULE})
+  set(_prj_comp_name ${gw_common_rules_verilator_PRJ_COMP_NAME})
+  set(_mem_file_list ${gw_common_rules_verilator_MEM_FILE_LIST})
+  set(_verilator_cpp_flags ${gw_common_rules_verilator_VERILATOR_CPP_FLAGS})
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
