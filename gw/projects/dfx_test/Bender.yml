@@ -32,6 +32,11 @@ sources:
       SPIFLASH: ~
       I2C: ~
       DFX: ~
+      #The static design of a DFX build expects to see empty module
+      #declarations on its virtual sockets. That what this flag is used
+      #for. The contents of of reconfigurable modules is ifndef'd with
+      #this flag.
+      DFX_SYNTHESIZE_EMPTY_MODULE: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_top/rtl/boxlambda_top.sv
