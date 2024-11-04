@@ -2,6 +2,8 @@
 #include <fcntl.h>
 #include <getopt.h>
 
+/* This is a rather brain-dead testcase. It just boots up the dfx_test SoC + test program and checks that the program can successfully read the VS0 stub (the default VS0 module included in the SoC) signature register. The Verilator build of dfx_test does not include the DFX Controller component and does not support DFX (partial FPGA reconfiguration) as such. */
+
 // For std::unique_ptr
 #include <memory>
 
