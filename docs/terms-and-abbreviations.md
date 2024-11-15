@@ -145,7 +145,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 
 - **IRQ**: Interrupt Request.
 
-- **ICAP**: Internal Configuration Access Port, a module giving access to the FPGA configuration functionality built into Xilinx FPGAs ([https://www.xilinx.com/products/intellectual-property/axi_hwicap.html](https://www.xilinx.com/products/intellectual-property/axi_hwicap.html))
+- **ICAP**: Internal Configuration Access Port, a Vivado primitive giving access to the FPGA configuration functionality built into AMD-Xilinx FPGAs ([https://www.xilinx.com/products/intellectual-property/axi_hwicap.html](https://www.xilinx.com/products/intellectual-property/axi_hwicap.html))
 
 - **ISA**: Instruction Set Architecture. The Instruction Set Architecture is the part of the processor that is visible to the programmer.
 

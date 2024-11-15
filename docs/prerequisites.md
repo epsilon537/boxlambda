@@ -119,7 +119,7 @@ sudo apt-get install libchromaprint-tools
 These Python modules are needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
 
 ```
-pip3 install numpy scipy sounddevice matplotlib
+pip install numpy scipy sounddevice matplotlib
 ```
 
 ### Perl (optional)
@@ -144,5 +144,35 @@ Ninja and Meson are only required if you want to rebuild the Picolibc library.
 ```
 sudo apt-get install ninja-build
 sudo apt-get install meson
+```
+
+### Jekyll (optional)
+
+Jekyll is only required if you want to build the BoxLambda Blog website.
+
+```
+sudo apt-get install rubygems ruby-bundler
+```
+
+Switch to the gh-pages branch:
+
+```
+git checkout gh-pages
+```
+
+Run Bundle install:
+
+```
+bundle install
+```
+
+### MkDocs (optional)
+
+MkDocs is only required if you want to build the BoxLambda read-the-docs website.
+
+```
+pip install mkdocs
+pip install mkdocs-material
+pip install pymdown-extensions
 ```
 
