@@ -5,13 +5,13 @@ comments: true
 mathjax: yes
 ---
 
-*Partial Reconfiguration* is an FPGA feature that allows you to dynamically reconfigure a portion of an FPGA design while the remaining FPGA design remains unchanged and operational. The Arty A7 100T has this feature and I started adding support for it in BoxLambda. It's still a work in progress, but I have reached a point where I can dynamically load a gateware component in the BoxLambda SoC, under control of the BoxLambda SoC itself. To demonstrate the feature, I developed a test program that dynamically loads a J1B CPU core and boots the SwapForth run-time firmware on this core. There are caveats, however.
+*Partial FPGA Reconfiguration* is an FPGA feature that allows you to dynamically reconfigure a portion of an FPGA design while the remaining part of the design remains unchanged and operational. The Arty A7 100T has this feature and I started adding support for it in BoxLambda. While it's still a work in progress, I have reached a point where I can dynamically load a gateware component in the BoxLambda SoC, under the control of the SoC itself. To demonstrate this feature, I developed a test program that dynamically loads a J1B CPU core and boots the SwapForth run-time firmware on this core. There are, however, some caveats.
 
 Recap
 -----
 ![BoxLambda Block Diagram.](../assets/Arch_Diagram_DFX_Focus.png)
 
-This is a summary of the current state of affairs of BoxLambda. We have:
+Summarizing the current state of affairs of BoxLambda, we have:
 - An Ibex RISC-V core with machine timer and hardware interrupt support.
 - Wishbone interconnect and Harvard architecture internal memory.
 - DDR3 external memory access through the Litex memory controller.
@@ -20,7 +20,7 @@ This is a summary of the current state of affairs of BoxLambda. We have:
 - Dual YM2149 PSG Audio.
 - SD Card Controller and FatFs File System.
 - 24-pin GPIO, UART, SPI Flash Controller, I2C Controller.
-- Real-Time Clock and Calendar (RTCC) support.
+- Real-time Clock and Calendar (RTCC) support.
 - USB HID Keyboard and Mouse support.
 - A PicoRV32-based Programmable DMA Controller.
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
@@ -33,16 +33,16 @@ The BoxLambda SoC top-level: [gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](
 
 Terminology
 -----------
-In the remainder of this post, I will adapt the Xilinx-AMD terminology associated with Partial FPGA Reconfiguration. Here's an overview of the terms used:
+In the remainder of this post, I will adapt the Xilinx-AMD terminology associated with Partial FPGA Reconfiguration. Here is an overview of the terms used:
 - **Dynamic Function eXchange (DFX)**: the Xilinx-AMD term for Partial FPGA Reconfiguration.
-- **DFX Controller**: The DFX Controller IP provides management functions for DFX designs.  When hardware or software trigger events occur, the DFX Controller pulls partial bitstreams from memory and delivers them to an *Internal Configuration Access Port (ICAP)*.  The IP also assists with logical decoupling and startup events, customizable per Reconfigurable Partition.
+- **DFX Controller**: The DFX Controller IP provides management functions for DFX designs.  When hardware or software trigger events occur, the DFX Controller pulls partial bitstreams from memory and delivers them to an *Internal Configuration Access Port (ICAP)*.  The IP also assists with logical decoupling and startup events, which are customizable per Reconfigurable Partition.
 - **ICAP**: Internal Configuration Access Port, a Vivado primitive giving access to the FPGA configuration functionality built into Xilinx-AMD FPGAs.
-- **Reconfigurable Module (RM)**: An RM is the netlist or HDL description of a module that is implemented within a *Reconfigurable Partition (RP)*. Multiple RMs can exist for a given RP, e.g. *vs0_stub* and *vs0_j1b* are two RM variants defined for the RP *boxlambda_soc/vs0_inst*. All RM variants belonging to an RP comply to the same interface defined by the RP.
-- **Reconfigurable Partition (RP)**: An RP is a module instance in the FPGA design hierarchy that's marked as *Reconfigurable*. An RP is the container of an RM. In this post, the RP is instance *boxlambda_soc/vs0_inst*.
+- **Reconfigurable Module (RM)**: An RM is the netlist or HDL description of a module that is implemented within a *Reconfigurable Partition (RP)*. Multiple RMs can exist for a given RP. For example, *vs0_stub* and *vs0_j1b* are two RM variants defined for the RP *boxlambda_soc/vs0_inst*. All RM variants belonging to an RP comply with the same interface defined by the RP.
+- **Reconfigurable Partition (RP)**: An RP is a module instance in the FPGA design hierarchy marked as *Reconfigurable*. An RP is the container of an RM. In this post, the RP is instance *boxlambda_soc/vs0_inst*.
 - **Virtual Socket (VS)**: a synonym for RP. Vivado documentation uses the term VS within the context of the DFX Controller IP.
-- **Partition Pins**: Partition pins are the logical and physical connection between the Static Design and and an RP. The Vivado toolchain automatically creates, places, and manages partition pins.
-- **Pblock**: A Pblock is a user-defined region in the FPGA floorplan specifying the device resources contained within. In the context of DFX, a Pblock is associated with an RP. It defines the FPGA resources (Block RAM, LUTs,...) allocated to that RP.
-- **Static Design**: The static design is the part of the design that does not change during partial reconfiguration. The static design includes the top-level and all modules not defined as reconfigurable. The static design is built with static logic and static routing.
+- **Partition Pins**: Partition pins are the logical and physical connection between the Static Design and an RP. The Vivado toolchain automatically creates, places, and manages partition pins.
+- **Pblock**: A Pblock is a user-defined region in the FPGA floor plan specifying the device resources contained within. In the context of DFX, a Pblock is associated with an RP. It defines the FPGA resources (Block RAM, LUTs,...) allocated to that RP.
+- **Static Design**: The static design is the part of the design that does not change during partial reconfiguration. It includes the top-level, and all modules not defined as reconfigurable. The static design is built with static logic and static routing.
 
 ![DFX Terminology applied to the BoxLambda SoC](../assets/dfx_terminology.png)
 
@@ -50,14 +50,14 @@ In the remainder of this post, I will adapt the Xilinx-AMD terminology associate
 
 The Goal: Dynamically Loading Application-Specific Gateware-Assists
 -------------------------------------------------------------------
-The goal of adding DFX support to BoxLambda is to give BoxLambda software applications the ability to dynamically load an application-specific gateware component into the SoC's *Virtual Socket 0 (VS0)* placeholder component. The intent is that this component acts as a gateware-assist for the software application.
+The goal of adding DFX support to BoxLambda is to enable BoxLambda software applications to dynamically load an application-specific gateware component into the SoC's *Virtual Socket 0 (VS0)* placeholder component. The intent is that this component acts as a gateware-assist for the software application.
 
-At a later stage, I would like to extend DFX support in BoxLambda to allow applications to dynamically select which sound and graphics subsystem to use, including the ability to switch to application-specific sound and graphics.
+At a later stage, I plan to extend DFX support in BoxLambda to allow applications to dynamically select which sound and graphics subsystem to use, including the ability to switch to application-specific sound and graphics.
 
 The Demo: Dynamically Loading the J1B core and Booting SwapForth
 ----------------------------------------------------------------
 
-J1B is a 32-bit, minimum instruction set stack processor. It's one of the supported host CPUs of the [SwapForth](https://github.com/jamesbowman/swapforth) environment.
+J1B is a 32-bit, minimal instruction set stack processor. It's one of the supported host CPUs of the [SwapForth](https://github.com/jamesbowman/swapforth) environment.
 
 To demonstrate DFX support in BoxLambda, I created a test program called **dfx_test** that loads a J1B core into the SoC's *Virtual Socket 0* and then boots the SwapForth run-time firmware image on this core, presenting the user with a Forth REPL.
 
@@ -66,21 +66,21 @@ To demonstrate DFX support in BoxLambda, I created a test program called **dfx_t
 
 *The DFX Test Program.*
 
-More details about this test program is given in section [The DFX Test Program Structure and CLI](#the-dfx-test-program-structure-and-cli) below. First I would like to discuss the project breakdown.
+Section [The DFX Test Program Structure and CLI](#the-dfx-test-program-structure-and-cli) below provides more details about this test program. First, I will discuss the project breakdown.
 
 Phases
 ------
-I broke down the task into three *phases*, outlined below, and elaborated in the following sections.
+I broke down the task into three *phases*, outlined below, and elaborated upon in the following sections.
 
-**Phase 1**: Test the integration of the J1B core into BoxLambda. Create a Test SoC that statically includes the J1B core as one of its gateware components. This Test SoC does not have any DFX support yet. It runs both on FPGA and in Verilator.
+**Phase 1**: Test the integration of the J1B core into BoxLambda. Create a Test SoC that statically includes the J1B core as one of its gateware components. This Test SoC does not yet have any DFX support. It runs both on FPGA and in Verilator.
 
-**Phase 2**: Create a Test SoC that defines an RP called *VS0 (boxlambda_soc_inst/vs0_inst)*. Two RMs are created for this RP: *vs0_stub*, which is just a stub module that does *almost* nothing, and *vs0_j1b*, which is the J1B core from Phase 1 implemented as an RM. The bitstream loading of RMs into the RP is handled with Vivado's Hardware Manager. This test SoC does not include a DFX Controller and does not support loading of RMs under control of the SoC itself.
+**Phase 2**: Create a Test SoC that defines an RP called *VS0 (boxlambda_soc_inst/vs0_inst)*. Two RMs are created for this RP: *vs0_stub*, which is just a stub module that does *almost* nothing, and *vs0_j1b*, which is the J1B core from Phase 1 implemented as an RM. The Vivado Hardware Manager handles the bitstream loading of RMs into the RP. This test SoC does not include a DFX Controller and does not support the loading of RMs under the control of the SoC itself.
 
 **Phase 3**: Extend the Test SoC from Phase 2 with a *DFX Controller* and create a DFX HAL and CLI that allows the dynamic loading of RMs into the RP from software. This is the *dfx_test* demo SoC.
 
 Phase 1: Integrating the J1B Core
 --------------------------------
-Integrating the J1B core means fitting the J1B subystem [as defined in the SwapForth repo](https://github.com/epsilon537/swapforth/blob/boxlambda/j1b/verilog/xilinx-top.v) to the interface I had in mind for Virtual Socket 0:
+Integrating the J1B core means fitting the J1B subsystem [as defined in the SwapForth repo](https://github.com/epsilon537/swapforth/blob/boxlambda/j1b/verilog/xilinx-top.v) to the interface I had in mind for Virtual Socket 0:
 
 ```
 module vs0 (
@@ -118,7 +118,7 @@ module vs0 (
 );
 ```
 
-The interface consists of a Wishbone master port, a Wishbone slave port, an input vector of system IRQs (the same one as seen by the Ibex CPU), and an output IRQ.
+The interface consists of a Wishbone master port, a Wishbone slave port, an input vector of system IRQs (the same vector seen by the Ibex CPU), and an output IRQ.
 
 The integrated J1B core, **vs0_j1b**, looks like this:
 
@@ -126,9 +126,9 @@ The integrated J1B core, **vs0_j1b**, looks like this:
 
 *The J1B Core fitted to the VS0 interface.*
 
-The register interface is borrowed from the PicoRV DMA Controller component. Through this interface both Ibex and the J1B CPU have access to the J1B UART registers. Transmit direction for Ibex is receive direction for J1B and vice versa. The Wishbone Slave port also gives the Ibex CPU access to the J1B's program memory so it can install the J1B firmware. Finally, the register interface has a control register which is used to take the J1B out reset after the firmware has been loaded into the core.
+The register interface is borrowed from the PicoRV DMA Controller component. Through this interface, both Ibex and the J1B CPU have access to the J1B UART registers. The transmit direction for Ibex is the receive direction for J1B and vice versa. The Wishbone Slave port also gives the Ibex CPU access to the J1B's program memory, allowing it to install the J1B firmware. Finally, the register interface has a control register which is used to take the J1B out of reset after the firmware has been loaded into the core.
 
-If I were to properly integrate the J1B core into BoxLambda, something I might do in the future, I would hook up the complete interface, giving the J1B core full access to the entire BoxLambda SoC. However, doing so currently would be too much a distraction from the task at hand: demonstrating DFX in BoxLambda. Hence, for the time being, the lazy, demo-type integration shown above.
+If I were to integrate the J1B core into BoxLambda properly - something I might do in the future - I would hook up the complete interface, giving the J1B core full access to the entire BoxLambda SoC. However, doing so currently would be too much of a distraction from the task at hand: demonstrating DFX in BoxLambda. Hence, for the time being, the lazy, demo-like integration shown above.
 
 The resulting Test SoC is called **j1b_test** and looks like this:
 
@@ -136,13 +136,13 @@ The resulting Test SoC is called **j1b_test** and looks like this:
 
 *The j1b_test Test SoC.*
 
-On the Ibex software side, I defined a J1B Hardware Access Layer (*j1b_hal*) giving access to the core's register interface and including a function for loading the firmware into the core. The j1b_test program uses the j1b_hal to do the following:
+On the Ibex software side, I defined a J1B Hardware Access Layer (*j1b_hal*) giving access to the core's register interface and including a function for loading the firmware into the core. The j1b_test program uses the j1b_hal to perform the following:
 
 1. Boot the SwapForth firmware.
 2. Forward the BoxLambda serial port input data to the J1B core UART input register.
 3. Forward J1B core UART output data to the BoxLambda serial port.
 
-This way, the SwapForth REPL running on the J1B core is presented to the user on the serial port terminal.
+In this way, the SwapForth REPL running on the J1B core is presented to the user on the serial port terminal.
 
 See section [Try It Yourself](#try-it-yourself) below for instructions for building and running the j1b_test on Verilator and/or the Arty A7.
 
@@ -161,12 +161,12 @@ Phase 2: Defining the RP and RMs
 
 *The BoxLambda SoC with RP VS0 (boxlambda_inst/vs0_inst) and RMs vs0_stub and vs0_j1b.*
 
-In this step I set up *boxlamba_soc_inst/vs0_inst* as an RP and I create two RMs that fit this RP: *vs0_j1b* and *vs0_stub*.
+In this step, *boxlamba_soc_inst/vs0_inst* is set up as an RP, and two RMs fitting this RP are created: *vs0_j1b* and *vs0_stub*.
 
-*Vs0_j1b* is the j1b core from Phase 1.
+*Vs0_j1b* is the J1B core from Phase 1.
 
 *Vs0_stub* is an almost-but-not entirely empty module. All it does is properly terminate
-the vs0 module interface signals, so they aren't left dangling. Wishbone reads and writes to the module are acknowledged but don't trigger any functionality. 
+the vs0 module interface signals, so they aren't left dangling. Wishbone reads and writes to the module are acknowledged but don't trigger any functionality.
 
 ![The vs0_stub](../assets/vs0_stub.png)
 
@@ -277,9 +277,9 @@ endmodule
 
 Step 2: Synthesize the RMs
 ==========================
-Synthesize components *vs0_stub* and *vs0_j1b* Out of Context (OOC). Generate for each a synthesis checkpoint: *vs0_stub_synth.dcp* and *vs0_j1b_synth.dcp*. 
+Synthesize components *vs0_stub* and *vs0_j1b* Out of Context (OOC). For each, generate a synthesis checkpoint: *vs0_stub_synth.dcp* and *vs0_j1b_synth.dcp*. 
 
-Make a note of the resource utilization of *vs0_j1b* so that, when we're defining the RP's Pblock, we can make sure it's big enough to hold this RM.
+Make a note of the resource utilization of *vs0_j1b*. When we're defining the RP's Pblock, we want to make sure it's big enough to hold this RM.
 
 Step 3: Mark the hierarchical instance as an RP
 ===============================================
@@ -292,7 +292,7 @@ set_property HD.RECONFIGURABLE TRUE [get_cells boxlambda_soc_inst/vs0_inst]
 update_design -quiet -cell boxlambda_soc_inst/vs0_inst -black_box
 ```
 
-Keep the Vivado GUI session open. The following steps up to [Step 7](#step-7-create-the-static-route-checkpoint) are taken in this session.
+Keep the Vivado GUI session open. The following steps, up to [Step 7](#step-7-create-the-static-route-checkpoint), are taken in this session.
 
 Step 4: Assign the default RM to the RP
 =======================================
@@ -304,23 +304,23 @@ read_checkpoint -cell boxlambda_soc_inst/vs0_inst vs0_stub_synth.dcp
 
 Step 5: Create a Pblock for the RP
 ==================================
-Create a Pblock for RP *VS0* by staking out the Pblock's region in the design's floorplan. 
+Create a Pblock for RP *VS0* by staking out the Pblock's region in the design's floor plan. 
 
 ![Pblock with properties](../assets/pblock_w_properties.png)
 
-*A Pblock on the Floorplan.*
+*A Pblock on the Floor Plan.*
 
 1. In the Vivado GUI, select *boxlambda_soc_inst/vs0_inst* in the Netlist window. This ensures that the Pblock we're creating is assigned to this RP.
-2. In the floorplan window, click the *Draw Pblock* window.
-3. Draw a rectangular region. Keep an eye on the number of selected resources (LUTs, BRAM,...) and make sure there's more than enough resources to hold the biggest RM variant for this RP. I would like the RP to be able to hold RMs that are at least twice as big as *vs0_j1b* so I selected about twice as many resources as required by *vs0_j1b*.
+2. In the floor plan window, click the *Draw Pblock* button.
+3. Draw a rectangular region. Keep an eye on the number of selected resources (LUTs, BRAM, etc.) and make sure there are enough resources to accommodate the biggest RM variant for this RP.
 
     ![Pblock with resources](../assets/pblock_w_resources.png)
 
     *When outlining a Pblock, the selected resources are shown.*
 
-4. In the Properties view, check *RESET_AFTER_RECONFIG* and set *SNAPPING_MODE* on. *RESET_AFTER_RECONFIG* ensures that the RM is initialized after reconfiguration. *SNAPPING_MODE* snaps the Pblock region boundaries to the alignment requirements of this 7 series FPGA.
-5. Run the DFX Design Rule checks: *Reports->Report DRC*. Fix reported errors, if any.
-6. Write the Pblock constraints to a files:
+4. In the Properties view, check *RESET_AFTER_RECONFIG* and set *SNAPPING_MODE* on. *RESET_AFTER_RECONFIG* ensures that the RM is initialized after reconfiguration. *SNAPPING_MODE* aligns the Pblock region boundaries with the requirements of this 7-series FPGA.
+5. Run the DFX Design Rule checks: *Reports->Report DRC*. Address any reported errors, if present.
+6. Write the Pblock constraints to a file:
 
     ```
     write_xdc ./Sources/xdc/top_all.xdc￼
@@ -353,9 +353,9 @@ set_property RESET_AFTER_RECONFIG true [get_pblocks pblock_vs0]
 set_property SNAPPING_MODE ON [get_pblocks pblock_vs0]
 ```
 
-The placement of the Pblock within the floorplan has a big impact on routing. It might require some experimentation to find out which placements are routable and meet timing. For some projects this would be a tricky exercise, but for Boxlambda, with its relatively slow clock and plenty of free space on the device, it wasn't an issue. 
+The placement of the Pblock within the floor plan significantly impacts routing. It might require some experimentation to determine which placements are routable and meet timing. For some projects, this could be a challenging task, but for Boxlambda, with its relatively slow clock and plenty of free space on the device, it was not an issue. 
 
-One guideline I've seen mentioned is to first implement the design with the biggest candidate RM statically instantiated in the build (i.e. without using DFX), then check where the Vivado router placed the module (you can highlight the instance in the floorplan) and use that info to guide the placement of the RP.
+One guideline I have encountered is to first implement the design with the biggest candidate RM statically instantiated in the build (i.e. without using DFX), then check where the Vivado router placed the module (you can highlight the instance in the floor plan) and use that information to guide the placement of the RP.
 
 Step 6: Route the Design and Generate the Bitstreams
 ====================================================
@@ -372,7 +372,7 @@ This *write_bitstream* command generates two bitstream files:
 
 Step 7: Create the Static Route Checkpoint
 ==========================================
-Before writing the static route checkpoint, the *vs0_stub* RM has to be cleared out the RP and the routing has to be locked down:
+Before writing the static route checkpoint, the *vs0_stub* RM has to be cleared from the RP and the routing has to be locked down:
 
 ```
 update_design -cell boxlambda_soc_inst/vs0_inst -black_box
@@ -380,11 +380,11 @@ lock_design -level routing
 write_checkpoint -force dfx_project.static_route.dcp
 ```
 
-At this point the Vivado session may be closed.
+At this point, the Vivado session may be closed.
 
 Step 8: Create an implementation project for the Alternate RM
 =============================================================
-The implementation project consists for the routed static design checkpoint and the synthesized RM checkpoint:
+The implementation project consists of the routed static design checkpoint and the synthesized RM checkpoint:
 ```
 create_project -force -part xc7a100ticsg324-1L rm_impl_project
 add_files dfx_project.static_route.dcp
@@ -410,7 +410,7 @@ write_bitstream -force -bin_file vs0_j1b
 
 This *write_bitstream* command generates two bitstream files:
 - *vs0_j1b.bin*: This is a full bitstream of the SoC, with vs0_j1b instantiated in the RP.
-- *vs0_j1b_pblock_vs0_partial.bin*: This is a partial bitstream file of just the *vs0_j1b* RM.
+- *vs0_j1b_pblock_vs0_partial.bin*: This is a partial bitstream file of the *vs0_j1b* RM.
 
 Testing
 =======
@@ -418,15 +418,15 @@ Testing
 2. Using the Vivado Hardware Manager, load the *vs0_j1b_pblock_vs0_partial.bin* partial bitstream onto the target. The *vs0_stub* RM is now replaced with the *vs0_j1b* RM.
 3. Flash the *j1b_test* software image onto the target. The test should run exactly as on the static *j1b_test* SoC from Phase 1.
 
-Scripts
-=======
+Scripts and Build Rules
+=======================
 I captured the above steps into a handful of Vivado scripts executed by BoxLambda's build system:
-- **Step 1**: Nothing new here. Project synthesis was already supported by the build system. To synthesize a project, navigate to the gateware project's directory in the build tree and type **make \<project_name\>_synth**. The Vivado scripts invoked are [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl).
-- **Step 2**: Component OOC synthesis was also already support by the build system. To synthesize a component, navigate to the gateware component's directory in the build tree and type **make \<component_name\>_synth**. The Vivado scripts invoked are [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl) (same scripts as used for project synthesis, but the *create_project* script is invoked with a *-ooc* flag).
-- **Steps 3-7**: Building the project's static bitstream file as well as the bitstream file of the default RM is done by navigating to the DFX project's directory in the build tree and typing **make \<project_name\>_bit**. The Vivado script invoked is [scripts/vivado_impl_dfx_prj.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_prj.tcl).
-- **Steps 8-10**: Building the alternate RM's bitstream file is done by navigating to the RM component directory in the build tree and typing **make <component_name\>_bit**. The Vivado script invoked is [scripts/vivado_impl_dfx_rm.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_rm.tcl).
+- **Step 1**: Nothing new here. The build system already supports project synthesis. To synthesize a project, navigate to the gateware project's directory in the build tree and type `make <project_name>_synth`. The Vivado scripts invoked are [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl).
+- **Step 2**: Also component OOC synthesis is already supported by the build system. To synthesize a component, navigate to the gateware component's directory in the build tree and type `make <component_name>_synth`. The Vivado scripts invoked are [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl) (same scripts as used for project synthesis, but the *create_project* script is invoked with a *-ooc* flag).
+- **Steps 3-7**: Building the project's static bitstream file as well as the bitstream file of the default RM is done by navigating to the DFX project's directory in the build tree and typing `make <project_name>_bit`. The Vivado script invoked is [scripts/vivado_impl_dfx_prj.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_prj.tcl).
+- **Steps 8-10**: Building the alternate RM's bitstream file is done by navigating to the RM component directory in the build tree and typing `make <component_name>_bit`. The Vivado script invoked is [scripts/vivado_impl_dfx_rm.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_rm.tcl).
 
-The [Try It Yourself, DFX Test](#the-dfx-test-on-fpga) section below walks you through the build and test procedure.
+The [Try It Yourself: DFX Test](#the-dfx-test-on-fpga) section below walks you through the build and test procedure.
 
 Phase 3: Adding the DFX Controller
 ----------------------------------
@@ -434,31 +434,31 @@ Phase 3: Adding the DFX Controller
 DFX Controller Operation
 ========================
 
-To manage loading of an RM into an RP from the SoC itself, a DFX Controller needs to be added to the design. The DFX Controller is a Vivado IP providing management functions for DFX designs across a wide range of use cases. The hardware triggered DFX use cases involve complex state machines and a lot of configuration. However, for BoxLambda, the use case is pretty simple: loading an RM into an RP under software control. This is how it works:
+To manage the loading of an RM into an RP from the SoC itself, a DFX Controller needs to be added to the design. The DFX Controller is a Vivado IP providing management functions for DFX designs across many use cases. The hardware-triggered DFX use cases involve complex state machines and require a lot of configuration. However, for BoxLambda, the use case is pretty simple: loading an RM into an RP under software control. Here's how it works:
 
-1. Software loads the RM's partial bitstream file into a memory buffer.
+1. A software program loads the RM's partial bitstream file into a memory buffer.
 
     ![DFX Flow 1](../assets/dfx_flow_1.png)
 
-2. Software shuts down the DFX Controller, configures the address and size of the bitstream memory buffer in the DFX Controller's *BS INFO* registers, the re-enables the DFX Controller.
+2. The software program shuts down the DFX Controller, configures the address and size of the bitstream memory buffer in the DFX Controller's *BS INFO* registers, then re-enables the DFX Controller.
 
     ![DFX Flow 2](../assets/dfx_flow_2.png)
 
-3. Software issues a trigger to the DFX Controller *SW_TRIGGER* register. This causes the DFX Controller to start fetching the bitstream data from the configured memory location and feeding it to the internal configuration access port (ICAP).
+3. The software program issues a trigger to the DFX Controller using the *SW_TRIGGER* register. This causes the DFX Controller to start fetching the bitstream data from the configured memory location and feeding it to the internal configuration access port (ICAP).
 
     ![DFX Flow 3](../assets/dfx_flow_3.png)
 
-4. When the RP is configured, the DFX Controller issues a reset to the RP/RM.
+4. When the RP is configured, the DFX Controller resets the RP/RM.
 
     ![DFX Flow 4](../assets/dfx_flow_4.png)
 
-Software monitors the progression via the DFX Controller status register. 
+The software program monitors the progression via the DFX Controller status register. 
 
-The *dfx_test* program contains a software routine implementing the complete sequence. See function *dfx_load_module()* in file [sw/projects/dfx_test/dfx_cli.cpp](https://github.com/epsilon537/boxlambda/blob/98b4f4e6d4bf33efa24f122d65c103f06b76289e/sw/projects/dfx_test/dfx_cli.cpp).
+The *dfx_test* program contains a software routine that implements the complete sequence. See function *dfx_load_module()* in file [sw/projects/dfx_test/dfx_cli.cpp](https://github.com/epsilon537/boxlambda/blob/98b4f4e6d4bf33efa24f122d65c103f06b76289e/sw/projects/dfx_test/dfx_cli.cpp).
 
 Binary for ICAP
 ===============
-The RM's partial bitstream binary read from memory by the DFX Controller is not in the regular bitstream file format generated by the *write_bitstream* command. The DFX Controller IP comes with a Tcl API function to convert the partial bitstream file into the format accepted by the ICAP primitive. The Tcl script is invoked as follows:
+The RM's partial bitstream, which is read from memory by the DFX Controller, is not in the regular bitstream file format generated by the *write_bitstream* command. The DFX Controller IP comes with a Tcl API function to convert the partial bitstream file into the format accepted by the ICAP primitive. The Tcl script is invoked as follows:
 
 ```
 #Convert partial.bin file into bin_for_icap format
@@ -478,14 +478,14 @@ DFX Controller Parameterization
 *DFX Controller Selected Parameters.*
 
 The DFX Controller requires a bit of parameterization, as shown in the screenshots above.
-- The AXI Lite interface is enabled, so software can access the DFX Controller registers.
+- The AXI Lite interface is enabled, allowing software to access the DFX Controller registers.
 - The controller is managing a 7 series device.
 - ICAP arbitration is not required. The DFX Controller is the only ICAP client in this design.
-- FIFO depth and clock domain stages are set to lowest possible values. Everything is running in one single clock domain so the clock domain crossing stages are not needed, but there is no option to remove them altogether.
+- FIFO depth and clock domain stages are set to the lowest possible values. Everything is running in one single clock domain so the clock domain crossing stages are not needed, but there is no option to remove them altogether.
 - Active High reset, one clock cycle wide.
 - Bitstream address and size are irrelevant. They get reconfigured at run-time by software.
 - Just one Virtual Socket Manager, to manage one RP.
-- The number of RMs allocated and number of triggers is set to two. I assumed that switching from one RM to another required switching between two table entries in the DFX Controller. I learned later that this is not case. One RM entry is sufficient. You just have to reprogram that one entry and issue a trigger when ready. So even though my DFX Controller instance currently has two RM entries allocated, I'm just using entry 0.
+- The number of RMs and triggers is set to two. Initially, I assumed that switching from one RM to another required switching between two table entries in the DFX Controller. However, later I learned that this is not the case. One RM entry is sufficient. You only need to reprogram that single entry and issue a trigger when ready. So even though my DFX Controller instance currently has two RM entries allocated, I am only using entry 0.
 
 The resulting DFX Controller instance and register map look like this:
 ![DFX Controller IP and Register Map](../assets/dfx_controller_ip_addr_map.png)
@@ -494,7 +494,7 @@ The resulting DFX Controller instance and register map look like this:
 
 Wishbone to AXI Interworking
 ============================
-The DFX Controller IP bus interfaces are AXI based. BoxLambda is Wishbone based. I'm using ZipCPU's [wbm2axilite](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/wbm2axilite.v) and [aximrd2wbsp](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/aximrd2wbsp.v) to bridge between the two bus protocols. The resulting **wb_dfx_controller** module looks like this:
+The DFX Controller IP bus interfaces are AXI-based. BoxLambda is Wishbone based. To bridge the two bus protocols, I'm using ZipCPU's [wbm2axilite](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/wbm2axilite.v) and [aximrd2wbsp](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/aximrd2wbsp.v). The resulting **wb_dfx_controller** module looks like this:
 
 
 ![WB DFX Controller Block Diagram](../assets/wb_dfx_controller.png)
@@ -512,9 +512,9 @@ The DFX Test Program Structure and CLI
 
 *Structure of the dfx_test software program.*
 
-The DFX Test Program is not an automatic testcase like the previous BoxLambda testcases. It runs on the Arty-A7-100T only and it requires user interaction through a CLI. The CLI commands are grouped into modules:
+The DFX Test Program is not an automatic test case like the previous BoxLambda test cases. It runs exclusively on the Arty-A7-100T and requires user interaction through a CLI. The CLI commands are grouped into modules:
 
-- [dfx_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/dfx_cli.cpp): This is a CLI wrapper around the [dfx_hal](https://github.com/epsilon537/boxlambda/blob/master/sw/components/dfx/dfx_controller_hal.h) component. Most of the commands let you interact with the DFX Controller at a low level. However, there's one high-level command called **dfx_load_module** that implements the entire sequence of loading an RM's bitstream file from the filesystem into the VS0 RP.
+- [dfx_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/dfx_cli.cpp): This is a CLI wrapper around the [dfx_hal](https://github.com/epsilon537/boxlambda/blob/master/sw/components/dfx/dfx_controller_hal.h) component. Most commands let you interact with the DFX Controller at a low level. However, there's one high-level command, **dfx_load_module**, that implements the entire sequence of loading an RM's bitstream file from the filesystem into the VS0 RP.
 
     ```
     * dfx_control
@@ -536,7 +536,7 @@ The DFX Test Program is not an automatic testcase like the previous BoxLambda te
      * dfx_load_module
             dfx_load_module <filename>
     ```
-- [j1b_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/j1b_cli.cpp): This CLI allows you to boot the SwapForth firmware image on the J1B core and to transfer serial port I/O to the J1B so you get access to its REPL.
+- [j1b_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/j1b_cli.cpp): This CLI allows you to boot the SwapForth firmware image on the J1B core and to transfer serial port I/O to the J1B providing access to its REPL.
 
     ```
      * j1b_boot
@@ -545,7 +545,7 @@ The DFX Test Program is not an automatic testcase like the previous BoxLambda te
             Forward UART I/O to J1B.
     ```
 
-- [mem_fs_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/mem_fs_cli/mem_fs_cli.cpp): This CLI module provides file system commands such as *ls* and *rm* as well as commands for loading files into memory and save memory buffers to file.
+- [mem_fs_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/mem_fs_cli/mem_fs_cli.cpp): This CLI module provides file system commands such as *ls* and *rm* as well as commands for loading files into memory and save memory buffers to files.
 
     ```
      * rm
@@ -562,7 +562,7 @@ The DFX Test Program is not an automatic testcase like the previous BoxLambda te
             list directory contents.
     ```
 
-- [ymodem_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ymodem_cli/ymodem_cli.cpp): The **ymodem_rx** command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to to BoxLambda. I could of course just copy everything onto an SD card and then move that card from PC to BoxLambda, but I prefer this method. Less moving parts.
+- [ymodem_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ymodem_cli/ymodem_cli.cpp): The **ymodem_rx** command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to BoxLambda. While I could simply copy everything onto an SD card and then move that card from PC to BoxLambda, I prefer this method as it involves fewer moving parts.
 
     ```
      * ymodem_rx
@@ -576,40 +576,40 @@ The Core Signature Register
 
 The block diagram above shows a [vs0_hal](https://github.com/epsilon537/boxlambda/blob/master/sw/components/vs0_hal/vs0_hal.h). This HAL contains definitions that are common across all VS0 RM variants (currently just *vs0_j1b* and *vs0_stub*): 
 - The base address and size of the VS0 RM address space.
-- The VS0 Signature Register all the way at the end of the VS0 RM address space. All VS0 RM variants are expected to implement this register and return a value that is unique to the RM. This allows software to identify the RM that's been loaded into the RP before attempting to access RM specific registers or memory. The *dfx_read_core_sig* command in the *dfx_cli* module reads this register.
+- The VS0 Signature Register at the end of the VS0 RM address space. All VS0 RM variants are expected to implement this register and return a value that is unique to the RM. This allows software to identify the RM loaded into the RP before attempting to access RM-specific registers or memory. The *dfx_read_core_sig* command in the *dfx_cli* module reads this register.
 
 Caveats
 -------
 
-If anything in the Static Design changes, all RMs must be re-implemented.
-=========================================================================
+If the Static Design changes, the RMs must be re-implemented.
+=============================================================
 ![pblock routing](../assets/pblock_routing.png)
 
 *Pblock selective routing constraints.*
 
-I assumed that if, in addition to creating a Pblock, you also constrain the RP's Partition Pins to a specific location, RMs and Static Design can evolve independently as long as they fit those constraints and honor the RP interface contract.
+I initially assumed that if, in addition to creating a Pblock, you also constrain the RP's Partition Pins to a specific location, then RMs and Static Design could evolve independently as long as they fit within those constraints and honor the RP interface contract.
 
-That is not the case, unfortunately. The problem is that, while a Pblock constrains the RM's routing to stay within the Pblock boundaries, it does *not* constrain the Static Design routing to stay outside of it. Part of the Static Design routing will go through the Pblock and as a result get encoded in RM's Partial Bitstream. So, when the Static Design changes, its routing outside and inside the Pblock will change, and the RMs have to be reimplemented to pick up the new Static Design Routing.
+Unfortunately, this is not the case. The problem is that, while a Pblock constrains the RM's routing to stay within the Pblock boundaries, it does *not* constrain the Static Design routing to remain outside the Pblock. As a result, part of the Static Design routing will go through the Pblock and become encoded in RM's Partial Bitstream. When the Static Design changes, its routing outside and inside the Pblock will change, requiring the RMs to be reimplemented to accommodate the updated Static Design Routing.
 
 ![static design changes in pblock](../assets/static_design_changes_in_pblock.png)
 
-It might be possible to work around this limitation by mapping the static logic into a Pblock of its own. I'm looking into that.
+It might be possible to work around this limitation by mapping the static logic into a separate Pblock. I'm looking into that.
 
-See this Xilinx-AMD support article: [https://adaptivesupport.amd.com/s/article/61284?language=en_US](https://adaptivesupport.amd.com/s/article/61284?language=en_US).
+For more details, see this Xilinx-AMD support article: [https://adaptivesupport.amd.com/s/article/61284?language=en_US](https://adaptivesupport.amd.com/s/article/61284?language=en_US).
 
-DFX is Xilinx-AMD Specific, which means giving up some Freedom
-==============================================================
-I can't accurately verilate BoxLambda SoCs with a DFX Controller in it and I can't directly port them to FPGA devices from other vendors.
+DFX is Xilinx-AMD Specific
+==========================
+I can't accurately verilate BoxLambda SoCs containing a DFX Controller and I can't directly port them to FPGA devices from other vendors.
 
-Having said that, I can still verilate BoxLambda SoCs with a specific RM statically included in the build. That is effectively what *j1b_test* is. It's just the process of loading an RM into an RP that I can't verilate.
+I can still verilate BoxLambda SoCs with a specific RM statically included in the build, however. That is effectively what *j1b_test* is. It's just the process of loading an RM into an RP that I can't verilate.
 
-Btw, *dfx_test* can be built in the *sim-a7-100* Verilator build tree. It's a BoxLambda SoC without a DFX Controller and with a *vs0_stub* statically included. The testcase just lets the software boot on the SoC and checks that the *vs0_stub's* signature register can be read.
+Btw, *dfx_test* can be built in the *sim-a7-100* Verilator build tree. In this build configuration, *dfx_test* is a BoxLambda SoC without a DFX Controller and with a *vs0_stub* statically included. The test case just lets the software boot on the SoC and checks that the *vs0_stub's* signature register can be read.
 
-Regarding the lack of portability, I think this just means that I will have to treat DFX as an optional feature. This is no different from the other BoxLambda gateware components (USB, I2C, SPI Flash...). These are all set up as features that can be included or excluded from the SoC through compile flags.
+Regarding the lack of portability, I will treat DFX as an optional feature. Similar to other BoxLambda components like USB, I2C, and SPI Flash, DFX can be included or excluded from the SoC via compile flags.
 
 Other Changes
 -------------
-Not all changes I'm making between two Blog posts fit in the topic I want to discuss in the Blog post. I used to capture these *other changes* here, but going forward I'll keep track of those in changes in a proper [CHANGELOG.md](https://github.com/epsilon537/boxlambda/blob/master/CHANGELOG.md).
+Not all changes I make between blog posts are directly related to the topic at hand. In the past, I used to capture these updates here, but moving forward, I’ll track them in a dedicated [CHANGELOG.md](https://github.com/epsilon537/boxlambda/blob/master/CHANGELOG.md) file.
 
 Try It Yourself
 ---------------
@@ -699,7 +699,7 @@ The DFX Test on FPGA
 
 1. Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/latest/pmods/#microsd-pmod) and insert a FAT formatted SD card.
 
-2. Connect a terminal program to Arty's USB serial port. I suggest using a terminal program that supports ymodem transfers such a *Minicom*. **Settings: 115200 8N1**.
+2. Connect a terminal program to Arty's USB serial port. I suggest using a terminal program that supports ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
 
 3. Build the *dfx_test* software project in the arty-a7-100 build tree:
 
@@ -727,7 +727,7 @@ The DFX Test on FPGA
     make dfx_test_flash_gw
     ```
 
-7. When flashing has completed, the target should boot up. You should see the following messages:
+7. When flashing has been completed, the target should boot up. You should see the following messages:
 
     ```
     Starting...
@@ -783,13 +783,13 @@ The DFX Test on FPGA
 
 11. Insert the SD Card in BoxLambda's MicroSD card slot.
 
-    As an aside, instead of copying the files to an SD Card mounted on your PC and then moving the SD Card to BoxLambda, you can leave a card inserted into BoxLambda's SD Card slot and transfer the files using the ymodem protocol. To do that, enter the following command on the CLI:
+    As an aside, instead of copying the files to an SD Card mounted on your PC and then moving the SD Card to BoxLambda, you can leave a card inserted into BoxLambda's SD Card slot and transfer the files using the Ymodem protocol. To do that, enter the following command on the CLI:
 
     ```
     ymodem_rx <filename>
     ```
 
-    Then send the file in question using your terminal program's ymodem function. The transfered file will be saved on the SD card as *\<filename\>*.
+    Then send the file in question using your terminal program's ymodem function. The transferred file will be saved on the SD card as *\<filename\>*.
 
 12. Confirm that all the required files are on the filesystem by running the *ls* CLI command:
 
@@ -802,7 +802,7 @@ The DFX Test on FPGA
     1 dirs, 3 files.
     ```
 
-13. At this point, the BoxLambda SoC still has *vs0_stub* equiped as the default module in the VS0 RP. Let's switch over to the *vs0_j1b* RM. Enter the following command on the CLI:
+13. At this point, the RM equipped in the VS0 RP is *vs0_stub*. Let's switch over to the *vs0_j1b* RM. Enter the following command on the CLI:
 
     ```
     > dfx_load_module vs0_j1b
@@ -861,11 +861,11 @@ The DFX Test on FPGA
 
 Conclusion
 ----------
-DFX support in BoxLambda is a work-in-progress. To complete the feature, I need to address the following topics:
+DFX support in BoxLambda is a work in progress. To complete the feature, I need to address the following topics:
 - Add support for multiple RPs, specifically, one for the graphics subsystem and one for the sound subsystem.
-- Constrain the static logic to a Pblock of its own. The intent is that the BoxLambda *proper* (the static logic) and its RMs can be modified and implemented/routed independantly of each other, while respecting the Pblock boundaries and the interfaces between them.
+- Constrain the static logic to its own a Pblock. The intent is to allow independent modification and implementation of the RMs and the BoxLambda *proper* (the static logic) while respecting the Pblock boundaries and their interfaces.
 
-I'm not entirely certain about the feasibility of that second bullet item. I'll let you know how it worked out in the next post.
+Is the second bullet item feasible? I'll let you know in the next post.
 
 References
 ----------
