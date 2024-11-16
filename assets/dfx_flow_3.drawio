@@ -1,0 +1,101 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="Page-1" id="V9tsRuEMkNXsPb4zUjGL">
+    <mxGraphModel dx="2920" dy="1343" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-1" value="DFX Controller" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="360" y="120" width="180" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-2" value="Memory" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="362.5" y="480" width="177.5" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-3" value="File System" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="150" y="481" width="170" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-4" value="RP" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="600" y="480" width="175" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-5" value="ICAP" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="627.5" y="341.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-6" value="Software" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="160" y="300" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-7" value="RM Partial Bitstream&lt;div style=&quot;font-size: 12px;&quot;&gt;File&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="175" y="511" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-8" value="RM Partial Bitstream Memory Buffer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#000000;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="390" y="510" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-9" value="addr" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="371.5" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-10" value="size" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="445" y="371.5" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-11" value="BS_INFO_0 Reg." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="341.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-12" value="enable DFX Ctrl" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="311.5" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-13" value="DFX Ctrl Reg." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="281.5" width="105" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-14" value="trigger" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="248.5" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-15" value="SW_TRIG Reg." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="218.5" width="105" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-16" value="status" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="190.5" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-17" value="DFX_STATUS Reg." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="160.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-19" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" parent="1" source="jrM2JtgU3ecvFQUcMoXZ-9" target="jrM2JtgU3ecvFQUcMoXZ-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="830" as="sourcePoint" />
+            <mxPoint x="560" y="780" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-20" value="3a. Issue SW Trigger" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;fontSize=12;fontStyle=1" parent="1" source="jrM2JtgU3ecvFQUcMoXZ-6" target="jrM2JtgU3ecvFQUcMoXZ-14" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="250" y="180" as="sourcePoint" />
+            <mxPoint x="400" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-22" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;fontSize=12;fontStyle=1;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="627.5" y="510" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-24" value="3b. DFX Contoller transfers&lt;div style=&quot;font-size: 12px;&quot;&gt;Bitstream data to ICAP&lt;/div&gt;" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=0.013;entryY=0.642;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=12;fontStyle=1" parent="1" source="jrM2JtgU3ecvFQUcMoXZ-8" target="jrM2JtgU3ecvFQUcMoXZ-5" edge="1">
+          <mxGeometry x="-0.2907" y="-34" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="460" as="sourcePoint" />
+            <mxPoint x="630" y="410" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="380" />
+              <mxPoint x="580" y="372" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jrM2JtgU3ecvFQUcMoXZ-25" value="3c. ICAP Configures the RP with given RM" style="curved=1;endArrow=classic;html=1;rounded=0;fontSize=12;fontStyle=1" parent="1" source="jrM2JtgU3ecvFQUcMoXZ-5" target="jrM2JtgU3ecvFQUcMoXZ-22" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="680" y="470" as="sourcePoint" />
+            <mxPoint x="730" y="420" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="700" y="430" />
+              <mxPoint x="730" y="430" />
+              <mxPoint x="720" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lAYLURPAjDxg5OcAIFuZ-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="480" width="960" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
