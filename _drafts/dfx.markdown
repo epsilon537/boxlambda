@@ -142,7 +142,7 @@ On the Ibex software side, I defined a J1B Hardware Access Layer (*j1b_hal*) giv
 2. Forward the BoxLambda serial port input data to the J1B core UART input register.
 3. Forward J1B core UART output data to the BoxLambda serial port.
 
-In this way, the SwapForth REPL running on the J1B core is presented to the user on the serial port terminal.
+This way, the SwapForth REPL running on the J1B core is presented to the user on the serial port terminal.
 
 See section [Try It Yourself](#try-it-yourself) below for instructions for building and running the j1b_test on Verilator and/or the Arty A7.
 
@@ -421,12 +421,24 @@ Testing
 Scripts and Build Rules
 =======================
 I captured the above steps into a handful of Vivado scripts executed by BoxLambda's build system:
-- **Step 1**: Nothing new here. The build system already supports project synthesis. To synthesize a project, navigate to the gateware project's directory in the build tree and type `make <project_name>_synth`. The Vivado scripts invoked are [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl).
-- **Step 2**: Also component OOC synthesis is already supported by the build system. To synthesize a component, navigate to the gateware component's directory in the build tree and type `make <component_name>_synth`. The Vivado scripts invoked are [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl) (same scripts as used for project synthesis, but the *create_project* script is invoked with a *-ooc* flag).
-- **Steps 3-7**: Building the project's static bitstream file as well as the bitstream file of the default RM is done by navigating to the DFX project's directory in the build tree and typing `make <project_name>_bit`. The Vivado script invoked is [scripts/vivado_impl_dfx_prj.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_prj.tcl).
-- **Steps 8-10**: Building the alternate RM's bitstream file is done by navigating to the RM component directory in the build tree and typing `make <component_name>_bit`. The Vivado script invoked is [scripts/vivado_impl_dfx_rm.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_rm.tcl).
+- **Step 1**: Project Synthesis:
+    - **Directory**: *build/arty-a7-100t/gw/projects/\<project>*
+    - **Build Command**: `make <project_name>_synth`
+    - **Vivado Scripts Invoked**: [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl).
+- **Step 2**: Component OOC Synthesis:
+    - **Directory**: *build/arty-a7-100t/gw/components/\<component>* 
+    - **Build Command**: `make <component_name>_synth`
+    - **Vivado Scripts Invoked**: [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl) (same scripts as used for project synthesis, but the *create_project* script is invoked with a *-ooc* flag).
+- **Steps 3-7**: Building the project's static bitstream file as well as the bitstream file of the default RM:
+    - **Directory**: *build/arty-a7-100t/gw/projects/\<project>* 
+    - **Build Command**: `make <project_name>_bit`
+    - **Vivado Script Invoked**: [scripts/vivado_impl_dfx_prj.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_prj.tcl)
+- **Steps 8-10**: Building the alternate RM's bitstream file:
+    - **Directory**: *build/arty-a7-100t/gw/components/\<component>* 
+    - **Build Command**: `make <component_name>_bit`
+    - **Vivado Script Invoked**: [scripts/vivado_impl_dfx_rm.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_rm.tcl).
 
-The [Try It Yourself: DFX Test](#the-dfx-test-on-fpga) section below walks you through the build and test procedure.
+The [Try It Yourself: DFX Test](#the-dfx-test-on-fpga) section below walks you through the complete build and test procedure.
 
 Phase 3: Adding the DFX Controller
 ----------------------------------
@@ -562,7 +574,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
             list directory contents.
     ```
 
-- [ymodem_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ymodem_cli/ymodem_cli.cpp): The **ymodem_rx** command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to BoxLambda. While I could simply copy everything onto an SD card and then move that card from PC to BoxLambda, I prefer this method as it involves fewer moving parts.
+- [ymodem_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ymodem_cli/ymodem_cli.cpp): The **ymodem_rx** command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to BoxLambda. While I could copy everything onto an SD card and then move that card from PC to BoxLambda, I prefer this method as it involves fewer moving parts.
 
     ```
      * ymodem_rx
@@ -603,9 +615,9 @@ I can't accurately verilate BoxLambda SoCs containing a DFX Controller and I can
 
 I can still verilate BoxLambda SoCs with a specific RM statically included in the build, however. That is effectively what *j1b_test* is. It's just the process of loading an RM into an RP that I can't verilate.
 
-Btw, *dfx_test* can be built in the *sim-a7-100* Verilator build tree. In this build configuration, *dfx_test* is a BoxLambda SoC without a DFX Controller and with a *vs0_stub* statically included. The test case just lets the software boot on the SoC and checks that the *vs0_stub's* signature register can be read.
+Btw, *dfx_test* can be built in the *sim-a7-100* Verilator build tree. In this build configuration, *dfx_test* is a BoxLambda SoC without a DFX Controller and with a *vs0_stub* statically included. The test case simply lets the software boot on the SoC and checks that the *vs0_stub's* signature register can be read.
 
-Regarding the lack of portability, I will treat DFX as an optional feature. Similar to other BoxLambda components like USB, I2C, and SPI Flash, DFX can be included or excluded from the SoC via compile flags.
+Regarding the lack of portability, I will treat DFX as an optional feature. Similar to other BoxLambda components like USB, I2C, and SPI Flash, DFX can be included or excluded from the SoC via compile flags. If BoxLambda is ported to another FPGA platform, features can be enabled or disabled to fit that platform.
 
 Other Changes
 -------------
@@ -699,7 +711,7 @@ The DFX Test on FPGA
 
 1. Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/latest/pmods/#microsd-pmod) and insert a FAT formatted SD card.
 
-2. Connect a terminal program to Arty's USB serial port. I suggest using a terminal program that supports ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
+2. Connect a terminal program to Arty's USB serial port. I suggest using a terminal program that supports Ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
 
 3. Build the *dfx_test* software project in the arty-a7-100 build tree:
 
@@ -863,7 +875,7 @@ Conclusion
 ----------
 DFX support in BoxLambda is a work in progress. To complete the feature, I need to address the following topics:
 - Add support for multiple RPs, specifically, one for the graphics subsystem and one for the sound subsystem.
-- Constrain the static logic to its own a Pblock. The intent is to allow independent modification and implementation of the RMs and the BoxLambda *proper* (the static logic) while respecting the Pblock boundaries and their interfaces.
+- Constrain the static logic to its own Pblock. The intent is to allow independent modification and implementation of the RMs and the BoxLambda *proper* (the static logic) while respecting the Pblock boundaries and their interfaces.
 
 Is the second bullet item feasible? I'll let you know in the next post.
 
