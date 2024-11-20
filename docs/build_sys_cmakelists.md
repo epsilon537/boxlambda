@@ -22,92 +22,89 @@ gw_component_rules(
 )
 ```
 
-The component's sources, definitions, and dependencies are still defined in its *Bender.yml* manifest. The CMake build system interfaces with Bender through a set of scripts to extract the necessary info and pass it on to Vivado or Verilator.
+The component's sources, Vivado IPs, flags, and dependencies are defined in its *Bender.yml* manifest. The CMake build system interfaces with Bender through a collection of scripts to extract the necessary info and pass it on to Vivado or Verilator.
 
 ### A Gateware Project CMakeList
 
-The build instructions for a gateware project are also grouped into a CMake function: **gw_project_rules()**. This function has a few additional arguments compared to its component counterpart. A typical GW project CMakeLists.txt file looks like this:
+The build instructions for a gateware project are also grouped into two CMake functions: 
+    - **gw_project_rules_vivado()**. gateware project build rules for Vivado builds.
+    - **gw_project_rules_verilator()**. gateware project build rules for Verilator builds.
+
+A typical GW project CMakeLists.txt file looks like this:
 
 ```
-gw_project_rules(
-    TOP_MODULE <top module name>
-    PROJECT_NAME <project name>
-    MEM_FILE_TARGET <sw project name>
-    VERILATOR_CPP_FLAGS <Verilator CPP flags, e.g. include paths>
-    VERILATOR_LD_FLAGS <Verilator link flags, e.g. -lncurses>
-)
+if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+  gw_project_rules_vivado(
+      TOP_MODULE boxlambda_top
+      PROJECT_NAME fatfs_test
+      MEM_FILE_TARGET fatfs_test
+  )
+else()
+  gw_project_rules_verilator(
+      TOP_MODULE sim_main
+      PROJECT_NAME fatfs_test
+      MEM_FILE_TARGET fatfs_test
+      VERILATOR_CPP_FLAGS
+          "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang -I${PROJECT_SOURCE_DIR}/sub/sdspi/bench/cpp"
+      VERILATOR_LD_FLAGS
+          -lncurses
+  )
 
-#Add testcase.
-add_test(NAME <test name>
-    COMMAND <test command>
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
+  #Add testcase.
+  add_test(NAME fatfs_test_test
+      COMMAND ./Vmodel -s ${CMAKE_CURRENT_LIST_DIR}/test/sdcard.img
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+endif()
 ```
 
-For example:
-
-```
-gw_project_rules(
-    TOP_MODULE ibex_soc
-    PROJECT_NAME hello_world
-    MEM_FILE_TARGET hello_world
-    VERILATOR_CPP_FLAGS "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/"
-    VERILATOR_LD_FLAGS "-lncurses"
-)
-
-add_test(NAME hello_world_test
-    COMMAND ./Vmodel
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
-```
-
-As is the case for GW components, the project's sources, definitions, dependencies, and constraint files are defined in its *bender.yml* manifest. The reference to the SW project delivering the memory file is *not* defined in the Bender manifest, however. The SW project name is passed in as the *MEM_FILE_TARGET* parameter in the *gw_project_rules()* call.
+The project's sources, flags, dependencies, Vivado IPs, and constraint files are defined in its *bender.yml* manifest. The reference to the SW project delivering the memory file is *not* defined in the Bender manifest, however. The SW project name is passed in as the *MEM_FILE_TARGET* parameter in the *gw_project_rules_vivado|verilator()* call.
 
 Any test cases are also added to the project's CMakeLists.txt file.
 
-### Software Build Structure
+### A Software Project CMakeList
 
 CMake is designed to build software. The necessary functions for creating libraries, executables, etc. are predefined.
-The only custom function added to the software CMakeLists tree is **link_internal_create_mem_file()**. This function implements the necessary instructions to link the given executable against the BoxLambda internal memory map and generate a memory file, to be used by the GW part of the build system.
+The only custom function added to the software CMakeLists tree is **link_and_create_mem_file()**. This function executes the necessary steps to link the given target using a given linker script and generate a memory file, used by the GW part of the build system.
 
-The linker script to be executed is passed as an argument to the *link_internal_create_mem_file()* function. Currently, two linker scripts are defined:
+Currently, two linker scripts are defined:
 
-- **/sw/components/bootstrap/link_internal_mem_64K.ld**: This is the linker script for an internal memory size of 64KB. This script results in a software image that can run both on the Arty-A7-35T and the Arty-A7-100T (FPGA and simulation).
-- **/sw/components/bootstrap/link_internal_mem_256K.ld**: This is the linker script for an internal memory size of 256KB. This script results in a software image that only runs on the Arty-A7-100T (FPGA and simulation).
+- **/sw/components/bootstrap/link_cmem_boot.ld**: This linker script creates software images that boot from CMEM internal memory
+- **/sw/components/bootstrap/link_flash_boot.ld**: This linker script creates software images that boot from flash memory.
 
 A typical SW project CMakeLists.txt file looks like this:
 
 ```
 add_executable(hello_world
-	EXCLUDE_FROM_ALL
+ EXCLUDE_FROM_ALL
     hello.c
-	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/gpio.c
-	../../../sub/ibex_wb/soc/fpga/arty-a7/sw/libs/soc/utils.c
 )
 
 #Setting the -g flag for the hello_dbg build testing GDB access.
 target_compile_options(hello_world
-	PRIVATE -g)
+ PRIVATE -g)
 
 #Function defined in parent CMakeLists.txt file:
-link_internal_create_mem_file(hello_world ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_internal_mem_64K.ld)
+link_and_create_mem_file(hello_world ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+
+target_link_libraries(hello_world gpio riscv)
 ```
 
-### Organization
+### CMakeList Organization
 
-![CMakeLists organization.](assets/CMakeLists_Org.drawio.png)
+![CMakeLists organization.](assets/CMakeLists_Org.png)
 
 *CMakeLists Organization.*
 
 The actual gateware build recipes (Bender interaction, verilating, synthesizing...) are implemented by a set of bash and tcl scripts kept in the [scripts/](https://github.com/epsilon537/boxlambda/tree/master/scripts) directory:
 
 ```
-	bender_gen_constraints_file_list.sh
+	bender_gen_prj_constraints_file_list.sh
 	bender_gen_verilator_sources.sh
-	bender_gen_vivado_sources.sh
+	bender_gen_vivado_sources_and_deps.sh
 	bender_get_cpp_files.sh
 	bender_get_vlts.sh
-	gen_mem_file_list.sh
+	bender_gen_mem_file_list.sh
+	bender_gen_ip_file_list.sh
 	prg_bitstream.tcl
 	verilator_lint_check.sh
 	verilator_sim.sh
@@ -117,9 +114,9 @@ The actual gateware build recipes (Bender interaction, verilating, synthesizing.
     vivado_updatemem.sh
 ```
 
-Having the build recipes as scripts instead of CMake allows me to invoke and test them outside of the build system.
+The build recipes are implemented as separate scripts outside the CMakeLists so they can be invoked from a Linux shell or Vivado session outside the build system.
 
-The CMake build instructions define the various targets and the relationships between them and invoke the above build scripts when needed. 
+The CMake build instructions define the various targets and the relationships between them and invoke the above build scripts when needed.
 
 The CMake build definitions are located as close as possible to the part of the tree to which they apply, e.g. the *gw_project_rules()* function can be found in the [gw/projects/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/CMakeLists.txt) file. *Gw_component_rules()* can be found in the [gw/components/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/components/CMakeLists.txt) file. Gateware build instructions common to both components and projects are located in the [gw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/CMakeLists.txt) file.
 
