@@ -10,6 +10,11 @@ The Directory Structure
 │   └── <git submodules>
 ├── gw/
 │   ├── CMakeLists.txt
+│   ├── ip/
+│   │   ├── ila/
+│   │   │   ├── ila_0.xci
+│   │   │   └── <other ILA IP files>
+│   │   └── <other Vivado IP>
 │   ├── components/
 │   │   ├── CMakeLists.txt
 │   │   ├── wbuart32/

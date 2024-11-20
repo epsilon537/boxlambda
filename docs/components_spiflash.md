@@ -33,7 +33,7 @@ I would like to be able to boot software from flash memory. That means that the 
 
 #### Writing to Flash
 
-I would like to be able to write to flash memory. The flash core should include a Wishbone control interface through which a driver can issue SPI flash commands.
+To enable writing to flash memory, the flash core should include a Wishbone control interface through which a driver can issue SPI flash commands.
 
 #### Configurable SPI Clock Frequency
 
@@ -45,7 +45,7 @@ As always, I want to simulate the entire setup in Verilator. I'll need to attach
 
 ### The ZipCPU SpiXpress core
 
-ZipCPU's spixpress core meets all of the above requirements, except the configurable SCK frequency bit. It's a single-SPI core with a Wishbone read interface as well as a control interface. The repository also includes driver software for the SPI core and a C++ SPI Flash device co-simulation model for Verilator. Here is the GitHub repository:
+ZipCPU's spixpress core meets all of the above requirements, except the configurable SCK frequency bit. It's a single-SPI core with a Wishbone read interface and a control interface. The repository also includes driver software for the SPI core and a C++ SPI Flash device co-simulation model for Verilator. Here is the GitHub repository:
 
 [https://github.com/ZipCPU/qspiflash](https://github.com/ZipCPU/qspiflash)
 
@@ -87,7 +87,7 @@ The SPI Flash core has a 32-bit Wishbone read interface. Through this interface,
 *Reading a 32-bit word from SPI Flash. 8 (C)ommand bits, followed by 24 (A)ddress bits, followed by 32 (D)ata bits.*
 
 - *C7-C0*: Command Bits. The Read Command ID is 0x03.
-- *A23-A0*: Address Bits covering the entire 16MB address range.
+- *A23-A0*: Address Bits covering the complete 16MB address range.
 - *D31-D0*: Data Bits.
 - *cs_n*: Active Low Chip Select of the SPI device.
 - *sclk*: SPI Clock.
@@ -174,11 +174,21 @@ For MISO timing, I'm taking into account the following delays:
 
 *SPI Flash MISO Timing.*
 
-Here I get only 5ns of slack. That's much less than I expected, but should still be good enough.
+Here I get only 5ns of slack. That's much less than I expected, but it should still be good enough.
 
-### Spiflash Core Clock Frequency
+### SpiFlash Core Clock Frequency
 
-The Spiflash core is part of the 50MHz System Clock Domain.
+The SpiFlash core is part of the 50MHz System Clock Domain.
 
 The SPI bus clock frequency is 25Mhz and is derived from the System Clock Domain through a clock divider.
+
+### SpiFlash Memory Layout
+
+The Arty A7 is equipped with 16Mbytes of flash memory. 
+
+Flash memory address range: 0x11000000-0x11ffffff, allocated as follows:
+
+    - 0x11000000-0x113fffff: 4Mbytes Reserved for Bitstreams
+    - 0x11400000-0x117fffff: 4Mbytes Reserved for software images that boot from flash memory.
+    - 0x11800000-0x11ffffff: 8Mbytes Available for non-volatile data storage.
 

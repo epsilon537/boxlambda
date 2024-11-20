@@ -32,13 +32,15 @@ nav:
     - LEDs: leds.md
     - FPGA Resource Utilization: fpga-resource-utilization.md
     - Git Workflow: git-workflow.md
-    - The Build System and Directory Layout:
-        - The Directory Structure: build_sys_dir_struct.md
-        - The Gateware Build Structure: build_sys_gw_build_struct.md
+    - The Build System:
+        - The Build Structure:
+          - The Directory Structure: build_sys_dir_struct.md
+          - The Gateware Build Structure: build_sys_gw_build_struct.md
+          - The CMakeLists: build_sys_cmakelists.md
+        - Building Gateware: build_sys_building_gw.md
         - Building Software: build_sys_building_sw.md
         - Make All, Clean and Regen: build_sys_make_all_etc.md
         - Creating Additional Build Trees: build_sys_creating_build_trees.md
-        - The CMakeLists: build_sys_cmakelists.md
     - The Test Bench: test-bench.md
     - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
@@ -73,7 +75,10 @@ nav:
         - Interrupt Handling: sw_comp_irqs.md
         - I2C: sw_comp_i2c.md
         - Real-Time Clock and Calendar: sw_comp_rtcc.md
-        - CLI: sw_comp_cli.md
+        - Embedded CLI: sw_comp_cli.md
+        - Ymodem: sw_comp_ymodem.md
+        - Memory and File System CLI: sw_comp_mem_fs_cli.md
+        - Peek and Poke CLI: sw_comp_peek_poke_cli.md
     - Installation:
         - Prerequisites: prerequisites.md
         - Peripherals (PMODs): pmods.md
