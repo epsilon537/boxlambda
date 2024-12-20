@@ -12,17 +12,29 @@ module vs0 (
     input logic sys_clk,
     input logic rst,
 
-    //32-bit pipelined Wishbone master interface.
-    output logic [27:0] wbm_adr_o,
-    output logic [31:0] wbm_dat_o,
-    input logic [31:0] wbm_dat_i,
-    output logic wbm_we_o,
-    output logic [3:0] wbm_sel_o,
-    output logic wbm_stb_o,
-    input logic wbm_ack_i,
-    input logic wbm_stall_i,
-    output logic wbm_cyc_o,
-    input logic wbm_err_i,
+    //32-bit pipelined Wishbone master interface 0.
+    output logic [27:0] wbm_0_adr_o,
+    output logic [31:0] wbm_0_dat_o,
+    input logic [31:0] wbm_0_dat_i,
+    output logic wbm_0_we_o,
+    output logic [3:0] wbm_0_sel_o,
+    output logic wbm_0_stb_o,
+    input logic wbm_0_ack_i,
+    input logic wbm_0_stall_i,
+    output logic wbm_0_cyc_o,
+    input logic wbm_0_err_i,
+
+    //32-bit pipelined Wishbone master interface 1.
+    output logic [27:0] wbm_1_adr_o,
+    output logic [31:0] wbm_1_dat_o,
+    input logic [31:0] wbm_1_dat_i,
+    output logic wbm_1_we_o,
+    output logic [3:0] wbm_1_sel_o,
+    output logic wbm_1_stb_o,
+    input logic wbm_1_ack_i,
+    input logic wbm_1_stall_i,
+    output logic wbm_1_cyc_o,
+    input logic wbm_1_err_i,
 
     //32-bit pipelined Wishbone slave interface.
     input logic [17:0] wbs_adr,
@@ -48,25 +60,33 @@ module vs0 (
 
   localparam [31:0] STUB_SIGNATURE = 32'h0000510b;  //Signature register value.
 
-  logic unused = &{rst, irq_in, wbm_dat_i, wbm_ack_i, wbm_stall_i, wbm_err_i, wbs_adr, wbs_dat_w, wbs_sel, wbs_we};
+  logic unused = &{rst, irq_in, wbm_0_dat_i, wbm_0_ack_i, wbm_0_stall_i, wbm_0_err_i, wbm_1_dat_i, wbm_1_ack_i, wbm_1_stall_i, wbm_1_err_i, wbs_adr, wbs_dat_w, wbs_sel, wbs_we};
 
   //Just acknowledge incoming transactions.
   always_ff @(posedge sys_clk) begin
     wbs_ack <= wbs_stb & wbs_cyc;
   end
 
-  assign wbm_adr_o = 28'b0;
-  assign wbm_dat_o = 32'b0;
-  assign wbm_we_o  = 1'b0;
-  assign wbm_sel_o = 4'b0;
+  assign wbm_0_adr_o = 28'b0;
+  assign wbm_0_dat_o = 32'b0;
+  assign wbm_0_we_o = 1'b0;
+  assign wbm_0_sel_o = 4'b0;
 
-  assign wbm_cyc_o = 1'b0;
-  assign wbm_stb_o = 1'b0;
+  assign wbm_0_cyc_o = 1'b0;
+  assign wbm_0_stb_o = 1'b0;
+
+  assign wbm_1_adr_o = 28'b0;
+  assign wbm_1_dat_o = 32'b0;
+  assign wbm_1_we_o = 1'b0;
+  assign wbm_1_sel_o = 4'b0;
+
+  assign wbm_1_cyc_o = 1'b0;
+  assign wbm_1_stb_o = 1'b0;
 
   assign wbs_stall = 1'b0;
-  assign wbs_err   = 1'b0;
+  assign wbs_err = 1'b0;
   assign wbs_dat_r = STUB_SIGNATURE;
-  assign irq_out   = 1'b0;
+  assign irq_out = 1'b0;
 `endif
 
 endmodule

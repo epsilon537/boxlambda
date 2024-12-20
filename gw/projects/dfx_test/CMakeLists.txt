@@ -24,8 +24,10 @@ gw_project_rules_dfx_vivado(
     TOP_MODULE boxlambda_top
     PROJECT_NAME dfx_test
     #Location of the virtual socket in the design:
-    VS_INST boxlambda_soc_inst/vs0_inst
-    VS_DEFAULT_COMPONENT vs0_stub
+    VS_INSTS 
+      boxlambda_soc_inst/vs0_inst
+    VS_DEFAULT_COMPONENTS
+      vs0_stub
 )
 else()
   #gw_project_rules_verilator() function is defined in the parent CMakeLists.txt.

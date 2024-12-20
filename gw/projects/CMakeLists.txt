@@ -2,15 +2,13 @@
 #TOP_MODULE: name of top module, e.g. ibex_soc
 #PROJECT_NAME: project name, e.g. dfx_test
 #MEM_FILE_LIST: Mem file list, if any.
-#VS_INST: DFX virtual socket instance name, e.g. boxlambda_soc/vs0_inst.
-#VS_DEFAULT_COMPONENT: DFX virtual socket default component, i.e. the component that gets placed into the virtual socket in the default bitstream image, e.g. vs0_stub.
-#
-#FIXME: This function assumes there's only one virtual socket. It should be extended to support multiple virtual sockets.
-#
+#VS_INSTS: DFX virtual socket instance names, e.g. boxlambda_soc/vs0_inst.
+#VS_DEFAULT_COMPONENTS: DFX virtual socket default components, one for each VS_INST listed. The default component gets placed into the virtual socket in the default bitstream image, e.g. vs0_stub.
+
 function (gw_project_rules_dfx_vivado)
   set(options)
-  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_LIST VS_INST VS_DEFAULT_COMPONENT)
-  set(multiValueArgs)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_LIST)
+  set(multiValueArgs VS_INSTS VS_DEFAULT_COMPONENTS)
 
   cmake_parse_arguments(gw_project_rules_dfx_vivado
         "${options}"
@@ -22,8 +20,16 @@ function (gw_project_rules_dfx_vivado)
   set(_top_module ${gw_project_rules_dfx_vivado_TOP_MODULE})
   set(_prj_name ${gw_project_rules_dfx_vivado_PROJECT_NAME})
   set(_mem_file_list ${gw_project_rules_dfx_vivado_MEM_FILE_LIST})
-  set(_vs_inst ${gw_project_rules_dfx_vivado_VS_INST})
-  set(_vs_default_comp ${gw_project_rules_dfx_vivado_VS_DEFAULT_COMPONENT})
+  set(_vs_insts ${gw_project_rules_dfx_vivado_VS_INSTS})
+  set(_vs_default_comps ${gw_project_rules_dfx_vivado_VS_DEFAULT_COMPONENTS})
+
+  foreach(vs_inst ${_vs_insts})
+    message("vs_inst " ${vs_inst})
+  endforeach()
+
+  foreach(default_comp ${_vs_default_comps})
+    message("default_comp " ${default_comp})
+  endforeach()
 
   if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
     set(_board arty_a7_100t)
@@ -75,12 +81,23 @@ function (gw_project_rules_dfx_vivado)
             ${_prj_name}.prj_constraints_file_list
     )
 
+  set(defaultDcps "")
+  set(default_comps_synth "")
+  foreach(default_comp ${_vs_default_comps})
+    list(APPEND defaultDcps $<TARGET_PROPERTY:${default_comp}_synth,BINARY_DIR>/project.runs/synth_1/*.dcp)
+    list(APPEND default_comps_synth ${default_comp}_synth)
+  endforeach()
+
+  foreach(defaultDcp ${defaultDcps})
+    message("defaultDcp " ${defaultDcp})
+  endforeach()
+
   #Build Vivado command string for the vivado_impl tcl script.
   #The .dcp file referenced below is the Vivado synthesis checkpoint.
   #The bender command referenced below extracts the DFX constraints file from the Bender.yml manifest/
   vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl_dfx_prj.tcl
-        -vsCellInst ${_vs_inst}
-        -vsDefaultDcp $<TARGET_PROPERTY:${_vs_default_comp}_synth,BINARY_DIR>/project.runs/synth_1/*.dcp
+        -vsCellInsts \"${_vs_insts}\"
+        -vsDefaultDcps \"${defaultDcps}\"
         -vsPblockConstr `${PROJECT_SOURCE_DIR}/scripts/bender_get_dfx_constraints.sh ${CMAKE_CURRENT_LIST_DIR}`)
 
   #Custom command executing the vivado implementation command string.
@@ -97,8 +114,8 @@ function (gw_project_rules_dfx_vivado)
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
             ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
-            ${_vs_default_comp}_synth
-            $<TARGET_PROPERTY:${_vs_default_comp}_synth,BINARY_DIR>/project.runs/synth_1/*.dcp
+            ${default_comps_synth}
+            ${defaultDcps}
         COMMENT
             "Implementing DFX project and generating bitstream(s)."
         VERBATIM

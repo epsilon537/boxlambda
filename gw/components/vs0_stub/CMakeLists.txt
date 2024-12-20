@@ -22,8 +22,14 @@ if(BL_TARGET_FPGA STREQUAL "arty-a7-100")
   # given below results in a vs0_stub_bit target being defined. Building that target results in a DFX partial bitstream
   # of the vs0_stub component.
   gw_rm_rules_dfx(
-    COMPONENT_NAME vs0_stub
-    VS_INST boxlambda_soc_inst/vs0_inst
+    COMPONENT_NAMES 
+      vs0_stub
+      vs1_vera
+      vs2_ym2149
+    VS_INSTS
+      boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
+      boxlambda_soc_inst/GENERATE_VS1_MODULE.vs1_inst
+      boxlambda_soc_inst/GENERATE_VS2_MODULE.vs2_inst
     REF_DFX_PROJECT dfx_test
   )
 endif()
