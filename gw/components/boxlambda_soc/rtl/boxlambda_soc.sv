@@ -114,10 +114,11 @@ module boxlambda_soc #(
 
   //Enum of Bus Masters attached to the cross bar.
   typedef enum {
-    COREI_M,  /*Ibex CPU instruction port.*/
-    CORED_M,  /*Ibex CPU data port.*/
+    COREI_M,   /*Ibex CPU instruction port.*/
+    CORED_M,   /*Ibex CPU data port.*/
     PICORV_M,  /*PicoRV DMA.*/
-    VS0_M,  /*Virtual Socket 0 Bus Master.*/
+    VS0_0_M,   /*Virtual Socket 0 Bus Master 0.*/
+    VS0_1_M,   /*Virtual Socket 0 Bus Master 1.*/
     ARBITER_M  /*DM/DFX Wishbone Arbiter Bus Master port.*/
   } wb_xbar_master_e;
 
@@ -167,8 +168,8 @@ module boxlambda_soc #(
     IRQ_ID_SDSPI,
     IRQ_ID_DMAC,
     IRQ_ID_VS_0,
-    IRQ_ID_VS_1,  /*VERA*/
-    IRQ_ID_VS_2
+    IRQ_ID_VERA,
+    IRQ_ID_NA_4
   } fast_irq_ids_e;
 
   /*We used a word-addressing Wishbone bus. The Dual Port RAM word address bus width is equal to the
@@ -180,7 +181,7 @@ module boxlambda_soc #(
 
   localparam NUM_ARBITER_MASTERS = 2; //Number of bus masters connected to the DM/DFX Wishbone arbiter. Has to be 2 (the arbiter arbitrates between 2 ports only).
   localparam NUM_ARBITER_SLAVES = 1; //Number of bus slaves attached to the DM/DFX Wishbone arbiter. Has to be 1 (the arbiter has only one 'output' port).
-  localparam NUM_XBAR_MASTERS = 5;
+  localparam NUM_XBAR_MASTERS = 6;
   localparam NUM_XBAR_SLAVES = 8;
   localparam NUM_SHARED_BUS_MASTERS = 1;
   localparam NUM_SHARED_BUS_SLAVES = 15;
@@ -782,16 +783,27 @@ module boxlambda_soc #(
       .sys_clk(sys_clk),
       .rst(vs0_reset),
       //32-bit pipelined Wishbone master interface 0.
-      .wbm_adr_o(xbar_wbm[VS0_M].adr),
-      .wbm_dat_o(xbar_wbm[VS0_M].dat_m),
-      .wbm_dat_i(xbar_wbm[VS0_M].dat_s),
-      .wbm_sel_o(xbar_wbm[VS0_M].sel),
-      .wbm_stall_i(xbar_wbm[VS0_M].stall),
-      .wbm_cyc_o(xbar_wbm[VS0_M].cyc),
-      .wbm_stb_o(xbar_wbm[VS0_M].stb),
-      .wbm_ack_i(xbar_wbm[VS0_M].ack),
-      .wbm_we_o(xbar_wbm[VS0_M].we),
-      .wbm_err_i(xbar_wbm[VS0_M].err),
+      .wbm_0_adr_o(xbar_wbm[VS0_0_M].adr),
+      .wbm_0_dat_o(xbar_wbm[VS0_0_M].dat_m),
+      .wbm_0_dat_i(xbar_wbm[VS0_0_M].dat_s),
+      .wbm_0_sel_o(xbar_wbm[VS0_0_M].sel),
+      .wbm_0_stall_i(xbar_wbm[VS0_0_M].stall),
+      .wbm_0_cyc_o(xbar_wbm[VS0_0_M].cyc),
+      .wbm_0_stb_o(xbar_wbm[VS0_0_M].stb),
+      .wbm_0_ack_i(xbar_wbm[VS0_0_M].ack),
+      .wbm_0_we_o(xbar_wbm[VS0_0_M].we),
+      .wbm_0_err_i(xbar_wbm[VS0_0_M].err),
+      //32-bit pipelined Wishbone master interface 1.
+      .wbm_1_adr_o(xbar_wbm[VS0_1_M].adr),
+      .wbm_1_dat_o(xbar_wbm[VS0_1_M].dat_m),
+      .wbm_1_dat_i(xbar_wbm[VS0_1_M].dat_s),
+      .wbm_1_sel_o(xbar_wbm[VS0_1_M].sel),
+      .wbm_1_stall_i(xbar_wbm[VS0_1_M].stall),
+      .wbm_1_cyc_o(xbar_wbm[VS0_1_M].cyc),
+      .wbm_1_stb_o(xbar_wbm[VS0_1_M].stb),
+      .wbm_1_ack_i(xbar_wbm[VS0_1_M].ack),
+      .wbm_1_we_o(xbar_wbm[VS0_1_M].we),
+      .wbm_1_err_i(xbar_wbm[VS0_1_M].err),
       //32-bit pipelined Wishbone slave interface.
       .wbs_adr(xbar_wbs[VS0_S].adr[19:0]),
       .wbs_dat_w(xbar_wbs[VS0_S].dat_m),
@@ -957,7 +969,7 @@ module boxlambda_soc #(
     if (VERA_ACTIVE) begin : GENERATE_VERA_MODULE
       logic vera_irq_n;
 
-      assign fast_irqs[IRQ_ID_VS_1] = ~vera_irq_n;
+      assign fast_irqs[IRQ_ID_VERA] = ~vera_irq_n;
 
       vera_top #(VRAM_SIZE_BYTES) vera_inst (
           .clk(sys_clk),
@@ -985,7 +997,7 @@ module boxlambda_soc #(
       assign vga_b = 4'b0;
       assign vga_hsync = 1'b0;
       assign vga_vsync = 1'b0;
-      assign fast_irqs[IRQ_ID_VS_1] = 1'b0;
+      assign fast_irqs[IRQ_ID_VERA] = 1'b0;
     end
   endgenerate
 
@@ -1301,7 +1313,7 @@ module boxlambda_soc #(
   endgenerate
 
   //Set the remaining bits in the fast_irq vector to 0
-  assign fast_irqs[IRQ_ID_VS_2] = 1'b0;
+  assign fast_irqs[IRQ_ID_NA_4] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_0] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_1] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_2] = 1'b0;

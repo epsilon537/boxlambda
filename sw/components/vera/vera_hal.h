@@ -12,8 +12,6 @@
 /* Tie the VERA IRQ to the VS_1 (Virtual Socket 1) IRQ handler. */
 #define IRQ_ID_VERA IRQ_ID_VS_1
 
-#define _vera_irq_handler _vs_1_irq_handler
-
 /*A low-level Hardware Access Layer for VERA.*/
 //VERA register write
 inline void vera_reg_wr(unsigned addr, unsigned data) {

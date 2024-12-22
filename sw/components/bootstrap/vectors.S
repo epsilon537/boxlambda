@@ -27,8 +27,8 @@
   jal x0, _sdspi_irq_handler
   jal x0, _dmac_irq_handler
   jal x0, _vs_0_irq_handler
-  jal x0, _vs_1_irq_handler
-  jal x0, _vs_2_irq_handler
+  jal x0, _vera_irq_handler
+  jal x0, _exc_handler
   jal x0, _exc_handler /*NMI*/
 
   // reset vector. The first instruction executed after reset (and power-on)
@@ -112,12 +112,9 @@ _dmac_irq_handler:
 .globl _vs_0_irq_handler
 .weak _vs_0_irq_handler
 _vs_0_irq_handler:
-.globl _vs_1_irq_handler
-.weak _vs_1_irq_handler
-_vs_1_irq_handler:
-.globl _vs_2_irq_handler
-.weak _vs_2_irq_handler
-_vs_2_irq_handler:
+.globl _vera_irq_handler
+.weak _vera_irq_handler
+_vera_irq_handler:
 .globl _timer_irq_handler
 .weak _timer_irq_handler
 _timer_irq_handler:
