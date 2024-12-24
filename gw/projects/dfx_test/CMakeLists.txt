@@ -25,7 +25,7 @@ gw_project_rules_dfx_vivado(
     PROJECT_NAME dfx_test
     #Location of the virtual socket in the design:
     VS_INSTS 
-      boxlambda_soc_inst/vs0_inst
+      boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
     VS_DEFAULT_COMPONENTS
       vs0_stub
 )

@@ -23,14 +23,6 @@ function (gw_project_rules_dfx_vivado)
   set(_vs_insts ${gw_project_rules_dfx_vivado_VS_INSTS})
   set(_vs_default_comps ${gw_project_rules_dfx_vivado_VS_DEFAULT_COMPONENTS})
 
-  foreach(vs_inst ${_vs_insts})
-    message("vs_inst " ${vs_inst})
-  endforeach()
-
-  foreach(default_comp ${_vs_default_comps})
-    message("default_comp " ${default_comp})
-  endforeach()
-
   if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
     set(_board arty_a7_100t)
   else()

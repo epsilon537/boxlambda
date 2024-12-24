@@ -1,6 +1,7 @@
 #Function grouping gateware build rules for DFX Reconfigurable Module builds.
-#COMPONENT_NAMES: name of the DFX virtual socket components to implement.
-#VS_INSTS: DFX virtual socket instance names.
+#COMPONENT_NAMES: names of all the DFX virtual socket components that are part of the design.
+#List the 'current' component first.
+#VS_INSTS: DFX virtual socket instance names, one for each COMPONENT_NAME specified.
 #REF_DFX_PROJECT: Reference DFX project to build the Reconfigurable Module against.
 function (gw_rm_rules_dfx)
   set(options)
@@ -24,10 +25,6 @@ function (gw_rm_rules_dfx)
   foreach(comp ${_comp_names})
     list(APPEND dcps $<TARGET_PROPERTY:${comp}_synth,BINARY_DIR>/project.runs/synth_1/*.dcp)
     list(APPEND comps_synth ${comp}_synth)
-  endforeach()
-
-  foreach(defaultDcp ${defaultDcps})
-    message("defaultDcp " ${defaultDcp})
   endforeach()
 
   #Build Vivado command string for the vivado_impl tcl script.

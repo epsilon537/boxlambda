@@ -20,11 +20,11 @@ if(BL_TARGET_FPGA STREQUAL "arty-a7-100")
   # given below results in a vs0_j1b_bit target being defined. Building that target results in a DFX partial bitstream
   # of the vs0_j1b component.
   gw_rm_rules_dfx(
-    COMPONENT_NAMES 
+    COMPONENT_NAMES
       vs0_j1b
     #Specify where in the SoC, this component plugs into.
-    VS_INSTS 
-      boxlambda_soc_inst/vs0_inst
+    VS_INSTS
+      boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
     #Specify the reference project definign the static portion of the DFX build.
     REF_DFX_PROJECT dfx_test
   )

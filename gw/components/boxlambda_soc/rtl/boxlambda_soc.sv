@@ -12,6 +12,7 @@ module boxlambda_soc #(
     parameter SPIFLASH_ACTIVE = 1,
     parameter I2C_ACTIVE = 1,
     parameter DFX_ACTIVE = 1,
+    parameter VS0_ACTIVE = 1,
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""
 ) (
@@ -778,48 +779,54 @@ module boxlambda_soc #(
       .b_cyc_i(xbar_wbs[DMEM_1_S].cyc)  // CYC_I cycle input
   );
 
-  //Virtual Socket 0 Interface
-  vs0 vs0_inst (
-      .sys_clk(sys_clk),
-      .rst(vs0_reset),
-      //32-bit pipelined Wishbone master interface 0.
-      .wbm_0_adr_o(xbar_wbm[VS0_0_M].adr),
-      .wbm_0_dat_o(xbar_wbm[VS0_0_M].dat_m),
-      .wbm_0_dat_i(xbar_wbm[VS0_0_M].dat_s),
-      .wbm_0_sel_o(xbar_wbm[VS0_0_M].sel),
-      .wbm_0_stall_i(xbar_wbm[VS0_0_M].stall),
-      .wbm_0_cyc_o(xbar_wbm[VS0_0_M].cyc),
-      .wbm_0_stb_o(xbar_wbm[VS0_0_M].stb),
-      .wbm_0_ack_i(xbar_wbm[VS0_0_M].ack),
-      .wbm_0_we_o(xbar_wbm[VS0_0_M].we),
-      .wbm_0_err_i(xbar_wbm[VS0_0_M].err),
-      //32-bit pipelined Wishbone master interface 1.
-      .wbm_1_adr_o(xbar_wbm[VS0_1_M].adr),
-      .wbm_1_dat_o(xbar_wbm[VS0_1_M].dat_m),
-      .wbm_1_dat_i(xbar_wbm[VS0_1_M].dat_s),
-      .wbm_1_sel_o(xbar_wbm[VS0_1_M].sel),
-      .wbm_1_stall_i(xbar_wbm[VS0_1_M].stall),
-      .wbm_1_cyc_o(xbar_wbm[VS0_1_M].cyc),
-      .wbm_1_stb_o(xbar_wbm[VS0_1_M].stb),
-      .wbm_1_ack_i(xbar_wbm[VS0_1_M].ack),
-      .wbm_1_we_o(xbar_wbm[VS0_1_M].we),
-      .wbm_1_err_i(xbar_wbm[VS0_1_M].err),
-      //32-bit pipelined Wishbone slave interface.
-      .wbs_adr(xbar_wbs[VS0_S].adr[19:0]),
-      .wbs_dat_w(xbar_wbs[VS0_S].dat_m),
-      .wbs_dat_r(xbar_wbs[VS0_S].dat_s),
-      .wbs_sel(xbar_wbs[VS0_S].sel),
-      .wbs_stall(xbar_wbs[VS0_S].stall),
-      .wbs_cyc(xbar_wbs[VS0_S].cyc),
-      .wbs_stb(xbar_wbs[VS0_S].stb),
-      .wbs_ack(xbar_wbs[VS0_S].ack),
-      .wbs_we(xbar_wbs[VS0_S].we),
-      .wbs_err(xbar_wbs[VS0_S].err),
-      //Input IRQs - VS0 receives the same 32 IRQs with the same IRQ_IDs (bit
-      //positions) as the Ibex CPU. The bit position assigned to the VS_0 itself is cleared, however.
-      .irq_in({1'b0, fast_irqs & ~(1'b1 << IRQ_ID_VS_0), 8'b0, timer_irq, 7'b0}),
-      .irq_out(fast_irqs[IRQ_ID_VS_0])
-  );
+  generate
+    if (VS0_ACTIVE) begin : GENERATE_VS0_MODULE
+      //Virtual Socket 0 Interface
+      vs0 vs0_inst (
+          .sys_clk(sys_clk),
+          .rst(vs0_reset),
+          //32-bit pipelined Wishbone master interface 0.
+          .wbm_0_adr_o(xbar_wbm[VS0_0_M].adr),
+          .wbm_0_dat_o(xbar_wbm[VS0_0_M].dat_m),
+          .wbm_0_dat_i(xbar_wbm[VS0_0_M].dat_s),
+          .wbm_0_sel_o(xbar_wbm[VS0_0_M].sel),
+          .wbm_0_stall_i(xbar_wbm[VS0_0_M].stall),
+          .wbm_0_cyc_o(xbar_wbm[VS0_0_M].cyc),
+          .wbm_0_stb_o(xbar_wbm[VS0_0_M].stb),
+          .wbm_0_ack_i(xbar_wbm[VS0_0_M].ack),
+          .wbm_0_we_o(xbar_wbm[VS0_0_M].we),
+          .wbm_0_err_i(xbar_wbm[VS0_0_M].err),
+          //32-bit pipelined Wishbone master interface 1.
+          .wbm_1_adr_o(xbar_wbm[VS0_1_M].adr),
+          .wbm_1_dat_o(xbar_wbm[VS0_1_M].dat_m),
+          .wbm_1_dat_i(xbar_wbm[VS0_1_M].dat_s),
+          .wbm_1_sel_o(xbar_wbm[VS0_1_M].sel),
+          .wbm_1_stall_i(xbar_wbm[VS0_1_M].stall),
+          .wbm_1_cyc_o(xbar_wbm[VS0_1_M].cyc),
+          .wbm_1_stb_o(xbar_wbm[VS0_1_M].stb),
+          .wbm_1_ack_i(xbar_wbm[VS0_1_M].ack),
+          .wbm_1_we_o(xbar_wbm[VS0_1_M].we),
+          .wbm_1_err_i(xbar_wbm[VS0_1_M].err),
+          //32-bit pipelined Wishbone slave interface.
+          .wbs_adr(xbar_wbs[VS0_S].adr[19:0]),
+          .wbs_dat_w(xbar_wbs[VS0_S].dat_m),
+          .wbs_dat_r(xbar_wbs[VS0_S].dat_s),
+          .wbs_sel(xbar_wbs[VS0_S].sel),
+          .wbs_stall(xbar_wbs[VS0_S].stall),
+          .wbs_cyc(xbar_wbs[VS0_S].cyc),
+          .wbs_stb(xbar_wbs[VS0_S].stb),
+          .wbs_ack(xbar_wbs[VS0_S].ack),
+          .wbs_we(xbar_wbs[VS0_S].we),
+          .wbs_err(xbar_wbs[VS0_S].err),
+          //Input IRQs - VS0 receives the same 32 IRQs with the same IRQ_IDs (bit
+          //positions) as the Ibex CPU. The bit position assigned to the VS_0 itself is cleared, however.
+          .irq_in({1'b0, fast_irqs & ~(1'b1 << IRQ_ID_VS_0), 8'b0, timer_irq, 7'b0}),
+          .irq_out(fast_irqs[IRQ_ID_VS_0])
+      );
+    end else begin
+      assign fast_irqs[IRQ_ID_VS_0] = 1'b0;
+    end
+  endgenerate
 
   //The UART.
   wbuart #(

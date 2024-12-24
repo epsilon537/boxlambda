@@ -25,7 +25,7 @@ if(BL_TARGET_FPGA STREQUAL "arty-a7-100")
     COMPONENT_NAMES 
       vs0_stub
     VS_INSTS
-      boxlambda_soc_inst/vs0_inst
+      boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
     REF_DFX_PROJECT dfx_test
   )
 endif()

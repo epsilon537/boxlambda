@@ -27,6 +27,7 @@ sources:
       PICORV_DMA: ~
       SPIFLASH: ~
       I2C: ~
+      VS0: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_top/rtl/boxlambda_top.sv
@@ -43,6 +44,7 @@ sources:
       PICORV_DMA: ~
       SPIFLASH: ~
       I2C: ~
+      VS0: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_top/rtl/boxlambda_top.sv

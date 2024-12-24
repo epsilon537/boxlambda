@@ -32,6 +32,7 @@ sources:
       SPIFLASH: ~
       I2C: ~
       DFX: ~
+      VS0: ~
       #The static design of a DFX build expects to see empty module
       #declarations on its virtual sockets. That what this flag is used
       #for. The contents of of reconfigurable modules is ifndef'd with
@@ -55,6 +56,7 @@ sources:
       SPIFLASH: ~
       I2C: ~
       DFX: ~
+      VS0: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - sim/sim_main.cpp
