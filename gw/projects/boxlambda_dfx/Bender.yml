@@ -3,7 +3,7 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: dfx_test
+  name: boxlambda_dfx
 
 dependencies:
   # Path dependency.
@@ -16,7 +16,7 @@ sources:
       - ../boxlambda_top/constrs/boxlambda_soc.xdc
   - target: dfx_constraints
     files:
-      - ../boxlambda_top/constrs/vs0_pblock.xdc
+      - constrs/vs0_pblock.xdc
   - target: vivado
     defines:
       VRAM_SIZE_BYTES: 131072
@@ -64,3 +64,4 @@ sources:
       - ../../components/spiflash/sim/flashsim.cpp
       - ../boxlambda_top/sim/sim_main.sv
       - ../boxlambda_top/lint.vlt
+
