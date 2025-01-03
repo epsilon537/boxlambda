@@ -17,7 +17,7 @@ sources:
       - ../boxlambda_base/constrs/boxlambda_soc.xdc
   - target: dfx_constraints
     files:
-      - constrs/vs0_pblock.xdc
+      - constrs/pblocks.xdc
   - target: vivado
     defines:
       VRAM_SIZE_BYTES: 131072
