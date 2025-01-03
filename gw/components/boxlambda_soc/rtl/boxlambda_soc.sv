@@ -11,7 +11,7 @@ module boxlambda_soc #(
     parameter USB_HID_ACTIVE = 1,
     parameter SPIFLASH_ACTIVE = 1,
     parameter I2C_ACTIVE = 1,
-    parameter DFX_ACTIVE = 1,
+    parameter DFX_ACTIVE = 0,
     parameter VS0_ACTIVE = 1,
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""

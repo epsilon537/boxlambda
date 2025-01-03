@@ -14,7 +14,7 @@
   jal x0, _exc_handler /*IRQ_ID 13*/
   jal x0, _exc_handler /*IRQ_ID 14*/
   jal x0, _exc_handler /*IRQ_ID 15*/
-  jal x0, _icap_irq_handler
+  jal x0, _exc_handler
   jal x0, _dfx_irq_handler
   jal x0, _exc_handler /*branch to exception handler for the not-assigned fast IRQs.*/
   jal x0, _exc_handler
@@ -82,9 +82,6 @@ _reset_handler:
 
 // Weak bindings for the fast IRQs. These will be overridden in the
 // application code requiring interrupt handling for a given source.
-.globl _icap_irq_handler
-.weak _icap_irq_handler
-_icap_irq_handler:
 .globl _dfx_irq_handler
 .weak _dfx_irq_handler
 _dfx_irq_handler:

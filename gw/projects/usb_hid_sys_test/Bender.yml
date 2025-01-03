@@ -14,7 +14,7 @@ dependencies:
 sources:
   - target: prj_constraints
     files:
-      - ../boxlambda_top/constrs/boxlambda_soc.xdc
+      - ../boxlambda_base/constrs/boxlambda_soc.xdc
   - target: arty-a7-35
     defines:
       VRAM_SIZE_BYTES: 65536
@@ -29,7 +29,7 @@ sources:
       USB_HID:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../boxlambda_top/rtl/boxlambda_top.sv
+      - ../boxlambda_base/rtl/boxlambda_top.sv
   - target: arty-a7-100
     defines:
       VRAM_SIZE_BYTES: 131072
@@ -44,7 +44,7 @@ sources:
       USB_HID: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../boxlambda_top/rtl/boxlambda_top.sv
+      - ../boxlambda_base/rtl/boxlambda_top.sv
   - target: verilator
     files:
       - sim/sim_main.cpp

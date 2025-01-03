@@ -2,15 +2,11 @@
 #define VERA_HAL_H
 
 #include "vera.h"
-#include "interrupts.h"
 
 #define VERA_BASE 0x12000000
 #define VERA_VRAM_BASE (VERA_BASE + VERA_VRAM_OFFSET)
 #define VERA_PALETTE_BASE (VERA_BASE + VERA_PALETTE_OFFSET)
 #define VERA_SPRITES_BASE (VERA_BASE + VERA_SPRITES_OFFSET)
-
-/* Tie the VERA IRQ to the VS_1 (Virtual Socket 1) IRQ handler. */
-#define IRQ_ID_VERA IRQ_ID_VS_1
 
 /*A low-level Hardware Access Layer for VERA.*/
 //VERA register write

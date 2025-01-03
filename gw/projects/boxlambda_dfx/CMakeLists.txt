@@ -1,4 +1,4 @@
-# This is DFX enabled configuration of BoxLambda.
+# This is the DFX enabled configuration of BoxLambda.
 
 # DFX is also known as partial FPGA reconfiguration.
 # This build implements BoxLambda SoC where one of the subcomponents (virtual 

@@ -26,13 +26,12 @@ dependencies:
   spiflash: { path: "../../components/spiflash"}
   wb_timer: { path: "../../components/wb_timer"}
   i2c_master: { path: "../../components/i2c_master"}
-  wb_dfx_controller: { path: "../../components/wb_dfx_controller"}
 
 sources:
   #OOC
   #Pulling in the vs0 stub to satisfy the lint checker.
   #FIXME: I would have prefered to use a target specific dependency instead of
-  #pulling in a module, but I haven't been able to figure out the bender syntax
+  #pulling in a module directly, but I haven't been able to figure out the bender syntax
   #for doing that.
   - target: boxlambda_soc
     files:

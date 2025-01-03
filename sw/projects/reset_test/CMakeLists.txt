@@ -1,23 +1,45 @@
-#Reset test program
+#Reset test program - RAM Build
 
-add_executable(reset_test
+add_executable(reset_test_ram
  EXCLUDE_FROM_ALL
  reset_test.cpp
 )
 
-target_compile_options(reset_test
+target_compile_options(reset_test_ram
  PRIVATE
   -O2 -g
 )
 
-target_include_directories(reset_test
+target_include_directories(reset_test_ram
   PRIVATE
   ${PROJECT_SOURCE_DIR}/sw/components/reset/
 )
 
-#reset_test is linked as CMEM memory image.
-link_and_create_mem_file(reset_test
+link_and_create_image(reset_test_ram
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(reset_test sdram gpio riscv)
+target_link_libraries(reset_test_ram sdram gpio riscv)
 
+#Reset test program - Flash Build
+
+add_executable(reset_test_flsh
+ EXCLUDE_FROM_ALL
+ reset_test.cpp
+)
+
+target_compile_options(reset_test_flsh
+ PRIVATE
+  -O2 -g
+)
+
+target_include_directories(reset_test_flsh
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/sw/components/reset/
+)
+
+link_and_create_image(reset_test_flsh
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
+
+target_link_libraries(reset_test_flsh sdram gpio riscv)
+
+add_flash_sw_target(reset_test_flsh)

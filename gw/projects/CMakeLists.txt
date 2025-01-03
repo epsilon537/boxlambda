@@ -473,5 +473,6 @@ add_subdirectory(reset_test)
 if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
   add_subdirectory(j1b_test)
   add_subdirectory(boxlambda_dfx)
+  add_subdirectory(boxlambda_base)
 endif()
 

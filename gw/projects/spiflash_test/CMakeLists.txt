@@ -7,7 +7,7 @@ add_custom_target(spiflash_test_collect ALL
         COMMENT
             "Dummy target to collect test dependencies."
         DEPENDS
-            spiflash_test
+            spiflash_test_flsh
         VERBATIM
     )
 
@@ -32,7 +32,7 @@ else()
 
   #Add testcase.
   add_test(NAME spiflash_test_test
-      COMMAND ./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test.bin
+      COMMAND ./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test_flsh.bin
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   )
 endif()

@@ -3,7 +3,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
   gw_project_rules_vivado(
       TOP_MODULE boxlambda_top
       PROJECT_NAME vera_integrated
-      MEM_FILE_TARGET vera_test
+      MEM_FILE_TARGET vera_test_ram
   )
 else()
   #Get the SDL2 compile flags
@@ -28,7 +28,7 @@ else()
   gw_project_rules_verilator(
       TOP_MODULE sim_main
       PROJECT_NAME vera_integrated
-      MEM_FILE_TARGET vera_test
+      MEM_FILE_TARGET vera_test_ram
       VERILATOR_CPP_FLAGS
           "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang ${SDL2_CFLAGS}"
       VERILATOR_LD_FLAGS
