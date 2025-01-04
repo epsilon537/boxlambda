@@ -75,4 +75,5 @@ add_subdirectory(rtcc_test)
 add_subdirectory(reset_test)
 add_subdirectory(j1b_test)
 add_subdirectory(dfx_test)
+add_subdirectory(invalid_address)
 
