@@ -24,11 +24,43 @@ gw_component_rules(
 
 The component's sources, Vivado IPs, flags, and dependencies are defined in its *Bender.yml* manifest. The CMake build system interfaces with Bender through a collection of scripts to extract the necessary info and pass it on to Vivado or Verilator.
 
+#### DFX Components
+
+DFX Components require additional build rules. A DFX Reconfigurable Module needs to be implemented and turned into a bitsteam that can be dynamically loaded onto a DFX-enabled system. The build rules to do that are defined in the *gw_rm_rules_dfx()* function. Calling this function results in a <component\>_bit target being defined. Building that target results in a DFX partial bitstream of the given component.
+
+Here is an example:
+
+```
+gw_component_rules(
+    TOP_MODULE  vs0
+    COMPONENT_NAME vs0_j1b
+)
+
+if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+if(BL_TARGET_FPGA STREQUAL "arty-a7-100")
+  gw_rm_rules_dfx(
+    COMPONENT_NAMES
+      vs0_j1b
+    VS_INSTS
+      boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
+    REF_DFX_PROJECT 
+      dfx_test
+  )
+endif()
+```
+
+The gw_rm_rules_dfx() parameters:
+
+- **COMPONENT_NAMES**: The name of the component. If there are multiple RMs in the build, list the names of all RMs starting with the current component.
+- **VS_INSTS**: Specify where in the SoC this component plugs into. If there are multiple RMS in the build, list the instance names in the same order as the component names list.
+- **REF_DFX_PROJECT**: Specify here the reference project defining the static portion of the DFX build.
+
 ### A Gateware Project CMakeList
 
 The build instructions for a gateware project are also grouped into two CMake functions: 
-    - **gw_project_rules_vivado()**. gateware project build rules for Vivado builds.
-    - **gw_project_rules_verilator()**. gateware project build rules for Verilator builds.
+
+- **gw_project_rules_vivado()**: gateware project build rules for Vivado builds.
+- **gw_project_rules_verilator()**: gateware project build rules for Verilator builds.
 
 A typical GW project CMakeLists.txt file looks like this:
 
@@ -61,10 +93,34 @@ The project's sources, flags, dependencies, Vivado IPs, and constraint files are
 
 Any test cases are also added to the project's CMakeLists.txt file.
 
+### A DFX Project CMakeList
+
+The build rules for a DFX enabled project are created by the *gw_project_rules_dfx_vivado()* CMake function. Calling this function results in the creation of a *<project\>_bit*, a *<project\>_load*, and a *<project\>_flash_gw* target. Building the *<project\>_bit* target results in a bitstream file that can be *_loaded* or *_gw_flashed* onto the target. The gateware image expects to find a software image on flash to boot from.
+
+Here is an example:
+
+```
+gw_project_rules_dfx_vivado(
+    TOP_MODULE boxlambda_top
+    PROJECT_NAME dfx_test
+    VS_INSTS 
+      boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
+    VS_DEFAULT_COMPONENTS
+      vs0_stub
+)
+```
+
+The gw_project_rules_dfx_vivado() parameters:
+
+- **TOP_MODULE**: Name of top module.
+- **PROJECT_NAME**: Project Name.
+- **VS_INSTS**: DFX virtual socket instance names.
+- **VS_DEFAULT_COMPONENTS**: DFX virtual socket default components, one for each VS_INST listed. The default component gets placed into the virtual socket in the default bitstream image.
+
 ### A Software Project CMakeList
 
 CMake is designed to build software. The necessary functions for creating libraries, executables, etc. are predefined.
-The only custom function added to the software CMakeLists tree is **link_and_create_mem_file()**. This function executes the necessary steps to link the given target using a given linker script and generate a memory file, used by the GW part of the build system.
+The only custom function added to the software CMakeLists tree is **link_and_create_image()**. This function executes the necessary steps to link the given target using a given linker script and generate a memory file, used by the GW part of the build system.
 
 Currently, two linker scripts are defined:
 
@@ -74,19 +130,42 @@ Currently, two linker scripts are defined:
 A typical SW project CMakeLists.txt file looks like this:
 
 ```
-add_executable(hello_world
+#
+# Hello World RAM Build
+#
+
+add_executable(hello_world_ram
  EXCLUDE_FROM_ALL
     hello.c
 )
 
 #Setting the -g flag for the hello_dbg build testing GDB access.
-target_compile_options(hello_world
+target_compile_options(hello_world_ram
  PRIVATE -g)
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_mem_file(hello_world ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+link_and_create_image(hello_world_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(hello_world gpio riscv)
+target_link_libraries(hello_world_ram gpio riscv)
+
+#
+# Hello World Flash Build
+#
+
+add_executable(hello_world_flsh
+ EXCLUDE_FROM_ALL
+    hello.c
+)
+
+#Setting the -g flag for the hello_dbg build testing GDB access.
+target_compile_options(hello_world_flsh
+ PRIVATE -g)
+
+#Function defined in parent CMakeLists.txt file:
+link_and_create_image(hello_world_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
+
+target_link_libraries(hello_world_flsh gpio riscv)
+
 ```
 
 ### CMakeList Organization
@@ -102,6 +181,7 @@ The actual gateware build recipes (Bender interaction, verilating, synthesizing.
 	bender_gen_verilator_sources.sh
 	bender_gen_vivado_sources_and_deps.sh
 	bender_get_cpp_files.sh
+	bender_get_dfx_constraints.sh
 	bender_get_vlts.sh
 	bender_gen_mem_file_list.sh
 	bender_gen_ip_file_list.sh
@@ -110,6 +190,8 @@ The actual gateware build recipes (Bender interaction, verilating, synthesizing.
 	verilator_sim.sh
 	vivado_create_project.tcl
 	vivado_impl.tcl
+	vivado_impl_dfx_prj.tcl
+	vivado_impl_dfx_rm.tcl
 	vivado_synth.tcl
     vivado_updatemem.sh
 ```

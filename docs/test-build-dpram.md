@@ -33,11 +33,9 @@ Test Successful.
 
 ### Dual Port RAM Test on Arty A7
 
-If you're running on WSL, check the [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+Build the project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/dual_port_ram_test

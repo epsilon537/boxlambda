@@ -63,6 +63,8 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 
 - **DFX**: Dynamic Function Exchange, Xilinx's solution for Partial FPGA Reconfiguration ([https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf](https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf))
 
+- **DFX Controller**: The DFX Controller IP provides management functions for DFX designs.  When hardware or software trigger events occur, the DFX Controller pulls partial bitstreams from memory and delivers them to an *Internal Configuration Access Port (ICAP)*.  The IP also assists with logical decoupling and startup events, which are customizable per Reconfigurable Partition.
+
 - **DMA**: Direct Memory Access, a hardware assist component offloading memory copy operations from the CPU.
 
 - **DM Reset**: Debug Module Reset signal/domain.
@@ -126,6 +128,8 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Ibex**: The name of the RISC-V CPU core used by BoxLambda.
 
 - **IC**: Integrated Circuit.
+
+- **ICAP**: Internal Configuration Access Port, a Vivado primitive giving access to the FPGA configuration functionality built into Xilinx-AMD FPGAs.
 
 - **Icarus**: Open-Source Verilog simulator. See [https://steveicarus.github.io/iverilog/](https://steveicarus.github.io/iverilog/). Used as the behind-the-scenes simulator when running CoCoTB.
 
@@ -209,6 +213,10 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 
 - **OpenOCD**: Open On-Chip Debugger, open-source software that interfaces with a hardware debugger's JTAG port.
 
+- **Partition Pins**: Partition pins are the logical and physical connection between the Static Design and an RP. The Vivado toolchain automatically creates, places, and manages partition pins.
+
+- **Pblock**: A Pblock is a user-defined region in the FPGA floor plan specifying the device resources contained within. In the context of DFX, a Pblock is associated with an RP. It defines the FPGA resources (Block RAM, LUTs,...) allocated to that RP.
+
 - **PCB**: Printed Circuit Board.
 
 - **PCM**: Pulse-Code Modulation. PCM data are digital audio samples.
@@ -236,6 +244,12 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **PWM**: Pulse Width Modulation.
 
 - **RC Filter**: A simple low-pass filter network consisting of a resistor and a capacitor.
+
+- **Reconfigurable Module (RM)**: An RM is the netlist or HDL description of a module that is implemented within a *Reconfigurable Partition (RP)*. Multiple RMs can exist for a given RP. For example, *vs0_stub* and *vs0_j1b* are two RM variants defined for the RP *boxlambda_soc/GENERATE_VS0_MODULE.vs0_inst*. All RM variants belonging to an RP comply with the same interface defined by the RP.
+
+- **Reconfigurable Partition (RP)**: An RP is a module instance in the FPGA design hierarchy marked as *Reconfigurable*. An RP is the container of an RM. BoxLambda has one RP instance with name *boxlambda_soc/GENERATE_VS0_MODULE.vs0_inst*.
+
+- **REPL**: Read-Eval-Print-Loop. The interactive prompt or language shell.
 
 - **Repo**: (Git) Repository.
 
@@ -278,6 +292,8 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **SPI**: Serial Peripheral Interface, a synchronous serial communication interface specification used for short-distance communication.
 
 - **Sprite**:  A computer graphic that may be moved on-screen and otherwise manipulated as a single entity.
+
+- **Static Design**: The static design is the part of the design that does not change during partial reconfiguration. It includes the top-level, and all modules not defined as reconfigurable. The static design is built with static logic and static routing.
 
 - **STB**: Wishbone Strobe bus signal.
 

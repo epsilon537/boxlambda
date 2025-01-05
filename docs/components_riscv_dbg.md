@@ -132,7 +132,7 @@ On the OpenOCD side, the transport protocol for this Debug-Access-via-FPGA-scan-
 
 The OpenOCD configuration file for JTAG Debugging on Arty A7 is checked into the *scripts/* directory:
 
-- Arty-A7-35T: [scripts/arty_a7_35t.openocd.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/arty_a7_35t.openocd.cfg)
+- Arty-A7-35T: [scripts/arty_a7_35t.openocd.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/arty_a7_35t.openocd.cfg) **DEPRECATED**.
 - Art-A7-100T: [scripts/arty_a7_100t.openocd.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/arty_a7_100t.openocd.cfg)
 
 To summarize:

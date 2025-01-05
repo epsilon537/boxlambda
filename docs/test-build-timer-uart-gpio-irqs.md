@@ -64,11 +64,9 @@ SIM: Test passed.
 
 ### The Timer, UART, and GPIO Interrupt Test on FPGA
 
-If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-
 Connect a terminal program to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the *timer_uart_gpio_irqs* gateware project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+Build the *timer_uart_gpio_irqs* gateware project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/timer_uart_gpio_irqs

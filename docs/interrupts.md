@@ -80,17 +80,18 @@ Briefly, the Ibex core has:
 - An **External Interrupt** port to connect a so-called *Platform-Level Interrupt Controller*. I'm not going to use this.
 - A **Non-Maskable Interrupt** (NMI) port, which I'll also leave unconnected until I find a good use for it.
 
-RISC-V defines 32 IRQ IDs. Ibex maps the timer interrupt to IRQ ID 7 and the fast interrupts to IRQ IDs 16 to 31.
+RISC-V defines 32 IRQ IDs. Ibex maps the timer interrupt to IRQ ID 7 and the fast interrupts to IRQ IDs 16 to 30.
 
-I'm using the same mapping to connect the IRQs to the [PicoRV DMA Controller](components_picorv_dma.md), i.e. Ibex and PicoRV see the same set of interrupts with the same IRQ_IDs/ISR bit positions. Note, however, that the PicoRV doesn't directly support interrupts. The PicoRV microcode detects signaled interrupts by polling its Interrupt Status Register. Check the PicoRV DMA Controller link earlier in this paragraph for more details.
+I'm using the same mapping to connect the IRQs to the [PicoRV DMA Controller](components_picorv_dma.md) and the VS0 component, i.e. Ibex, PicoRV, and VS0 see the same set of interrupts with the same IRQ_IDs/ISR bit positions.
 
 This table lists the BoxLambda interrupts and the events they report:
 
 | IRQ_ID | IRQ Name                                | Events |
 |--------|-----------------------------------------|--------|
-| 30     | RM_2 interrupt (Default: not assigned)  |        |
-| 29     | RM_1 interrupt (Default: VERA IRQ)      | Vsync, Line IRQ, Sprite Collision |
-| 28     | RM_0 interrupt (Default: not assigned)  |        |
+| 31     | NMI                                     | Not Used |
+| 30     | not assigned                            |        |
+| 29     | VERA IRQ                                | Vsync, Line IRQ, Sprite Collision |
+| 28     | VS0 interrupt                           |        |
 | 27     | PICORV DMAC IRQ                         | Programmable |
 | 26     | SDSPI IRQ                               | Device Busy->Idle, Card Removed |
 | 25     | GPIO                                    | Rising or Falling Edge on input pin |
@@ -101,8 +102,8 @@ This table lists the BoxLambda interrupts and the events they report:
 | 20     | not assigned                            |     |
 | 19     | not assigned                            |     |
 | 18     | not assigned                            |     |
-| 17     | DFX Controller IRQ                      | TBD |
-| 16     | ICAP IRQ                                | TBD |
+| 17     | DFX Controller IRQ                      | VS0 Event Error |
+| 16     | not assigned                            |     |
 |  7     | Timer IRQ                               | timer counter >= timer compare value |
 
 ### Interrupt Handling Software

@@ -263,7 +263,7 @@ BoxLambda has two linker scripts:
 - [link_cmem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_cmem_boot.ld): For software images that boot from CMEM.
 - [link_flash_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_flash_boot.ld): For software images that boot from Flash.
 
-BoxLambda does not have separate linker scripts for the Arty-A7-35T and the Arty-A7-100T. The CMEM and DMEM sizes are passed to the linker via symbols defined by the build system. They are not defined inside the linker script, which means the same script can be used for the Arty-A7-35T and the Arty-A7-100T.
+The CMEM and DMEM sizes are passed to the linker via symbols defined by the build system.
 
 ```
   #Pass linker script and picolibc specs to linker, and define __cmem_size and __dmem_size symbols.

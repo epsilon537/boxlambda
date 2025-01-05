@@ -22,13 +22,15 @@ The following clocks are present in the SoC:
 - **Reset Controller Top-Level**:
     [gw/components/reset_ctrl/rtl/reset_ctrl.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/reset_ctrl/rtl/reset_ctrl.sv)
 
-- **Reset Controller HAL**: TBD
+- **Reset Controller HAL**:
+    [sw/components/reset/reset_hal.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/reset/reset_hal.h)
 
 BoxLambda has the following synchronous **Reset Domains**:
 
 - **dm_reset**: Resets the Debug Module Logic in the system clock domain.
 - **ndm_reset**: Resets the Non-Debug Module Logic in the system clock domain.
 - **usb_reset**: Resets the logic in the USB clock domain.
+- **vs0_reset**: Resets the VS0 module. In the DFX Configuration, *vs0_reset* is driven by the DFX Controller. In the Base Configuration, *vs0_reset* is part of the *ndm_reset* domain.
 
 BoxLambda has the following **Reset Sources**:
 
@@ -36,8 +38,9 @@ BoxLambda has the following **Reset Sources**:
 - **External Reset**: Connected to a reset button on the Arty A7 board.
 - **Non-Debug Module Reset Request**: issued by the Debug Module.
 - **Software Reset**: Reset of *dm_reset*, *ndm_reset*, or *usb_reset* domain triggered by software by writing to a *reset_ctrl* register.
+- **DFX Controller**: Drives *vs0_reset* in the DFX Configuration.
 
-The management of these reset domains and reset sources is organized by a **reset_ctrl** module.
+The management of the non-DFX reset domains and reset sources is organized by a **reset_ctrl** module.
 
 ![Reset Controller](assets/reset_ctrl.png)
 

@@ -6,10 +6,12 @@
 - **BoxLambda SoC Module**:
     [gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)
 
+- **BoxLambda Top Module**:
+    [gw/projects/boxlambda_top/rtl/boxlambda_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_top/rtl/boxlambda_top.sv)
+
 The BoxLambda SoC module itself is defined as a gateware component.
 
 ```
-/*The parameterized BoxLambda SoC.*/
 module boxlambda_soc #(
     parameter DPRAM_BYTE_ADDR_MASK = 'h1ffff, /*DPRAM size as a mask value. Used both from CMEM and DMEM.*/
     parameter VRAM_SIZE_BYTES = 131072,
@@ -21,12 +23,14 @@ module boxlambda_soc #(
     parameter PICORV_ACTIVE = 1,
     parameter USB_HID_ACTIVE = 1,
     parameter SPIFLASH_ACTIVE = 1,
+    parameter I2C_ACTIVE = 1,
+    parameter DFX_ACTIVE = 1,
+    parameter VS0_ACTIVE = 1,
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""
 ) (
-    input wire ext_clk_100,  //100MHz external clock.
-    input wire ext_rst_n,    //External reset pin.
-
+    input  wire        ext_clk_100,         //100MHz external clock.
+    input  wire        ext_rst_n,           //External reset pin.
 `ifdef VERILATOR
     /*These JTAG signals are not used on FPGA (they are used in simulation).
    *On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the jtag tap module dmi_bscane_tap.sv.
@@ -40,6 +44,7 @@ module boxlambda_soc #(
     output wire        pll_locked_led,      //PLL locked indication.
     output wire        init_done_led,       //LiteDRAM initialization done indication.
     output wire        init_err_led,        //LiteDRAM initialization error indication.
+    output wire        sd_card_detect_led,
 `ifdef SYNTHESIS
     /*The simulation build doesn't export DDR pins.*/
     output wire [13:0] ddram_a,
@@ -64,18 +69,25 @@ module boxlambda_soc #(
     output wire [ 3:0] vga_b,
     output wire        vga_hsync,
     output wire        vga_vsync,
+
     // SDSPI interface
-    output wire        sdspi_cs_n,
-    output wire        sdspi_sck,
-    output wire        sdspi_mosi,
-    input  wire        sdspi_miso,
-    input  wire        sdspi_card_detect_n,
+    output wire sdspi_cs_n,
+    output wire sdspi_sck,
+    output wire sdspi_mosi,
+    input  wire sdspi_miso,
+    input  wire sdspi_card_detect_n,
 
     // Flash SPI interface
     output wire spiflash_sck,
     output wire spiflash_cs_n,
     output wire spiflash_mosi,
     input  wire spiflash_miso,
+
+    // I2C signals
+    input  wire i2c_scl_i,
+    input  wire i2c_sda_i,
+    output wire i2c_scl_o,
+    output wire i2c_sda_o,
 
     // USB HID, two ports.
     input  wire usb0_dm_i,
@@ -102,8 +114,10 @@ module boxlambda_soc #(
     // UART and GPIO
     input  wire        uart_rx,
     output wire        uart_tx,
-    inout  wire [ 7:0] gpio0,
-    inout  wire [ 3:0] gpio1
+    input  wire [23:0] gp_in,
+    output wire [23:0] gp_out,
+    output wire [23:0] gp_oe,
+    input  wire        gp_clk
 );
 ```
 
@@ -116,4 +130,4 @@ The [Gateware Build Structure](build_sys_gw_build_struct.md#the-gateware-build-s
 Different *gw/project/* builds reference this *boxlambda_soc* component. The project builds differ in the way they instantiate the *boxlambda_soc* module, including or excluding specific subcomponents. Most *gw/projects*
  reference the same [boxlambda_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_top/rtl/boxlambda_top.sv) module but with a different combination of *defines* in their *Bender.yml* manifest.
 
-*Gw/project/* builds also differ in the software program they run on the SoC. This is specified in the *gw/project/*'s CMakefile.
+*Gw/project/* builds also differ in the software program they run on the SoC. This is specified in the *gw/project*'s CMakefile.

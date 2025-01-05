@@ -32,11 +32,9 @@ Test Successful.
 
 ### DDR Test Image on Arty A7
 
-If you're running on WSL, check the [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-
 Build the test project:
 ```
-cd build/arty-a7-[35|100]/gw/projects/ddr_test
+cd build/arty-a7-100/gw/projects/ddr_test
 make ddr_test_bit_sw
 ```
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.

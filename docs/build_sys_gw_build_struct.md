@@ -22,16 +22,17 @@ Currently, the build system uses the following Bender targets:
 ```
   - target: ibex_wb_core
     files:
-      - rtl/ibex_wb_core_wrapper.sv    
+      - rtl/ibex_wb_core_wrapper.sv
 ```
 
 - **vivado**: set when synthesizing using Vivado.
 - **verilator**: set when building Verilator simulation model.
 - **prj_constraints**: set when retrieving *.xdc* constraints files for this project.
+- **dfx_constraints**: In DFX enabled builds, set when retrieving *Pblock* constraints files for this project.
 - **memory_vivado**: set when retrieving *.mem memory files required for Vivado synthesis of this component or project.
 - **memory_verilator**: set when retrieving *.mem memory files required to verilate this component or project.
 - **vivado_ip_arty-a7-100**: set in arty-a7-100 builds when retrieving the .xci file of Vivado IP referenced in this component or project.
-- **vivado_ip_arty-a7-35**: set in arty-a7-35 builds when retrieving the .xci file of Vivado IP referenced in this component or project.
+- **vivado_ip_arty-a7-35**: set in arty-a7-35 builds when retrieving the .xci file of Vivado IP referenced in this component or project. **Deprecated**.
 
 ### Three Layers
 

@@ -6,7 +6,7 @@ To build the *Hello World!* example, go through the following steps:
 
 Build the project:
 ```
-cd build/arty-a7-[35|100]/gw/projects/hello_world
+cd build/arty-a7-100/gw/projects/hello_world
 make hello_world_bit_sw
 ```
 Download the bitstream to the target:
@@ -18,11 +18,11 @@ make hello_world_load
 
 Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
 
-Start OpenOCD with the *arty_a7_[35|100]t.openocd.cfg* config file.
+Start OpenOCD with the *arty_a7_100t.openocd.cfg* config file.
 
 Note: If OpenOCD can't connect to the USB JTAG adapter, your USB device permissions might not be set correctly. Check the *User-Level Access to the Arty A7 USB JTAG Adapter* section above for a fix.
 ```
-openocd -f <boxlambda root directory>/scripts/arty_a7_[35|100]t.openocd.cfg
+openocd -f <boxlambda root directory>/scripts/arty_a7_100t.openocd.cfg
 
 Info : clock speed 1000 kHz
 Info : JTAG tap: riscv.cpu tap/device found: 0x0362d093 (mfg: 0x049 (Xilinx), part: 0x362d, ver: 0x0)
@@ -36,10 +36,10 @@ Ready for Remote Connections
 Info : Listening on port 6666 for tcl connections
 Info : Listening on port 4444 for telnet connections
 ```
-Launch GDB with hello.elf:
+Launch GDB with the hello_world_ram executable:
 ```
-cd <boxlambda root directory>/build/arty-a7-[35|100]/sw/projects/hello_world
-riscv32-unknown-elf-gdb hello_world
+cd <boxlambda root directory>/build/arty-a7-100/sw/projects/hello_world
+riscv32-unknown-elf-gdb hello_world_ram
 ```
 Connect GDB to the target. From the GDB shell:
 ```
@@ -85,10 +85,10 @@ TAP: riscv.cpu
 [riscv.cpu] Target successfully examined.
 Ready for Remote Connections on port 3333.
 ```
-Launch GDB with hello.elf:
+Launch GDB with the hello_world_ram executable:
 ```
-cd <boxlambda root directory>/build/sim-a7-[35|100]/sw/projects/hello_world
-riscv32-unknown-elf-gdb hello_world
+cd <boxlambda root directory>/build/sim-a7-100/sw/projects/hello_world
+riscv32-unknown-elf-gdb hello_world_ram
 ```
 Connect GDB to the target. From the GDB shell:
 ```

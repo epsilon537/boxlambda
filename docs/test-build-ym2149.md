@@ -36,11 +36,9 @@ The plots show both the filtered PCM and DAC output signals, but because they ov
 
 ### Audio DAC Test on Arty A7
 
-If you're running on WSL, check the [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
-Build the *audio_dac_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+Build the *audio_dac_test* project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/gw/projects/audio_dac_test
 make audio_dac_test_bit
@@ -67,7 +65,7 @@ PCM Output File: pcm_out.py
 YM2149 test.
 YM2149 config complete.                 
 No overflows detected.
-```  
+```
 The Verilator model should have generated Python files *dac_out.py* and *pcm_out.py*:
 ```
 ls *.py
@@ -90,13 +88,11 @@ Relative Deviations:
 
 ### YM2149 DAC Test on Arty A7
 
-If you're running on WSL, check the [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the *ym2149_dac_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+Build the *ym2149_dac_test* project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/gw/projects/ym2149_dac_test
 make ym2149_dac_test_bit_sw
@@ -165,8 +161,6 @@ Match with correlation of 100.00% at offset 0
 
 ### ST-Sound Test on Arty A7
 
-If you're running on WSL, check the [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
 Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
@@ -175,7 +169,7 @@ Locate YM file **ANCOOL1.YM** in directory **boxlambda/sub/StSound/YmSampleFiles
 
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**. 
 
-Build the *stsound_test* project in an Arty A7 build tree. **This test requires an Arty A7-100T.** The software footprint of this test doesn't fit in the internal memory of the Arty A7-35T build.
+Build the *stsound_test* project in an Arty A7 build tree.
 ```
 cd build/arty-a7-100/gw/projects/stsound_test
 make stsound_test_bit_sw
@@ -194,10 +188,11 @@ Listing directory contents...
 Switching to PSG_1
 Loading YM file: ancool1.ym ...
 Starting playback... 
-``` 
+```
 There are a few controls you can play around with:
 
 - Set SW0 (leaving SW1 and SW2 off), then press buttons 0/1 to increase/decrease the volume.
 - Set SW1 (leaving SW0 and SW2 off), then press buttons 0/1 to increase/decrease the bass level.
 - Set SW2 (leaving SW0 and SW1 off), then press buttons 0/1 to increase/decrease the treble level.
 - SW3, sampled once at SW boot time, selects PSG0 or PSG1 to play the chiptune.
+

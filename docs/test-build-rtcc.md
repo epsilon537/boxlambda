@@ -18,19 +18,19 @@ Hook up the RTCC PMOD as described [here](pmods.md#rtcc-pmod).
 
 Connect a terminal program to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the *rtcc_test* software project in an Arty A7 build tree:
+Build the *rtcc_test_flsh* software project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/sw/projects/rtcc_test
-make rtcc_test
+make rtcc_test_flsh
 ```
-Flash the *rtcc_test* program onto the target:
+Flash the *rtcc_test_flsh* program onto the target:
 ```
-make rtcc_test_flash_sw
+make rtcc_test_flsh_flash_sw
 ```
-Build the rtcc_test gateware project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+Build the rtcc_test gateware project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/gw/projects/rtcc_test
-make rtcc_test_bit_sw
+make rtcc_test_bit
 ```
 Flash the gateware build onto the target:
 ```

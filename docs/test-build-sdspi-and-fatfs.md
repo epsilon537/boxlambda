@@ -54,10 +54,10 @@ Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
    
 Note that this is a destructive test. The contents of the SD card will be destroyed.
 
-Build the *sdspi_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+Build the *sdspi_test* project in an Arty A7 build tree:
 	
 ```
-cd build/arty-a7-35/gw/projects/sdspi_test
+cd build/arty-a7-100/gw/projects/sdspi_test
 make sdspi_test_bit_sw
 ```
 
@@ -142,10 +142,10 @@ Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
    
 Note that this is a destructive test. The contents of the SD card will be destroyed.
 
-Build the *fatfs_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+Build the *fatfs_test* project in an Arty A7 build tree:
 
 ```
-cd build/arty-a7-35/gw/projects/fatfs_test
+cd build/arty-a7-100/gw/projects/fatfs_test
 make fatfs_test_bit_sw
 ```
 

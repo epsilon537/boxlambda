@@ -1,12 +1,12 @@
 Architecture
 ------------
 
-### The Arty A7-100T Configuration
+### The Base Configuration
 
-![Architecture Block Diagram for Arty A7-100T](assets/Arch_Diagram_Big.png)
-*BoxLambda Architecture Block Diagram for Arty A7-100T.*
+![Base Configuration Block Diagram](assets/Arch_Diagram_NoDFX.png)
+*BoxLambda Base Configuration Block Diagram.*
 
-This diagram shows the Arty A7-100T configuration. Further down, I'll show the Arty A7-35T configuration.
+This diagram shows the base configuration, without DFX support. Further down, I'll show the extended configuration with DFX support.
 
 #### Internal RAM
 
@@ -36,17 +36,11 @@ The bus masters and RAMs (including VERA graphics and LiteDRAM external memory c
 
 A big crossbar interconnect takes up a lot of FPGA resources. The fabric size grows with the square of the number of bus master and slave pairs attached to it. A shared bus, on the other hand, grows linearly with the number of bus masters and slaves attached to it. A disadvantage of a shared bus, however, is that only one bus master at a time can access the bus. Multiple bus masters on a shared bus will be stalling each other. As a compromise, I put the *slow* slaves on a shared bus and attached that bus to the crossbar interconnect consisting of the bus masters and *fast* slaves (read: memories).
 
-#### The Black Box, and Other Reconfigurable Partitions
+#### The VS0 Black Box
 
-The Black Box Partition is an empty area in the FPGA's floorplan. This is where you can insert your application-specific logic. Do you need hardware-assisted collision detection for your Bullet-Hell Shoot'em Up game? Put it in the Black Box. A DSP? A CORDIC core? More RAM? As long as it fits the floor plan, you can put it in the Black Box region.
+VS0 is a component with two Bus Master ports, one Bus Slave port, an interrupt vector input, and an interrupt line output. Nothing else is specified about this module. Different BoxLambda variants may fill this in in different ways. It might be a stack processor, or a DSP, or it might be left unused.
 
-Notice that the Black Box sits inside RP\_0, Reconfigurable Partition 0. A **Reconfigurable Partition** is a region on the FPGA where you can dynamically load a **Reconfigurable Module** (RM) into. Going back to the previous examples, the collision detector, DSP, CORDIC core, or RAM module, would be Reconfigurable Modules. You can live-load one of them into RP\_0. 
-
-VERA and the two YM2149 cores are also placed into their specific Reconfigurable Partitions (RP\_1 resp. RP\_2), so you can swap those out for a different graphics and/or sound controller.
-
-The CPU, DMAC, MEMC, and I/O peripheral blocks are all part of the so-called *Static Design*. These can't be swapped out for other logic on a live system. Any changes in these blocks require an update of the **Full Configuration Bitstream** (as opposed to a **Partial Configuration Bitstream** containing a Reconfigurable Module).
-
-Reconfigurable Modules require a reconfigurable clocking strategy. That's the role of the *Clock Control* (clk_ctrl) module. The BoxLambda Clocking Strategy is a topic for a future post.
+In the Base Configuration, VS0 is part of the Static Design, i.e. a particular VS0 component is selected at built-time. In the Extended Configuration, discussed below, VS0 can be dynamically loaded at run-time.
 
 #### External Memory Access
 
@@ -57,16 +51,20 @@ The Memory Controller is equipped with two Wishbone ports:
 
 The CPU has memory-mapped access to DDR memory and can execute code directly from DDR memory. DDR memory access is not fully deterministic, however. CPU instructions executing from DDR will not have a fixed cycle count.
 
-### The Arty A7-35T Configuration
+### The DFX Configuration
 
-![Draft Architecture Block Diagram for Arty A7-35T](assets/Arch_Diagram_Little.png)
-*BoxLambda Architecture Block Diagram for Arty A7-35T.*
+![DFX Configuration Block Diagram](assets/Arch_Diagram_DFX.png)
+*BoxLambda DFX Configuration Block Diagram.*
 
-This architecture diagram shows the Arty A7-35T configuration.
+This diagram shows the Dynamic Function Exchange (DFX) configuration. DFX is also known as Partial FGPA Reconfiguration.
 
-DFX is not supported on the A7-35T. Neither is the Hierarchical Design Flow. This means we have to stick to a monolithic design. The RTL for all components is combined into one single design, which is synthesized, implemented, and turned into a single bitstream. There is still room for RTL experimentation in this build, but you won't be able to live-load it. It's going to require an update of the Full Configuration Bitstream.
+In this configuration, **VS0** is an 'empty' area in the FPGA's floorplan. This is where you can insert your application-specific logic. Do you need hardware-assisted collision detection for your Bullet-Hell Shoot'em Up game? Put it in VS0. A DSP? A CORDIC core?  As long as it fits, you can put it in the VS0 partition.
 
-The A7-35T FPGA has much less Block RAM than the A7-100T. As a result, the amount of video RAM has been reduced to 64 KB, and the two Dual Port RAMs are reduced to 32 KB each. 
+VS0 is a **Reconfigurable Partition**, a region on the FPGA where you can dynamically load a **Reconfigurable Module** (RM) into. Going back to the previous examples, the collision detector, DSP, CORDIC core, or RAM module, would be Reconfigurable Modules. You can dynamically load one of them into the VS0 partition. 
 
-All other components are the same as in the Arty A7-100T Configuration.
+Everything besides VS0 is part of the so-called *Static Design*. Logic in the Static Design can't be dynamically swapped out for other logic. Any changes in the Static Design require an update of the **Full Configuration Bitstream** (as opposed to a **Partial Configuration Bitstream** containing a Reconfigurable Module).
+
+The DFX Configuration requries a DFX Controller and has VS0 set up as a Reconfiguranle Partition. All other components are the same as in the Base Configuration.
+
+I make a distinction between the Base and DFX Configuration because DFX is a Xilinx-AMD specific feature, requiring Xilinx-AMD specific IP. The Base Configuration doesn't have this dependency which makes it easier to target other toolchains (e.g. Verilator) and FPGA devices.
 
