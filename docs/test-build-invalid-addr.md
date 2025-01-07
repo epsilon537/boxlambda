@@ -49,4 +49,4 @@ Download the generated bitstream file to the Arty A7:
 make invalid_address_load
 ```
 
-In the Putty terminal, you should see the same output as with the Verilator test build above.
+In the Putty terminal, you should see the same output as in the Verilator test build above.

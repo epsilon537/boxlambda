@@ -1,11 +1,14 @@
-## VS0 HAL
+## VS0 HAL Overview
 
-**VS0 HAL API**:
-[boxlambda/sw/components/vs0_hal/vs0_hal.h](https://github.com/epsilon537/boxlambda/tree/master/sw/components/vs0_hal/vs0_hal.h)
+The **VS0 HAL API** provides common definitions for all VS0 RM variants, currently including *vs0_j1b* and *vs0_stub*. You can find the API here: [boxlambda/sw/components/vs0_hal/vs0_hal.h](https://github.com/epsilon537/boxlambda/tree/master/sw/components/vs0_hal/vs0_hal.h).
 
-The VS0 HAL contains definitions that are common across all VS0 RM variants (currently just *vs0_j1b* and *vs0_stub*):
+### Key Features:
+- **VS0 RM Address Space**:
+       - Specifies the base address and size of the address space allocated to the VS0 RM.
 
-- The base address and size of the VS0 RM address space.
-- The VS0 Signature Register at the end of the VS0 RM address space. All VS0 RM variants are expected to implement this register and return a value that is unique to the RM. This allows software to identify the RM loaded into the RP before attempting to access RM-specific registers or memory. The *dfx_read_core_sig* command in the *dfx_cli* module reads this register.
-
+- **VS0 Signature Register**:
+       - Located at the end of the VS0 RM address space.
+       - Must be implemented by all VS0 RM variants to provide a unique identifier for the RM.
+       - Helps software identify the RM loaded in the RP before interacting with any RM-specific components.
+       - The `dfx_read_core_sig` command from the `dfx_cli` module reads this register.
 

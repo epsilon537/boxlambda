@@ -1,13 +1,13 @@
-Building Software
------------------
-The software corresponding with a gateware project automatically gets compiled, converted to a memory file, and included in the gateware project as part of the build process (see gateware build rules **<project\>_bit_sw** and **<project\>_sim_sw**). 
+# Building Software
 
-Software projects can also be built independently. From the build directory type:
+The software corresponding to a gateware project is automatically compiled, converted to a memory file, and included in the gateware project as part of the build process (see gateware build rules **<project>_bit_sw** and **<project>_sim_sw**).
 
-- To create a RAM Build: `make <sw project name>_ram`.
-- To create a Flash Memory Build `make <sw project name>_flsh`.
+Software projects can also be built independently. From the build directory, type:
 
-For example:
+- To create a RAM Build: `make <sw_project_name>_ram`.
+- To create a Flash Memory Build: `make <sw_project_name>_flsh`.
+
+### Example:
 
 ```
 $ cd build/sim-a7-100/sw/projects/hello_world/
@@ -20,7 +20,7 @@ cmake_install.cmake  hello_world_ram      hello_world_ram.hex  hello_world_ram.m
 
 To flash a flash memory software image onto the target, type `make <sw_project_name>_flsh_flash_sw`.
 
-For example:
+### Example:
 
 ```
 $ cd build/arty-a7-100/sw/projects/hello_world/

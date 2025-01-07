@@ -9,11 +9,11 @@
 - **BoxLambda Top Module**:
     [gw/projects/boxlambda_top/rtl/boxlambda_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_top/rtl/boxlambda_top.sv)
 
-The BoxLambda SoC module itself is defined as a gateware component.
+The BoxLambda SoC module is defined as a gateware component.
 
 ```
 module boxlambda_soc #(
-    parameter DPRAM_BYTE_ADDR_MASK = 'h1ffff, /*DPRAM size as a mask value. Used both from CMEM and DMEM.*/
+    parameter DPRAM_BYTE_ADDR_MASK = 'h1ffff, // DPRAM size as a mask value. Used for both CMEM and DMEM.
     parameter VRAM_SIZE_BYTES = 131072,
     parameter DEBUG_MODULE_ACTIVE = 1,
     parameter DRAM_ACTIVE = 1,
@@ -29,24 +29,24 @@ module boxlambda_soc #(
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""
 ) (
-    input  wire        ext_clk_100,         //100MHz external clock.
-    input  wire        ext_rst_n,           //External reset pin.
+    input  wire        ext_clk_100,         // 100 MHz external clock.
+    input  wire        ext_rst_n,           // External reset pin.
 `ifdef VERILATOR
-    /*These JTAG signals are not used on FPGA (they are used in simulation).
-   *On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the jtag tap module dmi_bscane_tap.sv.
-   */
+    /* These JTAG signals are not used on FPGA (they are used in simulation).
+     * On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the JTAG TAP module dmi_bscane_tap.sv.
+     */
     input  wire        tck,
     input  wire        trst_n,
     input  wire        tms,
     input  wire        tdi,
     output wire        tdo,
 `endif
-    output wire        pll_locked_led,      //PLL locked indication.
-    output wire        init_done_led,       //LiteDRAM initialization done indication.
-    output wire        init_err_led,        //LiteDRAM initialization error indication.
+    output wire        pll_locked_led,      // PLL locked indication.
+    output wire        init_done_led,       // LiteDRAM initialization done indication.
+    output wire        init_err_led,        // LiteDRAM initialization error indication.
     output wire        sd_card_detect_led,
 `ifdef SYNTHESIS
-    /*The simulation build doesn't export DDR pins.*/
+    /* The simulation build doesn't export DDR pins. */
     output wire [13:0] ddram_a,
     output wire [ 2:0] ddram_ba,
     output wire        ddram_ras_n,
@@ -121,13 +121,12 @@ module boxlambda_soc #(
 );
 ```
 
-The [Gateware Build Structure](build_sys_gw_build_struct.md#the-gateware-build-structure) section describes the three-layer gateware build structure. The diagram below shows how the BoxLambda SoC component fits in that build structure.
+The [Gateware Build Structure](build_sys_gw_build_struct.md#the-gateware-build-structure) section describes the three-layer gateware build structure. The diagram below shows how the BoxLambda SoC component fits into that build structure.
 
-![BoxLambda SoC Component Build Diagram.](assets/BoxLambda_SoC_Component_Build_Diagram.png)
+![BoxLambda SoC Component Build Diagram](assets/BoxLambda_SoC_Component_Build_Diagram.png)
 
-*Build Diagram with BoxLambda SoC component and boxlambda_top.sv.*
+*Build diagram with the BoxLambda SoC component and `boxlambda_top.sv`.*
 
-Different *gw/project/* builds reference this *boxlambda_soc* component. The project builds differ in the way they instantiate the *boxlambda_soc* module, including or excluding specific subcomponents. Most *gw/projects*
- reference the same [boxlambda_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_top/rtl/boxlambda_top.sv) module but with a different combination of *defines* in their *Bender.yml* manifest.
+Different *gw/project/* builds reference this *boxlambda_soc* component. The project builds vary in the way they instantiate the *boxlambda_soc* module, including or excluding specific subcomponents. Most *gw/projects* reference the same [boxlambda_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_top/rtl/boxlambda_top.sv) module but with a different combination of *defines* in their *Bender.yml* manifest.
 
-*Gw/project/* builds also differ in the software program they run on the SoC. This is specified in the *gw/project*'s CMakefile.
+*Gw/project/* builds also differ in the software program they run on the SoC. This is specified in the *gw/project*'s `CMakefile`.

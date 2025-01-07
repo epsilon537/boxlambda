@@ -50,7 +50,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
          * allocBuf
                 allocBuf <size> : allocate from heap buffer of given size.
          * relBuf
-                relBuf <address> : release the buffer at given adress.
+                relBuf <address> : release the buffer at given address.
          * ls
                 list directory contents.
 
@@ -154,7 +154,7 @@ Transfer the following files to an SD Card and rename them to something short:
 Insert the SD Card in BoxLambda's MicroSD card slot.
 
 ---
-As an aside, instead of copying the files to an SD Card mounted on your PC and then moving the SD Card to BoxLambda, you can leave a card inserted into BoxLambda's SD Card slot and transfer the files using the Ymodem protocol. To do that, enter the following command on the CLI:
+Alternatively, instead of copying the files to an SD Card mounted on your PC and then moving the SD Card to BoxLambda, you can leave a card inserted into BoxLambda's SD Card slot and transfer the files using the Ymodem protocol. To do that, enter the following command on the CLI:
 
 ```
 ymodem_rx <filename>
