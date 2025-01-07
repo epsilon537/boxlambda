@@ -29,6 +29,7 @@ sources:
       SPIFLASH: ~
       I2C: ~
       VS0: ~
+      ACK_INVALID_ADDR:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - rtl/boxlambda_top.sv
@@ -47,6 +48,7 @@ sources:
       SPIFLASH: ~
       I2C: ~
       VS0: ~
+      ACK_INVALID_ADDR:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - sim/sim_main.cpp

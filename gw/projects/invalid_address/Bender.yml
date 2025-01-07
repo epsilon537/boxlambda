@@ -26,6 +26,7 @@ sources:
       VERA: ~
       PICORV_DMA: ~
       SPIFLASH: ~
+      ACK_INVALID_ADDR:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_base/rtl/boxlambda_top.sv
@@ -41,6 +42,7 @@ sources:
       VERA: ~
       PICORV_DMA: ~
       SPIFLASH: ~
+      ACK_INVALID_ADDR:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_base/rtl/boxlambda_top.sv

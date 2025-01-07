@@ -13,6 +13,7 @@ module boxlambda_soc #(
     parameter I2C_ACTIVE = 1,
     parameter DFX_ACTIVE = 0,
     parameter VS0_ACTIVE = 1,
+    parameter ACK_INVALID_ADDR = 1,
     parameter CMEM_FILE = "",
     parameter DMEM_FILE = ""
 ) (
@@ -434,10 +435,10 @@ module boxlambda_soc #(
       .SLAVE_ADDR(XBAR_SLAVE_ADDRS),
       .SLAVE_MASK(XBAR_SLAVE_ADDR_MASKS),
       .LGMAXBURST(3),
-      .OPT_TIMEOUT(511),
+      .OPT_TIMEOUT(ACK_INVALID_ADDR ? 511 : 0),
       .OPT_DBLBUFFER(1'b0),
       .OPT_LOWPOWER(1'b0),
-      .OPT_ACK_INVALID_ADDR(1'b1)
+      .OPT_ACK_INVALID_ADDR(ACK_INVALID_ADDR)
   ) wb_xbar (
       .i_clk(sys_clk),
       .i_reset(ndm_reset),
@@ -491,10 +492,10 @@ module boxlambda_soc #(
       .SLAVE_ADDR(SHARED_BUS_SLAVE_ADDRS),
       .SLAVE_MASK(SHARED_BUS_SLAVE_ADDR_MASKS),
       .LGMAXBURST(3),
-      .OPT_TIMEOUT(511),
+      .OPT_TIMEOUT(ACK_INVALID_ADDR ? 511 : 0),
       .OPT_DBLBUFFER(1'b0),
       .OPT_LOWPOWER(1'b0),
-      .OPT_ACK_INVALID_ADDR(1'b1)
+      .OPT_ACK_INVALID_ADDR(ACK_INVALID_ADDR)
   ) wb_shared_bus (
       .i_clk(sys_clk),
       .i_reset(ndm_reset),
