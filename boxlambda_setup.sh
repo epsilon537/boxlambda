@@ -27,9 +27,16 @@ fi
 
 echo "Creating build build trees..."
 cmake --fresh --preset=sim-a7-35
+make -C ./build/sim-a7-35 regen
+
 cmake --fresh --preset=sim-a7-100
+make -C ./build/sim-a7-100 regen
+
 cmake --fresh --preset=arty-a7-35
+make -C ./build/arty-a7-35 regen
+
 cmake --fresh --preset=arty-a7-100
+make -C ./build/arty-a7-100 regen
 
 echo
 echo "Setup complete."
