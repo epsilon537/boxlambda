@@ -107,6 +107,8 @@ nav:
         - J1B Test: test-build-j1b.md
         - DFX Test: test-build-dfx.md
         - Invalid Address Test: test-build-invalid-addr.md
-
+    - Documentation Builds:
+        - Blog: doc-build-blog.md
+        - MkDocs: doc-build-mkdocs.md
 
 

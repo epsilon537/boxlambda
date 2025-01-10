@@ -40,8 +40,6 @@ The test bench performs the following tasks:
    
 6. Pass/Fail criterion: After running the model for the set number of clock cycles, compare the captured UART and GPIO outputs against the expected results.
 
-As suggested by ZipCPU in his Verilog tutorial, I use *nCurses* for positional printing inside terminal windows. This allows me to build a display that refreshes, rather than scrolls, whenever the model produces new UART or GPIO data to display.
-
 Here is the source code for the proof-of-concept test bench:
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/projects/hello_world/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/hello_world/sim/sim_main.cpp)

@@ -179,11 +179,8 @@ At this point, the RM equipped in the VS0 RP is *vs0_stub*. Let's switch over to
 
 ```
 > dfx_load_module vs0_j1b
-Loading file tst_j1b, size: 592780 bytes, into memory at address 0x20000368.
-Issuing DFX trigger...
-DFX loading...
-DFX state: 4
-DFX state: 7
+Loading file vs0_j1b, size: 592780 bytes, into memory at address 0x20008370.
+Installing RM...
 Done.
 ```
 

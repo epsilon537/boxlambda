@@ -87,21 +87,18 @@ When you run *make hello_world_bit_sw*, the following happens:
 1. `make` runs both the *hello_world_bit* rule and the *hello_world* software build rule because *hello_world_bit_sw* depends on both.
 2. If there are changes to the bitstream or the software image, the latest software is merged into the bitstream file. For details, see [UpdateMem and XPM Memories](#updatemem-and-xpm-memories).
 
-### Managing Vivado Logging and Tracing Using *VIVADO_FLAGS*
+### Managing Vivado Logging and Tracing
 
-The build system uses the *VIVADO_FLAGS* environment variable when invoking Vivado:
+The build system invokes Vivado through a wrapper script: *scripts/vivado_wrapper.sh*.  
+This script defines a *VIVADO_FLAGS* variable that controls the level of Vivado logging and tracing.  
 
-```
-vivado -mode batch $VIVADO_FLAGS -source ${tcl_script} -tclargs ${_tcl_args}
-```
-
-*VIVADO_FLAGS* can be used to control the level of Vivado logging and tracing. I usually set it as follows:
+By default, the variable is set to:
 
 ```
-export VIVADO_FLAGS=-nolog -nojournal -notrace
+VIVADO_FLAGS="-nolog -nojournal -notrace"
 ```
 
-When debugging build issues, I unset *VIVADO_FLAGS* to access detailed logs and trace messages.
+To debug build issues, I unset *VIVADO_FLAGS* to enable detailed logs and trace messages.
 
 ### UpdateMem and XPM Memories
 
