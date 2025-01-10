@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Verilator script fails if VERILATOR_CPP_FLAGS not set in Makefile.
+- Build trees not clean after running boxlambda_setup.sh.
 
 ### Changed
 
