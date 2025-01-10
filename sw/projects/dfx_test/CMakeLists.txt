@@ -12,30 +12,30 @@
 # Step 2 above first builds the swapforth run-time firmware for the J1B as a hex file. Then this hex file
 # is converted to a little endian binary file.
 
-add_executable(dfx_test
+add_executable(dfx_test_flsh
  EXCLUDE_FROM_ALL
  dfx_test.cpp
  dfx_cli.cpp
  j1b_cli.cpp
 )
 
-target_compile_options(dfx_test
+target_compile_options(dfx_test_flsh
  PRIVATE
   -O2 -g
 )
 
-target_include_directories(dfx_test
+target_include_directories(dfx_test_flsh
   PRIVATE
   ${PROJECT_SOURCE_DIR}/sw/components/dfx/
   ${PROJECT_SOURCE_DIR}/sw/components/vs0_hal/
 )
 
-link_and_create_mem_file(dfx_test
+link_and_create_image(dfx_test_flsh
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(dfx_test sdram gpio embedded_cli riscv interrupts peek_poke_cli j1b_hal fatfs ymodem_cli mem_fs_cli)
+target_link_libraries(dfx_test_flsh sdram gpio embedded_cli riscv interrupts peek_poke_cli j1b_hal fatfs ymodem_cli mem_fs_cli dfx)
 
-add_flash_sw_target(dfx_test)
+add_flash_sw_target(dfx_test_flsh)
 
 add_executable(dfx_test_ram
  EXCLUDE_FROM_ALL
@@ -55,8 +55,8 @@ target_include_directories(dfx_test_ram
   ${PROJECT_SOURCE_DIR}/sw/components/vs0_hal/
 )
 
-link_and_create_mem_file(dfx_test_ram
+link_and_create_image(dfx_test_ram
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(dfx_test_ram sdram gpio embedded_cli riscv interrupts peek_poke_cli j1b_hal fatfs ymodem_cli mem_fs_cli)
+target_link_libraries(dfx_test_ram sdram gpio embedded_cli riscv interrupts peek_poke_cli j1b_hal fatfs ymodem_cli mem_fs_cli dfx)
 

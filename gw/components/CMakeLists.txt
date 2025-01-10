@@ -1,11 +1,12 @@
 #Function grouping gateware build rules for DFX Reconfigurable Module builds.
-#COMPONENT_NAME: name of the DFX virtual socket component to implement.
-#VS_INST: DFX virtual socket instance name.
+#COMPONENT_NAMES: names of all the DFX virtual socket components that are part of the design.
+#List the 'current' component first.
+#VS_INSTS: DFX virtual socket instance names, one for each COMPONENT_NAME specified.
 #REF_DFX_PROJECT: Reference DFX project to build the Reconfigurable Module against.
 function (gw_rm_rules_dfx)
   set(options)
-  set(oneValueArgs COMPONENT_NAME VS_INST REF_DFX_PROJECT)
-  set(multiValueArgs)
+  set(oneValueArgs REF_DFX_PROJECT)
+  set(multiValueArgs COMPONENT_NAMES VS_INSTS)
 
   cmake_parse_arguments(gw_rm_rules_dfx
         "${options}"
@@ -14,14 +15,22 @@ function (gw_rm_rules_dfx)
         ${ARGN}
     )
 
-  set(_comp_name ${gw_rm_rules_dfx_COMPONENT_NAME})
-  set(_vs_inst ${gw_rm_rules_dfx_VS_INST})
+  set(_comp_names ${gw_rm_rules_dfx_COMPONENT_NAMES})
+  list(GET _comp_names 0 _comp_name)
+  set(_vs_insts ${gw_rm_rules_dfx_VS_INSTS})
   set(_ref_dfx_prj ${gw_rm_rules_dfx_REF_DFX_PROJECT})
+
+  set(dcps "")
+  set(comps_synth "")
+  foreach(comp ${_comp_names})
+    list(APPEND dcps $<TARGET_PROPERTY:${comp}_synth,BINARY_DIR>/project.runs/synth_1/*.dcp)
+    list(APPEND comps_synth ${comp}_synth)
+  endforeach()
 
   #Build Vivado command string for the vivado_impl tcl script.
   vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl_dfx_rm.tcl
-        -vsCellInst ${_vs_inst}
-        -vsDcp $<TARGET_PROPERTY:${_comp_name}_synth,BINARY_DIR>/project.runs/synth_1/*.dcp
+        -vsCellInsts \"${_vs_insts}\"
+        -vsDcps \"${dcps}\"
         -staticDcp $<TARGET_PROPERTY:${_ref_dfx_prj}_bit,BINARY_DIR>/dfx_project.static_route.dcp
         -outputBaseName ${_comp_name}
         -part ${PART})
@@ -35,7 +44,7 @@ function (gw_rm_rules_dfx)
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
-            ${_comp_name}_synth
+            ${comps_synth}
             ${_ref_dfx_prj}_bit
             $<TARGET_PROPERTY:${_ref_dfx_prj}_bit,BINARY_DIR>/dfx_project.static_route.dcp
         COMMENT

@@ -29,16 +29,28 @@ module vs0 (
     input logic rst,
 
     //32-bit pipelined Wishbone master interface.
-    output logic [27:0] wbm_adr_o,
-    output logic [31:0] wbm_dat_o,
-    input logic [31:0] wbm_dat_i,
-    output logic wbm_we_o,
-    output logic [3:0] wbm_sel_o,
-    output logic wbm_stb_o,
-    input logic wbm_ack_i,
-    input logic wbm_stall_i,
-    output logic wbm_cyc_o,
-    input logic wbm_err_i,
+    output logic [27:0] wbm_0_adr_o,
+    output logic [31:0] wbm_0_dat_o,
+    input logic [31:0] wbm_0_dat_i,
+    output logic wbm_0_we_o,
+    output logic [3:0] wbm_0_sel_o,
+    output logic wbm_0_stb_o,
+    input logic wbm_0_ack_i,
+    input logic wbm_0_stall_i,
+    output logic wbm_0_cyc_o,
+    input logic wbm_0_err_i,
+
+    //32-bit pipelined Wishbone master interface.
+    output logic [27:0] wbm_1_adr_o,
+    output logic [31:0] wbm_1_dat_o,
+    input logic [31:0] wbm_1_dat_i,
+    output logic wbm_1_we_o,
+    output logic [3:0] wbm_1_sel_o,
+    output logic wbm_1_stb_o,
+    input logic wbm_1_ack_i,
+    input logic wbm_1_stall_i,
+    output logic wbm_1_cyc_o,
+    input logic wbm_1_err_i,
 
     //32-bit pipelined Wishbone slave interface.
     input logic [17:0] wbs_adr,
@@ -104,15 +116,21 @@ module vs0 (
   logic do_wbs_rd_reg;
   logic [31:0] wbs_dat_r_reg, wbs_dat_r_mem;
 
-  logic unused = &{wbs_sel, wbm_err_i, wbm_dat_i, wbm_ack_i, wbm_stall_i};
+  logic unused = &{wbs_sel, wbm_0_err_i, wbm_0_dat_i, wbm_0_ack_i, wbm_0_stall_i, wbm_1_err_i, wbm_1_dat_i, wbm_1_ack_i, wbm_1_stall_i};
 
-  //WBM interface currently not used.
-  assign wbm_adr_o = 28'b0;
-  assign wbm_dat_o = 32'b0;
-  assign wbm_we_o = 1'b0;
-  assign wbm_sel_o = 4'b0;
-  assign wbm_stb_o = 1'b0;
-  assign wbm_cyc_o = 1'b0;
+  //WBM interfaces currently not used.
+  assign wbm_0_adr_o = 28'b0;
+  assign wbm_0_dat_o = 32'b0;
+  assign wbm_0_we_o = 1'b0;
+  assign wbm_0_sel_o = 4'b0;
+  assign wbm_0_stb_o = 1'b0;
+  assign wbm_0_cyc_o = 1'b0;
+  assign wbm_1_adr_o = 28'b0;
+  assign wbm_1_dat_o = 32'b0;
+  assign wbm_1_we_o = 1'b0;
+  assign wbm_1_sel_o = 4'b0;
+  assign wbm_1_stb_o = 1'b0;
+  assign wbm_1_cyc_o = 1'b0;
 
   //WB slave handshake
   assign do_wbs_rd_reg = wbs_cyc && wbs_stb && (~wbs_we) && (wbs_adr >= 18'(WBS_REG_BASE_ADDR));

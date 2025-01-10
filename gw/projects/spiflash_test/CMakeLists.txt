@@ -7,7 +7,7 @@ add_custom_target(spiflash_test_collect ALL
         COMMENT
             "Dummy target to collect test dependencies."
         DEPENDS
-            spiflash_test
+            spiflash_test_flsh
         VERBATIM
     )
 
@@ -24,15 +24,15 @@ else()
       TOP_MODULE sim_main
       PROJECT_NAME spiflash_test
       MEM_FILE_TARGET cmem_to_flash_vector
-      VERILATOR_CPP_FLAGS
-          "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang -I${PROJECT_SOURCE_DIR}/gw/components/spiflash/sim/"
-      VERILATOR_LD_FLAGS
-          -lncurses
+      VERILATOR_FLAGS
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/" 
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang" 
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/gw/components/spiflash/sim/"
   )
 
   #Add testcase.
   add_test(NAME spiflash_test_test
-      COMMAND ./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test.bin
+      COMMAND ./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test_flsh.bin
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   )
 endif()

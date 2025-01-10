@@ -8,7 +8,7 @@
 
 if [[ "$#" < 3  || "$1" == "-h" ]]
 then
-  echo "$0 <src dir> <script file>"
+  echo "$0 <src dir> <script file> vivado|verilator"
   exit 1
 fi
 

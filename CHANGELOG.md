@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `boxlambda_base`: Changes Since Label `dfx` - 2025-01-07
+
+### Added
+
+- Support for multiple reconfigurable partitions in the build system.
+- Mechanism to acknowledge accesses to invalid addresses and non-responsive slaves, returning a `0xDEADBEEF` data pattern. This feature is enabled in project builds (`boxlambda_base`, `boxlambda_dfx`) and disabled in test builds.
+- Invalid Addressing Test Case.
+- Second bus master port added to Reconfigurable Partition `VS0`, enabling `VS0` to support a CPU with Harvard Architecture.
+- DFX documentation.
+- "Official" BoxLambda Project build `boxlambda_base`, which does not support DFX.
+- "Official" BoxLambda Project build `boxlambda_dfx`, which supports DFX.
+- Gateware build flags: `VS0`, `DFX`, and `ACK_INVALID_ADDR`.
+- Two build variants introduced for all software builds: `<sw_project>_ram` (RAM image) and `<sw_project>_flsh` (Flash Memory image).
+- `dfx_load_rm()` helper function in `dfx_controller_hal` for loading a reconfigurable module from memory into Virtual Socket 0 (`VS0`).
+
+### Fixed
+
+- Verilator script fails if VERILATOR_CPP_FLAGS not set in Makefile.
+
+### Changed
+
+- Renamed IRQ ID and handler for `VS_1` to `VERA`.
+- Renamed directory `gw/projects/boxlambda_top/` to `gw/projects/boxlambda_base/`.
+- Renamed CMake function `link_and_create_mem_file` to `link_and_create_image`.
+- In gw CMakeLists, replaced VERILATOR_CPP_FLAGS and VERILATOR_LD_FLAGS parameters with a single VERILATOR_FLAGS multi value parameter. 
+- Instead of relying on a VIVADO_FLAGS environment variable, vivado is now invoked through a wrapper script: *scripts/vivado_wrapper.sh*. The script defines the vivado flags to use.
+- Moved all verilator build artifacts except the *Vmodel* executable to a *verilator/* subdirectory of the gw project build directory.
+
+### Removed
+
+- Placeholder IRQ ID and handler for `VS_2`.
+- ICAP IRQ handler.
+- Deprecated support for the Arty-A7-35T platform.
+- Ncurses dependency.
+
 ## Label dfx, changes since label i2c_rtcc - 2024-10-29
 
 ### Added
@@ -51,5 +86,6 @@ Dependency of FindSDL2 CMake module is too brittle/distro-dependant.
 - Verilator flags from CMake gw_component_rules().
 - Bender.lock file generation.
 
+[boxlambda_base]: https://github.com/epsilon537/boxlambda/compare/boxlambda_base...dfx
 [dfx]: https://github.com/epsilon537/boxlambda/compare/i2c_rtcc...dfx
 

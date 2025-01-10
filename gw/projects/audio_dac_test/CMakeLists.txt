@@ -9,10 +9,9 @@ else()
   gw_project_rules_verilator(
       TOP_MODULE audio_dac_test
       PROJECT_NAME audio_dac_test
-      VERILATOR_CPP_FLAGS
-          "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
-      VERILATOR_LD_FLAGS
-          -lncurses
+      VERILATOR_FLAGS
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/" 
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
   )
 
   #Add testcase. This one's a script, not just the Verilator Vmodel executable.

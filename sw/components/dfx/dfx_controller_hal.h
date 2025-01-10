@@ -81,6 +81,10 @@
 #define DFX_BS_ADDRESS_1_REG 0x74
 #define DFX_BS_SIZE_1_REG 0x78
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 inline void dfx_reg_wr(uint32_t reg_offset, uint32_t data) {
   *(volatile uint32_t *)(DFX_BASE + reg_offset) = data;
 }
@@ -90,5 +94,19 @@ inline uint32_t dfx_reg_rd(uint32_t reg_offset) {
   return res;
 }
 
+/* DFX load a reconfigurable module from memory into
+ * Socket 0 (VS0). This function combines a number of register level
+ * interactions with the DFX controller.
+ * bufPtr: pointer to memory buffer holding the RM bitstream.
+ * size: size of the bitstream.
+ * timeout_ms: number of milliseconds to wait for DFX Controller state to reach
+ * DFX_STATUS_STATE_VS_FULL after loading has been initiated.
+ * Returns 0 if successful, a negative value on error.
+ */
+uint32_t dfx_load_rm(void *bufPtr, uint32_t size, uint32_t timeout_ms);
+
+#ifdef __cplusplus
+}
+#endif
 #endif /*DFX_CONTROLLER_HAL_H*/
 

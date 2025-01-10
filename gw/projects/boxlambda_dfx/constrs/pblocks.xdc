@@ -6,7 +6,7 @@
 create_pblock pblock_vs0
 
 #The module instance to associate this partition block with:
-add_cells_to_pblock [get_pblocks pblock_vs0] [get_cells -quiet [list boxlambda_soc_inst/vs0_inst]]
+add_cells_to_pblock [get_pblocks pblock_vs0] [get_cells -quiet [list boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst]]
 
 #Region location:
 resize_pblock [get_pblocks pblock_vs0] -add {SLICE_X6Y100:SLICE_X45Y149}

@@ -19,21 +19,33 @@ proc getopt {_argv name {_var ""} {default ""}} {
 
 #Command line arguments accepted by the script:
 
-# The virtual socket instance location in the design, e.g.
-# boxlambda_soc_inst/vs0_inst. This script currently only supports one virtual
-# socket. It should be extended so it can handle multiple virtual sockets.
-getopt argv -vsCellInst vsCellInst ""
+# The virtual socket instance locations in the design, e.g.
+# boxlambda_soc_inst/vs0_inst. Can be a string with multiple instances.
+getopt argv -vsCellInsts vsCellInsts ""
 
-# The .dcp synthesis checkpoint of the virtual socket default component.
-getopt argv -vsDefaultDcp vsDefaultDcp ""
+# The .dcp synthesis checkpoints of the virtual socket default component.
+# Can be a string with multiple instances.
+getopt argv -vsDefaultDcps vsDefaultDcps ""
 
 # The virtual socket partition block constraints file, specifying where in the
-# FPGA floorplan the reconfigurable partition should be located.
+# FPGA floorplan the reconfigurable partitions should be located.
 getopt argv -vsPblockConstr vsPblockConstr ""
 
-puts "vsCellInst: $vsCellInst"
-puts "vsDefaultDcp: $vsDefaultDcp"
-puts "vsPblockConstr: $vsPblockConstr"
+set vsCellInstList [regexp -all -inline {\S+} $vsCellInsts]
+set vsDefaultDcpList [regexp -all -inline {\S+} $vsDefaultDcps]
+
+puts "vsCellInsts $vsCellInsts"
+puts "vsDefaultDcps $vsDefaultDcps"
+
+foreach vsCellInst $vsCellInstList {
+  puts "vsCellInst: $vsCellInst"
+}
+
+foreach vsDefaultDcp $vsDefaultDcpList {
+  puts "vsDefaultDcp: $vsDefaultDcp"
+}
+
+puts "vsPblockConstrs: $vsPblockConstr"
 
 #We're using Vivado's project mode
 open_project project.xpr
@@ -41,21 +53,25 @@ open_project project.xpr
 #Open the synthesis checkpoint of the static design
 open_run synth_1
 
-if {![file exists $vsDefaultDcp]} {
-  error "vsDefaultDcp not found: $vsDefaultDcp"
+foreach vsDefaultDcp $vsDefaultDcpList {
+  if {![file exists [glob $vsDefaultDcp]]} {
+    error "vsDefaultDcp not found: $vsDefaultDcp"
+  }
 }
 
 if {![file exists $vsPblockConstr]} {
   error "vsPblockConstr not found: $vsPblockConstr"
 }
 
-#Indicate that this project has a reconfigurable partition at location
-#$vsCellInst
-set_property HD.RECONFIGURABLE TRUE [get_cells $vsCellInst]
-update_design -quiet -cell $vsCellInst -black_box
-#Associate the default component's synthesis checkpoint with is configurable
-#partition.
-read_checkpoint -cell $vsCellInst $vsDefaultDcp
+foreach vsCellInst $vsCellInstList vsDefaultDcp $vsDefaultDcpList {
+  #Indicate that this project has a reconfigurable partition at location
+  #$vsCellInst
+  set_property HD.RECONFIGURABLE TRUE [get_cells $vsCellInst]
+  update_design -quiet -cell $vsCellInst -black_box
+  #Associate the default component's synthesis checkpoint with is configurable
+  #partition.
+  read_checkpoint -cell $vsCellInst [glob $vsDefaultDcp]
+}
 
 puts "Reading Pblock constraints..."
 read_xdc -unmanaged -no_add $vsPblockConstr
@@ -65,19 +81,28 @@ opt_design
 place_design
 route_design
 
-# Generate two bitstream files: 
+# Generate bitstream files: 
 # - The full bitstream of the complete design, including the virtual socket 
 #   default component 
-# - A partial bitstream of just the virtual socket default component.
+# - For each Reconfigurable Partion, a partial bitstream of just the virtual socket default component.
 write_bitstream -force -bin_file dfx_project
 
 # Convert the partial bitstream into a format that can be live-loaded by the
 # DFX Controller.
 source [get_property REPOSITORY [get_ipdefs *dfx_controller:1.0]]/xilinx/dfx_controller_v1_0/tcl/api.tcl
-dfx_controller_v1_0::format_bin_for_icap -bs 1 -i [glob *_partial.bin]
+
+set partialBinList [glob *_partial.bin]
+puts "partialBinList $partialBinList"
+
+foreach partial $partialBinList {
+  dfx_controller_v1_0::format_bin_for_icap -bs 1 -i $partial
+}
 
 # Generate a static route checkpoint with an empty virtual socket.
-update_design -cell $vsCellInst -black_box
+foreach vsCellInst $vsCellInstList {
+  update_design -cell $vsCellInst -black_box
+}
+
 lock_design -level routing
 write_checkpoint -force dfx_project.static_route.dcp
 

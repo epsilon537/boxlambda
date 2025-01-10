@@ -3,20 +3,21 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: dfx_test
+  name: boxlambda_dfx
 
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
   vs0_stub: { path: "../../components/vs0_stub" }
+  wb_dfx_controller: { path: "../../components/wb_dfx_controller"}
 
 sources:
   - target: prj_constraints
     files:
-      - ../boxlambda_top/constrs/boxlambda_soc.xdc
+      - ../boxlambda_base/constrs/boxlambda_soc.xdc
   - target: dfx_constraints
     files:
-      - ../boxlambda_top/constrs/vs0_pblock.xdc
+      - constrs/pblocks.xdc
   - target: vivado
     defines:
       VRAM_SIZE_BYTES: 131072
@@ -32,6 +33,8 @@ sources:
       SPIFLASH: ~
       I2C: ~
       DFX: ~
+      VS0: ~
+      ACK_INVALID_ADDR:  ~
       #The static design of a DFX build expects to see empty module
       #declarations on its virtual sockets. That what this flag is used
       #for. The contents of of reconfigurable modules is ifndef'd with
@@ -39,7 +42,7 @@ sources:
       DFX_SYNTHESIZE_EMPTY_MODULE: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
-      - ../boxlambda_top/rtl/boxlambda_top.sv
+      - ../boxlambda_base/rtl/boxlambda_top.sv
   - target: verilator
     defines:
       VRAM_SIZE_BYTES: 131072
@@ -55,10 +58,13 @@ sources:
       SPIFLASH: ~
       I2C: ~
       DFX: ~
+      VS0: ~
+      ACK_INVALID_ADDR:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - sim/sim_main.cpp
-      - ../boxlambda_top/rtl/boxlambda_top.sv
+      - ../boxlambda_base/rtl/boxlambda_top.sv
       - ../../components/spiflash/sim/flashsim.cpp
-      - ../boxlambda_top/sim/sim_main.sv
-      - ../boxlambda_top/lint.vlt
+      - ../boxlambda_base/sim/sim_main.sv
+      - ../boxlambda_base/lint.vlt
+
