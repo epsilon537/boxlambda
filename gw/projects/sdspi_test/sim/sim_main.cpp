@@ -1,4 +1,3 @@
-//#include <curses.h>
 #include <getopt.h>
 #include <fcntl.h>
 

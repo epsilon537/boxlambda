@@ -24,10 +24,10 @@ else()
       TOP_MODULE sim_main
       PROJECT_NAME spiflash_test
       MEM_FILE_TARGET cmem_to_flash_vector
-      VERILATOR_CPP_FLAGS
-          "-I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/ -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang -I${PROJECT_SOURCE_DIR}/gw/components/spiflash/sim/"
-      VERILATOR_LD_FLAGS
-          -lncurses
+      VERILATOR_FLAGS
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/" 
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang" 
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/gw/components/spiflash/sim/"
   )
 
   #Add testcase.

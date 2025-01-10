@@ -327,12 +327,11 @@ endfunction()
 #PROJECT_NAME: project name, e.g. hello_dbg
 #MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
 #MEM_FILE_LIST: Mem file list, if any.
-#VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty.
-#VERILATOR_LD_FLAGS: LD flags to use when verilating. Usually empty.
+#VERILATOR_FLAGS: CFLAGS and LDFLAGS to use when verilating. Prepend each CFLAG with "-CFLAG" and each LDFLAG with "-LDFLAG".
 function (gw_project_rules_verilator)
   set(options)
-  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST VERILATOR_CPP_FLAGS VERILATOR_LD_FLAGS)
-  set(multiValueArgs)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST)
+  set(multiValueArgs VERILATOR_FLAGS)
 
   cmake_parse_arguments(gw_project_rules_verilator
         "${options}"
@@ -345,8 +344,7 @@ function (gw_project_rules_verilator)
   set(_prj_name ${gw_project_rules_verilator_PROJECT_NAME})
   set(_mem_file_tgt ${gw_project_rules_verilator_MEM_FILE_TARGET})
   set(_mem_file_list ${gw_project_rules_verilator_MEM_FILE_LIST})
-  set(_verilator_cpp_flags ${gw_project_rules_verilator_VERILATOR_CPP_FLAGS})
-  set(_verilator_ld_flags ${gw_project_rules_verilator_VERILATOR_LD_FLAGS})
+  set(_verilator_flags ${gw_project_rules_verilator_VERILATOR_FLAGS})
 
   #Extract .mem files from the Bender.yml manifest.
   add_custom_command(
@@ -371,8 +369,8 @@ function (gw_project_rules_verilator)
             ${_prj_name}
         MEM_FILE_LIST
             ${_prj_name}.mem_file_list
-        VERILATOR_CPP_FLAGS
-            ${_verilator_cpp_flags}
+        VERILATOR_FLAGS
+            ${_verilator_flags}
     )
 
   #Extract .c and .cpp files from Bender.yml manifest.
@@ -394,7 +392,7 @@ function (gw_project_rules_verilator)
         OUTPUT
             Vmodel
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/verilator_sim.sh ${_prj_name}.verilator_sources ${_prj_name}.vlts ${_prj_name}.cpp_files ${_top_module} ${_verilator_cpp_flags} ${_verilator_ld_flags} ${CMAKE_CURRENT_BINARY_DIR}
+            ${PROJECT_SOURCE_DIR}/scripts/verilator_sim.sh ${_prj_name}.verilator_sources ${_prj_name}.vlts ${_prj_name}.cpp_files ${_top_module} ${CMAKE_CURRENT_BINARY_DIR} ${_verilator_flags}
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS

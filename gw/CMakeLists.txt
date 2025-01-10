@@ -20,13 +20,7 @@ add_custom_target(lint_all ALL)
 #ARGN: Variables argument list to be passed to the tcl script.
 function(vivado_cmd cmd tcl_script)
   list(JOIN ARGN " " _tcl_args)
-
-  #Note the VIVADO_FLAGS environment variable here. By default Vivado generates
-  #quite a lot of logs and traces. You can use VIVADO_FLAGS to turn that off.
-  #I currently have the following Vivado flags in my .bashrc
-  #VIVADO_FLAGS=-nolog -nojournal -notrace
-  #When I'm debugging build issues, I just unset VIVADO_FLAGS.
-  set(${cmd} "vivado -mode batch $VIVADO_FLAGS -source ${tcl_script} -tclargs ${_tcl_args}" PARENT_SCOPE)
+  set(${cmd} "${PROJECT_SOURCE_DIR}/scripts/vivado_wrapper.sh -source ${tcl_script} -tclargs ${_tcl_args}" PARENT_SCOPE)
 endfunction()
 
 #Function grouping common vivado gateware build rules.
@@ -169,11 +163,11 @@ endfunction()
 #TOP_MODULE: name of top module.
 #PRJ_COMP_NAME: project or component name, e.g. wbuart32
 #MEM_FILE_LIST: Mem file list, if any.
-#VERILATOR_CPP_FLAGS: CPP flags to use when verilating. Usually empty.
+#VERILATOR_FLAGS: CFLAGS and LDFLAGS to use when verilating. Prepend each CFLAG with "-CFLAG" and each LDFLAG with "-LDFLAG".
 function (gw_common_rules_verilator)
   set(options)
-  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME MEM_FILE_LIST VERILATOR_CPP_FLAGS)
-  set(multiValueArgs)
+  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME MEM_FILE_LIST)
+  set(multiValueArgs VERILATOR_FLAGS)
 
   cmake_parse_arguments(gw_common_rules_verilator
         "${options}"
@@ -185,7 +179,7 @@ function (gw_common_rules_verilator)
   set(_top_module ${gw_common_rules_verilator_TOP_MODULE})
   set(_prj_comp_name ${gw_common_rules_verilator_PRJ_COMP_NAME})
   set(_mem_file_list ${gw_common_rules_verilator_MEM_FILE_LIST})
-  set(_verilator_cpp_flags ${gw_common_rules_verilator_VERILATOR_CPP_FLAGS})
+  set(_verilator_flags ${gw_common_rules_verilator_VERILATOR_FLAGS})
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
@@ -230,7 +224,7 @@ function (gw_common_rules_verilator)
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/verilator_lint_check.sh ${_top_module} ${_prj_comp_name}.vlts ${_prj_comp_name}.waiver ${_prj_comp_name}.verilator_sources ${_verilator_cpp_flags}
+            ${PROJECT_SOURCE_DIR}/scripts/verilator_lint_check.sh ${_top_module} ${_prj_comp_name}.vlts ${_prj_comp_name}.waiver ${_prj_comp_name}.verilator_sources ${_verilator_flags}
         DEPENDS
             ${_prj_comp_name}.vlts
             ${_prj_comp_name}.verilator_sources
