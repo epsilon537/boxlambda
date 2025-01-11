@@ -1,0 +1,44 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="Page-1" id="FkqsssBIUotFAyY2YX13">
+    <mxGraphModel dx="1428" dy="910" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="z8VmUbHNCWBOlJwFkyMI-2" value="Static Design Changes" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="240" y="220" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="z8VmUbHNCWBOlJwFkyMI-3" value="RM Partial Bitstream Changes" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="460" y="430" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="z8VmUbHNCWBOlJwFkyMI-5" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" edge="1" parent="1" source="z8VmUbHNCWBOlJwFkyMI-8" target="z8VmUbHNCWBOlJwFkyMI-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="410" as="sourcePoint" />
+            <mxPoint x="520" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="z8VmUbHNCWBOlJwFkyMI-6" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" edge="1" parent="1" source="z8VmUbHNCWBOlJwFkyMI-2" target="z8VmUbHNCWBOlJwFkyMI-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="250" as="sourcePoint" />
+            <mxPoint x="430" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="z8VmUbHNCWBOlJwFkyMI-7" value="Static Routing Changes Outside Pblock" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="470" y="160" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="z8VmUbHNCWBOlJwFkyMI-8" value="Static Routing Changes Inside Pblock" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="470" y="270" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="z8VmUbHNCWBOlJwFkyMI-9" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" edge="1" parent="1" source="z8VmUbHNCWBOlJwFkyMI-2" target="z8VmUbHNCWBOlJwFkyMI-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="270" as="sourcePoint" />
+            <mxPoint x="440" y="300" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="z8VmUbHNCWBOlJwFkyMI-13" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="800" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

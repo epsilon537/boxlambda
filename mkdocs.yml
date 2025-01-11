@@ -25,7 +25,7 @@ theme:
 nav:
     - About: index.md
     - Terms and Abbreviations: terms-and-abbreviations.md
-    - Goals and Requirement Analysis: goals-and-requirement-analysis.md
+    - Requirement Analysis: requirement-analysis.md
     - Architecture: architecture.md
     - Clocks and Reset: clocks_and_reset.md
     - Interrupts: interrupts.md
@@ -33,7 +33,7 @@ nav:
     - FPGA Resource Utilization: fpga-resource-utilization.md
     - Git Workflow: git-workflow.md
     - The Build System:
-        - The Build Structure:
+        - The Build System Structure:
           - The Directory Structure: build_sys_dir_struct.md
           - The Gateware Build Structure: build_sys_gw_build_struct.md
           - The CMakeLists: build_sys_cmakelists.md
@@ -60,7 +60,8 @@ nav:
         - Timer: components_timer.md
         - I2C: components_i2c.md
         - RTCC: components_rtcc.md
-        - Dynamic Function Exchange: components_dfx.md
+        - VS0: components_vs0.md
+        - DFX Controller: components_dfx_controller.md
     - Software Components:
         - LiteDRAM Initialization: sw_comp_litedram_initialization.md
         - PicoLibc and Bootstrap: sw_comp_picolibc.md
@@ -79,10 +80,16 @@ nav:
         - Ymodem: sw_comp_ymodem.md
         - Memory and File System CLI: sw_comp_mem_fs_cli.md
         - Peek and Poke CLI: sw_comp_peek_poke_cli.md
+        - DFX Controller HAL: sw_comp_dfx_controller_hal.md
+        - J1B HAL: sw_comp_j1b_hal.md
+        - VS0 HAL: sw_comp_vs0_hal.md
     - Installation:
         - Prerequisites: prerequisites.md
         - Peripherals (PMODs): pmods.md
         - Installation: installation.md
+    - Project Builds:
+        - BoxLambda Base: prj_build_boxlambda_base.md
+        - BoxLambda DFX: prj_build_boxlambda_dfx.md
     - Test Builds:
         - Hello World: test-build-hello-world.md
         - DDR Test: test-build-ddr.md
@@ -97,5 +104,11 @@ nav:
         - I2C Test: test-build-i2c.md
         - Real-Time Clock and Calendar Test: test-build-rtcc.md
         - Reset Test: test-build-reset.md
+        - J1B Test: test-build-j1b.md
+        - DFX Test: test-build-dfx.md
+        - Invalid Address Test: test-build-invalid-addr.md
+    - Documentation Builds:
+        - Blog: doc-build-blog.md
+        - MkDocs: doc-build-mkdocs.md
 
 

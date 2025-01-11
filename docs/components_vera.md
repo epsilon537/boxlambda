@@ -42,7 +42,7 @@ The easiest way to understand what's going on is by going through the diagram fr
 3. The Composer block in turn pulls the necessary data from three **Line Buffers**: one for each layer and one for sprites. The Composer and video_vga blocks operate at VGA pixel clock rate, i.e. 640 pixels worth of data flows when a scanline is being drawn. No data flows during horizontal or vertical retrace.
 4. The Line Buffers exist to give the renderers some leeway. The **Layer Renderers**, for instance, need to produce 640 pixels worth of data each scanline but they have 800 pixels worth of time to do so (the horizontal retrace time is 'extra time'). For the **Sprite Renderer**, the numbers are a bit different, but the concept is the same.
 5. The renderers contain the bulk of VERA's video generation logic. There are two identical Layer Renderer blocks and one Sprite Renderer. The Layer Renderers implement the different tile and Bitmap Modes, retrieve the necessary data from the **vram_if** block, and store the rendered output data in their respective Line Buffers. The Sprite Renderer does the same thing for sprites.
-6. The vram_if block contains **128KB or 64KB** of embedded video memory, depending on whether the Arty A7-100T or the Arty A7-35T is being targeted. It has four ports: one for each renderer and one for the CPU (via the external bus). A time slot scheduler gives each port in turn access to VRAM.
+6. The vram_if block contains **128KB** of embedded video memory. It has four ports: one for each renderer and one for the CPU (via the external bus). A time slot scheduler gives each port in turn access to VRAM.
 
 ### Video RAM
 

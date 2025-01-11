@@ -11,16 +11,16 @@ The **spiflash_test** program does the following:
 
 ### The SPI Flash Test on Verilator
 
-Build the **spiflash_test** gateware project. This will also build the *spiflash_test.bin* software image as a dependency:
+Build the **spiflash_test** gateware project. This will also build the *spiflash_test_flsh.bin* software image as a dependency:
 ```
 cd build/sim-a7-100/gw/projects/spiflash_test
 make spiflash_test_sim_sw
 ```
 
-Execute the generated Verilator model, passing in as a parameter the *spiflash_test.bin* software image. The software image will be loaded into the simulated flash device before the test starts:
+Execute the generated Verilator model, passing in as a parameter the *spiflash_test_flsh.bin* software image. The software image will be loaded into the simulated flash device before the test starts:
 ```
-./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test.bin
-Flash SW Image File: ../../../sw/projects/spiflash_test/spiflash_test.bin
+./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test_flsh.bin
+Flash SW Image File: ../../../sw/projects/spiflash_test/spiflash_test_flsh.bin
 ...
 Starting test...
 Reading one byte from FLASHBASE+0x800000:
@@ -60,21 +60,21 @@ Test passed.
 
 ### The SPI Flash Test on FPGA
 
-If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 Connect a terminal program to Arty's USB serial port. **Settings: 115200 8N1**.
-Build the *spiflash_test* software project in an Arty A7 build tree:
+
+Build the *spiflash_test_flsh* software project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/sw/projects/spiflash_test
-make spiflash_test
+make spiflash_test_flsh
 ```
 Flash the *spiflash_test* program onto the target:
 ```
-make spiflash_test_flash_sw
+make spiflash_test_flsh_flash_sw
 ```
-Build the gateware project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+Build the gateware project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/gw/projects/spiflash_test
-make spiflash_test_bit_sw
+make spiflash_test_bit
 ```
 Flash the gateware build onto the target:
 ```

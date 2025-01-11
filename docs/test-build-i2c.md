@@ -5,6 +5,7 @@ The I2C test code running on the RISCV processor: [boxlambda/sw/projects/rtcc_te
 The Verilator test bench code: [boxlambda/gw/projects/i2c_test/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/i2c_test/sim/sim_main.cpp)
 
 The Verilator version of the I2C Test Application uses an I2C slave co-simulator object provided by the WBI2C repo:
+
 - [boxlambda/sub/wbi2c/bench/cpp/i2csim.h](https://github.com/epsilon537/wbi2c/blob/boxlambda/bench/cpp/i2csim.h)
 - [boxlambda/sub/wbi2c/bench/cpp/i2csim.cpp](https://github.com/epsilon537/wbi2c/blob/boxlambda/bench/cpp/i2csim.cpp)
 
@@ -53,7 +54,7 @@ Hook up the RTCC PMOD as described [here](pmods.md#rtcc-pmod).
 
 Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+Build the project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/i2c_test

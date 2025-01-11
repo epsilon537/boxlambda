@@ -70,6 +70,15 @@ The Ibex processor has separate Instruction and Data ports. When accessing inter
 
 The default CMEM memory image is [sw/projects/cmem_to_flash_vector/cmem.mem](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/cmem_to_flash_vector). This is the *cmem_to_flash_vector* software image, checked into the source tree. When building a *<gw_project\>_bit_sw* target, this image will be replaced with the image of the software program referenced in the gateware project's *CMakeLists.txt* file (using post-synthesis memory update). When we're just building the *<gw_project\>_bit* target, however, the default *cmem_to_flash_vector* image will remain in place, setting up the project to boot from flash memory.
 
+### Address Ranges and Sizes
+
+| Port | Start Byte Address | End Byte Address | Size (Kbytes) |
+|------|--------------------|------------------|---------------|
+| CMEM Port 0 | 0x00000000 | 0x0001FFFF | 128 | 
+| DMEM Port 0 | 0x00020000 | 0x0003FFFF | 128 | 
+| CMEM Port 1 | 0x00100000 | 0x0011FFFF | 128 |
+| DMEM Port 1 | 0x00120000 | 0x0013FFFF | 128 |
+
 ### DPRAM Clock Frequency
 
 The two DPRAM instances, CMEM and DMEM, are part of the 50MHz System Clock Domain.
