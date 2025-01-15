@@ -14,7 +14,7 @@ sources:
   - target: prj_constraints
     files:
       - constrs/boxlambda_soc.xdc
-  - target: vivado
+  - target: any(vivado, openxc7)
     defines:
       VRAM_SIZE_BYTES: 131072
       DPRAM_SIZE_BYTES: 262144

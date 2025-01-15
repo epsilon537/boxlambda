@@ -1,8 +1,11 @@
 #! /bin/bash
 
-#This script extracts the files to be verilated from the nearest bender.yml manifest and generates 
-#a verilator script.
-#This script is used by the build system.
+# This script is used by the build system. It does the following:
+# - extract the files to be synthesized from the nearest bender.yml manifest 
+# - generate a verilator script containing a filelist.
+#   The verilator script/filelist is only updated when there actually are
+#   changes in the filelist so it can be used by the build system for dependency checking.
+# - generate a dependency file list.
 
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then

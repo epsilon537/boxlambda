@@ -11,7 +11,7 @@ dependencies:
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
 
 sources:
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:

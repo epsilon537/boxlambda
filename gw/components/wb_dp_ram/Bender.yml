@@ -14,14 +14,11 @@ sources:
     files:
      - lint.vlt
 
-  - target: any(vivado, verilator)
+  - target: any(vivado, openxc7, verilator)
     files:
       - rtl/wb_dp_ram_wrapper.sv
 
-  - target: verilator
+  - target: any(openxc7, verilator)
     files:
       - ../../../sub/verilog-wishbone/rtl/wb_dp_ram.v
-
-
-
 

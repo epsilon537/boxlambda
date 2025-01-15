@@ -9,7 +9,7 @@ sources:
   - target: verilator
     files:
      - lint.vlt
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     files:
      - rtl/pls2tgl.sv
      - rtl/sync3.sv

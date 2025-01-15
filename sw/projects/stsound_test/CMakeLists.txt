@@ -17,7 +17,7 @@ target_compile_options(stsound_test_ram
   -O2 -g
 )
 
-if(CMAKE_BUILD_TYPE STREQUAL "sim")
+if(CMAKE_BUILD_TYPE STREQUAL "verilator")
   target_compile_definitions(stsound_test_ram PRIVATE -DMEMTEST_SIZE=32768)
 else() #fpga:
   target_compile_definitions(stsound_test_ram PRIVATE -DMEMTEST_SIZE=\(256*1024*1024\))
@@ -47,7 +47,7 @@ target_compile_options(stsound_test_flsh
   -O2 -g
 )
 
-if(CMAKE_BUILD_TYPE STREQUAL "sim")
+if(CMAKE_BUILD_TYPE STREQUAL "verilator")
   target_compile_definitions(stsound_test_flsh PRIVATE -DMEMTEST_SIZE=32768)
 else() #fpga:
   target_compile_definitions(stsound_test_flsh PRIVATE -DMEMTEST_SIZE=\(256*1024*1024\))

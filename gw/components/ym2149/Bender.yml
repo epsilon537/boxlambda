@@ -9,7 +9,7 @@ sources:
   - target: verilator
     files:
      - lint.vlt
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     defines:
       #USE_STEREO: ~ #Mono
       #USE_I2S: ~ #BoxLambda uses as 1-bit DAC

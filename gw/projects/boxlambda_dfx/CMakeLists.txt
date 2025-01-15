@@ -18,7 +18,7 @@
 # _loaded or _gw_flashed onto the target device. This gateware image expects to find a 
 # software image on flash to boot from.
 
-if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+if(CMAKE_BUILD_TYPE STREQUAL "vivado")
   #gw_project_rules_dfx_vivado() function is defined in the parent CMakeLists.txt.
   gw_project_rules_dfx_vivado(
       TOP_MODULE boxlambda_top

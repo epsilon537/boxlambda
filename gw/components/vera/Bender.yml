@@ -6,13 +6,13 @@ package:
   name: vera
 
 sources:
-  - target: any(memory_vivado, memory_verilator)
+  - target: any(memory_vivado, memory_verilator, memory_openxc7)
     files:
      - ../../../sub/vera_wishbone/fpga/source/palette_ram.mem
   - target: verilator
     files:
      - lint.vlt
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     files:
      - ../../../sub/vera_wishbone/fpga/source/vera_top.v
      - ../../../sub/vera_wishbone/fpga/source/spram_byte_write_ram_wr_first.v

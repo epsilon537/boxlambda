@@ -23,7 +23,7 @@ sources:
      - ../../ip/dfx_controller/dfx_controller_0_stub.v
      - rtl/ICAPE2_stub.v
 
-  - target: any(vivado, verilator)
+  - target: any(vivado, openxc7, verilator)
     files:
       - rtl/wb_dfx_controller.sv
 

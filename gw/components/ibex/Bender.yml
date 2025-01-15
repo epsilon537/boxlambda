@@ -12,7 +12,7 @@ sources:
     - ../../../sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_ibex_ibex_top_0.1/rtl/ibex_register_file_ff.sv
     defines:
       PRIM_DEFAULT_IMPL: prim_pkg::ImplGeneric
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     include_dirs:
       - ../../../sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_dv_dv_fcov_macros_0
       - ../../../sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_assert_0.1/rtl
@@ -74,10 +74,10 @@ sources:
       - ../../../sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_ibex_ibex_top_0.1/rtl/ibex_lockstep.sv
       - ../../../sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_ibex_ibex_top_0.1/rtl/ibex_top.sv
 
-  - target: all(ibex,vivado)
+  - target: all(ibex,any(vivado, openxc7))
     files:
     - rtl/ibex_top_wrap.sv
-  - target: vivado
+  - target: any(vivado, openxc7)
     files:
     - ../../../sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_secded_0.1/rtl/prim_secded_22_16_dec.sv
     - ../../../sub/ibex/build/lowrisc_ibex_top_artya7_0.1/src/lowrisc_prim_secded_0.1/rtl/prim_secded_22_16_enc.sv

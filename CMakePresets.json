@@ -2,11 +2,11 @@
     "version": 3,
     "configurePresets": [
         {
-            "name": "arty-a7-100",
-            "displayName": "Arty A7 100T FPGA build.",
-            "binaryDir": "build/arty-a7-100",
+            "name": "vivado-a7-100",
+            "displayName": "Arty A7 100T Vivado build.",
+            "binaryDir": "build/vivado-a7-100",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "fpga",
+                "CMAKE_BUILD_TYPE": "vivado",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-100",
                 "CMEM_SIZE": "128K",
@@ -14,11 +14,11 @@
             }
         },
         {
-            "name": "arty-a7-35",
-            "displayName": "Arty A7 35T FPGA build.",
-            "binaryDir": "build/arty-a7-35",
+            "name": "vivado-a7-35",
+            "displayName": "Arty A7 35T Vivado build.",
+            "binaryDir": "build/vivado-a7-35",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "fpga",
+                "CMAKE_BUILD_TYPE": "vivado",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-35",
                 "CMEM_SIZE": "32K",
@@ -26,11 +26,23 @@
             }
         },
         {
-            "name": "sim-a7-35",
-            "displayName": "Arty A7 35T Verilator simulation build.",
-            "binaryDir": "build/sim-a7-35",
+            "name": "openxc7-a7-100",
+            "displayName": "Arty A7 100T OpenXC7 build.",
+            "binaryDir": "build/openxc7-a7-100",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "sim",
+                "CMAKE_BUILD_TYPE": "openxc7",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
+                "BL_TARGET_FPGA": "arty-a7-100",
+                "CMEM_SIZE": "128K",
+                "DMEM_SIZE": "128K"
+            }
+        },
+        {
+            "name": "openxc7-a7-35",
+            "displayName": "Arty A7 100T OpenXC7 build.",
+            "binaryDir": "build/openxc7-a7-35",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "openxc7",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-35",
                 "CMEM_SIZE": "32K",
@@ -42,7 +54,7 @@
             "displayName": "Arty A7 100T Verilator simulation build.",
             "binaryDir": "build/sim-a7-100",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "sim",
+                "CMAKE_BUILD_TYPE": "verilator",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-100",
                 "CMEM_SIZE": "128K",

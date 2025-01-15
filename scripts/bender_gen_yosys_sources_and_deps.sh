@@ -1,8 +1,11 @@
 #! /bin/bash
 
+#This script extracts the files to be verilated from the nearest bender.yml manifest and generates a yosys script.
+#This script is used by the build system.
+
 # This script is used by the build system. It does the following:
 # - extract the files to be synthesized from the nearest bender.yml manifest 
-# - generate a tcl subscript to be included in the main vivado_create_project.tcl script
+# - generate a filelist to be used by the yosys synth script. 
 #   The filelist is only updated when there actually are
 #   changes in the filelist so it can be used by the build system for dependency checking.
 # - generate a dependency file list.
@@ -13,10 +16,9 @@ then
   exit 1
 fi
 
-# $1 = source directory
 SRC_DIR="$1"
 
-# $2 = output file, a vivado tcl script
+# $2 = output file, containing yosys script
 OUTFILE="$2"
 
 # $3 = target to be used in the generated
@@ -34,19 +36,19 @@ else
   MIN_T_OOC="-t$5"
 fi
 
-bender -d $SRC_DIR script -t $BL_TARGET_FPGA $MIN_T_OOC vivado > $OUTFILE.tmp
+bender -d $SRC_DIR script -t $BL_TARGET_FPGA $MIN_T_OOC -t openxc7 flist-plus > $OUTFILE.tmp
 
 if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
-  echo "No vivado source list changes detected."
+  echo "No yosys source list changes detected."
 else
-  echo "Updating vivado source list".
+  echo "Updating yosys source list".
   cp $OUTFILE.tmp $OUTFILE
 fi
 
 rm $OUTFILE.tmp
 
 #Generate a depfile: Prepend each line with <target> :
-bender -d $SRC_DIR script $MIN_T_OOC -t $BL_TARGET_FPGA -t prj_constraints -t dfx_constraints -t vivado flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
+bender -d $SRC_DIR script $MIN_T_OOC -t $BL_TARGET_FPGA -t prj_constraints -t openxc7 flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
 
 #Remove the generated Bender.lock file to keep the source tree clean.
 rm -f $SRC_DIR/Bender.lock

@@ -9,7 +9,7 @@ sources:
   - target: verilator
     files:
     - lint.vlt
-  - target: any(vivado, verilator)
+  - target: any(vivado, openxc7, verilator)
     files:
     - ../../../sub/wbi2c/rtl/wbi2cmaster.v
     - ../../../sub/wbi2c/rtl/lli2cm.v

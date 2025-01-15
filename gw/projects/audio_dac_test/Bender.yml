@@ -14,7 +14,7 @@ sources:
   - target: prj_constraints
     files:
       - constrs/Arty-A7-35-Master.xdc
-  - target: any(memory_vivado, memory_verilator)
+  - target: any(memory_vivado, memory_verilator, memory_openxc7)
     files:
     - rtl/sin_table.mem
   - target: any(verilator, vivado)

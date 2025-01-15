@@ -7,7 +7,7 @@ dependencies:
   ibex_wb_core: { path: "../ibex_wb_core" }
 
 sources:
-  - target: vivado
+  - target: any(vivado, openxc7)
     files:
     - ../../../sub/riscv-dbg/src/dmi_bscane_tap.sv
     - ../../../sub/tech_cells_generic/src/fpga/tc_clk_xilinx.sv
@@ -16,7 +16,7 @@ sources:
     - lint.vlt
     - ../../../sub/riscv-dbg/src/dmi_jtag_tap.sv
     - ../../../sub/tech_cells_generic/src/rtl/tc_clk.sv
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     include_dirs:
     - ../../../sub/common_cells/include
     files:

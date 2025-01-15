@@ -48,7 +48,7 @@ sources:
       - ../../../sub/sdspi/bench/cpp/sdspisim.cpp
       - ../../../sub/wbi2c/bench/cpp/i2csim.cpp
 
-  - target: any(vivado, verilator)
+  - target: any(vivado, openxc7, verilator)
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:

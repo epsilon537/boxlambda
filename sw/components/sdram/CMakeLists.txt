@@ -28,7 +28,7 @@ target_include_directories(sdram
 )
 
 #The memory controller SW interface is different between simulation and FPGA targets.
-if(CMAKE_BUILD_TYPE STREQUAL "sim")
+if(CMAKE_BUILD_TYPE STREQUAL "verilator")
   target_include_directories(sdram
   PUBLIC
             ${PROJECT_SOURCE_DIR}/gw/components/litedram/sim/sw/include

@@ -82,9 +82,9 @@ function (gw_component_rules)
   set(_top_module ${gw_component_rules_TOP_MODULE})
   set(_comp_name ${gw_component_rules_COMPONENT_NAME})
 
-  if(CMAKE_BUILD_TYPE STREQUAL "fpga")
-    #Forward to gw_common_rules() function. gw_common_rules() build logic is shared between
-    #gw components and projects.
+  #Forward to gw_common_rules() function. gw_common_rules() build logic is shared between
+  #gw components and projects.
+  if(CMAKE_BUILD_TYPE STREQUAL "vivado")
     gw_common_rules_vivado(
           TOP_MODULE
               ${_top_module}
@@ -93,9 +93,16 @@ function (gw_component_rules)
           OOC
               "1"
       )
+  elseif(CMAKE_BUILD_TYPE STREQUAL "openxc7")
+    gw_common_rules_openxc7(
+          TOP_MODULE
+              ${_top_module}
+          PRJ_COMP_NAME
+              ${_comp_name}
+          OOC
+              "1"
+      )
   else()
-    #Forward to gw_common_rules() function. gw_common_rules() build logic is shared between
-    #gw components and projects.
     gw_common_rules_verilator(
           TOP_MODULE
               ${_top_module}
@@ -130,7 +137,7 @@ add_subdirectory(cdc_cells)
 add_subdirectory(spiflash)
 add_subdirectory(wb_timer)
 add_subdirectory(i2c_master)
-if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+if(CMAKE_BUILD_TYPE STREQUAL "vivado")
   add_subdirectory(wb_dfx_controller)
 endif()
 

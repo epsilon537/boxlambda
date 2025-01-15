@@ -1,6 +1,12 @@
-if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+if(CMAKE_BUILD_TYPE STREQUAL "vivado")
   #gw_project_rules_vivado() function is defined in the parent CMakeLists.txt.
   gw_project_rules_vivado(
+      TOP_MODULE audio_dac_test
+      PROJECT_NAME audio_dac_test
+  )
+elseif(CMAKE_BUILD_TYPE STREQUAL "openxc7")
+  #gw_project_rules_openxc7() function is defined in the parent CMakeLists.txt.
+  gw_project_rules_openxc7(
       TOP_MODULE audio_dac_test
       PROJECT_NAME audio_dac_test
   )

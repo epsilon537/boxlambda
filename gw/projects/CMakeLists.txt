@@ -1,13 +1,12 @@
 #Function grouping gateware build rules for DFX (partial FPGA reconfiguration) project builds. This function is only called in Vivado builds, not Verilator.
 #TOP_MODULE: name of top module, e.g. ibex_soc
 #PROJECT_NAME: project name, e.g. dfx_test
-#MEM_FILE_LIST: Mem file list, if any.
 #VS_INSTS: DFX virtual socket instance names, e.g. boxlambda_soc/vs0_inst.
 #VS_DEFAULT_COMPONENTS: DFX virtual socket default components, one for each VS_INST listed. The default component gets placed into the virtual socket in the default bitstream image, e.g. vs0_stub.
 
 function (gw_project_rules_dfx_vivado)
   set(options)
-  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_LIST)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME)
   set(multiValueArgs VS_INSTS VS_DEFAULT_COMPONENTS)
 
   cmake_parse_arguments(gw_project_rules_dfx_vivado
@@ -19,7 +18,6 @@ function (gw_project_rules_dfx_vivado)
 
   set(_top_module ${gw_project_rules_dfx_vivado_TOP_MODULE})
   set(_prj_name ${gw_project_rules_dfx_vivado_PROJECT_NAME})
-  set(_mem_file_list ${gw_project_rules_dfx_vivado_MEM_FILE_LIST})
   set(_vs_insts ${gw_project_rules_dfx_vivado_VS_INSTS})
   set(_vs_default_comps ${gw_project_rules_dfx_vivado_VS_DEFAULT_COMPONENTS})
 
@@ -154,10 +152,9 @@ endfunction()
 #TOP_MODULE: name of top module, e.g. ibex_soc
 #PROJECT_NAME: project name, e.g. hello_dbg
 #MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
-#MEM_FILE_LIST: Mem file list, if any.
 function (gw_project_rules_vivado)
   set(options)
-  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_project_rules_vivado
@@ -170,7 +167,6 @@ function (gw_project_rules_vivado)
   set(_top_module ${gw_project_rules_vivado_TOP_MODULE})
   set(_prj_name ${gw_project_rules_vivado_PROJECT_NAME})
   set(_mem_file_tgt ${gw_project_rules_vivado_MEM_FILE_TARGET})
-  set(_mem_file_list ${gw_project_rules_vivado_MEM_FILE_LIST})
 
   if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
     set(_board arty_a7_100t)
@@ -322,15 +318,33 @@ function (gw_project_rules_vivado)
       )
 endfunction()
 
+#Function grouping gateware project build rules for OpenXC7 builds.
+#TOP_MODULE: name of top module, e.g. ibex_soc
+#PROJECT_NAME: project name, e.g. hello_dbg
+function (gw_project_rules_openxc7)
+  set(options)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME)
+
+  cmake_parse_arguments(gw_project_rules_openxc7
+        "${options}"
+        "${oneValueArgs}"
+        "${multiValueArgs}"
+        ${ARGN}
+    )
+
+  set(_top_module ${gw_project_rules_openxc7_TOP_MODULE})
+  set(_prj_name ${gw_project_rules_openxc7_PROJECT_NAME})
+endfunction()
+
 #Function grouping gateware project build rules for Verilator builds.
 #TOP_MODULE: name of top module, e.g. ibex_soc
 #PROJECT_NAME: project name, e.g. hello_dbg
 #MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
-#MEM_FILE_LIST: Mem file list, if any.
 #VERILATOR_FLAGS: CFLAGS and LDFLAGS to use when verilating. Prepend each CFLAG with "-CFLAG" and each LDFLAG with "-LDFLAG".
+
 function (gw_project_rules_verilator)
   set(options)
-  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET MEM_FILE_LIST)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME MEM_FILE_TARGET)
   set(multiValueArgs VERILATOR_FLAGS)
 
   cmake_parse_arguments(gw_project_rules_verilator
@@ -343,7 +357,6 @@ function (gw_project_rules_verilator)
   set(_top_module ${gw_project_rules_verilator_TOP_MODULE})
   set(_prj_name ${gw_project_rules_verilator_PROJECT_NAME})
   set(_mem_file_tgt ${gw_project_rules_verilator_MEM_FILE_TARGET})
-  set(_mem_file_list ${gw_project_rules_verilator_MEM_FILE_LIST})
   set(_verilator_flags ${gw_project_rules_verilator_VERILATOR_FLAGS})
 
   #Extract .mem files from the Bender.yml manifest.
@@ -367,8 +380,6 @@ function (gw_project_rules_verilator)
             ${_top_module}
         PRJ_COMP_NAME
             ${_prj_name}
-        MEM_FILE_LIST
-            ${_prj_name}.mem_file_list
         VERILATOR_FLAGS
             ${_verilator_flags}
     )
@@ -464,12 +475,12 @@ add_subdirectory(usb_hid_sys_test)
 add_subdirectory(spiflash_test)
 add_subdirectory(timer_uart_gpio_irqs)
 add_subdirectory(i2c_test)
-if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+if ((CMAKE_BUILD_TYPE STREQUAL "vivado") OR (CMAKE_BUILD_TYPE STREQUAL "openxc7"))
   add_subdirectory(rtcc_test)
   add_subdirectory(boxlambda_base)
 endif()
 add_subdirectory(reset_test)
-if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
+if ((CMAKE_BUILD_TYPE STREQUAL "vivado") AND (BL_TARGET_FPGA STREQUAL "arty-a7-100"))
   add_subdirectory(j1b_test)
   add_subdirectory(boxlambda_dfx)
 endif()

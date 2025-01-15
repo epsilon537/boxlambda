@@ -10,7 +10,7 @@ dependencies:
   cdc_cells: { path: "../cdc_cells" }
 
 sources:
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     files:
     - rtl/reset_ctrl.sv
     - rtl/button_conditioner.sv

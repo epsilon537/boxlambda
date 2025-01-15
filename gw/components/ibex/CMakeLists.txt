@@ -1,5 +1,5 @@
 #gw_component_rules() function is defined in the parent CMakeLists.txt.
 gw_component_rules(
-    TOP_MODULE ibex_top 
-    COMPONENT_NAME ibex 
+    TOP_MODULE ibex_top_wrap 
+    COMPONENT_NAME ibex
 )

@@ -10,7 +10,7 @@ sources:
     files:
      - lint.vlt
 
-  - target: any(vivado, verilator)
+  - target: any(vivado, openxc7, verilator)
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:

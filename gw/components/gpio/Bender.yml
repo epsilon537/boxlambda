@@ -9,7 +9,7 @@ sources:
   - target: verilator
     files:
     - lint.vlt
-  - target: any(vivado, verilator)
+  - target: any(vivado, openxc7, verilator)
     include_dirs:
     - ../../../sub/gpio/rtl/verilog
     - ../../../sub/gpio/bench/verilog

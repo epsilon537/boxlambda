@@ -6,7 +6,7 @@ package:
   name: audio_dac
 
 sources:
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     defines:
       SECOND_ORDER_DAC: ~ #If not set, a 1st order DAC implementation is selected.
     files:

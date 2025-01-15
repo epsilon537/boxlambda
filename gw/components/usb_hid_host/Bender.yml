@@ -13,10 +13,10 @@ sources:
   - target: verilator
     files:
      - lint.vlt
-  - target: any(memory_vivado, memory_verilator)
+  - target: any(memory_vivado, memory_verilator, memory_openxc7)
     files:
      - ../../../sub/usb_hid_host/src/usb_hid_host_rom.hex
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     files:
      - ../../../sub/usb_hid_host/src/usb_hid_host.v
      - ../../../sub/usb_hid_host/src/usb_hid_host_rom.v

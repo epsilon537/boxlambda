@@ -8,7 +8,7 @@
 
 if [[ "$#" < 3  || "$1" == "-h" ]]
 then
-  echo "$0 <src dir> <script file> vivado|verilator"
+  echo "$0 <src dir> <script file> vivado|verilator|openxc7"
   exit 1
 fi
 
@@ -26,6 +26,7 @@ rm -f $SRC_DIR/Bender.lock
 
 for f in $MEM_FILE_LIST
 do
+  #Copy the file to the build directory.
 	cp $f .
   echo "add_files -norecurse $f" >> $SCRIPT_FILE_NAME.tmp
 done

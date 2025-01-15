@@ -14,7 +14,7 @@ gw_component_rules(
     COMPONENT_NAME vs0_stub
 )
 
-if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+if(CMAKE_BUILD_TYPE STREQUAL "vivado")
 if(BL_TARGET_FPGA STREQUAL "arty-a7-100")
   # vs0_stub is a DFX component. Next to lint check and synthesis, defined in gw_component_rules(), a DFX Reconfigurable
   # Module needs to be implemented and turned into a bitsteam that can be live-loaded onto a DFX-enabled system. The

@@ -6,7 +6,7 @@ package:
   name: ibex_wb_common
 
 sources:
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     files:
       - ../../../sub/ibex_wb/rtl/wb_pkg.sv
       - ../../../sub/ibex_wb/rtl/wb_if.sv

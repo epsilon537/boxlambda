@@ -11,7 +11,7 @@ add_custom_target(spiflash_test_collect ALL
         VERBATIM
     )
 
-if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+if(CMAKE_BUILD_TYPE STREQUAL "vivado")
   #gw_project_rules_vivado() function is defined in the parent CMakeLists.txt.
   gw_project_rules_vivado(
       TOP_MODULE boxlambda_top

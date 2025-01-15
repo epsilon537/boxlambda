@@ -1,4 +1,4 @@
-#Only relevant for CMAKE_BUILD_TYPE=fpga: -DBL_TARGET_FPGA="arty-a7-35" or -DBL_TARGET_FPGA="arty-a7-100".
+#Only relevant for CMAKE_BUILD_TYPE=openxc7 or vivado: -DBL_TARGET_FPGA="arty-a7-35" or -DBL_TARGET_FPGA="arty-a7-100".
 set(BL_TARGET_FPGA "arty-a7-35" CACHE STRING "FPGA Target: arty-a7-35 or arty-a7-100")
 set_property(CACHE BL_TARGET_FPGA PROPERTY STRINGS "arty-a7-35" "arty-a7-100")
 
@@ -21,6 +21,96 @@ add_custom_target(lint_all ALL)
 function(vivado_cmd cmd tcl_script)
   list(JOIN ARGN " " _tcl_args)
   set(${cmd} "${PROJECT_SOURCE_DIR}/scripts/vivado_wrapper.sh -source ${tcl_script} -tclargs ${_tcl_args}" PARENT_SCOPE)
+endfunction()
+
+#Function grouping common openxc7 gateware build rules.
+#TOP_MODULE: name of top module.
+#PRJ_COMP_NAME: project or component name, e.g. wbuart32
+#PRJ_CONSTRAINTS_FILE_LIST: Project constraints file list, if any.
+#MEM_FILE_LIST: Mem file list, if any.
+function (gw_common_rules_openxc7)
+  set(options)
+  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC PRJ_CONSTRAINTS_FILE_LIST MEM_FILE_LIST)
+  set(multiValueArgs)
+
+  cmake_parse_arguments(gw_common_rules_openxc7
+        "${options}"
+        "${oneValueArgs}"
+        "${multiValueArgs}"
+        ${ARGN}
+    )
+
+  set(_top_module ${gw_common_rules_openxc7_TOP_MODULE})
+  set(_prj_comp_name ${gw_common_rules_openxc7_PRJ_COMP_NAME})
+  set(_prj_constraints_file_list ${gw_common_rules_openxc7_PRJ_CONSTRAINTS_FILE_LIST})
+  set(_ooc ${gw_common_rules_openxc7_OOC})
+  set(_mem_file_list ${gw_common_rules_openxc7_MEM_FILE_LIST})
+
+  # Dummy output which is never actually produced. Anything that depends on
+  # this will always be rebuilt.
+  add_custom_command(
+        OUTPUT always_rebuild
+        COMMAND cmake -E echo
+        COMMENT
+            "always_rebuild dummy command."
+    )
+
+  add_custom_command(
+          OUTPUT
+              ${_prj_comp_name}.yosys_sources
+          BYPRODUCTS
+              ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.yosys_sources.dep
+          COMMAND
+              ${PROJECT_SOURCE_DIR}/scripts/bender_gen_yosys_sources_and_deps.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.yosys_sources ${BL_TARGET_FPGA} ${_prj_comp_name}
+          WORKING_DIRECTORY
+              ${CMAKE_CURRENT_BINARY_DIR}
+          DEPENDS
+              always_rebuild
+          COMMENT
+              "Generating yosys source list."
+          VERBATIM
+      )
+
+  #Extract .mem files from the Bender.yml manifest.
+  add_custom_command(
+        OUTPUT
+            ${_prj_comp_name}.mem_file_list
+        COMMAND
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.mem_file_list openxc7
+        DEPENDS
+            always_rebuild
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT
+            "Generating mem file list and copying mem files to build dir."
+        VERBATIM
+    )
+  #Custom command executing the yosys synthesis script
+  add_custom_command(
+          OUTPUT
+              ${CMAKE_CURRENT_BINARY_DIR}/${_top_module}.json
+          COMMAND
+              ${PROJECT_SOURCE_DIR}/scripts/yosys_synth.sh ${_prj_comp_name}.yosys_sources ${_top_module}
+          WORKING_DIRECTORY
+              ${CMAKE_CURRENT_BINARY_DIR}
+          DEPENDS
+              ${_prj_comp_name}.yosys_sources
+              ${_prj_comp_name}.mem_file_list
+          DEPFILE
+              ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.yosys_sources.dep
+          COMMENT
+              "Project or component synthesis."
+          VERBATIM
+      )
+
+  add_custom_target(${_prj_comp_name}_synth
+          WORKING_DIRECTORY
+              ${CMAKE_CURRENT_BINARY_DIR}
+          DEPENDS
+              ${CMAKE_CURRENT_BINARY_DIR}/${_top_module}.json
+          COMMENT
+              "Project or component synthesis target."
+      )
 endfunction()
 
 #Function grouping common vivado gateware build rules.
@@ -162,11 +252,10 @@ endfunction()
 #Function grouping common verilator gateware build rules.
 #TOP_MODULE: name of top module.
 #PRJ_COMP_NAME: project or component name, e.g. wbuart32
-#MEM_FILE_LIST: Mem file list, if any.
 #VERILATOR_FLAGS: CFLAGS and LDFLAGS to use when verilating. Prepend each CFLAG with "-CFLAG" and each LDFLAG with "-LDFLAG".
 function (gw_common_rules_verilator)
   set(options)
-  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME MEM_FILE_LIST)
+  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME)
   set(multiValueArgs VERILATOR_FLAGS)
 
   cmake_parse_arguments(gw_common_rules_verilator
@@ -178,7 +267,6 @@ function (gw_common_rules_verilator)
 
   set(_top_module ${gw_common_rules_verilator_TOP_MODULE})
   set(_prj_comp_name ${gw_common_rules_verilator_PRJ_COMP_NAME})
-  set(_mem_file_list ${gw_common_rules_verilator_MEM_FILE_LIST})
   set(_verilator_flags ${gw_common_rules_verilator_VERILATOR_FLAGS})
 
   # Dummy output which is never actually produced. Anything that depends on
@@ -208,7 +296,7 @@ function (gw_common_rules_verilator)
         OUTPUT
             ${_prj_comp_name}.verilator_sources
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.verilator_sources ${CMAKE_CURRENT_BINARY_DIR}/Vmodel ${BL_TARGET_FPGA} ${_prj_comp_name}
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_sources_and_deps.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.verilator_sources ${CMAKE_CURRENT_BINARY_DIR}/Vmodel ${BL_TARGET_FPGA} ${_prj_comp_name}
         BYPRODUCTS
             ${_prj_comp_name}.verilator_sources.dep
         WORKING_DIRECTORY

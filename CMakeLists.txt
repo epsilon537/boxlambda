@@ -21,11 +21,11 @@ if(isMultiConfig)
     message(FATAL_ERROR "MultiConfig is not supported.")
 endif()
 
-#Currently, two build types are supported: -DCMAKE_BUILD_TYPE=fpga and -DCMAKE_BUILD_TYPE=sim
+#Currently, three build types are supported: openxc7, vivado, and verilator
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY
-    STRINGS fpga sim)
+    STRINGS openxc7 vivado sim)
 
-set(allowedBuildTypes fpga sim)
+set(allowedBuildTypes openxc7 vivado verilator)
 
 if(NOT CMAKE_BUILD_TYPE IN_LIST allowedBuildTypes)
     message(FATAL_ERROR "${CMAKE_BUILD_TYPE} is not a known build type.")

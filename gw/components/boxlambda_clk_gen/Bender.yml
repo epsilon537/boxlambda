@@ -6,6 +6,6 @@ package:
   name: boxlambda_clk_gen
 
 sources:
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     files:
     - rtl/boxlambda_clk_gen.sv

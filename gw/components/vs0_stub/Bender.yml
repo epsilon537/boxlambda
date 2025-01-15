@@ -6,7 +6,7 @@ package:
   name: vs0_stub
 
 sources:
-  - target: any(vivado, verilator)
+  - target: any(vivado, openxc7, verilator)
     files:
       - rtl/vs0.sv
 

@@ -41,7 +41,7 @@ module wb_dp_ram_wrapper #(
     input  wire                  b_cyc_i     // CYC_I cycle input
 );
 
-`ifdef SYNTHESIS
+`ifdef TARGET_VIVADO
   logic a_valid, b_valid;
   logic [3:0] a_ram_we, b_ram_we;
   logic a_ack, b_ack;
@@ -187,10 +187,9 @@ module wb_dp_ram_wrapper #(
                       // is 32, web would be 4'b0010.
 
   );
-
-`else  /*SIMULATION:*/
-  logic [ADDR_WIDTH+1:0] a_adr_i_byte = {a_adr_i, 2'b0};
-  logic [ADDR_WIDTH+1:0] b_adr_i_byte = {b_adr_i, 2'b0};
+`else
+  logic [ADDR_WIDTH+1:0] a_adr_i_byte;
+  logic [ADDR_WIDTH+1:0] b_adr_i_byte;
 
   logic unused = rst;
 
