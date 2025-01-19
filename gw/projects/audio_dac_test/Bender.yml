@@ -17,9 +17,11 @@ sources:
   - target: any(memory_vivado, memory_verilator, memory_openxc7)
     files:
     - rtl/sin_table.mem
-  - target: any(verilator, vivado)
+  - target: any(verilator, vivado, openxc7)
     files:
       - rtl/sin_rom.sv
       - rtl/audio_dac_test.sv
+  - target: verilator
+    files:
       - sim/sim_main.cpp
       - lint.vlt

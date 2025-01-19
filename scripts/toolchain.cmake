@@ -23,10 +23,10 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 # search programs in the host environment
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-set(CMAKE_ASM_FLAGS "-march=rv32imc_zba_zbb_zbs_zbf_zbt -mabi=ilp32")
-set(CMAKE_C_FLAGS "-march=rv32imc_zba_zbb_zbs_zbf_zbt -mabi=ilp32")
+set(CMAKE_ASM_FLAGS "-march=rv32imc -mabi=ilp32")
+set(CMAKE_C_FLAGS "-march=rv32imc -mabi=ilp32")
 # some additional disable options to avoid having to pull in a C++ run-time for exception handling and std c++ library.
-set(CMAKE_CXX_FLAGS "-march=rv32imc_zba_zbb_zbs_zbf_zbt -mabi=ilp32 -fno-threadsafe-statics -fno-exceptions")
+set(CMAKE_CXX_FLAGS "-march=rv32imc -mabi=ilp32 -fno-threadsafe-statics -fno-exceptions")
 
 # picorv assembler flags: base integer ISA, no compression.
 # ASM_PICO dialect CMake extension is defined the cmake subdirectory of this repo.

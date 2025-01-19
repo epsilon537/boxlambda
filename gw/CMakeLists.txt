@@ -61,7 +61,7 @@ function (gw_common_rules_openxc7)
           BYPRODUCTS
               ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.yosys_sources.dep
           COMMAND
-              ${PROJECT_SOURCE_DIR}/scripts/bender_gen_yosys_sources_and_deps.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.yosys_sources ${BL_TARGET_FPGA} ${_prj_comp_name}
+              ${PROJECT_SOURCE_DIR}/scripts/bender_gen_yosys_sources_and_deps.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.yosys_sources ${CMAKE_CURRENT_BINARY_DIR}/${_top_module}.json ${BL_TARGET_FPGA} ${_prj_comp_name}
           WORKING_DIRECTORY
               ${CMAKE_CURRENT_BINARY_DIR}
           DEPENDS

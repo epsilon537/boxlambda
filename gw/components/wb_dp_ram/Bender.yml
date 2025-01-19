@@ -6,7 +6,7 @@ package:
   name: wb_dp_ram
 
 sources:
-  - target: memory_vivado
+  - target: any(memory_vivado, memory_openxc7)
     files:
      - ../../../sw/projects/cmem_to_flash_vector/cmem.mem
 

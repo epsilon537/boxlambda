@@ -334,6 +334,15 @@ function (gw_project_rules_openxc7)
 
   set(_top_module ${gw_project_rules_openxc7_TOP_MODULE})
   set(_prj_name ${gw_project_rules_openxc7_PROJECT_NAME})
+
+  gw_common_rules_openxc7(
+        TOP_MODULE
+            ${_top_module}
+        PRJ_COMP_NAME
+            ${_prj_name}
+        PRJ_CONSTRAINTS_FILE_LIST
+            ${_prj_name}.prj_constraints_file_list
+    )
 endfunction()
 
 #Function grouping gateware project build rules for Verilator builds.
