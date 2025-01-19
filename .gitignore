@@ -11,6 +11,9 @@ TAGS
 #vscode
 .vscode/*
 
+#openXC7 chip db
+chipdb
+
 #build trees
 build
 
