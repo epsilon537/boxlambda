@@ -4,17 +4,20 @@
 
 if [[ "$#" == 0  || "$1" == "-h" ]]
 then
-  echo "$0 <src dir>"
+  echo "$0 <src dir> <constraint target> <toolchain target>"
   exit 1
 fi
 
-# $1 = source directory
 SRC_DIR="$1"
-DFX_CONSTRAINTS=`bender -d $SRC_DIR script flist -n -t dfx_constraints`
+
+CONSTRAINT_TARGET="$2"
+TOOLCHAIN_TARGET="$3"
+
+CONSTRAINTS_FILE=`bender -d $SRC_DIR script flist -n -t $CONSTRAINT_TARGET -t $TOOLCHAIN_TARGET`
 
 #Remove the generated Bender.lock file to keep the source tree clean.
 rm -f $SRC_DIR/Bender.lock
 
-#Output the DFX constraints file name
-echo $DFX_CONSTRAINTS
+#Output the constraints file name
+echo $CONSTRAINTS_FILE
 

@@ -4,9 +4,17 @@ set_property(CACHE BL_TARGET_FPGA PROPERTY STRINGS "arty-a7-35" "arty-a7-100")
 
 #Map to full part number as expected by Vivado.
 if(BL_TARGET_FPGA STREQUAL "arty-a7-35")
-  set(PART xc7a35ticsg324-1L)
+  if(CMAKE_BUILD_TYPE STREQUAL "openxc7")
+    set(PART xc7a35tcsg324)
+  else()
+    set(PART xc7a35ticsg324-1L)
+  endif()
 elseif(BL_TARGET_FPGA STREQUAL "arty-a7-100")
-  set(PART xc7a100ticsg324-1L)
+  if(CMAKE_BUILD_TYPE STREQUAL "openxc7")
+    set(PART xc7a100tcsg324)
+  else()
+    set(PART xc7a100ticsg324-1L)
+  endif()
 else()
   message(FATAL_ERROR "Invalid part number: ${BL_TARGET_FPGA}.")
 endif()
@@ -28,9 +36,10 @@ endfunction()
 #PRJ_COMP_NAME: project or component name, e.g. wbuart32
 #PRJ_CONSTRAINTS_FILE_LIST: Project constraints file list, if any.
 #MEM_FILE_LIST: Mem file list, if any.
+#MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
 function (gw_common_rules_openxc7)
   set(options)
-  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC PRJ_CONSTRAINTS_FILE_LIST MEM_FILE_LIST)
+  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC PRJ_CONSTRAINTS_FILE_LIST MEM_FILE_LIST MEM_FILE_TARGET)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_common_rules_openxc7
@@ -45,6 +54,7 @@ function (gw_common_rules_openxc7)
   set(_prj_constraints_file_list ${gw_common_rules_openxc7_PRJ_CONSTRAINTS_FILE_LIST})
   set(_ooc ${gw_common_rules_openxc7_OOC})
   set(_mem_file_list ${gw_common_rules_openxc7_MEM_FILE_LIST})
+  set(_mem_file_tgt ${gw_project_rules_openxc7_MEM_FILE_TARGET})
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
@@ -85,6 +95,24 @@ function (gw_common_rules_openxc7)
             "Generating mem file list and copying mem files to build dir."
         VERBATIM
     )
+
+  if (NOT ${_mem_file_tgt} STREQUAL "")
+    #Custom command copying the SW image to its proper place in the gateware build directory
+    add_custom_command(
+            OUTPUT
+                cmem.mem
+            WORKING_DIRECTORY
+                ${CMAKE_CURRENT_BINARY_DIR}
+            COMMAND
+                cp $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/cmem.mem
+            DEPENDS
+                ${_mem_file_tgt}
+            COMMENT
+                "Copying SW memory image to gateware build dir."
+            VERBATIM
+        )
+  endif()
+
   #Custom command executing the yosys synthesis script
   add_custom_command(
           OUTPUT

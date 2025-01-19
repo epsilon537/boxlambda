@@ -88,7 +88,7 @@ function (gw_project_rules_dfx_vivado)
   vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl_dfx_prj.tcl
         -vsCellInsts \"${_vs_insts}\"
         -vsDefaultDcps \"${defaultDcps}\"
-        -vsPblockConstr `${PROJECT_SOURCE_DIR}/scripts/bender_get_dfx_constraints.sh ${CMAKE_CURRENT_LIST_DIR}`)
+        -vsPblockConstr `${PROJECT_SOURCE_DIR}/scripts/bender_get_constraints.sh ${CMAKE_CURRENT_LIST_DIR} dfx_constraints vivado`)
 
   #Custom command executing the vivado implementation command string.
   #Note that in the dependencies, both the _synth build rule and the .dcp synthesis checkpoint file
@@ -319,11 +319,13 @@ function (gw_project_rules_vivado)
 endfunction()
 
 #Function grouping gateware project build rules for OpenXC7 builds.
-#TOP_MODULE: name of top module, e.g. ibex_soc
-#PROJECT_NAME: project name, e.g. hello_dbg
+#TOP_MODULE: name of top module, e.g. ibex_soc.
+#PROJECT_NAME: project name, e.g. hello_dbg.
+#FREQ: target frequency (Most likely 50 (MHz)).
+#MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
 function (gw_project_rules_openxc7)
   set(options)
-  set(oneValueArgs TOP_MODULE PROJECT_NAME)
+  set(oneValueArgs TOP_MODULE PROJECT_NAME FREQ MEM_FILE_TARGET)
 
   cmake_parse_arguments(gw_project_rules_openxc7
         "${options}"
@@ -334,6 +336,8 @@ function (gw_project_rules_openxc7)
 
   set(_top_module ${gw_project_rules_openxc7_TOP_MODULE})
   set(_prj_name ${gw_project_rules_openxc7_PROJECT_NAME})
+  set(_freq ${gw_project_rules_openxc7_FREQ})
+  set(_mem_file_tgt ${gw_project_rules_openxc7_MEM_FILE_TARGET})
 
   gw_common_rules_openxc7(
         TOP_MODULE
@@ -342,7 +346,37 @@ function (gw_project_rules_openxc7)
             ${_prj_name}
         PRJ_CONSTRAINTS_FILE_LIST
             ${_prj_name}.prj_constraints_file_list
+        MEM_FILE_TARGET
+            ${_mem_file_tgt}
     )
+
+  #Custom command executing the openXC7 implementation script
+  add_custom_command(
+        OUTPUT
+            ${_top_module}.bin
+            ${_top_module}_routed.json
+        COMMAND
+            bash -c "${PROJECT_SOURCE_DIR}/scripts/openxc7_impl.sh ${PART} `${PROJECT_SOURCE_DIR}/scripts/bender_get_constraints.sh ${CMAKE_CURRENT_LIST_DIR} prj_constraints openxc7` ${_top_module} ${_freq}"
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        DEPENDS
+            ${CMAKE_CURRENT_BINARY_DIR}/${_top_module}.json
+        COMMENT
+            "Implementing OpenXC7 project and generating bitstream(s)."
+        VERBATIM
+    )
+
+  #Add the bitstream generation target to make all (ALL property).
+  add_custom_target(${_prj_name}_bit
+        ALL
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        DEPENDS
+            ${_top_module}.bin
+        COMMENT
+            "OpenXC7 project implementation and bitstream generation target."
+    )
+
 endfunction()
 
 #Function grouping gateware project build rules for Verilator builds.

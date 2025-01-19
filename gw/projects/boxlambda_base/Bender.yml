@@ -11,9 +11,12 @@ dependencies:
   vs0_stub: { path: "../../components/vs0_stub" }
 
 sources:
-  - target: prj_constraints
+  - target: all(vivado, prj_constraints)
     files:
       - constrs/boxlambda_soc.xdc
+  - target: all(openxc7, prj_constraints)
+    files:
+      - constrs/boxlambda_soc_openxc7.xdc
   - target: all(arty-a7-100, any(vivado, openxc7))
     defines:
       VRAM_SIZE_BYTES: 131072
@@ -43,7 +46,7 @@ sources:
       SDSPI: ~
       DRAM: ~
       VERA: ~
-      PICORV_DMA: ~
+      #PICORV_DMA: ~
       USB_HID:  ~
       SPIFLASH: ~
       I2C: ~
@@ -62,7 +65,7 @@ sources:
       SDSPI: ~
       DRAM: ~
       VERA: ~
-      PICORV_DMA: ~
+      #PICORV_DMA: ~
       USB_HID:  ~
       SPIFLASH: ~
       I2C: ~
