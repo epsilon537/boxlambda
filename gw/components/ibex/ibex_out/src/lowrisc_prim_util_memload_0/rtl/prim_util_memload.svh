@@ -57,8 +57,9 @@ endfunction
 initial begin
   logic show_mem_paths;
 
-`ifndef OPENXC7
   // Print the hierarchical path to the memory to help make formal connectivity checks easy.
+  // svh2h can't handle this:
+`ifndef OPENXC7
   void'($value$plusargs("show_mem_paths=%0b", show_mem_paths));
   if (show_mem_paths) $display("%m");
 `endif
