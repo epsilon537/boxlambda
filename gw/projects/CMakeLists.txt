@@ -344,8 +344,6 @@ function (gw_project_rules_openxc7)
             ${_top_module}
         PRJ_COMP_NAME
             ${_prj_name}
-        PRJ_CONSTRAINTS_FILE_LIST
-            ${_prj_name}.prj_constraints_file_list
         MEM_FILE_TARGET
             ${_mem_file_tgt}
     )

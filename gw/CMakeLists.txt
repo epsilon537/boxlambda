@@ -34,12 +34,11 @@ endfunction()
 #Function grouping common openxc7 gateware build rules.
 #TOP_MODULE: name of top module.
 #PRJ_COMP_NAME: project or component name, e.g. wbuart32
-#PRJ_CONSTRAINTS_FILE_LIST: Project constraints file list, if any.
 #MEM_FILE_LIST: Mem file list, if any.
 #MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
 function (gw_common_rules_openxc7)
   set(options)
-  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC PRJ_CONSTRAINTS_FILE_LIST MEM_FILE_LIST MEM_FILE_TARGET)
+  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC MEM_FILE_LIST MEM_FILE_TARGET)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_common_rules_openxc7
@@ -51,7 +50,6 @@ function (gw_common_rules_openxc7)
 
   set(_top_module ${gw_common_rules_openxc7_TOP_MODULE})
   set(_prj_comp_name ${gw_common_rules_openxc7_PRJ_COMP_NAME})
-  set(_prj_constraints_file_list ${gw_common_rules_openxc7_PRJ_CONSTRAINTS_FILE_LIST})
   set(_ooc ${gw_common_rules_openxc7_OOC})
   set(_mem_file_list ${gw_common_rules_openxc7_MEM_FILE_LIST})
   set(_mem_file_tgt ${gw_project_rules_openxc7_MEM_FILE_TARGET})
