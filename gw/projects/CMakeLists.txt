@@ -322,7 +322,6 @@ endfunction()
 #TOP_MODULE: name of top module, e.g. ibex_soc.
 #PROJECT_NAME: project name, e.g. hello_dbg.
 #FREQ: target frequency (Most likely 50 (MHz)).
-#MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
 function (gw_project_rules_openxc7)
   set(options)
   set(oneValueArgs TOP_MODULE PROJECT_NAME FREQ MEM_FILE_TARGET)
@@ -337,16 +336,13 @@ function (gw_project_rules_openxc7)
   set(_top_module ${gw_project_rules_openxc7_TOP_MODULE})
   set(_prj_name ${gw_project_rules_openxc7_PROJECT_NAME})
   set(_freq ${gw_project_rules_openxc7_FREQ})
-  set(_mem_file_tgt ${gw_project_rules_openxc7_MEM_FILE_TARGET})
 
   gw_common_rules_openxc7(
         TOP_MODULE
             ${_top_module}
         PRJ_COMP_NAME
             ${_prj_name}
-        MEM_FILE_TARGET
-            ${_mem_file_tgt}
-    )
+  )
 
   #Custom command executing the openXC7 implementation script
   add_custom_command(

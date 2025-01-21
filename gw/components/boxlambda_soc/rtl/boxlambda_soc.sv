@@ -253,7 +253,7 @@ module boxlambda_soc #(
   };
 
   //Clock signals.
-  logic sys_clk, usb_clk, clk_50, clk_100;
+  logic sys_clk, sys_clk_2x, usb_clk, clk_50, clk_100;
   //PLL lock signals.
   logic usb_pll_locked, sys_pll_locked, pre_pll_locked, litedram_pll_locked;
 
@@ -691,8 +691,8 @@ module boxlambda_soc #(
 
   /*The Ibex CPU.*/
   wb_ibex_core #(
-      .RV32M(ibex_pkg::RV32MSlow),
-      .RV32B(ibex_pkg::RV32BNone),
+      .RV32M(ibex_pkg::RV32MFast),
+      .RV32B(ibex_pkg::RV32BBalanced),
       .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA),
       .BranchTargetALU(1'b0),
       .WritebackStage(1'b0),
@@ -905,7 +905,7 @@ module boxlambda_soc #(
       litedram_wrapper litedram_wrapper_inst (
           .clk(clk_100),  /*100MHz input clock, coming for the First-stage clock generator..*/
           .rst(1'b0),  /*Never reset LiteDRAM.*/
-          .sys_clkx2(), /*LiteDRAM outputs 100MHz double rate system clock. In phase with sys_clk.*/
+          .sys_clkx2(sys_clk_2x), /*LiteDRAM outputs 100MHz double rate system clock. In phase with sys_clk.*/
           .sys_clk(sys_clk),  /*LiteDRAM outputs 50MHz system clock.*/
           .sys_rst(litedram_rst_o),  /*LiteDRAM outputs system reset.*/
           .pll_locked(litedram_pll_locked_i),  /*LiteDRAM PLL lock indication.*/
@@ -958,6 +958,7 @@ module boxlambda_soc #(
       assign sys_pll_locked = litedram_pll_locked;
     end else begin  //No DRAM: In this case the Stage-1 clock generator provides the system clock.
       assign sys_clk = clk_50;  //50MHz system clock.
+      assign sys_clk_2x = clk_100;  //100MHz double-rate system clock.
       assign litedram_pll_locked = 1'b1;
       assign init_done_led = 1'b1;
       assign init_err_led = 1'b0;
@@ -1128,7 +1129,7 @@ module boxlambda_soc #(
           .BASE_ADDR(PICORV_BASE_ADDRESS)
       ) picorv_dma_inst (
           .sys_clk(sys_clk),
-          .sys_clkx2(sys_clk),
+          .sys_clkx2(sys_clk_2x),
           .rst(ndm_reset),
           //32-bit pipelined Wishbone master interface 0.
           .wbm_adr_o(xbar_wbm[PICORV_M].adr),

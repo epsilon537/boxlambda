@@ -35,10 +35,9 @@ endfunction()
 #TOP_MODULE: name of top module.
 #PRJ_COMP_NAME: project or component name, e.g. wbuart32
 #MEM_FILE_LIST: Mem file list, if any.
-#MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
 function (gw_common_rules_openxc7)
   set(options)
-  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC MEM_FILE_LIST MEM_FILE_TARGET)
+  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC MEM_FILE_LIST)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_common_rules_openxc7
@@ -52,7 +51,6 @@ function (gw_common_rules_openxc7)
   set(_prj_comp_name ${gw_common_rules_openxc7_PRJ_COMP_NAME})
   set(_ooc ${gw_common_rules_openxc7_OOC})
   set(_mem_file_list ${gw_common_rules_openxc7_MEM_FILE_LIST})
-  set(_mem_file_tgt ${gw_project_rules_openxc7_MEM_FILE_TARGET})
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
@@ -93,23 +91,6 @@ function (gw_common_rules_openxc7)
             "Generating mem file list and copying mem files to build dir."
         VERBATIM
     )
-
-  if (NOT ${_mem_file_tgt} STREQUAL "")
-    #Custom command copying the SW image to its proper place in the gateware build directory
-    add_custom_command(
-            OUTPUT
-                cmem.mem
-            WORKING_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}
-            COMMAND
-                cp $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/cmem.mem
-            DEPENDS
-                ${_mem_file_tgt}
-            COMMENT
-                "Copying SW memory image to gateware build dir."
-            VERBATIM
-        )
-  endif()
 
   #Custom command executing the yosys synthesis script
   add_custom_command(
