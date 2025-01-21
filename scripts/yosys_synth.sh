@@ -19,7 +19,7 @@ cat $FLIST_PLUS | sed -e "s#+incdir+#--incdir=#" -e "s#+define+#-D#" | tr '\n' '
 source sv2v.in
 
 #Generate and execute yosys synth script
-echo "read_verilog -sv verilog/*.v; hierarchy; synth_xilinx -flatten -dff -abc9 -arch xc7 -top $TOP_MODULE; write_json $TOP_MODULE.json;" > yosys.synth
+echo "read_verilog -sv verilog/*.v; hierarchy; synth_xilinx -flatten -abc9 -arch xc7 -top $TOP_MODULE; write_json $TOP_MODULE.json;" > yosys.synth
 
 yosys -l yosys.log -s yosys.synth
 

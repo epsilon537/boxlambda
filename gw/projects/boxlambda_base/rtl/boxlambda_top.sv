@@ -171,7 +171,9 @@ module boxlambda_top (
   boxlambda_soc #(
       .DPRAM_BYTE_ADDR_MASK(`DPRAM_SIZE_BYTES/2-1), /*Divide by 2. DPRAM is split into two equal-size instances.*/
       .VRAM_SIZE_BYTES(`VRAM_SIZE_BYTES),
-      .DEBUG_MODULE_ACTIVE(1),
+`ifndef DEBUG_MODULE_ACTIVE
+      .DEBUG_MODULE_ACTIVE(0),
+`endif
 `ifndef DRAM
       .DRAM_ACTIVE(0),
 `endif

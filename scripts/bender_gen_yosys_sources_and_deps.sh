@@ -48,7 +48,7 @@ fi
 rm $OUTFILE.tmp
 
 #Generate a depfile: Prepend each line with <target> :
-bender -d $SRC_DIR script $MIN_T_OOC -t $BL_TARGET_FPGA -t prj_constraints -t openxc7 flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
+bender -d $SRC_DIR script $MIN_T_OOC -t $BL_TARGET_FPGA -t openxc7 flist | sed "s#^#$DEPFILE_TGT \: #" > $OUTFILE.dep
 
 #Remove the generated Bender.lock file to keep the source tree clean.
 rm -f $SRC_DIR/Bender.lock

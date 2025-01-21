@@ -17,17 +17,14 @@ CONSTRAINTS="$2"
 TOP_MODULE="$3"
 FREQ="$4"
 
-echo $PART
-echo $CONSTRAINTS
-echo $TOP_MODULE
-echo $FREQ
+rm -f nextpnr.log
 
 ii=0
 
 while [ $ii -le 10 ]
 do
   ii=$(( $ii + 1 ))
-  rm -f nextpnr.log && nextpnr-xilinx --randomize-seed --chipdb $CHIPDB_DIR/$PART.bin --xdc $CONSTRAINTS --json $TOP_MODULE.json --write $TOP_MODULE_routed.json --fasm $TOP_MODULE.fasm --freq $FREQ -l nextpnr.log
+  nextpnr-xilinx --randomize-seed --router router2 --chipdb $CHIPDB_DIR/$PART.bin --xdc $CONSTRAINTS --json $TOP_MODULE.json --write $TOP_MODULE_routed.json --fasm $TOP_MODULE.fasm --freq $FREQ -l nextpnr.log
   if [ $? -eq 0 ]; then
     echo "Routing completed successfully."
 

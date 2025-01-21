@@ -54,11 +54,11 @@ module ibex_top_wrap
     output logic        double_fault_seen_o,
 
     // CPU Control Signals
-    input  fetch_enable_t fetch_enable_i,
-    output logic          alert_minor_o,
-    output logic          alert_major_internal_o,
-    output logic          alert_major_bus_o,
-    output logic          core_sleep_o,
+    input  ibex_mubi_t fetch_enable_i,
+    output logic       alert_minor_o,
+    output logic       alert_major_internal_o,
+    output logic       alert_major_bus_o,
+    output logic       core_sleep_o,
 
     // DFT bypass controls
     input logic scan_rst_ni
