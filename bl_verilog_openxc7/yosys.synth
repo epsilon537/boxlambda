@@ -1,0 +1,1 @@
+read_verilog -sv verilog/*.v; hierarchy; synth_xilinx -flatten -abc9 -arch xc7 -top boxlambda_top; write_json boxlambda_top.json;

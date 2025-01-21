@@ -1,0 +1,1 @@
+nextpnr-xilinx --randomize-seed --router router2 --chipdb ../chipdb//xc7a35tcsg324.bin --xdc boxlambda_soc_openxc7.xdc --json boxlambda_top.json --write boxlambda_top_routed.json --fasm boxlambda_top.fasm --freq 50 -l nextpnr.log
