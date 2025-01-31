@@ -1,0 +1,1817 @@
+cores:
+  lowrisc:dv:common_ifs:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/common_ifs/common_ifs.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/common_ifs
+    files:
+    - common_ifs_pkg.sv
+    - clk_if.sv
+    - clk_rst_if.sv
+    used: false
+  lowrisc:dv:cosim:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/cosim/cosim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/cosim
+    files:
+    - cosim.h
+    - spike_cosim.cc
+    - spike_cosim.h
+    used: false
+  lowrisc:dv:cosim_dpi:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/cosim/cosim_dpi.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/cosim
+    files:
+    - cosim_dpi.cc
+    - cosim_dpi.h
+    - cosim_dpi.svh
+    used: false
+  lowrisc:dv:crypto_dpi_present:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_present/crypto_dpi_present/crypto_dpi_present.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_present/crypto_dpi_present
+    files:
+    - crypto_dpi_present.cc
+    - crypto_dpi_present_pkg.sv
+    used: false
+  lowrisc:dv:crypto_dpi_prince:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_prince/crypto_dpi_prince/crypto_dpi_prince.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_prince/crypto_dpi_prince
+    files:
+    - crypto_dpi_prince.c
+    - crypto_dpi_prince_pkg.sv
+    used: false
+  lowrisc:dv:crypto_prince_ref:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_prince/crypto_dpi_prince/crypto_prince_ref.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_prince/crypto_dpi_prince
+    files:
+    - prince_ref.h
+    used: true
+  lowrisc:dv:csr_utils:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/csr_utils/csr_utils.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/csr_utils
+    files:
+    - csr_utils_pkg.sv
+    - csr_seq_lib.sv
+    used: false
+  lowrisc:dv:dv_base_reg:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_base_reg/dv_base_reg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_base_reg
+    files:
+    - dv_base_reg_pkg.sv
+    - csr_excl_item.sv
+    - dv_base_reg_field.sv
+    - dv_base_reg.sv
+    - dv_base_mem.sv
+    - dv_base_reg_block.sv
+    - dv_base_reg_map.sv
+    - dv_base_lockable_field_cov.sv
+    - dv_base_shadowed_field_cov.sv
+    - dv_base_mubi_cov.sv
+    used: false
+  lowrisc:dv:dv_fcov_macros:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_utils/dv_fcov_macros.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_utils
+    files:
+    - dv_fcov_macros.svh
+    used: true
+  lowrisc:dv:dv_lib:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_lib/dv_lib.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_lib
+    files:
+    - dv_lib_pkg.sv
+    - dv_base_agent_cfg.sv
+    - dv_base_agent_cov.sv
+    - dv_base_monitor.sv
+    - dv_base_sequencer.sv
+    - dv_base_driver.sv
+    - dv_base_agent.sv
+    - dv_base_seq.sv
+    - dv_base_env_cfg.sv
+    - dv_base_env_cov.sv
+    - dv_base_virtual_sequencer.sv
+    - dv_base_scoreboard.sv
+    - dv_base_env.sv
+    - dv_base_vseq.sv
+    - dv_base_test.sv
+    used: false
+  lowrisc:dv:dv_macros:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_utils/dv_macros.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_utils
+    files:
+    - dv_macros.svh
+    used: false
+  lowrisc:dv:dv_test_status:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_utils/dv_test_status.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_utils
+    files:
+    - dv_test_status_pkg.sv
+    used: false
+  lowrisc:dv:dv_utils:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_utils/dv_utils.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/dv_utils
+    files:
+    - dv_utils_pkg.sv
+    - dv_report_catcher.sv
+    - dv_report_server.sv
+    - dv_vif_wrap.sv
+    used: false
+  lowrisc:dv:entropy_subsys_fifo_exception_if:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/common_ifs/entropy_subsys_fifo_exception_if.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/common_ifs
+    files:
+    - entropy_subsys_fifo_exception_pkg.sv
+    - entropy_subsys_fifo_exception_if.sv
+    used: false
+  lowrisc:dv:ibex_icache_core_agent:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/ibex_icache_core_agent/ibex_icache_core_agent.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/ibex_icache_core_agent
+    files:
+    - ibex_icache_core_if.sv
+    - ibex_icache_core_protocol_checker.sv
+    - ibex_icache_core_agent_pkg.sv
+    - ibex_icache_core_req_item.sv
+    - ibex_icache_core_rsp_item.sv
+    - ibex_icache_core_bus_item.sv
+    - ibex_icache_core_agent_cfg.sv
+    - ibex_icache_core_agent_cov.sv
+    - ibex_icache_core_sequencer.sv
+    - ibex_icache_core_driver.sv
+    - ibex_icache_core_monitor.sv
+    - ibex_icache_core_agent.sv
+    - seq_lib/ibex_icache_core_base_seq.sv
+    - seq_lib/ibex_icache_core_back_line_seq.sv
+    - seq_lib/ibex_icache_core_seq_list.sv
+    used: false
+  lowrisc:dv:ibex_icache_env:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/env/ibex_icache_env.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/env
+    files:
+    - ibex_icache_env_pkg.sv
+    - ibex_icache_ram_if.sv
+    - ibex_icache_env_cfg.sv
+    - ibex_icache_env_cov.sv
+    - ibex_icache_virtual_sequencer.sv
+    - ibex_icache_scoreboard.sv
+    - ibex_icache_env.sv
+    - seq_lib/ibex_icache_vseq_list.sv
+    - seq_lib/ibex_icache_base_vseq.sv
+    - seq_lib/ibex_icache_passthru_vseq.sv
+    - seq_lib/ibex_icache_caching_vseq.sv
+    - seq_lib/ibex_icache_invalidation_vseq.sv
+    - seq_lib/ibex_icache_oldval_vseq.sv
+    - seq_lib/ibex_icache_back_line_vseq.sv
+    - seq_lib/ibex_icache_many_errors_vseq.sv
+    - seq_lib/ibex_icache_ecc_vseq.sv
+    - seq_lib/ibex_icache_combo_vseq.sv
+    - seq_lib/ibex_icache_reset_vseq.sv
+    used: false
+  lowrisc:dv:ibex_icache_fcov:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/fcov/ibex_icache_fcov.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/fcov
+    files:
+    - ibex_icache_fcov_if.sv
+    - ibex_icache_fcov_bind.sv
+    used: false
+  lowrisc:dv:ibex_icache_mem_agent:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/ibex_icache_mem_agent/ibex_icache_mem_agent.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/ibex_icache_mem_agent
+    files:
+    - ibex_icache_mem_if.sv
+    - ibex_icache_mem_protocol_checker.sv
+    - ibex_icache_mem_agent_pkg.sv
+    - ibex_icache_mem_req_item.sv
+    - ibex_icache_mem_resp_item.sv
+    - ibex_icache_mem_bus_item.sv
+    - ibex_icache_mem_agent_cfg.sv
+    - ibex_icache_mem_agent_cov.sv
+    - ibex_icache_mem_driver.sv
+    - ibex_icache_mem_monitor.sv
+    - ibex_icache_mem_agent.sv
+    - ibex_icache_mem_sequencer.sv
+    - ibex_icache_mem_model.sv
+    - seq_lib/ibex_icache_mem_base_seq.sv
+    - seq_lib/ibex_icache_mem_resp_seq.sv
+    - seq_lib/ibex_icache_mem_seq_list.sv
+    used: false
+  lowrisc:dv:ibex_icache_sim:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/ibex_icache_sim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv
+    files: []
+    used: false
+  lowrisc:dv:ibex_icache_test:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/tests/ibex_icache_test.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/tests
+    files:
+    - ibex_icache_test_pkg.sv
+    - ibex_icache_base_test.sv
+    - ibex_icache_oldval_test.sv
+    used: false
+  lowrisc:dv:ibex_mem_intf_agent:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/core_ibex/common/ibex_mem_intf_agent/ibex_mem_intf_agent.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/core_ibex/common/ibex_mem_intf_agent
+    files:
+    - ibex_mem_intf.sv
+    - ibex_mem_intf_agent_pkg.sv
+    - ibex_mem_intf_request_agent.sv
+    - ibex_mem_intf_request_driver.sv
+    - ibex_mem_intf_monitor.sv
+    - ibex_mem_intf_seq_item.sv
+    - ibex_mem_intf_response_agent.sv
+    - ibex_mem_intf_response_driver.sv
+    - ibex_mem_intf_response_seq_lib.sv
+    - ibex_mem_intf_response_sequencer.sv
+    used: false
+  lowrisc:dv:mem_bkdr_util:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/mem_bkdr_util/mem_bkdr_util.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/mem_bkdr_util
+    files:
+    - otp_scrambler_pkg.sv
+    - sram_scrambler_pkg.sv
+    - mem_bkdr_util_pkg.sv
+    - mem_bkdr_util.sv
+    - mem_bkdr_util__otp.sv
+    - mem_bkdr_util__rom.sv
+    - mem_bkdr_util__sram.sv
+    - mem_bkdr_util__flash.sv
+    used: false
+  lowrisc:dv:mem_model:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/mem_model/mem_model.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/mem_model
+    files:
+    - mem_model_pkg.sv
+    - mem_model.sv
+    used: false
+  lowrisc:dv:pins_if:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/common_ifs/pins_ifs.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/common_ifs
+    files:
+    - pins_if.sv
+    used: false
+  lowrisc:dv:prim_alert_sim:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_alert/prim_alert_sim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_alert
+    files: []
+    used: false
+  lowrisc:dv:prim_esc_sim:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_esc/prim_esc_sim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_esc
+    files: []
+    used: false
+  lowrisc:dv:prim_flop_2sync_sim:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/pre_dv/prim_flop_2sync/prim_flop_2sync_sim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/pre_dv/prim_flop_2sync
+    files: []
+    used: false
+  lowrisc:dv:prim_lfsr_sim:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_lfsr/prim_lfsr_sim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_lfsr
+    files: []
+    used: false
+  lowrisc:dv:prim_present_sim:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_present/prim_present_sim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_present
+    files: []
+    used: false
+  lowrisc:dv:prim_prince_sim:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_prince/prim_prince_sim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_prince
+    files: []
+    used: false
+  lowrisc:dv:push_pull_agent:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/push_pull_agent/push_pull_agent.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/push_pull_agent
+    files:
+    - push_pull_if.sv
+    - push_pull_agent_pkg.sv
+    - push_pull_item.sv
+    - push_pull_agent_cfg.sv
+    - push_pull_agent_cov.sv
+    - push_pull_driver_lib.sv
+    - push_pull_monitor.sv
+    - push_pull_sequencer.sv
+    - push_pull_agent.sv
+    - seq_lib/push_pull_base_seq.sv
+    - seq_lib/push_pull_host_seq.sv
+    - seq_lib/push_pull_indefinite_host_seq.sv
+    - seq_lib/push_pull_device_seq.sv
+    - seq_lib/push_pull_seq_list.sv
+    used: false
+  lowrisc:dv:ralgen:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/tools/ralgen/ralgen.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/tools/ralgen
+    files: []
+    used: false
+  lowrisc:dv:rst_shadowed_if:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/common_ifs/rst_shadowed_if.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/common_ifs
+    files:
+    - rst_shadowed_if.sv
+    used: false
+  lowrisc:dv:scramble_model:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_ram_scr/cpp/scramble_model.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_ram_scr/cpp
+    files:
+    - scramble_model.cc
+    - scramble_model.h
+    used: true
+  lowrisc:dv:secded_enc:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_secded/secded_enc.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/dv/prim_secded
+    files:
+    - secded_enc.h
+    - secded_enc.c
+    used: true
+  lowrisc:dv:str_utils:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/str_utils/str_utils.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/sv/str_utils
+    files:
+    - str_utils_pkg.sv
+    used: false
+  lowrisc:dv_verilator:ibex_pcounts:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/verilator/pcount/ibex_pcounts.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/verilator/pcount
+    files:
+    - cpp/ibex_pcounts.cc
+    - cpp/ibex_pcounts.h
+    used: false
+  lowrisc:dv_verilator:memutil_dpi:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/verilator/memutil_dpi.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/verilator
+    files:
+    - cpp/dpi_memutil.cc
+    - cpp/dpi_memutil.h
+    - cpp/ecc32_mem_area.cc
+    - cpp/ecc32_mem_area.h
+    - cpp/mem_area.cc
+    - cpp/mem_area.h
+    - cpp/ranged_map.h
+    - cpp/sv_scoped.cc
+    - cpp/sv_scoped.h
+    used: true
+  lowrisc:dv_verilator:memutil_dpi_scrambled:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/verilator/memutil_dpi_scrambled.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/verilator
+    files:
+    - cpp/scrambled_ecc32_mem_area.cc
+    - cpp/scrambled_ecc32_mem_area.h
+    used: true
+  lowrisc:dv_verilator:memutil_verilator:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/verilator/memutil_verilator.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/verilator
+    files:
+    - cpp/verilator_memutil.cc
+    - cpp/verilator_memutil.h
+    used: false
+  lowrisc:dv_verilator:prim_sync_reqack_tb:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/pre_dv/prim_sync_reqack/prim_sync_reqack_tb.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/pre_dv/prim_sync_reqack
+    files:
+    - rtl/prim_sync_reqack_tb.sv
+    - cpp/prim_sync_reqack_tb.cc
+    used: false
+  lowrisc:dv_verilator:prim_trivium_tb:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/pre_dv/prim_trivium/prim_trivium_tb.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/pre_dv/prim_trivium
+    files:
+    - rtl/prim_trivium_tb.sv
+    - cpp/prim_trivium_tb.cc
+    used: false
+  lowrisc:dv_verilator:simutil_verilator:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/verilator/simutil_verilator/simutil_verilator.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/dv/verilator/simutil_verilator
+    files:
+    - cpp/verilator_sim_ctrl.cc
+    - cpp/verilated_toplevel.cc
+    - cpp/verilator_sim_ctrl.h
+    - cpp/verilated_toplevel.h
+    - cpp/sim_ctrl_extension.h
+    used: false
+  lowrisc:fpv:ibex_data_ind_timing:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/formal/data_ind_timing/ibex_data_ind_timing.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/formal/data_ind_timing
+    files: []
+    used: false
+  lowrisc:fpv:ibex_icache_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/formal/icache/ibex_icache_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/formal/icache
+    files: []
+    used: false
+  lowrisc:fpv:prim_alert_rxtx_async_fatal_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_alert_rxtx_async_fatal_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_alert_rxtx_async_assert_fpv.sv
+    - tb/prim_alert_rxtx_async_fatal_tb.sv
+    - tb/prim_alert_rxtx_async_fatal_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_alert_rxtx_async_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_alert_rxtx_async_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_alert_rxtx_async_assert_fpv.sv
+    - tb/prim_alert_rxtx_async_tb.sv
+    - tb/prim_alert_rxtx_async_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_alert_rxtx_fatal_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_alert_rxtx_fatal_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_alert_rxtx_assert_fpv.sv
+    - tb/prim_alert_rxtx_fatal_tb.sv
+    - tb/prim_alert_rxtx_fatal_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_alert_rxtx_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_alert_rxtx_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_alert_rxtx_assert_fpv.sv
+    - tb/prim_alert_rxtx_tb.sv
+    - tb/prim_alert_rxtx_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_arbiter_fixed_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_arbiter_fixed_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - tb/prim_arbiter_fixed_tb.sv
+    used: false
+  lowrisc:fpv:prim_arbiter_ppc_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_arbiter_ppc_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - tb/prim_arbiter_ppc_tb.sv
+    used: false
+  lowrisc:fpv:prim_arbiter_tree_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_arbiter_tree_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - tb/prim_arbiter_tree_tb.sv
+    used: false
+  lowrisc:fpv:prim_count_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_count_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - tb/prim_count_tb.sv
+    used: false
+  lowrisc:fpv:prim_esc_rxtx_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_esc_rxtx_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_esc_rxtx_assert_fpv.sv
+    - tb/prim_esc_rxtx_bind_fpv.sv
+    - tb/prim_esc_rxtx_tb.sv
+    used: false
+  lowrisc:fpv:prim_fifo_async_sram_adapter_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_fifo_async_sram_adapter_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - tb/prim_fifo_async_sram_adapter_tb.sv
+    used: false
+  lowrisc:fpv:prim_fifo_sync_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_fifo_sync_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_fifo_sync_assert_fpv.sv
+    - tb/prim_fifo_sync_bind_fpv.sv
+    - tb/prim_fifo_sync_tb.sv
+    used: false
+  lowrisc:fpv:prim_keccak_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_keccak_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - tb/prim_keccak_tb.sv
+    used: false
+  lowrisc:fpv:prim_lfsr_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_lfsr_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - tb/prim_lfsr_tb.sv
+    used: false
+  lowrisc:fpv:prim_packer_fpv:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_packer_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - tb/prim_packer_tb.sv
+    used: false
+  lowrisc:fpv:prim_secded_22_16_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_22_16_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_22_16_assert_fpv.sv
+    - tb/prim_secded_22_16_tb.sv
+    - tb/prim_secded_22_16_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_28_22_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_28_22_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_28_22_assert_fpv.sv
+    - tb/prim_secded_28_22_tb.sv
+    - tb/prim_secded_28_22_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_39_32_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_39_32_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_39_32_assert_fpv.sv
+    - tb/prim_secded_39_32_tb.sv
+    - tb/prim_secded_39_32_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_64_57_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_64_57_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_64_57_assert_fpv.sv
+    - tb/prim_secded_64_57_tb.sv
+    - tb/prim_secded_64_57_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_72_64_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_72_64_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_72_64_assert_fpv.sv
+    - tb/prim_secded_72_64_tb.sv
+    - tb/prim_secded_72_64_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_hamming_22_16_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_hamming_22_16_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_hamming_22_16_assert_fpv.sv
+    - tb/prim_secded_hamming_22_16_tb.sv
+    - tb/prim_secded_hamming_22_16_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_hamming_39_32_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_hamming_39_32_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_hamming_39_32_assert_fpv.sv
+    - tb/prim_secded_hamming_39_32_tb.sv
+    - tb/prim_secded_hamming_39_32_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_hamming_72_64_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_hamming_72_64_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_hamming_72_64_assert_fpv.sv
+    - tb/prim_secded_hamming_72_64_tb.sv
+    - tb/prim_secded_hamming_72_64_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_hamming_76_68_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_hamming_76_68_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_hamming_76_68_assert_fpv.sv
+    - tb/prim_secded_hamming_76_68_tb.sv
+    - tb/prim_secded_hamming_76_68_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_inv_22_16_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_inv_22_16_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_inv_22_16_assert_fpv.sv
+    - tb/prim_secded_inv_22_16_tb.sv
+    - tb/prim_secded_inv_22_16_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_inv_28_22_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_inv_28_22_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_inv_28_22_assert_fpv.sv
+    - tb/prim_secded_inv_28_22_tb.sv
+    - tb/prim_secded_inv_28_22_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_inv_39_32_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_inv_39_32_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_inv_39_32_assert_fpv.sv
+    - tb/prim_secded_inv_39_32_tb.sv
+    - tb/prim_secded_inv_39_32_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_inv_64_57_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_inv_64_57_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_inv_64_57_assert_fpv.sv
+    - tb/prim_secded_inv_64_57_tb.sv
+    - tb/prim_secded_inv_64_57_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_inv_72_64_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_inv_72_64_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_inv_72_64_assert_fpv.sv
+    - tb/prim_secded_inv_72_64_tb.sv
+    - tb/prim_secded_inv_72_64_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_inv_hamming_22_16_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_inv_hamming_22_16_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_inv_hamming_22_16_assert_fpv.sv
+    - tb/prim_secded_inv_hamming_22_16_tb.sv
+    - tb/prim_secded_inv_hamming_22_16_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_inv_hamming_39_32_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_inv_hamming_39_32_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_inv_hamming_39_32_assert_fpv.sv
+    - tb/prim_secded_inv_hamming_39_32_tb.sv
+    - tb/prim_secded_inv_hamming_39_32_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_inv_hamming_72_64_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_inv_hamming_72_64_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_inv_hamming_72_64_assert_fpv.sv
+    - tb/prim_secded_inv_hamming_72_64_tb.sv
+    - tb/prim_secded_inv_hamming_72_64_bind_fpv.sv
+    used: false
+  lowrisc:fpv:prim_secded_inv_hamming_76_68_fpv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv/prim_secded_inv_hamming_76_68_fpv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/fpv
+    files:
+    - vip/prim_secded_inv_hamming_76_68_assert_fpv.sv
+    - tb/prim_secded_inv_hamming_76_68_tb.sv
+    - tb/prim_secded_inv_hamming_76_68_bind_fpv.sv
+    used: false
+  lowrisc:ibex:bus_params_pkg:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/bus_params_pkg/bus_params_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/bus_params_pkg
+    files:
+    - bus_params_pkg.sv
+    used: false
+  lowrisc:ibex:fpga_xilinx_shared:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/shared/fpga_xilinx.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/shared
+    files:
+    - rtl/fpga/xilinx/clkgen_xil7series.sv
+    - rtl/ram_2p.sv
+    used: false
+  lowrisc:ibex:ibex_core:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/ibex_core.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex
+    files:
+    - lint/verilator_waiver.vlt
+    - rtl/ibex_alu.sv
+    - rtl/ibex_branch_predict.sv
+    - rtl/ibex_compressed_decoder.sv
+    - rtl/ibex_controller.sv
+    - rtl/ibex_cs_registers.sv
+    - rtl/ibex_csr.sv
+    - rtl/ibex_counter.sv
+    - rtl/ibex_decoder.sv
+    - rtl/ibex_ex_block.sv
+    - rtl/ibex_fetch_fifo.sv
+    - rtl/ibex_id_stage.sv
+    - rtl/ibex_if_stage.sv
+    - rtl/ibex_load_store_unit.sv
+    - rtl/ibex_multdiv_fast.sv
+    - rtl/ibex_multdiv_slow.sv
+    - rtl/ibex_prefetch_buffer.sv
+    - rtl/ibex_pmp.sv
+    - rtl/ibex_wb_stage.sv
+    - rtl/ibex_dummy_instr.sv
+    - rtl/ibex_core.sv
+    used: true
+  lowrisc:ibex:ibex_icache:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/ibex_icache.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex
+    files:
+    - rtl/ibex_icache.sv
+    used: true
+  lowrisc:ibex:ibex_multdiv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/ibex_multdiv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex
+    files:
+    - rtl/ibex_multdiv_fast.sv
+    - rtl/ibex_multdiv_slow.sv
+    used: false
+  lowrisc:ibex:ibex_pkg:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/ibex_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex
+    files:
+    - rtl/ibex_pkg.sv
+    used: true
+  lowrisc:ibex:ibex_riscv_compliance:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/riscv_compliance/ibex_riscv_compliance.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/riscv_compliance
+    files: []
+    used: false
+  lowrisc:ibex:ibex_simple_system:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/examples/simple_system/ibex_simple_system.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/examples/simple_system
+    files:
+    - ibex_simple_system_main.cc
+    used: false
+  lowrisc:ibex:ibex_simple_system_core:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/examples/simple_system/ibex_simple_system_core.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/examples/simple_system
+    files:
+    - rtl/ibex_simple_system.sv
+    - ibex_simple_system.cc
+    - ibex_simple_system.h
+    - lint/verilator_waiver.vlt
+    used: false
+  lowrisc:ibex:ibex_simple_system_cosim:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/verilator/simple_system_cosim/ibex_simple_system_cosim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/verilator/simple_system_cosim
+    files:
+    - simple_system_cosim.cc
+    - ibex_simple_system_cosim_checker.sv
+    - ibex_simple_system_cosim_checker_bind.sv
+    used: false
+  lowrisc:ibex:ibex_top:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/ibex_top.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex
+    files:
+    - lint/verilator_waiver.vlt
+    - rtl/ibex_register_file_ff.sv
+    - rtl/ibex_register_file_fpga.sv
+    - rtl/ibex_register_file_latch.sv
+    - rtl/ibex_lockstep.sv
+    - rtl/ibex_top.sv
+    used: true
+  lowrisc:ibex:ibex_top_tracing:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/ibex_top_tracing.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex
+    files:
+    - rtl/ibex_top_tracing.sv
+    used: false
+  lowrisc:ibex:ibex_tracer:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/ibex_tracer.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex
+    files:
+    - rtl/ibex_tracer_pkg.sv
+    - rtl/ibex_tracer.sv
+    used: false
+  lowrisc:ibex:sim_shared:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/shared/sim_shared.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/shared
+    files:
+    - ./rtl/ram_1p.sv
+    - ./rtl/ram_2p.sv
+    - ./rtl/bus.sv
+    - ./rtl/sim/simulator_ctrl.sv
+    - ./rtl/timer.sv
+    used: false
+  lowrisc:ibex:tb_cs_registers:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/cs_registers/tb_cs_registers.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/cs_registers
+    files: []
+    used: false
+  lowrisc:lint:common:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/lint/common.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/lint
+    files:
+    - tools/verilator/common.vlt
+    used: true
+  lowrisc:lint:comportable:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/lint/comportable.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/lint
+    files:
+    - tools/verilator/comportable.vlt
+    used: false
+  lowrisc:prim:alert:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_alert.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_alert_pkg.sv
+    - rtl/prim_alert_receiver.sv
+    - rtl/prim_alert_sender.sv
+    used: false
+  lowrisc:prim:all:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim.vlt
+    - rtl/prim_clock_gating_sync.sv
+    - rtl/prim_sram_arbiter.sv
+    - rtl/prim_slicer.sv
+    - rtl/prim_sync_reqack.sv
+    - rtl/prim_sync_reqack_data.sv
+    - rtl/prim_sync_slow_fast.sv
+    - rtl/prim_keccak.sv
+    - rtl/prim_packer.sv
+    - rtl/prim_packer_fifo.sv
+    - rtl/prim_gate_gen.sv
+    - rtl/prim_pulse_sync.sv
+    - rtl/prim_filter.sv
+    - rtl/prim_filter_ctr.sv
+    - rtl/prim_intr_hw.sv
+    used: false
+  lowrisc:prim:and2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_and2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: true
+  lowrisc:prim:arbiter:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_arbiter.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_arbiter.vlt
+    - rtl/prim_arbiter_fixed.sv
+    - rtl/prim_arbiter_ppc.sv
+    - rtl/prim_arbiter_tree.sv
+    - rtl/prim_arbiter_tree_dup.sv
+    used: false
+  lowrisc:prim:assert:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_assert.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_assert.vlt
+    - rtl/prim_assert.sv
+    - rtl/prim_assert_dummy_macros.svh
+    - rtl/prim_assert_yosys_macros.svh
+    - rtl/prim_assert_standard_macros.svh
+    - rtl/prim_assert_sec_cm.svh
+    - rtl/prim_flop_macros.sv
+    used: true
+  lowrisc:prim:blanker:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_blanker.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_blanker.sv
+    used: false
+  lowrisc:prim:buf:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_buf.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: true
+  lowrisc:prim:cdc_rand_delay:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_cdc_rand_delay.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_cdc_rand_delay.sv
+    - lint/prim_cdc_rand_delay.vlt
+    used: false
+  lowrisc:prim:cipher:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_cipher.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_cipher.vlt
+    - rtl/prim_subst_perm.sv
+    - rtl/prim_present.sv
+    - rtl/prim_prince.sv
+    used: true
+  lowrisc:prim:cipher_pkg:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_cipher_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_cipher_pkg.sv
+    used: true
+  lowrisc:prim:clock_buf:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_clock_buf.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:clock_div:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_clock_div.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:clock_gating:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_clock_gating.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: true
+  lowrisc:prim:clock_gp_mux2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_clock_gp_mux2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_clock_gp_mux2.sv
+    used: false
+  lowrisc:prim:clock_inv:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_clock_inv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:clock_mux2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_clock_mux2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: true
+  lowrisc:prim:count:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_count.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_count.vlt
+    - rtl/prim_count_pkg.sv
+    - rtl/prim_count.sv
+    used: true
+  lowrisc:prim:crc32:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_crc32.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_crc32.vlt
+    - rtl/prim_crc32.sv
+    used: false
+  lowrisc:prim:crc32_sim:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/pre_dv/prim_crc32/prim_crc32_sim.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/pre_dv/prim_crc32
+    files:
+    - prim_crc32_sim.cc
+    - prim_crc32_sim.sv
+    used: false
+  lowrisc:prim:diff_decode:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_diff_decode.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_diff_decode.sv
+    used: false
+  lowrisc:prim:double_lfsr:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_double_lfsr.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_double_lfsr.vlt
+    - rtl/prim_double_lfsr.sv
+    used: false
+  lowrisc:prim:edge_detector:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_edge_detector.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim.vlt
+    - rtl/prim_edge_detector.sv
+    used: false
+  lowrisc:prim:edn_req:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_edn_req.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_edn_req.sv
+    used: false
+  lowrisc:prim:esc:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_esc.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_esc_pkg.sv
+    - rtl/prim_esc_receiver.sv
+    - rtl/prim_esc_sender.sv
+    used: false
+  lowrisc:prim:fifo:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_fifo.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_fifo.vlt
+    - rtl/prim_fifo_async_sram_adapter.sv
+    - rtl/prim_fifo_async_simple.sv
+    - rtl/prim_fifo_async.sv
+    - rtl/prim_fifo_sync.sv
+    - rtl/prim_fifo_sync_cnt.sv
+    used: false
+  lowrisc:prim:flash:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_flash.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:flop:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_flop.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: true
+  lowrisc:prim:flop_2sync:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_flop_2sync.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_flop_2sync.sv
+    used: false
+  lowrisc:prim:flop_en:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_flop_en.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:gf_mult:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_gf_mult.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_gf_mult.sv
+    used: false
+  lowrisc:prim:lc_and_hardened:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_lc_and_hardened.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_lc_and_hardened.sv
+    used: false
+  lowrisc:prim:lc_combine:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_lc_combine.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_lc_combine.sv
+    used: false
+  lowrisc:prim:lc_dec:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_lc_dec.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_lc_dec.sv
+    used: false
+  lowrisc:prim:lc_or_hardened:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_lc_or_hardened.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_lc_or_hardened.sv
+    used: false
+  lowrisc:prim:lc_sender:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_lc_sender.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_lc_sender.sv
+    used: false
+  lowrisc:prim:lc_sync:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_lc_sync.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_lc_sync.sv
+    used: false
+  lowrisc:prim:lfsr:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_lfsr.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_lfsr.sv
+    used: true
+  lowrisc:prim:macros:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_macros.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_macros.svh
+    used: false
+  lowrisc:prim:max_tree:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_max_tree.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_max_tree.vlt
+    - rtl/prim_max_tree.sv
+    used: false
+  lowrisc:prim:measure:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_clock_meas.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_clock_meas.sv
+    - rtl/prim_clock_timeout.sv
+    used: false
+  lowrisc:prim:msb_extend:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_msb_extend.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_msb_extend.sv
+    used: false
+  lowrisc:prim:mubi:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_mubi.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_mubi_pkg.sv
+    - rtl/prim_mubi4_sender.sv
+    - rtl/prim_mubi4_sync.sv
+    - rtl/prim_mubi4_dec.sv
+    - rtl/prim_mubi8_sender.sv
+    - rtl/prim_mubi8_sync.sv
+    - rtl/prim_mubi8_dec.sv
+    - rtl/prim_mubi12_sender.sv
+    - rtl/prim_mubi12_sync.sv
+    - rtl/prim_mubi12_dec.sv
+    - rtl/prim_mubi16_sender.sv
+    - rtl/prim_mubi16_sync.sv
+    - rtl/prim_mubi16_dec.sv
+    - rtl/prim_mubi20_sender.sv
+    - rtl/prim_mubi20_sync.sv
+    - rtl/prim_mubi20_dec.sv
+    - rtl/prim_mubi24_sender.sv
+    - rtl/prim_mubi24_sync.sv
+    - rtl/prim_mubi24_dec.sv
+    - rtl/prim_mubi28_sender.sv
+    - rtl/prim_mubi28_sync.sv
+    - rtl/prim_mubi28_dec.sv
+    - rtl/prim_mubi32_sender.sv
+    - rtl/prim_mubi32_sync.sv
+    - rtl/prim_mubi32_dec.sv
+    used: true
+  lowrisc:prim:multibit_sync:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_multibit_sync.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_multibit_sync.sv
+    used: false
+  lowrisc:prim:onehot:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_onehot.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_onehot_enc.sv
+    - rtl/prim_onehot_mux.sv
+    used: true
+  lowrisc:prim:onehot_check:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_onehot_check.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_onehot_check.vlt
+    - rtl/prim_onehot_check.sv
+    used: true
+  lowrisc:prim:otp:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_otp.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:otp_pkg:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_otp_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_otp_pkg.sv
+    used: false
+  lowrisc:prim:pad_attr:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_pad_attr.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:pad_wrapper:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_pad_wrapper.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:pad_wrapper_pkg:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_pad_wrapper_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_pad_wrapper_pkg.sv
+    used: false
+  lowrisc:prim:prim_dom_and_2share:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_dom_and_2share.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim.vlt
+    - rtl/prim_dom_and_2share.sv
+    used: false
+  lowrisc:prim:prim_pkg:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: true
+  lowrisc:prim:primgen:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/primgen.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: true
+  lowrisc:prim:ram_1p:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_1p.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: true
+  lowrisc:prim:ram_1p_adv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_1p_adv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_ram_1p_adv.sv
+    used: true
+  lowrisc:prim:ram_1p_pkg:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_1p_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_ram_1p_pkg.sv
+    used: true
+  lowrisc:prim:ram_1p_scr:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_1p_scr.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_ram_1p_scr.vlt
+    - rtl/prim_ram_1p_scr.sv
+    used: true
+  lowrisc:prim:ram_1r1w:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_1r1w.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:ram_1r1w_adv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_1r1w_adv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_ram_1r1w_adv.sv
+    used: false
+  lowrisc:prim:ram_1r1w_async_adv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_1r1w_async_adv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_ram_1r1w_async_adv.sv
+    used: false
+  lowrisc:prim:ram_2p:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_2p.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:ram_2p_adv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_2p_adv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_ram_2p_adv.sv
+    used: false
+  lowrisc:prim:ram_2p_async_adv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_2p_async_adv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_ram_2p_async_adv.sv
+    used: false
+  lowrisc:prim:ram_2p_pkg:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_2p_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_ram_2p_pkg.sv
+    used: false
+  lowrisc:prim:reg_we_check:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_reg_we_check.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_reg_we_check.sv
+    used: false
+  lowrisc:prim:rom:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_rom.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:rom_adv:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_rom_adv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_rom_adv.sv
+    used: false
+  lowrisc:prim:rom_pkg:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_rom_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_rom_pkg.sv
+    used: false
+  lowrisc:prim:rst_sync:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_rst_sync.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_rst_sync.sv
+    used: false
+  lowrisc:prim:sec_anchor:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_sec_anchor.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_sec_anchor_buf.sv
+    - rtl/prim_sec_anchor_flop.sv
+    used: false
+  lowrisc:prim:secded:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_secded.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_secded_pkg.sv
+    - rtl/prim_secded_22_16_dec.sv
+    - rtl/prim_secded_22_16_enc.sv
+    - rtl/prim_secded_28_22_dec.sv
+    - rtl/prim_secded_28_22_enc.sv
+    - rtl/prim_secded_39_32_dec.sv
+    - rtl/prim_secded_39_32_enc.sv
+    - rtl/prim_secded_64_57_dec.sv
+    - rtl/prim_secded_64_57_enc.sv
+    - rtl/prim_secded_72_64_dec.sv
+    - rtl/prim_secded_72_64_enc.sv
+    - rtl/prim_secded_hamming_22_16_dec.sv
+    - rtl/prim_secded_hamming_22_16_enc.sv
+    - rtl/prim_secded_hamming_39_32_dec.sv
+    - rtl/prim_secded_hamming_39_32_enc.sv
+    - rtl/prim_secded_hamming_72_64_dec.sv
+    - rtl/prim_secded_hamming_72_64_enc.sv
+    - rtl/prim_secded_hamming_76_68_dec.sv
+    - rtl/prim_secded_hamming_76_68_enc.sv
+    - rtl/prim_secded_inv_22_16_dec.sv
+    - rtl/prim_secded_inv_22_16_enc.sv
+    - rtl/prim_secded_inv_28_22_dec.sv
+    - rtl/prim_secded_inv_28_22_enc.sv
+    - rtl/prim_secded_inv_39_32_dec.sv
+    - rtl/prim_secded_inv_39_32_enc.sv
+    - rtl/prim_secded_inv_64_57_dec.sv
+    - rtl/prim_secded_inv_64_57_enc.sv
+    - rtl/prim_secded_inv_72_64_dec.sv
+    - rtl/prim_secded_inv_72_64_enc.sv
+    - rtl/prim_secded_inv_hamming_22_16_dec.sv
+    - rtl/prim_secded_inv_hamming_22_16_enc.sv
+    - rtl/prim_secded_inv_hamming_39_32_dec.sv
+    - rtl/prim_secded_inv_hamming_39_32_enc.sv
+    - rtl/prim_secded_inv_hamming_72_64_dec.sv
+    - rtl/prim_secded_inv_hamming_72_64_enc.sv
+    - rtl/prim_secded_inv_hamming_76_68_dec.sv
+    - rtl/prim_secded_inv_hamming_76_68_enc.sv
+    used: true
+  lowrisc:prim:sha2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_sha2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_sha2.vlt
+    - rtl/prim_sha2_pad.sv
+    - rtl/prim_sha2.sv
+    - rtl/prim_sha2_32.sv
+    used: false
+  lowrisc:prim:sha2_pkg:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_sha2_pkg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_sha2_pkg.sv
+    used: false
+  lowrisc:prim:sparse_fsm:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_sparse_fsm.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_sparse_fsm_flop.vlt
+    - rtl/prim_sparse_fsm_flop.sv
+    used: false
+  lowrisc:prim:subreg:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_subreg.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_subreg.vlt
+    - rtl/prim_subreg_pkg.sv
+    - rtl/prim_reg_cdc.sv
+    - rtl/prim_reg_cdc_arb.sv
+    - rtl/prim_subreg.sv
+    - rtl/prim_subreg_arb.sv
+    - rtl/prim_subreg_ext.sv
+    - rtl/prim_subreg_shadow.sv
+    used: false
+  lowrisc:prim:sum_tree:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_sum_tree.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_sum_tree.vlt
+    - rtl/prim_sum_tree.sv
+    used: false
+  lowrisc:prim:trivium:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_trivium.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_trivium.vlt
+    - rtl/prim_trivium_pkg.sv
+    - rtl/prim_trivium.sv
+    used: false
+  lowrisc:prim:usb_diff_rx:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_usb_diff_rx.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:util:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_util.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_util_pkg.sv
+    used: true
+  lowrisc:prim:util_get_scramble_params:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_util_get_scramble_params.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_util_get_scramble_params.svh
+    used: true
+  lowrisc:prim:util_memload:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_util_memload.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - rtl/prim_util_memload.svh
+    used: false
+  lowrisc:prim:xnor2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_xnor2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:xor2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_xor2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files: []
+    used: false
+  lowrisc:prim:xoshiro256pp:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_xoshiro256pp.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+    files:
+    - lint/prim_xoshiro256pp.vlt
+    - rtl/prim_xoshiro256pp.sv
+    used: false
+  lowrisc:prim_badbit:ram_1p:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/prim_badbit/prim_badbit_ram_1p.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/prim_badbit
+    files:
+    - prim_badbit_ram_1p.sv
+    used: false
+  lowrisc:prim_generic:and2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_and2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_and2.sv
+    used: false
+  lowrisc:prim_generic:buf:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_buf.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_buf.sv
+    used: false
+  lowrisc:prim_generic:clock_buf:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_clock_buf.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_clock_buf.vlt
+    - rtl/prim_generic_clock_buf.sv
+    used: false
+  lowrisc:prim_generic:clock_div:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_clock_div.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_clock_div.sv
+    used: false
+  lowrisc:prim_generic:clock_gating:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_clock_gating.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_clock_gating.vlt
+    - rtl/prim_generic_clock_gating.sv
+    used: false
+  lowrisc:prim_generic:clock_inv:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_clock_inv.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_clock_inv.sv
+    used: false
+  lowrisc:prim_generic:clock_mux2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_clock_mux2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_clock_mux2.vlt
+    - rtl/prim_generic_clock_mux2.sv
+    used: false
+  lowrisc:prim_generic:flash:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_flash.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_flash.vlt
+    - rtl/prim_generic_flash_bank.sv
+    - rtl/prim_generic_flash.sv
+    used: false
+  lowrisc:prim_generic:flop:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_flop.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_flop.sv
+    used: false
+  lowrisc:prim_generic:flop_en:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_flop_en.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_flop_en.sv
+    used: false
+  lowrisc:prim_generic:otp:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_otp.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_otp.vlt
+    - rtl/prim_generic_otp.sv
+    used: false
+  lowrisc:prim_generic:pad_attr:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_pad_attr.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_pad_attr.sv
+    used: false
+  lowrisc:prim_generic:pad_wrapper:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_pad_wrapper.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_pad_wrapper.vlt
+    - rtl/prim_generic_pad_wrapper.sv
+    used: false
+  lowrisc:prim_generic:ram_1p:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_ram_1p.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_ram_1p.vlt
+    - rtl/prim_generic_ram_1p.sv
+    used: false
+  lowrisc:prim_generic:ram_1r1w:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_ram_1r1w.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_ram_1r1w.vlt
+    - rtl/prim_generic_ram_1r1w.sv
+    used: false
+  lowrisc:prim_generic:ram_2p:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_ram_2p.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_ram_2p.vlt
+    - rtl/prim_generic_ram_2p.sv
+    used: false
+  lowrisc:prim_generic:rom:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_rom.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - lint/prim_generic_rom.vlt
+    - rtl/prim_generic_rom.sv
+    used: false
+  lowrisc:prim_generic:usb_diff_rx:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_usb_diff_rx.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_usb_diff_rx.sv
+    used: false
+  lowrisc:prim_generic:xnor2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_xnor2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_xnor2.sv
+    used: false
+  lowrisc:prim_generic:xor2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_xor2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic
+    files:
+    - rtl/prim_generic_xor2.sv
+    used: false
+  lowrisc:prim_xilinx:and2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_and2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - rtl/prim_xilinx_and2.sv
+    used: false
+  lowrisc:prim_xilinx:buf:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_buf.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - rtl/prim_xilinx_buf.sv
+    used: false
+  lowrisc:prim_xilinx:clock_buf:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_clock_buf.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - lint/prim_xilinx_clock_buf.vlt
+    - rtl/prim_xilinx_clock_buf.sv
+    used: false
+  lowrisc:prim_xilinx:clock_gating:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_clock_gating.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - lint/prim_xilinx_clock_gating.vlt
+    - rtl/prim_xilinx_clock_gating.sv
+    used: false
+  lowrisc:prim_xilinx:clock_mux2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_clock_mux2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - lint/prim_xilinx_clock_mux2.vlt
+    - rtl/prim_xilinx_clock_mux2.sv
+    used: false
+  lowrisc:prim_xilinx:flop:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_flop.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - rtl/prim_xilinx_flop.sv
+    used: false
+  lowrisc:prim_xilinx:flop_en:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_flop_en.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - rtl/prim_xilinx_flop_en.sv
+    used: false
+  lowrisc:prim_xilinx:pad_attr:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_pad_attr.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - rtl/prim_xilinx_pad_attr.sv
+    used: false
+  lowrisc:prim_xilinx:pad_wrapper:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_pad_wrapper.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - lint/prim_xilinx_pad_wrapper.vlt
+    - rtl/prim_xilinx_pad_wrapper.sv
+    used: false
+  lowrisc:prim_xilinx:xor2:0:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_xor2.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx
+    files:
+    - rtl/prim_xilinx_xor2.sv
+    used: false
+  lowrisc:tool:check_tool_requirements:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/check_tool_requirements.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex
+    files:
+    - ./util/check_tool_requirements.py
+    - ./tool_requirements.py
+    used: true
+  lowrisc:tool:ibex_cosim_setup_check:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/dv/verilator/simple_system_cosim/ibex_cosim_setup_check.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/dv/verilator/simple_system_cosim
+    files:
+    - ./util/ibex_cosim_setup_check.sh
+    used: false
+  lowrisc:util:sv2v:0.1:
+    capi_version: 2
+    core_filepath: /home/epsilon/work/boxlambda/sub/ibex/util/ibex_util_sv2v.core
+    core_root: /home/epsilon/work/boxlambda/sub/ibex/util
+    files:
+    - sv2v_in_place.py
+    used: false
+files_root: /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim
+gapi: '1.0'
+parameters:
+  action: generate_prim_pkg
+toplevel: lowrisc:ibex:ibex_top:0.1
+vlnv: lowrisc:prim:prim_pkg-impl:0.1

@@ -1,0 +1,15 @@
+CAPI=2:
+filesets:
+  files_rtl:
+    depend:
+    - lowrisc:prim:prim_pkg
+    - lowrisc:prim_badbit:ram_1p:0
+    - lowrisc:prim_generic:ram_1p:0
+    file_type: systemVerilogSource
+    files:
+    - prim_ram_1p.sv
+name: lowrisc:prim_abstract:ram_1p
+targets:
+  default:
+    filesets:
+    - files_rtl
