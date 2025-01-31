@@ -111,9 +111,18 @@ module boxlambda_top (
     inout  wire [23:0] gpio,
 `endif
     input  wire        gp_clk
+`ifdef VERILATOR
+    ,output wire        sys_clk_25mhz
+`endif
 );
 
-`ifndef VERILATOR
+`ifdef VERILATOR
+`ifdef SYS_CLK_25MHZ
+  assign sys_clk_25mhz = 1;
+`else
+  assign sys_clk_25mhz = 0;
+`endif
+`else
   wire usb0_dm_i;
   wire usb0_dp_i;
   wire usb0_dm_o;

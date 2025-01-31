@@ -253,7 +253,7 @@ module boxlambda_soc #(
   };
 
   //Clock signals.
-  logic sys_clk, sys_clk_2x, usb_clk, clk_50, clk_100;
+  logic sys_clk, sys_clk_2x, usb_clk, first_stage_sys_clk, first_stage_sys_clk2x;
   //PLL lock signals.
   logic usb_pll_locked, sys_pll_locked, pre_pll_locked, litedram_pll_locked;
 
@@ -528,7 +528,7 @@ module boxlambda_soc #(
 
   //Reset Controller
   reset_ctrl reset_ctrl_inst (
-      .sys_clk(sys_clk),  //50MHz system clock
+      .sys_clk(sys_clk),  //50MHz or 25MHz system clock
       .usb_clk(usb_clk),  //12MHz USB clock
       .sys_pll_locked_i(sys_pll_locked),  //System Clock PLL locked indication (input)
       .usb_pll_locked_i(usb_pll_locked),  //USB Clock PLL locked indication (input)
@@ -552,17 +552,17 @@ module boxlambda_soc #(
   );
 
   /*First-stage clock generator. If LiteDRAM is synthesized-in, it includes a Second-stage clock generator.
-     *If LiteDRAM is not synthesized-in, this first-stage clock generator provides the system clock
-     */
+   *If LiteDRAM is not synthesized-in, this first-stage clock generator provides the system clock
+   */
   boxlambda_clk_gen clkgen (
       .ext_clk_100(ext_clk_100),  //100MHz external clock input.
       .rst_n(1'b1),
-      .clk_50(clk_50),  //50MHz clock output
-      .clk_100(clk_100),  //100MHz clock output
+      .sys_clk(first_stage_sys_clk),  //50MHz or 25MHz clock output
+      .sys_clk2x(first_stage_sys_clk2x),  //100MHz or 50MHz clock output
       .clk_12(usb_clk),  //12 MHz USB clock output
-      .locked      (pre_pll_locked) //PLL lock indication outpt. It's called pre-PLL because LiteDRAM (when included in the build)
-                                    //introduces a second-stage PLL hanging off clk_50. The LiteDRAM PLL provides the system clock.
-                                    //When LiteDRAM is not included in the build, clk_50 becomes the system clock.
+      .locked(pre_pll_locked) //PLL lock indication outpt. It's called pre-PLL because LiteDRAM (when included in the build)
+                              //introduces a second-stage PLL hanging off first_stage_sys_clk. The LiteDRAM PLL provides the system clock.
+                              //When LiteDRAM is not included in the build, first_stage_sys_clk becomes the system clock.
   );
 
   assign usb_pll_locked = pre_pll_locked;
@@ -691,9 +691,13 @@ module boxlambda_soc #(
 
   /*The Ibex CPU.*/
   wb_ibex_core #(
-      .RV32M(ibex_pkg::RV32MFast),
+      .RV32M(ibex_pkg::RV32MSlow),  //FIXME: Yosys synthesis failed on RV32MFast
       .RV32B(ibex_pkg::RV32BBalanced),
-      .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA),
+`ifdef VERILATOR
+      .RegFile(ibex_pkg::RegFileFF),
+`else
+      .RegFile(ibex_pkg::RegFileFPGA),
+`endif
       .BranchTargetALU(1'b0),
       .WritebackStage(1'b0),
       .DbgTriggerEn(1'b1),
@@ -903,10 +907,10 @@ module boxlambda_soc #(
       logic litedram_pll_locked_i, litedram_rst_o;
 
       litedram_wrapper litedram_wrapper_inst (
-          .clk(clk_100),  /*100MHz input clock, coming for the First-stage clock generator..*/
+          .clk(first_stage_sys_clk2x),  /*100MHz or 50MHz input clock, coming for the First-stage clock generator..*/
           .rst(1'b0),  /*Never reset LiteDRAM.*/
-          .sys_clkx2(sys_clk_2x), /*LiteDRAM outputs 100MHz double rate system clock. In phase with sys_clk.*/
-          .sys_clk(sys_clk),  /*LiteDRAM outputs 50MHz system clock.*/
+          .sys_clkx2(sys_clk_2x), /*LiteDRAM outputs 100MHz or 50MHz double rate system clock. In phase with sys_clk.*/
+          .sys_clk(sys_clk),  /*LiteDRAM outputs 50MHz or 25MHz system clock.*/
           .sys_rst(litedram_rst_o),  /*LiteDRAM outputs system reset.*/
           .pll_locked(litedram_pll_locked_i),  /*LiteDRAM PLL lock indication.*/
 `ifdef SYNTHESIS
@@ -953,15 +957,25 @@ module boxlambda_soc #(
       );
 
       /*sys_pll_locked is fed to the reset controller. It's asserted when Litedram controller indicates reset is
-         *deasserted and the PLL is locked.*/
+       *deasserted and the PLL is locked.*/
       assign litedram_pll_locked = ~litedram_rst_o & litedram_pll_locked_i;
       assign sys_pll_locked = litedram_pll_locked;
     end else begin  //No DRAM: In this case the Stage-1 clock generator provides the system clock.
-      assign sys_clk = clk_50;  //50MHz system clock.
-      assign sys_clk_2x = clk_100;  //100MHz double-rate system clock.
+      assign sys_clk = first_stage_sys_clk;  //50MHz or 25MHz system clock.
+      assign sys_clk_2x = first_stage_sys_clk2x;  //100MHz or 50 MHz double-rate system clock.
       assign litedram_pll_locked = 1'b1;
-      assign init_done_led = 1'b1;
-      assign init_err_led = 1'b0;
+
+      //Hijacking init_done_led to make it blink once per second.
+      //assign init_done_led = 1'b1;
+      reg [31:0] sys_clk_div_ctr;
+      initial sys_clk_div_ctr = 0;
+      always_ff @(posedge sys_clk) begin
+        sys_clk_div_ctr <= sys_clk_div_ctr + 1;
+        if (sys_clk_div_ctr == 32'd25000000) sys_clk_div_ctr <= 0;
+      end
+      assign init_done_led  = (sys_clk_div_ctr < 32'd12500000);
+
+      assign init_err_led   = 1'b0;
       assign sys_pll_locked = pre_pll_locked;
 `ifdef SYNTHESIS
       //Shut up, DRC.
@@ -1062,7 +1076,11 @@ module boxlambda_soc #(
       wire signed [15:0] ym2149_sound;
 
       YM2149_PSG_system_wb #(
+`ifdef SYS_CLK_25MHZ
+          .CLK_IN_HZ(25000000),  // Input clock frequency
+`else
           .CLK_IN_HZ(50000000),  // Input clock frequency
+`endif
           .CLK_PSG_HZ(2000000),  // PSG clock frequency
           .YM2149_DAC_BITS(10),   // PSG DAC bit precision, 8 through 14 bits, the higher the bits, the higher the dynamic range.
                                   // 10 bits almost perfectly replicates the YM2149 DA converter's Normalized voltage.
@@ -1091,11 +1109,15 @@ module boxlambda_soc #(
           .sound_right()  // parallel   audio out, right channel
       );
 
+`ifdef SYS_CLK_25MHZ
+      reg [0:0] div_by_4_ctr;  //Divide-clock-by-2 counter.
+`else
       reg [1:0] div_by_4_ctr;  //Divide-clock-by-4 counter.
+`endif
       always_ff @(posedge sys_clk) div_by_4_ctr <= div_by_4_ctr - 1;
 
       one_bit_dac dac_inst (
-          .clk(sys_clk),  // 50MHz clock
+          .clk(sys_clk),  // 50MHz clock, 25MHz on OpenXC7.
           .clk_en(div_by_4_ctr == 0),  // 12.5MHz clock enable
           .in(ym2149_sound),  // input 16 PCM audio signal.
           .out(audio_out)  // one bit output signal, modulated at 12.5MHz

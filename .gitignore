@@ -5,11 +5,24 @@
 #Lint suggested waivers
 *.lint
 #Picolibc generated files
-sw/picolibc-build/*
+sw/picolibc-build
 #Emacs tags
 TAGS
 #vscode
-.vscode/*
+.vscode
+#litex stuff
+sub/liteeth
+sub/liteiclink
+sub/litejesd204b
+sub/litepcie
+sub/litesata
+sub/litescope
+sub/litesdcard
+sub/litespi
+sub/litex-boards
+sub/migen
+sub/pythondata*
+sub/valentyusb
 
 #openXC7 chip db
 chipdb

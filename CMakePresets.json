@@ -9,8 +9,8 @@
                 "CMAKE_BUILD_TYPE": "vivado",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-100",
-                "CMEM_SIZE": "128K",
-                "DMEM_SIZE": "128K"
+                "CMEM_SIZE": "32K",
+                "DMEM_SIZE": "32K"
             }
         },
         {
@@ -33,8 +33,8 @@
                 "CMAKE_BUILD_TYPE": "openxc7",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-100",
-                "CMEM_SIZE": "128K",
-                "DMEM_SIZE": "128K"
+                "CMEM_SIZE": "32K",
+                "DMEM_SIZE": "32K"
             }
         },
         {
@@ -50,15 +50,15 @@
             }
         },
         {
-            "name": "sim-a7-100",
+            "name": "verilator-a7-100",
             "displayName": "Arty A7 100T Verilator simulation build.",
-            "binaryDir": "build/sim-a7-100",
+            "binaryDir": "build/verilator-a7-100",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "verilator",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-100",
-                "CMEM_SIZE": "128K",
-                "DMEM_SIZE": "128K"
+                "CMEM_SIZE": "32K",
+                "DMEM_SIZE": "32K"
             }
         }
     ]

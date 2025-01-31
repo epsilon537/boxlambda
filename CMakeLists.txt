@@ -18,7 +18,7 @@ get_property(isMultiConfig GLOBAL
 )
 
 if(isMultiConfig)
-    message(FATAL_ERROR "MultiConfig is not supported.")
+  message(FATAL_ERROR "MultiConfig is not supported.")
 endif()
 
 #Currently, three build types are supported: openxc7, vivado, and verilator
@@ -28,7 +28,7 @@ set_property(CACHE CMAKE_BUILD_TYPE PROPERTY
 set(allowedBuildTypes openxc7 vivado verilator)
 
 if(NOT CMAKE_BUILD_TYPE IN_LIST allowedBuildTypes)
-    message(FATAL_ERROR "${CMAKE_BUILD_TYPE} is not a known build type.")
+  message(FATAL_ERROR "${CMAKE_BUILD_TYPE} is not a known build type.")
 endif()
 
 message("Build Type: ${CMAKE_BUILD_TYPE}.")

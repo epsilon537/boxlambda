@@ -11,105 +11,105 @@
 `include "dv_fcov_macros.svh"
 
 module ibex_controller #(
-  parameter bit WritebackStage  = 1'b0,
-  parameter bit BranchPredictor = 1'b0,
-  parameter bit MemECC          = 1'b0
- ) (
-  input  logic                  clk_i,
-  input  logic                  rst_ni,
+    parameter bit WritebackStage  = 1'b0,
+    parameter bit BranchPredictor = 1'b0,
+    parameter bit MemECC          = 1'b0
+) (
+    input logic clk_i,
+    input logic rst_ni,
 
-  output logic                  ctrl_busy_o,             // core is busy processing instrs
+    output logic ctrl_busy_o,  // core is busy processing instrs
 
-  // decoder related signals
-  input  logic                  illegal_insn_i,          // decoder has an invalid instr
-  input  logic                  ecall_insn_i,            // decoder has ECALL instr
-  input  logic                  mret_insn_i,             // decoder has MRET instr
-  input  logic                  dret_insn_i,             // decoder has DRET instr
-  input  logic                  wfi_insn_i,              // decoder has WFI instr
-  input  logic                  ebrk_insn_i,             // decoder has EBREAK instr
-  input  logic                  csr_pipe_flush_i,        // do CSR-related pipeline flush
+    // decoder related signals
+    input logic illegal_insn_i,   // decoder has an invalid instr
+    input logic ecall_insn_i,     // decoder has ECALL instr
+    input logic mret_insn_i,      // decoder has MRET instr
+    input logic dret_insn_i,      // decoder has DRET instr
+    input logic wfi_insn_i,       // decoder has WFI instr
+    input logic ebrk_insn_i,      // decoder has EBREAK instr
+    input logic csr_pipe_flush_i, // do CSR-related pipeline flush
 
-  // instr from IF-ID pipeline stage
-  input  logic                  instr_valid_i,           // instr is valid
-  input  logic [31:0]           instr_i,                 // uncompressed instr data for mtval
-  input  logic [15:0]           instr_compressed_i,      // instr compressed data for mtval
-  input  logic                  instr_is_compressed_i,   // instr is compressed
-  input  logic                  instr_bp_taken_i,        // instr was predicted taken branch
-  input  logic                  instr_fetch_err_i,       // instr has error
-  input  logic                  instr_fetch_err_plus2_i, // instr error is x32
-  input  logic [31:0]           pc_id_i,                 // instr address
+    // instr from IF-ID pipeline stage
+    input logic        instr_valid_i,            // instr is valid
+    input logic [31:0] instr_i,                  // uncompressed instr data for mtval
+    input logic [15:0] instr_compressed_i,       // instr compressed data for mtval
+    input logic        instr_is_compressed_i,    // instr is compressed
+    input logic        instr_bp_taken_i,         // instr was predicted taken branch
+    input logic        instr_fetch_err_i,        // instr has error
+    input logic        instr_fetch_err_plus2_i,  // instr error is x32
+    input logic [31:0] pc_id_i,                  // instr address
 
-  // to IF-ID pipeline stage
-  output logic                  instr_valid_clear_o,     // kill instr in IF-ID reg
-  output logic                  id_in_ready_o,           // ID stage is ready for new instr
-  output logic                  controller_run_o,        // Controller is in standard instruction
-                                                         // run mode
-  input  logic                  instr_exec_i,            // Execution control, when clear ID/EX
-                                                         // stage stops accepting instructions from
-                                                         // IF
-  // to prefetcher
-  output logic                  instr_req_o,             // start fetching instructions
-  output logic                  pc_set_o,                // jump to address set by pc_mux
-  output ibex_pkg::pc_sel_e     pc_mux_o,                // IF stage fetch address selector
-                                                         // (boot, normal, exception...)
-  output logic                  nt_branch_mispredict_o,  // Not-taken branch in ID/EX was
-                                                         // mispredicted (predicted taken)
-  output ibex_pkg::exc_pc_sel_e exc_pc_mux_o,            // IF stage selector for exception PC
-  output ibex_pkg::exc_cause_t  exc_cause_o,             // for IF stage, CSRs
+    // to IF-ID pipeline stage
+    output logic                  instr_valid_clear_o,     // kill instr in IF-ID reg
+    output logic                  id_in_ready_o,           // ID stage is ready for new instr
+    output logic                  controller_run_o,        // Controller is in standard instruction
+                                                           // run mode
+    input  logic                  instr_exec_i,            // Execution control, when clear ID/EX
+                                                           // stage stops accepting instructions from
+                                                           // IF
+    // to prefetcher
+    output logic                  instr_req_o,             // start fetching instructions
+    output logic                  pc_set_o,                // jump to address set by pc_mux
+    output ibex_pkg::pc_sel_e     pc_mux_o,                // IF stage fetch address selector
+                                                           // (boot, normal, exception...)
+    output logic                  nt_branch_mispredict_o,  // Not-taken branch in ID/EX was
+                                                           // mispredicted (predicted taken)
+    output ibex_pkg::exc_pc_sel_e exc_pc_mux_o,            // IF stage selector for exception PC
+    output ibex_pkg::exc_cause_t  exc_cause_o,             // for IF stage, CSRs
 
-  // LSU
-  input  logic [31:0]           lsu_addr_last_i,         // for mtval
-  input  logic                  load_err_i,
-  input  logic                  store_err_i,
-  input  logic                  mem_resp_intg_err_i,
-  output logic                  wb_exception_o,          // Instruction in WB taking an exception
-  output logic                  id_exception_o,          // Instruction in ID taking an exception
+    // LSU
+    input  logic [31:0] lsu_addr_last_i,      // for mtval
+    input  logic        load_err_i,
+    input  logic        store_err_i,
+    input  logic        mem_resp_intg_err_i,
+    output logic        wb_exception_o,       // Instruction in WB taking an exception
+    output logic        id_exception_o,       // Instruction in ID taking an exception
 
-  // jump/branch signals
-  input  logic                  branch_set_i,            // branch set signal (branch definitely
-                                                         // taken)
-  input  logic                  branch_not_set_i,        // branch is definitely not taken
-  input  logic                  jump_set_i,              // jump taken set signal
+    // jump/branch signals
+    input logic branch_set_i,      // branch set signal (branch definitely
+                                   // taken)
+    input logic branch_not_set_i,  // branch is definitely not taken
+    input logic jump_set_i,        // jump taken set signal
 
-  // interrupt signals
-  input  logic                  csr_mstatus_mie_i,       // M-mode interrupt enable bit
-  input  logic                  irq_pending_i,           // interrupt request pending
-  input  ibex_pkg::irqs_t       irqs_i,                  // interrupt requests qualified with
-                                                         // mie CSR
-  input  logic                  irq_nm_ext_i,            // non-maskeable interrupt
-  output logic                  nmi_mode_o,              // core executing NMI handler
+    // interrupt signals
+    input  logic            csr_mstatus_mie_i,  // M-mode interrupt enable bit
+    input  logic            irq_pending_i,      // interrupt request pending
+    input  ibex_pkg::irqs_t irqs_i,             // interrupt requests qualified with
+                                                // mie CSR
+    input  logic            irq_nm_ext_i,       // non-maskeable interrupt
+    output logic            nmi_mode_o,         // core executing NMI handler
 
-  // debug signals
-  input  logic                  debug_req_i,
-  output ibex_pkg::dbg_cause_e  debug_cause_o,
-  output logic                  debug_csr_save_o,
-  output logic                  debug_mode_o,
-  output logic                  debug_mode_entering_o,
-  input  logic                  debug_single_step_i,
-  input  logic                  debug_ebreakm_i,
-  input  logic                  debug_ebreaku_i,
-  input  logic                  trigger_match_i,
+    // debug signals
+    input  logic                 debug_req_i,
+    output ibex_pkg::dbg_cause_e debug_cause_o,
+    output logic                 debug_csr_save_o,
+    output logic                 debug_mode_o,
+    output logic                 debug_mode_entering_o,
+    input  logic                 debug_single_step_i,
+    input  logic                 debug_ebreakm_i,
+    input  logic                 debug_ebreaku_i,
+    input  logic                 trigger_match_i,
 
-  output logic                  csr_save_if_o,
-  output logic                  csr_save_id_o,
-  output logic                  csr_save_wb_o,
-  output logic                  csr_restore_mret_id_o,
-  output logic                  csr_restore_dret_id_o,
-  output logic                  csr_save_cause_o,
-  output logic [31:0]           csr_mtval_o,
-  input  ibex_pkg::priv_lvl_e   priv_mode_i,
+    output logic                       csr_save_if_o,
+    output logic                       csr_save_id_o,
+    output logic                       csr_save_wb_o,
+    output logic                       csr_restore_mret_id_o,
+    output logic                       csr_restore_dret_id_o,
+    output logic                       csr_save_cause_o,
+    output logic                [31:0] csr_mtval_o,
+    input  ibex_pkg::priv_lvl_e        priv_mode_i,
 
-  // stall & flush signals
-  input  logic                  stall_id_i,
-  input  logic                  stall_wb_i,
-  output logic                  flush_id_o,
-  input  logic                  ready_wb_i,
+    // stall & flush signals
+    input  logic stall_id_i,
+    input  logic stall_wb_i,
+    output logic flush_id_o,
+    input  logic ready_wb_i,
 
-  // performance monitors
-  output logic                  perf_jump_o,             // we are executing a jump
-                                                         // instruction (j, jr, jal, jalr)
-  output logic                  perf_tbranch_o           // we are executing a taken branch
-                                                         // instruction
+    // performance monitors
+    output logic perf_jump_o,    // we are executing a jump
+                                 // instruction (j, jr, jal, jalr)
+    output logic perf_tbranch_o  // we are executing a taken branch
+                                 // instruction
 );
   import ibex_pkg::*;
 
@@ -125,58 +125,70 @@ module ibex_controller #(
 
   // Of the various exception/fault signals, which one takes priority in FLUSH and hence controls
   // what happens next (setting exc_cause, csr_mtval etc)
-  logic instr_fetch_err_prio;
-  logic illegal_insn_prio;
-  logic ecall_insn_prio;
-  logic ebrk_insn_prio;
-  logic store_err_prio;
-  logic load_err_prio;
+  logic                            instr_fetch_err_prio;
+  logic                            illegal_insn_prio;
+  logic                            ecall_insn_prio;
+  logic                            ebrk_insn_prio;
+  logic                            store_err_prio;
+  logic                            load_err_prio;
 
-  logic stall;
-  logic halt_if;
-  logic retain_id;
-  logic flush_id;
-  logic exc_req_lsu;
-  logic special_req;
-  logic special_req_pc_change;
-  logic special_req_flush_only;
-  logic do_single_step_d;
-  logic do_single_step_q;
-  logic enter_debug_mode_prio_d;
-  logic enter_debug_mode_prio_q;
-  logic enter_debug_mode;
-  logic ebreak_into_debug;
-  logic irq_enabled;
-  logic handle_irq;
-  logic id_wb_pending;
+  logic                            stall;
+  logic                            halt_if;
+  logic                            retain_id;
+  logic                            flush_id;
+  logic                            exc_req_lsu;
+  logic                            special_req;
+  logic                            special_req_pc_change;
+  logic                            special_req_flush_only;
+  logic                            do_single_step_d;
+  logic                            do_single_step_q;
+  logic                            enter_debug_mode_prio_d;
+  logic                            enter_debug_mode_prio_q;
+  logic                            enter_debug_mode;
+  logic                            ebreak_into_debug;
+  logic                            irq_enabled;
+  logic                            handle_irq;
+  logic                            id_wb_pending;
 
-  logic                     irq_nm;
-  logic                     irq_nm_int;
-  logic [31:0]              irq_nm_int_mtval;
-  ibex_pkg::nmi_int_cause_e irq_nm_int_cause;
+  logic                            irq_nm;
+  logic                            irq_nm_int;
+  logic                     [31:0] irq_nm_int_mtval;
+  ibex_pkg::nmi_int_cause_e        irq_nm_int_cause;
 
 
-  logic [3:0] mfip_id;
-  logic       unused_irq_timer;
+  logic                     [ 3:0] mfip_id;
+  logic                            unused_irq_timer;
 
-  logic ecall_insn;
-  logic mret_insn;
-  logic dret_insn;
-  logic wfi_insn;
-  logic ebrk_insn;
-  logic csr_pipe_flush;
-  logic instr_fetch_err;
+  logic                            ecall_insn;
+  logic                            mret_insn;
+  logic                            dret_insn;
+  logic                            wfi_insn;
+  logic                            ebrk_insn;
+  logic                            csr_pipe_flush;
+  logic                            instr_fetch_err;
 
 `ifndef SYNTHESIS
+  logic [31:0]               prev_pc_id_i;
+  initial prev_pc_id_i = 32'b0;
+
   // synopsys translate_off
   // make sure we are called later so that we do not generate messages for
   // glitches
   always_ff @(negedge clk_i) begin
+    prev_pc_id_i <= ibex_id_stage.pc_id_i;
     // print warning in case of decoding errors
     if ((ctrl_fsm_cs == DECODE) && instr_valid_i && !instr_fetch_err_i && illegal_insn_d) begin
-      $display("%t: Illegal instruction (hart %0x) at PC 0x%h: 0x%h", $time, u_ibex_core.hart_id_i,
-               pc_id_i, id_stage_i.instr_rdata_i);
+      $display("%t: Illegal instruction (hart %0x) at PC 0x%h: 0x%h", $time, ibex_core.hart_id_i,
+               ibex_id_stage.pc_id_i, ibex_id_stage.instr_rdata_i);
     end
+`ifdef TRACE_ALL_INSTRUCTIONS
+    else if ((ctrl_fsm_cs == DECODE) &&
+              instr_valid_i && !instr_fetch_err_i && !illegal_insn_d &&
+              (ibex_id_stage.pc_id_i != prev_pc_id_i)) begin
+      $display("%t: Instruction (hart %0x) at PC 0x%h: 0x%h", $time, ibex_core.hart_id_i,
+               ibex_id_stage.pc_id_i, ibex_id_stage.instr_rdata_i);
+    end
+`endif
   end
   // synopsys translate_on
 `endif
@@ -185,16 +197,16 @@ module ibex_controller #(
   // Exceptions //
   ////////////////
 
-  assign load_err_d  = load_err_i;
-  assign store_err_d = store_err_i;
+  assign load_err_d      = load_err_i;
+  assign store_err_d     = store_err_i;
 
   // Decoder doesn't take instr_valid into account, factor it in here.
-  assign ecall_insn      = ecall_insn_i      & instr_valid_i;
-  assign mret_insn       = mret_insn_i       & instr_valid_i;
-  assign dret_insn       = dret_insn_i       & instr_valid_i;
-  assign wfi_insn        = wfi_insn_i        & instr_valid_i;
-  assign ebrk_insn       = ebrk_insn_i       & instr_valid_i;
-  assign csr_pipe_flush  = csr_pipe_flush_i  & instr_valid_i;
+  assign ecall_insn      = ecall_insn_i & instr_valid_i;
+  assign mret_insn       = mret_insn_i & instr_valid_i;
+  assign dret_insn       = dret_insn_i & instr_valid_i;
+  assign wfi_insn        = wfi_insn_i & instr_valid_i;
+  assign ebrk_insn       = ebrk_insn_i & instr_valid_i;
+  assign csr_pipe_flush  = csr_pipe_flush_i & instr_valid_i;
   assign instr_fetch_err = instr_fetch_err_i & instr_valid_i;
 
   // This is recorded in the illegal_insn_q flop to help timing.  Specifically
@@ -202,7 +214,7 @@ module ibex_controller #(
   // to pc_set_o.  Clear when controller is in FLUSH so it won't remain set
   // once illegal instruction is handled.
   // illegal_insn_i only set when instr_valid_i is set.
-  assign illegal_insn_d = illegal_insn_i & (ctrl_fsm_cs != FLUSH);
+  assign illegal_insn_d  = illegal_insn_i & (ctrl_fsm_cs != FLUSH);
 
   `ASSERT(IllegalInsnOnlyIfInsnValid, illegal_insn_i |-> instr_valid_i)
 
@@ -252,7 +264,7 @@ module ibex_controller #(
       if (store_err_q) begin
         store_err_prio = 1'b1;
       end else if (load_err_q) begin
-        load_err_prio  = 1'b1;
+        load_err_prio = 1'b1;
       end else if (instr_fetch_err) begin
         instr_fetch_err_prio = 1'b1;
       end else if (illegal_insn_q) begin
@@ -286,20 +298,15 @@ module ibex_controller #(
       end else if (store_err_q) begin
         store_err_prio = 1'b1;
       end else if (load_err_q) begin
-        load_err_prio  = 1'b1;
+        load_err_prio = 1'b1;
       end
     end
     assign wb_exception_o = 1'b0;
   end
 
-  `ASSERT_IF(IbexExceptionPrioOnehot,
-             $onehot({instr_fetch_err_prio,
-                      illegal_insn_prio,
-                      ecall_insn_prio,
-                      ebrk_insn_prio,
-                      store_err_prio,
-                      load_err_prio}),
-             (ctrl_fsm_cs == FLUSH) & exc_req_q)
+  `ASSERT_IF(IbexExceptionPrioOnehot, $onehot({instr_fetch_err_prio, illegal_insn_prio,
+                                               ecall_insn_prio, ebrk_insn_prio, store_err_prio,
+                                               load_err_prio}), (ctrl_fsm_cs == FLUSH) & exc_req_q)
 
   ////////////////
   // Interrupts //
@@ -310,18 +317,18 @@ module ibex_controller #(
   // irq_nm_int_cause.
 
   if (MemECC) begin : g_intg_irq_int
-    logic        mem_resp_intg_err_irq_pending_q, mem_resp_intg_err_irq_pending_d;
+    logic mem_resp_intg_err_irq_pending_q, mem_resp_intg_err_irq_pending_d;
     logic [31:0] mem_resp_intg_err_addr_q, mem_resp_intg_err_addr_d;
-    logic        mem_resp_intg_err_irq_set, mem_resp_intg_err_irq_clear;
-    logic        entering_nmi;
+    logic mem_resp_intg_err_irq_set, mem_resp_intg_err_irq_clear;
+    logic entering_nmi;
 
     assign entering_nmi = nmi_mode_d & ~nmi_mode_q;
 
     // Load integerity error internal interrupt
     always_comb begin
-      mem_resp_intg_err_addr_d        = mem_resp_intg_err_addr_q;
-      mem_resp_intg_err_irq_set       = 1'b0;
-      mem_resp_intg_err_irq_clear     = 1'b0;
+      mem_resp_intg_err_addr_d    = mem_resp_intg_err_addr_q;
+      mem_resp_intg_err_irq_set   = 1'b0;
+      mem_resp_intg_err_irq_clear = 1'b0;
 
       if (mem_resp_intg_err_irq_pending_q) begin
         // Clear ECC error interrupt when it is handled. External NMI takes a higher priority so
@@ -332,8 +339,8 @@ module ibex_controller #(
       end else if (mem_resp_intg_err_i) begin
         // When an ECC error is seen set the ECC error interrupt and capture the address that saw
         // the error. If there is already an ecc error IRQ pending ignore any ECC errors coming in.
-        mem_resp_intg_err_addr_d        = lsu_addr_last_i;
-        mem_resp_intg_err_irq_set       = 1'b1;
+        mem_resp_intg_err_addr_d  = lsu_addr_last_i;
+        mem_resp_intg_err_irq_set = 1'b1;
       end
     end
 
@@ -361,9 +368,9 @@ module ibex_controller #(
     assign unused_mem_resp_intg_err_i = mem_resp_intg_err_i;
 
     // No integrity checking on incoming load data so no internal interrupts
-    assign irq_nm_int       = 1'b0;
-    assign irq_nm_int_cause = nmi_int_cause_e'(0);
-    assign irq_nm_int_mtval = '0;
+    assign irq_nm_int                 = 1'b0;
+    assign irq_nm_int_cause           = nmi_int_cause_e'(0);
+    assign irq_nm_int_mtval           = '0;
   end
 
 
@@ -452,15 +459,15 @@ module ibex_controller #(
 
   always_comb begin
     // Default values
-    instr_req_o           = 1'b1;
+    instr_req_o            = 1'b1;
 
-    csr_save_if_o         = 1'b0;
-    csr_save_id_o         = 1'b0;
-    csr_save_wb_o         = 1'b0;
-    csr_restore_mret_id_o = 1'b0;
-    csr_restore_dret_id_o = 1'b0;
-    csr_save_cause_o      = 1'b0;
-    csr_mtval_o           = '0;
+    csr_save_if_o          = 1'b0;
+    csr_save_id_o          = 1'b0;
+    csr_save_wb_o          = 1'b0;
+    csr_restore_mret_id_o  = 1'b0;
+    csr_restore_dret_id_o  = 1'b0;
+    csr_save_cause_o       = 1'b0;
+    csr_mtval_o            = '0;
 
     // The values of pc_mux and exc_pc_mux are only relevant if pc_set is set. Some of the states
     // below always set pc_mux and exc_pc_mux but only set pc_set if certain conditions are met.
@@ -471,7 +478,7 @@ module ibex_controller #(
     nt_branch_mispredict_o = 1'b0;
 
     exc_pc_mux_o           = EXC_PC_IRQ;
-    exc_cause_o            = ExcCauseInsnAddrMisa; // = 6'h00
+    exc_cause_o            = ExcCauseInsnAddrMisa;  // = 6'h00
 
     ctrl_fsm_ns            = ctrl_fsm_cs;
 
@@ -493,35 +500,35 @@ module ibex_controller #(
 
     unique case (ctrl_fsm_cs)
       RESET: begin
-        instr_req_o   = 1'b0;
-        pc_mux_o      = PC_BOOT;
-        pc_set_o      = 1'b1;
-        ctrl_fsm_ns   = BOOT_SET;
+        instr_req_o = 1'b0;
+        pc_mux_o    = PC_BOOT;
+        pc_set_o    = 1'b1;
+        ctrl_fsm_ns = BOOT_SET;
       end
 
       BOOT_SET: begin
         // copy boot address to instr fetch address
-        instr_req_o   = 1'b1;
-        pc_mux_o      = PC_BOOT;
-        pc_set_o      = 1'b1;
+        instr_req_o = 1'b1;
+        pc_mux_o    = PC_BOOT;
+        pc_set_o    = 1'b1;
 
         ctrl_fsm_ns = FIRST_FETCH;
       end
 
       WAIT_SLEEP: begin
-        ctrl_busy_o   = 1'b0;
-        instr_req_o   = 1'b0;
-        halt_if       = 1'b1;
-        flush_id      = 1'b1;
-        ctrl_fsm_ns   = SLEEP;
+        ctrl_busy_o = 1'b0;
+        instr_req_o = 1'b0;
+        halt_if     = 1'b1;
+        flush_id    = 1'b1;
+        ctrl_fsm_ns = SLEEP;
       end
 
       SLEEP: begin
         // instruction in IF stage is already valid
         // we begin execution when an interrupt has arrived
-        instr_req_o   = 1'b0;
-        halt_if       = 1'b1;
-        flush_id      = 1'b1;
+        instr_req_o = 1'b0;
+        halt_if     = 1'b1;
+        flush_id    = 1'b1;
 
         // normal execution flow
         // in debug mode or single step mode we leave immediately (wfi=nop)
@@ -632,7 +639,7 @@ module ibex_controller #(
           end
         end
 
-      end // DECODE
+      end  // DECODE
 
       IRQ_TAKEN: begin
         pc_mux_o     = PC_EXC;
@@ -646,15 +653,17 @@ module ibex_controller #(
 
           // Prioritise interrupts as required by the architecture
           if (irq_nm && !nmi_mode_q) begin
-            exc_cause_o =
-              irq_nm_ext_i ? ExcCauseIrqNm :
-                             '{irq_ext: 1'b0, irq_int: 1'b1, lower_cause: irq_nm_int_cause};
+            exc_cause_o = irq_nm_ext_i ? ExcCauseIrqNm : '{
+                irq_ext: 1'b0,
+                irq_int: 1'b1,
+                lower_cause: irq_nm_int_cause
+            };
 
             if (irq_nm_int & !irq_nm_ext_i) begin
               csr_mtval_o = irq_nm_int_mtval;
             end
 
-            nmi_mode_d  = 1'b1; // enter NMI mode
+            nmi_mode_d = 1'b1;  // enter NMI mode
           end else if (irqs_i.irq_fast != 15'b0) begin
             // generate exception cause ID from fast interrupt ID:
             // - first bit distinguishes interrupts from exceptions,
@@ -665,7 +674,7 @@ module ibex_controller #(
             exc_cause_o = ExcCauseIrqExternalM;
           end else if (irqs_i.irq_software) begin
             exc_cause_o = ExcCauseIrqSoftwareM;
-          end else begin // irqs_i.irq_timer
+          end else begin  // irqs_i.irq_timer
             exc_cause_o = ExcCauseIrqTimerM;
           end
         end
@@ -674,24 +683,24 @@ module ibex_controller #(
       end
 
       DBG_TAKEN_IF: begin
-        pc_mux_o     = PC_EXC;
-        exc_pc_mux_o = EXC_PC_DBD;
+        pc_mux_o              = PC_EXC;
+        exc_pc_mux_o          = EXC_PC_DBD;
 
         // enter debug mode and save PC in IF to dpc
         // jump to debug exception handler in debug memory
-        flush_id         = 1'b1;
-        pc_set_o         = 1'b1;
+        flush_id              = 1'b1;
+        pc_set_o              = 1'b1;
 
-        csr_save_if_o    = 1'b1;
-        debug_csr_save_o = 1'b1;
+        csr_save_if_o         = 1'b1;
+        debug_csr_save_o      = 1'b1;
 
-        csr_save_cause_o = 1'b1;
+        csr_save_cause_o      = 1'b1;
 
         // enter debug mode
         debug_mode_d          = 1'b1;
         debug_mode_entering_o = 1'b1;
 
-        ctrl_fsm_ns  = DECODE;
+        ctrl_fsm_ns           = DECODE;
       end
 
       DBG_TAKEN_ID: begin
@@ -702,13 +711,13 @@ module ibex_controller #(
         //
         // for 1. do not update dcsr and dpc, for 2. do so
         // jump to debug exception handler in debug memory
-        flush_id      = 1'b1;
-        pc_mux_o      = PC_EXC;
-        pc_set_o      = 1'b1;
-        exc_pc_mux_o  = EXC_PC_DBD;
+        flush_id     = 1'b1;
+        pc_mux_o     = PC_EXC;
+        pc_set_o     = 1'b1;
+        exc_pc_mux_o = EXC_PC_DBD;
 
         // update dcsr and dpc
-        if (ebreak_into_debug && !debug_mode_q) begin // ebreak with forced entry
+        if (ebreak_into_debug && !debug_mode_q) begin  // ebreak with forced entry
 
           // dpc (set to the address of the EBREAK, i.e. set to PC in ID stage)
           csr_save_cause_o = 1'b1;
@@ -722,7 +731,7 @@ module ibex_controller #(
         debug_mode_d          = 1'b1;
         debug_mode_entering_o = 1'b1;
 
-        ctrl_fsm_ns  = DECODE;
+        ctrl_fsm_ns           = DECODE;
       end
 
       FLUSH: begin
@@ -737,18 +746,18 @@ module ibex_controller #(
         // exceptions: set exception PC, save PC and exception cause
         // exc_req_lsu is high for one clock cycle only (in DECODE)
         if (exc_req_q || store_err_q || load_err_q) begin
-          pc_set_o         = 1'b1;
-          pc_mux_o         = PC_EXC;
-          exc_pc_mux_o     = debug_mode_q ? EXC_PC_DBG_EXC : EXC_PC_EXC;
+          pc_set_o     = 1'b1;
+          pc_mux_o     = PC_EXC;
+          exc_pc_mux_o = debug_mode_q ? EXC_PC_DBG_EXC : EXC_PC_EXC;
 
           if (WritebackStage) begin : g_writeback_mepc_save
             // With the writeback stage present whether an instruction accessing memory will cause
             // an exception is only known when it is in writeback. So when taking such an exception
             // epc must come from writeback.
-            csr_save_id_o  = ~(store_err_q | load_err_q);
-            csr_save_wb_o  = store_err_q | load_err_q;
+            csr_save_id_o = ~(store_err_q | load_err_q);
+            csr_save_wb_o = store_err_q | load_err_q;
           end else begin : g_no_writeback_mepc_save
-            csr_save_id_o  = 1'b0;
+            csr_save_id_o = 1'b0;
           end
 
           csr_save_cause_o = 1'b1;
@@ -764,8 +773,7 @@ module ibex_controller #(
               csr_mtval_o = instr_is_compressed_i ? {16'b0, instr_compressed_i} : instr_i;
             end
             ecall_insn_prio: begin
-              exc_cause_o = (priv_mode_i == PRIV_LVL_M) ? ExcCauseEcallMMode :
-                                                          ExcCauseEcallUMode;
+              exc_cause_o = (priv_mode_i == PRIV_LVL_M) ? ExcCauseEcallMMode : ExcCauseEcallUMode;
             end
             ebrk_insn_prio: begin
               if (debug_mode_q | ebreak_into_debug) begin
@@ -780,7 +788,7 @@ module ibex_controller #(
               end else begin
                 // If EBREAK won't enter debug mode (dcsr.ebreakm/u not set) then raise a breakpoint
                 // exception.
-                exc_cause_o      = ExcCauseBreakpoint;
+                exc_cause_o = ExcCauseBreakpoint;
               end
             end
             store_err_prio: begin
@@ -800,7 +808,7 @@ module ibex_controller #(
             pc_set_o              = 1'b1;
             csr_restore_mret_id_o = 1'b1;
             if (nmi_mode_q) begin
-              nmi_mode_d          = 1'b0; // exit NMI mode
+              nmi_mode_d = 1'b0;  // exit NMI mode
             end
           end else if (dret_insn) begin
             pc_mux_o              = PC_DRET;
@@ -808,9 +816,9 @@ module ibex_controller #(
             debug_mode_d          = 1'b0;
             csr_restore_dret_id_o = 1'b1;
           end else if (wfi_insn) begin
-            ctrl_fsm_ns           = WAIT_SLEEP;
+            ctrl_fsm_ns = WAIT_SLEEP;
           end
-        end // exc_req_q
+        end  // exc_req_q
 
         // Entering debug mode due to either single step or debug_req. Ensure
         // registers are set for exception but then enter debug handler rather
@@ -829,7 +837,7 @@ module ibex_controller #(
         if (enter_debug_mode_prio_q && !(ebrk_insn_prio && ebreak_into_debug)) begin
           ctrl_fsm_ns = DBG_TAKEN_IF;
         end
-      end // FLUSH
+      end  // FLUSH
 
       default: begin
         instr_req_o = 1'b0;
@@ -895,21 +903,22 @@ module ibex_controller #(
     end
   end
 
-  `ASSERT(PipeEmptyOnIrq, ctrl_fsm_cs != IRQ_TAKEN & ctrl_fsm_ns == IRQ_TAKEN |->
-    ~instr_valid_i & ready_wb_i)
+  `ASSERT(PipeEmptyOnIrq,
+          ctrl_fsm_cs != IRQ_TAKEN & ctrl_fsm_ns == IRQ_TAKEN |-> ~instr_valid_i & ready_wb_i)
 
   //////////
   // FCOV //
   //////////
 
   `DV_FCOV_SIGNAL(logic, all_debug_req, debug_req_i || debug_mode_q || debug_single_step_i)
-  `DV_FCOV_SIGNAL(logic, debug_wakeup, (ctrl_fsm_cs == SLEEP) & (ctrl_fsm_ns == FIRST_FETCH) &
-                                        (debug_req_i || debug_mode_q || debug_single_step_i))
+  `DV_FCOV_SIGNAL(
+      logic, debug_wakeup,
+      (ctrl_fsm_cs == SLEEP) & (ctrl_fsm_ns == FIRST_FETCH) & (debug_req_i || debug_mode_q || debug_single_step_i))
   `DV_FCOV_SIGNAL(logic, interrupt_taken, (ctrl_fsm_cs != IRQ_TAKEN) & (ctrl_fsm_ns == IRQ_TAKEN))
   `DV_FCOV_SIGNAL(logic, debug_entry_if,
-      (ctrl_fsm_cs != DBG_TAKEN_IF) & (ctrl_fsm_ns == DBG_TAKEN_IF))
+                  (ctrl_fsm_cs != DBG_TAKEN_IF) & (ctrl_fsm_ns == DBG_TAKEN_IF))
   `DV_FCOV_SIGNAL(logic, debug_entry_id,
-      (ctrl_fsm_cs != DBG_TAKEN_ID) & (ctrl_fsm_ns == DBG_TAKEN_ID))
+                  (ctrl_fsm_cs != DBG_TAKEN_ID) & (ctrl_fsm_ns == DBG_TAKEN_ID))
   `DV_FCOV_SIGNAL(logic, pipe_flush, (ctrl_fsm_cs != FLUSH) & (ctrl_fsm_ns == FLUSH))
   `DV_FCOV_SIGNAL(logic, debug_req, debug_req_i & ~debug_mode_q)
   `DV_FCOV_SIGNAL(logic, debug_single_step_taken, do_single_step_d & ~do_single_step_q)
@@ -921,98 +930,95 @@ module ibex_controller #(
   `ASSERT(AlwaysInstrClearOnMispredict, nt_branch_mispredict_o |-> instr_valid_clear_o)
 
   // Selectors must be known/valid.
-  `ASSERT(IbexCtrlStateValid, ctrl_fsm_cs inside {
-      RESET, BOOT_SET, WAIT_SLEEP, SLEEP, FIRST_FETCH, DECODE, FLUSH,
-      IRQ_TAKEN, DBG_TAKEN_IF, DBG_TAKEN_ID})
+  `ASSERT(
+      IbexCtrlStateValid,
+      ctrl_fsm_cs inside {RESET, BOOT_SET, WAIT_SLEEP, SLEEP, FIRST_FETCH, DECODE, FLUSH, IRQ_TAKEN, DBG_TAKEN_IF, DBG_TAKEN_ID})
 
-  `ifdef INC_ASSERT
-    // If something that causes a jump into an exception handler is seen that jump must occur before
-    // the next instruction executes. The logic tracks whether a jump into an exception handler is
-    // expected. Assertions check the jump occurs.
+`ifdef INC_ASSERT
+  // If something that causes a jump into an exception handler is seen that jump must occur before
+  // the next instruction executes. The logic tracks whether a jump into an exception handler is
+  // expected. Assertions check the jump occurs.
 
-    logic exception_req, exception_req_pending, exception_req_accepted, exception_req_done;
-    logic exception_pc_set, seen_exception_pc_set, expect_exception_pc_set;
-    logic exception_req_needs_pc_set;
+  logic exception_req, exception_req_pending, exception_req_accepted, exception_req_done;
+  logic exception_pc_set, seen_exception_pc_set, expect_exception_pc_set;
+  logic exception_req_needs_pc_set;
 
-    assign exception_req = (special_req | enter_debug_mode | handle_irq);
-    // Any exception rquest will cause a transition out of DECODE, once the controller transitions
-    // back into DECODE we're done handling the request.
-    assign exception_req_done =
+  assign exception_req = (special_req | enter_debug_mode | handle_irq);
+  // Any exception rquest will cause a transition out of DECODE, once the controller transitions
+  // back into DECODE we're done handling the request.
+  assign exception_req_done =
       exception_req_pending & (ctrl_fsm_cs != DECODE) & (ctrl_fsm_ns == DECODE);
 
-    assign exception_req_needs_pc_set = enter_debug_mode | handle_irq | special_req_pc_change;
+  assign exception_req_needs_pc_set = enter_debug_mode | handle_irq | special_req_pc_change;
 
-    // An exception PC set uses specific PC types
-    assign exception_pc_set =
+  // An exception PC set uses specific PC types
+  assign exception_pc_set =
       exception_req_pending & (pc_set_o & (pc_mux_o inside {PC_EXC, PC_ERET, PC_DRET}));
 
-    always @(posedge clk_i or negedge rst_ni) begin
-      if (!rst_ni) begin
-        exception_req_pending   <= 1'b0;
-        exception_req_accepted  <= 1'b0;
-        expect_exception_pc_set <= 1'b0;
-        seen_exception_pc_set   <= 1'b0;
-      end else begin
-        // Keep `exception_req_pending` asserted once an exception_req is seen until it is done
-        exception_req_pending <= (exception_req_pending | exception_req) & ~exception_req_done;
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      exception_req_pending   <= 1'b0;
+      exception_req_accepted  <= 1'b0;
+      expect_exception_pc_set <= 1'b0;
+      seen_exception_pc_set   <= 1'b0;
+    end else begin
+      // Keep `exception_req_pending` asserted once an exception_req is seen until it is done
+      exception_req_pending <= (exception_req_pending | exception_req) & ~exception_req_done;
 
-        // The exception req has been accepted once the controller transitions out of decode
-        exception_req_accepted <= (exception_req_accepted & ~exception_req_done) |
+      // The exception req has been accepted once the controller transitions out of decode
+      exception_req_accepted <= (exception_req_accepted & ~exception_req_done) |
           (exception_req & ctrl_fsm_ns != DECODE);
 
-        // Set `expect_exception_pc_set` if exception req needs one and keep it asserted until
-        // exception req is done
-        expect_exception_pc_set <= (expect_exception_pc_set | exception_req_needs_pc_set) &
+      // Set `expect_exception_pc_set` if exception req needs one and keep it asserted until
+      // exception req is done
+      expect_exception_pc_set <= (expect_exception_pc_set | exception_req_needs_pc_set) &
           ~exception_req_done;
 
-        // Keep `seen_exception_pc_set` asserted once an exception PC set is seen until the
-        // exception req is done
-        seen_exception_pc_set <= (seen_exception_pc_set | exception_pc_set) & ~exception_req_done;
-      end
+      // Keep `seen_exception_pc_set` asserted once an exception PC set is seen until the
+      // exception req is done
+      seen_exception_pc_set <= (seen_exception_pc_set | exception_pc_set) & ~exception_req_done;
     end
+  end
 
-    // Once an exception request has been accepted it must be handled before controller goes back to
-    // DECODE
-    `ASSERT(IbexNoDoubleExceptionReq, exception_req_accepted |-> ctrl_fsm_cs != DECODE)
+  // Once an exception request has been accepted it must be handled before controller goes back to
+  // DECODE
+  `ASSERT(IbexNoDoubleExceptionReq, exception_req_accepted |-> ctrl_fsm_cs != DECODE)
 
-    // Only signal ready, allowing a new instruction into ID, if there is no exception request
-    // pending or it is done this cycle.
-    `ASSERT(IbexDontSkipExceptionReq,
-      id_in_ready_o |-> !exception_req_pending || exception_req_done)
+  // Only signal ready, allowing a new instruction into ID, if there is no exception request
+  // pending or it is done this cycle.
+  `ASSERT(IbexDontSkipExceptionReq, id_in_ready_o |-> !exception_req_pending || exception_req_done)
 
-    // Once a PC set has been performed for an exception request there must not be any other
-    // excepting those to move into debug mode.
-    `ASSERT(IbexNoDoubleSpecialReqPCSet,
-      seen_exception_pc_set &&
-        !((ctrl_fsm_cs inside {DBG_TAKEN_IF, DBG_TAKEN_ID}) &&
-          (pc_mux_o == PC_EXC) && (exc_pc_mux_o == EXC_PC_DBD))
-      |-> !pc_set_o)
+  // Once a PC set has been performed for an exception request there must not be any other
+  // excepting those to move into debug mode.
+  `ASSERT(
+      IbexNoDoubleSpecialReqPCSet,
+      seen_exception_pc_set && !((ctrl_fsm_cs inside {DBG_TAKEN_IF, DBG_TAKEN_ID}) && (pc_mux_o == PC_EXC) && (exc_pc_mux_o == EXC_PC_DBD)) |-> !pc_set_o)
 
-    // When an exception request is done there must have been an appropriate PC set (either this
-    // cycle or a previous one).
-    `ASSERT(IbexSetExceptionPCOnSpecialReqIfExpected,
-      exception_req_pending && expect_exception_pc_set && exception_req_done |->
-      seen_exception_pc_set || exception_pc_set)
+  // When an exception request is done there must have been an appropriate PC set (either this
+  // cycle or a previous one).
+  `ASSERT(
+      IbexSetExceptionPCOnSpecialReqIfExpected,
+      exception_req_pending && expect_exception_pc_set && exception_req_done |-> seen_exception_pc_set || exception_pc_set)
 
-    // If there's a pending exception req that doesn't need a PC set we must not see one
-    `ASSERT(IbexNoPCSetOnSpecialReqIfNotExpected,
-      exception_req_pending && !expect_exception_pc_set |-> ~pc_set_o)
+  // If there's a pending exception req that doesn't need a PC set we must not see one
+  `ASSERT(IbexNoPCSetOnSpecialReqIfNotExpected,
+          exception_req_pending && !expect_exception_pc_set |-> ~pc_set_o)
 
-    // If entering or exiting debug mode, the pipeline must be flushed. This is because Ibex
-    // currently does not support some of the pipeline stages being in debug mode; either all or
-    // none of the pipeline stages must be in debug mode. As `flush_id_o` only affects the ID/EX
-    // stage but does not prevent a fetched instruction from proceeding to ID/EX the next cycle, the
-    // assertion additionally requires `pc_set_o`, which sets the PC in the IF stage to a new value,
-    // hence preventing a fetched instruction from proceeding to the ID/EX stage in the next cycle.
-    `ASSERT(IbexPipelineFlushOnChangingDebugMode,
-      debug_mode_d != debug_mode_q |-> flush_id_o & pc_set_o)
-  `endif
+  // If entering or exiting debug mode, the pipeline must be flushed. This is because Ibex
+  // currently does not support some of the pipeline stages being in debug mode; either all or
+  // none of the pipeline stages must be in debug mode. As `flush_id_o` only affects the ID/EX
+  // stage but does not prevent a fetched instruction from proceeding to ID/EX the next cycle, the
+  // assertion additionally requires `pc_set_o`, which sets the PC in the IF stage to a new value,
+  // hence preventing a fetched instruction from proceeding to the ID/EX stage in the next cycle.
+  `ASSERT(IbexPipelineFlushOnChangingDebugMode,
+          debug_mode_d != debug_mode_q |-> flush_id_o & pc_set_o)
+`endif
 
-  `ifdef RVFI
-    // Workaround for internal verilator error when using hierarchical refers to calcuate this
-    // directly in ibex_core
-    logic rvfi_flush_next;
+`ifdef RVFI
+  // Workaround for internal verilator error when using hierarchical refers to calcuate this
+  // directly in ibex_core
+  logic rvfi_flush_next;
 
-    assign rvfi_flush_next = ctrl_fsm_ns == FLUSH;
-  `endif
+  assign rvfi_flush_next = ctrl_fsm_ns == FLUSH;
+`endif
 endmodule

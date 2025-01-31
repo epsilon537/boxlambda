@@ -9,9 +9,8 @@ sources:
   - target: verilator
     files:
     - lint.vlt
-    - sim/rtl/litedram.v
-    - common/rtl/litedram_wrapper.sv
-  - target: any(vivado, openxc7)
+  - target: any(vivado, verilator, openxc7)
+    include_dirs:
+    - .
     files:
-    - arty/rtl/litedram.v
     - common/rtl/litedram_wrapper.sv

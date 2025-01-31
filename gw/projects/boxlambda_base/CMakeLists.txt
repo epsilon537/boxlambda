@@ -8,14 +8,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "vivado")
   gw_project_rules_vivado(
       TOP_MODULE boxlambda_top
       PROJECT_NAME boxlambda_base
-      MEM_FILE_TARGET cmem_to_flash_vector
   )
 elseif(CMAKE_BUILD_TYPE STREQUAL "openxc7")
   #gw_project_rules_openxc7() function is defined in the parent CMakeLists.txt.
   gw_project_rules_openxc7(
       TOP_MODULE boxlambda_top
       PROJECT_NAME boxlambda_base
-      FREQ 50
+      FREQ 25
   )
 endif()
 

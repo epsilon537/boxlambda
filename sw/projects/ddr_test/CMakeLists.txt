@@ -10,7 +10,7 @@ add_executable(ddr_test_ram
 if(CMAKE_BUILD_TYPE STREQUAL "verilator")
   target_compile_definitions(ddr_test_ram PRIVATE -DMEMTEST_SIZE=32768)
 else() #fpga:
-  target_compile_definitions(ddr_test_ram PRIVATE -DMEMTEST_SIZE=\(256*1024*1024\))
+  target_compile_definitions(ddr_test_ram PRIVATE -DMEMTEST_SIZE=32768)
 endif()
 
 target_compile_options(ddr_test_ram

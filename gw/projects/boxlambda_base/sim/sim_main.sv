@@ -51,7 +51,8 @@ module sim_main #(
     input  wire  [23:0] gp_in,
     output wire  [23:0] gp_out,
     output wire  [23:0] gp_oe,
-    input  wire         gp_clk
+    input  wire         gp_clk,
+    output wire         sys_clk_25mhz
 );
 
   // jtag openocd bridge signals
@@ -138,7 +139,10 @@ module sim_main #(
       .audio_shutdown_n(audio_shutdown_n),
       .pcm_out(pcm_out),
       .acc1_overflow(acc1_overflow),
-      .acc2_overflow(acc2_overflow)
+      .acc2_overflow(acc2_overflow),
+
+      // indicates we're running at 25mhz
+      .sys_clk_25mhz(sys_clk_25mhz)
   );
 
   always_comb begin : jtag_exit_handler

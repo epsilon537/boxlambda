@@ -35,9 +35,10 @@ endfunction()
 #TOP_MODULE: name of top module.
 #PRJ_COMP_NAME: project or component name, e.g. wbuart32
 #MEM_FILE_LIST: Mem file list, if any.
+#MEM_FILE_TARGET: Software image target, if any.
 function (gw_common_rules_openxc7)
   set(options)
-  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME OOC MEM_FILE_LIST)
+  set(oneValueArgs TOP_MODULE PRJ_COMP_NAME MEM_FILE_LIST MEM_FILE_TARGET)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_common_rules_openxc7
@@ -49,8 +50,8 @@ function (gw_common_rules_openxc7)
 
   set(_top_module ${gw_common_rules_openxc7_TOP_MODULE})
   set(_prj_comp_name ${gw_common_rules_openxc7_PRJ_COMP_NAME})
-  set(_ooc ${gw_common_rules_openxc7_OOC})
   set(_mem_file_list ${gw_common_rules_openxc7_MEM_FILE_LIST})
+  set(_mem_file_tgt ${gw_common_rules_openxc7_MEM_FILE_TARGET})
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
@@ -77,14 +78,21 @@ function (gw_common_rules_openxc7)
           VERBATIM
       )
 
+  if ("${_mem_file_tgt}" STREQUAL "")
+    set(_sw_mem_file "")
+  else()
+    set(_sw_mem_file $<TARGET_FILE:${_mem_file_tgt}>.mem)
+  endif()
+
   #Extract .mem files from the Bender.yml manifest.
   add_custom_command(
         OUTPUT
             ${_prj_comp_name}.mem_file_list
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.mem_file_list openxc7
+            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.mem_file_list openxc7 ${_sw_mem_file}
         DEPENDS
             always_rebuild
+            ${_mem_file_tgt}
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT
@@ -103,6 +111,7 @@ function (gw_common_rules_openxc7)
           DEPENDS
               ${_prj_comp_name}.yosys_sources
               ${_prj_comp_name}.mem_file_list
+              ${_mem_file_tgt}
           DEPFILE
               ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.yosys_sources.dep
           COMMENT
@@ -191,11 +200,11 @@ function (gw_common_rules_vivado)
                   -top ${_top_module})
   #If a constraints file list is given, append it to the Vivado command string.
   if (NOT ${_prj_constraints_file_list} STREQUAL "")
-      string(APPEND create_project_cmd " -prj_constraints " ${_prj_constraints_file_list})
+    string(APPEND create_project_cmd " -prj_constraints " ${_prj_constraints_file_list})
   endif()
   #If a mem file list is given, append it to the Vivado command string.
   if (NOT ${_mem_file_list} STREQUAL "")
-      string(APPEND create_project_cmd " -mem_files " ${_mem_file_list})
+    string(APPEND create_project_cmd " -mem_files " ${_mem_file_list})
   endif()
 
   #Custom command executing the create_project command string.

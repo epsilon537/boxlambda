@@ -8,7 +8,11 @@
 extern "C" {
 #endif
 
-#define PLATFORM_CLK_FREQ		(50ULL * 1000 * 1000)
+#ifdef SYS_CLK_25MHZ
+#define PLATFORM_CLK_FREQ (25ULL * 1000 * 1000)
+#else
+#define PLATFORM_CLK_FREQ (50ULL * 1000 * 1000)
+#endif
 
 /**
  * Sleeps for microseconds.

@@ -26,11 +26,9 @@ then
 fi
 
 echo "Creating build build trees..."
-cmake --fresh --preset=sim-a7-35
-make -C ./build/sim-a7-35 regen
 
-cmake --fresh --preset=sim-a7-100
-make -C ./build/sim-a7-100 regen
+cmake --fresh --preset=verilator-a7-100
+make -C ./build/verilator-a7-100 regen
 
 cmake --fresh --preset=vivado-a7-35
 make -C ./build/vivado-a7-35 regen

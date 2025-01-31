@@ -58,7 +58,9 @@ endfunction()
 
 #SW project builds:
 add_subdirectory(hello_world)
+add_subdirectory(hello_world_25mhz)
 add_subdirectory(ddr_test)
+add_subdirectory(ddr_test_25mhz)
 add_subdirectory(vera_test)
 add_subdirectory(sdspi_test)
 add_subdirectory(fatfs_test)

@@ -67,9 +67,10 @@ endfunction()
 #Function grouping gateware component build rules.
 #TOP_MODULE: name of top module.
 #COMPONENT_NAME: component name, e.g. wbuart32
+#MEM_FILE_TARGET: name of the SW target that generates the required .mem file, e.g. picolibc_test
 function (gw_component_rules)
   set(options)
-  set(oneValueArgs TOP_MODULE COMPONENT_NAME)
+  set(oneValueArgs TOP_MODULE COMPONENT_NAME MEM_FILE_TARGET)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_component_rules
@@ -81,6 +82,7 @@ function (gw_component_rules)
 
   set(_top_module ${gw_component_rules_TOP_MODULE})
   set(_comp_name ${gw_component_rules_COMPONENT_NAME})
+  set(_mem_file_tgt ${gw_component_rules_MEM_FILE_TARGET})
 
   #Forward to gw_common_rules() function. gw_common_rules() build logic is shared between
   #gw components and projects.
@@ -99,8 +101,8 @@ function (gw_component_rules)
               ${_top_module}
           PRJ_COMP_NAME
               ${_comp_name}
-          OOC
-              "1"
+          MEM_FILE_TARGET
+              ${_mem_file_tgt}
       )
   else()
     gw_common_rules_verilator(

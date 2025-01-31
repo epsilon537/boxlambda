@@ -1,7 +1,10 @@
 #! /bin/sh
 
-#Invoke Litex's liteDRAM generator script twice, once for FPGA and once for simulation
+#Invoke Litex's liteDRAM generator script for FPGA, Verilator, and OpenXC7
 #The generated code is checked in. The cores only need to be regenerated when the LiteDRAM YML configuration
 #file changes.
-litedram_gen artya7dram.yml --sim --gen_user_clkx2 --gateware-dir sim/rtl --software-dir sim/sw --name litedram
-litedram_gen artya7dram.yml --gen_user_clkx2 --gateware-dir arty/rtl --software-dir arty/sw --name litedram
+litedram_gen 50mhz.yml --sim --gen_user_clkx2 --gateware-dir sim_50mhz/rtl --software-dir sim_50mhz/sw --name litedram
+litedram_gen 50mhz.yml --gen_user_clkx2 --gateware-dir fpga_50mhz/rtl --software-dir fpga_50mhz/sw --name litedram
+litedram_gen 25mhz.yml --sim --gen_user_clkx2 --gateware-dir sim_25mhz/rtl --software-dir sim_25mhz/sw --name litedram
+litedram_gen 25mhz.yml --gen_user_clkx2 --gateware-dir fpga_25mhz/rtl --software-dir fpga_25mhz/sw --name litedram
+
