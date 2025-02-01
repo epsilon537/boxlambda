@@ -691,7 +691,7 @@ module boxlambda_soc #(
 
   /*The Ibex CPU.*/
   wb_ibex_core #(
-      .RV32M(ibex_pkg::RV32MFast),
+      .RV32M(ibex_pkg::RV32MSingleCycle),
       .RV32B(ibex_pkg::RV32BBalanced),
       .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA),
       .BranchTargetALU(1'b0),
