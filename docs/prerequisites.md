@@ -14,19 +14,6 @@ Make sure you also install your Arty A7 board files. Digilent has excellent inst
 
 [https://digilent.com/reference/programmable-logic/guides/installing-vivado-and-vitis](https://digilent.com/reference/programmable-logic/guides/installing-vivado-and-vitis)
 
-### RISCV Toolchain
-
-RISCV Compiler Toolchain **rv32imcb**. This is the cross-compiler for building the code that'll run on the Ibex processor. I'm using the **20220210-1** pre-built binaries from *lowRISC*:
-
-[https://github.com/lowRISC/lowrisc-toolchains/releases](https://github.com/lowRISC/lowrisc-toolchains/releases)
-
-Add the toolchain's *bin/* directory to your *PATH*. E.g.:
-
-```
-export RISCV_TOOLCHAIN=$HOME/lowrisc-toolchain-gcc-rv32imcb-20220210-1
-export PATH=$PATH:$RISCV_TOOLCHAIN/bin
-```
-
 ### GNU Make
 
 Version 4.2.1 or later.
@@ -34,20 +21,6 @@ Version 4.2.1 or later.
 ```
 sudo apt-get install make
 ```
-
-### Bender
-
-Version 0.28.1:
-
-[https://github.com/pulp-platform/bender/releases/tag/v0.28.1](https://github.com/pulp-platform/bender/releases/tag/v0.28.1)
-
-Add bender to your *PATH*.
-
-### OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD)
-
-Version 2024-03-18.
-
-Installation instructions: [https://github.com/YosysHQ/oss-cad-suite-build#installation](https://github.com/YosysHQ/oss-cad-suite-build#installation)
 
 ### CMake
 
@@ -63,11 +36,6 @@ export PATH=/usr/bin:$PATH
 ```
 
 ### Additional Prerequisites for Building and Running the Verilator Test Cases
-
-#### Pip
-```
-sudo apt-get install python3-pip
-```
 
 #### SDL2
 
@@ -97,14 +65,6 @@ Chromaprint is needed to run Verilator simulation testcases involving the YM2149
 sudo apt-get install libchromaprint-tools
 ```
 
-#### NumPy, SciPy, SoundDevice, and Matplotlib
-
-These Python modules are needed to run Verilator simulation testcases involving the YM2149 PSG sound core.
-
-```
-pip install numpy scipy sounddevice matplotlib
-```
-
 ### Prerequisites to Build the Documentation
 
 #### Jekyll
@@ -129,12 +89,11 @@ bundle install
 
 #### MkDocs
 
-MkDocs is required if you want to build the BoxLambda read-the-docs website.
+MkDocs is required if you want to build the BoxLambda read-the-docs website. From the root of the BoxLambda workspace:
 
 ```
-pip install mkdocs
-pip install mkdocs-material
-pip install pymdown-extensions
+git checkout gh-pages
+pip install -U -r python-requirements.txt
 ```
 
 ### Tools you probably don't need
@@ -175,4 +134,13 @@ Perl is required if you would like to tinker with the usb_hid_host firmware. You
 ```
 sudo apt-get install perl.
 ```
+
+### Hidden Tool Dependencies
+
+These are tools that are automatically installed (if not already installed) by sourcing the *activate_env.sh* script:
+
+- [OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD)](https://github.com/YosysHQ/oss-cad-suite-build)
+- [Lowrisc GCC RV32ICMB Compiler toolchain](https://github.com/lowRISC/lowrisc-toolchains/releases)
+- [Bender](https://github.com/pulp-platform/bender)
+- Python packages NumPy, SciPy, SoundDevice, and Matplotlib.
 

@@ -8,4 +8,5 @@ site
 vendor
 .editorconfig
 settings.json
+venv
 

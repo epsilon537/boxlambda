@@ -5,6 +5,7 @@ Before you try any of the test builds, you need to:
 1. [Install the Prerequisites](prerequisites.md).
 2. [Hook Up the Peripherals (PMODs)](pmods.md).
 3. [Set up the repository](#setting-up-the-repository).
+4. [Activate the tool environment](#activating-the-tools-environment).
 
 ### Setting Up the Repository.
 
@@ -13,10 +14,25 @@ Get the BoxLambda repository:
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-Set up the repository. This initializes the git submodules used and creates the default build trees: 
+Set up the repository. This initializes the git submodules used and creates the default build trees:
 ```
 ./boxlambda_setup.sh
 ```
+
+### Activating the Tools Environment
+
+From the root of the BoxLambda workspace, source the *activate_env.sh* script:
+```
+source activate_env.sh
+```
+
+This script will:
+- Activate a Python Virtual Environment.
+- Install the required Python packages if not already installed.
+- Install the required tools (compiler, oss-cad-suite, Bender...) if not already installed.
+- Update the PATH environment variable to include the required tools.
+
+If you happen to have multiple BoxLambda workspaces, you only need to activate the tools environment in one of them.
 
 ### User-Level Access to the Arty A7 USB JTAG Adapter.
 
@@ -32,7 +48,7 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="666",
 ### On Linux
 
 #### Serial Port
-Your mileage may vary but on my Ubuntu system, when I plug in my Arty A7, the serial port shows up at **/dev/ttyUSB1**. 
+Your mileage may vary but on my Ubuntu system, when I plug in my Arty A7, the serial port shows up at **/dev/ttyUSB1**.
 
 Serial Port Settings: **115200 8N1**
 
@@ -44,15 +60,15 @@ I'm using **Putty** terminal emulator. In *terminal options* I have enabled foll
 
 #### USBIPD-WIN
 
-For USB device access to work at all on WSL, it's necessary to attach the USB device to WSL (by default, USB ports stay under native Windows control). This is done using **usbipd-win**, which can be installed from this location: 
+For USB device access to work at all on WSL, it's necessary to attach the USB device to WSL (by default, USB ports stay under native Windows control). This is done using **usbipd-win**, which can be installed from this location:
 
 [https://github.com/dorssel/usbipd-win/releases](https://github.com/dorssel/usbipd-win/releases).
 
-Additional info about connecting USB devices to WSL can be found here: 
+Additional info about connecting USB devices to WSL can be found here:
 
 [https://learn.microsoft.com/en-us/windows/wsl/connect-usb](https://learn.microsoft.com/en-us/windows/wsl/connect-usb).
 
-For convenience, I created a one-line Windows batch script that attaches the Arty USB JTAG port to WSL: 
+For convenience, I created a one-line Windows batch script that attaches the Arty USB JTAG port to WSL:
 
 *boxlambda/scripts/usb_fwd_to_wsl.bat*:
 
