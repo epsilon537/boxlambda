@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `<TBD>`: Changes Since Label `boxlambda_base` - 2025-02-XX
+
+### Added
+
+- Activate_env.sh script to set up tools environment, simplifying setup.
+
+### Fixed
+
+N/A
+
+### Changed
+
+- Updated to LowRisc GCC toolchain 20240923.
+- Updated to OSS CAD Suite 20250201.
+- Update to 2025/01/21 version of Ibex code base.
+- Update to 2025/01/31 version of Litedram code base.
+- Ibex code is not imported in Boxlambda repo by gw/components/ibex/gen_core.sh script.
+- Switched to Single-Cycle multiplier in Ibex CPU.
+
+### Removed
+
+- User no longer needs to install LowRisc GCC toolchain.
+- User no longer needs to install OSS CAD suite.
+- User no longer needs to install Bender.
+- User no longer needs to install Python packages.
+- Removed zeroing out memory and some unnecessary SystemVerilog constructs that aren't compatible with Yosys synthesis, preparing for OpenXC7 support.
+
 ## Label `boxlambda_base`: Changes Since Label `dfx` - 2025-01-07
 
 ### Added
@@ -29,7 +56,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Renamed IRQ ID and handler for `VS_1` to `VERA`.
 - Renamed directory `gw/projects/boxlambda_top/` to `gw/projects/boxlambda_base/`.
 - Renamed CMake function `link_and_create_mem_file` to `link_and_create_image`.
-- In gw CMakeLists, replaced VERILATOR_CPP_FLAGS and VERILATOR_LD_FLAGS parameters with a single VERILATOR_FLAGS multi value parameter. 
+- In gw CMakeLists, replaced VERILATOR_CPP_FLAGS and VERILATOR_LD_FLAGS parameters with a single VERILATOR_FLAGS multi value parameter.
 - Instead of relying on a VIVADO_FLAGS environment variable, vivado is now invoked through a wrapper script: *scripts/vivado_wrapper.sh*. The script defines the vivado flags to use.
 - Moved all verilator build artifacts except the *Vmodel* executable to a *verilator/* subdirectory of the gw project build directory.
 

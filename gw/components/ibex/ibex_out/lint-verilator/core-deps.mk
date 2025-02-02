@@ -121,10 +121,10 @@ fusesoc-deps := \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_flop.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_flop-impl_0/prim_flop.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_flop-impl_0/prim_flop.sv \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_flop.core \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_flop.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_flop.core \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/rtl/prim_xilinx_flop.sv \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_flop.core \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_flop.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_count.core \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/lint/prim_count.vlt \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_count_pkg.sv \
@@ -132,12 +132,12 @@ fusesoc-deps := \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_clock_mux2.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_clock_mux2-impl_0/prim_clock_mux2.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_clock_mux2-impl_0/prim_clock_mux2.sv \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_clock_mux2.core \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/lint/prim_generic_clock_mux2.vlt \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_clock_mux2.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_clock_mux2.core \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/lint/prim_xilinx_clock_mux2.vlt \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/rtl/prim_xilinx_clock_mux2.sv \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_clock_mux2.core \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/lint/prim_generic_clock_mux2.vlt \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_clock_mux2.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_buf.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_buf-impl_0/prim_buf.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_buf-impl_0/prim_buf.sv \
@@ -148,10 +148,10 @@ fusesoc-deps := \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_and2.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_and2-impl_0/prim_and2.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_and2-impl_0/prim_and2.sv \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_and2.core \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_and2.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_and2.core \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/rtl/prim_xilinx_and2.sv \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_and2.core \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_and2.sv \
   /home/epsilon/work/boxlambda/sub/ibex/ibex_core.core \
   /home/epsilon/work/boxlambda/sub/ibex/lint/verilator_waiver.vlt \
   /home/epsilon/work/boxlambda/sub/ibex/rtl/ibex_alu.sv \
@@ -207,12 +207,12 @@ fusesoc-deps := \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_clock_gating.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_clock_gating-impl_0/prim_clock_gating.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_clock_gating-impl_0/prim_clock_gating.sv \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_clock_gating.core \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/lint/prim_xilinx_clock_gating.vlt \
-  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/rtl/prim_xilinx_clock_gating.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_clock_gating.core \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/lint/prim_generic_clock_gating.vlt \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_clock_gating.sv \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/prim_xilinx_clock_gating.core \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/lint/prim_xilinx_clock_gating.vlt \
+  /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_xilinx/rtl/prim_xilinx_clock_gating.sv \
   /home/epsilon/work/boxlambda/sub/ibex/ibex_pkg.core \
   /home/epsilon/work/boxlambda/sub/ibex/rtl/ibex_pkg.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/primgen.core \
