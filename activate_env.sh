@@ -1,42 +1,14 @@
 #! /bin/bash
 
-echo "Note: This script should be sourced from a boxlambda workspace root directory. Different boxlambda workspaces may share the same environment."
-
-if [ -d ./venv ]; then
-  echo "Boxlambda venv found. Activating..."
-  if source ./venv/bin/activate ; then
-    echo "OK"
-  else
-    echo "Activating venv failed. Aborting..."
-    return 1
-  fi
-else
-  echo "No Boxlambda venv found. Installing..."
-  if python -m venv ./venv ; then
-    echo "OK"
-  else
-    echo "Venv creation failed. Aborting..."
-    return 1
-  fi
-
-  echo "Activating venv..."
-  if source ./venv/bin/activate ; then
-    echo "OK"
-  else
-    echo "Activating venv failed. Aborting..."
-    return 1
-  fi
-
-  echo "Installing required Python packages..."
-  if pip install -U -r python-requirements.txt ; then
-    echo "OK"
-  else
-    "Pip install failed. Aborting..."
-    return 1
-  fi
+#!/usr/bin/env bash
+if [ "${BASH_SOURCE-}" = "$0" ]; then
+    echo "You must source this script: \$ source $0" >&2
+    exit 1
 fi
 
-pushd .
+echo "Note: This script should be sourced from a boxlambda workspace root directory. Different boxlambda workspaces may share the same environment."
+
+pushd . > /dev/null
 mkdir -p tools
 cd tools
 
@@ -85,11 +57,42 @@ else
   fi
 fi
 
-popd
+popd > /dev/null
+
+echo "Activate OSS CAD Suite Environment..."
+_ORIG_PS1="${PS1}"
+
+if source ./tools/oss-cad-suite/environment ; then
+  echo "OK"
+else
+  echo "OSS CAD Suite activation failed. Aborting..."
+  return 1
+fi
+
+if [ -n "${ZSH_VERSION-}" ] ; then
+    autoload -U colors && colors
+    PS1="%{$fg[magenta]%}(BoxLambda)%{$reset_color%}${_ORIG_PS1}"
+else
+    PS1="\[\033[1;35m\]\342\246\227BoxLambda\342\246\230\[\033[0m\]${_ORIG_PS1}"
+fi
+export PS1
+
+if python3 -m pip -qq check python-requirements.txt ; then
+  echo "Required Python packages found."
+else
+  echo "Installing required Python packages..."
+  if python3 -m pip install -qq -U -r python-requirements.txt ; then
+    echo "OK"
+  else
+    "Pip install failed. Aborting..."
+    return 1
+  fi
+fi
+
 echo "Updating PATH..."
 
 export BOXLAMBDA_WORKSPACE=`pwd`
-export PATH=$BOXLAMBDA_WORKSPACE/tools:$BOXLAMBDA_WORKSPACE/tools/lowrisc-toolchain-gcc-rv32imcb-$LOWRISC_TOOLCHAIN_VERSION-1/bin::$BOXLAMBDA_WORKSPACE/tools/oss-cad-suite/bin:$BOXLAMBDA_WORKSPACE/scripts:$PATH
+export PATH=$BOXLAMBDA_WORKSPACE/tools:$BOXLAMBDA_WORKSPACE/tools/lowrisc-toolchain-gcc-rv32imcb-$LOWRISC_TOOLCHAIN_VERSION-1/bin:$BOXLAMBDA_WORKSPACE/scripts:$PATH
 
-echo "Done."
+echo "Done. Enter 'deactivate' to deactivate the environment."
 

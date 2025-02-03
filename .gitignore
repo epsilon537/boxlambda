@@ -17,15 +17,9 @@ sub/litex-boards
 sub/migen
 sub/pythondata*
 sub/valentyusb
-
-#Python venv
-venv
-
 #Tools directory
 tools
-
 #build trees
 build
-
 CMakeUserPresets.json
 

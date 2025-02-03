@@ -1,7 +1,9 @@
 import os
+import sys
 import cocotb
 from pathlib import Path
-from cocotb.runner import *
+from cocotb_tools.runner import get_runner
+from cocotb_tools.check_results import get_results
 
 #This is a simple wrapper around CocoTB's Test Runner.
 #It takes care of some boilerplate code and makes sure waveforms are always generated.
@@ -44,6 +46,12 @@ def test_runner(verilog_sources, test_module_filename, top, testcase=None):
 
     res = runner.test(hdl_toplevel=top, test_module=test_module+",", testcase=testcase, plusargs=['-fst'])
 
-    #Check results is needed to have this test script return pass or fail.
-    #Without it, the script always returns success, even if some or all of the testcases themselves fail.
-    check_results_file(res)
+    try:
+      (num_tests, num_failed) = get_results(res)
+    except RuntimeError as e:
+      print("%s", e.args[0])
+      sys.exit(2)
+    else:
+      if num_failed:
+        print("ERROR: Failed %d of %d tests.", num_failed, num_tests)
+        sys.exit(1)
