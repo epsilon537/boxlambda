@@ -139,7 +139,7 @@ sudo apt-get install perl.
 
 These are tools that are automatically installed (if not already installed) by sourcing the *activate_env.sh* script:
 
-- [OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD)](https://github.com/YosysHQ/oss-cad-suite-build)
+- [OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD, Python)](https://github.com/YosysHQ/oss-cad-suite-build)
 - [Lowrisc GCC RV32ICMB Compiler toolchain](https://github.com/lowRISC/lowrisc-toolchains/releases)
 - [Bender](https://github.com/pulp-platform/bender)
 - Python packages NumPy, SciPy, SoundDevice, and Matplotlib.
