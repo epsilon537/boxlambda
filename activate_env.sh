@@ -6,7 +6,27 @@ if [ "${BASH_SOURCE-}" = "$0" ]; then
     exit 1
 fi
 
+echo "Activating BoxLambda tools environments. Installing tools if needed."
 echo "Note: This script should be sourced from a boxlambda workspace root directory. Different boxlambda workspaces may share the same environment."
+
+if [[ "$#" > 0 && "$1" == "-h" ]]
+then
+  echo "$0 [-h] [-r]"
+  echo "-h: Show help."
+  echo "-r: Force clean reinstallation of tools environment."
+  return 1
+fi
+
+if [[ "$#" > 0 && "$1" == "-r" ]]
+then
+  rm -rf tools
+fi
+
+if which vivado ; then
+  echo "Vivado found."
+else
+  echo "Vivado not found. Please install Vivado and add it to your path."
+fi
 
 pushd . > /dev/null
 mkdir -p tools
@@ -77,7 +97,7 @@ else
 fi
 export PS1
 
-if python3 -m pip -qq check python-requirements.txt ; then
+if [ -f ./tools/oss-cad-suite/.python_packages_installed ]; then
   echo "Required Python packages found."
 else
   echo "Installing required Python packages..."
@@ -87,6 +107,7 @@ else
     "Pip install failed. Aborting..."
     return 1
   fi
+  cp -f python-requirements.txt ./tools/oss-cad-suite/.python_packages_installed
 fi
 
 echo "Updating PATH..."
