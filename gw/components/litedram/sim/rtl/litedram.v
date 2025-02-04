@@ -8,8 +8,8 @@
 //
 // Filename   : litedram.v
 // Device     : 
-// LiteX sha1 : 55249ddae
-// Date       : 2024-05-07 15:09:05
+// LiteX sha1 : a3ac4b888
+// Date       : 2025-01-31 22:29:26
 //------------------------------------------------------------------------------
 
 `timescale 1ns / 1ps
@@ -248,34 +248,6 @@ LiteDRAMCore
 //------------------------------------------------------------------------------
 
 wire   [13:0] adr;
-reg     [2:0] array_muxed0 = 3'd0;
-reg    [13:0] array_muxed1 = 14'd0;
-reg           array_muxed10 = 1'd0;
-reg           array_muxed11 = 1'd0;
-reg           array_muxed12 = 1'd0;
-reg           array_muxed13 = 1'd0;
-reg     [2:0] array_muxed14 = 3'd0;
-reg    [13:0] array_muxed15 = 14'd0;
-reg           array_muxed16 = 1'd0;
-reg           array_muxed17 = 1'd0;
-reg           array_muxed18 = 1'd0;
-reg           array_muxed19 = 1'd0;
-reg           array_muxed2 = 1'd0;
-reg           array_muxed20 = 1'd0;
-reg     [2:0] array_muxed21 = 3'd0;
-reg    [13:0] array_muxed22 = 14'd0;
-reg           array_muxed23 = 1'd0;
-reg           array_muxed24 = 1'd0;
-reg           array_muxed25 = 1'd0;
-reg           array_muxed26 = 1'd0;
-reg           array_muxed27 = 1'd0;
-reg           array_muxed3 = 1'd0;
-reg           array_muxed4 = 1'd0;
-reg           array_muxed5 = 1'd0;
-reg           array_muxed6 = 1'd0;
-reg     [2:0] array_muxed7 = 3'd0;
-reg    [13:0] array_muxed8 = 14'd0;
-reg           array_muxed9 = 1'd0;
 wire          csrbank0_init_done0_r;
 reg           csrbank0_init_done0_re = 1'd0;
 wire          csrbank0_init_done0_w;
@@ -469,42 +441,70 @@ reg     [1:0] litedramcore_state = 2'd0;
 reg     [1:0] litedramwishbone2native_next_state = 2'd0;
 reg     [1:0] litedramwishbone2native_state = 2'd0;
 wire          por_clk;
-reg           rhs_array_muxed0 = 1'd0;
-reg    [13:0] rhs_array_muxed1 = 14'd0;
-reg           rhs_array_muxed10 = 1'd0;
-reg           rhs_array_muxed11 = 1'd0;
-reg    [20:0] rhs_array_muxed12 = 21'd0;
-reg           rhs_array_muxed13 = 1'd0;
-reg           rhs_array_muxed14 = 1'd0;
-reg    [20:0] rhs_array_muxed15 = 21'd0;
-reg           rhs_array_muxed16 = 1'd0;
-reg           rhs_array_muxed17 = 1'd0;
-reg    [20:0] rhs_array_muxed18 = 21'd0;
-reg           rhs_array_muxed19 = 1'd0;
-reg     [2:0] rhs_array_muxed2 = 3'd0;
-reg           rhs_array_muxed20 = 1'd0;
-reg    [20:0] rhs_array_muxed21 = 21'd0;
-reg           rhs_array_muxed22 = 1'd0;
-reg           rhs_array_muxed23 = 1'd0;
-reg    [20:0] rhs_array_muxed24 = 21'd0;
-reg           rhs_array_muxed25 = 1'd0;
-reg           rhs_array_muxed26 = 1'd0;
-reg    [20:0] rhs_array_muxed27 = 21'd0;
-reg           rhs_array_muxed28 = 1'd0;
-reg           rhs_array_muxed29 = 1'd0;
-reg           rhs_array_muxed3 = 1'd0;
-reg    [20:0] rhs_array_muxed30 = 21'd0;
-reg           rhs_array_muxed31 = 1'd0;
-reg           rhs_array_muxed32 = 1'd0;
-reg    [20:0] rhs_array_muxed33 = 21'd0;
-reg           rhs_array_muxed34 = 1'd0;
-reg           rhs_array_muxed35 = 1'd0;
-reg           rhs_array_muxed4 = 1'd0;
-reg           rhs_array_muxed5 = 1'd0;
-reg           rhs_array_muxed6 = 1'd0;
-reg    [13:0] rhs_array_muxed7 = 14'd0;
-reg     [2:0] rhs_array_muxed8 = 3'd0;
-reg           rhs_array_muxed9 = 1'd0;
+reg           rhs_self0 = 1'd0;
+reg    [13:0] rhs_self1 = 14'd0;
+reg           rhs_self10 = 1'd0;
+reg           rhs_self11 = 1'd0;
+reg    [20:0] rhs_self12 = 21'd0;
+reg           rhs_self13 = 1'd0;
+reg           rhs_self14 = 1'd0;
+reg    [20:0] rhs_self15 = 21'd0;
+reg           rhs_self16 = 1'd0;
+reg           rhs_self17 = 1'd0;
+reg    [20:0] rhs_self18 = 21'd0;
+reg           rhs_self19 = 1'd0;
+reg     [2:0] rhs_self2 = 3'd0;
+reg           rhs_self20 = 1'd0;
+reg    [20:0] rhs_self21 = 21'd0;
+reg           rhs_self22 = 1'd0;
+reg           rhs_self23 = 1'd0;
+reg    [20:0] rhs_self24 = 21'd0;
+reg           rhs_self25 = 1'd0;
+reg           rhs_self26 = 1'd0;
+reg    [20:0] rhs_self27 = 21'd0;
+reg           rhs_self28 = 1'd0;
+reg           rhs_self29 = 1'd0;
+reg           rhs_self3 = 1'd0;
+reg    [20:0] rhs_self30 = 21'd0;
+reg           rhs_self31 = 1'd0;
+reg           rhs_self32 = 1'd0;
+reg    [20:0] rhs_self33 = 21'd0;
+reg           rhs_self34 = 1'd0;
+reg           rhs_self35 = 1'd0;
+reg           rhs_self4 = 1'd0;
+reg           rhs_self5 = 1'd0;
+reg           rhs_self6 = 1'd0;
+reg    [13:0] rhs_self7 = 14'd0;
+reg     [2:0] rhs_self8 = 3'd0;
+reg           rhs_self9 = 1'd0;
+reg     [2:0] self0 = 3'd0;
+reg    [13:0] self1 = 14'd0;
+reg           self10 = 1'd0;
+reg           self11 = 1'd0;
+reg           self12 = 1'd0;
+reg           self13 = 1'd0;
+reg     [2:0] self14 = 3'd0;
+reg    [13:0] self15 = 14'd0;
+reg           self16 = 1'd0;
+reg           self17 = 1'd0;
+reg           self18 = 1'd0;
+reg           self19 = 1'd0;
+reg           self2 = 1'd0;
+reg           self20 = 1'd0;
+reg     [2:0] self21 = 3'd0;
+reg    [13:0] self22 = 14'd0;
+reg           self23 = 1'd0;
+reg           self24 = 1'd0;
+reg           self25 = 1'd0;
+reg           self26 = 1'd0;
+reg           self27 = 1'd0;
+reg           self3 = 1'd0;
+reg           self4 = 1'd0;
+reg           self5 = 1'd0;
+reg           self6 = 1'd0;
+reg     [2:0] self7 = 3'd0;
+reg    [13:0] self8 = 14'd0;
+reg           self9 = 1'd0;
 wire   [24:0] slice_proxy0;
 wire   [24:0] slice_proxy1;
 wire   [24:0] slice_proxy10;
@@ -2094,11 +2094,11 @@ wire          soc_litedramcore_read_available;
 wire          soc_litedramcore_reset_n;
 wire          soc_litedramcore_sel;
 reg           soc_litedramcore_sequencer_count = 1'd0;
-reg     [5:0] soc_litedramcore_sequencer_counter = 6'd0;
 wire          soc_litedramcore_sequencer_done0;
 reg           soc_litedramcore_sequencer_done1 = 1'd0;
 reg           soc_litedramcore_sequencer_start0 = 1'd0;
 wire          soc_litedramcore_sequencer_start1;
+reg     [5:0] soc_litedramcore_sequencer_trigger = 6'd0;
 wire          soc_litedramcore_slave_p0_act_n;
 wire   [13:0] soc_litedramcore_slave_p0_address;
 wire    [2:0] soc_litedramcore_slave_p0_bank;
@@ -2163,18 +2163,18 @@ wire          soc_litedramcore_slave_p3_we_n;
 wire   [31:0] soc_litedramcore_slave_p3_wrdata;
 wire          soc_litedramcore_slave_p3_wrdata_en;
 wire    [3:0] soc_litedramcore_slave_p3_wrdata_mask;
-reg           soc_litedramcore_steerer0 = 1'd1;
-reg           soc_litedramcore_steerer1 = 1'd1;
-reg           soc_litedramcore_steerer2 = 1'd1;
-reg           soc_litedramcore_steerer3 = 1'd1;
+reg     [1:0] soc_litedramcore_steerer0 = 2'd0;
+reg     [1:0] soc_litedramcore_steerer1 = 2'd0;
+reg           soc_litedramcore_steerer10 = 1'd1;
+reg           soc_litedramcore_steerer11 = 1'd1;
+reg     [1:0] soc_litedramcore_steerer2 = 2'd0;
+reg     [1:0] soc_litedramcore_steerer3 = 2'd0;
 reg           soc_litedramcore_steerer4 = 1'd1;
 reg           soc_litedramcore_steerer5 = 1'd1;
 reg           soc_litedramcore_steerer6 = 1'd1;
 reg           soc_litedramcore_steerer7 = 1'd1;
-reg     [1:0] soc_litedramcore_steerer_sel0 = 2'd0;
-reg     [1:0] soc_litedramcore_steerer_sel1 = 2'd0;
-reg     [1:0] soc_litedramcore_steerer_sel2 = 2'd0;
-reg     [1:0] soc_litedramcore_steerer_sel3 = 2'd0;
+reg           soc_litedramcore_steerer8 = 1'd1;
+reg           soc_litedramcore_steerer9 = 1'd1;
 reg     [3:0] soc_litedramcore_storage = 4'd1;
 reg           soc_litedramcore_tccdcon_count = 1'd0;
 reg           soc_litedramcore_tccdcon_ready = 1'd0;
@@ -2199,9 +2199,9 @@ wire          soc_litedramcore_twtrcon_valid;
 wire          soc_litedramcore_wants_refresh;
 wire          soc_litedramcore_wants_zqcs;
 wire          soc_litedramcore_write_available;
-reg     [4:0] soc_litedramcore_zqcs_executer_counter = 5'd0;
 reg           soc_litedramcore_zqcs_executer_done = 1'd0;
 reg           soc_litedramcore_zqcs_executer_start = 1'd0;
+reg     [4:0] soc_litedramcore_zqcs_executer_trigger = 5'd0;
 wire   [25:0] soc_litedramcore_zqcs_timer_count0;
 reg    [25:0] soc_litedramcore_zqcs_timer_count1 = 26'd49999999;
 wire          soc_litedramcore_zqcs_timer_done0;
@@ -2451,12 +2451,12 @@ wire          soc_wb_port_we;
 wire          sys2x_clk;
 wire          sys_clk;
 wire          sys_rst;
-reg           t_array_muxed0 = 1'd0;
-reg           t_array_muxed1 = 1'd0;
-reg           t_array_muxed2 = 1'd0;
-reg           t_array_muxed3 = 1'd0;
-reg           t_array_muxed4 = 1'd0;
-reg           t_array_muxed5 = 1'd0;
+reg           t_self0 = 1'd0;
+reg           t_self1 = 1'd0;
+reg           t_self2 = 1'd0;
+reg           t_self3 = 1'd0;
+reg           t_self4 = 1'd0;
+reg           t_self5 = 1'd0;
 wire          we;
 reg     [1:0] wishbone2csr_next_state = 2'd0;
 reg     [1:0] wishbone2csr_state = 2'd0;
@@ -9714,28 +9714,28 @@ always @(*) begin
     soc_litedramcore_choose_cmd_valids[7] <= (soc_litedramcore_bankmachine7_cmd_valid & (((soc_litedramcore_bankmachine7_cmd_payload_is_cmd & soc_litedramcore_choose_cmd_want_cmds) & ((~((soc_litedramcore_bankmachine7_cmd_payload_ras & (~soc_litedramcore_bankmachine7_cmd_payload_cas)) & (~soc_litedramcore_bankmachine7_cmd_payload_we))) | soc_litedramcore_choose_cmd_want_activates)) | ((soc_litedramcore_bankmachine7_cmd_payload_is_read == soc_litedramcore_choose_cmd_want_reads) & (soc_litedramcore_bankmachine7_cmd_payload_is_write == soc_litedramcore_choose_cmd_want_writes))));
 end
 assign soc_litedramcore_choose_cmd_request = soc_litedramcore_choose_cmd_valids;
-assign soc_litedramcore_choose_cmd_cmd_valid = rhs_array_muxed0;
-assign soc_litedramcore_choose_cmd_cmd_payload_a = rhs_array_muxed1;
-assign soc_litedramcore_choose_cmd_cmd_payload_ba = rhs_array_muxed2;
-assign soc_litedramcore_choose_cmd_cmd_payload_is_read = rhs_array_muxed3;
-assign soc_litedramcore_choose_cmd_cmd_payload_is_write = rhs_array_muxed4;
-assign soc_litedramcore_choose_cmd_cmd_payload_is_cmd = rhs_array_muxed5;
+assign soc_litedramcore_choose_cmd_cmd_valid = rhs_self0;
+assign soc_litedramcore_choose_cmd_cmd_payload_a = rhs_self1;
+assign soc_litedramcore_choose_cmd_cmd_payload_ba = rhs_self2;
+assign soc_litedramcore_choose_cmd_cmd_payload_is_read = rhs_self3;
+assign soc_litedramcore_choose_cmd_cmd_payload_is_write = rhs_self4;
+assign soc_litedramcore_choose_cmd_cmd_payload_is_cmd = rhs_self5;
 always @(*) begin
     soc_litedramcore_choose_cmd_cmd_payload_cas <= 1'd0;
     if (soc_litedramcore_choose_cmd_cmd_valid) begin
-        soc_litedramcore_choose_cmd_cmd_payload_cas <= t_array_muxed0;
+        soc_litedramcore_choose_cmd_cmd_payload_cas <= t_self0;
     end
 end
 always @(*) begin
     soc_litedramcore_choose_cmd_cmd_payload_ras <= 1'd0;
     if (soc_litedramcore_choose_cmd_cmd_valid) begin
-        soc_litedramcore_choose_cmd_cmd_payload_ras <= t_array_muxed1;
+        soc_litedramcore_choose_cmd_cmd_payload_ras <= t_self1;
     end
 end
 always @(*) begin
     soc_litedramcore_choose_cmd_cmd_payload_we <= 1'd0;
     if (soc_litedramcore_choose_cmd_cmd_valid) begin
-        soc_litedramcore_choose_cmd_cmd_payload_we <= t_array_muxed2;
+        soc_litedramcore_choose_cmd_cmd_payload_we <= t_self2;
     end
 end
 always @(*) begin
@@ -9823,43 +9823,43 @@ always @(*) begin
     soc_litedramcore_choose_req_valids[7] <= (soc_litedramcore_bankmachine7_cmd_valid & (((soc_litedramcore_bankmachine7_cmd_payload_is_cmd & soc_litedramcore_choose_req_want_cmds) & ((~((soc_litedramcore_bankmachine7_cmd_payload_ras & (~soc_litedramcore_bankmachine7_cmd_payload_cas)) & (~soc_litedramcore_bankmachine7_cmd_payload_we))) | soc_litedramcore_choose_req_want_activates)) | ((soc_litedramcore_bankmachine7_cmd_payload_is_read == soc_litedramcore_choose_req_want_reads) & (soc_litedramcore_bankmachine7_cmd_payload_is_write == soc_litedramcore_choose_req_want_writes))));
 end
 assign soc_litedramcore_choose_req_request = soc_litedramcore_choose_req_valids;
-assign soc_litedramcore_choose_req_cmd_valid = rhs_array_muxed6;
-assign soc_litedramcore_choose_req_cmd_payload_a = rhs_array_muxed7;
-assign soc_litedramcore_choose_req_cmd_payload_ba = rhs_array_muxed8;
-assign soc_litedramcore_choose_req_cmd_payload_is_read = rhs_array_muxed9;
-assign soc_litedramcore_choose_req_cmd_payload_is_write = rhs_array_muxed10;
-assign soc_litedramcore_choose_req_cmd_payload_is_cmd = rhs_array_muxed11;
+assign soc_litedramcore_choose_req_cmd_valid = rhs_self6;
+assign soc_litedramcore_choose_req_cmd_payload_a = rhs_self7;
+assign soc_litedramcore_choose_req_cmd_payload_ba = rhs_self8;
+assign soc_litedramcore_choose_req_cmd_payload_is_read = rhs_self9;
+assign soc_litedramcore_choose_req_cmd_payload_is_write = rhs_self10;
+assign soc_litedramcore_choose_req_cmd_payload_is_cmd = rhs_self11;
 always @(*) begin
     soc_litedramcore_choose_req_cmd_payload_cas <= 1'd0;
     if (soc_litedramcore_choose_req_cmd_valid) begin
-        soc_litedramcore_choose_req_cmd_payload_cas <= t_array_muxed3;
+        soc_litedramcore_choose_req_cmd_payload_cas <= t_self3;
     end
 end
 always @(*) begin
     soc_litedramcore_choose_req_cmd_payload_ras <= 1'd0;
     if (soc_litedramcore_choose_req_cmd_valid) begin
-        soc_litedramcore_choose_req_cmd_payload_ras <= t_array_muxed4;
+        soc_litedramcore_choose_req_cmd_payload_ras <= t_self4;
     end
 end
 always @(*) begin
     soc_litedramcore_choose_req_cmd_payload_we <= 1'd0;
     if (soc_litedramcore_choose_req_cmd_valid) begin
-        soc_litedramcore_choose_req_cmd_payload_we <= t_array_muxed5;
+        soc_litedramcore_choose_req_cmd_payload_we <= t_self5;
     end
 end
 assign soc_litedramcore_choose_req_ce = (soc_litedramcore_choose_req_cmd_ready | (~soc_litedramcore_choose_req_cmd_valid));
 assign soc_litedramcore_dfi_p0_reset_n = 1'd1;
-assign soc_litedramcore_dfi_p0_cke = {1{soc_litedramcore_steerer0}};
-assign soc_litedramcore_dfi_p0_odt = {1{soc_litedramcore_steerer1}};
+assign soc_litedramcore_dfi_p0_cke = {1{soc_litedramcore_steerer4}};
+assign soc_litedramcore_dfi_p0_odt = {1{soc_litedramcore_steerer5}};
 assign soc_litedramcore_dfi_p1_reset_n = 1'd1;
-assign soc_litedramcore_dfi_p1_cke = {1{soc_litedramcore_steerer2}};
-assign soc_litedramcore_dfi_p1_odt = {1{soc_litedramcore_steerer3}};
+assign soc_litedramcore_dfi_p1_cke = {1{soc_litedramcore_steerer6}};
+assign soc_litedramcore_dfi_p1_odt = {1{soc_litedramcore_steerer7}};
 assign soc_litedramcore_dfi_p2_reset_n = 1'd1;
-assign soc_litedramcore_dfi_p2_cke = {1{soc_litedramcore_steerer4}};
-assign soc_litedramcore_dfi_p2_odt = {1{soc_litedramcore_steerer5}};
+assign soc_litedramcore_dfi_p2_cke = {1{soc_litedramcore_steerer8}};
+assign soc_litedramcore_dfi_p2_odt = {1{soc_litedramcore_steerer9}};
 assign soc_litedramcore_dfi_p3_reset_n = 1'd1;
-assign soc_litedramcore_dfi_p3_cke = {1{soc_litedramcore_steerer6}};
-assign soc_litedramcore_dfi_p3_odt = {1{soc_litedramcore_steerer7}};
+assign soc_litedramcore_dfi_p3_cke = {1{soc_litedramcore_steerer10}};
+assign soc_litedramcore_dfi_p3_odt = {1{soc_litedramcore_steerer11}};
 assign soc_litedramcore_tfawcon_count = ((soc_litedramcore_tfawcon_window[0] + soc_litedramcore_tfawcon_window[1]) + soc_litedramcore_tfawcon_window[2]);
 always @(*) begin
     litedramcore_multiplexer_next_state <= 4'd0;
@@ -10038,15 +10038,15 @@ always @(*) begin
     endcase
 end
 always @(*) begin
-    soc_litedramcore_steerer_sel3 <= 2'd0;
+    soc_litedramcore_steerer3 <= 2'd0;
     case (litedramcore_multiplexer_state)
         1'd1: begin
-            soc_litedramcore_steerer_sel3 <= 1'd0;
+            soc_litedramcore_steerer3 <= 1'd0;
             if (1'd1) begin
-                soc_litedramcore_steerer_sel3 <= 2'd2;
+                soc_litedramcore_steerer3 <= 2'd2;
             end
             if (1'd0) begin
-                soc_litedramcore_steerer_sel3 <= 1'd1;
+                soc_litedramcore_steerer3 <= 1'd1;
             end
         end
         2'd2: begin
@@ -10068,12 +10068,12 @@ always @(*) begin
         4'd10: begin
         end
         default: begin
-            soc_litedramcore_steerer_sel3 <= 1'd0;
+            soc_litedramcore_steerer3 <= 1'd0;
             if (1'd0) begin
-                soc_litedramcore_steerer_sel3 <= 2'd2;
+                soc_litedramcore_steerer3 <= 2'd2;
             end
             if (1'd0) begin
-                soc_litedramcore_steerer_sel3 <= 1'd1;
+                soc_litedramcore_steerer3 <= 1'd1;
             end
         end
     endcase
@@ -10144,19 +10144,19 @@ always @(*) begin
     endcase
 end
 always @(*) begin
-    soc_litedramcore_steerer_sel0 <= 2'd0;
+    soc_litedramcore_steerer0 <= 2'd0;
     case (litedramcore_multiplexer_state)
         1'd1: begin
-            soc_litedramcore_steerer_sel0 <= 1'd0;
+            soc_litedramcore_steerer0 <= 1'd0;
             if (1'd0) begin
-                soc_litedramcore_steerer_sel0 <= 2'd2;
+                soc_litedramcore_steerer0 <= 2'd2;
             end
             if (1'd0) begin
-                soc_litedramcore_steerer_sel0 <= 1'd1;
+                soc_litedramcore_steerer0 <= 1'd1;
             end
         end
         2'd2: begin
-            soc_litedramcore_steerer_sel0 <= 2'd3;
+            soc_litedramcore_steerer0 <= 2'd3;
         end
         2'd3: begin
         end
@@ -10175,26 +10175,26 @@ always @(*) begin
         4'd10: begin
         end
         default: begin
-            soc_litedramcore_steerer_sel0 <= 1'd0;
+            soc_litedramcore_steerer0 <= 1'd0;
             if (1'd0) begin
-                soc_litedramcore_steerer_sel0 <= 2'd2;
+                soc_litedramcore_steerer0 <= 2'd2;
             end
             if (1'd0) begin
-                soc_litedramcore_steerer_sel0 <= 1'd1;
+                soc_litedramcore_steerer0 <= 1'd1;
             end
         end
     endcase
 end
 always @(*) begin
-    soc_litedramcore_steerer_sel1 <= 2'd0;
+    soc_litedramcore_steerer1 <= 2'd0;
     case (litedramcore_multiplexer_state)
         1'd1: begin
-            soc_litedramcore_steerer_sel1 <= 1'd0;
+            soc_litedramcore_steerer1 <= 1'd0;
             if (1'd0) begin
-                soc_litedramcore_steerer_sel1 <= 2'd2;
+                soc_litedramcore_steerer1 <= 2'd2;
             end
             if (1'd0) begin
-                soc_litedramcore_steerer_sel1 <= 1'd1;
+                soc_litedramcore_steerer1 <= 1'd1;
             end
         end
         2'd2: begin
@@ -10216,12 +10216,12 @@ always @(*) begin
         4'd10: begin
         end
         default: begin
-            soc_litedramcore_steerer_sel1 <= 1'd0;
+            soc_litedramcore_steerer1 <= 1'd0;
             if (1'd0) begin
-                soc_litedramcore_steerer_sel1 <= 2'd2;
+                soc_litedramcore_steerer1 <= 2'd2;
             end
             if (1'd1) begin
-                soc_litedramcore_steerer_sel1 <= 1'd1;
+                soc_litedramcore_steerer1 <= 1'd1;
             end
         end
     endcase
@@ -10290,15 +10290,15 @@ always @(*) begin
     endcase
 end
 always @(*) begin
-    soc_litedramcore_steerer_sel2 <= 2'd0;
+    soc_litedramcore_steerer2 <= 2'd0;
     case (litedramcore_multiplexer_state)
         1'd1: begin
-            soc_litedramcore_steerer_sel2 <= 1'd0;
+            soc_litedramcore_steerer2 <= 1'd0;
             if (1'd0) begin
-                soc_litedramcore_steerer_sel2 <= 2'd2;
+                soc_litedramcore_steerer2 <= 2'd2;
             end
             if (1'd1) begin
-                soc_litedramcore_steerer_sel2 <= 1'd1;
+                soc_litedramcore_steerer2 <= 1'd1;
             end
         end
         2'd2: begin
@@ -10320,56 +10320,56 @@ always @(*) begin
         4'd10: begin
         end
         default: begin
-            soc_litedramcore_steerer_sel2 <= 1'd0;
+            soc_litedramcore_steerer2 <= 1'd0;
             if (1'd1) begin
-                soc_litedramcore_steerer_sel2 <= 2'd2;
+                soc_litedramcore_steerer2 <= 2'd2;
             end
             if (1'd0) begin
-                soc_litedramcore_steerer_sel2 <= 1'd1;
+                soc_litedramcore_steerer2 <= 1'd1;
             end
         end
     endcase
 end
 assign litedramcore_roundrobin0_request = {(((soc_port_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid)};
 assign litedramcore_roundrobin0_ce = ((~soc_litedramcore_interface_bank0_valid) & (~soc_litedramcore_interface_bank0_lock));
-assign soc_litedramcore_interface_bank0_addr = rhs_array_muxed12;
-assign soc_litedramcore_interface_bank0_we = rhs_array_muxed13;
-assign soc_litedramcore_interface_bank0_valid = rhs_array_muxed14;
+assign soc_litedramcore_interface_bank0_addr = rhs_self12;
+assign soc_litedramcore_interface_bank0_we = rhs_self13;
+assign soc_litedramcore_interface_bank0_valid = rhs_self14;
 assign litedramcore_roundrobin1_request = {(((soc_port_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid)};
 assign litedramcore_roundrobin1_ce = ((~soc_litedramcore_interface_bank1_valid) & (~soc_litedramcore_interface_bank1_lock));
-assign soc_litedramcore_interface_bank1_addr = rhs_array_muxed15;
-assign soc_litedramcore_interface_bank1_we = rhs_array_muxed16;
-assign soc_litedramcore_interface_bank1_valid = rhs_array_muxed17;
+assign soc_litedramcore_interface_bank1_addr = rhs_self15;
+assign soc_litedramcore_interface_bank1_we = rhs_self16;
+assign soc_litedramcore_interface_bank1_valid = rhs_self17;
 assign litedramcore_roundrobin2_request = {(((soc_port_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid)};
 assign litedramcore_roundrobin2_ce = ((~soc_litedramcore_interface_bank2_valid) & (~soc_litedramcore_interface_bank2_lock));
-assign soc_litedramcore_interface_bank2_addr = rhs_array_muxed18;
-assign soc_litedramcore_interface_bank2_we = rhs_array_muxed19;
-assign soc_litedramcore_interface_bank2_valid = rhs_array_muxed20;
+assign soc_litedramcore_interface_bank2_addr = rhs_self18;
+assign soc_litedramcore_interface_bank2_we = rhs_self19;
+assign soc_litedramcore_interface_bank2_valid = rhs_self20;
 assign litedramcore_roundrobin3_request = {(((soc_port_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid)};
 assign litedramcore_roundrobin3_ce = ((~soc_litedramcore_interface_bank3_valid) & (~soc_litedramcore_interface_bank3_lock));
-assign soc_litedramcore_interface_bank3_addr = rhs_array_muxed21;
-assign soc_litedramcore_interface_bank3_we = rhs_array_muxed22;
-assign soc_litedramcore_interface_bank3_valid = rhs_array_muxed23;
+assign soc_litedramcore_interface_bank3_addr = rhs_self21;
+assign soc_litedramcore_interface_bank3_we = rhs_self22;
+assign soc_litedramcore_interface_bank3_valid = rhs_self23;
 assign litedramcore_roundrobin4_request = {(((soc_port_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid)};
 assign litedramcore_roundrobin4_ce = ((~soc_litedramcore_interface_bank4_valid) & (~soc_litedramcore_interface_bank4_lock));
-assign soc_litedramcore_interface_bank4_addr = rhs_array_muxed24;
-assign soc_litedramcore_interface_bank4_we = rhs_array_muxed25;
-assign soc_litedramcore_interface_bank4_valid = rhs_array_muxed26;
+assign soc_litedramcore_interface_bank4_addr = rhs_self24;
+assign soc_litedramcore_interface_bank4_we = rhs_self25;
+assign soc_litedramcore_interface_bank4_valid = rhs_self26;
 assign litedramcore_roundrobin5_request = {(((soc_port_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid)};
 assign litedramcore_roundrobin5_ce = ((~soc_litedramcore_interface_bank5_valid) & (~soc_litedramcore_interface_bank5_lock));
-assign soc_litedramcore_interface_bank5_addr = rhs_array_muxed27;
-assign soc_litedramcore_interface_bank5_we = rhs_array_muxed28;
-assign soc_litedramcore_interface_bank5_valid = rhs_array_muxed29;
+assign soc_litedramcore_interface_bank5_addr = rhs_self27;
+assign soc_litedramcore_interface_bank5_we = rhs_self28;
+assign soc_litedramcore_interface_bank5_valid = rhs_self29;
 assign litedramcore_roundrobin6_request = {(((soc_port_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid)};
 assign litedramcore_roundrobin6_ce = ((~soc_litedramcore_interface_bank6_valid) & (~soc_litedramcore_interface_bank6_lock));
-assign soc_litedramcore_interface_bank6_addr = rhs_array_muxed30;
-assign soc_litedramcore_interface_bank6_we = rhs_array_muxed31;
-assign soc_litedramcore_interface_bank6_valid = rhs_array_muxed32;
+assign soc_litedramcore_interface_bank6_addr = rhs_self30;
+assign soc_litedramcore_interface_bank6_we = rhs_self31;
+assign soc_litedramcore_interface_bank6_valid = rhs_self32;
 assign litedramcore_roundrobin7_request = {(((soc_port_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))))) & soc_port_cmd_valid)};
 assign litedramcore_roundrobin7_ce = ((~soc_litedramcore_interface_bank7_valid) & (~soc_litedramcore_interface_bank7_lock));
-assign soc_litedramcore_interface_bank7_addr = rhs_array_muxed33;
-assign soc_litedramcore_interface_bank7_we = rhs_array_muxed34;
-assign soc_litedramcore_interface_bank7_valid = rhs_array_muxed35;
+assign soc_litedramcore_interface_bank7_addr = rhs_self33;
+assign soc_litedramcore_interface_bank7_we = rhs_self34;
+assign soc_litedramcore_interface_bank7_valid = rhs_self35;
 assign soc_port_cmd_ready = ((((((((1'd0 | (((litedramcore_roundrobin0_grant == 1'd0) & ((soc_port_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank0_ready)) | (((litedramcore_roundrobin1_grant == 1'd0) & ((soc_port_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank1_ready)) | (((litedramcore_roundrobin2_grant == 1'd0) & ((soc_port_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank2_ready)) | (((litedramcore_roundrobin3_grant == 1'd0) & ((soc_port_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank3_ready)) | (((litedramcore_roundrobin4_grant == 1'd0) & ((soc_port_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank4_ready)) | (((litedramcore_roundrobin5_grant == 1'd0) & ((soc_port_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank5_ready)) | (((litedramcore_roundrobin6_grant == 1'd0) & ((soc_port_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0)))))) & soc_litedramcore_interface_bank6_ready)) | (((litedramcore_roundrobin7_grant == 1'd0) & ((soc_port_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0)))))) & soc_litedramcore_interface_bank7_ready));
 assign soc_port_wdata_ready = litedramcore_new_master_wdata_ready1;
 assign soc_port_rdata_valid = litedramcore_new_master_rdata_valid8;
@@ -11645,1192 +11645,1192 @@ assign slice_proxy13 = ((soc_ddrphy_bankmodel6_row * 11'd1024) | soc_ddrphy_bank
 assign slice_proxy14 = ((soc_ddrphy_bankmodel7_row * 11'd1024) | soc_ddrphy_bankmodel7_write_col);
 assign slice_proxy15 = ((soc_ddrphy_bankmodel7_row * 11'd1024) | soc_ddrphy_bankmodel7_read_col);
 always @(*) begin
-    rhs_array_muxed0 <= 1'd0;
+    rhs_self0 <= 1'd0;
     case (soc_litedramcore_choose_cmd_grant)
         1'd0: begin
-            rhs_array_muxed0 <= soc_litedramcore_choose_cmd_valids[0];
+            rhs_self0 <= soc_litedramcore_choose_cmd_valids[0];
         end
         1'd1: begin
-            rhs_array_muxed0 <= soc_litedramcore_choose_cmd_valids[1];
+            rhs_self0 <= soc_litedramcore_choose_cmd_valids[1];
         end
         2'd2: begin
-            rhs_array_muxed0 <= soc_litedramcore_choose_cmd_valids[2];
+            rhs_self0 <= soc_litedramcore_choose_cmd_valids[2];
         end
         2'd3: begin
-            rhs_array_muxed0 <= soc_litedramcore_choose_cmd_valids[3];
+            rhs_self0 <= soc_litedramcore_choose_cmd_valids[3];
         end
         3'd4: begin
-            rhs_array_muxed0 <= soc_litedramcore_choose_cmd_valids[4];
+            rhs_self0 <= soc_litedramcore_choose_cmd_valids[4];
         end
         3'd5: begin
-            rhs_array_muxed0 <= soc_litedramcore_choose_cmd_valids[5];
+            rhs_self0 <= soc_litedramcore_choose_cmd_valids[5];
         end
         3'd6: begin
-            rhs_array_muxed0 <= soc_litedramcore_choose_cmd_valids[6];
+            rhs_self0 <= soc_litedramcore_choose_cmd_valids[6];
         end
         default: begin
-            rhs_array_muxed0 <= soc_litedramcore_choose_cmd_valids[7];
+            rhs_self0 <= soc_litedramcore_choose_cmd_valids[7];
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed1 <= 14'd0;
+    rhs_self1 <= 14'd0;
     case (soc_litedramcore_choose_cmd_grant)
         1'd0: begin
-            rhs_array_muxed1 <= soc_litedramcore_bankmachine0_cmd_payload_a;
+            rhs_self1 <= soc_litedramcore_bankmachine0_cmd_payload_a;
         end
         1'd1: begin
-            rhs_array_muxed1 <= soc_litedramcore_bankmachine1_cmd_payload_a;
+            rhs_self1 <= soc_litedramcore_bankmachine1_cmd_payload_a;
         end
         2'd2: begin
-            rhs_array_muxed1 <= soc_litedramcore_bankmachine2_cmd_payload_a;
+            rhs_self1 <= soc_litedramcore_bankmachine2_cmd_payload_a;
         end
         2'd3: begin
-            rhs_array_muxed1 <= soc_litedramcore_bankmachine3_cmd_payload_a;
+            rhs_self1 <= soc_litedramcore_bankmachine3_cmd_payload_a;
         end
         3'd4: begin
-            rhs_array_muxed1 <= soc_litedramcore_bankmachine4_cmd_payload_a;
+            rhs_self1 <= soc_litedramcore_bankmachine4_cmd_payload_a;
         end
         3'd5: begin
-            rhs_array_muxed1 <= soc_litedramcore_bankmachine5_cmd_payload_a;
+            rhs_self1 <= soc_litedramcore_bankmachine5_cmd_payload_a;
         end
         3'd6: begin
-            rhs_array_muxed1 <= soc_litedramcore_bankmachine6_cmd_payload_a;
+            rhs_self1 <= soc_litedramcore_bankmachine6_cmd_payload_a;
         end
         default: begin
-            rhs_array_muxed1 <= soc_litedramcore_bankmachine7_cmd_payload_a;
+            rhs_self1 <= soc_litedramcore_bankmachine7_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed2 <= 3'd0;
+    rhs_self2 <= 3'd0;
     case (soc_litedramcore_choose_cmd_grant)
         1'd0: begin
-            rhs_array_muxed2 <= soc_litedramcore_bankmachine0_cmd_payload_ba;
+            rhs_self2 <= soc_litedramcore_bankmachine0_cmd_payload_ba;
         end
         1'd1: begin
-            rhs_array_muxed2 <= soc_litedramcore_bankmachine1_cmd_payload_ba;
+            rhs_self2 <= soc_litedramcore_bankmachine1_cmd_payload_ba;
         end
         2'd2: begin
-            rhs_array_muxed2 <= soc_litedramcore_bankmachine2_cmd_payload_ba;
+            rhs_self2 <= soc_litedramcore_bankmachine2_cmd_payload_ba;
         end
         2'd3: begin
-            rhs_array_muxed2 <= soc_litedramcore_bankmachine3_cmd_payload_ba;
+            rhs_self2 <= soc_litedramcore_bankmachine3_cmd_payload_ba;
         end
         3'd4: begin
-            rhs_array_muxed2 <= soc_litedramcore_bankmachine4_cmd_payload_ba;
+            rhs_self2 <= soc_litedramcore_bankmachine4_cmd_payload_ba;
         end
         3'd5: begin
-            rhs_array_muxed2 <= soc_litedramcore_bankmachine5_cmd_payload_ba;
+            rhs_self2 <= soc_litedramcore_bankmachine5_cmd_payload_ba;
         end
         3'd6: begin
-            rhs_array_muxed2 <= soc_litedramcore_bankmachine6_cmd_payload_ba;
+            rhs_self2 <= soc_litedramcore_bankmachine6_cmd_payload_ba;
         end
         default: begin
-            rhs_array_muxed2 <= soc_litedramcore_bankmachine7_cmd_payload_ba;
+            rhs_self2 <= soc_litedramcore_bankmachine7_cmd_payload_ba;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed3 <= 1'd0;
+    rhs_self3 <= 1'd0;
     case (soc_litedramcore_choose_cmd_grant)
         1'd0: begin
-            rhs_array_muxed3 <= soc_litedramcore_bankmachine0_cmd_payload_is_read;
+            rhs_self3 <= soc_litedramcore_bankmachine0_cmd_payload_is_read;
         end
         1'd1: begin
-            rhs_array_muxed3 <= soc_litedramcore_bankmachine1_cmd_payload_is_read;
+            rhs_self3 <= soc_litedramcore_bankmachine1_cmd_payload_is_read;
         end
         2'd2: begin
-            rhs_array_muxed3 <= soc_litedramcore_bankmachine2_cmd_payload_is_read;
+            rhs_self3 <= soc_litedramcore_bankmachine2_cmd_payload_is_read;
         end
         2'd3: begin
-            rhs_array_muxed3 <= soc_litedramcore_bankmachine3_cmd_payload_is_read;
+            rhs_self3 <= soc_litedramcore_bankmachine3_cmd_payload_is_read;
         end
         3'd4: begin
-            rhs_array_muxed3 <= soc_litedramcore_bankmachine4_cmd_payload_is_read;
+            rhs_self3 <= soc_litedramcore_bankmachine4_cmd_payload_is_read;
         end
         3'd5: begin
-            rhs_array_muxed3 <= soc_litedramcore_bankmachine5_cmd_payload_is_read;
+            rhs_self3 <= soc_litedramcore_bankmachine5_cmd_payload_is_read;
         end
         3'd6: begin
-            rhs_array_muxed3 <= soc_litedramcore_bankmachine6_cmd_payload_is_read;
+            rhs_self3 <= soc_litedramcore_bankmachine6_cmd_payload_is_read;
         end
         default: begin
-            rhs_array_muxed3 <= soc_litedramcore_bankmachine7_cmd_payload_is_read;
+            rhs_self3 <= soc_litedramcore_bankmachine7_cmd_payload_is_read;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed4 <= 1'd0;
+    rhs_self4 <= 1'd0;
     case (soc_litedramcore_choose_cmd_grant)
         1'd0: begin
-            rhs_array_muxed4 <= soc_litedramcore_bankmachine0_cmd_payload_is_write;
+            rhs_self4 <= soc_litedramcore_bankmachine0_cmd_payload_is_write;
         end
         1'd1: begin
-            rhs_array_muxed4 <= soc_litedramcore_bankmachine1_cmd_payload_is_write;
+            rhs_self4 <= soc_litedramcore_bankmachine1_cmd_payload_is_write;
         end
         2'd2: begin
-            rhs_array_muxed4 <= soc_litedramcore_bankmachine2_cmd_payload_is_write;
+            rhs_self4 <= soc_litedramcore_bankmachine2_cmd_payload_is_write;
         end
         2'd3: begin
-            rhs_array_muxed4 <= soc_litedramcore_bankmachine3_cmd_payload_is_write;
+            rhs_self4 <= soc_litedramcore_bankmachine3_cmd_payload_is_write;
         end
         3'd4: begin
-            rhs_array_muxed4 <= soc_litedramcore_bankmachine4_cmd_payload_is_write;
+            rhs_self4 <= soc_litedramcore_bankmachine4_cmd_payload_is_write;
         end
         3'd5: begin
-            rhs_array_muxed4 <= soc_litedramcore_bankmachine5_cmd_payload_is_write;
+            rhs_self4 <= soc_litedramcore_bankmachine5_cmd_payload_is_write;
         end
         3'd6: begin
-            rhs_array_muxed4 <= soc_litedramcore_bankmachine6_cmd_payload_is_write;
+            rhs_self4 <= soc_litedramcore_bankmachine6_cmd_payload_is_write;
         end
         default: begin
-            rhs_array_muxed4 <= soc_litedramcore_bankmachine7_cmd_payload_is_write;
+            rhs_self4 <= soc_litedramcore_bankmachine7_cmd_payload_is_write;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed5 <= 1'd0;
+    rhs_self5 <= 1'd0;
     case (soc_litedramcore_choose_cmd_grant)
         1'd0: begin
-            rhs_array_muxed5 <= soc_litedramcore_bankmachine0_cmd_payload_is_cmd;
+            rhs_self5 <= soc_litedramcore_bankmachine0_cmd_payload_is_cmd;
         end
         1'd1: begin
-            rhs_array_muxed5 <= soc_litedramcore_bankmachine1_cmd_payload_is_cmd;
+            rhs_self5 <= soc_litedramcore_bankmachine1_cmd_payload_is_cmd;
         end
         2'd2: begin
-            rhs_array_muxed5 <= soc_litedramcore_bankmachine2_cmd_payload_is_cmd;
+            rhs_self5 <= soc_litedramcore_bankmachine2_cmd_payload_is_cmd;
         end
         2'd3: begin
-            rhs_array_muxed5 <= soc_litedramcore_bankmachine3_cmd_payload_is_cmd;
+            rhs_self5 <= soc_litedramcore_bankmachine3_cmd_payload_is_cmd;
         end
         3'd4: begin
-            rhs_array_muxed5 <= soc_litedramcore_bankmachine4_cmd_payload_is_cmd;
+            rhs_self5 <= soc_litedramcore_bankmachine4_cmd_payload_is_cmd;
         end
         3'd5: begin
-            rhs_array_muxed5 <= soc_litedramcore_bankmachine5_cmd_payload_is_cmd;
+            rhs_self5 <= soc_litedramcore_bankmachine5_cmd_payload_is_cmd;
         end
         3'd6: begin
-            rhs_array_muxed5 <= soc_litedramcore_bankmachine6_cmd_payload_is_cmd;
+            rhs_self5 <= soc_litedramcore_bankmachine6_cmd_payload_is_cmd;
         end
         default: begin
-            rhs_array_muxed5 <= soc_litedramcore_bankmachine7_cmd_payload_is_cmd;
+            rhs_self5 <= soc_litedramcore_bankmachine7_cmd_payload_is_cmd;
         end
     endcase
 end
 always @(*) begin
-    t_array_muxed0 <= 1'd0;
+    t_self0 <= 1'd0;
     case (soc_litedramcore_choose_cmd_grant)
         1'd0: begin
-            t_array_muxed0 <= soc_litedramcore_bankmachine0_cmd_payload_cas;
+            t_self0 <= soc_litedramcore_bankmachine0_cmd_payload_cas;
         end
         1'd1: begin
-            t_array_muxed0 <= soc_litedramcore_bankmachine1_cmd_payload_cas;
+            t_self0 <= soc_litedramcore_bankmachine1_cmd_payload_cas;
         end
         2'd2: begin
-            t_array_muxed0 <= soc_litedramcore_bankmachine2_cmd_payload_cas;
+            t_self0 <= soc_litedramcore_bankmachine2_cmd_payload_cas;
         end
         2'd3: begin
-            t_array_muxed0 <= soc_litedramcore_bankmachine3_cmd_payload_cas;
+            t_self0 <= soc_litedramcore_bankmachine3_cmd_payload_cas;
         end
         3'd4: begin
-            t_array_muxed0 <= soc_litedramcore_bankmachine4_cmd_payload_cas;
+            t_self0 <= soc_litedramcore_bankmachine4_cmd_payload_cas;
         end
         3'd5: begin
-            t_array_muxed0 <= soc_litedramcore_bankmachine5_cmd_payload_cas;
+            t_self0 <= soc_litedramcore_bankmachine5_cmd_payload_cas;
         end
         3'd6: begin
-            t_array_muxed0 <= soc_litedramcore_bankmachine6_cmd_payload_cas;
+            t_self0 <= soc_litedramcore_bankmachine6_cmd_payload_cas;
         end
         default: begin
-            t_array_muxed0 <= soc_litedramcore_bankmachine7_cmd_payload_cas;
+            t_self0 <= soc_litedramcore_bankmachine7_cmd_payload_cas;
         end
     endcase
 end
 always @(*) begin
-    t_array_muxed1 <= 1'd0;
+    t_self1 <= 1'd0;
     case (soc_litedramcore_choose_cmd_grant)
         1'd0: begin
-            t_array_muxed1 <= soc_litedramcore_bankmachine0_cmd_payload_ras;
+            t_self1 <= soc_litedramcore_bankmachine0_cmd_payload_ras;
         end
         1'd1: begin
-            t_array_muxed1 <= soc_litedramcore_bankmachine1_cmd_payload_ras;
+            t_self1 <= soc_litedramcore_bankmachine1_cmd_payload_ras;
         end
         2'd2: begin
-            t_array_muxed1 <= soc_litedramcore_bankmachine2_cmd_payload_ras;
+            t_self1 <= soc_litedramcore_bankmachine2_cmd_payload_ras;
         end
         2'd3: begin
-            t_array_muxed1 <= soc_litedramcore_bankmachine3_cmd_payload_ras;
+            t_self1 <= soc_litedramcore_bankmachine3_cmd_payload_ras;
         end
         3'd4: begin
-            t_array_muxed1 <= soc_litedramcore_bankmachine4_cmd_payload_ras;
+            t_self1 <= soc_litedramcore_bankmachine4_cmd_payload_ras;
         end
         3'd5: begin
-            t_array_muxed1 <= soc_litedramcore_bankmachine5_cmd_payload_ras;
+            t_self1 <= soc_litedramcore_bankmachine5_cmd_payload_ras;
         end
         3'd6: begin
-            t_array_muxed1 <= soc_litedramcore_bankmachine6_cmd_payload_ras;
+            t_self1 <= soc_litedramcore_bankmachine6_cmd_payload_ras;
         end
         default: begin
-            t_array_muxed1 <= soc_litedramcore_bankmachine7_cmd_payload_ras;
+            t_self1 <= soc_litedramcore_bankmachine7_cmd_payload_ras;
         end
     endcase
 end
 always @(*) begin
-    t_array_muxed2 <= 1'd0;
+    t_self2 <= 1'd0;
     case (soc_litedramcore_choose_cmd_grant)
         1'd0: begin
-            t_array_muxed2 <= soc_litedramcore_bankmachine0_cmd_payload_we;
+            t_self2 <= soc_litedramcore_bankmachine0_cmd_payload_we;
         end
         1'd1: begin
-            t_array_muxed2 <= soc_litedramcore_bankmachine1_cmd_payload_we;
+            t_self2 <= soc_litedramcore_bankmachine1_cmd_payload_we;
         end
         2'd2: begin
-            t_array_muxed2 <= soc_litedramcore_bankmachine2_cmd_payload_we;
+            t_self2 <= soc_litedramcore_bankmachine2_cmd_payload_we;
         end
         2'd3: begin
-            t_array_muxed2 <= soc_litedramcore_bankmachine3_cmd_payload_we;
+            t_self2 <= soc_litedramcore_bankmachine3_cmd_payload_we;
         end
         3'd4: begin
-            t_array_muxed2 <= soc_litedramcore_bankmachine4_cmd_payload_we;
+            t_self2 <= soc_litedramcore_bankmachine4_cmd_payload_we;
         end
         3'd5: begin
-            t_array_muxed2 <= soc_litedramcore_bankmachine5_cmd_payload_we;
+            t_self2 <= soc_litedramcore_bankmachine5_cmd_payload_we;
         end
         3'd6: begin
-            t_array_muxed2 <= soc_litedramcore_bankmachine6_cmd_payload_we;
+            t_self2 <= soc_litedramcore_bankmachine6_cmd_payload_we;
         end
         default: begin
-            t_array_muxed2 <= soc_litedramcore_bankmachine7_cmd_payload_we;
+            t_self2 <= soc_litedramcore_bankmachine7_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed6 <= 1'd0;
+    rhs_self6 <= 1'd0;
     case (soc_litedramcore_choose_req_grant)
         1'd0: begin
-            rhs_array_muxed6 <= soc_litedramcore_choose_req_valids[0];
+            rhs_self6 <= soc_litedramcore_choose_req_valids[0];
         end
         1'd1: begin
-            rhs_array_muxed6 <= soc_litedramcore_choose_req_valids[1];
+            rhs_self6 <= soc_litedramcore_choose_req_valids[1];
         end
         2'd2: begin
-            rhs_array_muxed6 <= soc_litedramcore_choose_req_valids[2];
+            rhs_self6 <= soc_litedramcore_choose_req_valids[2];
         end
         2'd3: begin
-            rhs_array_muxed6 <= soc_litedramcore_choose_req_valids[3];
+            rhs_self6 <= soc_litedramcore_choose_req_valids[3];
         end
         3'd4: begin
-            rhs_array_muxed6 <= soc_litedramcore_choose_req_valids[4];
+            rhs_self6 <= soc_litedramcore_choose_req_valids[4];
         end
         3'd5: begin
-            rhs_array_muxed6 <= soc_litedramcore_choose_req_valids[5];
+            rhs_self6 <= soc_litedramcore_choose_req_valids[5];
         end
         3'd6: begin
-            rhs_array_muxed6 <= soc_litedramcore_choose_req_valids[6];
+            rhs_self6 <= soc_litedramcore_choose_req_valids[6];
         end
         default: begin
-            rhs_array_muxed6 <= soc_litedramcore_choose_req_valids[7];
+            rhs_self6 <= soc_litedramcore_choose_req_valids[7];
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed7 <= 14'd0;
+    rhs_self7 <= 14'd0;
     case (soc_litedramcore_choose_req_grant)
         1'd0: begin
-            rhs_array_muxed7 <= soc_litedramcore_bankmachine0_cmd_payload_a;
+            rhs_self7 <= soc_litedramcore_bankmachine0_cmd_payload_a;
         end
         1'd1: begin
-            rhs_array_muxed7 <= soc_litedramcore_bankmachine1_cmd_payload_a;
+            rhs_self7 <= soc_litedramcore_bankmachine1_cmd_payload_a;
         end
         2'd2: begin
-            rhs_array_muxed7 <= soc_litedramcore_bankmachine2_cmd_payload_a;
+            rhs_self7 <= soc_litedramcore_bankmachine2_cmd_payload_a;
         end
         2'd3: begin
-            rhs_array_muxed7 <= soc_litedramcore_bankmachine3_cmd_payload_a;
+            rhs_self7 <= soc_litedramcore_bankmachine3_cmd_payload_a;
         end
         3'd4: begin
-            rhs_array_muxed7 <= soc_litedramcore_bankmachine4_cmd_payload_a;
+            rhs_self7 <= soc_litedramcore_bankmachine4_cmd_payload_a;
         end
         3'd5: begin
-            rhs_array_muxed7 <= soc_litedramcore_bankmachine5_cmd_payload_a;
+            rhs_self7 <= soc_litedramcore_bankmachine5_cmd_payload_a;
         end
         3'd6: begin
-            rhs_array_muxed7 <= soc_litedramcore_bankmachine6_cmd_payload_a;
+            rhs_self7 <= soc_litedramcore_bankmachine6_cmd_payload_a;
         end
         default: begin
-            rhs_array_muxed7 <= soc_litedramcore_bankmachine7_cmd_payload_a;
+            rhs_self7 <= soc_litedramcore_bankmachine7_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed8 <= 3'd0;
+    rhs_self8 <= 3'd0;
     case (soc_litedramcore_choose_req_grant)
         1'd0: begin
-            rhs_array_muxed8 <= soc_litedramcore_bankmachine0_cmd_payload_ba;
+            rhs_self8 <= soc_litedramcore_bankmachine0_cmd_payload_ba;
         end
         1'd1: begin
-            rhs_array_muxed8 <= soc_litedramcore_bankmachine1_cmd_payload_ba;
+            rhs_self8 <= soc_litedramcore_bankmachine1_cmd_payload_ba;
         end
         2'd2: begin
-            rhs_array_muxed8 <= soc_litedramcore_bankmachine2_cmd_payload_ba;
+            rhs_self8 <= soc_litedramcore_bankmachine2_cmd_payload_ba;
         end
         2'd3: begin
-            rhs_array_muxed8 <= soc_litedramcore_bankmachine3_cmd_payload_ba;
+            rhs_self8 <= soc_litedramcore_bankmachine3_cmd_payload_ba;
         end
         3'd4: begin
-            rhs_array_muxed8 <= soc_litedramcore_bankmachine4_cmd_payload_ba;
+            rhs_self8 <= soc_litedramcore_bankmachine4_cmd_payload_ba;
         end
         3'd5: begin
-            rhs_array_muxed8 <= soc_litedramcore_bankmachine5_cmd_payload_ba;
+            rhs_self8 <= soc_litedramcore_bankmachine5_cmd_payload_ba;
         end
         3'd6: begin
-            rhs_array_muxed8 <= soc_litedramcore_bankmachine6_cmd_payload_ba;
+            rhs_self8 <= soc_litedramcore_bankmachine6_cmd_payload_ba;
         end
         default: begin
-            rhs_array_muxed8 <= soc_litedramcore_bankmachine7_cmd_payload_ba;
+            rhs_self8 <= soc_litedramcore_bankmachine7_cmd_payload_ba;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed9 <= 1'd0;
+    rhs_self9 <= 1'd0;
     case (soc_litedramcore_choose_req_grant)
         1'd0: begin
-            rhs_array_muxed9 <= soc_litedramcore_bankmachine0_cmd_payload_is_read;
+            rhs_self9 <= soc_litedramcore_bankmachine0_cmd_payload_is_read;
         end
         1'd1: begin
-            rhs_array_muxed9 <= soc_litedramcore_bankmachine1_cmd_payload_is_read;
+            rhs_self9 <= soc_litedramcore_bankmachine1_cmd_payload_is_read;
         end
         2'd2: begin
-            rhs_array_muxed9 <= soc_litedramcore_bankmachine2_cmd_payload_is_read;
+            rhs_self9 <= soc_litedramcore_bankmachine2_cmd_payload_is_read;
         end
         2'd3: begin
-            rhs_array_muxed9 <= soc_litedramcore_bankmachine3_cmd_payload_is_read;
+            rhs_self9 <= soc_litedramcore_bankmachine3_cmd_payload_is_read;
         end
         3'd4: begin
-            rhs_array_muxed9 <= soc_litedramcore_bankmachine4_cmd_payload_is_read;
+            rhs_self9 <= soc_litedramcore_bankmachine4_cmd_payload_is_read;
         end
         3'd5: begin
-            rhs_array_muxed9 <= soc_litedramcore_bankmachine5_cmd_payload_is_read;
+            rhs_self9 <= soc_litedramcore_bankmachine5_cmd_payload_is_read;
         end
         3'd6: begin
-            rhs_array_muxed9 <= soc_litedramcore_bankmachine6_cmd_payload_is_read;
+            rhs_self9 <= soc_litedramcore_bankmachine6_cmd_payload_is_read;
         end
         default: begin
-            rhs_array_muxed9 <= soc_litedramcore_bankmachine7_cmd_payload_is_read;
+            rhs_self9 <= soc_litedramcore_bankmachine7_cmd_payload_is_read;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed10 <= 1'd0;
+    rhs_self10 <= 1'd0;
     case (soc_litedramcore_choose_req_grant)
         1'd0: begin
-            rhs_array_muxed10 <= soc_litedramcore_bankmachine0_cmd_payload_is_write;
+            rhs_self10 <= soc_litedramcore_bankmachine0_cmd_payload_is_write;
         end
         1'd1: begin
-            rhs_array_muxed10 <= soc_litedramcore_bankmachine1_cmd_payload_is_write;
+            rhs_self10 <= soc_litedramcore_bankmachine1_cmd_payload_is_write;
         end
         2'd2: begin
-            rhs_array_muxed10 <= soc_litedramcore_bankmachine2_cmd_payload_is_write;
+            rhs_self10 <= soc_litedramcore_bankmachine2_cmd_payload_is_write;
         end
         2'd3: begin
-            rhs_array_muxed10 <= soc_litedramcore_bankmachine3_cmd_payload_is_write;
+            rhs_self10 <= soc_litedramcore_bankmachine3_cmd_payload_is_write;
         end
         3'd4: begin
-            rhs_array_muxed10 <= soc_litedramcore_bankmachine4_cmd_payload_is_write;
+            rhs_self10 <= soc_litedramcore_bankmachine4_cmd_payload_is_write;
         end
         3'd5: begin
-            rhs_array_muxed10 <= soc_litedramcore_bankmachine5_cmd_payload_is_write;
+            rhs_self10 <= soc_litedramcore_bankmachine5_cmd_payload_is_write;
         end
         3'd6: begin
-            rhs_array_muxed10 <= soc_litedramcore_bankmachine6_cmd_payload_is_write;
+            rhs_self10 <= soc_litedramcore_bankmachine6_cmd_payload_is_write;
         end
         default: begin
-            rhs_array_muxed10 <= soc_litedramcore_bankmachine7_cmd_payload_is_write;
+            rhs_self10 <= soc_litedramcore_bankmachine7_cmd_payload_is_write;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed11 <= 1'd0;
+    rhs_self11 <= 1'd0;
     case (soc_litedramcore_choose_req_grant)
         1'd0: begin
-            rhs_array_muxed11 <= soc_litedramcore_bankmachine0_cmd_payload_is_cmd;
+            rhs_self11 <= soc_litedramcore_bankmachine0_cmd_payload_is_cmd;
         end
         1'd1: begin
-            rhs_array_muxed11 <= soc_litedramcore_bankmachine1_cmd_payload_is_cmd;
+            rhs_self11 <= soc_litedramcore_bankmachine1_cmd_payload_is_cmd;
         end
         2'd2: begin
-            rhs_array_muxed11 <= soc_litedramcore_bankmachine2_cmd_payload_is_cmd;
+            rhs_self11 <= soc_litedramcore_bankmachine2_cmd_payload_is_cmd;
         end
         2'd3: begin
-            rhs_array_muxed11 <= soc_litedramcore_bankmachine3_cmd_payload_is_cmd;
+            rhs_self11 <= soc_litedramcore_bankmachine3_cmd_payload_is_cmd;
         end
         3'd4: begin
-            rhs_array_muxed11 <= soc_litedramcore_bankmachine4_cmd_payload_is_cmd;
+            rhs_self11 <= soc_litedramcore_bankmachine4_cmd_payload_is_cmd;
         end
         3'd5: begin
-            rhs_array_muxed11 <= soc_litedramcore_bankmachine5_cmd_payload_is_cmd;
+            rhs_self11 <= soc_litedramcore_bankmachine5_cmd_payload_is_cmd;
         end
         3'd6: begin
-            rhs_array_muxed11 <= soc_litedramcore_bankmachine6_cmd_payload_is_cmd;
+            rhs_self11 <= soc_litedramcore_bankmachine6_cmd_payload_is_cmd;
         end
         default: begin
-            rhs_array_muxed11 <= soc_litedramcore_bankmachine7_cmd_payload_is_cmd;
+            rhs_self11 <= soc_litedramcore_bankmachine7_cmd_payload_is_cmd;
         end
     endcase
 end
 always @(*) begin
-    t_array_muxed3 <= 1'd0;
+    t_self3 <= 1'd0;
     case (soc_litedramcore_choose_req_grant)
         1'd0: begin
-            t_array_muxed3 <= soc_litedramcore_bankmachine0_cmd_payload_cas;
+            t_self3 <= soc_litedramcore_bankmachine0_cmd_payload_cas;
         end
         1'd1: begin
-            t_array_muxed3 <= soc_litedramcore_bankmachine1_cmd_payload_cas;
+            t_self3 <= soc_litedramcore_bankmachine1_cmd_payload_cas;
         end
         2'd2: begin
-            t_array_muxed3 <= soc_litedramcore_bankmachine2_cmd_payload_cas;
+            t_self3 <= soc_litedramcore_bankmachine2_cmd_payload_cas;
         end
         2'd3: begin
-            t_array_muxed3 <= soc_litedramcore_bankmachine3_cmd_payload_cas;
+            t_self3 <= soc_litedramcore_bankmachine3_cmd_payload_cas;
         end
         3'd4: begin
-            t_array_muxed3 <= soc_litedramcore_bankmachine4_cmd_payload_cas;
+            t_self3 <= soc_litedramcore_bankmachine4_cmd_payload_cas;
         end
         3'd5: begin
-            t_array_muxed3 <= soc_litedramcore_bankmachine5_cmd_payload_cas;
+            t_self3 <= soc_litedramcore_bankmachine5_cmd_payload_cas;
         end
         3'd6: begin
-            t_array_muxed3 <= soc_litedramcore_bankmachine6_cmd_payload_cas;
+            t_self3 <= soc_litedramcore_bankmachine6_cmd_payload_cas;
         end
         default: begin
-            t_array_muxed3 <= soc_litedramcore_bankmachine7_cmd_payload_cas;
+            t_self3 <= soc_litedramcore_bankmachine7_cmd_payload_cas;
         end
     endcase
 end
 always @(*) begin
-    t_array_muxed4 <= 1'd0;
+    t_self4 <= 1'd0;
     case (soc_litedramcore_choose_req_grant)
         1'd0: begin
-            t_array_muxed4 <= soc_litedramcore_bankmachine0_cmd_payload_ras;
+            t_self4 <= soc_litedramcore_bankmachine0_cmd_payload_ras;
         end
         1'd1: begin
-            t_array_muxed4 <= soc_litedramcore_bankmachine1_cmd_payload_ras;
+            t_self4 <= soc_litedramcore_bankmachine1_cmd_payload_ras;
         end
         2'd2: begin
-            t_array_muxed4 <= soc_litedramcore_bankmachine2_cmd_payload_ras;
+            t_self4 <= soc_litedramcore_bankmachine2_cmd_payload_ras;
         end
         2'd3: begin
-            t_array_muxed4 <= soc_litedramcore_bankmachine3_cmd_payload_ras;
+            t_self4 <= soc_litedramcore_bankmachine3_cmd_payload_ras;
         end
         3'd4: begin
-            t_array_muxed4 <= soc_litedramcore_bankmachine4_cmd_payload_ras;
+            t_self4 <= soc_litedramcore_bankmachine4_cmd_payload_ras;
         end
         3'd5: begin
-            t_array_muxed4 <= soc_litedramcore_bankmachine5_cmd_payload_ras;
+            t_self4 <= soc_litedramcore_bankmachine5_cmd_payload_ras;
         end
         3'd6: begin
-            t_array_muxed4 <= soc_litedramcore_bankmachine6_cmd_payload_ras;
+            t_self4 <= soc_litedramcore_bankmachine6_cmd_payload_ras;
         end
         default: begin
-            t_array_muxed4 <= soc_litedramcore_bankmachine7_cmd_payload_ras;
+            t_self4 <= soc_litedramcore_bankmachine7_cmd_payload_ras;
         end
     endcase
 end
 always @(*) begin
-    t_array_muxed5 <= 1'd0;
+    t_self5 <= 1'd0;
     case (soc_litedramcore_choose_req_grant)
         1'd0: begin
-            t_array_muxed5 <= soc_litedramcore_bankmachine0_cmd_payload_we;
+            t_self5 <= soc_litedramcore_bankmachine0_cmd_payload_we;
         end
         1'd1: begin
-            t_array_muxed5 <= soc_litedramcore_bankmachine1_cmd_payload_we;
+            t_self5 <= soc_litedramcore_bankmachine1_cmd_payload_we;
         end
         2'd2: begin
-            t_array_muxed5 <= soc_litedramcore_bankmachine2_cmd_payload_we;
+            t_self5 <= soc_litedramcore_bankmachine2_cmd_payload_we;
         end
         2'd3: begin
-            t_array_muxed5 <= soc_litedramcore_bankmachine3_cmd_payload_we;
+            t_self5 <= soc_litedramcore_bankmachine3_cmd_payload_we;
         end
         3'd4: begin
-            t_array_muxed5 <= soc_litedramcore_bankmachine4_cmd_payload_we;
+            t_self5 <= soc_litedramcore_bankmachine4_cmd_payload_we;
         end
         3'd5: begin
-            t_array_muxed5 <= soc_litedramcore_bankmachine5_cmd_payload_we;
+            t_self5 <= soc_litedramcore_bankmachine5_cmd_payload_we;
         end
         3'd6: begin
-            t_array_muxed5 <= soc_litedramcore_bankmachine6_cmd_payload_we;
+            t_self5 <= soc_litedramcore_bankmachine6_cmd_payload_we;
         end
         default: begin
-            t_array_muxed5 <= soc_litedramcore_bankmachine7_cmd_payload_we;
+            t_self5 <= soc_litedramcore_bankmachine7_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed12 <= 21'd0;
+    rhs_self12 <= 21'd0;
     case (litedramcore_roundrobin0_grant)
         default: begin
-            rhs_array_muxed12 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
+            rhs_self12 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed13 <= 1'd0;
+    rhs_self13 <= 1'd0;
     case (litedramcore_roundrobin0_grant)
         default: begin
-            rhs_array_muxed13 <= soc_port_cmd_payload_we;
+            rhs_self13 <= soc_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed14 <= 1'd0;
+    rhs_self14 <= 1'd0;
     case (litedramcore_roundrobin0_grant)
         default: begin
-            rhs_array_muxed14 <= (((soc_port_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
+            rhs_self14 <= (((soc_port_cmd_payload_addr[9:7] == 1'd0) & (~(((((((litedramcore_locked0 | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed15 <= 21'd0;
+    rhs_self15 <= 21'd0;
     case (litedramcore_roundrobin1_grant)
         default: begin
-            rhs_array_muxed15 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
+            rhs_self15 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed16 <= 1'd0;
+    rhs_self16 <= 1'd0;
     case (litedramcore_roundrobin1_grant)
         default: begin
-            rhs_array_muxed16 <= soc_port_cmd_payload_we;
+            rhs_self16 <= soc_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed17 <= 1'd0;
+    rhs_self17 <= 1'd0;
     case (litedramcore_roundrobin1_grant)
         default: begin
-            rhs_array_muxed17 <= (((soc_port_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
+            rhs_self17 <= (((soc_port_cmd_payload_addr[9:7] == 1'd1) & (~(((((((litedramcore_locked1 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed18 <= 21'd0;
+    rhs_self18 <= 21'd0;
     case (litedramcore_roundrobin2_grant)
         default: begin
-            rhs_array_muxed18 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
+            rhs_self18 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed19 <= 1'd0;
+    rhs_self19 <= 1'd0;
     case (litedramcore_roundrobin2_grant)
         default: begin
-            rhs_array_muxed19 <= soc_port_cmd_payload_we;
+            rhs_self19 <= soc_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed20 <= 1'd0;
+    rhs_self20 <= 1'd0;
     case (litedramcore_roundrobin2_grant)
         default: begin
-            rhs_array_muxed20 <= (((soc_port_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
+            rhs_self20 <= (((soc_port_cmd_payload_addr[9:7] == 2'd2) & (~(((((((litedramcore_locked2 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed21 <= 21'd0;
+    rhs_self21 <= 21'd0;
     case (litedramcore_roundrobin3_grant)
         default: begin
-            rhs_array_muxed21 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
+            rhs_self21 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed22 <= 1'd0;
+    rhs_self22 <= 1'd0;
     case (litedramcore_roundrobin3_grant)
         default: begin
-            rhs_array_muxed22 <= soc_port_cmd_payload_we;
+            rhs_self22 <= soc_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed23 <= 1'd0;
+    rhs_self23 <= 1'd0;
     case (litedramcore_roundrobin3_grant)
         default: begin
-            rhs_array_muxed23 <= (((soc_port_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
+            rhs_self23 <= (((soc_port_cmd_payload_addr[9:7] == 2'd3) & (~(((((((litedramcore_locked3 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed24 <= 21'd0;
+    rhs_self24 <= 21'd0;
     case (litedramcore_roundrobin4_grant)
         default: begin
-            rhs_array_muxed24 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
+            rhs_self24 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed25 <= 1'd0;
+    rhs_self25 <= 1'd0;
     case (litedramcore_roundrobin4_grant)
         default: begin
-            rhs_array_muxed25 <= soc_port_cmd_payload_we;
+            rhs_self25 <= soc_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed26 <= 1'd0;
+    rhs_self26 <= 1'd0;
     case (litedramcore_roundrobin4_grant)
         default: begin
-            rhs_array_muxed26 <= (((soc_port_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
+            rhs_self26 <= (((soc_port_cmd_payload_addr[9:7] == 3'd4) & (~(((((((litedramcore_locked4 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed27 <= 21'd0;
+    rhs_self27 <= 21'd0;
     case (litedramcore_roundrobin5_grant)
         default: begin
-            rhs_array_muxed27 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
+            rhs_self27 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed28 <= 1'd0;
+    rhs_self28 <= 1'd0;
     case (litedramcore_roundrobin5_grant)
         default: begin
-            rhs_array_muxed28 <= soc_port_cmd_payload_we;
+            rhs_self28 <= soc_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed29 <= 1'd0;
+    rhs_self29 <= 1'd0;
     case (litedramcore_roundrobin5_grant)
         default: begin
-            rhs_array_muxed29 <= (((soc_port_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
+            rhs_self29 <= (((soc_port_cmd_payload_addr[9:7] == 3'd5) & (~(((((((litedramcore_locked5 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed30 <= 21'd0;
+    rhs_self30 <= 21'd0;
     case (litedramcore_roundrobin6_grant)
         default: begin
-            rhs_array_muxed30 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
+            rhs_self30 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed31 <= 1'd0;
+    rhs_self31 <= 1'd0;
     case (litedramcore_roundrobin6_grant)
         default: begin
-            rhs_array_muxed31 <= soc_port_cmd_payload_we;
+            rhs_self31 <= soc_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed32 <= 1'd0;
+    rhs_self32 <= 1'd0;
     case (litedramcore_roundrobin6_grant)
         default: begin
-            rhs_array_muxed32 <= (((soc_port_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
+            rhs_self32 <= (((soc_port_cmd_payload_addr[9:7] == 3'd6) & (~(((((((litedramcore_locked6 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank7_lock & (litedramcore_roundrobin7_grant == 1'd0))))) & soc_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed33 <= 21'd0;
+    rhs_self33 <= 21'd0;
     case (litedramcore_roundrobin7_grant)
         default: begin
-            rhs_array_muxed33 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
+            rhs_self33 <= {soc_port_cmd_payload_addr[23:10], soc_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed34 <= 1'd0;
+    rhs_self34 <= 1'd0;
     case (litedramcore_roundrobin7_grant)
         default: begin
-            rhs_array_muxed34 <= soc_port_cmd_payload_we;
+            rhs_self34 <= soc_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    rhs_array_muxed35 <= 1'd0;
+    rhs_self35 <= 1'd0;
     case (litedramcore_roundrobin7_grant)
         default: begin
-            rhs_array_muxed35 <= (((soc_port_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))))) & soc_port_cmd_valid);
+            rhs_self35 <= (((soc_port_cmd_payload_addr[9:7] == 3'd7) & (~(((((((litedramcore_locked7 | (soc_litedramcore_interface_bank0_lock & (litedramcore_roundrobin0_grant == 1'd0))) | (soc_litedramcore_interface_bank1_lock & (litedramcore_roundrobin1_grant == 1'd0))) | (soc_litedramcore_interface_bank2_lock & (litedramcore_roundrobin2_grant == 1'd0))) | (soc_litedramcore_interface_bank3_lock & (litedramcore_roundrobin3_grant == 1'd0))) | (soc_litedramcore_interface_bank4_lock & (litedramcore_roundrobin4_grant == 1'd0))) | (soc_litedramcore_interface_bank5_lock & (litedramcore_roundrobin5_grant == 1'd0))) | (soc_litedramcore_interface_bank6_lock & (litedramcore_roundrobin6_grant == 1'd0))))) & soc_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    array_muxed0 <= 3'd0;
-    case (soc_litedramcore_steerer_sel0)
+    self0 <= 3'd0;
+    case (soc_litedramcore_steerer0)
         1'd0: begin
-            array_muxed0 <= soc_litedramcore_nop_ba[2:0];
+            self0 <= soc_litedramcore_nop_ba[2:0];
         end
         1'd1: begin
-            array_muxed0 <= soc_litedramcore_choose_cmd_cmd_payload_ba[2:0];
+            self0 <= soc_litedramcore_choose_cmd_cmd_payload_ba[2:0];
         end
         2'd2: begin
-            array_muxed0 <= soc_litedramcore_choose_req_cmd_payload_ba[2:0];
+            self0 <= soc_litedramcore_choose_req_cmd_payload_ba[2:0];
         end
         default: begin
-            array_muxed0 <= soc_litedramcore_cmd_payload_ba[2:0];
+            self0 <= soc_litedramcore_cmd_payload_ba[2:0];
         end
     endcase
 end
 always @(*) begin
-    array_muxed1 <= 14'd0;
-    case (soc_litedramcore_steerer_sel0)
+    self1 <= 14'd0;
+    case (soc_litedramcore_steerer0)
         1'd0: begin
-            array_muxed1 <= soc_litedramcore_nop_a;
+            self1 <= soc_litedramcore_nop_a;
         end
         1'd1: begin
-            array_muxed1 <= soc_litedramcore_choose_cmd_cmd_payload_a;
+            self1 <= soc_litedramcore_choose_cmd_cmd_payload_a;
         end
         2'd2: begin
-            array_muxed1 <= soc_litedramcore_choose_req_cmd_payload_a;
+            self1 <= soc_litedramcore_choose_req_cmd_payload_a;
         end
         default: begin
-            array_muxed1 <= soc_litedramcore_cmd_payload_a;
+            self1 <= soc_litedramcore_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    array_muxed2 <= 1'd0;
-    case (soc_litedramcore_steerer_sel0)
+    self2 <= 1'd0;
+    case (soc_litedramcore_steerer0)
         1'd0: begin
-            array_muxed2 <= 1'd0;
+            self2 <= 1'd0;
         end
         1'd1: begin
-            array_muxed2 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_cas);
+            self2 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_cas);
         end
         2'd2: begin
-            array_muxed2 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_cas);
+            self2 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_cas);
         end
         default: begin
-            array_muxed2 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_cas);
+            self2 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_cas);
         end
     endcase
 end
 always @(*) begin
-    array_muxed3 <= 1'd0;
-    case (soc_litedramcore_steerer_sel0)
+    self3 <= 1'd0;
+    case (soc_litedramcore_steerer0)
         1'd0: begin
-            array_muxed3 <= 1'd0;
+            self3 <= 1'd0;
         end
         1'd1: begin
-            array_muxed3 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_ras);
+            self3 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_ras);
         end
         2'd2: begin
-            array_muxed3 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_ras);
+            self3 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_ras);
         end
         default: begin
-            array_muxed3 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_ras);
+            self3 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_ras);
         end
     endcase
 end
 always @(*) begin
-    array_muxed4 <= 1'd0;
-    case (soc_litedramcore_steerer_sel0)
+    self4 <= 1'd0;
+    case (soc_litedramcore_steerer0)
         1'd0: begin
-            array_muxed4 <= 1'd0;
+            self4 <= 1'd0;
         end
         1'd1: begin
-            array_muxed4 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_we);
+            self4 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_we);
         end
         2'd2: begin
-            array_muxed4 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_we);
+            self4 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_we);
         end
         default: begin
-            array_muxed4 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_we);
+            self4 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_we);
         end
     endcase
 end
 always @(*) begin
-    array_muxed5 <= 1'd0;
-    case (soc_litedramcore_steerer_sel0)
+    self5 <= 1'd0;
+    case (soc_litedramcore_steerer0)
         1'd0: begin
-            array_muxed5 <= 1'd0;
+            self5 <= 1'd0;
         end
         1'd1: begin
-            array_muxed5 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_read);
+            self5 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_read);
         end
         2'd2: begin
-            array_muxed5 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_read);
+            self5 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_read);
         end
         default: begin
-            array_muxed5 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_read);
+            self5 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_read);
         end
     endcase
 end
 always @(*) begin
-    array_muxed6 <= 1'd0;
-    case (soc_litedramcore_steerer_sel0)
+    self6 <= 1'd0;
+    case (soc_litedramcore_steerer0)
         1'd0: begin
-            array_muxed6 <= 1'd0;
+            self6 <= 1'd0;
         end
         1'd1: begin
-            array_muxed6 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_write);
+            self6 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_write);
         end
         2'd2: begin
-            array_muxed6 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_write);
+            self6 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_write);
         end
         default: begin
-            array_muxed6 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_write);
+            self6 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_write);
         end
     endcase
 end
 always @(*) begin
-    array_muxed7 <= 3'd0;
-    case (soc_litedramcore_steerer_sel1)
+    self7 <= 3'd0;
+    case (soc_litedramcore_steerer1)
         1'd0: begin
-            array_muxed7 <= soc_litedramcore_nop_ba[2:0];
+            self7 <= soc_litedramcore_nop_ba[2:0];
         end
         1'd1: begin
-            array_muxed7 <= soc_litedramcore_choose_cmd_cmd_payload_ba[2:0];
+            self7 <= soc_litedramcore_choose_cmd_cmd_payload_ba[2:0];
         end
         2'd2: begin
-            array_muxed7 <= soc_litedramcore_choose_req_cmd_payload_ba[2:0];
+            self7 <= soc_litedramcore_choose_req_cmd_payload_ba[2:0];
         end
         default: begin
-            array_muxed7 <= soc_litedramcore_cmd_payload_ba[2:0];
+            self7 <= soc_litedramcore_cmd_payload_ba[2:0];
         end
     endcase
 end
 always @(*) begin
-    array_muxed8 <= 14'd0;
-    case (soc_litedramcore_steerer_sel1)
+    self8 <= 14'd0;
+    case (soc_litedramcore_steerer1)
         1'd0: begin
-            array_muxed8 <= soc_litedramcore_nop_a;
+            self8 <= soc_litedramcore_nop_a;
         end
         1'd1: begin
-            array_muxed8 <= soc_litedramcore_choose_cmd_cmd_payload_a;
+            self8 <= soc_litedramcore_choose_cmd_cmd_payload_a;
         end
         2'd2: begin
-            array_muxed8 <= soc_litedramcore_choose_req_cmd_payload_a;
+            self8 <= soc_litedramcore_choose_req_cmd_payload_a;
         end
         default: begin
-            array_muxed8 <= soc_litedramcore_cmd_payload_a;
+            self8 <= soc_litedramcore_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    array_muxed9 <= 1'd0;
-    case (soc_litedramcore_steerer_sel1)
+    self9 <= 1'd0;
+    case (soc_litedramcore_steerer1)
         1'd0: begin
-            array_muxed9 <= 1'd0;
+            self9 <= 1'd0;
         end
         1'd1: begin
-            array_muxed9 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_cas);
+            self9 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_cas);
         end
         2'd2: begin
-            array_muxed9 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_cas);
+            self9 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_cas);
         end
         default: begin
-            array_muxed9 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_cas);
+            self9 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_cas);
         end
     endcase
 end
 always @(*) begin
-    array_muxed10 <= 1'd0;
-    case (soc_litedramcore_steerer_sel1)
+    self10 <= 1'd0;
+    case (soc_litedramcore_steerer1)
         1'd0: begin
-            array_muxed10 <= 1'd0;
+            self10 <= 1'd0;
         end
         1'd1: begin
-            array_muxed10 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_ras);
+            self10 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_ras);
         end
         2'd2: begin
-            array_muxed10 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_ras);
+            self10 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_ras);
         end
         default: begin
-            array_muxed10 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_ras);
+            self10 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_ras);
         end
     endcase
 end
 always @(*) begin
-    array_muxed11 <= 1'd0;
-    case (soc_litedramcore_steerer_sel1)
+    self11 <= 1'd0;
+    case (soc_litedramcore_steerer1)
         1'd0: begin
-            array_muxed11 <= 1'd0;
+            self11 <= 1'd0;
         end
         1'd1: begin
-            array_muxed11 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_we);
+            self11 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_we);
         end
         2'd2: begin
-            array_muxed11 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_we);
+            self11 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_we);
         end
         default: begin
-            array_muxed11 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_we);
+            self11 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_we);
         end
     endcase
 end
 always @(*) begin
-    array_muxed12 <= 1'd0;
-    case (soc_litedramcore_steerer_sel1)
+    self12 <= 1'd0;
+    case (soc_litedramcore_steerer1)
         1'd0: begin
-            array_muxed12 <= 1'd0;
+            self12 <= 1'd0;
         end
         1'd1: begin
-            array_muxed12 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_read);
+            self12 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_read);
         end
         2'd2: begin
-            array_muxed12 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_read);
+            self12 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_read);
         end
         default: begin
-            array_muxed12 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_read);
+            self12 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_read);
         end
     endcase
 end
 always @(*) begin
-    array_muxed13 <= 1'd0;
-    case (soc_litedramcore_steerer_sel1)
+    self13 <= 1'd0;
+    case (soc_litedramcore_steerer1)
         1'd0: begin
-            array_muxed13 <= 1'd0;
+            self13 <= 1'd0;
         end
         1'd1: begin
-            array_muxed13 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_write);
+            self13 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_write);
         end
         2'd2: begin
-            array_muxed13 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_write);
+            self13 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_write);
         end
         default: begin
-            array_muxed13 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_write);
+            self13 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_write);
         end
     endcase
 end
 always @(*) begin
-    array_muxed14 <= 3'd0;
-    case (soc_litedramcore_steerer_sel2)
+    self14 <= 3'd0;
+    case (soc_litedramcore_steerer2)
         1'd0: begin
-            array_muxed14 <= soc_litedramcore_nop_ba[2:0];
+            self14 <= soc_litedramcore_nop_ba[2:0];
         end
         1'd1: begin
-            array_muxed14 <= soc_litedramcore_choose_cmd_cmd_payload_ba[2:0];
+            self14 <= soc_litedramcore_choose_cmd_cmd_payload_ba[2:0];
         end
         2'd2: begin
-            array_muxed14 <= soc_litedramcore_choose_req_cmd_payload_ba[2:0];
+            self14 <= soc_litedramcore_choose_req_cmd_payload_ba[2:0];
         end
         default: begin
-            array_muxed14 <= soc_litedramcore_cmd_payload_ba[2:0];
+            self14 <= soc_litedramcore_cmd_payload_ba[2:0];
         end
     endcase
 end
 always @(*) begin
-    array_muxed15 <= 14'd0;
-    case (soc_litedramcore_steerer_sel2)
+    self15 <= 14'd0;
+    case (soc_litedramcore_steerer2)
         1'd0: begin
-            array_muxed15 <= soc_litedramcore_nop_a;
+            self15 <= soc_litedramcore_nop_a;
         end
         1'd1: begin
-            array_muxed15 <= soc_litedramcore_choose_cmd_cmd_payload_a;
+            self15 <= soc_litedramcore_choose_cmd_cmd_payload_a;
         end
         2'd2: begin
-            array_muxed15 <= soc_litedramcore_choose_req_cmd_payload_a;
+            self15 <= soc_litedramcore_choose_req_cmd_payload_a;
         end
         default: begin
-            array_muxed15 <= soc_litedramcore_cmd_payload_a;
+            self15 <= soc_litedramcore_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    array_muxed16 <= 1'd0;
-    case (soc_litedramcore_steerer_sel2)
+    self16 <= 1'd0;
+    case (soc_litedramcore_steerer2)
         1'd0: begin
-            array_muxed16 <= 1'd0;
+            self16 <= 1'd0;
         end
         1'd1: begin
-            array_muxed16 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_cas);
+            self16 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_cas);
         end
         2'd2: begin
-            array_muxed16 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_cas);
+            self16 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_cas);
         end
         default: begin
-            array_muxed16 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_cas);
+            self16 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_cas);
         end
     endcase
 end
 always @(*) begin
-    array_muxed17 <= 1'd0;
-    case (soc_litedramcore_steerer_sel2)
+    self17 <= 1'd0;
+    case (soc_litedramcore_steerer2)
         1'd0: begin
-            array_muxed17 <= 1'd0;
+            self17 <= 1'd0;
         end
         1'd1: begin
-            array_muxed17 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_ras);
+            self17 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_ras);
         end
         2'd2: begin
-            array_muxed17 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_ras);
+            self17 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_ras);
         end
         default: begin
-            array_muxed17 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_ras);
+            self17 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_ras);
         end
     endcase
 end
 always @(*) begin
-    array_muxed18 <= 1'd0;
-    case (soc_litedramcore_steerer_sel2)
+    self18 <= 1'd0;
+    case (soc_litedramcore_steerer2)
         1'd0: begin
-            array_muxed18 <= 1'd0;
+            self18 <= 1'd0;
         end
         1'd1: begin
-            array_muxed18 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_we);
+            self18 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_we);
         end
         2'd2: begin
-            array_muxed18 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_we);
+            self18 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_we);
         end
         default: begin
-            array_muxed18 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_we);
+            self18 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_we);
         end
     endcase
 end
 always @(*) begin
-    array_muxed19 <= 1'd0;
-    case (soc_litedramcore_steerer_sel2)
+    self19 <= 1'd0;
+    case (soc_litedramcore_steerer2)
         1'd0: begin
-            array_muxed19 <= 1'd0;
+            self19 <= 1'd0;
         end
         1'd1: begin
-            array_muxed19 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_read);
+            self19 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_read);
         end
         2'd2: begin
-            array_muxed19 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_read);
+            self19 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_read);
         end
         default: begin
-            array_muxed19 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_read);
+            self19 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_read);
         end
     endcase
 end
 always @(*) begin
-    array_muxed20 <= 1'd0;
-    case (soc_litedramcore_steerer_sel2)
+    self20 <= 1'd0;
+    case (soc_litedramcore_steerer2)
         1'd0: begin
-            array_muxed20 <= 1'd0;
+            self20 <= 1'd0;
         end
         1'd1: begin
-            array_muxed20 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_write);
+            self20 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_write);
         end
         2'd2: begin
-            array_muxed20 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_write);
+            self20 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_write);
         end
         default: begin
-            array_muxed20 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_write);
+            self20 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_write);
         end
     endcase
 end
 always @(*) begin
-    array_muxed21 <= 3'd0;
-    case (soc_litedramcore_steerer_sel3)
+    self21 <= 3'd0;
+    case (soc_litedramcore_steerer3)
         1'd0: begin
-            array_muxed21 <= soc_litedramcore_nop_ba[2:0];
+            self21 <= soc_litedramcore_nop_ba[2:0];
         end
         1'd1: begin
-            array_muxed21 <= soc_litedramcore_choose_cmd_cmd_payload_ba[2:0];
+            self21 <= soc_litedramcore_choose_cmd_cmd_payload_ba[2:0];
         end
         2'd2: begin
-            array_muxed21 <= soc_litedramcore_choose_req_cmd_payload_ba[2:0];
+            self21 <= soc_litedramcore_choose_req_cmd_payload_ba[2:0];
         end
         default: begin
-            array_muxed21 <= soc_litedramcore_cmd_payload_ba[2:0];
+            self21 <= soc_litedramcore_cmd_payload_ba[2:0];
         end
     endcase
 end
 always @(*) begin
-    array_muxed22 <= 14'd0;
-    case (soc_litedramcore_steerer_sel3)
+    self22 <= 14'd0;
+    case (soc_litedramcore_steerer3)
         1'd0: begin
-            array_muxed22 <= soc_litedramcore_nop_a;
+            self22 <= soc_litedramcore_nop_a;
         end
         1'd1: begin
-            array_muxed22 <= soc_litedramcore_choose_cmd_cmd_payload_a;
+            self22 <= soc_litedramcore_choose_cmd_cmd_payload_a;
         end
         2'd2: begin
-            array_muxed22 <= soc_litedramcore_choose_req_cmd_payload_a;
+            self22 <= soc_litedramcore_choose_req_cmd_payload_a;
         end
         default: begin
-            array_muxed22 <= soc_litedramcore_cmd_payload_a;
+            self22 <= soc_litedramcore_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    array_muxed23 <= 1'd0;
-    case (soc_litedramcore_steerer_sel3)
+    self23 <= 1'd0;
+    case (soc_litedramcore_steerer3)
         1'd0: begin
-            array_muxed23 <= 1'd0;
+            self23 <= 1'd0;
         end
         1'd1: begin
-            array_muxed23 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_cas);
+            self23 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_cas);
         end
         2'd2: begin
-            array_muxed23 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_cas);
+            self23 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_cas);
         end
         default: begin
-            array_muxed23 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_cas);
+            self23 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_cas);
         end
     endcase
 end
 always @(*) begin
-    array_muxed24 <= 1'd0;
-    case (soc_litedramcore_steerer_sel3)
+    self24 <= 1'd0;
+    case (soc_litedramcore_steerer3)
         1'd0: begin
-            array_muxed24 <= 1'd0;
+            self24 <= 1'd0;
         end
         1'd1: begin
-            array_muxed24 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_ras);
+            self24 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_ras);
         end
         2'd2: begin
-            array_muxed24 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_ras);
+            self24 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_ras);
         end
         default: begin
-            array_muxed24 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_ras);
+            self24 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_ras);
         end
     endcase
 end
 always @(*) begin
-    array_muxed25 <= 1'd0;
-    case (soc_litedramcore_steerer_sel3)
+    self25 <= 1'd0;
+    case (soc_litedramcore_steerer3)
         1'd0: begin
-            array_muxed25 <= 1'd0;
+            self25 <= 1'd0;
         end
         1'd1: begin
-            array_muxed25 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_we);
+            self25 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_we);
         end
         2'd2: begin
-            array_muxed25 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_we);
+            self25 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_we);
         end
         default: begin
-            array_muxed25 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_we);
+            self25 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_we);
         end
     endcase
 end
 always @(*) begin
-    array_muxed26 <= 1'd0;
-    case (soc_litedramcore_steerer_sel3)
+    self26 <= 1'd0;
+    case (soc_litedramcore_steerer3)
         1'd0: begin
-            array_muxed26 <= 1'd0;
+            self26 <= 1'd0;
         end
         1'd1: begin
-            array_muxed26 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_read);
+            self26 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_read);
         end
         2'd2: begin
-            array_muxed26 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_read);
+            self26 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_read);
         end
         default: begin
-            array_muxed26 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_read);
+            self26 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_read);
         end
     endcase
 end
 always @(*) begin
-    array_muxed27 <= 1'd0;
-    case (soc_litedramcore_steerer_sel3)
+    self27 <= 1'd0;
+    case (soc_litedramcore_steerer3)
         1'd0: begin
-            array_muxed27 <= 1'd0;
+            self27 <= 1'd0;
         end
         1'd1: begin
-            array_muxed27 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_write);
+            self27 <= ((soc_litedramcore_choose_cmd_cmd_valid & soc_litedramcore_choose_cmd_cmd_ready) & soc_litedramcore_choose_cmd_cmd_payload_is_write);
         end
         2'd2: begin
-            array_muxed27 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_write);
+            self27 <= ((soc_litedramcore_choose_req_cmd_valid & soc_litedramcore_choose_req_cmd_ready) & soc_litedramcore_choose_req_cmd_payload_is_write);
         end
         default: begin
-            array_muxed27 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_write);
+            self27 <= ((soc_litedramcore_cmd_valid & soc_litedramcore_cmd_ready) & soc_litedramcore_cmd_payload_is_write);
         end
     endcase
 end
@@ -12982,21 +12982,21 @@ always @(posedge sys_clk) begin
     soc_litedramcore_cmd_payload_ras <= 1'd0;
     soc_litedramcore_cmd_payload_we <= 1'd0;
     soc_litedramcore_sequencer_done1 <= 1'd0;
-    if ((soc_litedramcore_sequencer_start1 & (soc_litedramcore_sequencer_counter == 1'd0))) begin
+    if ((soc_litedramcore_sequencer_start1 & (soc_litedramcore_sequencer_trigger == 1'd0))) begin
         soc_litedramcore_cmd_payload_a <= 11'd1024;
         soc_litedramcore_cmd_payload_ba <= 1'd0;
         soc_litedramcore_cmd_payload_cas <= 1'd0;
         soc_litedramcore_cmd_payload_ras <= 1'd1;
         soc_litedramcore_cmd_payload_we <= 1'd1;
     end
-    if ((soc_litedramcore_sequencer_counter == 2'd2)) begin
+    if ((soc_litedramcore_sequencer_trigger == 2'd2)) begin
         soc_litedramcore_cmd_payload_a <= 11'd1024;
         soc_litedramcore_cmd_payload_ba <= 1'd0;
         soc_litedramcore_cmd_payload_cas <= 1'd1;
         soc_litedramcore_cmd_payload_ras <= 1'd1;
         soc_litedramcore_cmd_payload_we <= 1'd0;
     end
-    if ((soc_litedramcore_sequencer_counter == 6'd34)) begin
+    if ((soc_litedramcore_sequencer_trigger == 6'd34)) begin
         soc_litedramcore_cmd_payload_a <= 1'd0;
         soc_litedramcore_cmd_payload_ba <= 1'd0;
         soc_litedramcore_cmd_payload_cas <= 1'd0;
@@ -13004,14 +13004,14 @@ always @(posedge sys_clk) begin
         soc_litedramcore_cmd_payload_we <= 1'd0;
         soc_litedramcore_sequencer_done1 <= 1'd1;
     end
-    if ((soc_litedramcore_sequencer_counter == 6'd34)) begin
-        soc_litedramcore_sequencer_counter <= 1'd0;
+    if ((soc_litedramcore_sequencer_trigger == 6'd34)) begin
+        soc_litedramcore_sequencer_trigger <= 1'd0;
     end else begin
-        if ((soc_litedramcore_sequencer_counter != 1'd0)) begin
-            soc_litedramcore_sequencer_counter <= (soc_litedramcore_sequencer_counter + 1'd1);
+        if ((soc_litedramcore_sequencer_trigger != 1'd0)) begin
+            soc_litedramcore_sequencer_trigger <= (soc_litedramcore_sequencer_trigger + 1'd1);
         end else begin
             if (soc_litedramcore_sequencer_start1) begin
-                soc_litedramcore_sequencer_counter <= 1'd1;
+                soc_litedramcore_sequencer_trigger <= 1'd1;
             end
         end
     end
@@ -13021,21 +13021,21 @@ always @(posedge sys_clk) begin
         soc_litedramcore_zqcs_timer_count1 <= 26'd49999999;
     end
     soc_litedramcore_zqcs_executer_done <= 1'd0;
-    if ((soc_litedramcore_zqcs_executer_start & (soc_litedramcore_zqcs_executer_counter == 1'd0))) begin
+    if ((soc_litedramcore_zqcs_executer_start & (soc_litedramcore_zqcs_executer_trigger == 1'd0))) begin
         soc_litedramcore_cmd_payload_a <= 11'd1024;
         soc_litedramcore_cmd_payload_ba <= 1'd0;
         soc_litedramcore_cmd_payload_cas <= 1'd0;
         soc_litedramcore_cmd_payload_ras <= 1'd1;
         soc_litedramcore_cmd_payload_we <= 1'd1;
     end
-    if ((soc_litedramcore_zqcs_executer_counter == 2'd2)) begin
+    if ((soc_litedramcore_zqcs_executer_trigger == 2'd2)) begin
         soc_litedramcore_cmd_payload_a <= 1'd0;
         soc_litedramcore_cmd_payload_ba <= 1'd0;
         soc_litedramcore_cmd_payload_cas <= 1'd0;
         soc_litedramcore_cmd_payload_ras <= 1'd0;
         soc_litedramcore_cmd_payload_we <= 1'd1;
     end
-    if ((soc_litedramcore_zqcs_executer_counter == 5'd18)) begin
+    if ((soc_litedramcore_zqcs_executer_trigger == 5'd18)) begin
         soc_litedramcore_cmd_payload_a <= 1'd0;
         soc_litedramcore_cmd_payload_ba <= 1'd0;
         soc_litedramcore_cmd_payload_cas <= 1'd0;
@@ -13043,14 +13043,14 @@ always @(posedge sys_clk) begin
         soc_litedramcore_cmd_payload_we <= 1'd0;
         soc_litedramcore_zqcs_executer_done <= 1'd1;
     end
-    if ((soc_litedramcore_zqcs_executer_counter == 5'd18)) begin
-        soc_litedramcore_zqcs_executer_counter <= 1'd0;
+    if ((soc_litedramcore_zqcs_executer_trigger == 5'd18)) begin
+        soc_litedramcore_zqcs_executer_trigger <= 1'd0;
     end else begin
-        if ((soc_litedramcore_zqcs_executer_counter != 1'd0)) begin
-            soc_litedramcore_zqcs_executer_counter <= (soc_litedramcore_zqcs_executer_counter + 1'd1);
+        if ((soc_litedramcore_zqcs_executer_trigger != 1'd0)) begin
+            soc_litedramcore_zqcs_executer_trigger <= (soc_litedramcore_zqcs_executer_trigger + 1'd1);
         end else begin
             if (soc_litedramcore_zqcs_executer_start) begin
-                soc_litedramcore_zqcs_executer_counter <= 1'd1;
+                soc_litedramcore_zqcs_executer_trigger <= 1'd1;
             end
         end
     end
@@ -14150,37 +14150,37 @@ always @(posedge sys_clk) begin
         endcase
     end
     soc_litedramcore_dfi_p0_cs_n <= 1'd0;
-    soc_litedramcore_dfi_p0_bank <= array_muxed0;
-    soc_litedramcore_dfi_p0_address <= array_muxed1;
-    soc_litedramcore_dfi_p0_cas_n <= (~array_muxed2);
-    soc_litedramcore_dfi_p0_ras_n <= (~array_muxed3);
-    soc_litedramcore_dfi_p0_we_n <= (~array_muxed4);
-    soc_litedramcore_dfi_p0_rddata_en <= array_muxed5;
-    soc_litedramcore_dfi_p0_wrdata_en <= array_muxed6;
+    soc_litedramcore_dfi_p0_bank <= self0;
+    soc_litedramcore_dfi_p0_address <= self1;
+    soc_litedramcore_dfi_p0_cas_n <= (~self2);
+    soc_litedramcore_dfi_p0_ras_n <= (~self3);
+    soc_litedramcore_dfi_p0_we_n <= (~self4);
+    soc_litedramcore_dfi_p0_rddata_en <= self5;
+    soc_litedramcore_dfi_p0_wrdata_en <= self6;
     soc_litedramcore_dfi_p1_cs_n <= 1'd0;
-    soc_litedramcore_dfi_p1_bank <= array_muxed7;
-    soc_litedramcore_dfi_p1_address <= array_muxed8;
-    soc_litedramcore_dfi_p1_cas_n <= (~array_muxed9);
-    soc_litedramcore_dfi_p1_ras_n <= (~array_muxed10);
-    soc_litedramcore_dfi_p1_we_n <= (~array_muxed11);
-    soc_litedramcore_dfi_p1_rddata_en <= array_muxed12;
-    soc_litedramcore_dfi_p1_wrdata_en <= array_muxed13;
+    soc_litedramcore_dfi_p1_bank <= self7;
+    soc_litedramcore_dfi_p1_address <= self8;
+    soc_litedramcore_dfi_p1_cas_n <= (~self9);
+    soc_litedramcore_dfi_p1_ras_n <= (~self10);
+    soc_litedramcore_dfi_p1_we_n <= (~self11);
+    soc_litedramcore_dfi_p1_rddata_en <= self12;
+    soc_litedramcore_dfi_p1_wrdata_en <= self13;
     soc_litedramcore_dfi_p2_cs_n <= 1'd0;
-    soc_litedramcore_dfi_p2_bank <= array_muxed14;
-    soc_litedramcore_dfi_p2_address <= array_muxed15;
-    soc_litedramcore_dfi_p2_cas_n <= (~array_muxed16);
-    soc_litedramcore_dfi_p2_ras_n <= (~array_muxed17);
-    soc_litedramcore_dfi_p2_we_n <= (~array_muxed18);
-    soc_litedramcore_dfi_p2_rddata_en <= array_muxed19;
-    soc_litedramcore_dfi_p2_wrdata_en <= array_muxed20;
+    soc_litedramcore_dfi_p2_bank <= self14;
+    soc_litedramcore_dfi_p2_address <= self15;
+    soc_litedramcore_dfi_p2_cas_n <= (~self16);
+    soc_litedramcore_dfi_p2_ras_n <= (~self17);
+    soc_litedramcore_dfi_p2_we_n <= (~self18);
+    soc_litedramcore_dfi_p2_rddata_en <= self19;
+    soc_litedramcore_dfi_p2_wrdata_en <= self20;
     soc_litedramcore_dfi_p3_cs_n <= 1'd0;
-    soc_litedramcore_dfi_p3_bank <= array_muxed21;
-    soc_litedramcore_dfi_p3_address <= array_muxed22;
-    soc_litedramcore_dfi_p3_cas_n <= (~array_muxed23);
-    soc_litedramcore_dfi_p3_ras_n <= (~array_muxed24);
-    soc_litedramcore_dfi_p3_we_n <= (~array_muxed25);
-    soc_litedramcore_dfi_p3_rddata_en <= array_muxed26;
-    soc_litedramcore_dfi_p3_wrdata_en <= array_muxed27;
+    soc_litedramcore_dfi_p3_bank <= self21;
+    soc_litedramcore_dfi_p3_address <= self22;
+    soc_litedramcore_dfi_p3_cas_n <= (~self23);
+    soc_litedramcore_dfi_p3_ras_n <= (~self24);
+    soc_litedramcore_dfi_p3_we_n <= (~self25);
+    soc_litedramcore_dfi_p3_rddata_en <= self26;
+    soc_litedramcore_dfi_p3_wrdata_en <= self27;
     if (soc_litedramcore_trrdcon_valid) begin
         soc_litedramcore_trrdcon_count <= 1'd1;
         if (1'd0) begin
@@ -14688,11 +14688,11 @@ always @(posedge sys_clk) begin
         soc_litedramcore_postponer_req_o <= 1'd0;
         soc_litedramcore_postponer_count <= 1'd0;
         soc_litedramcore_sequencer_done1 <= 1'd0;
-        soc_litedramcore_sequencer_counter <= 6'd0;
+        soc_litedramcore_sequencer_trigger <= 6'd0;
         soc_litedramcore_sequencer_count <= 1'd0;
         soc_litedramcore_zqcs_timer_count1 <= 26'd49999999;
         soc_litedramcore_zqcs_executer_done <= 1'd0;
-        soc_litedramcore_zqcs_executer_counter <= 5'd0;
+        soc_litedramcore_zqcs_executer_trigger <= 5'd0;
         soc_litedramcore_bankmachine0_level <= 5'd0;
         soc_litedramcore_bankmachine0_produce <= 4'd0;
         soc_litedramcore_bankmachine0_consume <= 4'd0;
@@ -15450,5 +15450,5 @@ assign soc_litedramnativeportconverter_wdata_fifo_rdport_dat_r = storage_9[soc_l
 endmodule
 
 // -----------------------------------------------------------------------------
-//  Auto-Generated by LiteX on 2024-05-07 15:09:06.
+//  Auto-Generated by LiteX on 2025-01-31 22:29:26.
 //------------------------------------------------------------------------------

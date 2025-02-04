@@ -8,8 +8,8 @@
 //
 // Filename   : litedram.v
 // Device     : 
-// LiteX sha1 : 55249ddae
-// Date       : 2024-05-07 15:09:06
+// LiteX sha1 : a3ac4b888
+// Date       : 2025-01-31 22:29:26
 //------------------------------------------------------------------------------
 
 `timescale 1ns / 1ps
@@ -78,19 +78,19 @@ LiteDRAMCore
 └─── cpu (CPUNone)
 └─── crg (LiteDRAMS7DDRPHYCRG)
 │    └─── pll (S7PLL)
-│    │    └─── [FDCE]
+│    │    └─── [BUFG]
 │    │    └─── [PLLE2_ADV]
-│    │    └─── [BUFG]
-│    │    └─── [FDCE]
 │    │    └─── [FDCE]
 │    │    └─── [BUFG]
 │    │    └─── [FDCE]
 │    │    └─── [FDCE]
-│    │    └─── [BUFG]
 │    │    └─── [FDCE]
 │    │    └─── [BUFG]
 │    │    └─── [FDCE]
 │    │    └─── [FDCE]
+│    │    └─── [FDCE]
+│    │    └─── [FDCE]
+│    │    └─── [BUFG]
 │    │    └─── [BUFG]
 │    └─── idelayctrl (S7IDELAYCTRL)
 │    │    └─── [IDELAYCTRL]
@@ -136,102 +136,102 @@ LiteDRAMCore
 │    └─── bitslip_35* (BitSlip)
 │    └─── tappeddelayline_2* (TappedDelayLine)
 │    └─── tappeddelayline_3* (TappedDelayLine)
-│    └─── [IOBUF]
-│    └─── [ISERDESE2]
-│    └─── [IDELAYE2]
-│    └─── [IDELAYE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [ISERDESE2]
-│    └─── [IDELAYE2]
-│    └─── [OSERDESE2]
-│    └─── [IDELAYE2]
 │    └─── [OSERDESE2]
 │    └─── [OSERDESE2]
 │    └─── [IOBUF]
 │    └─── [OSERDESE2]
-│    └─── [ISERDESE2]
+│    └─── [OSERDESE2]
 │    └─── [IDELAYE2]
 │    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [IOBUF]
 │    └─── [ISERDESE2]
-│    └─── [ISERDESE2]
+│    └─── [OSERDESE2]
 │    └─── [OSERDESE2]
 │    └─── [IDELAYE2]
 │    └─── [OSERDESE2]
 │    └─── [IOBUF]
 │    └─── [OSERDESE2]
-│    └─── [ISERDESE2]
-│    └─── [IDELAYE2]
-│    └─── [IDELAYE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
 │    └─── [IOBUF]
 │    └─── [ISERDESE2]
 │    └─── [IDELAYE2]
 │    └─── [OSERDESE2]
+│    └─── [IOBUF]
+│    └─── [IDELAYE2]
+│    └─── [OSERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [IOBUF]
+│    └─── [OSERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [ISERDESE2]
 │    └─── [IDELAYE2]
 │    └─── [OSERDESE2]
 │    └─── [OSERDESE2]
 │    └─── [IOBUF]
-│    └─── [IOBUFDS]
-│    └─── [IOBUF]
-│    └─── [ISERDESE2]
 │    └─── [ISERDESE2]
 │    └─── [OSERDESE2]
 │    └─── [IDELAYE2]
-│    └─── [OSERDESE2]
-│    └─── [IOBUF]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [IOBUF]
-│    └─── [OSERDESE2]
-│    └─── [IOBUF]
-│    └─── [ISERDESE2]
-│    └─── [ISERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [IDELAYE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
 │    └─── [OBUFDS]
 │    └─── [OSERDESE2]
 │    └─── [IOBUFDS]
 │    └─── [IOBUF]
 │    └─── [ISERDESE2]
 │    └─── [OSERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [ISERDESE2]
+│    └─── [IOBUF]
+│    └─── [ISERDESE2]
 │    └─── [IDELAYE2]
+│    └─── [OSERDESE2]
+│    └─── [IOBUF]
+│    └─── [ISERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [IOBUF]
+│    └─── [ISERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [IDELAYE2]
+│    └─── [OSERDESE2]
+│    └─── [ISERDESE2]
+│    └─── [IOBUF]
+│    └─── [OSERDESE2]
+│    └─── [IDELAYE2]
+│    └─── [ISERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [IDELAYE2]
+│    └─── [IOBUF]
+│    └─── [IOBUF]
+│    └─── [ISERDESE2]
+│    └─── [IDELAYE2]
+│    └─── [IDELAYE2]
+│    └─── [OSERDESE2]
+│    └─── [ISERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [OSERDESE2]
+│    └─── [IOBUFDS]
+│    └─── [OSERDESE2]
 │    └─── [IOBUF]
 │    └─── [IDELAYE2]
 │    └─── [OSERDESE2]
 │    └─── [OSERDESE2]
+│    └─── [ISERDESE2]
 │    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [IOBUF]
 │    └─── [OSERDESE2]
 │    └─── [ISERDESE2]
 │    └─── [IDELAYE2]
 │    └─── [OSERDESE2]
 │    └─── [OSERDESE2]
 │    └─── [OSERDESE2]
-│    └─── [IOBUF]
-│    └─── [IOBUF]
-│    └─── [ISERDESE2]
-│    └─── [ISERDESE2]
 │    └─── [OSERDESE2]
+│    └─── [IOBUF]
+│    └─── [IDELAYE2]
+│    └─── [IOBUF]
+│    └─── [OSERDESE2]
+│    └─── [ISERDESE2]
 │    └─── [IDELAYE2]
 │    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [OSERDESE2]
-│    └─── [IOBUF]
-│    └─── [OSERDESE2]
-│    └─── [ISERDESE2]
 └─── sdram (LiteDRAMCore)
 │    └─── dfii (DFIInjector)
 │    │    └─── pi0 (PhaseInjector)
@@ -423,34 +423,6 @@ LiteDRAMCore
 //------------------------------------------------------------------------------
 
 wire   [13:0] builder_adr;
-reg     [2:0] builder_array_muxed0 = 3'd0;
-reg    [13:0] builder_array_muxed1 = 14'd0;
-reg           builder_array_muxed10 = 1'd0;
-reg           builder_array_muxed11 = 1'd0;
-reg           builder_array_muxed12 = 1'd0;
-reg           builder_array_muxed13 = 1'd0;
-reg     [2:0] builder_array_muxed14 = 3'd0;
-reg    [13:0] builder_array_muxed15 = 14'd0;
-reg           builder_array_muxed16 = 1'd0;
-reg           builder_array_muxed17 = 1'd0;
-reg           builder_array_muxed18 = 1'd0;
-reg           builder_array_muxed19 = 1'd0;
-reg           builder_array_muxed2 = 1'd0;
-reg           builder_array_muxed20 = 1'd0;
-reg     [2:0] builder_array_muxed21 = 3'd0;
-reg    [13:0] builder_array_muxed22 = 14'd0;
-reg           builder_array_muxed23 = 1'd0;
-reg           builder_array_muxed24 = 1'd0;
-reg           builder_array_muxed25 = 1'd0;
-reg           builder_array_muxed26 = 1'd0;
-reg           builder_array_muxed27 = 1'd0;
-reg           builder_array_muxed3 = 1'd0;
-reg           builder_array_muxed4 = 1'd0;
-reg           builder_array_muxed5 = 1'd0;
-reg           builder_array_muxed6 = 1'd0;
-reg     [2:0] builder_array_muxed7 = 3'd0;
-reg    [13:0] builder_array_muxed8 = 14'd0;
-reg           builder_array_muxed9 = 1'd0;
 wire          builder_csrbank0_init_done0_r;
 reg           builder_csrbank0_init_done0_re = 1'd0;
 wire          builder_csrbank0_init_done0_w;
@@ -681,62 +653,90 @@ wire          builder_reset4;
 wire          builder_reset5;
 wire          builder_reset6;
 wire          builder_reset7;
-reg           builder_rhs_array_muxed0 = 1'd0;
-reg    [13:0] builder_rhs_array_muxed1 = 14'd0;
-reg           builder_rhs_array_muxed10 = 1'd0;
-reg           builder_rhs_array_muxed11 = 1'd0;
-reg    [20:0] builder_rhs_array_muxed12 = 21'd0;
-reg           builder_rhs_array_muxed13 = 1'd0;
-reg           builder_rhs_array_muxed14 = 1'd0;
-reg    [20:0] builder_rhs_array_muxed15 = 21'd0;
-reg           builder_rhs_array_muxed16 = 1'd0;
-reg           builder_rhs_array_muxed17 = 1'd0;
-reg    [20:0] builder_rhs_array_muxed18 = 21'd0;
-reg           builder_rhs_array_muxed19 = 1'd0;
-reg     [2:0] builder_rhs_array_muxed2 = 3'd0;
-reg           builder_rhs_array_muxed20 = 1'd0;
-reg    [20:0] builder_rhs_array_muxed21 = 21'd0;
-reg           builder_rhs_array_muxed22 = 1'd0;
-reg           builder_rhs_array_muxed23 = 1'd0;
-reg    [20:0] builder_rhs_array_muxed24 = 21'd0;
-reg           builder_rhs_array_muxed25 = 1'd0;
-reg           builder_rhs_array_muxed26 = 1'd0;
-reg    [20:0] builder_rhs_array_muxed27 = 21'd0;
-reg           builder_rhs_array_muxed28 = 1'd0;
-reg           builder_rhs_array_muxed29 = 1'd0;
-reg           builder_rhs_array_muxed3 = 1'd0;
-reg    [20:0] builder_rhs_array_muxed30 = 21'd0;
-reg           builder_rhs_array_muxed31 = 1'd0;
-reg           builder_rhs_array_muxed32 = 1'd0;
-reg    [20:0] builder_rhs_array_muxed33 = 21'd0;
-reg           builder_rhs_array_muxed34 = 1'd0;
-reg           builder_rhs_array_muxed35 = 1'd0;
-reg           builder_rhs_array_muxed4 = 1'd0;
-reg           builder_rhs_array_muxed5 = 1'd0;
-reg           builder_rhs_array_muxed6 = 1'd0;
-reg    [13:0] builder_rhs_array_muxed7 = 14'd0;
-reg     [2:0] builder_rhs_array_muxed8 = 3'd0;
-reg           builder_rhs_array_muxed9 = 1'd0;
-reg           builder_t_array_muxed0 = 1'd0;
-reg           builder_t_array_muxed1 = 1'd0;
-reg           builder_t_array_muxed2 = 1'd0;
-reg           builder_t_array_muxed3 = 1'd0;
-reg           builder_t_array_muxed4 = 1'd0;
-reg           builder_t_array_muxed5 = 1'd0;
+reg           builder_rhs_self0 = 1'd0;
+reg    [13:0] builder_rhs_self1 = 14'd0;
+reg           builder_rhs_self10 = 1'd0;
+reg           builder_rhs_self11 = 1'd0;
+reg    [20:0] builder_rhs_self12 = 21'd0;
+reg           builder_rhs_self13 = 1'd0;
+reg           builder_rhs_self14 = 1'd0;
+reg    [20:0] builder_rhs_self15 = 21'd0;
+reg           builder_rhs_self16 = 1'd0;
+reg           builder_rhs_self17 = 1'd0;
+reg    [20:0] builder_rhs_self18 = 21'd0;
+reg           builder_rhs_self19 = 1'd0;
+reg     [2:0] builder_rhs_self2 = 3'd0;
+reg           builder_rhs_self20 = 1'd0;
+reg    [20:0] builder_rhs_self21 = 21'd0;
+reg           builder_rhs_self22 = 1'd0;
+reg           builder_rhs_self23 = 1'd0;
+reg    [20:0] builder_rhs_self24 = 21'd0;
+reg           builder_rhs_self25 = 1'd0;
+reg           builder_rhs_self26 = 1'd0;
+reg    [20:0] builder_rhs_self27 = 21'd0;
+reg           builder_rhs_self28 = 1'd0;
+reg           builder_rhs_self29 = 1'd0;
+reg           builder_rhs_self3 = 1'd0;
+reg    [20:0] builder_rhs_self30 = 21'd0;
+reg           builder_rhs_self31 = 1'd0;
+reg           builder_rhs_self32 = 1'd0;
+reg    [20:0] builder_rhs_self33 = 21'd0;
+reg           builder_rhs_self34 = 1'd0;
+reg           builder_rhs_self35 = 1'd0;
+reg           builder_rhs_self4 = 1'd0;
+reg           builder_rhs_self5 = 1'd0;
+reg           builder_rhs_self6 = 1'd0;
+reg    [13:0] builder_rhs_self7 = 14'd0;
+reg     [2:0] builder_rhs_self8 = 3'd0;
+reg           builder_rhs_self9 = 1'd0;
+reg     [2:0] builder_self0 = 3'd0;
+reg    [13:0] builder_self1 = 14'd0;
+reg           builder_self10 = 1'd0;
+reg           builder_self11 = 1'd0;
+reg           builder_self12 = 1'd0;
+reg           builder_self13 = 1'd0;
+reg     [2:0] builder_self14 = 3'd0;
+reg    [13:0] builder_self15 = 14'd0;
+reg           builder_self16 = 1'd0;
+reg           builder_self17 = 1'd0;
+reg           builder_self18 = 1'd0;
+reg           builder_self19 = 1'd0;
+reg           builder_self2 = 1'd0;
+reg           builder_self20 = 1'd0;
+reg     [2:0] builder_self21 = 3'd0;
+reg    [13:0] builder_self22 = 14'd0;
+reg           builder_self23 = 1'd0;
+reg           builder_self24 = 1'd0;
+reg           builder_self25 = 1'd0;
+reg           builder_self26 = 1'd0;
+reg           builder_self27 = 1'd0;
+reg           builder_self3 = 1'd0;
+reg           builder_self4 = 1'd0;
+reg           builder_self5 = 1'd0;
+reg           builder_self6 = 1'd0;
+reg     [2:0] builder_self7 = 3'd0;
+reg    [13:0] builder_self8 = 14'd0;
+reg           builder_self9 = 1'd0;
+reg           builder_t_self0 = 1'd0;
+reg           builder_t_self1 = 1'd0;
+reg           builder_t_self2 = 1'd0;
+reg           builder_t_self3 = 1'd0;
+reg           builder_t_self4 = 1'd0;
+reg           builder_t_self5 = 1'd0;
 wire          builder_we;
 reg     [1:0] builder_wishbone2csr_next_state = 2'd0;
 reg     [1:0] builder_wishbone2csr_state = 2'd0;
-wire          builder_xilinxasyncresetsynchronizerimpl0;
+wire          builder_xilinxasyncresetsynchronizerimpl0_async_reset;
 wire          builder_xilinxasyncresetsynchronizerimpl0_rst_meta;
-wire          builder_xilinxasyncresetsynchronizerimpl1;
+wire          builder_xilinxasyncresetsynchronizerimpl1_async_reset;
 wire          builder_xilinxasyncresetsynchronizerimpl1_rst_meta;
-wire          builder_xilinxasyncresetsynchronizerimpl2;
+wire          builder_xilinxasyncresetsynchronizerimpl2_async_reset;
 wire          builder_xilinxasyncresetsynchronizerimpl2_expr;
 wire          builder_xilinxasyncresetsynchronizerimpl2_rst_meta;
-wire          builder_xilinxasyncresetsynchronizerimpl3;
+wire          builder_xilinxasyncresetsynchronizerimpl3_async_reset;
 wire          builder_xilinxasyncresetsynchronizerimpl3_expr;
 wire          builder_xilinxasyncresetsynchronizerimpl3_rst_meta;
-wire          builder_xilinxasyncresetsynchronizerimpl4;
+wire          builder_xilinxasyncresetsynchronizerimpl4_async_reset;
 wire          builder_xilinxasyncresetsynchronizerimpl4_expr;
 wire          builder_xilinxasyncresetsynchronizerimpl4_rst_meta;
 wire          iodelay_clk;
@@ -2455,6 +2455,7 @@ wire          main_new_port_wdata_ready;
 reg           main_new_port_wdata_valid = 1'd0;
 reg    [13:0] main_nop_a = 14'd0;
 reg     [2:0] main_nop_ba = 3'd0;
+wire    [1:0] main_nphases;
 wire          main_odt;
 reg           main_phaseinjector0_address_re = 1'd0;
 reg    [13:0] main_phaseinjector0_address_storage = 14'd0;
@@ -2568,7 +2569,7 @@ wire          main_postponer_req_i;
 reg           main_postponer_req_o = 1'd0;
 reg           main_power_down = 1'd0;
 wire          main_ras_allowed;
-wire    [1:0] main_rdcmdphase;
+wire    [1:0] main_rdphase;
 reg           main_re = 1'd0;
 wire          main_read_available;
 wire          main_reset;
@@ -2577,11 +2578,11 @@ wire          main_reset_n;
 reg           main_rst = 1'd0;
 wire          main_sel;
 reg           main_sequencer_count = 1'd0;
-reg     [5:0] main_sequencer_counter = 6'd0;
 wire          main_sequencer_done0;
 reg           main_sequencer_done1 = 1'd0;
 reg           main_sequencer_start0 = 1'd0;
 wire          main_sequencer_start1;
+reg     [5:0] main_sequencer_trigger = 6'd0;
 wire          main_slave_p0_act_n;
 wire   [13:0] main_slave_p0_address;
 wire    [2:0] main_slave_p0_bank;
@@ -2646,18 +2647,18 @@ wire          main_slave_p3_we_n;
 wire   [31:0] main_slave_p3_wrdata;
 wire          main_slave_p3_wrdata_en;
 wire    [3:0] main_slave_p3_wrdata_mask;
-reg           main_steerer0 = 1'd1;
-reg           main_steerer1 = 1'd1;
-reg           main_steerer2 = 1'd1;
-reg           main_steerer3 = 1'd1;
+reg     [1:0] main_steerer0 = 2'd0;
+reg     [1:0] main_steerer1 = 2'd0;
+reg           main_steerer10 = 1'd1;
+reg           main_steerer11 = 1'd1;
+reg     [1:0] main_steerer2 = 2'd0;
+reg     [1:0] main_steerer3 = 2'd0;
 reg           main_steerer4 = 1'd1;
 reg           main_steerer5 = 1'd1;
 reg           main_steerer6 = 1'd1;
 reg           main_steerer7 = 1'd1;
-reg     [1:0] main_steerer_sel0 = 2'd0;
-reg     [1:0] main_steerer_sel1 = 2'd0;
-reg     [1:0] main_steerer_sel2 = 2'd0;
-reg     [1:0] main_steerer_sel3 = 2'd0;
+reg           main_steerer8 = 1'd1;
+reg           main_steerer9 = 1'd1;
 reg     [3:0] main_storage = 4'd1;
 reg           main_tccdcon_count = 1'd0;
 (* dont_touch = "true" *)
@@ -2706,11 +2707,10 @@ reg           main_wb_port_err = 1'd0;
 wire    [3:0] main_wb_port_sel;
 wire          main_wb_port_stb;
 wire          main_wb_port_we;
-wire    [1:0] main_wrcmdphase;
 wire          main_write_available;
-reg     [4:0] main_zqcs_executer_counter = 5'd0;
 reg           main_zqcs_executer_done = 1'd0;
 reg           main_zqcs_executer_start = 1'd0;
+reg     [4:0] main_zqcs_executer_trigger = 5'd0;
 wire   [25:0] main_zqcs_timer_count0;
 reg    [25:0] main_zqcs_timer_count1 = 26'd49999999;
 wire          main_zqcs_timer_done0;
@@ -9523,8 +9523,8 @@ always @(*) begin
         end
     endcase
 end
-assign main_rdcmdphase = (main_a7ddrphy_rdphase_storage - 1'd1);
-assign main_wrcmdphase = (main_a7ddrphy_wrphase_storage - 1'd1);
+assign main_nphases = (main_a7ddrphy_rdphase_storage - 1'd1);
+assign main_rdphase = (main_a7ddrphy_wrphase_storage - 1'd1);
 assign main_trrdcon_valid = ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & ((main_choose_cmd_cmd_payload_ras & (~main_choose_cmd_cmd_payload_cas)) & (~main_choose_cmd_cmd_payload_we)));
 assign main_tfawcon_valid = ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & ((main_choose_cmd_cmd_payload_ras & (~main_choose_cmd_cmd_payload_cas)) & (~main_choose_cmd_cmd_payload_we)));
 assign main_ras_allowed = (main_trrdcon_ready & main_tfawcon_ready);
@@ -9565,28 +9565,28 @@ always @(*) begin
     main_choose_cmd_valids[7] <= (main_bankmachine7_cmd_valid & (((main_bankmachine7_cmd_payload_is_cmd & main_choose_cmd_want_cmds) & ((~((main_bankmachine7_cmd_payload_ras & (~main_bankmachine7_cmd_payload_cas)) & (~main_bankmachine7_cmd_payload_we))) | main_choose_cmd_want_activates)) | ((main_bankmachine7_cmd_payload_is_read == main_choose_cmd_want_reads) & (main_bankmachine7_cmd_payload_is_write == main_choose_cmd_want_writes))));
 end
 assign main_choose_cmd_request = main_choose_cmd_valids;
-assign main_choose_cmd_cmd_valid = builder_rhs_array_muxed0;
-assign main_choose_cmd_cmd_payload_a = builder_rhs_array_muxed1;
-assign main_choose_cmd_cmd_payload_ba = builder_rhs_array_muxed2;
-assign main_choose_cmd_cmd_payload_is_read = builder_rhs_array_muxed3;
-assign main_choose_cmd_cmd_payload_is_write = builder_rhs_array_muxed4;
-assign main_choose_cmd_cmd_payload_is_cmd = builder_rhs_array_muxed5;
+assign main_choose_cmd_cmd_valid = builder_rhs_self0;
+assign main_choose_cmd_cmd_payload_a = builder_rhs_self1;
+assign main_choose_cmd_cmd_payload_ba = builder_rhs_self2;
+assign main_choose_cmd_cmd_payload_is_read = builder_rhs_self3;
+assign main_choose_cmd_cmd_payload_is_write = builder_rhs_self4;
+assign main_choose_cmd_cmd_payload_is_cmd = builder_rhs_self5;
 always @(*) begin
     main_choose_cmd_cmd_payload_cas <= 1'd0;
     if (main_choose_cmd_cmd_valid) begin
-        main_choose_cmd_cmd_payload_cas <= builder_t_array_muxed0;
+        main_choose_cmd_cmd_payload_cas <= builder_t_self0;
     end
 end
 always @(*) begin
     main_choose_cmd_cmd_payload_ras <= 1'd0;
     if (main_choose_cmd_cmd_valid) begin
-        main_choose_cmd_cmd_payload_ras <= builder_t_array_muxed1;
+        main_choose_cmd_cmd_payload_ras <= builder_t_self1;
     end
 end
 always @(*) begin
     main_choose_cmd_cmd_payload_we <= 1'd0;
     if (main_choose_cmd_cmd_valid) begin
-        main_choose_cmd_cmd_payload_we <= builder_t_array_muxed2;
+        main_choose_cmd_cmd_payload_we <= builder_t_self2;
     end
 end
 always @(*) begin
@@ -9674,43 +9674,43 @@ always @(*) begin
     main_choose_req_valids[7] <= (main_bankmachine7_cmd_valid & (((main_bankmachine7_cmd_payload_is_cmd & main_choose_req_want_cmds) & ((~((main_bankmachine7_cmd_payload_ras & (~main_bankmachine7_cmd_payload_cas)) & (~main_bankmachine7_cmd_payload_we))) | main_choose_req_want_activates)) | ((main_bankmachine7_cmd_payload_is_read == main_choose_req_want_reads) & (main_bankmachine7_cmd_payload_is_write == main_choose_req_want_writes))));
 end
 assign main_choose_req_request = main_choose_req_valids;
-assign main_choose_req_cmd_valid = builder_rhs_array_muxed6;
-assign main_choose_req_cmd_payload_a = builder_rhs_array_muxed7;
-assign main_choose_req_cmd_payload_ba = builder_rhs_array_muxed8;
-assign main_choose_req_cmd_payload_is_read = builder_rhs_array_muxed9;
-assign main_choose_req_cmd_payload_is_write = builder_rhs_array_muxed10;
-assign main_choose_req_cmd_payload_is_cmd = builder_rhs_array_muxed11;
+assign main_choose_req_cmd_valid = builder_rhs_self6;
+assign main_choose_req_cmd_payload_a = builder_rhs_self7;
+assign main_choose_req_cmd_payload_ba = builder_rhs_self8;
+assign main_choose_req_cmd_payload_is_read = builder_rhs_self9;
+assign main_choose_req_cmd_payload_is_write = builder_rhs_self10;
+assign main_choose_req_cmd_payload_is_cmd = builder_rhs_self11;
 always @(*) begin
     main_choose_req_cmd_payload_cas <= 1'd0;
     if (main_choose_req_cmd_valid) begin
-        main_choose_req_cmd_payload_cas <= builder_t_array_muxed3;
+        main_choose_req_cmd_payload_cas <= builder_t_self3;
     end
 end
 always @(*) begin
     main_choose_req_cmd_payload_ras <= 1'd0;
     if (main_choose_req_cmd_valid) begin
-        main_choose_req_cmd_payload_ras <= builder_t_array_muxed4;
+        main_choose_req_cmd_payload_ras <= builder_t_self4;
     end
 end
 always @(*) begin
     main_choose_req_cmd_payload_we <= 1'd0;
     if (main_choose_req_cmd_valid) begin
-        main_choose_req_cmd_payload_we <= builder_t_array_muxed5;
+        main_choose_req_cmd_payload_we <= builder_t_self5;
     end
 end
 assign main_choose_req_ce = (main_choose_req_cmd_ready | (~main_choose_req_cmd_valid));
 assign main_dfi_p0_reset_n = 1'd1;
-assign main_dfi_p0_cke = {1{main_steerer0}};
-assign main_dfi_p0_odt = {1{main_steerer1}};
+assign main_dfi_p0_cke = {1{main_steerer4}};
+assign main_dfi_p0_odt = {1{main_steerer5}};
 assign main_dfi_p1_reset_n = 1'd1;
-assign main_dfi_p1_cke = {1{main_steerer2}};
-assign main_dfi_p1_odt = {1{main_steerer3}};
+assign main_dfi_p1_cke = {1{main_steerer6}};
+assign main_dfi_p1_odt = {1{main_steerer7}};
 assign main_dfi_p2_reset_n = 1'd1;
-assign main_dfi_p2_cke = {1{main_steerer4}};
-assign main_dfi_p2_odt = {1{main_steerer5}};
+assign main_dfi_p2_cke = {1{main_steerer8}};
+assign main_dfi_p2_odt = {1{main_steerer9}};
 assign main_dfi_p3_reset_n = 1'd1;
-assign main_dfi_p3_cke = {1{main_steerer6}};
-assign main_dfi_p3_odt = {1{main_steerer7}};
+assign main_dfi_p3_cke = {1{main_steerer10}};
+assign main_dfi_p3_odt = {1{main_steerer11}};
 assign main_tfawcon_count = ((main_tfawcon_window[0] + main_tfawcon_window[1]) + main_tfawcon_window[2]);
 always @(*) begin
     builder_litedramcore_multiplexer_next_state <= 4'd0;
@@ -9835,19 +9835,19 @@ always @(*) begin
     endcase
 end
 always @(*) begin
-    main_steerer_sel0 <= 2'd0;
+    main_steerer0 <= 2'd0;
     case (builder_litedramcore_multiplexer_state)
         1'd1: begin
-            main_steerer_sel0 <= 1'd0;
+            main_steerer0 <= 1'd0;
             if ((main_a7ddrphy_wrphase_storage == 1'd0)) begin
-                main_steerer_sel0 <= 2'd2;
+                main_steerer0 <= 2'd2;
             end
-            if ((main_wrcmdphase == 1'd0)) begin
-                main_steerer_sel0 <= 1'd1;
+            if ((main_rdphase == 1'd0)) begin
+                main_steerer0 <= 1'd1;
             end
         end
         2'd2: begin
-            main_steerer_sel0 <= 2'd3;
+            main_steerer0 <= 2'd3;
         end
         2'd3: begin
         end
@@ -9866,12 +9866,12 @@ always @(*) begin
         4'd10: begin
         end
         default: begin
-            main_steerer_sel0 <= 1'd0;
+            main_steerer0 <= 1'd0;
             if ((main_a7ddrphy_rdphase_storage == 1'd0)) begin
-                main_steerer_sel0 <= 2'd2;
+                main_steerer0 <= 2'd2;
             end
-            if ((main_rdcmdphase == 1'd0)) begin
-                main_steerer_sel0 <= 1'd1;
+            if ((main_nphases == 1'd0)) begin
+                main_steerer0 <= 1'd1;
             end
         end
     endcase
@@ -9905,15 +9905,15 @@ always @(*) begin
     endcase
 end
 always @(*) begin
-    main_steerer_sel1 <= 2'd0;
+    main_steerer1 <= 2'd0;
     case (builder_litedramcore_multiplexer_state)
         1'd1: begin
-            main_steerer_sel1 <= 1'd0;
+            main_steerer1 <= 1'd0;
             if ((main_a7ddrphy_wrphase_storage == 1'd1)) begin
-                main_steerer_sel1 <= 2'd2;
+                main_steerer1 <= 2'd2;
             end
-            if ((main_wrcmdphase == 1'd1)) begin
-                main_steerer_sel1 <= 1'd1;
+            if ((main_rdphase == 1'd1)) begin
+                main_steerer1 <= 1'd1;
             end
         end
         2'd2: begin
@@ -9935,12 +9935,12 @@ always @(*) begin
         4'd10: begin
         end
         default: begin
-            main_steerer_sel1 <= 1'd0;
+            main_steerer1 <= 1'd0;
             if ((main_a7ddrphy_rdphase_storage == 1'd1)) begin
-                main_steerer_sel1 <= 2'd2;
+                main_steerer1 <= 2'd2;
             end
-            if ((main_rdcmdphase == 1'd1)) begin
-                main_steerer_sel1 <= 1'd1;
+            if ((main_nphases == 1'd1)) begin
+                main_steerer1 <= 1'd1;
             end
         end
     endcase
@@ -9974,15 +9974,15 @@ always @(*) begin
     endcase
 end
 always @(*) begin
-    main_steerer_sel2 <= 2'd0;
+    main_steerer2 <= 2'd0;
     case (builder_litedramcore_multiplexer_state)
         1'd1: begin
-            main_steerer_sel2 <= 1'd0;
+            main_steerer2 <= 1'd0;
             if ((main_a7ddrphy_wrphase_storage == 2'd2)) begin
-                main_steerer_sel2 <= 2'd2;
+                main_steerer2 <= 2'd2;
             end
-            if ((main_wrcmdphase == 2'd2)) begin
-                main_steerer_sel2 <= 1'd1;
+            if ((main_rdphase == 2'd2)) begin
+                main_steerer2 <= 1'd1;
             end
         end
         2'd2: begin
@@ -10004,12 +10004,12 @@ always @(*) begin
         4'd10: begin
         end
         default: begin
-            main_steerer_sel2 <= 1'd0;
+            main_steerer2 <= 1'd0;
             if ((main_a7ddrphy_rdphase_storage == 2'd2)) begin
-                main_steerer_sel2 <= 2'd2;
+                main_steerer2 <= 2'd2;
             end
-            if ((main_rdcmdphase == 2'd2)) begin
-                main_steerer_sel2 <= 1'd1;
+            if ((main_nphases == 2'd2)) begin
+                main_steerer2 <= 1'd1;
             end
         end
     endcase
@@ -10050,15 +10050,15 @@ always @(*) begin
     endcase
 end
 always @(*) begin
-    main_steerer_sel3 <= 2'd0;
+    main_steerer3 <= 2'd0;
     case (builder_litedramcore_multiplexer_state)
         1'd1: begin
-            main_steerer_sel3 <= 1'd0;
+            main_steerer3 <= 1'd0;
             if ((main_a7ddrphy_wrphase_storage == 2'd3)) begin
-                main_steerer_sel3 <= 2'd2;
+                main_steerer3 <= 2'd2;
             end
-            if ((main_wrcmdphase == 2'd3)) begin
-                main_steerer_sel3 <= 1'd1;
+            if ((main_rdphase == 2'd3)) begin
+                main_steerer3 <= 1'd1;
             end
         end
         2'd2: begin
@@ -10080,12 +10080,12 @@ always @(*) begin
         4'd10: begin
         end
         default: begin
-            main_steerer_sel3 <= 1'd0;
+            main_steerer3 <= 1'd0;
             if ((main_a7ddrphy_rdphase_storage == 2'd3)) begin
-                main_steerer_sel3 <= 2'd2;
+                main_steerer3 <= 2'd2;
             end
-            if ((main_rdcmdphase == 2'd3)) begin
-                main_steerer_sel3 <= 1'd1;
+            if ((main_nphases == 2'd3)) begin
+                main_steerer3 <= 1'd1;
             end
         end
     endcase
@@ -10183,44 +10183,44 @@ always @(*) begin
 end
 assign builder_litedramcore_roundrobin0_request = {(((main_port_cmd_payload_addr[9:7] == 1'd0) & (~(((((((builder_litedramcore_locked0 | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid)};
 assign builder_litedramcore_roundrobin0_ce = ((~main_interface_bank0_valid) & (~main_interface_bank0_lock));
-assign main_interface_bank0_addr = builder_rhs_array_muxed12;
-assign main_interface_bank0_we = builder_rhs_array_muxed13;
-assign main_interface_bank0_valid = builder_rhs_array_muxed14;
+assign main_interface_bank0_addr = builder_rhs_self12;
+assign main_interface_bank0_we = builder_rhs_self13;
+assign main_interface_bank0_valid = builder_rhs_self14;
 assign builder_litedramcore_roundrobin1_request = {(((main_port_cmd_payload_addr[9:7] == 1'd1) & (~(((((((builder_litedramcore_locked1 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid)};
 assign builder_litedramcore_roundrobin1_ce = ((~main_interface_bank1_valid) & (~main_interface_bank1_lock));
-assign main_interface_bank1_addr = builder_rhs_array_muxed15;
-assign main_interface_bank1_we = builder_rhs_array_muxed16;
-assign main_interface_bank1_valid = builder_rhs_array_muxed17;
+assign main_interface_bank1_addr = builder_rhs_self15;
+assign main_interface_bank1_we = builder_rhs_self16;
+assign main_interface_bank1_valid = builder_rhs_self17;
 assign builder_litedramcore_roundrobin2_request = {(((main_port_cmd_payload_addr[9:7] == 2'd2) & (~(((((((builder_litedramcore_locked2 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid)};
 assign builder_litedramcore_roundrobin2_ce = ((~main_interface_bank2_valid) & (~main_interface_bank2_lock));
-assign main_interface_bank2_addr = builder_rhs_array_muxed18;
-assign main_interface_bank2_we = builder_rhs_array_muxed19;
-assign main_interface_bank2_valid = builder_rhs_array_muxed20;
+assign main_interface_bank2_addr = builder_rhs_self18;
+assign main_interface_bank2_we = builder_rhs_self19;
+assign main_interface_bank2_valid = builder_rhs_self20;
 assign builder_litedramcore_roundrobin3_request = {(((main_port_cmd_payload_addr[9:7] == 2'd3) & (~(((((((builder_litedramcore_locked3 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid)};
 assign builder_litedramcore_roundrobin3_ce = ((~main_interface_bank3_valid) & (~main_interface_bank3_lock));
-assign main_interface_bank3_addr = builder_rhs_array_muxed21;
-assign main_interface_bank3_we = builder_rhs_array_muxed22;
-assign main_interface_bank3_valid = builder_rhs_array_muxed23;
+assign main_interface_bank3_addr = builder_rhs_self21;
+assign main_interface_bank3_we = builder_rhs_self22;
+assign main_interface_bank3_valid = builder_rhs_self23;
 assign builder_litedramcore_roundrobin4_request = {(((main_port_cmd_payload_addr[9:7] == 3'd4) & (~(((((((builder_litedramcore_locked4 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid)};
 assign builder_litedramcore_roundrobin4_ce = ((~main_interface_bank4_valid) & (~main_interface_bank4_lock));
-assign main_interface_bank4_addr = builder_rhs_array_muxed24;
-assign main_interface_bank4_we = builder_rhs_array_muxed25;
-assign main_interface_bank4_valid = builder_rhs_array_muxed26;
+assign main_interface_bank4_addr = builder_rhs_self24;
+assign main_interface_bank4_we = builder_rhs_self25;
+assign main_interface_bank4_valid = builder_rhs_self26;
 assign builder_litedramcore_roundrobin5_request = {(((main_port_cmd_payload_addr[9:7] == 3'd5) & (~(((((((builder_litedramcore_locked5 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid)};
 assign builder_litedramcore_roundrobin5_ce = ((~main_interface_bank5_valid) & (~main_interface_bank5_lock));
-assign main_interface_bank5_addr = builder_rhs_array_muxed27;
-assign main_interface_bank5_we = builder_rhs_array_muxed28;
-assign main_interface_bank5_valid = builder_rhs_array_muxed29;
+assign main_interface_bank5_addr = builder_rhs_self27;
+assign main_interface_bank5_we = builder_rhs_self28;
+assign main_interface_bank5_valid = builder_rhs_self29;
 assign builder_litedramcore_roundrobin6_request = {(((main_port_cmd_payload_addr[9:7] == 3'd6) & (~(((((((builder_litedramcore_locked6 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid)};
 assign builder_litedramcore_roundrobin6_ce = ((~main_interface_bank6_valid) & (~main_interface_bank6_lock));
-assign main_interface_bank6_addr = builder_rhs_array_muxed30;
-assign main_interface_bank6_we = builder_rhs_array_muxed31;
-assign main_interface_bank6_valid = builder_rhs_array_muxed32;
+assign main_interface_bank6_addr = builder_rhs_self30;
+assign main_interface_bank6_we = builder_rhs_self31;
+assign main_interface_bank6_valid = builder_rhs_self32;
 assign builder_litedramcore_roundrobin7_request = {(((main_port_cmd_payload_addr[9:7] == 3'd7) & (~(((((((builder_litedramcore_locked7 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))))) & main_port_cmd_valid)};
 assign builder_litedramcore_roundrobin7_ce = ((~main_interface_bank7_valid) & (~main_interface_bank7_lock));
-assign main_interface_bank7_addr = builder_rhs_array_muxed33;
-assign main_interface_bank7_we = builder_rhs_array_muxed34;
-assign main_interface_bank7_valid = builder_rhs_array_muxed35;
+assign main_interface_bank7_addr = builder_rhs_self33;
+assign main_interface_bank7_we = builder_rhs_self34;
+assign main_interface_bank7_valid = builder_rhs_self35;
 assign main_port_cmd_ready = ((((((((1'd0 | (((builder_litedramcore_roundrobin0_grant == 1'd0) & ((main_port_cmd_payload_addr[9:7] == 1'd0) & (~(((((((builder_litedramcore_locked0 | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0)))))) & main_interface_bank0_ready)) | (((builder_litedramcore_roundrobin1_grant == 1'd0) & ((main_port_cmd_payload_addr[9:7] == 1'd1) & (~(((((((builder_litedramcore_locked1 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0)))))) & main_interface_bank1_ready)) | (((builder_litedramcore_roundrobin2_grant == 1'd0) & ((main_port_cmd_payload_addr[9:7] == 2'd2) & (~(((((((builder_litedramcore_locked2 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0)))))) & main_interface_bank2_ready)) | (((builder_litedramcore_roundrobin3_grant == 1'd0) & ((main_port_cmd_payload_addr[9:7] == 2'd3) & (~(((((((builder_litedramcore_locked3 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0)))))) & main_interface_bank3_ready)) | (((builder_litedramcore_roundrobin4_grant == 1'd0) & ((main_port_cmd_payload_addr[9:7] == 3'd4) & (~(((((((builder_litedramcore_locked4 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0)))))) & main_interface_bank4_ready)) | (((builder_litedramcore_roundrobin5_grant == 1'd0) & ((main_port_cmd_payload_addr[9:7] == 3'd5) & (~(((((((builder_litedramcore_locked5 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0)))))) & main_interface_bank5_ready)) | (((builder_litedramcore_roundrobin6_grant == 1'd0) & ((main_port_cmd_payload_addr[9:7] == 3'd6) & (~(((((((builder_litedramcore_locked6 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0)))))) & main_interface_bank6_ready)) | (((builder_litedramcore_roundrobin7_grant == 1'd0) & ((main_port_cmd_payload_addr[9:7] == 3'd7) & (~(((((((builder_litedramcore_locked7 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0)))))) & main_interface_bank7_ready));
 assign main_port_wdata_ready = builder_litedramcore_new_master_wdata_ready1;
 assign main_port_rdata_valid = builder_litedramcore_new_master_rdata_valid8;
@@ -11659,1200 +11659,1200 @@ assign builder_interface1_bank_bus_dat_w = builder_dat_w;
 assign builder_interface2_bank_bus_dat_w = builder_dat_w;
 assign builder_dat_r = ((builder_interface0_bank_bus_dat_r | builder_interface1_bank_bus_dat_r) | builder_interface2_bank_bus_dat_r);
 always @(*) begin
-    builder_rhs_array_muxed0 <= 1'd0;
+    builder_rhs_self0 <= 1'd0;
     case (main_choose_cmd_grant)
         1'd0: begin
-            builder_rhs_array_muxed0 <= main_choose_cmd_valids[0];
+            builder_rhs_self0 <= main_choose_cmd_valids[0];
         end
         1'd1: begin
-            builder_rhs_array_muxed0 <= main_choose_cmd_valids[1];
+            builder_rhs_self0 <= main_choose_cmd_valids[1];
         end
         2'd2: begin
-            builder_rhs_array_muxed0 <= main_choose_cmd_valids[2];
+            builder_rhs_self0 <= main_choose_cmd_valids[2];
         end
         2'd3: begin
-            builder_rhs_array_muxed0 <= main_choose_cmd_valids[3];
+            builder_rhs_self0 <= main_choose_cmd_valids[3];
         end
         3'd4: begin
-            builder_rhs_array_muxed0 <= main_choose_cmd_valids[4];
+            builder_rhs_self0 <= main_choose_cmd_valids[4];
         end
         3'd5: begin
-            builder_rhs_array_muxed0 <= main_choose_cmd_valids[5];
+            builder_rhs_self0 <= main_choose_cmd_valids[5];
         end
         3'd6: begin
-            builder_rhs_array_muxed0 <= main_choose_cmd_valids[6];
+            builder_rhs_self0 <= main_choose_cmd_valids[6];
         end
         default: begin
-            builder_rhs_array_muxed0 <= main_choose_cmd_valids[7];
+            builder_rhs_self0 <= main_choose_cmd_valids[7];
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed1 <= 14'd0;
+    builder_rhs_self1 <= 14'd0;
     case (main_choose_cmd_grant)
         1'd0: begin
-            builder_rhs_array_muxed1 <= main_bankmachine0_cmd_payload_a;
+            builder_rhs_self1 <= main_bankmachine0_cmd_payload_a;
         end
         1'd1: begin
-            builder_rhs_array_muxed1 <= main_bankmachine1_cmd_payload_a;
+            builder_rhs_self1 <= main_bankmachine1_cmd_payload_a;
         end
         2'd2: begin
-            builder_rhs_array_muxed1 <= main_bankmachine2_cmd_payload_a;
+            builder_rhs_self1 <= main_bankmachine2_cmd_payload_a;
         end
         2'd3: begin
-            builder_rhs_array_muxed1 <= main_bankmachine3_cmd_payload_a;
+            builder_rhs_self1 <= main_bankmachine3_cmd_payload_a;
         end
         3'd4: begin
-            builder_rhs_array_muxed1 <= main_bankmachine4_cmd_payload_a;
+            builder_rhs_self1 <= main_bankmachine4_cmd_payload_a;
         end
         3'd5: begin
-            builder_rhs_array_muxed1 <= main_bankmachine5_cmd_payload_a;
+            builder_rhs_self1 <= main_bankmachine5_cmd_payload_a;
         end
         3'd6: begin
-            builder_rhs_array_muxed1 <= main_bankmachine6_cmd_payload_a;
+            builder_rhs_self1 <= main_bankmachine6_cmd_payload_a;
         end
         default: begin
-            builder_rhs_array_muxed1 <= main_bankmachine7_cmd_payload_a;
+            builder_rhs_self1 <= main_bankmachine7_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed2 <= 3'd0;
+    builder_rhs_self2 <= 3'd0;
     case (main_choose_cmd_grant)
         1'd0: begin
-            builder_rhs_array_muxed2 <= main_bankmachine0_cmd_payload_ba;
+            builder_rhs_self2 <= main_bankmachine0_cmd_payload_ba;
         end
         1'd1: begin
-            builder_rhs_array_muxed2 <= main_bankmachine1_cmd_payload_ba;
+            builder_rhs_self2 <= main_bankmachine1_cmd_payload_ba;
         end
         2'd2: begin
-            builder_rhs_array_muxed2 <= main_bankmachine2_cmd_payload_ba;
+            builder_rhs_self2 <= main_bankmachine2_cmd_payload_ba;
         end
         2'd3: begin
-            builder_rhs_array_muxed2 <= main_bankmachine3_cmd_payload_ba;
+            builder_rhs_self2 <= main_bankmachine3_cmd_payload_ba;
         end
         3'd4: begin
-            builder_rhs_array_muxed2 <= main_bankmachine4_cmd_payload_ba;
+            builder_rhs_self2 <= main_bankmachine4_cmd_payload_ba;
         end
         3'd5: begin
-            builder_rhs_array_muxed2 <= main_bankmachine5_cmd_payload_ba;
+            builder_rhs_self2 <= main_bankmachine5_cmd_payload_ba;
         end
         3'd6: begin
-            builder_rhs_array_muxed2 <= main_bankmachine6_cmd_payload_ba;
+            builder_rhs_self2 <= main_bankmachine6_cmd_payload_ba;
         end
         default: begin
-            builder_rhs_array_muxed2 <= main_bankmachine7_cmd_payload_ba;
+            builder_rhs_self2 <= main_bankmachine7_cmd_payload_ba;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed3 <= 1'd0;
+    builder_rhs_self3 <= 1'd0;
     case (main_choose_cmd_grant)
         1'd0: begin
-            builder_rhs_array_muxed3 <= main_bankmachine0_cmd_payload_is_read;
+            builder_rhs_self3 <= main_bankmachine0_cmd_payload_is_read;
         end
         1'd1: begin
-            builder_rhs_array_muxed3 <= main_bankmachine1_cmd_payload_is_read;
+            builder_rhs_self3 <= main_bankmachine1_cmd_payload_is_read;
         end
         2'd2: begin
-            builder_rhs_array_muxed3 <= main_bankmachine2_cmd_payload_is_read;
+            builder_rhs_self3 <= main_bankmachine2_cmd_payload_is_read;
         end
         2'd3: begin
-            builder_rhs_array_muxed3 <= main_bankmachine3_cmd_payload_is_read;
+            builder_rhs_self3 <= main_bankmachine3_cmd_payload_is_read;
         end
         3'd4: begin
-            builder_rhs_array_muxed3 <= main_bankmachine4_cmd_payload_is_read;
+            builder_rhs_self3 <= main_bankmachine4_cmd_payload_is_read;
         end
         3'd5: begin
-            builder_rhs_array_muxed3 <= main_bankmachine5_cmd_payload_is_read;
+            builder_rhs_self3 <= main_bankmachine5_cmd_payload_is_read;
         end
         3'd6: begin
-            builder_rhs_array_muxed3 <= main_bankmachine6_cmd_payload_is_read;
+            builder_rhs_self3 <= main_bankmachine6_cmd_payload_is_read;
         end
         default: begin
-            builder_rhs_array_muxed3 <= main_bankmachine7_cmd_payload_is_read;
+            builder_rhs_self3 <= main_bankmachine7_cmd_payload_is_read;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed4 <= 1'd0;
+    builder_rhs_self4 <= 1'd0;
     case (main_choose_cmd_grant)
         1'd0: begin
-            builder_rhs_array_muxed4 <= main_bankmachine0_cmd_payload_is_write;
+            builder_rhs_self4 <= main_bankmachine0_cmd_payload_is_write;
         end
         1'd1: begin
-            builder_rhs_array_muxed4 <= main_bankmachine1_cmd_payload_is_write;
+            builder_rhs_self4 <= main_bankmachine1_cmd_payload_is_write;
         end
         2'd2: begin
-            builder_rhs_array_muxed4 <= main_bankmachine2_cmd_payload_is_write;
+            builder_rhs_self4 <= main_bankmachine2_cmd_payload_is_write;
         end
         2'd3: begin
-            builder_rhs_array_muxed4 <= main_bankmachine3_cmd_payload_is_write;
+            builder_rhs_self4 <= main_bankmachine3_cmd_payload_is_write;
         end
         3'd4: begin
-            builder_rhs_array_muxed4 <= main_bankmachine4_cmd_payload_is_write;
+            builder_rhs_self4 <= main_bankmachine4_cmd_payload_is_write;
         end
         3'd5: begin
-            builder_rhs_array_muxed4 <= main_bankmachine5_cmd_payload_is_write;
+            builder_rhs_self4 <= main_bankmachine5_cmd_payload_is_write;
         end
         3'd6: begin
-            builder_rhs_array_muxed4 <= main_bankmachine6_cmd_payload_is_write;
+            builder_rhs_self4 <= main_bankmachine6_cmd_payload_is_write;
         end
         default: begin
-            builder_rhs_array_muxed4 <= main_bankmachine7_cmd_payload_is_write;
+            builder_rhs_self4 <= main_bankmachine7_cmd_payload_is_write;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed5 <= 1'd0;
+    builder_rhs_self5 <= 1'd0;
     case (main_choose_cmd_grant)
         1'd0: begin
-            builder_rhs_array_muxed5 <= main_bankmachine0_cmd_payload_is_cmd;
+            builder_rhs_self5 <= main_bankmachine0_cmd_payload_is_cmd;
         end
         1'd1: begin
-            builder_rhs_array_muxed5 <= main_bankmachine1_cmd_payload_is_cmd;
+            builder_rhs_self5 <= main_bankmachine1_cmd_payload_is_cmd;
         end
         2'd2: begin
-            builder_rhs_array_muxed5 <= main_bankmachine2_cmd_payload_is_cmd;
+            builder_rhs_self5 <= main_bankmachine2_cmd_payload_is_cmd;
         end
         2'd3: begin
-            builder_rhs_array_muxed5 <= main_bankmachine3_cmd_payload_is_cmd;
+            builder_rhs_self5 <= main_bankmachine3_cmd_payload_is_cmd;
         end
         3'd4: begin
-            builder_rhs_array_muxed5 <= main_bankmachine4_cmd_payload_is_cmd;
+            builder_rhs_self5 <= main_bankmachine4_cmd_payload_is_cmd;
         end
         3'd5: begin
-            builder_rhs_array_muxed5 <= main_bankmachine5_cmd_payload_is_cmd;
+            builder_rhs_self5 <= main_bankmachine5_cmd_payload_is_cmd;
         end
         3'd6: begin
-            builder_rhs_array_muxed5 <= main_bankmachine6_cmd_payload_is_cmd;
+            builder_rhs_self5 <= main_bankmachine6_cmd_payload_is_cmd;
         end
         default: begin
-            builder_rhs_array_muxed5 <= main_bankmachine7_cmd_payload_is_cmd;
+            builder_rhs_self5 <= main_bankmachine7_cmd_payload_is_cmd;
         end
     endcase
 end
 always @(*) begin
-    builder_t_array_muxed0 <= 1'd0;
+    builder_t_self0 <= 1'd0;
     case (main_choose_cmd_grant)
         1'd0: begin
-            builder_t_array_muxed0 <= main_bankmachine0_cmd_payload_cas;
+            builder_t_self0 <= main_bankmachine0_cmd_payload_cas;
         end
         1'd1: begin
-            builder_t_array_muxed0 <= main_bankmachine1_cmd_payload_cas;
+            builder_t_self0 <= main_bankmachine1_cmd_payload_cas;
         end
         2'd2: begin
-            builder_t_array_muxed0 <= main_bankmachine2_cmd_payload_cas;
+            builder_t_self0 <= main_bankmachine2_cmd_payload_cas;
         end
         2'd3: begin
-            builder_t_array_muxed0 <= main_bankmachine3_cmd_payload_cas;
+            builder_t_self0 <= main_bankmachine3_cmd_payload_cas;
         end
         3'd4: begin
-            builder_t_array_muxed0 <= main_bankmachine4_cmd_payload_cas;
+            builder_t_self0 <= main_bankmachine4_cmd_payload_cas;
         end
         3'd5: begin
-            builder_t_array_muxed0 <= main_bankmachine5_cmd_payload_cas;
+            builder_t_self0 <= main_bankmachine5_cmd_payload_cas;
         end
         3'd6: begin
-            builder_t_array_muxed0 <= main_bankmachine6_cmd_payload_cas;
+            builder_t_self0 <= main_bankmachine6_cmd_payload_cas;
         end
         default: begin
-            builder_t_array_muxed0 <= main_bankmachine7_cmd_payload_cas;
+            builder_t_self0 <= main_bankmachine7_cmd_payload_cas;
         end
     endcase
 end
 always @(*) begin
-    builder_t_array_muxed1 <= 1'd0;
+    builder_t_self1 <= 1'd0;
     case (main_choose_cmd_grant)
         1'd0: begin
-            builder_t_array_muxed1 <= main_bankmachine0_cmd_payload_ras;
+            builder_t_self1 <= main_bankmachine0_cmd_payload_ras;
         end
         1'd1: begin
-            builder_t_array_muxed1 <= main_bankmachine1_cmd_payload_ras;
+            builder_t_self1 <= main_bankmachine1_cmd_payload_ras;
         end
         2'd2: begin
-            builder_t_array_muxed1 <= main_bankmachine2_cmd_payload_ras;
+            builder_t_self1 <= main_bankmachine2_cmd_payload_ras;
         end
         2'd3: begin
-            builder_t_array_muxed1 <= main_bankmachine3_cmd_payload_ras;
+            builder_t_self1 <= main_bankmachine3_cmd_payload_ras;
         end
         3'd4: begin
-            builder_t_array_muxed1 <= main_bankmachine4_cmd_payload_ras;
+            builder_t_self1 <= main_bankmachine4_cmd_payload_ras;
         end
         3'd5: begin
-            builder_t_array_muxed1 <= main_bankmachine5_cmd_payload_ras;
+            builder_t_self1 <= main_bankmachine5_cmd_payload_ras;
         end
         3'd6: begin
-            builder_t_array_muxed1 <= main_bankmachine6_cmd_payload_ras;
+            builder_t_self1 <= main_bankmachine6_cmd_payload_ras;
         end
         default: begin
-            builder_t_array_muxed1 <= main_bankmachine7_cmd_payload_ras;
+            builder_t_self1 <= main_bankmachine7_cmd_payload_ras;
         end
     endcase
 end
 always @(*) begin
-    builder_t_array_muxed2 <= 1'd0;
+    builder_t_self2 <= 1'd0;
     case (main_choose_cmd_grant)
         1'd0: begin
-            builder_t_array_muxed2 <= main_bankmachine0_cmd_payload_we;
+            builder_t_self2 <= main_bankmachine0_cmd_payload_we;
         end
         1'd1: begin
-            builder_t_array_muxed2 <= main_bankmachine1_cmd_payload_we;
+            builder_t_self2 <= main_bankmachine1_cmd_payload_we;
         end
         2'd2: begin
-            builder_t_array_muxed2 <= main_bankmachine2_cmd_payload_we;
+            builder_t_self2 <= main_bankmachine2_cmd_payload_we;
         end
         2'd3: begin
-            builder_t_array_muxed2 <= main_bankmachine3_cmd_payload_we;
+            builder_t_self2 <= main_bankmachine3_cmd_payload_we;
         end
         3'd4: begin
-            builder_t_array_muxed2 <= main_bankmachine4_cmd_payload_we;
+            builder_t_self2 <= main_bankmachine4_cmd_payload_we;
         end
         3'd5: begin
-            builder_t_array_muxed2 <= main_bankmachine5_cmd_payload_we;
+            builder_t_self2 <= main_bankmachine5_cmd_payload_we;
         end
         3'd6: begin
-            builder_t_array_muxed2 <= main_bankmachine6_cmd_payload_we;
+            builder_t_self2 <= main_bankmachine6_cmd_payload_we;
         end
         default: begin
-            builder_t_array_muxed2 <= main_bankmachine7_cmd_payload_we;
+            builder_t_self2 <= main_bankmachine7_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed6 <= 1'd0;
+    builder_rhs_self6 <= 1'd0;
     case (main_choose_req_grant)
         1'd0: begin
-            builder_rhs_array_muxed6 <= main_choose_req_valids[0];
+            builder_rhs_self6 <= main_choose_req_valids[0];
         end
         1'd1: begin
-            builder_rhs_array_muxed6 <= main_choose_req_valids[1];
+            builder_rhs_self6 <= main_choose_req_valids[1];
         end
         2'd2: begin
-            builder_rhs_array_muxed6 <= main_choose_req_valids[2];
+            builder_rhs_self6 <= main_choose_req_valids[2];
         end
         2'd3: begin
-            builder_rhs_array_muxed6 <= main_choose_req_valids[3];
+            builder_rhs_self6 <= main_choose_req_valids[3];
         end
         3'd4: begin
-            builder_rhs_array_muxed6 <= main_choose_req_valids[4];
+            builder_rhs_self6 <= main_choose_req_valids[4];
         end
         3'd5: begin
-            builder_rhs_array_muxed6 <= main_choose_req_valids[5];
+            builder_rhs_self6 <= main_choose_req_valids[5];
         end
         3'd6: begin
-            builder_rhs_array_muxed6 <= main_choose_req_valids[6];
+            builder_rhs_self6 <= main_choose_req_valids[6];
         end
         default: begin
-            builder_rhs_array_muxed6 <= main_choose_req_valids[7];
+            builder_rhs_self6 <= main_choose_req_valids[7];
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed7 <= 14'd0;
+    builder_rhs_self7 <= 14'd0;
     case (main_choose_req_grant)
         1'd0: begin
-            builder_rhs_array_muxed7 <= main_bankmachine0_cmd_payload_a;
+            builder_rhs_self7 <= main_bankmachine0_cmd_payload_a;
         end
         1'd1: begin
-            builder_rhs_array_muxed7 <= main_bankmachine1_cmd_payload_a;
+            builder_rhs_self7 <= main_bankmachine1_cmd_payload_a;
         end
         2'd2: begin
-            builder_rhs_array_muxed7 <= main_bankmachine2_cmd_payload_a;
+            builder_rhs_self7 <= main_bankmachine2_cmd_payload_a;
         end
         2'd3: begin
-            builder_rhs_array_muxed7 <= main_bankmachine3_cmd_payload_a;
+            builder_rhs_self7 <= main_bankmachine3_cmd_payload_a;
         end
         3'd4: begin
-            builder_rhs_array_muxed7 <= main_bankmachine4_cmd_payload_a;
+            builder_rhs_self7 <= main_bankmachine4_cmd_payload_a;
         end
         3'd5: begin
-            builder_rhs_array_muxed7 <= main_bankmachine5_cmd_payload_a;
+            builder_rhs_self7 <= main_bankmachine5_cmd_payload_a;
         end
         3'd6: begin
-            builder_rhs_array_muxed7 <= main_bankmachine6_cmd_payload_a;
+            builder_rhs_self7 <= main_bankmachine6_cmd_payload_a;
         end
         default: begin
-            builder_rhs_array_muxed7 <= main_bankmachine7_cmd_payload_a;
+            builder_rhs_self7 <= main_bankmachine7_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed8 <= 3'd0;
+    builder_rhs_self8 <= 3'd0;
     case (main_choose_req_grant)
         1'd0: begin
-            builder_rhs_array_muxed8 <= main_bankmachine0_cmd_payload_ba;
+            builder_rhs_self8 <= main_bankmachine0_cmd_payload_ba;
         end
         1'd1: begin
-            builder_rhs_array_muxed8 <= main_bankmachine1_cmd_payload_ba;
+            builder_rhs_self8 <= main_bankmachine1_cmd_payload_ba;
         end
         2'd2: begin
-            builder_rhs_array_muxed8 <= main_bankmachine2_cmd_payload_ba;
+            builder_rhs_self8 <= main_bankmachine2_cmd_payload_ba;
         end
         2'd3: begin
-            builder_rhs_array_muxed8 <= main_bankmachine3_cmd_payload_ba;
+            builder_rhs_self8 <= main_bankmachine3_cmd_payload_ba;
         end
         3'd4: begin
-            builder_rhs_array_muxed8 <= main_bankmachine4_cmd_payload_ba;
+            builder_rhs_self8 <= main_bankmachine4_cmd_payload_ba;
         end
         3'd5: begin
-            builder_rhs_array_muxed8 <= main_bankmachine5_cmd_payload_ba;
+            builder_rhs_self8 <= main_bankmachine5_cmd_payload_ba;
         end
         3'd6: begin
-            builder_rhs_array_muxed8 <= main_bankmachine6_cmd_payload_ba;
+            builder_rhs_self8 <= main_bankmachine6_cmd_payload_ba;
         end
         default: begin
-            builder_rhs_array_muxed8 <= main_bankmachine7_cmd_payload_ba;
+            builder_rhs_self8 <= main_bankmachine7_cmd_payload_ba;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed9 <= 1'd0;
+    builder_rhs_self9 <= 1'd0;
     case (main_choose_req_grant)
         1'd0: begin
-            builder_rhs_array_muxed9 <= main_bankmachine0_cmd_payload_is_read;
+            builder_rhs_self9 <= main_bankmachine0_cmd_payload_is_read;
         end
         1'd1: begin
-            builder_rhs_array_muxed9 <= main_bankmachine1_cmd_payload_is_read;
+            builder_rhs_self9 <= main_bankmachine1_cmd_payload_is_read;
         end
         2'd2: begin
-            builder_rhs_array_muxed9 <= main_bankmachine2_cmd_payload_is_read;
+            builder_rhs_self9 <= main_bankmachine2_cmd_payload_is_read;
         end
         2'd3: begin
-            builder_rhs_array_muxed9 <= main_bankmachine3_cmd_payload_is_read;
+            builder_rhs_self9 <= main_bankmachine3_cmd_payload_is_read;
         end
         3'd4: begin
-            builder_rhs_array_muxed9 <= main_bankmachine4_cmd_payload_is_read;
+            builder_rhs_self9 <= main_bankmachine4_cmd_payload_is_read;
         end
         3'd5: begin
-            builder_rhs_array_muxed9 <= main_bankmachine5_cmd_payload_is_read;
+            builder_rhs_self9 <= main_bankmachine5_cmd_payload_is_read;
         end
         3'd6: begin
-            builder_rhs_array_muxed9 <= main_bankmachine6_cmd_payload_is_read;
+            builder_rhs_self9 <= main_bankmachine6_cmd_payload_is_read;
         end
         default: begin
-            builder_rhs_array_muxed9 <= main_bankmachine7_cmd_payload_is_read;
+            builder_rhs_self9 <= main_bankmachine7_cmd_payload_is_read;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed10 <= 1'd0;
+    builder_rhs_self10 <= 1'd0;
     case (main_choose_req_grant)
         1'd0: begin
-            builder_rhs_array_muxed10 <= main_bankmachine0_cmd_payload_is_write;
+            builder_rhs_self10 <= main_bankmachine0_cmd_payload_is_write;
         end
         1'd1: begin
-            builder_rhs_array_muxed10 <= main_bankmachine1_cmd_payload_is_write;
+            builder_rhs_self10 <= main_bankmachine1_cmd_payload_is_write;
         end
         2'd2: begin
-            builder_rhs_array_muxed10 <= main_bankmachine2_cmd_payload_is_write;
+            builder_rhs_self10 <= main_bankmachine2_cmd_payload_is_write;
         end
         2'd3: begin
-            builder_rhs_array_muxed10 <= main_bankmachine3_cmd_payload_is_write;
+            builder_rhs_self10 <= main_bankmachine3_cmd_payload_is_write;
         end
         3'd4: begin
-            builder_rhs_array_muxed10 <= main_bankmachine4_cmd_payload_is_write;
+            builder_rhs_self10 <= main_bankmachine4_cmd_payload_is_write;
         end
         3'd5: begin
-            builder_rhs_array_muxed10 <= main_bankmachine5_cmd_payload_is_write;
+            builder_rhs_self10 <= main_bankmachine5_cmd_payload_is_write;
         end
         3'd6: begin
-            builder_rhs_array_muxed10 <= main_bankmachine6_cmd_payload_is_write;
+            builder_rhs_self10 <= main_bankmachine6_cmd_payload_is_write;
         end
         default: begin
-            builder_rhs_array_muxed10 <= main_bankmachine7_cmd_payload_is_write;
+            builder_rhs_self10 <= main_bankmachine7_cmd_payload_is_write;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed11 <= 1'd0;
+    builder_rhs_self11 <= 1'd0;
     case (main_choose_req_grant)
         1'd0: begin
-            builder_rhs_array_muxed11 <= main_bankmachine0_cmd_payload_is_cmd;
+            builder_rhs_self11 <= main_bankmachine0_cmd_payload_is_cmd;
         end
         1'd1: begin
-            builder_rhs_array_muxed11 <= main_bankmachine1_cmd_payload_is_cmd;
+            builder_rhs_self11 <= main_bankmachine1_cmd_payload_is_cmd;
         end
         2'd2: begin
-            builder_rhs_array_muxed11 <= main_bankmachine2_cmd_payload_is_cmd;
+            builder_rhs_self11 <= main_bankmachine2_cmd_payload_is_cmd;
         end
         2'd3: begin
-            builder_rhs_array_muxed11 <= main_bankmachine3_cmd_payload_is_cmd;
+            builder_rhs_self11 <= main_bankmachine3_cmd_payload_is_cmd;
         end
         3'd4: begin
-            builder_rhs_array_muxed11 <= main_bankmachine4_cmd_payload_is_cmd;
+            builder_rhs_self11 <= main_bankmachine4_cmd_payload_is_cmd;
         end
         3'd5: begin
-            builder_rhs_array_muxed11 <= main_bankmachine5_cmd_payload_is_cmd;
+            builder_rhs_self11 <= main_bankmachine5_cmd_payload_is_cmd;
         end
         3'd6: begin
-            builder_rhs_array_muxed11 <= main_bankmachine6_cmd_payload_is_cmd;
+            builder_rhs_self11 <= main_bankmachine6_cmd_payload_is_cmd;
         end
         default: begin
-            builder_rhs_array_muxed11 <= main_bankmachine7_cmd_payload_is_cmd;
+            builder_rhs_self11 <= main_bankmachine7_cmd_payload_is_cmd;
         end
     endcase
 end
 always @(*) begin
-    builder_t_array_muxed3 <= 1'd0;
+    builder_t_self3 <= 1'd0;
     case (main_choose_req_grant)
         1'd0: begin
-            builder_t_array_muxed3 <= main_bankmachine0_cmd_payload_cas;
+            builder_t_self3 <= main_bankmachine0_cmd_payload_cas;
         end
         1'd1: begin
-            builder_t_array_muxed3 <= main_bankmachine1_cmd_payload_cas;
+            builder_t_self3 <= main_bankmachine1_cmd_payload_cas;
         end
         2'd2: begin
-            builder_t_array_muxed3 <= main_bankmachine2_cmd_payload_cas;
+            builder_t_self3 <= main_bankmachine2_cmd_payload_cas;
         end
         2'd3: begin
-            builder_t_array_muxed3 <= main_bankmachine3_cmd_payload_cas;
+            builder_t_self3 <= main_bankmachine3_cmd_payload_cas;
         end
         3'd4: begin
-            builder_t_array_muxed3 <= main_bankmachine4_cmd_payload_cas;
+            builder_t_self3 <= main_bankmachine4_cmd_payload_cas;
         end
         3'd5: begin
-            builder_t_array_muxed3 <= main_bankmachine5_cmd_payload_cas;
+            builder_t_self3 <= main_bankmachine5_cmd_payload_cas;
         end
         3'd6: begin
-            builder_t_array_muxed3 <= main_bankmachine6_cmd_payload_cas;
+            builder_t_self3 <= main_bankmachine6_cmd_payload_cas;
         end
         default: begin
-            builder_t_array_muxed3 <= main_bankmachine7_cmd_payload_cas;
+            builder_t_self3 <= main_bankmachine7_cmd_payload_cas;
         end
     endcase
 end
 always @(*) begin
-    builder_t_array_muxed4 <= 1'd0;
+    builder_t_self4 <= 1'd0;
     case (main_choose_req_grant)
         1'd0: begin
-            builder_t_array_muxed4 <= main_bankmachine0_cmd_payload_ras;
+            builder_t_self4 <= main_bankmachine0_cmd_payload_ras;
         end
         1'd1: begin
-            builder_t_array_muxed4 <= main_bankmachine1_cmd_payload_ras;
+            builder_t_self4 <= main_bankmachine1_cmd_payload_ras;
         end
         2'd2: begin
-            builder_t_array_muxed4 <= main_bankmachine2_cmd_payload_ras;
+            builder_t_self4 <= main_bankmachine2_cmd_payload_ras;
         end
         2'd3: begin
-            builder_t_array_muxed4 <= main_bankmachine3_cmd_payload_ras;
+            builder_t_self4 <= main_bankmachine3_cmd_payload_ras;
         end
         3'd4: begin
-            builder_t_array_muxed4 <= main_bankmachine4_cmd_payload_ras;
+            builder_t_self4 <= main_bankmachine4_cmd_payload_ras;
         end
         3'd5: begin
-            builder_t_array_muxed4 <= main_bankmachine5_cmd_payload_ras;
+            builder_t_self4 <= main_bankmachine5_cmd_payload_ras;
         end
         3'd6: begin
-            builder_t_array_muxed4 <= main_bankmachine6_cmd_payload_ras;
+            builder_t_self4 <= main_bankmachine6_cmd_payload_ras;
         end
         default: begin
-            builder_t_array_muxed4 <= main_bankmachine7_cmd_payload_ras;
+            builder_t_self4 <= main_bankmachine7_cmd_payload_ras;
         end
     endcase
 end
 always @(*) begin
-    builder_t_array_muxed5 <= 1'd0;
+    builder_t_self5 <= 1'd0;
     case (main_choose_req_grant)
         1'd0: begin
-            builder_t_array_muxed5 <= main_bankmachine0_cmd_payload_we;
+            builder_t_self5 <= main_bankmachine0_cmd_payload_we;
         end
         1'd1: begin
-            builder_t_array_muxed5 <= main_bankmachine1_cmd_payload_we;
+            builder_t_self5 <= main_bankmachine1_cmd_payload_we;
         end
         2'd2: begin
-            builder_t_array_muxed5 <= main_bankmachine2_cmd_payload_we;
+            builder_t_self5 <= main_bankmachine2_cmd_payload_we;
         end
         2'd3: begin
-            builder_t_array_muxed5 <= main_bankmachine3_cmd_payload_we;
+            builder_t_self5 <= main_bankmachine3_cmd_payload_we;
         end
         3'd4: begin
-            builder_t_array_muxed5 <= main_bankmachine4_cmd_payload_we;
+            builder_t_self5 <= main_bankmachine4_cmd_payload_we;
         end
         3'd5: begin
-            builder_t_array_muxed5 <= main_bankmachine5_cmd_payload_we;
+            builder_t_self5 <= main_bankmachine5_cmd_payload_we;
         end
         3'd6: begin
-            builder_t_array_muxed5 <= main_bankmachine6_cmd_payload_we;
+            builder_t_self5 <= main_bankmachine6_cmd_payload_we;
         end
         default: begin
-            builder_t_array_muxed5 <= main_bankmachine7_cmd_payload_we;
+            builder_t_self5 <= main_bankmachine7_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed12 <= 21'd0;
+    builder_rhs_self12 <= 21'd0;
     case (builder_litedramcore_roundrobin0_grant)
         default: begin
-            builder_rhs_array_muxed12 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
+            builder_rhs_self12 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed13 <= 1'd0;
+    builder_rhs_self13 <= 1'd0;
     case (builder_litedramcore_roundrobin0_grant)
         default: begin
-            builder_rhs_array_muxed13 <= main_port_cmd_payload_we;
+            builder_rhs_self13 <= main_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed14 <= 1'd0;
+    builder_rhs_self14 <= 1'd0;
     case (builder_litedramcore_roundrobin0_grant)
         default: begin
-            builder_rhs_array_muxed14 <= (((main_port_cmd_payload_addr[9:7] == 1'd0) & (~(((((((builder_litedramcore_locked0 | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
+            builder_rhs_self14 <= (((main_port_cmd_payload_addr[9:7] == 1'd0) & (~(((((((builder_litedramcore_locked0 | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed15 <= 21'd0;
+    builder_rhs_self15 <= 21'd0;
     case (builder_litedramcore_roundrobin1_grant)
         default: begin
-            builder_rhs_array_muxed15 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
+            builder_rhs_self15 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed16 <= 1'd0;
+    builder_rhs_self16 <= 1'd0;
     case (builder_litedramcore_roundrobin1_grant)
         default: begin
-            builder_rhs_array_muxed16 <= main_port_cmd_payload_we;
+            builder_rhs_self16 <= main_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed17 <= 1'd0;
+    builder_rhs_self17 <= 1'd0;
     case (builder_litedramcore_roundrobin1_grant)
         default: begin
-            builder_rhs_array_muxed17 <= (((main_port_cmd_payload_addr[9:7] == 1'd1) & (~(((((((builder_litedramcore_locked1 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
+            builder_rhs_self17 <= (((main_port_cmd_payload_addr[9:7] == 1'd1) & (~(((((((builder_litedramcore_locked1 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed18 <= 21'd0;
+    builder_rhs_self18 <= 21'd0;
     case (builder_litedramcore_roundrobin2_grant)
         default: begin
-            builder_rhs_array_muxed18 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
+            builder_rhs_self18 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed19 <= 1'd0;
+    builder_rhs_self19 <= 1'd0;
     case (builder_litedramcore_roundrobin2_grant)
         default: begin
-            builder_rhs_array_muxed19 <= main_port_cmd_payload_we;
+            builder_rhs_self19 <= main_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed20 <= 1'd0;
+    builder_rhs_self20 <= 1'd0;
     case (builder_litedramcore_roundrobin2_grant)
         default: begin
-            builder_rhs_array_muxed20 <= (((main_port_cmd_payload_addr[9:7] == 2'd2) & (~(((((((builder_litedramcore_locked2 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
+            builder_rhs_self20 <= (((main_port_cmd_payload_addr[9:7] == 2'd2) & (~(((((((builder_litedramcore_locked2 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed21 <= 21'd0;
+    builder_rhs_self21 <= 21'd0;
     case (builder_litedramcore_roundrobin3_grant)
         default: begin
-            builder_rhs_array_muxed21 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
+            builder_rhs_self21 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed22 <= 1'd0;
+    builder_rhs_self22 <= 1'd0;
     case (builder_litedramcore_roundrobin3_grant)
         default: begin
-            builder_rhs_array_muxed22 <= main_port_cmd_payload_we;
+            builder_rhs_self22 <= main_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed23 <= 1'd0;
+    builder_rhs_self23 <= 1'd0;
     case (builder_litedramcore_roundrobin3_grant)
         default: begin
-            builder_rhs_array_muxed23 <= (((main_port_cmd_payload_addr[9:7] == 2'd3) & (~(((((((builder_litedramcore_locked3 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
+            builder_rhs_self23 <= (((main_port_cmd_payload_addr[9:7] == 2'd3) & (~(((((((builder_litedramcore_locked3 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed24 <= 21'd0;
+    builder_rhs_self24 <= 21'd0;
     case (builder_litedramcore_roundrobin4_grant)
         default: begin
-            builder_rhs_array_muxed24 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
+            builder_rhs_self24 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed25 <= 1'd0;
+    builder_rhs_self25 <= 1'd0;
     case (builder_litedramcore_roundrobin4_grant)
         default: begin
-            builder_rhs_array_muxed25 <= main_port_cmd_payload_we;
+            builder_rhs_self25 <= main_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed26 <= 1'd0;
+    builder_rhs_self26 <= 1'd0;
     case (builder_litedramcore_roundrobin4_grant)
         default: begin
-            builder_rhs_array_muxed26 <= (((main_port_cmd_payload_addr[9:7] == 3'd4) & (~(((((((builder_litedramcore_locked4 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
+            builder_rhs_self26 <= (((main_port_cmd_payload_addr[9:7] == 3'd4) & (~(((((((builder_litedramcore_locked4 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed27 <= 21'd0;
+    builder_rhs_self27 <= 21'd0;
     case (builder_litedramcore_roundrobin5_grant)
         default: begin
-            builder_rhs_array_muxed27 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
+            builder_rhs_self27 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed28 <= 1'd0;
+    builder_rhs_self28 <= 1'd0;
     case (builder_litedramcore_roundrobin5_grant)
         default: begin
-            builder_rhs_array_muxed28 <= main_port_cmd_payload_we;
+            builder_rhs_self28 <= main_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed29 <= 1'd0;
+    builder_rhs_self29 <= 1'd0;
     case (builder_litedramcore_roundrobin5_grant)
         default: begin
-            builder_rhs_array_muxed29 <= (((main_port_cmd_payload_addr[9:7] == 3'd5) & (~(((((((builder_litedramcore_locked5 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
+            builder_rhs_self29 <= (((main_port_cmd_payload_addr[9:7] == 3'd5) & (~(((((((builder_litedramcore_locked5 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed30 <= 21'd0;
+    builder_rhs_self30 <= 21'd0;
     case (builder_litedramcore_roundrobin6_grant)
         default: begin
-            builder_rhs_array_muxed30 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
+            builder_rhs_self30 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed31 <= 1'd0;
+    builder_rhs_self31 <= 1'd0;
     case (builder_litedramcore_roundrobin6_grant)
         default: begin
-            builder_rhs_array_muxed31 <= main_port_cmd_payload_we;
+            builder_rhs_self31 <= main_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed32 <= 1'd0;
+    builder_rhs_self32 <= 1'd0;
     case (builder_litedramcore_roundrobin6_grant)
         default: begin
-            builder_rhs_array_muxed32 <= (((main_port_cmd_payload_addr[9:7] == 3'd6) & (~(((((((builder_litedramcore_locked6 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
+            builder_rhs_self32 <= (((main_port_cmd_payload_addr[9:7] == 3'd6) & (~(((((((builder_litedramcore_locked6 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank7_lock & (builder_litedramcore_roundrobin7_grant == 1'd0))))) & main_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed33 <= 21'd0;
+    builder_rhs_self33 <= 21'd0;
     case (builder_litedramcore_roundrobin7_grant)
         default: begin
-            builder_rhs_array_muxed33 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
+            builder_rhs_self33 <= {main_port_cmd_payload_addr[23:10], main_port_cmd_payload_addr[6:0]};
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed34 <= 1'd0;
+    builder_rhs_self34 <= 1'd0;
     case (builder_litedramcore_roundrobin7_grant)
         default: begin
-            builder_rhs_array_muxed34 <= main_port_cmd_payload_we;
+            builder_rhs_self34 <= main_port_cmd_payload_we;
         end
     endcase
 end
 always @(*) begin
-    builder_rhs_array_muxed35 <= 1'd0;
+    builder_rhs_self35 <= 1'd0;
     case (builder_litedramcore_roundrobin7_grant)
         default: begin
-            builder_rhs_array_muxed35 <= (((main_port_cmd_payload_addr[9:7] == 3'd7) & (~(((((((builder_litedramcore_locked7 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))))) & main_port_cmd_valid);
+            builder_rhs_self35 <= (((main_port_cmd_payload_addr[9:7] == 3'd7) & (~(((((((builder_litedramcore_locked7 | (main_interface_bank0_lock & (builder_litedramcore_roundrobin0_grant == 1'd0))) | (main_interface_bank1_lock & (builder_litedramcore_roundrobin1_grant == 1'd0))) | (main_interface_bank2_lock & (builder_litedramcore_roundrobin2_grant == 1'd0))) | (main_interface_bank3_lock & (builder_litedramcore_roundrobin3_grant == 1'd0))) | (main_interface_bank4_lock & (builder_litedramcore_roundrobin4_grant == 1'd0))) | (main_interface_bank5_lock & (builder_litedramcore_roundrobin5_grant == 1'd0))) | (main_interface_bank6_lock & (builder_litedramcore_roundrobin6_grant == 1'd0))))) & main_port_cmd_valid);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed0 <= 3'd0;
-    case (main_steerer_sel0)
+    builder_self0 <= 3'd0;
+    case (main_steerer0)
         1'd0: begin
-            builder_array_muxed0 <= main_nop_ba[2:0];
+            builder_self0 <= main_nop_ba[2:0];
         end
         1'd1: begin
-            builder_array_muxed0 <= main_choose_cmd_cmd_payload_ba[2:0];
+            builder_self0 <= main_choose_cmd_cmd_payload_ba[2:0];
         end
         2'd2: begin
-            builder_array_muxed0 <= main_choose_req_cmd_payload_ba[2:0];
+            builder_self0 <= main_choose_req_cmd_payload_ba[2:0];
         end
         default: begin
-            builder_array_muxed0 <= main_cmd_payload_ba[2:0];
+            builder_self0 <= main_cmd_payload_ba[2:0];
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed1 <= 14'd0;
-    case (main_steerer_sel0)
+    builder_self1 <= 14'd0;
+    case (main_steerer0)
         1'd0: begin
-            builder_array_muxed1 <= main_nop_a;
+            builder_self1 <= main_nop_a;
         end
         1'd1: begin
-            builder_array_muxed1 <= main_choose_cmd_cmd_payload_a;
+            builder_self1 <= main_choose_cmd_cmd_payload_a;
         end
         2'd2: begin
-            builder_array_muxed1 <= main_choose_req_cmd_payload_a;
+            builder_self1 <= main_choose_req_cmd_payload_a;
         end
         default: begin
-            builder_array_muxed1 <= main_cmd_payload_a;
+            builder_self1 <= main_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed2 <= 1'd0;
-    case (main_steerer_sel0)
+    builder_self2 <= 1'd0;
+    case (main_steerer0)
         1'd0: begin
-            builder_array_muxed2 <= 1'd0;
+            builder_self2 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed2 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_cas);
+            builder_self2 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_cas);
         end
         2'd2: begin
-            builder_array_muxed2 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_cas);
+            builder_self2 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_cas);
         end
         default: begin
-            builder_array_muxed2 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_cas);
+            builder_self2 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_cas);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed3 <= 1'd0;
-    case (main_steerer_sel0)
+    builder_self3 <= 1'd0;
+    case (main_steerer0)
         1'd0: begin
-            builder_array_muxed3 <= 1'd0;
+            builder_self3 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed3 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_ras);
+            builder_self3 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_ras);
         end
         2'd2: begin
-            builder_array_muxed3 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_ras);
+            builder_self3 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_ras);
         end
         default: begin
-            builder_array_muxed3 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_ras);
+            builder_self3 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_ras);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed4 <= 1'd0;
-    case (main_steerer_sel0)
+    builder_self4 <= 1'd0;
+    case (main_steerer0)
         1'd0: begin
-            builder_array_muxed4 <= 1'd0;
+            builder_self4 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed4 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_we);
+            builder_self4 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_we);
         end
         2'd2: begin
-            builder_array_muxed4 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_we);
+            builder_self4 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_we);
         end
         default: begin
-            builder_array_muxed4 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_we);
+            builder_self4 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_we);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed5 <= 1'd0;
-    case (main_steerer_sel0)
+    builder_self5 <= 1'd0;
+    case (main_steerer0)
         1'd0: begin
-            builder_array_muxed5 <= 1'd0;
+            builder_self5 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed5 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_read);
+            builder_self5 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_read);
         end
         2'd2: begin
-            builder_array_muxed5 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_read);
+            builder_self5 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_read);
         end
         default: begin
-            builder_array_muxed5 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_read);
+            builder_self5 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_read);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed6 <= 1'd0;
-    case (main_steerer_sel0)
+    builder_self6 <= 1'd0;
+    case (main_steerer0)
         1'd0: begin
-            builder_array_muxed6 <= 1'd0;
+            builder_self6 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed6 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_write);
+            builder_self6 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_write);
         end
         2'd2: begin
-            builder_array_muxed6 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_write);
+            builder_self6 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_write);
         end
         default: begin
-            builder_array_muxed6 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_write);
+            builder_self6 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_write);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed7 <= 3'd0;
-    case (main_steerer_sel1)
+    builder_self7 <= 3'd0;
+    case (main_steerer1)
         1'd0: begin
-            builder_array_muxed7 <= main_nop_ba[2:0];
+            builder_self7 <= main_nop_ba[2:0];
         end
         1'd1: begin
-            builder_array_muxed7 <= main_choose_cmd_cmd_payload_ba[2:0];
+            builder_self7 <= main_choose_cmd_cmd_payload_ba[2:0];
         end
         2'd2: begin
-            builder_array_muxed7 <= main_choose_req_cmd_payload_ba[2:0];
+            builder_self7 <= main_choose_req_cmd_payload_ba[2:0];
         end
         default: begin
-            builder_array_muxed7 <= main_cmd_payload_ba[2:0];
+            builder_self7 <= main_cmd_payload_ba[2:0];
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed8 <= 14'd0;
-    case (main_steerer_sel1)
+    builder_self8 <= 14'd0;
+    case (main_steerer1)
         1'd0: begin
-            builder_array_muxed8 <= main_nop_a;
+            builder_self8 <= main_nop_a;
         end
         1'd1: begin
-            builder_array_muxed8 <= main_choose_cmd_cmd_payload_a;
+            builder_self8 <= main_choose_cmd_cmd_payload_a;
         end
         2'd2: begin
-            builder_array_muxed8 <= main_choose_req_cmd_payload_a;
+            builder_self8 <= main_choose_req_cmd_payload_a;
         end
         default: begin
-            builder_array_muxed8 <= main_cmd_payload_a;
+            builder_self8 <= main_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed9 <= 1'd0;
-    case (main_steerer_sel1)
+    builder_self9 <= 1'd0;
+    case (main_steerer1)
         1'd0: begin
-            builder_array_muxed9 <= 1'd0;
+            builder_self9 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed9 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_cas);
+            builder_self9 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_cas);
         end
         2'd2: begin
-            builder_array_muxed9 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_cas);
+            builder_self9 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_cas);
         end
         default: begin
-            builder_array_muxed9 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_cas);
+            builder_self9 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_cas);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed10 <= 1'd0;
-    case (main_steerer_sel1)
+    builder_self10 <= 1'd0;
+    case (main_steerer1)
         1'd0: begin
-            builder_array_muxed10 <= 1'd0;
+            builder_self10 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed10 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_ras);
+            builder_self10 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_ras);
         end
         2'd2: begin
-            builder_array_muxed10 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_ras);
+            builder_self10 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_ras);
         end
         default: begin
-            builder_array_muxed10 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_ras);
+            builder_self10 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_ras);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed11 <= 1'd0;
-    case (main_steerer_sel1)
+    builder_self11 <= 1'd0;
+    case (main_steerer1)
         1'd0: begin
-            builder_array_muxed11 <= 1'd0;
+            builder_self11 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed11 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_we);
+            builder_self11 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_we);
         end
         2'd2: begin
-            builder_array_muxed11 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_we);
+            builder_self11 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_we);
         end
         default: begin
-            builder_array_muxed11 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_we);
+            builder_self11 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_we);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed12 <= 1'd0;
-    case (main_steerer_sel1)
+    builder_self12 <= 1'd0;
+    case (main_steerer1)
         1'd0: begin
-            builder_array_muxed12 <= 1'd0;
+            builder_self12 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed12 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_read);
+            builder_self12 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_read);
         end
         2'd2: begin
-            builder_array_muxed12 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_read);
+            builder_self12 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_read);
         end
         default: begin
-            builder_array_muxed12 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_read);
+            builder_self12 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_read);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed13 <= 1'd0;
-    case (main_steerer_sel1)
+    builder_self13 <= 1'd0;
+    case (main_steerer1)
         1'd0: begin
-            builder_array_muxed13 <= 1'd0;
+            builder_self13 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed13 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_write);
+            builder_self13 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_write);
         end
         2'd2: begin
-            builder_array_muxed13 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_write);
+            builder_self13 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_write);
         end
         default: begin
-            builder_array_muxed13 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_write);
+            builder_self13 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_write);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed14 <= 3'd0;
-    case (main_steerer_sel2)
+    builder_self14 <= 3'd0;
+    case (main_steerer2)
         1'd0: begin
-            builder_array_muxed14 <= main_nop_ba[2:0];
+            builder_self14 <= main_nop_ba[2:0];
         end
         1'd1: begin
-            builder_array_muxed14 <= main_choose_cmd_cmd_payload_ba[2:0];
+            builder_self14 <= main_choose_cmd_cmd_payload_ba[2:0];
         end
         2'd2: begin
-            builder_array_muxed14 <= main_choose_req_cmd_payload_ba[2:0];
+            builder_self14 <= main_choose_req_cmd_payload_ba[2:0];
         end
         default: begin
-            builder_array_muxed14 <= main_cmd_payload_ba[2:0];
+            builder_self14 <= main_cmd_payload_ba[2:0];
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed15 <= 14'd0;
-    case (main_steerer_sel2)
+    builder_self15 <= 14'd0;
+    case (main_steerer2)
         1'd0: begin
-            builder_array_muxed15 <= main_nop_a;
+            builder_self15 <= main_nop_a;
         end
         1'd1: begin
-            builder_array_muxed15 <= main_choose_cmd_cmd_payload_a;
+            builder_self15 <= main_choose_cmd_cmd_payload_a;
         end
         2'd2: begin
-            builder_array_muxed15 <= main_choose_req_cmd_payload_a;
+            builder_self15 <= main_choose_req_cmd_payload_a;
         end
         default: begin
-            builder_array_muxed15 <= main_cmd_payload_a;
+            builder_self15 <= main_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed16 <= 1'd0;
-    case (main_steerer_sel2)
+    builder_self16 <= 1'd0;
+    case (main_steerer2)
         1'd0: begin
-            builder_array_muxed16 <= 1'd0;
+            builder_self16 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed16 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_cas);
+            builder_self16 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_cas);
         end
         2'd2: begin
-            builder_array_muxed16 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_cas);
+            builder_self16 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_cas);
         end
         default: begin
-            builder_array_muxed16 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_cas);
+            builder_self16 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_cas);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed17 <= 1'd0;
-    case (main_steerer_sel2)
+    builder_self17 <= 1'd0;
+    case (main_steerer2)
         1'd0: begin
-            builder_array_muxed17 <= 1'd0;
+            builder_self17 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed17 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_ras);
+            builder_self17 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_ras);
         end
         2'd2: begin
-            builder_array_muxed17 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_ras);
+            builder_self17 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_ras);
         end
         default: begin
-            builder_array_muxed17 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_ras);
+            builder_self17 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_ras);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed18 <= 1'd0;
-    case (main_steerer_sel2)
+    builder_self18 <= 1'd0;
+    case (main_steerer2)
         1'd0: begin
-            builder_array_muxed18 <= 1'd0;
+            builder_self18 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed18 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_we);
+            builder_self18 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_we);
         end
         2'd2: begin
-            builder_array_muxed18 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_we);
+            builder_self18 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_we);
         end
         default: begin
-            builder_array_muxed18 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_we);
+            builder_self18 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_we);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed19 <= 1'd0;
-    case (main_steerer_sel2)
+    builder_self19 <= 1'd0;
+    case (main_steerer2)
         1'd0: begin
-            builder_array_muxed19 <= 1'd0;
+            builder_self19 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed19 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_read);
+            builder_self19 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_read);
         end
         2'd2: begin
-            builder_array_muxed19 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_read);
+            builder_self19 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_read);
         end
         default: begin
-            builder_array_muxed19 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_read);
+            builder_self19 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_read);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed20 <= 1'd0;
-    case (main_steerer_sel2)
+    builder_self20 <= 1'd0;
+    case (main_steerer2)
         1'd0: begin
-            builder_array_muxed20 <= 1'd0;
+            builder_self20 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed20 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_write);
+            builder_self20 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_write);
         end
         2'd2: begin
-            builder_array_muxed20 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_write);
+            builder_self20 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_write);
         end
         default: begin
-            builder_array_muxed20 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_write);
+            builder_self20 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_write);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed21 <= 3'd0;
-    case (main_steerer_sel3)
+    builder_self21 <= 3'd0;
+    case (main_steerer3)
         1'd0: begin
-            builder_array_muxed21 <= main_nop_ba[2:0];
+            builder_self21 <= main_nop_ba[2:0];
         end
         1'd1: begin
-            builder_array_muxed21 <= main_choose_cmd_cmd_payload_ba[2:0];
+            builder_self21 <= main_choose_cmd_cmd_payload_ba[2:0];
         end
         2'd2: begin
-            builder_array_muxed21 <= main_choose_req_cmd_payload_ba[2:0];
+            builder_self21 <= main_choose_req_cmd_payload_ba[2:0];
         end
         default: begin
-            builder_array_muxed21 <= main_cmd_payload_ba[2:0];
+            builder_self21 <= main_cmd_payload_ba[2:0];
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed22 <= 14'd0;
-    case (main_steerer_sel3)
+    builder_self22 <= 14'd0;
+    case (main_steerer3)
         1'd0: begin
-            builder_array_muxed22 <= main_nop_a;
+            builder_self22 <= main_nop_a;
         end
         1'd1: begin
-            builder_array_muxed22 <= main_choose_cmd_cmd_payload_a;
+            builder_self22 <= main_choose_cmd_cmd_payload_a;
         end
         2'd2: begin
-            builder_array_muxed22 <= main_choose_req_cmd_payload_a;
+            builder_self22 <= main_choose_req_cmd_payload_a;
         end
         default: begin
-            builder_array_muxed22 <= main_cmd_payload_a;
+            builder_self22 <= main_cmd_payload_a;
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed23 <= 1'd0;
-    case (main_steerer_sel3)
+    builder_self23 <= 1'd0;
+    case (main_steerer3)
         1'd0: begin
-            builder_array_muxed23 <= 1'd0;
+            builder_self23 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed23 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_cas);
+            builder_self23 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_cas);
         end
         2'd2: begin
-            builder_array_muxed23 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_cas);
+            builder_self23 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_cas);
         end
         default: begin
-            builder_array_muxed23 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_cas);
+            builder_self23 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_cas);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed24 <= 1'd0;
-    case (main_steerer_sel3)
+    builder_self24 <= 1'd0;
+    case (main_steerer3)
         1'd0: begin
-            builder_array_muxed24 <= 1'd0;
+            builder_self24 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed24 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_ras);
+            builder_self24 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_ras);
         end
         2'd2: begin
-            builder_array_muxed24 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_ras);
+            builder_self24 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_ras);
         end
         default: begin
-            builder_array_muxed24 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_ras);
+            builder_self24 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_ras);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed25 <= 1'd0;
-    case (main_steerer_sel3)
+    builder_self25 <= 1'd0;
+    case (main_steerer3)
         1'd0: begin
-            builder_array_muxed25 <= 1'd0;
+            builder_self25 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed25 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_we);
+            builder_self25 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_we);
         end
         2'd2: begin
-            builder_array_muxed25 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_we);
+            builder_self25 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_we);
         end
         default: begin
-            builder_array_muxed25 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_we);
+            builder_self25 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_we);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed26 <= 1'd0;
-    case (main_steerer_sel3)
+    builder_self26 <= 1'd0;
+    case (main_steerer3)
         1'd0: begin
-            builder_array_muxed26 <= 1'd0;
+            builder_self26 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed26 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_read);
+            builder_self26 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_read);
         end
         2'd2: begin
-            builder_array_muxed26 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_read);
+            builder_self26 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_read);
         end
         default: begin
-            builder_array_muxed26 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_read);
+            builder_self26 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_read);
         end
     endcase
 end
 always @(*) begin
-    builder_array_muxed27 <= 1'd0;
-    case (main_steerer_sel3)
+    builder_self27 <= 1'd0;
+    case (main_steerer3)
         1'd0: begin
-            builder_array_muxed27 <= 1'd0;
+            builder_self27 <= 1'd0;
         end
         1'd1: begin
-            builder_array_muxed27 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_write);
+            builder_self27 <= ((main_choose_cmd_cmd_valid & main_choose_cmd_cmd_ready) & main_choose_cmd_cmd_payload_is_write);
         end
         2'd2: begin
-            builder_array_muxed27 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_write);
+            builder_self27 <= ((main_choose_req_cmd_valid & main_choose_req_cmd_ready) & main_choose_req_cmd_payload_is_write);
         end
         default: begin
-            builder_array_muxed27 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_write);
+            builder_self27 <= ((main_cmd_valid & main_cmd_ready) & main_cmd_payload_is_write);
         end
     endcase
 end
-assign builder_xilinxasyncresetsynchronizerimpl0 = (~main_locked);
-assign builder_xilinxasyncresetsynchronizerimpl1 = (~main_locked);
-assign builder_xilinxasyncresetsynchronizerimpl2 = (~main_locked);
-assign builder_xilinxasyncresetsynchronizerimpl3 = (~main_locked);
-assign builder_xilinxasyncresetsynchronizerimpl4 = (~main_locked);
+assign builder_xilinxasyncresetsynchronizerimpl0_async_reset = (~main_locked);
+assign builder_xilinxasyncresetsynchronizerimpl1_async_reset = (~main_locked);
+assign builder_xilinxasyncresetsynchronizerimpl2_async_reset = (~main_locked);
+assign builder_xilinxasyncresetsynchronizerimpl3_async_reset = (~main_locked);
+assign builder_xilinxasyncresetsynchronizerimpl4_async_reset = (~main_locked);
 
 
 //------------------------------------------------------------------------------
@@ -13181,21 +13181,21 @@ always @(posedge sys_clk) begin
     main_cmd_payload_ras <= 1'd0;
     main_cmd_payload_we <= 1'd0;
     main_sequencer_done1 <= 1'd0;
-    if ((main_sequencer_start1 & (main_sequencer_counter == 1'd0))) begin
+    if ((main_sequencer_start1 & (main_sequencer_trigger == 1'd0))) begin
         main_cmd_payload_a <= 11'd1024;
         main_cmd_payload_ba <= 1'd0;
         main_cmd_payload_cas <= 1'd0;
         main_cmd_payload_ras <= 1'd1;
         main_cmd_payload_we <= 1'd1;
     end
-    if ((main_sequencer_counter == 2'd2)) begin
+    if ((main_sequencer_trigger == 2'd2)) begin
         main_cmd_payload_a <= 11'd1024;
         main_cmd_payload_ba <= 1'd0;
         main_cmd_payload_cas <= 1'd1;
         main_cmd_payload_ras <= 1'd1;
         main_cmd_payload_we <= 1'd0;
     end
-    if ((main_sequencer_counter == 6'd34)) begin
+    if ((main_sequencer_trigger == 6'd34)) begin
         main_cmd_payload_a <= 1'd0;
         main_cmd_payload_ba <= 1'd0;
         main_cmd_payload_cas <= 1'd0;
@@ -13203,14 +13203,14 @@ always @(posedge sys_clk) begin
         main_cmd_payload_we <= 1'd0;
         main_sequencer_done1 <= 1'd1;
     end
-    if ((main_sequencer_counter == 6'd34)) begin
-        main_sequencer_counter <= 1'd0;
+    if ((main_sequencer_trigger == 6'd34)) begin
+        main_sequencer_trigger <= 1'd0;
     end else begin
-        if ((main_sequencer_counter != 1'd0)) begin
-            main_sequencer_counter <= (main_sequencer_counter + 1'd1);
+        if ((main_sequencer_trigger != 1'd0)) begin
+            main_sequencer_trigger <= (main_sequencer_trigger + 1'd1);
         end else begin
             if (main_sequencer_start1) begin
-                main_sequencer_counter <= 1'd1;
+                main_sequencer_trigger <= 1'd1;
             end
         end
     end
@@ -13220,21 +13220,21 @@ always @(posedge sys_clk) begin
         main_zqcs_timer_count1 <= 26'd49999999;
     end
     main_zqcs_executer_done <= 1'd0;
-    if ((main_zqcs_executer_start & (main_zqcs_executer_counter == 1'd0))) begin
+    if ((main_zqcs_executer_start & (main_zqcs_executer_trigger == 1'd0))) begin
         main_cmd_payload_a <= 11'd1024;
         main_cmd_payload_ba <= 1'd0;
         main_cmd_payload_cas <= 1'd0;
         main_cmd_payload_ras <= 1'd1;
         main_cmd_payload_we <= 1'd1;
     end
-    if ((main_zqcs_executer_counter == 2'd2)) begin
+    if ((main_zqcs_executer_trigger == 2'd2)) begin
         main_cmd_payload_a <= 1'd0;
         main_cmd_payload_ba <= 1'd0;
         main_cmd_payload_cas <= 1'd0;
         main_cmd_payload_ras <= 1'd0;
         main_cmd_payload_we <= 1'd1;
     end
-    if ((main_zqcs_executer_counter == 5'd18)) begin
+    if ((main_zqcs_executer_trigger == 5'd18)) begin
         main_cmd_payload_a <= 1'd0;
         main_cmd_payload_ba <= 1'd0;
         main_cmd_payload_cas <= 1'd0;
@@ -13242,14 +13242,14 @@ always @(posedge sys_clk) begin
         main_cmd_payload_we <= 1'd0;
         main_zqcs_executer_done <= 1'd1;
     end
-    if ((main_zqcs_executer_counter == 5'd18)) begin
-        main_zqcs_executer_counter <= 1'd0;
+    if ((main_zqcs_executer_trigger == 5'd18)) begin
+        main_zqcs_executer_trigger <= 1'd0;
     end else begin
-        if ((main_zqcs_executer_counter != 1'd0)) begin
-            main_zqcs_executer_counter <= (main_zqcs_executer_counter + 1'd1);
+        if ((main_zqcs_executer_trigger != 1'd0)) begin
+            main_zqcs_executer_trigger <= (main_zqcs_executer_trigger + 1'd1);
         end else begin
             if (main_zqcs_executer_start) begin
-                main_zqcs_executer_counter <= 1'd1;
+                main_zqcs_executer_trigger <= 1'd1;
             end
         end
     end
@@ -14349,37 +14349,37 @@ always @(posedge sys_clk) begin
         endcase
     end
     main_dfi_p0_cs_n <= 1'd0;
-    main_dfi_p0_bank <= builder_array_muxed0;
-    main_dfi_p0_address <= builder_array_muxed1;
-    main_dfi_p0_cas_n <= (~builder_array_muxed2);
-    main_dfi_p0_ras_n <= (~builder_array_muxed3);
-    main_dfi_p0_we_n <= (~builder_array_muxed4);
-    main_dfi_p0_rddata_en <= builder_array_muxed5;
-    main_dfi_p0_wrdata_en <= builder_array_muxed6;
+    main_dfi_p0_bank <= builder_self0;
+    main_dfi_p0_address <= builder_self1;
+    main_dfi_p0_cas_n <= (~builder_self2);
+    main_dfi_p0_ras_n <= (~builder_self3);
+    main_dfi_p0_we_n <= (~builder_self4);
+    main_dfi_p0_rddata_en <= builder_self5;
+    main_dfi_p0_wrdata_en <= builder_self6;
     main_dfi_p1_cs_n <= 1'd0;
-    main_dfi_p1_bank <= builder_array_muxed7;
-    main_dfi_p1_address <= builder_array_muxed8;
-    main_dfi_p1_cas_n <= (~builder_array_muxed9);
-    main_dfi_p1_ras_n <= (~builder_array_muxed10);
-    main_dfi_p1_we_n <= (~builder_array_muxed11);
-    main_dfi_p1_rddata_en <= builder_array_muxed12;
-    main_dfi_p1_wrdata_en <= builder_array_muxed13;
+    main_dfi_p1_bank <= builder_self7;
+    main_dfi_p1_address <= builder_self8;
+    main_dfi_p1_cas_n <= (~builder_self9);
+    main_dfi_p1_ras_n <= (~builder_self10);
+    main_dfi_p1_we_n <= (~builder_self11);
+    main_dfi_p1_rddata_en <= builder_self12;
+    main_dfi_p1_wrdata_en <= builder_self13;
     main_dfi_p2_cs_n <= 1'd0;
-    main_dfi_p2_bank <= builder_array_muxed14;
-    main_dfi_p2_address <= builder_array_muxed15;
-    main_dfi_p2_cas_n <= (~builder_array_muxed16);
-    main_dfi_p2_ras_n <= (~builder_array_muxed17);
-    main_dfi_p2_we_n <= (~builder_array_muxed18);
-    main_dfi_p2_rddata_en <= builder_array_muxed19;
-    main_dfi_p2_wrdata_en <= builder_array_muxed20;
+    main_dfi_p2_bank <= builder_self14;
+    main_dfi_p2_address <= builder_self15;
+    main_dfi_p2_cas_n <= (~builder_self16);
+    main_dfi_p2_ras_n <= (~builder_self17);
+    main_dfi_p2_we_n <= (~builder_self18);
+    main_dfi_p2_rddata_en <= builder_self19;
+    main_dfi_p2_wrdata_en <= builder_self20;
     main_dfi_p3_cs_n <= 1'd0;
-    main_dfi_p3_bank <= builder_array_muxed21;
-    main_dfi_p3_address <= builder_array_muxed22;
-    main_dfi_p3_cas_n <= (~builder_array_muxed23);
-    main_dfi_p3_ras_n <= (~builder_array_muxed24);
-    main_dfi_p3_we_n <= (~builder_array_muxed25);
-    main_dfi_p3_rddata_en <= builder_array_muxed26;
-    main_dfi_p3_wrdata_en <= builder_array_muxed27;
+    main_dfi_p3_bank <= builder_self21;
+    main_dfi_p3_address <= builder_self22;
+    main_dfi_p3_cas_n <= (~builder_self23);
+    main_dfi_p3_ras_n <= (~builder_self24);
+    main_dfi_p3_we_n <= (~builder_self25);
+    main_dfi_p3_rddata_en <= builder_self26;
+    main_dfi_p3_wrdata_en <= builder_self27;
     if (main_trrdcon_valid) begin
         main_trrdcon_count <= 1'd1;
         if (1'd0) begin
@@ -14971,11 +14971,11 @@ always @(posedge sys_clk) begin
         main_postponer_req_o <= 1'd0;
         main_postponer_count <= 1'd0;
         main_sequencer_done1 <= 1'd0;
-        main_sequencer_counter <= 6'd0;
+        main_sequencer_trigger <= 6'd0;
         main_sequencer_count <= 1'd0;
         main_zqcs_timer_count1 <= 26'd49999999;
         main_zqcs_executer_done <= 1'd0;
-        main_zqcs_executer_counter <= 5'd0;
+        main_zqcs_executer_trigger <= 5'd0;
         main_bankmachine0_level <= 5'd0;
         main_bankmachine0_produce <= 4'd0;
         main_bankmachine0_consume <= 4'd0;
@@ -18134,7 +18134,7 @@ FDPE #(
 	.C   (iodelay_clk),
 	.CE  (1'd1),
 	.D   (1'd0),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl0),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl0_async_reset),
 
 	// Outputs.
 	.Q   (builder_xilinxasyncresetsynchronizerimpl0_rst_meta)
@@ -18152,7 +18152,7 @@ FDPE #(
 	.C   (iodelay_clk),
 	.CE  (1'd1),
 	.D   (builder_xilinxasyncresetsynchronizerimpl0_rst_meta),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl0),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl0_async_reset),
 
 	// Outputs.
 	.Q   (iodelay_rst)
@@ -18170,7 +18170,7 @@ FDPE #(
 	.C   (sys_clk),
 	.CE  (1'd1),
 	.D   (1'd0),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl1),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl1_async_reset),
 
 	// Outputs.
 	.Q   (builder_xilinxasyncresetsynchronizerimpl1_rst_meta)
@@ -18188,7 +18188,7 @@ FDPE #(
 	.C   (sys_clk),
 	.CE  (1'd1),
 	.D   (builder_xilinxasyncresetsynchronizerimpl1_rst_meta),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl1),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl1_async_reset),
 
 	// Outputs.
 	.Q   (sys_rst)
@@ -18206,7 +18206,7 @@ FDPE #(
 	.C   (sys2x_clk),
 	.CE  (1'd1),
 	.D   (1'd0),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl2),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl2_async_reset),
 
 	// Outputs.
 	.Q   (builder_xilinxasyncresetsynchronizerimpl2_rst_meta)
@@ -18224,7 +18224,7 @@ FDPE #(
 	.C   (sys2x_clk),
 	.CE  (1'd1),
 	.D   (builder_xilinxasyncresetsynchronizerimpl2_rst_meta),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl2),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl2_async_reset),
 
 	// Outputs.
 	.Q   (builder_xilinxasyncresetsynchronizerimpl2_expr)
@@ -18242,7 +18242,7 @@ FDPE #(
 	.C   (sys4x_clk),
 	.CE  (1'd1),
 	.D   (1'd0),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl3),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl3_async_reset),
 
 	// Outputs.
 	.Q   (builder_xilinxasyncresetsynchronizerimpl3_rst_meta)
@@ -18260,7 +18260,7 @@ FDPE #(
 	.C   (sys4x_clk),
 	.CE  (1'd1),
 	.D   (builder_xilinxasyncresetsynchronizerimpl3_rst_meta),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl3),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl3_async_reset),
 
 	// Outputs.
 	.Q   (builder_xilinxasyncresetsynchronizerimpl3_expr)
@@ -18278,7 +18278,7 @@ FDPE #(
 	.C   (sys4x_dqs_clk),
 	.CE  (1'd1),
 	.D   (1'd0),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl4),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl4_async_reset),
 
 	// Outputs.
 	.Q   (builder_xilinxasyncresetsynchronizerimpl4_rst_meta)
@@ -18296,7 +18296,7 @@ FDPE #(
 	.C   (sys4x_dqs_clk),
 	.CE  (1'd1),
 	.D   (builder_xilinxasyncresetsynchronizerimpl4_rst_meta),
-	.PRE (builder_xilinxasyncresetsynchronizerimpl4),
+	.PRE (builder_xilinxasyncresetsynchronizerimpl4_async_reset),
 
 	// Outputs.
 	.Q   (builder_xilinxasyncresetsynchronizerimpl4_expr)
@@ -18305,5 +18305,5 @@ FDPE #(
 endmodule
 
 // -----------------------------------------------------------------------------
-//  Auto-Generated by LiteX on 2024-05-07 15:09:07.
+//  Auto-Generated by LiteX on 2025-01-31 22:29:27.
 //------------------------------------------------------------------------------

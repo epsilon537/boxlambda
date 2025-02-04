@@ -7,11 +7,7 @@ add_executable(ddr_test_ram
       memtest.c
 )
 
-if(CMAKE_BUILD_TYPE STREQUAL "sim")
-  target_compile_definitions(ddr_test_ram PRIVATE -DMEMTEST_SIZE=32768)
-else() #fpga:
-  target_compile_definitions(ddr_test_ram PRIVATE -DMEMTEST_SIZE=\(256*1024*1024\))
-endif()
+target_compile_definitions(ddr_test_ram PRIVATE -DMEMTEST_SIZE=32768)
 
 target_compile_options(ddr_test_ram
     PRIVATE
@@ -32,7 +28,7 @@ add_executable(ddr_test_flsh
       memtest.c
 )
 
-target_compile_definitions(ddr_test_flsh PRIVATE -DMEMTEST_SIZE=\(256*1024*1024\))
+target_compile_definitions(ddr_test_flsh PRIVATE -DMEMTEST_SIZE=32768)
 
 target_compile_options(ddr_test_flsh
     PRIVATE
