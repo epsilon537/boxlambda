@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Label `<TBD>`: Changes Since Label `boxlambda_base` - 2025-02-XX
+## Label `tools_setup`: Changes Since Label `boxlambda_base` - 2025-02-04
 
 ### Added
 
@@ -20,7 +20,7 @@ N/A
 - Updated to OSS CAD Suite 20250201.
 - Update to 2025/01/21 version of Ibex code base.
 - Update to 2025/01/31 version of Litedram code base.
-- Ibex code is not imported in Boxlambda repo by gw/components/ibex/gen_core.sh script.
+- Ibex code is imported in Boxlambda repo by gw/components/ibex/gen_core.sh script.
 - Switched to Single-Cycle multiplier in Ibex CPU.
 
 ### Removed
@@ -28,8 +28,9 @@ N/A
 - User no longer needs to install LowRisc GCC toolchain.
 - User no longer needs to install OSS CAD suite.
 - User no longer needs to install Bender.
+- User no longer needs to install Python or PIP. This is provided by the OSS CAD Suite environment.
 - User no longer needs to install Python packages.
-- Removed zeroing out memory and some unnecessary SystemVerilog constructs that aren't compatible with Yosys synthesis, preparing for OpenXC7 support.
+- Removed zeroing out memory and some unnecessary SystemVerilog constructs incompatible with Yosys synthesis, preparing for OpenXC7 support.
 
 ## Label `boxlambda_base`: Changes Since Label `dfx` - 2025-01-07
 
