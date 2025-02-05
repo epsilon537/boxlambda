@@ -29,7 +29,11 @@ This script will:
 - Install the required Python packages if not already installed.
 - Update the PATH environment variable to include the required tools.
 
+The script is easy to follow. The tools versions used are specified inside the script.
+
 If you have multiple BoxLambda workspaces, you only need to activate the tools environment in one of them.
+
+If you want to force a reinstall of the tools, source the script with the `-r` option.
 
 To deactivate the environment again, enter `deactivate`.
 
