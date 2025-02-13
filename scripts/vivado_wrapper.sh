@@ -5,5 +5,5 @@
 #When I'm debugging build issues, I just unset VIVADO_FLAGS.
 VIVADO_FLAGS="-nolog -nojournal -notrace"
 
-vivado -mode batch $VIVADO_FLAGS $*
+vivado -mode batch $VIVADO_FLAGS $* || exit 1
 

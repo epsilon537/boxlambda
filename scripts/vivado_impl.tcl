@@ -11,6 +11,8 @@ opt_design
 place_design
 route_design
 
+write_checkpoint -force project_impl.dcp
+
 #Create the bitstream file
 write_bitstream -force -bin_file project
 
@@ -21,6 +23,21 @@ write_mem_info -quiet -force project
 # Generate a timing and utilization reports and write to disk
 report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose \
 -max_paths 10 -input_pins -file imp_timing.rpt
+
+# Run timing report and capture output
+set timing_report [report_timing_summary -return_string]
+
+# Extract Worst Negative Slack (WNS) using regex
+set timing_constraints_not_met [regexp -all -inline {Timing constraints are not met} $timing_report]
+
+# Check if WNS is negative (timing violation)
+if {$timing_constraints_not_met != ""} {
+    puts "ERROR: Timing violations detected! See imp_timing.rpt"
+    exit 1
+} else {
+    puts "PASS: Timing met."
+}
+
 report_utilization -quiet -file imp_util.rpt
 
 close_project
