@@ -9,6 +9,7 @@ dependencies:
   # Path dependency.
   audio_dac: { path: "../../components/audio_dac" }
   ibex: { path: "../../components/ibex" } # For the clock generator
+  boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
 
 sources:
   - target: prj_constraints
