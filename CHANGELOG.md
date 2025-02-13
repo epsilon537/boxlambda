@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Activate_env.sh script to set up tools environment, simplifying setup.
+- Enabled Ibex RISCV Branch target ALU (removes stall from taken branches).
+- Vivado build aborts with error if timing constraints are not met after implementation step.
 
 ### Fixed
 
@@ -16,16 +18,17 @@ N/A
 
 ### Changed
 
-- Updated to LowRisc GCC toolchain 20240923.
+- Using system riscv64-unknown-elf toolchain instead of LowRISC GCC toolchain. LowRISC's prebuilt rv32imcb GCC still uses compressed instructions in GCC library routines when using architecture rv32im.
 - Updated to OSS CAD Suite 20250201.
 - Update to 2025/01/21 version of Ibex code base.
 - Update to 2025/01/31 version of Litedram code base.
 - Ibex code is imported in Boxlambda repo by gw/components/ibex/gen_core.sh script.
 - Switched to Single-Cycle multiplier in Ibex CPU.
+- Switched audio DAC test to BoxLambda clock generator.
+- Switched to rv32im_zicsr, no instruction compression. Instruction compression may cause unaligned 32-bit instruction fetches, making instruction cycle count undeterministic. Deterministic instruction cycle counts are a BoxLambda requirement.
 
 ### Removed
 
-- User no longer needs to install LowRisc GCC toolchain.
 - User no longer needs to install OSS CAD suite.
 - User no longer needs to install Bender.
 - User no longer needs to install Python or PIP. This is provided by the OSS CAD Suite environment.

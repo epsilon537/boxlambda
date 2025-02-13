@@ -41,9 +41,9 @@ function(link_and_create_image _tgt _link_script)
             ${_tgt}
         POST_BUILD
         COMMAND
-            riscv32-unknown-elf-objcopy -O verilog --interleave-width=4 --interleave=4 --byte=0 ${_tgt} ${_tgt}.hex
+            ${CMAKE_OBJCOPY} -O verilog --interleave-width=4 --interleave=4 --byte=0 ${_tgt} ${_tgt}.hex
         COMMAND
-             riscv32-unknown-elf-objcopy -O binary ${_tgt} ${_tgt}.bin
+             ${CMAKE_OBJCOPY} -O binary ${_tgt} ${_tgt}.bin
         COMMAND
             ${PROJECT_SOURCE_DIR}/sub/ibex_wb/scripts/hex2vmem.pl < ${_tgt}.hex > ${_tgt}.mem
         WORKING_DIRECTORY
@@ -76,4 +76,5 @@ add_subdirectory(reset_test)
 add_subdirectory(j1b_test)
 add_subdirectory(dfx_test)
 add_subdirectory(invalid_address)
+add_subdirectory(ibex_perf_test)
 
