@@ -111,14 +111,14 @@ int main(void) {
 
   unsigned long memtest_size = MEMTEST_SIZE;
 
-  printf("Memory Test through port 0:\n");
+  printf("Memory Test:\n");
 
   if(!memtest((unsigned int *) MAIN_RAM_BASE, memtest_size)) {
-    printf("Memory port 0 test failed!\n");
+    printf("Memory test failed!\n");
     while(1);
   }
   else {
-    printf("Memory port 0 test successful.\n");
+    printf("Memory test successful.\n");
   }
 
   printf("DDR instruction access test:\n");
