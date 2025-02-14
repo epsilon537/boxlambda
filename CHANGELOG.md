@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Activate_env.sh script to set up tools environment, simplifying setup.
 - Enabled Ibex RISCV Branch target ALU (removes stall from taken branches).
 - Vivado build aborts with error if timing constraints are not met after implementation step.
+- Added a no-prefetch prefetcher to Ibex. This helps ensure instruction cycle counts are stable and predictable.
 
 ### Fixed
 
@@ -26,6 +27,7 @@ N/A
 - Switched to Single-Cycle multiplier in Ibex CPU.
 - Switched audio DAC test to BoxLambda clock generator.
 - Switched to rv32im_zicsr, no instruction compression. Instruction compression may cause unaligned 32-bit instruction fetches, making instruction cycle count undeterministic. Deterministic instruction cycle counts are a BoxLambda requirement.
+- Replaced Ibex ICache flag with PrefetchType enum to support PrefetchType_None option.
 
 ### Removed
 

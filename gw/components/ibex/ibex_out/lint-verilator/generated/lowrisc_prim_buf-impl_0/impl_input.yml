@@ -747,6 +747,7 @@ cores:
     - rtl/ibex_multdiv_fast.sv
     - rtl/ibex_multdiv_slow.sv
     - rtl/ibex_prefetch_buffer.sv
+    - rtl/ibex_no_prefetch_buffer.sv
     - rtl/ibex_pmp.sv
     - rtl/ibex_wb_stage.sv
     - rtl/ibex_dummy_instr.sv
