@@ -378,9 +378,7 @@ module ibex_if_stage
     endfunction
 `endif
   end else if (PrefetchType == PrefetchType_None) begin : gen_no_prefetch_buffer
-    ibex_no_prefetch_buffer #(
-        .ResetAll(ResetAll)
-    ) no_prefetch_buffer_i (
+    ibex_no_prefetch_buffer no_prefetch_buffer_i (
         .clk_i (clk_i),
         .rst_ni(rst_ni),
 

@@ -9,9 +9,7 @@
  * Prefetch Buffer that caches instructions. This cuts overly long critical
  * paths to the instruction cache.
  */
-module ibex_no_prefetch_buffer #(
-    parameter bit ResetAll = 1'b0
-) (
+module ibex_no_prefetch_buffer (
     input logic clk_i,
     input logic rst_ni,
 
@@ -69,7 +67,7 @@ module ibex_no_prefetch_buffer #(
     end
   end
 
-  always_ff @(posedge clk_i) begin
+  always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       mid_transaction_branch_req <= 1'b0;
       instr_req_reg <= 1'b0;

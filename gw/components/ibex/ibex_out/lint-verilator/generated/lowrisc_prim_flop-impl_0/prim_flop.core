@@ -3,8 +3,8 @@ filesets:
   files_rtl:
     depend:
     - lowrisc:prim:prim_pkg
-    - lowrisc:prim_generic:flop:0
     - lowrisc:prim_xilinx:flop:0
+    - lowrisc:prim_generic:flop:0
     file_type: systemVerilogSource
     files:
     - prim_flop.sv

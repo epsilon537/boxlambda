@@ -129,6 +129,7 @@ sources:
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_multdiv_fast.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_multdiv_slow.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_prefetch_buffer.sv
+      - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_no_prefetch_buffer.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_pmp.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_wb_stage.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_dummy_instr.sv
@@ -159,9 +160,10 @@ sources:
       - rtl/ibex_top_wrap.sv
     defines:
       PRIM_DEFAULT_IMPL: prim_pkg::ImplGeneric
-  - target: any(vivado, openxc7)
+  - target: vivado
     files:
       - rtl/ibex_top_wrap.sv
     defines:
       PRIM_DEFAULT_IMPL: prim_pkg::ImplXilinx
+      FPGA_XILINX: ~
 
