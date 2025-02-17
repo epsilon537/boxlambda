@@ -3,6 +3,10 @@
 // Licensed under the Apache License, Version 2.0, see LICENSE for details.
 // SPDX-License-Identifier: Apache-2.0
 
+`ifdef __ICARUS__
+`timescale 1 ns / 1 ps
+`endif
+
 /**
  * Prefetcher Buffer for 32 bit memory interface
  *
@@ -100,20 +104,11 @@ module ibex_no_prefetch_buffer (
     end
   end
 
-  /*
-  assign instr_req_o  = req_i & (ready_i | branch_i);
-  assign instr_addr_o = branch_i ? addr_i : addr_o + 4;
-
-  always_ff @(posedge clk_i)
-    if (!rst_ni) addr_o <= 0;
-    else if (instr_req_o && instr_gnt_i) addr_o <= instr_addr_o;
-  */
-
   assign addr_o = instr_adr_reg;
   assign rdata_o = instr_rdata_i;
   //Mask valid and error if we have a mid-transaction branch request.
-  assign valid_o = instr_rvalid_i & ~(req_i && branch_i) & ~(mid_transaction_branch_req);
-  assign err_o = instr_err_i & ~(req_i && branch_i) & ~(mid_transaction_branch_req);
+  assign valid_o = instr_rvalid_i & ~mid_transaction_branch_req;
+  assign err_o = instr_err_i & ~mid_transaction_branch_req;
   assign err_plus2_o = 1'b0;
 
   // Prefetch Buffer Status
