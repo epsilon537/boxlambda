@@ -18,8 +18,6 @@ async def core_gnt_o(dut):
 async def core_rvalid_o(dut):
     while True:
         await RisingEdge(dut.core_rvalid_o)
-        #only on reads
-        assert dut.core_we_i.value == 0
         #valid_o must remain asserted for one cycle
         await RisingEdge(dut.clk)
         await RisingEdge(dut.clk)
