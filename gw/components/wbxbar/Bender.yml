@@ -18,6 +18,7 @@ sources:
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:
+      - rtl/wb_staller.sv
       - ../../../sub/wb2axip/rtl/wbxbar.v
       - ../../../sub/wb2axip/rtl/addrdecode.v
       - ../../../sub/wb2axip/rtl/skidbuffer.v

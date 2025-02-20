@@ -271,6 +271,17 @@ module boxlambda_soc #(
   logic por_completed;  //Indicates Power-On Reset has been completed.
   logic debug_req;  //Debug Request signal.
 
+  //The CoreI and CoreD bus master interfaces.
+  wb_if corei_wbm (
+      .rst(ndm_reset),
+      .clk(sys_clk)
+  );
+
+  wb_if cored_wbm (
+      .rst(ndm_reset),
+      .clk(sys_clk)
+  );
+
   //The DM/DFX arbiter bus master interfaces.
   wb_if arbiter_wbm[NUM_ARBITER_MASTERS] (
       .rst(ndm_reset),
@@ -702,8 +713,8 @@ module boxlambda_soc #(
   ) wb_ibex_core (
       .clk         (sys_clk),
       .rst_n       (~ndm_reset),
-      .instr_wb    (xbar_wbm[COREI_M]),
-      .data_wb     (xbar_wbm[CORED_M]),
+      .instr_wb    (corei_wbm),
+      .data_wb     (cored_wbm),
       .test_en     (1'b0),
       .hart_id     (32'h0),
       .boot_addr   (32'h0),
@@ -716,6 +727,66 @@ module boxlambda_soc #(
       .fetch_enable({3'b0, por_completed}),  //Only start fetch after POR has been completed.
       .core_sleep  (),
       .*
+  );
+
+  //Attach CoreI and CoreD to wb_stallers to separate back-to-back
+  //transactions.
+  wb_staller #(
+      .DATA_WIDTH(DW),  // width of data bus in bits (8, 16, 32, or 64)
+      .ADDR_WIDTH(AW)   // width of address bus in bits
+  ) i_staller_inst (
+      .clk(sys_clk),
+      .rst(ndm_reset),
+      .wbm_adr_i(corei_wbm.adr),    // ADR_I() address input
+      .wbm_dat_i(corei_wbm.dat_m),    // DAT_I() data in
+      .wbm_dat_o(corei_wbm.dat_s),    // DAT_O() data out
+      .wbm_we_i(corei_wbm.we),     // WE_I write enable input
+      .wbm_sel_i(corei_wbm.sel),    // SEL_I() select input
+      .wbm_stb_i(corei_wbm.stb),    // STB_I strobe input
+      .wbm_ack_o(corei_wbm.ack),    // ACK_O acknowledge output
+      .wbm_err_o(corei_wbm.err),    // ERR_O error output
+      .wbm_stall_o(corei_wbm.stall),  // STALL_O retry output
+      .wbm_cyc_i(corei_wbm.cyc),    // CYC_I cycle input
+
+      .wbs_adr_o(xbar_wbm[COREI_M].adr),    // ADR_O() address output
+      .wbs_dat_i(xbar_wbm[COREI_M].dat_s),    // DAT_I() data in
+      .wbs_dat_o(xbar_wbm[COREI_M].dat_m),    // DAT_O() data out
+      .wbs_we_o(xbar_wbm[COREI_M].we),     // WE_O write enable output
+      .wbs_sel_o(xbar_wbm[COREI_M].sel),    // SEL_O() select output
+      .wbs_stb_o(xbar_wbm[COREI_M].stb),    // STB_O strobe output
+      .wbs_ack_i(xbar_wbm[COREI_M].ack),    // ACK_I acknowledge input
+      .wbs_err_i(xbar_wbm[COREI_M].err),    // ERR_I error input
+      .wbs_stall_i(xbar_wbm[COREI_M].stall),  // STALL_I retry input
+      .wbs_cyc_o(xbar_wbm[COREI_M].cyc)     // CYC_O cycle output
+  );
+
+  wb_staller #(
+      .DATA_WIDTH(DW),  // width of data bus in bits (8, 16, 32, or 64)
+      .ADDR_WIDTH(AW)   // width of address bus in bits
+  ) d_staller_inst (
+      .clk(sys_clk),
+      .rst(ndm_reset),
+      .wbm_adr_i(cored_wbm.adr),    // ADR_I() address input
+      .wbm_dat_i(cored_wbm.dat_m),    // DAT_I() data in
+      .wbm_dat_o(cored_wbm.dat_s),    // DAT_O() data out
+      .wbm_we_i(cored_wbm.we),     // WE_I write enable input
+      .wbm_sel_i(cored_wbm.sel),    // SEL_I() select input
+      .wbm_stb_i(cored_wbm.stb),    // STB_I strobe input
+      .wbm_ack_o(cored_wbm.ack),    // ACK_O acknowledge output
+      .wbm_err_o(cored_wbm.err),    // ERR_O error output
+      .wbm_stall_o(cored_wbm.stall),  // STALL_O retry output
+      .wbm_cyc_i(cored_wbm.cyc),    // CYC_I cycle input
+
+      .wbs_adr_o(xbar_wbm[CORED_M].adr),    // ADR_O() address output
+      .wbs_dat_i(xbar_wbm[CORED_M].dat_s),    // DAT_I() data in
+      .wbs_dat_o(xbar_wbm[CORED_M].dat_m),    // DAT_O() data out
+      .wbs_we_o(xbar_wbm[CORED_M].we),     // WE_O write enable output
+      .wbs_sel_o(xbar_wbm[CORED_M].sel),    // SEL_O() select output
+      .wbs_stb_o(xbar_wbm[CORED_M].stb),    // STB_O strobe output
+      .wbs_ack_i(xbar_wbm[CORED_M].ack),    // ACK_I acknowledge input
+      .wbs_err_i(xbar_wbm[CORED_M].err),    // ERR_I error input
+      .wbs_stall_i(xbar_wbm[CORED_M].stall),  // STALL_I retry input
+      .wbs_cyc_o(xbar_wbm[CORED_M].cyc)     // CYC_O cycle output
   );
 
   //CMEM (Code Mem.) Dual Port Memory
