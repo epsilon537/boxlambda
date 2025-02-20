@@ -8,6 +8,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
+#include "i2c_regs.h"
 
 #define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
@@ -28,6 +29,29 @@ void do_nothing() {
   uint32_t cycles = mcycle_get32();
 
   printf("Do nothing: %d cycles.\n", cycles);
+}
+
+//Repeatedly read and write a SoC register and measure how long it takes.
+void lw_register_loop(void *reg, size_t word_count) {
+  mcycle_stop();
+  pcount_reset();
+  mcycle_start();
+
+    __asm__ volatile (
+        "2: \n"
+        "lw t0, (%0) \n"   // Load word from register
+        "addi %1, %1, -1 \n" // Decrement counter
+        "bnez %1, 2b \n"   // Loop if counter != 0
+        : "+r"(reg), "+r"(word_count)
+        :
+        : "t0", "memory"
+    );
+
+  mcycle_stop();
+
+  uint32_t cycles = mcycle_get32();
+
+  printf("lw_sw_register_loop: %d cycles.\n", cycles);
 }
 
 void lw_sw_copy_loop(void *dest, const void *src, size_t word_count) {
@@ -532,6 +556,7 @@ int main(void) {
   gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
 
   do_nothing();
+  lw_register_loop((void *)(I2C_MASTER_BASE+I2C_ISR), 100); //Just picking a register without too many side effects.
   lw_sw_copy_loop(srcBuf, dstBuf, 100);
   lw_sw_copy_unrolled(srcBuf, dstBuf);
 

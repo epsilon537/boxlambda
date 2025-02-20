@@ -11,6 +11,11 @@ target_compile_options(ibex_perf_test_ram
   -O2
 )
 
+target_include_directories(ibex_perf_test_ram
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/sw/components/i2c/
+)
+
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(ibex_perf_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
@@ -27,6 +32,11 @@ add_executable(ibex_perf_test_flsh
 target_compile_options(ibex_perf_test_flsh
  PRIVATE
   -O2
+)
+
+target_include_directories(ibex_perf_test_flsh
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/sw/components/i2c/
 )
 
 #Function defined in parent CMakeLists.txt file:
