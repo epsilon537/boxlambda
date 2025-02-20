@@ -126,8 +126,6 @@ module boxlambda_soc #(
 
   //Enum of Bus Slaves attached to the cross bar.
   typedef enum {
-    CMEM_0_S,  /*CMEM port 0. Typically used by CPU.*/
-    DMEM_0_S,  /*DMEM port 0. Typically used by CPU.*/
     CMEM_1_S,  /*CMEM port 1. Typically used by DMA.*/
     DMEM_1_S,  /*DMEM port 1. Typically used by DMA.*/
     SHARED_BUS_S,  /*Connection to the shared bus.*/
@@ -184,7 +182,7 @@ module boxlambda_soc #(
   localparam NUM_ARBITER_MASTERS = 2; //Number of bus masters connected to the DM/DFX Wishbone arbiter. Has to be 2 (the arbiter arbitrates between 2 ports only).
   localparam NUM_ARBITER_SLAVES = 1; //Number of bus slaves attached to the DM/DFX Wishbone arbiter. Has to be 1 (the arbiter has only one 'output' port).
   localparam NUM_XBAR_MASTERS = 6;
-  localparam NUM_XBAR_SLAVES = 8;
+  localparam NUM_XBAR_SLAVES = 6;
   localparam NUM_SHARED_BUS_MASTERS = 1;
   localparam NUM_SHARED_BUS_SLAVES = 15;
 
@@ -234,10 +232,8 @@ module boxlambda_soc #(
     /*VS0_S*/{AW'('h13000000 >> 2)},
     /*VERA_S*/{AW'('h12000000 >> 2)},
     /*SHARED_BUS_S*/{AW'('h10000000 >> 2)},
-    /*DMEM_1_S*/{AW'('h00120000 >> 2)},
-    /*CMEM_1_S*/{AW'('h00100000 >> 2)},
-    /*DMEM_0_S*/{AW'('h00020000 >> 2)},
-    /*CMEM_0_S*/{AW'('h00000000 >> 2)}
+    /*DMEM_1_S*/{AW'('h00020000 >> 2)},
+    /*CMEM_1_S*/{AW'('h00000000 >> 2)}
   };
 
   //Crossbar slave address mask. Right-shift by two to convert byte size to word size.
@@ -247,9 +243,7 @@ module boxlambda_soc #(
     /*VERA_S*/{AW'(~('h0007ffff >> 2))},
     /*SHARED_BUS_S*/{AW'(~('h01ffffff >> 2))},
     /*DMEM_1_S*/{AW'(~(DPRAM_BYTE_ADDR_MASK >> 2))},
-    /*CMEM_1_S*/{AW'(~(DPRAM_BYTE_ADDR_MASK >> 2))},
-    /*DMEM_0_S*/{AW'(~(DPRAM_BYTE_ADDR_MASK >> 2))},
-    /*CMEM_0_S*/{AW'(~(DPRAM_BYTE_ADDR_MASK >> 2))}
+    /*CMEM_1_S*/{AW'(~(DPRAM_BYTE_ADDR_MASK >> 2))}
   };
 
   //Clock signals.
@@ -271,13 +265,38 @@ module boxlambda_soc #(
   logic por_completed;  //Indicates Power-On Reset has been completed.
   logic debug_req;  //Debug Request signal.
 
-  //The CoreI and CoreD bus master interfaces.
+  //The CoreI bus master interface.
   wb_if corei_wbm (
       .rst(ndm_reset),
       .clk(sys_clk)
   );
 
+  //The CoreD bus master interface.
   wb_if cored_wbm (
+      .rst(ndm_reset),
+      .clk(sys_clk)
+  );
+
+  //The iMux to CMEM interface.
+  wb_if imux_to_cmem (
+      .rst(ndm_reset),
+      .clk(sys_clk)
+  );
+
+  //The dMux to DMEM interface
+  wb_if dmux_to_dmem (
+      .rst(ndm_reset),
+      .clk(sys_clk)
+  );
+
+  //The iMux to staller interface.
+  wb_if imux_to_staller (
+      .rst(ndm_reset),
+      .clk(sys_clk)
+  );
+
+  //The dMux to staller interface
+  wb_if dmux_to_staller (
       .rst(ndm_reset),
       .clk(sys_clk)
   );
@@ -299,6 +318,7 @@ module boxlambda_soc #(
       .rst(dm_reset),
       .clk(sys_clk)
   );
+
   //The shared bus wishbone bus slave interfaces. (I didn't bother to create a shared bus bus master interface).
   wb_if shared_bus_wbs[NUM_SHARED_BUS_SLAVES] (
       .rst(dm_reset),
@@ -571,9 +591,9 @@ module boxlambda_soc #(
       .clk_50(clk_50),  //50MHz clock output
       .clk_100(clk_100),  //100MHz clock output
       .clk_12(usb_clk),  //12 MHz USB clock output
-      .locked      (pre_pll_locked) //PLL lock indication outpt. It's called pre-PLL because LiteDRAM (when included in the build)
-                                    //introduces a second-stage PLL hanging off clk_50. The LiteDRAM PLL provides the system clock.
-                                    //When LiteDRAM is not included in the build, clk_50 becomes the system clock.
+      .locked(pre_pll_locked) //PLL lock indication output. It's called pre-PLL because LiteDRAM (when included in the build)
+      //introduces a second-stage PLL hanging off clk_50. The LiteDRAM PLL provides the system clock.
+      //When LiteDRAM is not included in the build, clk_50 becomes the system clock.
   );
 
   assign usb_pll_locked = pre_pll_locked;
@@ -705,7 +725,7 @@ module boxlambda_soc #(
       .RV32M(ibex_pkg::RV32MSingleCycle),
       .RV32B(ibex_pkg::RV32BBalanced),
       .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA),
-      .BranchTargetALU(1'b0),
+      .BranchTargetALU(1'b1),
       .WritebackStage(1'b0),
       .DbgTriggerEn(1'b1),
       .DmHaltAddr({2'b00, SHARED_BUS_SLAVE_ADDRS[(DM_S+1)*AW-1:DM_S*AW], 2'b00} + 32'h00000800),
@@ -729,24 +749,148 @@ module boxlambda_soc #(
       .*
   );
 
+  wb_mux_2 #(
+      .ADDR_WIDTH(AW)
+  ) cmem_mux (
+      .clk(sys_clk),
+      .rst(ndm_reset),
+
+      /*
+     * Wishbone master input
+     */
+      .wbm_adr_i(corei_wbm.adr),    // ADR_I() address input
+      .wbm_dat_i(corei_wbm.dat_m),  // DAT_I() data in
+      .wbm_dat_o(corei_wbm.dat_s),  // DAT_O() data out
+      .wbm_we_i (corei_wbm.we),     // WE_I write enable input
+      .wbm_sel_i(corei_wbm.sel),    // SEL_I() select input
+      .wbm_stb_i(corei_wbm.stb),    // STB_I strobe input
+      .wbm_ack_o(corei_wbm.ack),    // ACK_O acknowledge output
+      .wbm_err_o(corei_wbm.err),    // ERR_O error output
+      .wbm_stall_o(corei_wbm.stall),  // STALL_O stall output
+      .wbm_cyc_i(corei_wbm.cyc),    // CYC_I cycle input
+
+      /*
+     * Wishbone slave 0 output
+     */
+      .wbs0_adr_o(imux_to_cmem.adr),    // ADR_O() address output
+      .wbs0_dat_i(imux_to_cmem.dat_s),    // DAT_I() data in
+      .wbs0_dat_o(imux_to_cmem.dat_m),    // DAT_O() data out
+      .wbs0_we_o(imux_to_cmem.we),     // WE_O write enable output
+      .wbs0_sel_o(imux_to_cmem.sel),    // SEL_O() select output
+      .wbs0_stb_o(imux_to_cmem.stb),    // STB_O strobe output
+      .wbs0_ack_i(imux_to_cmem.ack),    // ACK_I acknowledge input
+      .wbs0_err_i(imux_to_cmem.err),    // ERR_I error input
+      .wbs0_stall_i(imux_to_cmem.stall),    // STALL_I stall input
+      .wbs0_cyc_o(imux_to_cmem.cyc),    // CYC_O cycle output
+
+      /*
+     * Wishbone slave 0 address configuration
+     */
+      .wbs0_addr(AW'('h00000000 >> 2)),     // Slave address prefix
+      .wbs0_addr_msk(AW'((~DPRAM_BYTE_ADDR_MASK >> 2))), // Slave address prefix mask
+
+      /*
+     * Wishbone slave 1 output
+     */
+      .wbs1_adr_o(imux_to_staller.adr),    // ADR_O() address output
+      .wbs1_dat_i(imux_to_staller.dat_s),    // DAT_I() data in
+      .wbs1_dat_o(imux_to_staller.dat_m),    // DAT_O() data out
+      .wbs1_we_o(imux_to_staller.we),     // WE_O write enable output
+      .wbs1_sel_o(imux_to_staller.sel),    // SEL_O() select output
+      .wbs1_stb_o(imux_to_staller.stb),    // STB_O strobe output
+      .wbs1_ack_i(imux_to_staller.ack),    // ACK_I acknowledge input
+      .wbs1_err_i(imux_to_staller.err),    // ERR_I error input
+      .wbs1_stall_i(imux_to_staller.stall),    // STALL_I stall input
+      .wbs1_cyc_o(imux_to_staller.cyc),    // CYC_O cycle output
+
+      /*
+     * Wishbone slave 1 address configuration - catch all. Note that the wbs0
+     * port filter takes precedence.
+     */
+      .wbs1_addr(0),
+      .wbs1_addr_msk(0)
+  );
+
+  wb_mux_2 #(
+      .ADDR_WIDTH(AW)
+  ) dmem_mux (
+      .clk(sys_clk),
+      .rst(ndm_reset),
+
+      /*
+     * Wishbone master input
+     */
+      .wbm_adr_i(cored_wbm.adr),    // ADR_I() address input
+      .wbm_dat_i(cored_wbm.dat_m),  // DAT_I() data in
+      .wbm_dat_o(cored_wbm.dat_s),  // DAT_O() data out
+      .wbm_we_i (cored_wbm.we),     // WE_I write enable input
+      .wbm_sel_i(cored_wbm.sel),    // SEL_I() select input
+      .wbm_stb_i(cored_wbm.stb),    // STB_I strobe input
+      .wbm_ack_o(cored_wbm.ack),    // ACK_O acknowledge output
+      .wbm_err_o(cored_wbm.err),    // ERR_O error output
+      .wbm_stall_o(cored_wbm.stall),  // STALL_O stall output
+      .wbm_cyc_i(cored_wbm.cyc),    // CYC_I cycle input
+
+      /*
+     * Wishbone slave 0 output
+     */
+      .wbs0_adr_o(dmux_to_dmem.adr),    // ADR_O() address output
+      .wbs0_dat_i(dmux_to_dmem.dat_s),    // DAT_I() data in
+      .wbs0_dat_o(dmux_to_dmem.dat_m),    // DAT_O() data out
+      .wbs0_we_o(dmux_to_dmem.we),     // WE_O write enable output
+      .wbs0_sel_o(dmux_to_dmem.sel),    // SEL_O() select output
+      .wbs0_stb_o(dmux_to_dmem.stb),    // STB_O strobe output
+      .wbs0_ack_i(dmux_to_dmem.ack),    // ACK_I acknowledge input
+      .wbs0_err_i(dmux_to_dmem.err),    // ERR_I error input
+      .wbs0_stall_i(dmux_to_dmem.stall),    // STALL_I stall input
+      .wbs0_cyc_o(dmux_to_dmem.cyc),    // CYC_O cycle output
+
+      /*
+     * Wishbone slave 0 address configuration
+     */
+      .wbs0_addr(AW'('h00020000 >> 2)),     // Slave address prefix
+      .wbs0_addr_msk(AW'((~DPRAM_BYTE_ADDR_MASK >> 2))), // Slave address prefix mask
+
+      /*
+     * Wishbone slave 1 output
+     */
+      .wbs1_adr_o(dmux_to_staller.adr),    // ADR_O() address output
+      .wbs1_dat_i(dmux_to_staller.dat_s),    // DAT_I() data in
+      .wbs1_dat_o(dmux_to_staller.dat_m),    // DAT_O() data out
+      .wbs1_we_o(dmux_to_staller.we),     // WE_O write enable output
+      .wbs1_sel_o(dmux_to_staller.sel),    // SEL_O() select output
+      .wbs1_stb_o(dmux_to_staller.stb),    // STB_O strobe output
+      .wbs1_ack_i(dmux_to_staller.ack),    // ACK_I acknowledge input
+      .wbs1_err_i(dmux_to_staller.err),    // ERR_I error input
+      .wbs1_stall_i(dmux_to_staller.stall),    // STALL_I stall input
+      .wbs1_cyc_o(dmux_to_staller.cyc),    // CYC_O cycle output
+
+      /*
+     * Wishbone slave 1 address configuration - catch all. Note that the wbs0
+     * port filter takes precedence.
+     */
+      .wbs1_addr(0),
+      .wbs1_addr_msk(0)
+  );
+
   //Attach CoreI and CoreD to wb_stallers to separate back-to-back
-  //transactions.
+  //transactions going to the crossbar.
   wb_staller #(
       .DATA_WIDTH(DW),  // width of data bus in bits (8, 16, 32, or 64)
       .ADDR_WIDTH(AW)   // width of address bus in bits
   ) i_staller_inst (
       .clk(sys_clk),
       .rst(ndm_reset),
-      .wbm_adr_i(corei_wbm.adr),    // ADR_I() address input
-      .wbm_dat_i(corei_wbm.dat_m),    // DAT_I() data in
-      .wbm_dat_o(corei_wbm.dat_s),    // DAT_O() data out
-      .wbm_we_i(corei_wbm.we),     // WE_I write enable input
-      .wbm_sel_i(corei_wbm.sel),    // SEL_I() select input
-      .wbm_stb_i(corei_wbm.stb),    // STB_I strobe input
-      .wbm_ack_o(corei_wbm.ack),    // ACK_O acknowledge output
-      .wbm_err_o(corei_wbm.err),    // ERR_O error output
-      .wbm_stall_o(corei_wbm.stall),  // STALL_O retry output
-      .wbm_cyc_i(corei_wbm.cyc),    // CYC_I cycle input
+      .wbm_adr_i(imux_to_staller.adr),    // ADR_I() address input
+      .wbm_dat_i(imux_to_staller.dat_m),    // DAT_I() data in
+      .wbm_dat_o(imux_to_staller.dat_s),    // DAT_O() data out
+      .wbm_we_i(imux_to_staller.we),     // WE_I write enable input
+      .wbm_sel_i(imux_to_staller.sel),    // SEL_I() select input
+      .wbm_stb_i(imux_to_staller.stb),    // STB_I strobe input
+      .wbm_ack_o(imux_to_staller.ack),    // ACK_O acknowledge output
+      .wbm_err_o(imux_to_staller.err),    // ERR_O error output
+      .wbm_stall_o(imux_to_staller.stall),  // STALL_O retry output
+      .wbm_cyc_i(imux_to_staller.cyc),    // CYC_I cycle input
 
       .wbs_adr_o(xbar_wbm[COREI_M].adr),    // ADR_O() address output
       .wbs_dat_i(xbar_wbm[COREI_M].dat_s),    // DAT_I() data in
@@ -766,16 +910,16 @@ module boxlambda_soc #(
   ) d_staller_inst (
       .clk(sys_clk),
       .rst(ndm_reset),
-      .wbm_adr_i(cored_wbm.adr),    // ADR_I() address input
-      .wbm_dat_i(cored_wbm.dat_m),    // DAT_I() data in
-      .wbm_dat_o(cored_wbm.dat_s),    // DAT_O() data out
-      .wbm_we_i(cored_wbm.we),     // WE_I write enable input
-      .wbm_sel_i(cored_wbm.sel),    // SEL_I() select input
-      .wbm_stb_i(cored_wbm.stb),    // STB_I strobe input
-      .wbm_ack_o(cored_wbm.ack),    // ACK_O acknowledge output
-      .wbm_err_o(cored_wbm.err),    // ERR_O error output
-      .wbm_stall_o(cored_wbm.stall),  // STALL_O retry output
-      .wbm_cyc_i(cored_wbm.cyc),    // CYC_I cycle input
+      .wbm_adr_i(dmux_to_staller.adr),    // ADR_I() address input
+      .wbm_dat_i(dmux_to_staller.dat_m),    // DAT_I() data in
+      .wbm_dat_o(dmux_to_staller.dat_s),    // DAT_O() data out
+      .wbm_we_i(dmux_to_staller.we),     // WE_I write enable input
+      .wbm_sel_i(dmux_to_staller.sel),    // SEL_I() select input
+      .wbm_stb_i(dmux_to_staller.stb),    // STB_I strobe input
+      .wbm_ack_o(dmux_to_staller.ack),    // ACK_O acknowledge output
+      .wbm_err_o(dmux_to_staller.err),    // ERR_O error output
+      .wbm_stall_o(dmux_to_staller.stall),  // STALL_O retry output
+      .wbm_cyc_i(dmux_to_staller.cyc),    // CYC_I cycle input
 
       .wbs_adr_o(xbar_wbm[CORED_M].adr),    // ADR_O() address output
       .wbs_dat_i(xbar_wbm[CORED_M].dat_s),    // DAT_I() data in
@@ -798,16 +942,16 @@ module boxlambda_soc #(
       .rst(ndm_reset),
 
       // port A
-      .a_adr_i(xbar_wbs[CMEM_0_S].adr[DPRAM_AW-1:0]),  // ADR_I() address
-      .a_dat_i(xbar_wbs[CMEM_0_S].dat_m),  // DAT_I() data in
-      .a_dat_o(xbar_wbs[CMEM_0_S].dat_s),  // DAT_O() data out
-      .a_we_i(xbar_wbs[CMEM_0_S].we),  // WE_I write enable input
-      .a_sel_i(xbar_wbs[CMEM_0_S].sel),  // SEL_I() select input
-      .a_stb_i(xbar_wbs[CMEM_0_S].stb),  // STB_I strobe input
-      .a_stall_o(xbar_wbs[CMEM_0_S].stall),  // STALL_O stall output
-      .a_ack_o(xbar_wbs[CMEM_0_S].ack),  // ACK_O acknowledge output
-      .a_err_o(xbar_wbs[CMEM_0_S].err),  // ERR_O error output
-      .a_cyc_i(xbar_wbs[CMEM_0_S].cyc),  // CYC_I cycle input
+      .a_adr_i(imux_to_cmem.adr[DPRAM_AW-1:0]),  // ADR_I() address
+      .a_dat_i(imux_to_cmem.dat_m),  // DAT_I() data in
+      .a_dat_o(imux_to_cmem.dat_s),  // DAT_O() data out
+      .a_we_i(imux_to_cmem.we),  // WE_I write enable input
+      .a_sel_i(imux_to_cmem.sel),  // SEL_I() select input
+      .a_stb_i(imux_to_cmem.stb),  // STB_I strobe input
+      .a_stall_o(imux_to_cmem.stall),  // STALL_O stall output
+      .a_ack_o(imux_to_cmem.ack),  // ACK_O acknowledge output
+      .a_err_o(imux_to_cmem.err),  // ERR_O error output
+      .a_cyc_i(imux_to_cmem.cyc),  // CYC_I cycle input
 
       // port B
       .b_adr_i(xbar_wbs[CMEM_1_S].adr[DPRAM_AW-1:0]),  // ADR_I() address
@@ -831,16 +975,16 @@ module boxlambda_soc #(
       .rst(ndm_reset),
 
       // port A
-      .a_adr_i(xbar_wbs[DMEM_0_S].adr[DPRAM_AW-1:0]),  // ADR_I() address
-      .a_dat_i(xbar_wbs[DMEM_0_S].dat_m),  // DAT_I() data in
-      .a_dat_o(xbar_wbs[DMEM_0_S].dat_s),  // DAT_O() data out
-      .a_we_i(xbar_wbs[DMEM_0_S].we),  // WE_I write enable input
-      .a_sel_i(xbar_wbs[DMEM_0_S].sel),  // SEL_I() select input
-      .a_stb_i(xbar_wbs[DMEM_0_S].stb),  // STB_I strobe input
-      .a_stall_o(xbar_wbs[DMEM_0_S].stall),  // STALL_O stall output
-      .a_ack_o(xbar_wbs[DMEM_0_S].ack),  // ACK_O acknowledge output
-      .a_err_o(xbar_wbs[DMEM_0_S].err),  // ERR_O error output
-      .a_cyc_i(xbar_wbs[DMEM_0_S].cyc),  // CYC_I cycle input
+      .a_adr_i(dmux_to_dmem.adr[DPRAM_AW-1:0]),  // ADR_I() address
+      .a_dat_i(dmux_to_dmem.dat_m),  // DAT_I() data in
+      .a_dat_o(dmux_to_dmem.dat_s),  // DAT_O() data out
+      .a_we_i(dmux_to_dmem.we),  // WE_I write enable input
+      .a_sel_i(dmux_to_dmem.sel),  // SEL_I() select input
+      .a_stb_i(dmux_to_dmem.stb),  // STB_I strobe input
+      .a_stall_o(dmux_to_dmem.stall),  // STALL_O stall output
+      .a_ack_o(dmux_to_dmem.ack),  // ACK_O acknowledge output
+      .a_err_o(dmux_to_dmem.err),  // ERR_O error output
+      .a_cyc_i(dmux_to_dmem.cyc),  // CYC_I cycle input
 
       // port B
       .b_adr_i(xbar_wbs[DMEM_1_S].adr[DPRAM_AW-1:0]),  // ADR_I() address
