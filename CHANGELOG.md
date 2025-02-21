@@ -28,6 +28,9 @@ N/A
 - Switched audio DAC test to BoxLambda clock generator.
 - Switched to rv32im_zicsr, no instruction compression. Instruction compression may cause unaligned 32-bit instruction fetches, making instruction cycle count undeterministic. Deterministic instruction cycle counts are a BoxLambda requirement.
 - Replaced Ibex ICache flag with PrefetchType enum to support PrefetchType_None option.
+- Gave Ibex instruction and data port a shortcut do cmem resp. dmem so they don't have to go through the slow crossbar for local memory access.
+- Replaced the wbxbar-based shared bus with a faster wb_mux-based shared bus.
+- Added transaction separating stallers on the Ibex-to-Crossbar ports to achieve fixed latency for instruction and data fetches going over the crossbar. Without this, transactions on an already open channel complete faster than transactions to a new channel.
 
 ### Removed
 
