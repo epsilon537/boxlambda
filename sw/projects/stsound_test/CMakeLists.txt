@@ -26,7 +26,7 @@ endif()
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(stsound_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(stsound_test_ram sdram stsound fatfs gpio riscv)
+target_link_libraries(stsound_test_ram sdram stsound fatfs gpio riscv bootstrap)
 
 #
 # ST Sound Test - Flash Build
@@ -56,6 +56,6 @@ endif()
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(stsound_test_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(stsound_test_flsh sdram stsound fatfs gpio riscv)
+target_link_libraries(stsound_test_flsh sdram stsound fatfs gpio riscv bootstrap)
 
 add_flash_sw_target(stsound_test_flsh)

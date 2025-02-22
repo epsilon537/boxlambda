@@ -28,7 +28,7 @@ target_include_directories(picorv_dma_sys_test_ext_ram
 link_and_create_image(picorv_dma_sys_test_ext_ram
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(picorv_dma_sys_test_ext_ram picorv_dma vera sdram gpio riscv)
+target_link_libraries(picorv_dma_sys_test_ext_ram picorv_dma vera sdram gpio riscv bootstrap)
 
 #PicoRV_DMA system test program - Flash Build
 
@@ -60,6 +60,6 @@ target_include_directories(picorv_dma_sys_test_ext_flsh
 link_and_create_image(picorv_dma_sys_test_ext_flsh
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(picorv_dma_sys_test_ext_flsh picorv_dma vera sdram gpio riscv)
+target_link_libraries(picorv_dma_sys_test_ext_flsh picorv_dma vera sdram gpio riscv bootstrap)
 
 add_flash_sw_target(picorv_dma_sys_test_flsh)

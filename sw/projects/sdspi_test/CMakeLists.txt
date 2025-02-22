@@ -20,7 +20,7 @@ target_include_directories(sdspi_test_ram
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(sdspi_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(sdspi_test_ram gpio riscv interrupts)
+target_link_libraries(sdspi_test_ram gpio riscv interrupts bootstrap)
 
 #
 # SDSPI Test Flash Build
@@ -44,6 +44,6 @@ target_include_directories(sdspi_test_flsh
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(sdspi_test_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(sdspi_test_flsh gpio riscv interrupts)
+target_link_libraries(sdspi_test_flsh gpio riscv interrupts bootstrap)
 
 add_flash_sw_target(sdspi_test_flsh)

@@ -20,8 +20,6 @@ endfunction()
 
 #Link given target using given linker script and add byproduct command generating a .mem file.
 function(link_and_create_image _tgt _link_script)
-  target_link_libraries(${_tgt} bootstrap)
-
   target_link_options(${_tgt}
         PRIVATE
             # Don't use Picolibc's crt0. We provide our own crt0 in

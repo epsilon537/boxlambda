@@ -25,7 +25,7 @@ target_include_directories(timer_uart_gpio_irqs_ram
 link_and_create_image(timer_uart_gpio_irqs_ram
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(timer_uart_gpio_irqs_ram timer picorv_dma gpio riscv interrupts)
+target_link_libraries(timer_uart_gpio_irqs_ram timer picorv_dma gpio riscv interrupts bootstrap)
 
 #
 # Timer, UART, GPIO and IRQ test - Flash Build
@@ -54,6 +54,6 @@ target_include_directories(timer_uart_gpio_irqs_flsh
 link_and_create_image(timer_uart_gpio_irqs_flsh
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(timer_uart_gpio_irqs_flsh timer picorv_dma gpio riscv interrupts)
+target_link_libraries(timer_uart_gpio_irqs_flsh timer picorv_dma gpio riscv interrupts bootstrap)
 
 add_flash_sw_target(timer_uart_gpio_irqs_flsh)

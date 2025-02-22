@@ -15,7 +15,7 @@ target_compile_options(fatfs_test_ram
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(fatfs_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(fatfs_test_ram fatfs riscv)
+target_link_libraries(fatfs_test_ram fatfs riscv bootstrap)
 
 #
 # FatFs Test Flash Build
@@ -34,6 +34,6 @@ target_compile_options(fatfs_test_flsh
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(fatfs_test_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(fatfs_test_flsh fatfs riscv)
+target_link_libraries(fatfs_test_flsh fatfs riscv bootstrap)
 
 add_flash_sw_target(fatfs_test_flsh)
