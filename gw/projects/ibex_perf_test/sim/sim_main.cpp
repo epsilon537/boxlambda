@@ -163,13 +163,27 @@ int main(int argc, char** argv, char** env) {
     //Take the system out of reset.
     top->rst_ni = 1;
 
-    // When not in interactive mode, simulate for 50000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 50000000)) {
+    // When not in interactive mode, simulate for 10000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 10000000)) {
       // Evaluate model
       tick();
     }
 
+    int res = 0;
+    std::string uartCheckString("Test Successful.");
+
+    if (uartRxStringPrev.find(uartCheckString) == std::string::npos) {
+      printf("SIM: Test failed\n");
+      printf("SIM: Expected: %s\n", uartCheckString.c_str());
+      printf("SIM: Received: %s\n", uartRxStringPrev.c_str());
+
+      res = 1;
+    }
+    else {
+      printf("SIM: Test passed.\n");
+    }
+
     cleanup();
 
-    return 0;
+    return res;
 }

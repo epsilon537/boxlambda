@@ -23,7 +23,7 @@ sources:
       #YM2149: ~
       #SDSPI: ~
       DRAM: ~
-      #VERA: ~
+      VERA: ~
       #PICORV_DMA: ~
       #SPIFLASH: ~
       I2C: ~
@@ -39,7 +39,7 @@ sources:
       #YM2149: ~
       #SDSPI: ~
       DRAM: ~
-      #VERA: ~
+      VERA: ~
       #PICORV_DMA: ~
       #SPIFLASH: ~
       I2C: ~
