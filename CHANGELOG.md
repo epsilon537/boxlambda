@@ -19,6 +19,7 @@ N/A
 
 ### Changed
 
+- Switched to gdb-multiarch.
 - Using system riscv64-unknown-elf toolchain instead of LowRISC GCC toolchain. LowRISC's prebuilt rv32imcb GCC still uses compressed instructions in GCC library routines when using architecture rv32im.
 - Updated to OSS CAD Suite 20250201.
 - Update to 2025/01/21 version of Ibex code base.
@@ -39,6 +40,8 @@ N/A
 - User no longer needs to install Python or PIP. This is provided by the OSS CAD Suite environment.
 - User no longer needs to install Python packages.
 - Removed zeroing out memory and some unnecessary SystemVerilog constructs incompatible with Yosys synthesis, preparing for OpenXC7 support.
+- No longer implicitly linkining in the bootstrap component. Has to be done explicitly by the software project.
+- No longer implicitly copying the build tree cmem_to_flash_vector to source tree's cmem.mem. Violates the principle of least astonishment.
 
 ## Label `boxlambda_base`: Changes Since Label `dfx` - 2025-01-07
 
