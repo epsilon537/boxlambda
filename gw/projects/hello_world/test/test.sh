@@ -26,7 +26,7 @@ sleep 3
 #Collect result of actions in gdb.log
 rm -f gdb.log
 echo "Launching gdb..."
-riscv32-unknown-elf-gdb --batch -x $SRC_ROOT_DIR/gw/projects/hello_world/test/test.gdb ../../../sw/projects/hello_world/hello_world_ram > gdb.log
+gdb-multiarch --batch -x $SRC_ROOT_DIR/gw/projects/hello_world/test/test.gdb ../../../sw/projects/hello_world/hello_world_ram > gdb.log
 
 #Kill the Vmodel process so it doesn't linger forever in the background.
 kill -9 $VMODEL_PROCESS_ID
