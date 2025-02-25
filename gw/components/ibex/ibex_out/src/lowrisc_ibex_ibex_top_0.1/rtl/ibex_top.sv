@@ -29,7 +29,7 @@ module ibex_top
     parameter regfile_e RegFile = RegFileFF,
     parameter bit BranchTargetALU = 1'b0,
     parameter bit WritebackStage = 1'b0,
-    parameter prefetch_type_e PrefetchType = PrefetchType_None,
+    parameter prefetch_type_e PrefetchType = PrefetchType_Single,
     parameter bit ICacheECC = 1'b0,
     parameter bit BranchPredictor = 1'b0,
     parameter bit DbgTriggerEn = 1'b0,
@@ -242,9 +242,10 @@ module ibex_top
     assign unused_core_busy = ^core_busy_q[$bits(ibex_mubi_t)-1:1];
   end
 
-  assign core_sleep_o = ~clock_en;
-
   //No clock gating
+  logic unused_clock_en;
+  assign unused_clock_en = clock_en;
+  assign core_sleep_o = 1'b0;  //~clock_en;
   assign clk = clk_i;
 
   ////////////////////////

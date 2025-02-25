@@ -19,7 +19,7 @@ module ibex_if_stage
     parameter int unsigned    DmHaltAddr        = 32'h1A110800,
     parameter int unsigned    DmExceptionAddr   = 32'h1A110808,
     parameter bit             DummyInstructions = 1'b0,
-    parameter prefetch_type_e PrefetchType      = PrefetchType_None,
+    parameter prefetch_type_e PrefetchType      = PrefetchType_Single,
     parameter bit             ICacheECC         = 1'b0,
     parameter int unsigned    BusSizeECC        = BUS_SIZE,
     parameter int unsigned    TagSizeECC        = IC_TAG_SIZE,
@@ -377,8 +377,8 @@ module ibex_if_stage
       return 0;
     endfunction
 `endif
-  end else if (PrefetchType == PrefetchType_None) begin : gen_no_prefetch_buffer
-    ibex_no_prefetch_buffer no_prefetch_buffer_i (
+  end else if (PrefetchType == PrefetchType_Single) begin : gen_single_prefetch_buffer
+    ibex_single_prefetch_buffer single_prefetch_buffer_i (
         .clk_i (clk_i),
         .rst_ni(rst_ni),
 

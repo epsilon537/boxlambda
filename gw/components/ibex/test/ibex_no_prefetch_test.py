@@ -56,7 +56,6 @@ async def ibex_no_prefetch_test(dut):
 
     #Take the system out of reset and assert req_i
     dut.rst_ni.value = 1
-    dut.req_i.value = 1
 
     await Timer(10, units="ns")  # wait 10 clocks
 
@@ -66,6 +65,7 @@ async def ibex_no_prefetch_test(dut):
 
     #First transaction:
     #Regular non-branch transaction
+    dut.req_i.value = 1
     dut.ready_i.value = 1
     dut.branch_i.value = 0
     await with_timeout(RisingEdge(dut.instr_req_o), 1, "ns")
@@ -83,7 +83,7 @@ async def ibex_no_prefetch_test(dut):
     assert dut.addr_o.value == 4 #We started at 0 and increment the instruction address by 4.
     assert dut.rdata_o.value == dut.instr_rdata_i.value
 
-    #Second transaction back to back: valid is still asserted.
+    #Second transaction back to back. req and reqdy_i are still asserted.
     await RisingEdge(dut.clk_i)
     dut.instr_rvalid_i.value = 0 #Deassert the data valid of the previous transaction
     await with_timeout(Combine(FallingEdge(dut.valid_o), RisingEdge(dut.instr_req_o)), 1, "ns")
@@ -101,10 +101,10 @@ async def ibex_no_prefetch_test(dut):
     dut.instr_rvalid_i.value = 1
     dut.instr_rdata_i.value = random.randint(0, 0xffffffff)
     await with_timeout(RisingEdge(dut.valid_o), 1, "ns")
-    assert dut.addr_o.value == 8 #Previous transaction address 4.
+    assert dut.addr_o.value == 8 #Previous transaction address + 4.
     assert dut.rdata_o.value == dut.instr_rdata_i.value
 
-    #Third transaction back to back: branch. valid is still asserted as well.
+    #Third transaction back to back: branch. req and ready_i are still asserted as well.
     await RisingEdge(dut.clk_i)
     dut.instr_rvalid_i.value = 0 #Deassert the data valid of the previous transaction
     dut.branch_i.value = 1
@@ -129,7 +129,7 @@ async def ibex_no_prefetch_test(dut):
     assert dut.rdata_o.value == dut.instr_rdata_i.value
 
     #Fourth transaction back to back: regular non-branch instruction
-    #ready_i is still asserted.
+    #req and ready_i are still asserted.
     await RisingEdge(dut.clk_i)
     dut.instr_rvalid_i.value = 0
     await with_timeout(Combine(FallingEdge(dut.valid_o), RisingEdge(dut.instr_req_o)), 1, "ns")
@@ -152,19 +152,13 @@ async def ibex_no_prefetch_test(dut):
 
     #Fifth transaction: after a non-ready delay
     #Regular non-branch transaction
-    dut.ready_i.value = 0
     await RisingEdge(dut.clk_i)
-
+    dut.ready_i.value = 0
     dut.instr_rvalid_i.value = 0
     await with_timeout(FallingEdge(dut.valid_o), 1, "ns")
 
-    await RisingEdge(dut.clk_i)
-    await RisingEdge(dut.clk_i)
-    await RisingEdge(dut.clk_i)
-
-    #Resuming instruction fetching
-    dut.ready_i.value = 1
-    await with_timeout(RisingEdge(dut.instr_req_o), 1, "ns")
+    #One more instruction should still be fetched, but not propagated up until ready_i is reasserted.
+    assert dut.instr_req_o.value == 1
 
     #grant right away
     dut.instr_gnt_i.value = 1
@@ -175,6 +169,13 @@ async def ibex_no_prefetch_test(dut):
 
     dut.instr_rvalid_i.value = 1
     dut.instr_rdata_i.value = random.randint(0, 0xffffffff)
+
+    await RisingEdge(dut.clk_i)
+    await RisingEdge(dut.clk_i)
+    await RisingEdge(dut.clk_i)
+
+    #Resuming releasing fetched instructions upwards.
+    dut.ready_i.value = 1
     await with_timeout(RisingEdge(dut.valid_o), 1, "ns")
     assert dut.addr_o.value == branchAddr + 8
     assert dut.rdata_o.value == dut.instr_rdata_i.value
@@ -312,6 +313,63 @@ async def ibex_no_prefetch_test(dut):
     dut.instr_rdata_i.value = random.randint(0, 0xffffffff)
     await with_timeout(RisingEdge(dut.valid_o), 1, "ns")
     assert dut.addr_o.value == branchAddr
+    assert dut.rdata_o.value == dut.instr_rdata_i.value
+
+    #Ninth transaction: after a non-ready delay
+    #an IRQ branch transaction
+    await RisingEdge(dut.clk_i)
+    dut.ready_i.value = 0
+    dut.instr_rvalid_i.value = 0
+    await with_timeout(FallingEdge(dut.valid_o), 1, "ns")
+
+    #One more instruction should still be fetched, but not propagated up until ready_i is reasserted.
+    assert dut.instr_req_o.value == 1
+
+    #grant right away
+    dut.instr_gnt_i.value = 1
+
+    await RisingEdge(dut.clk_i)
+    dut.instr_gnt_i.value = 0
+    instr_req_may_deassert = True
+
+    dut.instr_rvalid_i.value = 1
+    dut.instr_rdata_i.value = random.randint(0, 0xffffffff)
+
+    await RisingEdge(dut.clk_i)
+    await RisingEdge(dut.clk_i)
+    await RisingEdge(dut.clk_i)
+
+    #Resuming releasing fetched instructions upwards and assert branch_i.
+    dut.branch_i.value = 1
+    newBranchAddr = random.randint(0,0x3fffffff)*4
+    dut.addr_i.value = newBranchAddr
+    dut.ready_i.value = 1
+    await with_timeout(RisingEdge(dut.valid_o), 1, "ns")
+    #This is the instruction that's getting interrupted
+    assert dut.addr_o.value == branchAddr + 4
+    assert dut.rdata_o.value == dut.instr_rdata_i.value
+
+    await RisingEdge(dut.clk_i)
+    dut.branch_i.value = 0
+    dut.instr_rvalid_i.value = 0
+    await with_timeout(FallingEdge(dut.valid_o), 1, "ns")
+
+    #Request the instruction belonging to the branch address
+    assert dut.instr_req_o.value == 1
+    #assert dut.instr_addr_o.value == newBranchAddr
+
+    #Grant the request
+    await RisingEdge(dut.clk_i)
+    dut.instr_gnt_i.value = 1
+    await RisingEdge(dut.clk_i)
+    dut.instr_gnt_i.value = 0
+    instr_req_may_deassert = True
+
+    dut.instr_rvalid_i.value = 1
+    dut.instr_rdata_i.value = random.randint(0, 0xffffffff)
+
+    await with_timeout(RisingEdge(dut.valid_o), 1, "ns")
+    assert dut.addr_o.value == newBranchAddr
     assert dut.rdata_o.value == dut.instr_rdata_i.value
 
     instr_req_o_task.kill()

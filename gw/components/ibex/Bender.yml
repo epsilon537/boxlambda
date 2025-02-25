@@ -129,7 +129,7 @@ sources:
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_multdiv_fast.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_multdiv_slow.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_prefetch_buffer.sv
-      - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_no_prefetch_buffer.sv
+      - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_single_prefetch_buffer.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_pmp.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_wb_stage.sv
       - ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_dummy_instr.sv

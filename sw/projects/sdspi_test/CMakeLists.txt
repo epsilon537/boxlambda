@@ -7,6 +7,9 @@ add_executable(sdspi_test_ram
  sdtest.c
 )
 
+target_compile_options(sdspi_test_ram
+ PRIVATE -g)
+
 target_compile_definitions(sdspi_test_ram
  PRIVATE
   -DSDSPI_CPU_IS_LITTLE_ENDIAN
@@ -30,6 +33,9 @@ add_executable(sdspi_test_flsh
  sdspi_test_main.c
  sdtest.c
 )
+
+target_compile_options(sdspi_test_flsh
+ PRIVATE -g)
 
 target_compile_definitions(sdspi_test_flsh
  PRIVATE

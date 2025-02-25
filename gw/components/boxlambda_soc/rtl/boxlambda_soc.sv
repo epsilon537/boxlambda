@@ -645,6 +645,7 @@ module boxlambda_soc #(
       .RV32M(ibex_pkg::RV32MSingleCycle),
       .RV32B(ibex_pkg::RV32BBalanced),
       .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA),
+      .PrefetchType(ibex_pkg::PrefetchType_Single),
       .BranchTargetALU(1'b0),
       .WritebackStage(1'b0),
       .DbgTriggerEn(1'b1),

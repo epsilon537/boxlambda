@@ -13,7 +13,7 @@
  * Prefetch Buffer that caches instructions. This cuts overly long critical
  * paths to the instruction cache.
  */
-module ibex_no_prefetch_buffer (
+module ibex_single_prefetch_buffer (
     input logic clk_i,
     input logic rst_ni,
 
@@ -45,12 +45,20 @@ module ibex_no_prefetch_buffer (
   logic transaction_ongoing_reg;
   logic instr_req_reg;
   logic [31:0] instr_adr_reg;
+  logic rvalid_pending;
+  logic err_pending;
+  logic [31:0] rdata_reg;
+  logic [31:0] addr_o_reg;
 
   initial begin
     mid_transaction_branch_req = 1'b0;
     instr_req_reg = 1'b0;
     instr_adr_reg = 0;
     transaction_ongoing_reg = 1'b0;
+    rvalid_pending = 1'b0;
+    err_pending = 1'b0;
+    rdata_reg = 0;
+    addr_o_reg = 0;
   end
 
   always_comb begin
@@ -61,7 +69,7 @@ module ibex_no_prefetch_buffer (
         instr_addr_o = instr_adr_reg;
       end else begin
         /* Put new core transactions on the bus right away...*/
-        instr_req_o  = req_i & (ready_i | branch_i);
+        instr_req_o  = req_i;
         instr_addr_o = branch_i ? addr_i : addr_o + 4;
       end
     end else begin
@@ -77,6 +85,10 @@ module ibex_no_prefetch_buffer (
       instr_req_reg <= 1'b0;
       instr_adr_reg <= 0;
       transaction_ongoing_reg <= 1'b0;
+      rvalid_pending <= 1'b0;
+      err_pending <= 1'b0;
+      rdata_reg <= 0;
+      addr_o_reg <= 0;
     end else begin
       if (!transaction_ongoing_reg) begin
         if (mid_transaction_branch_req) begin
@@ -98,17 +110,25 @@ module ibex_no_prefetch_buffer (
           instr_req_reg <= 1'b0;  //Clear the register as soon as the slave stops stalling.
         end
         if (instr_rvalid_i || instr_err_i) begin
+          addr_o_reg <= instr_adr_reg;
+          rdata_reg <= instr_rdata_i;
+          transaction_ongoing_reg <= ~ready_i;
+          rvalid_pending <= instr_rvalid_i & ~ready_i;
+          err_pending <= instr_err_i & ~ready_i;
+        end
+        if ((rvalid_pending || err_pending) && ready_i) begin
+          rvalid_pending <= 1'b0;
+          err_pending <= 1'b0;
           transaction_ongoing_reg <= 1'b0;
         end
       end
     end
   end
 
-  assign addr_o = instr_adr_reg;
-  assign rdata_o = instr_rdata_i;
-  //Mask valid and error if we have a mid-transaction branch request.
-  assign valid_o = instr_rvalid_i & ~mid_transaction_branch_req;
-  assign err_o = instr_err_i & ~mid_transaction_branch_req;
+  assign addr_o = rvalid_pending ? addr_o_reg : instr_adr_reg;
+  assign rdata_o = rvalid_pending ? rdata_reg : instr_rdata_i;
+  assign valid_o = (instr_rvalid_i | rvalid_pending) & ready_i & ~mid_transaction_branch_req;
+  assign err_o = (instr_err_i | err_pending) & ready_i & ~mid_transaction_branch_req;
   assign err_plus2_o = 1'b0;
 
   // Prefetch Buffer Status

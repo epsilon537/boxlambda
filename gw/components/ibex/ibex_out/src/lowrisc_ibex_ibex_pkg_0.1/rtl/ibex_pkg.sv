@@ -34,9 +34,9 @@ package ibex_pkg;
 
   // Type of instruction present in writeback stage
   typedef enum integer {
-    PrefetchType_None = 0,
+    PrefetchType_Single   = 0,
     PrefetchType_Prefetch = 1,
-    PrefetchType_ICache = 2
+    PrefetchType_ICache   = 2
   } prefetch_type_e;
 
   typedef enum integer {

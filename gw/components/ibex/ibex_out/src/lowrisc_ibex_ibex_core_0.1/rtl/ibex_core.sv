@@ -29,7 +29,7 @@ module ibex_core
     parameter rv32b_e                        RV32B                 = RV32BNone,
     parameter bit                            BranchTargetALU       = 1'b0,
     parameter bit                            WritebackStage        = 1'b0,
-    parameter prefetch_type_e                PrefetchType          = PrefetchType_None,
+    parameter prefetch_type_e                PrefetchType          = PrefetchType_Single,
     parameter bit                            ICacheECC             = 1'b0,
     parameter int unsigned                   BusSizeECC            = BUS_SIZE,
     parameter int unsigned                   TagSizeECC            = IC_TAG_SIZE,

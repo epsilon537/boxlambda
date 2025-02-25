@@ -3,8 +3,8 @@ filesets:
   files_rtl:
     depend:
     - lowrisc:prim:prim_pkg
-    - lowrisc:prim_generic:clock_gating:0
     - lowrisc:prim_xilinx:clock_gating:0
+    - lowrisc:prim_generic:clock_gating:0
     file_type: systemVerilogSource
     files:
     - prim_clock_gating.sv
