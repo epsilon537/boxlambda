@@ -379,9 +379,9 @@ if __name__ == "__main__":
     #Test Runner setup. Pass in the verilog sources and top-level.
     #The runner discovers the testcases.
     proj_path = Path(__file__).resolve().parent
-    verilog_sources = [proj_path / "../ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_no_prefetch_buffer.sv"]
+    verilog_sources = [proj_path / "../ibex_out/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_single_prefetch_buffer.sv"]
     #Defined in scripts/cocotb_boxlambda.py
     test_runner(verilog_sources=verilog_sources,
                 test_module_filename=__file__,
-                top="ibex_no_prefetch_buffer")
+                top="ibex_single_prefetch_buffer")
 

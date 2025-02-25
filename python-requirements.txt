@@ -1,8 +1,12 @@
 alabaster==1.0.0
+amaranth @ git+https://github.com/amaranth-lang/amaranth@a570317c365acacd67c52521e0eeab2605714235
+amaranth-boards @ git+https://github.com/amaranth-lang/amaranth-boards@c132fb250e28db2570635e65fe1fa2f5d21a44ac
 annotated-types==0.7.0
+Apycula==0.16.dev33+g15614ef
 attrs==25.1.0
 babel==2.17.0
 bitstring==3.1.9
+blackiceprog==2.0.0
 cachetools==5.5.1
 certifi==2025.1.31
 cffi==1.17.1
@@ -10,22 +14,32 @@ chardet==5.2.0
 charset-normalizer==3.4.1
 cli_exit_tools==1.2.7
 click==8.1.8
+cocotb==2.0.0.dev0+76de221a
 colorama==0.4.6
 contourpy==1.3.1
+crc==7.1.0
 cssselect==1.2.0
 cssutils==2.11.1
 cycler==0.12.1
 docutils==0.21.2
 edalize @ git+https://github.com/lowRISC/edalize.git@5ae2c3e1ca306e27d81ce5fcc769f62cb7ac42d0
+find_libpython==0.4.0
 flake8==7.1.1
+Flask==2.1.2
 fonttools==4.55.8
 fusesoc @ git+https://github.com/lowRISC/fusesoc.git@14dfc825ced58fe1fb343662fa80fc4fbd0fdc50
 hjson==3.1.0
+icefunprog==2.0.3
 idna==3.10
 imagesize==1.4.1
 importlib_metadata==8.6.1
 inflection==0.5.1
+iniconfig==2.0.0
+intelhex==2.3.0
+itsdangerous==2.2.0
 Jinja2==3.1.5
+jschon==0.11.1
+jsonmerge==1.9.2
 jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
 junit-xml==1.9
@@ -37,6 +51,7 @@ Markdown==3.7
 MarkupSafe==3.0.2
 matplotlib==3.10.0
 mccabe==0.7.0
+migen @ git+https://github.com/m-labs/migen@28e913e7114dae485747ccd8f9fd436ada2195f0
 mistletoe==1.4.0
 more-itertools==10.6.0
 numpy==2.2.2
@@ -46,34 +61,41 @@ Pallets-Sphinx-Themes==2.3.0
 pandas==2.2.3
 pathlib3x==2.0.3
 pillow==11.1.0
+pluggy==1.5.0
 portalocker==3.1.1
 premailer==3.8.0
 PyBoolector==3.2.4.20240823.1
+pycairo==1.25.1
 pycodestyle==2.12.1
 pycparser==2.22
 pydantic==2.10.6
 pydantic_core==2.27.2
 pyflakes==3.2.0
 Pygments==2.19.1
+PyGObject==3.46.0
 pyparsing==3.2.1
 pyserial==3.5
+pytest==8.3.4
 python-dateutil==2.9.0.post0
 python-jsonschema-objects==0.5.7
 pytz==2025.1
 pyucis==0.1.4.11087239919
+pyusb==1.2.1
+pyvcd==0.4.1
 pyvsc==0.9.3.10985030023
 PyYAML==6.0.2
 referencing==0.36.2
 reportlab==4.2.5
 requests==2.32.3
+rfc3986==2.0.0
 rpds-py==0.22.3
 rst2pdf==0.103.1
 scipy==1.15.1
+scy @ file:///work/_builds/linux-x64/formal/scy
 simplesat==0.9.1
 six==1.17.0
 smartypants==2.0.1
 snowballstemmer==2.2.0
-sounddevice==0.5.1
 Sphinx==8.1.3
 sphinx-issues==5.0.0
 sphinx-notfound-page==1.1.0
@@ -88,10 +110,16 @@ sphinxcontrib-qthelp==2.0.0
 sphinxcontrib-serializinghtml==2.0.0
 svg.py==1.5.0
 tabulate==0.9.0
+tinyfpgab==1.1.0
+tinyprog==1.0.23
 toposort==1.10
+tqdm==4.67.0
 typeguard==2.13.3
 typing-utils==0.1.0
 typing_extensions==4.12.2
 tzdata==2025.1
 urllib3==2.3.0
+Werkzeug==3.1.3
+xdot==1.1
+yosys-mau==0.0.2
 zipp==3.21.0

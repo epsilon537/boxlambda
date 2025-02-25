@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Activate_env.sh script to set up tools environment, simplifying setup.
 - Enabled Ibex RISCV Branch target ALU (removes stall from taken branches).
 - Vivado build aborts with error if timing constraints are not met after implementation step.
-- Added a no-prefetch prefetcher to Ibex. This helps ensure instruction cycle counts are stable and predictable.
+- Added a single instruction prefetcher to Ibex. This helps ensure instruction cycle counts are stable and predictable.
 
 ### Fixed
 
@@ -28,7 +28,7 @@ N/A
 - Switched to Single-Cycle multiplier in Ibex CPU.
 - Switched audio DAC test to BoxLambda clock generator.
 - Switched to rv32im_zicsr, no instruction compression. Instruction compression may cause unaligned 32-bit instruction fetches, making instruction cycle count undeterministic. Deterministic instruction cycle counts are a BoxLambda requirement.
-- Replaced Ibex ICache flag with PrefetchType enum to support PrefetchType_None option.
+- Replaced Ibex ICache flag with PrefetchType enum to support PrefetchType_Single option.
 - Gave Ibex instruction and data port a shortcut do cmem resp. dmem so they don't have to go through the slow crossbar for local memory access.
 - Replaced the wbxbar-based shared bus with a faster wb_mux-based shared bus.
 - Added transaction separating stallers on the Ibex-to-Crossbar ports to achieve fixed latency for instruction and data fetches going over the crossbar. Without this, transactions on an already open channel complete faster than transactions to a new channel.
@@ -42,6 +42,7 @@ N/A
 - Removed zeroing out memory and some unnecessary SystemVerilog constructs incompatible with Yosys synthesis, preparing for OpenXC7 support.
 - No longer implicitly linkining in the bootstrap component. Has to be done explicitly by the software project.
 - No longer implicitly copying the build tree cmem_to_flash_vector to source tree's cmem.mem. Violates the principle of least astonishment.
+- Removed Sounddevice/PortAudio.
 
 ## Label `boxlambda_base`: Changes Since Label `dfx` - 2025-01-07
 
