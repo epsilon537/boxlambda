@@ -28,14 +28,14 @@ async def init(dut):
     dut.sys_clkx2.value = 0
 
     #We have two clocks: sys_clk, and sys_clkx2. sys_clkx2 ticks at twice the rate of sys_clk.
-    cocotb.start_soon(Clock(dut.sys_clkx2, 1, units="ns").start())
+    cocotb.start_soon(Clock(dut.sys_clkx2, 1, unit="ns").start())
     cocotb.start_soon(sys_clk_div(dut))
 
     #Assert reset
     dut.rst.value = 1
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
     dut.rst.value = 0
-    await Timer(1, units="ns")  # wait 1 clock
+    await Timer(1, unit="ns")  # wait 1 clock
 
     #Initial values for input signals
     dut.wbs_adr.value = 0
@@ -50,7 +50,7 @@ async def init(dut):
     dut.wbm_stall_i.value = 0
     dut.wbm_err_i.value = 0
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
 #Function loading given binary file into a list of 32-bit words.
 def loadBinaryIntoWords(binfile):
@@ -68,7 +68,7 @@ def loadBinaryIntoWords(binfile):
 
 #Asynchronous timeout task. The test fails if this task isn't killed before the timeout is reached.
 async def timeout_check(dut):
-    await Timer(20000, units="ns")
+    await Timer(20000, unit="ns")
     #We should never reach this point
     assert False, "Transaction timeout!"
 
@@ -164,7 +164,7 @@ async def wb_slave_emulator(dut, delay_ack):
             await RisingEdge(dut.sys_clk)
 
             dut.wbm_ack_i.value = 0
-            await Timer(1, units="ns")
+            await Timer(1, unit="ns")
 
 #Test PicoRV reset
 @cocotb.test()

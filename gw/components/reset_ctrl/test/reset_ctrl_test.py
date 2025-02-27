@@ -11,28 +11,28 @@ from cocotb_boxlambda import *
 #Async task waiting for USB reset
 async def wait_for_usb_reset(dut):
     await RisingEdge(dut.usb_reset_o)
-    startTime = cocotb.utils.get_sim_time(units='ns')
+    startTime = cocotb.utils.get_sim_time(unit='ns')
     dut._log.info("usb_reset asserted")
     await FallingEdge(dut.usb_reset_o)
-    endTime = cocotb.utils.get_sim_time(units='ns')
+    endTime = cocotb.utils.get_sim_time(unit='ns')
     dut._log.info("usb_reset deasserted")
 
 #Async task waiting for NDM reset
 async def wait_for_ndm_reset(dut):
     await RisingEdge(dut.ndm_reset_o)
-    startTime = cocotb.utils.get_sim_time(units='ns')
+    startTime = cocotb.utils.get_sim_time(unit='ns')
     dut._log.info("ndm_reset asserted")
     await FallingEdge(dut.ndm_reset_o)
-    endTime = cocotb.utils.get_sim_time(units='ns')
+    endTime = cocotb.utils.get_sim_time(unit='ns')
     dut._log.info("ndm_reset deasserted")
 
 #Async task waiting for DM reset
 async def wait_for_dm_reset(dut):
     await RisingEdge(dut.dm_reset_o)
-    startTime = cocotb.utils.get_sim_time(units='ns')
+    startTime = cocotb.utils.get_sim_time(unit='ns')
     dut._log.info("dm_reset asserted")
     await FallingEdge(dut.dm_reset_o)
-    endTime = cocotb.utils.get_sim_time(units='ns')
+    endTime = cocotb.utils.get_sim_time(unit='ns')
     dut._log.info("dm_reset deasserted")
 
 #Async task cause test failure if DM reset is asserted.
@@ -156,15 +156,15 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
     dut.ext_reset_i.value = 0
     dut.ndm_reset_i.value = 0
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
-    cocotb.start_soon(Clock(dut.sys_clk, 1, units="ns").start())
-    cocotb.start_soon(Clock(dut.usb_clk, 8, units="ns").start())
-    startTime = cocotb.utils.get_sim_time(units='ns')
+    cocotb.start_soon(Clock(dut.sys_clk, 1, unit="ns").start())
+    cocotb.start_soon(Clock(dut.usb_clk, 8, unit="ns").start())
+    startTime = cocotb.utils.get_sim_time(unit='ns')
 
     dut._log.info("POR test.")
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
     await FallingEdge(dut.sys_clk)  # wait for falling edge/"negedge"
 
     #We shouldn't see any reset yet.
@@ -176,10 +176,10 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
     dm_reset_task = cocotb.start_soon(wait_for_dm_reset(dut))
     usb_reset_task = cocotb.start_soon(wait_for_usb_reset(dut))
     dut.sys_pll_locked_i.value = 1; #Indicate system clock domain lock achieved.
-    await Timer(3, units="ns")  # wait 3 clocks
+    await Timer(3, unit="ns")  # wait 3 clocks
     dut.usb_pll_locked_i.value = 1; #Indicate usb clock domain lock achieved.
 
-    await Timer(3, units="ns")  # wait 3 clocks
+    await Timer(3, unit="ns")  # wait 3 clocks
 
     #We still shouldn't see any resets.
     assert dut.ndm_reset_o.value == 0
@@ -187,7 +187,7 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
     assert dut.usb_reset_o.value == 0
     assert dut.por_completed_o.value == 0
 
-    await Timer(800, units="ns")  # wait 100 clocks
+    await Timer(800, unit="ns")  # wait 100 clocks
 
     #All tasks should have completed by now
     assert ndm_reset_task.done()
@@ -201,7 +201,7 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
 
     check_por_completed_task = cocotb.start_soon(make_sure_por_stays_completed(dut))
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
     #Now let's trigger an NDM reset
     dut._log.info("NDM reset test.")
@@ -214,9 +214,9 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
     usb_reset_task = cocotb.start_soon(make_sure_no_usb_reset(dut))
 
     dut.ndm_reset_i.value = 1
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
     dut.ndm_reset_i.value = 0
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
     #ndm reset task should have completed by now
     assert ndm_reset_task.done()
@@ -228,7 +228,7 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
     res = await with_timeout(wb_read(dut, 1), 30, 'ns')
     assert res == 8 #8 indicates NDM reset
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
     #Now let's trigger an external reset
     dut._log.info("Ext. reset test.")
@@ -246,19 +246,19 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
 
     #Toggle a bit to simulate bouncing. Debouncer should absorb this.
     dut.ext_reset_i.value = 1
-    await Timer(50, units="ns")
+    await Timer(50, unit="ns")
     dut.ext_reset_i.value = 0
-    await Timer(200, units="ns")
+    await Timer(200, unit="ns")
 
     dut.ext_reset_i.value = 1
-    await Timer(100, units="ns")
+    await Timer(100, unit="ns")
     dut.ext_reset_i.value = 0
-    await Timer(100, units="ns")
+    await Timer(100, unit="ns")
 
     dut.ext_reset_i.value = 1
-    await Timer(5000, units="ns")
+    await Timer(5000, unit="ns")
     dut.ext_reset_i.value = 0
-    await Timer(5000, units="ns")
+    await Timer(5000, unit="ns")
 
     #All tasks should have completed by now
     assert ndm_reset_task.done()
@@ -283,15 +283,15 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
     dm_reset_task = cocotb.start_soon(wait_for_dm_reset(dut))
     usb_reset_task = cocotb.start_soon(wait_for_usb_reset(dut))
 
-    await Timer(50, units="ns")
+    await Timer(50, unit="ns")
 
     await with_timeout(wb_write(dut, 0, 3), 30, 'ns')
 
-    await Timer(50, units="ns")
+    await Timer(50, unit="ns")
 
     await with_timeout(wb_write(dut, 0, 0), 30, 'ns')
 
-    await Timer(50, units="ns")
+    await Timer(50, unit="ns")
 
     #NDM/DM tasks should have completed by now
     assert ndm_reset_task.done()
@@ -317,15 +317,15 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
     dm_reset_task = cocotb.start_soon(wait_for_dm_reset(dut))
     usb_reset_task = cocotb.start_soon(wait_for_usb_reset(dut))
 
-    await Timer(50, units="ns")
+    await Timer(50, unit="ns")
 
     await with_timeout(wb_write(dut, 0, 4), 30, 'ns')
 
-    await Timer(50, units="ns")
+    await Timer(50, unit="ns")
 
     await with_timeout(wb_write(dut, 0, 0), 30, 'ns')
 
-    await Timer(50, units="ns")
+    await Timer(50, unit="ns")
 
     #USB task should have completed by now
     assert usb_reset_task.done()
@@ -341,7 +341,7 @@ async def por_ndm_rst_ext_rst_WB_NDMDM_rst_WB_USB_rst_test(dut):
     res = await with_timeout(wb_read(dut, 1), 30, 'ns')
     assert res == 0
 
-    endTime = cocotb.utils.get_sim_time(units='ns')
+    endTime = cocotb.utils.get_sim_time(unit='ns')
 
     dut._log.info("startTime: %d, endTime %d", startTime, endTime)
 

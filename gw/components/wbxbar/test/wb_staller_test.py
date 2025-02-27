@@ -25,14 +25,14 @@ async def wb_staller_test(dut):
     dut.wbs_err_i.value = 0
     dut.wbs_stall_i.value = 0
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
-    cocotb.start_soon(Clock(dut.clk, 1, units="ns").start())
+    cocotb.start_soon(Clock(dut.clk, 1, unit="ns").start())
 
     #Take the system out of reset
     dut.rst.value = 0
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
     await RisingEdge(dut.clk)
 

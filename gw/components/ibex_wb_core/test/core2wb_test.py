@@ -29,19 +29,19 @@ async def wb_stb_o(dut):
 
     while True:
         await RisingEdge(dut.wb_stb_o)
-        t = cocotb.utils.get_sim_time(units='ps')
+        t = cocotb.utils.get_sim_time(unit='ps')
         dut._log.info("stb rising edge at %d ps", t)
 
         #wb_stb_o must remain asserted for stb_width cycles
         for _ in range(stb_width):
             await RisingEdge(dut.clk)
-            t = cocotb.utils.get_sim_time(units='ps')
+            t = cocotb.utils.get_sim_time(unit='ps')
             dut._log.info("stb in loop: %d at %d ps", dut.wb_stb_o.value, t)
             assert dut.wb_stb_o.value == 1
 
         await RisingEdge(dut.clk)
 
-        t = cocotb.utils.get_sim_time(units='ps')
+        t = cocotb.utils.get_sim_time(unit='ps')
         dut._log.info("stb after loop: %d at %d ps", dut.wb_stb_o.value, t)
         assert dut.wb_stb_o.value == 0
 
@@ -65,14 +65,14 @@ async def core2wb_test(dut):
     dut.wb_err_i.value = 0
     dut.wb_dat_s_i.value = 0
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
-    cocotb.start_soon(Clock(dut.clk, 1, units="ns").start())
+    cocotb.start_soon(Clock(dut.clk, 1, unit="ns").start())
 
     #Take the system out of reset
     dut.rst.value = 0
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
     core_gnt_o_task = cocotb.start_soon(core_gnt_o(dut))
     rvalid_o_task = cocotb.start_soon(core_rvalid_o(dut))

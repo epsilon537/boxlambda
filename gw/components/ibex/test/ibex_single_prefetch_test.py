@@ -50,14 +50,14 @@ async def ibex_no_prefetch_test(dut):
     dut.instr_err_i.value = 0
     dut.instr_rvalid_i.value = 0
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
-    cocotb.start_soon(Clock(dut.clk_i, 1, units="ns").start())
+    cocotb.start_soon(Clock(dut.clk_i, 1, unit="ns").start())
 
     #Take the system out of reset and assert req_i
     dut.rst_ni.value = 1
 
-    await Timer(10, units="ns")  # wait 10 clocks
+    await Timer(10, unit="ns")  # wait 10 clocks
 
     #Two small signal monitoring tasks
     instr_req_o_task = cocotb.start_soon(instr_req_o(dut))
