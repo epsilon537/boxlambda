@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Enabled Ibex RISCV Branch target ALU (removes stall from taken branches).
 - Vivado build aborts with error if timing constraints are not met after implementation step.
 - Added a single instruction prefetcher to Ibex. This helps ensure instruction cycle counts are stable and predictable.
+- Enabled Vivado post-place and post-route physical optimization.
 
 ### Fixed
 
@@ -21,7 +22,7 @@ N/A
 
 - Switched to gdb-multiarch.
 - Using system riscv64-unknown-elf toolchain instead of LowRISC GCC toolchain. LowRISC's prebuilt rv32imcb GCC still uses compressed instructions in GCC library routines when using architecture rv32im.
-- Updated to OSS CAD Suite 20250201.
+- Updated to OSS CAD Suite 20250226.
 - Update to 2025/01/21 version of Ibex code base.
 - Update to 2025/01/31 version of Litedram code base.
 - Ibex code is imported in Boxlambda repo by gw/components/ibex/gen_core.sh script.
@@ -42,7 +43,7 @@ N/A
 - Removed zeroing out memory and some unnecessary SystemVerilog constructs incompatible with Yosys synthesis, preparing for OpenXC7 support.
 - No longer implicitly linkining in the bootstrap component. Has to be done explicitly by the software project.
 - No longer implicitly copying the build tree cmem_to_flash_vector to source tree's cmem.mem. Violates the principle of least astonishment.
-- Removed Sounddevice/PortAudio.
+- Removed Sounddevice/PortAudio dependency.
 
 ## Label `boxlambda_base`: Changes Since Label `dfx` - 2025-01-07
 

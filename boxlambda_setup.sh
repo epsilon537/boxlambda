@@ -40,9 +40,9 @@ if [ -d oss-cad-suite ]; then
   echo "oss-cad-suite found."
 else
   echo "Downloading and unpacking oss-cad-suite..."
-  wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-02-01/oss-cad-suite-linux-x64-20250201.tgz
+  wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-02-26/oss-cad-suite-linux-x64-20250226.tgz
 
-  if tar xf oss-cad-suite-linux-x64-20250201.tgz ; then
+  if tar xf oss-cad-suite-linux-x64-20250226.tgz ; then
     echo "OK"
   else
     echo "Unpack of oss-cad-suite failed. Aborting..."

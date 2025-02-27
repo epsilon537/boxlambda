@@ -9,7 +9,9 @@ open_run synth_1
 #Route the project
 opt_design
 place_design
+phys_opt_design
 route_design
+phys_opt_design
 
 write_checkpoint -force project_impl.dcp
 

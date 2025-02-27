@@ -6,7 +6,7 @@ package:
   name: ibex
 
 sources:
-  - target: any(verilator, vivado, openxc7)
+  - target: any(verilator, vivado)
     include_dirs:
       - ibex_out/src/lowrisc_dv_crypto_prince_ref_0.1
       - ibex_out/src/lowrisc_dv_dv_fcov_macros_0
