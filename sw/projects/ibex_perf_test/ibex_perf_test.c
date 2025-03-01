@@ -17,12 +17,6 @@
 
 #define NUM_ITERATIONS 100
 
-#define EXPECTED_DO_NOTHING_CYCLES 8
-#define EXPECTED_LW_SW_REGISTER_LOOP_CYCLES 10
-#define EXPECTED_LW_SW_COPY_LOOP_CYCLES 12
-#define EXPECTED_LW_SW_COPY_UNROLLED_CYCLES 8
-
-
 static struct uart uart0;
 static struct gpio gpio;
 
@@ -579,20 +573,20 @@ int main(void) {
   gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
 
   uint32_t do_nothing_cycles = do_nothing();
-  printf("Expected: %d cycles.\n", EXPECTED_DO_NOTHING_CYCLES);
+  printf("Expected: 8 cycles.\n");
   uint32_t lw_register_loop_cycles = lw_register_loop((void *)(I2C_MASTER_BASE+I2C_ISR)); //Just picking a register without too many side effects.
-  printf("Expected: %d cycles.\n", EXPECTED_LW_SW_REGISTER_LOOP_CYCLES);
+  printf("Expected: 12 cycles.\n");
   uint32_t lw_sw_copy_loop_cycles = lw_sw_copy_loop(srcBuf, dstBuf);
-  printf("Expected: %d cycles.\n", EXPECTED_LW_SW_COPY_LOOP_CYCLES);
+  printf("Expected: 14 cycles.\n");
   uint32_t lw_sw_copy_unrolled_cycles = lw_sw_copy_unrolled(srcBuf, dstBuf);
-  printf("Expected: %d cycles.\n", EXPECTED_LW_SW_COPY_UNROLLED_CYCLES);
+  printf("Expected: 8 cycles.\n");
   uint32_t lw_sw_copy_loop_vram_cycles = lw_sw_copy_loop((void*)VERA_VRAM_BASE, (void*)(VERA_VRAM_BASE+BUF_NUM_WORDS*4));
   printf("Expected: TBD.\n");
 
-  if ((do_nothing_cycles == EXPECTED_DO_NOTHING_CYCLES) &&
-      (lw_register_loop_cycles == EXPECTED_LW_SW_REGISTER_LOOP_CYCLES) &&
-      (lw_sw_copy_loop_cycles == EXPECTED_LW_SW_COPY_LOOP_CYCLES) &&
-      (lw_sw_copy_unrolled_cycles == EXPECTED_LW_SW_COPY_UNROLLED_CYCLES)) {
+  if ((do_nothing_cycles == 8) &&
+      (lw_register_loop_cycles == 12) &&
+      (lw_sw_copy_loop_cycles == 14) &&
+      (lw_sw_copy_unrolled_cycles == 8)) {
     printf("Test Successful.\n");
   }
   else {

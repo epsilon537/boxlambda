@@ -9,7 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Activate_env.sh script to set up tools environment, simplifying setup.
-- Enabled Ibex RISCV Branch target ALU (removes stall from taken branches).
 - Vivado build aborts with error if timing constraints are not met after implementation step.
 - Added a single instruction prefetcher to Ibex. This helps ensure instruction cycle counts are stable and predictable.
 - Enabled Vivado post-place and post-route physical optimization.
