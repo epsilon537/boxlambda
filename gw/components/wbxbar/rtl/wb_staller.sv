@@ -3,6 +3,10 @@
 `timescale 1 ns / 1 ps
 `endif
 
+//This module stalls the wbm for one clock cycle at the beginning of
+//a transaction.
+//It is used to separate transactions, i.e. to not have multiple back-to-back
+//transactions with CYC asserted throughout.
 module wb_staller #(
     parameter DATA_WIDTH   = 32,               // width of data bus in bits (8, 16, 32, or 64)
     parameter ADDR_WIDTH   = 32,               // width of address bus in bits
@@ -46,6 +50,9 @@ module wb_staller #(
     transaction_ongoing_reg = 1'b0;
   end
 
+  //At the beginning of a new transaction (i.e. no transaction ongoing yet),
+  //stall the bus master.
+  //If a transaction is ongoing, forward the slave's stall signal.
   assign wbm_stall_o = transaction_ongoing_reg ? wbs_stall_i : wbm_cyc_i;
   assign wbm_err_o = wbs_err_i;
   assign wbm_ack_o = wbs_ack_i;

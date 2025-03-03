@@ -1,6 +1,6 @@
 #! /bin/bash
 
-#This script does not make any modifications outside of the boxlambda directory tree.
+#This script does not make any file system modifications outside of the boxlambda directory tree.
 echo "Setting up BoxLambda. Installing tools if needed. Initializing git submodules and creating build tree."
 echo "Note: This script should be sourced from a boxlambda workspace root directory."
 
@@ -80,6 +80,7 @@ else
     echo "OK"
   else
     "Pip install failed. Aborting..."
+    popd
     return 1
   fi
   cp -f python-requirements.txt ./tools/oss-cad-suite/.python_packages_installed
@@ -94,6 +95,25 @@ then
     git submodule foreach --recursive git checkout boxlambda
     echo "Recursively pulling from remote."
     git submodule foreach --recursive git pull
+fi
+
+#Install LiteX.
+#When litex_setup is run, it creates a bunch of new directories under sub/.
+#sub/migen/ is one of them.
+if [ -d ./sub/migen ]; then
+  echo "Litex found."
+else
+  echo "Installing Litex..."
+  pushd . > /dev/null
+  cd sub/litex/
+  if ./litex_setup.py --init --install ; then
+    echo "OK"
+  else
+    "Litex install failed. Aborting..."
+    return 1
+  fi
+
+  popd
 fi
 
 echo "Creating build build trees..."

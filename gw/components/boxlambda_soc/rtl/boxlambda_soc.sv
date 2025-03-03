@@ -265,37 +265,37 @@ module boxlambda_soc #(
   logic por_completed;  //Indicates Power-On Reset has been completed.
   logic debug_req;  //Debug Request signal.
 
-  //The CoreI bus master interface.
+  //The Ibex CoreI bus master interface.
   wb_if corei_wbm (
       .rst(ndm_reset),
       .clk(sys_clk)
   );
 
-  //The CoreD bus master interface.
+  //The Ibex CoreD bus master interface.
   wb_if cored_wbm (
       .rst(ndm_reset),
       .clk(sys_clk)
   );
 
-  //The iMux to CMEM interface.
+  //The instruction path mux to CMEM interface.
   wb_if imux_to_cmem (
       .rst(ndm_reset),
       .clk(sys_clk)
   );
 
-  //The dMux to DMEM interface
+  //The data path mux to DMEM interface
   wb_if dmux_to_dmem (
       .rst(ndm_reset),
       .clk(sys_clk)
   );
 
-  //The iMux to staller interface.
+  //The instruction path mux to staller interface.
   wb_if imux_to_staller (
       .rst(ndm_reset),
       .clk(sys_clk)
   );
 
-  //The dMux to staller interface
+  //The data path mux to staller interface
   wb_if dmux_to_staller (
       .rst(ndm_reset),
       .clk(sys_clk)
@@ -464,7 +464,7 @@ module boxlambda_soc #(
       .i_serr(xbar_serr)
   );
 
-  //The shared bus.
+  //The shared bus is a 1-to-15 MUX.
   wb_shared_bus_15 #(
       .DATA_WIDTH(32),
       .ADDR_WIDTH(AW),
@@ -646,7 +646,7 @@ module boxlambda_soc #(
       .RV32B(ibex_pkg::RV32BBalanced),
       .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA),
       .PrefetchType(ibex_pkg::PrefetchType_Single),
-      .BranchTargetALU(1'b0),
+      .BranchTargetALU(1'b0), //I would like to enable this, but I'm running into timing closure issues if I do.
       .WritebackStage(1'b0),
       .DbgTriggerEn(1'b1),
       .DmHaltAddr({2'b00, SHARED_BUS_SLAVE_ADDRS[(DM_S+1)*AW-1:DM_S*AW], 2'b00} + 32'h00000800),
@@ -670,6 +670,9 @@ module boxlambda_soc #(
       .*
   );
 
+  //The instruction path splits to two possible destinations:
+  //1. CMEM.
+  //2. The rest of the system.
   wb_mux_2 #(
       .ADDR_WIDTH(AW)
   ) cmem_mux (
@@ -677,8 +680,8 @@ module boxlambda_soc #(
       .rst(ndm_reset),
 
       /*
-     * Wishbone master input
-     */
+       * Wishbone master input
+       */
       .wbm_adr_i(corei_wbm.adr),    // ADR_I() address input
       .wbm_dat_i(corei_wbm.dat_m),  // DAT_I() data in
       .wbm_dat_o(corei_wbm.dat_s),  // DAT_O() data out
@@ -691,8 +694,8 @@ module boxlambda_soc #(
       .wbm_cyc_i(corei_wbm.cyc),    // CYC_I cycle input
 
       /*
-     * Wishbone slave 0 output
-     */
+       * Wishbone slave 0 output
+       */
       .wbs0_adr_o(imux_to_cmem.adr),    // ADR_O() address output
       .wbs0_dat_i(imux_to_cmem.dat_s),    // DAT_I() data in
       .wbs0_dat_o(imux_to_cmem.dat_m),    // DAT_O() data out
@@ -705,15 +708,15 @@ module boxlambda_soc #(
       .wbs0_cyc_o(imux_to_cmem.cyc),    // CYC_O cycle output
 
       /*
-     * Wishbone slave 0 address configuration - lower port numbers take
-     * precedence.
-     */
+       * Wishbone slave 0 address configuration - lower port numbers take
+       * precedence.
+       */
       .wbs0_addr(AW'('h00000000 >> 2)),     // Slave address prefix
       .wbs0_addr_msk(AW'((~DPRAM_BYTE_ADDR_MASK >> 2))), // Slave address prefix mask
 
       /*
-     * Wishbone slave 1 output
-     */
+       * Wishbone slave 1 output
+       */
       .wbs1_adr_o(imux_to_staller.adr),    // ADR_O() address output
       .wbs1_dat_i(imux_to_staller.dat_s),    // DAT_I() data in
       .wbs1_dat_o(imux_to_staller.dat_m),    // DAT_O() data out
@@ -726,12 +729,15 @@ module boxlambda_soc #(
       .wbs1_cyc_o(imux_to_staller.cyc),    // CYC_O cycle output
 
       /*
-     * Wishbone slave 1 address configuration - catch all.
-     */
+       * Wishbone slave 1 address configuration - catch all.
+       */
       .wbs1_addr(0),
       .wbs1_addr_msk(0)
   );
 
+  //The CPU data path splits to two possible destinations:
+  //1. DMEM.
+  //2. The rest of the system.
   wb_mux_2 #(
       .ADDR_WIDTH(AW)
   ) dmem_mux (
@@ -739,8 +745,8 @@ module boxlambda_soc #(
       .rst(ndm_reset),
 
       /*
-     * Wishbone master input
-     */
+       * Wishbone master input
+       */
       .wbm_adr_i(cored_wbm.adr),    // ADR_I() address input
       .wbm_dat_i(cored_wbm.dat_m),  // DAT_I() data in
       .wbm_dat_o(cored_wbm.dat_s),  // DAT_O() data out
@@ -753,8 +759,8 @@ module boxlambda_soc #(
       .wbm_cyc_i(cored_wbm.cyc),    // CYC_I cycle input
 
       /*
-     * Wishbone slave 0 output
-     */
+       * Wishbone slave 0 output
+       */
       .wbs0_adr_o(dmux_to_dmem.adr),    // ADR_O() address output
       .wbs0_dat_i(dmux_to_dmem.dat_s),    // DAT_I() data in
       .wbs0_dat_o(dmux_to_dmem.dat_m),    // DAT_O() data out
@@ -767,14 +773,14 @@ module boxlambda_soc #(
       .wbs0_cyc_o(dmux_to_dmem.cyc),    // CYC_O cycle output
 
       /*
-     * Wishbone slave 0 address configuration
-     */
+       * Wishbone slave 0 address configuration
+       */
       .wbs0_addr(AW'('h00020000 >> 2)),     // Slave address prefix
       .wbs0_addr_msk(AW'((~DPRAM_BYTE_ADDR_MASK >> 2))), // Slave address prefix mask
 
       /*
-     * Wishbone slave 1 output
-     */
+       * Wishbone slave 1 output
+       */
       .wbs1_adr_o(dmux_to_staller.adr),    // ADR_O() address output
       .wbs1_dat_i(dmux_to_staller.dat_s),    // DAT_I() data in
       .wbs1_dat_o(dmux_to_staller.dat_m),    // DAT_O() data out
@@ -787,15 +793,20 @@ module boxlambda_soc #(
       .wbs1_cyc_o(dmux_to_staller.cyc),    // CYC_O cycle output
 
       /*
-     * Wishbone slave 1 address configuration - catch all. Note that the wbs0
-     * port filter takes precedence.
-     */
+       * Wishbone slave 1 address configuration - catch all. Note that the wbs0
+       * port filter takes precedence.
+       */
       .wbs1_addr(0),
       .wbs1_addr_msk(0)
   );
 
   //Attach CoreI and CoreD to wb_stallers to separate back-to-back
   //transactions going to the crossbar.
+  //Back-to-back transactions through the same xbar channel have lower
+  //latency than non-back-to-back transactions. This make the cycle count
+  //of instructions involving transactions through the crossbar (e.g. register
+  //access) more difficult to predict. The wb_staller (transaction separator)
+  //avoids that.
   wb_staller #(
       .DATA_WIDTH(DW),  // width of data bus in bits (8, 16, 32, or 64)
       .ADDR_WIDTH(AW)   // width of address bus in bits

@@ -1,3 +1,4 @@
+//This module is a wb_if aware wrappper around a 1-to-15 mux.
 module wb_shared_bus_15 #(
     parameter DATA_WIDTH = 32,  // width of data bus in bits (8, 16, 32, or 64)
     parameter ADDR_WIDTH = 32,  // width of address bus in bits

@@ -11,6 +11,7 @@ stb_width = 1
 #This task monitors the core_gnt_o signal
 async def core_gnt_o(dut):
     while True:
+        #A grant must be in response to a request
         await RisingEdge(dut.core_gnt_o)
         assert dut.core_req_i.value == 1
 
@@ -40,11 +41,13 @@ async def wb_stb_o(dut):
             assert dut.wb_stb_o.value == 1
 
         await RisingEdge(dut.clk)
+        assert dut.wb_stb_o.value == 0
 
         t = cocotb.utils.get_sim_time(unit='ps')
         dut._log.info("stb after loop: %d at %d ps", dut.wb_stb_o.value, t)
         assert dut.wb_stb_o.value == 0
 
+#Core_if to wb_if adapter module test
 @cocotb.test()
 async def core2wb_test(dut):
 
@@ -298,7 +301,7 @@ async def core2wb_test(dut):
     dut.core_be_i.value = 0xf
     dut.core_addr_i.value = random.randint(0,0x03ffffff)*4 #Word-aligned byte address
     dut.wb_stall_i.value = 1
-    #Let' stall for 3 cycles
+    #Let' stall for 3 cycles, which mean stb should be asserted for 4 cycles
     stb_width = 4
 
     #It should be granted right away

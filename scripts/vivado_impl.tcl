@@ -29,10 +29,9 @@ report_timing_summary -delay_type min_max -report_unconstrained -check_timing_ve
 # Run timing report and capture output
 set timing_report [report_timing_summary -return_string]
 
-# Extract Worst Negative Slack (WNS) using regex
+# Check if the timing report detected any timing violations
 set timing_constraints_not_met [regexp -all -inline {Timing constraints are not met} $timing_report]
 
-# Check if WNS is negative (timing violation)
 if {$timing_constraints_not_met != ""} {
     puts "ERROR: Timing violations detected! See imp_timing.rpt"
     exit 1

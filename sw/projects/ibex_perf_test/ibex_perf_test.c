@@ -23,6 +23,7 @@ static struct gpio gpio;
 static uint32_t srcBuf[BUF_NUM_WORDS];
 static uint32_t dstBuf[BUF_NUM_WORDS];
 
+//Measure how many cycles it take to call mcycle_start() and mcycle_stop().
 uint32_t do_nothing() {
   mcycle_stop();
   pcount_reset();
@@ -63,6 +64,7 @@ uint32_t lw_register_loop(void *reg) {
   return cycles;
 }
 
+//Copy NUM_ITERATIONS words from src to dest using a naive loop and measure how long it takes.
 uint32_t lw_sw_copy_loop(void *dest, const void *src) {
   uint32_t num_iterations = NUM_ITERATIONS;
 
@@ -92,7 +94,7 @@ uint32_t lw_sw_copy_loop(void *dest, const void *src) {
   return cycles;
 }
 
-//100 iterations of the lw_sw_copy_loop unrolled
+//NUM_ITERASTIONS of the lw_sw_copy_loop unrolled
 uint32_t lw_sw_copy_unrolled(void *dest, const void *src) {
   mcycle_stop();
   pcount_reset();

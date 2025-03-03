@@ -6,6 +6,8 @@ import os
 from pathlib import Path
 from cocotb_boxlambda import *
 
+#A unit test of the wb_staller module which stalls the bus master for one clock cycle
+#at the beginning of a transaction.
 @cocotb.test()
 async def wb_staller_test(dut):
 
@@ -46,12 +48,12 @@ async def wb_staller_test(dut):
     dut.wbm_stb_i.value = 1
 
     #This should stall the master right away
-    await with_timeout(RisingEdge(dut.wbm_stall_o), 500, "ps")
+    await with_timeout(RisingEdge(dut.wbm_stall_o), 50, "ps")
     assert dut.wbs_cyc_o.value == 0
     assert dut.wbs_stb_o.value == 0
 
     await RisingEdge(dut.clk)
-    await with_timeout(FallingEdge(dut.wbm_stall_o), 500, "ps")
+    await with_timeout(FallingEdge(dut.wbm_stall_o), 50, "ps")
 
     #Transaction should now appear on slave side
     assert dut.wbs_cyc_o.value == 1
@@ -66,7 +68,7 @@ async def wb_staller_test(dut):
     assert dut.wbs_cyc_o.value == 1
 
     #Slave stb output should follow master input
-    await with_timeout(FallingEdge(dut.wbs_stb_o), 500, "ps")
+    await with_timeout(FallingEdge(dut.wbs_stb_o), 50, "ps")
     assert dut.wbm_stall_o.value == 0
     assert dut.wbm_ack_o.value == 0
 
@@ -76,13 +78,14 @@ async def wb_staller_test(dut):
     dut.wbs_dat_i.value = random.randint(0,0xffffffff)
 
     #Should appear on master side right away
-    await with_timeout(RisingEdge(dut.wbm_ack_o), 500, "ps")
-    #assert dut.wbm_dat_o.value == dut.wbs_dat_i.value
-    #assert dut.wbm_err_o.value == dut.wbs_err_i.value
-    #assert dut.wbm_stall_o.value == dut.wbs_stall_i.value
+    await with_timeout(RisingEdge(dut.wbm_ack_o), 50, "ps")
+
+    await RisingEdge(dut.clk)
+    assert dut.wbm_dat_o.value == dut.wbs_dat_i.value
+    assert dut.wbm_err_o.value == dut.wbs_err_i.value
+    assert dut.wbm_stall_o.value == dut.wbs_stall_i.value
 
     #Deassert ack one cycle later
-    await RisingEdge(dut.clk)
     dut.wbs_ack_i.value = 0
 
     #Transaction 2:
@@ -95,12 +98,12 @@ async def wb_staller_test(dut):
     dut.wbm_stb_i.value = 1
 
     #This should stall the master right away
-    await with_timeout(RisingEdge(dut.wbm_stall_o), 500, "ps")
+    await with_timeout(RisingEdge(dut.wbm_stall_o), 50, "ps")
     assert dut.wbs_cyc_o.value == 0
     assert dut.wbs_stb_o.value == 0
 
     await RisingEdge(dut.clk)
-    await with_timeout(FallingEdge(dut.wbm_stall_o), 500, "ps")
+    await with_timeout(FallingEdge(dut.wbm_stall_o), 50, "ps")
 
     #Transaction should now appear on slave side
     assert dut.wbs_cyc_o.value == 1
@@ -115,7 +118,7 @@ async def wb_staller_test(dut):
     assert dut.wbs_cyc_o.value == 1
 
     #Slave stb output should follow master input
-    await with_timeout(FallingEdge(dut.wbs_stb_o), 500, "ps")
+    await with_timeout(FallingEdge(dut.wbs_stb_o), 50, "ps")
     assert dut.wbm_stall_o.value == 0
     assert dut.wbm_ack_o.value == 0
 
@@ -125,13 +128,13 @@ async def wb_staller_test(dut):
     dut.wbs_dat_i.value = random.randint(0,0xffffffff)
 
     #Should appear on master side right away
-    await with_timeout(RisingEdge(dut.wbm_ack_o), 500, "ps")
-    #assert dut.wbm_dat_o.value == dut.wbs_dat_i.value
-    #assert dut.wbm_err_o.value == dut.wbs_err_i.value
-    #assert dut.wbm_stall_o.value == dut.wbs_stall_i.value
+    await with_timeout(RisingEdge(dut.wbm_ack_o), 50, "ps")
 
-    #Deassert ack one cycle later
     await RisingEdge(dut.clk)
+    assert dut.wbm_dat_o.value == dut.wbs_dat_i.value
+    assert dut.wbm_err_o.value == dut.wbs_err_i.value
+    assert dut.wbm_stall_o.value == dut.wbs_stall_i.value
+    #Deassert ack one cycle later
     dut.wbs_ack_i.value = 0
 
     #Transaction 3: stalling slave
@@ -145,7 +148,7 @@ async def wb_staller_test(dut):
     dut.wbs_stall_i.value = 1
 
     #This should stall the master right away
-    await with_timeout(RisingEdge(dut.wbm_stall_o), 500, "ps")
+    await with_timeout(RisingEdge(dut.wbm_stall_o), 50, "ps")
     assert dut.wbs_cyc_o.value == 0
     assert dut.wbs_stb_o.value == 0
 
@@ -154,7 +157,7 @@ async def wb_staller_test(dut):
     await RisingEdge(dut.clk)
     await RisingEdge(dut.clk)
     dut.wbs_stall_i.value = 0
-    await with_timeout(FallingEdge(dut.wbm_stall_o), 500, "ps")
+    await with_timeout(FallingEdge(dut.wbm_stall_o), 50, "ps")
 
     #Transaction should now appear on slave side
     assert dut.wbs_cyc_o.value == 1
@@ -169,7 +172,7 @@ async def wb_staller_test(dut):
     assert dut.wbs_cyc_o.value == 1
 
     #Slave stb output should follow master input
-    await with_timeout(FallingEdge(dut.wbs_stb_o), 500, "ps")
+    await with_timeout(FallingEdge(dut.wbs_stb_o), 50, "ps")
     assert dut.wbm_stall_o.value == 0
     assert dut.wbm_ack_o.value == 0
 
@@ -179,13 +182,13 @@ async def wb_staller_test(dut):
     dut.wbs_dat_i.value = random.randint(0,0xffffffff)
 
     #Should appear on master side right away
-    await with_timeout(RisingEdge(dut.wbm_ack_o), 500, "ps")
-    #assert dut.wbm_dat_o.value == dut.wbs_dat_i.value
-    #assert dut.wbm_err_o.value == dut.wbs_err_i.value
-    #assert dut.wbm_stall_o.value == dut.wbs_stall_i.value
+    await with_timeout(RisingEdge(dut.wbm_ack_o), 50, "ps")
 
-    #Deassert ack one cycle later
     await RisingEdge(dut.clk)
+    assert dut.wbm_dat_o.value == dut.wbs_dat_i.value
+    assert dut.wbm_err_o.value == dut.wbs_err_i.value
+    assert dut.wbm_stall_o.value == dut.wbs_stall_i.value
+    #Deassert ack one cycle later
     dut.wbs_ack_i.value = 0
 
 if __name__ == "__main__":

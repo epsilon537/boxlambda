@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Label `tools_setup`: Changes Since Label `boxlambda_base` - 2025-02-04
+## Label `latency_shakeup`: Changes Since Label `boxlambda_base` - 2025-02-04
 
 ### Added
 
@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-N/A
+No known issues fixed.
 
 ### Changed
 
@@ -29,7 +29,7 @@ N/A
 - Switched audio DAC test to BoxLambda clock generator.
 - Switched to rv32im_zicsr, no instruction compression. Instruction compression may cause unaligned 32-bit instruction fetches, making instruction cycle count undeterministic. Deterministic instruction cycle counts are a BoxLambda requirement.
 - Replaced Ibex ICache flag with PrefetchType enum to support PrefetchType_Single option.
-- Gave Ibex instruction and data port a shortcut do cmem resp. dmem so they don't have to go through the slow crossbar for local memory access.
+- Gave Ibex instruction and data port a shortcut do CMEM resp. DMEM so they don't have to go through the slow crossbar for local memory access.
 - Replaced the wbxbar-based shared bus with a faster wb_mux-based shared bus.
 - Added transaction separating stallers on the Ibex-to-Crossbar ports to achieve fixed latency for instruction and data fetches going over the crossbar. Without this, transactions on an already open channel complete faster than transactions to a new channel.
 
@@ -39,9 +39,10 @@ N/A
 - User no longer needs to install Bender.
 - User no longer needs to install Python or PIP. This is provided by the OSS CAD Suite environment.
 - User no longer needs to install Python packages.
+- User no longer needs to install LiteX.
 - Removed zeroing out memory and some unnecessary SystemVerilog constructs incompatible with Yosys synthesis, preparing for OpenXC7 support.
-- No longer implicitly linkining in the bootstrap component. Has to be done explicitly by the software project.
-- No longer implicitly copying the build tree cmem_to_flash_vector to source tree's cmem.mem. Violates the principle of least astonishment.
+- No longer implicitly linkining in the bootstrap component. This now has to be done explicitly by the software project's CMake file.
+- No longer implicitly copying the build tree *cmem_to_flash_vector* to source tree's *cmem.mem*. It violates the principle of least astonishment.
 - Removed Sounddevice/PortAudio dependency.
 
 ## Label `boxlambda_base`: Changes Since Label `dfx` - 2025-01-07
