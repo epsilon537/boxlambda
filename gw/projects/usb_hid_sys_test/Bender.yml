@@ -38,7 +38,7 @@ sources:
       DEBUG_MODULE_ACTIVE: ~
       #YM2149: ~
       #SDSPI: ~
-      #DRAM: ~
+      DRAM: ~
       #VERA: ~
       #PICORV_DMA: ~
       USB_HID: ~

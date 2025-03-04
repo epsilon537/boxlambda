@@ -17,16 +17,16 @@ async def slow_clk_to_fast_clk(dut):
     dut.r_rst_n.value = 1
     dut.r_pulse.value = 0
 
-    cocotb.start_soon(Clock(dut.t_clk, 8, units="ns").start())
-    cocotb.start_soon(Clock(dut.r_clk, 1, units="ns").start())
+    cocotb.start_soon(Clock(dut.t_clk, 8, unit="ns").start())
+    cocotb.start_soon(Clock(dut.r_clk, 1, unit="ns").start())
 
-    await Timer(16, units="ns")
+    await Timer(16, unit="ns")
     dut.t_rst_n.value = 0
     dut.r_rst_n.value = 0
-    await Timer(16, units="ns")
+    await Timer(16, unit="ns")
     dut.t_rst_n.value = 1
     dut.r_rst_n.value = 1
-    await Timer(16, units="ns")
+    await Timer(16, unit="ns")
 
     await RisingEdge(dut.t_clk)
 
@@ -47,7 +47,7 @@ async def slow_clk_to_fast_clk(dut):
             await RisingEdge(dut.r_clk)
             assert dut.r_pulse.value == 0
             break
-        
+
     assert count < 100
 
 @cocotb.test()
@@ -59,17 +59,17 @@ async def fast_clk_to_slow_clk(dut):
     dut.r_rst_n.value = 1
     dut.r_pulse.value = 0
 
-    cocotb.start_soon(Clock(dut.t_clk, 1, units="ns").start())
-    cocotb.start_soon(Clock(dut.r_clk, 8, units="ns").start())
+    cocotb.start_soon(Clock(dut.t_clk, 1, unit="ns").start())
+    cocotb.start_soon(Clock(dut.r_clk, 8, unit="ns").start())
 
-    await Timer(16, units="ns")
+    await Timer(16, unit="ns")
     dut.t_rst_n.value = 0
     dut.r_rst_n.value = 0
-    await Timer(16, units="ns")
+    await Timer(16, unit="ns")
     dut.t_rst_n.value = 1
     dut.r_rst_n.value = 1
-    await Timer(16, units="ns")
-    
+    await Timer(16, unit="ns")
+
     await RisingEdge(dut.t_clk)
 
     dut.t_pulse.value = 1
@@ -89,7 +89,7 @@ async def fast_clk_to_slow_clk(dut):
             await RisingEdge(dut.r_clk)
             assert dut.r_pulse.value == 0
             break
-        
+
     assert count < 100
 
 if __name__ == "__main__":
@@ -101,6 +101,6 @@ if __name__ == "__main__":
                        proj_path / "../rtl/tgl2pls.sv",
                        proj_path / "../rtl/syncpls.sv"]
     #Defined in scripts/cocotb_boxlambda.py
-    test_runner(verilog_sources=verilog_sources, 
-                test_module_filename=__file__, 
+    test_runner(verilog_sources=verilog_sources,
+                test_module_filename=__file__,
                 top="syncpls")

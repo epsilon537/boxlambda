@@ -647,6 +647,9 @@ files:
   name: ../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_prefetch_buffer.sv
 - core: lowrisc:ibex:ibex_core:0.1
   file_type: systemVerilogSource
+  name: ../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_single_prefetch_buffer.sv
+- core: lowrisc:ibex:ibex_core:0.1
+  file_type: systemVerilogSource
   name: ../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_pmp.sv
 - core: lowrisc:ibex:ibex_core:0.1
   file_type: systemVerilogSource

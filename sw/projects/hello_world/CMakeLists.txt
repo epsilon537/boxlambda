@@ -14,7 +14,7 @@ target_compile_options(hello_world_ram
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(hello_world_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(hello_world_ram gpio riscv)
+target_link_libraries(hello_world_ram gpio riscv bootstrap)
 
 #
 # Hello World Flash Build
@@ -32,7 +32,7 @@ target_compile_options(hello_world_flsh
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(hello_world_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(hello_world_flsh gpio riscv)
+target_link_libraries(hello_world_flsh gpio riscv bootstrap)
 
 add_flash_sw_target(hello_world_flsh)
 

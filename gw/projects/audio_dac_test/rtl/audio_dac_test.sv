@@ -10,7 +10,7 @@ module audio_dac_test (
   output wire       audio_gain, /*PmodAMP2 control signal. When high a 6dB gain is applied, when low a 12dB gain is applied.*/
   output wire       audio_shutdown_n /*PmodAMP2 control signal to put the amplifier in shutdown*/
 `ifdef VERILATOR
-  ,output wire [15:0] pcm_out /*16-bit audio output, to cross check against 1-bit output in simulation.*/ 
+  ,output wire [15:0] pcm_out /*16-bit audio output, to cross check against 1-bit output in simulation.*/
   ,output wire acc1_overflow /*In simulation we check for accumulator overflows.*/
   ,output wire acc2_overflow
 `endif
@@ -23,7 +23,7 @@ localparam [8:0] PHASE_ADV_PERIOD = 9'd444;
 //Toggle LED once every TOGGLE_LED_PERIOD clock ticks.
 localparam [31:0] TOGGLE_LED_PERIOD = 32'd10000000;
 
-//sys_clk is a 50MHz clock.  
+//sys_clk is a 50MHz clock.
 logic sys_clk, sys_rst_n;
 
 logic signed [15:0] audio_pcm;
@@ -48,18 +48,18 @@ assign audio_gain = sw[0]; //Switch 0 sets gain.
 assign audio_shutdown_n = sw[1]; //Switch 1 controls shutdown.
 assign leds = led_state_r;
 
-`ifdef SYNTHESIS
-  //This clkgen does a divide-by-2 of the 100MHz ext_clk => sys_clk runs at 50MHz.
-  clkgen_xil7series clkgen (
-    .IO_CLK     (ext_clk),
-    .IO_RST_N   (ext_rst_n),
-    .clk_sys    (sys_clk),
-    .rst_sys_n  (sys_rst_n));
-`else
-  //In simulation ext_clk runs at 50MHz and sys_clk = ext_clk;
-  assign sys_clk = ext_clk;
-  assign sys_rst_n = ext_rst_n;
-`endif //SYNTHESIS/No SYNTHESIS
+logic pll_locked;
+
+boxlambda_clk_gen clkgen (
+    .ext_clk_100(ext_clk),  //100MHz external clock input.
+    .rst_n(ext_rst_n),
+    .clk_50(sys_clk),  //50MHz clock output
+    .clk_100(),  //100MHz clock output
+    .clk_12(),  //12 MHz USB clock output
+    .locked(pll_locked) //PLL lock indication outpt.
+);
+
+assign sys_rst_n = ~pll_locked;
 
 //256 entry sine ROM look-up table.
 sin_rom sin_rom_inst
@@ -96,7 +96,7 @@ one_bit_dac dac_inst (
 always_ff @(posedge sys_clk)
 begin
     div_by_4_ctr <= div_by_4_ctr + 1;
-    
+
     if (toggle_led_div_ctr == TOGGLE_LED_PERIOD) begin
       toggle_led_div_ctr <= 0;
       led_state_r <= led_state_r + 4'd1;

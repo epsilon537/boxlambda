@@ -14,6 +14,8 @@ function(link_gen_picobin _tgt)
   #Text section should start at 0x10002000.
   target_link_options(${_tgt}
         PRIVATE
+            -A elf32-littleriscv
+            -m elf32lriscv
             -Ttext 0x10002000)
 
   #Binary file generation command.

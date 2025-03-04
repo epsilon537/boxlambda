@@ -22,7 +22,7 @@ sources:
       DEBUG_MODULE_ACTIVE: ~
       #YM2149: ~
       SDSPI: ~
-      #DRAM: ~
+      DRAM: ~
       #VERA: ~
       #PICORV_DMA: ~
       #TRACE_ALL_INSTRUCTIONS: ~
@@ -36,7 +36,7 @@ sources:
       DEBUG_MODULE_ACTIVE: ~
       #YM2149: ~
       SDSPI: ~
-      #DRAM: ~
+      DRAM: ~
       #VERA: ~
       #PICORV_DMA: ~
       #TRACE_ALL_INSTRUCTIONS: ~

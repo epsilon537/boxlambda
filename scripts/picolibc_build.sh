@@ -23,7 +23,7 @@ pushd .
 
 echo "Executing picolibc configure script..."
 cd $PICOLIBC_BUILD_DIR
-$PICOLIBC_SUB_DIR/scripts/do-rv32imc-configure -Dprefix=$PICOLIBC_INSTALL_DIR -Dspecsdir=$PICOLIBC_INSTALL_DIR
+$PICOLIBC_SUB_DIR/scripts/do-rv32im-configure -Dprefix=$PICOLIBC_INSTALL_DIR -Dspecsdir=$PICOLIBC_INSTALL_DIR
 
 echo "Building picolibc..."
 ninja

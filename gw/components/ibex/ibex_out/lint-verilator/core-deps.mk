@@ -71,13 +71,13 @@ fusesoc-deps := \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_1p.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_ram_1p-impl_0/prim_ram_1p.core \
   /home/epsilon/work/boxlambda/gw/components/ibex/ibex_out/lint-verilator/generated/lowrisc_prim_ram_1p-impl_0/prim_ram_1p.sv \
+  /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/prim_badbit/prim_badbit_ram_1p.core \
+  /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/prim_badbit/prim_badbit_ram_1p.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/prim_generic_ram_1p.core \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/lint/prim_generic_ram_1p.vlt \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_ram_1p.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_util_memload.core \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_util_memload.svh \
-  /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/prim_badbit/prim_badbit_ram_1p.core \
-  /home/epsilon/work/boxlambda/sub/ibex/dv/uvm/icache/dv/prim_badbit/prim_badbit_ram_1p.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_ram_1p_pkg.core \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_ram_1p_pkg.sv \
   /home/epsilon/work/boxlambda/sub/ibex/vendor/lowrisc_ip/ip/prim/prim_secded.core \
@@ -170,6 +170,7 @@ fusesoc-deps := \
   /home/epsilon/work/boxlambda/sub/ibex/rtl/ibex_multdiv_fast.sv \
   /home/epsilon/work/boxlambda/sub/ibex/rtl/ibex_multdiv_slow.sv \
   /home/epsilon/work/boxlambda/sub/ibex/rtl/ibex_prefetch_buffer.sv \
+  /home/epsilon/work/boxlambda/sub/ibex/rtl/ibex_single_prefetch_buffer.sv \
   /home/epsilon/work/boxlambda/sub/ibex/rtl/ibex_pmp.sv \
   /home/epsilon/work/boxlambda/sub/ibex/rtl/ibex_wb_stage.sv \
   /home/epsilon/work/boxlambda/sub/ibex/rtl/ibex_dummy_instr.sv \

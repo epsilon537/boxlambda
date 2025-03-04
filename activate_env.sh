@@ -1,25 +1,25 @@
-#! /bin/bash
+#!/bin/bash
 
-#!/usr/bin/env bash
 if [ "${BASH_SOURCE-}" = "$0" ]; then
     echo "You must source this script: \$ source $0" >&2
     exit 1
 fi
 
-echo "Activating BoxLambda tools environments. Installing tools if needed."
+echo "Activating BoxLambda tools environments."
 echo "Note: This script should be sourced from a boxlambda workspace root directory. Different boxlambda workspaces may share the same environment."
 
 if [[ "$#" > 0 && "$1" == "-h" ]]
 then
   echo "$0 [-h] [-r]"
   echo "-h: Show help."
-  echo "-r: Force clean reinstallation of tools environment."
   return 1
 fi
 
-if [[ "$#" > 0 && "$1" == "-r" ]]
-then
-  rm -rf tools
+if [ -d tools ]; then
+  echo "Tools directory found."
+else
+  echo "Tools directory not found. Please source boxlambda_setup.sh to set up the workspace."
+  return 1;
 fi
 
 if which vivado ; then
@@ -28,56 +28,12 @@ else
   echo "Vivado not found. Please install Vivado and add it to your path."
 fi
 
-pushd . > /dev/null
-mkdir -p tools
-cd tools
-
-if [ -d oss-cad-suite ]; then
-  echo "oss-cad-suite found."
+if which riscv64-unknown-elf-gcc ; then
+  echo "riscv64-unknown-elf-gcc found."
 else
-  echo "Downloading and unpacking oss-cad-suite..."
-  wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-02-01/oss-cad-suite-linux-x64-20250201.tgz
-
-  if tar xf oss-cad-suite-linux-x64-20250201.tgz ; then
-    echo "OK"
-  else
-    echo "Unpack of oss-cad-suite failed. Aborting..."
-    popd
-    return 1
-  fi
+  echo "riscv64-unknown-elf-gcc not found. Please install riscv64-unknown-elf-gcc package."
+  return 1
 fi
-
-export LOWRISC_TOOLCHAIN_VERSION=20240923
-if [ -d ./lowrisc-toolchain-gcc-rv32imcb-$LOWRISC_TOOLCHAIN_VERSION-1 ]; then
-  echo "lowrisc-toolchain found."
-else
-  echo "Downloading and installing lowrisc-toolchain..."
-  wget https://github.com/lowRISC/lowrisc-toolchains/releases/download/$LOWRISC_TOOLCHAIN_VERSION-1/lowrisc-toolchain-gcc-rv32imcb-$LOWRISC_TOOLCHAIN_VERSION-1.tar.xz
-  if tar xf lowrisc-toolchain-gcc-rv32imcb-$LOWRISC_TOOLCHAIN_VERSION-1.tar.xz ; then
-    echo "OK"
-  else
-    echo "Unpack of lowrisc-toolchain failed. Aborting..."
-    popd
-    return 1
-  fi
-fi
-
-export BENDER_VERSION=0.28.1
-if [ -f ./bender ]; then
-  echo "Bender found."
-else
-  echo "Downloading and installing Bender..."
-  wget https://github.com/pulp-platform/bender/releases/download/v$BENDER_VERSION/bender-$BENDER_VERSION-x86_64-linux-gnu.tar.gz
-  if tar xf bender-$BENDER_VERSION-x86_64-linux-gnu.tar.gz ; then
-    echo "OK"
-  else
-    echo "Unpack of Bender failed. Aborting..."
-    popd
-    return 1
-  fi
-fi
-
-popd > /dev/null
 
 echo "Activate OSS CAD Suite Environment..."
 _ORIG_PS1="${PS1}"
@@ -89,26 +45,14 @@ else
   return 1
 fi
 
+#Tweaking the prompt
 if [ -n "${ZSH_VERSION-}" ] ; then
     autoload -U colors && colors
-    PS1="%{$fg[magenta]%}(BoxLambda)%{$reset_color%}${_ORIG_PS1}"
+    PS1="%{$fg[magenta]%}(BoxLambda `git rev-parse --abbrev-ref HEAD`)%{$reset_color%}${_ORIG_PS1}"
 else
-    PS1="\[\033[1;35m\]\342\246\227BoxLambda\342\246\230\[\033[0m\]${_ORIG_PS1}"
+    PS1="\[\033[1;35m\]\342\246\227BoxLambda `git rev-parse --abbrev-ref HEAD`\342\246\230\[\033[0m\]${_ORIG_PS1}"
 fi
 export PS1
-
-if [ -f ./tools/oss-cad-suite/.python_packages_installed ]; then
-  echo "Required Python packages found."
-else
-  echo "Installing required Python packages..."
-  if python3 -m pip install -qq -U -r python-requirements.txt ; then
-    echo "OK"
-  else
-    "Pip install failed. Aborting..."
-    return 1
-  fi
-  cp -f python-requirements.txt ./tools/oss-cad-suite/.python_packages_installed
-fi
 
 echo "Updating PATH..."
 

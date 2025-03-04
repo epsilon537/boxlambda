@@ -3,7 +3,6 @@
 from pcm_out import *
 import numpy as np
 import scipy.io.wavfile
-import sounddevice as sd
 import correlation
 import sys
 import getopt
@@ -14,8 +13,6 @@ def stsound_test(ref_wav):
     y_ac = y - 32768      #AC
     y_norm = y_ac / 32768.0 #Normalized
     sr = int(50000000/1024) #Sample Rate
-    sd.play(y_norm, sr) #Play it back (~5s)
-    sd.wait() #Wait for playback to complete.
     scaled = np.int16(y_norm / np.max(np.abs(y_norm)) * 32767) #Convert to int16 numpy array
     scipy.io.wavfile.write('test.wav', sr, scaled) #Write out the .wav file
 
@@ -55,5 +52,5 @@ if __name__ == "__main__":
         res = 0
     else:
         res = 1
-    
+
     sys.exit(res)

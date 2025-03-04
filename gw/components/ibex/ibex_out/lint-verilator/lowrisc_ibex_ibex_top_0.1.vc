@@ -142,6 +142,7 @@
 ../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_multdiv_fast.sv
 ../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_multdiv_slow.sv
 ../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_prefetch_buffer.sv
+../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_single_prefetch_buffer.sv
 ../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_pmp.sv
 ../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_wb_stage.sv
 ../src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_dummy_instr.sv

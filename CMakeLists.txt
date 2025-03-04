@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
-
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 project(BoxLambda VERSION 0.1.0 LANGUAGES C CXX ASM)
 
 #Add the cmake subdirectory to CMake's module path. The ASM_PICO dialect is defined there.
@@ -18,7 +18,7 @@ get_property(isMultiConfig GLOBAL
 )
 
 if(isMultiConfig)
-    message(FATAL_ERROR "MultiConfig is not supported.")
+  message(FATAL_ERROR "MultiConfig is not supported.")
 endif()
 
 #Currently, two build types are supported: -DCMAKE_BUILD_TYPE=fpga and -DCMAKE_BUILD_TYPE=sim
@@ -28,7 +28,7 @@ set_property(CACHE CMAKE_BUILD_TYPE PROPERTY
 set(allowedBuildTypes fpga sim)
 
 if(NOT CMAKE_BUILD_TYPE IN_LIST allowedBuildTypes)
-    message(FATAL_ERROR "${CMAKE_BUILD_TYPE} is not a known build type.")
+  message(FATAL_ERROR "${CMAKE_BUILD_TYPE} is not a known build type.")
 endif()
 
 message("Build Type: ${CMAKE_BUILD_TYPE}.")

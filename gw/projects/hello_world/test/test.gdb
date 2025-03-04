@@ -2,6 +2,8 @@
 #verifying OpenOCD based JTAG connectivity to a target
 #running a 'Hello World' test build.
 
+set architecture riscv:rv32
+
 #Connect to openocd (which is connected to the target.
 target extended-remote localhost:3333
 

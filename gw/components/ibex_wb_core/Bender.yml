@@ -17,6 +17,7 @@ sources:
     files:
       - ../../../sub/ibex_wb/rtl/wb_ibex_core.sv
       - ../../../sub/ibex_wb/rtl/core_if.sv
+      - ../../../sub/ibex_wb/rtl/core2wb_no_ifs.sv
       - ../../../sub/ibex_wb/rtl/core2wb.sv
       - ../../../sub/ibex_wb/rtl/slave2wb.sv
   - target: ibex_wb_core

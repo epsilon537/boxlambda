@@ -13,7 +13,7 @@ target_compile_options(invalid_address_ram
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(invalid_address_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(invalid_address_ram gpio riscv)
+target_link_libraries(invalid_address_ram gpio riscv bootstrap)
 
 #
 # WB Error Handling Test Flash Build
@@ -30,7 +30,7 @@ target_compile_options(invalid_address_flsh
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(invalid_address_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(invalid_address_flsh gpio riscv)
+target_link_libraries(invalid_address_flsh gpio riscv bootstrap)
 
 add_flash_sw_target(invalid_address_flsh)
 

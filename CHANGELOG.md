@@ -4,33 +4,49 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Label `tools_setup`: Changes Since Label `boxlambda_base` - 2025-02-04
+## Label `latency_shakeup`: Changes Since Label `boxlambda_base` - 2025-02-04
 
 ### Added
 
-- Activate_env.sh script to set up tools environment, simplifying setup.
+- *boxlambda_setup.sh* includes tools setup, simplifying user setup requirements.
+- Added *activate_env.sh* script to activate the tools environment, simplifying user setup.
+- Created a *boxlambda_doc_env_setup.sh* script to set up tools environment for building documentation.
+- Vivado build aborts with error if timing constraints are not met after implementation step.
+- Added a single instruction prefetcher to Ibex. This helps ensure instruction cycle counts are stable and predictable.
+- Enabled Vivado post-place and post-route physical optimization.
 
 ### Fixed
 
-N/A
+No known issues fixed.
 
 ### Changed
 
-- Updated to LowRisc GCC toolchain 20240923.
-- Updated to OSS CAD Suite 20250201.
+- Switched to gdb-multiarch.
+- Using system riscv64-unknown-elf toolchain instead of LowRISC GCC toolchain. LowRISC's prebuilt rv32imcb GCC still uses compressed instructions in GCC library routines when using architecture rv32im.
+- Updated to OSS CAD Suite 20250226.
 - Update to 2025/01/21 version of Ibex code base.
 - Update to 2025/01/31 version of Litedram code base.
 - Ibex code is imported in Boxlambda repo by gw/components/ibex/gen_core.sh script.
 - Switched to Single-Cycle multiplier in Ibex CPU.
+- Switched audio DAC test to BoxLambda clock generator.
+- Switched to rv32im_zicsr, no instruction compression. Instruction compression may cause unaligned 32-bit instruction fetches, making instruction cycle count undeterministic. Deterministic instruction cycle counts are a BoxLambda requirement.
+- Replaced Ibex ICache flag with PrefetchType enum to support PrefetchType_Single option.
+- Gave Ibex instruction and data port a shortcut do CMEM resp. DMEM so they don't have to go through the slow crossbar for local memory access.
+- Replaced the wbxbar-based shared bus with a faster wb_mux-based shared bus.
+- Added transaction separating stallers on the Ibex-to-Crossbar ports to achieve fixed latency for instruction and data fetches going over the crossbar. Without this, transactions on an already open channel complete faster than transactions to a new channel.
 
 ### Removed
 
-- User no longer needs to install LowRisc GCC toolchain.
 - User no longer needs to install OSS CAD suite.
 - User no longer needs to install Bender.
 - User no longer needs to install Python or PIP. This is provided by the OSS CAD Suite environment.
 - User no longer needs to install Python packages.
+- User no longer needs to install LiteX.
 - Removed zeroing out memory and some unnecessary SystemVerilog constructs incompatible with Yosys synthesis, preparing for OpenXC7 support.
+- No longer implicitly linkining in the bootstrap component. This now has to be done explicitly by the software project's CMake file.
+- No longer implicitly copying the build tree *cmem_to_flash_vector* to source tree's *cmem.mem*. It violates the principle of least astonishment.
+- Removed Sounddevice/PortAudio dependency.
+- No longer officially supporting WSL. I haven't tried to build BoxLambda on WSL in over a year. The build instruction are most likely obsolete.
 
 ## Label `boxlambda_base`: Changes Since Label `dfx` - 2025-01-07
 

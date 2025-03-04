@@ -25,7 +25,7 @@ target_include_directories(dual_port_ram_test_ram
 link_and_create_image(dual_port_ram_test_ram
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(dual_port_ram_test_ram picorv_dma gpio riscv)
+target_link_libraries(dual_port_ram_test_ram picorv_dma gpio riscv bootstrap)
 
 #
 # Dual Port RAM test Flash build
@@ -53,6 +53,6 @@ target_include_directories(dual_port_ram_test_flsh
 link_and_create_image(dual_port_ram_test_flsh
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(dual_port_ram_test_flsh picorv_dma gpio riscv)
+target_link_libraries(dual_port_ram_test_flsh picorv_dma gpio riscv bootstrap)
 
 add_flash_sw_target(dual_port_ram_test_flsh)

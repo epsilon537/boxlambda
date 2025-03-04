@@ -5,6 +5,10 @@ package:
   # The name of the package. Required.
   name: wbxbar
 
+dependencies:
+  # For wb_if and wb_pkg
+  ibex_wb_common: { path: "../../components/ibex_wb_common" }
+
 sources:
   - target: verilator
     files:
@@ -18,6 +22,8 @@ sources:
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:
+      - rtl/wb_staller.sv
+      - rtl/wb_shared_bus_15.sv
       - ../../../sub/wb2axip/rtl/wbxbar.v
       - ../../../sub/wb2axip/rtl/addrdecode.v
       - ../../../sub/wb2axip/rtl/skidbuffer.v
@@ -26,6 +32,9 @@ sources:
       - ../../../sub/wb2axip/rtl/wbm2axilite.v
       - ../../../sub/wb2axip/rtl/axi_addr.v
       - ../../../sub/wb2axip/rtl/sfifo.v
+      - ../../../sub/verilog-wishbone/rtl/wb_mux_2.v
+      - ../../../sub/verilog-wishbone/rtl/wb_mux_15.v
+
 
 
 

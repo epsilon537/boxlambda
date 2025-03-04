@@ -14,7 +14,7 @@ target_compile_options(spiflash_test_flsh
 link_and_create_image(spiflash_test_flsh
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(spiflash_test_flsh flashdrvr sdram gpio riscv)
+target_link_libraries(spiflash_test_flsh flashdrvr sdram gpio riscv bootstrap)
 
 add_flash_sw_target(spiflash_test_flsh)
 
@@ -34,5 +34,5 @@ target_compile_options(spiflash_test_ram
 link_and_create_image(spiflash_test_ram
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
 
-target_link_libraries(spiflash_test_ram flashdrvr sdram gpio riscv)
+target_link_libraries(spiflash_test_ram flashdrvr sdram gpio riscv bootstrap)
 

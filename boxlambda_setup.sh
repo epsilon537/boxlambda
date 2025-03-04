@@ -1,9 +1,13 @@
 #! /bin/bash
 
-#This script prepares the code base for first use. Retrieving submodules, setting up build trees.
-#This script is to be run from the directory it's located in, i.e. the boxlambda repository root directory).
-#This script does not make any modifications outside of the boxlambda directory tree.
+#This script does not make any file system modifications outside of the boxlambda directory tree.
+echo "Setting up BoxLambda. Installing tools if needed. Initializing git submodules and creating build tree."
+echo "Note: This script should be sourced from a boxlambda workspace root directory."
 
+if [ "${BASH_SOURCE-}" = "$0" ]; then
+    echo "You must source this script: \$ source $0" >&2
+    exit 1
+fi
 
 if [[ "$#" > 0 && "$1" == "-h" ]]
 then
@@ -13,9 +17,77 @@ then
   exit 1
 fi
 
+#Checking availability of key tools that user has to provide.
+if which vivado ; then
+  echo "Vivado found."
+else
+  echo "Vivado not found. Please install Vivado and add it to your path."
+fi
+
+if which riscv64-unknown-elf-gcc ; then
+  echo "riscv64-unknown-elf-gcc found."
+else
+  echo "riscv64-unknown-elf-gcc not found. Please install riscv64-unknown-elf-gcc package."
+  return 1
+fi
+
+#Download and install additional tools.
+pushd . > /dev/null
+mkdir -p tools
+cd tools
+
+if [ -d oss-cad-suite ]; then
+  echo "oss-cad-suite found."
+else
+  echo "Downloading and unpacking oss-cad-suite..."
+  wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-02-26/oss-cad-suite-linux-x64-20250226.tgz
+
+  if tar xf oss-cad-suite-linux-x64-20250226.tgz ; then
+    echo "OK"
+  else
+    echo "Unpack of oss-cad-suite failed. Aborting..."
+    popd
+    return 1
+  fi
+fi
+
+export BENDER_VERSION=0.28.1
+if [ -f ./bender ]; then
+  echo "Bender found."
+else
+  echo "Downloading and installing Bender..."
+  wget https://github.com/pulp-platform/bender/releases/download/v$BENDER_VERSION/bender-$BENDER_VERSION-x86_64-linux-gnu.tar.gz
+  if tar xf bender-$BENDER_VERSION-x86_64-linux-gnu.tar.gz ; then
+    echo "OK"
+  else
+    echo "Unpack of Bender failed. Aborting..."
+    popd
+    return 1
+  fi
+fi
+
+popd > /dev/null
+
+#Activate the environment
+source activate_env.sh
+
+#Install required Python packages.
+if [ -f ./tools/oss-cad-suite/.python_packages_installed ]; then
+  echo "Required Python packages found."
+else
+  echo "Installing required Python packages..."
+  if python3 -m pip install -qq -U -r python-requirements.txt ; then
+    echo "OK"
+  else
+    "Pip install failed. Aborting..."
+    popd
+    return 1
+  fi
+  cp -f python-requirements.txt ./tools/oss-cad-suite/.python_packages_installed
+fi
+
 echo "Retrieving git submodules..."
 git submodule update --init --recursive
-
 
 if [[ "$#" > 0 && "$1" == "-s" ]]
 then
@@ -23,6 +95,25 @@ then
     git submodule foreach --recursive git checkout boxlambda
     echo "Recursively pulling from remote."
     git submodule foreach --recursive git pull
+fi
+
+#Install LiteX.
+#When litex_setup is run, it creates a bunch of new directories under sub/.
+#sub/migen/ is one of them.
+if [ -d ./sub/migen ]; then
+  echo "Litex found."
+else
+  echo "Installing Litex..."
+  pushd . > /dev/null
+  cd sub/litex/
+  if ./litex_setup.py --init --install ; then
+    echo "OK"
+  else
+    "Litex install failed. Aborting..."
+    return 1
+  fi
+
+  popd
 fi
 
 echo "Creating build build trees..."
@@ -38,5 +129,10 @@ make -C ./build/arty-a7-35 regen
 cmake --fresh --preset=arty-a7-100
 make -C ./build/arty-a7-100 regen
 
+#Deactivate the environment
+deactivate
+
 echo
 echo "Setup complete."
+echo "Source activate_env.sh to activate the environment."
+
