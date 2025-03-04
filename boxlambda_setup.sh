@@ -129,6 +129,10 @@ make -C ./build/arty-a7-35 regen
 cmake --fresh --preset=arty-a7-100
 make -C ./build/arty-a7-100 regen
 
+#Deactivate the environment
+deactivate
+
 echo
-echo "Setup complete and environment activated."
-echo "Enter 'deactivate' to deactivate the environment."
+echo "Setup complete."
+echo "Source activate_env.sh to activate the environment."
+

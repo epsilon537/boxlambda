@@ -8,7 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Activate_env.sh script to set up tools environment, simplifying setup.
+- *boxlambda_setup.sh* includes tools setup, simplifying user setup requirements.
+- Added *activate_env.sh* script to activate the tools environment, simplifying user setup.
+- Created a *boxlambda_doc_env_setup.sh* script to set up tools environment for building documentation.
 - Vivado build aborts with error if timing constraints are not met after implementation step.
 - Added a single instruction prefetcher to Ibex. This helps ensure instruction cycle counts are stable and predictable.
 - Enabled Vivado post-place and post-route physical optimization.
@@ -44,6 +46,7 @@ No known issues fixed.
 - No longer implicitly linkining in the bootstrap component. This now has to be done explicitly by the software project's CMake file.
 - No longer implicitly copying the build tree *cmem_to_flash_vector* to source tree's *cmem.mem*. It violates the principle of least astonishment.
 - Removed Sounddevice/PortAudio dependency.
+- No longer officially supporting WSL. I haven't tried to build BoxLambda on WSL in over a year. The build instruction are most likely obsolete.
 
 ## Label `boxlambda_base`: Changes Since Label `dfx` - 2025-01-07
 
