@@ -69,7 +69,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
 
 Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/latest/pmods/#microsd-pmod) and insert a FAT formatted SD card.
 
-Connect a terminal program to Arty's USB serial port. I suggest using a terminal program that supports Ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
+Connect a terminal emulator to Arty's USB serial port. I suggest using a terminal emulator that supports Ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
 
 Build the *dfx_test_flsh* software project in the arty-a7-100 build tree:
 
@@ -160,14 +160,14 @@ Alternatively, instead of copying the files to an SD Card mounted on your PC and
 ymodem_rx <filename>
 ```
 
-Then send the file in question using your terminal program's ymodem function. The transferred file will be saved on the SD card as *\<filename\>*.
+Then send the file in question using your terminal emulator's ymodem function. The transferred file will be saved on the SD card as *\<filename\>*.
 
 ---
 
 Confirm that all the required files are on the filesystem by running the *ls* CLI command:
 
 ```
-> ls 
+> ls
    <DIR>   SYSTEM~1
      32768 NUC.BIN
     592780 VS0_J1B
@@ -200,7 +200,7 @@ Done.
 Finally, we forward the serial port to the J1B core so we can access its REPL:
 
 ```
-> j1b_fwd_uart 
+> j1b_fwd_uart
 Reading core signature register...
 Read signature value: 0xf041011b
 Signature correct. Checking if J1B has been booted up...
@@ -210,7 +210,7 @@ Forwarding UART. Press <ESC> to return.
 You can now start entering Forth instructions.
 
 ```
-CR 42 emit CR 
+CR 42 emit CR
 *
  ok
 ```

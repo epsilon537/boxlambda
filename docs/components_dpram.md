@@ -3,10 +3,10 @@
 - **DPRAM Repo**, BoxLambda fork, *boxlambda* branch:
     [https://github.com/epsilon537/verilog-wishbone](https://github.com/epsilon537/verilog-wishbone).
 
-- **DPRAM Submodule in the BoxLambda Directory Tree**: 
+- **DPRAM Submodule in the BoxLambda Directory Tree**:
     boxlambda/sub/verilog_wishbone/.
 
-- **DPRAM Component in the BoxLambda Directory Tree**: 
+- **DPRAM Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/wb_dp_ram](https://github.com/epsilon537/boxlambda/tree/master/gw/components/wb_dp_ram)
 
 - **DPRAM Core Top-Level**:
@@ -56,6 +56,10 @@ In simulation, I'm using Alex Forencich's [wb_dp_ram.v](https://github.com/epsil
 
 ### Two Dual Port RAMs
 
+![CMEM and DMEM in the BoxLambda SoC](assets/cmem_and_dmem.png)
+
+*CMEM and DMEM in the BoxLambda SoC.*
+
 BoxLambda's internal memory consists of two Dual Port instances: **CMEM** and **DMEM**. The two instances create a Harvard Architecture (see below). The RAMs are Dual Port to allow simultaneous memory access from both the CPU and the DMA Controller.
 
 ![Harvard vs. Von Neumann Architecture.](assets/HarvardvsVonNeumann.png)
@@ -74,10 +78,12 @@ The default CMEM memory image is [sw/projects/cmem_to_flash_vector/cmem.mem](htt
 
 | Port | Start Byte Address | End Byte Address | Size (Kbytes) |
 |------|--------------------|------------------|---------------|
-| CMEM Port 0 | 0x00000000 | 0x0001FFFF | 128 | 
-| DMEM Port 0 | 0x00020000 | 0x0003FFFF | 128 | 
-| CMEM Port 1 | 0x00100000 | 0x0011FFFF | 128 |
-| DMEM Port 1 | 0x00120000 | 0x0013FFFF | 128 |
+| CMEM Port 0 | 0x00000000 | 0x0001FFFF | 128 |
+| CMEM Port 1 | 0x00000000 | 0x0001FFFF | 128 |
+| DMEM Port 0 | 0x00020000 | 0x0003FFFF | 128 |
+| DMEM Port 1 | 0x00020000 | 0x0003FFFF | 128 |
+
+Both ports of CMEM and DMEM have the same address range. The CPU and the DMAC can access the same memory location using the same address. The CPU access will go through port 0. The DMAC access will go through port 1.
 
 ### DPRAM Clock Frequency
 

@@ -67,6 +67,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Icarus**: Open-source Verilog simulator ([project page](https://steveicarus.github.io/iverilog/)).
 - **IEN**: Interrupt Enable Register.
 - **I/F**: Interface.
+- **Instruction Prefetcher**: A hardware mechanism that anticipates future memory accesses and fetches instructions before they are actually needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access.
 - **Interconnect**: Wishbone bus fabric.
 - **IO**: Input/Output.
 - **IOB**: Input/Output Block connecting FPGA to IO ports ([guide](https://digilent.com/reference/programmable-logic/arty-a7/reference-manual)).
@@ -76,6 +77,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **ISA**: Instruction Set Architecture.
 - **ISR**: Interrupt Service Routine or Interrupt Status Register.
 - **J1**: A small Forth CPU core.
+- **Jekyll**: A static, blog-aware, website generator written in Ruby.
 - **JTAG**: Debugging interface standard.
 - **Linting**: Static code analysis.
 - **LiteDRAM**: Configurable DRAM core in LiteX.
@@ -87,6 +89,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Makefile**: File defining build tasks for the *Make* utility.
 - **Memory File**: Contains initial Block RAM contents for FPGAs.
 - **Memory Mapped IO**: Mapping memory and I/O devices to the same address space.
+- **MkDocs**: Python-based static site generator, used to build the BoxLambda read-the-docs documentation.
 - **MIG**: Xilinx’s Memory Interface Generator.
 - **MiniEdgeIC**: Edge Triggered Interrupt Controller in BoxLambda.
 - **MEMC**: Memory Controller.
@@ -107,6 +110,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **PCM**: Pulse-Code Modulation for digital audio.
 - **PDM**: Pulse Density Modulation.
 - **PicoRV32**: Size-optimized RISC-V CPU, used as a DMA controller.
+- **Pip**: Python package manager.
 - **PIT**: Programmable Interval Timer.
 - **PLL Primitive**: FPGA clock primitive using phase-locked loops.
 - **PMOD**: Digilent’s Peripheral Module Interface standard.
@@ -156,6 +160,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **USB HIDBP**: USB HID Boot Protocol.
 - **VCS**: Version Control Subsystem.
 - **Vectored Mode**: A RISC-V interrupt mode with separate entry points in a vector table.
+- **Venv**: Virtual Environment - A Python environment with its own Python interpreter and packages.
 - **Verilate**: The process of compiling HDL into C++ using Verilator.
 - **Verilator**: A tool that compiles HDL into C++.
 - **VERA**: Versatile Embedded Retro Adapter - Graphics core for BoxLambda.

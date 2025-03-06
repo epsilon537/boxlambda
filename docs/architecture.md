@@ -25,7 +25,7 @@ The interconnect fabric is a 32-bit pipelined, Wishbone-based structure consisti
 
 #### The Crossbar Interconnect
 
-The bus masters and RAMs (including VERA graphics and the LiteDRAM external memory controller) are connected to a Crossbar Interconnect. The Crossbar Interconnect creates on-demand channels between bus masters and slaves, and can maintain multiple such channels. It can accept transactions from multiple bus masters simultaneously, as long as they don't target the same slave port. For example, without interference, the CPU can access internal memory while the DMA controller moves data from external memory to VERA.
+The bus masters and RAMs (including VERA graphics and the LiteDRAM external memory controller) are connected to a Crossbar Interconnect. The Crossbar Interconnect creates on-demand channels between bus masters and slaves, and can maintain multiple such channels. It can accept transactions from multiple bus masters simultaneously, as long as they don't target the same slave port. For example, without interference, the CPU can access external memory while the DMA controller moves data from internal memory to VERA.
 
 ![Crossbar Example](assets/CrossBarExample.png)
 

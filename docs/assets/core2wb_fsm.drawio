@@ -1,1 +1,39 @@
-<mxfile host="Electron" modified="2022-12-21T11:09:27.214Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/19.0.3 Chrome/102.0.5005.63 Electron/19.0.3 Safari/537.36" etag="Bxk3i2kUu4tIBO35XNYz" version="19.0.3" type="device"><diagram id="d2PN6w6fKUq8cv_ohd9x" name="Page-1">zVbbUtswEP0aPyYjWyFJH5uQQoZhYEinPCvyxvZUkVxJufH1XduyHV8gpQOdvoB8tFqvz9mzkUfn2+ONZml8r0IQXkDCo0evvSDwCZ3ivww5Fch45BdApJPQBdXAKnmB8qRDd0kIphFolRI2SZsgV1ICtw2Maa0OzbCNEs23piyCDrDiTHTR5yS0cYFOr0iN30ISxeWbfeJ2tqwMdoCJWagOZxBdeHSulbLFanucg8jIK3kpzn17ZbcqTIO0f3Lg5cfN+GCiefR8Je8XN7Pb5cPdwGXZM7FzH+wFY4H5ZmtcRNliGSIXDsTsFV4F6hLhSsMwyqvxu7uH9ZCfOO6VfNhTSTIWinpCFhQnFlYp49nOAVsKsdhuRZ6SzjZKWtcj/jivIa8etIXjq7T4FdnYpaC2YPUJQ8oDpZSuQf0v7vlQy+2XGsZnUk8dxlyHRVXqWgRcOB3eoUlwWZPvmknDuE2UxMgHGalERl3K+2Q7E4m8IZL/X4k0GrdEmvaIdNUjUmXHD1eJdlR6xi8lK8H2aBeiwaRKmmz5dX6HfxVyTBZPT/3cyvBrNqzwiQtmTMKblGq1kyGEuWZdgvlO7/NNv2Ibws5Ya3GN71c7zeFyI1qmI7CXhsir2g3I0Kf+tKHfIAg6+vXJV2IaBLPJvvlJfZK6Kh7RD7YugU6a7TNqe7egwp06n6GtRKOglYi2EhVcdRKhuOx0FpZmAeaNgltDiY4bsx0XRcbW6TK92mwMWK/d4pU2f9/1o07XL9fo6uz3F8eKhl9Fe/dMlgEu2DYbFW40kaUxu8wfK5xdIjcK52CQFfKYpCASiT0dkNxV9nzefZ53BFuDmDH+M8oPzZVA19JrqSR8rLPKm8wlZwVvOosMyWQyaRpr9E995TfbtLrrvNdXtD3fJ5/kq/Z76Kf7Ch/rO14RXt+U6eI3</diagram></mxfile>
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.16 Chrome/132.0.6834.196 Electron/34.2.0 Safari/537.36" version="26.0.16">
+  <diagram id="d2PN6w6fKUq8cv_ohd9x" name="Page-1">
+    <mxGraphModel dx="1416" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="XsEBUBP-LL8jft2bZNag-1" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="80" y="200" width="600" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zVG6wsgCgW5nMEGBHIOK-1" value="&lt;b&gt;Idle&lt;/b&gt;&lt;br&gt;core.gnt=1&lt;br&gt;wb.cyc=0" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="150" y="190" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="zVG6wsgCgW5nMEGBHIOK-2" value="&lt;b&gt;Transaction Ongoing&lt;br&gt;&lt;/b&gt;core.gnt=0&lt;br&gt;wb.cyc=1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="460" y="180" width="150" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="zVG6wsgCgW5nMEGBHIOK-3" value="WB Slave response ACK or ERR=1" style="endArrow=classic;html=1;rounded=0;fontSize=16;curved=1;" parent="1" source="zVG6wsgCgW5nMEGBHIOK-2" target="zVG6wsgCgW5nMEGBHIOK-1" edge="1">
+          <mxGeometry x="-0.1318" y="-22" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="480" as="sourcePoint" />
+            <mxPoint x="420" y="430" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="350" y="360" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zVG6wsgCgW5nMEGBHIOK-4" value="Ibex core.req=1 &lt;br&gt;-&amp;gt; Issue Single Access Pipelined WB transaction" style="endArrow=classic;html=1;rounded=0;fontSize=16;curved=1;labelBackgroundColor=none;" parent="1" source="zVG6wsgCgW5nMEGBHIOK-1" target="zVG6wsgCgW5nMEGBHIOK-2" edge="1">
+          <mxGeometry x="0.0777" y="-4" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="310" y="220" as="sourcePoint" />
+            <mxPoint x="360" y="170" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="360" y="130" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

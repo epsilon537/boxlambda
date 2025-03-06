@@ -33,7 +33,7 @@ Test Successful.
 
 ### Dual Port RAM Test on Arty A7
 
-Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Build the project in an Arty A7 build tree:
 

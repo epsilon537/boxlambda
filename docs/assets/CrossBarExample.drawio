@@ -1,1 +1,64 @@
-<mxfile host="Electron" modified="2023-12-30T10:56:52.320Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/19.0.3 Chrome/102.0.5005.63 Electron/19.0.3 Safari/537.36" etag="CadUne40GG2EugrxFI2D" version="19.0.3" type="device"><diagram id="pOdQyDdDVasYtneojfy1" name="Page-1">7VjbbhshEP0aPybaC+s4j76lTaVIbqxe8lTRXeJFxYvFYnudr+9g2Bs4cZomtqv0ycxZYODMHDPQCYfz4oPAi/SGJ4R1Ai8pOuGoEwS+F/bgRyEbjXSRr4GZoInpVANT+kDKkQZd0oTkrY6Scybpog3GPMtILFsYFoKv293uOWt7XeAZcYBpjJmLfqOJTDXai7wa/0joLC09+575MsdlZwPkKU74ugGF4044FJxL3ZoXQ8IUeSUvetzVI1+rhQmSyecMyPIHMfnhR6Npsbr+hNDZ4vbzmZllhdnSbHg4+WLWKzclCeuUSjJd4FjZawh0Jxykcs7A8qGJ84Wm/p4WBLwN7nkmTSgDBLZxQoQkxaOr9ytOIJkInxMpNtClHNA1NJo86hlz3QiKgdJGPEoMmzSYVRPXTEHDkPUHxAUOcaOb/vAUmQuD02IudJi7zuR5J+gy8Dz4KaA1U60bMj8/RT59i8+jE4ocQsfFv0RoxcypEBo5hH4d3/ZPkTqEToy6wOUOjrg8H2BIQw+ETkR5Utt0Cr7MEkXUyANy9pB7CF17LpfI20EmejMyuw6ZDmvxUqy2pClWSJb0Vc0DZsxwntO4zVqbYpvDXAr+q6pyQjVfQeV31fs8MtZd6Qnao8JMtDU2pZHB1huDlHnX/FYP21rlOL0zkjjlmBU/2D1fipjsL2okFjMi951Ebj404h3tCHeJCcKwpKv2cnflgPEw4RQ2Uv/r+e108y+sNNLbNKOadZ01kW//fdoTaR6ciSBT8KbRbaE65E8s2LP8+N7T67IqNqs+hYZeQa2PKgZ/IZmL/5J5iWSCZ0omOqZkoqidUaH/Qsl07VTuvo1kwgtL45dPSwbZUj6IZC7fkWQSnKfVRpQxwRJqkmyLBJ5/HFWhY6oqtFSFbDE8V1XIUhWy5flaqrIPlj0HkX0BPoiqQs9R1fZlxUthm7DXOCa5arjXNMl1pQx3NW/nlQ1KXNlWnNbUkDMuAMl4RpTwKGMWhBmdqVSPiSrEAVAFM40x65sPc5okys3O8vtRXfu9V6rArX/LMs4NHVRYUwihlWev91ThPo/pVx47ituY6Uvilb58v7PQoQPGDsz61VTrtX57Dse/AQ==</diagram></mxfile>
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.16 Chrome/132.0.6834.196 Electron/34.2.0 Safari/537.36" version="26.0.16">
+  <diagram id="pOdQyDdDVasYtneojfy1" name="Page-1">
+    <mxGraphModel dx="1416" dy="820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-1" value="CPU" style="whiteSpace=wrap;html=1;aspect=fixed;fontSize=24;" parent="1" vertex="1">
+          <mxGeometry x="160" y="80" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-2" value="DMAC" style="whiteSpace=wrap;html=1;aspect=fixed;fontSize=24;" parent="1" vertex="1">
+          <mxGeometry x="320" y="80" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-3" value="Ext.&lt;br&gt;Mem." style="whiteSpace=wrap;html=1;aspect=fixed;fontSize=24;" parent="1" vertex="1">
+          <mxGeometry x="120" y="280" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-4" value="Int.&lt;br&gt;Mem." style="whiteSpace=wrap;html=1;aspect=fixed;fontSize=24;" parent="1" vertex="1">
+          <mxGeometry x="280" y="280" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-5" value="VERA" style="whiteSpace=wrap;html=1;aspect=fixed;fontSize=24;" parent="1" vertex="1">
+          <mxGeometry x="440" y="280" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-25" value="CrossBar Interconnect" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;" parent="1" vertex="1">
+          <mxGeometry x="120" y="200" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-26" value="" style="curved=1;endArrow=classic;html=1;rounded=0;fontSize=24;strokeWidth=3;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="nszrP_15DSxvIJ44-pRQ-1" target="nszrP_15DSxvIJ44-pRQ-3" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="210" y="170" as="sourcePoint" />
+            <mxPoint x="180" y="270" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="200" y="210" />
+              <mxPoint x="160" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-27" value="" style="curved=1;endArrow=classic;html=1;rounded=0;fontSize=24;strokeWidth=3;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="nszrP_15DSxvIJ44-pRQ-2" target="nszrP_15DSxvIJ44-pRQ-5" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="550" y="310" as="sourcePoint" />
+            <mxPoint x="600" y="260" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="370" y="190" />
+              <mxPoint x="480" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-29" value="" style="curved=1;endArrow=classic;html=1;rounded=0;fontSize=24;strokeWidth=3;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=1 1;" parent="1" source="nszrP_15DSxvIJ44-pRQ-2" target="nszrP_15DSxvIJ44-pRQ-4" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="460" as="sourcePoint" />
+            <mxPoint x="400" y="410" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="360" y="210" />
+              <mxPoint x="320" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-30" value="CPU is accessing Ext.&amp;nbsp;Mem." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="10" y="164" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nszrP_15DSxvIJ44-pRQ-31" value="while DMAC is accessing VERA and Int. Mem." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="410" y="155" width="160" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
