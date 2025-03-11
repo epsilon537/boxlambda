@@ -37,7 +37,7 @@ uint32_t do_nothing() {
   return cycles;
 }
 
-//Repeatedly read and write a SoC register and measure how long it takes.
+//Repeatedly read a SoC register and measure how long it takes.
 uint32_t lw_register_loop(void *reg) {
   uint32_t num_iterations = NUM_ITERATIONS;
 
@@ -94,7 +94,7 @@ uint32_t lw_sw_copy_loop(void *dest, const void *src) {
   return cycles;
 }
 
-//NUM_ITERASTIONS of the lw_sw_copy_loop unrolled
+//NUM_ITERATIONS of the lw_sw_copy_loop unrolled
 uint32_t lw_sw_copy_unrolled(void *dest, const void *src) {
   mcycle_stop();
   pcount_reset();
