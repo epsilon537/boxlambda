@@ -2,7 +2,7 @@
 
 The value of this test is mostly in the waveform it generates. Checking the waveform of this test allows you to see instruction fetch latency and the cycle count of various common instructions: load-word and store-word to internal memory and VRAM, reading SoC registers, addi, branch taken, branch not taken.
 
-The test program consist of the following sub-tests:
+The test program consists of the following sub-tests:
 
 - **do_nothing()**: Measures how many cycles it takes to call *mcycle_start()* and *mcycle_stop()*.
 - **lw_register_loop()**: Repeatedly reads a peripheral register and measures how long it takes.

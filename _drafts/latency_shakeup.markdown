@@ -1,17 +1,17 @@
 ---
 layout: post
-title: 'The Latency Shakeup.'
+title: 'The Latency Shakeup'
 comments: true
 mathjax: yes
 ---
 
-All gateware components are in place now on the BoxLambda SoC, but the system isn't behaving according to requirements yet. One key requirement of BoxLambda is deterministic behavior. The duration of operations such as internal memory or register access must be predictable by design. When looking at a snippet of assembly code, you should be able to predict exactly how many clock cycles it's going to take to execute, without resorting to statistics. That's what this post is about.
+All gateware components are now in place on the BoxLambda SoC, but the system is not yet behaving as required. A key requirement of BoxLambda is deterministic behavior. The duration of operations such as internal memory or register access must be predictable by design. When analyzing a snippet of assembly code, you should be able to predict exactly how many clock cycles it will take to execute, without relying on statistics. That's what this post is about.
 
 Recap
 -----
 ![BoxLambda Block Diagram.](../assets/Arch_Diagram_NoDFX.png)
 
-Summarizing the current state of affairs of BoxLambda, we have:
+Here's a summary of the current state of BoxLambda:
 - An Ibex RISC-V core with machine timer and hardware interrupt support.
 - Wishbone interconnect and Harvard architecture internal memory.
 - DDR3 external memory access through the Litex memory controller.
@@ -26,13 +26,13 @@ Summarizing the current state of affairs of BoxLambda, we have:
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
 - DFX Partial FPGA Reconfiguration support.
 - A *Base* and a *DFX* configuration targeting the Arty-A7-100T FPGA development board.
-- A suite of test applications targeting all SoC components. Each test application runs on both FPGA configurations and on Verilator.
+- A suite of test applications covering all SoC components, running on both FPGA and Verilator.
 - Automated testing on Verilator and CocoTB.
 - A Linux CMake and Bender-based Software and Gateware build system.
 
-The behavior of a simple word copy loop, before making any adjustments
-----------------------------------------------------------------------
-Let's take a look at the behavior of the Ibex CPU's Instruction Fetch (IF) and Instruction Decode (ID) stage in the case of a simple word copy loop.
+Behavior of a Simple Word Copy Loop Before Adjustments
+------------------------------------------------------
+Let's look at the behavior of the Ibex CPU's Instruction Fetch (IF) and Instruction Decode (ID) stage in the case of a simple word copy loop.
 
 This is the loop's disassembly:
 
@@ -51,40 +51,40 @@ Here are some relevant signals from the Ibex IF and ID stages making one pass th
 
 *Before making any system changes, Ibex IF and ID stage executing a word copy loop (click to zoom).*
 
-The Pipeline Signals
-====================
-The waveform signals show the Ibex two-stage pipeline in action:
+Pipeline Signals
+================
+The following signals illustrate the behavior of the Ibex two-stage pipeline:
 - **prefetch_buffer_i.instr_\*** signals show the Instruction Prefetcher fetching instructions from memory:
   - **instr_addr_o**: instruction address output.
   - **instr_req_o**: instruction request output strobe.
   - **instr_rvalid_i**: instruction return data valid input strobe.
-- **prefetch_buffer.addr_o/valid_o** show the IF stage handing over the next instruction to the ID stage.
+- **prefetch_buffer.addr_o/valid_o** shows the IF stage handing over the next instruction to the ID stage.
 - **id_stage.pc_i** shows the ID stage's program counter, i.e. the address of the instruction being executed.
 - **id_stage.instr_is_compressed** indicates if the instruction being executed is compressed.
-- **id_stage.id_in_ready_o:** with this signal the ID stage indicates to the IF stage that it's ready for the next instruction. If the ID stage is stalling, e.g. because the Load-Store unit is loading a word, *id_ready_o* will go low until the ID stage is ready to proceed.
+- **id_stage.id_in_ready_o:**: This signal indicates when the ID stage is ready to receive the next instruction from the IF stage. If the ID stage stalls (e.g. due to a load operation in the Load-Store unit), *id_ready_o* is deasserted until the ID stage is ready to proceed.
 - **id_stage.instr_executing** indicates if the ID stage is currently executing an instruction.
 
-Irregularities
-=============
-The *pc_id_i* signal shows how the ID stage progresses through the loop. Notice that comparable instructions don't have the same execution time:
+Execution Irregularities
+========================
+The *pc_id_i* signal shows how the ID stage progresses through the loop. Notice that similar instructions don't have different execution times:
 
-  - the *lw* (load word) instruction takes longer than the *sw* (store word) instruction.
-  - the 2nd *addi* (add immediate) instruction take longer than the first and third addi instruction.
+  - the *lw* (load word) instruction takes longer to execute than the *sw* (store word) instruction.
+  - the 2nd *addi* (add immediate) instruction takes longer than the first and third addi instruction.
 
-Also note that the branch instruction takes a very long time to complete.
+Additionally, the branch instruction takes a long time to complete.
 
-Our goal is to understand this behavior and adjust the system so that you can predict the behavior from the code, without having to dig into a waveform.
+The goal is to analyze this behavior and adjust the system so that execution timing can be predicted directly from the code, without requiring waveform inspection.
 
 16-bit and 32-bit instructions
 ------------------------------
-There are a number of factors at play here. To start with, the word copy loop contains a mix of 16-bit and 32-bit instructions, but the instruction Prefetcher always fetches 32-bit words at a time. A prefetched 32-bit word can contain:
+There are several factors at play here. To start with, the word copy loop contains a mix of 16-bit and 32-bit instructions, but the instruction Prefetcher always fetches 32-bit words at a time. A prefetched 32-bit word can contain one of the following:
 - Two 16-bit instructions.
 - One 32-bit instruction.
 - One 16-bit instruction and the first half of a 32-bit instruction.
 - The 2nd half of a 32-bit instruction and a 16-bit instruction.
 - The 2nd half of a 32-bit instruction and the 1st half of another 32-bit instruction.
 
-All of these combinations have an impact on the cycle count of the instructions involved. This impact is predictable. You can tell which of the above combinations applies by looking at the code. I prefer to keep things simple, however (another BoxLambda requirement), so I'm going to switch to all uncompressed instructions by setting *CFLAG -march* to *rv32im* instead of *rv32imc*:
+All of these combinations have an impact on the cycle count of the instructions involved. This impact is predictable based on the instruction sequence. However, I prefer to keep things simple (another core BoxLambda requirement), so I'm going to switch to all uncompressed instructions by setting *CFLAG -march* to *rv32im* instead of *rv32imc*:
 
 ```
      41c:       0004a283                lw      t0,0(s1)
@@ -95,7 +95,7 @@ All of these combinations have an impact on the cycle count of the instructions 
      430:       fe0796e3                bnez    a5,41c <lw_sw_copy_loop+0x30>
 ```
 
-The assembly code is the same as before, but all instructions are 32-bits now.
+The assembly code is the same as before, but all instructions are 32-bit now.
 
 The waveform of the CPU IF and ID stages making one pass through this code now looks like this:
 
@@ -103,14 +103,14 @@ The waveform of the CPU IF and ID stages making one pass through this code now l
 
 *Ibex IF Prefetcher and ID stage executing a word copy loop. All 32-bit instructions (click to zoom).*
 
-It's now easier to match up what's going on in the ID-stage with the IF stage just before. There are still irregularities in the instruction cycle counts, however. Also, the instruction cycle counts are quite high.
+It's now easier to match up what's going on in the ID stage with the IF stage just before. There are still irregularities in the instruction cycle counts, however. Also, the instruction cycle counts are quite high.
 
 Bypassing the Crossbar
 ----------------------
-If you look at the Architecture Block Diagram at the beginning of the post, you'll see that Instruction fetches and data access go through the Wishbone Crossbar. There are two problems with this approach:
+Looking at the Architecture Block Diagram at the beginning of the post, you'll see that Instruction fetches and data access go through the Wishbone Crossbar. There are two problems with this approach:
 
-- The Crossbar is designed for throughput, not minimum latency. It can move a lot of data in systems that support a lot of outstanding transactions. In case of setups such as BoxLambda, however, where each transaction is blocking, the Crossbar is slow.
-- There is a one clock cycle cost for *channel switching*. An instruction fetch transaction will complete faster if it's back-to-back (without deasserting CYC) with the previous transaction. When this is not possible, however, such as when the ID stage stalls the IF stage, the instruction fetch transaction right after the stall is going to take one clock cycle longer. This causes irregularities in the instruction cycle counts.
+- The Crossbar prioritizes throughput over latency. It can move a lot of data in systems that support many outstanding transactions. In the case of setups such as BoxLambda, however, where each transaction is blocking, the Crossbar is slow.
+- There is a one-clock cycle cost for *channel switching*. An instruction fetch transaction completes faster when executed back-to-back with the previous transaction, without deasserting CYC. However, if the ID stage stalls the IF stage, preventing back-to-back IF transactions, the instruction fetch transaction right after the stall will take one clock cycle longer. This causes irregularities in the instruction cycle counts.
 
 To sidestep these issues, we can give the CPU direct access to the internal memories instead of going through the Crossbar, like so:
 
@@ -128,7 +128,7 @@ This is much faster and very regular:
 
 - 2 clock cycles to read a word from internal memory.
 - 2 clock cycles to write a word to internal memory.
-- 2 clocks cycles for each addi instructions.
+- 2 clock cycles for each addi instruction.
 - 4 clock cycles for a branch taken.
 
 There is more to a system than internal memory access, however.
@@ -141,10 +141,10 @@ Let's consider peripheral register access. The CPU reading a register from, for 
 
 *CPU access to I2C, passing through two crossbars.*
 
-So in case of peripheral register access, we're dealing with the same crossbar issues discused in the previous section, times two. There's two things we can do to improve the situation:
+So in the case of peripheral register access, we're dealing with the same crossbar issues discussed in the previous section, times two. There are two things we can do to improve the situation:
 
 1. Replace the shared bus *wbxbar* instance with a 1->13 MUX, an extended version of the 1->2 MUX we're already using at the processor ports. This MUX does not introduce any transaction latency.
-2. We can get rid of the channel switching irregulatities by inserting **Transaction Separators**, or *wb_stallers*. These transaction separators deassert CYC for one clock cycle between transactions so there are no back-to-back transactions. This increases the transaction latency going through the main crossbar with one clock cycle, but it removes the channel switching irregularities.
+2. We can get rid of the channel switching irregularities by inserting **Transaction Separators**, or *wb_stallers*. These transaction separators deassert CYC for one clock cycle between transactions so there are no back-to-back transactions. This increases the transaction latency going through the main crossbar with one clock cycle, but it removes the channel switching irregularities.
 
 ![BoxLambda SoC with two transaction separators and 1->13 MUX](../assets/stallers_and_1_13_mux.png)
 
@@ -158,7 +158,7 @@ The above waveform shows instruction fetch transactions from DMEM. These transac
 
 The Single Instruction Prefetcher
 ---------------------------------
-With the 1->13 MUX and Transaction Separators in place, let's look at at the behaviour of the IF Prefetcher and ID stage continusouly reading an I2C register in a loop. This is the disassembly of the loop:
+With the 1->13 MUX and Transaction Separators in place, let's look at the behavior of the IF Prefetcher and ID stage continuously reading an I2C register in a loop. This is the disassembly of the loop:
 
 ```
      3ac:       00042283                lw      t0,0(s0)
@@ -168,7 +168,7 @@ With the 1->13 MUX and Transaction Separators in place, let's look at at the beh
 
 And this is the waveform:
 
-![CPU wth default FIFO-based Prefetcher reading an I2C register in a loop](../assets/register_read_loop_default_prefetcher.png)
+![CPU with default FIFO-based Prefetcher reading an I2C register in a loop](../assets/register_read_loop_default_prefetcher.png)
 
 *CPU with default FIFO-based Prefetcher reading an I2C register in a loop.*
 
@@ -207,15 +207,15 @@ This looks good. The instruction cycle counts are what we expected:
 
 The Price Paid
 ==============
-The instruction cycle count of the register read loop is now easy to compute/predict, but we paid a price for that. With the Single Instruction Prefetcher it takes 12 clock cycles to make one pass through the loop vs. 9 clock default with the FIFO-based Prefetcher. The reason for this increase is that the Single Instruction Prefetcher requires 2 clock cycles to fetch an instruction from CMEM and there is no caching taking place. Instruction Fetch (including Prefetch) and Instruction Decode are two stages in a pipeline. This pipeline puts a lower bound on the instruction cycle count. Even though the ID stage can execute some instructions (e.g. *addi*) in 1 clock cycle, it receives instructions at a maximum rate of 1 instruction every 2 clock cycles.
+While the instruction cycle count of the register read loop is now predictable, this comes at a cost. With the Single Instruction Prefetcher, it takes 12 clock cycles to make one pass through the loop vs. 9 clock default with the FIFO-based Prefetcher. This increase occurs because the Single Instruction Prefetcher requires two clock cycles to fetch each instruction from CMEM, and it does not utilize caching. Instruction Fetch (including Prefetch) and Instruction Decode are two stages in a pipeline. This pipeline puts a lower bound on the instruction cycle count. Even though the ID stage can execute some instructions (e.g. *addi*) in 1 clock cycle, it receives instructions at a maximum rate of 1 instruction every 2 clock cycles.
 
 Another downside of the Single Instruction Prefetcher is that it only supports uncompressed instructions. We can no longer just compile critical code sections as uncompressed instructions. *All* code has to be compiled into uncompressed instructions.
 
 Branches
 ========
-It takes 4 clock cycles to branch. You can see in the waveform why this is so. Executing the *bnez* instruction itself (pc_id_i=0x3b4) takes two clock cycles. After executing the *bnez* instruction, the pipeline is primed to execute the next sequential instruction, at 0x03b8. It can't execute that instruction, however. It has to branch back to the beginning of the loop. The instruction at 0x03b8, ready to go, goes to waste. The *instr_executing* signal goes low until execution resumes at address 0x3ac.
+It takes 4 clock cycles to branch. You can see in the waveform why this is so. Executing the *bnez* instruction itself (pc_id_i=0x3b4) takes two clock cycles. After executing the *bnez* instruction, the pipeline is primed to execute the next sequential instruction, at 0x03b8. It can't execute that instruction, however. It has to branch back to the beginning of the loop. The instruction at 0x03b8, ready to go, is discarded. The *instr_executing* signal goes low until execution resumes at address 0x3ac.
 
-Ibex has a feature that reduces branch execution time by including an 2nd ALU that is used exclusively for branch target computations. Unfortunately, if I enable that feature I can no longer close timing at 50MHz.
+Ibex has a feature that reduces branch execution time by including a 2nd ALU that is used exclusively for branch target computations. Unfortunately, if I enable this feature I can no longer close timing at 50MHz.
 
 VRAM Access
 -----------
@@ -234,13 +234,13 @@ One more waveform and we'll call it a day. This is the same word copy routine as
 
 *CPU with Single Instruction Prefetcher copying words in VRAM (click to zoom).*
 
-The *lw* instruction takes 6 clock cycles while the *sw* takes 8 clock cycles. What is it this time? Here the issue is that VRAM is a single port RAM with multiple clients taking turns to get access to that RAM.
+The *lw* instruction takes 6 clock cycles while the *sw* takes 8 clock cycles. What is it this time? Here the issue is that VRAM is a single-port RAM with multiple clients taking turns to get access to that RAM.
 
 ![Vera VRAM Interface](../assets/vera_vram_if.png)
 
 *The VERA VRAM Interface.*
 
-Access to VRAM is arranged into time slots. If you write the VRAM accessing code just so, you may be able get it to fall into a beat pattern which makes the whole thing predictable again. That is too complicated and slow, however. We'll need a better solution. That's a topic for the next post.
+Access to VRAM is arranged into time slots. If you write the VRAM accessing code just so, you may get it to fall into a beat pattern which makes the whole thing predictable again. This is too complex and slow, however. A better solution is needed. That's a topic for the next post.
 
 Other Changes
 -------------
@@ -275,13 +275,13 @@ Setup
   source activate_env.sh
   ```
 
-  The first three steps need be executed once. Activating the environment is required every time you're working with BoxLambda.
+  The first three steps only need be executed once. Activating the environment is required every time you're working with BoxLambda.
 
 ## The Ibex Performance Test on Verilator
 
 The value of this test is mostly in the waveform it generates. Checking the waveform of this test allows you to see instruction fetch latency and the cycle count of various common instructions: load-word and store-word to internal memory and VRAM, reading SoC registers, addi, branch taken, branch not taken.
 
-The test program consist of the following sub-tests:
+The test program consists of the following sub-tests:
 
 - **do_nothing()**: Measures how many cycles it takes to call *mcycle_start()* and *mcycle_stop()*.
 - **lw_register_loop()**: Repeatedly reads a peripheral register and measures how long it takes.
@@ -366,7 +366,7 @@ In the terminal emulator, you should see the same output as in the Verilator tes
 Conclusion
 ----------
 
-We made good progress towards BoxLambda's Deterministic Behavior requirement. It's now much easier to predict the exact instruction cycle count of a chunk of code. Additionally, the overall latency of the system has been significantly reduced. We haven't reached our goal yet, however. There's the matter of VRAM access and we haven't considered yet other aspects of deterministic behavior such as interrupt lantecy. And what about that other big requirement: Simplicity? Is BoxLambda simple enough? I see significant system changes coming up. To be continued.
+We made good progress toward achieving BoxLambda's Deterministic Behavior requirement. It's now much easier to predict the exact instruction cycle count of a chunk of code. Additionally, the overall latency of the system has been significantly reduced. However, the goal has not yet been fully achieved. VRAM access remains an issue, and other aspects of deterministic behavior, such as interrupt latency, have yet to be addressed. And what about that other core requirement: Simplicity? Is BoxLambda simple enough? I see significant system changes coming up. To be continued.
 
 References
 ----------

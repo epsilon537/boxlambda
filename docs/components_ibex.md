@@ -1,20 +1,20 @@
-## RISCV Ibex Processor
+## RISC-V Ibex Processor
 
 - **Ibex Documentation**: [https://ibex-core.readthedocs.io/en/latest/index.html](https://ibex-core.readthedocs.io/en/latest/index.html).
 
-- **Ibex Repo**, BoxLambda fork, *boxlambda* branch:
+- **Ibex Repo** (BoxLambda fork, *boxlambda* branch):
   [https://github.com/epsilon537/ibex](https://github.com/epsilon537/ibex).
 
-- **Ibex Submodule in the BoxLambda Directory Tree**:
+- **Ibex as a Submodule in the BoxLambda Directory Tree**:
   boxlambda/sub/ibex/.
 
 - **Ibex Component in the BoxLambda Directory Tree**:
   [boxlambda/gw/components/ibex](https://github.com/epsilon537/boxlambda/tree/master/gw/components/ibex)
 
-- **Ibex Core Top-Level**:
+- **Ibex Core Top-Level Module**:
 [sub/ibex/rtl/ibex_top.sv](https://github.com/epsilon537/ibex/blob/acdf41b2bf3ed2f33ed5c29e65c1625d22e4aab5/rtl/ibex_top.sv)
 
-### Ibex Wishbone Wrapper: *Ibex_WB*
+### Ibex Wishbone Wrapper (*Ibex_WB*)
 
 - **Ibex WB Repo**, BoxLambda fork, *boxlambda* branch:
   [https://github.com/epsilon537/ibex_wb](https://github.com/epsilon537/ibex_wb).
@@ -29,7 +29,7 @@
 - **Ibex WB Core Top-Level**:
 [sub/ibex_wb/rtl/wb_ibex_core.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_ibex_core.sv)
 
-The Ibex RISCV core itself doesn't have Wishbone ports. *Ibex_WB* wraps around the vanilla Ibex core and attaches Core-to-Wishbone port adapters to its instruction and data ports.
+The Ibex RISCV core does not natively include Wishbone ports. *Ibex_WB* wraps around the vanilla Ibex core and attaches Core-to-Wishbone port adapters to its instruction and data ports.
 
 ### Ibex Core Configuration
 
@@ -53,9 +53,9 @@ wb_ibex_core #(
 ```
 
 - Single Cycle Multiplier.
-- Balanced Support for Bit Manipulation extensions, meaning: Zba (address generation), Zbb (base), Zbs (single-bit), Zbf (bit-field place), Zbt (ternary).
+- Balanced Support for Bit Manipulation extensions, meaning: Zba (address generation), Zbb (base), Zbs (single-bit operations), Zbf (bit-field placement), Zbt (ternary operations).
 - Single Instruction Prefetcher: This is a custom prefetcher that prefetches just one instruction. This helps ensure that the instruction cycle counts remain constant. See []().
-- Branch Target ALU disabled. The branch target ALU removes stall from taken branches. I would like to enable this feature, but I'm running into timing closure issues if I do.
+- Branch Target ALU disabled. The branch target ALU removes stalls from taken branches. While this feature reduces stalls from branches taken, enabling it currently results in timing closure issues.
 - Writeback stage disabled.
 - ICache disabled.
 - Dynamic branch prediction disabled.
@@ -63,7 +63,7 @@ wb_ibex_core #(
 - Memory protection disabled.
 - Debug Module support enabled.
 
-*Wb_ibex_core*'s *boot_addr* port is a misnomer. *Boot_addr* specifies the base address of the vector table. The Reset Vector, i.e. the first instruction executed when the processor comes out of reset, is at offset 0x80 relative to this base address. Hence, the *real* Boot Address for BoxLambda is address 0x80.
+The *boot_addr* port of *wb_ibex_core*'s is somewhat misleading. *Boot_addr* specifies the base address of the vector table. The Reset Vector - the first instruction executed when the processor comes out of reset - is at offset 0x80 relative to this base address. Hence, the *real* Boot Address for BoxLambda is address 0x80.
 
 Note that there's no Instruction or Data Cache. Code executes directly from the CMEM DPRAM or DDR memory. Data access goes straight to DMEM DPRAM or DDR memory.
 
@@ -75,7 +75,7 @@ For information on the compiler and compiler flags used to generate code for thi
 
 *The Single Instruction Prefetch Buffer in the Ibex Core.*
 
-An **Instruction Prefetcher** is a mechanism that anticipates future memory accesses and fetches instructions before they are actually needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access. The prefetcher caches instructions which means that instruction cycle counts will not be constant. For BoxLambda, determinism is a key goal, however. BoxLambda requires constant, or at least predictable, cycle counts. For this reason I replaced the standard Ibex prefetcher module with a custom, single instruction prefetcher.
+An **Instruction Prefetcher** is a mechanism that anticipates future memory accesses and fetches instructions before they are actually needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access. Because the prefetcher caches instructions, instruction cycle counts may vary. However, for BoxLambda, deterministic execution is a key goal. BoxLambda requires consistent cycle counts. To achieve this, the standard Ibex prefetcher module was replaced with a custom single-instruction prefetcher.
 
 Here is the code:
 
@@ -83,12 +83,12 @@ Here is the code:
 
 This module is a drop-in replacement for Ibex's standard prefetcher. It's selected by instantiating the Ibex core with parameter *PrefetchType* set to *PrefetchType_Single*.
 
-This prefetcher is very simple. It prefetches one 32-bit (i.e. uncompressed) instruction and delivers it to the Instruction Fetch (IF) stage when that stage indicates it is *ready*. The address being prefetched is the previously fetched address + 4 in case of linear code, or the address given to the prefetcher by the IF stage in case of a *branch_i* request. There are two special cases worth knowin about:
+This prefetcher is very simple. It prefetches one 32-bit (i.e. uncompressed) instruction and delivers it to the Instruction Fetch (IF) stage when that stage indicates it is *ready*. The prefetched address is either the previously fetched address incremented by 4 (for linear execution) or the address specified by the IF stage in the case of a *branch_i* request. There are two special cases worth knowing about:
 
 - If a branch_i request occurs while an instruction fetch transaction is ongoing, the ongoing transaction is discarded upon completion (not propagated to the IF stage). Then the branch address instruction is fetched.
 - When a branch_i request is issued to respond to an IRQ, the *addr_o* being output by the prefetcher at the moment the branch_i strobe arrives, is the address of the instruction being interrupted. Execution resumes from this address when the IRQ has been serviced.
 
-The single instruction prefetcher only supports uncompressed instructions. That's fine because BoxLambda software builds only use uncompressed instructions. Having a mix of 16-bit compressed and 32-bit uncompressable instructions would again result in less predictable instruction cycle counts, due to unaligned instruction fetches for instance.
+The single instruction prefetcher supports only uncompressed instructions. That's fine because BoxLambda software builds only use uncompressed instructions. Having a mix of 16-bit compressed and 32-bit uncompressable instructions would again result in less predictable instruction cycle counts, due to unaligned instruction fetches for instance.
 
 A prefetcher that fetches single 32-bit instructions helps ensure a constant instruction cycle count, but by itself is not enough. The path to the instruction memory, data memory or registers being fetched has to be free of unpredictable stalls. This is further discussed [here]().
 
@@ -100,33 +100,33 @@ This is the Ibex Memory Interface specification:
 
 There are two such interfaces. One for data, one for instructions.
 
-The job of *core2wb* is to adapt that interface to a pipelined Wishbone bus master interface. That Wishbone bus master in turn requests access to the shared bus.
+*Core2wb* adapts this interface to a pipelined Wishbone bus master interface. That Wishbone bus master in turn requests access to the shared bus.
 
-[Core2wb](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/core2wb.sv) effectively has two states: Idle (*transaction_ongoing==0*) and Transaction Ongoing (*transaction_ongoing==1*). In the Idle state, when Ibex signals a transaction request (*core.req*), a single access pipelined Wishbone transaction is generated and *core2wb* goes to the Transaction Ongoing state. When a WB ACK or ERR response is received, *core2wb* goes back to Idle. While in the Transaction Ongoing state, the memory interface grant (*gnt*) signal is held low, so further transaction requests are stalled until *core2wb* is idle again.
-Multiple outstanding transactions are currently not supported. I hope to add that capability someday.
+[Core2wb](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/core2wb.sv) effectively has two states: Idle (*transaction_ongoing==0*) and Transaction Ongoing (*transaction_ongoing==1*). In the Idle state, when Ibex signals a transaction request (*core.req*), a single access pipelined Wishbone transaction is generated, and *core2wb* goes to the Transaction Ongoing state. When a WB ACK or ERR response is received, *core2wb* goes back to Idle. While in the Transaction Ongoing state, the memory interface grant (*gnt*) signal is held low, so further transaction requests are stalled until *core2wb* is idle again.
+Currently, multiple outstanding transactions are not supported.
 
 ![Core2WB State Diagram.](assets/core2wb_fsm_new.png)
 
 *Core2WB State Diagram.*
 
-### Machine Mode
+### RISC-V Machine Mode
 
-Machine Mode is one of the four RISC-V privilege levels. It's the only mode used in BoxLambda.
+Machine Mode is one of the four RISC-V privilege levels and is the only one used in BoxLambda.
 
-### Ibex Clock Frequency
+### Ibex Core Clock Frequency
 
-The Ibex core is part of the 50MHz System Clock Domain.
+The Ibex core operates within the 50MHz system clock domain.
 
 ### Importing Ibex Code
 
-The ibex repo is a git submodule of BoxLambda, located in directory *sub/ibex*. This repo can't be built directly, however. It needs to be exported using fusesoc. Then, the exported files can be built.
+The ibex repo is a Git submodule of BoxLambda, located in the *sub/ibex* directory. However, this repo cannot be built directly. It must first be exported using FuseSoC. Then, the exported files can be built.
 In BoxLambda, the exported version of the Ibex lives in directory *gw/components/ibex/ibex_out*. This directory is part of the source tree and is under version control.
 
-A downside of this approach is that any changes in the Ibex code base need to be re-exported to BoxLambda for them to take effect in BoxLambda builds. This is currently a manual step handled by a *gen_core.sh* script:
+A downside of this approach is that any changes in the Ibex code base have to be re-exported to BoxLambda for them to take effect in BoxLambda builds. Currently this step is performed manually using the *gen_core.sh* script:
 
 ```
 cd gw/components/ibex
 ./gen_core.sh
 ```
 
-I will integrate this export/import step into the build system in the future.
+In the future, this export/import process will be integrated into the build system.
