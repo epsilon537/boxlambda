@@ -83,6 +83,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **LiteDRAM**: Configurable DRAM core in LiteX.
 - **LiteX**: SoC builder framework using Migen.
 - **LSB**: Least Significant Bit.
+- **LSU**: Load Store Unit.
 - **LUT**: Look-Up Table.
 - **Machine Mode**: RISC-V’s privilege level used by BoxLambda.
 - **MCP**: Multi-Cycle Path for CDC signals.

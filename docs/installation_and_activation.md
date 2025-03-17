@@ -22,7 +22,7 @@ cd boxlambda
 The following script initializes the git submodules used and creates the default build trees:
 
 ```
-./boxlambda_setup.sh
+source boxlambda_setup.sh
 ```
 
 This script will:

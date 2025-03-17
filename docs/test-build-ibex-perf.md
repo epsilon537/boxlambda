@@ -4,8 +4,8 @@ The value of this test is mostly in the waveform it generates. Checking the wave
 
 The test program consist of the following sub-tests:
 
-- **do_nothing()**: Measures how many cycles it take to call *mcycle_start()* and *mcycle_stop()*.
-- **lw_register_loop()**: Repeatedly reads a SoC register and measures how long it takes.
+- **do_nothing()**: Measures how many cycles it takes to call *mcycle_start()* and *mcycle_stop()*.
+- **lw_register_loop()**: Repeatedly reads a peripheral register and measures how long it takes.
 - **lw_sw_copy_loop()**: Copies 100 words from DMEM to DMEM, or from VRAM to VRAM, using a naive loop and measures how long it takes.
 - **lw_sw_copy_loop_unrolled()**: Same as the previous test, but with the loop unrolled.
 
@@ -18,7 +18,7 @@ cd build/sim-a7-100/gw/projects/ibex_perf_test
 make ibex_perf_test_bit_sw
 ```
 
-Execute the generated Verilator model with tracing enabled (*-t). You should see the following output:
+Execute the generated Verilator model with tracing enabled (*-t*). You should see the following output:
 
 ```
 ./Vmodel -t
