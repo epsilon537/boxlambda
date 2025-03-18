@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## YM2149 PSG, Audio DAC, and ST-Sound Test
 
 ### Audio DAC Test on Verilator

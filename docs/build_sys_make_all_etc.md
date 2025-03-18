@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 Make All, Clean, and Regen
 --------------------------
 *make all* will lint check and build **bit_sw/sim_sw** all gateware projects.

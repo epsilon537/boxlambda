@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## PicoRV DMA Controller
 
 - **PicoRV32 Repo**, BoxLambda fork, *boxlambda* branch:

@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## USB HID Keyboard and Mouse Test
 
 The USB HID System Test Case, running both on Verilator and on FPGA, continuously polls the two USB cores for report events. Whenever there's a report event (indicated in the *USB_HID_ISR* register), the device type (Keyboard/Mouse) and report details (mouse movement, keypress...) are printed.

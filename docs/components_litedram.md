@@ -1,15 +1,20 @@
+---
+hide:
+  - toc
+---
+
 ## LiteDRAM Memory Controller
 
-- **LiteX Repo**, BoxLambda fork, *boxlambda* branch: 
+- **LiteX Repo**, BoxLambda fork, *boxlambda* branch:
   [https://github.com/epsilon537/litex](https://github.com/epsilon537/litex).
 
-- **LiteX Submodule in the BoxLambda Directory Tree**: 
+- **LiteX Submodule in the BoxLambda Directory Tree**:
   boxlambda/sub/litex/.
 
-- **LiteDRAM Component in the BoxLambda Directory Tree**: 
+- **LiteDRAM Component in the BoxLambda Directory Tree**:
   [boxlambda/gw/components/litedram](https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram)
 
-SDRAM memory access is pretty complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. 
+SDRAM memory access is pretty complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed.
 
 There exists a class of memory controllers, called **Static Memory Controllers**, that absorb these complexities and by design create a fixed schedule for a fixed use case, resulting in very predictable behavior. Static Memory Controllers are far off the beaten path, however. **Dynamic Memory Controllers** are more common. Dynamic Memory Controllers can handle a variety of use cases with good performance *on average*. Unfortunately, they sacrifice predictability to achieve this flexibility.
 
@@ -20,7 +25,7 @@ The LiteDRAM memory controller falls squarely into the Dynamic Memory Controller
 ### Why choose LiteDRAM over Xilinx MIG?
 
 - LiteDRAM is open-source, scoring good karma points. All the benefits of open-source apply: Full access to all code, access to the maintainers, many eyeballs, the option to make changes as you please, submit bug fixes, etc.
-- The LiteDRAM simulation model, the entire test SoC, in fact, runs nicely in Verilator. That's a must-have for me. 
+- The LiteDRAM simulation model, the entire test SoC, in fact, runs nicely in Verilator. That's a must-have for me.
 - The LiteDRAM core, configured for BoxLambda, is almost 50% smaller than the equivalent MIG core.
 
 ### Generating a LiteDRAM core
@@ -86,27 +91,27 @@ Some points about the above:
 
 - The *PHY layer*, *Electrical*, and *Core* sections I left exactly as-is in the given Arty example.
 - In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
-- In the *Frequency* section, I set *sys_clk_freq* to 50MHz. The generated core will also provide a double-rate 100MHz clock next to this 50MHz clock.  
+- In the *Frequency* section, I set *sys_clk_freq* to 50MHz. The generated core will also provide a double-rate 100MHz clock next to this 50MHz clock.
 - In the *User Ports* section, I specified one 32-bit Wishbone port.
-  
-I generate two LiteDRAM core variants from this configuration: 
 
-- For simulation: 
-  
+I generate two LiteDRAM core variants from this configuration:
+
+- For simulation:
+
 ```litedram_gen artya7dram.yml --sim --gateware-dir sim/rtl --software-dir sim/sw --name litedram```
 
-- For FPGA: 
-  
+- For FPGA:
+
 ```litedram_gen artya7dram.yml --gateware-dir arty/rtl --software-dir arty/sw --name litedram```
 
 The generated core has the following interface:
 
 ```
 module litedram (
-`ifndef SYNTHESIS    
+`ifndef SYNTHESIS
     input  wire sim_trace, /*Simulation only.*/
 `endif
-`ifdef SYNTHESIS  
+`ifdef SYNTHESIS
     output wire          pll_locked, /*FPGA only...*/
     input  wire          rst,
     input  wire          clk,
@@ -169,7 +174,7 @@ I created a *litedram_wrapper.sv* module around litedram.v:
 [https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv)
 
 This wrapper contains Pipelined-to-Classic Wishbone adaptation. The adapter logic comes straight out of the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The *stall* signal is used to avoid pipelining:
-  
+
 ```
   /*Straight out of the Wishbone B4 spec. This is how you interface a classic slave to a pipelined master.
    *The stall signal ensures that the STB signal remains asserted until an ACK is received from the slave.*/

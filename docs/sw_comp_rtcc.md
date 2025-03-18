@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Real-Time Clock and Calendar API
 
 - **MCP79412RTC Repo**, BoxLambda fork, *boxlambda* branch:

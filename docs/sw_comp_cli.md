@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Embedded CLI
 
 - **Embedded CLI Repo**, BoxLambda fork, *boxlambda* branch:

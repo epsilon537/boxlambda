@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## GPIO
 
 - **GPIO Repo**, BoxLambda fork, *boxlambda* branch:

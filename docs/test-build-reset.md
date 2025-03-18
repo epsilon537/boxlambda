@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Reset Test
 
 The reset test code running on the RISCV processor: [boxlambda/sw/projects/reset_test/reset_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/reset_test/reset_test.cpp)

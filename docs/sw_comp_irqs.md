@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Ibex RISC-V Interrupt Handling
 
 ### Vectored Mode

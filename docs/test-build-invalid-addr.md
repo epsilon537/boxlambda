@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Invalid Address Test
 
 This test verifies that reading from or writing to an invalid address does not cause an exception and that reading from an invalid address returns the value 0xDEADBEEF.

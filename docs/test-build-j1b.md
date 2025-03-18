@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## J1B Test
 
 **The j1b_test Test SoC project directory**:

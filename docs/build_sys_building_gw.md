@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # Building Gateware
 
 Assuming all [Prerequisites](prerequisites.md) are installed, navigate to the desired build tree and run the following command:
@@ -89,8 +94,8 @@ When you run *make hello_world_bit_sw*, the following happens:
 
 ### Managing Vivado Logging and Tracing
 
-The build system invokes Vivado through a wrapper script: *scripts/vivado_wrapper.sh*.  
-This script defines a *VIVADO_FLAGS* variable that controls the level of Vivado logging and tracing.  
+The build system invokes Vivado through a wrapper script: *scripts/vivado_wrapper.sh*.
+This script defines a *VIVADO_FLAGS* variable that controls the level of Vivado logging and tracing.
 
 By default, the variable is set to:
 

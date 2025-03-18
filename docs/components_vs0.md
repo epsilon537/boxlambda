@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## VS0
 
 - **VS0 Stub** Component in the BoxLambda Directory Tree:

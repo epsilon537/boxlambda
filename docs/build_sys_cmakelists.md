@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # The CMakeLists
 
 The build system consists of a tree of *CMakeLists.txt* files. The top-level *CMakeLists.txt* adds the *gw/* and *sw/* subdirectories. The *CMakeLists.txt* files in those subdirectories add the *components/* and *projects/* subdirectories, etc., down to the individual GW and SW component and project directories.
@@ -8,8 +13,8 @@ The build instructions for a gateware component are grouped into one CMake funct
 
 ```
 gw_component_rules(
-    TOP_MODULE <top module name> 
-    COMPONENT_NAME <component name> 
+    TOP_MODULE <top module name>
+    COMPONENT_NAME <component name>
 )
 ```
 
@@ -17,8 +22,8 @@ For example:
 
 ```
 gw_component_rules(
-    TOP_MODULE wb_wbuart_wrap_wrap 
-    COMPONENT_NAME wbuart32 
+    TOP_MODULE wb_wbuart_wrap_wrap
+    COMPONENT_NAME wbuart32
 )
 ```
 
@@ -43,7 +48,7 @@ if(BL_TARGET_FPGA STREQUAL "arty-a7-100")
       vs0_j1b
     VS_INSTS
       boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
-    REF_DFX_PROJECT 
+    REF_DFX_PROJECT
       dfx_test
   )
 endif()
@@ -103,7 +108,7 @@ Here is an example:
 gw_project_rules_dfx_vivado(
     TOP_MODULE boxlambda_top
     PROJECT_NAME dfx_test
-    VS_INSTS 
+    VS_INSTS
       boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
     VS_DEFAULT_COMPONENTS
       vs0_stub
@@ -252,8 +257,8 @@ wait_start:
 GNU Make, CMake's backend, uses the modification date of dependencies to decide if a build rule should be triggered, e.g. an object gets rebuilt when the corresponding source code has a more recent modification date than the object file itself. With Bender, however, a component's or project's *Bender.yml* file is just the tip of a tree. The Bender target and package dependencies also have to be considered. Simply listing the Bender.yml file as a dependency is not good enough. Instead, I'm using the Bender script output as a dependency:
 
 1. The build system runs the *bender script* command.
-2. The output of that command is stored in a temporary file. 
-3. That file is compared with the Bender script output file used by the previous build of the same target. 
+2. The output of that command is stored in a temporary file.
+3. That file is compared with the Bender script output file used by the previous build of the same target.
     - If it's different, the file is copied over, making it the Bender script output file to be used by the next build step. The Bender script output file is a dependency for synthesis, so synthesis will be triggered.
     - If the temporary file is the same as the Bender script output file used by the previous build of that target, the temporary file is discarded. Synthesis will not be triggered.
 

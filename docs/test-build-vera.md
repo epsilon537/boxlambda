@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## VERA Test
 
 ### Vera_integrated on Verilator
@@ -39,7 +44,7 @@ make vera_integrated_load
 ```
 
 The display should now show a bunch of colored squares. Here's a picture of my setup.
-   
+
 ![Arty A7 Setup for vera_integrated Test SoC.](assets/vera_fpga_test_setup.jpg)
 
 *Arty A7 Setup for the vera_integrated Test SoC.*

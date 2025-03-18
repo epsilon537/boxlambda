@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## (Debugging) Hello World
 
 ### Hello World on the Arty A7

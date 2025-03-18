@@ -1,12 +1,17 @@
+---
+hide:
+  - toc
+---
+
 ## YM Music files and ST-Sound
 
 - **ST-Sound Repo**, BoxLambda fork, *boxlambda* branch:
     [https://github.com/epsilon537/StSound](https://github.com/epsilon537/StSound).
 
-- **ST-Sound Submodule in the BoxLambda Directory Tree**: 
+- **ST-Sound Submodule in the BoxLambda Directory Tree**:
     boxlambda/sub/StSound/.
 
-- **ST-Sound Component in the BoxLambda Directory Tree**: 
+- **ST-Sound Component in the BoxLambda Directory Tree**:
     [boxlambda/sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound)
 
 The YM file format by Arnaud Carré, a.k.a. Leonard/Oxygene, is a music file format that supports the YM2149:
@@ -21,7 +26,7 @@ The *ST-Sound* code base is written for Windows, but it was easy to add a Linux 
 
 [https://github.com/epsilon537/StSound](https://github.com/epsilon537/StSound)
 
-I ported ST-Sound library to BoxLambda, using the YM2149 audio core: 
+I ported ST-Sound library to BoxLambda, using the YM2149 audio core:
 
 [https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound)
 

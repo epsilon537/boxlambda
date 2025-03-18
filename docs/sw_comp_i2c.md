@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## I2C API
 
 - **I2C Software Component in the BoxLambda Directory Tree**:

@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## The BoxLambda Base Project Build
 
 - **BoxLambda Base Project in the BoxLambda Directory Tree**:

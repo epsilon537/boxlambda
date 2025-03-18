@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## RISC-V Ibex Processor
 
 - **Ibex Documentation**: [https://ibex-core.readthedocs.io/en/latest/index.html](https://ibex-core.readthedocs.io/en/latest/index.html).

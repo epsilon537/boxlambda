@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## LEDs
 
 LEDs 0-3 have a fixed role in BoxLambda:
