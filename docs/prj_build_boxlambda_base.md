@@ -3,7 +3,7 @@
 - **BoxLambda Base Project in the BoxLambda Directory Tree**:
   [boxlambda/gw/projects/boxlambda-base](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_base)
 
-This project builds the 'official' BoxLambda Base Configuration, as described in the [Architecture section](architecture.md#the-base-configuration).
+This project builds the 'official' BoxLambda Base Configuration, as described in the [Architecture section](architecture.md#base-configuration).
 
 This is an FPGA-only project build. Most test project builds are variants of this project, tailored for testing a specific feature, and include a Verilator version as well.
 
