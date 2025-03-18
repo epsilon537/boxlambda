@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## SDSPI and FatFs Test
 
 ### SDSPI Test on Verilator

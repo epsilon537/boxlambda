@@ -1,12 +1,17 @@
+---
+hide:
+  - toc
+---
+
 ## USB HID Keyboard and Mouse
 
 - **Usb_hid_host Repo**, BoxLambda fork, *boxlambda* branch:
     [https://github.com/epsilon537/usb_hid_host](https://github.com/epsilon537/usb_hid_host)
 
-- **Usb_hid_host Submodule in the BoxLambda Directory Tree**: 
+- **Usb_hid_host Submodule in the BoxLambda Directory Tree**:
     boxlambda/sub/usb_hid_host/.
 
-- **Usb_hid_host Component in the BoxLambda Directory Tree**: 
+- **Usb_hid_host Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/usb_hid_host](https://github.com/epsilon537/boxlambda/tree/master/gw/components/usb_hid_host)
 
 - **Usb_hid_host Top-Level**:
@@ -15,10 +20,10 @@
 - **Usb_hid_device Repo**, BoxLambda fork, *boxlambda* branch:
     [https://github.com/epsilon537/usb_hid_device](https://github.com/epsilon537/usb_hid_device)
 
-- **Usb_hid_device Submodule in the BoxLambda Directory Tree**: 
+- **Usb_hid_device Submodule in the BoxLambda Directory Tree**:
     boxlambda/sub/usb_hid_device/.
 
-- **Usb_hid_device Component in the BoxLambda Directory Tree**: 
+- **Usb_hid_device Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/usb_hid_device](https://github.com/epsilon537/boxlambda/tree/master/gw/components/usb_hid_device)
 
 - **Usb_hid_device Top-Level**:
@@ -32,7 +37,7 @@ The USB HID Host core used by BoxLambda is based on the NAND2Mario usb_hid_host 
 
 *The NAND2Mario usb_hid_host core.*
 
-The NAND2Mario usb_hid_host core is easy to use. You don't need a USB software stack. UKP, a little 4-bit processor inside the core handles the USB enumeration. You don't need a USB PHY chip either. You can just hook up the USB D-/D+ pins directly to a simple USB PMOD. 
+The NAND2Mario usb_hid_host core is easy to use. You don't need a USB software stack. UKP, a little 4-bit processor inside the core handles the USB enumeration. You don't need a USB PHY chip either. You can just hook up the USB D-/D+ pins directly to a simple USB PMOD.
 
 Usb_hid_host requires a 12MHz clock. You just hook up the clock, reset, USB D-/D+ and the core takes care of the rest. Usb_hid_host has the following output ports:
 
@@ -49,7 +54,7 @@ Usb_hid_host requires a 12MHz clock. You just hook up the clock, reset, USB D-/D
 
 ### USB HIDBP
 
-The [USB HID Spec](https://www.usb.org/sites/default/files/hid1_11.pdf) is big and complicated. A complete implementation would require a lot more infrastructure than just a small usb_hid_host core. Usb_hid_host implements a subset of the USB HID spec called the *Boot Protocol* (USB HIDBP). The Boot Protocol was added to the spec to humor BIOS developers. The Boot Protocol is much simpler than its counterpart, the *Report Protocol*, which is the protocol used by the big USB stacks in Linux or Windows. 
+The [USB HID Spec](https://www.usb.org/sites/default/files/hid1_11.pdf) is big and complicated. A complete implementation would require a lot more infrastructure than just a small usb_hid_host core. Usb_hid_host implements a subset of the USB HID spec called the *Boot Protocol* (USB HIDBP). The Boot Protocol was added to the spec to humor BIOS developers. The Boot Protocol is much simpler than its counterpart, the *Report Protocol*, which is the protocol used by the big USB stacks in Linux or Windows.
 
 Unfortunately, not all keyboards and mice support the Boot Protocol. Basic/Low-end keyboards and mice have a higher chance of supporting the Boot Protocol. I'm using a *Dell KB212-B* keyboard and a *Dell OCJ339* mouse.
 

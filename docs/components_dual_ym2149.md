@@ -1,12 +1,17 @@
+---
+hide:
+  - toc
+---
+
 ## Dual YM2149 PSG Sound Core
 
 - **YM2149_PSG_system Repo**, BoxLambda fork, *boxlambda* branch:
     [https://github.com/epsilon537/YM2149_PSG_system](https://github.com/epsilon537/YM2149_PSG_system).
 
-- **YM2149_PSG_system Submodule in the BoxLambda Directory Tree**: 
+- **YM2149_PSG_system Submodule in the BoxLambda Directory Tree**:
     boxlambda/sub/ym2149_psg_system/.
 
-- **YM2149_PSG_system Component in the BoxLambda Directory Tree**: 
+- **YM2149_PSG_system Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/ym2149](https://github.com/epsilon537/boxlambda/tree/master/gw/components/ym2149)
 
 - **YM2149_PSG_system Core Top-Level**:
@@ -17,7 +22,7 @@
 
 - **YM2419_PSG_system Register interface**:
     [sw/components/ym2149_sys_hal/ym2149_sys_regs.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ym2149_sys_hal/ym2149_sys_regs.h)
-  
+
 A sound core is a perfect candidate for Partial FPGA Reconfiguration. There are a lot of options (Wave-Table synthesis, FM synthesis, PSG...) and a lot of open-source cores available. It would be pretty cool if the software application could just download its synthesizer of choice as part of the program.
 
 Pretty much any core developed by [Jotego](https://github.com/jotego) sounds like a great idea.
@@ -85,7 +90,7 @@ The core can be configured to produce stereo I2S output, but for BoxLambda we'll
 
 ### A Second Order Delta-Sigma DAC
 
-The *YM2149_PSG_System* core produces 16-bit PCM audio. The audio amplifier PMOD expects the audio signal on a single pin, however. To bring 16-bit PCM audio to a single digital pin, we need a **one-bit Digital-to-Analog converter**. If you've never heard of one-bit DACs before, it probably sounds terrible, but it works quite well. The idea is to generate, at a rate much higher than the input sample rate, a stream of pulses such that a moving average going over the pulse stream produces a signal that tracks the input 16-bit PCM signal. 
+The *YM2149_PSG_System* core produces 16-bit PCM audio. The audio amplifier PMOD expects the audio signal on a single pin, however. To bring 16-bit PCM audio to a single digital pin, we need a **one-bit Digital-to-Analog converter**. If you've never heard of one-bit DACs before, it probably sounds terrible, but it works quite well. The idea is to generate, at a rate much higher than the input sample rate, a stream of pulses such that a moving average going over the pulse stream produces a signal that tracks the input 16-bit PCM signal.
 
 ![1-bit delta-sigma modulation (blue) of a sine wave (red).](assets/Pulse-density_modulation_1_period.gif)
 
@@ -93,7 +98,7 @@ The *YM2149_PSG_System* core produces 16-bit PCM audio. The audio amplifier PMOD
 
 In analog electronics, a moving average is created by attaching a simple low-pass RC filter to the one-bit-DAC pin. In our case, we don't even have to do that, because the audio amplifier PMOD provides the low-pass filter.
 
-There exist several ways to implement a one-bit DAC, with different pros and cons. One commonly used technique is called **Delta-Sigma Conversion**. It's explained very well in the following article from Uwe Beis: 
+There exist several ways to implement a one-bit DAC, with different pros and cons. One commonly used technique is called **Delta-Sigma Conversion**. It's explained very well in the following article from Uwe Beis:
 
 [https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html)
 
@@ -101,14 +106,14 @@ There exist several ways to implement a one-bit DAC, with different pros and con
 
 *Second Order Delta Sigma Modulator Block Diagram from [https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html).*
 
-I'll be using a **Second Order Delta-Sigma DAC**. An advantage of a second-order delta-sigma DAC is that it (more than its first-order counterpart) pushes the noise introduced by the Digital-to-Analog conversion out of the way, to higher frequency ranges where gets filtered out by the low-pass filter. 
+I'll be using a **Second Order Delta-Sigma DAC**. An advantage of a second-order delta-sigma DAC is that it (more than its first-order counterpart) pushes the noise introduced by the Digital-to-Analog conversion out of the way, to higher frequency ranges where gets filtered out by the low-pass filter.
 
 The Uwe Beis article above describes the idea well enough. However, I was unable to find a reference implementation that made sense to me. I ended up writing my own, borrowing ideas from the following implementations I found online:
 
 - [https://forum.digilent.com/topic/20332-second-order-sigma-delta-dacs-implemented-in-a-fpga/?do=findComment&comment=65787](https://forum.digilent.com/topic/20332-second-order-sigma-delta-dacs-implemented-in-a-fpga/?do=findComment&comment=65787)
 - [https://github.com/briansune/Delta-Sigma-DAC-Verilog?_ga=2.154876920.117504330.1692006910-1995131070.1681993594](https://github.com/briansune/Delta-Sigma-DAC-Verilog?_ga=2.154876920.117504330.1692006910-1995131070.1681993594)
 
-Here is my Verilog code: 
+Here is my Verilog code:
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/audio_dac/rtl/one_bit_dac.sv)
 
@@ -154,7 +159,7 @@ The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob
 1. The DAC samples are converted to a numpy array and normalized.
 2. The normalized signal is sent through a low-pass filter.
 3. The frequency spectrum of the filtered signal is computed.
-4. The spectrum's frequency bins up to 1000Hz are analyzed and plotted. 
+4. The spectrum's frequency bins up to 1000Hz are analyzed and plotted.
 5. Six peak frequencies are identified and matched against the 6 expected pitches. If the deviation is small, the test is declared successful.
 
 The test project code is located here:

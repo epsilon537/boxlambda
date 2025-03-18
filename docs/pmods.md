@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Hooking Up the Peripherals (PMODs)
 
 ### VGA PMOD

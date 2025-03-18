@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## DFX Test
 
 J1B is a 32-bit, minimal instruction set stack processor. It's one of the supported host CPUs of the [SwapForth](https://github.com/jamesbowman/swapforth) environment.

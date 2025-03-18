@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Serial Port
 
 - **Wbuart32 Repo**, BoxLambda fork, *boxlambda* branch:

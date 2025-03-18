@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## SPI Flash Test
 
 The **spiflash_test** program does the following:

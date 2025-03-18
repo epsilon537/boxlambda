@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Real-Time Clock and Calendar Test
 
 - [boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/rtcc_test/rtcc_test.cpp)

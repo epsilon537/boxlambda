@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## I2C
 
 - **I2C Repo**, BoxLambda fork, *boxlambda* branch:

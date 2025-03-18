@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Dual Port RAM Test
 
 The Dual Port RAM Test verifies access to the dual port memories. The test program checks instruction and data access to both of the memories. The program also includes a test exercising both ports of the Dual Port RAM simultaneously. One port is accessed by the CPU, and the other port by the DMA Controller.

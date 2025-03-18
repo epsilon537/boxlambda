@@ -174,7 +174,7 @@ And this is the waveform:
 
 It looks like we're not there yet. In this loop, the *addi* (add immediate) instruction only takes one clock cycle. In the word copy loop earlier, the *addi* instruction takes 2 clock cycles. A bit of investigation shows that this irregularity comes from the Instruction Prefetcher. The Instruction Prefetcher contains a small FIFO that caches prefetched instructions. This creates a bit of elasticity. Generally, that's a good thing, but not if you want predictable instruction cycle counts.
 
-I wrote an alternative, **Single Instruction Prefetcher** module that, as the name says, just prefetches a single instruction. There's no FIFO. The Single Instruction Prefetcher can be used as a drop-in replacement for the Ibex processor's default Instruction Prefetcher. You select it by setting the *PrefetchType* parameter to *PrefetchType_Single* in the instantiation of the wb_ibex_core:
+I wrote an alternative, **Single Instruction Prefetcher** module that, as the name says, just prefetches a single instruction. The Single Instruction Prefetcher can be used as a drop-in replacement for the Ibex processor's default Instruction Prefetcher. You select it by setting the *PrefetchType* parameter to *PrefetchType_Single* in the instantiation of the wb_ibex_core:
 
 ```
   wb_ibex_core #(
@@ -189,6 +189,12 @@ I wrote an alternative, **Single Instruction Prefetcher** module that, as the na
       .DmExceptionAddr({2'b00, SHARED_BUS_SLAVE_ADDRS[(DM_S+1)*AW-1:DM_S*AW], 2'b00} + 32'h00000808)
   ) wb_ibex_core (
 ```
+
+![The Single Instruction Prefetch Buffer in the Ibex Core.](../assets/ibex_single_prefetch_buffer.png)
+
+*The Single Instruction Prefetch Buffer in the Ibex Core.*
+
+This prefetcher is very simple. It prefetches one 32-bit (i.e. uncompressed) instruction and delivers it to the Instruction Fetch (IF) stage when that stage indicates it is *ready*. The prefetched address is either the previously fetched address incremented by 4 (for linear execution) or the address specified by the IF stage in the case of a *branch_i* request.
 
 The Single Instruction Prefetch SystemVerilog code can be found here:
 

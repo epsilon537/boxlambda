@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## The Timer API
 
 This is the Timer module API:

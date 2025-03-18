@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## The BoxLambda DFX Project Build
 
 **BoxLambda DFX Project in the BoxLambda Directory Tree**:

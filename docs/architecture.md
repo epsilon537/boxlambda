@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # Architecture
 
 ## Base Configuration

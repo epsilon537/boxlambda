@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # Building Software for BoxLambda
 
 The software associated with a gateware project is automatically compiled, converted to a memory file, and included in the gateware project as part of the build process (see gateware build rules **<project>_bit_sw** and **<project>_sim_sw**).

@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## J1B HAL
 
 **J1B HAL API**:

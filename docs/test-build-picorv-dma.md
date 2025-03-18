@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## PicoRV DMA Test Builds
 
 ### PicoRV Burst FSM CoCoTB Unit Test

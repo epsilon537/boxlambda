@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # Terms and Abbreviations
 
 This section clarifies some of the more ambiguous terms and abbreviations used elsewhere in the documentation.

@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Peek and Poke CLI
 
 - **Peek_poke_cli CLI Component in the BoxLambda Directory Tree**:

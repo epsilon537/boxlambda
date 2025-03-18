@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Timer, UART, and GPIO Interrupt Test
 
 ### The Timer, UART, and GPIO Interrupt Test on Verilator

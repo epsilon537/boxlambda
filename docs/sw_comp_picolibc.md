@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## Picolibc and Bootstrap
 
 - **PicoLibc Version**: 1.8.6

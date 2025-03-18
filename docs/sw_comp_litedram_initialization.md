@@ -1,10 +1,15 @@
+---
+hide:
+  - toc
+---
+
 ## LiteDRAM Initialization
 
 When the *litedram_gen.py* script generates the LiteDRAM Verilog core (based on the given *.yml* configuration file), it also generates the core's CSR register accessors for software:
 
 - For FPGA: [https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/arty/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/arty/sw/include/generated)
 - For simulation: [https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/sim/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram/sim/sw/include/generated)
-  
+
 The most relevant files are **csr.h** and **sdram_phy.h**. They contain the register definitions and constants used by the memory initialization code. Unfortunately, these accessors are *not* the same for the FPGA and the simulated LiteDRAM cores. We're going to have to use separate software builds for FPGA and simulation.
 
 ### *Sdram_init()*

@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## I2C Test
 
 The I2C test code running on the RISCV processor: [boxlambda/sw/projects/rtcc_test/i2c_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/i2c_test/i2c_test.cpp)

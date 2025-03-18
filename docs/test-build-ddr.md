@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## DDR Test
 
 ### DDR Test Image on Verilator

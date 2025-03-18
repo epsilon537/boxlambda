@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 The Test Bench
 ==============
 Because BoxLambda primarily integrates existing components that have already been verified by their respective owners, the focus is on system-level testing rather than component-level verification. In the few areas where BoxLambda introduces significant new logic, component and/or module-level verification is performed. Component-level verification and system-level testing use different test benches.
@@ -37,7 +42,7 @@ The test bench performs the following tasks:
    1. Feed characters into UARTSIM's transmit path, i.e., towards the model.
    2. Feed the model's UART output to UARTSIM, and UARTSIM's output to the model's UART input.
    3. Capture and display the decoded UARTSIM output and GPIO outputs.
-   
+
 6. Pass/Fail criterion: After running the model for the set number of clock cycles, compare the captured UART and GPIO outputs against the expected results.
 
 Here is the source code for the proof-of-concept test bench:
@@ -59,7 +64,7 @@ The *hello.c* test program includes the following check:
 ```c
   //GPIO1 bits3:0 = 0xf indicate we're running inside a simulator.
   if ((gpio_get_input(&gpio1) & 0xf) == GPIO1_SIM_INDICATOR)
-    uart_printf(&uart0, "This is a simulation.\n");    
+    uart_printf(&uart0, "This is a simulation.\n");
   else
     uart_printf(&uart0, "This is not a simulation.\n");
 ```

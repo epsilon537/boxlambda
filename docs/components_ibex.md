@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## RISC-V Ibex Processor
 
 - **Ibex Documentation**: [https://ibex-core.readthedocs.io/en/latest/index.html](https://ibex-core.readthedocs.io/en/latest/index.html).
@@ -54,7 +59,7 @@ wb_ibex_core #(
 
 - Single Cycle Multiplier.
 - Balanced Support for Bit Manipulation extensions, meaning: Zba (address generation), Zbb (base), Zbs (single-bit operations), Zbf (bit-field placement), Zbt (ternary operations).
-- Single Instruction Prefetcher: This is a custom prefetcher that prefetches just one instruction. This helps ensure that the instruction cycle counts remain constant. See []().
+- Single Instruction Prefetcher: This is a custom prefetcher that prefetches just one instruction. This helps ensure that the instruction cycle counts remain constant. See [the next section](#the-single-instruction-prefetcher).
 - Branch Target ALU disabled. The branch target ALU removes stalls from taken branches. While this feature reduces stalls from branches taken, enabling it currently results in timing closure issues.
 - Writeback stage disabled.
 - ICache disabled.
@@ -75,7 +80,7 @@ For information on the compiler and compiler flags used to generate code for thi
 
 *The Single Instruction Prefetch Buffer in the Ibex Core.*
 
-An **Instruction Prefetcher** is a mechanism that anticipates future memory accesses and fetches instructions before they are actually needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access. Because the prefetcher caches instructions, instruction cycle counts may vary. However, for BoxLambda, deterministic execution is a key goal. BoxLambda requires consistent cycle counts. To achieve this, the standard Ibex prefetcher module was replaced with a custom single-instruction prefetcher.
+An **Instruction Prefetcher** is a mechanism that anticipates future memory accesses and fetches instructions before they are actually needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access. Because the prefetcher caches upcoming instructions, instruction cycle counts may vary. However, for BoxLambda, deterministic execution is a key goal. BoxLambda requires consistent cycle counts. To achieve this, the standard Ibex prefetcher module was replaced with a custom single-instruction prefetcher.
 
 Here is the code:
 
@@ -85,12 +90,12 @@ This module is a drop-in replacement for Ibex's standard prefetcher. It's select
 
 This prefetcher is very simple. It prefetches one 32-bit (i.e. uncompressed) instruction and delivers it to the Instruction Fetch (IF) stage when that stage indicates it is *ready*. The prefetched address is either the previously fetched address incremented by 4 (for linear execution) or the address specified by the IF stage in the case of a *branch_i* request. There are two special cases worth knowing about:
 
-- If a branch_i request occurs while an instruction fetch transaction is ongoing, the ongoing transaction is discarded upon completion (not propagated to the IF stage). Then the branch address instruction is fetched.
-- When a branch_i request is issued to respond to an IRQ, the *addr_o* being output by the prefetcher at the moment the branch_i strobe arrives, is the address of the instruction being interrupted. Execution resumes from this address when the IRQ has been serviced.
+- If a *branch_i* request occurs while an instruction fetch transaction is ongoing, the ongoing transaction is discarded upon completion (not propagated to the IF stage). Then the branch address instruction is fetched.
+- When a *branch_i* request is issued to respond to an IRQ, the *addr_o* being output by the prefetcher at the moment the *branch_i* strobe arrives, is the address of the instruction being interrupted. Execution resumes from this address when the IRQ has been serviced.
 
 The single instruction prefetcher supports only uncompressed instructions. That's fine because BoxLambda software builds only use uncompressed instructions. Having a mix of 16-bit compressed and 32-bit uncompressable instructions would again result in less predictable instruction cycle counts, due to unaligned instruction fetches for instance.
 
-A prefetcher that fetches single 32-bit instructions helps ensure a constant instruction cycle count, but by itself is not enough. The path to the instruction memory, data memory or registers being fetched has to be free of unpredictable stalls. This is further discussed [here]().
+A prefetcher that fetches single 32-bit instructions helps ensure a constant instruction cycle count, but by itself is not enough. The path to the instruction memory, data memory or registers being fetched has to be free of unpredictable stalls. This is further discussed [here](components_wb_interconnect.md#wishbone-staller-transaction-separator).
 
 #### Core2WB
 
@@ -120,7 +125,7 @@ The Ibex core operates within the 50MHz system clock domain.
 ### Importing Ibex Code
 
 The ibex repo is a Git submodule of BoxLambda, located in the *sub/ibex* directory. However, this repo cannot be built directly. It must first be exported using FuseSoC. Then, the exported files can be built.
-In BoxLambda, the exported version of the Ibex lives in directory *gw/components/ibex/ibex_out*. This directory is part of the source tree and is under version control.
+In BoxLambda, the exported version of Ibex lives in directory *gw/components/ibex/ibex_out*. This directory is part of the source tree and is under version control.
 
 A downside of this approach is that any changes in the Ibex code base have to be re-exported to BoxLambda for them to take effect in BoxLambda builds. Currently this step is performed manually using the *gen_core.sh* script:
 

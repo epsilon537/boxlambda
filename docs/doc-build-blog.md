@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # Building the Jekyll Blog
 
 Ruby and Bundler are required if you want to build the BoxLambda Blog website.

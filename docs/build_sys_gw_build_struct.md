@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # The Gateware Build Structure
 
 ## Bender
@@ -6,7 +11,7 @@ The build system is CMake-based but relies on Bender for gateware package depend
 
 [https://github.com/pulp-platform/bender](https://github.com/pulp-platform/bender)
 
-Central to Bender is the package manifest file, `bender.yml`. This manifest specifies HDL sources, Vivado IPs, dependencies, include paths, targets (e.g., synthesis, simulation), and associated *defines*. 
+Central to Bender is the package manifest file, `bender.yml`. This manifest specifies HDL sources, Vivado IPs, dependencies, include paths, targets (e.g., synthesis, simulation), and associated *defines*.
 
 A **package directory** is a directory containing a `bender.yml` file. Running Bender in such a directory generates a flat list of all sources from the current package and its dependencies. Additionally, Bender can output this list along with any *defines* for a given target as a Tcl script, simplifying Vivado integration.
 
@@ -39,20 +44,20 @@ The build system currently uses the following Bender targets:
 
 The gateware system is organized into three layers:
 
-1. **The Project Layer (Top)**:  
+1. **The Project Layer (Top)**:
    Example: *Hello World*. This layer represents the top level of the build system. The `bender.yml` manifest includes top-level SoC build files, project-specific `.xdc` constraints, memory files, and the list of components the project depends on.
 
-2. **The Component Layer (Middle)**:  
+2. **The Component Layer (Middle)**:
    Components form the building blocks of an SoC. Each component defines its sources, *defines*, and dependencies in a `bender.yml` manifest. Component HDL sources are located in the `rtl/` subdirectory or in `sub/` (submodule layer). Each Wishbone Bus master or slave is considered a separate component.
 
-3. **The Submodule Layer (Bottom)**:  
+3. **The Submodule Layer (Bottom)**:
    Submodules are Git submodules referenced by BoxLambda. They form the foundation of the build system.
 
 ## Verilator Lint Waivers
 
 Instead of adding lint waivers directly to the source code of Git submodules, these waivers are grouped into `.vlt` files located in the corresponding gateware component or project subdirectory. This approach avoids unnecessary changes to submodule source code.
 
-Example:  
+Example:
 [gw/components/ibex/lint.vlt](https://github.com/epsilon537/boxlambda/blob/master/gw/components/ibex/lint.vlt)
 
 ## Gateware Component/Project Directory Layout

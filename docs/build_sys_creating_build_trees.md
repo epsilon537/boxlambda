@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # Creating Additional Build Trees
 
 You can create additional build trees easily from the BoxLambda root directory using the following command:

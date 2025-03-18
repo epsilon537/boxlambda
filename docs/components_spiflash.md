@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 ## SPI Flash Controller
 
 - **SPI Flash Gateware Component in the BoxLambda Directory Tree**:
@@ -184,7 +189,7 @@ The SPI bus clock frequency is 25Mhz and is derived from the System Clock Domain
 
 ### SpiFlash Memory Layout
 
-The Arty A7 is equipped with 16Mbytes of flash memory. 
+The Arty A7 is equipped with 16Mbytes of flash memory.
 
 Flash memory address range: 0x11000000-0x11ffffff, allocated as follows:
 
