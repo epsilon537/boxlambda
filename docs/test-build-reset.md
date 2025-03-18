@@ -64,7 +64,7 @@ Build the test project:
 cd build/arty-a7-100/gw/projects/reset_test
 make reset_test_bit_sw
 ```
-Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Run the project:
 ```

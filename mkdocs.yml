@@ -1,26 +1,36 @@
 site_name: BoxLambda Documentation
+site_url: !ENV READTHEDOCS_CANONICAL_URL
 
 markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
+
+plugins:
+  - glightbox
 
 extra_javascript:
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 theme:
-    name: readthedocs
+    name: material
     collapse_navigation: True
     titles_only: False
     logo: assets/boxlambda_logo_simple_white.png
     favicon: images/favicon.png
     features:
-    - navigation.instant
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.top
-    - navigation.sections
     - toc.follow
+    - content.code.copy  # Adds "copy" button to code blocks
+    - content.tabs.link  # Enables tabbed content
+    - content.tooltips  # Enables tooltips
+    - content.code.annotate  # Enables inline code annotations
+    - navigation.top
+    - navigation.instant  # Faster page loads
+    - navigation.tracking  # Keeps the URL updated
+    - navigation.sections  # Groups sidebar items into sections
 
 nav:
     - About: index.md
@@ -86,7 +96,7 @@ nav:
     - Installation:
         - Prerequisites: prerequisites.md
         - Peripherals (PMODs): pmods.md
-        - Installation: installation.md
+        - Installation and Activation: installation_and_activation.md
     - Project Builds:
         - BoxLambda Base: prj_build_boxlambda_base.md
         - BoxLambda DFX: prj_build_boxlambda_dfx.md
@@ -107,6 +117,7 @@ nav:
         - J1B Test: test-build-j1b.md
         - DFX Test: test-build-dfx.md
         - Invalid Address Test: test-build-invalid-addr.md
+        - Ibex Performance Test: test-build-ibex-perf.md
     - Documentation Builds:
         - Blog: doc-build-blog.md
         - MkDocs: doc-build-mkdocs.md

@@ -1,6 +1,6 @@
 ## The BoxLambda Base Project Build
 
-- **BoxLambda Base Project in the BoxLambda Directory Tree**:  
+- **BoxLambda Base Project in the BoxLambda Directory Tree**:
   [boxlambda/gw/projects/boxlambda-base](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_base)
 
 This project builds the 'official' BoxLambda Base Configuration, as described in the [Architecture section](architecture.md#the-base-configuration).
@@ -11,7 +11,7 @@ This build expects to find the software image to boot in flash memory.
 
 ### Building and Running BoxLambda Base
 
-Connect a terminal program to the Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator to the Arty's USB serial port. **Settings: 115200 8N1**.
 
 Build the flash image for one of the non-DFX software projects in the Arty A7 build tree. Using the *ddr_test* flash image as an example:
 

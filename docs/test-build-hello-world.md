@@ -36,13 +36,15 @@ Ready for Remote Connections
 Info : Listening on port 6666 for tcl connections
 Info : Listening on port 4444 for telnet connections
 ```
-Launch GDB with the hello_world_ram executable:
+Launch gdb-multiarch with the hello_world_ram executable:
 ```
 cd <boxlambda root directory>/build/arty-a7-100/sw/projects/hello_world
-riscv32-unknown-elf-gdb hello_world_ram
+gdb-multiarch hello_world_ram
 ```
-Connect GDB to the target. From the GDB shell:
+Set the architecture to *riscv:rv32* and connect GDB to the target. From the GDB shell:
 ```
+(gdb) set architecture riscv:rv32
+The target architecture is set to "riscv:rv32".
 (gdb) target extended-remote localhost:3333
 Remote debugging using localhost:3333
 ?? () at crt0.S:81
@@ -85,13 +87,15 @@ TAP: riscv.cpu
 [riscv.cpu] Target successfully examined.
 Ready for Remote Connections on port 3333.
 ```
-Launch GDB with the hello_world_ram executable:
+Launch gdb-multiarch with the hello_world_ram executable:
 ```
 cd <boxlambda root directory>/build/sim-a7-100/sw/projects/hello_world
-riscv32-unknown-elf-gdb hello_world_ram
+gdb-multiarch hello_world_ram
 ```
-Connect GDB to the target. From the GDB shell:
+Set the architecture to *riscv:rv32* and connect GDB to the target. From the GDB shell:
 ```
+(gdb) set architecture riscv:rv32
+The target architecture is set to "riscv:rv32".
 (gdb) target extended-remote localhost:3333
 Remote debugging using localhost:3333
 ?? () at crt0.S:81
@@ -101,7 +105,7 @@ Notice that the CPU is stopped at the very first instruction of the boot sequenc
 
 ##### *Ignoring Packet Error, Continuing...*
 
-When GDB is connected to a Verilator target, you might occasionally get an annoying *'Ignoring packet error, continuing...'* message in the GDB console. This happens because GDB interaction with a running Verilator model is slow. You can avoid the message by increasing GDB's **remotetimeout** value. The default value is 2 (seconds). On my system, increasing the value to 10 does the trick. In the GDB console, or in your ~/.gdbinit file, enter the following command:
+When GDB is connected to a Verilator target, you might occasionally get an annoying *'Ignoring packet error, continuing...'* message in the GDB console. This happens because GDB interaction with a running Verilator model is slow. You can avoid the message by increasing GDB's **remotetimeout** value. The default value is 2 (seconds). On my system, increasing the value to 10 does the trick. In the GDB console, or your *~/.gdbinit* file, enter the following command:
 
 ```
 set remotetimeout 10

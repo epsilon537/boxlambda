@@ -48,7 +48,7 @@ Download the generated bitstream file to the Arty A7:
 make audio_dac_test_load
 ```
 You should hear a 440Hz tone. You can check the pitch with a pitch detector app.
-   
+
 ### YM2149 DAC Test on Verilator
 
 Build the *ym2149_dac_test* project:
@@ -63,7 +63,7 @@ DAC Output File: dac_out.py
 PCM Output File: pcm_out.py
 ...
 YM2149 test.
-YM2149 config complete.                 
+YM2149 config complete.
 No overflows detected.
 ```
 The Verilator model should have generated Python files *dac_out.py* and *pcm_out.py*:
@@ -90,7 +90,7 @@ Relative Deviations:
 
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
-Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Build the *ym2149_dac_test* project in an Arty A7 build tree:
 ```
@@ -102,7 +102,7 @@ Download the generated bitstream file to the Arty A7:
 make ym2149_dac_test_load
 ```
 You should hear a 6-tone chord.
-   
+
 ### ST-Sound Test on Verilator
 
 Build the *stsound_test* project:
@@ -141,7 +141,7 @@ SDSPI: CMDIDX = 6 -- WE HAVE A COMMAND #17! [ 51 00 00 01 30 15 ]
 READ: Seek to sector 307
 Starting playback...
 No overflows detected.
-Test passed.  
+Test passed.
 ```
 The Verilator model should have generated Python file *pcm_out.py*:
 ```
@@ -165,9 +165,9 @@ Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
 Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
 
-Locate YM file **ANCOOL1.YM** in directory **boxlambda/sub/StSound/YmSampleFiles/**. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.  
+Locate YM file **ANCOOL1.YM** in directory **boxlambda/sub/StSound/YmSampleFiles/**. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.
 
-Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**. 
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Build the *stsound_test* project in an Arty A7 build tree.
 ```
@@ -187,7 +187,7 @@ Listing directory contents...
 /ANCOOL1.YM
 Switching to PSG_1
 Loading YM file: ancool1.ym ...
-Starting playback... 
+Starting playback...
 ```
 There are a few controls you can play around with:
 

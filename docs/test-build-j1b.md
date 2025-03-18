@@ -41,7 +41,7 @@ DUT: Signature correct.
 DUT: J1B program length in bytes: 32768
 DUT: Taking J1B out of reset...
 DUT: Sending test string: 42 EMIT
-DUT: 
+DUT:
 DUT: Test string sent. Forwarding UART...
 DUT:  * ok
 SIM: String matched.
@@ -52,7 +52,7 @@ The test string *42 emit* is a Forth instruction, requesting to *emit* (print) t
 
 ### The J1B Test on FPGA
 
-Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Build the project in *arty-a7-100t* build tree:
 
@@ -72,7 +72,7 @@ The REPL is still listening. You can continue entering Forth instructions:
 
 ```
 : star 42 emit ;  ok
-cr star cr star cr star 
+cr star cr star cr star
 *
 *
 * ok

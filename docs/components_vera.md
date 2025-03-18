@@ -1,12 +1,12 @@
 ## VERA (Wishbone) Graphics
 
-- **VERA Wishbone Repo**, BoxLambda fork, *boxlambda* branch: 
+- **VERA Wishbone Repo**, BoxLambda fork, *boxlambda* branch:
   [https://github.com/epsilon537/vera_wishbone](https://github.com/epsilon537/vera_wishbone).
 
-- **VERA Wishbone Submodule in the BoxLambda Directory Tree**: 
+- **VERA Wishbone Submodule in the BoxLambda Directory Tree**:
   boxlambda/sub/vera_wishbone/.
 
-- **VERA Gateware Component in the BoxLambda Directory Tree**: 
+- **VERA Gateware Component in the BoxLambda Directory Tree**:
   [boxlambda/gw/components/vera](https://github.com/epsilon537/boxlambda/tree/master/gw/components/vera)
 
 - **VERA Wishbone Core Top-Level**:
@@ -48,7 +48,7 @@ The easiest way to understand what's going on is by going through the diagram fr
 
 The video RAM (VRAM) is a Single Port RAM instance of four byte-wide columns (matching a 32-bit Wishbone data bus with four byte-enables). The amount of RAM is configurable, up to 128KB, through a **VRAM_SIZE_BYTES** parameter/macro.
 
-The **vram_if** module has four ports: Two Line Renderers, the Sprite Renderer, and the CPU. The vram_if module arbitrates access to the VRAM using a time slot scheduler. There are four equal time slot *beats*. Each port is assigned one slot during which it can access VRAM. The duration of a timeslot is one clock cycle.
+The **vram_if** module has four ports: Two Line Renderers, the Sprite Renderer, and the CPU. The vram_if module arbitrates access to the VRAM using a time slot scheduler. There are four equal time slot *beats*, each one clock cycle wide. Each port is assigned one slot during which it can access VRAM. The duration of a timeslot is one clock cycle.
 
 ![Time Slot Scheduled VRAM Access.](assets/vram_if_timeslot_scheduling.drawio.png)
 
@@ -61,11 +61,11 @@ With this mechanism, bandwidth utilization on one port does not have any impact 
 The Composer receives basic control signals from the video_vga block: *next pixel*, *next line*, *next frame*, *vblank*. It uses these signals for the following purposes:
 
 - Generate control/timing signals towards the other blocks, e.g. *line index*, *render start*, *frame done*, *sprite Line Buffer erase start*.
-- Keep track of the horizontal and vertical screen position counters, both regular and scaled.  
+- Keep track of the horizontal and vertical screen position counters, both regular and scaled.
 - Generate line IRQs.
 - Determine the active area of the screen, where the border isn't shown.
 - Compose the display, reading out the pixel data from the three Line Buffers.
-   
+
 ### The Layer Renderer
 
 The Layer Render's implementation is, conceptually at least, reasonably straightforward:
@@ -92,12 +92,12 @@ Other responsibilities of the Layer Renderer include:
 - Handling of the different colors-depths: 8bpp, 4bpp, 2bpp, 1bpp.
 - Handling of the different tile widths and heights.
 - Tile V-flip and H-flip.
-  
+
 ### The Layer Line Buffer
 
 The Layer Renderer has an 8-bit write-only interface to its Line Buffer. The Line Buffer contains 8 bits per entry. One entry corresponds to one pixel.
-The Layer Line Buffer implements a double buffering scheme: While the renderer is writing out one scan line, the Composer is reading out the other line. When they are done with the respective scan lines, they switch places.  
-  
+The Layer Line Buffer implements a double buffering scheme: While the renderer is writing out one scan line, the Composer is reading out the other line. When they are done with the respective scan lines, they switch places.
+
 ### The Sprite Renderer
 
 The Sprite Renderer's operation is a bit more complicated:
@@ -116,7 +116,7 @@ In the waveform below, you can see two sprites getting rendered out on a scanlin
 
 #### Sprite Banks
 
-The Sprite Attribute RAM consists of two banks of 64 sprite IDs. A bit in the *VERA_CTRL* register is used to select the active bank. 
+The Sprite Attribute RAM consists of two banks of 64 sprite IDs. A bit in the *VERA_CTRL* register is used to select the active bank.
 
 Sprite Banking may help with sprite multiplexing or animation: While one sprite bank is active, software can prepare the inactive bank's entries and switch over at the right moment, triggered by a *line_irq*, for instance.
 
@@ -182,7 +182,7 @@ Note:
 
 For a description of the VERA Wishbone registers, refer to the [VERA Programmer's Reference](https://github.com/epsilon537/vera_wishbone/blob/boxlambda/doc/VERA%20Programmer's%20Reference.md).
 
-### Top-Level Interface and Output Pins 
+### Top-Level Interface and Output Pins
 
 The *vera_wishbone* top-level interface is straightforward:
 
@@ -210,11 +210,11 @@ module vera_top #(
   output wire        irq_n,
 
   // VGA interface
-  output reg  [3:0]  vga_r,       
-  output reg  [3:0]  vga_g,       
-  output reg  [3:0]  vga_b,       
-  output reg         vga_hsync,   
-  output reg         vga_vsync   
+  output reg  [3:0]  vga_r,
+  output reg  [3:0]  vga_g,
+  output reg  [3:0]  vga_b,
+  output reg         vga_hsync,
+  output reg         vga_vsync
   );
 ```
 

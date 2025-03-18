@@ -3,28 +3,28 @@
 ### SDSPI Test on Verilator
 
 Build the *sdspi_test* project:
-   
+
 ```
 cd build/sim-a7-100/gw/projects/sdspi_test
 make sdspi_test_sim_sw
 ```
 
 Create and format the SD Card image file (or just use the *sdcard.img* files checked into the *test/* subdirectory of the *sdspi_test* project):
-   
+
 ```
 dd if=/dev/zero of=sdcard.img bs=512 count=131072
 mkfs.fat -F 16 sdcard.img
 ```
 
 Execute the generated Verilator model. Pass in the *sdcard.img* file:
-   
+
 ```
 ./Vmodel -s sdcard.img
 ```
 
 You should now see the following messages appear in the terminal window. The traces prefixed with *SDSPI:* come from the SDSPI co-simulator. The first two lines and the last line come from the test bench. The other lines are *printf()* statements coming from the test program running on the RISCV processor.
 
-```   
+```
 SD Image File: /home/epsilon/sdcard.img
 SDCARD: NBLOCKS = 131072
 
@@ -51,17 +51,17 @@ SDSPI Test successful.
 ### SDSPI Test on Arty A7
 
 Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
-   
+
 Note that this is a destructive test. The contents of the SD card will be destroyed.
 
 Build the *sdspi_test* project in an Arty A7 build tree:
-	
+
 ```
 cd build/arty-a7-100/gw/projects/sdspi_test
 make sdspi_test_bit_sw
 ```
 
-Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Download the generated bitstream file to the Arty A7:
 
@@ -103,7 +103,7 @@ Create and format the SD Card image file (or just use the *sdcard.img* files che
 dd if=/dev/zero of=sdcard.img bs=512 count=131072
 mkfs.fat -F 16 sdcard.img
 ```
-   
+
    Execute the generated Verilator model. Pass in the *sdcard.img* file:
 
 ```
@@ -111,7 +111,7 @@ mkfs.fat -F 16 sdcard.img
 ```
 
 You should see the following messages in the terminal window. The traces prefixed with *SDSPI:* come from the SDSPI co-simulator. The first two lines and the last line come from the test bench. The other lines are *printf()* statements coming from the test program running on the RISCV processor.
-	
+
 ```
 SD Image File: /home/epsilon/sdcard.img
 SDCARD: NBLOCKS = 131072
@@ -133,13 +133,13 @@ sudo mount -o loop ~/sdcard.img /mnt/sd
 ls -al /mnt/sd
 cat /mnt/sd/LOG.TXT
 This is a test.
-sudo umount /mnt/sd    
+sudo umount /mnt/sd
 ```
 
 ### FatFS Test on Arty A7
 
 Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
-   
+
 Note that this is a destructive test. The contents of the SD card will be destroyed.
 
 Build the *fatfs_test* project in an Arty A7 build tree:
@@ -149,7 +149,7 @@ cd build/arty-a7-100/gw/projects/fatfs_test
 make fatfs_test_bit_sw
 ```
 
-Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Download the generated bitstream file to the Arty A7:
 

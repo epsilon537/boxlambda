@@ -60,7 +60,7 @@ Test passed.
 
 ### The SPI Flash Test on FPGA
 
-Connect a terminal program to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Build the *spiflash_test_flsh* software project in an Arty A7 build tree:
 ```
