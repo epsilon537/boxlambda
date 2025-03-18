@@ -6,10 +6,6 @@ markdown_extensions:
       generic: true
   - attr_list
   - md_in_html
-  - pymdownx.blocks.caption
-
-plugins:
-  - glightbox
 
 extra_javascript:
   - javascripts/mathjax.js
