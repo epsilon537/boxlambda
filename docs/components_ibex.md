@@ -67,7 +67,7 @@ The *boot_addr* port of *wb_ibex_core*'s is somewhat misleading. *Boot_addr* spe
 
 Note that there's no Instruction or Data Cache. Code executes directly from the CMEM DPRAM or DDR memory. Data access goes straight to DMEM DPRAM or DDR memory.
 
-For information on the compiler and compiler flags used to generate code for this processor configuration, see section [RISCV GCC Compiler Flags](build_sys_building_sw.md#riscv-gcc-compiler-flags).
+For information on the compiler and compiler flags used to generate code for this processor configuration, see section [RISC-V GCC Compiler Flags](build_sys_building_sw.md#risc-v-gcc-compiler-flags).
 
 ### The Single Instruction Prefetcher
 

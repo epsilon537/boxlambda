@@ -1,9 +1,9 @@
 ## The BoxLambda DFX Project Build
 
-**BoxLambda DFX Project in the BoxLambda Directory Tree**:  
+**BoxLambda DFX Project in the BoxLambda Directory Tree**:
 [boxlambda/gw/projects/boxlambda-dfx](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_dfx)
 
-This project builds the 'official' BoxLambda DFX Configuration as described in the [Architecture section](architecture.md#the-dfx-configuration).
+This project builds the 'official' BoxLambda DFX Configuration as described in the [Architecture section](architecture.md#dfx-configuration).
 
 ![DFX Terminology applied to the BoxLambda SoC](assets/dfx_terminology.png)
 
