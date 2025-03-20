@@ -94,11 +94,11 @@ function (gw_common_rules_vivado)
                   -top ${_top_module})
   #If a constraints file list is given, append it to the Vivado command string.
   if (NOT ${_prj_constraints_file_list} STREQUAL "")
-      string(APPEND create_project_cmd " -prj_constraints " ${_prj_constraints_file_list})
+    string(APPEND create_project_cmd " -prj_constraints " ${_prj_constraints_file_list})
   endif()
   #If a mem file list is given, append it to the Vivado command string.
   if (NOT ${_mem_file_list} STREQUAL "")
-      string(APPEND create_project_cmd " -mem_files " ${_mem_file_list})
+    string(APPEND create_project_cmd " -mem_files " ${_mem_file_list})
   endif()
 
   #Custom command executing the create_project command string.
@@ -221,6 +221,7 @@ function (gw_common_rules_verilator)
     )
 
   add_custom_target(${_prj_comp_name}_lint
+        ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND

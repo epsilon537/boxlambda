@@ -15,18 +15,21 @@ gw_component_rules(
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "fpga")
-if(BL_TARGET_FPGA STREQUAL "arty-a7-100")
-  # vs0_stub is a DFX component. Next to lint check and synthesis, defined in gw_component_rules(), a DFX Reconfigurable
-  # Module needs to be implemented and turned into a bitsteam that can be live-loaded onto a DFX-enabled system. The
-  # build rules to do that are defined in the gw_rm_rules_dfx() function. Calling this function with the parameters
-  # given below results in a vs0_stub_bit target being defined. Building that target results in a DFX partial bitstream
-  # of the vs0_stub component.
-  gw_rm_rules_dfx(
-    COMPONENT_NAMES 
-      vs0_stub
-    VS_INSTS
-      boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
-    REF_DFX_PROJECT boxlambda_dfx
-  )
-endif()
+  if(BL_TARGET_FPGA STREQUAL "arty-a7-100")
+    # vs0_stub is a DFX component. Next to lint check and synthesis, defined in gw_component_rules(), a DFX Reconfigurable
+    # Module needs to be implemented and turned into a bitsteam that can be live-loaded onto a DFX-enabled system. The
+    # build rules to do that are defined in the gw_rm_rules_dfx() function. Calling this function with the parameters
+    # given below results in a vs0_stub_bit target being defined. Building that target results in a DFX partial bitstream
+    # of the vs0_stub component.
+    gw_rm_rules_dfx(
+      COMPONENT_NAMES
+        vs0_stub
+      VS_INSTS
+        boxlambda_soc_inst/GENERATE_VS0_MODULE.vs0_inst
+      REF_DFX_PROJECT boxlambda_dfx
+    )
+
+    add_custom_target(vs0_stub_all_wrapper ALL)
+    add_dependencies(vs0_stub_all_wrapper vs0_stub_bit)
+  endif()
 endif()

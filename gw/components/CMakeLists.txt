@@ -52,9 +52,7 @@ function (gw_rm_rules_dfx)
         VERBATIM
     )
 
-  #Add the bitstream generation target to make all (ALL property).
   add_custom_target(${_comp_name}_bit
-        ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS

@@ -116,9 +116,7 @@ function (gw_project_rules_dfx_vivado)
         VERBATIM
     )
 
-  #Add the bitstream generation target to make all (ALL property).
   add_custom_target(${_prj_name}_bit
-        ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
@@ -246,9 +244,7 @@ function (gw_project_rules_vivado)
         VERBATIM
     )
 
-  #Add the bitstream generation target to make all (ALL property).
   add_custom_target(${_prj_name}_bit
-        ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
@@ -289,9 +285,7 @@ function (gw_project_rules_vivado)
             VERBATIM
         )
 
-    #Add the bitstream-with-sw-image target
     add_custom_target(${_prj_name}_bit_sw
-            ALL
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS

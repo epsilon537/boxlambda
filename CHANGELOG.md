@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `boxlambda_simplified`: Changes Since Label `latency_shakeup` - 2025-03-20
+
+### Added
+
+### Fixed
+
+### Changed
+
+- In arty-a7 build tree, only boxlambda_base_bit, boxlambda_dfx_bit, vs0_stub_bit, and vs0_j1b_bit are built by default.
+
+### Removed
+
 ## Label `latency_shakeup`: Changes Since Label `boxlambda_base` - 2025-03-18
 
 ### Added
