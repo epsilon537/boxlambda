@@ -1,6 +1,6 @@
 #! /bin/bash
 
-#This script is invoked by the build system's 'make gen_ibex_core' rule.
+#This script is invoked by the build system's 'make gen_ibex_core' rule and at build tree configuration time.
 #It exports the ibex core files from the given ibex submodule to the given export directory.
 #It should be run when the ibex repo has been changed.
 
@@ -17,6 +17,7 @@ fi
 REPO_DIR="$1"
 EXP_DIR="$2"
 
+rm -rf $EXP_DIR
 mkdir -p $EXP_DIR
 
 pushd .

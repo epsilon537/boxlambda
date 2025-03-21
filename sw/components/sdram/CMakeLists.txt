@@ -21,21 +21,14 @@ target_compile_options(sdram
 
 target_include_directories(sdram
     PUBLIC
-        ${PROJECT_SOURCE_DIR}/sub/litex/litex/soc/software/liblitedram
-  ${PROJECT_SOURCE_DIR}/sub/litex/litex/soc/software/include
-  ${PROJECT_SOURCE_DIR}/sub/litex/litex/soc/software
-     ${PROJECT_SOURCE_DIR}/sub/litex/litex/soc/cores/cpu/ibex
+      ${PROJECT_SOURCE_DIR}/sub/litex/litex/soc/software/liblitedram
+      ${PROJECT_SOURCE_DIR}/sub/litex/litex/soc/software/include
+      ${PROJECT_SOURCE_DIR}/sub/litex/litex/soc/software
+      ${PROJECT_SOURCE_DIR}/sub/litex/litex/soc/cores/cpu/ibex
 )
 
 #The memory controller SW interface is different between simulation and FPGA targets.
-if(CMAKE_BUILD_TYPE STREQUAL "sim")
-  target_include_directories(sdram
-  PUBLIC
-            ${PROJECT_SOURCE_DIR}/gw/components/litedram/sim/sw/include
- )
-else() #fpga:
-  target_include_directories(sdram
-  PUBLIC
-            ${PROJECT_SOURCE_DIR}/gw/components/litedram/arty/sw/include
- )
-endif()
+target_include_directories(sdram
+    PUBLIC
+      ${CMAKE_BINARY_DIR}/codegen/litedram/sw/include
+)

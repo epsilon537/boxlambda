@@ -9,9 +9,9 @@ sources:
   - target: verilator
     files:
     - lint.vlt
-    - sim/rtl/litedram.v
+    - ../../../build/sim-a7-100/codegen/litedram/rtl/litedram.v
     - common/rtl/litedram_wrapper.sv
   - target: vivado
     files:
-    - arty/rtl/litedram.v
+    - ../../../build/arty-a7-100/codegen/litedram/rtl/litedram.v
     - common/rtl/litedram_wrapper.sv
