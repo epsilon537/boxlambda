@@ -7,7 +7,7 @@ package:
 
 dependencies:
   # Path dependency.
-  wbxbar: { path: "../../components/wbxbar" }
+  interconnect: { path: "../../components/interconnect" }
 
 sources:
   - target: vivado_ip_arty-a7-100

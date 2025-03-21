@@ -3,7 +3,7 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: wbxbar
+  name: interconnect
 
 dependencies:
   # For wb_if and wb_pkg
@@ -14,7 +14,7 @@ sources:
     files:
      - lint.vlt
 
-  - target: wbxbar
+  - target: interconnect
     files:
      - rtl/wbxbar_ooc.sv
 

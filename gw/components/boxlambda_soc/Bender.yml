@@ -8,7 +8,7 @@ package:
 dependencies:
   # Path dependency.
   wb_dp_ram: { path: "../../components/wb_dp_ram" }
-  wbxbar: { path: "../../components/wbxbar" }
+  interconnect: { path: "../../components/interconnect" }
   gpio: { path: "../../components/gpio" }
   wbuart: { path: "../../components/wbuart" }
   ibex_wb_common: { path: "../../components/ibex_wb_common" }

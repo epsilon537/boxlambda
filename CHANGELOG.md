@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - In arty-a7 build tree, only boxlambda_base_bit, boxlambda_dfx_bit, vs0_stub_bit, and vs0_j1b_bit are built by default.
 - Ibex core is now exported into the build tree at build tree configuration time. The exported files are derived objects and don't belong in the source tree.
 - Litedram core is now generated into the build tree at build tree configuration time. The generated files are derived objects and don't belong in the source tree.
+- Renamed gw component wbxbar to interconnect.
 
 ### Removed
 
