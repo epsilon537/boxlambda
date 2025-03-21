@@ -117,17 +117,13 @@ else
 fi
 
 echo "Creating build build trees..."
+
+rm -rf build
+
 cmake --fresh --preset=sim-a7-35
-make -C ./build/sim-a7-35 regen
-
 cmake --fresh --preset=sim-a7-100
-make -C ./build/sim-a7-100 regen
-
 cmake --fresh --preset=arty-a7-35
-make -C ./build/arty-a7-35 regen
-
 cmake --fresh --preset=arty-a7-100
-make -C ./build/arty-a7-100 regen
 
 #Deactivate the environment
 deactivate

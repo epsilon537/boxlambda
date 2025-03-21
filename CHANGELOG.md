@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Ibex core is now exported into the build tree at build tree configuration time. The exported files are derived objects and don't belong in the source tree.
 - Litedram core is now generated into the build tree at build tree configuration time. The generated files are derived objects and don't belong in the source tree.
 - Renamed gw component wbxbar to interconnect.
+- Recreated build trees from scratch when running boxlambda_setup.sh.
+- Made SDL2 optional: if it's installed, the vera_integrated test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criterium.
 
 ### Removed
 
