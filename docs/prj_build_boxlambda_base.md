@@ -35,7 +35,7 @@ Build the `boxlambda_base` bitstream in the Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/boxlambda_base
-make boxlambda_base_bit
+make boxlambda_base_bit_sw
 ```
 
 Flash the bitstream onto the target:
