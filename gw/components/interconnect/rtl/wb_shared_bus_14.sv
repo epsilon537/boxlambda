@@ -1,24 +1,24 @@
-//This module is a wb_if aware wrappper around a 1-to-15 mux.
-module wb_shared_bus_15 #(
+//This module is a wb_if aware wrappper around a 1-to-14 mux.
+module wb_shared_bus_14 #(
     parameter DATA_WIDTH = 32,  // width of data bus in bits (8, 16, 32, or 64)
     parameter ADDR_WIDTH = 32,  // width of address bus in bits
     parameter SELECT_WIDTH = (DATA_WIDTH / 8),  // width of word select bus (1, 2, 4, or 8)
-    parameter [15*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
-    parameter [15*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
+    parameter [14*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
+    parameter [14*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
 ) (
     input wire clk,
     input wire rst,
     wb_if.slave wbm,
-    wb_if.master wbs[15]
+    wb_if.master wbs[14]
 );
 
   import wb_pkg::*;
 
-  wb_mux_15 #(
+  wb_mux_14 #(
       .DATA_WIDTH  (DATA_WIDTH),
       .ADDR_WIDTH  (ADDR_WIDTH),
       .SELECT_WIDTH(SELECT_WIDTH)
-  ) wb_mux_15_inst (
+  ) wb_mux_14_inst (
       .clk(clk),
       .rst(rst),
 
@@ -227,21 +227,7 @@ module wb_shared_bus_15 #(
       .wbs13_cyc_o(wbs[13].cyc),  // CYC_O cycle output
 
       .wbs13_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*13:ADDR_WIDTH*13]),
-      .wbs13_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*13:ADDR_WIDTH*13]),
-
-      .wbs14_adr_o(wbs[14].adr),  // ADDR_O() address output
-      .wbs14_dat_i(wbs[14].dat_s),  // DAT_I() data in
-      .wbs14_dat_o(wbs[14].dat_m),  // DAT_O() data out
-      .wbs14_we_o(wbs[14].we),  // WE_O write enable output
-      .wbs14_sel_o(wbs[14].sel),  // SEL_O() select output
-      .wbs14_stb_o(wbs[14].stb),  // STB_O strobe output
-      .wbs14_ack_i(wbs[14].ack),  // ACK_I acknowledge input
-      .wbs14_err_i(wbs[14].err),  // ERR_I error input
-      .wbs14_stall_i(wbs[14].stall),  // STALL_I retry input
-      .wbs14_cyc_o(wbs[14].cyc),  // CYC_O cycle output
-
-      .wbs14_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*14:ADDR_WIDTH*14]),
-      .wbs14_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*14:ADDR_WIDTH*14])
+      .wbs13_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*13:ADDR_WIDTH*13])
   );
 
 endmodule

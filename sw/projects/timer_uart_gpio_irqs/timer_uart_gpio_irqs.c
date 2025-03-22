@@ -11,8 +11,6 @@
 #include "mcycle.h"
 #include "timer.h"
 #include "interrupts.h"
-#include "picorv_dma_hal.h"
-#include "picorv_irq_in_out.h"
 
 static struct uart uart0;
 static struct gpio gpio;
@@ -102,14 +100,6 @@ int main(void) {
   gpio_init(&gpio, (volatile void *)GPIO_BASE);
   gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
 
-  printf("Load PicoRV Program picorv_irq_in_out.\n");
-  //This test program just ors any recevied interrupts into the irq_out
-  //system register.
-  picorv_load_program(picorv_irq_in_out_picobin, picorv_irq_in_out_picobin_len);
-
-  printf("Taking PicoRV out of reset...\n");
-  picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 1);
-
   printf("Enabling Ibex IRQs\n");
   enable_global_irq();
   enable_irq(IRQ_ID_TIMER);
@@ -123,10 +113,6 @@ int main(void) {
   mtimer_set_raw_time_cmp(10000); //Fire IRQ in 10000 ticks.
   while (timer_irq_fired == 0); //Wait for it.
   printf("Timer irq fired.\n");
-  //Check if the PicoRV DMA also saw the interrupt.
-  assert(picorv_sys_reg_rd(PICORV_SYS_REG_IRQ_OUT) & (1<<IRQ_ID_TIMER));
-  //Acknowledge the interrupt in the picorv dma core.
-  picorv_sys_reg_wr(PICORV_SYS_REG_IRQ_OUT, 1<<IRQ_ID_TIMER);
 
   timer_irq_fired = 0;
 
@@ -135,8 +121,6 @@ int main(void) {
   while (timer_irq_fired == 0);
   printf("Timer irq fired.\n");
   disable_irq(IRQ_ID_TIMER);
-  assert(picorv_sys_reg_rd(PICORV_SYS_REG_IRQ_OUT) & (1<<IRQ_ID_TIMER));
-  picorv_sys_reg_wr(PICORV_SYS_REG_IRQ_OUT, 1<<IRQ_ID_TIMER);
 
   printf("Timer Test Successful.\n");
 
@@ -156,9 +140,6 @@ int main(void) {
   while (!uart_tx_fifo_half_empty_fired); //Wait until half empty
   //At this point we shouldn't be completely empty yet.
   assert(!uart_tx_fifo_empty_fired);
-  //Check if the PicoRV DMA core saw the interrupt as well.
-  assert(picorv_sys_reg_rd(PICORV_SYS_REG_IRQ_OUT) & (1<<IRQ_ID_UART));
-  picorv_sys_reg_wr(PICORV_SYS_REG_IRQ_OUT, 1<<IRQ_ID_UART);
   while (!uart_tx_fifo_empty_fired); //Wait until completely empty.
   //Disable UART TX IRQs again.
   uart_irq_dis(&uart0, UART_IRQ_TX_FIFO_EMPTY_MASK);
@@ -188,9 +169,6 @@ int main(void) {
     if (uart_rx_irq_fired) {
       printf("UART RX IRQ received.\n");
       uart_rx_irq_fired = 0;
-
-      assert(picorv_sys_reg_rd(PICORV_SYS_REG_IRQ_OUT) & (1<<IRQ_ID_UART));
-      picorv_sys_reg_wr(PICORV_SYS_REG_IRQ_OUT, 1<<IRQ_ID_UART);
 
       rxc = getc(stdin); //Pull the received character out of the FIFO.
       printf("Received character: %c\n", rxc);

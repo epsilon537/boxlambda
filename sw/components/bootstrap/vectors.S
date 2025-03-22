@@ -25,7 +25,7 @@
   jal x0, _usb_hid_1_irq_handler
   jal x0, _gpio_irq_handler
   jal x0, _sdspi_irq_handler
-  jal x0, _dmac_irq_handler
+  jal x0, _exc_handler
   jal x0, _vs_0_irq_handler
   jal x0, _vera_irq_handler
   jal x0, _exc_handler
@@ -103,9 +103,6 @@ _gpio_irq_handler:
 .globl _sdspi_irq_handler
 .weak _sdspi_irq_handler
 _sdspi_irq_handler:
-.globl _dmac_irq_handler
-.weak _dmac_irq_handler
-_dmac_irq_handler:
 .globl _vs_0_irq_handler
 .weak _vs_0_irq_handler
 _vs_0_irq_handler:

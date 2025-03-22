@@ -25,7 +25,6 @@ sources:
       #SDSPI: ~
       DRAM: ~
       #VERA: ~
-      #PICORV_DMA: ~
       USB_HID:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
@@ -40,7 +39,6 @@ sources:
       #SDSPI: ~
       DRAM: ~
       #VERA: ~
-      #PICORV_DMA: ~
       USB_HID: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:

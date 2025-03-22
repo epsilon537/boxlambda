@@ -184,9 +184,6 @@ module boxlambda_top (
 `ifndef YM2149
       .YM2149_ACTIVE(0),
 `endif
-`ifndef PICORV_DMA
-      .PICORV_ACTIVE(0),
-`endif
 `ifndef USB_HID
       .USB_HID_ACTIVE(0),
 `endif

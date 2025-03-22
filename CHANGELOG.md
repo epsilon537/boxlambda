@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Corrected boxlambda_base build instructions in the read-the-docs documentation.
+
 ### Changed
 
 - In arty-a7 build tree, only boxlambda_base_bit, boxlambda_dfx_bit, vs0_stub_bit, and vs0_j1b_bit are built by default.
@@ -23,6 +25,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Made SDL2 optional: if it's installed, the vera_integrated test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criterium.
 
 ### Removed
+
+- Removed picorv_dma component.
 
 ## Label `latency_shakeup`: Changes Since Label `boxlambda_base` - 2025-03-18
 

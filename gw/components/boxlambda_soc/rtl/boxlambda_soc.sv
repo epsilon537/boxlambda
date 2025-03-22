@@ -7,7 +7,6 @@ module boxlambda_soc #(
     parameter VERA_ACTIVE = 1,
     parameter SDSPI_ACTIVE = 1,
     parameter YM2149_ACTIVE = 1,
-    parameter PICORV_ACTIVE = 1,
     parameter USB_HID_ACTIVE = 1,
     parameter SPIFLASH_ACTIVE = 1,
     parameter I2C_ACTIVE = 1,
@@ -118,7 +117,6 @@ module boxlambda_soc #(
   typedef enum {
     COREI_M,   /*Ibex CPU instruction port.*/
     CORED_M,   /*Ibex CPU data port.*/
-    PICORV_M,  /*PicoRV DMA.*/
     VS0_0_M,   /*Virtual Socket 0 Bus Master 0.*/
     VS0_1_M,   /*Virtual Socket 0 Bus Master 1.*/
     ARBITER_M  /*DM/DFX Wishbone Arbiter Bus Master port.*/
@@ -145,7 +143,6 @@ module boxlambda_soc #(
     I2C_S,  /*I2C*/
     DFX_S,  /*DFX Controller*/
     YM2149_S,  /*Dual YM2149 PSG core.*/
-    PICORV_S,  /*PicoRV DMA slave port.*/
     UART_S,  /*UART.*/
     TIMER_S,  /*Timer Module.*/
     DDR_CTRL_S,  /*LiteDRAM control port.*/
@@ -166,10 +163,10 @@ module boxlambda_soc #(
     IRQ_ID_USB_HID_1,
     IRQ_ID_GPIO,
     IRQ_ID_SDSPI,
-    IRQ_ID_DMAC,
+    IRQ_ID_NA_4,
     IRQ_ID_VS_0,
     IRQ_ID_VERA,
-    IRQ_ID_NA_4
+    IRQ_ID_NA_5
   } fast_irq_ids_e;
 
   /*We used a word-addressing Wishbone bus. The Dual Port RAM word address bus width is equal to the
@@ -181,12 +178,10 @@ module boxlambda_soc #(
 
   localparam NUM_ARBITER_MASTERS = 2; //Number of bus masters connected to the DM/DFX Wishbone arbiter. Has to be 2 (the arbiter arbitrates between 2 ports only).
   localparam NUM_ARBITER_SLAVES = 1; //Number of bus slaves attached to the DM/DFX Wishbone arbiter. Has to be 1 (the arbiter has only one 'output' port).
-  localparam NUM_XBAR_MASTERS = 6;
+  localparam NUM_XBAR_MASTERS = 5;
   localparam NUM_XBAR_SLAVES = 6;
   localparam NUM_SHARED_BUS_MASTERS = 1;
-  localparam NUM_SHARED_BUS_SLAVES = 15;
-
-  localparam PICORV_BASE_ADDRESS = 'h10002000;
+  localparam NUM_SHARED_BUS_SLAVES = 14;
 
   //Shared bus slave addresses. Right shift by two to convert byte address values to word address values.
   localparam [NUM_SHARED_BUS_SLAVES*AW-1:0] SHARED_BUS_SLAVE_ADDRS = {
@@ -195,7 +190,6 @@ module boxlambda_soc #(
     /*DDR_CTRL_S*/{AW'('h10030000 >> 2)},
     /*TIMER_S*/{AW'('h10020000 >> 2)},
     /*UART_S*/{AW'('h10010000 >> 2)},
-    /*PICORV_S*/{AW'(PICORV_BASE_ADDRESS >> 2)},
     /*YM2149_S*/{AW'('h10001000 >> 2)},
     /*DFX_S*/{AW'('h10000400 >> 2)},
     /*I2C_S*/{AW'('h10000200 >> 2)},
@@ -214,7 +208,6 @@ module boxlambda_soc #(
     /*DDR_CTRL_S*/{AW'(~('h0000ffff >> 2))},
     /*TIMER_S*/{AW'(~('h000003ff >> 2))},
     /*UART_S*/{AW'(~('h0000001f >> 2))},
-    /*PICORV_S*/{AW'(~('h00001fff >> 2))},
     /*YM2149_S*/{AW'(~('h000003ff >> 2))},
     /*DFX_S*/{AW'(~('h0000007f >> 2))},
     /*I2C_S*/{AW'(~('h000001ff >> 2))},
@@ -247,7 +240,7 @@ module boxlambda_soc #(
   };
 
   //Clock signals.
-  logic sys_clk, sys_clk_2x, usb_clk, clk_50, clk_100;
+  logic sys_clk, usb_clk, clk_50, clk_100;
   //PLL lock signals.
   logic usb_pll_locked, sys_pll_locked, pre_pll_locked, litedram_pll_locked;
 
@@ -464,8 +457,8 @@ module boxlambda_soc #(
       .i_serr(xbar_serr)
   );
 
-  //The shared bus is a 1-to-15 MUX.
-  wb_shared_bus_15 #(
+  //The shared bus is a 1-to-14 MUX.
+  wb_shared_bus_14 #(
       .DATA_WIDTH(32),
       .ADDR_WIDTH(AW),
       .SLAVE_ADDRESSES(SHARED_BUS_SLAVE_ADDRS),
@@ -1052,7 +1045,7 @@ module boxlambda_soc #(
       litedram_wrapper litedram_wrapper_inst (
           .clk(clk_100),  /*100MHz input clock, coming for the First-stage clock generator..*/
           .rst(1'b0),  /*Never reset LiteDRAM.*/
-          .sys_clkx2(sys_clk_2x), /*LiteDRAM outputs 100MHz double rate system clock. In phase with sys_clk.*/
+          .sys_clkx2(),  /*Not used.*/
           .sys_clk(sys_clk),  /*LiteDRAM outputs 50MHz system clock.*/
           .sys_rst(litedram_rst_o),  /*LiteDRAM outputs system reset.*/
           .pll_locked(litedram_pll_locked_i),  /*LiteDRAM PLL lock indication.*/
@@ -1105,7 +1098,6 @@ module boxlambda_soc #(
       assign sys_pll_locked = litedram_pll_locked;
     end else begin  //No DRAM: In this case the Stage-1 clock generator provides the system clock.
       assign sys_clk = clk_50;  //50MHz system clock.
-      assign sys_clk_2x = clk_100;  //100MHz double-rate system clock.
       assign litedram_pll_locked = 1'b1;
       assign init_done_led = 1'b1;
       assign init_err_led = 1'b0;
@@ -1266,48 +1258,6 @@ module boxlambda_soc #(
       assign acc1_overflow = 1'b0;
       assign acc2_overflow = 1'b0;
 `endif
-    end
-  endgenerate
-
-  //The PicoRV DMA module.
-  generate
-    if (PICORV_ACTIVE) begin : GENERATE_PICORV_MODULE
-      picorv_dma_top #(
-          .BASE_ADDR(PICORV_BASE_ADDRESS)
-      ) picorv_dma_inst (
-          .sys_clk(sys_clk),
-          .sys_clkx2(sys_clk_2x),
-          .rst(ndm_reset),
-          //32-bit pipelined Wishbone master interface 0.
-          .wbm_adr_o(xbar_wbm[PICORV_M].adr),
-          .wbm_dat_o(xbar_wbm[PICORV_M].dat_m),
-          .wbm_dat_i(xbar_wbm[PICORV_M].dat_s),
-          .wbm_sel_o(xbar_wbm[PICORV_M].sel),
-          .wbm_stall_i(xbar_wbm[PICORV_M].stall),
-          .wbm_cyc_o(xbar_wbm[PICORV_M].cyc),
-          .wbm_stb_o(xbar_wbm[PICORV_M].stb),
-          .wbm_ack_i(xbar_wbm[PICORV_M].ack),
-          .wbm_we_o(xbar_wbm[PICORV_M].we),
-          .wbm_err_i(xbar_wbm[PICORV_M].err),
-          //32-bit pipelined Wishbone slave interface.
-          .wbs_adr(shared_bus_wbs[PICORV_S].adr[10:0]),
-          .wbs_dat_w(shared_bus_wbs[PICORV_S].dat_m),
-          .wbs_dat_r(shared_bus_wbs[PICORV_S].dat_s),
-          .wbs_sel(shared_bus_wbs[PICORV_S].sel),
-          .wbs_stall(shared_bus_wbs[PICORV_S].stall),
-          .wbs_cyc(shared_bus_wbs[PICORV_S].cyc),
-          .wbs_stb(shared_bus_wbs[PICORV_S].stb),
-          .wbs_ack(shared_bus_wbs[PICORV_S].ack),
-          .wbs_we(shared_bus_wbs[PICORV_S].we),
-          .wbs_err(shared_bus_wbs[PICORV_S].err),
-          //Input IRQs - PicoRV DMAC receives the same 32 IRQs with the same IRQ_IDs (bit
-          //positions) as the Ibex CPU. The bit position assigned to the DMAC
-          //itself is cleared, however.
-          .irq_in({1'b0, fast_irqs & ~(1'b1 << IRQ_ID_DMAC), 8'b0, timer_irq, 7'b0}),
-          .irq_out(fast_irqs[IRQ_ID_DMAC])
-      );
-    end else begin
-      assign fast_irqs[IRQ_ID_DMAC] = 1'b0;
     end
   endgenerate
 
@@ -1472,10 +1422,11 @@ module boxlambda_soc #(
   endgenerate
 
   //Set the remaining bits in the fast_irq vector to 0
-  assign fast_irqs[IRQ_ID_NA_4] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_0] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_1] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_2] = 1'b0;
   assign fast_irqs[IRQ_ID_NA_3] = 1'b0;
+  assign fast_irqs[IRQ_ID_NA_4] = 1'b0;
+  assign fast_irqs[IRQ_ID_NA_5] = 1'b0;
 endmodule
 

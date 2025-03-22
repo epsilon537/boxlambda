@@ -24,7 +24,6 @@ sources:
       #SDSPI: ~
       DRAM: ~
       VERA: ~
-      PICORV_DMA: ~
       SPIFLASH: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
@@ -39,7 +38,6 @@ sources:
       #SDSPI: ~
       DRAM: ~
       VERA: ~
-      PICORV_DMA: ~
       SPIFLASH: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:

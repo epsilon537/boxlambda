@@ -23,7 +23,7 @@ sources:
       NO_MODPORT_EXPRESSIONS: ~
     files:
       - rtl/wb_staller.sv
-      - rtl/wb_shared_bus_15.sv
+      - rtl/wb_shared_bus_14.sv
       - ../../../sub/wb2axip/rtl/wbxbar.v
       - ../../../sub/wb2axip/rtl/addrdecode.v
       - ../../../sub/wb2axip/rtl/skidbuffer.v
@@ -33,7 +33,7 @@ sources:
       - ../../../sub/wb2axip/rtl/axi_addr.v
       - ../../../sub/wb2axip/rtl/sfifo.v
       - ../../../sub/verilog-wishbone/rtl/wb_mux_2.v
-      - ../../../sub/verilog-wishbone/rtl/wb_mux_15.v
+      - ../../../sub/verilog-wishbone/rtl/wb_mux_14.v
 
 
 

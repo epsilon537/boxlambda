@@ -24,7 +24,6 @@ sources:
       SDSPI: ~
       DRAM: ~
       VERA: ~
-      PICORV_DMA: ~
       USB_HID:  ~
       SPIFLASH: ~
       I2C: ~
@@ -43,7 +42,6 @@ sources:
       SDSPI: ~
       DRAM: ~
       VERA: ~
-      PICORV_DMA: ~
       USB_HID:  ~
       SPIFLASH: ~
       I2C: ~

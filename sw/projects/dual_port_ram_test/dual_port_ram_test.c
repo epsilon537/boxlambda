@@ -1,5 +1,4 @@
-/*Dual Port RAM test checks code and data access to the CMEM and DMEM dual port memories.
- *It also check simultaneous access to those memories from the CPU and PICORV DMA.*/
+/*Dual Port RAM test checks code and data access to the CMEM and DMEM dual port memories.*/
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -10,19 +9,6 @@
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
-
-/*PicoRV register mapping for the wordcopy_burst program.*/
-#define PICORV_HIR_REG_SRC PICORV_HIR_0
-#define PICORV_HIR_REG_DST PICORV_HIR_1
-#define PICORV_HIR_REG_NUM_ELEMS PICORV_HIR_2
-#define PICORV_HIR_REG_CTRL_STAT PICORV_HIR_3
-
-#define DMA_START 1
-#define DMA_BUSY 2
-
-//PicoRV copy programs
-#include "picorv_wordcopy_burst.h"
-#include "picorv_dma_hal.h"
 
 static struct uart uart0;
 static struct gpio gpio;
@@ -73,66 +59,6 @@ int code_in_dmem(char *message) {
     return crc;
 }
 
-void waitDMAcomplete() {
-    int dmaBusy = DMA_BUSY;
-    while(dmaBusy) {
-        dmaBusy = picorv_hir_reg_rd(PICORV_HIR_REG_CTRL_STAT);
-    }
-}
-
-void dmaCopyStart(unsigned char* srcPtr, unsigned char* dstPtr, unsigned numElems, unsigned elemSize) {
-    /*Or-in 0x100000 to make sure PicoRV DMA access to the Dual Port memories is done through the 'other' port, i.e.
-     *not the port the CPU is using.*/
-    picorv_hir_reg_wr(PICORV_HIR_REG_SRC, (unsigned)srcPtr | 0x100000);
-    picorv_hir_reg_wr(PICORV_HIR_REG_DST, (unsigned)dstPtr | 0x100000);
-    picorv_hir_reg_wr(PICORV_HIR_REG_NUM_ELEMS, numElems);
-
-    picorv_hir_reg_wr(PICORV_HIR_REG_CTRL_STAT, DMA_START);
-}
-
-int dualCopyTest(volatile unsigned* src_0, volatile unsigned* dst_0, volatile unsigned* src_1, volatile unsigned* dst_1) {
-    //Fill source buffers with some random data and destination with 0x55s
-    for (int ii=0; ii<256; ii++) {
-        src_0[ii] = (unsigned)rand();
-        src_1[ii] = (unsigned)rand();
-        dst_0[ii] = 0x55555555;
-        dst_1[ii] = 0x55555555;
-    }
-
-    //Kick off DMA.
-    dmaCopyStart((unsigned char*)src_0, (unsigned char*)dst_0, 256, sizeof(int));
-
-    //Simultaneously do a memcpy.
-    for (int ii=0; ii<256; ii++) {
-        dst_1[ii] = src_1[ii];
-    }
-
-    waitDMAcomplete();
-
-    //Check the copy.
-    if (memcmp((void*)src_0, (void*)dst_0, 256*sizeof(unsigned))) {
-        printf("DMA copy failed.\n");
-
-        for (int ii=0; ii<256; ii++) {
-            printf("[%d] 0x%x vs. 0x%x\n", ii, src_0[ii], dst_0[ii]);
-        }
-
-        return -1;
-    }
-
-    if (memcmp((void*)src_1, (void*)dst_1, 256*sizeof(unsigned))) {
-        printf("Memcpy failed.\n");
-
-        for (int ii=0; ii<256; ii++) {
-            printf("[%d] 0x%x vs. 0x%x\n", ii, src_0[ii], dst_0[ii]);
-        }
-
-        return -1;
-    }
-
-    return 0;
-}
-
 int main(void) {
     //Switches
     gpio_init(&gpio, (volatile void *)GPIO_BASE);
@@ -180,21 +106,6 @@ int main(void) {
     printf("%s\n", cmem_str);
     if (strcmp(test_str, cmem_str)) {
         printf("CMEM data access failed!\n");
-        return -1;
-    }
-
-    printf("Load PicoRV Program wordcopy_burst\n");
-    picorv_load_program(picorv_wordcopy_burst_picobin, sizeof(picorv_wordcopy_burst_picobin));
-    printf("Taking PicoRV out of reset...\n");
-    picorv_sys_reg_wr(PICORV_SYS_REG_CTRL, 1);
-
-    printf("Dual copy from DMEM to CMEM...\n");
-    if (dualCopyTest(dmem_buf_0, cmem_buf_0, dmem_buf_1, cmem_buf_1)) {
-        return -1;
-    }
-
-    printf("Dual copy from CMEM to DMEM...\n");
-    if (dualCopyTest(cmem_buf_0, dmem_buf_0, cmem_buf_1, dmem_buf_1)) {
         return -1;
     }
 

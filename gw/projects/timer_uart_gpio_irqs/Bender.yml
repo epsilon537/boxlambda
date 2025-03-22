@@ -24,7 +24,6 @@ sources:
       SDSPI: ~
       DRAM: ~
       VERA: ~
-      PICORV_DMA: ~
       SPIFLASH: ~
       I2C: ~
       #TRACE_ALL_INSTRUCTIONS: ~
@@ -40,7 +39,6 @@ sources:
       SDSPI: ~
       DRAM: ~
       VERA: ~
-      PICORV_DMA: ~
       SPIFLASH: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:

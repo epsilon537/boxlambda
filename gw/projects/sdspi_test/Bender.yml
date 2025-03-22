@@ -24,7 +24,6 @@ sources:
       SDSPI: ~
       DRAM: ~
       #VERA: ~
-      #PICORV_DMA: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_base/rtl/boxlambda_top.sv
@@ -38,7 +37,6 @@ sources:
       SDSPI: ~
       DRAM: ~
       #VERA: ~
-      #PICORV_DMA: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_base/rtl/boxlambda_top.sv
