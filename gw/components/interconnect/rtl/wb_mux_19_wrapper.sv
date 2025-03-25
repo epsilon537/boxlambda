@@ -1,24 +1,24 @@
-//This module is a wb_if aware wrappper around a 1-to-14 mux.
-module wb_shared_bus_14 #(
+//This module is a wb_if aware wrappper around a 1-to-19 mux.
+module wb_mux_19_wrapper #(
     parameter DATA_WIDTH = 32,  // width of data bus in bits (8, 16, 32, or 64)
     parameter ADDR_WIDTH = 32,  // width of address bus in bits
     parameter SELECT_WIDTH = (DATA_WIDTH / 8),  // width of word select bus (1, 2, 4, or 8)
-    parameter [14*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
-    parameter [14*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
+    parameter [19*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
+    parameter [19*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
 ) (
     input wire clk,
     input wire rst,
     wb_if.slave wbm,
-    wb_if.master wbs[14]
+    wb_if.master wbs[19]
 );
 
   import wb_pkg::*;
 
-  wb_mux_14 #(
+  wb_mux_19 #(
       .DATA_WIDTH  (DATA_WIDTH),
       .ADDR_WIDTH  (ADDR_WIDTH),
       .SELECT_WIDTH(SELECT_WIDTH)
-  ) wb_mux_14_inst (
+  ) wb_mux_19_inst (
       .clk(clk),
       .rst(rst),
 
@@ -227,7 +227,77 @@ module wb_shared_bus_14 #(
       .wbs13_cyc_o(wbs[13].cyc),  // CYC_O cycle output
 
       .wbs13_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*13:ADDR_WIDTH*13]),
-      .wbs13_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*13:ADDR_WIDTH*13])
+      .wbs13_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*13:ADDR_WIDTH*13]),
+
+      .wbs14_adr_o(wbs[14].adr),  // ADDR_O() address output
+      .wbs14_dat_i(wbs[14].dat_s),  // DAT_I() data in
+      .wbs14_dat_o(wbs[14].dat_m),  // DAT_O() data out
+      .wbs14_we_o(wbs[14].we),  // WE_O write enable output
+      .wbs14_sel_o(wbs[14].sel),  // SEL_O() select output
+      .wbs14_stb_o(wbs[14].stb),  // STB_O strobe output
+      .wbs14_ack_i(wbs[14].ack),  // ACK_I acknowledge input
+      .wbs14_err_i(wbs[14].err),  // ERR_I error input
+      .wbs14_stall_i(wbs[14].stall),  // STALL_I retry input
+      .wbs14_cyc_o(wbs[14].cyc),  // CYC_O cycle output
+
+      .wbs14_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*14:ADDR_WIDTH*14]),
+      .wbs14_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*14:ADDR_WIDTH*14]),
+
+      .wbs15_adr_o(wbs[15].adr),  // ADDR_O() address output
+      .wbs15_dat_i(wbs[15].dat_s),  // DAT_I() data in
+      .wbs15_dat_o(wbs[15].dat_m),  // DAT_O() data out
+      .wbs15_we_o(wbs[15].we),  // WE_O write enable output
+      .wbs15_sel_o(wbs[15].sel),  // SEL_O() select output
+      .wbs15_stb_o(wbs[15].stb),  // STB_O strobe output
+      .wbs15_ack_i(wbs[15].ack),  // ACK_I acknowledge input
+      .wbs15_err_i(wbs[15].err),  // ERR_I error input
+      .wbs15_stall_i(wbs[15].stall),  // STALL_I retry input
+      .wbs15_cyc_o(wbs[15].cyc),  // CYC_O cycle output
+
+      .wbs15_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*15:ADDR_WIDTH*15]),
+      .wbs15_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*15:ADDR_WIDTH*15]),
+
+      .wbs16_adr_o(wbs[16].adr),  // ADDR_O() address output
+      .wbs16_dat_i(wbs[16].dat_s),  // DAT_I() data in
+      .wbs16_dat_o(wbs[16].dat_m),  // DAT_O() data out
+      .wbs16_we_o(wbs[16].we),  // WE_O write enable output
+      .wbs16_sel_o(wbs[16].sel),  // SEL_O() select output
+      .wbs16_stb_o(wbs[16].stb),  // STB_O strobe output
+      .wbs16_ack_i(wbs[16].ack),  // ACK_I acknowledge input
+      .wbs16_err_i(wbs[16].err),  // ERR_I error input
+      .wbs16_stall_i(wbs[16].stall),  // STALL_I retry input
+      .wbs16_cyc_o(wbs[16].cyc),  // CYC_O cycle output
+
+      .wbs16_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*16:ADDR_WIDTH*16]),
+      .wbs16_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*16:ADDR_WIDTH*16]),
+
+      .wbs17_adr_o(wbs[17].adr),  // ADDR_O() address output
+      .wbs17_dat_i(wbs[17].dat_s),  // DAT_I() data in
+      .wbs17_dat_o(wbs[17].dat_m),  // DAT_O() data out
+      .wbs17_we_o(wbs[17].we),  // WE_O write enable output
+      .wbs17_sel_o(wbs[17].sel),  // SEL_O() select output
+      .wbs17_stb_o(wbs[17].stb),  // STB_O strobe output
+      .wbs17_ack_i(wbs[17].ack),  // ACK_I acknowledge input
+      .wbs17_err_i(wbs[17].err),  // ERR_I error input
+      .wbs17_stall_i(wbs[17].stall),  // STALL_I retry input
+      .wbs17_cyc_o(wbs[17].cyc),  // CYC_O cycle output
+
+      .wbs17_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*17:ADDR_WIDTH*17]),
+      .wbs17_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*17:ADDR_WIDTH*17]),
+
+      .wbs18_adr_o(wbs[18].adr),  // ADDR_O() address output
+      .wbs18_dat_i(wbs[18].dat_s),  // DAT_I() data in
+      .wbs18_dat_o(wbs[18].dat_m),  // DAT_O() data out
+      .wbs18_we_o(wbs[18].we),  // WE_O write enable output
+      .wbs18_sel_o(wbs[18].sel),  // SEL_O() select output
+      .wbs18_stb_o(wbs[18].stb),  // STB_O strobe output
+      .wbs18_ack_i(wbs[18].ack),  // ACK_I acknowledge input
+      .wbs18_err_i(wbs[18].err),  // ERR_I error input
+      .wbs18_stall_i(wbs[18].stall),  // STALL_I retry input
+      .wbs18_cyc_o(wbs[18].cyc),  // CYC_O cycle output
+
+      .wbs18_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*18:ADDR_WIDTH*18]),
+      .wbs18_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*18:ADDR_WIDTH*18])
   );
 
 endmodule

@@ -18,7 +18,7 @@ sources:
   - target: arty-a7-35
     defines:
       VRAM_SIZE_BYTES: 65536
-      DPRAM_SIZE_BYTES: 65536
+      CPU_RAM_SIZE_BYTES: 65536
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       #YM2149: ~
@@ -32,7 +32,7 @@ sources:
   - target: arty-a7-100
     defines:
       VRAM_SIZE_BYTES: 131072
-      DPRAM_SIZE_BYTES: 262144
+      CPU_RAM_SIZE_BYTES: 262144
       NO_MODPORT_EXPRESSIONS: ~
       DEBUG_MODULE_ACTIVE: ~
       #YM2149: ~

@@ -15,6 +15,6 @@ BITSTREAM_IN=$3
 BITSTREAM_OUT=$4
 
 #Hack: It is assumed that this is the cmem memory instance that needs updating
-CMEM_PROC=boxlambda_soc_inst/cmem/xpm_memory_tdpram_inst/xpm_memory_base_inst
- 
+CMEM_PROC=boxlambda_soc_inst/cmem/xpm_memory_spram_inst/xpm_memory_base_inst
+
 updatemem --force --meminfo $MMI_FILE --data $CMEM_FILE --proc $CMEM_PROC --bit $BITSTREAM_IN --out $BITSTREAM_OUT

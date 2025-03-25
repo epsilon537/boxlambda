@@ -3,7 +3,7 @@
 # Package metadata. Required.
 package:
   # The name of the package. Required.
-  name: wb_dp_ram
+  name: wb_ram
 
 sources:
   - target: memory_vivado
@@ -16,11 +16,11 @@ sources:
 
   - target: any(vivado, verilator)
     files:
-      - rtl/wb_dp_ram_wrapper.sv
+      - rtl/wb_ram_wrapper.sv
 
   - target: verilator
     files:
-      - ../../../sub/verilog-wishbone/rtl/wb_dp_ram.v
+      - ../../../sub/verilog-wishbone/rtl/wb_ram.v
 
 
 

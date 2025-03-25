@@ -1,4 +1,4 @@
-/*Dual Port RAM test checks code and data access to the CMEM and DMEM dual port memories.*/
+/*Dual RAM test checks code and data access to the CMEM and DMEM port memories.*/
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>

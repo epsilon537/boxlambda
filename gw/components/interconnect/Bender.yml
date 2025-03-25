@@ -16,24 +16,24 @@ sources:
 
   - target: interconnect
     files:
-     - rtl/wbxbar_ooc.sv
+     - rtl/interconnect_ooc.sv
 
   - target: any(vivado, verilator)
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:
-      - rtl/wb_staller.sv
-      - rtl/wb_shared_bus_14.sv
-      - ../../../sub/wb2axip/rtl/wbxbar.v
-      - ../../../sub/wb2axip/rtl/addrdecode.v
-      - ../../../sub/wb2axip/rtl/skidbuffer.v
-      - ../../../sub/wb2axip/rtl/wbarbiter.v
-      - ../../../sub/wb2axip/rtl/aximrd2wbsp.v
-      - ../../../sub/wb2axip/rtl/wbm2axilite.v
-      - ../../../sub/wb2axip/rtl/axi_addr.v
-      - ../../../sub/wb2axip/rtl/sfifo.v
-      - ../../../sub/verilog-wishbone/rtl/wb_mux_2.v
-      - ../../../sub/verilog-wishbone/rtl/wb_mux_14.v
+      - rtl/data_bus.sv
+      - rtl/instruction_bus.sv
+      - rtl/wb_mux_19_wrapper.sv
+      - rtl/wb_mux_5_wrapper.sv
+      - rtl/wb_arbiter_4_wrapper.sv
+      - rtl/wb_arbiter_2_wrapper.sv
+      - ../../../sub/verilog-wishbone/rtl/wb_arbiter_4.v
+      - ../../../sub/verilog-wishbone/rtl/wb_arbiter_2.v
+      - ../../../sub/verilog-wishbone/rtl/arbiter.v
+      - ../../../sub/verilog-wishbone/rtl/priority_encoder.v
+      - ../../../sub/verilog-wishbone/rtl/wb_mux_19.v
+      - ../../../sub/verilog-wishbone/rtl/wb_mux_5.v
 
 
 
