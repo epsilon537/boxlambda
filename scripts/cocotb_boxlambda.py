@@ -8,18 +8,21 @@ from cocotb_tools.check_results import get_results
 #This is a simple wrapper around CocoTB's Test Runner.
 #It takes care of some boilerplate code.
 
-#Pass in list of verilog source, the filename of the CocoTB Python test module, the top-level module
-#and optionally a specific testcase to run (by default all tests in the test module will be run).
-def test_runner(verilog_sources, test_module_filename, top, testcase=None):
+#Pass in list of verilog source, the filename of the CocoTB Python test module and the top-level module. Optionally a specific testcase to run (by default all tests in the test module will be run) and module instantiation parameters.
+def test_runner(verilog_sources, test_module_filename, top, testcase=None, parameters={}):
     hdl_toplevel_lang = "verilog"
     sim = "icarus"
     test_module = os.path.basename(os.path.splitext(test_module_filename)[0])
     build_dir= test_module+"_sim_build"
 
+    print("verilog sources:")
+    print(verilog_sources)
+
     runner = get_runner(sim)
     runner.build(
         verilog_sources=verilog_sources,
         vhdl_sources= [],
+        parameters = parameters,
         hdl_toplevel= top,
         always=True,
         build_dir=build_dir,

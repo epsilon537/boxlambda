@@ -61,7 +61,7 @@ int main(void) {
   uint32_t sig = vs0_reg_rd(VS0_REG_SIGNATURE);
 
   if (sig != J1B_SIG_VALUE) {
-    printf("Incorrect signature! Expected 0x%x. Aborting...\n", J1B_SIG_VALUE);
+    printf("Incorrect signature! Received 0x%x, Expected 0x%x. Aborting...\n", sig, J1B_SIG_VALUE);
     return -1;
   }
 

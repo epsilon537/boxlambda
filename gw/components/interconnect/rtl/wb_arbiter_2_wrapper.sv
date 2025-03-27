@@ -6,8 +6,11 @@ module wb_arbiter_2_wrapper #(
     parameter ARB_TYPE_ROUND_ROBIN = 0,  // select round robin arbitration
     parameter ARB_LSB_HIGH_PRIORITY = 1,  // LSB priority selection
     parameter ARB_BLOCK_ACK = 1,  // block ack generation
-    parameter ARB_DEFAULT_TO_LOW_PRIORITY = 0     // boxlambda: default to lowest priority if there is no request.
-                                                  // this reduces latency on the lowest priority port.
+    parameter ARB_DEFAULT_TO_PORT_0 = 0  // boxlambda: default to port 0 if there is no request.
+                                         // this removes arbitration
+                                         // overhead on port 0 when there
+                                         // are no requests on the other
+                                         // ports.
 ) (
     input wire clk,
     input wire rst,
@@ -25,7 +28,7 @@ module wb_arbiter_2_wrapper #(
       .ARB_TYPE_ROUND_ROBIN(ARB_TYPE_ROUND_ROBIN),
       .ARB_LSB_HIGH_PRIORITY(ARB_LSB_HIGH_PRIORITY),
       .ARB_BLOCK_ACK(ARB_BLOCK_ACK),
-      .ARB_DEFAULT_TO_LOW_PRIORITY(ARB_DEFAULT_TO_LOW_PRIORITY)
+      .ARB_DEFAULT_TO_PORT_0(ARB_DEFAULT_TO_PORT_0)
   ) u_wb_arbiter_2 (
       .clk(clk),
       .rst(rst),

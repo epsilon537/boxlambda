@@ -30,7 +30,7 @@ module data_bus #(
       .ARB_TYPE_ROUND_ROBIN(ARB_TYPE_ROUND_ROBIN),
       .ARB_LSB_HIGH_PRIORITY(ARB_LSB_HIGH_PRIORITY),
       .ARB_BLOCK_ACK(ARB_BLOCK_ACK),
-      .ARB_DEFAULT_TO_LOW_PRIORITY(1)
+      .ARB_DEFAULT_TO_PORT_0(1)
   ) arbiter (
       .clk(clk),
       .rst(rst),

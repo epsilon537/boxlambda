@@ -109,8 +109,8 @@ module boxlambda_soc #(
 
   //Enum of Bus Masters attached to the instruction bus.
   typedef enum {
-    INSTR_BUS_VS0_M,    /*Virtual Socket 0 Bus Master port.*/
-    INSTR_BUS_IBEX_I_M  /*Ibex CPU instruction port.*/
+    INSTR_BUS_IBEX_I_M,  /*Ibex CPU instruction port.*/
+    INSTR_BUS_VS0_M  /*Virtual Socket 0 Bus Master port.*/
   } wb_instr_bus_master_e;
 
   //Enum of Bus Slaves attached to the instruction_bus
@@ -124,10 +124,10 @@ module boxlambda_soc #(
 
   //Enum of Bus Masters attached to the data bus.
   typedef enum {
-    DATA_BUS_DM_M,     /*Debug Module Bus Master port.*/
+    DATA_BUS_IBEX_D_M,  /*Ibex CPU data port.*/
     DATA_BUS_VS0_M,    /*Virtual Socket 0 Bus Master port.*/
     DATA_BUS_DFX_M,    /*DFX Bus Master port.*/
-    DATA_BUS_IBEX_D_M  /*Ibex CPU data port.*/
+    DATA_BUS_DM_M     /*Debug Module Bus Master port.*/
   } wb_data_bus_master_e;
 
   //Enum of Bus Slaves attached to the data bus.
@@ -230,7 +230,6 @@ module boxlambda_soc #(
     /*DATA_BUS_DDR_USR_S*/{AW'(~('h0fffffff >> 2))},
     /*DATA_BUS_VS0_S*/{AW'(~('h000fffff >> 2))},
     /*DATA_BUS_VERA_S*/{AW'(~('h0007ffff >> 2))},
-    /*DATA_BUS_DDR_USR_S*/{AW'('h20000000 >> 2)},
     /*DATA_BUS_FLASH_USR_S*/{AW'(~('h00ffffff >> 2))},
     /*DATA_BUS_DM_S*/{AW'(~('h0000ffff >> 2))},
     /*DATA_BUS_DDR_CTRL_S*/{AW'(~('h0000ffff >> 2))},
@@ -372,12 +371,12 @@ module boxlambda_soc #(
       .ADDR_WIDTH(AW),
       .ARB_TYPE_ROUND_ROBIN(0),
       .ARB_BLOCK_ACK(0),
-      .ARB_DEFAULT_TO_LOW_PRIORITY(1)
+      .ARB_DEFAULT_TO_PORT_0(1)
   ) cmem_arbiter (
       .clk  (sys_clk),
       .rst  (dm_reset),
-      .wbm_0(data_bus_wbs[DATA_BUS_CMEM_S]),
-      .wbm_1(instruction_bus_wbs[INSTR_BUS_CMEM_S]),
+      .wbm_0(instruction_bus_wbs[INSTR_BUS_CMEM_S]),
+      .wbm_1(data_bus_wbs[DATA_BUS_CMEM_S]),
       .wbs  (cmem_wb_if)
   );
 
@@ -390,12 +389,12 @@ module boxlambda_soc #(
       .ADDR_WIDTH(AW),
       .ARB_TYPE_ROUND_ROBIN(0),
       .ARB_BLOCK_ACK(0),
-      .ARB_DEFAULT_TO_LOW_PRIORITY(1)
+      .ARB_DEFAULT_TO_PORT_0(1)
   ) dmem_arbiter (
       .clk  (sys_clk),
       .rst  (dm_reset),
-      .wbm_0(instruction_bus_wbs[INSTR_BUS_DMEM_S]),
-      .wbm_1(data_bus_wbs[DATA_BUS_DMEM_S]),
+      .wbm_0(data_bus_wbs[DATA_BUS_DMEM_S]),
+      .wbm_1(instruction_bus_wbs[INSTR_BUS_DMEM_S]),
       .wbs  (dmem_wb_if)
   );
 
@@ -408,12 +407,12 @@ module boxlambda_soc #(
       .ADDR_WIDTH(AW),
       .ARB_TYPE_ROUND_ROBIN(0),
       .ARB_BLOCK_ACK(0),
-      .ARB_DEFAULT_TO_LOW_PRIORITY(1)
+      .ARB_DEFAULT_TO_PORT_0(1)
   ) dm_arbiter (
       .clk  (sys_clk),
       .rst  (dm_reset),
-      .wbm_0(data_bus_wbs[DATA_BUS_DM_S]),
-      .wbm_1(instruction_bus_wbs[INSTR_BUS_DM_S]),
+      .wbm_0(instruction_bus_wbs[INSTR_BUS_DM_S]),
+      .wbm_1(data_bus_wbs[DATA_BUS_DM_S]),
       .wbs  (dm_wb_if)
   );
 
@@ -426,12 +425,12 @@ module boxlambda_soc #(
       .ADDR_WIDTH(AW),
       .ARB_TYPE_ROUND_ROBIN(0),
       .ARB_BLOCK_ACK(0),
-      .ARB_DEFAULT_TO_LOW_PRIORITY(1)
+      .ARB_DEFAULT_TO_PORT_0(1)
   ) flash_usr_arbiter (
       .clk  (sys_clk),
       .rst  (dm_reset),
-      .wbm_0(data_bus_wbs[DATA_BUS_FLASH_USR_S]),
-      .wbm_1(instruction_bus_wbs[INSTR_BUS_FLASH_USR_S]),
+      .wbm_0(instruction_bus_wbs[INSTR_BUS_FLASH_USR_S]),
+      .wbm_1(data_bus_wbs[DATA_BUS_FLASH_USR_S]),
       .wbs  (flash_usr_wb_if)
   );
 
@@ -444,12 +443,12 @@ module boxlambda_soc #(
       .ADDR_WIDTH(AW),
       .ARB_TYPE_ROUND_ROBIN(0),
       .ARB_BLOCK_ACK(0),
-      .ARB_DEFAULT_TO_LOW_PRIORITY(1)
+      .ARB_DEFAULT_TO_PORT_0(1)
   ) ddr_usr_arbiter (
       .clk  (sys_clk),
       .rst  (dm_reset),
-      .wbm_1(data_bus_wbs[DATA_BUS_DDR_USR_S]),
-      .wbm_0(instruction_bus_wbs[INSTR_BUS_DDR_USR_S]),
+      .wbm_0(data_bus_wbs[DATA_BUS_DDR_USR_S]),
+      .wbm_1(instruction_bus_wbs[INSTR_BUS_DDR_USR_S]),
       .wbs  (ddr_usr_wb_if)
   );
 
@@ -1086,10 +1085,10 @@ module boxlambda_soc #(
       assign flash_wb_addr = flash_usr_wb_if.cyc ? flash_usr_wb_if.adr[21:0] : data_bus_wbs[DATA_BUS_FLASH_CTRL_S].adr[21:0];
       assign flash_wb_dat_m = flash_usr_wb_if.cyc ? flash_usr_wb_if.dat_m : data_bus_wbs[DATA_BUS_FLASH_CTRL_S].dat_m;
 
-      assign flash_usr_wb_if.stall = flash_wb_stall;
-      assign data_bus_wbs[DATA_BUS_FLASH_CTRL_S].stall = flash_wb_stall;
-      assign flash_usr_wb_if.ack = flash_wb_ack;
-      assign data_bus_wbs[DATA_BUS_FLASH_CTRL_S].ack = flash_wb_ack;
+      assign flash_usr_wb_if.stall = flash_usr_wb_if.cyc & flash_wb_stall;
+      assign data_bus_wbs[DATA_BUS_FLASH_CTRL_S].stall = data_bus_wbs[DATA_BUS_FLASH_CTRL_S].cyc & flash_wb_stall;
+      assign flash_usr_wb_if.ack = flash_usr_wb_if.cyc & flash_wb_ack;
+      assign data_bus_wbs[DATA_BUS_FLASH_CTRL_S].ack = data_bus_wbs[DATA_BUS_FLASH_CTRL_S].cyc & flash_wb_ack;
       assign flash_usr_wb_if.dat_s = flash_wb_dat_s;
       assign data_bus_wbs[DATA_BUS_FLASH_CTRL_S].dat_s = flash_wb_dat_s;
 
