@@ -577,18 +577,19 @@ int main(void) {
   uint32_t do_nothing_cycles = do_nothing();
   printf("Expected: 8 cycles.\n");
   uint32_t lw_register_loop_cycles = lw_register_loop((void *)(I2C_MASTER_BASE+I2C_ISR)); //Just picking a register without too many side effects.
-  printf("Expected: 12 cycles.\n");
+  printf("Expected: 8 cycles.\n");
   uint32_t lw_sw_copy_loop_cycles = lw_sw_copy_loop(srcBuf, dstBuf);
   printf("Expected: 14 cycles.\n");
   uint32_t lw_sw_copy_unrolled_cycles = lw_sw_copy_unrolled(srcBuf, dstBuf);
   printf("Expected: 8 cycles.\n");
   uint32_t lw_sw_copy_loop_vram_cycles = lw_sw_copy_loop((void*)VERA_VRAM_BASE, (void*)(VERA_VRAM_BASE+BUF_NUM_WORDS*4));
-  printf("Expected: TBD.\n");
+  printf("Expected: 14.\n");
 
   if ((do_nothing_cycles == 8) &&
-      (lw_register_loop_cycles == 12) &&
+      (lw_register_loop_cycles == 8) &&
       (lw_sw_copy_loop_cycles == 14) &&
-      (lw_sw_copy_unrolled_cycles == 8)) {
+      (lw_sw_copy_unrolled_cycles == 8) &&
+      (lw_sw_copy_loop_vram_cycles == 14)) {
     printf("Test Successful.\n");
   }
   else {

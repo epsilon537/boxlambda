@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Made SDL2 optional: if it's installed, the vera_integrated test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criterium.
 - Made CMEM and DMEM single port.
 - Replaced the crossbar+shared bus based interconnect with a dual bus interconnect.
+- Made VERA's VRAM dual port, reducing CPU access latency.
 
 ### Removed
 
