@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Corrected boxlambda_base build instructions in the read-the-docs documentation.
+- Fixed missing dependency of spiflash_test_sim_sw on spiflash_test_flsh.
 
 ### Changed
 
