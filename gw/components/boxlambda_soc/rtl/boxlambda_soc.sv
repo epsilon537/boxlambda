@@ -1,6 +1,6 @@
 /*The parameterized BoxLambda SoC.*/
 module boxlambda_soc #(
-    parameter CMEM_DMEM_BYTE_ADDR_MASK = 'h1ffff,  /*CMEM/DMEM size as a mask value.*/
+    parameter IMEM_BYTE_ADDR_MASK = 'h3ffff,  /*Internal MEM size as a mask value.*/
     parameter VRAM_SIZE_BYTES = 131072,
     parameter DEBUG_MODULE_ACTIVE = 1,
     parameter DRAM_ACTIVE = 1,
@@ -13,8 +13,7 @@ module boxlambda_soc #(
     parameter DFX_ACTIVE = 0,
     parameter VS0_ACTIVE = 1,
     parameter ACK_INVALID_ADDR = 1,
-    parameter CMEM_FILE = "",
-    parameter DMEM_FILE = ""
+    parameter IMEM_FILE = ""
 ) (
     input  wire        ext_clk_100,         //100MHz external clock.
     input  wire        ext_rst_n,           //External reset pin.
@@ -115,8 +114,7 @@ module boxlambda_soc #(
 
   //Enum of Bus Slaves attached to the instruction_bus
   typedef enum {
-    INSTR_BUS_CMEM_S,  /*CMEM slave port.*/
-    INSTR_BUS_DMEM_S,  /*DMEM slave port.*/
+    INSTR_BUS_IMEM_S,  /*IMEM slave port.*/
     INSTR_BUS_DM_S,  /*Debug Module slave port.*/
     INSTR_BUS_FLASH_USR_S,  /*Flash controller user slave port*/
     INSTR_BUS_DDR_USR_S  /*DRAM user slave port.*/
@@ -132,8 +130,7 @@ module boxlambda_soc #(
 
   //Enum of Bus Slaves attached to the data bus.
   typedef enum {
-    DATA_BUS_CMEM_S,  /*CMEM slave port.*/
-    DATA_BUS_DMEM_S,  /*DMEM slave port.*/
+    DATA_BUS_IMEM_S,  /*IMEM slave port.*/
     DATA_BUS_SDSPI_S,  /*SDSPI*/
     DATA_BUS_USB_HID_0_S,  /*USB HID keyboard or mouse*/
     DATA_BUS_USB_HID_1_S,  /*USB HID keyboard or mouse*/
@@ -172,25 +169,24 @@ module boxlambda_soc #(
     IRQ_ID_NA_5
   } fast_irq_ids_e;
 
-  /*We used a word-addressing Wishbone bus. The CMEM/DMEM word address bus width is equal to the
-   *number of bits of the CMEM/DMEM Byte Address mask minus 2.*/
-  localparam CMEM_DMEM_AW = $clog2(CMEM_DMEM_BYTE_ADDR_MASK) - 2;
+  /*We used a word-addressing Wishbone bus. The IMEM word address bus width is equal to the
+   *number of bits of the Byte Address mask minus 2.*/
+  localparam IMEM_AW = $clog2(IMEM_BYTE_ADDR_MASK) - 2;
 
   localparam AW = 28;  //Wishbone Bus address width. Note that we use word addressing.
   localparam DW = 32;  //Wishbone Bus data width.
 
   localparam NUM_INSTR_BUS_MASTERS = 2;
-  localparam NUM_INSTR_BUS_SLAVES = 5;
+  localparam NUM_INSTR_BUS_SLAVES = 4;
   localparam NUM_DATA_BUS_MASTERS = 4;
-  localparam NUM_DATA_BUS_SLAVES = 19;
+  localparam NUM_DATA_BUS_SLAVES = 18;
 
   //Instruction bus bus slave addresses. Right shift by two to convert byte address values to word address values.
   localparam [NUM_INSTR_BUS_SLAVES*AW-1:0] INSTR_BUS_SLAVE_ADDRS = {
     /*INSTR_BUS_DDR_USR_S*/{AW'('h20000000 >> 2)},
     /*INSTR_BUS_FLASH_USR_S*/{AW'('h11000000 >> 2)},
     /*INSTR_BUS_DM_S*/{AW'('h10040000 >> 2)},
-    /*INSTR_BUS_DMEM_S*/{AW'('h00020000 >> 2)},
-    /*INSTR_BUS_CMEM_S*/{AW'('h00000000 >> 2)}
+    /*INSTR_BUS_IMEM_S*/{AW'('h00000000 >> 2)}
   };
 
   //Instruction bus slave address mask. Right-shift by two to convert byte size to word size.
@@ -198,8 +194,7 @@ module boxlambda_soc #(
     /*INSTR_BUS_DDR_USR_S*/{AW'(~('h0fffffff >> 2))},
     /*INSTR_BUS_FLASH_USR_S*/{AW'(~('h00ffffff >> 2))},
     /*INSTR_BUS_DM_S*/{AW'(~('h0000ffff >> 2))},
-    /*INSTR_BUS_DMEM_S*/{AW'(~(CMEM_DMEM_BYTE_ADDR_MASK >> 2))},
-    /*INSTR_BUS_CMEM_S*/{AW'(~(CMEM_DMEM_BYTE_ADDR_MASK >> 2))}
+    /*INSTR_BUS_IMEM_S*/{AW'(~(IMEM_BYTE_ADDR_MASK >> 2))}
   };
 
   //Data bus slave addresses. Right shift by two to convert byte address values to word address values.
@@ -221,8 +216,7 @@ module boxlambda_soc #(
     /*DATA_BUS_USB_HID_1_S*/{AW'('h10000080 >> 2)},
     /*DATA_BUS_USB_HID_0_S*/{AW'('h10000040 >> 2)},
     /*DATA_BUS_SDSPI_S*/{AW'('h10000020 >> 2)},
-    /*DATA_BUS_DMEM_S*/{AW'('h00020000 >> 2)},
-    /*DATA_BUS_CMEM_S*/{AW'('h00000000 >> 2)}
+    /*DATA_BUS_IMEM_S*/{AW'('h00000000 >> 2)}
   };
 
   //Data bus slave address mask. Right-shift by two to convert byte size to word size.
@@ -244,8 +238,7 @@ module boxlambda_soc #(
     /*DATA_BUS_USB_HID_1_S*/{AW'(~('h0000003f >> 2))},
     /*DATA_BUS_USB_HID_0_S*/{AW'(~('h0000003f >> 2))},
     /*DATA_BUS_SDSPI_S*/{AW'(~('h0000001f >> 2))},
-    /*DATA_BUS_DMEM_S*/{AW'(~(CMEM_DMEM_BYTE_ADDR_MASK >> 2))},
-    /*DATA_BUS_CMEM_S*/{AW'(~(CMEM_DMEM_BYTE_ADDR_MASK >> 2))}
+    /*DATA_BUS_IMEM_S*/{AW'(~(IMEM_BYTE_ADDR_MASK >> 2))}
   };
 
   //Clock signals.
@@ -361,42 +354,6 @@ module boxlambda_soc #(
   );
 
   /*The Slave side 2-to-1 arbiters*/
-
-  wb_if cmem_wb_if (
-      .rst(dm_reset),
-      .clk(sys_clk)
-  );
-
-  wb_arbiter_2_wrapper #(
-      .ADDR_WIDTH(AW),
-      .ARB_TYPE_ROUND_ROBIN(0),
-      .ARB_BLOCK_ACK(0),
-      .ARB_DEFAULT_TO_PORT_0(1)
-  ) cmem_arbiter (
-      .clk  (sys_clk),
-      .rst  (dm_reset),
-      .wbm_0(instruction_bus_wbs[INSTR_BUS_CMEM_S]),
-      .wbm_1(data_bus_wbs[DATA_BUS_CMEM_S]),
-      .wbs  (cmem_wb_if)
-  );
-
-  wb_if dmem_wb_if (
-      .rst(dm_reset),
-      .clk(sys_clk)
-  );
-
-  wb_arbiter_2_wrapper #(
-      .ADDR_WIDTH(AW),
-      .ARB_TYPE_ROUND_ROBIN(0),
-      .ARB_BLOCK_ACK(0),
-      .ARB_DEFAULT_TO_PORT_0(1)
-  ) dmem_arbiter (
-      .clk  (sys_clk),
-      .rst  (dm_reset),
-      .wbm_0(data_bus_wbs[DATA_BUS_DMEM_S]),
-      .wbm_1(instruction_bus_wbs[INSTR_BUS_DMEM_S]),
-      .wbs  (dmem_wb_if)
-  );
 
   wb_if dm_wb_if (
       .rst(dm_reset),
@@ -610,44 +567,35 @@ module boxlambda_soc #(
       .*
   );
 
-  //CMEM (Code Mem.) Internal Memory
-  wb_ram_wrapper #(
-      .ADDR_WIDTH(CMEM_DMEM_AW),
-      .INIT_FILE (CMEM_FILE)
-  ) cmem (
+  //Internal Memory
+  wb_dp_ram_wrapper #(
+      .ADDR_WIDTH(IMEM_AW),
+      .INIT_FILE (IMEM_FILE)
+  ) imem (
       .clk(sys_clk),
       .rst(ndm_reset),
 
-      .adr_i(cmem_wb_if.adr[CMEM_DMEM_AW-1:0]),  // ADR_I() address
-      .dat_i(cmem_wb_if.dat_m),  // DAT_I() data in
-      .dat_o(cmem_wb_if.dat_s),  // DAT_O() data out
-      .we_i(cmem_wb_if.we),  // WE_I write enable input
-      .sel_i(cmem_wb_if.sel),  // SEL_I() select input
-      .stb_i(cmem_wb_if.stb),  // STB_I strobe input
-      .stall_o(cmem_wb_if.stall),  // STALL_O stall output
-      .ack_o(cmem_wb_if.ack),  // ACK_O acknowledge output
-      .err_o(cmem_wb_if.err),  // ERR_O error output
-      .cyc_i(cmem_wb_if.cyc)  // CYC_I cycle input
-  );
+      .a_adr_i(instruction_bus_wbs[INSTR_BUS_IMEM_S].adr[IMEM_AW-1:0]),  // ADR_I() address
+      .a_dat_i(instruction_bus_wbs[INSTR_BUS_IMEM_S].dat_m),  // DAT_I() data in
+      .a_dat_o(instruction_bus_wbs[INSTR_BUS_IMEM_S].dat_s),  // DAT_O() data out
+      .a_we_i(instruction_bus_wbs[INSTR_BUS_IMEM_S].we),  // WE_I write enable input
+      .a_sel_i(instruction_bus_wbs[INSTR_BUS_IMEM_S].sel),  // SEL_I() select input
+      .a_stb_i(instruction_bus_wbs[INSTR_BUS_IMEM_S].stb),  // STB_I strobe input
+      .a_stall_o(instruction_bus_wbs[INSTR_BUS_IMEM_S].stall),  // STALL_O stall output
+      .a_ack_o(instruction_bus_wbs[INSTR_BUS_IMEM_S].ack),  // ACK_O acknowledge output
+      .a_err_o(instruction_bus_wbs[INSTR_BUS_IMEM_S].err),  // ERR_O error output
+      .a_cyc_i(instruction_bus_wbs[INSTR_BUS_IMEM_S].cyc),  // CYC_I cycle input
 
-  //DMEM (Data Mem.) Internal Memory
-  wb_ram_wrapper #(
-      .ADDR_WIDTH(CMEM_DMEM_AW),
-      .INIT_FILE (DMEM_FILE)
-  ) dmem (
-      .clk(sys_clk),
-      .rst(ndm_reset),
-
-      .adr_i(dmem_wb_if.adr[CMEM_DMEM_AW-1:0]),  // ADR_I() address
-      .dat_i(dmem_wb_if.dat_m),  // DAT_I() data in
-      .dat_o(dmem_wb_if.dat_s),  // DAT_O() data out
-      .we_i(dmem_wb_if.we),  // WE_I write enable input
-      .sel_i(dmem_wb_if.sel),  // SEL_I() select input
-      .stb_i(dmem_wb_if.stb),  // STB_I strobe input
-      .stall_o(dmem_wb_if.stall),  // STALL_O stall output
-      .ack_o(dmem_wb_if.ack),  // ACK_O acknowledge output
-      .err_o(dmem_wb_if.err),  // ERR_O error output
-      .cyc_i(dmem_wb_if.cyc)  // CYC_I cycle input
+      .b_adr_i(data_bus_wbs[DATA_BUS_IMEM_S].adr[IMEM_AW-1:0]),  // ADR_I() address
+      .b_dat_i(data_bus_wbs[DATA_BUS_IMEM_S].dat_m),  // DAT_I() data in
+      .b_dat_o(data_bus_wbs[DATA_BUS_IMEM_S].dat_s),  // DAT_O() data out
+      .b_we_i(data_bus_wbs[DATA_BUS_IMEM_S].we),  // WE_I write enable input
+      .b_sel_i(data_bus_wbs[DATA_BUS_IMEM_S].sel),  // SEL_I() select input
+      .b_stb_i(data_bus_wbs[DATA_BUS_IMEM_S].stb),  // STB_I strobe input
+      .b_stall_o(data_bus_wbs[DATA_BUS_IMEM_S].stall),  // STALL_O stall output
+      .b_ack_o(data_bus_wbs[DATA_BUS_IMEM_S].ack),  // ACK_O acknowledge output
+      .b_err_o(data_bus_wbs[DATA_BUS_IMEM_S].err),  // ERR_O error output
+      .b_cyc_i(data_bus_wbs[DATA_BUS_IMEM_S].cyc)  // CYC_I cycle input
   );
 
   generate

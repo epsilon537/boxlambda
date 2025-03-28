@@ -16,7 +16,7 @@ target_include_directories(reset_test_ram
 )
 
 link_and_create_image(reset_test_ram
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(reset_test_ram sdram gpio riscv bootstrap)
 

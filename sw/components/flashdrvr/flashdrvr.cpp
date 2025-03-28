@@ -87,7 +87,7 @@ static const unsigned    F_RESET = (CFG_USERMODE|0x0ff),
 //BoxLambda: define a default constructor referencing the singleton devbus object.
 FLASHDRVR::FLASHDRVR() :m_fpga(&devbus), m_debug(false), m_id(FLASH_UNKNOWN) {
   //BoxLambda: Allocating an sbuf on the heap. This object is too big to fit in
-  //DMEM or worse, on the stack.
+  //IMEM or worse, on the stack.
   m_sbuf = (char*)malloc(SECTORSZB);
   assert(m_sbuf);
 }

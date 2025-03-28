@@ -1,24 +1,24 @@
-//This module is a wb_if aware wrappper around a 1-to-5 mux.
-module wb_mux_5_wrapper #(
+//This module is a wb_if aware wrappper around a 1-to-4 mux.
+module wb_mux_4_wrapper #(
     parameter DATA_WIDTH = 32,  // width of data bus in bits (8, 16, 32, or 64)
     parameter ADDR_WIDTH = 32,  // width of address bus in bits
     parameter SELECT_WIDTH = (DATA_WIDTH / 8),  // width of word select bus (1, 2, 4, or 8)
-    parameter [5*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
-    parameter [5*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
+    parameter [4*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
+    parameter [4*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
 ) (
     input wire clk,
     input wire rst,
     wb_if.slave wbm,
-    wb_if.master wbs[5]
+    wb_if.master wbs[4]
 );
 
   import wb_pkg::*;
 
-  wb_mux_5 #(
+  wb_mux_4 #(
       .DATA_WIDTH  (DATA_WIDTH),
       .ADDR_WIDTH  (ADDR_WIDTH),
       .SELECT_WIDTH(SELECT_WIDTH)
-  ) wb_mux_5_inst (
+  ) wb_mux_4_inst (
       .clk(clk),
       .rst(rst),
 
@@ -87,21 +87,7 @@ module wb_mux_5_wrapper #(
       .wbs3_cyc_o(wbs[3].cyc),  // CYC_O cycle output
 
       .wbs3_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*3:ADDR_WIDTH*3]),
-      .wbs3_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*3:ADDR_WIDTH*3]),
-
-      .wbs4_adr_o(wbs[4].adr),  // ADDR_O() address output
-      .wbs4_dat_i(wbs[4].dat_s),  // DAT_I() data in
-      .wbs4_dat_o(wbs[4].dat_m),  // DAT_O() data out
-      .wbs4_we_o(wbs[4].we),  // WE_O write enable output
-      .wbs4_sel_o(wbs[4].sel),  // SEL_O() select output
-      .wbs4_stb_o(wbs[4].stb),  // STB_O strobe output
-      .wbs4_ack_i(wbs[4].ack),  // ACK_I acknowledge input
-      .wbs4_err_i(wbs[4].err),  // ERR_I error input
-      .wbs4_stall_i(wbs[4].stall),  // STALL_I retry input
-      .wbs4_cyc_o(wbs[4].cyc),  // CYC_O cycle output
-
-      .wbs4_addr(SLAVE_ADDRESSES[ADDR_WIDTH-1+ADDR_WIDTH*4:ADDR_WIDTH*4]),
-      .wbs4_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*4:ADDR_WIDTH*4])
+      .wbs3_addr_msk(SLAVE_ADDR_MASKS[ADDR_WIDTH-1+ADDR_WIDTH*3:ADDR_WIDTH*3])
   );
 
 endmodule

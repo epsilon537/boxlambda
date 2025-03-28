@@ -12,7 +12,7 @@ target_compile_options(timer_uart_gpio_irqs_ram
 )
 
 link_and_create_image(timer_uart_gpio_irqs_ram
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(timer_uart_gpio_irqs_ram timer gpio riscv interrupts bootstrap)
 

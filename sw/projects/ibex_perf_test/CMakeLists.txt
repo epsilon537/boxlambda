@@ -17,7 +17,7 @@ target_include_directories(ibex_perf_test_ram
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_image(ibex_perf_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+link_and_create_image(ibex_perf_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(ibex_perf_test_ram gpio riscv vera bootstrap)
 

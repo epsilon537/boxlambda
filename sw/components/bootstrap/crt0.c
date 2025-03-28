@@ -59,18 +59,19 @@ static void local_memset(char *dst, char val, unsigned num_bytes);
  * flash memory.*/
 static void __attribute__((used)) __section(".init") _cstart(void) {
   /* BoxLambda: Copy code segment if needed. For SW images linked
-   * to boot from CMEM, __code_start and __code_source will be the
+   * to boot from IMEM, __code_start and __code_source will be the
    * same and no code relocation is performed. */
   if (__code_start != __code_source) {
     local_memcpy(__code_start, __code_source, (uintptr_t)__code_size);
   }
 
   /*data segment*/
-  local_memcpy(__data_start, __data_source, (uintptr_t)__data_size);
-  /*(DMEM) BSS segment*/
+  if (__data_start != __data_source) {
+    local_memcpy(__data_start, __data_source, (uintptr_t)__data_size);
+  }
+
+  /*BSS segment*/
   local_memset(__bss_start, '\0', (uintptr_t)__bss_size);
-  /*CMEM BSS segment*/
-  local_memset(__cmem_bss_start, '\0', (uintptr_t)__cmem_bss_size);
 
 /* BoxLambda: code and data has now been relocated, at this point we
  * can make non-local function calls. */
@@ -122,8 +123,8 @@ static void __attribute__((used)) __section(".init") _cstart(void) {
 /* BoxLambda:
  * Place these two functions in .init section so they execute
  * from flash memory (in case the SW image is linked to boot
- * from flash at least. For SW images linked to boot from CMEM,
- * the .init section is placed in CMEM).*/
+ * from flash at least. For SW images linked to boot from IMEM,
+ * the .init section is placed in IMEM).*/
 static void __attribute__((used)) __section(".init")
     local_memcpy(char *dst, char *src, unsigned num_bytes) {
   char *end = dst + num_bytes;

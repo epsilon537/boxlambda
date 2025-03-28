@@ -7,13 +7,13 @@ module instruction_bus #(
     parameter ARB_TYPE_ROUND_ROBIN = 0,  // select round robin arbitration
     parameter ARB_LSB_HIGH_PRIORITY = 1,  // LSB priority selection
     parameter ARB_BLOCK_ACK = 1,  // block ack generation
-    parameter [5*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
-    parameter [5*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
+    parameter [4*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
+    parameter [4*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
 ) (
     input wire clk,
     input wire rst,
     wb_if.slave wbm[2],
-    wb_if.master wbs[5]
+    wb_if.master wbs[4]
 );
 
   import wb_pkg::*;
@@ -39,7 +39,7 @@ module instruction_bus #(
       .wbs  (arbiter_to_mux_if)
   );
 
-  wb_mux_5_wrapper #(
+  wb_mux_4_wrapper #(
       .DATA_WIDTH(DATA_WIDTH),
       .ADDR_WIDTH(ADDR_WIDTH),
       .SELECT_WIDTH(SELECT_WIDTH),

@@ -9,8 +9,7 @@
                 "CMAKE_BUILD_TYPE": "fpga",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-100",
-                "CMEM_SIZE": "128K",
-                "DMEM_SIZE": "128K"
+                "IMEM_SIZE": "256K"
             }
         },
         {
@@ -21,8 +20,7 @@
                 "CMAKE_BUILD_TYPE": "fpga",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-35",
-                "CMEM_SIZE": "32K",
-                "DMEM_SIZE": "32K"
+                "IMEM_SIZE": "64K"
             }
         },
         {
@@ -33,8 +31,7 @@
                 "CMAKE_BUILD_TYPE": "sim",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-35",
-                "CMEM_SIZE": "32K",
-                "DMEM_SIZE": "32K"
+                "IMEM_SIZE": "64K"
             }
         },
         {
@@ -45,8 +42,7 @@
                 "CMAKE_BUILD_TYPE": "sim",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
                 "BL_TARGET_FPGA": "arty-a7-100",
-                "CMEM_SIZE": "128K",
-                "DMEM_SIZE": "128K"
+                "IMEM_SIZE": "256K"
             }
         }
     ]

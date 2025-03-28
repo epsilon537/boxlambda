@@ -10,8 +10,7 @@ module interconnect_ooc #(
 
   localparam AW = 28;
 
-  localparam [19*AW-1:0] SLAVE_ADDRESSES_19 = {
-    /*DDR_USR_S*/{AW'('h20000000 >> 2)},
+  localparam [18*AW-1:0] SLAVE_ADDRESSES_18 = {
     /*VS0_S*/{AW'('h13000000 >> 2)},
     /*VERA_S*/{AW'('h12000000 >> 2)},
     /*DMEM_1_S*/{AW'('h00020000 >> 2)},
@@ -32,8 +31,7 @@ module interconnect_ooc #(
     /*SDSPI_S*/{AW'('h10000020 >> 2)}
   };
 
-  localparam [19*AW-1:0] SLAVE_ADDR_MASKS_19 = {
-    /*DDR_USR_S*/{AW'(~('h0fffffff >> 2))},
+  localparam [18*AW-1:0] SLAVE_ADDR_MASKS_18 = {
     /*VS0_S*/{AW'(~('h000fffff >> 2))},
     /*VERA_S*/{AW'(~('h0007ffff >> 2))},
     /*DMEM_1_S*/{AW'(~(RAM_BYTE_ADDR_MASK >> 2))},
@@ -54,16 +52,14 @@ module interconnect_ooc #(
     /*SDSPI_S*/{AW'(~('h0000001f >> 2))}
   };
 
-  localparam [5*AW-1:0] SLAVE_ADDRESSES_5 = {
-    /*RESET_CTRL_S*/{AW'('h100000D0 >> 2)},
+  localparam [4*AW-1:0] SLAVE_ADDRESSES_4 = {
     /*FLASH_CTRL_S*/{AW'('h100000C0 >> 2)},
     /*USB_HID_1_S*/{AW'('h10000080 >> 2)},
     /*USB_HID_0_S*/{AW'('h10000040 >> 2)},
     /*SDSPI_S*/{AW'('h10000020 >> 2)}
   };
 
-  localparam [5*AW-1:0] SLAVE_ADDR_MASKS_5 = {
-    /*RESET_CTRL_S*/{AW'(~('h00000007 >> 2))},
+  localparam [4*AW-1:0] SLAVE_ADDR_MASKS_4 = {
     /*FLASH_CTRL_S*/{AW'(~('h00000007 >> 2))},
     /*USB_HID_1_S*/{AW'(~('h0000003f >> 2))},
     /*USB_HID_0_S*/{AW'(~('h0000003f >> 2))},
@@ -75,7 +71,7 @@ module interconnect_ooc #(
       .clk(clk)
   );
 
-  wb_if wbs_5[5] (
+  wb_if wbs_4[4] (
       .rst(rst),
       .clk(clk)
   );
@@ -85,7 +81,7 @@ module interconnect_ooc #(
       .clk(clk)
   );
 
-  wb_if wbs_19[19] (
+  wb_if wbs_18[18] (
       .rst(rst),
       .clk(clk)
   );
@@ -94,25 +90,25 @@ module interconnect_ooc #(
       .DATA_WIDTH(DATA_WIDTH),
       .ADDR_WIDTH(AW),
       .ARB_TYPE_ROUND_ROBIN(1),
-      .SLAVE_ADDRESSES(SLAVE_ADDRESSES_5),
-      .SLAVE_ADDR_MASKS(SLAVE_ADDR_MASKS_5)
+      .SLAVE_ADDRESSES(SLAVE_ADDRESSES_4),
+      .SLAVE_ADDR_MASKS(SLAVE_ADDR_MASKS_4)
   ) u_instruction_bus (
       .clk(clk),
       .rst(rst),
       .wbm(wbm_2),
-      .wbs(wbs_5)
+      .wbs(wbs_4)
   );
 
   data_bus #(
       .DATA_WIDTH(DATA_WIDTH),
       .ADDR_WIDTH(AW),
       .ARB_TYPE_ROUND_ROBIN(1),
-      .SLAVE_ADDRESSES(SLAVE_ADDRESSES_19),
-      .SLAVE_ADDR_MASKS(SLAVE_ADDR_MASKS_19)
+      .SLAVE_ADDRESSES(SLAVE_ADDRESSES_18),
+      .SLAVE_ADDR_MASKS(SLAVE_ADDR_MASKS_18)
   ) u_data_bus (
       .clk(clk),
       .rst(rst),
       .wbm(wbm_4),
-      .wbs(wbs_19)
+      .wbs(wbs_18)
   );
 endmodule

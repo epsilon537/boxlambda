@@ -56,7 +56,7 @@ target_include_directories(dfx_test_ram
 )
 
 link_and_create_image(dfx_test_ram
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(dfx_test_ram sdram gpio embedded_cli riscv interrupts peek_poke_cli j1b_hal fatfs ymodem_cli mem_fs_cli dfx bootstrap)
 

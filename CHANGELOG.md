@@ -24,7 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Renamed gw component wbxbar to interconnect.
 - Recreated build trees from scratch when running boxlambda_setup.sh.
 - Made SDL2 optional: if it's installed, the vera_integrated test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criterium.
-- Made CMEM and DMEM single port.
+- Replaced CMEM and DMEM with one Dual Port Memory named IMEM (Internal memory). Port 0 is for instructions, port 1 is for data.
 - Replaced the crossbar+shared bus based interconnect with a dual bus interconnect.
 - Made VERA's VRAM dual port, reducing CPU access latency.
 

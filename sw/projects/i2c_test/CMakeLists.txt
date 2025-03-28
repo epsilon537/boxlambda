@@ -13,7 +13,7 @@ target_compile_options(i2c_test_ram
 )
 
 link_and_create_image(i2c_test_ram
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(i2c_test_ram sdram i2c gpio embedded_cli riscv interrupts peek_poke_cli bootstrap)
 
