@@ -26,9 +26,9 @@ sources:
       - rtl/instruction_bus.sv
       - rtl/wb_mux_18_wrapper.sv
       - rtl/wb_mux_4_wrapper.sv
-      - rtl/wb_arbiter_4_wrapper.sv
+      - rtl/wb_arbiter_3_wrapper.sv
       - rtl/wb_arbiter_2_wrapper.sv
-      - ../../../sub/verilog-wishbone/rtl/wb_arbiter_4.v
+      - ../../../sub/verilog-wishbone/rtl/wb_arbiter_3.v
       - ../../../sub/verilog-wishbone/rtl/wb_arbiter_2.v
       - ../../../sub/verilog-wishbone/rtl/arbiter.v
       - ../../../sub/verilog-wishbone/rtl/priority_encoder.v

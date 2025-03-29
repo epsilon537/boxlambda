@@ -76,7 +76,7 @@ module interconnect_ooc #(
       .clk(clk)
   );
 
-  wb_if wbm_4[4] (
+  wb_if wbm_3[3] (
       .rst(rst),
       .clk(clk)
   );
@@ -108,7 +108,7 @@ module interconnect_ooc #(
   ) u_data_bus (
       .clk(clk),
       .rst(rst),
-      .wbm(wbm_4),
+      .wbm(wbm_3),
       .wbs(wbs_18)
   );
 endmodule

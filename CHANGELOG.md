@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added 'make gen_ibex_core' rule to re-export the ibex core when necessary.
 - Added 'make gen_litedram_core' rule to regenerated the litedram core when necessary.
 - Enabled RISC-V bit manipulation extensions zba_zbb_zbs.
+- Added link to AMD-Xilinx DFX Controller Documentation.
 
 ### Fixed
 

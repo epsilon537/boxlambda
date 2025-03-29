@@ -1,4 +1,4 @@
-//This is BoxLambda's data bus: a 4-to-1 arbiter connected to a 1-to-18
+//This is BoxLambda's data bus: a 3-to-1 arbiter connected to a 1-to-18
 //mux.
 module data_bus #(
     parameter DATA_WIDTH = 32,  // width of data bus in bits (8, 16, 32, or 64)
@@ -12,7 +12,7 @@ module data_bus #(
 ) (
     input wire clk,
     input wire rst,
-    wb_if.slave wbm[4],
+    wb_if.slave wbm[3],
     wb_if.master wbs[18]
 );
 
@@ -23,7 +23,7 @@ module data_bus #(
       .clk(clk)
   );
 
-  wb_arbiter_4_wrapper #(
+  wb_arbiter_3_wrapper #(
       .DATA_WIDTH(DATA_WIDTH),
       .ADDR_WIDTH(ADDR_WIDTH),
       .SELECT_WIDTH(SELECT_WIDTH),
@@ -32,10 +32,12 @@ module data_bus #(
       .ARB_BLOCK_ACK(ARB_BLOCK_ACK),
       .ARB_DEFAULT_TO_PORT_0(1)
   ) arbiter (
-      .clk(clk),
-      .rst(rst),
-      .wbm(wbm),
-      .wbs(arbiter_to_mux_if)
+      .clk  (clk),
+      .rst  (rst),
+      .wbm_0(wbm[0]),
+      .wbm_1(wbm[1]),
+      .wbm_2(wbm[2]),
+      .wbs  (arbiter_to_mux_if)
   );
 
   wb_mux_18_wrapper #(

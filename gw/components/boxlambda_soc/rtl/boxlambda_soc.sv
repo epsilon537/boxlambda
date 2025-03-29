@@ -124,7 +124,6 @@ module boxlambda_soc #(
   typedef enum {
     DATA_BUS_IBEX_D_M,  /*Ibex CPU data port.*/
     DATA_BUS_VS0_M,    /*Virtual Socket 0 Bus Master port.*/
-    DATA_BUS_DFX_M,    /*DFX Bus Master port.*/
     DATA_BUS_DM_M     /*Debug Module Bus Master port.*/
   } wb_data_bus_master_e;
 
@@ -178,7 +177,7 @@ module boxlambda_soc #(
 
   localparam NUM_INSTR_BUS_MASTERS = 2;
   localparam NUM_INSTR_BUS_SLAVES = 4;
-  localparam NUM_DATA_BUS_MASTERS = 4;
+  localparam NUM_DATA_BUS_MASTERS = 3;
   localparam NUM_DATA_BUS_SLAVES = 18;
 
   //Instruction bus bus slave addresses. Right shift by two to convert byte address values to word address values.
@@ -353,7 +352,7 @@ module boxlambda_soc #(
       .wbs(data_bus_wbs)
   );
 
-  /*The Slave side 2-to-1 arbiters*/
+  /*The Slave side arbiters*/
 
   wb_if dm_wb_if (
       .rst(dm_reset),
@@ -396,7 +395,12 @@ module boxlambda_soc #(
       .clk(sys_clk)
   );
 
-  wb_arbiter_2_wrapper #(
+  wb_if dfx_wb_if (
+      .rst(dm_reset),
+      .clk(sys_clk)
+  );
+
+  wb_arbiter_3_wrapper #(
       .ADDR_WIDTH(AW),
       .ARB_TYPE_ROUND_ROBIN(0),
       .ARB_BLOCK_ACK(0),
@@ -404,8 +408,9 @@ module boxlambda_soc #(
   ) ddr_usr_arbiter (
       .clk  (sys_clk),
       .rst  (dm_reset),
-      .wbm_0(data_bus_wbs[DATA_BUS_DDR_USR_S]),
-      .wbm_1(instruction_bus_wbs[INSTR_BUS_DDR_USR_S]),
+      .wbm_0(dfx_wb_if),
+      .wbm_1(data_bus_wbs[DATA_BUS_DDR_USR_S]),
+      .wbm_2(instruction_bus_wbs[INSTR_BUS_DDR_USR_S]),
       .wbs  (ddr_usr_wb_if)
   );
 
@@ -416,16 +421,16 @@ module boxlambda_soc #(
           .clk(sys_clk),
           .rst(ndm_reset),
           //32-bit pipelined Wishbone master interface.
-          .wbm_adr_o(data_bus_wbm[DATA_BUS_DFX_M].adr),
-          .wbm_dat_o(data_bus_wbm[DATA_BUS_DFX_M].dat_m),
-          .wbm_dat_i(data_bus_wbm[DATA_BUS_DFX_M].dat_s),
-          .wbm_we_o(data_bus_wbm[DATA_BUS_DFX_M].we),
-          .wbm_sel_o(data_bus_wbm[DATA_BUS_DFX_M].sel),
-          .wbm_stb_o(data_bus_wbm[DATA_BUS_DFX_M].stb),
-          .wbm_ack_i(data_bus_wbm[DATA_BUS_DFX_M].ack),
-          .wbm_stall_i(data_bus_wbm[DATA_BUS_DFX_M].stall),
-          .wbm_cyc_o(data_bus_wbm[DATA_BUS_DFX_M].cyc),
-          .wbm_err_i(data_bus_wbm[DATA_BUS_DFX_M].err),
+          .wbm_adr_o(dfx_wb_if.adr),
+          .wbm_dat_o(dfx_wb_if.dat_m),
+          .wbm_dat_i(dfx_wb_if.dat_s),
+          .wbm_we_o(dfx_wb_if.we),
+          .wbm_sel_o(dfx_wb_if.sel),
+          .wbm_stb_o(dfx_wb_if.stb),
+          .wbm_ack_i(dfx_wb_if.ack),
+          .wbm_stall_i(dfx_wb_if.stall),
+          .wbm_cyc_o(dfx_wb_if.cyc),
+          .wbm_err_i(dfx_wb_if.err),
           //32-bit pipelined Wishbone slave interface.
           .wbs_adr(data_bus_wbs[DATA_BUS_DFX_S].adr[4:0]),
           .wbs_dat_w(data_bus_wbs[DATA_BUS_DFX_S].dat_m),
@@ -441,12 +446,12 @@ module boxlambda_soc #(
           .vsm_VS_0_event_error(fast_irqs[IRQ_ID_DFX])
       );
     end else begin
-      assign data_bus_wbm[DATA_BUS_DFX_M].adr = 0;
-      assign data_bus_wbm[DATA_BUS_DFX_M].dat_m = 0;
-      assign data_bus_wbm[DATA_BUS_DFX_M].sel = 0;
-      assign data_bus_wbm[DATA_BUS_DFX_M].cyc = 0;
-      assign data_bus_wbm[DATA_BUS_DFX_M].stb = 0;
-      assign data_bus_wbm[DATA_BUS_DFX_M].we = 0;
+      assign dfx_wb_if.adr = 0;
+      assign dfx_wb_if.dat_m = 0;
+      assign dfx_wb_if.sel = 0;
+      assign dfx_wb_if.cyc = 0;
+      assign dfx_wb_if.stb = 0;
+      assign dfx_wb_if.we = 0;
       assign fast_irqs[IRQ_ID_DFX] = 1'b0;
 
       assign vs0_reset = ndm_reset;
