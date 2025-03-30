@@ -12,17 +12,17 @@ extern "C" {
  * provide a definition for the corresponding function below.
  * It'll overrule the weak binding.
  */
-void _vera_irq_handler(void) __attribute__((interrupt("machine")));
-void _vs_0_irq_handler(void) __attribute__((interrupt("machine")));
-void _sdspi_irq_handler(void) __attribute__((interrupt("machine")));
-void _gpio_irq_handler(void) __attribute__((interrupt("machine")));
-void _usb_hid_1_irq_handler(void) __attribute__((interrupt("machine")));
-void _usb_hid_0_irq_handler(void) __attribute__((interrupt("machine")));
-void _i2c_irq_handler(void) __attribute__((interrupt("machine")));
-void _uart_irq_handler(void) __attribute__((interrupt("machine")));
-void _dfx_irq_handler(void) __attribute__((interrupt("machine")));
+void __attribute__((naked)) _vera_irq_handler(void);
+void __attribute__((naked)) _vs_0_irq_handler(void);
+void __attribute__((naked)) _sdspi_irq_handler(void);
+void __attribute__((naked)) _gpio_irq_handler(void);
+void __attribute__((naked)) _usb_hid_1_irq_handler(void);
+void __attribute__((naked)) _usb_hid_0_irq_handler(void);
+void __attribute__((naked)) _i2c_irq_handler(void);
+void __attribute__((naked)) _uart_irq_handler(void);
+void __attribute__((naked)) _dfx_irq_handler(void);
 
-void _timer_irq_handler(void) __attribute__((interrupt("machine")));
+void _timer_irq_handler(void);
 
 /* Exception Handler */
 void _exc_handler(void) __attribute__((interrupt("machine")));

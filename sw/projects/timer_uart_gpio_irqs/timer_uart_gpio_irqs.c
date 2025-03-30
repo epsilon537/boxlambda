@@ -62,6 +62,11 @@ void _gpio_irq_handler(void) {
       gpio_set_pin_value(&gpio, out_pin, pin_ptrig);
     }
   }
+
+  //Return from interrupt
+  __asm__ volatile (
+      "mret \n"
+  );
 }
 
 void _uart_irq_handler(void) {
@@ -87,12 +92,22 @@ void _uart_irq_handler(void) {
     uart_irq_ack(&uart0, UART_IRQ_TX_FIFO_HALF_EMPTY_MASK);
     uart_tx_fifo_half_empty_fired = 1;
   }
+
+  //Return from interrupt
+  __asm__ volatile (
+      "mret \n"
+  );
 }
 
 void _timer_irq_handler(void) {
   //Stop the timer. If we don't stop it, or move into the future, the IRQ will keep on firing.
   mtimer_disable_raw_time_cmp();
   timer_irq_fired = 1;
+
+  //Return from interrupt
+  __asm__ volatile (
+      "mret \n"
+  );
 }
 
 int main(void) {

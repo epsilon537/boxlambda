@@ -10,7 +10,7 @@
 // Creator:  Dan Gisselquist, Ph.D.
 //    Gisselquist Technology, LLC
 //
-// BoxLambdda modifications by epsilon537
+// BoxLambda modifications by epsilon537
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -71,6 +71,11 @@ void _sdspi_irq_handler(void) {
 
   //Acknowledge the interrupt in the SDSPI core.
   _sdcard->sd_isr = _sdcard->sd_ien;
+
+  //Return from interrupt
+  __asm__ volatile (
+      "mret \n"
+  );
 }
 
 int sdspi_test(void) {

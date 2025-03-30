@@ -62,6 +62,11 @@ extern "C" {
       usb_hid_reg_wr(usb0, USB_HID_ISR, USB_HID_IRQ_BIT_LED_REPORT);
       usb0_led_report_irq_fired = 1;
     }
+
+    //Return from interrupt
+    __asm__ volatile (
+        "mret \n"
+    );
   }
 
   void _usb_hid_1_irq_handler(void) {
@@ -76,8 +81,12 @@ extern "C" {
       usb_hid_reg_wr(usb1, USB_HID_ISR, USB_HID_IRQ_BIT_LED_REPORT);
       usb1_led_report_irq_fired = 1;
     }
-  }
 
+    //Return from interrupt
+    __asm__ volatile (
+        "mret \n"
+    );
+  }
 }
 
 //Returns usb_status

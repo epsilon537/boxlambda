@@ -8,7 +8,7 @@ add_executable(sdspi_test_ram
 )
 
 target_compile_options(sdspi_test_ram
- PRIVATE -g)
+ PRIVATE -g -O2)
 
 target_compile_definitions(sdspi_test_ram
  PRIVATE
@@ -35,7 +35,7 @@ add_executable(sdspi_test_flsh
 )
 
 target_compile_options(sdspi_test_flsh
- PRIVATE -g)
+ PRIVATE -g -O2)
 
 target_compile_definitions(sdspi_test_flsh
  PRIVATE
