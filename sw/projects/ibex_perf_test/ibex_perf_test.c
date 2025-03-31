@@ -10,6 +10,18 @@
 #include "mcycle.h"
 #include "i2c_regs.h"
 #include "vera_hal.h"
+#include "interrupts.h"
+#include "timer.h"
+
+//The disassembly of the first few instructions in the timer interrupt handler looks like this:
+//00000c48 <_timer_irq_handler>:
+//     c48:       100207b7                lui     a5,0x10020
+//     c4c:       0007a703                lw      a4,0(a5) # 10020000
+//
+//The lui and lw instructions each take 2 cycles to execute.
+//In other words, _timer_irq_handle started 4 clock cycles before
+//the retrieved mtimer value.
+#define IRQ_LATENCY_OFFSET 4
 
 #define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
@@ -561,6 +573,7 @@ void _init(void) {
   uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
   uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
   set_stdio_to_uart(&uart0);
+  disable_all_irqs();
 }
 
 //_exit is executed by the picolibc exit function.
@@ -569,10 +582,43 @@ void	_exit (int status) {
 	while (1);
 }
 
+volatile uint32_t timel = 0;
+volatile const uint32_t* const mtimel = (volatile uint32_t*)(MTIME_ADDR);
+volatile uint32_t* const mtimecmpl = (volatile uint32_t*)(MTIMECMP_ADDR);
+
+
+void _timer_irq_handler(void) {
+  timel = *mtimel;
+
+  mtimer_disable_raw_time_cmp();
+
+  //Return from interrupt
+  __asm__ volatile (
+      "mret \n"
+  );
+}
+
 int main(void) {
   //Switches
   gpio_init(&gpio, (volatile void *)GPIO_BASE);
   gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
+
+  printf("Enabling Timer IRQ.\n");
+  enable_global_irq();
+  enable_irq(IRQ_ID_TIMER);
+
+  mtimer_set_raw_time_cmp(1000); //Fire IRQ in 1000 ticks.
+  uint32_t time_cmpl = *mtimecmpl; //The comparator value.
+
+  while (timel == 0); //Wait for the IRQ.
+  printf("Timer IRQ fired.\n");
+
+  uint32_t irq_latency = timel-time_cmpl-IRQ_LATENCY_OFFSET;
+  printf("Timer IRQ latency: %d cycles.\n", irq_latency);
+  printf("expected: 8 cycles.\n");
+
+  disable_irq(IRQ_ID_TIMER);
+  disable_global_irq();
 
   uint32_t do_nothing_cycles = do_nothing();
   printf("Expected: 8 cycles.\n");
@@ -585,7 +631,8 @@ int main(void) {
   uint32_t lw_sw_copy_loop_vram_cycles = lw_sw_copy_loop((void*)VERA_VRAM_BASE, (void*)(VERA_VRAM_BASE+BUF_NUM_WORDS*4));
   printf("Expected: 14.\n");
 
-  if ((do_nothing_cycles == 8) &&
+  if ((irq_latency == 8) &&
+      (do_nothing_cycles == 8) &&
       (lw_register_loop_cycles == 8) &&
       (lw_sw_copy_loop_cycles == 14) &&
       (lw_sw_copy_unrolled_cycles == 8) &&

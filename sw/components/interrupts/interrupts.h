@@ -22,7 +22,8 @@ void __attribute__((naked)) _i2c_irq_handler(void);
 void __attribute__((naked)) _uart_irq_handler(void);
 void __attribute__((naked)) _dfx_irq_handler(void);
 
-void _timer_irq_handler(void);
+//void _timer_irq_handler(void) __attribute__((interrupt("machine")));
+void __attribute__((naked)) _timer_irq_handler(void);
 
 /* Exception Handler */
 void _exc_handler(void) __attribute__((interrupt("machine")));

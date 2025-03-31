@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added 'make gen_litedram_core' rule to regenerated the litedram core when necessary.
 - Enabled RISC-V bit manipulation extensions zba_zbb_zbs.
 - Added link to AMD-Xilinx DFX Controller Documentation.
+- Added interrupt shadow registers to Ibex for faster interrupt handling.
+- Added interrupt latency measurement to ibex_perf_test.
 
 ### Fixed
 
