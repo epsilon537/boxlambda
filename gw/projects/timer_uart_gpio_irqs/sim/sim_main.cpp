@@ -123,7 +123,7 @@ static int timer_test(void) {
 static int uart_tx_irq_test(void) {
   int done = 0;
 
-  while (!done && (contextp->time() < 5000000)) {
+  while (!done && (contextp->time() < 6000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
@@ -146,7 +146,7 @@ static int uart_tx_irq_test(void) {
 static int uart_rx_irq_test_single(void) {
   int done = 0;
 
-  while (!done && (contextp->time() < 6000000)) {
+  while (!done && (contextp->time() < 7000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
@@ -170,7 +170,7 @@ static int uart_rx_irq_test_single(void) {
    */
   done = 0;
 
-  while (!done && (contextp->time() < 7000000)) {
+  while (!done && (contextp->time() < 8000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
@@ -195,7 +195,7 @@ static int uart_rx_irq_test_single(void) {
 static int uart_rx_irq_test_seq(void) {
   int done = 0;
 
-  while (!done && (contextp->time() < 9500000)) {
+  while (!done && (contextp->time() < 10000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
@@ -237,7 +237,7 @@ static int uart_rx_irq_test_seq(void) {
 
   done = 0;
 
-  while (!done && (contextp->time() < 17000000)) {
+  while (!done && (contextp->time() < 18000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
@@ -275,7 +275,7 @@ static int uart_rx_irq_test_seq(void) {
 
   done = 0;
 
-  while (!done && (contextp->time() < 23000000)) {
+  while (!done && (contextp->time() < 24000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 

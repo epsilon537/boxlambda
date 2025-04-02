@@ -12,6 +12,8 @@
 #include "timer.h"
 #include "interrupts.h"
 
+#define IRQ_JITTER_MARGIN 20
+
 static struct uart uart0;
 static struct gpio gpio;
 
@@ -24,6 +26,7 @@ void _init(void) {
 
   mcycle_start();
   disable_all_irqs();
+  mtimer_disable_raw_time_cmp(); //do this to prevent the timer interrupt from firing before we are ready.
 }
 
 //_exit is executed by the picolibc exit function.
@@ -99,7 +102,16 @@ void _uart_irq_handler(void) {
   );
 }
 
+volatile uint32_t timer_irq_expected_at = 0;
+volatile uint32_t mtime_after_irq_jitter_removal = 0;
+
 void _timer_irq_handler(void) {
+  /* MTIMER_BLK_UNTIL acts as an IRQ jitter absorber: _timer_irq_handler is entered slightly */
+  /* before the expected time, with a bit of uncertainty due to IRQ jitter. */
+  /* MTIMER_BLK_UNTIL then blocks the system for a few more cycles, until we exactly reach the expected time. */
+  MTIMER_BLK_UNTIL(timer_irq_expected_at-1); //Block until 1 clock cycle before the expected time.
+  mtime_after_irq_jitter_removal = MTIMER_GET_RAW_MTIME_LOW(); //Retrieve the mtime value.
+
   //Stop the timer. If we don't stop it, or move into the future, the IRQ will keep on firing.
   mtimer_disable_raw_time_cmp();
   timer_irq_fired = 1;
@@ -115,6 +127,7 @@ int main(void) {
   gpio_init(&gpio, (volatile void *)GPIO_BASE);
   gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
 
+
   printf("Enabling Ibex IRQs\n");
   enable_global_irq();
   enable_irq(IRQ_ID_TIMER);
@@ -125,16 +138,37 @@ int main(void) {
   printf("Setting timer...\n");
 
   timer_irq_fired = 0;
-  mtimer_set_raw_time_cmp(10000); //Fire IRQ in 10000 ticks.
-  while (timer_irq_fired == 0); //Wait for it.
-  printf("Timer irq fired.\n");
+  mtimer_set_raw_time_cmp(5000); //Fire IRQ in 5000 ticks.
+  //Timer IRQ firing time + irq jitter absorption margin
+  timer_irq_expected_at = MTIMER_GET_RAW_TIMECMP_LOW()+IRQ_JITTER_MARGIN;
+  printf("Timer IRQ expected at: %d\n", timer_irq_expected_at);
 
-  timer_irq_fired = 0;
+  while (timer_irq_fired == 0); //Wait for it.
+
+  //Minus two because it takes two clock cycle to read the mtime in the isr.
+  printf("Timer ISR after IRQ jitter removal started at: %d\n", mtime_after_irq_jitter_removal-2);
+
+  if (mtime_after_irq_jitter_removal - 2 != timer_irq_expected_at) {
+    printf("Test failed.\n");
+    return -1;
+  }
 
   //Let's do it again.
-  mtimer_set_raw_time_cmp(10000);
-  while (timer_irq_fired == 0);
-  printf("Timer irq fired.\n");
+  timer_irq_fired = 0;
+  mtimer_set_raw_time_cmp(5000); //Fire IRQ in 5000 ticks.
+  //Timer IRQ firing time + irq jitter absorption margin
+  timer_irq_expected_at = MTIMER_GET_RAW_TIMECMP_LOW()+IRQ_JITTER_MARGIN;
+  printf("Timer IRQ expected at: %d\n", timer_irq_expected_at);
+
+  while (timer_irq_fired == 0); //Wait for it.
+  //Minus two because it takes two clock cycle to read the mtime in the isr.
+  printf("Timer ISR after IRQ jitter removal started at: %d\n", mtime_after_irq_jitter_removal-2);
+
+  if (mtime_after_irq_jitter_removal - 2 != timer_irq_expected_at) {
+    printf("Test failed.\n");
+    return -1;
+  }
+
   disable_irq(IRQ_ID_TIMER);
 
   printf("Timer Test Successful.\n");
@@ -143,6 +177,7 @@ int main(void) {
 
   printf("Testing UART TX IRQs...\n");
 
+  printf("Current time: %d\n", MTIMER_GET_RAW_MTIME_LOW());
   //This is enough to fill the UART TX FIFO more than halfway.
   uart_tx_string(&uart0, "0123456789\n");
 

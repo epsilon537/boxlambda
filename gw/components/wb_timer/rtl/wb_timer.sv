@@ -18,6 +18,10 @@ module wb_timer (
 
   assign wb_stall_o = 1'b0;
 
+  /*Straight out of the Wishbone B4 spec. This is how you interface a classic slave to a pipelined master.
+   *The stall signal ensures that the STB signal remains asserted until an ACK is received from the slave.*/
+  assign wb_stall_o = !wb_cyc_i ? 1'b0 : !wb_ack_o;
+
   timer #(
       .DataWidth(32),
       .AddressWidth(10)

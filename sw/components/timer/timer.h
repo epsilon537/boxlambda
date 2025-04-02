@@ -13,6 +13,7 @@
 
 #define TIMER_BASE_ADDR 0x10020000
 
+#define MTIMEBLK_ADDR (TIMER_BASE_ADDR + 16)
 #define MTIMECMP_ADDR (TIMER_BASE_ADDR + 8)
 #define MTIME_ADDR (TIMER_BASE_ADDR + 0)
 
@@ -26,6 +27,24 @@
 
 #define MTIMER_USEC_TO_CLOCKS(USEC) \
     ((uint64_t)(((USEC) * (MTIME_FREQ_HZ)) / 1000000))
+
+/**
+ * Minimal overhead accessor to retrieve the low word of MTIME.
+ **/
+#define MTIMER_GET_RAW_MTIME_LOW() (*(volatile uint32_t *)(MTIME_ADDR))
+
+/**
+ * Minimal overhead accessor to retrieve the low word of MTIMECMP.
+ * Used in conjunction with MTIMER_BLK_UNTIL() to remove interrupt jitter from timer interrupts.
+ **/
+#define MTIMER_GET_RAW_TIMECMP_LOW() (*(volatile uint32_t *)(MTIMECMP_ADDR))
+
+/**
+ * Block until the lower 8 bits of the mtime are equal to the argument.
+ * This is accurate to 1 clock cycle.
+ * This mechanisf can be used to remove interrupt jitter from timer interrupts.
+ **/
+#define MTIMER_BLK_UNTIL(t) (*(volatile uint32_t *)(MTIMEBLK_ADDR) = (t))
 
 /**
  * Disable timer compare point by setting it to max. value

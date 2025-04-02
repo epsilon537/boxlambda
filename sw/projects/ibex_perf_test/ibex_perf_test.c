@@ -607,15 +607,26 @@ int main(void) {
   enable_global_irq();
   enable_irq(IRQ_ID_TIMER);
 
-  mtimer_set_raw_time_cmp(1000); //Fire IRQ in 1000 ticks.
-  uint32_t time_cmpl = *mtimecmpl; //The comparator value.
+  int ii;
+  uint32_t time_cmpl;
+  uint32_t irq_latency;
+  uint32_t irq_latency_max=0;
+  uint32_t irq_latency_min=~0;
 
-  while (timel == 0); //Wait for the IRQ.
-  printf("Timer IRQ fired.\n");
+  for (ii=0; ii<50; ii++) {
+    timel = 0;
+    mtimer_set_raw_time_cmp(1000+ii); //Fire IRQ in 1000+ii ticks.
+    time_cmpl = *mtimecmpl; //The comparator value.
 
-  uint32_t irq_latency = timel-time_cmpl-IRQ_LATENCY_OFFSET;
-  printf("Timer IRQ latency: %d cycles.\n", irq_latency);
-  printf("expected: 8 cycles.\n");
+    while (timel == 0); //Wait for the IRQ.
+
+    irq_latency = timel-time_cmpl-IRQ_LATENCY_OFFSET;
+    if (irq_latency < irq_latency_min) irq_latency_min = irq_latency;
+    if (irq_latency > irq_latency_max) irq_latency_max = irq_latency;
+  }
+
+  printf("Timer IRQ latency Min-Max: %d-%d cycles.\n", irq_latency_min, irq_latency_max);
+  printf("Expected: 5-7 cycles.\n");
 
   disable_irq(IRQ_ID_TIMER);
   disable_global_irq();
@@ -631,7 +642,8 @@ int main(void) {
   uint32_t lw_sw_copy_loop_vram_cycles = lw_sw_copy_loop((void*)VERA_VRAM_BASE, (void*)(VERA_VRAM_BASE+BUF_NUM_WORDS*4));
   printf("Expected: 14.\n");
 
-  if ((irq_latency == 8) &&
+  if ((irq_latency_min == 5) &&
+      (irq_latency_max == 7) &&
       (do_nothing_cycles == 8) &&
       (lw_register_loop_cycles == 8) &&
       (lw_sw_copy_loop_cycles == 14) &&
