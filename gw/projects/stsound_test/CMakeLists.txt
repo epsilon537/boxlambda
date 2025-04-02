@@ -18,8 +18,11 @@ else()
   )
 
   #Add testcase. This one's a script, not just the Verilator Vmodel executable.
-  #add_test(NAME stsound_test
-  #    COMMAND ${CMAKE_CURRENT_LIST_DIR}/test/test.sh ${PROJECT_SOURCE_DIR}
-  #    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  #)
+  add_test(NAME stsound_test
+      COMMAND ${CMAKE_CURRENT_LIST_DIR}/test/test.sh ${PROJECT_SOURCE_DIR}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
+
+  set_tests_properties(stsound_test
+    PROPERTIES LABELS "long")
 endif()

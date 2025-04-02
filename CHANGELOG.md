@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added interrupt shadow registers to Ibex for faster interrupt handling.
 - Added interrupt latency measurement to ibex_perf_test.
 - Added mtimer register that, when written to, blocks until the lower 8 bits of mtime match the written value. This mechanism can be used to remove the IRQ jitter in timer interrupts. See *timer_uart_irqs.c* for an example.
+- Added a "long" label to the stsound_test so it can be excluded froma quick test run using 'ctest -LE long'.
 
 ### Fixed
 
