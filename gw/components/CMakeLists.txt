@@ -45,8 +45,6 @@ function (gw_rm_rules_dfx)
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
             ${comps_synth}
-            ${_ref_dfx_prj}_bit
-            $<TARGET_PROPERTY:${_ref_dfx_prj}_bit,BINARY_DIR>/dfx_project.static_route.dcp
         COMMENT
             "Implementing DFX Reconfigurable Module and generating bitstream(s)."
         VERBATIM

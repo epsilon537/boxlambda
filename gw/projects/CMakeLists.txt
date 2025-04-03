@@ -11,11 +11,11 @@ function (gw_project_rules_dfx_vivado)
   set(multiValueArgs VS_INSTS VS_DEFAULT_COMPONENTS)
 
   cmake_parse_arguments(gw_project_rules_dfx_vivado
-        "${options}"
-        "${oneValueArgs}"
-        "${multiValueArgs}"
-        ${ARGN}
-    )
+      "${options}"
+      "${oneValueArgs}"
+      "${multiValueArgs}"
+      ${ARGN}
+  )
 
   set(_top_module ${gw_project_rules_dfx_vivado_TOP_MODULE})
   set(_prj_name ${gw_project_rules_dfx_vivado_PROJECT_NAME})
@@ -29,49 +29,58 @@ function (gw_project_rules_dfx_vivado)
     set(_board arty_a7_35t)
   endif()
 
+  # Dummy output which is never actually produced. Anything that depends on
+  # this will always be rebuilt.
+  add_custom_command(
+      OUTPUT always_rebuild
+      COMMAND cmake -E echo
+      COMMENT
+          "always_rebuild dummy command."
+  )
+
   # Extract .mem files from Bender.yml manifest.
   add_custom_command(
-        OUTPUT
-            ${_prj_name}.mem_file_list
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list vivado
-        DEPENDS
-            always_rebuild
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT
-            "Generating mem file list."
-        VERBATIM
-    )
+      OUTPUT
+          ${_prj_name}.mem_file_list
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list vivado
+      DEPENDS
+          always_rebuild
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT
+          "Generating mem file list."
+      VERBATIM
+  )
 
   # Retrieve the project constraints file from the Bender.yml manifest.
   add_custom_command(
-        OUTPUT
-            ${_prj_name}.prj_constraints_file_list
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_prj_constraints_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.prj_constraints_file_list ${BL_TARGET_FPGA}
-        DEPENDS
-            always_rebuild
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT
-            "Generating prj_constraints file list."
-        VERBATIM
-    )
+      OUTPUT
+          ${_prj_name}.prj_constraints_file_list
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/bender_gen_prj_constraints_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.prj_constraints_file_list ${BL_TARGET_FPGA}
+      DEPENDS
+          always_rebuild
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT
+          "Generating prj_constraints file list."
+      VERBATIM
+  )
 
   #Build rules, shared with gateware components : lint target, Vivado synthesis
   gw_common_rules_vivado(
-        TOP_MODULE
-            ${_top_module}
-        PRJ_COMP_NAME
-            ${_prj_name}
-        OOC
-            "0"
-        MEM_FILE_LIST
-            ${_prj_name}.mem_file_list
-        PRJ_CONSTRAINTS_FILE_LIST
-            ${_prj_name}.prj_constraints_file_list
-    )
+      TOP_MODULE
+          ${_top_module}
+      PRJ_COMP_NAME
+          ${_prj_name}
+      OOC
+          "0"
+      MEM_FILE_LIST
+          ${_prj_name}.mem_file_list
+      PRJ_CONSTRAINTS_FILE_LIST
+          ${_prj_name}.prj_constraints_file_list
+  )
 
   set(defaultDcps "")
   set(default_comps_synth "")
@@ -90,7 +99,8 @@ function (gw_project_rules_dfx_vivado)
   vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl_dfx_prj.tcl
         -vsCellInsts \"${_vs_insts}\"
         -vsDefaultDcps \"${defaultDcps}\"
-        -vsPblockConstr `${PROJECT_SOURCE_DIR}/scripts/bender_get_dfx_constraints.sh ${CMAKE_CURRENT_LIST_DIR}`)
+        -vsPblockConstr `${PROJECT_SOURCE_DIR}/scripts/bender_get_dfx_constraints.sh ${CMAKE_CURRENT_LIST_DIR}`
+  )
 
   #Custom command executing the vivado implementation command string.
   #Note that in the dependencies, both the _synth build rule and the .dcp synthesis checkpoint file
@@ -100,55 +110,53 @@ function (gw_project_rules_dfx_vivado)
   #It's the failure state of impl_cmd we're after. Without the pipefail option, the piped tee would
   #mask error codes returned by impl_cmd.
   add_custom_command(
-        OUTPUT
-            dfx_project.bin
-            dfx_project.static_route.dcp
-        COMMAND
-            bash -c "set -o pipefail; ${impl_cmd} 2>&1 | tee impl.log || exit 1"
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS
-            ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
-            ${default_comps_synth}
-            ${defaultDcps}
-        COMMENT
-            "Implementing DFX project and generating bitstream(s)."
-        VERBATIM
-    )
+      OUTPUT
+          dfx_project.bit
+          dfx_project.bin
+          dfx_project.static_route.dcp
+      COMMAND
+          bash -c "set -o pipefail; ${impl_cmd} 2>&1 | tee impl.log || exit 1"
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+          ${default_comps_synth}
+          ${defaultDcps}
+      COMMENT
+          "Implementing DFX project and generating bitstream(s)."
+      VERBATIM
+  )
 
   add_custom_target(${_prj_name}_bit
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS
-            dfx_project.bin
-        COMMENT
-            "DFX project implementation and bitstream generation target."
-    )
-
-  #Note that unlike non-DFX project builds, DFX builds currently don't have a
-  #_bit_sw build rule. This might be added in the future.
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          dfx_project.bit
+      COMMENT
+          "DFX project implementation and bitstream generation target."
+  )
 
   #Custom command executing the vivado prg_bitstream command string.
   add_custom_target(${_prj_name}_load
-          WORKING_DIRECTORY
-              ${CMAKE_CURRENT_BINARY_DIR}
-          COMMAND
-              ${PROJECT_SOURCE_DIR}/scripts/load_gw.sh ${_board} dfx_project.bit.bin
-          COMMENT
-              "Loading bitstream to target."
-          VERBATIM
-      )
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/load_gw.sh ${_board} dfx_project.bit
+      COMMENT
+          "Loading bitstream to target."
+      VERBATIM
+  )
 
   #Custom command executing the vivado flash_bitstream command string.
   add_custom_target(${_prj_name}_flash_gw
-          WORKING_DIRECTORY
-              ${CMAKE_CURRENT_BINARY_DIR}
-          COMMAND
-              ${PROJECT_SOURCE_DIR}/scripts/flash_gw.sh ${_board} dfx_project.bit.bin
-          COMMENT
-              "Flashing bitstream to target."
-          VERBATIM
-      )
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/flash_gw.sh ${_board} dfx_project.bit
+      COMMENT
+          "Flashing bitstream to target."
+      VERBATIM
+  )
 endfunction()
 
 #Function grouping gateware project build rules for Vivado builds.
@@ -162,11 +170,11 @@ function (gw_project_rules_vivado)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_project_rules_vivado
-        "${options}"
-        "${oneValueArgs}"
-        "${multiValueArgs}"
-        ${ARGN}
-    )
+      "${options}"
+      "${oneValueArgs}"
+      "${multiValueArgs}"
+      ${ARGN}
+  )
 
   set(_top_module ${gw_project_rules_vivado_TOP_MODULE})
   set(_prj_name ${gw_project_rules_vivado_PROJECT_NAME})
@@ -181,47 +189,47 @@ function (gw_project_rules_vivado)
 
   #Extract .mem files from Bender.yml manifest.
   add_custom_command(
-        OUTPUT
-            ${_prj_name}.mem_file_list
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list vivado
-        DEPENDS
-            always_rebuild
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT
-            "Generating mem file list."
-        VERBATIM
-    )
+      OUTPUT
+          ${_prj_name}.mem_file_list
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list vivado
+      DEPENDS
+          always_rebuild
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT
+          "Generating mem file list."
+      VERBATIM
+  )
 
   #Extract project constraints file from Bender.yml manifest.
   add_custom_command(
-        OUTPUT
-            ${_prj_name}.prj_constraints_file_list
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_prj_constraints_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.prj_constraints_file_list ${BL_TARGET_FPGA}
-        DEPENDS
-            always_rebuild
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT
-            "Generating prj_constraints file list."
-        VERBATIM
-    )
+      OUTPUT
+          ${_prj_name}.prj_constraints_file_list
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/bender_gen_prj_constraints_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.prj_constraints_file_list ${BL_TARGET_FPGA}
+      DEPENDS
+          always_rebuild
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT
+          "Generating prj_constraints file list."
+      VERBATIM
+  )
 
   #Build rules, shared with gateware components : lint target, Vivado synthesis
   gw_common_rules_vivado(
-        TOP_MODULE
-            ${_top_module}
-        PRJ_COMP_NAME
-            ${_prj_name}
-        OOC
-            "0"
-        MEM_FILE_LIST
-            ${_prj_name}.mem_file_list
-        PRJ_CONSTRAINTS_FILE_LIST
-            ${_prj_name}.prj_constraints_file_list
-    )
+      TOP_MODULE
+          ${_top_module}
+      PRJ_COMP_NAME
+          ${_prj_name}
+      OOC
+          "0"
+      MEM_FILE_LIST
+          ${_prj_name}.mem_file_list
+      PRJ_CONSTRAINTS_FILE_LIST
+          ${_prj_name}.prj_constraints_file_list
+  )
 
   #Build Vivado command string for the vivado_impl tcl script.
   vivado_cmd(impl_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_impl.tcl)
@@ -231,95 +239,79 @@ function (gw_project_rules_vivado)
   #It's the failure state of impl_cmd we're after. Without the pipefail option, the piped tee would
   #mask error codes returned by impl_cmd.
   add_custom_command(
-        OUTPUT
-            project.bin
-        COMMAND
-            bash -c "set -o pipefail; ${impl_cmd} 2>&1 | tee impl.log || exit 1"
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS
-            ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
-        COMMENT
-            "Implementing project and generating bitstream(s)."
-        VERBATIM
-    )
+      OUTPUT
+          project.bit
+      COMMAND
+          bash -c "set -o pipefail; ${impl_cmd} 2>&1 | tee impl.log || exit 1"
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+      COMMENT
+          "Implementing project and generating bitstream(s)."
+      VERBATIM
+  )
 
   add_custom_target(${_prj_name}_bit
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS
-            project.bin
-        COMMENT
-            "Project implementation and bitstream generation target."
-    )
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          project.bit
+      COMMENT
+          "Project implementation and bitstream generation target."
+  )
 
   if (NOT ${_mem_file_tgt} STREQUAL "")
     #Custom command updating the SW memory file in the bitstream.
     add_custom_command(
-            OUTPUT
-                project.sw.bit
-            WORKING_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}
-            COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/vivado_updatemem.sh project.mmi $<TARGET_FILE:${_mem_file_tgt}>.mem project.bit project.sw.bit
-            DEPENDS
-                ${_mem_file_tgt}
-                ${_prj_name}_bit
-            COMMENT
-                "Updating SW memory image in bitstream."
-            VERBATIM
-        )
+        TARGET
+            ${_prj_name}_bit
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND
+            ${PROJECT_SOURCE_DIR}/scripts/vivado_updatemem.sh project.mmi $<TARGET_FILE:${_mem_file_tgt}>.mem project.bit project.bit
+        DEPENDS
+            ${_mem_file_tgt}
+        COMMENT
+            "Updating SW memory image in bitstream."
+        VERBATIM
+    )
 
-    #Custom command converting the bitstream file into a .bin file ready for flashing.
-    add_custom_command(
-            OUTPUT
-                project.sw.bit.bin
-            WORKING_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}
-            COMMAND
-                ${PROJECT_SOURCE_DIR}/scripts/bit2bin.sh project.sw.bit
-            DEPENDS
-                project.sw.bit
-            COMMENT
-                "Converting bitstream to .bin."
-            VERBATIM
-        )
-
-    add_custom_target(${_prj_name}_bit_sw
-            WORKING_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}
-            DEPENDS
-                project.sw.bit.bin
-            COMMENT
-                "Bitstream + SW image target."
-        )
-
-    set(_bit_file project.sw.bit)
-  else()
-    set(_bit_file project.bit)
+    #Custom command updating the SW image in the bitstream.
+    add_custom_target(${_prj_name}_update_sw
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND
+            ${PROJECT_SOURCE_DIR}/scripts/vivado_updatemem.sh project.mmi $<TARGET_FILE:${_mem_file_tgt}>.mem project.bit project.bit
+        DEPENDS
+            ${_mem_file_tgt}
+        COMMENT
+            "Updating SW image in bitstream."
+        VERBATIM
+    )
   endif()
 
   #Custom command executing the vivado prg_bitstream command string.
   add_custom_target(${_prj_name}_load
-          WORKING_DIRECTORY
-              ${CMAKE_CURRENT_BINARY_DIR}
-          COMMAND
-              ${PROJECT_SOURCE_DIR}/scripts/load_gw.sh ${_board} ${_bit_file}
-          COMMENT
-              "Loading bitstream to target."
-          VERBATIM
-      )
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/load_gw.sh ${_board} project.bit
+      COMMENT
+          "Loading bitstream to target."
+      VERBATIM
+  )
 
   #Custom command executing the vivado flash_bitstream command string.
   add_custom_target(${_prj_name}_flash_gw
-          WORKING_DIRECTORY
-              ${CMAKE_CURRENT_BINARY_DIR}
-          COMMAND
-              ${PROJECT_SOURCE_DIR}/scripts/flash_gw.sh ${_board} ${_bit_file}.bin
-          COMMENT
-              "Flashing bitstream to target."
-          VERBATIM
-      )
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/flash_gw.sh ${_board} project.bit
+      COMMENT
+          "Flashing bitstream to target."
+      VERBATIM
+  )
 endfunction()
 
 #Function grouping gateware project build rules for Verilator builds.
@@ -334,11 +326,11 @@ function (gw_project_rules_verilator)
   set(multiValueArgs VERILATOR_FLAGS)
 
   cmake_parse_arguments(gw_project_rules_verilator
-        "${options}"
-        "${oneValueArgs}"
-        "${multiValueArgs}"
-        ${ARGN}
-    )
+      "${options}"
+      "${oneValueArgs}"
+      "${multiValueArgs}"
+      ${ARGN}
+  )
 
   set(_top_module ${gw_project_rules_verilator_TOP_MODULE})
   set(_prj_name ${gw_project_rules_verilator_PROJECT_NAME})
@@ -348,103 +340,101 @@ function (gw_project_rules_verilator)
 
   #Extract .mem files from the Bender.yml manifest.
   add_custom_command(
-        OUTPUT
-            ${_prj_name}.mem_file_list
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list verilator
-        DEPENDS
-            always_rebuild
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT
-            "Generating mem file list."
-        VERBATIM
-    )
+      OUTPUT
+          ${_prj_name}.mem_file_list
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/bender_gen_mem_file_list.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.mem_file_list verilator
+      DEPENDS
+          always_rebuild
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT
+          "Generating mem file list."
+      VERBATIM
+  )
 
   #Build rules, shared with gateware components : lint target, Vivado synthesis
   gw_common_rules_verilator(
-        TOP_MODULE
-            ${_top_module}
-        PRJ_COMP_NAME
-            ${_prj_name}
-        MEM_FILE_LIST
-            ${_prj_name}.mem_file_list
-        VERILATOR_FLAGS
-            ${_verilator_flags}
-    )
+      TOP_MODULE
+          ${_top_module}
+      PRJ_COMP_NAME
+          ${_prj_name}
+      MEM_FILE_LIST
+          ${_prj_name}.mem_file_list
+      VERILATOR_FLAGS
+          ${_verilator_flags}
+  )
 
   #Extract .c and .cpp files from Bender.yml manifest.
   add_custom_command(
-        OUTPUT
-            ${_prj_name}.cpp_files
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_get_cpp_files.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.cpp_files ${BL_TARGET_FPGA}
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS
-            always_rebuild
-        COMMENT
-            "Retrieving CPP files for Verilator build."
-        VERBATIM
-    )
+      OUTPUT
+          ${_prj_name}.cpp_files
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/bender_get_cpp_files.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_name}.cpp_files ${BL_TARGET_FPGA}
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          always_rebuild
+      COMMENT
+          "Retrieving CPP files for Verilator build."
+      VERBATIM
+  )
 
   add_custom_command(
-        OUTPUT
-            Vmodel
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/verilator_sim.sh ${_prj_name}.verilator_sources ${_prj_name}.vlts ${_prj_name}.cpp_files ${_top_module} ${CMAKE_CURRENT_BINARY_DIR} ${_verilator_flags}
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS
-            ${_prj_name}.mem_file_list
-            ${_prj_name}.verilator_sources
-            ${_prj_name}.vlts
-            ${_prj_name}.cpp_files
-        DEPFILE
-            ${_prj_name}.verilator_sources.dep
-        COMMENT
-            "Generating Verilator Vmodel."
-        VERBATIM
-    )
+      OUTPUT
+          Vmodel
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/verilator_sim.sh ${_prj_name}.verilator_sources ${_prj_name}.vlts ${_prj_name}.cpp_files ${_top_module} ${CMAKE_CURRENT_BINARY_DIR} ${_verilator_flags}
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          ${_prj_name}.mem_file_list
+          ${_prj_name}.verilator_sources
+          ${_prj_name}.vlts
+          ${_prj_name}.cpp_files
+      COMMENT
+          "Generating Verilator Vmodel."
+      VERBATIM
+  )
 
   add_custom_target(${_prj_name}_sim
-        ALL
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS
-            Vmodel
-        COMMENT
-            "Verilator build target."
-        VERBATIM
-    )
+      ALL
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          Vmodel
+      COMMENT
+          "Verilator build target."
+      VERBATIM
+  )
 
   if (NOT ${_mem_file_tgt} STREQUAL "")
     #Custom command copying the SW image to its proper place in the gateware build directory
     add_custom_command(
-            OUTPUT
-                imem.mem
-            WORKING_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}
-            COMMAND
-                cp $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/imem.mem
-            DEPENDS
-                ${_mem_file_tgt}
-            COMMENT
-                "Copying SW memory image to gateware build dir."
-            VERBATIM
-        )
+        OUTPUT
+            imem.mem
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND
+            cp $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/imem.mem
+        DEPENDS
+            ${_mem_file_tgt}
+        COMMENT
+            "Copying SW memory image to gateware build dir."
+        VERBATIM
+    )
 
-    #Verilator model + SW image target
-    add_custom_target(${_prj_name}_sim_sw
-            ALL
-            WORKING_DIRECTORY
-                ${CMAKE_CURRENT_BINARY_DIR}
-            DEPENDS
-                imem.mem
-                ${_prj_name}_sim
-            COMMENT
-                "Verilator Vmodel + SW image target."
-        )
+    add_custom_target(${_prj_name}_mem
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        DEPENDS
+            imem.mem
+        COMMENT
+            "Imem image build target."
+        VERBATIM
+    )
+
+    add_dependencies(${_prj_name}_sim ${_prj_name}_mem)
   endif()
 endfunction()
 

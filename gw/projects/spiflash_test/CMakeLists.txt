@@ -17,7 +17,7 @@ else()
           "-CFLAGS -I${PROJECT_SOURCE_DIR}/gw/components/spiflash/sim/"
   )
 
-  add_dependencies(spiflash_test_sim_sw spiflash_test_flsh)
+  add_dependencies(spiflash_test_sim spiflash_test_flsh)
 
   #Add testcase.
   add_test(NAME spiflash_test_test

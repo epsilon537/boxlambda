@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Corrected boxlambda_base build instructions in the read-the-docs documentation.
-- Fixed missing dependency of spiflash_test_sim_sw on spiflash_test_flsh.
+- Fixed missing dependency of spiflash_test_sim on spiflash_test_flsh.
 
 ### Changed
 
@@ -32,6 +32,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Replaced CMEM and DMEM with one Dual Port Memory named IMEM (Internal memory). Port 0 is for instructions, port 1 is for data.
 - Replaced the crossbar+shared bus based interconnect with a dual bus interconnect.
 - Made VERA's VRAM dual port, reducing CPU access latency.
+- Simplified gateware build system:
+  - make *project*_synth always (re)synthesizes
+  - make *project*_bit always (re)implements and generates the bitstream including the software image
+  - make *reconfigurable_module*_bit expects the reference static design project to be built first.
+  - make *project*_update_sw updates the software image in the bitstream file without triggering (re)synthesis and/or (re)implementation.
+- Simplified simulation build system: make *project*_sim builds the simulation executable including software image.
 
 ### Removed
 

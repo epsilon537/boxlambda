@@ -34,11 +34,11 @@ function (gw_common_rules_vivado)
   set(multiValueArgs)
 
   cmake_parse_arguments(gw_common_rules_vivado
-        "${options}"
-        "${oneValueArgs}"
-        "${multiValueArgs}"
-        ${ARGN}
-    )
+      "${options}"
+      "${oneValueArgs}"
+      "${multiValueArgs}"
+      ${ARGN}
+  )
 
   set(_top_module ${gw_common_rules_vivado_TOP_MODULE})
   set(_prj_comp_name ${gw_common_rules_vivado_PRJ_COMP_NAME})
@@ -49,19 +49,17 @@ function (gw_common_rules_vivado)
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
   add_custom_command(
-        OUTPUT always_rebuild
-        COMMAND cmake -E echo
-        COMMENT
-            "always_rebuild dummy command."
-    )
+      OUTPUT always_rebuild
+      COMMAND cmake -E echo
+      COMMENT
+          "always_rebuild dummy command."
+  )
 
   add_custom_command(
           OUTPUT
               ${_prj_comp_name}.vivado_sources
-          BYPRODUCTS
-              ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.vivado_sources.dep
           COMMAND
-              ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_sources_and_deps.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vivado_sources ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${BL_TARGET_FPGA} ${_prj_comp_name}
+              ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vivado_sources ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${BL_TARGET_FPGA} ${_prj_comp_name}
           WORKING_DIRECTORY
               ${CMAKE_CURRENT_BINARY_DIR}
           DEPENDS
@@ -88,10 +86,12 @@ function (gw_common_rules_vivado)
 
   #Build Vivado command string for the vivado_create_project tcl script.
   vivado_cmd(create_project_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_create_project.tcl
-                  -ooc ${_ooc}
-                  -part ${PART} -sources ${_prj_comp_name}.vivado_sources
-                  -vivado_ips ${_prj_comp_name}.vivado_ip_file_list
-                  -top ${_top_module})
+                -ooc ${_ooc}
+                -part ${PART} -sources ${_prj_comp_name}.vivado_sources
+                -vivado_ips ${_prj_comp_name}.vivado_ip_file_list
+                -top ${_top_module}
+  )
+
   #If a constraints file list is given, append it to the Vivado command string.
   if (NOT ${_prj_constraints_file_list} STREQUAL "")
     string(APPEND create_project_cmd " -prj_constraints " ${_prj_constraints_file_list})
@@ -102,31 +102,22 @@ function (gw_common_rules_vivado)
   endif()
 
   #Custom command executing the create_project command string.
-  #Notice that a dummy project.dep output is generated along with the actual project.xpr output.
-  #This is because project.xpr modification time updates every time we open the project file for synthesis or
-  #implementation. We can't use project.xpr as a dependency to detect if a re-synthesis is needed.
-  #project.dep on the other hand is only touched when the Vivado project file is actually created, so that one
-  #can be used as a dependency by the synthesis target.
   add_custom_command(
-          OUTPUT
-              ${CMAKE_CURRENT_BINARY_DIR}/project.dep
-          COMMAND
-              bash -c ${create_project_cmd}
-          COMMAND
-              touch ${CMAKE_CURRENT_BINARY_DIR}/project.dep
-          BYPRODUCTS
-              ${CMAKE_CURRENT_BINARY_DIR}/project.xpr
-          WORKING_DIRECTORY
-              ${CMAKE_CURRENT_BINARY_DIR}
-          DEPENDS
-              ${_prj_comp_name}.vivado_ip_file_list
-              ${_prj_comp_name}.vivado_sources
-              ${_prj_constraints_file_list}
-              ${_mem_file_list}
-          COMMENT
-              "Creating Vivado project."
-          VERBATIM
-      )
+      OUTPUT
+          ${CMAKE_CURRENT_BINARY_DIR}/project.xpr
+      COMMAND
+          bash -c ${create_project_cmd}
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          ${_prj_comp_name}.vivado_ip_file_list
+          ${_prj_comp_name}.vivado_sources
+          ${_prj_constraints_file_list}
+          ${_mem_file_list}
+      COMMENT
+          "Creating Vivado project."
+      VERBATIM
+  )
 
   #Build Vivado command string for the vivado_synth tcl script.
   vivado_cmd(synth_cmd ${PROJECT_SOURCE_DIR}/scripts/vivado_synth.tcl
@@ -134,29 +125,27 @@ function (gw_common_rules_vivado)
 
   #Custom command executing the vivado synthesis command string.
   add_custom_command(
-          OUTPUT
-              ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
-          COMMAND
-              bash -c ${synth_cmd}
-          WORKING_DIRECTORY
-              ${CMAKE_CURRENT_BINARY_DIR}
-          DEPENDS
-              ${CMAKE_CURRENT_BINARY_DIR}/project.dep
-          DEPFILE
-              ${CMAKE_CURRENT_BINARY_DIR}/${_prj_comp_name}.vivado_sources.dep
-          COMMENT
-              "Project or component synthesis."
-          VERBATIM
-      )
+      OUTPUT
+          ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+      COMMAND
+          bash -c ${synth_cmd}
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          ${CMAKE_CURRENT_BINARY_DIR}/project.xpr
+      COMMENT
+          "Project or component synthesis."
+      VERBATIM
+  )
 
   add_custom_target(${_prj_comp_name}_synth
-          WORKING_DIRECTORY
-              ${CMAKE_CURRENT_BINARY_DIR}
-          DEPENDS
-              ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
-          COMMENT
-              "Project or component synthesis target."
-      )
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp
+      COMMENT
+          "Project or component synthesis target."
+  )
 endfunction()
 
 #Function grouping common verilator gateware build rules.
@@ -184,61 +173,61 @@ function (gw_common_rules_verilator)
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
   add_custom_command(
-        OUTPUT always_rebuild
-        COMMAND cmake -E echo
-        COMMENT
-            "always_rebuild dummy command."
-    )
+      OUTPUT always_rebuild
+      COMMAND cmake -E echo
+      COMMENT
+          "always_rebuild dummy command."
+  )
 
   add_custom_command(
-        OUTPUT
-            ${_prj_comp_name}.vlts
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_get_vlts.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vlts ${BL_TARGET_FPGA}
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS
-            always_rebuild
-        COMMENT
-            "Generating list of .vlt files."
-        VERBATIM
-    )
+      OUTPUT
+          ${_prj_comp_name}.vlts
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/bender_get_vlts.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vlts ${BL_TARGET_FPGA}
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          always_rebuild
+      COMMENT
+          "Generating list of .vlt files."
+      VERBATIM
+  )
 
   add_custom_command(
-        OUTPUT
-            ${_prj_comp_name}.verilator_sources
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.verilator_sources ${CMAKE_CURRENT_BINARY_DIR}/Vmodel ${BL_TARGET_FPGA} ${_prj_comp_name}
-        BYPRODUCTS
-            ${_prj_comp_name}.verilator_sources.dep
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS
-            always_rebuild
-        COMMENT
-            "Generating verilator source list."
-        VERBATIM
-    )
+      OUTPUT
+          ${_prj_comp_name}.verilator_sources
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/bender_gen_verilator_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.verilator_sources ${BL_TARGET_FPGA} ${_prj_comp_name}
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS
+          always_rebuild
+      COMMENT
+          "Generating verilator source list."
+      VERBATIM
+  )
 
   add_custom_target(${_prj_comp_name}_lint
-        ALL
-        WORKING_DIRECTORY
-            ${CMAKE_CURRENT_BINARY_DIR}
-        COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/verilator_lint_check.sh ${_top_module} ${_prj_comp_name}.vlts ${_prj_comp_name}.waiver ${_prj_comp_name}.verilator_sources ${_verilator_flags}
-        DEPENDS
-            ${_prj_comp_name}.vlts
-            ${_prj_comp_name}.verilator_sources
-        BYPRODUCTS
-            ${_prj_comp_name}.waiver
-        COMMENT
-            "Lint check."
-        VERBATIM
-    )
+      ALL
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/verilator_lint_check.sh ${_top_module} ${_prj_comp_name}.vlts ${_prj_comp_name}.waiver ${_prj_comp_name}.verilator_sources ${_verilator_flags}
+      DEPENDS
+          ${_prj_comp_name}.vlts
+          ${_prj_comp_name}.verilator_sources
+      BYPRODUCTS
+          ${_prj_comp_name}.waiver
+      COMMENT
+          "Lint check."
+      VERBATIM
+  )
 
   #Include lint target in the lint_all dependency list.
   add_dependencies(lint_all ${_prj_comp_name}_lint)
 endfunction()
 
-add_subdirectory(components)
+#Projects before components because reconfigurable modules
+#Depend on their reference projects.
 add_subdirectory(projects)
+add_subdirectory(components)

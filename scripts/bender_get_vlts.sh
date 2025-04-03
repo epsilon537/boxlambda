@@ -28,15 +28,6 @@ BENDER_VLT=`bender -d $SRC_DIR script flist -t BL_TARGET_FPGA -t verilator | gre
 rm -f $SRC_DIR/Bender.lock
 
 #'return' the default vlt and the lint.vlt retrieved from the bender manifest (if it has one).
-echo "$BASEDIR/lint_default.vlt $BENDER_VLT" > "$OUTFILE.tmp"
-
-if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
-  echo "No .vlt file list changes detected."
-else
-  echo "Updating .vlt file list".
-  cp $OUTFILE.tmp $OUTFILE
-fi
-
-rm $OUTFILE.tmp
+echo "$BASEDIR/lint_default.vlt $BENDER_VLT" > "$OUTFILE"
 
 

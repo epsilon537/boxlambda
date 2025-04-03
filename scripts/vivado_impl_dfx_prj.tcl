@@ -81,10 +81,12 @@ opt_design
 place_design
 route_design
 
-# Generate bitstream files: 
-# - The full bitstream of the complete design, including the virtual socket 
-#   default component 
+# Generate bitstream files:
+# - The full bitstream of the complete design, including the virtual socket
+#   default component
 # - For each Reconfigurable Partion, a partial bitstream of just the virtual socket default component.
+# - bin_file option must be used to generate a .bin next to the .bit. The
+#   format_bin_for_icap command below expects the partial bitstreams in .bin format.
 write_bitstream -force -bin_file dfx_project
 
 # Convert the partial bitstream into a format that can be live-loaded by the
