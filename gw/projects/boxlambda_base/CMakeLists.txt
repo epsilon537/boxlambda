@@ -11,6 +11,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
       MEM_FILE_TARGET imem_to_flash_vector
   )
 
+  #Add to ALL list.
   add_custom_target(boxlambda_base_all_wrapper ALL)
   add_dependencies(boxlambda_base_all_wrapper boxlambda_base_bit)
 endif()

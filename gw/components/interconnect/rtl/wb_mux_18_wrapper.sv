@@ -3,8 +3,8 @@ module wb_mux_18_wrapper #(
     parameter DATA_WIDTH = 32,  // width of data bus in bits (8, 16, 32, or 64)
     parameter ADDR_WIDTH = 32,  // width of address bus in bits
     parameter SELECT_WIDTH = (DATA_WIDTH / 8),  // width of word select bus (1, 2, 4, or 8)
-    parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
-    parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
+    parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDRESSES = {18 * ADDR_WIDTH{1'b0}},
+    parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS = {18 * ADDR_WIDTH{1'b0}}
 ) (
     input wire clk,
     input wire rst,

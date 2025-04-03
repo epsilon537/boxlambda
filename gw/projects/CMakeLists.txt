@@ -29,15 +29,6 @@ function (gw_project_rules_dfx_vivado)
     set(_board arty_a7_35t)
   endif()
 
-  # Dummy output which is never actually produced. Anything that depends on
-  # this will always be rebuilt.
-  add_custom_command(
-      OUTPUT always_rebuild
-      COMMAND cmake -E echo
-      COMMENT
-          "always_rebuild dummy command."
-  )
-
   # Extract .mem files from Bender.yml manifest.
   add_custom_command(
       OUTPUT

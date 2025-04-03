@@ -7,8 +7,8 @@ module data_bus #(
     parameter ARB_TYPE_ROUND_ROBIN = 0,  // select round robin arbitration
     parameter ARB_LSB_HIGH_PRIORITY = 1,  // LSB priority selection
     parameter ARB_BLOCK_ACK = 1,  // block ack generation
-    parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDRESSES,
-    parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS
+    parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDRESSES = {18 * ADDR_WIDTH{1'b0}},
+    parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS = {18 * ADDR_WIDTH{1'b0}}
 ) (
     input wire clk,
     input wire rst,

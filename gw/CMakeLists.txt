@@ -14,6 +14,24 @@ endif()
 #A top-level target aggregating all lint targets.
 add_custom_target(lint_all ALL)
 
+# Dummy output which is never actually produced. Anything that depends on
+# this will always be rebuilt.
+add_custom_command(
+    OUTPUT always_rebuild
+    COMMAND cmake -E echo
+    COMMENT
+        "always_rebuild dummy command."
+)
+
+add_custom_target(always_rebuild
+    DEPENDS always_rebuild
+)
+
+#A gateware codegeneration target. Components that require
+#code generation will add their codegeneration target as a
+#dependency to this target.
+add_custom_target(gw_codegen)
+
 #This function builds a Vivado command string.
 #cmd: the output string variable.
 #tcl_script: the tcl script Vivado should execute
@@ -46,15 +64,6 @@ function (gw_common_rules_vivado)
   set(_ooc ${gw_common_rules_vivado_OOC})
   set(_mem_file_list ${gw_common_rules_vivado_MEM_FILE_LIST})
 
-  # Dummy output which is never actually produced. Anything that depends on
-  # this will always be rebuilt.
-  add_custom_command(
-      OUTPUT always_rebuild
-      COMMAND cmake -E echo
-      COMMENT
-          "always_rebuild dummy command."
-  )
-
   add_custom_command(
           OUTPUT
               ${_prj_comp_name}.vivado_sources
@@ -64,6 +73,7 @@ function (gw_common_rules_vivado)
               ${CMAKE_CURRENT_BINARY_DIR}
           DEPENDS
               always_rebuild
+              gw_codegen
           COMMENT
               "Generating vivado source list."
           VERBATIM
@@ -170,15 +180,6 @@ function (gw_common_rules_verilator)
   set(_mem_file_list ${gw_common_rules_verilator_MEM_FILE_LIST})
   set(_verilator_flags ${gw_common_rules_verilator_VERILATOR_FLAGS})
 
-  # Dummy output which is never actually produced. Anything that depends on
-  # this will always be rebuilt.
-  add_custom_command(
-      OUTPUT always_rebuild
-      COMMAND cmake -E echo
-      COMMENT
-          "always_rebuild dummy command."
-  )
-
   add_custom_command(
       OUTPUT
           ${_prj_comp_name}.vlts
@@ -202,6 +203,7 @@ function (gw_common_rules_verilator)
           ${CMAKE_CURRENT_BINARY_DIR}
       DEPENDS
           always_rebuild
+          gw_codegen
       COMMENT
           "Generating verilator source list."
       VERBATIM

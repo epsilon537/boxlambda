@@ -30,6 +30,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
         vs0_stub
   )
 
+  #Add to ALL list.
   add_custom_target(boxlambda_dfx_all_wrapper ALL)
   add_dependencies(boxlambda_dfx_all_wrapper boxlambda_dfx_bit)
 else()

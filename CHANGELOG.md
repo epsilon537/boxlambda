@@ -7,8 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## Label `boxlambda_simplified`: Changes Since Label `latency_shakeup` - 2025-03-20
 
 ### Added
-- Added 'make gen_ibex_core' rule to re-export the ibex core when necessary.
-- Added 'make gen_litedram_core' rule to regenerated the litedram core when necessary.
+- Added ibex (gen_ibex_core) and litedram (gen_litedram_core) code generation to gateware build dependency list so manual regeneration is no longer required.
 - Enabled RISC-V bit manipulation extensions zba_zbb_zbs.
 - Added link to AMD-Xilinx DFX Controller Documentation.
 - Added interrupt shadow registers to Ibex for faster interrupt handling.
