@@ -14,19 +14,6 @@ endif()
 #A top-level target aggregating all lint targets.
 add_custom_target(lint_all ALL)
 
-# Dummy output which is never actually produced. Anything that depends on
-# this will always be rebuilt.
-add_custom_command(
-    OUTPUT always_rebuild
-    COMMAND cmake -E echo
-    COMMENT
-        "always_rebuild dummy command."
-)
-
-add_custom_target(always_rebuild
-    DEPENDS always_rebuild
-)
-
 #A gateware codegeneration target. Components that require
 #code generation will add their codegeneration target as a
 #dependency to this target.
@@ -64,11 +51,20 @@ function (gw_common_rules_vivado)
   set(_ooc ${gw_common_rules_vivado_OOC})
   set(_mem_file_list ${gw_common_rules_vivado_MEM_FILE_LIST})
 
+  # Dummy output which is never actually produced. Anything that depends on
+  # this will always be rebuilt.
+  add_custom_command(
+      OUTPUT always_rebuild
+      COMMAND cmake -E echo
+      COMMENT
+          "always_rebuild dummy command."
+  )
+
   add_custom_command(
           OUTPUT
               ${_prj_comp_name}.vivado_sources
           COMMAND
-              ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vivado_sources ${CMAKE_CURRENT_BINARY_DIR}/project.runs/synth_1/${_top_module}.dcp ${BL_TARGET_FPGA} ${_prj_comp_name}
+              ${PROJECT_SOURCE_DIR}/scripts/bender_gen_vivado_sources.sh ${CMAKE_CURRENT_LIST_DIR} ${_prj_comp_name}.vivado_sources ${BL_TARGET_FPGA} ${_prj_comp_name}
           WORKING_DIRECTORY
               ${CMAKE_CURRENT_BINARY_DIR}
           DEPENDS
@@ -179,6 +175,15 @@ function (gw_common_rules_verilator)
   set(_prj_comp_name ${gw_common_rules_verilator_PRJ_COMP_NAME})
   set(_mem_file_list ${gw_common_rules_verilator_MEM_FILE_LIST})
   set(_verilator_flags ${gw_common_rules_verilator_VERILATOR_FLAGS})
+
+  # Dummy output which is never actually produced. Anything that depends on
+  # this will always be rebuilt.
+  add_custom_command(
+      OUTPUT always_rebuild
+      COMMAND cmake -E echo
+      COMMENT
+          "always_rebuild dummy command."
+  )
 
   add_custom_command(
       OUTPUT

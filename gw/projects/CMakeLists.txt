@@ -29,6 +29,15 @@ function (gw_project_rules_dfx_vivado)
     set(_board arty_a7_35t)
   endif()
 
+  # Dummy output which is never actually produced. Anything that depends on
+  # this will always be rebuilt.
+  add_custom_command(
+      OUTPUT always_rebuild
+      COMMAND cmake -E echo
+      COMMENT
+          "always_rebuild dummy command."
+  )
+
   # Extract .mem files from Bender.yml manifest.
   add_custom_command(
       OUTPUT
@@ -177,6 +186,15 @@ function (gw_project_rules_vivado)
   else()
     set(_board arty_a7_35t)
   endif()
+
+  # Dummy output which is never actually produced. Anything that depends on
+  # this will always be rebuilt.
+  add_custom_command(
+      OUTPUT always_rebuild
+      COMMAND cmake -E echo
+      COMMENT
+          "always_rebuild dummy command."
+  )
 
   #Extract .mem files from Bender.yml manifest.
   add_custom_command(
@@ -328,6 +346,15 @@ function (gw_project_rules_verilator)
   set(_mem_file_tgt ${gw_project_rules_verilator_MEM_FILE_TARGET})
   set(_mem_file_list ${gw_project_rules_verilator_MEM_FILE_LIST})
   set(_verilator_flags ${gw_project_rules_verilator_VERILATOR_FLAGS})
+
+  # Dummy output which is never actually produced. Anything that depends on
+  # this will always be rebuilt.
+  add_custom_command(
+      OUTPUT always_rebuild
+      COMMAND cmake -E echo
+      COMMENT
+          "always_rebuild dummy command."
+  )
 
   #Extract .mem files from the Bender.yml manifest.
   add_custom_command(
