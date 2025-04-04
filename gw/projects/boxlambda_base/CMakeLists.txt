@@ -8,7 +8,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
   gw_project_rules_vivado(
       TOP_MODULE boxlambda_top
       PROJECT_NAME boxlambda_base
-      MEM_FILE_TARGET imem_to_flash_vector
   )
 
   #Add to ALL list.

@@ -38,6 +38,11 @@ add_custom_target(regen
     VERBATIM
 )
 
+#A gateware codegeneration target. Components that require
+#code generation will add their codegeneration target as a
+#dependency to this target.
+add_custom_target(gw_codegen)
+
 enable_testing()
 
 #The software tree

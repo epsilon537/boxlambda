@@ -24,3 +24,17 @@ target_link_options(imem_to_flash_vector
 
 link_and_create_image(imem_to_flash_vector ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
+#Copy imem_to_flash_vector.mem to imem.mem. It's the default
+#imem.mem on FPGA builds.
+add_custom_command(
+  TARGET imem_to_flash_vector
+  WORKING_DIRECTORY
+      ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND cp -f imem_to_flash_vector.mem imem.mem
+  COMMENT "Copying imem_to_flash_vector.mem to imem.mem"
+  VERBATIM
+)
+
+#Add imem_to_flash_vector to gateware codegeneration dependency list.
+#It's the default IMEM .mem file.
+add_dependencies(gw_codegen imem_to_flash_vector)

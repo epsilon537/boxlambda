@@ -13,23 +13,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added interrupt shadow registers to Ibex for faster interrupt handling.
 - Added interrupt latency measurement to ibex_perf_test.
 - Added mtimer register that, when written to, blocks until the lower 8 bits of mtime match the written value. This mechanism can be used to remove the IRQ jitter in timer interrupts. See *timer_uart_irqs.c* for an example.
-- Added a "long" label to the stsound_test so it can be excluded froma quick test run using 'ctest -LE long'.
+- Added a "long" label to the stsound_test so it can be excluded from a quick test run using 'ctest -LE long'.
 
 ### Fixed
 
-- Corrected boxlambda_base build instructions in the read-the-docs documentation.
 - Fixed missing dependency of spiflash_test_sim on spiflash_test_flsh.
 
 ### Changed
 
 - In arty-a7 build tree, only boxlambda_base_bit, boxlambda_dfx_bit, vs0_stub_bit, and vs0_j1b_bit are built by default.
-- Ibex core is now exported into the build tree at build tree configuration time. The exported files are derived objects and don't belong in the source tree.
-- Litedram core is now generated into the build tree at build tree configuration time. The generated files are derived objects and don't belong in the source tree.
-- Renamed gw component wbxbar to interconnect.
-- Recreated build trees from scratch when running boxlambda_setup.sh.
-- Made SDL2 optional: if it's installed, the vera_integrated test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criterium.
+- Renamed gw component *wbxbar* to *interconnect*.
+- Build trees are now recreated from scratch when running boxlambda_setup.sh.
+- Made SDL2 optional: if it's installed, the *vera_integrated* test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criterium.
 - Replaced CMEM and DMEM with one Dual Port Memory named IMEM (Internal memory). Port 0 is for instructions, port 1 is for data.
-- Replaced the crossbar+shared bus based interconnect with a dual bus interconnect.
+- Replaced the crossbar+shared bus based interconnect with a dual bus interconnect: an instruction bus and a data bus.
 - Made VERA's VRAM dual port, reducing CPU access latency.
 - Simplified gateware build system:
   - make *project*_synth always (re)synthesizes
@@ -37,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - make *reconfigurable_module*_bit expects the reference static design project to be built first.
   - make *project*_update_sw updates the software image in the bitstream file without triggering (re)synthesis and/or (re)implementation.
 - Simplified simulation build system: make *project*_sim builds the simulation executable including software image.
+- The imem-to-flash vector memory image (*imem.mem* - the default content of IMEM) is no longer checked into the source tree. It's an object derived from the *imem_to_flash_vector* SW project. *Imem.mem* is now automatically generated during the gateware codegeneraton step (*gw_codegen*) of the build system.
 
 ### Removed
 

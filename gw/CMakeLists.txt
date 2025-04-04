@@ -14,11 +14,6 @@ endif()
 #A top-level target aggregating all lint targets.
 add_custom_target(lint_all ALL)
 
-#A gateware codegeneration target. Components that require
-#code generation will add their codegeneration target as a
-#dependency to this target.
-add_custom_target(gw_codegen)
-
 #This function builds a Vivado command string.
 #cmd: the output string variable.
 #tcl_script: the tcl script Vivado should execute
