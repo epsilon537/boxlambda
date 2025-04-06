@@ -5,6 +5,8 @@ hide:
 
 ## The DFX Controller
 
+[AMD Xilinx DFX Controller Documentation](https://docs.amd.com/v/u/en-US/pg374-dfx-controller)
+
 ### DFX Controller Operation
 
 To manage the loading of an RM into an RP from the SoC, a DFX Controller needs to be added to the design. The DFX Controller is a Vivado IP that provides management functions for DFX designs across many use cases. The hardware-triggered DFX use cases involve complex state machines and require extensive configuration. However, for BoxLambda, the use case is relatively simple: loading an RM into an RP under software control. Here's how it works:

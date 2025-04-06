@@ -298,7 +298,7 @@ Build the **ibex_perf_test** project:
 
 ```
 cd build/sim-a7-100/gw/projects/ibex_perf_test
-make ibex_perf_test_bit_sw
+make ibex_perf_test_sim_sw
 ```
 
 Execute the generated Verilator model with tracing enabled (*-t*). You should see the following output:
