@@ -18,4 +18,4 @@ target_include_directories(peek_poke_cli
        ${CMAKE_CURRENT_LIST_DIR}
 )
 
-target_link_libraries(peek_poke_cli embedded_cli)
+target_link_libraries(peek_poke_cli embedded_cli riscv)

@@ -12,7 +12,7 @@
 #include "timer.h"
 #include "interrupts.h"
 
-#define IRQ_JITTER_MARGIN 20
+#define IRQ_LATENCY_AND_JITTER_MARGIN 20
 
 static struct uart uart0;
 static struct gpio gpio;
@@ -140,7 +140,7 @@ int main(void) {
   timer_irq_fired = 0;
   mtimer_set_raw_time_cmp(5000); //Fire IRQ in 5000 ticks.
   //Timer IRQ firing time + irq jitter absorption margin
-  timer_irq_expected_at = MTIMER_GET_RAW_TIMECMP_LOW()+IRQ_JITTER_MARGIN;
+  timer_irq_expected_at = MTIMER_GET_RAW_TIMECMP_LOW()+IRQ_LATENCY_AND_JITTER_MARGIN;
   printf("Timer IRQ expected at: %d\n", timer_irq_expected_at);
 
   while (timer_irq_fired == 0); //Wait for it.
@@ -157,7 +157,7 @@ int main(void) {
   timer_irq_fired = 0;
   mtimer_set_raw_time_cmp(5000); //Fire IRQ in 5000 ticks.
   //Timer IRQ firing time + irq jitter absorption margin
-  timer_irq_expected_at = MTIMER_GET_RAW_TIMECMP_LOW()+IRQ_JITTER_MARGIN;
+  timer_irq_expected_at = MTIMER_GET_RAW_TIMECMP_LOW()+IRQ_LATENCY_AND_JITTER_MARGIN;
   printf("Timer IRQ expected at: %d\n", timer_irq_expected_at);
 
   while (timer_irq_fired == 0); //Wait for it.

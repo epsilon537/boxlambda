@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "embedded_cli.h"
+#include "mcycle.h"
 
 extern "C" {
   static void peekw(EmbeddedCli *cli, char *args, void *context) {
@@ -10,11 +11,23 @@ extern "C" {
     }
     else {
       uint32_t addr;
+      uint32_t res;
+      uint32_t cycles;
 
       char *token = embeddedCliGetTokenVariable(args, 1);
       sscanf(token, "%08X", &addr);
 
-      printf("peekw 0x%08X -> 0x%08X\n", addr, *(volatile unsigned *)addr);
+      mcycle_stop();
+      pcount_reset();
+      mcycle_start();
+      res = *(volatile unsigned *)addr;
+      mcycle_stop();
+
+      cycles = mcycle_get32();
+
+      printf("peekw 0x%08X -> 0x%08X\n", addr, res);
+      //The measurement overhead is 10 cycles.
+      printf("Cycles: %d\n", cycles-10);
     }
   }
 
