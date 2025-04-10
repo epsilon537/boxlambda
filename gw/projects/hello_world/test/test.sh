@@ -26,7 +26,19 @@ sleep 3
 #Collect result of actions in gdb.log
 rm -f gdb.log
 echo "Launching gdb..."
-gdb-multiarch --batch -x $SRC_ROOT_DIR/gw/projects/hello_world/test/test.gdb ../../../sw/projects/hello_world/hello_world_ram > gdb.log
+
+#If gdb-multiarch exists, use it.
+if which gdb-multiarch ; then
+  echo "gdb-multiarch found."
+  export GDB=gdb-multiarch
+else
+  echo "gdb-multiarch not found. Trying gdb..."
+  #If it doesn't, assume the gdb executable has multiarch support.
+  #E.g. on Arch Linux this is the case.
+  export GDB=gdb
+fi
+
+$GDB --batch -x $SRC_ROOT_DIR/gw/projects/hello_world/test/test.gdb ../../../sw/projects/hello_world/hello_world_ram > gdb.log
 
 #Kill the Vmodel process so it doesn't linger forever in the background.
 kill -9 $VMODEL_PROCESS_ID

@@ -28,6 +28,7 @@ link_and_create_image(imem_to_flash_vector ${PROJECT_SOURCE_DIR}/sw/components/b
 #imem.mem on FPGA builds.
 add_custom_command(
   TARGET imem_to_flash_vector
+  POST_BUILD
   WORKING_DIRECTORY
       ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND cp -f imem_to_flash_vector.mem imem.mem

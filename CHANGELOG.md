@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Using $RISCV_PREFIX for toolchain selection. Defaults to *riscv64-unknown-elf-gdb* if not specified by user.
 - In arty-a7 build tree, only boxlambda_base_bit, boxlambda_dfx_bit, vs0_stub_bit, and vs0_j1b_bit are built by default.
 - Renamed gw component *wbxbar* to *interconnect*.
 - Build trees are now recreated from scratch when running boxlambda_setup.sh.
@@ -29,12 +30,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Replaced the crossbar+shared bus based interconnect with a dual bus interconnect: an instruction bus and a data bus.
 - Made VERA's VRAM dual port, reducing CPU access latency.
 - Simplified gateware build system:
-  - make *project*_synth always (re)synthesizes
-  - make *project*_bit always (re)implements and generates the bitstream including the software image
+  - make *project*_synth always (re)synthesizes the component or project.
+  - make *project*_bit always (re)synthesize, (re)implements and (re)generates the bitstream including the software image
+  - make *project*_sim always (re)creates the verilator simulation model including the software image.
+  - make *project*_update_sw updates the software image in the bitstream file or Vmodel directory without triggering (re)synthesis, (re)implementation, and/or Vmodel (re)generation.
   - make *reconfigurable_module*_bit expects the reference static design project to be built first.
-  - make *project*_update_sw updates the software image in the bitstream file without triggering (re)synthesis and/or (re)implementation.
 - Simplified simulation build system: make *project*_sim builds the simulation executable including software image.
 - The imem-to-flash vector memory image (*imem.mem* - the default content of IMEM) is no longer checked into the source tree. It's an object derived from the *imem_to_flash_vector* SW project. *Imem.mem* is now automatically generated during the gateware codegeneraton step (*gw_codegen*) of the build system.
+- Switched to CMake 4.0.0.
 
 ### Removed
 

@@ -3,19 +3,19 @@
 # the name of the target operating system
 set(CMAKE_SYSTEM_NAME Generic)
 
-set(TOOLCHAIN_PREFIX "riscv64-unknown-elf-")
+set(TOOLCHAIN_PREFIX "$ENV{RISCV_PREFIX}-")
 
 # which compilers to use
-set(CMAKE_C_COMPILER riscv64-unknown-elf-gcc)
+set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}gcc)
 # enable C++ as well
-set(CMAKE_CXX_COMPILER riscv64-unknown-elf-gcc)
+set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}gcc)
 
 #Use GCC for assembly as well.
-set(CMAKE_ASM_COMPILER riscv64-unknown-elf-gcc)
+set(CMAKE_ASM_COMPILER ${TOOLCHAIN_PREFIX}gcc)
 
 # picorv assembler, associated with the .picoasm file extension
 # ASM_PICO dialect CMake extension is defined the cmake subdirectory of this repo.
-set(CMAKE_ASM_PICO_COMPILER riscv64-unknown-elf-as)
+set(CMAKE_ASM_PICO_COMPILER ${TOOLCHAIN_PREFIX}as)
 
 # adjust the default behaviour of the find commands:
 # search headers and libraries in the target environment

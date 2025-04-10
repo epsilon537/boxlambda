@@ -27,8 +27,11 @@ target_include_directories(sdram
       ${PROJECT_SOURCE_DIR}/sub/litex/litex/soc/cores/cpu/ibex
 )
 
-#The memory controller SW interface is different between simulation and FPGA targets.
 target_include_directories(sdram
     PUBLIC
       ${CMAKE_BINARY_DIR}/codegen/litedram/sw/include
 )
+
+#Include directory above requires litedram core to be generated.
+add_dependencies(sdram gw_codegen)
+

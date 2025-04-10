@@ -24,10 +24,14 @@ else
   echo "Vivado not found. Please install Vivado and add it to your path."
 fi
 
-if which riscv64-unknown-elf-gcc ; then
-  echo "riscv64-unknown-elf-gcc found."
+if [ -z "$RISCV_PREFIX" ]; then
+  export RISCV_PREFIX=riscv64-unknown-elf
+fi
+
+if which $RISCV_PREFIX-gcc ; then
+  echo "$RISCV_PREFIX-gcc found."
 else
-  echo "riscv64-unknown-elf-gcc not found. Please install riscv64-unknown-elf-gcc package."
+  echo "$RISCV_PREFIX-gcc not found. Please install $RISCV_PREFIX-gcc package."
   return 1
 fi
 

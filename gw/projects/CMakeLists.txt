@@ -266,6 +266,7 @@ function (gw_project_rules_vivado)
           ${CMAKE_CURRENT_BINARY_DIR}
       DEPENDS
           project.bit
+          ${_mem_file_tgt}
       COMMENT
           "Project implementation and bitstream generation target."
   )
@@ -275,12 +276,11 @@ function (gw_project_rules_vivado)
     add_custom_command(
         TARGET
             ${_prj_name}_bit
+        POST_BUILD
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
             ${PROJECT_SOURCE_DIR}/scripts/vivado_updatemem.sh project.mmi $<TARGET_FILE:${_mem_file_tgt}>.mem project.bit project.bit
-        DEPENDS
-            ${_mem_file_tgt}
         COMMENT
             "Updating SW memory image in bitstream."
         VERBATIM
@@ -439,6 +439,19 @@ function (gw_project_rules_verilator)
             ${_mem_file_tgt}
         COMMENT
             "Copying SW memory image to gateware build dir."
+        VERBATIM
+    )
+
+    #Custom command updating the SW image in the Vmodel directory.
+    add_custom_target(${_prj_name}_update_sw
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND
+            cp $<TARGET_FILE:${_mem_file_tgt}>.mem ${CMAKE_CURRENT_BINARY_DIR}/imem.mem
+        DEPENDS
+            ${_mem_file_tgt}
+        COMMENT
+            "Updating SW image in Vmodel directory."
         VERBATIM
     )
 
