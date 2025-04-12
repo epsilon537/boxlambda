@@ -62,6 +62,9 @@ add_custom_target(check_env
     VERBATIM
 )
 
+#Add check_env as a dependency to all targets.
+#There has to be a better way to do this but I can't find it. This beats having to add
+#the dependency to each target individually.
 function (_get_all_cmake_targets out_var current_dir)
     get_property(targets DIRECTORY ${current_dir} PROPERTY BUILDSYSTEM_TARGETS)
     get_property(subdirs DIRECTORY ${current_dir} PROPERTY SUBDIRECTORIES)
