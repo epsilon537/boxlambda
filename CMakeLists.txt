@@ -51,4 +51,33 @@ add_subdirectory(sw)
 #The gateware tree
 add_subdirectory(gw)
 
+#A rule to check if the BoxLambda environment is active.
+add_custom_target(check_env
+    WORKING_DIRECTORY
+        ${PROJECT_SOURCE_DIR}/scripts
+    COMMAND
+        ./check_env.sh
+    COMMENT
+        "Checking if BoxLambda environment has been activated."
+    VERBATIM
+)
+
+function (_get_all_cmake_targets out_var current_dir)
+    get_property(targets DIRECTORY ${current_dir} PROPERTY BUILDSYSTEM_TARGETS)
+    get_property(subdirs DIRECTORY ${current_dir} PROPERTY SUBDIRECTORIES)
+
+    foreach(subdir ${subdirs})
+        _get_all_cmake_targets(subdir_targets ${subdir})
+        list(APPEND targets ${subdir_targets})
+    endforeach()
+
+    set(${out_var} ${targets} PARENT_SCOPE)
+endfunction()
+
+# Run at end of top-level CMakeLists
+_get_all_cmake_targets(all_targets ${CMAKE_CURRENT_LIST_DIR})
+
+foreach(tgt ${all_targets})
+  add_dependencies(${tgt} check_env)
+endforeach()
 

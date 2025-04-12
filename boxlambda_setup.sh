@@ -28,17 +28,26 @@ if [ -z "$RISCV_PREFIX" ]; then
   export RISCV_PREFIX=riscv64-unknown-elf
 fi
 
-if which $RISCV_PREFIX-gcc ; then
-  echo "$RISCV_PREFIX-gcc found."
-else
-  echo "$RISCV_PREFIX-gcc not found. Please install $RISCV_PREFIX-gcc package."
-  return 1
-fi
-
-#Download and install additional tools.
+#Install RISCV compiler
 pushd . > /dev/null
 mkdir -p tools
 cd tools
+
+if [ -d riscv32-boxlambda-elf ]; then
+  echo "riscv32 toolchain found."
+else
+  echo "Unpacking riscv32 toolchain..." 
+
+  if tar xf ../assets/riscv32-boxlambda-elf.tgz ; then
+    echo "OK"
+  else
+    echo "Unpack of riscv32 toolchain failed. Aborting..."
+    popd
+    return 1
+  fi
+fi
+
+#Download and install additional tools.
 
 if [ -d oss-cad-suite ]; then
   echo "oss-cad-suite found."

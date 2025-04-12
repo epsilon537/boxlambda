@@ -193,7 +193,7 @@ int main(void) {
 
       //After two frames, move the sprites, to create sprite collisions.
       if (frame_counter == 2) {
-        //printf("(Forcing sprite collision)");
+        printf("(Forcing sprite collision)");
         setup_sprite_attr_ram(1);
       }
     }

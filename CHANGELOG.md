@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added interrupt latency measurement to ibex_perf_test.
 - Added mtimer register that, when written to, blocks until the lower 8 bits of mtime match the written value. This mechanism can be used to remove the IRQ jitter in timer interrupts. See *timer_uart_irqs.c* for an example.
 - Added a "long" label to the stsound_test so it can be excluded from a quick test run using 'ctest -LE long'.
+- The RISCV toolchain, custom built for BoxLambda, is included as an asset in the repo and provided as part of the environment created by the boxlambda_setup.sh/activate.sh scripts. The toolchain is called riscv32-boxlambda-elf to avoid collision with other riscv toolchains that may be installed on the system.
+- Build system checks if BoxLambda environment is active before building.
 
 ### Fixed
 
