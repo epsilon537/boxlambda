@@ -25,7 +25,7 @@
   jal x0, _usb_hid_1_irq_handler
   jal x0, _gpio_irq_handler
   jal x0, _sdspi_irq_handler
-  jal x0, _dmac_irq_handler
+  jal x0, _exc_handler
   jal x0, _vs_0_irq_handler
   jal x0, _vera_irq_handler
   jal x0, _exc_handler
@@ -35,10 +35,10 @@
   // is here. This is also the case when we 'boot from flash'. We always
   // start from this vector, but may jump to flash memory at the end of the
   // _reset_handler function.
-  // In case of boot-from-flash builds, the CMEM image included in the bitstream
+  // In case of boot-from-flash builds, the IMEM image included in the bitstream
   // contains just this vector.S module, nothing else.
-  // This CMEM image is created in the sw/projects/cmem_to_flash_vector project.
-  // In case of boot-from-cmem builds, the CMEM image included in the bitstream
+  // This IMEM image is created in the sw/projects/imem_to_flash_vector project.
+  // In case of boot-from-imem builds, the IMEM image included in the bitstream
   // contains the actual SW image, which starts with this vector.S module.
   .org 0x80
 _reset_handler:
@@ -75,7 +75,7 @@ _reset_handler:
   mv x30, x1
   mv x31, x1
   // Tail call pseudo instruction. _reset_handler is always located
-  // in cmem, while _start might be located in flash memory (in case of
+  // in imem, while _start might be located in flash memory (in case of
   // a SW image linked to boot from flash), in which
   // case we have to make a non-local jump.
   tail _start
@@ -103,9 +103,6 @@ _gpio_irq_handler:
 .globl _sdspi_irq_handler
 .weak _sdspi_irq_handler
 _sdspi_irq_handler:
-.globl _dmac_irq_handler
-.weak _dmac_irq_handler
-_dmac_irq_handler:
 .globl _vs_0_irq_handler
 .weak _vs_0_irq_handler
 _vs_0_irq_handler:

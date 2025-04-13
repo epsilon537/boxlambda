@@ -1,0 +1,27 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: wb_ram
+
+sources:
+  - target: memory_vivado
+    files:
+     - ../../../sw/projects/imem_to_flash_vector/imem.mem
+
+  - target: verilator
+    files:
+     - lint.vlt
+
+  - target: any(vivado, verilator)
+    files:
+      - rtl/wb_ram_wrapper.sv
+
+  - target: verilator
+    files:
+      - ../../../sub/verilog-wishbone/rtl/wb_ram.v
+
+
+
+

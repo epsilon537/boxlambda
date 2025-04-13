@@ -12,8 +12,8 @@ else()
       PROJECT_NAME stsound_test
       MEM_FILE_TARGET stsound_test_ram
       VERILATOR_FLAGS
-          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/" 
-          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang" 
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/"
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
           "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/sdspi/bench/cpp"
   )
 
@@ -22,4 +22,7 @@ else()
       COMMAND ${CMAKE_CURRENT_LIST_DIR}/test/test.sh ${PROJECT_SOURCE_DIR}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   )
+
+  set_tests_properties(stsound_test
+    PROPERTIES LABELS "long")
 endif()

@@ -17,7 +17,7 @@ SCRIPT_FILE_NAME=$2
 #verilator or vivado
 TARGET=$3
 
-echo "#Memory files" > $SCRIPT_FILE_NAME.tmp
+echo "#Memory files" > $SCRIPT_FILE_NAME
 
 MEM_FILE_LIST=`bender -d $SRC_DIR script -t memory_$TARGET flist`
 
@@ -27,14 +27,6 @@ rm -f $SRC_DIR/Bender.lock
 for f in $MEM_FILE_LIST
 do
 	cp $f .
-  echo "add_files -norecurse $f" >> $SCRIPT_FILE_NAME.tmp
+  echo "add_files -norecurse $f" >> $SCRIPT_FILE_NAME
 done
 
-if cmp --silent -- "$SCRIPT_FILE_NAME" "$SCRIPT_FILE_NAME.tmp"; then
-  echo "No memory filelist changes detected."
-else
-  echo "Updating memory filelist".
-  cp $SCRIPT_FILE_NAME.tmp $SCRIPT_FILE_NAME
-fi
-
-rm $SCRIPT_FILE_NAME.tmp

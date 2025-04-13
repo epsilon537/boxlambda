@@ -16,7 +16,7 @@ phys_opt_design
 write_checkpoint -force project_impl.dcp
 
 #Create the bitstream file
-write_bitstream -force -bin_file project
+write_bitstream -force project
 
 #Generate the .mmi file to be used for post-synthesis memory updates.
 #-quiet to silently ignore errors. Not all project can produce .mmi files.

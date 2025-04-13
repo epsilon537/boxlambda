@@ -14,7 +14,7 @@ target_compile_options(rtcc_test_ram
 )
 
 link_and_create_image(rtcc_test_ram
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(rtcc_test_ram sdram rtcc i3c gpio riscv embedded_cli peek_poke_cli bootstrap)
 

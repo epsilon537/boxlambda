@@ -27,8 +27,7 @@ function(link_and_create_image _tgt _link_script)
             -nostartfiles
             -T${_link_script}
             "--specs=${CMAKE_BINARY_DIR}/sw/picolibc.specs"
-            "LINKER:--defsym=__cmem_size=${CMEM_SIZE}"
-            "LINKER:--defsym=__dmem_size=${DMEM_SIZE}"
+            "LINKER:--defsym=__imem_size=${IMEM_SIZE}"
             "LINKER:--gc-sections"
             "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
     )
@@ -62,11 +61,9 @@ add_subdirectory(sdspi_test)
 add_subdirectory(fatfs_test)
 add_subdirectory(ym2149_test)
 add_subdirectory(stsound_test)
-add_subdirectory(picorv_dma_sys_test_ext)
-add_subdirectory(dual_port_ram_test)
 add_subdirectory(usb_hid_sys_test)
 add_subdirectory(spiflash_test)
-add_subdirectory(cmem_to_flash_vector)
+add_subdirectory(imem_to_flash_vector)
 add_subdirectory(timer_uart_gpio_irqs)
 add_subdirectory(i2c_test)
 add_subdirectory(rtcc_test)

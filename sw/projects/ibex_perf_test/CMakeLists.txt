@@ -17,9 +17,9 @@ target_include_directories(ibex_perf_test_ram
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_image(ibex_perf_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+link_and_create_image(ibex_perf_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
-target_link_libraries(ibex_perf_test_ram gpio riscv vera bootstrap)
+target_link_libraries(ibex_perf_test_ram gpio riscv vera bootstrap timer interrupts)
 
 #
 # ibex_perf Test - Flash Build
@@ -42,6 +42,6 @@ target_include_directories(ibex_perf_test_flsh
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(ibex_perf_test_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
 
-target_link_libraries(ibex_perf_test_flsh gpio riscv vera bootstrap)
+target_link_libraries(ibex_perf_test_flsh gpio riscv vera bootstrap timer interrupts)
 
 add_flash_sw_target(ibex_perf_test_flsh)

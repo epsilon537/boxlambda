@@ -24,17 +24,30 @@ else
   echo "Vivado not found. Please install Vivado and add it to your path."
 fi
 
-if which riscv64-unknown-elf-gcc ; then
-  echo "riscv64-unknown-elf-gcc found."
-else
-  echo "riscv64-unknown-elf-gcc not found. Please install riscv64-unknown-elf-gcc package."
-  return 1
+if [ -z "$RISCV_PREFIX" ]; then
+  export RISCV_PREFIX=riscv64-unknown-elf
 fi
 
-#Download and install additional tools.
+#Install RISCV compiler
 pushd . > /dev/null
 mkdir -p tools
 cd tools
+
+if [ -d riscv32-boxlambda-elf ]; then
+  echo "riscv32 toolchain found."
+else
+  echo "Unpacking riscv32 toolchain..." 
+
+  if tar xf ../assets/riscv32-boxlambda-elf.tgz ; then
+    echo "OK"
+  else
+    echo "Unpack of riscv32 toolchain failed. Aborting..."
+    popd
+    return 1
+  fi
+fi
+
+#Download and install additional tools.
 
 if [ -d oss-cad-suite ]; then
   echo "oss-cad-suite found."
@@ -117,17 +130,13 @@ else
 fi
 
 echo "Creating build build trees..."
+
+rm -rf build
+
 cmake --fresh --preset=sim-a7-35
-make -C ./build/sim-a7-35 regen
-
 cmake --fresh --preset=sim-a7-100
-make -C ./build/sim-a7-100 regen
-
 cmake --fresh --preset=arty-a7-35
-make -C ./build/arty-a7-35 regen
-
 cmake --fresh --preset=arty-a7-100
-make -C ./build/arty-a7-100 regen
 
 #Deactivate the environment
 deactivate

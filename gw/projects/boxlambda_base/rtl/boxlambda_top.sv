@@ -169,7 +169,7 @@ module boxlambda_top (
 `endif
 
   boxlambda_soc #(
-      .DPRAM_BYTE_ADDR_MASK(`DPRAM_SIZE_BYTES/2-1), /*Divide by 2. DPRAM is split into two equal-size instances.*/
+      .IMEM_BYTE_ADDR_MASK(`CPU_RAM_SIZE_BYTES - 1),
       .VRAM_SIZE_BYTES(`VRAM_SIZE_BYTES),
       .DEBUG_MODULE_ACTIVE(1),
 `ifndef DRAM
@@ -183,9 +183,6 @@ module boxlambda_top (
 `endif
 `ifndef YM2149
       .YM2149_ACTIVE(0),
-`endif
-`ifndef PICORV_DMA
-      .PICORV_ACTIVE(0),
 `endif
 `ifndef USB_HID
       .USB_HID_ACTIVE(0),
@@ -205,9 +202,7 @@ module boxlambda_top (
 `ifndef ACK_INVALID_ADDR
       .ACK_INVALID_ADDR(0),
 `endif
-      /*We don't specify a dmem.mem. The data segment is copied into DMEM from a load segment that's part of the cmem.mem
-         *image. This copy operation is part of the PicoLibc start-up code.*/
-      .CMEM_FILE("cmem.mem")
+      .IMEM_FILE("imem.mem")
   ) boxlambda_soc_inst (
       .*
   );

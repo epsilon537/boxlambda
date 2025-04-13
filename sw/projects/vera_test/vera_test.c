@@ -44,6 +44,11 @@ void _vera_irq_handler(void) {
 
   //Acknowledge IRQ in the VERA core.
   vera_reg_wr(VERA_ISR, isr&ien);
+
+  //Return from interrupt
+  __asm__ volatile (
+      "mret \n"
+  );
 }
 
 //Returns 0 if OK, <0 if error.

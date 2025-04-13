@@ -12,7 +12,7 @@ target_compile_options(hello_world_ram
  PRIVATE -g)
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_image(hello_world_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+link_and_create_image(hello_world_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(hello_world_ram gpio riscv bootstrap)
 

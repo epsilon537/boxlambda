@@ -5,10 +5,6 @@ package:
   # The name of the package. Required.
   name: wb_dfx_controller
 
-dependencies:
-  # Path dependency.
-  wbxbar: { path: "../../components/wbxbar" }
-
 sources:
   - target: vivado_ip_arty-a7-100
     files:
@@ -26,4 +22,9 @@ sources:
   - target: any(vivado, verilator)
     files:
       - rtl/wb_dfx_controller.sv
+      - ../../../sub/wb2axip/rtl/aximrd2wbsp.v
+      - ../../../sub/wb2axip/rtl/axi_addr.v
+      - ../../../sub/wb2axip/rtl/sfifo.v
+      - ../../../sub/wb2axip/rtl/wbm2axilite.v
+      - ../../../sub/wb2axip/rtl/skidbuffer.v
 

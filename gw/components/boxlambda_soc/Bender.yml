@@ -8,7 +8,7 @@ package:
 dependencies:
   # Path dependency.
   wb_dp_ram: { path: "../../components/wb_dp_ram" }
-  wbxbar: { path: "../../components/wbxbar" }
+  interconnect: { path: "../../components/interconnect" }
   gpio: { path: "../../components/gpio" }
   wbuart: { path: "../../components/wbuart" }
   ibex_wb_common: { path: "../../components/ibex_wb_common" }
@@ -20,7 +20,6 @@ dependencies:
   ym2149: { path: "../../components/ym2149" }
   audio_dac: { path: "../../components/audio_dac" }
   reset_ctrl: { path: "../../components/reset_ctrl" }
-  picorv_dma: { path: "../../components/picorv_dma" }
   boxlambda_clk_gen: { path: "../../components/boxlambda_clk_gen" }
   usb_hid_host: { path: "../../components/usb_hid_host" }
   spiflash: { path: "../../components/spiflash"}

@@ -1,22 +1,15 @@
 /* This link script is derived from the picolibc link script. It creates a SW image that
  * boots from flash memory.
- * In this type of image, all load sections are placed in flash memory. From there, the code
- * sections are relocated to CMEM. The data sections are relocated to DMEM.
+ * In this type of image, all load sections are placed in flash memory. From there, the
+ * sections are relocated to IMEM.
  *
  * The link script (starting after the ENTRY directive below) expects the following symbols
  * to be set:
  *
- * 'cmem' or 'code memory' contains code. You can also put BSS data in
- * cmem by assigning it to the .cmem_bss section. I did not (yet) add a .cmem_data section.
+ * 'imem': Internal memory start address.
  */
-__cmem = 0x00000000;
-/*__cmem_size is no longer specified here. It is now passed in as a linker option*/
-
-/* 'dmem' or 'data memory' contains data segments, bss and stack. You can put code in dmem
- * by assigning it
- * to the .dmem_text section.*/
-__dmem = 0x00020000;
-/*__dmem_size is no longer specified here. It is now passed in as a linker option*/
+__imem = 0x00000000;
+/*__imem_size is not specified here. It is passed in as a linker option*/
 
 /* stack:*/
 __stack_size = 512;
@@ -37,15 +30,14 @@ ENTRY(_start)
 MEMORY
 {
     flash : ORIGIN = __flash, LENGTH = __flash_size
-    cmem : ORIGIN = __cmem, LENGTH = __cmem_size
-    dmem : ORIGIN = __dmem, LENGTH = __dmem_size
+    imem : ORIGIN = __imem, LENGTH = __imem_size
     emem : ORIGIN = __emem, LENGTH = __emem_size
 }
 
 SECTIONS
 {
-    /*Place the stack at the end of dmem.*/
-    PROVIDE(__stack = ORIGIN(dmem) + LENGTH(dmem));
+    /*Place the stack at the end of imem.*/
+    PROVIDE(__stack = ORIGIN(imem) + LENGTH(imem));
 
     .flash : {
         KEEP (*(.text.init.enter))
@@ -55,7 +47,7 @@ SECTIONS
 
     .text : {
         PROVIDE(__code_start = ADDR(.text));
-        KEEP (*(.vectors)) /*add vectors to the start of CMEM.*/
+        KEEP (*(.vectors)) /*add vectors to the start of IMEM.*/
         /* code */
         *(.text.unlikely .text.unlikely.*)
         *(.text.startup .text.startup.*)
@@ -87,17 +79,9 @@ SECTIONS
         PROVIDE_HIDDEN ( __fini_array_end = . );
 
         PROVIDE(__code_end = .);
-    } >cmem AT>flash
+    } >imem AT>flash
     PROVIDE(__code_source = LOADADDR(.text));
     PROVIDE(__code_size = __code_end - __code_start );
-
-   /*BSS data can be mapped to cmem by assigning it to this segment.*/
-    .cmem_bss (NOLOAD) : {
-        *(.cmem_bss)
-        __cmem_bss_end = .;
-    } >cmem
-    PROVIDE(__cmem_bss_start = ADDR(.cmem_bss));
-    PROVIDE(__cmem_bss_size = __cmem_bss_end - __cmem_bss_start );
 
    /*
     * Data values which are preserved across reset
@@ -107,7 +91,7 @@ SECTIONS
         KEEP(*(SORT_BY_NAME(.preserve.*)))
         KEEP(*(.preserve))
         PROVIDE(__preserve_end__ = .);
-    } >dmem
+    } >imem
 
     .data : ALIGN_WITH_INPUT {
         *(.data .data.*)
@@ -133,26 +117,18 @@ SECTIONS
         *(.sdata .sdata.* .sdata2.*)
         *(.gnu.linkonce.s.*)
 
-        /*Code can be mapped to DMEM by assigning it to this segment.*/
-        *(.dmem_text)
-    } >dmem AT>flash
+    } >imem AT>flash
 
     PROVIDE(__data_start = ADDR(.data));
     PROVIDE(__data_source = LOADADDR(.data));
 
-   /* Thread local initialized data. This gets
-    * space allocated as it is expected to be placed
-    * in dmem to be used as a template for TLS data blocks
-    * allocated at runtime. We're slightly abusing that
-    * by placing the data in cmem where it will be copied
-    * into the allocate dmem addresses by the existing
-    * data initialization code in crt0
-    */
+   /* Thread local initialized data.*/
     .tdata : ALIGN_WITH_INPUT {
         *(.tdata .tdata.* .gnu.linkonce.td.*)
+        /*Notice that __data_end is set here.*/
         PROVIDE(__data_end = .);
         PROVIDE(__tdata_end = .);
-    } >dmem AT>flash
+    } >imem AT>flash
 
     PROVIDE( __tls_base = ADDR(.tdata));
     PROVIDE( __tdata_start = ADDR(.tdata));
@@ -170,8 +146,9 @@ SECTIONS
         *(.tcommon)
         PROVIDE( __tls_end = . );
         PROVIDE( __tbss_end = . );
-    } >dmem
+    } >imem
 
+    /*Notice that __bss_start is set here*/
     PROVIDE( __bss_start = ADDR(.tbss));
     PROVIDE( __tbss_start = ADDR(.tbss));
     PROVIDE( __tbss_size = SIZEOF(.tbss) );
@@ -188,7 +165,7 @@ SECTIONS
     */
     .tbss_space (NOLOAD) : {
         . = . + SIZEOF(.tbss);
-    } >dmem
+    } >imem
 
     .bss (NOLOAD) : {
         *(.sbss*)
@@ -197,7 +174,7 @@ SECTIONS
         *(.gnu.linkonce.b.*)
         *(COMMON)
         __bss_end = .;
-    } >dmem
+    } >imem
 
     PROVIDE( __end = __bss_end );
     PROVIDE( _end = __bss_end );
@@ -215,7 +192,7 @@ SECTIONS
     /* Define a stack region to make sure it fits in memory */
     .stack (NOLOAD) : {
        . += __stack_size;
-    } >dmem
+    } >imem
 
     /* Throw away C++ exception handling information */
 

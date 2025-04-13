@@ -30,9 +30,9 @@ target_compile_options(spiflash_test_ram
   -O2 -g
 )
 
-#spiflash_test_ram is linked as CMEM memory image.
+#spiflash_test_ram is linked as IMEM memory image.
 link_and_create_image(spiflash_test_ram
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(spiflash_test_ram flashdrvr sdram gpio riscv bootstrap)
 

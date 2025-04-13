@@ -2,14 +2,6 @@ cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 project(BoxLambda VERSION 0.1.0 LANGUAGES C CXX ASM)
 
-#Add the cmake subdirectory to CMake's module path. The ASM_PICO dialect is defined there.
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
-
-#Enable picorv32 assembler dialect, associated with .picoasm file extension.
-#We want to keep this separate from the regular host processor assembler settings associated
-#with .s and .S files.
-enable_language(ASM_PICO)
-
 #Build systems like Ninja can handle multiple configurations in one build tree.
 #We currently don't support that.
 
@@ -46,6 +38,11 @@ add_custom_target(regen
     VERBATIM
 )
 
+#A gateware codegeneration target. Components that require
+#code generation will add their codegeneration target as a
+#dependency to this target.
+add_custom_target(gw_codegen)
+
 enable_testing()
 
 #The software tree
@@ -54,4 +51,36 @@ add_subdirectory(sw)
 #The gateware tree
 add_subdirectory(gw)
 
+#A rule to check if the BoxLambda environment is active.
+add_custom_target(check_env
+    WORKING_DIRECTORY
+        ${PROJECT_SOURCE_DIR}/scripts
+    COMMAND
+        ./check_env.sh
+    COMMENT
+        "Checking if BoxLambda environment has been activated."
+    VERBATIM
+)
+
+#Add check_env as a dependency to all targets.
+#There has to be a better way to do this but I can't find it. This beats having to add
+#the dependency to each target individually.
+function (_get_all_cmake_targets out_var current_dir)
+    get_property(targets DIRECTORY ${current_dir} PROPERTY BUILDSYSTEM_TARGETS)
+    get_property(subdirs DIRECTORY ${current_dir} PROPERTY SUBDIRECTORIES)
+
+    foreach(subdir ${subdirs})
+        _get_all_cmake_targets(subdir_targets ${subdir})
+        list(APPEND targets ${subdir_targets})
+    endforeach()
+
+    set(${out_var} ${targets} PARENT_SCOPE)
+endfunction()
+
+# Run at end of top-level CMakeLists
+_get_all_cmake_targets(all_targets ${CMAKE_CURRENT_LIST_DIR})
+
+foreach(tgt ${all_targets})
+  add_dependencies(${tgt} check_env)
+endforeach()
 

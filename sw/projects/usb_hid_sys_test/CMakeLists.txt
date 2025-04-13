@@ -11,7 +11,7 @@ target_compile_options(usb_hid_sys_test_ram
 )
 
 link_and_create_image(usb_hid_sys_test_ram
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(usb_hid_sys_test_ram usb_hid gpio riscv interrupts bootstrap)
 

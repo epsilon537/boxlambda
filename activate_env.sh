@@ -28,13 +28,6 @@ else
   echo "Vivado not found. Please install Vivado and add it to your path."
 fi
 
-if which riscv64-unknown-elf-gcc ; then
-  echo "riscv64-unknown-elf-gcc found."
-else
-  echo "riscv64-unknown-elf-gcc not found. Please install riscv64-unknown-elf-gcc package."
-  return 1
-fi
-
 echo "Activate OSS CAD Suite Environment..."
 _ORIG_PS1="${PS1}"
 
@@ -50,14 +43,14 @@ if [ -n "${ZSH_VERSION-}" ] ; then
     autoload -U colors && colors
     PS1="%{$fg[magenta]%}(BoxLambda `git rev-parse --abbrev-ref HEAD`)%{$reset_color%}${_ORIG_PS1}"
 else
-    PS1="\[\033[1;35m\]\342\246\227BoxLambda `git rev-parse --abbrev-ref HEAD`\342\246\230\[\033[0m\]${_ORIG_PS1}"
+    PS1="(\e[35mBoxLambda `git rev-parse --abbrev-ref HEAD`\e[0m)${_ORIG_PS1}"
 fi
 export PS1
 
 echo "Updating PATH..."
 
 export BOXLAMBDA_WORKSPACE=`pwd`
-export PATH=$BOXLAMBDA_WORKSPACE/tools:$BOXLAMBDA_WORKSPACE/tools/lowrisc-toolchain-gcc-rv32imcb-$LOWRISC_TOOLCHAIN_VERSION-1/bin:$BOXLAMBDA_WORKSPACE/scripts:$PATH
+export PATH=$BOXLAMBDA_WORKSPACE/tools:$BOXLAMBDA_WORKSPACE/tools/riscv32-boxlambda-elf/bin:$BOXLAMBDA_WORKSPACE/scripts:$PATH
 
 echo "Done. Enter 'deactivate' to deactivate the environment."
 

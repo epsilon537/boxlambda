@@ -39,7 +39,7 @@ sources:
      - ../../../sub/usb_hid_device/J1_WB/rtl/interfaces.sv
      - ../../../sub/usb_hid_device/J1_WB/misc/wb_rom.sv
      - ../../../sub/usb_hid_device/J1_WB/misc/rom.v
-     - ../../../sub/usb_hid_device/J1_WB/misc/wb_ram.sv
+     - ../../../sub/usb_hid_device/J1_WB/misc/wb_spram.sv
      - ../../../sub/usb_hid_device/J1_WB/misc/spram.v
      - ../../../sub/usb_hid_device/async_fifo/rtl/async_fifo.v
      - ../../../sub/usb_hid_device/async_fifo/rtl/sync_r2w.v

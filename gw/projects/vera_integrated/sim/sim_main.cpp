@@ -6,8 +6,10 @@
 
 #include <string>
 
+#ifdef SDL2_SUPPORT
 // SDL for rendering VGA output
 #include <SDL2/SDL.h>
+#endif //SDL2_SUPPORT
 
 // Include common routines
 #include <verilated.h>
@@ -26,6 +28,7 @@
 // From riscv-dbg
 #include "sim_jtag.h"
 
+#ifdef SDL2_SUPPORT
 //SDL objects:
 #define SDL_WINDOW_WIDTH 800
 
@@ -35,10 +38,16 @@ SDL_Window *sdl_window;
 SDL_Texture *sdl_display;
 
 int sdl_2x=0/*750*/, sdl_y=0/*523*/;
+bool exit_req = false; //Will be set to true when SDL window is closed by user.
+
+#else //No SDL2 support:
+
+typedef unsigned char Uint8;
+
+#endif //SDL2_SUPPORT
 
 bool vsync_prev = true;
 bool hsync_prev = true;
-bool exit_req = false; //Will be set to true when SDL window is closed by user.
 
 bool tracing_enable = false;
 
@@ -70,10 +79,12 @@ double sc_time_stamp() { return 0; }
 
 //Clean-up logic.
 static void cleanup() {
+#ifdef SDL2_SUPPORT
   //SDL clean-up.
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
   SDL_Quit();
+#endif //SDL2_SUPPORT
 
   //Close trace file.
   if (tracing_enable)
@@ -103,15 +114,19 @@ static void tick(void) {
       tfp->dump(contextp->time());
   }
 
+#ifdef SDL2_SUPPORT
   //Exit if user closes the SDL window.
   if (SDL_PollEvent(&sdl_event) && sdl_event.type == SDL_QUIT)
     exit_req = true;
+#endif //SDL2_SUPPORT
 
   //Clear the screen during Vsync. Note that Vsync is active low.
   if (!top->vga_vsync && vsync_prev) {
+#ifdef SDL2_SUPPORT
     SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 0);
     SDL_RenderClear(sdl_renderer);
     sdl_y = 0;
+#endif //SDL2_SUPPORT
     ++framecount;
 
     //Start frame recording on frame 2.
@@ -126,6 +141,7 @@ static void tick(void) {
     }
   }
 
+#ifdef SDL2_SUPPORT
   //Render to SDL's back buffer at each Hsync. Note that Hsync is active low.
   if (!top->vga_hsync && hsync_prev) {
     SDL_SetRenderTarget(sdl_renderer, NULL);
@@ -135,6 +151,7 @@ static void tick(void) {
     sdl_2x = 0;
     sdl_y++;
   }
+#endif //SDL2_SUPPORT
 
   //A pixel buffer for recording to file.
   static Uint8 pixel[4];
@@ -145,18 +162,22 @@ static void tick(void) {
   pixel[2] = (Uint8)(top->vga_b<<4);
   pixel[3] = 255;
 
+#ifdef SDL2_SUPPORT
   //Render the VGA rgb output.
   SDL_SetRenderDrawColor(sdl_renderer, pixel[0], pixel[1], pixel[2], pixel[3]);
 
   //sdl_2x increments at clock rate (50MHz), i.e. twice the pixel clock rate.
   //=> the pixel's x position corresponds to sdl_2x right shifted by 1.
   SDL_RenderDrawPoint(sdl_renderer, sdl_2x>>1, sdl_y);
+#endif //SDL2_SUPPORT
 
   if (frameFile)
     fwrite(pixel, 1, 4, frameFile);
 
+#ifdef SDL2_SUPPORT
   //sdl_2x increments at clock rate (50MHz), i.e. twice the pixel clock rate.
   ++sdl_2x;
+#endif //SDL2_SUPPORT
 
   vsync_prev = top->vga_vsync;
   hsync_prev = top->vga_hsync;
@@ -227,6 +248,7 @@ int main(int argc, char** argv, char** env) {
       break;
     }
 
+#ifdef SDL2_SUPPORT
     //SDL setup
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(SDL_WINDOW_WIDTH, SDL_WINDOW_WIDTH, SDL_WINDOW_ALWAYS_ON_TOP, &sdl_window, &sdl_renderer);
@@ -238,6 +260,7 @@ int main(int argc, char** argv, char** env) {
     //object to SDL's back buffer.
     sdl_display = SDL_CreateTexture(sdl_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SDL_WINDOW_WIDTH, SDL_WINDOW_WIDTH);
     SDL_SetRenderTarget(sdl_renderer, sdl_display);
+#endif //SDL2_SUPPORT
 
     //Trace file
     if (tracing_enable) {
@@ -254,8 +277,10 @@ int main(int argc, char** argv, char** env) {
 
     // When not in interactive mode, simulate for 19000000 timeprecision periods
     while (interactive_mode || (contextp->time() < 19000000)) {
+#ifdef SDL2_SUPPORT
         if (exit_req)
           break;
+#endif //SDL2_SUPPORT
 
         // Evaluate model
         tick();
@@ -274,7 +299,7 @@ int main(int argc, char** argv, char** env) {
     }
 
     /* V<sprite-bank#> indicates a Vsync IRQ, L = Line IRQ, C = collision IRQ. */
-    std::string uartCheckString2("LV0LV0(Forcing sprite collision)LV0CL");
+    std::string uartCheckString2("V0LV0(Forcing sprite collision)LV0CL");
 
     if (uartRxStringPrev.find(uartCheckString2) == std::string::npos) {
       printf("SIM: did not find expected string: %s\n", uartCheckString2.c_str());

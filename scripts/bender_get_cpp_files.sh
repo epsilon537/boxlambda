@@ -19,16 +19,8 @@ OUTFILE="$2"
 BL_TARGET_FPGA="$3"
 
 #Get all files from bender verilator target, filter out the cpp and c file, and put everything on one line,
-bender -d $SRC_DIR script flist -t $BL_TARGET_FPGA -t verilator | grep "\.cpp$\|\.c$" | tr '\n' ' ' > "$OUTFILE.tmp"
+bender -d $SRC_DIR script flist -t $BL_TARGET_FPGA -t verilator | grep "\.cpp$\|\.c$" | tr '\n' ' ' > "$OUTFILE"
 
 #Remove the generated Bender.lock file to keep the source tree clean.
 rm -f $SRC_DIR/Bender.lock
 
-if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
-  echo "No cpp filelist changes detected."
-else
-  echo "Updating cpp filelist".
-  cp $OUTFILE.tmp $OUTFILE
-fi
-
-rm $OUTFILE.tmp

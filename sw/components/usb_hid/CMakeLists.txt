@@ -1,6 +1,6 @@
 add_library(usb_hid)
 
-#picorv_dma hardware access layer.
+#usb_hid hardware access layer.
 target_sources(usb_hid
     PRIVATE
     usb_hid_hal.c

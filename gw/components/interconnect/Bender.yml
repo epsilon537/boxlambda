@@ -1,0 +1,41 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: interconnect
+
+dependencies:
+  # For wb_if and wb_pkg
+  ibex_wb_common: { path: "../../components/ibex_wb_common" }
+
+sources:
+  - target: verilator
+    files:
+     - lint.vlt
+
+  - target: interconnect
+    files:
+     - rtl/interconnect_ooc.sv
+
+  - target: any(vivado, verilator)
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
+    files:
+      - rtl/data_bus.sv
+      - rtl/instruction_bus.sv
+      - rtl/wb_mux_18_wrapper.sv
+      - rtl/wb_mux_4_wrapper.sv
+      - rtl/wb_arbiter_3_wrapper.sv
+      - rtl/wb_arbiter_2_wrapper.sv
+      - ../../../sub/verilog-wishbone/rtl/wb_arbiter_3.v
+      - ../../../sub/verilog-wishbone/rtl/wb_arbiter_2.v
+      - ../../../sub/verilog-wishbone/rtl/arbiter.v
+      - ../../../sub/verilog-wishbone/rtl/priority_encoder.v
+      - ../../../sub/verilog-wishbone/rtl/wb_mux_18.v
+      - ../../../sub/verilog-wishbone/rtl/wb_mux_4.v
+
+
+
+
+

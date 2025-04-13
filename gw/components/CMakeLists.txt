@@ -45,16 +45,12 @@ function (gw_rm_rules_dfx)
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
             ${comps_synth}
-            ${_ref_dfx_prj}_bit
-            $<TARGET_PROPERTY:${_ref_dfx_prj}_bit,BINARY_DIR>/dfx_project.static_route.dcp
         COMMENT
             "Implementing DFX Reconfigurable Module and generating bitstream(s)."
         VERBATIM
     )
 
-  #Add the bitstream generation target to make all (ALL property).
   add_custom_target(${_comp_name}_bit
-        ALL
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         DEPENDS
@@ -117,9 +113,8 @@ add_subdirectory(litedram)
 add_subdirectory(ibex_wb_core)
 add_subdirectory(ibex)
 add_subdirectory(reset_ctrl)
-add_subdirectory(picorv_dma)
 add_subdirectory(boxlambda_clk_gen)
-add_subdirectory(wbxbar)
+add_subdirectory(interconnect)
 add_subdirectory(wb_dp_ram)
 add_subdirectory(boxlambda_soc)
 add_subdirectory(vs0_stub)

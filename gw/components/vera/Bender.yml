@@ -15,7 +15,6 @@ sources:
   - target: any(verilator, vivado)
     files:
      - ../../../sub/vera_wishbone/fpga/source/vera_top.v
-     - ../../../sub/vera_wishbone/fpga/source/spram_byte_write_ram_wr_first.v
      - ../../../sub/vera_wishbone/fpga/source/dpram.v
      - ../../../sub/vera_wishbone/fpga/source/sprite_ram.v
      - ../../../sub/vera_wishbone/fpga/source/palette_ram.v
@@ -26,7 +25,7 @@ sources:
      - ../../../sub/vera_wishbone/fpga/source/graphics/sprite_renderer.v
      - ../../../sub/vera_wishbone/fpga/source/video/video_vga.v
      - ../../../sub/vera_wishbone/fpga/source/vram_if.v
-     - ../../../sub/vera_wishbone/fpga/source/main_ram_generic.v
+     - ../../../sub/vera_wishbone/fpga/source/bytewrite_sdp_ram.v
 
 
 

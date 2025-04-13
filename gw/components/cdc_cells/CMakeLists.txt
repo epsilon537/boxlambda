@@ -4,7 +4,7 @@ gw_component_rules(
     COMPONENT_NAME cdc_cells
 )
 
-#A CocoTB-based test program testing the PicoRV_DMA core.
+#A CocoTB-based test program testing the syncpls core.
 add_test(NAME syncpls_test
     COMMAND ${PROJECT_SOURCE_DIR}/scripts/cocotb_test.sh ${CMAKE_CURRENT_LIST_DIR}/test/syncpls_test.py
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

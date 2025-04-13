@@ -8,7 +8,7 @@ package:
 sources:
   - target: memory_vivado
     files:
-     - ../../../sw/projects/cmem_to_flash_vector/cmem.mem
+     - ../../../build/arty-a7-100/sw/projects/imem_to_flash_vector/imem_to_flash_vector.mem
 
   - target: verilator
     files:

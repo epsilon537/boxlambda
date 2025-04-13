@@ -23,19 +23,10 @@ vivado_ips=`bender -d $SRC_DIR script flist -t  vivado_ip_$BL_TARGET_FPGA`
 #Remove the generated Bender.lock file to keep the source tree clean.
 rm -f $SRC_DIR/Bender.lock
 
-touch $OUTFILE.tmp
+echo "#IPs" > $OUTFILE
 
 for ip in $vivado_ips
 do
-    echo import_ip $ip >> $OUTFILE.tmp
+    echo import_ip $ip >> $OUTFILE
 done
-
-if cmp --silent -- "$OUTFILE" "$OUTFILE.tmp"; then
-  echo "No Vivado IP filelist changes detected."
-else
-  echo "Updating Vivado IP filelist".
-  cp $OUTFILE.tmp $OUTFILE
-fi
-
-rm -f $OUTFILE.tmp
 

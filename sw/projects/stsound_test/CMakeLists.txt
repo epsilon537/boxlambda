@@ -24,7 +24,7 @@ else() #fpga:
 endif()
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_image(stsound_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+link_and_create_image(stsound_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
 target_link_libraries(stsound_test_ram sdram stsound fatfs gpio riscv bootstrap)
 

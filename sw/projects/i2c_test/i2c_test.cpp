@@ -40,6 +40,11 @@ extern "C" {
   void _i2c_irq_handler(void) {
     i2c.ackIRQ();
     ++i2c_irqs_fired;
+
+    //Return from interrupt
+    __asm__ volatile (
+        "mret \n"
+    );
   }
 
   //_init is executed by picolibc startup code before main().

@@ -56,8 +56,6 @@ extern char __data_start[];
 extern char __data_end[];
 extern char __data_size[];
 /*Boxlambda added:*/
-extern char __cmem_bss_start[];
-extern char __cmem_bss_size[];
 extern char __bss_start[];
 extern char __bss_size[];
 extern char __tls_base[];

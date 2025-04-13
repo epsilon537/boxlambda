@@ -5,16 +5,15 @@
 
 if [[ "$#" < 4  || "$1" == "-h" ]]
 then
-  echo "$0 <mmi file> <cmem file> <bitstream input file> <bitstream output file>"
+  echo "$0 <mmi file> <imem file> <bitstream input file> <bitstream output file>"
   exit 1
 fi
 
 MMI_FILE=$1
-CMEM_FILE=$2
+IMEM_FILE=$2
 BITSTREAM_IN=$3
 BITSTREAM_OUT=$4
 
-#Hack: It is assumed that this is the cmem memory instance that needs updating
-CMEM_PROC=boxlambda_soc_inst/cmem/xpm_memory_tdpram_inst/xpm_memory_base_inst
- 
-updatemem --force --meminfo $MMI_FILE --data $CMEM_FILE --proc $CMEM_PROC --bit $BITSTREAM_IN --out $BITSTREAM_OUT
+#Hack: It is assumed that this is the imem memory instance that needs updating
+IMEM_PROC=boxlambda_soc_inst/imem/xpm_memory_tdpram_inst/xpm_memory_base_inst
+updatemem --force --meminfo $MMI_FILE --data $IMEM_FILE --proc $IMEM_PROC --bit $BITSTREAM_IN --out $BITSTREAM_OUT
