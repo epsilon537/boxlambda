@@ -19,10 +19,10 @@ Make sure you also install your Arty A7 board files. Digilent has excellent inst
 
 [https://digilent.com/reference/programmable-logic/guides/installing-vivado-and-vitis](https://digilent.com/reference/programmable-logic/guides/installing-vivado-and-vitis)
 
-### Riscv Toolchain
+### Git
 
 ```
-sudo apt install gcc-riscv64-unknown-elf
+sudo apt-get install git
 ```
 
 ### GNU Make
@@ -35,7 +35,7 @@ sudo apt-get install make
 
 ### CMake
 
-Version 3.24 or later.
+Version 4.0.0 or later.
 
 On Ubuntu, follow these instructions: [https://apt.kitware.com/](https://apt.kitware.com/)
 
@@ -46,13 +46,15 @@ source /tools/Xilinx/Vivado/2023.1/settings64.sh
 export PATH=/usr/bin:$PATH
 ```
 
-### GDB Multiarch
+### GDB (Multiarch)
 
 For debug access to BoxLambda.
 
 ```
 sudo apt install gdb-multiarch
 ```
+
+On distros such as Arch Linux there is no gdb-multiarch package. The regular gdb package includes multiarch support.
 
 ### Additional Prerequisites for Building and Running the Verilator Test Cases
 
@@ -110,4 +112,5 @@ The following tools are automatically installed (if not already installed) by so
 - [Bender](https://github.com/pulp-platform/bender)
 - Python packages NumPy, SciPy, and Matplotlib.
 - [BoxLambda fork of Litex](https://github.com/epsilon537/litex)
+- riscv32-boxlambda-elf: RISCV32 GNU toolchain custom built for BoxLambda.
 

@@ -1,9 +1,11 @@
 ---
 layout: post
-title: 'The Latency Shakeup'
+title: 'The Latency Shakeup.'
 comments: true
 mathjax: yes
 ---
+
+*Updated 13 April 2025: I corrected the breakdown of the 6 clock cycle register access time in [this](#the-single-instruction-prefetcher) section.*
 
 All gateware components are now in place on the BoxLambda SoC, but the system is not yet behaving as required. A key requirement of BoxLambda is deterministic behavior. The duration of operations such as internal memory or register access must be predictable by design. When analyzing a snippet of assembly code, you should be able to predict exactly how many clock cycles it will take to execute, without relying on statistics. That's what this post is about.
 
@@ -207,7 +209,7 @@ Using the Single Instruction Prefetcher, the waveform corresponding to the regis
 *CPU with Single Instruction Prefetcher reading an I2C register in a loop.*
 
 This looks good. The instruction cycle counts are what we expected:
-- 6 clock cycles for a peripheral register read operation: 5 to go through the crossbar and 1 to go through the Transaction Separator.
+- 6 clock cycles for a peripheral register read operation: 1 to issue the read request, 1 to go through the transaction separator, 3 to go through the crossbar, and 1 for the slave to respond.
 - 2 clock cycles for the *addi* instruction.
 - 4 clock cycles for a branch taken.
 

@@ -1,6 +1,6 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.2 Chrome/134.0.6998.178 Electron/35.1.2 Safari/537.36" version="26.2.2">
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.4 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="26.0.4">
   <diagram id="0d0418cf-194d-6f34-59b4-59e4f961d9f4" name="Page-1">
-    <mxGraphModel dx="2260" dy="1925" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="2920" dy="2443" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -168,7 +168,7 @@
             <mxPoint x="-80" y="207" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FLBWLRREEo4RobXQaIjN-588" value="16MB Flash" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="FLBWLRREEo4RobXQaIjN-588" value="16MB Flash" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;align=center;fillColor=#dae8fc;strokeColor=#000000;" parent="1" vertex="1">
           <mxGeometry x="-480" y="440" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="FLBWLRREEo4RobXQaIjN-589" value="" style="endArrow=classic;html=1;rounded=0;fontSize=20;" parent="1" source="FLBWLRREEo4RobXQaIjN-532" target="FLBWLRREEo4RobXQaIjN-588" edge="1">

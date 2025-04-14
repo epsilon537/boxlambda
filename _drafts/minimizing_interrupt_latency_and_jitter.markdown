@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Minimizing Interrupt Latency and Jitter'
+title: 'Minimizing Interrupt Latency and Jitter.'
 comments: true
 mathjax: yes
 ---
