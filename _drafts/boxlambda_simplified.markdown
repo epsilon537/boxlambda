@@ -1,17 +1,19 @@
 ---
 layout: post
-title: 'Who needs a DMA Controller Anyway.'
+title: 'BoxLambda Simplified.'
 comments: true
 mathjax: yes
 ---
 
-In this post I explain why I decided to remove the DMA Controller from the BoxLambda SoC. The executive summary: Removing the DMA Controller leads to a simpler and faster SoC. 
+BoxLambda just got a lot simpler and faster. In this post, I explain why I removed the DMA Controller from the BoxLambda SoC and what that means for the system architecture.
 
 I'll also briefly describe how the RISC-V GNU toolchain for BoxLambda is built.
 
 Recap
 -----
 [![BoxLambda Block Diagram.](../assets/Arch_Diagram_DFX_w_crossbar.png)](../assets/Arch_Diagram_DFX_w_crossbar.png)
+
+*The BoxLambda Block Diagram before removing the DMA Controller.*
 
 Here's a summary of the current state of BoxLambda (before removing the DMA Controller):
 - Targeting the Arty-A7-100T FPGA development board.
@@ -33,35 +35,36 @@ Here's a summary of the current state of BoxLambda (before removing the DMA Cont
 
 Kill Your Darlings
 ------------------
-I the [previous post](https://epsilon537.github.io/boxlambda/latency-shakeup/) I mentioned that wishbone transactions across the crossbar have a relatively high latency (6 clock cycles). I got around that by I creating shortcuts from the CPU to CMEM and DMEM. I also added *wb_staller* transaction separators to stabilize the register access latency. The problem is, those are workarounds, band-aids, kludges. They make the system more clunky and complicated. Time to step back and reconsider.
+In the [previous post](https://epsilon537.github.io/boxlambda/latency-shakeup/), I mentioned that wishbone transactions across the crossbar have a high and variable latency (5-6 clock cycles). I got around that by creating shortcuts from the CPU to CMEM and DMEM and by adding transaction separators to stabilize the register access latency. The problem is, those are workarounds, kludges. They make the system more clunky and complicated. It's time to step back and reconsider.
 
-The primary reason for having a crossbar-based interconnect in the BoxLambda SoC is the PicoRV DMA Controller. Without the DMA Controller, the Ibex CPU is essentially the only bus master on the SoC. The crossbar could be replaced with two simple MUX-based buses:
-- an Instruction Bus for CPU instruction access.
-- a Data Bus access for CPU data access.
+The primary reason for having a crossbar-based interconnect in the BoxLambda SoC is the PicoRV DMA Controller. Without the DMA Controller, the Ibex CPU is essentially the only bus master on the SoC and the crossbar can be replaced with two simple MUX-based buses:
+- An Instruction Bus for CPU instruction access.
+- A Data Bus access for CPU data access.
 
 A wishbone MUX adds no latency while the wishbone crossbar combined with wb_staller adds 4 clock cycles of latency.
 
 [![CPU read word cycle count to a wishbone slave directly connected, through a mux, and through a crossbar.](../assets/read_word_direct_vs_mux_vs_crossbar.png)](../assets/read_word_direct_vs_mux_vs_crossbar.png)
 
-*CPU read word cycle count to directly connect slave, via mux, and via crossbar.*
+*CPU read word cycle count to directly connected slave, via MUX, and via crossbar.*
 
-In other words, the price of having a DMA Controller on the BoxLambda SoC is 4 clock cycles of additional transaction latency. This has to be balanced against the value provided by the DMA Controller: moving data around the chip with minimal CPU overhead. I think the price is too high. BoxLambda is supposed to be a simple, low-latency system. I prefer to have fast access from CPU to VRAM (for example) over having to rely on DMA transfers to get data into or out of VRAM. The PicoRV DMA Controller and the crossbar will have to go.
+In other words, the price of having a DMA Controller on the BoxLambda SoC is 4 clock cycles of additional transaction latency. This has to be balanced against the value provided by the DMA Controller: moving data around the chip with minimal CPU overhead. I think the price is too high. BoxLambda is supposed to be a simple, low-latency system. I prefer fast access from CPU to VRAM (for example) over having to rely on DMA transfers to get data into or out of VRAM. The PicoRV DMA Controller and the crossbar will have to go.
 
-It is unfortunate that I spent three months adding the PicoRV DMA Controller to the SoC, and another month or so to add the crossbar. I'll have to accept that as Sunk Cost. The decision to keep or cut a body of work should be base on the value it adds, not the amount of time to create it.
+I spent 3-4 months adding the PicoRV DMA Controller and crossbar to the SoC. I'll have to accept that as Sunk Cost. The decision to keep or cut a body of work should be based on the value it adds, not the amount of time to create it.
+
 
 BoxLambda Simplified
 --------------------
-With the PicoRV DMA Controller removed and the crossbar replaced by an MUX-based Instruction and Data bus, the BoxLambda SoC looks like this:
+With the PicoRV DMA Controller removed and the crossbar replaced by a MUX-based Instruction and Data bus, the BoxLambda SoC looks like this:
 
 [![BoxLambda SoC with Dual Bus Block Diagram.](../assets/Arch_Diagram_dual_bus_DFX.png)](../assets/Arch_Diagram_dual_bus_DFX.png)
 
 *BoxLambda SoC with Dual Bus Block Diagram.*
 
-This is a very simple and straightforward architecture. A CPU with an instruction and a data port, each connected via their own bus to the slaves they need to be able to reach. The few slaves that have to be hooked up to both buses use a 2-to-1 wishbone arbiter to select between the two buses. In theory, the arbitration will introduce delays when there's concurrent access. In practice, the programmer will know when he's in such a situation and there will be no surprises (or maybe a little one. See the [Arbiters without Overhead](#arbiters-without-overhead-most-of-the-time) section below).
+This is a very straightforward architecture. A CPU with an instruction and a data port, each connected via their own bus to the slaves they need to be able to reach. The few slaves that have to be hooked up to both buses use a 2-to-1 wishbone arbiter to select between the two buses. In theory, the arbitration will introduce delays when there's concurrent access. In practice, the programmer will know when he's in such a situation and there will be no surprises (or maybe a little one. See the [Arbiters without Overhead](#arbiters-without-overhead-most-of-the-time) section below).
 
 Multiple Bus Masters, but not simultaneously
 ============================================
-OK, I bended the truth a little. Both buses still have multiple bus masters:
+OK, I bent the truth a little. Both buses still have multiple bus masters:
 - The Data Bus is connected to 3 bus masters: the CPU data port, VS0 (DFX Virtual Socket 0) port 1, and the Debug Module.
 - The Instruction Bus is connected to 2 bus masters: the CPU instruction port and VS0 port 0.
 
@@ -69,7 +72,7 @@ OK, I bended the truth a little. Both buses still have multiple bus masters:
 
 *The Data Bus and the Instruction Bus.*
 
-Both buses have an arbiter that selects which bus master gets access to the MUX.
+Both buses have an arbiter that selects which bus master can access the MUX.
 
 I'm retaining the VS0 bus master ports to keep the option of experimenting with alternative CPU designs as DFX Reconfigurable Modules. In such a configuration, the Ibex CPU would go quiet after launching the VS0-based CPU, and VS0 would effectively become the only bus master on the system.
 
@@ -83,7 +86,7 @@ Here is the Instruction and Data bus verilog code:
 
 Arbiters without Overhead (most of the time)
 ============================================
-The wishbone arbiters present a minor problem, however. Arbiters typically introduce some transaction overhead. Luckily, there's a way to avoid that: I added a parameter to the arbiter module that allows you to select a default port. Transactions going through the default port will not suffer arbitration overhead when there are no requests on the other ports. The Bus Master facing arbiters have their default port connected to the CPU.
+The wishbone arbiters present a minor problem, however. Arbiters typically introduce some transaction overhead. Luckily, there's a way to avoid that: I added a parameter to the arbiter module that allows you to select a default port. Transactions going through the default port will not suffer arbitration overhead when there are no requests on the other ports. The Bus Master-facing arbiters have their default port connected to the CPU.
 
 [![Arbiter without arbitration overhead on the default port.](../assets/arbiter_wo_overhead.png)](../assets/arbiter_wo_overhead.png)
 
@@ -99,7 +102,7 @@ I replaced the 128KB CMEM and the 128KB DMEM with a single 256KB Dual Port *IMEM
 
 Dual Port VRAM
 ==============
-This isn't visible in the block diagram above, but I made VRAM a dual port memory. VRAM used to be a single port memory with a time-multiplexed bus for its various clients, the CPU being one of them. I changed it a dual port memory to give the CPU constant, low latency access to VRAM (2 clock cycles for a load or store operation) . VRAM access is now organized as shown in the following diagram:
+This isn't visible in the block diagram above, but I made VRAM a dual-port memory. Originally, VRAM was single-port with a time-multiplexed bus for its various clients, the CPU being one of them. I changed it a dual-port memory to give the CPU constant, low latency access to VRAM (2 clock cycles for a load or store operation). VRAM access is now organized as shown in the following diagram:
 
 ![Dual Port VRAM](../assets/vera_dp_vram.png)
 
@@ -107,7 +110,7 @@ This isn't visible in the block diagram above, but I made VRAM a dual port memor
 
 Instruction Cycle Counts Summary
 ================================
-All on-chip memory or register accesses are now low-latency with a known, fixed instruction cycle count. Some slaves respond a bit faster than others so the instruction cycle count varies a bit depending on the slave being addressed. 
+All on-chip memory or register accesses are now low-latency with a known, fixed instruction cycle count. Some slaves respond faster than others so the instruction cycle count varies a bit depending on the slave being addressed.
 
 The table below summarizes the instruction cycle counts on BoxLambda according to instruction type and destination.
 
@@ -146,17 +149,17 @@ The table below summarizes the instruction cycle counts on BoxLambda according t
 
 Side Quest: Building a RISC-V GNU Toolchain
 -------------------------------------------
-Currently, BoxLambda just uses whatever RISC-V GNU toolchain happens to be installed on the system. This is problematic. Different compiler versions generate different code and this may impact test results. It may even completely break the system if the compiler happens to include library routines that are built using the compressed RISC-V instruction set (no longer supported on BoxLambda).
+Currently, BoxLambda uses whatever RISC-V GNU toolchain happens to be installed on the system. This is problematic. Different compiler versions generate different code and this may impact test results. It may even completely break the system if the compiler happens to include library routines that are built using the compressed RISC-V instruction set (no longer supported on BoxLambda).
 
-I would like to include a RISC-V GNU toolchain, specifically built for BoxLambda, as part of the BoxLambda distribution. The toolchain should be built so that the executables can run out of the box on different x86_64 Linux systems (i.e. without relying on system specific shared libraries).
+I would like to include a RISC-V GNU toolchain, specifically built for BoxLambda, as part of the BoxLambda distribution. The toolchain should be built so that the executables can run out of the box on different x86_64 Linux systems (i.e. without relying on system-specific shared libraries).
 
-[Crosstool-ng](https://crosstool-ng.github.io/) make this task surprisingly easy. The tool uses a menuconfig similar to the Linux kernel menuconfig:
+[Crosstool-ng](https://crosstool-ng.github.io/) makes this task surprisingly easy. The tool uses a menuconfig similar to the Linux kernel menuconfig:
 
 ![Crosstool-ng menuconfig](../assets/ct-ng-menuconfig.png)
 
 *Crosstool-NG menuconfig.*
 
-You just focus on the specifics of the toolchain you want to build (RISC-V, 32-bit, Static Toolchain...). The tools selects good defaults for all the rest. 
+You just focus on the specifics of the toolchain you want to build (RISC-V, 32-bit, Static Toolchain...). The tool selects good defaults for all the rest.
 
 I selected:
 - Target Architecture: riscv
@@ -167,7 +170,7 @@ I selected:
 - Target OS: bare-metal
 - Additional support languages: C++
 
-After `ct-ng menuconfig` you type `ct-ng build` and the tool goes off fetching the necessary repos and tarballs, applying patches, and building the whole thing. The end result is a *riscv32-boxlambda-elf/* folder organized according to the typical GNU toolchain directory structure:
+After `ct-ng menuconfig` you type `ct-ng build` and the tool goes off fetching the necessary repos and tarballs, applying patches, and building the whole thing. The result is a *riscv32-boxlambda-elf/* folder organized according to the typical GNU toolchain directory structure:
 
 ```
 riscv32-boxlambda-elf/
@@ -219,13 +222,13 @@ Setup
   source activate_env.sh
   ```
 
-  The first three steps only need be executed once. Activating the environment is required every time you're working with BoxLambda.
+  The first three steps only need to be executed once. Activating the environment is required every time you're working with BoxLambda.
 
 ### Peeking Words with the DFX test program on FPGA
 
-The [peekw CLI command](https://github.com/epsilon537/boxlambda/blob/master/sw/components/peek_poke_cli/peek_poke_cli.cpp) in the, in addition to retrieving the value of the given register or memory location, measures the instruction cycle count of the load word (*lw*) transaction. This can be used to measure how long it takes to read a word from specific slaves (IMEM, UART...).
+The [peekw CLI command](https://github.com/epsilon537/boxlambda/blob/master/sw/components/peek_poke_cli/peek_poke_cli.cpp), in addition to retrieving the value of the given register or memory location, measures the instruction cycle count of the load word (*lw*) transaction. This can be used to measure how long it takes to read a word from specific slaves (IMEM, UART...).
 
-Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/latest/pmods/#microsd-pmod) and insert a FAT formatted SD card.
+Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/latest/pmods/#microsd-pmod) and insert a FAT-formatted SD card.
 
 Connect a terminal emulator to Arty's USB serial port. I suggest using a terminal emulator that supports Ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
 
@@ -300,7 +303,7 @@ Cycles: 3
 Conclusion
 ----------
 
-The new block diagram is quite similar to the [initial architecture](https://epsilon537.github.io/boxlambda/architecture-first-draft/) diagram I proposed when I set out on this project. I drifted away from it over time and then gravitated back. It's a straightforward architecture that meets BoxLambda's predictability and simplicity requirements. It looks very obvious. Why then did it take me so long to make something so simple? That's easy: I wasted a lot of time making it complicated.
+The new block diagram is quite similar to the [initial architecture](https://epsilon537.github.io/boxlambda/architecture-first-draft/) diagram I proposed when I set out on this project. I drifted away from it over time and then gravitated back. It's a straightforward architecture that meets BoxLambda's predictability and simplicity requirements.
 
 Are we done talking about latency yet? Almost. We haven't discussed interrupt latency yet. That'll be the topic of the next post.
 

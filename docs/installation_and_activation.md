@@ -13,7 +13,7 @@ To install BoxLambda:
 4. [Set up the environment](#setting-up-the-environment).
 5. [Activate the environment](#activating-the-tools-environment).
 
-The first four steps need be executed once. Activating the environment is required every time you're working with BoxLambda.
+The first four steps need to be executed once. Activating the environment is required every time you're working with BoxLambda.
 
 ### Getting the Repository
 
