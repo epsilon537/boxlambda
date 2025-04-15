@@ -16,7 +16,7 @@ Recap
 *The BoxLambda Block Diagram before removing the DMA Controller.*
 
 Here's a summary of the current state of BoxLambda (before removing the DMA Controller):
-- Targeting the Arty-A7-100T FPGA development board.
+- Targets the Arty-A7-100T FPGA development board.
 - Ibex RISC-V core with machine timer and hardware interrupt support.
 - Fixed latency access to CMEM, DMEM, and registers.
 - DDR3 external memory access through the Litex memory controller.
@@ -60,7 +60,7 @@ With the PicoRV DMA Controller removed and the crossbar replaced by a MUX-based 
 
 *BoxLambda SoC with Dual Bus Block Diagram.*
 
-This is a very straightforward architecture. A CPU with an instruction and a data port, each connected via their own bus to the slaves they need to be able to reach. The few slaves that have to be hooked up to both buses use a 2-to-1 wishbone arbiter to select between the two buses. In theory, the arbitration will introduce delays when there's concurrent access. In practice, the programmer will know when he's in such a situation and there will be no surprises (or maybe a little one. See the [Arbiters without Overhead](#arbiters-without-overhead-most-of-the-time) section below).
+This architecture is straightforward: A CPU with an instruction and a data port, each connected via their own bus to the slaves they need to be able to reach. The few slaves that have to be hooked up to both buses use a 2-to-1 wishbone arbiter to select between the two buses. In theory, the arbitration will introduce delays when there's concurrent access. In practice, the programmer will know when he's in such a situation and there will be no surprises (or maybe a little one. See the [Arbiters without Overhead](#arbiters-without-overhead-most-of-the-time) section below).
 
 Multiple Bus Masters, but not simultaneously
 ============================================
@@ -92,7 +92,7 @@ The wishbone arbiters present a minor problem, however. Arbiters typically intro
 
 *Arbiter without arbitration overhead on the default port.*
 
-The arbiter is based on [Alex Forencich's](https://github.com/alexforencich) wishbone arbiter. The arbiter is code-generated using a Python script:
+The arbiter design is adapted from [Alex Forencich's](https://github.com/alexforencich) wishbone arbiter implementation. The arbiter is code-generated using a Python script:
 
 [https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py](https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py)
 
@@ -170,7 +170,7 @@ I selected:
 - Target OS: bare-metal
 - Additional support languages: C++
 
-After `ct-ng menuconfig` you type `ct-ng build` and the tool goes off fetching the necessary repos and tarballs, applying patches, and building the whole thing. The result is a *riscv32-boxlambda-elf/* folder organized according to the typical GNU toolchain directory structure:
+After running `ct-ng menuconfig`, execute `ct-ng build` to start the build process. The tool goes off fetching the necessary repos and tarballs, applying patches, and building the whole thing. The result is a *riscv32-boxlambda-elf/* folder organized according to the typical GNU toolchain directory structure:
 
 ```
 riscv32-boxlambda-elf/
