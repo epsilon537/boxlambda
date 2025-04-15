@@ -1,10 +1,28 @@
 # About BoxLambda
 
-![BoxLambda Architecture Block Diagram](assets/Arch_Diagram_DFX.png)
+![BoxLambda Architecture Block Diagram](assets/Arch_Diagram_dual_bus_DFX.png)
 
 **BoxLambda** is a project that creates a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for both software and RTL experimentation.
 
 BoxLambda is a software-hardware crossover project, providing opportunities for experimentation on both the FPGA RTL side and the software side.
+
+## Feature List
+
+- Targets the Arty-A7-100T FPGA development board.
+- Ibex RISC-V core with machine timer and hardware interrupt support.
+- Stable low-latency access to internal memories and registers. Stable and documented instrucion cycle counts.
+- DDR3 external memory access through the Litex memory controller.
+- OpenOCD-based debug access on FPGA and Verilator.
+- VERA-based VGA graphics: 2 layers tile or bitmap mode, 2 banks of 64 sprites, 128KB Video RAM, 256 color palette.
+- Dual YM2149 PSG Audio.
+- SD Card Controller and FatFs File System.
+- 24-pin GPIO, UART, SPI Flash Controller, I2C Controller.
+- Real-time Clock and Calendar (RTCC) support.
+- USB HID Keyboard and Mouse support.
+- Picolibc-based standard C environment.
+- DFX Partial FPGA Reconfiguration support.
+- Test application suite covering all SoC components, running on both FPGA and Verilator.
+- Linux CMake and Bender-based Software and Gateware build system.
 
 ## Key Goals
 
@@ -14,9 +32,9 @@ BoxLambda is a software-hardware crossover project, providing opportunities for 
         - **Deterministic Behavior**: The duration of operations such as internal memory or register access must be predictable by design.
         - **Self-Contained Run-Time Environment** supporting high-level interactive and low-level systems programming.
     - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components. Optionally, support Partial FPGA Reconfiguration.
-  
+
 - Target Hardware: Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start).
-  
+
 - The computer supports the following peripherals:
     - USB HID Keyboard
     - USB HID Mouse (optional)
@@ -27,13 +45,13 @@ BoxLambda is a software-hardware crossover project, providing opportunities for 
     - Flash Memory storage
     - VGA Display
     - Audio output
-  
+
 - Sound and graphics support retro-style 2D demos and gameplay.
 
-## Status (Dec. 2024)
+## Status (April 2025)
 
-- **Infrastructure** (build system, etc.): Complete, with room for simplification.
-- **Gateware**: Complete as pictured in the Block Diagram. Of course, there’s always room for additional or alternate components.
+- **Infrastructure** (build system, etc.): Complete.
+- **Gateware**: Complete as pictured in the Block Diagram. Meeting requirements but IRQ Latency yet to be analyzed.
 - **Software**: Early stage development.
 
 ## GitHub

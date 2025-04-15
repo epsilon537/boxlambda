@@ -588,11 +588,11 @@ volatile uint32_t* const mtimecmpl = (volatile uint32_t*)(MTIMECMP_ADDR);
 
 
 void _timer_irq_handler(void) {
-  timel = *mtimel;
+  timel = *mtimel; //Retrieve current time, for check at thread-level after returning from ISR.
 
-  mtimer_disable_raw_time_cmp();
+  mtimer_disable_raw_time_cmp(); //Disable raw_time_cmp to prevent IRQ from re-firing.
 
-  //Return from interrupt
+  //Return from interrupt - ISRs in BoxLambda have the "naked" attribute which means we have to provide the proper prologue and epilogue ourselves.
   __asm__ volatile (
       "mret \n"
   );
@@ -621,6 +621,8 @@ int main(void) {
     while (timel == 0); //Wait for the IRQ.
 
     irq_latency = timel-time_cmpl-IRQ_LATENCY_OFFSET;
+
+    //There is a window due to IRQ jitter.
     if (irq_latency < irq_latency_min) irq_latency_min = irq_latency;
     if (irq_latency > irq_latency_max) irq_latency_max = irq_latency;
   }
