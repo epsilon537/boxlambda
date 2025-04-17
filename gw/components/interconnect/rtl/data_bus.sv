@@ -7,6 +7,7 @@ module data_bus #(
     parameter ARB_TYPE_ROUND_ROBIN = 0,  // select round robin arbitration
     parameter ARB_LSB_HIGH_PRIORITY = 1,  // LSB priority selection
     parameter ARB_BLOCK_ACK = 1,  // block ack generation
+    parameter ACK_INVALID_ADDR = 0,  //acknowledge accesses to invalid addresses
     parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDRESSES = {18 * ADDR_WIDTH{1'b0}},
     parameter [18*ADDR_WIDTH-1:0] SLAVE_ADDR_MASKS = {18 * ADDR_WIDTH{1'b0}}
 ) (
@@ -18,7 +19,7 @@ module data_bus #(
 
   import wb_pkg::*;
 
-  wb_if arbiter_to_mux_if (
+  wb_if arbiter_if (
       .rst(rst),
       .clk(clk)
   );
@@ -37,21 +38,52 @@ module data_bus #(
       .wbm_0(wbm[0]),
       .wbm_1(wbm[1]),
       .wbm_2(wbm[2]),
-      .wbs  (arbiter_to_mux_if)
+      .wbs  (arbiter_if)
   );
 
-  wb_mux_18_wrapper #(
-      .DATA_WIDTH(DATA_WIDTH),
-      .ADDR_WIDTH(ADDR_WIDTH),
-      .SELECT_WIDTH(SELECT_WIDTH),
-      .SLAVE_ADDRESSES(SLAVE_ADDRESSES),
-      .SLAVE_ADDR_MASKS(SLAVE_ADDR_MASKS)
-  ) mux (
-      .clk(clk),
-      .rst(rst),
-      .wbm(arbiter_to_mux_if),
-      .wbs(wbs)
-  );
+  generate
+    if (ACK_INVALID_ADDR) begin : GENERATE_WB_TIMEOUT
+      wb_if mux_if (
+          .rst(rst),
+          .clk(clk)
+      );
 
+      wb_timeout #(
+          .DUMMY_VALUE('hDEADBEEF),
+          .TIMEOUT(10'd512)
+      ) wb_timeout_inst (
+          .clk(clk),
+          .rst(rst),
+          .wbm(arbiter_if),
+          .wbs(mux_if)
+      );
+
+      wb_mux_18_wrapper #(
+          .DATA_WIDTH(DATA_WIDTH),
+          .ADDR_WIDTH(ADDR_WIDTH),
+          .SELECT_WIDTH(SELECT_WIDTH),
+          .SLAVE_ADDRESSES(SLAVE_ADDRESSES),
+          .SLAVE_ADDR_MASKS(SLAVE_ADDR_MASKS)
+      ) mux (
+          .clk(clk),
+          .rst(rst),
+          .wbm(mux_if),
+          .wbs(wbs)
+      );
+    end else begin : GENERATE_WITHOUT_TIMEOUT
+      wb_mux_18_wrapper #(
+          .DATA_WIDTH(DATA_WIDTH),
+          .ADDR_WIDTH(ADDR_WIDTH),
+          .SELECT_WIDTH(SELECT_WIDTH),
+          .SLAVE_ADDRESSES(SLAVE_ADDRESSES),
+          .SLAVE_ADDR_MASKS(SLAVE_ADDR_MASKS)
+      ) mux (
+          .clk(clk),
+          .rst(rst),
+          .wbm(arbiter_if),
+          .wbs(wbs)
+      );
+    end
+  endgenerate
 endmodule
 

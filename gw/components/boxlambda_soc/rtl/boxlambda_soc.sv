@@ -344,7 +344,8 @@ module boxlambda_soc #(
       .ARB_TYPE_ROUND_ROBIN(0),
       .ARB_BLOCK_ACK(0),
       .SLAVE_ADDRESSES(DATA_BUS_SLAVE_ADDRS),
-      .SLAVE_ADDR_MASKS(DATA_BUS_SLAVE_ADDR_MASKS)
+      .SLAVE_ADDR_MASKS(DATA_BUS_SLAVE_ADDR_MASKS),
+      .ACK_INVALID_ADDR(ACK_INVALID_ADDR)
   ) data_bus_inst (
       .clk(sys_clk),
       .rst(dm_reset),

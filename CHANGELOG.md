@@ -7,15 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## Label `boxlambda_simplified`: Changes Since Label `latency_shakeup` - 2025-03-20
 
 ### Added
-- Added ibex (gen_ibex_core) and litedram (gen_litedram_core) code generation to gateware build dependency list so manual regeneration is no longer required.
-- Enabled RISC-V bit manipulation extensions zba_zbb_zbs.
-- Added link to AMD-Xilinx DFX Controller Documentation.
+- Added ibex (*gen_ibex_core*), litedram (*gen_litedram_core*), and interconnect (*gen_wb_mux_arbiters*) code generation to gateware build dependency list so manual regeneration is no longer required.
+- (Re-)Enabled RISC-V bit manipulation extensions zba_zbb_zbs.
 - Added interrupt shadow registers to Ibex for faster interrupt handling.
 - Added interrupt latency measurement to ibex_perf_test.
 - Added mtimer register that, when written to, blocks until the lower 8 bits of mtime match the written value. This mechanism can be used to remove the IRQ jitter in timer interrupts. See *timer_uart_irqs.c* for an example.
 - Added a "long" label to the stsound_test so it can be excluded from a quick test run using 'ctest -LE long'.
-- The RISCV toolchain, custom built for BoxLambda, is included as an asset in the repo and provided as part of the environment created by the boxlambda_setup.sh/activate.sh scripts. The toolchain is called riscv32-boxlambda-elf to avoid collision with other riscv toolchains that may be installed on the system.
+- The RISCV toolchain, custom-built for BoxLambda, is included in the repo and provided as part of the environment created by the boxlambda_setup.sh/activate.sh scripts.
 - Build system checks if BoxLambda environment is active before building.
+- The peekw CLI command, measures the load-word latency (in addition to retrieving the value at the given address).
 
 ### Fixed
 
@@ -23,21 +23,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Using $RISCV_PREFIX for toolchain selection. Defaults to *riscv64-unknown-elf-gdb* if not specified by user.
 - In arty-a7 build tree, only boxlambda_base_bit, boxlambda_dfx_bit, vs0_stub_bit, and vs0_j1b_bit are built by default.
 - Renamed gw component *wbxbar* to *interconnect*.
 - Build trees are now recreated from scratch when running boxlambda_setup.sh.
-- Made SDL2 optional: if it's installed, the *vera_integrated* test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criterium.
-- Replaced CMEM and DMEM with one Dual Port Memory named IMEM (Internal memory). Port 0 is for instructions, port 1 is for data.
-- Replaced the crossbar+shared bus based interconnect with a dual bus interconnect: an instruction bus and a data bus.
-- Made VERA's VRAM dual port, reducing CPU access latency.
+- Made SDL2 optional: if it's installed, the *vera_integrated* test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criteria.
+- Replaced CMEM and DMEM with one Dual-Port Memory named IMEM (Internal memory). Port 0 is for instructions, port 1 is for data.
+- Replaced the crossbar-based interconnect with a dual-bus interconnect: an Instruction Bus and a Data Bus.
+- Made VERA's VRAM dual-port, reducing CPU access latency.
 - Simplified gateware build system:
   - make *project*_synth always (re)synthesizes the component or project.
-  - make *project*_bit always (re)synthesize, (re)implements and (re)generates the bitstream including the software image
-  - make *project*_sim always (re)creates the verilator simulation model including the software image.
+  - make *project*_bit always (re)synthesizes, (re)implements and (re)generates the bitstream including the software image.
+  - make *project*_sim always (re)builds the verilator simulation model including the software image.
   - make *project*_update_sw updates the software image in the bitstream file or Vmodel directory without triggering (re)synthesis, (re)implementation, and/or Vmodel (re)generation.
   - make *reconfigurable_module*_bit expects the reference static design project to be built first.
-- Simplified simulation build system: make *project*_sim builds the simulation executable including software image.
 - The imem-to-flash vector memory image (*imem.mem* - the default content of IMEM) is no longer checked into the source tree. It's an object derived from the *imem_to_flash_vector* SW project. *Imem.mem* is now automatically generated during the gateware codegeneraton step (*gw_codegen*) of the build system.
 - Switched to CMake 4.0.0.
 

@@ -27,7 +27,7 @@ sources:
       USB_HID:  ~
       SPIFLASH: ~
       I2C: ~
-      VS0: ~
+      #VS0: ~
       ACK_INVALID_ADDR:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
@@ -45,7 +45,7 @@ sources:
       USB_HID:  ~
       SPIFLASH: ~
       I2C: ~
-      VS0: ~
+      #VS0: ~
       ACK_INVALID_ADDR:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:

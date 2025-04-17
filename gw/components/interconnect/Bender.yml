@@ -28,14 +28,24 @@ sources:
       - rtl/wb_mux_4_wrapper.sv
       - rtl/wb_arbiter_3_wrapper.sv
       - rtl/wb_arbiter_2_wrapper.sv
-      - ../../../sub/verilog-wishbone/rtl/wb_arbiter_3.v
-      - ../../../sub/verilog-wishbone/rtl/wb_arbiter_2.v
+      - rtl/wb_timeout.sv
       - ../../../sub/verilog-wishbone/rtl/arbiter.v
       - ../../../sub/verilog-wishbone/rtl/priority_encoder.v
-      - ../../../sub/verilog-wishbone/rtl/wb_mux_18.v
-      - ../../../sub/verilog-wishbone/rtl/wb_mux_4.v
+
+  - target: verilator
+    files:
+      - ../../../build/sim-a7-100/codegen/interconnect/wb_mux_18.v
+      - ../../../build/sim-a7-100/codegen/interconnect/wb_mux_4.v
+      - ../../../build/sim-a7-100/codegen/interconnect/wb_arbiter_2.v
+      - ../../../build/sim-a7-100/codegen/interconnect/wb_arbiter_3.v
 
 
+  - target: vivado
+    files:
+      - ../../../build/arty-a7-100/codegen/interconnect/wb_mux_18.v
+      - ../../../build/arty-a7-100/codegen/interconnect/wb_mux_4.v
+      - ../../../build/arty-a7-100/codegen/interconnect/wb_arbiter_2.v
+      - ../../../build/arty-a7-100/codegen/interconnect/wb_arbiter_3.v
 
 
 

@@ -8,7 +8,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
       VERBATIM
   )
 
-  #Add gen_litedram_core to to gateware codegeneration dependency list.
+  #Add gen_litedram_core to the gateware codegeneration dependency list.
   add_dependencies(gw_codegen gen_litedram_core)
 else()
   #Add a rule so the core can be regenerated using make gen_litedram_core
@@ -20,7 +20,7 @@ else()
       VERBATIM
   )
 
-  #Add gen_litedram_core to to gateware codegeneration dependency list.
+  #Add gen_litedram_core to the gateware codegeneration dependency list.
   add_dependencies(gw_codegen gen_litedram_core)
 endif()
 

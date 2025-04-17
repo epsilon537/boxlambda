@@ -1,14 +1,14 @@
 `verilator_config
 
-lint_off -rule UNUSEDSIGNAL -file "*/sub/ibex_wb/rtl/wb_if.sv" -match "Signal is not used: 'rst'*"
+lint_off -rule UNUSEDSIGNAL -file "*/wb_if.sv" -match "Signal is not used: 'rst'*"
 
-lint_off -rule UNUSEDSIGNAL -file "*/sub/ibex_wb/rtl/wb_if.sv" -match "Signal is not used: 'clk'*"
+lint_off -rule UNUSEDSIGNAL -file "*/wb_if.sv" -match "Signal is not used: 'clk'*"
 
-lint_off -rule UNUSEDSIGNAL -file "*/sub/verilog-wishbone/rtl/wb_mux_18.v" -match "Signal is not used: 'clk'*"
+lint_off -rule UNUSEDSIGNAL -file "*/wb_mux_18.v" -match "Signal is not used: 'clk'*"
 
-lint_off -rule UNUSEDSIGNAL -file "*/sub/verilog-wishbone/rtl/wb_mux_18.v" -match "Signal is not used: 'rst'*"
+lint_off -rule UNUSEDSIGNAL -file "*/wb_mux_18.v" -match "Signal is not used: 'rst'*"
 
-lint_off -rule UNUSEDSIGNAL -file "*/sub/verilog-wishbone/rtl/wb_mux_4.v" -match "Signal is not used: 'clk'*"
+lint_off -rule UNUSEDSIGNAL -file "*/wb_mux_4.v" -match "Signal is not used: 'clk'*"
 
-lint_off -rule UNUSEDSIGNAL -file "*/sub/verilog-wishbone/rtl/wb_mux_4.v" -match "Signal is not used: 'rst'*"
+lint_off -rule UNUSEDSIGNAL -file "*/wb_mux_4.v" -match "Signal is not used: 'rst'*"
 

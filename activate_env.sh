@@ -41,9 +41,9 @@ fi
 #Tweaking the prompt
 if [ -n "${ZSH_VERSION-}" ] ; then
     autoload -U colors && colors
-    PS1="%{$fg[magenta]%}(BoxLambda `git rev-parse --abbrev-ref HEAD`)%{$reset_color%}${_ORIG_PS1}"
+    PS1="%{$fg[magenta]%}(BoxLambda-`git rev-parse --abbrev-ref HEAD`)%{$reset_color%}${_ORIG_PS1}"
 else
-    PS1="(\e[35mBoxLambda `git rev-parse --abbrev-ref HEAD`\e[0m)${_ORIG_PS1}"
+    PS1="\[\033[1;35m\](BoxLambda-`git rev-parse --abbrev-ref HEAD`)\[\033[0m\]${_ORIG_PS1}"
 fi
 export PS1
 
