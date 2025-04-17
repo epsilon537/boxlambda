@@ -190,5 +190,5 @@ int main(int argc, char** argv, char** env) {
 
     cleanup();
 
-    return 0;
+    return res;
 }

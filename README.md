@@ -6,7 +6,7 @@
 
 BoxLambda is a software-hardware crossover project, providing opportunities for experimentation on both the FPGA RTL side and the software side.
 
-## Feature List
+## Current Features
 
 - Targets the Arty-A7-100T FPGA development board.
 - Ibex RISC-V core with machine timer and hardware interrupt support.

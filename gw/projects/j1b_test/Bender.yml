@@ -26,7 +26,7 @@ sources:
       VERA: ~
       SPIFLASH: ~
       I2C: ~
-      VS0: ~
+      #VS0: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_base/rtl/boxlambda_top.sv
@@ -42,7 +42,7 @@ sources:
       VERA: ~
       SPIFLASH: ~
       I2C: ~
-      VS0: ~
+      #VS0: ~
       #TRACE_ALL_INSTRUCTIONS: ~
     files:
       - ../boxlambda_base/rtl/boxlambda_top.sv
