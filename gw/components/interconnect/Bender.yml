@@ -28,6 +28,7 @@ sources:
       - rtl/wb_mux_4_wrapper.sv
       - rtl/wb_arbiter_3_wrapper.sv
       - rtl/wb_arbiter_2_wrapper.sv
+      - rtl/wb_timeout.sv
       - ../../../sub/verilog-wishbone/rtl/arbiter.v
       - ../../../sub/verilog-wishbone/rtl/priority_encoder.v
 
