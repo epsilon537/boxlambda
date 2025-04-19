@@ -26,7 +26,6 @@ function(link_and_create_image _tgt _link_script)
             # sw/components/bootstrap
             -nostartfiles
             -T${_link_script}
-            "--specs=${CMAKE_BINARY_DIR}/sw/picolibc.specs"
             "LINKER:--defsym=__imem_size=${IMEM_SIZE}"
             "LINKER:--gc-sections"
             "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"

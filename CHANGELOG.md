@@ -28,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Build trees are now recreated from scratch when running boxlambda_setup.sh.
 - Made SDL2 optional: if it's installed, the *vera_integrated* test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criteria.
 - Replaced CMEM and DMEM with one Dual-Port Memory named IMEM (Internal memory). Port 0 is for instructions, port 1 is for data.
-- Replaced the crossbar-based interconnect with a dual-bus interconnect: an Instruction Bus and a Data Bus.
+- Replaced the crossbar-based interconnect with a dual-bus interconnect: an Instruction Bus and a Data Bus. The Data Bus has the option to acknowledge transactions if the slave doesn't respond within a timeout period.
 - Made VERA's VRAM dual-port, reducing CPU access latency.
 - Simplified gateware build system:
   - make *project*_synth always (re)synthesizes the component or project.
@@ -38,10 +38,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - make *reconfigurable_module*_bit expects the reference static design project to be built first.
 - The imem-to-flash vector memory image (*imem.mem* - the default content of IMEM) is no longer checked into the source tree. It's an object derived from the *imem_to_flash_vector* SW project. *Imem.mem* is now automatically generated during the gateware codegeneraton step (*gw_codegen*) of the build system.
 - Switched to CMake 4.0.0.
+- Renamed picolibc configuration scripts to a boxlambda basename.
 
 ### Removed
 
 - Removed picorv_dma component.
+- Removed sw/picolibc-install because derived objects don't belong in a source tree. Picolibc is now built and installed in the build tree during build tree configuration.
 
 ## Label `latency_shakeup`: Changes Since Label `boxlambda_base` - 2025-03-18
 

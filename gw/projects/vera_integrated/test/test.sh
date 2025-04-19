@@ -16,7 +16,7 @@ if [ "$RES" -ne "0" ]; then
   echo "Vmodel returned unsuccessfully. Test Failed!"
   exit -1
 else
-  echo "Vmodle returned successfully."
+  echo "Vmodel returned successfully."
 fi
 
 echo "Checking frame file..."
