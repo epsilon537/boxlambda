@@ -5,7 +5,7 @@ hide:
 
 ## USB HID Keyboard and Mouse Test
 
-The USB HID System Test Case, running both on Verilator and on FPGA, continuously polls the two USB cores for report events. Whenever there's a report event (indicated in the *USB_HID_ISR* register), the device type (Keyboard/Mouse) and report details (mouse movement, keypress...) are printed.
+The USB HID System Test Case, running both on Verilator and on FPGA, continuously polls the two USB cores for report events. Whenever there's a report event (indicated in the `USB_HID_ISR` register), the device type (Keyboard/Mouse) and report details (mouse movement, keypress...) are printed.
 
 Additionally, when Switch 0 (SW0) is set to *On* and a USB keyboard is connected, the keyboard LEDs will be turned on and off in a rotating pattern.
 
@@ -43,7 +43,7 @@ USB0 mouse report: 0xcffcfc001000100
 Test passed.
 ```
 
-The *ledg_1 = ...* lines indicate a LED update in the emulated USB keyboard.
+The `ledg_1 = ...` lines indicate a LED update in the emulated USB keyboard.
 
 ### The USB HID Test on FPGA
 

@@ -5,7 +5,7 @@ hide:
 
 ## FatFS
 
-- **FatFs Repo**, BoxLambda fork, *boxlambda* branch:
+- **FatFs Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/fatfs/tree/boxlambda](https://github.com/epsilon537/fatfs/tree/boxlambda)
 
 - **FatFs Submodule in the BoxLambda Directory Tree**:
@@ -19,7 +19,7 @@ hide:
 
 [FatFs](http://elm-chan.org/fsw/ff/00index_e.html) is a lightweight software library for small systems that implements FAT file system support. It's written in ANSI C89 and has no dependencies other than a minimal C environment. It'll compile out of the box in virtually any environment.
 
-FatFs itself does not provide the device/media-specific _Storage Device_ Controls*. Those have to come from the device implementer. The SDSPI submodule provides these functions for FatFs. Four files are provided: [sdcard.c, sdcard.h, diskio.c, and board.h](https://github.com/epsilon537/sdspi/tree/boxlambda/sw).
+FatFs itself does not provide the device/media-specific *Storage Device Controls*. Those have to come from the device implementer. The SDSPI submodule provides these functions for FatFs. Four files are provided: [sdcard.c, sdcard.h, diskio.c, and board.h](https://github.com/epsilon537/sdspi/tree/boxlambda/sw).
 
 ![FatFs Media Access Interface.](assets/FatFs_Media_Access_Interface.drawio.png)
 
@@ -28,11 +28,11 @@ FatFs itself does not provide the device/media-specific _Storage Device_ Control
 ### FatFs Configuration
 
 FatFs is very configurable, so you can trade options for footprint.
-All configuration options are well-documented and centralized in the *ffconf.h* file.
+All configuration options are well-documented and centralized in the `ffconf.h` file.
 Relative to the default settings, I modified the following:
 
-- **Enable FF_USE_FIND**: filtered directory read functions, *f_findfirst()* and *f_findnext()*.
-- **Enable FF_USE_STRFUNC**: string functions, *f_gets()*, *f_putc()*, *f_puts()*, and *f_printf()*.
+- **Enable FF_USE_FIND**: filtered directory read functions, `f_findfirst()` and `f_findnext()`.
+- **Enable FF_USE_STRFUNC**: string functions, `f_gets()`, `f_putc()`, `f_puts()`, and `f_printf()`.
 - **Enable FF_FS_RPATH**: support for relative paths.
 - **Enable FF_FS_NORTC**: I *disabled* the timestamp feature. I will revisit this when I bring up RTC on BoxLambda.
 

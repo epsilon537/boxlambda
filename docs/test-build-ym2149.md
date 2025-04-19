@@ -18,12 +18,12 @@ Execute the generated Verilator model:
 DAC Output File: dac_out.py
 PCM Output File: pcm_out.py
 ```
-The Verilator model should have generated Python files *dac_out.py* and *pcm_out.py*:
+The Verilator model should have generated Python files `dac_out.py` and `pcm_out.py`:
 ```
 ls *.py
 dac_out.py  pcm_out.py
 ```
-Execute the Audio DAC Test Python script. Pass in the *-p* option to see the plots. You should see a frequency domain plot, a time domain plot, and the correlation match between the PCM and the DAC signals:
+Execute the Audio DAC Test Python script. Pass in the `-p` option to see the plots. You should see a frequency domain plot, a time domain plot, and the correlation match between the PCM and the DAC signals:
 ```
 PYTHONPATH="." ../../../../../gw/projects/audio_dac_test/test/dac_test.py -p
 Time Domain Correlation: 1.000000
@@ -71,12 +71,12 @@ YM2149 test.
 YM2149 config complete.
 No overflows detected.
 ```
-The Verilator model should have generated Python files *dac_out.py* and *pcm_out.py*:
+The Verilator model should have generated Python files `dac_out.py` and `pcm_out.py`:
 ```
 ls *.py
 dac_out.py  pcm_out.py
 ```
-Execute the YM2149 DAC Test Python script. Pass in the *-p* flag to see the plot. The plot should show a frequency spectrum plot with six pitches. The script's terminal output should look like this:
+Execute the YM2149 DAC Test Python script. Pass in the `-p` flag to see the plot. The plot should show a frequency spectrum plot with six pitches. The script's terminal output should look like this:
 ```
 PYTHONPATH="." ../../../../../gw/projects/ym2149_dac_test/test/ym2149_test.py -p
 Detected pitches:
@@ -148,7 +148,7 @@ Starting playback...
 No overflows detected.
 Test passed.
 ```
-The Verilator model should have generated Python file *pcm_out.py*:
+The Verilator model should have generated Python file `pcm_out.py`:
 ```
 ls *.py
 pcm_out.py

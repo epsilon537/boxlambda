@@ -80,7 +80,7 @@ The Layer Render's implementation is, conceptually at least, reasonably straight
 Steps 1 and 2 are always sequential, but as much as possible they overlap with step 3, i.e. while pixel data is being rendered out to the Line Buffer, new map and/or tile data is being retrieved from VRAM.
 
 Below you see the waveform of the Layer Renderer operating in 8bpp Tile Mode, 8 pixel wide tiles. One full FSM (Finite State Machine) cycle is shown, i.e. the pattern between the two vertical cursors is repeating.
-You can see the VRAM reads (*buf_strobe* and *bus_ack*) happening in parallel with the Line Buffer writes (*lb_wridx_r*). You can also see how the Renderer FSM cycles through its states (*fetch map*, *wait fetch map*, *fetch tile*, *wait fetch tile*, *render*, etc.).
+You can see the VRAM reads (`buf_strobe` and `bus_ack`) happening in parallel with the Line Buffer writes (`lb_wridx_r`). You can also see how the Renderer FSM cycles through its states (`fetch map`, `wait fetch map`, `fetch tile`, `wait fetch tile`, `render`, etc.).
 
 ![Layer Rendering Waveform.](assets/layer_render_l0_only_tile_mode_8bpp_tile_w_8.jpg)
 

@@ -29,7 +29,7 @@ OpenOCD is an open-source software package used to interface with a hardware deb
 - `tech_cells_generic`: [https://github.com/pulp-platform/tech_cells_generic](https://github.com/pulp-platform/tech_cells_generic)
 - `pulpino`: [https://github.com/pulp-platform/pulpino](https://github.com/pulp-platform/pulpino)
 
-As their names suggest, *common_cells* and *tech_cells_generic* provide essential building blocks like FIFOs, CDC logic, and reset logic. The *pulpino* dependency is minimal, limited to a few clock management cells.
+As their names suggest, `common_cells` and `tech_cells_generic` provide essential building blocks like FIFOs, CDC logic, and reset logic. The `pulpino` dependency is minimal, limited to a few clock management cells.
 
 To integrate these dependencies, git submodules were created under the `sub/` directory in the BoxLambda repository. A `Bender.yml` manifest in the RISCV-DBG component directory references all the necessary sources:
 [gw/components/riscv-dbg/Bender.yml](https://github.com/epsilon537/boxlambda/blob/master/gw/components/riscv-dbg/Bender.yml).
@@ -119,7 +119,7 @@ The most straightforward approach for debugging on the Arty-A7 FPGA would be to 
 On the Arty-A7, bitstream programming is done through the FTDI-based USB serial port, eliminating the need for special adapters. The **RISCV-DBG** codebase provides two variants for this configuration:
 
 - [`dmi_jtag_tap.sv`](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_jtag_tap.sv): Connects the JTAG TAP to external pins.
-- [`dmi_bscane_tap.sv`](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_bscane_tap.sv): Integrates the JTAG TAP into the FPGA scan chain using the Xilinx *BSCANE* primitive.
+- [`dmi_bscane_tap.sv`](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_bscane_tap.sv): Integrates the JTAG TAP into the FPGA scan chain using the Xilinx `BSCANE` primitive.
 
 Both files implement the same module (`dmi_jtag_tap`) with identical ports, enabling seamless swapping. By default, BoxLambda builds the `BSCANE` variant for the Arty-A7.
 

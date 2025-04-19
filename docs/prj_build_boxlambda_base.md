@@ -18,7 +18,7 @@ This build expects to find the software image to boot in flash memory.
 
 Connect a terminal emulator to the Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the flash image for one of the non-DFX software projects in the Arty A7 build tree. Using the *ddr_test* flash image as an example:
+Build the flash image for one of the non-DFX software projects in the Arty A7 build tree. Using the `ddr_test` flash image as an example:
 
 ```
 cd build/arty-a7-100/sw/projects/ddr_test

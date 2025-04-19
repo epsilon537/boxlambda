@@ -92,8 +92,8 @@ The VS0 core is part of the 50 MHz System Clock Domain.
 The easiest way to create a new VS0 RM is to copy the `vs0_stub` component directory and make the following modifications:
 
 1. Replace the stub module definitions in `rtl/vs0.vs` with the logic you want. Do not modify the module interface.
-2. In the `Bender.yml` file, rename *vs0_stub* to your component's name.
-3. In the `CMakeLists.txt` file, rename *vs0_stub* to your component's name.
+2. In the `Bender.yml` file, rename `vs0_stub` to your component's name.
+3. In the `CMakeLists.txt` file, rename `vs0_stub` to your component's name.
 4. Add your new VS0 component directory to the build system by adding an `add_subdirectory(<vs0_component_name>)` line to the file `gw/components/CMakeLists.txt`.
 
 ### Building a VS0 Bitstream (DFX)

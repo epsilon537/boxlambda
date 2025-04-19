@@ -20,5 +20,5 @@ The BoxLambda SoC module is defined as a gateware component. The [Gateware Build
 
 *Build diagram with the BoxLambda SoC component and `boxlambda_top.sv`.*
 
-Different `gw/project/` builds reference this *boxlambda_soc* component. The project builds vary in the way they instantiate the *boxlambda_soc* module, including or excluding specific subcomponents. Most `gw/projects` reference the same [boxlambda_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_top/rtl/boxlambda_top.sv) module but with a different combination of *defines* in their `Bender.yml` manifest.
+Different `gw/project/` builds reference this `boxlambda_soc` component. The project builds vary in the way they instantiate the `boxlambda_soc` module, including or excluding specific subcomponents. Most `gw/projects` reference the same [boxlambda_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_top/rtl/boxlambda_top.sv) module but with a different combination of *defines* in their `Bender.yml` manifest.
 

@@ -7,7 +7,7 @@ hide:
 
 ### The Timer, UART, and GPIO Interrupt Test on Verilator
 
-Build the *timer_uart_gpio_irqs* gateware project:
+Build the `timer_uart_gpio_irqs` gateware project:
 
 ```
 cd build/sim-a7-100/gw/projects/timer_uart_gpio_irqs
@@ -71,7 +71,7 @@ SIM: Test passed.
 
 Connect a terminal emulator to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the *timer_uart_gpio_irqs* gateware project in an Arty A7 build tree:
+Build the `timer_uart_gpio_irqs` gateware project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/timer_uart_gpio_irqs

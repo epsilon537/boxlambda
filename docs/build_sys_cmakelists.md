@@ -31,7 +31,7 @@ The component's sources, Vivado IPs, flags, and dependencies are defined in its 
 
 ### DFX Components
 
-DFX Components require additional build rules. A DFX Reconfigurable Module needs to be implemented and turned into a bitstream that can be dynamically loaded onto a DFX-enabled system. The build rules to do that are defined in the *gw_rm_rules_dfx()* function. Calling this function results in a `<component>_bit` target being defined. Building that target results in a DFX partial bitstream of the given component.
+DFX Components require additional build rules. A DFX Reconfigurable Module needs to be implemented and turned into a bitstream that can be dynamically loaded onto a DFX-enabled system. The build rules to do that are defined in the `gw_rm_rules_dfx()` function. Calling this function results in a `<component>_bit` target being defined. Building that target results in a DFX partial bitstream of the given component.
 
 Here is an example:
 
@@ -94,13 +94,13 @@ else()
 endif()
 ```
 
-The project's sources, flags, dependencies, Vivado IPs, and constraint files are defined in its *bender.yml* manifest. The reference to the SW project delivering the memory file is *not* defined in the Bender manifest, however. The SW project name is passed in as the *MEM_FILE_TARGET* parameter in the *gw_project_rules_vivado|verilator()* call.
+The project's sources, flags, dependencies, Vivado IPs, and constraint files are defined in its `Bender.yml` manifest. The reference to the SW project delivering the memory file is *not* defined in the Bender manifest, however. The SW project name is passed in as the `MEM_FILE_TARGET` parameter in the `gw_project_rules_vivado|verilator()` call.
 
 Any test cases are also added to the project's `CMakeLists.txt` file.
 
 ## A DFX Project CMakeList
 
-The build rules for a DFX-enabled project are created by the *gw_project_rules_dfx_vivado()* CMake function. Calling this function results in the creation of a `<project>_bit`, a `<project>_load`, and a `<project>_flash_gw` target. Building the `<project>_bit` target results in a bitstream file that can be `_loaded` or `_gw_flashed` onto the target. The gateware image expects to find a software image on flash to boot from.
+The build rules for a DFX-enabled project are created by the `gw_project_rules_dfx_vivado()` CMake function. Calling this function results in the creation of a `<project>_bit`, a `<project>_load`, and a `<project>_flash_gw` target. Building the `<project>_bit` target results in a bitstream file that can be `_loaded` or `_gw_flashed` onto the target. The gateware image expects to find a software image on flash to boot from.
 
 Here is an example:
 
@@ -204,5 +204,5 @@ The build recipes are implemented as separate scripts outside the CMakeLists so 
 
 The CMake build instructions define the various targets and the relationships between them and invoke the above build scripts when needed.
 
-The CMake build definitions are located as close as possible to the part of the tree to which they apply, e.g. the *gw_project_rules()* function can be found in the [gw/projects/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/CMakeLists.txt) file. *Gw_component_rules()* can be found in the [gw/components/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/components/CMakeLists.txt) file. Gateware build instructions common to both components and projects are located in the [gw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/CMakeLists.txt) file.
+The CMake build definitions are located as close as possible to the part of the tree to which they apply, e.g. the `gw_project_rules()` function can be found in the [gw/projects/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/CMakeLists.txt) file. `Gw_component_rules()` can be found in the [gw/components/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/components/CMakeLists.txt) file. Gateware build instructions common to both components and projects are located in the [gw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/CMakeLists.txt) file.
 

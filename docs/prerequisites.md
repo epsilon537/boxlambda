@@ -39,7 +39,7 @@ Version 4.0.0 or later.
 
 On Ubuntu, follow these instructions: [https://apt.kitware.com/](https://apt.kitware.com/)
 
-Make sure that the correct CMake version is first in your PATH. The Vivado */tools/Xilinx/Vivado/2023.1/settings64.sh* script adds an old version of CMake to your path. I override that by re-adding */usr/bin* to the front of the PATH after sourcing the Vivado script:
+Make sure that the correct CMake version is first in your PATH. The Vivado `/tools/Xilinx/Vivado/2023.1/settings64.sh` script adds an old version of CMake to your path. I override that by re-adding `/usr/bin` to the front of the PATH after sourcing the Vivado script:
 
 ```
 source /tools/Xilinx/Vivado/2023.1/settings64.sh
@@ -101,7 +101,7 @@ sudo apt-get install perl.
 
 ### Hidden Tool Dependencies
 
-The following tools are automatically installed (if not already installed) by sourcing the *activate_env.sh* script:
+The following tools are automatically installed (if not already installed) by sourcing the `activate_env.sh` script:
 
 - [OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD, Python)](https://github.com/YosysHQ/oss-cad-suite-build)
 - [Bender](https://github.com/pulp-platform/bender)

@@ -5,7 +5,7 @@ hide:
 
 ## Dual YM2149 PSG Sound Core
 
-- **YM2149_PSG_system Repo**, BoxLambda fork, *boxlambda* branch:
+- **YM2149_PSG_system Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/YM2149_PSG_system](https://github.com/epsilon537/YM2149_PSG_system).
 
 - **YM2149_PSG_system Submodule in the BoxLambda Directory Tree**:
@@ -57,14 +57,14 @@ My initial plan was to instantiate this core twice and add the PCM output signal
 
 The project even supports I2S output, but currently, I just have a simple audio amplifier PMOD, so I wouldn't be using I2S (I added it to the wishlist).
 
-For the most part, I was able to use the *YM2149_PSG_system* code as-is. I just had to make a few small tweaks to integrate the core into BoxLambda:
+For the most part, I was able to use the `YM2149_PSG_system` code as-is. I just had to make a few small tweaks to integrate the core into BoxLambda:
 
 - I added a Wishbone front end.
-- I made I2S support optional, controlled by a *USE_I2S* define.
-- Rather than have the top-level YM2149_PSG_system module include the Verilog files of the submodules it depends on, I added all required modules separately to the BoxLambda project in a *Bender.yml* manifest (see [here](build_sys_gw_build_struct.md#bender) for more info on Bender). BoxLambda's build system dependency checking doesn't work well will Verilog modules including other Verilog modules.
+- I made I2S support optional, controlled by a `USE_I2S` define.
+- Rather than have the top-level YM2149_PSG_system module include the Verilog files of the submodules it depends on, I added all required modules separately to the BoxLambda project in a `Bender.yml` manifest (see [here](build_sys_gw_build_struct.md#bender) for more info on Bender). BoxLambda's build system dependency checking doesn't work well will Verilog modules including other Verilog modules.
 - I made a few code tweaks to pacify Vivado's synthesizer.
 
-I forked the *YM2149_PSG_system* repo to track my changes:
+I forked the `YM2149_PSG_system` repo to track my changes:
 
 [https://github.com/epsilon537/YM2149_PSG_system](https://github.com/epsilon537/YM2149_PSG_system)
 
@@ -74,15 +74,15 @@ I forked the *YM2149_PSG_system* repo to track my changes:
 
 *YM2149 PSG System Block Diagram.*
 
-The design of the *YM2149_PSG_system* core is easy to follow:
+The design of the `YM2149_PSG_system` core is easy to follow:
 
 - `YM2149_PSG_system_wb` is a Wishbone wrapper around the **YM2149_PSG_system** core.
-- `BHG_jt49` represents one YM2149 device. *YM2149_PSG_system* instantiates two such modules and feeds their output to the `BHG_audio_filter_mixer`.
-- *BHG_audio_filter_mixer* implements mixing logic, individual channel volume controls, master volume control, treble, and bass controls.
-- Looking into the *BHG_jt49* module:
+- `BHG_jt49` represents one YM2149 device. `YM2149_PSG_system` instantiates two such modules and feeds their output to the `BHG_audio_filter_mixer`.
+- `BHG_audio_filter_mixer` implements mixing logic, individual channel volume controls, master volume control, treble, and bass controls.
+- Looking into the `BHG_jt49` module:
   - `jt49_div` is a configurable square wave generator module. It is instantiated three times, so we have three channels.
   - `jt49_noise` is a noise generator module (e.g. for percussion effects).
-  - `jt49_eg` with the assistance of a fourth *jt49_div* instance is the sound envelope generator.
+  - `jt49_eg` with the assistance of a fourth `jt49_div` instance is the sound envelope generator.
   - `jt49_cent` generates clock enables at the appropriate rate for the above modules.
   - `BHG_jt49_exp` provides decibel-based volume attenuation through a look-up table.
 
@@ -90,7 +90,7 @@ The core can be configured to produce stereo I2S output, but for BoxLambda we'll
 
 ### A Second Order Delta-Sigma DAC
 
-The *YM2149_PSG_System* core produces 16-bit PCM audio. The audio amplifier PMOD expects the audio signal on a single pin, however. To bring 16-bit PCM audio to a single digital pin, we need a **one-bit Digital-to-Analog converter**. If you've never heard of one-bit DACs before, it probably sounds terrible, but it works quite well. The idea is to generate, at a rate much higher than the input sample rate, a stream of pulses such that a moving average going over the pulse stream produces a signal that tracks the input 16-bit PCM signal.
+The `YM2149_PSG_System` core produces 16-bit PCM audio. The audio amplifier PMOD expects the audio signal on a single pin, however. To bring 16-bit PCM audio to a single digital pin, we need a **one-bit Digital-to-Analog converter**. If you've never heard of one-bit DACs before, it probably sounds terrible, but it works quite well. The idea is to generate, at a rate much higher than the input sample rate, a stream of pulses such that a moving average going over the pulse stream produces a signal that tracks the input 16-bit PCM signal.
 
 ![1-bit delta-sigma modulation (blue) of a sine wave (red).](assets/Pulse-density_modulation_1_period.gif)
 
@@ -134,7 +134,7 @@ Here's the top-level Verilog:
 
 The Verilator testbench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The testbench will also flag an error if any accumulator overflows are reported.
 
-The Verilator testbench executes for 0.5s simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/test/dac_test.py)) imports the generated *pcm_out.py* and *dac_out.py* and performs the following operations:
+The Verilator testbench executes for 0.5s simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
 
 1. The PCM samples and DAC samples are converted to numpy arrays and normalized.
 2. Both signals are sent through a low-pass filter.
@@ -150,11 +150,11 @@ See [here](test-build-ym2149.md#audio-dac-test-on-verilator) for instructions to
 
 ### The YM2149 DAC Test Project - a Chord of Six Pitches.
 
-This test project is a BoxLambda SoC with the *YM2149_PSG_system* core and the one-bit DAC integrated.
-Through software, the *YM2149_PSG_system* core is configured to produce six tones at six different pitches.
-Similar to the previous test, the Verilator testbench code checks for accumulator overflows and saves the generated audio samples to *pcm_out.py* and *dac_out.py* for further analysis in Python.
+This test project is a BoxLambda SoC with the `YM2149_PSG_system` core and the one-bit DAC integrated.
+Through software, the `YM2149_PSG_system` core is configured to produce six tones at six different pitches.
+Similar to the previous test, the Verilator testbench code checks for accumulator overflows and saves the generated audio samples to `pcm_out.py` and `dac_out.py` for further analysis in Python.
 
-The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/ym2149_dac_test/test/ym2149_test.py)) imports the generated *dac_out.py* and performs the following operations:
+The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/ym2149_dac_test/test/ym2149_test.py)) imports the generated `dac_out.py` and performs the following operations:
 
 1. The DAC samples are converted to a numpy array and normalized.
 2. The normalized signal is sent through a low-pass filter.

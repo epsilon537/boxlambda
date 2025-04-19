@@ -27,12 +27,12 @@ To make space for the keyboard and mouse, I moved the audio PMOD to the ChipKit 
 
 | Audio PMOD Pin | Arty A7 Board Pin |
 |----------------|-------------------|
-| 1 (*AIN*) | ChipKit Header IO0 |
-| 2 (*GAIN*) | ChipKit Header IO1 |
+| 1 `AIN` | ChipKit Header IO0 |
+| 2 `GAIN` | ChipKit Header IO1 |
 | 3 | Not Connected |
-| 4 (*~SHUTDOWN*) | ChipKit Header IO3 |
-| 5 (*GND*) | ChipKit Header GND |
-| 6 (*VCC*) | ChipKit Header 3V3 |
+| 4 `~SHUTDOWN` | ChipKit Header IO3 |
+| 5 `GND` | ChipKit Header GND |
+| 6 `VCC` | ChipKit Header 3V3 |
 
 ![Audio PMOD Setup.](assets/audio_pmod.jpg)
 
@@ -64,10 +64,10 @@ There aren't enough PMOD ports on the Arty A7 to accommodate all BoxLambda perip
 
 | RTCC PMOD Pin | Arty A7 Board Pin |
 |----------|-------------|
-| 1 (*SCL*) | ChipKit Header SCL |
-| 2 (*SDA*) | ChipKit Header SDA |
-| 3 (*GND*) | ChipKit Header GND |
-| 4 (*VCC*) | ChipKit Header IOREF |
+| 1 `SCL` | ChipKit Header SCL |
+| 2 `SDA` | ChipKit Header SDA |
+| 3 `GND` | ChipKit Header GND |
+| 4 `VCC` | ChipKit Header IOREF |
 
 ![RTCC PMOD Setup.](assets/rtcc_pmod.jpg)
 

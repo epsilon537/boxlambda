@@ -5,7 +5,7 @@ hide:
 
 ## GPIO
 
-- **GPIO Repo**, BoxLambda fork, *boxlambda* branch:
+- **GPIO Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/gpio](https://github.com/epsilon537/gpio)
 
 - **GPIO Submodule in the BoxLambda Directory Tree**:

@@ -5,7 +5,7 @@ hide:
 
 ## I2C
 
-- **I2C Repo**, BoxLambda fork, *boxlambda* branch:
+- **I2C Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/wbi2c](https://github.com/epsilon537/wbi2c)
 
 - **I2C Submodule in the BoxLambda Directory Tree**:
@@ -82,7 +82,7 @@ To read from a single I2C slave register:
     - the number of bytes to read (1 in case of a single register read).
     - a flag indicating that this is a read transaction.
 2. WBI2C reads the requested I2C slave register using the Slave Register Protocol and stores the retrieved byte in the proxy memory, at the slave register address.
-3. Software waits for the completion of the transaction by polling the CMD register *Busy* bit. Instead of polling, WBI2C can be configured to generate an IRQ when the transaction is complete.
+3. Software waits for the completion of the transaction by polling the CMD register `Busy` bit. Instead of polling, WBI2C can be configured to generate an IRQ when the transaction is complete.
 4. Software reads the retrieved I2C register value from the proxy memory, at the slave register address.
 
 #### Multi-Byte Transactions
@@ -123,7 +123,7 @@ Although the WBI2C core by design assumes that an I2C data frame starts with an 
 
 ### Where are the Output Enables?
 
-The WBI2C core top-level has *SCL* and *SDA* input and output ports, but no *Output Enable* ports:
+The WBI2C core top-level has `SCL` and `SDA` input and output ports, but no *Output Enable* ports:
 
 ```
 module wbi2cmaster #(

@@ -7,7 +7,7 @@ hide:
 
 - **PicoLibc Version**: 1.8.6
 
-- **PicoLibc Repo**, BoxLambda fork, *boxlambda* branch:
+- **PicoLibc Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/picolibc](https://github.com/epsilon537/picolibc)
 
 - **PicoLibc Submodule in the BoxLambda Directory Tree**:
@@ -30,16 +30,16 @@ A Picolibc build for a new system requires configuration scripts for that system
 
 I'm using `boxlambda` as the base name for the new scripts.
 
-The new scripts are derived from the existing configuration files for *rv32imac*:
+The new scripts are derived from the existing configuration files for `rv32imac`:
 
 - [do-boxlambda-configure](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/do-boxlambda-configure) is based on [do-rv32imac-configure](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/do-rv32imac-configure).
 - [cross-boxlambda.txt](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/cross-boxlambda.txt) is based on [cross-rv32imac_zicsr.txt](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/cross-rv32imac_zicsr.txt).
 
 The differences between the derived scripts and the base scripts are minimal:
 
-- They are referencing the *riscv32-boxlambda-elf* GCC toolchain.
-- The *-march* flag is set to *rv32im_zicsr*.
-- In *do-boxlambda-configure*, `picocrt` is set to `false`. We're not using the picolibc crt0 module. BoxLambda has its own variant of the crt0 module in the `bootstrap` software component.
+- They are referencing the `riscv32-boxlambda-elf` GCC toolchain.
+- The `-march` flag is set to `rv32im_zicsr`.
+- In `do-boxlambda-configure`, `picocrt` is set to `false`. We're not using the picolibc crt0 module. BoxLambda has its own variant of the crt0 module in the `bootstrap` software component.
 
 #### picolibc_build.sh
 ![Building Picolibc.](assets/building_picolibc.drawio.png)
@@ -109,7 +109,7 @@ BoxLambda's version of crt0 can be found here:
 
 #### Standard Input, Output, and Error
 
-The PicoLibc integrator needs to supply *stdin*, *stdout*, and *stderr* instances and associated *getc()* and *putc()* implementations to connect them to an actual IO device.
+The PicoLibc integrator needs to supply `stdin`, `stdout`, and `stderr` instances and associated `getc()` and `putc()` implementations to connect them to an actual IO device.
 We'll be using the UART as our IO device for the time being. Down the road, we can extend that with keyboard input and screen output implementation.
 
 ```
@@ -172,7 +172,7 @@ Through a *linker script* we tell the linker where in memory to place the progra
 
 The Linker Script defines the following:
 
-- Relevant Memories on the target device: In the case of BoxLambda, these are *imem*, *emem* (=DDR memory), and *flash*.
+- Relevant Memories on the target device: In the case of BoxLambda, these are `imem`, `emem` (=DDR memory), and `flash`.
 ```
 MEMORY
 {
@@ -181,7 +181,7 @@ MEMORY
     emem : ORIGIN = __emem, LENGTH = __emem_size
 }
 ```
-- The mapping of input to output sections. Input sections are defined in the source code and default to .text, .bss, and .data when not explicitly specified. The output sections for BoxLambda are: *.flash*, *.text*, *.data*, *.tdata*, *.tbss*, *.bss*, *.heap* and *.stack*.
+- The mapping of input to output sections. Input sections are defined in the source code and default to .text, .bss, and .data when not explicitly specified. The output sections for BoxLambda are: `.flash`, `.text`, `.data`, `.tdata`, `.tbss`, `.bss`, `.heap` and `.stack`.
 ```
     .text : {
         ...
@@ -203,12 +203,12 @@ MEMORY
     .bss (NOLOAD) : {
     } >imem
 ```
-  - Code, Data, BSS, and stack sections go to *imem*.
-  - The heap goes to *emem*.
+  - Code, Data, BSS, and stack sections go to `imem`.
+  - The heap goes to `emem`.
 - Symbols used by the CRT0 code for section relocation, BSS initialization, etc. For BoxLambda, the key symbols are:
-    - *__code_source / __code_start / __code_size*: source address, destination address, and size of the code section to relocate from flash to IMEM. In the Boot-from-IMEM sequence, *__code_source* and *__code_start* point to the same IMEM address.
-    - *__data_source / __data_start / __data_size*: source address, destination address, and size of the data section to relocate from flash to IMEM. In the Boot-from-IMEM sequence; *__data_source* and *__data_start* point to the same IMEM address.
-    - *__bss_start / __bss_size*: Address and size of BSS section in IMEM to zero out.
+    - `__code_source / __code_start / __code_size`: source address, destination address, and size of the code section to relocate from flash to IMEM. In the Boot-from-IMEM sequence, `__code_source` and `__code_start` point to the same IMEM address.
+    - `__data_source / __data_start / __data_size`: source address, destination address, and size of the data section to relocate from flash to IMEM. In the Boot-from-IMEM sequence; `__data_source` and `__data_start` point to the same IMEM address.
+    - `__bss_start / __bss_size`: Address and size of BSS section in IMEM to zero out.
 ```
     .text : {
         PROVIDE(__code_start = ADDR(.text));
@@ -250,11 +250,11 @@ BoxLambda currently supports two boot sequences: **Boot-from-Flash** and **Boot-
 
 *The Software Boot-from-Flash Sequence.*
 
-Technically, BoxLambda doesn't boot from flash memory. It boots from IMEM at address offset 0x80. There, it executes the early startup code defined in *vectors.S* before jumping to the CRT0 code located in flash memory.
+Technically, BoxLambda doesn't boot from flash memory. It boots from IMEM at address offset 0x80. There, it executes the early startup code defined in `vectors.S` before jumping to the CRT0 code located in flash memory.
 
 The Ibex Boot Vector is part of a vector table that also includes the interrupt vectors. For the purpose of low-latency interrupt handling, it's important to keep this vector table in IMEM, rather than (slow) flash memory.
 
-The software project that branches from IMEM to the flash boot code (i.e. containing just *vectors.S*) is located here:
+The software project that branches from IMEM to the flash boot code (i.e. containing just `vectors.S`) is located here:
 
 [https://github.com/epsilon537/boxlambda/tree/master/sw/projects/imem_to_flash_vector](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/imem_to_flash_vector)
 

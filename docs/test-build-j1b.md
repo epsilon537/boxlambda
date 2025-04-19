@@ -19,7 +19,7 @@ hide:
 
 *The j1b_test Test SoC.*
 
-On the Ibex software side, I defined a J1B Hardware Access Layer (*j1b_hal*) giving access to the core's register interface and including a function for loading the firmware into the core. The j1b_test program uses the j1b_hal to perform the following:
+On the Ibex software side, I defined a J1B Hardware Access Layer (`j1b_hal`) giving access to the core's register interface and including a function for loading the firmware into the core. The j1b_test program uses the j1b_hal to perform the following:
 
 1. Boot the SwapForth firmware.
 2. Forward the BoxLambda serial port input data to the J1B core UART input register.
@@ -29,7 +29,7 @@ This way, the SwapForth REPL running on the J1B core is presented to the user on
 
 ### The J1B Test on Verilator
 
-Build the `j1b_test` project in the *sim-a7-100* build tree:
+Build the `j1b_test` project in the `sim-a7-100` build tree:
 
 ```
 cd build/sim-a7-100/gw/projects/j1b_test
@@ -53,13 +53,13 @@ SIM: String matched.
 SIM: Test passed.
 ```
 
-The test string *42 emit* is a Forth instruction, requesting to *emit* (print) the character with ASCII code 42 (an asterisk). *\* ok* is the response from the J1B processor.
+The test string `42 emit` is a Forth instruction, requesting to *emit* (print) the character with ASCII code 42 (an asterisk). *\* ok* is the response from the J1B processor.
 
 ### The J1B Test on FPGA
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the project in *arty-a7-100t* build tree:
+Build the project in `arty-a7-100t` build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/j1b_test

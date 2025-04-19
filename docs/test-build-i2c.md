@@ -90,7 +90,7 @@ Test Successful.
 Push btn[0] to start CLI.
 ```
 
-Press button 0 to get dropped into the CLI. Type *help* to see a list of available commands:
+Press button 0 to get dropped into the CLI. Type `help` to see a list of available commands:
 
 ```
 > help

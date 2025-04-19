@@ -54,7 +54,7 @@ ZipCPU's spixpress core meets all of the above requirements, except the configur
 
 [https://github.com/ZipCPU/qspiflash](https://github.com/ZipCPU/qspiflash)
 
-The repository is named *qspiflash* but it includes a quad-SPI, Dual-SPI, and single-SPI core (and a co-simulation model supporting all three).
+The repository is named `qspiflash` but it includes a quad-SPI, Dual-SPI, and single-SPI core (and a co-simulation model supporting all three).
 
 Dan Gisselquist wrote this article describing the design of the single-SPI core:
 
@@ -91,19 +91,19 @@ The SPI Flash core has a 32-bit Wishbone read interface. Through this interface,
 
 *Reading a 32-bit word from SPI Flash. 8 (C)ommand bits, followed by 24 (A)ddress bits, followed by 32 (D)ata bits.*
 
-- *C7-C0*: Command Bits. The Read Command ID is 0x03.
-- *A23-A0*: Address Bits covering the complete 16MB address range.
-- *D31-D0*: Data Bits.
-- *cs_n*: Active Low Chip Select of the SPI device.
-- *sclk*: SPI Clock.
-- *mo*: Master Out.
-- *si*: Slave In.
-- *so*: Slave Out.
-- *mi*: Master In.
+- `C7-C0`: Command Bits. The Read Command ID is 0x03.
+- `A23-A0`: Address Bits covering the complete 16MB address range.
+- `D31-D0`: Data Bits.
+- `cs_n`: Active Low Chip Select of the SPI device.
+- `sclk`: SPI Clock.
+- `mo`: Master Out.
+- `si`: Slave In.
+- `so`: Slave Out.
+- `mi`: Master In.
 
 ### The Control Interface and Flash Driver
 
-The SPI Flash core has a simple but clever control interface (invented by Dan, not me). From the *spiflash.v* header:
+The SPI Flash core has a simple but clever control interface (invented by Dan, not me). From the `spiflash.v` header:
 
 ```
 //     Control Port

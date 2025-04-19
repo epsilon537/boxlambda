@@ -21,7 +21,7 @@ hide:
 
 ### Ibex Wishbone Wrapper (*Ibex_WB*)
 
-- **Ibex WB Repo**, BoxLambda fork, *boxlambda* branch:
+- **Ibex WB Repo**, BoxLambda fork, `boxlambda` branch:
   [https://github.com/epsilon537/ibex_wb](https://github.com/epsilon537/ibex_wb).
 
 - **Ibex WB Submodule in the BoxLambda Directory Tree**:

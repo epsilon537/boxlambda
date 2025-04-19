@@ -5,7 +5,7 @@ hide:
 
 ## LiteDRAM Memory Controller
 
-- **LiteX Repo**, BoxLambda fork, *boxlambda* branch:
+- **LiteX Repo**, BoxLambda fork, `boxlambda` branch:
   [https://github.com/epsilon537/litex](https://github.com/epsilon537/litex).
 
 - **LiteX Submodule in the BoxLambda Directory Tree**:
@@ -86,9 +86,9 @@ Starting from [LiteDram's arty.yml](https://github.com/enjoy-digital/litedram/tr
 Some points about the above:
 
 - The *PHY layer*, *Electrical*, and *Core* sections I left exactly as-is in the given Arty example.
-- In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
-- In the *Frequency* section, I set *sys_clk_freq* to 50MHz.
-- In the *User Ports* section, I specified one 32-bit Wishbone port.
+- In the *General* section, I set `cpu` to `None`. BoxLambda already has a CPU. We don't need LiteX to generate one.
+- In the `Frequency` section, I set `sys_clk_freq` to 50MHz.
+- In the `User Ports` section, I specified one 32-bit Wishbone port.
 
 Two LiteDRAM core variants are generated from this configuration:
 
@@ -164,7 +164,7 @@ module litedram (
 Some points worth noting about this interface:
 
 - A Wishbone control port is generated along with the user port. LiteDRAM CSR register access is done through the control port.
-- Both Wishbone ports are *classic* Wishbone ports, not *pipelined*. There is no *stall* signal.
+- Both Wishbone ports are *classic* Wishbone ports, not *pipelined*. There is no `stall` signal.
 - The Wishbone port addresses are word addresses, not byte addresses.
 - The LiteDRAM module takes an external input clock (`clk`) and generates both a 50MHz system clock (`user_clk`) and a 100MHz double-rate system clock (`user_clkx2`). The LiteDRAM module contains a PLL clock primitive.
 - The double-rate system clock is a modification for BoxLambda, but is currently not used.
@@ -173,7 +173,7 @@ Some points worth noting about this interface:
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv)
 
-`Litedram_wrapper` contains Pipelined-to-Classic Wishbone adaptation. The adapter logic comes straight out of the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The *stall* signal is used to avoid pipelining:
+`Litedram_wrapper` contains Pipelined-to-Classic Wishbone adaptation. The adapter logic comes straight out of the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The `stall` signal is used to avoid pipelining:
 
 ```
   /*Straight out of the Wishbone B4 spec. This is how you interface a classic slave to a pipelined master.

@@ -5,7 +5,7 @@ hide:
 
 ## Real-Time Clock and Calendar API
 
-- **MCP79412RTC Repo**, BoxLambda fork, *boxlambda* branch:
+- **MCP79412RTC Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/MCP79412RTC](https://github.com/epsilon537/MCP79412RTC)
 
 - **MCP79412RTC Submodule in the BoxLambda Directory Tree**:
@@ -59,7 +59,7 @@ Example usage:
     }
   }
 ```
-For additional example code, check the *rtcc_test* app:
+For additional example code, check the `rtcc_test` app:
 
 - [boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/rtcc_test/rtcc_test.cpp)
 - [boxlambda/sw/projects/rtcc_test/rtcc_cli.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/rtcc_test/rtcc_cli.cpp)

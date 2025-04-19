@@ -41,7 +41,7 @@ This script will:
 
 The script is easy to follow. The tools versions used are specified inside the script.
 
-If you want to force a reinstall of the tools, delete the *./tools/* directory and source the `boxlambda_setup.sh` script again.
+If you want to force a reinstall of the tools, delete the `./tools/` directory and source the `boxlambda_setup.sh` script again.
 
 ### User-Level Access to the Arty A7 USB JTAG Adapter.
 
@@ -61,7 +61,7 @@ Serial Port Settings: **115200 8N1**
 
 ## Activating the Tools Environment
 
-When working with BoxLambda, its tools environment needs to be activated. This is done by sourcing the *activate_env.sh* script.
+When working with BoxLambda, its tools environment needs to be activated. This is done by sourcing the `activate_env.sh` script.
 
 ```
 source activate_env.sh

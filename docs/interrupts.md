@@ -17,7 +17,7 @@ A core, such as a UART, may raise an interrupt request (IRQ) when it detects an 
 
 Note that in the condition-based interrupt example, there is no explicit interrupt acknowledgment. The IRQ is de-asserted once the FIFO is empty.
 
-- **Event-Based Interrupts**: A core implementing event-based interrupts will assert its IRQ line when a specific event occurs. The IRQ line remains asserted until the CPU clears/acknowledges the event by writing to an interrupt register inside the core. For example, a UART core that implements event-based interrupts will assert its IRQ line when the RX FIFO transitions from empty to non-empty. The IRQ line remains asserted until the CPU writes a 1 into the *Rx_Data_Avl* bit position of the UART core's Interrupt Status Register.
+- **Event-Based Interrupts**: A core implementing event-based interrupts will assert its IRQ line when a specific event occurs. The IRQ line remains asserted until the CPU clears/acknowledges the event by writing to an interrupt register inside the core. For example, a UART core that implements event-based interrupts will assert its IRQ line when the RX FIFO transitions from empty to non-empty. The IRQ line remains asserted until the CPU writes a 1 into the `Rx_Data_Avl` bit position of the UART core's Interrupt Status Register.
 
 ![Event-Based Interrupts](assets/event_based_irq.png)
 
@@ -40,7 +40,7 @@ ISR bits are cleared by the CPU writing a 1 into the bit position of the event i
 
 The modification of **sdspi** is almost identical. Here, the events are:
 
-- `ISR[0]`: The device transitioned from a *busy* state to an *idle* state.
+- `ISR[0]`: The device transitioned from a `busy` state to an `idle` state.
 - `ISR[1]`: The removal of an SD card is detected.
 
 Except for [wb_timer](components_timer.md), which follows its own protocol, the other cores in the BoxLambda SoC already implement the event-based protocol.
@@ -84,7 +84,7 @@ The RISC-V specification defines an elaborate interrupt architecture, offering v
 Briefly, the Ibex core has:
 
 - 15 ports for **Fast** local interrupts. The BoxLambda SoC components that can post IRQs (not all of them do) are connected to these fast interrupts.
-- 1 port for a **Timer** interrupt. The *wb_timer* module is connected to this interrupt line.
+- 1 port for a **Timer** interrupt. The `wb_timer` module is connected to this interrupt line.
 - An **External Interrupt** port to connect to a *Platform-Level Interrupt Controller*. This will not be used in BoxLambda.
 - A **Non-Maskable Interrupt** (NMI) port, which will remain unconnected until a suitable use case is found.
 
