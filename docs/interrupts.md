@@ -31,17 +31,17 @@ The original **wbuart** and **sdspi** cores use condition-based interrupts. Howe
 
 For **wbuart**, I added an Interrupt Enable (IEN) register and an Interrupt Status (ISR) register. The ISR bits get set when specific events occur:
 
-- **ISR[0]**: The UART Rx FIFO goes from an empty to a non-empty state.
-- **ISR[1]**: The UART Rx FIFO goes from less-than-half-full to half-full.
-- **ISR[2]**: The UART Tx FIFO goes from half-full to less-than-half-full.
-- **ISR[3]**: The UART Tx FIFO goes from non-empty to empty.
+- `ISR[0]`: The UART Rx FIFO goes from an empty to a non-empty state.
+- `ISR[1]`: The UART Rx FIFO goes from less-than-half-full to half-full.
+- `ISR[2]`: The UART Tx FIFO goes from half-full to less-than-half-full.
+- `ISR[3]`: The UART Tx FIFO goes from non-empty to empty.
 
 ISR bits are cleared by the CPU writing a 1 into the bit position of the event it wants to acknowledge. When any IEN-enabled ISR bits are set, the **wbuart** core's IRQ line is asserted.
 
 The modification of **sdspi** is almost identical. Here, the events are:
 
-- **ISR[0]**: The device transitioned from a *busy* state to an *idle* state.
-- **ISR[1]**: The removal of an SD card is detected.
+- `ISR[0]`: The device transitioned from a *busy* state to an *idle* state.
+- `ISR[1]`: The removal of an SD card is detected.
 
 Except for [wb_timer](components_timer.md), which follows its own protocol, the other cores in the BoxLambda SoC already implement the event-based protocol.
 

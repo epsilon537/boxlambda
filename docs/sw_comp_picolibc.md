@@ -95,13 +95,13 @@ The vector table is a table with code entry points for all sorts of CPU events: 
 
 The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S).
 
-The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to **_start**, the entry point into the **crt0** module.
+The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to `_start`, the entry point into the `crt0` module.
 
 For more info on vectors.S, check the [Interrupt Handling](sw_comp_irqs.md) page.
 
 #### Crt0
 
-*Crt0*, C-Run-Time-0, is the start-up code in charge of setting up a C environment (zeroing the BSS segment, setting up the stack, etc.) before calling **main()**.
+*Crt0*, C-Run-Time-0, is the start-up code in charge of setting up a C environment (zeroing the BSS segment, setting up the stack, etc.) before calling `main()`.
 BoxLambda's version of crt0 can be found here:
 
 [boxlambda/sw/components/bootstrap/crt0.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/crt0.c).
@@ -164,7 +164,7 @@ void set_stdio_to_uart(struct uart *uart) {
 
 [boxlambda/sw/components/bootstrap/stdio_to_uart.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/stdio_to_uart.c)
 
-The **set_stdio_to_uart()** function is to be called from the application before any standard library calls that require standard IO. The application needs to provide a pointer to an initialized *uart* object.
+The `set_stdio_to_uart()` function is to be called from the application before any standard library calls that require standard IO. The application needs to provide a pointer to an initialized *uart* object.
 
 #### The Linker Script
 
@@ -308,5 +308,5 @@ int main(void) {
 ```
 
 
-Notice the **_init()** function. This function is executed by the PicoLibc startup code before calling **main()**. This is where we set up the UART and stdio.
+Notice the `_init()` function. This function is executed by the PicoLibc startup code before calling `main()`. This is where we set up the UART and stdio.
 

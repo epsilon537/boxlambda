@@ -45,8 +45,8 @@ If you want to force a reinstall of the tools, delete the *./tools/* directory a
 
 ### User-Level Access to the Arty A7 USB JTAG Adapter.
 
-When run at the user level, OpenOCD might not have permission to access the USB JTAG adapter. To fix this issue, add a rule to **/etc/udev/rules.d**.
-Create a file named **99-openocd.rules** in the **/etc/udev/rules.d** directory. This file should have the following contents:
+When run at the user level, OpenOCD might not have permission to access the USB JTAG adapter. To fix this issue, add a rule to `/etc/udev/rules.d`.
+Create a file named `99-openocd.rules` in the `/etc/udev/rules.d` directory. This file should have the following contents:
 
 ```
 # Original FT2232 VID:PID
@@ -55,7 +55,7 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="666",
 ```
 
 ### Serial Port
-Your mileage may vary but on my Ubuntu system, when I plug in my Arty A7, the serial port shows up at **/dev/ttyUSB1**.
+Your mileage may vary but on my Ubuntu system, when I plug in my Arty A7, the serial port shows up at `/dev/ttyUSB1`.
 
 Serial Port Settings: **115200 8N1**
 

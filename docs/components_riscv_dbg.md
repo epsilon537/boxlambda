@@ -23,11 +23,11 @@ OpenOCD is an open-source software package used to interface with a hardware deb
 
 ### The RISCV-DBG Component
 
-**RISCV-DBG** is part of the [PULP Platform](https://github.com/pulp-platform). It depends on the following repositories from the platform:
+`RISCV-DBG` is part of the [PULP Platform](https://github.com/pulp-platform). It depends on the following repositories from the platform:
 
-- **common_cells**: [https://github.com/pulp-platform/common_cells](https://github.com/pulp-platform/common_cells)
-- **tech_cells_generic**: [https://github.com/pulp-platform/tech_cells_generic](https://github.com/pulp-platform/tech_cells_generic)
-- **pulpino**: [https://github.com/pulp-platform/pulpino](https://github.com/pulp-platform/pulpino)
+- `common_cells`: [https://github.com/pulp-platform/common_cells](https://github.com/pulp-platform/common_cells)
+- `tech_cells_generic`: [https://github.com/pulp-platform/tech_cells_generic](https://github.com/pulp-platform/tech_cells_generic)
+- `pulpino`: [https://github.com/pulp-platform/pulpino](https://github.com/pulp-platform/pulpino)
 
 As their names suggest, *common_cells* and *tech_cells_generic* provide essential building blocks like FIFOs, CDC logic, and reset logic. The *pulpino* dependency is minimal, limited to a few clock management cells.
 
@@ -69,7 +69,7 @@ The Verilator setup is shown below:
 ![BoxLambda OpenOCD Verilator Setup](assets/OpenOCD_Setup_Verilator.drawio.png)
 *BoxLambda OpenOCD Verilator Setup*
 
-The **hello_world** project (`gw/projects/hello_world/`) demonstrates the OpenOCD Verilator setup. Its test script performs the following steps:
+The `hello_world` project (`gw/projects/hello_world/`) demonstrates the OpenOCD Verilator setup. Its test script performs the following steps:
 
 1. Starts the Verilator model.
 2. Connects OpenOCD to the model.
@@ -108,7 +108,7 @@ To summarize:
 1. The above OpenOCD config file is used to connect to the JTAG TAP of a Verilator model.
 2. The JTAG TAP is implemented by a riscv-dbg core connected to an Ibex RISCV32 core.
 3. The JTAG TAP is used to debug the software running on the Ibex RISCV32 core.
-4. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called **remote_bitbang**.
+4. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called `remote_bitbang`.
 
 For a step-by-step guide on setting up a debug session, refer to [this section](test-build-hello-world.md#connecting-gdb-to-the-hello-world-build-on-verilator).
 
@@ -121,9 +121,9 @@ On the Arty-A7, bitstream programming is done through the FTDI-based USB serial 
 - [`dmi_jtag_tap.sv`](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_jtag_tap.sv): Connects the JTAG TAP to external pins.
 - [`dmi_bscane_tap.sv`](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_bscane_tap.sv): Integrates the JTAG TAP into the FPGA scan chain using the Xilinx *BSCANE* primitive.
 
-Both files implement the same module (`dmi_jtag_tap`) with identical ports, enabling seamless swapping. By default, BoxLambda builds the **BSCANE** variant for the Arty-A7.
+Both files implement the same module (`dmi_jtag_tap`) with identical ports, enabling seamless swapping. By default, BoxLambda builds the `BSCANE` variant for the Arty-A7.
 
-On the OpenOCD side, the transport protocol used for this debug-access-via-FPGA-scan-chain-over-FTDI setup is called **ftdi**. The configuration is depicted below:
+On the OpenOCD side, the transport protocol used for this debug-access-via-FPGA-scan-chain-over-FTDI setup is called `ftdi`. The configuration is depicted below:
 
 ![BoxLambda OpenOCD Arty A7 FTDI Setup](assets/OpenOCD_Setup_Arty_A7.drawio.png)
 *BoxLambda OpenOCD Arty A7 FTDI Setup*
@@ -136,7 +136,7 @@ To summarize:
 2. The **RISCV-DBG** core is used to debug software running on a connected Ibex RISCV32 core.
 3. The JTAG TAP is integrated into the Arty-A7's FPGA scan chain (normally used for bitstream programming).
 4. The FPGA scan chain is accessible via the board’s FTDI-based USB serial port.
-5. The OpenOCD transport protocol used for this connection is **ftdi**.
+5. The OpenOCD transport protocol used for this connection is `ftdi`.
 
 #### Starting a Debug Session on the Arty-A7
 
@@ -146,5 +146,5 @@ For detailed steps on setting up an OpenOCD JTAG debug session on the Arty-A7, r
 
 The **RISCV-DBG** components `dm_top` and `dmi_jtag` operate in the 50 MHz system clock domain.
 
-The JTAG clock (`tck`) is driven via the FPGA’s JTAG chain using the Xilinx **BSCANE2** primitive. This primitive is instantiated in the [`dmi_bscane_tap`](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_bscane_tap.sv) module.
+The JTAG clock (`tck`) is driven via the FPGA’s JTAG chain using the Xilinx `BSCANE2` primitive. This primitive is instantiated in the [`dmi_bscane_tap`](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_bscane_tap.sv) module.
 

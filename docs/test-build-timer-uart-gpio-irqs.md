@@ -11,7 +11,7 @@ Build the *timer_uart_gpio_irqs* gateware project:
 
 ```
 cd build/sim-a7-100/gw/projects/timer_uart_gpio_irqs
-make timer_uart_gpio_irqs_sim_sw
+make timer_uart_gpio_irqs_sim
 ```
 
 Execute the generated Verilator model:
@@ -75,7 +75,7 @@ Build the *timer_uart_gpio_irqs* gateware project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/timer_uart_gpio_irqs
-make timer_uart_gpio_irqs_bit_sw
+make timer_uart_gpio_irqs_bit
 ```
 
 Download the generated bitstream file to the Arty A7:

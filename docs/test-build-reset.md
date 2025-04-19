@@ -19,7 +19,7 @@ The reset test checks the software interaction with BoxLambda's reset controller
 Build the test project:
 ```
 cd build/sim-a7-100/gw/projects/reset_test
-make reset_test_sim_sw
+make reset_test_sim
 ```
 Execute the generated verilator model:
 ```
@@ -67,7 +67,7 @@ SIM: Test passed.
 Build the test project:
 ```
 cd build/arty-a7-100/gw/projects/reset_test
-make reset_test_bit_sw
+make reset_test_bit
 ```
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 

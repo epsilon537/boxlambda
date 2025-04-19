@@ -5,7 +5,7 @@ hide:
 
 ## SPI Flash Test
 
-The **spiflash_test** program does the following:
+The `spiflash_test` program does the following:
 
 1. Boot from Flash Memory.
 2. Read the Flash ID.
@@ -16,10 +16,10 @@ The **spiflash_test** program does the following:
 
 ### The SPI Flash Test on Verilator
 
-Build the **spiflash_test** gateware project. This will also build the *spiflash_test_flsh.bin* software image as a dependency:
+Build the `spiflash_test` gateware project. This will also build the *spiflash_test_flsh.bin* software image as a dependency:
 ```
 cd build/sim-a7-100/gw/projects/spiflash_test
-make spiflash_test_sim_sw
+make spiflash_test_sim
 ```
 
 Execute the generated Verilator model, passing in as a parameter the *spiflash_test_flsh.bin* software image. The software image will be loaded into the simulated flash device before the test starts:

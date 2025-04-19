@@ -10,7 +10,7 @@ hide:
 Build the *vera_integrated* project:
 ```
 cd build/sim-a7-100/gw/projects/vera_integrated
-make vera_integrated_sim_sw
+make vera_integrated_sim
 ```
 Execute the generated Verilator model:
 ```
@@ -35,7 +35,7 @@ Hook up the VGA PMOD as described [here](pmods.md#vga-pmod).
 Build the vera_integrated project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/gw/projects/vera_integrated
-make vera_integrated_bit_sw
+make vera_integrated_bit
 ```
 
 Download the generated bitstream file to the Arty A7:

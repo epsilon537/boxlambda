@@ -70,7 +70,7 @@ BoxLambda's SPI Flash core uses the ZipCPU spixpress core as a starting point. I
 
 - The SCK output port of the core is the actual SPI clock signal, rather than an enable signal to be used in conjunction with a DDR primitive.
 - I added a clock divider parameter for SCK. I'm using a clock divider value of two in the BoxLambda SoC.
-- The core shifts out the serial output data at the SCK falling edge and shifts in the serial input data at the SCK rising edge. I modified the **Flashsim** co-simulator module to behave like this as well. This is the standard SPI timing design.
+- The core shifts out the serial output data at the SCK falling edge and shifts in the serial input data at the SCK rising edge. I modified the `Flashsim` co-simulator module to behave like this as well. This is the standard SPI timing design.
 
 ![SPI Timing Design](assets/spi_rising_falling_edge.png)
 

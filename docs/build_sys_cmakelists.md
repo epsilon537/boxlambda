@@ -9,7 +9,7 @@ The build system consists of a tree of `CMakeLists.txt` files. The top-level `CM
 
 ## A Gateware Component CMakeList
 
-The build instructions for a gateware component are grouped into one CMake function: **gw_component_rules()**. A GW component-level CMakeLists.txt file contains just a call to this function, passing in the expected parameters:
+The build instructions for a gateware component are grouped into one CMake function: `gw_component_rules()`. A GW component-level CMakeLists.txt file contains just a call to this function, passing in the expected parameters:
 
 ```
 gw_component_rules(
@@ -56,16 +56,16 @@ endif()
 
 The `gw_rm_rules_dfx()` parameters:
 
-- **COMPONENT_NAMES**: The name of the component. If there are multiple RMs in the build, list the names of all RMs starting with the current component.
-- **VS_INSTS**: Specify where in the SoC this component plugs into. If there are multiple RMs in the build, list the instance names in the same order as the component names list.
-- **REF_DFX_PROJECT**: Specify the reference project defining the static portion of the DFX build.
+- `COMPONENT_NAMES`: The name of the component. If there are multiple RMs in the build, list the names of all RMs starting with the current component.
+- `VS_INSTS`: Specify where in the SoC this component plugs into. If there are multiple RMs in the build, list the instance names in the same order as the component names list.
+- `REF_DFX_PROJECT`: Specify the reference project defining the static portion of the DFX build.
 
 ## A Gateware Project CMakeList
 
 The build instructions for a gateware project are also grouped into two CMake functions:
 
-- **gw_project_rules_vivado()**: Gateware project build rules for Vivado builds.
-- **gw_project_rules_verilator()**: Gateware project build rules for Verilator builds.
+- `gw_project_rules_vivado()`: Gateware project build rules for Vivado builds.
+- `gw_project_rules_verilator()`: Gateware project build rules for Verilator builds.
 
 A typical GW project CMakeLists.txt file looks like this:
 
@@ -117,19 +117,19 @@ gw_project_rules_dfx_vivado(
 
 The `gw_project_rules_dfx_vivado()` parameters:
 
-- **TOP_MODULE**: Name of the top module.
-- **PROJECT_NAME**: Project name.
-- **VS_INSTS**: DFX virtual socket instance names.
-- **VS_DEFAULT_COMPONENTS**: DFX virtual socket default components, one for each `VS_INST` listed. The default component gets placed into the virtual socket in the default bitstream image.
+- `TOP_MODULE`: Name of the top module.
+- `PROJECT_NAME`: Project name.
+- `VS_INSTS`: DFX virtual socket instance names.
+- `VS_DEFAULT_COMPONENTS`: DFX virtual socket default components, one for each `VS_INST` listed. The default component gets placed into the virtual socket in the default bitstream image.
 
 ## A Software Project CMakeList
 
-CMake is designed to build software. The necessary functions for creating libraries, executables, etc., are predefined. The only custom function added to the software CMakeLists tree is **link_and_create_image()**. This function executes the necessary steps to link the given target using a given linker script and generate a memory file, which is used by the GW part of the build system.
+CMake is designed to build software. The necessary functions for creating libraries, executables, etc., are predefined. The only custom function added to the software CMakeLists tree is `link_and_create_image()`. This function executes the necessary steps to link the given target using a given linker script and generate a memory file, which is used by the GW part of the build system.
 
 Currently, two linker scripts are defined:
 
-- **/sw/components/bootstrap/link_imem_boot.ld**: This linker script creates software images that boot from IMEM internal memory.
-- **/sw/components/bootstrap/link_flash_boot.ld**: This linker script creates software images that boot from flash memory.
+- `/sw/components/bootstrap/link_imem_boot.ld`: This linker script creates software images that boot from IMEM internal memory.
+- `/sw/components/bootstrap/link_flash_boot.ld`: This linker script creates software images that boot from flash memory.
 
 A typical SW project `CMakeLists.txt` file looks like this:
 

@@ -7,7 +7,7 @@ hide:
 
 J1B is a 32-bit, minimal instruction set stack processor. It's one of the supported host CPUs of the [SwapForth](https://github.com/jamesbowman/swapforth) environment.
 
-To demonstrate DFX support in BoxLambda, I created a test program called **dfx_test** that loads a J1B core into the SoC's *Virtual Socket 0* and then boots the SwapForth run-time firmware image on this core, presenting the user with a Forth REPL.
+To demonstrate DFX support in BoxLambda, I created a test program called `dfx_test` that loads a J1B core into the SoC's *Virtual Socket 0* and then boots the SwapForth run-time firmware image on this core, presenting the user with a Forth REPL.
 
 
 ![The DFX Test Program](assets/dfx_test_program.png)
@@ -16,7 +16,7 @@ To demonstrate DFX support in BoxLambda, I created a test program called **dfx_t
 
 The DFX Test Program is not an automatic test case like the previous BoxLambda test cases. It runs exclusively on the Arty-A7-100T and requires user interaction through a CLI. The CLI commands are grouped into modules:
 
-- [dfx_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/dfx_cli.cpp): This is a CLI wrapper around the [dfx_hal](https://github.com/epsilon537/boxlambda/blob/master/sw/components/dfx/dfx_controller_hal.h) component. Most commands let you interact with the DFX Controller at a low level. However, there's one high-level command, **dfx_load_module**, that implements the entire sequence of loading an RM's bitstream file from the filesystem into the VS0 RP.
+- [dfx_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/dfx_cli.cpp): This is a CLI wrapper around the [dfx_hal](https://github.com/epsilon537/boxlambda/blob/master/sw/components/dfx/dfx_controller_hal.h) component. Most commands let you interact with the DFX Controller at a low level. However, there's one high-level command, `dfx_load_module`, that implements the entire sequence of loading an RM's bitstream file from the filesystem into the VS0 RP.
 
         * dfx_control
                 dfx_control <cmd> <extra byte> <extra halfword> : Write to DFX Control Register.
@@ -59,7 +59,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
          * ls
                 list directory contents.
 
-- [ymodem_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ymodem_cli/ymodem_cli.cpp): The **ymodem_rx** command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to BoxLambda. While I could copy everything onto an SD card and then move that card from PC to BoxLambda, I prefer this method as it involves fewer moving parts.
+- [ymodem_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ymodem_cli/ymodem_cli.cpp): The `ymodem_rx` command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to BoxLambda. While I could copy everything onto an SD card and then move that card from PC to BoxLambda, I prefer this method as it involves fewer moving parts.
 
          * ymodem_rx
                 ymodem_rx <filename>: Ymodem rx and save to give file.
@@ -152,9 +152,9 @@ make vs0_stub_bit
 
 Transfer the following files to an SD Card and rename them to something short:
 
-- **build/arty-a7-100/gw/components/vs0_j1b/vs0_j1b_pblock_vs0_partial.bin.bin_for_icap**: This is the *vs0_j1b* RM Partial Bitstream file. Let's rename it to *vs0_j1b*.
-- **build/arty-a7-100/gw/components/vs0_stub/vs0_stub_pblock_vs0_partial.bin.bin_for_icap**: This is the *vs0_stub* RM Partial Bitstream file. Let's rename it to *vs0_stub*.
-- **sw/projects/dfx_test/nuc.bin**: This is the SwapForth firmware image for the J1B processor.
+- `build/arty-a7-100/gw/components/vs0_j1b/vs0_j1b_pblock_vs0_partial.bin.bin_for_icap`: This is the *vs0_j1b* RM Partial Bitstream file. Let's rename it to *vs0_j1b*.
+- `build/arty-a7-100/gw/components/vs0_stub/vs0_stub_pblock_vs0_partial.bin.bin_for_icap`: This is the *vs0_stub* RM Partial Bitstream file. Let's rename it to *vs0_stub*.
+- `sw/projects/dfx_test/nuc.bin`: This is the SwapForth firmware image for the J1B processor.
 
 Insert the SD Card in BoxLambda's MicroSD card slot.
 

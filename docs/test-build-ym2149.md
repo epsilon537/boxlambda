@@ -59,7 +59,7 @@ You should hear a 440Hz tone. You can check the pitch with a pitch detector app.
 Build the *ym2149_dac_test* project:
 ```
 cd build/sim-a7-100/gw/projects/ym2149_dac_test
-make ym2149_dac_test_sim_sw
+make ym2149_dac_test_sim
 ```
 Execute the generated Verilator model. You should see the following output:
 ```
@@ -100,7 +100,7 @@ Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. 
 Build the *ym2149_dac_test* project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/gw/projects/ym2149_dac_test
-make ym2149_dac_test_bit_sw
+make ym2149_dac_test_bit
 ```
 Download the generated bitstream file to the Arty A7:
 ```
@@ -113,7 +113,7 @@ You should hear a 6-tone chord.
 Build the *stsound_test* project:
 ```
 cd build/sim-a7-100/gw/projects/stsound_test
-make stsound_test_sim_sw
+make stsound_test_sim
 ```
 Execute the generated Verilator model. Pass in the SD card image that's checked in as part of the test. The SD card image contains the song that we want to play. The model runs for 5s simulated time. It will take a few minutes in real-time to complete. You should see the following output:
 ```
@@ -170,14 +170,14 @@ Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
 Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
 
-Locate YM file **ANCOOL1.YM** in directory **boxlambda/sub/StSound/YmSampleFiles/**. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.
+Locate YM file `ANCOOL1.YM` in directory `boxlambda/sub/StSound/YmSampleFiles/`. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Build the *stsound_test* project in an Arty A7 build tree.
 ```
 cd build/arty-a7-100/gw/projects/stsound_test
-make stsound_test_bit_sw
+make stsound_test_bit
 ```
 Download the generated bitstream file to the Arty A7:
 ```

@@ -29,11 +29,11 @@ This way, the SwapForth REPL running on the J1B core is presented to the user on
 
 ### The J1B Test on Verilator
 
-Build the **j1b_test** project in the *sim-a7-100* build tree:
+Build the `j1b_test` project in the *sim-a7-100* build tree:
 
 ```
 cd build/sim-a7-100/gw/projects/j1b_test
-make j1b_test_sim_sw
+make j1b_test_sim
 ```
 
 Execute the generated Verilator model. You should see the following output:
@@ -63,7 +63,7 @@ Build the project in *arty-a7-100t* build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/j1b_test
-make j1b_test_bit_sw
+make j1b_test_bit
 ```
 
 Download the generated bitstream file to the Arty A7:

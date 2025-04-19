@@ -13,11 +13,11 @@ The Dual Port RAM Test verifies access to the dual port memories. The test progr
 
 ### Dual Port RAM Test on Verilator
 
-Build the **dual_port_ram_test** project:
+Build the `dual_port_ram_test` project:
 
 ```
 cd build/sim-a7-100/gw/projects/dual_port_ram_test
-make dual_port_ram_test_sim_sw
+make dual_port_ram_test_sim
 ```
 
 Execute the generated Verilator model. You should see the following output:
@@ -44,7 +44,7 @@ Build the project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/dual_port_ram_test
-make dual_port_ram_test_bit_sw
+make dual_port_ram_test_bit
 ```
 
 Download the generated bitstream file to the Arty A7:

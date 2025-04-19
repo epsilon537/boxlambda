@@ -24,9 +24,9 @@ hide:
 
 *Dual-Port IMEM.*
 
-BoxLambda's internal memory (**IMEM**) is a Dual-Port RAM implemented by the `wb_dpram_wrapper.sv` module. This module selects one of two DPRAM implementations depending on whether we're targeting simulation or FPGA synthesis.
+BoxLambda's internal memory (`IMEM`) is a Dual-Port RAM implemented by the `wb_dpram_wrapper.sv` module. This module selects one of two DPRAM implementations depending on whether we're targeting simulation or FPGA synthesis.
 
-On FPGA, an **XPM_MEMORY_TDPRAM** instance used. Using an XPM macro for internal memory allows post-synthesis memory image updates in the bitstream file (see next section).
+On FPGA, an `XPM_MEMORY_TDPRAM` instance used. Using an XPM macro for internal memory allows post-synthesis memory image updates in the bitstream file (see next section).
 
 In simulations, I'm using Alex Forencich's [wb_dp_ram.v](https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_dp_ram.v) module.
 

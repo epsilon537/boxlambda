@@ -76,15 +76,15 @@ I forked the *YM2149_PSG_system* repo to track my changes:
 
 The design of the *YM2149_PSG_system* core is easy to follow:
 
-- **YM2149_PSG_system_wb** is a Wishbone wrapper around the **YM2149_PSG_system** core.
-- **BHG_jt49** represents one YM2149 device. *YM2149_PSG_system* instantiates two such modules and feeds their output to the **BHG_audio_filter_mixer**.
+- `YM2149_PSG_system_wb` is a Wishbone wrapper around the **YM2149_PSG_system** core.
+- `BHG_jt49` represents one YM2149 device. *YM2149_PSG_system* instantiates two such modules and feeds their output to the `BHG_audio_filter_mixer`.
 - *BHG_audio_filter_mixer* implements mixing logic, individual channel volume controls, master volume control, treble, and bass controls.
 - Looking into the *BHG_jt49* module:
-  - **jt49_div** is a configurable square wave generator module. It is instantiated three times, so we have three channels.
-  - **jt49_noise** is a noise generator module (e.g. for percussion effects).
-  - **jt49_eg** with the assistance of a fourth *jt49_div* instance is the sound envelope generator.
-  - **jt49_cent** generates clock enables at the appropriate rate for the above modules.
-  - **BHG_jt49_exp** provides decibel-based volume attenuation through a look-up table.
+  - `jt49_div` is a configurable square wave generator module. It is instantiated three times, so we have three channels.
+  - `jt49_noise` is a noise generator module (e.g. for percussion effects).
+  - `jt49_eg` with the assistance of a fourth *jt49_div* instance is the sound envelope generator.
+  - `jt49_cent` generates clock enables at the appropriate rate for the above modules.
+  - `BHG_jt49_exp` provides decibel-based volume attenuation through a look-up table.
 
 The core can be configured to produce stereo I2S output, but for BoxLambda we'll set it up to produce 16-bit PCM mono audio.
 
@@ -132,7 +132,7 @@ Here's the top-level Verilog:
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/rtl/audio_dac_test.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/rtl/audio_dac_test.sv)
 
-The Verilator testbench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to **pcm_out.py** and the DAC samples as a Python array to **dac_out.py**. The testbench will also flag an error if any accumulator overflows are reported.
+The Verilator testbench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The testbench will also flag an error if any accumulator overflows are reported.
 
 The Verilator testbench executes for 0.5s simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/test/dac_test.py)) imports the generated *pcm_out.py* and *dac_out.py* and performs the following operations:
 

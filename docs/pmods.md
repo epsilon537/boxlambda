@@ -15,7 +15,7 @@ Hook up [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start)
 
 ### MicroSD PMOD
 
-Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert an SD card into the card reader.
+Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port `JD` and insert an SD card into the card reader.
 
 ![MicroSD PMOD Setup.](assets/microsd_pmod.jpg)
 
@@ -48,7 +48,7 @@ I'm using the following PMOD from Machdyne:
 
 [https://machdyne.com/product/usb-host-dual-socket-pmod/](https://machdyne.com/product/usb-host-dual-socket-pmod/)
 
-Hook up the PMOD to port **JA** and connect a keyboard and/or a mouse.
+Hook up the PMOD to port `JA` and connect a keyboard and/or a mouse.
 
 ![USB PMOD Setup](assets/usb_pmod_setup.jpg)
 

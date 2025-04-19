@@ -62,7 +62,7 @@ Note that if you were to add a second RP to the design, the DFX Controller would
 
 ### Wishbone to AXI Interworking
 
-The DFX Controller IP bus interfaces are AXI-based, while BoxLambda is Wishbone-based. To bridge the two bus protocols, I'm using ZipCPU's [wbm2axilite](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/wbm2axilite.v) and [aximrd2wbsp](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/aximrd2wbsp.v). The resulting **wb_dfx_controller** module looks like this:
+The DFX Controller IP bus interfaces are AXI-based, while BoxLambda is Wishbone-based. To bridge the two bus protocols, I'm using ZipCPU's [wbm2axilite](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/wbm2axilite.v) and [aximrd2wbsp](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/aximrd2wbsp.v). The resulting `wb_dfx_controller` module looks like this:
 
 ![WB DFX Controller Block Diagram](assets/wb_dfx_controller.png)
 

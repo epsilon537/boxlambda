@@ -9,11 +9,11 @@ This test verifies that reading from or writing to an invalid address does not c
 
 ### Invalid Address Test on Verilator
 
-Build the **invalid_address** project:
+Build the `invalid_address` project:
 
 ```
 cd build/sim-a7-100/gw/projects/invalid_address
-make invalid_address_sim_sw
+make invalid_address_sim
 ```
 
 Execute the generated Verilator model. You should see the following output:
@@ -45,7 +45,7 @@ Build the project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/invalid_address
-make invalid_address_bit_sw
+make invalid_address_bit
 ```
 
 Download the generated bitstream file to the Arty A7:

@@ -66,7 +66,7 @@ Going into a little more detail, to write to a single I2C slave register:
     - the number of bytes to send (1 in case of a single register write).
     - a flag indicating that this is a write transaction.
 4. WBI2C reads the register value from proxy memory and sends it to the slave using the Slave Register Protocol.
-5. Software waits for the completion of the transaction by polling the CMD register **Busy** bit. Instead of polling, WBI2C can be configured to generate an IRQ when the transaction is complete.
+5. Software waits for the completion of the transaction by polling the CMD register `Busy` bit. Instead of polling, WBI2C can be configured to generate an IRQ when the transaction is complete.
 
 **I2C CMD Register Layout**:
 
@@ -186,7 +186,7 @@ module boxlambda_top (
 
 ## Pull-Up Pins
 
-You might expect that the SCL and SDA pull-up resistors connect directly to the 3V3 power rail. On the Arty A7, that's not the case. The SCL and SDA pull-up resistors connect to an **SCL Pull-Up Pin** (SCL PUP) and **SDA Pull-Up Pin** (SDA PUP) respectively. For these pull-ups to work, the pull-up pins have to be statically driven high. That's what the last two lines in the above code snippet are for.
+You might expect that the SCL and SDA pull-up resistors connect directly to the 3V3 power rail. On the Arty A7, that's not the case. The SCL and SDA pull-up resistors connect to an **SCL Pull-Up Pin** (`SCL PUP`) and **SDA Pull-Up Pin** (`SDA PUP`) respectively. For these pull-ups to work, the pull-up pins have to be statically driven high. That's what the last two lines in the above code snippet are for.
 
 ![SCL and SDA Pull-Up Pins on Arty A7 Schematic](assets/scl_sda_pup_schematic.png)
 

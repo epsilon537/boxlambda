@@ -13,11 +13,11 @@ Additionally, when Switch 0 (SW0) is set to *On* and a USB keyboard is connected
 
 ### The USB HID Test on Verilator
 
-Build the **usb_hid_sys_test** project:
+Build the `usb_hid_sys_test` project:
 
 ```
 cd build/sim-a7-100/gw/projects/usb_hid_sys_test
-make usb_hid_sys_test_sim_sw
+make usb_hid_sys_test_sim
 ```
 
 Execute the generated Verilator model. You should see the following output (it'll take a minute before you start seeing any output):
@@ -47,7 +47,7 @@ The *ledg_1 = ...* lines indicate a LED update in the emulated USB keyboard.
 
 ### The USB HID Test on FPGA
 
-Hook up Machdyne's [USB host dual socket PMOD](https://machdyne.com/product/usb-host-dual-socket-pmod/) to port **JA** and connect a keyboard and/or a mouse.
+Hook up Machdyne's [USB host dual socket PMOD](https://machdyne.com/product/usb-host-dual-socket-pmod/) to port `JA` and connect a keyboard and/or a mouse.
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
@@ -55,7 +55,7 @@ Build the project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/usb_hid_sys_test
-make usb_hid_sys_test_bit_sw
+make usb_hid_sys_test_bit
 ```
 
 Download the generated bitstream file to the Arty A7:
@@ -64,7 +64,7 @@ Download the generated bitstream file to the Arty A7:
 make usb_hid_sys_test_load
 ```
 
-Make sure Switch 0 (**SW0**) is in the *Off* position (flipped toward the edge of the board).
+Make sure Switch 0 (`SW0`) is in the *Off* position (flipped toward the edge of the board).
 
 Press some keys on the keyboard, move the mouse around. You should see the results in the Putty terminal.
 

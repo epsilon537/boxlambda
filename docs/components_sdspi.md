@@ -26,7 +26,7 @@ hide:
 
 *SDSPI in the BoxLambda Architecture.*
 
-On the Arty, BoxLambda uses Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) plugged into the **JD** Connector.
+On the Arty, BoxLambda uses Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) plugged into the `JD` Connector.
 
 The MicroSD card can operate in two modes: SD card mode and SPI mode. In SPI mode, a 1-bit SPI bus is used as the interface between the SD-Card Controller (Master) and the SD card (Slave). SPI mode is selected by pulling the Chip Select line low.
 The SDSPI core currently only supports SPI mode.
@@ -37,7 +37,7 @@ Other than the SPI signals (*SCK*, *MISO*, *MOSI*, *CS*), the MicroSD card inter
 
 ### SDSPI Core
 
-**Sdspi_test** is a test SoC containing the SDSPI core along with other BoxLambda components. The SDSPI core is instantiated in the [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv) module as follows:
+`Sdspi_test` is a test SoC containing the SDSPI core along with other BoxLambda components. The SDSPI core is instantiated in the [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv) module as follows:
 
 ```
 sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
