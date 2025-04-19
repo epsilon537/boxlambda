@@ -15,7 +15,9 @@ Designing a deterministic system is more complex than designing a system that al
 
 For example, it would be cool if the system is designed so that "racing the beam" becomes possible. This would mean timing actions within an application's main loop so that they occur on a specific screen scan line and column. Think of Commodore 64 split raster bars and sprite multiplexing.
 
-Deterministic behavior must be guaranteed only when required by the application. Less deterministic operations are perfectly acceptable when the application doesn’t need full determinism. For example, a deterministic application might run from Block RAM with known, fixed memory access latency, while a non-deterministic application could run from bursty external memory.
+Deterministic behavior must be guaranteed only when required by the application. Less deterministic operations are perfectly acceptable when the application doesn’t need full determinism. For example, a deterministic application might run from Block RAM with known, low, fixed memory access latency, while a non-deterministic application could run from bursty external memory.
+
+Deterministic behavior als implies that instruction cycle counts are known and fixed.
 
 ## Self-Contained
 

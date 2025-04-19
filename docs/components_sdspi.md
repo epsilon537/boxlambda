@@ -5,11 +5,11 @@ hide:
 
 ## SDSPI SD Card Controller
 
-- **SDSPSI Repo**, BoxLambda fork, *boxlambda* branch:
+- **SDSPSI Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/sdspi/tree/boxlambda](https://github.com/epsilon537/sdspi/tree/boxlambda).
 
 - **SDSPI Submodule in the BoxLambda Directory Tree**:
-    boxlambda/sub/sdspi/.
+    `boxlambda/sub/sdspi/`
 
 - **SDSPI Gateware Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/sdspi](https://github.com/epsilon537/boxlambda/tree/master/gw/components/sdspi)
@@ -76,7 +76,7 @@ The above is a simplified block diagram illustrating the SDSPI core internal. I 
 
 On the Verilator test bench, the MicroSD card PMOD is replaced with an SDSPISIM co-simulator. SDSPISIM was easy to plug into BoxLambda's test bench. The interface is similar to the UARTSIM co-simulator, already in use in the test bench, and also provided by Dan Gisselquist.
 
-Hereare the hooks to both co-simulators in the test bench's **tick()** function. The tick() function is the heart of the test bench advancing the simulation by one clock cycle:
+Hereare the hooks to both co-simulators in the test bench's `tick()` function. The `tick()` function is the heart of the test bench advancing the simulation by one clock cycle:
 
 ```
   //Feed SDSPI co-sim
@@ -89,7 +89,7 @@ Hereare the hooks to both co-simulators in the test bench's **tick()** function.
 
 For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/sim/sim_main.cpp) in the *sdspi_test* project.
 
-SDSPISIM reads from and writes to an **sdcard.img** file. That file can be mounted in Linux, so you can FAT format it and put files on it for the simulated system to use, or vice versa.
+SDSPISIM reads from and writes to an `sdcard.img` file. That file can be mounted in Linux, so you can FAT format it and put files on it for the simulated system to use, or vice versa.
 
 ### SDSPI Operation
 

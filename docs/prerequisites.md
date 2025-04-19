@@ -46,6 +46,15 @@ source /tools/Xilinx/Vivado/2023.1/settings64.sh
 export PATH=/usr/bin:$PATH
 ```
 
+#### Ninja and Meson
+
+Ninja and Meson are required to build the Picolibc library.
+
+```
+sudo apt-get install ninja-build
+sudo apt-get install meson
+```
+
 ### GDB (Multiarch)
 
 For debug access to BoxLambda.
@@ -54,21 +63,15 @@ For debug access to BoxLambda.
 sudo apt install gdb-multiarch
 ```
 
-On distros such as Arch Linux there is no gdb-multiarch package. The regular gdb package includes multiarch support.
+On Arch Linux, the regular `gdb` package includes multiarch support, so you should just install `gdb` instead of `gdb-multiarch`.
 
 ### Additional Prerequisites for Building and Running the Verilator Test Cases
 
 #### SDL2
 
-SDL2 is needed to run Verilator simulation test cases involving the VERA graphics core.
+If SDL2 is installed, the `vera_integrated_test` Verilator simulation test cases will use it to display the VERA graphics core VGA output. If SDL2 is not installed, the test will still run, using the same pass/fail criteria, but the output will not be rendered to a window.
 
 [https://wiki.libsdl.org/SDL2/Installation](https://wiki.libsdl.org/SDL2/Installation)
-
-Also, set the environment variable **SDL2_DIR** to point to the SDL2 directory containing files *SDL2Config.cmake* or *sdl2-config.cmake*. In my case (Ubuntu 22.04), I added the following line to my *~/.bashrc*:
-
-```
-export SDL2_DIR=/usr/lib/x86_64-linux-gnu/cmake/SDL2/
-```
 
 #### Chromaprint
 
@@ -86,14 +89,6 @@ Gforth is required if you would like to tinker with the usb_hid_device firmware.
 
 ```
 sudo apt-get install gforth
-```
-#### Ninja and Meson
-
-Ninja and Meson are required if you want to rebuild the Picolibc library.
-
-```
-sudo apt-get install ninja-build
-sudo apt-get install meson
 ```
 
 #### Perl

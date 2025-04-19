@@ -42,11 +42,3 @@ Relative to the default settings, I modified the following:
 
 FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/fatfs_test/fatfs_test.c).
 
-Memory Footprint
-----------------
-
-|                        | Code (KB) | RO-Data (KB) | RW-Data (KB) |
-| ---------------------- | ----------| ------------ | ------------ |
-| FatFs                  | 14.1      | 0.8          | 0.3          |
-| Stack                  | 0         | 0            | 0.5          |
-

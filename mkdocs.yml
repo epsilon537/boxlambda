@@ -43,23 +43,25 @@ nav:
           - The Directory Structure: build_sys_dir_struct.md
           - The Gateware Build Structure: build_sys_gw_build_struct.md
           - The CMakeLists: build_sys_cmakelists.md
-        - Building Gateware: build_sys_building_gw.md
-        - Building Software: build_sys_building_sw.md
-        - Make All, Clean and Regen: build_sys_make_all_etc.md
-        - Creating Additional Build Trees: build_sys_creating_build_trees.md
-    - The Test Bench: test-bench.md
+        - Using the Build System:
+          - Building the Gateware: build_sys_building_gw.md
+          - Building the Software: build_sys_building_sw.md
+          - Make All, Clean, and Regen: build_sys_make_all_etc.md
+    - The Test Bench:
+        - The Test Bench: test-bench.md
+        - The System-Level Test Bench: test-bench-system-level.md
+        - The Component-Level Test Bench: test-bench-component-level.md
     - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
         - RISCV Ibex Processor: components_ibex.md
-        - Dual Port RAM: components_dpram.md
+        - IMEM: components_imem.md
         - RISCV-DBG Debug Core: components_riscv_dbg.md
         - LiteDRAM Memory Controller: components_litedram.md
         - VERA (Wishbone) Graphics: components_vera.md
         - SDSPI SD Card Controller: components_sdspi.md
         - SPI Flash Controller: components_spiflash.md
         - Dual YM2149 PSG Sound Core: components_dual_ym2149.md
-        - PicoRV DMA Controller: components_picorv_dma.md
         - USB HID Keyboard and Mouse: components_usb_hid.md
         - Serial Port: components_serial.md
         - GPIO: components_gpio.md
@@ -74,7 +76,6 @@ nav:
         - FatFs: sw_comp_fat_fs.md
         - ST-Sound: sw_comp_st_sound.md
         - YM2149 HAL: sw_comp_ym2149_hal.md
-        - PicoRV DMA HAL: sw_comp_picorv_dma_hal.md
         - USB HID: sw_comp_usb_hid.md
         - Flash Driver: sw_comp_flashdrvr.md
         - Timer: sw_comp_timer.md
@@ -102,7 +103,6 @@ nav:
         - VERA Test: test-build-vera.md
         - SDSPI and FatFS Test: test-build-sdspi-and-fatfs.md
         - YM2149 PSG, Audio DAC, and ST-Sound Test: test-build-ym2149.md
-        - PicoRV DMA Test: test-build-picorv-dma.md
         - Dual Port RAM Test: test-build-dpram.md
         - USB HID Keyboard and Mouse Test: test-build-usb-hid.md
         - SPI Flash Test: test-build-spi-flash.md

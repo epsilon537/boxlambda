@@ -25,86 +25,49 @@ BoxLambda uses the Picolibc standard C library implementation.
 
 ### Building Picolibc
 
-#### Picolibc Configuration Scripts - RV32IMC
-A Picolibc build for a new system requires configuration scripts for that system in the [picolibc/scripts/](https://github.com/epsilon537/picolibc/tree/3cd5bea5ad034d574670a7a85b2221d26224b588/scripts) directory. The scripts are named after the selected processor configuration. They specify such things as the compiler toolchain to use, GCC processor architecture flags, and CPP preprocessor flags tweaking specific library features.
+#### Picolibc Configuration Scripts
+A Picolibc build for a new system requires configuration scripts for that system in the [picolibc/scripts/](https://github.com/epsilon537/picolibc/tree/boxlambda/scripts) directory. They specify such things as the compiler toolchain to use, GCC processor architecture flags, and CPP preprocessor flags tweaking specific library features.
 
-I'm using RISCV ISA-string **rv32imc** as the base name for the new scripts I'm creating. This corresponds with the default **-march** value of BoxLambda's GCC toolchain:
+I'm using `boxlambda` as the base name for the new scripts.
 
-```
-riscv32-unknown-elf-gcc -Q --help=target
-The following options are target-specific:
-  -mabi=                                ilp32
-  -malign-data=                         xlen
-  -march=                               rv32imc
-  -mbranch-cost=N                       0
-  -mcmodel=                             medlow
-  -mcpu=PROCESSOR
-  -mdiv                                 [disabled]
-  -mexplicit-relocs                     [disabled]
-  -mfdiv                                [disabled]
-  -misa-spec=                           2.2
-  -mplt                                 [enabled]
-  -mpreferred-stack-boundary=           0
-  -mrelax                               [enabled]
-  -mriscv-attribute                     [enabled]
-  -msave-restore                        [disabled]
-  -mshorten-memrefs                     [enabled]
-  -msmall-data-limit=N                  8
-  -mstrict-align                        [disabled]
-  -mtune=PROCESSOR
+The new scripts are derived from the existing configuration files for *rv32imac*:
 
-  Supported ABIs (for use with the -mabi= option):
-    ilp32 ilp32d ilp32e ilp32f lp64 lp64d lp64f
-
-  Known code models (for use with the -mcmodel= option):
-    medany medlow
-
-  Supported ISA specs (for use with the -misa-spec= option):
-    2.2 20190608 20191213
-
-  Known data alignment choices (for use with the -malign-data= option):
-    natural xlen
-```
-
-The easiest way to create the new scripts is to derive them from existing scripts for similar platforms. I derived the *rv32imc* configuration files  from the existing *rv32imac* configuration files:
-
-- [do-rv32imc-configure](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/do-rv32imc-configure) is based on [do-rv32imac-configure](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/do-rv32imac-configure).
-- [cross-rv32imc_zicsr.txt](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/cross-rv32imc_zicsr.txt) is based on [cross-rv32imac_zicsr.txt](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/cross-rv32imac_zicsr.txt).
-- [run-rv32imc](https://github.com/epsilon537/picolibc/blob/3cd5bea5ad034d574670a7a85b2221d26224b588/scripts/run-rv32imc) is based on [run-rv32imac](https://github.com/epsilon537/picolibc/blob/3cd5bea5ad034d574670a7a85b2221d26224b588/scripts/run-rv32imac).
-
-*Zicsr* stands for RISCV Control and Status Registers. These are always enabled on Ibex.
+- [do-boxlambda-configure](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/do-boxlambda-configure) is based on [do-rv32imac-configure](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/do-rv32imac-configure).
+- [cross-boxlambda.txt](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/cross-boxlambda.txt) is based on [cross-rv32imac_zicsr.txt](https://github.com/epsilon537/picolibc/blob/boxlambda/scripts/cross-rv32imac_zicsr.txt).
 
 The differences between the derived scripts and the base scripts are minimal:
 
-- They are referencing the *riscv32-unknown-elf* GCC toolchain used by BoxLambda.
-- The *-march* flag is set to *rv32imc* (no 'a' - atomic instructions).
-- In *do-rv32imc-configure*, picocrt is set to **false**. We're not using the picolibc crt0 module. BoxLambda has its own variant of the crt0 module in the **bootstrap** software component.
+- They are referencing the *riscv32-boxlambda-elf* GCC toolchain.
+- The *-march* flag is set to *rv32im_zicsr*.
+- In *do-boxlambda-configure*, `picocrt` is set to `false`. We're not using the picolibc crt0 module. BoxLambda has its own variant of the crt0 module in the `bootstrap` software component.
 
 #### picolibc_build.sh
 ![Building Picolibc.](assets/building_picolibc.drawio.png)
 
-With the configuration scripts in place, we can build and install the picolibc library. We have to supply a build directory and an install directory.
-I put the build directory in **boxlambda/sw/picolibc-build** and the install directory in **boxlambda/sw/picolibc-install**.
+I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc_build.sh) shell script. This script is invoked by the build system (in [sw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/sw/CMakeLists.txt)) during build tree configuration time. The picolibc build and install directories are placed inside the build tree:
 
-I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc_build.sh) shell script. The PicoLibc install directory is checked in so there's no need to run the *picolibc_build.sh* as part of the repository setup. The script is only needed in case we want to regenerate the PicoLibc library (e.g. after updating to a newer version of the library).
+- **Picolibc build directory**: `<build dir>/sw/piclobc-build`
+- **Picolibc install directory**: `<build dir>/sw/piclobc-install`
+
+When there are changes in the Picolibc source tree, the build trees need to be re-generated. The easiest way to do that is by running `make regen` from the build tree.
 
 ### Linking against the Picolibc library: The Picolibc GCC specs file
 
-To link the PicoLibc library into an application image, the PicoLibc *spec file* needs to be passed to GCC. The Picolibc GCC specs file expects absolute paths, however. I'm using CMake's *configure_file()* to replace placeholders
-in [scripts/picolibc.specs.in](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc.specs.in) with the project source directory's absolute path. The resulting *picolibc.specs* is written in the root of the build tree. This way, the Picolibc library build for BoxLambda can be checked into the source tree and the user won't need to build and install it from source when setting up BoxLambda.
-
-The code snippet below is taken from the SW [CMakeList](https://github.com/epsilon537/boxlambda/blob/master/sw/CMakeLists.txt):
+To link the PicoLibc library into an application image, the PicoLibc *specs file* needs to be passed to GCC. `sw/CMakeLists.txt` takes care of this:
 
 ```
-#The GCC specs file expects absolute paths. I'm using configure_file() to replace placeholders
-#in picolibc.specs.in with PROJECT_SOURCE_DIR. The resulting picolibc.specs is written in the root of the build tree.
-configure_file(${PROJECT_SOURCE_DIR}/scripts/picolibc.specs.in picolibc.specs @ONLY)
-
 #Set the generated specs files as standard compile and link options.
-set(SPECS "--specs=${CMAKE_CURRENT_BINARY_DIR}/picolibc.specs")
-add_compile_options(${SPECS})
-add_link_options(${SPECS} "LINKER:--gc-sections")
+set(SPECS "--specs=${CMAKE_CURRENT_BINARY_DIR}/picolibc-install/picolibc.specs")
+
+#Use the picolibc specs for all compilations.
+add_compile_options(
+    $<$<COMPILE_LANGUAGE:CXX,C,ASM>:${SPECS}>)
+
+add_link_options(
+    $<$<COMPILE_LANGUAGE:CXX,C,ASM>:${SPECS}>)
 ```
+
+The Picolibc GCC specs file can be found in the Picolib install directorty.
 
 ### Bootstrap
 
@@ -124,7 +87,7 @@ More detail for each of these follows in the subsections below. I have grouped t
 
 [https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap)
 
-An application wishing to use the standard C library has to link in this bootstrap component along with the PicoLibc library itself.
+An application using the standard C library has to link in this bootstrap component.
 
 #### The Vector Table
 
@@ -143,8 +106,6 @@ BoxLambda's version of crt0 can be found here:
 
 [boxlambda/sw/components/bootstrap/crt0.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/crt0.c).
 [boxlambda/sw/components/bootstrap/crt0.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/crt0.h).
-
-BoxLambda's crt0 is based on the Picolibc implementation, with modifications to accommodate the relocation of sections to BoxLambda's CMEM and DMEM internal memories.
 
 #### Standard Input, Output, and Error
 
@@ -207,21 +168,20 @@ The **set_stdio_to_uart()** function is to be called from the application before
 
 #### The Linker Script
 
-Through a *linker script* we tell the linker where in memory to place the program code, data, and stack. The BoxLambda linker script is based on the one provided by PicoLibc, with modifications for BoxLambda's *CMEM*/*DMEM*/*EMEM*/*flash* memory architecture.
+Through a *linker script* we tell the linker where in memory to place the program code, data, and stack.
 
 The Linker Script defines the following:
 
-- Relevant Memories on the target device: In the case of BoxLambda, these are *cmem*, *dmem*, *emem* (=DDR memory), and *flash*.
+- Relevant Memories on the target device: In the case of BoxLambda, these are *imem*, *emem* (=DDR memory), and *flash*.
 ```
 MEMORY
 {
     flash : ORIGIN = __flash, LENGTH = __flash_size
-    cmem : ORIGIN = __cmem, LENGTH = __cmem_size
-    dmem : ORIGIN = __dmem, LENGTH = __dmem_size
+    imem : ORIGIN = __imem, LENGTH = __imem_size
     emem : ORIGIN = __emem, LENGTH = __emem_size
 }
 ```
-- The mapping of input to output sections. Input sections are defined in the source code and default to .text, .bss, and .data when not explicitly specified. The output sections for BoxLambda are: *.flash*, *.text*, *.cmem_bss*, *.data*, *.tdata*, *.tbss*, *.bss*, *.heap* and *.stack*.
+- The mapping of input to output sections. Input sections are defined in the source code and default to .text, .bss, and .data when not explicitly specified. The output sections for BoxLambda are: *.flash*, *.text*, *.data*, *.tdata*, *.tbss*, *.bss*, *.heap* and *.stack*.
 ```
     .text : {
         ...
@@ -231,33 +191,30 @@ MEMORY
         *(.gnu.linkonce.t.*)
     ...
 ```
-- The mapping of output sections to memories and, for sections that require relocation, the memory from which to load them. For executables built to boot from Flash, the load memory will be the *flash* memory. For executables built to boot from CMEM, *cmem* will be used as the load memory.
+- The mapping of output sections to memories and, for sections that require relocation, the memory from which to load them. For executables built to boot from flash, the load memory will be the *flash* memory. For executables built to boot from IMEM, *imem* will be used as the load memory.
 ```
     ...
     .text : {...
-    } >cmem AT>flash
+    } >imem AT>flash
     ...
     .data : ALIGN_WITH_INPUT {...
-    } >dmem AT>flash
+    } >imem AT>flash
     ...
     .bss (NOLOAD) : {
-    } >dmem
+    } >imem
 ```
-  - Code sections go to *cmem*.
-  - Data, BSS, and stack sections go to *dmem*.
-  - The *.cmem_bss* section goes to *cmem*.
+  - Code, Data, BSS, and stack sections go to *imem*.
   - The heap goes to *emem*.
 - Symbols used by the CRT0 code for section relocation, BSS initialization, etc. For BoxLambda, the key symbols are:
-    - *__code_source / __code_start / __code_size*: source address, destination address, and size of the code section to relocate from flash to CMEM. In the Boot-from-CMEM sequence, *__code_source* and *__code_start* point to the same CMEM address.
-    - *__data_source / __data_start / __data_size*: source address, destination address, and size of the data section to relocate from flash or CMEM to DMEM.
-    - *__bss_start / __bss_size*: Address and size of BSS section in DMEM to zero out.
-    - *__cmem_bss_start / __cmem_bss_size*: Address and size of BSS section in CMEM to zero out.
+    - *__code_source / __code_start / __code_size*: source address, destination address, and size of the code section to relocate from flash to IMEM. In the Boot-from-IMEM sequence, *__code_source* and *__code_start* point to the same IMEM address.
+    - *__data_source / __data_start / __data_size*: source address, destination address, and size of the data section to relocate from flash to IMEM. In the Boot-from-IMEM sequence; *__data_source* and *__data_start* point to the same IMEM address.
+    - *__bss_start / __bss_size*: Address and size of BSS section in IMEM to zero out.
 ```
     .text : {
         PROVIDE(__code_start = ADDR(.text));
         ...
         PROVIDE(__code_end = .);
-    } >cmem AT>flash
+    } >imem AT>flash
     PROVIDE(__code_source = LOADADDR(.text));
     PROVIDE(__code_size = __code_end - __code_start );
     ...
@@ -265,59 +222,45 @@ MEMORY
 
 BoxLambda has two linker scripts:
 
-- [link_cmem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_cmem_boot.ld): For software images that boot from CMEM.
+- [link_imem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_imem_boot.ld): For software images that boot from IMEM.
 - [link_flash_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_flash_boot.ld): For software images that boot from Flash.
 
-The CMEM and DMEM sizes are passed to the linker via symbols defined by the build system.
+The IMEM size is passed to the linker via symbols defined by the build system ([sw/projects/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/CMakeLists.txt)).
 
 ```
-  #Pass linker script and picolibc specs to linker, and define __cmem_size and __dmem_size symbols.
   target_link_options(${_tgt}
         PRIVATE
+            # Don't use Picolibc's crt0. We provide our own crt0 in
+            # sw/components/bootstrap
+            -nostartfiles
             -T${_link_script}
-            "--specs=${CMAKE_BINARY_DIR}/sw/picolibc.specs"
-            "LINKER:--defsym=__cmem_size=${CMEM_SIZE}"
-            "LINKER:--defsym=__dmem_size=${DMEM_SIZE}"
+            "LINKER:--defsym=__imem_size=${IMEM_SIZE}"
             "LINKER:--gc-sections"
             "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
     )
 ```
 
-###### .cmem_bss and .dmem_text
-
-The linker script contains a **.cmem_bss** section, mapped to CMEM, so it is possible to put data in CMEM by assigning it to this section.
-```
-/*Create some data buffers in CMEM by mapping them to the .cmem_bss segment.*/
-char cmem_str[32] __attribute__ ((section (".cmem_bss")));
-```
-
-Similarly, the **.dmem_text** section allows code to be put in DMEM.
-```
-/*This function executes from DMEM.*/
-__attribute__ ((section(".dmem_text")))
-int code_in_dmem(char *message) {
-    int i, j;
-...
-```
-
 #### Boot Sequence
 
-BoxLambda currently supports two boot sequences: **Boot-from-Flash** and **Boot-from-CMEM**.
+BoxLambda currently supports two boot sequences: **Boot-from-Flash** and **Boot-from-IMEM**.
 
 ##### Boot-from-Flash Sequence
 
-![The Boot from Flash Sequence](assets/spiflash_boot_sequence.png)
+[![The Boot from Flash Sequence](assets/spiflash_boot_sequence.png)](assets/spiflash_boot_sequence.png)
 
 *The Software Boot-from-Flash Sequence.*
 
-Note that, technically, BoxLambda doesn't boot from Flash Memory. It boots from CMEM at address offset 0x80. There, it executes the early startup code defined in *vectors.S* before jumping to the CRT0 code located in Flash Memory.
-I could have just pointed the Ibex Boot Vector to Flash Memory. However, I already have so many test programs that execute directly from CMEM, I decided to keep the Boot-from-CMEM feature, and from there branch to Flash Memory if so desired. The CMEM software program that branches to the flash boot code (i.e. containing just *vectors.S*) is located here:
+Technically, BoxLambda doesn't boot from flash memory. It boots from IMEM at address offset 0x80. There, it executes the early startup code defined in *vectors.S* before jumping to the CRT0 code located in flash memory.
 
-[https://github.com/epsilon537/boxlambda/tree/master/sw/projects/cmem_to_flash_vector](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/cmem_to_flash_vector)
+The Ibex Boot Vector is part of a vector table that also includes the interrupt vectors. For the purpose of low-latency interrupt handling, it's important to keep this vector table in IMEM, rather than (slow) flash memory.
 
-##### Boot-from-CMEM Sequence
+The software project that branches from IMEM to the flash boot code (i.e. containing just *vectors.S*) is located here:
 
-![The Boot from CMEM Sequence](assets/cmem_boot_sequence.png)
+[https://github.com/epsilon537/boxlambda/tree/master/sw/projects/imem_to_flash_vector](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/imem_to_flash_vector)
+
+##### Boot-from-IMEM Sequence
+
+![The Boot from IMEM Sequence](assets/imem_boot_sequence.png)
 
 *The Software Boot-from-CMEM Sequence.*
 
@@ -366,11 +309,4 @@ int main(void) {
 
 
 Notice the **_init()** function. This function is executed by the PicoLibc startup code before calling **main()**. This is where we set up the UART and stdio.
-
-### Memory Footprint
-
-|                        | Code (KB) | RO-Data (KB) | RW-Data (KB) |
-| ---------------------- | ----------| ------------ | ------------ |
-| Picolibc + GCC         | 9.6       | 1.3          | 0.1          |
-| Stack                  | 0         | 0            | 0.5          |
 

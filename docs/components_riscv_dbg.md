@@ -128,12 +128,7 @@ On the OpenOCD side, the transport protocol used for this debug-access-via-FPGA-
 ![BoxLambda OpenOCD Arty A7 FTDI Setup](assets/OpenOCD_Setup_Arty_A7.drawio.png)
 *BoxLambda OpenOCD Arty A7 FTDI Setup*
 
-OpenOCD configuration files for debugging on the Arty-A7 are available in the `scripts/` directory:
-
-- **Arty-A7-35T** (deprecated):
-  [`scripts/arty_a7_35t.openocd.cfg`](https://github.com/epsilon537/boxlambda/blob/master/scripts/arty_a7_35t.openocd.cfg)
-- **Arty-A7-100T**:
-  [`scripts/arty_a7_100t.openocd.cfg`](https://github.com/epsilon537/boxlambda/blob/master/scripts/arty_a7_100t.openocd.cfg)
+OpenOCD configuration files for debugging on the Arty-A7 are available in the `scripts/` directory: [`scripts/arty_a7_100t.openocd.cfg`](https://github.com/epsilon537/boxlambda/blob/master/scripts/arty_a7_100t.openocd.cfg)
 
 To summarize:
 

@@ -5,7 +5,7 @@ hide:
 
 ## VERA (Wishbone) Graphics
 
-- **VERA Wishbone Repo**, BoxLambda fork, *boxlambda* branch:
+- **VERA Wishbone Repo**, BoxLambda fork, `boxlambda` branch:
   [https://github.com/epsilon537/vera_wishbone](https://github.com/epsilon537/vera_wishbone).
 
 - **VERA Wishbone Submodule in the BoxLambda Directory Tree**:
@@ -38,34 +38,32 @@ VERA Wishbone's feature summary:
 
 *The VERA Wishbone Block Diagram.*
 
-In the above diagram, the big arrows show the main data flow. The small arrows are control signals. The labels next to the arrowheads show what is being presented to the block at that point. E.g. the *Composer* presents a *line_idx* and *render_start* signal to the *Layer 0 Renderer*. Data path bus widths are indicated by a number between brackets.
+In the above diagram, the big arrows show the main data flow. The small arrows are control signals. The labels next to the arrowheads show what is being presented to the block at that point. E.g. the `composer` presents a `line_idx` and `render_start` signal to the *Layer 0 Renderer*. Data path bus widths are indicated by a number between brackets.
 
 The easiest way to understand what's going on is by going through the diagram from bottom to top:
 
-1. The **video_vga** block generates the 640x480@60Hz VGA signal (RGB 4:4:4, Hsync and Vsync).
-2. The video_vga block pulls the pixel data from the **Composer** block. The 8-bit pixel data passes through the **palette_ram** to be converted to RGB 4:4:4.
-3. The Composer block in turn pulls the necessary data from three **Line Buffers**: one for each layer and one for sprites. The Composer and video_vga blocks operate at VGA pixel clock rate, i.e. 640 pixels worth of data flows when a scanline is being drawn. No data flows during horizontal or vertical retrace.
+1. The `video_vga` block generates the 640x480@60Hz VGA signal (RGB 4:4:4, Hsync and Vsync).
+2. The `video_vga` block pulls the pixel data from the `composer` block. The 8-bit pixel data passes through the `palette_ram` to be converted to RGB 4:4:4.
+3. The `composer` block in turn pulls the necessary data from three **Line Buffers**: one for each layer and one for sprites. The Composer and video_vga blocks operate at VGA pixel clock rate, i.e. 640 pixels worth of data flows when a scanline is being drawn. No data flows during horizontal or vertical retrace.
 4. The Line Buffers exist to give the renderers some leeway. The **Layer Renderers**, for instance, need to produce 640 pixels worth of data each scanline but they have 800 pixels worth of time to do so (the horizontal retrace time is 'extra time'). For the **Sprite Renderer**, the numbers are a bit different, but the concept is the same.
-5. The renderers contain the bulk of VERA's video generation logic. There are two identical Layer Renderer blocks and one Sprite Renderer. The Layer Renderers implement the different tile and Bitmap Modes, retrieve the necessary data from the **vram_if** block, and store the rendered output data in their respective Line Buffers. The Sprite Renderer does the same thing for sprites.
-6. The vram_if block contains **128KB** of embedded video memory. It has four ports: one for each renderer and one for the CPU (via the external bus). A time slot scheduler gives each port in turn access to VRAM.
+5. The renderers contain the bulk of VERA's video generation logic. There are two identical Layer Renderer blocks and one Sprite Renderer. The Layer Renderers implement the different tile and Bitmap Modes, retrieve the necessary data from the `vram_if` block, and store the rendered output data in their respective Line Buffers. The Sprite Renderer does the same thing for sprites.
+6. The `vram_if` block contains **128KB** of embedded video memory. It has four ports: one for each renderer and one for the CPU.
 
 ### Video RAM
 
-The video RAM (VRAM) is a Single Port RAM instance of four byte-wide columns (matching a 32-bit Wishbone data bus with four byte-enables). The amount of RAM is configurable, up to 128KB, through a **VRAM_SIZE_BYTES** parameter/macro.
+The video RAM (VRAM) is a Dual Port RAM instance of four byte-wide columns (matching a 32-bit Wishbone data bus with four byte-enables). The amount of RAM is configurable, up to 128KB, through a `VRAM_SIZE_BYTES` parameter/macro.
 
-The **vram_if** module has four ports: Two Line Renderers, the Sprite Renderer, and the CPU. The vram_if module arbitrates access to the VRAM using a time slot scheduler. There are four equal time slot *beats*, each one clock cycle wide. Each port is assigned one slot during which it can access VRAM. The duration of a timeslot is one clock cycle.
+DPRAM port 0 is exclusively for the CPU. DPRAM port 1 is shared by the two Line Renderers and the Sprite Renderer. The `vram_if` module arbitrates access to port 1 using a time slot scheduler. There are three equal time slot *beats*, each one clock cycle wide. Each port is assigned one slot during which it can access VRAM. The duration of a timeslot is one clock cycle.
 
 ![Time Slot Scheduled VRAM Access.](assets/vram_if_timeslot_scheduling.drawio.png)
 
 *Time Slot Scheduled VRAM Access.*
 
-With this mechanism, bandwidth utilization on one port does not have any impact on any of the other ports. A port that tries to use more than its share of the bus bandwidth is stalled. In practice, the only port where this can happen is the CPU port.
-
 ### The Composer
 
-The Composer receives basic control signals from the video_vga block: *next pixel*, *next line*, *next frame*, *vblank*. It uses these signals for the following purposes:
+The `composer` receives basic control signals from the `video_vga` block: `next pixel`, `next line`, `next frame`, `vblank`. It uses these signals for the following purposes:
 
-- Generate control/timing signals towards the other blocks, e.g. *line index*, *render start*, *frame done*, *sprite Line Buffer erase start*.
+- Generate control/timing signals towards the other blocks, e.g. `line_index`, `render_start`, `frame_done`, `sprite_line_buffer_erase_start`.
 - Keep track of the horizontal and vertical screen position counters, both regular and scaled.
 - Generate line IRQs.
 - Determine the active area of the screen, where the border isn't shown.
@@ -88,6 +86,8 @@ You can see the VRAM reads (*buf_strobe* and *bus_ack*) happening in parallel wi
 
 *Layer Rendering Waveform.*
 
+*Note: the exact timing of this waveform may have changed a little since this screenshot was taken because the Layer Renderer currently has slightly faster access to VRAM (1 out of 3 timeslots vs. 1 out of 4 originally).*
+
 #### Other Layer Renderer Responsibilities
 
 Other responsibilities of the Layer Renderer include:
@@ -101,7 +101,7 @@ Other responsibilities of the Layer Renderer include:
 ### The Layer Line Buffer
 
 The Layer Renderer has an 8-bit write-only interface to its Line Buffer. The Line Buffer contains 8 bits per entry. One entry corresponds to one pixel.
-The Layer Line Buffer implements a double buffering scheme: While the renderer is writing out one scan line, the Composer is reading out the other line. When they are done with the respective scan lines, they switch places.
+The Layer Line Buffer implements a double buffering scheme: While the renderer is writing out one scan line, the `composer` is reading out the other line. When they are done with the respective scan lines, they switch places.
 
 ### The Sprite Renderer
 
@@ -113,17 +113,19 @@ The Sprite Renderer's operation is a bit more complicated:
 
 The sequence of scanning the sprite attribute RAM, retrieving sprite pixel data, and rendering it out to the Line Buffer is entirely sequential. There is no pipelining.
 
-In the waveform below, you can see two sprites getting rendered out on a scanline: sprite ID 4 at position 192, and sprite ID 5 at position 256. The two sprites have 8bpp color depth and are 8 pixels wide. You can see that, for each sprite, two VRAM read operations are performed (*bus_strobe* and *bus_ack* signals), and 8 entries are accessed in the Sprite Line Buffer (*linebuf_idx_r*).
+In the waveform below, you can see two sprites getting rendered out on a scanline: sprite ID 4 at position 192, and sprite ID 5 at position 256. The two sprites have 8bpp color depth and are 8 pixels wide. You can see that, for each sprite, two VRAM read operations are performed (`bus_strobe` and `bus_ack` signals), and 8 entries are accessed in the Sprite Line Buffer (`linebuf_idx_r`).
 
 ![Sprite Rendering Waveform.](assets/spr_render_8bpp_8w.jpg)
 
 *Sprite Rendering Waveform.*
 
+*Note: the exact timing of this waveform may have changed a little since this screenshot was taken because the Sprite Renderer currently has slightly faster access to VRAM (1 out of 3 timeslots vs. 1 out of 4 originally).*
+
 #### Sprite Banks
 
-The Sprite Attribute RAM consists of two banks of 64 sprite IDs. A bit in the *VERA_CTRL* register is used to select the active bank.
+The Sprite Attribute RAM consists of two banks of 64 sprite IDs. A bit in the `VERA_CTRL` register is used to select the active bank.
 
-Sprite Banking may help with sprite multiplexing or animation: While one sprite bank is active, software can prepare the inactive bank's entries and switch over at the right moment, triggered by a *line_irq*, for instance.
+Sprite Banking may help with sprite multiplexing or animation: While one sprite bank is active, software can prepare the inactive bank's entries and switch over at the right moment, triggered by a `line_irq`, for instance.
 
 ![Double Buffering with Sprite Banks.](assets/sprite_banking_double_buffering.drawio.png)
 
@@ -181,7 +183,7 @@ The following table shows the memory-mapped address ranges:
 Note:
 
 - The above addresses are absolute, as seen by the processor. The VERA core's base address is 0x10100000.
-- The Video RAM address range depends on the amount of Video RAM set by the *VRAM_SIZE_BYTES* macro. The range 0x10140000-0x10160000 corresponds to a *VRAM_SIZE_BYTES* setting of 131072 (128K).
+- The Video RAM address range depends on the amount of Video RAM set by the `VRAM_SIZE_BYTES` macro. The range 0x10140000-0x10160000 corresponds to a `VRAM_SIZE_BYTES` setting of 131072 (128K).
 
 ### Register Interface / Programmer's Reference.
 
@@ -240,10 +242,6 @@ It is assumed that [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmo
 | JB Pin 11 | GND         | JC Pin 11 | GND         |
 | JB Pin 12 | VCC3V3      | JC Pin 12 | VCC         |
 
-### The VERA Gateware Component
-
-The VERA gateware component in the BoxLambda tree, [boxlambda/gw/components/vera](https://github.com/epsilon537/boxlambda/tree/master/gw/components/vera), contains just a *CMakeLists.txt* file and a *Bender.yml* file listing the core's verilog sources to be pulled in from the *vera_wishbone* submodule. There is no wrapper module. The *vera_top* module is directly instantiated in the BoxLambda gateware project top-level.
-
 ### VERA Wishbone Clock Frequency
 
-The VERA Wishbone core operates at **50MHz**, BoxLambda's system clock frequency. However, the **video_vga** and **composer** modules need to run at 25MHz, the 640x480@60Hz VGA pixel clock rate. These blocks use a toggling clock enable signal to do so. [Clock enables are preferred over clock dividers](https://electronics.stackexchange.com/questions/222972/advantage-of-clock-enable-over-clock-division).
+The VERA Wishbone core operates at **50MHz**, BoxLambda's system clock frequency. However, the `video_vga` and `composer` modules need to run at 25MHz, the 640x480@60Hz VGA pixel clock rate. These blocks use a toggling clock enable signal to do so. [Clock enables are preferred over clock dividers](https://electronics.stackexchange.com/questions/222972/advantage-of-clock-enable-over-clock-division).

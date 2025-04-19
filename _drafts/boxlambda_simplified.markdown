@@ -5,9 +5,7 @@ comments: true
 mathjax: yes
 ---
 
-BoxLambda just got a lot simpler and faster. In this post, I explain why I removed the DMA Controller from the BoxLambda SoC and what that means for the system architecture.
-
-I'll also briefly describe how the RISC-V GNU toolchain for BoxLambda is built.
+In this post, I remove more functionality than I'm adding, and BoxLambda becomes a lot simpler and faster as a result. I'll also briefly describe how the RISC-V GNU toolchain for BoxLambda is built.
 
 Recap
 -----
@@ -65,20 +63,26 @@ This architecture is straightforward: A CPU with an instruction and a data port,
 Multiple Bus Masters, but not simultaneously
 ============================================
 OK, I bent the truth a little. Both buses still have multiple bus masters:
-- The Data Bus is connected to 3 bus masters: the CPU data port, VS0 (DFX Virtual Socket 0) port 1, and the Debug Module.
-- The Instruction Bus is connected to 2 bus masters: the CPU instruction port and VS0 port 0.
+- The Data Bus is connected to: 
+    - The Ibex CPU data port.
+    - VS0 (DFX Virtual Socket 0) port 1.
+    - The Debug Module.
+
+- The Instruction Bus is connected to: 
+    - The Ibex CPU instruction port.
+    - VS0 port 0.
 
 [![The Data Bus and the Instruction Bus.](../assets/data_bus_and_instruction_bus.png)](../assets/data_bus_and_instruction_bus.png)
 
 *The Data Bus and the Instruction Bus.*
 
-Both buses have an arbiter that selects which bus master can access the MUX.
+The buses use an arbiter to select which bus master can access the MUX.
 
 I'm retaining the VS0 bus master ports to keep the option of experimenting with alternative CPU designs as DFX Reconfigurable Modules. In such a configuration, the Ibex CPU would go quiet after launching the VS0-based CPU, and VS0 would effectively become the only bus master on the system.
 
 The Debug Module is not active during normal operation.
 
-In other words, during normal operation only one CPU is active. You won't have multiple masters competing for the bus, so register and internal memory access times remain known and constant.
+In other words, during normal operation only the CPU is active. You won't have multiple masters competing for the bus, so register and internal memory access times remain known and constant.
 
 Here is the Instruction and Data bus verilog code:
 - [https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/instruction_bus.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/instruction_bus.sv)
@@ -95,6 +99,14 @@ The wishbone arbiters present a minor problem, however. Arbiters typically intro
 The arbiter design is adapted from [Alex Forencich's](https://github.com/alexforencich) wishbone arbiter implementation. The arbiter is code-generated using a Python script:
 
 [https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py](https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py)
+
+Handling Invalid Addresses
+==========================
+The Data Bus can optionally acknowledge transactions to invalid addresses. With this feature enabled, if there is no slave response to a read or write request within a timeout period (512 clock cycles), the Data Bus will acknowledge the transaction. In case of read requests, a dummy value of `0xDEADBEEF` is returned.
+
+The rationale behind this feature is to prevent a system lock-up when the user accidentally accesses an invalid address from the REPL.
+
+For test builds, invalid addresses should trigger Wishbone errors, so a top-level flag was introduced to control this behavior. This flag, *ACK_INVALID_ADDR*, is set to 0 for all test builds except the *invalid_address* test build. For the *boxlambda_base*, *boxlambda_dfx*, and *invalid_address* test builds, this flag is set to 1.
 
 IMEM
 ====
@@ -162,13 +174,13 @@ I would like to include a RISC-V GNU toolchain, specifically built for BoxLambda
 You just focus on the specifics of the toolchain you want to build (RISC-V, 32-bit, Static Toolchain...). The tool selects good defaults for all the rest.
 
 I selected:
-- Target Architecture: riscv
-- Architecture level: rv32im_zicsr_za_zb_zbs
-- ABI: ilp32
-- Build Static Toolchain
-- Tuple's vendor string: boxlambda
-- Target OS: bare-metal
-- Additional support languages: C++
+- Target Architecture: *riscv*
+- Architecture level: *rv32im_zicsr_za_zb_zbs*
+- ABI: *ilp32*
+- *Build Static Toolchain*
+- Tuple's vendor string: *boxlambda*
+- Target OS: *bare-metal*
+- Additional support languages: *C++*
 
 After running `ct-ng menuconfig`, execute `ct-ng build` to start the build process. The tool goes off fetching the necessary repos and tarballs, applying patches, and building the whole thing. The result is a *riscv32-boxlambda-elf/* folder organized according to the typical GNU toolchain directory structure:
 

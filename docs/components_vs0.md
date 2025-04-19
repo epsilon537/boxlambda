@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## VS0
+## VS0 - DFX Reconfigurable Partition
 
 - **VS0 Stub** Component in the BoxLambda Directory Tree:
   [boxlambda/gw/components/vs0_stub](https://github.com/epsilon537/boxlambda/tree/master/gw/components/vs0_stub)
@@ -61,19 +61,19 @@ module vs0 (
 );
 ```
 
-In the Base Configuration, VS0 is part of the Static Design, meaning a particular VS0 component is selected at build time.
+VS0 does not exist in the BoxLambda Base Configuration.
 
-In the Extended Configuration, VS0 is a **Reconfigurable Partition**, a region on the FPGA where you can dynamically load a **Reconfigurable Module (RM)**. For example, a collision detector, DSP, CORDIC core, or RAM module could be VS0 Reconfigurable Modules. You can dynamically load one of them into the VS0 partition.
+In the DFX Configuration, VS0 is a **Reconfigurable Partition**, a region on the FPGA where you can dynamically load a **Reconfigurable Module (RM)**. For example, a collision detector, DSP, CORDIC core, or RAM module could be VS0 Reconfigurable Modules. You can dynamically load one of them into the VS0 partition.
 
 Currently, two VS0 RMs are included in the BoxLambda source tree to demonstrate the DFX feature:
 
-- **Vs0_stub** is an almost-empty module. All it does is properly terminate the VS0 module interface signals, so they aren't left dangling. Wishbone reads and writes to the module are acknowledged, but no functionality is triggered.
+- **VS0_stub** is an almost-empty module. All it does is properly terminate the VS0 module interface signals, so they aren't left dangling. Wishbone reads and writes to the module are acknowledged, but no functionality is triggered.
 
 ![The vs0_stub](assets/vs0_stub.png)
 
 *The vs0_stub.*
 
-- **Vs0_j1b** is a J1B Core fitted to the VS0 interface.
+- **VS0_j1b** is a J1B Core fitted to the VS0 interface.
 
 ![The J1B Core fitted to the VS0 interface](assets/vs0_j1b.png)
 
@@ -89,19 +89,20 @@ The VS0 core is part of the 50 MHz System Clock Domain.
 
 ### Creating a New VS0 RM (DFX)
 
-The easiest way to create a new VS0 RM is to copy the *vs0_stub* component directory and make the following modifications:
+The easiest way to create a new VS0 RM is to copy the `vs0_stub` component directory and make the following modifications:
 
-1. Replace the stub module definitions in *rtl/vs0.vs* with the logic you want. Do not modify the module interface.
-2. In the *Bender.yml* file, rename *vs0_stub* to your component's name.
-3. In the *CMakeLists.txt* file, rename *vs0_stub* to your component's name.
-4. Add your new VS0 component directory to the build system by adding an *add_subdirectory(<vs0_component_name>)* line to the file *gw/components/CMakeLists.txt*.
+1. Replace the stub module definitions in `rtl/vs0.vs` with the logic you want. Do not modify the module interface.
+2. In the `Bender.yml` file, rename *vs0_stub* to your component's name.
+3. In the `CMakeLists.txt` file, rename *vs0_stub* to your component's name.
+4. Add your new VS0 component directory to the build system by adding an `add_subdirectory(<vs0_component_name>)` line to the file `gw/components/CMakeLists.txt`.
 
 ### Building a VS0 Bitstream (DFX)
 
 To build a VS0 Bitstream:
 
 1. Navigate to the VS0 component directory in the `arty-a7-100` build tree.
-2. Type *make <vs0_component_name>_bit*.
-3. The generated bitstream file will be called *<vs0_component_name>_pblock_vs0_partial.bin.bin_for_icap*.
+2. Type `make <vs0_component_name>_bit`.
+3. The generated bitstream file will be called `<vs0_component_name>_pblock_vs0_partial.bin.bin_for_icap`.
 
 See the [DFX Test Build](test-build-dfx.md) for an example.
+

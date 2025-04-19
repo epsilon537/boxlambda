@@ -90,8 +90,6 @@ Briefly, the Ibex core has:
 
 RISC-V defines 32 IRQ IDs. Ibex maps the timer interrupt to IRQ ID 7 and the fast interrupts to IRQ IDs 16 to 30.
 
-I’m using the same mapping to connect the IRQs to the [PicoRV DMA Controller](components_picorv_dma.md) and the VS0 component. This way, Ibex, PicoRV, and VS0 share the same set of interrupts with the same IRQ_IDs/ISR bit positions.
-
 The following table lists the BoxLambda interrupts and the events they report:
 
 | IRQ_ID | IRQ Name                                | Events |
@@ -100,7 +98,7 @@ The following table lists the BoxLambda interrupts and the events they report:
 | 30     | Not Assigned                            |        |
 | 29     | VERA IRQ                                | Vsync, Line IRQ, Sprite Collision |
 | 28     | VS0 Interrupt                           |        |
-| 27     | PICORV DMAC IRQ                         | Programmable |
+| 27     | Not Assigned                            |        |
 | 26     | SDSPI IRQ                               | Device Busy->Idle, Card Removed |
 | 25     | GPIO                                    | Rising or Falling Edge on input pin |
 | 24     | usb_hid_1 IRQ                           | USB report received, LED set confirmation |
@@ -110,7 +108,7 @@ The following table lists the BoxLambda interrupts and the events they report:
 | 20     | Not Assigned                            |     |
 | 19     | Not Assigned                            |     |
 | 18     | Not Assigned                            |     |
-| 17     | DFX Controller IRQ                      | VS0 Event Error |
+| 17     | Not Assigned                            |        |
 | 16     | Not Assigned                            |     |
 |  7     | Timer IRQ                               | Timer counter >= timer compare value |
 

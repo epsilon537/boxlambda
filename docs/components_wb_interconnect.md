@@ -5,61 +5,66 @@ hide:
 
 ## Wishbone Interconnect
 
-- **Crossbar and Arbiter Repo**, BoxLambda fork, *boxlambda* branch:
-  [https://github.com/epsilon537/wb2axip](https://github.com/epsilon537/wb2axip)
-
-- **Crossbar Submodule in the BoxLambda Directory Tree**:
-  `boxlambda/sub/wb2axip/`
-
-- **Shared Bus / MUX Repo**, BoxLambda fork, *boxlambda* branch:
+- **Wishbone Arbiter and MUX Repo**, BoxLambda fork, `boxlambda` branch:
   [https://github.com/epsilon537/verilog-wishbone](https://github.com/epsilon537/verilog-wishbone)
 
-- **Shared Bus / MUX Submodule in the BoxLambda Directory Tree**:
-  `boxlambda/sub/verilog-wishbone/`
+- **Wishbone Arbiter and MUX Submodule in the BoxLambda Directory Tree**:
+  boxlambda/sub/verilog-wishbone/
 
-- **Crossbar/Arbiter/MUX Component in the BoxLambda Directory Tree**:
-  [boxlambda/gw/components/wbxbar](https://github.com/epsilon537/boxlambda/tree/master/gw/components/wbxbar)
+- **Interconnect Component in the BoxLambda Directory Tree**:
+  [boxlambda/gw/components/interconnect](https://github.com/epsilon537/boxlambda/tree/master/gw/components/interconnect)
 
-- **Crossbar Top-Level Module**:
-  [sub/wb2axip/rtl/wbxbar.v](https://github.com/epsilon537/wb2axip/blob/boxlambda/rtl/wbxbar.v)
+- **Instruction Bus Module**:
+  [boxlambda/gw/components/interconnect/rtl/instruction_bus.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/instruction_bus.sv)
 
-- **Arbiter Module**:
-  [sub/wb2axip/rtl/wbarbiter.v](https://github.com/epsilon537/wb2axip/blob/boxlambda/rtl/wbarbiter.v)
+- **Data Bus Module**:
+  [boxlambda/gw/components/interconnect/rtl/data_bus.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/data_bus.sv)
 
-- **Shared Bus Top-Level Module**:
-  [gw/components/wbxbar/rtl/wb_shared_bus_15.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wbxbar/rtl/wb_shared_bus_15.sv)
+The interconnect serves as the backbone connecting the internal components of the SoC. BoxLambda uses the Wishbone *Pipelined* bus protocol, as defined in the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
 
-- **Wishbone Staller Module**:
-  [gw/components/wbxbar/rtl/wb_staller.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wbxbar/rtl/wb_staller.sv)
+Using the pipelined wishbone bus protocol does *not* imply that BoxLamba supports multiple outstanding transactions. It doesn't, currently. BoxLambda uses the pipelined protocol to have the option of supporting multiple outstanding transactions in case some day the need arises.
 
-The interconnect serves as the backbone connecting the internal components of the SoC. For this project, the two most relevant SoC internal bus specifications are [ARM's AXI bus](https://developer.arm.com/documentation/ihi0022/latest) and the open-source [Wishbone bus](https://wishbone-interconnect.readthedocs.io/en/latest/).
+### The Instruction Bus and the Data Bus
 
-**AXI** is a powerful and widely adopted interconnect standard that scales efficiently for large SoCs. However, I it does not scale down effectively to simpler SoCs like BoxLambda, where low latency and reduced complexity are prioritized over high bandwidth and scalability. For this project, I am using **Wishbone** instead.
+![BoxLambda Block Diagram](assets/Arch_Diagram_dual_bus_DFX.png)
+*BoxLambda Block Diagram.*
 
-BoxLambda uses Wishbone in *Pipelined Mode*, as defined in the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
+The Ibex CPU has an instruction and a data port, respectively connected via an Instruction and a Data Bus to the slaves they need to be able to reach. The few slaves that have to be hooked up to both buses use a 2-to-1 wishbone arbiter to select between the two buses. In theory, the arbitration will introduce delays when there's concurrent access. In practice, the programmer will know when he's in such a situation and there will be no surprises (or maybe a little one. See the [Arbiters without Overhead](#arbiters-without-overhead-most-of-the-time) section below).
 
-### Crossbar, Shared Bus, and Bus Arbiter
+Note that both buses have multiple bus masters:
 
-BoxLambda incorporates a *Crossbar*, a *Shared Bus*, and, in the case of the DFX Configuration, a *Bus Arbiter*. Refer to the [Architecture](architecture.md#architecture) section to see how these components fit into the overall architecture.
+- The Data Bus is connected to: 
+    - The Ibex CPU data port.
+    - VS0 (DFX Virtual Socket 0) port 1.
+    - The Debug Module.
 
-I am using ZipCPU's [WBXbar](https://github.com/epsilon537/wb2axip/blob/boxlambda/rtl/wbxbar.v) module for the crossbar. This module is well-documented in this ZipCPU blog post:
+- The Instruction Bus is connected to: 
+    - The Ibex CPU instruction port.
+    - VS0 port 0.
 
-[https://zipcpu.com/blog/2019/07/17/crossbar.html](https://zipcpu.com/blog/2019/07/17/crossbar.html)
+[![The Data Bus and the Instruction Bus.](assets/data_bus_and_instruction_bus.png)](assets/data_bus_and_instruction_bus.png)
 
-The Wishbone Bus Arbiter, [WBArbiter](https://github.com/epsilon537/wb2axip/blob/boxlambda/rtl/wbarbiter.v), is sourced from the same ZipCPU *wb2axip* repo.
+*The Data Bus and the Instruction Bus.*
 
-The Shared Bus is a 1-to-15 MUX generated by the [wb_mux.py](https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_mux.py) Python script. For convenience, I wrote a [wb_if](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/wb_if.sv) aware SystemVerilog wrapper for it:
+The buses use an arbiter to select which bus master can access the MUX, but during normal operation, there will be no conflict:
 
-[gw/components/wbxbar/rtl/wb_shared_bus_15.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wbxbar/rtl/wb_shared_bus_15.sv)
+- The VS0 bus master port give us the option of experimenting with alternative CPU designs as DFX Reconfigurable Modules. In such a configuration, the Ibex CPU would go quiet after launching the VS0-based CPU, and VS0 would effectively become the only bus master on the system.
 
-### Wishbone Staller / Transaction Separator
+- The Debug Module is not active during normal operation.
 
-In the [Architecture Diagram](architecture.md#architecture), you'll see that the CPU instruction and data ports are connected to the crossbar through [wb_staller](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wbxbar/rtl/wb_staller.sv) modules.
-WB_staller stalls the Wishbone Bus Master for one clock cycle at the beginning of a transaction. It's purposed is to separate transactions, i.e. preventing back-to-back transactions with CYC continuously asserted. Back-to-back transactions within the same xbar channel have lower latency than non-back-to-back transactions. As a result, the cycle count of transactions passing through the crossbar (e.g. register access) becomes less predictable. The wb_stallers avoid this issue.
+In other words, during normal operation only the CPU is active. You won't have multiple masters competing for the bus, so register and internal memory access times remain known and constant.
 
-![Transaction Separator Signals: wbm_\* signals are bus master facing, wbs_\* signals are bus slave facing](assets/wb_staller_waveform.png)
+Arbiters without Overhead (most of the time)
+============================================
+The wishbone arbiters present a minor problem, however. Arbiters typically introduce some transaction overhead. Luckily, there's a way to avoid that: I added a parameter to the arbiter module that allows you to select a default port. Transactions going through the default port will not suffer arbitration overhead when there are no requests on the other ports. The Bus Master-facing arbiters have their default port connected to the CPU.
 
-*WB_Staller Transaction Separator signals: wbm_\* signals are bus master facing, wbs_\* signals are bus slave facing.*
+[![Arbiter without arbitration overhead on the default port.](assets/arbiter_wo_overhead.png)](assets/arbiter_wo_overhead.png)
+
+*Arbiter without arbitration overhead on the default port.*
+
+The arbiter design is adapted from [Alex Forencich's](https://github.com/alexforencich) wishbone arbiter implementation. The arbiter is code-generated using a Python script:
+
+[https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py](https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py)
 
 ### Word Addressing
 
@@ -83,13 +88,9 @@ The interconnect operates within the 50 MHz system clock domain.
 
 ### Handling Invalid Addresses
 
-A small 'feature' was added to WBXbar (which may be controversial): transactions to invalid addresses are acknowledged rather than rejected. In such cases, the Wishbone error signal, which would typically be asserted, is suppressed. Reads from an invalid address returns `0xDEADBEEF`.
+The Data Bus can optionally acknowledge transactions to invalid addresses. With this feature enabled, if there is no slave response to a read or write request within a timeout period (512 clock cycles), the Data Bus will acknowledge the transaction. In case of read requests, a dummy value of `0xDEADBEEF` is returned.
 
-This feature is enabled with the *OPT_ACK_INVALID_ADDR* and *OPT_TIMEOUT* parameters of WBXbar. Specifically:
+The rationale behind this feature is to prevent a system lock-up when the user accidentally accesses an invalid address from the REPL.
 
-- *OPT_ACK_INVALID_ADDR* causes Wishbone accesses to addresses outside the configured address map to be acknowledged. The return data is set to `ERROR_DATA_PATTERN`, which is also a WBXbar parameter.
-- *OPT_TIMEOUT* is set to 511. This causes WBXbar to abort a Wishbone transaction after 511 clock cycles. This is used to terminate transactions with non-responding slaves.
+For test builds, invalid addresses should trigger Wishbone errors, so a top-level flag was introduced to control this behavior. This flag, `ACK_INVALID_ADDR` is set to 0 for all test builds except the *invalid_address* test build. For the *boxlambda_base*, *boxlambda_dfx*, and *invalid_address* test builds, this flag is set to 1.
 
-The rationale behind this is to prevent an unrecoverable CPU exception when accidentally accessing an invalid address in the REPL.
-
-For test builds, invalid addresses should trigger Wishbone errors, so a top-level flag was introduced to control this behavior. This flag, ACK_INVALID_ADDR, is set to 0 for all test builds except the *invalid_address* test build. For the *boxlambda_base*, *boxlambda_dfx*, and *invalid_address* test builds, this flag is set to 1.
