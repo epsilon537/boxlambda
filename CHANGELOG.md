@@ -44,6 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Removed picorv_dma component.
 - Removed sw/picolibc-install because derived objects don't belong in a source tree. Picolibc is now built and installed in the build tree during build tree configuration.
+- Removed j1b_test.
 
 ## Label `latency_shakeup`: Changes Since Label `boxlambda_base` - 2025-03-18
 
