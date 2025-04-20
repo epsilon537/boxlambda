@@ -34,7 +34,7 @@ VERA Wishbone's feature summary:
 
 ### Overview
 
-![The VERA Wishbone Block Diagram.](assets/vera_wishbone.drawio.png)
+[![The VERA Wishbone Block Diagram.](assets/vera_wishbone.drawio.png)](assets/vera_wishbone.drawio.png)
 
 *The VERA Wishbone Block Diagram.*
 
@@ -191,7 +191,7 @@ For a description of the VERA Wishbone registers, refer to the [VERA Programmer'
 
 ### Top-Level Interface and Output Pins
 
-The *vera_wishbone* top-level interface is straightforward:
+The VERA Wishbone top-level interface is straightforward:
 
 ```
 module vera_top #(
@@ -225,7 +225,7 @@ module vera_top #(
   );
 ```
 
-It is assumed that [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start) is being used. The VGA signals are sent to PMOD ports JB and JC with the following pin layout:
+It is assumed that [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start) is being used. The VGA signals are sent to PMOD ports `JB` and `JC` with the following pin layout:
 
 | Pin       | Description | Pin       | Description |
 | --------- | ----------- | --------- | ----------- |

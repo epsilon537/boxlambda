@@ -110,7 +110,6 @@ nav:
         - I2C Test: test-build-i2c.md
         - Real-Time Clock and Calendar Test: test-build-rtcc.md
         - Reset Test: test-build-reset.md
-        - J1B Test: test-build-j1b.md
         - DFX Test: test-build-dfx.md
         - Invalid Address Test: test-build-invalid-addr.md
         - Ibex Performance Test: test-build-ibex-perf.md

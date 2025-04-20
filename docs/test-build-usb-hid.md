@@ -13,7 +13,7 @@ Additionally, when Switch 0 (SW0) is set to *On* and a USB keyboard is connected
 
 ### The USB HID Test on Verilator
 
-Build the `usb_hid_sys_test` project:
+Build the *usb_hid_sys_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/usb_hid_sys_test
@@ -68,7 +68,7 @@ Make sure Switch 0 (`SW0`) is in the *Off* position (flipped toward the edge of 
 
 Press some keys on the keyboard, move the mouse around. You should see the results in the Putty terminal.
 
-Flip SW0 on.
+Flip `SW0` on.
 
 You should now see the keyboard LEDs rotate.
 

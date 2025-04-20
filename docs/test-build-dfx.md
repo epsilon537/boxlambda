@@ -165,7 +165,7 @@ Alternatively, instead of copying the files to an SD Card mounted on your PC and
 ymodem_rx <filename>
 ```
 
-Then send the file in question using your terminal emulator's ymodem function. The transferred file will be saved on the SD card as *\<filename\>*.
+Then send the file in question using your terminal emulator's ymodem function. The transferred file will be saved on the SD card using the given filename.
 
 ---
 

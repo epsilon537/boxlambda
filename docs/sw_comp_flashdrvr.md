@@ -9,7 +9,7 @@ hide:
 
 [boxlambda/sw/components/flashdrvr](https://github.com/epsilon537/boxlambda/tree/master/sw/components/flashdrvr)
 
-The primary purpose of the Spiflash Control Interface is to allow software to write to Flash. One does not simply write a byte to flash, however. The appropriate sector needs to be identified, erased, and paged (written). The **flashdrvr** software module implements this logic.
+The primary purpose of the Spiflash Control Interface is to allow software to write to Flash. One does not simply write a byte to flash, however. The appropriate sector needs to be identified, erased, and paged (written). The `flashdrvr` software module implements this logic.
 
 ```
 #define    FLASHCFG    0x100000C0

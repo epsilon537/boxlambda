@@ -196,8 +196,8 @@ Starting playback...
 ```
 There are a few controls you can play around with:
 
-- Set SW0 (leaving SW1 and SW2 off), then press buttons 0/1 to increase/decrease the volume.
-- Set SW1 (leaving SW0 and SW2 off), then press buttons 0/1 to increase/decrease the bass level.
-- Set SW2 (leaving SW0 and SW1 off), then press buttons 0/1 to increase/decrease the treble level.
-- SW3, sampled once at SW boot time, selects PSG0 or PSG1 to play the chiptune.
+- Set `SW0` (leaving `SW1` and `SW2` off), then press buttons 0/1 to increase/decrease the volume.
+- Set `SW1` (leaving `SW0` and `SW2` off), then press buttons 0/1 to increase/decrease the bass level.
+- Set `SW2` (leaving `SW0` and `SW1` off), then press buttons 0/1 to increase/decrease the treble level.
+- `SW3`, sampled once at SW boot time, selects PSG0 or PSG1 to play the chiptune.
 

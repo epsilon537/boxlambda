@@ -16,7 +16,7 @@ The test program consists of the following sub-tests:
 
 ### Ibex Performance Test on Verilator
 
-Build the `ibex_perf_test` project:
+Build the *ibex_perf_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/ibex_perf_test
@@ -30,14 +30,14 @@ Execute the generated Verilator model with tracing enabled (`-t`). You should se
 SIM: Tracing enabled
 DUT: Do nothing: 8 cycles.
 DUT: Expected: 8 cycles.
-DUT: lw_sw_register_loop: addr: 0x10000208, 12 cycles/iteration.
-DUT: Expected: 12 cycles.
-DUT: lw_sw_copy_loop: dest: 0x24b68, src: 0x20b68, 14 cycles/iteration.
+DUT: lw_sw_register_loop: addr: 0x10000208, 8 cycles/iteration.
+DUT: Expected: 8 cycles.
+DUT: lw_sw_copy_loop: dest: 0x9c14, src: 0x5c14, 14 cycles/iteration.
 DUT: Expected: 14 cycles.
 DUT: lw_sw_copy unrolled: 8 cycles/iteration.
 DUT: Expected: 8 cycles.
-DUT: lw_sw_copy_loop: dest: 0x12040190, src: 0x12044190, 24 cycles/iteration.
-DUT: Expected: TBD.
+DUT: lw_sw_copy_loop: dest: 0x12040190, src: 0x12044190, 14 cycles/iteration.
+DUT: Expected: 14.
 DUT: Test Successful.
 SIM: Test passed.
 ```

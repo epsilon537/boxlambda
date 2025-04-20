@@ -24,7 +24,7 @@ The I2C System Test Case runs on Verilator and FPGA, albeit with different test 
 
 ### The I2C Test on Verilator
 
-Build the `i2c_test` project:
+Build the *i2c_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/i2c_test

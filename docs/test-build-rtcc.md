@@ -108,7 +108,7 @@ Press button 0 to drop into the CLI, then type 'help' to see a list of available
         Get Current Date
 ```
 
-Play around with the settime/gettime/setdate/getdate commands. For example:
+Play around with the `settime/gettime/setdate/getdate` commands. For example:
 
 ```
 > setdate 7 8 2024

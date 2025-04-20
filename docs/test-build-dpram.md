@@ -13,7 +13,7 @@ The Dual Port RAM Test verifies access to the dual port memories. The test progr
 
 ### Dual Port RAM Test on Verilator
 
-Build the `dual_port_ram_test` project:
+Build the *dual_port_ram_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/dual_port_ram_test

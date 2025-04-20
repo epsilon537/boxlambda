@@ -7,14 +7,14 @@ hide:
 
 ### SDSPI Test on Verilator
 
-Build the `sdspi_test` project:
+Build the *sdspi_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/sdspi_test
 make sdspi_test_sim
 ```
 
-Create and format the SD Card image file (or just use the `sdcard.img` files checked into the `test/` subdirectory of the `sdspi_test` project):
+Create and format the SD Card image file (or just use the `sdcard.img` files checked into the `test/` subdirectory of the *sdspi_test* project):
 
 ```
 dd if=/dev/zero of=sdcard.img bs=512 count=131072
@@ -59,7 +59,7 @@ Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
 
 Note that this is a destructive test. The contents of the SD card will be destroyed.
 
-Build the `sdspi_test` project in an Arty A7 build tree:
+Build the *sdspi_test* project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/sdspi_test
@@ -95,14 +95,14 @@ SDSPI Test successful.
 
 ### FatFS Test on Verilator
 
-Build the `fatfs_test` project:
+Build the *fatfs_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/fatfs_test
 make fatfs_test_sim
 ```
 
-Create and format the SD Card image file (or just use the `sdcard.img` files checked into the `test/` subdirectory of the `fatfs_test` project):
+Create and format the SD Card image file (or just use the `sdcard.img` files checked into the `test/` subdirectory of the *fatfs_test* project):
 
 ```
 dd if=/dev/zero of=sdcard.img bs=512 count=131072
@@ -147,7 +147,7 @@ Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
 
 Note that this is a destructive test. The contents of the SD card will be destroyed.
 
-Build the `fatfs_test` project in an Arty A7 build tree:
+Build the *fatfs_test* project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/fatfs_test

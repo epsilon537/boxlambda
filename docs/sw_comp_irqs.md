@@ -7,7 +7,7 @@ hide:
 
 ### Vectored Mode
 
-Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the IRQ_ID by four and adding it to the vector table base address. The vector table base address is specified in the `mtvec` CSR. In BoxLambda, I'm leaving it at 0, so the interrupt entry point address is simply IRQ_ID*4.
+Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the `IRQ_ID` by four and adding it to the vector table base address. The vector table base address is specified in the `mtvec` CSR. In BoxLambda, I'm leaving it at 0, so the interrupt entry point address is simply `IRQ_ID*4`.
 
 ### Vectors.S Weak Bindings
 
@@ -61,7 +61,7 @@ _exc_handler:          //_exc_handler is overridden in the interrupt SW module.
   jal x0, _exc_handler
 ```
 
-As you can see, the weak bindings jump to `_exc_handler`, and the default _exc_handler jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
+As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
 
 ```
 void _rm_2_irq_handler(void) __attribute__((interrupt("machine")));

@@ -24,9 +24,6 @@ make mkdocs
 
 Point your browser to [http://127.0.0.1:8000/boxlambda/](http://127.0.0.1:8000/boxlambda/) to see the MkDocs website.
 
-When done, deactivate the documentation environment by running the `deactivate` command:
+When done, deactivate the documentation environment by executing the `deactivate` command.
 
-```
-deactivate
-```
 

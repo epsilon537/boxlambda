@@ -74,7 +74,7 @@ The above is a simplified block diagram illustrating the SDSPI core internal. I 
 
 ### SDSPISIM
 
-On the Verilator test bench, the MicroSD card PMOD is replaced with an SDSPISIM co-simulator. SDSPISIM was easy to plug into BoxLambda's test bench. The interface is similar to the UARTSIM co-simulator, already in use in the test bench, and also provided by Dan Gisselquist.
+On the Verilator test bench, the MicroSD card PMOD is replaced with an `SDSPISIM` co-simulator. `SDSPISIM` was easy to plug into BoxLambda's test bench. The interface is similar to the UARTSIM co-simulator, already in use in the test bench, and also provided by Dan Gisselquist.
 
 Hereare the hooks to both co-simulators in the test bench's `tick()` function. The `tick()` function is the heart of the test bench advancing the simulation by one clock cycle:
 
@@ -87,9 +87,9 @@ Hereare the hooks to both co-simulators in the test bench's `tick()` function. T
   top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 ```
 
-For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/sim/sim_main.cpp) in the `sdspi_test` project.
+For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/sim/sim_main.cpp) in the *sdspi_test* project.
 
-SDSPISIM reads from and writes to an `sdcard.img` file. That file can be mounted in Linux, so you can FAT format it and put files on it for the simulated system to use, or vice versa.
+`SDSPISIM` reads from and writes to an `sdcard.img` file. That file can be mounted in Linux, so you can FAT format it and put files on it for the simulated system to use, or vice versa.
 
 ### SDSPI Operation
 

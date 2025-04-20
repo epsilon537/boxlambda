@@ -27,8 +27,5 @@ make jekyll
 
 Point your browser to [http://127.0.0.1:4000/boxlambda/](http://127.0.0.1:4000/boxlambda/) to see the Jekyll Blog website.
 
-When done, deactivate the documentation environment by running the `deactivate` command:
-```
-deactivate
-```
+When done, deactivate the documentation environment by executing the `deactivate` command.
 

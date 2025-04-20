@@ -19,7 +19,7 @@ hide:
 
 #### Quad-SPI Flash vs. Single-SPI Flash
 
-![Arty A7 SPI Flash](https://digilent.com/reference/_media/arty/arty_spiflash.png)
+![Arty A7 SPI Flash](assets/arty_spiflash.png)
 
 *Arty A7 SPI Flash (source: Arty A7 Reference Manual)*.
 
@@ -68,9 +68,9 @@ Dan Gisselquist wrote this article describing the design of the single-SPI core:
 
 BoxLambda's SPI Flash core uses the ZipCPU spixpress core as a starting point. I made the following changes relative to the original core:
 
-- The SCK output port of the core is the actual SPI clock signal, rather than an enable signal to be used in conjunction with a DDR primitive.
-- I added a clock divider parameter for SCK. I'm using a clock divider value of two in the BoxLambda SoC.
-- The core shifts out the serial output data at the SCK falling edge and shifts in the serial input data at the SCK rising edge. I modified the `Flashsim` co-simulator module to behave like this as well. This is the standard SPI timing design.
+- The `SCK` output port of the core is the actual SPI clock signal, rather than an enable signal to be used in conjunction with a DDR primitive.
+- I added a clock divider parameter for `SCK`. I'm using a clock divider value of two in the BoxLambda SoC.
+- The core shifts out the serial output data at the SCK falling edge and shifts in the serial input data at the `SCK` rising edge. I modified the `Flashsim` co-simulator module to behave like this as well. This is the standard SPI timing design.
 
 ![SPI Timing Design](assets/spi_rising_falling_edge.png)
 
@@ -122,7 +122,7 @@ The SPI Flash core has a simple but clever control interface (invented by Dan, n
 //             in these same bits [7:0].
 ```
 
-I.e. the control port consists of a single 9-bit register. By setting the CS_n bit to 0, software can choose to 'grab' the SPI Flash port and keep ownership of it for multiple SPI transactions. When done, software releases the SPI Flash port again by setting CS_n to one in the control register.
+I.e. the control port consists of a single 9-bit register. By setting the `CS_n` bit to 0, software can choose to 'grab' the SPI Flash port and keep ownership of it for multiple SPI transactions. When done, software releases the SPI Flash port again by setting `CS_n` to one in the control register.
 
 As an example, the Flash Driver code sequence to read the Flash Device ID looks like this:
 
@@ -153,7 +153,7 @@ As an example, the Flash Driver code sequence to read the Flash Device ID looks 
 
 ### Timing
 
-Is an SCK frequency of 25MHz slow enough to stay out of trouble? I took a look at the timing.
+Is an `SCK` frequency of 25MHz slow enough to stay out of trouble? I took a look at the timing.
 For MOSI timing, I'm taking into account the following delays:
 
 - The Clock-to-Out delay in the FPGA's output flip-flop OLOGIC: 0.5ns
@@ -191,9 +191,9 @@ The SPI bus clock frequency is 25Mhz and is derived from the System Clock Domain
 
 The Arty A7 is equipped with 16Mbytes of flash memory.
 
-Flash memory address range: 0x11000000-0x11ffffff, allocated as follows:
+The flash memory address range is `0x11000000-0x11ffffff`, allocated as follows:
 
-    - 0x11000000-0x113fffff: 4Mbytes Reserved for Bitstreams
-    - 0x11400000-0x117fffff: 4Mbytes Reserved for software images that boot from flash memory.
-    - 0x11800000-0x11ffffff: 8Mbytes Available for non-volatile data storage.
+- `0x11000000-0x113fffff`: 4Mbytes Reserved for Bitstreams
+- `0x11400000-0x117fffff`: 4Mbytes Reserved for software images that boot from flash memory.
+- `0x11800000-0x11ffffff`: 8Mbytes Available for non-volatile data storage.
 

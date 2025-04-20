@@ -69,7 +69,7 @@ The Verilator setup is shown below:
 ![BoxLambda OpenOCD Verilator Setup](assets/OpenOCD_Setup_Verilator.drawio.png)
 *BoxLambda OpenOCD Verilator Setup*
 
-The `hello_world` project (`gw/projects/hello_world/`) demonstrates the OpenOCD Verilator setup. Its test script performs the following steps:
+The *hello_world* project (`gw/projects/hello_world/`) demonstrates the OpenOCD Verilator setup. Its test script performs the following steps:
 
 1. Starts the Verilator model.
 2. Connects OpenOCD to the model.
