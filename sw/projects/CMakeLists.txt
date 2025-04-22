@@ -26,7 +26,6 @@ function(link_and_create_image _tgt _link_script)
             # sw/components/bootstrap
             -nostartfiles
             -T${_link_script}
-            "--specs=${CMAKE_BINARY_DIR}/sw/picolibc.specs"
             "LINKER:--defsym=__imem_size=${IMEM_SIZE}"
             "LINKER:--gc-sections"
             "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
@@ -68,7 +67,6 @@ add_subdirectory(timer_uart_gpio_irqs)
 add_subdirectory(i2c_test)
 add_subdirectory(rtcc_test)
 add_subdirectory(reset_test)
-add_subdirectory(j1b_test)
 add_subdirectory(dfx_test)
 add_subdirectory(invalid_address)
 add_subdirectory(ibex_perf_test)

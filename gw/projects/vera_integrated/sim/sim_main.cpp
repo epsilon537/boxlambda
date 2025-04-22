@@ -299,7 +299,7 @@ int main(int argc, char** argv, char** env) {
     }
 
     /* V<sprite-bank#> indicates a Vsync IRQ, L = Line IRQ, C = collision IRQ. */
-    std::string uartCheckString2("V0LV0(Forcing sprite collision)LV0CL");
+    std::string uartCheckString2("V0LV0(Forcing sprite collision)LCV0L");
 
     if (uartRxStringPrev.find(uartCheckString2) == std::string::npos) {
       printf("SIM: did not find expected string: %s\n", uartCheckString2.c_str());

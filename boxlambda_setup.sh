@@ -133,9 +133,7 @@ echo "Creating build build trees..."
 
 rm -rf build
 
-cmake --fresh --preset=sim-a7-35
 cmake --fresh --preset=sim-a7-100
-cmake --fresh --preset=arty-a7-35
 cmake --fresh --preset=arty-a7-100
 
 #Deactivate the environment
