@@ -10,7 +10,7 @@ BoxLambda is a software-hardware crossover project, providing opportunities for 
 
 - Targets the Arty-A7-100T FPGA development board.
 - Ibex RISC-V core with machine timer and hardware interrupt support.
-- Stable low-latency access to internal memories and registers. Stable and documented instrucion cycle counts.
+- Stable low-latency access to internal memories and registers. Stable and documented instruction cycle counts.
 - DDR3 external memory access through the Litex memory controller.
 - OpenOCD-based debug access on FPGA and Verilator.
 - VERA-based VGA graphics: 2 layers tile or bitmap mode, 2 banks of 64 sprites, 128KB Video RAM, 256 color palette.
@@ -51,7 +51,7 @@ BoxLambda is a software-hardware crossover project, providing opportunities for 
 ## Status (April 2025)
 
 - **Infrastructure** (build system, etc.): Complete.
-- **Gateware**: Complete as pictured in the Block Diagram. Meeting requirements but IRQ Latency yet to be analyzed.
+- **Gateware**: Complete as pictured in the Block Diagram. Meeting requirements, but IRQ Latency yet to be analyzed.
 - **Software**: Early stage development.
 
 ## GitHub
