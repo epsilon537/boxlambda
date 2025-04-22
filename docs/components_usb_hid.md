@@ -66,7 +66,7 @@ The best information I could find online describing USB HID in general, and keyb
 
 [https://wiki.osdev.org/USB_Human_Interface_Devices](https://wiki.osdev.org/USB_Human_Interface_Devices).
 
-For the lower-level details, e.g. how to set up a *Control Transfer* to the device, I found [USB in a nutshell](https://www.beyondlogic.org/usbnutshell/usb1.shtml) very helpful.
+For the lower-level details, e.g., how to set up a *Control Transfer* to the device, I found [USB in a nutshell](https://www.beyondlogic.org/usbnutshell/usb1.shtml) very helpful.
 
 Briefly, the USB host controls keyboard LEDs by sending a *SetReport* message to the device using a [Control Transfer](https://www.beyondlogic.org/usbnutshell/usb4.shtml#Control). The message contains a bitmap specifying which LEDs should be on and off.
 
@@ -92,7 +92,7 @@ To add USB keyboard LED control to the usb_hid_host core, I implemented the foll
 - I added a conditional *Branch Request* (`br`) instruction and a `req_branch_stb` input port to the UKP module. Through the `req_branch_stb` signal, the user (usb_hid_host) can request the branch to be taken. When the branch has been taken, an ack_req_branch_stb is sent back to the user.
 - I added `outr0, outr1, and outr2` instructions, associated with three 8-bit registers and three 8-bit input ports of the UKP module, also called outr0, outr1, and outr2. When an outr<x> instruction executes, the contents of the associated register will be transmitted over the USB port.
 
-With these UKP changes, the usb_hid_host core can, upon request, have the UKP firmware branch to a section of microcode that sends a *SetReport* request to the device. The parameters of this message, i.e. the LED bitmap and the CRC16 value are specified in outr0 and outr1/2.
+With these UKP changes, the usb_hid_host core can, upon request, have the UKP firmware branch to a section of microcode that sends a *SetReport* request to the device. The parameters of this message, i.e., the LED bitmap and the CRC16 value, are specified in outr0 and outr1/2.
 
 ### Wishbone Frontend and Clock Domain Crossing
 
@@ -100,7 +100,7 @@ With these UKP changes, the usb_hid_host core can, upon request, have the UKP fi
 
 *Usb_hid_host core in USB Clock Domain with Wishbone Frontend in System Clock Domain.*
 
-I added a Wishbone frontend to the usb_hid_host core so it could be integrated into the BoxLambda SoC. The BoxLambda SoC system clock runs at 50MHz while the usb_hid_host core runs at 12MHz, so Clock Domain Crossing (CDC)) logic is needed between these two clock domains.
+I added a Wishbone frontend to the usb_hid_host core so it could be integrated into the BoxLambda SoC. The BoxLambda SoC system clock runs at 50MHz while the usb_hid_host core runs at 12MHz, so Clock Domain Crossing (CDC) logic is needed between these two clock domains.
 
 In both directions, USB to System Clock and System Clock to USB, I'm using a Multi-Cycle Path (MCP) strategy to pass signals across the clock domains. In the System Clock to USB direction (fast to slow clock), I'm using feedback. Keyboard LED update requests are acknowledged.
 
