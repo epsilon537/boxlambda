@@ -11,13 +11,13 @@ Simplicity will be a key factor when making design choices. It’s hard to make 
 
 ## Deterministic Behavior
 
-Designing a deterministic system is more complex than designing a system that allows some flexibility in completing operations. However, once such a system is in place, it becomes much easier to reason about it and design applications on top of it—especially applications with real-time requirements.
+Designing a deterministic system is more complex than designing a system that allows some flexibility in completing operations. However, once such a system is in place, it becomes much easier to reason about it and design applications on top of it, especially applications with real-time requirements.
 
 For example, it would be cool if the system is designed so that "racing the beam" becomes possible. This would mean timing actions within an application's main loop so that they occur on a specific screen scan line and column. Think of Commodore 64 split raster bars and sprite multiplexing.
 
 Deterministic behavior must be guaranteed only when required by the application. Less deterministic operations are perfectly acceptable when the application doesn’t need full determinism. For example, a deterministic application might run from Block RAM with known, low, fixed memory access latency, while a non-deterministic application could run from bursty external memory.
 
-Deterministic behavior als implies that instruction cycle counts are known and fixed.
+Deterministic behavior also implies that instruction cycle counts are known and fixed.
 
 ## Self-Contained
 
