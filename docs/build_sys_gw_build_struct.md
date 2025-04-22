@@ -42,7 +42,7 @@ The build system currently uses the following Bender targets:
 
 ## Four Layers
 
-The gateware system is organized into fours layers:
+The gateware system is organized into four layers:
 
 1. **The Project Layer**:
    Example: *Hello World*. This layer represents the top level of the build system. The `Bender.yml` manifest includes top-level SoC build files, project-specific `.xdc` constraints, memory files, and the list of components the project depends on.
@@ -54,7 +54,7 @@ The gateware system is organized into fours layers:
    Submodules are Git submodules referenced by BoxLambda. They form the foundation of the build system.
 
 4. **The Code Generation Layer**:
-   Some components require some form of transformation to be turned into synthesizable verilog. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) its `CMakefile.txt`. The custom command is added as a dependency to the generic `gw_codegen` target which gets executed as the first step in a gateware build. The code generated files are written to the `codegen/` subdirectory in the build tree. The code generated files are derived objects so they are not put under version control.
+   Some components require some form of transformation to be turned into synthesizable Verilog. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) in its `CMakefile.txt`. The custom command is added as a dependency to the generic `gw_codegen` target, which gets executed as the first step in a gateware build. The code-generated files are written to the `codegen/` subdirectory in the build tree. The code-generated files are derived objects, so they are not put under version control.
 
 The following components currently rely on code generation:
 
@@ -65,7 +65,7 @@ The following components currently rely on code generation:
 
 ## Verilator Lint Waivers
 
-Instead of adding lint waivers directly to the source code of Git submodules, these waivers are grouped into `.vlt` files located in the corresponding gateware component or project subdirectory. This approach avoids unnecessary changes to submodule source code.
+Instead of adding lint waivers directly to the source code of Git submodules, these waivers are grouped into `.vlt` files located in the corresponding gateware component or project subdirectory. This approach avoids unnecessary changes to the submodule source code.
 
 Example:
 [gw/components/ibex/lint.vlt](https://github.com/epsilon537/boxlambda/blob/master/gw/components/ibex/lint.vlt)
