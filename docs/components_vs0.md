@@ -63,7 +63,7 @@ module vs0 (
 
 VS0 does not exist in the BoxLambda Base Configuration.
 
-In the DFX Configuration, VS0 is a **Reconfigurable Partition**, a region on the FPGA where you can dynamically load a **Reconfigurable Module (RM)**. For example, a collision detector, DSP, CORDIC core, or RAM module could be VS0 Reconfigurable Modules. You can dynamically load one of them into the VS0 partition.
+In the DFX Configuration, VS0 is a **Reconfigurable Partition**, a region on the FPGA where you can dynamically load a **Reconfigurable Module (RM)**. For example, a collision detector, DSP, CORDIC core, or RAM module could be a VS0 Reconfigurable Module. You can dynamically load one of them into the VS0 partition.
 
 Currently, two VS0 RMs are included in the BoxLambda source tree to demonstrate the DFX feature:
 
