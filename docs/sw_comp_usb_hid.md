@@ -15,7 +15,7 @@ The usb_hid_host UKP firmware `*.hex` image is checked in, so you don't need to 
 
 UKP Firmware directory: [sub/usb_hid_host/src/usb_hid_host/](https://github.com/epsilon537/usb_hid_host/tree/boxlambda/src/usb_hid_host)
 
-After making your changes, run the `asukp` script in that same directory and a new firmware image will be generated.
+After making your changes, run the `asukp` script in that same directory, and a new firmware image will be generated.
 
 ## The usb_hid_device firmware
 
