@@ -66,7 +66,7 @@ make usb_hid_sys_test_load
 
 Make sure Switch 0 (`SW0`) is in the *Off* position (flipped toward the edge of the board).
 
-Press some keys on the keyboard, move the mouse around. You should see the results in the Putty terminal.
+Press some keys on the keyboard, and move the mouse around. You should see the results in the Putty terminal.
 
 Flip `SW0` on.
 
