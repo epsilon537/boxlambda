@@ -26,14 +26,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - In arty-a7 build tree, only boxlambda_base_bit, boxlambda_dfx_bit, vs0_stub_bit, and vs0_j1b_bit are built by default.
 - Renamed gw component *wbxbar* to *interconnect*.
 - Build trees are now recreated from scratch when running boxlambda_setup.sh.
-- Made SDL2 optional: if it's installed, the *vera_integrated* test will render its output in an SDL2 window. This does not affect the testcase's pass/fail criteria.
+- Made SDL2 optional: if it's installed, the *vera_integrated* test will render its output in an SDL2 window. This does not affect the test case's pass/fail criteria.
 - Replaced CMEM and DMEM with one Dual-Port Memory named IMEM (Internal memory). Port 0 is for instructions, port 1 is for data.
 - Replaced the crossbar-based interconnect with a dual-bus interconnect: an Instruction Bus and a Data Bus. The Data Bus has the option to acknowledge transactions if the slave doesn't respond within a timeout period.
 - Made VERA's VRAM dual-port, reducing CPU access latency.
 - Simplified gateware build system:
   - make *project*_synth always (re)synthesizes the component or project.
-  - make *project*_bit always (re)synthesizes, (re)implements and (re)generates the bitstream including the software image.
-  - make *project*_sim always (re)builds the verilator simulation model including the software image.
+  - make *project*_bit always (re)synthesizes, (re)implements, and (re)generates the bitstream including the software image.
+  - make *project*_sim always (re)builds the Verilator simulation model, including the software image.
   - make *project*_update_sw updates the software image in the bitstream file or Vmodel directory without triggering (re)synthesis, (re)implementation, and/or Vmodel (re)generation.
   - make *reconfigurable_module*_bit expects the reference static design project to be built first.
 - The imem-to-flash vector memory image (*imem.mem* - the default content of IMEM) is no longer checked into the source tree. It's an object derived from the *imem_to_flash_vector* SW project. *Imem.mem* is now automatically generated during the gateware codegeneraton step (*gw_codegen*) of the build system.
@@ -53,11 +53,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - *boxlambda_setup.sh* includes tools setup, simplifying user setup requirements.
 - Added *activate_env.sh* script to activate the tools environment, simplifying user setup.
-- Created a *boxlambda_doc_env_setup.sh* script to set up tools environment for building documentation.
-- Vivado build aborts with error if timing constraints are not met after implementation step.
+- Created a *boxlambda_doc_env_setup.sh* script to set up the tools environment for building documentation.
+- Vivado build aborts with an error if timing constraints are not met after the implementation step.
 - Added a single instruction prefetcher to Ibex. This helps ensure instruction cycle counts are stable and predictable.
 - Enabled Vivado post-place and post-route physical optimization.
-- Added ibex_perf_test system test. Checking the waveform of this test allows you to check the cycle count of various common instructions: lw and sw to internal memory, lw and sw to SoC registers, addi, branch taken, branch not taken.
+- Added ibex_perf_test system test. Checking the waveform of this test allows you to check the cycle count of various common instructions: lw and sw to internal memory, lw and sw to SoC registers, addi, branch taken, and branch not taken.
 - Added CoCoTB module tests for the Ibex single instruction prefetcher, the core2wb adapter, and the wb_staller.
 
 ### Fixed
@@ -69,9 +69,9 @@ No known issues fixed.
 - Switched to gdb-multiarch.
 - Using system riscv64-unknown-elf toolchain instead of LowRISC GCC toolchain. The LowRISC GCC toolchain does not support multilib which makes it harder to create executables containing strictly uncompressed instructions.
 - Updated to OSS CAD Suite 20250226.
-- Update to 2025/01/21 version of Ibex code base.
+- Update to 2025/01/21 version of the Ibex code base.
 - Update to 2025/01/31 version of Litedram code base.
-- Ibex code is imported in Boxlambda repo by gw/components/ibex/gen_core.sh script.
+- Ibex code is imported in the Boxlambda repo by the gw/components/ibex/gen_core.sh script.
 - Switched to Single-Cycle multiplier in Ibex CPU.
 - Switched audio DAC test to BoxLambda clock generator.
 - Switched to rv32im_zicsr, no instruction compression. Instruction compression may cause unaligned 32-bit instruction fetches, making instruction cycle count undeterministic. Deterministic instruction cycle counts are a BoxLambda requirement.
@@ -82,13 +82,13 @@ No known issues fixed.
 
 ### Removed
 
-- User no longer needs to install OSS CAD suite.
+- User no longer needs to install the OSS CAD suite.
 - User no longer needs to install Bender.
 - User no longer needs to install Python or PIP. This is provided by the OSS CAD Suite environment.
 - User no longer needs to install Python packages.
 - User no longer needs to install LiteX.
 - Removed zeroing out memory and some unnecessary SystemVerilog constructs incompatible with Yosys synthesis, preparing for OpenXC7 support.
-- No longer implicitly linkining in the bootstrap component. This now has to be done explicitly by the software project's CMake file.
+- No longer implicitly linking in the Bootstrap component. This now has to be done explicitly by the software project's CMake file.
 - No longer implicitly copying the build tree *cmem_to_flash_vector* to source tree's *cmem.mem*. Doing this violates the principle of least astonishment.
 - Removed Sounddevice/PortAudio dependency.
 - No longer officially supporting WSL. I haven't tried to build BoxLambda on WSL in over a year. The build instruction are most likely obsolete.
@@ -110,7 +110,7 @@ No known issues fixed.
 
 ### Fixed
 
-- Verilator script fails if VERILATOR_CPP_FLAGS not set in Makefile.
+- Verilator script fails if VERILATOR_CPP_FLAGS is not set in Makefile.
 - Build trees not clean after running boxlambda_setup.sh.
 
 ### Changed
