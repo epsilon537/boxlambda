@@ -55,7 +55,7 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="666",
 ```
 
 ### Serial Port
-Your mileage may vary but on my Ubuntu system, when I plug in my Arty A7, the serial port shows up at `/dev/ttyUSB1`.
+Your mileage may vary, but on my Ubuntu system, when I plug in my Arty A7, the serial port shows up at `/dev/ttyUSB1`.
 
 Serial Port Settings: **115200 8N1**
 
