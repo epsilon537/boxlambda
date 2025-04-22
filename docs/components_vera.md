@@ -163,9 +163,9 @@ The Sprite Line Buffer contains 16 bits per entry. One entry corresponds to one 
 
 Like the Layer Line Buffer, the Sprite Line Buffer implements a double buffering scheme.
 
-The Sprite Line Buffer also contains erase logic. When the Composer has read one scanline, it sends a signal to the Sprite Line Buffer to erase that line. Erasing is necessary because the Sprite Renderer doesn't necessarily write to each position in the line buffer. If the line were not erased, stale pixels (and associated meta-data) from a previous scanline may shine through.
+The Sprite Line Buffer also contains erase logic. When the Composer has read one scanline, it sends a signal to the Sprite Line Buffer to erase that line. Erasing is necessary because the Sprite Renderer doesn't necessarily write to each position in the line buffer. If the line were not erased, stale pixels (and associated metadata) from a previous scanline may shine through.
 
-### Wishbone Interface and Memory Mapped Access
+### Wishbone Interface and Memory-Mapped Access
 
 The VERA Wishbone core has a pipelined Wishbone slave interface. The interface has a 32-bit data port, 4-byte lane enables, and a 17-bit word-addressed address port.
 
