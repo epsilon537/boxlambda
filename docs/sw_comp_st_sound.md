@@ -26,7 +26,7 @@ The *ST-Sound* code base is written for Windows, but it was easy to add a Linux 
 
 [https://github.com/epsilon537/StSound](https://github.com/epsilon537/StSound)
 
-I ported ST-Sound library to BoxLambda, using the YM2149 audio core:
+I ported the ST-Sound library to BoxLambda, using the YM2149 audio core:
 
 [https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound)
 
@@ -40,7 +40,7 @@ The ST-Sound test software build uses the BoxLambda *stsound* and *fatfs* librar
 
 #### Audio Fingerprinting
 
-The Verilator test bench of the ST-Sound test project records about 5s worth of generated samples and saves them off to `pcm_out.py`, similar to the previous two test builds. This brings up an interesting question, however: How do we analyze this data? I.e. how do we create an automated test that checks if the given PCM sample sequence actually sounds like the first 5s of the song we want to play back? A bit-for-bit check against a reference waveform would be too brittle. A slight delay, change in volume, treble, or bass would be sufficient to break the test. We need a test that checks if a given audio fragment *sounds like* another given audio fragment without requiring it to be 100% identical.
+The Verilator test bench of the ST-Sound test project records about 5s worth of generated samples and saves them off to `pcm_out.py`, similar to the previous two test builds. This brings up an interesting question, however: How do we analyze this data? I.e., how do we create an automated test that checks if the given PCM sample sequence sounds like the first 5s of the song we want to play back? A bit-for-bit check against a reference waveform would be too brittle. A slight delay, change in volume, treble, or bass would be sufficient to break the test. We need a test that checks if a given audio fragment *sounds like* another given audio fragment without requiring it to be 100% identical.
 
 One technique that can be used for this purpose is called **Audio Fingerprinting**. The software package that implements it is called [Chromaprint](https://acoustid.org/chromaprint). It's a very interesting technique. Here is a nice article describing how it works:
 
