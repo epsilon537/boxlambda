@@ -25,8 +25,8 @@ hide:
 
 The Arty A7 has a quad-SPI flash device, so using a quad-SPI flash core would make sense. I chose to use a single-SPI flash core, however, for a couple of reasons:
 
-- A single-SPI flash core is less complex than a quad-SPI flash core. single-SPI flash is also slower than quad-SPI flash, but I don't have a specific performance requirement for flash access. I do have a simplicity requirement, so I choose to trade performance for simplicity.
-- The flash device used on the Arty A7 depends on the PCB revision. Some revisions use Micron, other revisions use Spansian. Quad-SPI flash access is not standardized across SPI flash devices, however. E.g. the command sequence needed to get the device into quad-SPI mode is device-dependent. The latency between a read command and the resulting data is device-dependent as well in quad-SPI mode. In single-SPI mode, these devices behave the same (at least when it comes to the limited feature set I'll be using in BoxLambda).
+- A single-SPI flash core is less complex than a quad-SPI flash core. Single-SPI flash is also slower than quad-SPI flash, but I don't have a specific performance requirement for flash access. I do have a simplicity requirement, so I choose to trade performance for simplicity.
+- The flash device used on the Arty A7 depends on the PCB revision. Some revisions use Micron, others use Spansion. Quad-SPI flash access is not standardized across SPI flash devices, however. E.g., the command sequence needed to get the device into quad-SPI mode is device-dependent. The latency between a read command and the resulting data is device-dependent as well in quad-SPI mode. In single-SPI mode, these devices behave the same (at least when it comes to the limited feature set I'll be using in BoxLambda).
 
 ![Arty A7 PCB revisions and their flash devices](assets/arty_flash_devices.jpg)
 
@@ -54,7 +54,7 @@ ZipCPU's spixpress core meets all of the above requirements, except the configur
 
 [https://github.com/ZipCPU/qspiflash](https://github.com/ZipCPU/qspiflash)
 
-The repository is named `qspiflash` but it includes a quad-SPI, Dual-SPI, and single-SPI core (and a co-simulation model supporting all three).
+The repository is named `qspiflash`, but it includes a quad-SPI, dual-SPI, and single-SPI core (and a co-simulation model supporting all three).
 
 Dan Gisselquist wrote this article describing the design of the single-SPI core:
 
@@ -85,7 +85,7 @@ The BoxLambda version of the Spiflash core and Flashsim co-simulator can be foun
 
 ### Reading from Flash - the Data Interface
 
-The SPI Flash core has a 32-bit Wishbone read interface. Through this interface, the user can request the core to read 32-bit words at a time from Flash memory. At SPI level, the transaction looks like this:
+The SPI Flash core has a 32-bit Wishbone read interface. Through this interface, the user can request the core to read 32-bit words at a time from Flash memory. At the SPI level, the transaction looks like this:
 
 ![Word read SPI Flash Transaction](assets/spiflash_word_read.png)
 
@@ -122,7 +122,7 @@ The SPI Flash core has a simple but clever control interface (invented by Dan, n
 //             in these same bits [7:0].
 ```
 
-I.e. the control port consists of a single 9-bit register. By setting the `CS_n` bit to 0, software can choose to 'grab' the SPI Flash port and keep ownership of it for multiple SPI transactions. When done, software releases the SPI Flash port again by setting `CS_n` to one in the control register.
+I.e., the control port consists of a single 9-bit register. By setting the `CS_n` bit to 0, software can choose to 'grab' the SPI Flash port and keep ownership of it for multiple SPI transactions. When done, the software releases the SPI Flash port again by setting `CS_n` to one in the control register.
 
 As an example, the Flash Driver code sequence to read the Flash Device ID looks like this:
 
@@ -158,7 +158,7 @@ For MOSI timing, I'm taking into account the following delays:
 
 - The Clock-to-Out delay in the FPGA's output flip-flop OLOGIC: 0.5ns
 - The FPGA IOB pad output delay: 4ns.
-- Estimated trace propagations delay assuming a signal speed of 15cm/ns: 0.5ns
+- Estimated trace propagation delay assuming a signal speed of 15cm/ns: 0.5ns
 - SPI Flash setup and hold time requirement: 2ns / 3ns
 
 ![SPI Flash MOSI Timing](assets/spi_flash_mosi_timing.png)
@@ -171,7 +171,7 @@ For MISO timing, I'm taking into account the following delays:
 
 - The Clock-to-Out delay in the FPGA IO Tile's output flip-flop OLOGIC: 0.5ns
 - The FPGA IOB pad output delay: 4ns.
-- Estimated trace propagations delay assuming a signal speed of 15cm/ns: 0.5ns
+- Estimated trace propagation delay assuming a signal speed of 15cm/ns: 0.5ns
 - SPI flash Clock Low to Output valid delay: 8ns
 - The FPGA IOB pad input delay: 1.5ns
 
@@ -185,7 +185,7 @@ Here I get only 5ns of slack. That's much less than I expected, but it should st
 
 The SpiFlash core is part of the 50MHz System Clock Domain.
 
-The SPI bus clock frequency is 25Mhz and is derived from the System Clock Domain through a clock divider.
+The SPI bus clock frequency is 25MHz and is derived from the System Clock Domain through a clock divider.
 
 ### SpiFlash Memory Layout
 
