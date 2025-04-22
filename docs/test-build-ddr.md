@@ -12,7 +12,7 @@ Build the test project:
 cd build/sim-a7-100/gw/projects/ddr_test
 make ddr_test_sim
 ```
-Execute the generated verilator model in interactive mode:
+Execute the generated Verilator model in interactive mode:
 ```
 ./Vmodel -i
 ```
