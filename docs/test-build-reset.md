@@ -21,7 +21,7 @@ Build the test project:
 cd build/sim-a7-100/gw/projects/reset_test
 make reset_test_sim
 ```
-Execute the generated verilator model:
+Execute the generated Verilator model:
 ```
 ./Vmodel
 ```
@@ -75,7 +75,7 @@ Run the project:
 ```
 make reset_test_load
 ```
-Verify that software reports Power-On Reset as the reset reason:
+Verify that the software reports Power-On Reset as the reset reason:
 ```
 Starting...
 Initializing SDRAM @0x20000000...
@@ -87,8 +87,8 @@ Reset Reason: Power-On Reset.
 String matched. Moving on...
 Push btn[0] to SW trigger DM+NDM Reset.
 ```
-Press button 0, which should cause software to issue a Debug Module and Non-Debug Module reset request.
-The system should restart and software should report a software-triggered Non-Debug Module and Debug
+Press button 0, which should cause the software to issue a Debug Module and Non-Debug Module reset request.
+The system should restart, and the software should report a software-triggered Non-Debug Module and Debug
 Module reset reason:
 ```
 SW triggering DStarting...
@@ -101,7 +101,7 @@ Reset Reason: SW triggered Non-Debug Module Reset.
 Reset Reason: SW triggered Debug Module Reset.
 Push btn[0] to SW trigger DM+NDM Reset.
 ```
-Press the external reset button. The system should restart and software should report an *External Reset*
+Press the external reset button. The system should restart, and the software should report an *External Reset*
 reason:
 ```
 Starting...
