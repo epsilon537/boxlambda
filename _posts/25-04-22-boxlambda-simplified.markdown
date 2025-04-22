@@ -9,7 +9,7 @@ In this post, I remove more functionality than I'm adding, and BoxLambda becomes
 
 Recap
 -----
-[![BoxLambda Block Diagram.](../assets/Arch_Diagram_DFX_w_crossbar.png)](../assets/Arch_Diagram_DFX_w_crossbar.png)
+[![BoxLambda Block Diagram.](../assets/Arch_Diagram_dual_bus_DFX.png)](../assets/Arch_Diagram_dual_bus_DFX.png)
 
 *The BoxLambda Block Diagram before removing the DMA Controller.*
 
