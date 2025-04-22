@@ -43,6 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Removed
 
 - Removed picorv_dma component.
+- Removed Dual-RAM test.
 - Removed sw/picolibc-install because derived objects don't belong in a source tree. Picolibc is now built and installed in the build tree during build tree configuration.
 - Removed j1b_test.
 
