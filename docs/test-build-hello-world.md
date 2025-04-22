@@ -110,7 +110,7 @@ Notice that the CPU is stopped at the very first instruction of the boot sequenc
 
 ##### *Ignoring Packet Error, Continuing...*
 
-When GDB is connected to a Verilator target, you might occasionally get an annoying *'Ignoring packet error, continuing...'* message in the GDB console. This happens because GDB interaction with a running Verilator model is slow. You can avoid the message by increasing GDB's `remotetimeout` value. The default value is 2 (seconds). On my system, increasing the value to 10 does the trick. In the GDB console, or your `~/.gdbinit` file, enter the following command:
+When GDB is connected to a Verilator target, you might occasionally get an annoying *'Ignoring packet error, continuing...'* message in the GDB console. This happens because GDB's interaction with a running Verilator model is slow. You can avoid the message by increasing GDB's `remotetimeout` value. The default value is 2 (seconds). On my system, increasing the value to 10 does the trick. In the GDB console, or your `~/.gdbinit` file, enter the following command:
 
 ```
 set remotetimeout 10
