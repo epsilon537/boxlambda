@@ -48,7 +48,7 @@ Note that both buses have multiple bus masters:
 
 The buses use an arbiter to select which bus master can access the MUX, but during normal operation, there will be no conflict:
 
-- The VS0 bus master port give us the option of experimenting with alternative CPU designs as DFX Reconfigurable Modules. In such a configuration, the Ibex CPU would go quiet after launching the VS0-based CPU, and VS0 would effectively become the only bus master on the system.
+- The VS0 bus master port gives us the option of experimenting with alternative CPU designs as DFX Reconfigurable Modules. In such a configuration, the Ibex CPU would go quiet after launching the VS0-based CPU, and VS0 would effectively become the only bus master on the system.
 
 - The Debug Module is not active during normal operation.
 
@@ -92,5 +92,5 @@ The Data Bus can optionally acknowledge transactions to invalid addresses. With 
 
 The rationale behind this feature is to prevent a system lock-up when the user accidentally accesses an invalid address from the REPL.
 
-For test builds, invalid addresses should trigger Wishbone errors, so a top-level flag was introduced to control this behavior. This flag, `ACK_INVALID_ADDR` is set to 0 for all test builds except the *invalid_address* test build. For the *boxlambda_base*, *boxlambda_dfx*, and *invalid_address* test builds, this flag is set to 1.
+For test builds, invalid addresses should trigger Wishbone errors, so a top-level flag was introduced to control this behavior. This flag, `ACK_INVALID_ADDR`, is set to 0 for all test builds except the *invalid_address* test build. For the *boxlambda_base*, *boxlambda_dfx*, and *invalid_address* test builds, this flag is set to 1.
 
