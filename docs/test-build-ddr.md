@@ -10,9 +10,9 @@ hide:
 Build the test project:
 ```
 cd build/sim-a7-100/gw/projects/ddr_test
-make ddr_test_sim_sw
+make ddr_test_sim
 ```
-Execute the generated verilator model in interactive mode:
+Execute the generated Verilator model in interactive mode:
 ```
 ./Vmodel -i
 ```
@@ -40,7 +40,7 @@ Test Successful.
 Build the test project:
 ```
 cd build/arty-a7-100/gw/projects/ddr_test
-make ddr_test_bit_sw
+make ddr_test_bit
 ```
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 

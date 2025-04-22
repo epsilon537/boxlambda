@@ -17,7 +17,7 @@ A core, such as a UART, may raise an interrupt request (IRQ) when it detects an 
 
 Note that in the condition-based interrupt example, there is no explicit interrupt acknowledgment. The IRQ is de-asserted once the FIFO is empty.
 
-- **Event-Based Interrupts**: A core implementing event-based interrupts will assert its IRQ line when a specific event occurs. The IRQ line remains asserted until the CPU clears/acknowledges the event by writing to an interrupt register inside the core. For example, a UART core that implements event-based interrupts will assert its IRQ line when the RX FIFO transitions from empty to non-empty. The IRQ line remains asserted until the CPU writes a 1 into the *Rx_Data_Avl* bit position of the UART core's Interrupt Status Register.
+- **Event-Based Interrupts**: A core implementing event-based interrupts will assert its IRQ line when a specific event occurs. The IRQ line remains asserted until the CPU clears/acknowledges the event by writing to an interrupt register inside the core. For example, a UART core that implements event-based interrupts will assert its IRQ line when the RX FIFO transitions from empty to non-empty. The IRQ line remains asserted until the CPU writes a 1 into the `Rx_Data_Avl` bit position of the UART core's Interrupt Status Register.
 
 ![Event-Based Interrupts](assets/event_based_irq.png)
 
@@ -31,17 +31,17 @@ The original **wbuart** and **sdspi** cores use condition-based interrupts. Howe
 
 For **wbuart**, I added an Interrupt Enable (IEN) register and an Interrupt Status (ISR) register. The ISR bits get set when specific events occur:
 
-- **ISR[0]**: The UART Rx FIFO goes from an empty to a non-empty state.
-- **ISR[1]**: The UART Rx FIFO goes from less-than-half-full to half-full.
-- **ISR[2]**: The UART Tx FIFO goes from half-full to less-than-half-full.
-- **ISR[3]**: The UART Tx FIFO goes from non-empty to empty.
+- `ISR[0]`: The UART Rx FIFO goes from an empty to a non-empty state.
+- `ISR[1]`: The UART Rx FIFO goes from less-than-half-full to half-full.
+- `ISR[2]`: The UART Tx FIFO goes from half-full to less-than-half-full.
+- `ISR[3]`: The UART Tx FIFO goes from non-empty to empty.
 
 ISR bits are cleared by the CPU writing a 1 into the bit position of the event it wants to acknowledge. When any IEN-enabled ISR bits are set, the **wbuart** core's IRQ line is asserted.
 
 The modification of **sdspi** is almost identical. Here, the events are:
 
-- **ISR[0]**: The device transitioned from a *busy* state to an *idle* state.
-- **ISR[1]**: The removal of an SD card is detected.
+- `ISR[0]`: The device transitioned from a `busy` state to an `idle` state.
+- `ISR[1]`: The removal of an SD card is detected.
 
 Except for [wb_timer](components_timer.md), which follows its own protocol, the other cores in the BoxLambda SoC already implement the event-based protocol.
 
@@ -84,13 +84,11 @@ The RISC-V specification defines an elaborate interrupt architecture, offering v
 Briefly, the Ibex core has:
 
 - 15 ports for **Fast** local interrupts. The BoxLambda SoC components that can post IRQs (not all of them do) are connected to these fast interrupts.
-- 1 port for a **Timer** interrupt. The *wb_timer* module is connected to this interrupt line.
+- 1 port for a **Timer** interrupt. The `wb_timer` module is connected to this interrupt line.
 - An **External Interrupt** port to connect to a *Platform-Level Interrupt Controller*. This will not be used in BoxLambda.
 - A **Non-Maskable Interrupt** (NMI) port, which will remain unconnected until a suitable use case is found.
 
 RISC-V defines 32 IRQ IDs. Ibex maps the timer interrupt to IRQ ID 7 and the fast interrupts to IRQ IDs 16 to 30.
-
-I’m using the same mapping to connect the IRQs to the [PicoRV DMA Controller](components_picorv_dma.md) and the VS0 component. This way, Ibex, PicoRV, and VS0 share the same set of interrupts with the same IRQ_IDs/ISR bit positions.
 
 The following table lists the BoxLambda interrupts and the events they report:
 
@@ -100,7 +98,7 @@ The following table lists the BoxLambda interrupts and the events they report:
 | 30     | Not Assigned                            |        |
 | 29     | VERA IRQ                                | Vsync, Line IRQ, Sprite Collision |
 | 28     | VS0 Interrupt                           |        |
-| 27     | PICORV DMAC IRQ                         | Programmable |
+| 27     | Not Assigned                            |        |
 | 26     | SDSPI IRQ                               | Device Busy->Idle, Card Removed |
 | 25     | GPIO                                    | Rising or Falling Edge on input pin |
 | 24     | usb_hid_1 IRQ                           | USB report received, LED set confirmation |
@@ -110,7 +108,7 @@ The following table lists the BoxLambda interrupts and the events they report:
 | 20     | Not Assigned                            |     |
 | 19     | Not Assigned                            |     |
 | 18     | Not Assigned                            |     |
-| 17     | DFX Controller IRQ                      | VS0 Event Error |
+| 17     | Not Assigned                            |        |
 | 16     | Not Assigned                            |     |
 |  7     | Timer IRQ                               | Timer counter >= timer compare value |
 

@@ -24,11 +24,11 @@ The I2C System Test Case runs on Verilator and FPGA, albeit with different test 
 
 ### The I2C Test on Verilator
 
-Build the **i2c_test** project:
+Build the *i2c_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/i2c_test
-make i2c_test_sim_sw
+make i2c_test_sim
 ```
 
 Execute the generated Verilator model. You should see the following output:
@@ -63,7 +63,7 @@ Build the project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/i2c_test
-make i2c_test_bit_sw
+make i2c_test_bit
 ```
 
 Download the generated bitstream file to the Arty A7:
@@ -90,7 +90,7 @@ Test Successful.
 Push btn[0] to start CLI.
 ```
 
-Press button 0 to get dropped into the CLI. Type *help* to see a list of available commands:
+Press button 0 to get dropped into the CLI. Type `help` to see a list of available commands:
 
 ```
 > help

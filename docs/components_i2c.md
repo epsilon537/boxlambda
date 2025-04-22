@@ -5,7 +5,7 @@ hide:
 
 ## I2C
 
-- **I2C Repo**, BoxLambda fork, *boxlambda* branch:
+- **I2C Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/wbi2c](https://github.com/epsilon537/wbi2c)
 
 - **I2C Submodule in the BoxLambda Directory Tree**:
@@ -47,7 +47,7 @@ WBI2C implements the traditional I2C protocol used to access 8-bit I2C slave reg
 A quick note on terminology:
 
 - **I2C Slave Address**: An I2C bus supports multiple slave devices. Each slave device has a unique address, distinguishing it from the other slaves on the bus. This address is what I'm calling the *Slave Address* in the discussion below.
-- **I2C Slave Register Address**: Most I2C slaves implement multiple byte-wide configuration and status registers. These registers are addressed using the first byte of an I2C data frame (i.e. the first byte following the address frame). This address is called the *Slave Register Address*.
+- **I2C Slave Register Address**: Most I2C slaves implement multiple byte-wide configuration and status registers. These registers are addressed using the first byte of an I2C data frame (i.e., the first byte following the address frame). This address is called the *Slave Register Address*.
 
 ### Theory of Operation
 
@@ -66,7 +66,7 @@ Going into a little more detail, to write to a single I2C slave register:
     - the number of bytes to send (1 in case of a single register write).
     - a flag indicating that this is a write transaction.
 4. WBI2C reads the register value from proxy memory and sends it to the slave using the Slave Register Protocol.
-5. Software waits for the completion of the transaction by polling the CMD register **Busy** bit. Instead of polling, WBI2C can be configured to generate an IRQ when the transaction is complete.
+5. Software waits for the completion of the transaction by polling the CMD register's `Busy` bit. Instead of polling, WBI2C can be configured to generate an IRQ when the transaction is complete.
 
 **I2C CMD Register Layout**:
 
@@ -81,9 +81,9 @@ To read from a single I2C slave register:
     - the slave register address to read.
     - the number of bytes to read (1 in case of a single register read).
     - a flag indicating that this is a read transaction.
-2. WBI2C reads the requested I2C slave register using the Slave Register Protocol and stores the retrieved byte in the proxy memory, at the slave register address.
-3. Software waits for the completion of the transaction by polling the CMD register *Busy* bit. Instead of polling, WBI2C can be configured to generate an IRQ when the transaction is complete.
-4. Software reads the retrieved I2C register value from the proxy memory, at the slave register address.
+2. WBI2C reads the requested I2C slave register using the Slave Register Protocol and stores the retrieved byte in the proxy memory at the slave register address.
+3. Software waits for the completion of the transaction by polling the CMD register `Busy` bit. Instead of polling, WBI2C can be configured to generate an IRQ when the transaction is complete.
+4. Software reads the retrieved I2C register value from the proxy memory at the slave register address.
 
 #### Multi-Byte Transactions
 
@@ -101,7 +101,7 @@ The sequence would be as follows:
     - the flag indicating that this is a write transaction.
 
 3. WBI2C sends the 16 bytes to the I2C slave using a multi-byte transaction.
-4. Software waits for transaction completion by polling the CMD register Busy bit, or by receiving the I2C IRQ.
+4. Software waits for transaction completion by polling the CMD register's Busy bit, or by receiving the I2C IRQ.
 
 To read back this 16-byte character string:
 
@@ -112,7 +112,7 @@ To read back this 16-byte character string:
     - the flag indicating that this is a read transaction.
 
 2. WBI2C fetches the requested bytes from the I2C slave using a multi-byte transaction.
-3. Software waits for transaction completion by polling the CMD Busy bit, or by receiving the I2C IRQ.
+3. Software waits for transaction completion by polling the CMD Busy bit or by receiving the I2C IRQ.
 4. Software reads the 16-byte character string from the WBI2C proxy memory, starting at memory offset 32.
 
 The [I2C Test Application](test-build-i2c.md) implements this example.
@@ -123,7 +123,7 @@ Although the WBI2C core by design assumes that an I2C data frame starts with an 
 
 ### Where are the Output Enables?
 
-The WBI2C core top-level has *SCL* and *SDA* input and output ports, but no *Output Enable* ports:
+The WBI2C core top-level has `SCL` and `SDA` input and output ports, but no *Output Enable* ports:
 
 ```
 module wbi2cmaster #(
@@ -186,7 +186,7 @@ module boxlambda_top (
 
 ## Pull-Up Pins
 
-You might expect that the SCL and SDA pull-up resistors connect directly to the 3V3 power rail. On the Arty A7, that's not the case. The SCL and SDA pull-up resistors connect to an **SCL Pull-Up Pin** (SCL PUP) and **SDA Pull-Up Pin** (SDA PUP) respectively. For these pull-ups to work, the pull-up pins have to be statically driven high. That's what the last two lines in the above code snippet are for.
+You might expect that the SCL and SDA pull-up resistors connect directly to the 3V3 power rail. On the Arty A7, that's not the case. The SCL and SDA pull-up resistors connect to an **SCL Pull-Up Pin** (`SCL PUP`) and **SDA Pull-Up Pin** (`SDA PUP`) respectively. For these pull-ups to work, the pull-up pins have to be statically driven high. That's what the last two lines in the above code snippet are for.
 
 ![SCL and SDA Pull-Up Pins on Arty A7 Schematic](assets/scl_sda_pup_schematic.png)
 

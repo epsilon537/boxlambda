@@ -5,7 +5,7 @@ hide:
 
 ## GPIO
 
-- **GPIO Repo**, BoxLambda fork, *boxlambda* branch:
+- **GPIO Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/gpio](https://github.com/epsilon537/gpio)
 
 - **GPIO Submodule in the BoxLambda Directory Tree**:
@@ -23,7 +23,7 @@ hide:
 The GPIO core comes from OpenCores.org. The authors are Damjan Lampret and Goran Djakovic. This core is very configurable and has a lot of features. Among other things:
 
 - Inputs can be configured to trigger IRQs.
-- Inputs can be configured to register at the rising edge of the system clock or either edge of an external clock (I have not not tested this feature yet).
+- Inputs can be configured to register at the rising edge of the system clock or either edge of an external clock (I have not tested this feature yet).
 
 BoxLambda instantiates the GPIO core with 24 pins. The pin assignment is given in the table below.
 

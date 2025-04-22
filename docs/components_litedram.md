@@ -5,7 +5,7 @@ hide:
 
 ## LiteDRAM Memory Controller
 
-- **LiteX Repo**, BoxLambda fork, *boxlambda* branch:
+- **LiteX Repo**, BoxLambda fork, `boxlambda` branch:
   [https://github.com/epsilon537/litex](https://github.com/epsilon537/litex).
 
 - **LiteX Submodule in the BoxLambda Directory Tree**:
@@ -34,13 +34,9 @@ LiteDRAM is a highly configurable core. For an overview of the core's features, 
 
 [https://github.com/enjoy-digital/litedram/blob/master/README.md](https://github.com/enjoy-digital/litedram/blob/master/README.md)
 
-You specify the configuration details in a *.yml* file. A Python script parses that *.yml* file and generates the core's Verilog as well as a CSR register access layer for software.
+The configuration details are specifief in a `.yml` file. A Python script parses that `.yml` file and generates the core's Verilog as well as a CSR register access layer for software.
 
-Details are a bit sparse, but luckily example configurations are provided:
-
-[https://github.com/enjoy-digital/litedram/tree/master/examples](https://github.com/enjoy-digital/litedram/tree/master/examples)
-
-Starting from the *arty.yml* example, I created the following LiteDRAM configuration file for BoxLambda:
+Starting from [LiteDram's arty.yml](https://github.com/enjoy-digital/litedram/tree/master/examples/arty.yml) example, I created the following LiteDRAM configuration file for BoxLambda:
 
 ```
 {
@@ -90,11 +86,11 @@ Starting from the *arty.yml* example, I created the following LiteDRAM configura
 Some points about the above:
 
 - The *PHY layer*, *Electrical*, and *Core* sections I left exactly as-is in the given Arty example.
-- In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
-- In the *Frequency* section, I set *sys_clk_freq* to 50MHz. The generated core will also provide a double-rate 100MHz clock next to this 50MHz clock.
-- In the *User Ports* section, I specified one 32-bit Wishbone port.
+- In the *General* section, I set `cpu` to `None`. BoxLambda already has a CPU. We don't need LiteX to generate one.
+- In the `Frequency` section, I set `sys_clk_freq` to 50MHz.
+- In the `User Ports` section, I specified one 32-bit Wishbone port.
 
-I generate two LiteDRAM core variants from this configuration:
+Two LiteDRAM core variants are generated from this configuration:
 
 - For simulation:
 
@@ -103,6 +99,12 @@ I generate two LiteDRAM core variants from this configuration:
 - For FPGA:
 
 ```litedram_gen artya7dram.yml --gateware-dir arty/rtl --software-dir arty/sw --name litedram```
+
+The LiteDRAM cores are generated during the code generation step of a gateware build. The generated files are written to the `<build_tree/codegen/litedram/` directory.
+
+This is the build script performing the code generation: [scripts/gen_litedram_core.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/gen_litedram_core.sh)
+
+### LiteDRAM Interface
 
 The generated core has the following interface:
 
@@ -162,18 +164,16 @@ module litedram (
 Some points worth noting about this interface:
 
 - A Wishbone control port is generated along with the user port. LiteDRAM CSR register access is done through the control port.
-- Both Wishbone ports are *classic* Wishbone ports, not *pipelined*. There is no *stall* signal.
+- Both Wishbone ports are *classic* Wishbone ports, not *pipelined*. There is no `stall` signal.
 - The Wishbone port addresses are word addresses, not byte addresses.
-- The LiteDRAM module takes an external input clock (*clk*) and generates both a 50MHz system clock (*user_clk*) and a 100MHz double-rate system clock (*user_clkx2*). The LiteDRAM module contains a PLL clock primitive.
-- The double-rate system clock is a modification for BoxLambda. The vanilla LiteDRAM/LiteX code base only generates one *user_clk*.
+- The LiteDRAM module takes an external input clock (`clk`) and generates both a 50MHz system clock (`user_clk`) and a 100MHz double-rate system clock (`user_clkx2`). The LiteDRAM module contains a PLL clock primitive.
+- The double-rate system clock is a modification for BoxLambda, but is currently not used.
 
 ### *Litedram_wrapper*
 
-I created a *litedram_wrapper.sv* module around litedram.v:
-
 [https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv)
 
-This wrapper contains Pipelined-to-Classic Wishbone adaptation. The adapter logic comes straight out of the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The *stall* signal is used to avoid pipelining:
+`Litedram_wrapper` contains a Pipelined-to-Classic Wishbone adaptation. The adapter logic comes straight out of the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The `stall` signal is used to avoid pipelining:
 
 ```
   /*Straight out of the Wishbone B4 spec. This is how you interface a classic slave to a pipelined master.

@@ -7,7 +7,7 @@ hide:
 
 ### Vectored Mode
 
-Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the IRQ_ID by four and adding it to the vector table base address. The vector table base address is specified in the *mtvec* CSR. In BoxLambda, I'm leaving it at 0, so the interrupt entry point address is simply IRQ_ID*4.
+Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the `IRQ_ID` by four and adding it to the vector table base address. The vector table base address is specified in the `mtvec` CSR. In BoxLambda, I'm leaving it at 0, so the interrupt entry point address is simply `IRQ_ID*4`.
 
 ### Vectors.S Weak Bindings
 
@@ -61,7 +61,7 @@ _exc_handler:          //_exc_handler is overridden in the interrupt SW module.
   jal x0, _exc_handler
 ```
 
-As you can see, the weak bindings jump to *_exc_handler*, and the default _exc_handler jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
+As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
 
 ```
 void _rm_2_irq_handler(void) __attribute__((interrupt("machine")));
@@ -82,9 +82,9 @@ void _timer_irq_handler(void) __attribute__((interrupt("machine")));
 
 #### The Interrupt("machine") Attribute
 
-Regarding the *interrupt("machine")* attribute in the function declarations above, interrupt service routines require a special entry and exit code sequence. An interrupt service routine needs to save and restore all CPU registers it's modifying to ensure the interrupted code can continue normally when the CPU returns from the interrupt. Also, instead of a regular return, an interrupt service routine should execute a return-from-interrupt when done. These concepts can't be expressed in regular C language, but GCC comes to the resource with the *interrupt("machine")* attribute. This attribute ensures the function receives the proper prologue and epilogue code to make it behave as an interrupt service routine.
+Regarding the `interrupt("machine")` attribute in the function declarations above, interrupt service routines require a special entry and exit code sequence. An interrupt service routine needs to save and restore all CPU registers it's modifying to ensure the interrupted code can continue normally when the CPU returns from the interrupt. Also, instead of a regular return, an interrupt service routine should execute a return-from-interrupt when done. These concepts can't be expressed in regular C language, but GCC comes to the resource with the `interrupt("machine")` attribute. This attribute ensures the function receives the proper prologue and epilogue code to make it behave as an interrupt service routine.
 
-As an example of the generated code when using *interrupt("machine")*, here's a disassembly of the timer interrupt service routine I'm using in the interrupt test program:
+As an example of the generated code when using `interrupt("machine")`, here's a disassembly of the timer interrupt service routine I'm using in the interrupt test program:
 
 ```
 95	void _timer_irq_handler(void) {
@@ -144,7 +144,7 @@ Here's the GCC page about RISC-V function attributes:
 
 ### Enabling Interrupts
 
-To receive interrupts, you need to enable the global CPU interrupt, *mstatus.MIE*, as well as the specific Machine Interrupts you want to receive by setting their bits in the MIE CSR.
+To receive interrupts, you need to enable the global CPU interrupt, `mstatus.MIE`, as well as the specific Machine Interrupts you want to receive by setting their bits in the MIE CSR.
 
 [Interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h) defines functions to enable and disable global as well as specific machine interrupts:
 
@@ -185,7 +185,7 @@ I haven't tested it, but RISC-V supports interrupt nesting. You can find more in
 
 ### Interrupt API
 
-*Interrupts.h* provides the interrupt API:
+`Interrupts.h` provides the interrupt API:
 
 - It defines all IRQ_IDs.
 - It declares, but does not define (that's up to application code), all interrupt service routines.

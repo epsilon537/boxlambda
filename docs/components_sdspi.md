@@ -5,11 +5,11 @@ hide:
 
 ## SDSPI SD Card Controller
 
-- **SDSPSI Repo**, BoxLambda fork, *boxlambda* branch:
+- **SDSPSI Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/sdspi/tree/boxlambda](https://github.com/epsilon537/sdspi/tree/boxlambda).
 
 - **SDSPI Submodule in the BoxLambda Directory Tree**:
-    boxlambda/sub/sdspi/.
+    `boxlambda/sub/sdspi/`
 
 - **SDSPI Gateware Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/sdspi](https://github.com/epsilon537/boxlambda/tree/master/gw/components/sdspi)
@@ -26,18 +26,18 @@ hide:
 
 *SDSPI in the BoxLambda Architecture.*
 
-On the Arty, BoxLambda uses Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) plugged into the **JD** Connector.
+On the Arty, BoxLambda uses Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) plugged into the `JD` Connector.
 
 The MicroSD card can operate in two modes: SD card mode and SPI mode. In SPI mode, a 1-bit SPI bus is used as the interface between the SD-Card Controller (Master) and the SD card (Slave). SPI mode is selected by pulling the Chip Select line low.
 The SDSPI core currently only supports SPI mode.
 
 The SPI bus speed is software-configurable through a clock divider setting in the SDSPI core. The minimum value of this divider is 4. Given BoxLambda's 50MHz system clock rate, this limits the bus speed to 12.5MHz.
 
-Other than the SPI signals (*SCK*, *MISO*, *MOSI*, *CS*), the MicroSD card interface has two *DAT* data lines that we won't be using and a *CD* Card Detect signal, which appears to be active-low, even though the [MicroSD PMOD Reference Manual](https://digilent.com/reference/pmod/pmodmicrosd/reference-manual?redirect=1) didn't say so.
+Other than the SPI signals (`SCK`, `MISO`, `MOSI`, `CS`), the MicroSD card interface has two `DAT` data lines that we won't be using and a `CD` Card Detect signal, which appears to be active-low, even though the [MicroSD PMOD Reference Manual](https://digilent.com/reference/pmod/pmodmicrosd/reference-manual?redirect=1) didn't say so.
 
 ### SDSPI Core
 
-**Sdspi_test** is a test SoC containing the SDSPI core along with other BoxLambda components. The SDSPI core is instantiated in the [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv) module as follows:
+`Sdspi_test` is a test SoC containing the SDSPI core along with other BoxLambda components. The SDSPI core is instantiated in the [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv) module as follows:
 
 ```
 sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
@@ -70,13 +70,13 @@ Interrupts are currently not hooked up.
 
 *SDSPI Simplified Block Diagram.*
 
-The above is a simplified block diagram illustrating the SDSPI core internal. I won't be going into the details here. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
+The above is a simplified block diagram illustrating the SDSPI core internally. I won't be going into the details here. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
 
 ### SDSPISIM
 
-On the Verilator test bench, the MicroSD card PMOD is replaced with an SDSPISIM co-simulator. SDSPISIM was easy to plug into BoxLambda's test bench. The interface is similar to the UARTSIM co-simulator, already in use in the test bench, and also provided by Dan Gisselquist.
+On the Verilator test bench, the MicroSD card PMOD is replaced with an `SDSPISIM` co-simulator. `SDSPISIM` was easy to plug into BoxLambda's test bench. The interface is similar to the UARTSIM co-simulator, already in use in the test bench, and also provided by Dan Gisselquist.
 
-Hereare the hooks to both co-simulators in the test bench's **tick()** function. The tick() function is the heart of the test bench advancing the simulation by one clock cycle:
+Here are the hooks to both co-simulators in the test bench's `tick()` function. The `tick()` function is the heart of the test bench, advancing the simulation by one clock cycle:
 
 ```
   //Feed SDSPI co-sim
@@ -89,15 +89,15 @@ Hereare the hooks to both co-simulators in the test bench's **tick()** function.
 
 For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/sim/sim_main.cpp) in the *sdspi_test* project.
 
-SDSPISIM reads from and writes to an **sdcard.img** file. That file can be mounted in Linux, so you can FAT format it and put files on it for the simulated system to use, or vice versa.
+`SDSPISIM` reads from and writes to an `sdcard.img` file. That file can be mounted in Linux, so you can FAT format it and put files on it for the simulated system to use, or vice versa.
 
 ### SDSPI Operation
 
 The SDSPI core's register interface, the initialization sequence, and the overall operation of the core are well-documented in the SDSPI core [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/sdspi.pdf).
 
-[Sdtest.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's *sdtest.c* in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The *Zbasic* repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
+[Sdtest.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's `sdtest.c` in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The `Zbasic` repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
 
-*Sdtest.c* runs on the RISCV processor that's part of the SDSPI Test SoC.
+`Sdtest.c` runs on the RISCV processor that's part of the SDSPI Test SoC.
 
 ### SDSPI Clock Frequency
 

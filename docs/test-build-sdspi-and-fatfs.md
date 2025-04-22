@@ -11,23 +11,23 @@ Build the *sdspi_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/sdspi_test
-make sdspi_test_sim_sw
+make sdspi_test_sim
 ```
 
-Create and format the SD Card image file (or just use the *sdcard.img* files checked into the *test/* subdirectory of the *sdspi_test* project):
+Create and format the SD Card image file (or just use the `sdcard.img` files checked into the `test/` subdirectory of the *sdspi_test* project):
 
 ```
 dd if=/dev/zero of=sdcard.img bs=512 count=131072
 mkfs.fat -F 16 sdcard.img
 ```
 
-Execute the generated Verilator model. Pass in the *sdcard.img* file:
+Execute the generated Verilator model. Pass in the `sdcard.img` file:
 
 ```
 ./Vmodel -s sdcard.img
 ```
 
-You should now see the following messages appear in the terminal window. The traces prefixed with *SDSPI:* come from the SDSPI co-simulator. The first two lines and the last line come from the test bench. The other lines are *printf()* statements coming from the test program running on the RISCV processor.
+You should now see the following messages appear in the terminal window. The traces prefixed with *SDSPI:* come from the SDSPI co-simulator. The first two lines and the last line come from the test bench. The other lines are `printf()` statements coming from the test program running on the RISCV processor.
 
 ```
 SD Image File: /home/epsilon/sdcard.img
@@ -63,7 +63,7 @@ Build the *sdspi_test* project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/sdspi_test
-make sdspi_test_bit_sw
+make sdspi_test_bit
 ```
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
@@ -99,23 +99,23 @@ Build the *fatfs_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/fatfs_test
-make fatfs_test_sim_sw
+make fatfs_test_sim
 ```
 
-Create and format the SD Card image file (or just use the *sdcard.img* files checked into the *test/* subdirectory of the *fatfs_test* project):
+Create and format the SD Card image file (or just use the `sdcard.img` files checked into the `test/` subdirectory of the *fatfs_test* project):
 
 ```
 dd if=/dev/zero of=sdcard.img bs=512 count=131072
 mkfs.fat -F 16 sdcard.img
 ```
 
-   Execute the generated Verilator model. Pass in the *sdcard.img* file:
+   Execute the generated Verilator model. Pass in the `sdcard.img` file:
 
 ```
 ./Vmodel -s sdcard.img
 ```
 
-You should see the following messages in the terminal window. The traces prefixed with *SDSPI:* come from the SDSPI co-simulator. The first two lines and the last line come from the test bench. The other lines are *printf()* statements coming from the test program running on the RISCV processor.
+You should see the following messages in the terminal window. The traces prefixed with *SDSPI:* come from the SDSPI co-simulator. The first two lines and the last line come from the test bench. The other lines are `printf()` statements coming from the test program running on the RISCV processor.
 
 ```
 SD Image File: /home/epsilon/sdcard.img
@@ -131,7 +131,7 @@ FatFS Test Completed Successfully!
 Test passed.
 ```
 
-One of the steps taken by the test program is to create a **LOG.TXT** file with the contents *This is a test*. We can mount the *sdcard.img* on Linux and check if that file exists with the expected contents:
+One of the steps taken by the test program is to create a `LOG.TXT` file with the contents *This is a test*. We can mount the `sdcard.img` on Linux and check if that file exists with the expected contents:
 
 ```
 sudo mount -o loop ~/sdcard.img /mnt/sd
@@ -151,7 +151,7 @@ Build the *fatfs_test* project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/fatfs_test
-make fatfs_test_bit_sw
+make fatfs_test_bit
 ```
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
@@ -180,6 +180,6 @@ f_printf test...
 FatFS Test Completed Successfully!
 ```
 
-One of the steps taken by the test program is to create a **LOG.TXT** file with the contents *This is a test*. Eject the SD card, insert it into your PC, and verify that *LOG.TXT* exists with the expected contents.
+One of the steps taken by the test program is to create a `LOG.TXT` file with the contents *This is a test*. Eject the SD card, insert it into your PC, and verify that `LOG.TXT` exists with the expected contents.
 
 &nbsp;

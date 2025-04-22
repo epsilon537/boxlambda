@@ -12,7 +12,7 @@ To build the *Hello World!* example, go through the following steps:
 Build the project:
 ```
 cd build/arty-a7-100/gw/projects/hello_world
-make hello_world_bit_sw
+make hello_world_bit
 ```
 Download the bitstream to the target:
 ```
@@ -23,7 +23,7 @@ make hello_world_load
 
 Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
 
-Start OpenOCD with the *arty_a7_100t.openocd.cfg* config file.
+Start OpenOCD with the `arty_a7_100t.openocd.cfg` config file.
 
 Note: If OpenOCD can't connect to the USB JTAG adapter, your USB device permissions might not be set correctly. Check the *User-Level Access to the Arty A7 USB JTAG Adapter* section above for a fix.
 ```
@@ -46,7 +46,7 @@ Launch gdb-multiarch with the hello_world_ram executable:
 cd <boxlambda root directory>/build/arty-a7-100/sw/projects/hello_world
 gdb-multiarch hello_world_ram
 ```
-Set the architecture to *riscv:rv32* and connect GDB to the target. From the GDB shell:
+Set the architecture to `riscv:rv32` and connect GDB to the target. From the GDB shell:
 ```
 (gdb) set architecture riscv:rv32
 The target architecture is set to "riscv:rv32".
@@ -64,7 +64,7 @@ To try out the Verilator Test Bench for *Hello World*:
 Build the testbench:
 ```
 cd build/sim-a7-100/gw/projects/hello_world
-make hello_world_sim_sw
+make hello_world_sim
 ```
 Execute the testbench, with (```./Vmodel -i```) or without (```./Vmodel -t```) tracing:
 ```
@@ -77,11 +77,11 @@ gtkwave simx.fst
 
 #### Connecting GDB to the Hello World build on Verilator
 
-Launch the Verilator model with the *-d* flag to indicate that a debugger will be attached to the simulated processor:
+Launch the Verilator model with the `-d` flag to indicate that a debugger will be attached to the simulated processor:
 ```
 ./Vmodel -d
 ```
-Start OpenOCD with the *verilator.openocd.cfg* config file:
+Start OpenOCD with the `verilator.openocd.cfg` config file:
 ```
 openocd -f <boxlambda root directory>/scripts/verilator.openocd.cfg
 Open On-Chip Debugger 0.11.0+dev-02372-g52177592f (2022-08-10-14:11)
@@ -97,7 +97,7 @@ Launch gdb-multiarch with the hello_world_ram executable:
 cd <boxlambda root directory>/build/sim-a7-100/sw/projects/hello_world
 gdb-multiarch hello_world_ram
 ```
-Set the architecture to *riscv:rv32* and connect GDB to the target. From the GDB shell:
+Set the architecture to `riscv:rv32` and connect GDB to the target. From the GDB shell:
 ```
 (gdb) set architecture riscv:rv32
 The target architecture is set to "riscv:rv32".
@@ -110,7 +110,7 @@ Notice that the CPU is stopped at the very first instruction of the boot sequenc
 
 ##### *Ignoring Packet Error, Continuing...*
 
-When GDB is connected to a Verilator target, you might occasionally get an annoying *'Ignoring packet error, continuing...'* message in the GDB console. This happens because GDB interaction with a running Verilator model is slow. You can avoid the message by increasing GDB's **remotetimeout** value. The default value is 2 (seconds). On my system, increasing the value to 10 does the trick. In the GDB console, or your *~/.gdbinit* file, enter the following command:
+When GDB is connected to a Verilator target, you might occasionally get an annoying *'Ignoring packet error, continuing...'* message in the GDB console. This happens because GDB's interaction with a running Verilator model is slow. You can avoid the message by increasing GDB's `remotetimeout` value. The default value is 2 (seconds). On my system, increasing the value to 10 does the trick. In the GDB console, or your `~/.gdbinit` file, enter the following command:
 
 ```
 set remotetimeout 10

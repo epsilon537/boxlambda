@@ -9,35 +9,35 @@ The value of this test is mostly in the waveform it generates. Checking the wave
 
 The test program consists of the following sub-tests:
 
-- **do_nothing()**: Measures how many cycles it takes to call *mcycle_start()* and *mcycle_stop()*.
-- **lw_register_loop()**: Repeatedly reads a peripheral register and measures how long it takes.
-- **lw_sw_copy_loop()**: Copies 100 words from DMEM to DMEM, or from VRAM to VRAM, using a naive loop and measures how long it takes.
-- **lw_sw_copy_loop_unrolled()**: Same as the previous test, but with the loop unrolled.
+- `do_nothing()`: Measures how many cycles it takes to call `mcycle_start()` and `mcycle_stop()`.
+- `lw_register_loop()`: Repeatedly reads a peripheral register and measures how long it takes.
+- `lw_sw_copy_loop()`: Copies 100 words from DMEM to DMEM, or from VRAM to VRAM, using a naive loop and measures how long it takes.
+- `lw_sw_copy_loop_unrolled()`: Same as the previous test, but with the loop unrolled.
 
 ### Ibex Performance Test on Verilator
 
-Build the **ibex_perf_test** project:
+Build the *ibex_perf_test* project:
 
 ```
 cd build/sim-a7-100/gw/projects/ibex_perf_test
-make ibex_perf_test_bit_sw
+make ibex_perf_test_bit
 ```
 
-Execute the generated Verilator model with tracing enabled (*-t*). You should see the following output:
+Execute the generated Verilator model with tracing enabled (`-t`). You should see the following output:
 
 ```
 ./Vmodel -t
 SIM: Tracing enabled
 DUT: Do nothing: 8 cycles.
 DUT: Expected: 8 cycles.
-DUT: lw_sw_register_loop: addr: 0x10000208, 12 cycles/iteration.
-DUT: Expected: 12 cycles.
-DUT: lw_sw_copy_loop: dest: 0x24b68, src: 0x20b68, 14 cycles/iteration.
+DUT: lw_sw_register_loop: addr: 0x10000208, 8 cycles/iteration.
+DUT: Expected: 8 cycles.
+DUT: lw_sw_copy_loop: dest: 0x9c14, src: 0x5c14, 14 cycles/iteration.
 DUT: Expected: 14 cycles.
 DUT: lw_sw_copy unrolled: 8 cycles/iteration.
 DUT: Expected: 8 cycles.
-DUT: lw_sw_copy_loop: dest: 0x12040190, src: 0x12044190, 24 cycles/iteration.
-DUT: Expected: TBD.
+DUT: lw_sw_copy_loop: dest: 0x12040190, src: 0x12044190, 14 cycles/iteration.
+DUT: Expected: 14.
 DUT: Test Successful.
 SIM: Test passed.
 ```
@@ -69,7 +69,7 @@ TOP.sim_main.dut.boxlambda_soc_inst.wb_ibex_core.u_top.u_ibex_core.if_stage_i.ge
 ![Ibex Performance Test Waveform](assets/ibex_perf_test.png){ .mdx-lightbox }
 *Ibex Performance Test Waveform.*
 
-To navigate the waveform, check the ID stage's *pc_id_i* values against the addresses in the disassembly of the ibex_perf_test_ram executable.
+To navigate the waveform, check the ID stage's `pc_id_i` values against the addresses in the disassembly of the ibex_perf_test_ram executable.
 
 ### Ibex Performance Test on Arty A7
 
@@ -79,7 +79,7 @@ Build the project in an Arty A7 build tree:
 
 ```
 cd build/arty-a7-100/gw/projects/ibex_perf_test
-make ibex_perf_test_bit_sw
+make ibex_perf_test_bit
 ```
 
 Download the generated bitstream file to the Arty A7:

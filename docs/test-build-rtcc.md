@@ -23,12 +23,12 @@ Hook up the RTCC PMOD as described [here](pmods.md#rtcc-pmod).
 
 Connect a terminal emulator to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the *rtcc_test_flsh* software project in an Arty A7 build tree:
+Build the `rtcc_test_flsh` software project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/sw/projects/rtcc_test
 make rtcc_test_flsh
 ```
-Flash the *rtcc_test_flsh* program onto the target:
+Flash the `rtcc_test_flsh` program onto the target:
 ```
 make rtcc_test_flsh_flash_sw
 ```
@@ -108,7 +108,7 @@ Press button 0 to drop into the CLI, then type 'help' to see a list of available
         Get Current Date
 ```
 
-Play around with the settime/gettime/setdate/getdate commands. For example:
+Play around with the `settime/gettime/setdate/getdate` commands. For example:
 
 ```
 > setdate 7 8 2024

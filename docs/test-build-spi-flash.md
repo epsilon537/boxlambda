@@ -5,7 +5,7 @@ hide:
 
 ## SPI Flash Test
 
-The **spiflash_test** program does the following:
+The `spiflash_test` program does the following:
 
 1. Boot from Flash Memory.
 2. Read the Flash ID.
@@ -16,13 +16,13 @@ The **spiflash_test** program does the following:
 
 ### The SPI Flash Test on Verilator
 
-Build the **spiflash_test** gateware project. This will also build the *spiflash_test_flsh.bin* software image as a dependency:
+Build the `spiflash_test` gateware project. This will also build the `spiflash_test_flsh.bin` software image as a dependency:
 ```
 cd build/sim-a7-100/gw/projects/spiflash_test
-make spiflash_test_sim_sw
+make spiflash_test_sim
 ```
 
-Execute the generated Verilator model, passing in as a parameter the *spiflash_test_flsh.bin* software image. The software image will be loaded into the simulated flash device before the test starts:
+Execute the generated Verilator model, passing in as a parameter the `spiflash_test_flsh.bin` software image. The software image will be loaded into the simulated flash device before the test starts:
 ```
 ./Vmodel -f ../../../sw/projects/spiflash_test/spiflash_test_flsh.bin
 Flash SW Image File: ../../../sw/projects/spiflash_test/spiflash_test_flsh.bin
@@ -67,12 +67,12 @@ Test passed.
 
 Connect a terminal emulator to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the *spiflash_test_flsh* software project in an Arty A7 build tree:
+Build the `spiflash_test_flsh` software project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/sw/projects/spiflash_test
 make spiflash_test_flsh
 ```
-Flash the *spiflash_test* program onto the target:
+Flash the `spiflash_test` program onto the target:
 ```
 make spiflash_test_flsh_flash_sw
 ```

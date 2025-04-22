@@ -18,12 +18,12 @@ Execute the generated Verilator model:
 DAC Output File: dac_out.py
 PCM Output File: pcm_out.py
 ```
-The Verilator model should have generated Python files *dac_out.py* and *pcm_out.py*:
+The Verilator model should have generated Python files `dac_out.py` and `pcm_out.py`:
 ```
 ls *.py
 dac_out.py  pcm_out.py
 ```
-Execute the Audio DAC Test Python script. Pass in the *-p* option to see the plots. You should see a frequency domain plot, a time domain plot, and the correlation match between the PCM and the DAC signals:
+Execute the Audio DAC Test Python script. Pass in the `-p` option to see the plots. You should see a frequency domain plot, a time domain plot, and the correlation match between the PCM and the DAC signals:
 ```
 PYTHONPATH="." ../../../../../gw/projects/audio_dac_test/test/dac_test.py -p
 Time Domain Correlation: 1.000000
@@ -59,7 +59,7 @@ You should hear a 440Hz tone. You can check the pitch with a pitch detector app.
 Build the *ym2149_dac_test* project:
 ```
 cd build/sim-a7-100/gw/projects/ym2149_dac_test
-make ym2149_dac_test_sim_sw
+make ym2149_dac_test_sim
 ```
 Execute the generated Verilator model. You should see the following output:
 ```
@@ -71,12 +71,12 @@ YM2149 test.
 YM2149 config complete.
 No overflows detected.
 ```
-The Verilator model should have generated Python files *dac_out.py* and *pcm_out.py*:
+The Verilator model should have generated Python files `dac_out.py` and `pcm_out.py`:
 ```
 ls *.py
 dac_out.py  pcm_out.py
 ```
-Execute the YM2149 DAC Test Python script. Pass in the *-p* flag to see the plot. The plot should show a frequency spectrum plot with six pitches. The script's terminal output should look like this:
+Execute the YM2149 DAC Test Python script. Pass in the `-p` flag to see the plot. The plot should show a frequency spectrum plot with six pitches. The script's terminal output should look like this:
 ```
 PYTHONPATH="." ../../../../../gw/projects/ym2149_dac_test/test/ym2149_test.py -p
 Detected pitches:
@@ -100,7 +100,7 @@ Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. 
 Build the *ym2149_dac_test* project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/gw/projects/ym2149_dac_test
-make ym2149_dac_test_bit_sw
+make ym2149_dac_test_bit
 ```
 Download the generated bitstream file to the Arty A7:
 ```
@@ -113,9 +113,9 @@ You should hear a 6-tone chord.
 Build the *stsound_test* project:
 ```
 cd build/sim-a7-100/gw/projects/stsound_test
-make stsound_test_sim_sw
+make stsound_test_sim
 ```
-Execute the generated Verilator model. Pass in the SD card image that's checked in as part of the test. The SD card image contains the song that we want to play. The model runs for 5s simulated time. It will take a few minutes in real-time to complete. You should see the following output:
+Execute the generated Verilator model. Pass in the SD card image that's checked in as part of the test. The SD card image contains the song that we want to play. The model runs for 5s of simulated time. It will take a few minutes in real-time to complete. You should see the following output:
 ```
 ./Vmodel -s ../../../../../gw/projects/stsound_test/test/sdcard.img
 SD Image File: ../../../../../gw/projects/stsound_test/test/sdcard.img
@@ -148,7 +148,7 @@ Starting playback...
 No overflows detected.
 Test passed.
 ```
-The Verilator model should have generated Python file *pcm_out.py*:
+The Verilator model should have generated a Python file `pcm_out.py`:
 ```
 ls *.py
 pcm_out.py
@@ -170,20 +170,20 @@ Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
 Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
 
-Locate YM file **ANCOOL1.YM** in directory **boxlambda/sub/StSound/YmSampleFiles/**. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.
+Locate the YM file `ANCOOL1.YM` in the directory `boxlambda/sub/StSound/YmSampleFiles/`. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
 Build the *stsound_test* project in an Arty A7 build tree.
 ```
 cd build/arty-a7-100/gw/projects/stsound_test
-make stsound_test_bit_sw
+make stsound_test_bit
 ```
 Download the generated bitstream file to the Arty A7:
 ```
 make stsound_test_load
 ```
-You should hear the chiptune play. In the terminal window you should see the following:
+You should hear the chiptune play. In the terminal window, you should see the following:
 ```
 Mounting...
 CID: 534d5402:47323341:7d604971:3168018d
@@ -196,8 +196,8 @@ Starting playback...
 ```
 There are a few controls you can play around with:
 
-- Set SW0 (leaving SW1 and SW2 off), then press buttons 0/1 to increase/decrease the volume.
-- Set SW1 (leaving SW0 and SW2 off), then press buttons 0/1 to increase/decrease the bass level.
-- Set SW2 (leaving SW0 and SW1 off), then press buttons 0/1 to increase/decrease the treble level.
-- SW3, sampled once at SW boot time, selects PSG0 or PSG1 to play the chiptune.
+- Set `SW0` (leaving `SW1` and `SW2` off), then press buttons 0/1 to increase/decrease the volume.
+- Set `SW1` (leaving `SW0` and `SW2` off), then press buttons 0/1 to increase/decrease the bass level.
+- Set `SW2` (leaving `SW0` and `SW1` off), then press buttons 0/1 to increase/decrease the treble level.
+- `SW3`, sampled once at SW boot time, selects PSG0 or PSG1 to play the chiptune.
 
