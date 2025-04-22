@@ -20,7 +20,7 @@ RISC-V CSRs, Control and Status Registers, are special registers through which t
 
 For a complete list of CSRs, see the [Ibex Controls and Status Registers](https://ibex-core.readthedocs.io/en/latest/03_reference/cs_registers.html#cs-registers) page.
 
-To be able to access the CSRs easily from C/C++ I'm using Five Embeddev's `riscv-csr-access` library:
+To be able to access the CSRs easily from C/C++, I'm using Five Embeddev's `riscv-csr-access` library:
 
 [https://github.com/five-embeddev/riscv-csr-access](https://github.com/five-embeddev/riscv-csr-access)
 
