@@ -168,7 +168,7 @@ The `set_stdio_to_uart()` function is to be called from the application before a
 
 #### The Linker Script
 
-Through a *linker script* we tell the linker where in memory to place the program code, data, and stack.
+Through a *linker script*, we tell the linker where in memory to place the program code, data, and stack.
 
 The Linker Script defines the following:
 
@@ -181,7 +181,7 @@ MEMORY
     emem : ORIGIN = __emem, LENGTH = __emem_size
 }
 ```
-- The mapping of input to output sections. Input sections are defined in the source code and default to .text, .bss, and .data when not explicitly specified. The output sections for BoxLambda are: `.flash`, `.text`, `.data`, `.tdata`, `.tbss`, `.bss`, `.heap` and `.stack`.
+- The mapping of input to output sections. Input sections are defined in the source code and default to .text, .bss, and .data when not explicitly specified. The output sections for BoxLambda are: `.flash`, `.text`, `.data`, `.tdata`, `.tbss`, `.bss`, `.heap`, and `.stack`.
 ```
     .text : {
         ...
@@ -254,7 +254,7 @@ Technically, BoxLambda doesn't boot from flash memory. It boots from IMEM at add
 
 The Ibex Boot Vector is part of a vector table that also includes the interrupt vectors. For the purpose of low-latency interrupt handling, it's important to keep this vector table in IMEM, rather than (slow) flash memory.
 
-The software project that branches from IMEM to the flash boot code (i.e. containing just `vectors.S`) is located here:
+The software project that branches from IMEM to the flash boot code (i.e., containing just `vectors.S`) is located here:
 
 [https://github.com/epsilon537/boxlambda/tree/master/sw/projects/imem_to_flash_vector](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/imem_to_flash_vector)
 
