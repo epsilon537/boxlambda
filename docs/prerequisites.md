@@ -107,5 +107,5 @@ The following tools are automatically installed (if not already installed) by so
 - [Bender](https://github.com/pulp-platform/bender)
 - Python packages NumPy, SciPy, and Matplotlib.
 - [BoxLambda fork of Litex](https://github.com/epsilon537/litex)
-- **riscv32-boxlambda-elf**: RISCV32 GNU toolchain custom built for BoxLambda.
+- **riscv32-boxlambda-elf**: RISCV32 GNU toolchain custom-built for BoxLambda.
 
