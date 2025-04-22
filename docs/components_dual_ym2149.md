@@ -134,7 +134,7 @@ Here's the top-level Verilog:
 
 The Verilator testbench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The testbench will also flag an error if any accumulator overflows are reported.
 
-The Verilator testbench executes for 0.5s simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
+The Verilator testbench executes for 0.5s of simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
 
 1. The PCM samples and DAC samples are converted to numpy arrays and normalized.
 2. Both signals are sent through a low-pass filter.
@@ -170,4 +170,4 @@ See [here](test-build-ym2149.md#ym2149-dac-test-on-verilator) for instructions t
 
 ### Dual YM2149 PSG Core Clock Frequency
 
-The core's clock frequency and PSG clock frequency (clock enable) are core module parameters. The core is instantiated with a clock frequency of 50MHz (BoxLambda's system clock domain) and a PSG clock frequency of 2MHz. I set the PSG clock frequency to 2MHz to match the Atari ST.
+The core's clock frequency and PSG clock frequency (clock enable) are core module parameters. The core is instantiated with a clock frequency of 50MHz (BoxLambda's system clock domain) and a PSG clock frequency of 2MHz. I set the PSG clock frequency to 2 MHz to match the Atari ST.
