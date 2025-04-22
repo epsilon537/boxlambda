@@ -70,13 +70,13 @@ Interrupts are currently not hooked up.
 
 *SDSPI Simplified Block Diagram.*
 
-The above is a simplified block diagram illustrating the SDSPI core internal. I won't be going into the details here. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
+The above is a simplified block diagram illustrating the SDSPI core internally. I won't be going into the details here. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
 
 ### SDSPISIM
 
 On the Verilator test bench, the MicroSD card PMOD is replaced with an `SDSPISIM` co-simulator. `SDSPISIM` was easy to plug into BoxLambda's test bench. The interface is similar to the UARTSIM co-simulator, already in use in the test bench, and also provided by Dan Gisselquist.
 
-Hereare the hooks to both co-simulators in the test bench's `tick()` function. The `tick()` function is the heart of the test bench advancing the simulation by one clock cycle:
+Here are the hooks to both co-simulators in the test bench's `tick()` function. The `tick()` function is the heart of the test bench, advancing the simulation by one clock cycle:
 
 ```
   //Feed SDSPI co-sim
