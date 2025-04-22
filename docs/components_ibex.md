@@ -116,6 +116,45 @@ Currently, multiple outstanding transactions are not supported.
 
 Machine Mode is one of the four RISC-V privilege levels and is the only one used in BoxLambda.
 
+### Instruction Cycle Counts Summary
+
+All on-chip memory or register accesses are now low-latency with a known, fixed instruction cycle count. Some slaves respond faster than others so the instruction cycle count varies a bit depending on the slave being addressed.
+
+The table below summarizes the instruction cycle counts on BoxLambda according to instruction type and destination.
+
+| Instruction | Destination | Cycles |
+|-------------|-------------|--------|
+| load/store  | IMEM        | 2      |
+|             | VRAM        | 2      |
+|             | Sprite RAM  | 2      |
+|             | Palette RAM | 2      |
+|             | VERA Ctrl   | 2      |
+|             | SDRAM       | 15 (variable) |
+|             | SDRAM Ctrl  | 3      |
+|             | SPIFlash    | 131    |
+|             | SPIFlash Ctrl | 2      |
+|             | SDSPI       | 3      |
+|             | UART        | 3      |
+|             | GPIO        | 2      |
+|             | USB         | 2      |
+|             | ResetCtrl   | 2      |
+|             | Timer       | 2      |
+|             | YM2149      | 2      |
+|             | I2C         | 2      |
+| branch      | IMEM        | 2      |
+| conditional branch taken |  IMEM  | 4      |
+| conditional branch not taken | IMEM   | 2      |
+| return from interrupt | IMEM   | 5      |
+| integer/computational | IMEM   | 2      |
+| multiplication | IMEM   | 2      |
+| division/remainder | IMEM       | variable (long division)       |
+| CSRSI | IMEM   | 3      |
+| CSRS | IMEM   | 4      |
+| CSRC | IMEM   | 2      |
+| CSRCI | IMEM   | 2      |
+| CSRW | IMEM   | 2      |
+| CSRR | IMEM   | 2      |
+
 ### Code Generation
 
 The Ibex repo/submodule sources are not referenced directly. The source code needs to be *exported* using *fusesoc*. This is done during the codegeneration step of a gateware build.

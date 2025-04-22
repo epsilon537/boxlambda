@@ -92,5 +92,5 @@ The Data Bus can optionally acknowledge transactions to invalid addresses. With 
 
 The rationale behind this feature is to prevent a system lock-up when the user accidentally accesses an invalid address from the REPL.
 
-For test builds, invalid addresses should trigger Wishbone errors, so a top-level flag was introduced to control this behavior. This flag, `ACK_INVALID_ADDR` is set to 0 for all test builds except the `invalid_address` test build. For the `boxlambda_base`, `boxlambda_dfx`, and `invalid_address` test builds, this flag is set to 1.
+For test builds, invalid addresses should trigger Wishbone errors, so a top-level flag was introduced to control this behavior. This flag, `ACK_INVALID_ADDR` is set to 0 for all test builds except the *invalid_address* test build. For the *boxlambda_base*, *boxlambda_dfx*, and *invalid_address* test builds, this flag is set to 1.
 
