@@ -16,7 +16,7 @@ hide:
 
 The Real-Time Clock and Calendar (RTCC) software component is based on the [MCP79412RTC](https://github.com/epsilon537/MCP79412RTC) library. The library interfaces with Digilent's [PMOD RTCC](components_rtcc.md) via I2C.
 
-The library allows you to set and get a time and date (among other things). The RTCC's coin cell battery backup ensures that time and date will be maintained while the host (BoxLambda) is turned off.
+The library allows you to set and get a time and date (among other things). The RTCC's coin cell battery backup ensures that the time and date will be maintained while the host (BoxLambda) is turned off.
 
 Example usage:
 
