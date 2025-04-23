@@ -4,6 +4,7 @@ title: 'BoxLambda Simplified.'
 comments: true
 mathjax: yes
 ---
+*Updated 23 April 2025: Corrected the architecture diagram in the Recap section. It was showing the new architecture block diagram instead of the old one that was used as the baseline for the changes described in this post.*
 
 In this post, I remove more functionality than I'm adding, and BoxLambda becomes a lot simpler and faster as a result. I'll also briefly describe how the RISC-V GNU toolchain for BoxLambda is built.
 
