@@ -5,16 +5,16 @@ comments: true
 mathjax: yes
 ---
 
-In this post, I will be looking at ways to improve interrupt latency and jitter on the BoxLambda SoC.
+In this post, I'll explore ways to improve interrupt latency and jitter on the BoxLambda SoC.
 
 Recap
 -----
 ![BoxLambda Block Diagram.](../assets/Arch_Diagram_dual_bus_DFX.png)
 
-Here's a summary of the current state of BoxLambda:
-- Targets the Arty-A7-100T FPGA development board.
+BoxLambda's current features:
+- Target FPGA: Arty-A7-100T.
 - Ibex RISC-V core with machine timer and hardware interrupt support.
-- Harvard architecture based interconnect.
+- Harvard architecture-based interconnect.
 - Low-latency register and memory access across the SoC.
 - Predictable instruction cycle counts.
 - DFX Partial FPGA Reconfiguration support.
@@ -32,15 +32,15 @@ Here's a summary of the current state of BoxLambda:
 
 Interrupt Latency Before Adjustments
 ------------------------------------
-Let's have a look at the waveform of a timer interrupt firing:
+Let's take a look at the waveform of a timer interrupt firing:
 
 [![Waveform of a Timer Interrupt Firing.](../assets/timer_irq_waveform_before_changes.png)](../assets/timer_irq_waveform_before_changes.png)
 
 *Waveform of a Timer Interrupt Firing.*
 
-You see the time IRQ firing while the CPU is executing the instruction at address 0x02ec. Five clock cycles later, the CPU branches to the IRQ vector at 0x1c and two clock cycles after that, we're in the timer interrupt service routine (ISR). Six clock cycles of interrupt latency. Not too bad, you might say. 
+You can see the timer interrupt firing while the CPU is executing the instruction at address 0x02ec. Five clock cycles later, the CPU branches to the interrupt vector at 0x1c and two clock cycles after that, we're in the timer interrupt service routine (ISR). Six clock cycles of interrupt latency. Not too bad, you might say.
 
-The real damage is yet to come, however. Take a look at timer ISR code:
+The real performance cost is yet to come, however. Take a look at the timer ISR code:
 
 ```
 void _timer_irq_handler(void) {
@@ -99,11 +99,11 @@ That's 38 instructions, not including the routine that disables the timer! Where
 void _timer_irq_handler(void) __attribute__((interrupt("machine")));
 ```
 
-The CPU registers need to be saved before the ISR can make any register changes, and restored after the ISR has done its work. This simple timer ISR takes 101 clock cycles to execute. It takes 42 clock cycles from the rising edge of the timer IRQ signal until the execution of the first non-prologue instruction in the ISR.
+The CPU registers need to be saved before the ISR can make any register changes, and restored after the ISR has done its work. This simple timer ISR takes 101 clock cycles to execute. There are 42 clock cycles between the rising edge of the timer IRQ signal and the execution of the first non-prologue instruction in the ISR.
 
-[![IRQ Overhead before changes.](../assets/irq_overhead_before.png)](../assets/irq_overhead_before.png)
+[![Interrupt Overhead before changes.](../assets/irq_overhead_before.png)](../assets/irq_overhead_before.png)
 
-*IRQ overhead before changes.*
+*Interrupt Overhead before changes.*
 
 Interrupt Shadow Registers
 --------------------------
@@ -117,12 +117,12 @@ The modified register file has two register banks:
 
 Following the pattern of Ibex's `nmi_mode`, I added an `irq_mode` signal that tracks when the CPU enters and exits an ISR.
 The `irq_mode` signal controls how register reads and writes are handled in the Register File:
-- When the CPU is running at thread-level (i.e. not in IRQ mode), register writes are stored in both register banks and register reads are fetched from the *mem* bank.
-- When the CPU is running in IRQ mode, register writes are only stored in the `irq_mem` register bank and register reads are fetched from the `irq_mem` bank.
+- When the CPU is running at thread-level (i.e., not in IRQ mode), register writes are stored in both register banks, and register reads are fetched from the *mem* bank.
+- When the CPU is running in IRQ mode, register writes are only stored in the `irq_mem` register bank, and register reads are fetched from the `irq_mem` bank.
 
-With this design, the `irq_mem` bank is up-to-date when the CPU enter IRQ mode. Any register writes while in IRQ mode go to the `irq_mem` bank only and don't affect the thread-level `mem` bank. This means that no registers need to be saved or restored when switching between thread-level mode and IRQ mode.
+With this design, the `irq_mem` bank is up-to-date when the CPU enters IRQ mode. Any register writes while in IRQ mode go to the `irq_mem` bank only and don't affect the thread-level `mem` bank. This means that no registers need to be saved or restored when switching between thread-level mode and IRQ mode.
 
-**Caveat**: `irq_mode` is just a 1-bit signal. It can't track nested interrupts. That's fine for BoxLambda.
+**Caveat**: `irq_mode` is just a 1-bit signal. It can't track nested interrupts. This limitation is acceptable for BoxLambda.
 
 The *naked* attribute
 =====================
@@ -156,32 +156,33 @@ The disassembly looks like this:
      718:       30200073                mret
 ```
 
-With a *naked* `_timer_irq_handler`, the IRQ prologue takes 2 clock cycles (the branch fromm the IRQ vector to the `timer_irq_handler` and the epilogue takes 5 clock cycles (the `mret` instruction).
+With a *naked* `_timer_irq_handler`, the prologue takes 2 clock cycles (the branch from the interrupt vector to the `timer_irq_handler` and the epilogue takes 5 clock cycles (the `mret` instruction).
 
 The Gain
 ========
-With these changes implemented, it takes 27 clock cyles to execute the ISR (down from 101 clock cycles), and 8 clock cycles from the risinge edge of the timer IRQ signal until the execution of the first timer ISR specific instruction (down from 42 clock cycles).
+After implementing these changes, it takes 27 clock cycles to execute the ISR. There are 8 clock cycles between the rising edge of the timer IRQ signal and the execution of the first timer ISR specific instruction.
 
-| Timer ISR | Without IRQ Shadow Registers | With IRQ Shadow Registers |
+| Timer ISR | Without Interrupt Shadow Registers | With Interrupt Shadow Registers |
 |-----------|------------------------------|---------------------------|
-| *Real* IRQ Latency | 43 clock cycles | 8 clock cycles |
+| *Real* Interrupt Latency | 43 clock cycles | 8 clock cycles |
+| ISR Execution Time | 95 clock cycles | 27 clock cycles |
 | ISR Prologue and Epilogue overhead | 75 clock cycles| 7 clock cycles |
 
-[![IRQ Overhead after changes.](../assets/irq_overhead_after.png)](../assets/irq_overhead_after.png)
+[![Interrupt Overhead after changes.](../assets/irq_overhead_after.png)](../assets/irq_overhead_after.png)
 
-*IRQ overhead after changes.*
+*Interrupt Overhead after changes.*
 
-IRQ Jitter
-----------
-Claiming six clock cycles of IRQ latency is not entirely accurate. The actual latency depends on the instruction being executed when the IRQ occurs. The CPU has to complete that instruction before it can jump to the IRQ vector. This constraint causes some IRQ latency jitter. For asynchronous events, such as key presses, that won't matter. However, for critically timed events, there may be cases where you want to execute a sequence of instructions *exactly* at a given time, without any jitter.
+Interrupt Jitter
+----------------
+Claiming six clock cycles of interrupt latency is not entirely accurate. The actual latency depends on the instruction being executed when the interrupt occurs. The CPU has to complete that instruction before it can jump to the interrupt vector. This constraint causes some interrupt latency jitter/variation. For asynchronous events, such as key presses, that won't matter. However, for critically timed events, there may be cases where you want to execute a sequence of instructions *exactly* at a given time, without any jitter.
 
-To accommodate such use cases, I added an `MTIMEBLK` register to the Timer core. A write operation to this register blocks until the lower 8 bits of the `MTIMER` register matches the written value. This mechanism can be used to absorb Timer IRQ jitter as shown in the diagram below:
+To accommodate such use cases, I added an `MTIMEBLK` register to the Timer core. A write operation to this register blocks until the lower 8 bits of the `MTIMER` register match the written value. This mechanism can be used to absorb Timer interrupt jitter, as shown in the diagram below:
 
-![Absorbing Timer IRQ Jitter with MTIMEBLK](../assets/mtimeblk_mechanism.png)
+![Absorbing Timer Interrupt Jitter with MTIMEBLK](../assets/mtimeblk_mechanism.png)
 
-*Absorbing Timer IRQ Jitter with MTIMEBLK.*
+*Absorbing Timer Interrupt Jitter with MTIMEBLK.*
 
-You program a Timer IRQ to fire a few clock cycles before the desired time. Then, inside the timer ISR, you write to `MTIMEBLK` to block until the desired time is reached exactly.
+You program a Timer interrupt to fire a few clock cycles before the desired time. Then, inside the timer ISR, you write to `MTIMEBLK` to block until the desired time is reached exactly.
 
 The [timer_uart_gpio_irqs](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) test implements this mechanism:
 
@@ -227,7 +228,7 @@ int main(void) {
   }
 ```
 
-This mechanism can also be used to remove jitter from periodic interrupts such VGA line IRQs.
+This mechanism can also be used to remove jitter from periodic interrupts, such as VGA line interrupts.
 
 Other Changes
 -------------
@@ -266,7 +267,7 @@ Setup
 
 ## The Ibex Performance Test on Verilator
 
-The [Ibex Performance Test]() now includes an IRQ latency measurement test.
+The [Ibex Performance Test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ibex_perf_test/ibex_perf_test.c) now includes an interrupt latency measurement test.
 
 Build the **ibex_perf_test** project:
 
@@ -317,7 +318,7 @@ In the terminal emulator, you should see the same output as in the Verilator tes
 
 ### The Timer, UART, and GPIO Interrupt Test on Verilator
 
-The [Timer, UART, and GPIO Interrupt Test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) includes a timer interrupt test implementing the IRQ jitter removal mechanism.
+The [Timer, UART, and GPIO Interrupt Test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) includes a timer interrupt test implementing the interrupt jitter removal mechanism.
 
 Build the *timer_uart_gpio_irqs* gateware project:
 
@@ -364,7 +365,7 @@ Conclusion
 ----------
 The tweaking of the BoxLambda SoC gateware to meet the requirements is now complete. The SoC is a simple, low-latency system with predictable behavior down to the clock cycle. **This is a milestone!** 
 
-In the next phase of the project, the focus will shift to software. BoxLambda needs a self-contained run-time environment. One of the key questions I would like to answer is: How do you develop software for a resource-constrained computer on that resource-constrained computer? I can't wait to dive in!
+In the next phase of the project, the focus will shift to software. BoxLambda needs a self-contained runtime environment. One of the key questions I would like to answer is: How do you develop software for a resource-constrained computer on that resource-constrained computer? I can't wait to dive in!
 
 
 
