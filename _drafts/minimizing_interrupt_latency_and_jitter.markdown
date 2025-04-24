@@ -317,7 +317,7 @@ In the terminal emulator, you should see the same output as in the Verilator tes
 
 ### The Timer, UART, and GPIO Interrupt Test on Verilator
 
-The [Timer, UART, and GPIO Interrupt Test]() includes a timer interrupt test implementing the IRQ jitter removal mechanism.
+The [Timer, UART, and GPIO Interrupt Test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) includes a timer interrupt test implementing the IRQ jitter removal mechanism.
 
 Build the *timer_uart_gpio_irqs* gateware project:
 
@@ -364,7 +364,7 @@ Conclusion
 ----------
 The tweaking of the BoxLambda SoC gateware to meet the requirements is now complete. The SoC is a simple, low-latency system with predictable behavior down to the clock cycle. **This is a milestone!** 
 
-In the next phase of the project, the focus will shift to software. BoxLambda needs a self-contained run-time environment. One of the key questions I would like to answer is: How do you develop software for a resource-constrained computer on that resource constrained computer? I can't wait to dive in!
+In the next phase of the project, the focus will shift to software. BoxLambda needs a self-contained run-time environment. One of the key questions I would like to answer is: How do you develop software for a resource-constrained computer on that resource-constrained computer? I can't wait to dive in!
 
 
 
