@@ -97,9 +97,9 @@ The single instruction prefetcher supports only uncompressed instructions. That'
 
 ### Interrupt Shadow Registers
 
-To reduce the ISR prologue and epilogue overhead, the CPU's register files includes an *interrupt shadow register bank*:
+To reduce the ISR prologue and epilogue overhead, the CPU's register file includes an *interrupt shadow register bank*:
 
-![The Ibex Register File including a Interrupt Shadow Register Bank](assets/irq_shadow_registers.png)
+![The Ibex Register File including an Interrupt Shadow Register Bank](assets/irq_shadow_registers.png)
 
 The CPU register file has two register banks:
 
@@ -140,7 +140,7 @@ Machine Mode is one of the four RISC-V privilege levels and is the only one used
 
 ### Instruction Cycle Counts Summary
 
-All on-chip memory or register accesses are now low-latency with a known, fixed instruction cycle count. Some slaves respond faster than others so the instruction cycle count varies a bit depending on the slave being addressed.
+All on-chip memory or register accesses are now low-latency with a known, fixed instruction cycle count. Some slaves respond faster than others, so the instruction cycle count varies a bit depending on the slave being addressed.
 
 The table below summarizes the instruction cycle counts on BoxLambda according to instruction type and destination.
 
@@ -179,7 +179,7 @@ The table below summarizes the instruction cycle counts on BoxLambda according t
 
 ### Code Generation
 
-The Ibex repo/submodule sources are not referenced directly. The source code needs to be *exported* using *fusesoc*. This is done during the codegeneration step of a gateware build.
+The Ibex repo/submodule sources are not referenced directly. The source code needs to be *exported* using *fusesoc*. This is done during the code generation step of a gateware build.
 
 This is the wrapper script performing the export: [scripts/gen_ibex_core.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/gen_ibex_core.sh)
 
