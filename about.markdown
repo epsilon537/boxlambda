@@ -6,12 +6,13 @@ permalink: /about/
 
 ![BoxLambda Architecture Block Diagram](../assets/Arch_Diagram_dual_bus_DFX.png)
 
-**BoxLambda** is a project that creates a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for both software and RTL experimentation.
+**BoxLambda** is a project that creates a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for both software and gateware experimentation.
 
 ## Current Features
 
 - Targets the Arty-A7-100T FPGA development board.
 - Ibex RISC-V core with machine timer and hardware interrupt support.
+- Interrupt shadow register bank supporting low-latency interrupt handling.
 - Stable low-latency access to internal memories and registers. Stable and documented instruction cycle counts.
 - DDR3 external memory access through the Litex memory controller.
 - OpenOCD-based debug access on FPGA and Verilator.
@@ -53,7 +54,7 @@ permalink: /about/
 ## Status (April 2025)
 
 - **Infrastructure** (build system, etc.): Complete.
-- **Gateware**: Complete as pictured in the Block Diagram. Meeting requirements, but IRQ Latency yet to be analyzed.
+- **Gateware**: Complete and meeting requirements.
 - **Software**: Early stage development.
 
 ## GitHub

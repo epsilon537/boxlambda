@@ -7,14 +7,13 @@ hide:
 
 ![BoxLambda Architecture Block Diagram](assets/Arch_Diagram_dual_bus_DFX.png)
 
-**BoxLambda** is a project that creates a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for both software and RTL experimentation.
-
-BoxLambda is a software-hardware crossover project, providing opportunities for experimentation on both the FPGA RTL side and the software side.
+**BoxLambda** is a project that creates a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for both software and gateware experimentation.
 
 ## Current Features
 
 - Targets the Arty-A7-100T FPGA development board.
 - Ibex RISC-V core with machine timer and hardware interrupt support.
+- Interrupt shadow register bank supporting low-latency interrupt handling.
 - Stable low-latency access to internal memories and registers. Stable and documented instruction cycle counts.
 - DDR3 external memory access through the Litex memory controller.
 - OpenOCD-based debug access on FPGA and Verilator.
@@ -26,14 +25,14 @@ BoxLambda is a software-hardware crossover project, providing opportunities for 
 - USB HID Keyboard and Mouse support.
 - Picolibc-based standard C environment.
 - DFX Partial FPGA Reconfiguration support.
-- Test application suite covering all SoC components, running on both FPGA and Verilator.
+- Test application suite covering all SoC components, running on FPGA and Verilator.
 - Linux CMake and Bender-based Software and Gateware build system.
 
 ## Key Goals
 
 - Create a sandbox for experimenting with software and FPGA gateware:
     - It should be **easy** to jump in and do something: create, hack, tinker.
-        - **Simple Enough for One Person**: A motivated individual can develop a solid understanding of the entire system, including both software and hardware.
+        - **Simple Enough for One Person**: A motivated individual can develop a solid understanding of the entire system, including software and hardware.
         - **Deterministic Behavior**: The duration of operations such as internal memory or register access must be predictable by design.
         - **Self-Contained Run-Time Environment** supporting high-level interactive and low-level systems programming.
     - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components. Optionally, support Partial FPGA Reconfiguration.
@@ -56,7 +55,7 @@ BoxLambda is a software-hardware crossover project, providing opportunities for 
 ## Status (April 2025)
 
 - **Infrastructure** (build system, etc.): Complete.
-- **Gateware**: Complete as pictured in the Block Diagram. Meeting requirements, but IRQ Latency yet to be analyzed.
+- **Gateware**: Complete and meeting requirements.
 - **Software**: Early stage development.
 
 ## GitHub
