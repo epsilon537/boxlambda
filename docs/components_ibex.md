@@ -95,6 +95,28 @@ This prefetcher is very simple. It prefetches one 32-bit (i.e., uncompressed) in
 
 The single instruction prefetcher supports only uncompressed instructions. That's fine because BoxLambda software builds only use uncompressed instructions. Having a mix of 16-bit compressed and 32-bit uncompressible instructions would again result in less predictable instruction cycle counts, due to unaligned instruction fetches, for instance.
 
+### Interrupt Shadow Registers
+
+To reduce the ISR prologue and epilogue overhead, the CPU's register files includes an *interrupt shadow register bank*:
+
+![The Ibex Register File including a Interrupt Shadow Register Bank](assets/irq_shadow_registers.png)
+
+The CPU register file has two register banks:
+
+- The *thread-level* bank named `mem`
+- The *interrupt-level* bank named `irq_mem`.
+
+The `irq_mode` signal tracks when the CPU enters and exits an ISR. The signal is used to control how register reads and writes are handled in the Register File:
+
+- When the CPU is running at thread-level (i.e., not in IRQ mode), register writes are stored in both register banks, and register reads are fetched from the *mem* bank.
+- When the CPU is running in IRQ mode, register writes are only stored in the `irq_mem` register bank, and register reads are fetched from the `irq_mem` bank.
+
+With this design, the `irq_mem` bank is up-to-date when the CPU enters IRQ mode. Any register writes while in IRQ mode go to the `irq_mem` bank only and don't affect the thread-level `mem` bank. This means that no registers need to be saved or restored when switching between thread-level mode and IRQ mode.
+
+**Caveat**: `irq_mode` is just a 1-bit signal. It can't track nested interrupts. This limitation is acceptable for BoxLambda.
+
+To benefit from the interrupt shadow register optimization, ISRs should be declared with the `naked` attribute. See [the naked attribute](sw_comp_irqs.md#the-naked-attribute) section for details.
+
 #### Core2WB
 
 This is the Ibex Memory Interface specification:

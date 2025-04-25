@@ -176,7 +176,7 @@ Interrupt Jitter
 ----------------
 Claiming six clock cycles of interrupt latency is not entirely accurate. The actual latency depends on the instruction being executed when the interrupt occurs. The CPU has to complete that instruction before it can jump to the interrupt vector. This constraint causes some interrupt latency jitter/variation. For asynchronous events, such as key presses, that won't matter. However, for critically timed events, there may be cases where you want to execute a sequence of instructions *exactly* at a given time, without any jitter.
 
-To accommodate such use cases, I added an `MTIMEBLK` register to the Timer core. A write operation to this register blocks until the lower 8 bits of the `MTIMER` register match the written value. This mechanism can be used to absorb Timer interrupt jitter, as shown in the diagram below:
+To accommodate such use cases, I added an `MTIMEBLK` register to the Timer core. A write operation to this register blocks the CPU until the lower 8 bits of the `MTIME` register match the written value. This mechanism can be used to absorb Timer interrupt jitter, as shown in the diagram below:
 
 ![Absorbing Timer Interrupt Jitter with MTIMEBLK](../assets/mtimeblk_mechanism.png)
 

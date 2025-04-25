@@ -9,6 +9,7 @@ The value of this test is mostly in the waveform it generates. Checking the wave
 
 The test program consists of the following sub-tests:
 
+- `irq_latency_test`: Repeatedly measures timer interrupt latency and recording minimum and maximum latency.
 - `do_nothing()`: Measures how many cycles it takes to call `mcycle_start()` and `mcycle_stop()`.
 - `lw_register_loop()`: Repeatedly reads a peripheral register and measures how long it takes.
 - `lw_sw_copy_loop()`: Copies 100 words from DMEM to DMEM, or from VRAM to VRAM, using a naive loop and measures how long it takes.
@@ -26,13 +27,15 @@ make ibex_perf_test_bit
 Execute the generated Verilator model with tracing enabled (`-t`). You should see the following output:
 
 ```
-./Vmodel -t
-SIM: Tracing enabled
+./Vmodel
+DUT: Enabling Timer IRQ.
+DUT: Timer IRQ latency Min-Max: 5-7 cycles.
+DUT: Expected: 5-7 cycles.
 DUT: Do nothing: 8 cycles.
 DUT: Expected: 8 cycles.
 DUT: lw_sw_register_loop: addr: 0x10000208, 8 cycles/iteration.
 DUT: Expected: 8 cycles.
-DUT: lw_sw_copy_loop: dest: 0x9c14, src: 0x5c14, 14 cycles/iteration.
+DUT: lw_sw_copy_loop: dest: 0x96c4, src: 0x56c4, 14 cycles/iteration.
 DUT: Expected: 14 cycles.
 DUT: lw_sw_copy unrolled: 8 cycles/iteration.
 DUT: Expected: 8 cycles.
@@ -66,7 +69,7 @@ TOP.sim_main.dut.boxlambda_soc_inst.wb_ibex_core.u_top.u_ibex_core.if_stage_i.ge
 TOP.sim_main.dut.boxlambda_soc_inst.wb_ibex_core.u_top.u_ibex_core.if_stage_i.gen_single_prefetch_buffer.single_prefetch_buffer_i.instr_rvalid_i
 ```
 
-![Ibex Performance Test Waveform](assets/ibex_perf_test.png){ .mdx-lightbox }
+[![Ibex Performance Test Waveform](assets/ibex_perf_test.png)](assets/ibex_perf_test.png)
 *Ibex Performance Test Waveform.*
 
 To navigate the waveform, check the ID stage's `pc_id_i` values against the addresses in the disassembly of the ibex_perf_test_ram executable.
