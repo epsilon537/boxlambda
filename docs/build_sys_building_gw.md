@@ -35,7 +35,7 @@ Where *action* is one of the following:
     - Depends on: No dependencies.
     - Build tree: `arty-a7-100` build tree.
 
-See [here](build_sys_gw_build_struct.md#four-layers) for more info on the `gw_codegen` target see.
+See [here](build_sys_gw_build_struct.md#four-layers) for more info on the `gw_codegen` target.
 
 ### Some Examples
 
@@ -51,7 +51,7 @@ cd <boxlambda_root_dir>/build/arty-a7-100 && make hello_world_synth
 cd <boxlambda_root_dir>/build/arty-a7-100 && make hello_world_bit && make hello_world_load
 ```
 
-The build directory tree mirrors the source tree. After a build completes, you can find the project's Verilator model or Vivado project files under the corresponding project directory. For example:
+The build directory tree mirrors the source tree. After a build is completed, you can find the project's Verilator model or Vivado project files under the corresponding project directory. For example:
 
 ```
 $ cd build/arty-a7-100/gw/projects/hello_world
