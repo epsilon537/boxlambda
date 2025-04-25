@@ -100,7 +100,7 @@ Any test cases are also added to the project's `CMakeLists.txt` file.
 
 ## A DFX Project CMakeList
 
-The build rules for a DFX-enabled project are created by the `gw_project_rules_dfx_vivado()` CMake function. Calling this function results in the creation of a `<project>_bit`, a `<project>_load`, and a `<project>_flash_gw` target. Building the `<project>_bit` target results in a bitstream file that can be `_loaded` or `_gw_flashed` onto the target. The gateware image expects to find a software image on flash to boot from.
+The build rules for a DFX-enabled project are created by the `gw_project_rules_dfx_vivado()` CMake function. Calling this function results in the creation of a `<project>_bit`, a `<project>_load`, and a `<project>_flash_gw` target. Building the `<project>_bit` target results in a bitstream file that can be `_loaded` or `_gw_flashed` onto the target. The gateware image expects to find a software image in flash memory to boot from.
 
 Here is an example:
 
