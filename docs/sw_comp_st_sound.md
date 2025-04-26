@@ -30,7 +30,7 @@ I ported the ST-Sound library to BoxLambda, using the YM2149 audio core:
 
 [https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound)
 
-As you can see in the `CMakeLists.txt`, the port references some of the original *ST-Sound* library files unmodified in the *stsound* git submodule. The *ST-Sound* library files that required significant modification I copied locally to the `boxlambda/sw/component/stsound/` directory.
+As you can see in the `CMakeLists.txt`, the port references some of the original *ST-Sound* library files unmodified in the *stsound* git submodule. The *ST-Sound* library files that required significant modification, I copied locally to the `boxlambda/sw/component/stsound/` directory.
 
 The port is not complete. I did the bare minimum needed to be able to play back a simple YM-type 2 song. To play the more advanced subtypes, I need to add *digidrums* and *syncbuzzer* sound effects. I made a note of it.
 
