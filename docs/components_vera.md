@@ -17,7 +17,7 @@ hide:
 - **VERA Wishbone Core Top-Level**:
 [sub/vera_wishbone/fpga/source/vera_top.v](https://github.com/epsilon537/vera_wishbone/blob/boxlambda/fpga/source/vera_top.v)
 
-Frank van den Hoef's [VERA Versatile Embedded Retro Adapter](https://github.com/fvdhoef/vera-module), used by the [Commander X16 project](https://www.commanderx16.com/), is a standalone FPGA with an 8-bit external bus interface. **VERA Wisbone**, discussed here is an adaption of the graphics subsystem of the original VERA core for the BoxLambda SoC.
+Frank van den Hoef's [VERA Versatile Embedded Retro Adapter](https://github.com/fvdhoef/vera-module), used by the [Commander X16 project](https://www.commanderx16.com/), is a standalone FPGA with an 8-bit external bus interface. **VERA Wisbone**, discussed here, is an adaptation of the graphics subsystem of the original VERA core for the BoxLambda SoC.
 
 Note: The original VERA core also supports PSG Audio, PCM Audio, and a SPI Controller for storage. These subcomponents have not been carried over to VERA Wishbone.
 
@@ -38,20 +38,20 @@ VERA Wishbone's feature summary:
 
 *The VERA Wishbone Block Diagram.*
 
-In the above diagram, the big arrows show the main data flow. The small arrows are control signals. The labels next to the arrowheads show what is being presented to the block at that point. E.g. the `composer` presents a `line_idx` and `render_start` signal to the *Layer 0 Renderer*. Data path bus widths are indicated by a number between brackets.
+In the above diagram, the big arrows show the main data flow. The small arrows are control signals. The labels next to the arrowheads show what is being presented to the block at that point. E.g., the `composer` presents a `line_idx` and `render_start` signal to the *Layer 0 Renderer*. Data path bus widths are indicated by a number between brackets.
 
 The easiest way to understand what's going on is by going through the diagram from bottom to top:
 
 1. The `video_vga` block generates the 640x480@60Hz VGA signal (RGB 4:4:4, Hsync and Vsync).
 2. The `video_vga` block pulls the pixel data from the `composer` block. The 8-bit pixel data passes through the `palette_ram` to be converted to RGB 4:4:4.
-3. The `composer` block in turn pulls the necessary data from three **Line Buffers**: one for each layer and one for sprites. The Composer and video_vga blocks operate at VGA pixel clock rate, i.e. 640 pixels worth of data flows when a scanline is being drawn. No data flows during horizontal or vertical retrace.
-4. The Line Buffers exist to give the renderers some leeway. The **Layer Renderers**, for instance, need to produce 640 pixels worth of data each scanline but they have 800 pixels worth of time to do so (the horizontal retrace time is 'extra time'). For the **Sprite Renderer**, the numbers are a bit different, but the concept is the same.
+3. The `composer` block, in turn, pulls the necessary data from three **Line Buffers**: one for each layer and one for sprites. The Composer and video_vga blocks operate at VGA pixel clock rate, i.e., 640 pixels worth of data flows when a scanline is being drawn. No data flows during horizontal or vertical retrace.
+4. The Line Buffers exist to give the renderers some leeway. The **Layer Renderers**, for instance, need to produce 640 pixels worth of data each scanline, but they have 800 pixels worth of time to do so (the horizontal retrace time is 'extra time'). For the **Sprite Renderer**, the numbers are a bit different, but the concept is the same.
 5. The renderers contain the bulk of VERA's video generation logic. There are two identical Layer Renderer blocks and one Sprite Renderer. The Layer Renderers implement the different tile and Bitmap Modes, retrieve the necessary data from the `vram_if` block, and store the rendered output data in their respective Line Buffers. The Sprite Renderer does the same thing for sprites.
 6. The `vram_if` block contains **128KB** of embedded video memory. It has four ports: one for each renderer and one for the CPU.
 
 ### Video RAM
 
-The video RAM (VRAM) is a Dual Port RAM instance of four byte-wide columns (matching a 32-bit Wishbone data bus with four byte-enables). The amount of RAM is configurable, up to 128KB, through a `VRAM_SIZE_BYTES` parameter/macro.
+The video RAM (VRAM) is a dual-port RAM instance of four byte-wide columns (matching a 32-bit Wishbone data bus with four byte-enables). The amount of RAM is configurable, up to 128KB, through a `VRAM_SIZE_BYTES` parameter/macro.
 
 DPRAM port 0 is exclusively for the CPU. DPRAM port 1 is shared by the two Line Renderers and the Sprite Renderer. The `vram_if` module arbitrates access to port 1 using a time slot scheduler. There are three equal time slot *beats*, each one clock cycle wide. Each port is assigned one slot during which it can access VRAM. The duration of a timeslot is one clock cycle.
 
@@ -63,7 +63,7 @@ DPRAM port 0 is exclusively for the CPU. DPRAM port 1 is shared by the two Line 
 
 The `composer` receives basic control signals from the `video_vga` block: `next pixel`, `next line`, `next frame`, `vblank`. It uses these signals for the following purposes:
 
-- Generate control/timing signals towards the other blocks, e.g. `line_index`, `render_start`, `frame_done`, `sprite_line_buffer_erase_start`.
+- Generate control/timing signals towards the other blocks, e.g., `line_index`, `render_start`, `frame_done`, `sprite_line_buffer_erase_start`.
 - Keep track of the horizontal and vertical screen position counters, both regular and scaled.
 - Generate line IRQs.
 - Determine the active area of the screen, where the border isn't shown.
@@ -77,9 +77,9 @@ The Layer Render's implementation is, conceptually at least, reasonably straight
 2. It retrieves the corresponding tile pixel data, also from VRAM.
 3. It writes out the pixel data to the next few positions in the Line Buffer.
 
-Steps 1 and 2 are always sequential, but as much as possible they overlap with step 3, i.e. while pixel data is being rendered out to the Line Buffer, new map and/or tile data is being retrieved from VRAM.
+Steps 1 and 2 are always sequential, but as much as possible, they overlap with step 3, i.e., while pixel data is being rendered out to the Line Buffer, new map and/or tile data is being retrieved from VRAM.
 
-Below you see the waveform of the Layer Renderer operating in 8bpp Tile Mode, 8 pixel wide tiles. One full FSM (Finite State Machine) cycle is shown, i.e. the pattern between the two vertical cursors is repeating.
+Below you see the waveform of the Layer Renderer operating in 8bpp Tile Mode, 8 pixel wide tiles. One full FSM (Finite State Machine) cycle is shown, i.e., the pattern between the two vertical cursors is repeating.
 You can see the VRAM reads (`buf_strobe` and `bus_ack`) happening in parallel with the Line Buffer writes (`lb_wridx_r`). You can also see how the Renderer FSM cycles through its states (`fetch map`, `wait fetch map`, `fetch tile`, `wait fetch tile`, `render`, etc.).
 
 ![Layer Rendering Waveform.](assets/layer_render_l0_only_tile_mode_8bpp_tile_w_8.jpg)
@@ -139,7 +139,7 @@ Note: Sprite Banking does not exist in the original VERA core. The original VERA
 
 #### A Fixed Sprite-Pixels-per-Scanline Limit
 
-The Sprites-per-Scanline limit is inversely proportional to the sprite width. That makes sense. It takes roughly twice as long to render a 16-pixel-wide sprite than an 8-pixel-wide sprite. Conversely, the number of *sprite pixels* that can be rendered on a given scanline is relatively constant. For VERA Wishbone running at 50MHz, this constant is 512 pixels, i.e. the Sprite Renderer can render a maximum of 512 sprite pixels on any scanline, guaranteed.
+The Sprites-per-Scanline limit is inversely proportional to the sprite width. That makes sense. It takes roughly twice as long to render a 16-pixel-wide sprite as an 8-pixel-wide sprite. Conversely, the number of *sprite pixels* that can be rendered on a given scanline is relatively constant. For VERA Wishbone running at 50MHz, this constant is 512 pixels, i.e., the Sprite Renderer can render a maximum of 512 sprite pixels on any scanline, guaranteed.
 
 The original Sprite Renderer code kept track of rendering time to decide when to abort rendering, to avoid exceeding its time budget. VERA Wishbone replaces that code with logic that keeps track of the number of sprite pixels rendered. When 512 sprite pixels are rendered, further sprite rendering is aborted for the given scanline.
 
