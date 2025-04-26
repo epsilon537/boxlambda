@@ -52,7 +52,7 @@ The buses use an arbiter to select which bus master can access the MUX, but duri
 
 - The Debug Module is not active during normal operation.
 
-In other words, during normal operation only the CPU is active. You won't have multiple masters competing for the bus, so register and internal memory access times remain known and constant.
+In other words, during normal operation, only the CPU is active. You won't have multiple masters competing for the bus, so register and internal memory access times remain known and constant.
 
 Arbiters without Overhead (most of the time)
 ============================================
