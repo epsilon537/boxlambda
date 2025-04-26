@@ -16,7 +16,7 @@ hide:
 
 ### RISCV OpenOCD
 
-OpenOCD is an open-source software package used to interface with a hardware debugger's JTAG port via various transport protocols. For BoxLambda, the hardware debug logic is implemented by a component called `riscv-dbg`. The overall setup is illustrated below:
+OpenOCD is an open-source software package that interfaces with a hardware debugger's JTAG port via various transport protocols. On BoxLambda, the hardware debug logic is implemented by `riscv-dbg`. The overall setup is illustrated below:
 
 ![OpenOCD General Setup](assets/OpenOCD_Setup_General.drawio.png)
 *OpenOCD General Setup*
@@ -106,8 +106,8 @@ The OpenOCD configuration file for Verilator-based debugging:
 To summarize:
 
 1. The above OpenOCD config file is used to connect to the JTAG TAP of a Verilator model.
-2. The JTAG TAP is implemented by a `riscv-dbg` core connected to an Ibex RISCV32 core.
-3. The JTAG TAP is used to debug the software running on the Ibex RISCV32 core.
+2. The JTAG TAP is implemented by the `riscv-dbg` core.
+3. The `riscv-dbg` core provides debug support for the connected Ibex RISCV32 core.
 4. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called `remote_bitbang`.
 
 For a step-by-step guide on setting up a debug session, refer to [this section](test-build-hello-world.md#connecting-gdb-to-the-hello-world-build-on-verilator).
@@ -132,8 +132,8 @@ OpenOCD configuration files for debugging on the Arty-A7 are available in the `s
 
 To summarize:
 
-1. The above OpenOCD configuration file connects to the JTAG TAP of the `riscv-dbg` core.
-2. The `riscv-dbg` core is used to debug software running on a connected Ibex RISCV32 core.
+1. The above OpenOCD configuration file is used to connect to the JTAG TAP of the `riscv-dbg` core.
+2. The `riscv-dbg` core provides debug support for the connected Ibex RISCV32 core.
 3. The JTAG TAP is integrated into the Arty-A7's FPGA scan chain (normally used for bitstream programming).
 4. The FPGA scan chain is accessible via the board’s FTDI-based USB serial port.
 5. The OpenOCD transport protocol used for this connection is `ftdi`.
