@@ -5,11 +5,17 @@ hide:
 
 ## Ibex Performance Test
 
-The value of this test is mostly in the waveform it generates. Checking the waveform of this test allows you to see instruction fetch latency and the cycle count of various common instructions: load-word and store-word to internal memory and VRAM, reading SoC registers, addi, branch taken, branch not taken.
+The value of this test is mostly in the waveform it generates. Checking the waveform of this test allows you to see instruction fetch latency and the cycle count of various common instructions: 
+
+- load-word and store-word to internal memory and VRAM.
+- reading SoC registers.
+- addi.
+- branch taken.
+- branch not taken.
 
 The test program consists of the following sub-tests:
 
-- `irq_latency_test`: Repeatedly measures timer interrupt latency and recording minimum and maximum latency.
+- `irq_latency_test`: Repeatedly measures timer interrupt latency and records minimum and maximum latency.
 - `do_nothing()`: Measures how many cycles it takes to call `mcycle_start()` and `mcycle_stop()`.
 - `lw_register_loop()`: Repeatedly reads a peripheral register and measures how long it takes.
 - `lw_sw_copy_loop()`: Copies 100 words from DMEM to DMEM, or from VRAM to VRAM, using a naive loop and measures how long it takes.
