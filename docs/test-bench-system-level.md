@@ -51,7 +51,7 @@ Other, more elaborate system test benches include:
 
 ## Are We Running in a Simulation?
 
-Software running on Ibex needs to know whether it's running in a simulation or on FPGA, so it can adjust timings, such as the LED blink period. I'm using GPIO1 bits 3:0 for this purpose. In a simulation, I set these bits to `4'bf`, and on FPGA, I set them to something else.
+Software running on Ibex needs to know whether it's running in a simulation or on an FPGA, so it can adjust timings, such as the LED blink period. I'm using GPIO1 bits 3:0 for this purpose. In a simulation, I set these bits to `4'bf`, and on FPGA, I set them to something else.
 
 The `hello.c` test program includes the following check:
 
