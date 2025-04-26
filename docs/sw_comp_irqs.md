@@ -11,7 +11,7 @@ Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry 
 
 ### Vectors.S Weak Bindings
 
-The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: If you insert into the vector table a straightforward call to your application-specific interrupt service routine, you end up with an inverted dependency. You don't want the lowest layer platform code to depend directly on the higher layer application code. To get around that issue, I defined *weak bindings* for all the interrupts service routines inside `vectors.S`:
+The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide, so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: If you insert into the vector table a straightforward call to your application-specific interrupt service routine, you end up with an inverted dependency. You don't want the lowest layer platform code to depend directly on the higher layer application code. To get around that issue, I defined *weak bindings* for all the interrupt service routines inside `vectors.S`:
 
 ```
 // Weak bindings for the fast IRQs. These will be overridden in the
@@ -61,7 +61,7 @@ _exc_handler:          //_exc_handler is overridden in the interrupt SW module.
   jal x0, _exc_handler
 ```
 
-As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
+As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings never get invoked and that they are replaced with actual interrupt service routine implementations in higher-layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
 
 ```
 void __attribute__((naked)) _vera_irq_handler(void);
@@ -105,7 +105,7 @@ The corresponding disassembly:
      718:       30200073                mret
 ```
 
-The interrupt shadow register feature combined with `naked` ISRs result in very low interrupt overhead. For the timer interrupt example above, the ISR timing looks like this:
+The interrupt shadow register feature, combined with `naked` ISRs, results in very low interrupt overhead. For the timer interrupt example above, the ISR timing looks like this:
 
 [![Interrupt Overhead.](assets/irq_overhead_after.png)](assets/irq_overhead_after.png)
 
