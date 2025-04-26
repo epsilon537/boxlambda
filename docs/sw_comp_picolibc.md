@@ -21,12 +21,12 @@ hide:
 
 BoxLambda uses the Picolibc standard C library implementation.
 [Picolibc](https://github.com/picolibc/picolibc) is a Newlib variant, blended with AVR libc, optimized for systems with limited memory.
-[Newlib](https://www.sourceware.org/newlib/) is the de-facto standard C library implementation for embedded systems.
+[Newlib](https://www.sourceware.org/newlib/) is the de facto standard C library implementation for embedded systems.
 
 ### Building Picolibc
 
 #### Picolibc Configuration Scripts
-A Picolibc build for a new system requires configuration scripts for that system in the [picolibc/scripts/](https://github.com/epsilon537/picolibc/tree/boxlambda/scripts) directory. They specify such things as the compiler toolchain to use, GCC processor architecture flags, and CPP preprocessor flags tweaking specific library features.
+A Picolibc build for a new system requires configuration scripts for that system in the [picolibc/scripts/](https://github.com/epsilon537/picolibc/tree/boxlambda/scripts) directory. They specify such things as the compiler toolchain to use, GCC processor architecture flags, and CPP preprocessor flags, tweaking specific library features.
 
 I'm using `boxlambda` as the base name for the new scripts.
 
@@ -49,7 +49,7 @@ I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](h
 - **Picolibc build directory**: `<build dir>/sw/piclobc-build`
 - **Picolibc install directory**: `<build dir>/sw/piclobc-install`
 
-When there are changes in the Picolibc source tree, the build trees need to be re-generated. The easiest way to do that is by running `make regen` from the build tree.
+When there are changes in the Picolibc source tree, the build trees need to be regenerated. The easiest way to do that is by running `make regen` from the build tree.
 
 ### Linking against the Picolibc library: The Picolibc GCC specs file
 
@@ -67,7 +67,7 @@ add_link_options(
     $<$<COMPILE_LANGUAGE:CXX,C,ASM>:${SPECS}>)
 ```
 
-The Picolibc GCC specs file can be found in the Picolib install directorty.
+The Picolibc GCC specs file can be found in the Picolib install directory.
 
 ### Bootstrap
 
@@ -91,7 +91,7 @@ An application using the standard C library has to link in this bootstrap compon
 
 #### The Vector Table
 
-The vector table is a table with code entry points for all sorts of CPU events: interrupts, exceptions, etc. The Boot/Reset Vector, i.e. the very first instruction executed when the CPU comes out of reset, is part of this table.
+The vector table is a table with code entry points for all sorts of CPU events: interrupts, exceptions, etc. The Boot/Reset Vector, i.e., the very first instruction executed when the CPU comes out of reset, is part of this table.
 
 The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S).
 
@@ -252,7 +252,7 @@ BoxLambda currently supports two boot sequences: **Boot-from-Flash** and **Boot-
 
 Technically, BoxLambda doesn't boot from flash memory. It boots from IMEM at address offset 0x80. There, it executes the early startup code defined in `vectors.S` before jumping to the CRT0 code located in flash memory.
 
-The Ibex Boot Vector is part of a vector table that also includes the interrupt vectors. For the purpose of low-latency interrupt handling, it's important to keep this vector table in IMEM, rather than (slow) flash memory.
+The Ibex Boot Vector is part of a vector table that also includes the interrupt vectors. For low-latency interrupt handling, it's important to keep this vector table in IMEM, rather than (slow) flash memory.
 
 The software project that branches from IMEM to the flash boot code (i.e., containing just `vectors.S`) is located here:
 

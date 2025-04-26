@@ -70,7 +70,7 @@ Interrupts are currently not hooked up.
 
 *SDSPI Simplified Block Diagram.*
 
-The above is a simplified block diagram illustrating the SDSPI core internally. I won't be going into the details here. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
+The above is a simplified block diagram illustrating the SDSPI core internals. I won't be going into the details here. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
 
 ### SDSPISIM
 
@@ -89,15 +89,13 @@ Here are the hooks to both co-simulators in the test bench's `tick()` function. 
 
 For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/sim/sim_main.cpp) in the *sdspi_test* project.
 
-`SDSPISIM` reads from and writes to an `sdcard.img` file. That file can be mounted in Linux, so you can FAT format it and put files on it for the simulated system to use, or vice versa.
+`SDSPISIM` reads from and writes to an `sdcard.img` file. That file can be mounted in Linux. You can FAT-format it and store files on it to be used by the simulated system (or vice versa).
 
 ### SDSPI Operation
 
 The SDSPI core's register interface, the initialization sequence, and the overall operation of the core are well-documented in the SDSPI core [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/sdspi.pdf).
 
 [Sdtest.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's `sdtest.c` in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The `Zbasic` repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
-
-`Sdtest.c` runs on the RISCV processor that's part of the SDSPI Test SoC.
 
 ### SDSPI Clock Frequency
 

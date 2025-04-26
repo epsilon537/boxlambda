@@ -39,7 +39,7 @@ This script will:
 - Update the PATH environment variable to include the required tools.
 - Create the default build trees.
 
-The script is easy to follow. The tools versions used are specified inside the script.
+The script is easy to follow. The tool versions used are specified inside the script.
 
 If you want to force a reinstall of the tools, delete the `./tools/` directory and source the `boxlambda_setup.sh` script again.
 

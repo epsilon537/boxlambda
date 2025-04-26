@@ -4,6 +4,7 @@ title: 'BoxLambda Simplified.'
 comments: true
 mathjax: yes
 ---
+*Updated 25 April 2025: Punctuation.*
 *Updated 23 April 2025: Corrected the architecture diagram in the Recap section. It was showing the new architecture block diagram instead of the old one that was used as the baseline for the changes described in this post.*
 
 In this post, I remove more functionality than I'm adding, and BoxLambda becomes a lot simpler and faster as a result. I'll also briefly describe how the RISC-V GNU toolchain for BoxLambda is built.
@@ -243,7 +244,7 @@ The [peekw CLI command](https://github.com/epsilon537/boxlambda/blob/master/sw/c
 
 Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/latest/pmods/#microsd-pmod) and insert a FAT-formatted SD card.
 
-Connect a terminal emulator to Arty's USB serial port. I suggest using a terminal emulator that supports Ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
+Connect a terminal emulator to Arty's USB serial port. I suggest using a terminal emulator that supports Ymodem transfers, such as *Minicom*. **Settings: 115200 8N1**.
 
 Build the *dfx_test_flsh* software project in the arty-a7-100 build tree:
 
@@ -305,7 +306,7 @@ Read signature value: 0x510b
 Starting CLI...
 ```
 
-Enter a *peekw* command, e.g. read a UART register:
+Enter a *peekw* command, e.g., read a UART register:
 
 ```
 > peekw 10010000

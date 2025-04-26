@@ -103,7 +103,6 @@ nav:
         - VERA Test: test-build-vera.md
         - SDSPI and FatFS Test: test-build-sdspi-and-fatfs.md
         - YM2149 PSG, Audio DAC, and ST-Sound Test: test-build-ym2149.md
-        - Dual Port RAM Test: test-build-dpram.md
         - USB HID Keyboard and Mouse Test: test-build-usb-hid.md
         - SPI Flash Test: test-build-spi-flash.md
         - Timer, UART, and GPIO Interrupt Test: test-build-timer-uart-gpio-irqs.md

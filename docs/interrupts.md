@@ -112,6 +112,10 @@ The following table lists the BoxLambda interrupts and the events they report:
 | 16     | Not Assigned                            |     |
 |  7     | Timer IRQ                               | Timer counter >= timer compare value |
 
+### Interrupt Jitter
+
+When the CPU receives an IRQ, it has to complete that instruction before it can jump to the interrupt vector. This constraint causes some interrupt latency jitter/variation. For asynchronous events, such as key presses, that won't matter. However, for critically timed events, there may be cases where you want to execute a sequence of instructions *exactly* at a given time, without any jitter. The [Timer module](components_timer.md#timer) includes a mechanism (`mtimeblk`) that can be used to remove this jitter.
+
 ### Interrupt Handling Software
 
 See the [Interrupt Handling](sw_comp_irqs.md) page.

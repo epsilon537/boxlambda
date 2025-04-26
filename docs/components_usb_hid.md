@@ -37,11 +37,11 @@ The USB HID Host core used by BoxLambda is based on the NAND2Mario usb_hid_host 
 
 *The NAND2Mario usb_hid_host core.*
 
-The NAND2Mario usb_hid_host core is easy to use. You don't need a USB software stack. UKP, a little 4-bit processor inside the core handles the USB enumeration. You don't need a USB PHY chip either. You can just hook up the USB D-/D+ pins directly to a simple USB PMOD.
+The NAND2Mario usb_hid_host core is easy to use. You don't need a USB software stack. UKP, a little 4-bit processor inside the core, handles the USB enumeration. You don't need a USB PHY chip either. You can just hook up the USB D-/D+ pins directly to a simple USB PMOD.
 
-Usb_hid_host requires a 12MHz clock. You just hook up the clock, reset, USB D-/D+ and the core takes care of the rest. Usb_hid_host has the following output ports:
+Usb_hid_host requires a 12MHz clock. You just hook up the clock, reset, USB D-/D+, and the core takes care of the rest. Usb_hid_host has the following output ports:
 
-- `report`: a strobe signal indicating that a new report has been received from the attached device (e.g. a key press, a mouse movement,...).
+- `report`: a strobe signal indicating that a new report has been received from the attached device (e.g., a key press, a mouse movement,...).
 - `typ`: the type of the attached USB device: keyboard, mouse, or gamepad.
 - `connerr`: a connection error indication.
 - `key_modifiers`: if the attached device is a keyboard, indicates which key modifiers (ctrl, shift,...) are being held down.
@@ -90,7 +90,7 @@ To add USB keyboard LED control to the usb_hid_host core, I implemented the foll
 
 - I extended the UKP opcode width from 4 bits to 5 bits. This gave me space to add new instructions.
 - I added a conditional *Branch Request* (`br`) instruction and a `req_branch_stb` input port to the UKP module. Through the `req_branch_stb` signal, the user (usb_hid_host) can request the branch to be taken. When the branch has been taken, an ack_req_branch_stb is sent back to the user.
-- I added `outr0, outr1, and outr2` instructions, associated with three 8-bit registers and three 8-bit input ports of the UKP module, also called outr0, outr1, and outr2. When an outr<x> instruction executes, the contents of the associated register will be transmitted over the USB port.
+- I added `outr0, outr1, and outr2` instructions, associated with three 8-bit registers and three 8-bit input ports of the UKP module, also called `outr0`, `outr1`, and `outr2`. When an `outr<x>` instruction executes, the contents of the associated register will be transmitted over the USB port.
 
 With these UKP changes, the usb_hid_host core can, upon request, have the UKP firmware branch to a section of microcode that sends a *SetReport* request to the device. The parameters of this message, i.e., the LED bitmap and the CRC16 value, are specified in outr0 and outr1/2.
 

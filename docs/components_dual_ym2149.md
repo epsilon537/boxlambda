@@ -61,7 +61,6 @@ For the most part, I was able to use the `YM2149_PSG_system` code as-is. I just 
 
 - I added a Wishbone front end.
 - I made I2S support optional, controlled by a `USE_I2S` define.
-- Rather than have the top-level YM2149_PSG_system module include the Verilog files of the submodules it depends on, I added all required modules separately to the BoxLambda project in a `Bender.yml` manifest (see [here](build_sys_gw_build_struct.md#bender) for more info on Bender). BoxLambda's build system dependency checking doesn't work well will Verilog modules including other Verilog modules.
 - I made a few code tweaks to pacify Vivado's synthesizer.
 
 I forked the `YM2149_PSG_system` repo to track my changes:
@@ -81,12 +80,12 @@ The design of the `YM2149_PSG_system` core is easy to follow:
 - `BHG_audio_filter_mixer` implements mixing logic, individual channel volume controls, master volume control, treble, and bass controls.
 - Looking into the `BHG_jt49` module:
   - `jt49_div` is a configurable square wave generator module. It is instantiated three times, so we have three channels.
-  - `jt49_noise` is a noise generator module (e.g. for percussion effects).
+  - `jt49_noise` is a noise generator module (e.g., for percussion effects).
   - `jt49_eg` with the assistance of a fourth `jt49_div` instance is the sound envelope generator.
   - `jt49_cent` generates clock enables at the appropriate rate for the above modules.
   - `BHG_jt49_exp` provides decibel-based volume attenuation through a look-up table.
 
-The core can be configured to produce stereo I2S output, but for BoxLambda we'll set it up to produce 16-bit PCM mono audio.
+The core can be configured to produce stereo I2S output, but for BoxLambda, we'll set it up to produce 16-bit PCM mono audio.
 
 ### A Second Order Delta-Sigma DAC
 
@@ -96,7 +95,7 @@ The `YM2149_PSG_System` core produces 16-bit PCM audio. The audio amplifier PMOD
 
 *1-bit delta-sigma modulation (blue) of a sine wave (red) - taken from [Wikipedia](https://en.wikipedia.org/wiki/Delta-sigma_modulation).*
 
-In analog electronics, a moving average is created by attaching a simple low-pass RC filter to the one-bit-DAC pin. In our case, we don't even have to do that, because the audio amplifier PMOD provides the low-pass filter.
+In analog electronics, a moving average is created by attaching a simple low-pass RC filter to the one-bit DAC pin. In our case, we don't even have to do that, because the audio amplifier PMOD provides the low-pass filter.
 
 There exist several ways to implement a one-bit DAC, with different pros and cons. One commonly used technique is called **Delta-Sigma Conversion**. It's explained very well in the following article from Uwe Beis:
 
@@ -106,7 +105,7 @@ There exist several ways to implement a one-bit DAC, with different pros and con
 
 *Second Order Delta Sigma Modulator Block Diagram from [https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html).*
 
-I'll be using a **Second Order Delta-Sigma DAC**. An advantage of a second-order delta-sigma DAC is that it (more than its first-order counterpart) pushes the noise introduced by the Digital-to-Analog conversion out of the way, to higher frequency ranges where gets filtered out by the low-pass filter.
+I'll be using a **Second Order Delta-Sigma DAC**. An advantage of a second-order delta-sigma DAC is that it (more than its first-order counterpart) pushes the noise introduced by the Digital-to-Analog conversion out of the way, to higher frequency ranges where it gets filtered out by the low-pass filter.
 
 The Uwe Beis article above describes the idea well enough. However, I was unable to find a reference implementation that made sense to me. I ended up writing my own, borrowing ideas from the following implementations I found online:
 

@@ -16,11 +16,11 @@ The Verilator version of the I2C Test Application uses an I2C slave co-simulator
 
 The I2C System Test Case runs on Verilator and FPGA, albeit with different test features. The program does the following:
 
-1. On Verilator it reads the initial contents of a co-simulated I2C slave memory and checks the fetched values against the expected contents. If there were an endianness issue in the I2C path (which may happen with ZipCPU-based cores because ZipCPU is big-endian and BoxLambda is little-endian), this test would catch it.
+1. On Verilator, it reads the initial contents of a co-simulated I2C slave memory and checks the fetched values against the expected contents. If there were an endianness issue in the I2C path (which may happen with ZipCPU-based cores because ZipCPU is big-endian and BoxLambda is little-endian), this test would catch it.
 2. It writes a test string into the I2C slave memory.
 3. It reads back the test string from the I2C slave memory.
 4. It verifies that WBI2C generates an IRQ when an I2C transaction has been completed.
-5. On FPGA, you get dropped into a CLI built on top of the I2C API. From this CLI you can issue your own I2C transactions.
+5. On FPGA, you get dropped into a CLI built on top of the I2C API. From this CLI, you can issue your own I2C transactions.
 
 ### The I2C Test on Verilator
 

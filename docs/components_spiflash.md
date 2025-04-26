@@ -70,7 +70,7 @@ BoxLambda's SPI Flash core uses the ZipCPU spixpress core as a starting point. I
 
 - The `SCK` output port of the core is the actual SPI clock signal, rather than an enable signal to be used in conjunction with a DDR primitive.
 - I added a clock divider parameter for `SCK`. I'm using a clock divider value of two in the BoxLambda SoC.
-- The core shifts out the serial output data at the SCK falling edge and shifts in the serial input data at the `SCK` rising edge. I modified the `Flashsim` co-simulator module to behave like this as well. This is the standard SPI timing design.
+- The core shifts out the serial output data at the SCK falling edge and shifts in the serial input data at the `SCK` rising edge. I modified the `Flashsim` co-simulator module to match this behavior. This is the standard SPI timing design.
 
 ![SPI Timing Design](assets/spi_rising_falling_edge.png)
 
@@ -92,7 +92,7 @@ The SPI Flash core has a 32-bit Wishbone read interface. Through this interface,
 *Reading a 32-bit word from SPI Flash. 8 (C)ommand bits, followed by 24 (A)ddress bits, followed by 32 (D)ata bits.*
 
 - `C7-C0`: Command Bits. The Read Command ID is 0x03.
-- `A23-A0`: Address Bits covering the complete 16MB address range.
+- `A23-A0`: Address Bits covering the full 16MB address range.
 - `D31-D0`: Data Bits.
 - `cs_n`: Active Low Chip Select of the SPI device.
 - `sclk`: SPI Clock.
@@ -122,7 +122,7 @@ The SPI Flash core has a simple but clever control interface (invented by Dan, n
 //             in these same bits [7:0].
 ```
 
-I.e., the control port consists of a single 9-bit register. By setting the `CS_n` bit to 0, software can choose to 'grab' the SPI Flash port and keep ownership of it for multiple SPI transactions. When done, the software releases the SPI Flash port again by setting `CS_n` to one in the control register.
+I.e., the control port consists of a single 9-bit register. By setting the `CS_n` bit to 0, software can 'grab' the SPI Flash port and keep ownership of it for multiple SPI transactions. When done, the software releases the SPI Flash port by setting `CS_n` to one in the control register.
 
 As an example, the Flash Driver code sequence to read the Flash Device ID looks like this:
 

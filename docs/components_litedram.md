@@ -14,18 +14,14 @@ hide:
 - **LiteDRAM Component in the BoxLambda Directory Tree**:
   [boxlambda/gw/components/litedram](https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram)
 
-SDRAM memory access is pretty complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed.
-
-There exists a class of memory controllers, called **Static Memory Controllers**, that absorb these complexities and by design create a fixed schedule for a fixed use case, resulting in very predictable behavior. Static Memory Controllers are far off the beaten path, however. **Dynamic Memory Controllers** are more common. Dynamic Memory Controllers can handle a variety of use cases with good performance *on average*. Unfortunately, they sacrifice predictability to achieve this flexibility.
+SDRAM memory access is complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. As much as possible, BoxLambda aims for deterministic behavior. Unfortunately, in the case of SDRAM, we'll have to make an exception. I couldn't find any memory controller designs that offer predictable memory access latency, and I'm not up to making one myself.
 
 I decided to use the **LiteDRAM** memory controller: [https://github.com/enjoy-digital/litedram](https://github.com/enjoy-digital/litedram)
-
-The LiteDRAM memory controller falls squarely into the Dynamic Memory Controller class. How do we fit this into a platform that requires deterministic behavior? I think the best approach is to use a DMA engine to transfer data between SDRAM and on-chip memory. Fixed memory access latency to on-chip memory (from any bus master that requires it) can be guaranteed by using Dual Port Memory and a crossbar.
 
 ### Why choose LiteDRAM over Xilinx MIG?
 
 - LiteDRAM is open-source, scoring good karma points. All the benefits of open-source apply: Full access to all code, access to the maintainers, many eyeballs, the option to make changes as you please, submit bug fixes, etc.
-- The LiteDRAM simulation model, the entire test SoC, in fact, runs nicely in Verilator. That's a must-have for me.
+- The LiteDRAM simulation model runs nicely in Verilator. That's a must-have for me.
 - The LiteDRAM core, configured for BoxLambda, is almost 50% smaller than the equivalent MIG core.
 
 ### Generating a LiteDRAM core
@@ -34,9 +30,9 @@ LiteDRAM is a highly configurable core. For an overview of the core's features, 
 
 [https://github.com/enjoy-digital/litedram/blob/master/README.md](https://github.com/enjoy-digital/litedram/blob/master/README.md)
 
-The configuration details are specifief in a `.yml` file. A Python script parses that `.yml` file and generates the core's Verilog as well as a CSR register access layer for software.
+The configuration details are specified in a `.yml` file. A Python script parses that `.yml` file and generates the core Verilog and a CSR register access layer for software.
 
-Starting from [LiteDram's arty.yml](https://github.com/enjoy-digital/litedram/tree/master/examples/arty.yml) example, I created the following LiteDRAM configuration file for BoxLambda:
+Starting from [LiteDRAM's arty.yml](https://github.com/enjoy-digital/litedram/tree/master/examples/arty.yml) example, I created the following LiteDRAM configuration file for BoxLambda:
 
 ```
 {
@@ -85,7 +81,7 @@ Starting from [LiteDram's arty.yml](https://github.com/enjoy-digital/litedram/tr
 
 Some points about the above:
 
-- The *PHY layer*, *Electrical*, and *Core* sections I left exactly as-is in the given Arty example.
+- The *PHY layer*, *Electrical*, and *Core* sections are left exactly as in LiteDRAM's Arty example.
 - In the *General* section, I set `cpu` to `None`. BoxLambda already has a CPU. We don't need LiteX to generate one.
 - In the `Frequency` section, I set `sys_clk_freq` to 50MHz.
 - In the `User Ports` section, I specified one 32-bit Wishbone port.
@@ -100,7 +96,7 @@ Two LiteDRAM core variants are generated from this configuration:
 
 ```litedram_gen artya7dram.yml --gateware-dir arty/rtl --software-dir arty/sw --name litedram```
 
-The LiteDRAM cores are generated during the code generation step of a gateware build. The generated files are written to the `<build_tree/codegen/litedram/` directory.
+The LiteDRAM cores are generated during the code generation step of a gateware build. The generated files are stored in the `<build_tree/codegen/litedram/` directory.
 
 This is the build script performing the code generation: [scripts/gen_litedram_core.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/gen_litedram_core.sh)
 
@@ -167,13 +163,13 @@ Some points worth noting about this interface:
 - Both Wishbone ports are *classic* Wishbone ports, not *pipelined*. There is no `stall` signal.
 - The Wishbone port addresses are word addresses, not byte addresses.
 - The LiteDRAM module takes an external input clock (`clk`) and generates both a 50MHz system clock (`user_clk`) and a 100MHz double-rate system clock (`user_clkx2`). The LiteDRAM module contains a PLL clock primitive.
-- The double-rate system clock is a modification for BoxLambda, but is currently not used.
+- The double-rate system clock is a modification for BoxLambda but is currently unused.
 
 ### *Litedram_wrapper*
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv)
 
-`Litedram_wrapper` contains a Pipelined-to-Classic Wishbone adaptation. The adapter logic comes straight out of the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The `stall` signal is used to avoid pipelining:
+`Litedram_wrapper` contains a Pipelined-to-Classic Wishbone adaptation. The adapter logic comes from the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The `stall` signal is used to avoid pipelining:
 
 ```
   /*Straight out of the Wishbone B4 spec. This is how you interface a classic slave to a pipelined master.

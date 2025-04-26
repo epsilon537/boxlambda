@@ -22,7 +22,7 @@ The CPU is an Ibex RISCV32 processor. It has separate Instruction and Data ports
 
 ### The Interconnect
 
-The interconnect consists of two 32-bit Wishbone buses. The Instruction Bus is used exclusively for instruction fetching, the Data Bus for data access.
+The interconnect consists of two 32-bit Wishbone buses. The Instruction Bus is used exclusively for instruction fetching, and the Data Bus for data access.
 
 ### External Memory Access
 

@@ -11,7 +11,7 @@ Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry 
 
 ### Vectors.S Weak Bindings
 
-The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: If you insert into the vector table a straightforward call to your application-specific interrupt service routine, you end up with an inverted dependency. You don't want the lowest layer platform code to depend directly on the higher layer application code. To get around that issue, I defined *weak bindings* for all the interrupts service routines inside vectors.S:
+The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide, so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: If you insert into the vector table a straightforward call to your application-specific interrupt service routine, you end up with an inverted dependency. You don't want the lowest layer platform code to depend directly on the higher layer application code. To get around that issue, I defined *weak bindings* for all the interrupt service routines inside `vectors.S`:
 
 ```
 // Weak bindings for the fast IRQs. These will be overridden in the
@@ -61,86 +61,55 @@ _exc_handler:          //_exc_handler is overridden in the interrupt SW module.
   jal x0, _exc_handler
 ```
 
-As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
+As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings never get invoked and that they are replaced with actual interrupt service routine implementations in higher-layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
 
 ```
-void _rm_2_irq_handler(void) __attribute__((interrupt("machine")));
-void _rm_1_irq_handler(void) __attribute__((interrupt("machine")));
-void _rm_0_irq_handler(void) __attribute__((interrupt("machine")));
-void _dmac_irq_handler(void) __attribute__((interrupt("machine")));
-void _sdspi_irq_handler(void) __attribute__((interrupt("machine")));
-void _gpio_irq_handler(void) __attribute__((interrupt("machine")));
-void _usb_hid_1_irq_handler(void) __attribute__((interrupt("machine")));
-void _usb_hid_0_irq_handler(void) __attribute__((interrupt("machine")));
-void _i2c_irq_handler(void) __attribute__((interrupt("machine")));
-void _uart_irq_handler(void) __attribute__((interrupt("machine")));
-void _dfx_irq_handler(void) __attribute__((interrupt("machine")));
-void _icap_irq_handler(void) __attribute__((interrupt("machine")));
-
-void _timer_irq_handler(void) __attribute__((interrupt("machine")));
+void __attribute__((naked)) _vera_irq_handler(void);
+void __attribute__((naked)) _vs_0_irq_handler(void);
+void __attribute__((naked)) _sdspi_irq_handler(void);
+void __attribute__((naked)) _gpio_irq_handler(void);
+void __attribute__((naked)) _usb_hid_1_irq_handler(void);
+void __attribute__((naked)) _usb_hid_0_irq_handler(void);
+void __attribute__((naked)) _i2c_irq_handler(void);
+void __attribute__((naked)) _uart_irq_handler(void);
+void __attribute__((naked)) _dfx_irq_handler(void);
 ```
 
-#### The Interrupt("machine") Attribute
+#### The *naked* attribute
 
-Regarding the `interrupt("machine")` attribute in the function declarations above, interrupt service routines require a special entry and exit code sequence. An interrupt service routine needs to save and restore all CPU registers it's modifying to ensure the interrupted code can continue normally when the CPU returns from the interrupt. Also, instead of a regular return, an interrupt service routine should execute a return-from-interrupt when done. These concepts can't be expressed in regular C language, but GCC comes to the resource with the `interrupt("machine")` attribute. This attribute ensures the function receives the proper prologue and epilogue code to make it behave as an interrupt service routine.
+The CPU switches to an [interrupt register bank](components_ibex.md#interrupt-shadow-registers) when entering interrupt mode. This means that the ISR no longer needs to save and restore the registers it uses. The regular ISR prologue and epilogue code (saving and restoring registers) can be skipped. This is done by declaring the ISR function with the GCC `naked` attribute.
 
-As an example of the generated code when using `interrupt("machine")`, here's a disassembly of the timer interrupt service routine I'm using in the interrupt test program:
+Because the `naked` attribute skips all epilogue code, we have to insert the `mret` instruction ourselves in the ISR. 
+
+For example:
 
 ```
-95	void _timer_irq_handler(void) {
-96	 //Stop the timer. If we don't stop it, or move into the future, the IRQ will keep on firing.
-97	 mtimer_disable_raw_time_cmp();
-98	 timer_irq_fired = 1;
-99	}
-100
-101	int main(void) {
-(gdb) disassemble _timer_irq_handler
-Dump of assembler code for function _timer_irq_handler:
-   0x000006d8 <+0>:	add	sp,sp,-64
-   0x000006da <+2>:	sw	a4,28(sp)
-   0x000006dc <+4>:	sw	a5,24(sp)
-   0x000006de <+6>:	sw	ra,60(sp)
-   0x000006e0 <+8>:	sw	t0,56(sp)
-   0x000006e2 <+10>:	sw	t1,52(sp)
-   0x000006e4 <+12>:	sw	t2,48(sp)
-   0x000006e6 <+14>:	sw	a0,44(sp)
-   0x000006e8 <+16>:	sw	a1,40(sp)
-   0x000006ea <+18>:	sw	a2,36(sp)
-   0x000006ec <+20>:	sw	a3,32(sp)
-   0x000006ee <+22>:	sw	a6,20(sp)
-   0x000006f0 <+24>:	sw	a7,16(sp)
-   0x000006f2 <+26>:	sw	t3,12(sp)
-   0x000006f4 <+28>:	sw	t4,8(sp)
-   0x000006f6 <+30>:	sw	t5,4(sp)
-   0x000006f8 <+32>:	sw	t6,0(sp)
-   0x000006fa <+34>:	jal	0x832 <mtimer_disable_raw_time_cmp>
-   0x000006fc <+36>:	li	a4,1
-   0x000006fe <+38>:	sw	a4,608(gp)
-   0x00000702 <+42>:	lw	ra,60(sp)
-   0x00000704 <+44>:	lw	t0,56(sp)
-   0x00000706 <+46>:	lw	t1,52(sp)
-   0x00000708 <+48>:	lw	t2,48(sp)
-   0x0000070a <+50>:	lw	a0,44(sp)
-   0x0000070c <+52>:	lw	a1,40(sp)
-   0x0000070e <+54>:	lw	a2,36(sp)
-   0x00000710 <+56>:	lw	a3,32(sp)
-   0x00000712 <+58>:	lw	a4,28(sp)
-   0x00000714 <+60>:	lw	a5,24(sp)
-   0x00000716 <+62>:	lw	a6,20(sp)
-   0x00000718 <+64>:	lw	a7,16(sp)
-   0x0000071a <+66>:	lw	t3,12(sp)
-   0x0000071c <+68>:	lw	t4,8(sp)
-   0x0000071e <+70>:	lw	t5,4(sp)
-   0x00000720 <+72>:	lw	t6,0(sp)
-   0x00000722 <+74>:	add	sp,sp,64
-   0x00000724 <+76>:	mret
-End of assembler dump.
-(gdb) quit
+void _timer_irq_handler(void) {
+  mtimer_disable_raw_time_cmp();
+  timer_irq_fired = 1;
+
+  //Return from interrupt
+  __asm__ volatile (
+      "mret \n"
+  );
+}
 ```
 
-Here's the GCC page about RISC-V function attributes:
+The corresponding disassembly:
 
-[https://gcc.gnu.org/onlinedocs/gcc/RISC-V-Function-Attributes.html](https://gcc.gnu.org/onlinedocs/gcc/RISC-V-Function-Attributes.html)
+```
+0000070c <_timer_irq_handler>:
+     70c:       0b8000ef                jal     7c4 <mtimer_disable_raw_time_cmp>
+     710:       00100713                li      a4,1
+     714:       4ae1a223                sw      a4,1188(gp) # 536c <timer_irq_fired>
+     718:       30200073                mret
+```
+
+The interrupt shadow register feature, combined with `naked` ISRs, results in very low interrupt overhead. For the timer interrupt example above, the ISR timing looks like this:
+
+[![Interrupt Overhead.](assets/irq_overhead_after.png)](assets/irq_overhead_after.png)
+
+*Interrupt Overhead with interrupt shadow registers and naked ISR.*
 
 ### Enabling Interrupts
 

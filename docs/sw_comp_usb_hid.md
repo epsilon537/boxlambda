@@ -26,6 +26,6 @@ The firmware is located here:
 - Mouse Firmware directory: [sub/usb_hid_device/firmware_mouse/](https://github.com/epsilon537/usb_hid_device/tree/boxlambda/firmware_mouse)
 - Keyboard Firmware directory: [sub/usb_hid_device/firmware_keyboard/](https://github.com/epsilon537/usb_hid_device/tree/boxlambda/firmware_keyboard)
 
-After making your changes, just run `make` in that same directory and a new firmware image will be generated.
+After making your changes, just run `make` in that same directory, and a new firmware image will be generated.
 
 
