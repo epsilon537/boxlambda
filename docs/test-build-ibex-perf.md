@@ -7,7 +7,7 @@ hide:
 
 The value of this test is mostly in the waveform it generates. Checking the waveform of this test allows you to see instruction fetch latency and the cycle count of various common instructions: 
 
-- load-word and store-word to internal memory and VRAM.
+- load-word/store-word from/to internal memory and VRAM.
 - reading SoC registers.
 - addi.
 - branch taken.
