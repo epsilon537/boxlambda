@@ -9,4 +9,6 @@ vendor
 .editorconfig
 settings.json
 venv
+Gemfile.lock
+
 

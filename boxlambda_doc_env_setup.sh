@@ -18,12 +18,13 @@ fi
 
 #Check if venv directory exists
 if [ -d venv ]; then
-  echo "venv found."
+  echo "venv found. Activating..."
+  source venv/bin/activate
 else
-  #No venv found. Create one.
+  echo "No venv found. Creating one..."
   python -m venv venv
 
-  #Activate venv
+  echo "Activating venv..."
   source venv/bin/activate
 
   echo "Installing required Python packages..."
@@ -36,14 +37,15 @@ else
 fi
 
 echo "Installing gems..."
+rm -f Gemfile.lock
 if bundle install ; then
   echo "OK"
 else
-  "bundle install failed. Aborting..."
+  echo "bundle install failed. Please run 'sudo gem update system' and retry."
+  echo "Aborting."
   return 1
 fi
 
-source venv/bin/activate
 
 echo
 echo "Setup complete and environment activated."

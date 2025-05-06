@@ -365,7 +365,7 @@ Conclusion
 ----------
 The tweaking of the BoxLambda SoC gateware to meet the requirements is now complete. The SoC is a simple, low-latency system with predictable behavior down to the clock cycle. **This is a milestone!** 
 
+![Celebrate.](../assets/celebrate.png)
+
 In the next phase of the project, the focus will shift to software. BoxLambda needs a self-contained runtime environment. One of the key questions I would like to answer is: How do you develop software for a resource-constrained computer on that resource-constrained computer? I can't wait to dive in!
-
-
 
