@@ -598,11 +598,10 @@ void _timer_irq_handler(void) {
   );
 }
 
-int main(void) {
-  //Switches
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
+uint32_t irq_latency_max=0;
+uint32_t irq_latency_min=~0;
 
+void irq_latency_test(void) {
   printf("Enabling Timer IRQ.\n");
   enable_global_irq();
   enable_irq(IRQ_ID_TIMER);
@@ -610,8 +609,6 @@ int main(void) {
   int ii;
   uint32_t time_cmpl;
   uint32_t irq_latency;
-  uint32_t irq_latency_max=0;
-  uint32_t irq_latency_min=~0;
 
   for (ii=0; ii<50; ii++) {
     timel = 0;
@@ -632,6 +629,14 @@ int main(void) {
 
   disable_irq(IRQ_ID_TIMER);
   disable_global_irq();
+}
+
+int main(void) {
+  //Switches
+  gpio_init(&gpio, (volatile void *)GPIO_BASE);
+  gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
+
+  irq_latency_test();
 
   uint32_t do_nothing_cycles = do_nothing();
   printf("Expected: 8 cycles.\n");

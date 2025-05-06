@@ -26,7 +26,7 @@ void __attribute__((naked)) _dfx_irq_handler(void);
 void __attribute__((naked)) _timer_irq_handler(void);
 
 /* Exception Handler */
-void _exc_handler(void) __attribute__((interrupt("machine")));
+void __attribute__((naked)) _exc_handler(void);
 
 /* Disable the global interrupt line at CPU level.*/
 static inline void disable_global_irq(void) {
