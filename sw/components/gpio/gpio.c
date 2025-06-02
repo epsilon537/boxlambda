@@ -10,6 +10,11 @@ void gpio_init(struct gpio * module, volatile void * base_address)
   module->registers[GPIO_RGPIO_CTRL] = GPIO_RGPIO_CTRL_INTE_MSK;
 }
 
+uint32_t gpio_get_direction(struct gpio * module)
+{
+  return module->registers[GPIO_RGPIO_OE];
+}
+
 void gpio_set_direction(struct gpio * module, uint32_t dir)
 {
   module->registers[GPIO_RGPIO_OE] = dir;

@@ -28,6 +28,12 @@ void uart_configure(struct uart * module, uint32_t config)
   module->registers[UART_REG_SETUP] = config;
 }
 
+void uart_tx_flush(struct uart * module)
+{
+  //Bits 27-18 contain the TX FIFO filling level.
+  while (module->registers[UART_REG_FIFO] & 0x0ffc00000);
+}
+
 int uart_tx_ready(struct uart * module)
 {
   return module->registers[UART_REG_FIFO] & 0x00010000;

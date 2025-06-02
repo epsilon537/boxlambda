@@ -46,6 +46,9 @@
  **/
 #define MTIMER_BLK_UNTIL(t) (*(volatile uint32_t *)(MTIMEBLK_ADDR) = (t))
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
  * Disable timer compare point by setting it to max. value
  */
@@ -61,5 +64,9 @@ void mtimer_set_raw_time_cmp(uint64_t clock_offset);
 /** Read the raw time of the system timer in system timer clocks
  */
 uint64_t mtimer_get_raw_time(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif// #ifdef TIMER_H

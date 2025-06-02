@@ -22,6 +22,13 @@ struct gpio
 void gpio_init(struct gpio * module, volatile void * base_address);
 
 /*
+ * Gets the GPIO direction register.
+ * 1 for output, 0 for input
+ * @param module Pointer to a GPIO instance structure.
+ */
+uint32_t gpio_get_direction(struct gpio * module);
+
+/*
  * Sets the GPIO direction register.
  * 1 for output, 0 for input
  * @param module Pointer to a GPIO instance structure.
