@@ -1,0 +1,34 @@
+regmap:
+-   name: SETUP
+    description: Setup register
+    address: 0
+    bitfields:
+    -   name: BAUD
+        description: Baudrate value
+        reset: 0
+        width: 2
+        lsb: 0
+        access: rw
+        hardware: o
+        enums:
+        -   name: B9600
+            description: 9600 baud
+            value: 0
+        -   name: B38400
+            description: 38400 baud
+            value: 1
+        -   name: B115200
+            description: 115200 baud
+            value: 2
+-   name: ID
+    description: IP-core ID register
+    address: 4092
+    bitfields:
+    -   name: UID
+        description: Unique ID
+        reset: 3405645414
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: f
+        enums: []
