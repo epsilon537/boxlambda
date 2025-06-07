@@ -6,10 +6,19 @@
 
 
 #define UART_REG_SETUP    0
+
 #define UART_REG_FIFO    1
+#define UART_FIFO_TX_FILLING_LVL_MSK 0x0ffc00000
+#define UART_FIFO_TX_RDY_MSK 0x000100000
+#define UART_FIFO_RX_RDY_MSK 0x000000001
+
 #define UART_REG_RXDATA    2
+#define UART_RX_DATA_MSK 0xff
+
 #define UART_REG_TXDATA    3
+
 #define UART_REG_ISR       4
+
 #define UART_REG_IEN       5
 
 static unsigned remu10(unsigned n);
@@ -31,12 +40,12 @@ void uart_configure(struct uart * module, uint32_t config)
 void uart_tx_flush(struct uart * module)
 {
   //Bits 27-18 contain the TX FIFO filling level.
-  while (module->registers[UART_REG_FIFO] & 0x0ffc00000);
+  while (module->registers[UART_REG_FIFO] & UART_FIFO_TX_FILLING_LVL_MSK);
 }
 
 int uart_tx_ready(struct uart * module)
 {
-  return module->registers[UART_REG_FIFO] & 0x00010000;
+  return module->registers[UART_REG_FIFO] & UART_FIFO_TX_RDY_MSK;
 }
 
 void uart_tx(struct uart * module, uint8_t byte)
@@ -55,12 +64,12 @@ void uart_tx_string(struct uart * module, const char *str)
 
 int uart_rx_ready(struct uart * module)
 {
-  return module->registers[UART_REG_FIFO] & 0x00000001;
+  return module->registers[UART_REG_FIFO] & UART_FIFO_RX_RDY_MSK;
 }
 
 uint8_t uart_rx(struct uart * module)
 {
-  return (uint8_t)(module->registers[UART_REG_RXDATA] & 0x000000FF);
+  return (uint8_t)(module->registers[UART_REG_RXDATA] & UART_RX_DATA_MSK);
 }
 
 uint32_t uart_rx_line(struct uart * module, char * str)
