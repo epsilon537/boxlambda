@@ -1,0 +1,54 @@
+regmap:
+-   name: CTRL
+    description: Reset control register
+    address: 0
+    bitfields:
+    -   name: NDM_RESET
+        description: Non-debug module reset
+        width: 1
+        lsb: 0
+        access: wo
+    -   name: DM_RESET
+        description: Debug module reset
+        width: 1
+        lsb: 1
+        access: wo
+    -   name: USB_RESET
+        description: USB module reset
+        width: 1
+        lsb: 2
+        access: wo
+-   name: REASON
+    description: Reset reason register
+    address: 4
+    bitfields:
+    -   name: POR
+        description: Power-on reset
+        width: 1
+        lsb: 0
+        access: roc
+    -   name: SW_NDM
+        description: Software triggered NDM reset
+        width: 1
+        lsb: 1
+        access: roc
+    -   name: SW_DM
+        description: Software triggered DM reset
+        width: 1
+        lsb: 2
+        access: roc
+    -   name: NDM
+        description: Non-debug module reset
+        width: 1
+        lsb: 3
+        access: roc
+    -   name: EXT
+        description: External reset
+        width: 1
+        lsb: 4
+        access: roc
+    -   name: SW_USB
+        description: Software triggered USB reset
+        width: 1
+        lsb: 5
+        access: roc

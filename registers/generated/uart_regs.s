@@ -1,0 +1,120 @@
+# --- UART
+
+.equ UART_BASE_ADDR, 0x10010000
+
+# SETUP - Setup register
+.equ UART_SETUP_ADDR, 0x0
+
+# SETUP.BAUD_CLKS - System clock per baudrate interval
+.equ UART_SETUP_BAUD_CLKS_WIDTH 24
+.equ UART_SETUP_BAUD_CLKS_LSB 0
+.equ UART_SETUP_BAUD_CLKS_MASK 0xffffff
+# SETUP.PFT - Parity setup
+.equ UART_SETUP_PFT_WIDTH 3
+.equ UART_SETUP_PFT_LSB 24
+.equ UART_SETUP_PFT_MASK 0x7000000
+# SETUP.S - Number of stop bits - 1
+.equ UART_SETUP_S_WIDTH 1
+.equ UART_SETUP_S_LSB 27
+.equ UART_SETUP_S_MASK 0x8000000
+# SETUP.N - 8 - number of bits per word
+.equ UART_SETUP_N_WIDTH 2
+.equ UART_SETUP_N_LSB 28
+.equ UART_SETUP_N_MASK 0x30000000
+# SETUP.H - Disable hardware flow control
+.equ UART_SETUP_H_WIDTH 1
+.equ UART_SETUP_H_LSB 30
+.equ UART_SETUP_H_MASK 0x40000000
+# FIFO - Rx and Tx FIFO size and status
+.equ UART_FIFO_ADDR, 0x4
+
+# FIFO.RX_Z - Data available in Rx FIFO.
+.equ UART_FIFO_RX_Z_WIDTH 1
+.equ UART_FIFO_RX_Z_LSB 0
+.equ UART_FIFO_RX_Z_MASK 0x1
+# FIFO.RX_H - Rx FIFO high order fill bit set.
+.equ UART_FIFO_RX_H_WIDTH 1
+.equ UART_FIFO_RX_H_LSB 1
+.equ UART_FIFO_RX_H_MASK 0x2
+# FIFO.RX_FILL - Number of filled entries in Rx FIFO.
+.equ UART_FIFO_RX_FILL_WIDTH 10
+.equ UART_FIFO_RX_FILL_LSB 2
+.equ UART_FIFO_RX_FILL_MASK 0xffc
+# FIFO.RX_LGLN - Log base 2 of FIFO length.
+.equ UART_FIFO_RX_LGLN_WIDTH 4
+.equ UART_FIFO_RX_LGLN_LSB 12
+.equ UART_FIFO_RX_LGLN_MASK 0xf000
+# FIFO.TX_Z - Space available in Tx FIFO.
+.equ UART_FIFO_TX_Z_WIDTH 1
+.equ UART_FIFO_TX_Z_LSB 16
+.equ UART_FIFO_TX_Z_MASK 0x10000
+# FIFO.TX_H - Tx FIFO high order fill bit set.
+.equ UART_FIFO_TX_H_WIDTH 1
+.equ UART_FIFO_TX_H_LSB 17
+.equ UART_FIFO_TX_H_MASK 0x20000
+# FIFO.TX_FILL - Number of available spaces in Tx FIFO.
+.equ UART_FIFO_TX_FILL_WIDTH 10
+.equ UART_FIFO_TX_FILL_LSB 18
+.equ UART_FIFO_TX_FILL_MASK 0xffc0000
+# FIFO.TX_LGLN - Log base 2 of FIFO length.
+.equ UART_FIFO_TX_LGLN_WIDTH 4
+.equ UART_FIFO_TX_LGLN_LSB 28
+.equ UART_FIFO_TX_LGLN_MASK 0xf0000000
+# RXDATA - Rx data register.
+.equ UART_RXDATA_ADDR, 0x8
+
+# RXDATA.RWORD - Read data word.
+.equ UART_RXDATA_RWORD_WIDTH 8
+.equ UART_RXDATA_RWORD_LSB 0
+.equ UART_RXDATA_RWORD_MASK 0xff
+# RXDATA.S - Data invalid.
+.equ UART_RXDATA_S_WIDTH 1
+.equ UART_RXDATA_S_LSB 8
+.equ UART_RXDATA_S_MASK 0x100
+# RXDATA.P - Parity error.
+.equ UART_RXDATA_P_WIDTH 1
+.equ UART_RXDATA_P_LSB 9
+.equ UART_RXDATA_P_MASK 0x200
+# RXDATA.F - Frame error.
+.equ UART_RXDATA_F_WIDTH 1
+.equ UART_RXDATA_F_LSB 10
+.equ UART_RXDATA_F_MASK 0x400
+# RXDATA.B - Rx line is in break condition.
+.equ UART_RXDATA_B_WIDTH 1
+.equ UART_RXDATA_B_LSB 11
+.equ UART_RXDATA_B_MASK 0x800
+# RXDATA.E - Read indicates Rx FIFO has overflowed since last reset. Writing 1 clears FIFO and waits for line idle before receiving next byte.
+.equ UART_RXDATA_E_WIDTH 1
+.equ UART_RXDATA_E_LSB 12
+.equ UART_RXDATA_E_MASK 0x1000
+# TXDATA - Tx data register.
+.equ UART_TXDATA_ADDR, 0xc
+
+# TXDATA.TWORD - Transmit data word.
+.equ UART_TXDATA_TWORD_WIDTH 8
+.equ UART_TXDATA_TWORD_LSB 0
+.equ UART_TXDATA_TWORD_MASK 0xff
+# TXDATA.S - Transmit busy.
+.equ UART_TXDATA_S_WIDTH 1
+.equ UART_TXDATA_S_LSB 8
+.equ UART_TXDATA_S_MASK 0x100
+# TXDATA.B - Tx break condition.
+.equ UART_TXDATA_B_WIDTH 1
+.equ UART_TXDATA_B_LSB 9
+.equ UART_TXDATA_B_MASK 0x200
+# TXDATA.E - Read indicates Tx FIFO has overflowed since last reset. Writing 1 resets FIFO.
+.equ UART_TXDATA_E_WIDTH 1
+.equ UART_TXDATA_E_LSB 12
+.equ UART_TXDATA_E_MASK 0x1000
+# TXDATA.Z - Tx FIFO not full.
+.equ UART_TXDATA_Z_WIDTH 1
+.equ UART_TXDATA_Z_LSB 13
+.equ UART_TXDATA_Z_MASK 0x2000
+# TXDATA.H - Tx FIFO at least half full.
+.equ UART_TXDATA_H_WIDTH 1
+.equ UART_TXDATA_H_LSB 14
+.equ UART_TXDATA_H_MASK 0x4000
+# TXDATA.R - Received RTS instantaneous value.
+.equ UART_TXDATA_R_WIDTH 1
+.equ UART_TXDATA_R_LSB 15
+.equ UART_TXDATA_R_MASK 0x8000
