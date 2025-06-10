@@ -207,3 +207,51 @@ regmap:
         width: 1
         lsb: 15
         access: ro
+-   name: ISR
+    description: Interrupt status register
+    address: 16
+    bitfields:
+    -   name: RX_DATA_AVL
+        description: Rx FIFO went from empty to non-empty state.
+        width: 1
+        lsb: 0
+        access: rw1c
+    -   name: RX_FIFO_HALF_FULL
+        description: Receive FIFO passed the half-full threshold.
+        width: 1
+        lsb: 1
+        access: rw1c
+    -   name: TX_FIFO_EMPTY
+        description: Tx FIFO went from non-empty to empty state.
+        width: 1
+        lsb: 2
+        access: rw1c
+    -   name: TX_FIFO_HALF_EMPTY
+        description: Tx FIFO filling level dropped below the half empty threshold.
+        width: 1
+        lsb: 3
+        access: rw1c
+-   name: IEN
+    description: Interrupt enable register
+    address: 20
+    bitfields:
+    -   name: RX_DATA_AVL
+        description: Enable RX_DATA_AVL interrupt.
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: RX_FIFO_HALF_FULL
+        description: Enable RX_FIFO_HALF_FULL interrupt.
+        width: 1
+        lsb: 1
+        access: rw
+    -   name: TX_FIFO_EMPTY
+        description: Enable TX_FIFO_EMPTY interrupt.
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: TX_FIFO_HALF_EMPTY
+        description: Enabled TX_FIFO_HALF_EMPTY interrupt.
+        width: 1
+        lsb: 3
+        access: rw

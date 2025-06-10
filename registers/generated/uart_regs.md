@@ -26,6 +26,8 @@ Base address: 0x10010000
 | [FIFO](#fifo)            | 0x00000004 | Rx and Tx FIFO size and status |
 | [RXDATA](#rxdata)        | 0x00000008 | Rx data register. |
 | [TXDATA](#txdata)        | 0x0000000c | Tx data register. |
+| [ISR](#isr)              | 0x00000010 | Interrupt status register |
+| [IEN](#ien)              | 0x00000014 | Interrupt enable register |
 
 ## SETUP
 
@@ -161,5 +163,45 @@ Reset value: 0x00000000
 | B                | 9      | rw              | 0x0        | Tx break condition. |
 | S                | 8      | ro              | 0x0        | Transmit busy. |
 | TWORD            | 7:0    | rw              | 0x00       | Transmit data word. |
+
+Back to [Register map](#register-map-summary).
+
+## ISR
+
+Interrupt status register
+
+Address offset: 0x00000010
+
+Reset value: 0x00000000
+
+![isr](md_img/isr.svg)
+
+| Name             | Bits   | Mode            | Reset      | Description |
+| :---             | :---   | :---            | :---       | :---        |
+| -                | 31:4   | -               | 0x0000000  | Reserved |
+| TX_FIFO_HALF_EMPTY | 3      | rw1c            | 0x0        | Tx FIFO filling level dropped below the half empty threshold. |
+| TX_FIFO_EMPTY    | 2      | rw1c            | 0x0        | Tx FIFO went from non-empty to empty state. |
+| RX_FIFO_HALF_FULL | 1      | rw1c            | 0x0        | Receive FIFO passed the half-full threshold. |
+| RX_DATA_AVL      | 0      | rw1c            | 0x0        | Rx FIFO went from empty to non-empty state. |
+
+Back to [Register map](#register-map-summary).
+
+## IEN
+
+Interrupt enable register
+
+Address offset: 0x00000014
+
+Reset value: 0x00000000
+
+![ien](md_img/ien.svg)
+
+| Name             | Bits   | Mode            | Reset      | Description |
+| :---             | :---   | :---            | :---       | :---        |
+| -                | 31:4   | -               | 0x0000000  | Reserved |
+| TX_FIFO_HALF_EMPTY | 3      | rw              | 0x0        | Enabled TX_FIFO_HALF_EMPTY interrupt. |
+| TX_FIFO_EMPTY    | 2      | rw              | 0x0        | Enable TX_FIFO_EMPTY interrupt. |
+| RX_FIFO_HALF_FULL | 1      | rw              | 0x0        | Enable RX_FIFO_HALF_FULL interrupt. |
+| RX_DATA_AVL      | 0      | rw              | 0x0        | Enable RX_DATA_AVL interrupt. |
 
 Back to [Register map](#register-map-summary).
