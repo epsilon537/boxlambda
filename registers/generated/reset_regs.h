@@ -8,11 +8,10 @@
 
 
 #ifdef __cplusplus
-#include <cstdint>
 extern "C" {
-#else
-#include <stdint.h>
 #endif
+
+#include <stdint.h>
 
 #define RESET_BASE_ADDR 0x100000d0
 

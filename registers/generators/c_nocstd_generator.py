@@ -5,9 +5,8 @@
 """
 from corsair import RegisterMap, generators, config, __version__, utils
 
-
-class AsmGenerator(generators.Generator, generators.Jinja2):
-    """Create assembler .s file with register map defines.
+class CHeaderNoCstd(generators.Generator, generators.Jinja2):
+    """Create C header file with register map defines.
 
     :param rmap: Register map object
     :type rmap: :class:`corsair.RegisterMap`
@@ -33,7 +32,7 @@ class AsmGenerator(generators.Generator, generators.Jinja2):
         # validate parameters
         self.validate()
         # prepare jinja2
-        j2_template = 'regmap_asm.j2'
+        j2_template = 'c_header_nocstd.j2'
         j2_vars = {}
         j2_vars['corsair_ver'] = __version__
         j2_vars['rmap'] = self.rmap
