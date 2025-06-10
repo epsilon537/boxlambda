@@ -82,8 +82,6 @@ extern "C" {
 void add_ymodem_cli(EmbeddedCli* cli, struct uart* uart) {
   assert(cli);
 
-  ymodem_init(uart);
-
   embeddedCliAddBinding(cli, {
         "ymodem_rx",          // command name (spaces are not allowed)
         "ymodem_rx <filename>: Ymodem rx and save to give file.",   // Optional help for a command (NULL for no help)

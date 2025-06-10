@@ -30,8 +30,6 @@
 #if !defined(_YMODEM_H)
 #define _YMODEM_H
 
-#include "uart.h"
-
 /* Comment this out if you don't plan to use extra CRC32 - removes ~1K */
 #define WITH_CRC32
 
@@ -64,7 +62,6 @@
 extern "C" {
 #endif
 
-void ymodem_init(struct uart *uart);
 unsigned long ymodem_receive(unsigned char *buf, unsigned long length);
 unsigned long ymodem_send(unsigned char *buf, unsigned long size, char* filename);
 

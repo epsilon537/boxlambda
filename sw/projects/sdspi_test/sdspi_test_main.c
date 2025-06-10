@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
@@ -13,15 +11,11 @@
 
 #define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
-static struct uart uart0;
 static struct gpio gpio;
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  //Set up UART and tie stdio to it.
-  uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-  uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-  set_stdio_to_uart(&uart0);
+  uart_set_baudrate(115200);
   disable_all_irqs();
 }
 

@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
@@ -29,7 +27,6 @@
 
 #define NUM_ITERATIONS 100
 
-static struct uart uart0;
 static struct gpio gpio;
 
 static uint32_t srcBuf[BUF_NUM_WORDS];
@@ -569,10 +566,7 @@ uint32_t lw_sw_copy_unrolled(void *dest, const void *src) {
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  //Set up UART and tie stdio to it.
-  uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-  uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-  set_stdio_to_uart(&uart0);
+  uart_set_baudrate(115200);
   disable_all_irqs();
 }
 

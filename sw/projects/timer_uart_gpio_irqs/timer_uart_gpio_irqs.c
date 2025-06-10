@@ -4,8 +4,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <assert.h>
-
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
@@ -14,15 +12,11 @@
 
 #define IRQ_LATENCY_AND_JITTER_MARGIN 20
 
-static struct uart uart0;
 static struct gpio gpio;
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  //Set up UART and tie stdio to it.
-  uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-  uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-  set_stdio_to_uart(&uart0);
+  uart_set_baudrate(115200);
 
   mcycle_start();
   disable_all_irqs();
@@ -73,26 +67,26 @@ void _gpio_irq_handler(void) {
 }
 
 void _uart_irq_handler(void) {
-  unsigned ien = uart_get_ien(&uart0);
-  unsigned isr = uart_get_isr(&uart0);
+  unsigned ien = uart_get_ien();
+  unsigned isr = uart_get_isr();
 
-  if (isr & ien & UART_IRQ_RX_DATA_AVL_MASK) {
-    uart_irq_ack(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
+  if (isr & ien & UART_ISR_RX_DATA_AVL_MASK) {
+    uart_irq_ack(UART_ISR_RX_DATA_AVL_MASK);
     uart_rx_irq_fired = 1;
   }
 
-  if (isr & ien & UART_IRQ_RX_FIFO_HALF_FULL_MASK) {
-    uart_irq_ack(&uart0, UART_IRQ_RX_FIFO_HALF_FULL_MASK);
+  if (isr & ien & UART_ISR_RX_FIFO_HALF_FULL_MASK) {
+    uart_irq_ack(UART_ISR_RX_FIFO_HALF_FULL_MASK);
     uart_rx_fifo_irq_fired = 1;
   }
 
-  if (isr & ien & UART_IRQ_TX_FIFO_EMPTY_MASK) {
-    uart_irq_ack(&uart0, UART_IRQ_TX_FIFO_EMPTY_MASK);
+  if (isr & ien & UART_ISR_TX_FIFO_EMPTY_MASK) {
+    uart_irq_ack(UART_ISR_TX_FIFO_EMPTY_MASK);
     uart_tx_fifo_empty_fired = 1;
   }
 
-  if (isr & ien & UART_IRQ_TX_FIFO_HALF_EMPTY_MASK) {
-    uart_irq_ack(&uart0, UART_IRQ_TX_FIFO_HALF_EMPTY_MASK);
+  if (isr & ien & UART_ISR_TX_FIFO_HALF_EMPTY_MASK) {
+    uart_irq_ack(UART_ISR_TX_FIFO_HALF_EMPTY_MASK);
     uart_tx_fifo_half_empty_fired = 1;
   }
 
@@ -179,21 +173,21 @@ int main(void) {
 
   printf("Current time: %d\n", MTIMER_GET_RAW_MTIME_LOW());
   //This is enough to fill the UART TX FIFO more than halfway.
-  uart_tx_string(&uart0, "0123456789\n");
+  uart_tx_string("0123456789\n");
 
   //Clear any pending Tx interrupts before enabling them in the UART core.
-  uart_irq_ack(&uart0, UART_IRQ_TX_FIFO_EMPTY_MASK);
-  uart_irq_ack(&uart0, UART_IRQ_TX_FIFO_HALF_EMPTY_MASK);
-  uart_irq_en(&uart0, UART_IRQ_TX_FIFO_EMPTY_MASK);
-  uart_irq_en(&uart0, UART_IRQ_TX_FIFO_HALF_EMPTY_MASK);
+  uart_irq_ack(UART_ISR_TX_FIFO_EMPTY_MASK);
+  uart_irq_ack(UART_ISR_TX_FIFO_HALF_EMPTY_MASK);
+  uart_irq_en(UART_ISR_TX_FIFO_EMPTY_MASK);
+  uart_irq_en(UART_ISR_TX_FIFO_HALF_EMPTY_MASK);
 
   while (!uart_tx_fifo_half_empty_fired); //Wait until half empty
   //At this point we shouldn't be completely empty yet.
   assert(!uart_tx_fifo_empty_fired);
   while (!uart_tx_fifo_empty_fired); //Wait until completely empty.
   //Disable UART TX IRQs again.
-  uart_irq_dis(&uart0, UART_IRQ_TX_FIFO_EMPTY_MASK);
-  uart_irq_dis(&uart0, UART_IRQ_TX_FIFO_HALF_EMPTY_MASK);
+  uart_irq_dis(UART_ISR_TX_FIFO_EMPTY_MASK);
+  uart_irq_dis(UART_ISR_TX_FIFO_HALF_EMPTY_MASK);
 
   printf("UART TX IRQ test successful.\n");
 
@@ -202,10 +196,10 @@ int main(void) {
   printf("Testing UART RX IRQs...\n");
 
   //Clear any pending IRQs in the UART core, then enable receive IRQs.
-  uart_irq_ack(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
-  uart_irq_ack(&uart0, UART_IRQ_RX_FIFO_HALF_FULL_MASK);
-  uart_irq_en(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
-  uart_irq_en(&uart0, UART_IRQ_RX_FIFO_HALF_FULL_MASK);
+  uart_irq_ack(UART_ISR_RX_DATA_AVL_MASK);
+  uart_irq_ack(UART_ISR_RX_FIFO_HALF_FULL_MASK);
+  uart_irq_en(UART_ISR_RX_DATA_AVL_MASK);
+  uart_irq_en(UART_ISR_RX_FIFO_HALF_FULL_MASK);
 
   int uart_rx_irq_count = 0;
   int uart_rx_fifo_irq_count = 0;
@@ -225,7 +219,7 @@ int main(void) {
 
       ++uart_rx_irq_count;
       if (uart_rx_irq_count == 2) {
-        uart_irq_dis(&uart0, UART_IRQ_RX_DATA_AVL_MASK);
+        uart_irq_dis(UART_ISR_RX_DATA_AVL_MASK);
         done = 1;
       }
       else {
@@ -245,12 +239,12 @@ int main(void) {
       uart_rx_fifo_irq_fired = 0;
       ++uart_rx_fifo_irq_count;
       if (uart_rx_fifo_irq_count == 2) {
-        uart_irq_dis(&uart0, UART_IRQ_RX_FIFO_HALF_FULL_MASK);
+        uart_irq_dis(UART_ISR_RX_FIFO_HALF_FULL_MASK);
       }
 
       //Pull the received characters out of the FIFO.
-      while (uart_rx_ready(&uart0)) {
-        rxc = uart_rx(&uart0);
+      while (uart_rx_ready()) {
+        rxc = uart_rx();
         printf("Received character: %c\n", rxc);
       }
 

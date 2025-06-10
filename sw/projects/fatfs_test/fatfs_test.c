@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "mcycle.h"
 #include "ff.h"
@@ -19,14 +17,9 @@ const char *text_file_name = STR_ROOT_DIRECTORY "log.txt";
 static uint8_t data_buffer[DATA_SIZE];
 #define TEST_SIZE   (4 * 1024)
 
-static struct uart uart0;
-
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  //Set up UART and tie stdio to it.
-  uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-  uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-  set_stdio_to_uart(&uart0);
+  uart_set_baudrate(115200);
 }
 
 //_exit is executed by the picolibc exit function.

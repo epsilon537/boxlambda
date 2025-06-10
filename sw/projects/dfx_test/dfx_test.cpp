@@ -8,7 +8,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
@@ -26,7 +25,6 @@
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
-static struct uart uart0;
 static struct gpio gpio;
 
 #ifdef __cplusplus
@@ -35,10 +33,7 @@ extern "C"
 #endif
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  //Set up UART and tie stdio to it.
-  uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-  uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-  set_stdio_to_uart(&uart0);
+  uart_set_baudrate(115200);
 
   mcycle_start();
 }
@@ -101,7 +96,7 @@ int main(void) {
 
   printf("Starting CLI...\n");
 
-  EmbeddedCli *cli = createEmbeddedCli(&uart0);
+  EmbeddedCli *cli = createEmbeddedCli();
 
   //CLI command for peeking an poking memory/registers
   add_peek_poke_cli(cli);
@@ -111,9 +106,9 @@ int main(void) {
   //CLI commands to interact with the filesystem.
   add_mem_fs_cli(cli);
   //CLI commands to transfer files via the ymodem serial protocol.
-  add_ymodem_cli(cli, &uart0);
+  add_ymodem_cli(cli);
   //CLI commands to interact with the J1B core after it's been loaded into the system using the DFX CLI.
-  add_j1b_cli(cli, &uart0);
+  add_j1b_cli(cli);
 
   embeddedCliStartLoop();
 

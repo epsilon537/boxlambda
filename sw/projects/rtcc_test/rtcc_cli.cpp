@@ -9,8 +9,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-static struct uart *uartp = 0;
-
 extern "C" {
   static void settime(EmbeddedCli *cli, char *args, void *context) {
     if (embeddedCliGetTokenCount(args) < 3) {

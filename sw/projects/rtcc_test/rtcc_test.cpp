@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
@@ -17,16 +15,12 @@
 #include "peek_poke_cli.h"
 #include "embedded_cli_setup.h"
 
-static struct uart uart0;
 static struct gpio gpio;
 
 extern "C" {
   //_init is executed by picolibc startup code before main().
   void _init(void) {
-    //Set up UART and tie stdio to it.
-    uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-    uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-    set_stdio_to_uart(&uart0);
+    uart_set_baudrate(115200);
     mcycle_start();
   }
 
@@ -107,7 +101,7 @@ int main(void) {
   /* Run the RTCC test. After test we can fall through to CLI.*/
   rtcc_test();
 
-  EmbeddedCli *cli = createEmbeddedCli(&uart0);
+  EmbeddedCli *cli = createEmbeddedCli();
 
   add_peek_poke_cli(cli);
   add_i2c_cli(cli);

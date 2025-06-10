@@ -1,84 +1,81 @@
-
 #include "uart.h"
 #include <stdint.h>
-//#include <stdio.h>
 #include <string.h>
+#include "mcycle.h"
 
+#define PAD_RIGHT 1
+#define PAD_ZERO  2
 
-#define UART_REG_SETUP    0
+/* the following should be enough for 32 bit int */
+#define PRINT_BUF_LEN 32
 
-#define UART_REG_FIFO    1
-#define UART_FIFO_TX_FILLING_LVL_MSK 0x0ffc00000
-#define UART_FIFO_TX_RDY_MSK 0x000100000
-#define UART_FIFO_RX_RDY_MSK 0x000000001
+/* define LONG_MAX for int32 */
+#define LONG_MAX 2147483647L
 
-#define UART_REG_RXDATA    2
-#define UART_RX_DATA_MSK 0xff
-
-#define UART_REG_TXDATA    3
-
-#define UART_REG_ISR       4
-
-#define UART_REG_IEN       5
+/* DETECTNULL returns nonzero if (long)X contains a NULL byte. */
+#if LONG_MAX == 2147483647L
+#define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
+#else
+#if LONG_MAX == 9223372036854775807L
+#define DETECTNULL(X) (((X) - 0x0101010101010101) & ~(X) & 0x8080808080808080)
+#else
+#error long int is not a 32bit or 64bit type.
+#endif
+#endif
 
 static unsigned remu10(unsigned n);
-static void qprintchar(struct uart * module, char **str, int c);
-static int qprints(struct uart * module, char **out, const char *string, int width, int pad);
-static int qprinti(struct uart * module, char **out, int i, int b, int sg, int width, int pad, char letbase);
-static int qprint(struct uart * module, char **out, const char *format, va_list va);
+static void qprintchar(char **str, int c);
+static int qprints(char **out, const char *string, int width, int pad);
+static int qprinti(char **out, int i, int b, int sg, int width, int pad, char letbase);
+static int qprint(char **out, const char *format, va_list va);
 
-void uart_init(struct uart * module, volatile void * base_address)
+void uart_configure(uart_setup_pft_t parity, uart_setup_s_t stop_bits, uart_setup_n_t bits_per_word, uart_setup_h_t hw_flow_control)
 {
-  module->registers = (volatile uint32_t *)base_address;
+  UART->SETUP_bf.PFT = parity;
+  UART->SETUP_bf.S = stop_bits;
+  UART->SETUP_bf.N = bits_per_word;
+  UART->SETUP_bf.H = hw_flow_control;
 }
 
-void uart_configure(struct uart * module, uint32_t config)
+void uart_tx_flush(void)
 {
-  module->registers[UART_REG_SETUP] = config;
+  while (UART->FIFO_bf.TX_FILL);
 }
 
-void uart_tx_flush(struct uart * module)
+int uart_tx_ready(void)
 {
-  //Bits 27-18 contain the TX FIFO filling level.
-  while (module->registers[UART_REG_FIFO] & UART_FIFO_TX_FILLING_LVL_MSK);
+  return UART->FIFO_bf.TX_Z;
 }
 
-int uart_tx_ready(struct uart * module)
+void uart_tx(uint8_t byte)
 {
-  return module->registers[UART_REG_FIFO] & UART_FIFO_TX_RDY_MSK;
+  UART->TXDATA = (uint32_t)byte;
 }
 
-void uart_tx(struct uart * module, uint8_t byte)
-{
-  module->registers[UART_REG_TXDATA] = (uint32_t)byte;
-}
-
-void uart_tx_string(struct uart * module, const char *str)
+void uart_tx_string(const char *str)
 {
   for (uint32_t i = 0; str[i] != '\0'; i++) {
-    while (!uart_tx_ready(module))
-      ;
-    uart_tx(module, (uint8_t)str[i]);
+    while (!uart_tx_ready());
+    uart_tx((uint8_t)str[i]);
   }
 }
 
-int uart_rx_ready(struct uart * module)
+int uart_rx_ready()
 {
-  return module->registers[UART_REG_FIFO] & UART_FIFO_RX_RDY_MSK;
+  return UART->FIFO_bf.RX_Z;
 }
 
-uint8_t uart_rx(struct uart * module)
+uint8_t uart_rx()
 {
-  return (uint8_t)(module->registers[UART_REG_RXDATA] & UART_RX_DATA_MSK);
+  return (uint8_t)(UART->RXDATA_bf.RWORD);
 }
 
-uint32_t uart_rx_line(struct uart * module, char * str)
+uint32_t uart_rx_line(char * str)
 {
   uint32_t i = 0;
   for (;;) {
-    while (!uart_rx_ready(module))
-      ;
-    str[i] = uart_rx(module);
+    while (!uart_rx_ready());
+    str[i] = uart_rx();
     if (str[i] == '\n')
       break;
     i++;
@@ -87,57 +84,30 @@ uint32_t uart_rx_line(struct uart * module, char * str)
   return i;
 }
 
-void uart_set_baudrate(struct uart * module, uint32_t baudrate, uint32_t clk_freq)
+void uart_set_baudrate(uint32_t baudrate)
 {
-  module->registers[UART_REG_SETUP] = clk_freq / baudrate;
+  UART->SETUP_bf.BAUD_CLKS = PLATFORM_CLK_FREQ / baudrate;
 }
 
-void uart_irq_ack(struct uart * module, unsigned irq_mask) {
-  module->registers[UART_REG_ISR] = irq_mask;
+void uart_irq_ack(uint32_t irq_mask) {
+  UART->ISR = irq_mask;
 }
 
-void uart_irq_en(struct uart * module, unsigned irq_mask) {
-  module->registers[UART_REG_IEN] = irq_mask | module->registers[UART_REG_IEN];
+void uart_irq_en(uint32_t irq_mask) {
+  UART->IEN |= irq_mask;
 }
 
-void uart_irq_dis(struct uart * module, unsigned irq_mask) {
-  module->registers[UART_REG_IEN] = ~irq_mask & module->registers[UART_REG_IEN];
+void uart_irq_dis(uint32_t irq_mask) {
+  UART->IEN &= ~irq_mask;
 }
 
-unsigned uart_get_isr(struct uart * module) {
-  return module->registers[UART_REG_ISR];
+uint32_t uart_get_isr(void) {
+  return UART->ISR;
 }
 
-unsigned uart_get_ien(struct uart * module) {
-  return module->registers[UART_REG_IEN];
+uint32_t uart_get_ien(void) {
+  return UART->IEN;
 }
-
-//int uart_printf(struct uart * module, const char * fmt, ...)
-//{
-//  int result;
-//  char str[100];
-//
-//  va_list argp;
-//  va_start(argp, fmt);
-//  result = vsnprintf(str, 100, fmt, argp);
-//  va_end(argp);
-//  uart_tx_string(module, str);
-//
-//  return result;
-//}
-//
-//int uart_scanf(struct uart * module, const char * fmt, ...)
-//{
-//  char str[100];
-//  int result;
-//  uart_rx_line(module, str);
-//
-//  va_list argp;
-//  va_start(argp, fmt);
-//  result = vsscanf(str, fmt, argp);
-//  va_end(argp);
-//  return result;
-//}
 
 /* Nonzero if either X or Y is not aligned on a "long" boundary. */
 #define UNALIGNED(X, Y) \
@@ -166,16 +136,14 @@ static unsigned remu10(unsigned n) {
   return remu10_table[n];
 }
 
-
-int uart_putchar(struct uart * module, int s)
+int uart_putchar(int s)
 {
-  while (!uart_tx_ready(module))
-      ;
-  uart_tx(module, (uint8_t)s);
+  while (!uart_tx_ready());
+  uart_tx((uint8_t)s);
   return s;
 }
 
-static void qprintchar(struct uart * module, char **str, int c)
+static void qprintchar(char **str, int c)
 {
   if (str)
   {
@@ -183,10 +151,10 @@ static void qprintchar(struct uart * module, char **str, int c)
     ++(*str);
   }
   else
-    uart_putchar(module, (char)c);
+    uart_putchar((char)c);
 }
 
-static int qprints(struct uart * module, char **out, const char *string, int width, int pad)
+static int qprints(char **out, const char *string, int width, int pad)
 {
   register int pc = 0, padchar = ' ';
 
@@ -200,23 +168,23 @@ static int qprints(struct uart * module, char **out, const char *string, int wid
   }
   if (!(pad & PAD_RIGHT)) {
     for ( ; width > 0; --width) {
-      qprintchar (module, out, padchar);
+      qprintchar (out, padchar);
       ++pc;
     }
   }
   for ( ; *string ; ++string) {
-    qprintchar (module, out, *string);
+    qprintchar (out, *string);
     ++pc;
   }
   for ( ; width > 0; --width) {
-    qprintchar (module, out, padchar);
+    qprintchar (out, padchar);
     ++pc;
   }
 
   return pc;
 }
 
-static int qprinti(struct uart * module, char **out, int i, int b, int sg, int width, int pad, char letbase)
+static int qprinti(char **out, int i, int b, int sg, int width, int pad, char letbase)
 {
   char print_buf[PRINT_BUF_LEN];
   register char *s;
@@ -227,7 +195,7 @@ static int qprinti(struct uart * module, char **out, int i, int b, int sg, int w
   {
     print_buf[0] = '0';
     print_buf[1] = '\0';
-    return qprints (module, out, print_buf, width, pad);
+    return qprints (out, print_buf, width, pad);
   }
 
   if (sg && b == 10 && i < 0)
@@ -262,7 +230,7 @@ static int qprinti(struct uart * module, char **out, int i, int b, int sg, int w
   if (neg) {
     if( width && (pad & PAD_ZERO) )
     {
-      qprintchar (module, out, '-');
+      qprintchar (out, '-');
       ++pc;
       --width;
     }
@@ -271,10 +239,10 @@ static int qprinti(struct uart * module, char **out, int i, int b, int sg, int w
       *--s = '-';
     }
   }
-  return pc + qprints (module, out, s, width, pad);
+  return pc + qprints (out, s, width, pad);
 }
 
-static int qprint(struct uart * module, char **out, const char *format, va_list va)
+static int qprint(char **out, const char *format, va_list va)
 {
   register int width, pad;
   register int pc = 0;
@@ -304,36 +272,36 @@ static int qprint(struct uart * module, char **out, const char *format, va_list 
       }
       if( *format == 's' ) {
         register char *s = va_arg(va, char*);
-        pc += qprints (module, out, s?s:"(null)", width, pad);
+        pc += qprints (out, s?s:"(null)", width, pad);
         continue;
       }
       if( *format == 'd' ) {
-        pc += qprinti (module, out, va_arg(va, int), 10, 1, width, pad, 'a');
+        pc += qprinti (out, va_arg(va, int), 10, 1, width, pad, 'a');
         continue;
       }
       if( *format == 'u' ) {
-        pc += qprinti (module, out, va_arg(va, unsigned int), 10, 0, width, pad, 'a');
+        pc += qprinti (out, va_arg(va, unsigned int), 10, 0, width, pad, 'a');
         continue;
       }
       if( *format == 'x' ) {
-        pc += qprinti (module, out, va_arg(va, uint32_t), 16, 0, width, pad, 'a');
+        pc += qprinti (out, va_arg(va, uint32_t), 16, 0, width, pad, 'a');
         continue;
       }
       if( *format == 'X' ) {
-        pc += qprinti (module, out, va_arg(va, uint32_t), 16, 0, width, pad, 'A');
+        pc += qprinti (out, va_arg(va, uint32_t), 16, 0, width, pad, 'A');
         continue;
       }
       if( *format == 'c' ) {
         scr[0] = va_arg(va, int);
         scr[1] = '\0';
-        pc += qprints (module, out, scr, width, pad);
+        pc += qprints (out, scr, width, pad);
         continue;
       }
     }
     else
     {
 out:
-      qprintchar (module, out, *format);
+      qprintchar (out, *format);
       ++pc;
     }
   }
@@ -343,26 +311,26 @@ out:
 }
 
 
-int uart_puts(struct uart * module, const char *s)
+int uart_puts(const char *s)
 {
   int i=0;
 
   while(s[i] != '\0')
-    uart_putchar(module, s[i++]);
+    uart_putchar(s[i++]);
 
-  uart_putchar(module, '\n');
+  uart_putchar('\n');
 
   return i;
 }
 
-int uart_printf(struct uart * module, const char *format, ...)
+int uart_printf(const char *format, ...)
 {
   int pc;
   va_list va;
 
   va_start(va, format);
 
-  pc = qprint(module, 0, format, va);
+  pc = qprint(0, format, va);
 
   va_end(va);
 

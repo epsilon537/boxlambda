@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
@@ -12,8 +11,6 @@
 #include "libbase/memtest.h"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
-
-static struct uart uart0;
 
 static struct gpio gpio;
 
@@ -45,10 +42,7 @@ int code_in_ddr(char *message) {
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  //Set up UART and tie stdio to it.
-  uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-  uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-  set_stdio_to_uart(&uart0);
+  uart_set_baudrate(115200);
 }
 
 //_exit is executed by the picolibc exit function.

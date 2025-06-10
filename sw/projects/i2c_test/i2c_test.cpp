@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
@@ -28,7 +26,6 @@
 //On FPGA, we use the typical 100KHz I2C bus speed.
 #define I2C_SPEED_FPGA_HZ 100000
 
-static struct uart uart0;
 static struct gpio gpio;
 
 volatile int i2c_irqs_fired = 0; //Keep track of the number of I2C IRQs received.
@@ -49,10 +46,7 @@ extern "C" {
 
   //_init is executed by picolibc startup code before main().
   void _init(void) {
-    //Set up UART and tie stdio to it.
-    uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-    uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-    set_stdio_to_uart(&uart0);
+    uart_set_baudrate(115200);
   }
 
   //_exit is executed by the picolibc exit function.
@@ -211,7 +205,7 @@ int main(void) {
 
   while ((gpio_get_input(&gpio) & 0x0100) == 0);
 
-  EmbeddedCli *cli = createEmbeddedCli(&uart0);
+  EmbeddedCli *cli = createEmbeddedCli();
 
   add_peek_poke_cli(cli);
   add_i2c_cli(cli);

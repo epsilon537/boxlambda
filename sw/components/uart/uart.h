@@ -3,88 +3,52 @@
 
 #include <stdint.h>
 #include <stdarg.h>
-
-#define PLATFORM_UART_BASE		0x10010000
-
-#define PAD_RIGHT 1
-#define PAD_ZERO  2
-
-/* the following should be enough for 32 bit int */
-#define PRINT_BUF_LEN 32
-
-/* define LONG_MAX for int32 */
-#define LONG_MAX 2147483647L
-
-/* DETECTNULL returns nonzero if (long)X contains a NULL byte. */
-#if LONG_MAX == 2147483647L
-#define DETECTNULL(X) (((X) - 0x01010101) & ~(X) & 0x80808080)
-#else
-#if LONG_MAX == 9223372036854775807L
-#define DETECTNULL(X) (((X) - 0x0101010101010101) & ~(X) & 0x8080808080808080)
-#else
-#error long int is not a 32bit or 64bit type.
-#endif
-#endif
+#include "uart_regs.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-struct uart
-{
-	volatile uint32_t * registers;
-};
+void uart_configure(uart_setup_pft_t parity, uart_setup_s_t stop_bits, uart_setup_n_t bits_per_word, uart_setup_h_t hw_flow_control);
 
-void uart_init(struct uart * module, volatile void * base_address);
+void uart_set_baudrate(uint32_t baudrate);
 
-void uart_configure(struct uart * module, uint32_t config);
+int uart_tx_ready(void);
 
-void uart_set_baudrate(struct uart * module, uint32_t baudrate, uint32_t clk_freq);
+void uart_tx(uint8_t byte);
 
-int uart_tx_ready(struct uart * module);
-
-void uart_tx(struct uart * module, uint8_t byte);
-
-void uart_tx_string(struct uart * module, const char *str);
+void uart_tx_string(const char *str);
 
 //Block until the TX FIFO is empty.
-void uart_tx_flush(struct uart * module);
+void uart_tx_flush(void);
 
 /*Returns non-zero if data available.*/
-int uart_rx_ready(struct uart * module);
+int uart_rx_ready(void);
 
-uint8_t uart_rx(struct uart * module);
+uint8_t uart_rx(void);
 
-uint32_t uart_rx_line(struct uart * module, char * str);
+uint32_t uart_rx_line(char * str);
 
-//int uart_printf(struct uart * module, const char * fmt, ...);
-
-//int uart_scanf(struct uart * module, const char * fmt, ...);
-
-int uart_puts(struct uart * module, const char *s);
-int uart_printf(struct uart * module, const char *format, ...);
-int uart_putchar(struct uart * module, int s);
-
-#define UART_IRQ_TX_FIFO_HALF_EMPTY_MASK 0x8
-#define UART_IRQ_TX_FIFO_EMPTY_MASK 0x4
-#define UART_IRQ_RX_FIFO_HALF_FULL_MASK 0x2
-#define UART_IRQ_RX_DATA_AVL_MASK 0x1
+int uart_puts(const char *s);
+int uart_printf(const char *format, ...);
+int uart_putchar(int s);
 
 /*Retrieve uart ISR register to see which interrupts fired.*/
-unsigned uart_get_isr(struct uart * module);
+uint32_t uart_get_isr(void);
 
 /*Retrieve uart IEN register to see which interrupts are enabled.*/
-unsigned uart_get_ien(struct uart * module);
+uint32_t uart_get_ien(void);
 
 /*Acknowledge received interrupts. Bits set in the given mask will be cleared in the uart isr register.*/
-void uart_irq_ack(struct uart * module, unsigned irq_mask);
+void uart_irq_ack(uint32_t irq_mask);
+
 /* Enable uart interrupts. Bits set enable corresponding uart interrupts. Successive enables are cumulative.
  * To disable uart irqs, used uart_irq_dis.*/
-void uart_irq_en(struct uart * module, unsigned irq_mask);
+void uart_irq_en(uint32_t irq_mask);
 
 /* Disable uart interrupts. Bits set disable corresponding uart interrupts. Successive disables are cumulative.
  * To enable uart irqs, used uart_irq_en.*/
-void uart_irq_dis(struct uart * module, unsigned irq_mask);
+void uart_irq_dis(uint32_t irq_mask);
 
 #ifdef __cplusplus
 }

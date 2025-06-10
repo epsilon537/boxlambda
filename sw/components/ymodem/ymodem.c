@@ -49,21 +49,13 @@
 #include "timer.h"
 #include <stdio.h>
 
-struct uart *uartp = 0;
-
-void ymodem_init(struct uart *uart) {
-  uartp = uart;
-}
-
 static int _getchar(int timeout) {
-  assert(uartp);
-
   int infinite_timeout = (timeout < 0);
   uint64_t timeout_time = MTIMER_SECONDS_TO_CLOCKS(timeout) + mtimer_get_raw_time();
 
   while (infinite_timeout || (mtimer_get_raw_time() < timeout_time)) {
-    if (uart_rx_ready(uartp)) {
-      return (int)uart_rx(uartp);
+    if (uart_rx_ready()) {
+      return (int)uart_rx();
     }
   }
 
@@ -71,11 +63,9 @@ static int _getchar(int timeout) {
 }
 
 static void _putchar(int c) {
-  assert(uartp);
-
   //Wait until there's space...
-  while (!uart_tx_ready(uartp));
-  uart_tx(uartp, (uint8_t)c);
+  while (!uart_tx_ready());
+  uart_tx((uint8_t)c);
 }
 
 void _sleep(unsigned long seconds) {

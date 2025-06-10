@@ -1,6 +1,5 @@
 #include "YmMusicBL.h"
 #include "mcycle.h"
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "ff.h"
@@ -22,7 +21,6 @@
 const char *root_dir_name = STR_ROOT_DIRECTORY;
 const char *ym_file_name = STR_ROOT_DIRECTORY "ancool1.ym";
 
-static struct uart uart0;
 static struct gpio gpio;
 
 unsigned mval = 10;
@@ -37,10 +35,7 @@ extern "C"
   //_init is executed by picolibc startup code before main().
   void _init(void)
   {
-    // Set up UART and tie stdio to it.
-    uart_init(&uart0, (volatile void *)PLATFORM_UART_BASE);
-    uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-    set_stdio_to_uart(&uart0);
+    uart_set_baudrate(115200);
 
     mcycle_start();
   }

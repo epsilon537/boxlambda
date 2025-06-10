@@ -9,8 +9,6 @@
 
 class BoxLambdaSerial {
 public:
-  BoxLambdaSerial();
-
   //Speed in bps (baud)
   void begin(unsigned long speed);
 
@@ -20,35 +18,32 @@ public:
 
   //Returns number of characters available for reading.
   inline int available(void) {
-    return uart_rx_ready(&uart0_);
+    return uart_rx_ready();
   }
 
   // Returns first byte of incoming data or -1 if no data is available.
   inline int read(void) {
-    if (!uart_rx_ready(&uart0_)) return -1;
+    if (!uart_rx_ready()) return -1;
 
-    return (int)uart_rx(&uart0_);
+    return (int)uart_rx();
   }
 
   //Waits for the transmission of outgoing serial data to complete.
   inline void flush(void) {
-    uart_tx_flush(&uart0_);
+    uart_tx_flush();
   }
 
   //Write a single character. Returns number of bytes written.
   inline size_t write(uint8_t val) {
     //Wait until there's space...
-    while (!uart_tx_ready(&uart0_));
-    uart_tx(&uart0_, (uint8_t)val);
+    while (!uart_tx_ready());
+    uart_tx((uint8_t)val);
 
     return 1;
   }
 
   //Returns true if the serial port is available.
   inline operator bool() { return true; }
-
-private:
-   struct uart uart0_;
 };
 
 

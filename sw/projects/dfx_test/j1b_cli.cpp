@@ -10,8 +10,6 @@
 //The ASCII code for <ESC>
 #define ESC 27
 
-static struct uart* uartp = 0;
-
 extern "C" {
   /* CLI command to load a J1B firmware image from disk and use it to boot the J1B core. */
   static void j1b_boot(EmbeddedCli *cli, char *args, void *context) {
@@ -102,8 +100,8 @@ extern "C" {
 
     for (;;) {
       //Check if a character is waiting in the UART (does not block).
-      if (uart_rx_ready(uartp)) {
-        socUartRx = (char)uart_rx(uartp);
+      if (uart_rx_ready()) {
+        socUartRx = (char)uart_rx();
 
         if (socUartRx == ESC) {
           printf("Returning to shell...\n");
@@ -119,19 +117,16 @@ extern "C" {
       //Check for output waiting in the J1B UART transmit direction.
       j1bUartRx = j1b_reg_rd(J1B_REG_UART_RX_FROM_J1B);
       if (j1bUartRx&J1B_REG_UART_RX_FROM_J1B_DATA_AVL) {
-         while(!uart_tx_ready(uartp));
-         uart_tx(uartp, (j1bUartRx&J1B_REG_UART_RX_FROM_J1B_RX_DATA_MSK));
+         while(!uart_tx_ready());
+         uart_tx((j1bUartRx&J1B_REG_UART_RX_FROM_J1B_RX_DATA_MSK));
       }
     }
   }
 }
 
 //Call this function to hook the above functions into the embedded-CLI instance running on the system.
-void add_j1b_cli(EmbeddedCli* cli, struct uart* uart) {
+void add_j1b_cli(EmbeddedCli* cli) {
   assert(cli);
-  assert(uart);
-
-  uartp = uart;
 
   embeddedCliAddBinding(cli, {
         "j1b_boot",          // command name (spaces are not allowed)
