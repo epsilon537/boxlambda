@@ -50,7 +50,7 @@ typedef struct {
 typedef struct {
     uint32_t POR : 1; // Power-on reset
     uint32_t SW_NDM : 1; // Software triggered NDM reset
-    uint32_t SW_DM : 1; // Softwate triggered DM reset
+    uint32_t SW_DM : 1; // Software triggered DM reset
     uint32_t NDM : 1; // Non-debug module reset
     uint32_t EXT : 1; // External reset
     uint32_t SW_USB : 1; // Software triggered USB reset
@@ -69,7 +69,7 @@ typedef struct {
 #define RESET_REASON_SW_NDM_MASK 0x2
 #define RESET_REASON_SW_NDM_RESET 0x0
 
-// REASON.SW_DM - Softwate triggered DM reset
+// REASON.SW_DM - Software triggered DM reset
 #define RESET_REASON_SW_DM_WIDTH 1
 #define RESET_REASON_SW_DM_LSB 2
 #define RESET_REASON_SW_DM_MASK 0x4

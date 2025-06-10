@@ -254,6 +254,76 @@ typedef struct {
 #define UART_TXDATA_R_MASK 0x8000
 #define UART_TXDATA_R_RESET 0x0
 
+// ISR - Interrupt status register
+#define UART_ISR_ADDR 0x10
+#define UART_ISR_RESET 0x0
+typedef struct {
+    uint32_t RX_DATA_AVL : 1; // Rx FIFO went from empty to non-empty state.
+    uint32_t RX_FIFO_HALF_FULL : 1; // Receive FIFO passed the half-full threshold.
+    uint32_t TX_FIFO_EMPTY : 1; // Tx FIFO went from non-empty to empty state.
+    uint32_t TX_FIFO_HALF_EMPTY : 1; // Tx FIFO filling level dropped below the half empty threshold.
+    uint32_t : 28; // reserved
+} uart_isr_t;
+
+// ISR.RX_DATA_AVL - Rx FIFO went from empty to non-empty state.
+#define UART_ISR_RX_DATA_AVL_WIDTH 1
+#define UART_ISR_RX_DATA_AVL_LSB 0
+#define UART_ISR_RX_DATA_AVL_MASK 0x1
+#define UART_ISR_RX_DATA_AVL_RESET 0x0
+
+// ISR.RX_FIFO_HALF_FULL - Receive FIFO passed the half-full threshold.
+#define UART_ISR_RX_FIFO_HALF_FULL_WIDTH 1
+#define UART_ISR_RX_FIFO_HALF_FULL_LSB 1
+#define UART_ISR_RX_FIFO_HALF_FULL_MASK 0x2
+#define UART_ISR_RX_FIFO_HALF_FULL_RESET 0x0
+
+// ISR.TX_FIFO_EMPTY - Tx FIFO went from non-empty to empty state.
+#define UART_ISR_TX_FIFO_EMPTY_WIDTH 1
+#define UART_ISR_TX_FIFO_EMPTY_LSB 2
+#define UART_ISR_TX_FIFO_EMPTY_MASK 0x4
+#define UART_ISR_TX_FIFO_EMPTY_RESET 0x0
+
+// ISR.TX_FIFO_HALF_EMPTY - Tx FIFO filling level dropped below the half empty threshold.
+#define UART_ISR_TX_FIFO_HALF_EMPTY_WIDTH 1
+#define UART_ISR_TX_FIFO_HALF_EMPTY_LSB 3
+#define UART_ISR_TX_FIFO_HALF_EMPTY_MASK 0x8
+#define UART_ISR_TX_FIFO_HALF_EMPTY_RESET 0x0
+
+// IEN - Interrupt enable register
+#define UART_IEN_ADDR 0x14
+#define UART_IEN_RESET 0x0
+typedef struct {
+    uint32_t RX_DATA_AVL : 1; // Enable RX_DATA_AVL interrupt.
+    uint32_t RX_FIFO_HALF_FULL : 1; // Enable RX_FIFO_HALF_FULL interrupt.
+    uint32_t TX_FIFO_EMPTY : 1; // Enable TX_FIFO_EMPTY interrupt.
+    uint32_t TX_FIFO_HALF_EMPTY : 1; // Enabled TX_FIFO_HALF_EMPTY interrupt.
+    uint32_t : 28; // reserved
+} uart_ien_t;
+
+// IEN.RX_DATA_AVL - Enable RX_DATA_AVL interrupt.
+#define UART_IEN_RX_DATA_AVL_WIDTH 1
+#define UART_IEN_RX_DATA_AVL_LSB 0
+#define UART_IEN_RX_DATA_AVL_MASK 0x1
+#define UART_IEN_RX_DATA_AVL_RESET 0x0
+
+// IEN.RX_FIFO_HALF_FULL - Enable RX_FIFO_HALF_FULL interrupt.
+#define UART_IEN_RX_FIFO_HALF_FULL_WIDTH 1
+#define UART_IEN_RX_FIFO_HALF_FULL_LSB 1
+#define UART_IEN_RX_FIFO_HALF_FULL_MASK 0x2
+#define UART_IEN_RX_FIFO_HALF_FULL_RESET 0x0
+
+// IEN.TX_FIFO_EMPTY - Enable TX_FIFO_EMPTY interrupt.
+#define UART_IEN_TX_FIFO_EMPTY_WIDTH 1
+#define UART_IEN_TX_FIFO_EMPTY_LSB 2
+#define UART_IEN_TX_FIFO_EMPTY_MASK 0x4
+#define UART_IEN_TX_FIFO_EMPTY_RESET 0x0
+
+// IEN.TX_FIFO_HALF_EMPTY - Enabled TX_FIFO_HALF_EMPTY interrupt.
+#define UART_IEN_TX_FIFO_HALF_EMPTY_WIDTH 1
+#define UART_IEN_TX_FIFO_HALF_EMPTY_LSB 3
+#define UART_IEN_TX_FIFO_HALF_EMPTY_MASK 0x8
+#define UART_IEN_TX_FIFO_HALF_EMPTY_RESET 0x0
+
 
 // Register map structure
 typedef struct {
@@ -272,6 +342,14 @@ typedef struct {
     union {
         __IO uint32_t TXDATA; // Tx data register.
         __IO uart_txdata_t TXDATA_bf; // Bit access for TXDATA register
+    };
+    union {
+        __IO uint32_t ISR; // Interrupt status register
+        __IO uart_isr_t ISR_bf; // Bit access for ISR register
+    };
+    union {
+        __IO uint32_t IEN; // Interrupt enable register
+        __IO uart_ien_t IEN_bf; // Bit access for IEN register
     };
 } uart_t;
 

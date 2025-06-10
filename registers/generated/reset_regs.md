@@ -60,7 +60,7 @@ Reset value: 0x00000000
 | SW_USB           | 5      | roc             | 0x0        | Software triggered USB reset |
 | EXT              | 4      | roc             | 0x0        | External reset |
 | NDM              | 3      | roc             | 0x0        | Non-debug module reset |
-| SW_DM            | 2      | roc             | 0x0        | Softwate triggered DM reset |
+| SW_DM            | 2      | roc             | 0x0        | Software triggered DM reset |
 | SW_NDM           | 1      | roc             | 0x0        | Software triggered NDM reset |
 | POR              | 0      | roc             | 0x0        | Power-on reset |
 
