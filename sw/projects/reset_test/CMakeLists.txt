@@ -2,7 +2,7 @@
 
 add_executable(reset_test_ram
  EXCLUDE_FROM_ALL
- reset_test.cpp
+ reset_test.c
 )
 
 target_compile_options(reset_test_ram
@@ -12,7 +12,7 @@ target_compile_options(reset_test_ram
 
 target_include_directories(reset_test_ram
   PRIVATE
-  ${PROJECT_SOURCE_DIR}/sw/components/reset/
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 link_and_create_image(reset_test_ram
@@ -24,7 +24,7 @@ target_link_libraries(reset_test_ram sdram gpio riscv bootstrap)
 
 add_executable(reset_test_flsh
  EXCLUDE_FROM_ALL
- reset_test.cpp
+ reset_test.c
 )
 
 target_compile_options(reset_test_flsh
@@ -34,7 +34,7 @@ target_compile_options(reset_test_flsh
 
 target_include_directories(reset_test_flsh
   PRIVATE
-  ${PROJECT_SOURCE_DIR}/sw/components/reset/
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 link_and_create_image(reset_test_flsh
