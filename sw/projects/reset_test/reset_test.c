@@ -14,8 +14,6 @@
 
 #define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
-static struct gpio gpio;
-
 //_init is executed by picolibc startup code before main().
 void _init(void) {
   uart_set_baudrate(115200);
@@ -68,8 +66,8 @@ int main(void) {
   printf("Starting...\n");
 
   //Switches and LEDs
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
   //We need SDRAM in this build because the flashdriver requires
   //heap memory, which is located in SDRAM.
@@ -89,7 +87,7 @@ int main(void) {
 
   for (;;) {
     /*SW trigger NDM reset if btn 0 is pushed.*/
-    if ((gpio_get_input(&gpio) & 0x0100) != 0) {
+    if ((gpio_get_input() & 0x0100) != 0) {
       printf("SW triggering DM+NDM reset...\n");
       RESET->CTRL_bf.NDM_RESET = 1;
     }

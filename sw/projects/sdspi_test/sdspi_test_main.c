@@ -11,8 +11,6 @@
 
 #define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
-static struct gpio gpio;
-
 //_init is executed by picolibc startup code before main().
 void _init(void) {
   uart_set_baudrate(115200);
@@ -28,8 +26,8 @@ void	_exit (int status) {
 int main(void) {
   uint32_t leds = 0xF;
 
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
   enable_global_irq();
 

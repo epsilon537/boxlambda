@@ -32,6 +32,3 @@ target_include_directories(sdram
       ${CMAKE_BINARY_DIR}/codegen/litedram/sw/include
 )
 
-#Include directory above requires litedram core to be generated.
-add_dependencies(sdram gw_codegen)
-

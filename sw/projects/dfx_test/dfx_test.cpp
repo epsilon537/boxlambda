@@ -24,9 +24,6 @@
 #define STR_ROOT_DIRECTORY ""
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
-
-static struct gpio gpio;
-
 #ifdef __cplusplus
 extern "C"
 {
@@ -53,11 +50,11 @@ int main(void) {
   printf("Starting...\n");
 
   //Switches and LEDs
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
   //GPIO bits 7:4 = 0xf indicate we're running inside a simulator.
-  if ((gpio_get_input(&gpio) & 0xf0) == GPIO_SIM_INDICATOR)
+  if ((gpio_get_input() & 0xf0) == GPIO_SIM_INDICATOR)
     printf("This is a simulation.\n");
 
   //We need SDRAM in this build because the flashdriver requires
@@ -73,7 +70,7 @@ int main(void) {
   }
 
   //Don't mount the file system in simulation.
-  if ((gpio_get_input(&gpio) & 0xf0) != GPIO_SIM_INDICATOR) {
+  if ((gpio_get_input() & 0xf0) != GPIO_SIM_INDICATOR) {
     printf("Mounting filesystem...\n");
 
     static FATFS fs;

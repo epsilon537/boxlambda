@@ -17,8 +17,8 @@ add_custom_target(gen_wb_mux_arbiters
     VERBATIM
 )
 
-#Add to the gateware codegeneration dependency list.
-add_dependencies(gw_codegen gen_wb_mux_arbiters)
+#Add to the codegeneration dependency list.
+add_dependencies(cgen gen_wb_mux_arbiters)
 
 #gw_component_rules() function is defined in the parent CMakeLists.txt.
 gw_component_rules(

@@ -26,8 +26,6 @@
 //On FPGA, we use the typical 100KHz I2C bus speed.
 #define I2C_SPEED_FPGA_HZ 100000
 
-static struct gpio gpio;
-
 volatile int i2c_irqs_fired = 0; //Keep track of the number of I2C IRQs received.
 
 bool isSimulation = false;
@@ -65,7 +63,7 @@ int test(void) {
   i2c.enableIRQ(true);
 
   //GPIO bits 7:4 = 0xf indicate we're running inside a simulator.
-  if ((gpio_get_input(&gpio) & 0xf0) == GPIO_SIM_INDICATOR) {
+  if ((gpio_get_input() & 0xf0) == GPIO_SIM_INDICATOR) {
     printf("This is a simulation. Setting simulation I2C clock.\n");
 
     isSimulation = true;
@@ -180,8 +178,8 @@ int test(void) {
 int main(void) {
   uint32_t leds = 0xF;
 
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
   printf("\n\n");
 
@@ -203,7 +201,7 @@ int main(void) {
 
   printf("Push btn[0] to start CLI.\n");
 
-  while ((gpio_get_input(&gpio) & 0x0100) == 0);
+  while ((gpio_get_input() & 0x0100) == 0);
 
   EmbeddedCli *cli = createEmbeddedCli();
 

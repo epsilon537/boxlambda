@@ -81,3 +81,9 @@ typing-utils==0.1.0
 tzdata==2025.1
 urllib3==2.3.0
 zipp==3.21.0
+corsair==1.0.4
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+six==1.17.0
+svgwrite==1.4.3
+wavedrom==2.0.3.post3

@@ -12,8 +12,6 @@
 
 #define IRQ_LATENCY_AND_JITTER_MARGIN 20
 
-static struct gpio gpio;
-
 //_init is executed by picolibc startup code before main().
 void _init(void) {
   uart_set_baudrate(115200);
@@ -37,10 +35,10 @@ volatile int uart_tx_fifo_half_empty_fired = 0;
 volatile int gpio_irq_fired = 0;
 
 void _gpio_irq_handler(void) {
-  uint32_t isr = gpio_get_irq_status(&gpio);
+  uint32_t isr = gpio_get_irq_status();
 
   //Clear interrupt(s)
-  gpio_irq_ack(&gpio, isr);
+  gpio_irq_ack(isr);
 
   gpio_irq_fired = 1;
 
@@ -50,13 +48,13 @@ void _gpio_irq_handler(void) {
     uint8_t out_pin = ii;
 
     if (isr & (1<<in_pin)) {
-      int pin_ptrig = gpio_get_ptrig_pin(&gpio, in_pin);
+      int pin_ptrig = gpio_get_ptrig_pin(in_pin);
 
       //Now trigger on opposite edge
-      gpio_set_ptrig_pin(&gpio, in_pin, pin_ptrig ? 0 : 1);
+      gpio_set_ptrig_pin(in_pin, pin_ptrig ? 0 : 1);
 
       //Make output (led) track input
-      gpio_set_pin_value(&gpio, out_pin, pin_ptrig);
+      gpio_set_pin_value(out_pin, pin_ptrig);
     }
   }
 
@@ -118,8 +116,8 @@ void _timer_irq_handler(void) {
 
 int main(void) {
   //Switches
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
 
   printf("Enabling Ibex IRQs\n");
@@ -264,7 +262,7 @@ int main(void) {
   printf("Testing GPIO IRQs...\n");
 
   //Enable GPIO IRQs on pins 8-11 (buttons) positive edge
-  gpio_irq_enable(&gpio, 0xf00, 0xf00);
+  gpio_irq_enable(0xf00, 0xf00);
 
   printf("Push some buttons. The LEDS should track the button presses/releases.\n");
 

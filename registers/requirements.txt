@@ -1,7 +1,0 @@
-corsair==1.0.4
-Jinja2==3.1.6
-MarkupSafe==3.0.2
-PyYAML==6.0.2
-six==1.17.0
-svgwrite==1.4.3
-wavedrom==2.0.3.post3

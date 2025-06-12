@@ -10,8 +10,6 @@
 
 #define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
 
-static struct gpio gpio;
-
 unsigned mval = 10;
 unsigned bass = 25;
 unsigned treble = 128;
@@ -29,8 +27,8 @@ void	_exit (int status) {
 
 int main(void) {
   //Switches
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 inputs, 4 outputs
 
 
   printf("YM2149 test.\n");
@@ -51,8 +49,8 @@ int main(void) {
     //Set switch 0, 1 or 2 to select volume, bass or treble control.
     //Then press buttons 0 or 1 to increase/decrease.
 
-    if (gpio_get_input(&gpio) & 0x10) {
-      if (gpio_get_input(&gpio) & 0x0100) {
+    if (gpio_get_input() & 0x10) {
+      if (gpio_get_input() & 0x0100) {
         if (mval < 255)
           ++mval;
 
@@ -60,7 +58,7 @@ int main(void) {
         printf("mval: %d\n", mval);
       }
 
-      if (gpio_get_input(&gpio) & 0x0200) {
+      if (gpio_get_input() & 0x0200) {
         if (mval > 0)
           --mval;
 
@@ -69,8 +67,8 @@ int main(void) {
       }
     }
 
-    if (gpio_get_input(&gpio) & 0x20) {
-      if (gpio_get_input(&gpio) & 0x0100) {
+    if (gpio_get_input() & 0x20) {
+      if (gpio_get_input() & 0x0100) {
         if (bass < 63)
           ++bass;
 
@@ -78,7 +76,7 @@ int main(void) {
         printf("bass: %d\n", bass);
       }
 
-      if (gpio_get_input(&gpio) & 0x0200) {
+      if (gpio_get_input() & 0x0200) {
         if (bass > 1)
           --bass;
 
@@ -87,8 +85,8 @@ int main(void) {
       }
     }
 
-    if (gpio_get_input(&gpio) & 0x40) {
-      if (gpio_get_input(&gpio) & 0x0100) {
+    if (gpio_get_input() & 0x40) {
+      if (gpio_get_input() & 0x0100) {
         if (treble < 255)
           ++treble;
 
@@ -96,7 +94,7 @@ int main(void) {
         printf("treble: %d\n", treble);
       }
 
-      if (gpio_get_input(&gpio) & 0x0200) {
+      if (gpio_get_input() & 0x0200) {
         if (treble > 0)
           --treble;
 

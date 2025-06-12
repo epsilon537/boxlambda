@@ -1,87 +1,87 @@
 
 #include "gpio.h"
+#include "gpio_regs.h"
 #include <stdint.h>
 #include <assert.h>
 
-void gpio_init(struct gpio * module, volatile void * base_address)
+void gpio_init(void)
 {
-  module->registers = base_address;
   //Enable gpio global IRQ
-  module->registers[GPIO_RGPIO_CTRL] = GPIO_RGPIO_CTRL_INTE_MSK;
+  GPIO->RGPIO_CTRL_STATUS_bf.INTE = 1;
 }
 
-uint32_t gpio_get_direction(struct gpio * module)
+uint32_t gpio_get_direction(void)
 {
-  return module->registers[GPIO_RGPIO_OE];
+  return GPIO->RGPIO_OE;
 }
 
-void gpio_set_direction(struct gpio * module, uint32_t dir)
+void gpio_set_direction(uint32_t dir)
 {
-  module->registers[GPIO_RGPIO_OE] = dir;
+  GPIO->RGPIO_OE = dir;
 }
 
-uint32_t gpio_get_input(struct gpio * module)
+uint32_t gpio_get_input(void)
 {
-  return module->registers[GPIO_RGPIO_IN];
+  return GPIO->RGPIO_IN;
 }
 
-void gpio_set_output(struct gpio * module, uint32_t output)
+void gpio_set_output(uint32_t output)
 {
-  module->registers[GPIO_RGPIO_OUT] = output;
+  GPIO->RGPIO_OUT = output;
 }
 
-void gpio_set_pin_value(struct gpio * module, uint8_t pin, int value)
+void gpio_set_pin_value(uint8_t pin, int value)
 {
-  uint32_t out = module->registers[GPIO_RGPIO_OUT];
+  uint32_t out = GPIO->RGPIO_OUT;
   assert((value == 1) || (value == 0));
 
   out &= ~(1 << pin);
   out |= (value << pin);
 
-  module->registers[GPIO_RGPIO_OUT] = out;
+  GPIO->RGPIO_OUT = out;
 }
 
-void gpio_set_pin(struct gpio * module, uint8_t pin)
+void gpio_set_pin(uint8_t pin)
 {
-  module->registers[GPIO_RGPIO_OUT] |= (1 << pin);
+  GPIO->RGPIO_OUT = (1 << pin);
 }
 
-void gpio_clear_pin(struct gpio * module, uint8_t pin)
+void gpio_clear_pin(uint8_t pin)
 {
-  module->registers[GPIO_RGPIO_OUT] &= ~(1 << pin);
+  GPIO->RGPIO_OUT = ~(1 << pin);
 }
 
-void gpio_irq_enable(struct gpio * module, uint32_t enable_mask, uint32_t edge_mask) {
-  module->registers[GPIO_RGPIO_INTE] = enable_mask;
-  module->registers[GPIO_RGPIO_PTRIG] = edge_mask;
+void gpio_irq_enable(uint32_t enable_mask, uint32_t edge_mask) {
+  GPIO->RGPIO_INTE = enable_mask;
+  GPIO->RGPIO_PTRIG = edge_mask;
 }
 
-void gpio_irq_ack(struct gpio * module, uint32_t ack_mask) {
-  module->registers[GPIO_RGPIO_INTS] &= ~ack_mask;
+void gpio_irq_ack(uint32_t ack_mask) {
+  GPIO->RGPIO_INTS &= ~ack_mask;
 }
 
-void gpio_enable_latch_clk(struct gpio * module, uint32_t enable_mask) {
-  module->registers[GPIO_RGPIO_ECLK] = enable_mask;
+void gpio_enable_latch_clk(uint32_t enable_mask) {
+  GPIO->RGPIO_ECLK = enable_mask;
 }
 
-uint32_t gpio_get_irq_status(struct gpio * module)
+uint32_t gpio_get_irq_status()
 {
-  return module->registers[GPIO_RGPIO_INTS];
+  return GPIO->RGPIO_INTS;
 }
 
-void gpio_set_ptrig_pin(struct gpio * module, uint8_t pin, int value)
+void gpio_set_ptrig_pin(uint8_t pin, int value)
 {
-  uint32_t ptrig = module->registers[GPIO_RGPIO_PTRIG];
+  uint32_t ptrig = GPIO->RGPIO_PTRIG;
   assert((value == 1) || (value == 0));
 
   ptrig &= ~(1 << pin);
   ptrig |= (value << pin);
 
-  module->registers[GPIO_RGPIO_PTRIG] = ptrig;
+  GPIO->RGPIO_PTRIG = ptrig;
 }
 
-uint32_t gpio_get_ptrig_pin(struct gpio * module, uint8_t pin)
+uint32_t gpio_get_ptrig_pin(uint8_t pin)
 {
-  return (module->registers[GPIO_RGPIO_PTRIG] >> pin) & 1;
+  return (GPIO->RGPIO_PTRIG >> pin) & 1;
 }
 

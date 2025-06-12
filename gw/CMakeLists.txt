@@ -64,7 +64,6 @@ function (gw_common_rules_vivado)
               ${CMAKE_CURRENT_BINARY_DIR}
           DEPENDS
               always_rebuild
-              gw_codegen
           COMMENT
               "Generating vivado source list."
           VERBATIM
@@ -203,7 +202,6 @@ function (gw_common_rules_verilator)
           ${CMAKE_CURRENT_BINARY_DIR}
       DEPENDS
           always_rebuild
-          gw_codegen
       COMMENT
           "Generating verilator source list."
       VERBATIM

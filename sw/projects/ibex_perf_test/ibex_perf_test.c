@@ -27,8 +27,6 @@
 
 #define NUM_ITERATIONS 100
 
-static struct gpio gpio;
-
 static uint32_t srcBuf[BUF_NUM_WORDS];
 static uint32_t dstBuf[BUF_NUM_WORDS];
 
@@ -627,8 +625,8 @@ void irq_latency_test(void) {
 
 int main(void) {
   //Switches
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 inputs, 4 outputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 inputs, 4 outputs
 
   irq_latency_test();
 

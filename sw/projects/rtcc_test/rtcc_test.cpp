@@ -15,8 +15,6 @@
 #include "peek_poke_cli.h"
 #include "embedded_cli_setup.h"
 
-static struct gpio gpio;
-
 extern "C" {
   //_init is executed by picolibc startup code before main().
   void _init(void) {
@@ -66,7 +64,7 @@ void rtcc_test(void) {
 
   for (;;) {
     /*Exit function if btn 0 is pushed.*/
-    if ((gpio_get_input(&gpio) & 0x0100) != 0) {
+    if ((gpio_get_input() & 0x0100) != 0) {
       return;
     }
 
@@ -86,8 +84,8 @@ int main(void) {
   usleep(1000000);
   printf("Starting...\n");
 
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
   /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {
