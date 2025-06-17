@@ -41,10 +41,15 @@ nav:
         - Clocks and Reset: clocks_and_reset.md
         - Interrupts: interrupts.md
         - LEDs: leds.md
+        - FPGA Resource Utilization: fpga-resource-utilization.md
     - Register Map:
         - Reset: registers/generated/reset_regs.md
         - UART: registers/generated/uart_regs.md
         - GPIO: registers/generated/gpio_regs.md
+        - MTIMER: registers/generated/mtimer_regs.md
+        - I2C Master: registers/generated/i2c_master_regs.md
+        - USB_HID_0: registers/generated/usb_hid_0_regs.md
+        - USB_HID_1: registers/generated/usb_hid_1_regs.md
     - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
@@ -74,6 +79,7 @@ nav:
         - Flash Driver: sw_comp_flashdrvr.md
         - Timer: sw_comp_timer.md
         - UART: sw_comp_uart.md
+        - GPIO: sw_comp_gpio.md
         - RISC-V: sw_comp_riscv.md
         - Interrupt Handling: sw_comp_irqs.md
         - I2C: sw_comp_i2c.md
@@ -85,9 +91,8 @@ nav:
         - DFX Controller HAL: sw_comp_dfx_controller_hal.md
         - J1B HAL: sw_comp_j1b_hal.md
         - VS0 HAL: sw_comp_vs0_hal.md
-    - FPGA Resource Utilization: fpga-resource-utilization.md
-    - Git Workflow: git-workflow.md
     - The Build System:
+        - Git Workflow: git-workflow.md
         - The Build System Structure:
           - The Directory Structure: build_sys_dir_struct.md
           - The Gateware Build Structure: build_sys_gw_build_struct.md

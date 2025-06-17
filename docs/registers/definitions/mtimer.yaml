@@ -1,0 +1,51 @@
+regmap:
+-   name: MTIME
+    description: Machine-level time counter, low word.
+    address: 0
+    bitfields:
+    -   name: VALUE
+        description: Machine-level time counter, low word.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: MTIMEH
+    description: Machine-level time counter, high word.
+    address: 4
+    bitfields:
+    -   name: VALUE
+        description: Machine-level time counter, high word.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: MTIMECMP
+    description: Machine-level time compare, low word.
+    address: 8
+    bitfields:
+    -   name: VALUE
+        description: Machine-level time compare, low word.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: MTIMECMPH
+    description: Machine-level time compare, high word.
+    address: 12
+    bitfields:
+    -   name: VALUE
+        description: Machine-level time compare, high word.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: MTIMEBLK
+    description: Blocking time compare register.
+    address: 16
+    bitfields:
+    -   name: VALUE
+        description: A write operation to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw

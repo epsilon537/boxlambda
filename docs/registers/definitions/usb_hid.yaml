@@ -1,0 +1,235 @@
+regmap:
+-   name: IEN
+    description: Interrupt Enable Register
+    address: 0
+    bitfields:
+    -   name: USB_REPORT
+        description: Set to enable USB_REPORT interrupt.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: LED_REPORT
+        description: Set to enable LED_REPORT interrupt.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw
+-   name: ISR
+    description: Interrupt Status Register
+    address: 4
+    bitfields:
+    -   name: USB_REPORT
+        description: Set when a USB report is received.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw1c
+    -   name: LED_REPORT
+        description: Set when a LED report is received.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw1c
+-   name: STATUS
+    description: Status Register
+    address: 8
+    bitfields:
+    -   name: USB_TYP
+        description: USB type
+        reset: 0
+        width: 2
+        lsb: 0
+        access: ro
+        enums:
+        -   name: NO_DEV
+            description: No device
+            value: 0
+        -   name: KEYB
+            description: Keyboard
+            value: 1
+        -   name: MOUSE
+            description: Mouse
+            value: 2
+        -   name: GAME
+            description: Game pad
+            value: 3
+    -   name: CONN_ERR
+        description: Connection error.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: ro
+-   name: KEY_MODS
+    description: Key modifiers
+    address: 12
+    bitfields:
+    -   name: LCTRL
+        description: Left control
+        reset: 0
+        width: 1
+        lsb: 0
+        access: ro
+    -   name: LSHIFT
+        description: Left shift
+        reset: 0
+        width: 1
+        lsb: 1
+        access: ro
+    -   name: LALT
+        description: Left alt
+        reset: 0
+        width: 1
+        lsb: 2
+        access: ro
+    -   name: LMETA
+        description: Left meta
+        reset: 0
+        width: 1
+        lsb: 3
+        access: ro
+    -   name: RCTRL
+        description: Right control
+        reset: 0
+        width: 1
+        lsb: 4
+        access: ro
+    -   name: RSHIFT
+        description: Right shift
+        reset: 0
+        width: 1
+        lsb: 5
+        access: ro
+    -   name: RALT
+        description: Right alt
+        reset: 0
+        width: 1
+        lsb: 6
+        access: ro
+    -   name: RMETA
+        description: Right meta
+        reset: 0
+        width: 1
+        lsb: 7
+        access: ro
+-   name: KEYS
+    description: Keys register
+    address: 16
+    bitfields:
+    -   name: KEY_0
+        description: Key 0
+        reset: 0
+        width: 8
+        lsb: 0
+        access: ro
+    -   name: KEY_1
+        description: Key 1
+        reset: 0
+        width: 8
+        lsb: 8
+        access: ro
+    -   name: KEY_2
+        description: Key 2
+        reset: 0
+        width: 8
+        lsb: 16
+        access: ro
+    -   name: KEY_3
+        description: Key 3
+        reset: 0
+        width: 8
+        lsb: 24
+        access: ro
+-   name: MOUSE
+    description: Mouse register
+    address: 20
+    bitfields:
+    -   name: DY
+        description: Delta y
+        reset: 0
+        width: 8
+        lsb: 0
+        access: ro
+    -   name: DX
+        description: Delta x
+        reset: 0
+        width: 8
+        lsb: 8
+        access: ro
+    -   name: BTN_LEFT
+        description: Left button
+        reset: 0
+        width: 1
+        lsb: 16
+        access: ro
+    -   name: BTN_RIGHT
+        description: Right button
+        reset: 0
+        width: 1
+        lsb: 17
+        access: ro
+    -   name: BTN_MIDDLE
+        description: Middle button
+        reset: 0
+        width: 1
+        lsb: 18
+        access: ro
+-   name: GAME
+    description: Game pad register
+    address: 24
+    bitfields:
+    -   name: VALUE
+        description: TBD
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+-   name: REPORT_0
+    description: USB report 0 register
+    address: 28
+    bitfields:
+    -   name: VALUE
+        description: USB report 0 value
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+-   name: REPORT_1
+    description: USB report 1 register
+    address: 32
+    bitfields:
+    -   name: VALUE
+        description: USB report 1 value
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+-   name: LEDS
+    description: LED register
+    address: 36
+    bitfields:
+    -   name: NUM_LOCK
+        description: Num lock LED
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: CAPS_LOCK
+        description: CAPS lock LED
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw
+    -   name: SCROLL_LOCK
+        description: SCROLL lock LED
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: COMPOSE
+        description: Compose LED
+        reset: 0
+        width: 1
+        lsb: 3
+        access: rw
+
