@@ -13,5 +13,6 @@ target_compile_options(timer
 target_include_directories(timer
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
+    ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 

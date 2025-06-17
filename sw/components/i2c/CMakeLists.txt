@@ -13,6 +13,7 @@ target_compile_options(i2c
 #Paths to include files users of usb_hid are expected to use.
 target_include_directories(i2c
     PUBLIC
+        ${PROJECT_SOURCE_DIR}/registers/generated/
         ${CMAKE_CURRENT_LIST_DIR}
 )
 

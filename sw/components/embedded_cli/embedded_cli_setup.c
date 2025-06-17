@@ -1,6 +1,7 @@
 #define EMBEDDED_CLI_IMPL
 #include "embedded_cli.h"
 #include "embedded_cli_setup.h"
+#include "uart.h"
 #include <assert.h>
 #include <stdio.h>
 

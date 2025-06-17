@@ -1,4 +1,4 @@
-set(register_modules uart reset gpio)
+set(register_modules uart reset gpio mtimer i2c_master usb_hid)
 
 #A codegeneration rule to generate the register access layer
 add_custom_target(registers

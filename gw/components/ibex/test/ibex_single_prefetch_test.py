@@ -18,6 +18,7 @@ async def valid_o(dut):
         assert not valid_o_must_not_assert
         #valid_o must remain asserted for one cycle
         await RisingEdge(dut.clk_i)
+        assert dut.valid_o.value == 1
         await RisingEdge(dut.clk_i)
         assert dut.valid_o.value == 0
 
@@ -255,10 +256,9 @@ async def ibex_no_prefetch_test(dut):
     dut.instr_rvalid_i.value = 1
     dut.instr_rdata_i.value = random.randint(0, 0xffffffff)
     dut.addr_i.value = branchAddr
-    #This valid _does_ propagate to valid_o. This is not the interrupting branch yet.
-    await with_timeout(RisingEdge(dut.valid_o), 1, "ns")
-    assert dut.addr_o.value == oldBranchAddr + 4
-    assert dut.rdata_o.value == dut.instr_rdata_i.value
+    #This valid not propagate to valid_o. We have an interrupting branch
+    #pending.
+    assert dut.valid_o.value == 0
     await with_timeout(RisingEdge(dut.instr_req_o), 2, "ns")
     dut.instr_rvalid_i.value = 0
     dut.branch_i.value = 0
@@ -352,23 +352,22 @@ async def ibex_no_prefetch_test(dut):
     await RisingEdge(dut.clk_i)
     await RisingEdge(dut.clk_i)
 
-    #Resuming releasing fetched instructions upwards and assert branch_i.
+    #assert branch_i together with ready_i
     dut.branch_i.value = 1
     newBranchAddr = random.randint(0,0x3fffffff)*4
     dut.addr_i.value = newBranchAddr
     dut.ready_i.value = 1
     await RisingEdge(dut.clk_i)
-    assert dut.valid_o.value == 1
-    #This is the instruction that's getting interrupted
-    assert dut.addr_o.value == branchAddr + 4
-    assert dut.rdata_o.value == dut.instr_rdata_i.value
+    #IF-stage is ready but we've received a branch transaction request.
+    #Don't return data to IF-stage until we've received the branch transaction
+    #data.
+    assert dut.valid_o.value == 0
     dut.branch_i.value = 0 #a branch_i pulse is one clock cycle long.
     await RisingEdge(dut.clk_i)
-    assert dut.valid_o.value == 0
-
     #Request the instruction belonging to the branch address
     assert dut.instr_req_o.value == 1
     assert dut.instr_addr_o.value == newBranchAddr
+    assert dut.valid_o.value == 0
 
     #Grant the request
     await RisingEdge(dut.clk_i)

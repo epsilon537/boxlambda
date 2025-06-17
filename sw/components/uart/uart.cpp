@@ -31,10 +31,9 @@ static int qprint(char **out, const char *format, va_list va);
 
 void uart_configure(uart_setup_pft_t parity, uart_setup_s_t stop_bits, uart_setup_n_t bits_per_word, uart_setup_h_t hw_flow_control)
 {
-  UART->SETUP_bf.PFT = parity;
-  UART->SETUP_bf.S = stop_bits;
-  UART->SETUP_bf.N = bits_per_word;
-  UART->SETUP_bf.H = hw_flow_control;
+  uart_setup_t setup{.PFT=parity, .S=stop_bits, .N=bits_per_word, .H=hw_flow_control};
+  //Write as a 32-bit word to avoid field-by-field writes
+  UART->SETUP = *(uint32_t*)&setup;
 }
 
 void uart_tx_flush(void)
@@ -156,11 +155,11 @@ static void qprintchar(char **str, int c)
 
 static int qprints(char **out, const char *string, int width, int pad)
 {
-  register int pc = 0, padchar = ' ';
+  int pc = 0, padchar = ' ';
 
   if (width > 0) {
-    register int len = 0;
-    register const char *ptr;
+    int len = 0;
+    const char *ptr;
     for (ptr = string; *ptr; ++ptr) ++len;
     if (len >= width) width = 0;
     else width -= len;
@@ -187,8 +186,8 @@ static int qprints(char **out, const char *string, int width, int pad)
 static int qprinti(char **out, int i, int b, int sg, int width, int pad, char letbase)
 {
   char print_buf[PRINT_BUF_LEN];
-  register char *s;
-  register int neg = 0, pc = 0;
+  char *s;
+  int neg = 0, pc = 0;
   unsigned int u = i;
 
   if (i == 0)
@@ -244,8 +243,8 @@ static int qprinti(char **out, int i, int b, int sg, int width, int pad, char le
 
 static int qprint(char **out, const char *format, va_list va)
 {
-  register int width, pad;
-  register int pc = 0;
+  int width, pad;
+  int pc = 0;
   char scr[2];
 
   for (; *format != 0; ++format)
@@ -271,7 +270,7 @@ static int qprint(char **out, const char *format, va_list va)
         width += *format - '0';
       }
       if( *format == 's' ) {
-        register char *s = va_arg(va, char*);
+        char *s = va_arg(va, char*);
         pc += qprints (out, s?s:"(null)", width, pad);
         continue;
       }

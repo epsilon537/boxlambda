@@ -137,10 +137,9 @@ int main(void) {
 
   while (timer_irq_fired == 0); //Wait for it.
 
-  //Minus two because it takes two clock cycle to read the mtime in the isr.
-  printf("Timer ISR after IRQ jitter removal started at: %d\n", mtime_after_irq_jitter_removal-2);
+  printf("Timer ISR after IRQ jitter removal started at: %d\n", mtime_after_irq_jitter_removal);
 
-  if (mtime_after_irq_jitter_removal - 2 != timer_irq_expected_at) {
+  if (mtime_after_irq_jitter_removal != timer_irq_expected_at) {
     printf("Test failed.\n");
     return -1;
   }
@@ -153,10 +152,9 @@ int main(void) {
   printf("Timer IRQ expected at: %d\n", timer_irq_expected_at);
 
   while (timer_irq_fired == 0); //Wait for it.
-  //Minus two because it takes two clock cycle to read the mtime in the isr.
-  printf("Timer ISR after IRQ jitter removal started at: %d\n", mtime_after_irq_jitter_removal-2);
+  printf("Timer ISR after IRQ jitter removal started at: %d\n", mtime_after_irq_jitter_removal);
 
-  if (mtime_after_irq_jitter_removal - 2 != timer_irq_expected_at) {
+  if (mtime_after_irq_jitter_removal != timer_irq_expected_at) {
     printf("Test failed.\n");
     return -1;
   }

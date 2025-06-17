@@ -2,7 +2,7 @@ add_library(uart)
 
 target_sources(uart
     PRIVATE
-    uart.c
+    uart.cpp
 )
 
 target_compile_options(uart
