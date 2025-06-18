@@ -17,7 +17,8 @@ target_compile_definitions(sdspi_test_ram
 
 target_include_directories(sdspi_test_ram
     PRIVATE
-     ${PROJECT_SOURCE_DIR}/sub/sdspi/sw/
+     ${PROJECT_SOURCE_DIR}/sw/components/sdspi/
+     ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:

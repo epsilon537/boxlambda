@@ -9,6 +9,7 @@ then
   exit 1
 fi
 
+rm -rf generated/*
 for MODULE in $*
 do
   python3 -m corsair -c definitions/$MODULE.config -r definitions/$MODULE.yaml;

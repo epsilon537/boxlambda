@@ -43,12 +43,9 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include "board.h"
+#include "sdspi_hal.h"
 #include "sdtest.h"
 #include "interrupts.h"
-
-#define  SDSPI_READREG  0x0200
-#define  SDSPI_WAIT_WHILE_BUSY  while(_sdcard->sd_ctrl & SDSPI_BUSY)
 
 //
 //
@@ -63,14 +60,14 @@ int  debug_data[128];
 int num_sdpsi_busy_irqs = 0;
 
 void _sdspi_irq_handler(void) {
-  if (_sdcard->sd_isr & SDCARD_IRQ_CARD_REMOVED_MASK)
+  if (SDSPI->ISR_bf.CARD_REMOVED)
     printf("Card removed IRQ received!\n");
 
-  if (_sdcard->sd_isr & SDCARD_IRQ_BUSY_MASK)
+  if (SDSPI->ISR_bf.BUSY)
     ++num_sdpsi_busy_irqs;
 
   //Acknowledge the interrupt in the SDSPI core.
-  _sdcard->sd_isr = _sdcard->sd_ien;
+  SDSPI->ISR = SDSPI->IEN;
 
   //Return from interrupt
   __asm__ volatile (
@@ -89,19 +86,21 @@ int sdspi_test(void) {
     data[i] = 0;
 
   // Clear any prior pending errors
-  _sdcard->sd_data = 0;
-  _sdcard->sd_ctrl = SDSPI_REMOVED|SDSPI_CLEARERR|SDSPI_READAUX;
+  SDSPI->DAT = 0;
+  SDSPI->CMD = SDSPI_CMD_REM_MASK | SDSPI_CLEARERR | SDSPI_READAUX;
 
   enable_irq(IRQ_ID_SDSPI); //Enable SDSPI IRQ at CPU level.
-  _sdcard->sd_isr = 3; //Clear all IRQs in the SDSPI core
-  _sdcard->sd_ien = 3; //Enable all IRQs in the SDSPI core.
+  //Clear all IRQs in the SDSPI core
+  SDSPI->ISR = SDSPI_ISR_BUSY_MASK | SDSPI_ISR_CARD_REMOVED_MASK;
+  //Enable all IRQs in the SDSPI core.
+  SDSPI->IEN = SDSPI_IEN_BUSY_MASK | SDSPI_IEN_CARD_REMOVED_MASK;
 
   printf("Initializing the SD-Card\n  CMD0 - the INIT command\n");
-  _sdcard->sd_data = 0;
-  _sdcard->sd_ctrl = SDSPI_CMD+0; // CMD zero
+  SDSPI->DAT = 0;
+  SDSPI->CMD = SDSPI_CMD+0; // CMD zero
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl)!= 1) {
+  if ((v = SDSPI->CMD)!= 1) {
     printf("\t?? Ctrl-RSP  : %08x (!=  1 ?\?)\n", v);
     return -1;
   }
@@ -111,50 +110,50 @@ int sdspi_test(void) {
   //  Hence if VAL=1, and the FPGA clock is 80MHz, clock speed
   //    is then 80MHz/4 = 20MHz
   printf("Testing the AUX register\n");
-  _sdcard->sd_data = 0x3e;  // 400kHz assuming 50MHz master clk
-  _sdcard->sd_ctrl = SDSPI_SETAUX; // Write config data, read last config data
-  _sdcard->sd_ctrl = SDSPI_READAUX; // Read  current config data
+  SDSPI->DAT = 0x3e;  // 400kHz assuming 50MHz master clk
+  SDSPI->CMD = SDSPI_SETAUX; // Write config data, read last config data
+  SDSPI->CMD = SDSPI_READAUX; // Read  current config data
 
-  if ((v = _sdcard->sd_ctrl)!= 1) {
+  if ((v = SDSPI->CMD)!= 1) {
     printf("\t?? Ctrl-RSP  : %08x (!= 1?\?)\n", v);
     return -1;
   }
 
-  if ((v = _sdcard->sd_data)!= 0x0909003e) {
+  if ((v = SDSPI->DAT)!= 0x0909003e) {
     printf("\t?? Ctrl-DATA : %08x (!= 0x0909003e ?\?)\n", v);
     return -1;
   }
 
   printf("  CMD1 - SEND_OP_COND, send operational conditions (voltage)\n");
-  _sdcard->sd_data = 0x40000000;
-  _sdcard->sd_ctrl = SDSPI_CMD+1; // CMD one -- SEND_OP_COND
+  SDSPI->DAT = 0x40000000;
+  SDSPI->CMD = SDSPI_CMD+1; // CMD one -- SEND_OP_COND
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl)!= 1) {
+  if ((v = SDSPI->CMD)!= 1) {
     printf("\t?? Ctrl-RSP  : %08x (!=  1 ?\?)\n", v);
     //return -1; //Non-fatal? It is treated as no-fatal in sdcard.c.
   }
 
-  if ((v = _sdcard->sd_data)!= -1) {
+  if ((v = SDSPI->DAT)!= -1) {
     printf("\t?? Ctrl-DATA : %08x (!= -1 ?\?)\n", v);
     return -1;
   }
 
   // Clear any prior pending errors
-  _sdcard->sd_data = 0;
-  _sdcard->sd_ctrl = SDSPI_REMOVED|SDSPI_CLEARERR|SDSPI_READAUX;
+  SDSPI->DAT = 0;
+  SDSPI->CMD = SDSPI_CMD_REM_MASK | SDSPI_CLEARERR | SDSPI_READAUX;
 
   printf("  CMD8 - SEND_IF_COND, send interface condition\n");
-  _sdcard->sd_data = 0x001a5; // 1 sets the voltage to 3v3. 0xa5 just gets echoed back and does nothing.
-  _sdcard->sd_ctrl = (SDSPI_CMD|SDSPI_READREG)+8; // CMD eight -- SEND_IF_COND
+  SDSPI->DAT = 0x001a5; // 1 sets the voltage to 3v3. 0xa5 just gets echoed back and does nothing.
+  SDSPI->CMD = (SDSPI_CMD|SDSPI_READREG)+8; // CMD eight -- SEND_IF_COND
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl)!= 1) {
+  if ((v = SDSPI->CMD)!= 1) {
     printf("\t?? Ctrl-RSP  : %08x (!=      1 ?\?)\n", v);
     //return -1; //Non-fatal? It is treated as no-fatal in sdcard.c.
   }
 
-  if ((v = _sdcard->sd_data)!= 0x01a5) {
+  if ((v = SDSPI->DAT)!= 0x01a5) {
     printf("\t?? Ctrl-DATA : %08x (!= 0x01a5 ?\?)\n", v);
     return -1;
   }
@@ -165,26 +164,26 @@ int sdspi_test(void) {
       // Now we need to issue an ACMD41 until such time as
       // the in_idle_state turns to zero
       printf(" ACMD\n");
-      _sdcard->sd_data = 0;
-      _sdcard->sd_ctrl = SDSPI_ACMD;
+      SDSPI->DAT = 0;
+      SDSPI->CMD = SDSPI_ACMD;
       SDSPI_WAIT_WHILE_BUSY;
 
       printf(" ACMD41\n");
-      _sdcard->sd_data = 0x40000000;
-      _sdcard->sd_ctrl = SDSPI_CMD + 41; // 0x69; // 0x040+41;
+      SDSPI->DAT = 0x40000000;
+      SDSPI->CMD = SDSPI_CMD + 41; // 0x69; // 0x040+41;
       SDSPI_WAIT_WHILE_BUSY;
 
-      dev_busy = _sdcard->sd_ctrl&1;
+      dev_busy = SDSPI->CMD&1;
     } while(dev_busy);
   }
 
   printf("Finished waiting for startup to complete\n");
-  if ((v = _sdcard->sd_ctrl)!= 0) {
+  if ((v = SDSPI->CMD)!= 0) {
     printf("\t?? Ctrl-RSP  : %08x (!=  0?\?)\n", v);
     return -1;
   }
 
-  if ((v = _sdcard->sd_data)!= -1) {
+  if ((v = SDSPI->DAT)!= -1) {
     printf("\t?? Ctrl-DATA : %08x (!= -1?\?)\n", v);
     return -1;
   }
@@ -193,24 +192,24 @@ int sdspi_test(void) {
   // After the card is ready, we must send a READ_OCR command next
   // READ-OCR = Request Operating Conditions
   // The card will respond with an R7
-  _sdcard->sd_data = 0x0;
-  _sdcard->sd_ctrl = (SDSPI_CMD|SDSPI_READREG) + 58; // 0x027a;
+  SDSPI->DAT = 0x0;
+  SDSPI->CMD = (SDSPI_CMD|SDSPI_READREG) + 58; // 0x027a;
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl)!= 0) {
+  if ((v = SDSPI->CMD)!= 0) {
     printf("\t?? Ctrl-RSP  : %08x (!= 0?\?)\n", v);
     return -1;
   }
 
-  v = _sdcard->sd_data;
+  v = SDSPI->DAT;
   printf("    OCR = 0x%08x\n", v);
 
   printf("Changing clock to high speed\n");
 
-  _sdcard->sd_data = 0x40001;  //2^^4 bytes FIFO size. 12.5MHz clock
-  _sdcard->sd_ctrl = SDSPI_SETAUX; // Write config data, read last config data
-  _sdcard->sd_ctrl = SDSPI_READAUX; // Read config data, read last config data
-  if ((v = _sdcard->sd_data) != 0x09040001) {
+  SDSPI->DAT = 0x40001;  //2^^4 bytes FIFO size. 12.5MHz clock
+  SDSPI->CMD = SDSPI_SETAUX; // Write config data, read last config data
+  SDSPI->CMD = SDSPI_READAUX; // Read config data, read last config data
+  if ((v = SDSPI->DAT) != 0x09040001) {
     printf("\tERR: Aux register set to %08x, should be %08x\n", v, 0x09040001);
     return -1;
   }
@@ -218,25 +217,25 @@ int sdspi_test(void) {
   // CMD nine -- SEND_CSD_COND, send to FIFO #0, requires FIFO support
   // SEND_CSD_COND requests card specific data to be sent to FIFO #0.
   printf(" CMD9 - SEND_CSD_COND\n");
-  _sdcard->sd_data = 0;
-  _sdcard->sd_ctrl = (SDSPI_CLEARERR|SDSPI_FIFO_OP|SDSPI_CMD) + 9; // 0x08849;
+  SDSPI->DAT = 0;
+  SDSPI->CMD = (SDSPI_CLEARERR|SDSPI_CMD_F_MASK|SDSPI_CMD) + 9; // 0x08849;
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl) != 0) {
+  if ((v = SDSPI->CMD) != 0) {
     printf("\tERR: CMD-RESPONSE = %08x, not 0 as expected\n", v);
     return -1;
   }
 
-  if ((v = _sdcard->sd_data) != 0) {
+  if ((v = SDSPI->DAT) != 0) {
     printf("\tERR: CMD-DATA     = %08x, not 0 as expected\n", v);
     return -1;
   }
 
   // Read out the CSD condition
-  printf("\tCtrl-RSP: %08x\n", _sdcard->sd_ctrl);
+  printf("\tCtrl-RSP: %08x\n", SDSPI->CMD);
   printf("\tCSD_COND: ");
   for(i=0; i<4; i++)
-    printf(" %08x", _sdcard->sd_fifo[0]);
+    printf(" %08x", SDSPI->FIFO_0);
   printf("\n");
 
   // 40,0e,00,32, 5b,59,00,00, e8,37,7f,80, 0a,40,00,23,
@@ -289,19 +288,19 @@ int sdspi_test(void) {
   //   Requires reading from FIFO
   //   First, set the FIFO length of interest
   printf(" CMD10 - SEND_CID_COND\n");
-  _sdcard->sd_data = 0x040001;  // 2^^4 bytes FIFO size, 12.5MHz clock
-  _sdcard->sd_ctrl = SDSPI_SETAUX; // Write config data, read last config data
-  _sdcard->sd_ctrl = SDSPI_READAUX; // Read config data
-  _sdcard->sd_data = 0x0;
-  _sdcard->sd_ctrl = (SDSPI_CLEARERR|SDSPI_ALTFIFO|SDSPI_FIFO_OP|SDSPI_CMD)+10;
+  SDSPI->DAT = 0x040001;  // 2^^4 bytes FIFO size, 12.5MHz clock
+  SDSPI->CMD = SDSPI_SETAUX; // Write config data, read last config data
+  SDSPI->CMD = SDSPI_READAUX; // Read config data
+  SDSPI->DAT = 0x0;
+  SDSPI->CMD = (SDSPI_CLEARERR|SDSPI_CMD_SEL_MASK|SDSPI_CMD_F_MASK|SDSPI_CMD)+10;
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl) != 0x01000) {// Expecting 0x01000 for FIFO ID (B)
+  if ((v = SDSPI->CMD) != SDSPI_CMD_SEL_MASK) {// Expecting 0x01000 for FIFO ID (B)
     printf("\tERR: CMD-RESPONSE = %08x, not 0x01000 as expected\n", v);
     return -1;
   }
 
-  if ((v = _sdcard->sd_data) != 0) {
+  if ((v = SDSPI->DAT) != 0) {
     printf("\tERR: CMD-DATA     = %08x, not 0 as expected\n", v);
     return -1;
   }
@@ -309,7 +308,7 @@ int sdspi_test(void) {
   // Read out the CID condition
   printf("\tCID : ");
   for(i=0; i<4; i++)
-    printf("%08x ", _sdcard->sd_fifo[1]);
+    printf("%08x ", SDSPI->FIFO_1);
   printf("\n");
   // 03,53,44,53, 44,33,32,47, 30,7c,13,03, 66,00,ea,25,
   // MID = 0x03; // Manufacturer ID
@@ -323,34 +322,34 @@ int sdspi_test(void) {
 
   //Request status -> 8-bit R2 response goes to data register
   printf("  CMD13 - SEND_STATUS\n");
-  _sdcard->sd_data = 0x0;
-  _sdcard->sd_ctrl = (SDSPI_CLEARERR|SDSPI_READREG|SDSPI_CMD)+ 13;
+  SDSPI->DAT = 0x0;
+  SDSPI->CMD = (SDSPI_CLEARERR|SDSPI_READREG|SDSPI_CMD)+ 13;
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl) != 0) {// 0
+  if ((v = SDSPI->CMD) != 0) {// 0
     printf("\tERR: CMD-RESPONSE = %08x, not 0 as expected\n", v);
     return -1;
   }
 
-  if ((v = _sdcard->sd_data) != 0x00ffffff) {// Finally, read the cards status
+  if ((v = SDSPI->DAT) != 0x00ffffff) {// Finally, read the cards status
     printf("\tERR: CMD-DATA     = %08x, not 0x00ffffff as expected\n", v);
     return -1;
   }
 
   printf("  CMD10 - SEND_CID_COND\n");
   // One last shot at the SEND_CID_COND command, looking at the CRC
-  _sdcard->sd_data = 0x040001;  // 2^^4 bytes FIFO size, 12.5MHz clock
-  _sdcard->sd_ctrl = SDSPI_SETAUX;// Write config data, read last config data
-  _sdcard->sd_data = 0x0;  // Read from position zero
-  _sdcard->sd_ctrl = (SDSPI_CLEARERR|SDSPI_ALTFIFO|SDSPI_FIFO_OP|SDSPI_CMD)+10; // 0x0184a;
+  SDSPI->DAT = 0x040001;  // 2^^4 bytes FIFO size, 12.5MHz clock
+  SDSPI->CMD = SDSPI_SETAUX;// Write config data, read last config data
+  SDSPI->DAT = 0x0;  // Read from position zero
+  SDSPI->CMD = (SDSPI_CLEARERR|SDSPI_CMD_SEL_MASK|SDSPI_CMD_F_MASK|SDSPI_CMD)+10; // 0x0184a;
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl) != 0x01000) {// SDSPI_ALTFIFO
+  if ((v = SDSPI->CMD) != SDSPI_CMD_SEL_MASK) {// SDSPI_ALTFIFO
     printf("\tERR: CMD-RESPONSE = %08x, not 0x%x as expected\n", v, SDSPI_ALTFIFO);
     return -1;
   }
 
-  if ((v = _sdcard->sd_data) != 0) {
+  if ((v = SDSPI->DAT) != 0) {
     printf("\tERR: CMD-DATA     = %08x, not 0 as expected\n", v);
     return -1;
   }
@@ -358,37 +357,37 @@ int sdspi_test(void) {
 
   printf("\tCID: ");
   for(int i=0; i<4; i++)
-    printf(" %08x", _sdcard->sd_fifo[1]);
+    printf(" %08x", SDSPI->FIFO_1);
   printf("\n");
   // 03,53,44,53, 44,33,32,47, 30,7c,13,03, 66,00,ea,25,
   // Interpretation given above
 
   printf("  CMD55 - Read SCR\n");
   // Let's read the SCR register: SD Card Configuration register
-  _sdcard->sd_data = 0x30001;      // 2^^3 byte FIFO size, 12.5MHz clock
-  _sdcard->sd_ctrl = SDSPI_SETAUX;// Write config data, read last config data
-  _sdcard->sd_data = 0;
-  _sdcard->sd_ctrl = (SDSPI_CLEARERR|SDSPI_ACMD); // Go to alt command set
+  SDSPI->DAT = 0x30001;      // 2^^3 byte FIFO size, 12.5MHz clock
+  SDSPI->CMD = SDSPI_SETAUX;// Write config data, read last config data
+  SDSPI->DAT = 0;
+  SDSPI->CMD = (SDSPI_CLEARERR|SDSPI_ACMD); // Go to alt command set
   SDSPI_WAIT_WHILE_BUSY;
 
   printf("  CMD51\n");
-  _sdcard->sd_data = 0x0;  // Read from position zero
-  _sdcard->sd_ctrl = (SDSPI_CLEARERR|SDSPI_FIFO_OP|SDSPI_CMD)+51; // 0x0184a;
+  SDSPI->DAT = 0x0;  // Read from position zero
+  SDSPI->CMD = (SDSPI_CLEARERR|SDSPI_CMD_F_MASK|SDSPI_CMD)+51; // 0x0184a;
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl) != 0) {
+  if ((v = SDSPI->CMD) != 0) {
     printf("\tERR: CMD-RESPONSE = %08x, not 0 as expected\n", v);
     return -1;
   }
 
-  if ((v = _sdcard->sd_data) != 0xffffffff) {
+  if ((v = SDSPI->DAT) != 0xffffffff) {
     printf("\tERR: CMD-DATA     = %08x, not -1 as expected\n", v);
     //return -1;
   }
 
   printf("\tSCR : ");
   for(int i=0; i<2; i++)
-    printf("%08x ", _sdcard->sd_fifo[0]);
+    printf("%08x ", SDSPI->FIFO_0);
   printf("\n");
 
 //
@@ -400,20 +399,20 @@ int sdspi_test(void) {
   printf("Read a sector\n");
   // Now, let's try reading from the card (gasp!)  Let's read from
   // position zero (wherever that is)
-  _sdcard->sd_data = 0x090001;  // 2^^9 byte FIFO size, 12.5MHz clock
-  _sdcard->sd_ctrl = SDSPI_SETAUX;// Write config data, read last config data
-  _sdcard->sd_data = 0x0;  // Read from position zero
-  _sdcard->sd_ctrl = SDSPI_READ_SECTOR;  // CMD 17, into FIFO 0
+  SDSPI->DAT = 0x090001;  // 2^^9 byte FIFO size, 12.5MHz clock
+  SDSPI->CMD = SDSPI_SETAUX;// Write config data, read last config data
+  SDSPI->DAT = 0x0;  // Read from position zero
+  SDSPI->CMD = SDSPI_READ_SECTOR;  // CMD 17, into FIFO 0
   SDSPI_WAIT_WHILE_BUSY;
 
   printf("\tFirst sectors read response-----------\n");
-  printf("\tCtrl-RSP: %08x\n", _sdcard->sd_ctrl);
-  printf("\tCtrl-DAT: %08x\n", _sdcard->sd_data);
+  printf("\tCtrl-RSP: %08x\n", SDSPI->CMD);
+  printf("\tCtrl-DAT: %08x\n", SDSPI->DAT);
 
   for(j=0; j<32; j++) {
     printf("\tDATA : ");
     for(i=0; i<4; i++)
-      printf("%08x ", _sdcard->sd_fifo[0]);
+      printf("%08x ", SDSPI->FIFO_0);
     printf("\n");
   }
 
@@ -421,16 +420,16 @@ int sdspi_test(void) {
   // Let's read the next four blocks
   for(i=0; i<4; i++) {
     printf("Read sector: #%d\n", i);
-    _sdcard->sd_data = i+1;
-    _sdcard->sd_ctrl = SDSPI_READ_SECTOR;
+    SDSPI->DAT = i+1;
+    SDSPI->CMD = SDSPI_READ_SECTOR;
     SDSPI_WAIT_WHILE_BUSY;
 
-    printf("\tCtrl-RSP: %08x\n", _sdcard->sd_ctrl);
-    printf("\tCtrl-DAT: %08x\n", _sdcard->sd_data);
+    printf("\tCtrl-RSP: %08x\n", SDSPI->CMD);
+    printf("\tCtrl-DAT: %08x\n", SDSPI->DAT);
     for(int k=0; k<32; k++) {
       printf("\tDATA[%03x] : ", k*16);
       for(j=0; j<4; j++)
-        printf("%08x ", _sdcard->sd_fifo[0]);
+        printf("%08x ", SDSPI->FIFO_0);
       printf("\n");
     }
   }
@@ -441,62 +440,62 @@ int sdspi_test(void) {
 //
 //
   // For our next test, let us write and then read sector 2.
-  _sdcard->sd_data = 0x090001;  // 2^^9 byte FIFO size, 12.5MHz clock
+  SDSPI->DAT = 0x090001;  // 2^^9 byte FIFO size, 12.5MHz clock
 
   // Write config data, read last config data
   // This also resets our FIFO to the beginning, so we can start
   // writing into it from the beginning.
-  _sdcard->sd_ctrl = SDSPI_SETAUX;
+  SDSPI->CMD = SDSPI_SETAUX;
   printf("Write sector 2\n");
   for(int i=0; i<128; i++)
-    _sdcard->sd_fifo[0] = 0x0;
-  _sdcard->sd_ctrl = SDSPI_SETAUX;
+    SDSPI->FIFO_0 = 0x0;
+  SDSPI->CMD = SDSPI_SETAUX;
   for(int i=0; i<128; i++)
-    _sdcard->sd_fifo[1] = 0;
-  _sdcard->sd_data = 0x2;  // Write to sector 2
-  _sdcard->sd_ctrl = SDSPI_WRITE_SECTOR;
+    SDSPI->FIFO_1 = 0;
+  SDSPI->DAT = 0x2;  // Write to sector 2
+  SDSPI->CMD = SDSPI_WRITE_SECTOR;
 
   SDSPI_WAIT_WHILE_BUSY;
 
-  if (_sdcard->sd_ctrl != 0x400) {
-    printf("\tERR Ctrl-RSP: %08x (was expecting 0x%x)\n", _sdcard->sd_ctrl, 0x400);
+  if (SDSPI->CMD != SDSPI_CMD_WR_MASK) {
+    printf("\tERR Ctrl-RSP: %08x (was expecting 0x%x)\n", SDSPI->CMD, 0x400);
     return -1;
   }
 
   printf("Read sector 3\n");
   // Now, let's read sector 3, and then read sector 2
-  _sdcard->sd_data = 3;
-  _sdcard->sd_ctrl = SDSPI_READ_SECTOR;
+  SDSPI->DAT = 3;
+  SDSPI->CMD = SDSPI_READ_SECTOR;
   SDSPI_WAIT_WHILE_BUSY;
-  if (_sdcard->sd_ctrl & 0x08000) {
-    printf("\tERR Ctrl-RSP: %08x (was expecting 0x%x)\n", _sdcard->sd_ctrl, 0);
+  if (SDSPI->CMD & SDSPI_CMD_ERR_MASK) {
+    printf("\tERR Ctrl-RSP: %08x (was expecting 0x%x)\n", SDSPI->CMD, 0);
     return -1;
   } else {
-    printf("\tCtrl-RSP: %08x\n", _sdcard->sd_ctrl);
+    printf("\tCtrl-RSP: %08x\n", SDSPI->CMD);
   }
 
   printf("Read sector 2\n");
-  _sdcard->sd_data = 2;
-  _sdcard->sd_ctrl = SDSPI_READ_SECTOR|SDSPI_ALTFIFO;
+  SDSPI->DAT = 2;
+  SDSPI->CMD = SDSPI_READ_SECTOR|SDSPI_ALTFIFO;
   for(i=0; i<128; i++)
-    data[i] = _sdcard->sd_fifo[0];
+    data[i] = SDSPI->FIFO_0;
   // Wait for the read operation to complete
   SDSPI_WAIT_WHILE_BUSY;
 
-  if ((v = _sdcard->sd_ctrl) != SDSPI_ALTFIFO) {
-    printf("\tERR Ctrl-RSP: %08x (was expecting 0x%x)\n", _sdcard->sd_ctrl, SDSPI_ALTFIFO);
+  if ((v = SDSPI->CMD) != SDSPI_ALTFIFO) {
+    printf("\tERR Ctrl-RSP: %08x (was expecting 0x%x)\n", SDSPI->CMD, SDSPI_ALTFIFO);
     return -1;
   }
 
   // Set the FIFO back to zero
-  _sdcard->sd_data = 0;
-  _sdcard->sd_ctrl = SDSPI_READAUX;
+  SDSPI->DAT = 0;
+  SDSPI->CMD = SDSPI_READAUX;
   // Read sector two out of the FIFO
   for(int i=0; i<128; i++)
-    data[i] = _sdcard->sd_fifo[1];
+    data[i] = SDSPI->FIFO_1;
 
-  if ((v = _sdcard->sd_ctrl) != 0) {
-    printf("\tERR Ctrl-RSP: %08x (Expecting a %08x)\n", _sdcard->sd_ctrl, 0);
+  if ((v = SDSPI->CMD) != 0) {
+    printf("\tERR Ctrl-RSP: %08x (Expecting a %08x)\n", SDSPI->CMD, 0);
     return -1;
   }
 
