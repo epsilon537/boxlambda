@@ -1,1 +1,25 @@
-<mxfile host="Electron" modified="2023-05-10T10:57:58.592Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/19.0.3 Chrome/102.0.5005.63 Electron/19.0.3 Safari/537.36" etag="wZlL3mmQFRTveX9oV9ar" version="19.0.3" type="device"><diagram id="GExQI0PKyTtKDbZz8-Lj" name="Page-1">tVbJbtswEP0aHWNoiQ1fvcRpgQYw6gJNTgVNUhZRSVRJypb69R1aQ60OkqDIxeK8WUjOeyTtRZuselSkSJ4k46kX+qzyoq0XhoEfLeFjkbpBFvdBA5yUYBjUAQfxl7tMREvBuB4EGilTI4ohSGWec2oGGFFKXoZhsUyHsxbkxCfAgZJ0iv4UzCQNupz7Hf6Fi1PiZg589GTEBSOgE8LkpQdFD160UVKaZpRVG57a5rm+NHm7V7ztwhTPzXsSNuv90/5beajoXj3/8vWP8vvyDqucSVrihr1wkUK9dSyhLKza1NiKxZ9SOsedvhK1goBgWQDZ684PoxN+r4WODtgRs9MtqiZxEwT20iYfZZWS7MgIgLoEeBcTE2tryVJRbvc9KRTHM2++pok3h/VvLP0x6CSeJc7StTY8m1Fnl7mgIGELtEtoGuFWFg56EipZ5ozbDvvgviTC8ENBqPVe4EAAlpgsBStos/uMufZzZXjVg5DBRy4zblQNIegNl6gmPE7BAktcOnFGTnFJX5gRggQPxKmt3WkGBiibD0gofFVCLXkHI5U9Z6G/5WdhyfI30FUlU32L6/doZKoHzXQh7PcCP0zo30I6YjWjRLGRFo7SYsn/UWrFgZdWsPwciqOF/06Kg8+iOJpQ/MSZgNb7K0q5BhL9r7nhKrZtGvcT7r3CDuOUVyt7I0ObeM5wuKUp0VrQYVuHHIybDL1V9bN1zubOfMHYq7GtBlbtrEqYXhpYLzifHXdJ1qj7c+Nmbly5COEd9OY9a4g6cfP2YeJs8CpNtdLTwvyGFBymeEqMOA/fslvywBn2UlxvfZTivT+UYrgYKazZN2b1355xofmo0FiqTWMmha5qbbd9S8Bgdk9oE979EYke/gE=</diagram></mxfile>
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram id="GExQI0PKyTtKDbZz8-Lj" name="Page-1">
+    <mxGraphModel dx="2062" dy="1348" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7Bn-g6t278TBe35TN6Dq-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="70" y="280" width="730" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CBPMPLuSxcPrX_0sTuR8-1" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;FatFs&lt;br&gt;&lt;br&gt;&lt;/b&gt;boxlambda/sub/fatfs/source/&lt;br&gt;ff.[ch], ffconf.h, ffsystem.c, ffunicode.c&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="280" y="161" width="320" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="CBPMPLuSxcPrX_0sTuR8-2" value="&lt;b&gt;Storage Device Controls&lt;/b&gt;&lt;br&gt;&lt;br&gt;boxlambda/sw/components/sdspi/sw/sdcard.[ch]&amp;nbsp;&lt;div&gt;boxlambda/sw/components/fatfs/diskio.c&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="240" y="361" width="400" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="CBPMPLuSxcPrX_0sTuR8-3" value="Media Access Interface" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fontSize=18;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontStyle=1" parent="1" source="CBPMPLuSxcPrX_0sTuR8-1" target="CBPMPLuSxcPrX_0sTuR8-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="260" as="sourcePoint" />
+            <mxPoint x="450" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -50,6 +50,7 @@ nav:
         - I2C Master: registers/generated/i2c_master_regs.md
         - USB_HID_0: registers/generated/usb_hid_0_regs.md
         - USB_HID_1: registers/generated/usb_hid_1_regs.md
+        - SDSPI: registers/generated/sdspi_regs.md
     - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
@@ -72,6 +73,7 @@ nav:
     - Software Components:
         - LiteDRAM Initialization: sw_comp_litedram_initialization.md
         - PicoLibc and Bootstrap: sw_comp_picolibc.md
+        - SDSPI: sw_comp_sdspi.md
         - FatFs: sw_comp_fat_fs.md
         - ST-Sound: sw_comp_st_sound.md
         - YM2149 HAL: sw_comp_ym2149_hal.md

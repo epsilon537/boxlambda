@@ -1,0 +1,132 @@
+regmap:
+-   name: CMD
+    description: Command and status register
+    address: 0
+    bitfields:
+    -   name: R1_CMD
+        description: On write, if bits [7:6]==01 and card idle, remaining bits are sent to card. Contains R1 response when command has completed.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+    -   name: ERESP
+        description: Expected response.
+        reset: 0
+        width: 2
+        lsb: 8
+        access: rw
+        enums:
+        -   name: R1_RESP
+            description: Expect R1 response.
+            value: 0
+        -   name: R1B_RESP
+            description: Expect R1b response.
+            value: 1
+        -   name: R2_R3_R7
+            description: Expect R2, R3, R7 32-bit response.
+            value: 2
+    -   name: WR
+        description: 1 to write from FIFO to card, 0 to read from card into FIFO. Assumes F is set.
+        reset: 0
+        width: 1
+        lsb: 10
+        access: rw
+    -   name: F
+        description: Set if FIFO data transmision accompanies command.
+        reset: 0
+        width: 1
+        lsb: 11
+        access: rw
+    -   name: SEL
+        description: 1 = select FIFO[0], 0 = select FIFO[1].
+        reset: 0
+        width: 1
+        lsb: 12
+        access: rw
+    -   name: BUSY
+        description: Busy bit, set while command is running.
+        reset: 0
+        width: 1
+        lsb: 14
+        access: ro
+    -   name: ERR
+        description: Error indication. Time-out, card reset, CRC error, R1 response error.
+        reset: 0
+        width: 1
+        lsb: 15
+        access: rw1c
+    -   name: REM
+        description: Card has been removed since last read. If P=0 and R=1, card has been inserted and needs initialization.
+        reset: 0
+        width: 1
+        lsb: 18
+        access: rw1c
+    -   name: P
+        description: 1 = card missing, 0 = card present.
+        reset: 0
+        width: 1
+        lsb: 19
+        access: ro
+-   name: DAT
+    description: Return data/argument register
+    address: 4
+    bitfields:
+    -   name: VALUE
+        description: Command argument, command response. R2 response is in upper 8-bits.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: FIFO_0
+    description: 128 word FIFO[0] data
+    address: 8
+    bitfields:
+    -   name: VALUE
+        description: Data read from or to write to card.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: FIFO_1
+    description: 128 word FIFO[1] data
+    address: 12
+    bitfields:
+    -   name: VALUE
+        description: Data read from or to write to card.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: ISR
+    description: Interrupt status register
+    address: 16
+    bitfields:
+    -   name: BUSY
+        description: Set when controller goes from busy to non-busy state
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw1c
+    -   name: CARD_REMOVED
+        description: Set when controller detects that the SD card has been removed.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw1c
+-   name: IEN
+    description: Interrupt enable register
+    address: 20
+    bitfields:
+    -   name: BUSY
+        description: Set to enable BUSY interrupt.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: CARD_REMOVED
+        description: Set to enabled CARD_REMOVED interrupt.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw
+
