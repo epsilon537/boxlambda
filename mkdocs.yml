@@ -51,6 +51,7 @@ nav:
         - USB_HID_0: registers/generated/usb_hid_0_regs.md
         - USB_HID_1: registers/generated/usb_hid_1_regs.md
         - SDSPI: registers/generated/sdspi_regs.md
+        - SPIFlash: registers/generated/spiflash_regs.md
     - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
