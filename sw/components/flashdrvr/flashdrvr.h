@@ -42,15 +42,11 @@
 #ifndef    FLASHDRVR_H
 #define    FLASHDRVR_H
 
-#include "devbus.h"
-
-#define    FLASHCFG    0x100000C0
 #define    FLASHBASE   0x11000000
 #define    FLASHLEN    0x01000000
 
 class    FLASHDRVR {
 private:
-    DEVBUS    *m_fpga;
     bool    m_debug;
     unsigned    m_id; // ID of the flash device
     char    *m_sbuf;
