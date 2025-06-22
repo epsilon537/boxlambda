@@ -82,6 +82,12 @@ For information on the compiler and compile flags used to generate code for this
 
 An **Instruction Prefetcher** is a mechanism that anticipates future memory accesses and fetches instructions before they are needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access. Because the prefetcher caches upcoming instructions, instruction cycle counts may vary. However, for BoxLambda, deterministic execution is a key goal. BoxLambda requires consistent cycle counts. To achieve this, the standard Ibex prefetcher module was replaced with a custom single-instruction prefetcher.
 
+The module is implemented as an FSM:
+
+[![The Single Instruction Prefetcher FSM.](assets/single_prefetch_buffer_fsm.png)](assets/single_prefetch_buffer_fsm.png)
+
+*The Single Instruction Prefetch FSM.*
+
 Here is the code:
 
 [https://github.com/epsilon537/ibex/blob/boxlambda/rtl/ibex_single_prefetch_buffer.sv](https://github.com/epsilon537/ibex/blob/boxlambda/rtl/ibex_single_prefetch_buffer.sv)

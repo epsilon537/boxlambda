@@ -5,6 +5,8 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 22 June 2025: Included Prefetcher FSM diagram.*
+
 *Updated 13 April 2025: I corrected the breakdown of the 6 clock cycle register access time in [this](#the-single-instruction-prefetcher) section.*
 
 All gateware components are now in place on the BoxLambda SoC, but the system is not yet behaving as required. A key requirement of BoxLambda is deterministic behavior. The duration of operations such as internal memory or register access must be predictable by design. When analyzing a snippet of assembly code, you should be able to predict exactly how many clock cycles it will take to execute, without relying on statistics. That's what this post is about.
@@ -198,7 +200,14 @@ I wrote an alternative, **Single Instruction Prefetcher** module that, as the na
 
 This prefetcher is very simple. It prefetches one 32-bit (i.e. uncompressed) instruction and delivers it to the Instruction Fetch (IF) stage when that stage indicates it is *ready*. The prefetched address is either the previously fetched address incremented by 4 (for linear execution) or the address specified by the IF stage in the case of a *branch_i* request.
 
-The Single Instruction Prefetch SystemVerilog code can be found here:
+The Single Instruction Prefetcher is implemented as an FSM:
+
+![The Single Instruction Prefetcher FSM.](../assets/single_prefetch_buffer_fsm.png)
+
+*The Single Instruction Prefetcher FSM.*
+
+
+The SystemVerilog code can be found here:
 
 [https://github.com/epsilon537/ibex/blob/boxlambda/rtl/ibex_single_prefetch_buffer.sv](https://github.com/epsilon537/ibex/blob/boxlambda/rtl/ibex_single_prefetch_buffer.sv)
 
