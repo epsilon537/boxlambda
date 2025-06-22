@@ -6,7 +6,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
-#include "i2c_regs.h"
+#include "i2c_master_regs.h"
 #include "vera_hal.h"
 #include "interrupts.h"
 #include "timer.h"
@@ -575,12 +575,9 @@ void	_exit (int status) {
 }
 
 volatile uint32_t timel = 0;
-volatile const uint32_t* const mtimel = (volatile uint32_t*)(MTIME_ADDR);
-volatile uint32_t* const mtimecmpl = (volatile uint32_t*)(MTIMECMP_ADDR);
-
 
 void _timer_irq_handler(void) {
-  timel = *mtimel; //Retrieve current time, for check at thread-level after returning from ISR.
+  timel = MTIMER->MTIME; //Retrieve current time, for check at thread-level after returning from ISR.
 
   mtimer_disable_raw_time_cmp(); //Disable raw_time_cmp to prevent IRQ from re-firing.
 
@@ -605,7 +602,7 @@ void irq_latency_test(void) {
   for (ii=0; ii<50; ii++) {
     timel = 0;
     mtimer_set_raw_time_cmp(1000+ii); //Fire IRQ in 1000+ii ticks.
-    time_cmpl = *mtimecmpl; //The comparator value.
+    time_cmpl = MTIMER->MTIMECMP; //The comparator value.
 
     while (timel == 0); //Wait for the IRQ.
 
@@ -632,7 +629,7 @@ int main(void) {
 
   uint32_t do_nothing_cycles = do_nothing();
   printf("Expected: 8 cycles.\n");
-  uint32_t lw_register_loop_cycles = lw_register_loop((void *)(I2C_MASTER_BASE+I2C_ISR)); //Just picking a register without too many side effects.
+  uint32_t lw_register_loop_cycles = lw_register_loop((void *)&(I2C_MASTER->ISR)); //Just picking a register without too many side effects.
   printf("Expected: 8 cycles.\n");
   uint32_t lw_sw_copy_loop_cycles = lw_sw_copy_loop(srcBuf, dstBuf);
   printf("Expected: 14 cycles.\n");
