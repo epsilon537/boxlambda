@@ -12,8 +12,8 @@ target_compile_options(vera
 
 target_include_directories(vera
     PUBLIC
-        ${PROJECT_SOURCE_DIR}/sub/vera_wishbone/misc
-        ${CMAKE_CURRENT_LIST_DIR}
+      ${PROJECT_SOURCE_DIR}/registers/generated/
+      ${CMAKE_CURRENT_LIST_DIR}
 )
 
 target_link_libraries(vera interrupts)

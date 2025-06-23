@@ -1,4 +1,5 @@
 #include "vera_hal.h"
+
 //Crude sprite attributes write function.
 void sprite_attr_wr(unsigned sprite_id, unsigned addr, unsigned mode, unsigned x, unsigned y,
                     unsigned z, unsigned collision_mask, unsigned width, unsigned height) {

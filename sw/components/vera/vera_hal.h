@@ -1,23 +1,14 @@
 #ifndef VERA_HAL_H
 #define VERA_HAL_H
 
-#include "vera.h"
+#include "vera_regs.h"
 
-#define VERA_BASE 0x12000000
-#define VERA_VRAM_BASE (VERA_BASE + VERA_VRAM_OFFSET)
-#define VERA_PALETTE_BASE (VERA_BASE + VERA_PALETTE_OFFSET)
-#define VERA_SPRITES_BASE (VERA_BASE + VERA_SPRITES_OFFSET)
-
-/*A low-level Hardware Access Layer for VERA.*/
-//VERA register write
-inline void vera_reg_wr(unsigned addr, unsigned data) {
-  *(volatile unsigned *)(VERA_BASE + addr) = data;
-}
-
-//VERA register read
-inline unsigned vera_reg_rd(unsigned addr) {
-  return *(unsigned volatile *)(VERA_BASE + addr);
-}
+#define VERA_PALETTE_OFFSET (0x2000)
+#define VERA_SPRITES_OFFSET (0x1000)
+#define VERA_VRAM_OFFSET   (0x40000)
+#define VERA_VRAM_BASE (VERA_BASE_ADDR + VERA_VRAM_OFFSET)
+#define VERA_PALETTE_BASE (VERA_BASE_ADDR + VERA_PALETTE_OFFSET)
+#define VERA_SPRITES_BASE (VERA_BASE_ADDR + VERA_SPRITES_OFFSET)
 
 //VERA VRAM word write
 inline void vram_wr(unsigned addr, unsigned data) {

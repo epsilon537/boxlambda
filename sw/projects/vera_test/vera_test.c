@@ -11,34 +11,34 @@
 
 #define VRAM_MAP_BASE (0x8000) //Relative to VERA base address.
 
-volatile unsigned frame_counter = 0;
-volatile unsigned vsync_irq_fired=0;
-volatile unsigned line_irq_fired=0;
-volatile unsigned sprcol_irq_fired=0;
+volatile uint32_t frame_counter = 0;
+volatile uint32_t vsync_irq_fired=0;
+volatile uint32_t line_irq_fired=0;
+volatile uint32_t sprcol_irq_fired=0;
 
 void _vera_irq_handler(void) {
-  unsigned isr = vera_reg_rd(VERA_ISR);
-  unsigned ien = vera_reg_rd(VERA_IEN);
+  uint32_t isr = VERA->ISR;
+  uint32_t ien = VERA->IEN;
 
-  if (isr & ien & VERA_IRQ_MSK_VSYNC) {
+  if (isr & ien & VERA_ISR_VSYNC_MASK) {
     ++frame_counter;
     //Switch to sprite bank 0 at vsync
-    vera_reg_wr(VERA_CTRL, 0);
+    VERA->CTRL = 0;
     vsync_irq_fired = 1;
   }
 
-  if (isr & ien & VERA_IRQ_MSK_LINE) {
+  if (isr & ien & VERA_ISR_LINE_MASK) {
     line_irq_fired = 1;
     //Switch to sprite bank 1 at scanline 240
-    vera_reg_wr(VERA_CTRL, 1);
+    VERA->CTRL = 1;
   }
 
-  if (isr & ien & VERA_IRQ_MSK_SPRCOL) {
+  if (isr & ien & VERA_ISR_SPRCOL_MASK) {
     sprcol_irq_fired = 1;
   }
 
   //Acknowledge IRQ in the VERA core.
-  vera_reg_wr(VERA_ISR, isr&ien);
+  VERA->ISR = isr&ien;
 
   //Return from interrupt
   __asm__ volatile (
@@ -48,7 +48,7 @@ void _vera_irq_handler(void) {
 
 //Returns 0 if OK, <0 if error.
 int generate_8bpp_8x8_tiles() {
-  unsigned char data=0;
+  uint8_t data=0;
 
   //Just generate 8x8 blocks of different colors
   for (int jj=0;jj<16;jj++) {
@@ -68,7 +68,7 @@ int generate_8bpp_8x8_tiles() {
   return 0;
 }
 
-void generate_8bpp_64x64_sprite(unsigned vram_addr) {
+void generate_8bpp_64x64_sprite(uint32_t vram_addr) {
   for (int ii=0; ii<64*64/4; ii++) {
       vram_wr(vram_addr+ii*4, 0x03030303);
     }
@@ -76,7 +76,7 @@ void generate_8bpp_64x64_sprite(unsigned vram_addr) {
 
 void setup_sprite_attr_ram(int collide) {
   int i;
-  unsigned v,w;
+  uint32_t v,w;
 
   for (i=0; i<64; i++) {
     sprite_attr_wr(i, 0x1c0, 1, collide ? 4*i : 8*i, 16, 3, 1, 0, 0);
@@ -88,7 +88,7 @@ void setup_sprite_attr_ram(int collide) {
 }
 
 void setup_palette_ram(void) {
-  for (unsigned ii=0; ii<256; ii++) {
+  for (uint32_t ii=0; ii<256; ii++) {
     palette_ram_wr(ii, ((ii>>4)&3)<<2, ((ii>>2)&3)<<2, (ii&3)<<2);
   }
 }
@@ -112,14 +112,14 @@ int main(void) {
   gpio_init();
   gpio_set_direction(0x0000000F); //4 inputs, 4 outputs
 
-  unsigned read_back_val=0;
-  unsigned read_back_err=0;
+  uint32_t read_back_val=0;
+  uint32_t read_back_err=0;
 
   printf("Setting up VERA registers...\n");
 
-  unsigned dc_video_reg = 0x71; //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
-  vera_reg_wr(VERA_DC_VIDEO, dc_video_reg);
-  read_back_val = vera_reg_rd(VERA_DC_VIDEO);
+  uint32_t dc_video_reg = 0x71; //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
+  VERA->DC_VIDEO = dc_video_reg;
+  read_back_val = VERA->DC_VIDEO;
 
   if (read_back_val != dc_video_reg) {
     printf("VERA_DC_VIDEO read back incorrectly: 0x%x, expected 0x%x\n\r", read_back_val, dc_video_reg);
@@ -129,21 +129,40 @@ int main(void) {
     printf("VERA_DC_VIDEO read back OK\n\r");
   }
 
-  vera_reg_wr(VERA_L0_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
-  vera_reg_wr(VERA_L0_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
-  vera_reg_wr(VERA_L0_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
-  vera_reg_wr(VERA_L0_HSCROLL, 4);
-  vera_reg_wr(VERA_L0_VSCROLL, 4);
+  vera_l0_config_t l0_config;
+  l0_config.COLOR_DEPTH = VERA_L0_CONFIG_COLOR_DEPTH_EIGHT_BPP;
+  l0_config.BITMAP_MODE = 0;
+  l0_config.MAP_WIDTH = VERA_L0_CONFIG_MAP_WIDTH_TILES_128;
+  l0_config.MAP_HEIGHT = VERA_L0_CONFIG_MAP_HEIGHT_TILES_128;
+  VERA->L0_CONFIG = *(uint32_t *)&l0_config;
+  vera_l0_tilebase_t l0_tilebase;
+  l0_tilebase.TILE_WIDTH = VERA_L0_TILEBASE_TILE_WIDTH_TILE_WIDTH_8;
+  l0_tilebase.TILE_HEIGHT = VERA_L0_TILEBASE_TILE_HEIGHT_TILE_HEIGHT_8;
+  l0_tilebase.TILE_BASE_ADDR_16_11 = 0;
+  VERA->L0_TILEBASE = *(uint32_t*)&l0_tilebase;
+  VERA->L0_MAPBASE = VRAM_MAP_BASE>>9; //Map base address 0x10000
+  VERA->L0_HSCROLL = 4;
+  VERA->L0_VSCROLL = 4;
 
-  vera_reg_wr(VERA_L1_CONFIG, 0xc3); //map size 128x128, tile mode, 8bpp.
-  vera_reg_wr(VERA_L1_TILEBASE, 0x0); //tile base address 0, tile height/width 8x8.
-  vera_reg_wr(VERA_L1_MAPBASE, VRAM_MAP_BASE>>9); //Map base address 0x10000
-  vera_reg_wr(VERA_L1_HSCROLL, 4);
-  vera_reg_wr(VERA_L1_VSCROLL, 4);
-  vera_reg_wr(VERA_CTRL, 0); //Sprite Bank 0
+  vera_l1_config_t l1_config;
+  l1_config.COLOR_DEPTH = VERA_L1_CONFIG_COLOR_DEPTH_EIGHT_BPP;
+  l1_config.BITMAP_MODE = 0;
+  l1_config.MAP_WIDTH = VERA_L1_CONFIG_MAP_WIDTH_TILES_128;
+  l1_config.MAP_HEIGHT = VERA_L1_CONFIG_MAP_HEIGHT_TILES_128;
+  VERA->L1_CONFIG = *(uint32_t *)&l1_config;
+  vera_l1_tilebase_t l1_tilebase;
+  l1_tilebase.TILE_WIDTH = VERA_L1_TILEBASE_TILE_WIDTH_TILE_WIDTH_8;
+  l1_tilebase.TILE_HEIGHT = VERA_L1_TILEBASE_TILE_HEIGHT_TILE_HEIGHT_8;
+  l1_tilebase.TILE_BASE_ADDR_16_11 = 0;
+  VERA->L1_TILEBASE = *(uint32_t*)&l1_tilebase;
+  VERA->L1_MAPBASE = VRAM_MAP_BASE>>9; //Map base address 0x10000
+  VERA->L1_HSCROLL = 4;
+  VERA->L1_VSCROLL = 4;
 
-  vera_reg_wr(VERA_DC_HSCALE, 92);
-  vera_reg_wr(VERA_DC_VSCALE, 92);
+  VERA->CTRL_bf.SBNK = 0; //Sprite Bank 0
+
+  VERA->DC_HSCALE = 92;
+  VERA->DC_VSCALE = 92;
 
   printf("Setting up VRAM...\n");
 
@@ -156,7 +175,7 @@ int main(void) {
 
   //Fill VRAM map area
   for (int ii=0; ii<128*128*2; ii+=2) {
-    vram_wr_byte(VRAM_MAP_BASE+ii, (unsigned char)ii&0xf);
+    vram_wr_byte(VRAM_MAP_BASE+ii, (uint8_t)ii&0xf);
     vram_wr_byte(VRAM_MAP_BASE+ii+1, 0);
   }
 
@@ -167,13 +186,13 @@ int main(void) {
     printf("VERA Read Back Tests failed.\n");
   }
 
-  vera_reg_wr(VERA_IRQ_LINE, 240);
+  VERA->IRQLINE = 240;
 
   printf("Enabling IRQs\n");
   enable_global_irq(); //Enable global IRQ line in the CPU
   enable_irq(IRQ_ID_VERA); //Enable the VERA IRQ in the CPU
-  vera_reg_wr(VERA_ISR, VERA_IRQ_MSK_VSYNC|VERA_IRQ_MSK_LINE|VERA_IRQ_MSK_SPRCOL); //Clear any pending IRQs in the VERA core.
-  vera_reg_wr(VERA_IEN, VERA_IRQ_MSK_VSYNC|VERA_IRQ_MSK_LINE|VERA_IRQ_MSK_SPRCOL); //Enable all 3 IRQ sources in the VERA core.
+  VERA->ISR = VERA_ISR_VSYNC_MASK|VERA_ISR_LINE_MASK|VERA_ISR_SPRCOL_MASK; //Clear any pending IRQs in the VERA core.
+  VERA->IEN = VERA_IEN_VSYNC_MASK|VERA_IEN_LINE_MASK|VERA_IEN_SPRCOL_MASK; //Enable all 3 IRQ sources in the VERA core.
 
   printf("Starting loop... V<sprite-bank#> indicates a Vsync IRQ, L = Line IRQ, C = collision IRQ.\n");
 
@@ -181,7 +200,7 @@ int main(void) {
   while (1) {
     if (vsync_irq_fired) {
       vsync_irq_fired = 0;
-      printf("V%d", vera_reg_rd(VERA_CTRL));
+      printf("V%d", VERA->CTRL);
 
       //After two frames, move the sprites, to create sprite collisions.
       if (frame_counter == 2) {
@@ -192,7 +211,7 @@ int main(void) {
 
     if (line_irq_fired) {
       line_irq_fired = 0;
-      printf("L", vera_reg_rd(VERA_CTRL));
+      printf("L", VERA->CTRL);
     }
 
     if (sprcol_irq_fired) {
