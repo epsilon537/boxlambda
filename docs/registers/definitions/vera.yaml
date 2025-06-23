@@ -1,0 +1,466 @@
+regmap:
+-   name: CTRL
+    description: Control register.
+    address: 0
+    bitfields:
+    -   name: SBNK
+        description: Active sprite bank.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+-   name: DC_BORDER
+    description: Display composer border register.
+    address: 4
+    bitfields:
+    -   name: BORDER_COLOR
+        description: Border color
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: IEN
+    description: Interrupt enable register.
+    address: 8
+    bitfields:
+    -   name: VSYNC
+        description: Vertical sync interrupt enable.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: LINE
+        description: Line interrupt enable.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw
+    -   name: SPRCOL
+        description: Sprite collision interrupt enable.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw
+-   name: ISR
+    description: Interrupt status register.
+    address: 12
+    bitfields:
+    -   name: VSYNC
+        description: Vertical sync interrupt status.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw1c
+    -   name: LINE
+        description: Line interrupt status.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw1c
+    -   name: SPRCOL
+        description: Sprite collision interrupt status.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw1c
+    -   name: SPR_COLLISIONS
+        description: Sprite collisions as determined by sprite renderer.
+        reset: 0
+        width: 4
+        lsb: 4
+        access: ro
+-   name: IRQLINE
+    description: Interrupt line register.
+    address: 16
+    bitfields:
+    -   name: VALUE
+        description: Scanline on which to generate line interrupt.
+        reset: 0
+        width: 10
+        lsb: 0
+        access: rw
+-   name: SCANLINE
+    description: Scanline register
+    address: 20
+    bitfields:
+    -   name: VALUE
+        description: Current scanline.
+        reset: 0
+        width: 10
+        lsb: 0
+        access: ro
+-   name: DC_VIDEO
+    description: Display composer video register.
+    address: 24
+    bitfields:
+    -   name: OUTPUT_MODE
+        description: Video output mode.
+        reset: 0
+        width: 2
+        lsb: 0
+        access: rw
+        enums:
+        -   name: DIS
+            description: Video disabled.
+            value: 0
+        -   name: VGA
+            description: VGA output enabled.
+            value: 1
+    -   name: L0_ENABLE
+        description: Enable Layer 0.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+    -   name: L1_ENABLE
+        description: Enable layer 1.
+        reset: 0
+        width: 1
+        lsb: 5
+        access: rw
+    -   name: SPR_ENABLE
+        description: Enable sprites.
+        reset: 0
+        width: 1
+        lsb: 6
+        access: rw
+-   name: DC_HSCALE
+    description: Display composer horizontal scale register.
+    address: 32
+    bitfields:
+    -   name: VALUE
+        description: the horizonal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: DC_VSCALE
+    description: Display composer vertical scale register.
+    address: 36
+    bitfields:
+    -   name: VALUE
+        description: the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: DC_HSTART
+    description: Display composer horizontal start register.
+    address: 40
+    bitfields:
+    -   name: VALUE
+        description: Horizontal start of active part of screen in 640x480 space.
+        reset: 0
+        width: 10
+        lsb: 0
+        access: rw
+-   name: DC_HSTOP
+    description: Display compser horizontal stop register.
+    address: 44
+    bitfields:
+    -   name: VALUE
+        description: Horizontal stop of active part of screen in 640x480 space.
+        reset: 0
+        width: 10
+        lsb: 0
+        access: rw
+-   name: DC_VSTART
+    description: Display composer vertical start register.
+    address: 48
+    bitfields:
+    -   name: VALUE
+        description: Vertical start of active part of screen in 640x480 space.
+        reset: 0
+        width: 10
+        lsb: 0
+        access: rw
+-   name: DC_VSTOP
+    description: Display composer vertical stop register.
+    address: 52
+    bitfields:
+    -   name: VALUE
+        description: Vertical stop of active part of screen in 640x480 space.
+        reset: 0
+        width: 10
+        lsb: 0
+        access: rw
+-   name: L0_CONFIG
+    description: Layer 0 Configuration regiser.
+    address: 64
+    bitfields:
+    -   name: COLOR_DEPTH
+        description: Number of bits pers pixel to encode color information.
+        enums:
+        -   name: ONE_BPP
+            description: 1 bpp.
+            value: 0
+        -   name: TWO_BPP
+            description: 2 bpp.
+            value: 1
+        -   name: FOUR_BPP
+            description: 4 bpp.
+            value: 2
+        -   name: EIGHT_BPP
+            description: 8 bpp.
+            value: 3
+        reset: 0
+        width: 2
+        lsb: 0
+        access: rw
+    -   name: BITMAP_MODE
+        description: 1 selects bitmap mode, 0 selects tile mode.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: T256C
+        description: When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes.
+        reset: 0
+        width: 1
+        lsb: 3
+        access: rw
+    -   name: MAP_WIDTH
+        description: Tile map width.
+        reset: 0
+        width: 2
+        lsb: 4
+        access: rw
+        enums:
+        -   name: TILES_32
+            description: 32 tiles wide.
+            value: 0
+        -   name: TILES_64
+            description: 64 tiles wide.
+            value: 1
+        -   name: TILES_128
+            description: 128 tiles wide.
+            value: 2
+        -   name: TILES_256
+            description: 256 tiles wide.
+            value: 3
+    -   name: MAP_HEIGHT
+        description: Tile map height.
+        reset: 0
+        width: 2
+        lsb: 6
+        access: rw
+        enums:
+        -   name: TILES_32
+            description: 32 tiles high.
+            value: 0
+        -   name: TILES_64
+            description: 64 tiles high.
+            value: 1
+        -   name: TILES_128
+            description: 128 tiles high.
+            value: 2
+        -   name: TILES_256
+            description: 256 tiles high.
+            value: 3
+-   name: L0_MAPBASE
+    description: Layer 0 map base register.
+    address: 68
+    bitfields:
+    -   name: ADDR_16_9
+        description: Bits 16:9 of the base address of the tile map.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: L0_TILEBASE
+    description: Layer 0 tile base register.
+    address: 72
+    bitfields:
+    -   name: TILE_WIDTH
+        description: Tile width.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+        enums:
+        -   name: TILE_WIDTH_8
+            description: 8 pixel tile width.
+            value: 0
+        -   name: TILE_WIDTH_16
+            description: 16 pixel tile width.
+            value: 1
+    -   name: TILE_HEIGHT
+        description: Tile height.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw
+        enums:
+        -   name: TILE_HEIGHT_8
+            description: 8 pixel tile height.
+            value: 0
+        -   name: TILE_HEIGHT_16
+            description: 16 pixel tile height.
+            value: 1
+    -   name: TILE_BASE_ADDR_16_11
+        description: Bits 16:11 of the base address of the tile data.
+        reset: 0
+        width: 6
+        lsb: 2
+        access: rw
+-   name: L0_HSCROLL
+    description: Layer 0 horizontal scroll register.
+    address: 80
+    bitfields:
+    -   name: VALUE
+        description: Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+        reset: 0
+        width: 12
+        lsb: 0
+        access: rw
+-   name: L0_VSCROLL
+    description: Layer 0 vertical scroll register.
+    address: 84
+    bitfields:
+    -   name: VALUE
+        description: Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down.
+        reset: 0
+        width: 12
+        lsb: 0
+        access: rw
+
+-   name: L1_CONFIG
+    description: Layer 1 Configuration regiser.
+    address: 128
+    bitfields:
+    -   name: COLOR_DEPTH
+        description: Number of bits pers pixel to encode color information.
+        enums:
+        -   name: ONE_BPP
+            description: 1 bpp.
+            value: 0
+        -   name: TWO_BPP
+            description: 2 bpp.
+            value: 1
+        -   name: FOUR_BPP
+            description: 4 bpp.
+            value: 2
+        -   name: EIGHT_BPP
+            description: 8 bpp.
+            value: 3
+        reset: 0
+        width: 2
+        lsb: 0
+        access: rw
+    -   name: BITMAP_MODE
+        description: 1 selects bitmap mode, 0 selects tile mode.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: T256C
+        description: When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes.
+        reset: 0
+        width: 1
+        lsb: 3
+        access: rw
+    -   name: MAP_WIDTH
+        description: Tile map width.
+        reset: 0
+        width: 2
+        lsb: 4
+        access: rw
+        enums:
+        -   name: TILES_32
+            description: 32 tiles wide.
+            value: 0
+        -   name: TILES_64
+            description: 64 tiles wide.
+            value: 1
+        -   name: TILES_128
+            description: 128 tiles wide.
+            value: 2
+        -   name: TILES_256
+            description: 256 tiles wide.
+            value: 3
+    -   name: MAP_HEIGHT
+        description: Tile map height.
+        reset: 0
+        width: 2
+        lsb: 6
+        access: rw
+        enums:
+        -   name: TILES_32
+            description: 32 tiles high.
+            value: 0
+        -   name: TILES_64
+            description: 64 tiles high.
+            value: 1
+        -   name: TILES_128
+            description: 128 tiles high.
+            value: 2
+        -   name: TILES_256
+            description: 256 tiles high.
+            value: 3
+-   name: L1_MAPBASE
+    description: Layer 1 map base register.
+    address: 132
+    bitfields:
+    -   name: ADDR_16_9
+        description: Bits 16:9 of the base address of the tile map.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: L1_TILEBASE
+    description: Layer 1 tile base register.
+    address: 136
+    bitfields:
+    -   name: TILE_WIDTH
+        description: Tile width.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+        enums:
+        -   name: TILE_WIDTH_8
+            description: 8 pixel tile width.
+            value: 0
+        -   name: TILE_WIDTH_16
+            description: 16 pixel tile width.
+            value: 1
+    -   name: TILE_HEIGHT
+        description: Tile height.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw
+        enums:
+        -   name: TILE_HEIGHT_8
+            description: 8 pixel tile height.
+            value: 0
+        -   name: TILE_HEIGHT_16
+            description: 16 pixel tile height.
+            value: 1
+    -   name: TILE_BASE_ADDR_16_11
+        description: Bits 16:11 of the base address of the tile data.
+        reset: 0
+        width: 6
+        lsb: 2
+        access: rw
+-   name: L1_HSCROLL
+    description: Layer 1 horizontal scroll register.
+    address: 144
+    bitfields:
+    -   name: VALUE
+        description: Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+        reset: 0
+        width: 12
+        lsb: 0
+        access: rw
+-   name: L1_VSCROLL
+    description: Layer 1 vertical scroll register.
+    address: 148
+    bitfields:
+    -   name: VALUE
+        description: Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down.
+        reset: 0
+        width: 12
+        lsb: 0
+        access: rw
+
