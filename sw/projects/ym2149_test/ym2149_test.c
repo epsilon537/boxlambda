@@ -6,9 +6,14 @@
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
-#include "ym2149_sys_regs.h"
+#include "ym2149_regs.h"
 
 #define GPIO_SIM_INDICATOR 0xf //If GPIO1 inputs have this value, this is a simulation.
+
+typedef struct {
+  uint32_t addr;
+  uint32_t val;
+} AddrVal_t;
 
 unsigned mval = 10;
 unsigned bass = 25;
@@ -25,6 +30,11 @@ void	_exit (int status) {
 	while (1);
 }
 
+static inline void ym2149_sys_reg_wr(unsigned reg_offset, unsigned val)
+{
+  *(uint32_t volatile *)(YM2149_BASE_ADDR + reg_offset) = val;
+}
+
 int main(void) {
   //Switches
   gpio_init();
@@ -34,13 +44,50 @@ int main(void) {
   printf("YM2149 test.\n");
 
   //Set 6 different pitches in the 6 channels
-  unsigned addrs[] = {
-    0,  1,  2,  3,    4, 5,  6,    7 ,  8,  9, 10, 11, 12, 13,    16  , 17,   18, 19,   20, 21, 22,   23, 24, 25, 26, 27, 28, 29, 128,129, 130,131,132,133, 134, 135, 136, 137 } ;
-  unsigned vals[]  = {
-    0x1c,1,0xfd, 0, 0xef, 0,  0, 0xf8 , 15,  15, 15,  1,  0, 13,   0xd5,  0, 0xbe,  0, 0xb3,  0,  0, 0xf8, 15, 15, 15,  1,  0, 13,  64, 64,  64, 64, 64, 64, mval,   0,  bass, treble } ;
+  AddrVal_t addr_vals[]  = {
+    {YM2149_PSG0_CHA_TONE_PERIOD_FINE_ADDR, 0x1c},
+    {YM2149_PSG0_CHA_TONE_PERIOD_COARSE_ADDR, 1},
+    {YM2149_PSG0_CHB_TONE_PERIOD_FINE_ADDR, 0xfd},
+    {YM2149_PSG0_CHB_TONE_PERIOD_COARSE_ADDR, 0},
+    {YM2149_PSG0_CHC_TONE_PERIOD_FINE_ADDR, 0xef},
+    {YM2149_PSG0_CHC_TONE_PERIOD_COARSE_ADDR, 0},
+    {YM2149_PSG0_NOISE_PERIOD_ADDR, 0},
+    {YM2149_PSG0_DISABLE_ADDR,
+      ~(YM2149_PSG0_DISABLE_TONE_A_MASK|YM2149_PSG0_DISABLE_TONE_B_MASK|YM2149_PSG0_DISABLE_TONE_C_MASK)},
+    {YM2149_PSG0_CHA_LVL_ADDR, 15},
+    {YM2149_PSG0_CHB_LVL_ADDR, 15},
+    {YM2149_PSG0_CHC_LVL_ADDR, 15},
+    {YM2149_PSG0_ENV_PERIOD_FINE_ADDR, 1},
+    {YM2149_PSG0_ENV_PERIOD_COARSE_ADDR, 0},
+    {YM2149_PSG0_ENV_SHAPE_ADDR, 13},
+    {YM2149_PSG1_CHA_TONE_PERIOD_FINE_ADDR, 0xd5},
+    {YM2149_PSG1_CHA_TONE_PERIOD_COARSE_ADDR, 0},
+    {YM2149_PSG1_CHB_TONE_PERIOD_FINE_ADDR, 0xbe},
+    {YM2149_PSG1_CHB_TONE_PERIOD_COARSE_ADDR, 0},
+    {YM2149_PSG1_CHC_TONE_PERIOD_FINE_ADDR, 0xb3},
+    {YM2149_PSG1_CHC_TONE_PERIOD_COARSE_ADDR, 0},
+    {YM2149_PSG1_NOISE_PERIOD_ADDR, 0},
+    {YM2149_PSG1_DISABLE_ADDR,
+      ~(YM2149_PSG1_DISABLE_TONE_A_MASK|YM2149_PSG1_DISABLE_TONE_B_MASK|YM2149_PSG1_DISABLE_TONE_C_MASK)},
+    {YM2149_PSG1_CHA_LVL_ADDR, 15},
+    {YM2149_PSG1_CHB_LVL_ADDR, 15},
+    {YM2149_PSG1_CHC_LVL_ADDR, 15},
+    {YM2149_PSG1_ENV_PERIOD_FINE_ADDR, 1},
+    {YM2149_PSG1_ENV_PERIOD_COARSE_ADDR, 0},
+    {YM2149_PSG1_ENV_SHAPE_ADDR, 13},
+    {YM2149_FILTER_MIXER_VOLA_ADDR, 64},
+    {YM2149_FILTER_MIXER_VOLB_ADDR, 64},
+    {YM2149_FILTER_MIXER_VOLC_ADDR, 64},
+    {YM2149_FILTER_MIXER_VOLD_ADDR, 64},
+    {YM2149_FILTER_MIXER_VOLE_ADDR, 64},
+    {YM2149_FILTER_MIXER_VOLF_ADDR, 64},
+    {YM2149_FILTER_MIXER_MVOL_ADDR, mval},
+    {YM2149_FILTER_MIXER_INV_ADDR, 0},
+    {YM2149_FILTER_MIXER_BASS_ADDR, bass},
+    {YM2149_FILTER_MIXER_TREBLE_ADDR, treble} } ;
 
-  for (int ii=0; ii<(sizeof(addrs)/sizeof(addrs[0])); ii++) {
-    ym2149_sys_reg_wr(addrs[ii], vals[ii]);
+  for (int ii=0; ii<(sizeof(addr_vals)/sizeof(AddrVal_t)); ii++) {
+    ym2149_sys_reg_wr(addr_vals[ii].addr, addr_vals[ii].val);
   }
 
   printf("YM2149 config complete.\n");
@@ -54,7 +101,7 @@ int main(void) {
         if (mval < 255)
           ++mval;
 
-        ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
+        YM2149->FILTER_MIXER_MVOL = mval;
         printf("mval: %d\n", mval);
       }
 
@@ -62,7 +109,7 @@ int main(void) {
         if (mval > 0)
           --mval;
 
-        ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
+        YM2149->FILTER_MIXER_MVOL = mval;
         printf("mval: %d\n", mval);
       }
     }
@@ -72,7 +119,7 @@ int main(void) {
         if (bass < 63)
           ++bass;
 
-        ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
+        YM2149->FILTER_MIXER_BASS = bass;
         printf("bass: %d\n", bass);
       }
 
@@ -80,7 +127,7 @@ int main(void) {
         if (bass > 1)
           --bass;
 
-        ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
+        YM2149->FILTER_MIXER_BASS = bass;
         printf("bass: %d\n", bass);
       }
     }
@@ -90,7 +137,7 @@ int main(void) {
         if (treble < 255)
           ++treble;
 
-        ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
+        YM2149->FILTER_MIXER_TREBLE = treble;
         printf("treble: %d\n", treble);
       }
 
@@ -98,7 +145,7 @@ int main(void) {
         if (treble > 0)
           --treble;
 
-        ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
+        YM2149->FILTER_MIXER_TREBLE = treble;
         printf("treble: %d\n", treble);
       }
     }

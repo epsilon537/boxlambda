@@ -12,8 +12,8 @@ target_compile_options(ym2149_test_ram
 )
 
 target_include_directories(ym2149_test_ram
-    PRIVATE
-  ${PROJECT_SOURCE_DIR}/sw/components/ym2149_sys_hal/
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:
@@ -35,8 +35,8 @@ target_compile_options(ym2149_test_flsh
 )
 
 target_include_directories(ym2149_test_flsh
-    PRIVATE
-      ${PROJECT_SOURCE_DIR}/sw/components/ym2149_sys_hal/
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:

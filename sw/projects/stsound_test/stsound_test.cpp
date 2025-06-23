@@ -5,21 +5,25 @@
 #include "ff.h"
 #include <stdio.h>
 #include <string.h>
-#include "ym2149_sys_regs.h"
+#include "ym2149_regs.h"
 #include "sdram.h"
 
 //This test program loads a .ym music file from the SD card and plays it back on one of the
 //two YM2149 PSGs using the STsound library.
 
-#define YM2149_SYS_BASE 0x10001000
-#define YM2149_PSG_0 (YM2149_SYS_BASE+PSG0_CHA_TONE_PERIOD_FINE_OFFSET*4)
-#define YM2149_PSG_1 (YM2149_SYS_BASE+PSG1_CHA_TONE_PERIOD_FINE_OFFSET*4)
+#define YM2149_PSG_0 (YM2149_BASE_ADDR+YM2149_PSG0_CHA_TONE_PERIOD_FINE_ADDR)
+#define YM2149_PSG_1 (YM2149_BASE_ADDR+YM2149_PSG1_CHA_TONE_PERIOD_FINE_ADDR)
 
 #define DISK_DEV_NUM "0:"
 #define STR_ROOT_DIRECTORY ""
 
 const char *root_dir_name = STR_ROOT_DIRECTORY;
 const char *ym_file_name = STR_ROOT_DIRECTORY "ancool1.ym";
+
+typedef struct {
+  uint32_t addr;
+  uint32_t val;
+} AddrVal_t;
 
 unsigned mval = 10;
 unsigned bass = 25;
@@ -83,6 +87,11 @@ static FRESULT scan_files(
   return res;
 }
 
+static inline void ym2149_sys_reg_wr(unsigned reg_offset, unsigned val)
+{
+  *(uint32_t volatile *)(YM2149_BASE_ADDR + reg_offset) = val;
+}
+
 int main(void)
 {
   FRESULT res;
@@ -99,17 +108,22 @@ int main(void)
     printf("SDRAM init failed!\n");
     while(1);
   }
-  //Program the audio mixer registers
-  unsigned addrs[] = {FILTER_MIXER_VOLA_OFFSET, FILTER_MIXER_VOLB_OFFSET, FILTER_MIXER_VOLC_OFFSET,
-            FILTER_MIXER_VOLD_OFFSET, FILTER_MIXER_VOLE_OFFSET, FILTER_MIXER_VOLF_OFFSET,
-            FILTER_MIXER_MVOL_OFFSET, FILTER_MIXER_INV_OFFSET, FILTER_MIXER_BASS_OFFSET, FILTER_MIXER_TREB_OFFSET};
-  unsigned vals[] = {50, 50, 50,
-             50, 50, 50,
-             mval, 0, bass, treble};
 
-  for (int ii = 0; ii < (sizeof(addrs) / sizeof(addrs[0])); ii++)
-  {
-    ym2149_sys_reg_wr(addrs[ii], vals[ii]);
+  //Program the audio mixer registers
+  static AddrVal_t addr_vals[]  = {
+    {YM2149_FILTER_MIXER_VOLA_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLB_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLC_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLD_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLE_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLF_ADDR, 50},
+    {YM2149_FILTER_MIXER_MVOL_ADDR, mval},
+    {YM2149_FILTER_MIXER_INV_ADDR, 0},
+    {YM2149_FILTER_MIXER_BASS_ADDR, bass},
+    {YM2149_FILTER_MIXER_TREBLE_ADDR, treble} } ;
+
+  for (int ii=0; ii<(sizeof(addr_vals)/sizeof(AddrVal_t)); ii++) {
+    ym2149_sys_reg_wr(addr_vals[ii].addr, addr_vals[ii].val);
   }
 
   /* Declare these as static to avoid stack usage.
@@ -180,7 +194,7 @@ int main(void)
           if (mval < 255)
             ++mval;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
+          YM2149->FILTER_MIXER_MVOL = mval;
           printf("mval: %d\n", mval);
         }
 
@@ -189,7 +203,7 @@ int main(void)
           if (mval > 0)
             --mval;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
+          YM2149->FILTER_MIXER_MVOL = mval;
           printf("mval: %d\n", mval);
         }
       }
@@ -201,7 +215,7 @@ int main(void)
           if (bass < 63)
             ++bass;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
+          YM2149->FILTER_MIXER_BASS = bass;
           printf("bass: %d\n", bass);
         }
 
@@ -210,7 +224,7 @@ int main(void)
           if (bass > 1)
             --bass;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
+          YM2149->FILTER_MIXER_BASS = bass;
           printf("bass: %d\n", bass);
         }
       }
@@ -222,7 +236,7 @@ int main(void)
           if (treble < 255)
             ++treble;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
+          YM2149->FILTER_MIXER_TREBLE = treble;
           printf("treble: %d\n", treble);
         }
 
@@ -231,7 +245,7 @@ int main(void)
           if (treble > 0)
             --treble;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
+          YM2149->FILTER_MIXER_TREBLE = treble;
           printf("treble: %d\n", treble);
         }
       }
