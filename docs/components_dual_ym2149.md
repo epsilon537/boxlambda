@@ -20,9 +20,6 @@ hide:
 - **YM2149 Data Sheet**:
     [http://www.ym2149.com/ym2149.pdf](http://www.ym2149.com/ym2149.pdf)
 
-- **YM2419_PSG_system Register interface**:
-    [sw/components/ym2149_sys_hal/ym2149_sys_regs.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ym2149_sys_hal/ym2149_sys_regs.h)
-
 A sound core is a perfect candidate for Partial FPGA Reconfiguration. There are a lot of options (Wave-Table synthesis, FM synthesis, PSG...) and a lot of open-source cores available. It would be pretty cool if the software application could just download its synthesizer of choice as part of the program.
 
 Pretty much any core developed by [Jotego](https://github.com/jotego) sounds like a great idea.

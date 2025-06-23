@@ -53,6 +53,7 @@ nav:
         - SDSPI: registers/generated/sdspi_regs.md
         - SPIFlash: registers/generated/spiflash_regs.md
         - VERA: registers/generated/vera_regs.md
+        - YM2149: registers/generated/ym2149_regs.md
     - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
@@ -78,7 +79,6 @@ nav:
         - SDSPI: sw_comp_sdspi.md
         - FatFs: sw_comp_fat_fs.md
         - ST-Sound: sw_comp_st_sound.md
-        - YM2149 HAL: sw_comp_ym2149_hal.md
         - VERA HAL: sw_comp_vera_hal.md
         - USB HID: sw_comp_usb_hid.md
         - Flash Driver: sw_comp_flashdrvr.md
