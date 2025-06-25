@@ -5,11 +5,12 @@
 /* the DFX Product Guide PG374.
  * Example usage of this register interface can be found in
  * sw/projects/dfx_test/dfx_cli.cpp.*/
-#include "dfx_controller_regs.h"
 /* The DFX Controller control register is in a separate file due to a Corsair
  * limitation. The control register is a write-only register located at the
  * same address as the status register.*/
 #include "dfx_controller_ctrl_reg.h"
+/* All other DFX Controller registers are defined in this file:*/
+#include "dfx_controller_other_regs.h"
 
 #include <stdint.h>
 

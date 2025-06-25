@@ -1,4 +1,4 @@
-# DFX Controller Register map
+# DFX Controller other registers map
 
 Created with [Corsair](https://github.com/esynr3z/corsair) v1.0.4.
 
