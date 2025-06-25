@@ -6,6 +6,7 @@
 #include "vs0_hal.h"
 #include "j1b_hal.h"
 #include "ff.h"
+#include "uart.h"
 
 //The ASCII code for <ESC>
 #define ESC 27

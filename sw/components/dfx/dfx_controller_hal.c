@@ -19,20 +19,20 @@ uint32_t dfx_load_rm(void *bufPtr, uint32_t size, uint32_t timeout_ms) {
   assert(addr);
 
   /* Temporarily shut down the DFX Controller so we can write to the DFX BS INFO 0 register. */
-  dfx_reg_wr(DFX_CONTROL_REG, DFX_CONTROL_CMD_SHUTDOWN);
+  DFX_CTRL->CONTROL_bf.CMD = DFX_CTRL_CONTROL_CMD_SHUTDOWN;
 
   /* Point BS_INFO register 0 to the memory buffer holding the module */
-  dfx_reg_wr(DFX_BS_ADDRESS_0_REG, addr);
-  dfx_reg_wr(DFX_BS_SIZE_0_REG, size);
+  DFX->BS_ADDRESS_0 = addr;
+  DFX->BS_SIZE_0 = size;
 
   /* Turn the DFX Controller back on */
-  dfx_reg_wr(DFX_CONTROL_REG, DFX_CONTROL_CMD_RESTART_NOT_STAT);
+  DFX_CTRL->CONTROL_bf.CMD = DFX_CTRL_CONTROL_CMD_RESTART_NO_STAT;
 
   /* Issue a trigger (index 0) to kick off the loading of the module into the virtual socket*/
-  dfx_reg_wr(DFX_SW_TRIGGER_REG, 0);
+  DFX->SW_TRIGGER_bf.TRIGGER_ID = 0;
 
   /* Check the state */
-  uint32_t status_reg=0;
+  dfx_status_t status_reg;
   uint32_t err=0;
   uint32_t state=0, prev_state=0;
 
@@ -40,9 +40,9 @@ uint32_t dfx_load_rm(void *bufPtr, uint32_t size, uint32_t timeout_ms) {
 
   /* The DFX controller is going to cycle through a few states and, hopefully, end up in the VS_FULL state. */
   while (state != DFX_STATUS_STATE_VS_FULL) {
-    status_reg = dfx_reg_rd(DFX_STATUS_REG);
-    state = (status_reg & DFX_STATUS_STATE_MASK);
-    err = (status_reg & DFX_STATUS_ERR_MASK) >> DFX_STATUS_ERR_OFFSET;
+    status_reg = DFX->STATUS_bf;
+    state = status_reg.STATE;
+    err = status_reg.ERR;
 
     //Abort if we detecte an error.
     if (err != DFX_STATUS_ERR_NO_ERR) {

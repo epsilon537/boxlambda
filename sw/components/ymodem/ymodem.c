@@ -44,6 +44,7 @@
  * o printf(), thought all the printfs can be removed if needed.
  */
 
+#include "uart.h"
 #include "ymodem.h"
 #include <assert.h>
 #include "timer.h"

@@ -30,7 +30,8 @@ message("Build Type: ${CMAKE_BUILD_TYPE}.")
 #dependency to this target.
 add_custom_target(cgen)
 
-#make regen rule, to complete remove and regenerate the build tree.
+#make regen rule, to completely remove and regenerate the build tree, including
+#the code generation (cgen) step.
 add_custom_target(regen
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}
@@ -38,8 +39,8 @@ add_custom_target(regen
         rm -rf sw && rm -rf gw
     COMMAND
         ${CMAKE_COMMAND} .
-    DEPENDS
-        codegen
+    COMMAND
+        ${CMAKE_MAKE_PROGRAM} cgen
     COMMENT
         "Removing and regenerating build tree."
     VERBATIM

@@ -13,6 +13,7 @@ target_compile_options(dfx
 target_include_directories(dfx
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
+    ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 target_link_libraries(dfx timer)

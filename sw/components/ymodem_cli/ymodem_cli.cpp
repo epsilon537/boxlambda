@@ -79,7 +79,7 @@ extern "C" {
 
 /* Call this function to hook the ymodem CLI commanded into the embedded-cli */
 /* instance running on the system. */
-void add_ymodem_cli(EmbeddedCli* cli, struct uart* uart) {
+void add_ymodem_cli(EmbeddedCli* cli) {
   assert(cli);
 
   embeddedCliAddBinding(cli, {

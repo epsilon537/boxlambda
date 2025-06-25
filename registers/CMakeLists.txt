@@ -1,5 +1,5 @@
 set(register_modules uart reset gpio mtimer i2c_master usb_hid sdspi spiflash
-vera ym2149)
+vera ym2149 dfx_controller dfx_controller_ctrl)
 
 #A codegeneration rule to generate the register access layer
 add_custom_target(registers

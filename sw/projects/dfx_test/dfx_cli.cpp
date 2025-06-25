@@ -26,6 +26,7 @@ extern "C" {
     }
     else {
       uint32_t cmd, extraByte, extraHalfword;
+      dfx_ctrl_control_t dfx_control;
 
       char *cmdStr = embeddedCliGetTokenVariable(args, 1);
       char *extraByteStr = embeddedCliGetTokenVariable(args, 2);
@@ -37,39 +38,28 @@ extern "C" {
 
       printf("DFX_CONTROL: cmd:%d, extraByte: %d, extraHalfword: %d.\n", cmd, extraByte, extraHalfword);
 
-      cmd &= DFX_CONTROL_CMD_MASK;
-
-      extraByte <<= DFX_CONTROL_BYTE_OFFSET;
-      extraByte &= DFX_CONTROL_BYTE_MASK;
-
-      extraHalfword <<= DFX_CONTROL_HALFWORD_OFFSET;
-      extraHalfword &= DFX_CONTROL_HALFWORD_MASK;
-
-      dfx_reg_wr(DFX_CONTROL_REG, extraHalfword | extraByte | cmd);
+      dfx_control.CMD = cmd;
+      dfx_control.BYTE = extraByte;
+      dfx_control.HALFWORD = extraHalfword;
+      DFX_CTRL->CONTROL = *(uint32_t*)&dfx_control;
     }
   }
 
   //CLI command to read the DFX status register.
   static void dfx_status(EmbeddedCli *cli, char *args, void *context) {
-    uint32_t status_reg = dfx_reg_rd(DFX_STATUS_REG);
-    uint32_t rm_id = (status_reg & DFX_STATUS_RM_ID_MASK)>>DFX_STATUS_RM_ID_OFFSET;
-    uint32_t shutdown = (status_reg & DFX_STATUS_SHUTDOWN) ? 1 : 0;
-    uint32_t err = (status_reg & DFX_STATUS_ERR_MASK) >> DFX_STATUS_ERR_OFFSET;
-    uint32_t state = (status_reg & DFX_STATUS_STATE_MASK);
+    dfx_status_t dfx_status = *(dfx_status_t*)&(DFX->STATUS);
 
-    printf("DFX_STATUS: RM_ID: %d, Shutdown: %d, Err: %d, State: %d\n", rm_id, shutdown, err, state);
+    printf("DFX_STATUS: RM_ID: %d, Shutdown: %d, Err: %d, State: %d\n", dfx_status.RM_ID, dfx_status.SHUTDOWN, dfx_status.ERR, dfx_status.STATE);
   }
 
   //CLI command to read the DFX trigger register.
   static void dfx_trig_get(EmbeddedCli *cli, char *args, void *context) {
-    uint32_t sw_trig_reg = dfx_reg_rd(DFX_SW_TRIGGER_REG);
-    uint32_t sw_trig_pending = (sw_trig_reg & DFX_SW_TRIGGER_PENDING) ? 1 : 0;
-    uint32_t sw_trig_id = (sw_trig_reg & DFX_SW_TRIGGER_TRIG_ID);
+    dfx_sw_trigger_t sw_trigger = *(dfx_sw_trigger_t*)&(DFX->SW_TRIGGER_bf);
 
-    printf("SW TRIGGER: pending: %d, trigger_id: %d\n", sw_trig_pending, sw_trig_id);
+    printf("SW TRIGGER: pending: %d, trigger_id: %d\n", sw_trigger.TRIGGER_PENDING, sw_trigger.TRIGGER_ID);
 
-    uint32_t trig_0_reg = dfx_reg_rd(DFX_TRIGGER_0_REG);
-    uint32_t trig_1_reg = dfx_reg_rd(DFX_TRIGGER_1_REG);
+    uint32_t trig_0_reg = DFX->TRIGGER_0;
+    uint32_t trig_1_reg = DFX->TRIGGER_1;
 
     printf("TRIGGER_0: %d, TRIGGER_1: %d\n", trig_0_reg, trig_1_reg);
   }
@@ -85,48 +75,38 @@ extern "C" {
       char *token = embeddedCliGetTokenVariable(args, 1);
       sscanf(token, "%d", &trig_id);
 
-      dfx_reg_wr(DFX_SW_TRIGGER_REG, trig_id & DFX_SW_TRIGGER_TRIG_ID);
+      DFX->SW_TRIGGER_bf.TRIGGER_ID = trig_id;
 
-      uint32_t sw_trig_reg = dfx_reg_rd(DFX_SW_TRIGGER_REG);
-      uint32_t sw_trig_pending = (sw_trig_reg & DFX_SW_TRIGGER_PENDING) ? 1 : 0;
-      uint32_t sw_trig_id = (sw_trig_reg & DFX_SW_TRIGGER_TRIG_ID);
+      dfx_sw_trigger_t sw_trigger = *(dfx_sw_trigger_t*)&(DFX->SW_TRIGGER_bf);
 
-      printf("SW TRIGGER: pending: %d, trigger_id: %d\n", sw_trig_pending, sw_trig_id);
+      printf("SW TRIGGER: pending: %d, trigger_id: %d\n", sw_trigger.TRIGGER_PENDING, sw_trigger.TRIGGER_ID);
     }
   }
 
   //CLI command to read the DFX RM info register.
   static void dfx_rm_info_get(EmbeddedCli *cli, char *args, void *context) {
-    uint32_t rm_bs_idx_reg = dfx_reg_rd(DFX_RM_BS_INDEX_0_REG);
-    uint32_t rm_ctrl_reg = dfx_reg_rd(DFX_RM_CONTROL_0_REG);
-    uint32_t rst_duration = (rm_ctrl_reg & DFX_RM_CONTROL_RST_DURATION_MASK) >> DFX_RM_CONTROL_RST_DURATION_OFFSET;
-    uint32_t rst_required = (rm_ctrl_reg & DFX_RM_CONTROL_RST_REQUIRED_MASK) >> DFX_RM_CONTROL_RST_REQUIRED_OFFSET;
-    uint32_t startup_required = (rm_ctrl_reg & DFX_RM_CONTROL_STARTUP_REQUIRED) ? 1 : 0;
-    uint32_t shutdown_required = (rm_ctrl_reg & DFX_RM_CONTROL_SHUTDOWN_REQUIRED_MASK);
+    uint32_t rm_bs_idx_reg = DFX->RM_BS_INDEX_0;
+    dfx_rm_control_0_t rm_control_0 = *(dfx_rm_control_0_t*)&(DFX->RM_CONTROL_0_bf);
 
     printf("RM0: BS_IDX: %d, rst_duration: %d, rst_required: %d, startup_required:%d, shutdown_required: %d.\n",
-           rm_bs_idx_reg, rst_duration, rst_required, startup_required, shutdown_required);
+           rm_bs_idx_reg, rm_control_0.RST_DURATION, rm_control_0.RST_REQUIRED, rm_control_0.STARTUP_REQUIRED, rm_control_0.SHUTDOWN_REQUIRED);
 
-    rm_bs_idx_reg = dfx_reg_rd(DFX_RM_BS_INDEX_1_REG);
-    rm_ctrl_reg = dfx_reg_rd(DFX_RM_CONTROL_1_REG);
-    rst_duration = (rm_ctrl_reg & DFX_RM_CONTROL_RST_DURATION_MASK) >> DFX_RM_CONTROL_RST_DURATION_OFFSET;
-    rst_required = (rm_ctrl_reg & DFX_RM_CONTROL_RST_REQUIRED_MASK) >> DFX_RM_CONTROL_RST_REQUIRED_OFFSET;
-    startup_required = (rm_ctrl_reg & DFX_RM_CONTROL_STARTUP_REQUIRED) ? 1 : 0;
-    shutdown_required = (rm_ctrl_reg & DFX_RM_CONTROL_SHUTDOWN_REQUIRED_MASK);
+    rm_bs_idx_reg = DFX->RM_BS_INDEX_1;
+    dfx_rm_control_1_t rm_control_1 = *(dfx_rm_control_1_t*)&(DFX->RM_CONTROL_1_bf);
 
     printf("RM1: BS_IDX: %d, rst_duration: %d, rst_required: %d, startup_required:%d, shutdown_required: %d.\n",
-           rm_bs_idx_reg, rst_duration, rst_required, startup_required, shutdown_required);
+           rm_bs_idx_reg, rm_control_1.RST_DURATION, rm_control_1.RST_REQUIRED, rm_control_1.STARTUP_REQUIRED, rm_control_1.SHUTDOWN_REQUIRED);
   }
 
   //CLI command to read the DFX BS info register.
   static void dfx_bs_info_get(EmbeddedCli *cli, char *args, void *context) {
-    uint32_t bs_addr = dfx_reg_rd(DFX_BS_ADDRESS_0_REG);
-    uint32_t bs_size = dfx_reg_rd(DFX_BS_SIZE_0_REG);
+    uint32_t bs_addr = DFX->BS_ADDRESS_0;
+    uint32_t bs_size = DFX->BS_SIZE_0;
 
     printf("BS0: addr: 0x%x, size: %d.\n", bs_addr, bs_size);
 
-    bs_addr = dfx_reg_rd(DFX_BS_ADDRESS_1_REG);
-    bs_size = dfx_reg_rd(DFX_BS_SIZE_1_REG);
+    bs_addr = DFX->BS_ADDRESS_1;
+    bs_size = DFX->BS_SIZE_1;
 
     printf("BS1: addr: 0x%x, size: %d.\n", bs_addr, bs_size);
   }
@@ -148,20 +128,20 @@ extern "C" {
       sscanf(bsSzStr, "%d", &bs_size);
 
       if (bs_idx == 0) {
-        dfx_reg_wr(DFX_BS_ADDRESS_0_REG, bs_adr);
-        dfx_reg_wr(DFX_BS_SIZE_0_REG, bs_size);
+        DFX->BS_ADDRESS_0 = bs_adr;
+        DFX->BS_SIZE_0 = bs_size;
 
-        bs_adr = dfx_reg_rd(DFX_BS_ADDRESS_0_REG);
-        bs_size = dfx_reg_rd(DFX_BS_SIZE_0_REG);
+        bs_adr = DFX->BS_ADDRESS_0;
+        bs_size = DFX->BS_SIZE_0;
 
         printf("BS0: addr: 0x%x, size: %d.\n", bs_adr, bs_size);
       }
       else {
-        dfx_reg_wr(DFX_BS_ADDRESS_1_REG, bs_adr);
-        dfx_reg_wr(DFX_BS_SIZE_1_REG, bs_size);
+        DFX->BS_ADDRESS_1 = bs_adr;
+        DFX->BS_SIZE_1 = bs_size;
 
-        bs_adr = dfx_reg_rd(DFX_BS_ADDRESS_1_REG);
-        bs_size = dfx_reg_rd(DFX_BS_SIZE_1_REG);
+        bs_adr = DFX->BS_ADDRESS_1;
+        bs_size = DFX->BS_SIZE_1;
 
         printf("BS1: addr: 0x%x, size: %d.\n", bs_adr, bs_size);
       }
