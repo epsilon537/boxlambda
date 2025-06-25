@@ -1,0 +1,39 @@
+regmap:
+-   name: CONTROL
+    description: Control register.
+    address: 0
+    bitfields:
+    -   name: CMD
+        description: Command.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+        enums:
+        -   name: SHUTDOWN
+            description: Shutdown.
+            value: 0
+        -   name: RESTART_NO_STAT
+            description: Restart without status.
+            value: 1
+        -   name: RESTART_STAT
+            description: Restart with status.
+            value: 2
+        -   name: PROCEED
+            description: Proceed.
+            value: 3
+        -   name: USR_CTRL
+            description: Proceed.
+            value: 4
+    -   name: BYTE
+        description: Byte field containing extra info.
+        reset: 0
+        width: 8
+        lsb: 8
+        access: rw
+    -   name: HALFWORD
+        description: Halfword field containing extra info.
+        reset: 0
+        width: 16
+        lsb: 16
+        access: wo

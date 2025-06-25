@@ -48,12 +48,14 @@ nav:
         - GPIO: registers/generated/gpio_regs.md
         - MTIMER: registers/generated/mtimer_regs.md
         - I2C Master: registers/generated/i2c_master_regs.md
-        - USB_HID_0: registers/generated/usb_hid_0_regs.md
-        - USB_HID_1: registers/generated/usb_hid_1_regs.md
+        - USB HID 0: registers/generated/usb_hid_0_regs.md
+        - USB HID 1: registers/generated/usb_hid_1_regs.md
         - SDSPI: registers/generated/sdspi_regs.md
-        - SPIFlash: registers/generated/spiflash_regs.md
+        - SPI Flash: registers/generated/spiflash_regs.md
         - VERA: registers/generated/vera_regs.md
         - YM2149: registers/generated/ym2149_regs.md
+        - DFX Controller Control Register: registers/generated/dfx_controller_ctrl_reg.md
+        - DFX Controller Other Registers: registers/generated/dfx_controller_other_regs.md
     - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
@@ -74,6 +76,7 @@ nav:
         - VS0: components_vs0.md
         - DFX Controller: components_dfx_controller.md
     - Software Components:
+        - Register Access Layer: sw_comp_register_access_layer.md
         - LiteDRAM Initialization: sw_comp_litedram_initialization.md
         - PicoLibc and Bootstrap: sw_comp_picolibc.md
         - SDSPI: sw_comp_sdspi.md

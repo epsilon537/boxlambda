@@ -105,7 +105,7 @@ The following tools are automatically installed (if not already installed) by so
 
 - [OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD, Python)](https://github.com/YosysHQ/oss-cad-suite-build)
 - [Bender](https://github.com/pulp-platform/bender)
-- Python packages NumPy, SciPy, and Matplotlib.
+- Python packages NumPy, SciPy, Matplotlib, Corsair.
 - [BoxLambda fork of Litex](https://github.com/epsilon537/litex)
 - **riscv32-boxlambda-elf**: RISCV32 GNU toolchain custom-built for BoxLambda.
 
