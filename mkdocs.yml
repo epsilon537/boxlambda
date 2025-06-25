@@ -56,6 +56,7 @@ nav:
         - YM2149: registers/generated/ym2149_regs.md
         - DFX Controller Control Register: registers/generated/dfx_controller_ctrl_reg.md
         - DFX Controller Other Registers: registers/generated/dfx_controller_other_regs.md
+        - LiteDRAM Registers: litedram_regs.md
     - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md

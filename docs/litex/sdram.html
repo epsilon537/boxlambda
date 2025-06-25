@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SDRAM &#8212; LiteX SoC Project  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/default.js?v=0004674d"></script>
+    <script src="_static/WaveDrom.js?v=12e62515"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="DDRPHY" href="ddrphy.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="sdram">
+<h1>SDRAM<a class="headerlink" href="#sdram" title="Link to this heading">¶</a></h1>
+<section id="register-listing-for-sdram">
+<h2>Register Listing for SDRAM<a class="headerlink" href="#register-listing-for-sdram" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Register</p></th>
+<th class="head"><p>Address</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-control"><span class="std std-ref">SDRAM_DFII_CONTROL</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-control"><span class="std std-ref">0x00001000</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi0-command"><span class="std std-ref">SDRAM_DFII_PI0_COMMAND</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi0-command"><span class="std std-ref">0x00001004</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi0-command-issue"><span class="std std-ref">SDRAM_DFII_PI0_COMMAND_ISSUE</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi0-command-issue"><span class="std std-ref">0x00001008</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi0-address"><span class="std std-ref">SDRAM_DFII_PI0_ADDRESS</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi0-address"><span class="std std-ref">0x0000100c</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi0-baddress"><span class="std std-ref">SDRAM_DFII_PI0_BADDRESS</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi0-baddress"><span class="std std-ref">0x00001010</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi0-wrdata"><span class="std std-ref">SDRAM_DFII_PI0_WRDATA</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi0-wrdata"><span class="std std-ref">0x00001014</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi0-rddata"><span class="std std-ref">SDRAM_DFII_PI0_RDDATA</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi0-rddata"><span class="std std-ref">0x00001018</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi1-command"><span class="std std-ref">SDRAM_DFII_PI1_COMMAND</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi1-command"><span class="std std-ref">0x0000101c</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi1-command-issue"><span class="std std-ref">SDRAM_DFII_PI1_COMMAND_ISSUE</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi1-command-issue"><span class="std std-ref">0x00001020</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi1-address"><span class="std std-ref">SDRAM_DFII_PI1_ADDRESS</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi1-address"><span class="std std-ref">0x00001024</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi1-baddress"><span class="std std-ref">SDRAM_DFII_PI1_BADDRESS</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi1-baddress"><span class="std std-ref">0x00001028</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi1-wrdata"><span class="std std-ref">SDRAM_DFII_PI1_WRDATA</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi1-wrdata"><span class="std std-ref">0x0000102c</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi1-rddata"><span class="std std-ref">SDRAM_DFII_PI1_RDDATA</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi1-rddata"><span class="std std-ref">0x00001030</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi2-command"><span class="std std-ref">SDRAM_DFII_PI2_COMMAND</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi2-command"><span class="std std-ref">0x00001034</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi2-command-issue"><span class="std std-ref">SDRAM_DFII_PI2_COMMAND_ISSUE</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi2-command-issue"><span class="std std-ref">0x00001038</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi2-address"><span class="std std-ref">SDRAM_DFII_PI2_ADDRESS</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi2-address"><span class="std std-ref">0x0000103c</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi2-baddress"><span class="std std-ref">SDRAM_DFII_PI2_BADDRESS</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi2-baddress"><span class="std std-ref">0x00001040</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi2-wrdata"><span class="std std-ref">SDRAM_DFII_PI2_WRDATA</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi2-wrdata"><span class="std std-ref">0x00001044</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi2-rddata"><span class="std std-ref">SDRAM_DFII_PI2_RDDATA</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi2-rddata"><span class="std std-ref">0x00001048</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi3-command"><span class="std std-ref">SDRAM_DFII_PI3_COMMAND</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi3-command"><span class="std std-ref">0x0000104c</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi3-command-issue"><span class="std std-ref">SDRAM_DFII_PI3_COMMAND_ISSUE</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi3-command-issue"><span class="std std-ref">0x00001050</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi3-address"><span class="std std-ref">SDRAM_DFII_PI3_ADDRESS</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi3-address"><span class="std std-ref">0x00001054</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi3-baddress"><span class="std std-ref">SDRAM_DFII_PI3_BADDRESS</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi3-baddress"><span class="std std-ref">0x00001058</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sdram-dfii-pi3-wrdata"><span class="std std-ref">SDRAM_DFII_PI3_WRDATA</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi3-wrdata"><span class="std std-ref">0x0000105c</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sdram-dfii-pi3-rddata"><span class="std std-ref">SDRAM_DFII_PI3_RDDATA</span></a></p></td>
+<td><p><a class="reference internal" href="#sdram-dfii-pi3-rddata"><span class="std std-ref">0x00001060</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="sdram-dfii-control">
+<h3>SDRAM_DFII_CONTROL<a class="headerlink" href="#sdram-dfii-control" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x0 = 0x00001000</cite></p>
+<blockquote>
+<div><p>Control DFI signals common to all phases</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "sel",  "attr": '1', "bits": 1},
+        {"name": "cke",  "bits": 1},
+        {"name": "odt",  "bits": 1},
+        {"name": "reset_n",  "bits": 1},
+        {"bits": 28}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[0]</p></td>
+<td><p>SEL</p></td>
+<td><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0b0</span></code></p></td>
+<td><p>Software (CPU) control.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0b1</span></code></p></td>
+<td><p>Hardware control (default).</p></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><p>[1]</p></td>
+<td><p>CKE</p></td>
+<td><p>DFI clock enable bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[2]</p></td>
+<td><p>ODT</p></td>
+<td><p>DFI on-die termination bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[3]</p></td>
+<td><p>RESET_N</p></td>
+<td><p>DFI clock reset bus</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sdram-dfii-pi0-command">
+<h3>SDRAM_DFII_PI0_COMMAND<a class="headerlink" href="#sdram-dfii-pi0-command" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x4 = 0x00001004</cite></p>
+<blockquote>
+<div><p>Control DFI signals on a single phase</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "cs",  "bits": 1},
+        {"name": "we",  "bits": 1},
+        {"name": "cas",  "bits": 1},
+        {"name": "ras",  "bits": 1},
+        {"name": "wren",  "bits": 1},
+        {"name": "rden",  "bits": 1},
+        {"name": "cs_top",  "bits": 1},
+        {"name": "cs_bottom",  "bits": 1},
+        {"bits": 24}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[0]</p></td>
+<td><p>CS</p></td>
+<td><p>DFI chip select bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[1]</p></td>
+<td><p>WE</p></td>
+<td><p>DFI write enable bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[2]</p></td>
+<td><p>CAS</p></td>
+<td><p>DFI column address strobe bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[3]</p></td>
+<td><p>RAS</p></td>
+<td><p>DFI row address strobe bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[4]</p></td>
+<td><p>WREN</p></td>
+<td><p>DFI write data enable bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[5]</p></td>
+<td><p>RDEN</p></td>
+<td><p>DFI read data enable bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[6]</p></td>
+<td><p>CS_TOP</p></td>
+<td><p>DFI chip select bus for top half only</p></td>
+</tr>
+<tr class="row-odd"><td><p>[7]</p></td>
+<td><p>CS_BOTTOM</p></td>
+<td><p>DFI chip select bus for bottom half only</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sdram-dfii-pi0-command-issue">
+<h3>SDRAM_DFII_PI0_COMMAND_ISSUE<a class="headerlink" href="#sdram-dfii-pi0-command-issue" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x8 = 0x00001008</cite></p>
+<blockquote>
+<div>
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi0_command_issue", "bits": 1},
+        {"bits": 31},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi0-address">
+<h3>SDRAM_DFII_PI0_ADDRESS<a class="headerlink" href="#sdram-dfii-pi0-address" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0xc = 0x0000100c</cite></p>
+<blockquote>
+<div><p>DFI address bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi0_address[13:0]", "bits": 14},
+        {"bits": 18},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi0-baddress">
+<h3>SDRAM_DFII_PI0_BADDRESS<a class="headerlink" href="#sdram-dfii-pi0-baddress" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x10 = 0x00001010</cite></p>
+<blockquote>
+<div><p>DFI bank address bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi0_baddress[2:0]", "bits": 3},
+        {"bits": 29},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi0-wrdata">
+<h3>SDRAM_DFII_PI0_WRDATA<a class="headerlink" href="#sdram-dfii-pi0-wrdata" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x14 = 0x00001014</cite></p>
+<blockquote>
+<div><p>DFI write data bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi0_wrdata[31:0]", "bits": 32}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi0-rddata">
+<h3>SDRAM_DFII_PI0_RDDATA<a class="headerlink" href="#sdram-dfii-pi0-rddata" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x18 = 0x00001018</cite></p>
+<blockquote>
+<div><p>DFI read data bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi0_rddata[31:0]", "bits": 32}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi1-command">
+<h3>SDRAM_DFII_PI1_COMMAND<a class="headerlink" href="#sdram-dfii-pi1-command" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x1c = 0x0000101c</cite></p>
+<blockquote>
+<div><p>Control DFI signals on a single phase</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "cs",  "bits": 1},
+        {"name": "we",  "bits": 1},
+        {"name": "cas",  "bits": 1},
+        {"name": "ras",  "bits": 1},
+        {"name": "wren",  "bits": 1},
+        {"name": "rden",  "bits": 1},
+        {"name": "cs_top",  "bits": 1},
+        {"name": "cs_bottom",  "bits": 1},
+        {"bits": 24}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[0]</p></td>
+<td><p>CS</p></td>
+<td><p>DFI chip select bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[1]</p></td>
+<td><p>WE</p></td>
+<td><p>DFI write enable bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[2]</p></td>
+<td><p>CAS</p></td>
+<td><p>DFI column address strobe bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[3]</p></td>
+<td><p>RAS</p></td>
+<td><p>DFI row address strobe bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[4]</p></td>
+<td><p>WREN</p></td>
+<td><p>DFI write data enable bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[5]</p></td>
+<td><p>RDEN</p></td>
+<td><p>DFI read data enable bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[6]</p></td>
+<td><p>CS_TOP</p></td>
+<td><p>DFI chip select bus for top half only</p></td>
+</tr>
+<tr class="row-odd"><td><p>[7]</p></td>
+<td><p>CS_BOTTOM</p></td>
+<td><p>DFI chip select bus for bottom half only</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sdram-dfii-pi1-command-issue">
+<h3>SDRAM_DFII_PI1_COMMAND_ISSUE<a class="headerlink" href="#sdram-dfii-pi1-command-issue" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x20 = 0x00001020</cite></p>
+<blockquote>
+<div>
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi1_command_issue", "bits": 1},
+        {"bits": 31},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi1-address">
+<h3>SDRAM_DFII_PI1_ADDRESS<a class="headerlink" href="#sdram-dfii-pi1-address" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x24 = 0x00001024</cite></p>
+<blockquote>
+<div><p>DFI address bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi1_address[13:0]", "bits": 14},
+        {"bits": 18},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi1-baddress">
+<h3>SDRAM_DFII_PI1_BADDRESS<a class="headerlink" href="#sdram-dfii-pi1-baddress" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x28 = 0x00001028</cite></p>
+<blockquote>
+<div><p>DFI bank address bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi1_baddress[2:0]", "bits": 3},
+        {"bits": 29},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi1-wrdata">
+<h3>SDRAM_DFII_PI1_WRDATA<a class="headerlink" href="#sdram-dfii-pi1-wrdata" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x2c = 0x0000102c</cite></p>
+<blockquote>
+<div><p>DFI write data bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi1_wrdata[31:0]", "bits": 32}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi1-rddata">
+<h3>SDRAM_DFII_PI1_RDDATA<a class="headerlink" href="#sdram-dfii-pi1-rddata" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x30 = 0x00001030</cite></p>
+<blockquote>
+<div><p>DFI read data bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi1_rddata[31:0]", "bits": 32}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi2-command">
+<h3>SDRAM_DFII_PI2_COMMAND<a class="headerlink" href="#sdram-dfii-pi2-command" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x34 = 0x00001034</cite></p>
+<blockquote>
+<div><p>Control DFI signals on a single phase</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "cs",  "bits": 1},
+        {"name": "we",  "bits": 1},
+        {"name": "cas",  "bits": 1},
+        {"name": "ras",  "bits": 1},
+        {"name": "wren",  "bits": 1},
+        {"name": "rden",  "bits": 1},
+        {"name": "cs_top",  "bits": 1},
+        {"name": "cs_bottom",  "bits": 1},
+        {"bits": 24}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[0]</p></td>
+<td><p>CS</p></td>
+<td><p>DFI chip select bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[1]</p></td>
+<td><p>WE</p></td>
+<td><p>DFI write enable bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[2]</p></td>
+<td><p>CAS</p></td>
+<td><p>DFI column address strobe bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[3]</p></td>
+<td><p>RAS</p></td>
+<td><p>DFI row address strobe bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[4]</p></td>
+<td><p>WREN</p></td>
+<td><p>DFI write data enable bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[5]</p></td>
+<td><p>RDEN</p></td>
+<td><p>DFI read data enable bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[6]</p></td>
+<td><p>CS_TOP</p></td>
+<td><p>DFI chip select bus for top half only</p></td>
+</tr>
+<tr class="row-odd"><td><p>[7]</p></td>
+<td><p>CS_BOTTOM</p></td>
+<td><p>DFI chip select bus for bottom half only</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sdram-dfii-pi2-command-issue">
+<h3>SDRAM_DFII_PI2_COMMAND_ISSUE<a class="headerlink" href="#sdram-dfii-pi2-command-issue" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x38 = 0x00001038</cite></p>
+<blockquote>
+<div>
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi2_command_issue", "bits": 1},
+        {"bits": 31},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi2-address">
+<h3>SDRAM_DFII_PI2_ADDRESS<a class="headerlink" href="#sdram-dfii-pi2-address" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x3c = 0x0000103c</cite></p>
+<blockquote>
+<div><p>DFI address bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi2_address[13:0]", "bits": 14},
+        {"bits": 18},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi2-baddress">
+<h3>SDRAM_DFII_PI2_BADDRESS<a class="headerlink" href="#sdram-dfii-pi2-baddress" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x40 = 0x00001040</cite></p>
+<blockquote>
+<div><p>DFI bank address bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi2_baddress[2:0]", "bits": 3},
+        {"bits": 29},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi2-wrdata">
+<h3>SDRAM_DFII_PI2_WRDATA<a class="headerlink" href="#sdram-dfii-pi2-wrdata" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x44 = 0x00001044</cite></p>
+<blockquote>
+<div><p>DFI write data bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi2_wrdata[31:0]", "bits": 32}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi2-rddata">
+<h3>SDRAM_DFII_PI2_RDDATA<a class="headerlink" href="#sdram-dfii-pi2-rddata" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x48 = 0x00001048</cite></p>
+<blockquote>
+<div><p>DFI read data bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi2_rddata[31:0]", "bits": 32}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi3-command">
+<h3>SDRAM_DFII_PI3_COMMAND<a class="headerlink" href="#sdram-dfii-pi3-command" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x4c = 0x0000104c</cite></p>
+<blockquote>
+<div><p>Control DFI signals on a single phase</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "cs",  "bits": 1},
+        {"name": "we",  "bits": 1},
+        {"name": "cas",  "bits": 1},
+        {"name": "ras",  "bits": 1},
+        {"name": "wren",  "bits": 1},
+        {"name": "rden",  "bits": 1},
+        {"name": "cs_top",  "bits": 1},
+        {"name": "cs_bottom",  "bits": 1},
+        {"bits": 24}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[0]</p></td>
+<td><p>CS</p></td>
+<td><p>DFI chip select bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[1]</p></td>
+<td><p>WE</p></td>
+<td><p>DFI write enable bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[2]</p></td>
+<td><p>CAS</p></td>
+<td><p>DFI column address strobe bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[3]</p></td>
+<td><p>RAS</p></td>
+<td><p>DFI row address strobe bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[4]</p></td>
+<td><p>WREN</p></td>
+<td><p>DFI write data enable bus</p></td>
+</tr>
+<tr class="row-odd"><td><p>[5]</p></td>
+<td><p>RDEN</p></td>
+<td><p>DFI read data enable bus</p></td>
+</tr>
+<tr class="row-even"><td><p>[6]</p></td>
+<td><p>CS_TOP</p></td>
+<td><p>DFI chip select bus for top half only</p></td>
+</tr>
+<tr class="row-odd"><td><p>[7]</p></td>
+<td><p>CS_BOTTOM</p></td>
+<td><p>DFI chip select bus for bottom half only</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sdram-dfii-pi3-command-issue">
+<h3>SDRAM_DFII_PI3_COMMAND_ISSUE<a class="headerlink" href="#sdram-dfii-pi3-command-issue" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x50 = 0x00001050</cite></p>
+<blockquote>
+<div>
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi3_command_issue", "bits": 1},
+        {"bits": 31},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi3-address">
+<h3>SDRAM_DFII_PI3_ADDRESS<a class="headerlink" href="#sdram-dfii-pi3-address" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x54 = 0x00001054</cite></p>
+<blockquote>
+<div><p>DFI address bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi3_address[13:0]", "bits": 14},
+        {"bits": 18},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi3-baddress">
+<h3>SDRAM_DFII_PI3_BADDRESS<a class="headerlink" href="#sdram-dfii-pi3-baddress" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x58 = 0x00001058</cite></p>
+<blockquote>
+<div><p>DFI bank address bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi3_baddress[2:0]", "bits": 3},
+        {"bits": 29},
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 4 }, "options": {"hspace": 400, "bits": 32, "lanes": 4}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi3-wrdata">
+<h3>SDRAM_DFII_PI3_WRDATA<a class="headerlink" href="#sdram-dfii-pi3-wrdata" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x5c = 0x0000105c</cite></p>
+<blockquote>
+<div><p>DFI write data bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi3_wrdata[31:0]", "bits": 32}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+<section id="sdram-dfii-pi3-rddata">
+<h3>SDRAM_DFII_PI3_RDDATA<a class="headerlink" href="#sdram-dfii-pi3-rddata" title="Link to this heading">¶</a></h3>
+<p><cite>Address: 0x00001000 + 0x60 = 0x00001060</cite></p>
+<blockquote>
+<div><p>DFI read data bus</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+    "reg": [
+        {"name": "dfii_pi3_rddata[31:0]", "bits": 32}
+    ], "config": {"hspace": 400, "bits": 32, "lanes": 1 }, "options": {"hspace": 400, "bits": 32, "lanes": 1}
+}
+</script>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">LiteX SoC Project</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="interrupts.html">Interrupt Controller</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ddrctrl.html">DDRCTRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ddrphy.html">DDRPHY</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SDRAM</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="ddrphy.html" title="previous chapter">DDRPHY</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Anonymous.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/sdram.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
