@@ -42,7 +42,7 @@ nav:
         - Interrupts: interrupts.md
         - LEDs: leds.md
         - FPGA Resource Utilization: fpga-resource-utilization.md
-    - Register Map:
+    - Register and Memory Map:
         - Reset: registers/generated/reset_regs.md
         - UART: registers/generated/uart_regs.md
         - GPIO: registers/generated/gpio_regs.md
@@ -57,6 +57,7 @@ nav:
         - DFX Controller Control Register: registers/generated/dfx_controller_ctrl_reg.md
         - DFX Controller Other Registers: registers/generated/dfx_controller_other_regs.md
         - LiteDRAM Registers: litedram_regs.md
+        - Memory Map: memory_map.md
     - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
