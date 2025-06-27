@@ -43,28 +43,28 @@ int main(void) {
     printf("This is not a simulation.\n");
 
   printf("Writing 0 to invalid address 0x18000000:\n");
-  *(volatile unsigned *)0x18000000 = 0;
+  *(volatile uint32_t *)0x18000000 = 0;
   printf("Reading from invalid address 0x18000000:\n");
-  printf("0x18000000: 0x%x\n", *(volatile unsigned *)0x18000000);
-  assert(*(volatile unsigned *)0x18000000 == 0xdeadbeef);
+  printf("0x18000000: 0x%x\n", *(volatile uint32_t *)0x18000000);
+  assert(*(volatile uint32_t *)0x18000000 == 0xdeadbeef);
 
   printf("Writing 0 to invalid address 0x10080000:\n");
-  *(volatile unsigned *)0x10080000 = 0;
+  *(volatile uint32_t *)0x10080000 = 0;
   printf("Reading from invalid address 0x10080000:\n");
-  printf("0x10080000: 0x%x\n", *(volatile unsigned *)0x10080000);
-  assert(*(volatile unsigned *)0x10080000 == 0xdeadbeef);
+  printf("0x10080000: 0x%x\n", *(volatile uint32_t *)0x10080000);
+  assert(*(volatile uint32_t *)0x10080000 == 0xdeadbeef);
 
   printf("Writing 0 to invalid address 0x20000000:\n");
-  *(volatile unsigned *)0x20000000 = 0;
+  *(volatile uint32_t *)0x20000000 = 0;
   printf("Reading from invalid address 0x20000000:\n");
-  printf("0x20000000: 0x%x\n", *(volatile unsigned *)0x20000000);
-  assert(*(volatile unsigned *)0x20000000 == 0xdeadbeef);
+  printf("0x20000000: 0x%x\n", *(volatile uint32_t *)0x20000000);
+  assert(*(volatile uint32_t *)0x20000000 == 0xdeadbeef);
 
   printf("Writing 0 to invalid address 0x10000400:\n");
-  *(volatile unsigned *)0x10000400 = 0;
+  *(volatile uint32_t *)0x10000400 = 0;
   printf("Reading from invalid address 0x10000400:\n");
-  printf("0x10000400: 0x%x\n", *(volatile unsigned *)0x10000400);
-  assert(*(volatile unsigned *)0x10000400 == 0xdeadbeef);
+  printf("0x10000400: 0x%x\n", *(volatile uint32_t *)0x10000400);
+  assert(*(volatile uint32_t *)0x10000400 == 0xdeadbeef);
 
   printf("Test Successful.\n");
 

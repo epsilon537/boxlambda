@@ -24,7 +24,7 @@ extern "C" {
 
       addr = (uint32_t)malloc(YMODEM_RX_BUF_SIZE_BYTES);
 
-      ymodem_rx_size = ymodem_receive((unsigned char*)addr, YMODEM_RX_BUF_SIZE_BYTES);
+      ymodem_rx_size = ymodem_receive((uint8_t*)addr, YMODEM_RX_BUF_SIZE_BYTES);
 
       printf("Ymodem received %d bytes into buffer at address 0x%x.\n", ymodem_rx_size, addr);
 
@@ -70,7 +70,7 @@ extern "C" {
       sscanf(addrString, "%08X", &addr);
       sscanf(sizeString, "%d", &buf_size);
 
-      ymodem_send((unsigned char*)addr, buf_size, (char*)filename);
+      ymodem_send((uint8_t*)addr, buf_size, (char*)filename);
 
       printf("Ymodem transmitted %d bytes into buffer at address 0x%x to file %s.\n", buf_size, addr, filename);
     }

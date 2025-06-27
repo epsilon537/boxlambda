@@ -1,9 +1,9 @@
 #include "vera_hal.h"
 
 //Crude sprite attributes write function.
-void sprite_attr_wr(unsigned sprite_id, unsigned addr, unsigned mode, unsigned x, unsigned y,
-                    unsigned z, unsigned collision_mask, unsigned width, unsigned height) {
-  unsigned v,w;
+void sprite_attr_wr(uint32_t sprite_id, uint32_t addr, uint32_t mode, uint32_t x, uint32_t y,
+                    uint32_t z, uint32_t collision_mask, uint32_t width, uint32_t height) {
+  uint32_t v,w;
 
   v = (addr>>5);
   v |= (mode<<15);
@@ -14,6 +14,6 @@ void sprite_attr_wr(unsigned sprite_id, unsigned addr, unsigned mode, unsigned x
   w |= (width<<28); //width:64
   w |= (height<<30); //height
 
-  *(volatile unsigned *)(VERA_SPRITES_BASE + sprite_id*8) = v;
-  *(volatile unsigned *)(VERA_SPRITES_BASE + sprite_id*8 + 4) = w;
+  *(volatile uint32_t *)(VERA_SPRITES_BASE + sprite_id*8) = v;
+  *(volatile uint32_t *)(VERA_SPRITES_BASE + sprite_id*8 + 4) = w;
 }

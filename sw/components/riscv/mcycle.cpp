@@ -6,7 +6,7 @@
 /**
  * Delay loop executing within 8 cycles on ibex
  */
-static void delay_loop_ibex(unsigned long loops) {
+static void delay_loop_ibex(uint32_t loops) {
   int out; /* only to notify compiler of modifications to |loops| */
   asm volatile(
             "1: nop             \n" // 1 cycle
@@ -20,15 +20,15 @@ static void delay_loop_ibex(unsigned long loops) {
             );
 }
 
-static int usleep_ibex(unsigned long usec) {
-  unsigned long usec_cycles;
+static int usleep_ibex(uint32_t usec) {
+  uint32_t usec_cycles;
   usec_cycles = PLATFORM_CLK_FREQ * usec / 1000 / 1000 / 8;
 
   delay_loop_ibex(usec_cycles);
   return 0;
 }
 
-int usleep(unsigned long usec) {
+int usleep(uint32_t usec) {
   return usleep_ibex(usec);
 }
 

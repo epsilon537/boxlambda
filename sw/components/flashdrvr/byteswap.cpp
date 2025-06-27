@@ -4,7 +4,7 @@
 //
 // Project:	OpenArty, an entirely open SoC based upon the Arty platform
 //
-// Purpose:	
+// Purpose:
 //
 // Creator:	Dan Gisselquist, Ph.D.
 //		Gisselquist Technology, LLC
@@ -54,7 +54,7 @@ byteswap(uint32_t v) {
 }
 
 uint32_t
-buildword(const unsigned char *p) {
+buildword(const uint8_t *p) {
 	uint32_t	r = 0;
 
 	r  = (*p++); r <<= 8;
@@ -66,7 +66,7 @@ buildword(const unsigned char *p) {
 }
 
 uint32_t
-buildswap(const unsigned char *p) {
+buildswap(const uint8_t *p) {
 	uint32_t	r = 0;
 
 	r  = p[3]; r <<= 8;

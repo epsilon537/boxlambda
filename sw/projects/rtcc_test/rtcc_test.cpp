@@ -74,7 +74,7 @@ void rtcc_test(void) {
     if (tmElements.Second != prevSecond) {
       prevSecond = tmElements.Second;
 
-      printf("sec: 0x%x, min: 0x%x, hour: 0x%x.\n", (unsigned)tmElements.Second, (unsigned)tmElements.Minute, (unsigned)tmElements.Hour);
+      printf("sec: 0x%x, min: 0x%x, hour: 0x%x.\n", (uint32_t)tmElements.Second, (uint32_t)tmElements.Minute, (uint32_t)tmElements.Hour);
     }
   }
 }

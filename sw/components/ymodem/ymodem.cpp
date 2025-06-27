@@ -69,7 +69,7 @@ static void _putchar(int c) {
   uart_tx((uint8_t)c);
 }
 
-void _sleep(unsigned long seconds) {
+void _sleep(uint32_t seconds) {
   uint64_t timeout_time = MTIMER_SECONDS_TO_CLOCKS(seconds) + mtimer_get_raw_time();
 
   while (mtimer_get_raw_time() < timeout_time);
@@ -81,13 +81,13 @@ static int serial_read() {
 
 #ifdef WITH_CRC32
 /* http://csbruce.com/~csbruce/software/crc32.c */
-static unsigned long crc32(const unsigned char* buf, unsigned long count)
+static uint32_t crc32(const uint8_t* buf, uint32_t count)
 {
-  unsigned long crc = 0xFFFFFFFF;
-  unsigned long i;
+  uint32_t crc = 0xFFFFFFFF;
+  uint32_t i;
 
   /* This static table adds 1K */
-  static const unsigned long crc_table[256] = {
+  static const uint32_t crc_table[256] = {
     0x00000000,0x77073096,0xEE0E612C,0x990951BA,0x076DC419,0x706AF48F,0xE963A535,
     0x9E6495A3,0x0EDB8832,0x79DCB8A4,0xE0D5E91E,0x97D2D988,0x09B64C2B,0x7EB17CBD,
     0xE7B82D07,0x90BF1D91,0x1DB71064,0x6AB020F2,0xF3B97148,0x84BE41DE,0x1ADAD47D,
@@ -135,9 +135,9 @@ static unsigned long crc32(const unsigned char* buf, unsigned long count)
 #endif
 
 /* http://www.ccsinfo.com/forum/viewtopic.php?t=24977 */
-static unsigned short crc16(const unsigned char *buf, unsigned long count)
+static uint32_t short crc16(const uint8_t *buf, uint32_t count)
 {
-  unsigned short crc = 0;
+  uint32_t short crc = 0;
   int i;
 
   while(count--) {
@@ -154,7 +154,7 @@ static unsigned short crc16(const unsigned char *buf, unsigned long count)
   return crc;
 }
 
-static const char *u32_to_str(unsigned int val)
+static const char *u32_to_str(uint32_t val)
 {
   /* Maximum number of decimal digits in u32 is 10 */
   static char num_str[11];
@@ -174,10 +174,10 @@ static const char *u32_to_str(unsigned int val)
   return &num_str[pos];
 }
 
-static unsigned long str_to_u32(unsigned char* str)
+static uint32_t str_to_u32(uint8_t* str)
 {
-  const unsigned char *s = str;
-  unsigned long acc;
+  const uint8_t *s = str;
+  uint32_t acc;
   int c;
 
   /* strip leading spaces if any */
@@ -194,10 +194,10 @@ static unsigned long str_to_u32(unsigned char* str)
 }
 
 /* Returns 0 on success, 1 on corrupt packet, -1 on error (timeout): */
-static int receive_packet(unsigned char *data, int *length)
+static int receive_packet(uint8_t *data, int *length)
 {
   int i, c;
-  unsigned int packet_size;
+  uint32_t packet_size;
 
   *length = 0;
 
@@ -258,14 +258,14 @@ static int receive_packet(unsigned char *data, int *length)
 }
 
 /* Returns the length of the file received, or 0 on error: */
-unsigned long ymodem_receive(unsigned char *buf, unsigned long length)
+uint32_t ymodem_receive(uint8_t *buf, uint32_t length)
 {
-  unsigned char packet_data[PACKET_1K_SIZE + PACKET_OVERHEAD];
+  uint8_t packet_data[PACKET_1K_SIZE + PACKET_OVERHEAD];
   int packet_length, i, file_done, session_done, crc_tries, crc_nak;
-  unsigned int packets_received, errors, first_try = 1;
-  unsigned char file_name[FILE_NAME_LENGTH], file_size[FILE_SIZE_LENGTH], *file_ptr;
-  unsigned char *buf_ptr;
-  unsigned long size = 0;
+  uint32_t packets_received, errors, first_try = 1;
+  uint8_t file_name[FILE_NAME_LENGTH], file_size[FILE_SIZE_LENGTH], *file_ptr;
+  uint8_t *buf_ptr;
+  uint32_t size = 0;
 
   printf("Ymodem rcv:\n");
   file_name[0] = 0;
@@ -389,7 +389,7 @@ unsigned long ymodem_receive(unsigned char *buf, unsigned long length)
   return size;
 }
 
-static void send_packet(unsigned char *data, int block_no)
+static void send_packet(uint8_t *data, int block_no)
 {
   int count, crc, packet_size;
 
@@ -413,10 +413,10 @@ static void send_packet(unsigned char *data, int block_no)
 }
 
 /* Send block 0 (the filename block). filename might be truncated to fit. */
-static void send_packet0(char* filename, unsigned long size)
+static void send_packet0(char* filename, uint32_t size)
 {
-  unsigned long count = 0;
-  unsigned char block[PACKET_SIZE];
+  uint32_t count = 0;
+  uint8_t block[PACKET_SIZE];
   const char* num;
 
   if (filename) {
@@ -439,10 +439,10 @@ static void send_packet0(char* filename, unsigned long size)
 }
 
 
-static void send_data_packets(unsigned char* data, unsigned long size)
+static void send_data_packets(uint8_t* data, uint32_t size)
 {
   int blockno = 1;
-  unsigned long send_size;
+  uint32_t send_size;
   int ch;
 
   while (size > 0) {
@@ -482,7 +482,7 @@ static void send_data_packets(unsigned char* data, unsigned long size)
   }
 }
 
-unsigned long ymodem_send(unsigned char* buf, unsigned long size, char* filename)
+uint32_t ymodem_send(uint8_t* buf, uint32_t size, char* filename)
 {
   int ch, crc_nak = 1;
 

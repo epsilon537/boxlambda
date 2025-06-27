@@ -64,22 +64,22 @@ extern "C" {
 #define J1B_REG_MAX J1B_REG_GP_FROM_J1B
 
 //Write to Register
-inline void j1b_reg_wr(unsigned reg_offset, unsigned val)
+inline void j1b_reg_wr(uint32_t reg_offset, uint32_t val)
 {
 	assert(reg_offset <= J1B_REG_MAX);
-	((unsigned volatile *)(J1B_REG_BASE))[reg_offset] = val;
+	((uint32_t volatile *)(J1B_REG_BASE))[reg_offset] = val;
 }
 
 //Read from Register
-inline unsigned j1b_reg_rd(unsigned reg_offset)
+inline uint32_t j1b_reg_rd(uint32_t reg_offset)
 {
 	assert(reg_offset <= J1B_REG_MAX);
-	return ((unsigned volatile *)(J1B_REG_BASE))[reg_offset];
+	return ((uint32_t volatile *)(J1B_REG_BASE))[reg_offset];
 }
 
 //Load a j1b program into the J1B core's Program Memory.
 //progLen must be a multiple of 4 and <= J1B_PROG_SIZE_BYTES.
-void j1b_load_program(unsigned char *progData, unsigned progLen);
+void j1b_load_program(uint8_t *progData, uint32_t progLen);
 
 #ifdef __cplusplus
 }

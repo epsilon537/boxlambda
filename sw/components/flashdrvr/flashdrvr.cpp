@@ -67,7 +67,7 @@
 
 #define    CFG_USER_CS_n    (1<<8)
 
-static const unsigned    F_RESET = (0x0ff),
+static const uint32_t    F_RESET = (0x0ff),
             F_EMPTY = (0x000),
             F_WRR   = (0x001),
             F_PP    = (0x002),
@@ -98,8 +98,8 @@ FLASHDRVR::FLASHDRVR() : m_debug(false), m_id(FLASH_UNKNOWN) {
   assert(m_sbuf);
 }
 
-unsigned FLASHDRVR::flashid(void) {
-    unsigned    r;
+uint32_t FLASHDRVR::flashid(void) {
+    uint32_t    r;
 
     if (m_id != FLASH_UNKNOWN)
         return m_id;
@@ -132,8 +132,8 @@ void    FLASHDRVR::flwait(void) {
     SPIFLASH->CTRL = F_END;
 }
 
-bool    FLASHDRVR::erase_sector(const unsigned sector, const bool verify_erase) {
-    unsigned    flashaddr = sector & 0x0ffffff;
+bool    FLASHDRVR::erase_sector(const uint32_t sector, const bool verify_erase) {
+    uint32_t    flashaddr = sector & 0x0ffffff;
 
     // Write enable
     SPIFLASH->CTRL = F_END;
@@ -163,7 +163,7 @@ bool    FLASHDRVR::erase_sector(const unsigned sector, const bool verify_erase) 
             readi(FLASHBASE+flashaddr+i*SZPAGEB, SZPAGEW, page);
             for(int j=0; j<SZPAGEW; j++)
                 if (page[j] != 0xffffffff) {
-                    unsigned rdaddr = FLASHBASE+flashaddr+i*SZPAGEB;
+                    uint32_t rdaddr = FLASHBASE+flashaddr+i*SZPAGEB;
 
                     if (m_debug)
                         printf("FLASH[%07x] = %08x, not 0xffffffff as desired (%06x + %d)\n",
@@ -179,10 +179,10 @@ bool    FLASHDRVR::erase_sector(const unsigned sector, const bool verify_erase) 
     return true;
 }
 
-bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
+bool    FLASHDRVR::page_program(const uint32_t addr, const uint32_t len,
         const char *data, const bool verify_write) {
     uint32_t    buf[SZPAGEW], bswapd[SZPAGEW];
-    unsigned    flashaddr = addr & 0x0ffffff;
+    uint32_t    flashaddr = addr & 0x0ffffff;
 
     assert(len > 0);
     assert(len <= PGLENB);
@@ -192,9 +192,9 @@ bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
         return true;
 
     bool    empty_page = true;
-    for(unsigned i=0; i<len; i+=4) {
+    for(uint32_t i=0; i<len; i+=4) {
         uint32_t v;
-        v = buildword((const unsigned char *)&data[i]);
+        v = buildword((const uint8_t *)&data[i]);
         bswapd[(i>>2)] = v;
         if (v != 0xffffffff)
             empty_page = false;
@@ -222,7 +222,7 @@ bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
         SPIFLASH->CTRL = ((flashaddr    )&0x0ff);
 
         // Write the page data itself
-        for(unsigned i=0; i<len; i++)
+        for(uint32_t i=0; i<len; i++)
             SPIFLASH->CTRL =
                 (data[i] & 0x0ff);
         SPIFLASH->CTRL = F_END;
@@ -241,7 +241,7 @@ bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
         // printf("Attempting to verify page\n");
         // NOW VERIFY THE PAGE
         readi(addr, len>>2, buf);
-        for(unsigned i=0; i<(len>>2); i++) {
+        for(uint32_t i=0; i<(len>>2); i++) {
             if (buf[i] != bswapd[i]) {
                 printf("\nVERIFY FAILS[%d]: %08x\n", i, (i<<2)+addr);
                 printf("\t(Flash[%d]) %08x != %08x (Goal[%08x])\n",
@@ -253,7 +253,7 @@ bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
     } return true;
 }
 
-bool    FLASHDRVR::write(const unsigned addr, const unsigned len,
+bool    FLASHDRVR::write(const uint32_t addr, const uint32_t len,
         const char *data, const bool verify) {
 
     assert(addr >= FLASHBASE);
@@ -263,15 +263,15 @@ bool    FLASHDRVR::write(const unsigned addr, const unsigned len,
     // If this buffer is equal to the sector value(s), go on
     // If not, erase the sector
 
-    for(unsigned s=SECTOROF(addr); s<SECTOROF(addr+len+SECTORSZB-1);
+    for(uint32_t s=SECTOROF(addr); s<SECTOROF(addr+len+SECTORSZB-1);
             s+=SECTORSZB) {
         // Do we need to erase?
         bool    need_erase = false, need_program = false;
-        unsigned newv = 0; // (s<addr)?addr:s;
+        uint32_t newv = 0; // (s<addr)?addr:s;
         {
             char *sbuf = m_sbuf;
             const char *dp;    // pointer to our "desired" buffer
-            unsigned    base,ln;
+            uint32_t    base,ln;
 
             base = (addr>s)?addr:s;
             ln=((addr+len>s+SECTORSZB)?(s+SECTORSZB):(addr+len))-base;
@@ -280,7 +280,7 @@ bool    FLASHDRVR::write(const unsigned addr, const unsigned len,
 
             dp = &data[base-addr];
 
-            for(unsigned i=0; i<ln; i++) {
+            for(uint32_t i=0; i<ln; i++) {
                 if ((sbuf[i]&dp[i]) != dp[i]) {
                     if (m_debug) {
                         printf("\nNEED-ERASE @0x%08x ... %08x != %08x (Goal)\n",
@@ -310,8 +310,8 @@ bool    FLASHDRVR::write(const unsigned addr, const unsigned len,
 
         // Now walk through all of our pages in this sector and write
         // to them.
-        for(unsigned p=newv; (p<s+SECTORSZB)&&(p<addr+len); p=PAGEOF(p+PGLENB)) {
-            unsigned start = p, len = addr+len-start;
+        for(uint32_t p=newv; (p<s+SECTORSZB)&&(p<addr+len); p=PAGEOF(p+PGLENB)) {
+            uint32_t start = p, len = addr+len-start;
 
             // BUT! if we cross page boundaries, we need to clip
             // our results to the page boundary

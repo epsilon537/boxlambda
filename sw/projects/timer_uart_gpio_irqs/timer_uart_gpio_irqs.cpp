@@ -73,8 +73,8 @@ void _gpio_irq_handler(void) {
 }
 
 void _uart_irq_handler(void) {
-  unsigned ien = uart_get_ien();
-  unsigned isr = uart_get_isr();
+  uint32_t ien = uart_get_ien();
+  uint32_t isr = uart_get_isr();
 
   if (isr & ien & UART_ISR_RX_DATA_AVL_MASK) {
     uart_irq_ack(UART_ISR_RX_DATA_AVL_MASK);

@@ -63,7 +63,7 @@ extern "C" {
       printf("Booting J1B...\n");
 
       //Load the program into the J1B's program memory.
-      j1b_load_program((unsigned char*)addr, size);
+      j1b_load_program((uint8_t*)addr, size);
 
       printf("Taking J1B out of reset...\n");
 
@@ -93,8 +93,8 @@ extern "C" {
       return;
     }
 
-    unsigned socUartRx;
-    unsigned j1bUartRx;
+    uint32_t socUartRx;
+    uint32_t j1bUartRx;
 
     printf("Forwarding UART. Press <ESC> to return.\n");
 

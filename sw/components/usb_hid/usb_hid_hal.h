@@ -31,8 +31,8 @@ extern "C" {
 
 //USB report data structure.
 typedef struct USB_HID_Report_t {
-	unsigned report0;
-	unsigned report1;
+	uint32_t report0;
+	uint32_t report1;
 } USB_HID_Report_t;
 
 //Retrieve the latest USB report.

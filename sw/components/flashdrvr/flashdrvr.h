@@ -48,24 +48,24 @@
 class    FLASHDRVR {
 private:
     bool    m_debug;
-    unsigned    m_id; // ID of the flash device
+    uint32_t    m_id; // ID of the flash device
     char    *m_sbuf;
 
     void    flwait(void);
 public:
     FLASHDRVR();
-    bool    erase_sector(const unsigned sector, const bool verify_erase=true);
-    bool    page_program(const unsigned addr, const unsigned len,
+    bool    erase_sector(const uint32_t sector, const bool verify_erase=true);
+    bool    page_program(const uint32_t addr, const uint32_t len,
             const char *data, const bool verify_write=true);
 
    /* Write the given block of data to the given flash memory address.
     * Note that flash memory is divided into 4KB segments. Writing to a segment
     * will destroy all previous contents of that segment.
     */
-    bool    write(const unsigned addr, const unsigned len,
+    bool    write(const uint32_t addr, const uint32_t len,
             const char *data, const bool verify=false);
 
-    unsigned    flashid(void);
+    uint32_t    flashid(void);
 };
 
 #endif

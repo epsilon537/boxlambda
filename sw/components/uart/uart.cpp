@@ -23,7 +23,7 @@
 #endif
 #endif
 
-static unsigned remu10(unsigned n);
+static uint32_t remu10(uint32_t n);
 static void qprintchar(char **str, int c);
 static int qprints(char **out, const char *string, int width, int pad);
 static int qprinti(char **out, int i, int b, int sg, int width, int pad, char letbase);
@@ -112,8 +112,8 @@ uint32_t uart_get_ien(void) {
 #define UNALIGNED(X, Y) \
   (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
 
-static unsigned divu10(unsigned n) {
-  unsigned q, r;
+static uint32_t divu10(uint32_t n) {
+  uint32_t q, r;
 
   q = (n >> 1) + (n >> 2);
   q = q + (q >> 4);
@@ -130,7 +130,7 @@ char remu10_table[16] = {
   5, 6, 7, 7, 8, 8, 9, 0
 };
 
-static unsigned remu10(unsigned n) {
+static uint32_t remu10(uint32_t n) {
   n = (0x19999999 * n + (n >> 1) + (n >> 3)) >> 28;
   return remu10_table[n];
 }
@@ -188,7 +188,7 @@ static int qprinti(char **out, int i, int b, int sg, int width, int pad, char le
   char print_buf[PRINT_BUF_LEN];
   char *s;
   int neg = 0, pc = 0;
-  unsigned int u = i;
+  uint32_t u = i;
 
   if (i == 0)
   {
@@ -279,7 +279,7 @@ static int qprint(char **out, const char *format, va_list va)
         continue;
       }
       if( *format == 'u' ) {
-        pc += qprinti (out, va_arg(va, unsigned int), 10, 0, width, pad, 'a');
+        pc += qprinti (out, va_arg(va, uint32_t), 10, 0, width, pad, 'a');
         continue;
       }
       if( *format == 'x' ) {

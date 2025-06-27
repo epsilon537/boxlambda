@@ -78,7 +78,7 @@ void _sdspi_irq_handler(void) {
 int sdspi_test(void) {
   int  *data = debug_data;
   int  i, j;
-  unsigned  v;
+  uint32_t  v;
 
   printf("\n\nSDSPI testing program\n\n");
 

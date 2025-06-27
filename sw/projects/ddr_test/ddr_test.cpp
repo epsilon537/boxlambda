@@ -13,14 +13,14 @@
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 /*Making CRC variable of code_in_ddr() test routine volatile to make sure we also generate some data accesses
  *to internal memory while executing from DDR.*/
-static volatile unsigned int crc;
+static volatile uint32_t crc;
 
 /*This function will be copied to DDR memory.
  *It generates a mix of DDR data and instruction accesses by computing
  *a CRC over a chunk of DDR memory.*/
 int code_in_ddr(char *message) {
   int i, j;
-  unsigned int byte, mask;
+  uint32_t byte, mask;
 
    i = 0;
    crc = 0xFFFFFFFF;
@@ -50,9 +50,9 @@ void	_exit (int status) {
 
 //Adding this specific test because this used to fail.
 static int doubleWriteTest() {
-  void *dst = malloc(sizeof(unsigned));
-  unsigned val1 = 0xffffffff;
-  unsigned val2 = 0x11111111;
+  void *dst = malloc(sizeof(uint32_t));
+  uint32_t val1 = 0xffffffff;
+  uint32_t val2 = 0x11111111;
 
   asm inline volatile (
     "sw %1, 0(%0) \n\t"
@@ -60,7 +60,7 @@ static int doubleWriteTest() {
     :
     : "r" (dst), "r" (val1), "r" (val2));
 
-  unsigned res = *(volatile int *)dst;
+  uint32_t res = *(volatile int *)dst;
 
   free(dst);
 

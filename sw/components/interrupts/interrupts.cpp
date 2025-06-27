@@ -20,20 +20,20 @@ void puthex(uint32_t h) {
   }
 }
 
-static unsigned int get_mepc() {
-  unsigned result;
+static uint32_t get_mepc() {
+  uint32_t result;
   __asm__ volatile("csrr %0, mepc;" : "=r"(result));
   return result;
 }
 
-static unsigned int get_mcause() {
-  unsigned result;
+static uint32_t get_mcause() {
+  uint32_t result;
   __asm__ volatile("csrr %0, mcause;" : "=r"(result));
   return result;
 }
 
-static unsigned int get_mtval() {
-  unsigned result;
+static uint32_t get_mtval() {
+  uint32_t result;
   __asm__ volatile("csrr %0, mtval;" : "=r"(result));
   return result;
 }

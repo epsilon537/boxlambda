@@ -102,17 +102,17 @@ static const int  SDINFO  = 0;
 #ifdef  _BOARD_HAS_SDSPI
 
 //BoxLambda
-void sdcard_irq_clr(unsigned irq_mask) {
+void sdcard_irq_clr(uint32_t irq_mask) {
   SDSPI->ISR = irq_mask;
 }
 
 //BoxLambda
-void sdcard_ien(unsigned irq_mask) {
+void sdcard_ien(uint32_t irq_mask) {
   SDSPI->IEN = irq_mask;
 }
 
 int  sdcard_read_ocr(void) {
-  unsigned  v;
+  uint32_t  v;
 
   if (SDDEBUG)
     txstr("SDCARD: CMD58, READ-OCR\n");
@@ -228,8 +228,8 @@ int  sdcard_read_ocr(void) {
 //
 // Read the SCR register
 //
-int  sdcard_read_scr(unsigned *scr) {
-  unsigned  v;
+int  sdcard_read_scr(uint32_t *scr) {
+  uint32_t  v;
 
   if (SDDEBUG)
     txstr("READ-SCR\n");
@@ -275,12 +275,12 @@ int  sdcard_read_scr(unsigned *scr) {
 // Read the CSD register
 //
 int  sdcard_read_csd(char *csd) {
-  unsigned  *ucsd = (unsigned *)csd;
+  uint32_t  *ucsd = (uint32_t *)csd;
   int    i;
-  unsigned  v;
+  uint32_t  v;
 
   /*csd buffer needs to be word aligned*/
-  assert((((unsigned)csd) & 0x3) == 0);
+  assert((((uint32_t)csd) & 0x3) == 0);
 
   if (sdcard_err != 0)
     return -1;
@@ -324,8 +324,8 @@ zip_halt();
   }
 
   for(i=0; i<4; i++) {
-    unsigned w = SDSPI->FIFO_0;
-    ucsd[i] = ENDIAN_CAST_UNSIGNED(w);
+    uint32_t w = SDSPI->FIFO_0;
+    ucsd[i] = ENDIAN_CAST_uint32_t(w);
   }
 
   if (SDINFO) {
@@ -389,15 +389,15 @@ zip_halt();
 }
 
 int  sdcard_read_cid(char *cid) {
-  unsigned  *ucid = (unsigned *)cid;
+  uint32_t  *ucid = (uint32_t *)cid;
   int    i;
-  unsigned  v;
+  uint32_t  v;
 
   if (SDDEBUG)
     txstr("READ-CID\n");
 
   /*cid buffer needs to be word aligned*/
-  assert((((unsigned)cid) & 0x3) == 0);
+  assert((((uint32_t)cid) & 0x3) == 0);
 
   // CMD10 : SEND_CID_COND
   // Send CID condition to FIFO #1 (Requires reading from FIFO)
@@ -438,8 +438,8 @@ int  sdcard_read_cid(char *cid) {
 
   // Read out the CID
   for(i=0; i<4; i++) {
-    unsigned w = SDSPI->FIFO_0;
-    ucid[i] = ENDIAN_CAST_UNSIGNED(w);
+    uint32_t w = SDSPI->FIFO_0;
+    ucid[i] = ENDIAN_CAST_uint32_t(w);
   }
 
   if (1 || SDINFO) {
@@ -466,7 +466,7 @@ int  sdcard_read_cid(char *cid) {
 
 #ifdef  STDIO_DEBUG
   if (SDINFO) {
-    unsigned sn, md;
+    uint32_t sn, md;
 
     //
     // Here's an example of how this might break down
@@ -514,10 +514,10 @@ int  sdcard_read_cid(char *cid) {
 int  sdcard_init(void) {
   // int    *data = debug_data;
   int    i, j;
-  unsigned  v;
+  uint32_t  v;
 
 #ifdef  SCOPE
-  const unsigned  SCOPEDELAY = 0x100;
+  const uint32_t  SCOPEDELAY = 0x100;
 
   SCOPE->s_ctrl = WBSCOPE_DISABLE | SCOPEDELAY;
 #endif
@@ -706,7 +706,7 @@ int  sdcard_init(void) {
   // Check the response, to double check things are "working" like they
   // should be.
   {
-    unsigned vc, vd;
+    uint32_t vc, vd;
 
     vc = SDSPI->CMD;
     vd = SDSPI->DAT;
@@ -806,7 +806,7 @@ int  sdcard_init(void) {
 // DUMP Control register
 //
 //
-static void  sdcard_dump_ctrlreg(const unsigned rv) {
+static void  sdcard_dump_ctrlreg(const uint32_t rv) {
   if (SDDEBUG) {
     txstr("CONTROL-REG:  "); txhex(rv);
     if (rv & SDSPI_WATCHDOG)
@@ -841,7 +841,7 @@ static void  sdcard_dump_ctrlreg(const unsigned rv) {
 // DUMP R1
 //
 //
-static void  sdcard_dump_r1(const unsigned rv) {
+static void  sdcard_dump_r1(const uint32_t rv) {
   if (SDDEBUG) {
     txstr("R1 Decode:  "); txhex(rv & 0x0ff);
     if (rv & 0x01)
@@ -867,9 +867,9 @@ static void  sdcard_dump_r1(const unsigned rv) {
 // DUMP R2
 //
 //
-static void  sdcard_dump_r2(const unsigned rv) {
+static void  sdcard_dump_r2(const uint32_t rv) {
   if (SDDEBUG) {
-    unsigned  uv = rv >> 16;
+    uint32_t  uv = rv >> 16;
     txstr("R2 Decode:  "); txhex(uv & 0x0ffff);
     if (uv & 0x01)
       txstr("\r\n  Card is locked");
@@ -898,7 +898,7 @@ static void  sdcard_dump_r2(const unsigned rv) {
 // DUMP SECTOR
 //
 //
-static void  sdcard_dump_sector(const unsigned *ubuf) {
+static void  sdcard_dump_sector(const uint32_t *ubuf) {
   int  j;
 
   for(j=0; j<512/4; j++) {
@@ -928,11 +928,11 @@ static  void  sdcard_get_r2(void) {
 //
 //
 int  sdcard_read(int sector, char *buf) {
-  unsigned  *ubuf = (unsigned *)buf;
+  uint32_t  *ubuf = (uint32_t *)buf;
   int    j;
 
   /*buf needs to be word aligned*/
-  assert((((unsigned)buf) & 0x3) == 0);
+  assert((((uint32_t)buf) & 0x3) == 0);
 
   if (SDDEBUG) {
     txstr("SDCARD-READ: ");
@@ -959,7 +959,7 @@ int  sdcard_read(int sector, char *buf) {
 #ifdef  INCLUDE_DMA_CONTROLLER
   if (SDUSEDMA && ((_zip->z_dma.d_ctrl & DMA_BUSY) == 0)) {
     _zip->z_dma.d_len= 512/sizeof(int);
-    _zip->z_dma.d_rd = (unsigned *)&SDSPI->FIFO_0;
+    _zip->z_dma.d_rd = (uint32_t *)&SDSPI->FIFO_0;
     _zip->z_dma.d_wr = &ubuf[0];
     _zip->z_dma.d_ctrl = DMACCOPY | DMA_CONSTSRC;
     while(_zip->z_dma.d_ctrl & DMA_BUSY)
@@ -968,8 +968,8 @@ int  sdcard_read(int sector, char *buf) {
   } else
 #endif
     for(j=0; j<512/4; j++) {
-      unsigned w = SDSPI->FIFO_0;
-      ubuf[j] = ENDIAN_CAST_UNSIGNED(w);
+      uint32_t w = SDSPI->FIFO_0;
+      ubuf[j] = ENDIAN_CAST_uint32_t(w);
     }
 
   if (SDDEBUG && SDINFO)
@@ -988,11 +988,11 @@ int  sdcard_read(int sector, char *buf) {
 //
 //
 int  sdcard_write(const int sector, const char *buf) {
-  const unsigned *ubuf = (unsigned *)buf;
-  unsigned  vc, vd;
+  const uint32_t *ubuf = (uint32_t *)buf;
+  uint32_t  vc, vd;
 
   /*buf needs to be word aligned*/
-  assert((((unsigned)buf) & 0x3) == 0);
+  assert((((uint32_t)buf) & 0x3) == 0);
 
   if (SDDEBUG) {
     txstr("SDCARD-WRITE: ");
@@ -1019,15 +1019,15 @@ int  sdcard_write(const int sector, const char *buf) {
 #ifdef  INCLUDE_DMA_CONTROLLER
   if (SDUSEDMA && ((_zip->z_dma.d_ctrl & DMA_BUSY) == 0)) {
     _zip->z_dma.d_len= 512/sizeof(int);
-    _zip->z_dma.d_rd = (unsigned *)&ubuf[0];
-    _zip->z_dma.d_wr = (unsigned *)&SDSPI->FIFO_0;
+    _zip->z_dma.d_rd = (uint32_t *)&ubuf[0];
+    _zip->z_dma.d_wr = (uint32_t *)&SDSPI->FIFO_0;
     _zip->z_dma.d_ctrl = DMACCOPY | DMA_CONSTDST;
     while(_zip->z_dma.d_ctrl & DMA_BUSY)
       ;
   } else
 #endif
     for(int i=0; i<512/4; i++)
-      SDSPI->FIFO_0 = ENDIAN_CAST_UNSIGNED(ubuf[i]);
+      SDSPI->FIFO_0 = ENDIAN_CAST_uint32_t(ubuf[i]);
 
   SDSPI->DAT = sector;
   SDSPI->CMD = SDSPI_WRITE_SECTOR;

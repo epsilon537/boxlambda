@@ -62,8 +62,8 @@
 extern "C" {
 #endif
 
-unsigned long ymodem_receive(unsigned char *buf, unsigned long length);
-unsigned long ymodem_send(unsigned char *buf, unsigned long size, char* filename);
+uint32_t ymodem_receive(uint8_t *buf, uint32_t length);
+uint32_t ymodem_send(uint8_t *buf, uint32_t size, char* filename);
 
 #ifdef __cplusplus
 }

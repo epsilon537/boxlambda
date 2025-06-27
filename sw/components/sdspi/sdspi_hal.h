@@ -48,9 +48,9 @@
 #endif
 
 #if (SDSPI_CPU_ENDIANNESS == SDSPI_IP_ENDIANNESS)
-#define ENDIAN_CAST_UNSIGNED(w) (w)
+#define ENDIAN_CAST_uint32_t(w) (w)
 #else
-#define ENDIAN_CAST_UNSIGNED(w) (((w&0x000000ff)<<24) | ((w&0x0000ff00)<<8) | ((w&0x00ff0000)>>8) | ((w&0xff000000)>>24))
+#define ENDIAN_CAST_uint32_t(w) (((w&0x000000ff)<<24) | ((w&0x0000ff00)<<8) | ((w&0x00ff0000)>>8) | ((w&0xff000000)>>24))
 #endif
 
 #endif //SDSPI_HAL_H

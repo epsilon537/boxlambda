@@ -20,7 +20,7 @@ extern "C" {
       mcycle_stop();
       pcount_reset();
       mcycle_start();
-      res = *(volatile unsigned *)addr;
+      res = *(volatile uint32_t *)addr;
       mcycle_stop();
 
       cycles = mcycle_get32();
@@ -41,7 +41,7 @@ extern "C" {
       char *token = embeddedCliGetTokenVariable(args, 1);
       sscanf(token, "%08X", &addr);
 
-      printf("peekb 0x%08X -> 0x%02X\n", addr, *(volatile unsigned char *)addr);
+      printf("peekb 0x%08X -> 0x%02X\n", addr, *(volatile uint8_t *)addr);
     }
   }
 
@@ -78,7 +78,7 @@ extern "C" {
       token = embeddedCliGetTokenVariable(args, 2);
       sscanf(token, "%02hhX", &value);
 
-      printf("pokew 0x%08X -> 0x%08X\n", addr, (unsigned)value);
+      printf("pokew 0x%08X -> 0x%08X\n", addr, (uint32_t)value);
 
       *(volatile uint8_t*)addr = value;
     }

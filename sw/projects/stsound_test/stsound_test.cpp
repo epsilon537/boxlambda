@@ -25,9 +25,9 @@ typedef struct {
   uint32_t val;
 } AddrVal_t;
 
-unsigned mval = 10;
-unsigned bass = 25;
-unsigned treble = 128;
+uint32_t mval = 10;
+uint32_t bass = 25;
+uint32_t treble = 128;
 
 #ifdef __cplusplus
 extern "C"
@@ -87,7 +87,7 @@ static FRESULT scan_files(
   return res;
 }
 
-static inline void ym2149_sys_reg_wr(unsigned reg_offset, unsigned val)
+static inline void ym2149_sys_reg_wr(uint32_t reg_offset, uint32_t val)
 {
   *(uint32_t volatile *)(YM2149_BASE_ADDR + reg_offset) = val;
 }

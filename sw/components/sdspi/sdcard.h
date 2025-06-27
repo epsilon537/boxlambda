@@ -83,15 +83,15 @@ extern	char	sdcard_cid[16];
 /* BoxLambda:
  * Acknowledge/Clear an SDCard interrupt. See SDCARD_IRQ in board.h
  * for bit definitions. */
-extern void sdcard_irq_clr(unsigned irq_mask);
+extern void sdcard_irq_clr(uint32_t irq_mask);
 
 /* BoxLambda:
  * Enable an SDCard interrupt. See SDCARD_IRQ in board.h
  * for bit definitions. */
-extern void sdcard_ien(unsigned irq_mask);
+extern void sdcard_ien(uint32_t irq_mask);
 
 extern	int	sdcard_read_ocr(void);
-extern	int	sdcard_read_scr(unsigned *scr);
+extern	int	sdcard_read_scr(uint32_t *scr);
 
 /*Note: the csd buffer has to be 32-bit word aligned.*/
 extern	int	sdcard_read_csd(char *csd);
