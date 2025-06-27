@@ -41,20 +41,22 @@ extern "C" {
       dfx_control.CMD = cmd;
       dfx_control.BYTE = extraByte;
       dfx_control.HALFWORD = extraHalfword;
-      DFX_CTRL->CONTROL = *(uint32_t*)&dfx_control;
+      DFX_CTRL->CONTROL = dfx_control.UINT32;
     }
   }
 
   //CLI command to read the DFX status register.
   static void dfx_status(EmbeddedCli *cli, char *args, void *context) {
-    dfx_other_status_t dfx_status = *(dfx_other_status_t*)&(DFX_OTHER->STATUS);
+    dfx_other_status_t dfx_status;
+    dfx_status.UINT32 = DFX_OTHER->STATUS;
 
     printf("DFX_STATUS: RM_ID: %d, Shutdown: %d, Err: %d, State: %d\n", dfx_status.RM_ID, dfx_status.SHUTDOWN, dfx_status.ERR, dfx_status.STATE);
   }
 
   //CLI command to read the DFX trigger register.
   static void dfx_trig_get(EmbeddedCli *cli, char *args, void *context) {
-    dfx_other_sw_trigger_t sw_trigger = *(dfx_other_sw_trigger_t*)&(DFX_OTHER->SW_TRIGGER_bf);
+    dfx_other_sw_trigger_t sw_trigger;
+    sw_trigger.UINT32 = DFX_OTHER->SW_TRIGGER;
 
     printf("SW TRIGGER: pending: %d, trigger_id: %d\n", sw_trigger.TRIGGER_PENDING, sw_trigger.TRIGGER_ID);
 
@@ -77,7 +79,8 @@ extern "C" {
 
       DFX_OTHER->SW_TRIGGER_bf.TRIGGER_ID = trig_id;
 
-      dfx_other_sw_trigger_t sw_trigger = *(dfx_other_sw_trigger_t*)&(DFX_OTHER->SW_TRIGGER_bf);
+      dfx_other_sw_trigger_t sw_trigger;
+      sw_trigger.UINT32 = DFX_OTHER->SW_TRIGGER;
 
       printf("SW TRIGGER: pending: %d, trigger_id: %d\n", sw_trigger.TRIGGER_PENDING, sw_trigger.TRIGGER_ID);
     }
@@ -86,13 +89,15 @@ extern "C" {
   //CLI command to read the DFX RM info register.
   static void dfx_rm_info_get(EmbeddedCli *cli, char *args, void *context) {
     uint32_t rm_bs_idx_reg = DFX_OTHER->RM_BS_INDEX_0;
-    dfx_other_rm_control_0_t rm_control_0 = *(dfx_other_rm_control_0_t*)&(DFX_OTHER->RM_CONTROL_0_bf);
+    dfx_other_rm_control_0_t rm_control_0;
+    rm_control_0.UINT32 = DFX_OTHER->RM_CONTROL_0;
 
     printf("RM0: BS_IDX: %d, rst_duration: %d, rst_required: %d, startup_required:%d, shutdown_required: %d.\n",
            rm_bs_idx_reg, rm_control_0.RST_DURATION, rm_control_0.RST_REQUIRED, rm_control_0.STARTUP_REQUIRED, rm_control_0.SHUTDOWN_REQUIRED);
 
     rm_bs_idx_reg = DFX_OTHER->RM_BS_INDEX_1;
-    dfx_other_rm_control_1_t rm_control_1 = *(dfx_other_rm_control_1_t*)&(DFX_OTHER->RM_CONTROL_1_bf);
+    dfx_other_rm_control_1_t rm_control_1;
+    rm_control_1.UINT32 = DFX_OTHER->RM_CONTROL_1;
 
     printf("RM1: BS_IDX: %d, rst_duration: %d, rst_required: %d, startup_required:%d, shutdown_required: %d.\n",
            rm_bs_idx_reg, rm_control_1.RST_DURATION, rm_control_1.RST_REQUIRED, rm_control_1.STARTUP_REQUIRED, rm_control_1.SHUTDOWN_REQUIRED);

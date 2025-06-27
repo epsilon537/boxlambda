@@ -18,10 +18,13 @@ extern "C" {
 // CTRL - SPIFlash Control Register
 #define SPIFLASH_CTRL_ADDR 0x0
 #define SPIFLASH_CTRL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t DATA : 8; // If control port is active, written byte value is sent out to SPI slave, top bit first. After write, may be read to retrieve return data byte.
     uint32_t CS_N : 1; // 1/0 de/activates the control port.
     uint32_t : 23; // reserved
+  };
 } spiflash_ctrl_t;
 
 // CTRL.DATA - If control port is active, written byte value is sent out to SPI slave, top bit first. After write, may be read to retrieve return data byte.

@@ -134,12 +134,12 @@ int main(void) {
   l0_config.BITMAP_MODE = 0;
   l0_config.MAP_WIDTH = VERA_L0_CONFIG_MAP_WIDTH_TILES_128;
   l0_config.MAP_HEIGHT = VERA_L0_CONFIG_MAP_HEIGHT_TILES_128;
-  VERA->L0_CONFIG = *(uint32_t *)&l0_config;
+  VERA->L0_CONFIG = l0_config.UINT32;
   vera_l0_tilebase_t l0_tilebase;
   l0_tilebase.TILE_WIDTH = VERA_L0_TILEBASE_TILE_WIDTH_TILE_WIDTH_8;
   l0_tilebase.TILE_HEIGHT = VERA_L0_TILEBASE_TILE_HEIGHT_TILE_HEIGHT_8;
   l0_tilebase.TILE_BASE_ADDR_16_11 = 0;
-  VERA->L0_TILEBASE = *(uint32_t*)&l0_tilebase;
+  VERA->L0_TILEBASE = l0_tilebase.UINT32;
   VERA->L0_MAPBASE = VRAM_MAP_BASE>>9; //Map base address 0x10000
   VERA->L0_HSCROLL = 4;
   VERA->L0_VSCROLL = 4;
@@ -149,12 +149,12 @@ int main(void) {
   l1_config.BITMAP_MODE = 0;
   l1_config.MAP_WIDTH = VERA_L1_CONFIG_MAP_WIDTH_TILES_128;
   l1_config.MAP_HEIGHT = VERA_L1_CONFIG_MAP_HEIGHT_TILES_128;
-  VERA->L1_CONFIG = *(uint32_t *)&l1_config;
+  VERA->L1_CONFIG = l1_config.UINT32;
   vera_l1_tilebase_t l1_tilebase;
   l1_tilebase.TILE_WIDTH = VERA_L1_TILEBASE_TILE_WIDTH_TILE_WIDTH_8;
   l1_tilebase.TILE_HEIGHT = VERA_L1_TILEBASE_TILE_HEIGHT_TILE_HEIGHT_8;
   l1_tilebase.TILE_BASE_ADDR_16_11 = 0;
-  VERA->L1_TILEBASE = *(uint32_t*)&l1_tilebase;
+  VERA->L1_TILEBASE = l1_tilebase.UINT32;
   VERA->L1_MAPBASE = VRAM_MAP_BASE>>9; //Map base address 0x10000
   VERA->L1_HSCROLL = 4;
   VERA->L1_VSCROLL = 4;

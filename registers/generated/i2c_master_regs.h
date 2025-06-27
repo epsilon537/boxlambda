@@ -18,7 +18,9 @@ extern "C" {
 // CMD - I2C master command register
 #define I2C_MASTER_CMD_ADDR 0x0
 #define I2C_MASTER_CMD_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t NUM_BYTES : 8; // Number of bytes to read/write.
     uint32_t START_ADDR : 8; // Initial address to read from or write to.
     uint32_t RD_N_WR : 1; // Set to 1 for a read command, 0 for a write command.
@@ -26,6 +28,7 @@ typedef struct {
     uint32_t : 6; // reserved
     uint32_t ERR : 1; // Command error
     uint32_t BUSY : 1; // Transaction ongoing.
+  };
 } i2c_master_cmd_t;
 
 // CMD.NUM_BYTES - Number of bytes to read/write.
@@ -67,9 +70,12 @@ typedef struct {
 // SPD - Speed register
 #define I2C_MASTER_SPD_ADDR 0x4
 #define I2C_MASTER_SPD_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 20; // Number of system clocks for I2C wait state (1/4th of I2C bus clock period).
     uint32_t : 12; // reserved
+  };
 } i2c_master_spd_t;
 
 // SPD.VALUE - Number of system clocks for I2C wait state (1/4th of I2C bus clock period).
@@ -81,9 +87,12 @@ typedef struct {
 // ISR - Interrupt Status Register
 #define I2C_MASTER_ISR_ADDR 0x8
 #define I2C_MASTER_ISR_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t BUSY : 1; // Set when I2C goes from busy to idle.
     uint32_t : 31; // reserved
+  };
 } i2c_master_isr_t;
 
 // ISR.BUSY - Set when I2C goes from busy to idle.
@@ -95,9 +104,12 @@ typedef struct {
 // IEN - Interrupt Enable Register
 #define I2C_MASTER_IEN_ADDR 0xc
 #define I2C_MASTER_IEN_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t BUSY : 1; // Set to enable BUSY interrupt.
     uint32_t : 31; // reserved
+  };
 } i2c_master_ien_t;
 
 // IEN.BUSY - Set to enable BUSY interrupt.

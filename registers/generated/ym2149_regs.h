@@ -18,9 +18,12 @@ extern "C" {
 // PSG0_CHA_TONE_PERIOD_FINE - Channel A fine tone period adjustment.
 #define YM2149_PSG0_CHA_TONE_PERIOD_FINE_ADDR 0x0
 #define YM2149_PSG0_CHA_TONE_PERIOD_FINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Channel A fine tone period adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg0_cha_tone_period_fine_t;
 
 // PSG0_CHA_TONE_PERIOD_FINE.VALUE - Channel A fine tone period adjustment.
@@ -32,9 +35,12 @@ typedef struct {
 // PSG0_CHA_TONE_PERIOD_COARSE - Channel A coarse tone period adjustment.
 #define YM2149_PSG0_CHA_TONE_PERIOD_COARSE_ADDR 0x4
 #define YM2149_PSG0_CHA_TONE_PERIOD_COARSE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 4; // Channel A coarse tone period adjustment.
     uint32_t : 28; // reserved
+  };
 } ym2149_psg0_cha_tone_period_coarse_t;
 
 // PSG0_CHA_TONE_PERIOD_COARSE.VALUE - Channel A coarse tone period adjustment.
@@ -46,9 +52,12 @@ typedef struct {
 // PSG0_CHB_TONE_PERIOD_FINE - Channel B fine tone period adjustment.
 #define YM2149_PSG0_CHB_TONE_PERIOD_FINE_ADDR 0x8
 #define YM2149_PSG0_CHB_TONE_PERIOD_FINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Channel B fine tone period adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg0_chb_tone_period_fine_t;
 
 // PSG0_CHB_TONE_PERIOD_FINE.VALUE - Channel B fine tone period adjustment.
@@ -60,9 +69,12 @@ typedef struct {
 // PSG0_CHB_TONE_PERIOD_COARSE - Channel B coarse tone period adjustment.
 #define YM2149_PSG0_CHB_TONE_PERIOD_COARSE_ADDR 0xc
 #define YM2149_PSG0_CHB_TONE_PERIOD_COARSE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 4; // Channel B coarse tone period adjustment.
     uint32_t : 28; // reserved
+  };
 } ym2149_psg0_chb_tone_period_coarse_t;
 
 // PSG0_CHB_TONE_PERIOD_COARSE.VALUE - Channel B coarse tone period adjustment.
@@ -74,9 +86,12 @@ typedef struct {
 // PSG0_CHC_TONE_PERIOD_FINE - Channel C fine tone period adjustment.
 #define YM2149_PSG0_CHC_TONE_PERIOD_FINE_ADDR 0x10
 #define YM2149_PSG0_CHC_TONE_PERIOD_FINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Channel C fine tone period adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg0_chc_tone_period_fine_t;
 
 // PSG0_CHC_TONE_PERIOD_FINE.VALUE - Channel C fine tone period adjustment.
@@ -88,9 +103,12 @@ typedef struct {
 // PSG0_CHC_TONE_PERIOD_COARSE - Channel C coarse tone period adjustment.
 #define YM2149_PSG0_CHC_TONE_PERIOD_COARSE_ADDR 0x14
 #define YM2149_PSG0_CHC_TONE_PERIOD_COARSE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 4; // Channel C coarse tone period adjustment.
     uint32_t : 28; // reserved
+  };
 } ym2149_psg0_chc_tone_period_coarse_t;
 
 // PSG0_CHC_TONE_PERIOD_COARSE.VALUE - Channel C coarse tone period adjustment.
@@ -102,9 +120,12 @@ typedef struct {
 // PSG0_NOISE_PERIOD - Noise period.
 #define YM2149_PSG0_NOISE_PERIOD_ADDR 0x18
 #define YM2149_PSG0_NOISE_PERIOD_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 5; // Noise period.
     uint32_t : 27; // reserved
+  };
 } ym2149_psg0_noise_period_t;
 
 // PSG0_NOISE_PERIOD.VALUE - Noise period.
@@ -116,7 +137,9 @@ typedef struct {
 // PSG0_DISABLE - Mixer settings.
 #define YM2149_PSG0_DISABLE_ADDR 0x1c
 #define YM2149_PSG0_DISABLE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t TONE_A : 1; // Channel A tone disable.
     uint32_t TONE_B : 1; // Channel B tone disable.
     uint32_t TONE_C : 1; // Channel C tone disable.
@@ -124,6 +147,7 @@ typedef struct {
     uint32_t NOISE_B : 1; // Channel B noise disable.
     uint32_t NOISE_C : 1; // Channel C noise disable.
     uint32_t : 26; // reserved
+  };
 } ym2149_psg0_disable_t;
 
 // PSG0_DISABLE.TONE_A - Channel A tone disable.
@@ -165,10 +189,13 @@ typedef struct {
 // PSG0_CHA_LVL - Channel A level control.
 #define YM2149_PSG0_CHA_LVL_ADDR 0x20
 #define YM2149_PSG0_CHA_LVL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t LVL : 4; // Level selection.
     uint32_t MODE : 1; // Mode.
     uint32_t : 27; // reserved
+  };
 } ym2149_psg0_cha_lvl_t;
 
 // PSG0_CHA_LVL.LVL - Level selection.
@@ -186,10 +213,13 @@ typedef struct {
 // PSG0_CHB_LVL - Channel B level control.
 #define YM2149_PSG0_CHB_LVL_ADDR 0x24
 #define YM2149_PSG0_CHB_LVL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t LVL : 4; // Level selection.
     uint32_t MODE : 1; // Mode.
     uint32_t : 27; // reserved
+  };
 } ym2149_psg0_chb_lvl_t;
 
 // PSG0_CHB_LVL.LVL - Level selection.
@@ -207,10 +237,13 @@ typedef struct {
 // PSG0_CHC_LVL - Channel C level control.
 #define YM2149_PSG0_CHC_LVL_ADDR 0x28
 #define YM2149_PSG0_CHC_LVL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t LVL : 4; // Level selection.
     uint32_t MODE : 1; // Mode.
     uint32_t : 27; // reserved
+  };
 } ym2149_psg0_chc_lvl_t;
 
 // PSG0_CHC_LVL.LVL - Level selection.
@@ -228,9 +261,12 @@ typedef struct {
 // PSG0_ENV_PERIOD_FINE - Envelope frequency fine adjustment.
 #define YM2149_PSG0_ENV_PERIOD_FINE_ADDR 0x2c
 #define YM2149_PSG0_ENV_PERIOD_FINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Envelope frequency fine adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg0_env_period_fine_t;
 
 // PSG0_ENV_PERIOD_FINE.VALUE - Envelope frequency fine adjustment.
@@ -242,9 +278,12 @@ typedef struct {
 // PSG0_ENV_PERIOD_COARSE - Envelope frequeny coarse adjustment.
 #define YM2149_PSG0_ENV_PERIOD_COARSE_ADDR 0x30
 #define YM2149_PSG0_ENV_PERIOD_COARSE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Envelope frequency coarse adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg0_env_period_coarse_t;
 
 // PSG0_ENV_PERIOD_COARSE.VALUE - Envelope frequency coarse adjustment.
@@ -256,9 +295,12 @@ typedef struct {
 // PSG0_ENV_SHAPE - Envelope shape.
 #define YM2149_PSG0_ENV_SHAPE_ADDR 0x34
 #define YM2149_PSG0_ENV_SHAPE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 4; // Envelope shape.
     uint32_t : 28; // reserved
+  };
 } ym2149_psg0_env_shape_t;
 
 // PSG0_ENV_SHAPE.VALUE - Envelope shape.
@@ -270,9 +312,12 @@ typedef struct {
 // PSG1_CHA_TONE_PERIOD_FINE - Channel A fine tone period adjustment.
 #define YM2149_PSG1_CHA_TONE_PERIOD_FINE_ADDR 0x40
 #define YM2149_PSG1_CHA_TONE_PERIOD_FINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Channel A fine tone period adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg1_cha_tone_period_fine_t;
 
 // PSG1_CHA_TONE_PERIOD_FINE.VALUE - Channel A fine tone period adjustment.
@@ -284,9 +329,12 @@ typedef struct {
 // PSG1_CHA_TONE_PERIOD_COARSE - Channel A coarse tone period adjustment.
 #define YM2149_PSG1_CHA_TONE_PERIOD_COARSE_ADDR 0x44
 #define YM2149_PSG1_CHA_TONE_PERIOD_COARSE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 4; // Channel A coarse tone period adjustment.
     uint32_t : 28; // reserved
+  };
 } ym2149_psg1_cha_tone_period_coarse_t;
 
 // PSG1_CHA_TONE_PERIOD_COARSE.VALUE - Channel A coarse tone period adjustment.
@@ -298,9 +346,12 @@ typedef struct {
 // PSG1_CHB_TONE_PERIOD_FINE - Channel B fine tone period adjustment.
 #define YM2149_PSG1_CHB_TONE_PERIOD_FINE_ADDR 0x48
 #define YM2149_PSG1_CHB_TONE_PERIOD_FINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Channel B fine tone period adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg1_chb_tone_period_fine_t;
 
 // PSG1_CHB_TONE_PERIOD_FINE.VALUE - Channel B fine tone period adjustment.
@@ -312,9 +363,12 @@ typedef struct {
 // PSG1_CHB_TONE_PERIOD_COARSE - Channel B coarse tone period adjustment.
 #define YM2149_PSG1_CHB_TONE_PERIOD_COARSE_ADDR 0x4c
 #define YM2149_PSG1_CHB_TONE_PERIOD_COARSE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 4; // Channel B coarse tone period adjustment.
     uint32_t : 28; // reserved
+  };
 } ym2149_psg1_chb_tone_period_coarse_t;
 
 // PSG1_CHB_TONE_PERIOD_COARSE.VALUE - Channel B coarse tone period adjustment.
@@ -326,9 +380,12 @@ typedef struct {
 // PSG1_CHC_TONE_PERIOD_FINE - Channel C fine tone period adjustment.
 #define YM2149_PSG1_CHC_TONE_PERIOD_FINE_ADDR 0x50
 #define YM2149_PSG1_CHC_TONE_PERIOD_FINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Channel C fine tone period adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg1_chc_tone_period_fine_t;
 
 // PSG1_CHC_TONE_PERIOD_FINE.VALUE - Channel C fine tone period adjustment.
@@ -340,9 +397,12 @@ typedef struct {
 // PSG1_CHC_TONE_PERIOD_COARSE - Channel C coarse tone period adjustment.
 #define YM2149_PSG1_CHC_TONE_PERIOD_COARSE_ADDR 0x54
 #define YM2149_PSG1_CHC_TONE_PERIOD_COARSE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 4; // Channel C coarse tone period adjustment.
     uint32_t : 28; // reserved
+  };
 } ym2149_psg1_chc_tone_period_coarse_t;
 
 // PSG1_CHC_TONE_PERIOD_COARSE.VALUE - Channel C coarse tone period adjustment.
@@ -354,9 +414,12 @@ typedef struct {
 // PSG1_NOISE_PERIOD - Noise period.
 #define YM2149_PSG1_NOISE_PERIOD_ADDR 0x58
 #define YM2149_PSG1_NOISE_PERIOD_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 5; // Noise period.
     uint32_t : 27; // reserved
+  };
 } ym2149_psg1_noise_period_t;
 
 // PSG1_NOISE_PERIOD.VALUE - Noise period.
@@ -368,7 +431,9 @@ typedef struct {
 // PSG1_DISABLE - Mixer settings.
 #define YM2149_PSG1_DISABLE_ADDR 0x5c
 #define YM2149_PSG1_DISABLE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t TONE_A : 1; // Channel A tone disable.
     uint32_t TONE_B : 1; // Channel B tone disable.
     uint32_t TONE_C : 1; // Channel C tone disable.
@@ -376,6 +441,7 @@ typedef struct {
     uint32_t NOISE_B : 1; // Channel B noise disable.
     uint32_t NOISE_C : 1; // Channel C noise disable.
     uint32_t : 26; // reserved
+  };
 } ym2149_psg1_disable_t;
 
 // PSG1_DISABLE.TONE_A - Channel A tone disable.
@@ -417,10 +483,13 @@ typedef struct {
 // PSG1_CHA_LVL - Channel A level control.
 #define YM2149_PSG1_CHA_LVL_ADDR 0x60
 #define YM2149_PSG1_CHA_LVL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t LVL : 4; // Level selection.
     uint32_t MODE : 1; // Mode.
     uint32_t : 27; // reserved
+  };
 } ym2149_psg1_cha_lvl_t;
 
 // PSG1_CHA_LVL.LVL - Level selection.
@@ -438,10 +507,13 @@ typedef struct {
 // PSG1_CHB_LVL - Channel B level control.
 #define YM2149_PSG1_CHB_LVL_ADDR 0x64
 #define YM2149_PSG1_CHB_LVL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t LVL : 4; // Level selection.
     uint32_t MODE : 1; // Mode.
     uint32_t : 27; // reserved
+  };
 } ym2149_psg1_chb_lvl_t;
 
 // PSG1_CHB_LVL.LVL - Level selection.
@@ -459,10 +531,13 @@ typedef struct {
 // PSG1_CHC_LVL - Channel C level control.
 #define YM2149_PSG1_CHC_LVL_ADDR 0x68
 #define YM2149_PSG1_CHC_LVL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t LVL : 4; // Level selection.
     uint32_t MODE : 1; // Mode.
     uint32_t : 27; // reserved
+  };
 } ym2149_psg1_chc_lvl_t;
 
 // PSG1_CHC_LVL.LVL - Level selection.
@@ -480,9 +555,12 @@ typedef struct {
 // PSG1_ENV_PERIOD_FINE - Envelope frequency fine adjustment.
 #define YM2149_PSG1_ENV_PERIOD_FINE_ADDR 0x6c
 #define YM2149_PSG1_ENV_PERIOD_FINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Envelope frequency fine adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg1_env_period_fine_t;
 
 // PSG1_ENV_PERIOD_FINE.VALUE - Envelope frequency fine adjustment.
@@ -494,9 +572,12 @@ typedef struct {
 // PSG1_ENV_PERIOD_COARSE - Envelope frequeny coarse adjustment.
 #define YM2149_PSG1_ENV_PERIOD_COARSE_ADDR 0x70
 #define YM2149_PSG1_ENV_PERIOD_COARSE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Envelope frequency coarse adjustment.
     uint32_t : 24; // reserved
+  };
 } ym2149_psg1_env_period_coarse_t;
 
 // PSG1_ENV_PERIOD_COARSE.VALUE - Envelope frequency coarse adjustment.
@@ -508,9 +589,12 @@ typedef struct {
 // PSG1_ENV_SHAPE - Envelope shape.
 #define YM2149_PSG1_ENV_SHAPE_ADDR 0x74
 #define YM2149_PSG1_ENV_SHAPE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 4; // Envelope shape.
     uint32_t : 28; // reserved
+  };
 } ym2149_psg1_env_shape_t;
 
 // PSG1_ENV_SHAPE.VALUE - Envelope shape.
@@ -522,9 +606,12 @@ typedef struct {
 // FILTER_MIXER_VOLA - Filter mixer PSG0 channel A volume.
 #define YM2149_FILTER_MIXER_VOLA_ADDR 0x200
 #define YM2149_FILTER_MIXER_VOLA_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Filter mixer PSG0 channel A volume.
     uint32_t : 24; // reserved
+  };
 } ym2149_filter_mixer_vola_t;
 
 // FILTER_MIXER_VOLA.VALUE - Filter mixer PSG0 channel A volume.
@@ -536,9 +623,12 @@ typedef struct {
 // FILTER_MIXER_VOLB - Filter mixer PSG0 channel B volume.
 #define YM2149_FILTER_MIXER_VOLB_ADDR 0x204
 #define YM2149_FILTER_MIXER_VOLB_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Filter mixer PSG0 channel B volume.
     uint32_t : 24; // reserved
+  };
 } ym2149_filter_mixer_volb_t;
 
 // FILTER_MIXER_VOLB.VALUE - Filter mixer PSG0 channel B volume.
@@ -550,9 +640,12 @@ typedef struct {
 // FILTER_MIXER_VOLC - Filter mixer PSG0 channel C volume.
 #define YM2149_FILTER_MIXER_VOLC_ADDR 0x208
 #define YM2149_FILTER_MIXER_VOLC_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Filter mixer PSG0 channel C volume.
     uint32_t : 24; // reserved
+  };
 } ym2149_filter_mixer_volc_t;
 
 // FILTER_MIXER_VOLC.VALUE - Filter mixer PSG0 channel C volume.
@@ -564,9 +657,12 @@ typedef struct {
 // FILTER_MIXER_VOLD - Filter mixer PSG1 channel A volume.
 #define YM2149_FILTER_MIXER_VOLD_ADDR 0x20c
 #define YM2149_FILTER_MIXER_VOLD_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Filter mixer PSG1 channel A volume.
     uint32_t : 24; // reserved
+  };
 } ym2149_filter_mixer_vold_t;
 
 // FILTER_MIXER_VOLD.VALUE - Filter mixer PSG1 channel A volume.
@@ -578,9 +674,12 @@ typedef struct {
 // FILTER_MIXER_VOLE - Filter mixer PSG1 channel B volume.
 #define YM2149_FILTER_MIXER_VOLE_ADDR 0x210
 #define YM2149_FILTER_MIXER_VOLE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Filter mixer PSG1 channel B volume.
     uint32_t : 24; // reserved
+  };
 } ym2149_filter_mixer_vole_t;
 
 // FILTER_MIXER_VOLE.VALUE - Filter mixer PSG1 channel B volume.
@@ -592,9 +691,12 @@ typedef struct {
 // FILTER_MIXER_VOLF - Filter mixer PSG1 channel C volume.
 #define YM2149_FILTER_MIXER_VOLF_ADDR 0x214
 #define YM2149_FILTER_MIXER_VOLF_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Filter mixer PSG1 channel C volume.
     uint32_t : 24; // reserved
+  };
 } ym2149_filter_mixer_volf_t;
 
 // FILTER_MIXER_VOLF.VALUE - Filter mixer PSG1 channel C volume.
@@ -606,9 +708,12 @@ typedef struct {
 // FILTER_MIXER_MVOL - Filter mixer master volume.
 #define YM2149_FILTER_MIXER_MVOL_ADDR 0x218
 #define YM2149_FILTER_MIXER_MVOL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Filter mixer master volume.
     uint32_t : 24; // reserved
+  };
 } ym2149_filter_mixer_mvol_t;
 
 // FILTER_MIXER_MVOL.VALUE - Filter mixer master volume.
@@ -620,7 +725,9 @@ typedef struct {
 // FILTER_MIXER_INV - Filter mixer channel inverter
 #define YM2149_FILTER_MIXER_INV_ADDR 0x21c
 #define YM2149_FILTER_MIXER_INV_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t INVA : 1; // Invert PSG0 channel A.
     uint32_t INVB : 1; // Invert PSG0 channel B.
     uint32_t INVC : 1; // Invert PSG0 channel C.
@@ -628,6 +735,7 @@ typedef struct {
     uint32_t INVE : 1; // Invert PSG1 channel B.
     uint32_t INVF : 1; // Invert PSG1 channel C.
     uint32_t : 26; // reserved
+  };
 } ym2149_filter_mixer_inv_t;
 
 // FILTER_MIXER_INV.INVA - Invert PSG0 channel A.
@@ -669,9 +777,12 @@ typedef struct {
 // FILTER_MIXER_BASS - Filter mixer bass level.
 #define YM2149_FILTER_MIXER_BASS_ADDR 0x220
 #define YM2149_FILTER_MIXER_BASS_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Filter mixer bass level.
     uint32_t : 24; // reserved
+  };
 } ym2149_filter_mixer_bass_t;
 
 // FILTER_MIXER_BASS.VALUE - Filter mixer bass level.
@@ -683,9 +794,12 @@ typedef struct {
 // FILTER_MIXER_TREBLE - Filter mixer treble level.
 #define YM2149_FILTER_MIXER_TREBLE_ADDR 0x224
 #define YM2149_FILTER_MIXER_TREBLE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // Filter mixer treble level.
     uint32_t : 24; // reserved
+  };
 } ym2149_filter_mixer_treble_t;
 
 // FILTER_MIXER_TREBLE.VALUE - Filter mixer treble level.

@@ -18,9 +18,12 @@ extern "C" {
 // CTRL - Control register.
 #define VERA_CTRL_ADDR 0x0
 #define VERA_CTRL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t SBNK : 1; // Active sprite bank.
     uint32_t : 31; // reserved
+  };
 } vera_ctrl_t;
 
 // CTRL.SBNK - Active sprite bank.
@@ -32,9 +35,12 @@ typedef struct {
 // DC_BORDER - Display composer border register.
 #define VERA_DC_BORDER_ADDR 0x4
 #define VERA_DC_BORDER_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t BORDER_COLOR : 8; // Border color
     uint32_t : 24; // reserved
+  };
 } vera_dc_border_t;
 
 // DC_BORDER.BORDER_COLOR - Border color
@@ -46,11 +52,14 @@ typedef struct {
 // IEN - Interrupt enable register.
 #define VERA_IEN_ADDR 0x8
 #define VERA_IEN_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VSYNC : 1; // Vertical sync interrupt enable.
     uint32_t LINE : 1; // Line interrupt enable.
     uint32_t SPRCOL : 1; // Sprite collision interrupt enable.
     uint32_t : 29; // reserved
+  };
 } vera_ien_t;
 
 // IEN.VSYNC - Vertical sync interrupt enable.
@@ -74,13 +83,16 @@ typedef struct {
 // ISR - Interrupt status register.
 #define VERA_ISR_ADDR 0xc
 #define VERA_ISR_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VSYNC : 1; // Vertical sync interrupt status.
     uint32_t LINE : 1; // Line interrupt status.
     uint32_t SPRCOL : 1; // Sprite collision interrupt status.
     uint32_t : 1; // reserved
     uint32_t SPR_COLLISIONS : 4; // Sprite collisions as determined by sprite renderer.
     uint32_t : 24; // reserved
+  };
 } vera_isr_t;
 
 // ISR.VSYNC - Vertical sync interrupt status.
@@ -110,9 +122,12 @@ typedef struct {
 // IRQLINE - Interrupt line register.
 #define VERA_IRQLINE_ADDR 0x10
 #define VERA_IRQLINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 10; // Scanline on which to generate line interrupt.
     uint32_t : 22; // reserved
+  };
 } vera_irqline_t;
 
 // IRQLINE.VALUE - Scanline on which to generate line interrupt.
@@ -124,9 +139,12 @@ typedef struct {
 // SCANLINE - Scanline register
 #define VERA_SCANLINE_ADDR 0x14
 #define VERA_SCANLINE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 10; // Current scanline.
     uint32_t : 22; // reserved
+  };
 } vera_scanline_t;
 
 // SCANLINE.VALUE - Current scanline.
@@ -138,13 +156,16 @@ typedef struct {
 // DC_VIDEO - Display composer video register.
 #define VERA_DC_VIDEO_ADDR 0x18
 #define VERA_DC_VIDEO_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t OUTPUT_MODE : 2; // Video output mode.
     uint32_t : 2; // reserved
     uint32_t L0_ENABLE : 1; // Enable Layer 0.
     uint32_t L1_ENABLE : 1; // Enable layer 1.
     uint32_t SPR_ENABLE : 1; // Enable sprites.
     uint32_t : 25; // reserved
+  };
 } vera_dc_video_t;
 
 // DC_VIDEO.OUTPUT_MODE - Video output mode.
@@ -178,9 +199,12 @@ typedef enum {
 // DC_HSCALE - Display composer horizontal scale register.
 #define VERA_DC_HSCALE_ADDR 0x20
 #define VERA_DC_HSCALE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // the horizonal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
     uint32_t : 24; // reserved
+  };
 } vera_dc_hscale_t;
 
 // DC_HSCALE.VALUE - the horizonal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
@@ -192,9 +216,12 @@ typedef struct {
 // DC_VSCALE - Display composer vertical scale register.
 #define VERA_DC_VSCALE_ADDR 0x24
 #define VERA_DC_VSCALE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 8; // the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
     uint32_t : 24; // reserved
+  };
 } vera_dc_vscale_t;
 
 // DC_VSCALE.VALUE - the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
@@ -206,9 +233,12 @@ typedef struct {
 // DC_HSTART - Display composer horizontal start register.
 #define VERA_DC_HSTART_ADDR 0x28
 #define VERA_DC_HSTART_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 10; // Horizontal start of active part of screen in 640x480 space.
     uint32_t : 22; // reserved
+  };
 } vera_dc_hstart_t;
 
 // DC_HSTART.VALUE - Horizontal start of active part of screen in 640x480 space.
@@ -220,9 +250,12 @@ typedef struct {
 // DC_HSTOP - Display compser horizontal stop register.
 #define VERA_DC_HSTOP_ADDR 0x2c
 #define VERA_DC_HSTOP_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 10; // Horizontal stop of active part of screen in 640x480 space.
     uint32_t : 22; // reserved
+  };
 } vera_dc_hstop_t;
 
 // DC_HSTOP.VALUE - Horizontal stop of active part of screen in 640x480 space.
@@ -234,9 +267,12 @@ typedef struct {
 // DC_VSTART - Display composer vertical start register.
 #define VERA_DC_VSTART_ADDR 0x30
 #define VERA_DC_VSTART_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 10; // Vertical start of active part of screen in 640x480 space.
     uint32_t : 22; // reserved
+  };
 } vera_dc_vstart_t;
 
 // DC_VSTART.VALUE - Vertical start of active part of screen in 640x480 space.
@@ -248,9 +284,12 @@ typedef struct {
 // DC_VSTOP - Display composer vertical stop register.
 #define VERA_DC_VSTOP_ADDR 0x34
 #define VERA_DC_VSTOP_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 10; // Vertical stop of active part of screen in 640x480 space.
     uint32_t : 22; // reserved
+  };
 } vera_dc_vstop_t;
 
 // DC_VSTOP.VALUE - Vertical stop of active part of screen in 640x480 space.
@@ -262,13 +301,16 @@ typedef struct {
 // L0_CONFIG - Layer 0 Configuration regiser.
 #define VERA_L0_CONFIG_ADDR 0x40
 #define VERA_L0_CONFIG_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t COLOR_DEPTH : 2; // Number of bits pers pixel to encode color information.
     uint32_t BITMAP_MODE : 1; // 1 selects bitmap mode, 0 selects tile mode.
     uint32_t T256C : 1; // When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes.
     uint32_t MAP_WIDTH : 2; // Tile map width.
     uint32_t MAP_HEIGHT : 2; // Tile map height.
     uint32_t : 24; // reserved
+  };
 } vera_l0_config_t;
 
 // L0_CONFIG.COLOR_DEPTH - Number of bits pers pixel to encode color information.
@@ -322,9 +364,12 @@ typedef enum {
 // L0_MAPBASE - Layer 0 map base register.
 #define VERA_L0_MAPBASE_ADDR 0x44
 #define VERA_L0_MAPBASE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t ADDR_16_9 : 8; // Bits 16:9 of the base address of the tile map.
     uint32_t : 24; // reserved
+  };
 } vera_l0_mapbase_t;
 
 // L0_MAPBASE.ADDR_16_9 - Bits 16:9 of the base address of the tile map.
@@ -336,11 +381,14 @@ typedef struct {
 // L0_TILEBASE - Layer 0 tile base register.
 #define VERA_L0_TILEBASE_ADDR 0x48
 #define VERA_L0_TILEBASE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t TILE_WIDTH : 1; // Tile width.
     uint32_t TILE_HEIGHT : 1; // Tile height.
     uint32_t TILE_BASE_ADDR_16_11 : 6; // Bits 16:11 of the base address of the tile data.
     uint32_t : 24; // reserved
+  };
 } vera_l0_tilebase_t;
 
 // L0_TILEBASE.TILE_WIDTH - Tile width.
@@ -372,9 +420,12 @@ typedef enum {
 // L0_HSCROLL - Layer 0 horizontal scroll register.
 #define VERA_L0_HSCROLL_ADDR 0x50
 #define VERA_L0_HSCROLL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 12; // Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
     uint32_t : 20; // reserved
+  };
 } vera_l0_hscroll_t;
 
 // L0_HSCROLL.VALUE - Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
@@ -386,9 +437,12 @@ typedef struct {
 // L0_VSCROLL - Layer 0 vertical scroll register.
 #define VERA_L0_VSCROLL_ADDR 0x54
 #define VERA_L0_VSCROLL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 12; // Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down.
     uint32_t : 20; // reserved
+  };
 } vera_l0_vscroll_t;
 
 // L0_VSCROLL.VALUE - Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down.
@@ -400,13 +454,16 @@ typedef struct {
 // L1_CONFIG - Layer 1 Configuration regiser.
 #define VERA_L1_CONFIG_ADDR 0x80
 #define VERA_L1_CONFIG_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t COLOR_DEPTH : 2; // Number of bits pers pixel to encode color information.
     uint32_t BITMAP_MODE : 1; // 1 selects bitmap mode, 0 selects tile mode.
     uint32_t T256C : 1; // When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes.
     uint32_t MAP_WIDTH : 2; // Tile map width.
     uint32_t MAP_HEIGHT : 2; // Tile map height.
     uint32_t : 24; // reserved
+  };
 } vera_l1_config_t;
 
 // L1_CONFIG.COLOR_DEPTH - Number of bits pers pixel to encode color information.
@@ -460,9 +517,12 @@ typedef enum {
 // L1_MAPBASE - Layer 1 map base register.
 #define VERA_L1_MAPBASE_ADDR 0x84
 #define VERA_L1_MAPBASE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t ADDR_16_9 : 8; // Bits 16:9 of the base address of the tile map.
     uint32_t : 24; // reserved
+  };
 } vera_l1_mapbase_t;
 
 // L1_MAPBASE.ADDR_16_9 - Bits 16:9 of the base address of the tile map.
@@ -474,11 +534,14 @@ typedef struct {
 // L1_TILEBASE - Layer 1 tile base register.
 #define VERA_L1_TILEBASE_ADDR 0x88
 #define VERA_L1_TILEBASE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t TILE_WIDTH : 1; // Tile width.
     uint32_t TILE_HEIGHT : 1; // Tile height.
     uint32_t TILE_BASE_ADDR_16_11 : 6; // Bits 16:11 of the base address of the tile data.
     uint32_t : 24; // reserved
+  };
 } vera_l1_tilebase_t;
 
 // L1_TILEBASE.TILE_WIDTH - Tile width.
@@ -510,9 +573,12 @@ typedef enum {
 // L1_HSCROLL - Layer 1 horizontal scroll register.
 #define VERA_L1_HSCROLL_ADDR 0x90
 #define VERA_L1_HSCROLL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 12; // Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
     uint32_t : 20; // reserved
+  };
 } vera_l1_hscroll_t;
 
 // L1_HSCROLL.VALUE - Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
@@ -524,9 +590,12 @@ typedef struct {
 // L1_VSCROLL - Layer 1 vertical scroll register.
 #define VERA_L1_VSCROLL_ADDR 0x94
 #define VERA_L1_VSCROLL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 12; // Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down.
     uint32_t : 20; // reserved
+  };
 } vera_l1_vscroll_t;
 
 // L1_VSCROLL.VALUE - Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down.

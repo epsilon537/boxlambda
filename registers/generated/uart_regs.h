@@ -18,12 +18,15 @@ extern "C" {
 // SETUP - Setup register
 #define UART_SETUP_ADDR 0x0
 #define UART_SETUP_RESET 0x1b2
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t BAUD_CLKS : 24; // System clock per baudrate interval
     uint32_t PFT : 3; // Parity setup
     uint32_t S : 1; // Number of stop bits - 1
     uint32_t N : 2; // 8 - number of bits per word
     uint32_t H : 1; // Disable hardware flow control
+  };
 } uart_setup_t;
 
 // SETUP.BAUD_CLKS - System clock per baudrate interval
@@ -84,7 +87,9 @@ typedef enum {
 // FIFO - Rx and Tx FIFO size and status
 #define UART_FIFO_ADDR 0x4
 #define UART_FIFO_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t RX_Z : 1; // Data available in Rx FIFO.
     uint32_t RX_H : 1; // Rx FIFO high order fill bit set.
     uint32_t RX_FILL : 10; // Number of filled entries in Rx FIFO.
@@ -93,6 +98,7 @@ typedef struct {
     uint32_t TX_H : 1; // Tx FIFO high order fill bit set.
     uint32_t TX_FILL : 10; // Number of available spaces in Tx FIFO.
     uint32_t TX_LGLN : 4; // Log base 2 of FIFO length.
+  };
 } uart_fifo_t;
 
 // FIFO.RX_Z - Data available in Rx FIFO.
@@ -146,7 +152,9 @@ typedef struct {
 // RXDATA - Rx data register.
 #define UART_RXDATA_ADDR 0x8
 #define UART_RXDATA_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t RWORD : 8; // Read data word.
     uint32_t S : 1; // Data invalid.
     uint32_t P : 1; // Parity error.
@@ -154,6 +162,7 @@ typedef struct {
     uint32_t B : 1; // Rx line is in break condition.
     uint32_t E : 1; // Read indicates Rx FIFO has overflowed since last reset. Writing 1 clears FIFO and waits for line idle before receiving next byte.
     uint32_t : 19; // reserved
+  };
 } uart_rxdata_t;
 
 // RXDATA.RWORD - Read data word.
@@ -199,7 +208,9 @@ typedef enum {
 // TXDATA - Tx data register.
 #define UART_TXDATA_ADDR 0xc
 #define UART_TXDATA_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t TWORD : 8; // Transmit data word.
     uint32_t S : 1; // Transmit busy.
     uint32_t B : 1; // Tx break condition.
@@ -209,6 +220,7 @@ typedef struct {
     uint32_t H : 1; // Tx FIFO at least half full.
     uint32_t R : 1; // Received RTS instantaneous value.
     uint32_t : 16; // reserved
+  };
 } uart_txdata_t;
 
 // TXDATA.TWORD - Transmit data word.
@@ -256,12 +268,15 @@ typedef struct {
 // ISR - Interrupt status register
 #define UART_ISR_ADDR 0x10
 #define UART_ISR_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t RX_DATA_AVL : 1; // Rx FIFO went from empty to non-empty state.
     uint32_t RX_FIFO_HALF_FULL : 1; // Receive FIFO passed the half-full threshold.
     uint32_t TX_FIFO_EMPTY : 1; // Tx FIFO went from non-empty to empty state.
     uint32_t TX_FIFO_HALF_EMPTY : 1; // Tx FIFO filling level dropped below the half empty threshold.
     uint32_t : 28; // reserved
+  };
 } uart_isr_t;
 
 // ISR.RX_DATA_AVL - Rx FIFO went from empty to non-empty state.
@@ -291,12 +306,15 @@ typedef struct {
 // IEN - Interrupt enable register
 #define UART_IEN_ADDR 0x14
 #define UART_IEN_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t RX_DATA_AVL : 1; // Enable RX_DATA_AVL interrupt.
     uint32_t RX_FIFO_HALF_FULL : 1; // Enable RX_FIFO_HALF_FULL interrupt.
     uint32_t TX_FIFO_EMPTY : 1; // Enable TX_FIFO_EMPTY interrupt.
     uint32_t TX_FIFO_HALF_EMPTY : 1; // Enabled TX_FIFO_HALF_EMPTY interrupt.
     uint32_t : 28; // reserved
+  };
 } uart_ien_t;
 
 // IEN.RX_DATA_AVL - Enable RX_DATA_AVL interrupt.

@@ -32,8 +32,7 @@ static int qprint(char **out, const char *format, va_list va);
 void uart_configure(uart_setup_pft_t parity, uart_setup_s_t stop_bits, uart_setup_n_t bits_per_word, uart_setup_h_t hw_flow_control)
 {
   uart_setup_t setup{.PFT=parity, .S=stop_bits, .N=bits_per_word, .H=hw_flow_control};
-  //Write as a 32-bit word to avoid field-by-field writes
-  UART->SETUP = *(uint32_t*)&setup;
+  UART->SETUP = setup.UINT32;
 }
 
 void uart_tx_flush(void)

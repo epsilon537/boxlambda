@@ -72,8 +72,7 @@ uint8_t I2C::endTransmission() {
   if (numBytes_ > 0) {
     //I2C write transaction.
     i2c_master_cmd_t cmd{.NUM_BYTES=numBytes_, .START_ADDR=bufStartIdx_, .RD_N_WR=0, .SLAVE_ADDR=slaveAddr_};
-    //Write as a 32-bit word to avoid field-by-field writes
-    I2C_MASTER->CMD = *(uint32_t*)&cmd;
+    I2C_MASTER->CMD = cmd.UINT32;
 
     while (isBusy_());
 
@@ -102,8 +101,7 @@ uint8_t I2C::requestFrom(uint8_t slaveAddr, uint8_t numBytes) {
 
   //I2C read transaction - apologies for the ugly cast.
   i2c_master_cmd_t cmd{.NUM_BYTES=numBytes_, .START_ADDR=bufStartIdx_, .RD_N_WR=1, .SLAVE_ADDR=slaveAddr_};
-  //Write as a 32-bit word to avoid field-by-field writes
-  I2C_MASTER->CMD = *(uint32_t*)&cmd;
+  I2C_MASTER->CMD = cmd.UINT32;
 
   while (isBusy_());
 

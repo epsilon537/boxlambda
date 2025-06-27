@@ -959,7 +959,7 @@ int  sdcard_read(int sector, char *buf) {
 #ifdef  INCLUDE_DMA_CONTROLLER
   if (SDUSEDMA && ((_zip->z_dma.d_ctrl & DMA_BUSY) == 0)) {
     _zip->z_dma.d_len= 512/sizeof(int);
-    _zip->z_dma.d_rd = (uint32_t *)&SDSPI->FIFO_0;
+    _zip->z_dma.d_rd = SDSPI->FIFO_0.UINT32;
     _zip->z_dma.d_wr = &ubuf[0];
     _zip->z_dma.d_ctrl = DMACCOPY | DMA_CONSTSRC;
     while(_zip->z_dma.d_ctrl & DMA_BUSY)
@@ -1020,7 +1020,7 @@ int  sdcard_write(const int sector, const char *buf) {
   if (SDUSEDMA && ((_zip->z_dma.d_ctrl & DMA_BUSY) == 0)) {
     _zip->z_dma.d_len= 512/sizeof(int);
     _zip->z_dma.d_rd = (uint32_t *)&ubuf[0];
-    _zip->z_dma.d_wr = (uint32_t *)&SDSPI->FIFO_0;
+    _zip->z_dma.d_wr = SDSPI->FIFO_0.UINT32;
     _zip->z_dma.d_ctrl = DMACCOPY | DMA_CONSTDST;
     while(_zip->z_dma.d_ctrl & DMA_BUSY)
       ;

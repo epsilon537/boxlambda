@@ -18,8 +18,11 @@ extern "C" {
 // RGPIO_IN - Latched value of general-purpose input pins.
 #define GPIO_RGPIO_IN_ADDR 0x0
 #define GPIO_RGPIO_IN_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t PINS : 32; // Latched value of general-purpose input pins.
+  };
 } gpio_rgpio_in_t;
 
 // RGPIO_IN.PINS - Latched value of general-purpose input pins.
@@ -31,8 +34,11 @@ typedef struct {
 // RGPIO_OUT - General-purpose output pin values.
 #define GPIO_RGPIO_OUT_ADDR 0x4
 #define GPIO_RGPIO_OUT_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t PINS : 32; // General-purpose output pin values.
+  };
 } gpio_rgpio_out_t;
 
 // RGPIO_OUT.PINS - General-purpose output pin values.
@@ -44,8 +50,11 @@ typedef struct {
 // RGPIO_OE - General-purpose pins output enables.
 #define GPIO_RGPIO_OE_ADDR 0x8
 #define GPIO_RGPIO_OE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t PINS : 32; // General-purpose pins output enables.
+  };
 } gpio_rgpio_oe_t;
 
 // RGPIO_OE.PINS - General-purpose pins output enables.
@@ -57,8 +66,11 @@ typedef struct {
 // RGPIO_INTE - General-purpose pin interrupt enables.
 #define GPIO_RGPIO_INTE_ADDR 0xc
 #define GPIO_RGPIO_INTE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t PINS : 32; // General-purpose pins interrupt enables.
+  };
 } gpio_rgpio_inte_t;
 
 // RGPIO_INTE.PINS - General-purpose pins interrupt enables.
@@ -70,8 +82,11 @@ typedef struct {
 // RGPIO_PTRIG - Trigger IRQ on positive edge.
 #define GPIO_RGPIO_PTRIG_ADDR 0x10
 #define GPIO_RGPIO_PTRIG_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t PINS : 32; // Trigger IRQ on positive edge if set, on negative edge if cleared.
+  };
 } gpio_rgpio_ptrig_t;
 
 // RGPIO_PTRIG.PINS - Trigger IRQ on positive edge if set, on negative edge if cleared.
@@ -83,10 +98,13 @@ typedef struct {
 // RGPIO_CTRL_STATUS - GPIO control and status register
 #define GPIO_RGPIO_CTRL_STATUS_ADDR 0x18
 #define GPIO_RGPIO_CTRL_STATUS_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t INTE : 1; // Interrupt enabled
     uint32_t INTS : 1; // Interrupt status
     uint32_t : 30; // reserved
+  };
 } gpio_rgpio_ctrl_status_t;
 
 // RGPIO_CTRL_STATUS.INTE - Interrupt enabled
@@ -104,8 +122,11 @@ typedef struct {
 // RGPIO_INTS - GPIO interrupt status register.
 #define GPIO_RGPIO_INTS_ADDR 0x1c
 #define GPIO_RGPIO_INTS_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t PINS : 32; // Interrupt status - Write 0 to clear.
+  };
 } gpio_rgpio_ints_t;
 
 // RGPIO_INTS.PINS - Interrupt status - Write 0 to clear.
@@ -117,8 +138,11 @@ typedef struct {
 // RGPIO_ECLK - Latch on gp_clk input signal.
 #define GPIO_RGPIO_ECLK_ADDR 0x20
 #define GPIO_RGPIO_ECLK_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t PINS : 32; // When set, the gp_clk input signal is used to latch pin.
+  };
 } gpio_rgpio_eclk_t;
 
 // RGPIO_ECLK.PINS - When set, the gp_clk input signal is used to latch pin.
@@ -130,8 +154,11 @@ typedef struct {
 // RGPIO_NEC - Latch on gp_clk negative edge. Relevant only if RGPIO_ECLK is set.
 #define GPIO_RGPIO_NEC_ADDR 0x24
 #define GPIO_RGPIO_NEC_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t PINS : 32; // When set, gp_clk is active on negative edge, when cleared on positive edge.
+  };
 } gpio_rgpio_nec_t;
 
 // RGPIO_NEC.PINS - When set, gp_clk is active on negative edge, when cleared on positive edge.
