@@ -89,7 +89,7 @@ int main(void) {
     /*SW trigger NDM reset if btn 0 is pushed.*/
     if ((gpio_get_input() & 0x0100) != 0) {
       printf("SW triggering DM+NDM reset...\n");
-      RESET->CTRL_bf.NDM_RESET = 1;
+      RESET->CTRL = RESET_CTRL_DM_RESET_MASK|RESET_CTRL_NDM_RESET_MASK;
     }
   }
 

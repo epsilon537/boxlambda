@@ -2,7 +2,7 @@ add_library(timer)
 
 target_sources(timer
     PRIVATE
-    timer.c
+    timer.cpp
 )
 
 target_compile_options(timer

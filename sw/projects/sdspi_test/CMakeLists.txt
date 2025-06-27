@@ -3,8 +3,8 @@
 #
 add_executable(sdspi_test_ram
  EXCLUDE_FROM_ALL
- sdspi_test_main.c
- sdtest.c
+ sdspi_test_main.cpp
+ sdtest.cpp
 )
 
 target_compile_options(sdspi_test_ram
@@ -31,8 +31,8 @@ target_link_libraries(sdspi_test_ram gpio riscv interrupts bootstrap)
 #
 add_executable(sdspi_test_flsh
  EXCLUDE_FROM_ALL
- sdspi_test_main.c
- sdtest.c
+ sdspi_test_main.cpp
+ sdtest.cpp
 )
 
 target_compile_options(sdspi_test_flsh

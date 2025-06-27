@@ -70,6 +70,9 @@
 //	for startup
 //
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern	int	sdcard_err;
 extern	int	sdcard_ocr;
 extern	char	sdcard_csd[16];
@@ -108,4 +111,7 @@ extern	int	sdcard_write(int sector, const char *buf);
 // into a design, according to the SDSPI script
 #error "No _BOARD_HAS_SDSPI defined"
 #endif	// _BOARD_HAS_SDSPI
+#ifdef __cplusplus
+}
+#endif
 #endif	// SDCARD_H

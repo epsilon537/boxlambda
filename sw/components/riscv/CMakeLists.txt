@@ -2,7 +2,7 @@ add_library(riscv)
 
 target_sources(riscv
     PRIVATE
-    mcycle.c
+    mcycle.cpp
 )
 
 target_compile_options(riscv

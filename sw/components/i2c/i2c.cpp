@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <string.h>
 
-#define I2C_MASTER_MEM_BASE 256 /*Address offset of the 128 byte memory buffer*/
+#define I2C_MASTER_MEM_BASE 256 /*Address offset of the 256 byte memory buffer*/
 #define I2C_MASTER_MEM_SIZE_BYTES 256
 
 #define SLAVE_ADDR_UNASSIGNED (~0UL)

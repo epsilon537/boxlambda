@@ -910,7 +910,7 @@ static void  sdcard_dump_sector(const unsigned *ubuf) {
   } txstr("\r\n");
 }
 
-static  unsigned  sdcard_get_r2(void) {
+static  void  sdcard_get_r2(void) {
   if (SDDEBUG) {
     SDSPI->CMD = SDSPI_ERROR | SDSPI_READREG | SDSPI_CMD + 13;
     SDSPI_WAIT_WHILE_BUSY;

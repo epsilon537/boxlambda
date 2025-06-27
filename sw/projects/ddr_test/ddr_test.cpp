@@ -117,8 +117,8 @@ int main(void) {
   //Copy code to DDR
   int (*fptr)(char*);
   fptr =  (int (*)(char*))((int)(code_in_ddr) | MAIN_RAM_BASE);
-  memcpy(fptr,
-         code_in_ddr,
+  memcpy((void*)fptr,
+         (void*)code_in_ddr,
          32 + ((char*)_init - (char*)code_in_ddr));
   /*Execute the code in DDR*/
   int ext_mem_crc = fptr((char*)fptr);

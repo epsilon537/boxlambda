@@ -3,8 +3,8 @@
 #
 add_executable(ddr_test_ram
     EXCLUDE_FROM_ALL
-      ddr_test.c
-      memtest.c
+      ddr_test.cpp
+      memtest.cpp
 )
 
 target_compile_definitions(ddr_test_ram PRIVATE -DMEMTEST_SIZE=32768)
@@ -24,8 +24,8 @@ target_link_libraries(ddr_test_ram sdram gpio riscv bootstrap)
 #
 add_executable(ddr_test_flsh
     EXCLUDE_FROM_ALL
-      ddr_test.c
-      memtest.c
+      ddr_test.cpp
+      memtest.cpp
 )
 
 target_compile_definitions(ddr_test_flsh PRIVATE -DMEMTEST_SIZE=32768)

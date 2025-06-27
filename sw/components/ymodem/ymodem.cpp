@@ -174,9 +174,9 @@ static const char *u32_to_str(unsigned int val)
   return &num_str[pos];
 }
 
-static unsigned long str_to_u32(char* str)
+static unsigned long str_to_u32(unsigned char* str)
 {
-  const char *s = str;
+  const unsigned char *s = str;
   unsigned long acc;
   int c;
 
@@ -194,7 +194,7 @@ static unsigned long str_to_u32(char* str)
 }
 
 /* Returns 0 on success, 1 on corrupt packet, -1 on error (timeout): */
-static int receive_packet(char *data, int *length)
+static int receive_packet(unsigned char *data, int *length)
 {
   int i, c;
   unsigned int packet_size;
@@ -263,7 +263,7 @@ unsigned long ymodem_receive(unsigned char *buf, unsigned long length)
   unsigned char packet_data[PACKET_1K_SIZE + PACKET_OVERHEAD];
   int packet_length, i, file_done, session_done, crc_tries, crc_nak;
   unsigned int packets_received, errors, first_try = 1;
-  char file_name[FILE_NAME_LENGTH], file_size[FILE_SIZE_LENGTH], *file_ptr;
+  unsigned char file_name[FILE_NAME_LENGTH], file_size[FILE_SIZE_LENGTH], *file_ptr;
   unsigned char *buf_ptr;
   unsigned long size = 0;
 

@@ -2,7 +2,7 @@ add_library(gpio)
 
 target_sources(gpio
     PRIVATE
-    gpio.c
+    gpio.cpp
 )
 
 target_compile_options(gpio

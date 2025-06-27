@@ -3,7 +3,7 @@
 #
 add_executable(ibex_perf_test_ram
  EXCLUDE_FROM_ALL
- ibex_perf_test.c
+ ibex_perf_test.cpp
 )
 
 target_compile_options(ibex_perf_test_ram
@@ -26,7 +26,7 @@ target_link_libraries(ibex_perf_test_ram gpio riscv vera bootstrap timer interru
 #
 add_executable(ibex_perf_test_flsh
  EXCLUDE_FROM_ALL
- ibex_perf_test.c
+ ibex_perf_test.cpp
 )
 
 target_compile_options(ibex_perf_test_flsh

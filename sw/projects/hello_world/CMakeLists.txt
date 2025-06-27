@@ -4,7 +4,7 @@
 
 add_executable(hello_world_ram
  EXCLUDE_FROM_ALL
-    hello.c
+    hello.cpp
 )
 
 #Setting the -g flag for the hello_dbg build testing GDB access.
@@ -22,7 +22,7 @@ target_link_libraries(hello_world_ram gpio riscv bootstrap)
 
 add_executable(hello_world_flsh
  EXCLUDE_FROM_ALL
-    hello.c
+    hello.cpp
 )
 
 #Setting the -g flag for the hello_dbg build testing GDB access.

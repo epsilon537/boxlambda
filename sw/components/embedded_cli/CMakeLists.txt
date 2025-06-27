@@ -4,13 +4,13 @@ add_library(embedded_cli)
 
 target_sources(embedded_cli
     PRIVATE
-    embedded_cli_setup.c
+    embedded_cli_setup.cpp
     ${PROJECT_SOURCE_DIR}/sub/embedded-cli/lib/src/embedded_cli.c
 )
 
 target_compile_options(embedded_cli
  PRIVATE
-  -O2 -g -ffunction-sections
+  -O2 -g
 )
 
 #Paths to include files users of usb_hid are expected to use.

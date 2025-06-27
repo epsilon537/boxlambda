@@ -8,6 +8,11 @@
 #include "mcycle.h"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //_init is executed by picolibc startup code before main().
 void _init(void) {
   uart_set_baudrate(115200);
@@ -18,6 +23,10 @@ void _init(void) {
 void	_exit (int status) {
 	while (1);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 /* This test checks that accessing invalid addresses don't cause */
 /* cpu exceptions and reading from invalid addresses returns 0xdeadbeef. */

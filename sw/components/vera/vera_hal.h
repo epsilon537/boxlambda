@@ -10,6 +10,10 @@
 #define VERA_PALETTE_BASE (VERA_BASE_ADDR + VERA_PALETTE_OFFSET)
 #define VERA_SPRITES_BASE (VERA_BASE_ADDR + VERA_SPRITES_OFFSET)
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //VERA VRAM word write
 inline void vram_wr(unsigned addr, unsigned data) {
   *(volatile unsigned *)(addr+VERA_VRAM_BASE) = data;
@@ -39,4 +43,7 @@ inline void palette_ram_wr(unsigned idx, unsigned char r, unsigned char g, unsig
 void sprite_attr_wr(unsigned sprite_id, unsigned addr, unsigned mode, unsigned x, unsigned y,
                     unsigned z, unsigned collision_mask, unsigned width, unsigned height);
 
+#ifdef __cplusplus
+}
+#endif
 #endif //VERA_HAL_H

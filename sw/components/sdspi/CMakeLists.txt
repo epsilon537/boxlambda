@@ -2,7 +2,7 @@ add_library(sdspi)
 
 target_sources(sdspi
     PRIVATE
-    sdcard.c
+    sdcard.cpp
 )
 
 target_compile_definitions(sdspi

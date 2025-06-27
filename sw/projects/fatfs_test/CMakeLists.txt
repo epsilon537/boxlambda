@@ -4,7 +4,7 @@
 
 add_executable(fatfs_test_ram
  EXCLUDE_FROM_ALL
- fatfs_test.c
+ fatfs_test.cpp
 )
 
 target_compile_options(fatfs_test_ram
@@ -23,7 +23,7 @@ target_link_libraries(fatfs_test_ram fatfs riscv bootstrap)
 
 add_executable(fatfs_test_flsh
  EXCLUDE_FROM_ALL
- fatfs_test.c
+ fatfs_test.cpp
 )
 
 target_compile_options(fatfs_test_flsh

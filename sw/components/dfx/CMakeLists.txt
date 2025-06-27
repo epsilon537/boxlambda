@@ -2,7 +2,7 @@ add_library(dfx)
 
 target_sources(dfx
     PRIVATE
-    dfx_controller_hal.c
+    dfx_controller_hal.cpp
 )
 
 target_compile_options(dfx

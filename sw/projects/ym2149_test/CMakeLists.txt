@@ -3,7 +3,7 @@
 #
 add_executable(ym2149_test_ram
  EXCLUDE_FROM_ALL
- ym2149_test.c
+ ym2149_test.cpp
 )
 
 target_compile_options(ym2149_test_ram
@@ -26,7 +26,7 @@ target_link_libraries(ym2149_test_ram gpio riscv bootstrap)
 #
 add_executable(ym2149_test_flsh
  EXCLUDE_FROM_ALL
- ym2149_test.c
+ ym2149_test.cpp
 )
 
 target_compile_options(ym2149_test_flsh

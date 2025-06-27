@@ -3,7 +3,7 @@ add_library(usb_hid)
 #usb_hid hardware access layer.
 target_sources(usb_hid
     PRIVATE
-    usb_hid_hal.c
+    usb_hid_hal.cpp
 )
 
 target_compile_options(usb_hid

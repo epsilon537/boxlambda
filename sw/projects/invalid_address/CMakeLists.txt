@@ -4,7 +4,7 @@
 
 add_executable(invalid_address_ram
  EXCLUDE_FROM_ALL
-    invalid_address.c
+    invalid_address.cpp
 )
 
 target_compile_options(invalid_address_ram
@@ -21,7 +21,7 @@ target_link_libraries(invalid_address_ram gpio riscv bootstrap)
 
 add_executable(invalid_address_flsh
  EXCLUDE_FROM_ALL
-    invalid_address.c
+    invalid_address.cpp
 )
 
 target_compile_options(invalid_address_flsh

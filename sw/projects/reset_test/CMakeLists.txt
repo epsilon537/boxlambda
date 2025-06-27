@@ -2,7 +2,7 @@
 
 add_executable(reset_test_ram
  EXCLUDE_FROM_ALL
- reset_test.c
+ reset_test.cpp
 )
 
 target_compile_options(reset_test_ram
@@ -24,7 +24,7 @@ target_link_libraries(reset_test_ram sdram gpio riscv bootstrap)
 
 add_executable(reset_test_flsh
  EXCLUDE_FROM_ALL
- reset_test.c
+ reset_test.cpp
 )
 
 target_compile_options(reset_test_flsh

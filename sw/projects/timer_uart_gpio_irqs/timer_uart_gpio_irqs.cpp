@@ -12,6 +12,10 @@
 
 #define IRQ_LATENCY_AND_JITTER_MARGIN 20
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //_init is executed by picolibc startup code before main().
 void _init(void) {
   uart_set_baudrate(115200);
@@ -26,6 +30,10 @@ void _init(void) {
 void	_exit (int status) {
 	while (1);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 volatile int timer_irq_fired = 0;
 volatile int uart_rx_irq_fired = 0;

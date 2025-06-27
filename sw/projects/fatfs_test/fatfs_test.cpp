@@ -17,6 +17,10 @@ const char *text_file_name = STR_ROOT_DIRECTORY "log.txt";
 static uint8_t data_buffer[DATA_SIZE];
 #define TEST_SIZE   (4 * 1024)
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //_init is executed by picolibc startup code before main().
 void _init(void) {
   uart_set_baudrate(115200);
@@ -27,6 +31,10 @@ void _init(void) {
 void  _exit (int status) {
   while (1);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 //This FatFs test function is derived from avrxml/asf's run_fatfs_test.
 //
@@ -150,8 +158,7 @@ static int fatfs_test(void)
       return -1;
   }
 
-  res = f_printf(&file_object, "This is a test.\n");
-  if (res < 0) {
+  if (f_printf(&file_object, "This is a test.\n") < 0) {
     printf("FatFS f_printf error!\n");
     return -1;
   }

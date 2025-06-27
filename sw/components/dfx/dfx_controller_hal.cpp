@@ -32,6 +32,7 @@ uint32_t dfx_load_rm(void *bufPtr, uint32_t size, uint32_t timeout_ms) {
   DFX_OTHER->SW_TRIGGER_bf.TRIGGER_ID = 0;
 
   /* Check the state */
+  uint32_t tmp;
   dfx_other_status_t status_reg;
   uint32_t err=0;
   uint32_t state=0, prev_state=0;
@@ -40,7 +41,8 @@ uint32_t dfx_load_rm(void *bufPtr, uint32_t size, uint32_t timeout_ms) {
 
   /* The DFX controller is going to cycle through a few states and, hopefully, end up in the VS_FULL state. */
   while (state != DFX_OTHER_STATUS_STATE_VS_FULL) {
-    status_reg = DFX_OTHER->STATUS_bf;
+    tmp = DFX_OTHER->STATUS;
+    status_reg = *(dfx_other_status_t *)&tmp;
     state = status_reg.STATE;
     err = status_reg.ERR;
 

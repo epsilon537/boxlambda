@@ -2,7 +2,7 @@ add_library(vera)
 
 target_sources(vera
     PRIVATE
-        vera_hal.c
+        vera_hal.cpp
 )
 
 target_compile_options(vera
