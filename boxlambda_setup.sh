@@ -131,6 +131,16 @@ rm -rf build
 cmake --fresh --preset=sim-a7-100
 cmake --fresh --preset=arty-a7-100
 
+#Run the code generation rules
+pushd .
+cd build/sim-a7-100
+make cgen
+popd
+pushd .
+cd build/arty-a7-100
+make cgen
+popd
+
 #Deactivate the environment
 deactivate
 
