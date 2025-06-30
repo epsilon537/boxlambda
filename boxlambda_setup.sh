@@ -36,7 +36,7 @@ cd tools
 if [ -d riscv32-boxlambda-elf ]; then
   echo "riscv32 toolchain found."
 else
-  echo "Unpacking riscv32 toolchain..." 
+  echo "Unpacking riscv32 toolchain..."
 
   if tar xf ../assets/riscv32-boxlambda-elf.tgz ; then
     echo "OK"
@@ -85,19 +85,14 @@ popd > /dev/null
 source activate_env.sh
 
 #Install required Python packages.
-if [ -f ./tools/oss-cad-suite/.python_packages_installed ]; then
-  echo "Required Python packages found."
+echo "Installing required Python packages..."
+if python3 -m pip install -qq -U -r python-requirements.txt ; then
+  echo "OK"
 else
-  echo "Installing required Python packages..."
-  if python3 -m pip install -qq -U -r python-requirements.txt ; then
-    echo "OK"
-  else
-    "Pip install failed. Aborting..."
-    popd
-    return 1
-  fi
-  cp -f python-requirements.txt ./tools/oss-cad-suite/.python_packages_installed
+  "Pip install failed. Aborting..."
+  return 1
 fi
+cp -f python-requirements.txt ./tools/oss-cad-suite/.python_packages_installed
 
 echo "Retrieving git submodules..."
 git submodule update --init --recursive
