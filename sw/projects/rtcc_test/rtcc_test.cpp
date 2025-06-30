@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "mcycle.h"
@@ -17,16 +15,10 @@
 #include "peek_poke_cli.h"
 #include "embedded_cli_setup.h"
 
-static struct uart uart0;
-static struct gpio gpio;
-
 extern "C" {
   //_init is executed by picolibc startup code before main().
   void _init(void) {
-    //Set up UART and tie stdio to it.
-    uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-    uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-    set_stdio_to_uart(&uart0);
+    uart_set_baudrate(115200);
     mcycle_start();
   }
 
@@ -72,7 +64,7 @@ void rtcc_test(void) {
 
   for (;;) {
     /*Exit function if btn 0 is pushed.*/
-    if ((gpio_get_input(&gpio) & 0x0100) != 0) {
+    if ((gpio_get_input() & 0x0100) != 0) {
       return;
     }
 
@@ -82,7 +74,7 @@ void rtcc_test(void) {
     if (tmElements.Second != prevSecond) {
       prevSecond = tmElements.Second;
 
-      printf("sec: 0x%x, min: 0x%x, hour: 0x%x.\n", (unsigned)tmElements.Second, (unsigned)tmElements.Minute, (unsigned)tmElements.Hour);
+      printf("sec: 0x%x, min: 0x%x, hour: 0x%x.\n", (uint32_t)tmElements.Second, (uint32_t)tmElements.Minute, (uint32_t)tmElements.Hour);
     }
   }
 }
@@ -92,8 +84,8 @@ int main(void) {
   usleep(1000000);
   printf("Starting...\n");
 
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
   /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {
@@ -107,7 +99,7 @@ int main(void) {
   /* Run the RTCC test. After test we can fall through to CLI.*/
   rtcc_test();
 
-  EmbeddedCli *cli = createEmbeddedCli(&uart0);
+  EmbeddedCli *cli = createEmbeddedCli();
 
   add_peek_poke_cli(cli);
   add_i2c_cli(cli);

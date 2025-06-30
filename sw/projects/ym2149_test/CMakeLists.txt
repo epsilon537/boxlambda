@@ -3,7 +3,7 @@
 #
 add_executable(ym2149_test_ram
  EXCLUDE_FROM_ALL
- ym2149_test.c
+ ym2149_test.cpp
 )
 
 target_compile_options(ym2149_test_ram
@@ -12,8 +12,8 @@ target_compile_options(ym2149_test_ram
 )
 
 target_include_directories(ym2149_test_ram
-    PRIVATE
-  ${PROJECT_SOURCE_DIR}/sw/components/ym2149_sys_hal/
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:
@@ -26,7 +26,7 @@ target_link_libraries(ym2149_test_ram gpio riscv bootstrap)
 #
 add_executable(ym2149_test_flsh
  EXCLUDE_FROM_ALL
- ym2149_test.c
+ ym2149_test.cpp
 )
 
 target_compile_options(ym2149_test_flsh
@@ -35,8 +35,8 @@ target_compile_options(ym2149_test_flsh
 )
 
 target_include_directories(ym2149_test_flsh
-    PRIVATE
-      ${PROJECT_SOURCE_DIR}/sw/components/ym2149_sys_hal/
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:

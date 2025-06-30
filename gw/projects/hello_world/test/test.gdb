@@ -10,11 +10,9 @@ target extended-remote localhost:3333
 #Continue to main()
 b main
 c
-
-#Dump the address of the uart0 registers.
-#(i.e. this script assumes that the SW running on target has
-#uart0 instantiated.
-p/x uart0.registers
+s
+#Print the contents of a local variable.
+p/x leds
 
 #Disconnect from target.
 monitor [target current] configure -event gdb-detach { shutdown }

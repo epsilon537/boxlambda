@@ -1,0 +1,98 @@
+regmap:
+-   name: RGPIO_IN
+    description: Latched value of general-purpose input pins.
+    address: 0
+    bitfields:
+    -   name: PINS
+        description: Latched value of general-purpose input pins.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+-   name: RGPIO_OUT
+    description: General-purpose output pin values.
+    address: 4
+    bitfields:
+    -   name: PINS
+        description: General-purpose output pin values.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: RGPIO_OE
+    description: General-purpose pins output enables.
+    address: 8
+    bitfields:
+    -   name: PINS
+        description: General-purpose pins output enables.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: RGPIO_INTE
+    description: General-purpose pin interrupt enables.
+    address: 12
+    bitfields:
+    -   name: PINS
+        description: General-purpose pins interrupt enables.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: RGPIO_PTRIG
+    description: Trigger IRQ on positive edge.
+    address: 16
+    bitfields:
+    -   name: PINS
+        description: Trigger IRQ on positive edge if set, on negative edge if cleared.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: RGPIO_CTRL_STATUS
+    description: GPIO control and status register
+    address: 24
+    bitfields:
+    -   name: INTE
+        description: Interrupt enabled
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: INTS
+        description: Interrupt status
+        reset: 0
+        width: 1
+        lsb: 1
+        access: ro
+-   name: RGPIO_INTS
+    description: GPIO interrupt status register.
+    address: 28
+    bitfields:
+    -   name: PINS
+        description: Interrupt status - Write 0 to clear.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: RGPIO_ECLK
+    description: Latch on gp_clk input signal.
+    address: 32
+    bitfields:
+    -   name: PINS
+        description: When set, the gp_clk input signal is used to latch pin.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: RGPIO_NEC
+    description: Latch on gp_clk negative edge. Relevant only if RGPIO_ECLK is set.
+    address: 36
+    bitfields:
+    -   name: PINS
+        description: When set, gp_clk is active on negative edge, when cleared on positive edge.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+

@@ -245,7 +245,7 @@ int main(int argc, char** argv, char** env) {
     int pos=0;
 
     while (pos != std::string::npos) {
-      pos = uartRxString.find("keyboard report", pos);
+      pos = uartRxString.find("Keyboard report", pos);
       if (pos != std::string::npos) {
         ++numKeyboardReports;
         ++pos;
@@ -257,7 +257,7 @@ int main(int argc, char** argv, char** env) {
     pos = 0;
 
     while (pos != std::string::npos) {
-      pos = uartRxString.find("mouse report", pos);
+      pos = uartRxString.find("Mouse report", pos);
       if (pos != std::string::npos) {
         ++numMouseReports;
         ++pos;
@@ -293,5 +293,5 @@ int main(int argc, char** argv, char** env) {
     }
 
     cleanup();
-    return 0;
+    return res;
 }

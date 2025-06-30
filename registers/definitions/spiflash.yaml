@@ -1,0 +1,18 @@
+regmap:
+-   name: CTRL
+    description: SPIFlash Control Register
+    address: 0
+    bitfields:
+    -   name: CS_N
+        description: 1/0 de/activates the control port.
+        reset: 0
+        width: 1
+        lsb: 8
+        access: rw
+    -   name: DATA
+        description: If control port is active, written byte value is sent out to SPI slave, top bit first. After write, may be read to retrieve return data byte.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+

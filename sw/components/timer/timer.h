@@ -1,51 +1,41 @@
-/*
-   Simple machine mode timer driver for RISC-V standard timer.
-   SPDX-License-Identifier: Unlicense
-
-   (https://five-embeddev.com/)
-
-*/
-
 #ifndef TIMER_H
 #define TIMER_H
 
 #include <stdint.h>
+#include "mtimer_regs.h"
 
-#define TIMER_BASE_ADDR 0x10020000
-
-#define MTIMEBLK_ADDR (TIMER_BASE_ADDR + 16)
-#define MTIMECMP_ADDR (TIMER_BASE_ADDR + 8)
-#define MTIME_ADDR (TIMER_BASE_ADDR + 0)
-
-#define MTIME_FREQ_HZ 50000000
+#define MTIMER_FREQ_HZ 50000000
 
 #define MTIMER_SECONDS_TO_CLOCKS(SEC) \
-    ((uint64_t)(((SEC) * (MTIME_FREQ_HZ))))
+    ((uint64_t)(((SEC) * (MTIMER_FREQ_HZ))))
 
 #define MTIMER_MSEC_TO_CLOCKS(MSEC) \
-    ((uint64_t)(((MSEC) * (MTIME_FREQ_HZ)) / 1000))
+    ((uint64_t)(((MSEC) * (MTIMER_FREQ_HZ)) / 1000))
 
 #define MTIMER_USEC_TO_CLOCKS(USEC) \
-    ((uint64_t)(((USEC) * (MTIME_FREQ_HZ)) / 1000000))
+    ((uint64_t)(((USEC) * (MTIMER_FREQ_HZ)) / 1000000))
 
 /**
  * Minimal overhead accessor to retrieve the low word of MTIME.
  **/
-#define MTIMER_GET_RAW_MTIME_LOW() (*(volatile uint32_t *)(MTIME_ADDR))
+#define MTIMER_GET_RAW_MTIME_LOW() (MTIMER->MTIME)
 
 /**
  * Minimal overhead accessor to retrieve the low word of MTIMECMP.
  * Used in conjunction with MTIMER_BLK_UNTIL() to remove interrupt jitter from timer interrupts.
  **/
-#define MTIMER_GET_RAW_TIMECMP_LOW() (*(volatile uint32_t *)(MTIMECMP_ADDR))
+#define MTIMER_GET_RAW_TIMECMP_LOW() (MTIMER->MTIMECMP)
 
 /**
  * Block until the lower 8 bits of the mtime are equal to the argument.
  * This is accurate to 1 clock cycle.
  * This mechanisf can be used to remove interrupt jitter from timer interrupts.
  **/
-#define MTIMER_BLK_UNTIL(t) (*(volatile uint32_t *)(MTIMEBLK_ADDR) = (t))
+#define MTIMER_BLK_UNTIL(t) (MTIMER->MTIMEBLK = (t))
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
  * Disable timer compare point by setting it to max. value
  */
@@ -61,5 +51,9 @@ void mtimer_set_raw_time_cmp(uint64_t clock_offset);
 /** Read the raw time of the system timer in system timer clocks
  */
 uint64_t mtimer_get_raw_time(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif// #ifdef TIMER_H

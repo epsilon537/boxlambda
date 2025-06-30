@@ -3,7 +3,7 @@
 #
 add_executable(timer_uart_gpio_irqs_ram
  EXCLUDE_FROM_ALL
- timer_uart_gpio_irqs.c
+ timer_uart_gpio_irqs.cpp
 )
 
 target_compile_options(timer_uart_gpio_irqs_ram
@@ -21,7 +21,7 @@ target_link_libraries(timer_uart_gpio_irqs_ram timer gpio riscv interrupts boots
 #
 add_executable(timer_uart_gpio_irqs_flsh
  EXCLUDE_FROM_ALL
- timer_uart_gpio_irqs.c
+ timer_uart_gpio_irqs.cpp
 )
 
 target_compile_options(timer_uart_gpio_irqs_flsh

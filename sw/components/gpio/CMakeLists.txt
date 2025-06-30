@@ -2,7 +2,7 @@ add_library(gpio)
 
 target_sources(gpio
     PRIVATE
-    gpio.c
+    gpio.cpp
 )
 
 target_compile_options(gpio
@@ -14,4 +14,5 @@ target_compile_options(gpio
 target_include_directories(gpio
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}
+        ${PROJECT_SOURCE_DIR}/registers/generated/
 )

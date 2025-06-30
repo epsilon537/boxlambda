@@ -10,7 +10,7 @@ add_library(j1b_hal)
 #j1b_hal hardware access layer.
 target_sources(j1b_hal
     PRIVATE
-    j1b_hal.c
+    j1b_hal.cpp
 )
 
 target_compile_options(j1b_hal

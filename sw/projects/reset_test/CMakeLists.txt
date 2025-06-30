@@ -12,7 +12,7 @@ target_compile_options(reset_test_ram
 
 target_include_directories(reset_test_ram
   PRIVATE
-  ${PROJECT_SOURCE_DIR}/sw/components/reset/
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 link_and_create_image(reset_test_ram
@@ -34,7 +34,7 @@ target_compile_options(reset_test_flsh
 
 target_include_directories(reset_test_flsh
   PRIVATE
-  ${PROJECT_SOURCE_DIR}/sw/components/reset/
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 link_and_create_image(reset_test_flsh

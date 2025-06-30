@@ -1,51 +1,49 @@
 #ifndef VERA_HAL_H
 #define VERA_HAL_H
 
-#include "vera.h"
+#include "vera_regs.h"
 
-#define VERA_BASE 0x12000000
-#define VERA_VRAM_BASE (VERA_BASE + VERA_VRAM_OFFSET)
-#define VERA_PALETTE_BASE (VERA_BASE + VERA_PALETTE_OFFSET)
-#define VERA_SPRITES_BASE (VERA_BASE + VERA_SPRITES_OFFSET)
+#define VERA_PALETTE_OFFSET (0x2000)
+#define VERA_SPRITES_OFFSET (0x1000)
+#define VERA_VRAM_OFFSET   (0x40000)
+#define VERA_VRAM_BASE (VERA_BASE_ADDR + VERA_VRAM_OFFSET)
+#define VERA_PALETTE_BASE (VERA_BASE_ADDR + VERA_PALETTE_OFFSET)
+#define VERA_SPRITES_BASE (VERA_BASE_ADDR + VERA_SPRITES_OFFSET)
 
-/*A low-level Hardware Access Layer for VERA.*/
-//VERA register write
-inline void vera_reg_wr(unsigned addr, unsigned data) {
-  *(volatile unsigned *)(VERA_BASE + addr) = data;
-}
-
-//VERA register read
-inline unsigned vera_reg_rd(unsigned addr) {
-  return *(unsigned volatile *)(VERA_BASE + addr);
-}
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //VERA VRAM word write
-inline void vram_wr(unsigned addr, unsigned data) {
-  *(volatile unsigned *)(addr+VERA_VRAM_BASE) = data;
+inline void vram_wr(uint32_t addr, uint32_t data) {
+  *(volatile uint32_t *)(addr+VERA_VRAM_BASE) = data;
 }
 
 //VERA VRAM byte write
-inline void vram_wr_byte(unsigned addr, unsigned char data) {
-  *(volatile unsigned char *)(addr+VERA_VRAM_BASE) = data;
+inline void vram_wr_byte(uint32_t addr, uint8_t data) {
+  *(volatile uint8_t *)(addr+VERA_VRAM_BASE) = data;
 }
 
 //VERA VRAM word read
-inline unsigned vram_rd(unsigned addr) {
-  return (*(volatile unsigned *)(addr+VERA_VRAM_BASE));
+inline uint32_t vram_rd(uint32_t addr) {
+  return (*(volatile uint32_t *)(addr+VERA_VRAM_BASE));
 }
 
 //VERA VRAM byte read
-inline unsigned char vram_rd_byte(unsigned addr) {
-  return (*(volatile unsigned char *)(addr+VERA_VRAM_BASE));
+inline uint8_t vram_rd_byte(uint32_t addr) {
+  return (*(volatile uint8_t *)(addr+VERA_VRAM_BASE));
 }
 
 //This function writes the given rgb triple to the given position in VERA's Palette RAM.
-inline void palette_ram_wr(unsigned idx, unsigned char r, unsigned char g, unsigned char b) {
-  *(volatile unsigned *)(idx*4+VERA_PALETTE_BASE) = (((unsigned)r)<<8) | (((unsigned)g)<<4) | ((unsigned)b);
+inline void palette_ram_wr(uint32_t idx, uint8_t r, uint8_t g, uint8_t b) {
+  *(volatile uint32_t *)(idx*4+VERA_PALETTE_BASE) = (((uint32_t)r)<<8) | (((uint32_t)g)<<4) | ((uint32_t)b);
 }
 
 //Crude sprite attributes write function.
-void sprite_attr_wr(unsigned sprite_id, unsigned addr, unsigned mode, unsigned x, unsigned y,
-                    unsigned z, unsigned collision_mask, unsigned width, unsigned height);
+void sprite_attr_wr(uint32_t sprite_id, uint32_t addr, uint32_t mode, uint32_t x, uint32_t y,
+                    uint32_t z, uint32_t collision_mask, uint32_t width, uint32_t height);
 
+#ifdef __cplusplus
+}
+#endif
 #endif //VERA_HAL_H

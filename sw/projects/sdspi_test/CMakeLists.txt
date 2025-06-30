@@ -3,8 +3,8 @@
 #
 add_executable(sdspi_test_ram
  EXCLUDE_FROM_ALL
- sdspi_test_main.c
- sdtest.c
+ sdspi_test_main.cpp
+ sdtest.cpp
 )
 
 target_compile_options(sdspi_test_ram
@@ -17,7 +17,8 @@ target_compile_definitions(sdspi_test_ram
 
 target_include_directories(sdspi_test_ram
     PRIVATE
-     ${PROJECT_SOURCE_DIR}/sub/sdspi/sw/
+     ${PROJECT_SOURCE_DIR}/sw/components/sdspi/
+     ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:
@@ -30,8 +31,8 @@ target_link_libraries(sdspi_test_ram gpio riscv interrupts bootstrap)
 #
 add_executable(sdspi_test_flsh
  EXCLUDE_FROM_ALL
- sdspi_test_main.c
- sdtest.c
+ sdspi_test_main.cpp
+ sdtest.cpp
 )
 
 target_compile_options(sdspi_test_flsh

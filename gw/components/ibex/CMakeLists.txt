@@ -7,8 +7,8 @@ add_custom_target(gen_ibex_core
       VERBATIM
   )
 
-#Add gen_ibex_core to the gateware codegeneration dependency list.
-add_dependencies(gw_codegen gen_ibex_core)
+#Add gen_ibex_core to the codegeneration dependency list.
+add_dependencies(cgen gen_ibex_core)
 
 #gw_component_rules() function is defined in the parent CMakeLists.txt.
 gw_component_rules(

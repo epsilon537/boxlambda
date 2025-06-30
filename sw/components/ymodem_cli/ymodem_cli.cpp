@@ -24,7 +24,7 @@ extern "C" {
 
       addr = (uint32_t)malloc(YMODEM_RX_BUF_SIZE_BYTES);
 
-      ymodem_rx_size = ymodem_receive((unsigned char*)addr, YMODEM_RX_BUF_SIZE_BYTES);
+      ymodem_rx_size = ymodem_receive((uint8_t*)addr, YMODEM_RX_BUF_SIZE_BYTES);
 
       printf("Ymodem received %d bytes into buffer at address 0x%x.\n", ymodem_rx_size, addr);
 
@@ -70,7 +70,7 @@ extern "C" {
       sscanf(addrString, "%08X", &addr);
       sscanf(sizeString, "%d", &buf_size);
 
-      ymodem_send((unsigned char*)addr, buf_size, (char*)filename);
+      ymodem_send((uint8_t*)addr, buf_size, (char*)filename);
 
       printf("Ymodem transmitted %d bytes into buffer at address 0x%x to file %s.\n", buf_size, addr, filename);
     }
@@ -79,10 +79,8 @@ extern "C" {
 
 /* Call this function to hook the ymodem CLI commanded into the embedded-cli */
 /* instance running on the system. */
-void add_ymodem_cli(EmbeddedCli* cli, struct uart* uart) {
+void add_ymodem_cli(EmbeddedCli* cli) {
   assert(cli);
-
-  ymodem_init(uart);
 
   embeddedCliAddBinding(cli, {
         "ymodem_rx",          // command name (spaces are not allowed)

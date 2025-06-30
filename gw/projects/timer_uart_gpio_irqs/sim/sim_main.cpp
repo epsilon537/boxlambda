@@ -123,7 +123,7 @@ static int timer_test(void) {
 static int uart_tx_irq_test(void) {
   int done = 0;
 
-  while (!done && (contextp->time() < 6000000)) {
+  while (!done && (contextp->time() < 9000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 

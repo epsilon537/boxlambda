@@ -4,7 +4,7 @@ add_library(ymodem)
 
 target_sources(ymodem
     PRIVATE
-    ymodem.c
+    ymodem.cpp
 )
 
 target_compile_options(ymodem

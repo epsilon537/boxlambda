@@ -17,5 +17,6 @@ target_compile_options(flashdrvr
 target_include_directories(flashdrvr
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
+    ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 

@@ -3,7 +3,7 @@
 #
 add_executable(ibex_perf_test_ram
  EXCLUDE_FROM_ALL
- ibex_perf_test.c
+ ibex_perf_test.cpp
 )
 
 target_compile_options(ibex_perf_test_ram
@@ -13,7 +13,7 @@ target_compile_options(ibex_perf_test_ram
 
 target_include_directories(ibex_perf_test_ram
   PRIVATE
-  ${PROJECT_SOURCE_DIR}/sw/components/i2c/
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:
@@ -26,7 +26,7 @@ target_link_libraries(ibex_perf_test_ram gpio riscv vera bootstrap timer interru
 #
 add_executable(ibex_perf_test_flsh
  EXCLUDE_FROM_ALL
- ibex_perf_test.c
+ ibex_perf_test.cpp
 )
 
 target_compile_options(ibex_perf_test_flsh
@@ -36,7 +36,7 @@ target_compile_options(ibex_perf_test_flsh
 
 target_include_directories(ibex_perf_test_flsh
   PRIVATE
-  ${PROJECT_SOURCE_DIR}/sw/components/i2c/
+  ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:

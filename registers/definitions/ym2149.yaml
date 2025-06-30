@@ -1,0 +1,508 @@
+regmap:
+-   name: PSG0_CHA_TONE_PERIOD_FINE
+    description: Channel A fine tone period adjustment.
+    address: 0
+    bitfields:
+    -   name: VALUE
+        description: Channel A fine tone period adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG0_CHA_TONE_PERIOD_COARSE
+    description: Channel A coarse tone period adjustment.
+    address: 4
+    bitfields:
+    -   name: VALUE
+        description: Channel A coarse tone period adjustment.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+-   name: PSG0_CHB_TONE_PERIOD_FINE
+    description: Channel B fine tone period adjustment.
+    address: 8
+    bitfields:
+    -   name: VALUE
+        description: Channel B fine tone period adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG0_CHB_TONE_PERIOD_COARSE
+    description: Channel B coarse tone period adjustment.
+    address: 12
+    bitfields:
+    -   name: VALUE
+        description: Channel B coarse tone period adjustment.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+-   name: PSG0_CHC_TONE_PERIOD_FINE
+    description: Channel C fine tone period adjustment.
+    address: 16
+    bitfields:
+    -   name: VALUE
+        description: Channel C fine tone period adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG0_CHC_TONE_PERIOD_COARSE
+    description: Channel C coarse tone period adjustment.
+    address: 20
+    bitfields:
+    -   name: VALUE
+        description: Channel C coarse tone period adjustment.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+-   name: PSG0_NOISE_PERIOD
+    description: Noise period.
+    address: 24
+    bitfields:
+    -   name: VALUE
+        description: Noise period.
+        reset: 0
+        width: 5
+        lsb: 0
+        access: rw
+-   name: PSG0_DISABLE
+    description: Mixer settings.
+    address: 28
+    bitfields:
+    -   name: TONE_A
+        description: Channel A tone disable.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: TONE_B
+        description: Channel B tone disable.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw
+    -   name: TONE_C
+        description: Channel C tone disable.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: NOISE_A
+        description: Channel A noise disable.
+        reset: 0
+        width: 1
+        lsb: 3
+        access: rw
+    -   name: NOISE_B
+        description: Channel B noise disable.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+    -   name: NOISE_C
+        description: Channel C noise disable.
+        reset: 0
+        width: 1
+        lsb: 5
+        access: rw
+-   name: PSG0_CHA_LVL
+    description: Channel A level control.
+    address: 32
+    bitfields:
+    -   name: LVL
+        description: Level selection.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+    -   name: MODE
+        description: Mode.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+-   name: PSG0_CHB_LVL
+    description: Channel B level control.
+    address: 36
+    bitfields:
+    -   name: LVL
+        description: Level selection.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+    -   name: MODE
+        description: Mode.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+-   name: PSG0_CHC_LVL
+    description: Channel C level control.
+    address: 40
+    bitfields:
+    -   name: LVL
+        description: Level selection.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+    -   name: MODE
+        description: Mode.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+-   name: PSG0_ENV_PERIOD_FINE
+    description: Envelope frequency fine adjustment.
+    address: 44
+    bitfields:
+    -   name: VALUE
+        description: Envelope frequency fine adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG0_ENV_PERIOD_COARSE
+    description: Envelope frequeny coarse adjustment.
+    address: 48
+    bitfields:
+    -   name: VALUE
+        description: Envelope frequency coarse adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG0_ENV_SHAPE
+    description: Envelope shape.
+    address: 52
+    bitfields:
+    -   name: VALUE
+        description: Envelope shape.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+-   name: PSG1_CHA_TONE_PERIOD_FINE
+    description: Channel A fine tone period adjustment.
+    address: 64
+    bitfields:
+    -   name: VALUE
+        description: Channel A fine tone period adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG1_CHA_TONE_PERIOD_COARSE
+    description: Channel A coarse tone period adjustment.
+    address: 68
+    bitfields:
+    -   name: VALUE
+        description: Channel A coarse tone period adjustment.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+-   name: PSG1_CHB_TONE_PERIOD_FINE
+    description: Channel B fine tone period adjustment.
+    address: 72
+    bitfields:
+    -   name: VALUE
+        description: Channel B fine tone period adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG1_CHB_TONE_PERIOD_COARSE
+    description: Channel B coarse tone period adjustment.
+    address: 76
+    bitfields:
+    -   name: VALUE
+        description: Channel B coarse tone period adjustment.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+-   name: PSG1_CHC_TONE_PERIOD_FINE
+    description: Channel C fine tone period adjustment.
+    address: 80
+    bitfields:
+    -   name: VALUE
+        description: Channel C fine tone period adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG1_CHC_TONE_PERIOD_COARSE
+    description: Channel C coarse tone period adjustment.
+    address: 84
+    bitfields:
+    -   name: VALUE
+        description: Channel C coarse tone period adjustment.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+-   name: PSG1_NOISE_PERIOD
+    description: Noise period.
+    address: 88
+    bitfields:
+    -   name: VALUE
+        description: Noise period.
+        reset: 0
+        width: 5
+        lsb: 0
+        access: rw
+-   name: PSG1_DISABLE
+    description: Mixer settings.
+    address: 92
+    bitfields:
+    -   name: TONE_A
+        description: Channel A tone disable.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: TONE_B
+        description: Channel B tone disable.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw
+    -   name: TONE_C
+        description: Channel C tone disable.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: NOISE_A
+        description: Channel A noise disable.
+        reset: 0
+        width: 1
+        lsb: 3
+        access: rw
+    -   name: NOISE_B
+        description: Channel B noise disable.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+    -   name: NOISE_C
+        description: Channel C noise disable.
+        reset: 0
+        width: 1
+        lsb: 5
+        access: rw
+-   name: PSG1_CHA_LVL
+    description: Channel A level control.
+    address: 96
+    bitfields:
+    -   name: LVL
+        description: Level selection.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+    -   name: MODE
+        description: Mode.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+-   name: PSG1_CHB_LVL
+    description: Channel B level control.
+    address: 100
+    bitfields:
+    -   name: LVL
+        description: Level selection.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+    -   name: MODE
+        description: Mode.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+-   name: PSG1_CHC_LVL
+    description: Channel C level control.
+    address: 104
+    bitfields:
+    -   name: LVL
+        description: Level selection.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+    -   name: MODE
+        description: Mode.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+-   name: PSG1_ENV_PERIOD_FINE
+    description: Envelope frequency fine adjustment.
+    address: 108
+    bitfields:
+    -   name: VALUE
+        description: Envelope frequency fine adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG1_ENV_PERIOD_COARSE
+    description: Envelope frequeny coarse adjustment.
+    address: 112
+    bitfields:
+    -   name: VALUE
+        description: Envelope frequency coarse adjustment.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: PSG1_ENV_SHAPE
+    description: Envelope shape.
+    address: 116
+    bitfields:
+    -   name: VALUE
+        description: Envelope shape.
+        reset: 0
+        width: 4
+        lsb: 0
+        access: rw
+-   name: FILTER_MIXER_VOLA
+    description: Filter mixer PSG0 channel A volume.
+    address: 512
+    bitfields:
+    -   name: VALUE
+        description: Filter mixer PSG0 channel A volume.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: FILTER_MIXER_VOLB
+    description: Filter mixer PSG0 channel B volume.
+    address: 516
+    bitfields:
+    -   name: VALUE
+        description: Filter mixer PSG0 channel B volume.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: FILTER_MIXER_VOLC
+    description: Filter mixer PSG0 channel C volume.
+    address: 520
+    bitfields:
+    -   name: VALUE
+        description: Filter mixer PSG0 channel C volume.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: FILTER_MIXER_VOLD
+    description: Filter mixer PSG1 channel A volume.
+    address: 524
+    bitfields:
+    -   name: VALUE
+        description: Filter mixer PSG1 channel A volume.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: FILTER_MIXER_VOLE
+    description: Filter mixer PSG1 channel B volume.
+    address: 528
+    bitfields:
+    -   name: VALUE
+        description: Filter mixer PSG1 channel B volume.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: FILTER_MIXER_VOLF
+    description: Filter mixer PSG1 channel C volume.
+    address: 532
+    bitfields:
+    -   name: VALUE
+        description: Filter mixer PSG1 channel C volume.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: FILTER_MIXER_MVOL
+    description: Filter mixer master volume.
+    address: 536
+    bitfields:
+    -   name: VALUE
+        description: Filter mixer master volume.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: FILTER_MIXER_INV
+    description: Filter mixer channel inverter
+    address: 540
+    bitfields:
+    -   name: INVA
+        description: Invert PSG0 channel A.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: INVB
+        description: Invert PSG0 channel B.
+        reset: 0
+        width: 1
+        lsb: 1
+        access: rw
+    -   name: INVC
+        description: Invert PSG0 channel C.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: INVD
+        description: Invert PSG1 channel A.
+        reset: 0
+        width: 1
+        lsb: 3
+        access: rw
+    -   name: INVE
+        description: Invert PSG1 channel B.
+        reset: 0
+        width: 1
+        lsb: 4
+        access: rw
+    -   name: INVF
+        description: Invert PSG1 channel C.
+        reset: 0
+        width: 1
+        lsb: 5
+        access: rw
+-   name: FILTER_MIXER_BASS
+    description: Filter mixer bass level.
+    address: 544
+    bitfields:
+    -   name: VALUE
+        description: Filter mixer bass level.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+-   name: FILTER_MIXER_TREBLE
+    description: Filter mixer treble level.
+    address: 548
+    bitfields:
+    -   name: VALUE
+        description: Filter mixer treble level.
+        reset: 0
+        width: 8
+        lsb: 0
+        access: rw
+

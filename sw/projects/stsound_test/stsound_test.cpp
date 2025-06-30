@@ -1,20 +1,18 @@
 #include "YmMusicBL.h"
 #include "mcycle.h"
-#include "stdio_to_uart.h"
 #include "uart.h"
 #include "gpio.h"
 #include "ff.h"
 #include <stdio.h>
 #include <string.h>
-#include "ym2149_sys_regs.h"
+#include "ym2149_regs.h"
 #include "sdram.h"
 
 //This test program loads a .ym music file from the SD card and plays it back on one of the
 //two YM2149 PSGs using the STsound library.
 
-#define YM2149_SYS_BASE 0x10001000
-#define YM2149_PSG_0 (YM2149_SYS_BASE+PSG0_CHA_TONE_PERIOD_FINE_OFFSET*4)
-#define YM2149_PSG_1 (YM2149_SYS_BASE+PSG1_CHA_TONE_PERIOD_FINE_OFFSET*4)
+#define YM2149_PSG_0 (YM2149_BASE_ADDR+YM2149_PSG0_CHA_TONE_PERIOD_FINE_ADDR)
+#define YM2149_PSG_1 (YM2149_BASE_ADDR+YM2149_PSG1_CHA_TONE_PERIOD_FINE_ADDR)
 
 #define DISK_DEV_NUM "0:"
 #define STR_ROOT_DIRECTORY ""
@@ -22,12 +20,14 @@
 const char *root_dir_name = STR_ROOT_DIRECTORY;
 const char *ym_file_name = STR_ROOT_DIRECTORY "ancool1.ym";
 
-static struct uart uart0;
-static struct gpio gpio;
+typedef struct {
+  uint32_t addr;
+  uint32_t val;
+} AddrVal_t;
 
-unsigned mval = 10;
-unsigned bass = 25;
-unsigned treble = 128;
+uint32_t mval = 10;
+uint32_t bass = 25;
+uint32_t treble = 128;
 
 #ifdef __cplusplus
 extern "C"
@@ -37,10 +37,7 @@ extern "C"
   //_init is executed by picolibc startup code before main().
   void _init(void)
   {
-    // Set up UART and tie stdio to it.
-    uart_init(&uart0, (volatile void *)PLATFORM_UART_BASE);
-    uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-    set_stdio_to_uart(&uart0);
+    uart_set_baudrate(115200);
 
     mcycle_start();
   }
@@ -90,13 +87,18 @@ static FRESULT scan_files(
   return res;
 }
 
+static inline void ym2149_sys_reg_wr(uint32_t reg_offset, uint32_t val)
+{
+  *(uint32_t volatile *)(YM2149_BASE_ADDR + reg_offset) = val;
+}
+
 int main(void)
 {
   FRESULT res;
   static DIR dirs;
 
-  gpio_init(&gpio, (volatile void *)GPIO_BASE);
-  gpio_set_direction(&gpio, 0x0000000F); //4 outputs, 20 inputs
+  gpio_init();
+  gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
   /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {
@@ -106,17 +108,22 @@ int main(void)
     printf("SDRAM init failed!\n");
     while(1);
   }
-  //Program the audio mixer registers
-  unsigned addrs[] = {FILTER_MIXER_VOLA_OFFSET, FILTER_MIXER_VOLB_OFFSET, FILTER_MIXER_VOLC_OFFSET,
-            FILTER_MIXER_VOLD_OFFSET, FILTER_MIXER_VOLE_OFFSET, FILTER_MIXER_VOLF_OFFSET,
-            FILTER_MIXER_MVOL_OFFSET, FILTER_MIXER_INV_OFFSET, FILTER_MIXER_BASS_OFFSET, FILTER_MIXER_TREB_OFFSET};
-  unsigned vals[] = {50, 50, 50,
-             50, 50, 50,
-             mval, 0, bass, treble};
 
-  for (int ii = 0; ii < (sizeof(addrs) / sizeof(addrs[0])); ii++)
-  {
-    ym2149_sys_reg_wr(addrs[ii], vals[ii]);
+  //Program the audio mixer registers
+  static AddrVal_t addr_vals[]  = {
+    {YM2149_FILTER_MIXER_VOLA_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLB_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLC_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLD_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLE_ADDR, 50},
+    {YM2149_FILTER_MIXER_VOLF_ADDR, 50},
+    {YM2149_FILTER_MIXER_MVOL_ADDR, mval},
+    {YM2149_FILTER_MIXER_INV_ADDR, 0},
+    {YM2149_FILTER_MIXER_BASS_ADDR, bass},
+    {YM2149_FILTER_MIXER_TREBLE_ADDR, treble} } ;
+
+  for (int ii=0; ii<(sizeof(addr_vals)/sizeof(AddrVal_t)); ii++) {
+    ym2149_sys_reg_wr(addr_vals[ii].addr, addr_vals[ii].val);
   }
 
   /* Declare these as static to avoid stack usage.
@@ -142,7 +149,7 @@ int main(void)
   static CYmMusic cyMusic_psg_1((volatile ymint *)YM2149_PSG_1);
   CYmMusic* cyMusicp = 0;
 
-  if (gpio_get_input(&gpio) & 0x80)
+  if (gpio_get_input() & 0x80)
   {
     printf("Switching to PSG_0\n");
     cyMusicp = &cyMusic_psg_0;
@@ -180,65 +187,65 @@ int main(void)
 
       //Set switch 0, 1 or 2 to select volume, bass or treble control.
         //Then press buttons 0 or 1 to increase/decrease.
-      if (gpio_get_input(&gpio) & 0x10)
+      if (gpio_get_input() & 0x10)
       {
-        if (gpio_get_input(&gpio) & 0x0100)
+        if (gpio_get_input() & 0x0100)
         {
           if (mval < 255)
             ++mval;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
+          YM2149->FILTER_MIXER_MVOL = mval;
           printf("mval: %d\n", mval);
         }
 
-        if (gpio_get_input(&gpio) & 0x0200)
+        if (gpio_get_input() & 0x0200)
         {
           if (mval > 0)
             --mval;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_MVOL_OFFSET, mval);
+          YM2149->FILTER_MIXER_MVOL = mval;
           printf("mval: %d\n", mval);
         }
       }
 
-      if (gpio_get_input(&gpio) & 0x20)
+      if (gpio_get_input() & 0x20)
       {
-        if (gpio_get_input(&gpio) & 0x0100)
+        if (gpio_get_input() & 0x0100)
         {
           if (bass < 63)
             ++bass;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
+          YM2149->FILTER_MIXER_BASS = bass;
           printf("bass: %d\n", bass);
         }
 
-        if (gpio_get_input(&gpio) & 0x0200)
+        if (gpio_get_input() & 0x0200)
         {
           if (bass > 1)
             --bass;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_BASS_OFFSET, bass);
+          YM2149->FILTER_MIXER_BASS = bass;
           printf("bass: %d\n", bass);
         }
       }
 
-      if (gpio_get_input(&gpio) & 0x40)
+      if (gpio_get_input() & 0x40)
       {
-        if (gpio_get_input(&gpio) & 0x0100)
+        if (gpio_get_input() & 0x0100)
         {
           if (treble < 255)
             ++treble;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
+          YM2149->FILTER_MIXER_TREBLE = treble;
           printf("treble: %d\n", treble);
         }
 
-        if (gpio_get_input(&gpio) & 0x0200)
+        if (gpio_get_input() & 0x0200)
         {
           if (treble > 0)
             --treble;
 
-          ym2149_sys_reg_wr(FILTER_MIXER_TREB_OFFSET, treble);
+          YM2149->FILTER_MIXER_TREBLE = treble;
           printf("treble: %d\n", treble);
         }
       }

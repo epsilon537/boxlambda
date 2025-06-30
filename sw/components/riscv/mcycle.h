@@ -15,7 +15,7 @@ extern "C" {
  * @param usec	Sleep time in microseconds.
  * @return		Returns 0 for success.
  */
-int usleep(unsigned long usec);
+int usleep(uint32_t usec);
 
 /**
  * Resets the performance counters.

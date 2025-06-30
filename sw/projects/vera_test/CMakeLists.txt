@@ -3,7 +3,7 @@
 #
 add_executable(vera_test_ram
  EXCLUDE_FROM_ALL
- vera_test.c
+ vera_test.cpp
 )
 
 target_compile_options(vera_test_ram
@@ -21,7 +21,7 @@ target_link_libraries(vera_test_ram vera sdram gpio riscv interrupts bootstrap)
 #
 add_executable(vera_test_flsh
  EXCLUDE_FROM_ALL
- vera_test.c
+ vera_test.cpp
 )
 
 target_compile_options(vera_test_flsh

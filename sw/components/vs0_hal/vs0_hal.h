@@ -2,6 +2,7 @@
 #define VS0_HAL_H
 
 #include <assert.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,17 +31,17 @@ extern "C" {
 #define VS0_STUB_SIG_VALUE 0x0000510b
 
 //Write to Register
-inline void vs0_reg_wr(unsigned reg_offset, unsigned val)
+inline void vs0_reg_wr(uint32_t reg_offset, uint32_t val)
 {
 	assert(reg_offset <= VS0_REG_MAX);
-	((unsigned volatile *)(VS0_BASE))[reg_offset] = val;
+	((uint32_t volatile *)(VS0_BASE))[reg_offset] = val;
 }
 
 //Read from Register
-inline unsigned vs0_reg_rd(unsigned reg_offset)
+inline uint32_t vs0_reg_rd(uint32_t reg_offset)
 {
 	assert(reg_offset <= VS0_REG_MAX);
-	return ((unsigned volatile *)(VS0_BASE))[reg_offset];
+	return ((uint32_t volatile *)(VS0_BASE))[reg_offset];
 }
 
 #ifdef __cplusplus

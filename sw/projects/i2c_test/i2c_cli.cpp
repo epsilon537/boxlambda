@@ -14,7 +14,7 @@ extern "C" {
       char *token = embeddedCliGetTokenVariable(args, 1);
       sscanf(token, "%02hhX", &slaveAddr);
 
-      printf("beginTransmission 0x%x\n", (unsigned)slaveAddr);
+      printf("beginTransmission 0x%x\n", (uint32_t)slaveAddr);
 
       i2c.beginTransmission(slaveAddr);
     }
@@ -41,7 +41,7 @@ extern "C" {
       sscanf(token, "%02hhX", &numBytes);
 
       uint8_t res = i2c.requestFrom(slaveAddr, numBytes);
-      printf("requestFrom 0x%x %d -> %s\n", (unsigned)slaveAddr, numBytes, (res == 0) ? "OK" : "Error");
+      printf("requestFrom 0x%x %d -> %s\n", (uint32_t)slaveAddr, numBytes, (res == 0) ? "OK" : "Error");
     }
   }
 
@@ -59,7 +59,7 @@ extern "C" {
       char *token = embeddedCliGetTokenVariable(args, 1);
       sscanf(token, "%02hhX", &value);
 
-      printf("i2cwrite 0x%x\n", (unsigned)value);
+      printf("i2cwrite 0x%x\n", (uint32_t)value);
 
       i2c.write(value);
     }

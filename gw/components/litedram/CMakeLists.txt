@@ -8,8 +8,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
       VERBATIM
   )
 
-  #Add gen_litedram_core to the gateware codegeneration dependency list.
-  add_dependencies(gw_codegen gen_litedram_core)
+  #Add gen_litedram_core to the codegeneration dependency list.
+  add_dependencies(cgen gen_litedram_core)
 else()
   #Add a rule so the core can be regenerated using make gen_litedram_core
   add_custom_target(gen_litedram_core
@@ -20,8 +20,8 @@ else()
       VERBATIM
   )
 
-  #Add gen_litedram_core to the gateware codegeneration dependency list.
-  add_dependencies(gw_codegen gen_litedram_core)
+  #Add gen_litedram_core to the codegeneration dependency list.
+  add_dependencies(cgen gen_litedram_core)
 endif()
 
 #gw_component_rules function is defined in the parent CMakeLists.txt.

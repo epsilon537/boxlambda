@@ -1,0 +1,257 @@
+regmap:
+-   name: SETUP
+    description: Setup register
+    address: 0
+    bitfields:
+    -   name: BAUD_CLKS
+        description: System clock per baudrate interval
+        reset: 434
+        width: 24
+        lsb: 0
+        access: rw
+        enums:
+        -   name: B9600
+            description: 9600 baud
+            value: 5208
+        -   name: B115200
+            description: 115200 baud
+            value: 434
+    -   name: PFT
+        description: Parity setup
+        reset: 0
+        width: 3
+        lsb: 24
+        access: rw
+        enums:
+        -   name: P_ODD
+            description: Odd Parity
+            value: 4
+        -   name: P_EVEN
+            description: Even Parity
+            value: 5
+        -   name: P_SPC
+            description: Party bit is a space
+            value: 6
+        -   name: P_MK
+            description: Party bit is a mark
+            value: 7
+        -   name: P_NONE
+            description: No parity
+            value: 0
+    -   name: S
+        description: Number of stop bits - 1
+        reset: 0
+        width: 1
+        lsb: 27
+        access: rw
+        enums:
+        -   name: STOP_2
+            description: Two stop bits
+            value: 1
+        -   name: STOP_1
+            description: One stop bit
+            value: 0
+    -   name: N
+        description: 8 - number of bits per word
+        reset: 0
+        width: 2
+        lsb: 28
+        access: rw
+        enums:
+        -   name: BPW_8
+            description: 8 bits per word
+            value: 0
+        -   name: BPW_7
+            description: 7 bits per word
+            value: 1
+        -   name: BPW_6
+            description: 6 bits per word
+            value: 2
+        -   name: BPW_5
+            description: 5 bits per word
+            value: 3
+    -   name: H
+        description: Disable hardware flow control
+        reset: 0
+        width: 1
+        lsb: 30
+        access: rw
+        enums:
+        -   name: HFL_EN
+            description: Hardware flow control enabled
+            value: 0
+        -   name: HFL_DIS
+            description: Hardware flow control disabled
+            value: 1
+-   name: FIFO
+    description: Rx and Tx FIFO size and status
+    address: 4
+    bitfields:
+    -   name: RX_Z
+        description: Data available in Rx FIFO.
+        width: 1
+        lsb: 0
+        access: ro
+    -   name: RX_H
+        description: Rx FIFO high order fill bit set.
+        width: 1
+        lsb: 1
+        access: ro
+    -   name: RX_FILL
+        description: Number of filled entries in Rx FIFO.
+        width: 10
+        lsb: 2
+        access: ro
+    -   name: RX_LGLN
+        description: Log base 2 of FIFO length.
+        width: 4
+        lsb: 12
+        access: ro
+    -   name: TX_Z
+        description: Space available in Tx FIFO.
+        width: 1
+        lsb: 16
+        access: ro
+    -   name: TX_H
+        description: Tx FIFO high order fill bit set.
+        width: 1
+        lsb: 17
+        access: ro
+    -   name: TX_FILL
+        description: Number of available spaces in Tx FIFO.
+        width: 10
+        lsb: 18
+        access: ro
+    -   name: TX_LGLN
+        description: Log base 2 of FIFO length.
+        width: 4
+        lsb: 28
+        access: ro
+-   name: RXDATA
+    description: Rx data register.
+    address: 8
+    bitfields:
+    -   name: RWORD
+        description: Read data word.
+        width: 8
+        lsb: 0
+        access: ro
+    -   name: S
+        description: Data invalid.
+        width: 1
+        lsb: 8
+        access: ro
+        enums:
+        -   name: RWORD_VALID
+            description: RWORD is valid.
+            value: 0
+        -   name: RWORD_INVALID
+            description: RWORD is invalid.
+            value: 1
+    -   name: P
+        description: Parity error.
+        width: 1
+        lsb: 9
+        access: rw1c
+    -   name: F
+        description: Frame error.
+        width: 1
+        lsb: 10
+        access: rw1c
+    -   name: B
+        description: Rx line is in break condition.
+        width: 1
+        lsb: 11
+        access: rw1c
+    -   name: E
+        description: Read indicates Rx FIFO has overflowed since last reset. Writing 1 clears FIFO and waits for line idle before receiving next byte.
+        width: 1
+        lsb: 12
+        access: rw1c
+-   name: TXDATA
+    description: Tx data register.
+    address: 12
+    bitfields:
+    -   name: TWORD
+        description: Transmit data word.
+        width: 8
+        lsb: 0
+        access: rw
+    -   name: S
+        description: Transmit busy.
+        width: 1
+        lsb: 8
+        access: ro
+    -   name: B
+        description: Tx break condition.
+        width: 1
+        lsb: 9
+        access: rw
+    -   name: E
+        description: Read indicates Tx FIFO has overflowed since last reset. Writing 1 resets FIFO.
+        width: 1
+        lsb: 12
+        access: rw1c
+    -   name: Z
+        description: Tx FIFO not full.
+        width: 1
+        lsb: 13
+        access: ro
+    -   name: H
+        description: Tx FIFO at least half full.
+        width: 1
+        lsb: 14
+        access: ro
+    -   name: R
+        description: Received RTS instantaneous value.
+        width: 1
+        lsb: 15
+        access: ro
+-   name: ISR
+    description: Interrupt status register
+    address: 16
+    bitfields:
+    -   name: RX_DATA_AVL
+        description: Rx FIFO went from empty to non-empty state.
+        width: 1
+        lsb: 0
+        access: rw1c
+    -   name: RX_FIFO_HALF_FULL
+        description: Receive FIFO passed the half-full threshold.
+        width: 1
+        lsb: 1
+        access: rw1c
+    -   name: TX_FIFO_EMPTY
+        description: Tx FIFO went from non-empty to empty state.
+        width: 1
+        lsb: 2
+        access: rw1c
+    -   name: TX_FIFO_HALF_EMPTY
+        description: Tx FIFO filling level dropped below the half empty threshold.
+        width: 1
+        lsb: 3
+        access: rw1c
+-   name: IEN
+    description: Interrupt enable register
+    address: 20
+    bitfields:
+    -   name: RX_DATA_AVL
+        description: Enable RX_DATA_AVL interrupt.
+        width: 1
+        lsb: 0
+        access: rw
+    -   name: RX_FIFO_HALF_FULL
+        description: Enable RX_FIFO_HALF_FULL interrupt.
+        width: 1
+        lsb: 1
+        access: rw
+    -   name: TX_FIFO_EMPTY
+        description: Enable TX_FIFO_EMPTY interrupt.
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: TX_FIFO_HALF_EMPTY
+        description: Enabled TX_FIFO_HALF_EMPTY interrupt.
+        width: 1
+        lsb: 3
+        access: rw

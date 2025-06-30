@@ -4,7 +4,7 @@
 //
 // Project:	OpenArty, an entirely open SoC based upon the Arty platform
 //
-// Purpose:	
+// Purpose:
 //
 // Creator:	Dan Gisselquist, Ph.D.
 //		Gisselquist Technology, LLC
@@ -48,7 +48,7 @@ extern	void	byteswapbuf(int ln, uint32_t *buf);
 #define	byteswapbuf(A, B)
 #endif
 
-extern	uint32_t buildword(const unsigned char *p);
-extern	uint32_t buildswap(const unsigned char *p);
+extern	uint32_t buildword(const uint8_t *p);
+extern	uint32_t buildswap(const uint8_t *p);
 
 #endif

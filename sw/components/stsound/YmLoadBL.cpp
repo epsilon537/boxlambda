@@ -121,7 +121,7 @@ yms32 ReadBigEndian32(ymu8 *pBig)
 	return v;
 }
 
-unsigned char *CYmMusic::depackFile(ymu32 checkOriginalSize)
+uint8_t *CYmMusic::depackFile(ymu32 checkOriginalSize)
 {
 	lzhHeader_t *pHeader;
 	ymu8 *pSrc;
@@ -243,7 +243,7 @@ ymbool CYmMusic::ymDecode(void)
 	yms32 tmp;
 	ymu32 id;
 
-	id = ReadBigEndian32((unsigned char *)pBigMalloc);
+	id = ReadBigEndian32((uint8_t *)pBigMalloc);
 	switch (id)
 	{
 	case e_YM2a: //'YM2!':		// MADMAX specific.
@@ -438,7 +438,7 @@ ymbool CYmMusic::load(const char *fileName)
 	// Allocation d'un buffer pour lire le fichier.
 	//---------------------------------------------------
 	fileSize = fileSizeGet(&in);
-	pBigMalloc = (unsigned char *)malloc(fileSize);
+	pBigMalloc = (uint8_t *)malloc(fileSize);
 	if (!pBigMalloc)
 	{
 		setLastError("MALLOC Error");
@@ -498,7 +498,7 @@ ymbool CYmMusic::loadMemory(void *pBlock, ymu32 size)
 	// Allocation d'un buffer pour lire le fichier.
 	//---------------------------------------------------
 	fileSize = size;
-	pBigMalloc = (unsigned char *)malloc(fileSize);
+	pBigMalloc = (uint8_t *)malloc(fileSize);
 	if (!pBigMalloc)
 	{
 		setLastError("MALLOC Error");

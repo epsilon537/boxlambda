@@ -36,6 +36,6 @@ add_custom_command(
   VERBATIM
 )
 
-#Add imem_to_flash_vector to gateware codegeneration dependency list.
+#Add imem_to_flash_vector to codegeneration dependency list.
 #It's the default IMEM .mem file.
-add_dependencies(gw_codegen imem_to_flash_vector)
+add_dependencies(cgen imem_to_flash_vector)

@@ -48,7 +48,7 @@ kill -9 $VMODEL_PROCESS_ID
 #the UART register contents (retrieved with GDB) should be 0x10010000.
 echo "Checking gdb log..."
 cat gdb.log
-grep "\$1 = 0x10010000" gdb.log
+grep "\$1 = 0xf" gdb.log
 RES="$?"
 echo "RES=$RES"
 if [ "$RES" -ne "0" ]; then

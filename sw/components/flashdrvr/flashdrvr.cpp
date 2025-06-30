@@ -45,6 +45,7 @@
 #include <assert.h>
 
 #include "flashdrvr.h"
+#include "spiflash_regs.h"
 #include "byteswap.h"
 
 // Flash control constants
@@ -64,49 +65,54 @@
 #define    FLASH_UNKNOWN    0
 #endif
 
-#define    CFG_USERMODE    (1<<12)
-#define    CFG_WEDIR    (1<<9)
 #define    CFG_USER_CS_n    (1<<8)
 
-//BoxLambda: all I/O goes through this object.
-static DEVBUS devbus;
+static const uint32_t    F_RESET = (0x0ff),
+            F_EMPTY = (0x000),
+            F_WRR   = (0x001),
+            F_PP    = (0x002),
+            F_QPP   = (0x032),
+            F_READ  = (0x003),
+            F_WRDI  = (0x004),
+            F_RDSR1 = (0x005),
+            F_WREN  = (0x006),
+            F_MFRID = (0x09f),
+            F_SE    = (0x0d8),
+            F_END   = (CFG_USER_CS_n);
 
-static const unsigned    F_RESET = (CFG_USERMODE|0x0ff),
-            F_EMPTY = (CFG_USERMODE|0x000),
-            F_WRR   = (CFG_USERMODE|0x001),
-            F_PP    = (CFG_USERMODE|0x002),
-            F_QPP   = (CFG_USERMODE|0x032),
-            F_READ  = (CFG_USERMODE|0x003),
-            F_WRDI  = (CFG_USERMODE|0x004),
-            F_RDSR1 = (CFG_USERMODE|0x005),
-            F_WREN  = (CFG_USERMODE|0x006),
-            F_MFRID = (CFG_USERMODE|0x09f),
-            F_SE    = (CFG_USERMODE|0x0d8),
-            F_END   = (CFG_USERMODE|CFG_USER_CS_n);
+// Read a series of values from values from a block of memory
+//    a is the address of the value to be read as it exists on the
+//        wishbone bus within the FPGA.
+//    len is the number of words to read
+//    buf is a pointer to a place to store the words once read.
+static inline void readi(uint32_t a, const int len, uint32_t *buf) {
+    for(int i=0; i<len; i++)
+        buf[i] = *(volatile uint32_t*)(a+i);
+}
 
 //BoxLambda: define a default constructor referencing the singleton devbus object.
-FLASHDRVR::FLASHDRVR() :m_fpga(&devbus), m_debug(false), m_id(FLASH_UNKNOWN) {
+FLASHDRVR::FLASHDRVR() : m_debug(false), m_id(FLASH_UNKNOWN) {
   //BoxLambda: Allocating an sbuf on the heap. This object is too big to fit in
   //IMEM or worse, on the stack.
   m_sbuf = (char*)malloc(SECTORSZB);
   assert(m_sbuf);
 }
 
-unsigned FLASHDRVR::flashid(void) {
-    unsigned    r;
+uint32_t FLASHDRVR::flashid(void) {
+    uint32_t    r;
 
     if (m_id != FLASH_UNKNOWN)
         return m_id;
 
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x9f);
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x00);
-    r = m_fpga->readio(FLASHCFG) & 0x0ff;
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x00);
-    r = (r<<8) | (m_fpga->readio(FLASHCFG) & 0x0ff);
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x00);
-    r = (r<<8) | (m_fpga->readio(FLASHCFG) & 0x0ff);
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x00);
-    r = (r<<8) | (m_fpga->readio(FLASHCFG) & 0x0ff);
+    SPIFLASH->CTRL = F_MFRID;
+    SPIFLASH->CTRL = 0x00;
+    r = SPIFLASH->CTRL & 0x0ff;
+    SPIFLASH->CTRL = 0x00;
+    r = (r<<8) | (SPIFLASH->CTRL & 0x0ff);
+    SPIFLASH->CTRL = 0x00;
+    r = (r<<8) | (SPIFLASH->CTRL & 0x0ff);
+    SPIFLASH->CTRL = 0x00;
+    r = (r<<8) | (SPIFLASH->CTRL & 0x0ff);
     m_id = r;
 
 //  printf("flash ID returning %08x\n", m_id);
@@ -115,35 +121,35 @@ unsigned FLASHDRVR::flashid(void) {
 
 void    FLASHDRVR::flwait(void) {
     const    int    WIP = 1;    // Write in progress bit
-    DEVBUS::BUSW    sr;
+    uint32_t    sr;
 
-    m_fpga->writeio(FLASHCFG, F_END);
-    m_fpga->writeio(FLASHCFG, F_RDSR1);
+    SPIFLASH->CTRL = F_END;
+    SPIFLASH->CTRL = F_RDSR1;
     do {
-        m_fpga->writeio(FLASHCFG, F_EMPTY);
-        sr = m_fpga->readio(FLASHCFG);
+        SPIFLASH->CTRL = F_EMPTY;
+        sr = SPIFLASH->CTRL;
     } while(sr&WIP);
-    m_fpga->writeio(FLASHCFG, F_END);
+    SPIFLASH->CTRL = F_END;
 }
 
-bool    FLASHDRVR::erase_sector(const unsigned sector, const bool verify_erase) {
-    unsigned    flashaddr = sector & 0x0ffffff;
+bool    FLASHDRVR::erase_sector(const uint32_t sector, const bool verify_erase) {
+    uint32_t    flashaddr = sector & 0x0ffffff;
 
     // Write enable
-    m_fpga->writeio(FLASHCFG, F_END);
-    m_fpga->writeio(FLASHCFG, F_WREN);
-    m_fpga->writeio(FLASHCFG, F_END);
+    SPIFLASH->CTRL = F_END;
+    SPIFLASH->CTRL = F_WREN;
+    SPIFLASH->CTRL = F_END;
 
-    DEVBUS::BUSW    page[SZPAGEW];
+    uint32_t    page[SZPAGEW];
 
     // printf("EREG before   : %08x\n", m_fpga->readio(R_QSPI_EREG));
     printf("Erasing sector: %06x\n", flashaddr);
 
-    m_fpga->writeio(FLASHCFG, F_SE);
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | ((flashaddr>>16)&0x0ff));
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | ((flashaddr>> 8)&0x0ff));
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | ((flashaddr    )&0x0ff));
-    m_fpga->writeio(FLASHCFG, F_END);
+    SPIFLASH->CTRL = F_SE;
+    SPIFLASH->CTRL = ((flashaddr>>16)&0x0ff);
+    SPIFLASH->CTRL = ((flashaddr>> 8)&0x0ff);
+    SPIFLASH->CTRL = ((flashaddr    )&0x0ff);
+    SPIFLASH->CTRL = F_END;
 
     // Wait for the erase to complete
     flwait();
@@ -154,10 +160,10 @@ bool    FLASHDRVR::erase_sector(const unsigned sector, const bool verify_erase) 
             printf("Verifying the erase\n");
         for(int i=0; i<NPAGES; i++) {
             // printf("READI[%08x + %04x]\n", FLASHBASE+flashaddr+i*SZPAGEB, SZPAGEW);
-            m_fpga->readi(FLASHBASE+flashaddr+i*SZPAGEB, SZPAGEW, page);
+            readi(FLASHBASE+flashaddr+i*SZPAGEB, SZPAGEW, page);
             for(int j=0; j<SZPAGEW; j++)
                 if (page[j] != 0xffffffff) {
-                    unsigned rdaddr = FLASHBASE+flashaddr+i*SZPAGEB;
+                    uint32_t rdaddr = FLASHBASE+flashaddr+i*SZPAGEB;
 
                     if (m_debug)
                         printf("FLASH[%07x] = %08x, not 0xffffffff as desired (%06x + %d)\n",
@@ -173,10 +179,10 @@ bool    FLASHDRVR::erase_sector(const unsigned sector, const bool verify_erase) 
     return true;
 }
 
-bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
+bool    FLASHDRVR::page_program(const uint32_t addr, const uint32_t len,
         const char *data, const bool verify_write) {
-    DEVBUS::BUSW    buf[SZPAGEW], bswapd[SZPAGEW];
-    unsigned    flashaddr = addr & 0x0ffffff;
+    uint32_t    buf[SZPAGEW], bswapd[SZPAGEW];
+    uint32_t    flashaddr = addr & 0x0ffffff;
 
     assert(len > 0);
     assert(len <= PGLENB);
@@ -186,9 +192,9 @@ bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
         return true;
 
     bool    empty_page = true;
-    for(unsigned i=0; i<len; i+=4) {
-        DEVBUS::BUSW v;
-        v = buildword((const unsigned char *)&data[i]);
+    for(uint32_t i=0; i<len; i+=4) {
+        uint32_t v;
+        v = buildword((const uint8_t *)&data[i]);
         bswapd[(i>>2)] = v;
         if (v != 0xffffffff)
             empty_page = false;
@@ -196,9 +202,9 @@ bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
 
     if (!empty_page) {
         // Write enable
-        m_fpga->writeio(FLASHCFG, F_END);
-        m_fpga->writeio(FLASHCFG, F_WREN);
-        m_fpga->writeio(FLASHCFG, F_END);
+        SPIFLASH->CTRL = F_END;
+        SPIFLASH->CTRL = F_WREN;
+        SPIFLASH->CTRL = F_END;
 
         //
         // Write the page
@@ -209,17 +215,17 @@ bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
         // Our interface will limit us, so there's no reason to use
         // QUAD page programming here
         // if (F_QPP) {} else
-        m_fpga->writeio(FLASHCFG, F_PP);
+        SPIFLASH->CTRL = F_PP;
         // The address
-        m_fpga->writeio(FLASHCFG, CFG_USERMODE|((flashaddr>>16)&0x0ff));
-        m_fpga->writeio(FLASHCFG, CFG_USERMODE|((flashaddr>> 8)&0x0ff));
-        m_fpga->writeio(FLASHCFG, CFG_USERMODE|((flashaddr    )&0x0ff));
+        SPIFLASH->CTRL = ((flashaddr>>16)&0x0ff);
+        SPIFLASH->CTRL = ((flashaddr>> 8)&0x0ff);
+        SPIFLASH->CTRL = ((flashaddr    )&0x0ff);
 
         // Write the page data itself
-        for(unsigned i=0; i<len; i++)
-            m_fpga->writeio(FLASHCFG,
-                CFG_USERMODE | CFG_WEDIR | (data[i] & 0x0ff));
-        m_fpga->writeio(FLASHCFG, F_END);
+        for(uint32_t i=0; i<len; i++)
+            SPIFLASH->CTRL =
+                (data[i] & 0x0ff);
+        SPIFLASH->CTRL = F_END;
 
         printf("Writing page: 0x%08x - 0x%08x", addr, addr+len-1);
         if ((m_debug)&&(verify_write))
@@ -234,8 +240,8 @@ bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
 
         // printf("Attempting to verify page\n");
         // NOW VERIFY THE PAGE
-        m_fpga->readi(addr, len>>2, buf);
-        for(unsigned i=0; i<(len>>2); i++) {
+        readi(addr, len>>2, buf);
+        for(uint32_t i=0; i<(len>>2); i++) {
             if (buf[i] != bswapd[i]) {
                 printf("\nVERIFY FAILS[%d]: %08x\n", i, (i<<2)+addr);
                 printf("\t(Flash[%d]) %08x != %08x (Goal[%08x])\n",
@@ -247,7 +253,7 @@ bool    FLASHDRVR::page_program(const unsigned addr, const unsigned len,
     } return true;
 }
 
-bool    FLASHDRVR::write(const unsigned addr, const unsigned len,
+bool    FLASHDRVR::write(const uint32_t addr, const uint32_t len,
         const char *data, const bool verify) {
 
     assert(addr >= FLASHBASE);
@@ -257,24 +263,24 @@ bool    FLASHDRVR::write(const unsigned addr, const unsigned len,
     // If this buffer is equal to the sector value(s), go on
     // If not, erase the sector
 
-    for(unsigned s=SECTOROF(addr); s<SECTOROF(addr+len+SECTORSZB-1);
+    for(uint32_t s=SECTOROF(addr); s<SECTOROF(addr+len+SECTORSZB-1);
             s+=SECTORSZB) {
         // Do we need to erase?
         bool    need_erase = false, need_program = false;
-        unsigned newv = 0; // (s<addr)?addr:s;
+        uint32_t newv = 0; // (s<addr)?addr:s;
         {
             char *sbuf = m_sbuf;
             const char *dp;    // pointer to our "desired" buffer
-            unsigned    base,ln;
+            uint32_t    base,ln;
 
             base = (addr>s)?addr:s;
             ln=((addr+len>s+SECTORSZB)?(s+SECTORSZB):(addr+len))-base;
-            m_fpga->readi(base, ln>>2, (DEVBUS::BUSW*)sbuf);
+            readi(base, ln>>2, (uint32_t*)sbuf);
             byteswapbuf(ln>>2, (uint32_t *)sbuf);
 
             dp = &data[base-addr];
 
-            for(unsigned i=0; i<ln; i++) {
+            for(uint32_t i=0; i<ln; i++) {
                 if ((sbuf[i]&dp[i]) != dp[i]) {
                     if (m_debug) {
                         printf("\nNEED-ERASE @0x%08x ... %08x != %08x (Goal)\n",
@@ -304,8 +310,8 @@ bool    FLASHDRVR::write(const unsigned addr, const unsigned len,
 
         // Now walk through all of our pages in this sector and write
         // to them.
-        for(unsigned p=newv; (p<s+SECTORSZB)&&(p<addr+len); p=PAGEOF(p+PGLENB)) {
-            unsigned start = p, len = addr+len-start;
+        for(uint32_t p=newv; (p<s+SECTORSZB)&&(p<addr+len); p=PAGEOF(p+PGLENB)) {
+            uint32_t start = p, len = addr+len-start;
 
             // BUT! if we cross page boundaries, we need to clip
             // our results to the page boundary
@@ -319,8 +325,8 @@ bool    FLASHDRVR::write(const unsigned addr, const unsigned len,
             printf("Sector 0x%08x: DONE%15s\n", s, "");
     }
 
-    m_fpga->writeio(FLASHCFG, F_WRDI);
-    m_fpga->writeio(FLASHCFG, F_END);
+    SPIFLASH->CTRL = F_WRDI;
+    SPIFLASH->CTRL = F_END;
 
     return true;
 }

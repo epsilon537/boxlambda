@@ -2,7 +2,7 @@ add_library(interrupts)
 
 target_sources(interrupts
     PRIVATE
-    interrupts.c
+    interrupts.cpp
 )
 
 target_compile_options(interrupts

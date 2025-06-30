@@ -1,8 +1,11 @@
 #include "i2c.h"
-#include "i2c_regs.h"
+#include "i2c_master_regs.h"
 #include "mcycle.h"
 #include <assert.h>
 #include <string.h>
+
+#define I2C_MASTER_MEM_BASE 256 /*Address offset of the 256 byte memory buffer*/
+#define I2C_MASTER_MEM_SIZE_BYTES 256
 
 #define SLAVE_ADDR_UNASSIGNED (~0UL)
 #define BUF_IDX_UNKNOWN (~0UL)
@@ -13,19 +16,19 @@
 //Singleton
 I2C i2c;
 
-I2C::I2C() : i2c_mem_((volatile uint8_t*)(I2C_MASTER_BASE + I2C_MASTER_MEM_BASE)), slaveAddr_(SLAVE_ADDR_UNASSIGNED), bufStartIdx_(BUF_IDX_UNKNOWN), readIdx_(BUF_IDX_UNKNOWN), numBytes_(0) {}
+I2C::I2C() : i2c_mem_((volatile uint8_t*)(I2C_MASTER_BASE_ADDR + I2C_MASTER_MEM_BASE)), slaveAddr_(SLAVE_ADDR_UNASSIGNED), bufStartIdx_(BUF_IDX_UNKNOWN), readIdx_(BUF_IDX_UNKNOWN), numBytes_(0) {}
 
 bool I2C::isBusy_() {
-  return (i2c_master_reg_rd(I2C_MASTER_CMD) & (I2C_MASTER_CMD_BUSY | I2C_MASTER_CMD_NUM_BYTES_MASK)) != 0;
+  return (I2C_MASTER->CMD & (I2C_MASTER_CMD_BUSY_MASK | I2C_MASTER_CMD_NUM_BYTES_MASK)) != 0;
 }
 
 bool I2C::i2cError_() {
-  return (i2c_master_reg_rd(I2C_MASTER_CMD) & I2C_MASTER_CMD_ERR) != 0;
+  return (I2C_MASTER->CMD_bf.ERR != 0);
 }
 
 void I2C::begin() {
   //Set default bus speed.
-  i2c_master_reg_wr(I2C_MASTER_SPD, I2C_SPEED_DEFAULT);
+  I2C_MASTER->SPD = I2C_SPEED_DEFAULT;
   slaveAddr_ = SLAVE_ADDR_UNASSIGNED;
   bufStartIdx_ = BUF_IDX_UNKNOWN;
   readIdx_ = BUF_IDX_UNKNOWN;
@@ -33,18 +36,18 @@ void I2C::begin() {
 }
 
 void I2C::enableIRQ(bool enable) {
-  i2c_master_reg_wr(I2C_IEN, enable ? I2C_IEN_BUSY : 0);
+  I2C_MASTER->IEN_bf.BUSY = enable ? 1 : 0;
 }
 
 void I2C::ackIRQ() {
-  i2c_master_reg_wr(I2C_ISR, I2C_ISR_BUSY);
+  I2C_MASTER->ISR_bf.BUSY = 1;
 }
 
 void I2C::setClock(uint32_t clockSpeedHz) {
   uint32_t ticks_per_i2c_bit = PLATFORM_CLK_FREQ / (4*clockSpeedHz);
 
-  assert(ticks_per_i2c_bit <= I2C_MASTER_SPD_MASK);
-  i2c_master_reg_wr(I2C_MASTER_SPD, ticks_per_i2c_bit);
+  assert(ticks_per_i2c_bit <= I2C_MASTER_SPD_VALUE_MASK);
+  I2C_MASTER->SPD = ticks_per_i2c_bit;
 }
 
 void I2C::beginTransmission(uint8_t slaveAddr) {
@@ -67,14 +70,9 @@ uint8_t I2C::endTransmission() {
    * if numBytes_ is 0, we do nothing.
    */
   if (numBytes_ > 0) {
-    //I2C write transaction:
-    uint32_t cmdReg = numBytes_ & I2C_MASTER_CMD_NUM_BYTES_MASK;
-    cmdReg |= (slaveAddr_ << I2C_MASTER_CMD_SLV_ADDR_OFFSET) & I2C_MASTER_CMD_SLV_ADDR_MASK;
-    cmdReg |= (bufStartIdx_ << I2C_MASTER_CMD_START_ADDR_OFFSET) & I2C_MASTER_CMD_START_ADDR_MASK;
-    cmdReg |= I2C_MASTER_CMD_WR;
-
-    /*Kick off write transaction to slave.*/
-    i2c_master_reg_wr(I2C_MASTER_CMD, cmdReg);
+    //I2C write transaction.
+    i2c_master_cmd_t cmd{.NUM_BYTES=numBytes_, .START_ADDR=bufStartIdx_, .RD_N_WR=0, .SLAVE_ADDR=slaveAddr_};
+    I2C_MASTER->CMD = cmd.UINT32;
 
     while (isBusy_());
 
@@ -101,14 +99,9 @@ uint8_t I2C::requestFrom(uint8_t slaveAddr, uint8_t numBytes) {
 
   numBytes_ = numBytes;
 
-  //I2C read transaction
-  uint32_t cmdReg = numBytes_ & I2C_MASTER_CMD_NUM_BYTES_MASK;
-  cmdReg |= (slaveAddr_ << I2C_MASTER_CMD_SLV_ADDR_OFFSET) & I2C_MASTER_CMD_SLV_ADDR_MASK;
-  cmdReg |= (bufStartIdx_ << I2C_MASTER_CMD_START_ADDR_OFFSET) & I2C_MASTER_CMD_START_ADDR_MASK;
-  cmdReg |= I2C_MASTER_CMD_RD;
-
-  /*Kick off read transaction to slave.*/
-  i2c_master_reg_wr(I2C_MASTER_CMD, cmdReg);
+  //I2C read transaction - apologies for the ugly cast.
+  i2c_master_cmd_t cmd{.NUM_BYTES=numBytes_, .START_ADDR=bufStartIdx_, .RD_N_WR=1, .SLAVE_ADDR=slaveAddr_};
+  I2C_MASTER->CMD = cmd.UINT32;
 
   while (isBusy_());
 

@@ -25,7 +25,13 @@ endif()
 
 message("Build Type: ${CMAKE_BUILD_TYPE}.")
 
-#make regen rule, to complete remove and regenerate the build tree.
+#A codegeneration target. Components that require
+#code generation will add their codegeneration target as a
+#dependency to this target.
+add_custom_target(cgen)
+
+#make regen rule, to completely remove and regenerate the build tree, including
+#the code generation (cgen) step.
 add_custom_target(regen
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}
@@ -33,17 +39,17 @@ add_custom_target(regen
         rm -rf sw && rm -rf gw
     COMMAND
         ${CMAKE_COMMAND} .
+    COMMAND
+        ${CMAKE_MAKE_PROGRAM} cgen
     COMMENT
         "Removing and regenerating build tree."
     VERBATIM
 )
 
-#A gateware codegeneration target. Components that require
-#code generation will add their codegeneration target as a
-#dependency to this target.
-add_custom_target(gw_codegen)
-
 enable_testing()
+
+#The registers tree
+add_subdirectory(registers)
 
 #The software tree
 add_subdirectory(sw)

@@ -72,12 +72,12 @@ static inline void enable_global_irq(void) {
 /* Enable a specific interrupt ID at CPU level. Note that for interrupts
  * to go through, the global interrupt line also needs to be enabled
  * (enable_global_irq).*/
-static inline void enable_irq(unsigned irq_id) {
+static inline void enable_irq(uint32_t irq_id) {
   csr_set_bits_mie(1<<irq_id);
 }
 
 /* Disable a specific interrupt ID at CPU level. */
-static inline void disable_irq(unsigned irq_id) {
+static inline void disable_irq(uint32_t irq_id) {
   csr_clr_bits_mie(1<<irq_id);
 }
 

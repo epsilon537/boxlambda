@@ -1,6 +1,7 @@
 add_subdirectory(bootstrap)
 add_subdirectory(sdram)
 add_subdirectory(vera)
+add_subdirectory(sdspi)
 add_subdirectory(fatfs)
 add_subdirectory(stsound)
 add_subdirectory(j1b_hal)
@@ -20,4 +21,5 @@ add_subdirectory(ymodem)
 add_subdirectory(ymodem_cli)
 add_subdirectory(mem_fs_cli)
 add_subdirectory(dfx)
+add_subdirectory(arduino)
 

@@ -2,7 +2,7 @@ add_library(uart)
 
 target_sources(uart
     PRIVATE
-    uart.c
+    uart.cpp
 )
 
 target_compile_options(uart
@@ -14,4 +14,6 @@ target_compile_options(uart
 target_include_directories(uart
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}
+        ${PROJECT_SOURCE_DIR}/registers/generated/
+        ${PROJECT_SOURCE_DIR}/sw/components/riscv/
 )
