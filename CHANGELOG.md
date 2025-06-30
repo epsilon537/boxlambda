@@ -4,7 +4,32 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Label `boxlambda_simplified`: Changes Since Label `latency_shakeup` - 2025-03-20
+## Label `regmap`: Changes sinces label `boxlambda_simplified` - 2025-06-27
+
+### Added
+- Corsair-based register map definition and documentation.
+- Software component `sdspi`.
+
+### Fixed
+- Fixed bug in Ibex Single Instruction Prefetcher related to handling of multiple
+near-simultaneous interrupts.
+
+### Changed
+- Triggering code (re)generation when (re)generating build tree, or when
+explicitly requested using `make cgen` command. No longer triggering code
+(re)generation as part of the regular build process.
+- Renamed build targetr `gw_codegen` to `cgen`.
+- Set default baudrate of UART core to 115200.
+- Rewrote Ibex Single Instruction Prefetcher as an FSM.
+- Simplified UART and GPIO APIs. The API no longer requires a uart/gpio object.
+- Migrated from .c to .cpp.
+- Migrated from unsigned to uint32_t/uint8_t.
+
+### Removed
+- Removed ad-hoc register map definitions. Replaced with Corsair-generated
+register map.
+
+## Label `boxlambda_simplified`: Changes since Label `latency_shakeup` - 2025-03-20
 
 ### Added
 - Added ibex (*gen_ibex_core*), litedram (*gen_litedram_core*), and interconnect (*gen_wb_mux_arbiters*) code generation to gateware build dependency list so manual regeneration is no longer required.
