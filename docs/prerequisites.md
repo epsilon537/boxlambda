@@ -11,9 +11,9 @@ Linux. The package installation commands below are Ubuntu-based. I also have a B
 
 ### Vivado
 
-**Vivado ML** Edition V2023.1, Linux version:
+**Vivado ML** Edition V2025.1, Linux version:
 
-[https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2023-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2023-1.html)
+[https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2025-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2025-1.html)
 
 Make sure you also install your Arty A7 board files. Digilent has excellent instructions for installing Vivado and Digilent board files:
 
