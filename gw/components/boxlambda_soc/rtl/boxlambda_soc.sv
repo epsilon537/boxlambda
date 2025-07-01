@@ -668,7 +668,7 @@ module boxlambda_soc #(
 
   //The UART.
   wbuart #(
-      .HARDWARE_FLOW_CONTROL_PRESENT(1'b0),
+      .HARDWARE_FLOW_CONTROL_PRESENT(1'b1),
       .INITIAL_SETUP                (50000000 / 115200),
       .LGFLEN                       (4'd4)
   ) wbuart_inst (
