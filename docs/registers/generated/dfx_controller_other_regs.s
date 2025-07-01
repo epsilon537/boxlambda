@@ -1,0 +1,142 @@
+# --- DFX
+
+.equ DFX_BASE_ADDR, 0x10000400
+
+# STATUS - Status register.
+.equ DFX_STATUS_ADDR, 0x0
+
+# STATUS.STATE - Current state.
+.equ DFX_STATUS_STATE_WIDTH 3
+.equ DFX_STATUS_STATE_LSB 0
+.equ DFX_STATUS_STATE_MASK 0x7
+# STATUS.ERR - Error state.
+.equ DFX_STATUS_ERR_WIDTH 4
+.equ DFX_STATUS_ERR_LSB 3
+.equ DFX_STATUS_ERR_MASK 0x78
+# STATUS.SHUTDOWN - Set if controller is int shutdown state.
+.equ DFX_STATUS_SHUTDOWN_WIDTH 1
+.equ DFX_STATUS_SHUTDOWN_LSB 7
+.equ DFX_STATUS_SHUTDOWN_MASK 0x80
+# STATUS.RM_ID - ID of Reconfigurable module to which the status applies.
+.equ DFX_STATUS_RM_ID_WIDTH 16
+.equ DFX_STATUS_RM_ID_LSB 8
+.equ DFX_STATUS_RM_ID_MASK 0xffff00
+# SW_TRIGGER - Software trigger register.
+.equ DFX_SW_TRIGGER_ADDR, 0x4
+
+# SW_TRIGGER.TRIGGER_ID - Trigger ID.
+.equ DFX_SW_TRIGGER_TRIGGER_ID_WIDTH 1
+.equ DFX_SW_TRIGGER_TRIGGER_ID_LSB 0
+.equ DFX_SW_TRIGGER_TRIGGER_ID_MASK 0x1
+# SW_TRIGGER.TRIGGER_PENDING - Software trigger pending.
+.equ DFX_SW_TRIGGER_TRIGGER_PENDING_WIDTH 1
+.equ DFX_SW_TRIGGER_TRIGGER_PENDING_LSB 31
+.equ DFX_SW_TRIGGER_TRIGGER_PENDING_MASK 0x80000000
+# TRIGGER_0 - Trigger 0.
+.equ DFX_TRIGGER_0_ADDR, 0x20
+
+# TRIGGER_0.VALUE - ID of Reconfigurable Module to load if trigger 0 is asserted.
+.equ DFX_TRIGGER_0_VALUE_WIDTH 32
+.equ DFX_TRIGGER_0_VALUE_LSB 0
+.equ DFX_TRIGGER_0_VALUE_MASK 0xffffffff
+# TRIGGER_1 - Trigger 1.
+.equ DFX_TRIGGER_1_ADDR, 0x24
+
+# TRIGGER_1.VALUE - ID of Reconfigurable Module to load if trigger 1 is asserted.
+.equ DFX_TRIGGER_1_VALUE_WIDTH 32
+.equ DFX_TRIGGER_1_VALUE_LSB 0
+.equ DFX_TRIGGER_1_VALUE_MASK 0xffffffff
+# RM_BS_INDEX_0 - Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 0.
+.equ DFX_RM_BS_INDEX_0_ADDR, 0x40
+
+# RM_BS_INDEX_0.INDEX - Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 0.
+.equ DFX_RM_BS_INDEX_0_INDEX_WIDTH 16
+.equ DFX_RM_BS_INDEX_0_INDEX_LSB 0
+.equ DFX_RM_BS_INDEX_0_INDEX_MASK 0xffff
+# RM_CONTROL_0 - Control info for Reconfigurable Module 0.
+.equ DFX_RM_CONTROL_0_ADDR, 0x44
+
+# RM_CONTROL_0.SHUTDOWN_REQUIRED - Shutdown required.
+.equ DFX_RM_CONTROL_0_SHUTDOWN_REQUIRED_WIDTH 2
+.equ DFX_RM_CONTROL_0_SHUTDOWN_REQUIRED_LSB 0
+.equ DFX_RM_CONTROL_0_SHUTDOWN_REQUIRED_MASK 0x3
+# RM_CONTROL_0.STARTUP_REQUIRED - Software startup required.
+.equ DFX_RM_CONTROL_0_STARTUP_REQUIRED_WIDTH 1
+.equ DFX_RM_CONTROL_0_STARTUP_REQUIRED_LSB 2
+.equ DFX_RM_CONTROL_0_STARTUP_REQUIRED_MASK 0x4
+# RM_CONTROL_0.RST_REQUIRED - Reset required.
+.equ DFX_RM_CONTROL_0_RST_REQUIRED_WIDTH 2
+.equ DFX_RM_CONTROL_0_RST_REQUIRED_LSB 3
+.equ DFX_RM_CONTROL_0_RST_REQUIRED_MASK 0x18
+# RM_CONTROL_0.RST_DURATION - Reset duration in clock cycles.
+.equ DFX_RM_CONTROL_0_RST_DURATION_WIDTH 8
+.equ DFX_RM_CONTROL_0_RST_DURATION_LSB 5
+.equ DFX_RM_CONTROL_0_RST_DURATION_MASK 0x1fe0
+# RM_BS_INDEX_1 - Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 1.
+.equ DFX_RM_BS_INDEX_1_ADDR, 0x48
+
+# RM_BS_INDEX_1.INDEX - Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 1.
+.equ DFX_RM_BS_INDEX_1_INDEX_WIDTH 16
+.equ DFX_RM_BS_INDEX_1_INDEX_LSB 0
+.equ DFX_RM_BS_INDEX_1_INDEX_MASK 0xffff
+# RM_CONTROL_1 - Control info for Reconfigurable Module 1.
+.equ DFX_RM_CONTROL_1_ADDR, 0x4c
+
+# RM_CONTROL_1.SHUTDOWN_REQUIRED - Shutdown required.
+.equ DFX_RM_CONTROL_1_SHUTDOWN_REQUIRED_WIDTH 2
+.equ DFX_RM_CONTROL_1_SHUTDOWN_REQUIRED_LSB 0
+.equ DFX_RM_CONTROL_1_SHUTDOWN_REQUIRED_MASK 0x3
+# RM_CONTROL_1.STARTUP_REQUIRED - Software startup required.
+.equ DFX_RM_CONTROL_1_STARTUP_REQUIRED_WIDTH 1
+.equ DFX_RM_CONTROL_1_STARTUP_REQUIRED_LSB 2
+.equ DFX_RM_CONTROL_1_STARTUP_REQUIRED_MASK 0x4
+# RM_CONTROL_1.RST_REQUIRED - Reset required.
+.equ DFX_RM_CONTROL_1_RST_REQUIRED_WIDTH 2
+.equ DFX_RM_CONTROL_1_RST_REQUIRED_LSB 3
+.equ DFX_RM_CONTROL_1_RST_REQUIRED_MASK 0x18
+# RM_CONTROL_1.RST_DURATION - Reset duration in clock cycles.
+.equ DFX_RM_CONTROL_1_RST_DURATION_WIDTH 8
+.equ DFX_RM_CONTROL_1_RST_DURATION_LSB 5
+.equ DFX_RM_CONTROL_1_RST_DURATION_MASK 0x1fe0
+# BS_ID_0 - Bitstream 0 ID.
+.equ DFX_BS_ID_0_ADDR, 0x60
+
+# BS_ID_0.VALUE - Bitstream 0 ID value.
+.equ DFX_BS_ID_0_VALUE_WIDTH 32
+.equ DFX_BS_ID_0_VALUE_LSB 0
+.equ DFX_BS_ID_0_VALUE_MASK 0xffffffff
+# BS_ADDRESS_0 - Bitstream 0 byte address.
+.equ DFX_BS_ADDRESS_0_ADDR, 0x64
+
+# BS_ADDRESS_0.VALUE - Bitstream 0 byte address.
+.equ DFX_BS_ADDRESS_0_VALUE_WIDTH 32
+.equ DFX_BS_ADDRESS_0_VALUE_LSB 0
+.equ DFX_BS_ADDRESS_0_VALUE_MASK 0xffffffff
+# BS_SIZE_0 - Bitstream 0 size in bytes.
+.equ DFX_BS_SIZE_0_ADDR, 0x68
+
+# BS_SIZE_0.VALUE - Bitstream 0 size in bytes.
+.equ DFX_BS_SIZE_0_VALUE_WIDTH 32
+.equ DFX_BS_SIZE_0_VALUE_LSB 0
+.equ DFX_BS_SIZE_0_VALUE_MASK 0xffffffff
+# BS_ID_1 - Bitstream 1 ID.
+.equ DFX_BS_ID_1_ADDR, 0x70
+
+# BS_ID_1.VALUE - Bitstream 1 ID value.
+.equ DFX_BS_ID_1_VALUE_WIDTH 32
+.equ DFX_BS_ID_1_VALUE_LSB 0
+.equ DFX_BS_ID_1_VALUE_MASK 0xffffffff
+# BS_ADDRESS_1 - Bitstream 1 byte address.
+.equ DFX_BS_ADDRESS_1_ADDR, 0x74
+
+# BS_ADDRESS_1.VALUE - Bitstream 1 byte address value.
+.equ DFX_BS_ADDRESS_1_VALUE_WIDTH 32
+.equ DFX_BS_ADDRESS_1_VALUE_LSB 0
+.equ DFX_BS_ADDRESS_1_VALUE_MASK 0xffffffff
+# BS_SIZE_1 - Bitstream 1 size in bytes.
+.equ DFX_BS_SIZE_1_ADDR, 0x78
+
+# BS_SIZE_1.VALUE - Bitstream 1 size in bytes value.
+.equ DFX_BS_SIZE_1_VALUE_WIDTH 32
+.equ DFX_BS_SIZE_1_VALUE_LSB 0
+.equ DFX_BS_SIZE_1_VALUE_MASK 0xffffffff

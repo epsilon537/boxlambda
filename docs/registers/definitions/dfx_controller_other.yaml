@@ -1,0 +1,295 @@
+regmap:
+-   name: STATUS
+    description: Status register.
+    address: 0
+    bitfields:
+    -   name: STATE
+        description: Current state.
+        reset: 0
+        width: 3
+        lsb: 0
+        access: ro
+        enums:
+        -   name: VS_EMPTY
+            description: Virtual socket empty.
+            value: 0
+        -   name: HW_SHUTDOWN
+            description: Hardware shutdown step.
+            value: 1
+        -   name: SW_SHUTDOWN
+            description: Executing software shutdown step.
+            value: 2
+        -   name: LOADING
+            description: Loading the new reconfigurable module.
+            value: 4
+        -   name: SW_STARTUP
+            description: Executing software startup step.
+            value: 5
+        -   name: RM_RESET
+            description: Executing reconfigurable module reset step.
+            value: 6
+        -   name: VS_FULL
+            description: Virtual Socket is full.
+            value: 7
+    -   name: ERR
+        description: Error state.
+        reset: 0
+        width: 4
+        lsb: 3
+        access: ro
+        enums:
+        -   name: NO_ERR
+            description: No error.
+            value: 0
+        -   name: BAD_CONFIG
+            description: Bad configuration error.
+            value: 1
+        -   name: BS
+            description: Bitstream error.
+            value: 2
+        -   name: FETCH
+            description: Fetch error.
+            value: 4
+        -   name: BS_FETCH
+            description: Bitstream and fetch error.
+            value: 5
+        -   name: BAD_SIZE
+            description: Bad size error.
+            value: 7
+        -   name: BAD_FORMAT
+            description: Bad format error.
+            value: 8
+        -   name: UNKNOWN
+            description: Unknown error.
+            value: 15
+    -   name: SHUTDOWN
+        description: Set if controller is int shutdown state.
+        reset: 0
+        width: 1
+        lsb: 7
+        access: ro
+    -   name: RM_ID
+        description: ID of Reconfigurable module to which the status applies.
+        reset: 0
+        width: 16
+        lsb: 8
+        access: ro
+-   name: SW_TRIGGER
+    description: Software trigger register.
+    address: 4
+    bitfields:
+    -   name: TRIGGER_PENDING
+        description: Software trigger pending.
+        reset: 0
+        width: 1
+        lsb: 31
+        access: ro
+    -   name: TRIGGER_ID
+        description: Trigger ID.
+        reset: 0
+        width: 1
+        lsb: 0
+        access: rw
+-   name: TRIGGER_0
+    description: Trigger 0.
+    address: 32
+    bitfields:
+    -   name: VALUE
+        description: ID of Reconfigurable Module to load if trigger 0 is asserted.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: TRIGGER_1
+    description: Trigger 1.
+    address: 36
+    bitfields:
+    -   name: VALUE
+        description: ID of Reconfigurable Module to load if trigger 1 is asserted.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: RM_BS_INDEX_0
+    description: Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 0.
+    address: 64
+    bitfields:
+    -   name: INDEX
+        description: Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 0.
+        reset: 0
+        width: 16
+        lsb: 0
+        access: rw
+-   name: RM_BS_INDEX_1
+    description: Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 1.
+    address: 72
+    bitfields:
+    -   name: INDEX
+        description: Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 1.
+        reset: 0
+        width: 16
+        lsb: 0
+        access: rw
+-   name: RM_CONTROL_0
+    description: Control info for Reconfigurable Module 0.
+    address: 68
+    bitfields:
+    -   name: RST_DURATION
+        description: Reset duration in clock cycles.
+        reset: 0
+        width: 8
+        lsb: 5
+        access: rw
+    -   name: RST_REQUIRED
+        description: Reset required.
+        reset: 0
+        width: 2
+        lsb: 3
+        access: rw
+        enums:
+        -   name: NO_RST
+            description: No reset required.
+            value: 0
+        -   name: ACTIVE_LO_RST
+            description: Active low reset required.
+            value: 2
+        -   name: ACTIVE_HI_RST
+            description: Active high reset required.
+            value: 3
+    -   name: STARTUP_REQUIRED
+        description: Software startup required.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: SHUTDOWN_REQUIRED
+        description: Shutdown required.
+        reset: 0
+        width: 2
+        lsb: 0
+        access: rw
+        enums:
+        -   name: NO_SHUTDOWN
+            description: No shutdown required.
+            value: 0
+        -   name: HW_RM
+            description: Hardware Reconfigurable Module shutdown required.
+            value: 1
+        -   name: HW_THEN_SW
+            description: Hardware then software shutdown required.
+            value: 2
+        -   name: SW_THEN_HW
+            description: Software then hardware shutdown required.
+            value: 3
+-   name: RM_CONTROL_1
+    description: Control info for Reconfigurable Module 1.
+    address: 76
+    bitfields:
+    -   name: RST_DURATION
+        description: Reset duration in clock cycles.
+        reset: 0
+        width: 8
+        lsb: 5
+        access: rw
+    -   name: RST_REQUIRED
+        description: Reset required.
+        reset: 0
+        width: 2
+        lsb: 3
+        access: rw
+        enums:
+        -   name: NO_RST
+            description: No reset required.
+            value: 0
+        -   name: ACTIVE_LO_RST
+            description: Active low reset required.
+            value: 2
+        -   name: ACTIVE_HI_RST
+            description: Active high reset required.
+            value: 3
+    -   name: STARTUP_REQUIRED
+        description: Software startup required.
+        reset: 0
+        width: 1
+        lsb: 2
+        access: rw
+    -   name: SHUTDOWN_REQUIRED
+        description: Shutdown required.
+        reset: 0
+        width: 2
+        lsb: 0
+        access: rw
+        enums:
+        -   name: NO_SHUTDOWN
+            description: No shutdown required.
+            value: 0
+        -   name: HW_RM
+            description: Hardware Reconfigurable Module shutdown required.
+            value: 1
+        -   name: HW_THEN_SW
+            description: Hardware then software shutdown required.
+            value: 2
+        -   name: SW_THEN_HW
+            description: Software then hardware shutdown required.
+            value: 3
+-   name: BS_ID_0
+    description: Bitstream 0 ID.
+    address: 96
+    bitfields:
+    -   name: VALUE
+        description: Bitstream 0 ID value.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: BS_ADDRESS_0
+    description: Bitstream 0 byte address.
+    address: 100
+    bitfields:
+    -   name: VALUE
+        description: Bitstream 0 byte address.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: BS_SIZE_0
+    description: Bitstream 0 size in bytes.
+    address: 104
+    bitfields:
+    -   name: VALUE
+        description: Bitstream 0 size in bytes.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: BS_ID_1
+    description: Bitstream 1 ID.
+    address: 112
+    bitfields:
+    -   name: VALUE
+        description: Bitstream 1 ID value.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: BS_ADDRESS_1
+    description: Bitstream 1 byte address.
+    address: 116
+    bitfields:
+    -   name: VALUE
+        description: Bitstream 1 byte address value.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+-   name: BS_SIZE_1
+    description: Bitstream 1 size in bytes.
+    address: 120
+    bitfields:
+    -   name: VALUE
+        description: Bitstream 1 size in bytes value.
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+

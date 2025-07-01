@@ -12,6 +12,13 @@ hide:
 ├── CMakeLists.txt
 ├── scripts/
 │   └── <build system scripts>
+├── registers/
+│   ├── definitions/
+│   │   └── <Corsair .yaml format register map definitions>
+│   ├── generated/
+│   │   └── <generated register map header files and documentation>
+│   └── generators/
+│       └── <register map code generator templates>
 ├── sub/
 │   └── <git submodules>
 ├── gw/

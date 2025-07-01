@@ -62,13 +62,8 @@ The `reset_ctrl` module source code is located here:
 
 ### Reset Controller Registers
 
-Software can trigger resets by writing to the *Reset Control Register* and retrieve the reason for the most recent reset by reading the *Reset Reason Register*:
+Software can trigger resets by writing to the *Reset Control Register* and retrieve the reason for the most recent reset by reading the *Reset Reason Register*.
 
-| Address      | Name           | Bit 7 | Bit 6 | Bit 5   | Bit 4   | Bit 3   | Bit 2      | Bit 1      | Bit 0      |
-|--------------|----------------|-------|-------|---------|---------|---------|------------|------------|------------|
-| 0x100000D0   | RESET_CTRL     | -     | -     | -       | -       | -       | USB_RESET  | DM_RESET   | NDM_RESET  |
-| 0x100000D4   | RESET_REASON   | -     | -     | SW_USB  | EXT     | NDM     | SW_DM      | SW_NDM     | POR        |
-
-The *Reset Reason Register* contents are cleared after reading (Read-Reset).
+See the [Reset Register Map](registers/generated/reset_regs.md#reset-register-map) for details.
 
 The [Reset Test](test-build-reset.md) application demonstrates the use of these registers.

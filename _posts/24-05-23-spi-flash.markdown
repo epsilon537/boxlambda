@@ -3,6 +3,9 @@ layout: post
 title: 'SPI Flash Access, Boot, and Core.'
 comments: true
 ---
+*Updated 10 June 2025: Corrected the example code retrieving the Flash
+ID. The previously shown code included a CFG_USERMODE flag which isn't
+needed.*
 
 ![SPI Flash On On BoxLambda](../assets/spiflash_on_boxlambda.png)
 
@@ -172,26 +175,20 @@ As an example, the Flash Driver code sequence to read the Flash Device ID looks 
 
 ```
     /*Write Flash ID Command Byte*/
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x9f);
-
+    SPIFLASH->CTRL = F_MFRID;
     /*Write 0 Byte - While this gets sent to SPI Flash,
      *8-bits of miso response get shifted in.*/
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x00);
-
+    SPIFLASH->CTRL = 0x00;
     /*Read the byte that got shifted in.*/
-    r = m_fpga->readio(FLASHCFG) & 0x0ff;
-
+    r = SPIFLASH->CTRL & 0x0ff;
     /*Write another 0 Byte - so we can retrieve the next response byte.*/
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x00);
-
-    /*Read the byte that got shifted in.*/
-    r = (r<<8) | (m_fpga->readio(FLASHCFG) & 0x0ff);
-
+    SPIFLASH->CTRL = 0x00;
     /*Etc, until the 4-byte response to the Flash Id. command is retrieved.*/
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x00);
-    r = (r<<8) | (m_fpga->readio(FLASHCFG) & 0x0ff);
-    m_fpga->writeio(FLASHCFG, CFG_USERMODE | 0x00);
-    r = (r<<8) | (m_fpga->readio(FLASHCFG) & 0x0ff);
+    r = (r<<8) | (SPIFLASH->CTRL & 0x0ff);
+    SPIFLASH->CTRL = 0x00;
+    r = (r<<8) | (SPIFLASH->CTRL & 0x0ff);
+    SPIFLASH->CTRL = 0x00;
+    r = (r<<8) | (SPIFLASH->CTRL & 0x0ff);
     m_id = r;
 ```
 
