@@ -6,11 +6,11 @@
  */
 module wb_dp_ram_wrapper #(
     parameter ADDR_WIDTH = 14,  // width of word addressed address bus in bits
-    parameter INIT_FILE  = ""   // This parameter used to be used only when building on verilator, 
+    parameter INIT_FILE  = ""   // This parameter used to be used only when building on verilator,
                                 // Vivado builds relying stricly on .mmi based post-implementation
                                 // memory updates. Now, INIT_FILEs can also be passed into Vivado
-                                // builds at synthesis time. This allow for instance for a default 
-                                // memory image (e.g. a jump-to-flash stub) that can later, 
+                                // builds at synthesis time. This allow for instance for a default
+                                // memory image (e.g. a jump-to-flash stub) that can later,
                                 // post-imp, be overwritten by a custom test build image.
 ) (
     input wire clk,
@@ -104,9 +104,9 @@ module wb_dp_ram_wrapper #(
       .WAKEUP_TIME("disable_sleep"),  // String
       .WRITE_DATA_WIDTH_A(32),  // DECIMAL
       .WRITE_DATA_WIDTH_B(32),  // DECIMAL
-      .WRITE_MODE_A("write_first"),  // String
-      .WRITE_MODE_B("write_first"),  // String
-      .WRITE_PROTECT(0)  // DECIMAL
+      .WRITE_MODE_A("no_change"),  // String
+      .WRITE_MODE_B("no_change"),  // String
+      .WRITE_PROTECT(1)  // DECIMAL
   ) xpm_memory_tdpram_inst (
       .dbiterra(),  // 1-bit output: Status signal to indicate double bit error occurrence
       // on the data output of port A.

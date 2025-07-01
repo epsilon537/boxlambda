@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - Corsair-based register map definition and documentation.
 - Software component `sdspi`.
+- Enabled HW flow control support in the UART core.
 
 ### Fixed
 - Fixed bug in Ibex Single Instruction Prefetcher related to handling of multiple
@@ -24,6 +25,7 @@ explicitly requested using `make cgen` command. No longer triggering code
 - Simplified UART and GPIO APIs. The API no longer requires a uart/gpio object.
 - Migrated from .c to .cpp.
 - Migrated from unsigned to uint32_t/uint8_t.
+- Switched to Vivado 2025.1
 
 ### Removed
 - Removed ad-hoc register map definitions. Replaced with Corsair-generated
