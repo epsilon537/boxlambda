@@ -18,7 +18,7 @@ hide:
 │   ├── generated/
 │   │   └── <generated register map header files and documentation>
 │   └── generators/
-│       └── <register map codegenerator templates>
+│       └── <register map code generator templates>
 ├── sub/
 │   └── <git submodules>
 ├── gw/

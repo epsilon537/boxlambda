@@ -22,8 +22,6 @@ hide:
 
 ZipCPU comes to the rescue again with a UART implementation with a Wishbone interface. The BoxLambda variant of the wbuart core contains modifications for enabling and clearing specific interrupt events. These modifications are documented in a separate section of the core's [spec](https://github.com/epsilon537/wbuart32/blob/boxlambda/doc/spec.pdf).
 
-The wbuart core is instantiated *without* hardware flow control.
-
 ## Core Parameters
 
 The Wbuart core is instantiated with the following parameters:
