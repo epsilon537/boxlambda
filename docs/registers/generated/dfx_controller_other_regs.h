@@ -18,12 +18,15 @@ extern "C" {
 // STATUS - Status register.
 #define DFX_OTHER_STATUS_ADDR 0x0
 #define DFX_OTHER_STATUS_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t STATE : 3; // Current state.
     uint32_t ERR : 4; // Error state.
     uint32_t SHUTDOWN : 1; // Set if controller is int shutdown state.
     uint32_t RM_ID : 16; // ID of Reconfigurable module to which the status applies.
     uint32_t : 8; // reserved
+  };
 } dfx_other_status_t;
 
 // STATUS.STATE - Current state.
@@ -72,10 +75,13 @@ typedef enum {
 // SW_TRIGGER - Software trigger register.
 #define DFX_OTHER_SW_TRIGGER_ADDR 0x4
 #define DFX_OTHER_SW_TRIGGER_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t TRIGGER_ID : 1; // Trigger ID.
     uint32_t : 30; // reserved
     uint32_t TRIGGER_PENDING : 1; // Software trigger pending.
+  };
 } dfx_other_sw_trigger_t;
 
 // SW_TRIGGER.TRIGGER_ID - Trigger ID.
@@ -93,8 +99,11 @@ typedef struct {
 // TRIGGER_0 - Trigger 0.
 #define DFX_OTHER_TRIGGER_0_ADDR 0x20
 #define DFX_OTHER_TRIGGER_0_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // ID of Reconfigurable Module to load if trigger 0 is asserted.
+  };
 } dfx_other_trigger_0_t;
 
 // TRIGGER_0.VALUE - ID of Reconfigurable Module to load if trigger 0 is asserted.
@@ -106,8 +115,11 @@ typedef struct {
 // TRIGGER_1 - Trigger 1.
 #define DFX_OTHER_TRIGGER_1_ADDR 0x24
 #define DFX_OTHER_TRIGGER_1_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // ID of Reconfigurable Module to load if trigger 1 is asserted.
+  };
 } dfx_other_trigger_1_t;
 
 // TRIGGER_1.VALUE - ID of Reconfigurable Module to load if trigger 1 is asserted.
@@ -119,9 +131,12 @@ typedef struct {
 // RM_BS_INDEX_0 - Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 0.
 #define DFX_OTHER_RM_BS_INDEX_0_ADDR 0x40
 #define DFX_OTHER_RM_BS_INDEX_0_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t INDEX : 16; // Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 0.
     uint32_t : 16; // reserved
+  };
 } dfx_other_rm_bs_index_0_t;
 
 // RM_BS_INDEX_0.INDEX - Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 0.
@@ -133,12 +148,15 @@ typedef struct {
 // RM_CONTROL_0 - Control info for Reconfigurable Module 0.
 #define DFX_OTHER_RM_CONTROL_0_ADDR 0x44
 #define DFX_OTHER_RM_CONTROL_0_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t SHUTDOWN_REQUIRED : 2; // Shutdown required.
     uint32_t STARTUP_REQUIRED : 1; // Software startup required.
     uint32_t RST_REQUIRED : 2; // Reset required.
     uint32_t RST_DURATION : 8; // Reset duration in clock cycles.
     uint32_t : 19; // reserved
+  };
 } dfx_other_rm_control_0_t;
 
 // RM_CONTROL_0.SHUTDOWN_REQUIRED - Shutdown required.
@@ -179,9 +197,12 @@ typedef enum {
 // RM_BS_INDEX_1 - Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 1.
 #define DFX_OTHER_RM_BS_INDEX_1_ADDR 0x48
 #define DFX_OTHER_RM_BS_INDEX_1_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t INDEX : 16; // Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 1.
     uint32_t : 16; // reserved
+  };
 } dfx_other_rm_bs_index_1_t;
 
 // RM_BS_INDEX_1.INDEX - Row number in BS info register bank that holds info about the bitstream for Reconfigurable Module 1.
@@ -193,12 +214,15 @@ typedef struct {
 // RM_CONTROL_1 - Control info for Reconfigurable Module 1.
 #define DFX_OTHER_RM_CONTROL_1_ADDR 0x4c
 #define DFX_OTHER_RM_CONTROL_1_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t SHUTDOWN_REQUIRED : 2; // Shutdown required.
     uint32_t STARTUP_REQUIRED : 1; // Software startup required.
     uint32_t RST_REQUIRED : 2; // Reset required.
     uint32_t RST_DURATION : 8; // Reset duration in clock cycles.
     uint32_t : 19; // reserved
+  };
 } dfx_other_rm_control_1_t;
 
 // RM_CONTROL_1.SHUTDOWN_REQUIRED - Shutdown required.
@@ -239,8 +263,11 @@ typedef enum {
 // BS_ID_0 - Bitstream 0 ID.
 #define DFX_OTHER_BS_ID_0_ADDR 0x60
 #define DFX_OTHER_BS_ID_0_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // Bitstream 0 ID value.
+  };
 } dfx_other_bs_id_0_t;
 
 // BS_ID_0.VALUE - Bitstream 0 ID value.
@@ -252,8 +279,11 @@ typedef struct {
 // BS_ADDRESS_0 - Bitstream 0 byte address.
 #define DFX_OTHER_BS_ADDRESS_0_ADDR 0x64
 #define DFX_OTHER_BS_ADDRESS_0_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // Bitstream 0 byte address.
+  };
 } dfx_other_bs_address_0_t;
 
 // BS_ADDRESS_0.VALUE - Bitstream 0 byte address.
@@ -265,8 +295,11 @@ typedef struct {
 // BS_SIZE_0 - Bitstream 0 size in bytes.
 #define DFX_OTHER_BS_SIZE_0_ADDR 0x68
 #define DFX_OTHER_BS_SIZE_0_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // Bitstream 0 size in bytes.
+  };
 } dfx_other_bs_size_0_t;
 
 // BS_SIZE_0.VALUE - Bitstream 0 size in bytes.
@@ -278,8 +311,11 @@ typedef struct {
 // BS_ID_1 - Bitstream 1 ID.
 #define DFX_OTHER_BS_ID_1_ADDR 0x70
 #define DFX_OTHER_BS_ID_1_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // Bitstream 1 ID value.
+  };
 } dfx_other_bs_id_1_t;
 
 // BS_ID_1.VALUE - Bitstream 1 ID value.
@@ -291,8 +327,11 @@ typedef struct {
 // BS_ADDRESS_1 - Bitstream 1 byte address.
 #define DFX_OTHER_BS_ADDRESS_1_ADDR 0x74
 #define DFX_OTHER_BS_ADDRESS_1_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // Bitstream 1 byte address value.
+  };
 } dfx_other_bs_address_1_t;
 
 // BS_ADDRESS_1.VALUE - Bitstream 1 byte address value.
@@ -304,8 +343,11 @@ typedef struct {
 // BS_SIZE_1 - Bitstream 1 size in bytes.
 #define DFX_OTHER_BS_SIZE_1_ADDR 0x78
 #define DFX_OTHER_BS_SIZE_1_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // Bitstream 1 size in bytes value.
+  };
 } dfx_other_bs_size_1_t;
 
 // BS_SIZE_1.VALUE - Bitstream 1 size in bytes value.

@@ -18,10 +18,13 @@ extern "C" {
 // IEN - Interrupt Enable Register
 #define USB_HID_IEN_ADDR 0x0
 #define USB_HID_IEN_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t USB_REPORT : 1; // Set to enable USB_REPORT interrupt.
     uint32_t LED_REPORT : 1; // Set to enable LED_REPORT interrupt.
     uint32_t : 30; // reserved
+  };
 } usb_hid_ien_t;
 
 // IEN.USB_REPORT - Set to enable USB_REPORT interrupt.
@@ -39,10 +42,13 @@ typedef struct {
 // ISR - Interrupt Status Register
 #define USB_HID_ISR_ADDR 0x4
 #define USB_HID_ISR_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t USB_REPORT : 1; // Set when a USB report is received.
     uint32_t LED_REPORT : 1; // Set when a LED report is received.
     uint32_t : 30; // reserved
+  };
 } usb_hid_isr_t;
 
 // ISR.USB_REPORT - Set when a USB report is received.
@@ -60,10 +66,13 @@ typedef struct {
 // STATUS - Status Register
 #define USB_HID_STATUS_ADDR 0x8
 #define USB_HID_STATUS_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t USB_TYP : 2; // USB type
     uint32_t CONN_ERR : 1; // Connection error.
     uint32_t : 29; // reserved
+  };
 } usb_hid_status_t;
 
 // STATUS.USB_TYP - USB type
@@ -87,7 +96,9 @@ typedef enum {
 // KEY_MODS - Key modifiers
 #define USB_HID_KEY_MODS_ADDR 0xc
 #define USB_HID_KEY_MODS_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t LCTRL : 1; // Left control
     uint32_t LSHIFT : 1; // Left shift
     uint32_t LALT : 1; // Left alt
@@ -97,6 +108,7 @@ typedef struct {
     uint32_t RALT : 1; // Right alt
     uint32_t RMETA : 1; // Right meta
     uint32_t : 24; // reserved
+  };
 } usb_hid_key_mods_t;
 
 // KEY_MODS.LCTRL - Left control
@@ -150,11 +162,14 @@ typedef struct {
 // KEYS - Keys register
 #define USB_HID_KEYS_ADDR 0x10
 #define USB_HID_KEYS_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t KEY_0 : 8; // Key 0
     uint32_t KEY_1 : 8; // Key 1
     uint32_t KEY_2 : 8; // Key 2
     uint32_t KEY_3 : 8; // Key 3
+  };
 } usb_hid_keys_t;
 
 // KEYS.KEY_0 - Key 0
@@ -184,13 +199,16 @@ typedef struct {
 // MOUSE - Mouse register
 #define USB_HID_MOUSE_ADDR 0x14
 #define USB_HID_MOUSE_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t DY : 8; // Delta y
     uint32_t DX : 8; // Delta x
     uint32_t BTN_LEFT : 1; // Left button
     uint32_t BTN_RIGHT : 1; // Right button
     uint32_t BTN_MIDDLE : 1; // Middle button
     uint32_t : 13; // reserved
+  };
 } usb_hid_mouse_t;
 
 // MOUSE.DY - Delta y
@@ -226,8 +244,11 @@ typedef struct {
 // GAME - Game pad register
 #define USB_HID_GAME_ADDR 0x18
 #define USB_HID_GAME_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // TBD
+  };
 } usb_hid_game_t;
 
 // GAME.VALUE - TBD
@@ -239,8 +260,11 @@ typedef struct {
 // REPORT_0 - USB report 0 register
 #define USB_HID_REPORT_0_ADDR 0x1c
 #define USB_HID_REPORT_0_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // USB report 0 value
+  };
 } usb_hid_report_0_t;
 
 // REPORT_0.VALUE - USB report 0 value
@@ -252,8 +276,11 @@ typedef struct {
 // REPORT_1 - USB report 1 register
 #define USB_HID_REPORT_1_ADDR 0x20
 #define USB_HID_REPORT_1_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // USB report 1 value
+  };
 } usb_hid_report_1_t;
 
 // REPORT_1.VALUE - USB report 1 value
@@ -265,12 +292,15 @@ typedef struct {
 // LEDS - LED register
 #define USB_HID_LEDS_ADDR 0x24
 #define USB_HID_LEDS_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t NUM_LOCK : 1; // Num lock LED
     uint32_t CAPS_LOCK : 1; // CAPS lock LED
     uint32_t SCROLL_LOCK : 1; // SCROLL lock LED
     uint32_t COMPOSE : 1; // Compose LED
     uint32_t : 28; // reserved
+  };
 } usb_hid_leds_t;
 
 // LEDS.NUM_LOCK - Num lock LED

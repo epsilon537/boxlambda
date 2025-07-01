@@ -13,6 +13,11 @@ The register definition files are located in directory [registers/definitions](h
 The generated C/C++ register access header files are located in directory
 [registers/generated](https://github.com/epsilon537/boxlambda/tree/develop/registers/generated).
 
+The template used to generate the C/C++ register access header files can be
+found here:
+
+[registers/generators/c_header_nocstd.j2](https://github.com/epsilon537/boxlambda/blob/master/registers/generators/c_header_nocstd.j2)
+
 Also the Register Map documentation section is generated from the register
 definition files.
 

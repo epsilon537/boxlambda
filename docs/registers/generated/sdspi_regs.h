@@ -18,7 +18,9 @@ extern "C" {
 // CMD - Command and status register
 #define SDSPI_CMD_ADDR 0x0
 #define SDSPI_CMD_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t R1_CMD : 8; // On write, if bits [7:6]==01 and card idle, remaining bits are sent to card. Contains R1 response when command has completed.
     uint32_t ERESP : 2; // Expected response.
     uint32_t WR : 1; // 1 to write from FIFO to card, 0 to read from card into FIFO. Assumes F is set.
@@ -31,6 +33,7 @@ typedef struct {
     uint32_t REM : 1; // Card has been removed since last read. If P=0 and R=1, card has been inserted and needs initialization.
     uint32_t P : 1; // 1 = card missing, 0 = card present.
     uint32_t : 12; // reserved
+  };
 } sdspi_cmd_t;
 
 // CMD.R1_CMD - On write, if bits [7:6]==01 and card idle, remaining bits are sent to card. Contains R1 response when command has completed.
@@ -95,8 +98,11 @@ typedef enum {
 // DAT - Return data/argument register
 #define SDSPI_DAT_ADDR 0x4
 #define SDSPI_DAT_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // Command argument, command response. R2 response is in upper 8-bits.
+  };
 } sdspi_dat_t;
 
 // DAT.VALUE - Command argument, command response. R2 response is in upper 8-bits.
@@ -108,8 +114,11 @@ typedef struct {
 // FIFO_0 - 128 word FIFO[0] data
 #define SDSPI_FIFO_0_ADDR 0x8
 #define SDSPI_FIFO_0_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // Data read from or to write to card.
+  };
 } sdspi_fifo_0_t;
 
 // FIFO_0.VALUE - Data read from or to write to card.
@@ -121,8 +130,11 @@ typedef struct {
 // FIFO_1 - 128 word FIFO[1] data
 #define SDSPI_FIFO_1_ADDR 0xc
 #define SDSPI_FIFO_1_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t VALUE : 32; // Data read from or to write to card.
+  };
 } sdspi_fifo_1_t;
 
 // FIFO_1.VALUE - Data read from or to write to card.
@@ -134,10 +146,13 @@ typedef struct {
 // ISR - Interrupt status register
 #define SDSPI_ISR_ADDR 0x10
 #define SDSPI_ISR_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t BUSY : 1; // Set when controller goes from busy to non-busy state
     uint32_t CARD_REMOVED : 1; // Set when controller detects that the SD card has been removed.
     uint32_t : 30; // reserved
+  };
 } sdspi_isr_t;
 
 // ISR.BUSY - Set when controller goes from busy to non-busy state
@@ -155,10 +170,13 @@ typedef struct {
 // IEN - Interrupt enable register
 #define SDSPI_IEN_ADDR 0x14
 #define SDSPI_IEN_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t BUSY : 1; // Set to enable BUSY interrupt.
     uint32_t CARD_REMOVED : 1; // Set to enabled CARD_REMOVED interrupt.
     uint32_t : 30; // reserved
+  };
 } sdspi_ien_t;
 
 // IEN.BUSY - Set to enable BUSY interrupt.

@@ -18,10 +18,13 @@ extern "C" {
 // CONTROL - Control register.
 #define DFX_CTRL_CONTROL_ADDR 0x0
 #define DFX_CTRL_CONTROL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t CMD : 8; // Command.
     uint32_t BYTE : 8; // Byte field containing extra info.
     uint32_t HALFWORD : 16; // Halfword field containing extra info.
+  };
 } dfx_ctrl_control_t;
 
 // CONTROL.CMD - Command.

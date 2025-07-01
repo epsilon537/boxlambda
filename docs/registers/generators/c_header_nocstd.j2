@@ -58,7 +58,9 @@ extern "C" {
 // {{ reg.name }} - {{ reg.description }}
 #define {{ module_prefix()|upper }}{{ reg.name.upper() }}_ADDR {{ "0x%x" % (reg.address) }}
 #define {{ module_prefix()|upper }}{{ reg.name.upper() }}_RESET {{ "0x%x" % (reg.reset) }}
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     {% set tmp.lsb = 0 %}
     {% for bf in reg %}
         {% if tmp.lsb != bf.lsb %}
@@ -70,6 +72,7 @@ typedef struct {
     {%if tmp.lsb < config.data_width - 1%}
     {{ data_t() }} : {{ config.data_width - tmp.lsb }}; // reserved
     {% endif %}
+  };
 } {{ module_prefix()|lower }}{{ reg.name.lower() }}_t;
 
     {% for bf in reg %}

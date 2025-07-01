@@ -18,11 +18,14 @@ extern "C" {
 // CTRL - Reset control register
 #define RESET_CTRL_ADDR 0x0
 #define RESET_CTRL_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t NDM_RESET : 1; // Non-debug module reset
     uint32_t DM_RESET : 1; // Debug module reset
     uint32_t USB_RESET : 1; // USB module reset
     uint32_t : 29; // reserved
+  };
 } reset_ctrl_t;
 
 // CTRL.NDM_RESET - Non-debug module reset
@@ -46,7 +49,9 @@ typedef struct {
 // REASON - Reset reason register
 #define RESET_REASON_ADDR 0x4
 #define RESET_REASON_RESET 0x0
-typedef struct {
+typedef union {
+  uint32_t UINT32;
+  struct {
     uint32_t POR : 1; // Power-on reset
     uint32_t SW_NDM : 1; // Software triggered NDM reset
     uint32_t SW_DM : 1; // Software triggered DM reset
@@ -54,6 +59,7 @@ typedef struct {
     uint32_t EXT : 1; // External reset
     uint32_t SW_USB : 1; // Software triggered USB reset
     uint32_t : 26; // reserved
+  };
 } reset_reason_t;
 
 // REASON.POR - Power-on reset
