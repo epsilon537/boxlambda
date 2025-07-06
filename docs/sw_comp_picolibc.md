@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Picolibc and Bootstrap
+## Picolibc and the Bootstrap Component
 
 - **PicoLibc Version**: 1.8.6
 
@@ -69,7 +69,7 @@ add_link_options(
 
 The Picolibc GCC specs file can be found in the Picolib install directory.
 
-### Bootstrap
+### The Bootstrap Component
 
 #### Some Glue Required
 
@@ -113,19 +113,14 @@ The PicoLibc integrator needs to supply `stdin`, `stdout`, and `stderr` instance
 We'll be using the UART as our IO device for the time being. Down the road, we can extend that with keyboard input and screen output implementation.
 
 ```
-static struct uart *uartp = 0;
-
 static int uart_putc(char c, FILE *file) {
   int res;
 
   (void) file;		/* Not used in this function */
 
-  if (!uartp) {
-    res = EOF;
-  }
-  else {
-    while (!uart_tx_ready(uartp));
-    uart_tx(uartp, (uint8_t)c);
+  {
+    while (!uart_tx_ready());
+    uart_tx((uint8_t)c);
     res = (int)c;
   }
 
@@ -136,155 +131,54 @@ static int uart_getc(FILE *file) {
   int c;
   (void) file;		/* Not used in this function */
 
-  if (!uartp) {
-    c = EOF;
-  }
-  else {
-    while (!uart_rx_ready(uartp));
-    c = (int)uart_rx(uartp);
+  {
+    while (!uart_rx_ready());
+    c = (int)uart_rx();
   }
 
   return c;
 }
 
 static FILE __stdio = FDEV_SETUP_STREAM(uart_putc,
-					uart_getc,
-					NULL,
-					_FDEV_SETUP_RW);
+ uart_getc,
+ NULL,
+ _FDEV_SETUP_RW);
 
 
 FILE *const stdin = &__stdio;
 FILE *const stdout = &__stdio;
 FILE *const stderr = &__stdio;
 
-void set_stdio_to_uart(struct uart *uart) {
-  uartp = uart;
-}
 ```
 
 [boxlambda/sw/components/bootstrap/stdio_to_uart.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/stdio_to_uart.c)
 
-The `set_stdio_to_uart()` function is to be called from the application before any standard library calls that require standard IO. The application needs to provide a pointer to an initialized *uart* object.
-
-#### The Linker Script
-
-Through a *linker script*, we tell the linker where in memory to place the program code, data, and stack.
-
-The Linker Script defines the following:
-
-- Relevant Memories on the target device: In the case of BoxLambda, these are `imem`, `emem` (=DDR memory), and `flash`.
-```
-MEMORY
-{
-    flash : ORIGIN = __flash, LENGTH = __flash_size
-    imem : ORIGIN = __imem, LENGTH = __imem_size
-    emem : ORIGIN = __emem, LENGTH = __emem_size
-}
-```
-- The mapping of input to output sections. Input sections are defined in the source code and default to .text, .bss, and .data when not explicitly specified. The output sections for BoxLambda are: `.flash`, `.text`, `.data`, `.tdata`, `.tbss`, `.bss`, `.heap`, and `.stack`.
-```
-    .text : {
-        ...
-        *(.text.unlikely .text.unlikely.*)
-        *(.text.startup .text.startup.*)
-        *(.text .text.*)
-        *(.gnu.linkonce.t.*)
-    ...
-```
-- The mapping of output sections to memories and, for sections that require relocation, the memory from which to load them. For executables built to boot from flash, the load memory will be the *flash* memory. For executables built to boot from IMEM, *imem* will be used as the load memory.
-```
-    ...
-    .text : {...
-    } >imem AT>flash
-    ...
-    .data : ALIGN_WITH_INPUT {...
-    } >imem AT>flash
-    ...
-    .bss (NOLOAD) : {
-    } >imem
-```
-  - Code, Data, BSS, and stack sections go to `imem`.
-  - The heap goes to `emem`.
-- Symbols used by the CRT0 code for section relocation, BSS initialization, etc. For BoxLambda, the key symbols are:
-    - `__code_source / __code_start / __code_size`: source address, destination address, and size of the code section to relocate from flash to IMEM. In the Boot-from-IMEM sequence, `__code_source` and `__code_start` point to the same IMEM address.
-    - `__data_source / __data_start / __data_size`: source address, destination address, and size of the data section to relocate from flash to IMEM. In the Boot-from-IMEM sequence; `__data_source` and `__data_start` point to the same IMEM address.
-    - `__bss_start / __bss_size`: Address and size of BSS section in IMEM to zero out.
-```
-    .text : {
-        PROVIDE(__code_start = ADDR(.text));
-        ...
-        PROVIDE(__code_end = .);
-    } >imem AT>flash
-    PROVIDE(__code_source = LOADADDR(.text));
-    PROVIDE(__code_size = __code_end - __code_start );
-    ...
-```
-
-BoxLambda has two linker scripts:
-
-- [link_imem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_imem_boot.ld): For software images that boot from IMEM.
-- [link_flash_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_flash_boot.ld): For software images that boot from Flash.
-
-The IMEM size is passed to the linker via symbols defined by the build system ([sw/projects/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/CMakeLists.txt)).
-
-```
-  target_link_options(${_tgt}
-        PRIVATE
-            # Don't use Picolibc's crt0. We provide our own crt0 in
-            # sw/components/bootstrap
-            -nostartfiles
-            -T${_link_script}
-            "LINKER:--defsym=__imem_size=${IMEM_SIZE}"
-            "LINKER:--gc-sections"
-            "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
-    )
-```
-
-#### Boot Sequence
-
-BoxLambda currently supports two boot sequences: **Boot-from-Flash** and **Boot-from-IMEM**.
-
-##### Boot-from-Flash Sequence
-
-[![The Boot from Flash Sequence](assets/spiflash_boot_sequence.png)](assets/spiflash_boot_sequence.png)
-
-*The Software Boot-from-Flash Sequence.*
-
-Technically, BoxLambda doesn't boot from flash memory. It boots from IMEM at address offset 0x80. There, it executes the early startup code defined in `vectors.S` before jumping to the CRT0 code located in flash memory.
-
-The Ibex Boot Vector is part of a vector table that also includes the interrupt vectors. For low-latency interrupt handling, it's important to keep this vector table in IMEM, rather than (slow) flash memory.
-
-The software project that branches from IMEM to the flash boot code (i.e., containing just `vectors.S`) is located here:
-
-[https://github.com/epsilon537/boxlambda/tree/master/sw/projects/imem_to_flash_vector](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/imem_to_flash_vector)
-
-##### Boot-from-IMEM Sequence
+### Software Startup Sequence
 
 ![The Boot from IMEM Sequence](assets/imem_boot_sequence.png)
 
-*The Software Boot-from-CMEM Sequence.*
-
-In the Boot-from-CMEM sequence, CMEM is used as the load region. The data segment is relocated from CMEM to DMEM. The code segment can stay where it is.
+*The Software Startup Sequence.*
 
 ### Example Program
 
 Here's an example application program using Picolibc:
 
 ```
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include "stdio_to_uart.h"
+#include <stdbool.h>
 #include "uart.h"
-#include "platform.h"
-
-static struct uart uart0;
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  //Set up UART and tie stdio to it.
-  uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-  uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-  set_stdio_to_uart(&uart0);
+  uart_set_baudrate(115200);
+}
+
+//_exit is executed by the picolibc exit function.
+//An implementation has to be provided to be able to user assert().
+void	_exit (int status) {
+	while (1);
 }
 
 int main(void) {
@@ -305,8 +199,8 @@ int main(void) {
 
   return 0;
 }
+
 ```
 
-
-Notice the `_init()` function. This function is executed by the PicoLibc startup code before calling `main()`. This is where we set up the UART and stdio.
+Notice the `_init()` function. This function is executed by the PicoLibc startup code before calling `main()`. This is where we set up the UART.
 
