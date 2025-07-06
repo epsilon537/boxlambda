@@ -3,7 +3,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
   gw_project_rules_vivado(
       TOP_MODULE boxlambda_top
       PROJECT_NAME vera_integrated
-      MEM_FILE_TARGET vera_test_ram
+      MEM_FILE_TARGET vera_test
   )
 else()
   find_program(SDL2_CONFIG_EXECUTABLE NAMES sdl2-config)
@@ -52,7 +52,7 @@ else()
     gw_project_rules_verilator(
         TOP_MODULE sim_main
         PROJECT_NAME vera_integrated
-        MEM_FILE_TARGET vera_test_ram
+        MEM_FILE_TARGET vera_test
         VERILATOR_FLAGS
             "-CFLAGS -DSDL2_SUPPORT"
             "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/"
@@ -66,7 +66,7 @@ else()
     gw_project_rules_verilator(
         TOP_MODULE sim_main
         PROJECT_NAME vera_integrated
-        MEM_FILE_TARGET vera_test_ram
+        MEM_FILE_TARGET vera_test
         VERILATOR_FLAGS
             "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/"
             "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"

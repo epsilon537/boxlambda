@@ -1,38 +1,20 @@
 #
-# Hello World RAM Build
+# Hello World
 #
 
-add_executable(hello_world_ram
+add_executable(hello_world
  EXCLUDE_FROM_ALL
     hello.cpp
 )
 
 #Setting the -g flag for the hello_dbg build testing GDB access.
-target_compile_options(hello_world_ram
+target_compile_options(hello_world
  PRIVATE -g)
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_image(hello_world_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+link_and_create_image(hello_world ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
-target_link_libraries(hello_world_ram gpio riscv bootstrap)
+target_link_libraries(hello_world gpio riscv bootstrap)
 
-#
-# Hello World Flash Build
-#
-
-add_executable(hello_world_flsh
- EXCLUDE_FROM_ALL
-    hello.cpp
-)
-
-#Setting the -g flag for the hello_dbg build testing GDB access.
-target_compile_options(hello_world_flsh
- PRIVATE -g)
-
-#Function defined in parent CMakeLists.txt file:
-link_and_create_image(hello_world_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
-
-target_link_libraries(hello_world_flsh gpio riscv bootstrap)
-
-add_flash_sw_target(hello_world_flsh)
+add_flash_sw_target(hello_world)
 

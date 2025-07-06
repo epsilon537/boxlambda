@@ -1,14 +1,8 @@
 #ifndef VERA_HAL_H
 #define VERA_HAL_H
 
+#include "memmap.h"
 #include "vera_regs.h"
-
-#define VERA_PALETTE_OFFSET (0x2000)
-#define VERA_SPRITES_OFFSET (0x1000)
-#define VERA_VRAM_OFFSET   (0x40000)
-#define VERA_VRAM_BASE (VERA_BASE_ADDR + VERA_VRAM_OFFSET)
-#define VERA_PALETTE_BASE (VERA_BASE_ADDR + VERA_PALETTE_OFFSET)
-#define VERA_SPRITES_BASE (VERA_BASE_ADDR + VERA_SPRITES_OFFSET)
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,7 +30,7 @@ inline uint8_t vram_rd_byte(uint32_t addr) {
 
 //This function writes the given rgb triple to the given position in VERA's Palette RAM.
 inline void palette_ram_wr(uint32_t idx, uint8_t r, uint8_t g, uint8_t b) {
-  *(volatile uint32_t *)(idx*4+VERA_PALETTE_BASE) = (((uint32_t)r)<<8) | (((uint32_t)g)<<4) | ((uint32_t)b);
+  *(volatile uint32_t *)(idx*4+VERA_PALETTE_RAM_BASE) = (((uint32_t)r)<<8) | (((uint32_t)g)<<4) | ((uint32_t)b);
 }
 
 //Crude sprite attributes write function.

@@ -1,56 +1,28 @@
 #
-# SDSPI Test RAM Build
+# SDSPI Test
 #
-add_executable(sdspi_test_ram
+add_executable(sdspi_test
  EXCLUDE_FROM_ALL
  sdspi_test_main.cpp
  sdtest.cpp
 )
 
-target_compile_options(sdspi_test_ram
+target_compile_options(sdspi_test
  PRIVATE -g -O2)
 
-target_compile_definitions(sdspi_test_ram
+target_compile_definitions(sdspi_test
  PRIVATE
   -DSDSPI_CPU_IS_LITTLE_ENDIAN
 )
 
-target_include_directories(sdspi_test_ram
+target_include_directories(sdspi_test
     PRIVATE
      ${PROJECT_SOURCE_DIR}/sw/components/sdspi/
      ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_image(sdspi_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+link_and_create_image(sdspi_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
-target_link_libraries(sdspi_test_ram gpio riscv interrupts bootstrap)
+target_link_libraries(sdspi_test gpio riscv interrupts bootstrap)
 
-#
-# SDSPI Test Flash Build
-#
-add_executable(sdspi_test_flsh
- EXCLUDE_FROM_ALL
- sdspi_test_main.cpp
- sdtest.cpp
-)
-
-target_compile_options(sdspi_test_flsh
- PRIVATE -g -O2)
-
-target_compile_definitions(sdspi_test_flsh
- PRIVATE
-  -DSDSPI_CPU_IS_LITTLE_ENDIAN
-)
-
-target_include_directories(sdspi_test_flsh
-    PRIVATE
-     ${PROJECT_SOURCE_DIR}/sub/sdspi/sw/
-)
-
-#Function defined in parent CMakeLists.txt file:
-link_and_create_image(sdspi_test_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
-
-target_link_libraries(sdspi_test_flsh gpio riscv interrupts bootstrap)
-
-add_flash_sw_target(sdspi_test_flsh)

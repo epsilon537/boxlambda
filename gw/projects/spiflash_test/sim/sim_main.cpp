@@ -27,6 +27,9 @@
 // From qspiflash
 #include "flashsim.h"
 
+//We set GPIO bits 7:4 to 0xf to indicate to RISCV SW that this is a simulation.
+#define GPIO_SIM_INDICATOR 0x0000f0
+
 const char *DEV_RANDOM = "/dev/urandom";
 const unsigned FLASH_SW_IMG_OFFSET = 0x400000;
 
@@ -101,6 +104,8 @@ static void tick(void) {
     spiflash_dat = (*flash)(top->spiflash_cs_n, top->spiflash_sck, spiflash_dat);
     top->spiflash_miso = (spiflash_dat>>1)&1;
   }
+
+  top->gp_in = GPIO_SIM_INDICATOR; //Indicate to SW that this is a simulation.
 
   // Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   // and feed the UART co-simulator output to our model
@@ -208,8 +213,8 @@ int main(int argc, char **argv, char **env) {
   // Take the system out of reset.
   top->rst_ni = 1;
 
-  // When not in interactive mode, simulate for 150000000 timeprecision periods
-  while (interactive_mode || (contextp->time() < 150000000)) {
+  // When not in interactive mode, simulate for 1500000000 timeprecision periods
+  while (interactive_mode || (contextp->time() < 1500000000)) {
     // Evaluate model
     tick();
   }

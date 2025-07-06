@@ -159,15 +159,15 @@ bool    FLASHDRVR::erase_sector(const uint32_t sector, const bool verify_erase) 
         if (m_debug)
             printf("Verifying the erase\n");
         for(int i=0; i<NPAGES; i++) {
-            // printf("READI[%08x + %04x]\n", FLASHBASE+flashaddr+i*SZPAGEB, SZPAGEW);
-            readi(FLASHBASE+flashaddr+i*SZPAGEB, SZPAGEW, page);
+            // printf("READI[%08x + %04x]\n", SPIFLASH_BASE+flashaddr+i*SZPAGEB, SZPAGEW);
+            readi(SPIFLASH_BASE+flashaddr+i*SZPAGEB, SZPAGEW, page);
             for(int j=0; j<SZPAGEW; j++)
                 if (page[j] != 0xffffffff) {
-                    uint32_t rdaddr = FLASHBASE+flashaddr+i*SZPAGEB;
+                    uint32_t rdaddr = SPIFLASH_BASE+flashaddr+i*SZPAGEB;
 
                     if (m_debug)
                         printf("FLASH[%07x] = %08x, not 0xffffffff as desired (%06x + %d)\n",
-                            FLASHBASE+flashaddr+i*SZPAGEB+(j<<2),
+                            SPIFLASH_BASE+flashaddr+i*SZPAGEB+(j<<2),
                             page[j], rdaddr,(j<<2));
                     return false;
                 }
@@ -256,8 +256,8 @@ bool    FLASHDRVR::page_program(const uint32_t addr, const uint32_t len,
 bool    FLASHDRVR::write(const uint32_t addr, const uint32_t len,
         const char *data, const bool verify) {
 
-    assert(addr >= FLASHBASE);
-    assert(addr+len <= FLASHBASE + FLASHLEN);
+    assert(addr >= SPIFLASH_BASE);
+    assert(addr+len <= SPIFLASH_BASE + SPIFLASH_SIZE_BYTES);
 
     // Work through this one sector at a time.
     // If this buffer is equal to the sector value(s), go on

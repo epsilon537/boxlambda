@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Label `regmap`: Changes sinces label `boxlambda_simplified` - 2025-06-27
+## Label `regmap`: Changes sinces label `boxlambda_simplified` - 2025-07-06
 
 ### Added
+
 - Corsair-based register map definition and documentation.
 - Software component `sdspi`.
 - Enabled HW flow control support in the UART core.
+- Bootloader as default IMEM image initializes SDRAM and loads application image from flash into IMEM.
 
 ### Fixed
 - Fixed bug in Ibex Single Instruction Prefetcher related to handling of multiple
@@ -25,11 +27,15 @@ explicitly requested using `make cgen` command. No longer triggering code
 - Simplified UART and GPIO APIs. The API no longer requires a uart/gpio object.
 - Migrated from .c to .cpp.
 - Migrated from unsigned to uint32_t/uint8_t.
-- Switched to Vivado 2025.1
+- On FPGA, application images no longer need to initialize SDRAM. The bootloader
+  has done that already.
+- Centralized all memory map #defines into memmap.h.
+- Put IMEM size in linker script again instead of passing it in via build system. For simplicity's sake.
 
 ### Removed
-- Removed ad-hoc register map definitions. Replaced with Corsair-generated
-register map.
+- Removed ad-hoc register map definitions. Replaced with Corsair-generated register map.
+- Removed *_flsh software build variant. The bootloader now loads the application image from flash into IMEM.
+- Remove arty-a7-35 from Bender.yml files.
 
 ## Label `boxlambda_simplified`: Changes since Label `latency_shakeup` - 2025-03-20
 

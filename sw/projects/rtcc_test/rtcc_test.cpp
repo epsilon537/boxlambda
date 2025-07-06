@@ -87,15 +87,6 @@ int main(void) {
   gpio_init();
   gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
-  /*sdram_init() is provided by the Litex code base.*/
-  if (sdram_init()) {
-    printf("SDRAM init OK.\n");
-  }
-  else {
-    printf("SDRAM init failed!\n");
-    while(1);
-  }
-
   /* Run the RTCC test. After test we can fall through to CLI.*/
   rtcc_test();
 

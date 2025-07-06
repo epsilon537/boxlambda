@@ -17,6 +17,7 @@
 #define DISK_DEV_NUM "0:"
 #define STR_ROOT_DIRECTORY ""
 
+#define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 const char *root_dir_name = STR_ROOT_DIRECTORY;
 const char *ym_file_name = STR_ROOT_DIRECTORY "ancool1.ym";
 
@@ -100,13 +101,18 @@ int main(void)
   gpio_init();
   gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
-  /*sdram_init() is provided by the Litex code base.*/
-  if (sdram_init()) {
-    printf("SDRAM init OK.\n");
-  }
-  else {
-    printf("SDRAM init failed!\n");
-    while(1);
+  //GPIO bits 7:4 = 0xf indicate we're running inside a simulator.
+  if ((gpio_get_input() & 0xf0) == GPIO_SIM_INDICATOR) {
+    printf("This is a simulation.\n");
+    //We only need to initialize SDRAM in simultation here.
+    //On FPGA, the bootloader has already set up SDRAM.
+    if (sdram_init()) {
+      printf("SDRAM init OK.\n");
+    }
+    else {
+      printf("SDRAM init failed!\n");
+      while(1);
+    }
   }
 
   //Program the audio mixer registers

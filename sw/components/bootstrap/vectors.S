@@ -37,7 +37,7 @@
   // _reset_handler function.
   // In case of boot-from-flash builds, the IMEM image included in the bitstream
   // contains just this vector.S module, nothing else.
-  // This IMEM image is created in the sw/projects/imem_to_flash_vector project.
+  // This IMEM image is created in the sw/projects/bootloader project.
   // In case of boot-from-imem builds, the IMEM image included in the bitstream
   // contains the actual SW image, which starts with this vector.S module.
   .org 0x80

@@ -38,7 +38,7 @@ else()
   gw_project_rules_verilator(
       TOP_MODULE sim_main
       PROJECT_NAME boxlambda_dfx
-      MEM_FILE_TARGET dfx_test_ram
+      MEM_FILE_TARGET dfx_test
       VERILATOR_FLAGS
           "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/"
           "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
