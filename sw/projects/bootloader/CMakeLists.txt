@@ -1,3 +1,10 @@
+add_custom_target(gen_version_h
+    COMMAND
+      ${PROJECT_SOURCE_DIR}/scripts/gen_version_h.py > ${CMAKE_CURRENT_BINARY_DIR}/version.h
+      "Generating version.h"
+    VERBATIM
+)
+
 #Second stage bootloader runs from DDR memory
 add_executable(second_stage_boot
     EXCLUDE_FROM_ALL
@@ -38,6 +45,11 @@ add_executable(bootloader
       second_stage_boot_img.o
 )
 
+target_compile_definitions(bootloader
+  PUBLIC
+    -DPROJECT_VERSION=${PROJECT_VERSION}
+)
+
 target_compile_options(bootloader
  PRIVATE -g)
 
@@ -49,6 +61,7 @@ target_include_directories(bootloader
     ${PROJECT_SOURCE_DIR}/sw/components/imem
     ${PROJECT_SOURCE_DIR}/sw/components/flashdrvr
     ${PROJECT_SOURCE_DIR}/sw/components/memmap/
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 link_and_create_image(bootloader ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
@@ -69,6 +82,6 @@ add_custom_command(
 #It's the default IMEM .mem file.
 add_dependencies(cgen bootloader)
 
-#The bootloader requires the litedram core to be generated first.
-add_dependencies(bootloader gen_litedram_core)
+#The bootloader requires the litedram core and the version.h file to be generated first.
+add_dependencies(bootloader gen_litedram_core gen_version_h)
 

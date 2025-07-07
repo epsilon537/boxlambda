@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Label `regmap`: Changes sinces label `boxlambda_simplified` - 2025-07-06
+## Label `v0.1.0`: Changes sinces label `boxlambda_simplified` - 2025-07-07
 
 ### Added
 
@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Software component `sdspi`.
 - Enabled HW flow control support in the UART core.
 - Bootloader as default IMEM image initializes SDRAM and loads application image from flash into IMEM.
+- A "make sw" target to build all the software projects without building any
+gateware projects.
 
 ### Fixed
 - Fixed bug in Ibex Single Instruction Prefetcher related to handling of multiple
@@ -27,8 +29,6 @@ explicitly requested using `make cgen` command. No longer triggering code
 - Simplified UART and GPIO APIs. The API no longer requires a uart/gpio object.
 - Migrated from .c to .cpp.
 - Migrated from unsigned to uint32_t/uint8_t.
-- On FPGA, application images no longer need to initialize SDRAM. The bootloader
-  has done that already.
 - Centralized all memory map #defines into memmap.h.
 - Put IMEM size in linker script again instead of passing it in via build system. For simplicity's sake.
 

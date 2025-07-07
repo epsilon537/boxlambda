@@ -101,18 +101,12 @@ int main(void)
   gpio_init();
   gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
-  //GPIO bits 7:4 = 0xf indicate we're running inside a simulator.
-  if ((gpio_get_input() & 0xf0) == GPIO_SIM_INDICATOR) {
-    printf("This is a simulation.\n");
-    //We only need to initialize SDRAM in simultation here.
-    //On FPGA, the bootloader has already set up SDRAM.
-    if (sdram_init()) {
-      printf("SDRAM init OK.\n");
-    }
-    else {
-      printf("SDRAM init failed!\n");
-      while(1);
-    }
+  if (sdram_init()) {
+    printf("SDRAM init OK.\n");
+  }
+  else {
+    printf("SDRAM init failed!\n");
+    while(1);
   }
 
   //Program the audio mixer registers

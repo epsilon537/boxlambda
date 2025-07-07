@@ -16,7 +16,7 @@ target_compile_options(rtcc_test
 link_and_create_image(rtcc_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
-target_link_libraries(rtcc_test sdram rtcc i3c gpio riscv embedded_cli peek_poke_cli bootstrap)
+target_link_libraries(rtcc_test sdram rtcc i2c gpio riscv embedded_cli peek_poke_cli bootstrap)
 
 target_include_directories(rtcc_test
     PUBLIC

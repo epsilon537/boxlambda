@@ -49,6 +49,10 @@ function(link_and_create_image _tgt _link_script)
             "Converting executable to mem and bin."
         VERBATIM
     )
+
+  #Add it to the sw target dependency list
+  add_dependencies(sw ${_tgt})
+
 endfunction()
 
 #SW project builds:

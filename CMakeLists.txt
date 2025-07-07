@@ -25,6 +25,9 @@ endif()
 
 message("Build Type: ${CMAKE_BUILD_TYPE}.")
 
+#A sw target. Builds all software projects
+add_custom_target(sw)
+
 #A codegeneration target. Components that require
 #code generation will add their codegeneration target as a
 #dependency to this target.

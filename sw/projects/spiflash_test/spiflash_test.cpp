@@ -36,21 +36,13 @@ int main(void) {
   gpio_init();
   gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
-  if ((gpio_get_input() & 0xf0) == GPIO_SIM_INDICATOR) {
-    //We only need to initialize SDRAM in simulation here.
-    //Only FPGA, the bootloader has already set up SDRAM.
-
-    //We need SDRAM in this build because the flashdriver requires
-    //heap memory, which is located in SDRAM.
-
-    /*sdram_init() is provided by the Litex code base.*/
-    if (sdram_init()) {
-      printf("SDRAM init OK.\n");
-    }
-    else {
-      printf("SDRAM init failed!\n");
-      while(1);
-    }
+  /*sdram_init() is provided by the Litex code base.*/
+  if (sdram_init()) {
+    printf("SDRAM init OK.\n");
+  }
+  else {
+    printf("SDRAM init failed!\n");
+    while(1);
   }
 
   printf("Starting test...\n");

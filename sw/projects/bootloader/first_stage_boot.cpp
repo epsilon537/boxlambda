@@ -10,9 +10,7 @@
 #include "sdram.h"
 #include "memmap.h"
 #include "flashdrvr.h"
-
-#define BOOTLOADER_VERSION_MAJOR 0
-#define BOOTLOADER_VERSION_MINOR 1
+#include "version.h"
 
 #define GPIO_PRE_SDRAM 0x1
 #define GPIO_SDRAM_OK 0x2
@@ -41,13 +39,14 @@ int main(void) {
 
   gpio_set_output(GPIO_PRE_SDRAM);
 
-  //Wait 1s before outputting first message to make sure the terminal emulator
+  //On FPGA, wait 1s before outputting first message to make sure the terminal emulator
   //can catch up when plugging in the device.
-  if ((gpio_get_input() & 0xf0) == GPIO_SIM_INDICATOR)
-  //usleep(1000000);
+  if ((gpio_get_input() & 0xf0) != GPIO_SIM_INDICATOR)
+    usleep(1000000);
 
-  printf("BoxLambda first stage bootloader V%d.%d.\n", BOOTLOADER_VERSION_MAJOR, BOOTLOADER_VERSION_MINOR);
-  printf("--------------------------------------\n");
+  printf("BoxLambda first stage bootloader\n");
+  printf("--------------------------------\n");
+  printf("Version: %s\n", VERSION_STR);
 
   printf("Initializing SDRAM...\n");
   /*sdram_init() is provided by the Litex code base.*/
