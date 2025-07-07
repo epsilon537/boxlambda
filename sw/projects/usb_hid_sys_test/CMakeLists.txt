@@ -1,35 +1,17 @@
-#USB HID system test program - RAM Build
+#USB HID system test program
 
-add_executable(usb_hid_sys_test_ram
+add_executable(usb_hid_sys_test
  EXCLUDE_FROM_ALL
  usb_hid_sys_test.cpp
 )
 
-target_compile_options(usb_hid_sys_test_ram
+target_compile_options(usb_hid_sys_test
  PRIVATE
   -O2 -g
 )
 
-link_and_create_image(usb_hid_sys_test_ram
+link_and_create_image(usb_hid_sys_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
-target_link_libraries(usb_hid_sys_test_ram usb_hid gpio riscv interrupts bootstrap)
+target_link_libraries(usb_hid_sys_test usb_hid gpio riscv interrupts bootstrap)
 
-#USB HID system test program - Flash Build
-
-add_executable(usb_hid_sys_test_flsh
- EXCLUDE_FROM_ALL
- usb_hid_sys_test.cpp
-)
-
-target_compile_options(usb_hid_sys_test_flsh
- PRIVATE
-  -O2 -g
-)
-
-link_and_create_image(usb_hid_sys_test_flsh
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
-
-target_link_libraries(usb_hid_sys_test_flsh usb_hid gpio riscv interrupts bootstrap)
-
-add_flash_sw_target(usb_hid_sys_test_flsh)

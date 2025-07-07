@@ -8,7 +8,7 @@
  * 'imem': Internal memory start address.
  */
 __imem = 0x00000000;
-/*__imem_size is not specified here. It is passed in as a linker option*/
+__imem_size = 256k; /*256KB internal memory*/
 
 /* stack:*/
 __stack_size = 512;

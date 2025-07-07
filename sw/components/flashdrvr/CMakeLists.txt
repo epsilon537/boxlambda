@@ -18,5 +18,6 @@ target_include_directories(flashdrvr
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
     ${PROJECT_SOURCE_DIR}/registers/generated/
+    ${PROJECT_SOURCE_DIR}/sw/components/memmap/
 )
 

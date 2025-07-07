@@ -42,8 +42,7 @@
 #ifndef    FLASHDRVR_H
 #define    FLASHDRVR_H
 
-#define    FLASHBASE   0x11000000
-#define    FLASHLEN    0x01000000
+#include "memmap.h"
 
 class    FLASHDRVR {
 private:

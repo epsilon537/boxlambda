@@ -26,7 +26,6 @@ function(link_and_create_image _tgt _link_script)
             # sw/components/bootstrap
             -nostartfiles
             -T${_link_script}
-            "LINKER:--defsym=__imem_size=${IMEM_SIZE}"
             "LINKER:--gc-sections"
             "LINKER:--Map,${CMAKE_CURRENT_BINARY_DIR}/${_tgt}.map"
     )
@@ -50,6 +49,10 @@ function(link_and_create_image _tgt _link_script)
             "Converting executable to mem and bin."
         VERBATIM
     )
+
+  #Add it to the sw target dependency list
+  add_dependencies(sw ${_tgt})
+
 endfunction()
 
 #SW project builds:
@@ -62,7 +65,7 @@ add_subdirectory(ym2149_test)
 add_subdirectory(stsound_test)
 add_subdirectory(usb_hid_sys_test)
 add_subdirectory(spiflash_test)
-add_subdirectory(imem_to_flash_vector)
+add_subdirectory(bootloader)
 add_subdirectory(timer_uart_gpio_irqs)
 add_subdirectory(i2c_test)
 add_subdirectory(rtcc_test)

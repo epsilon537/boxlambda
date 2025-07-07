@@ -36,9 +36,6 @@ int main(void) {
   gpio_init();
   gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
-  //We need SDRAM in this build because the flashdriver requires
-  //heap memory, which is located in SDRAM.
-
   /*sdram_init() is provided by the Litex code base.*/
   if (sdram_init()) {
     printf("SDRAM init OK.\n");
@@ -53,8 +50,8 @@ int main(void) {
   //Create the flashdriver object.
   static FLASHDRVR flashdrvr;
 
-  printf("Reading one byte from FLASHBASE+0x800000:\n");
-  volatile char x = *(volatile char *)(FLASHBASE+0x800000);
+  printf("Reading one byte from SPIFLASH_BASE+0x800000:\n");
+  volatile char x = *(volatile char *)(SPIFLASH_BASE+0x800000);
   printf("Read back value = 0x%x\n", x);
 
   //Read the flash id
@@ -63,16 +60,16 @@ int main(void) {
   static const int TEST_STR_LEN=13;
   static const char testStr[TEST_STR_LEN] = "Hello World.";
 
-  printf("Writing to FLASHBASE+0x800000:\n");
-  flashdrvr.write(FLASHBASE+0x800000, TEST_STR_LEN, testStr);
+  printf("Writing to SPIFLASH_BASE+0x800000:\n");
+  flashdrvr.write(SPIFLASH_BASE+0x800000, TEST_STR_LEN, testStr);
 
   for (int ii=0; ii<TEST_STR_LEN; ++ii) {
     printf("Written [%d]: 0x%x\n", ii, testStr[ii]);
   }
 
   static char readbackStr[TEST_STR_LEN+1] = "             ";
-  printf("Reading back from FLASHBASE+0x800000:\n");
-  memcpy(readbackStr, (const char*)(FLASHBASE+0x800000), TEST_STR_LEN);
+  printf("Reading back from SPIFLASH_BASE+0x800000:\n");
+  memcpy(readbackStr, (const char*)(SPIFLASH_BASE+0x800000), TEST_STR_LEN);
 
   for (int ii=0; ii<TEST_STR_LEN; ++ii) {
     printf("Read back [%d]: 0x%x\n", ii, readbackStr[ii]);
@@ -82,16 +79,16 @@ int main(void) {
 
   static const char testStr2[TEST_STR_LEN] = ".dlroW olleH";
 
-  printf("Writing to FLASHBASE+0x800000:\n");
-  flashdrvr.write(FLASHBASE+0x800000, TEST_STR_LEN, testStr2);
+  printf("Writing to SPIFLASH_BASE+0x800000:\n");
+  flashdrvr.write(SPIFLASH_BASE+0x800000, TEST_STR_LEN, testStr2);
 
   for (int ii=0; ii<TEST_STR_LEN; ++ii) {
     printf("Written [%d]: 0x%x\n", ii, testStr2[ii]);
   }
 
   static char readbackStr2[TEST_STR_LEN+1] = "             ";
-  printf("Reading back from FLASHBASE+0x800000:\n");
-  memcpy(readbackStr2, (const char*)(FLASHBASE+0x800000), TEST_STR_LEN);
+  printf("Reading back from SPIFLASH_BASE+0x800000:\n");
+  memcpy(readbackStr2, (const char*)(SPIFLASH_BASE+0x800000), TEST_STR_LEN);
 
   for (int ii=0; ii<TEST_STR_LEN; ++ii) {
     printf("Read back [%d]: 0x%x\n", ii, readbackStr2[ii]);

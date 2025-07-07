@@ -8,30 +8,7 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "fpga",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
-                "BL_TARGET_FPGA": "arty-a7-100",
-                "IMEM_SIZE": "256K"
-            }
-        },
-        {
-            "name": "arty-a7-35",
-            "displayName": "Arty A7 35T FPGA build.",
-            "binaryDir": "build/arty-a7-35",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "fpga",
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
-                "BL_TARGET_FPGA": "arty-a7-35",
-                "IMEM_SIZE": "64K"
-            }
-        },
-        {
-            "name": "sim-a7-35",
-            "displayName": "Arty A7 35T Verilator simulation build.",
-            "binaryDir": "build/sim-a7-35",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "sim",
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
-                "BL_TARGET_FPGA": "arty-a7-35",
-                "IMEM_SIZE": "64K"
+                "BL_TARGET_FPGA": "arty-a7-100"
             }
         },
         {
@@ -41,8 +18,7 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "sim",
                 "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/scripts/toolchain.cmake",
-                "BL_TARGET_FPGA": "arty-a7-100",
-                "IMEM_SIZE": "256K"
+                "BL_TARGET_FPGA": "arty-a7-100"
             }
         }
     ]

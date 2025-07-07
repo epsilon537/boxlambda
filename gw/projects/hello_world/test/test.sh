@@ -38,7 +38,7 @@ else
   export GDB=gdb
 fi
 
-$GDB --batch -x $SRC_ROOT_DIR/gw/projects/hello_world/test/test.gdb ../../../sw/projects/hello_world/hello_world_ram > gdb.log
+$GDB --batch -x $SRC_ROOT_DIR/gw/projects/hello_world/test/test.gdb ../../../sw/projects/hello_world/hello_world > gdb.log
 
 #Kill the Vmodel process so it doesn't linger forever in the background.
 kill -9 $VMODEL_PROCESS_ID

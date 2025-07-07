@@ -14,6 +14,6 @@ void sprite_attr_wr(uint32_t sprite_id, uint32_t addr, uint32_t mode, uint32_t x
   w |= (width<<28); //width:64
   w |= (height<<30); //height
 
-  *(volatile uint32_t *)(VERA_SPRITES_BASE + sprite_id*8) = v;
-  *(volatile uint32_t *)(VERA_SPRITES_BASE + sprite_id*8 + 4) = w;
+  *(volatile uint32_t *)(VERA_SPRITE_RAM_BASE + sprite_id*8) = v;
+  *(volatile uint32_t *)(VERA_SPRITE_RAM_BASE + sprite_id*8 + 4) = w;
 }

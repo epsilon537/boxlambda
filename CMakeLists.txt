@@ -25,13 +25,15 @@ endif()
 
 message("Build Type: ${CMAKE_BUILD_TYPE}.")
 
+#A sw target. Builds all software projects
+add_custom_target(sw)
+
 #A codegeneration target. Components that require
 #code generation will add their codegeneration target as a
 #dependency to this target.
 add_custom_target(cgen)
 
-#make regen rule, to completely remove and regenerate the build tree, including
-#the code generation (cgen) step.
+#make regen rule, to completely remove and regenerate the build tree.
 add_custom_target(regen
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}

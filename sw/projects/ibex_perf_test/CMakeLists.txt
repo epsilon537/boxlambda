@@ -1,47 +1,23 @@
 #
-# Ibex Performance Test - RAM Build
+# Ibex Performance Test
 #
-add_executable(ibex_perf_test_ram
+add_executable(ibex_perf_test
  EXCLUDE_FROM_ALL
  ibex_perf_test.cpp
 )
 
-target_compile_options(ibex_perf_test_ram
+target_compile_options(ibex_perf_test
  PRIVATE
   -O2
 )
 
-target_include_directories(ibex_perf_test_ram
+target_include_directories(ibex_perf_test
   PRIVATE
   ${PROJECT_SOURCE_DIR}/registers/generated/
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_image(ibex_perf_test_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+link_and_create_image(ibex_perf_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
-target_link_libraries(ibex_perf_test_ram gpio riscv vera bootstrap timer interrupts)
+target_link_libraries(ibex_perf_test gpio riscv vera bootstrap timer interrupts)
 
-#
-# ibex_perf Test - Flash Build
-#
-add_executable(ibex_perf_test_flsh
- EXCLUDE_FROM_ALL
- ibex_perf_test.cpp
-)
-
-target_compile_options(ibex_perf_test_flsh
- PRIVATE
-  -O2
-)
-
-target_include_directories(ibex_perf_test_flsh
-  PRIVATE
-  ${PROJECT_SOURCE_DIR}/registers/generated/
-)
-
-#Function defined in parent CMakeLists.txt file:
-link_and_create_image(ibex_perf_test_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
-
-target_link_libraries(ibex_perf_test_flsh gpio riscv vera bootstrap timer interrupts)
-
-add_flash_sw_target(ibex_perf_test_flsh)

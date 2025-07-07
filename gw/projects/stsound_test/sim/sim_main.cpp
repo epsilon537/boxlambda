@@ -27,6 +27,9 @@
 // SDSPI simulation model
 #include "sdspisim.h"
 
+//We set GPIO bits 7:4 to 0xf to indicate to RISCV SW that this is a simulation.
+#define GPIO_SIM_INDICATOR 0x0000f0
+
 // SD card image holding the song .ym file to play back.
 const char	DEFAULT_SDIMAGE_FILENAME[] = "sdcard.img";
 
@@ -114,6 +117,8 @@ static void tick(void) {
 
   //Feed SDSPI co-sim
   top->sdspi_miso = (*sdspi)(top->sdspi_cs_n, top->sdspi_sck, top->sdspi_mosi);
+
+  top->gp_in = GPIO_SIM_INDICATOR; //Indicate to SW that this is a simulation.
 
   //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
   //and feed the UART co-simulator output to our model

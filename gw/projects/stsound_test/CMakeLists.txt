@@ -3,14 +3,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
   gw_project_rules_vivado(
       TOP_MODULE boxlambda_top
       PROJECT_NAME stsound_test
-      MEM_FILE_TARGET stsound_test_ram
+      MEM_FILE_TARGET stsound_test
   )
 else()
   #gw_project_rules_verilator() function is defined in the parent CMakeLists.txt.
   gw_project_rules_verilator(
       TOP_MODULE sim_main
       PROJECT_NAME stsound_test
-      MEM_FILE_TARGET stsound_test_ram
+      MEM_FILE_TARGET stsound_test
       VERILATOR_FLAGS
           "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/"
           "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"

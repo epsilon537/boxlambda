@@ -8,6 +8,7 @@
 #include "gpio.h"
 #include "mcycle.h"
 #include "sdram.h"
+#include "memmap.h"
 #include "libbase/memtest.h"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
@@ -104,7 +105,7 @@ int main(void) {
 
   printf("Memory Test:\n");
 
-  if(!memtest((unsigned int *) MAIN_RAM_BASE, memtest_size)) {
+  if(!memtest((unsigned int *) SDRAM_BASE, memtest_size)) {
     printf("Memory test failed!\n");
     while(1);
   }
@@ -116,7 +117,7 @@ int main(void) {
 
   //Copy code to DDR
   int (*fptr)(char*);
-  fptr =  (int (*)(char*))((int)(code_in_ddr) | MAIN_RAM_BASE);
+  fptr =  (int (*)(char*))((int)(code_in_ddr) | SDRAM_BASE);
   memcpy((void*)fptr,
          (void*)code_in_ddr,
          32 + ((char*)_init - (char*)code_in_ddr));
