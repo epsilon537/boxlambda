@@ -40,7 +40,7 @@ nav:
         - Architecture: architecture.md
         - Clocks and Reset: clocks_and_reset.md
         - Interrupts: interrupts.md
-        - LEDs: leds.md
+        - LEDs and Switches: leds_and_switches.md
         - FPGA Resource Utilization: fpga-resource-utilization.md
     - Register and Memory Map:
         - Reset: registers/generated/reset_regs.md
@@ -58,7 +58,7 @@ nav:
         - DFX Controller Other Registers: registers/generated/dfx_controller_other_regs.md
         - LiteDRAM Registers: litedram_regs.md
         - Memory Map: memory_map.md
-    - Gateware Components:
+    - Gateware:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
         - RISCV Ibex Processor: components_ibex.md
@@ -77,10 +77,11 @@ nav:
         - RTCC: components_rtcc.md
         - VS0: components_vs0.md
         - DFX Controller: components_dfx_controller.md
-    - Software Components:
+    - Software:
         - Register Access Layer: sw_comp_register_access_layer.md
+        - PicoLibc and the Bootstrap Component: sw_comp_picolibc.md
+        - Bootloader: sw_comp_bootloader.md
         - LiteDRAM Initialization: sw_comp_litedram_initialization.md
-        - PicoLibc and Bootstrap: sw_comp_picolibc.md
         - SDSPI: sw_comp_sdspi.md
         - FatFs: sw_comp_fat_fs.md
         - ST-Sound: sw_comp_st_sound.md
@@ -111,6 +112,7 @@ nav:
           - Building the Gateware: build_sys_building_gw.md
           - Building the Software: build_sys_building_sw.md
           - Make All, Clean, and Regen: build_sys_make_all_etc.md
+        - The Linker Script: build_sys_linker_script.md
     - The Test Bench:
         - The Test Bench: test-bench.md
         - The System-Level Test Bench: test-bench-system-level.md

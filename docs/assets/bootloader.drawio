@@ -1,0 +1,106 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram name="Page-1" id="ME7Ef5hKk6MobHV0p_rD">
+    <mxGraphModel dx="2062" dy="1276" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PBcya50oZrXv9YUZO4rO-1" value="IMEM" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="190" y="120" width="330" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-2" value="SDRAM" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="120" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-3" value="Flash" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="280" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-4" value="Stage 1 Bootloader Image" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="230" y="150" width="250" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-6" value="Stage 2 Bootloader Image" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="270" y="180" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-7" value="Application Image" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="600" y="310" width="145" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-8" value="..." style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="600" y="150" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-10" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;1. Initialize SDRAM&lt;/font&gt;" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontStyle=1" edge="1" parent="1" target="PBcya50oZrXv9YUZO4rO-2">
+          <mxGeometry x="-1" y="22" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="650" y="90" as="sourcePoint" />
+            <mxPoint x="550" y="160" as="targetPoint" />
+            <mxPoint x="-19" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-11" value="2. Copy Stage 2 Bootloader&amp;nbsp;&lt;div&gt;to SDRAM&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=14;" edge="1" parent="1" source="PBcya50oZrXv9YUZO4rO-6" target="PBcya50oZrXv9YUZO4rO-8">
+          <mxGeometry x="0.1738" y="-39" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="370" as="sourcePoint" />
+            <mxPoint x="620" y="310" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-12" value="3. Jump to Stage 2 Bootloader" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=0;fontStyle=1;fontSize=14;" edge="1" parent="1" target="PBcya50oZrXv9YUZO4rO-8">
+          <mxGeometry x="-1" y="22" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="110" as="sourcePoint" />
+            <mxPoint x="540" y="50" as="targetPoint" />
+            <mxPoint x="-19" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-13" value="Boot Stage 1:" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=24;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-14" value="IMEM" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="190" y="520" width="330" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-15" value="SDRAM" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="520" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-16" value="Flash" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="680" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-19" value="Application Image" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="600" y="710" width="145" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-20" value="Stage 2 Bootloader Image" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="600" y="550" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-22" value="1. Copy Stage Application Image&amp;nbsp;&lt;div&gt;to IMEM&lt;/div&gt;&lt;div&gt;(overwriting Booloader Image)&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=14;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="PBcya50oZrXv9YUZO4rO-19" target="PBcya50oZrXv9YUZO4rO-25">
+          <mxGeometry x="0.1636" y="16" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="611.9047619047619" as="sourcePoint" />
+            <mxPoint x="460" y="820" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-23" value="3. Jump to Application Image" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=0;fontStyle=1;fontSize=14;" edge="1" parent="1" target="PBcya50oZrXv9YUZO4rO-25">
+          <mxGeometry x="-1" y="22" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="250" y="510" as="sourcePoint" />
+            <mxPoint x="540" y="450" as="targetPoint" />
+            <mxPoint x="-21" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-24" value="Boot Stage 2:" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=24;" vertex="1" parent="1">
+          <mxGeometry x="30" y="440" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-25" value="..." style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="282.5" y="570" width="145" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-35" value="&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;2. If all switches off, spin, allowing debugger to connect&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="230" y="740" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PBcya50oZrXv9YUZO4rO-37" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;curved=1;" edge="1" parent="1" target="PBcya50oZrXv9YUZO4rO-35">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="790" as="sourcePoint" />
+            <mxPoint x="370" y="860" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="370" y="780" />
+              <mxPoint x="371" y="780" />
+              <mxPoint x="371" y="840" />
+              <mxPoint x="180" y="840" />
+              <mxPoint x="180" y="763" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

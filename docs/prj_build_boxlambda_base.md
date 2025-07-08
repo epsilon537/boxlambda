@@ -18,17 +18,21 @@ This build expects to find the software image to boot in flash memory.
 
 Connect a terminal emulator to the Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the flash image for one of the non-DFX software projects in the Arty A7 build tree. Using the `ddr_test` flash image as an example:
+Make sure the four switches on the Arty are not all off (the bootloader would wait
+for a debugger to connect) or all on (the software project would assume it's
+running in a Verilator simulation).
+
+Build one of the non-DFX software projects in the Arty A7 build tree. Using the `ddr_test` flash image as an example:
 
 ```
 cd build/arty-a7-100/sw/projects/ddr_test
-make ddr_test_flsh
+make ddr_test
 ```
 
 Flash the software image onto the target:
 
 ```
-make ddr_test_flsh_flash_sw
+make ddr_test_flash_sw
 ```
 
 Build the `boxlambda_base` bitstream in the Arty A7 build tree:

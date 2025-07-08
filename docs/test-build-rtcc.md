@@ -10,10 +10,9 @@ hide:
 
 The Real-Time Clock and Calendar test program does the following:
 
-1. Boot from Flash Memory.
-2. Every second, retrieve the current time from the RTCC PMOD via I2C.
-3. Drop into a CLI when button 0 is pressed.
-4. From the CLI, the user can set the time, get the time, set the date, and get the date.
+1. Every second, retrieve the current time from the RTCC PMOD via I2C.
+2. Drop into a CLI when button 0 is pressed.
+3. From the CLI, the user can set the time, get the time, set the date, and get the date.
 
 This test program does *not* run on Verilator.
 
@@ -23,14 +22,14 @@ Hook up the RTCC PMOD as described [here](pmods.md#rtcc-pmod).
 
 Connect a terminal emulator to Arty's USB serial port. **Settings: 115200 8N1**.
 
-Build the `rtcc_test_flsh` software project in an Arty A7 build tree:
+Build the `rtcc_test` software project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/sw/projects/rtcc_test
-make rtcc_test_flsh
+make rtcc_test
 ```
-Flash the `rtcc_test_flsh` program onto the target:
+Flash the `rtcc_test` program onto the target:
 ```
-make rtcc_test_flsh_flash_sw
+make rtcc_test_flash_sw
 ```
 Build the rtcc_test gateware project in an Arty A7 build tree:
 ```

@@ -15,3 +15,11 @@ LEDs 0-3 have a fixed role in BoxLambda:
 | 3 | **SD Card Detect** | Lights up green when an SD card is detected in the SD PMOD card slot. |
 
 LEDs 4-7 are assigned to the GPIO core. See the [GPIO component](components_gpio.md) page.
+
+## Switches
+
+- If switches 0-3 are all in the off position, the bootloader will spin after
+loading the application image, allowing a debugger to connect.
+
+- If switches 0-3 are all in the on position, test applications may treat that as
+an indication that the application is running in a Verilator simulation environment.

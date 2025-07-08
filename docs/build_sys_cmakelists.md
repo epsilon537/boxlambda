@@ -100,7 +100,7 @@ Any test cases are also added to the project's `CMakeLists.txt` file.
 
 ## A DFX Project CMakeList
 
-The build rules for a DFX-enabled project are created by the `gw_project_rules_dfx_vivado()` CMake function. Calling this function results in the creation of a `<project>_bit`, a `<project>_load`, and a `<project>_flash_gw` target. Building the `<project>_bit` target results in a bitstream file that can be `_loaded` or `_gw_flashed` onto the target. The gateware image expects to find a software image in flash memory to boot from.
+The build rules for a DFX-enabled project are created by the `gw_project_rules_dfx_vivado()` CMake function. Calling this function results in the creation of a `<project>_bit`, a `<project>_load`, and a `<project>_flash_gw` target. Building the `<project>_bit` target results in a bitstream file that can be *_loaded* or *_gw_flashed* onto the target. The gateware image expects to find a software image in flash memory to boot from.
 
 Here is an example:
 
@@ -124,51 +124,31 @@ The `gw_project_rules_dfx_vivado()` parameters:
 
 ## A Software Project CMakeList
 
-CMake is designed to build software. The necessary functions for creating libraries, executables, etc., are predefined. The only custom function added to the software CMakeLists tree is `link_and_create_image()`. This function executes the necessary steps to link the given target using a given linker script and generate a memory file, which is used by the GW part of the build system.
-
-Currently, two linker scripts are defined:
-
-- `/sw/components/bootstrap/link_imem_boot.ld`: This linker script creates software images that boot from IMEM internal memory.
-- `/sw/components/bootstrap/link_flash_boot.ld`: This linker script creates software images that boot from flash memory.
+CMake is designed to build software. The necessary functions for creating libraries, executables, etc., are predefined. The only custom function added to the software CMakeLists tree is `link_and_create_image()`. This function executes the necessary steps to link the given target using a given linker script and generate a memory file, which is used by the GW part of the build system. See [here](build_sys_linker_script.md) for more info about linker scripts.
 
 A typical SW project `CMakeLists.txt` file looks like this:
 
 ```
 #
-# Hello World RAM Build
+# Hello World
 #
 
-add_executable(hello_world_ram
+add_executable(hello_world
  EXCLUDE_FROM_ALL
-    hello.c
+    hello.cpp
 )
 
-# Setting the -g flag for the hello_dbg build testing GDB access.
-target_compile_options(hello_world_ram
+#Setting the -g flag for the hello_dbg build testing GDB access.
+target_compile_options(hello_world
  PRIVATE -g)
 
-# Function defined in parent CMakeLists.txt file:
-link_and_create_image(hello_world_ram ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_cmem_boot.ld)
+#Function defined in parent CMakeLists.txt file:
+link_and_create_image(hello_world ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 
-target_link_libraries(hello_world_ram gpio riscv)
+target_link_libraries(hello_world gpio riscv bootstrap)
 
-#
-# Hello World Flash Build
-#
+add_flash_sw_target(hello_world)
 
-add_executable(hello_world_flsh
- EXCLUDE_FROM_ALL
-    hello.c
-)
-
-# Setting the -g flag for the hello_dbg build testing GDB access.
-target_compile_options(hello_world_flsh
- PRIVATE -g)
-
-# Function defined in parent CMakeLists.txt file:
-link_and_create_image(hello_world_flsh ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_flash_boot.ld)
-
-target_link_libraries(hello_world_flsh gpio riscv)
 ```
 
 ## CMakeList Organization
