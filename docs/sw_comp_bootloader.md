@@ -6,7 +6,7 @@ hide:
 ## The Bootloader
 
 **Bootloader Software Project in the BoxLambda Directory Tree**:
- []()
+ [sw/projects/bootloader](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/bootloader)
 
 The bootloader is the default IMEM internal memory image. The program initializes
 SDRAM and loads an application image from flash memory into IMEM. The bootloader
