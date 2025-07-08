@@ -54,7 +54,7 @@ The gateware system is organized into four layers:
    Submodules are Git submodules referenced by BoxLambda. They form the foundation of the build system.
 
 4. **The Code Generation Layer**:
-   Some components require some form of transformation to be turned into synthesizable Verilog. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) in its `CMakefile.txt`. The custom command is added as a dependency to the generic `cgen` target, which gets executed as part of `make regen`, the build tree (re-)generation command. With the exception of the [Register Access Layer](sw_comp_register_access_layer.md), code-generated files are written to the `codegen/` subdirectory in the build tree.
+   Some components require some form of transformation to be turned into synthesizable Verilog. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) in its `CMakefile.txt`. The custom command is added as a dependency to the generic `cgen` target, which gets executed as part of `make regen`, the build tree (re-)generation command. Excepti the [Register Access Layer](sw_comp_register_access_layer.md), code-generated files are written to the `codegen/` subdirectory in the build tree.
 
 The following components currently rely on code generation:
 

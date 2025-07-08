@@ -32,7 +32,7 @@ $ make hello_world
 $ make hello_world_flash_sw
 ```
 
-To build all software projects (without building the gateware), run `make sw` from the root of the build directory.
+To build all software projects (excluding the gateware builds), run `make sw` from the root of the build directory.
 
 ## The Cross-Compiler
 

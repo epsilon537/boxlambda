@@ -46,8 +46,8 @@ The differences between the derived scripts and the base scripts are minimal:
 
 I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc_build.sh) shell script. This script is invoked by the build system (in [sw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/sw/CMakeLists.txt)) during build tree configuration time. The picolibc build and install directories are placed inside the build tree:
 
-- **Picolibc build directory**: `<build dir>/sw/piclobc-build`
-- **Picolibc install directory**: `<build dir>/sw/piclobc-install`
+- **Picolibc build directory**: `<build dir>/sw/picolibc-build`
+- **Picolibc install directory**: `<build dir>/sw/picolibc-install`
 
 When there are changes in the Picolibc source tree, the build trees need to be regenerated. The easiest way to do that is by running `make regen` from the build tree.
 
@@ -202,5 +202,5 @@ int main(void) {
 
 ```
 
-Notice the `_init()` function. This function is executed by the PicoLibc startup code before calling `main()`. This is where we set up the UART.
+Notice the `_init()` function. The PicoLibc startup code executes this functio before calling `main()`. This is where we set up the UART.
 

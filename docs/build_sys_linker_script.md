@@ -59,7 +59,7 @@ MEMORY
     ...
 ```
 
-Currently, with the exception of the Stage 2 Bootloader, all BoxLambda executables execute from IMEM and use the following linker script:
+Currently, except the stage 2 Bootloader, all BoxLambda executables execute from IMEM and use the following linker script:
 
 [sw/components/bootstrap/link_imem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_imem_boot.ld)
 

@@ -18,8 +18,8 @@ This build expects to find the software image to boot in flash memory.
 
 Connect a terminal emulator to the Arty's USB serial port. **Settings: 115200 8N1**.
 
-Make sure the four switches on the Arty are not all-off (the bootloader would wait
-for a debugger to connect) or all-on (the software project would assume it's
+Make sure the four switches on the Arty are not all off (the bootloader would wait
+for a debugger to connect) or all on (the software project would assume it's
 running in a Verilator simulation).
 
 Build one of the non-DFX software projects in the Arty A7 build tree. Using the `ddr_test` flash image as an example:

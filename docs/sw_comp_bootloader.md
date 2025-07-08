@@ -8,7 +8,7 @@ hide:
 **Bootloader Software Project in the BoxLambda Directory Tree**:
  []()
 
-The bootloader is the default IMEM interal memory image. The program initializes
+The bootloader is the default IMEM internal memory image. The program initializes
 SDRAM and loads an application image from flash memory into IMEM. The bootloader
 then checks the switch settings. If all four switches are in the off position, the
 bootloader will spin in a loop, allowing a debugger to connect. If the switches
