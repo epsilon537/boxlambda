@@ -41,10 +41,10 @@ Ready for Remote Connections
 Info : Listening on port 6666 for tcl connections
 Info : Listening on port 4444 for telnet connections
 ```
-Launch gdb-multiarch with the hello_world_ram executable:
+Launch gdb-multiarch with the hello_world executable:
 ```
 cd <boxlambda root directory>/build/arty-a7-100/sw/projects/hello_world
-gdb-multiarch hello_world_ram
+gdb-multiarch hello_world
 ```
 Set the architecture to `riscv:rv32` and connect GDB to the target. From the GDB shell:
 ```
@@ -92,10 +92,10 @@ TAP: riscv.cpu
 [riscv.cpu] Target successfully examined.
 Ready for Remote Connections on port 3333.
 ```
-Launch gdb-multiarch with the hello_world_ram executable:
+Launch gdb-multiarch with the hello_world executable:
 ```
 cd <boxlambda root directory>/build/sim-a7-100/sw/projects/hello_world
-gdb-multiarch hello_world_ram
+gdb-multiarch hello_world
 ```
 Set the architecture to `riscv:rv32` and connect GDB to the target. From the GDB shell:
 ```

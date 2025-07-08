@@ -9,29 +9,30 @@ The software associated with a gateware project is automatically compiled, conve
 
 Software projects can also be built independently. From the build directory, enter the following command:
 
-- To create a RAM Build: `make <sw_project_name>_ram`.
-- To create a Flash Memory Build: `make <sw_project_name>_flsh`.
+`make <sw_project_name>`.
 
 Example:
 
 ```
 $ cd build/sim-a7-100/sw/projects/hello_world
-$ make hello_world_ram
+$ make hello_world
 ...
 $ ls
-CMakeFiles           CTestTestfile.cmake  hello_world_ram.bin  hello_world_ram.map  Makefile
-cmake_install.cmake  hello_world_ram      hello_world_ram.hex  hello_world_ram.mem
+CMakeFiles           CTestTestfile.cmake  hello_world.bin  hello_world.map  Makefile
+cmake_install.cmake  hello_world          hello_world.hex  hello_world.mem
 ```
 
-To flash a software image onto the target, run `make <sw_project_name>_flsh_flash_sw`.
+To flash a software image onto the target, run `make <sw_project_name>_flash_sw`.
 
 Example:
 
 ```
 $ cd build/arty-a7-100/sw/projects/hello_world
-$ make hello_world_flsh
-$ make hello_world_flsh_flash_sw
+$ make hello_world
+$ make hello_world_flash_sw
 ```
+
+To build all software projects (without building the gateware), run `make sw` from the root of the build directory.
 
 ## The Cross-Compiler
 

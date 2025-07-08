@@ -45,15 +45,15 @@ MEMORY
   - Code, Data, BSS, and stack sections go to `imem`.
   - The heap goes to `emem`.
 - Symbols used by the CRT0 code for section relocation, BSS initialization, etc. For BoxLambda, the key symbols are:
-    - `__code_source / __code_start / __code_size`: source address, destination address, and size of the code section to relocate from flash to IMEM. In the Boot-from-IMEM sequence, `__code_source` and `__code_start` point to the same IMEM address.
-    - `__data_source / __data_start / __data_size`: source address, destination address, and size of the data section to relocate from flash to IMEM. In the Boot-from-IMEM sequence; `__data_source` and `__data_start` point to the same IMEM address.
+    - `__code_source / __code_start / __code_size`: source address, destination address, and size of the code section. In the Boot-from-IMEM sequence, `__code_source` and `__code_start` point to the same IMEM address.
+    - `__data_source / __data_start / __data_size`: source address, destination address, and size of the data section. In the Boot-from-IMEM sequence; `__data_source` and `__data_start` point to the same IMEM address.
     - `__bss_start / __bss_size`: Address and size of BSS section in IMEM to zero out.
 ```
     .text : {
         PROVIDE(__code_start = ADDR(.text));
         ...
         PROVIDE(__code_end = .);
-    } >imem AT>flash
+    } >imem
     PROVIDE(__code_source = LOADADDR(.text));
     PROVIDE(__code_size = __code_end - __code_start );
     ...

@@ -76,17 +76,21 @@ Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en
 
 Connect a terminal emulator to Arty's USB serial port. I suggest using a terminal emulator that supports Ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
 
-Build the `dfx_test_flsh` software project in the arty-a7-100 build tree:
+Make sure the four switches on the Arty are not all-off (the bootloader would wait
+for a debugger to connect) or all-on (the software project would assume it's
+running in a Verilator simulation).
+
+Build the `dfx_test` software project in the arty-a7-100 build tree:
 
 ```
 cd build/arty-a7-100/sw/projects/dfx_test
-make dfx_test_flsh
+make dfx_test
 ```
 
-Flash the `dfx_test_flsh` program onto the target:
+Flash the `dfx_test` program onto the target:
 
 ```
-make dfx_test_flsh_flash_sw
+make dfx_test_flash_sw
 ```
 
 Build the `boxlambda_dfx` gateware project in the `arty-a7-100` build tree:
