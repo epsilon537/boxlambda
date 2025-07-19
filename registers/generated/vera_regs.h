@@ -384,22 +384,22 @@ typedef union {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t TILE_WIDTH : 1; // Tile width.
+    uint32_t TILE_BITMAP_WIDTH : 1; // Tile or Bitmap width.
     uint32_t TILE_HEIGHT : 1; // Tile height.
     uint32_t TILE_BASE_ADDR_16_11 : 6; // Bits 16:11 of the base address of the tile data.
     uint32_t : 24; // reserved
   };
 } vera_l0_tilebase_t;
 
-// L0_TILEBASE.TILE_WIDTH - Tile width.
-#define VERA_L0_TILEBASE_TILE_WIDTH_WIDTH 1
-#define VERA_L0_TILEBASE_TILE_WIDTH_LSB 0
-#define VERA_L0_TILEBASE_TILE_WIDTH_MASK 0x1
-#define VERA_L0_TILEBASE_TILE_WIDTH_RESET 0x0
+// L0_TILEBASE.TILE_BITMAP_WIDTH - Tile or Bitmap width.
+#define VERA_L0_TILEBASE_TILE_BITMAP_WIDTH_WIDTH 1
+#define VERA_L0_TILEBASE_TILE_BITMAP_WIDTH_LSB 0
+#define VERA_L0_TILEBASE_TILE_BITMAP_WIDTH_MASK 0x1
+#define VERA_L0_TILEBASE_TILE_BITMAP_WIDTH_RESET 0x0
 typedef enum {
-    VERA_L0_TILEBASE_TILE_WIDTH_TILE_WIDTH_8 = 0x0, //8 pixel tile width.
-    VERA_L0_TILEBASE_TILE_WIDTH_TILE_WIDTH_16 = 0x1, //16 pixel tile width.
-} vera_l0_tilebase_tile_width_t;
+    VERA_L0_TILEBASE_TILE_BITMAP_WIDTH_TILE_BITMAP_W_8_320 = 0x0, //8 pixel tile width, 320 pixels bitmap width.
+    VERA_L0_TILEBASE_TILE_BITMAP_WIDTH_TILE_BITMAP_W_16_640 = 0x1, //16 pixel tile width, 640 pixels bitmap width.
+} vera_l0_tilebase_tile_bitmap_width_t;
 
 // L0_TILEBASE.TILE_HEIGHT - Tile height.
 #define VERA_L0_TILEBASE_TILE_HEIGHT_WIDTH 1
@@ -423,16 +423,23 @@ typedef enum {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t VALUE : 12; // Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+    uint32_t HSCROLL_7_0 : 8; // Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+    uint32_t HSCROLL_11_8_PAL_OFFSET : 4; // In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors.
     uint32_t : 20; // reserved
   };
 } vera_l0_hscroll_t;
 
-// L0_HSCROLL.VALUE - Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
-#define VERA_L0_HSCROLL_VALUE_WIDTH 12
-#define VERA_L0_HSCROLL_VALUE_LSB 0
-#define VERA_L0_HSCROLL_VALUE_MASK 0xfff
-#define VERA_L0_HSCROLL_VALUE_RESET 0x0
+// L0_HSCROLL.HSCROLL_7_0 - Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+#define VERA_L0_HSCROLL_HSCROLL_7_0_WIDTH 8
+#define VERA_L0_HSCROLL_HSCROLL_7_0_LSB 0
+#define VERA_L0_HSCROLL_HSCROLL_7_0_MASK 0xff
+#define VERA_L0_HSCROLL_HSCROLL_7_0_RESET 0x0
+
+// L0_HSCROLL.HSCROLL_11_8_PAL_OFFSET - In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors.
+#define VERA_L0_HSCROLL_HSCROLL_11_8_PAL_OFFSET_WIDTH 4
+#define VERA_L0_HSCROLL_HSCROLL_11_8_PAL_OFFSET_LSB 8
+#define VERA_L0_HSCROLL_HSCROLL_11_8_PAL_OFFSET_MASK 0xf00
+#define VERA_L0_HSCROLL_HSCROLL_11_8_PAL_OFFSET_RESET 0x0
 
 // L0_VSCROLL - Layer 0 vertical scroll register.
 #define VERA_L0_VSCROLL_ADDR 0x54
@@ -537,22 +544,22 @@ typedef union {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t TILE_WIDTH : 1; // Tile width.
+    uint32_t TILE_BITMAP_WIDTH : 1; // Tile or Bitmap width.
     uint32_t TILE_HEIGHT : 1; // Tile height.
     uint32_t TILE_BASE_ADDR_16_11 : 6; // Bits 16:11 of the base address of the tile data.
     uint32_t : 24; // reserved
   };
 } vera_l1_tilebase_t;
 
-// L1_TILEBASE.TILE_WIDTH - Tile width.
-#define VERA_L1_TILEBASE_TILE_WIDTH_WIDTH 1
-#define VERA_L1_TILEBASE_TILE_WIDTH_LSB 0
-#define VERA_L1_TILEBASE_TILE_WIDTH_MASK 0x1
-#define VERA_L1_TILEBASE_TILE_WIDTH_RESET 0x0
+// L1_TILEBASE.TILE_BITMAP_WIDTH - Tile or Bitmap width.
+#define VERA_L1_TILEBASE_TILE_BITMAP_WIDTH_WIDTH 1
+#define VERA_L1_TILEBASE_TILE_BITMAP_WIDTH_LSB 0
+#define VERA_L1_TILEBASE_TILE_BITMAP_WIDTH_MASK 0x1
+#define VERA_L1_TILEBASE_TILE_BITMAP_WIDTH_RESET 0x0
 typedef enum {
-    VERA_L1_TILEBASE_TILE_WIDTH_TILE_WIDTH_8 = 0x0, //8 pixel tile width.
-    VERA_L1_TILEBASE_TILE_WIDTH_TILE_WIDTH_16 = 0x1, //16 pixel tile width.
-} vera_l1_tilebase_tile_width_t;
+    VERA_L1_TILEBASE_TILE_BITMAP_WIDTH_TILE_BITMAP_W_8_320 = 0x0, //8 pixel tile width, 320 pixels bitmap width.
+    VERA_L1_TILEBASE_TILE_BITMAP_WIDTH_TILE_BITMAP_W_16_640 = 0x1, //16 pixel tile width, 640 pixels bitmap width.
+} vera_l1_tilebase_tile_bitmap_width_t;
 
 // L1_TILEBASE.TILE_HEIGHT - Tile height.
 #define VERA_L1_TILEBASE_TILE_HEIGHT_WIDTH 1
@@ -576,16 +583,23 @@ typedef enum {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t VALUE : 12; // Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+    uint32_t HSCROLL_7_0 : 8; // Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+    uint32_t HSCROLL_11_8_PAL_OFFSET : 4; // In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors.
     uint32_t : 20; // reserved
   };
 } vera_l1_hscroll_t;
 
-// L1_HSCROLL.VALUE - Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
-#define VERA_L1_HSCROLL_VALUE_WIDTH 12
-#define VERA_L1_HSCROLL_VALUE_LSB 0
-#define VERA_L1_HSCROLL_VALUE_MASK 0xfff
-#define VERA_L1_HSCROLL_VALUE_RESET 0x0
+// L1_HSCROLL.HSCROLL_7_0 - Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+#define VERA_L1_HSCROLL_HSCROLL_7_0_WIDTH 8
+#define VERA_L1_HSCROLL_HSCROLL_7_0_LSB 0
+#define VERA_L1_HSCROLL_HSCROLL_7_0_MASK 0xff
+#define VERA_L1_HSCROLL_HSCROLL_7_0_RESET 0x0
+
+// L1_HSCROLL.HSCROLL_11_8_PAL_OFFSET - In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors.
+#define VERA_L1_HSCROLL_HSCROLL_11_8_PAL_OFFSET_WIDTH 4
+#define VERA_L1_HSCROLL_HSCROLL_11_8_PAL_OFFSET_LSB 8
+#define VERA_L1_HSCROLL_HSCROLL_11_8_PAL_OFFSET_MASK 0xf00
+#define VERA_L1_HSCROLL_HSCROLL_11_8_PAL_OFFSET_RESET 0x0
 
 // L1_VSCROLL - Layer 1 vertical scroll register.
 #define VERA_L1_VSCROLL_ADDR 0x94

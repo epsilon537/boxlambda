@@ -158,10 +158,10 @@
 # L0_TILEBASE - Layer 0 tile base register.
 .equ VERA_L0_TILEBASE_ADDR, 0x48
 
-# L0_TILEBASE.TILE_WIDTH - Tile width.
-.equ VERA_L0_TILEBASE_TILE_WIDTH_WIDTH 1
-.equ VERA_L0_TILEBASE_TILE_WIDTH_LSB 0
-.equ VERA_L0_TILEBASE_TILE_WIDTH_MASK 0x1
+# L0_TILEBASE.TILE_BITMAP_WIDTH - Tile or Bitmap width.
+.equ VERA_L0_TILEBASE_TILE_BITMAP_WIDTH_WIDTH 1
+.equ VERA_L0_TILEBASE_TILE_BITMAP_WIDTH_LSB 0
+.equ VERA_L0_TILEBASE_TILE_BITMAP_WIDTH_MASK 0x1
 # L0_TILEBASE.TILE_HEIGHT - Tile height.
 .equ VERA_L0_TILEBASE_TILE_HEIGHT_WIDTH 1
 .equ VERA_L0_TILEBASE_TILE_HEIGHT_LSB 1
@@ -173,10 +173,14 @@
 # L0_HSCROLL - Layer 0 horizontal scroll register.
 .equ VERA_L0_HSCROLL_ADDR, 0x50
 
-# L0_HSCROLL.VALUE - Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
-.equ VERA_L0_HSCROLL_VALUE_WIDTH 12
-.equ VERA_L0_HSCROLL_VALUE_LSB 0
-.equ VERA_L0_HSCROLL_VALUE_MASK 0xfff
+# L0_HSCROLL.HSCROLL_7_0 - Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+.equ VERA_L0_HSCROLL_HSCROLL_7_0_WIDTH 8
+.equ VERA_L0_HSCROLL_HSCROLL_7_0_LSB 0
+.equ VERA_L0_HSCROLL_HSCROLL_7_0_MASK 0xff
+# L0_HSCROLL.HSCROLL_11_8_PAL_OFFSET - In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors.
+.equ VERA_L0_HSCROLL_HSCROLL_11_8_PAL_OFFSET_WIDTH 4
+.equ VERA_L0_HSCROLL_HSCROLL_11_8_PAL_OFFSET_LSB 8
+.equ VERA_L0_HSCROLL_HSCROLL_11_8_PAL_OFFSET_MASK 0xf00
 # L0_VSCROLL - Layer 0 vertical scroll register.
 .equ VERA_L0_VSCROLL_ADDR, 0x54
 
@@ -217,10 +221,10 @@
 # L1_TILEBASE - Layer 1 tile base register.
 .equ VERA_L1_TILEBASE_ADDR, 0x88
 
-# L1_TILEBASE.TILE_WIDTH - Tile width.
-.equ VERA_L1_TILEBASE_TILE_WIDTH_WIDTH 1
-.equ VERA_L1_TILEBASE_TILE_WIDTH_LSB 0
-.equ VERA_L1_TILEBASE_TILE_WIDTH_MASK 0x1
+# L1_TILEBASE.TILE_BITMAP_WIDTH - Tile or Bitmap width.
+.equ VERA_L1_TILEBASE_TILE_BITMAP_WIDTH_WIDTH 1
+.equ VERA_L1_TILEBASE_TILE_BITMAP_WIDTH_LSB 0
+.equ VERA_L1_TILEBASE_TILE_BITMAP_WIDTH_MASK 0x1
 # L1_TILEBASE.TILE_HEIGHT - Tile height.
 .equ VERA_L1_TILEBASE_TILE_HEIGHT_WIDTH 1
 .equ VERA_L1_TILEBASE_TILE_HEIGHT_LSB 1
@@ -232,10 +236,14 @@
 # L1_HSCROLL - Layer 1 horizontal scroll register.
 .equ VERA_L1_HSCROLL_ADDR, 0x90
 
-# L1_HSCROLL.VALUE - Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
-.equ VERA_L1_HSCROLL_VALUE_WIDTH 12
-.equ VERA_L1_HSCROLL_VALUE_LSB 0
-.equ VERA_L1_HSCROLL_VALUE_MASK 0xfff
+# L1_HSCROLL.HSCROLL_7_0 - Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right.
+.equ VERA_L1_HSCROLL_HSCROLL_7_0_WIDTH 8
+.equ VERA_L1_HSCROLL_HSCROLL_7_0_LSB 0
+.equ VERA_L1_HSCROLL_HSCROLL_7_0_MASK 0xff
+# L1_HSCROLL.HSCROLL_11_8_PAL_OFFSET - In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors.
+.equ VERA_L1_HSCROLL_HSCROLL_11_8_PAL_OFFSET_WIDTH 4
+.equ VERA_L1_HSCROLL_HSCROLL_11_8_PAL_OFFSET_LSB 8
+.equ VERA_L1_HSCROLL_HSCROLL_11_8_PAL_OFFSET_MASK 0xf00
 # L1_VSCROLL - Layer 1 vertical scroll register.
 .equ VERA_L1_VSCROLL_ADDR, 0x94
 

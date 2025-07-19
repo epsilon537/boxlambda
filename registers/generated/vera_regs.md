@@ -364,14 +364,14 @@ Reset value: 0x00000000
 | -                | 31:8   | -               | 0x000000   | Reserved |
 | TILE_BASE_ADDR_16_11 | 7:2    | rw              | 0x0        | Bits 16:11 of the base address of the tile data. |
 | TILE_HEIGHT      | 1      | rw              | 0x0        | Tile height. |
-| TILE_WIDTH       | 0      | rw              | 0x0        | Tile width. |
+| TILE_BITMAP_WIDTH | 0      | rw              | 0x0        | Tile or Bitmap width. |
 
-Enumerated values for L0_TILEBASE.TILE_WIDTH.
+Enumerated values for L0_TILEBASE.TILE_BITMAP_WIDTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILE_WIDTH_8     | 0x0    | 8 pixel tile width. |
-| TILE_WIDTH_16    | 0x1    | 16 pixel tile width. |
+| TILE_BITMAP_W_8_320 | 0x0    | 8 pixel tile width, 320 pixels bitmap width. |
+| TILE_BITMAP_W_16_640 | 0x1    | 16 pixel tile width, 640 pixels bitmap width. |
 
 Enumerated values for L0_TILEBASE.TILE_HEIGHT.
 
@@ -395,7 +395,8 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| VALUE            | 11:0   | rw              | 0x000      | Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
+| HSCROLL_11_8_PAL_OFFSET | 11:8   | rw              | 0x0        | In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors. |
+| HSCROLL_7_0      | 7:0    | rw              | 0x00       | Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
 
 Back to [Register map](#register-map-summary).
 
@@ -496,14 +497,14 @@ Reset value: 0x00000000
 | -                | 31:8   | -               | 0x000000   | Reserved |
 | TILE_BASE_ADDR_16_11 | 7:2    | rw              | 0x0        | Bits 16:11 of the base address of the tile data. |
 | TILE_HEIGHT      | 1      | rw              | 0x0        | Tile height. |
-| TILE_WIDTH       | 0      | rw              | 0x0        | Tile width. |
+| TILE_BITMAP_WIDTH | 0      | rw              | 0x0        | Tile or Bitmap width. |
 
-Enumerated values for L1_TILEBASE.TILE_WIDTH.
+Enumerated values for L1_TILEBASE.TILE_BITMAP_WIDTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILE_WIDTH_8     | 0x0    | 8 pixel tile width. |
-| TILE_WIDTH_16    | 0x1    | 16 pixel tile width. |
+| TILE_BITMAP_W_8_320 | 0x0    | 8 pixel tile width, 320 pixels bitmap width. |
+| TILE_BITMAP_W_16_640 | 0x1    | 16 pixel tile width, 640 pixels bitmap width. |
 
 Enumerated values for L1_TILEBASE.TILE_HEIGHT.
 
@@ -527,7 +528,8 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| VALUE            | 11:0   | rw              | 0x000      | Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
+| HSCROLL_11_8_PAL_OFFSET | 11:8   | rw              | 0x0        | In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors. |
+| HSCROLL_7_0      | 7:0    | rw              | 0x00       | Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
 
 Back to [Register map](#register-map-summary).
 

@@ -75,3 +75,6 @@
 [submodule "sub/swapforth"]
 	path = sub/swapforth
 	url = https://github.com/epsilon537/swapforth
+[submodule "sub/libtmt"]
+	path = sub/libtmt
+	url = https://github.com/epsilon537/libtmt
