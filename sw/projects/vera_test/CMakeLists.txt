@@ -16,3 +16,4 @@ link_and_create_image(vera_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/li
 
 target_link_libraries(vera_test vera sdram gpio riscv interrupts bootstrap)
 
+add_flash_sw_target(vera_test)

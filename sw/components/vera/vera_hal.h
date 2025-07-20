@@ -27,6 +27,7 @@ extern "C" {
 
 #define VERA_NUM_SPRITE_BANKS 2
 #define VERA_NUM_SPRITES_IN_BANK 64 //Number of sprites in one sprite bank)
+#define VERA_MAX_SPRITE_ID 127
 #define VERA_SPR_ID_ALLOC_FAILED (~0U)
 
 // Vera default color palette.
@@ -138,7 +139,7 @@ typedef union {
   Vera_textmap_entry_16_t txt16;
   Vera_textmap_entry_256_t txt256;
   Vera_tilemap_entry_t tile;
-} Vera_tilemap_entry_u;
+} Vera_map_entry_u;
 
 //A tile map structure holding the map base address, its width, height, and type.
 typedef struct {
@@ -157,7 +158,6 @@ typedef struct {
   Vera_bpp_t bpp;
   uint32_t tilesize_bytes;
   uint32_t num_tiles;
-  bool is_spriteset;
 } Vera_tileset_t;
 
 //A bitmap structure holding the bitmap's bas address, dimensions and color
@@ -185,9 +185,9 @@ typedef struct {
 
 //Color Palette entry structure.
 typedef struct {
-  uint16_t r : 4;
-  uint16_t g : 4;
   uint16_t b : 4;
+  uint16_t g : 4;
+  uint16_t r : 4;
   uint16_t : 4;
 } Vera_rgb_t;
 
@@ -210,6 +210,10 @@ void vera_irqs_disable(uint32_t irq_mask);
 // Retrieve the enabled IRQs bitmask.
 // @return: a bitmask of enabled VERA_IRQs.
 uint32_t vera_irqs_enabled();
+
+// Retrieve the active IRQs.
+// @return: a bitmask of active VERA_IRQs.
+uint32_t vera_irqs_get();
 
 // Acknowledge IRQs.
 // @param irq_mask: bitwise OR of VERA_IRQs to acknowledge.
@@ -311,14 +315,14 @@ uint32_t vera_compute_map_size(VERA_IN Vera_map_t *map);
 // @param row: the map row. Range: 0..map height - 1;
 // @param entry: The 16-bit data to write into the entry. The entry layout
 // depends on the selected tile mode.
-void vera_map_write(VERA_IN Vera_map_t *map, uint32_t col, uint32_t row, Vera_tilemap_entry_u entry);
+void vera_map_write(VERA_IN Vera_map_t *map, uint32_t col, uint32_t row, Vera_map_entry_u entry);
 
 // Read an entry from the given tile map.
 // @param map: Struct hold base address and dimensions of the tile map.
 // @param col: the map column. Range: 0..map width - 1;
 // @param row: the map row. Range: 0..map height - 1;
 // @return: The 16-bit entry value. The layout depends on the selected tile mode.
-Vera_tilemap_entry_u vera_map_read(VERA_IN Vera_map_t *map, uint32_t col, uint32_t row);
+Vera_map_entry_u vera_map_read(VERA_IN Vera_map_t *map, uint32_t col, uint32_t row);
 
 //
 // Tile Set Functions:
@@ -338,11 +342,10 @@ Vera_tilemap_entry_u vera_map_read(VERA_IN Vera_map_t *map, uint32_t col, uint32
 // additionally 32 and 64 are allowed.
 // @param bpp: VERA_BPP_1/2/4/8. In case of spritesets, only VERA_BPP_4 and 8 are
 // allowed.
-// @param is_spriteset: An indication that this is a spriteset.
 // @param num_tiles: Number of tiles in the tileset.
 // @output param tileset: Pointer to tileset structure with all fields populated.
 // @return: true if successful, false if memory allocation failed.
-bool vera_tileset_create(uint8_t *tile_base, Vera_tile_size_t width, Vera_tile_size_t height, Vera_bpp_t bpp, bool is_spriteset, uint32_t num_tiles, VERA_OUT Vera_tileset_t *tileset);
+bool vera_tileset_create(uint8_t *tile_base, Vera_tile_size_t width, Vera_tile_size_t height, Vera_bpp_t bpp, uint32_t num_tiles, VERA_OUT Vera_tileset_t *tileset);
 
 // Release VRAM resources allocated for the given tileset object.
 // @param tileset: Pointer to tile struct for which the memory may be released.
@@ -452,6 +455,7 @@ uint8_t* vera_layer_mapbase_get(Vera_layer_t layer);
 // @param layer: VERA_L0 or VERA_L1.
 // @param tileset: the tile modes's bpp, tile width and height are taken from
 // the given tileset object.
+// Note that the tileset width and heigh must be VERA_TILE_SZ_8 or 16.
 void vera_layer_tilemode_set(Vera_layer_t layer,
                              VERA_IN Vera_tileset_t *tileset);
 
@@ -567,6 +571,14 @@ void vera_spr_attr_update_x(uint32_t sprite_id, VERA_IN Vera_sprite_attrs_t *spr
 // @param sprite_id: Sprite identifier. Range: 0..127.
 // @param sprite: Take the Y attribute from this object.
 void vera_spr_attr_update_y(uint32_t sprite_id, VERA_IN Vera_sprite_attrs_t *sprite);
+
+// Set the active sprite bank
+// @param bank: Sprite bank selector: VERA_SPR_BANK_0/1.
+void vera_spr_bank_set(Vera_sprite_bank_t bank);
+
+// Get the active sprite bank
+// @return the active sprite bank.
+Vera_sprite_bank_t vera_spr_bank_get();
 
 //
 // Lower-Level VRAM access functions:

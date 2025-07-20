@@ -2,6 +2,7 @@
 #include "memmap.h"
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 #define VRAM_BLOCK_SZ_BYTES 2048
 #define VRAM_NUM_BLOCKS (VERA_VRAM_SIZE_BYTES/VRAM_BLOCK_SZ_BYTES)
@@ -96,6 +97,10 @@ void vera_irqs_disable(uint32_t irq_mask) {
 
 uint32_t vera_irqs_enabled() {
   return VERA->IEN;
+}
+
+uint32_t vera_irqs_get() {
+  return VERA->ISR;
 }
 
 void vera_irqs_ack(uint32_t irq_mask) {
@@ -202,31 +207,30 @@ uint32_t vera_compute_map_size(VERA_IN Vera_map_t *map) {
   return map->width*map->height*2;
 }
 
-void vera_map_write(VERA_IN Vera_map_t *map, uint32_t col, uint32_t row, Vera_tilemap_entry_u entry) {
+void vera_map_write(VERA_IN Vera_map_t *map, uint32_t col, uint32_t row, Vera_map_entry_u entry) {
   assert(map);
+  assert(col < map->width);
+  assert(row < map->height);
+
 
   uint16_t *entryp = (uint16_t*)map->map_base + row*map->width + col;
   *entryp = entry.UINT16;
 }
 
-Vera_tilemap_entry_u vera_map_read(VERA_IN Vera_map_t *map, uint32_t col, uint32_t row) {
+Vera_map_entry_u vera_map_read(VERA_IN Vera_map_t *map, uint32_t col, uint32_t row) {
   assert(map);
-  Vera_tilemap_entry_u res;
+  Vera_map_entry_u res;
   uint16_t *entryp = (uint16_t*)map->map_base + row*map->width + col;
   res.UINT16 = *entryp;
   return res;
 }
 
-bool vera_tileset_create(uint8_t *tileset_base, Vera_tile_size_t width, Vera_tile_size_t height, Vera_bpp_t bpp, bool is_spriteset, uint32_t num_tiles, VERA_OUT Vera_tileset_t *tileset) {
+bool vera_tileset_create(uint8_t *tileset_base, Vera_tile_size_t width, Vera_tile_size_t height, Vera_bpp_t bpp, uint32_t num_tiles, VERA_OUT Vera_tileset_t *tileset) {
   assert(tileset);
-  assert((!is_spriteset) || (bpp == VERA_BPP_4) || (bpp == VERA_BPP_8));
-  assert((is_spriteset) || (width == VERA_TILE_SZ_32) || (width == VERA_TILE_SZ_64));
-  assert((is_spriteset) || (height == VERA_TILE_SZ_32) || (height == VERA_TILE_SZ_64));
 
   tileset->width = width;
   tileset->height = height;
   tileset->bpp = bpp;
-  tileset->is_spriteset = is_spriteset;
   tileset->num_tiles = num_tiles;
   tileset->tilesize_bytes = bpp*width*height/8;
   tileset->tileset_base = tileset_base ? tileset_base : vera_vram_alloc(vera_compute_tileset_size(tileset));
@@ -371,6 +375,10 @@ uint8_t* vera_layer_mapbase_get(Vera_layer_t layer) {
 void vera_layer_tilemode_set(Vera_layer_t layer,
                              VERA_IN Vera_tileset_t *tileset) {
   assert(tileset);
+
+  assert((tileset->width == VERA_TILE_SZ_8) || (tileset->width == VERA_TILE_SZ_16));
+  assert((tileset->height == VERA_TILE_SZ_8) || (tileset->width == VERA_TILE_SZ_16));
+
   vera_layer_regs[layer]->CONFIG_bf.COLOR_DEPTH = color_depth_enc(tileset->bpp);
   vera_layer_regs[layer]->CONFIG_bf.BITMAP_MODE = 0;
   vera_layer_regs[layer]->TILEBASE_bf.TILE_BITMAP_WIDTH = (uint32_t)(tileset->width == VERA_TILE_SZ_16);
@@ -445,7 +453,7 @@ Vera_layer_mode_t vera_layer_mode_get(Vera_layer_t layer) {
 
 void vera_palette_wr(uint32_t idx, Vera_rgb_u rgb) {
   //One color entry per word address
-  *(uint32_t *)(idx*4+VERA_PALETTE_RAM_BASE) = (uint32_t)rgb.UINT16;
+  *(uint32_t *)(idx*4+VERA_PALETTE_RAM_BASE) = (uint32_t)(rgb.UINT16)&0xfff;
 }
 
 //Given a block pool of a given size, free the allocated block starting with
@@ -466,7 +474,7 @@ static void free_(uint8_t *pool, uint32_t pool_size, uint32_t idx) {
 uint8_t* vera_vram_alloc(uint32_t size) {
   //Convert size in bytes to block size, rounding up.
   uint32_t num_blocks = (size+VRAM_BLOCK_SZ_BYTES-1)/VRAM_BLOCK_SZ_BYTES;
-  uint32_t block_id = alloc_(vram_blocks, VRAM_NUM_BLOCKS, size);
+  uint32_t block_id = alloc_(vram_blocks, VRAM_NUM_BLOCKS, num_blocks);
   if (block_id == ~0U)
     return 0;
 
@@ -487,12 +495,13 @@ uint32_t vera_spr_ids_alloc(Vera_sprite_bank_t bank, uint32_t num_sprs) {
 }
 
 void vera_spr_ids_free(uint32_t sprite_id) {
-  assert(sprite_id < VERA_NUM_SPRITES_IN_BANK*VERA_NUM_SPRITE_BANKS);
+  assert(sprite_id <= VERA_MAX_SPRITE_ID);
   Vera_sprite_bank_t bank = (sprite_id > VERA_NUM_SPRITES_IN_BANK) ? VERA_SPR_BANK_1 : VERA_SPR_BANK_0;
   free_(sprite_blocks[bank], VERA_NUM_SPRITES_IN_BANK, sprite_id);
 }
 
 void vera_spr_attr_set(uint32_t sprite_id, VERA_IN Vera_sprite_attrs_t *sprite) {
+  assert(sprite_id <= VERA_MAX_SPRITE_ID);
   assert(sprite);
   assert((sprite->bpp == VERA_BPP_4) || (sprite->bpp == VERA_BPP_8));
   assert(sprite->collision_mask < 15);
@@ -513,6 +522,7 @@ void vera_spr_attr_set(uint32_t sprite_id, VERA_IN Vera_sprite_attrs_t *sprite) 
 }
 
 void vera_spr_attr_update_addr(uint32_t sprite_id, VERA_IN Vera_sprite_attrs_t *sprite) {
+  assert(sprite_id <= VERA_MAX_SPRITE_ID);
   assert(sprite);
   uint16_t v;
 
@@ -523,14 +533,24 @@ void vera_spr_attr_update_addr(uint32_t sprite_id, VERA_IN Vera_sprite_attrs_t *
 }
 
 void vera_spr_attr_update_x(uint32_t sprite_id, VERA_IN Vera_sprite_attrs_t *sprite) {
+  assert(sprite_id <= VERA_MAX_SPRITE_ID);
   assert(sprite);
 
-  *(volatile uint16_t *)(VERA_SPRITE_RAM_BASE + sprite_id*8 + 2) = sprite->x;
+  *(uint16_t *)(VERA_SPRITE_RAM_BASE + sprite_id*8 + 2) = sprite->x;
 }
 
 void vera_spr_attr_update_y(uint32_t sprite_id, VERA_IN Vera_sprite_attrs_t *sprite) {
+  assert(sprite_id <= VERA_MAX_SPRITE_ID);
   assert(sprite);
 
   *(uint16_t *)(VERA_SPRITE_RAM_BASE + sprite_id*8 + 4) = sprite->y;
+}
+
+void vera_spr_bank_set(Vera_sprite_bank_t bank) {
+  VERA->CTRL = bank;
+}
+
+Vera_sprite_bank_t vera_spr_bank_get() {
+  return (Vera_sprite_bank_t)(VERA->CTRL_bf.SBNK);
 }
 
