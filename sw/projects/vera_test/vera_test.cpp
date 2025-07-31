@@ -86,14 +86,11 @@ void generate_8bpp_64x64_sprite(Vera_tileset *tileset) {
   memset(tileptr, 0x03, 64*64);
 }
 
-void setup_sprite_attr_ram(Vera_tileset *tileset_bank_0, Vera_tileset *tileset_bank_1, int collide) {
-  assert(tileset_bank_0);
-  assert(tileset_bank_1);
-
+void setup_sprite_attr_ram(int collide) {
   //Bank 0
   for (int ii=0; ii<64; ii++) {
-    Vera_sprite& sprite = vera.sprite_get(ii);
-    sprite.tile_set(tileset_bank_0, 7);
+    Vera_sprite& sprite = vera.sprite[ii];
+    sprite.tile_set(0, 7);
     sprite.x_set(collide ? 4*ii : 8*ii);
     sprite.y_set(16);
     sprite.collision_mask_set(1);
@@ -102,8 +99,8 @@ void setup_sprite_attr_ram(Vera_tileset *tileset_bank_0, Vera_tileset *tileset_b
 
   //Bank 1
   for (int ii=0; ii<64; ii++) {
-    Vera_sprite& sprite = vera.sprite_get(ii+64);
-    sprite.tile_set(tileset_bank_1, 0);
+    Vera_sprite& sprite = vera.sprite[ii+64];
+    sprite.tile_set(1, 0);
     sprite.x_set(collide ? 35*ii : 70*ii);
     sprite.y_set(300);
     sprite.collision_mask_set(1);
@@ -151,8 +148,12 @@ int main(void) {
 
   printf("Setting up VRAM...\n");
 
-  map = vera.map_create(VERA_MAP_SZ_128, VERA_MAP_SZ_128, VERA_MAP_TYPE_TILE);
-  assert(map);
+  bool res;
+
+  map = &vera.map[0];
+  res = map->init(VERA_MAP_SZ_128, VERA_MAP_SZ_128, VERA_MAP_TYPE_TILE);
+
+  assert(res);
 
   //Fill VRAM map area
   uint16_t entry;
@@ -163,8 +164,10 @@ int main(void) {
     }
   }
 
-  tileset0 = vera.tileset_create(VERA_TILE_SZ_8, VERA_TILE_SZ_8, VERA_BPP_8, 256);
-  assert(tileset0);
+  tileset0 = &vera.tileset[0];
+  res = tileset0->init(VERA_TILE_SZ_8, VERA_TILE_SZ_8, VERA_BPP_8, 256);
+
+  assert(res);
 
   if (generate_8bpp_8x8_tiles(tileset0) < 0)
     read_back_err = 1;
@@ -176,27 +179,25 @@ int main(void) {
     printf("VERA Read Back Tests failed.\n");
   }
 
-  tileset1 = vera.tileset_create(VERA_TILE_SZ_64, VERA_TILE_SZ_64, VERA_BPP_8, 1);
-  assert(tileset1);
+  tileset1 = &vera.tileset[1];
+  res = tileset1->init(VERA_TILE_SZ_64, VERA_TILE_SZ_64, VERA_BPP_8, 1);
+
+  assert(res);
 
   generate_8bpp_64x64_sprite(tileset1);
 
   //Configure the layers
   vera.layer[0].hscroll_set(4);
   vera.layer[0].vscroll_set(4);
-  vera.layer[0].map_props_set(map);
-  vera.layer[0].mapbase_set(map);
-  vera.layer[0].tilemode_set(tileset0);
-  vera.layer[0].tilebase_set(tileset0);
+  vera.layer[0].map_set(0);
+  vera.layer[0].tileset_set(0);
 
   vera.layer[1].hscroll_set(4);
   vera.layer[1].vscroll_set(4);
-  vera.layer[1].map_props_set(map);
-  vera.layer[1].mapbase_set(map);
-  vera.layer[1].tilemode_set(tileset0);
-  vera.layer[1].tilebase_set(tileset0);
+  vera.layer[1].map_set(0);
+  vera.layer[1].tileset_set(0);
 
-  setup_sprite_attr_ram(tileset0, tileset1, 0);
+  setup_sprite_attr_ram(0);
   setup_palette_ram();
 
   vera.irqline_set(240);
@@ -239,7 +240,7 @@ int main(void) {
       //After two frames, move the sprites, to create sprite collisions.
       if (frame_counter == 2) {
         printf("(Forcing sprite collision)");
-        setup_sprite_attr_ram(tileset0, tileset1, 1);
+        setup_sprite_attr_ram(1);
       }
     }
 

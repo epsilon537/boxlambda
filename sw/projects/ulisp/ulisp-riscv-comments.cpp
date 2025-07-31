@@ -18,7 +18,9 @@ const char LispLibrary[] = "";
 #define assemblerlist
 #define lineeditor
 #define vt100
-// #define extensions
+#if defined(BOARD_BOXLAMBDA)
+#define extensions
+#endif
 
 // Includes
 
@@ -8008,3 +8010,9 @@ void ulisperror () {
   if (!tstflag(LIBRARYLOADED)) { setflag(LIBRARYLOADED); loadfromlibrary(NULL); clrflag(NOECHO); }
   #endif
 }
+
+#if defined(BOARD_BOXLAMBDA)
+#include "ulisp-extensions.cpp"
+#endif
+
+
