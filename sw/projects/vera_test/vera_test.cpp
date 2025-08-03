@@ -63,11 +63,11 @@ int generate_8bpp_8x8_tiles(Vera_tileset *tileset) {
     tileptr = tileset->tile(jj);
 
     for (int ii=0; ii<64; ii++) {
-      tileptr[ii] = (ii<32) ? ((ii%8 >= 4) ? jj : 0) : 0;
+      tileptr[ii] = (ii<32) ? ((ii%8 < 4) ? jj : 0) : 0;
 
       data = vera.vram_rd_byte((uint32_t)tileset->tileset_base() - VERA_VRAM_BASE + jj*64+ii);
 
-      if (data != ((ii<32) ? ((ii%8 >= 4) ? jj : 0) : 0)) {
+      if (data != ((ii<32) ? ((ii%8 < 4) ? jj : 0) : 0)) {
         printf("VRAM read back mismatch addr: 0x%x: 0x%x vs. 0x%x.\n\r", jj*64+ii, data, ((ii<32) ? ((ii%8 >= 4) ? jj : 0) : 0));
         return -1;
       }
@@ -120,6 +120,50 @@ void setup_palette_ram(void) {
   }
 }
 
+void check_line_capture(void) {
+  if (!vera.line_capture_enabled()) {
+    printf("P");
+    uint32_t irq_line = vera.irqline_get();
+    uint32_t row = irq_line/8;
+    uint32_t row_offset = irq_line%8;
+    uint32_t col;
+    uint32_t col_offset;
+    Vera_tilemap_entry_t tilemap_entry;
+    uint8_t pal_idx;
+    Vera_rgb_u rgb_expected;
+    Vera_rgb_u rgb_actual;
+    bool checkok = true;
+
+    for (int ii=0; ii<640; ii++) {
+      col = ii/8;
+      col_offset = ii%8;
+
+      tilemap_entry = vera.map[0].read_tile(col, row);
+      pal_idx = vera.tileset[0].pixel_get(tilemap_entry.tile, col_offset, row_offset);
+      rgb_expected.rgb = vera.palette.read_rgb(pal_idx);
+      rgb_actual.rgb = vera.line_capture_read_pixel(ii);
+      if (rgb_expected.UINT16 != rgb_actual.UINT16) {
+        printf("col: %d, row: %d, col_offset: %d, row_offset: %d\n", col, row, col_offset, row_offset);
+        printf("tile: %d, pal_idx: %d\n", tilemap_entry.tile, pal_idx);
+        printf("[%d] expected: 0x%03X actual: 0x%03X\n", ii, rgb_expected.UINT16, rgb_actual.UINT16);
+        checkok = false;
+      }
+    }
+
+    if (checkok) {
+      printf("Line capture check OK.\n");
+    }
+    else {
+      printf("Line capture check failed.\n");
+      while (1);
+    }
+  }
+  else {
+    printf("ERROR: Line capture did not trigger!\n");
+    while (1); //Just sit here and spin.
+  }
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -160,7 +204,7 @@ int main(void) {
 
   for (int ii=0; ii<128; ii++) {
     for (int jj=0; jj<128; jj++) {
-      map->write(jj, ii, (jj*2)&0xf);
+      map->write(jj, ii, ((jj+2)*2)&0xf);
     }
   }
 
@@ -187,13 +231,17 @@ int main(void) {
   generate_8bpp_64x64_sprite(tileset1);
 
   //Configure the layers
-  vera.layer[0].hscroll_set(4);
-  vera.layer[0].vscroll_set(4);
+  vera.layer[0].hscroll_set(0);
+  assert(vera.layer[0].hscroll_get() == 0);
+
+  vera.layer[0].vscroll_set(0);
   vera.layer[0].map_set(0);
   vera.layer[0].tileset_set(0);
 
-  vera.layer[1].hscroll_set(4);
-  vera.layer[1].vscroll_set(4);
+  vera.layer[1].hscroll_set(0);
+  assert(vera.layer[0].hscroll_get() == 0);
+
+  vera.layer[1].vscroll_set(0);
   vera.layer[1].map_set(0);
   vera.layer[1].tileset_set(0);
 
@@ -204,9 +252,13 @@ int main(void) {
 
   printf("Enabling display and layers...\n");
 
+  Vera_screen_boundaries_t screen_boundaries = {0, 640, 0, 480};
+
+  vera.screen_boundaries_set(&screen_boundaries);
+
   vera.sprite_bank_set(VERA_SPR_BANK_0);
-  vera.hscale_set(92);
-  vera.vscale_set(92);
+  vera.hscale_set(128);
+  vera.vscale_set(128);
   vera.sprites_enable(true);
   vera.layer[0].enable(true);
   vera.layer[1].enable(true);
@@ -230,6 +282,7 @@ int main(void) {
   vera.irqs_enable(VERA_IRQ_VSYNC|VERA_IRQ_LINE|VERA_IRQ_SPRCOL); //Enable all 3 IRQ sources in the VERA core.
 
   printf("Starting loop... V<sprite-bank#> indicates a Vsync IRQ, L<sprite-bank#> = Line IRQ, XXX = collision IRQ.\n");
+  printf("P = Line captured.\n");
 
   //The sim_main.cpp test bench checks for the presence of the trace prints below as part of the pass-fail criteria.
   while (1) {
@@ -237,8 +290,18 @@ int main(void) {
       vsync_irq_fired = 0;
       printf("V%d", vera.sprite_bank_get());
 
+      //On frame 1, request VGA line capture (on the IRQ line).
+      if (frame_counter == 1) {
+        vera.line_capture_enable(true);
+
+        assert(vera.line_capture_enabled());
+      }
+
       //After two frames, move the sprites, to create sprite collisions.
       if (frame_counter == 2) {
+        //By now the VGA line should have been captured.
+        check_line_capture();
+
         printf("(Forcing sprite collision)");
         setup_sprite_attr_ram(1);
       }

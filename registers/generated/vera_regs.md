@@ -22,7 +22,7 @@ Base address: 0x12000000
 
 | Name                     | Address    | Description |
 | :---                     | :---       | :---        |
-| [CTRL](#ctrl)            | 0x00000000 | Control register. |
+| [CTRL_STATUS](#ctrl_status) | 0x00000000 | Control/Status register. |
 | [DC_BORDER](#dc_border)  | 0x00000004 | Display composer border register. |
 | [IEN](#ien)              | 0x00000008 | Interrupt enable register. |
 | [ISR](#isr)              | 0x0000000c | Interrupt status register. |
@@ -46,19 +46,20 @@ Base address: 0x12000000
 | [L1_HSCROLL](#l1_hscroll) | 0x00000090 | Layer 1 horizontal scroll register. |
 | [L1_VSCROLL](#l1_vscroll) | 0x00000094 | Layer 1 vertical scroll register. |
 
-## CTRL
+## CTRL_STATUS
 
-Control register.
+Control/Status register.
 
 Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![ctrl](md_img/ctrl.svg)
+![ctrl_status](md_img/ctrl_status.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
-| -                | 31:1   | -               | 0x0000000  | Reserved |
+| -                | 31:2   | -               | 0x0000000  | Reserved |
+| CAPTURE_EN       | 1      | rw              | 0x0        | Enable VGA line capture. Bit returns to 0 when capture has completed. |
 | SBNK             | 0      | rw              | 0x0        | Active sprite bank. |
 
 Back to [Register map](#register-map-summary).

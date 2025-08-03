@@ -15,22 +15,29 @@ extern "C" {
 
 #define VERA_BASE_ADDR 0x12000000
 
-// CTRL - Control register.
-#define VERA_CTRL_ADDR 0x0
-#define VERA_CTRL_RESET 0x0
+// CTRL_STATUS - Control/Status register.
+#define VERA_CTRL_STATUS_ADDR 0x0
+#define VERA_CTRL_STATUS_RESET 0x0
 typedef union {
   uint32_t UINT32;
   struct {
     uint32_t SBNK : 1; // Active sprite bank.
-    uint32_t : 31; // reserved
+    uint32_t CAPTURE_EN : 1; // Enable VGA line capture. Bit returns to 0 when capture has completed.
+    uint32_t : 30; // reserved
   };
-} vera_ctrl_t;
+} vera_ctrl_status_t;
 
-// CTRL.SBNK - Active sprite bank.
-#define VERA_CTRL_SBNK_WIDTH 1
-#define VERA_CTRL_SBNK_LSB 0
-#define VERA_CTRL_SBNK_MASK 0x1
-#define VERA_CTRL_SBNK_RESET 0x0
+// CTRL_STATUS.SBNK - Active sprite bank.
+#define VERA_CTRL_STATUS_SBNK_WIDTH 1
+#define VERA_CTRL_STATUS_SBNK_LSB 0
+#define VERA_CTRL_STATUS_SBNK_MASK 0x1
+#define VERA_CTRL_STATUS_SBNK_RESET 0x0
+
+// CTRL_STATUS.CAPTURE_EN - Enable VGA line capture. Bit returns to 0 when capture has completed.
+#define VERA_CTRL_STATUS_CAPTURE_EN_WIDTH 1
+#define VERA_CTRL_STATUS_CAPTURE_EN_LSB 1
+#define VERA_CTRL_STATUS_CAPTURE_EN_MASK 0x2
+#define VERA_CTRL_STATUS_CAPTURE_EN_RESET 0x0
 
 // DC_BORDER - Display composer border register.
 #define VERA_DC_BORDER_ADDR 0x4
@@ -622,8 +629,8 @@ typedef union {
 // Register map structure
 typedef struct {
     union {
-        __IO uint32_t CTRL; // Control register.
-        __IO vera_ctrl_t CTRL_bf; // Bit access for CTRL register
+        __IO uint32_t CTRL_STATUS; // Control/Status register.
+        __IO vera_ctrl_status_t CTRL_STATUS_bf; // Bit access for CTRL_STATUS register
     };
     union {
         __IO uint32_t DC_BORDER; // Display composer border register.

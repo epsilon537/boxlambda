@@ -18,6 +18,7 @@ sources:
      - ../../../sub/vera_wishbone/fpga/source/dpram.v
      - ../../../sub/vera_wishbone/fpga/source/sprite_ram.v
      - ../../../sub/vera_wishbone/fpga/source/palette_ram.v
+     - ../../../sub/vera_wishbone/fpga/source/capture_ram.v
      - ../../../sub/vera_wishbone/fpga/source/graphics/composer.v
      - ../../../sub/vera_wishbone/fpga/source/graphics/layer_line_buffer.v
      - ../../../sub/vera_wishbone/fpga/source/graphics/layer_renderer.v

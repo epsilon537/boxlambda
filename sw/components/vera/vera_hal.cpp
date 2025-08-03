@@ -12,12 +12,6 @@ typedef union {
   Vera_tilemap_entry_t tile;
 } Vera_map_entry_u;
 
-//An overlay of an RGB-triple and a uint16.
-typedef union {
-  uint16_t UINT16;
-  Vera_rgb_t rgb;
-} Vera_rgb_u;
-
 struct Vera_layer_regs_t {
     union {
         uint32_t CONFIG; // Layer Configuration regiser.
@@ -281,7 +275,7 @@ void Vera_map::write(uint32_t col, uint32_t row, Vera_tilemap_entry_t entry) {
 uint16_t Vera_map::read(uint32_t col, uint32_t row) {
   assert(initialized_);
 
-  uint16_t *entryp = (uint16_t*)map_base_ + row*width_ + col;
+  uint16_t *entryp = (uint16_t*)(map_base_ + 2*(row*width_ + col));
   return *entryp;
 }
 
@@ -683,6 +677,16 @@ Vera::Vera() {
   //Initialize the layer objects
   layer[VERA_L0].set_id_(VERA_L0);
   layer[VERA_L1].set_id_(VERA_L1);
+}
+
+Vera_rgb_t Vera::line_capture_read_pixel(uint32_t x) {
+  assert(x < 640);
+
+  Vera_rgb_u rgbu;
+
+  rgbu.UINT16 = *(uint16_t *)(x*4+VERA_CAPTURE_RAM_BASE);
+
+  return rgbu.rgb;
 }
 
 void Vera::irqline_set(uint32_t scanline) {

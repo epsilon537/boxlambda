@@ -2,13 +2,17 @@
 
 .equ VERA_BASE_ADDR, 0x12000000
 
-# CTRL - Control register.
-.equ VERA_CTRL_ADDR, 0x0
+# CTRL_STATUS - Control/Status register.
+.equ VERA_CTRL_STATUS_ADDR, 0x0
 
-# CTRL.SBNK - Active sprite bank.
-.equ VERA_CTRL_SBNK_WIDTH 1
-.equ VERA_CTRL_SBNK_LSB 0
-.equ VERA_CTRL_SBNK_MASK 0x1
+# CTRL_STATUS.SBNK - Active sprite bank.
+.equ VERA_CTRL_STATUS_SBNK_WIDTH 1
+.equ VERA_CTRL_STATUS_SBNK_LSB 0
+.equ VERA_CTRL_STATUS_SBNK_MASK 0x1
+# CTRL_STATUS.CAPTURE_EN - Enable VGA line capture. Bit returns to 0 when capture has completed.
+.equ VERA_CTRL_STATUS_CAPTURE_EN_WIDTH 1
+.equ VERA_CTRL_STATUS_CAPTURE_EN_LSB 1
+.equ VERA_CTRL_STATUS_CAPTURE_EN_MASK 0x2
 # DC_BORDER - Display composer border register.
 .equ VERA_DC_BORDER_ADDR, 0x4
 

@@ -477,6 +477,12 @@ typedef struct {
   uint16_t : 4;
 } Vera_rgb_t;
 
+//An overlay of an RGB-triple and a uint16.
+typedef union {
+  uint16_t UINT16;
+  Vera_rgb_t rgb;
+} Vera_rgb_u;
+
 class Vera_palette {
 public:
   //Write an entry into the palette.
@@ -491,12 +497,12 @@ public:
 
   //Read the RGB value of a palette entry
   //@param idx: the palete color index:
-  //@return: the RGB triple.
+  //@return: the RGB triple as a uint16_t.
   uint16_t read_u16(uint32_t idx);
 
   //Read the RGB value of a palette entry
   //@param idx: the palete color index:
-  //@return: the RGB triple as a uint16_t.
+  //@return: the RGB triple.
   Vera_rgb_t read_rgb(uint32_t idx);
 
   //Restore the default palette.
@@ -598,16 +604,37 @@ public:
   Vera();
 
   //
+  // VGA line capture Functions
+  //
+
+  // Enable VGA line capture
+  // @param enable: true/false.
+  inline void line_capture_enable(bool enable) {
+    VERA->CTRL_STATUS_bf.CAPTURE_EN = enable;
+  }
+
+  // Check if display is enabled
+  // @return: true if display is enabled.
+  inline bool line_capture_enabled() { return VERA->CTRL_STATUS_bf.CAPTURE_EN != 0; }
+
+  //Read the RGB value of a pixel on the captured line.
+  //@param x: the pixel's x position. Range: 0..639.
+  //@return: the RGB triple.
+  Vera_rgb_t line_capture_read_pixel(uint32_t x);
+
+  //
   // Sprite bank Functions:
   //
 
   // Set the active sprite bank
   // @param bank: Sprite bank selector: VERA_SPR_BANK_0/1.
-  inline void sprite_bank_set(Vera_sprite_bank_t bank) { VERA->CTRL = bank; }
+  inline void sprite_bank_set(Vera_sprite_bank_t bank) {
+    VERA->CTRL_STATUS_bf.SBNK = bank; }
 
   // Get the active sprite bank
   // @return the active sprite bank.
-  inline Vera_sprite_bank_t sprite_bank_get() { return (Vera_sprite_bank_t)(VERA->CTRL_bf.SBNK); }
+  inline Vera_sprite_bank_t sprite_bank_get() {
+    return (Vera_sprite_bank_t)(VERA->CTRL_STATUS_bf.SBNK); }
 
   //
   // Interrupt stuffs
