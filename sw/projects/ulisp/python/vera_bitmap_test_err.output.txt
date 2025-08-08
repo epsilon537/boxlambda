@@ -1,0 +1,34 @@
+start                                                                           
+                                                                                
+XXXXXX> (vera_init)                                                             
+nil                                                                             
+                                                                                
+XXXXXX> (vera_bitmap 0 320 1 1)                                                 
+(XXXXXXXXX 320 1 1)                                                             
+                                                                                
+XXXXXX> (vera_bitmap 0 320 1 1)                                                 
+Error: 'vera_bitmap' already initialized: 0                                     
+XXXXXX> (vera_bitmap_deinit 0)                                                  
+nil                                                                             
+                                                                                
+XXXXXX> (vera_bitmap_deinit 0)                                                  
+Error: 'vera_bitmap_deinit' not initialized: 0                                  
+XXXXXX> (vera_bitmap 0 320)                                                     
+Error: 'vera_bitmap' too few arguments                                          
+XXXXXX> (vera_bitmap 0 320 1)                                                   
+Error: 'vera_bitmap' too few arguments                                          
+XXXXXX> (vera_bitmap 0 320 1 1 0)                                               
+Error: 'vera_bitmap' too many arguments                                         
+XXXXXX> (vera_bitmap 0 321 1 1)                                                 
+Error: 'vera_bitmap' invalid argument: 321                                      
+XXXXXX> (vera_bitmap 0 320 0 1)                                                 
+Error: 'vera_bitmap' invalid argument: 0                                        
+XXXXXX> (vera_bitmap 0 320 1 10)                                                
+Error: 'vera_bitmap' invalid argument: 10                                       
+XXXXXX> (vera_bitmap 1 320 240 8)                                               
+(XXXXXXXXX 320 240 8)                                                           
+                                                                                
+XXXXXX> (vera_bitmap 2 320 240 8)                                               
+Error: 'vera_bitmap' insufficient resources                                     
+XXXXXX> 'end                                                                    
+end                                                                             

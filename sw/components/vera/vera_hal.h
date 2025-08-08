@@ -603,6 +603,9 @@ class Vera {
 public:
   Vera();
 
+  //(Re)initialize Vera.
+  void init();
+
   //
   // VGA line capture Functions
   //

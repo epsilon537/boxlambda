@@ -1,0 +1,57 @@
+start                                                                           
+                                                                                
+XXXXXX> (vera_init)                                                             
+nil                                                                             
+                                                                                
+XXXXXX> (dotimes (jj 2)                                                         
+  (let ((idx 0))                                                           (   (
+    (dolist (wh (list (cons 8 8) (cons 16 16) (cons 32))2) (cons 64 64))        
+      (dolist (bpp (list 1 2 4 8))                                              
+         (vera_tileset idx (car wh) (cdr wh) bpp 16)                            
+         (print (vera_tileset idx))                                             
+         (setq idx (1+ idx)))))                                                 
+  (dotimes (ii 16)                                                              
+    (vera_tileset_deinit ii)))                                                  
+                                                                                
+(XXXXXXXXX 8 8 1 16 8)                                                          
+(XXXXXXXXX 8 8 2 16 16)                                                         
+(XXXXXXXXX 8 8 4 16 32)                                                         
+(XXXXXXXXX 8 8 8 16 64)                                                         
+(XXXXXXXXX 16 16 1 16 32)                                                       
+(XXXXXXXXX 16 16 2 16 64)                                                       
+(XXXXXXXXX 16 16 4 16 128)                                                      
+(XXXXXXXXX 16 16 8 16 256)                                                      
+(XXXXXXXXX 32 32 1 16 128)                                                      
+(XXXXXXXXX 32 32 2 16 256)                                                      
+(XXXXXXXXX 32 32 4 16 512)                                                      
+(XXXXXXXXX 32 32 8 16 1024)                                                     
+(XXXXXXXXX 64 64 1 16 512)                                                      
+(XXXXXXXXX 64 64 2 16 1024)                                                     
+(XXXXXXXXX 64 64 4 16 2048)                                                     
+(XXXXXXXXX 64 64 8 16 4096)                                                     
+(XXXXXXXXX 8 8 1 16 8)                                                          
+(XXXXXXXXX 8 8 2 16 16)                                                         
+(XXXXXXXXX 8 8 4 16 32)                                                         
+(XXXXXXXXX 8 8 8 16 64)                                                         
+(XXXXXXXXX 16 16 1 16 32)                                                       
+(XXXXXXXXX 16 16 2 16 64)                                                       
+(XXXXXXXXX 16 16 4 16 128)                                                      
+(XXXXXXXXX 16 16 8 16 256)                                                      
+(XXXXXXXXX 32 32 1 16 128)                                                      
+(XXXXXXXXX 32 32 2 16 256)                                                      
+(XXXXXXXXX 32 32 4 16 512)                                                      
+(XXXXXXXXX 32 32 8 16 1024)                                                     
+(XXXXXXXXX 64 64 1 16 512)                                                      
+(XXXXXXXXX 64 64 2 16 1024)                                                     
+(XXXXXXXXX 64 64 4 16 2048)                                                     
+(XXXXXXXXX 64 64 8 16 4096)                                                     
+nil                                                                             
+                                                                                
+XXXXXX> (vera_tileset 0 8 8 1 1)                                                
+(XXXXXXXXX 8 8 1 1 8)                                                           
+                                                                                
+XXXXXX> (vera_tileset 1 8 8 1 1023)                                             
+(XXXXXXXXX 8 8 1 1023 8)                                                        
+                                                                                
+XXXXXX> 'end                                                                    
+end                                                                             

@@ -308,6 +308,7 @@ Vera_tilemap_entry_t Vera_map::read_tile(uint32_t col, uint32_t row) {
 
 bool Vera_tileset::init(Vera_tile_size_t width, Vera_tile_size_t height, Vera_bpp_t bpp, uint32_t num_tiles) {
   assert(!initialized_);
+  assert(num_tiles > 0);
 
   tileset_base_ = vera.vram_alloc(num_tiles*bpp*width*height/8);
   if (!tileset_base_) return false;
@@ -356,6 +357,7 @@ uint8_t Vera_tileset::pixel_get(uint32_t tile_idx, uint32_t x, uint32_t y) {
 
 bool Vera_bitmap::init(Vera_bitmap_width_t width, uint32_t height, Vera_bpp_t bpp) {
   assert(!initialized_);
+  assert(height > 0);
 
   bitmap_base_ = vera.vram_alloc(width*height*bpp/8);
   if (!bitmap_base_) return false;
@@ -668,6 +670,10 @@ void Vera_layer::set_id_(Vera_layer_t layer) {
 }
 
 Vera::Vera() {
+  init();
+}
+
+void Vera::init() {
   memset(vram_blocks_, 0, sizeof(vram_blocks_));
 
   for (int ii=0; ii<VERA_NUM_SPRITES; ii++) {
@@ -728,7 +734,7 @@ uint32_t Vera::alloc_(uint8_t *pool, uint32_t pool_size, uint32_t num_blocks) {
   while (block_idx<pool_size) {
     jj=0;
 
-    while ((jj<num_blocks) && (pool[block_idx+jj]==0)) ++jj;
+    while ((jj<num_blocks) && (block_idx+jj<pool_size) && (pool[block_idx+jj]==0)) ++jj;
 
     if (jj == num_blocks) break;
 
@@ -777,7 +783,7 @@ uint8_t* Vera::vram_alloc(uint32_t size) {
 
 void Vera::vram_free(uint8_t* mem) {
   assert(mem);
-  uint32_t block_id = ((uint8_t*)(VERA_VRAM_BASE)-mem)*VRAM_BLOCK_SZ_BYTES;
+  uint32_t block_id = (mem - (uint8_t*)(VERA_VRAM_BASE))/VRAM_BLOCK_SZ_BYTES;
 
   assert(block_id < VRAM_NUM_BLOCKS);
 

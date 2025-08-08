@@ -1,0 +1,20 @@
+'start
+(vera_init)
+(vera_tileset 0 8 8 1 1)
+(vera_tileset 0 8 8 1 1)
+(vera_tileset_deinit 0)
+(vera_tileset_deinit 0)
+(vera_tileset 1 8)
+(vera_tileset 1 8 8)
+(vera_tileset 1 8 8 1)
+(vera_tileset 1 8 8 1 1 0)
+(vera_tileset 100 8 8 1 1)
+(vera_tileset 2 9 8 1 1)
+(vera_tileset 2 8 9 1 1)
+(vera_tileset 2 8 8 10 1)
+(vera_tileset 2 8 8 1 0)
+(vera_tileset 2 8 8 1 1025)
+(vera_tileset 3 64 64 8 32)
+(vera_tileset 4 64 64 8 2)
+'end
+
