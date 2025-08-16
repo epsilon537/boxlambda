@@ -111,13 +111,16 @@ void setup_sprite_attr_ram(int collide) {
 void setup_palette_ram(void) {
   Vera_rgb_t rgb;
 
-  for(int ii=0; ii<256; ii++) {
+  for(int ii=1; ii<256; ii++) {
     rgb.r = ((ii>>4)&3)<<2;
     rgb.g = ((ii>>2)&3)<<2;
     rgb.b = (ii&3)<<2;
 
     vera.palette.write(ii, rgb);
   }
+
+  //Make background white.
+  vera.palette.write(0, 0xfff);
 }
 
 void check_line_capture(void) {
