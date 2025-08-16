@@ -657,7 +657,7 @@ public:
 
   // Retrieve the active IRQs.
   // @return: a bitmask of active VERA_IRQs.
-  static inline uint32_t irqs_get() { return VERA->ISR; }
+static inline uint32_t irqs_get() { return (VERA->ISR & VERA->IEN); }
 
   // Acknowledge IRQs.
   // @param irq_mask: bitwise OR of VERA_IRQs to acknowledge.
@@ -668,7 +668,7 @@ public:
 
   // Set the scanline on which to trigger the line IRQ if VERA_IRQ_LINE is
   // enabled.
-  // @param scanline: scanline number on which the trigger the line IRQ, must be <= VERA_IRQ_LINE_MAX.
+  // @param scanline: scanline number on which the trigger the line IRQ, must be <= VERA_SCANLINE_MAX.
   static void irqline_set(uint32_t scanline);
 
   // Retrieve the scanline on which the line IRQ will be triggered if VERA_IRQ_LINE is enabled.

@@ -98,7 +98,7 @@ static void pixel_set_2bpp(uint8_t *base, uint32_t x, uint32_t y, uint32_t width
   uint8_t *p = base + (y*width + x)/4;
   uint8_t b = *p;
   static const uint32_t bitoffsets[] = {6, 4, 2, 0};
-  uint32_t bitoffset = bitoffsets[x&2];
+  uint32_t bitoffset = bitoffsets[x&3];
 
   b &= ~(3<<bitoffset);
   b |= (val&3)<<bitoffset;
@@ -110,7 +110,7 @@ static uint8_t pixel_get_2bpp(uint8_t *base, uint32_t x, uint32_t y, uint32_t wi
   uint8_t *p = base + (y*width + x)/4;
   uint8_t b = *p;
   static const uint32_t bitoffsets[] = {6, 4, 2, 0};
-  uint32_t bitoffset = bitoffsets[x&2];
+  uint32_t bitoffset = bitoffsets[x&3];
 
   b >>= bitoffset;
 
@@ -120,7 +120,7 @@ static uint8_t pixel_get_2bpp(uint8_t *base, uint32_t x, uint32_t y, uint32_t wi
 static void pixel_set_1bpp(uint8_t *base, uint32_t x, uint32_t y, uint32_t width, uint8_t val) {
   uint8_t *p = base + (y*width + x)/8;
   uint8_t b = *p;
-  uint32_t bitoffset = 7-(x&3);
+  uint32_t bitoffset = 7-(x&7);
 
   b &= ~(1<<bitoffset);
   b |= (val&1)<<bitoffset;
@@ -131,7 +131,7 @@ static void pixel_set_1bpp(uint8_t *base, uint32_t x, uint32_t y, uint32_t width
 static uint8_t pixel_get_1bpp(uint8_t *base, uint32_t x, uint32_t y, uint32_t width) {
   uint8_t *p = base + (y*width + x)/8;
   uint8_t b = *p;
-  uint32_t bitoffset = 7-(x&3);
+  uint32_t bitoffset = 7-(x&7);
 
   b >>= bitoffset;
   return b&1;
