@@ -1,0 +1,24 @@
+start                                                                           
+                                                                                
+XXXXXX> (vera_init)                                                             
+nil                                                                             
+                                                                                
+XXXXXX> (defun scanline_test ()                                                 
+  (loop (if (= (vera_scanline) 0) (return)))                                    
+  (vera_irqline 400)                                                            
+  (vera_isr VERA_IRQ_LINE)                                                      
+  (vera_ien VERA_IRQ_LINE 1)                                                    
+  (loop (if (= VERA_IRQ_LINE (vera_isr)) (return)))                             
+  (let ((scanline (vera_scanline)))                                             
+    (if (and (>= scanline 400) (< scanline 420))                                
+        (print "OK")                                                            
+        (print "Fail"))))                                                       
+scanline_test                                                                   
+                                                                                
+XXXXXX> (scanline_test)                                                         
+                                                                                
+"OK"                                                                            
+"OK"                                                                            
+                                                                                
+XXXXXX> 'end                                                                    
+end                                                                             

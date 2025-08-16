@@ -11,7 +11,7 @@ import os
 
 output = None
 testname = None
-scrn = pyte.Screen(80, 96)
+scrn = pyte.Screen(80, 192)
 strm = pyte.ByteStream(scrn)
 
 def init():
@@ -21,7 +21,7 @@ def init():
 
     print("Starting terminal session...")
     ch = pexpect.spawn(
-            '/bin/bash -c "stty rows 96 cols 80 && screen /dev/ttyUSB1 115200"')
+            '/bin/bash -c "stty rows 192 cols 80 && screen /dev/ttyUSB1 115200"')
     ch.logfile = open('pexpect_log.txt','ab')
     return ch
 

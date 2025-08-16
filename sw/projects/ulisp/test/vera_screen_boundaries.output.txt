@@ -1,0 +1,61 @@
+start                                                                           
+                                                                                
+XXXXXX> (vera_init)                                                             
+nil                                                                             
+                                                                                
+XXXXXX> (vera_display_enable 1)                                                 
+1                                                                               
+                                                                                
+XXXXXX> (vera_display_enable)                                                   
+1                                                                               
+                                                                                
+XXXXXX> (vera_bordercolor VERA_COLOR_BLUE)                                      
+6                                                                               
+                                                                                
+XXXXXX> (vera_bordercolor)                                                      
+6                                                                               
+                                                                                
+XXXXXX> (vera_screen_boundaries 100 540 100 380)                                
+(100 540 100 380)                                                               
+                                                                                
+XXXXXX> (vera_screen_boundaries)                                                
+(100 540 100 380)                                                               
+                                                                                
+XXXXXX> (vera_irqline 99)                                                       
+99                                                                              
+                                                                                
+XXXXXX> (vera_line_capture_enable 1)                                            
+1                                                                               
+                                                                                
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
+nil                                                                             
+                                                                                
+XXXXXX> (vera_line_capture_read_pixel 100)                                      
+(0 0 10)                                                                        
+                                                                                
+XXXXXX> (vera_line_capture_read_pixel 539)                                      
+(0 0 10)                                                                        
+                                                                                
+XXXXXX> (vera_irqline 100)                                                      
+100                                                                             
+                                                                                
+XXXXXX> (vera_line_capture_enable 1)                                            
+1                                                                               
+                                                                                
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
+nil                                                                             
+                                                                                
+XXXXXX> (vera_line_capture_read_pixel 99)                                       
+(0 0 10)                                                                        
+                                                                                
+XXXXXX> (vera_line_capture_read_pixel 100)                                      
+(0 0 0)                                                                         
+                                                                                
+XXXXXX> (vera_line_capture_read_pixel 539)                                      
+(0 0 0)                                                                         
+                                                                                
+XXXXXX> (vera_line_capture_read_pixel 540)                                      
+(0 0 10)                                                                        
+                                                                                
+XXXXXX> 'end                                                                    
+end                                                                             

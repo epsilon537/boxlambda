@@ -1,0 +1,28 @@
+'start
+(vera_display_enable 1)
+(vera_tileset 0 16 16 1 32)
+(dotimes (ii 16)
+  (vera_tileset_pixel 0 1 ii ii 1)
+  (vera_tileset_pixel 0 1 (- 15 ii) ii 1))
+(vera_map 0 32 32 VERA_MAP_TYPE_TXT16)
+(vera_layer_map 0 0)
+(vera_layer_tileset 0 0)
+(defvar row1 10)
+(defvar col1 20)
+(defvar row2 20)
+(defvar col2 10)
+(vera_map_entry 0 col1 row1
+                (logior (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_WHITE 8) 1))
+(vera_map_entry 0 col2 row2
+                (logior (ash VERA_COLOR_BLUE 12) (ash VERA_COLOR_YELLOW 8) 1))
+(vera_layer_enable 0 1)
+(vera_irqline 0)
+(vera_line_capture_enable 1)
+(loop (if (= (vera_line_capture_enable) 0) (return)))
+(dolist (rowcol (list (cons row1 col1) (cons row2 col2)))
+  (vera_irqline (* 16 (car rowcol)))
+  (vera_line_capture_enable 1)
+  (loop (if (= (vera_line_capture_enable) 0) (return)))
+  (dotimes (ii 16)
+    (print (vera_line_capture_read_pixel (+ (* 16 (cdr rowcol)) ii)))))
+'end

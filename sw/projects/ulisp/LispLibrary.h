@@ -1,6 +1,10 @@
 
 const char LispLibrary[] =  R"lisplibrary(
 
+(defvar VERA_IRQ_VSYNC 1)
+(defvar VERA_IRQ_LINE 2)
+(defvar VERA_IRQ_SPRCOL 4)
+
 (defvar VERA_SCANLINE_VISIBLE_MAX 479)
 (defvar VERA_SCANLINE_MAX 524)
 
@@ -62,6 +66,10 @@ const char LispLibrary[] =  R"lisplibrary(
 (defvar VERA_SPRITE_Z_BG_L0 1)
 (defvar VERA_SPRITE_Z_L0_L1 2)
 (defvar VERA_SPRITE_Z_L1 3)
+
+(defvar VERA_MAPENTRY_HFLIP_MASK 1024)
+(defvar VERA_MAPENTRY_VFLIP_MASK 2048)
+(defvar VERA_MAPENTRY_PAL_OFFSET_SHIFT 12)
 
 )lisplibrary";
 

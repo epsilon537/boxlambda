@@ -1,0 +1,165 @@
+start                                                                           
+                                                                                
+XXXXXX> (vera_display_enable 1)                                                 
+1                                                                               
+                                                                                
+XXXXXX> (vera_sprite_enable 1)                                                  
+1                                                                               
+                                                                                
+XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TILE)                                   
+(XXXXXXXXX 32 32 2)                                                             
+                                                                                
+XXXXXX> (vera_map 1 32 32 VERA_MAP_TYPE_TILE)                                   
+(XXXXXXXXX 32 32 2)                                                             
+                                                                                
+XXXXXX> (vera_layer_map 0 0)                                                    
+0                                                                               
+                                                                                
+XXXXXX> (vera_layer_map 1 1)                                                    
+1                                                                               
+                                                                                
+XXXXXX> (vera_map_entry 0 0 0 #x0002)                                           
+2                                                                               
+                                                                                
+XXXXXX> (vera_map_entry 1 0 0 #x2002)                                           
+8194                                                                            
+                                                                                
+XXXXXX> (defvar w 8)                                                            
+w                                                                               
+                                                                                
+XXXXXX> (defvar h 8)                                                            
+h                                                                               
+                                                                                
+XXXXXX> (defvar bpp 8)                                                          
+bpp                                                                             
+                                                                                
+XXXXXX> (vera_tileset 1 w h bpp 8)                                              
+(XXXXXXXXX 8 8 8 8 64)                                                          
+                                                                                
+XXXXXX> (vera_layer_tileset 0 1)                                                
+1                                                                               
+                                                                                
+XXXXXX> (vera_layer_tileset 1 1)                                                
+1                                                                               
+                                                                                
+XXXXXX> (vera_sprite_init 1)                                                    
+nil                                                                             
+                                                                                
+XXXXXX> (vera_sprite_tile 1 1 2)                                                
+(1 2)                                                                           
+                                                                                
+XXXXXX> (vera_sprite_tile 1)                                                    
+(1 2)                                                                           
+                                                                                
+XXXXXX> (vera_sprite_z_depth 1 VERA_SPRITE_Z_DIS)                               
+0                                                                               
+                                                                                
+XXXXXX> (vera_sprite_z_depth 1)                                                 
+0                                                                               
+                                                                                
+XXXXXX> (vera_sprite_pal_offset 1 1)                                            
+1                                                                               
+                                                                                
+XXXXXX> (dotimes (yy h)                                                         
+  (dotimes (xx (min w (1+ yy)))                                                 
+    (vera_sprite_pixel 1 xx yy VERA_COLOR_CYAN)))                               
+nil                                                                             
+                                                                                
+XXXXXX>                                                                         
+                                                                                
+                                                                                
+(vera_irqline 0)                                                                
+0                                                                               
+                                                                                
+XXXXXX> (vera_line_capture_enable 1)                                            
+1                                                                               
+                                                                                
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
+nil                                                                             
+                                                                                
+XXXXXX> (print (vera_line_capture_read_pixel 0))                                
+                                                                                
+(0 0 0)                                                                         
+(0 0 0)                                                                         
+                                                                                
+XXXXXX> (vera_sprite_z_depth 1 VERA_SPRITE_Z_BG_L0)                             
+1                                                                               
+                                                                                
+XXXXXX> (vera_sprite_z_depth 1)                                                 
+1                                                                               
+                                                                                
+XXXXXX> (vera_line_capture_enable 1)                                            
+1                                                                               
+                                                                                
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
+nil                                                                             
+                                                                                
+XXXXXX> (print (vera_line_capture_read_pixel 0))                                
+                                                                                
+(3 3 3)                                                                         
+(3 3 3)                                                                         
+                                                                                
+XXXXXX> (vera_layer_enable 0 1)                                                 
+1                                                                               
+                                                                                
+XXXXXX> (vera_line_capture_enable 1)                                            
+1                                                                               
+                                                                                
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
+nil                                                                             
+                                                                                
+XXXXXX> (print (vera_line_capture_read_pixel 0))                                
+                                                                                
+(10 15 14)                                                                      
+(10 15 14)                                                                      
+                                                                                
+XXXXXX> (vera_sprite_z_depth 1 VERA_SPRITE_Z_L0_L1)                             
+2                                                                               
+                                                                                
+XXXXXX> (vera_sprite_z_depth 1)                                                 
+2                                                                               
+                                                                                
+XXXXXX> (vera_line_capture_enable 1)                                            
+1                                                                               
+                                                                                
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
+nil                                                                             
+                                                                                
+XXXXXX> (print (vera_line_capture_read_pixel 0))                                
+                                                                                
+(3 3 3)                                                                         
+(3 3 3)                                                                         
+                                                                                
+XXXXXX> (vera_layer_enable 1 1)                                                 
+1                                                                               
+                                                                                
+XXXXXX> (vera_line_capture_enable 1)                                            
+1                                                                               
+                                                                                
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
+nil                                                                             
+                                                                                
+XXXXXX> (print (vera_line_capture_read_pixel 0))                                
+                                                                                
+(8 6 6)                                                                         
+(8 6 6)                                                                         
+                                                                                
+XXXXXX> (vera_sprite_z_depth 1 VERA_SPRITE_Z_L1)                                
+3                                                                               
+                                                                                
+XXXXXX> (vera_sprite_z_depth 1)                                                 
+3                                                                               
+                                                                                
+XXXXXX> (vera_line_capture_enable 1)                                            
+1                                                                               
+                                                                                
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
+nil                                                                             
+                                                                                
+XXXXXX> (print (vera_line_capture_read_pixel 0))                                
+                                                                                
+(3 3 3)                                                                         
+(3 3 3)                                                                         
+                                                                                
+XXXXXX> 'end                                                                    
+end                                                                             

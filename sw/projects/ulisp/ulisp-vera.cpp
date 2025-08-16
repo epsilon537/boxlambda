@@ -329,6 +329,71 @@ object *fn_vera_spritebank (object *args, object *env) {
   return number((int)bankchecked);
 }
 
+object *fn_vera_ien (object *args, object *env) {
+  (void) env;
+
+  int nargs = listlength(args);
+
+  uint32_t irq_mask;
+
+  if (nargs == 2) {
+
+    irq_mask = checkinteger(first(args));
+    bool enable = checkbitvalue(second(args)) != 0;
+
+    if (enable)
+      vera.irqs_enable(irq_mask);
+    else
+      vera.irqs_disable(irq_mask);
+  }
+  else if (nargs == 1) {
+    error2(toofewargs);
+  };
+
+  irq_mask = vera.irqs_enabled();
+
+  return number(irq_mask);
+}
+
+object *fn_vera_isr (object *args, object *env) {
+  (void) env;
+
+  int nargs = listlength(args);
+
+  uint32_t irq_mask;
+
+  if (nargs == 1) {
+
+    irq_mask = checkinteger(first(args));
+
+    vera.irqs_ack(irq_mask);
+  }
+
+  irq_mask = vera.irqs_get();
+
+  return number(irq_mask);
+}
+
+object *fn_vera_irqline (object *args, object *env) {
+  (void) env;
+
+  int nargs = listlength(args);
+
+  uint32_t irqline;
+
+  if (nargs == 1) {
+
+    irqline = checkrange(first(args), 0, VERA_SCANLINE_MAX);
+
+    vera.irqline_set(irqline);
+  }
+  else {
+    irqline = vera.irqline_get();
+  }
+
+  return number(irqline);
+}
+
 object *fn_vera_scanline (object *args, object *env) {
   (void) env;
 
@@ -659,10 +724,8 @@ object *fn_vera_palette (object *args, object *env) {
 
   int nargs = listlength(args);
 
-  object *idx = first(args);
-  int idxchecked = checkrange(idx, 0, 255);
-
   Vera_rgb_t rgb;
+  int idx = (nargs > 0) ? checkrange(first(args), 0, 255) : 0;
 
   switch (nargs) {
     case 4:
@@ -670,7 +733,7 @@ object *fn_vera_palette (object *args, object *env) {
       rgb.g = (uint16_t)checkrange(third(args), 0,  15);
       rgb.b = (uint16_t)checkrange(fourth(args), 0,  15);
 
-      vera.palette.write(idxchecked, rgb);
+      vera.palette.write(idx, rgb);
 
       break;
 
@@ -680,7 +743,7 @@ object *fn_vera_palette (object *args, object *env) {
       break;
 
     case 1:
-      rgb = vera.palette.read_rgb(idxchecked);
+      rgb = vera.palette.read_rgb(idx);
       break;
 
     default:
@@ -952,8 +1015,8 @@ object *fn_vera_map_entry (object *args, object *env) {
   Vera_map_size_t height = map.height();
 
   uint16_t entry;
-  uint32_t col = checkrange(second(args), 0, width);
-  uint32_t row = checkrange(third(args), 0, height);
+  uint32_t col = checkrange(second(args), 0, width-1);
+  uint32_t row = checkrange(third(args), 0, height-1);
 
   if (nargs == 4) {
     entry = (uint16_t)checkrange(fourth(args), 0, 65535);
@@ -982,8 +1045,8 @@ object *fn_vera_bitmap_pixel (object *args, object *env) {
   uint32_t height = bitmap.height();
 
   uint8_t val;
-  uint32_t x = checkrange(second(args), 0, width);
-  uint32_t y = checkrange(third(args), 0, height);
+  uint32_t x = checkrange(second(args), 0, width-1);
+  uint32_t y = checkrange(third(args), 0, height-1);
 
   if (nargs == 4) {
     val = (uint8_t)checkrange(fourth(args), 0, 255);
@@ -1014,8 +1077,8 @@ object *fn_vera_tileset_pixel (object *args, object *env) {
 
   uint8_t val;
   uint32_t tile_idx = checkrange(second(args), 0, num_tiles);
-  uint32_t x = checkrange(third(args), 0, width);
-  uint32_t y = checkrange(fourth(args), 0, height);
+  uint32_t x = checkrange(third(args), 0, width-1);
+  uint32_t y = checkrange(fourth(args), 0, height-1);
 
   if (nargs == 5) {
     val = (uint8_t)checkrange(fifth(args), 0, 255);
@@ -1039,6 +1102,9 @@ const char stringvera_bitmap_deinit[] = "vera_bitmap_deinit";
 const char stringvera_line_capture_enable[] = "vera_line_capture_enable";
 const char stringvera_line_capture_read_pixel[] = "vera_line_capture_read_pixel";
 const char stringvera_spritebank[] = "vera_spritebank";
+const char stringvera_ien[] = "vera_ien";
+const char stringvera_isr[] = "vera_isr";
+const char stringvera_irqline[] = "vera_irqline";
 const char stringvera_scanline[] = "vera_scanline";
 const char stringvera_display_enable[] = "vera_display_enable";
 const char stringvera_sprite_enable[] = "vera_sprite_enable";
@@ -1079,7 +1145,7 @@ const char docvera_map[] = "(vera_map map_id [width height map_type])\n"
 "@param map_id: id of map object to initialize. Range: 0..VERA_NUM_MAPS-1.\n"
 "@param width: width in tiles: 32/64/128/256.\n"
 "@param height: height in tiles: 32/64/128/256.\n"
-"@param map_type: TXT16/TXT256/TILE.\n"
+"@param map_type: VERA_MAP_TYPE_TXT16/TXT256/TILE.\n"
 "@return: (map_base, width, height, map_type) or nil if map is not initialized.\n";
 
 const char docvera_map_deinit[] = "(vera_map_deinit map_id)\n"
@@ -1132,6 +1198,22 @@ const char docvera_spritebank[] = "(vera_spritebank [bank])\n"
 "@param bank: the active spritebank. Range: 0..1.\n"
 "@return: the active spritebank.\n";
 
+const char docvera_ien[] = "(vera_ien [irq_mask enable])\n"
+"Enable/disable VERA IRQs.\n"
+"@param irq_mask: Bitmask of IRQs to enable/disable.\n"
+"@param enable: if 1, irq_mask is an enable mask, if 0, irq_mask is a disable mask.\n"
+"@return: Bitmask of enabled irqs.\n";
+
+const char docvera_isr[] = "(vera_isr [irq_mask])\n"
+"Get bitmask of active IRQs and acknowledge IRQs\n"
+"@param irq_mask: Bitmask of IRQs to acknowledge.\n"
+"@return: Bitmask of active irqs.\n";
+
+const char docvera_irqline[] = "(vera_irqline [scanline])\n"
+"Set or get the scanline used to trigger line IRQs.\n"
+"@param scanline: Range: 0..524.\n"
+"@return: the line IRQ scanline.\n";
+
 const char docvera_scanline[] = "(vera_scanline)\n"
 "@return: the current VGA scanline.\n";
 
@@ -1167,7 +1249,7 @@ const char docvera_screen_boundaries[] = "(vera_screen_boundaries [hstart hstop,
 "@param hstart: Range: 0..hstop-1\n"
 "@param hstop: Range: hstart+1..1023\n"
 "@param vstart: Range: 0..vstop-1\n"
-"@param vstop: Range: vsitart+1..1023\n"
+"@param vstop: Range: vstart+1..1023\n"
 "@return: (hstart hstop vstart vstop).\n";
 
 const char docvera_layer_enable[] = "(vera_layer_enable layer [enable])\n"
@@ -1238,13 +1320,13 @@ const char docvera_sprite_tile[] = "(vera_sprite_tile sprite_id [tileset_id tile
 "data. Range: 0..tileset.num_tiles.\n"
 "@return: (tileset_id, tile_idx) or nil if currently no tile is configured for this sprite\n";
 
-const char docvera_sprite_x[] = "(vera_sprite_tile sprite_id [x])\n"
+const char docvera_sprite_x[] = "(vera_sprite_x sprite_id [x])\n"
 "Get or set the sprite's x position.\n"
 "@param sprite_id: the sprite_id. Range: 0..127.\n"
 "@param x: Range: 0..1023.\n"
 "@return: the sprite's x position\n";
 
-const char docvera_sprite_y[] = "(vera_sprite_tile sprite_id [y])\n"
+const char docvera_sprite_y[] = "(vera_sprite_y sprite_id [y])\n"
 "Get or set the sprite's y position.\n"
 "@param sprite_id: the sprite_id. Range: 0..127.\n"
 "@param y: Range: 0..1023.\n"
@@ -1268,7 +1350,7 @@ const char docvera_sprite_col_mask[] = "(vera_sprite_col_mask sprite_id [mask])\
 const char docvera_sprite_z_depth[] = "(vera_sprite_z_depth sprite_id [z_depth])\n"
 "Get or set the sprite's z_depth.\n"
 "@param sprite_id: the sprite_id. Range: 0..127.\n"
-"@param z_depth: VERA_SPR_Z_DIS/BG_L0/L0_L1/L1.\n"
+"@param z_depth: VERA_SPRITE_Z_DIS/BG_L0/L0_L1/L1.\n"
 "@return: the sprite's current z_depth.\n";
 
 const char docvera_sprite_hflip[] = "(vera_sprite_hflip sprite_id [hflip])\n"
@@ -1328,10 +1410,13 @@ const tbl_entry_t lookup_table2[] = {
   { stringvera_line_capture_read_pixel, fn_vera_line_capture_read_pixel, 0201, docvera_line_capture_read_pixel},
   { stringvera_sprite_enable, fn_vera_sprite_enable, 0201, docvera_sprite_enable},
   { stringvera_spritebank, fn_vera_spritebank, 0201, docvera_spritebank},
+  { stringvera_ien, fn_vera_ien, 0202, docvera_ien},
+  { stringvera_isr, fn_vera_isr, 0201, docvera_isr},
+  { stringvera_irqline, fn_vera_irqline, 0201, docvera_irqline},
   { stringvera_scanline, fn_vera_scanline, 0200, docvera_scanline},
   { stringvera_display_enable, fn_vera_display_enable, 0201, docvera_display_enable},
   { stringvera_hscale, fn_vera_hscale, 0201, docvera_hscale},
-  { stringvera_hscale, fn_vera_vscale, 0201, docvera_vscale},
+  { stringvera_vscale, fn_vera_vscale, 0201, docvera_vscale},
   { stringvera_bordercolor, fn_vera_bordercolor, 0201, docvera_bordercolor},
   { stringvera_screen_boundaries, fn_vera_screen_boundaries, 0204, docvera_screen_boundaries},
   { stringvera_layer_enable, fn_vera_layer_enable, 0212, docvera_layer_enable},
