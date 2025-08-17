@@ -6,6 +6,8 @@ import copy
 import sys
 import re
 import os
+import glob
+from pathlib import Path
 
 #TX_CHR_DELAY = 0.001
 
@@ -13,6 +15,7 @@ output = None
 testname = None
 scrn = pyte.Screen(80, 192)
 strm = pyte.ByteStream(scrn)
+result = {}
 
 def init():
     print("Board Reset...")
@@ -22,7 +25,7 @@ def init():
     print("Starting terminal session...")
     ch = pexpect.spawn(
             '/bin/bash -c "stty rows 192 cols 80 && screen /dev/ttyUSB1 115200"')
-    ch.logfile = open('pexpect_log.txt','ab')
+    ch.logfile = open('__pycache__/pexpect_log.txt','ab')
     return ch
 
 def end(ch):
@@ -145,10 +148,14 @@ def attach():
     end(ch)
 
 def all():
-    test('vera_map_test')
-    test('vera_map_test_cont')
-    test('vera_map_test_err')
-    test('vera_tileset_test')
-    test('vera_tileset_test_err')
-    test('vera_bitmap_test')
-    test('vera_bitmap_test_err')
+    global result
+
+    files = glob.glob("*.lisp")
+    result = {}
+    for f in files:
+        print(f)
+        r = test(Path(f).stem)
+        result[f] = r
+
+    print(result)
+

@@ -4,7 +4,7 @@
   (let ((idx 0))
     (dolist (wh (list (cons 8 8) (cons 16 16) (cons 32 32) (cons 64 64)))
       (dolist (bpp (list 1 2 4 8))
-         (vera_tileset idx (car wh) (cdr wh) bpp 16)
+         (vera_tileset idx (car wh) (cdr wh) bpp 8)
          (print (vera_tileset idx))
          (setq idx (1+ idx)))))
   (dotimes (ii 16)
