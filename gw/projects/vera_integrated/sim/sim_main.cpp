@@ -299,7 +299,7 @@ int main(int argc, char** argv, char** env) {
     }
 
     /* V<sprite-bank#> indicates a Vsync IRQ, L = Line IRQ.*/
-    std::string uartCheckString2("V0L1V0(Forcing sprite collision)");
+    std::string uartCheckString2("V0L1V0PLine capture check OK.");
 
     size_t spos = uartRxStringPrev.find(uartCheckString2);
 
@@ -309,11 +309,21 @@ int main(int argc, char** argv, char** env) {
       return -1;
     }
 
-    /* XXX = collision IRQ. */
-    std::string uartCheckString3("XXX");
+    std::string uartCheckString3("(Forcing sprite collision)");
 
-    if (uartRxStringPrev.find(uartCheckString3, spos) == std::string::npos) {
+    spos = uartRxStringPrev.find(uartCheckString3);
+
+    if (spos == std::string::npos) {
       printf("SIM: did not find expected string: %s\n", uartCheckString3.c_str());
+      printf("SIM: Test failed\n");
+      return -1;
+    }
+
+    /* XXX = collision IRQ. */
+    std::string uartCheckString4("XXX");
+
+    if (uartRxStringPrev.find(uartCheckString4, spos) == std::string::npos) {
+      printf("SIM: did not find expected string: %s\n", uartCheckString4.c_str());
       printf("SIM: Test failed\n");
       return -1;
     }
