@@ -1,18 +1,21 @@
+// This is a ulisp extension library adding the VERA Graphics Adapter HAL to ulisp.
+
 #include "vera_hal.h"
 #include "ulisp.h"
 
+//Convenience macros for accessing a 4th and 5th element in a list.
 #define cdddr(x)           cdr(cdr(cdr(x)))
 #define fourth(x)          first(cdddr(x))
 
 #define cddddr(x)          cdr(cdr(cdr(cdr(x))))
 #define fifth(x)           first(cddddr(x))
 
+//A few new error messages
 const char insufficientresources[] = "insufficient resources";
-
 const char alreadyinitialized[] = "already initialized";
-
 const char notinitialized[] = "not initialized";
 
+//Validate BPP argument
 Vera_bpp_t checkbpp (object *obj) {
   if (!integerp(obj)) error(notaninteger, obj);
 
@@ -24,6 +27,7 @@ Vera_bpp_t checkbpp (object *obj) {
   return (Vera_bpp_t)i;
 }
 
+//Validate tile size argument
 Vera_tile_size_t checktilesize (object *obj) {
   if (!integerp(obj)) error(notaninteger, obj);
 
@@ -44,6 +48,7 @@ Vera_tile_size_t checktilesize (object *obj) {
   return (Vera_tile_size_t)i;
 }
 
+//Validate map size argument
 Vera_map_size_t checkmapsize (object *obj) {
   if (!integerp(obj)) error(notaninteger, obj);
 
@@ -55,6 +60,7 @@ Vera_map_size_t checkmapsize (object *obj) {
   return (Vera_map_size_t)i;
 }
 
+//Validate map_type argument
 Vera_map_type_t checkmaptype (object *obj) {
   if (!integerp(obj)) error(notaninteger, obj);
 
@@ -66,6 +72,7 @@ Vera_map_type_t checkmaptype (object *obj) {
   return (Vera_map_type_t)i;
 }
 
+//Validate integer argument against range minimum and maximum.
 uint32_t checkrange (object *obj, int min, int max) {
   if (!integerp(obj)) error(notaninteger, obj);
 
@@ -77,6 +84,7 @@ uint32_t checkrange (object *obj, int min, int max) {
   return (uint32_t)i;
 }
 
+//Validate floating point argument against range minimum and maximum.
 float checkrangefloat (object *obj, float min, float max) {
   if (!floatp(obj)) error(notanumber, obj);
 
@@ -88,7 +96,10 @@ float checkrangefloat (object *obj, float min, float max) {
   return f;
 }
 
-// Definitions
+// Definitions:
+// For the fn_* functions below, please refer to their corresponding doc*
+// strings to learn what they do.
+
 object *fn_vera_init (object *args, object *env) {
   (void) env;
 
@@ -1320,3 +1331,4 @@ const tbl_entry_t *table (int n) {
 unsigned int tablesize (int n) {
   return tablesizes[n];
 }
+

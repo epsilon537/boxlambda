@@ -1,3 +1,10 @@
+# This module interacts via the serial port (a screen session) and openFPGAloader
+# with an Arty A7 running BoxLambda running ulisp.
+# It runs any or all of the ulisp scripts in the current directory and checks
+# their output against a reference output file.
+# The output is expected to match exactly, except for 'big numbers', which are
+# replace with XXXXXX strings.
+
 from __future__ import unicode_literals
 import pexpect
 import time
@@ -9,12 +16,16 @@ import os
 import glob
 from pathlib import Path
 
-#TX_CHR_DELAY = 0.001
-
 output = None
 testname = None
+
+#ulisp uses terminal emulator control codes so we send the received input through
+#a pyte terminal emulator session to get clean textual data.
 scrn = pyte.Screen(80, 192)
 strm = pyte.ByteStream(scrn)
+
+# After running all(), will hold dictionary of all tests run and their Pass/Fail
+# result.
 result = {}
 
 def init():
@@ -25,6 +36,8 @@ def init():
     print("Starting terminal session...")
     ch = pexpect.spawn(
             '/bin/bash -c "stty rows 192 cols 80 && screen /dev/ttyUSB1 115200"')
+
+    #All output will accummulate in this log file.
     ch.logfile = open('__pycache__/pexpect_log.txt','ab')
     return ch
 
@@ -69,6 +82,8 @@ def mask_digits(match):
     return 'X' * len(match.group(0))
 
 def test(name):
+    """Run a single lisp test. Pass in the script name without the .lisp
+        extension."""
     global scrn
     global strm
     global output
@@ -80,6 +95,8 @@ def test(name):
 
     ch.sendline("")
 
+    # Send the script char-by-char, like an operator entering it
+    # manually on the REPL.
     try:
         with open(name+".lisp", "r") as file:
             for line in file:
@@ -106,14 +123,21 @@ def test(name):
     ended = False
     output = []
 
+    #Check the output, up to one screen worth of data.
+    #Note that this will fail if the test outputs more
+    #than one terminal emulator screen of data (check number
+    #of rows used for the screen).
     for line in scrn.display:
+        #Find start marker
         if re.match(r"^start", line):
             started = True
 
         if started and not ended:
+            #Replace larger numbers with XXXXXX.
             masked_text = re.sub(r'\d{6,}', mask_digits, line)
             output.append(masked_text+'\n')
 
+        #Find end marker
         if re.match(r"^end", line):
             ended = True
 
@@ -133,6 +157,8 @@ def test(name):
     return check()
 
 def save():
+    """Save the output of the previously run test as the reference output for
+        this test."""
     global output
     global testname
 
@@ -141,6 +167,7 @@ def save():
             file.write(line)
 
 def attach():
+    """Attach to the ulisp terminal to manually interact with it."""
     ch = init()
 
     ch.interact()
@@ -148,6 +175,8 @@ def attach():
     end(ch)
 
 def all():
+    """Run all .lisp testcases in the current directory and record the
+    result""".
     global result
 
     files = glob.glob("*.lisp")
@@ -157,5 +186,9 @@ def all():
         r = test(Path(f).stem)
         result[f] = r
 
+    print("All:")
     print(result)
+
+    print("Failed:)
+    print([k for (k, v) in result.items() if not v)
 

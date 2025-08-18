@@ -1,6 +1,5 @@
 
 const char LispLibrary[] =  R"lisplibrary(
-
 (defvar VERA_IRQ_VSYNC 1)
 (defvar VERA_IRQ_LINE 2)
 (defvar VERA_IRQ_SPRCOL 4)
@@ -22,7 +21,6 @@ const char LispLibrary[] =  R"lisplibrary(
 
 (defvar VERA_NUM_MAPS 32)
 (defvar VERA_NUM_TILESETS 32)
-(defvar VERA_NUM_BITMAPS 32)
 
 (defvar VERA_COLOR_BLACK 0)
 (defvar VERA_COLOR_WHITE 1)
