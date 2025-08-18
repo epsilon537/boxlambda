@@ -13,7 +13,7 @@ V  - Deinit-reinit
 V  - Double deinit
 V  - Read back
 V  - Exhaust VRAM.
-   - Try to install invalid tileset at layer, bitmap, sprite.
+V  - Try to install invalid tileset at layer, bitmap, sprite.
 
 V - Init bitmap w params: width height bpp
 V  - Attempt invalid params
