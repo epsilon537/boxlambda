@@ -1,6 +1,5 @@
 #include "vera_hal.h"
 #include "memmap.h"
-#include <assert.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -201,7 +200,7 @@ uint32_t static color_depth_enc(Vera_bpp_t bpp) {
   return res;
 }
 
-uint16_t static tile_sz_enc(Vera_tile_size_t sz) {
+uint16_t static tile_sz_enc(uint32_t sz) {
   uint16_t res;
 
   switch (sz) {
@@ -306,7 +305,7 @@ Vera_tilemap_entry_t Vera_map::read_tile(uint32_t col, uint32_t row) {
   return entry_u.tile;
 }
 
-bool Vera_tileset::init(Vera_tile_size_t width, Vera_tile_size_t height, Vera_bpp_t bpp, uint32_t num_tiles) {
+bool Vera_tileset::init(Vera_tile_size_t width, uint32_t height, Vera_bpp_t bpp, uint32_t num_tiles) {
   assert(!initialized_);
   assert(num_tiles > 0);
 
@@ -329,7 +328,7 @@ void Vera_tileset::deinit() {
   initialized_ = false;
 }
 
-uint8_t* Vera_tileset::tile(uint32_t tile_idx) {
+uint8_t* Vera_tileset::tile_data(uint32_t tile_idx) {
   assert(initialized_);
   assert(tile_idx < num_tiles_);
   return tileset_base_ + tile_idx*tilesize_bytes_;
@@ -340,7 +339,7 @@ void Vera_tileset::pixel_set(uint32_t tile_idx, uint32_t x, uint32_t y, uint8_t 
   assert(x < width_);
   assert(y < height_);
 
-  uint8_t *tileptr = tile(tile_idx);
+  uint8_t *tileptr = tile_data(tile_idx);
 
   ::pixel_set(bpp_, tileptr, x, y, width_, val);
 }
@@ -350,48 +349,9 @@ uint8_t Vera_tileset::pixel_get(uint32_t tile_idx, uint32_t x, uint32_t y) {
   assert(x < width_);
   assert(y < height_);
 
-  uint8_t *tileptr = tile(tile_idx);
+  uint8_t *tileptr = tile_data(tile_idx);
 
   return ::pixel_get(bpp_, tileptr, x, y, width_);
-}
-
-bool Vera_bitmap::init(Vera_bitmap_width_t width, uint32_t height, Vera_bpp_t bpp) {
-  assert(!initialized_);
-  assert(height > 0);
-
-  bitmap_base_ = vera.vram_alloc(width*height*bpp/8);
-  if (!bitmap_base_) return false;
-
-  width_ = width;
-  height_ = height;
-  bpp_ = bpp;
-  initialized_ = true;
-
-  return true;
-}
-
-void Vera_bitmap::deinit() {
-  assert(initialized_);
-
-  vera.vram_free(bitmap_base_);
-
-  initialized_ = false;
-}
-
-void Vera_bitmap::pixel_set(uint32_t x, uint32_t y, uint8_t val) {
-  assert(initialized_);
-  assert(x < width_);
-  assert(y < height_);
-
-  ::pixel_set(bpp_, bitmap_base_, x, y, width_, val);
-}
-
-uint8_t Vera_bitmap::pixel_get(uint32_t x, uint32_t y) {
-  assert(initialized_);
-  assert(x < width_);
-  assert(y < height_);
-
-  return ::pixel_get(bpp_, bitmap_base_, x, y, width_);
 }
 
 void Vera_sprite::init() {
@@ -421,7 +381,7 @@ void Vera_sprite::tile_set(uint32_t tileset_id, uint32_t tile_idx) {
 
   Vera_tileset& tileset = vera.tileset[tileset_id];
 
-  uint8_t *addr = tileset.tile(tile_idx_);
+  uint8_t *addr = tileset.tile_data(tile_idx_);
   Vera_bpp_t bpp = tileset.bpp();
 
   uint16_t aa, ww;
@@ -490,22 +450,6 @@ void Vera_sprite::vflip_set(bool vflip) {
   vflip_ = vflip;
 
   set_attr_byte6_();
-}
-
-void Vera_sprite::pixel_set(uint32_t x, uint32_t y, uint8_t val) {
-  assert(tileset_id_ < VERA_NUM_TILESETS);
-
-  Vera_tileset& tileset = vera.tileset[tileset_id_];
-
-  tileset.pixel_set(tile_idx_, x, y, val);
-}
-
-uint8_t Vera_sprite::pixel_get(uint32_t x, uint32_t y) {
-  assert(tileset_id_ < VERA_NUM_TILESETS);
-
-  Vera_tileset& tileset = vera.tileset[tileset_id_];
-
-  return tileset.pixel_get(tile_idx_, x, y);
 }
 
 void Vera_sprite::set_id_(uint32_t id) {
@@ -579,14 +523,14 @@ Vera_palette::Vera_palette() {
 }
 
 void Vera_layer::enable(bool enable) {
-  if (layer_ == VERA_L0)
+  if (layer_ == 0)
     VERA->DC_VIDEO_bf.L0_ENABLE = enable;
   else
     VERA->DC_VIDEO_bf.L1_ENABLE = enable;
 }
 
 bool Vera_layer::enabled() {
-  if (layer_ == VERA_L0)
+  if (layer_ == 0)
     return VERA->DC_VIDEO_bf.L0_ENABLE;
   else
     return VERA->DC_VIDEO_bf.L1_ENABLE;
@@ -628,7 +572,7 @@ void Vera_layer::tileset_set(uint32_t tileset_id) {
   Vera_tileset& tileset = vera.tileset[tileset_id];
 
   tileset_id_ = tileset_id;
-  bitmap_id_ = ~0U;
+  tile_idx_ = ~0U;
 
   vera_layer_regs_->CONFIG_bf.COLOR_DEPTH = color_depth_enc(tileset.bpp());
   vera_layer_regs_->CONFIG_bf.BITMAP_MODE = 0;
@@ -637,19 +581,26 @@ void Vera_layer::tileset_set(uint32_t tileset_id) {
   vera_layer_regs_->TILEBASE_bf.TILE_BASE_ADDR_16_11 = ((uint32_t)tileset.tileset_base() - VERA_VRAM_BASE)>>11;
 }
 
-void Vera_layer::bitmap_set(uint32_t bitmap_id) {
-  assert(bitmap_id < VERA_NUM_BITMAPS);
+void Vera_layer::bitmap_set(uint32_t tileset_id, uint32_t tile_idx) {
+  assert(tileset_id < VERA_NUM_TILESETS);
+  assert(tile_idx != ~0U);
 
-  tileset_id_ = ~0U;
-  bitmap_id_ = bitmap_id;
+  tileset_id_ = tileset_id;
+  tile_idx_ = tile_idx;
 
-  Vera_bitmap &bitmap = vera.bitmap[bitmap_id];
+  Vera_tileset& tileset = vera.tileset[tileset_id];
 
-  vera_layer_regs_->CONFIG_bf.COLOR_DEPTH = color_depth_enc(bitmap.bpp());
+  vera_layer_regs_->CONFIG_bf.COLOR_DEPTH = color_depth_enc(tileset.bpp());
   vera_layer_regs_->CONFIG_bf.BITMAP_MODE = 1;
-  vera_layer_regs_->TILEBASE_bf.TILE_BITMAP_WIDTH = (uint32_t)(bitmap.width() == VERA_BITMAP_WIDTH_640);
+  vera_layer_regs_->TILEBASE_bf.TILE_BITMAP_WIDTH = (uint32_t)(tileset.width() == VERA_TILE_SZ_640);
   vera_layer_regs_->TILEBASE_bf.TILE_HEIGHT = 0;
-  vera_layer_regs_->TILEBASE_bf.TILE_BASE_ADDR_16_11 = ((uint32_t)bitmap.bitmap_base() - VERA_VRAM_BASE)>>11;
+  vera_layer_regs_->TILEBASE_bf.TILE_BASE_ADDR_16_11 = ((uint32_t)tileset.tile_data(tile_idx) - VERA_VRAM_BASE)>>11;
+}
+
+bool Vera_layer::bitmap_get(VERA_OUT uint32_t &tileset_id, VERA_OUT uint32_t &tile_idx) {
+  tileset_id = tileset_id_;
+  tile_idx = tile_idx_;
+  return vera_layer_regs_->CONFIG_bf.BITMAP_MODE == 1;
 }
 
 void Vera_layer::bitmap_pal_offset_set(uint8_t offset) {
@@ -661,12 +612,12 @@ uint8_t Vera_layer::bitmap_pal_offset_get() {
   return (uint8_t)vera_layer_regs_->HSCROLL_bf.HSCROLL_11_8_PAL_OFFSET;
 }
 
-void Vera_layer::set_id_(Vera_layer_t layer) {
+void Vera_layer::set_id_(uint32_t layer) {
   layer_ = layer;
-  vera_layer_regs_ = (Vera_layer_regs_t*)&((layer == VERA_L0) ? VERA->L0_CONFIG : VERA->L1_CONFIG);
+  vera_layer_regs_ = (Vera_layer_regs_t*)&(layer ? VERA->L1_CONFIG : VERA->L0_CONFIG);
   map_id_ = ~0U;
   tileset_id_ = ~0U;
-  bitmap_id_ = ~0U;
+  tile_idx_ = ~0U;
 }
 
 Vera::Vera() {
@@ -681,8 +632,8 @@ void Vera::init() {
   }
 
   //Initialize the layer objects
-  layer[VERA_L0].set_id_(VERA_L0);
-  layer[VERA_L1].set_id_(VERA_L1);
+  layer[0].set_id_(0);
+  layer[1].set_id_(1);
 }
 
 Vera_rgb_t Vera::line_capture_read_pixel(uint32_t x) {

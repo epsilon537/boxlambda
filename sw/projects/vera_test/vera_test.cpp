@@ -28,14 +28,14 @@ void _vera_irq_handler(void) {
   if (isr & ien & VERA_IRQ_VSYNC) {
     ++frame_counter;
     //Switch to sprite bank 0 at vsync
-    vera.sprite_bank_set(VERA_SPR_BANK_0);
+    vera.sprite_bank_set(0);
     vsync_irq_fired = 1;
   }
 
   if (isr & ien & VERA_IRQ_LINE) {
     line_irq_fired = 1;
     //Switch to sprite bank 1 at scanline 240
-    vera.sprite_bank_set(VERA_SPR_BANK_1);
+    vera.sprite_bank_set(1);
   }
 
   if (isr & ien & VERA_IRQ_SPRCOL) {
@@ -60,7 +60,7 @@ int generate_8bpp_8x8_tiles(Vera_tileset *tileset) {
 
   //For 16 tiles generate 8x8 blocks of different colors
   for (int jj=0;jj<16;jj++) {
-    tileptr = tileset->tile(jj);
+    tileptr = tileset->tile_data(jj);
 
     for (int ii=0; ii<64; ii++) {
       tileptr[ii] = (ii<32) ? ((ii%8 < 4) ? jj : 0) : 0;
@@ -82,7 +82,7 @@ int generate_8bpp_8x8_tiles(Vera_tileset *tileset) {
 void generate_8bpp_64x64_sprite(Vera_tileset *tileset) {
   assert(tileset);
 
-  uint8_t *tileptr = tileset->tile(0);
+  uint8_t *tileptr = tileset->tile_data(0);
   memset(tileptr, 0x03, 64*64);
 }
 
@@ -259,7 +259,7 @@ int main(void) {
 
   vera.screen_boundaries_set(&screen_boundaries);
 
-  vera.sprite_bank_set(VERA_SPR_BANK_0);
+  vera.sprite_bank_set(0);
   vera.hscale_set(128);
   vera.vscale_set(128);
   vera.sprites_enable(true);

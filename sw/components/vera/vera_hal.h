@@ -3,6 +3,7 @@
 
 #include "memmap.h"
 #include "vera_regs.h"
+#include <assert.h>
 
 //Indication of an output parameter
 #define VERA_OUT
@@ -31,7 +32,6 @@
 
 #define VERA_NUM_MAPS 32
 #define VERA_NUM_TILESETS 32
-#define VERA_NUM_BITMAPS 32
 
 // Vera default color palette.
 // The first 16 color are the C64 color palette.
@@ -73,7 +73,6 @@
 // Internal:
 #define VRAM_BLOCK_SZ_BYTES 2048
 #define VRAM_NUM_BLOCKS (VERA_VRAM_SIZE_BYTES/VRAM_BLOCK_SZ_BYTES)
-#define VERA_NUM_MAPS_TILESETS_BITMAPS 128
 
 // Forward declarations
 class Vera;
@@ -86,10 +85,8 @@ typedef uint8_t vera_ufix_1_7_t;
 typedef enum { VERA_MAP_SZ_32=32, VERA_MAP_SZ_64=64, VERA_MAP_SZ_128=128, VERA_MAP_SZ_256=256 } Vera_map_size_t;
 
 //Supported tile width and height values.
-typedef enum { VERA_TILE_SZ_8=8, VERA_TILE_SZ_16=16, VERA_TILE_SZ_32=32, VERA_TILE_SZ_64=64 } Vera_tile_size_t;
-
-//Supported bitmap widths
-typedef enum { VERA_BITMAP_WIDTH_320=320, VERA_BITMAP_WIDTH_640=640 } Vera_bitmap_width_t;
+//(However, in case of bitmaps, height values are not restricted to this set).
+typedef enum { VERA_TILE_SZ_8=8, VERA_TILE_SZ_16=16, VERA_TILE_SZ_32=32, VERA_TILE_SZ_64=64, VERA_TILE_SZ_320=320, VERA_TILE_SZ_640=640 } Vera_tile_size_t;
 
 //Supported color depths.
 typedef enum { VERA_BPP_1=1, VERA_BPP_2=2, VERA_BPP_4=4, VERA_BPP_8=8 } Vera_bpp_t;
@@ -97,21 +94,12 @@ typedef enum { VERA_BPP_1=1, VERA_BPP_2=2, VERA_BPP_4=4, VERA_BPP_8=8 } Vera_bpp
 //Supported map types
 typedef enum { VERA_MAP_TYPE_TXT16=0, VERA_MAP_TYPE_TXT256=1, VERA_MAP_TYPE_TILE=2 } Vera_map_type_t;
 
-//Supported Layer modes
-typedef enum { VERA_LAYER_MODE_TILE, VERA_LAYER_MODE_BITMAP } Vera_layer_mode_t;
-
-//Supported Layers
-typedef enum { VERA_L0, VERA_L1 } Vera_layer_t;
-
 // Supported Sprite Z-depth values
 // VERA_SPR_Z_DIS: Sprite Disabled.
 // VERA_SPR_Z_BG_L0: Between Background and L0.
 // VERA_SPR_Z_L0_L1: Between L0 and L1,
 // VERA_SPR_Z_L1: In front of L1.
 typedef enum { VERA_SPR_Z_DIS=0, VERA_SPR_Z_BG_L0=1, VERA_SPR_Z_L0_L1=2, VERA_SPR_Z_L1=3 } Vera_z_depth_t;
-
-// Sprite attribute bank ids
-typedef enum { VERA_SPR_BANK_0=0, VERA_SPR_BANK_1=1 } Vera_sprite_bank_t;
 
 //Screen boundaries structure
 typedef struct {
@@ -148,7 +136,6 @@ typedef struct {
 //A tile map class holding the map base address, its width, height, and type.
 class Vera_map {
 public:
-
   inline Vera_map() : initialized_(false) {};
 
   // Initialize a map object of the given dimensions.
@@ -238,6 +225,8 @@ private:
 
 //A tile set class holding the tile set's base address, the tile's dimensions,
 //the color depth, and number of tiles in the set.
+//Tilesets are used to hold regular tiles (e.g. character sets), sprites, and
+//bitmaps.
 class Vera_tileset {
 public:
 
@@ -247,15 +236,16 @@ public:
   // VRAM resources will be allocated.
   // A tileset can be used to represent both tilesets and spritesets.
   //
-  // @param width: VERA_TILE_SZ_8/16 for non-sprite tiles. For sprites,
-  // additionally 32 and 64 are allowed.
-  // @param height: VERA_TILE_SZ_8/16 for non-sprite tiles. For sprites,
-  // additionally 32 and 64 are allowed.
+  // @param width: VERA_TILE_SZ_8/16 for regular tiles. For sprites,
+  // additionally 32 and 64 are allowed. For bitmaps: VERA_TILE_SZ_320/640
+  // @param height: VERA_TILE_SZ_8/16 for regular tiles. For sprites,
+  // additionally 32 and 64 are allowed. For bitmaps any positive value is
+  // allowed.
   // @param bpp: VERA_BPP_1/2/4/8. In case of spritesets, only VERA_BPP_4 and 8 are
   // allowed.
   // @param num_tiles: Number of tiles in the tileset. Range: 0..1023.
   // @return: true if successful or false if VRAM allocation failed.
-  bool init(Vera_tile_size_t width, Vera_tile_size_t height, Vera_bpp_t bpp, uint32_t num_tiles);
+  bool init(Vera_tile_size_t width, uint32_t height, Vera_bpp_t bpp, uint32_t num_tiles);
 
   // Deinitialize the tileset object, releasing the VRAM resources.
   void deinit();
@@ -271,7 +261,7 @@ public:
   inline Vera_tile_size_t width() { return width_; }
 
   //@return: tileset height.
-  inline Vera_tile_size_t height() { return height_; }
+  inline uint32_t height() { return height_; }
 
   //@return: tileset bits-per-pixel.
   inline Vera_bpp_t bpp() { return bpp_; }
@@ -281,10 +271,10 @@ public:
 
   inline uint32_t tilesize_bytes() {return tilesize_bytes_;};
 
-  // Get a pointer to a tile in the tileset.
+  // Get a pointer to the pixel data of a tile in the tileset.
   // @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
   // @return: pointer to the tile's pixel data.
-  uint8_t* tile(uint32_t tile_idx);
+  uint8_t* tile_data(uint32_t tile_idx);
 
   // Set a pixel in a given tile.
   // @param tile_idx: tile index. Range 0..num_tiles-1.
@@ -302,64 +292,11 @@ public:
 private:
   bool initialized_;
   uint8_t * tileset_base_;
-  Vera_tile_size_t width_; //For non-sprite tiles only VERA_TILE_SZ_8/16 allowed
-  Vera_tile_size_t height_; //For non-sprite tiles only VERA_TILE_SZ_8/16 allowed
+  Vera_tile_size_t width_;
+  uint32_t height_;
   Vera_bpp_t bpp_;
   uint32_t num_tiles_;
   uint32_t tilesize_bytes_;
-};
-
-//A bitmap class holding the bitmap's bas address, dimensions and color
-//depth.
-class Vera_bitmap {
-public:
-  inline Vera_bitmap() : initialized_(false) {}
-
-  // Initialize a bitmap object using given parameters.
-  // VRAM resources for the bitmap will be allocated.
-  // @param width: VERA_BITMAP_WIDTH_320/640
-  // @param height: in pixels.
-  // @param bpp: Supported values: VERA_BPP_1/2/4/8.
-  // @return: true if succesful, false if vram allocation failed.
-  bool init(Vera_bitmap_width_t width, uint32_t height, Vera_bpp_t bpp);
-
-  // De-initialize the bitmap object, releasing the VRAM resources.
-  void deinit();
-
-  // @return: true if the object is initialized, holding VRAM resources, false
-  // if not.
-  inline bool is_initialized() { return initialized_; }
-
-  //@return: pointer to the base of the bitmap in VRAM.
-  inline uint8_t *bitmap_base() { return bitmap_base_; }
-
-  //@return: bitmap width.
-  inline Vera_bitmap_width_t width() { return width_; }
-
-  //@return: bitmap height.
-  inline uint32_t height() { return height_; }
-
-  //@return: tileset bits-per-pixel.
-  inline Vera_bpp_t bpp() { return bpp_; }
-
-  // Set a pixel in the bitmap.
-  // @param x: pixel x-position. Range: 0..width-1.
-  // @param y: pixel y-position. Range: 0..height-1.
-  // @param val: pixel value. Range: 0..(2^bpp)-1.
-  void pixel_set(uint32_t x, uint32_t y, uint8_t val);
-
-  // Get a pixel from the bitmap.
-  // @param x: pixel x-position. Range: 0..width-1.
-  // @param y: pixel y-position. Range: 0..height-1.
-  // @return: pixel value. Range: 0..(2^bpp)-1.
-  uint8_t pixel_get(uint32_t x, uint32_t y);
-
-private:
-  bool initialized_;
-  uint8_t * bitmap_base_;
-  Vera_bitmap_width_t width_;
-  uint32_t height_;
-  Vera_bpp_t bpp_;
 };
 
 //A Sprite class holding a sprite's ID and its attributes.
@@ -430,18 +367,6 @@ public:
 
   // @return: vflip value.
   inline bool vflip_get() { return vflip_; }
-
-  // Set a pixel in the sprite
-  // @param x: pixel x-position. Range: 0..width-1.
-  // @param y: pixel y-position. Range: 0..height-1.
-  // @param val: pixel value. Range: 0..(2^bpp)-1.
-  void pixel_set(uint32_t x, uint32_t y, uint8_t val);
-
-  // Get a pixel from the sprite.
-  // @param x: pixel x-position. Range: 0..width-1.
-  // @param y: pixel y-position. Range: 0..height-1.
-  // @return: pixel value. Range: 0..(2^bpp)-1.
-  uint8_t pixel_get(uint32_t x, uint32_t y);
 
 private:
   inline Vera_sprite() {}
@@ -520,7 +445,7 @@ class Vera_layer {
 public:
   // Retrieve the layer id.
   // @return: VERA_L0/L1
-  inline Vera_layer_t id() {return layer_;}
+  inline uint32_t id() {return layer_;}
 
   // Enable/disable Layer
   // @param enable: Set to true to enable Layer.
@@ -567,12 +492,15 @@ public:
 
   // Put Layer in Bitmap Mode, using the given bitmap object's properties
   // (base, bpp, and bitmap width).
-  // @param bitmap_id: id id of bitmap object.
-  void bitmap_set(uint32_t bitmap_id);
+  // @param tileset_id: id of tileset holding the bitmap.
+  // @param tile_idx: idx of the bitmap within the tileset.
+  void bitmap_set(uint32_t tileset_id, uint32_t tile_idx);
 
   // Get bitmap object currently used by this layer (if any).
-  // @return: id bitmap ojbect. ~0U if not in bitmap mode.
-  inline uint32_t bitmap_get() { return bitmap_id_; };
+  // @output param tileset_id: id of tileset holding the bitmap.
+  // @output param tile_idx: idx of the bitmap within the tileset.
+  // @return true if in bitmap mode, false if not.
+  bool bitmap_get(VERA_OUT uint32_t &tileset_id, VERA_OUT uint32_t &tile_idx);
 
   // Set Layer bitmap palette offset. Assumes Bitmap mode.
   // The color index of bitmap pixels is modified by the palette offset using the following logic:
@@ -588,13 +516,13 @@ public:
 private:
   inline Vera_layer() {}
 
-  void set_id_(Vera_layer_t layer); //This method serves as delayed constructor.
+  void set_id_(uint32_t layer); //This method serves as delayed constructor.
 
-  Vera_layer_t layer_;
+  uint32_t layer_;
   volatile Vera_layer_regs_t *vera_layer_regs_;
   uint32_t map_id_;
   uint32_t tileset_id_;
-  uint32_t bitmap_id_;
+  uint32_t tile_idx_;
 
   friend class Vera;
 };
@@ -630,14 +558,15 @@ public:
   //
 
   // Set the active sprite bank
-  // @param bank: Sprite bank selector: VERA_SPR_BANK_0/1.
-  inline void sprite_bank_set(Vera_sprite_bank_t bank) {
+  // @param bank: Sprite bank selector: 0 or 1.
+  inline void sprite_bank_set(uint32_t bank) {
+    assert(bank < VERA_NUM_SPRITE_BANKS);
     VERA->CTRL_STATUS_bf.SBNK = bank; }
 
   // Get the active sprite bank
-  // @return the active sprite bank.
-  inline Vera_sprite_bank_t sprite_bank_get() {
-    return (Vera_sprite_bank_t)(VERA->CTRL_STATUS_bf.SBNK); }
+  // @return the active sprite bank (0 or 1).
+  inline uint32_t sprite_bank_get() {
+    return VERA->CTRL_STATUS_bf.SBNK; }
 
   //
   // Interrupt stuffs
@@ -657,7 +586,7 @@ public:
 
   // Retrieve the active IRQs.
   // @return: a bitmask of active VERA_IRQs.
-static inline uint32_t irqs_get() { return (VERA->ISR & VERA->IEN); }
+  static inline uint32_t irqs_get() { return (VERA->ISR & VERA->IEN); }
 
   // Acknowledge IRQs.
   // @param irq_mask: bitwise OR of VERA_IRQs to acknowledge.
@@ -805,11 +734,6 @@ static inline uint32_t irqs_get() { return (VERA->ISR & VERA->IEN); }
   // The tilesets
   //
   Vera_tileset tileset[VERA_NUM_TILESETS];
-
-  //
-  // The bitmaps
-  //
-  Vera_bitmap bitmap[VERA_NUM_BITMAPS];
 
 private:
   static uint32_t alloc_(uint8_t *pool, uint32_t pool_size, uint32_t num_blocks);

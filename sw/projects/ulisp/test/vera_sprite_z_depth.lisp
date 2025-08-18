@@ -21,7 +21,7 @@
 (vera_sprite_pal_offset 1 1)
 (dotimes (yy h)
   (dotimes (xx (min w (1+ yy)))
-    (vera_sprite_pixel 1 xx yy VERA_COLOR_CYAN)))
+    (vera_tileset_pixel 1 2 xx yy VERA_COLOR_CYAN)))
 
 
 

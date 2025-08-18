@@ -6,16 +6,16 @@ XXXXXX> (vera_display_enable 1)
 XXXXXX> (vera_layer_enable 0 1)                                                 
 1                                                                               
                                                                                 
-XXXXXX> (vera_bitmap 0 320 32 8)                                                
-(XXXXXXXXX 320 32 8)                                                            
+XXXXXX> (vera_tileset 0 320 32 8 1)                                             
+(XXXXXXXXX 320 32 8 1 10240)                                                    
                                                                                 
-XXXXXX> (vera_layer_bitmap 0 0)                                                 
-0                                                                               
+XXXXXX> (vera_layer_bitmap 0 0 0)                                               
+(0 0)                                                                           
                                                                                 
-XXXXXX> (vera_bitmap_pixel 0 0 0 255)                                           
+XXXXXX> (vera_tileset_pixel 0 0 0 0 255)                                        
 255                                                                             
                                                                                 
-XXXXXX> (print (vera_bitmap_pixel 0 0 0))                                       
+XXXXXX> (print (vera_tileset_pixel 0 0 0 0))                                    
                                                                                 
 255                                                                             
 255                                                                             

@@ -11,7 +11,7 @@
     (vera_sprite_z_depth 1 VERA_SPRITE_Z_L1)
     (dotimes (yy h)
       (dotimes (xx (min w (1+ yy)))
-        (vera_sprite_pixel 1 xx yy VERA_COLOR_CYAN)))
+        (vera_tileset_pixel 0 2 xx yy VERA_COLOR_CYAN)))
     (vera_irqline 0)
     (vera_line_capture_enable 1)
     (loop (if (= (vera_line_capture_enable) 0) (return)))
@@ -39,7 +39,7 @@
     (print (vera_line_capture_read_pixel (min w h)))
     (dotimes (yy h)
       (dotimes (xx (min w (1+ yy)))
-        (vera_sprite_pixel 1 xx yy 0)))
+        (vera_tileset_pixel 0 2 xx yy 0)))
     (vera_tileset_deinit 0)))
 
 

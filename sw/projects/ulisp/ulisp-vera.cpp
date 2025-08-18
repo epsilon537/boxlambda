@@ -13,17 +13,6 @@ const char alreadyinitialized[] = "already initialized";
 
 const char notinitialized[] = "not initialized";
 
-Vera_bitmap_width_t checkbitmapwidth (object *obj) {
-  if (!integerp(obj)) error(notaninteger, obj);
-
-  int i = obj->integer;
-
-  if (!((i==VERA_BITMAP_WIDTH_320) || (i==VERA_BITMAP_WIDTH_640)))
-    error(invalidarg,obj);
-
-  return (Vera_bitmap_width_t)i;
-}
-
 Vera_bpp_t checkbpp (object *obj) {
   if (!integerp(obj)) error(notaninteger, obj);
 
@@ -40,8 +29,17 @@ Vera_tile_size_t checktilesize (object *obj) {
 
   int i = obj->integer;
 
-  if (!((i==VERA_TILE_SZ_8) || (i==VERA_TILE_SZ_16) || (i==VERA_TILE_SZ_32) || (i==VERA_TILE_SZ_64)))
-    error(invalidarg,obj);
+  switch (i) {
+    case VERA_TILE_SZ_8:
+    case VERA_TILE_SZ_16:
+    case VERA_TILE_SZ_32:
+    case VERA_TILE_SZ_64:
+    case VERA_TILE_SZ_320:
+    case VERA_TILE_SZ_640:
+      break;
+    default:
+      error(invalidarg,obj);
+  }
 
   return (Vera_tile_size_t)i;
 }
@@ -98,6 +96,7 @@ object *fn_vera_init (object *args, object *env) {
 
   return NULL;
 }
+
 object *fn_vera_map (object *args, object *env) {
   (void) env;
 
@@ -168,9 +167,18 @@ object *fn_vera_tileset (object *args, object *env) {
     if (tileset.is_initialized())
       error(alreadyinitialized, first(args));
 
+    Vera_tile_size_t width = checktilesize(second(args));
+    uint32_t height;
+
+    if (width < VERA_TILE_SZ_320) {
+      height = checktilesize(third(args));
+    }
+    else {
+      height = checkrange(third(args), 1, 0xFFFF);
+    }
+
     bool res = tileset.init(
-      checktilesize(second(args)),
-      checktilesize(third(args)),
+      width, height,
       checkbpp(fourth(args)),
       checkrange(fifth(args), 1, VERA_MAX_NUM_TILES_IN_TILESET));
 
@@ -184,7 +192,7 @@ object *fn_vera_tileset (object *args, object *env) {
   if (tileset.is_initialized()) {
     uint8_t *tileset_base = tileset.tileset_base();
     Vera_tile_size_t width = tileset.width();
-    Vera_tile_size_t height = tileset.height();
+    uint32_t height = tileset.height();
     Vera_bpp_t bpp = tileset.bpp();
     uint32_t num_tiles = tileset.num_tiles();
     uint32_t tilesize = tileset.tilesize_bytes();
@@ -213,63 +221,6 @@ object *fn_vera_tileset_deinit (object *args, object *env) {
     error(notinitialized, idx);
 
   tileset.deinit();
-
-  return nil;
-}
-
-object *fn_vera_bitmap (object *args, object *env) {
-  (void) env;
-
-  int nargs = listlength(args);
-
-  uint32_t bitmap_id = checkrange(first(args), 0, VERA_NUM_BITMAPS-1);
-
-  Vera_bitmap &bitmap = vera.bitmap[bitmap_id];
-
-  if (nargs == 4) {
-    if (bitmap.is_initialized())
-      error(alreadyinitialized, first(args));
-
-    bool res = bitmap.init(
-      checkbitmapwidth(second(args)),
-      checkrange(third(args), 1, 0xFFFF),
-      checkbpp(fourth(args)));
-
-    if (!res)
-      error2(insufficientresources);
-  }
-  else if (nargs > 1) {
-    error2(toofewargs);
-  }
-
-  if (bitmap.is_initialized()) {
-    uint8_t *bitmap_base = bitmap.bitmap_base();
-    Vera_bitmap_width_t width = bitmap.width();
-    uint32_t height = bitmap.height();
-    Vera_bpp_t bpp = bitmap.bpp();
-
-    return cons(number((int)bitmap_base),
-                cons(number(width),
-                     cons(number(height),
-                          cons(number(bpp),NULL))));
-  }
-  else {
-    return NULL;
-  }
-}
-
-object *fn_vera_bitmap_deinit (object *args, object *env) {
-  (void) env;
-
-  object *idx = first(args);
-  uint32_t idx_checked = checkrange(idx, 0, VERA_NUM_BITMAPS-1);
-
-  Vera_bitmap &bitmap = vera.bitmap[idx_checked];
-
-  if (!bitmap.is_initialized())
-    error(notinitialized, idx);
-
-  bitmap.deinit();
 
   return nil;
 }
@@ -308,17 +259,17 @@ object *fn_vera_line_capture_read_pixel (object *args, object *env) {
                    cons(number(rgb.b), NULL)));
 }
 
-object *fn_vera_spritebank (object *args, object *env) {
+object *fn_vera_sprite_bank (object *args, object *env) {
   (void) env;
 
   int nargs = listlength(args);
 
-  Vera_sprite_bank_t bankchecked;
+  uint32_t bankchecked;
 
   if (nargs == 1) {
     object *bank = first(args);
 
-    bankchecked = (Vera_sprite_bank_t)checkrange(bank, 0, 1);
+    bankchecked = checkrange(bank, 0, 1);
 
     vera.sprite_bank_set(bankchecked);
   }
@@ -326,7 +277,7 @@ object *fn_vera_spritebank (object *args, object *env) {
     bankchecked = vera.sprite_bank_get();
   }
 
-  return number((int)bankchecked);
+  return number(bankchecked);
 }
 
 object *fn_vera_ien (object *args, object *env) {
@@ -661,6 +612,10 @@ object *fn_vera_layer_tileset (object *args, object *env) {
     if (!tileset.is_initialized())
       error(notinitialized, second(args));
 
+    //Make sure it's a regular tileset, not a bitmap or a sprite tileset
+    if (tileset.width() > VERA_TILE_SZ_16)
+      error(invalidarg, second(args));
+
     vera.layer[layerchecked].tileset_set(tileset_id);
   }
   else {
@@ -678,23 +633,38 @@ object *fn_vera_layer_bitmap (object *args, object *env) {
   object *layer = first(args);
   int layerchecked = checkrange(layer, 0, 1);
 
-  uint32_t bitmap_id;
+  uint32_t tileset_id;
+  uint32_t tile_idx;
+  bool is_a_bitmap = true;
 
-  if (nargs == 2) {
-    bitmap_id = checkrange(second(args), 0, VERA_NUM_BITMAPS-1);
+  if (nargs == 3) {
+    tileset_id = (uint32_t)checkrange(second(args), 0, VERA_NUM_TILESETS);
 
-    Vera_bitmap& bitmap = vera.bitmap[bitmap_id];
+    Vera_tileset& tileset = vera.tileset[tileset_id];
 
-    if (!bitmap.is_initialized())
+    if (!tileset.is_initialized())
       error(notinitialized, second(args));
 
-    vera.layer[layerchecked].bitmap_set(bitmap_id);
+    //Make sure this tileset holds bitmaps
+    if (tileset.width() < VERA_TILE_SZ_320)
+      error(invalidarg, second(args));
+
+    tile_idx = (uint32_t)checkinteger(third(args));
+
+    if (tile_idx >= tileset.num_tiles())
+      error(indexrange, third(args));
+
+    vera.layer[layerchecked].bitmap_set(tileset_id, tile_idx);
+  }
+  if (nargs == 2) {
+    error2(toofewargs);
   }
   else {
-    bitmap_id = vera.layer[layerchecked].bitmap_get();
+    is_a_bitmap = vera.layer[layerchecked].bitmap_get(tileset_id, tile_idx);
   }
 
-  return (bitmap_id != ~0U) ? number((int)(bitmap_id)) : NULL;
+  return !is_a_bitmap ? NULL :
+    cons(number(tileset_id), cons(number(tile_idx), NULL));
 }
 
 object *fn_vera_layer_pal_offset (object *args, object *env) {
@@ -784,6 +754,11 @@ object *fn_vera_sprite_tile (object *args, object *env) {
 
     if (!tileset.is_initialized())
       error(notinitialized, second(args));
+
+    //Make sure this tileset is valid for sprites
+    if ((tileset.width() > VERA_TILE_SZ_64) ||
+        (tileset.bpp() < VERA_BPP_4))
+      error(invalidarg, second(args));
 
     tile_idx = (uint32_t)checkinteger(third(args));
 
@@ -957,48 +932,6 @@ object *fn_vera_sprite_vflip (object *args, object *env) {
   return number((int)vflip);
 }
 
-object *fn_vera_sprite_pixel (object *args, object *env) {
-  (void) env;
-
-  int nargs = listlength(args);
-
-  int spritechecked = checkrange(first(args), 0, VERA_NUM_SPRITES-1);
-
-  uint32_t x, y;
-  uint8_t val;
-
-  Vera_sprite& sprite = vera.sprite[spritechecked];
-
-  x = checkinteger(second(args));
-  y = checkinteger(third(args));
-
-  uint32_t tileset_id;
-  uint32_t tile_idx;
-
-  sprite.tile_get(tileset_id, tile_idx);
-
-  if (tileset_id >= VERA_NUM_TILESETS)
-    error(notinitialized, first(args));
-
-  Vera_tileset& tileset = vera.tileset[tileset_id];
-
-  if (x >= tileset.width())
-    error(invalidarg, second(args));
-
-  if (y >= tileset.height())
-    error(invalidarg, third(args));
-
-  if (nargs == 4) {
-    val = (uint8_t)checkrange(fourth(args), 0, 255);
-    sprite.pixel_set(x, y, val);
-  }
-  else {
-    val = sprite.pixel_get(x, y);
-  }
-
-  return number((int)val);
-}
-
 object *fn_vera_map_entry (object *args, object *env) {
   (void) env;
 
@@ -1029,36 +962,6 @@ object *fn_vera_map_entry (object *args, object *env) {
   return number(entry);
 }
 
-object *fn_vera_bitmap_pixel (object *args, object *env) {
-  (void) env;
-
-  int nargs = listlength(args);
-
-  uint32_t bitmap_id = checkrange(first(args), 0, VERA_NUM_BITMAPS-1);
-
-  Vera_bitmap &bitmap = vera.bitmap[bitmap_id];
-
-  if (!bitmap.is_initialized())
-    error(notinitialized, first(args));
-
-  Vera_bitmap_width_t width = bitmap.width();
-  uint32_t height = bitmap.height();
-
-  uint8_t val;
-  uint32_t x = checkrange(second(args), 0, width-1);
-  uint32_t y = checkrange(third(args), 0, height-1);
-
-  if (nargs == 4) {
-    val = (uint8_t)checkrange(fourth(args), 0, 255);
-    bitmap.pixel_set(x, y, val);
-  }
-  else {
-    val = bitmap.pixel_get(x, y);
-  }
-
-  return number((int)val);
-}
-
 object *fn_vera_tileset_pixel (object *args, object *env) {
   (void) env;
 
@@ -1072,7 +975,7 @@ object *fn_vera_tileset_pixel (object *args, object *env) {
     error(notinitialized, first(args));
 
   Vera_tile_size_t width = tileset.width();
-  Vera_tile_size_t height = tileset.height();
+  uint32_t height = tileset.height();
   uint32_t num_tiles = tileset.num_tiles();
 
   uint8_t val;
@@ -1097,11 +1000,9 @@ const char stringvera_map[] = "vera_map";
 const char stringvera_map_deinit[] = "vera_map_deinit";
 const char stringvera_tileset[] = "vera_tileset";
 const char stringvera_tileset_deinit[] = "vera_tileset_deinit";
-const char stringvera_bitmap[] = "vera_bitmap";
-const char stringvera_bitmap_deinit[] = "vera_bitmap_deinit";
 const char stringvera_line_capture_enable[] = "vera_line_capture_enable";
 const char stringvera_line_capture_read_pixel[] = "vera_line_capture_read_pixel";
-const char stringvera_spritebank[] = "vera_spritebank";
+const char stringvera_sprite_bank[] = "vera_sprite_bank";
 const char stringvera_ien[] = "vera_ien";
 const char stringvera_isr[] = "vera_isr";
 const char stringvera_irqline[] = "vera_irqline";
@@ -1129,9 +1030,7 @@ const char stringvera_sprite_col_mask[] = "vera_sprite_col_mask";
 const char stringvera_sprite_z_depth[] = "vera_sprite_z_depth";
 const char stringvera_sprite_hflip[] = "vera_sprite_hflip";
 const char stringvera_sprite_vflip[] = "vera_sprite_vflip";
-const char stringvera_sprite_pixel[] = "vera_sprite_pixel";
 const char stringvera_map_entry[] = "vera_map_entry";
-const char stringvera_bitmap_pixel[] = "vera_bitmap_pixel";
 const char stringvera_tileset_pixel[] = "vera_tileset_pixel";
 
 // Documentation strings
@@ -1156,10 +1055,10 @@ const char docvera_map_deinit[] = "(vera_map_deinit map_id)\n"
 const char docvera_tileset[] = "(vera_tileset tileset_id [width height bpp num_tiles])\n"
 "Initialize a tileset object using given parameters. If only tileset_id is given,\n"
 "retrieve tileset properties.\n"
-"A tileset can be used to represent both tilesets and spritesets.\n"
+"A tileset can be used to represent sets of regular tiles, sprites and bitmaps.\n"
 "@param tileset: id of tileset object. Range: 0..VERA_NUM_TILESETS-1.\n"
-"@param width: 8/16 for non-sprite tiles. For sprites, additionally 32 and 64 are allowed.\n"
-"@param height: 8/16 for non-sprite tiles. For sprites, additionally 32 and 64 are allowed.\n"
+"@param width: 8/16 for regular tiles. For sprites, additionally 32 and 64 are allowed. For bitmaps: 320 or 640.\n"
+"@param height: 8/16 for regular tiles. For sprites, additionally 32 and 64 are allowed. For bitmaps: Range [1..65535].\n"
 "@param bpp: 1/2/4/8. In case of spritesets, only 4 and 8 are allowed.\n"
 "@param num_tiles: Number of tiles in the tileset. Range: 0..1023.\n"
 "@return: (tileset_base, width, height, bpp, num_tiles, tilesize_bytes) or nil if tileset is not initialized.\n";
@@ -1167,20 +1066,6 @@ const char docvera_tileset[] = "(vera_tileset tileset_id [width height bpp num_t
 const char docvera_tileset_deinit[] = "(vera_tileset_deinit tileset_id)\n"
 "Deinit tileset object, releasing its VRAM resources.\n"
 "@param tileset: id of tileset object to deinit. Range: 0..VERA_NUM_TILESETS-1.\n"
-"@return: nil.\n";
-
-const char docvera_bitmap[] = "(vera_bitmap bitmap_id [width height bpp])\n"
-"Initialize a bitmap object using given parameters. If only bitmap_id is given,\n"
-"retrieve bitmap properties.\n"
-"@param bitmap: id of bitmap object to initialize.\n"
-"@param width: 320/640\n"
-"@param height: in pixels.\n"
-"@param bpp: Supported values: 1/2/4/8.\n"
-"@return: (bitmap_base, width, height, bpp) or nil if bitmap is not initialized.\n";
-
-const char docvera_bitmap_deinit[] = "(vera_bitmap_deinit bitmap)\n"
-"Deinitialize bitmap object, releasing its VRAM resources.\n"
-"@param bitmap: id of bitmap object to deinit.\n"
 "@return: nil.\n";
 
 const char docvera_line_capture_enable[] = "(vera_line_capture_enable [enable])\n"
@@ -1193,10 +1078,10 @@ const char docvera_line_capture_read_pixel[] = "(vera_line_capture_read_pixel x\
 "@param x: Range: 0..639.\n"
 "@return: (r, g, b).\n";
 
-const char docvera_spritebank[] = "(vera_spritebank [bank])\n"
-"Set or get the active spritebank.\n"
-"@param bank: the active spritebank. Range: 0..1.\n"
-"@return: the active spritebank.\n";
+const char docvera_sprite_bank[] = "(vera_sprite_bank [bank])\n"
+"Set or get the active sprite bank.\n"
+"@param bank: the active sprite bank. Range: 0..1.\n"
+"@return: the active sprite bank.\n";
 
 const char docvera_ien[] = "(vera_ien [irq_mask enable])\n"
 "Enable/disable VERA IRQs.\n"
@@ -1282,11 +1167,12 @@ const char docvera_layer_tileset[] = "(vera_layer_tileset layer [tileset_id])\n"
 "@param tileset_id: the id of the tile object whose properties to use. Range: 0..VERA_NUM_TILESETS-1.\n"
 "@return: the layer's current tileset_id or nil if no tileset is currently set.\n";
 
-const char docvera_layer_bitmap[] = "(vera_layer_bitmap layer [bitmap_id])\n"
-"Put the layer in bitmapmode using the given bitmap object's properties.\n"
+const char docvera_layer_bitmap[] = "(vera_layer_bitmap layer [tileset_id tile_idx])\n"
+"Put Layer in Bitmap Mode, using the given bitmap object's properties\n"
 "@param layer: 1/0: the layer id.\n"
-"@param bitmap_id: the id of the bitmap object whose properties to use. Range: 0..VERA_NUM_BITMAPS-1.\n"
-"@return: the layer's current bitmap_id or nil if no bitmap is currently set.\n";
+"@param tileset_id: id of tileset holding the bitmap. Range: 0..VERA_NUM_TILESETS-1.\n"
+"@param tile_idx: idx of the bitmap within the tileset. Range: 0..1024.\n"
+"@return: (tileset_idx tileset_idx) or nil if not in bitmap mode.\n";
 
 const char docvera_layer_pal_offset[] = "(vera_layer_pal_offset layer [offset])\n"
 "Assuming bitmap mode, set or get the layer's palette offset.\n"
@@ -1365,14 +1251,6 @@ const char docvera_sprite_vflip[] = "(vera_sprite_vflip sprite_id [vflip])\n"
 "@param vflip: 0 or 1.\n"
 "@return: the sprite's current vflip value.\n";
 
-const char docvera_sprite_pixel[] = "(vera_sprite_pixel sprite_id x y [val])\n"
-"Get or set a pixel in a sprite.\n"
-"@param sprite_id: the sprite_id. Range: 0..127.\n"
-"@param x: Range: 0..sprite width-1.\n"
-"@param y: Range: 0..sprite height-1.\n"
-"@param val: the pixel value. Range: 0..(2^bpp)-1.\n"
-"@return: the pixel value.\n";
-
 const char docvera_map_entry[] = "(vera_map_entry map_id col row [entry])\n"
 "Set or get a 16-bit map entry.\n"
 "@param map_id. Range: 0..VERA_NUM_MAPS-1.\n"
@@ -1381,15 +1259,7 @@ const char docvera_map_entry[] = "(vera_map_entry map_id col row [entry])\n"
 "@param entry: the 16-bit entry value.\n"
 "@return: 16-bit map entry.\n";
 
-const char docvera_bitmap_pixel[] = "(vera_bitmap_pixel bitmap_id x y [val])\n"
-"Set or get a bitmap pixel.\n"
-"@param bitmap_id. Range: 0..VERA_NUM_BITMAPS-1.\n"
-"@param x: the pixel x position. Range: 0..bitmap width-1.\n"
-"@param y: the pixel y position. Range: 0..bitmap height-1.\n"
-"@param val: the pixel value. Range: 0..(2^bpp)-1.\n"
-"@return: pixel value\n";
-
-const char docvera_tileset_pixel[] = "(vera_tileset_pixel tilset_id tile_idx x y [val])\n"
+const char docvera_tileset_pixel[] = "(vera_tileset_pixel tileset_id tile_idx x y [val])\n"
 "Set or get a tile pixel.\n"
 "@param tileset_id.\n"
 "@param tile_idx: Index into the tileset. Range: 0..num_tiles-1.\n"
@@ -1404,12 +1274,10 @@ const tbl_entry_t lookup_table2[] = {
   { stringvera_map_deinit, fn_vera_map_deinit, 0211, docvera_map_deinit },
   { stringvera_tileset, fn_vera_tileset, 0215, docvera_tileset },
   { stringvera_tileset_deinit, fn_vera_tileset_deinit, 0211, docvera_tileset_deinit },
-  { stringvera_bitmap, fn_vera_bitmap, 0214, docvera_bitmap },
-  { stringvera_bitmap_deinit, fn_vera_bitmap_deinit, 0211, docvera_bitmap_deinit },
   { stringvera_line_capture_enable, fn_vera_line_capture_enable, 0201, docvera_line_capture_enable},
   { stringvera_line_capture_read_pixel, fn_vera_line_capture_read_pixel, 0201, docvera_line_capture_read_pixel},
   { stringvera_sprite_enable, fn_vera_sprite_enable, 0201, docvera_sprite_enable},
-  { stringvera_spritebank, fn_vera_spritebank, 0201, docvera_spritebank},
+  { stringvera_sprite_bank, fn_vera_sprite_bank, 0201, docvera_sprite_bank},
   { stringvera_ien, fn_vera_ien, 0202, docvera_ien},
   { stringvera_isr, fn_vera_isr, 0201, docvera_isr},
   { stringvera_irqline, fn_vera_irqline, 0201, docvera_irqline},
@@ -1424,7 +1292,7 @@ const tbl_entry_t lookup_table2[] = {
   { stringvera_layer_vscroll, fn_vera_layer_vscroll, 0212, docvera_layer_vscroll},
   { stringvera_layer_map, fn_vera_layer_map, 0212, docvera_layer_map},
   { stringvera_layer_tileset, fn_vera_layer_tileset, 0212, docvera_layer_tileset},
-  { stringvera_layer_bitmap, fn_vera_layer_bitmap, 0212, docvera_layer_bitmap},
+  { stringvera_layer_bitmap, fn_vera_layer_bitmap, 0213, docvera_layer_bitmap},
   { stringvera_layer_pal_offset, fn_vera_layer_pal_offset, 0212, docvera_layer_pal_offset},
   { stringvera_palette, fn_vera_palette, 0204, docvera_palette},
   { stringvera_sprite_init, fn_vera_sprite_init, 0211, docvera_sprite_init},
@@ -1436,9 +1304,7 @@ const tbl_entry_t lookup_table2[] = {
   { stringvera_sprite_z_depth, fn_vera_sprite_z_depth, 0212, docvera_sprite_z_depth},
   { stringvera_sprite_hflip, fn_vera_sprite_hflip, 0212, docvera_sprite_hflip},
   { stringvera_sprite_vflip, fn_vera_sprite_vflip, 0212, docvera_sprite_vflip},
-  { stringvera_sprite_pixel, fn_vera_sprite_pixel, 0234, docvera_sprite_pixel},
   { stringvera_map_entry, fn_vera_map_entry, 0234, docvera_map_entry},
-  { stringvera_bitmap_pixel, fn_vera_bitmap_pixel, 0234, docvera_bitmap_pixel},
   { stringvera_tileset_pixel, fn_vera_tileset_pixel, 0245, docvera_tileset_pixel},
 };
 

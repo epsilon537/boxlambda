@@ -44,17 +44,6 @@ Error: 'vera_sprite_z_depth' invalid argument: 20
 XXXXXX> (vera_sprite_z_depth 1 VERA_SPRITE_Z_BG_L0)                             
 1                                                                               
                                                                                 
-XXXXXX> (vera_sprite_pixel 1000 0 0  VERA_COLOR_CYAN)                           
-Error: 'vera_sprite_pixel' invalid argument: 1000                               
-XXXXXX> (vera_sprite_pixel 1 1000 0  VERA_COLOR_CYAN)                           
-Error: 'vera_sprite_pixel' invalid argument: 1000                               
-XXXXXX> (vera_sprite_pixel 1 0 1000  VERA_COLOR_CYAN)                           
-Error: 'vera_sprite_pixel' invalid argument: 1000                               
-XXXXXX> (vera_sprite_pixel 1 0 0 1000)                                          
-Error: 'vera_sprite_pixel' invalid argument: 1000                               
-XXXXXX> (vera_sprite_pixel 1 0 0  VERA_COLOR_CYAN)                              
-3                                                                               
-                                                                                
 XXXXXX> (vera_sprite_pal_offset 1000 1)                                         
 Error: 'vera_sprite_pal_offset' invalid argument: 1000                          
 XXXXXX> (vera_sprite_pal_offset 1 1000)                                         
