@@ -4,7 +4,7 @@ target_sources(arduino
     PRIVATE
     Serial.cpp
     Wire.cpp
-    boxlambda-hal-gpio.cpp
+    GPIO.cpp
     SPI.cpp
 )
 
