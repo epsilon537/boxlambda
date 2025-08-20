@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `v0.2.0`: Changes sinces label `v0.1.0` - 2025-08-19
+
+### Added
+
+- Software-configurable VGA line capture in VERA.
+- Early-stage Arduino compatibility module (boots ulisp).
+- C++ VERA HAL API implemented.
+- ulisp port for BoxLambda boots REPL on serial port; limited integration.
+- VERA HAL ulisp extension.
+- `ulisp_test.py` automated ulisp test scripting supervised by host PC.
+- ulisp test suite for VERA HAL.
+
+### Fixed
+
+- Refinements in VERA Register Access Layer.
+
+### Changed
+
+- Added `-fno-rtti` to CXX flags.
+
+### Removed
+
+- Nothing.
+
 ## Label `v0.1.0`: Changes sinces label `boxlambda_simplified` - 2025-07-07
 
 ### Added
@@ -16,10 +40,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 gateware projects.
 
 ### Fixed
+
 - Fixed bug in Ibex Single Instruction Prefetcher related to handling of multiple
 near-simultaneous interrupts.
 
 ### Changed
+
 - Triggering code (re)generation when (re)generating build tree, or when
 explicitly requested using `make cgen` command. No longer triggering code
 (re)generation as part of the regular build process.
@@ -33,6 +59,7 @@ explicitly requested using `make cgen` command. No longer triggering code
 - Put IMEM size in linker script again instead of passing it in via build system. For simplicity's sake.
 
 ### Removed
+
 - Removed ad-hoc register map definitions. Replaced with Corsair-generated register map.
 - Removed *_flsh software build variant. The bootloader now loads the application image from flash into IMEM.
 - Remove arty-a7-35 from Bender.yml files.
