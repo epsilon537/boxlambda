@@ -106,9 +106,7 @@ then
 fi
 
 #Install LiteX.
-#When litex_setup is run, it creates a bunch of new directories under sub/.
-#sub/migen/ is one of them.
-if [ -d ./sub/migen ]; then
+if [ -f ./tools/oss-cad-suite/bin/litedram_gen ]; then
   echo "Litex found."
 else
   echo "Installing Litex..."

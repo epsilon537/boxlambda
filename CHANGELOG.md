@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Refinements in VERA Register Access Layer.
+- Corrected LiteX installation in `boxlambda_setup.sh` script.
 
 ### Changed
 
