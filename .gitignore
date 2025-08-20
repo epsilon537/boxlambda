@@ -22,4 +22,6 @@ tools
 #build trees
 build
 CMakeUserPresets.json
+#python derived filex
+__pycache__
 

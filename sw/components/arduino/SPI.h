@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+// Note: Enough stuff here to allow ulisp to build, but not to actually use SPI.
+
 #define SPI_MODE0 0x00
 #define SPI_MODE1 0x04
 #define SPI_MODE2 0x08

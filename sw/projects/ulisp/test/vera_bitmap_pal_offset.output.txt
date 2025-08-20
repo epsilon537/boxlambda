@@ -1,0 +1,72 @@
+start                                                                           
+                                                                                
+XXXXXX> (vera_display_enable 1)                                                 
+1                                                                               
+                                                                                
+XXXXXX> (vera_layer_enable 0 1)                                                 
+1                                                                               
+                                                                                
+XXXXXX> (dolist (bpp (list 2 4 8))                                              
+  (vera_tileset 0 320 32 bpp 1)                                                 
+  (print (vera_tileset 0))                                                      
+  (vera_layer_bitmap 0 0 0)                                                     
+  (vera_layer_pal_offset 0 0)                                                   
+  (print (vera_layer_pal_offset 0))                                             
+  (vera_tileset_pixel 0 0 0 0 1)                                                
+  (vera_irqline 0)                                                              
+  (vera_line_capture_enable 1)                                                  
+  (loop (if (= (vera_line_capture_enable) 0) (return)))                         
+  (vera_line_capture_enable 1)                                                  
+  (loop (if (= (vera_line_capture_enable) 0) (return)))                         
+  (print (vera_line_capture_read_pixel 0))                                      
+  (print (vera_palette 1))                                                      
+  (vera_layer_pal_offset 0 1)                                                   
+  (print (vera_layer_pal_offset 0))                                             
+  (loop (if (= (vera_line_capture_enable) 0) (return)))                         
+  (vera_line_capture_enable 1)                                                  
+  (loop (if (= (vera_line_capture_enable) 0) (return)))                         
+  (print (vera_line_capture_read_pixel 0))                                      
+  (print (vera_palette 17))                                                     
+  (vera_layer_pal_offset 0 4)                                                   
+  (print (vera_layer_pal_offset 0))                                             
+  (loop (if (= (vera_line_capture_enable) 0) (return)))                         
+  (vera_line_capture_enable 1)                                                  
+  (loop (if (= (vera_line_capture_enable) 0) (return)))                         
+  (print (vera_line_capture_read_pixel 0))                                      
+  (print (vera_palette (1+ (* 4 16))))                                          
+  (vera_tileset_deinit 0))                                                      
+                                                                                
+(XXXXXXXXX 320 32 2 1 2560)                                                     
+0                                                                               
+(15 15 15)                                                                      
+(15 15 15)                                                                      
+1                                                                               
+(1 1 1)                                                                         
+(1 1 1)                                                                         
+4                                                                               
+(12 12 9)                                                                       
+(12 12 9)                                                                       
+(XXXXXXXXX 320 32 4 1 5120)                                                     
+0                                                                               
+(15 15 15)                                                                      
+(15 15 15)                                                                      
+1                                                                               
+(1 1 1)                                                                         
+(1 1 1)                                                                         
+4                                                                               
+(12 12 9)                                                                       
+(12 12 9)                                                                       
+(XXXXXXXXX 320 32 8 1 10240)                                                    
+0                                                                               
+(15 15 15)                                                                      
+(15 15 15)                                                                      
+1                                                                               
+(1 1 1)                                                                         
+(1 1 1)                                                                         
+4                                                                               
+(12 12 9)                                                                       
+(12 12 9)                                                                       
+nil                                                                             
+                                                                                
+XXXXXX> 'end                                                                    
+end                                                                             

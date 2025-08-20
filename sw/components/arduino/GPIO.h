@@ -1,5 +1,4 @@
-#ifndef BOXLAMBDA_HAL_H
-#define BOXLAMBDA_HAL_H
+#pragma once
 
 #include "stdint.h"
 
@@ -7,9 +6,7 @@
 extern "C" {
 #endif
 
-inline void analogReadResolution(int bits) {}
-inline void analogWriteResolution(int bits) {}
-
+// From Arduino's gpio API
 #define LOW               0x0
 #define HIGH              0x1
 
@@ -22,10 +19,6 @@ void pinMode(uint8_t pin, uint8_t mode);
 void digitalWrite(uint16_t pin, uint8_t value);
 int digitalRead(uint8_t pin);
 
-inline int analogRead(uint8_t pin) { return 0; }
-inline void analogWrite(uint8_t pin, int value) {}
-
 #ifdef __cplusplus
 }
 #endif
-#endif //BOXLAMBDA_HAL_H

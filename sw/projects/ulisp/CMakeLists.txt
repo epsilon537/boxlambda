@@ -28,3 +28,4 @@ link_and_create_image(ulisp ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_i
 target_link_libraries(ulisp arduino gpio riscv vera bootstrap timer
 interrupts sdram)
 
+add_flash_sw_target(ulisp)

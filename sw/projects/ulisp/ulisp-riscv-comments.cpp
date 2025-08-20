@@ -4,8 +4,11 @@
    Licensed under the MIT license: https://opensource.org/licenses/MIT
 */
 
+#if defined(BOARD_BOXLAMBDA)
 // Lisp Library
-const char LispLibrary[] = "";
+//const char LispLibrary[] = "";
+#include "LispLibrary.h"
+#endif
 
 // Compile options
 
@@ -14,11 +17,15 @@ const char LispLibrary[] = "";
 // #define printgcs
 // #define sdcardsupport
 // #define gfxsupport
-// #define lisplibrary
+#if defined(BOARD_BOXLAMBDA)
+#define lisplibrary
+#endif
 #define assemblerlist
 #define lineeditor
 #define vt100
-// #define extensions
+#if defined(BOARD_BOXLAMBDA)
+#define extensions
+#endif
 
 // Includes
 
@@ -8008,3 +8015,9 @@ void ulisperror () {
   if (!tstflag(LIBRARYLOADED)) { setflag(LIBRARYLOADED); loadfromlibrary(NULL); clrflag(NOECHO); }
   #endif
 }
+
+#if defined(BOARD_BOXLAMBDA)
+#include "ulisp-extensions.cpp"
+#endif
+
+

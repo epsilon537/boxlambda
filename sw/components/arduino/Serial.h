@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include "uart.h"
 
-// BoxLambda adapter of Arduino's Seral
+// BoxLambda adapter of Arduino's Serial
 
 class BoxLambdaSerial {
 public:

@@ -10,6 +10,9 @@
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 //_init is executed by picolibc startup code before main().
 void _init(void) {
 }
@@ -19,6 +22,10 @@ void _init(void) {
 void	_exit (int status) {
 	while (1);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 int main(void) {
   uint32_t leds = 0xF;

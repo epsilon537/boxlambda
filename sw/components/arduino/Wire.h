@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+// A BoxLambda adaption of Arduino's I2C Wire API.
 class BoxLambdaWire
 {
   public:
