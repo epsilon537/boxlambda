@@ -176,7 +176,7 @@ def attach():
 
 def all():
     """Run all .lisp testcases in the current directory and record the
-    result""".
+    result"""
     global result
 
     files = glob.glob("*.lisp")
@@ -190,5 +190,5 @@ def all():
     print(result)
 
     print("Failed:")
-    print([k for (k, v) in result.items() if not v)
+    print([k for (k, v) in result.items() if not v])
 
