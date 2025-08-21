@@ -189,6 +189,6 @@ def all():
     print("All:")
     print(result)
 
-    print("Failed:)
+    print("Failed:")
     print([k for (k, v) in result.items() if not v)
 
