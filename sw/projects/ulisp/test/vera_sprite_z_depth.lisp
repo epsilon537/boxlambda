@@ -1,6 +1,6 @@
 'start
 (vera_display_enable 1)
-(vera_sprite_enable 1)
+(vera_sprites_enable 1)
 (vera_map 0 32 32 VERA_MAP_TYPE_TILE)
 (vera_map 1 32 32 VERA_MAP_TYPE_TILE)
 (vera_layer_map 0 0)

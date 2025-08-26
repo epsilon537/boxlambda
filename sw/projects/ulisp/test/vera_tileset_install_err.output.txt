@@ -1,28 +1,28 @@
-start                                                                           
-                                                                                
-XXXXXX> (vera_init)                                                             
-nil                                                                             
-                                                                                
-XXXXXX> (vera_tileset 0 8 8 1 1)                                                
-(XXXXXXXXX 8 8 1 1 8)                                                           
-                                                                                
-XXXXXX> (vera_layer_bitmap 0 0 0)                                               
-Error: 'vera_layer_bitmap' invalid argument: 0                                  
-XXXXXX> (vera_sprite_init 0)                                                    
-nil                                                                             
-                                                                                
-XXXXXX> (vera_sprite_tile 0 0 0)                                                
-Error: 'vera_sprite_tile' invalid argument: 0                                   
-XXXXXX> (vera_tileset_deinit 0)                                                 
-nil                                                                             
-                                                                                
-XXXXXX> (vera_tileset 0 320 8 4 1)                                              
-(XXXXXXXXX 320 8 4 1 1280)                                                      
-                                                                                
-XXXXXX> (vera_sprite_tile 0 0 0)                                                
-Error: 'vera_sprite_tile' invalid argument: 0                                   
-XXXXXX> (vera_layer_tileset 0 0)                                                
-Error: 'vera_layer_tileset' invalid argument: 0                                 
-XXXXXX>                                                                         
-'end                                                                            
-end                                                                             
+start
+
+XXXXXX> (vera_init)
+nil
+
+XXXXXX> (vera_tileset 0 8 8 1 1)
+(XXXXXXXXX 8 8 1 1 8)
+
+XXXXXX> (vera_layer_bitmap 0 0 0)
+Error: 'vera_layer_bitmap' invalid argument: 0
+XXXXXX> (vera_sprite_init 0)
+nil
+
+XXXXXX> (vera_sprite_tile 0 0 0)
+Error: 'vera_sprite_tile' invalid argument: 0
+XXXXXX> (vera_tileset_deinit 0)
+nil
+
+XXXXXX> (vera_tileset 0 320 8 4 1)
+(XXXXXXXXX 320 8 4 1 1280)
+
+XXXXXX> (vera_sprite_tile 0 0 0)
+Error: 'vera_sprite_tile' invalid argument: 0
+XXXXXX> (vera_layer_tileset 0 0)
+Error: 'vera_layer_tileset' invalid argument: 0
+XXXXXX>
+'end
+end

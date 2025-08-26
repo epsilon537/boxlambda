@@ -1,81 +1,81 @@
-start                                                                           
-                                                                                
-XXXXXX> (vera_display_enable 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_layer_enable 0 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TILE)                                   
-(XXXXXXXXX 32 32 2)                                                             
-                                                                                
-XXXXXX> (vera_tileset 0 16 16 8 32)                                             
-(XXXXXXXXX 16 16 8 32 256)                                                      
-                                                                                
-XXXXXX> (vera_layer_map 0 0)                                                    
-0                                                                               
-                                                                                
-XXXXXX> (vera_layer_tileset 0 0)                                                
-0                                                                               
-                                                                                
-XXXXXX> (vera_map_entry 0 0 0 1)                                                
-1                                                                               
-                                                                                
-XXXXXX> (dotimes (ii 16)                                                        
-  (vera_tileset_pixel 0 1 ii ii VERA_COLOR_WHITE)                               
-  (vera_tileset_pixel 0 1 (- 15 ii) ii VERA_COLOR_WHITE))                       
-nil                                                                             
-                                                                                
-XXXXXX> (vera_irqline 15)                                                       
-15                                                                              
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 14)                                       
-(0 0 0)                                                                         
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 15)                                       
-(15 15 15)                                                                      
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 16)                                       
-(0 0 0)                                                                         
-                                                                                
-XXXXXX> (vera_hscale 0.5)                                                       
-0.5                                                                             
-                                                                                
-XXXXXX> (vera_vscale 0.5)                                                       
-0.5                                                                             
-                                                                                
-XXXXXX> (vera_hscale)                                                           
-0.5                                                                             
-                                                                                
-XXXXXX> (vera_vscale)                                                           
-0.5                                                                             
-                                                                                
-XXXXXX> (vera_irqline 31)                                                       
-31                                                                              
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 29)                                       
-(0 0 0)                                                                         
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 30)                                       
-(15 15 15)                                                                      
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 31)                                       
-(15 15 15)                                                                      
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 32)                                       
-(0 0 0)                                                                         
-                                                                                
-XXXXXX> 'end                                                                    
-end                                                                             
+start
+
+XXXXXX> (vera_display_enable 1)
+1
+
+XXXXXX> (vera_layer_enable 0 1)
+1
+
+XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TILE)
+(XXXXXXXXX 32 32 2)
+
+XXXXXX> (vera_tileset 0 16 16 8 32)
+(XXXXXXXXX 16 16 8 32 256)
+
+XXXXXX> (vera_layer_map 0 0)
+0
+
+XXXXXX> (vera_layer_tileset 0 0)
+0
+
+XXXXXX> (vera_map_entry 0 0 0 1)
+1
+
+XXXXXX> (dotimes (ii 16)
+  (vera_tileset_pixel 0 1 ii ii VERA_COLOR_WHITE)
+  (vera_tileset_pixel 0 1 (- 15 ii) ii VERA_COLOR_WHITE))
+nil
+
+XXXXXX> (vera_irqline 15)
+15
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (vera_line_capture_read_pixel 14)
+(0 0 0)
+
+XXXXXX> (vera_line_capture_read_pixel 15)
+(15 15 15)
+
+XXXXXX> (vera_line_capture_read_pixel 16)
+(0 0 0)
+
+XXXXXX> (vera_hscale 0.5)
+0.5
+
+XXXXXX> (vera_vscale 0.5)
+0.5
+
+XXXXXX> (vera_hscale)
+0.5
+
+XXXXXX> (vera_vscale)
+0.5
+
+XXXXXX> (vera_irqline 31)
+31
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (vera_line_capture_read_pixel 29)
+(0 0 0)
+
+XXXXXX> (vera_line_capture_read_pixel 30)
+(15 15 15)
+
+XXXXXX> (vera_line_capture_read_pixel 31)
+(15 15 15)
+
+XXXXXX> (vera_line_capture_read_pixel 32)
+(0 0 0)
+
+XXXXXX> 'end
+end

@@ -134,7 +134,7 @@ def test(name):
 
         if started and not ended:
             #Replace larger numbers with XXXXXX.
-            masked_text = re.sub(r'\d{6,}', mask_digits, line)
+            masked_text = re.sub(r'\d{6,}', mask_digits, line).rstrip(" ")
             output.append(masked_text+'\n')
 
         #Find end marker

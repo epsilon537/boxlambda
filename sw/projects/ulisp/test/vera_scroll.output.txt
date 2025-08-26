@@ -1,75 +1,75 @@
-start                                                                           
-                                                                                
-XXXXXX> (vera_display_enable 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_layer_enable 0 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_layer_enable 0)                                                   
-1                                                                               
-                                                                                
-XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TILE)                                   
-(XXXXXXXXX 32 32 2)                                                             
-                                                                                
-XXXXXX> (vera_tileset 0 16 16 8 32)                                             
-(XXXXXXXXX 16 16 8 32 256)                                                      
-                                                                                
-XXXXXX> (vera_layer_map 0 0)                                                    
-0                                                                               
-                                                                                
-XXXXXX> (vera_layer_tileset 0 0)                                                
-0                                                                               
-                                                                                
-XXXXXX> (vera_map_entry 0 2 2 1)                                                
-1                                                                               
-                                                                                
-XXXXXX> (dotimes (ii 16)                                                        
-  (vera_tileset_pixel 0 1 ii ii VERA_COLOR_WHITE)                               
-  (vera_tileset_pixel 0 1 (- 15 ii) ii VERA_COLOR_WHITE))                       
-nil                                                                             
-                                                                                
-XXXXXX> (vera_layer_hscroll 0 16)                                               
-16                                                                              
-                                                                                
-XXXXXX> (vera_layer_vscroll 0 16)                                               
-16                                                                              
-                                                                                
-XXXXXX> (vera_layer_hscroll)                                                    
-Error: 'vera_layer_hscroll' too few arguments                                   
-XXXXXX> (vera_layer_vscroll)                                                    
-Error: 'vera_layer_vscroll' too few arguments                                   
-XXXXXX> (vera_irqline 16)                                                       
-16                                                                              
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (dotimes (ii 3) (print (vera_line_capture_read_pixel (+ ii 15))))       
-                                                                                
-(0 0 0)                                                                         
-(15 15 15)                                                                      
-(0 0 0)                                                                         
-nil                                                                             
-                                                                                
-XXXXXX> (vera_irqline 32)                                                       
-32                                                                              
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (dotimes (ii 3) (print (vera_line_capture_read_pixel (+ ii 31))))       
-                                                                                
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-nil                                                                             
-                                                                                
-XXXXXX> 'end                                                                    
-end                                                                             
+start
+
+XXXXXX> (vera_display_enable 1)
+1
+
+XXXXXX> (vera_layer_enable 0 1)
+1
+
+XXXXXX> (vera_layer_enable 0)
+1
+
+XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TILE)
+(XXXXXXXXX 32 32 2)
+
+XXXXXX> (vera_tileset 0 16 16 8 32)
+(XXXXXXXXX 16 16 8 32 256)
+
+XXXXXX> (vera_layer_map 0 0)
+0
+
+XXXXXX> (vera_layer_tileset 0 0)
+0
+
+XXXXXX> (vera_map_entry 0 2 2 1)
+1
+
+XXXXXX> (dotimes (ii 16)
+  (vera_tileset_pixel 0 1 ii ii VERA_COLOR_WHITE)
+  (vera_tileset_pixel 0 1 (- 15 ii) ii VERA_COLOR_WHITE))
+nil
+
+XXXXXX> (vera_layer_hscroll 0 16)
+16
+
+XXXXXX> (vera_layer_vscroll 0 16)
+16
+
+XXXXXX> (vera_layer_hscroll)
+Error: 'vera_layer_hscroll' too few arguments
+XXXXXX> (vera_layer_vscroll)
+Error: 'vera_layer_vscroll' too few arguments
+XXXXXX> (vera_irqline 16)
+16
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (dotimes (ii 3) (print (vera_line_capture_read_pixel (+ ii 15))))
+
+(0 0 0)
+(15 15 15)
+(0 0 0)
+nil
+
+XXXXXX> (vera_irqline 32)
+32
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (dotimes (ii 3) (print (vera_line_capture_read_pixel (+ ii 31))))
+
+(0 0 0)
+(0 0 0)
+(0 0 0)
+nil
+
+XXXXXX> 'end
+end

@@ -1,97 +1,97 @@
-start                                                                           
-                                                                                
-XXXXXX> (vera_display_enable 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_tileset 0 16 16 1 32)                                             
-(XXXXXXXXX 16 16 1 32 32)                                                       
-                                                                                
-XXXXXX> (dotimes (ii 16)                                                        
-  (vera_tileset_pixel 0 1 ii ii 1)                                              
-  (vera_tileset_pixel 0 1 (- 15 ii) ii 1))                                      
-nil                                                                             
-                                                                                
-XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TXT256)                                 
-(XXXXXXXXX 32 32 1)                                                             
-                                                                                
-XXXXXX> (vera_layer_map 0 0)                                                    
-0                                                                               
-                                                                                
-XXXXXX> (vera_layer_tileset 0 0)                                                
-0                                                                               
-                                                                                
-XXXXXX> (defvar row1 10)                                                        
-row1                                                                            
-                                                                                
-XXXXXX> (defvar col1 20)                                                        
-col1                                                                            
-                                                                                
-XXXXXX> (defvar row2 20)                                                        
-row2                                                                            
-                                                                                
-XXXXXX> (defvar col2 10)                                                        
-col2                                                                            
-                                                                                
-XXXXXX> (vera_map_entry 0 col1 row1                                             
-                (logior (ash VERA_COLOR_GREEN 8) 1))                            
-1281                                                                            
-                                                                                
-XXXXXX> (vera_map_entry 0 col2 row2                                             
-                (logior (ash VERA_COLOR_GRAYSCALE_10 8) 1))                     
-6657                                                                            
-                                                                                
-XXXXXX> (vera_layer_enable 0 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_irqline 0)                                                        
-0                                                                               
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (dolist (rowcol (list (cons row1 col1) (cons row2 col2)))               
-  (vera_irqline (* 16 (car rowcol)))                                            
-  (vera_line_capture_enable 1)                                                  
-  (loop (if (= (vera_line_capture_enable) 0) (return)))                         
-  (dotimes (ii 16)                                                              
-    (print (vera_line_capture_read_pixel (+ (* 16 (cdr rowcol)) ii)))))         
-                                                                                
-(0 12 5)                                                                        
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 12 5)                                                                        
-(10 10 10)                                                                      
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(0 0 0)                                                                         
-(10 10 10)                                                                      
-nil                                                                             
-                                                                                
-XXXXXX> 'end                                                                    
-end                                                                             
+start
+
+XXXXXX> (vera_display_enable 1)
+1
+
+XXXXXX> (vera_tileset 0 16 16 1 32)
+(XXXXXXXXX 16 16 1 32 32)
+
+XXXXXX> (dotimes (ii 16)
+  (vera_tileset_pixel 0 1 ii ii 1)
+  (vera_tileset_pixel 0 1 (- 15 ii) ii 1))
+nil
+
+XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TXT256)
+(XXXXXXXXX 32 32 1)
+
+XXXXXX> (vera_layer_map 0 0)
+0
+
+XXXXXX> (vera_layer_tileset 0 0)
+0
+
+XXXXXX> (defvar row1 10)
+row1
+
+XXXXXX> (defvar col1 20)
+col1
+
+XXXXXX> (defvar row2 20)
+row2
+
+XXXXXX> (defvar col2 10)
+col2
+
+XXXXXX> (vera_map_entry 0 col1 row1
+                (logior (ash VERA_COLOR_GREEN 8) 1))
+1281
+
+XXXXXX> (vera_map_entry 0 col2 row2
+                (logior (ash VERA_COLOR_GRAYSCALE_10 8) 1))
+6657
+
+XXXXXX> (vera_layer_enable 0 1)
+1
+
+XXXXXX> (vera_irqline 0)
+0
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (dolist (rowcol (list (cons row1 col1) (cons row2 col2)))
+  (vera_irqline (* 16 (car rowcol)))
+  (vera_line_capture_enable 1)
+  (loop (if (= (vera_line_capture_enable) 0) (return)))
+  (dotimes (ii 16)
+    (print (vera_line_capture_read_pixel (+ (* 16 (cdr rowcol)) ii)))))
+
+(0 12 5)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 12 5)
+(10 10 10)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(0 0 0)
+(10 10 10)
+nil
+
+XXXXXX> 'end
+end

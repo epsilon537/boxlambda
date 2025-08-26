@@ -1,6 +1,6 @@
 'start
 (vera_display_enable 1)
-(vera_sprite_enable 1)
+(vera_sprites_enable 1)
 (defvar w 8)
 (defvar h 8)
 (defvar bpp 8)

@@ -1,165 +1,165 @@
-start                                                                           
-                                                                                
-XXXXXX> (vera_display_enable 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_layer_enable 0 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_tileset 0 320 32 8 1)                                             
-(XXXXXXXXX 320 32 8 1 10240)                                                    
-                                                                                
-XXXXXX> (vera_layer_bitmap 0 0 0)                                               
-(0 0)                                                                           
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 0 0 VERA_COLOR_BLACK)                           
-0                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 1 0 VERA_COLOR_WHITE)                           
-1                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 2 0 VERA_COLOR_RED)                             
-2                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 3 0 VERA_COLOR_CYAN)                            
-3                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 4 0 VERA_COLOR_PURPLE)                          
-4                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 5 0 VERA_COLOR_GREEN)                           
-5                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 6 0 VERA_COLOR_BLUE)                            
-6                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 7 0 VERA_COLOR_YELLOW)                          
-7                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 8 0 VERA_COLOR_ORANGE)                          
-8                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 9 0 VERA_COLOR_BROWN)                           
-9                                                                               
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 10 0 VERA_COLOR_LIGHT_RED)                      
-10                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 11 0 VERA_COLOR_DARK_GREY)                      
-11                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 12 0 VERA_COLOR_GREY)                           
-12                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 13 0 VERA_COLOR_LIGHT_GREEN)                    
-13                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 14 0 VERA_COLOR_LIGHT_BLUE)                     
-14                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 15 0 VERA_COLOR_LIGHT_GREY)                     
-15                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 16 0 VERA_COLOR_GRAYSCALE_0)                    
-16                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 17 0 VERA_COLOR_GRAYSCALE_1)                    
-17                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 18 0 VERA_COLOR_GRAYSCALE_2)                    
-18                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 19 0 VERA_COLOR_GRAYSCALE_3)                    
-19                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 20 0 VERA_COLOR_GRAYSCALE_4)                    
-20                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 21 0 VERA_COLOR_GRAYSCALE_5)                    
-21                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 22 0 VERA_COLOR_GRAYSCALE_6)                    
-22                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 23 0 VERA_COLOR_GRAYSCALE_7)                    
-23                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 24 0 VERA_COLOR_GRAYSCALE_8)                    
-24                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 25 0 VERA_COLOR_GRAYSCALE_9)                    
-25                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 26 0 VERA_COLOR_GRAYSCALE_10)                   
-26                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 27 0 VERA_COLOR_GRAYSCALE_11)                   
-27                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 28 0 VERA_COLOR_GRAYSCALE_12)                   
-28                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 29 0 VERA_COLOR_GRAYSCALE_13)                   
-29                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 30 0 VERA_COLOR_GRAYSCALE_14)                   
-30                                                                              
-                                                                                
-XXXXXX> (vera_tileset_pixel 0 0 31 0 VERA_COLOR_GRAYSCALE_15)                   
-31                                                                              
-                                                                                
-XXXXXX> (vera_irqline 0)                                                        
-0                                                                               
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (dotimes (ii 32)                                                        
-  (let ((rgb (vera_line_capture_read_pixel ii)))                                
-    (mapc (lambda (c) (format t "~x " c)) rgb))                                 
-  (format t "~%"))                                                              
-0 0 0                                                                           
-f f f                                                                           
-8 0 0                                                                           
-a f e                                                                           
-c 4 c                                                                           
-0 c 5                                                                           
-0 0 a                                                                           
-e e 7                                                                           
-d 8 5                                                                           
-6 4 0                                                                           
-f 7 7                                                                           
-3 3 3                                                                           
-7 7 7                                                                           
-a f 6                                                                           
-0 8 f                                                                           
-b b b                                                                           
-0 0 0                                                                           
-1 1 1                                                                           
-2 2 2                                                                           
-3 3 3                                                                           
-4 4 4                                                                           
-5 5 5                                                                           
-6 6 6                                                                           
-7 7 7                                                                           
-8 8 8                                                                           
-9 9 9                                                                           
-a a a                                                                           
-b b b                                                                           
-c c c                                                                           
-d d d                                                                           
-e e e                                                                           
-f f f                                                                           
-nil                                                                             
-                                                                                
-XXXXXX> 'end                                                                    
-end                                                                             
+start
+
+XXXXXX> (vera_display_enable 1)
+1
+
+XXXXXX> (vera_layer_enable 0 1)
+1
+
+XXXXXX> (vera_tileset 0 320 32 8 1)
+(XXXXXXXXX 320 32 8 1 10240)
+
+XXXXXX> (vera_layer_bitmap 0 0 0)
+(0 0)
+
+XXXXXX> (vera_tileset_pixel 0 0 0 0 VERA_COLOR_BLACK)
+0
+
+XXXXXX> (vera_tileset_pixel 0 0 1 0 VERA_COLOR_WHITE)
+1
+
+XXXXXX> (vera_tileset_pixel 0 0 2 0 VERA_COLOR_RED)
+2
+
+XXXXXX> (vera_tileset_pixel 0 0 3 0 VERA_COLOR_CYAN)
+3
+
+XXXXXX> (vera_tileset_pixel 0 0 4 0 VERA_COLOR_PURPLE)
+4
+
+XXXXXX> (vera_tileset_pixel 0 0 5 0 VERA_COLOR_GREEN)
+5
+
+XXXXXX> (vera_tileset_pixel 0 0 6 0 VERA_COLOR_BLUE)
+6
+
+XXXXXX> (vera_tileset_pixel 0 0 7 0 VERA_COLOR_YELLOW)
+7
+
+XXXXXX> (vera_tileset_pixel 0 0 8 0 VERA_COLOR_ORANGE)
+8
+
+XXXXXX> (vera_tileset_pixel 0 0 9 0 VERA_COLOR_BROWN)
+9
+
+XXXXXX> (vera_tileset_pixel 0 0 10 0 VERA_COLOR_LIGHT_RED)
+10
+
+XXXXXX> (vera_tileset_pixel 0 0 11 0 VERA_COLOR_DARK_GREY)
+11
+
+XXXXXX> (vera_tileset_pixel 0 0 12 0 VERA_COLOR_GREY)
+12
+
+XXXXXX> (vera_tileset_pixel 0 0 13 0 VERA_COLOR_LIGHT_GREEN)
+13
+
+XXXXXX> (vera_tileset_pixel 0 0 14 0 VERA_COLOR_LIGHT_BLUE)
+14
+
+XXXXXX> (vera_tileset_pixel 0 0 15 0 VERA_COLOR_LIGHT_GREY)
+15
+
+XXXXXX> (vera_tileset_pixel 0 0 16 0 VERA_COLOR_GRAYSCALE_0)
+16
+
+XXXXXX> (vera_tileset_pixel 0 0 17 0 VERA_COLOR_GRAYSCALE_1)
+17
+
+XXXXXX> (vera_tileset_pixel 0 0 18 0 VERA_COLOR_GRAYSCALE_2)
+18
+
+XXXXXX> (vera_tileset_pixel 0 0 19 0 VERA_COLOR_GRAYSCALE_3)
+19
+
+XXXXXX> (vera_tileset_pixel 0 0 20 0 VERA_COLOR_GRAYSCALE_4)
+20
+
+XXXXXX> (vera_tileset_pixel 0 0 21 0 VERA_COLOR_GRAYSCALE_5)
+21
+
+XXXXXX> (vera_tileset_pixel 0 0 22 0 VERA_COLOR_GRAYSCALE_6)
+22
+
+XXXXXX> (vera_tileset_pixel 0 0 23 0 VERA_COLOR_GRAYSCALE_7)
+23
+
+XXXXXX> (vera_tileset_pixel 0 0 24 0 VERA_COLOR_GRAYSCALE_8)
+24
+
+XXXXXX> (vera_tileset_pixel 0 0 25 0 VERA_COLOR_GRAYSCALE_9)
+25
+
+XXXXXX> (vera_tileset_pixel 0 0 26 0 VERA_COLOR_GRAYSCALE_10)
+26
+
+XXXXXX> (vera_tileset_pixel 0 0 27 0 VERA_COLOR_GRAYSCALE_11)
+27
+
+XXXXXX> (vera_tileset_pixel 0 0 28 0 VERA_COLOR_GRAYSCALE_12)
+28
+
+XXXXXX> (vera_tileset_pixel 0 0 29 0 VERA_COLOR_GRAYSCALE_13)
+29
+
+XXXXXX> (vera_tileset_pixel 0 0 30 0 VERA_COLOR_GRAYSCALE_14)
+30
+
+XXXXXX> (vera_tileset_pixel 0 0 31 0 VERA_COLOR_GRAYSCALE_15)
+31
+
+XXXXXX> (vera_irqline 0)
+0
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (dotimes (ii 32)
+  (let ((rgb (vera_line_capture_read_pixel ii)))
+    (mapc (lambda (c) (format t "~x " c)) rgb))
+  (format t "~%"))
+0 0 0
+f f f
+8 0 0
+a f e
+c 4 c
+0 c 5
+0 0 a
+e e 7
+d 8 5
+6 4 0
+f 7 7
+3 3 3
+7 7 7
+a f 6
+0 8 f
+b b b
+0 0 0
+1 1 1
+2 2 2
+3 3 3
+4 4 4
+5 5 5
+6 6 6
+7 7 7
+8 8 8
+9 9 9
+a a a
+b b b
+c c c
+d d d
+e e e
+f f f
+nil
+
+XXXXXX> 'end
+end

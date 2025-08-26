@@ -1,90 +1,90 @@
-start                                                                           
-                                                                                
-XXXXXX> (vera_display_enable 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_layer_enable 0)                                                   
-0                                                                               
-                                                                                
-XXXXXX> (vera_layer_enable 1)                                                   
-0                                                                               
-                                                                                
-XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TILE)                                   
-(XXXXXXXXX 32 32 2)                                                             
-                                                                                
-XXXXXX> (vera_map 1 32 32 VERA_MAP_TYPE_TILE)                                   
-(XXXXXXXXX 32 32 2)                                                             
-                                                                                
-XXXXXX> (vera_tileset 0 16 16 8 32)                                             
-(XXXXXXXXX 16 16 8 32 256)                                                      
-                                                                                
-XXXXXX> (vera_layer_map 0 0)                                                    
-0                                                                               
-                                                                                
-XXXXXX> (vera_layer_map 1 1)                                                    
-1                                                                               
-                                                                                
-XXXXXX> (vera_layer_tileset 0 0)                                                
-0                                                                               
-                                                                                
-XXXXXX> (vera_layer_tileset 1 0)                                                
-0                                                                               
-                                                                                
-XXXXXX> (vera_map_entry 0 1 1 1)                                                
-1                                                                               
-                                                                                
-XXXXXX> (vera_map_entry 1 1 1 2)                                                
-2                                                                               
-                                                                                
-XXXXXX> (dotimes (ii 16)                                                        
-  (vera_tileset_pixel 0 1 0 ii VERA_COLOR_RED))                                 
-nil                                                                             
-                                                                                
-XXXXXX> (dotimes (ii 16)                                                        
-  (vera_tileset_pixel 0 2 ii 0 VERA_COLOR_BLUE))                                
-nil                                                                             
-                                                                                
-XXXXXX> (vera_irqline 16)                                                       
-16                                                                              
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 16)                                       
-(0 0 0)                                                                         
-                                                                                
-XXXXXX> (vera_layer_enable 0 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_layer_enable 0)                                                   
-1                                                                               
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 16)                                       
-(8 0 0)                                                                         
-                                                                                
-XXXXXX> (vera_layer_enable 1 1)                                                 
-1                                                                               
-                                                                                
-XXXXXX> (vera_layer_enable 1)                                                   
-1                                                                               
-                                                                                
-XXXXXX> (vera_line_capture_enable 1)                                            
-1                                                                               
-                                                                                
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))                   
-nil                                                                             
-                                                                                
-XXXXXX> (vera_line_capture_read_pixel 16)                                       
-(0 0 10)                                                                        
-                                                                                
-XXXXXX> 'end                                                                    
-end                                                                             
+start
+
+XXXXXX> (vera_display_enable 1)
+1
+
+XXXXXX> (vera_layer_enable 0)
+0
+
+XXXXXX> (vera_layer_enable 1)
+0
+
+XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TILE)
+(XXXXXXXXX 32 32 2)
+
+XXXXXX> (vera_map 1 32 32 VERA_MAP_TYPE_TILE)
+(XXXXXXXXX 32 32 2)
+
+XXXXXX> (vera_tileset 0 16 16 8 32)
+(XXXXXXXXX 16 16 8 32 256)
+
+XXXXXX> (vera_layer_map 0 0)
+0
+
+XXXXXX> (vera_layer_map 1 1)
+1
+
+XXXXXX> (vera_layer_tileset 0 0)
+0
+
+XXXXXX> (vera_layer_tileset 1 0)
+0
+
+XXXXXX> (vera_map_entry 0 1 1 1)
+1
+
+XXXXXX> (vera_map_entry 1 1 1 2)
+2
+
+XXXXXX> (dotimes (ii 16)
+  (vera_tileset_pixel 0 1 0 ii VERA_COLOR_RED))
+nil
+
+XXXXXX> (dotimes (ii 16)
+  (vera_tileset_pixel 0 2 ii 0 VERA_COLOR_BLUE))
+nil
+
+XXXXXX> (vera_irqline 16)
+16
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (vera_line_capture_read_pixel 16)
+(0 0 0)
+
+XXXXXX> (vera_layer_enable 0 1)
+1
+
+XXXXXX> (vera_layer_enable 0)
+1
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (vera_line_capture_read_pixel 16)
+(8 0 0)
+
+XXXXXX> (vera_layer_enable 1 1)
+1
+
+XXXXXX> (vera_layer_enable 1)
+1
+
+XXXXXX> (vera_line_capture_enable 1)
+1
+
+XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+nil
+
+XXXXXX> (vera_line_capture_read_pixel 16)
+(0 0 10)
+
+XXXXXX> 'end
+end

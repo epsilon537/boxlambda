@@ -383,25 +383,25 @@ object *fn_vera_display_enable (object *args, object *env) {
   return number((int)display_enable);
 }
 
-object *fn_vera_sprite_enable (object *args, object *env) {
+object *fn_vera_sprites_enable (object *args, object *env) {
   (void) env;
 
   int nargs = listlength(args);
 
-  bool sprite_enable;
+  bool sprites_enable;
 
   if (nargs == 1) {
     object *enable = first(args);
 
-    sprite_enable = checkbitvalue(enable) != 0;
+    sprites_enable = checkbitvalue(enable) != 0;
 
-    vera.sprites_enable(sprite_enable);
+    vera.sprites_enable(sprites_enable);
   }
   else {
-    sprite_enable = vera.sprites_enabled();
+    sprites_enable = vera.sprites_enabled();
   }
 
-  return number((int)sprite_enable);
+  return number((int)sprites_enable);
 }
 
 object *fn_vera_hscale (object *args, object *env) {
@@ -1005,6 +1005,20 @@ object *fn_vera_tileset_pixel (object *args, object *env) {
   return number((int)val);
 }
 
+object *fn_peek (object *args, object *env) {
+  (void) env;
+  int addr = checkinteger(first(args));
+  return number(*(int *)addr);
+}
+
+object *fn_poke (object *args, object *env) {
+  (void) env;
+  int addr = checkinteger(first(args));
+  object *val = second(args);
+  *(int *)addr = checkinteger(val);
+  return val;
+}
+
 // Symbol names
 const char stringvera_init[] = "vera_init";
 const char stringvera_map[] = "vera_map";
@@ -1019,7 +1033,7 @@ const char stringvera_isr[] = "vera_isr";
 const char stringvera_irqline[] = "vera_irqline";
 const char stringvera_scanline[] = "vera_scanline";
 const char stringvera_display_enable[] = "vera_display_enable";
-const char stringvera_sprite_enable[] = "vera_sprite_enable";
+const char stringvera_sprites_enable[] = "vera_sprites_enable";
 const char stringvera_hscale[] = "vera_hscale";
 const char stringvera_vscale[] = "vera_vscale";
 const char stringvera_bordercolor[] = "vera_bordercolor";
@@ -1043,6 +1057,9 @@ const char stringvera_sprite_hflip[] = "vera_sprite_hflip";
 const char stringvera_sprite_vflip[] = "vera_sprite_vflip";
 const char stringvera_map_entry[] = "vera_map_entry";
 const char stringvera_tileset_pixel[] = "vera_tileset_pixel";
+
+const char stringpeek[] = "peek";
+const char stringpoke[] = "poke";
 
 // Documentation strings
 const char docvera_init[] = "(vera_init)\n"
@@ -1118,7 +1135,7 @@ const char docvera_display_enable[] = "(vera_display_enable [enable])\n"
 "@param enable: 1/0 enables/disables the display.\n"
 "@return: 1/0 if the display is enabled/disabled.\n";
 
-const char docvera_sprite_enable[] = "(vera_sprite_enable [enable])\n"
+const char docvera_sprites_enable[] = "(vera_sprites_enable [enable])\n"
 "Enable/disable the sprite renderer and/or retrieve the current sprite renderer state.\n"
 "@param enable: 1/0 enables/disables the sprite renderer.\n"
 "@return: 1/0 if the sprite renderer is enabled/disabled.\n";
@@ -1279,7 +1296,12 @@ const char docvera_tileset_pixel[] = "(vera_tileset_pixel tileset_id tile_idx x 
 "@param val: the pixel value. Range: 0..(2^bpp)-1.\n"
 "@return: pixel value\n";
 
-const tbl_entry_t lookup_table2[] = {
+const char docpeek[] = "(peek address)\n"
+"Returns the contents of the specified memory address.";
+const char docpoke[] = "(poke address value)\n"
+"Stores value in the specified memory address, and returns value.";
+
+const tbl_entry_t lookup_table_boxlambda[] = {
   { stringvera_init, fn_vera_init, 0200, docvera_init },
   { stringvera_map, fn_vera_map, 0214, docvera_map },
   { stringvera_map_deinit, fn_vera_map_deinit, 0211, docvera_map_deinit },
@@ -1287,7 +1309,7 @@ const tbl_entry_t lookup_table2[] = {
   { stringvera_tileset_deinit, fn_vera_tileset_deinit, 0211, docvera_tileset_deinit },
   { stringvera_line_capture_enable, fn_vera_line_capture_enable, 0201, docvera_line_capture_enable},
   { stringvera_line_capture_read_pixel, fn_vera_line_capture_read_pixel, 0201, docvera_line_capture_read_pixel},
-  { stringvera_sprite_enable, fn_vera_sprite_enable, 0201, docvera_sprite_enable},
+  { stringvera_sprites_enable, fn_vera_sprites_enable, 0201, docvera_sprites_enable},
   { stringvera_sprite_bank, fn_vera_sprite_bank, 0201, docvera_sprite_bank},
   { stringvera_ien, fn_vera_ien, 0202, docvera_ien},
   { stringvera_isr, fn_vera_isr, 0201, docvera_isr},
@@ -1317,18 +1339,7 @@ const tbl_entry_t lookup_table2[] = {
   { stringvera_sprite_vflip, fn_vera_sprite_vflip, 0212, docvera_sprite_vflip},
   { stringvera_map_entry, fn_vera_map_entry, 0234, docvera_map_entry},
   { stringvera_tileset_pixel, fn_vera_tileset_pixel, 0245, docvera_tileset_pixel},
+  { stringpeek, fn_peek, 0211, docpeek },
+  { stringpoke, fn_poke, 0222, docpoke },
 };
-
-// Table cross-reference functions
-
-tbl_entry_t *tables[] = {lookup_table, lookup_table2};
-const int tablesizes[] = { arraysize(lookup_table), arraysize(lookup_table2) };
-
-const tbl_entry_t *table (int n) {
-  return tables[n];
-}
-
-unsigned int tablesize (int n) {
-  return tablesizes[n];
-}
 

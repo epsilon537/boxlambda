@@ -1,6 +1,6 @@
 'start
 (vera_display_enable 1)
-(vera_sprite_enable 1)
+(vera_sprites_enable 1)
 (defvar w 8)
 (dolist (h (list 8 16 32 64))
   (dolist (bpp (list 4 8))

@@ -1,21 +1,21 @@
-start                                                                           
-                                                                                
-XXXXXX> (vera_init)                                                             
-nil                                                                             
-                                                                                
-XXXXXX> (let ((idx 0))                                                          
-  (dolist (wh (list (cons 32 256) (cons 256 32)))                               
-     (vera_map idx (car wh) (cdr wh) (mod idx 3))                               
-     (print (vera_map idx))                                                     
-     (setq idx (1+ idx))))                                                      
-                                                                                
-(XXXXXXXXX 32 256 0)                                                            
-(XXXXXXXXX 256 32 1)                                                            
-nil                                                                             
-                                                                                
-XXXXXX> (dotimes (ii 2)                                                         
-  (vera_map_deinit ii))                                                         
-nil                                                                             
-                                                                                
-XXXXXX> 'end                                                                    
-end                                                                             
+start
+
+XXXXXX> (vera_init)
+nil
+
+XXXXXX> (let ((idx 0))
+  (dolist (wh (list (cons 32 256) (cons 256 32)))
+     (vera_map idx (car wh) (cdr wh) (mod idx 3))
+     (print (vera_map idx))
+     (setq idx (1+ idx))))
+
+(XXXXXXXXX 32 256 0)
+(XXXXXXXXX 256 32 1)
+nil
+
+XXXXXX> (dotimes (ii 2)
+  (vera_map_deinit ii))
+nil
+
+XXXXXX> 'end
+end

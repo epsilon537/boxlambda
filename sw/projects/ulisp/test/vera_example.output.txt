@@ -1,0 +1,87 @@
+start
+
+XXXXXX> (defvar map_sz 32)
+map_sz
+
+XXXXXX> (defvar tile_sz 16)
+tile_sz
+
+XXXXXX> (defvar sprite_sz 64)
+sprite_sz
+
+XXXXXX> (defvar x 128)
+x
+
+XXXXXX> (defvar y 88)
+y
+
+XXXXXX> (defvar bpp 4)
+bpp
+
+XXXXXX> (defvar scale 0.5)
+scale
+
+XXXXXX> (vera_display_enable 1)
+1
+
+XXXXXX> (vera_palette 0 8 8 15)
+(8 8 15)
+
+XXXXXX> (vera_hscale scale)
+0.5
+
+XXXXXX> (vera_vscale scale)
+0.5
+
+XXXXXX> (vera_sprites_enable 1)
+1
+
+XXXXXX> (vera_tileset 0 tile_sz tile_sz bpp 1)
+(XXXXXXXXX 16 16 4 1 128)
+
+XXXXXX> (vera_tileset 1 sprite_sz sprite_sz bpp 1)
+(XXXXXXXXX 64 64 4 1 2048)
+
+XXXXXX> (vera_map 0 map_sz map_sz VERA_MAP_TYPE_TILE)
+(XXXXXXXXX 32 32 2)
+
+XXXXXX> (vera_layer_enable 0 1)
+1
+
+XXXXXX> (vera_layer_map 0 0)
+0
+
+XXXXXX> (vera_layer_tileset 0 0)
+0
+
+XXXXXX> (dotimes (ii map_sz)
+  (dotimes (jj map_sz)
+  (vera_map_entry 0 ii jj 0)))
+nil
+
+XXXXXX> (dotimes (ii tile_sz)
+  (vera_tileset_pixel 0 0 ii 0 VERA_COLOR_YELLOW)
+  (vera_tileset_pixel 0 0 0 ii VERA_COLOR_YELLOW)
+  (vera_tileset_pixel 0 0 ii (1- tile_sz) VERA_COLOR_YELLOW)
+  (vera_tileset_pixel 0 0 (1- tile_sz) ii VERA_COLOR_YELLOW))
+nil
+
+XXXXXX> (dotimes (ii sprite_sz)
+  (dotimes (jj sprite_sz)
+  (vera_tileset_pixel 1 0 ii jj VERA_COLOR_WHITE)))
+nil
+
+XXXXXX> (vera_sprite_tile 0 1 0)
+(1 0)
+
+XXXXXX> (vera_sprite_z_depth 0 VERA_SPRITE_Z_L1)
+3
+
+XXXXXX> (vera_sprite_x 0 x)
+128
+
+XXXXXX> (vera_sprite_y 0 y)
+88
+
+XXXXXX> 'end
+end

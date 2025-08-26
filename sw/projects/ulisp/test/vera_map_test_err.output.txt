@@ -1,36 +1,36 @@
-start                                                                           
-                                                                                
-XXXXXX> (vera_init)                                                             
-nil                                                                             
-                                                                                
-XXXXXX> (vera_map 0 32 32 0)                                                    
-(XXXXXXXXX 32 32 0)                                                             
-                                                                                
-XXXXXX> (vera_map 0 32 32 0)                                                    
-Error: 'vera_map' already initialized: 0                                        
-XXXXXX> (vera_map_deinit 0)                                                     
-nil                                                                             
-                                                                                
-XXXXXX> (vera_map_deinit 0)                                                     
-Error: 'vera_map_deinit' not initialized: 0                                     
-XXXXXX> (vera_map 1 32)                                                         
-Error: 'vera_map' too few arguments                                             
-XXXXXX> (vera_map 1 32 64)                                                      
-Error: 'vera_map' too few arguments                                             
-XXXXXX> (vera_map 1 32 64 0 0)                                                  
-Error: 'vera_map' too many arguments                                            
-XXXXXX> (vera_map 100 32 32 0)                                                  
-Error: 'vera_map' invalid argument: 100                                         
-XXXXXX> (vera_map 2 33 32 0)                                                    
-Error: 'vera_map' invalid argument: 33                                          
-XXXXXX> (vera_map 2 32 33 0)                                                    
-Error: 'vera_map' invalid argument: 33                                          
-XXXXXX> (vera_map 2 32 32 5)                                                    
-Error: 'vera_map' invalid argument: 5                                           
-XXXXXX> (vera_map 3 256 256 0)                                                  
-(XXXXXXXXX 256 256 0)                                                           
-                                                                                
-XXXXXX> (vera_map 4 32 32 0)                                                    
-Error: 'vera_map' insufficient resources                                        
-XXXXXX> 'end                                                                    
-end                                                                             
+start
+
+XXXXXX> (vera_init)
+nil
+
+XXXXXX> (vera_map 0 32 32 0)
+(XXXXXXXXX 32 32 0)
+
+XXXXXX> (vera_map 0 32 32 0)
+Error: 'vera_map' already initialized: 0
+XXXXXX> (vera_map_deinit 0)
+nil
+
+XXXXXX> (vera_map_deinit 0)
+Error: 'vera_map_deinit' not initialized: 0
+XXXXXX> (vera_map 1 32)
+Error: 'vera_map' too few arguments
+XXXXXX> (vera_map 1 32 64)
+Error: 'vera_map' too few arguments
+XXXXXX> (vera_map 1 32 64 0 0)
+Error: 'vera_map' too many arguments
+XXXXXX> (vera_map 100 32 32 0)
+Error: 'vera_map' invalid argument: 100
+XXXXXX> (vera_map 2 33 32 0)
+Error: 'vera_map' invalid argument: 33
+XXXXXX> (vera_map 2 32 33 0)
+Error: 'vera_map' invalid argument: 33
+XXXXXX> (vera_map 2 32 32 5)
+Error: 'vera_map' invalid argument: 5
+XXXXXX> (vera_map 3 256 256 0)
+(XXXXXXXXX 256 256 0)
+
+XXXXXX> (vera_map 4 32 32 0)
+Error: 'vera_map' insufficient resources
+XXXXXX> 'end
+end
