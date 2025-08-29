@@ -7,7 +7,7 @@
 #if defined(BOARD_BOXLAMBDA)
 // Lisp Library
 //const char LispLibrary[] = "";
-#include "LispLibrary.h"
+#include "LispLibrary.lisp"
 #endif
 
 // Compile options

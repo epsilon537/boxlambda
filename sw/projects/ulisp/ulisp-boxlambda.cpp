@@ -1200,7 +1200,7 @@ const char docvera_layer_bitmap[] = "(vera_layer_bitmap layer [tileset_id tile_i
 "@param layer: 1/0: the layer id.\n"
 "@param tileset_id: id of tileset holding the bitmap. Range: 0..VERA_NUM_TILESETS-1.\n"
 "@param tile_idx: idx of the bitmap within the tileset. Range: 0..1024.\n"
-"@return: (tileset_idx tileset_idx) or nil if not in bitmap mode.\n";
+"@return: (tileset_idx tile_idx) or nil if not in bitmap mode.\n";
 
 const char docvera_layer_pal_offset[] = "(vera_layer_pal_offset layer [offset])\n"
 "Assuming bitmap mode, set or get the layer's palette offset.\n"

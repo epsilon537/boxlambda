@@ -21,7 +21,7 @@ testname = None
 
 #ulisp uses terminal emulator control codes so we send the received input through
 #a pyte terminal emulator session to get clean textual data.
-scrn = pyte.Screen(80, 192)
+scrn = pyte.Screen(80, 512)
 strm = pyte.ByteStream(scrn)
 
 # After running all(), will hold dictionary of all tests run and their Pass/Fail
@@ -81,7 +81,7 @@ def check():
 def mask_digits(match):
     return 'X' * len(match.group(0))
 
-def test(name):
+def test(name, line_delay=0.5):
     """Run a single lisp test. Pass in the script name without the .lisp
         extension."""
     global scrn
@@ -100,11 +100,9 @@ def test(name):
     try:
         with open(name+".lisp", "r") as file:
             for line in file:
-                for c in line:
-                    print(c, end="", flush=True)
-                    ch.send(c)
-                    #time.sleep(TX_CHR_DELAY)
-                time.sleep(0.5)
+                print(line, end="", flush=True)
+                ch.send(line)
+                time.sleep(line_delay)
 
         ch.sendline("'stop")
         ch.expect("stop", timeout=5)
