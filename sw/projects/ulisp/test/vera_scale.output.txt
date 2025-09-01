@@ -1,24 +1,26 @@
 start
 
-XXXXXX> (vera_display_enable 1)
+XXXXXX>
+(vera :display :enable)
 1
 
-XXXXXX> (vera_layer_enable 0 1)
+XXXXXX> (vera :layer 0 :enable)
 1
 
-XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TILE)
-(XXXXXXXXX 32 32 2)
+XXXXXX> (vera :map 0 :init :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
+(:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
 
-XXXXXX> (vera_tileset 0 16 16 8 32)
-(XXXXXXXXX 16 16 8 32 256)
+XXXXXX> (vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 32)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num_tiles 32 :tilesize_bytes 256)
 
-XXXXXX> (vera_layer_map 0 0)
+XXXXXX> (vera :layer 0 :map 0)
 0
 
-XXXXXX> (vera_layer_tileset 0 0)
+XXXXXX> (vera :layer 0 :tileset 0)
 0
 
-XXXXXX> (vera_map_entry 0 0 0 1)
+XXXXXX>
+(vera :map 0 :entry :x 0 :y 0 :val 1)
 1
 
 XXXXXX> (dotimes (ii 16)
@@ -26,56 +28,77 @@ XXXXXX> (dotimes (ii 16)
   (vera_tileset_pixel 0 1 (- 15 ii) ii VERA_COLOR_WHITE))
 nil
 
-XXXXXX> (vera_irqline 15)
+XXXXXX>
+(vera :irqline 15)
 15
 
-XXXXXX> (vera_line_capture_enable 1)
+XXXXXX> (vera :linecapture :enable)
 1
 
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
 nil
 
-XXXXXX> (vera_line_capture_read_pixel 14)
-(0 0 0)
+XXXXXX>
+(print (vera :linecapture :pixel :x 14))
 
-XXXXXX> (vera_line_capture_read_pixel 15)
-(15 15 15)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
 
-XXXXXX> (vera_line_capture_read_pixel 16)
-(0 0 0)
+XXXXXX> (print (vera :linecapture :pixel :x 15))
 
-XXXXXX> (vera_hscale 0.5)
+(:r 15 :g 15 :b 15)
+(:r 15 :g 15 :b 15)
+
+XXXXXX> (print (vera :linecapture :pixel :x 16))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+(vera :hscale 0.5)
 0.5
 
-XXXXXX> (vera_vscale 0.5)
+XXXXXX> (vera :vscale 0.5)
 0.5
 
-XXXXXX> (vera_hscale)
+XXXXXX>
+(vera :hscale)
 0.5
 
-XXXXXX> (vera_vscale)
+XXXXXX> (vera :vscale)
 0.5
 
-XXXXXX> (vera_irqline 31)
+XXXXXX>
+(vera :irqline 31)
 31
 
-XXXXXX> (vera_line_capture_enable 1)
+XXXXXX> (vera :linecapture :enable)
 1
 
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
 nil
 
-XXXXXX> (vera_line_capture_read_pixel 29)
-(0 0 0)
+XXXXXX>
+(print (vera :linecapture :pixel :x 29))
 
-XXXXXX> (vera_line_capture_read_pixel 30)
-(15 15 15)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
 
-XXXXXX> (vera_line_capture_read_pixel 31)
-(15 15 15)
+XXXXXX> (print (vera :linecapture :pixel :x 30))
 
-XXXXXX> (vera_line_capture_read_pixel 32)
-(0 0 0)
+(:r 15 :g 15 :b 15)
+(:r 15 :g 15 :b 15)
 
-XXXXXX> 'end
+XXXXXX> (print (vera :linecapture :pixel :x 31))
+
+(:r 15 :g 15 :b 15)
+(:r 15 :g 15 :b 15)
+
+XXXXXX> (print (vera :linecapture :pixel :x 32))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+'end
 end

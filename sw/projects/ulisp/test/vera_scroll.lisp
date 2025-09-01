@@ -1,25 +1,37 @@
 'start
-(vera_display_enable 1)
-(vera_layer_enable 0 1)
-(vera_layer_enable 0)
-(vera_map 0 32 32 VERA_MAP_TYPE_TILE)
-(vera_tileset 0 16 16 8 32)
-(vera_layer_map 0 0)
-(vera_layer_tileset 0 0)
-(vera_map_entry 0 2 2 1)
+(vera :display :enable)
+(vera :layer 0 :enable)
+(vera :layer 0 :enabled)
+(vera :map 0 :init :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
+(vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 32)
+(vera :layer 0 :map 0)
+(vera :layer 0 :tileset 0)
+(vera :map 0 :entry :x 2 :y 2 :val 1)
 (dotimes (ii 16)
-  (vera_tileset_pixel 0 1 ii ii VERA_COLOR_WHITE)
-  (vera_tileset_pixel 0 1 (- 15 ii) ii VERA_COLOR_WHITE))
-(vera_layer_hscroll 0 16)
-(vera_layer_vscroll 0 16)
-(vera_layer_hscroll)
-(vera_layer_vscroll)
-(vera_irqline 16)
-(vera_line_capture_enable 1)
-(loop (if (= (vera_line_capture_enable) 0) (return)))
-(dotimes (ii 3) (print (vera_line_capture_read_pixel (+ ii 15))))
-(vera_irqline 32)
-(vera_line_capture_enable 1)
-(loop (if (= (vera_line_capture_enable) 0) (return)))
-(dotimes (ii 3) (print (vera_line_capture_read_pixel (+ ii 31))))
+  (vera :tileset 0 :pixel :tile_idx 1 :x ii :y ii :val VERA_COLOR_WHITE)
+  (vera :tileset 0 :pixel :tile_idx 1 :x (- 15 ii) :y ii :val VERA_COLOR_WHITE))
+
+
+
+
+(vera :layer 0 :hscroll 16)
+(vera :layer 0 :vscroll 16)
+(vera :layer 0 :hscroll)
+(vera :layer 0 :vscroll)
+
+(vera :irqline 16)
+(vera :linecapture :enable)
+(loop (if (= (vera :linecapture :enabled) 0) (return)))
+(dotimes (ii 3)
+  (print (vera :linecapture :pixel :x (+ ii 15))))
+
+
+(vera :irqline 32)
+(vera :linecapture :enable)
+(loop (if (= (vera :linecapture :enabled) 0) (return)))
+(dotimes (ii 3)
+  (print (vera :linecapture :pixel :x (+ ii 31))))
+
+
+
 'end

@@ -1,72 +1,75 @@
 start
 
-XXXXXX> (vera_display_enable 1)
+XXXXXX> (vera :display :enable)
 1
 
-XXXXXX> (vera_layer_enable 0 1)
+XXXXXX> (vera :layer 0 :enable)
 1
 
 XXXXXX> (dolist (bpp (list 2 4 8))
-  (vera_tileset 0 320 32 bpp 1)
-  (print (vera_tileset 0))
-  (vera_layer_bitmap 0 0 0)
-  (vera_layer_pal_offset 0 0)
-  (print (vera_layer_pal_offset 0))
-  (vera_tileset_pixel 0 0 0 0 1)
-  (vera_irqline 0)
-  (vera_line_capture_enable 1)
-  (loop (if (= (vera_line_capture_enable) 0) (return)))
-  (vera_line_capture_enable 1)
-  (loop (if (= (vera_line_capture_enable) 0) (return)))
-  (print (vera_line_capture_read_pixel 0))
-  (print (vera_palette 1))
-  (vera_layer_pal_offset 0 1)
-  (print (vera_layer_pal_offset 0))
-  (loop (if (= (vera_line_capture_enable) 0) (return)))
-  (vera_line_capture_enable 1)
-  (loop (if (= (vera_line_capture_enable) 0) (return)))
-  (print (vera_line_capture_read_pixel 0))
-  (print (vera_palette 17))
-  (vera_layer_pal_offset 0 4)
-  (print (vera_layer_pal_offset 0))
-  (loop (if (= (vera_line_capture_enable) 0) (return)))
-  (vera_line_capture_enable 1)
-  (loop (if (= (vera_line_capture_enable) 0) (return)))
-  (print (vera_line_capture_read_pixel 0))
-  (print (vera_palette (1+ (* 4 16))))
-  (vera_tileset_deinit 0))
+  (vera :tileset 0 :init :width 320 :height 32 :bpp bpp :num_tiles 1)
+  (print (vera :tileset 0 :info))
+  (vera :layer 0 :bitmap :tileset 0 :tile_idx 0)
+  (vera :layer 0 :pal_offset 0)
+  (print (vera :layer 0 :pal_offset))
+  (vera :tileset 0 :pixel :tile_idx 0 :x 0 :y 0 :val 1)
+  (vera :irqline 0)
+  (vera :linecapture :enable)
+  (loop (if (= (vera :linecapture :enabled) 0) (return)))
+  (print (vera :linecapture :pixel :x 0))
+  (print (vera :palette :idx 1))
+  (vera :layer 0 :pal_offset 1)
+  (print (vera :layer 0 :pal_offset))
+  (vera :linecapture :enable)
+  (loop (if (= (vera :linecapture :enabled) 0) (return)))
+  (print (vera :linecapture :pixel :x 0))
+  (print (vera :palette :idx 17))
+  (vera :layer 0 :pal_offset 4)
+  (print (vera :layer 0 :pal_offset))
+  (vera :linecapture :enable)
+  (loop (if (= (vera :linecapture :enabled) 0) (return)))
+  (print (vera :linecapture :pixel :x 0))
+  (print (vera :palette :idx (1+ (* 4 16))))
+  (vera :tileset 0 :deinit))
 
-(XXXXXXXXX 320 32 2 1 2560)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 2 :num_tiles 1 :tilesize_bytes 2560)
+
 0
-(15 15 15)
-(15 15 15)
+(:r 15 :g 15 :b 15)
+(:r 15 :g 15 :b 15)
 1
-(1 1 1)
-(1 1 1)
+(:r 1 :g 1 :b 1)
+(:r 1 :g 1 :b 1)
 4
-(12 12 9)
-(12 12 9)
-(XXXXXXXXX 320 32 4 1 5120)
+(:r 12 :g 12 :b 9)
+(:r 12 :g 12 :b 9)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 4 :num_tiles 1 :tilesize_bytes 5120)
+
 0
-(15 15 15)
-(15 15 15)
+(:r 15 :g 15 :b 15)
+(:r 15 :g 15 :b 15)
 1
-(1 1 1)
-(1 1 1)
+(:r 1 :g 1 :b 1)
+(:r 1 :g 1 :b 1)
 4
-(12 12 9)
-(12 12 9)
-(XXXXXXXXX 320 32 8 1 10240)
+(:r 12 :g 12 :b 9)
+(:r 12 :g 12 :b 9)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
+)
 0
-(15 15 15)
-(15 15 15)
+(:r 15 :g 15 :b 15)
+(:r 15 :g 15 :b 15)
 1
-(1 1 1)
-(1 1 1)
+(:r 1 :g 1 :b 1)
+(:r 1 :g 1 :b 1)
 4
-(12 12 9)
-(12 12 9)
+(:r 12 :g 12 :b 9)
+(:r 12 :g 12 :b 9)
 nil
 
-XXXXXX> 'end
+XXXXXX>
+
+
+
+'end
 end

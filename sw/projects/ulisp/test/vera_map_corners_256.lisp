@@ -1,27 +1,34 @@
 'start
-(vera_display_enable 1)
-(vera_tileset 0 16 16 1 32)
+(vera :display :enable)
+(vera :tileset 0 :init :width 16 :height 16 :bpp 1 :num_tiles 32)
+
 (dotimes (ii 16)
-  (vera_tileset_pixel 0 1 ii ii 1)
-  (vera_tileset_pixel 0 1 (- 15 ii) ii 1))
-(vera_layer_tileset 0 0)
+  (vera :tileset 0 :pixel :tile_idx 1 :x ii :y ii :val 1)
+  (vera :tileset 0 :pixel :tile_idx 1 :x (- 15 ii) :y ii :val 1))
+
+(vera :layer 0 :tileset 0)
+
 (let ((cols (list 256 256 256 32 64 128))
       (rows (list 32 64 128 256 256 256)))
   (mapc (lambda (r c)
-          (vera_map 0 c r VERA_MAP_TYPE_TXT16)
-          (vera_layer_map 0 0)
-          (vera_map_entry 0 0 0
-                          (logior (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_WHITE 8) 1))
-          (vera_map_entry 0 (1- c) 0
-                          (logior (ash VERA_COLOR_BLUE 12) (ash VERA_COLOR_WHITE 8) 1))
-          (vera_map_entry 0 0 (1- r)
-                          (logior (ash VERA_COLOR_PURPLE 12) (ash VERA_COLOR_YELLOW 8) 1))
-          (vera_map_entry 0 (1- c) (1- r)
-                          (logior (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_GREY 8) 1))
-          (format t "~x~%"  (vera_map_entry 0 0 0))
-          (format t "~x~%" (vera_map_entry 0 (1- c) 0))
-          (format t "~x~%" (vera_map_entry 0 0 (1- r)))
-          (format t "~x~%" (vera_map_entry 0 (1- c) (1- r)))
-          (vera_map_deinit 0))
-        rows cols))
+      (vera :map 0 :init :width c :height r :map_type VERA_MAP_TYPE_TXT16)
+      (vera :layer 0 :map 0)
+      (vera :map 0 :entry :x 0 :y 0 :val
+                      (logior (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_WHITE 8) 1))
+      (vera :map 0 :entry :x (1- c) :y 0 :val
+                      (logior (ash VERA_COLOR_BLUE 12) (ash VERA_COLOR_WHITE 8) 1))
+      (vera :map 0 :entry :x 0 :y (1- r) :val
+                      (logior (ash VERA_COLOR_PURPLE 12) (ash VERA_COLOR_YELLOW 8) 1))
+      (vera :map 0 :entry :x (1- c) :y (1- r) :val
+                      (logior (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_GREY 8) 1))
+      (format t "~x~%"  (vera :map 0 :entry :x 0 :y 0))
+      (format t "~x~%" (vera :map 0 :entry :x (1- c) :y 0))
+      (format t "~x~%" (vera :map 0 :entry :x 0 :y (1- r)))
+      (format t "~x~%" (vera :map 0 :entry :x (1- c) :y (1- r)))
+      (vera :map 0 :deinit 0))
+    rows cols))
+
+
+
+
 'end

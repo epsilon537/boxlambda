@@ -1,13 +1,12 @@
 'start
-(vera_init)
-(vera_tileset 0 8 8 1 1)
-(vera_layer_bitmap 0 0 0)
-(vera_sprite_init 0)
-(vera_sprite_tile 0 0 0)
-(vera_tileset_deinit 0)
-(vera_tileset 0 320 8 4 1)
-(vera_sprite_tile 0 0 0)
-(vera_layer_tileset 0 0)
+(vera :tileset 0 :init :width 8 :height 8 :bpp 1 :num_tiles 1)
+(vera :layer 0 :bitmap :tileset 0 :tile_idx 0)
+(vera :sprite 0 :init)
+(vera :sprite 0 :tileset 0 :tile_idx 0)
+(vera :tileset 0 :deinit)
+(vera :tileset 0 :init :width 320 :height 8 :bpp 4 :num_tiles 1)
+(vera :sprite 0 :tileset 0 :tile_idx 0)
+(vera :layer 0 :tileset 0)
 
 'end
 

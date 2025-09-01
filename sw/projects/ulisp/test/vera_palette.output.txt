@@ -1,122 +1,111 @@
 start
 
-XXXXXX> (vera_display_enable 1)
+XXXXXX> (vera :display :enable)
 1
 
-XXXXXX> (vera_layer_enable 0 1)
+XXXXXX> (vera :layer 0 :enable)
 1
 
-XXXXXX> (vera_tileset 0 320 32 8 1)
-(XXXXXXXXX 320 32 8 1 10240)
+XXXXXX> (vera :tileset 0 :init :width 320 :height 32 :bpp 8 :num_tiles 1)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
+)
 
-XXXXXX> (vera_layer_bitmap 0 0 0)
-(0 0)
+XXXXXX> (vera :layer 0 :bitmap :tileset 0 :tile_idx 0)
+(:tileset 0 :tile_idx 0)
 
-XXXXXX> (vera_tileset_pixel 0 0 0 0 255)
+XXXXXX> (vera :tileset 0 :pixel :tile_idx 0 :x 0 :y 0 :val 255)
 255
 
-XXXXXX> (print (vera_tileset_pixel 0 0 0 0))
+XXXXXX> (print (vera :tileset 0 :pixel :tile_idx 0 :x 0 :y 0))
 
 255
 255
 
-XXXXXX> (vera_irqline 0)
+XXXXXX>
+(vera :irqline 0)
 0
 
-XXXXXX> (vera_line_capture_enable 1)
+XXXXXX> (vera :linecapture :enable)
 1
 
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
 nil
 
-XXXXXX> (vera_line_capture_enable 1)
+XXXXXX> (print (vera :linecapture :pixel :x 0))
+
+(:r 15 :g 0 :b 11)
+(:r 15 :g 0 :b 11)
+
+XXXXXX> (print (vera :linecapture :pixel :x 1))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+(vera :palette :idx 0 :r 3 :g 2 :b 1)
+(:r 3 :g 2 :b 1)
+
+XXXXXX> (vera :palette :idx 255 :r 1 :g 2 :b 3)
+(:r 1 :g 2 :b 3)
+
+XXXXXX> (print (vera :palette :idx 0))
+
+(:r 3 :g 2 :b 1)
+(:r 3 :g 2 :b 1)
+
+XXXXXX> (print (vera :palette :idx 255))
+
+(:r 1 :g 2 :b 3)
+(:r 1 :g 2 :b 3)
+
+XXXXXX>
+(vera :linecapture :enable)
 1
 
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
 nil
 
-XXXXXX> (print (vera_line_capture_read_pixel 0))
+XXXXXX> (print (vera :linecapture :pixel :x 0))
 
-(15 0 11)
-(15 0 11)
+(:r 1 :g 2 :b 3)
+(:r 1 :g 2 :b 3)
 
-XXXXXX> (print (vera_line_capture_read_pixel 1))
+XXXXXX> (print (vera :linecapture :pixel :x 1))
 
-(0 0 0)
-(0 0 0)
+(:r 3 :g 2 :b 1)
+(:r 3 :g 2 :b 1)
 
-XXXXXX> (vera_palette 0 3 2 1)
-(3 2 1)
+XXXXXX>
+(vera :palette :restore)
+nil
 
-XXXXXX> (vera_palette 255 1 2 3)
-(1 2 3)
+XXXXXX> (print (vera :palette :idx 0))
 
-XXXXXX> (print (vera_palette 0))
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
 
-(3 2 1)
-(3 2 1)
+XXXXXX> (print (vera :palette :idx 255))
 
-XXXXXX> (print (vera_palette 255))
+(:r 15 :g 0 :b 11)
+(:r 15 :g 0 :b 11)
 
-(1 2 3)
-(1 2 3)
-
-XXXXXX> (vera_line_capture_enable 1)
+XXXXXX>
+(vera :linecapture :enable)
 1
 
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
 nil
 
-XXXXXX> (vera_line_capture_enable 1)
-1
+XXXXXX> (print (vera :linecapture :pixel :x 0))
 
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
-nil
+(:r 15 :g 0 :b 11)
+(:r 15 :g 0 :b 11)
 
-XXXXXX> (print (vera_line_capture_read_pixel 0))
+XXXXXX> (print (vera :linecapture :pixel :x 1))
 
-(1 2 3)
-(1 2 3)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
 
-XXXXXX> (print (vera_line_capture_read_pixel 1))
-
-(3 2 1)
-(3 2 1)
-
-XXXXXX> (vera_palette)
-nil
-
-XXXXXX> (print (vera_palette 0))
-
-(0 0 0)
-(0 0 0)
-
-XXXXXX> (print (vera_palette 255))
-
-(15 0 11)
-(15 0 11)
-
-XXXXXX> (vera_line_capture_enable 1)
-1
-
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
-nil
-
-XXXXXX> (vera_line_capture_enable 1)
-1
-
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
-nil
-
-XXXXXX> (print (vera_line_capture_read_pixel 0))
-
-(15 0 11)
-(15 0 11)
-
-XXXXXX> (print (vera_line_capture_read_pixel 1))
-
-(0 0 0)
-(0 0 0)
-
-XXXXXX> 'end
+XXXXXX>
+'end
 end

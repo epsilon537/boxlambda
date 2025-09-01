@@ -95,17 +95,21 @@ def test(name, line_delay=0.5):
 
     ch.sendline("")
 
-    # Send the script char-by-char, like an operator entering it
-    # manually on the REPL.
+    # Send the script line by line with pause between lines
     try:
         with open(name+".lisp", "r") as file:
             for line in file:
                 print(line, end="", flush=True)
-                ch.send(line)
+                match = re.search(r"<wait (\d+)>", line)
+                if match:
+                    number = int(match.group(1))
+                    time.sleep(number)
+                else:
+                    ch.send(line)
                 time.sleep(line_delay)
 
-        ch.sendline("'stop")
-        ch.expect("stop", timeout=5)
+        ch.sendline("'stop_test")
+        ch.expect("stop_test", timeout=5)
 
     except Exception as e:
         print("Exception during test.")
@@ -140,11 +144,17 @@ def test(name, line_delay=0.5):
             ended = True
 
     if not started:
-        print("Test did not start.")
+        print("Test did not start:")
+
+        for line in scrn.display:
+            print(line)
+
         return False
 
     if not ended:
-        print("Test did not end.")
+        print("Test did not end:")
+        for line in scrn.display:
+            print(line)
         return False
 
     print("Output:")

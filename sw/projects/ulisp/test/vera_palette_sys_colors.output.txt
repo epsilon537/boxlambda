@@ -1,18 +1,21 @@
 start
 
-XXXXXX> (vera_display_enable 1)
+XXXXXX>
+(vera :display :enable)
 1
 
-XXXXXX> (vera_layer_enable 0 1)
+XXXXXX> (vera :layer 0 :enable)
 1
 
-XXXXXX> (vera_tileset 0 320 32 8 1)
-(XXXXXXXXX 320 32 8 1 10240)
+XXXXXX> (vera :tileset 0 :init :width 320 :height 32 :bpp 8 :num_tiles 1)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
+)
 
-XXXXXX> (vera_layer_bitmap 0 0 0)
-(0 0)
+XXXXXX> (vera :layer 0 :bitmap :tileset 0 :tile_idx 0)
+(:tileset 0 :tile_idx 0)
 
-XXXXXX> (vera_tileset_pixel 0 0 0 0 VERA_COLOR_BLACK)
+XXXXXX>
+(vera_tileset_pixel 0 0 0 0 VERA_COLOR_BLACK)
 0
 
 XXXXXX> (vera_tileset_pixel 0 0 1 0 VERA_COLOR_WHITE)
@@ -60,7 +63,16 @@ XXXXXX> (vera_tileset_pixel 0 0 14 0 VERA_COLOR_LIGHT_BLUE)
 XXXXXX> (vera_tileset_pixel 0 0 15 0 VERA_COLOR_LIGHT_GREY)
 15
 
-XXXXXX> (vera_tileset_pixel 0 0 16 0 VERA_COLOR_GRAYSCALE_0)
+XXXXXX>
+
+
+
+
+
+
+
+
+(vera_tileset_pixel 0 0 16 0 VERA_COLOR_GRAYSCALE_0)
 16
 
 XXXXXX> (vera_tileset_pixel 0 0 17 0 VERA_COLOR_GRAYSCALE_1)
@@ -108,58 +120,55 @@ XXXXXX> (vera_tileset_pixel 0 0 30 0 VERA_COLOR_GRAYSCALE_14)
 XXXXXX> (vera_tileset_pixel 0 0 31 0 VERA_COLOR_GRAYSCALE_15)
 31
 
-XXXXXX> (vera_irqline 0)
+XXXXXX>
+(vera :irqline 0)
 0
 
-XXXXXX> (vera_line_capture_enable 1)
+XXXXXX> (vera :linecapture :enable)
 1
 
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
-nil
-
-XXXXXX> (vera_line_capture_enable 1)
-1
-
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
 nil
 
 XXXXXX> (dotimes (ii 32)
-  (let ((rgb (vera_line_capture_read_pixel ii)))
-    (mapc (lambda (c) (format t "~x " c)) rgb))
-  (format t "~%"))
-0 0 0
-f f f
-8 0 0
-a f e
-c 4 c
-0 c 5
-0 0 a
-e e 7
-d 8 5
-6 4 0
-f 7 7
-3 3 3
-7 7 7
-a f 6
-0 8 f
-b b b
-0 0 0
-1 1 1
-2 2 2
-3 3 3
-4 4 4
-5 5 5
-6 6 6
-7 7 7
-8 8 8
-9 9 9
-a a a
-b b b
-c c c
-d d d
-e e e
-f f f
+  (print (vera :linecapture :pixel :x ii)))
+
+(:r 0 :g 0 :b 0)
+(:r 15 :g 15 :b 15)
+(:r 8 :g 0 :b 0)
+(:r 10 :g 15 :b 14)
+(:r 12 :g 4 :b 12)
+(:r 0 :g 12 :b 5)
+(:r 0 :g 0 :b 10)
+(:r 14 :g 14 :b 7)
+(:r 13 :g 8 :b 5)
+(:r 6 :g 4 :b 0)
+(:r 15 :g 7 :b 7)
+(:r 3 :g 3 :b 3)
+(:r 7 :g 7 :b 7)
+(:r 10 :g 15 :b 6)
+(:r 0 :g 8 :b 15)
+(:r 11 :g 11 :b 11)
+(:r 0 :g 0 :b 0)
+(:r 1 :g 1 :b 1)
+(:r 2 :g 2 :b 2)
+(:r 3 :g 3 :b 3)
+(:r 4 :g 4 :b 4)
+(:r 5 :g 5 :b 5)
+(:r 6 :g 6 :b 6)
+(:r 7 :g 7 :b 7)
+(:r 8 :g 8 :b 8)
+(:r 9 :g 9 :b 9)
+(:r 10 :g 10 :b 10)
+(:r 11 :g 11 :b 11)
+(:r 12 :g 12 :b 12)
+(:r 13 :g 13 :b 13)
+(:r 14 :g 14 :b 14)
+(:r 15 :g 15 :b 15)
 nil
 
-XXXXXX> 'end
+XXXXXX>
+
+
+'end
 end

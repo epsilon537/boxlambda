@@ -1,13 +1,18 @@
 'start
-(vera_init)
+(vera :init)
 (dotimes (jj 2)
   (let ((idx 0))
     (dolist (wh (list (cons 320 32) (cons 640 16)))
       (dolist (bpp (list 1 2 4 8))
-         (vera_tileset idx (car wh) (cdr wh) bpp 1)
-         (print (vera_tileset idx))
+         (vera :tileset idx :init :width (car wh) :height (cdr wh) :bpp bpp :num_tiles 1)
+         (print (vera :tileset idx :info))
          (setq idx (1+ idx)))))
   (dotimes (ii 8)
-    (vera_tileset_deinit ii)))
+    (vera :tileset ii :deinit)))
+
+
+
+
+
 'end
 

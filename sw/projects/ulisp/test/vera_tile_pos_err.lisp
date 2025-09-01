@@ -1,9 +1,10 @@
 'start
-(vera_tileset 0 8 8 8 8)
-(vera_tileset_pixel 0 1 8 0 101)
-(vera_tileset_pixel 0 1 0 8 101)
-(vera_tileset_deinit 0)
-(vera_tileset 0 16 16 8 8)
-(vera_tileset_pixel 0 1 16 0 101)
-(vera_tileset_pixel 0 1 0 16 101)
+(vera :tileset 0 :init :width 8 :height 8 :bpp 8 :num_tiles 8)
+(vera :tileset 0 :pixel :tile_idx 1 :x 8 :y 0 :val 101)
+(vera :tileset 0 :pixel :tile_idx 1 :x 0 :y 8 :val 101)
+(vera :tileset 0 :deinit)
+(vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 8)
+(vera :tileset 0 :pixel :tile_idx 1 :x 16 :y 0 :val 101)
+(vera :tileset 0 :pixel :tile_idx 1 :x 0 :y 16 :val 101)
+
 'end

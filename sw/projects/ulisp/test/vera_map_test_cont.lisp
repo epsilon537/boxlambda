@@ -1,11 +1,13 @@
 'start
-(vera_init)
+(vera :init)
+
 (let ((idx 0))
   (dolist (wh (list (cons 32 256) (cons 256 32)))
-     (vera_map idx (car wh) (cdr wh) (mod idx 3))
-     (print (vera_map idx))
+    (vera :map idx :init :width (car wh) :height (cdr wh) :map_type (mod idx 3))
+    (print (vera :map idx :info))
      (setq idx (1+ idx))))
 (dotimes (ii 2)
-  (vera_map_deinit ii))
+  (vera :map ii :deinit))
+
 'end
 

@@ -1,20 +1,25 @@
 'start
-(vera_init)
-(vera_tileset 0 8 8 1 1)
-(vera_tileset 0 8 8 1 1)
-(vera_tileset_deinit 0)
-(vera_tileset_deinit 0)
-(vera_tileset 1 8)
-(vera_tileset 1 8 8)
-(vera_tileset 1 8 8 1)
-(vera_tileset 1 8 8 1 1 0)
-(vera_tileset 100 8 8 1 1)
-(vera_tileset 2 9 8 1 1)
-(vera_tileset 2 8 9 1 1)
-(vera_tileset 2 8 8 10 1)
-(vera_tileset 2 8 8 1 0)
-(vera_tileset 2 8 8 1 1025)
-(vera_tileset 3 64 64 8 32)
-(vera_tileset 4 64 64 8 2)
+(vera :tileset 0 :init :width 8 :height 8 :bpp 1 :num_tiles 1)
+(vera :tileset 0 :init :width 8 :height 8 :bpp 1 :num_tiles 1)
+(vera :tileset 0 :deinit)
+(vera :tileset 0 :deinit)
+(vera :tileset 1 :init :width 8)
+(vera :tileset 1 :init :width 8 :height 8)
+(vera :tileset 1 :init :width 8 :height 8 :bpp 1)
+(vera :tileset 100 :init :width 8 :height 8 :bpp 1 :num_tiles 1)
+(vera :tileset 2 :init :width 9 :height 8 :bpp 1 :num_tiles 1)
+(vera :tileset 2 :init :width 8 :height 9 :bpp 1 :num_tiles 1)
+(vera :tileset 2 :init :width 8 :height 8 :bpp 10 :num_tiles 1)
+(vera :tileset 2 :init :width 8 :height 8 :bpp 1 :num_tiles 0)
+(vera :tileset 2 :init :width 8 :height 8 :bpp 1 :num_tiles 1025)
+(vera :tileset 3 :init :width 64 :height 64 :bpp 8 :num_tiles 32)
+
+
+
+(vera :tileset 4 :init :width 64 :height 64 :bpp 8 :num_tiles 2)
+
+
+
+
 'end
 

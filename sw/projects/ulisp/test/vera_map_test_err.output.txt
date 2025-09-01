@@ -1,36 +1,37 @@
 start
 
-XXXXXX> (vera_init)
+XXXXXX> (vera :init)
 nil
 
-XXXXXX> (vera_map 0 32 32 0)
-(XXXXXXXXX 32 32 0)
+XXXXXX> (vera :map 0 :init :width 32 :height 32 :map_type 0)
+(:addr XXXXXXXXX :width 32 :height 32 :map_type 0)
 
-XXXXXX> (vera_map 0 32 32 0)
+XXXXXX> (vera :map 0 :init :width 32 :height 32 :map_type 0)
 Error: 'vera_map' already initialized: 0
-XXXXXX> (vera_map_deinit 0)
+XXXXXX> (vera :map 0 :deinit)
 nil
 
-XXXXXX> (vera_map_deinit 0)
+XXXXXX> (vera :map 0 :deinit)
 Error: 'vera_map_deinit' not initialized: 0
-XXXXXX> (vera_map 1 32)
-Error: 'vera_map' too few arguments
-XXXXXX> (vera_map 1 32 64)
-Error: 'vera_map' too few arguments
-XXXXXX> (vera_map 1 32 64 0 0)
-Error: 'vera_map' too many arguments
-XXXXXX> (vera_map 100 32 32 0)
+XXXXXX> (vera :map 1 :init)
+Error: Missing argument: :width. Table: ((:id . 1))
+XXXXXX> (vera :map 1 :init :width 32)
+Error: Missing argument: :height. Table: ((:width . 32) (:id . 1))
+XXXXXX> (vera :map 1 :init :width 32 :height 64)
+Error: Missing argument: :map_type. Table: ((:height . 64) (:width . 32) (:id .
+1))
+XXXXXX> (vera :map 100 :init :width 32 :height 32 :map_type 0)
 Error: 'vera_map' invalid argument: 100
-XXXXXX> (vera_map 2 33 32 0)
+XXXXXX> (vera :map 2 :init :width 33 :height 32 :map_type 0)
 Error: 'vera_map' invalid argument: 33
-XXXXXX> (vera_map 2 32 33 0)
+XXXXXX> (vera :map 2 :init :width 32 :height 33 :map_type 0)
 Error: 'vera_map' invalid argument: 33
-XXXXXX> (vera_map 2 32 32 5)
+XXXXXX> (vera :map 2 :init :width 32 :height 32 :map_type 5)
 Error: 'vera_map' invalid argument: 5
-XXXXXX> (vera_map 3 256 256 0)
-(XXXXXXXXX 256 256 0)
+XXXXXX> (vera :map 3 :init :width 256 :height 256 :map_type 0)
+(:addr XXXXXXXXX :width 256 :height 256 :map_type 0)
 
-XXXXXX> (vera_map 4 32 32 0)
+XXXXXX> (vera :map 4 :init :width 32 :height 32 :map_type 0)
 Error: 'vera_map' insufficient resources
 XXXXXX> 'end
 end

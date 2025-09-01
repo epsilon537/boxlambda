@@ -1,26 +1,39 @@
 start
 
-XXXXXX> (vera_display_enable 1)
+XXXXXX>
+(vera :display :enable)
 1
 
-XXXXXX> (vera_tileset 0 16 16 8 32)
-(XXXXXXXXX 16 16 8 32 256)
+XXXXXX> (vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 32)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num_tiles 32 :tilesize_bytes 256)
 
-XXXXXX> (dotimes (ii 16)
+XXXXXX>
+(dotimes (ii 16)
   (dotimes (jj (1+ ii))
-    (vera_tileset_pixel 0 1 jj ii VERA_COLOR_BLUE)))
+    (vera_tileset_pixel 0 1 jj ii VERA_COLOR_BLUE)                             (
+    #|(vera :tileset 0 :pixel :tile_idx 1 :x jj :y ii :val VERA_COL)|#))UE)
 nil
 
-XXXXXX> (vera_map 0 32 32 VERA_MAP_TYPE_TILE)
-(XXXXXXXXX 32 32 2)
+XXXXXX>
 
-XXXXXX> (vera_layer_map 0 0)
+
+
+
+
+
+
+
+(vera :map 0 :init :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
+(:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
+
+XXXXXX> (vera :layer 0 :map 0)
 0
 
-XXXXXX> (vera_layer_tileset 0 0)
+XXXXXX> (vera :layer 0 :tileset 0)
 0
 
-XXXXXX> (defvar row1 10)
+XXXXXX>
+(defvar row1 10)
 row1
 
 XXXXXX> (defvar col1 20)
@@ -38,86 +51,82 @@ row3
 XXXXXX> (defvar col3 16)
 col3
 
-XXXXXX> (vera_map_entry 0 col1 row1 1)
+XXXXXX>
+(vera :map 0 :entry :x col1 :y row1 :val 1)
 1
 
-XXXXXX> (vera_map_entry 0 col2 row2 (logior VERA_MAPENTRY_HFLIP_MASK VERA_MAPENT
-RY_VFLIP_MASK 1))
+XXXXXX> (vera :map 0 :entry :x col2 :y row2 :val (logior VERA_MAPENTRY_HFLIP_MAS
+K VERA_MAPENTRY_VFLIP_MASK 1))
 3073
 
-XXXXXX> (vera_map_entry 0 col3 row3 (logior (ash 1 VERA_MAPENTRY_PAL_OFFSET_SHIF
-T) 1))
+XXXXXX> (vera :map 0 :entry :x col3 :y row3 :val (logior (ash 1 VERA_MAPENTRY_PA
+L_OFFSET_SHIFT) 1))
 4097
 
-XXXXXX> (vera_layer_enable 0 1)
+XXXXXX> (vera :layer 0 :enable)
 1
-
-XXXXXX> (vera_irqline 0)
-0
-
-XXXXXX> (vera_line_capture_enable 1)
-1
-
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
-nil
 
 XXXXXX> (dolist (rowcol (list (cons row1 col1) (cons row2 col2) (cons row3 col3)
 ))
-  (vera_irqline (* 16 (car rowcol)))
-  (vera_line_capture_enable 1)
-  (loop (if (= (vera_line_capture_enable) 0) (return)))
+  (vera :irqline (* 16 (car rowcol)))
+  (vera :linecapture :enable)
+  (loop (if (= (vera :linecapture :enabled) 0) (return)))
   (dotimes (ii 16)
-    (print (vera_line_capture_read_pixel (+ (* 16 (cdr rowcol)) ii)))))
+    (print (vera :linecapture :pixel :x (+ (* 16 (cdr rowcol)) ii)))))
 
-(0 0 10)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(0 0 10)
-(6 6 6)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
-(0 0 0)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 6 :g 6 :b 6)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
 nil
 
-XXXXXX> 'end
+XXXXXX>
+
+
+
+'end
 end

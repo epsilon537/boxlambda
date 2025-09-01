@@ -1,58 +1,83 @@
 start
 
-XXXXXX> (vera_init)
-nil
-
-XXXXXX> (vera_display_enable 1)
+XXXXXX> (vera :display :enable)
 1
 
-XXXXXX> (vera_bordercolor VERA_COLOR_BLUE)
+XXXXXX> (vera :display :enabled)
+1
+
+XXXXXX>
+(vera :bordercolor VERA_COLOR_BLUE)
 6
 
-XXXXXX> (vera_screen_boundaries 100 540 100 380)
-(100 540 100 380)
+XXXXXX> (vera :bordercolor)
+6
 
-XXXXXX> (vera_irqline 379)
+XXXXXX>
+(vera :boundaries :hstart 100 :hstop 540 :vstart 100 :vstop 380)
+(:hstart 100 :hstop 540 :vstart 100 :vstop 380)
+
+XXXXXX> (vera :boundaries)
+(:hstart 100 :hstop 540 :vstart 100 :vstop 380)
+
+XXXXXX>
+(vera :irqline 379)
 379
 
-XXXXXX> (vera_line_capture_enable 1)
+XXXXXX> (vera :linecapture :enable)
 1
 
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
 nil
 
-XXXXXX> (vera_line_capture_read_pixel 99)
-(0 0 10)
+XXXXXX> (print (vera :linecapture :pixel :x 99))
 
-XXXXXX> (vera_line_capture_read_pixel 100)
-(0 0 0)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
 
-XXXXXX> (vera_line_capture_read_pixel 539)
-(0 0 0)
+XXXXXX> (print (vera :linecapture :pixel :x 100))
 
-XXXXXX> (vera_line_capture_read_pixel 540)
-(0 0 10)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
 
-XXXXXX> (vera_irqline 380)
+XXXXXX> (print (vera :linecapture :pixel :x 539))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x 540))
+
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+
+XXXXXX>
+
+(vera :irqline 380)
 380
 
-XXXXXX> (vera_line_capture_enable 1)
+XXXXXX> (vera :linecapture :enable)
 1
 
-XXXXXX> (loop (if (= (vera_line_capture_enable) 0) (return)))
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
 nil
 
-XXXXXX> (vera_line_capture_read_pixel 100)
-(0 0 10)
+XXXXXX> (print (vera :linecapture :pixel :x 100))
 
-XXXXXX> (vera_line_capture_read_pixel 539)
-(0 0 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
 
-XXXXXX> (vera_display_enable 0)
+XXXXXX> (print (vera :linecapture :pixel :x 539))
+
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+
+XXXXXX>
+(vera :display :disable)
 0
 
-XXXXXX> (vera_display_enable)
+XXXXXX> (vera :display :enabled)
 0
 
-XXXXXX> 'end
+XXXXXX>
+'end
 end

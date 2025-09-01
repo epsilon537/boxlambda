@@ -91,7 +91,7 @@
       (funcall (cdr disp_entry) args)
       (error "Dispatch keyword not found. Table: ~a keyword: ~a" table action))))
 
-(defun _vera_init ()
+(defun _vera_init (args)
   (vera_init))
 
 (defun _vera_map_res (map)
@@ -109,12 +109,12 @@
   (vera_map_deinit (table :id)))
 
 (defun _vera_map_entry (table)
-  (let ((col (table :x)
+  (let ((col (table :x))
         (row (table :y))
-        (val (table :val)))
+        (val (table :val t)))
     (if val
       (vera_map_entry id col row val)
-      (vera_map_entry id col row)))))
+      (vera_map_entry id col row))))
 
 (defun _vera_map_info (table)
   (_vera_map_res (vera_map (table :id))))
@@ -152,7 +152,7 @@
     (let ((tile_idx (table :tile_idx))
           (x (table :x))
           (y (table :y))
-          (val (table :val)))
+          (val (table :val t)))
       (if val
         (vera_tileset_pixel id tile_idx x y val)
         (vera_tileset_pixel id tile_idx x y))))
@@ -189,14 +189,14 @@
   (_vera_linecapture_pixel_res
     (vera_line_capture_read_pixel (table :x))))
 
-(defun _vera_linecapture_enabled (args)
+(defun _vera_linecapture_enabled (table)
   (vera_line_capture_enable))
 
 (defvar vera_linecapture_dispatch '(
   (:enable . _vera_linecapture_enable)
   (:disable . _vera_linecapture_disable)
   (:pixel . _vera_linecapture_pixel)
-  (:enable . _vera_linecapture_enabled)))
+  (:enabled . _vera_linecapture_enabled)))
 
 (defun _vera_linecapture (args)
   (if args
@@ -568,7 +568,6 @@
   (format t "(vera :map <id> :init :width <w> :height <h> :map_type <t>)~%")
   (format t "(vera :map <id> :deinit)~%")
   (format t "(vera :map <id> :entry :x <x> :y <y> [:val <v>])~%")
-  (format t "(vera :map <id> :entry :x <x> :y <y>~%")
   (format t "(vera :map <id> :info)~%")
   (format t "(vera :tileset <id> :init :width <w> :height <h> :bpp <b> :num_tiles <n>)~%")
   (format t "(vera :tileset <id> :deinit)~%")

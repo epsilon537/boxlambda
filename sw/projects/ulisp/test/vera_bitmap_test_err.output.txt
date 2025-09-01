@@ -1,36 +1,44 @@
 start
 
-XXXXXX> (vera_init)
+XXXXXX> (vera :init)
 nil
 
-XXXXXX> (vera_tileset 0 320 1 1 1)
-(XXXXXXXXX 320 1 1 1 40)
+XXXXXX> (vera :tileset 0 :init :width 320 :height 1 :bpp 1 :num_tiles 1)
+(:addr XXXXXXXXX :width 320 :height 1 :bpp 1 :num_tiles 1 :tilesize_bytes 40)
 
-XXXXXX> (vera_tileset 0 320 1 1 1)
+XXXXXX> (vera :tileset 0 :init :width 320 :height 1 :bpp 1 :num_tiles 1)
 Error: 'vera_tileset' already initialized: 0
-XXXXXX> (vera_tileset_deinit 0)
+XXXXXX> (vera :tileset 0 :deinit)
 nil
 
-XXXXXX> (vera_tileset_deinit 0)
+XXXXXX> (vera :tileset 0 :deinit)
 Error: 'vera_tileset_deinit' not initialized: 0
-XXXXXX> (vera_tileset 0 320)
-Error: 'vera_tileset' too few arguments
-XXXXXX> (vera_tileset 0 320 1)
-Error: 'vera_tileset' too few arguments
-XXXXXX> (vera_tileset 0 320 1 1)
-Error: 'vera_tileset' too few arguments
-XXXXXX> (vera_tileset 0 320 1 1 0 1)
-Error: 'vera_tileset' too many arguments
-XXXXXX> (vera_tileset 0 321 1 1 1)
-Error: 'vera_tileset' invalid argument: 321
-XXXXXX> (vera_tileset 0 320 0 1 1)
+XXXXXX> (vera :tileset 0 :init :width 320)
+Error: Missing argument: :height. Table: ((:width . 320) (:id . 0))
+XXXXXX> (vera :tileset 0 :init :width 320 :height 1)
+Error: Missing argument: :bpp. Table: ((:height . 1) (:width . 320) (:id . 0))
+XXXXXX> (vera :tileset 0 :init :width 320 :height 1 :bpp 1)
+Error: Missing argument: :num_tiles. Table: ((:bpp . 1) (:height . 1) (:width .
+320) (:id . 0))
+XXXXXX> (vera :tileset 0 :init :width 320 :height 1 :bpp 1 :num_tiles 0)
 Error: 'vera_tileset' invalid argument: 0
-XXXXXX> (vera_tileset 0 320 1 10 1)
+XXXXXX> (vera :tileset 0 :init :width 321 :height 1 :bpp 1 :num_tiles 1)
+Error: 'vera_tileset' invalid argument: 321
+XXXXXX> (vera :tileset 0 :init :width 320 :height 0 :bpp 1 :num_tiles 1)
+Error: 'vera_tileset' invalid argument: 0
+XXXXXX> (vera :tileset 0 :init :width 320 :height 1 :bpp 10 :num_tiles 1)
 Error: 'vera_tileset' invalid argument: 10
-XXXXXX> (vera_tileset 1 320 240 8 1)
-(XXXXXXXXX 320 240 8 1 76800)
+XXXXXX> (vera :tileset 1 :init :width 320 :height 240 :bpp 8 :num_tiles 1)
+(:addr XXXXXXXXX :width 320 :height 240 :bpp 8 :num_tiles 1 :tilesize_bytes 7680
+0)
 
-XXXXXX> (vera_tileset 2 320 240 8 1)
+XXXXXX> (vera :tileset 2 :init :width 320 :height 240 :bpp 8 :num_tiles 1)
 Error: 'vera_tileset' insufficient resources
-XXXXXX> 'end
+XXXXXX>
+
+
+
+
+
+'end
 end

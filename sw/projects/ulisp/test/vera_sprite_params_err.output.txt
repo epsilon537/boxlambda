@@ -1,9 +1,9 @@
 start
 
-XXXXXX> (vera_display_enable 1)
+XXXXXX> (vera :display :enable)
 1
 
-XXXXXX> (vera_sprites_enable 1)
+XXXXXX> (vera :sprites :enable)
 1
 
 XXXXXX> (defvar w 64)
@@ -15,55 +15,56 @@ h
 XXXXXX> (defvar bpp 8)
 bpp
 
-XXXXXX> (vera_tileset 0 w h bpp 8)
-(XXXXXXXXX 64 64 8 8 4096)
+XXXXXX> (vera :tileset 0 :init :width w :height h :bpp bpp :num_tiles 8)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 8 :num_tiles 8 :tilesize_bytes 4096)
 
-XXXXXX> (vera_tileset 0)
-(XXXXXXXXX 64 64 8 8 4096)
+XXXXXX> (vera :tileset 0 :info)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 8 :num_tiles 8 :tilesize_bytes 4096)
 
-XXXXXX> (vera_sprite_init 200)
+XXXXXX>
+(vera :sprite 200 :init)
 Error: 'vera_sprite_init' invalid argument: 200
-XXXXXX> (vera_sprite_init 1)
+XXXXXX> (vera :sprite 1 :init)
 nil
 
-XXXXXX> (vera_sprite_tile 200 0 2)
+XXXXXX> (vera :sprite 200 :tileset 0 :tile_idx 2)
 Error: 'vera_sprite_tile' invalid argument: 200
-XXXXXX> (vera_sprite_tile 1 400 2)
+XXXXXX> (vera :sprite 1 :tileset 400 :tile_idx 2)
 Error: 'vera_sprite_tile' invalid argument: 400
-XXXXXX> (vera_sprite_tile 1 40 2)
+XXXXXX> (vera :sprite 1 :tileset 40 :tile_idx 2)
 Error: 'vera_sprite_tile' invalid argument: 40
-XXXXXX> (vera_sprite_tile 1 0 200)
+XXXXXX> (vera :sprite 1 :tileset 0 :tile_idx 200)
 Error: 'vera_sprite_tile' index out of range: 200
-XXXXXX> (vera_sprite_tile 1 0 2)
-(0 2)
+XXXXXX> (vera :sprite 1 :tileset 0 :tile_idx 2)
+(:tileset 0 :tile_idx 2)
 
-XXXXXX> (vera_sprite_z_depth 200 0)
+XXXXXX> (vera :sprite 200 :z 0)
 Error: 'vera_sprite_z_depth' invalid argument: 200
-XXXXXX> (vera_sprite_z_depth 1 20)
+XXXXXX> (vera :sprite 1 :z 20)
 Error: 'vera_sprite_z_depth' invalid argument: 20
-XXXXXX> (vera_sprite_z_depth 1 VERA_SPRITE_Z_BG_L0)
+XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_BG_L0)
 1
 
-XXXXXX> (vera_sprite_pal_offset 1000 1)
+XXXXXX> (vera :sprite 1000 :pal_offset 1)
 Error: 'vera_sprite_pal_offset' invalid argument: 1000
-XXXXXX> (vera_sprite_pal_offset 1 1000)
+XXXXXX> (vera :sprite 1 :pal_offset 1000)
 Error: 'vera_sprite_pal_offset' invalid argument: 1000
-XXXXXX> (vera_sprite_pal_offset 1 1)
+XXXXXX> (vera :sprite 1 :pal_offset 1)
 1
 
-XXXXXX> (vera_sprite_hflip 1000 1)
+XXXXXX> (vera :sprite 1000 :hflip :enable)
 Error: 'vera_sprite_hflip' invalid argument: 1000
-XXXXXX> (vera_sprite_hflip 1 1)
+XXXXXX> (vera :sprite 1 :hflip :enable)
 1
 
-XXXXXX> (vera_sprite_vflip 1000 1)
+XXXXXX> (vera :sprite 1000 :vflip :enable)
 Error: 'vera_sprite_vflip' invalid argument: 1000
-XXXXXX> (vera_sprite_vflip 1 1)
+XXXXXX> (vera :sprite 1 :vflip :enable)
 1
 
-XXXXXX> (vera_sprite_col_mask 1000 1)
+XXXXXX> (vera :sprite 1000 :mask 1)
 Error: 'vera_sprite_col_mask' invalid argument: 1000
-XXXXXX> (vera_sprite_col_mask 1 1)
+XXXXXX> (vera :sprite 1 :mask 1)
 1
 
 XXXXXX>

@@ -21,67 +21,59 @@ bpp
 XXXXXX> (defvar scale 0.5)
 scale
 
-XXXXXX> (vera_display_enable 1)
-1
+XXXXXX> (defun vera_example ()
+  (print "General setup...")
+  (vera :display :enable)
+  (vera :palette :idx 0 :r 8 :g 8 :b 15)
+  (vera :hscale scale)
+  (vera :vscale scale)
+  (vera :sprites :enable)                                                      (
+  (vera :tileset 0 :init :width tile_sz :height tile_sz :bpp bpp :num_tile) 1)
+  ((era :tileset 1 :init :width sprite_sz :height sprite_sz :bpp bpp :num_tiles
+1)                                                                             (
+  (vera :map 0 :init :width map_sz :height map_sz :map_type VERA_MAP_TYPE_T)LE)
+  (vera :layer 0 :enable)
+  (vera :layer 0 :map 0)
+  (vera :layer 0 :tileset 0)
+  (print "Initializing map...")
+  (dotimes (ii map_sz)
+    (dotimes (jj map_sz)
+      (vera_map_entry 0 ii jj 0)
+      #|(vera :map 0 :entry :x ii :y jj :val 0)|#))
+  (print "Generating tile...")
+  (dotimes (ii tile_sz)                                                        (
+    (vera :tileset 0 :pixel :tile_idx 0 :x ii :y 0 :val VERA_COLOR_Y)LLOW)     (
+    (vera :tileset 0 :pixel :tile_idx 0 :x 0 :y ii :val VERA_COLOR_Y)LLOW)
+    (vera :tileset 0 :pixel :tile_idx 0 :x ii :y (1- tile_sz) :val VERA_COLOR_YE
+LLOW)
+    (vera :tileset 0 :pixel :tile_idx 0 :x (1- tile_sz) :y ii :val VERA_COLOR_YE
+LLOW))
+  (print "Generating sprite tile...")
+  (dotimes (ii sprite_sz)
+    (dotimes (jj sprite_sz)
+      (vera_tileset_pixel 1 0 ii jj VERA_COLOR_WHITE)                          (
+      #|(vera :tileset 1 :pixel :tile_idx 0 :x ii :y jj :val VERA_CO)|#))HITE)
+  (print "Setting up sprite...")
+  (vera :sprite 0 :init)
+  (vera :sprite 0 :tileset 1 :tile_idx 0)
+  (vera :sprite 0 :z VERA_SPRITE_Z_L1)
+  (vera :sprite 0 :x x :y y))
+vera_example
 
-XXXXXX> (vera_palette 0 8 8 15)
-(8 8 15)
+XXXXXX>
 
-XXXXXX> (vera_hscale scale)
-0.5
 
-XXXXXX> (vera_vscale scale)
-0.5
 
-XXXXXX> (vera_sprites_enable 1)
-1
+(vera_example)
 
-XXXXXX> (vera_tileset 0 tile_sz tile_sz bpp 1)
-(XXXXXXXXX 16 16 4 1 128)
-
-XXXXXX> (vera_tileset 1 sprite_sz sprite_sz bpp 1)
-(XXXXXXXXX 64 64 4 1 2048)
-
-XXXXXX> (vera_map 0 map_sz map_sz VERA_MAP_TYPE_TILE)
-(XXXXXXXXX 32 32 2)
-
-XXXXXX> (vera_layer_enable 0 1)
-1
-
-XXXXXX> (vera_layer_map 0 0)
-0
-
-XXXXXX> (vera_layer_tileset 0 0)
-0
-
-XXXXXX> (dotimes (ii map_sz)
-  (dotimes (jj map_sz)
-  (vera_map_entry 0 ii jj 0)))
-nil
-
-XXXXXX> (dotimes (ii tile_sz)
-  (vera_tileset_pixel 0 0 ii 0 VERA_COLOR_YELLOW)
-  (vera_tileset_pixel 0 0 0 ii VERA_COLOR_YELLOW)
-  (vera_tileset_pixel 0 0 ii (1- tile_sz) VERA_COLOR_YELLOW)
-  (vera_tileset_pixel 0 0 (1- tile_sz) ii VERA_COLOR_YELLOW))
-nil
-
-XXXXXX> (dotimes (ii sprite_sz)
-  (dotimes (jj sprite_sz)
-  (vera_tileset_pixel 1 0 ii jj VERA_COLOR_WHITE)))
-nil
-
-XXXXXX> (vera_sprite_tile 0 1 0)
-(1 0)
-
-XXXXXX> (vera_sprite_z_depth 0 VERA_SPRITE_Z_L1)
-3
-
-XXXXXX> (vera_sprite_x 0 x)
-128
-
-XXXXXX> (vera_sprite_y 0 y)
+"General setup..."
+"Initializing map..."
+"Generating tile..."
+"Generating sprite tile..."
+"Setting up sprite..."
 88
 
-XXXXXX> 'end
+XXXXXX>
+
+'end
 end

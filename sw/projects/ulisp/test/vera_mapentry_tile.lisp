@@ -1,29 +1,45 @@
 'start
-(vera_display_enable 1)
-(vera_tileset 0 16 16 8 32)
+
+(vera :display :enable)
+(vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 32)
+
 (dotimes (ii 16)
   (dotimes (jj (1+ ii))
-    (vera_tileset_pixel 0 1 jj ii VERA_COLOR_BLUE)))
-(vera_map 0 32 32 VERA_MAP_TYPE_TILE)
-(vera_layer_map 0 0)
-(vera_layer_tileset 0 0)
+    (vera_tileset_pixel 0 1 jj ii VERA_COLOR_BLUE)
+    #|(vera :tileset 0 :pixel :tile_idx 1 :x jj :y ii :val VERA_COLOR_BLUE)|#))
+
+
+
+
+
+
+
+
+
+(vera :map 0 :init :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
+(vera :layer 0 :map 0)
+(vera :layer 0 :tileset 0)
+
 (defvar row1 10)
 (defvar col1 20)
 (defvar row2 20)
 (defvar col2 10)
 (defvar row3 16)
 (defvar col3 16)
-(vera_map_entry 0 col1 row1 1)
-(vera_map_entry 0 col2 row2 (logior VERA_MAPENTRY_HFLIP_MASK VERA_MAPENTRY_VFLIP_MASK 1))
-(vera_map_entry 0 col3 row3 (logior (ash 1 VERA_MAPENTRY_PAL_OFFSET_SHIFT) 1))
-(vera_layer_enable 0 1)
-(vera_irqline 0)
-(vera_line_capture_enable 1)
-(loop (if (= (vera_line_capture_enable) 0) (return)))
+
+(vera :map 0 :entry :x col1 :y row1 :val 1)
+(vera :map 0 :entry :x col2 :y row2 :val (logior VERA_MAPENTRY_HFLIP_MASK VERA_MAPENTRY_VFLIP_MASK 1))
+(vera :map 0 :entry :x col3 :y row3 :val (logior (ash 1 VERA_MAPENTRY_PAL_OFFSET_SHIFT) 1))
+(vera :layer 0 :enable)
 (dolist (rowcol (list (cons row1 col1) (cons row2 col2) (cons row3 col3)))
-  (vera_irqline (* 16 (car rowcol)))
-  (vera_line_capture_enable 1)
-  (loop (if (= (vera_line_capture_enable) 0) (return)))
+  (vera :irqline (* 16 (car rowcol)))
+  (vera :linecapture :enable)
+  (loop (if (= (vera :linecapture :enabled) 0) (return)))
   (dotimes (ii 16)
-    (print (vera_line_capture_read_pixel (+ (* 16 (cdr rowcol)) ii)))))
+    (print (vera :linecapture :pixel :x (+ (* 16 (cdr rowcol)) ii)))))
+
+
+
+
+
 'end
