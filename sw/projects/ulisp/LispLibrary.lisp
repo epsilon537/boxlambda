@@ -311,7 +311,12 @@
 
 (defun _vera_hscale (args)
   (if args
-    (vera_hscale (first args))
+    (let ((hscale (first args))
+          (table (_make_assoc_table (rest args))))
+      (vera_hscale (first args))
+      (let ((vscale (table :vscale t)))
+        (if vscale
+          (vera_vscale vscale))))
     (vera_hscale)))
 
 (defun _vera_vscale (args)
@@ -594,6 +599,7 @@
   (format t "(vera :sprites :enabled)~%")
   (format t "(vera :hscale [<h>])~%")
   (format t "(vera :vscale [<v>])~%")
+  (format t "(vera :hscale <h> :vscale <v>)~%")
   (format t "(vera :bordercolor [<c>])~%")
   (format t "(vera :boundaries [:hstart <hs> :hstop <he> :vstart <vs> :vstop <ve>])~%")
   (format t "(vera :layer <id> :enable)~%")

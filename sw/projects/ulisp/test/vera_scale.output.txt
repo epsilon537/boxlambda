@@ -55,10 +55,7 @@ XXXXXX> (print (vera :linecapture :pixel :x 16))
 (:r 0 :g 0 :b 0)
 
 XXXXXX>
-(vera :hscale 0.5)
-0.5
-
-XXXXXX> (vera :vscale 0.5)
+(vera :hscale 0.5 :vscale 0.5)
 0.5
 
 XXXXXX>
