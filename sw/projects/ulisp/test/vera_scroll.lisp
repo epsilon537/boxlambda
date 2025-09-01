@@ -14,8 +14,7 @@
 
 
 
-(vera :layer 0 :hscroll 16)
-(vera :layer 0 :vscroll 16)
+(vera :layer 0 :hscroll 16 :vscroll 16)
 (vera :layer 0 :hscroll)
 (vera :layer 0 :vscroll)
 

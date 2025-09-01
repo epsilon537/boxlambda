@@ -32,10 +32,7 @@ nil
 XXXXXX>
 
 
-(vera :layer 0 :hscroll 16)
-16
-
-XXXXXX> (vera :layer 0 :vscroll 16)
+(vera :layer 0 :hscroll 16 :vscroll 16)
 16
 
 XXXXXX> (vera :layer 0 :hscroll)

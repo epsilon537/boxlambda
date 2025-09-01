@@ -352,9 +352,13 @@
 
 (defun _vera_layer_hscroll (args)
   (let ((id (first args))
-        (val (second args)))
-    (if val
-      (vera_layer_hscroll id val)
+        (hscroll (second args)))
+    (if hscroll
+      (let* ((table (_make_assoc_table (cddr args)))
+             (vscroll (table :vscroll t)))
+        (vera_layer_hscroll id hscroll)
+        (if vscroll
+          (vera_layer_vscroll id vscroll)))
       (vera_layer_hscroll id))))
 
 (defun _vera_layer_vscroll (args)
@@ -607,6 +611,7 @@
   (format t "(vera :layer <id> :enabled)~%")
   (format t "(vera :layer <id> :hscroll [<h>])~%")
   (format t "(vera :layer <id> :vscroll [<v>])~%")
+  (format t "(vera :layer <id> :hscroll <h> :vscroll <v>)~%")
   (format t "(vera :layer <id> :map [<m>])~%")
   (format t "(vera :layer <id> :tileset [<t>])~%")
   (format t "(vera :layer <id> :bitmap [:tileset <t> :tile_idx <i>])~%")
