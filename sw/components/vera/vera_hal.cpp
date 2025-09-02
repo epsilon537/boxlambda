@@ -229,9 +229,9 @@ bool Vera_map::init(Vera_map_size_t width, Vera_map_size_t height, Vera_map_type
 }
 
 void Vera_map::deinit() {
-  assert(initialized_);
+  if (initialized_)
+    vera.vram_free(map_base_);
 
-  vera.vram_free(map_base_);
   initialized_ = false;
 }
 
@@ -323,8 +323,9 @@ bool Vera_tileset::init(Vera_tile_size_t width, uint32_t height, Vera_bpp_t bpp,
 }
 
 void Vera_tileset::deinit() {
-  assert(initialized_);
-  vera.vram_free(tileset_base_);
+  if (initialized_)
+    vera.vram_free(tileset_base_);
+
   initialized_ = false;
 }
 
@@ -625,15 +626,25 @@ Vera::Vera() {
 }
 
 void Vera::init() {
-  memset(vram_blocks_, 0, sizeof(vram_blocks_));
 
   for (int ii=0; ii<VERA_NUM_SPRITES; ii++) {
     sprite[ii].set_id_(ii);
+    sprite[ii].init();
   }
 
   //Initialize the layer objects
   layer[0].set_id_(0);
   layer[1].set_id_(1);
+
+  //Deinit the maps and tilesets (in case of a re-init)
+  for (int ii=0; ii<VERA_NUM_MAPS; ii++)
+    map[ii].deinit();
+
+  for (int ii=0; ii<VERA_NUM_TILESETS; ii++)
+    tileset[ii].deinit();
+
+  //Do this last to not confuse the deinits above.
+  memset(vram_blocks_, 0, sizeof(vram_blocks_));
 }
 
 Vera_rgb_t Vera::line_capture_read_pixel(uint32_t x) {
