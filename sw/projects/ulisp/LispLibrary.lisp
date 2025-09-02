@@ -313,11 +313,11 @@
   (if args
     (let ((hscale (first args))
           (table (_make_assoc_table (rest args))))
-      (vera_hscale (first args))
+      (vera_hscale hscale)
       (let ((vscale (table :vscale t)))
         (if vscale
-          (vera_vscale vscale))))
-    (vera_hscale)))
+          (vera_vscale vscale)))))
+    (vera_hscale))
 
 (defun _vera_vscale (args)
   (if args
@@ -358,8 +358,8 @@
              (vscroll (table :vscroll t)))
         (vera_layer_hscroll id hscroll)
         (if vscroll
-          (vera_layer_vscroll id vscroll)))
-      (vera_layer_hscroll id))))
+          (vera_layer_vscroll id vscroll)))))
+  (vera_layer_hscroll id))
 
 (defun _vera_layer_vscroll (args)
   (let ((id (first args))
@@ -476,8 +476,8 @@
         (vera_sprite_x id x)
         (let ((y (table :y t)))
           (if y
-            (vera_sprite_y id y))))
-      (vera_sprite_x id))))
+            (vera_sprite_y id y)))))
+    (vera_sprite_x id)))
 
 (defun _vera_sprite_y (args)
   (let ((id (first args))

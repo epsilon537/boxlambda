@@ -358,7 +358,7 @@ uint8_t Vera_tileset::pixel_get(uint32_t tile_idx, uint32_t x, uint32_t y) {
 void Vera_sprite::init() {
   assert(attrs_);
 
-  tileset_id_ = ~0U;
+  tileset_id_ = VERA_TILESET_ID_UNKNOWN;
   tile_idx_ = 0;
   x_ = 0;
   y_ = 0;
@@ -474,13 +474,14 @@ void Vera_sprite::set_attr_byte6_() {
 
 void Vera_sprite::set_attr_byte7_() {
   assert(attrs_);
-  assert(tileset_id_ < VERA_NUM_TILESETS);
 
   Vera_tileset& tileset = vera.tileset[tileset_id_];
 
   uint8_t bb = pal_offset_;
-  bb |= tile_sz_enc(tileset.width())<<4;
-  bb |= tile_sz_enc(tileset.height())<<6;
+  if (tileset_id_ != VERA_TILESET_ID_UNKNOWN) {
+    bb |= tile_sz_enc(tileset.width())<<4;
+    bb |= tile_sz_enc(tileset.height())<<6;
+  }
 
   uint8_t *attrb_ = (uint8_t*)(&attrs_[3]) + 1;
   *attrb_ = bb;

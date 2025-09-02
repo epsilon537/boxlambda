@@ -157,9 +157,6 @@ object *fn_vera_map_deinit (object *args, object *env) {
 
   Vera_map &map = vera.map[idx_checked];
 
-  if (!map.is_initialized())
-    error(notinitialized, idx);
-
   map.deinit();
 
   return nil;
@@ -227,9 +224,6 @@ object *fn_vera_tileset_deinit (object *args, object *env) {
   uint32_t idx_checked = checkrange(idx, 0, VERA_NUM_TILESETS-1);
 
   Vera_tileset &tileset = vera.tileset[idx_checked];
-
-  if (!tileset.is_initialized())
-    error(notinitialized, idx);
 
   tileset.deinit();
 
