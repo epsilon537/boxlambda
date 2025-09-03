@@ -8,8 +8,8 @@
 (vera :layer 0 :tileset 0)
 (vera :map 0 :entry :x 2 :y 2 :val 1)
 (dotimes (ii 16)
-  (vera :tileset 0 :pixel :tile_idx 1 :x ii :y ii :val VERA_COLOR_WHITE)
-  (vera :tileset 0 :pixel :tile_idx 1 :x (- 15 ii) :y ii :val VERA_COLOR_WHITE))
+  (vera :tileset 0 :pixel :tile 1 :x ii :y ii :val VERA_COLOR_WHITE)
+  (vera :tileset 0 :pixel :tile 1 :x (- 15 ii) :y ii :val VERA_COLOR_WHITE))
 
 
 

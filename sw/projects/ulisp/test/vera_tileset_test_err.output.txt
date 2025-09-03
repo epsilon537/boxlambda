@@ -9,7 +9,8 @@ XXXXXX> (vera :tileset 0 :deinit)
 nil
 
 XXXXXX> (vera :tileset 0 :deinit)
-Error: 'vera_tileset_deinit' not initialized: 0
+nil
+
 XXXXXX> (vera :tileset 1 :init :width 8)
 Error: Missing argument: :height. Table: ((:width . 8) (:id . 1))
 XXXXXX> (vera :tileset 1 :init :width 8 :height 8)

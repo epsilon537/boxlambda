@@ -149,13 +149,13 @@
   (vera_tileset_deinit (table :id)))
 
 (defun _vera_tileset_pixel (table)
-    (let ((tile_idx (table :tile_idx))
+    (let ((tile (table :tile))
           (x (table :x))
           (y (table :y))
           (val (table :val t)))
       (if val
-        (vera_tileset_pixel id tile_idx x y val)
-        (vera_tileset_pixel id tile_idx x y))))
+        (vera_tileset_pixel id tile x y val)
+        (vera_tileset_pixel id tile x y))))
 
 (defun _vera_tileset_info (table)
   (_vera_tileset_res
@@ -384,7 +384,7 @@
 
 (defun _vera_layer_bitmap_res (bitmap)
   (mapcan (lambda (k v) (list k v))
-            '(:tileset :tile_idx) bitmap))
+            '(:tileset :tile) bitmap))
 
 (defun _vera_layer_bitmap (args)
   (let ((id (first args))
@@ -392,7 +392,7 @@
     (_vera_layer_bitmap_res
       (if args
         (let ((table (_make_assoc_table args)))
-          (vera_layer_bitmap id (table :tileset) (table :tile_idx)))
+          (vera_layer_bitmap id (table :tileset) (table :tile)))
         (vera_layer_bitmap id)))))
 
 (defun _vera_layer_pal_offset (args)
@@ -455,7 +455,7 @@
 
 (defun _vera_sprite_tileset_res (tileset)
   (mapcan (lambda (k v) (list k v))
-            '(:tileset :tile_idx) tileset))
+            '(:tileset :tile) tileset))
 
 (defun _vera_sprite_tileset (args)
   (let ((id (first args))
@@ -464,7 +464,7 @@
       (if args
         (let ((tileset (first args))
               (table (_make_assoc_table (rest args))))
-          (vera_sprite_tile id tileset (table :tile_idx)))
+          (vera_sprite_tile id tileset (table :tile)))
         (vera_sprite_tile id)))))
 
 (defun _vera_sprite_x (args)
@@ -580,7 +580,7 @@
   (format t "(vera :map <id> :info)~%")
   (format t "(vera :tileset <id> :init :width <w> :height <h> :bpp <b> :num_tiles <n>)~%")
   (format t "(vera :tileset <id> :deinit)~%")
-  (format t "(vera :tileset <id> :pixel :tile_idx <idx> :x <x> :y <y> [:val <v>])~%")
+  (format t "(vera :tileset <id> :pixel :tile <idx> :x <x> :y <y> [:val <v>])~%")
   (format t "(vera :tileset <id> :info)~%")
   (format t "(vera :linecapture :enable)~%")
   (format t "(vera :linecapture :disable)~%")
@@ -614,12 +614,12 @@
   (format t "(vera :layer <id> :hscroll <h> :vscroll <v>)~%")
   (format t "(vera :layer <id> :map [<m>])~%")
   (format t "(vera :layer <id> :tileset [<t>])~%")
-  (format t "(vera :layer <id> :bitmap [:tileset <t> :tile_idx <i>])~%")
+  (format t "(vera :layer <id> :bitmap [:tileset <t> :tile <i>])~%")
   (format t "(vera :layer <id> :pal_offset [<o>])~%")
   (format t "(vera :palette :restore)~%")
   (format t "(vera :palette :idx <i> [:r <r> :g <g> :b <b>])~%")
   (format t "(vera :sprite <id> :init)~%")
-  (format t "(vera :sprite <id> :tileset <t> :tile_idx <i>)~%")
+  (format t "(vera :sprite <id> :tileset <t> :tile <i>)~%")
   (format t "(vera :sprite <id> :tileset)~%")
   (format t "(vera :sprite <id> :x [<x>])~%")
   (format t "(vera :sprite <id> :y [<y>])~%")

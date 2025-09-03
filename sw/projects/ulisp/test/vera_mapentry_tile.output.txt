@@ -10,8 +10,8 @@ XXXXXX> (vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 32)
 XXXXXX>
 (dotimes (ii 16)
   (dotimes (jj (1+ ii))
-    (vera_tileset_pixel 0 1 jj ii VERA_COLOR_BLUE)                             (
-    #|(vera :tileset 0 :pixel :tile_idx 1 :x jj :y ii :val VERA_COL)|#))UE)
+    (vera_tileset_pixel 0 1 jj ii VERA_COLOR_BLUE)
+    #|(vera :tileset 0 :pixel :tile 1 :x jj :y ii :val VERA_COLOR_BLUE)|#))
 nil
 
 XXXXXX>

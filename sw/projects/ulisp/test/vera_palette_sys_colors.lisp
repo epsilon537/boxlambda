@@ -3,7 +3,7 @@
 (vera :display :enable)
 (vera :layer 0 :enable)
 (vera :tileset 0 :init :width 320 :height 32 :bpp 8 :num_tiles 1)
-(vera :layer 0 :bitmap :tileset 0 :tile_idx 0)
+(vera :layer 0 :bitmap :tileset 0 :tile 0)
 
 (vera_tileset_pixel 0 0 0 0 VERA_COLOR_BLACK)
 (vera_tileset_pixel 0 0 1 0 VERA_COLOR_WHITE)

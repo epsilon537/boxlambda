@@ -46,11 +46,11 @@ XXXXXX> (vera :layer 1 :tileset 1)
 XXXXXX> (vera :sprite 1 :init)
 nil
 
-XXXXXX> (vera :sprite 1 :tileset 1 :tile_idx 2)
-(:tileset 1 :tile_idx 2)
+XXXXXX> (vera :sprite 1 :tileset 1 :tile 2)
+(:tileset 1 :tile 2)
 
 XXXXXX> (vera :sprite 1 :tileset)
-(:tileset 1 :tile_idx 2)
+(:tileset 1 :tile 2)
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_DIS)
 0

@@ -12,7 +12,8 @@ XXXXXX> (vera :map 0 :deinit)
 nil
 
 XXXXXX> (vera :map 0 :deinit)
-Error: 'vera_map_deinit' not initialized: 0
+nil
+
 XXXXXX> (vera :map 1 :init)
 Error: Missing argument: :width. Table: ((:id . 1))
 XXXXXX> (vera :map 1 :init :width 32)

@@ -193,6 +193,7 @@ def all():
         print(f)
         r = test(Path(f).stem)
         result[f] = r
+        save()
 
     print("All:")
     print(result)

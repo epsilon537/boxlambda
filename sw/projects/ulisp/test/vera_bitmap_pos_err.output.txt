@@ -3,9 +3,9 @@ start
 XXXXXX> (vera :tileset 0 :init :width 320 :height 64 :bpp 1 :num_tiles 1)
 (:addr XXXXXXXXX :width 320 :height 64 :bpp 1 :num_tiles 1 :tilesize_bytes 2560)
 
-XXXXXX> (vera :tileset 0 :pixel :tile_idx 0 :x 320 :y 0 :val 101)
+XXXXXX> (vera :tileset 0 :pixel :tile 0 :x 320 :y 0 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 320
-XXXXXX> (vera :tileset 0 :pixel :tile_idx 0 :x 0 :y 64 :val 101)
+XXXXXX> (vera :tileset 0 :pixel :tile 0 :x 0 :y 64 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 64
 XXXXXX> (vera :tileset 0 :deinit)
 nil
@@ -13,9 +13,9 @@ nil
 XXXXXX> (vera :tileset 0 :init :width 640 :height 32 :bpp 1 :num_tiles 1)
 (:addr XXXXXXXXX :width 640 :height 32 :bpp 1 :num_tiles 1 :tilesize_bytes 2560)
 
-XXXXXX> (vera :tileset 0 :pixel :tile_idx 0 :x 640 :y 0 :val 101)
+XXXXXX> (vera :tileset 0 :pixel :tile 0 :x 640 :y 0 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 640
-XXXXXX> (vera :tileset 0 :pixel :tile_idx 0 :x 0 :y 32 :val 101)
+XXXXXX> (vera :tileset 0 :pixel :tile 0 :x 0 :y 32 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 32
 XXXXXX>
 

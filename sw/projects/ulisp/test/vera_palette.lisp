@@ -2,9 +2,9 @@
 (vera :display :enable)
 (vera :layer 0 :enable)
 (vera :tileset 0 :init :width 320 :height 32 :bpp 8 :num_tiles 1)
-(vera :layer 0 :bitmap :tileset 0 :tile_idx 0)
-(vera :tileset 0 :pixel :tile_idx 0 :x 0 :y 0 :val 255)
-(print (vera :tileset 0 :pixel :tile_idx 0 :x 0 :y 0))
+(vera :layer 0 :bitmap :tileset 0 :tile 0)
+(vera :tileset 0 :pixel :tile 0 :x 0 :y 0 :val 255)
+(print (vera :tileset 0 :pixel :tile 0 :x 0 :y 0))
 
 (vera :irqline 0)
 (vera :linecapture :enable)

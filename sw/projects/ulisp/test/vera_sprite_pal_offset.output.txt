@@ -25,8 +25,8 @@ XXXXXX> (vera :tileset 0 :info)
 XXXXXX> (vera :sprite 1 :init)
 nil
 
-XXXXXX> (vera :sprite 1 :tileset 0 :tile_idx 2)
-(:tileset 0 :tile_idx 2)
+XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
+(:tileset 0 :tile 2)
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
 3

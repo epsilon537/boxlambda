@@ -8,7 +8,7 @@
 (vera :tileset 0 :init :width w :height h :bpp bpp :num_tiles 4)
 (vera :tileset 0 :info)
 (vera :sprite 1 :init)
-(vera :sprite 1 :tileset 0 :tile_idx 2)
+(vera :sprite 1 :tileset 0 :tile 2)
 (vera :sprite 1 :z VERA_SPRITE_Z_L1)
 (dotimes (yy h)
   (dotimes (xx (min w (1+ yy)))

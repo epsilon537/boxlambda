@@ -38,12 +38,12 @@ XXXXXX> (vera :map 1 :entry :x 1 :y 1 :val 2)
 
 XXXXXX>
 (dotimes (ii 16)
-  (vera :tileset 0 :pixel :tile_idx 1 :x 0 :y ii :val VERA_COLOR_RED))
+  (vera :tileset 0 :pixel :tile 1 :x 0 :y ii :val VERA_COLOR_RED))
 nil
 
 XXXXXX>
 (dotimes (ii 16)
-  (vera :tileset 0 :pixel :tile_idx 2 :x ii :y 0 :val VERA_COLOR_BLUE))
+  (vera :tileset 0 :pixel :tile 2 :x ii :y 0 :val VERA_COLOR_BLUE))
 nil
 
 XXXXXX>

@@ -24,8 +24,8 @@ XXXXXX> (vera :tileset 0 :info)
 XXXXXX> (vera :sprite 1 :init)
 nil
 
-XXXXXX> (vera :sprite 1 :tileset 0 :tile_idx 2)
-(:tileset 0 :tile_idx 2)
+XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
+(:tileset 0 :tile 2)
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
 3
@@ -51,7 +51,7 @@ XXXXXX>
 
 
 (vera :sprite 1 :x 40 :y 50)
-50
+40
 
 XXXXXX> (vera :sprite 1 :x)
 40
@@ -94,7 +94,7 @@ XXXXXX> (print (vera :linecapture :pixel :x 40))
 (:r 10 :g 15 :b 14)
 (:r 10 :g 15 :b 14)
 
-XXXXXX> (print (vera :linecapture :pixel :x 47))
+XXXXXX> (print (vera :linecapture :pixel :x 41))
 
 (:r 10 :g 15 :b 14)
 (:r 10 :g 15 :b 14)

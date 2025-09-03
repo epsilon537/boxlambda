@@ -10,8 +10,8 @@
       (vera :tileset 0 :init :width w :height h :bpp bpp :num_tiles 8)
       (vera :layer 0 :tileset 0)
       (vera_tileset_pixel 0 1 (- w 1) (- h 1) 101)
-      (vera :tileset 0 :pixel :tile_idx 1 :x (- w 1) :y (- h 1) :val 101)
-      (print (vera :tileset 0 :pixel :tile_idx 1 :x (- w 1) :y (- h 1)))
+      (vera :tileset 0 :pixel :tile 1 :x (- w 1) :y (- h 1) :val 101)
+      (print (vera :tileset 0 :pixel :tile 1 :x (- w 1) :y (- h 1)))
       (vera_irqline (- h 1))
       (vera_line_capture_enable 1)
       (loop (if (= (vera_line_capture_enable) 0) (return)))
@@ -22,7 +22,7 @@
       (vera :linecapture :enable)
       (loop (if (= (vera :linecapture :enabled) 0) (return)))
       (print (vera :linecapture :pixel :x (- w 1)))
-      (vera :tileset 0 :pixel :tile_idx 1 :x (- w 1) :y (- h 1) :val 0)
+      (vera :tileset 0 :pixel :tile 1 :x (- w 1) :y (- h 1) :val 0)
       (vera :tileset 0 :deinit)))
 
 

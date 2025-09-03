@@ -27,16 +27,16 @@ Error: 'vera_sprite_init' invalid argument: 200
 XXXXXX> (vera :sprite 1 :init)
 nil
 
-XXXXXX> (vera :sprite 200 :tileset 0 :tile_idx 2)
+XXXXXX> (vera :sprite 200 :tileset 0 :tile 2)
 Error: 'vera_sprite_tile' invalid argument: 200
-XXXXXX> (vera :sprite 1 :tileset 400 :tile_idx 2)
+XXXXXX> (vera :sprite 1 :tileset 400 :tile 2)
 Error: 'vera_sprite_tile' invalid argument: 400
-XXXXXX> (vera :sprite 1 :tileset 40 :tile_idx 2)
+XXXXXX> (vera :sprite 1 :tileset 40 :tile 2)
 Error: 'vera_sprite_tile' invalid argument: 40
-XXXXXX> (vera :sprite 1 :tileset 0 :tile_idx 200)
+XXXXXX> (vera :sprite 1 :tileset 0 :tile 200)
 Error: 'vera_sprite_tile' index out of range: 200
-XXXXXX> (vera :sprite 1 :tileset 0 :tile_idx 2)
-(:tileset 0 :tile_idx 2)
+XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
+(:tileset 0 :tile 2)
 
 XXXXXX> (vera :sprite 200 :z 0)
 Error: 'vera_sprite_z_depth' invalid argument: 200

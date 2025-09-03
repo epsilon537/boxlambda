@@ -15,7 +15,7 @@
 (vera :layer 0 :tileset 1)
 (vera :layer 1 :tileset 1)
 (vera :sprite 1 :init)
-(vera :sprite 1 :tileset 1 :tile_idx 2)
+(vera :sprite 1 :tileset 1 :tile 2)
 (vera :sprite 1 :tileset)
 (vera :sprite 1 :z VERA_SPRITE_Z_DIS)
 (vera :sprite 1 :z)

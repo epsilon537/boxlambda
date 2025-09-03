@@ -6,7 +6,7 @@
 (dotimes (ii 16)
   (dotimes (jj (1+ ii))
     (vera_tileset_pixel 0 1 jj ii VERA_COLOR_BLUE)
-    #|(vera :tileset 0 :pixel :tile_idx 1 :x jj :y ii :val VERA_COLOR_BLUE)|#))
+    #|(vera :tileset 0 :pixel :tile 1 :x jj :y ii :val VERA_COLOR_BLUE)|#))
 
 
 
