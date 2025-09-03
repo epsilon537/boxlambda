@@ -553,6 +553,20 @@
       (_dispatch _vera_sprite_vflip_dispatch action id)
       (error "vflip missing args."))))
 
+(defun _vera_sprite_info (args)
+  (let* ((id (first args))
+         (tileset_info (vera_sprite_tile id))
+         (tileset (if tileset_info (first tileset_info) '()))
+         (tile (if tileset_info (second tileset_info) '()))
+         (x (vera_sprite_x id))
+         (y (vera_sprite_y id))
+         (z (vera_sprite_z_depth id))
+         (pal_offset (vera_sprite_pal_offset id))
+         (mask (vera_sprite_col_mask id))
+         (hflip (if (= 1 (vera_sprite_hflip id)) :enabled :disabled))
+         (vflip (if (= 1 (vera_sprite_vflip id)) :enabled :disabled)))
+    (list :tileset tileset :tile tile :x x :y y :z z :pal_offset pal_offset :mask mask :hflip hflip :vflip vflip)))
+
 (defvar _vera_sprite_dispatch '(
   (:init . _vera_sprite_init)
   (:tileset . _vera_sprite_tileset)
@@ -562,7 +576,8 @@
   (:pal_offset . _vera_sprite_pal_offset)
   (:mask . _vera_sprite_mask)
   (:hflip . _vera_sprite_hflip)
-  (:vflip . _vera_sprite_vflip)))
+  (:vflip . _vera_sprite_vflip)
+  (:info . _vera_sprite_info)))
 
 (defun _vera_sprite (args)
   (if (>= (length args) 2)
