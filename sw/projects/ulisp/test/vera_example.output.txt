@@ -27,11 +27,11 @@ XXXXXX> (defun vera_example ()
   (vera :palette :idx 0 :r 8 :g 8 :b 15)
   (vera :hscale scale)
   (vera :vscale scale)
-  (vera :sprites :enable)                                                      (
-  (vera :tileset 0 :init :width tile_sz :height tile_sz :bpp bpp :num_tile) 1)
-  ((era :tileset 1 :init :width sprite_sz :height sprite_sz :bpp bpp :num_tiles
-1)                                                                             (
-  (vera :map 0 :init :width map_sz :height map_sz :map_type VERA_MAP_TYPE_T)LE)
+  (vera :sprites :enable)
+  (vera :tileset 0 :init :width tile_sz :height tile_sz :bpp bpp :num_tiles 1)
+  (vera :tileset 1 :init :width sprite_sz :height sprite_sz :bpp bpp :num_tiles
+1)
+  (vera :map 0 :init :width map_sz :height map_sz :map_type VERA_MAP_TYPE_TILE)
   (vera :layer 0 :enable)
   (vera :layer 0 :map 0)
   (vera :layer 0 :tileset 0)
@@ -51,8 +51,8 @@ XXXXXX> (defun vera_example ()
   (print "Generating sprite tile...")
   (dotimes (ii sprite_sz)
     (dotimes (jj sprite_sz)
-      (vera_tileset_pixel 1 0 ii jj VERA_COLOR_WHITE)                          (
-      #|(vera :tileset 1 :pixel :tile 0 :x ii :y jj :val VERA_CO)|#))HITE)
+      (vera_tileset_pixel 1 0 ii jj VERA_COLOR_WHITE)
+      #|(vera :tileset 1 :pixel :tile 0 :x ii :y jj :val VERA_COLOR_WHITE)|#))
   (print "Setting up sprite...")
   (vera :sprite 0 :init)
   (vera :sprite 0 :tileset 1 :tile 0)

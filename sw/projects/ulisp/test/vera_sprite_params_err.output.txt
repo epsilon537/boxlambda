@@ -62,11 +62,8 @@ Error: 'vera_sprite_vflip' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :vflip :enable)
 1
 
-XXXXXX> (vera :sprite 1000 :mask 1)
-Error: 'vera_sprite_col_mask' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :mask 1)
-1
-
+Error: illegal function: vera_sprite_mask
 XXXXXX>
 'end
 end

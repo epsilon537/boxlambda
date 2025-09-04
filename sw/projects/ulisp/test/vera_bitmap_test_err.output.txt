@@ -15,12 +15,13 @@ XXXXXX> (vera :tileset 0 :deinit)
 nil
 
 XXXXXX> (vera :tileset 0 :init :width 320)
-Error: Missing argument: :height. Table: ((:width . 320) (:id . 0))
+Error: Missing argument: :height. Table: ((:tileset . 0) (:init) (:width . 320))
 XXXXXX> (vera :tileset 0 :init :width 320 :height 1)
-Error: Missing argument: :bpp. Table: ((:height . 1) (:width . 320) (:id . 0))
+Error: Missing argument: :bpp. Table: ((:tileset . 0) (:init) (:width . 320) (:h
+eight . 1))
 XXXXXX> (vera :tileset 0 :init :width 320 :height 1 :bpp 1)
-Error: Missing argument: :num_tiles. Table: ((:bpp . 1) (:height . 1) (:width .
-320) (:id . 0))
+Error: Missing argument: :num_tiles. Table: ((:tileset . 0) (:init) (:width . 32
+0) (:height . 1) (:bpp . 1))
 XXXXXX> (vera :tileset 0 :init :width 320 :height 1 :bpp 1 :num_tiles 0)
 Error: 'vera_tileset' invalid argument: 0
 XXXXXX> (vera :tileset 0 :init :width 321 :height 1 :bpp 1 :num_tiles 1)
@@ -36,7 +37,6 @@ XXXXXX> (vera :tileset 1 :init :width 320 :height 240 :bpp 8 :num_tiles 1)
 XXXXXX> (vera :tileset 2 :init :width 320 :height 240 :bpp 8 :num_tiles 1)
 Error: 'vera_tileset' insufficient resources
 XXXXXX>
-
 
 
 

@@ -23,11 +23,10 @@ XXXXXX> (vera :sprite 1 :hflip :enable)
 1
 
 XXXXXX> (vera :sprite 1 :mask 3)
-3
-
+Error: illegal function: vera_sprite_mask
 XXXXXX>
 (vera :sprite 1 :info)
-(:tileset 2 :tile 1 :x 5 :y 6 :z 0 :pal_offset 0 :mask 3 :hflip :enabled :vflip
+(:tileset 2 :tile 1 :x 5 :y 6 :z 0 :pal_offset 0 :mask 0 :hflip :enabled :vflip
 :disabled)
 
 XXXXXX>

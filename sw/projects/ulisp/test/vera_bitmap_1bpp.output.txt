@@ -124,6 +124,5 @@ XXXXXX> (dolist (w (list 320 640))
 nil
 
 XXXXXX>
-
 'end
 end

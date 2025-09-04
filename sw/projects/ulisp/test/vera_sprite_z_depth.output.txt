@@ -164,6 +164,5 @@ XXXXXX> (print (vera :linecapture :pixel :x 0))
 (:r 3 :g 3 :b 3)
 (:r 3 :g 3 :b 3)
 
-XXXXXX>
-'end
+XXXXXX> 'end
 end

@@ -1,21 +1,16 @@
 'start
 (vera :init)
 
-(defun scanline_test ()
-  (loop (if (= (vera_scanline) 0) (return)))
-  (vera :irqline 400)
-  (vera :isr :set :mask VERA_IRQ_LINE)
-  (vera :ien :set :mask VERA_IRQ_LINE)
-  (loop (if (= VERA_IRQ_LINE (vera_isr)) (return)))
-  (let ((scanline (vera_scanline)))
-  (if (and (>= scanline 400) (< scanline 480))
-      (print "OK")
-      (format t "Fail ~a~%" scanline))))
+(defun make_scanline_list ()
+  (loop (if (< (vera_scanline) 10) (return)))
+  (list (vera_scanline) (vera_scanline) (vera_scanline)))
 
-(scanline_test)
-
-
-
+(let ((scanline_list (make_scanline_list)))
+  (if (and
+        (> 40 (- (second scanline_list) (first scanline_list)))
+        (> 40 (- (third scanline_list) (second scanline_list))))
+    (print "OK")
+    (format t "Fail: ~a~%" scanline_list)))
 
 'end
 

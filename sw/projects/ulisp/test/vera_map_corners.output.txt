@@ -72,6 +72,5 @@ XXXXXX>
 5c01
 nil
 
-XXXXXX>
-'end
+XXXXXX> 'end
 end

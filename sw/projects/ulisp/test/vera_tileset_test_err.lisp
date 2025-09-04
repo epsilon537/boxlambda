@@ -12,6 +12,11 @@
 (vera :tileset 2 :init :width 8 :height 8 :bpp 10 :num_tiles 1)
 (vera :tileset 2 :init :width 8 :height 8 :bpp 1 :num_tiles 0)
 (vera :tileset 2 :init :width 8 :height 8 :bpp 1 :num_tiles 1025)
+
+
+
+
+
 (vera :tileset 3 :init :width 64 :height 64 :bpp 8 :num_tiles 32)
 
 
