@@ -3,10 +3,10 @@ start
 XXXXXX> (vera :init)
 nil
 
-XXXXXX> (vera :tileset 0 :init :width 320 :height 1 :bpp 1 :num_tiles 1)
+XXXXXX> (vera :tileset 0 :width 320 :height 1 :bpp 1 :num_tiles 1)
 (:addr XXXXXXXXX :width 320 :height 1 :bpp 1 :num_tiles 1 :tilesize_bytes 40)
 
-XXXXXX> (vera :map 0 :init :width 32 :height 32 :map_type 1)
+XXXXXX> (vera :map 0 :width 32 :height 32 :map_type 1)
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 1)
 
 XXXXXX> (vera :tileset 0 :info)
@@ -24,10 +24,10 @@ nil
 XXXXXX> (vera :map 0 :info)
 nil
 
-XXXXXX> (vera :tileset 0 :init :width 320 :height 1 :bpp 1 :num_tiles 1)
+XXXXXX> (vera :tileset 0 :width 320 :height 1 :bpp 1 :num_tiles 1)
 (:addr XXXXXXXXX :width 320 :height 1 :bpp 1 :num_tiles 1 :tilesize_bytes 40)
 
-XXXXXX> (vera :map 0 :init :width 32 :height 32 :map_type 1)
+XXXXXX> (vera :map 0 :width 32 :height 32 :map_type 1)
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 1)
 
 XXXXXX> (vera :tileset 0 :deinit)

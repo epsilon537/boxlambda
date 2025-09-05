@@ -1,7 +1,7 @@
 'start
 
 (vera :display :enable)
-(vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 32)
+(vera :tileset 0 :width 16 :height 16 :bpp 8 :num_tiles 32)
 
 (dotimes (ii 16)
   (dotimes (jj (1+ ii))
@@ -16,7 +16,7 @@
 
 
 
-(vera :map 0 :init :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
+(vera :map 0 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
 (vera :layer 0 :map 0)
 (vera :layer 0 :tileset 0)
 

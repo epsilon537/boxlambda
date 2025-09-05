@@ -3,32 +3,38 @@ start
 XXXXXX> (vera :display :enable)
 1
 
-XXXXXX> (vera :tileset 0 :init :width 16 :height 16 :bpp 1 :num_tiles 32)
+XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 1 :num_tiles 32)
 (:addr XXXXXXXXX :width 16 :height 16 :bpp 1 :num_tiles 32 :tilesize_bytes 32)
 
 XXXXXX>
 (dotimes (ii 16)
   (vera :tileset 0 :pixel :tile 1 :x ii :y ii :val 1)
   (vera :tileset 0 :pixel :tile 1 :x (- 15 ii) :y ii :val 1))
-nil
-
-XXXXXX> (vera :layer 0 :tileset 0)
+Error: Dispatch keyword not found. Table: ((:width . _vera_tileset_init) (:heigh
+t . _vera_tileset_init) (:bpp . _vera_tileset_init) (:num_tiles . _vera_tileset_
+init) (:deinit . _vera_tileset_deinit) (:info . _vera_tileset_info)) keyword: :p
+ixel
+XXXXXX>
+(vera :layer 0 :tileset 0)
 0
 
 XXXXXX>
 (dolist (cols (list 32 64 128))
-  (dolist (rows (list 32 64 128))                                              (
-    (vera :map 0 :init :width cols :height rows :map_type VERA_MAP_TYPE_)XT16)
+  (dolist (rows (list 32 64 128))
+    (vera :map 0 :width cols :height rows :map_type VERA_MAP_TYPE_TXT16)
     (vera :layer 0 :map 0)
-    (vera :map 0 :entry :x 0 :y 0 :val       (                                 (
-                    (l) 1)) (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_WHITE 8)
-    (vera :map 0 :entry :x (1- cols) :y 0 :val(                                (
-                    (l) 1)) (ash VERA_COLOR_BLUE 12) (ash VERA_COLOR_WHITE 8)
+    (vera :map 0 :entry :x 0 :y 0 :val
+                    (logior (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_WHITE 8) 1
+))
+    (vera :map 0 :entry :x (1- cols) :y 0 :val
+                    (logior (ash VERA_COLOR_BLUE 12) (ash VERA_COLOR_WHITE 8) 1)
+)
     (vera :map 0 :entry :x 0 :y (1- rows) :val
                     (logior (ash VERA_COLOR_PURPLE 12) (ash VERA_COLOR_YELLOW 8)
  1))
-    (vera :map 0 :entry :x (1- cols) :y (1- r(ws) :val                         (
-                    () 1))r (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_GREY 8)
+    (vera :map 0 :entry :x (1- cols) :y (1- rows) :val
+                    (logior (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_GREY 8) 1)
+)
     (format t "~x~%"  (vera :map 0 :entry :x 0 :y 0))
     (format t "~x~%" (vera :map 0 :entry :x (1- cols) :y 0))
     (format t "~x~%" (vera :map 0 :entry :x 0 :y (1- rows)))

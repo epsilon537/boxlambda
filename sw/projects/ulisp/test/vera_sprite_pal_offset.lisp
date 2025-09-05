@@ -5,7 +5,7 @@
 (defvar w 64)
 (defvar h 64)
 (defvar bpp 8)
-(vera :tileset 0 :init :width w :height h :bpp bpp :num_tiles 4)
+(vera :tileset 0 :width w :height h :bpp bpp :num_tiles 4)
 (vera :tileset 0 :info)
 (vera :sprite 1 :init)
 (vera :sprite 1 :tileset 0 :tile 2)

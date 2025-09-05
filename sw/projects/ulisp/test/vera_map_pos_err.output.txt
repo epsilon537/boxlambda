@@ -6,8 +6,7 @@ cols
 XXXXXX> (defvar rows 32)
 rows
 
-XXXXXX> (vera :map 0 :init :width cols :height rows :map_type VERA_MAP_TYPE_TXT1
-6)
+XXXXXX> (vera :map 0 :width cols :height rows :map_type VERA_MAP_TYPE_TXT16)
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 0)
 
 XXXXXX> (vera :map 0 :entry :x cols :y 0
@@ -26,8 +25,7 @@ XXXXXX>
 XXXXXX> (setq rows 64)
 64
 
-XXXXXX> (vera :map 0 :init :width cols :height rows :map_type VERA_MAP_TYPE_TXT1
-6)
+XXXXXX> (vera :map 0 :width cols :height rows :map_type VERA_MAP_TYPE_TXT16)
 (:addr XXXXXXXXX :width 64 :height 64 :map_type 0)
 
 XXXXXX> (vera :map 0 :entry :x cols :y 0
@@ -46,8 +44,7 @@ XXXXXX>
 XXXXXX> (setq rows 128)
 128
 
-XXXXXX> (vera :map 0 :init :width cols :height rows :map_type VERA_MAP_TYPE_TXT1
-6)
+XXXXXX> (vera :map 0 :width cols :height rows :map_type VERA_MAP_TYPE_TXT16)
 (:addr XXXXXXXXX :width 128 :height 128 :map_type 0)
 
 XXXXXX> (vera :map 0 :entry :x cols :y 0
@@ -66,8 +63,7 @@ XXXXXX>
 XXXXXX> (setq rows 256)
 256
 
-XXXXXX> (vera :map 0 :init :width cols :height rows :map_type VERA_MAP_TYPE_TXT1
-6)
+XXXXXX> (vera :map 0 :width cols :height rows :map_type VERA_MAP_TYPE_TXT16)
 (:addr XXXXXXXXX :width 256 :height 256 :map_type 0)
 
 XXXXXX> (vera :map 0 :entry :x cols :y 0

@@ -136,7 +136,9 @@
   (_vera_map_res (vera_map (arg_lookup :map))))
 
 (defvar _vera_map_dispatch '(
-  (:init . _vera_map_init)
+  (:width . _vera_map_init)
+  (:height . _vera_map_init)
+  (:map_type . _vera_map_init)
   (:deinit . _vera_map_deinit)
   (:entry . _vera_map_entry)
   (:info . _vera_map_info)))
@@ -144,7 +146,7 @@
 (defun _vera_map (arg_lookup iter)
   (if iter
     (_dispatch _vera_map_dispatch arg_lookup iter)
-    (error "Map missing args")))
+    (_vera_map_info arg_lookup iter)))
 
 (defun _vera_tileset_res (tileset)
   (mapcan (lambda (k v) (list k v))
@@ -161,30 +163,32 @@
 (defun _vera_tileset_deinit (arg_lookup iter)
   (vera_tileset_deinit (arg_lookup :tileset)))
 
-(defun _vera_tileset_pixel (arg_lookup iter)
-    (let ((id (arg_lookup :tileset))
-          (tile (arg_lookup :tile))
-          (x (arg_lookup :x))
-          (y (arg_lookup :y))
-          (val (arg_lookup :val t)))
-      (if val
-        (vera_tileset_pixel id tile x y val)
-        (vera_tileset_pixel id tile x y))))
-
 (defun _vera_tileset_info (arg_lookup iter)
   (_vera_tileset_res
     (vera_tileset (arg_lookup :tileset))))
 
 (defvar _vera_tileset_dispatch '(
-  (:init . _vera_tileset_init)
+  (:width . _vera_tileset_init)
+  (:height . _vera_tileset_init)
+  (:bpp . _vera_tileset_init)
+  (:num_tiles . _vera_tileset_init)
   (:deinit . _vera_tileset_deinit)
-  (:pixel . _vera_tileset_pixel)
   (:info . _vera_tileset_info)))
 
 (defun _vera_tileset (arg_lookup iter)
   (if iter
     (_dispatch _vera_tileset_dispatch arg_lookup iter)
-    (error "Tileset missing args")))
+    (_vera_tileset_info arg_lookup iter)))
+
+(defun _vera_pixel (arg_lookup iter)
+    (let ((tileset (arg_lookup :tileset))
+          (tile (arg_lookup :tile))
+          (x (arg_lookup :x))
+          (y (arg_lookup :y))
+          (val (arg_lookup :val t)))
+      (if val
+        (vera_tileset_pixel tileset tile x y val)
+        (vera_tileset_pixel tileset tile x y))))
 
 (defun _vera_linecapture_enable (arg_lookup iter)
   (vera_line_capture_enable 1))
@@ -369,7 +373,8 @@
 
 (defun _vera_layer_map (arg_lookup iter)
   (let ((layer (arg_lookup :layer))
-        (map (arg_lookup :map t)))
+        (map (arg_lookup :map))
+        (tileset (arg_lookup :tileset))
     (if map
       (vera_layer_map layer map))
     (vera_layer_map layer)))
@@ -417,28 +422,20 @@
     (_dispatch _vera_layer_dispatch arg_lookup iter)
     (error "Layer missing args")))
 
-(defun _vera_palette_restore (arg_lookup iter)
-  (vera_palette))
-
 (defun _vera_palette_res (palette)
   (mapcan (lambda (k v) (list k v))
             '(:r :g :b) palette))
 
-(defun _vera_palette_idx (arg_lookup iter)
-  (_vera_palette_res
-    (let ((idx (arg_lookup :idx)))
-      (if (consp iter)
-        (vera_palette idx (arg_lookup :r) (arg_lookup :g) (arg_lookup :b)))
-        (vera_palette idx))))
-
-(defvar _vera_palette_dispatch '(
-  (:restore . _vera_palette_restore)
-  (:idx     . _vera_palette_idx)))
-
 (defun _vera_palette (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_palette_dispatch arg_lookup iter)
-    (error "Palette missing args")))
+  (let ((idx (arg_lookup :palette t)))
+    (if idx
+      (_vera_palette_res
+        (if (consp iter)
+          (vera_palette idx (arg_lookup :r) (arg_lookup :g) (arg_lookup :b))
+          (vera_palette idx)))
+      (progn
+        (arg_lookup :restore)
+        (vera_palette)))))
 
 (defun _vera_sprite_init (arg_lookup iter)
   (vera_sprite_init (arg_lookup :sprite)))
@@ -561,18 +558,18 @@
 (defun _vera_sprite (arg_lookup iter)
   (if iter
     (_dispatch _vera_sprite_dispatch arg_lookup iter)
-    (error "Sprite missing args")))
+    (_vera_sprite_info arg_lookup iter)))
 
 (defun _vera_help (args)
   (format t "(vera :init)~%")
-  (format t "(vera :map <id> :init :width <w> :height <h> :map_type <t>)~%")
+  (format t "(vera :map <id> :width <w> :height <h> :map_type <t>)~%")
   (format t "(vera :map <id> :deinit)~%")
   (format t "(vera :map <id> :entry :x <x> :y <y> [:val <v>])~%")
-  (format t "(vera :map <id> :info)~%")
-  (format t "(vera :tileset <id> :init :width <w> :height <h> :bpp <b> :num_tiles <n>)~%")
+  (format t "(vera :map <id> [:info])~%")
+  (format t "(vera :tileset <id> :width <w> :height <h> :bpp <b> :num_tiles <n>)~%")
   (format t "(vera :tileset <id> :deinit)~%")
-  (format t "(vera :tileset <id> :pixel :tile <idx> :x <x> :y <y> [:val <v>])~%")
-  (format t "(vera :tileset <id> :info)~%")
+  (format t "(vera :tileset <id> [:info])~%")
+  (format t "(vera :pixel :tileset <id> :tile <idx> :x <x> :y <y> [:val <v>])~%")
   (format t "(vera :linecapture :enable)~%")
   (format t "(vera :linecapture :disable)~%")
   (format t "(vera :linecapture :enabled)~%")
@@ -608,7 +605,7 @@
   (format t "(vera :layer <id> :bitmap [:tileset <t> :tile <i>])~%")
   (format t "(vera :layer <id> :pal_offset [<o>])~%")
   (format t "(vera :palette :restore)~%")
-  (format t "(vera :palette :idx <i> [:r <r> :g <g> :b <b>])~%")
+  (format t "(vera :palette <id> [:r <r> :g <g> :b <b>])~%")
   (format t "(vera :sprite <id> :init)~%")
   (format t "(vera :sprite <id> :tileset <t> :tile <i>)~%")
   (format t "(vera :sprite <id> :tileset)~%")
@@ -624,13 +621,14 @@
   (format t "(vera :sprite <id> :vflip :enable)~%")
   (format t "(vera :sprite <id> :vflip :disable)~%")
   (format t "(vera :sprite <id> :vflip :enabled)~%")
-  (format t "(vera :sprite <id> :info)~%")
+  (format t "(vera :sprite <id> [:info])~%")
   )
 
 (defvar vera_dispatch '(
   (:init . _vera_init)
   (:map . _vera_map)
   (:tileset . _vera_tileset)
+  (:pixel . _vera_pixel)
   (:linecapture . _vera_linecapture)
   (:spritebank . _vera_spritebank)
   (:ien . _vera_ien)

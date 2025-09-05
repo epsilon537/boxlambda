@@ -7,7 +7,7 @@ XXXXXX>
 XXXXXX> (vera :layer 0 :enable)
 1
 
-XXXXXX> (vera :tileset 0 :init :width 320 :height 32 :bpp 8 :num_tiles 1)
+XXXXXX> (vera :tileset 0 :width 320 :height 32 :bpp 8 :num_tiles 1)
 (:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
 )
 

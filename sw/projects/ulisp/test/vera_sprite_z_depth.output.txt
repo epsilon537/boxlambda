@@ -6,10 +6,10 @@ XXXXXX> (vera :display :enable)
 XXXXXX> (vera :sprites :enable)
 1
 
-XXXXXX> (vera :map 0 :init :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
+XXXXXX> (vera :map 0 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
 
-XXXXXX> (vera :map 1 :init :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
+XXXXXX> (vera :map 1 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
 
 XXXXXX> (vera :layer 0 :map 0)
@@ -34,7 +34,7 @@ h
 XXXXXX> (defvar bpp 8)
 bpp
 
-XXXXXX> (vera :tileset 1 :init :width w :height h :bpp bpp :num_tiles 8)
+XXXXXX> (vera :tileset 1 :width w :height h :bpp bpp :num_tiles 8)
 (:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num_tiles 8 :tilesize_bytes 64)
 
 XXXXXX> (vera :layer 0 :tileset 1)

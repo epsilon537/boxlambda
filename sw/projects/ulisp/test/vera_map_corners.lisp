@@ -1,6 +1,6 @@
 'start
 (vera :display :enable)
-(vera :tileset 0 :init :width 16 :height 16 :bpp 1 :num_tiles 32)
+(vera :tileset 0 :width 16 :height 16 :bpp 1 :num_tiles 32)
 
 (dotimes (ii 16)
   (vera :tileset 0 :pixel :tile 1 :x ii :y ii :val 1)
@@ -10,7 +10,7 @@
 
 (dolist (cols (list 32 64 128))
   (dolist (rows (list 32 64 128))
-    (vera :map 0 :init :width cols :height rows :map_type VERA_MAP_TYPE_TXT16)
+    (vera :map 0 :width cols :height rows :map_type VERA_MAP_TYPE_TXT16)
     (vera :layer 0 :map 0)
     (vera :map 0 :entry :x 0 :y 0 :val
                     (logior (ash VERA_COLOR_GREEN 12) (ash VERA_COLOR_WHITE 8) 1))

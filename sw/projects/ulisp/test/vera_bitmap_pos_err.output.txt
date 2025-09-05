@@ -1,22 +1,29 @@
 start
 
-XXXXXX> (vera :tileset 0 :init :width 320 :height 64 :bpp 1 :num_tiles 1)
+XXXXXX> (vera :tileset 0 :width 320 :height 64 :bpp 1 :num_tiles 1)
 (:addr XXXXXXXXX :width 320 :height 64 :bpp 1 :num_tiles 1 :tilesize_bytes 2560)
 
-XXXXXX> (vera :tileset 0 :pixel :tile 0 :x 320 :y 0 :val 101)
+XXXXXX> (vera :pixel :tileset 0 :tile 0 :x 320 :y 0 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 320
-XXXXXX> (vera :tileset 0 :pixel :tile 0 :x 0 :y 64 :val 101)
+XXXXXX> (vera :pixel :tileset 0 :tile 0 :x 0 :y 64 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 64
 XXXXXX> (vera :tileset 0 :deinit)
 nil
 
-XXXXXX> (vera :tileset 0 :init :width 640 :height 32 :bpp 1 :num_tiles 1)
+XXXXXX> (vera :tileset 0 :width 640 :height 32 :bpp 1 :num_tiles 1)
 (:addr XXXXXXXXX :width 640 :height 32 :bpp 1 :num_tiles 1 :tilesize_bytes 2560)
 
-XXXXXX> (vera :tileset 0 :pixel :tile 0 :x 640 :y 0 :val 101)
+XXXXXX> (vera :pixel :tileset 0 :tile 0 :x 640 :y 0 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 640
-XXXXXX> (vera :tileset 0 :pixel :tile 0 :x 0 :y 32 :val 101)
-Error: 'vera_tileset_pixel' invalid argument: 32
+XXXXXX> (vera :pxiel :tileset 0 :tile 0 :x 0 :y 32 :val 101)
+Error: Dispatch keyword not found. Table: ((:init . _vera_init) (:map . _vera_ma
+p) (:tileset . _vera_tileset) (:pixel . _vera_pixel) (:linecapture . _vera_linec
+apture) (:spritebank . _vera_spritebank) (:ien . _vera_ien) (:isr . _vera_isr) (
+:irqline . _vera_irqline) (:scanline . _vera_scanline) (:display . _vera_display
+) (:sprites . _vera_sprites) (:hscale . _vera_hscale) (:vscale . _vera_vscale) (
+:bordercolor . _vera_bordercolor) (:boundaries . _vera_screen_boundaries) (:laye
+r . _vera_layer) (:palette . _vera_palette) (:sprite . _vera_sprite) (:help . _v
+era_help)) keyword: :pxiel
 XXXXXX>
 
 

@@ -4,7 +4,7 @@ XXXXXX>
 (vera :display :enable)
 1
 
-XXXXXX> (vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 32)
+XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 8 :num_tiles 32)
 (:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num_tiles 32 :tilesize_bytes 256)
 
 XXXXXX>
@@ -23,7 +23,7 @@ XXXXXX>
 
 
 
-(vera :map 0 :init :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
+(vera :map 0 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
 
 XXXXXX> (vera :layer 0 :map 0)
@@ -125,6 +125,7 @@ XXXXXX> (dolist (rowcol (list (cons row1 col1) (cons row2 col2) (cons row3 col3)
 nil
 
 XXXXXX>
+
 
 
 'end

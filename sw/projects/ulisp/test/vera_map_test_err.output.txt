@@ -3,10 +3,10 @@ start
 XXXXXX> (vera :init)
 nil
 
-XXXXXX> (vera :map 0 :init :width 32 :height 32 :map_type 0)
+XXXXXX> (vera :map 0 :width 32 :height 32 :map_type 0)
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 0)
 
-XXXXXX> (vera :map 0 :init :width 32 :height 32 :map_type 0)
+XXXXXX> (vera :map 0 :width 32 :height 32 :map_type 0)
 Error: 'vera_map' already initialized: 0
 XXXXXX> (vera :map 0 :deinit)
 nil
@@ -15,24 +15,26 @@ XXXXXX> (vera :map 0 :deinit)
 nil
 
 XXXXXX> (vera :map 1 :init)
-Error: Missing argument: :width. Table: ((:map . 1) (:init))
-XXXXXX> (vera :map 1 :init :width 32)
-Error: Missing argument: :height. Table: ((:map . 1) (:init) (:width . 32))
-XXXXXX> (vera :map 1 :init :width 32 :height 64)
-Error: Missing argument: :map_type. Table: ((:map . 1) (:init) (:width . 32) (:h
-eight . 64))
-XXXXXX> (vera :map 100 :init :width 32 :height 32 :map_type 0)
+Error: Dispatch keyword not found. Table: ((:width . _vera_map_init) (:height .
+_vera_map_init) (:map_type . _vera_map_init) (:deinit . _vera_map_deinit) (:entr
+y . _vera_map_entry) (:info . _vera_map_info)) keyword: :init
+XXXXXX> (vera :map 1 :width 32)
+Error: Missing argument: :height. Table: ((:map . 1) (:width . 32))
+XXXXXX> (vera :map 1 :width 32 :height 64)
+Error: Missing argument: :map_type. Table: ((:map . 1) (:width . 32) (:height .
+64))
+XXXXXX> (vera :map 100 :width 32 :height 32 :map_type 0)
 Error: 'vera_map' invalid argument: 100
-XXXXXX> (vera :map 2 :init :width 33 :height 32 :map_type 0)
+XXXXXX> (vera :map 2 :width 33 :height 32 :map_type 0)
 Error: 'vera_map' invalid argument: 33
-XXXXXX> (vera :map 2 :init :width 32 :height 33 :map_type 0)
+XXXXXX> (vera :map 2 :width 32 :height 33 :map_type 0)
 Error: 'vera_map' invalid argument: 33
-XXXXXX> (vera :map 2 :init :width 32 :height 32 :map_type 5)
+XXXXXX> (vera :map 2 :width 32 :height 32 :map_type 5)
 Error: 'vera_map' invalid argument: 5
-XXXXXX> (vera :map 3 :init :width 256 :height 256 :map_type 0)
+XXXXXX> (vera :map 3 :width 256 :height 256 :map_type 0)
 (:addr XXXXXXXXX :width 256 :height 256 :map_type 0)
 
-XXXXXX> (vera :map 4 :init :width 32 :height 32 :map_type 0)
+XXXXXX> (vera :map 4 :width 32 :height 32 :map_type 0)
 Error: 'vera_map' insufficient resources
 XXXXXX> 'end
 end

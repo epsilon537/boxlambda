@@ -4,7 +4,7 @@
 (defvar w 16)
 (dolist (h (list 8 16 32 64))
   (dolist (bpp (list 4 8))
-    (vera :tileset 0 :init :width w :height h :bpp bpp :num_tiles 8)
+    (vera :tileset 0 :width w :height h :bpp bpp :num_tiles 8)
     (vera :tileset 0 :info)
     (vera :sprite 1 :init)
     (vera :sprite 1 :tileset 0 :tile 2)

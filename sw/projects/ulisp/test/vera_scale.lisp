@@ -2,8 +2,8 @@
 
 (vera :display :enable)
 (vera :layer 0 :enable)
-(vera :map 0 :init :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
-(vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 32)
+(vera :map 0 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
+(vera :tileset 0 :width 16 :height 16 :bpp 8 :num_tiles 32)
 (vera :layer 0 :map 0)
 (vera :layer 0 :tileset 0)
 

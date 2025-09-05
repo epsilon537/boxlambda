@@ -1,21 +1,21 @@
 start
 
-XXXXXX> (vera :tileset 0 :init :width 8 :height 8 :bpp 8 :num_tiles 8)
+XXXXXX> (vera :tileset 0 :width 8 :height 8 :bpp 8 :num_tiles 8)
 (:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num_tiles 8 :tilesize_bytes 64)
 
-XXXXXX> (vera :tileset 0 :pixel :tile 1 :x 8 :y 0 :val 101)
+XXXXXX> (vera :pixel :tileset 0 :tile 1 :x 8 :y 0 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 8
-XXXXXX> (vera :tileset 0 :pixel :tile 1 :x 0 :y 8 :val 101)
+XXXXXX> (vera :pixel :tileset 0 :tile 1 :x 0 :y 8 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 8
 XXXXXX> (vera :tileset 0 :deinit)
 nil
 
-XXXXXX> (vera :tileset 0 :init :width 16 :height 16 :bpp 8 :num_tiles 8)
+XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 8 :num_tiles 8)
 (:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num_tiles 8 :tilesize_bytes 256)
 
-XXXXXX> (vera :tileset 0 :pixel :tile 1 :x 16 :y 0 :val 101)
+XXXXXX> (vera :pixel :tileset 0 :tile 1 :x 16 :y 0 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 16
-XXXXXX> (vera :tileset 0 :pixel :tile 1 :x 0 :y 16 :val 101)
+XXXXXX> (vera :pixel :tileset 0 :tile 1 :x 0 :y 16 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 16
 XXXXXX>
 'end
