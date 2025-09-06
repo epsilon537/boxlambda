@@ -16,14 +16,14 @@ XXXXXX> (vera :tileset 0 :width 640 :height 32 :bpp 1 :num_tiles 1)
 XXXXXX> (vera :pixel :tileset 0 :tile 0 :x 640 :y 0 :val 101)
 Error: 'vera_tileset_pixel' invalid argument: 640
 XXXXXX> (vera :pxiel :tileset 0 :tile 0 :x 0 :y 32 :val 101)
-Error: Dispatch keyword not found. Table: ((:init . _vera_init) (:map . _vera_ma
-p) (:tileset . _vera_tileset) (:pixel . _vera_pixel) (:linecapture . _vera_linec
-apture) (:spritebank . _vera_spritebank) (:ien . _vera_ien) (:isr . _vera_isr) (
-:irqline . _vera_irqline) (:scanline . _vera_scanline) (:display . _vera_display
-) (:sprites . _vera_sprites) (:hscale . _vera_hscale) (:vscale . _vera_vscale) (
-:bordercolor . _vera_bordercolor) (:boundaries . _vera_screen_boundaries) (:laye
-r . _vera_layer) (:palette . _vera_palette) (:sprite . _vera_sprite) (:help . _v
-era_help)) keyword: :pxiel
+Error: Dispatch keyword not found. Table: ((:init lambda (arg_lookup iter) (vera
+_init)) (:map . _vera_map) (:tileset . _vera_tileset) (:pixel . _vera_pixel) (:l
+inecapture . _vera_linecapture) (:spritebank . _vera_spritebank) (:ien . _vera_i
+en) (:isr . _vera_isr) (:irqline . _vera_irqline) (:scanline lambda (arg_lookup
+iter) (vera_scanline)) (:display . _vera_display) (:sprites . _vera_sprites) (:h
+scale . _vera_hscale) (:vscale . _vera_vscale) (:bordercolor . _vera_bordercolor
+) (:boundaries . _vera_screen_boundaries) (:layer . _vera_layer) (:palette . _ve
+ra_palette) (:sprite . _vera_sprite) (:help . _vera_help)) keyword: :pxiel
 XXXXXX>
 
 

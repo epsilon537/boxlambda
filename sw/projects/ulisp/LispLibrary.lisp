@@ -77,76 +77,56 @@
         (cdr entry)
         (if return_nil_on_miss
           nil
-          (error "Missing argument: ~a. Table: ~s" k table))))))
+          (error "Unknown argument: ~a. Table: ~s" k table))))))
 
 (defun _make_assoc_table (args)
   (defun _make_assoc_table_loop (table args)
     (if args
-      (let ((key (first args))
-            (val (second args)))
-        (if (numberp key)
-          (error "Malformed argument list: ~a." args))
+      (let ((key (first args)) (val (second args)))
+        (if (numberp key) (error "Malformed argument list: ~a." args))
         (if (numberp val)
-          (let ((table (cons (cons key val) table))
-                (args (cddr args)))
+          (let ((table (cons (cons key val) table)) (args (cddr args)))
             (_make_assoc_table_loop table args))
-          (let ((table (cons (cons key nil) table))
-                (args (cdr args)))
+          (let ((table (cons (cons key nil) table)) (args (cdr args)))
             (_make_assoc_table_loop table args))))
       (reverse table)))
   (_make_assoc_table_loop '() args))
+
+(defun _last (l) (nth (1- (length l)) l))
 
 (defun _dispatch (disp_table arg_lookup iter)
   (if iter
     (let* ((action (first (first iter)))
            (disp_tbl_entry (assoc action disp_table))
            (iter (rest iter)))
-    (if disp_tbl_entry
-      (funcall (cdr disp_tbl_entry) arg_lookup iter)
-      (error "Dispatch keyword not found. Table: ~a keyword: ~a" disp_table action)))
-    (error "Insufficient arguments. Table: ~a" disp_table)))
-
-(defun _vera_init (arg_lookup iter)
-  (vera_init))
+      (if disp_tbl_entry
+        (funcall (cdr disp_tbl_entry) arg_lookup iter)
+        (error "Dispatch keyword not found. Table: ~a keyword: ~a" disp_table action)))
+    (funcall (cdr (_last disp_table)) arg_lookup iter)))
 
 (defun _vera_map_res (map)
-  (mapcan (lambda (k v) (list k v))
-            '(:addr :width :height :map_type) map))
+  (mapcan (lambda (k v) (list k v)) '(:addr :width :height :map_type) map))
 
 (defun _vera_map_init (arg_lookup iter)
   (_vera_map_res
-    (vera_map (arg_lookup :map)
-              (arg_lookup :width)
-              (arg_lookup :height)
-              (arg_lookup :map_type))))
-
-(defun _vera_map_deinit (arg_lookup iter)
-  (vera_map_deinit (arg_lookup :map)))
+    (vera_map (arg_lookup :map) (arg_lookup :width) (arg_lookup :height) (arg_lookup :map_type))))
 
 (defun _vera_map_entry (arg_lookup iter)
-  (let ((id (arg_lookup :map))
-        (col (arg_lookup :x))
-        (row (arg_lookup :y))
-        (val (arg_lookup :val t)))
+  (let ((id (arg_lookup :map)) (col (arg_lookup :x)) (row (arg_lookup :y)) (val (arg_lookup :val t)))
     (if val
       (vera_map_entry id col row val)
       (vera_map_entry id col row))))
-
-(defun _vera_map_info (arg_lookup iter)
-  (_vera_map_res (vera_map (arg_lookup :map))))
 
 (defvar _vera_map_dispatch '(
   (:width . _vera_map_init)
   (:height . _vera_map_init)
   (:map_type . _vera_map_init)
-  (:deinit . _vera_map_deinit)
+  (:deinit . (lambda (arg_lookup iter) (vera_map_deinit (arg_lookup :map))))
   (:entry . _vera_map_entry)
-  (:info . _vera_map_info)))
+  (:info . (lambda (arg_lookup iter) (_vera_map_res (vera_map (arg_lookup :map)))))))
 
 (defun _vera_map (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_map_dispatch arg_lookup iter)
-    (_vera_map_info arg_lookup iter)))
+  (_dispatch _vera_map_dispatch arg_lookup iter))
 
 (defun _vera_tileset_res (tileset)
   (mapcan (lambda (k v) (list k v))
@@ -154,118 +134,63 @@
 
 (defun _vera_tileset_init (arg_lookup iter)
   (_vera_tileset_res
-    (vera_tileset (arg_lookup :tileset)
-                (arg_lookup :width)
-                (arg_lookup :height)
-                (arg_lookup :bpp)
-                (arg_lookup :num_tiles))))
-
-(defun _vera_tileset_deinit (arg_lookup iter)
-  (vera_tileset_deinit (arg_lookup :tileset)))
-
-(defun _vera_tileset_info (arg_lookup iter)
-  (_vera_tileset_res
-    (vera_tileset (arg_lookup :tileset))))
+    (vera_tileset (arg_lookup :tileset) (arg_lookup :width) (arg_lookup :height)
+                (arg_lookup :bpp) (arg_lookup :num_tiles))))
 
 (defvar _vera_tileset_dispatch '(
   (:width . _vera_tileset_init)
   (:height . _vera_tileset_init)
   (:bpp . _vera_tileset_init)
   (:num_tiles . _vera_tileset_init)
-  (:deinit . _vera_tileset_deinit)
-  (:info . _vera_tileset_info)))
+  (:deinit . (lambda (arg_lookup iter) (vera_tileset_deinit (arg_lookup :tileset))))
+  (:info . (lambda (arg_lookup iter) (_vera_tileset_res (vera_tileset (arg_lookup :tileset)))))))
 
 (defun _vera_tileset (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_tileset_dispatch arg_lookup iter)
-    (_vera_tileset_info arg_lookup iter)))
+  (_dispatch _vera_tileset_dispatch arg_lookup iter))
 
 (defun _vera_pixel (arg_lookup iter)
-    (let ((tileset (arg_lookup :tileset))
-          (tile (arg_lookup :tile))
-          (x (arg_lookup :x))
-          (y (arg_lookup :y))
-          (val (arg_lookup :val t)))
+    (let ((tileset (arg_lookup :tileset)) (tile (arg_lookup :tile))
+          (x (arg_lookup :x)) (y (arg_lookup :y)) (val (arg_lookup :val t)))
       (if val
         (vera_tileset_pixel tileset tile x y val)
         (vera_tileset_pixel tileset tile x y))))
 
-(defun _vera_linecapture_enable (arg_lookup iter)
-  (vera_line_capture_enable 1))
-
-(defun _vera_linecapture_disable (arg_lookup iter)
-  (vera_line_capture_enable 0))
-
 (defun _vera_linecapture_pixel_res (pixel)
-  (mapcan (lambda (k v) (list k v))
-            '(:r :g :b) pixel))
+  (mapcan (lambda (k v) (list k v)) '(:r :g :b) pixel))
 
 (defun _vera_linecapture_pixel (arg_lookup iter)
-  (_vera_linecapture_pixel_res
-    (vera_line_capture_read_pixel (arg_lookup :x))))
-
-(defun _vera_linecapture_enabled (arg_lookup iter)
-  (vera_line_capture_enable))
+  (_vera_linecapture_pixel_res (vera_line_capture_read_pixel (arg_lookup :x))))
 
 (defvar _vera_linecapture_dispatch '(
-  (:enable . _vera_linecapture_enable)
-  (:disable . _vera_linecapture_disable)
+  (:enable . (lambda (arg_lookup iter) (vera_line_capture_enable 1)))
+  (:disable . (lambda (arg_lookup iter) (vera_line_capture_enable 0)))
   (:pixel . _vera_linecapture_pixel)
-  (:enabled . _vera_linecapture_enabled)))
+  (:enabled . (lambda (arg_lookup iter) (vera_line_capture_enable)))))
 
 (defun _vera_linecapture (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_linecapture_dispatch arg_lookup iter)
-    (error "Linecapture missing args")))
-
-(defun _vera_spritebank_select (arg_lookup iter)
-  (vera_sprite_bank (arg_lookup :select)))
-
-(defun _vera_spritebank_selected (arg_lookup iter)
-  (vera_sprite_bank))
+  (_dispatch _vera_linecapture_dispatch arg_lookup iter))
 
 (defvar _vera_spritebank_dispatch '(
-  (:select . _vera_spritebank_select)
-  (:selected . _vera_spritebank_selected)))
+  (:select . (lambda (arg_lookup iter) (vera_sprite_bank (arg_lookup :select))))
+  (:selected . (lambda (arg_lookup iter) (vera_sprite_bank)))))
 
 (defun _vera_spritebank (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_spritebank_dispatch arg_lookup iter)
-    (error "Spritebank missing args")))
-
-(defun _vera_ien_set (arg_lookup iter)
-  (vera_ien (arg_lookup :mask) 1))
-
-(defun _vera_ien_clr (arg_lookup iter)
-  (vera_ien (arg_lookup :mask) 0))
-
-(defun _vera_ien_get (arg_lookup iter)
-  (vera_ien))
+  (_dispatch _vera_spritebank_dispatch arg_lookup iter))
 
 (defvar _vera_ien_dispatch '(
-  (:set . _vera_ien_set)
-  (:clr . _vera_ien_clr)
-  (:get . _vera_ien_get)))
+  (:set . (lambda (arg_lookup iter) (vera_ien (arg_lookup :mask) 1)))
+  (:clr . (lambda (arg_lookup iter) (vera_ien (arg_lookup :mask) 0)))
+  (:get . (lambda (arg_lookup iter) (vera_ien)))))
 
 (defun _vera_ien (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_ien_dispatch arg_lookup iter)
-    (error "IEN missing args")))
-
-(defun _vera_isr_set (arg_lookup iter)
-  (vera_isr (arg_lookup :mask)))
-
-(defun _vera_isr_get (arg_lookup iter)
-  (vera_isr))
+  (_dispatch _vera_ien_dispatch arg_lookup iter))
 
 (defvar _vera_isr_dispatch '(
-  (:set . _vera_isr_set)
-  (:get . _vera_isr_get)))
+  (:set . (lambda (arg_lookup iter) (vera_isr (arg_lookup :mask))))
+  (:get . (lambda (arg_lookup iter) (vera_isr)))))
 
 (defun _vera_isr (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_isr_dispatch arg_lookup iter)
-    (error "ISR missing args")))
+  (_dispatch _vera_isr_dispatch arg_lookup iter))
 
 (defun _vera_irqline (arg_lookup iter)
   (let ((irqline (arg_lookup :irqline)))
@@ -273,60 +198,36 @@
       (vera_irqline irqline)
       (vera_irqline))))
 
-(defun _vera_scanline (arg_lookup iter)
-  (vera_scanline))
-
-(defun _vera_display_enable (arg_lookup iter)
-  (vera_display_enable 1))
-
-(defun _vera_display_disable (arg_lookup iter)
-  (vera_display_enable 0))
-
-(defun _vera_display_enabled (arg_lookup iter)
-  (vera_display_enable))
-
 (defvar _vera_display_dispatch '(
-  (:enable . _vera_display_enable)
-  (:disable . _vera_display_disable)
-  (:enabled . _vera_display_enabled)))
+  (:enable . (lambda (arg_lookup iter) (vera_display_enable 1)))
+  (:disable . (lambda (arg_lookup iter) (vera_display_enable 0)))
+  (:enabled . (lambda (arg_lookup iter) (vera_display_enable)))))
 
 (defun _vera_display (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_display_dispatch arg_lookup iter)
-    (error "Display missing args")))
-
-(defun _vera_sprites_enable (arg_lookup iter)
-  (vera_sprites_enable 1))
-
-(defun _vera_sprites_disable (arg_lookup iter)
-  (vera_sprites_enable 0))
-
-(defun _vera_sprites_enabled (arg_lookup iter)
-  (vera_sprites_enable))
+  (_dispatch _vera_display_dispatch arg_lookup iter))
 
 (defvar _vera_sprites_dispatch '(
-  (:enable . _vera_sprites_enable)
-  (:disable . _vera_sprites_disable)
-  (:enabled . _vera_sprites_enabled)))
+  (:enable . (lambda (arg_lookup iter) (vera_sprites_enable 1)))
+  (:disable . (lambda (arg_lookup iter) (vera_sprites_enable 0)))
+  (:enabled . (lambda (arg_lookup iter) (vera_sprites_enable)))))
 
 (defun _vera_sprites (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_sprites_dispatch arg_lookup iter)
-    (error "Sprites missing args")))
+  (_dispatch _vera_sprites_dispatch arg_lookup iter))
 
 (defun _vera_hscale (arg_lookup iter)
-  (let ((hscale (arg_lookup :hscale))
-        (vscale (arg_lookup :vscale t)))
+  (let ((hscale (arg_lookup :hscale)))
     (if hscale
-      (vera_hscale hscale))
-    (if vscale
-      (vera_vscale vscale)))
-  (vera_hscale))
+      (progn
+        (vera_hscale hscale)
+        (if iter (_vera arg_lookup iter)))
+      (vera_hscale))))
 
 (defun _vera_vscale (arg_lookup iter)
   (let ((vscale (arg_lookup :vscale)))
     (if vscale
-      (vera_vscale vscale)
+      (progn
+        (vera_vscale vscale)
+        (if iter (_vera arg_lookup iter)))
       (vera_vscale))))
 
 (defun _vera_bordercolor (arg_lookup iter)
@@ -345,39 +246,30 @@
       (vera_screen_boundaries (arg_lookup :hstart) (arg_lookup :hstop) (arg_lookup :vstart) (arg_lookup :vstop))
       (vera_screen_boundaries))))
 
-(defun _vera_layer_enable (arg_lookup iter)
-  (vera_layer_enable (arg_lookup :layer) 1))
-
-(defun _vera_layer_disable (arg_lookup iter)
-  (vera_layer_enable (arg_lookup :layer) 0))
-
-(defun _vera_layer_enabled (arg_lookup iter)
-  (vera_layer_enable (arg_lookup :layer)))
-
 (defun _vera_layer_hscroll (arg_lookup iter)
-  (let ((layer (arg_lookup :layer))
-        (hscroll (arg_lookup :hscroll))
-        (vscroll (arg_lookup :vscroll t)))
+  (let ((layer (arg_lookup :layer)) (hscroll (arg_lookup :hscroll)))
     (if hscroll
-      (vera_layer_hscroll layer hscroll))
-    (if vscroll
-      (vera_layer_vscroll layer vscroll))
-    (vera_layer_hscroll layer)))
+      (progn
+        (vera_layer_hscroll layer hscroll)
+        (if iter (_vera_layer arg_lookup iter)))
+      (vera_layer_hscroll layer))))
 
 (defun _vera_layer_vscroll (arg_lookup iter)
-  (let ((layer (arg_lookup :layer))
-        (vscroll (arg_lookup :vscroll t)))
+  (let ((layer (arg_lookup :layer)) (vscroll (arg_lookup :vscroll t)))
     (if vscroll
-      (vera_layer_vscroll layer vscroll))
-    (vera_layer_vscroll layer)))
+      (progn
+        (vera_layer_vscroll layer vscroll)
+        (if iter (_vera_layer arg_lookup iter)))
+      (vera_layer_vscroll layer))))
 
 (defun _vera_layer_map (arg_lookup iter)
-  (let ((layer (arg_lookup :layer))
-        (map (arg_lookup :map))
-        (tileset (arg_lookup :tileset))
+  (let ((layer (arg_lookup :layer)) (map (arg_lookup :map)))
     (if map
-      (vera_layer_map layer map))
-    (vera_layer_map layer)))
+      (progn
+        (vera_layer_map layer map)
+        (if iter
+            (_vera_layer arg_lookup iter)))
+      (vera_layer_map layer))))
 
 (defun _vera_layer_tileset (arg_lookup iter)
   (let ((layer (arg_lookup :layer))
@@ -387,29 +279,25 @@
     (vera_layer_tileset layer)))
 
 (defun _vera_layer_bitmap_res (bitmap)
-  (mapcan (lambda (k v) (list k v))
-            '(:tileset :tile) bitmap))
+  (mapcan (lambda (k v) (list k v)) '(:tileset :tile) bitmap))
 
 (defun _vera_layer_bitmap (arg_lookup iter)
   (_vera_layer_bitmap_res
-    (let ((layer (arg_lookup :layer))
-          (tileset (arg_lookup :tileset t))
-          (tile (arg_lookup :tile t)))
+    (let ((layer (arg_lookup :layer)) (tileset (arg_lookup :tileset t)) (tile (arg_lookup :tile t)))
       (if (and tileset tile)
         (vera_layer_bitmap layer tileset tile)
         (vera_layer_bitmap layer)))))
 
 (defun _vera_layer_pal_offset (arg_lookup iter)
-  (let ((layer (arg_lookup :layer))
-        (pal_offset (arg_lookup :pal_offset t)))
+  (let ((layer (arg_lookup :layer)) (pal_offset (arg_lookup :pal_offset t)))
     (if pal_offset
       (vera_layer_pal_offset layer pal_offset))
     (vera_layer_pal_offset layer)))
 
 (defvar _vera_layer_dispatch '(
-  (:enable . _vera_layer_enable)
-  (:disable . _vera_layer_disable)
-  (:enabled . _vera_layer_enabled)
+  (:enable . (lambda (arg_lookup iter) (vera_layer_enable (arg_lookup :layer) 1)))
+  (:disable . (lambda (arg_lookup iter) (vera_layer_enable (arg_lookup :layer) 0)))
+  (:enabled . (lambda (arg_lookup iter) (vera_layer_enable (arg_lookup :layer))))
   (:hscroll . _vera_layer_hscroll)
   (:vscroll . _vera_layer_vscroll)
   (:map . _vera_layer_map)
@@ -418,13 +306,10 @@
   (:pal_offset . _vera_layer_pal_offset)))
 
 (defun _vera_layer (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_layer_dispatch arg_lookup iter)
-    (error "Layer missing args")))
+  (_dispatch _vera_layer_dispatch arg_lookup iter))
 
 (defun _vera_palette_res (palette)
-  (mapcan (lambda (k v) (list k v))
-            '(:r :g :b) palette))
+  (mapcan (lambda (k v) (list k v)) '(:r :g :b) palette))
 
 (defun _vera_palette (arg_lookup iter)
   (let ((idx (arg_lookup :palette t)))
@@ -437,97 +322,89 @@
         (arg_lookup :restore)
         (vera_palette)))))
 
-(defun _vera_sprite_init (arg_lookup iter)
-  (vera_sprite_init (arg_lookup :sprite)))
-
 (defun _vera_sprite_tileset_res (tileset)
-  (mapcan (lambda (k v) (list k v))
-            '(:tileset :tile) tileset))
+  (mapcan (lambda (k v) (list k v)) '(:tileset :tile) tileset))
 
 (defun _vera_sprite_tileset (arg_lookup iter)
   (_vera_sprite_tileset_res
-    (let ((id (arg_lookup :sprite))
-          (tileset (arg_lookup :tileset t))
-          (tile (arg_lookup :tile t)))
+    (let ((id (arg_lookup :sprite)) (tileset (arg_lookup :tileset t)) (tile (arg_lookup :tile t)))
       (if (and tileset tile)
+        (progn
           (vera_sprite_tile id tileset tile)
-          (vera_sprite_tile id)))))
+          (if (cdr iter) (_vera_sprite arg_lookup (cdr iter))))
+        (vera_sprite_tile id)))))
 
 (defun _vera_sprite_x (arg_lookup iter)
-  (let ((id (arg_lookup :sprite))
-        (x (arg_lookup :x))
-        (y (arg_lookup :y t)))
+  (let ((id (arg_lookup :sprite)) (x (arg_lookup :x)))
     (if x
-      (vera_sprite_x id x))
-    (if y
-      (vera_sprite_y id y))
-    (vera_sprite_x id)))
+      (progn
+        (vera_sprite_x id x)
+        (if iter (_vera_sprite arg_lookup iter)))
+      (vera_sprite_x id))))
 
 (defun _vera_sprite_y (arg_lookup iter)
-  (let ((id (arg_lookup :sprite))
-        (y (arg_lookup :y t)))
+  (let ((id (arg_lookup :sprite)) (y (arg_lookup :y t)))
     (if y
-      (vera_sprite_y id y))
-    (vera_sprite_y id)))
+      (progn
+        (vera_sprite_y id y)
+        (if iter (_vera_sprite arg_lookup iter)))
+      (vera_sprite_y id))))
 
 (defun _vera_sprite_z (arg_lookup iter)
-  (let ((id (arg_lookup :sprite))
-        (z (arg_lookup :z t)))
+  (let ((id (arg_lookup :sprite)) (z (arg_lookup :z t)))
     (if z
-      (vera_sprite_z_depth id z))
-    (vera_sprite_z_depth id)))
+      (progn
+        (vera_sprite_z_depth id z)
+        (if iter (_vera_sprite arg_lookup iter)))
+      (vera_sprite_z_depth id))))
 
 (defun _vera_sprite_pal_offset (arg_lookup iter)
-  (let ((id (arg_lookup :sprite))
-        (pal_offset (arg_lookup :pal_offset t)))
+  (let ((id (arg_lookup :sprite)) (pal_offset (arg_lookup :pal_offset t)))
     (if pal_offset
-      (vera_sprite_pal_offset id pal_offset))
-    (vera_sprite_pal_offset id)))
+      (progn
+        (vera_sprite_pal_offset id pal_offset)
+        (if iter (_vera_sprite arg_lookup iter)))
+      (vera_sprite_pal_offset id))))
 
 (defun _vera_sprite_mask (arg_lookup iter)
-  (let ((id (arg_lookup :sprite))
-        (mask (arg_lookup :mask t)))
+  (let ((id (arg_lookup :sprite)) (mask (arg_lookup :mask t)))
     (if mask
-      (vera_sprite_col_mask id mask))
-    (vera_sprite_col_mask id)))
+      (progn
+        (vera_sprite_col_mask id mask)
+        (if iter (_vera_sprite arg_lookup iter)))
+      (vera_sprite_col_mask id))))
 
 (defun _vera_sprite_hflip_enable (arg_lookup iter)
-  (vera_sprite_hflip (arg_lookup :sprite) 1))
+  (vera_sprite_hflip (arg_lookup :sprite) 1)
+  (if iter (_vera_sprite arg_lookup iter)))
 
 (defun _vera_sprite_hflip_disable (arg_lookup iter)
-  (vera_sprite_hflip (arg_lookup :sprite) 0))
-
-(defun _vera_sprite_hflip_enabled (arg_lookup iter)
-  (vera_sprite_hflip (arg_lookup :sprite)))
+  (vera_sprite_hflip (arg_lookup :sprite) 0)
+  (if iter (_vera_sprite arg_lookup iter)))
 
 (defvar _vera_sprite_hflip_dispatch '(
   (:enable . _vera_sprite_hflip_enable)
   (:disable . _vera_sprite_hflip_disable)
-  (:enabled . _vera_sprite_hflip_enabled)))
+  (:enabled . (lambda (arg_lookup iter) (vera_sprite_hflip (arg_lookup :sprite))))))
 
 (defun _vera_sprite_hflip (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_sprite_hflip_dispatch arg_lookup iter)
-    (error "Hflip missing args")))
+  (_dispatch _vera_sprite_hflip_dispatch arg_lookup iter))
 
 (defun _vera_sprite_vflip_enable (arg_lookup iter)
-  (vera_sprite_vflip (arg_lookup :sprite) 1))
+  (vera_sprite_vflip (arg_lookup :sprite) 1)
+  (if iter (_vera_sprite arg_lookup iter)))
 
 (defun _vera_sprite_vflip_disable (arg_lookup iter)
-  (vera_sprite_vflip (arg_lookup :sprite) 0))
-
-(defun _vera_sprite_vflip_enabled (arg_lookup iter)
-  (vera_sprite_vflip (arg_lookup :sprite)))
+  (vera_sprite_vflip (arg_lookup :sprite) 0)
+  (if iter (_vera_sprite arg_lookup iter)))
 
 (defvar _vera_sprite_vflip_dispatch '(
   (:enable . _vera_sprite_vflip_enable)
   (:disable . _vera_sprite_vflip_disable)
-  (:enabled . _vera_sprite_vflip_enabled)))
+  (:enabled . (lambda (arg_lookup iter) (vera_sprite_vflip (arg_lookup :sprite))))))
 
 (defun _vera_sprite_vflip (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_sprite_vflip_dispatch arg_lookup iter)
-    (error "vflip missing args")))
+  (_dispatch _vera_sprite_vflip_dispatch arg_lookup iter))
 
 (defun _vera_sprite_info (arg_lookup iter)
   (let* ((id (arg_lookup :sprite))
@@ -544,7 +421,7 @@
     (list :tileset tileset :tile tile :x x :y y :z z :pal_offset pal_offset :mask mask :hflip hflip :vflip vflip)))
 
 (defvar _vera_sprite_dispatch '(
-  (:init . _vera_sprite_init)
+  (:init . (lambda (arg_lookup iter) (vera_sprite_init (arg_lookup :sprite))))
   (:tileset . _vera_sprite_tileset)
   (:x . _vera_sprite_x)
   (:y . _vera_sprite_y)
@@ -556,9 +433,7 @@
   (:info . _vera_sprite_info)))
 
 (defun _vera_sprite (arg_lookup iter)
-  (if iter
-    (_dispatch _vera_sprite_dispatch arg_lookup iter)
-    (_vera_sprite_info arg_lookup iter)))
+  (_dispatch _vera_sprite_dispatch arg_lookup iter))
 
 (defun _vera_help (args)
   (format t "(vera :init)~%")
@@ -570,62 +445,45 @@
   (format t "(vera :tileset <id> :deinit)~%")
   (format t "(vera :tileset <id> [:info])~%")
   (format t "(vera :pixel :tileset <id> :tile <idx> :x <x> :y <y> [:val <v>])~%")
-  (format t "(vera :linecapture :enable)~%")
-  (format t "(vera :linecapture :disable)~%")
-  (format t "(vera :linecapture :enabled)~%")
+  (format t "(vera :linecapture :enable|:disable|:enabled)~%")
   (format t "(vera :linecapture :pixel :x <x>)~%")
   (format t "(vera :spritebank :select <idx>)~%")
   (format t "(vera :spritebank :selected)~%")
-  (format t "(vera :ien :set :mask <m>)~%")
-  (format t "(vera :ien :clr :mask <m>)~%")
+  (format t "(vera :ien :set|:clr :mask <m>)~%")
   (format t "(vera :ien :get)~%")
   (format t "(vera :isr :set :mask <m>)~%")
   (format t "(vera :isr :get)~%")
   (format t "(vera :irqline [<l>])~%")
   (format t "(vera :scanline)~%")
-  (format t "(vera :display :enable)~%")
-  (format t "(vera :display :disable)~%")
-  (format t "(vera :display :enabled)~%")
-  (format t "(vera :sprites :enable)~%")
-  (format t "(vera :sprites :disable)~%")
-  (format t "(vera :sprites :enabled)~%")
-  (format t "(vera :hscale [<h>])~%")
-  (format t "(vera :vscale [<v>])~%")
-  (format t "(vera :hscale <h> :vscale <v>)~%")
+  (format t "(vera :display :enable|:disable|:enabled)~%")
+  (format t "(vera :sprites :enable|:disable|:enabled)~%")
+  (format t "(vera [:hscale <h>] [:vscale <v>])~%")
+  (format t "(vera :hscale|:vscale)~%")
   (format t "(vera :bordercolor [<c>])~%")
   (format t "(vera :boundaries [:hstart <hs> :hstop <he> :vstart <vs> :vstop <ve>])~%")
-  (format t "(vera :layer <id> :enable)~%")
-  (format t "(vera :layer <id> :disable)~%")
-  (format t "(vera :layer <id> :enabled)~%")
-  (format t "(vera :layer <id> :hscroll [<h>])~%")
-  (format t "(vera :layer <id> :vscroll [<v>])~%")
-  (format t "(vera :layer <id> :hscroll <h> :vscroll <v>)~%")
-  (format t "(vera :layer <id> :map [<m>])~%")
-  (format t "(vera :layer <id> :tileset [<t>])~%")
+  (format t "(vera :layer <id> :enable|:disable|:enabled)~%")
+  (format t "(vera :layer <id> [:hscroll <h>] [:vscroll <v>])~%")
+  (format t "(vera :layer <id> :hscroll|:vscroll)~%")
+  (format t "(vera :layer <id> :map [<m>] [:tileset t])~%")
+  (format t "(vera :layer <id> :tileset [<t>] [:map <m>])~%")
   (format t "(vera :layer <id> :bitmap [:tileset <t> :tile <i>])~%")
   (format t "(vera :layer <id> :pal_offset [<o>])~%")
   (format t "(vera :palette :restore)~%")
   (format t "(vera :palette <id> [:r <r> :g <g> :b <b>])~%")
   (format t "(vera :sprite <id> :init)~%")
-  (format t "(vera :sprite <id> :tileset <t> :tile <i>)~%")
-  (format t "(vera :sprite <id> :tileset)~%")
-  (format t "(vera :sprite <id> :x [<x>])~%")
-  (format t "(vera :sprite <id> :y [<y>])~%")
-  (format t "(vera :sprite <id> :x <x> :y <y>)~%")
-  (format t "(vera :sprite <id> :z [<z>])~%")
-  (format t "(vera :sprite <id> :pal_offset [<o>])~%")
-  (format t "(vera :sprite <id> :mask [<m>])~%")
-  (format t "(vera :sprite <id> :hflip :enable)~%")
-  (format t "(vera :sprite <id> :hflip :disable)~%")
-  (format t "(vera :sprite <id> :hflip :enabled)~%")
-  (format t "(vera :sprite <id> :vflip :enable)~%")
-  (format t "(vera :sprite <id> :vflip :disable)~%")
-  (format t "(vera :sprite <id> :vflip :enabled)~%")
+  (format t "(vera :sprite <id> <sprite_attribute settings>)~%")
+  (format t "  Where <sprite_attribute settings> is one or more of the following:~%")
+  (format t "  :tileset <t> :tile <i>~%")
+  (format t "  :x <x> / :y <y> / :z <z> / :pal_offset <o> / :mask <mask>~%")
+  (format t "  :hflip :enable|:disable / :vflip :enable|:disable~%")
+  (format t "(vera :sprite <id> <sprite_attribute>)~%")
+  (format t "  Where <sprite_attribute> is one of the following:~%")
+  (format t "  :tileset :x :y :z :pal_offset :mask :hflip :vflip~%")
   (format t "(vera :sprite <id> [:info])~%")
   )
 
-(defvar vera_dispatch '(
-  (:init . _vera_init)
+(defvar _vera_dispatch '(
+  (:init . (lambda (arg_lookup iter) (vera_init)))
   (:map . _vera_map)
   (:tileset . _vera_tileset)
   (:pixel . _vera_pixel)
@@ -634,7 +492,7 @@
   (:ien . _vera_ien)
   (:isr . _vera_isr)
   (:irqline . _vera_irqline)
-  (:scanline . _vera_scanline)
+  (:scanline . (lambda (arg_lookup iter) (vera_scanline)))
   (:display . _vera_display)
   (:sprites . _vera_sprites)
   (:hscale . _vera_hscale)
@@ -646,10 +504,13 @@
   (:sprite . _vera_sprite)
   (:help . _vera_help)))
 
+(defun _vera (arg_lookup iter)
+  (_dispatch _vera_dispatch arg_lookup iter))
+
 (defun vera (&rest args)
   (if args
     (let ((atable (_make_assoc_table args)))
-      (_dispatch vera_dispatch (_make_assoc_table_lookup atable) atable))
+      (_vera (_make_assoc_table_lookup atable) atable))
     (_vera_help '())))
 
 )lisplibrary";

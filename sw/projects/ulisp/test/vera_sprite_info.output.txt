@@ -11,19 +11,19 @@ XXXXXX>
 
 XXXXXX>
 (vera :sprite 1 :tileset 2 :tile 1)
-(:tileset 2 :tile 1)
+nil
 
 XXXXXX> (vera :sprite 1 :x 5 :y 6)
-5
+nil
 
 XXXXXX> (vera :sprite 2 :z 2)
-2
+nil
 
 XXXXXX> (vera :sprite 1 :hflip :enable)
-1
+nil
 
 XXXXXX> (vera :sprite 1 :mask 3)
-3
+nil
 
 XXXXXX>
 (vera :sprite 1 :info)

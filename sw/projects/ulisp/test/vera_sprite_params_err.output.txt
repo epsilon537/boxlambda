@@ -36,34 +36,36 @@ Error: 'vera_sprite_tile' invalid argument: 40
 XXXXXX> (vera :sprite 1 :tileset 0 :tile 200)
 Error: 'vera_sprite_tile' index out of range: 200
 XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
-(:tileset 0 :tile 2)
+nil
 
 XXXXXX> (vera :sprite 200 :z 0)
 Error: 'vera_sprite_z_depth' invalid argument: 200
 XXXXXX> (vera :sprite 1 :z 20)
 Error: 'vera_sprite_z_depth' invalid argument: 20
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_BG_L0)
-1
+nil
 
 XXXXXX> (vera :sprite 1000 :pal_offset 1)
 Error: 'vera_sprite_pal_offset' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :pal_offset 1000)
 Error: 'vera_sprite_pal_offset' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :pal_offset 1)
-1
+nil
 
 XXXXXX> (vera :sprite 1000 :hflip :enable)
 Error: 'vera_sprite_hflip' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :hflip :enable)
-1
+nil
 
 XXXXXX> (vera :sprite 1000 :vflip :enable)
 Error: 'vera_sprite_vflip' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :vflip :enable)
-1
+nil
 
 XXXXXX> (vera :sprite 1000 :mask 1)
 Error: 'vera_sprite_col_mask' invalid argument: 1000
-XXXXXX>
-'end
+XXXXXX> (vera :sprite 1 :mask 1)
+nil
+
+XXXXXX> 'end
 end

@@ -27,7 +27,7 @@ XXXXXX>
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
 
 XXXXXX> (vera :layer 0 :map 0)
-0
+nil
 
 XXXXXX> (vera :layer 0 :tileset 0)
 0

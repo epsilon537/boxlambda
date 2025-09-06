@@ -26,10 +26,10 @@ XXXXXX> (vera :sprite 1 :init)
 nil
 
 XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
-(:tileset 0 :tile 2)
+nil
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
-3
+nil
 
 XXXXXX> (dotimes (yy h)
   (dotimes (xx (min w (1+ yy)))
@@ -37,6 +37,7 @@ XXXXXX> (dotimes (yy h)
 nil
 
 XXXXXX>
+
 
 
 
@@ -67,7 +68,7 @@ XXXXXX> (print (vera :linecapture :pixel :x 0))
 
 XXXXXX>
 (vera :sprite 1 :pal_offset 1)
-1
+nil
 
 XXXXXX> (vera :sprite 1 :pal_offset)
 1

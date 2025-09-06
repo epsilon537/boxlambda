@@ -12,8 +12,9 @@ XXXXXX>
   (vera :tileset 0 :pixel :tile 1 :x (- 15 ii) :y ii :val 1))
 Error: Dispatch keyword not found. Table: ((:width . _vera_tileset_init) (:heigh
 t . _vera_tileset_init) (:bpp . _vera_tileset_init) (:num_tiles . _vera_tileset_
-init) (:deinit . _vera_tileset_deinit) (:info . _vera_tileset_info)) keyword: :p
-ixel
+init) (:deinit lambda (arg_lookup iter) (vera_tileset_deinit (arg_lookup :tilese
+t))) (:info lambda (arg_lookup iter) (_vera_tileset_res (vera_tileset (arg_looku
+p :tileset))))) keyword: :pixel
 XXXXXX>
 (vera :layer 0 :tileset 0)
 0
@@ -78,5 +79,6 @@ XXXXXX>
 5c01
 nil
 
-XXXXXX> 'end
+XXXXXX>
+'end
 end

@@ -25,10 +25,10 @@ XXXXXX> (vera :sprite 1 :init)
 nil
 
 XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
-(:tileset 0 :tile 2)
+nil
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
-3
+nil
 
 XXXXXX> (dotimes (yy h)
   (dotimes (xx (min w (1+ yy)))
@@ -50,8 +50,9 @@ XXXXXX>
 
 
 
+
 (vera :sprite 1 :x 40 :y 50)
-40
+nil
 
 XXXXXX> (vera :sprite 1 :x)
 40

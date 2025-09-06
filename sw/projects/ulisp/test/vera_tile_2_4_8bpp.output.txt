@@ -10,7 +10,7 @@ XXXXXX> (vera :map 0 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
 
 XXXXXX> (vera :layer 0 :map 0)
-0
+nil
 
 XXXXXX> (vera :map 0 :entry :x 0 :y 0 :val 1)
 1

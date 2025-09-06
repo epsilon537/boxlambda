@@ -36,8 +36,9 @@ XXXXXX> (dolist (bpp (list 2 4 8))
 
 0 Error: Dispatch keyword not found. Table: ((:width . _vera_tileset_init) (:hei
 ght . _vera_tileset_init) (:bpp . _vera_tileset_init) (:num_tiles . _vera_tilese
-t_init) (:deinit . _vera_tileset_deinit) (:info . _vera_tileset_info)) keyword:
-:pixel
+t_init) (:deinit lambda (arg_lookup iter) (vera_tileset_deinit (arg_lookup :tile
+set))) (:info lambda (arg_lookup iter) (_vera_tileset_res (vera_tileset (arg_loo
+kup :tileset))))) keyword: :pixel
 XXXXXX>
 
 

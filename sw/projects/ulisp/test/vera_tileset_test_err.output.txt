@@ -12,12 +12,12 @@ XXXXXX> (vera :tileset 0 :deinit)
 nil
 
 XXXXXX> (vera :tileset 1 :width 8)
-Error: Missing argument: :height. Table: ((:tileset . 1) (:width . 8))
+Error: Unknown argument: :height. Table: ((:tileset . 1) (:width . 8))
 XXXXXX> (vera :tileset 1 :width 8 :height 8)
-Error: Missing argument: :bpp. Table: ((:tileset . 1) (:width . 8) (:height . 8)
+Error: Unknown argument: :bpp. Table: ((:tileset . 1) (:width . 8) (:height . 8)
 )
 XXXXXX> (vera :tileset 1 :width 8 :height 8 :bpp 1)
-Error: Missing argument: :num_tiles. Table: ((:tileset . 1) (:width . 8) (:heigh
+Error: Unknown argument: :num_tiles. Table: ((:tileset . 1) (:width . 8) (:heigh
 t . 8) (:bpp . 1))
 XXXXXX> (vera :tileset 100 :width 8 :height 8 :bpp 1 :num_tiles 1)
 Error: 'vera_tileset' invalid argument: 100

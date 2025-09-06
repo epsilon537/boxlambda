@@ -13,10 +13,10 @@ XXXXXX> (vera :map 1 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
 (:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
 
 XXXXXX> (vera :layer 0 :map 0)
-0
+nil
 
 XXXXXX> (vera :layer 1 :map 1)
-1
+nil
 
 XXXXXX> (vera :map 0 :entry :x 0 :y 0 :val #x0002)
 2
@@ -47,19 +47,19 @@ XXXXXX> (vera :sprite 1 :init)
 nil
 
 XXXXXX> (vera :sprite 1 :tileset 1 :tile 2)
-(:tileset 1 :tile 2)
+nil
 
 XXXXXX> (vera :sprite 1 :tileset)
 (:tileset 1 :tile 2)
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_DIS)
-0
+nil
 
 XXXXXX> (vera :sprite 1 :z)
 0
 
 XXXXXX> (vera :sprite 1 :pal_offset 1)
-1
+nil
 
 XXXXXX> (dotimes (yy h)
   (dotimes (xx (min w (1+ yy)))
@@ -85,7 +85,7 @@ XXXXXX> (print (vera :linecapture :pixel :x 0))
 
 XXXXXX>
 (vera :sprite 1 :z VERA_SPRITE_Z_BG_L0)
-1
+nil
 
 XXXXXX> (vera :sprite 1 :z)
 1
@@ -117,7 +117,7 @@ XXXXXX> (print (vera :linecapture :pixel :x 0))
 (:r 10 :g 15 :b 14)
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L0_L1)
-2
+nil
 
 XXXXXX> (vera :sprite 1 :z)
 2
@@ -148,7 +148,7 @@ XXXXXX> (print (vera :linecapture :pixel :x 0))
 (:r 8 :g 6 :b 6)
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
-3
+nil
 
 XXXXXX> (vera :sprite 1 :z)
 3
@@ -164,5 +164,6 @@ XXXXXX> (print (vera :linecapture :pixel :x 0))
 (:r 3 :g 3 :b 3)
 (:r 3 :g 3 :b 3)
 
-XXXXXX> 'end
+XXXXXX>
+'end
 end

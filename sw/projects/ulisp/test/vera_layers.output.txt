@@ -19,10 +19,10 @@ XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 8 :num_tiles 32)
 (:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num_tiles 32 :tilesize_bytes 256)
 
 XXXXXX> (vera :layer 0 :map 0)
-0
+nil
 
 XXXXXX> (vera :layer 1 :map 1)
-1
+nil
 
 XXXXXX> (vera :layer 0 :tileset 0)
 0
