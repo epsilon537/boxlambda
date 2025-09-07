@@ -29,7 +29,7 @@ XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
 nil
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
-nil
+3
 
 XXXXXX> (dotimes (yy h)
   (dotimes (xx (min w (1+ yy)))
@@ -51,7 +51,7 @@ XXXXXX>
 
 
 (vera :sprite 1 :hflip :enable)
-nil
+1
 
 XXXXXX> (vera :sprite 1 :hflip :enabled)
 1

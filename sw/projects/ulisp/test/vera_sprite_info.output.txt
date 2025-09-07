@@ -14,16 +14,16 @@ XXXXXX>
 nil
 
 XXXXXX> (vera :sprite 1 :x 5 :y 6)
-nil
+5
 
 XXXXXX> (vera :sprite 2 :z 2)
-nil
+2
 
 XXXXXX> (vera :sprite 1 :hflip :enable)
-nil
+1
 
 XXXXXX> (vera :sprite 1 :mask 3)
-nil
+3
 
 XXXXXX>
 (vera :sprite 1 :info)

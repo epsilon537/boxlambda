@@ -14,11 +14,6 @@ nil
 XXXXXX> (vera :map 0 :deinit)
 nil
 
-XXXXXX> (vera :map 1 :init)
-Error: Dispatch keyword not found. Table: ((:width . _vera_map_init) (:height .
-_vera_map_init) (:map_type . _vera_map_init) (:deinit lambda (arg_lookup iter) (
-vera_map_deinit (arg_lookup :map))) (:entry . _vera_map_entry) (:info lambda (ar
-g_lookup iter) (_vera_map_res (vera_map (arg_lookup :map))))) keyword: :init
 XXXXXX> (vera :map 1 :width 32)
 Error: Unknown argument: :height. Table: ((:map . 1) (:width . 32))
 XXXXXX> (vera :map 1 :width 32 :height 64)

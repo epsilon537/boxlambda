@@ -3,8 +3,8 @@
 (vera :tileset 0 :width 16 :height 16 :bpp 1 :num_tiles 32)
 
 (dotimes (ii 16)
-  (vera :tileset 0 :pixel :tile 1 :x ii :y ii :val 1)
-  (vera :tileset 0 :pixel :tile 1 :x (- 15 ii) :y ii :val 1))
+  (vera :pixel :tileset 0 :tile 1 :x ii :y ii :val 1)
+  (vera :pixel :tileset 0 :tile 1 :x (- 15 ii) :y ii :val 1))
 
 (vera :layer 0 :tileset 0)
 

@@ -43,29 +43,30 @@ Error: 'vera_sprite_z_depth' invalid argument: 200
 XXXXXX> (vera :sprite 1 :z 20)
 Error: 'vera_sprite_z_depth' invalid argument: 20
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_BG_L0)
-nil
+1
 
 XXXXXX> (vera :sprite 1000 :pal_offset 1)
 Error: 'vera_sprite_pal_offset' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :pal_offset 1000)
 Error: 'vera_sprite_pal_offset' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :pal_offset 1)
-nil
+1
 
 XXXXXX> (vera :sprite 1000 :hflip :enable)
 Error: 'vera_sprite_hflip' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :hflip :enable)
-nil
+1
 
 XXXXXX> (vera :sprite 1000 :vflip :enable)
 Error: 'vera_sprite_vflip' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :vflip :enable)
-nil
+1
 
 XXXXXX> (vera :sprite 1000 :mask 1)
 Error: 'vera_sprite_col_mask' invalid argument: 1000
 XXXXXX> (vera :sprite 1 :mask 1)
-nil
+1
 
-XXXXXX> 'end
+XXXXXX>
+'end
 end

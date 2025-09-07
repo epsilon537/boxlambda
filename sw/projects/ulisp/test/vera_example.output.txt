@@ -70,7 +70,7 @@ XXXXXX>
 "Generating tile..."
 "Generating sprite tile..."
 "Setting up sprite..."
-nil
+128
 
 XXXXXX>
 

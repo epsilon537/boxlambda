@@ -36,23 +36,23 @@ XXXXXX> (vera :sprite 65 :tileset 0 :tile 1)
 nil
 
 XXXXXX> (vera :sprite 65 :pal_offset 1)
-nil
+1
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
-nil
+3
 
 XXXXXX> (vera :sprite 65 :z VERA_SPRITE_Z_L1)
-nil
+3
 
 XXXXXX> (vera :pixel :tileset 0 :tile 1 :x 0 :y 0 :val VERA_COLOR_CYAN)
 3
 
 XXXXXX>
 (vera :sprite 1 :x 40 :y 50)
-nil
+40
 
 XXXXXX> (vera :sprite 65 :x 100 :y 200)
-nil
+100
 
 XXXXXX>
 (vera :irqline 50)

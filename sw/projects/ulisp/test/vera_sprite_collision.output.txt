@@ -29,7 +29,7 @@ XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
 nil
 
 XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
-nil
+3
 
 XXXXXX> (vera :sprite 2 :init)
 nil
@@ -38,7 +38,7 @@ XXXXXX> (vera :sprite 2 :tileset 0 :tile 2)
 nil
 
 XXXXXX> (vera :sprite 2 :z VERA_SPRITE_Z_L1)
-nil
+3
 
 XXXXXX> (dotimes (yy h)
   (dotimes (xx (min w (1+ yy)))
@@ -56,16 +56,16 @@ XXXXXX>
 
 
 (vera :sprite 1 :x 40 :y 50)
-nil
+40
 
 XXXXXX> (vera :sprite 2 :x 200 :y 200)
-nil
+200
 
 XXXXXX> (vera :sprite 1 :mask 1)
-nil
+1
 
 XXXXXX> (vera :sprite 2 :mask 1)
-nil
+1
 
 XXXXXX> (vera :sprite 1 :mask)
 1
@@ -81,7 +81,7 @@ XXXXXX> (vera :isr :get)
 
 XXXXXX>
 (vera :sprite 2 :x 40 :y 50)
-nil
+40
 
 XXXXXX>
 

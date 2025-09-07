@@ -12,7 +12,7 @@ XXXXXX> (dolist (bpp (list 2 4 8))
   (vera :layer 0 :bitmap :tileset 0 :tile 0)
   (vera :layer 0 :pal_offset 0)
   (print (vera :layer 0 :pal_offset))
-  (vera :tileset 0 :pixel :tile 0 :x 0 :y 0 :val 1)
+  (vera :pixel :tileset 0 :tile 0 :x 0 :y 0 :val 1)
   (vera :irqline 0)
   (vera :linecapture :enable)
   (loop (if (= (vera :linecapture :enabled) 0) (return)))
@@ -34,13 +34,40 @@ XXXXXX> (dolist (bpp (list 2 4 8))
 
 (:addr XXXXXXXXX :width 320 :height 32 :bpp 2 :num_tiles 1 :tilesize_bytes 2560)
 
-0 Error: Dispatch keyword not found. Table: ((:width . _vera_tileset_init) (:hei
-ght . _vera_tileset_init) (:bpp . _vera_tileset_init) (:num_tiles . _vera_tilese
-t_init) (:deinit lambda (arg_lookup iter) (vera_tileset_deinit (arg_lookup :tile
-set))) (:info lambda (arg_lookup iter) (_vera_tileset_res (vera_tileset (arg_loo
-kup :tileset))))) keyword: :pixel
-XXXXXX>
+0
+(:r 15 :g 15 :b 15)
+(:r 15 :g 15 :b 15)
+1
+(:r 1 :g 1 :b 1)
+(:r 1 :g 1 :b 1)
+4
+(:r 12 :g 12 :b 9)
+(:r 12 :g 12 :b 9)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 4 :num_tiles 1 :tilesize_bytes 5120)
 
+0
+(:r 15 :g 15 :b 15)
+(:r 15 :g 15 :b 15)
+1
+(:r 1 :g 1 :b 1)
+(:r 1 :g 1 :b 1)
+4
+(:r 12 :g 12 :b 9)
+(:r 12 :g 12 :b 9)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
+)
+0
+(:r 15 :g 15 :b 15)
+(:r 15 :g 15 :b 15)
+1
+(:r 1 :g 1 :b 1)
+(:r 1 :g 1 :b 1)
+4
+(:r 12 :g 12 :b 9)
+(:r 12 :g 12 :b 9)
+nil
+
+XXXXXX>
 
 
 

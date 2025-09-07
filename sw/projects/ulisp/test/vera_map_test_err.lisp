@@ -4,7 +4,6 @@
 (vera :map 0 :width 32 :height 32 :map_type 0)
 (vera :map 0 :deinit)
 (vera :map 0 :deinit)
-(vera :map 1 :init)
 (vera :map 1 :width 32)
 (vera :map 1 :width 32 :height 64)
 (vera :map 100 :width 32 :height 32 :map_type 0)

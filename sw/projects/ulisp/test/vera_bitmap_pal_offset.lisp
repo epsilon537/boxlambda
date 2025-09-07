@@ -7,7 +7,7 @@
   (vera :layer 0 :bitmap :tileset 0 :tile 0)
   (vera :layer 0 :pal_offset 0)
   (print (vera :layer 0 :pal_offset))
-  (vera :tileset 0 :pixel :tile 0 :x 0 :y 0 :val 1)
+  (vera :pixel :tileset 0 :tile 0 :x 0 :y 0 :val 1)
   (vera :irqline 0)
   (vera :linecapture :enable)
   (loop (if (= (vera :linecapture :enabled) 0) (return)))
