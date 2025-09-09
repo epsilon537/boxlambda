@@ -1,0 +1,14 @@
+start
+
+XXXXXX>
+(vera :palette 1 :r 3)
+Error: Missing argument: :g. Table: ((:palette . 1) (:r . 3))
+XXXXXX> (vera :palette 1 :r 3 :g 2)
+Error: Missing argument: :b. Table: ((:palette . 1) (:r . 3) (:g . 2))
+XXXXXX> (vera :palette 1 :b 3 :g 2)
+Error: Missing argument: :r. Table: ((:palette . 1) (:b . 3) (:g . 2))
+XXXXXX> (vera :palette 256)
+Error: 'vera-palette' invalid argument: 256
+XXXXXX>
+'end
+end

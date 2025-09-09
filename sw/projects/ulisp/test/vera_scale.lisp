@@ -2,15 +2,15 @@
 
 (vera :display :enable)
 (vera :layer 0 :enable)
-(vera :map 0 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
-(vera :tileset 0 :width 16 :height 16 :bpp 8 :num_tiles 32)
+(vera :map 0 :width 32 :height 32 :map-type +vera-map-type-tile+)
+(vera :tileset 0 :width 16 :height 16 :bpp 8 :num-tiles 32)
 (vera :layer 0 :map 0)
 (vera :layer 0 :tileset 0)
 
 (vera :map 0 :entry :x 0 :y 0 :val 1)
 (dotimes (ii 16)
-  (vera_tileset_pixel 0 1 ii ii VERA_COLOR_WHITE)
-  (vera_tileset_pixel 0 1 (- 15 ii) ii VERA_COLOR_WHITE))
+  (vera-tileset-pixel 0 1 ii ii +vera-color-white+)
+  (vera-tileset-pixel 0 1 (- 15 ii) ii +vera-color-white+))
 
 (vera :irqline 15)
 (vera :linecapture :enable)

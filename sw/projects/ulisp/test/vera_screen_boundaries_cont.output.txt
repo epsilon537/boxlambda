@@ -7,7 +7,7 @@ XXXXXX> (vera :display :enabled)
 1
 
 XXXXXX>
-(vera :bordercolor VERA_COLOR_BLUE)
+(vera :bordercolor +vera-color-blue+)
 6
 
 XXXXXX> (vera :bordercolor)

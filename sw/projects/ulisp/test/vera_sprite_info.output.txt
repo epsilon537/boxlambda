@@ -2,12 +2,12 @@ start
 
 XXXXXX>
 (vera :sprite 1 :info)
-(:tileset nil :tile nil :x 0 :y 0 :z 0 :pal_offset 0 :mask 0 :hflip :disabled :v
+(:tileset nil :tile nil :x 0 :y 0 :z 0 :pal-offset 0 :mask 0 :hflip :disabled :v
 flip :disabled)
 
 XXXXXX>
-(vera :tileset 2 :width 32 :height 32 :bpp 8 :num_tiles 3)
-(:addr XXXXXXXXX :width 32 :height 32 :bpp 8 :num_tiles 3 :tilesize_bytes 1024)
+(vera :tileset 2 :width 32 :height 32 :bpp 8 :num-tiles 3)
+(:addr XXXXXXXXX :width 32 :height 32 :bpp 8 :num-tiles 3 :tilesize-bytes 1024)
 
 XXXXXX>
 (vera :sprite 1 :tileset 2 :tile 1)
@@ -27,7 +27,7 @@ XXXXXX> (vera :sprite 1 :mask 3)
 
 XXXXXX>
 (vera :sprite 1 :info)
-(:tileset 2 :tile 1 :x 5 :y 6 :z 0 :pal_offset 0 :mask 3 :hflip :enabled :vflip
+(:tileset 2 :tile 1 :x 5 :y 6 :z 0 :pal-offset 0 :mask 3 :hflip :enabled :vflip
 :disabled)
 
 XXXXXX>

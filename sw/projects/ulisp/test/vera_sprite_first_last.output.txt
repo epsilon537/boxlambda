@@ -1,0 +1,104 @@
+start
+
+XXXXXX> (vera :display :enable)
+1
+
+XXXXXX> (vera :sprites :enable)
+1
+
+XXXXXX> (defvar w 8)
+w
+
+XXXXXX> (defvar h 8)
+h
+
+XXXXXX> (defvar bpp 8)
+bpp
+
+XXXXXX> (vera :tileset 0 :width w :height h :bpp bpp :num-tiles 8)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num-tiles 8 :tilesize-bytes 64)
+
+XXXXXX> (vera :sprite 0 :tileset 0 :tile 2)
+nil
+
+XXXXXX> (vera :sprite 0 :z +vera-sprite-z-l1+)
+3
+
+XXXXXX> (vera :sprite 63 :tileset 0 :tile 2)
+nil
+
+XXXXXX> (vera :sprite 63 :z +vera-sprite-z-l1+)
+3
+
+XXXXXX> (dotimes (yy h)
+  (dotimes (xx (min w (1+ yy)))
+    (vera-tileset-pixel 0 2 xx yy +vera-color-cyan+)))
+nil
+
+XXXXXX>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(vera :sprite 0 :x 40 :y 50)
+40
+
+XXXXXX> (vera :sprite 63 :x 40 :y 70)
+40
+
+XXXXXX>
+(vera :irqline 50)
+50
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 39))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x 40))
+
+(:r 10 :g 15 :b 14)
+(:r 10 :g 15 :b 14)
+
+XXXXXX>
+(vera :irqline 70)
+70
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 39))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x 40))
+
+(:r 10 :g 15 :b 14)
+(:r 10 :g 15 :b 14)
+
+XXXXXX>
+'end
+end

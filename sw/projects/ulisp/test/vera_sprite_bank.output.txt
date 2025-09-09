@@ -17,11 +17,11 @@ XXXXXX> (defvar bpp 8)
 bpp
 
 XXXXXX>
-(vera :tileset 0 :width w :height h :bpp bpp :num_tiles 8)
-(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num_tiles 8 :tilesize_bytes 64)
+(vera :tileset 0 :width w :height h :bpp bpp :num-tiles 8)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num-tiles 8 :tilesize-bytes 64)
 
 XXXXXX> (vera :tileset 0 :info)
-(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num_tiles 8 :tilesize_bytes 64)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num-tiles 8 :tilesize-bytes 64)
 
 XXXXXX> (vera :sprite 1 :init)
 nil
@@ -35,16 +35,16 @@ nil
 XXXXXX> (vera :sprite 65 :tileset 0 :tile 1)
 nil
 
-XXXXXX> (vera :sprite 65 :pal_offset 1)
+XXXXXX> (vera :sprite 65 :pal-offset 1)
 1
 
-XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
+XXXXXX> (vera :sprite 1 :z +vera-sprite-z-l1+)
 3
 
-XXXXXX> (vera :sprite 65 :z VERA_SPRITE_Z_L1)
+XXXXXX> (vera :sprite 65 :z +vera-sprite-z-l1+)
 3
 
-XXXXXX> (vera :pixel :tileset 0 :tile 1 :x 0 :y 0 :val VERA_COLOR_CYAN)
+XXXXXX> (vera :pixel :tileset 0 :tile 1 :x 0 :y 0 :val +vera-color-cyan+)
 3
 
 XXXXXX>

@@ -1,16 +1,16 @@
 'start
 (vera :init)
 
-(defun make_scanline_list ()
-  (loop (if (< (vera_scanline) 10) (return)))
-  (list (vera_scanline) (vera_scanline) (vera_scanline)))
+(defun make-scanline-list ()
+  (loop (if (< (vera-scanline) 10) (return)))
+  (list (vera-scanline) (vera-scanline) (vera-scanline)))
 
-(let ((scanline_list (make_scanline_list)))
+(let ((scanline-list (make-scanline-list)))
   (if (and
-        (> 40 (- (second scanline_list) (first scanline_list)))
-        (> 40 (- (third scanline_list) (second scanline_list))))
+        (> 40 (- (second scanline-list) (first scanline-list)))
+        (> 40 (- (third scanline-list) (second scanline-list))))
     (print "OK")
-    (format t "Fail: ~a~%" scanline_list)))
+    (format t "Fail: ~a~%" scanline-list)))
 
 'end
 

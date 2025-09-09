@@ -3,7 +3,7 @@
 (vera :layer 0 :enable)
 (dolist (w (list 320 640))
   (dolist (h (list 32 64))
-    (vera :tileset 0 :width w :height h :bpp 8 :num_tiles 1)
+    (vera :tileset 0 :width w :height h :bpp 8 :num-tiles 1)
     (print (vera :tileset 0 :info))
     (vera :layer 0 :bitmap :tileset 0 :tile 0)
     (vera :pixel :tileset 0 :tile 0 :x 0 :y 0 :val 101)

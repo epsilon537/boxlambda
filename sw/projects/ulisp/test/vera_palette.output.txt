@@ -6,8 +6,8 @@ XXXXXX> (vera :display :enable)
 XXXXXX> (vera :layer 0 :enable)
 1
 
-XXXXXX> (vera :tileset 0 :width 320 :height 32 :bpp 8 :num_tiles 1)
-(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
+XXXXXX> (vera :tileset 0 :width 320 :height 32 :bpp 8 :num-tiles 1)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num-tiles 1 :tilesize-bytes 10240
 )
 
 XXXXXX> (vera :layer 0 :bitmap :tileset 0 :tile 0)

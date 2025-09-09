@@ -7,11 +7,11 @@ XXXXXX>
 XXXXXX> (vera :layer 0 :enable)
 1
 
-XXXXXX> (vera :map 0 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
-(:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
+XXXXXX> (vera :map 0 :width 32 :height 32 :map-type +vera-map-type-tile+)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 2)
 
-XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 8 :num_tiles 32)
-(:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num_tiles 32 :tilesize_bytes 256)
+XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 8 :num-tiles 32)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num-tiles 32 :tilesize-bytes 256)
 
 XXXXXX> (vera :layer 0 :map 0)
 0
@@ -24,8 +24,8 @@ XXXXXX>
 1
 
 XXXXXX> (dotimes (ii 16)
-  (vera_tileset_pixel 0 1 ii ii VERA_COLOR_WHITE)
-  (vera_tileset_pixel 0 1 (- 15 ii) ii VERA_COLOR_WHITE))
+  (vera-tileset-pixel 0 1 ii ii +vera-color-white+)
+  (vera-tileset-pixel 0 1 (- 15 ii) ii +vera-color-white+))
 nil
 
 XXXXXX>

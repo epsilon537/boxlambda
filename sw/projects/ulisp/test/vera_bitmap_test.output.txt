@@ -7,44 +7,44 @@ XXXXXX> (dotimes (jj 2)
   (let ((idx 0))
     (dolist (wh (list (cons 320 32) (cons 640 16)))
       (dolist (bpp (list 1 2 4 8))
-         (vera :tileset idx :width (car wh) :height (cdr wh) :bpp bpp :num_tiles
+         (vera :tileset idx :width (car wh) :height (cdr wh) :bpp bpp :num-tiles
  1)
          (print (vera :tileset idx :info))
          (setq idx (1+ idx)))))
   (dotimes (ii 8)
     (vera :tileset ii :deinit)))
 
-(:addr XXXXXXXXX :width 320 :height 32 :bpp 1 :num_tiles 1 :tilesize_bytes 1280)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 1 :num-tiles 1 :tilesize-bytes 1280)
 
-(:addr XXXXXXXXX :width 320 :height 32 :bpp 2 :num_tiles 1 :tilesize_bytes 2560)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 2 :num-tiles 1 :tilesize-bytes 2560)
 
-(:addr XXXXXXXXX :width 320 :height 32 :bpp 4 :num_tiles 1 :tilesize_bytes 5120)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 4 :num-tiles 1 :tilesize-bytes 5120)
 
-(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num-tiles 1 :tilesize-bytes 10240
 )
-(:addr XXXXXXXXX :width 640 :height 16 :bpp 1 :num_tiles 1 :tilesize_bytes 1280)
+(:addr XXXXXXXXX :width 640 :height 16 :bpp 1 :num-tiles 1 :tilesize-bytes 1280)
 
-(:addr XXXXXXXXX :width 640 :height 16 :bpp 2 :num_tiles 1 :tilesize_bytes 2560)
+(:addr XXXXXXXXX :width 640 :height 16 :bpp 2 :num-tiles 1 :tilesize-bytes 2560)
 
-(:addr XXXXXXXXX :width 640 :height 16 :bpp 4 :num_tiles 1 :tilesize_bytes 5120)
+(:addr XXXXXXXXX :width 640 :height 16 :bpp 4 :num-tiles 1 :tilesize-bytes 5120)
 
-(:addr XXXXXXXXX :width 640 :height 16 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
+(:addr XXXXXXXXX :width 640 :height 16 :bpp 8 :num-tiles 1 :tilesize-bytes 10240
 )
-(:addr XXXXXXXXX :width 320 :height 32 :bpp 1 :num_tiles 1 :tilesize_bytes 1280)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 1 :num-tiles 1 :tilesize-bytes 1280)
 
-(:addr XXXXXXXXX :width 320 :height 32 :bpp 2 :num_tiles 1 :tilesize_bytes 2560)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 2 :num-tiles 1 :tilesize-bytes 2560)
 
-(:addr XXXXXXXXX :width 320 :height 32 :bpp 4 :num_tiles 1 :tilesize_bytes 5120)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 4 :num-tiles 1 :tilesize-bytes 5120)
 
-(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num-tiles 1 :tilesize-bytes 10240
 )
-(:addr XXXXXXXXX :width 640 :height 16 :bpp 1 :num_tiles 1 :tilesize_bytes 1280)
+(:addr XXXXXXXXX :width 640 :height 16 :bpp 1 :num-tiles 1 :tilesize-bytes 1280)
 
-(:addr XXXXXXXXX :width 640 :height 16 :bpp 2 :num_tiles 1 :tilesize_bytes 2560)
+(:addr XXXXXXXXX :width 640 :height 16 :bpp 2 :num-tiles 1 :tilesize-bytes 2560)
 
-(:addr XXXXXXXXX :width 640 :height 16 :bpp 4 :num_tiles 1 :tilesize_bytes 5120)
+(:addr XXXXXXXXX :width 640 :height 16 :bpp 4 :num-tiles 1 :tilesize-bytes 5120)
 
-(:addr XXXXXXXXX :width 640 :height 16 :bpp 8 :num_tiles 1 :tilesize_bytes 10240
+(:addr XXXXXXXXX :width 640 :height 16 :bpp 8 :num-tiles 1 :tilesize-bytes 10240
 )
 nil
 

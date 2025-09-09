@@ -1,19 +1,17 @@
 'start
 (vera :display :enable)
 (vera :sprites :enable)
-(vera_display_enable 1)
-(vera_sprites_enable 1)
 (defvar w 64)
 (defvar h 64)
 (defvar bpp 8)
-(vera :tileset 0 :width w :height h :bpp bpp :num_tiles 8)
+(vera :tileset 0 :width w :height h :bpp bpp :num-tiles 8)
 (vera :tileset 0 :info)
 (vera :sprite 1 :init)
 (vera :sprite 1 :tileset 0 :tile 2)
-(vera :sprite 1 :z VERA_SPRITE_Z_L1)
+(vera :sprite 1 :z +vera-sprite-z-l1+)
 (dotimes (yy h)
   (dotimes (xx (min w (1+ yy)))
-    (vera_tileset_pixel 0 2 xx yy VERA_COLOR_CYAN)))
+    (vera-tileset-pixel 0 2 xx yy +vera-color-cyan+)))
 
 
 

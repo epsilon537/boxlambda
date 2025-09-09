@@ -6,11 +6,11 @@ XXXXXX> (vera :display :enable)
 XXXXXX> (vera :sprites :enable)
 1
 
-XXXXXX> (vera :map 0 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
-(:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
+XXXXXX> (vera :map 0 :width 32 :height 32 :map-type +vera-map-type-tile+)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 2)
 
-XXXXXX> (vera :map 1 :width 32 :height 32 :map_type VERA_MAP_TYPE_TILE)
-(:addr XXXXXXXXX :width 32 :height 32 :map_type 2)
+XXXXXX> (vera :map 1 :width 32 :height 32 :map-type +vera-map-type-tile+)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 2)
 
 XXXXXX> (vera :layer 0 :map 0)
 0
@@ -34,8 +34,8 @@ h
 XXXXXX> (defvar bpp 8)
 bpp
 
-XXXXXX> (vera :tileset 1 :width w :height h :bpp bpp :num_tiles 8)
-(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num_tiles 8 :tilesize_bytes 64)
+XXXXXX> (vera :tileset 1 :width w :height h :bpp bpp :num-tiles 8)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num-tiles 8 :tilesize-bytes 64)
 
 XXXXXX> (vera :layer 0 :tileset 1)
 1
@@ -52,18 +52,18 @@ nil
 XXXXXX> (vera :sprite 1 :tileset)
 (:tileset 1 :tile 2)
 
-XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_DIS)
+XXXXXX> (vera :sprite 1 :z +vera-sprite-z-dis+)
 0
 
 XXXXXX> (vera :sprite 1 :z)
 0
 
-XXXXXX> (vera :sprite 1 :pal_offset 1)
+XXXXXX> (vera :sprite 1 :pal-offset 1)
 1
 
 XXXXXX> (dotimes (yy h)
   (dotimes (xx (min w (1+ yy)))
-    (vera_tileset_pixel 1 2 xx yy VERA_COLOR_CYAN)))
+    (vera-tileset-pixel 1 2 xx yy +vera-color-cyan+)))
 nil
 
 XXXXXX>
@@ -84,7 +84,7 @@ XXXXXX> (print (vera :linecapture :pixel :x 0))
 (:r 0 :g 0 :b 0)
 
 XXXXXX>
-(vera :sprite 1 :z VERA_SPRITE_Z_BG_L0)
+(vera :sprite 1 :z +vera-sprite-z-bg-l0+)
 1
 
 XXXXXX> (vera :sprite 1 :z)
@@ -116,7 +116,7 @@ XXXXXX> (print (vera :linecapture :pixel :x 0))
 (:r 10 :g 15 :b 14)
 (:r 10 :g 15 :b 14)
 
-XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L0_L1)
+XXXXXX> (vera :sprite 1 :z +vera-sprite-z-l0-l1+)
 2
 
 XXXXXX> (vera :sprite 1 :z)
@@ -147,7 +147,7 @@ XXXXXX> (print (vera :linecapture :pixel :x 0))
 (:r 8 :g 6 :b 6)
 (:r 8 :g 6 :b 6)
 
-XXXXXX> (vera :sprite 1 :z VERA_SPRITE_Z_L1)
+XXXXXX> (vera :sprite 1 :z +vera-sprite-z-l1+)
 3
 
 XXXXXX> (vera :sprite 1 :z)

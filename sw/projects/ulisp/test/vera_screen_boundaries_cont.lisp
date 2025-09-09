@@ -2,7 +2,7 @@
 (vera :display :enable)
 (vera :display :enabled)
 
-(vera :bordercolor VERA_COLOR_BLUE)
+(vera :bordercolor +vera-color-blue+)
 (vera :bordercolor)
 
 (vera :boundaries :hstart 100 :hstop 540 :vstart 100 :vstop 380)

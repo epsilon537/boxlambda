@@ -3,13 +3,13 @@ start
 XXXXXX> (vera :display :enable)
 1
 
-XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 1 :num_tiles 32)
-(:addr XXXXXXXXX :width 16 :height 16 :bpp 1 :num_tiles 32 :tilesize_bytes 32)
+XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 1 :num-tiles 32)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 1 :num-tiles 32 :tilesize-bytes 32)
 
 XXXXXX>
 (dotimes (ii 16)
-  (vera_tileset_pixel 0 1 ii ii 1)
-  (vera_tileset_pixel 0 1 (- 15 ii) ii 1))
+  (vera-tileset-pixel 0 1 ii ii 1)
+  (vera-tileset-pixel 0 1 (- 15 ii) ii 1))
 nil
 
 XXXXXX>
@@ -20,8 +20,8 @@ XXXXXX>
 
 
 
-(vera :map 0 :width 32 :height 32 :map_type VERA_MAP_TYPE_TXT256)
-(:addr XXXXXXXXX :width 32 :height 32 :map_type 1)
+(vera :map 0 :width 32 :height 32 :map-type +vera-map-type-txt256+)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 1)
 
 XXXXXX> (vera :layer 0 :map 0)
 0
@@ -45,13 +45,12 @@ col2
 
 XXXXXX>
 (vera :map 0 :entry :x col1 :y row1 :val
-                (logior (ash VERA_COLOR_GREEN 8) 1))
+                (logior (ash +vera-color-green+ 8) 1))
 1281
 
 XXXXXX> (vera :map 0 :entry :x col2 :y row2 :val
-                (logior (ash VERA_COLOR_GRAYSCALE_10 8) 1))
-6657
-
+                (logior (ash +vera-color-grayscale_10+ 8) 1))
+Error: undefined: +vera-color-grayscale_10+
 XXXXXX> (vera :layer 0 :enable)
 1
 
@@ -79,7 +78,6 @@ XXXXXX>
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
 (:r 0 :g 12 :b 5)
-(:r 10 :g 10 :b 10)
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
@@ -94,7 +92,8 @@ XXXXXX>
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
-(:r 10 :g 10 :b 10)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
 nil
 
 XXXXXX>

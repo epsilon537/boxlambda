@@ -1,25 +1,25 @@
 start
 
-XXXXXX> (vera :tileset 0 :width 8 :height 8 :bpp 1 :num_tiles 1)
-(:addr XXXXXXXXX :width 8 :height 8 :bpp 1 :num_tiles 1 :tilesize_bytes 8)
+XXXXXX> (vera :tileset 0 :width 8 :height 8 :bpp 1 :num-tiles 1)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 1 :num-tiles 1 :tilesize-bytes 8)
 
 XXXXXX> (vera :layer 0 :bitmap :tileset 0 :tile 0)
-Error: 'vera_layer_bitmap' invalid argument: 0
+Error: 'vera-layer-bitmap' invalid argument: 0
 XXXXXX> (vera :sprite 0 :init)
 nil
 
 XXXXXX> (vera :sprite 0 :tileset 0 :tile 0)
-Error: 'vera_sprite_tile' invalid argument: 0
+Error: 'vera-sprite-tile' invalid argument: 0
 XXXXXX> (vera :tileset 0 :deinit)
 nil
 
-XXXXXX> (vera :tileset 0 :width 320 :height 8 :bpp 4 :num_tiles 1)
-(:addr XXXXXXXXX :width 320 :height 8 :bpp 4 :num_tiles 1 :tilesize_bytes 1280)
+XXXXXX> (vera :tileset 0 :width 320 :height 8 :bpp 4 :num-tiles 1)
+(:addr XXXXXXXXX :width 320 :height 8 :bpp 4 :num-tiles 1 :tilesize-bytes 1280)
 
 XXXXXX> (vera :sprite 0 :tileset 0 :tile 0)
-Error: 'vera_sprite_tile' invalid argument: 0
+Error: 'vera-sprite-tile' invalid argument: 0
 XXXXXX> (vera :layer 0 :tileset 0)
-Error: 'vera_layer_tileset' invalid argument: 0
+Error: 'vera-layer-tileset' invalid argument: 0
 XXXXXX>
 'end
 end

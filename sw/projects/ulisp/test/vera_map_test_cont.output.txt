@@ -6,12 +6,12 @@ nil
 XXXXXX>
 (let ((idx 0))
   (dolist (wh (list (cons 32 256) (cons 256 32)))
-    (vera :map idx :width (car wh) :height (cdr wh) :map_type (mod idx 3))
+    (vera :map idx :width (car wh) :height (cdr wh) :map-type (mod idx 3))
     (print (vera :map idx :info))
      (setq idx (1+ idx))))
 
-(:addr XXXXXXXXX :width 32 :height 256 :map_type 0)
-(:addr XXXXXXXXX :width 256 :height 32 :map_type 1)
+(:addr XXXXXXXXX :width 32 :height 256 :map-type 0)
+(:addr XXXXXXXXX :width 256 :height 32 :map-type 1)
 nil
 
 XXXXXX> (dotimes (ii 2)
