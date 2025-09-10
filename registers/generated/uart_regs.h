@@ -94,9 +94,9 @@ typedef union {
     uint32_t RX_H : 1; // Rx FIFO high order fill bit set.
     uint32_t RX_FILL : 10; // Number of filled entries in Rx FIFO.
     uint32_t RX_LGLN : 4; // Log base 2 of FIFO length.
-    uint32_t TX_Z : 1; // Space available in Tx FIFO.
+    uint32_t TX_Z : 1; // Space is available in Tx FIFO.
     uint32_t TX_H : 1; // Tx FIFO high order fill bit set.
-    uint32_t TX_FILL : 10; // Number of available spaces in Tx FIFO.
+    uint32_t TX_AVL : 10; // Number of available spaces in Tx FIFO.
     uint32_t TX_LGLN : 4; // Log base 2 of FIFO length.
   };
 } uart_fifo_t;
@@ -125,7 +125,7 @@ typedef union {
 #define UART_FIFO_RX_LGLN_MASK 0xf000
 #define UART_FIFO_RX_LGLN_RESET 0x0
 
-// FIFO.TX_Z - Space available in Tx FIFO.
+// FIFO.TX_Z - Space is available in Tx FIFO.
 #define UART_FIFO_TX_Z_WIDTH 1
 #define UART_FIFO_TX_Z_LSB 16
 #define UART_FIFO_TX_Z_MASK 0x10000
@@ -137,11 +137,11 @@ typedef union {
 #define UART_FIFO_TX_H_MASK 0x20000
 #define UART_FIFO_TX_H_RESET 0x0
 
-// FIFO.TX_FILL - Number of available spaces in Tx FIFO.
-#define UART_FIFO_TX_FILL_WIDTH 10
-#define UART_FIFO_TX_FILL_LSB 18
-#define UART_FIFO_TX_FILL_MASK 0xffc0000
-#define UART_FIFO_TX_FILL_RESET 0x0
+// FIFO.TX_AVL - Number of available spaces in Tx FIFO.
+#define UART_FIFO_TX_AVL_WIDTH 10
+#define UART_FIFO_TX_AVL_LSB 18
+#define UART_FIFO_TX_AVL_MASK 0xffc0000
+#define UART_FIFO_TX_AVL_RESET 0x0
 
 // FIFO.TX_LGLN - Log base 2 of FIFO length.
 #define UART_FIFO_TX_LGLN_WIDTH 4

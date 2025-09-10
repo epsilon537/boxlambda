@@ -177,7 +177,7 @@ int main(void) {
 
   printf("Current time: %d\n", MTIMER_GET_RAW_MTIME_LOW());
   //This is enough to fill the UART TX FIFO more than halfway.
-  uart_tx_string("0123456789\n");
+  uart_tx_string("012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789\n");
 
   //Clear any pending Tx interrupts before enabling them in the UART core.
   uart_irq_ack(UART_ISR_TX_FIFO_EMPTY_MASK);
@@ -234,7 +234,7 @@ int main(void) {
 
   done = 0;
 
-  printf("Please enter 8 characters. They will be echoed when all 8 characters are received.\n");
+  printf("Please enter 64 characters. They will be echoed when all 64 characters are received.\n");
 
   while (!done) {
     //Fires when the RX FIFO is half full.

@@ -1,0 +1,36 @@
+start
+
+XXXXXX> (vera :init)
+nil
+
+XXXXXX> (vera :map 0 :width 32 :height 32 :map-type 0)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 0)
+
+XXXXXX> (vera :map 0 :width 32 :height 32 :map-type 0)
+Error: 'vera-map' already initialized: 0
+XXXXXX> (vera :map 0 :deinit)
+nil
+
+XXXXXX> (vera :map 0 :deinit)
+nil
+
+XXXXXX> (vera :map 1 :width 32)
+Error: Missing argument: :height. Table: ((:map . 1) (:width . 32))
+XXXXXX> (vera :map 1 :width 32 :height 64)
+Error: Missing argument: :map-type. Table: ((:map . 1) (:width . 32) (:height .
+64))
+XXXXXX> (vera :map 100 :width 32 :height 32 :map-type 0)
+Error: 'vera-map' invalid argument: 100
+XXXXXX> (vera :map 2 :width 33 :height 32 :map-type 0)
+Error: 'vera-map' invalid argument: 33
+XXXXXX> (vera :map 2 :width 32 :height 33 :map-type 0)
+Error: 'vera-map' invalid argument: 33
+XXXXXX> (vera :map 2 :width 32 :height 32 :map-type 5)
+Error: 'vera-map' invalid argument: 5
+XXXXXX> (vera :map 3 :width 256 :height 256 :map-type 0)
+(:addr XXXXXXXXX :width 256 :height 256 :map-type 0)
+
+XXXXXX> (vera :map 4 :width 32 :height 32 :map-type 0)
+Error: 'vera-map' insufficient resources
+XXXXXX> 'end
+end

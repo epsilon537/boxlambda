@@ -146,7 +146,7 @@ static int uart_tx_irq_test(void) {
 static int uart_rx_irq_test_single(void) {
   int done = 0;
 
-  while (!done && (contextp->time() < 7000000)) {
+  while (!done && (contextp->time() < 8000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
@@ -170,7 +170,7 @@ static int uart_rx_irq_test_single(void) {
    */
   done = 0;
 
-  while (!done && (contextp->time() < 8000000)) {
+  while (!done && (contextp->time() < 10000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
@@ -195,11 +195,11 @@ static int uart_rx_irq_test_single(void) {
 static int uart_rx_irq_test_seq(void) {
   int done = 0;
 
-  while (!done && (contextp->time() < 10000000)) {
+  while (!done && (contextp->time() < 12000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
-    std::string uartCheckString("Please enter 8 characters. They will be echoed when all 8 characters are received.");
+    std::string uartCheckString("Please enter 64 characters. They will be echoed when all 64 characters are received.");
 
     if (uartRxStringPrev.find(uartCheckString) != std::string::npos)
       done = 1;
@@ -214,7 +214,7 @@ static int uart_rx_irq_test_seq(void) {
 
   done = 0;
 
-  char strToSend[] = "Hello World!";
+  char strToSend[] = "0123456789012345678901234567890123456789012345678901234567890123";
   char *strPtr = &strToSend[0];
   char *strPtrEnd = strPtr + strlen(strToSend);
 
@@ -237,7 +237,7 @@ static int uart_rx_irq_test_seq(void) {
 
   done = 0;
 
-  while (!done && (contextp->time() < 18000000)) {
+  while (!done && (contextp->time() < 41000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
@@ -275,7 +275,7 @@ static int uart_rx_irq_test_seq(void) {
 
   done = 0;
 
-  while (!done && (contextp->time() < 24000000)) {
+  while (!done && (contextp->time() < 80000000)) {
     // Evaluate model
     tick(0 /*gp_in*/);
 
@@ -297,7 +297,7 @@ int gpio_test(void) {
   int done = 0;
   unsigned gp_in = 0;
 
-  while (!done && (contextp->time() < 25000000)) {
+  while (!done && (contextp->time() < 80000000)) {
     // Evaluate model
     tick(gp_in);
 
@@ -319,7 +319,7 @@ int gpio_test(void) {
   int button0pushed = 0, button1pushed = 0;
   int led0turnedOn = 0, led1turnedOn = 0;
 
-  while (!done && (contextp->time() < 25000000)) {
+  while (!done && (contextp->time() < 100000000)) {
     // Evaluate model
     tick(gp_in);
 

@@ -1,0 +1,83 @@
+start
+
+XXXXXX> (vera :display :enable)
+1
+
+XXXXXX> (vera :display :enabled)
+1
+
+XXXXXX>
+(vera :bordercolor +vera-color-blue+)
+6
+
+XXXXXX> (vera :bordercolor)
+6
+
+XXXXXX>
+(vera :boundaries :hstart 100 :hstop 540 :vstart 100 :vstop 380)
+(:hstart 100 :hstop 540 :vstart 100 :vstop 380)
+
+XXXXXX> (vera :boundaries)
+(:hstart 100 :hstop 540 :vstart 100 :vstop 380)
+
+XXXXXX>
+(vera :irqline 379)
+379
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 99))
+
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+
+XXXXXX> (print (vera :linecapture :pixel :x 100))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x 539))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x 540))
+
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+
+XXXXXX>
+
+(vera :irqline 380)
+380
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 100))
+
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+
+XXXXXX> (print (vera :linecapture :pixel :x 539))
+
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+
+XXXXXX>
+(vera :display :disable)
+0
+
+XXXXXX> (vera :display :enabled)
+0
+
+XXXXXX>
+'end
+end

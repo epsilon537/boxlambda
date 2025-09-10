@@ -103,9 +103,9 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | TX_LGLN          | 31:28  | ro              | 0x0        | Log base 2 of FIFO length. |
-| TX_FILL          | 27:18  | ro              | 0x00       | Number of available spaces in Tx FIFO. |
+| TX_AVL           | 27:18  | ro              | 0x00       | Number of available spaces in Tx FIFO. |
 | TX_H             | 17     | ro              | 0x0        | Tx FIFO high order fill bit set. |
-| TX_Z             | 16     | ro              | 0x0        | Space available in Tx FIFO. |
+| TX_Z             | 16     | ro              | 0x0        | Space is available in Tx FIFO. |
 | RX_LGLN          | 15:12  | ro              | 0x0        | Log base 2 of FIFO length. |
 | RX_FILL          | 11:2   | ro              | 0x00       | Number of filled entries in Rx FIFO. |
 | RX_H             | 1      | ro              | 0x0        | Rx FIFO high order fill bit set. |

@@ -1,0 +1,13 @@
+'start
+(vera :init)
+
+(let ((idx 0))
+  (dolist (wh (list (cons 32 256) (cons 256 32)))
+    (vera :map idx :width (car wh) :height (cdr wh) :map-type (mod idx 3))
+    (print (vera :map idx :info))
+     (setq idx (1+ idx))))
+(dotimes (ii 2)
+  (vera :map ii :deinit))
+
+'end
+

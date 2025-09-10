@@ -229,9 +229,9 @@ bool Vera_map::init(Vera_map_size_t width, Vera_map_size_t height, Vera_map_type
 }
 
 void Vera_map::deinit() {
-  assert(initialized_);
+  if (initialized_)
+    vera.vram_free(map_base_);
 
-  vera.vram_free(map_base_);
   initialized_ = false;
 }
 
@@ -323,8 +323,9 @@ bool Vera_tileset::init(Vera_tile_size_t width, uint32_t height, Vera_bpp_t bpp,
 }
 
 void Vera_tileset::deinit() {
-  assert(initialized_);
-  vera.vram_free(tileset_base_);
+  if (initialized_)
+    vera.vram_free(tileset_base_);
+
   initialized_ = false;
 }
 
@@ -357,7 +358,7 @@ uint8_t Vera_tileset::pixel_get(uint32_t tile_idx, uint32_t x, uint32_t y) {
 void Vera_sprite::init() {
   assert(attrs_);
 
-  tileset_id_ = ~0U;
+  tileset_id_ = VERA_TILESET_ID_UNKNOWN;
   tile_idx_ = 0;
   x_ = 0;
   y_ = 0;
@@ -473,13 +474,14 @@ void Vera_sprite::set_attr_byte6_() {
 
 void Vera_sprite::set_attr_byte7_() {
   assert(attrs_);
-  assert(tileset_id_ < VERA_NUM_TILESETS);
 
   Vera_tileset& tileset = vera.tileset[tileset_id_];
 
   uint8_t bb = pal_offset_;
-  bb |= tile_sz_enc(tileset.width())<<4;
-  bb |= tile_sz_enc(tileset.height())<<6;
+  if (tileset_id_ != VERA_TILESET_ID_UNKNOWN) {
+    bb |= tile_sz_enc(tileset.width())<<4;
+    bb |= tile_sz_enc(tileset.height())<<6;
+  }
 
   uint8_t *attrb_ = (uint8_t*)(&attrs_[3]) + 1;
   *attrb_ = bb;
@@ -625,15 +627,25 @@ Vera::Vera() {
 }
 
 void Vera::init() {
-  memset(vram_blocks_, 0, sizeof(vram_blocks_));
 
   for (int ii=0; ii<VERA_NUM_SPRITES; ii++) {
     sprite[ii].set_id_(ii);
+    sprite[ii].init();
   }
 
   //Initialize the layer objects
   layer[0].set_id_(0);
   layer[1].set_id_(1);
+
+  //Deinit the maps and tilesets (in case of a re-init)
+  for (int ii=0; ii<VERA_NUM_MAPS; ii++)
+    map[ii].deinit();
+
+  for (int ii=0; ii<VERA_NUM_TILESETS; ii++)
+    tileset[ii].deinit();
+
+  //Do this last to not confuse the deinits above.
+  memset(vram_blocks_, 0, sizeof(vram_blocks_));
 }
 
 Vera_rgb_t Vera::line_capture_read_pixel(uint32_t x) {

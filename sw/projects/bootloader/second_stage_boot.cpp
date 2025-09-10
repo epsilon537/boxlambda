@@ -10,6 +10,7 @@
 #include "gpio.h"
 #include "memmap.h"
 #include "flashdrvr.h"
+#include "uart.h"
 
 #define GPIO_SPIN_INDICATOR 0x0
 
@@ -44,6 +45,9 @@ int main(void) {
   }
 
   printf("Starting SW image...\n");
+
+  uart_tx_flush();
+
  __asm__ volatile (
     //Jump to start vector
       "jr     0x80(x0)           \n"

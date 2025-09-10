@@ -1,0 +1,80 @@
+start
+
+XXXXXX> (defvar cols 32)
+cols
+
+XXXXXX> (defvar rows 32)
+rows
+
+XXXXXX> (vera :map 0 :width cols :height rows :map-type +vera-map-type-txt16+)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 0)
+
+XXXXXX> (vera :map 0 :entry :x cols :y 0
+      :val (logior (ash +vera-color-blue+ 12) (ash +vera-color-white+ 8) 1))
+Error: 'vera-map-entry' invalid argument: 32
+XXXXXX> (vera :map 0 :entry :x 0 :y rows
+      :val (logior (ash +vera-color-purple+ 12) (ash +vera-color-yellow+ 8) 1))
+Error: 'vera-map-entry' invalid argument: 32
+XXXXXX> (vera :map 0 :deinit)
+nil
+
+XXXXXX>
+(setq cols 64)
+64
+
+XXXXXX> (setq rows 64)
+64
+
+XXXXXX> (vera :map 0 :width cols :height rows :map-type +vera-map-type-txt16+)
+(:addr XXXXXXXXX :width 64 :height 64 :map-type 0)
+
+XXXXXX> (vera :map 0 :entry :x cols :y 0
+      :val (logior (ash +vera-color-blue+ 12) (ash +vera-color-white+ 8) 1))
+Error: 'vera-map-entry' invalid argument: 64
+XXXXXX> (vera :map 0 :entry :x 0 :y rows
+      :val (logior (ash +vera-color-purple+ 12) (ash +vera-color-yellow+ 8) 1))
+Error: 'vera-map-entry' invalid argument: 64
+XXXXXX> (vera :map 0 :deinit)
+nil
+
+XXXXXX>
+(setq cols 128)
+128
+
+XXXXXX> (setq rows 128)
+128
+
+XXXXXX> (vera :map 0 :width cols :height rows :map-type +vera-map-type-txt16+)
+(:addr XXXXXXXXX :width 128 :height 128 :map-type 0)
+
+XXXXXX> (vera :map 0 :entry :x cols :y 0
+      :val (logior (ash +vera-color-blue+ 12) (ash +vera-color-white+ 8) 1))
+Error: 'vera-map-entry' invalid argument: 128
+XXXXXX> (vera :map 0 :entry :x 0 :y rows
+      :val (logior (ash +vera-color-purple+ 12) (ash +vera-color-yellow+ 8) 1))
+Error: 'vera-map-entry' invalid argument: 128
+XXXXXX> (vera :map 0 :deinit)
+nil
+
+XXXXXX>
+(setq cols 256)
+256
+
+XXXXXX> (setq rows 256)
+256
+
+XXXXXX> (vera :map 0 :width cols :height rows :map-type +vera-map-type-txt16+)
+(:addr XXXXXXXXX :width 256 :height 256 :map-type 0)
+
+XXXXXX> (vera :map 0 :entry :x cols :y 0
+      :val (logior (ash +vera-color-blue+ 12) (ash +vera-color-white+ 8) 1))
+Error: 'vera-map-entry' invalid argument: 256
+XXXXXX> (vera :map 0 :entry :x 0 :y rows
+      :val (logior (ash +vera-color-purple+ 12) (ash +vera-color-yellow+ 8) 1))
+Error: 'vera-map-entry' invalid argument: 256
+XXXXXX> (vera :map 0 :deinit)
+nil
+
+XXXXXX>
+'end
+end

@@ -1,0 +1,57 @@
+start
+
+XXXXXX> (dotimes (jj 2)
+  (let ((idx 0))
+    (dolist (wh (list (cons 8 8) (cons 16 16) (cons 32 32) (cons 64 64)))
+      (dolist (bpp (list 1 2 4 8))
+        (vera :tileset idx :width (car wh) :height (cdr wh) :bpp bpp :num-tiles
+8)
+        (print (vera :tileset idx :info))
+        (setq idx (1+ idx)))))
+  (dotimes (ii 16)
+    (vera :tileset ii :deinit)))
+
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 1 :num-tiles 8 :tilesize-bytes 8)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 2 :num-tiles 8 :tilesize-bytes 16)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 4 :num-tiles 8 :tilesize-bytes 32)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num-tiles 8 :tilesize-bytes 64)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 1 :num-tiles 8 :tilesize-bytes 32)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 2 :num-tiles 8 :tilesize-bytes 64)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 4 :num-tiles 8 :tilesize-bytes 128)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num-tiles 8 :tilesize-bytes 256)
+(:addr XXXXXXXXX :width 32 :height 32 :bpp 1 :num-tiles 8 :tilesize-bytes 128)
+(:addr XXXXXXXXX :width 32 :height 32 :bpp 2 :num-tiles 8 :tilesize-bytes 256)
+(:addr XXXXXXXXX :width 32 :height 32 :bpp 4 :num-tiles 8 :tilesize-bytes 512)
+(:addr XXXXXXXXX :width 32 :height 32 :bpp 8 :num-tiles 8 :tilesize-bytes 1024)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 1 :num-tiles 8 :tilesize-bytes 512)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 2 :num-tiles 8 :tilesize-bytes 1024)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 4 :num-tiles 8 :tilesize-bytes 2048)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 8 :num-tiles 8 :tilesize-bytes 4096)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 1 :num-tiles 8 :tilesize-bytes 8)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 2 :num-tiles 8 :tilesize-bytes 16)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 4 :num-tiles 8 :tilesize-bytes 32)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num-tiles 8 :tilesize-bytes 64)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 1 :num-tiles 8 :tilesize-bytes 32)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 2 :num-tiles 8 :tilesize-bytes 64)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 4 :num-tiles 8 :tilesize-bytes 128)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num-tiles 8 :tilesize-bytes 256)
+(:addr XXXXXXXXX :width 32 :height 32 :bpp 1 :num-tiles 8 :tilesize-bytes 128)
+(:addr XXXXXXXXX :width 32 :height 32 :bpp 2 :num-tiles 8 :tilesize-bytes 256)
+(:addr XXXXXXXXX :width 32 :height 32 :bpp 4 :num-tiles 8 :tilesize-bytes 512)
+(:addr XXXXXXXXX :width 32 :height 32 :bpp 8 :num-tiles 8 :tilesize-bytes 1024)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 1 :num-tiles 8 :tilesize-bytes 512)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 2 :num-tiles 8 :tilesize-bytes 1024)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 4 :num-tiles 8 :tilesize-bytes 2048)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 8 :num-tiles 8 :tilesize-bytes 4096)
+nil
+
+XXXXXX>
+(vera :tileset 0 :width 8 :height 8 :bpp 1 :num-tiles 1)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 1 :num-tiles 1 :tilesize-bytes 8)
+
+XXXXXX> (vera :tileset 1 :width 8 :height 8 :bpp 1 :num-tiles 1023)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 1 :num-tiles 1023 :tilesize-bytes 8)
+
+XXXXXX>
+'end
+end

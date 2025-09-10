@@ -1,0 +1,77 @@
+start
+
+XXXXXX> (vera :display :enable)
+1
+
+XXXXXX> (vera :layer 0 :enable)
+1
+
+XXXXXX> (dolist (w (list 320 640))
+  (dolist (h (list 32 64))
+    (vera :tileset 0 :width w :height h :bpp 1 :num-tiles 1)
+    (print (vera :tileset 0 :info))
+    (vera :layer 0 :bitmap :tileset 0 :tile 0)
+    (vera :pixel :tileset 0 :tile 0 :x 0 :y 0 :val 101)
+    (vera :pixel :tileset 0 :tile 0 :x (- w 1) :y 0 :val 101)
+    (vera :pixel :tileset 0 :tile 0 :x 0 :y (- h 1) :val 101)
+    (vera :pixel :tileset 0 :tile 0 :x (- w 1) :y (- h 1) :val 101)
+    (vera :irqline 0)
+    (vera :linecapture :enable)
+    (loop (if (= (vera :linecapture :enabled) 0) (return)))
+    (print (vera :linecapture :pixel :x 0))
+    (print (vera :linecapture :pixel :x 1))
+    (print (vera :linecapture :pixel :x (- w 2)))
+    (print (vera :linecapture :pixel :x (- w 1)))
+    (vera :irqline 1)
+    (vera :linecapture :enable)
+    (loop (if (= (vera :linecapture :enabled) 0) (return)))
+    (print (vera :linecapture :pixel :x 0))
+    (print (vera :linecapture :pixel :x 1))
+    (print (vera :linecapture :pixel :x (- w 2)))
+    (print (vera :linecapture :pixel :x (- w 1)))
+    (vera :irqline (- h 1))
+    (vera :linecapture :enable)
+    (loop (if (= (vera :linecapture :enabled) 0) (return)))
+    (print (vera :linecapture :pixel :x 0))
+    (print (vera :linecapture :pixel :x 1))
+    (print (vera :linecapture :pixel :x (- w 2)))
+    (print (vera :linecapture :pixel :x (- w 1)))
+    (vera :irqline h)
+    (vera :linecapture :enable)
+    (loop (if (= (vera :linecapture :enabled) 0) (return)))
+    (print (vera :linecapture :pixel :x 0))
+    (print (vera :linecapture :pixel :x 1))
+    (print (vera :linecapture :pixel :x (- w 2)))
+    (print (vera :linecapture :pixel :x (- w 1)))
+    (vera :pixel :tileset 0 :tile 0 :x 0 :y 0 :val 0)
+    (vera :pixel :tileset 0 :tile 0 :x (- w 1) :y 0 :val 0)
+    (vera :pixel :tileset 0 :tile 0 :x 0 :y (- h 1) :val 0)
+    (vera :pixel :tileset 0 :tile 0 :x (- w 1) :y (- h 1) :val 0)
+    (vera :pixel :tileset 0 :deinit)))
+
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 1 :num-tiles 1 :tilesize-bytes 1280)
+
+(:r 15 :g 15 :b 15)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 15 :g 15 :b 15)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 15 :g 15 :b 15)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 15 :g 15 :b 15)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0) Error: Missing argument: :tile. Table: ((:pixel) (:tileset . 0)
+ (:deinit))
+XXXXXX>
+
+
+
+
+'end
+end

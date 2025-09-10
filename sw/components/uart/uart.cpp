@@ -6,6 +6,9 @@
 #define PAD_RIGHT 1
 #define PAD_ZERO  2
 
+/* This constant has to match the hardware */
+#define TX_FIFO_SZ 128
+
 /* the following should be enough for 32 bit int */
 #define PRINT_BUF_LEN 32
 
@@ -37,7 +40,7 @@ void uart_configure(uart_setup_pft_t parity, uart_setup_s_t stop_bits, uart_setu
 
 void uart_tx_flush(void)
 {
-  while (UART->FIFO_bf.TX_FILL);
+  while (UART->FIFO_bf.TX_AVL != (TX_FIFO_SZ-1));
 }
 
 int uart_tx_ready(void)

@@ -108,7 +108,7 @@ regmap:
         lsb: 12
         access: ro
     -   name: TX_Z
-        description: Space available in Tx FIFO.
+        description: Space is available in Tx FIFO.
         width: 1
         lsb: 16
         access: ro
@@ -117,7 +117,7 @@ regmap:
         width: 1
         lsb: 17
         access: ro
-    -   name: TX_FILL
+    -   name: TX_AVL
         description: Number of available spaces in Tx FIFO.
         width: 10
         lsb: 18

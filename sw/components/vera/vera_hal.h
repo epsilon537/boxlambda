@@ -33,6 +33,8 @@
 #define VERA_NUM_MAPS 32
 #define VERA_NUM_TILESETS 32
 
+#define VERA_TILESET_ID_UNKNOWN ~0U
+
 // Vera default color palette.
 // The first 16 color are the C64 color palette.
 #define VERA_COLOR_BLACK 0

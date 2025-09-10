@@ -7,7 +7,7 @@
 #if defined(BOARD_BOXLAMBDA)
 // Lisp Library
 //const char LispLibrary[] = "";
-#include "LispLibrary.h"
+#include "LispLibrary.lisp"
 #endif
 
 // Compile options
@@ -22,7 +22,7 @@
 #endif
 #define assemblerlist
 #define lineeditor
-#define vt100
+//#define vt100
 #if defined(BOARD_BOXLAMBDA)
 #define extensions
 #endif

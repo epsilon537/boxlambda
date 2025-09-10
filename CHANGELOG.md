@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `v0.2.1`: Changes sinces label `v0.2.0` - 2025-09-08
+
+### Added
+
+- uLisp vera convenience API. Type `(vera)` or see documentation for more info.
+
+### Fixed
+
+- Fixed uart_tx_flush() implementation.
+- Vera reinitialization (`vera_init`) releases all allocated VRAM resources.
+- Bootloader: Flush pending UART TX output before transfering control to
+application.
+- Fixed a sprite 0 rendering bug in the vera_wishbone core.
+
+### Changed
+
+- Disabled UART hardware flow control support in gateware. Hardware flow control
+  signals are not hooked up on Arty A7.
+- Increased UART FIFO depth from 16 to 128 to improve line-line copy-paste
+behavior into terminal emulator.
+- Renamed UART TX FIFO TX_FILL bitfield to more accurate name TX_AVL.
+- VERA HAL: Allow multiple map/tileset deinit()s.
+
+### Removed
+
+- Nothing.
+
 ## Label `v0.2.0`: Changes sinces label `v0.1.0` - 2025-08-19
 
 ### Added

@@ -1,0 +1,95 @@
+start
+
+XXXXXX> (vera :display :enable)
+1
+
+XXXXXX> (vera :sprites :enable)
+1
+
+XXXXXX>
+(defvar w 64)
+w
+
+XXXXXX> (defvar h 64)
+h
+
+XXXXXX> (defvar bpp 8)
+bpp
+
+XXXXXX> (vera :tileset 0 :width w :height h :bpp bpp :num-tiles 8)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 8 :num-tiles 8 :tilesize-bytes 4096)
+
+XXXXXX> (vera :tileset 0 :info)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 8 :num-tiles 8 :tilesize-bytes 4096)
+
+XXXXXX> (vera :sprite 1 :init)
+nil
+
+XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
+nil
+
+XXXXXX> (vera :sprite 1 :z +vera-sprite-z-l1+)
+3
+
+XXXXXX> (vera :sprite 2 :init)
+nil
+
+XXXXXX> (vera :sprite 2 :tileset 0 :tile 2)
+nil
+
+XXXXXX> (vera :sprite 2 :z +vera-sprite-z-l1+)
+3
+
+XXXXXX> (dotimes (yy h)
+  (dotimes (xx (min w (1+ yy)))
+    (vera-tileset-pixel 0 2 xx yy +vera-color-cyan+)))
+nil
+
+XXXXXX>
+
+
+
+
+
+
+
+
+
+(vera :sprite 1 :x 40 :y 50)
+40
+
+XXXXXX> (vera :sprite 2 :x 200 :y 200)
+200
+
+XXXXXX> (vera :sprite 1 :mask 1)
+1
+
+XXXXXX> (vera :sprite 2 :mask 1)
+1
+
+XXXXXX> (vera :sprite 1 :mask)
+1
+
+XXXXXX> (vera :sprite 2 :mask)
+1
+
+XXXXXX> (vera :ien :set :mask +vera-irq-sprcol+)
+4
+
+XXXXXX> (vera :isr :get)
+0
+
+XXXXXX>
+(vera :sprite 2 :x 40 :y 50)
+40
+
+XXXXXX>
+
+
+
+(vera :isr :get)
+4
+
+XXXXXX>
+'end
+end

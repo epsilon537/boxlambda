@@ -1,0 +1,48 @@
+start
+
+XXXXXX> (vera :init)
+nil
+
+XXXXXX> (vera :tileset 0 :width 320 :height 1 :bpp 1 :num-tiles 1)
+(:addr XXXXXXXXX :width 320 :height 1 :bpp 1 :num-tiles 1 :tilesize-bytes 40)
+
+XXXXXX> (vera :map 0 :width 32 :height 32 :map-type 1)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 1)
+
+XXXXXX> (vera :tileset 0 :info)
+(:addr XXXXXXXXX :width 320 :height 1 :bpp 1 :num-tiles 1 :tilesize-bytes 40)
+
+XXXXXX> (vera :map 0 :info)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 1)
+
+XXXXXX> (vera :init)
+nil
+
+XXXXXX> (vera :tileset 0 :info)
+nil
+
+XXXXXX> (vera :map 0 :info)
+nil
+
+XXXXXX> (vera :tileset 0 :width 320 :height 1 :bpp 1 :num-tiles 1)
+(:addr XXXXXXXXX :width 320 :height 1 :bpp 1 :num-tiles 1 :tilesize-bytes 40)
+
+XXXXXX> (vera :map 0 :width 32 :height 32 :map-type 1)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 1)
+
+XXXXXX> (vera :tileset 0 :deinit)
+nil
+
+XXXXXX> (vera :map 0 :deinit)
+nil
+
+XXXXXX>
+
+
+
+
+
+
+
+'end
+end
