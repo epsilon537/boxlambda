@@ -49,8 +49,9 @@ XXXXXX>
 1281
 
 XXXXXX> (vera :map 0 :entry :x col2 :y row2 :val
-                (logior (ash +vera-color-grayscale_10+ 8) 1))
-Error: undefined: +vera-color-grayscale_10+
+                (logior (ash +vera-color-grayscale-10+ 8) 1))
+6657
+
 XXXXXX> (vera :layer 0 :enable)
 1
 
@@ -78,6 +79,7 @@ XXXXXX>
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
 (:r 0 :g 12 :b 5)
+(:r 10 :g 10 :b 10)
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
@@ -92,8 +94,7 @@ XXXXXX>
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
 (:r 0 :g 0 :b 0)
-(:r 0 :g 0 :b 0)
-(:r 0 :g 0 :b 0)
+(:r 10 :g 10 :b 10)
 nil
 
 XXXXXX>

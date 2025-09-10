@@ -26,7 +26,7 @@
 (vera :map 0 :entry :x col1 :y row1 :val
                 (logior (ash +vera-color-green+ 8) 1))
 (vera :map 0 :entry :x col2 :y row2 :val
-                (logior (ash +vera-color-grayscale_10+ 8) 1))
+                (logior (ash +vera-color-grayscale-10+ 8) 1))
 (vera :layer 0 :enable)
 
 (dolist (rowcol (list (cons row1 col1) (cons row2 col2)))

@@ -10,5 +10,10 @@
         (setq idx (1+ idx)))))
   (dotimes (ii 9)
     (vera :map ii :deinit)))
+
+
+
+
+
 'end
 

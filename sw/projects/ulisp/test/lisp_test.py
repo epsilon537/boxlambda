@@ -182,7 +182,7 @@ def attach():
 
     end(ch)
 
-def all():
+def all(save_all=False):
     """Run all .lisp testcases in the current directory and record the
     result"""
     global result
@@ -193,7 +193,8 @@ def all():
         print(f)
         r = test(Path(f).stem)
         result[f] = r
-        save()
+        if save_all:
+            save()
 
     print("All:")
     print(result)
