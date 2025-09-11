@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed uart_tx_flush() implementation.
 - Vera reinitialization (`vera_init`) releases all allocated VRAM resources.
-- Bootloader: Flush pending UART TX output before transfering control to
+- Bootloader: Flush pending UART TX output before transferring control to
 application.
 - Fixed a sprite 0 rendering bug in the vera_wishbone core.
 
