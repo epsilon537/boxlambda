@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## VS0 - DFX Reconfigurable Partition
+# VS0 - DFX Reconfigurable Partition
 
 - **VS0 Stub** Component in the BoxLambda Directory Tree:
   [boxlambda/gw/components/vs0_stub](https://github.com/epsilon537/boxlambda/tree/master/gw/components/vs0_stub)
@@ -83,11 +83,11 @@ The register interface is borrowed from the PicoRV DMA Controller component. Thr
 
 If I were to integrate the J1B core into BoxLambda properly—something I might do in the future—I would hook up the complete interface, giving the J1B core full access to the entire BoxLambda SoC. However, doing so at this time would be a distraction from the task at hand: demonstrating DFX in BoxLambda. Hence, for now, the lazy, demo-like integration shown above.
 
-### VS0 Clock Frequency
+## VS0 Clock Frequency
 
 The VS0 core is part of the 50 MHz System Clock Domain.
 
-### Creating a New VS0 RM (DFX)
+## Creating a New VS0 RM (DFX)
 
 The easiest way to create a new VS0 RM is to copy the `vs0_stub` component directory and make the following modifications:
 
@@ -96,7 +96,7 @@ The easiest way to create a new VS0 RM is to copy the `vs0_stub` component direc
 3. In the `CMakeLists.txt` file, rename `vs0_stub` to your component's name.
 4. Add your new VS0 component directory to the build system by adding an `add_subdirectory(<vs0_component_name>)` line to the file `gw/components/CMakeLists.txt`.
 
-### Building a VS0 Bitstream (DFX)
+## Building a VS0 Bitstream (DFX)
 
 To build a VS0 Bitstream:
 

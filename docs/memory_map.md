@@ -167,6 +167,33 @@ At reset, the palette RAM will contain the following predefined palette:
 - Color indexes 16-31 contain a grayscale ramp.
 - Color indexes 32-255 contain various hues, saturation levels, brightness levels.
 
+## VERA VGA Line Capture RAM
+
+Read-only RAM containing one VGA scanline worth of captured pixel data.
+
+- **Address Range**: `0x12003000-0x12003a00`
+- **Size**: 2560 bytes
+
+The memory has 640 entries, one entry per displayed pixel in the captured
+scanline (VERA always outputs 640x480 VGA). Each entry has the following format:
+
+<table>
+	<tr>
+		<th>Bit&nbsp;31-12</th>
+		<th>Bit&nbsp;11-8</th>
+		<th>Bit&nbsp;7-4</th>
+		<th>Bit&nbsp;3-0</th>
+	</tr>
+	<tr>
+		<td align="center">-</td>
+		<td align="center">Red</td>
+		<td align="center">Green</td>
+		<td align="center">Blue</td>
+	</tr>
+</table>
+
+See [here](components_vera.md#the-video-vga-block-vga-line-capture) for a description of the VGA line capture mechanism.
+
 ## VERA VRAM
 
 Low- and fixed-latency video memory.

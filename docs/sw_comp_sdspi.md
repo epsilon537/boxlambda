@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## SDSPI
+# SDSPI
 
 - **SDSPI Software Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/sdspi/](https://github.com/epsilon537/boxlambda/tree/master/sw/components/sdspi)
@@ -15,7 +15,7 @@ The SDSPI software component provides the following APIs:
 
 The SDCard module is based on ZipCPU's SDCard implementation in his [SDSPI repo](https://github.com/epsilon537/sdspi).
 
-### SDSPI Test
+## SDSPI Test
 
 The SDSPI Test program tests the SDSPI core using the SDSPI HAL. It does not use
 the SDCard API.

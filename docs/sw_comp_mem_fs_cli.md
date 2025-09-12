@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Memory and File System CLI
+# Memory and File System CLI
 
 - **Mem_fs_cli CLI Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/mem_fs_cli](https://github.com/epsilon537/boxlambda/tree/master/sw/components/mem_fs_cli)

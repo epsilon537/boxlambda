@@ -1,0 +1,70 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
+  <diagram id="qX5EwINmHutbpbPkApwj" name="Page-1">
+    <mxGraphModel dx="1632" dy="577" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-18" value="Non-Resident Electives" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-120" y="40" width="680" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-1" value="Resident OS and System Components" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-120" y="280" width="680" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-2" value="VERA&lt;div&gt;Graphics&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-80" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-3" value="USB Keyboard, Mouse &amp;amp; Gamepad" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-4" value="FatFs" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-5" value="Flash Access &amp;amp;&lt;div&gt;Semi-Permanent&lt;/div&gt;&lt;div&gt;Variables&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-80" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-6" value="Real-Time&lt;div&gt;Clock &amp;amp; Calendar&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-7" value="YM2149&lt;div&gt;PSG&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-8" value="ST-Sound" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-9" value="Timer" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-80" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-10" value="Serial" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-11" value="GPIO" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-13" value="Graphics Primitives" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-14" value="Font Loader" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-15" value="PNG/BMP/JPG&lt;div&gt;Image loaders&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-40" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-16" value="Random Number&lt;div&gt;Generator&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-17" value="..." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-19" value="..." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-20" value="Terminal" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FyDwyhVnEdfE6Ji-d3FA-21" value="File Transfer" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-40" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

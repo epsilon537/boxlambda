@@ -3,6 +3,7 @@ hide:
   - toc
 ---
 # The Component-Level Test Bench
+
 [CoCoTB](https://www.cocotb.org/) is used for component-level verification, with [Icarus](https://steveicarus.github.io/iverilog/) acting as the behind-the-scenes simulator for CoCoTB.
 
 An example of a CoCoTB test bench is the Ibex *Single Instruction Prefetcher* test bench. This is the test script:

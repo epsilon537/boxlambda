@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Ibex Performance Test
+# Ibex Performance Test
 
 The value of this test is mostly in the waveform it generates. Checking the waveform of this test allows you to see instruction fetch latency and the cycle count of various common instructions:
 
@@ -80,7 +80,7 @@ TOP.sim_main.dut.boxlambda_soc_inst.wb_ibex_core.u_top.u_ibex_core.if_stage_i.ge
 
 To navigate the waveform, check the ID stage's `pc_id_i` values against the addresses in the disassembly of the `ibex_perf_test` executable.
 
-### Ibex Performance Test on Arty A7
+## Ibex Performance Test on Arty A7
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 
@@ -98,3 +98,4 @@ make ibex_perf_test_load
 ```
 
 In the terminal emulator, you should see the same output as in the Verilator test build above.
+

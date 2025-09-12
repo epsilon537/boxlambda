@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Wishbone Interconnect
+# Wishbone Interconnect
 
 - **Wishbone Arbiter and MUX Repo**, BoxLambda fork, `boxlambda` branch:
   [https://github.com/epsilon537/verilog-wishbone](https://github.com/epsilon537/verilog-wishbone)
@@ -24,7 +24,7 @@ The interconnect serves as the backbone connecting the internal components of th
 
 Using the pipelined wishbone bus protocol does *not* imply that BoxLamba supports multiple outstanding transactions. It doesn't, currently. BoxLambda uses the pipelined protocol to have the option of supporting multiple outstanding transactions in case some day the need arises.
 
-### The Instruction Bus and the Data Bus
+## The Instruction Bus and the Data Bus
 
 ![BoxLambda Block Diagram](assets/Arch_Diagram_dual_bus_DFX.png)
 *BoxLambda Block Diagram.*
@@ -33,12 +33,12 @@ The Ibex CPU has an instruction and a data port, respectively connected via an I
 
 Note that both buses have multiple bus masters:
 
-- The Data Bus is connected to: 
+- The Data Bus is connected to:
     - The Ibex CPU data port.
     - VS0 (DFX Virtual Socket 0) port 1.
     - The Debug Module.
 
-- The Instruction Bus is connected to: 
+- The Instruction Bus is connected to:
     - The Ibex CPU instruction port.
     - VS0 port 0.
 
@@ -54,8 +54,8 @@ The buses use an arbiter to select which bus master can access the MUX, but duri
 
 In other words, during normal operation, only the CPU is active. You won't have multiple masters competing for the bus, so register and internal memory access times remain known and constant.
 
-Arbiters without Overhead (most of the time)
-============================================
+## Arbiters without Overhead (most of the time)
+
 The wishbone arbiters present a minor problem, however. Arbiters typically introduce some transaction overhead. Luckily, there's a way to avoid that: I added a parameter to the arbiter module that allows you to select a default port. Transactions going through the default port will not suffer arbitration overhead when there are no requests on the other ports. The Bus Master-facing arbiters have their default port connected to the CPU.
 
 [![Arbiter without arbitration overhead on the default port.](assets/arbiter_wo_overhead.png)](assets/arbiter_wo_overhead.png)
@@ -66,7 +66,7 @@ The arbiter design is adapted from [Alex Forencich's](https://github.com/alexfor
 
 [https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py](https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py)
 
-### Word Addressing
+## Word Addressing
 
 BoxLambda uses Word Addressing rather than Byte Addressing.
 
@@ -80,13 +80,13 @@ A byte can still be accessed using a word-addressed bus. This is achieved throug
 
 *Addressing a byte using Word Addressing and Byte Enables.*
 
-### Interconnect Bus Width and Clock Frequency
+## Interconnect Bus Width and Clock Frequency
 
 BoxLambda's interconnect features a 32-bit data bus and a 28-bit word-address bus.
 
 The interconnect operates within the 50 MHz system clock domain.
 
-### Handling Invalid Addresses
+## Handling Invalid Addresses
 
 The Data Bus can optionally acknowledge transactions to invalid addresses. With this feature enabled, if there is no slave response to a read or write request within a timeout period (512 clock cycles), the Data Bus will acknowledge the transaction. In case of read requests, a dummy value of `0xDEADBEEF` is returned.
 

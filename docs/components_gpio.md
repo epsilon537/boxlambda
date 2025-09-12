@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## GPIO
+# GPIO
 
 - **GPIO Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/gpio](https://github.com/epsilon537/gpio)
@@ -45,7 +45,7 @@ BoxLambda instantiates the GPIO core with 24 pins. The pin assignment is given i
 |       |                        |
 | Ext. Clk. | ChipKit Pin 38     |
 
-### GPIO Clock Frequency
+## GPIO Clock Frequency
 
 The GPIO core is part of the 50MHz System Clock Domain.
 

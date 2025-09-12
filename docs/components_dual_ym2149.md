@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Dual YM2149 PSG Sound Core
+# Dual YM2149 PSG Sound Core
 
 - **YM2149_PSG_system Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/YM2149_PSG_system](https://github.com/epsilon537/YM2149_PSG_system).
@@ -22,13 +22,13 @@ hide:
 
 I added a Dual [**YM2149**](https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910) PSG core to BoxLambda. Each core provides three PSG channels, so one core can play a 3-channel audio track and the other core can play up to three overlapping sound effects.
 
-### Programmable Sound Generators (PSG)
+## Programmable Sound Generators (PSG)
 
 A Programmable Sound Generator is a chip that generates sound by combining multiple basic waveforms (channels). Typical waveforms used are square waves, triangular waves, and noise. The shape, frequency, and volume of the different waveforms are configured by the CPU through a register interface.
 
 PSG chips usually also include one or more envelope generators that control the variation of the sound's volume over time (ramp up, hold, ramp down, etc.). Different envelope shapes and associated parameters can be configured through the register interface.
 
-### The YM2149
+## The YM2149
 
 The YM2149 is a little PSG chip used in 80s arcade games, consoles, and home computer systems such as MSX and the Atari ST. The chip has a 3-channel square wave generator, a noise generator, and an envelope generator.
 Here's the datasheet:
@@ -38,7 +38,7 @@ Here's the datasheet:
 
 *YM2149 Block Diagram as shown in the datasheet.*
 
-### A Dual YM2149 PSG Audio core: *YM2149_PSG_System*
+## A Dual YM2149 PSG Audio core: *YM2149_PSG_System*
 
 When you're searching online for a YM2149 implementation, you'll quickly come across Jotego's *JT49* core:
 
@@ -60,7 +60,7 @@ I forked the `YM2149_PSG_system` repo to track my changes:
 
 [https://github.com/epsilon537/YM2149_PSG_system](https://github.com/epsilon537/YM2149_PSG_system)
 
-#### YM2149 PSG System Overview
+### YM2149 PSG System Overview
 
 ![YM2149 PSG System Block Diagram.](assets/ym2149_psg_sys_block_diagram.png)
 
@@ -80,7 +80,7 @@ The design of the `YM2149_PSG_system` core is easy to follow:
 
 The core can be configured to produce stereo I2S output, but for BoxLambda, we'll set it up to produce 16-bit PCM mono audio.
 
-### A Second Order Delta-Sigma DAC
+## A Second Order Delta-Sigma DAC
 
 The `YM2149_PSG_System` core produces 16-bit PCM audio. The audio amplifier PMOD expects the audio signal on a single pin, however. To bring 16-bit PCM audio to a single digital pin, we need a **one-bit Digital-to-Analog converter**. If you've never heard of one-bit DACs before, it probably sounds terrible, but it works quite well. The idea is to generate, at a rate much higher than the input sample rate, a stream of pulses such that a moving average going over the pulse stream produces a signal that tracks the input 16-bit PCM signal.
 
@@ -111,7 +111,7 @@ Here is my Verilog code:
 
 It wasn't obvious to me how to size the two accumulators used in the implementation so that they don't overflow and create conversion errors. I ended up adding logic that checks for overflows and experimented with different audio samples. The outcome was that for a 16-bit input signal, the stage-1 accumulator needs to be 20 bits in size and the stage-2 accumulator needs to be 22 bits in size.
 
-### The Audio DAC Test Project
+## The Audio DAC Test Project
 
 I created a test project to test the one-bit DAC. The RTL consists of a sine wave generator connected to an instance of the one-bit DAC. The top-level module output ports include:
 
@@ -140,7 +140,7 @@ The test project code is located here:
 
 See [here](test-build-ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
 
-### The YM2149 DAC Test Project - a Chord of Six Pitches.
+## The YM2149 DAC Test Project - a Chord of Six Pitches.
 
 This test project is a BoxLambda SoC with the `YM2149_PSG_system` core and the one-bit DAC integrated.
 Through software, the `YM2149_PSG_system` core is configured to produce six tones at six different pitches.
@@ -160,6 +160,6 @@ The test project code is located here:
 
 See [here](test-build-ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
 
-### Dual YM2149 PSG Core Clock Frequency
+## Dual YM2149 PSG Core Clock Frequency
 
 The core's clock frequency and PSG clock frequency (clock enable) are core module parameters. The core is instantiated with a clock frequency of 50MHz (BoxLambda's system clock domain) and a PSG clock frequency of 2MHz. I set the PSG clock frequency to 2 MHz to match the Atari ST.

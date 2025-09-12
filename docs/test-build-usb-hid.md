@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## USB HID Keyboard and Mouse Test
+# USB HID Keyboard and Mouse Test
 
 The USB HID System Test Case, running both on Verilator and on FPGA, continuously polls the two USB cores for report events. Whenever there's a report event (indicated in the `USB_HID_ISR` register), the device type (Keyboard/Mouse) and report details (mouse movement, keypress...) are printed.
 
@@ -11,7 +11,7 @@ Additionally, when Switch 0 (SW0) is set to *On* and a USB keyboard is connected
 
 [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/usb_hid_sys_test/usb_hid_sys_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/usb_hid_sys_test/usb_hid_sys_test.c)
 
-### The USB HID Test on Verilator
+## The USB HID Test on Verilator
 
 Build the *usb_hid_sys_test* project:
 
@@ -45,7 +45,7 @@ Test passed.
 
 The `ledg_1 = ...` lines indicate a LED update in the emulated USB keyboard.
 
-### The USB HID Test on FPGA
+## The USB HID Test on FPGA
 
 Hook up Machdyne's [USB host dual socket PMOD](https://machdyne.com/product/usb-host-dual-socket-pmod/) to port `JA` and connect a keyboard and/or a mouse.
 

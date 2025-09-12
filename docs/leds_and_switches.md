@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## LEDs
+# LEDs
 
 LEDs 0-3 have a fixed role in BoxLambda:
 
@@ -16,7 +16,7 @@ LEDs 0-3 have a fixed role in BoxLambda:
 
 LEDs 4-7 are assigned to the GPIO core. See the [GPIO component](components_gpio.md) page.
 
-## Switches
+# Switches
 
 - If switches 0-3 are all in the off position, the bootloader will spin after
 loading the application image, allowing a debugger to connect.

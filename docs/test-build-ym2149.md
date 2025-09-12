@@ -3,9 +3,9 @@ hide:
   - toc
 ---
 
-## YM2149 PSG, Audio DAC, and ST-Sound Test
+# YM2149 PSG, Audio DAC, and ST-Sound Test
 
-### Audio DAC Test on Verilator
+## Audio DAC Test on Verilator
 
 Build the *audio_dac_test* project:
 ```
@@ -39,7 +39,7 @@ Frequency Domain Correlation: 1.000000
 
 The plots show both the filtered PCM and DAC output signals, but because they overlap almost perfectly, you only see one waveform.
 
-### Audio DAC Test on Arty A7
+## Audio DAC Test on Arty A7
 
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
@@ -54,7 +54,7 @@ make audio_dac_test_load
 ```
 You should hear a 440Hz tone. You can check the pitch with a pitch detector app.
 
-### YM2149 DAC Test on Verilator
+## YM2149 DAC Test on Verilator
 
 Build the *ym2149_dac_test* project:
 ```
@@ -91,7 +91,7 @@ Relative Deviations:
 
 *Dual YM2149 6-channel Pitch Test Frequency Spectrum Plot.*
 
-### YM2149 DAC Test on Arty A7
+## YM2149 DAC Test on Arty A7
 
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
@@ -164,7 +164,7 @@ Match with correlation of 100.00% at offset 0
 ```
 (You may have to scroll the box horizontally to see the complete command line.)
 
-### ST-Sound Test on Arty A7
+## ST-Sound Test on Arty A7
 
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 

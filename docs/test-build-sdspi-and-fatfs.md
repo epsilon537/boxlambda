@@ -3,14 +3,14 @@ hide:
   - toc
 ---
 
-## SDSPI and FatFs Test
+# SDSPI and FatFs Test
 
 The SDSPI Test program tests the SDSPI core at a low level using the SDSPI HAL. It does not use the higher-level SDCard API.
 
 The FatFs Test program uses the FatFs library API, which in turn relies on the
 SDCard API.
 
-### SDSPI Test on Verilator
+## SDSPI Test on Verilator
 
 Build the *sdspi_test* project:
 
@@ -58,7 +58,7 @@ Test is complete
 SDSPI Test successful.
 ```
 
-### SDSPI Test on Arty A7
+## SDSPI Test on Arty A7
 
 Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
 
@@ -146,7 +146,7 @@ This is a test.
 sudo umount /mnt/sd
 ```
 
-### FatFS Test on Arty A7
+## FatFS Test on Arty A7
 
 Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
 

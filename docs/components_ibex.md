@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Ibex RISC-V Processor
+# Ibex RISC-V Processor
 
 - **Ibex Documentation**: [https://ibex-core.readthedocs.io/en/latest/index.html](https://ibex-core.readthedocs.io/en/latest/index.html).
 
@@ -36,7 +36,7 @@ hide:
 
 The Ibex RISCV core does not natively include Wishbone ports. `Wb_ibex_core` wraps around the vanilla Ibex core and attaches Core-to-Wishbone port adapters to its instruction and data ports.
 
-### Ibex Core Configuration
+## Ibex Core Configuration
 
 The Ibex core is instantiated with the following parameters (see [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)):
 
@@ -74,7 +74,7 @@ Note that there's no Instruction or Data Cache. Instruction or data accesses go 
 
 For information on the compiler and compile flags used to generate code for this processor configuration, see section [The Cross-Compiler](build_sys_building_sw.md#the-cross-compiler).
 
-### The Single Instruction Prefetcher
+## The Single Instruction Prefetcher
 
 ![The Single Instruction Prefetch Buffer in the Ibex Core.](assets/ibex_single_prefetch_buffer.png)
 
@@ -101,7 +101,7 @@ This prefetcher is very simple. It prefetches one 32-bit (i.e., uncompressed) in
 
 The single instruction prefetcher supports only uncompressed instructions. That's fine because BoxLambda software builds only use uncompressed instructions. Having a mix of 16-bit compressed and 32-bit uncompressible instructions would again result in less predictable instruction cycle counts, due to unaligned instruction fetches, for instance.
 
-### Interrupt Shadow Registers
+## Interrupt Shadow Registers
 
 To reduce the ISR prologue and epilogue overhead, the CPU's register file includes an *interrupt shadow register bank*:
 
@@ -123,7 +123,7 @@ With this design, the `irq_mem` bank is up-to-date when the CPU enters IRQ mode.
 
 To benefit from the interrupt shadow register optimization, ISRs should be declared with the `naked` attribute. See [the naked attribute](sw_comp_irqs.md#the-naked-attribute) section for details.
 
-#### Core2WB
+### Core2WB
 
 This is the Ibex Memory Interface specification:
 
@@ -140,11 +140,11 @@ Currently, multiple outstanding transactions are not supported.
 
 *Core2WB State Diagram.*
 
-### RISC-V Machine Mode
+## RISC-V Machine Mode
 
 Machine Mode is one of the four RISC-V privilege levels and is the only one used in BoxLambda.
 
-### Instruction Cycle Counts Summary
+## Instruction Cycle Counts Summary
 
 All on-chip memory or register accesses are now low-latency with a known, fixed instruction cycle count. Some slaves respond faster than others, so the instruction cycle count varies a bit depending on the slave being addressed.
 
@@ -183,13 +183,13 @@ The table below summarizes the instruction cycle counts on BoxLambda according t
 | CSRW | IMEM   | 2      |
 | CSRR | IMEM   | 2      |
 
-### Code Generation
+## Code Generation
 
 The Ibex repo/submodule sources are not referenced directly. The source code needs to be *exported* using *fusesoc*. This is done during the code generation step of a gateware build.
 
 This is the wrapper script performing the export: [scripts/gen_ibex_core.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/gen_ibex_core.sh)
 
-### Ibex Core Clock Frequency
+## Ibex Core Clock Frequency
 
 The Ibex core operates within the 50MHz system clock domain.
 

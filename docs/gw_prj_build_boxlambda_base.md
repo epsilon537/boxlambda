@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## The BoxLambda Base Project Build
+# The BoxLambda Base Gateware Project Build
 
 - **BoxLambda Base Project in the BoxLambda Directory Tree**:
   [boxlambda/gw/projects/boxlambda-base](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_base)

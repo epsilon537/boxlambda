@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Real-Time Clock and Calendar API
+# Real-Time Clock and Calendar API
 
 - **MCP79412RTC Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/MCP79412RTC](https://github.com/epsilon537/MCP79412RTC)

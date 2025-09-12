@@ -3,9 +3,9 @@ hide:
   - toc
 ---
 
-## VERA Test
+# VERA Test
 
-### Vera_integrated on Verilator
+## Vera_integrated on Verilator
 
 Build the *vera_integrated* project:
 ```
@@ -28,7 +28,7 @@ The terminal window should look like this:
 
 *Vera_integrated Verilator model terminal window output.*
 
-### Vera_integrated on the Arty A7
+## Vera_integrated on the Arty A7
 
 Hook up the VGA PMOD as described [here](pmods.md#vga-pmod).
 

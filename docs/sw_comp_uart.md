@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## The UART API
+# The UART API
 
 This is the UART Serial Port API:
 

@@ -3,9 +3,9 @@ hide:
   - toc
 ---
 
-## Timer, UART, and GPIO Interrupt Test
+# Timer, UART, and GPIO Interrupt Test
 
-### The Timer, UART, and GPIO Interrupt Test on Verilator
+## The Timer, UART, and GPIO Interrupt Test on Verilator
 
 Build the `timer_uart_gpio_irqs` gateware project:
 
@@ -68,7 +68,7 @@ SIM: SIM: GPIO test successful. Time = 24612996
 SIM: Test passed.
 ```
 
-### The Timer, UART, and GPIO Interrupt Test on FPGA
+## The Timer, UART, and GPIO Interrupt Test on FPGA
 
 Connect a terminal emulator to Arty's USB serial port. **Settings: 115200 8N1**.
 

@@ -3,15 +3,15 @@ hide:
   - toc
 ---
 
-## RISC-V
+# RISC-V
 
-### MCycle
+## MCycle
 
 The MCycle API gives access to the Ibex processor's cycle counter. It also provides a cycle counter-based implementation of the micro-sleep function `usleep`.
 
 [https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/mcycle.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/mcycle.h)
 
-### CSRs
+## CSRs
 
 RISC-V CSRs, Control and Status Registers, are special registers through which the programmer can configure the CPU and query its status. CSR registers live in a separate address space, accessed through special instructions such as:
 

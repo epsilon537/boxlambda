@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## I2C API
+# I2C API
 
 - **I2C Software Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/i2c](https://github.com/epsilon537/boxlambda/tree/master/sw/components/i2c)
@@ -35,7 +35,7 @@ A read operation goes like this:
     uint8_t i2cSlaveRegVal = i2c.read();
 ```
 
-### Slave Register Protocol not assumed
+## Slave Register Protocol not assumed
 
 The I2C API doesn't assume that the first byte of an I2C data frame is a slave register address. For the I2C  API, the first byte of a data frame is just that. No special role is assigned to it. This is a good thing because it works. Even though the WBI2C clearly *is* built around the slave register address convention, it can work with an I2C slave that doesn't follow this convention.
 

@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Embedded CLI
+# Embedded CLI
 
 - **Embedded CLI Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/embedded-cli](https://github.com/epsilon537/embedded-cli)
