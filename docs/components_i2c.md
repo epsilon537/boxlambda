@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## I2C
+# I2C
 
 - **I2C Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/wbi2c](https://github.com/epsilon537/wbi2c)
@@ -24,7 +24,7 @@ For info about the I2C protocol in general, please check the following resources
 - [https://ai.thestempedia.com/docs/evive/evive-technical-specifications/arduino-core-interface/i2c-communication/](https://ai.thestempedia.com/docs/evive/evive-technical-specifications/arduino-core-interface/i2c-communication/)
 - [https://en.wikipedia.org/wiki/I%C2%B2C](https://en.wikipedia.org/wiki/I%C2%B2C)
 
-### WBI2C
+## WBI2C
 
 Although it's perfectly doable to implement I2C in software using bit banging, I chose to use a gateware-assist. I'm using the I2C Bus Master core of ZipCPU's WBI2C repo. As usual, I forked the repo so I can easily implement customizations for BoxLambda. Here's the GitHub page:
 
@@ -34,7 +34,7 @@ This is the I2C Bus Master core top-level:
 
 [https://github.com/epsilon537/wbi2c/blob/boxlambda/rtl/wbi2cmaster.v](https://github.com/epsilon537/wbi2c/blob/boxlambda/rtl/wbi2cmaster.v)
 
-### The Slave Register Protocol
+## The Slave Register Protocol
 
 WBI2C implements the traditional I2C protocol used to access 8-bit I2C slave registers. The protocol uses an address frame consisting of a 7-bit slave address and a read/write bit, followed by one or more byte-sized data frames. The first of these data frames contains the slave register address.
 
@@ -49,7 +49,7 @@ A quick note on terminology:
 - **I2C Slave Address**: An I2C bus supports multiple slave devices. Each slave device has a unique address, distinguishing it from the other slaves on the bus. This address is what I'm calling the *Slave Address* in the discussion below.
 - **I2C Slave Register Address**: Most I2C slaves implement multiple byte-wide configuration and status registers. These registers are addressed using the first byte of an I2C data frame (i.e., the first byte following the address frame). This address is called the *Slave Register Address*.
 
-### Theory of Operation
+## Theory of Operation
 
 ![WBI2C Master Core](assets/wbi2c_master.png)
 
@@ -85,7 +85,7 @@ To read from a single I2C slave register:
 3. Software waits for the completion of the transaction by polling the CMD register `Busy` bit. Instead of polling, WBI2C can be configured to generate an IRQ when the transaction is complete.
 4. Software reads the retrieved I2C register value from the proxy memory at the slave register address.
 
-#### Multi-Byte Transactions
+### Multi-Byte Transactions
 
 The 256-byte memory is overkill for reading and writing individual slave registers. The advantage of this memory comes into play when reading or writing a byte *sequence*. Instead of babysitting the entire transaction byte-by-byte, a bulk transaction can be kicked off. The CPU can move on to other tasks while the transaction is ongoing. In a multi-byte transaction, WBI2C automatically increments the slave register address value after each byte sent/retrieved, wrapping around to 0 if the address value goes beyond 255.
 
@@ -117,11 +117,11 @@ To read back this 16-byte character string:
 
 The [I2C Test Application](test-build-i2c.md) implements this example.
 
-### Working with I2C slaves that don't follow the Slave Register Address Frame Format
+## Working with I2C slaves that don't follow the Slave Register Address Frame Format
 
 Although the WBI2C core by design assumes that an I2C data frame starts with an 8-bit slave register address, this core *can* work with I2C slaves that don't follow this format. See [here](sw_comp_i2c.md#slave-register-protocol-not-assumed) for more info.
 
-### Where are the Output Enables?
+## Where are the Output Enables?
 
 The WBI2C core top-level has `SCL` and `SDA` input and output ports, but no *Output Enable* ports:
 
@@ -194,7 +194,7 @@ You might expect that the SCL and SDA pull-up resistors connect directly to the 
 
 I'm sure Digilent has good reasons for adding these pull-up pins, but I don't know what they are.
 
-### I2C Clock Frequency
+## I2C Clock Frequency
 
 The WBI2C core is part of the 50MHz System Clock Domain.
 

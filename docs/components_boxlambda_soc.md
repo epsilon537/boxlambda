@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## The BoxLambda SoC Component
+# The BoxLambda SoC Component
 
 - **BoxLambda SoC Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/boxlambda_soc](https://github.com/epsilon537/boxlambda/tree/master/gw/components/boxlambda_soc)

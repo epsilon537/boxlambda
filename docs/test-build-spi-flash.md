@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## SPI Flash Test
+# SPI Flash Test
 
 The `spiflash_test` program does the following:
 
@@ -14,7 +14,7 @@ The `spiflash_test` program does the following:
 5. Write a different character string of the same length to the same Flash Memory location.
 6. Read back the character string from Flash Memory and compare it against the written string.
 
-### The SPI Flash Test on Verilator
+## The SPI Flash Test on Verilator
 
 Build the `spiflash_test` gateware project. This will also build the `spiflash_test.bin` software image as a dependency:
 ```
@@ -63,7 +63,7 @@ Test Successful.
 Test passed.
 ```
 
-### The SPI Flash Test on FPGA
+## The SPI Flash Test on FPGA
 
 Connect a terminal emulator to Arty's USB serial port. **Settings: 115200 8N1**.
 

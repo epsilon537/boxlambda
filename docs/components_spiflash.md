@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## SPI Flash Controller
+# SPI Flash Controller
 
 - **SPI Flash Gateware Component in the BoxLambda Directory Tree**:
     [boxlambda/gw/components/spiflash](https://github.com/epsilon537/boxlambda/tree/master/gw/components/spiflash)
@@ -15,9 +15,9 @@ hide:
 
 *SPI Flash on BoxLambda.*
 
-### SPI Flash Core Considerations
+## SPI Flash Core Considerations
 
-#### Quad-SPI Flash vs. Single-SPI Flash
+### Quad-SPI Flash vs. Single-SPI Flash
 
 ![Arty A7 SPI Flash](assets/arty_spiflash.png)
 
@@ -32,23 +32,23 @@ The Arty A7 has a quad-SPI flash device, so using a quad-SPI flash core would ma
 
 *Arty A7 PCB revisions and their flash devices.*
 
-#### Memory Mapped Read Access
+### Memory Mapped Read Access
 
 I would like to be able to boot software from flash memory. That means that the CPU should be able to read from flash memory as if it were a regular ROM module. The flash core should present to the SoC a memory-mapped Wishbone read interface that can address the entire 16MB flash memory range.
 
-#### Writing to Flash
+### Writing to Flash
 
 To enable writing to flash memory, the flash core should include a Wishbone control interface through which a driver can issue SPI flash commands.
 
-#### Configurable SPI Clock Frequency
+### Configurable SPI Clock Frequency
 
 To have a bit more control over timing, I would like to be able to configure a SCK clock frequency relative to the system clock frequency.
 
-#### Simulating Flash
+### Simulating Flash
 
 As always, I want to simulate the entire setup in Verilator. I'll need to attach a SPI Flash co-simulation model to the testbench.
 
-### The ZipCPU SpiXpress core
+## The ZipCPU SpiXpress core
 
 ZipCPU's spixpress core meets all of the above requirements, except the configurable SCK frequency bit. It's a single-SPI core with a Wishbone read interface and a control interface. The repository also includes driver software for the SPI core and a C++ SPI Flash device co-simulation model for Verilator. Here is the GitHub repository:
 
@@ -64,7 +64,7 @@ Dan Gisselquist wrote this article describing the design of the single-SPI core:
 
 *The simplified SpiXpress SPI Flash Core Design.*
 
-### The BoxLambda SPI Flash Core Variant
+## The BoxLambda SPI Flash Core Variant
 
 BoxLambda's SPI Flash core uses the ZipCPU spixpress core as a starting point. I made the following changes relative to the original core:
 
@@ -83,7 +83,7 @@ The BoxLambda version of the Spiflash core and Flashsim co-simulator can be foun
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/components/spiflash/sim/flashsim.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/components/spiflash/sim/flashsim.cpp)
 
-### Reading from Flash - the Data Interface
+## Reading from Flash - the Data Interface
 
 The SPI Flash core has a 32-bit Wishbone read interface. Through this interface, the user can request the core to read 32-bit words at a time from Flash memory. At the SPI level, the transaction looks like this:
 
@@ -101,7 +101,7 @@ The SPI Flash core has a 32-bit Wishbone read interface. Through this interface,
 - `so`: Slave Out.
 - `mi`: Master In.
 
-### The Control Interface and Flash Driver
+## The Control Interface and Flash Driver
 
 The SPI Flash core has a simple but clever control interface (invented by Dan, not me). From the `spiflash.v` header:
 
@@ -145,7 +145,7 @@ As an example, the Flash Driver code sequence to read the Flash Device ID looks 
     m_id = r;
 ```
 
-### Timing
+## Timing
 
 Is an `SCK` frequency of 25MHz slow enough to stay out of trouble? I took a look at the timing.
 For MOSI timing, I'm taking into account the following delays:
@@ -175,13 +175,13 @@ For MISO timing, I'm taking into account the following delays:
 
 Here I get only 5ns of slack. That's much less than I expected, but it should still be good enough.
 
-### SpiFlash Core Clock Frequency
+## SpiFlash Core Clock Frequency
 
 The SpiFlash core is part of the 50MHz System Clock Domain.
 
 The SPI bus clock frequency is 25MHz and is derived from the System Clock Domain through a clock divider.
 
-### SpiFlash Memory Layout
+## SpiFlash Memory Layout
 
 The Arty A7 is equipped with 16Mbytes of flash memory.
 

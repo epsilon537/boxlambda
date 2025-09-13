@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## FatFS
+# FatFS
 
 - **FatFs Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/fatfs/tree/boxlambda](https://github.com/epsilon537/fatfs/tree/boxlambda)
@@ -30,7 +30,7 @@ The FatFs library does not provide the device/media-specific *Storage Device Con
 
 Both modules are based on ZipCPU's implementation in his [SDSPI repo](https://github.com/epsilon537/sdspi).
 
-### FatFs Configuration
+## FatFs Configuration
 
 FatFs is very configurable, so you can trade options for footprint.
 All configuration options are well-documented and centralized in the `ffconf.h` file.
@@ -44,7 +44,7 @@ Relative to the default settings, I modified the following:
 
 [https://github.com/epsilon537/fatfs/blob/boxlambda/source/ffconf.h](https://github.com/epsilon537/fatfs/blob/boxlambda/source/ffconf.h)
 
-### FatFs_Test
+## FatFs_Test
 
 FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/fatfs_test/fatfs_test.c).
 

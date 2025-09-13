@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## SDSPI SD Card Controller
+# SDSPI SD Card Controller
 
 - **SDSPSI Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/sdspi/tree/boxlambda](https://github.com/epsilon537/sdspi/tree/boxlambda).
@@ -20,7 +20,7 @@ hide:
 - **SDSPI Core Documentation**:
     [https://github.com/epsilon537/sdspi/blob/master/doc/spec.pdf](https://github.com/epsilon537/sdspi/blob/master/doc/spec.pdf)
 
-### The MicroSD Card Interface and SPI Mode
+## The MicroSD Card Interface and SPI Mode
 
 ![Arty A7 with MicroSD PMOD in JD port.](assets/arty_w_microsd_pmod.jpeg)
 
@@ -35,7 +35,7 @@ The SPI bus speed is software-configurable through a clock divider setting in th
 
 Other than the SPI signals (`SCK`, `MISO`, `MOSI`, `CS`), the MicroSD card interface has two `DAT` data lines that we won't be using and a `CD` Card Detect signal, which appears to be active-low, even though the [MicroSD PMOD Reference Manual](https://digilent.com/reference/pmod/pmodmicrosd/reference-manual?redirect=1) didn't say so.
 
-### SDSPI Core
+## SDSPI Core
 
 `Sdspi_test` is a test SoC containing the SDSPI core along with other BoxLambda components. The SDSPI core is instantiated in the [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv) module as follows:
 
@@ -72,7 +72,7 @@ Interrupts are currently not hooked up.
 
 The above is a simplified block diagram illustrating the SDSPI core internals. I won't be going into the details here. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
 
-### SDSPISIM
+## SDSPISIM
 
 On the Verilator test bench, the MicroSD card PMOD is replaced with an `SDSPISIM` co-simulator. `SDSPISIM` was easy to plug into BoxLambda's test bench. The interface is similar to the UARTSIM co-simulator, already in use in the test bench, and also provided by Dan Gisselquist.
 
@@ -91,13 +91,13 @@ For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon5
 
 `SDSPISIM` reads from and writes to an `sdcard.img` file. That file can be mounted in Linux. You can FAT-format it and store files on it to be used by the simulated system (or vice versa).
 
-### SDSPI Operation
+## SDSPI Operation
 
 The SDSPI core's register interface, the initialization sequence, and the overall operation of the core are well-documented in the SDSPI core [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/sdspi.pdf).
 
 [Sdtest.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's `sdtest.c` in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The `Zbasic` repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
 
-### SDSPI Clock Frequency
+## SDSPI Clock Frequency
 
 The SDSPI core is part of the 50MHz System Clock Domain.
 

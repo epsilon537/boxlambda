@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Timer
+# Timer
 
 The Timer module is part of the **Ibex** RISCV repo. See the [Ibex Component page](components_ibex.md) for the Ibex repo link and submodule path.
 
@@ -31,7 +31,7 @@ You program a Timer interrupt to fire a few clock cycles before the desired time
 
 The [timer_uart_gpio_irqs](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) test implements this mechanism.
 
-### Timer Clock Frequency
+## Timer Clock Frequency
 
 The Timer module is part of the 50MHz System Clock Domain.
 

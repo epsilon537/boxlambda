@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## USB HID Keyboard and Mouse
+# USB HID Keyboard and Mouse
 
 - **Usb_hid_host Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/usb_hid_host](https://github.com/epsilon537/usb_hid_host)
@@ -29,7 +29,7 @@ hide:
 - **Usb_hid_device Top-Level**:
     [sub/usb_hid_device/rtl/top_usb_device.sv](https://github.com/epsilon537/usb_hid_device/blob/boxlambda/rtl/top_usb_device.sv)
 
-### The NAND2Mario usb_hid_host core
+## The NAND2Mario usb_hid_host core
 
 The USB HID Host core used by BoxLambda is based on the NAND2Mario usb_hid_host core.
 
@@ -52,13 +52,13 @@ Usb_hid_host requires a 12MHz clock. You just hook up the clock, reset, USB D-/D
 - `game_*`: if the attached device is a gamepad, indicates the gamepad joystick directions and buttons being pressed. I haven't tested these yet. I currently don't have a gamepad.
 - `dbg_hid_report`: the raw HID report, for debug purposes.
 
-### USB HIDBP
+## USB HIDBP
 
 The [USB HID Spec](https://www.usb.org/sites/default/files/hid1_11.pdf) is big and complicated. A complete implementation would require a lot more infrastructure than just a small usb_hid_host core. Usb_hid_host implements a subset of the USB HID spec called the *Boot Protocol* (USB HIDBP). The Boot Protocol was added to the spec to humor BIOS developers. The Boot Protocol is much simpler than its counterpart, the *Report Protocol*, which is the protocol used by the big USB stacks in Linux or Windows.
 
 Unfortunately, not all keyboards and mice support the Boot Protocol. Basic/Low-end keyboards and mice have a higher chance of supporting the Boot Protocol. I'm using a *Dell KB212-B* keyboard and a *Dell OCJ339* mouse.
 
-### Controlling USB keyboard LEDs - Background
+## Controlling USB keyboard LEDs - Background
 
 The BoxLambda fork of usb_hid_host adds keyboard LED control support to the NAND2Mario core.
 
@@ -80,7 +80,7 @@ The entire packet sequence looks like this:
 
 *SetReport Sequence Diagram.*
 
-### Adding Keyboard LED Control to the NAND2Mario usb_hid_host core
+## Adding Keyboard LED Control to the NAND2Mario usb_hid_host core
 
 ![Keyboard LED Control in usb_hid_host.](assets/keyboard_led_ctrl_in_usb_hid_host.png)
 
@@ -94,7 +94,7 @@ To add USB keyboard LED control to the usb_hid_host core, I implemented the foll
 
 With these UKP changes, the usb_hid_host core can, upon request, have the UKP firmware branch to a section of microcode that sends a *SetReport* request to the device. The parameters of this message, i.e., the LED bitmap and the CRC16 value, are specified in outr0 and outr1/2.
 
-### Wishbone Frontend and Clock Domain Crossing
+## Wishbone Frontend and Clock Domain Crossing
 
 ![usb_hid_host with Wishbone frontend.](assets/usb_hid_host_new.png)
 
@@ -108,7 +108,7 @@ The MCP CDC strategy is based on the following paper:
 
 [http://www.sunburst-design.com/papers/CummingsSNUG2008Boston_CDC.pdf](http://www.sunburst-design.com/papers/CummingsSNUG2008Boston_CDC.pdf)
 
-### Simulation and USB HID Device Emulation
+## Simulation and USB HID Device Emulation
 
 To test the usb_hid_host core in simulation, I have to connect it to an emulated USB HID device. The emulated mouse and keyboard are based on this project from Pbing:
 
@@ -123,6 +123,4 @@ The simulation top-level, [sim_main.sv](https://github.com/epsilon537/boxlambda/
 ![Simulation Setup.](assets/usb_hid_host_and_device.png)
 
 *USB HID System Test Simulation Setup.*
-
-
 

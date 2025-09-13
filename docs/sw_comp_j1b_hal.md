@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## J1B HAL
+# J1B HAL
 
 **J1B HAL API**:
 [boxlambda/sw/components/j1b_hal/j1b_hal.h](https://github.com/epsilon537/boxlambda/tree/master/sw/components/j1b_hal/j1b_hal.h)

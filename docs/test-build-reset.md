@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Reset Test
+# Reset Test
 
 The reset test code running on the RISCV processor: [boxlambda/sw/projects/reset_test/reset_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/reset_test/reset_test.cpp)
 
@@ -14,7 +14,7 @@ The reset test checks the software interaction with BoxLambda's reset controller
 1. Retrieve the reset reason after reset (POR, External Reset, SW triggered reset...).
 2. Trigger a system reset via software.
 
-### Reset Test on Verilator
+## Reset Test on Verilator
 
 Build the test project:
 ```
@@ -62,7 +62,7 @@ SIM: String matched. Moving on...
 SIM: Test passed.
 ```
 
-### Reset Test Image on FPGA
+## Reset Test Image on FPGA
 
 Build the test project:
 ```

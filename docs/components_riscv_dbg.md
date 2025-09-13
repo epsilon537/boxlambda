@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## The RISCV-DBG Debug Core
+# The RISCV-DBG Debug Core
 
 - **RISCV-DBG Repository (BoxLambda Fork, `boxlambda` Branch)**:
   [https://github.com/epsilon537/riscv-dbg](https://github.com/epsilon537/riscv-dbg)
@@ -14,7 +14,7 @@ hide:
 - **RISCV-DBG Gateware Component in the BoxLambda Directory Tree**:
   [boxlambda/gw/components/riscv-dbg](https://github.com/epsilon537/boxlambda/tree/master/gw/components/riscv-dbg)
 
-### RISCV OpenOCD
+## RISCV OpenOCD
 
 OpenOCD is an open-source software package that interfaces with a hardware debugger's JTAG port via various transport protocols. On BoxLambda, the hardware debug logic is implemented by `riscv-dbg`. The overall setup is illustrated below:
 
@@ -49,7 +49,7 @@ boxlambda
     └── riscv-dbg
 ```
 
-### RISCV-DBG RTL Structure
+## RISCV-DBG RTL Structure
 
 `Riscv-dbg` includes two top-level modules:
 
@@ -112,7 +112,7 @@ To summarize:
 
 For a step-by-step guide on setting up a debug session, refer to [this section](test-build-hello-world.md#connecting-gdb-to-the-hello-world-build-on-verilator).
 
-### OpenOCD and RISCV-DBG on Arty-A7 FPGA
+## OpenOCD and RISCV-DBG on Arty-A7 FPGA
 
 The most straightforward approach for debugging on the Arty-A7 FPGA would be to expose the JTAG signals to PMOD pins and use a JTAG adapter. However, an alternative approach eliminates the need for a JTAG adapter. The `riscv-dbg` JTAG TAP can be integrated into the FPGA scan chain, typically used to program the FPGA bitstream.
 
@@ -138,11 +138,11 @@ To summarize:
 4. The FPGA scan chain is accessible via the board’s FTDI-based USB serial port.
 5. The OpenOCD transport protocol used for this connection is `ftdi`.
 
-#### Starting a Debug Session on the Arty-A7
+### Starting a Debug Session on the Arty-A7
 
 For detailed steps on setting up an OpenOCD JTAG debug session on the Arty-A7, refer to [this section](test-build-hello-world.md#connecting-gdb-to-the-hello-world-build-on-arty-a7).
 
-### RISCV-DBG Clock Frequency
+## RISCV-DBG Clock Frequency
 
 The `riscv-dbg` components `dm_top` and `dmi_jtag` operate in the 50 MHz system clock domain.
 

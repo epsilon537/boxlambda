@@ -1,0 +1,34 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
+  <diagram name="Page-1" id="jbdmYNF_eP6Ri0AgSuQs">
+    <mxGraphModel dx="2062" dy="1348" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="F-_MCL4bYj07vVC4jyL0-6" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="520" width="600" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="F-_MCL4bYj07vVC4jyL0-1" value="&lt;b&gt;VERA C++ HAL&lt;/b&gt;&lt;div&gt;(vera_hal.h)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="640" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="F-_MCL4bYj07vVC4jyL0-4" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="F-_MCL4bYj07vVC4jyL0-3" target="F-_MCL4bYj07vVC4jyL0-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-50" y="470" as="sourcePoint" />
+            <mxPoint y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="F-_MCL4bYj07vVC4jyL0-5" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="F-_MCL4bYj07vVC4jyL0-2" target="F-_MCL4bYj07vVC4jyL0-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="850" as="sourcePoint" />
+            <mxPoint x="70" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="F-_MCL4bYj07vVC4jyL0-2" value="&lt;b&gt;VERA uLisp HAL&lt;/b&gt;&lt;div&gt;(ulisp-boxlambda.cpp)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="540" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="F-_MCL4bYj07vVC4jyL0-3" value="&lt;b&gt;VERA uLisp Convenience API&lt;/b&gt;&lt;div&gt;(LispLibrary.lisp)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="440" width="200" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

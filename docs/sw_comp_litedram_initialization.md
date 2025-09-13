@@ -11,7 +11,7 @@ hide:
 
 - **SDRAM Software Component in the BoxLambda Directory Tree**: [boxlambda/sw/components/sdram](https://github.com/epsilon537/boxlambda/tree/master/sw/components/sdram)
 
-## LiteDRAM Initialization
+# LiteDRAM Initialization
 
 When the LiteDRAM core is generated (during the code generation step of a gateware project build), the core's CSR register accessors for software are also generated in the build tree's `codegen/` directory:
 
@@ -26,7 +26,7 @@ build/[sim|arty]-a7-100/codegen/litedram/sw/include/generated/
 
 The most relevant files are `csr.h` and `sdram_phy.h`. They contain the register definitions and constants used by the memory initialization code.
 
-### *Sdram_init()*
+## *Sdram_init()*
 
 In addition to register definitions, `sdram_phy.h` contains a function called `init_sequence()`. This function gets invoked as part of a more elaborate initialization function called `sdram_init()`. `Sdram_init()` is *not* part of the generated code, however. It's part of `sdram.c`, which is part of `liblitedram`, which is part of the base Litex repository (*not* the LiteDRAM repository):
 
@@ -38,7 +38,7 @@ In addition to register definitions, `sdram_phy.h` contains a function called `i
 
 The `sdram_init()` function is part of the `sdram` software component in the BoxLambda code base.
 
-### The DDR Test Application
+## The DDR Test Application
 
 The DDR test program is located here:
 

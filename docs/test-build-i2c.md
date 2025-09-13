@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## I2C Test
+# I2C Test
 
 The I2C test code running on the RISCV processor: [boxlambda/sw/projects/rtcc_test/i2c_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/i2c_test/i2c_test.cpp)
 
@@ -22,7 +22,7 @@ The I2C System Test Case runs on Verilator and FPGA, albeit with different test 
 4. It verifies that WBI2C generates an IRQ when an I2C transaction has been completed.
 5. On FPGA, you get dropped into a CLI built on top of the I2C API. From this CLI, you can issue your own I2C transactions.
 
-### The I2C Test on Verilator
+## The I2C Test on Verilator
 
 Build the *i2c_test* project:
 
@@ -53,7 +53,7 @@ DUT: Test Successful.
 DUT: Push btn[0] to start CLI.
 ```
 
-### The I2C Test on FPGA
+## The I2C Test on FPGA
 
 Hook up the RTCC PMOD as described [here](pmods.md#rtcc-pmod).
 

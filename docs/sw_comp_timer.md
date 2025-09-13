@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## The Timer API
+# The Timer API
 
 This is the Timer module API:
 

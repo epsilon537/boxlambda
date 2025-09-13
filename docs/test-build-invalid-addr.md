@@ -3,11 +3,11 @@ hide:
   - toc
 ---
 
-## Invalid Address Test
+# Invalid Address Test
 
 This test verifies that reading from or writing to an invalid address does not cause an exception and that reading from an invalid address returns the value `0xDEADBEEF`.
 
-### Invalid Address Test on Verilator
+## Invalid Address Test on Verilator
 
 Build the *invalid_address* project:
 
@@ -37,7 +37,7 @@ DUT: Test Successful.
 SIM: Test passed.
 ```
 
-### Invalid Address Test on Arty A7
+## Invalid Address Test on Arty A7
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
 

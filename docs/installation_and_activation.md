@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Installation
+# Installation
 
 To install BoxLambda:
 
@@ -15,14 +15,14 @@ To install BoxLambda:
 
 The first four steps need to be executed once. Activating the environment is required every time you're working with BoxLambda.
 
-### Getting the Repository
+## Getting the Repository
 
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
 
-### Setting Up the Environment
+## Setting Up the Environment
 
 The following script initializes the git submodules used and creates the default build trees:
 
@@ -43,7 +43,7 @@ The script is easy to follow. The tool versions used are specified inside the sc
 
 If you want to force a reinstall of the tools, delete the `./tools/` directory and source the `boxlambda_setup.sh` script again.
 
-### User-Level Access to the Arty A7 USB JTAG Adapter.
+## User-Level Access to the Arty A7 USB JTAG Adapter.
 
 When run at the user level, OpenOCD might not have permission to access the USB JTAG adapter. To fix this issue, add a rule to `/etc/udev/rules.d`.
 Create a file named `99-openocd.rules` in the `/etc/udev/rules.d` directory. This file should have the following contents:
@@ -54,12 +54,13 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="666",
 
 ```
 
-### Serial Port
+## Serial Port
+
 Your mileage may vary, but on my Ubuntu system, when I plug in my Arty A7, the serial port shows up at `/dev/ttyUSB1`.
 
 Serial Port Settings: **115200 8N1**
 
-## Activating the Tools Environment
+# Activating the Tools Environment
 
 When working with BoxLambda, its tools environment needs to be activated. This is done by sourcing the `activate_env.sh` script.
 

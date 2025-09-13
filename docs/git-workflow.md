@@ -3,8 +3,7 @@ hide:
   - toc
 ---
 
-Git Workflow
-============
+# Git Workflow
 
 All GitHub repositories used by BoxLambda are instantiated in BoxLambda's repository as git submodules. The git submodules are located in the `sub/` directory:
 
@@ -30,8 +29,8 @@ In the BoxLambda repository itself, I have the following long-running branches:
 - `gh-pages`: This branch holds the BoxLambda Blog files. GitHub Pages are by default on the `gh-pages` branch of a GitHub project.
 - `boxlambda-gh-pages-wip`: This branch holds work-in-progress Blog updates. This branch also contains some config file modifications specifically for local previewing, which is why this is a long-running branch, rather than a topic branch. When updates are ready for release, I merge them to `gh-pages`.
 
-Adding Submodules
------------------
+# Adding Submodules
+
 I use the following sequence to add a git submodule:
 
 1. I fork the repo in GitHub.
@@ -45,4 +44,30 @@ I use the following sequence to add a git submodule:
 ```
 
 That last step is necessary to switch the remote URL from HTTPS to SSH. I prefer to use SSH-based authentication.
+
+# Creating a new release (*Note to Self*)
+
+On `develop` branch:
+
+1. Update `CHANGELOG.md`.
+2. In `sim_a7_100` build tree, build all and run ctest.
+3. In `arty_a7_100` build tree, build all.
+4. Flash `boxlambda_base` gateware project build and
+   `ulisp` software project build.
+5. Run `ulisp_test.py` test suite.
+
+On `master` branch:
+
+1. Merge `develop`.
+2. In `sim_a7_100` build tree, build all and run ctest.
+3. `git tag vX.Y.Z`.
+4. In `arty_a7_100` build tree, build all.
+5. Flash `boxlambda_base` gateware project build and `ulisp` software project build.
+6. Check bootloader version string.
+7. Run `lisp_test.py` test suite.
+8. Copy from `arty_a7_100` build tree to `binaries` directory: gateware project bitstream files, including VS0 `.bin_for_icap` files, and software project binaries.
+9. `git commit` the binaries.
+10. Update tag to include the new binaries: `git -f tag vX.Y.Z`.
+11. `git push origin vX.Y.Z`.
+12. On GitHub boxlambda repo, navigate to *releases*, then *Draft a new release*.
 

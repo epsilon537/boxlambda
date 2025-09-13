@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## LiteDRAM Memory Controller
+# LiteDRAM Memory Controller
 
 - **LiteX Repo**, BoxLambda fork, `boxlambda` branch:
   [https://github.com/epsilon537/litex](https://github.com/epsilon537/litex).
@@ -18,13 +18,13 @@ SDRAM memory access is complicated. Memory access requests get queued in the mem
 
 I decided to use the **LiteDRAM** memory controller: [https://github.com/enjoy-digital/litedram](https://github.com/enjoy-digital/litedram)
 
-### Why choose LiteDRAM over Xilinx MIG?
+## Why choose LiteDRAM over Xilinx MIG?
 
 - LiteDRAM is open-source, scoring good karma points. All the benefits of open-source apply: Full access to all code, access to the maintainers, many eyeballs, the option to make changes as you please, submit bug fixes, etc.
 - The LiteDRAM simulation model runs nicely in Verilator. That's a must-have for me.
 - The LiteDRAM core, configured for BoxLambda, is almost 50% smaller than the equivalent MIG core.
 
-### Generating a LiteDRAM core
+## Generating a LiteDRAM core
 
 LiteDRAM is a highly configurable core. For an overview of the core's features, please take a look at the LiteDRAM repository's README file:
 
@@ -100,7 +100,7 @@ The LiteDRAM cores are generated during the code generation step of a gateware b
 
 This is the build script performing the code generation: [scripts/gen_litedram_core.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/gen_litedram_core.sh)
 
-### LiteDRAM Interface
+## LiteDRAM Interface
 
 The generated core has the following interface:
 
@@ -165,7 +165,7 @@ Some points worth noting about this interface:
 - The LiteDRAM module takes an external input clock (`clk`) and generates both a 50MHz system clock (`user_clk`) and a 100MHz double-rate system clock (`user_clkx2`). The LiteDRAM module contains a PLL clock primitive.
 - The double-rate system clock is a modification for BoxLambda but is currently unused.
 
-### *Litedram_wrapper*
+## *Litedram_wrapper*
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv)
 
@@ -177,6 +177,6 @@ Some points worth noting about this interface:
    assign user_port_wishbone_p_0_stall = !user_port_wishbone_p_0_cyc ? 1'b0 : !user_port_wishbone_c_0_ack;
 ```
 
-#### LiteDRAM Clock Frequency
+### LiteDRAM Clock Frequency
 
 See [Clocks and Reset](clocks_and_reset.md)

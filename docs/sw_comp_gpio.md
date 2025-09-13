@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## The GPIO API
+# The GPIO API
 
 This is the GPIO API:
 

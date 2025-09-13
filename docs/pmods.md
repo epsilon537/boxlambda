@@ -3,9 +3,9 @@ hide:
   - toc
 ---
 
-## Hooking Up the Peripherals (PMODs)
+# Hooking Up the Peripherals (PMODs)
 
-### VGA PMOD
+## VGA PMOD
 
 Hook up [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start) to PMOD ports JB and JC. Connect a VGA display.
 
@@ -13,7 +13,7 @@ Hook up [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start)
 
 *VGA PMOD Setup.*
 
-### MicroSD PMOD
+## MicroSD PMOD
 
 Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port `JD` and insert an SD card into the card reader.
 
@@ -21,7 +21,7 @@ Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd
 
 *MicroSD PMOD Setup.*
 
-### Audio PMOD
+## Audio PMOD
 
 To make space for the keyboard and mouse, I moved the audio PMOD to the ChipKit header of the Arty A7 board. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) as follows:
 
@@ -38,7 +38,7 @@ To make space for the keyboard and mouse, I moved the audio PMOD to the ChipKit 
 
 *Audio PMOD Setup.*
 
-### USB Host PMOD
+## USB Host PMOD
 
 I'm using the following PMOD from Machdyne:
 
@@ -54,7 +54,7 @@ Hook up the PMOD to port `JA` and connect a keyboard and/or a mouse.
 
 *Arty A7 Setup with USB PMOD attached to port JA.*
 
-### RTCC PMOD
+## RTCC PMOD
 
 The Real-Time Clock and Calendar PMOD is from Digilent:
 

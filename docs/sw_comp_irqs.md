@@ -3,13 +3,13 @@ hide:
   - toc
 ---
 
-## Ibex RISC-V Interrupt Handling
+# Ibex RISC-V Interrupt Handling
 
-### Vectored Mode
+## Vectored Mode
 
 Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the `IRQ_ID` by four and adding it to the vector table base address. The vector table base address is specified in the `mtvec` CSR. In BoxLambda, I'm leaving it at 0, so the interrupt entry point address is simply `IRQ_ID*4`.
 
-### Vectors.S Weak Bindings
+## Vectors.S Weak Bindings
 
 The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide, so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: If you insert into the vector table a straightforward call to your application-specific interrupt service routine, you end up with an inverted dependency. You don't want the lowest layer platform code to depend directly on the higher layer application code. To get around that issue, I defined *weak bindings* for all the interrupt service routines inside `vectors.S`:
 
@@ -75,11 +75,11 @@ void __attribute__((naked)) _uart_irq_handler(void);
 void __attribute__((naked)) _dfx_irq_handler(void);
 ```
 
-#### The *naked* attribute
+### The *naked* attribute
 
 The CPU switches to an [interrupt register bank](components_ibex.md#interrupt-shadow-registers) when entering interrupt mode. This means that the ISR no longer needs to save and restore the registers it uses. The regular ISR prologue and epilogue code (saving and restoring registers) can be skipped. This is done by declaring the ISR function with the GCC `naked` attribute.
 
-Because the `naked` attribute skips all epilogue code, we have to insert the `mret` instruction ourselves in the ISR. 
+Because the `naked` attribute skips all epilogue code, we have to insert the `mret` instruction ourselves in the ISR.
 
 For example:
 
@@ -111,7 +111,7 @@ The interrupt shadow register feature, combined with `naked` ISRs, results in ve
 
 *Interrupt Overhead with interrupt shadow registers and naked ISR.*
 
-### Enabling Interrupts
+## Enabling Interrupts
 
 To receive interrupts, you need to enable the global CPU interrupt, `mstatus.MIE`, as well as the specific Machine Interrupts you want to receive by setting their bits in the MIE CSR.
 
@@ -146,13 +146,13 @@ static inline void disable_all_irqs(void) {
 }
 ```
 
-### Nested Interrupts
+## Nested Interrupts
 
 I haven't tested it, but RISC-V supports interrupt nesting. You can find more info here:
 
 [https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html#nested-interrupt-exception-handling](https://ibex-core.readthedocs.io/en/latest/03_reference/exception_interrupts.html#nested-interrupt-exception-handling)
 
-### Interrupt API
+## Interrupt API
 
 `Interrupts.h` provides the interrupt API:
 

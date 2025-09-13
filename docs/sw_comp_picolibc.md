@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Picolibc and the Bootstrap Component
+# Picolibc and the Bootstrap Component
 
 - **PicoLibc Version**: 1.8.6
 
@@ -23,9 +23,9 @@ BoxLambda uses the Picolibc standard C library implementation.
 [Picolibc](https://github.com/picolibc/picolibc) is a Newlib variant, blended with AVR libc, optimized for systems with limited memory.
 [Newlib](https://www.sourceware.org/newlib/) is the de facto standard C library implementation for embedded systems.
 
-### Building Picolibc
+## Building Picolibc
 
-#### Picolibc Configuration Scripts
+### Picolibc Configuration Scripts
 A Picolibc build for a new system requires configuration scripts for that system in the [picolibc/scripts/](https://github.com/epsilon537/picolibc/tree/boxlambda/scripts) directory. They specify such things as the compiler toolchain to use, GCC processor architecture flags, and CPP preprocessor flags, tweaking specific library features.
 
 I'm using `boxlambda` as the base name for the new scripts.
@@ -41,7 +41,7 @@ The differences between the derived scripts and the base scripts are minimal:
 - The `-march` flag is set to `rv32im_zicsr`.
 - In `do-boxlambda-configure`, `picocrt` is set to `false`. We're not using the picolibc crt0 module. BoxLambda has its own variant of the crt0 module in the `bootstrap` software component.
 
-#### picolibc_build.sh
+### picolibc_build.sh
 ![Building Picolibc.](assets/building_picolibc.drawio.png)
 
 I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc_build.sh) shell script. This script is invoked by the build system (in [sw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/sw/CMakeLists.txt)) during build tree configuration time. The picolibc build and install directories are placed inside the build tree:
@@ -51,7 +51,7 @@ I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](h
 
 When there are changes in the Picolibc source tree, the build trees need to be regenerated. The easiest way to do that is by running `make regen` from the build tree.
 
-### Linking against the Picolibc library: The Picolibc GCC specs file
+## Linking against the Picolibc library: The Picolibc GCC specs file
 
 To link the PicoLibc library into an application image, the PicoLibc *specs file* needs to be passed to GCC. `sw/CMakeLists.txt` takes care of this:
 
@@ -69,9 +69,9 @@ add_link_options(
 
 The Picolibc GCC specs file can be found in the Picolib install directory.
 
-### The Bootstrap Component
+## The Bootstrap Component
 
-#### Some Glue Required
+### Some Glue Required
 
 ![Picolibc on BoxLambda.](assets/picolibc_on_boxlambda.drawio.png)
 
@@ -89,7 +89,7 @@ More detail for each of these follows in the subsections below. I have grouped t
 
 An application using the standard C library has to link in this bootstrap component.
 
-#### The Vector Table
+### The Vector Table
 
 The vector table is a table with code entry points for all sorts of CPU events: interrupts, exceptions, etc. The Boot/Reset Vector, i.e., the very first instruction executed when the CPU comes out of reset, is part of this table.
 
@@ -99,7 +99,7 @@ The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initializa
 
 For more info on vectors.S, check the [Interrupt Handling](sw_comp_irqs.md) page.
 
-#### Crt0
+### Crt0
 
 *Crt0*, C-Run-Time-0, is the start-up code in charge of setting up a C environment (zeroing the BSS segment, setting up the stack, etc.) before calling `main()`.
 BoxLambda's version of crt0 can be found here:
@@ -107,7 +107,7 @@ BoxLambda's version of crt0 can be found here:
 [boxlambda/sw/components/bootstrap/crt0.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/crt0.c).
 [boxlambda/sw/components/bootstrap/crt0.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/crt0.h).
 
-#### Standard Input, Output, and Error
+### Standard Input, Output, and Error
 
 The PicoLibc integrator needs to supply `stdin`, `stdout`, and `stderr` instances and associated `getc()` and `putc()` implementations to connect them to an actual IO device.
 We'll be using the UART as our IO device for the time being. Down the road, we can extend that with keyboard input and screen output implementation.
@@ -153,13 +153,13 @@ FILE *const stderr = &__stdio;
 
 [boxlambda/sw/components/bootstrap/stdio_to_uart.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/stdio_to_uart.c)
 
-### Software Startup Sequence
+## Software Startup Sequence
 
 ![The Boot from IMEM Sequence](assets/imem_boot_sequence.png)
 
 *The Software Startup Sequence.*
 
-### Example Program
+## Example Program
 
 Here's an example application program using Picolibc:
 

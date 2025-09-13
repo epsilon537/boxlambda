@@ -58,7 +58,7 @@ nav:
         - DFX Controller Other Registers: registers/generated/dfx_controller_other_regs.md
         - LiteDRAM Registers: litedram_regs.md
         - Memory Map: memory_map.md
-    - Gateware:
+    - Gateware Components:
         - BoxLambda SoC: components_boxlambda_soc.md
         - Wishbone Interconnect: components_wb_interconnect.md
         - RISCV Ibex Processor: components_ibex.md
@@ -77,7 +77,10 @@ nav:
         - RTCC: components_rtcc.md
         - VS0: components_vs0.md
         - DFX Controller: components_dfx_controller.md
-    - Software:
+    - Gateware Project Builds:
+        - BoxLambda Base: gw_prj_build_boxlambda_base.md
+        - BoxLambda DFX: gw_prj_build_boxlambda_dfx.md
+    - Software Components:
         - Register Access Layer: sw_comp_register_access_layer.md
         - PicoLibc and the Bootstrap Component: sw_comp_picolibc.md
         - Bootloader: sw_comp_bootloader.md
@@ -85,7 +88,7 @@ nav:
         - SDSPI: sw_comp_sdspi.md
         - FatFs: sw_comp_fat_fs.md
         - ST-Sound: sw_comp_st_sound.md
-        - VERA HAL: sw_comp_vera_hal.md
+        - VERA Stack: sw_comp_vera_stack.md
         - USB HID: sw_comp_usb_hid.md
         - Flash Driver: sw_comp_flashdrvr.md
         - Timer: sw_comp_timer.md
@@ -102,6 +105,8 @@ nav:
         - DFX Controller HAL: sw_comp_dfx_controller_hal.md
         - J1B HAL: sw_comp_j1b_hal.md
         - VS0 HAL: sw_comp_vs0_hal.md
+    - Software Project Builds:
+        - uLisp: sw_prj_build_ulisp.md
     - The Build System:
         - Git Workflow: git-workflow.md
         - The Build System Structure:
@@ -117,9 +122,6 @@ nav:
         - The Test Bench: test-bench.md
         - The System-Level Test Bench: test-bench-system-level.md
         - The Component-Level Test Bench: test-bench-component-level.md
-    - Project Builds:
-        - BoxLambda Base: prj_build_boxlambda_base.md
-        - BoxLambda DFX: prj_build_boxlambda_dfx.md
     - Test Builds:
         - Hello World: test-build-hello-world.md
         - DDR Test: test-build-ddr.md

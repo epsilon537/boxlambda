@@ -22,7 +22,7 @@ Base address: 0x12000000
 
 | Name                     | Address    | Description |
 | :---                     | :---       | :---        |
-| [CTRL](#ctrl)            | 0x00000000 | Control register. |
+| [CTRL_STATUS](#ctrl_status) | 0x00000000 | Control/Status register. |
 | [DC_BORDER](#dc_border)  | 0x00000004 | Display composer border register. |
 | [IEN](#ien)              | 0x00000008 | Interrupt enable register. |
 | [ISR](#isr)              | 0x0000000c | Interrupt status register. |
@@ -46,19 +46,20 @@ Base address: 0x12000000
 | [L1_HSCROLL](#l1_hscroll) | 0x00000090 | Layer 1 horizontal scroll register. |
 | [L1_VSCROLL](#l1_vscroll) | 0x00000094 | Layer 1 vertical scroll register. |
 
-## CTRL
+## CTRL_STATUS
 
-Control register.
+Control/Status register.
 
 Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![ctrl](md_img/ctrl.svg)
+![ctrl_status](md_img/ctrl_status.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
-| -                | 31:1   | -               | 0x0000000  | Reserved |
+| -                | 31:2   | -               | 0x0000000  | Reserved |
+| CAPTURE_EN       | 1      | rw              | 0x0        | Enable VGA line capture. Bit returns to 0 when capture has completed. |
 | SBNK             | 0      | rw              | 0x0        | Active sprite bank. |
 
 Back to [Register map](#register-map-summary).
@@ -364,14 +365,14 @@ Reset value: 0x00000000
 | -                | 31:8   | -               | 0x000000   | Reserved |
 | TILE_BASE_ADDR_16_11 | 7:2    | rw              | 0x0        | Bits 16:11 of the base address of the tile data. |
 | TILE_HEIGHT      | 1      | rw              | 0x0        | Tile height. |
-| TILE_WIDTH       | 0      | rw              | 0x0        | Tile width. |
+| TILE_BITMAP_WIDTH | 0      | rw              | 0x0        | Tile or Bitmap width. |
 
-Enumerated values for L0_TILEBASE.TILE_WIDTH.
+Enumerated values for L0_TILEBASE.TILE_BITMAP_WIDTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILE_WIDTH_8     | 0x0    | 8 pixel tile width. |
-| TILE_WIDTH_16    | 0x1    | 16 pixel tile width. |
+| TILE_BITMAP_W_8_320 | 0x0    | 8 pixel tile width, 320 pixels bitmap width. |
+| TILE_BITMAP_W_16_640 | 0x1    | 16 pixel tile width, 640 pixels bitmap width. |
 
 Enumerated values for L0_TILEBASE.TILE_HEIGHT.
 
@@ -395,7 +396,8 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| VALUE            | 11:0   | rw              | 0x000      | Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
+| HSCROLL_11_8_PAL_OFFSET | 11:8   | rw              | 0x0        | In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors. |
+| HSCROLL_7_0      | 7:0    | rw              | 0x00       | Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
 
 Back to [Register map](#register-map-summary).
 
@@ -496,14 +498,14 @@ Reset value: 0x00000000
 | -                | 31:8   | -               | 0x000000   | Reserved |
 | TILE_BASE_ADDR_16_11 | 7:2    | rw              | 0x0        | Bits 16:11 of the base address of the tile data. |
 | TILE_HEIGHT      | 1      | rw              | 0x0        | Tile height. |
-| TILE_WIDTH       | 0      | rw              | 0x0        | Tile width. |
+| TILE_BITMAP_WIDTH | 0      | rw              | 0x0        | Tile or Bitmap width. |
 
-Enumerated values for L1_TILEBASE.TILE_WIDTH.
+Enumerated values for L1_TILEBASE.TILE_BITMAP_WIDTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILE_WIDTH_8     | 0x0    | 8 pixel tile width. |
-| TILE_WIDTH_16    | 0x1    | 16 pixel tile width. |
+| TILE_BITMAP_W_8_320 | 0x0    | 8 pixel tile width, 320 pixels bitmap width. |
+| TILE_BITMAP_W_16_640 | 0x1    | 16 pixel tile width, 640 pixels bitmap width. |
 
 Enumerated values for L1_TILEBASE.TILE_HEIGHT.
 
@@ -527,7 +529,8 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| VALUE            | 11:0   | rw              | 0x000      | Specifies the horizontal scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
+| HSCROLL_11_8_PAL_OFFSET | 11:8   | rw              | 0x0        | In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors. |
+| HSCROLL_7_0      | 7:0    | rw              | 0x00       | Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
 
 Back to [Register map](#register-map-summary).
 

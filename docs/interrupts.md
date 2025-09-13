@@ -3,9 +3,9 @@ hide:
   - toc
 ---
 
-## Interrupts
+# Interrupts
 
-### The Interrupt Handling Protocol: Condition-Based vs. Event-Based Interrupts
+## The Interrupt Handling Protocol: Condition-Based vs. Event-Based Interrupts
 
 A core, such as a UART, may raise an interrupt request (IRQ) when it detects an event or condition that may be of interest to the software running on the CPU. For example, in the case of a UART, the condition might be *Rx-FIFO-Not-Empty*, or the event might be *Character-Enters-Empty-Rx-FIFO*. Interrupt triggers come in two types:
 
@@ -25,7 +25,7 @@ Note that in the condition-based interrupt example, there is no explicit interru
 
 In the event-based interrupt example, the interrupt is explicitly acknowledged by writing to the ISR register. Additionally, the interrupt handler routine *may* read the received character from the Rx FIFO, but this is not required. Retrieving the character from the Rx FIFO may be deferred until later, once the CPU is no longer in interrupted mode. In the event-based protocol, interrupt handling is decoupled from managing the condition that triggered the interrupt.
 
-#### WBUART and SDSPI Interrupt Protocol Modification
+### WBUART and SDSPI Interrupt Protocol Modification
 
 The original **wbuart** and **sdspi** cores use condition-based interrupts. However, I find the event-based protocol easier to work with, so I modified these cores to generate event-based interrupts.
 
@@ -45,7 +45,7 @@ The modification of **sdspi** is almost identical. Here, the events are:
 
 Except for [wb_timer](components_timer.md), which follows its own protocol, the other cores in the BoxLambda SoC already implement the event-based protocol.
 
-#### Edge-Triggered Interrupt Controllers Connected to a Level-Sensitive CPU
+### Edge-Triggered Interrupt Controllers Connected to a Level-Sensitive CPU
 
 The terms *Condition-Based* and *Event-Based* interrupts are terms I coined for this discussion. Some might argue that the generally accepted term for what I call *Condition-Based* is *Level-Triggered*, and the official term for an *Event-Based* interrupt is *Edge-Triggered*. Depending on your perspective, there's some truth to that. Different people interpret these terms in different ways. You can find the Wikipedia definition of edge- and level-triggered [here](https://en.wikipedia.org/wiki/Interrupt#Triggering_methods).
 
@@ -71,7 +71,7 @@ From this perspective, the overall interrupt architecture of the BoxLambda SoC c
 
 *BoxLambda SoC with Mini, Edge-Triggered Interrupt Controllers inside the component cores.*
 
-### Ibex RISC-V Interrupt Assignments
+## Ibex RISC-V Interrupt Assignments
 
 ![BoxLambda Interrupts](assets/irq_diagram.png)
 
@@ -112,10 +112,11 @@ The following table lists the BoxLambda interrupts and the events they report:
 | 16     | Not Assigned                            |     |
 |  7     | Timer IRQ                               | Timer counter >= timer compare value |
 
-### Interrupt Jitter
+## Interrupt Jitter
 
 When the CPU receives an IRQ, it has to complete that instruction before it can jump to the interrupt vector. This constraint causes some interrupt latency jitter/variation. For asynchronous events, such as key presses, that won't matter. However, for critically timed events, there may be cases where you want to execute a sequence of instructions *exactly* at a given time, without any jitter. The [Timer module](components_timer.md#timer) includes a mechanism (`mtimeblk`) that can be used to remove this jitter.
 
-### Interrupt Handling Software
+## Interrupt Handling Software
 
 See the [Interrupt Handling](sw_comp_irqs.md) page.
+

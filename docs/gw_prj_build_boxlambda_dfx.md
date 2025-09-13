@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## The BoxLambda DFX Project Build
+# The BoxLambda DFX Gateware Project Build
 
 **BoxLambda DFX Project in the BoxLambda Directory Tree**:
 [boxlambda/gw/projects/boxlambda-dfx](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_dfx)
@@ -14,25 +14,25 @@ This project builds the 'official' BoxLambda DFX Configuration as described in t
 
 *DFX Terminology applied to the BoxLambda SoC.*
 
-### The Goal: Dynamically Loading Application-Specific Gateware-Assists
+## The Goal: Dynamically Loading Application-Specific Gateware-Assists
 
 The goal of adding DFX support to BoxLambda is to enable BoxLambda software applications to dynamically load an application-specific gateware component into the SoC's *Virtual Socket 0 (VS0)* placeholder component. This component acts as a gateware assist for the software application.
 
 In the BoxLambda SoC, instance `boxlambda_soc_inst/vs0_inst` is set up as a Reconfigurable Partition (RP). To demonstrate DFX, two Reconfigurable Modules (RMs) fitting this RP are created: `vs0_j1b` and `vs0_stub`. More details on these components can be found on the [VS0 page](components_vs0.md).
 
-### Building and Running BoxLambda DFX
+## Building and Running BoxLambda DFX
 
 See [DFX Test](test-build-dfx.md).
 
-### Adding a Reconfigurable Partition (RP)
+## Adding a Reconfigurable Partition (RP)
 
 Currently, the BoxLambda SoC has only one RP, VS0, but additional RPs can be created. Here’s how to add a new RP, named VS1.
 
-#### Step 1: Reparameterize the DFX Controller to Manage a Second RP
+### Step 1: Reparameterize the DFX Controller to Manage a Second RP
 
 Refer to the section on [DFX Controller Parameterization](components_dfx_controller.md#dfx-controller-parameterization).
 
-#### Step 2: Synthesize the SoC with an Empty RP
+### Step 2: Synthesize the SoC with an Empty RP
 
 To begin, synthesize the project (the Static Design) with an empty declaration for the `vs1` module:
 
@@ -46,7 +46,7 @@ endmodule
 - **Directory**: `build/arty-a7-100t/gw/projects/<project_name>`
 - **Build Command**: `make <project_name>_synth`
 
-#### Step 3: Synthesize the Default RM
+### Step 3: Synthesize the Default RM
 
 Next, synthesize the component to use as the default module for this RP.
 
@@ -55,7 +55,7 @@ Next, synthesize the component to use as the default module for this RP.
 
 Note the resource utilization of the component. This will help ensure that the Reconfigurable Partition (RP) is large enough to accommodate the RM.
 
-#### Step 4: Mark the Hierarchical Instance as an RP
+### Step 4: Mark the Hierarchical Instance as an RP
 
 Using the Vivado GUI, open the SoC’s static synthesis checkpoint and mark the VS1 instance as an RP by assigning the `HD.RECONFIGURABLE` property and tagging it as a black box:
 
@@ -68,7 +68,7 @@ update_design -quiet -cell boxlambda_soc_inst/vs1_inst -black_box
 
 Keep the Vivado GUI session open. The next steps, up to [Step 6](#step-6-create-a-pblock-for-the-rp), are performed in this session.
 
-#### Step 5: Assign the Default RM to the RP
+### Step 5: Assign the Default RM to the RP
 
 Load the default component synthesis checkpoint and assign it to the RP `boxlambda_soc_inst/vs1_inst` to make it the default RM.
 
@@ -76,7 +76,7 @@ Load the default component synthesis checkpoint and assign it to the RP `boxlamb
 read_checkpoint -cell boxlambda_soc_inst/vs0_inst vs0_stub_synth.dcp
 ```
 
-#### Step 6: Create a Pblock for the RP
+### Step 6: Create a Pblock for the RP
 
 In the Vivado GUI, create a Pblock for RP `VS1` by outlining its region in the design’s floor plan. The procedure for VS1 is the same as for VS0.
 
@@ -125,7 +125,7 @@ Add the Pblock constraints from the previous step to the project's DFX constrain
 
 [gw/projects/boxlambda_dfx/constrs/pblocks.xdc](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_dfx/constrs/pblocks.xdc)
 
-#### Step 8: Update the Project Build CMakeLists.txt
+### Step 8: Update the Project Build CMakeLists.txt
 
 In the `gw_project_rules_dfx_vivado()` call of the project build’s CMakeLists.txt file:
 
@@ -150,7 +150,7 @@ gw_project_rules_dfx_vivado(
 
 Here, `vs1_default` is the default RM for VS1. More details on creating RMs are available [here](components_vs0.md#creating-a-new-vs0-rm-dfx).
 
-#### Step 9: Route the Design and Generate the Bitstreams
+### Step 9: Route the Design and Generate the Bitstreams
 
 - **Directory**: `build/arty-a7-100t/gw/projects/<project_name>`
 - **Build Command**: `make <project_name>_bit`
@@ -160,7 +160,7 @@ This step generates multiple bitstream files:
 - `<project_name>.bin`: A full bitstream of the SoC, with the default RMs instantiated in the RPs.
 - `<project_name>_pblock_vs<x>_partial.bin`: A partial bitstream of just the default RM for VS<x>. A partial bitstream file is generated for each RP.
 
-### Caveat: Re-implement RMs if the Static Design Changes
+## Caveat: Re-implement RMs if the Static Design Changes
 
 ![pblock routing](assets/pblock_routing.png)
 

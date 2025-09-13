@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## VERA (Wishbone) Graphics
+# VERA (Wishbone) Graphics
 
 - **VERA Wishbone Repo**, BoxLambda fork, `boxlambda` branch:
   [https://github.com/epsilon537/vera_wishbone](https://github.com/epsilon537/vera_wishbone).
@@ -21,24 +21,25 @@ Frank van den Hoef's [VERA Versatile Embedded Retro Adapter](https://github.com/
 
 Note: The original VERA core also supports PSG Audio, PCM Audio, and a SPI Controller for storage. These subcomponents have not been carried over to VERA Wishbone.
 
-### Features
+## Features
 
 VERA Wishbone's feature summary:
 
 - 32-bit pipelined Wishbone slave interface.
 - VGA output format at a fixed resolution of 640x480@60Hz (same as original VERA).
+- Software configurable VGA line capture mechanism.
 - Support for 2 layers, both supporting either tile or bitmap mode (same as original VERA).
 - Support for 2 banks of 64 sprites. Guaranteed max. of 512 sprite pixels per scanline.
 - Configurable Embedded video RAM size of up to 128kB.
 - Palette with 256 colors selected from a total range of 4096 colors (same as original VERA).
 
-### Overview
+## Overview
 
 [![The VERA Wishbone Block Diagram.](assets/vera_wishbone.drawio.png)](assets/vera_wishbone.drawio.png)
 
 *The VERA Wishbone Block Diagram.*
 
-In the above diagram, the big arrows show the main data flow. The small arrows are control signals. The labels next to the arrowheads show what is being presented to the block at that point. E.g., the `composer` presents a `line_idx` and `render_start` signal to the *Layer 0 Renderer*. Data path bus widths are indicated by a number between brackets.
+In the above diagram, the large arrows show the main data flow. The small arrows are control signals. The labels next to the arrowheads show what is being presented to the block at that point. E.g., the `composer` presents a `line_idx` and `render_start` signal to the *Layer 0 Renderer*. Data path bus widths are indicated by a number in brackets.
 
 The easiest way to understand what's going on is by going through the diagram from bottom to top:
 
@@ -49,7 +50,7 @@ The easiest way to understand what's going on is by going through the diagram fr
 5. The renderers contain the bulk of VERA's video generation logic. There are two identical Layer Renderer blocks and one Sprite Renderer. The Layer Renderers implement the different tile and Bitmap Modes, retrieve the necessary data from the `vram_if` block, and store the rendered output data in their respective Line Buffers. The Sprite Renderer does the same thing for sprites.
 6. The `vram_if` block contains **128KB** of embedded video memory. It has four ports: one for each renderer and one for the CPU.
 
-### Video RAM
+## Video RAM
 
 The video RAM (VRAM) is a dual-port RAM instance of four byte-wide columns (matching a 32-bit Wishbone data bus with four byte-enables). The amount of RAM is configurable, up to 128KB, through a `VRAM_SIZE_BYTES` parameter/macro.
 
@@ -59,7 +60,25 @@ DPRAM port 0 is exclusively for the CPU. DPRAM port 1 is shared by the two Line 
 
 *Time Slot Scheduled VRAM Access.*
 
-### The Composer
+## The Video VGA block - VGA line capture
+
+The original VERA Video VGA block functionality has been enhanced with a VGA line capture
+mechanism. When requested by software (wishbone register), the RGB pixel data of
+the scanline corresponding to the IRQ line number is recorded into a 640x16
+memory accessible by software.
+
+![VERA VGA Line Capture.](assets/vga_line_capture.png)
+
+*VERA VGA Line Capture.*
+
+To set up a VGA line capture, software configures the VGA line to capture in the
+Line IRQ register, then sets the `CAPTURE_EN` bit is the
+[CTRL_STATUS](registers/generated/vera_regs.md#ctrl_status) register.
+Once the capture has been completed, VERA resets the `CAPTURE_EN` bit. Software
+can now read the captured data in the [VGA Line Capture
+RAM](memory_map.md#vera-vga-line-capture-ram).
+
+## The Composer
 
 The `composer` receives basic control signals from the `video_vga` block: `next pixel`, `next line`, `next frame`, `vblank`. It uses these signals for the following purposes:
 
@@ -69,7 +88,7 @@ The `composer` receives basic control signals from the `video_vga` block: `next 
 - Determine the active area of the screen, where the border isn't shown.
 - Compose the display, reading out the pixel data from the three Line Buffers.
 
-### The Layer Renderer
+## The Layer Renderer
 
 The Layer Render's implementation is, conceptually at least, reasonably straightforward:
 
@@ -88,7 +107,7 @@ You can see the VRAM reads (`buf_strobe` and `bus_ack`) happening in parallel wi
 
 *Note: the exact timing of this waveform may have changed a little since this screenshot was taken because the Layer Renderer currently has slightly faster access to VRAM (1 out of 3 timeslots vs. 1 out of 4 originally).*
 
-#### Other Layer Renderer Responsibilities
+### Other Layer Renderer Responsibilities
 
 Other responsibilities of the Layer Renderer include:
 
@@ -98,12 +117,12 @@ Other responsibilities of the Layer Renderer include:
 - Handling of the different tile widths and heights.
 - Tile V-flip and H-flip.
 
-### The Layer Line Buffer
+## The Layer Line Buffer
 
 The Layer Renderer has an 8-bit write-only interface to its Line Buffer. The Line Buffer contains 8 bits per entry. One entry corresponds to one pixel.
 The Layer Line Buffer implements a double buffering scheme: While the renderer is writing out one scan line, the `composer` is reading out the other line. When they are done with the respective scan lines, they switch places.
 
-### The Sprite Renderer
+## The Sprite Renderer
 
 The Sprite Renderer's operation is a bit more complicated:
 
@@ -121,7 +140,7 @@ In the waveform below, you can see two sprites getting rendered out on a scanlin
 
 *Note: the exact timing of this waveform may have changed a little since this screenshot was taken because the Sprite Renderer currently has slightly faster access to VRAM (1 out of 3 timeslots vs. 1 out of 4 originally).*
 
-#### Sprite Banks
+### Sprite Banks
 
 The Sprite Attribute RAM consists of two banks of 64 sprite IDs. A bit in the `VERA_CTRL` register is used to select the active bank.
 
@@ -137,7 +156,7 @@ Sprite Banking may help with sprite multiplexing or animation: While one sprite 
 
 Note: Sprite Banking does not exist in the original VERA core. The original VERA core uses a single bank of 128 Sprite IDs.
 
-#### A Fixed Sprite-Pixels-per-Scanline Limit
+### A Fixed Sprite-Pixels-per-Scanline Limit
 
 The Sprites-per-Scanline limit is inversely proportional to the sprite width. That makes sense. It takes roughly twice as long to render a 16-pixel-wide sprite as an 8-pixel-wide sprite. Conversely, the number of *sprite pixels* that can be rendered on a given scanline is relatively constant. For VERA Wishbone running at 50MHz, this constant is 512 pixels, i.e., the Sprite Renderer can render a maximum of 512 sprite pixels on any scanline, guaranteed.
 
@@ -149,7 +168,7 @@ The original Sprite Renderer code kept track of rendering time to decide when to
 
 The VERA Wishbone changes relative to the original VERA code make it easier for a programmer to plan sprites. The programmer knows ahead of time exactly how many sprites of a given size he can have on the same scanline. This number is independent of the Layer Renderer settings and the VRAM loading by the CPU (or any other Wishbone bus master accessing VRAM, such as a DMA core).
 
-#### Other Sprite Renderer Responsibilities
+### Other Sprite Renderer Responsibilities
 
 Other responsibilities of the Sprite Renderer include:
 
@@ -157,7 +176,7 @@ Other responsibilities of the Sprite Renderer include:
 - Sprite-to-Sprite Collision Detection.
 - Handling pixel transparency.
 
-### The Sprite Line Buffer
+## The Sprite Line Buffer
 
 The Sprite Line Buffer contains 16 bits per entry. One entry corresponds to one pixel. Each entry contains the sprite pixel's collision data and z-value (layering depth relative to layers 0 and 1), along with the pixel data. The Sprite Renderer's collision handling logic has to be able to read back the collision data of the sprite pixels that are already rendered out, so the Sprite Renderer has a 16-bit read-and-write interface to its Line Buffer.
 
@@ -165,7 +184,7 @@ Like the Layer Line Buffer, the Sprite Line Buffer implements a double buffering
 
 The Sprite Line Buffer also contains erase logic. When the Composer has read one scanline, it sends a signal to the Sprite Line Buffer to erase that line. Erasing is necessary because the Sprite Renderer doesn't necessarily write to each position in the line buffer. If the line were not erased, stale pixels (and associated metadata) from a previous scanline may shine through.
 
-### Wishbone Interface and Memory-Mapped Access
+## Wishbone Interface and Memory-Mapped Access
 
 The VERA Wishbone core has a pipelined Wishbone slave interface. The interface has a 32-bit data port, 4-byte lane enables, and a 17-bit word-addressed address port.
 
@@ -178,18 +197,16 @@ The following table shows the memory-mapped address ranges:
 | 0x10100000 - 0x10100100 | VERA Registers    | Read/Write |
 | 0x10101000 - 0x10101400 | Sprite attributes | Write Only |
 | 0x10102000 - 0x10102200 | Palette           | Write Only |
+| 0x10103000 - 0x10103a00 | Line Capture RAM  | Ready Only |
 | 0x10140000 - 0x10160000 | Video RAM (128KB) | Read/Write |
 
-Note:
+Note: The above addresses are absolute, as seen by the processor. The VERA core's base address is 0x10100000.
 
-- The above addresses are absolute, as seen by the processor. The VERA core's base address is 0x10100000.
-- The Video RAM address range depends on the amount of Video RAM set by the `VRAM_SIZE_BYTES` macro. The range 0x10140000-0x10160000 corresponds to a `VRAM_SIZE_BYTES` setting of 131072 (128K).
-
-### Register Interface / Programmer's Reference.
+## Register Interface / Programmer's Reference.
 
 For a description of the VERA Wishbone registers, refer to the [VERA Programmer's Reference](https://github.com/epsilon537/vera_wishbone/blob/boxlambda/doc/VERA%20Programmer's%20Reference.md).
 
-### Top-Level Interface and Output Pins
+## Top-Level Interface and Output Pins
 
 The VERA Wishbone top-level interface is straightforward:
 
@@ -242,6 +259,6 @@ It is assumed that [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmo
 | JB Pin 11 | GND         | JC Pin 11 | GND         |
 | JB Pin 12 | VCC3V3      | JC Pin 12 | VCC         |
 
-### VERA Wishbone Clock Frequency
+## VERA Wishbone Clock Frequency
 
 The VERA Wishbone core operates at **50MHz**, BoxLambda's system clock frequency. However, the `video_vga` and `composer` modules need to run at 25MHz, the 640x480@60Hz VGA pixel clock rate. These blocks use a toggling clock enable signal to do so. [Clock enables are preferred over clock dividers](https://electronics.stackexchange.com/questions/222972/advantage-of-clock-enable-over-clock-division).

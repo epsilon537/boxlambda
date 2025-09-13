@@ -3,6 +3,7 @@ hide:
   - toc
 ---
 # The System-Level Test Bench
+
 The system-level test bench should allow for the following:
 
 - Executing system-level test cases within a reasonable time frame. System-level test cases refer to those where the DUT (Device Under Test) is the SoC (System on Chip).

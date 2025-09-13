@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## Clocks
+# Clocks
 
 ![BoxLambda Clocks](assets/clocks.png)
 
@@ -19,9 +19,9 @@ The following clocks are present in the SoC:
 - `tck`: The JTAG clock, driven via a `BSCANE2` primitive by the FPGA's JTAG chain. The `BSCANE2` primitive is instantiated in the `dmi_bscane_tap` module.
 - `usb_clk`: A 12MHz clock for the USB HID Host cores.
 
-## Reset
+# Reset
 
-### Reset Controller
+## Reset Controller
 
 - **Reset Controller Component in the BoxLambda Directory Tree**:
   [boxlambda/gw/components/reset_ctrl](https://github.com/epsilon537/boxlambda/tree/master/gw/components/reset_ctrl)
@@ -32,7 +32,7 @@ The following clocks are present in the SoC:
 - **Reset Controller HAL**:
   [sw/components/reset/reset_hal.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/reset/reset_hal.h)
 
-### Reset Domains
+## Reset Domains
 
 BoxLambda includes the following synchronous **reset domains**:
 
@@ -41,7 +41,7 @@ BoxLambda includes the following synchronous **reset domains**:
 - `usb_reset`: Resets the logic in the USB clock domain.
 - `vs0_reset`: Resets the VS0 module. In the DFX configuration, `vs0_reset` is driven by the DFX Controller. In the Base configuration, `vs0_reset` is part of the `ndm_reset` domain.
 
-### Reset Sources
+## Reset Sources
 
 BoxLambda provides the following **reset sources**:
 
@@ -60,7 +60,7 @@ The management of non-DFX reset domains and sources is handled by the `reset_ctr
 The `reset_ctrl` module source code is located here:
 [gw/components/reset_ctrl/rtl/reset_ctrl.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/reset_ctrl/rtl/reset_ctrl.sv)
 
-### Reset Controller Registers
+## Reset Controller Registers
 
 Software can trigger resets by writing to the *Reset Control Register* and retrieve the reason for the most recent reset by reading the *Reset Reason Register*.
 

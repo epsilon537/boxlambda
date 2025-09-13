@@ -3,7 +3,7 @@ hide:
   - toc
 ---
 
-## UART
+# UART
 
 - **Wbuart32 Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/wbuart32](https://github.com/epsilon537/wbuart32)
@@ -22,7 +22,7 @@ hide:
 
 ZipCPU comes to the rescue again with a UART implementation with a Wishbone interface. The BoxLambda variant of the wbuart core contains modifications for enabling and clearing specific interrupt events. These modifications are documented in a separate section of the core's [spec](https://github.com/epsilon537/wbuart32/blob/boxlambda/doc/spec.pdf).
 
-## Core Parameters
+# Core Parameters
 
 The Wbuart core is instantiated with the following parameters:
 
@@ -35,7 +35,7 @@ The Wbuart core is instantiated with the following parameters:
     - 1 stop bit
     - Hardware Flow Control disabled
 
-### Wbuart Clock Frequency
+## Wbuart Clock Frequency
 
 The Wbuart core is part of the 50MHz System Clock Domain.
 

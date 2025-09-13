@@ -3,13 +3,13 @@ hide:
   - toc
 ---
 
-## Real-Time Clock and Calendar (RTCC)
+# Real-Time Clock and Calendar (RTCC)
 
 BoxLambda uses I2C to interface with a [Real-Time Clock and Calendar PMOD](https://digilent.com/shop/pmod-rtcc-real-time-clock-calendar/) from Digilent. This PMOD is powered by Microchip's MCP79410. It includes a coin cell battery backup so time and date can be maintained even while BoxLambda is switched off.
 
 The MCP79410 datasheet: [http://ww1.microchip.com/downloads/en/DeviceDoc/22266d.pdf](http://ww1.microchip.com/downloads/en/DeviceDoc/22266d.pdf)
 
-### Clock Drift
+## Clock Drift
 
 The MCP79410 uses a low-cost 32.768 kHz crystal. Typically, these crystals are not very accurate. Over time, the clock will drift relative to the wall clock. However, Digilent's RTCC PMOD uses a *CMR200T_E* crystal with a reasonably good frequency tolerance of ±10ppm.
 
