@@ -12,8 +12,13 @@ target_compile_options(i2c_test
   -O2 -g -ffunction-sections
 )
 
+if(CMAKE_BUILD_TYPE STREQUAL "sim")
 link_and_create_image(i2c_test
  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+else()
+link_and_create_image(i2c_test
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+endif()
 
 target_link_libraries(i2c_test sdram i2c gpio embedded_cli riscv interrupts peek_poke_cli bootstrap)
 

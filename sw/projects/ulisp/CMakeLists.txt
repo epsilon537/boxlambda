@@ -23,7 +23,8 @@ target_compile_definitions(ulisp
 # )
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_image(ulisp ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+link_and_create_image(ulisp
+${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
 
 target_link_libraries(ulisp arduino gpio riscv vera bootstrap timer
 interrupts sdram)

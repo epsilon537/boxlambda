@@ -58,20 +58,31 @@ static void local_memset(char *dst, char val, unsigned num_bytes);
  * linked to boot from flash, this code will execute directly from
  * flash memory.*/
 static void __attribute__((used)) __section(".init") _cstart(void) {
-  /* BoxLambda: Copy code segment if needed. For SW images linked
-   * to boot from IMEM, __code_start and __code_source will be the
-   * same and no code relocation is performed. */
-  if (__code_start != __code_source) {
-    local_memcpy(__code_start, __code_source, (uintptr_t)__code_size);
+  /* BoxLambda: Copy emem code segment if needed.*/
+  if (__ecode_start != __ecode_source) {
+    local_memcpy(__ecode_start, __ecode_source, (uintptr_t)__ecode_size);
   }
 
-  /*data segment*/
-  if (__data_start != __data_source) {
-    local_memcpy(__data_start, __data_source, (uintptr_t)__data_size);
+  /*edata segment*/
+  if (__edata_start != __edata_source) {
+    local_memcpy(__edata_start, __edata_source, (uintptr_t)__edata_size);
   }
 
-  /*BSS segment*/
-  local_memset(__bss_start, '\0', (uintptr_t)__bss_size);
+  /*eBSS segment*/
+  local_memset(__ebss_start, '\0', (uintptr_t)__ebss_size);
+
+  /* icode segment.*/
+  if (__icode_start != __icode_source) {
+    local_memcpy(__icode_start, __icode_source, (uintptr_t)__icode_size);
+  }
+
+  /*idata segment*/
+  if (__idata_start != __idata_source) {
+    local_memcpy(__idata_start, __idata_source, (uintptr_t)__idata_size);
+  }
+
+  /*iBSS segment*/
+  local_memset(__ibss_start, '\0', (uintptr_t)__ibss_size);
 
 /* BoxLambda: code and data has now been relocated, at this point we
  * can make non-local function calls. */
@@ -257,7 +268,11 @@ __attribute((aligned(4))) _trap(void) {
 }
 #endif
 
-void __attribute__((naked)) __section(".text.init.enter") __attribute__((used))
+/* An application image starts with this header. */
+unsigned const header_magic[2] __attribute__((section(".init.header"))) =
+  {IMAGE_HEADER_MAGIC_NUMBER, (unsigned)__image_size};
+
+void __attribute__((naked)) __section(".init.enter") __attribute__((used))
 _start(void) {
 
   /**
@@ -278,17 +293,15 @@ _start(void) {
           "la	gp, __global_pointer$\n"
           ".option	pop");
 
+  /*Set mtvec to 0, in imem (it might originally be at 0x11000000 in flash)*/
+  __asm__("csrw	mtvec, x0");
+
 #ifdef __riscv_flen
   __asm__("csrr	t0, mstatus\n"
           "li	t1, 8192\n" // 1 << 13 = 8192
           "or	t0, t1, t0\n"
           "csrw	mstatus, t0\n"
           "csrwi	fcsr, 0");
-#endif
-#ifdef CRT0_SEMIHOST
-  __asm__("la     t0, _trap");
-  __asm__("csrw   mtvec, t0");
-  __asm__("csrr   t1, mtvec");
 #endif
   __asm__("j      _cstart");
 }

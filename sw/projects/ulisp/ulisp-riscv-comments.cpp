@@ -77,7 +77,7 @@ Sipeed_ST7789 tft(320, 240, spi_);
   #define CPU_K210
 
 #elif defined(BOARD_BOXLAMBDA)
-  #define WORKSPACESIZE 500000            /* Objects (16*bytes) */
+  #define WORKSPACESIZE 90000             /* Objects (16*bytes) */
   #define CODESIZE 512                    /* Bytes */
   #define STACKDIFF 4096
   #define CPU_K210

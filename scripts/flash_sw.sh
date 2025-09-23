@@ -5,12 +5,22 @@
 
 if [[ "$#" < 2  || "$1" == "-h" ]]
 then
-  echo "$0 arty_a7_[35|100]t <.bin input file>"
+  echo "$0 [-b] arty_a7_[35|100]t <.bin input file>"
   exit 1
+fi
+
+if [[ "$1" == "-b" ]]
+then
+  #Bootloader image lives at flash offset 0x400000
+  ADDR=4194304
+  shift
+else
+  #Application image lives at 0x500000
+  ADDR=5242880
 fi
 
 BOARD=$1
 BIN_IN=$2
 
-openFPGALoader -b $BOARD -f -o 4194304 $BIN_IN
+openFPGALoader -b $BOARD -f -o $ADDR $BIN_IN
 

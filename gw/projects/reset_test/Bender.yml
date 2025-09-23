@@ -14,7 +14,7 @@ sources:
   - target: prj_constraints
     files:
       - ../boxlambda_base/constrs/boxlambda_soc.xdc
-  - target: arty-a7-100
+  - target: vivado
     defines:
       VRAM_SIZE_BYTES: 131072
       CPU_RAM_SIZE_BYTES: 262144
@@ -27,11 +27,26 @@ sources:
       SPIFLASH: ~
       I2C: ~
       #TRACE_ALL_INSTRUCTIONS: ~
+      IBEX_BOOT_ADDR: 32'h11500000
     files:
       - ../boxlambda_base/rtl/boxlambda_top.sv
   - target: verilator
+    defines:
+      VRAM_SIZE_BYTES: 131072
+      CPU_RAM_SIZE_BYTES: 262144
+      NO_MODPORT_EXPRESSIONS: ~
+      DEBUG_MODULE_ACTIVE: ~
+      YM2149: ~
+      SDSPI: ~
+      DRAM: ~
+      VERA: ~
+      SPIFLASH: ~
+      I2C: ~
+      #TRACE_ALL_INSTRUCTIONS: ~
+      IBEX_BOOT_ADDR: 32'h00000000
     files:
       - sim/sim_main.cpp
       - ../../components/spiflash/sim/flashsim.cpp
       - ../boxlambda_base/sim/sim_main.sv
       - ../boxlambda_base/lint.vlt
+      - ../boxlambda_base/rtl/boxlambda_top.sv

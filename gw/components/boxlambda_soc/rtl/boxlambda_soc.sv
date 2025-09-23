@@ -562,7 +562,7 @@ module boxlambda_soc #(
       .data_wb(data_bus_wbm[DATA_BUS_IBEX_D_M]),
       .test_en(1'b0),
       .hart_id(32'h0),
-      .boot_addr(32'h0),
+      .boot_addr(`IBEX_BOOT_ADDR),
       .irq_software(1'b0),
       .irq_timer(timer_irq),
       .irq_external(),
