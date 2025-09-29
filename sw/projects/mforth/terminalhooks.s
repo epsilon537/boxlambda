@@ -145,7 +145,7 @@ pause:
   # -----------------------------------------------------------------------------
   # Initialize register file
   li  x1, 0           # Return address register, holds link back and is also used to compose long calls with auipc and jalr
-  laf x2, returnstackanfang # Stack pointer x2 (sp) is initialized by reset to end of RAM... We may choose another location.
+  laf x2, __stack     # Stack pointer x2 (sp) is initialized by reset to end of RAM... We may choose another location.
   li  x3, 0           # Loop index
   li  x4, 0           # Loop limit
   li  x5, 0           # Scratch register, needs to be saved.
@@ -153,7 +153,7 @@ pause:
   li  x7, 0           # Scratch register, needs to be saved.
 
   li  x8, 42          # TOS
-  laf x9, datenstackanfang  # PSP Set data stack pointer
+  laf x9, datastackstart  # PSP Set data stack pointer
   li x10, 0           # Scratch register, needs to be saved.
   li x11, 0           # Scratch register, needs to be saved.
   li x12, 0           # Scratch register, needs to be saved.

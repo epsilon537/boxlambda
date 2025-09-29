@@ -87,7 +87,7 @@ accept: # ( c-addr maxlength -- length ) Collecting your keystrokes !
 5: # Delete a character.
   beq x12, zero, 1b  # Zero characters in buffer ? Then we cannot delete one.
 
-  call dotgaensefuesschen # Clear a character visually. Emit sequence to delete one character in terminal.
+  call dotquote # Clear a character visually. Emit sequence to delete one character in terminal.
   .byte 3, 8, 32, 8       # Step back cursor, overwrite with space, step back cursor again.
 
   # pushdaconst 8
@@ -134,15 +134,15 @@ accept: # ( c-addr maxlength -- length ) Collecting your keystrokes !
   Definition Flag_foldable_0, "tib" # ( -- addr )
 # -----------------------------------------------------------------------------
 tib:
-  pushdaaddrf Eingabepuffer
+  pushdaaddrf Inputbuffer
   ret
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible|Flag_variable, ">in" # ( -- addr )
-  CoreVariable Pufferstand
+  CoreVariable Bufferlevel
 # -----------------------------------------------------------------------------
 source_in:
-  pushdaaddrf Pufferstand
+  pushdaaddrf Bufferlevel
   ret
   .varinit 0
 
@@ -153,7 +153,7 @@ source_in:
   pushdaaddrf current_source
   ret
   .varinit 0              # Empty TIB for default
-  .varinit Eingabepuffer
+  .varinit Inputbuffer
 
 
 # -----------------------------------------------------------------------------
@@ -185,18 +185,18 @@ source:
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "query" # Collecting your keystrokes into TIB ! Forth at your fingertips :-)
-query: # ( -- ) Nimmt einen String in den Eingabepuffer auf
+query: # ( -- ) Nimmt einen String in den Inputbuffer auf
 # -----------------------------------------------------------------------------
   push x1
 
-  call source_in # Aktueller Offset in den Eingabepuffer  Zero characters consumed yet
+  call source_in # Aktueller Offset in den Inputbuffer  Zero characters consumed yet
   li x15, 0
   sc x15, 0(x8)
   drop
 
   call tib
   dup
-  pushdaconst Maximaleeingabe
+  pushdaconst Maximuminput
   call accept
   pop x1
   j setsource

@@ -23,7 +23,7 @@
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "*" # ( x1 x2 -- x1*x2 )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "*" # ( x1 x2 -- x1*x2 )
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
   addi x9, x9, CELL
@@ -77,7 +77,7 @@ m_star:
   ret
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "/" # ( n1 n2 -- n1/n2 )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "/" # ( n1 n2 -- n1/n2 )
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
   addi x9, x9, CELL
@@ -91,7 +91,7 @@ m_star:
   j multiply_opcodierung
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "mod" # ( n1 n2 -- n1%n2 )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "mod" # ( n1 n2 -- n1%n2 )
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
   addi x9, x9, CELL

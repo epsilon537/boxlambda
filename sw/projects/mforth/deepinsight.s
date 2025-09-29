@@ -75,7 +75,7 @@ hexdot: # ( u -- ) Print an unsigned number in Base 16, independent of number su
   write "Returnstack: [ "
 
   # Berechne den Stackfüllstand  Calculate number of elements on datastack
-  laf x15, returnstackanfang # Anfang laden
+  laf x15, __stack # Anfang laden
   sub x15, x15, sp # und aktuellen Stackpointer abziehen
   blt x15, zero, 2f # Stack underflow ? Do not print a zillion of locations.
   srli x11, x15, CELLSHIFT
@@ -87,7 +87,7 @@ hexdot: # ( u -- ) Print an unsigned number in Base 16, independent of number su
 
   beq x11, zero, 2f # Bei einem leeren Stack ist nichts auszugeben.  Don't print elements for an empty stack
 
-  laf x10, returnstackanfang # Anfang laden, wo ich beginne:  Start here !
+  laf x10, __stack # Anfang laden, wo ich beginne:  Start here !
 
 1: # Hole das Stackelement !  Fetch stack element directly
    pushdatos
@@ -105,7 +105,7 @@ hexdot: # ( u -- ) Print an unsigned number in Base 16, independent of number su
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "words" # Print list of words with debug information
-words: # Malt den Dictionaryinhalt
+words:
 # -----------------------------------------------------------------------------
   push x1
 
@@ -113,7 +113,7 @@ words: # Malt den Dictionaryinhalt
 
   call dictionarystart
 
-1:# Adresse:
+1:# Adress:
   write "Address: "
   dup
   call hexdot
@@ -124,13 +124,13 @@ words: # Malt den Dictionaryinhalt
   lc x8, 0(x8)
   call hexdot
 
-  # Flagfeld
+  # Flags
   write "Flags: "
   dup
   lc x8, CELL(x8)
   call hexdot
 
-  # Einsprungadresse
+  # Entryaddress
   write "Code: "
   dup
   addi x8, x8, 2*CELL
@@ -163,11 +163,11 @@ words: # Malt den Dictionaryinhalt
   popda x15
   bne x15, zero, unused_ram
 
-    laf x15, FlashDictionaryEnde
+    laf x15, __forth_imem_end
     j unused_common
 
 unused_ram:
-  call flashvarhere
+  call ramvarhere
   popda x15
 
 unused_common:
@@ -202,9 +202,9 @@ unused_common:
   li x15, 10
   sc x15, 0(x14)
 
-  # Berechne den Stackfüllstand  Calculate number of elements on datastack
-  laf x11, datenstackanfang # Anfang laden
-  sub x11, x11, x9 # und aktuellen Stackpointer abziehen
+  # Calculate number of elements on datastack
+  laf x11, datastackstart # load start
+  sub x11, x11, x9 # subtract current stack pointer
   blt x11, zero, 2f # Stack underflow ? Do not print a zillion of locations.
   srli x11, x11, CELLSHIFT
 
@@ -217,11 +217,11 @@ unused_common:
 
   blt x11, zero, 2f # Stack underflow ? Do not print a zillion of locations.
 
-  beq x11, zero, 2f # Bei einem leeren Stack ist nichts auszugeben.  Don't print elements for an empty stack
+  beq x11, zero, 2f # Don't print elements for an empty stack
 
-  laf x12, datenstackanfang - CELL # Anfang laden, wo ich beginne:  Start here !
+  laf x12, datastackstart - CELL # Start here !
 
-1: # Hole das Stackelement !  Fetch stack element directly
+1: # Fetch stack element directly
    pushdatos
    lc x8, 0(x12)
 
@@ -238,7 +238,7 @@ unused_common:
    addi x11, x11, -1
    bne x11, zero, 1b
 
-2: # TOS zeigen  Print TOS
+2: # Print TOS
    write " TOS: "
    pushda x8
 
@@ -268,7 +268,7 @@ dots:
   write "Stack: [ "
 
   # Berechne den Stackfüllstand  Calculate number of elements on datastack
-  laf x11, datenstackanfang # Anfang laden
+  laf x11, datastackstart # Anfang laden
   sub x11, x11, x9 # und aktuellen Stackpointer abziehen
   blt x11, zero, 2f # Stack underflow ? Do not print a zillion of locations.
   srli x11, x11, CELLSHIFT
@@ -279,7 +279,7 @@ dots:
 
   beq x11, zero, 2f # Bei einem leeren Stack ist nichts auszugeben.  Don't print elements for an empty stack
 
-  laf x10, datenstackanfang - CELL # Anfang laden, wo ich beginne:  Start here !
+  laf x10, datastackstart - CELL # Anfang laden, wo ich beginne:  Start here !
 
 1: # Hole das Stackelement !  Fetch stack element directly
    pushdatos

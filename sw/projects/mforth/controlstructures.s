@@ -293,7 +293,7 @@ struktur_then:
 2:  # ( Sprunglücke Opcode )
     swap
     pop x1
-    j kommairgendwo
+    j kommasomewhere
 
 strukturen_passen_nicht:
   writeln "Structures don't match"

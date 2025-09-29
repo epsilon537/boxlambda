@@ -20,7 +20,7 @@
 # Logic.
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "and" # ( x1 x2 -- x1&x2 )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "and" # ( x1 x2 -- x1&x2 )
                         # Combines the top two stack elements using bitwise AND.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
@@ -57,7 +57,7 @@ opcodiereinsprung_mips_unsigned:
   .endif
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "bic" # ( x1 x2 -- x1&~x2 )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "bic" # ( x1 x2 -- x1&~x2 )
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
   addi x9, x9, CELL
@@ -72,7 +72,7 @@ opcodiereinsprung_mips_unsigned:
   j opcodiereinsprung_and
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "or" # ( x1 x2 -- x1|x2 )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "or" # ( x1 x2 -- x1|x2 )
                        # Combines the top two stack elements using bitwise OR.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
@@ -100,7 +100,7 @@ opcodiereinsprung_mips_unsigned:
   .endif
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "xor" # ( x1 x2 -- x1|x2 )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "xor" # ( x1 x2 -- x1|x2 )
                         # Combines the top two stack elements using bitwise exclusive-OR.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
@@ -165,7 +165,7 @@ opcodiereinsprung_mips_unsigned:
 .ifdef RV64
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "warshift" # ( x n -- x' )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "warshift" # ( x n -- x' )
                             # Shifts 'x' right by 'n' bits, shifting in x's MSB.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
@@ -181,7 +181,7 @@ opcodiereinsprung_mips_unsigned:
   j opcodiereinsprung_shift
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "wrshift" # ( x n -- x' )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "wrshift" # ( x n -- x' )
                            # Shifts 'x' right by 'n' bits.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
@@ -197,7 +197,7 @@ opcodiereinsprung_mips_unsigned:
   j opcodiereinsprung_shift
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "wlshift" # ( x n -- x' )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "wlshift" # ( x n -- x' )
                             # Shifts 'x' right by 'n' bits, shifting in x's MSB.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
@@ -216,7 +216,7 @@ opcodiereinsprung_mips_unsigned:
 
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "arshift" # ( x n -- x' )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "arshift" # ( x n -- x' )
                             # Shifts 'x' right by 'n' bits, shifting in x's MSB.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
@@ -236,7 +236,7 @@ opcodiereinsprung_mips_unsigned:
   j opcodiereinsprung_shift
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "rshift" # ( x n -- x' )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "rshift" # ( x n -- x' )
                            # Shifts 'x' right by 'n' bits.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
@@ -256,7 +256,7 @@ opcodiereinsprung_mips_unsigned:
   j opcodiereinsprung_shift
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodierbar, "lshift" # ( x n -- x' )
+  Definition Flag_foldable_2|Flag_inline|Flag_noframe|Flag_opcodable, "lshift" # ( x n -- x' )
                            # Shifts 'x' left by 'n' bits.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)

@@ -24,14 +24,23 @@
   .endm
 .endif
 
-.include "../common/datastackandmacros.s"
+.include "datastackandmacros.s"
 
 # -----------------------------------------------------------------------------
-#   Type of flash memory
+#   Linker labels
+# -----------------------------------------------------------------------------
+.extern __forth_ram_start
+.extern __forth_ram_end
+.extern __forth_imem_start
+.extern __forth_imem_end
+.extern __stack
+
+# -----------------------------------------------------------------------------
+#   Type of memory
 # -----------------------------------------------------------------------------
 
 .ifndef erasedflashspecial
-  .ifdef erasedflashcontainszero
+  .ifdef erasedmemcontainszero
     .equ erasedbyte, 0
     .equ erasedhalfword, 0
     .equ erasedword, 0
@@ -88,24 +97,14 @@
     .equ "Code_\Name", .        # Labels for a more readable assembler listing only
 .endm
 
-
+# This macro is used once, by the final core word.
 .macro Definition_EndOfCore Flags, Name
     .balign CELL, 0
     .equ "Dictionary_\Name", .  # Labels for a more readable assembler listing only
 
-    .ifdef RV64
-9:  .dword FlashDictionaryAnfang
-    .dword \Flags
-    .else
-
-     .ifdef flash8bytesblockwrite
-9:      .word FlashDictionaryAnfang + 0x04 # Insert Link with offset because of alignment issues.
-     .else
-9:      .word FlashDictionaryAnfang        # Link einfügen  Insert Link
-     .endif
+9:  .word __forth_imem_start    # Insert Link to the IMEM dictionary
 
     .word \Flags      # Flag field
-    .endif
 
     .byte 8f - 7f     # Calculate length of name field
 7:  .ascii "\Name"    # Insert name string
@@ -119,7 +118,7 @@
     .equ "Code_\Name", .        # Labels for a more readable assembler listing only
 .endm
 
-.ifdef erasedflashcontainszero
+.ifdef erasedmemcontainszero
   .equ Flag_invisible,  0              # Erased Flash needs to give invisible Flags.
   .equ Flag_visible,    1 << SIGNSHIFT # 0x80000000
 .else
@@ -152,7 +151,7 @@
 # Different from Mecrisp-Stellaris ! Opcodability is independent of constant folding flags in Mecrisp-Quintus.
 # This greatly simplifies this optimisation.
 
-.equ Flag_opcodierbar, Flag_visible | 0x200
+.equ Flag_opcodable, Flag_visible | 0x200
 .equ Flag_undefined,   Flag_visible | 0xBD4A3BC0
 
 # Allows to keep the link register without saving it to the stack.
@@ -160,47 +159,43 @@
 .equ Flag_noframe,     Flag_visible | 0x400
 
 # -----------------------------------------------------------------------------
-# Makros zum Bauen des Dictionary
 # Macros for building dictionary
 # -----------------------------------------------------------------------------
 
-# Für initialisierte Variablen am Ende des RAM-Dictionary
-# For initialised variables at the end of RAM-Dictioanary that are recognized by catchflashpointers
+# For initialised variables at the end of RAM-Dictioanary that are recognized by catchmempointers
 
-.macro CoreVariable, Name #  Benutze den Mechanismus, um initialisierte Variablen zu erhalten.
-  .set CoreVariablenPointer, CoreVariablenPointer - CELL
-  .equ \Name, CoreVariablenPointer
+.macro CoreVariable, Name #  Use the mechanism to obtain initialized variables.
+  .set CoreVariablePointer, CoreVariablePointer - CELL
+  .equ \Name, CoreVariablePointer
 .endm
 
-.macro DoubleCoreVariable, Name #  Benutze den Mechanismus, um initialisierte Variablen zu erhalten.
-  .set CoreVariablenPointer, CoreVariablenPointer - 2*CELL
-  .equ \Name, CoreVariablenPointer
+.macro DoubleCoreVariable, Name #  Use the mechanism to obtain initialized variables.
+  .set CoreVariablePointer, CoreVariablePointer - 2*CELL
+  .equ \Name, CoreVariablePointer
 .endm
 
-.macro ramallot Name, Menge         # Für Variablen und Puffer zu Beginn des Rams, die im Kern verwendet werden sollen.
-  .equ \Name, rampointer            # Uninitialisiert.
-  .set rampointer, rampointer + \Menge
+.macro ramallot Name, Amount        # For variables and buffers at the beginning of the RAM that are to be used in the kernel
+  .equ \Name, rampointer            # uninitialized.
+  .set rampointer, rampointer + \Amount
 .endm
 
 # -----------------------------------------------------------------------------
-# Festverdrahtete Kernvariablen, Puffer und Stacks zu Begin des RAMs
 # Hardwired core variables, buffers and stacks at the begin of RAM
 # -----------------------------------------------------------------------------
+.set rampointer, __forth_ram_start  # Set location for core variables.
 
-.set rampointer, RamAnfang  # Ram-Anfang setzen  Set location for core variables.
-
-# Variablen des Kerns  Variables of core that are not visible
-# Variablen für das Flashdictionary  Variables for Flash management
+# Variables of core that are not visible
+# Variables for IMEM/Second dictionary management
 
 ramallot Dictionarypointer, CELL        # These five variables need to be exactly in this order in memory.
-ramallot ZweitDictionaryPointer, CELL   # Dictionarypointer +  4
-ramallot Fadenende, CELL                # Dictionarypointer +  8
-ramallot ZweitFadenende, CELL           # Dictionarypointer + 12
-ramallot VariablenPointer, CELL         # Dictionarypointer + 16
+ramallot SecondDictionaryPointer, CELL   # Dictionarypointer +  4
+ramallot ThreadEnd, CELL                # Dictionarypointer +  8
+ramallot SecondThreadEnd, CELL           # Dictionarypointer + 12
+ramallot VariablesPointer, CELL         # Dictionarypointer + 16
 
-ramallot konstantenfaltungszeiger, CELL
+ramallot constantfoldingpointer, CELL
 ramallot leavepointer, CELL
-ramallot Einsprungpunkt, CELL
+ramallot Entrypoint, CELL
 
 ramallot FlashFlags, CELL
 
@@ -208,8 +203,8 @@ ramallot FlashFlags, CELL
   ramallot arguments, CELL
 .endif
 
-.equ Zahlenpufferlaenge, 18*CELL-1 # Zahlenpufferlänge+1 sollte durch Zellengröße teilbar sein !      Number buffer (Length+1 mod CELL = 0)
-ramallot Zahlenpuffer, Zahlenpufferlaenge+1 # Reserviere mal großzügig 72 Bytes RAM für den Zahlenpuffer
+.equ Numberbufferlength, 18*CELL-1 # Numberbufferlänge+1 sollte durch Zellengröße teilbar sein !      Number buffer (Length+1 mod CELL = 0)
+ramallot Numberbuffer, Numberbufferlength+1 # Reserviere mal großzügig 72 Bytes RAM für den Numberbuffer
 
 .ifndef datastacklength
   .equ datastacklength, 128*CELL
@@ -221,11 +216,11 @@ ramallot Zahlenpuffer, Zahlenpufferlaenge+1 # Reserviere mal großzügig 72 Byte
   .equ tiblength, 200
 .endif
 
-  ramallot datenstackende, datastacklength  # Data stack
-  ramallot datenstackanfang, 0
+  ramallot datastackend, datastacklength  # Data stack
+  ramallot datastackstart, 0
 
-  ramallot returnstackende, returnstacklength  # Return stack
-  ramallot returnstackanfang, 0
+  # ramallot returnstackend, returnstacklength  # Return stack
+  # ramallot returnstackstart, 0
 
 .ifdef dualcore
   ramallot datastackcore1end, datastacklength  # Data stack
@@ -237,26 +232,26 @@ ramallot Zahlenpuffer, Zahlenpufferlaenge+1 # Reserviere mal großzügig 72 Byte
   ramallot trampolineaddr, 4
 .endif
 
-.equ Maximaleeingabe,   tiblength        # Input buffer for an Address-Length string
-ramallot Eingabepuffer, Maximaleeingabe  # Eingabepuffer wird einen Adresse-Länge String enthalten
+.equ Maximuminput,   tiblength        # Input buffer for an Address-Length string
+ramallot Inputbuffer, Maximuminput  # Inputbuffer wird einen Adresse-Länge String enthalten
 
 .ifdef flash8bytesblockwrite
   .equ Sammelstellen, 32 # 32 * (8 + 4) = 384 Bytes
   ramallot Sammeltabelle, Sammelstellen * 12 # Buffer 32 blocks of 8 bytes each for ECC constrained Flash write
 .endif
 
-.equ RamDictionaryAnfang, rampointer # Ende der Puffer und Variablen ist Anfang des Ram-Dictionary.  Start of RAM dictionary
-.equ RamDictionaryEnde,   RamEnde    # Das Ende vom Dictionary ist auch das Ende vom gesamten Ram.   End of RAM dictionary = End of RAM
+.equ RamDictionaryStart, rampointer # Start of RAM dictionary
+.equ RamDictionaryEnd,   __forth_ram_end    # End of RAM dictionary
 
 
 # -----------------------------------------------------------------------------
 #  Macros for "typesetting" :-)
 # -----------------------------------------------------------------------------
 
-.macro write Meldung
-  call dotgaensefuesschen
+.macro write Notification
+  call dotquote
         .byte 8f - 7f         # Compute length of string.
-7:      .ascii "\Meldung"
+7:      .ascii "\Notification"
 
 .ifdef compressed_isa
 8:  .balign 2, 0      # Realign
@@ -266,13 +261,13 @@ ramallot Eingabepuffer, Maximaleeingabe  # Eingabepuffer wird einen Adresse-Län
 
 .endm
 
-.macro writeln Meldung
-  call dotgaensefuesschen
+.macro writeln Notification
+  call dotquote
         .byte 8f - 7f         # Compute length of string.
 .ifdef crlf
-7:      .ascii "\Meldung\n\r"
+7:      .ascii "\Notification\n\r"
 .else
-7:      .ascii "\Meldung\n"
+7:      .ascii "\Notification\n"
 .endif
 
 .ifdef compressed_isa
@@ -283,13 +278,13 @@ ramallot Eingabepuffer, Maximaleeingabe  # Eingabepuffer wird einen Adresse-Län
 
 .endm
 
-.macro welcome Meldung
-  call dotgaensefuesschen
+.macro welcome Notification Notification2
+  call dotquote
         .byte 8f - 7f         # Compute length of string.
 .ifdef crlf
-7:      .ascii "Mecrisp-Quintus 1.1.1\Meldung\n\r"
+7:      .ascii "Mecrisp-Quintus 1.1.1\Notification\n\r\Notification2\n\r"
 .else
-7:      .ascii "Mecrisp-Quintus 1.1.1\Meldung\n"
+7:      .ascii "Mecrisp-Quintus 1.1.1\Notification\n\Notification2\n"
 .endif
 
 .ifdef compressed_isa
@@ -301,15 +296,13 @@ ramallot Eingabepuffer, Maximaleeingabe  # Eingabepuffer wird einen Adresse-Län
 .endm
 
 # -----------------------------------------------------------------------------
-# Vorbereitung der Dictionarystruktur
 # Preparations for dictionary structure
 # -----------------------------------------------------------------------------
 .balign CELL, 0
-CoreDictionaryAnfang: # Dictionary-Einsprungpunkt setzen
-                      # Set entry point for Dictionary
-
-.set CoreVariablenPointer, RamDictionaryEnde # Im Flash definierte Variablen kommen ans RAM-Ende
-                                             # Variables defined in Flash are placed at the end of RAM
+CoreDictionaryStart: # Set entry point for Dictionary
+# Variables defined in the core words are placed at the end of RAM
+# SetCoreVariablePointer advances down, to lower addresses.
+.set CoreVariablePointer, RamDictionaryEnd
 
   Definition Flag_invisible, "--- Mecrisp-Quintus 1.1.1 ---"
 
@@ -319,31 +312,31 @@ CoreDictionaryAnfang: # Dictionary-Einsprungpunkt setzen
 .include "../common/flash8bytesblockwrite.s"
 .endif
 
-.include "../common/stackjugglers.s"
+.include "stackjugglers.s"
 
 .ifdef letsroll
-.include "../common/roll.s"
+.include "roll.s"
 .endif
 
-.include "../common/comparisions.s"
-.include "../common/calculations.s"
+.include "comparisions.s"
+.include "calculations.s"
 
 .include "terminal.s"
 
-.include "../common/query.s"
-.include "../common/strings.s"
-.include "../common/deepinsight.s"
-.include "../common/token.s"
-.include "../common/buildsdoes.s"
-.include "../common/compiler.s"
-.include "../common/compiler-flash.s"
-.include "../common/doloop.s"
-.include "../common/case.s"
-.include "../common/controlstructures.s"
-.include "../common/logic.s"
-.include "../common/interpreter.s"
-.include "../common/numberstrings.s"
-.include "../common/numberoutput.s"
+.include "query.s"
+.include "strings.s"
+.include "deepinsight.s"
+.include "token.s"
+.include "buildsdoes.s"
+.include "compiler.s"
+.include "compiler-memory.s"
+.include "doloop.s"
+.include "case.s"
+.include "controlstructures.s"
+.include "logic.s"
+.include "interpreter.s"
+.include "numberstrings.s"
+.include "numberoutput.s"
 
 .ifdef mipscore
 .include "../common/multiplydivide-mips.s"
@@ -351,19 +344,18 @@ CoreDictionaryAnfang: # Dictionary-Einsprungpunkt setzen
   .ifdef softwaremultiply
   .include "../common/multiplydivide-sw.s"
   .else
-  .include "../common/multiplydivide.s"
+  .include "multiplydivide.s"
   .endif
 .endif
 
-.include "../common/double.s"
-.include "../common/memory.s"
+.include "double.s"
+.include "memory.s"
 
 # -----------------------------------------------------------------------------
-# Schließen der Dictionarystruktur und Zeiger ins Flash-Dictionary
-# Finalize the dictionary structure and put a pointer into changeable Flash-Dictionary
+# Finalize the dictionary structure and put a pointer into IMEM-Dictionary
 # -----------------------------------------------------------------------------
 
-  Definition_EndOfCore Flag_invisible, "--- Flash Dictionary ---"
+  Definition_EndOfCore Flag_invisible, "--- End of Core ---"
 
 # -----------------------------------------------------------------------------
 #  End of Dictionary

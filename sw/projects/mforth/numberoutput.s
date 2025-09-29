@@ -60,10 +60,10 @@ hold: # ( Zeichen -- )  Insert one character at the beginning of number buffer
 
   push x10
 
-  laf x10, Zahlenpuffer
+  laf x10, Numberbuffer
   lbu x14, 0(x10) # Länge holen
 
-  li x15, Zahlenpufferlaenge  # Ist der Puffer voll ? Number buffer full ?
+  li x15, Numberbufferlength  # Ist der Puffer voll ? Number buffer full ?
   bgeu x14, x15, 3f           # Keine weiteren Zeichen mehr annehmen.
 
   # Länge des Puffers um 1 erhöhen  Increment length
@@ -100,10 +100,10 @@ zahlanhaengen: # ( Character -- ) Insert one character at the end of number buff
 #------------------------------------------------------------------------------
   push x10
 
-  laf x10, Zahlenpuffer
+  laf x10, Numberbuffer
   lbu x14, 0(x10) # Länge holen
 
-  li x15, Zahlenpufferlaenge  # Ist der Puffer voll ? Number buffer full ?
+  li x15, Numberbufferlength  # Ist der Puffer voll ? Number buffer full ?
   bgeu x14, x15, 3f           # Keine weiteren Zeichen mehr annehmen.
 
     addi x14, x14, 1 # Ein Zeichen mehr
@@ -127,15 +127,15 @@ vorzeichen: # ( Vorzeichen -- )
   ret
 
 1:li x8, 45  # Minuszeichen  ASCII for minus
-  j hold     # an den Zahlenpuffer anhängen  put it into number buffer
+  j hold     # an den Numberbuffer anhängen  put it into number buffer
 
 #------------------------------------------------------------------------------
   Definition Flag_visible, "#>" # ( ZahlenrestL (ZahlenrestH) -- Addr Len )
 zifferstringende:  # Schließt einen neuen Ziffernstring ab und gibt seine Adresse zurück.
-                   # Benutzt dafür einfach den Zahlenpuffer.
+                   # Benutzt dafür einfach den Numberbuffer.
                    # Finishes a number string and gives back its address.
 #------------------------------------------------------------------------------
-  laf x15, Zahlenpuffer
+  laf x15, Numberbuffer
   lbu x8, 0(x15)
   addi x15, x15, 1
   sc x15, 0(x9)
@@ -222,7 +222,7 @@ ziffer: # ( Zahl -- Zahl )
 zifferstringanfang: # Eröffnet einen neuen Ziffernstring.
                     # Opens a number string
 #------------------------------------------------------------------------------
-  laf x14, Zahlenpuffer # Länge löschen, bisherige Länge Null.
+  laf x14, Numberbuffer # Länge löschen, bisherige Länge Null.
   li x15, 0
   sb x15, 0(x14)
   ret

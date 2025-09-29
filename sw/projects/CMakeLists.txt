@@ -74,4 +74,5 @@ add_subdirectory(dfx_test)
 add_subdirectory(invalid_address)
 add_subdirectory(ibex_perf_test)
 add_subdirectory(ulisp)
+add_subdirectory(mforth)
 

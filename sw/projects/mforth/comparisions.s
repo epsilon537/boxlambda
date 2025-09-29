@@ -115,7 +115,7 @@
   ret
 
 # -----------------------------------------------------------------------------
-  # Definition Flag_inline|Flag_opcodierbar_GleichUngleich, "<>" # ( x1 x2 -- ? )
+  # Definition Flag_inline|Flag_opcodable_GleichUngleich, "<>" # ( x1 x2 -- ? )
   Definition Flag_foldable_2|Flag_inline|Flag_noframe, "<>" # ( x1 x2 -- ? )
                        # Compares the top two stack elements for inequality.
 # -----------------------------------------------------------------------------
@@ -127,7 +127,7 @@
   ret
 
 # -----------------------------------------------------------------------------
-  # Definition Flag_inline|Flag_opcodierbar_GleichUngleich, "=" # ( x1 x2 -- ? )
+  # Definition Flag_inline|Flag_opcodable_GleichUngleich, "=" # ( x1 x2 -- ? )
   Definition Flag_foldable_2|Flag_inline|Flag_noframe, "=" # ( x1 x2 -- ? )
                       # Compares the top two stack elements for equality.
 # -----------------------------------------------------------------------------

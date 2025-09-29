@@ -141,9 +141,9 @@ holechar: # ( -- Zeichen )
   ret
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate_compileonly, ".\"" # Fügt eine Meldung ein  Print a message
+  Definition Flag_immediate_compileonly, ".\"" # Fügt eine Notification ein  Print a message
 # -----------------------------------------------------------------------------
-  pushdaaddr dotgaensefuesschen
+  pushdaaddr dotquote
 
 1:push x1
   call callkomma
@@ -167,7 +167,7 @@ holechar: # ( -- Zeichen )
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "(.\")"
-dotgaensefuesschen:
+dotquote:
 # -----------------------------------------------------------------------------
   pushda x1
 
@@ -309,9 +309,9 @@ type_intern:
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "count"
-count: # ( str -- ) Gibt einen String aus  Print a counted string
+count: # ( c-addr -- a-addr len ) Gibt einen String aus  Print a counted string
 # -----------------------------------------------------------------------------
-  # Count soll die Adresse um eine Stelle weiterschieben und die Länge holen.
+  # Count should shift the address one place and get the length.
   addi x8, x8, 1
   dup
   lbu x8, -1(x8)

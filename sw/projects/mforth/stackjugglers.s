@@ -138,7 +138,7 @@ pick:
                                   # ( -- Number of elements that have been on datastack before )
 # -----------------------------------------------------------------------------
   # Berechne den Stackfüllstand
-  laf x15, datenstackanfang # Anfang laden  Calculate stack fill gauge
+  laf x15, datastackstart # Anfang laden  Calculate stack fill gauge
   sub x15, x15, x9          # und aktuellen Stackpointer abziehen
   pushdatos
   srai x8, x15, CELLSHIFT # Divide through bytes/cell.
@@ -148,7 +148,7 @@ pick:
   Definition Flag_visible, "rdepth"
 # -----------------------------------------------------------------------------
   # Berechne den Stackfüllstand
-  laf x15, returnstackanfang # Anfang laden  Calculate stack fill gauge
+  laf x15, __stack # Anfang laden  Calculate stack fill gauge
   sub x15, x15, sp          # und aktuellen Stackpointer abziehen
   pushdatos
   srai x8, x15, CELLSHIFT # Divide through bytes/cell.

@@ -31,7 +31,7 @@ insert_jalrx8: # ( Ziel Opcodelücke -- )
   li x15, 0x3C000000 | reg_tmp1 << 16 # lui x15, 0
   or x8, x8, x15
   pushda x10
-  call kommairgendwo
+  call kommasomewhere
 
   # Low-Part
   andi x8, x8, 0xFFFF
@@ -40,7 +40,7 @@ insert_jalrx8: # ( Ziel Opcodelücke -- )
   pushda x10
   addi x8, x8, 4
   pop_x1_x10
-  j kommairgendwo
+  j kommasomewhere
 
 .else
 
@@ -66,7 +66,7 @@ insert_jalrx8: # ( Ziel Opcodelücke -- )
   ori  x8, x8, 0x00000037 | reg_tmp1 << 7 # lui x15, ...
 
   pushda x10
-  call kommairgendwo
+  call kommasomewhere
 
   slli x8, x8, 20
   li x15, 0x00000067 | reg_tos << 7 | reg_tmp1 << 15 # jalr x8, x15, 0
@@ -75,7 +75,7 @@ insert_jalrx8: # ( Ziel Opcodelücke -- )
   pushda x10
   addi x8, x8, 4
   pop_x1_x10
-  j kommairgendwo
+  j kommasomewhere
 
 .endif
 .endif
@@ -118,7 +118,7 @@ dodoes:
 
   push x1
 
-  pushdaaddrf Einsprungpunkt
+  pushdaaddrf Entrypoint
   lc x8, 0(x8)
 
   .ifdef compressed_isa
@@ -155,12 +155,12 @@ dodoes:
     over
     addiw x8, x8, 0
     over
-    call kommairgendwo
+    call kommasomewhere
     swap
     srli x8, x8, 32
     swap
     addi x8, x8, 4
-    call kommairgendwo
+    call kommasomewhere
   .else
     call insert_jalrx8
   .endif

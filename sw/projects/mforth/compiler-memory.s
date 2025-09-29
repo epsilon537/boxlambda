@@ -26,66 +26,14 @@ smudge:
 # -----------------------------------------------------------------------------
   push x1
 
-  call align4komma # Align on 4 to make sure the last compressed opcode is actually written to Flash and to fullfill ANS requirement.
+  call align4komma # Align on 4 to make sure the last compressed opcode to fullfill ANS requirement.
 
   .ifdef RV64
     call align8komma
   .endif
 
-  call compiletoramq
-  popda x15
-  bne x15, zero, smudge_ram
-
   # -----------------------------------------------------------------------------
-  # Smudge for Flash
-
-    .ifdef flash8bytesblockwrite
-      call align8komma
-    .endif
-
-    # Prüfe, ob am Ende des Wortes ein $FFFF steht. Das darf nicht sein !
-    # Es würde als freie Stelle erkannt und später überschrieben werden.
-    # Deshalb wird in diesem Fall hier am Ende eine 0 ans Dictionary angehängt.
-
-    # Check if there is $FFFF at the end of the definition.
-    # That must not be ! It would be detected as free space on next Reset and simply overwritten.
-    # To prevent it a zero is applied at the end in this case.
-
-    call here
-    lc x15, -CELL(x8)
-    li x14, erasedcell
-    drop
-    bne x15, x14, 1f
-      # writeln "Füge in Smudge eine Enderkennungs-Null ein."
-      pushdaconst writtencell
-      call wkomma
-1:  # Okay, Ende gut, alles gut. Fine :-)
-
-    # Brenne die gesammelten Flags:  Flash in the collected Flags:
-    pushdatos
-    laf x8, FlashFlags
-    lc x8, 0(x8)
-
-    pushdatos
-    laf x8, Fadenende
-    lc x8, 0(x8)
-    addi x8, x8, CELL # Skip Link field
-
-    .ifdef RV64
-      call dflashstore
-    .else
-      call flashstore
-    .endif
-
-    .ifdef flushflash
-      call flushflash
-    .endif
-
-    pop x1
-    ret
-
-  # -----------------------------------------------------------------------------
-  # Smudge for RAM
+  # Smudge for RAM (both IMEM and EMEM)
 
 smudge_ram:
   pushdaconst Flag_visible
@@ -93,8 +41,7 @@ smudge_ram:
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "setflags" # ( x -- )
-setflags: # Setflags collects the Flags if compiling for Flash, because we can write Flash field only once.
-          # For RAM, the bits are simply set directly.
+setflags:
 # -----------------------------------------------------------------------------
 
   li x14, (Flag_undefined >> 5) & 0xFFFFFFFF # Sichtbarkeit entfernen  Remove visibility
@@ -106,26 +53,12 @@ setflags: # Setflags collects the Flags if compiling for Flash, because we can w
 1:push x1 # Flag ok.
 
 setflags_intern:
-  call compiletoramq
-  popda x15
-  bne x15, zero, setflags_ram
-
-  # -----------------------------------------------------------------------------
-  # Setflags for Flash
-  laf x14, FlashFlags
-  lc x15, 0(x14)
-  or x15, x15, x8  # Flashflags beginnt von create aus immer mit "Sichtbar" = 0.
-  sc x15, 0(x14)
-  drop
-  pop x1
-  ret
-
   # -----------------------------------------------------------------------------
   # Setflags for RAM
 setflags_ram:
 
   # Hole die Flags des aktuellen Wortes   Fetch flags of current definition
-  laf x14, Fadenende # Variable containing pointer to current definition
+  laf x14, ThreadEnd # Variable containing pointer to current definition
   lc x14,    0(x14)  # Address of current definition
   lc x15, CELL(x14)  # Flags des zuletzt definierten Wortes holen  Fetch its Flags
 
@@ -167,27 +100,27 @@ here: # Gibt den Dictionarypointer zurück
   ret
 
 # -----------------------------------------------------------------------------
-  Definition Flag_visible, "flashvar-here" # ( -- a-addr ) Gives RAM management pointer
-flashvarhere:
+  Definition Flag_visible, "ramvar-here" # ( -- a-addr ) Gives RAM management pointer
+ramvarhere:
 # -----------------------------------------------------------------------------
   pushdatos
-  laf x8, VariablenPointer
+  laf x8, VariablesPointer
   lc x8, 0(x8)
   ret
 
 # -----------------------------------------------------------------------------
-  Definition Flag_visible, "addrinflash?" # ( a-addr -- a-addr ) Permanent memory there ?
-addrinflash:
+  Definition Flag_visible, "addrinimem?" # ( a-addr -- a-addr )
+addrinimem:
 # -----------------------------------------------------------------------------
-  laf x14, FlashAnfang
-  laf x15, FlashEnde
+  laf x14, __forth_imem_start
+  laf x15, __forth_imem_end
   j 1f
 
 # -----------------------------------------------------------------------------
-  Definition Flag_visible, "addrinram?" # ( a-addr -- a-addr ) Volatile memory there ?
+  Definition Flag_visible, "addrinram?" # ( a-addr -- a-addr )
 # -----------------------------------------------------------------------------
-  laf x14, RamAnfang
-  laf x15, RamEnde
+  laf x14, __forth_ram_start
+  laf x15, __forth_ram_end
 
 1:bltu x8, x14, 2f
   bgeu x8, x15, 2f
@@ -277,19 +210,19 @@ align4komma: # Macht den Dictionarypointer auf 4 gerade
   ret
 
 # -----------------------------------------------------------------------------
-kommairgendwo: # ( x addr -- ) For backpatching of jump opcodes.
+kommasomewhere: # ( x addr -- ) For backpatching of jump opcodes.
 # -----------------------------------------------------------------------------
   push x1
   ddup
 
-  call hkommairgendwo
+  call hkommasomewhere
 
   swap
   srli x8, x8, 16
   swap
   addi x8, x8, 2
   pop x1
-hkommairgendwo: # ( x addr -- ) For backpatching of jump opcodes.
+hkommasomewhere: # ( x addr -- ) For backpatching of jump opcodes.
   push x1
   dup
   j hkomma_intern
@@ -307,13 +240,6 @@ hkomma: # Fügt 16 Bits an das Dictionary an
   call allot
 
 hkomma_intern:
-  call addrinflash
-  popda x15
-  beq x15, zero, hkomma_ram
-
-hkomma_flash:
-  call hflashstore
-  j 1f
 
 hkomma_ram:
   # Simply write directly if compiling for RAM.
@@ -397,7 +323,7 @@ align4komma: # Macht den Dictionarypointer auf 4 gerade
   ret
 
 # -----------------------------------------------------------------------------
-kommairgendwo: # ( x addr -- ) For backpatching of jump opcodes.
+kommasomewhere: # ( x addr -- ) For backpatching of jump opcodes.
 # -----------------------------------------------------------------------------
   push x1
   dup
@@ -406,12 +332,12 @@ kommairgendwo: # ( x addr -- ) For backpatching of jump opcodes.
 .ifdef RV64
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "w," # ( x -- )
-wkomma: # Fügt 32 Bits an das Dictionary an  Write 32 bits in Dictionary
+wkomma: # Write 32 bits in Dictionary
 # -----------------------------------------------------------------------------
 .else
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "," # ( x -- )
-wkomma: # Fügt 32 Bits an das Dictionary an  Write 32 bits in Dictionary
+wkomma: # Write 32 bits in Dictionary
 cellkomma:
 # -----------------------------------------------------------------------------
 .endif
@@ -430,16 +356,8 @@ cellkomma:
   call four_allot
 
 wkomma_intern:
-  call addrinflash
-  popda x15
-  beq x15, zero, komma_ram
-
-komma_flash:
-  call flashstore
-  j 1f
-
 komma_ram:
-  # Simply write directly if compiling for RAM.
+  # Simply write directly
   popda x15
   sw x8, 0(x15)
   drop
@@ -465,9 +383,8 @@ cellkomma: # Fügt 64 Bits an das Dictionary an  Write 64 bits in Dictionary
   .endif
 
 #------------------------------------------------------------------------------
-  Definition Flag_visible, "allot" # Erhöht den Dictionaryzeiger, schafft Platz !  Advance Dictionarypointer and check if there is enough space left for the requested amount.
-allot:  # Überprüft auch gleich, ob ich mich noch im Ram befinde.
-        # Ansonsten verweigtert Allot seinen Dienst.
+  Definition Flag_visible, "allot" # Advance Dictionarypointer and check if there is enough space left for the requested amount.
+allot:
 #------------------------------------------------------------------------------
 
 #   # Simple variant without any checks.
@@ -486,20 +403,19 @@ allot:  # Überprüft auch gleich, ob ich mich noch im Ram befinde.
   popda x15
   bne x15, zero, allot_ram
 
-allot_flash:
+allot_imem:
   laf x14, Dictionarypointer
   lc x15, 0(x14)
   add x15, x15, x10
 
-  laf x10, FlashDictionaryEnde
+  laf x10, __forth_imem_end
 
   bltu x15, x10, 2f
-    writeln "Flash full"
+    writeln "Forth IMEM full"
     j quit
 
 allot_ram:
-  call flashvarhere         # Am Ende des RAMs liegen die Variablen. Diese sind die Ram-Voll-Grenze...
-                            # There are variables defined in Flash at the end of RAM. Don't overwrite them !
+  call ramvarhere  # There are variables defined at the end of RAM. Don't overwrite them !
   laf x14, Dictionarypointer
   lc x15, 0(x14)
   add x15, x15, x10
@@ -518,7 +434,7 @@ four_allot:
   pushdaconst 4
   j allot
 
-# There are two sets of Pointers: One set for RAM, one set for Flash Dictionary.
+# There are two sets of Pointers: One set for RAM, one set for IMEM Dictionary.
 # They are exchanged if you want to write to the "other" memory type.
 # A small check takes care of the case if you are already in the memory you request.
 
@@ -528,16 +444,14 @@ four_allot:
   push x1
   call compiletoram
 
-  # Dictionarypointer ins RAM setzen
   # Set dictionary pointer into RAM first
   laf x14, Dictionarypointer
-  laf x15, RamDictionaryAnfang
+  laf x15, RamDictionaryStart
   sc x15, 0(x14)
 
-  # Fadenende fürs RAM vorbereiten
   # Set latest for RAM
-  laf x14, Fadenende
-  la x15, CoreDictionaryAnfang
+  laf x14, ThreadEnd
+  la x15, CoreDictionaryStart
   sc x15, 0(x14)
 
   pop x1
@@ -549,7 +463,7 @@ compiletoramq:
 # -----------------------------------------------------------------------------
   push x1
   call here
-  call addrinflash
+  call addrinimem
   inv x8
   pop x1
   ret
@@ -564,26 +478,26 @@ compiletoram:
   popda x15
   bne x15, zero, 2f
 
-  # Befinde mich im Flash. Prüfe auf Kollisionen der Variablen mit dem RAM-Dictionary und schalte um !
+  # I am in IMEM. Check for collisions between the variables and the RAM dictionary and switch!
   laf x14, Dictionarypointer
-  lc x15, 1*CELL(x14) # ZweitDictionaryPointer
-  lc x14, 4*CELL(x14) # VariablenPointer
+  lc x15, 1*CELL(x14) # SecondDictionaryPointer
+  lc x14, 4*CELL(x14) # VariablesPointer
 
-  bltu x15, x14, Zweitpointertausch
+  bltu x15, x14, Secondpointerswap
    writeln " Variables collide with dictionary"
-Zweitpointertausch:
+Secondpointerswap:
 
   pushdatos
 
     laf x8, Dictionarypointer
 
     lc x14, 0*CELL(x8) # Dictionarypointer
-    lc x15, 1*CELL(x8) # ZweitDictionaryPointer
+    lc x15, 1*CELL(x8) # SecondDictionaryPointer
     sc x14, 1*CELL(x8)
     sc x15, 0*CELL(x8)
 
-    lc x14, 2*CELL(x8) # Fadenende
-    lc x15, 3*CELL(x8) # ZweitFadenende
+    lc x14, 2*CELL(x8) # ThreadEnd
+    lc x15, 3*CELL(x8) # SecondThreadEnd
     sc x14, 3*CELL(x8)
     sc x15, 2*CELL(x8)
 
@@ -592,14 +506,14 @@ Zweitpointertausch:
   j allot
 
 # -----------------------------------------------------------------------------
-  Definition Flag_visible, "compiletoflash"
-compiletoflash:
+  Definition Flag_visible, "compiletoimem"
+compiletoimem:
 # -----------------------------------------------------------------------------
   push x1
   call compiletoramq
 
   popda x15
-  bne x15, zero, Zweitpointertausch # Befinde mich im Ram. Schalte um !
+  bne x15, zero, Secondpointerswap # I'm in RAM, switch!
 
 2:pop x1
   ret
@@ -608,7 +522,7 @@ compiletoflash:
   Definition Flag_visible|Flag_foldable_0, "(latest)"
 # -----------------------------------------------------------------------------
   pushdatos
-  laf x8, Fadenende
+  laf x8, ThreadEnd
   ret
 
 # -----------------------------------------------------------------------------
@@ -620,38 +534,33 @@ compiletoflash:
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "(create)"
-create: # Nimmt das nächste Token aus dem Puffer,
-        # erstellt einen neuen Kopf im Dictionary und verlinkt ihn.
-        # Fetch new token from buffer, create a new dictionary header and take care of links.
-        # Links are very different for RAM and Flash !
-        # As we can write Flash only once, freshly created definitions have no code at all.
+create:
 # -----------------------------------------------------------------------------
   push x1
-  call token # Hole den Namen der neuen Definition.  Fetch name for new definition.
-  # ( Tokenadresse Länge )
+  call token # Fetch name for new definition.
+  # ( Tokenaddress Length )
   bne x8, zero, 1f
 
     # Check if token is empty. That happens if input buffer is empty after create.
-    # Token ist leer. Brauche Stacks nicht zu putzen.
     writeln " Create needs name !"
     j quit
 
-1:# Tokenname ist okay.               Name is ok.
-  # Prüfe, ob er schon existiert.     Check if it already exists.
+1:# Name is ok.
+  # Check if it already exists.
   ddup
-  # ( Tokenadresse Länge Tokenadresse Länge )
+  # ( Tokenadress Length Tokenaddress Length )
   call find
-  # ( Tokenadresse Länge Einsprungadresse Flags )
-  drop # Benötige die Flags hier nicht. Möchte doch nur schauen, ob es das Wort schon gibt.  No need for the Flags...
-  # ( Tokenadresse Länge Einsprungadresse )
+  # ( Tokenaddress Length Entryaddress Flags )
+  drop # No need for the Flags...
+  # ( Tokenaddress Length Entryaddress )
 
-  # Prüfe, ob die Suche erfolgreich gewesen ist.  Do we have a search result ?
+  # Do we have a search result ?
   popda x15
   beq x15, zero, 2f
-  # ( Tokenadresse Länge )
+  # ( Tokenaddress Length )
     ddup
     write "Redefine "
-    call type # Den neuen Tokennamen nochmal ausgeben
+    call type # Display the new token name again
     write ". "
 2:
 
@@ -661,89 +570,34 @@ create: # Nimmt das nächste Token aus dem Puffer,
     call align8komma
   .endif
 
-  # ( Tokenadresse Länge )
-
-  call compiletoramq
-  popda x15
-  bne x15, zero, create_ram
-
-  # -----------------------------------------------------------------------------
-  # Create for Flash
-
-  laf x14, FlashFlags
-  li x15, Flag_visible
-  sc x15, 0(x14) # Flags vorbereiten  Prepare Flags for collecting
-
-  .ifdef flash8bytesblockwrite
-    call align8komma  # Vorrücken auf die nächste passende Schreibstelle
-                      # Es muss ein kompletter 8-Byte-Block für das Linkfeld reserviert werden
-    call four_allot   # damit dies später noch nachträglich eingefügt werden kann.
-  .endif
-
-  call here
-  # ( Tokenadresse Länge Neue-Linkadresse )
-
-  pushdaconst 2*CELL # Lücke für die Flags und Link lassen  Leave space for Flags and Link - they are not known yet at this time.
-  call allot
-
-  call minusrot
-  call stringkomma # Den Namen einfügen  Insert Name
-  # ( Neue-Linkadresse )
-
-  # Jetzt den aktuellen Link an die passende Stelle im letzten Wort einfügen,
-  # falls dort FFFF FFFF steht:
-  # Insert Link to fresh definition into old latest if there is still -1 in its Link field:
-
-  laf x10, Fadenende # Hole das aktuelle Fadenende  Fetch old latest
-  lc x11, 0(x10)
-
-  lc x12, 0(x11) # Inhalt des Link-Feldes holen  Check if Link is set
-
-  li x13, erasedcell
-  bne x12, x13, 1f # Ist der Link ungesetzt ?      Isn't it ?
-
-    dup
-    pushda x11
-    .ifdef RV64
-    call dflashstore
-    .else
-    call flashstore
-    .endif
-
-1:# Backlink fertig gesetzt.  Finished Backlinking.
-  # Fadenende aktualisieren:  Set fresh latest.
-  sc x8, 0(x10) # Neues-Fadenende in die Fadenende-Variable legen
-  drop
-
-  j create_ende
 
   # -----------------------------------------------------------------------------
   # Create for RAM
 create_ram:
-  # ( Tokenadresse Länge )
+  # ( Tokenaddress Length )
 
   call here
 
-    # Link setzen  Write Link
-    pushdaaddrf Fadenende
+    # Write Link
+    pushdaaddrf ThreadEnd
     lc x8, 0(x8)
-    call cellkomma # Das alte Fadenende hinein   Old latest
+    call cellkomma # Old latest
 
-  laf x14, Fadenende # Das Fadenende aktualisieren  Set new latest
+  laf x14, ThreadEnd # Set new latest
   sc x8, 0(x14)
   drop
 
-  # Flags setzen  Set initial Flags to Invisible.
+  # Set initial Flags to Invisible.
   pushdaconst Flag_invisible
   call cellkomma
 
-  # Den Namen schreiben  Write Name
+  # Write Name
   call stringkomma
 
-create_ende: # Save code entry point of current definition for recurse and dodoes
+create_end: # Save code entry point of current definition for recurse and dodoes
 
   call here
-  laf x14, Einsprungpunkt
+  laf x14, Entrypoint
   sc x8, 0(x14)
   drop
 
@@ -769,78 +623,6 @@ nvariable: # Creates an initialised variable of given length.
 #------------------------------------------------------------------------------
   push_x1_x10_x11
   call create
-  call compiletoramq
-  popda x15
-  bne x15, zero, variable_ram
-
-  # -----------------------------------------------------------------------------
-  # Variable Flash
-
-  andi x8, x8, 0x0F      # Maximum length for flash variables ! Limit is important to not break Flags for catchflashpointers.
-  push x8                # Save the amount of cells for generating flags for catchflashpointers later
-  slli x8, x8, CELLSHIFT # Multiply number of elements with bytes per cell
-
-  call variable_buffer_flash_prepare
-  call retkomma
-
-    popda x10            # Fetch amount of bytes
-    beq x10, zero, 2f    # If nvariable is called with length zero... Maybe this could be useful sometimes.
-
-1:  sc x8, (x11)         # Initialize RAM location
-    addi x11, x11, CELL  # Advance address
-    call cellkomma       # Put initialisation value for catchflashpointers in place.
-    addi x10, x10, -CELL
-    bne x10, zero, 1b
-2:  # Finished.
-
-  r_from                                    # Finally (!) set Flags for RAM usage.
-  ori x8, x8, Flag_ramallot & ~Flag_visible # Or together with desired amount of cells.
-  j variable_buffer_flash_finalise
-
-#------------------------------------------------------------------------------
-  Definition Flag_visible, "buffer:" # ( Length -- )
-  # Creates an uninitialised buffer of given bytes length.
-#------------------------------------------------------------------------------
-  push_x1_x10_x11
-
-  call aligned # Round requested buffer length to next 4-Byte boundary to ensure alignment
-
-  call create
-  call compiletoramq
-  popda x15
-  bne x15, zero, buffer_ram
-
-  # -----------------------------------------------------------------------------
-  # Buffer Flash
-
-  call variable_buffer_flash_prepare
-  call retkomma
-
-  # Write desired size of buffer at the end of the definition
-  call cellkomma
-
-  pushdaconst Flag_buffer_foldable  # Finally (!) set Flags for buffer usage.
-
-variable_buffer_flash_finalise:
-  call setflags
-  j pop_x1_x10_x11_smudge
-
-  # -----------------------------------------------------------------------------
-variable_buffer_flash_prepare:
-    # Variablenpointer erniedrigen und zurückschreiben   Decrement variable pointer
-
-  laf x10, VariablenPointer
-  lc x11, 0(x10)
-  sub x11, x11, x8  # Ram voll ?  Maybe insert a check for enough RAM left ?
-    laf x14, RamDictionaryAnfang
-    bge x11, x14, 1f
-      writeln "Not enough RAM"
-      j quit
-1:sc x11, 0(x10)
-
-  # Code schreiben:  Write code
-  pushda x11
-  j literalkomma
 
   # -----------------------------------------------------------------------------
   # Variable and Buffer: for RAM
@@ -863,7 +645,7 @@ buffer_ram:
   call variable_buffer_ram_prepare
   call allot
 variable_buffer_ram_finalise:
-  # call setze_faltbarflag # Variables always are 0-foldable as their address never changes.
+  # Variables always are 0-foldable as their address never changes.
   pushdaconst Flag_ramallot & ~Flag_visible # For better detection of variables and buffers in dictionary
   call setflags
 pop_x1_x10_x11_smudge:
@@ -914,25 +696,11 @@ variable_buffer_ram_prepare:
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "dictionarystart"
-dictionarystart: # ( -- Startadresse des aktuellen Dictionaryfadens )
-                 # Da dies je nach Ram oder Flash unterschiedlich ist...
-                 # Einmal so ausgelagert.
-                 # Entry point for dictionary searches.
-                 # This is different for RAM and for Flash and it changes with new definitions.
+dictionarystart: # Entry point for dictionary searches.
 # -----------------------------------------------------------------------------
 
-
-  # Prüfe, ob der Dictionarypointer im Ram oder im Flash ist:  Are we compiling into RAM or into Flash ?
-  push x1
-
-  call compiletoramq
-  pop x1
-  bne x8, zero, 1f
-
-  la x8, CoreDictionaryAnfang # Befinde mich im Flash mit Backlinks. Muss beim CoreDictionary anfangen:        In Flash: Start with core dictionary.
-  ret
-
-1:laf x8, Fadenende            # Kann mit dem Fadenende beginnen.                                               In RAM:   Start with latest definition.
+1:pushdatos
+  laf x8, ThreadEnd            # In RAM:   Start with latest definition.
   lc x8, 0(x8)
   ret
 
@@ -999,16 +767,16 @@ core_find: # ( address length -- Code-Adresse Flags )
 # -----------------------------------------------------------------------------
   push_x1_x10_x12
 
-  # x15  Helferlein      Scratch
-  # x10  Flags           Flags
+  # x15  Scratch
+  # x10  Flags
 
-  # x11  Zieladresse     Destination Address
-  # x12  Zielflags       Destination Flags
+  # x11  Destination Address
+  # x12  Destination Flags
 
-  # x8   Hangelpointer   Pointer for crawl the dictionary
+  # x8   Pointer for crawling through the dictionary
 
-  li x11, 0  # Noch keinen Treffer          No hits yet
-  li x12, 0  # Und noch keine Trefferflags  No hits have no Flags
+  li x11, 0  # No hits yet
+  li x12, 0  # No hits have no Flags
 
   to_r_2 # String length and address
 
@@ -1026,7 +794,7 @@ core_find: # ( address length -- Code-Adresse Flags )
   .endif
 
   # Definition is visible. Compare the name !
-  dup
+  dup  # ( x dict-addr ) tos=dict-addr
   addi x8, x8, 2*CELL # Skip Link and Flags
   call count          # Prepare an address-length string
 
@@ -1035,35 +803,25 @@ core_find: # ( address length -- Code-Adresse Flags )
   popda x15
   beq x15, zero, 2f
 
-    # Gefunden ! Found !
-    # String überlesen und Pointer gerade machen   Skip name string
+    # Found !
+    # Skip name string
     dup
     addi x8, x8, 2*CELL # Skip Link and Flags
     call skipstring
-    popda x11      # Codestartadresse  Note Code start address
+    popda x11      # Note Code start address
     mv x12, x10    # Flags             Note Flags
 
     # j 3f # RAM only, finished on first hit.
 
-    # Prüfe, ob ich mich im Flash oder im Ram befinde.  Check if in RAM or in Flash.
-    # Im Ram beim ersten Treffer ausspringen. Search is over in RAM with first hit.
-    # Im Flash wird weitergesucht, ob es noch eine neuere Definition mit dem Namen gibt.
-    # When in Flash, whole dictionary has to be searched because of backwards link dictionary structure.
-    pushda x11
-    call addrinflash
-    popda x15
-    beq x15, zero, 3f
-
-2:# Weiterhangeln  Continue crawl.
+2:# Continue crawl.
   call dictionarynext
-  popda x15
+  popda x15 # ( x ) tos=dict-addr
   beq x15, zero, 1b
 
-
-3:# Durchgehangelt. Habe ich etwas gefunden ?  Finished. Found something ?
-  # Zieladresse gesetzt, also nicht Null bedeutet: Etwas gefunden !    Destination address <> 0 means successfully found.
-  mv x8, x11    # Zieladresse    oder 0, falls nichts gefunden            Address = 0 means: Not found. Check for that !
-  pushda x12    # Zielflags      oder 0  --> # ( 0 0 - Nicht gefunden )   Push Flags on Stack. ( Destination-Code Flags ) or ( 0 0 ).
+3:# Finished. Found something ?
+  # Destination address <> 0 means successfully found.
+  mv x8, x11    # Address = 0 means: Not found. Check for that !
+  pushda x12    # Push Flags on Stack. ( Destination-Code Flags ) or ( 0 0 ).
 
   r_drop_2
   pop_x1_x10_x12

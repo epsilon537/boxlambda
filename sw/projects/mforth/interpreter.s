@@ -29,7 +29,7 @@
   popdadouble x15, x14
   pushdouble x14, x15
 
-  laf x14, Pufferstand  # Save >in and set to zero
+  laf x14, Bufferlevel  # Save >in and set to zero
   lc x15, 0(x14)
   push x15
   li x15, 0
@@ -38,7 +38,7 @@
   call setsource          # Set new source
   call interpret          # Interpret
 
-  laf x14, Pufferstand  # Restore >in
+  laf x14, Bufferlevel  # Restore >in
   pop x15
   sc x15, 0(x14)
 
@@ -80,33 +80,28 @@ interpret_vanilla:
 # -----------------------------------------------------------------------------
   push x1
 
-1:# Bleibe solange in der Schleife, wie token noch etwas zurückliefert.
-  # Stay in loop as long token can fetch something from input buffer.
+1: # Stay in loop as long as token can fetch something from input buffer.
 
-  # Probe des Datenstackpointers.
   # Check pointer for datastack.
 
-  laf x10, datenstackanfang   # Stacks fangen oben an und wachsen nach unten.
-  bgeu x10, x9, 2f           # Wenn die Adresse kleiner oder gleich der Anfangsadresse ist, ist alles okay.
+  laf x10, datastackstart
+  bgeu x10, x9, 2f
     writeln "Stack underflow"
     j quit
 
-2:laf x10, datenstackende     # Solange der Stackzeiger oberhalb des Endes liegt, ist alles okay.
+2:laf x10, datastackend
   bltu x10, x9, 3f
     writeln "Stack overflow"
     j quit
 
-3: # Alles ok.  Stacks are fine.
+3: # Stacks are fine.
 
 # -----------------------------------------------------------------------------
 
-  # Konstantenfaltungszeiger setzen, falls er das noch nicht ist.
-  # Set Constant-Folding-Pointer
-  laf x14, konstantenfaltungszeiger
+  # Set Constant-Folding-Pointer if not set already
+  laf x14, constantfoldingpointer
   lc x7, 0(x14)
   bne x7, zero, 3f
-    # Konstantenfaltungszeiger setzen.
-    # If not set yet, set it now.
     mv x7, x9
     sc x7, 0(x14)
 3:
@@ -127,6 +122,7 @@ interpret_vanilla:
   # ( Address Length )
 
   ddup
+  # ( Address Length Address Length)
   call find # Probe, ob es sich um ein Wort aus dem Dictionary handelt:  Attemp to find token in dictionary.
   # ( Token-Addr Token-Length Addr Flags )
 
@@ -139,10 +135,9 @@ interpret_vanilla:
   # Registerkarte:
   #  x11: Flags                                  Flags
   #  x12: Einsprungadresse                       Code entry point
-  #  x7: Konstantenfaltungszeiger               Constant folding pointer
+  #  x7: constantfoldingpointer               Constant folding pointer
 
   bne x12, zero, 4f
-    # Nicht gefunden. Ein Fall für Number.
     # Entry-Address is zero if not found ! Note that Flags have very special meanings in Mecrisp !
 
     lc x10, 0(x9)
@@ -176,14 +171,14 @@ type_not_found_quit:
   # Registerkarte:
   #  x11: Flags                                  Flags
   #  x12: Einsprungadresse                       Code entry point
-  #  x7: Konstantenfaltungszeiger               Constant folding pointer
+  #  x7: constantfoldingpointer               Constant folding pointer
 
   laf x13, state
   lc x13, 0(x13)
   bne x13, zero, 5f
     # Im Ausführzustand.  Execute.
-    laf x14, konstantenfaltungszeiger
-    li x7, 0   # Konstantenfaltungszeiger löschen  Clear constant folding pointer
+    laf x14, constantfoldingpointer
+    li x7, 0   # constantfoldingpointer löschen  Clear constant folding pointer
     sc x7, 0(x14)  # Do not collect literals for folding in execute mode. They simply stay on stack.
 
     li x15, Flag_immediate_compileonly & ~Flag_visible
@@ -206,7 +201,7 @@ ausfuehren:
   #  x11: Flags
   #  x13: Temporärer Register, ab hier: Konstantenfüllstand  Constant fill gauge of Datastack
   #  x12: Einsprungadresse                        Code entry point
-  #  x7: Konstantenfaltungszeiger                Constant folding pointer
+  #  x7: constantfoldingpointer                Constant folding pointer
 
 # -----------------------------------------------------------------------------
 5:# Im Kompilierzustand.  In compile state.
@@ -239,7 +234,7 @@ ausfuehren:
 #       beq.n .interpret_genugkonstanten # Flag is set
 #       cmp r3, #0 # And at least one constant is available for folding.
 #       beq.n .interpret_genugkonstanten
-#         b.n .interpret_opcodierbar
+#         b.n .interpret_opcodable
 
 interpret_genugkonstanten: # Not opcodable. Maybe foldable.
       # Prüfe, ob genug Konstanten da sind:
@@ -261,7 +256,7 @@ konstantenschleife:
     sltiu x10, x13, 1 # Only if there is at least one constant available
     bne zero, x10, 2f
 
-      andi x10, x11, Flag_opcodierbar & ~Flag_visible # Flagfeld auf Opcodierbarkeit hin prüfen
+      andi x10, x11, Flag_opcodable & ~Flag_visible # Flagfeld auf opcodablekeit hin prüfen
       beq x10, zero, 2f
 
         # Flags of Definition in x11
@@ -269,7 +264,7 @@ konstantenschleife:
         # Number of folding constants available in x13
 
         pushda x12
-        call suchedefinitionsende
+        call findendofdefinition
         call execute
         j 1b
 
@@ -338,8 +333,8 @@ konstanteninnenschleife:
     addi x9, x7, -CELL # TOS wurde beim drauflegen der Konstanten gesichert.
     drop         # Das alte TOS aus seinem Platz auf dem Stack zurückholen.
 
-7:laf x14, konstantenfaltungszeiger
-  li x7, 0   # Konstantenfaltungszeiger löschen  Clear constant folding pointer.
+7:laf x14, constantfoldingpointer
+  li x7, 0   # constantfoldingpointer löschen  Clear constant folding pointer.
   sc x7, 0(x14)
   pop x1
   ret
@@ -361,8 +356,8 @@ quit:
   # Stacks zurücksetzen
   # Clear stacks and tidy up.
 
-  laf sp, returnstackanfang
-  laf x9, datenstackanfang
+  laf sp, __stack
+  laf x9, datastackstart
 
   .ifdef initflash
   call initflash
@@ -376,18 +371,18 @@ quit:
   li x15, 0       # Execute mode
   sc x15, 0(x14)
 
-  laf x14, konstantenfaltungszeiger
+  laf x14, constantfoldingpointer
   # li x15, 0       # Clear constant folding pointer
   sc x15, 0(x14)
 
-  laf x14, Pufferstand
+  laf x14, Bufferlevel
   # li x15, 0       # Set >IN to 0
   sc x15, 0(x14)
 
   laf x14, current_source
   # li x15, 0       # Empty TIB is source
   sc x15, 0(x14)
-  laf x15, Eingabepuffer
+  laf x15, Inputbuffer
   sc x15, CELL(x14)
 
 quit_intern:

@@ -16,21 +16,23 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-.include "../common/interrupt-femtorv.s"
-.include "../common/terminalhooks.s"
+#.include "interrupt-femtorv.s"
+.include "terminalhooks.s"
+.include "uart_regs.s"
 
 # -----------------------------------------------------------------------------
 # Labels for a few hardware ports
 # -----------------------------------------------------------------------------
 
-.equ uart_data,     0x40010000
-.equ uart_flags,    0x40020000
+.equ uart_txdata, (UART_BASE_ADDR + UART_TXDATA_ADDR)
+.equ uart_rxdata, (UART_BASE_ADDR + UART_RXDATA_ADDR)
+.equ uart_fifo, (UART_BASE_ADDR + UART_FIFO_ADDR)
 
 # -----------------------------------------------------------------------------
 uart_init:
 # -----------------------------------------------------------------------------
-  la x15, irq_collection
-  csrrw zero, mtvec, x15  # MTVEC: Store address of exception handler
+  #la x15, irq_collection
+  #csrrw zero, mtvec, x15  # MTVEC: Store address of exception handler
   ret
 
 # -----------------------------------------------------------------------------
@@ -43,7 +45,8 @@ serial_emit: # ( c -- ) Emit one character
   popda x15
   beq x15, zero, 1b
 
-  li x14, uart_data
+  la x14, uart_txdata
+  andi x8, x8, 0xFF
   sw x8, 0(x14)
   drop
 
@@ -61,7 +64,7 @@ serial_key: # ( -- c ) Receive one character
   beq x15, zero, 1b
 
   pushdatos
-  li x14, uart_data
+  la x14, uart_rxdata
   lw x8, 0(x14)
   andi x8, x8, 0xFF
 
@@ -76,12 +79,13 @@ serial_qemit:  # ( -- ? ) Ready to send a character ?
   call pause
 
   pushdatos
-  li x8, uart_flags
+  li x8, uart_fifo
   lw x8, 0(x8)
-  andi x8, x8, 0x200
+  li x14, UART_FIFO_TX_Z_MASK
+  and x8, x8, x14 #Space available bit
 
-  sltiu x8, x8, 1 # 0=
-  sub x8, zero, x8
+  sltiu x8, x8, 1 # 0<>
+  addi x8, x8, -1
 
   pop x1
   ret
@@ -94,9 +98,9 @@ serial_qkey:  # ( -- ? ) Is there a key press ?
   call pause
 
   pushdatos
-  li x8, uart_flags
+  li x8, uart_fifo
   lw x8, 0(x8)
-  andi x8, x8, 0x100
+  andi x8, x8, UART_FIFO_RX_Z_MASK #Data avl in Rx FIFO
 
   sltiu x8, x8, 1 # 0<>
   addi x8, x8, -1

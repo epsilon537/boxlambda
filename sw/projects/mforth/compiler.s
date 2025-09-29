@@ -692,7 +692,7 @@ inlinekomma:
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "skipdefinition" # ( addr -- addr )
-suchedefinitionsende:
+findendofdefinition:
 # -----------------------------------------------------------------------------
   .ifdef mipscore
 
@@ -807,7 +807,7 @@ retbytes:
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "'" # Searches next token in unput buffer and gives back its code entry point.
-tick: # Nimmt das nächste Token aus dem Puffer, suche es und gibt den Einsprungpunkt zurück.
+tick: # Nimmt das nächste Token aus dem Puffer, suche es und gibt den Entrypoint zurück.
 # -----------------------------------------------------------------------------
   push_x1_x10_x11
   call token
@@ -933,7 +933,7 @@ retkomma: # Separat, weil MIPS einen Branch Delay Slot NOP braucht.
 #------------------------------------------------------------------------------
   Definition Flag_immediate_compileonly, "recurse" # Für Rekursion. Führt das gerade frische Wort aus. Execute freshly defined definition.
 #------------------------------------------------------------------------------
-  pushdaaddrf Einsprungpunkt
+  pushdaaddrf Entrypoint
   lc x8, 0(x8)
   j callkomma
 

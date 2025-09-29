@@ -20,7 +20,7 @@
 # Small calculations
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_opcodierbar|Flag_inline|Flag_noframe, "+" # ( x1 x2 -- x1+x2 )
+  Definition Flag_foldable_2|Flag_opcodable|Flag_inline|Flag_noframe, "+" # ( x1 x2 -- x1+x2 )
                       # Adds x1 and x2.
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
@@ -87,7 +87,7 @@ opcodiereinsprung_lang: # Lange Variante mit zwei Opcodes.
   j wkomma
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_opcodierbar|Flag_inline|Flag_noframe, "-" # ( x1 x2 -- x1-x2 )
+  Definition Flag_foldable_2|Flag_opcodable|Flag_inline|Flag_noframe, "-" # ( x1 x2 -- x1-x2 )
                       # Subtracts x2 from x1.
 # -----------------------------------------------------------------------------
 minus:
@@ -106,7 +106,7 @@ minus:
 .ifdef RV64
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_opcodierbar|Flag_inline|Flag_noframe, "w+" # ( x1 x2 -- x1-x2 )
+  Definition Flag_foldable_2|Flag_opcodable|Flag_inline|Flag_noframe, "w+" # ( x1 x2 -- x1-x2 )
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
   addi x9, x9, CELL
@@ -124,7 +124,7 @@ opcodiereinsprung_wplus:
   j opcodiereinsprung_signed
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_opcodierbar|Flag_inline|Flag_noframe, "w-" # ( x1 x2 -- x1-x2 )
+  Definition Flag_foldable_2|Flag_opcodable|Flag_inline|Flag_noframe, "w-" # ( x1 x2 -- x1-x2 )
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
   addi x9, x9, CELL
@@ -141,7 +141,7 @@ opcodiereinsprung_wplus:
 .endif
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_opcodierbar|Flag_inline|Flag_noframe, "slt" # ( x1 x2 -- 0 | 1 )
+  Definition Flag_foldable_2|Flag_opcodable|Flag_inline|Flag_noframe, "slt" # ( x1 x2 -- 0 | 1 )
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
   addi x9, x9, CELL
@@ -166,7 +166,7 @@ opcodiereinsprung_wplus:
   j opcodiereinsprung_signed
 
 # -----------------------------------------------------------------------------
-  Definition Flag_foldable_2|Flag_opcodierbar|Flag_inline|Flag_noframe, "sltu" # ( x1 x2 -- 0 | 1 )
+  Definition Flag_foldable_2|Flag_opcodable|Flag_inline|Flag_noframe, "sltu" # ( x1 x2 -- 0 | 1 )
 # -----------------------------------------------------------------------------
   lc x15, 0(x9)
   addi x9, x9, CELL

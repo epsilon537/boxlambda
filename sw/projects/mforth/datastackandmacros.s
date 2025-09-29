@@ -416,12 +416,12 @@
 # Embedded: Forth dictionary points are handled by dictionary structure, which appear as constants to the assembler
 
     .macro laf register, address
-      li \register, \address
+      la \register, \address
     .endm
 
     .macro pushdaaddrf address # Push address constant on Datastack
       pushdatos
-      li x8, \address
+      la x8, \address
     .endm
 
 .endif

@@ -19,8 +19,9 @@
 
   # This is the same as in quit, in order to prepare for whatever the user might want to do within "init".
 
-  laf sp, returnstackanfang
-  laf x9, datenstackanfang
+  # BoxLambda: this is already handled at catchpointers entry.
+  laf sp, __stack
+  laf x9, datastackstart
 
   .ifdef initflash
   call initflash
@@ -34,22 +35,21 @@
   li x15, 0       # Execute mode
   sc x15, 0(x14)
 
-  laf x14, konstantenfaltungszeiger
+  laf x14, constantfoldingpointer
   # li x15, 0       # Clear constant folding pointer
   sc x15, 0(x14)
 
-  laf x14, Pufferstand
+  laf x14, Bufferlevel
   # li x15, 0       # Set >IN to 0
   sc x15, 0(x14)
 
   laf x14, current_source
   # li x15, 0       # Empty TIB is source
   sc x15, 0(x14)
-  laf x15, Eingabepuffer
+  laf x15, Inputbuffer
   sc x15, CELL(x14)
 
 
-   # Suche nach der init-Definition:
    # Search for current init definition in dictionary:
 
    pushdaaddr init_name
@@ -58,11 +58,11 @@
    drop # No need for flags
    beq x8, zero, 1f
 
-     # Gefunden ! Found !
+     # Found !
      call execute
      j quit_intern
 1:
-   drop   # Die 0-Adresse von find. Wird hier heruntergeworfen, damit der Startwert AFFEBEEF erhalten bleibt !
+   drop
    j quit # Drop 0-address of find to keep magic TOS value intact.
 
 init_name: .byte 105, 110, 105, 116 # "init"

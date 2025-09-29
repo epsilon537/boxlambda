@@ -16,7 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Token und Parse zum Zerlegen des Eingabepuffers
+# Token und Parse zum Zerlegen des Inputbuffers
 # Token and parse to cut contents of input buffer apart
 
 # -----------------------------------------------------------------------------
