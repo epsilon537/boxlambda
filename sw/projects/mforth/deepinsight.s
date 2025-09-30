@@ -75,7 +75,8 @@ hexdot: # ( u -- ) Print an unsigned number in Base 16, independent of number su
   write "Returnstack: [ "
 
   # Berechne den Stackfüllstand  Calculate number of elements on datastack
-  laf x15, __stack # Anfang laden
+  laf x15, returnstackstart
+  lc x15, 0(x15)
   sub x15, x15, sp # und aktuellen Stackpointer abziehen
   blt x15, zero, 2f # Stack underflow ? Do not print a zillion of locations.
   srli x11, x15, CELLSHIFT
@@ -87,7 +88,8 @@ hexdot: # ( u -- ) Print an unsigned number in Base 16, independent of number su
 
   beq x11, zero, 2f # Bei einem leeren Stack ist nichts auszugeben.  Don't print elements for an empty stack
 
-  laf x10, __stack # Anfang laden, wo ich beginne:  Start here !
+  laf x15, returnstackstart
+  lc x10, 0(x15) # Anfang laden, wo ich beginne:  Start here !
 
 1: # Hole das Stackelement !  Fetch stack element directly
    pushdatos
@@ -203,7 +205,7 @@ unused_common:
   sc x15, 0(x14)
 
   # Calculate number of elements on datastack
-  laf x11, datastackstart # load start
+  laf x11, __datastack # load start
   sub x11, x11, x9 # subtract current stack pointer
   blt x11, zero, 2f # Stack underflow ? Do not print a zillion of locations.
   srli x11, x11, CELLSHIFT
@@ -219,7 +221,7 @@ unused_common:
 
   beq x11, zero, 2f # Don't print elements for an empty stack
 
-  laf x12, datastackstart - CELL # Start here !
+  laf x12, __datastack - CELL # Start here !
 
 1: # Fetch stack element directly
    pushdatos
@@ -268,7 +270,7 @@ dots:
   write "Stack: [ "
 
   # Berechne den Stackfüllstand  Calculate number of elements on datastack
-  laf x11, datastackstart # Anfang laden
+  laf x11, __datastack # Anfang laden
   sub x11, x11, x9 # und aktuellen Stackpointer abziehen
   blt x11, zero, 2f # Stack underflow ? Do not print a zillion of locations.
   srli x11, x11, CELLSHIFT
@@ -279,7 +281,7 @@ dots:
 
   beq x11, zero, 2f # Bei einem leeren Stack ist nichts auszugeben.  Don't print elements for an empty stack
 
-  laf x10, datastackstart - CELL # Anfang laden, wo ich beginne:  Start here !
+  laf x10, __datastack - CELL # Anfang laden, wo ich beginne:  Start here !
 
 1: # Hole das Stackelement !  Fetch stack element directly
    pushdatos

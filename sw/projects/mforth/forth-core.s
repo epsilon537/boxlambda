@@ -33,7 +33,8 @@
 .extern __forth_ram_end
 .extern __forth_imem_start
 .extern __forth_imem_end
-.extern __stack
+.extern __datastack
+.extern __datastack_end
 
 # -----------------------------------------------------------------------------
 #   Type of memory
@@ -206,21 +207,14 @@ ramallot FlashFlags, CELL
 .equ Numberbufferlength, 18*CELL-1 # Numberbufferlänge+1 sollte durch Zellengröße teilbar sein !      Number buffer (Length+1 mod CELL = 0)
 ramallot Numberbuffer, Numberbufferlength+1 # Reserviere mal großzügig 72 Bytes RAM für den Numberbuffer
 
-.ifndef datastacklength
-  .equ datastacklength, 128*CELL
-.endif
-.ifndef returnstacklength
-  .equ returnstacklength, 128*CELL
-.endif
 .ifndef tiblength
   .equ tiblength, 200
 .endif
 
-  ramallot datastackend, datastacklength  # Data stack
-  ramallot datastackstart, 0
-
-  # ramallot returnstackend, returnstacklength  # Return stack
-  # ramallot returnstackstart, 0
+  #When Forth is called from C, sp is saved in returnstactstart
+  #i.e. the sp at Forth entry is considered the start of the return stack.
+  #The reset and quit words reset sp back to this value.
+  ramallot returnstackstart, CELL
 
 .ifdef dualcore
   ramallot datastackcore1end, datastacklength  # Data stack
@@ -282,9 +276,9 @@ ramallot Inputbuffer, Maximuminput  # Inputbuffer wird einen Adresse-Länge Stri
   call dotquote
         .byte 8f - 7f         # Compute length of string.
 .ifdef crlf
-7:      .ascii "Mecrisp-Quintus 1.1.1\Notification\n\r\Notification2\n\r"
+7:      .ascii "\n\r\Mecrisp-Quintus 1.1.1\Notification\n\r\Notification2\n\r"
 .else
-7:      .ascii "Mecrisp-Quintus 1.1.1\Notification\n\Notification2\n"
+7:      .ascii "\nMecrisp-Quintus 1.1.1\Notification\n\Notification2\n"
 .endif
 
 .ifdef compressed_isa

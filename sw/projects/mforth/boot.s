@@ -19,10 +19,6 @@
 
   # This is the same as in quit, in order to prepare for whatever the user might want to do within "init".
 
-  # BoxLambda: this is already handled at catchpointers entry.
-  laf sp, __stack
-  laf x9, datastackstart
-
   .ifdef initflash
   call initflash
   .endif
@@ -58,11 +54,14 @@
    drop # No need for flags
    beq x8, zero, 1f
 
-     # Found !
+     # Found init
      call execute
-     j quit_intern
+     j 2f #was: quit_intern
 1:
-   drop
-   j quit # Drop 0-address of find to keep magic TOS value intact.
+   drop # Drop 0-address of find to keep magic TOS value intact.
+   j 2f
 
 init_name: .byte 105, 110, 105, 116 # "init"
+
+2: # Forth boot code ends here.
+

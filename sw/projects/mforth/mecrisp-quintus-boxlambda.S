@@ -29,18 +29,57 @@
 .include "forth-core.s"
 
 # -----------------------------------------------------------------------------
-.global StartmForth
-StartmForth: # Forth begins here
+.global mForthInit
+mForthInit: # Forth environment initialization.
+# -----------------------------------------------------------------------------
+  push ra  # We're called from C: save ra, gp and tp on the stack
+  push gp
+  push tp
+
+  # Save the sp in a variable so we can restore it to this point if necessary.
+  laf x15, returnstackstart
+  sc sp, 0(x15)
+
+  call Reset
+
+  #Returning to C: retrieve tp, gp and ra from the stack
+  pop tp
+  pop gp
+  pop ra
+
+  ret
+
+# -----------------------------------------------------------------------------
+.global mForthREPL
+mForthREPL: # Enter the Forth REPL
+# -----------------------------------------------------------------------------
+  push ra  # We're called from C: save ra, gp and tp on the stack
+  push gp
+  push tp
+
+  # Save the sp in a variable so we can restore it to this point if necessary.
+  laf x15, returnstackstart
+  sc sp, 0(x15)
+  j quit
+
+# -----------------------------------------------------------------------------
 Reset:
 # -----------------------------------------------------------------------------
 
-  .include "catchmempointers.s"
+  #Restore RS in case we got called from reset word
+  laf x15, returnstackstart
+  lc sp, 0(x15)
 
-  call uart_init
+  push ra
+
+  .include "catchmempointers.s"
 
   welcome " for RISC-V RV32IM by Matthias Koch." "BoxLambda port by Ruben Lysens."
 
   # Ready to fly :!
   .include "boot.s"
 
-#.org 0x20000, 0xFF
+  pop ra
+
+  ret
+

@@ -156,7 +156,7 @@ SECTIONS
     * identified as segments which are not loaded and are
     * thread_local.
     *
-    * For these segments, the linker does not advance 'dot'
+    * For .tbss specifically, the linker does not advance 'dot'
     * across them.  We actually need memory allocated for tbss,
     * so we create a special segment here just to make room
     */

@@ -112,4 +112,6 @@ serial_qkey:  # ( -- ? ) Is there a key press ?
   Definition Flag_visible, "reset"
 # -----------------------------------------------------------------------------
   csrrci zero, mstatus, 8 # Clear Machine Interrupt Enable Bit
-  j Reset
+  call Reset
+  j quit
+

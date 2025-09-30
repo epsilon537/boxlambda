@@ -8,8 +8,11 @@
 __imem = 0x00000000;
 __imem_size = 256k; /*256KB internal memory*/
 
-/* stack:*/
-__stack_size = 512;
+/* (return) stack:*/
+PROVIDE(__stack_size = 512);
+
+/* data stack:*/
+PROVIDE(__datastack_size = 512);
 
 /*'emem' is the external memory section.*/
 __emem = 0x20000000;
@@ -37,8 +40,11 @@ MEMORY
 
 SECTIONS
 {
-    /*Place the stack at the end of imem.*/
+    /* Place the (return) stack pointer at the end of imem.*/
     PROVIDE(__stack = ORIGIN(imem) + LENGTH(imem));
+    /* Put the data stack in front of it.*/
+    PROVIDE(__datastack = __stack - __stack_size);
+    PROVIDE(__datastack_end = __datastack - __datastack_size);
 
     .etext : {
         KEEP (*(.init.header))
@@ -163,7 +169,7 @@ SECTIONS
     * identified as segments which are not loaded and are
     * thread_local.
     *
-    * For these segments, the linker does not advance 'dot'
+    * For .tbss specifically, the linker does not advance 'dot'
     * across them.  We actually need memory allocated for tbss,
     * so we create a special segment here just to make room
     */
@@ -193,6 +199,8 @@ SECTIONS
 
     .ibss (NOLOAD) : {
         *(.ibss .ibss.*)
+        /* Check that the location pointer doesn't cross into the stack region*/
+        ASSERT(. < __datastack - __datastack_size, "IBSS doesn't fit in IMEM.");
     } >imem
 
     PROVIDE( __ibss_end = . );

@@ -84,12 +84,12 @@ interpret_vanilla:
 
   # Check pointer for datastack.
 
-  laf x10, datastackstart
+  laf x10, __datastack
   bgeu x10, x9, 2f
     writeln "Stack underflow"
     j quit
 
-2:laf x10, datastackend
+2:laf x10, __datastack_end
   bltu x10, x9, 3f
     writeln "Stack overflow"
     j quit
@@ -352,12 +352,11 @@ konstanteninnenschleife:
   Definition Flag_visible, "quit" # ( -- )
 quit:
 # -----------------------------------------------------------------------------
-  # Endlosschleife - muss LR nicht sichern.  No need for saving LR as this is an endless loop.
-  # Stacks zurücksetzen
   # Clear stacks and tidy up.
 
-  laf sp, __stack
-  laf x9, datastackstart
+  laf x15, returnstackstart
+  lc sp, 0(x15)
+  laf x9, __datastack # PSP
 
   .ifdef initflash
   call initflash

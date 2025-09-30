@@ -20,7 +20,8 @@ void	_exit (int status) {
 	while (1);
 }
 
-void StartmForth();
+void mForthInit();
+void mForthREPL();
 
 #ifdef __cplusplus
 }
@@ -40,6 +41,15 @@ int main(void) {
   memset(__forth_ram_start, 0xff, __forth_ram_end - __forth_ram_start);
   memset(__forth_imem_start, 0xff, __forth_imem_end - __forth_imem_start);
 
-  StartmForth();
+  mForthInit();
+
+  printf("mForth init complete. Starting REPL.\n");
+  printf("------------------------------------\n");
+
+  mForthREPL();
+
+  printf("mForth REPL exited.\n");
+
+  while (1);
 }
 
