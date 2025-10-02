@@ -43,7 +43,7 @@ parse:
 
   add x14, x10, x12 # Start address of parsed string
 
-  # Speziell for Token, falls das Trennzeichen das Leerzeichen ist:
+  # Specifically for tokens, if the separator is a space:
   li x15, 32
   bne x8, x15, 2f
 

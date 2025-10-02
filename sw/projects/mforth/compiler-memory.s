@@ -240,6 +240,7 @@ hkomma: # Fügt 16 Bits an das Dictionary an
   call allot
 
 hkomma_intern:
+  drop
 
 hkomma_ram:
   # Simply write directly if compiling for RAM.
@@ -356,6 +357,7 @@ cellkomma:
   call four_allot
 
 wkomma_intern:
+  drop
 komma_ram:
   # Simply write directly
   popda x15
@@ -496,10 +498,14 @@ Secondpointerswap:
     sc x14, 1*CELL(x8)
     sc x15, 0*CELL(x8)
 
-    lc x14, 2*CELL(x8) # ThreadEnd
-    lc x15, 3*CELL(x8) # SecondThreadEnd
-    sc x14, 3*CELL(x8)
-    sc x15, 2*CELL(x8)
+    # In BoxLambda, only to the DictionaryPointers are swapped so
+    # new entries are compiled into IMEM or EMEM (RAM) as needed, but all words
+    # remain linked in one single dictionary
+    #
+    # lc x14, 2*CELL(x8) # ThreadEnd
+    # lc x15, 3*CELL(x8) # SecondThreadEnd
+    # sc x14, 3*CELL(x8)
+    # sc x15, 2*CELL(x8)
 
   li x8, 0 # Trick: Allot will check for collisions, too, and reports RAM full then.
   pop x1

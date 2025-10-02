@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "gpio.h"
+#include "forth.h"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -20,17 +21,11 @@ void	_exit (int status) {
 	while (1);
 }
 
-void mForthInit();
-void mForthREPL();
+const char evalStr[] = "3 4 + . cr";
 
 #ifdef __cplusplus
 }
 #endif
-
-extern char __forth_ram_start[];
-extern char __forth_ram_end[];
-extern char __forth_imem_start[];
-extern char __forth_imem_end[];
 
 int main(void) {
   uint32_t leds = 0xF;
@@ -38,17 +33,33 @@ int main(void) {
   gpio_init();
   gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
-  memset(__forth_ram_start, 0xff, __forth_ram_end - __forth_ram_start);
-  memset(__forth_imem_start, 0xff, __forth_imem_end - __forth_imem_start);
+  forth_init();
 
-  mForthInit();
+  printf("Forth init complete.\n");
 
-  printf("mForth init complete. Starting REPL.\n");
-  printf("------------------------------------\n");
+  printf("Forth quit is at %d.\n", forth_find_word("quit"));
 
-  mForthREPL();
+  printf("Executing .s:\n");
 
-  printf("mForth REPL exited.\n");
+  forth_execute_word(".s");
+
+  printf("\n");
+
+  printf("Forth computing 3 4 +:\n");
+  forth_pushda(3);
+  forth_pushda(4);
+  forth_execute_word("+");
+  printf("Result: %d\n", forth_popda());
+
+  printf("Forth evaluating string: %s\n", evalStr);
+  forth_eval(evalStr);
+
+  printf("REPL:\n");
+  printf("-----\n");
+
+  forth_repl();
+
+  printf("\nForth REPL exited.\n");
 
   while (1);
 }

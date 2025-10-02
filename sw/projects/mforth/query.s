@@ -169,7 +169,7 @@ setsource:
   ret
 
 # -----------------------------------------------------------------------------
-  Definition Flag_visible, "source" # ( c-addr len -- )
+  Definition Flag_visible, "source" # ( -- c-addr len )
 source:
 # -----------------------------------------------------------------------------
   push x10

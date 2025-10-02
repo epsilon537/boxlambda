@@ -1,10 +1,22 @@
 #
-# Mecrisp Quintus Forth
+# BoxLambda port of Mecrisp Quintus Forth
 #
+
+# Hack: rebuild mecrisp-boxlambda.S when one of the .included .s files change.
+file(GLOB FORTH_S_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.s")
+
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/mecrisp-quintus-boxlambda.S
+    DEPENDS ${FORTH_S_SOURCES}
+    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_SOURCE_DIR}/mecrisp-quintus-boxlambda.S
+    COMMENT "Touching mecrisp-quintus.boxlambda.S because .s files changed."
+)
+
 add_executable(mforth
  EXCLUDE_FROM_ALL
- main.cpp
- mecrisp-quintus-boxlambda.S
+   main.cpp
+   forth.cpp
+   mecrisp-quintus-boxlambda.S
 )
 
 target_compile_options(mforth
@@ -29,3 +41,4 @@ link_and_create_image(mforth ${CMAKE_CURRENT_SOURCE_DIR}/link_mforth.ld)
 target_link_libraries(mforth gpio bootstrap)
 
 add_flash_sw_target(mforth)
+

@@ -103,7 +103,7 @@
     .balign CELL, 0
     .equ "Dictionary_\Name", .  # Labels for a more readable assembler listing only
 
-9:  .word __forth_imem_start    # Insert Link to the IMEM dictionary
+9:  .word 0xffffffff  # Indicates end of dictionary
 
     .word \Flags      # Flag field
 

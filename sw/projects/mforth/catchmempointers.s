@@ -179,7 +179,7 @@ ScanCoreWords_MemAlloc_complete:
   beq x10, zero, ScanCoreWords
 
   laf x10, SecondThreadEnd
-  sc x8, 0(x10) # Set SecondThreadEnd pointer to latest core word i.e. link SecondThread to Thread.
+  sc x0, 0(x10) # Set SecondThreadEnd pointer to 0. Not used in BoxLambda version of mecrisp.
   drop
 
   laf x10, VariablesPointer # Set variables pointer to RAM allocations made by core words.

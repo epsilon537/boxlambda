@@ -29,12 +29,14 @@
 .include "forth-core.s"
 
 # -----------------------------------------------------------------------------
-.global mForthInit
-mForthInit: # Forth environment initialization.
+.global forth_init
+forth_init: # Forth environment initialization.
 # -----------------------------------------------------------------------------
   push ra  # We're called from C: save ra, gp and tp on the stack
   push gp
   push tp
+  push x8 # Callee saved
+  push x9 # Callee saved
 
   # Save the sp in a variable so we can restore it to this point if necessary.
   laf x15, returnstackstart
@@ -42,7 +44,9 @@ mForthInit: # Forth environment initialization.
 
   call Reset
 
-  #Returning to C: retrieve tp, gp and ra from the stack
+  #Returning to C: retrieve x9, x8, tp, gp and ra from the stack
+  pop x9
+  pop x8
   pop tp
   pop gp
   pop ra
@@ -50,12 +54,14 @@ mForthInit: # Forth environment initialization.
   ret
 
 # -----------------------------------------------------------------------------
-.global mForthREPL
-mForthREPL: # Enter the Forth REPL
+.global forth_repl
+forth_repl: # Enter the Forth REPL
 # -----------------------------------------------------------------------------
-  push ra  # We're called from C: save ra, gp and tp on the stack
+  push ra  # We're called from C: save ra, gp, tp, x8 and x9 on the stack
   push gp
   push tp
+  push x8 # Callee saved
+  push x9 # Callee saved
 
   # Save the sp in a variable so we can restore it to this point if necessary.
   laf x15, returnstackstart
@@ -66,7 +72,7 @@ mForthREPL: # Enter the Forth REPL
 Reset:
 # -----------------------------------------------------------------------------
 
-  #Restore RS in case we got called from reset word
+  #Restore RS in case we got called from reset word.
   laf x15, returnstackstart
   lc sp, 0(x15)
 
@@ -83,3 +89,54 @@ Reset:
 
   ret
 
+# -----------------------------------------------------------------------------
+.global forth_find
+forth_find: # C interface for find
+# -----------------------------------------------------------------------------
+  push ra  # We're called from C: save ra, gp and tp on the stack
+  push gp
+  push tp
+  push x8 # Callee saved
+  push x9 # Callee saved
+
+  mv x8, a0
+  mv x9, a1
+
+  call find
+
+  mv a0, x8
+  mv a1, x9
+
+  pop x9
+  pop x8
+  pop tp
+  pop gp
+  pop ra
+
+  ret
+
+# -----------------------------------------------------------------------------
+.global forth_execute
+forth_execute: # C interface for execute
+# -----------------------------------------------------------------------------
+  push ra  # We're called from C: save ra, gp and tp on the stack
+  push gp
+  push tp
+  push x8 # Callee saved
+  push x9 # Callee saved
+
+  mv x8, a0
+  mv x9, a1
+
+  call execute
+
+  mv a0, x8
+  mv a1, x9
+
+  pop x9
+  pop x8
+  pop tp
+  pop gp
+  pop ra
+
+  ret

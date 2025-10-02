@@ -115,3 +115,18 @@ serial_qkey:  # ( -- ? ) Is there a key press ?
   call Reset
   j quit
 
+# -----------------------------------------------------------------------------
+  Definition Flag_visible, "bye"
+# -----------------------------------------------------------------------------
+  # Restore stack to where it was at forth_repl entry.
+  laf x15, returnstackstart
+  lc sp, 0(x15)
+  # Restore impacted risc-v calling convention registers that were saved
+  # at forth_reply entry
+  pop x9
+  pop x8
+  pop tp
+  pop gp
+  pop ra # We're going to return to the forth_repl caller
+  ret
+

@@ -1,0 +1,66 @@
+#pragma once
+
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+//
+// Linker Variables:
+//
+extern uint32_t __forth_ram_start[];
+extern uint32_t __forth_ram_end[];
+extern uint32_t __forth_imem_start[];
+extern uint32_t __forth_imem_end[];
+extern uint32_t __datastack[];
+extern uint32_t __datastack_size[];
+extern uint32_t __datastack_end[];
+
+//
+// Forth Data Stack Accessor:
+//
+typedef struct {
+  uint32_t tos;
+  uint32_t *psp;
+} Forth_Datastack;
+
+extern Forth_Datastack datastack;
+
+// There is no Return Stack Accessor.
+// The call stack acts as return stack.
+
+//
+// The following functions are implemented in the forth core (mecrisp-quintus-boxlambda.S file):
+//
+void forth_init();
+void forth_repl();
+Forth_Datastack forth_find(Forth_Datastack);
+Forth_Datastack forth_execute(Forth_Datastack);
+
+//
+// These functions are implemented in forth.cpp.
+//
+
+// Push a value onto the data stack
+void forth_pushda(uint32_t val);
+
+// Pop a value from the data stack
+uint32_t forth_popda();
+
+// Find a word and return its xt, or 0 if word is not found.
+uint32_t forth_find_word(const char *s);
+
+// Execute the given xt (looked up using forth_find_word).
+void forth_execute_xt(uint32_t xt);
+
+// A wrapper for the two previous actions. Look up a word,
+// if found, executed it and return 0. If not found, return -1.
+uint32_t forth_execute_word(const char *s);
+
+// Evaluate the given string.
+void forth_eval(const char *s);
+
+#ifdef __cplusplus
+}
+#endif
