@@ -61,6 +61,13 @@ uint32_t forth_execute_word(const char *s);
 // Evaluate the given string.
 void forth_eval(const char *s);
 
+// Evalulate the multi-line buffer pointed to by s line-by-line?
+void forth_load_buf(char *s);
+
+// Register a C function so it can be called later from Forth.
+#define forth_register_fun(fun) \
+           forth_pushda((uint32_t)fun), forth_eval("constant (" #fun ")")
+
 #ifdef __cplusplus
 }
 #endif

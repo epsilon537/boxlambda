@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 #include <assert.h>
 #include "forth.h"
@@ -59,17 +60,30 @@ uint32_t forth_execute_word(const char *s) {
 void forth_eval(const char *s) {
   assert(s);
 
-  //Retrieve current input source and put it on the stack.
-  forth_execute_word("source");
+  //Push the given string on the stack, as input for setsource.
   forth_pushda((uint32_t)s);
   forth_pushda(strlen(s));
 
-  //Switch source to the given string.
-  forth_execute_word("setsource");
-
   //Evaluate the string.
-  forth_execute_word("interpret");
-  //Restore original source
-  forth_execute_word("setsource");
+  forth_execute_word("evaluate");
+}
+
+void forth_load_buf(char *s) {
+
+  char *line_start_ptr = s;
+  char *line_end_ptr;
+
+  while (line_start_ptr) {
+    line_end_ptr = strchr(line_start_ptr, '\n');
+
+    if (line_end_ptr) {
+      *line_end_ptr = 0; //0-terminate the line.
+      forth_eval(line_start_ptr);
+      line_start_ptr = line_end_ptr + 1;
+    }
+    else {
+      line_start_ptr = 0;
+    }
+  }
 }
 

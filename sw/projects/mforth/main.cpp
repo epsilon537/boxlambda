@@ -5,6 +5,7 @@
 
 #include "gpio.h"
 #include "forth.h"
+#include "included-tools.fs"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -21,7 +22,13 @@ void	_exit (int status) {
 	while (1);
 }
 
-const char evalStr[] = "3 4 + . cr";
+void void0() {
+ printf("\nvoid0 in C.\n");
+}
+
+void void1(uint32_t a0) {
+ printf("\nvoid1 in C. arg: %d\n", a0);
+}
 
 #ifdef __cplusplus
 }
@@ -37,6 +44,12 @@ int main(void) {
 
   printf("Forth init complete.\n");
 
+  printf("Compiling Forth included_tools...\n");
+
+  forth_load_buf((char*)included_tools);
+
+  printf("Done.\n");
+
   printf("Forth quit is at %d.\n", forth_find_word("quit"));
 
   printf("Executing .s:\n");
@@ -51,12 +64,17 @@ int main(void) {
   forth_execute_word("+");
   printf("Result: %d\n", forth_popda());
 
-  printf("Forth evaluating string: %s\n", evalStr);
-  forth_eval(evalStr);
+  printf("Forth evaluating string: 3 4 + . cr\n");
+  forth_eval("3 4 + . cr");
+  printf("Forth evaluating string: 42 emit cr\n");
+  forth_eval("42 emit cr");
 
-  printf("REPL:\n");
-  printf("-----\n");
+  printf("Registering C functions void0() etc.\n");
 
+  forth_register_fun(void0);
+  forth_register_fun(void1);
+
+  forth_execute_word("welcome");
   forth_repl();
 
   printf("\nForth REPL exited.\n");

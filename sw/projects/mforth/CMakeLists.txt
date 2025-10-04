@@ -6,11 +6,14 @@
 file(GLOB FORTH_S_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.s")
 
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/mecrisp-quintus-boxlambda.S
+    OUTPUT stamp
     DEPENDS ${FORTH_S_SOURCES}
-    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_SOURCE_DIR}/mecrisp-quintus-boxlambda.S
+    COMMAND ${CMAKE_COMMAND} -E touch stamp ${CMAKE_CURRENT_SOURCE_DIR}/mecrisp-quintus-boxlambda.S
     COMMENT "Touching mecrisp-quintus.boxlambda.S because .s files changed."
 )
+set_source_files_properties(
+  ${CMAKE_CURRENT_SOURCE_DIR}/mecrisp-quintus-boxlambda.S
+  PROPERTIES SYMBOLIC TRUE)
 
 add_executable(mforth
  EXCLUDE_FROM_ALL

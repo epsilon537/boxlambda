@@ -80,7 +80,7 @@ Reset:
 
   .include "catchmempointers.s"
 
-  welcome " for RISC-V RV32IM by Matthias Koch." "BoxLambda port by Ruben Lysens."
+  welcome " for RISC-V RV32IM by Matthias Koch." "BoxLambda port by Ruben Lysens/Epsilon537."
 
   # Ready to fly :!
   .include "boot.s"

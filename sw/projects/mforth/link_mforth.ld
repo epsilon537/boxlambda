@@ -55,8 +55,6 @@ SECTIONS
         *(.gnu.linkonce.t.*)
         KEEP (*(.fini .fini.*))
 
-        *(.forth_core)
-
         . = ALIGN(8);
 
         /* lists of constructors and destructors */
@@ -83,6 +81,9 @@ SECTIONS
     .itext : {
         KEEP (*(.vectors))
         *(.itext .itext.*)
+
+        *(.forth_core)
+
         . = ALIGN(8);
     } >imem AT>emem
 
