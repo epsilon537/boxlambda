@@ -307,6 +307,30 @@
   addi sp, sp, 8*CELL
 .endm
 
+.macro push_x1_x3_x5_x10_x13
+  addi sp, sp, -8*CELL
+  sc x1,  7*CELL(sp)
+  sc x3,  6*CELL(sp)
+  sc x4,  5*CELL(sp)
+  sc x5,  4*CELL(sp)
+  sc x10, 3*CELL(sp)
+  sc x11, 2*CELL(sp)
+  sc x12, 1*CELL(sp)
+  sc x13, 0*CELL(sp)
+.endm
+
+.macro pop_x1_x3_x5_x10_x13
+  lc x1,  7*CELL(sp)
+  lc x3,  6*CELL(sp)
+  lc x4,  5*CELL(sp)
+  lc x5,  4*CELL(sp)
+  lc x10, 3*CELL(sp)
+  lc x11, 2*CELL(sp)
+  lc x12, 1*CELL(sp)
+  lc x13, 0*CELL(sp)
+  addi sp, sp, 8*CELL
+.endm
+
 .macro pushdatos
   addi x9, x9, -CELL
   sc x8, 0(x9)

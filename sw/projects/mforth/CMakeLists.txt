@@ -20,6 +20,7 @@ add_executable(mforth
    main.cpp
    forth.cpp
    mecrisp-quintus-boxlambda.S
+   stamp
 )
 
 target_compile_options(mforth

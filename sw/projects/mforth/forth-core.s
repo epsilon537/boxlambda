@@ -211,10 +211,15 @@ ramallot Numberbuffer, Numberbufferlength+1 # Reserviere mal großzügig 72 Byte
   .equ tiblength, 200
 .endif
 
-  #When Forth is called from C, sp is saved in returnstactstart
-  #i.e. the sp at Forth entry is considered the start of the return stack.
-  #The reset and quit words reset sp back to this value.
+  # When Forth is called from C, sp is saved in returnstactstart
+  # i.e. the sp at Forth entry is considered the start of the return stack.
+  # The reset and quit words reset sp back to this value.
   ramallot returnstackstart, CELL
+
+  # When forth_init is called from C, the gp and tp are saved in these two
+  # locations
+  ramallot generalpointer, CELL
+  ramallot threadpointer, CELL
 
 .ifdef dualcore
   ramallot datastackcore1end, datastacklength  # Data stack

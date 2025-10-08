@@ -65,8 +65,8 @@ void forth_eval(const char *s);
 void forth_load_buf(char *s);
 
 // Register a C function so it can be called later from Forth.
-#define forth_register_fun(fun) \
-           forth_pushda((uint32_t)fun), forth_eval("constant (" #fun ")")
+#define forth_register_fun(fun, nargs, nrets) \
+           forth_pushda((uint32_t)fun), forth_pushda(nargs), forth_pushda(nrets), forth_eval("c-fun " #fun)
 
 #ifdef __cplusplus
 }

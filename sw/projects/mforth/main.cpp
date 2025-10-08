@@ -30,6 +30,16 @@ void void1(uint32_t a0) {
  printf("\nvoid1 in C. arg: %d\n", a0);
 }
 
+void void2(uint32_t a0, uint32_t a1) {
+ printf("\nvoid2 in C. arg0: %d, arg1: %d\n", a0, a1);
+}
+
+uint32_t onerettwoargs(uint32_t a0, uint32_t a1) {
+ uint32_t sum = a0+a1;
+ printf("\nvoid2 in C. arg0: %d, arg1: %d, return: %d\n", a0, a1, sum);
+ return sum;
+}
+
 #ifdef __cplusplus
 }
 #endif
@@ -69,10 +79,12 @@ int main(void) {
   printf("Forth evaluating string: 42 emit cr\n");
   forth_eval("42 emit cr");
 
-  printf("Registering C functions void0() etc.\n");
+  printf("Registering C functions.\n");
 
-  forth_register_fun(void0);
-  forth_register_fun(void1);
+  forth_register_fun(void0, 0, 0);
+  forth_register_fun(void1, 1, 0);
+  forth_register_fun(void2, 2, 0);
+  forth_register_fun(onerettwoargs, 2, 1);
 
   forth_execute_word("welcome");
   forth_repl();

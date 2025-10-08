@@ -1070,6 +1070,57 @@ execute:
   .endif
 
 # -----------------------------------------------------------------------------
+  Definition Flag_visible, "call-c"
+# ( arg0..argn c-fun-addr -- ret0..retn )
+# -----------------------------------------------------------------------------
+  push_x1_x3_x5_x10_x13
+
+  lc x5, 4(x8) # PSP adjustment value
+
+  # Adjust PSP so that 6 params can be taken off it. Only the lowest n-args
+  # contain actual arguments used by the C function. The rest is garbage, ignored.
+  add x9, x9, x5
+
+  # Load the arguments from the PSP into a0-a5.
+  # RISC-V calling convention allows up to 8 args to be passed as registers.
+  # However, the Mecrisp register allocation only allows register usage up to x15.
+  # => We can only pass up to 6 args (unless we modify the Mexcrisp register
+  # allocation convention).
+  lc x15, 0(x9)
+  lc x14, 4(x9)
+  lc x13, 8(x9)
+  lc x12, 12(x9)
+  lc x11, 16(x9)
+  lc x10, 20(x9)
+
+  # Remove all params from the PSP
+  addi x9, x9, 6*CELL
+
+  #Set up gp and tp
+  laf x3, generalpointer
+  lw x3, 0(x3)
+  laf x4, threadpointer
+  lw x4, 0(x4)
+
+  #Call the C function
+  lc x5, 8(x8)
+  jalr x1, x5
+
+  lc x5, 0(x8) # Number of return values
+
+  drop # We can drop the nrets/nargs/cfun table pointer now.
+
+  # Handle 0, 1 or 2 return args
+  beq x5, zero, 1f
+  pushda x10
+  addi x5, x5, -1
+  beq x5, zero, 1f
+  pushda x11
+1:
+  pop_x1_x3_x5_x10_x13
+  ret
+
+# -----------------------------------------------------------------------------
   Definition Flag_immediate, "immediate" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_immediate & ~Flag_visible

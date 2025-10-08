@@ -32,11 +32,18 @@
 .global forth_init
 forth_init: # Forth environment initialization.
 # -----------------------------------------------------------------------------
-  push ra  # We're called from C: save ra, gp and tp on the stack
-  push gp
-  push tp
+  push x1  # We're called from C: save ra, gp and tp on the stack
+  push x3
+  push x4
   push x8 # Callee saved
   push x9 # Callee saved
+
+  # Save x3 and x4 (a.k.a. gp and tp) in generalpointer and threadpointer
+  # so these registers can be set up properly when Forth calls C.
+  laf x15, generalpointer
+  sc x3, 0(x15)
+  laf x15, threadpointer
+  sc x4, 0(x15)
 
   # Save the sp in a variable so we can restore it to this point if necessary.
   laf x15, returnstackstart
@@ -47,9 +54,9 @@ forth_init: # Forth environment initialization.
   #Returning to C: retrieve x9, x8, tp, gp and ra from the stack
   pop x9
   pop x8
-  pop tp
-  pop gp
-  pop ra
+  pop x4
+  pop x3
+  pop x1
 
   ret
 
@@ -57,9 +64,9 @@ forth_init: # Forth environment initialization.
 .global forth_repl
 forth_repl: # Enter the Forth REPL
 # -----------------------------------------------------------------------------
-  push ra  # We're called from C: save ra, gp, tp, x8 and x9 on the stack
-  push gp
-  push tp
+  push x1  # We're called from C: save ra, gp, tp, x8 and x9 on the stack
+  push x3
+  push x4
   push x8 # Callee saved
   push x9 # Callee saved
 
@@ -76,7 +83,7 @@ Reset:
   laf x15, returnstackstart
   lc sp, 0(x15)
 
-  push ra
+  push x1
 
   .include "catchmempointers.s"
 
@@ -85,7 +92,7 @@ Reset:
   # Ready to fly :!
   .include "boot.s"
 
-  pop ra
+  pop x1
 
   ret
 
@@ -93,9 +100,9 @@ Reset:
 .global forth_find
 forth_find: # C interface for find
 # -----------------------------------------------------------------------------
-  push ra  # We're called from C: save ra, gp and tp on the stack
-  push gp
-  push tp
+  push x1  # We're called from C: save ra, gp and tp on the stack
+  push x3
+  push x4
   push x8 # Callee saved
   push x9 # Callee saved
 
@@ -109,9 +116,9 @@ forth_find: # C interface for find
 
   pop x9
   pop x8
-  pop tp
-  pop gp
-  pop ra
+  pop x4
+  pop x3
+  pop x1
 
   ret
 
@@ -119,9 +126,9 @@ forth_find: # C interface for find
 .global forth_execute
 forth_execute: # C interface for execute
 # -----------------------------------------------------------------------------
-  push ra  # We're called from C: save ra, gp and tp on the stack
-  push gp
-  push tp
+  push x1  # We're called from C: save ra, gp and tp on the stack
+  push x3
+  push x4
   push x8 # Callee saved
   push x9 # Callee saved
 
@@ -135,8 +142,8 @@ forth_execute: # C interface for execute
 
   pop x9
   pop x8
-  pop tp
-  pop gp
-  pop ra
+  pop x4
+  pop x3
+  pop x1
 
   ret
