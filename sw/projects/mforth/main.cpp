@@ -56,17 +56,11 @@ int main(void) {
 
   printf("Compiling Forth included_tools...\n");
 
-  forth_load_buf((char*)included_tools);
+  forth_load_buf((char*)included_tools, /*verbose=*/false);
 
   printf("Done.\n");
 
   printf("Forth quit is at %d.\n", forth_find_word("quit"));
-
-  printf("Executing .s:\n");
-
-  forth_execute_word(".s");
-
-  printf("\n");
 
   printf("Forth computing 3 4 +:\n");
   forth_pushda(3);
@@ -85,6 +79,9 @@ int main(void) {
   forth_register_fun(void1, 1, 0);
   forth_register_fun(void2, 2, 0);
   forth_register_fun(onerettwoargs, 2, 1);
+
+  printf("Executing .s:\n");
+  forth_execute_word(".s");
 
   forth_execute_word("welcome");
   forth_repl();

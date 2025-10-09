@@ -29,8 +29,8 @@
 .include "forth-core.s"
 
 # -----------------------------------------------------------------------------
-.global forth_init
-forth_init: # Forth environment initialization.
+.global forth_init_
+forth_init_: # Forth environment initialization.
 # -----------------------------------------------------------------------------
   push x1  # We're called from C: save ra, gp and tp on the stack
   push x3
@@ -49,7 +49,13 @@ forth_init: # Forth environment initialization.
   laf x15, returnstackstart
   sc sp, 0(x15)
 
+  mv x8, a0
+  mv x9, a1
+
   call Reset
+
+  mv a0, x8
+  mv a1, x9
 
   #Returning to C: retrieve x9, x8, tp, gp and ra from the stack
   pop x9
@@ -61,8 +67,8 @@ forth_init: # Forth environment initialization.
   ret
 
 # -----------------------------------------------------------------------------
-.global forth_repl
-forth_repl: # Enter the Forth REPL
+.global forth_repl_
+forth_repl_: # Enter the Forth REPL
 # -----------------------------------------------------------------------------
   push x1  # We're called from C: save ra, gp, tp, x8 and x9 on the stack
   push x3
@@ -73,6 +79,10 @@ forth_repl: # Enter the Forth REPL
   # Save the sp in a variable so we can restore it to this point if necessary.
   laf x15, returnstackstart
   sc sp, 0(x15)
+
+  mv x8, a0
+  mv x9, a1
+
   j quit
 
 # -----------------------------------------------------------------------------
@@ -97,8 +107,8 @@ Reset:
   ret
 
 # -----------------------------------------------------------------------------
-.global forth_find
-forth_find: # C interface for find
+.global forth_find_
+forth_find_: # C interface for find
 # -----------------------------------------------------------------------------
   push x1  # We're called from C: save ra, gp and tp on the stack
   push x3
@@ -123,8 +133,8 @@ forth_find: # C interface for find
   ret
 
 # -----------------------------------------------------------------------------
-.global forth_execute
-forth_execute: # C interface for execute
+.global forth_execute_
+forth_execute_: # C interface for execute
 # -----------------------------------------------------------------------------
   push x1  # We're called from C: save ra, gp and tp on the stack
   push x3
@@ -147,3 +157,4 @@ forth_execute: # C interface for execute
   pop x1
 
   ret
+

@@ -4,7 +4,29 @@
 #include <assert.h>
 #include "forth.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+//
+// The following functions are implemented in the forth core (mecrisp-quintus-boxlambda.S file):
+//
+Forth_Datastack forth_init_(Forth_Datastack);
+Forth_Datastack forth_repl_(Forth_Datastack);
+Forth_Datastack forth_find_(Forth_Datastack);
+Forth_Datastack forth_execute_(Forth_Datastack);
+#ifdef __cplusplus
+}
+#endif
+
 Forth_Datastack datastack = { 42, __datastack };
+
+void forth_init() {
+  datastack = forth_init_(datastack);
+}
+
+void forth_repl() {
+  datastack = forth_repl_(datastack);
+}
 
 void forth_pushda(uint32_t val) {
   --(datastack.psp);
@@ -32,7 +54,7 @@ uint32_t forth_find_word(const char *s) {
   forth_pushda((uint32_t)s);
   forth_pushda(strlen(s));
 
-  datastack = forth_find(datastack);
+  datastack = forth_find_(datastack);
   assert((datastack.psp >= __datastack_end) && (datastack.psp <= __datastack));
 
   forth_popda(); //drop flags
@@ -41,7 +63,7 @@ uint32_t forth_find_word(const char *s) {
 
 void forth_execute_xt(uint32_t xt) {
   forth_pushda(xt);
-  datastack = forth_execute(datastack);
+  datastack = forth_execute_(datastack);
   assert((datastack.psp >= __datastack_end) && (datastack.psp <= __datastack));
 }
 
@@ -68,7 +90,7 @@ void forth_eval(const char *s) {
   forth_execute_word("evaluate");
 }
 
-void forth_load_buf(char *s) {
+void forth_load_buf(char *s, bool verbose) {
 
   char *line_start_ptr = s;
   char *line_end_ptr;
@@ -78,6 +100,9 @@ void forth_load_buf(char *s) {
 
     if (line_end_ptr) {
       *line_end_ptr = 0; //0-terminate the line.
+
+      if (verbose) printf("%s\n", line_start_ptr);
+
       forth_eval(line_start_ptr);
       line_start_ptr = line_end_ptr + 1;
     }

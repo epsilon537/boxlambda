@@ -31,16 +31,11 @@ extern Forth_Datastack datastack;
 // The call stack acts as return stack.
 
 //
-// The following functions are implemented in the forth core (mecrisp-quintus-boxlambda.S file):
-//
-void forth_init();
-void forth_repl();
-Forth_Datastack forth_find(Forth_Datastack);
-Forth_Datastack forth_execute(Forth_Datastack);
-
-//
 // These functions are implemented in forth.cpp.
 //
+
+void forth_init();
+void forth_repl();
 
 // Push a value onto the data stack
 void forth_pushda(uint32_t val);
@@ -61,8 +56,9 @@ uint32_t forth_execute_word(const char *s);
 // Evaluate the given string.
 void forth_eval(const char *s);
 
-// Evalulate the multi-line buffer pointed to by s line-by-line?
-void forth_load_buf(char *s);
+// Evaluate the multi-line buffer pointed to by s line-by-line?
+// If verbose flag is set, print each line as its being loaded.
+void forth_load_buf(char *s, bool verbose);
 
 // Register a C function so it can be called later from Forth.
 #define forth_register_fun(fun, nargs, nrets) \

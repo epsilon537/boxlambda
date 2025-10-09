@@ -11,9 +11,6 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E touch stamp ${CMAKE_CURRENT_SOURCE_DIR}/mecrisp-quintus-boxlambda.S
     COMMENT "Touching mecrisp-quintus.boxlambda.S because .s files changed."
 )
-set_source_files_properties(
-  ${CMAKE_CURRENT_SOURCE_DIR}/mecrisp-quintus-boxlambda.S
-  PROPERTIES SYMBOLIC TRUE)
 
 add_executable(mforth
  EXCLUDE_FROM_ALL
@@ -45,4 +42,35 @@ link_and_create_image(mforth ${CMAKE_CURRENT_SOURCE_DIR}/link_mforth.ld)
 target_link_libraries(mforth gpio bootstrap)
 
 add_flash_sw_target(mforth)
+
+add_executable(forthtestsuite
+ EXCLUDE_FROM_ALL
+   testsuite.cpp
+   forth.cpp
+   mecrisp-quintus-boxlambda.S
+   stamp
+)
+
+target_compile_options(forthtestsuite
+ PRIVATE
+  -O2 -g
+)
+
+target_compile_definitions(forthtestsuite
+ PRIVATE
+  -DBOARD_BOXLAMBDA
+)
+
+target_include_directories(forthtestsuite
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/registers/generated
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+#Function defined in parent CMakeLists.txt file:
+link_and_create_image(forthtestsuite ${CMAKE_CURRENT_SOURCE_DIR}/link_mforth.ld)
+
+target_link_libraries(forthtestsuite gpio bootstrap)
+
+add_flash_sw_target(forthtestsuite)
 

@@ -630,9 +630,6 @@ nvariable: # Creates an initialised variable of given length.
   push_x1_x10_x11
   call create
 
-  # -----------------------------------------------------------------------------
-  # Variable and Buffer: for RAM
-
 variable_ram:
   call variable_buffer_ram_prepare
 
@@ -645,7 +642,15 @@ variable_ram:
 
   j variable_buffer_ram_finalise
 
-# -----------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+  Definition Flag_visible, "buffer:" # ( Length -- )
+  # Creates an uninitialised buffer of given bytes length.
+#------------------------------------------------------------------------------
+  push_x1_x10_x11
+
+  call aligned # Round requested buffer length to next 4-Byte boundary to ensure alignment
+
+  call create
 
 buffer_ram:
   call variable_buffer_ram_prepare
@@ -817,7 +822,7 @@ core_find: # ( address length -- Code-Adresse Flags )
     popda x11      # Note Code start address
     mv x12, x10    # Flags             Note Flags
 
-    # j 3f # RAM only, finished on first hit.
+    j 3f # RAM only, finished on first hit.
 
 2:# Continue crawl.
   call dictionarynext

@@ -120,6 +120,11 @@ serial_qkey:  # ( -- ? ) Is there a key press ?
 # -----------------------------------------------------------------------------
   # Restore stack to where it was at forth_repl entry.
   laf x15, returnstackstart
+
+  # Set data stack
+  mv a0, x8
+  mv a1, x9
+
   lc sp, 0(x15)
   # Restore impacted risc-v calling convention registers that were saved
   # at forth_reply entry

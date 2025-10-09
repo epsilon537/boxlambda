@@ -47,7 +47,6 @@ const char included_tools[] =  R"included_tools(
 : [ifdef]  ( -- ) token find drop 0=  if postpone [else] then immediate 0-foldable ;
 : [ifndef] ( -- ) token find drop 0<> if postpone [else] then immediate 0-foldable ;
 
-
 \ RISC-V 32 IM Disassembler, Copyright (C) 2018  Matthias Koch
 \ This is free software under GNU General Public License v3.
 \ Usage: Specify your target address in disasm-$ and give disasm-step some calls.
