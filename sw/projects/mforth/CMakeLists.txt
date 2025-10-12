@@ -16,6 +16,7 @@ add_executable(mforth
  EXCLUDE_FROM_ALL
    main.cpp
    forth.cpp
+   fs.cpp
    mecrisp-quintus-boxlambda.S
    stamp
 )
@@ -39,7 +40,7 @@ target_include_directories(mforth
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(mforth ${CMAKE_CURRENT_SOURCE_DIR}/link_mforth.ld)
 
-target_link_libraries(mforth gpio bootstrap)
+target_link_libraries(mforth fatfs rtcc gpio bootstrap)
 
 add_flash_sw_target(mforth)
 

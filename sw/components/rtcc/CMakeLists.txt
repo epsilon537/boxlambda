@@ -14,6 +14,7 @@ target_compile_options(rtcc
 
 target_include_directories(rtcc
     PUBLIC
+    ${CMAKE_CURRENT_LIST_DIR}
     ${PROJECT_SOURCE_DIR}/sub/MCP79412RTC/src/
 )
 

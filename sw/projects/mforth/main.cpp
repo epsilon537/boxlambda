@@ -6,6 +6,7 @@
 #include "gpio.h"
 #include "forth.h"
 #include "included-tools.fs"
+#include "fs.h"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -75,10 +76,16 @@ int main(void) {
 
   printf("Registering C functions.\n");
 
-  forth_register_fun(void0, 0, 0);
-  forth_register_fun(void1, 1, 0);
-  forth_register_fun(void2, 2, 0);
-  forth_register_fun(onerettwoargs, 2, 1);
+  forth_register_fun(void0, 0, 0, "void0");
+  forth_register_fun(void1, 1, 0, "void1");
+  forth_register_fun(void2, 2, 0, "void2");
+  forth_register_fun(onerettwoargs, 2, 1, "onerettwoargs");
+
+  printf("Executing .s:\n");
+  forth_execute_word(".s");
+
+  printf("Initializing FS.\n");
+  FS_init();
 
   printf("Executing .s:\n");
   forth_execute_word(".s");
