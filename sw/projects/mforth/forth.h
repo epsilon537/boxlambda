@@ -34,7 +34,7 @@ extern Forth_Datastack datastack;
 // These functions are implemented in forth.cpp.
 //
 
-void forth_init();
+void forth_core_init();
 void forth_repl();
 
 // Push a value onto the data stack
@@ -54,15 +54,16 @@ void forth_execute_xt(uint32_t xt);
 uint32_t forth_execute_word(const char *s);
 
 // Evaluate the given string.
-void forth_eval(const char *s);
+void forth_evaluate(const char *s, uint32_t count);
+#define forth_eval(s) forth_evaluate(s, strlen(s))
 
 // Evaluate the multi-line buffer pointed to by s line-by-line?
 // If verbose flag is set, print each line as its being loaded.
 void forth_load_buf(char *s, bool verbose);
 
-// Register a C function so it can be called later from Forth.
-#define forth_register_fun(fun, nargs, nrets, wordname) \
-           forth_pushda((uint32_t)fun), forth_pushda(nargs), forth_pushda(nrets), forth_eval("c-fun " wordname)
+// Register a C function with signature: void fun(void). Fun uses the datastack object for parameter passing.
+#define forth_register_cfun(fun, wordname) \
+           forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)
 
 #ifdef __cplusplus
 }

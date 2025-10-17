@@ -7,6 +7,8 @@
 #include "forth.h"
 #include "included-tools.fs"
 #include "fs.h"
+#include "vi.h"
+#include "terminal.h"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -27,20 +29,6 @@ void void0() {
  printf("\nvoid0 in C.\n");
 }
 
-void void1(uint32_t a0) {
- printf("\nvoid1 in C. arg: %d\n", a0);
-}
-
-void void2(uint32_t a0, uint32_t a1) {
- printf("\nvoid2 in C. arg0: %d, arg1: %d\n", a0, a1);
-}
-
-uint32_t onerettwoargs(uint32_t a0, uint32_t a1) {
- uint32_t sum = a0+a1;
- printf("\nvoid2 in C. arg0: %d, arg1: %d, return: %d\n", a0, a1, sum);
- return sum;
-}
-
 #ifdef __cplusplus
 }
 #endif
@@ -51,13 +39,16 @@ int main(void) {
   gpio_init();
   gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
-  forth_init();
+  printf("Initializing Forth.\n");
 
-  printf("Forth init complete.\n");
+  forth_core_init();
+
+  printf("Forth core init complete.\n");
 
   printf("Compiling Forth included_tools...\n");
 
   forth_load_buf((char*)included_tools, /*verbose=*/false);
+#if 0
 
   printf("Done.\n");
 
@@ -76,21 +67,23 @@ int main(void) {
 
   printf("Registering C functions.\n");
 
-  forth_register_fun(void0, 0, 0, "void0");
-  forth_register_fun(void1, 1, 0, "void1");
-  forth_register_fun(void2, 2, 0, "void2");
-  forth_register_fun(onerettwoargs, 2, 1, "onerettwoargs");
+  forth_register_cfun(void0, "void0");
 
   printf("Executing .s:\n");
   forth_execute_word(".s");
+#endif
 
   printf("Initializing FS.\n");
   FS_init();
+  VI_init();
+  TERMINAL_init();
 
+#if 0
   printf("Executing .s:\n");
   forth_execute_word(".s");
-
+#endif
   forth_execute_word("welcome");
+
   forth_repl();
 
   printf("\nForth REPL exited.\n");

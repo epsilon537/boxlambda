@@ -26,11 +26,13 @@
 # -----------------------------------------------------------------------------
 # Include the Forth core of Mecrisp-Quintus
 # -----------------------------------------------------------------------------
+.global EvaluateState
+
 .include "forth-core.s"
 
 # -----------------------------------------------------------------------------
-.global forth_init_
-forth_init_: # Forth environment initialization.
+.global forth_core_init_
+forth_core_init_: # Forth core initialization.
 # -----------------------------------------------------------------------------
   push x1  # We're called from C: save ra, gp and tp on the stack
   push x3
@@ -116,13 +118,13 @@ forth_find_: # C interface for find
   push x8 # Callee saved
   push x9 # Callee saved
 
-  mv x8, a0
-  mv x9, a1
+  mv x8, x10
+  mv x9, x11
 
   call find
 
-  mv a0, x8
-  mv a1, x9
+  mv x10, x8
+  mv x11, x9
 
   pop x9
   pop x8

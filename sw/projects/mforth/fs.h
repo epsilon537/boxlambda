@@ -15,10 +15,13 @@
 
 #include "ff.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern const char FS_Version[];
 // extern	uint32_t **ZweitDictionaryPointer;
 
-// extern int EvaluateState;
+extern int EvaluateState;
 
 
 void FS_init(void);
@@ -57,11 +60,14 @@ void FS_umount   ();
 void FS_mkfs     ();
 
 void FS_evaluate (uint8_t *str, int count);
-// void FS_catch_evaluate (uint8_t *str, int count);
+void FS_catch_evaluate (uint8_t *str, int count);
 void FS_type     (uint8_t *str, int count);
 void FS_cr       ();
 void FS_token    (uint8_t **str, int *count);
 void FS_accept   (uint8_t *str, int *count);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* INC_FS_H_ */

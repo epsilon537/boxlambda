@@ -17,6 +17,8 @@ add_executable(mforth
    main.cpp
    forth.cpp
    fs.cpp
+   terminal.cpp
+   vi.cpp
    mecrisp-quintus-boxlambda.S
    stamp
 )
@@ -33,6 +35,7 @@ target_compile_definitions(mforth
 
 target_include_directories(mforth
   PRIVATE
+  ${PROJECT_SOURCE_DIR}/sw/components/arduino
   ${PROJECT_SOURCE_DIR}/registers/generated
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -40,7 +43,7 @@ target_include_directories(mforth
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(mforth ${CMAKE_CURRENT_SOURCE_DIR}/link_mforth.ld)
 
-target_link_libraries(mforth fatfs rtcc gpio bootstrap)
+target_link_libraries(mforth timer fatfs rtcc gpio bootstrap)
 
 add_flash_sw_target(mforth)
 

@@ -10,7 +10,7 @@ extern "C" {
 //
 // The following functions are implemented in the forth core (mecrisp-quintus-boxlambda.S file):
 //
-Forth_Datastack forth_init_(Forth_Datastack);
+Forth_Datastack forth_core_init_(Forth_Datastack);
 Forth_Datastack forth_repl_(Forth_Datastack);
 Forth_Datastack forth_find_(Forth_Datastack);
 Forth_Datastack forth_execute_(Forth_Datastack);
@@ -20,8 +20,8 @@ Forth_Datastack forth_execute_(Forth_Datastack);
 
 Forth_Datastack datastack = { 42, __datastack };
 
-void forth_init() {
-  datastack = forth_init_(datastack);
+void forth_core_init() {
+  datastack = forth_core_init_(datastack);
 }
 
 void forth_repl() {
@@ -79,12 +79,12 @@ uint32_t forth_execute_word(const char *s) {
   }
 }
 
-void forth_eval(const char *s) {
+void forth_evaluate(const char *s, uint32_t count) {
   assert(s);
 
   //Push the given string on the stack, as input for setsource.
   forth_pushda((uint32_t)s);
-  forth_pushda(strlen(s));
+  forth_pushda(count);
 
   //Evaluate the string.
   forth_execute_word("evaluate");
@@ -103,7 +103,7 @@ void forth_load_buf(char *s, bool verbose) {
 
       if (verbose) printf("%s\n", line_start_ptr);
 
-      forth_eval(line_start_ptr);
+      forth_evaluate(line_start_ptr, strlen(line_start_ptr));
       line_start_ptr = line_end_ptr + 1;
     }
     else {

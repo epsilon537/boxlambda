@@ -109,22 +109,22 @@ void FS_init(void) {
  accept_xt = forth_find_word("accept");
  type_xt = forth_find_word("type");
 
- forth_register_fun(FS_included, 0, 0, "included");
- forth_register_fun(FS_cat, 0, 0, "cat");
- forth_register_fun(FS_ls, 0, 0, "ls");
- forth_register_fun(FS_cd, 0, 0, "cd");
- forth_register_fun(FS_pwd, 0, 0, "pwd");
- forth_register_fun(FS_mkdir, 0, 0, "mkdir");
- forth_register_fun(FS_rm, 0, 0, "rm");
- forth_register_fun(FS_chmod, 0, 0, "chmod");
- forth_register_fun(FS_touch, 0, 0, "touch");
- forth_register_fun(FS_mv, 0, 0, "mv");
- forth_register_fun(FS_cp, 0, 0, "cp");
- forth_register_fun(FS_df, 0, 0, "df");
- forth_register_fun(FS_date, 0, 0, "date");
- forth_register_fun(FS_mount, 0, 0, "mount");
- forth_register_fun(FS_umount, 0, 0, "umount");
- forth_register_fun(FS_mkfs, 0, 0, "mkfs");
+ forth_register_cfun(FS_included, "included");
+ forth_register_cfun(FS_cat, "cat");
+ forth_register_cfun(FS_ls, "ls");
+ forth_register_cfun(FS_cd, "cd");
+ forth_register_cfun(FS_pwd, "pwd");
+ forth_register_cfun(FS_mkdir, "mkdir");
+ forth_register_cfun(FS_rm, "rm");
+ forth_register_cfun(FS_chmod, "chmod");
+ forth_register_cfun(FS_touch, "touch");
+ forth_register_cfun(FS_mv, "mv");
+ forth_register_cfun(FS_cp, "cp");
+ forth_register_cfun(FS_df, "df");
+ forth_register_cfun(FS_date, "date");
+ forth_register_cfun(FS_mount, "mount");
+ forth_register_cfun(FS_umount, "umount");
+ forth_register_cfun(FS_mkfs, "mkfs");
 
  forth_load_buf((char*)FS_Forth, /*verbose=*/false);
 }
@@ -954,8 +954,7 @@ int FS_getc(FIL* fp) {
 }
 
 void FS_evaluate (uint8_t *str, int count) {
-  assert(strlen((char*)str) == count);
-  forth_eval((char*)str);
+  forth_evaluate((char*)str, count);
 }
 
 void FS_type(uint8_t *str, int count) {

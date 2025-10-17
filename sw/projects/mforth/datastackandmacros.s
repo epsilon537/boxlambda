@@ -181,6 +181,18 @@
   addi sp, sp, 3*CELL
 .endm
 
+.macro push_x1_x3_x4
+  addi sp, sp, -3*CELL
+  sc x1,  2*CELL(sp)
+  sc x3, 1*CELL(sp)
+  sc x4, 0*CELL(sp)
+.endm
+.macro pop_x1_x3_x4
+  lc x1,  2*CELL(sp)
+  lc x3, 1*CELL(sp)
+  lc x4, 0*CELL(sp)
+  addi sp, sp, 3*CELL
+.endm
 
 .macro push_x10_x12
   addi sp, sp, -3*CELL

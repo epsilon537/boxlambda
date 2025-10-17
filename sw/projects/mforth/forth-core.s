@@ -242,7 +242,6 @@ ramallot Inputbuffer, Maximuminput  # Inputbuffer wird einen Adresse-Länge Stri
 .equ RamDictionaryStart, rampointer # Start of RAM dictionary
 .equ RamDictionaryEnd,   __forth_ram_end    # End of RAM dictionary
 
-
 # -----------------------------------------------------------------------------
 #  Macros for "typesetting" :-)
 # -----------------------------------------------------------------------------
@@ -349,6 +348,7 @@ CoreDictionaryStart: # Set entry point for Dictionary
 
 .include "double.s"
 .include "memory.s"
+.include "fs.s"
 
 # -----------------------------------------------------------------------------
 # Finalize the dictionary structure and put a pointer into IMEM-Dictionary

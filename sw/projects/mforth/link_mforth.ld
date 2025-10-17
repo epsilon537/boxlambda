@@ -9,10 +9,10 @@ __imem = 0x00000000;
 __imem_size = 256k; /*256KB internal memory*/
 
 /* (return) stack:*/
-PROVIDE(__stack_size = 512);
+PROVIDE(__stack_size = 1024);
 
 /* data stack:*/
-PROVIDE(__datastack_size = 512);
+PROVIDE(__datastack_size = 1024);
 
 /*'emem' is the external memory section.*/
 __emem = 0x20000000;
@@ -20,8 +20,8 @@ __emem_size = 256m; /*256MB external memory.*/
 __heap_size = 128m;
 
 /*'fmem' is the flash memory section.*/
-__fmem = 0x11500000;
-__fmem_size = 1m; /*1MB flash memory.*/
+__fmem = 0x11600000;
+__fmem_size = 2m; /*2MB flash memory available for the SW image.*/
 
 /*Forth IMEM size*/
 __forth_imem_size = 92k;

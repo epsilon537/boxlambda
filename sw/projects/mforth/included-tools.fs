@@ -1204,12 +1204,10 @@ numbertable exp-coef
 ;
 
 \ Register a C function so it can be called from Forth.
-\ Define: ( fun n-args n-rets -- ) Up to 6 args, up to 2 return values.
-\ Execute: ( arg0..argn-1 -- ret0..retn-1 )
+\ Define: ( fun "name" -- )
+\ Execute: ( i*x -- j*x )
 \ Table contains:
-\ - n-rets
-\ - PSP correction needed to pass 6 args to C (of which 6-(n-args) are garbage)
 \ - C function pointer.
-: c-fun create , 6 - cells , , does> call-c ;
+: c-fun create , does> @ call-c ;
 
 )included_tools";
