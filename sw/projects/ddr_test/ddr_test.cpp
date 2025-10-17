@@ -40,7 +40,6 @@ int code_in_ddr(char *message) {
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  uart_set_baudrate(115200);
 }
 
 //_exit is executed by the picolibc exit function.

@@ -27,11 +27,13 @@
 // From qspiflash
 #include "flashsim.h"
 
+#include "memmap.h"
+
 //We set GPIO bits 7:4 to 0xf to indicate to RISCV SW that this is a simulation.
 #define GPIO_SIM_INDICATOR 0x0000f0
 
 const char *DEV_RANDOM = "/dev/urandom";
-const unsigned FLASH_SW_IMG_OFFSET = 0x400000;
+const unsigned FLASH_SW_IMG_OFFSET = SPIFLASH_SW_BASE - SPIFLASH_BASE;
 
 bool tracing_enable = false;
 

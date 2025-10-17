@@ -20,3 +20,4 @@ endif()
 
 target_link_libraries(timer_uart_gpio_irqs timer gpio riscv interrupts bootstrap)
 
+add_flash_sw_target(timer_uart_gpio_irqs)

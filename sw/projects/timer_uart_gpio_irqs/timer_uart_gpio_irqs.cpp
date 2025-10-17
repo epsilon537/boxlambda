@@ -18,8 +18,6 @@ extern "C" {
 
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  uart_set_baudrate(115200);
-
   mcycle_start();
   disable_all_irqs();
   mtimer_disable_raw_time_cmp(); //do this to prevent the timer interrupt from firing before we are ready.
