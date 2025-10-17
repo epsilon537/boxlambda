@@ -17,7 +17,7 @@ __emem_size = 256m; /*256MB external memory.*/
 __heap_size = 128m;
 
 /*'fmem' is the flash memory section reserved for the bootloader.*/
-__fmem = 0x11400000;
+__fmem = 0x11500000;
 __fmem_size = 1m; /*1MB flash memory.*/
 
 ENTRY(_start)

@@ -31,7 +31,12 @@ target_include_directories(bootloader
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-link_and_create_image(bootloader ${CMAKE_CURRENT_SOURCE_DIR}/link_bootloader.ld)
+if(CMAKE_BUILD_TYPE STREQUAL "sim")
+  link_and_create_image(bootloader
+  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+else()
+  link_and_create_image(bootloader ${CMAKE_CURRENT_SOURCE_DIR}/link_bootloader.ld)
+endif()
 
 if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
   set(_board arty_a7_100t)

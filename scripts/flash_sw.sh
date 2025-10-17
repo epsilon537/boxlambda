@@ -11,12 +11,12 @@ fi
 
 if [[ "$1" == "-b" ]]
 then
-  #Bootloader image lives at flash offset 0x400000
-  ADDR=4194304
+  #Bootloader image lives at flash offset 0x500000
+  ADDR=5242880
   shift
 else
-  #Application image lives at 0x500000
-  ADDR=5242880
+  #Application image lives at 0x600000
+  ADDR=6291456
 fi
 
 BOARD=$1

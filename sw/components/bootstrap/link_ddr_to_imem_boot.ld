@@ -17,8 +17,8 @@ __emem_size = 256m; /*256MB external memory.*/
 __heap_size = 128m;
 
 /*'fmem' is the flash memory section.*/
-__fmem = 0x11500000;
-__fmem_size = 1m; /*1MB flash memory.*/
+__fmem = 0x11600000;
+__fmem_size = 2m; /*2MB flash memory available for the SW image*/
 
 ENTRY(_start)
 

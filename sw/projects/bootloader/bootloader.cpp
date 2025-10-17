@@ -28,6 +28,7 @@ void	_exit (int status) {
 }
 
 int main(int, char **) {
+
   gpio_init();
   gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
