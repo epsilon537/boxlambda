@@ -293,7 +293,7 @@ _start(void) {
           "la	gp, __global_pointer$\n"
           ".option	pop");
 
-  /*Set mtvec to 0, in imem (it might originally be at 0x11000000 in flash)*/
+  /*Set mtvec to 0, in imem (it might originally be at 0x11500000 in flash memory)*/
   __asm__("csrw	mtvec, x0");
 
 #ifdef __riscv_flen
