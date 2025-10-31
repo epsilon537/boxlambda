@@ -11,8 +11,13 @@ target_compile_options(timer_uart_gpio_irqs
   -O2 -g
 )
 
-link_and_create_image(timer_uart_gpio_irqs
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+if(CMAKE_BUILD_TYPE STREQUAL "sim")
+  link_and_create_image(timer_uart_gpio_irqs ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+else()
+  link_and_create_image(timer_uart_gpio_irqs
+  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+endif()
 
 target_link_libraries(timer_uart_gpio_irqs timer gpio riscv interrupts bootstrap)
 
+add_flash_sw_target(timer_uart_gpio_irqs)

@@ -2,7 +2,7 @@
 
 ![BoxLambda Architecture Block Diagram](assets/Arch_Diagram_dual_bus_DFX.png)
 
-**BoxLambda** is a project that creates a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for both software and gateware experimentation.
+**BoxLambda** is a homebrew project creating a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for both software and gateware experimentation.
 
 ## Current Features
 

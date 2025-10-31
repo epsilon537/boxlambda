@@ -1,6 +1,8 @@
 
 ;const char LispLibrary[] =  R"lisplibrary(
 
+(format t "Loading VERA Convenience Layer...~%")
+
 (defvar +vera-irq-vsync+ 1)
 (defvar +vera-irq-line+ 2)
 (defvar +vera-irq-sprcol+ 4)
@@ -421,5 +423,6 @@
       (%vera (%make-assoc-table-lookup atable) atable))
     (? vera)))
 
+(format t "Done.~%")
 )lisplibrary";
 

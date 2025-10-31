@@ -17,8 +17,6 @@ extern "C"
 #endif
 //_init is executed by picolibc startup code before main().
 void _init(void) {
-  uart_set_baudrate(115200);
-
   mcycle_start();
 }
 

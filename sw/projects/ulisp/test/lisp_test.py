@@ -31,7 +31,7 @@ result = {}
 def init():
     print("Board Reset...")
     os.system('openFPGALoader -b arty_a7_100t -r')
-    time.sleep(5)
+    time.sleep(20)
 
     print("Starting terminal session...")
     ch = pexpect.spawn(

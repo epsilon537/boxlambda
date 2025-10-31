@@ -30,6 +30,7 @@ sources:
       #VS0: ~
       ACK_INVALID_ADDR:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
+      IBEX_BOOT_ADDR: 32'h11500000
     files:
       - rtl/boxlambda_top.sv
   - target: verilator
@@ -48,6 +49,7 @@ sources:
       #VS0: ~
       ACK_INVALID_ADDR:  ~
       #TRACE_ALL_INSTRUCTIONS: ~
+      IBEX_BOOT_ADDR: 32'h00000000
     files:
       - sim/sim_main.cpp
       - rtl/boxlambda_top.sv

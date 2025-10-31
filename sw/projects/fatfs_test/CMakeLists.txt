@@ -12,8 +12,12 @@ target_compile_options(fatfs_test
   -O2 -g
 )
 
-#Function defined in parent CMakeLists.txt file:
-link_and_create_image(fatfs_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+if(CMAKE_BUILD_TYPE STREQUAL "sim")
+  link_and_create_image(fatfs_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+else()
+  link_and_create_image(fatfs_test
+  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+endif()
 
 target_link_libraries(fatfs_test fatfs riscv bootstrap)
 

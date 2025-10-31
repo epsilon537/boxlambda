@@ -28,9 +28,9 @@
 
     {% for bf in reg %}
 # {{ reg.name }}.{{ bf.name }} - {{ bf.description }}
-.equ {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_WIDTH {{ bf.width }}
-.equ {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_LSB {{ bf.lsb }}
-.equ {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_MASK {{ "0x%x" % (bf.mask) }}
+.equ {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_WIDTH, {{ bf.width }}
+.equ {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_LSB, {{ bf.lsb }}
+.equ {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_MASK, {{ "0x%x" % (bf.mask) }}
     {% endfor %}
 {% endfor %}
 

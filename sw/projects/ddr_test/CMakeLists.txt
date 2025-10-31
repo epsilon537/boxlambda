@@ -19,8 +19,12 @@ target_include_directories(ddr_test
     ${PROJECT_SOURCE_DIR}/sw/components/memmap/
 )
 
-#Function defined in parent CMakeLists.txt file:
-link_and_create_image(ddr_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+if(CMAKE_BUILD_TYPE STREQUAL "sim")
+  link_and_create_image(ddr_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
+else()
+link_and_create_image(ddr_test
+  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+endif()
 
 target_link_libraries(ddr_test sdram gpio riscv bootstrap)
 

@@ -1,1 +1,7 @@
 `verilator_config
+
+lint_off -rule UNUSEDSIGNAL -file "*/ibex/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_cs_registers.sv" -match "Bits of signal are not used: 'mhpmcounter_we'[2]*"
+
+lint_off -rule UNUSEDSIGNAL -file "*/ibex/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_cs_registers.sv" -match "Bits of signal are not used: 'mhpmcounterh_we'[2]*"
+
+lint_off -rule UNUSEDSIGNAL -file "*/ibex/src/lowrisc_ibex_ibex_core_0.1/rtl/ibex_cs_registers.sv" -match "Bits of signal are not used: 'mhpmcounter_incr'[2]*"

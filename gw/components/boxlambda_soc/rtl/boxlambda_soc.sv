@@ -562,7 +562,7 @@ module boxlambda_soc #(
       .data_wb(data_bus_wbm[DATA_BUS_IBEX_D_M]),
       .test_en(1'b0),
       .hart_id(32'h0),
-      .boot_addr(32'h0),
+      .boot_addr(`IBEX_BOOT_ADDR),
       .irq_software(1'b0),
       .irq_timer(timer_irq),
       .irq_external(),
@@ -669,7 +669,7 @@ module boxlambda_soc #(
   //The UART.
   wbuart #(
       .HARDWARE_FLOW_CONTROL_PRESENT(1'b0),
-      .INITIAL_SETUP                (50000000 / 115200),
+      .INITIAL_SETUP                (50000000 / 1000000),
       .LGFLEN                       (4'd7)
   ) wbuart_inst (
       .i_clk(sys_clk),

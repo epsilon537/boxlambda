@@ -15,6 +15,7 @@ else()
           "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/"
           "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
           "-CFLAGS -I${PROJECT_SOURCE_DIR}/gw/components/spiflash/sim/"
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sw/components/memmap/"
   )
 
   add_dependencies(spiflash_test_sim spiflash_test)

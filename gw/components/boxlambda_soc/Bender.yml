@@ -35,9 +35,13 @@ sources:
   - target: boxlambda_soc
     files:
       - ../vs0_stub/rtl/vs0.sv
+    defines:
+      IBEX_BOOT_ADDR: 32'h00000000
 
   #co-sim stuffs.
   - target: verilator
+    defines:
+      NO_MODPORT_EXPRESSIONS: ~
     files:
       - lint.vlt
       - ../../../sub/wbuart32/bench/cpp/uartsim.cpp
@@ -46,8 +50,9 @@ sources:
       - ../../../sub/riscv-dbg/tb/SimJTAG.sv
       - ../../../sub/sdspi/bench/cpp/sdspisim.cpp
       - ../../../sub/wbi2c/bench/cpp/i2csim.cpp
+      - rtl/boxlambda_soc.sv
 
-  - target: any(vivado, verilator)
+  - target: vivado
     defines:
       NO_MODPORT_EXPRESSIONS: ~
     files:

@@ -6,10 +6,6 @@ package:
   name: wb_dp_ram
 
 sources:
-  - target: memory_vivado
-    files:
-     - ../../../build/arty-a7-100/sw/projects/bootloader/bootloader.mem
-
   - target: verilator
     files:
      - lint.vlt

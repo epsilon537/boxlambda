@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `v0.2.2`: Changes sinces label `v0.2.1` - 2025-10-31
+
+### Added
+
+- Application images now have a header containing a magic number allowing the bootloader to detect
+their presence in flash memory.
+- Added `sw/components/rtcc/rtc.h` which simply forwards to less easy to remember `MCP794412RTC.h`.
+
+### Fixed
+
+- Fixed a typo in the Corsair assembly code generation of the register access macros.
+
+### Changed
+
+- On FPGA, the CPU boots from flash instead of
+  IMEM. Bootloader copies itself from flash to IMEM, then proceeds as before.
+- Change default UART baudrate from 115200 to 1000000.
+- Modified SPI Flash memory map, allocating different memory regions for bootloader
+and application software. See the *Memory Map* section of the documentation for details.
+- Split linker variables `code_start/source`, `data_start/source` and `_bss_start/source` into
+`icode/ecode_start/source`, `idata/edata_start/source`, `ibss/ebss_start/source` and modified
+crt0.c to support them.
+- Mtvec is initially at 0x11500000 after reset. Crt0's `_start()` function sets it to 0.
+
+### Removed
+
+- Nothing.
+
 ## Label `v0.2.1`: Changes sinces label `v0.2.0` - 2025-09-08
 
 ### Added

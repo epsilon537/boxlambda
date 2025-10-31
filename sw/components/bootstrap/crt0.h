@@ -46,26 +46,36 @@
 #include <string.h>
 #include <picotls.h>
 
-/*Boxlambda added:*/
-extern char __code_source[];
-extern char __code_start[];
-extern char __code_size[];
-
-extern char __data_source[];
-extern char __data_start[];
-extern char __data_end[];
-extern char __data_size[];
-/*Boxlambda added:*/
-extern char __bss_start[];
-extern char __bss_size[];
+extern char __icode_source[];
+extern char __icode_start[];
+extern char __icode_size[];
+extern char __ecode_source[];
+extern char __ecode_start[];
+extern char __ecode_size[];
+extern char __idata_source[];
+extern char __idata_start[];
+extern char __idata_end[];
+extern char __idata_size[];
+extern char __edata_source[];
+extern char __edata_start[];
+extern char __edata_end[];
+extern char __edata_size[];
+extern char __ibss_start[];
+extern char __ibss_size[];
+extern char __ebss_start[];
+extern char __ebss_size[];
 extern char __tls_base[];
 extern char __tdata_end[];
 extern char __tls_end[];
+extern char __image_size[];
+extern char __stack[];
+extern char __stack_size[];
+extern char __datastack[];
+extern char __datastack_size[];
+extern char __datastack_end[];
 
-#ifdef __PICOLIBC_CRT_RUNTIME_SIZE
-#define __data_size (__data_end - __data_start)
-#define __bss_size (__bss_end - __bss_start)
-#endif
+/* The first word in an application image has this magic number */
+#define IMAGE_HEADER_MAGIC_NUMBER 0xB07A3BDA
 
 /* These two functions must be defined in the architecture-specific
  * code
