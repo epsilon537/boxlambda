@@ -183,11 +183,5 @@ The SPI bus clock frequency is 25MHz and is derived from the System Clock Domain
 
 ## SpiFlash Memory Layout
 
-The Arty A7 is equipped with 16Mbytes of flash memory.
-
-The flash memory address range is `0x11000000-0x11ffffff`, allocated as follows:
-
-- `0x11000000-0x113fffff`: 4Mbytes Reserved for Bitstreams
-- `0x11400000-0x117fffff`: 4Mbytes Reserved for software images that boot from flash memory.
-- `0x11800000-0x11ffffff`: 8Mbytes Available for non-volatile data storage.
+See [BoxLambda Memory Map](memory_map.md#spi-flash)
 

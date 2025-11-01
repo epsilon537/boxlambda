@@ -7,7 +7,7 @@ hide:
 
 ## Vectored Mode
 
-Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the `IRQ_ID` by four and adding it to the vector table base address. The vector table base address is specified in the `mtvec` CSR. In BoxLambda, I'm leaving it at 0, so the interrupt entry point address is simply `IRQ_ID*4`.
+Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the `IRQ_ID` by four and adding it to the vector table base address. The vector table base address is specified in the `mtvec` CSR. In BoxLambda, after reset the vector will initially point at `0x1150000`. Crt0's `_start()` function will set it to 0 (in IMEM), so from then on an interrupt's entry point address is simply `IRQ_ID*4`.
 
 ## Vectors.S Weak Bindings
 

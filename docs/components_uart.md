@@ -29,7 +29,7 @@ The Wbuart core is instantiated with the following parameters:
 - **Rx and Tx FIFO Size**: 16 bytes.
 - **Hardware Flow Control Support**: Enabled.
 - **Initial Setup**:
-    - 115200 baud
+    - 1000000 baud
     - 8 bits/word
     - no parity
     - 1 stop bit

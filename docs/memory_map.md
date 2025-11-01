@@ -24,6 +24,14 @@ High-latency read-only memory (writable through flash driver API).
 - **Address Range**: `0x11000000-0x12000000`
 - **Size**: 16 Mbytes
 
+The flash memory address range is allocated as follows:
+
+- `0x11000000-0x113fffff`: 4Mbytes reserved for bitstreams
+- `0x11500000-0x115fffff`: 1Mbyte reserved for the bootloader.
+- `0x11600000-0x117fffff`: 2Mbytes reserved for application software images.
+- `0x11800000-0x11bfffff`: 4Mbytes reserved for non-volatile data storage.
+- `0x11c00000-0x11ffffff`: Not allocated.
+
 ## VERA Sprite Attribute RAM
 
 Write-only Sprite attribute RAM.

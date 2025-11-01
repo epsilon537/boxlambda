@@ -1,0 +1,64 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram id="mVrFFS_0RJGBFr3V-ITc" name="Page-1">
+    <mxGraphModel dx="1425" dy="988" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-15" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry y="680" width="800" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#000000,#000000);" vertex="1" parent="1">
+          <mxGeometry x="160" y="640" width="450" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-2" value="&lt;pre&gt;: foo .&quot; Hello World&quot; ;&lt;br&gt;foo CR&lt;br&gt;&lt;/pre&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFF99;" vertex="1" parent="1">
+          <mxGeometry x="170" y="680" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-4" value="&lt;pre&gt;ok&lt;br&gt;Hello World&lt;br&gt;ok&lt;br&gt;&lt;/pre&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFF99;" vertex="1" parent="1">
+          <mxGeometry x="170" y="800" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-5" value="&lt;pre&gt;: bar 42 emit foo 42 emit CR ;&lt;br&gt;bar&lt;br&gt;&lt;b&gt;|&lt;/b&gt;&lt;/pre&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFF99;" vertex="1" parent="1">
+          <mxGeometry x="170" y="725" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-6" value="&lt;pre&gt;ok&lt;br&gt;*Hello World*&lt;br&gt;ok&lt;br&gt;&lt;b&gt;&amp;gt;&lt;/b&gt;&lt;/pre&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFF99;" vertex="1" parent="1">
+          <mxGeometry x="170" y="850" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-7" value="1. Some input here" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="425" y="660" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-8" value="2. Some output there" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="425" y="695" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-9" value="3. Some more input here" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="425" y="725" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-10" value="4. Some more output there" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="425" y="755" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-11" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;fontColor=#FFFFFF;strokeColor=#FFFFFF;" edge="1" parent="1" source="7f-Ep-UaOvoNqfp-Gn0m-7" target="7f-Ep-UaOvoNqfp-Gn0m-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="840" as="sourcePoint" />
+            <mxPoint x="510" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-12" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontColor=#FFFFFF;strokeColor=#FFFFFF;" edge="1" parent="1" source="7f-Ep-UaOvoNqfp-Gn0m-8" target="7f-Ep-UaOvoNqfp-Gn0m-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="710" as="sourcePoint" />
+            <mxPoint x="460" y="840" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontColor=#FFFFFF;strokeColor=#FFFFFF;" edge="1" parent="1" source="7f-Ep-UaOvoNqfp-Gn0m-9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="730" as="sourcePoint" />
+            <mxPoint x="390" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7f-Ep-UaOvoNqfp-Gn0m-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontColor=#FFFFFF;strokeColor=#FFFFFF;" edge="1" parent="1" source="7f-Ep-UaOvoNqfp-Gn0m-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="470" y="910" as="sourcePoint" />
+            <mxPoint x="270" y="840" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
