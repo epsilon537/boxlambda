@@ -16,7 +16,7 @@ This build expects to find the software image to boot in flash memory.
 
 ### Building and Running BoxLambda Base
 
-Connect a terminal emulator to the Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator to the Arty's USB serial port. **Settings: 1000000 8N1**.
 
 Make sure the four switches on the Arty are not all off (the bootloader would wait
 for a debugger to connect) or all on (the software project would assume it's

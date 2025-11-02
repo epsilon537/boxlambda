@@ -105,8 +105,6 @@ nav:
         - DFX Controller HAL: sw_comp_dfx_controller_hal.md
         - J1B HAL: sw_comp_j1b_hal.md
         - VS0 HAL: sw_comp_vs0_hal.md
-    - Software Project Builds:
-        - uLisp: sw_prj_build_ulisp.md
     - The Build System:
         - Git Workflow: git-workflow.md
         - The Build System Structure:
@@ -137,6 +135,7 @@ nav:
         - DFX Test: test-build-dfx.md
         - Invalid Address Test: test-build-invalid-addr.md
         - Ibex Performance Test: test-build-ibex-perf.md
+        - uLisp: test_build_ulisp.md
     - Documentation Builds:
         - Blog: doc-build-blog.md
         - MkDocs: doc-build-mkdocs.md

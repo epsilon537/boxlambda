@@ -71,7 +71,7 @@ cd build/arty-a7-100/gw/projects/sdspi_test
 make sdspi_test_bit
 ```
 
-Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 
 Download the generated bitstream file to the Arty A7:
 
@@ -159,7 +159,7 @@ cd build/arty-a7-100/gw/projects/fatfs_test
 make fatfs_test_bit
 ```
 
-Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 
 Download the generated bitstream file to the Arty A7:
 

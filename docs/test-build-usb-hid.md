@@ -49,7 +49,7 @@ The `ledg_1 = ...` lines indicate a LED update in the emulated USB keyboard.
 
 Hook up Machdyne's [USB host dual socket PMOD](https://machdyne.com/product/usb-host-dual-socket-pmod/) to port `JA` and connect a keyboard and/or a mouse.
 
-Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 
 Build the project in an Arty A7 build tree:
 

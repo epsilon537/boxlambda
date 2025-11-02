@@ -95,7 +95,7 @@ Relative Deviations:
 
 Hook up the Audio PMOD as described [here](pmods.md#audio-pmod).
 
-Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 
 Build the *ym2149_dac_test* project in an Arty A7 build tree:
 ```
@@ -172,7 +172,7 @@ Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
 
 Locate the YM file `ANCOOL1.YM` in the directory `boxlambda/sub/StSound/YmSampleFiles/`. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.
 
-Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 
 Build the *stsound_test* project in an Arty A7 build tree.
 ```

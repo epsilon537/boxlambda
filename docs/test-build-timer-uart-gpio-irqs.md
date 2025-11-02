@@ -70,7 +70,7 @@ SIM: Test passed.
 
 ## The Timer, UART, and GPIO Interrupt Test on FPGA
 
-Connect a terminal emulator to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator to Arty's USB serial port. **Settings: 1000000 8N1**.
 
 Build the `timer_uart_gpio_irqs` gateware project in an Arty A7 build tree:
 
