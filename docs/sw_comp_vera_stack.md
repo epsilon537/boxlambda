@@ -10,7 +10,7 @@ The VERA Software Stack consists of three layers:
 - **VERA C++ HAL**: The VERA Hardware Abstraction Layer C++ API.
 - **VERA uLisp HAL**: The VERA Hardware Abstraction Layer uLisp API. This API
 maps directly to the C++ API.
-- **VERA uLisp Convenience API**: A more expressive, higher level API using
+- **VERA uLisp Convenience API (Experimental)**: A more expressive, higher level API using
 keyword arguments built on top of the VERA uLisp HAL.
 
 ![VERA Software Stack.](assets/vera_sw_stack.png)
@@ -59,7 +59,7 @@ The following classes are defined:
 boundaries, scaling, and border color are configured at this level. `Vera_hal` is also the access point to the other objects in the hierarchy.
 - `Vera_layer`: Vera has two layers (not counting the sprite 'layer'). The
 `Vera_layer` class handles layer-specific settings such as the tileset and map to use, horizontal and vertical scroll offset, etc.
-- `Vera_tileset`: This class represents the pixel data of a collection of *tiles* in the most general sense. Tiles can be an 8x8 font in 1 bpp text mode, 16x16 multi-color tiles for use in a game tile map, 32x32 sprites, or even complete 640x480 bitmaps. Vera_tilesets allocate space in VRAM to hold the pixel data for the given number of tiles.
+- `Vera_tileset`: This class represents the pixel data of a collection of *tiles* in the most general sense. Tiles can be an 8x8 font in 1 bpp text mode, 16x16 multicolor tiles for use in a game tile map, 32x32 sprites, or even complete 640x480 bitmaps. Vera_tilesets allocate space in VRAM to hold the pixel data for the specified number of tiles.
 - `Vera_map`: This class represents a map, or grid, in tile or text mode. The
 grid elements are addressed by column and row.
 - `Vera_sprite`: This class holds all attributes of 1 sprite, including a
@@ -421,7 +421,7 @@ Vera graphics API. General form: (vera :<action> [:<param keyword> [param value]
 
 The lisp code can be found here: [sw/projects/ulisp/LispLibrary.lisp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ulisp/LispLibrary.lisp).
 
-The VERA Convenience API is more expressive, but also slower than the lower-level [uLisp VERA HAL API](#the-ulisp-vera-hal). For code that requires a level of performance, e.g. pixel drawing in a nested loop, it's better to use the uLisp VERA HAL API directly.
+The VERA Convenience API is more expressive, but also slower than the lower-level [uLisp VERA HAL API](#the-ulisp-vera-hal). For code that requires a level of performance, e.g., pixel drawing in a nested loop, it's better to use the uLisp VERA HAL API directly.
 
 ### Example
 

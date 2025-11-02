@@ -20,7 +20,7 @@ This test program does *not* run on Verilator.
 
 Hook up the RTCC PMOD as described [here](pmods.md#rtcc-pmod).
 
-Connect a terminal emulator to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator to Arty's USB serial port. **Settings: 1000000 8N1**.
 
 Build the `rtcc_test` software project in an Arty A7 build tree:
 ```

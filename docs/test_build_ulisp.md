@@ -3,19 +3,19 @@ hide:
   - toc
 ---
 
-# The uLisp Software Project Build (WIP)
+# The uLisp Test Build (WIP)
 
 **uLisp**: [http://www.ulisp.com](http://www.ulisp.com)
 
 **The software project directory**: [sw/projects/ulisp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ulisp)
 
-The BoxLambda port of ulisp is still at a very early stage. Currently, the ulisp
-build boots and provides access to the [VERA Stack](sw_comp_vera_stack.md) as a
-ulisp extension.
+This is an experimental BoxLambda port of uLisp. The port is still at a very
+early stage. Currently, the uLisp build boots and provides access to the [VERA
+Stack](sw_comp_vera_stack.md) as a uLisp extension.
 
 # Building and Running uLisp on FPGA
 
-Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 115200 8N1**.
+Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 
 Flash the `boxlambda_base` release bitstream onto the target:
 
@@ -141,7 +141,7 @@ Vera graphics API. General form: (vera :<action> [:<param keyword> [param value]
 
 [sw/projects/ulisp/test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ulisp/test) contains a suite of uLisp test scripts used to verify the integration of BoxLambda features into uLisp.
 
-The test suite can be run under control of a host PC using the `lisp_test.py` Python module. `Lisp_test.py` assumes that the target boots into uLisp. The Python module interacts with the target via the serial port (a screen session) and openFPGAloader (to trigger reboots between scripts).
+The test suite can be run under the control of a host PC using the `lisp_test.py` Python module. `Lisp_test.py` assumes that the target boots into uLisp. The Python module interacts with the target via the serial port (a screen session) and openFPGAloader (to trigger reboots between scripts).
 
 To run all testcases:
 

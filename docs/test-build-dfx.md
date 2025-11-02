@@ -74,7 +74,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
 
 Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/latest/pmods/#microsd-pmod) and insert a FAT-formatted SD card.
 
-Connect a terminal emulator to Arty's USB serial port. I suggest using a terminal emulator that supports Ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
+Connect a terminal emulator to Arty's USB serial port. I suggest using a terminal emulator that supports Ymodem transfers such as *Minicom*. **Settings: 1000000 8N1**.
 
 Make sure the four switches on the Arty are not all-off (the bootloader would wait
 for a debugger to connect) or all-on (the software project would assume it's
