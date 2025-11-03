@@ -6,14 +6,14 @@ mathjax: yes
 ---
 
 About six months ago, to my surprise, I completed the BoxLambda SoC's gateware.
-Since then, I have explored various OS projects, programming languages, tools and
+Since then, I've explored various OS projects, programming languages, tools, and
 ideas for BoxLambda's software environment. It's time to commit to a
-software architecture for BoxLambda.
+software architecture.
 
 # Context
 
 Here's a TLDR, for those who haven't read all 33 previous posts:
-BoxLambda is a hardware-software cross-over project creating a homebrew,
+BoxLambda is a hardware-software crossover project creating a homebrew,
 retro-style FPGA-based microcomputer. The goal is to create a sandbox
 environment for experimenting with software and FPGA gateware.
 
@@ -34,7 +34,7 @@ BoxLambda's current features:
 - DFX Partial FPGA Reconfiguration support.
 - DDR3 external memory access through the Litex memory controller.
 - OpenOCD-based debug access on FPGA and Verilator.
-- VERA-based VGA graphics: 2 layers tile or bitmap mode, 2 banks of 64 sprites,
+- VERA-based VGA graphics: 2 layers, tile or bitmap mode, 2 banks of 64 sprites,
 128KB Video RAM, 256 color palette.
 - Dual YM2149 PSG Audio.
 - SD Card Controller and FatFs File System.
@@ -69,7 +69,7 @@ understanding of the entire system, software and hardware.
 - **Single User/Single Tasking OS** booting to a console shell.
 
 (There are some additional, practical requirements for peripherals, sound, and
-graphics, but those are less relevant for the current discussion)
+graphics. Those are less relevant for the current discussion.)
 
 That was three years ago. Meanwhile, I've had time to think about them and my
 expectations for the operating system. I would like to introduce the following
@@ -78,7 +78,7 @@ additional requirements:
 - **Self-Hosting**: The system must be self-contained and self-hosted, i.e. not
 depend on a host PC for software development.
 - **System Programming**: The programmer must have full access to the system,
-i.e. not being restricted to a sandbox/VM environment.
+i.e. not be restricted to a sandbox/VM environment.
 - **REPL**: The programming environment must support interactive programming
 using a REPL.
 - **Automated Testing**: All features must support automatic testing.
@@ -112,37 +112,39 @@ will be needed.
 
 # Forth
 
-[![The Forth Logo.](../assets/forth_logo.png)](../assets/forth_logo.png)
-
-Forth enthusiasts saw this coming from a mile away: These requirements have
-*Forth* written all over them.
+Forth enthusiasts already know: These requirements have *Forth* written all over
+them.
 
 To be honest, when I started this project, I did *not* know about Forth, other
-than that is was a weird stack-based language. When I finally learned about it
-while looking for ideas for this project, I got excited, of course. Forth is
-a unique, minimalistic, extremely powerful programming language. It features a
-REPL, an interpreter doing double duty as a compiler (a *competer*? *interpiler*?),
-an assembler, editor, and metaprogramming capabilities you wouldn't believe.
+than that is was a niche, stack-based language. When I finally learned about it
+while looking for ideas for this project, the Forth bug bit me. Forth is a
+unique, minimalistic, extremely powerful programming language, perfect for
+running on constrained systems. It features a REPL, an interpreter doing double
+duty as a compiler (a *competer*? *interpiler*?), an assembler, editor, and
+metaprogramming capabilities you wouldn't believe.
+
+To get a sense of what a unique language Forth is, check out this article. It's
+long but quite entertaining:
+
+[![the programming language that writes itself.](../assets/forth_article.png)](https://ratfactor.com/forth/the_programming_language_that_writes_itself.html)
+
+Forth just begs to be explored on an experimental homebrew computer such as
+BoxLambda. Learning Forth is *not* a walk in the park. It requires a different
+way of thinking. At my current level, an average line of low-level Forth is a
+puzzle. It takes as long to unpack as a regular expression of the same
+length. Here's an example:
 
 ```
 : IF IMMEDIATE ' 0BRANCH , HERE @ 0 , ;
 
 : THEN IMMEDIATE DUP HERE @ SWAP - SWAP ! ;
 ```
-*If..then defined in Forth.*
 
-To get a sense of what a unique language Forth is, check out this article. It's
-long but entertaining:
-
-[https://ratfactor.com/forth/the_programming_language_that_writes_itself.html](https://ratfactor.com/forth/the_programming_language_that_writes_itself.html)
-
-Forth just begs to be explored on an experimental homebrew computer such as
-BoxLambda. Learning Forth is *not* a walk in the park. It requires a different
-way of thinking. At my current level, an average line of low-level Forth takes
-almost as long to unpack as a regular expression of the same length. But I
-enjoy the challenge! It feels a bit like diving into assembly code on the
-Commodore 64 for the first time.
-<br/><br/>
+Two lines of code, defining the equivalent of the ```if (...) {...}``` control
+structure in C. How many lines of code would a C compiler require to implement
+```if (...) {...}```? Needless to say, there's a lot to unpack in those two lines
+of Forth code. But I enjoy the challenge! It feels a bit like diving into assembly
+code on the Commodore 64 for the first time. <br/><br/>
 
 # Explorations
 
@@ -178,13 +180,13 @@ Forth.
 candidate text editor for BoxLambda.
 [Kilo](https://viewsourcecode.org/snaptoken/kilo/) is another option.
 
-DuskOS is an amazing project. It would be great to be part of it and to port
-that system to BoxLambda. A few things are holding me back, however. The OS and
-language is very advanced and not easy to master. It feels a bit like jumping on
-a powerful 800cc bike while I'm not used to the 125cc starter bike yet. Also, in
-Dusk, most interesting decisions have already been made. Dusk OS is more or less
-complete. I'm looking for an OS development project, not just an OS porting
-project.
+DuskOS is an amazing project. It would be great to be part of that story and to
+port that system to BoxLambda. A few things are holding me back, however. The OS
+is very advanced and not easy to master. It feels a bit like
+jumping on an 800cc bike while I'm not used to the 125cc starter bike
+yet. Also, in Dusk, most interesting decisions have already been made. Dusk OS
+is more or less complete. I'm looking for an OS development project, not just an
+OS porting project.
 
 Maybe one day I'll port Dusk, but right now, I prefer to go my own way. It
 would be a bit strange to spend all this time carefully putting together this
@@ -226,9 +228,9 @@ The BoxLambda Kernel is subdivided into two cores:
 
 The BoxKern is mostly about leveraging existing non-Forth code. Most of the
 BoxKern components already exist in BoxLambda's code base, the exceptions being:
-- **The Foreign Function Interface (FFI)**: This is the mechanism to be used to
+- **The Foreign Function Interface (FFI)**: This is the mechanism used to
 call Forth from C code and C from Forth code. BoxKern drivers and libraries
-export their functionality to the Forth environments using the FFI.
+export their functionality to the Forth environments through the FFI.
 - **The Console Driver**: In the current BoxLambda code base, Picolibc's *stdin*
 and *stdout* are associated with the serial port. This I/O method has to be
 replaced by a Console Driver which forwards output to and takes input from the
@@ -257,7 +259,7 @@ Flamingo.](../assets/flamingo.png)](../assets/flamingo.png)
 Most *new* code will be written in Forth or in assembly language in the Forth
 environment. Not everything is in the Forth environment is new, still-
 to-be-developed software, however. Some modules, such as the RISC-V assembler
-and disassembler are part of the Mecrisp Forth Quintus distribution.
+and disassembler, are part of the Mecrisp Forth Quintus distribution.
 
 ### The Canvas REPL / Editor
 
@@ -280,8 +282,8 @@ proxies access the BoxKern drivers/libs through the FFI.
 ## The Extras
 
 The greyed-out parts in the block diagram are components that are not essential
-to create a working system. These components are likely added later (or
-possibly, never). This is just a crude binary partitioning of what really
+to create a working system. These components are likely added later (some
+possibly never). This is just a crude binary partitioning of what really
 is an [iterative spiraling
 approach](https://epsilon537.github.io/boxlambda/hello-world/). I start from
 something small but working (e.g., the Mecrisp Forth core running in a serial port
@@ -307,14 +309,19 @@ default.
 
 I spent an inordinate amount of time evaluating projects and programming
 languages for BoxLambda. It's just too much fun. I have prototypes on BoxLambda
-of *uLisp*, *Lua*, *Forth*, and *vi*. I wrote a RISC-V disassembler for DuskOS,
+of [uLisp](https://boxlambda.readthedocs.io/en/latest/test_build_ulisp/), *Lua*,
+[Mecrisp
+Forth](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/mforth),
+and *vi*. I wrote a [RISC-V disassembler for
+DuskOS](https://git.sr.ht/~vdupras/duskos/tree/master/item/fs/asm/riscvd.fs),
 and I've been diving into Project Oberon, ELF loaders, and small-footprint C
 compilers.
 
-The hard part is deciding it's time to stop. You don't get to define
-the OS for a homebrew computer every day, and you never know if you've overlooked
-some project or concept that's even cooler and more perfect for your own project
-than what you have already discovered.
+The hard part is deciding it's time to stop scouting and commit to an idea. An
+opportunity to define the OS for a homebrew computer doesn't come along every
+day. You never know if you've overlooked some project or concept that's even
+cooler and more perfect for your own project than what you have already
+discovered.
 
 What would you choose?
 
