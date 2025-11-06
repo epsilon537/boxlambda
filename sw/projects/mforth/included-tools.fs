@@ -1030,7 +1030,7 @@ numbertable exp-coef
 : executablelocation? ( addr -- ? )
   dup  addrinram?              \ In RAM
   over ramvar-here u< and     \ and below the variables and buffers
-  swap addrinimem? or           \ or in flash ?
+  swap addrinimem? or           \ or in imem ?
 ;
 
 : link>flags ( addr -- addr* ) 1 cells + ;
