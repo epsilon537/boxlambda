@@ -23,4 +23,5 @@ add_subdirectory(mem_fs_cli)
 add_subdirectory(dfx)
 add_subdirectory(arduino)
 add_subdirectory(terminal)
+add_subdirectory(forth_core)
 

@@ -13,10 +13,6 @@ set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}gcc)
 #Use GCC for assembly as well.
 set(CMAKE_ASM_COMPILER ${TOOLCHAIN_PREFIX}gcc)
 
-# picorv assembler, associated with the .picoasm file extension
-# ASM_PICO dialect CMake extension is defined the cmake subdirectory of this repo.
-set(CMAKE_ASM_PICO_COMPILER ${TOOLCHAIN_PREFIX}as)
-
 # adjust the default behaviour of the find commands:
 # search headers and libraries in the target environment
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
