@@ -38,14 +38,14 @@ const char included_tools[] =  R"included_tools(
     ?dup 0=
   until
 
-  immediate 0-foldable
+  [immediate] [0-foldable]
 ;
 
-: [then] ( -- ) immediate 0-foldable ;
+: [then] ( -- ) [immediate] [0-foldable] ;
 
-: [if]   ( ? -- )                 0=  if postpone [else] then immediate 1-foldable ;
-: [ifdef]  ( -- ) token find drop 0=  if postpone [else] then immediate 0-foldable ;
-: [ifndef] ( -- ) token find drop 0<> if postpone [else] then immediate 0-foldable ;
+: [if]   ( ? -- )                 0=  if postpone [else] then [immediate] [1-foldable] ;
+: [ifdef]  ( -- ) token find drop 0=  if postpone [else] then [immediate] [0-foldable] ;
+: [ifndef] ( -- ) token find drop 0<> if postpone [else] then [immediate] [0-foldable] ;
 
 \ RISC-V 32 IM Disassembler, Copyright (C) 2018  Matthias Koch
 \ This is free software under GNU General Public License v3.
@@ -471,12 +471,12 @@ $FFFFFFFF $7FFFFFFF 2constant +inf  \ 2147483647,9999999999
 $0 $80000000 2constant -inf         \ 2147483648,0
 
 \ Return the floor of an s31.32 value df
-: floor ( df -- df ) nip 0 swap 2-foldable ;
+: floor ( df -- df ) nip 0 swap [2-foldable] ;
 
 \ Convert an s31.32 angle df1 in degrees to an angle df2 in [0, 360)
 \ such that df1 = df2 + n*360 where n is an integer
 : deg0to360 ( df1 -- df2 )  360,0 d/mod 2drop 2dup d0< if 360,0 d+ then
-  2-foldable
+  [2-foldable]
 ;
 
 \ Convert an s31.32 angle df1 in degrees to an angle df2 in [-90, 90)
@@ -490,7 +490,7 @@ $0 $80000000 2constant -inf         \ 2147483648,0
       180,0 d+
     then
   then
-  2-foldable
+  [2-foldable]
 ;
 
 \ From common directory of Mecrisp-Stellaris Forth 2.4.0
@@ -526,7 +526,7 @@ $0 $80000000 2constant -inf         \ 2147483648,0
 
   \ Drop u and bit, res is s31.32 square root of x
   2drop 2drop
-  2-foldable
+  [2-foldable]
 ;
 
 : sqrt ( x -- sqrtx )
@@ -546,7 +546,7 @@ $0 $80000000 2constant -inf         \ 2147483648,0
       dshl                  \ Multiply by 2 ndiv times
     loop
   then
-  2-foldable
+  [2-foldable]
 ;
 
 \ -------------------------------------------------------------------------
@@ -555,13 +555,13 @@ $0 $80000000 2constant -inf         \ 2147483648,0
 : deg2rad ( deg -- rad )
   \ Convert s31.32 in degress to s31.32 in radians
   74961321 0 f*
-  2-foldable
+  [2-foldable]
 ;
 
 : rad2deg ( rad -- deg )
   \ Convert s31.32 in radians to s31.32 in degrees
   1270363336 57 f*
-  2-foldable
+  [2-foldable]
 ;
 
 \ pi/2 and pi/4 as s31.32 numbers (whole part first for retrieval with 2@)
@@ -594,7 +594,7 @@ numbertable sin-coef
   loop
   \ Last term is multiplied by x
   2nip f*
-  2-foldable
+  [2-foldable]
 ;
 
 \ s31.32 comma parts of coefficients in Horner expression of 8-term series
@@ -622,7 +622,7 @@ numbertable cos-coef
     i 2 mod 0= if d- else d+ then
   loop
   2nip
-  2-foldable
+  [2-foldable]
 ;
 
 : q1-sin-rad ( x -- sinx )
@@ -636,7 +636,7 @@ numbertable cos-coef
   \ Apply max/min limits
   \ 2dup 1,0 d> if 2drop 1,0 exit then
   \ 2dup -1,0 d< if 2drop -1,0 exit then
-  2-foldable
+  [2-foldable]
 ;
 
 : q1toq4-sin ( x -- sinx )
@@ -649,7 +649,7 @@ numbertable cos-coef
   else
     deg2rad q1-sin-rad
   then then
-  2-foldable
+  [2-foldable]
 ;
 
 \ s31.32 comma parts of coefficients in Horner expression of 6-term Euler
@@ -676,7 +676,7 @@ numbertable atan-coef
   loop
   \ Last term is multiplied by x/(x^2+1)
   2nip f*
-  2-foldable
+  [2-foldable]
 ;
 
 \ Table of atan(i/8), i = 0, 1, ..., 8, values in radians
@@ -713,7 +713,7 @@ numbertable atan-table
       then
     -1 +loop
   then
-  2-foldable
+  [2-foldable]
 ;
 
 \ -------------------------------------------------------------------------
@@ -727,13 +727,13 @@ numbertable atan-table
   q1toq4-sin    \ sin|x|
   \ Negate if x is negative
   2swap d0< if dnegate then
-  2-foldable
+  [2-foldable]
 ;
 
 : cos ( x -- cosx )
   \ x is any s31.32 angle in degrees
   90,0 d+ sin
-  2-foldable
+  [2-foldable]
 ;
 
 : tan ( x -- tanx )
@@ -747,7 +747,7 @@ numbertable atan-table
   else
     2drop 2dup sin 2swap cos f/
   then
-  2-foldable
+  [2-foldable]
 ;
 
 : atan ( x -- atanx )
@@ -764,7 +764,7 @@ numbertable atan-table
   \ Negate if x is negative
   2swap d0< if dnegate then
   rad2deg
-  2-foldable
+  [2-foldable]
 ;
 
 : asin ( x -- asinx )
@@ -780,13 +780,13 @@ numbertable atan-table
   then
   \ Negate if x is negative
   2swap d0< if dnegate then
-  2-foldable
+  [2-foldable]
 ;
 
 : acos ( x -- acosx )
   \ Calc acos for s31.32 x in interval [-1, 1], return result in degrees
   90,0 2swap asin d-
-  2-foldable
+  [2-foldable]
 ;
 
 \ -------------------------------------------------------------------------
@@ -825,7 +825,7 @@ numbertable atan-table
     ( retval y cum_m )
   repeat
   drop 2drop
-  2-foldable
+  [2-foldable]
 ;
 
 \ -------------------------------------------------------------------------
@@ -862,7 +862,7 @@ numbertable atan-table
   \ helper function to get log2(y) since 1 <= y < 2
   log2-1to2 rot 0 swap d+
   ( log2x )
-  2-foldable
+  [2-foldable]
 ;
 
 1292913986 0 2constant log10of2
@@ -898,7 +898,7 @@ numbertable atan-table
   \ identity log10(y) = log10(2)*log2(y)
   log2 log10of2 f* rot 0 swap d+
   ( log10x )
-  2-foldable
+  [2-foldable]
 ;
 
 2977044472 0 2constant lnof2
@@ -913,7 +913,7 @@ numbertable atan-table
   2dup 1,0 d= if 2drop 0,0 exit then
 
   log2 lnof2 f*
-  2-foldable
+  [2-foldable]
 ;
 
 \ -------------------------------------------------------------------------
@@ -947,7 +947,7 @@ numbertable exp-coef
   \ Last part of expansion
   2over f* 0 1 d+
   2nip
-  2-foldable
+  [2-foldable]
 ;
 
 : pow2 ( x -- 2^x )
@@ -972,7 +972,7 @@ numbertable exp-coef
       0 do dshl loop
     then
   then
-  2-foldable
+  [2-foldable]
 ;
 
 1901360723 1 2constant 1overlnof2
@@ -991,7 +991,7 @@ numbertable exp-coef
   else
     1overlnof2 f* pow2
   then
-  2-foldable
+  [2-foldable]
 ;
 
 1382670639 3 2constant ln10overln2
@@ -1015,13 +1015,13 @@ numbertable exp-coef
   else
     ln10overln2 f* pow2
   then
-  2-foldable
+  [2-foldable]
 ;
 
 \ -------------------------------------------------------------------------
 
-: s>f ( n -- f ) 0 swap  1-foldable ; \ Signed integer --> Fixpoint s31.32
-: f>s ( f -- n ) nip     2-foldable ; \ Fixpoint s31.32 --> Signed integer
+: s>f ( n -- f ) 0 swap  [1-foldable] ; \ Signed integer --> Fixpoint s31.32
+: f>s ( f -- n ) nip     [2-foldable] ; \ Fixpoint s31.32 --> Signed integer
 
 \ -----------------------------------------------------------------------------
 \   A few tools for dictionary wizardy

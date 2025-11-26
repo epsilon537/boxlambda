@@ -271,7 +271,7 @@ inline_do_opcodes:
 do_opcodes:
   pushdouble x4, x3
   popdadouble x3, x4
-  ret  # Ende für inline,  End for inline,
+  ret  # End for inline,
 
 #------------------------------------------------------------------------------
   Definition Flag_immediate_compileonly, "?do"

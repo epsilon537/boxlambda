@@ -38,14 +38,14 @@ const char testsuite[] =  R"testsuite(
     ?dup 0=
   until
 
-  immediate 0-foldable
+  [immediate] [0-foldable]
 ;
 
-: [then] ( -- ) immediate 0-foldable ;
+: [then] ( -- ) [immediate] [0-foldable] ;
 
-: [if]   ( ? -- )                 0=  if postpone [else] then immediate 1-foldable ;
-: [ifdef]  ( -- ) token find drop 0=  if postpone [else] then immediate 0-foldable ;
-: [ifndef] ( -- ) token find drop 0<> if postpone [else] then immediate 0-foldable ;
+: [if]   ( ? -- )                 0=  if postpone [else] then [immediate] [1-foldable] ;
+: [ifdef]  ( -- ) token find drop 0=  if postpone [else] then [immediate] [0-foldable] ;
+: [ifndef] ( -- ) token find drop 0<> if postpone [else] then [immediate] [0-foldable] ;
 
 
 \ ------------------------------------------------------------------------
@@ -88,15 +88,15 @@ const char testsuite[] =  R"testsuite(
 \     repeat
 \ ;
 
-: chars ( u -- u ) 0-foldable ;
-: char+ ( u -- u+1 ) 1+ 1-foldable ;
+: chars ( u -- u ) [0-foldable] ;
+: char+ ( u -- u+1 ) 1+ [1-foldable] ;
 
 : erase ( addr u -- ) 0 fill ;
 
 
 : sgn ( u1 n1 -- n2 ) \ n2 is u1 with the sign of n1
     0< if negate then
-2-foldable ;
+[2-foldable] ;
 
 \ Divide d1 by n1, giving the symmetric quotient n3 and the remainder
 \ n2.
@@ -107,7 +107,7 @@ const char testsuite[] =  R"testsuite(
     um/mod          ( remainder quotient )
     swap r> sgn     \ apply to remainder
     swap r> sgn     \ apply to quotient
-3-foldable ;
+[3-foldable] ;
 
 \ Divide d1 by n1, giving the floored quotient n3 and the remainder n2.
 \ Adapted from hForth
@@ -125,14 +125,14 @@ const char testsuite[] =  R"testsuite(
         then
     then
     r> drop
-3-foldable ;
+[3-foldable] ;
 
-\ : */mod ( n1 n2 n3 -- n4 n5 ) >r m* r> sm/rem 3-foldable ;
-\ : */    ( n1 n2 n3 -- n4 )    */mod nip 3-foldable ;
+\ : */mod ( n1 n2 n3 -- n4 n5 ) >r m* r> sm/rem [3-foldable] ;
+\ : */    ( n1 n2 n3 -- n4 )    */mod nip [3-foldable] ;
 
-: 0> ( n -- ? ) 0 > 1-foldable ;
+: 0> ( n -- ? ) 0 > [1-foldable] ;
 
-: within ( n1|u1 n2|u2 n3|u3 -- flag ) over - >r - r> u< 3-foldable ;
+: within ( n1|u1 n2|u2 n3|u3 -- flag ) over - >r - r> u< [3-foldable] ;
 
 
 
@@ -174,12 +174,12 @@ const char testsuite[] =  R"testsuite(
 \ [ifdef] RISC-V
 
 : w@unaligned ( addr -- x ) dup h@ swap 2+ h@ 16 lshift or ;
-: >body ( addr -- addr* )  begin dup 4 - w@unaligned $000FFFFF and $00078467 ( jalr x8, ...[x15] ) <> while 2 + repeat 1-foldable ;
+: >body ( addr -- addr* )  begin dup 4 - w@unaligned $000FFFFF and $00078467 ( jalr x8, ...[x15] ) <> while 2 + repeat [1-foldable] ;
 : >bdy 4 - w@unaligned .s ;
 
 \ [else] \ MIPS
 
-\ : >body ( addr -- addr* ) begin dup 8 - @ $01E04009 ( jalr $8, $15, $zero ) <> while 4 + repeat 1-foldable ;
+\ : >body ( addr -- addr* ) begin dup 8 - @ $01E04009 ( jalr $8, $15, $zero ) <> while 4 + repeat [1-foldable] ;
 
 \ [then]
 
@@ -197,7 +197,7 @@ const char testsuite[] =  R"testsuite(
 
 : .( ( -- )
     [char] ) parse type
-immediate ;
+[immediate] ;
 
 : compile, ( addr -- ) call, ;
 
@@ -210,11 +210,11 @@ immediate ;
  0 CONSTANT <FALSE>
 -1 CONSTANT <TRUE>
 
-: literal ( n -- ) literal, immediate ;
+: literal ( n -- ) literal, [immediate] ;
 
 : 2literal ( d -- )
     swap postpone literal postpone literal
-; immediate
+; [immediate]
 
 : d>s ( d -- n ) drop ;
 
@@ -247,10 +247,10 @@ immediate ;
 
 : m*/  ( d . n u -- d . )  >r t*  r> t/ ;
 
-: dmin ( d1 d2 -- d ) 2over 2over d< if 2drop else 2nip then 4-foldable ;
-: dmax ( d1 d2 -- d ) 2over 2over d< if 2nip else 2drop then 4-foldable ;
+: dmin ( d1 d2 -- d ) 2over 2over d< if 2drop else 2nip then [4-foldable] ;
+: dmax ( d1 d2 -- d ) 2over 2over d< if 2nip else 2drop then [4-foldable] ;
 
-: m+ ( d n -- d' ) s>d d+ 3-foldable ;
+: m+ ( d n -- d' ) s>d d+ [3-foldable] ;
 
 : d.r  ( d n -- )
     >r
@@ -266,17 +266,17 @@ immediate ;
     0 swap d.r
 ;
 
-: 2or  ( d1 d2 -- d ) >r swap >r or  r> r> or  4-foldable ;
-: 2and ( d1 d2 -- d ) >r swap >r and r> r> and 4-foldable ;
-: 2xor ( d1 d2 -- d ) >r swap >r xor r> r> xor 4-foldable ;
+: 2or  ( d1 d2 -- d ) >r swap >r or  r> r> or  [4-foldable] ;
+: 2and ( d1 d2 -- d ) >r swap >r and r> r> and [4-foldable] ;
+: 2xor ( d1 d2 -- d ) >r swap >r xor r> r> xor [4-foldable] ;
 
-: d>= ( d1 d2 -- ? ) d< not 4-foldable ;
-: d<= ( d1 d2 -- ? ) d> not 4-foldable ;
+: d>= ( d1 d2 -- ? ) d< not [4-foldable] ;
+: d<= ( d1 d2 -- ? ) d> not [4-foldable] ;
 
-: du>= ( d1 d2 -- ? ) du< not 4-foldable ;
-: du<= ( d1 d2 -- ? ) du> not 4-foldable ;
+: du>= ( d1 d2 -- ? ) du< not [4-foldable] ;
+: du<= ( d1 d2 -- ? ) du> not [4-foldable] ;
 
-: s>f ( n -- f ) 0 swap 1-foldable ;
+: s>f ( n -- f ) 0 swap [1-foldable] ;
 
 \ ------------------------------------------------------------------------
 \ For testing of the ansification layer. Slightly changed, some parts are commented out.
@@ -1003,11 +1003,11 @@ T{ GC4 SWAP DROP -> 2 }T
 T{ GC4 DROP DUP C@ SWAP CHAR+ C@ -> 58 59 }T
 
 \ ------------------------------------------------------------------------
-TESTING ' ['] FIND EXECUTE IMMEDIATE COUNT LITERAL POSTPONE STATE
+TESTING ' ['] FIND EXECUTE [immediate] COUNT LITERAL POSTPONE STATE
 
 T{ : GT1 123 ; -> }T
 T{ ' GT1 EXECUTE -> 123 }T
-T{ : GT2 ['] GT1 ; IMMEDIATE -> }T
+T{ : GT2 ['] GT1 ; [immediate] -> }T
 T{ GT2 EXECUTE -> 123 }T
 
 \ HERE 3 C, CHAR G C, CHAR T C, CHAR 1 C, CONSTANT GT1STRING
@@ -1019,14 +1019,14 @@ T{ GT2 EXECUTE -> 123 }T
 \ T{ GT3 -> ' GT1 }T
 \ T{ GT1STRING COUNT -> GT1STRING CHAR+ 3 }T
 
-T{ : GT4 POSTPONE GT1 ; IMMEDIATE -> }T
+T{ : GT4 POSTPONE GT1 ; [immediate] -> }T
 T{ : GT5 GT4 ; -> }T
 T{ GT5 -> 123 }T
-T{ : GT6 345 ; IMMEDIATE -> }T
+T{ : GT6 345 ; [immediate] -> }T
 T{ : GT7 POSTPONE GT6 ; -> }T
 T{ GT7 -> 345 }T
 
-T{ : GT8 STATE @ ; IMMEDIATE -> }T
+T{ : GT8 STATE @ ; [immediate] -> }T
 T{ GT8 -> 0 }T
 \ T{ : GT9 GT8 LITERAL ; -> }T
 \ T{ GT9 0= -> <FALSE> }T
@@ -1144,10 +1144,10 @@ T{ W1 -> HERE 2 + }T
 \ ------------------------------------------------------------------------
 TESTING EVALUATE
 
-: GE1 S" 123" ; IMMEDIATE
-: GE2 S" 123 1+" ; IMMEDIATE
+: GE1 S" 123" ; [immediate]
+: GE2 S" 123 1+" ; [immediate]
 : GE3 S" : GE4 345 ;" ;
-: GE5 EVALUATE ; IMMEDIATE
+: GE5 EVALUATE ; [immediate]
 
 T{ GE1 EVALUATE -> 123 }T         ( TEST EVALUATE IN INTERP. STATE )
 T{ GE2 EVALUATE -> 124 }T
@@ -2354,10 +2354,10 @@ T{ 14145 8115 ?DUP 0= 34 AND >IN +! TUCK MOD 14 >IN ! GCD CALCULATION -> 15 }T
 \           T{ IW10 FIND-IW IW10 -> 224 1 }T        \ IW10 becomes immediate
 \
 \ ------------------------------------------------------------------------------
-TESTING that IMMEDIATE doesn't toggle a flag
+TESTING that [immediate] doesn't toggle a flag
 
 VARIABLE IT1 0 IT1 !
-: IT2 1234 IT1 ! ; IMMEDIATE IMMEDIATE
+: IT2 1234 IT1 ! ; [immediate] [immediate]
 \ T{ : IT3 IT2 ; IT1 @ -> 1234 }T
 
 \ ------------------------------------------------------------------------------

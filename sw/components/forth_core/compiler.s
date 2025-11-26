@@ -250,7 +250,7 @@ retbytes:
 #------------------------------------------------------------------------------
   Definition Flag_immediate|Flag_foldable_0, "[']" # Searches the next token in input buffer and compiles its entry point as literal.
 #------------------------------------------------------------------------------
-  j tick # What it used to be: ['] ' immediate 0-foldable ;
+  j tick # What it used to be: ['] ' [immediate] [0-foldable] ;
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "'" # Searches next token in unput buffer and gives back its code entry point.
@@ -430,75 +430,75 @@ execute:
   jalr zero, x15, 0
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate, "immediate" # ( -- )
+  Definition Flag_immediate, "[immediate]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_immediate & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "inline" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[inline]" # ( -- )
 setze_inlineflag:
 # -----------------------------------------------------------------------------
   li x15, Flag_inline & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "noframe" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[noframe]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_noframe & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate, "compileonly" # ( -- )
+  Definition Flag_immediate, "[compileonly]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_immediate_compileonly & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "0-foldable" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[0-foldable]" # ( -- )
 set_foldableflag:
 # -----------------------------------------------------------------------------
   li x15, Flag_foldable_0 & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "1-foldable" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[1-foldable]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_foldable_1 & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "2-foldable" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[2-foldable]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_foldable_2 & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "3-foldable" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[3-foldable]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_foldable_3 & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "4-foldable" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[4-foldable]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_foldable_4 & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "5-foldable" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[5-foldable]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_foldable_5 & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "6-foldable" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[6-foldable]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_foldable_6 & ~Flag_visible
   j setflags_x15
 
 # -----------------------------------------------------------------------------
-  Definition Flag_immediate|Flag_foldable_0, "7-foldable" # ( -- )
+  Definition Flag_immediate|Flag_foldable_0, "[7-foldable]" # ( -- )
 # -----------------------------------------------------------------------------
   li x15, Flag_foldable_7 & ~Flag_visible
 setflags_x15:
