@@ -42,13 +42,13 @@
   mv x14, x2
   addi x2, x2, 16
   andi x2, x2, -16
-  sc x14, -4(x2)
+  sc x14, 4(x2)
 
   # Call the C function
   jalr x1, x15
 
   # Restore the stack pointer
-  lc x2, -4(x2)
+  lc x2, 4(x2)
 
   # Pick up the new datastack values. C might have modified it.
   laf x14, datastack

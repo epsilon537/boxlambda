@@ -5,7 +5,6 @@
 add_executable(boxlambda_os
  EXCLUDE_FROM_ALL
    main.cpp
-   included-tools.fs
 )
 
 target_compile_options(boxlambda_os

@@ -21,6 +21,7 @@ target_sources(forth_core
   PRIVATE
     mecrisp-quintus-boxlambda.s
     forth.cpp
+    included-tools.fs
     stamp
 )
 
