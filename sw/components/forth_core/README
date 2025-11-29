@@ -478,6 +478,8 @@ String routines:
         ( Comment )     Ignore Comment
         \ Comment       Comment to end of line
 
+        .( Text )       Immediately print the text between the parenthesis.
+
         cr              ( -- ) Emits line feed
         bl              ( -- 32 ) ASCII code for Space
         space           ( -- ) Emits space
