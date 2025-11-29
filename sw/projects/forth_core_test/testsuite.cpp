@@ -36,7 +36,22 @@ void test_c_fun() {
   uint32_t second_arg = forth_popda();
 
   printf("test_c_fun called with args %d and %d.\n", first_arg, second_arg);
-  printf("Returning values 77 88.\n");
+
+  //Put them back on the stack, reversed
+  forth_pushda(first_arg);
+  forth_pushda(second_arg);
+  //Create a test Word in Forth to call so we have c calls forth calls c calls forth.
+  forth_eval(": foo .\" In foo...\" 2dup . . cr + ;");
+
+  printf("Calling test Word foo in Forth with args %d %d...\n", second_arg, first_arg);
+
+  forth_execute_word("foo");
+
+  uint32_t res = forth_popda();
+
+  printf("Foo returned %d.\n", res);
+
+  printf("Returning values 77 88 to Forth.\n");
 
   forth_pushda(77);
   forth_pushda(88);
@@ -80,11 +95,12 @@ int main(void) {
   printf("Registering test_c_fun with Forth...\n");
   forth_register_cfun(test_c_fun, "test_c_fun");
   printf("Forth evaluating string: 11 22 test_c_fun . . cr with various RS alignments...\n");
-  forth_eval("11 22 test_c_fun . . cr");
-  forth_eval("11 22 0 >r test_c_fun rdrop . . cr");
-  forth_eval("11 22 0 >r 0 >r test_c_fun rdrop rdrop . . cr");
-  forth_eval("11 22 0 >r 0 >r 0 >r test_c_fun rdrop rdrop rdrop . . cr");
-  forth_eval("11 22 0 >r 0 >r 0 >r 0 >r test_c_fun rdrop rdrop rdrop rdrop . . cr");
+  forth_eval(": test_c_fun_ret_s s\" test_c_fun returned \" ;");
+  forth_eval("11 22 test_c_fun .( test_c_fun returned ) . . cr");
+  forth_eval("11 22 0 >r test_c_fun rdrop .( test_c_fun returned ) . . cr");
+  forth_eval("11 22 0 >r 0 >r test_c_fun rdrop rdrop .( test_c_fun returned ) . . cr");
+  forth_eval("11 22 0 >r 0 >r 0 >r test_c_fun rdrop rdrop rdrop .( test_c_fun returned ) . . cr");
+  forth_eval("11 22 0 >r 0 >r 0 >r 0 >r test_c_fun rdrop rdrop rdrop rdrop .( test_c_fun returned ) . . cr");
 
   printf("Executing .s:\n");
   forth_execute_word(".s");

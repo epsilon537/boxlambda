@@ -15,20 +15,35 @@ Forth evaluating string: 42 emit cr
 Registering test_c_fun with Forth...
 Forth evaluating string: 11 22 test_c_fun . . cr with various RS alignments...
 test_c_fun called with args 22 and 11.
-Returning values 77 88.
-88 77 
+Calling test Word foo in Forth with args 11 22...
+In foo...11 22 
+Foo returned 33.
+Returning values 77 88 to Forth.
+test_c_fun returned 88 77 
 test_c_fun called with args 22 and 11.
-Returning values 77 88.
-88 77 
+Redefine foo. Calling test Word foo in Forth with args 11 22...
+In foo...11 22 
+Foo returned 33.
+Returning values 77 88 to Forth.
+test_c_fun returned 88 77 
 test_c_fun called with args 22 and 11.
-Returning values 77 88.
-88 77 
+Redefine foo. Calling test Word foo in Forth with args 11 22...
+In foo...11 22 
+Foo returned 33.
+Returning values 77 88 to Forth.
+test_c_fun returned 88 77 
 test_c_fun called with args 22 and 11.
-Returning values 77 88.
-88 77 
+Redefine foo. Calling test Word foo in Forth with args 11 22...
+In foo...11 22 
+Foo returned 33.
+Returning values 77 88 to Forth.
+test_c_fun returned 88 77 
 test_c_fun called with args 22 and 11.
-Returning values 77 88.
-88 77 
+Redefine foo. Calling test Word foo in Forth with args 11 22...
+In foo...11 22 
+Foo returned 33.
+Returning values 77 88 to Forth.
+test_c_fun returned 88 77 
 Executing .s:
 Stack: [ 0 ]  TOS: 42  *>
 Executing Forth testsuite...

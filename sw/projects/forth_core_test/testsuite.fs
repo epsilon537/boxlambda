@@ -195,10 +195,6 @@ const char testsuite[] =  R"testsuite(
     then
 ;
 
-: .( ( -- )
-    [char] ) parse type
-[immediate] ;
-
 : compile, ( addr -- ) call, ;
 
 : :noname ( -- addr ) 0 s" : (noname)" evaluate drop (latest) @ 2 cells + skipstring ;

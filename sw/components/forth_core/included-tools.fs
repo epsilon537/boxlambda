@@ -1190,4 +1190,9 @@ numbertable exp-coef
 \ - C function pointer.
 : c-fun create , does> @ call-c ;
 
+\ Interactive string printing, taken from testsuite.
+: .( ( -- )
+    [char] ) parse type
+[immediate] ;
+
 )included_tools";
