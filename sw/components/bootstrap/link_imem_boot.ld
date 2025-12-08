@@ -63,8 +63,8 @@ SECTIONS
     } >imem
 
     PROVIDE(__icode_end = .);
-    PROVIDE(__icode_start = .);
-    PROVIDE(__icode_source = .);
+    PROVIDE( __icode_start = ADDR(.itext) );
+    PROVIDE( __icode_source = ADDR(.itext) );
     PROVIDE( __icode_size = __icode_end - __icode_start );
 
    /*

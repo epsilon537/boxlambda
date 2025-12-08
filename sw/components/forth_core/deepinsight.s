@@ -22,7 +22,7 @@
   Definition Flag_visible, "risc-v"
 # -----------------------------------------------------------------------------
   push x1
-  welcome " for RISC-V by Matthias Koch"
+  welcome " for RISC-V RV32IM by Matthias Koch." "BoxLambda port by Ruben Lysens/Epsilon537."
   pop x1
   ret
 

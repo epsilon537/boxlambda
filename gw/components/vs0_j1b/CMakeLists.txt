@@ -29,8 +29,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "fpga")
     REF_DFX_PROJECT boxlambda_dfx
   )
 
-    #Add to ALL list
-    add_custom_target(vs0_j1b_all_wrapper ALL)
-    add_dependencies(vs0_j1b_all_wrapper vs0_j1b_bit)
+    # FIXME: Temporarily removed from ALL list
+    # add_custom_target(vs0_j1b_all_wrapper ALL)
+    # add_dependencies(vs0_j1b_all_wrapper vs0_j1b_bit)
   endif()
 endif()

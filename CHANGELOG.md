@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Label `v0.3.0`: Changes sinces label `v0.2.2` - 2025-11-29
+## Label `v0.3.0`: Changes sinces label `v0.2.2` - 2025-12-01
 
 ### Added
 
@@ -17,11 +17,12 @@ automated regression testing of the Forth core.
 
 ### Fixed
 
-- Nothing.
+- __icode_start/end variables incorrectely set in link_imem_boot.ld.
 
 ### Changed
 
-- Nothing.
+- Restructed documentation, preparing it for the software phase of the project.
+- Renamed immediate words such as `immediate` and `compileonly` to `[immediate]` and `[compileonly]` [https://github.com/epsilon537/boxlambda/issues/96](https://github.com/epsilon537/boxlambda/issues/96).
 
 ### Removed
 

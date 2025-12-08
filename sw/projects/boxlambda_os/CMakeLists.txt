@@ -3,7 +3,6 @@
 #
 
 add_executable(boxlambda_os
- EXCLUDE_FROM_ALL
    main.cpp
 )
 

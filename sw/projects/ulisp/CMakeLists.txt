@@ -2,7 +2,6 @@
 # ulisp
 #
 add_executable(ulisp
- EXCLUDE_FROM_ALL
  ulisp-riscv-comments.cpp
  main.cpp
 )

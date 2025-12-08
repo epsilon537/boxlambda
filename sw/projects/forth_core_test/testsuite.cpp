@@ -109,6 +109,7 @@ int main(void) {
 
   forth_load_buf((char*)testsuite, false /*verbose*/);
 
+  forth_execute_word("welcome");
   forth_repl();
 
   printf("Done.\n");
