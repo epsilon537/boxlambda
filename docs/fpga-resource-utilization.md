@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # FPGA Resource Utilization
 
 ## BoxLambda Base Configuration

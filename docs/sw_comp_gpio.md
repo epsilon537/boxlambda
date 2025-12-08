@@ -1,9 +1,8 @@
----
-hide:
-  - toc
----
-
 # The GPIO API
+
+- **Integrated in OS**: Yes
+
+- **Exported to Forth**: No
 
 This is the GPIO API:
 

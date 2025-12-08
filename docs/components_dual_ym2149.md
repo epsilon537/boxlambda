@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Dual YM2149 PSG Sound Core
 
 - **YM2149_PSG_system Repo**, BoxLambda fork, `boxlambda` branch:
@@ -138,7 +133,7 @@ The test project code is located here:
 
 [https://github.com/epsilon537/boxlambda/tree/master/gw/projects/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/audio_dac_test)
 
-See [here](test-build-ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
+See [here](gw-test-build-ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
 
 ## The YM2149 DAC Test Project - a Chord of Six Pitches.
 
@@ -158,7 +153,7 @@ The test project code is located here:
 
 [https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test)
 
-See [here](test-build-ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
+See [here](gw-test-build-ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
 
 ## Dual YM2149 PSG Core Clock Frequency
 

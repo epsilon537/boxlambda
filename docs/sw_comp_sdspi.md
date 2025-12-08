@@ -1,12 +1,11 @@
----
-hide:
-  - toc
----
-
 # SDSPI
 
 - **SDSPI Software Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/sdspi/](https://github.com/epsilon537/boxlambda/tree/master/sw/components/sdspi)
+
+- **Integrated in OS**: No
+
+- **Exported to Forth**: No
 
 The SDSPI software component provides the following APIs:
 

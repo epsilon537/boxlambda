@@ -1,9 +1,8 @@
----
-hide:
-  - toc
----
-
 # The VERA Software Stack
+
+- **Integrated in OS**: No
+
+- **Exported to Forth**: No
 
 The VERA Software Stack consists of three layers:
 

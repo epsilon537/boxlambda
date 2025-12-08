@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # SDSPI SD Card Controller
 
 - **SDSPSI Repo**, BoxLambda fork, `boxlambda` branch:

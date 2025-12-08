@@ -1,9 +1,8 @@
----
-hide:
-  - toc
----
-
 # The Timer API
+
+- **Integrated in OS**: No
+
+- **Exported to Forth**: No
 
 This is the Timer module API:
 

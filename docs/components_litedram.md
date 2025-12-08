@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # LiteDRAM Memory Controller
 
 - **LiteX Repo**, BoxLambda fork, `boxlambda` branch:

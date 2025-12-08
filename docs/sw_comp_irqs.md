@@ -1,9 +1,8 @@
----
-hide:
-  - toc
----
-
 # Ibex RISC-V Interrupt Handling
+
+- **Integrated in OS**: No
+
+- **Exported to Forth**: No
 
 ## Vectored Mode
 

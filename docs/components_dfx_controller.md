@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # The DFX Controller
 
 [AMD Xilinx DFX Controller Documentation](https://docs.amd.com/v/u/en-US/pg374-dfx-controller)

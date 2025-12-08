@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # VERA (Wishbone) Graphics
 
 - **VERA Wishbone Repo**, BoxLambda fork, `boxlambda` branch:

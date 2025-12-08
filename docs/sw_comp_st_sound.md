@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # YM Music files and ST-Sound
 
 - **ST-Sound Repo**, BoxLambda fork, `boxlambda` branch:
@@ -13,6 +8,10 @@ hide:
 
 - **ST-Sound Component in the BoxLambda Directory Tree**:
     [boxlambda/sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound)
+
+- **Integrated in OS**: No
+
+- **Exported to Forth**: No
 
 The YM file format by Arnaud Carré, a.k.a. Leonard/Oxygene, is a music file format that supports the YM2149:
 
@@ -64,5 +63,5 @@ The test scripts and related files are here:
 
 [https://github.com/epsilon537/boxlambda/tree/master/gw/projects/stsound_test/test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/stsound_test/test)
 
-See [here](test-build-ym2149.md#st-sound-test-on-verilator) for instructions to build and run the test yourself.
+See [here](gw-test-build-ym2149.md#st-sound-test-on-verilator) for instructions to build and run the test yourself.
 

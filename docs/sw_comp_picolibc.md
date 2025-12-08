@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Picolibc and the Bootstrap Component
 
 - **PicoLibc Version**: 1.8.6
@@ -18,6 +13,10 @@ hide:
 
 - **Bootstrap Software Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap)
+
+- **Integrated in OS**: Yes
+
+- **Exported to Forth**: No
 
 BoxLambda uses the Picolibc standard C library implementation.
 [Picolibc](https://github.com/picolibc/picolibc) is a Newlib variant, blended with AVR libc, optimized for systems with limited memory.

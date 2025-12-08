@@ -1,14 +1,9 @@
----
-hide:
-  - toc
----
-
-# The BoxLambda DFX Gateware Project Build
+# The BoxLambda DFX Gateware Project Build (Experimental/Advanced)
 
 **BoxLambda DFX Project in the BoxLambda Directory Tree**:
 [boxlambda/gw/projects/boxlambda-dfx](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_dfx)
 
-This project builds the 'official' BoxLambda DFX Configuration as described in the [Architecture section](architecture.md#dfx-configuration).
+This project builds the 'official' BoxLambda DFX Configuration as described in the [Gaterware Architecture section](gw_architecture.md#dfx-configuration).
 
 ![DFX Terminology applied to the BoxLambda SoC](assets/dfx_terminology.png)
 
@@ -22,7 +17,7 @@ In the BoxLambda SoC, instance `boxlambda_soc_inst/vs0_inst` is set up as a Reco
 
 ## Building and Running BoxLambda DFX
 
-See [DFX Test](test-build-dfx.md).
+See [DFX Test](gw-test-build-dfx.md).
 
 ## Adding a Reconfigurable Partition (RP)
 

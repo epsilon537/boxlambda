@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Building the MkDocs Documentation
 
 Python and Pip are required if you want to build the BoxLambda MkDocs documentation.

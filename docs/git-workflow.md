@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Git Workflow
 
 All GitHub repositories used by BoxLambda are instantiated in BoxLambda's repository as git submodules. The git submodules are located in the `sub/` directory:
@@ -52,9 +47,8 @@ On `develop` branch:
 1. Update `CHANGELOG.md`.
 2. In `sim_a7_100` build tree, build all and run ctest.
 3. In `arty_a7_100` build tree, build all.
-4. Flash `boxlambda_base` gateware project build and
-   `ulisp` software project build.
-5. Run `ulisp_test.py` test suite.
+4. Flash `boxlambda_base` gateware project build and bootloader.
+5. Run `forth_core_test.py` test suite.
 
 On `master` branch:
 
@@ -62,10 +56,10 @@ On `master` branch:
 2. In `sim_a7_100` build tree, build all and run ctest.
 3. `git tag vX.Y.Z`.
 4. In `arty_a7_100` build tree, build all.
-5. Flash `boxlambda_base` gateware project build and `ulisp` software project build.
+4. Flash `boxlambda_base` gateware project build, `bootloader`, and `boxlambda_os`.
 6. Check bootloader version string.
-7. Run `lisp_test.py` test suite.
-8. Copy from `arty_a7_100` build tree to `binaries` directory: gateware project bitstream files, including VS0 `.bin_for_icap` files, and software project binaries.
+7. Run `forth_core_test.py` test suite.
+8. Copy from `arty_a7_100` build tree to `binaries` directory: `boxlambda_base.bit`, `bootloader.bin`, `boxlambda_os.bin`.
 9. `git commit` the binaries.
 10. Update tag to include the new binaries: `git -f tag vX.Y.Z`.
 11. `git push origin vX.Y.Z`.

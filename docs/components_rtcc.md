@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Real-Time Clock and Calendar (RTCC)
 
 BoxLambda uses I2C to interface with a [Real-Time Clock and Calendar PMOD](https://digilent.com/shop/pmod-rtcc-real-time-clock-calendar/) from Digilent. This PMOD is powered by Microchip's MCP79410. It includes a coin cell battery backup so time and date can be maintained even while BoxLambda is switched off.

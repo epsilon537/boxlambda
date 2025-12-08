@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Interrupts
 
 ## The Interrupt Handling Protocol: Condition-Based vs. Event-Based Interrupts

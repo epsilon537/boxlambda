@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # USB HID Keyboard and Mouse
 
 - **Usb_hid_host Repo**, BoxLambda fork, `boxlambda` branch:

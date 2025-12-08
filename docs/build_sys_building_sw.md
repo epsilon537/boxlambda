@@ -1,13 +1,6 @@
----
-hide:
-  - toc
----
-
 # Building the Software for BoxLambda
 
-The software associated with a gateware project is automatically compiled, converted to a memory file, and included in the gateware project as part of the build process.
-
-Software projects can also be built independently. From the build directory, enter the following command:
+To build a software project, from the build directory, enter the following command:
 
 `make <sw_project_name>`.
 
@@ -33,6 +26,8 @@ $ make hello_world_flash_sw
 ```
 
 To build all software projects (excluding the gateware builds), run `make sw` from the root of the build directory.
+
+For gateware test builds, the software associated with a gateware project is automatically compiled, converted to a memory file, and included in the gateware project as part of the build process.
 
 ## The Cross-Compiler
 

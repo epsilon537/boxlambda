@@ -1,9 +1,8 @@
----
-hide:
-  - toc
----
-
 # The Register Access Layer
+
+- **Integrated in OS**: Yes
+
+- **Exported to Forth**: No
 
 The Register Access Layer is code-generated from `.yaml` register definition
 files using [Corsair](https://github.com/esynr3z/corsair).

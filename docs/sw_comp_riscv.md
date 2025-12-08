@@ -1,9 +1,8 @@
----
-hide:
-  - toc
----
-
 # RISC-V
+
+- **Integrated in OS**: Yes
+
+- **Exported to Forth**: No
 
 ## MCycle
 

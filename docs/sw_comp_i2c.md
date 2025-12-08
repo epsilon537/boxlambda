@@ -1,9 +1,8 @@
----
-hide:
-  - toc
----
-
 # I2C API
+
+- **Integrated in OS**: No
+
+- **Exported to Forth**: No
 
 - **I2C Software Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/i2c](https://github.com/epsilon537/boxlambda/tree/master/sw/components/i2c)

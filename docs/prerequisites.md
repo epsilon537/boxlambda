@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Prerequisites
 
 ## Host OS

@@ -1,9 +1,8 @@
----
-hide:
-  - toc
----
-
 # The UART API
+
+- **Integrated in OS**: Yes
+
+- **Exported to Forth**: Partially
 
 This is the UART Serial Port API:
 

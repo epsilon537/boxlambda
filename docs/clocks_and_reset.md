@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Clocks
 
 ![BoxLambda Clocks](assets/clocks.png)
@@ -66,4 +61,4 @@ Software can trigger resets by writing to the *Reset Control Register* and retri
 
 See the [Reset Register Map](registers/generated/reset_regs.md#reset-register-map) for details.
 
-The [Reset Test](test-build-reset.md) application demonstrates the use of these registers.
+The [Reset Test](gw-test-build-reset.md) application demonstrates the use of these registers.

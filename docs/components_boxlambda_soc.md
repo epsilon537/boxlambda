@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # The BoxLambda SoC Component
 
 - **BoxLambda SoC Component in the BoxLambda Directory Tree**:

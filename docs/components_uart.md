@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # UART
 
 - **Wbuart32 Repo**, BoxLambda fork, `boxlambda` branch:
