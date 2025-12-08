@@ -4,30 +4,51 @@ title: About BoxLambda
 permalink: /about/
 ---
 
-![BoxLambda Architecture Block Diagram](../assets/Arch_Diagram_dual_bus_DFX.png)
+BoxLambda is a hardware-software crossover project creating a homebrew,
+retro-style FPGA-based microcomputer. The goal is to create a sandbox
+environment for experimenting with software and FPGA gateware.
 
-**BoxLambda** is a project that creates a retro-style FPGA-based microcomputer from open-source components. The microcomputer serves as a platform for both software and gateware experimentation.
+# The Physical Setup
 
-## Current Features
+[![The physical
+setup.](assets/physical_setup.png)](assets/physical_setup.png)
 
-- Targets the Arty-A7-100T FPGA development board.
+*The physical setup.*
+
+# Current Features
+
+- Target FPGA: Arty-A7-100T.
 - Ibex RISC-V core with machine timer and hardware interrupt support.
-- Interrupt shadow register bank supporting low-latency interrupt handling.
-- Stable low-latency access to internal memories and registers. Stable and documented instruction cycle counts.
+- Harvard architecture-based interconnect.
+- Low-latency register and memory access across the SoC.
+- Predictable instruction cycle counts.
+- DFX Partial FPGA Reconfiguration support.
 - DDR3 external memory access through the Litex memory controller.
 - OpenOCD-based debug access on FPGA and Verilator.
-- VERA-based VGA graphics: 2 layers tile or bitmap mode, 2 banks of 64 sprites, 128KB Video RAM, 256 color palette.
+- VERA-based VGA graphics: 2 layers, tile or bitmap mode, 2 banks of 64 sprites,
+128KB Video RAM, 256 color palette.
 - Dual YM2149 PSG Audio.
 - SD Card Controller and FatFs File System.
 - 24-pin GPIO, UART, SPI Flash Controller, I2C Controller.
 - Real-time Clock and Calendar (RTCC) support.
 - USB HID Keyboard and Mouse support.
 - Picolibc-based standard C environment.
-- DFX Partial FPGA Reconfiguration support.
-- Test application suite covering all SoC components, running on FPGA and Verilator.
-- Linux CMake and Bender-based Software and Gateware build system.
+- Test application suite covering all SoC components, running on both FPGA and
+Verilator.
+- Mecrisp Forth core + C FFI.
 
-## Key Goals
+# Gateware Block Diagram
+
+![BoxLambda Gateware Block Diagram.](assets/Arch_Diagram_dual_bus_DFX.png)
+
+# Software Block Diagram
+
+[![BoxLambda OS
+Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Architecture.png)
+
+*BoxLambda OS Architecture Block Diagram.*
+
+# Key Goals
 
 - Create a sandbox for experimenting with software and FPGA gateware:
     - It should be **easy** to jump in and do something: create, hack, tinker.
@@ -51,13 +72,13 @@ permalink: /about/
 
 - Sound and graphics support retro-style 2D demos and gameplay.
 
-## Status (April 2025)
+# Status (December 2025)
 
 - **Infrastructure** (build system, etc.): Complete.
 - **Gateware**: Complete and meeting requirements.
-- **Software**: Early stage development.
+- **Software**: Early stage development. OS architecture defined. BoxLambda C Core partially completed. Mecrisp Forth Core partially completed. Mecrisp Forth Environment not started yet.
 
-## GitHub
+# Links
 
 - **Source Code**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
 - **Project Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
