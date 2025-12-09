@@ -32,4 +32,3 @@ uint64_t mtimer_get_raw_time(void) {
     return (uint64_t)((((uint64_t)mtimeh_val) << 32UL) | mtimel_val);
 }
 
-// NOLINTEND (performance-no-int-to-ptr)

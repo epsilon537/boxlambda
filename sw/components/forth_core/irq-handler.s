@@ -37,10 +37,9 @@
     .align \Alignment
   .endif
 
+.globl \Asmname
 \Asmname:
 
-  addi sp, sp, -13*CELL
-  sc x1,  12*CELL(sp)
   laf x1, irq_hook_\Name
   j irq_common
 
@@ -49,40 +48,11 @@
 #------------------------------------------------------------------------------
 irq_common: # Common framework for all interrupt entries
 #------------------------------------------------------------------------------
-
-  sc x14, 11*CELL(sp) # Required for Forth core...
-  sc x15, 10*CELL(sp)
-
-  sc x16,  9*CELL(sp) # Required for Acrobatics only...
-  sc x17,  8*CELL(sp)
-  sc x18,  7*CELL(sp)
-  sc x19,  6*CELL(sp)
-  sc x20,  5*CELL(sp)
-  sc x21,  4*CELL(sp)
-  sc x22,  3*CELL(sp)
-  sc x23,  2*CELL(sp)
-  sc x24,  1*CELL(sp)
-  sc x25,  0*CELL(sp)
+  # On BoxLambda we don't need to save/restore registers on the stack. BoxLambda
+  # has a register bank for IRQ mode.
 
   lc x1, 0(x1)
   jalr x1, x1, 0
-
-  lc x25,  0*CELL(sp) # Required for Acrobatics only...
-  lc x24,  1*CELL(sp)
-  lc x23,  2*CELL(sp)
-  lc x22,  3*CELL(sp)
-  lc x21,  4*CELL(sp)
-  lc x20,  5*CELL(sp)
-  lc x19,  6*CELL(sp)
-  lc x18,  7*CELL(sp)
-  lc x17,  8*CELL(sp)
-  lc x16,  9*CELL(sp)
-
-  lc x15, 10*CELL(sp) # Required for Forth core...
-  lc x14, 11*CELL(sp)
-  lc x1,  12*CELL(sp)
-
-  addi sp, sp, 13*CELL
 
   mret
 

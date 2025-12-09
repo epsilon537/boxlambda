@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-#.include "interrupt-femtorv.s"
+.include "interrupts.s"
 .include "terminalhooks.s"
 .include "uart_regs.s"
 
