@@ -66,8 +66,8 @@ static inline void enable_global_irq(void) {
 #define IRQ_ID_I2C IRQ_ID_FAST_06
 #define IRQ_ID_UART IRQ_ID_FAST_05
 //IRQ_ID_FAST_04, 03 and 02 are currently not assigned.
-#define IRQ_ID_DFX IRQ_ID_FAST_01
-#define IRQ_ID_ICAP IRQ_ID_FAST_00
+//#define IRQ_ID_DFX IRQ_ID_FAST_01
+//#define IRQ_ID_ICAP IRQ_ID_FAST_00
 
 /* Enable a specific interrupt ID at CPU level. Note that for interrupts
  * to go through, the global interrupt line also needs to be enabled

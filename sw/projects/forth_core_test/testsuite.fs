@@ -3489,6 +3489,41 @@ T{ ' ememword $20000000 > -> <TRUE> }T
 T{ ' ememword 1024 1024 * 256 * $20000000 + < -> <TRUE> }T
 
 \ ------------------------------------------------------------------------------
+TESTING INTERRUPTS
+
+0 1 nvariable timer-irq-received
+0 1 nvariable saved-mcause
+0 1 nvariable saved-mip
+
+: mtime-irq-handle
+  mip saved-mip !
+  mcause saved-mcause !
+  ." IRQ mip : " mip hex. cr
+  ." IRQ mcause : " mcause hex. cr
+  -1 s>d mtimecmp64! ." MTIMER IRQ received." cr true timer-irq-received ! ;
+
+: wait-for-timer-irq
+  ." Waiting for MTIME IRQ..." cr begin timer-irq-received @ until ;
+
+dint
+0 mie!
+' mtime-irq-handle irq-timer !
+T{ mie -> 0 }T
+T{ eint? -> 0 }T
+
+1 irq-id-timer lshift mie! eint
+
+T{ mie -> $80 }T
+T{ eint? -> <TRUE> }T
+
+50000000 3 * set-raw-time-cmp
+wait-for-timer-irq
+dint
+T{ eint? -> <FALSE> }T
+T{ saved-mip @ -> $80 }T
+T{ saved-mcause @ -> $80000007 }T
+
+\ ------------------------------------------------------------------------------
 TESTING COMPLETE
 
 \ words
