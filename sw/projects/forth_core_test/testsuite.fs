@@ -3500,7 +3500,8 @@ TESTING INTERRUPTS
   mcause saved-mcause !
   ." IRQ mip : " mip hex. cr
   ." IRQ mcause : " mcause hex. cr
-  -1 s>d mtimecmp64! ." MTIMER IRQ received." cr true timer-irq-received ! ;
+  -1 s>d mtimecmp64! \ Disable timer
+  ." MTIMER IRQ received." cr true timer-irq-received ! ;
 
 : wait-for-timer-irq
   ." Waiting for MTIME IRQ..." cr begin timer-irq-received @ until ;
@@ -3511,6 +3512,7 @@ dint
 T{ mie -> 0 }T
 T{ eint? -> 0 }T
 
+-1 s>d mtimecmp64! \ Disable timer
 1 irq-id-timer lshift mie! eint
 
 T{ mie -> $80 }T
