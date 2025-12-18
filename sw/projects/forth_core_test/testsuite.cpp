@@ -71,7 +71,7 @@ int main(void) {
 
   printf("Forth init complete.\n");
 
-  printf("Compiling Forth included_tools...\n");
+  printf("Compiling Forth init.fs...\n");
 
   forth_load_buf((char*)init_fs, /*verbose=*/ false);
 
