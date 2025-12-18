@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added -r target reset option to ./scripts/openocd_arty_a7_100t.sh
-- Added BoxLambda port of Mecrisp Quintus Forth core as as software component.
+- Added BoxLambda port of Mecrisp Quintus Forth core as a software component.
 - Defined a C-Forth FFI for the Forth core and the C/C++ parts of the OS.
 - Added `boxlambda_os` software project build that boots into the Forth REPL.
 - Added `forth_core_test` test build and corresponding Python script for
@@ -17,11 +17,11 @@ automated regression testing of the Forth core.
 
 ### Fixed
 
-- __icode_start/end variables incorrectely set in link_imem_boot.ld.
+- __icode_start/end variables incorrectly set in link_imem_boot.ld.
 
 ### Changed
 
-- Restructed documentation, preparing it for the software phase of the project.
+- Restructured documentation, preparing it for the software phase of the project.
 - Renamed immediate words such as `immediate` and `compileonly` to `[immediate]` and `[compileonly]` [https://github.com/epsilon537/boxlambda/issues/96](https://github.com/epsilon537/boxlambda/issues/96).
 
 ### Removed
