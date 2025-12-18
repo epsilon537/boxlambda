@@ -3516,7 +3516,7 @@ T{ eint? -> 0 }T
 T{ mie -> $80 }T
 T{ eint? -> <TRUE> }T
 
-50000000 3 * set-raw-time-cmp
+50000000 6 * set-raw-time-cmp
 wait-for-timer-irq
 dint
 T{ eint? -> <FALSE> }T

@@ -25,7 +25,6 @@ def init():
     print("Pexpect starting serial port channel...")
 
     ch = pexpect.spawn("socat STDIO,raw,echo=0 /dev/ttyUSB1,b1000000,raw,echo=0")
-    ch.logfile = open('pexpect_log.txt','wb')
 
 def terminate():
     """Terminate processes and channels created by init()."""
@@ -35,7 +34,6 @@ def terminate():
 
     print("Terminating...")
 
-    ch.logfile.close()
     ch.close(force=True)
 
     while (ch.isalive()):

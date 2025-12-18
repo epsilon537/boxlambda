@@ -1,4 +1,4 @@
-const char included_tools[] =  R"included_tools(
+const char init_fs[] =  R"init_fs(
 \ -----------------------------------------------------------------------------
 \   Conditional compilation
 \ -----------------------------------------------------------------------------
@@ -1209,4 +1209,4 @@ numbertable exp-coef
 07 irq-id-fast-0 + constant irq-id-i2c
 05 irq-id-fast-0 + constant irq-id-uart
 
-)included_tools";
+)init_fs";

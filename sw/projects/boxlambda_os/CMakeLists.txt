@@ -20,7 +20,7 @@ target_compile_options(boxlambda_os
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(boxlambda_os ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
 
-target_link_libraries(boxlambda_os forth_core timer gpio bootstrap)
+target_link_libraries(boxlambda_os forth_core gpio bootstrap)
 
 add_flash_sw_target(boxlambda_os)
 

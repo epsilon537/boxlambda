@@ -5,7 +5,7 @@
 
 #include "gpio.h"
 #include "forth.h"
-#include "included-tools.fs"
+#include "init.fs"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -38,11 +38,13 @@ int main(void) {
 
   printf("Forth core init complete.\n");
 
-  printf("Compiling Forth included_tools...\n");
+  printf("Compiling init.fs...\n");
 
-  forth_load_buf((char*)included_tools, /*verbose=*/ false);
+  forth_load_buf((char*)init_fs, /*verbose=*/ false);
 
   forth_execute_word("welcome");
+
+  forth_eval(".( Ready. ) cr");
 
   forth_repl();
 
