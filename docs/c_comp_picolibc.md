@@ -14,9 +14,7 @@
 - **Bootstrap Software Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap)
 
-- **Integrated in OS**: Yes
-
-- **Exported to Forth**: No
+- **Included in OS**: Yes
 
 BoxLambda uses the Picolibc standard C library implementation.
 [Picolibc](https://github.com/picolibc/picolibc) is a Newlib variant, blended with AVR libc, optimized for systems with limited memory.
@@ -96,7 +94,7 @@ The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S
 
 The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to `_start`, the entry point into the `crt0` module.
 
-For more info on vectors.S, check the [Interrupt Handling](sw_comp_irqs.md) page.
+For more info on vectors.S, check the [Interrupt Handling](sw_irqs.md) page.
 
 ### Crt0
 

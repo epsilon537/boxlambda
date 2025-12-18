@@ -3,26 +3,15 @@
 This glossary is taken from the Mecrisp Quintus README, with modifications for
 BoxLambda.
 
+The coverage of specific platform components such as [Interrupt Handling](sw_irqs.md) and [Time Handling](sw_time.md) is factored out into separate subsections.
+
 Mecrisp-Quintus is case-insensitive, but only for letters 'a' to 'z'.
 UTF-8 Unicode encoded characters beyond 7 bit ASCII are case-sensitive.
-
-Dictionary structure:
-
--- Aligned on 4 --
-   4 bytes link
-   4 bytes flags
-   1 byte  name length
-   n bytes name
--- Aligned on either 2 (RV32IMC only) or 4 (all other archs) --
-   Code
-
-Empty link field or name length of zero denotes end of dictionary chain.
 
 Words with `(BoxLambda)` in the description have been added or modified as part of
 the BoxLambda port of Mecrisp.
 
-Note that the BoxLambda Forth Core does **not** include flash support. Flash support is a
-key component in the original Mecrisp Forth core. BoxLambda will load non-core Forth definitions from the file system (TBD) rather than have them defined in flash memory. Flash support will be added, but it might not be in the form of a Forth Word Dictionary.
+Note that BoxLambda's Forth does **not** include flash support as defined in Mecrisp Quintus Forth. BoxLambda will load non-core Forth definitions from the file system (TBD) rather than have them defined in flash memory. Flash support will be added, but it might not be in the form of a Forth Word Dictionary.
 
 ## Terminal-IO  (exactly ANS, some logical extensions)
 
@@ -184,6 +173,36 @@ like "31 and ar/r/lshift". 32 lshift does nothing.
         2lshift         ( d1 u -- d2 ) Logical    double  left-shift of u bit-places
 ```
 
+## Fixed point numbers
+
+S31.32 fixpoint numbers are written like `3,14159`, i.e. written with a comma
+instead of a dot.
+
+Fixpoint numbers are stored ( n-comma n-whole ) and can be handled
+like signed double numbers.
+
+```
+        f/              ( df1 df2 -- df3 ) Division of two fixpoint numbers
+        f*              ( df1 df2 -- df3 ) Multiplication
+
+        hold<           ( char -- )
+                        Adds character to pictured number output buffer
+                        from behind.
+        f#S             ( n-comma1 -- n-comma2 )
+                        Adds 32 comma-digits to number output
+        f#              ( n-comma1 -- n-comma2 )
+                        Adds one comma-digit to number output
+        f.              ( df -- )
+                        Prints a fixpoint number with 32 fractional digits
+        f.n             ( df n -- )
+                        Prints a fixpoint number with n fractional digits
+
+        number          ( c-addr length -- 0 )
+                                        -- n 1 )
+                                        -- n-low n-high 2 )
+                        Tries to convert a string to a number.
+```
+
 ## Comparisions  (exactly ANS, some logical extensions)
 
 Single-Comparisions:
@@ -222,36 +241,6 @@ Specials:
 ```
         slt             ( u1 u2 -- 0 | 1 ) Set if less than
         sltu            ( u1 u2 -- 0 | 1 ) Set if less than, unsigned
-```
-
-## Tools (not only) for s31.32 fixed point numbers  (speciality!)
-
-S31.32 fixpoint numbers are written like `3,14159`, i.e. written with a comma
-instead of a dot.
-
-Fixpoint numbers are stored ( n-comma n-whole ) and can be handled
-like signed double numbers.
-
-```
-        f/              ( df1 df2 -- df3 ) Division of two fixpoint numbers
-        f*              ( df1 df2 -- df3 ) Multiplication
-
-        hold<           ( char -- )
-                        Adds character to pictured number output buffer
-                        from behind.
-        f#S             ( n-comma1 -- n-comma2 )
-                        Adds 32 comma-digits to number output
-        f#              ( n-comma1 -- n-comma2 )
-                        Adds one comma-digit to number output
-        f.              ( df -- )
-                        Prints a fixpoint number with 32 fractional digits
-        f.n             ( df n -- )
-                        Prints a fixpoint number with n fractional digits
-
-        number          ( c-addr length -- 0 )
-                                        -- n 1 )
-                                        -- n-low n-high 2 )
-                        Tries to convert a string to a number.
 ```
 
 ## Number base  (exactly ANS)
@@ -459,11 +448,7 @@ Deep insights:
 
         addrinimem?     ( addr -- flag ) Location in imem ? (BoxLambda)
         addrinemem?     ( addr -- flag ) Location in emem ? (BoxLambda)
-```
 
-## Dictionary expansion  (speciality!)
-
-```
         string,         ( c-addr len -- ) Inserts a string of maximum 255 characters without runtime
         literal,        ( u|n -- ) Compiles a literal with runtime
         inline,         ( a-addr -- ) Inlines the choosen subroutine
@@ -490,7 +475,7 @@ Can x be encoded as immediate for...
         sb-encoding?    ( x -- x false | bitmask true ) ...   conditional jumps
 ```
 
-## Flags and inventory  (speciality!)
+## Flags and inventory
 
 Note that `[immediate]` needs to be *inside* of the definition, not after the `;`. There is no `immediate` Word variant that goes *after* the definition.
 
@@ -638,22 +623,7 @@ limit index   do ... [one or more leave(s)] ... loop
                         Begins a loop
 ```
 
-## Common interrupt primitives (WIP - not ported yet)
-
-```
-        reset           ( -- ) Reset on hardware level, if possible
-        dint            ( -- ) Disables Interrupts
-        eint            ( -- ) Enables  Interrupts
-        eint?           ( -- ) Are Interrupts enabled ?
-        nop             ( -- ) No Operation. Hook for unused handlers !
-
-        unhandled       ( -- ) Message for unhandled interrupts.
-
-        irq-collection  ( -- a-addr ) Collection of all unhandled interrupts
-        irq-fault       ( -- a-addr ) For all faults, if available
-```
-
-## Specials depending on architecture
+## Misc
 
 ```
         risc-v          ( -- ) Welcome message if arch is RISC-V

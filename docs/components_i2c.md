@@ -114,7 +114,7 @@ The [I2C Test Application](gw-test-build-i2c.md) implements this example.
 
 ## Working with I2C slaves that don't follow the Slave Register Address Frame Format
 
-Although the WBI2C core by design assumes that an I2C data frame starts with an 8-bit slave register address, this core *can* work with I2C slaves that don't follow this format. See [here](sw_comp_i2c.md#slave-register-protocol-not-assumed) for more info.
+Although the WBI2C core by design assumes that an I2C data frame starts with an 8-bit slave register address, this core *can* work with I2C slaves that don't follow this format. See [here](c_comp_i2c.md#slave-register-protocol-not-assumed) for more info.
 
 ## Where are the Output Enables?
 

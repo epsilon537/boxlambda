@@ -1,6 +1,6 @@
 # The VERA Software Stack
 
-- **Integrated in OS**: No
+- **Included in OS**: No
 
 - **Exported to Forth**: No
 

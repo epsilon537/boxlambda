@@ -14,7 +14,7 @@ The software build system is organized into four layers:
    Submodules are Git submodules containing, among other things, source code referenced from the *Software Component Layer*. The software build system does not directly build at this level. Makefile locates in the *Submodule Layer* are not executed.
 
 4. **The Code Generation Layer**:
-   Some components require some form of transformation to be turned into source code. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) in its `CMakefile.txt`. The custom command is added as a dependency to the generic `cgen` target, which gets executed as part of `make regen`, the build tree (re-)generation command. Except the [Register Access Layer](sw_comp_register_access_layer.md), code-generated files are written to the `codegen/` subdirectory in the build tree.
+   Some components require some form of transformation to be turned into source code. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) in its `CMakefile.txt`. The custom command is added as a dependency to the generic `cgen` target, which gets executed as part of `make regen`, the build tree (re-)generation command. Except the [Register Access Layer](c_comp_register_access_layer.md), code-generated files are written to the `codegen/` subdirectory in the build tree.
 
 The following software components currently rely on code generation:
 
@@ -82,8 +82,8 @@ add_flash_sw_target(hello_world)
 Note that depending on whether we're building for simulation or FPGA, two variants of the linker script are used. `link_imem_boot.ld` creates an image that boots directly from IMEM. `link_ddr_to_imem_boot.ld` creates a image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
 
 Other linker script variants:
-- [link_ddr_to_ddr_boot.ld](): Creates a image to be loaded into EMEM by the bootloader. From there, the image will unpack itself further into EMEM.
-- [boxlambda_os/link.ld](): The linker script used by the BoxLambda OS. Note the Forth sections.
+- [link_ddr_to_ddr_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_ddr_to_ddr_boot.ld): Creates a image to be loaded into EMEM by the bootloader. From there, the image will unpack itself further into EMEM.
+- [boxlambda_os/link.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/boxlambda_os/link.ld): The linker script used by the BoxLambda OS. Note the Forth sections.
 
 #### Linker Script Details
 

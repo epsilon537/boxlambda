@@ -8,9 +8,7 @@
 
 - **SDRAM Software Component in the BoxLambda Directory Tree**: [boxlambda/sw/components/sdram](https://github.com/epsilon537/boxlambda/tree/master/sw/components/sdram)
 
-- **Integrated in OS**: Yes
-
-- **Exported to Forth**: No
+- **Included in OS**: Yes
 
 When the LiteDRAM core is generated (during the code generation step of a gateware project build), the core's CSR register accessors for software are also generated in the build tree's `codegen/` directory:
 

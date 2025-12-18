@@ -9,9 +9,7 @@
 - **RTCC Software Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/rtcc](https://github.com/epsilon537/boxlambda/tree/master/sw/components/rtcc)
 
-- **Integrated in OS**: No
-
-- **Exported to Forth**: No
+- **Included in OS**: No
 
 The Real-Time Clock and Calendar (RTCC) software component is based on the [MCP79412RTC](https://github.com/epsilon537/MCP79412RTC) library. The library interfaces with Digilent's [PMOD RTCC](components_rtcc.md) via I2C.
 

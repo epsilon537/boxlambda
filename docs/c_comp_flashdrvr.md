@@ -2,9 +2,7 @@
 
 **Flash Driver Component in the BoxLambda Directory Tree**:
 
-- **Integrated in OS**: No
-
-- **Exported to Forth**: No
+- **Included in OS**: No
 
 [boxlambda/sw/components/flashdrvr](https://github.com/epsilon537/boxlambda/tree/master/sw/components/flashdrvr)
 

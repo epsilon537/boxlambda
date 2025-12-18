@@ -116,7 +116,7 @@ With this design, the `irq_mem` bank is up-to-date when the CPU enters IRQ mode.
 
 **Caveat**: `irq_mode` is just a 1-bit signal. It can't track nested interrupts. This limitation is acceptable for BoxLambda.
 
-To benefit from the interrupt shadow register optimization, ISRs should be declared with the `naked` attribute. See [the naked attribute](sw_comp_irqs.md#the-naked-attribute) section for details.
+To benefit from the interrupt shadow register optimization, ISRs written in C should be declared with the `naked` attribute. See [the naked attribute](test_c_comp_irqs.md#the-naked-attribute) section for details.
 
 ### Core2WB
 

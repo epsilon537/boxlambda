@@ -1,8 +1,6 @@
 # The GPIO API
 
-- **Integrated in OS**: Yes
-
-- **Exported to Forth**: No
+- **Included in OS**: Yes
 
 This is the GPIO API:
 

@@ -12,9 +12,7 @@
 - **FatFs Software Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/fatfs](https://github.com/epsilon537/boxlambda/tree/master/sw/components/fatfs)
 
-- **Integrated in OS**: No
-
-- **Exported to Forth**: No
+- **Included in OS**: No
 
 [FatFs](http://elm-chan.org/fsw/ff/00index_e.html) is a lightweight software library for small systems that implements FAT file system support. It's written in ANSI C89 and has no dependencies other than a minimal C environment. It'll compile out of the box in virtually any environment.
 

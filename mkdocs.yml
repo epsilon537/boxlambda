@@ -23,7 +23,6 @@ theme:
       - navigation.tabs.sticky
       - navigation.path
       - navigation.top
-      - toc.integrate
 
 extra:
   social:
@@ -101,42 +100,45 @@ nav:
             - DFX Test: gw-test-build-dfx.md
             - Invalid Address Test: gw-test-build-invalid-addr.md
             - Ibex Performance Test: gw-test-build-ibex-perf.md
-    - Software & OS:
+    - Software:
       - OS Requirements: os_requirements.md
       - OS Architecture: os_architecture.md
       - OS Build: os_build.md
+      - OS Memory Layout and Boot Sequence: os_mem_layout_boot_seq.md
       - Forth:
-        - The Mecrisp Forth Core: os-forth-core.md
-        - The Forth-C FFI: os-forth-c-ffi.md
-        - Forth Word Glossary: os-forth-glossary.md
+        - The Mecrisp Forth Core: forth-core.md
+        - The Forth-C FFI: forth-c-ffi.md
+        - Forth Word Glossary: forth-glossary.md
+        - Interrupt Handling: sw_irqs.md
+        - Time Handling: sw_time.md
       - Bootloader: sw_bootloader.md
-      - Software Components:
-          - About Software Components: sw_comp_about.md
-          - Register Access Layer: sw_comp_register_access_layer.md
-          - PicoLibc and the Bootstrap Component: sw_comp_picolibc.md
-          - LiteDRAM Initialization: sw_comp_litedram_initialization.md
-          - SDSPI: sw_comp_sdspi.md
-          - FatFs: sw_comp_fat_fs.md
-          - ST-Sound: sw_comp_st_sound.md
-          - VERA Stack: sw_comp_vera_stack.md
-          - USB HID: sw_comp_usb_hid.md
-          - Flash Driver: sw_comp_flashdrvr.md
-          - Timer: sw_comp_timer.md
-          - UART: sw_comp_uart.md
-          - GPIO: sw_comp_gpio.md
-          - RISC-V: sw_comp_riscv.md
-          - Interrupt Handling: sw_comp_irqs.md
-          - I2C: sw_comp_i2c.md
-          - Real-Time Clock and Calendar: sw_comp_rtcc.md
-          - DFX Controller HAL: sw_comp_dfx_controller_hal.md
-      - Test Software Components:
-          - About Test Software Components: test_sw_comp_about.md
-          - Embedded CLI: test_sw_comp_cli.md
-          - Ymodem: test_sw_comp_ymodem.md
-          - Memory and File System CLI: test_sw_comp_mem_fs_cli.md
-          - Peek and Poke CLI: test_sw_comp_peek_poke_cli.md
-          - J1B HAL: test_sw_comp_j1b_hal.md
-          - VS0 HAL: test_sw_comp_vs0_hal.md
+      - C Components:
+          - About C Components: c_comp_about.md
+          - Register Access Layer: c_comp_register_access_layer.md
+          - PicoLibc and the Bootstrap Component: c_comp_picolibc.md
+          - LiteDRAM Initialization: c_comp_litedram_initialization.md
+          - SDSPI: c_comp_sdspi.md
+          - FatFs: c_comp_fat_fs.md
+          - ST-Sound: c_comp_st_sound.md
+          - VERA Stack: c_comp_vera_stack.md
+          - USB HID: c_comp_usb_hid.md
+          - Flash Driver: c_comp_flashdrvr.md
+          - UART: c_comp_uart.md
+          - GPIO: c_comp_gpio.md
+          - RISC-V: c_comp_riscv.md
+          - I2C: c_comp_i2c.md
+          - Real-Time Clock and Calendar: c_comp_rtcc.md
+          - DFX Controller HAL: c_comp_dfx_controller_hal.md
+      - Test C Components:
+          - About Test C Components: test_c_comp_about.md
+          - Timer: test_c_comp_timer.md
+          - Interrupt Handling: test_c_comp_irqs.md
+          - Embedded CLI: test_c_comp_cli.md
+          - Ymodem: test_c_comp_ymodem.md
+          - Memory and File System CLI: test_c_comp_mem_fs_cli.md
+          - Peek and Poke CLI: test_c_comp_peek_poke_cli.md
+          - J1B HAL: test_c_comp_j1b_hal.md
+          - VS0 HAL: test_c_comp_vs0_hal.md
       - Software Testing:
         - The Software Test Bench: sw-test-bench.md
         - Software Test Builds:

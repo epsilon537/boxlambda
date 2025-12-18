@@ -9,9 +9,7 @@
 - **ST-Sound Component in the BoxLambda Directory Tree**:
     [boxlambda/sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound)
 
-- **Integrated in OS**: No
-
-- **Exported to Forth**: No
+- **Included in OS**: No
 
 The YM file format by Arnaud Carré, a.k.a. Leonard/Oxygene, is a music file format that supports the YM2149:
 

@@ -2,7 +2,7 @@
 
 **Usb_hid_host HAL**: [sw/components/usb_hid/usb_hid_hal.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/usb_hid/usb_hid_hal.h)
 
-- **Integrated in OS**: No
+- **Included in OS**: No
 
 - **Exported to Forth**: No
 

@@ -1,15 +1,13 @@
 # I2C API
 
-- **Integrated in OS**: No
-
-- **Exported to Forth**: No
+- **Included in OS**: No
 
 - **I2C Software Component in the BoxLambda Directory Tree**:
   [boxlambda/sw/components/i2c](https://github.com/epsilon537/boxlambda/tree/master/sw/components/i2c)
 - **I2C API**:
   [boxlambda/sw/components/i2c/i2c.h](https://github.com/epsilon537/boxlambda/tree/master/sw/components/i2c/i2c.h)
 
-BoxLambda's I2C component is based on the [TinyWireM](https://github.com/adafruit/TinyWireM) API, which in turn is derived from Arduino's [Wire](https://www.arduino.cc/reference/en/language/functions/communication/wire/) API. This API makes it easy to port I2C-dependent components, such as the MCP79412RTC library, discussed [here](sw_comp_rtcc.md).
+BoxLambda's I2C component is based on the [TinyWireM](https://github.com/adafruit/TinyWireM) API, which in turn is derived from Arduino's [Wire](https://www.arduino.cc/reference/en/language/functions/communication/wire/) API. This API makes it easy to port I2C-dependent components, such as the MCP79412RTC library, discussed [here](c_comp_rtcc.md).
 
 A write operation to an I2C slave register typically looks like this:
 

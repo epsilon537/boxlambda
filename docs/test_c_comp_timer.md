@@ -1,9 +1,5 @@
 # The Timer API
 
-- **Integrated in OS**: No
-
-- **Exported to Forth**: No
-
 This is the Timer module API:
 
 [https://github.com/epsilon537/boxlambda/blob/master/sw/components/timer/timer.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/timer/timer.h)

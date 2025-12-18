@@ -3,14 +3,10 @@
 **Bootloader Software Project in the BoxLambda Directory Tree**:
  [sw/projects/bootloader](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/bootloader)
 
-## On Verilator
-
 The Bootloader is only used on FPGA. On Verilator, the CPU boots from IMEM. The test program is built into IMEM
 and executes from there without requiring any pre-setup steps from a bootloader.
 
-## On FPGA
-
-This is the boot sequence on FPGA:
+## Boot Sequence
 
 1. The CPU boots from address `0x11500080`, located in flash memory. This is the entry point to the bootloader.
 2. The bootloader copies itself from flash to IMEM and jumps to its entry point in IMEM.
@@ -26,13 +22,13 @@ jumping to its entry point at address `0x20000008` in EMEM.
 
 ![The Bootloader](assets/boxlambda_sw_env_boot.png)
 
-*The Bootloader*
+*The Boot Sequence.*
 
 It's worth noting that the bootloader as well as the application
 images are complete, standalone C/C++ programs built against PicoLibc and using
 the usual CRT0 start-up sequence to set up the C/C++ environment. The bootloader
-is built using the [link_bootloader.ld]() link script, the application image is
-based on either the [link_ddr_to_ddr_boot.ld]() script or the [link_ddr_to_imem_boot.ld](),
+is built using the [link_bootloader.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/bootloader/link_bootloader.ld) link script, the application image is
+based on either the [link_ddr_to_ddr_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_ddr_to_ddr_boot.ld) script or the [link_ddr_to_imem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_ddr_to_imem_boot.ld),
 depending on whether the application executes from EMEM or IMEM after start-up.
 
 ## Building and Flashing the Bootloader

@@ -1,7 +1,5 @@
 # The Forth-C Foreign Function Interface (FFI)
 
-- The API: [sw/components/forth_core/Forth.h]()
-
 C has one stack which it used to keep track of the call stack, stack frames
 (local variables), and when a lot of parameters are involved, parameter
 passing. Forth uses two stacks: a **Return Stack** and a **Data Stack**. The Return
@@ -96,7 +94,7 @@ If C needs to call Forth Word `foo` many times, it's better to store foo's execu
 
 When Forth calls C, it updates the `datastack` object with its current *TOS* and *PSP* values. It then invokes one of the registered C functions. The register C functions retrieves input parameters from the stack using `forth_popda()` and pushes output parameters / return values on the stack using `forth_pushda()`.
 
-C functions are registered with Forth using the following macro from [forth.h]():
+C functions are registered with Forth using the following macro from [forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h):
 
 ```
 // Register a C function with signature: void fun(void). Fun uses the datastack object for parameter passing.
@@ -147,9 +145,7 @@ The `. . cr` after calling `test_c_fun` pops the output arguments off the stack,
 
 ## The Forth-C FFI API
 
-This is the Forth-C FFI API:
-
-[sw/components/forth_core/Forth.h]():
+[sw/components/forth_core/forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h):
 
 
 ```
@@ -186,23 +182,23 @@ void forth_load_buf(char *s, bool verbose);
            forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)
 ```
 
-## C-Forth FFI Implementation
+### Implementation
 
 The following files implement the Forth-C FFI:
 
-- [sw/components/forth_core/Forth.h]()
-- [sw/components/forth_core/Forth.cpp]()
-- [sw/components/forth_core/c-ffs.s]()
-- The `c-fun` Word in [sw/components/forth_core/included-tools.fs]()
+- [sw/components/forth_core/forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h)
+- [sw/components/forth_core/forth.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.cpp)
+- [sw/components/forth_core/c-ffs.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/c-ffi.s)
+- The `c-fun` Word in [sw/components/forth_core/init.fs](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/init.fs)
 
-### Register Usage
+## Register Usage
 
 When C code calls a Forth Word, or a Forth Word calls C we have to consider
 both the [RISC-V C
 ABI](https://riscv.org/wp-content/uploads/2024/12/riscv-calling.pdf) and the
 Mecrisp Quintus Forth register usage convention.
 
-#### C Calling Forth
+### Register Usage in case of C Calling Forth
 
 To maintain the C environment when C calls a Forth Word, the Forth code has to execute as if it were a C function.
 
@@ -236,7 +232,7 @@ We'll also save the C stack pointer (x2/sp) into a global variable upon entry
 into Forth so we can restore to this point if the Forth *reset* Word is
 invoked.
 
-#### Forth Calling C
+### Register Usage in case of Forth Calling C
 
 To maintain the Forth environment when Forth calls a C function, the C code has to execute as if it were a Forth Words.
 

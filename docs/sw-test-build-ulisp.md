@@ -6,7 +6,7 @@
 
 This is an experimental BoxLambda port of uLisp. The port is at a very
 early stage. The program boots and provides access to the [VERA
-Stack](sw_comp_vera_stack.md) as a uLisp extension. I currently don't have any plans to pursue this further.
+Stack](c_comp_vera_stack.md) as a uLisp extension. I currently don't have any plans to pursue this further.
 
 ## Building and Running uLisp on FPGA
 
