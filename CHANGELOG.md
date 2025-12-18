@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `v0.3.0`: Changes sinces label `v0.2.2` - 2025-12-01
+
+### Added
+
+- Added -r target reset option to ./scripts/openocd_arty_a7_100t.sh
+- Added BoxLambda port of Mecrisp Quintus Forth core as as software component.
+- Defined a C-Forth FFI for the Forth core and the C/C++ parts of the OS.
+- Added `boxlambda_os` software project build that boots into the Forth REPL.
+- Added `forth_core_test` test build and corresponding Python script for
+automated regression testing of the Forth core.
+
+### Fixed
+
+- __icode_start/end variables incorrectely set in link_imem_boot.ld.
+
+### Changed
+
+- Restructed documentation, preparing it for the software phase of the project.
+- Renamed immediate words such as `immediate` and `compileonly` to `[immediate]` and `[compileonly]` [https://github.com/epsilon537/boxlambda/issues/96](https://github.com/epsilon537/boxlambda/issues/96).
+
+### Removed
+
+- Removed `./scripts/openocd_arty_a7_35t.sh`.
+- Removed `CMAKE_ASM_PICO_COMPILER` from toolchain.
+- Removed `sw/projects/mforth` experimental build.
+
 ## Label `v0.2.2`: Changes sinces label `v0.2.1` - 2025-10-31
 
 ### Added
