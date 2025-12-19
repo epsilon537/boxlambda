@@ -5,9 +5,9 @@
 
 - **Forth Core Entry Point**: [sw/components/forth_core/mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s)
 
-BoxLambda's Forth is based on Matthias Koch's [Mecrisp Quintus](https://mecrisp.sourceforge.net). This section discusses the Forth *Core*, i.e. the RISC-V assembly language code base that bootstraps the Forth environment. There's a lot to be said about this code base. It's a well-written piece of code (I'm allowed to say that. I didn't write it) and very instructive to study it.
+BoxLambda's Forth is based on Matthias Koch's [Mecrisp Quintus](https://mecrisp.sourceforge.net). This section discusses the Forth *Core*, i.e., the RISC-V assembly language code base that bootstraps the Forth environment. There's a lot to be said about this code base. It’s a well-written piece of code — easy to say, since I didn’t write it — and well worth studying.
 
-Over time, I'll flesh out this section. For the time being, I'm putting here my notes about those aspects of the Mecrisp Forth Core that were relevant for bringing up the code base to BoxLambda.
+I’ll flesh this section out over time. For now, these are my notes on the parts of the Mecrisp Forth core relevant to bringing up the codebase on BoxLambda.
 
 ## BoxLambda changes relative to the original Mecrisp Quintus Core.
 
@@ -16,7 +16,7 @@ Mecrisp code base when porting it to BoxLambda.
 
 ### No Flash Memory
 
-This is the biggest one. The original Mecrisp Forth code is written to boot from flash memory and includes mechanisms to compile Words into flash memory. These mechanisms are quite clever and make up a significant portion of the original Forth core. I don't need this feature for BoxLambda, however. Non-volatile storage on BoxLambda is mostly filesystem-based using an SD Card. BoxLambda does use flash memory for bitstreams, firmware, and key system variables, but not to store user programs. BoxLambda's Forth does not include a flash-based dictionary.
+This is the biggest one. The original Mecrisp Forth code is written to boot from flash memory and includes mechanisms to compile Words into flash memory. These mechanisms are quite clever and make up a significant portion of the original Forth core. I don't need this feature for BoxLambda, however. Non-volatile storage on BoxLambda is primarily filesystem-based, utilizing an SD Card. BoxLambda uses flash memory for bitstreams, firmware, and key system variables, but not for storing user programs. BoxLambda's Forth does not include a flash-based dictionary.
 
 ### Two Dictionaries
 
@@ -31,7 +31,7 @@ dictionary secondary. After entering this Word, any new Words created will be
 compiled into EMEM.
 
 After start-up, `DictionaryPointer` points to the EMEM dictionary and
-`SecondDictionary` points to IMEM, i.e. initially this system is in
+`SecondDictionary` points to IMEM, i.e., initially, this system is in
 *compiletoemem* state.
 
 ![Dictionary Search Order](assets/dictionary_search_order.png)
@@ -43,15 +43,15 @@ After start-up, `DictionaryPointer` points to the EMEM dictionary and
 All Forth *Core* Words are entered into the IMEM dictionary at initialization time.
 Any Word created *after* initialization time is a *non-Core* Word.
 
-A dictionary search starts from latest non-Core Word to oldest non-Core Word,
+A dictionary search starts from the latest non-Core Word to the oldest non-Core Word,
 regardless of whether that non-Core Word is created in EMEM or IMEM. The
-search then proceeds from **oldest** Core Word (i.e. the first Words created by
+search then proceeds from **oldest** Core Word (i.e., the first Words created by
 the Forth core) to **newest** Core Word (the last Word created by the Forth
 core).
 
 ### Booting Forth from C
 
-The original Mecrisp Forth boots the Forth core directly (from flash memory), i.e. the boot vector is part of the Forth core. BoxLambda first boots up a C environment (see [here](sw_bootloader.md#boot-sequence)), then the C environment boots the Forth environment using the [Forth-C FFI](forth-c-ffi.md#the-forth-c-ffi-api) API.
+The original Mecrisp Forth boots the Forth core directly (from flash memory), i.e., the boot vector is part of the Forth core. BoxLambda first boots up a C environment (see [here](sw_bootloader.md#boot-sequence)), then the C environment boots the Forth environment using the [Forth-C FFI](forth-c-ffi.md#the-forth-c-ffi-api) API.
 
 From BoxLambda OS's [main.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/boxlambda_os/main.cpp):
 
@@ -71,17 +71,17 @@ From BoxLambda OS's [main.cpp](https://github.com/epsilon537/boxlambda/blob/mast
 
 ### English Translation
 
-The original Mecrisp codebase contains a lot of German Words and comments. I took the liberty of translating those to English. There were also many places with comments in English *and* German. I removed the redundant German comments for the sake of brevity. I hope I'm not causing offense by doing this.
+The original Mecrisp codebase contains many German words and comments. I took the liberty of translating these into English. In several places, comments appeared in both English and German; for the sake of brevity, I removed the redundant German comments. I hope this causes no offense.
 
 ### Conditional Compilation
 
-The Mecrisp Core is generally well-written, but the nested conditional compilation accounting for all the platform variants (RISCV32, RISCV64, MIPS, compressed instruction set...) sometimes made it hard to find the relevant code variant. Because the BoxLambda code-base is intended for BoxLambda only, I decided to remove the `.ifdef`s/`.else`s that don't apply to BoxLambda. Doing this significantly simplified the code.
+The Mecrisp core is generally well written, but the nested conditional compilation used to account for the various platform variants (RISC-V 32, RISC-V 64, MIPS, compressed instruction sets, and so on) sometimes made it difficult to locate the relevant code paths. Because the BoxLambda code-base is intended for BoxLambda only, I decided to remove the `.ifdef`s/`.else`s that don't apply to BoxLambda. Doing this significantly simplified the code.
 
 ## Understanding the Forth Core
 
-Over time, I'll add more detail about the inner workings of the Forth Core. At the moment I understand just enough to be able to complete the port. Understanding the Forth Core doesn't require a lot of handholding, however. The code is well-written (by Matthias Koch) and makes for an interesting read. Pay particular attention to the code-generating macros. Along the way, you'll realize that the Forth Core is Forth code written in assembly syntax. If you haven't looke at the code yet, that sentence probably doesn't make much sense, but you'll get it when you read the code.
+Over time, I'll add more detail about the inner workings of the Forth Core. At the moment, I understand just enough to complete the port. Understanding the Forth Core doesn't require a lot of handholding, however. The code is well-written (by Matthias Koch) and makes for an interesting read. Pay particular attention to the code-generating macros. Along the way, you'll realize that the Forth Core is Forth code written in assembly syntax. If you haven't looked at the code yet, that sentence probably doesn't make much sense, but you'll get it when you read the code.
 
-The top-level source file is [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s). I suggest to start code reading from the beginning of that file, working your way do, going into each `.include` file you come across. Recursing into include files isn't something you would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
+The top-level source file is [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, going into each `.include` file you come across. Recursing into include files isn't something you would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
 
 ### Key Variables
 
@@ -107,7 +107,7 @@ The link map also defines the following linker variables associated with those s
 Understanding the purpose of the following variables, defined in [forth-core.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth-core.s), was essential to be able to understand the Forth Core boot procedure and port it to BoxLambda:
 
 - `DictionaryPointer`: The *primary* dictionary pointer. Dictionary search
-start here. Corresponds to Forth variable `(dp)`, taking into account that
+starts here. Corresponds to Forth variable `(dp)`, taking into account that
 referencing a variable in Forth puts the variable's *address* on the stack, not
 its value. Word `here` puts the content of the variable on the stack. In other
 words, `here`is equivalent to `'(dp) @`.
@@ -121,7 +121,7 @@ Forth puts the variable's *address* on the stack, not its value.
 are placed and initialized at the end of the `.forth_imem` section. As core variables are placed during the
 `catchmempointers.s` phase of initialization, the pointer advances downwards,
 towards lower memory. When *catchmempointers* has completed, the pointer value
-is stored into `VariablesPointer`. `VariablesPointer` acts like a *here*
+is stored in `VariablesPointer`. `VariablesPointer` acts like a *here*
 pointer for core variables. The corresponding Word is `ramvar-here`.
 
 The Forth Core code base relies heavily on the GNU Preprocessor through macros and preprocessor symbols.
@@ -131,7 +131,7 @@ The following assembler preprocessor symbols play an important role in the Forth
 - `rampointer`: Initially points to the start of the `.forth_imem` section.
 Advances towards higher memory addresses as space for variables is allocated
 using the `ramallot` macro.
-- `CoreVariablePointer` and `DoubleCoreVariablePointer`: Initially points to
+- `CoreVariablePointer` and `DoubleCoreVariablePointer`: Initially point to
 the end of IMEM. The `CoreVariable, name` macro decrements the pointer to make
 space for one variable, then assigns the current pointer value to the given
 symbol *name*. This allocation mechanism, executing during the assembler
@@ -140,7 +140,7 @@ preprocessing stage, matches the run-time allocation mechanism executed by
 
 ##### Inefficiencies
 
-If you look at the definitions of core variables (e.g. `hook-emit`), you'll see
+If you look at the definitions of core variables (e.g., `hook-emit`), you'll see
 that the initial value of the variable is placed right after the code.
 `Catchmempointers.s` will copy it from there to the variable location at the
 end of IMEM. This is a bit wasteful. Each core variable takes up two IMEM
@@ -160,5 +160,5 @@ inefficiency in a future release.
    Code
 ```
 
-Empty link field or name length of zero denotes end of dictionary chain.
+An empty link field or name length of zero denotes the end of the dictionary chain.
 

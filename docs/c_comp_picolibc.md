@@ -94,7 +94,7 @@ The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S
 
 The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to `_start`, the entry point into the `crt0` module.
 
-For more info on vectors.S, check the [Interrupt Handling](sw_irqs.md) page.
+For more info on `vectors.S`, check the [Interrupt Handling](sw_irqs.md) page.
 
 ### Crt0
 
@@ -199,5 +199,5 @@ int main(void) {
 
 ```
 
-Notice the `_init()` function. The PicoLibc startup code executes this functio before calling `main()`. This is where we set up the UART.
+Notice the `_init()` function. The PicoLibc startup code executes this function before calling `main()`. This is where we set up the UART.
 

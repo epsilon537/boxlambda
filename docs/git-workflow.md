@@ -64,5 +64,5 @@ On `master` branch:
 10. Update tag to include the new binaries: `git -f tag vX.Y.Z`.
 11. `git push origin vX.Y.Z`.
 12. On GitHub boxlambda repo, navigate to *releases*, then *Draft a new release*.
-13. On GitHub update/close open issues.
+13. On GitHub boxlambda repo, update/close open issues.
 

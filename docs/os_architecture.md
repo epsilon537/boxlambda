@@ -55,7 +55,7 @@ Flamingo.](assets/flamingo.png)](assets/flamingo.png)
 *Mecrisp Forth's Welcome message - ASCII art from Adreas Freise.*
 
 Most *new* code will be written in Forth or in assembly language in the Forth
-environment. Not everything is in the Forth environment is new, still-
+environment. Not everything in the Forth environment is new, still-
 to-be-developed software, however. Some modules, such as the RISC-V assembler
 and disassembler, are part of the Mecrisp Forth Quintus distribution.
 

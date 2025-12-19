@@ -1,15 +1,15 @@
 # The Forth-C Foreign Function Interface (FFI)
 
-C has one stack which it used to keep track of the call stack, stack frames
-(local variables), and when a lot of parameters are involved, parameter
-passing. Forth uses two stacks: a **Return Stack** and a **Data Stack**. The Return
-Stack is used to keep track of the call stack and stack frames. The Data Stack
+C has one stack, which is used to keep track of the call stack, stack frames
+(local variables), and, when a lot of parameters are involved, parameter
+passing. Forth uses two stacks: a **Return Stack** and a **Data Stack**. The return
+stack is used to keep track of the call stack and stack frames. The Data Stack
 is used for parameter passing.
 
-On BoxLambda, the C stack acts as Return Stack in Forth space. It's a natural
-fit. It doesn't require any particular software constructs. The C stack is
-managed by the C compiler. On the Forth side, Mecrisp Quintus is already using
-the stack pointer register (x2) as Return Stack.
+On BoxLambda, the C stack acts as a return stack in Forth space. It's a natural
+fit. It doesn't require any particular software constructs. The C compiler
+manages the C stack. On the Forth side, Mecrisp Quintus is already using the
+stack pointer register (x2) as the return stack pointer.
 
 The Data Stack does require a software construct. The `forth_core_init()` function initializes a global `datastack` object with the following layout in C:
 
@@ -26,7 +26,7 @@ The `tos` field is the *Top Of (data) Stack*. The `psp` field is the *Parameter 
 
 This `datastack` object acts as the mailbox between C and Forth.
 
-In C space, the datastack is manipulated using the following two accessors:
+In C space, the data stack is manipulated using the following two accessors:
 
 ```
 // Push a value onto the data stack
@@ -38,7 +38,7 @@ uint32_t forth_popda();
 
 ## C Calling Forth
 
-When C calls Forth, the calling function puts input parameters on the datastack using `forth_pushda()` before invoking the Forth Word. Afterwards (i.e. when the Forth Word has executed and returned back to C), it picks up any return values using `forth_popda()`.
+When C calls Forth, the calling function puts input parameters on the data stack using `forth_pushda()` before invoking the Forth Word. Afterwards (i.e., when the Forth Word has executed and returned to C), it picks up any return values using `forth_popda()`.
 
 ### Example 1
 
@@ -92,7 +92,7 @@ If C needs to call Forth Word `foo` many times, it's better to store foo's execu
 
 ## Forth Calling C
 
-When Forth calls C, it updates the `datastack` object with its current *TOS* and *PSP* values. It then invokes one of the registered C functions. The register C functions retrieves input parameters from the stack using `forth_popda()` and pushes output parameters / return values on the stack using `forth_pushda()`.
+When Forth calls C, it updates the `datastack` object with its current *TOS* and *PSP* values. It then invokes one of the registered C functions. The registered C function retrieves input parameters from the stack using `forth_popda()` and pushes output parameters/return values on the stack using `forth_pushda()`.
 
 C functions are registered with Forth using the following macro from [forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h):
 
@@ -102,7 +102,7 @@ C functions are registered with Forth using the following macro from [forth.h](h
            forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)
 ```
 
-Note the expected ```void fun(void)``` signature. Forth registered C functions don't take any C-style input parameters and don't return any values C-style. The `datastack` object is used exclusively for parameter passing.
+Note the expected ```void fun(void)``` signature. Forth registered C functions don't have any C-style input parameters or return values. The `datastack` object is used exclusively for parameter passing.
 
 ### Example
 
@@ -193,7 +193,7 @@ The following files implement the Forth-C FFI:
 
 ## Register Usage
 
-When C code calls a Forth Word, or a Forth Word calls C we have to consider
+When C code calls a Forth Word, or a Forth Word calls C, we have to consider
 both the [RISC-V C
 ABI](https://riscv.org/wp-content/uploads/2024/12/riscv-calling.pdf) and the
 Mecrisp Quintus Forth register usage convention.
@@ -234,7 +234,7 @@ invoked.
 
 ### Register Usage in case of Forth Calling C
 
-To maintain the Forth environment when Forth calls a C function, the C code has to execute as if it were a Forth Words.
+To maintain the Forth environment when Forth calls a C function, the C code has to execute as if it were a Forth Word.
 
 The table below summarizes the actions that should be taken per register.
 

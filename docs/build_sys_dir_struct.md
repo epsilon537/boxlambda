@@ -86,6 +86,6 @@ In the `arty-a7-100` build tree, `make all` will build `boxlambda_base_bit`, `bo
 
 If you want to go back to a clean build tree, type `make regen` from the build directory. This command will:
 
-1. remove and regenerate the build tree.
-2. run the code generation rules (`make cgen`).
+1. Remove and regenerate the build tree.
+2. Run the code generation rules (`make cgen`).
 

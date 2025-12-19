@@ -1,6 +1,6 @@
 # Building the Jekyll Blog
 
-Ruby and Bundler are required if you want to build the BoxLambda Blog website.
+Ruby and Bundler are required to build the BoxLambda Blog website.
 ```
 sudo apt-get install rubygems ruby-bundler
 ```

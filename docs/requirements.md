@@ -28,7 +28,7 @@ Software should also be able to probe the entire address space without causing s
 
 ## Optional: Partial FPGA Reconfiguration
 
-It would be great if a gateware component could be incrementally loaded into the FPGA using Xilinx’s *DFX* (Dynamic Function eXchange) feature. This would allow applications to be packaged along with specific hardware components (such as accelerators or peripherals) they depend on.
+It would be great if a gateware component could be incrementally loaded into the FPGA using Xilinx’s *DFX* (Dynamic Function eXchange) feature. This would allow applications to be packaged along with specific hardware components (such as accelerators or peripherals) that they depend on.
 
 I'm considering this feature as a stretch goal for the project.
 

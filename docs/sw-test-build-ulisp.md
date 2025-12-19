@@ -39,9 +39,9 @@ make ulisp_flash_sw
 You should see the following output in the terminal:
 
 ```
-BoxLambda first stage bootloader
---------------------------------
-Version: v0.2.1
+BoxLambda bootloader
+--------------------
+Version: v0.3.0
 Initializing SDRAM...
 Initializing SDRAM @0x20000000...
 Switching SDRAM to software control.
@@ -66,16 +66,14 @@ Read leveling:
   best: m1, b01 delays: 14+-14
 Switching SDRAM to hardware control.
 Done.
-Installing second stage bootloader in DDR...
 Done.
-Proceeding to boot stage 2...
-Bootloader stage 2:
--------------------
-Copying SW image from Flash to IMEM...
-Done.
-Starting SW image...
+Application image magic number check OK.
+Application image size: 79428 bytes
+Copying SW image from Flash to DDR...
 uLisp 4.7
-495045>
+Loading VERA Convenience Layer...
+Done.
+85045>
 ```
 
 To see a list of available VERA functions in uLisp, enter the following:

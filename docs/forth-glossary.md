@@ -11,7 +11,7 @@ UTF-8 Unicode encoded characters beyond 7 bit ASCII are case-sensitive.
 Words with `(BoxLambda)` in the description have been added or modified as part of
 the BoxLambda port of Mecrisp.
 
-Note that BoxLambda's Forth does **not** include flash support as defined in Mecrisp Quintus Forth. BoxLambda will load non-core Forth definitions from the file system (TBD) rather than have them defined in flash memory. Flash support will be added, but it might not be in the form of a Forth Word Dictionary.
+Note that BoxLambda's Forth does **not** include flash support as defined in Mecrisp Quintus Forth. BoxLambda will load non-core Forth definitions from the file system (TBD), rather than defining them in flash memory. Flash support will be added, but it might not be in the form of a Forth Word Dictionary.
 
 ## Terminal-IO  (exactly ANS, some logical extensions)
 
@@ -90,7 +90,7 @@ Stack pointers:
 
 ## Logic  (exactly ANS, some logical extensions)
 
-Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behave
+Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves
 like "31 and ar/r/lshift". 32 lshift does nothing.
 
 ```
@@ -203,9 +203,9 @@ like signed double numbers.
                         Tries to convert a string to a number.
 ```
 
-## Comparisions  (exactly ANS, some logical extensions)
+## Comparisons  (exactly ANS, some logical extensions)
 
-Single-Comparisions:
+Single-Comparisons:
 
 ```
         u<=             ( u1 u2 -- flag )  Unsigned comparisions
@@ -223,7 +223,7 @@ Single-Comparisions:
         =               ( x1 x2 -- flag )
 ```
 
-Double-Comparisions:            They perform the same for double numbers.
+Double-Comparisons:            They perform the same for double numbers.
 
 ```
         du>             ( ud1 ud2 -- flag )
@@ -321,7 +321,7 @@ String routines:
         ( Comment )     Ignore Comment
         \ Comment       Comment to end of line
 
-        .( Text )       Immediately print the text between the parenthesis.
+        .( Text )       Immediately print the text between the parentheses.
 
         cr              ( -- ) Emits line feed
         bl              ( -- 32 ) ASCII code for Space
@@ -451,7 +451,7 @@ Deep insights:
 
         string,         ( c-addr len -- ) Inserts a string of maximum 255 characters without runtime
         literal,        ( u|n -- ) Compiles a literal with runtime
-        inline,         ( a-addr -- ) Inlines the choosen subroutine
+        inline,         ( a-addr -- ) Inlines the chosen subroutine
         call,           ( a-addr -- ) Compiles a call to a subroutine
         ret,            ( -- ) Compiles a ret opcode
 
@@ -513,7 +513,7 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
                                       gives back executable address
         ['] name        ( -- a-addr)  Tick that compiles the executable address
                                       of found word as literal
-        postpone name   ( -- ) Helps compiling immediate words.
+        postpone name   ( -- ) Helps compile immediate words.
         does>           ( -- ) executes: ( -- a-addr )
                                Gives address to where you have stored data.
         <builds         ( -- ) Makes Dictionary header and reserves space
@@ -556,7 +556,7 @@ n case
 
         case            ( n -- n )       Begins case structure
         of              ( m -- )         Compares m with n, choose this if n=m
-        ?of             ( n flag -- )    Flag-of, for custom comparisions
+        ?of             ( n flag -- )    Flag-of, for custom comparisons
         endof           ( -- )           End of one possibility
         endcase         ( n -- )         Ends case structure, discards n
 ```

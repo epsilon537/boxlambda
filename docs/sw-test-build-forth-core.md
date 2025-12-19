@@ -5,7 +5,7 @@
 This build runs the Forth regression test suite. The testsuite is based on the Mecrisp
 Forth testsuite, augmented with Words specifically added for BoxLambda (C-FFI, c, halign, compiletoimem,...).
 
-The program expects user input at some point. To automate this part, the program can be executed under control of a `pexpect` based Python script that will provide the required input at the right time. The Python script also checks the expected output against a [reference output file](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/forth_core_test/test/forth_core_test.output.txt) and provide the overall pass/fail status to the ctest bench.
+The program expects user input at some point. To automate this part, the program can be executed under the control of a `pexpect` based Python script that will provide the required input at the right time. The Python script also checks the expected output against a [reference output file](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/forth_core_test/test/forth_core_test.output.txt) and provides the overall pass/fail status to the ctest bench.
 
 ## Building and Running Forh Core Test on FPGA
 
@@ -22,11 +22,11 @@ make forth_core_test
 
 ### Running Forth Core Test Manually
 
-At this point you could just flash the software onto the target using the command `make forth_core_flash_sw`. I avoid that, however, because I'm worried about wearing out the board's flash memory. Instead, I use OpenOCD+GDB to load the software onto the target:
+At this point, you can simply flash the software onto the target using the command `make forth_core_flash_sw`. I avoid that, however, because I'm worried about wearing out the board's flash memory. Instead, I use OpenOCD+GDB to load the software onto the target:
 
-Set the board swithes all to off. This causes the bootloader to spin after booting up, allowing OpenOCD/GDB to connect.
+Set all board switches to off. This causes the bootloader to spin after booting up, allowing OpenOCD/GDB to connect.
 
-Open a new terminal window, activate the boxlambda environment and start OpenOCD:
+Open a new terminal window, activate the boxlambda environment, and start OpenOCD:
 
 ```
 cd <boxlambda root dir>
@@ -34,7 +34,7 @@ source activate_env.sh
 openocd_arty_a7_100t.sh -r
 ```
 
-Now go back to the terminal where you build `forth_core_test` and load the program using GDB:
+Now go back to the terminal where you built `forth_core_test` and load the program using GDB:
 
 ```
 gdb forth_core_test
@@ -161,7 +161,7 @@ The test leaves you at the Forth prompt.
 
 ### Running Forth Core Test Automatically
 
-The Forth Core Test can also be run automatically, under control of a Python script. To kick off the automatic test:
+The Forth Core Test can also be run automatically, under the control of a Python script. To kick off the automatic test:
 
 If you have it open, close the serial port terminal. The Python script will take control of the serial port.
 

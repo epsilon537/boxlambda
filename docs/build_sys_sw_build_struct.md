@@ -8,13 +8,13 @@ The software build system is organized into four layers:
    Example: *Hello World*. This layer represents the top level of the build system. The software ELF executables and flash binaries are built at this level. Depending on what functionality the software project build requires, it will add libraries from the *Software Component Layer*.
 
 2. **The Software Component Layer**:
-   Software Components are the building blocks of a Software Project build. Each component is built as a library and may have dependencies on additional software components in the *Software Component Layer*. The Software Component's sources are located directly in the Software Component's directory, or referenced from specific locations in the submodule layer.
+   Software Components are the building blocks of a software project build. Each component is built as a library and may have dependencies on additional software components in the *Software Component Layer*. The Software Component's sources are located directly in the Software Component's directory, or referenced from specific locations in the submodule layer.
 
 3. **The Submodule Layer**:
-   Submodules are Git submodules containing, among other things, source code referenced from the *Software Component Layer*. The software build system does not directly build at this level. Makefile locates in the *Submodule Layer* are not executed.
+   Submodules are Git submodules containing, among other things, source code referenced from the *Software Component Layer*. The software build system does not directly build at this level. Makefiles located in the *Submodule Layer* are not executed.
 
 4. **The Code Generation Layer**:
-   Some components require some form of transformation to be turned into source code. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) in its `CMakefile.txt`. The custom command is added as a dependency to the generic `cgen` target, which gets executed as part of `make regen`, the build tree (re-)generation command. Except the [Register Access Layer](c_comp_register_access_layer.md), code-generated files are written to the `codegen/` subdirectory in the build tree.
+   Some components require some form of transformation to be turned into source code. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) in its `CMakefile.txt`. The custom command is added as a dependency to the generic `cgen` target, which gets executed as part of `make regen`, the build tree (re-)generation command. Except for the [Register Access Layer](c_comp_register_access_layer.md), code-generated files are written to the `codegen/` subdirectory in the build tree.
 
 The following software components currently rely on code generation:
 
@@ -23,11 +23,11 @@ The following software components currently rely on code generation:
 
 ## The Software CMakeLists
 
-The build system consists of a tree of `CMakeLists.txt` files. The top-level `CMakeLists.txt` adds the `gw/` and `sw/` subdirectories. The `CMakeLists.txt` files in the `sw/` directory adds the `components/` and `projects/` subdirectories, etc., down to the individual SW component and project directories.
+The build system consists of a tree of `CMakeLists.txt` files. The top-level `CMakeLists.txt` adds the `gw/` and `sw/` subdirectories. The `CMakeLists.txt` file in the `sw/` directory adds the `components/` and `projects/` subdirectories, etc., down to the individual SW component and project directories.
 
 ### A Software Component CMakeList
 
-The Software Compoonent CMakeList is straightforward: You give the library a name, specify its sources, include paths, and C/CPPFLAGS:
+The Software Component CMakeList is straightforward: You give the library a name, specify its sources, include paths, and C/CPPFLAGS:
 
 ```
 add_library(gpio)
@@ -79,7 +79,7 @@ target_link_libraries(hello_world gpio riscv bootstrap)
 add_flash_sw_target(hello_world)
 ```
 
-Note that depending on whether we're building for simulation or FPGA, two variants of the linker script are used. `link_imem_boot.ld` creates an image that boots directly from IMEM. `link_ddr_to_imem_boot.ld` creates a image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
+Note that depending on whether we're building for simulation or FPGA, two variants of the linker script are used. `link_imem_boot.ld` creates an image that boots directly from IMEM. `link_ddr_to_imem_boot.ld` creates an image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
 
 Other linker script variants:
 - [link_ddr_to_ddr_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_ddr_to_ddr_boot.ld): Creates a image to be loaded into EMEM by the bootloader. From there, the image will unpack itself further into EMEM.

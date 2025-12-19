@@ -2,11 +2,11 @@
 
 ## Vectored Mode
 
-Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the `IRQ_ID` by four and adding it to the vector table base address. The vector table base address is specified in the `mtvec` CSR. In BoxLambda, after reset the vector will initially point at `0x1150000`. Crt0's `_start()` function will set it to 0 (in IMEM), so from then on an interrupt's entry point address is simply `IRQ_ID*4`.
+Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry point in a vector table. When an interrupt occurs, the CPU jumps to the address calculated by multiplying the `IRQ_ID` by four and adding it to the vector table base address. The vector table base address is specified in the `mtvec` CSR. In BoxLambda, after reset, the vector will initially point at `0x1150000`. Crt0's `_start()` function will set it to 0 (in IMEM), so from then on an interrupt's entry point address is `IRQ_ID*4`.
 
 ## Vectors.S Weak Bindings
 
-The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide, so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: If you insert into the vector table a straightforward call to your application-specific interrupt service routine, you end up with an inverted dependency. You don't want the lowest layer platform code to depend directly on the higher layer application code. To get around that issue, I defined *weak bindings* for all the interrupt service routines inside `vectors.S`:
+The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide, so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: if you insert a straightforward call to your application-specific interrupt service routine into the vector table, you introduce an inverted dependency. You don’t want the lowest-level platform code to depend directly on higher-level application code. To get around that issue, I defined *weak bindings* for all the interrupt service routines inside `vectors.S`:
 
 ```
 // Weak bindings for the fast IRQs. These will be overridden in the
@@ -56,7 +56,7 @@ _exc_handler:          //_exc_handler is overridden in the interrupt SW module.
   jal x0, _exc_handler
 ```
 
-As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings never get invoked and that they are replaced with actual interrupt service routine implementations in higher-layer code. On the BoxLambda OS build, the Forth Core will take ownership of all the IRQ vectors. See [interrupts.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/interrupts.s). In gateware test builds, test C code may bind some or all of the IRQs. See [Ibex RISC-V Interrupt Handling in Test C Components](test_c_comp_irqs.md).
+As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings are never invoked and are instead replaced by actual interrupt service routine implementations in higher-layer code. On the BoxLambda OS build, the Forth Core will take ownership of all the IRQ vectors. See [interrupts.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/interrupts.s). In gateware test builds, test C code may bind some or all of the IRQs. See [Ibex RISC-V Interrupt Handling in Test C Components](test_c_comp_irqs.md).
 
 ## The IRQ Shadow Registers
 

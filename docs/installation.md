@@ -9,7 +9,7 @@ To install BoxLambda:
 5. [Activate the environment](#activating-the-tools-environment).
 6. [Flash the bitstream, bootloader, and OS binaries](#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
-The first four steps need to be executed once. Activating the environment is required every time you're working with BoxLambda.
+The first four steps should be executed once. Activating the environment is required every time you're working with BoxLambda.
 
 ## Getting the Repository
 
@@ -176,7 +176,7 @@ make boxlambda_base.bit
 make boxlambda_base_flash_gw
 ```
 
-The `make boxlambda_base.bit` step will take a few minutes to complete. The other build steps should complete in seconds.
+The `make boxlambda_base.bit` step will take a few minutes to complete. The other build steps should complete in a few seconds.
 
 You should see the same output on the serial port terminal as shown in the previous section.
 
