@@ -7,7 +7,6 @@
 Memory Layout.](assets/os_mem_layout.png)](assets/os_mem_layout.png)
 
 *BoxLambda OS Memory Layout.*
-https://github.com/epsilon537/boxlambda/blob/master/sw/projects/forth_core_test/testsuite.fs
 
 ### Memory Footprint
 

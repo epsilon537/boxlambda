@@ -5,6 +5,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **ACK**: A Wishbone Bus Signal.
 - **API**: Application Programming Interface.
 - **AXI**: Advanced eXtensible Interface, ARM's SoC bus specification.
+- **Bit-Banging**: Software manually toggling pins to emulate hardware communication.
 - **Bitstream**: A file containing the programming data for an FPGA chip.
 - **Blitter**: A type of DMA used in 2D graphics for bitmap manipulation in video memory.
 - **BPP**: Bits Per Pixel.
