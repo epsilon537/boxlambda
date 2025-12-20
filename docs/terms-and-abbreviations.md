@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Terms and Abbreviations
 
 This section clarifies some of the more ambiguous terms and abbreviations used elsewhere in the documentation.
@@ -10,6 +5,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **ACK**: A Wishbone Bus Signal.
 - **API**: Application Programming Interface.
 - **AXI**: Advanced eXtensible Interface, ARM's SoC bus specification.
+- **Bit-Banging**: Software manually toggling pins to emulate hardware communication.
 - **Bitstream**: A file containing the programming data for an FPGA chip.
 - **Blitter**: A type of DMA used in 2D graphics for bitmap manipulation in video memory.
 - **BPP**: Bits Per Pixel.
@@ -50,6 +46,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **EDA tool**: Electronic Design Automation tool, e.g., Vivado.
 - **EMEM**: External Memory (SDRAM).
 - **ERR**: A Wishbone Bus Signal.
+- **FFI**: Foreign Function Interface, e.g. the interface used to allow C code to call Forth code.
 - **FFT**: Fast Fourier Transform, converting signals to frequency components.
 - **FHDL**: Fragmented Hardware Description Language, used by Migen and LiteX.
 - **FIFO**: First-In-First-Out queue implementation.
@@ -180,8 +177,10 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Weak Binding**: A software symbol definition that can be overridden by a non-weak redefinition.
 - **WIP**: Work In Progress.
 - **Wishbone**: An open-source SoC bus specification ([Wishbone Spec](https://cdn.opencores.org/downloads/wbspec_b4.pdf)).
+- **Word**: In this documentation, a *Word* written with capital *W* signifies a Forth Word.
 - **WSL**: Windows Subsystem for Linux.
 - **Xbar**: Cross-Bar - A type of interconnect used in SoC bus fabrics.
+- **XT**: Execution Token. A value that uniquely identifies a word’s executable code, allowing the program to execute that word indirectly.
 - **XPM**: Xilinx Parameterized Macro.
 - **YM**: A music file format for the YM2149 chip ([YM Format](http://leonard.oxg.free.fr/ymformat.html)).
 - **YM2149**: A Yamaha sound chip from the 1980s. See also JT49.

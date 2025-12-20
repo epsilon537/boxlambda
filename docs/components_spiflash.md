@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # SPI Flash Controller
 
 - **SPI Flash Gateware Component in the BoxLambda Directory Tree**:

@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Interrupts
 
 ## The Interrupt Handling Protocol: Condition-Based vs. Event-Based Interrupts
@@ -118,5 +113,5 @@ When the CPU receives an IRQ, it has to complete that instruction before it can 
 
 ## Interrupt Handling Software
 
-See the [Interrupt Handling](sw_comp_irqs.md) page.
+See the [Interrupt Handling](forth_irqs.md) page.
 

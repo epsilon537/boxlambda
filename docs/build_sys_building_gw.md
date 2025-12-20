@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Building the Gateware
 
 Assuming all [Prerequisites](prerequisites.md) are installed, navigate to the desired build tree and run the following command:
@@ -19,7 +14,7 @@ Where *action* is one of the following:
 - `_sim`: Build the Verilator simulation model (`Vmodel`) for the specified gateware project, including the associated software image.
     - Depends on: Gateware sources, the associated software target, and the `gw_codegen` target.
     - Build tree: `sim-a7-100` build tree.
-- `_synth`: Synthesize the specified gateware component or project. This action is only available in the `arty-a7-100` build tree. When you run the synth action on a component, Out-Of-Context (OOC) synthesis is performed, meaning the component's input and output ports are not connected to anything.
+- `_synth`: Synthesize the specified gateware component or project. This action is only available in the `arty-a7-100` build tree. When you run the synth action on a component, Out-Of-Context (OOC) synthesis is performed, meaning the component's input and output ports are not connected.
     - Depends on: Gateware sources, constraints, and the `gw_codegen` target.
     - Build tree: `arty-a7-100` build tree.
 - `_bit`: Implement the specified gateware project and generate its bitstream, including the associated software image.

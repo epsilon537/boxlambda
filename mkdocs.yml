@@ -12,36 +12,146 @@ extra_javascript:
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 theme:
-    name: readthedocs
-    collapse_navigation: True
-    titles_only: False
+    name: material
     logo: assets/boxlambda_logo_simple_white.png
-    favicon: images/favicon.png
+    favicon: assets/boxlambda_logo_simple.png
     features:
-    - toc.follow
-    - content.code.copy  # Adds "copy" button to code blocks
-    - content.tabs.link  # Enables tabbed content
-    - content.tooltips  # Enables tooltips
-    - content.code.annotate  # Enables inline code annotations
-    - navigation.top
-    - navigation.instant  # Faster page loads
-    - navigation.tracking  # Keeps the URL updated
-    - navigation.sections  # Groups sidebar items into sections
+      - navigation.tracking
+      - navigation.instant
+      - navigation.sections
+      - navigation.tabs
+      - navigation.tabs.sticky
+      - navigation.path
+      - navigation.top
+
+extra:
+  social:
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/@2Lysens
+    - icon: fontawesome/brands/bluesky
+      link: https://bsky.app/profile/epsilon537.bsky.social
+    - icon: fontawesome/brands/github
+      link: https://github.com/epsilon537/boxlambda
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:ruben.lysens2@gmail.com
+
+repo_url: https://github.com/epsilon537/boxlambda
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 4
 
 nav:
-    - About: index.md
+    - About:
+        - About: index.md
+        - The Requirements: requirements.md
     - Terms and Abbreviations: terms-and-abbreviations.md
-    - Requirement Analysis: requirement-analysis.md
     - Installation:
         - Prerequisites: prerequisites.md
         - Peripherals (PMODs): pmods.md
-        - Installation and Activation: installation_and_activation.md
-    - Top-Level:
-        - Architecture: architecture.md
-        - Clocks and Reset: clocks_and_reset.md
-        - Interrupts: interrupts.md
-        - LEDs and Switches: leds_and_switches.md
-        - FPGA Resource Utilization: fpga-resource-utilization.md
+        - Installation: installation.md
+    - Gateware:
+      - Top-Level:
+          - Gateware Architecture: gw_architecture.md
+          - Clocks and Reset: clocks_and_reset.md
+          - Interrupts: interrupts.md
+          - LEDs and Switches: leds_and_switches.md
+          - FPGA Resource Utilization: fpga-resource-utilization.md
+      - Gateware Components:
+          - BoxLambda SoC: components_boxlambda_soc.md
+          - Wishbone Interconnect: components_wb_interconnect.md
+          - RISCV Ibex Processor: components_ibex.md
+          - IMEM: components_imem.md
+          - RISCV-DBG Debug Core: components_riscv_dbg.md
+          - LiteDRAM Memory Controller: components_litedram.md
+          - VERA (Wishbone) Graphics: components_vera.md
+          - SDSPI SD Card Controller: components_sdspi.md
+          - SPI Flash Controller: components_spiflash.md
+          - Dual YM2149 PSG Sound Core: components_dual_ym2149.md
+          - USB HID Keyboard and Mouse: components_usb_hid.md
+          - UART: components_uart.md
+          - GPIO: components_gpio.md
+          - Timer: components_timer.md
+          - I2C: components_i2c.md
+          - RTCC: components_rtcc.md
+          - VS0: components_vs0.md
+          - DFX Controller: components_dfx_controller.md
+      - Gateware Project Builds:
+          - BoxLambda Base: gw_prj_build_boxlambda_base.md
+          - BoxLambda DFX (Experimental/Advanced): gw_prj_build_boxlambda_dfx.md
+      - Gateware Testing:
+        - The Gateware Test Bench:
+            - The Test Bench: gw-test-bench.md
+            - The System-Level Test Bench: gw-test-bench-system-level.md
+            - The Component-Level Test Bench: gw-test-bench-component-level.md
+        - Gateware Test Builds:
+            - Hello World: gw-test-build-hello-world.md
+            - DDR Test: gw-test-build-ddr.md
+            - VERA Test: gw-test-build-vera.md
+            - SDSPI and FatFS Test: gw-test-build-sdspi-and-fatfs.md
+            - YM2149 PSG, Audio DAC, and ST-Sound Test: gw-test-build-ym2149.md
+            - USB HID Keyboard and Mouse Test: gw-test-build-usb-hid.md
+            - SPI Flash Test: gw-test-build-spi-flash.md
+            - Timer, UART, and GPIO Interrupt Test: gw-test-build-timer-uart-gpio-irqs.md
+            - I2C Test: gw-test-build-i2c.md
+            - Real-Time Clock and Calendar Test: gw-test-build-rtcc.md
+            - Reset Test: gw-test-build-reset.md
+            - DFX Test: gw-test-build-dfx.md
+            - Invalid Address Test: gw-test-build-invalid-addr.md
+            - Ibex Performance Test: gw-test-build-ibex-perf.md
+    - Software:
+      - OS Requirements: os_requirements.md
+      - OS Architecture: os_architecture.md
+      - OS Build: os_build.md
+      - OS Memory Layout and Boot Sequence: os_mem_layout_boot_seq.md
+      - Forth:
+        - The Mecrisp Forth Core: forth-core.md
+        - The Forth-C FFI: forth-c-ffi.md
+        - Forth Word Glossary: forth-glossary.md
+        - Interrupt Handling: forth_irqs.md
+        - Time Handling: forth_time.md
+      - Bootloader: sw_bootloader.md
+      - C Components:
+          - About C Components: c_comp_about.md
+          - Register Access Layer: c_comp_register_access_layer.md
+          - PicoLibc and the Bootstrap Component: c_comp_picolibc.md
+          - LiteDRAM Initialization: c_comp_litedram_initialization.md
+          - SDSPI: c_comp_sdspi.md
+          - FatFs: c_comp_fat_fs.md
+          - ST-Sound: c_comp_st_sound.md
+          - VERA Stack: c_comp_vera_stack.md
+          - USB HID: c_comp_usb_hid.md
+          - Flash Driver: c_comp_flashdrvr.md
+          - UART: c_comp_uart.md
+          - GPIO: c_comp_gpio.md
+          - RISC-V: c_comp_riscv.md
+          - I2C: c_comp_i2c.md
+          - Real-Time Clock and Calendar: c_comp_rtcc.md
+          - DFX Controller HAL: c_comp_dfx_controller_hal.md
+      - Test C Components:
+          - About Test C Components: test_c_comp_about.md
+          - Timer: test_c_comp_timer.md
+          - Interrupt Handling: test_c_comp_irqs.md
+          - Embedded CLI: test_c_comp_cli.md
+          - Ymodem: test_c_comp_ymodem.md
+          - Memory and File System CLI: test_c_comp_mem_fs_cli.md
+          - Peek and Poke CLI: test_c_comp_peek_poke_cli.md
+          - J1B HAL: test_c_comp_j1b_hal.md
+          - VS0 HAL: test_c_comp_vs0_hal.md
+      - Software Testing:
+        - The Software Test Bench: sw-test-bench.md
+        - Software Test Builds:
+            - Forth Core Test: sw-test-build-forth-core.md
+            - uLisp (Experimental): sw-test-build-ulisp.md
+    - Build System:
+        - The Directory Structure: build_sys_dir_struct.md
+        - The Gateware Build System:
+          - The Gateware Build Structure: build_sys_gw_build_struct.md
+          - Building the Gateware: build_sys_building_gw.md
+        - The Software Build System:
+          - The Software Build Structure: build_sys_sw_build_struct.md
+          - Building the Software: build_sys_building_sw.md
     - Register and Memory Map:
         - Reset: registers/generated/reset_regs.md
         - UART: registers/generated/uart_regs.md
@@ -58,86 +168,10 @@ nav:
         - DFX Controller Other Registers: registers/generated/dfx_controller_other_regs.md
         - LiteDRAM Registers: litedram_regs.md
         - Memory Map: memory_map.md
-    - Gateware Components:
-        - BoxLambda SoC: components_boxlambda_soc.md
-        - Wishbone Interconnect: components_wb_interconnect.md
-        - RISCV Ibex Processor: components_ibex.md
-        - IMEM: components_imem.md
-        - RISCV-DBG Debug Core: components_riscv_dbg.md
-        - LiteDRAM Memory Controller: components_litedram.md
-        - VERA (Wishbone) Graphics: components_vera.md
-        - SDSPI SD Card Controller: components_sdspi.md
-        - SPI Flash Controller: components_spiflash.md
-        - Dual YM2149 PSG Sound Core: components_dual_ym2149.md
-        - USB HID Keyboard and Mouse: components_usb_hid.md
-        - UART: components_uart.md
-        - GPIO: components_gpio.md
-        - Timer: components_timer.md
-        - I2C: components_i2c.md
-        - RTCC: components_rtcc.md
-        - VS0: components_vs0.md
-        - DFX Controller: components_dfx_controller.md
-    - Gateware Project Builds:
-        - BoxLambda Base: gw_prj_build_boxlambda_base.md
-        - BoxLambda DFX: gw_prj_build_boxlambda_dfx.md
-    - Software Components:
-        - Register Access Layer: sw_comp_register_access_layer.md
-        - PicoLibc and the Bootstrap Component: sw_comp_picolibc.md
-        - Bootloader: sw_comp_bootloader.md
-        - LiteDRAM Initialization: sw_comp_litedram_initialization.md
-        - SDSPI: sw_comp_sdspi.md
-        - FatFs: sw_comp_fat_fs.md
-        - ST-Sound: sw_comp_st_sound.md
-        - VERA Stack: sw_comp_vera_stack.md
-        - USB HID: sw_comp_usb_hid.md
-        - Flash Driver: sw_comp_flashdrvr.md
-        - Timer: sw_comp_timer.md
-        - UART: sw_comp_uart.md
-        - GPIO: sw_comp_gpio.md
-        - RISC-V: sw_comp_riscv.md
-        - Interrupt Handling: sw_comp_irqs.md
-        - I2C: sw_comp_i2c.md
-        - Real-Time Clock and Calendar: sw_comp_rtcc.md
-        - Embedded CLI: sw_comp_cli.md
-        - Ymodem: sw_comp_ymodem.md
-        - Memory and File System CLI: sw_comp_mem_fs_cli.md
-        - Peek and Poke CLI: sw_comp_peek_poke_cli.md
-        - DFX Controller HAL: sw_comp_dfx_controller_hal.md
-        - J1B HAL: sw_comp_j1b_hal.md
-        - VS0 HAL: sw_comp_vs0_hal.md
-    - The Build System:
-        - Git Workflow: git-workflow.md
-        - The Build System Structure:
-          - The Directory Structure: build_sys_dir_struct.md
-          - The Gateware Build Structure: build_sys_gw_build_struct.md
-          - The CMakeLists: build_sys_cmakelists.md
-        - Using the Build System:
-          - Building the Gateware: build_sys_building_gw.md
-          - Building the Software: build_sys_building_sw.md
-          - Make All, Clean, and Regen: build_sys_make_all_etc.md
-        - The Linker Script: build_sys_linker_script.md
-    - The Test Bench:
-        - The Test Bench: test-bench.md
-        - The System-Level Test Bench: test-bench-system-level.md
-        - The Component-Level Test Bench: test-bench-component-level.md
-    - Test Builds:
-        - Hello World: test-build-hello-world.md
-        - DDR Test: test-build-ddr.md
-        - VERA Test: test-build-vera.md
-        - SDSPI and FatFS Test: test-build-sdspi-and-fatfs.md
-        - YM2149 PSG, Audio DAC, and ST-Sound Test: test-build-ym2149.md
-        - USB HID Keyboard and Mouse Test: test-build-usb-hid.md
-        - SPI Flash Test: test-build-spi-flash.md
-        - Timer, UART, and GPIO Interrupt Test: test-build-timer-uart-gpio-irqs.md
-        - I2C Test: test-build-i2c.md
-        - Real-Time Clock and Calendar Test: test-build-rtcc.md
-        - Reset Test: test-build-reset.md
-        - DFX Test: test-build-dfx.md
-        - Invalid Address Test: test-build-invalid-addr.md
-        - Ibex Performance Test: test-build-ibex-perf.md
-        - uLisp: test_build_ulisp.md
-    - Documentation Builds:
-        - Blog: doc-build-blog.md
-        - MkDocs: doc-build-mkdocs.md
+    - Misc.:
+      - Git Workflow: git-workflow.md
+      - Documentation Builds:
+          - Blog: doc-build-blog.md
+          - MkDocs: doc-build-mkdocs.md
 
 

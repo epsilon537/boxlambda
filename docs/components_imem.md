@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # IMEM (Internal Memory)
 
 - **DPRAM Repo**, BoxLambda fork, `boxlambda` branch:

@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Wishbone Interconnect
 
 - **Wishbone Arbiter and MUX Repo**, BoxLambda fork, `boxlambda` branch:

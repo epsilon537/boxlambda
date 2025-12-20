@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # I2C
 
 - **I2C Repo**, BoxLambda fork, `boxlambda` branch:
@@ -115,11 +110,11 @@ To read back this 16-byte character string:
 3. Software waits for transaction completion by polling the CMD Busy bit or by receiving the I2C IRQ.
 4. Software reads the 16-byte character string from the WBI2C proxy memory, starting at memory offset 32.
 
-The [I2C Test Application](test-build-i2c.md) implements this example.
+The [I2C Test Application](gw-test-build-i2c.md) implements this example.
 
 ## Working with I2C slaves that don't follow the Slave Register Address Frame Format
 
-Although the WBI2C core by design assumes that an I2C data frame starts with an 8-bit slave register address, this core *can* work with I2C slaves that don't follow this format. See [here](sw_comp_i2c.md#slave-register-protocol-not-assumed) for more info.
+Although the WBI2C core by design assumes that an I2C data frame starts with an 8-bit slave register address, this core *can* work with I2C slaves that don't follow this format. See [here](c_comp_i2c.md#slave-register-protocol-not-assumed) for more info.
 
 ## Where are the Output Enables?
 

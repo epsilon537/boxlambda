@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # Timer
 
 The Timer module is part of the **Ibex** RISCV repo. See the [Ibex Component page](components_ibex.md) for the Ibex repo link and submodule path.

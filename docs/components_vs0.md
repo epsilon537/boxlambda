@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # VS0 - DFX Reconfigurable Partition
 
 - **VS0 Stub** Component in the BoxLambda Directory Tree:
@@ -104,5 +99,5 @@ To build a VS0 Bitstream:
 2. Type `make <vs0_component_name>_bit`.
 3. The generated bitstream file will be called `<vs0_component_name>_pblock_vs0_partial.bin.bin_for_icap`.
 
-See the [DFX Test Build](test-build-dfx.md) for an example.
+See the [DFX Test Build](gw-test-build-dfx.md) for an example.
 
