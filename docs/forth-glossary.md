@@ -3,15 +3,13 @@
 This glossary is taken from the Mecrisp Quintus README, with modifications for
 BoxLambda.
 
-The coverage of specific platform components such as [Interrupt Handling](sw_irqs.md) and [Time Handling](sw_time.md) is factored out into separate subsections.
+The coverage of specific platform components such as [Interrupt Handling](forth_irqs.md) and [Time Handling](forth_time.md) is factored out into separate subsections.
 
 Mecrisp-Quintus is case-insensitive, but only for letters 'a' to 'z'.
 UTF-8 Unicode encoded characters beyond 7 bit ASCII are case-sensitive.
 
 Words with `(BoxLambda)` in the description have been added or modified as part of
 the BoxLambda port of Mecrisp.
-
-Note that BoxLambda's Forth does **not** include flash support as defined in Mecrisp Quintus Forth. BoxLambda will load non-core Forth definitions from the file system (TBD), rather than defining them in flash memory. Flash support will be added, but it might not be in the form of a Forth Word Dictionary.
 
 ## Terminal-IO  (exactly ANS, some logical extensions)
 

@@ -3,7 +3,7 @@
 **The software project directory**: [sw/projects/forth_core_test](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/forth_core_test)
 
 This build runs the Forth regression test suite. The testsuite is based on the Mecrisp
-Forth testsuite, augmented with Words specifically added for BoxLambda (C-FFI, c, halign, compiletoimem,...).
+Forth testsuite, augmented with Words specifically added for BoxLambda (C-FFI, `c,`, `halign`, `compiletoimem`,...).
 
 The program expects user input at some point. To automate this part, the program can be executed under the control of a `pexpect` based Python script that will provide the required input at the right time. The Python script also checks the expected output against a [reference output file](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/forth_core_test/test/forth_core_test.output.txt) and provides the overall pass/fail status to the ctest bench.
 
@@ -137,7 +137,7 @@ TESTING BOOLEANS: INVERT AND OR XOR
 PLEASE TYPE UP TO 80 CHARACTERS:
 ```
 
-Type some characters and press enter. The test continues:
+Type some characters and press Enter. The test continues:
 
 ```
 RECEIVED: "    sfdgj"
@@ -161,18 +161,21 @@ The test leaves you at the Forth prompt.
 
 ### Running Forth Core Test Automatically
 
-The Forth Core Test can also be run automatically, under the control of a Python script. To kick off the automatic test:
+The Forth Core Test can also be run automatically, under the control of a
+Python script. To do that, go through the following steps:
 
-If you have it open, close the serial port terminal. The Python script will take control of the serial port.
+1. Close the serial port terminal (if you have it open). The Python script will
+take control of the serial port.
 
-Navigate to the `sw/projects/forth_core_test/test` directory in the **source tree** (not the build tree) and run the python script:
+2. Navigate to the `sw/projects/forth_core_test/test` directory in the **source
+tree** (not the build tree) and run the python script:
 
 ```
 cd sw/projects/forth_core_test/test
 python3 forth_core_test.py
 ```
-
-You should see the following output:
+<ol start="3">
+3. You should see the following output:
 
 ```
 Board Reset and OpenOCD start...

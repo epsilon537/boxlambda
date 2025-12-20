@@ -3,7 +3,9 @@
 **Bootloader Software Project in the BoxLambda Directory Tree**:
  [sw/projects/bootloader](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/bootloader)
 
-The Bootloader is only used on FPGA. On Verilator, the CPU boots from IMEM. The test program is built into IMEM
+The Bootloader is only used on FPGA.
+
+On Verilator, the CPU boots from IMEM. The test program is built into IMEM
 and executes from there without requiring any pre-setup steps from a bootloader.
 
 ## Boot Sequence
@@ -24,12 +26,17 @@ jumping to its entry point at address `0x20000008` in EMEM.
 
 *The Boot Sequence.*
 
-It's worth noting that the bootloader as well as the application
-images are complete, standalone C/C++ programs built against PicoLibc and using
-the usual CRT0 start-up sequence to set up the C/C++ environment. The bootloader
-is built using the [link_bootloader.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/bootloader/link_bootloader.ld) link script, the application image is
-based on either the [link_ddr_to_ddr_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_ddr_to_ddr_boot.ld) script or the [link_ddr_to_imem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_ddr_to_imem_boot.ld),
-depending on whether the application executes from EMEM or IMEM after start-up.
+It's worth noting that the bootloader, as well as the application images, are
+complete, standalone C/C++ programs built against PicoLibc and using the usual
+CRT0 start-up sequence to set up the C/C++ environment. The bootloader is built
+using the
+[link_bootloader.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/bootloader/link_bootloader.ld)
+link script. The application image is based on the
+[link_ddr_to_ddr_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_ddr_to_ddr_boot.ld)
+script or the
+[link_ddr_to_imem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+(or a combination of both), depending on whether the application executes from
+EMEM or IMEM after start-up.
 
 ## Building and Flashing the Bootloader
 

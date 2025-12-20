@@ -1,4 +1,4 @@
-# Time Handling Software
+# Time Handling
 
 ## Time Handling Words
 
@@ -12,5 +12,5 @@
 
 ## Example
 
-See [Interrupt Handling Example](sw_irqs.md#interrupt-handling-example).
+See [Interrupt Handling Example](forth_irqs.md#interrupt-handling-example).
 

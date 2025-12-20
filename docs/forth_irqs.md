@@ -1,4 +1,4 @@
-# Interrupt Handling Software
+# Interrupt Handling
 
 ## Vectored Mode
 
@@ -127,6 +127,8 @@ dint
 0 mie!
 \ Install timer interrupt handler hook
 ' mtime-irq-handle irq-timer !
+\ Disable timer
+-1 s>d mtimecmp64!
 \ Enable timer IRQ
 1 irq-id-timer lshift mie! eint
 \ Request timer IRQ 3 seconds from now.

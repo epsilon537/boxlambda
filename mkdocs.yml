@@ -109,8 +109,8 @@ nav:
         - The Mecrisp Forth Core: forth-core.md
         - The Forth-C FFI: forth-c-ffi.md
         - Forth Word Glossary: forth-glossary.md
-        - Interrupt Handling: sw_irqs.md
-        - Time Handling: sw_time.md
+        - Interrupt Handling: forth_irqs.md
+        - Time Handling: forth_time.md
       - Bootloader: sw_bootloader.md
       - C Components:
           - About C Components: c_comp_about.md

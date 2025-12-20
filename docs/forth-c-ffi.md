@@ -1,17 +1,28 @@
 # The Forth-C Foreign Function Interface (FFI)
 
+API:
+
+- [sw/components/forth_core/forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h):
+
+Implementation:
+
+- [sw/components/forth_core/forth.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.cpp)
+- The `c-fun` Word in [sw/components/forth_core/init.fs](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/init.fs)
+- Forth to C: [sw/components/forth_core/c-ffi.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/c-ffi.s)
+- C to Forth: [sw/components/forth_core/mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s)
+
 C has one stack, which is used to keep track of the call stack, stack frames
-(local variables), and, when a lot of parameters are involved, parameter
+(local variables), and - when a lot of parameters are involved - parameter
 passing. Forth uses two stacks: a **Return Stack** and a **Data Stack**. The return
 stack is used to keep track of the call stack and stack frames. The Data Stack
 is used for parameter passing.
 
-On BoxLambda, the C stack acts as a return stack in Forth space. It's a natural
-fit. It doesn't require any particular software constructs. The C compiler
-manages the C stack. On the Forth side, Mecrisp Quintus is already using the
-stack pointer register (x2) as the return stack pointer.
+On BoxLambda, the C stack acts as a return stack when in Forth space. It's a natural
+fit. It doesn't require any additional software constructs. The C compiler
+manages the C stack, while on the Forth side, the Mecrisp Quintus Forth Core is already using the
+RISC-V stack pointer register (x2) as the return stack pointer.
 
-The Data Stack does require a software construct. The `forth_core_init()` function initializes a global `datastack` object with the following layout in C:
+The Data Stack does require a software construct. The `forth_core_init()` function initializes a global `datastack` object with the following layout in C (see [forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h)):
 
 ```
 typedef struct {
@@ -53,15 +64,16 @@ Here's an example of C calling Forth:
 
   forth_execute_word("foo");
 
-  uint32_t res = forth_popda();
+  uint32_t res1 = forth_popda();
+  uint32_t res2 = forth_popda();
 
-  printf("Foo returned %d.\n", res);
+  printf("Foo returned %d and %d.\n", res1, res2);
 ```
 
-In this example, `foo` is a Word that takes 2 arguments and returns one. For example:
+In this example, `foo` is a Word that takes 2 arguments and return two values. For example:
 
 ```
-: foo .\" In foo...\" 2dup . . cr + ;
+: foo ." In foo..." 2dup . . cr /mod ;
 ```
 
 [![C Calls Forth.](assets/c-calls-forth.png)](assets/c-calls-forth.png)
@@ -77,7 +89,7 @@ If C needs to call Forth Word `foo` many times, it's better to store foo's execu
 
   uint32_t first_arg = 42;
   uint32_t second_arg = 43;
-  uint32_t res;
+  uint32_t res1, res2;
 
   for (int ii=0; ii<100; ii++) {
       forth_pushda(second_arg);
@@ -85,8 +97,9 @@ If C needs to call Forth Word `foo` many times, it's better to store foo's execu
 
       forth_execute_xt(foo_xt);
 
-      res = forth_popda();
-      printf("Foo returned %d.\n", res);
+      res1 = forth_popda();
+      res2 = forth_popda();
+      printf("Foo returned %d and %d.\n", res1, res2);
   }
 ```
 
@@ -106,10 +119,10 @@ Note the expected ```void fun(void)``` signature. Forth registered C functions d
 
 ### Example
 
-Let's say we have a function `test_c_fun()` which takes two input parameters off the data stack, prints them, and then pushes values 77 and 88 on the stack as output arguments:
+Let's say we have a function `cbar()` which takes two input parameters off the data stack, prints them, and then pushes values 77 and 88 on the stack as output arguments:
 
 ```
-void test_c_fun() {
+void cbar() {
   uint32_t first_arg = forth_popda();
   uint32_t second_arg = forth_popda();
 
@@ -128,16 +141,16 @@ Preparation in C space, at initialization time:
 
 ```
   forth_core_init();
-  forth_register_cfun(test_c_fun, "test_c_fun");
+  forth_register_cfun(cbar, "cbar");
 ```
 
 From Forth:
 
 ```
-11 22 test_c_fun . . cr
+11 22 cbar . . cr
 ```
 
-The `. . cr` after calling `test_c_fun` pops the output arguments off the stack, prints them, and then prints a carriage return.
+The `. . cr` after calling `cbar` pops the output arguments off the stack, prints them, and then prints a carriage return.
 
 [![Forth Calls C.](assets/forth-calls-c.png)](assets/forth-calls-c.png)
 
@@ -182,15 +195,6 @@ void forth_load_buf(char *s, bool verbose);
            forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)
 ```
 
-### Implementation
-
-The following files implement the Forth-C FFI:
-
-- [sw/components/forth_core/forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h)
-- [sw/components/forth_core/forth.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.cpp)
-- [sw/components/forth_core/c-ffs.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/c-ffi.s)
-- The `c-fun` Word in [sw/components/forth_core/init.fs](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/init.fs)
-
 ## Register Usage
 
 When C code calls a Forth Word, or a Forth Word calls C, we have to consider
@@ -232,6 +236,8 @@ We'll also save the C stack pointer (x2/sp) into a global variable upon entry
 into Forth so we can restore to this point if the Forth *reset* Word is
 invoked.
 
+See `forth_core_init_` and `forth_core_fun_` in [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s).
+
 ### Register Usage in case of Forth Calling C
 
 To maintain the Forth environment when Forth calls a C function, the C code has to execute as if it were a Forth Word.
@@ -257,4 +263,6 @@ The table below summarizes the actions that should be taken per register.
 | x14    | a4    | Function argument, not preserved across calls/no need save before use | Free scratch register, not preserved across calls | None. |
 | x15    | a5    | Function argument, not preserved across calls/no need save before use | Free scratch register, not preserved across calls | None. |
 | x16-31 | --    | -- | Unused in vanilla forth cores | None. |
+
+See `call-c` in [c-ffi.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/c-ffi.s) along with Word `c-fun` in [init.fs](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/init.fs).
 
