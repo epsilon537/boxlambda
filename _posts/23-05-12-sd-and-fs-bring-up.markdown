@@ -4,6 +4,8 @@ title: 'Bringing up the SD-Card Controller and File System.'
 comments: true
 ---
 
+*Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
+
 I spent a couple of days bringing up an SD-Card Controller and a file system. It was a straightforward exercise thanks to Dan Gisselquist's [SDSPI repository](https://github.com/ZipCPU/sdspi).
 
 Recap
@@ -16,7 +18,7 @@ This is a summary of the current state of affairs for BoxLambda. We have:
 - Test builds running on Arty-A7-35T, Arty-A7-100T, and Verilator.
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
 - A Linux CMake and Bender-based RTL build system.
-- Automated testing on Verilator. 
+- Automated testing on Verilator.
 
 The MicroSD Card Interface and SPI Mode
 ---------------------------------------
@@ -26,7 +28,7 @@ The MicroSD Card Interface and SPI Mode
 
 On the Arty, I'll be using Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) plugged into the **JD** Connector.
 
-The MicroSD card can operate in two modes: SD card mode and SPI mode. In SPI mode, a 1-bit SPI bus is used as the interface between the SD-Card Controller (Master) and the SD card (Slave). SPI mode is selected by pulling the Chip Select line low. 
+The MicroSD card can operate in two modes: SD card mode and SPI mode. In SPI mode, a 1-bit SPI bus is used as the interface between the SD-Card Controller (Master) and the SD card (Slave). SPI mode is selected by pulling the Chip Select line low.
 The SDSPI core currently only supports SPI mode.
 
 The SPI bus speed is software-configurable through a clock divider setting in the SDSPI core. The minimum value of this divider is 4. Given BoxLambda's 50MHz system clock rate, this limits the bus speed to 12.5MHz.
@@ -86,7 +88,7 @@ I've been studying the core's internals a bit and created the above, simplified 
 
 SDSPISIM
 ========
-On the Verilator test bench, the MicroSD card PMOD is replaced with an SDSPISIM co-simulator. SDSPISIM was easy to plug into BoxLambda's test bench. The interface is similar to the UARTSIM co-simulator, already in use in the test bench, and also provided by Dan Gisselquist. 
+On the Verilator test bench, the MicroSD card PMOD is replaced with an SDSPISIM co-simulator. SDSPISIM was easy to plug into BoxLambda's test bench. The interface is similar to the UARTSIM co-simulator, already in use in the test bench, and also provided by Dan Gisselquist.
 
 Here're the hooks to both co-simulators in the test bench's **tick()** function. The tick() function is the heart of the test bench advancing the simulation by one clock cycle:
 
@@ -130,7 +132,7 @@ Endianness
 ==========
 Bringing up the file system should just be a matter of compiling the FatFs sources together with the Storage Device Control sources provided by the SDSPI repo. Here, I hit a snag, however. The first call to FatFs, **f_mount()** returned a **FR_NO_FILESYSTEM** error. At first, I thought there was something wrong with the formatting of my *sdcard.img* file, but that wasn't the case. Luckily, the SDSPI code contains plenty of debug logic. Once the debug code was enabled, the problem was easy to see: When reading data from the SD card image, groups of four bytes were getting swapped around. In other words, there was an endianness issue.
 
-There is some word-to-byte-array casting going on in *sdcard.c* which assumed a big-endian system. This is because SDSPI is part of the ZipCPU ecosystem, which is a big-endian platform. BoxLambda is using a little-endian RISCV CPU, however. 
+There is some word-to-byte-array casting going on in *sdcard.c* which assumed a big-endian system. This is because SDSPI is part of the ZipCPU ecosystem, which is a big-endian platform. BoxLambda is using a little-endian RISCV CPU, however.
 I mentioned the issue to Dan and he provided a fix by adding a parameter that allows you to instantiate the core as a little-endian core:
 
 ```
@@ -145,18 +147,18 @@ There is a secondary issue here: the word-to-byte array casting in *sdcard.c* si
 FatFs Configuration
 ===================
 FatFs is very configurable, so you can trade options for footprint.
-All configuration options are well-documented and centralized in the *ffconf.h* file. 
+All configuration options are well-documented and centralized in the *ffconf.h* file.
 Relative to the default settings, I modified the following:
 - **Enable FF_USE_FIND**: filtered directory read functions, *f_findfirst()* and *f_findnext()*.
 - **Enable FF_USE_STRFUNC**: string functions, *f_gets()*, *f_putc()*, *f_puts()*, and *f_printf()*.
 - **Enable FF_FS_RPATH**: support for relative paths.
 - **Enable FF_FS_NORTC**: I *disabled* the timestamp feature. I will revisit this when I bring up RTC on BoxLambda.
-  
+
 [https://github.com/epsilon537/fatfs/blob/boxlambda/source/ffconf.h](https://github.com/epsilon537/fatfs/blob/boxlambda/source/ffconf.h)
 
 FatFs_Test
 ==========
-FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/fatfs_test/fatfs_test.c). 
+FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/fatfs_test/fatfs_test.c).
 
 With the endianness fix in place, *fatfs_test is* working fine, both in Verilator and on FPGA.
 
@@ -186,24 +188,24 @@ Relevant Files and Directories
 - [sub/fatfs/](https://github.com/epsilon537/fatfs/tree/boxlambda): BoxLambda git submodule referencing the BoxLambda fork of the FatFS repo. Note that the selected branch in this repo is *boxlambda*.
 - [sw/components/fatfs/](https://github.com/epsilon537/boxlambda/tree/master/sw/components/fatfs): BoxLambda software component to be used by software project builds wishing to use FatFS.
 - [gw/components/sdspi/](https://github.com/epsilon537/boxlambda/tree/master/gw/components/sdspi): BoxLambda gateware component to be used by gateware project builds wishing to include the SDSPI core.
-    
+
 Try It Out
 ----------
 
 Setup
 =====
 
-1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
 2. Get the BoxLambda repository:
 	```
 	git clone https://github.com/epsilon537/boxlambda/
 	cd boxlambda
 	```
-3. Switch to the *sd_and_fs* tag: 
+3. Switch to the *sd_and_fs* tag:
 	```
 	git checkout sd_and_fs
 	```
-4. Set up the repository. This initializes the git submodules used and creates the default build trees: 
+4. Set up the repository. This initializes the git submodules used and creates the default build trees:
 	```
 	./boxlambda_setup.sh
 	```
@@ -226,7 +228,7 @@ SDSPI Test on Verilator
 	```
 3. You should now see the following messages appear in the terminal window. The traces prefixed with *SDSPI:* come from the SDSPI co-simulator. The first two lines and the last line come from the test bench. The other lines are *printf()* statements coming from the test program running on the RISCV processor.
 
-	```   
+	```
 	SD Image File: /home/epsilon/sdcard.img
 	SDCARD: NBLOCKS = 131072
 
@@ -252,22 +254,21 @@ SDSPI Test on Verilator
 
 SDSPI Test on Arty A7
 ======================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert an SD card into the card reader. 
-   
+1. Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert an SD card into the card reader.
+
    Note that this is a destructive test. The contents of the SD card will be destroyed.
 
-3. Build the *sdspi_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+2. Build the *sdspi_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 	```
 	cd build/arty-a7-35/gw/projects/sdspi_test
 	make sdspi_test_impl
 	```
-4. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-5. Download the generated bitstream file to the Arty A7:
+3. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+4. Download the generated bitstream file to the Arty A7:
 	```
 	make sdspi_test_load
 	```
-6. Verify the test program's output in the terminal. You should see something like this:
+5. Verify the test program's output in the terminal. You should see something like this:
 
 	```
 	SDSPI testing program
@@ -322,27 +323,26 @@ FatFS Test on Verilator
 	ls -al /mnt/sd
 	cat /mnt/sd/LOG.TXT
 	This is a test.
-	sudo umount /mnt/sd    
+	sudo umount /mnt/sd
 	```
 
 FatFS Test on Arty A7
 =====================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert a FAT-formatted SD card into the card reader. 
-   
+1. Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD** and insert a FAT-formatted SD card into the card reader.
+
    Note that this is a destructive test. The contents of the SD card will be destroyed.
 
-3. Build the *fatfs_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+2. Build the *fatfs_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 	```
 	cd build/arty-a7-35/gw/projects/fatfs_test
 	make fatfs_test_impl
 	```
-4. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-5. Download the generated bitstream file to the Arty A7:
+3. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+4. Download the generated bitstream file to the Arty A7:
 	```
 	make fatfs_test_load
 	```
-6. Verify the test program's output in the terminal. You should see something like this:
+5. Verify the test program's output in the terminal. You should see something like this:
 	```
 	Starting fatfs_test...
 	Mounting...
@@ -358,7 +358,7 @@ FatFS Test on Arty A7
 	f_printf test...
 	FatFS Test Completed Successfully!
 	```
-7. One of the steps taken by the test program is to create a **LOG.TXT** file with the contents *This is a test*. Eject the SD card, insert it into your PC, and verify that *LOG.TXT* exists with the expected contents.
+6. One of the steps taken by the test program is to create a **LOG.TXT** file with the contents *This is a test*. Eject the SD card, insert it into your PC, and verify that *LOG.TXT* exists with the expected contents.
 
 Other Changes
 -------------

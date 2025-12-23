@@ -4,11 +4,16 @@ title: 'The Interconnect, Harvard Architecture, and Dual Port RAM.'
 comments: true
 ---
 
+*Updated 23 December 2025:*
+- *Corrected link to UpdateMem and XPM Memories in documentation.*
+- *Removed reference to 'On WSL' documentation.*
+- *Fixed von Neumann and Harvard waveform diagrams.*
+
 ![BoxLambda with revised interconnect.](../assets/Arch_Diagram_Interconnect_Focus.png)
 
 *The BoxLambda Architecture Diagram with Revised Interconnect and Harvard Architecture.*
 
-When you develop in public, you make embarrassing mistakes in public. Somehow, I failed to see that after implementing the PicoRV DMA optimizations (**picorv_dma_2** tag), the design no longer met the timing requirements... Yeah, I know. 
+When you develop in public, you make embarrassing mistakes in public. Somehow, I failed to see that after implementing the PicoRV DMA optimizations (**picorv_dma_2** tag), the design no longer met the timing requirements... Yeah, I know.
 
 I parked the task of adding keyboard and mouse support to the project and switched gears to address the timing issue. This led to the following chain of events:
 1. The test build with the timing issue is currently just a set of cores loosely organized along a shared bus. This is not BoxLambda's final architecture. Rather than analyze the timing of this throwaway architecture, I should switch over to the intended architecture and analyze any timing issues in that context.
@@ -31,7 +36,7 @@ This is a summary of the current state of affairs for BoxLambda. We have:
 - A PicoRV32-based Programmable DMA Controller.
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
 - Test builds running on Arty-A7-35T, Arty-A7-100T, Verilator, and CocoTB.
-- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.  
+- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.
 
 Crossbar and Shared Bus vs. Two Shared Buses
 --------------------------------------------
@@ -40,7 +45,7 @@ Crossbar and Shared Bus vs. Two Shared Buses
 
 *Shared Bus Interconnect Example.*
 
-In a Shared Bus architecture, only one bus Master can access the bus at a time. To allow simultaneous transactions from both the CPU and the DMA Controller, I created two shared buses in the original BoxLambda architecture: the *Processor Bus* and the *DMA Bus*. 
+In a Shared Bus architecture, only one bus Master can access the bus at a time. To allow simultaneous transactions from both the CPU and the DMA Controller, I created two shared buses in the original BoxLambda architecture: the *Processor Bus* and the *DMA Bus*.
 
 ![Original BoxLambda Architecture Diagram.](../assets/Original_Arch_Diagram.png)
 
@@ -98,7 +103,7 @@ In a Von Neumann Architecture, the CPU has access to one memory that stores both
 
 The Ibex processor has separate Instruction and Data ports. In the original BoxLambda architecture, both ports were connected to a shared bus, effectively creating a Von Neumann Architecture. In such a configuration, the waveform of a word copy operation looks like this:
 
-![Word Copy in Von Neumann Architecture.](../assets/vonNeuMannWaveform.png)
+![Word Copy in Von Neumann Architecture.](../assets/vonNeuMannWaveForm.png)
 
 *Word Copy in Von Neumann Architecture.*
 
@@ -106,7 +111,7 @@ Both instruction fetches and data accesses go to the same port. Due to the inter
 
 By contrast, if you connect the Instruction and Data Ports to two separate memories via a Crossbar Interconnect, the waveform of a word copy operation looks like this:
 
-![Word Copy in Harvard Architecture.](../assets/harvardWaveform.png)
+![Word Copy in Harvard Architecture.](../assets/harvardWaveForm.png)
 
 *Word Copy in Hardvard Architecture.*
 
@@ -116,9 +121,9 @@ The Dual-Port RAM Modules
 =========================
 A [wb_dpram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv) module selects one of two DPRAM implementations depending on whether we're targeting simulation or FPGA synthesis.
 
-On FPGA, I'm using an **XPM_MEMORY_TDPRAM** instance. Using an XPM macro for internal memory allows me to do post-synthesis memory image updates in the bitstream file, as described [here](https://boxlambda.readthedocs.io/en/latest/build-system/#updatemem-and-xpm-memories).
+On FPGA, I'm using an **XPM_MEMORY_TDPRAM** instance. Using an XPM macro for internal memory allows me to do post-synthesis memory image updates in the bitstream file, as described [here](https://boxlambda.readthedocs.io/en/latest/build_sys_building_gw/#updatemem-and-xpm-memories).
 
-Here is the XPM_MEMORY_TDPRAM documentation: 
+Here is the XPM_MEMORY_TDPRAM documentation:
 
 [https://docs.xilinx.com/r/en-US/ug974-vivado-ultrascale-libraries/XPM_MEMORY_TDPRAM](https://docs.xilinx.com/r/en-US/ug974-vivado-ultrascale-libraries/XPM_MEMORY_TDPRAM)
 
@@ -174,7 +179,7 @@ __attribute__ ((section(".dmem_text")))
 int code_in_dmem(char *message) {
     int i, j;
 ...
-```  
+```
 
 Dual Port RAM Test
 ==================
@@ -205,7 +210,7 @@ BoxLambda SoC as a Component
 ============================
 So far, each *gw/project/* build defined its own Test SoC. Each new Test SoC copied the previous one and added its own logic so I ended up with a progression going from very simple SoCs (*hello_world*) to very complete SoCs (*picorv_dma_sys_test*).
 
-Going forward, I'll be maintaining just one SoC module: 
+Going forward, I'll be maintaining just one SoC module:
 
 [gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv).
 
@@ -225,8 +230,8 @@ module boxlambda_soc #(
     ) (
     input  wire       ext_clk_100, //100MHz external clock.
     input  wire       ext_rst_n,   //External reset pin.
-    
-`ifdef VERILATOR  
+
+`ifdef VERILATOR
   /*These JTAG signals are not used on FPGA (they are used in simulation).
    *On FPGA, the JTAG signals are driven by a BSCANE2 primitive inside the jtag tap module dmi_bscane_tap.sv.
    */
@@ -258,16 +263,16 @@ module boxlambda_soc #(
     output wire ddram_reset_n,
 `endif
     // VGA interface
-    output wire  [3:0] vga_r,       
-    output wire  [3:0] vga_g,       
-    output wire  [3:0] vga_b,       
-    output wire        vga_hsync,   
-    output wire        vga_vsync,   
+    output wire  [3:0] vga_r,
+    output wire  [3:0] vga_g,
+    output wire  [3:0] vga_b,
+    output wire        vga_hsync,
+    output wire        vga_vsync,
     // SDSPI interface
-    output wire  sdspi_cs_n, 
-    output wire  sdspi_sck, 
+    output wire  sdspi_cs_n,
+    output wire  sdspi_sck,
     output wire  sdspi_mosi,
-    input  wire	 sdspi_miso, 
+    input  wire	 sdspi_miso,
     input  wire  sdspi_card_detect_n,
     // Audio interface
     output wire       audio_out,
@@ -277,7 +282,7 @@ module boxlambda_soc #(
     // Audio interface signals only used in simulation
     output wire [15:0] pcm_out,
     output wire acc1_overflow,
-    output wire acc2_overflow,  
+    output wire acc2_overflow,
 `endif
     // UART and GPIO
     input  wire       uart_rx,
@@ -301,17 +306,17 @@ Try It Out
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-1. Switch to the *interconnect* tag: 
+1. Switch to the *interconnect* tag:
 ```
 git checkout interconnect
 ```
-1. Set up the repository. This initializes the git submodules used and creates the default build trees: 
+1. Set up the repository. This initializes the git submodules used and creates the default build trees:
 ```
 ./boxlambda_setup.sh
 ```
@@ -340,18 +345,17 @@ Test Successful.
 
 Dual Port RAM Test on Arty A7
 =============================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-3. Build the project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+1. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+2. Build the project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```
 cd build/arty-a7-100/gw/projects/dual_port_ram_test
 make dual_port_ram_test_bit_sw
 ```
-4. Download the generated bitstream file to the Arty A7:
+3. Download the generated bitstream file to the Arty A7:
 ```
 make dual_port_ram_test_load
 ```
-5. In the Putty terminal, you should see the same output as with the Verilator test build above.
+4. In the Putty terminal, you should see the same output as with the Verilator test build above.
 
 Conclusion
 ----------

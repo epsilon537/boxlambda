@@ -4,6 +4,8 @@ title: 'Integrating VERA.'
 comments: true
 ---
 
+*Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
+
 ![VERA in the BoxLambda Architecture.](../assets/Arch_Diagram_VERA_focus.drawio.png)
 
 *VERA in the BoxLambda Architecture.*
@@ -17,7 +19,7 @@ This is a summary of the current state of affairs for BoxLambda. We have:
 - Test builds running on Arty-A7-35T, Arty-A7-100T, and Verilator.
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
 - A Linux CMake and Bender-based RTL build system.
-- Automated testing on Verilator. 
+- Automated testing on Verilator.
 
 In my [previous post](https://epsilon537.github.io/boxlambda/understanding-vera/), I analyzed the internal structure and operation of the VERA (*Versatile Embedded Retro Adapter*) graphics pipeline. In this post, I focus on the modifications needed to make the VERA core a suitable component for a 32-bit Wishbone-based SoC. Specifically, BoxLambda.
 
@@ -66,7 +68,7 @@ Note:
 
 Time Slot Scheduled Access to VRAM
 ==================================
-Four ports are accessing VRAM: two Layer Renderers, the Sprite Renderer, and the CPU. The original VERA code uses a priority scheduler to decide which port gets access when two or more ports are competing for access. The CPU port had the highest priority, then the Layer Renderers, and finally the Sprite Renderer. However, the high-speed, memory-mapped Wishbone interface makes it all too easy for the CPU to oversubscribe the VRAM bus and starve the other ports of bandwidth. This would result in tearing artifacts and other rendering errors. To avoid this issue, the priority scheduler is replaced with a time slot scheduler. There are four equal time slot *beats*. Each port is assigned one slot during which it can access VRAM. The duration of a time slot is one clock cycle. 
+Four ports are accessing VRAM: two Layer Renderers, the Sprite Renderer, and the CPU. The original VERA code uses a priority scheduler to decide which port gets access when two or more ports are competing for access. The CPU port had the highest priority, then the Layer Renderers, and finally the Sprite Renderer. However, the high-speed, memory-mapped Wishbone interface makes it all too easy for the CPU to oversubscribe the VRAM bus and starve the other ports of bandwidth. This would result in tearing artifacts and other rendering errors. To avoid this issue, the priority scheduler is replaced with a time slot scheduler. There are four equal time slot *beats*. Each port is assigned one slot during which it can access VRAM. The duration of a time slot is one clock cycle.
 
 ![Time Slot Scheduled VRAM Access.](../assets/vram_if_timeslot_scheduling.drawio.png)
 
@@ -78,9 +80,9 @@ Sprite Banks
 ============
 One nice consequence of the time slot scheduling is that the Sprites-per-Scanline limit no longer depends on the selected Layer Renderer modes. However, that limit also depends to some extent on the position of the enabled sprites in the Sprite Attribute Table. Each scanline, the Sprite Attribute Table is scanned front-to-back for enabled sprites. This takes time. As a result, if all enabled sprites are located towards the end of the table, the Sprites-per-Scanline limit is lower compared to having the same number of enabled sprites near the front of the table. This is undesirable. It goes against the grain of BoxLambda's [*deterministic behavior* requirement](https://epsilon537.github.io/boxlambda/requirements-analysis/).
 
-One way to avoid the issue is to conservatively reduce the Sprite ID maximum value to the Sprites-per-Scanline limit minus 1, i.e. when the limit is reached, the table is full and there is no front-of-table or back-of-table effect to consider. By running the VERA core at 50MHz, the largest number of sprites that can be guaranteed to be rendered completely on one scanline is 64. This is for 8-pixel-wide sprites. In other words, the highest Sprites-per-Scanline limit is 64, and Sprite IDs should be limited to the range of 0 to 63. 
+One way to avoid the issue is to conservatively reduce the Sprite ID maximum value to the Sprites-per-Scanline limit minus 1, i.e. when the limit is reached, the table is full and there is no front-of-table or back-of-table effect to consider. By running the VERA core at 50MHz, the largest number of sprites that can be guaranteed to be rendered completely on one scanline is 64. This is for 8-pixel-wide sprites. In other words, the highest Sprites-per-Scanline limit is 64, and Sprite IDs should be limited to the range of 0 to 63.
 
-However, limiting the Sprite ID maximum value to 63 would mean that the upper half of the Sprite Attributes RAM is left unused. We could just cut the size of that RAM in half. Instead, I chose to create two banks of 64 sprite IDs. A bit in the *VERA_CTRL* register is used to select the active bank. 
+However, limiting the Sprite ID maximum value to 63 would mean that the upper half of the Sprite Attributes RAM is left unused. We could just cut the size of that RAM in half. Instead, I chose to create two banks of 64 sprite IDs. A bit in the *VERA_CTRL* register is used to select the active bank.
 
 Sprite Banking may help with sprite multiplexing or animation: While one sprite bank is active, software can prepare the inactive bank's entries and switch over at the right moment, triggered by a *line_irq*, for instance.
 
@@ -414,11 +416,11 @@ module vera_top #(
   output wire        irq_n,
 
   // VGA interface
-  output reg  [3:0]  vga_r,       
-  output reg  [3:0]  vga_g,       
-  output reg  [3:0]  vga_b,       
-  output reg         vga_hsync,   
-  output reg         vga_vsync   
+  output reg  [3:0]  vga_r,
+  output reg  [3:0]  vga_g,
+  output reg  [3:0]  vga_b,
+  output reg         vga_hsync,
+  output reg         vga_vsync
   );
 ```
 
@@ -429,7 +431,7 @@ Vera_Standalone
 ===============
 The *vera_standalone* test project introduced in the previous post is still functional. It's a Verilator simulation project containing just the VERA core and a test bench. The test bench has been updated to track the various modifications to the VERA core and it has been extended to support the rendering of the VGA output in a window using SDL.
 
-Vera_standalone served its purpose of testing the VERA core and modifications pre-integration. Once the VERA core was integrated into the BoxLambda SoC, however, the **vera_integrated** test SoC project took over. I don't intend to further maintain the *vera_standalone* project after I have applied the *vera_integrated* git label. 
+Vera_standalone served its purpose of testing the VERA core and modifications pre-integration. Once the VERA core was integrated into the BoxLambda SoC, however, the **vera_integrated** test SoC project took over. I don't intend to further maintain the *vera_standalone* project after I have applied the *vera_integrated* git label.
 
 Location of the vera_standalone project: [boxlambda/gw/projects/vera_standalone](https://github.com/epsilon537/boxlambda/tree/3a38c2e6d7a57d87b97e18f65e14e60132390efc/gw/projects/vera_standalone).
 
@@ -466,17 +468,17 @@ Try It Out
 
 Setup
 =====
-1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
 1. Get the BoxLambda repository:
 	```
 	git clone https://github.com/epsilon537/boxlambda/
 	cd boxlambda
 	```
-1. Switch to the *vera_integrated* tag: 
+1. Switch to the *vera_integrated* tag:
 	```
 	git checkout vera_integrated
 	```
-1. Set up the repository. This initializes the git submodules used and creates the default build trees: 
+1. Set up the repository. This initializes the git submodules used and creates the default build trees:
 	```
 	./boxlambda_setup.sh
 	```
@@ -523,19 +525,18 @@ Vera_integrated on Verilator
 
 Vera_integrated on the Arty A7
 ================================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
 1. Hook up a VGA display to the Arty A7 PMOD ports JB and JC using [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start).
-7. Build the vera_integrated project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+2. Build the vera_integrated project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 	```
 	cd build/arty-a7-35/gw/projects/vera_integrated
 	make vera_integrated_impl
 	```
-1. Download the generated bitstream file to the Arty A7:
+3. Download the generated bitstream file to the Arty A7:
 	```
 	make vera_integrated_load
 	```
-1. The display should now show a bunch of colored squares. Here's a picture of my setup. Apologies for the potato quality. It shows that I'm spending more on FPGA dev boards than on cameras.
-   
+4. The display should now show a bunch of colored squares. Here's a picture of my setup. Apologies for the potato quality. It shows that I'm spending more on FPGA dev boards than on cameras.
+
 ![Arty A7 Setup for vera_integrated Test SoC.](../assets/vera_fpga_test_setup.jpg)
 
 *Arty A7 Setup for the vera_integrated Test SoC.*

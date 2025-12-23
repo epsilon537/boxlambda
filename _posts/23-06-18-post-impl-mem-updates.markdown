@@ -6,13 +6,17 @@ comments: true
 
 *Updated 18 July 2023: Added the RAM_DECOMP("power") section.*
 
-I've been working on the integration of a sound synthesizer core and player software for that core. I'm still relying heavily on my Verilator test bench, but increasingly, I'm hitting the limits of that environment. Evaluating a 30-second fragment of a chiptune requires 30s simulation time, which in my case translates to 75 minutes in real-time. Not impossible, but inconvenient when you have to re-test frequently, e.g. due to software changes. 
+*Updated 23 December 2025:*
+ - *Removed reference to 'On WSL' documentation.*
+ - *Fixed link to build system in documentation.*
 
-On the Arty FPGA, the 30s chiptune test executes in real-time, but Vivado synthesis and implementation of the project takes 10 minutes on my system. Again, doable, but inconvenient, especially considering that in my current flow, a software change requires FPGA resynthesis and reimplementation. The generated software image is a *.mem* file for an internal memory. This *.mem* file has to be included in the Vivado project like any other input file, before synthesis.     
+I've been working on the integration of a sound synthesizer core and player software for that core. I'm still relying heavily on my Verilator test bench, but increasingly, I'm hitting the limits of that environment. Evaluating a 30-second fragment of a chiptune requires 30s simulation time, which in my case translates to 75 minutes in real-time. Not impossible, but inconvenient when you have to re-test frequently, e.g. due to software changes.
+
+On the Arty FPGA, the 30s chiptune test executes in real-time, but Vivado synthesis and implementation of the project takes 10 minutes on my system. Again, doable, but inconvenient, especially considering that in my current flow, a software change requires FPGA resynthesis and reimplementation. The generated software image is a *.mem* file for an internal memory. This *.mem* file has to be included in the Vivado project like any other input file, before synthesis.
 
 UpdateMem and XPM Memories
 --------------------------
-If you think about it, a change in the contents of a *.mem* file should not require FPGA resynthesis and reimplementation. The memory contents exist somewhere in the FPGA bitstream file. There should be a way to merge new memory contents into the bitstream file, post-implementation. 
+If you think about it, a change in the contents of a *.mem* file should not require FPGA resynthesis and reimplementation. The memory contents exist somewhere in the FPGA bitstream file. There should be a way to merge new memory contents into the bitstream file, post-implementation.
 
 This is indeed possible in Vivado. The tool that does it is called **UpdateMEM**. There is a catch, however. *UpdateMEM* works with memories implemented using Xilinx **XPM** macros.
 
@@ -38,7 +42,7 @@ source /tools/Xilinx/Vivado/2023.1/scripts/updatemem/main.tcl -notrace
 Command: update_mem -meminfo ibex_soc.mmi -data spram.mem -proc i_dont_know -bit ibex_soc.bit -out ibex_soc.out.bit
 0 Infos, 0 Warnings, 0 Critical Warnings and 1 Errors encountered.
 update_mem failed
-ERROR: [Updatemem 57-85] Invalid processor specification of: i_dont_know. 
+ERROR: [Updatemem 57-85] Invalid processor specification of: i_dont_know.
 The known processors are: wb_spram/xpm_memory_spram_inst/xpm_memory_base_inst
 ```
 
@@ -133,21 +137,21 @@ I organized the gateware build rules as follows:
 
 *Gateware Build Targets.*
 
-For a full description of BoxLambda's build system, see [https://boxlambda.readthedocs.io/en/latest/build-system/](https://boxlambda.readthedocs.io/en/latest/build-system/).
+For a full description of BoxLambda's build system, see [https://boxlambda.readthedocs.io/en/latest/build-system/](https://boxlambda.readthedocs.io/en/latest/build_sys_dir_struct/).
 
 Other BoxLambda Changes
 -----------------------
 - I added limited C++ support to the build system. This boiled down to two things:
     - Adding a *CXX* compiler and flags in the *toolchain.cmake* file. The *CXX* flags reduce the C++ environment such that there's no C++ run-time environment required, at the expense of thread-safe statics and exception handling:
-  
+
 		```
 		set(CMAKE_CXX_COMPILER riscv32-unknown-elf-gcc)
-		set(CMAKE_CXX_FLAGS_INIT "-msave-restore -fshort-enums 
+		set(CMAKE_CXX_FLAGS_INIT "-msave-restore -fshort-enums
         -march=rv32imc -mabi=ilp32 -fno-threadsafe-statics -fno-exceptions")
 		```
 
-    - Surrounding C-based APIs (I have a mixed bag of C and C++ code) with *extern "C" {}* brackets for compatibility with C++ code. 
-  
+    - Surrounding C-based APIs (I have a mixed bag of C and C++ code) with *extern "C" {}* brackets for compatibility with C++ code.
+
 		```
 		#ifdef __cplusplus
 		extern "C" {
@@ -158,11 +162,11 @@ Other BoxLambda Changes
 		#endif
 		```
 
-- I created two linker script variants: 
+- I created two linker script variants:
     - **boxlambda/sw/components/bootstrap/link_internal_mem_64K.ld**: This is the linker script for an internal memory size of 64KB. This script results in a software image that can run both on the Arty-A7-35T and the Arty-A7-100T (FPGA and simulation).
     - **boxlambda/sw/components/bootstrap/link_internal_mem_256K.ld**: This is the linker script for an internal memory size of 256KB. This script results in a software image that only runs on the Arty-A7-100T (FPGA and simulation).
 
-- I created two simulation build tree variants: 
+- I created two simulation build tree variants:
     - **sim-a7-35** for Verilator simulation of Arty-A7-35T builds
     - **sim-a7-100** for Verilator simulation of Arty-A7-100T builds.
 
@@ -172,17 +176,17 @@ Try It Out
 Setup
 =====
 
-1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
 2. Get the BoxLambda repository:
 	```
 	git clone https://github.com/epsilon537/boxlambda/
 	cd boxlambda
 	```
-3. Switch to the *updatemem* tag: 
+3. Switch to the *updatemem* tag:
 	```
 	git checkout updatemem
 	```
-4. Set up the repository. This initializes the git submodules used and creates the default build trees: 
+4. Set up the repository. This initializes the git submodules used and creates the default build trees:
 	```
 	./boxlambda_setup.sh
 	```
@@ -190,31 +194,29 @@ Setup
 Hello World on Arty A7
 ======================
 
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-   
-2. Build and time the *hello_world* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+1. Build and time the *hello_world* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 	```
 	cd build/arty-a7-35/gw/projects/hello_world
 	time make hello_world_bit_sw
 	```
-3. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-4. Download the generated bitstream file to the Arty A7:
+2. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+3. Download the generated bitstream file to the Arty A7:
 	```
 	make hello_world_load
 	```
-5. Verify the test program's output in the terminal. You should see something like this:
+4. Verify the test program's output in the terminal. You should see something like this:
 
 	```
 	Hello, World!
 	This is not a simulation.
 	```
-6. Modify the hello world source code: *boxlambda/sub/ibex_wb/soc/fpga/arty-a7/sw/examples/hello/hello.c*. E.g. change the string `"Hello, World!\n"` to `"Hola, Mundo!\n"`.
-7. Rebuild and time the *hello_world* project:
+5. Modify the hello world source code: *boxlambda/sub/ibex_wb/soc/fpga/arty-a7/sw/examples/hello/hello.c*. E.g. change the string `"Hello, World!\n"` to `"Hola, Mundo!\n"`.
+6. Rebuild and time the *hello_world* project:
 	```
 	time make hello_world_bit_sw
 	```
-8. Note that the build time is just a few seconds now, whereas it was a few minutes the first time around.
-9. Download the generated bitstream file to the Arty A7 to make sure that the bitstream includes the modified hello message:
+7. Note that the build time is just a few seconds now, whereas it was a few minutes the first time around.
+8. Download the generated bitstream file to the Arty A7 to make sure that the bitstream includes the modified hello message:
 	```
 	make hello_world_load
 	```

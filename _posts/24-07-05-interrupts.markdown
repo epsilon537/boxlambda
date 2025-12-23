@@ -5,6 +5,10 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 23 December 2025:*
+- *Removed references to PicoRV DMA which is no longer included in the SoC.*
+- *Removed reference to 'On WSL' documentation.*
+
 BoxLambda is inching closer to gateware-completeness. I added interrupt support so the various components of the BoxLambda SoC can report specific events back to the CPU and/or indicate that software intervention may be required. For better or worse, I've spent a good portion of this post wrestling with the terms *Edge-Triggered* and *Level-Sensitive* interrupt.
 
 Recap
@@ -21,7 +25,6 @@ This is a summary of the current state of affairs for BoxLambda. We have:
 - SD Card Controller and FatFs File System.
 - SPI Flash Controller.
 - USB HID Keyboard and Mouse support.
-- A PicoRV32-based Programmable DMA Controller.
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
 - Test builds running on Arty-A7-35T, Arty-A7-100T, Verilator, and CocoTB.
 - A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.
@@ -128,8 +131,6 @@ Briefly, the Ibex core has:
 - A **Non-Maskable Interrupt** (NMI) port, which I'll also leave unconnected until I find a good use for it.
 
 RISC-V defines 32 IRQ IDs. Ibex maps the timer interrupt to IRQ ID 7 and the fast interrupts to IRQ IDs 16 to 31.
-
-I'm using the same mapping to connect the IRQs to the [PicoRV DMA Controller](https://boxlambda.readthedocs.io/en/latest/components_picorv_dma/), i.e. Ibex and PicoRV see the same set of interrupts with the same IRQ_IDs/ISR bit positions. Note, however, that the PicoRV doesn't directly support interrupts. The PicoRV microcode detects signaled interrupts by polling its Interrupt Status Register. Check the PicoRV DMA Controller link earlier in this paragraph for more details.
 
 This table lists the BoxLambda interrupts and the events they report:
 
@@ -386,7 +387,7 @@ The VERA, SDSPI, and USB interrupts I tested by extending their respective syste
 
 [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/usb_hid_sys_test/usb_hid_sys_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/usb_hid_sys_test/usb_hid_sys_test.cpp)
 
-For testing Timer, GPIO, and UART interrupts, I created a separate system test case called **timer_uart_gpio_irqs**. This program also verifies that the PicoRV DMA can receive the posted interrupts.
+For testing Timer, GPIO, and UART interrupts, I created a separate system test case called **timer_uart_gpio_irqs**.
 
 Some external interaction is required for GPIO and UART testing. On FPGA, follow the prompts on the serial port terminal ("Enter a character", "Push a button",...). On Verilator I want a fully automated test case, so the test bench pushes the simulated GPIO buttons and sends the UART characters when it detects the corresponding prompts in the serial port output.
 
@@ -497,18 +498,17 @@ SIM: Test passed.
 
 The Timer, UART, and GPIO Interrupt Test on FPGA
 ================================================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Connect a terminal program to Arty's USB serial port. **Settings: 115200 8N1**.
-3. Build the *timer_uart_gpio_irqs* gateware project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+1. Connect a terminal program to Arty's USB serial port. **Settings: 115200 8N1**.
+2. Build the *timer_uart_gpio_irqs* gateware project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```
 cd build/arty-a7-100/gw/projects/timer_uart_gpio_irqs
 make timer_uart_gpio_irqs_bit_sw
 ```
-4. Download the generated bitstream file to the Arty A7:
+3. Download the generated bitstream file to the Arty A7:
 ```
 make timer_uart_gpio_irqs_load
 ```
-5. Follow the prompts on the serial port terminal. Push the Arty's buttons or enter characters into the terminal when prompted.
+4. Follow the prompts on the serial port terminal. Push the Arty's buttons or enter characters into the terminal when prompted.
 
 Conclusion
 ----------

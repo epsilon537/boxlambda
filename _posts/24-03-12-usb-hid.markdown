@@ -5,11 +5,13 @@ comments: true
 youtubeId: qZe9CCA0zFE
 ---
 
+*Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
+
 ![BoxLambda Block Diagram.](../assets/Arch_Diagram_USB_Focus.png)
 
-I added keyboard and mouse support to BoxLambda. The plan was to use PS/2, but when [NAND2Mario](https://github.com/nand2mario) announced their [usb_hid_host](https://github.com/nand2mario/usb_hid_host) core, I couldn't resist. I added a Wishbone frontend and some CDC logic to cross from the 12MHz USB clock domain to the 50MHz system clock domain. I plugged in a keyboard and mouse, and it all worked fine. End of story... 
+I added keyboard and mouse support to BoxLambda. The plan was to use PS/2, but when [NAND2Mario](https://github.com/nand2mario) announced their [usb_hid_host](https://github.com/nand2mario/usb_hid_host) core, I couldn't resist. I added a Wishbone frontend and some CDC logic to cross from the 12MHz USB clock domain to the 50MHz system clock domain. I plugged in a keyboard and mouse, and it all worked fine. End of story...
 
-Almost. The original usb_hid_host core does not include support for controlling USB keyboard LEDs. Adding that feature required a deep dive into the usb_hid_host implementation and the USB spec. I also needed a way to test it all in simulation, in other words, I needed a USB keyboard and mouse emulator. 
+Almost. The original usb_hid_host core does not include support for controlling USB keyboard LEDs. Adding that feature required a deep dive into the usb_hid_host implementation and the USB spec. I also needed a way to test it all in simulation, in other words, I needed a USB keyboard and mouse emulator.
 
 Recap
 -----
@@ -23,7 +25,7 @@ This is a summary of the current state of affairs for BoxLambda. We have:
 - A PicoRV32-based Programmable DMA Controller.
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
 - Test builds running on Arty-A7-35T, Arty-A7-100T, Verilator, and CocoTB.
-- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.  
+- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.
 
 The NAND2Mario usb_hid_host core
 --------------------------------
@@ -53,13 +55,13 @@ Usb_hid_host requires a 12MHz clock. You just hook up the clock, reset, USB D-/D
 
 USB HIDBP
 =========
-The [USB HID Spec](https://www.usb.org/sites/default/files/hid1_11.pdf) is big and complicated. A complete implementation would require a lot more infrastructure than just a small usb_hid_host core. Usb_hid_host implements a subset of the USB HID spec called the *Boot Protocol* (USB HIDBP). The Boot Protocol was added to the spec to humor BIOS developers. The Boot Protocol is much simpler than its counterpart, the *Report Protocol*, which is the protocol used by the big USB stacks in Linux or Windows. 
+The [USB HID Spec](https://www.usb.org/sites/default/files/hid1_11.pdf) is big and complicated. A complete implementation would require a lot more infrastructure than just a small usb_hid_host core. Usb_hid_host implements a subset of the USB HID spec called the *Boot Protocol* (USB HIDBP). The Boot Protocol was added to the spec to humor BIOS developers. The Boot Protocol is much simpler than its counterpart, the *Report Protocol*, which is the protocol used by the big USB stacks in Linux or Windows.
 
 Unfortunately, not all keyboards and mice support the Boot Protocol. Basic/Low-end keyboards and mice have a higher chance of supporting the Boot Protocol. I'm using a *Dell KB212-B* keyboard and a *Dell OCJ339* mouse.
 
 Controlling USB keyboard LEDs
 -----------------------------
-I want to add keyboard LED control to the NAND2Mario core. Where to start? 
+I want to add keyboard LED control to the NAND2Mario core. Where to start?
 
 The best information I could find online describing USB HID in general, and keyboard LED control in particular, is this page from the **OSDev Wiki**:
 
@@ -224,10 +226,10 @@ The usb_hid_host firmware
 =========================
 The usb_hid_host UKP firmware *.hex* image is checked in, so you don't need to build it from source.
 
-If you would like to tinker with the firmware, you'll need to have perl installed (*sudo apt-get install perl* on Ubuntu). 
+If you would like to tinker with the firmware, you'll need to have perl installed (*sudo apt-get install perl* on Ubuntu).
 
 UKP Firmware directory: [sub/usb_hid_host/src/usb_hid_host/](https://github.com/epsilon537/usb_hid_host/tree/boxlambda/src/usb_hid_host)
- 
+
 After making your changes, run the *asukp* script in that same directory and a new firmware image will be generated.
 
 The usb_hid_device firmware
@@ -238,7 +240,7 @@ The usb_hid_device firmware *.hex* images for the emulated keyboard and mouse ar
 If you would like to tinker with the firmware, you'll need to install gforth (*sudo apt-get install gforth* on Ubuntu). The firmware is located here:
 - Mouse Firmware directory: [sub/usb_hid_device/firmware_mouse/](https://github.com/epsilon537/usb_hid_device/tree/boxlambda/firmware_mouse)
 - Keyboard Firmware directory: [sub/usb_hid_device/firmware_keyboard/](https://github.com/epsilon537/usb_hid_device/tree/boxlambda/firmware_keyboard)
- 
+
 After making your changes, just run *make* in that same directory and a new firmware image will be generated.
 
 Try It Out
@@ -246,17 +248,17 @@ Try It Out
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-1. Switch to the *usb_hid_host* tag: 
+1. Switch to the *usb_hid_host* tag:
 ```
 git checkout usb_hid_host
 ```
-1. Set up the repository. This initializes the git submodules used and creates the default build trees: 
+1. Set up the repository. This initializes the git submodules used and creates the default build trees:
 ```
 ./boxlambda_setup.sh
 ```
@@ -299,22 +301,21 @@ The USB HID Test on FPGA
 
 *Arty A7 Setup with USB PMOD attached to port JA.*
 
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Hook up Machdyne's [USB host dual socket PMOD](https://machdyne.com/product/usb-host-dual-socket-pmod/) to port **JA** and connect a keyboard and/or a mouse.
-3. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-4. Build the project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+1. Hook up Machdyne's [USB host dual socket PMOD](https://machdyne.com/product/usb-host-dual-socket-pmod/) to port **JA** and connect a keyboard and/or a mouse.
+2. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+3. Build the project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```
 cd build/arty-a7-100/gw/projects/usb_hid_sys_test
 make usb_hid_sys_test_bit_sw
 ```
-1. Download the generated bitstream file to the Arty A7:
+4. Download the generated bitstream file to the Arty A7:
 ```
 make usb_hid_sys_test_load
 ```
-1. Make sure Switch 0 (**SW0**) is in the *Off* position (flipped toward the edge of the board).
-2. Press some keys on the keyboard, move the mouse around. You should see the results in the Putty terminal.
-3. Flip SW0 on.
-4. You should now see the keyboard LEDs rotate.
+5. Make sure Switch 0 (**SW0**) is in the *Off* position (flipped toward the edge of the board).
+6. Press some keys on the keyboard, move the mouse around. You should see the results in the Putty terminal.
+7. Flip SW0 on.
+8. You should now see the keyboard LEDs rotate.
 
 https://youtube.com/shorts/qZe9CCA0zFE?feature=share
 
