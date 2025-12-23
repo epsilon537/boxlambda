@@ -5,6 +5,11 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 23 December 2025:
+- *Fixed link to bootloader in documentation.*
+- *Fixed link to uLisp test build in documentation.*
+- *Fixed link to Forth test build in documentation.*
+
 About six months ago, to my surprise, I completed the BoxLambda SoC's gateware.
 Since then, I've explored various OS projects, programming languages, tools, and
 ideas for BoxLambda's software environment. It's time to commit to a
@@ -213,7 +218,7 @@ The two main subsystems are the **BoxLambda Kernel** (**BoxKern**) and the
 The BoxKern image is stored in flash memory. The Bootloader loads the kernel
 into EMEM, then transfers control to it. The kernel's *CRT0* startup code then
 further unpacks specific sections into EMEM and IMEM. (See
-[here](https://boxlambda.readthedocs.io/en/latest/sw_comp_bootloader/) for a
+[here](https://boxlambda.readthedocs.io/en/latest/sw_bootloader/) for a
 more detailed description of the boot sequence).
 
 The Mercrisp Forth Environment lives as Forth source code on the SD card
@@ -309,9 +314,9 @@ default.
 
 I spent an inordinate amount of time evaluating projects and programming
 languages for BoxLambda. It's just too much fun. I have prototypes on BoxLambda
-of [uLisp](https://boxlambda.readthedocs.io/en/latest/test_build_ulisp/), *Lua*,
+of [uLisp](https://boxlambda.readthedocs.io/en/latest/sw-test-build-ulisp/), *Lua*,
 [Mecrisp
-Forth](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/mforth),
+Forth](https://boxlambda.readthedocs.io/en/latest/sw-test-build-forth-core/),
 and *vi*. I wrote a [RISC-V disassembler for
 DuskOS](https://git.sr.ht/~vdupras/duskos/tree/master/item/fs/asm/riscvd.fs),
 and I've been diving into Project Oberon, ELF loaders, and small-footprint C

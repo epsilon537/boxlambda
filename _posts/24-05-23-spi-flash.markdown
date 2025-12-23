@@ -7,6 +7,8 @@ comments: true
 ID. The previously shown code included a CFG_USERMODE flag which isn't
 needed.*
 
+*Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
+
 ![SPI Flash On On BoxLambda](../assets/spiflash_on_boxlambda.png)
 
 *SPI Flash on BoxLambda.*
@@ -451,27 +453,26 @@ Test passed.
 
 The SPI Flash Test on FPGA
 ==========================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Connect a terminal program to Arty's USB serial port. **Settings: 115200 8N1**.
-3. Build the *spiflash_test* software project in an Arty A7 build tree:
+1. Connect a terminal program to Arty's USB serial port. **Settings: 115200 8N1**.
+2. Build the *spiflash_test* software project in an Arty A7 build tree:
 ```
 cd build/arty-a7-100/sw/projects/spiflash_test
 make spiflash_test
 ```
-4. Flash the *spiflash_test* program onto the target:
+3. Flash the *spiflash_test* program onto the target:
 ```
 make spiflash_test_flash_sw
 ```
-5. Build the gateware project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+4. Build the gateware project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```
 cd build/arty-a7-100/gw/projects/spiflash_test
 make spiflash_test_bit_sw
 ```
-6. Flash the gateware build onto the target:
+5. Flash the gateware build onto the target:
 ```
 make spiflash_test_flash_gw
 ```
-7. When flashing has been completed, the target will be reset. In the terminal, you should now see the same output as with the Verilator test build above.
+6. When flashing has been completed, the target will be reset. In the terminal, you should now see the same output as with the Verilator test build above.
 
 Conclusion
 ----------

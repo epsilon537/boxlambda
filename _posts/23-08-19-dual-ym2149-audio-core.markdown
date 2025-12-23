@@ -5,6 +5,10 @@ comments: true
 youtubeId: whIKsVm54Ko
 ---
 
+*Updated 23 December 2025:*
+- *Corrected link to Bender in documentation.*
+- *Removed reference to 'On WSL' documentation.*
+
 ![Dual YM2149 PSG in the BoxLambda Architecture.](../assets/Arch_Diagram_YM2149_focus.png)
 
 *A dual YM2149 PSG core in the BoxLambda Architecture.*
@@ -23,7 +27,7 @@ This is a summary of the current state of affairs for BoxLambda. We have:
 - SD Card Controller and FatFs File System.
 - Test builds running on Arty-A7-35T, Arty-A7-100T, and Verilator.
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
-- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.  
+- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.
 
 Programmable Sound Generators (PSG)
 -----------------------------------
@@ -58,7 +62,7 @@ For the most part, I was able to use the *YM2149_PSG_system* code as-is. I just 
 
 - I added a Wishbone front end.
 - I made I2S support optional, controlled by a *USE_I2S* define.
-- Rather than have the top-level YM2149_PSG_system module include the Verilog files of the submodules it depends on, I added all required modules separately to the BoxLambda project in a *Bender.yml* manifest (see [https://boxlambda.readthedocs.io/en/latest/build-system/#bender](https://boxlambda.readthedocs.io/en/latest/build-system/#bender)). BoxLambda's build system dependency checking doesn't work well will Verilog modules including other Verilog modules.
+- Rather than have the top-level YM2149_PSG_system module include the Verilog files of the submodules it depends on, I added all required modules separately to the BoxLambda project in a *Bender.yml* manifest (see [https://boxlambda.readthedocs.io/en/latest/build_sys_gw_build_struct/#bender](https://boxlambda.readthedocs.io/en/latest/build_sys_gw_build_struct/#the-gateware-build-structure)). BoxLambda's build system dependency checking doesn't work well will Verilog modules including other Verilog modules.
 - I made a few code tweaks to pacify Vivado's synthesizer.
 
 I forked the *YM2149_PSG_system* repo to track my changes:
@@ -89,7 +93,7 @@ The input clock frequency and PSG clock frequency (clock enable) are core module
 
 A Second Order Delta-Sigma DAC
 ------------------------------
-The *YM2149_PSG_System* core produces 16-bit PCM audio. The audio amplifier PMOD expects the audio signal on a single pin, however. To bring 16-bit PCM audio to a single digital pin, we need a **one-bit Digital-to-Analog converter**. If you've never heard of one-bit DACs before, it probably sounds terrible, but it works quite well. The idea is to generate, at a rate much higher than the input sample rate, a stream of pulses such that a moving average going over the pulse stream produces a signal that tracks the input 16-bit PCM signal. 
+The *YM2149_PSG_System* core produces 16-bit PCM audio. The audio amplifier PMOD expects the audio signal on a single pin, however. To bring 16-bit PCM audio to a single digital pin, we need a **one-bit Digital-to-Analog converter**. If you've never heard of one-bit DACs before, it probably sounds terrible, but it works quite well. The idea is to generate, at a rate much higher than the input sample rate, a stream of pulses such that a moving average going over the pulse stream produces a signal that tracks the input 16-bit PCM signal.
 
 ![1-bit delta-sigma modulation (blue) of a sine wave (red).](../assets/Pulse-density_modulation_1_period.gif)
 
@@ -97,7 +101,7 @@ The *YM2149_PSG_System* core produces 16-bit PCM audio. The audio amplifier PMOD
 
 In analog electronics, a moving average is created by attaching a simple low-pass RC filter to the one-bit-DAC pin. In our case, we don't even have to do that, because the audio amplifier PMOD provides the low-pass filter.
 
-There exist several ways to implement a one-bit DAC, with different pros and cons. One commonly used technique is called **Delta-Sigma Conversion**. It's explained very well in the following article from Uwe Beis: 
+There exist several ways to implement a one-bit DAC, with different pros and cons. One commonly used technique is called **Delta-Sigma Conversion**. It's explained very well in the following article from Uwe Beis:
 
 [https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html)
 
@@ -105,14 +109,14 @@ There exist several ways to implement a one-bit DAC, with different pros and con
 
 *Second Order Delta Sigma Modulator Block Diagram from [https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html).*
 
-I'll be using a **Second Order Delta-Sigma DAC**. An advantage of a second-order delta-sigma DAC is that it (more than its first-order counterpart) pushes the noise introduced by the Digital-to-Analog conversion out of the way, to higher frequency ranges where gets filtered out by the low-pass filter. 
+I'll be using a **Second Order Delta-Sigma DAC**. An advantage of a second-order delta-sigma DAC is that it (more than its first-order counterpart) pushes the noise introduced by the Digital-to-Analog conversion out of the way, to higher frequency ranges where gets filtered out by the low-pass filter.
 
 The Uwe Beis article above describes the idea well enough. However, I was unable to find a reference implementation that made sense to me. I ended up writing my own, borrowing ideas from the following implementations I found online:
 
 - [https://forum.digilent.com/topic/20332-second-order-sigma-delta-dacs-implemented-in-a-fpga/?do=findComment&comment=65787](https://forum.digilent.com/topic/20332-second-order-sigma-delta-dacs-implemented-in-a-fpga/?do=findComment&comment=65787)
 - [https://github.com/briansune/Delta-Sigma-DAC-Verilog?_ga=2.154876920.117504330.1692006910-1995131070.1681993594](https://github.com/briansune/Delta-Sigma-DAC-Verilog?_ga=2.154876920.117504330.1692006910-1995131070.1681993594)
 
-Here is my Verilog code: 
+Here is my Verilog code:
 
 [https://github.com/epsilon537/boxlambda/blob/master/gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/audio_dac/rtl/one_bit_dac.sv)
 
@@ -155,7 +159,7 @@ The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob
 1. The DAC samples are converted to a numpy array and normalized.
 2. The normalized signal is sent through a low-pass filter.
 3. The frequency spectrum of the filtered signal is computed.
-4. The spectrum's frequency bins up to 1000Hz are analyzed and plotted. 
+4. The spectrum's frequency bins up to 1000Hz are analyzed and plotted.
 5. Six peak frequencies are identified and matched against the 6 expected pitches. If the deviation is small, the test is declared successful.
 
 The test project code is located here:
@@ -163,12 +167,12 @@ The test project code is located here:
 [https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test)
 
 See the [Try It Out](#try-it-out) section below for instructions to build and run the test yourself.
- 
+
 YM Music files and ST-Sound
 ---------------------------
 With the above two test projects, I confirmed that the audio DAC is working and the audio core can produce sound. I wanted to go a step further and confirm that the BoxLamdba SoC can carry a chiptune.
 
-It looked around for a music file format that supports the YM2149. Atari ST owners may mention [SNDH](https://sndh.atari.org/about.php), but SNDH, like many other chiptune formats of that time, contains a combination of data and machine code native to the Atari ST. I needed a music file format that's just a data format, no code. 
+It looked around for a music file format that supports the YM2149. Atari ST owners may mention [SNDH](https://sndh.atari.org/about.php), but SNDH, like many other chiptune formats of that time, contains a combination of data and machine code native to the Atari ST. I needed a music file format that's just a data format, no code.
 
 I found the YM file format by Arnaud Carré, a.k.a. Leonard/Oxygene:
 
@@ -232,24 +236,24 @@ Relevant Files and Directories
 - [sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound): The BoxLambda port of the ST-Sound Library.
 - [gw/projects/stsound_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/stsound_test): The ST-Sound Test project.
 - [sw/components/ym2149_sys_hal/ym2149_sys_regs.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ym2149_sys_hal/ym2149_sys_regs.h): YM2419 PSG system register interface.
-  
+
 Try It Out
 ----------
 
 Setup
 =====
 
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
 2. Get the BoxLambda repository:
 	```
 	git clone https://github.com/epsilon537/boxlambda/
 	cd boxlambda
 	```
-3. Switch to the *dual_ym2149_audio* tag: 
+3. Switch to the *dual_ym2149_audio* tag:
 	```
 	git checkout dual_ym2149_audio
 	```
-4. Set up the repository. This initializes the git submodules used and creates the default build trees: 
+4. Set up the repository. This initializes the git submodules used and creates the default build trees:
 	```
 	./boxlambda_setup.sh
 	```
@@ -290,19 +294,18 @@ The plots show both the filtered PCM and DAC output signals, but because they ov
 
 Audio DAC Test on Arty A7
 =========================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) to the upper row of the Arty A7 PMOD port JA. 
-3. Build the *audio_dac_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+1. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) to the upper row of the Arty A7 PMOD port JA.
+2. Build the *audio_dac_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 	```
 	cd build/arty-a7-100/gw/projects/audio_dac_test
 	make audio_dac_test_bit
 	```
-4. Download the generated bitstream file to the Arty A7:
+3. Download the generated bitstream file to the Arty A7:
 	```
 	make audio_dac_test_load
 	```
-5. You should hear a 440Hz tone. You can check the pitch with a pitch detector app.
-   
+4. You should hear a 440Hz tone. You can check the pitch with a pitch detector app.
+
 YM2149 DAC Test on Verilator
 ============================
 1. Build the *ym2149_dac_test* project:
@@ -315,7 +318,7 @@ YM2149 DAC Test on Verilator
   ./Vmodel
   DAC Output File: dac_out.py
   PCM Output File: pcm_out.py
-  
+
     XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     XXX   BHG_FP_clk_divider.v settings/results.   XXX
     XXX   https://github.com/BrianHGinc            XXX
@@ -355,9 +358,9 @@ YM2149 DAC Test on Verilator
     XXX                  297,  354,  423,  505,  603,  719,  858, 1023}   XXX
     XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   YM2149 test.
-  YM2149 config complete.                 
+  YM2149 config complete.
   No overflows detected.
-  ```  
+  ```
 3. The Verilator model should have generated Python files *dac_out.py* and *pcm_out.py*:
   ```
   ls *.py
@@ -380,20 +383,19 @@ YM2149 DAC Test on Verilator
 
 YM2149 DAC Test on Arty A7
 ==========================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) to the upper row of the Arty A7 PMOD port JA.
-3. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-4. Build the *ym2149_dac_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+1. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) to the upper row of the Arty A7 PMOD port JA.
+2. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+3. Build the *ym2149_dac_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 	```
 	cd build/arty-a7-100/gw/projects/ym2149_dac_test
 	make ym2149_dac_test_bit_sw
 	```
-5. Download the generated bitstream file to the Arty A7:
+4. Download the generated bitstream file to the Arty A7:
 	```
 	make ym2149_dac_test_load
 	```
-6. You should hear a 6-tone chord.
-   
+5. You should hear a 6-tone chord.
+
 ST-Sound Test on Verilator
 ==========================
 1. Build the *stsound_test* project:
@@ -407,7 +409,7 @@ ST-Sound Test on Verilator
   SD Image File: ../../../../../gw/projects/stsound_test/test/sdcard.img
   SDCARD: NBLOCKS = 131072
   PCM Output File: pcm_out.py
-  
+
     XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     XXX   BHG_FP_clk_divider.v settings/results.   XXX
     XXX   https://github.com/BrianHGinc            XXX
@@ -468,7 +470,7 @@ ST-Sound Test on Verilator
   READ: Seek to sector 307
   Starting playback...
   No overflows detected.
-  Test passed.  
+  Test passed.
 	```
 3. The Verilator model should have generated Python file *pcm_out.py*:
   ```
@@ -488,21 +490,20 @@ ST-Sound Test on Verilator
 
 ST-Sound Test on Arty A7
 ========================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) to the upper row of the Arty A7 PMOD port JA.
-3. Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD**.
-4. Locate YM file **ANCOOL1.YM** in directory **boxlambda/sub/StSound/YmSampleFiles/**. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.  
-5. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**. 
-6. Build the *stsound_test* project in an Arty A7 build tree. **This test requires an Arty A7-100T.** The software footprint of this test doesn't fit in the internal memory of the Arty A7-35T build.
+1. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) to the upper row of the Arty A7 PMOD port JA.
+2. Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port **JD**.
+3. Locate YM file **ANCOOL1.YM** in directory **boxlambda/sub/StSound/YmSampleFiles/**. Copy it to a FAT-formatted SD card and insert the SD card into the card reader.
+4. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+5. Build the *stsound_test* project in an Arty A7 build tree. **This test requires an Arty A7-100T.** The software footprint of this test doesn't fit in the internal memory of the Arty A7-35T build.
 	```
 	cd build/arty-a7-100/gw/projects/stsound_test
 	make stsound_test_bit_sw
 	```
-7. Download the generated bitstream file to the Arty A7:
+6. Download the generated bitstream file to the Arty A7:
 	```
 	make stsound_test_load
 	```
-8. You should hear the chiptune play. In the terminal window you should see the following:
+7. You should hear the chiptune play. In the terminal window you should see the following:
   ```
   Mounting...
   CID: 534d5402:47323341:7d604971:3168018d
@@ -511,9 +512,9 @@ ST-Sound Test on Arty A7
   /ANCOOL1.YM
   Switching to PSG_1
   Loading YM file: ancool1.ym ...
-  Starting playback... 
-  ``` 
-9. There are a few controls you can play around with:
+  Starting playback...
+  ```
+8. There are a few controls you can play around with:
    - Set SW0 (leaving SW1 and SW2 off), then press buttons 0/1 to increase/decrease the volume.
    - Set SW1 (leaving SW0 and SW2 off), then press buttons 0/1 to increase/decrease the bass level.
    - Set SW2 (leaving SW0 and SW1 off), then press buttons 0/1 to increase/decrease the treble level.

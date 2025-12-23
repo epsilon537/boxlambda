@@ -7,7 +7,11 @@ comments: true
 *Updated 13 November 2023: Corrected performance number:*
 - *Bus utilization for 4x unrolled wordcopy is 25%, not 30%.*
 - *Fixed broken picorv_dma tag.*
-  
+
+*Updated 23 December 2025:*
+- *Corrected link to architecture diagram in documentation.*
+- *Removed reference to 'On WSL' documentation.*
+
 ![PicoRV-based DMA Controller in the BoxLambda Architecture.](../assets/Arch_Diagram_PICORV_DMA_focus.png)
 
 *The PicoRV-based DMA Controller in the BoxLambda Architecture.*
@@ -19,7 +23,7 @@ I added a processor-based DMA Controller to BoxLambda. The goal is to use it for
 - Different block sizes and strides, both in source and destination.
 - Scatter-Gather.
 - Bit manipulations such as bit-masking and rotation on the data being transferred.
-  
+
 Hence the processor-based approach. I started with the [Praxos](https://github.com/esherriff/Praxos) DMA controller but was unhappy with the outcome. To address the shortcomings I saw with Praxos, I moved to the [PicoRV32](https://github.com/YosysHQ/picorv32) RISC-V processor. This works well, but as you'll see, in its current form it's slow.
 
 Recap
@@ -33,7 +37,7 @@ This is a summary of the current state of affairs for BoxLambda. We have:
 - SD Card Controller and FatFs File System.
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
 - Test builds running on Arty-A7-35T, Arty-A7-100T, and Verilator.
-- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.  
+- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.
 
 Transfer Scenarios
 ------------------
@@ -66,13 +70,13 @@ The DMA core's top-level is located here:
 Memory accesses coming from the PicoRV processor are mapped into three address spaces:
 - 0x10002000-0x10003000: PicoRV **Program Memory**, or to be more accurate, Program Memory and Local Data.
 - 0x10003000-0x10003080: The DMA Core's **System Registers** and **Host Interface Registers** (HIR), not to be confused with PicoRV's own registers (x0-x31).
-- All other memory accesses are considered non-local and are turned into Wishbone Bus Master (WBM) transactions. These WBM transactions are dispatched to WBM port 0 or port 1 based on a cut-off address (0x50000000). The intent is to attach port 0 to the Processor Bus and port 1 to the DMA Bus. See BoxLambda's [Architecture Diagram](https://boxlambda.readthedocs.io/en/latest/architecture/).
+- All other memory accesses are considered non-local and are turned into Wishbone Bus Master (WBM) transactions. These WBM transactions are dispatched to WBM port 0 or port 1 based on a cut-off address (0x50000000). The intent is to attach port 0 to the Processor Bus and port 1 to the DMA Bus. See BoxLambda's [Architecture Diagram](https://boxlambda.readthedocs.io/en/latest/gw_architecture/).
 
 These address spaces match with the world view of BoxLambda's Ibex RISC-V host processor.
 
-Through the Wishbone Slave (WBS) port, the Host Processor has access to PicoRV's Program Memory, the System Registers, and the Host Interface Registers. 
+Through the Wishbone Slave (WBS) port, the Host Processor has access to PicoRV's Program Memory, the System Registers, and the Host Interface Registers.
 
-Host processor access to PicoRV's Program Memory is only enabled when the PicoRV is held in reset. PicoRV reset is controlled through one of the System Registers, the **Control Register**. 
+Host processor access to PicoRV's Program Memory is only enabled when the PicoRV is held in reset. PicoRV reset is controlled through one of the System Registers, the **Control Register**.
 
 The 16 Host Interface Registers serve as the communication interface between the Host Processor and the DMA Controller. They are general-purpose registers. Their role is decided by the program that gets loaded into PicoRV's Program Memory.
 
@@ -89,7 +93,7 @@ The intended usage is as follows:
 - The Host Processor configures DMA requests and the PicoRV reports status through the Host Interface Registers. The role of the different registers is determined by the application-specific microprogram running on the PicoRV.
 - Flow Control can be implemented through interrupts, or by having the PicoRV poll the given slave using the slave's register interface.
 - Rate Control can be implemented through interrupts or PicoRV internal timing.
-   
+
 Note that although I primarily intend to use the PicoRV DMA core for DMA purposes, it can be used as a general-purpose auxiliary processor as well. All it takes is to load a microprogram that consists of a single jump to the main program in on-chip or external memory.
 
 Utilization on Arty A7
@@ -124,7 +128,7 @@ wait_start:
     lw a2, HIR1(a0)    /*HIR1: dst pointer*/
     lw a3, HIR2(a0)    /*HIR2: num words*/
     slli a3, a3, 2    /*Multiple by 4 to convert to byte address offset.*/
-    add a3, a3, a1    
+    add a3, a3, a1
 loop:
     /*Copy word by word*/
     lw t0, 0(a1)
@@ -174,7 +178,7 @@ Testing
 
 Unit Testing with CoCoTB
 ========================
-I created a unit test for the PicoRV DMA core. I could have done this in C/C++ using Verilator, as I did for previous BoxLambda work, but I've been looking for an opportunity to try out [CocoTB](https://www.cocotb.org/). CocoTB is a Python-based verification framework. It's very easy to pick up. Your Python test script operates directly on a *DUT* (Device Under Test) object. No boilerplate code is required to get it going. All the interaction with the simulator is handled behind the scenes. 
+I created a unit test for the PicoRV DMA core. I could have done this in C/C++ using Verilator, as I did for previous BoxLambda work, but I've been looking for an opportunity to try out [CocoTB](https://www.cocotb.org/). CocoTB is a Python-based verification framework. It's very easy to pick up. Your Python test script operates directly on a *DUT* (Device Under Test) object. No boilerplate code is required to get it going. All the interaction with the simulator is handled behind the scenes.
 
 You monitor signals using triggers such as *RisingEdge(dut.wbm.stb)*, and you drive signals by setting their value, e.g. *dut.wbs.sel.value = 0xf*. This can all be done concurrently using asynchronous tasks, which you create and execute as easily as executing functions. For example:
 
@@ -200,7 +204,7 @@ async def wb_read(dut, addr):
     stall_check_task.kill()
     assert dut.wbs_err.value == 0
     res = dut.wbs_dat_r.value
-    
+
     await RisingEdge(dut.clk)
     dut.wbs_cyc.value = 0
 ```
@@ -337,17 +341,17 @@ Try It Out
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-1. Switch to the *picorv_dma* tag: 
+1. Switch to the *picorv_dma* tag:
 ```
 git checkout picorv_dma
 ```
-1. Set up the repository. This initializes the git submodules used and creates the default build trees: 
+1. Set up the repository. This initializes the git submodules used and creates the default build trees:
 ```
 ./boxlambda_setup.sh
 ```
@@ -452,18 +456,17 @@ Test passed.
 
 PicoRV DMA System Test on Arty A7
 =================================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-3. Build the *picorv_dma_sys_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+1. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+2. Build the *picorv_dma_sys_test* project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```
 cd build/arty-a7-100/gw/projects/picorv_dma_sys_test
 make picorv_dma_sys_test_bit_sw
 ```
-4. Download the generated bitstream file to the Arty A7:
+3. Download the generated bitstream file to the Arty A7:
 ```
 make picorv_dma_sys_test_load
 ```
-5. In the Putty terminal, you should see the same output as with the Verilator test build above.
+4. In the Putty terminal, you should see the same output as with the Verilator test build above.
 
 Conclusion
 ----------

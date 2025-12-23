@@ -4,11 +4,15 @@ title: 'Exit MIG, Enter LiteDRAM.'
 comments: true
 ---
 
+*Updated 23 December 2025:*
+- *Corrected link to Gateware Architecure in documentation.*
+- *Removed reference to 'On WSL' documentation.*
+
 ![LiteDRAM in the BoxLambda Architecture.](../assets/Arch_Diagram_LiteDRAM_focus.drawio.png)
 
 *LiteDRAM in the BoxLambda Architecture.*
 
-Initially, the plan was to use **Xilinx's MIG** (Memory Interface Generator) to generate a DDR Memory Controller for Boxlambda. At the time, that was (and maybe still is) the consensus online when I was looking for memory controller options for the Arty A7. 
+Initially, the plan was to use **Xilinx's MIG** (Memory Interface Generator) to generate a DDR Memory Controller for Boxlambda. At the time, that was (and maybe still is) the consensus online when I was looking for memory controller options for the Arty A7.
 Meanwhile, Reddit user yanangao suggested I take a look at project **LiteX** for a memory controller. I took the advice and started playing around a bit with Litex. One thing led to another and, long story short, BoxLambda now has a DDR memory controller based on **LiteDRAM**, a core of the *LiteX* project. If you're interested in the longer story, read on.
 
 Recap
@@ -17,7 +21,7 @@ This is a summary of the current state of BoxLambda. We have:
 - An Ibex RISCV core, a Wishbone shared bus, a Debug Core, internal memory, a timer, two GPIO ports, and a UART core.
 - A Picolibc-based standard C environment for software running on the Ibex RISCV core.
 - Test builds running on Arty-A7-35T and Verilator.
-- Automated testing on Verilator. 
+- Automated testing on Verilator.
 - OpenOCD-based Debug Access, both on FPGA and on Verilator.
 - A Linux Makefile and Bender-based RTL build system.
 
@@ -82,9 +86,9 @@ Why choose LiteDRAM over Xilinx MIG?
 ====================================
 
 - LiteDRAM is open-source, scoring good karma points. All the benefits of open-source apply: Full access to all code, access to the maintainers, many eyeballs, the option to make changes as you please, submit bug fixes, etc.
-- The LiteDRAM simulation model, the entire DDR test SoC, runs nicely in Verilator. That's a must-have for me. 
+- The LiteDRAM simulation model, the entire DDR test SoC, runs nicely in Verilator. That's a must-have for me.
 - The LiteDRAM core, configured for BoxLambda, is 50% smaller than the equivalent MIG core: 3016 LUTs and 2530 registers vs. 5673 LUTs and 5060 registers.
-  
+
 Generating a LiteDRAM core
 --------------------------
 LiteDRAM is a highly configurable core (because of Migen). For an overview of the core's features, take a look at the LiteDRAM repository's README file:
@@ -154,10 +158,10 @@ Starting from the *arty.yml* example, I created the following LiteDRAM configura
 Some points about the above:
 - The *PHY layer*, *Electrical* and *Core* sections I left exactly as-is in the given Arty example.
 - In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
-- In the *Frequency* section, I set *sys_clk_freq* to 50MHz. 50MHz has been the system clock frequency in the previous BoxLambda test builds as well. Also, I haven't been able to close timing at 100MHz. 
-- In the *User Ports* section, I specified two 32-bit Wishbone ports. In the [BoxLambda Architecture Diagram](https://boxlambda.readthedocs.io/en/latest/architecture/#the-arty-a7-configuration), you'll see that BoxLambda has two system buses. The memory controller is hooked up to both.
+- In the *Frequency* section, I set *sys_clk_freq* to 50MHz. 50MHz has been the system clock frequency in the previous BoxLambda test builds as well. Also, I haven't been able to close timing at 100MHz.
+- In the *User Ports* section, I specified two 32-bit Wishbone ports. In the [BoxLambda Architecture Diagram](https://boxlambda.readthedocs.io/en/latest/gw_architecture/), you'll see that BoxLambda has two system buses. The memory controller is hooked up to both.
 
-I generate two LiteDRAM core variants from this configuration: 
+I generate two LiteDRAM core variants from this configuration:
 
 - For simulation: ```litedram_gen artya7dram.yml --sim --gateware-dir sim/rtl --software-dir sim/sw --name litedram```
 - For FPGA: ```litedram_gen artya7dram.yml --gateware-dir arty/rtl --software-dir arty/sw --name litedram```
@@ -166,11 +170,11 @@ The generated core has the following interface:
 
 ```
 module litedram (
-`ifndef SYNTHESIS    
+`ifndef SYNTHESIS
   input  wire sim_trace, /*Simulation only.*/
 `endif
 	input  wire clk,
-`ifdef SYNTHESIS  
+`ifdef SYNTHESIS
 	input  wire rst,       /*FPGA only...*/
 	output wire pll_locked,
 	output wire [13:0] ddram_a,
@@ -188,7 +192,7 @@ module litedram (
 	output wire ddram_cke,
 	output wire ddram_odt,
 	output wire ddram_reset_n,
-`endif  
+`endif
 	output wire init_done,  /*FPGA/Simulation common ports...*/
 	output wire init_error,
 	input  wire [29:0] wb_ctrl_adr,
@@ -245,7 +249,7 @@ I created a *litedram_wrapper* module around *litedram.v*:
 This wrapper contains:
 - byte-to-word address adaptation on all three Wishbone ports.
 - Pipelined-to-Classic Wishbone adaptation. The adapter logic comes straight out of the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The *stall* signal is used to avoid pipelining:
-  
+
 ```
   /*Straight out of the Wishbone B4 spec. This is how you interface a classic slave to a pipelined master.
    *The stall signal ensures that the STB signal remains asserted until an ACK is received from the slave.*/
@@ -282,26 +286,26 @@ The job of *core2wb* is to adapt that interface to a pipelined Wishbone bus mast
 
 *From Ibex to LiteDRAM.*
 
-*core2wb.sv* and *wb_interconnect_shared_bus.sv* are part of the [ibex_wb](https://github.com/epsilon537/ibex_wb) repository. The *ibex_wb* repository no longer appears to be actively maintained. I looked long and hard at the implementation of the two modules and ultimately decided that I couldn't figure out the author's reasoning. I decided to re-implement both modules: 
+*core2wb.sv* and *wb_interconnect_shared_bus.sv* are part of the [ibex_wb](https://github.com/epsilon537/ibex_wb) repository. The *ibex_wb* repository no longer appears to be actively maintained. I looked long and hard at the implementation of the two modules and ultimately decided that I couldn't figure out the author's reasoning. I decided to re-implement both modules:
 
 - [Core2wb](https://github.com/epsilon537/ibex_wb/blob/master/rtl/core2wb.sv) has two states: *Idle* and *Transaction Ongoing*. In the Idle state, when Ibex signals a transaction request (core.req), the Ibex memory interface signals get registered, a single access pipelined Wishbone transaction is generated and *core2wb* goes to *Transaction Ongoing* state. When a WB ACK or ERR response is received, core2wb goes back to idle. While *Transaction Ongoing* state, the memory interface grant (*gnt*) signal is held low, so further transaction requests are stalled until *core2wb* is idle again Multiple outstanding transactions are currently not supported. I hope to add that capability someday.
 
 ![Core2WB State Diagram.](../assets/core2wb_fsm.drawio.png)
 
-*Core2WB State Diagram.* 
+*Core2WB State Diagram.*
 
 - [WB_interconnect_shared_bus](https://github.com/epsilon537/ibex_wb/blob/master/soc/common/rtl/wb_interconnect_sharedbus.sv) also has two states: In the _Idle_ state, a priority arbiter monitors the CYC signal of participating Bus Masters. When one or more Bus Masters assert CYC, the arbiter grants access to the lowest order Bus Master and goes to *Transaction Ongoing* state. When that Bus Master de-asserts CYC again, we go back to Idle state. Slave selection and forwarding of WB signals is done with combinatorial logic.
 
 ![WB_Interconnect_Shared_Bus State Diagram.](../assets/wb_shared_bus_fsm.drawio.png)
 
-*WB_Interconnect_Shared_Bus State Diagram.* 
+*WB_Interconnect_Shared_Bus State Diagram.*
 
 With those changes in place, Ibex instruction and data transactions to LiteDRAM are working fine.
 
 *ddr_test_soc*
 ==============
 
-[/projects/ddr_test/rtl/ddr_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/projects/ddr_test/rtl/ddr_test_soc.sv) has the test build's top-level. It's based on the previous test build's top-level, extended with the LiteDRAM wrapper instance. 
+[/projects/ddr_test/rtl/ddr_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/projects/ddr_test/rtl/ddr_test_soc.sv) has the test build's top-level. It's based on the previous test build's top-level, extended with the LiteDRAM wrapper instance.
 
 ```
   litedram_wrapper litedram_wrapper_inst (
@@ -367,7 +371,7 @@ With those changes in place, Ibex instruction and data transactions to LiteDRAM 
   );
 ```
 
-Clock and Reset generation is now done by LiteDRAM. LiteDRAM accepts the external clock and reset signal and provides the system clock and synchronized system reset. Previous BoxLambda test builds had a separate Clock-and-Reset-Generator instance for that. 
+Clock and Reset generation is now done by LiteDRAM. LiteDRAM accepts the external clock and reset signal and provides the system clock and synchronized system reset. Previous BoxLambda test builds had a separate Clock-and-Reset-Generator instance for that.
 
 In this test build, both user ports are hooked up to the same shared bus. That doesn't make a lot of sense of course. I'm just doing this to verify connectivity over both buses. Eventually, BoxLambda is going to have two buses and LiteDRAM will be hooked up to both.
 
@@ -376,7 +380,7 @@ LiteDRAM Initialization
 When the *litedram_gen.py* script generates the LiteDRAM Verilog core (based on the given *.yml* configuration file), it also generates the core's CSR register accessors for software:
 - For FPGA: [https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/arty/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/arty/sw/include/generated)
 - For simulation: [https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/sim/sw/include/generated](https://github.com/epsilon537/boxlambda/tree/develop/components/litedram/sim/sw/include/generated)
-  
+
 The most relevant files are **csr.h** and **sdram_phy.h**. They contain the register definitions and constants used by the memory initialization code. Unfortunately, these accessors are *not* the same for the FPGA and the simulated LiteDRAM cores. We're going to have to use separate software builds for FPGA and simulation.
 
 *Sdram_init()*
@@ -422,23 +426,23 @@ Relevant Files
 - [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/sw/include/generated/sdram_phy.h](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/sw/include/generated/sdram_phy.h)
 - [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/csr.h](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/csr.h)
 - [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/sdram_phy.h](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/sdram_phy.h)
-  
+
 Try It Out
 ----------
 
 Repository setup
 ================
-   1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+   1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
    2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-   3. Switch to the *enter_litedram* tag: 
+   3. Switch to the *enter_litedram* tag:
 ```
 git checkout enter_litedram
 ```
-   4. Set up the repository. This initializes the git submodules used and builds picolibc for BoxLambda: 
+   4. Set up the repository. This initializes the git submodules used and builds picolibc for BoxLambda:
 ```
 make setup
 ```
@@ -459,22 +463,21 @@ cd generated
 
 ![ddr_test on Verilator](../assets/ddr_test_verilator.png)
 
-*DDR Test on Verilator.* 
+*DDR Test on Verilator.*
 
 Build and Run the DDR Test Image on Arty A7
 ===========================================
-   1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
    2. Build the test project:
 ```
 cd projects/ddr_test
 make impl
 ```
-   3. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-   4. Run the project:
+   2. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+   3. Run the project:
 ```
 make run
 ```
-   5. Verify the test program's output in the terminal. You should see something like this:
+   4. Verify the test program's output in the terminal. You should see something like this:
 
 ![ddr_test on Arty - Putty Terminal](../assets/ddr_test_arty.png)
 
@@ -484,7 +487,7 @@ Other Changes
 -------------
 
 - To minimize the differences with the Arty A7-35T (*Little BoxLambda*), I decided to use the Arty A7-100T rather than the Nexys A7 as the *Big BoxLambda* variant.
-  
+
 - I noticed belatedly that I didn't create a constraint for the *tck* JTAG clock, so no timing analysis could be done on the JTAG logic. I added the following to the *.xdc* constraints file. Vivado's timing analysis is much happier now.
 
 ```
@@ -494,7 +497,7 @@ create_clock -period 1000.000 -name dmi_jtag_inst/i_dmi_jtag_tap/tck_o -waveform
 ```
 
 - I have merged the development branch to the master branch. Going forward, I intend to do that every time I put down a release label for a new Blog post.
-  
+
 Interesting Links
 -----------------
 [https://github.com/antonblanchard/microwatt](https://github.com/antonblanchard/microwatt): An Open-Source FPGA SoC by Anton Blanchard using LiteDRAM. I found it helpful to look at that code base to figure out how to integrate LiteDRAM into BoxLambda.

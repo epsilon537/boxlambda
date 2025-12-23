@@ -4,6 +4,8 @@ title: 'A C Standard Library for BoxLambda.'
 comments: true
 ---
 
+*Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
+
 BoxLambda is a hardware-software cross-over project (see [About BoxLambda](https://epsilon537.github.io/boxlambda/about/)). The previous posts have been mostly about hardware (as far as FPGA logic can be considered hardware). This post will be about software for a change.
 
 I would like to bring up the C standard library on BoxLambda. Having a standard C environment will help with the overall platform bring-up. It also allows us to run third-party C code, which typically assumes the presence of a standard C environment.
@@ -11,7 +13,7 @@ I would like to bring up the C standard library on BoxLambda. Having a standard 
 Recap
 -----
 This is a summary of the current state of BoxLambda. We have:
-- A test build consisting of an Ibex RISCV core, a Wishbone shared bus, a Debug Core, internal memory, a timer, two GPIO ports, and a UART core. 
+- A test build consisting of an Ibex RISCV core, a Wishbone shared bus, a Debug Core, internal memory, a timer, two GPIO ports, and a UART core.
 - A simple *Hello World* and LED toggling test program running on the test build.
 - An Arty-A7-35T FPGA version of the test build.
 - A Verilator version of the test build, for a faster development cycle and automated testing.
@@ -22,7 +24,7 @@ Picolibc
 --------
 I'll be using the Picolibc standard C library implementation.
 [Picolibc](https://github.com/picolibc/picolibc) is a Newlib variant, blended with AVR libc, optimized for systems with limited memory.
-[Newlib](https://www.sourceware.org/newlib/) is the de-facto standard C library implementation for embedded systems. 
+[Newlib](https://www.sourceware.org/newlib/) is the de-facto standard C library implementation for embedded systems.
 
 Building Picolibc
 -----------------
@@ -30,7 +32,7 @@ I created a Picolibc fork and added it as a git submodule to BoxLambda's reposit
 
 Picolibc Configuration Scripts - RV32IMC
 ========================================
-A Picolibc build for a new system requires configuration scripts for that system in the [picolibc/scripts/](https://github.com/epsilon537/picolibc/tree/3cd5bea5ad034d574670a7a85b2221d26224b588/scripts) directory. The scripts are named after the selected processor configuration. They specify such things as the compiler toolchain to use, GCC processor architecture flags, and CPP preprocessor flags tweaking specific library features. 
+A Picolibc build for a new system requires configuration scripts for that system in the [picolibc/scripts/](https://github.com/epsilon537/picolibc/tree/3cd5bea5ad034d574670a7a85b2221d26224b588/scripts) directory. The scripts are named after the selected processor configuration. They specify such things as the compiler toolchain to use, GCC processor architecture flags, and CPP preprocessor flags tweaking specific library features.
 
 I'm using RISCV ISA-string **rv32imc** as the base name for the new scripts I'm creating. This corresponds with the default **-march** value of BoxLambda's GCC toolchain:
 
@@ -81,9 +83,9 @@ The easiest way to create the new scripts is to derive them from existing script
 The differences between the derived scripts and the base scripts are minimal:
 
 - They are referencing the *riscv32-unknown-elf* GCC toolchain used by BoxLambda.
-- The *-march* flag is set to *rv32imc* (no 'a' - atomic instructions). 
+- The *-march* flag is set to *rv32imc* (no 'a' - atomic instructions).
 
-[Many other configuration flags](https://github.com/epsilon537/picolibc/blob/main/doc/build.md) can be tweaked, but this will do for now. It's easier to start from something that works and then make incremental changes than it is to start from scratch. 
+[Many other configuration flags](https://github.com/epsilon537/picolibc/blob/main/doc/build.md) can be tweaked, but this will do for now. It's easier to start from something that works and then make incremental changes than it is to start from scratch.
 
 make setup
 ==========
@@ -128,7 +130,7 @@ More detail for each of these follows in the subsections below. I have grouped t
 
 [https://github.com/epsilon537/boxlambda/tree/develop/sw/bootstrap](https://github.com/epsilon537/boxlambda/tree/develop/sw/bootstrap)
 
-An application wishing to use the standard C library has to link in this bootstrap component along with the picolibc library itself. 
+An application wishing to use the standard C library has to link in this bootstrap component along with the picolibc library itself.
 
 The Vector Table
 ================
@@ -150,7 +152,7 @@ static struct uart *uartp = 0;
 
 static int uart_putc(char c, FILE *file) {
   int res;
-  
+
   (void) file;		/* Not used in this function */
 
   if (!uartp) {
@@ -161,7 +163,7 @@ static int uart_putc(char c, FILE *file) {
     uart_tx(uartp, (uint8_t)c);
     res = (int)c;
   }
-  
+
   return res;
 }
 
@@ -176,7 +178,7 @@ static int uart_getc(FILE *file) {
     while (!uart_rx_ready(uartp));
     c = (int)uart_rx(uartp);
   }
-  
+
   return c;
 }
 
@@ -294,14 +296,14 @@ int main(void) {
   //Some basic libc tests:
 
   memset(m, '!', sizeof(m)-1);
-  
+
   printf("printf in main() v=%d, m=%s.\n", v, m);
 
   printf("Enter character: ");
   c = getc(stdin);
   printf("Character entered: ");
   putc(c, stdout);
-   
+
   return 0;
 }
 ```
@@ -354,17 +356,17 @@ Try It Out
 
 Repository setup
 ================
-   0. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+   0. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
    1. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-   3. Switch to the picolibc tag: 
+   3. Switch to the picolibc tag:
 ```
 git checkout picolibc
 ```
-   4. Set up the repository. This initializes the git submodules used and builds picolibc for BoxLambda: 
+   4. Set up the repository. This initializes the git submodules used and builds picolibc for BoxLambda:
 ```
 make setup
 ```
@@ -387,18 +389,17 @@ cd generated
 
 Build and Run the Picolibc_test Image on Arty A7
 ================================================
-   1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-   2. Build the test project:
+   1. Build the test project:
 ```
 cd projects/picolibc_test
 make impl
 ```
-   3. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-   4. Run the project:
+   2. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+   3. Run the project:
 ```
 make run
 ```
-   5. Verify the test program's output in the terminal. Enter a character to verify that stdin (standard input) is also working.
+   4. Verify the test program's output in the terminal. Enter a character to verify that stdin (standard input) is also working.
 
 ![Picolibc_test on Arty - Putty Terminal](../assets/picolibc_test_arty.png){:class="img-responsive"}
 

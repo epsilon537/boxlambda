@@ -5,7 +5,9 @@ comments: true
 ---
 
 *Updated 16 November 2023: Added FPGA resource utilization.*
- 
+
+*Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
+
 ![PicoRV DMA Bus Utilization.](../assets/PicoRV_Bus_Utilization.png)
 
 *The PicoRV DMA Bus Utilization Improvements from Optimizations.*
@@ -28,7 +30,7 @@ This is a summary of the current state of affairs for BoxLambda. We have:
 - A flexible but slow PicoRV32-based DMA Controller.
 - A Picolibc-based standard C environment for software running on the Ibex RISC-V core.
 - Test builds running on Arty-A7-35T, Arty-A7-100T, Verilator, and CocoTB.
-- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.  
+- A Linux CMake and Bender-based Software and Gateware build system with support for automated testing and post-implementation memory updates.
 
 Optimization 1: Doubling the PicoRV32 clock frequency
 -----------------------------------------------------
@@ -85,7 +87,7 @@ In the diagram above, the top row shows a burst of four words being read and sto
 A couple of things are worth noting:
 
 - The burst read sequence and the burst write sequence are triggered by a PicoRV word read / word write request.
-- These PicoRV word read / word write requests are *Posted Reads* and *Posted Writes*, i.e. the transaction completes immediately toward the PicoRV. The PicoRV does not stall until the entire burst is read or written. The PicoRV will only stall when a new read or write request is posted before a previous burst transaction has been completed. The posted burst transactions give the PicoRV copy-loop a few clock cycles of breathing room to do pointer arithmetic etc. without causing delays in the data path.  
+- These PicoRV word read / word write requests are *Posted Reads* and *Posted Writes*, i.e. the transaction completes immediately toward the PicoRV. The PicoRV does not stall until the entire burst is read or written. The PicoRV will only stall when a new read or write request is posted before a previous burst transaction has been completed. The posted burst transactions give the PicoRV copy-loop a few clock cycles of breathing room to do pointer arithmetic etc. without causing delays in the data path.
 
 ![PicoRV instructions vs. Burst Transaction.](../assets/picorv_racing_burst_transactions.png)
 
@@ -205,17 +207,17 @@ Try It Out
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-1. Switch to the *picorv_dma_2* tag: 
+1. Switch to the *picorv_dma_2* tag:
 ```
 git checkout picorv_dma_2
 ```
-1. Set up the repository. This initializes the git submodules used and creates the default build trees: 
+1. Set up the repository. This initializes the git submodules used and creates the default build trees:
 ```
 ./boxlambda_setup.sh
 ```
@@ -287,18 +289,17 @@ Test passed.
 
 PicoRV DMA Extended System Test on Arty A7
 ==========================================
-1. If you're running on WSL, check BoxLambda's documentation [On WSL](https://boxlambda.readthedocs.io/en/latest/installation/#on-wsl) section.
-2. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
-3. Build the project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
+1. Connect a terminal program such as Putty or Teraterm to Arty's USB serial port. **Settings: 115200 8N1**.
+2. Build the project in an Arty A7 build tree (*arty-a7-35* or *arty-a7-100*):
 ```
 cd build/arty-a7-100/gw/projects/picorv_dma_sys_test_ext
 make picorv_dma_sys_test_ext_bit_sw
 ```
-4. Download the generated bitstream file to the Arty A7:
+3. Download the generated bitstream file to the Arty A7:
 ```
 make picorv_dma_sys_test_ext_load
 ```
-5. In the Putty terminal, you should see the same output as with the Verilator test build above.
+4. In the Putty terminal, you should see the same output as with the Verilator test build above.
 
 Conclusion
 ----------
