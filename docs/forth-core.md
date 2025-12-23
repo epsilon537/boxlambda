@@ -83,6 +83,10 @@ There's a lot to be said about the Forth Core. It’s a well-written piece of co
 
 The top-level source file is [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
 
+![Forth Core Org](assets/forth-core_org.png)
+
+*Forth Core Organization.*
+
 ### Key Variables
 
 #### Forth Linker Sections and Variables
