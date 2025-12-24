@@ -216,12 +216,9 @@ hkomma: # Write 16 bits in Dictionary
   push x1
 
   call here
-  dup
 
   pushdaconst 2
   call allot
-
-  drop
 
   # Simply write directly
   popda x15
@@ -238,16 +235,13 @@ ckomma: # Write 8 bits in Dictionary
   push x1
 
   call here
-  dup
 
   pushdaconst 1
   call allot
 
-  drop
-
   # Simply write directly
   popda x15
-  sh x8, 0(x15)
+  sb x8, 0(x15)
   drop
 
 1:pop x1
