@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `v0.3.1`: Changes sinces label `v0.3.0` - 2025-12-24
+
+### Added
+
+- Nothing.
+
+### Fixed
+
+- Fixed and optimized implementation of Words `c,` and `h,`.
+
+### Changed
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
 ## Label `v0.3.0`: Changes sinces label `v0.2.2` - 2025-12-01
 
 ### Added
