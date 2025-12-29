@@ -11,6 +11,8 @@ Implementation:
 - Forth to C: [sw/components/forth_core/c-ffi.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/c-ffi.s)
 - C to Forth: [sw/components/forth_core/mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s)
 
+The BoxLambda C-Forth FFI is loosely based on Peter Schmid's work for the [Mecrisp Cube project](https://github.com/spyren/Mecrisp-Cube/tree/master).
+
 C has one stack, which is used to keep track of the call stack, stack frames
 (local variables), and - when a lot of parameters are involved - parameter
 passing. Forth uses two stacks: a **Return Stack** and a **Data Stack**. The return

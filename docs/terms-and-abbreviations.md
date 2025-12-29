@@ -69,6 +69,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Icarus**: Open-source Verilog simulator ([project page](https://steveicarus.github.io/iverilog/)).
 - **IEN**: Interrupt Enable Register.
 - **I/F**: Interface.
+- **IMEM**: Internal Memory.
 - **Instruction Prefetcher**: A hardware mechanism that anticipates future memory accesses and fetches instructions before they are actually needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access.
 - **Interconnect**: Wishbone bus fabric.
 - **IO**: Input/Output.

@@ -11,7 +11,7 @@ environment for experimenting with software and FPGA gateware.
 # The Physical Setup
 
 [![The physical
-setup.](assets/physical_setup.png)](assets/physical_setup.png)
+setup.](../assets/physical_setup.png)](../assets/physical_setup.png)
 
 *The physical setup.*
 
@@ -39,12 +39,12 @@ Verilator.
 
 # Gateware Block Diagram
 
-![BoxLambda Gateware Block Diagram.](assets/Arch_Diagram_dual_bus_DFX.png)
+![BoxLambda Gateware Block Diagram.](../assets/Arch_Diagram_dual_bus_DFX.png)
 
 # Software Block Diagram
 
 [![BoxLambda OS
-Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Architecture.png)
+Architecture.](../assets/BoxLambda_OS_Architecture.png)](../assets/BoxLambda_OS_Architecture.png)
 
 *BoxLambda OS Architecture Block Diagram.*
 

@@ -5,7 +5,7 @@ comments: true
 mathjax: yes
 ---
 
-*Updated 23 December 2025:
+*Updated 23 December 2025:*
 - *Fixed link to bootloader in documentation.*
 - *Fixed link to uLisp test build in documentation.*
 - *Fixed link to Forth test build in documentation.*
