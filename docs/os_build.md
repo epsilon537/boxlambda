@@ -4,5 +4,5 @@
 
 This software project builds BoxLambda's Operating System.
 
-For instructions to build and flash the BoxLambda OS, see [this section](installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+For instructions to build and flash the BoxLambda Gateware, Bootloader, and OS, see [this section](installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
