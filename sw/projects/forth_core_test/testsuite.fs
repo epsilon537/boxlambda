@@ -3526,6 +3526,39 @@ T{ saved-mip @ -> $80 }T
 T{ saved-mcause @ -> $80000007 }T
 
 \ ------------------------------------------------------------------------------
+TESTING STRUCTS
+
+begin-structure tstruct
+  cfield: bytefield1
+  cfield: bytefield2
+  cfield: bytefield3
+  hfield: hfield1
+  hfield: hfield2
+  hfield: hfield3
+  field:  cellfield
+  2field: doublefield
+  cfield: bytefield4
+  10 +field: plusfield
+  cfield: bytefield5
+end-structure
+
+create tstructinst tstruct allot
+
+T{ tstructinst bytefield1 tstructinst - -> 0 }T
+T{ tstructinst bytefield2 tstructinst - -> 1 }T
+T{ tstructinst bytefield3 tstructinst - -> 2 }T
+T{ tstructinst hfield1 tstructinst - -> 4 }T
+T{ tstructinst hfield2 tstructinst - -> 6 }T
+T{ tstructinst hfield3 tstructinst - -> 8 }T
+T{ tstructinst cellfield tstructinst - -> 12 }T
+T{ tstructinst doublefield tstructinst - -> 16 }T
+T{ tstructinst bytefield4 tstructinst - -> 24 }T
+T{ tstructinst plusfield tstructinst - -> 25 }T
+T{ tstructinst bytefield5 tstructinst - -> 35 }T
+T{ tstruct -> 36 }T
+
+\ ------------------------------------------------------------------------------
+
 TESTING COMPLETE
 
 \ words

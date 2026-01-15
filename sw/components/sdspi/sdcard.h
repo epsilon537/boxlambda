@@ -47,6 +47,9 @@
 
 #include "sdspi_hal.h"
 
+#define SDCARD_IRQ_BUSY_MASK 0x1
+#define SDCARD_IRQ_CARD_REMOVED_MASK 0x2
+
 #define	SDERR_READ	0x001
 #define	SDERR_WRITE	0x002
 #define	SDERR_INIT	0x010
@@ -66,8 +69,8 @@
 #define	SECTOR_512B	0x090000	// 512-byte disk sectors
 //
 //
-// Book recommen ds sequence of: CMD0, (CMD8), CMD58, ACMD41(wait), CMD58
-//	for startup
+// Book recommends sequence of: CMD0, (CMD8), CMD58, ACMD41(wait), CMD58
+// for startup
 //
 
 #ifdef __cplusplus
@@ -81,7 +84,7 @@ extern	char	sdcard_cid[16];
 #ifdef	_BOARD_HAS_SDSPI
 
 /* BoxLambda:
- * Acknowledge/Clear an SDCard interrupt. See SDCARD_IRQ in board.h
+ * Acknowledge/Clear an SDCard interrupt. See SDCARD_IRQ above.
  * for bit definitions. */
 extern void sdcard_irq_clr(uint32_t irq_mask);
 

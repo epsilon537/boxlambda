@@ -292,7 +292,7 @@ type_intern:
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "count"
-count: # ( c-addr -- a-addr len ) Print a counted string
+count: # ( c-addr -- a-addr len ) Convert a counted string to addr-len pair.
 # -----------------------------------------------------------------------------
   # Count should shift the address one place and get the length.
   addi x8, x8, 1

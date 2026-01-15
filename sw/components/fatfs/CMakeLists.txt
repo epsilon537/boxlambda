@@ -7,7 +7,7 @@ target_sources(fatfs
     ../../../sub/fatfs/source/ff.c
     ../../../sub/fatfs/source/ffsystem.c
     ../../../sub/fatfs/source/ffunicode.c
-    diskio.c
+    diskio.cpp
 )
 
 target_compile_definitions(fatfs
