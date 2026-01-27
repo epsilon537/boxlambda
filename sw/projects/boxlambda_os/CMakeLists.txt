@@ -13,7 +13,7 @@ target_compile_options(boxlambda_os
 
 target_include_directories(boxlambda_os
   PRIVATE
-   ${PROJECT_SOURCE_DIR}/sw/components/forth/forth_cstr
+   ${PROJECT_SOURCE_DIR}/sw/components/forth/forth
 )
 
 #Function defined in parent CMakeLists.txt file:

@@ -383,7 +383,10 @@ executemode:
   li x15, 1
   j 1b
 
-push_x1_komma:
+#------------------------------------------------------------------------------
+  Definition Flag_immediate_compileonly, "push_ra"
+push_x1_komma:# Writes addi sp, sp, -4 sw ra, sp into current definition. Take care with inlining !
+#------------------------------------------------------------------------------
 
       push x1
 

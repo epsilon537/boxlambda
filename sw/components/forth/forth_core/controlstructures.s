@@ -214,7 +214,7 @@ structure_ahead: # ( -- Address-for-Jump 5 )
   push x1
 
   call here
-  pushdaconst 5 # Structure matching
+  pushdaconst 5 # Structure matching constant
 
 1:call four_allot
 

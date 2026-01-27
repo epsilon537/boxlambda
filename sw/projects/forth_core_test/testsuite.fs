@@ -187,14 +187,6 @@ const char testsuite[] =  R"testsuite(
 \  These CORE-EXT definitions are not part of Mecrisp-Quintus for default:
 \ ------------------------------------------------------------------------
 
-: roll
-    ?dup if
-        swap >r
-        1- recurse
-        r> swap
-    then
-;
-
 : compile, ( addr -- ) call, ;
 
 : :noname ( -- addr ) 0 s" : (noname)" evaluate drop (latest) @ 2 cells + skipstring ;
@@ -327,23 +319,23 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
    THEN ;
 
 : }T      \ ( ... -- ) COMPARE STACK (EXPECTED) CONTENTS WITH SAVED
-      \ (ACTUAL) CONTENTS.
-   DEPTH ACTUAL-DEPTH @ = IF      \ IF DEPTHS MATCH
-      DEPTH ?DUP IF         \ IF THERE IS SOMETHING ON THE STACK
-         0  DO            \ FOR EACH STACK ITEM
-           ACTUAL-RESULTS I CELLS + @   \ COMPARE ACTUAL WITH EXPECTED
-           = 0= IF S" INCORRECT RESULT: " ERROR LEAVE THEN
-         LOOP
-      THEN
-   ELSE               \ DEPTH MISMATCH
-      S" WRONG NUMBER OF RESULTS: " ERROR
-   THEN ;
+  \ (ACTUAL) CONTENTS.
+  DEPTH ACTUAL-DEPTH @ = IF      \ IF DEPTHS MATCH
+    DEPTH ?DUP IF         \ IF THERE IS SOMETHING ON THE STACK
+      0 DO            \ FOR EACH STACK ITEM
+        ACTUAL-RESULTS I CELLS + @   \ COMPARE ACTUAL WITH EXPECTED
+        = 0= IF S" INCORRECT RESULT: " ERROR LEAVE THEN
+      LOOP
+    THEN
+  ELSE               \ DEPTH MISMATCH
+    S" WRONG NUMBER OF RESULTS: " ERROR
+  THEN ;
 
 : TESTING   \ ( -- ) TALKING COMMENT.
   SOURCE VERBOSE @
-   IF DUP >R TYPE CR R> >IN !
-   ELSE >IN ! DROP [CHAR] * EMIT
-   THEN ;
+  IF DUP >R TYPE CR R> >IN !
+  ELSE >IN ! DROP [CHAR] * EMIT
+  THEN ;
 \ From: John Hayes S1I
 \ Subject: core.fr
 \ Date: Mon, 27 Nov 95 13:10
@@ -361,6 +353,257 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
 CR
 TESTING CORE WORDS
 HEX
+
+\ ------------------------------------------------------------------------
+TESTING EXCEPTIONS
+
+: x-test-exception-1 ." Test exception 1." cr ;
+: x-test-exception-2 ." Test exception 2." cr ;
+
+.( 1 )
+
+: throws-exception-2
+  true averts x-test-exception-1
+  true triggers x-test-exception-2
+
+  S" Exception-2 not thrown" ERROR
+;
+
+: throws-exception-1
+  false triggers x-test-exception-2
+  false averts x-test-exception-1
+
+  S" Exception-1 not thrown" ERROR
+;
+
+: no-throw
+  cr ." Not throwing exception" cr
+  \ Just return something to indicate we got here.
+  decimal #2785
+;
+
+: try-throw-exception-1
+  ['] throws-exception-1 try
+;
+
+: try-throw-exception-2
+  ['] throws-exception-2 try
+;
+
+: try-no-throw
+  ['] no-throw try
+;
+
+: throw-1-suppress-2
+  ['] throws-exception-1 try suppress x-test-exception-2
+;
+
+: throw-2-suppress-2
+  ['] throws-exception-2 try suppress x-test-exception-2
+;
+
+T{ try-throw-exception-1 -> ' x-test-exception-1 }T
+T{ try-throw-exception-2 -> ' x-test-exception-2 }T
+T{ try-throw-exception-2 -> ' x-test-exception-2 }T
+T{ try-no-throw -> #2785 0 }T
+T{ throw-1-suppress-2 -> ' x-test-exception-1 }T
+T{ throw-2-suppress-2 -> 0 }T
+
+T{ ' throws-exception-1 try -> ' x-test-exception-1 }T
+T{ ' throws-exception-2 try -> ' x-test-exception-2 }T
+T{ ' no-throw try -> #2785 0  }T
+T{ ' throws-exception-1 try suppress x-test-exception-2 -> ' x-test-exception-1 }T
+T{ ' throws-exception-2 try suppress x-test-exception-2 -> 0 }T
+
+\ ------------------------------------------------------------------------------
+TESTING LAMBDA
+
+: test-lambda [: + ;] ;
+
+T{ test-lambda 23 24 rot execute -> 47  }T
+
+\ ------------------------------------------------------------------------
+TESTING HEAP
+8 256 heap-size constant test-heap-size
+T{ test-heap-size 8 256 * 2dup > -rot 2 * < -> <TRUE> <TRUE> }T ( Between requested size and twice requested size )
+create test-heap test-heap-size allot
+here constant test-heap-end
+8 256 test-heap init-heap
+
+test-heap-size 128 / 2+ constant max-allocations
+create allocations max-allocations cells allot
+0 1 nvariable num-allocations
+
+\ Compiling a function so we can use loops.
+\ ( blocksize -- )
+: test-heap-alloc
+  \ Allocate blocks until exhausted.
+  max-allocations 0 do
+    dup ( blocksize blocksize )
+    [: test-heap allocate ;] try ( blocksize addr exception-code )
+    0= if ( blocksize addr )
+      i allocations a! ( blocksize addr )
+    else ( blocksize )
+      drop
+      0 i allocations a!
+      ." test-heap exhausted. OK." cr
+      leave
+    then
+    i 1+ num-allocations ! ( blocksize )
+  loop
+  drop
+;
+
+: test-heap-free-all
+  num-allocations @ 0 do
+    i allocations a@ test-heap free
+  loop
+  0 num-allocations !
+;
+
+.( Allocate check )
+
+512 test-heap-alloc
+T{ num-allocations @ 0> -> <TRUE> }T
+T{ num-allocations @ max-allocations < -> <TRUE> }T
+
+.( Address range check )
+
+: test-heap-addr-check
+  num-allocations @ 0 do
+    \ within heap address range
+    i allocations a@ test-heap <= if
+      S" Allocation out of range 1, idx: " i . ERROR
+      leave
+    then
+
+    i allocations a@ test-heap-end >= if
+      S" Allocation out of range 2, idx: " i . ERROR
+      leave
+    then
+
+    \ At least 512 apart
+    i 0> if
+      i allocations a@ i 1- allocations a@ - 512 < if
+        S" Allocation spacing error, idx: " i . ERROR
+        leave
+      then
+    then
+  loop
+;
+
+test-heap-addr-check
+
+.( Free-realloc check )
+
+num-allocations @ 1 nvariable saved-num-allocations
+
+test-heap-free-all
+\ Reallocate all again, using small blocks
+128 test-heap-alloc
+
+T{ num-allocations @ saved-num-allocations @ >= -> <TRUE> }T
+T{ num-allocations @ 128 * test-heap-size <= -> <TRUE> }T
+
+test-heap-free-all
+\ Reallocate all again, using again the 512 sized blocks.
+512 test-heap-alloc
+T{ num-allocations @ saved-num-allocations @ = -> <TRUE> }T
+
+.( Resize check )
+
+: test-heap-resize-alloc-0
+  0 allocations a@ test-heap resize
+;
+
+\ Attempt to resize allocation 0 to 1K. This should fail.
+T{ 1024 ' test-heap-resize-alloc-0 try ' x-allocate-failed = nip -> <TRUE> }T
+
+\ Free allocation 1 then retry the resize...
+1 allocations a@ test-heap free
+\ Now it should work, without changing the address.
+T{ 1024 ' test-heap-resize-alloc-0 try swap 0 allocations a@ = -> 0 <TRUE> }T
+\ Free the resized block so we have a 1K space to allocate again.
+0 allocations a@ test-heap free
+
+\ Allocate 2 small blocks
+256 test-heap allocate 0 allocations a!
+256 test-heap allocate 1 allocations a!
+\ Now resizing the first block to 300 should work, but with a new address.
+T{ 300 ' test-heap-resize-alloc-0 try swap 0 allocations a@ <> -> 0 <TRUE> }T
+
+\ ------------------------------------------------------------------------
+TESTING pool
+
+create test-pool-allocations 16 allot
+
+create test-pool pool-size allot
+8 test-pool init-pool
+
+create test-pool-memory 32 allot
+test-pool-memory 32 test-pool add-pool
+
+: test-pool-alloc-all
+  test-pool allocate-pool 0 test-pool-allocations a!
+  test-pool allocate-pool 1 test-pool-allocations a!
+  test-pool allocate-pool 2 test-pool-allocations a!
+  test-pool allocate-pool 3 test-pool-allocations a!
+;
+
+T{ test-pool pool-block-size -> 8 }T
+T{ test-pool pool-free-count -> 4 }T
+
+T{ ' test-pool-alloc-all try -> 0 }T
+T{ 0 test-pool-allocations a@ test-pool-memory 0 + = -> <TRUE> }T
+T{ 1 test-pool-allocations a@ test-pool-memory 8 + = -> <TRUE> }T
+T{ 2 test-pool-allocations a@ test-pool-memory 16 + = -> <TRUE> }T
+T{ 3 test-pool-allocations a@ test-pool-memory 24 + = -> <TRUE> }T
+
+T{ test-pool pool-free-count -> 0 }T
+T{ test-pool pool-total-count -> 4 }T
+
+T{ test-pool ' allocate-pool try nip ' x-pool-allocate-failed = -> <TRUE> }T
+
+
+0 test-pool-allocations a@ test-pool free-pool
+1 test-pool-allocations a@ test-pool free-pool
+2 test-pool-allocations a@ test-pool free-pool
+3 test-pool-allocations a@ test-pool free-pool
+
+T{ test-pool pool-free-count -> 4 }T
+
+T{ ' test-pool-alloc-all try -> 0 }T
+
+create test-pool-memory-2 32 allot
+test-pool-memory 32 test-pool add-pool
+
+T{ test-pool pool-free-count -> 4 }T
+
+\ ------------------------------------------------------------------------
+TESTING INTERPRETED STRINGS
+
+s" 123"
+T{ evaluate -> 123 }T
+s" 456"
+T{ evaluate -> 456 }T
+
+: istr-test s" 789" ;
+istr-test
+T{ evaluate -> 789 }T
+
+T{ istr-dump -> }T
+
+T{ str-pool-mem istr-allocated? -> <TRUE> }T
+T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <TRUE> }T
+T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
+1 istr-free
+T{ str-pool-mem istr-allocated? -> <TRUE> }T
+T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
+T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
+2 istr-free
+T{ str-pool-mem istr-allocated? -> <TRUE> }T
+T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
+T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
 
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
@@ -427,7 +670,7 @@ T{ MSB 2/ MSB AND -> MSB }T
 T{ 1 0 LSHIFT -> 1 }T
 T{ 1 1 LSHIFT -> 2 }T
 T{ 1 2 LSHIFT -> 4 }T
-T{ 1 F LSHIFT -> 8000 }T         \ BIGGEST GUARANTEED SHIFT
+T{ 1 $F LSHIFT -> $8000 }T         \ BIGGEST GUARANTEED SHIFT
 T{ 1S 1 LSHIFT 1 XOR -> 1S }T
 T{ MSB 1 LSHIFT -> 0 }T
 
@@ -435,7 +678,7 @@ T{ 1 0 RSHIFT -> 1 }T
 T{ 1 1 RSHIFT -> 0 }T
 T{ 2 1 RSHIFT -> 1 }T
 T{ 4 2 RSHIFT -> 1 }T
-T{ 8000 F RSHIFT -> 1 }T         \ BIGGEST
+T{ $8000 $F RSHIFT -> 1 }T         \ BIGGEST
 T{ MSB 1 RSHIFT MSB AND -> 0 }T      \ RSHIFT ZERO FILLS MSBS
 T{ MSB 1 RSHIFT 2* -> MSB }T
 
@@ -987,18 +1230,18 @@ T{ 2ndal 3 and -> 0 }T
 \ ------------------------------------------------------------------------
 TESTING CHAR [CHAR] [ ] BL S"
 
-T{ BL -> 20 }T
-T{ CHAR X -> 58 }T
-T{ CHAR HELLO -> 48 }T
+T{ BL -> $20 }T
+T{ CHAR X -> $58 }T
+T{ CHAR HELLO -> $48 }T
 T{ : GC1 [CHAR] X ; -> }T
 T{ : GC2 [CHAR] HELLO ; -> }T
-T{ GC1 -> 58 }T
-T{ GC2 -> 48 }T
+T{ GC1 -> $58 }T
+T{ GC2 -> $48 }T
 T{ : GC3 [ GC1 ] LITERAL ; -> }T
-T{ GC3 -> 58 }T
+T{ GC3 -> $58 }T
 T{ : GC4 S" XY" ; -> }T
 T{ GC4 SWAP DROP -> 2 }T
-T{ GC4 DROP DUP C@ SWAP CHAR+ C@ -> 58 59 }T
+T{ GC4 DROP DUP C@ SWAP CHAR+ C@ -> $58 $59 }T
 
 \ ------------------------------------------------------------------------
 TESTING ' ['] FIND EXECUTE [immediate] COUNT LITERAL POSTPONE STATE
@@ -1186,6 +1429,8 @@ T{ GS4 123 456
 
 \ ------------------------------------------------------------------------
 TESTING <# # #S #> HOLD SIGN BASE >NUMBER HEX DECIMAL
+
+HEX
 
 : S=  \ ( ADDR1 C1 ADDR2 C2 -- T/F ) COMPARE TWO STRINGS.
    >R SWAP R@ = IF         \ MAKE SURE STRINGS HAVE SAME LENGTH
@@ -3556,8 +3801,6 @@ T{ tstructinst bytefield4 tstructinst - -> 24 }T
 T{ tstructinst plusfield tstructinst - -> 25 }T
 T{ tstructinst bytefield5 tstructinst - -> 35 }T
 T{ tstruct -> 36 }T
-
-\ ------------------------------------------------------------------------------
 
 TESTING COMPLETE
 

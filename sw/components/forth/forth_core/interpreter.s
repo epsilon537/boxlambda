@@ -368,7 +368,18 @@ quit_intern:
   laf x15, hook_quit
   lc x15, 0(x15)
 
-  jalr zero, x15, 0
+  pushda x15
+
+  call _try # Wrap the quit hook in a try block.
+
+  # If we get here, an exception was raised.
+  write "***Exception***: "
+
+  call _try # Wrap the exception handler call in a try block
+
+  drop
+
+  j quit_intern
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "(quit)" # ( -- )

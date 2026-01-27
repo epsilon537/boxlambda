@@ -8,6 +8,10 @@
 #include "forth.h"
 #include "testsuite.fs"
 #include "init.fs"
+#include "heap.fs"
+#include "pool.fs"
+#include "cstr.fs"
+#include "istr.fs"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -74,6 +78,18 @@ int main(void) {
   printf("Compiling Forth init.fs...\n");
 
   forth_load_buf((char*)init_fs, /*verbose=*/ false);
+
+  printf("Compiling heap.fs...\n");
+
+  forth_load_buf((char*)heap_fs, /*verbose=*/ false);
+
+  printf("Compiling pool.fs...\n");
+
+  forth_load_buf((char*)pool_fs, /*verbose=*/ false);
+
+  printf("Compiling istr.fs...\n");
+
+  forth_load_buf((char*)istr_fs, /*verbose=*/ false);
 
   printf("Forth-C FFI testcases...\n");
 

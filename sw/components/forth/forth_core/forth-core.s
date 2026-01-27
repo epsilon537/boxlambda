@@ -182,7 +182,7 @@ ramallot constantfoldingpointer, CELL
 ramallot leavepointer, CELL
 ramallot Entrypoint, CELL
 
-ramallot FlashFlags, CELL
+ramallot ExceptionFramePointer, CELL
 
 .ifdef within_os # Specials for Linux targets
   ramallot arguments, CELL
@@ -259,6 +259,7 @@ CoreDictionaryStart: # Set entry point for Dictionary
 # .include "flash.s"
 
 .include "stackjugglers.s"
+.include "exception.s"
 
 .ifdef letsroll
 .include "roll.s"

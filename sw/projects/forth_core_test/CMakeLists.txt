@@ -12,6 +12,11 @@ target_compile_options(forth_core_test
   -O2 -g
 )
 
+target_include_directories(forth_core_test
+  PRIVATE
+   ${PROJECT_SOURCE_DIR}/sw/components/forth/forth
+)
+
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(forth_core_test ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
 

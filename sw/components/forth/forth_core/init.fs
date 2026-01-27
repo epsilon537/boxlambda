@@ -1183,6 +1183,11 @@ numbertable exp-coef
   2drop
 ;
 
+\ 1<<u
+: bit ( u -- u )
+  1 swap lshift [inline]
+;
+
 \
 \ Structures
 \
@@ -1234,8 +1239,147 @@ numbertable exp-coef
 
 \ Interactive string printing, taken from testsuite.
 : .( ( -- )
-    [char] ) parse type
+    [char] ) parse type cr
 [immediate] ;
+
+\ Align an address to a power of two
+: alignto ( a power -- a ) swap 1- swap 1- or 1+ ;
+
+\ 1 cell size
+4 constant cell
+
+\ Add the size of n cells to x)
+\ ( x n -- x+n*cell )
+: cells+
+  cell * + ;
+
+\ array accessors
+: a@ ( i base -- x )
+    swap cells+ @ ;
+
+: a! ( x i base -- )
+    swap cells+ ! ;
+
+: b@ ( i base -- c )
+    + c@ ;
+
+: b! ( c i base -- )
+    + c! ;
+
+\ positive?
+\ ( x -- flag )
+: 0>
+  0 > ;
+
+\
+\ Exceptions
+\
+
+\ Assert that a value is true, otherwise raise a specified exception
+: averts ( f "name" -- )
+  ' ( f xt )
+  state @ if
+    postpone 0=
+    postpone if
+    rot literal,
+    postpone ?raise
+    postpone then
+  else
+    swap 0= if
+      ?raise
+    else
+      drop
+    then
+  then
+  [immediate]
+;
+
+\ Assert that a value is false, otherwise raise a specified exception
+: triggers ( f "name" -- )
+  '
+  state @ if
+    postpone 0<>
+    postpone if
+    rot literal,
+    postpone ?raise
+    postpone then
+  else
+    swap 0<> if
+      ?raise
+    else
+      drop
+    then
+  then
+  [immediate]
+;
+
+\ Check whether an exception, typically returned by `try`, matches a specified
+\ exception and if it does, replace it with zero, marking no exception
+\ otherwise passing the specified argument through.
+: suppress ( exc|0 "name" -- exc|0 )
+  '
+  state @ if
+    postpone dup
+    literal,
+    postpone =
+    postpone if
+    postpone drop
+    0 literal,
+    postpone then
+  else
+    swap dup rot = if
+      drop 0
+    then
+  then
+  [immediate]
+;
+
+\
+\ Lambdas
+\
+
+\ Begin lambda
+: [: ( -- )
+  \ [: is a compiling word, i.e. a code-generating word that executes when it's encountered in the definition of an other word.
+  \ When [: _executes_...
+  postpone ahead \ [: compiles an ahead, this pushes 2 items on the stack: ( patchaddr structmatchconst)
+  here -rot \ [: puts here on the stack. This the entry point of the code ahead is skipping over: ( lambdaentry patchaddr structmatchconst )
+  postpone push_ra \ [: compiles a add sp, sp -4 sw ra, (sp), i.e. it generates a prologue. (lambdaentry patchaddr structmatchconst )
+  [immediate] [compileonly]
+;
+
+\ End lambda
+: ;] ( -- )
+  \ When :] _executes_...
+  postpone exit \ :] compiles an epilogue. ( lambdaentry patchaddr structmatchconst )
+  postpone then \ :] compiles a then matching the ahead and consuming the 2 stack items ahead produced. ( lambdaentry ).
+  literal, \ :] compiles the lambda entry point as a literal.
+           \ when the literal executes (when the word invoking  [:..;] in its definition executes), the lambda entrypoint is pushed onto the stack.
+  [immediate] [compileonly]
+;
+
+\ The upshot of
+\ ... [: <lambdadef> ;] ... is:
+\        ...
+\        ahead
+\ xt: prologue
+\        <lambdadef>
+\        epilogue
+\ then
+\ xt
+\        ...
+\ i.e. [: .. ;] produces an xt representing the instructions within the [: .. ;].
+
+\
+\ roll
+\
+: roll
+    ?dup if
+        swap >r
+        1- recurse
+        r> swap
+    then
+;
 
 \ Setting the MTIMER Comparator
 : set-raw-time-cmp ( u -- ) s>d mtime64 d+ mtimecmp64! ;
