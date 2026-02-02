@@ -63,11 +63,29 @@ evaluate:
   Definition Flag_visible, "interpret" # ( -- )
 interpret:
 # -----------------------------------------------------------------------------
+  push x1
 
   laf x15, hook_interpret
   lc x15, 0(x15)
+  pushda x15
 
-  jalr zero, x15, 0
+  call _try # Wrap the interpret hook in a try block.
+
+  beq x8, zero, 1f
+
+  # If we get here, an exception was raised.
+  write "***Exception***: "
+  call _try # Wrap the exception handler call in a try block
+
+  beq x8, zero, 1f
+  # If we get here, an exception was raised, again
+  write "***Exception***: "
+  call execute
+
+1:
+  drop
+  pop x1
+  ret
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "(interpret)" # ( -- )
@@ -368,18 +386,7 @@ quit_intern:
   laf x15, hook_quit
   lc x15, 0(x15)
 
-  pushda x15
-
-  call _try # Wrap the quit hook in a try block.
-
-  # If we get here, an exception was raised.
-  write "***Exception***: "
-
-  call _try # Wrap the exception handler call in a try block
-
-  drop
-
-  j quit_intern
+  jalr zero, x15, 0
 
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "(quit)" # ( -- )
@@ -389,4 +396,23 @@ quit_vanilla:  # Main loop of Forth system.
   call interpret
   writeln " ok."
   j quit_vanilla
+
+check_exception:
+  push x1
+  beq x8, zero, 1f
+
+  # If we get here, an exception was raised.
+  write "***Exception***: "
+
+  call _try # Wrap the exception handler call in a try block
+
+  beq x8, zero, 1f
+  # If we get here, an exception was raised.
+  write "***Exception***: "
+
+  call execute
+1:
+  drop
+  pop x1
+  ret
 

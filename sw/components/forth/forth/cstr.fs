@@ -22,6 +22,7 @@ const char cstr_fs[] =  R"cstr_fs(
 : +0c! + 0 swap c! ;
 
 \ Compiles a 0-terminated string and gives back its address when executed.
+\ ( "string" -- addr )
 : s0"
   ['] (s") call, \ Compile a call to (s")
   here \ Remember where the string will be inserted. ( insert-addr )
@@ -36,6 +37,7 @@ const char cstr_fs[] =  R"cstr_fs(
   \ (s") returns to this point, the 1st instruction after the inserted string.
   ['] drop inline, \ drop length return by (s"), just return addr.
   [immediate]
+  [compileonly]
 ;
 
 \ Copy len bytes from c-addr to buf of at least 256 bytes and add 0 terminator

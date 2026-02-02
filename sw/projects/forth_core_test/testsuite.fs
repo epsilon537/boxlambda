@@ -306,6 +306,26 @@ VARIABLE #ERRORS 0 #ERRORS !
    QUIT  \ *** Uncomment this line to QUIT on an error
 ;
 
+\ "text" -- )
+: error"
+  [char] " parse
+  error
+;
+
+\ ( exception | 0 -- )
+: ?except_error
+  ?dup if
+    execute
+    s" Exception caught in: " error
+  then
+;
+
+: ?assert ( f -- )
+  0= if
+    s" assert failed: " error
+  then
+;
+
 VARIABLE ACTUAL-DEPTH         \ STACK RECORD
 CREATE ACTUAL-RESULTS 20 CELLS ALLOT
 
@@ -359,8 +379,6 @@ TESTING EXCEPTIONS
 
 : x-test-exception-1 ." Test exception 1." cr ;
 : x-test-exception-2 ." Test exception 2." cr ;
-
-.( 1 )
 
 : throws-exception-2
   true averts x-test-exception-1
@@ -421,6 +439,7 @@ TESTING LAMBDA
 : test-lambda [: + ;] ;
 
 T{ test-lambda 23 24 rot execute -> 47  }T
+T{ [: + ;] 23 24 rot execute -> 47  }T
 
 \ ------------------------------------------------------------------------
 TESTING HEAP
@@ -604,6 +623,53 @@ T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
 T{ str-pool-mem istr-allocated? -> <TRUE> }T
 T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
 T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
+
+\ ------------------------------------------------------------------------
+TESTING C STRINGS
+
+256 buffer: test-buf
+test-buf s" Hello" cstr ( addr )
+test-buf s0len ( len )
+T{ 5 = -> <TRUE> }T
+
+T{ test-buf s0len -> 5 }T
+
+test-buf s0>s ( addr len )
+T{ s" Hello" compare -> <true> }T
+
+: cstr-test
+  s0" Hello"
+;
+
+T{ cstr-test s0>s s" Hello" compare -> <true> }T
+
+256 buffer: test-buf2
+test-buf2 cstr" Hello"
+test-buf2 s0len ( len )
+T{ 5 = -> <TRUE> }T
+
+test-buf2 s0>s ( addr len )
+T{ s" Hello" compare -> <true> }T
+
+\ ------------------------------------------------------------------------
+TESTING FILE SYSTEM
+
+256 buffer: fs-buf
+
+[: s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;] try ?except_error ( fil )
+[: dup s" Hello World!" f_write ;] try ?except_error ( fil nbw )
+\ 12 bytes written
+12 = ?assert ( fil )
+[: f_close ;] try ?except_error ( )
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf 256 f_read ;] try ?except_error ( fil numbytes )
+dup 12 = ?assert ( fil numbytes )
+fs-buf swap ( fil fs-buf len )
+.( 2.1 )
+s" Hello World!" compare ?assert
+.( 3 )
+[: f_close ;] try ?except_error ( )
+.( 4 )
 
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS

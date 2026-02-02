@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "fs_ffi.h"
+#include "ff.h"
 
 #include "gpio.h"
 #include "forth.h"
@@ -12,6 +14,7 @@
 #include "pool.fs"
 #include "cstr.fs"
 #include "istr.fs"
+#include "fs.fs"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -61,6 +64,9 @@ void test_c_fun() {
   forth_pushda(88);
 }
 
+// The file system object
+FATFS fs;
+
 #ifdef __cplusplus
 }
 #endif
@@ -79,6 +85,22 @@ int main(void) {
 
   forth_load_buf((char*)init_fs, /*verbose=*/ false);
 
+  printf("Mounting file system...\n");
+  /* Clear file system object */
+  memset(&fs, 0, sizeof(FATFS));
+
+  FRESULT res = f_mount(&fs, "", 1);
+  if (res != FR_OK)
+  {
+    printf("FatFS mount error! %d\n", res);
+    return -1;
+  }
+
+  printf("Initializing Forth Filesystem FFI...\n");
+
+  fs_ffi_init();
+
+  printf("Forth FS FFI init complete.\n");
   printf("Compiling heap.fs...\n");
 
   forth_load_buf((char*)heap_fs, /*verbose=*/ false);
@@ -90,6 +112,14 @@ int main(void) {
   printf("Compiling istr.fs...\n");
 
   forth_load_buf((char*)istr_fs, /*verbose=*/ false);
+
+  printf("Compiling cstr.fs...\n");
+
+  forth_load_buf((char*)cstr_fs, /*verbose=*/ false);
+
+  printf("Loading fs.fs...\n");
+
+  forth_load_buf((char*)fs_fs, /*verbose=*/ false);
 
   printf("Forth-C FFI testcases...\n");
 

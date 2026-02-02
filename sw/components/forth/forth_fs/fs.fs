@@ -1,4 +1,5 @@
 const char fs_fs[] =  R"fs_fs(
+
 \ path is the principle working buffer for filesystem paths.
 256 buffer: path
 
@@ -6,320 +7,433 @@ const char fs_fs[] =  R"fs_fs(
 256 buffer: path2
 
 \ Put a pathname string of max 255 bytes in the path object.
-\ ( c-addr len  -- )
-: str>path path -rot cstr ;
-
-\ Read string from input stream into path.
-\ ( "path" -- )
-: path" path cstr" ;
+\ ( c-addr len path -- )
+: str>path -rot cstr ;
 
 \ Get pathname string from path object
-\ ( -- c-addr len )
-: path>str path s0>s ;
+\ ( path -- c-addr len )
+: path>str s0>s ;
 
-\ Put a pathname string of max 255 bytes in the path2 object.
-\ ( c-addr len path/path2/pattern -- )
-: str>path2 path2 -rot cstr ;
-
-\ Read string from input stream into path2.
-\ ( "path" -- )
-: path2" path2 cstr" ;
-
-\ Get pathname string from path2 object
-\ ( -- c-addr len )
-: path2>str path2 s0>s ;
-
-\ FILINFO object, populated by directory operations below.
+\ FILINFO global object, populated by directory operations below.
 /FILINFO buffer: filinfo
 
-\ Retrieve file size from filinfo object.
-\ ( filinfo -- fsize )
-: .fsize
-  fsize+ + @
+\ 0-initialize
+filinfo /FILINFO 0 fill
+
+\
+\ filinfo object accessors
+\
+
+\ Retrieve file size from global filinfo object.
+\ ( -- fsize )
+: filinfo.fsize
+  filinfo fsize+ + @
 ;
 
-\ Retrieve date from filinfo object.
-\ ( filinfo -- dd mm yy )
-: .fdate
-  fdate+ + @ \ ( yymmdd )
-  dup 9 rshift 127 and swap \ ( yy yymmdd )
-  dup 5 rshift 15 and -rot \ ( mm yy yymmdd )
-  31 and -rot \ ( dd mm yy )
+\ Set date in global filinfo object.
+\ ( dd mm yyyy -- )
+\ FIXME
+: filinfo.setfdate
+  1980 - $7f and 9 lshift -rot ( yy0000 dd mm )
+  $f and 5 lshift -rot ( mm00 yy0000 dd )
+  $1f and or or ( yymmdd )
+  filinfo fdate+ + !
 ;
 
-\ Retrieve time from filinfo object.
-\ ( filinfo -- hh mm ss )
-: .ftime
-  ftime+ + @ \ ( hhmmss )
-  dup 11 rshift 31 and swap \ ( hh hhmmss )
-  dup 5 rshift 62 and -rot \ ( mm hh hhmmss )
-  31 and shl -rot \ ( ss mm hh )
+\ Retrieve date from global  filinfo object.
+\ ( -- dd mm yyyy )
+: filinfo.getfdate
+  filinfo fdate+ + @ \ ( yymmdd )
+  dup 9 rshift $7f and 1980 + swap \ ( yy yymmdd )
+  dup 5 rshift $f and -rot \ ( mm yy yymmdd )
+  $1f and -rot \ ( dd mm yy )
 ;
 
-\ Retrieve attributes from filinfo object.
-\ ( filinfo -- attrib )
-: .fattrib
-  fattrib+ + c@
+\ Set time in global filinfo object.
+\ ( hh mm ss -- )
+\ FIXME
+: filinfo.setftime
+  shr and $1f -rot ( 0000ss hh mm )
+  and $3f 5 rshift -rot ( mm00 0000ss hh )
+  and $1f 11 rshift ( mm00 0000ss hh0000 )
+  or or ( hhmmss )
+  filinfo ftime+ + !
 ;
 
-\ Retrieve name from filinfo object.
-\ ( filinfo -- c-addr len )
-: .fname
-  fname+ + s0>s
+\ Retrieve time from global filinfo object.
+\ ( -- hh mm ss )
+: filinfo.getftime
+  filinfo ftime+ + @ \ ( hhmmss )
+  dup 11 rshift $1f and swap \ ( hh hhmmss )
+  dup 5 rshift $3f and -rot \ ( mm hh hhmmss )
+  $1f and shl -rot \ ( ss mm hh )
 ;
 
-\ To create a fil object:
-\ create fil /FIL allot
+\ Retrieve attributes from global filinfo object.
+\ ( -- attrib )
+: filinfo.fattrib filinfo fattrib+ + c@ ;
 
-\ To create a dir object:
-\ create dir /DIR allot
+\ Retrieve name from global filinfo object.
+\ ( -- c-addr len )
+: filinfo.fname filinfo fname+ + s0>s ;
+
+\ File object pool
+64 constant MAX_NUM_OPEN_FILES
+MAX_NUM_OPEN_FILES /FIL * constant FILE_POOL_MEM_SZ
+create file-pool-memory FILE_POOL_MEM_SZ allot
+create file-pool pool-size allot
+/FIL file-pool init-pool
+file-pool-memory FILE_POOL_MEM_SZ file-pool add-pool
+
+\ Directory object pool
+8 constant MAX_NUM_OPEN_DIRS
+MAX_NUM_OPEN_DIRS /DIR * constant DIR_POOL_MEM_SZ
+create dir-pool-memory DIR_POOL_MEM_SZ allot
+create dir-pool pool-size allot
+/DIR dir-pool init-pool
+dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
+
+\ Exceptions:
+: x-fr-disk-err ." FR: (1) A hard error occurred in the low level disk I/O layer" cr ;
+: x-fr-int-err ." FR: (2) Assertion failed" cr ;
+: x-fr-not-ready ." FR: (3) The physical drive cannot work" cr ;
+: x-fr-no-file ." FR: (4) Could not find the file" cr ;
+: x-fr-no-path ." FR: (5) Could not find the path" cr ;
+: x-fr-invalid-name ." FR: (6) The path name format is invalid" cr ;
+: x-fr-denied ." FR: (7) Access denied due to prohibited access or directory full" cr ;
+: x-fr-exist ." FR: (8) Access denied due to prohibited access" cr ;
+: x-fr-invalid-object ." FR: (9) The file/directory object is invalid" cr ;
+: x-fr-write-protected ." FR: (10) The physical drive is write protected" cr ;
+: x-fr-invalid-drive ." FR: (11) The logical drive number is invalid" cr ;
+: x-fr-not-enabled ." FR: (12) The volume has no work area" cr ;
+: x-fr-no-filesystem ." FR: (13) There is no valid FAT volume" cr ;
+: x-fr-mkfs-aborted ." FR: (14) The f-mkfs() aborted due to any problem" cr ;
+: x-fr-timeout ." FR: (15) Could not get a grant to access the volume within defined period" cr ;
+: x-fr-locked ." FR: (16) The operation is rejected according to the file sharing policy" cr ;
+: x-fr-not-enough-core ." FR: (17) LFN working buffer could not be allocated" cr ;
+: x-fr-too-many-open-files ." FS: (18) Number of open files > FF-FS-LOCK" cr ;
+: x-fr-unknown ." FR: (??) Unknown exception" cr ;
+
+\ ( ior -- xt)
+: ior>exception
+  case
+    FR_OK of 0 endof
+    FR_DISK_ERR of ['] x-fr-disk-err endof
+    FR_INT_ERR of ['] x-fr-int-err endof
+    FR_NOT_READY of ['] x-fr-not-ready endof
+    FR_NO_FILE of ['] x-fr-no-file endof
+    FR_NO_PATH of ['] x-fr-no-path endof
+    FR_INVALID_NAME of ['] x-fr-invalid-name endof
+    FR_DENIED of ['] x-fr-denied endof
+    FR_EXIST of ['] x-fr-exist endof
+    FR_INVALID_OBJECT of ['] x-fr-invalid-object endof
+    FR_WRITE_PROTECTED of ['] x-fr-write-protected endof
+    FR_INVALID_DRIVE of ['] x-fr-invalid-drive endof
+    FR_NOT_ENABLED of ['] x-fr-not-enabled endof
+    FR_NO_FILESYSTEM of ['] x-fr-no-filesystem endof
+    FR_MKFS_ABORTED of ['] x-fr-mkfs-aborted endof
+    FR_TIMEOUT of ['] x-fr-timeout endof
+    FR_LOCKED of ['] x-fr-locked endof
+    FR_NOT_ENOUGH_CORE of ['] x-fr-not-enough-core endof
+    FR_TOO_MANY_OPEN_FILES of ['] x-fr-too-many-open-files endof
+    ['] x-fr-unknown
+  endcase
+;
+
+\ Check IOR and throw exception if non-zero
+\ ( ior -- )
+: check-throw-ior ior>exception ?raise ;
+
+\ Print the IO return code string.
+\ ( ior -- )
+: .ior ior>exception execute ;
 
 \
 \ File Access:
 \
 
-\ Open the file specified in the path object.
-\ Mode values:
-\ FA_READ, FA_WRITE, FA_OPEN_EXISTING, FA_CREATE_NEW, FA_CREATE_ALWAYS,
-\ FA_OPEN_ALWAYS, FA_OPEN_APPEND
-
-\ ( fil mode -- ior )
+\ Open the file specified in input string.
+\ Mode argument is a combination of following values:
+\ FA_READ:Specifies read access to the file. Data can be read from the file.
+\ FA_WRITE: Specifies write access to the file. Data can be written to the file. Combine with FA_READ for read-write access.
+\ FA_OPEN_EXISTING:	Opens the file. The function fails if the file is not existing. (Default)
+\ FA_CREATE_ALWAYS: Creates a new file. If the file is existing, the file is truncated and overwritten.
+\ FA_CREATE_NEW: Creates a new file. The function fails if the file is existing.
+\ FA_OPEN_ALWAYS: Opens the file. If it is not exist, a new file is created.
+\ FA_OPEN_APPEND: Same as FA_OPEN_ALWAYS except the read/write pointer is set end of the file.
+\ May throw x-fr-* and x-pool-* exceptions.
+\ ( addr len mode -- fil )
 : f_open
-  path swap \ ( file path mode )
-  fs_f_open
+  -rot path str>path ( mode )
+  file-pool allocate-pool >r ( mode )
+  r@ path rot ( fil path mode )
+  fs_f_open ( ior )
+  ?dup if ( ior )
+    r@ file-pool free-pool ( ior )
+    check-throw-ior ( )
+  then ( )
+  r> ( fil )
 ;
 
 \ Close file
-\ ( fil -- ior )
+\ May throw x-fr-* exception.
+\ ( fil -- )
 : f_close
-  fs_f_close
+  dup fs_f_close ( fil ior )
+  check-throw-ior ( fil )
+  file-pool free-pool ( )
 ;
 
 \ Internal variable used to hold a numbytes value.
 0 variable (fs_nbytes)
 
 \ Read n bytes from file into buffer
-\ ( fil buf numbytes -- numbytes ior )
+\ May throw x-fr-* exception.
+\ ( fil buf numbytes -- numbytes )
 : f_read
-  (fs_nbytes)    \ ( fp buf btr *br )
-  fs_f_read      \ ( ior )
-  (fs_nbytes) @ swap \ ( nbytes ior )
+  (fs_nbytes)     \ ( fp buf btr *br )
+  fs_f_read       \ ( ior )
+  check-throw-ior \ ( )
+  (fs_nbytes) @   \ ( nbytes )
 ;
 
 \ Write n bytes from buffer into file.
-\ ( fil buf numbytes -- numbytes ior )
+\ May throw x-fr-* exception.
+\ ( fil buf numbytes -- numbytes )
 : f_write
   (fs_nbytes)        \ ( fp buf btw *bw )
   fs_f_write         \ ( ior )
-  (fs_nbytes) @ swap \ ( nbytesd ior )
+  check-throw-ior    \ ( )
+  (fs_nbytes) @      \ ( nbytes )
 ;
 
 \ Moves the file read/write pointer of an open file. Can also be used to expand
 \ the file size (cluster pre-allocation).
-\ ( fil offset -- ior )
+\ May throw x-fr-* exception.
+\ ( fil offset -- )
 : f_lseek
   fs_f_lseek
+  check-throw-ior
 ;
 
 \ Truncate file size to current read/write pointer.
-\ ( fil -- ior )
+\ May throw x-fr-* exception.
+\ ( fl-il -- )
 : f_truncate
   fs_f_truncate
+  check-throw-ior
 ;
 
 \ Flush cached data
-\ ( fil -- ior )
+\ May throw x-fr-* exception.
+\ ( fil -- )
 : f_sync
   fs_f_sync
+  check-throw-ior
 ;
 
 \ Prepare or allocate a contiguous data area to the file.
-\ ( fil size opt -- ior )
+\ May throw x-fr-* exception.
+\ ( fil size opt -- )
 : f_expand
   fs_f_expand
+  check-throw-ior
 ;
 
 \ Read a string from the file
-\ ( fil len buf -- buf )
+\ May throw x-fr-* exception.
+\ ( fil len buf -- )
 : f_gets
   fs_f_gets
+  check-throw-ior
 ;
 
 \ Write a character to the file
-\ ( file c -- ior )
+\ May throw x-fr-* exception.
+\ ( fil c -- )
 : f_putc
   fs_f_putc
+  check-throw-ior
 ;
 
 \ Write a string to the file
-\ ( fil str -- ior )
+\ May throw x-fr-* exception.
+\ ( fil str -- )
 : f_puts
   fs_f_puts
+  check-throw-ior
 ;
 
 \ Get current read/write pointer
 \ ( fil -- rwptr )
-: f_tell
-  fs_f_tell
-;
+: f_tell fs_f_tell ;
 
 \ Test for end of file.
 \ ( fil -- flag )
-: f_eof
-  fs_f_eof
-;
+: f_eof fs_f_eof ;
 
 \ Get file size
 \ ( fil -- size )
-: f_size
-  fs_f_size
-;
+: f_size fs_f_size ;
 
 \ Test for an error
 \ ( fil -- flag )
-: f_error
-  fs_f_error
-;
-
-\ Print the IO return code string.
-\ ( ior -- )
-: .ior
-  case
-    FR_OK of ." FR_OK" endof
-    FR_DISK_ERR of ." FR_DISK_ERR" endof
-    FR_INT_ERR of ." FR_INT_ERR" endof
-    FR_NOT_READY of ." FR_NOT_READY" endof
-    FR_NO_FILE of ." FR_NO_FILE" endof
-    FR_NO_PATH of ." FR_NO_PATH" endof
-    FR_INVALID_NAME of ." FR_INVALID_NAME" endof
-    FR_DENIED of ." FR_DENIED" endof
-    FR_EXIST of ." FR_EXIST" endof
-    FR_INVALID_OBJECT of ." FR_INVALID_OBJECT" endof
-    FR_WRITE_PROTECTED of ." FR_WRITE_PROTECTED" endof
-    FR_INVALID_DRIVE of ." FR_INVALID_DRIVE" endof
-    FR_NOT_ENABLED of ." FR_NOT_ENABLED" endof
-    FR_NO_FILESYSTEM of ." FR_NO_FILESYSTEM" endof
-    FR_MKFS_ABORTED of ." FR_MKFS_ABORTED" endof
-    FR_TIMEOUT of ." FR_TIMEOUT" endof
-    FR_LOCKED of ." FR_LOCKED" endof
-    FR_NOT_ENOUGH_CORE of ." FR_NOT_ENOUGH_CORE" endof
-    FR_TOO_MANY_OPEN_FILES of ." FR_TOO_MANY_OPEN_FILES" endof
-    FR_INVALID_PARAMETER of ." FR_INVALID_PARAMETER" endof
-    ." Unkown IOR"
-  endcase
-;
+: f_error fs_f_error ;
 
 \
 \ Directory Access:
 \
 
-\ Open the directory specified in the path object.
-\ ( dir -- ior )
+\ Open the directory specified in the input string.
+\ May throw x-fr-* and x-pool-* exceptions.
+\ ( addr len -- dir )
 : f_opendir
-  path
-  fs_f_opendir
+  path str>path ( )
+  dir-pool allocate-pool ( dir )
+  dup path ( dir dir path )
+  fs_f_opendir ( dir ior )
+  ?dup if ( dir ior )
+    over ( dir ior dir )
+    dir-pool free-pool ( dir ior )
+    check-throw-ior ( dir )
+  then ( dir )
 ;
 
 \ Close directory
-\ ( dir -- ior )
+\ May throw x-fr-* exception.
+\ ( dir -- )
 : f_closedir
-  fs_f_closedir
+  dup fs_f_closedir ( dir ior )
+  check-throw-ior ( dir )
+  dir-pool free-pool ( )
 ;
 
 \ Read directory entry into the filinfo object.
-\ ( dir -- ior )
+\ May throw x-fr-* exception.
+\ ( dir -- )
 : f_readdir
   filinfo
   fs_f_readdir
+  check-throw-ior
 ;
 
 \ Rewind directory
-\ ( dir -- ior )
+\ May throw x-fr-* exception.
+\ ( dir -- )
 : f_rewind
   0 ( dir 0 )
   fs_f_readdir
+  check-throw-ior
 ;
 
-\ Open the directory specified in path and read first item patching pattern specified in path2.
+\ Open the directory specified in addr/len1 input string and read first
+\ item matching pattern specified in addr/len2 input string.
 \ Put result in filinfo object.
-\ ( dir -- ior )
+\ May throw x-fr-* exception.
+\ ( addr1 len1 addr2 len2 dir -- )
 : f_findfirst
-  filinfo path path2 ( dir nfo path pattern )
-  fs_f_findfirst
+  >r path2 str>path path str>path ( )
+  r@ filinfo path path2 ( dir nfo path pattern )
+  fs_f_findfirst ( ior )
+  check-throw-ior ( )
 ;
 
 \ Find next entry matching pattern.
 \ Put result in filinfo object.
-\ ( dir -- ior )
+\ May throw x-fr-* exception.
+\ ( dir -- )
 : f_findnext
   filinfo
   fs_f_findnext
+  check-throw-ior
 ;
 
 \
 \ File and Directory Management:
 \
 
-\ Check existence of file or directory specified in path. Put result in filinfo.
-\ ( -- ior )
+\ Check existence of file or directory with given name. Put result in filinfo.
+\ May throw x-fr-* exception.
+\ ( addr len -- )
 : f_stat
-  path
-  filinfo
-  fs_f_stat
+  path str>path ( )
+  path filinfo ( path filinfo )
+  fs_f_stat ( ior )
+  check-throw-ior ( )
 ;
 
-\ Remove file or subdirectory specified in path.
-\ ( -- ior )
+\ Remove file or subdirectory with given name.
+\ May throw x-fr-* exception.
+\ ( addr len -- )
 : f_unlink
-  path
-  fs_f_unlink
+  path str>path ( )
+  path ( path )
+  fs_f_unlink ( ior )
+  check-throw-ior ( )
 ;
 
-\ Rename/move fil/dir in path to path2.
-\ ( -- ior )
+\ Rename/move fil/dir in addr/len1 string addr/len2 string.
+\ May throw x-fr-* exception.
+\ ( addr1 len1 addr2 len2 -- )
 : f_rename
-  path2
-  path
-  fs_f_rename
+  path2 str>path
+  path str>path
+  path path2 ( old_name new_name )
+  fs_f_rename ( ior )
+  check-throw-ior ( )
 ;
 
-\ Change attribute of file or directory specified in path.
+\ Change attribute of file or directory with given name.
 \ Attribute values:
 \ AM_RDO, AM_ARC, AM_SYS, AM_HID
-\ ( attr mask -- ior )
+\ May throw x-fr-* exception.
+\ ( addr len attr mask -- )
 : f_chmod
-  path -rot
-  fs_f_chmod
+  >r >r ( addr len )
+  path str>path ( )
+  path r> r> ( path attr mask )
+  fs_f_chmod ( ior )
+  check-throw-ior ( )
 ;
 
-\ Change timestamp of file or subdirectory specified in path to value specified in filinfo.
-\ ( -- ior )
+\ Change timestamp of file or subdirectory with given name to value specified in filinfo.
+\ May throw x-fr-* exception.
+\ ( addr len -- )
 : f_utime
-  path
-  filinfo
-  fs_f_utime
+  path str>path ( )
+  path filinfo ( path filinfo )
+  fs_f_utime ( ior )
+  check-throw-ior ( )
 ;
 
-\ Make directory specified in path.
-\ ( -- ior )
+\ Make directory with given name.
+\ May throw x-fr-* exception.
+\ ( addr len -- )
 : f_mkdir
-  path
-  fs_f_mkdir
+  path str>path ( )
+  path ( path )
+  fs_f_mkdir ( ior )
+  check-throw-ior ( )
 ;
 
-\ Change current directory to directory specified in path.
-\ ( -- ior )
+\ Change current directory to directory with given name.
+\ May throw x-fr-* exception.
+\ ( addr len -- )
 : f_chdir
-  path
-  fs_f_chdir
+  path str>path ( )
+  path ( path )
+  fs_f_chdir ( ior )
+  check-throw-ior ( )
 ;
 
-\ Get current working directory into path.
-\ ( -- c-addr len ior )
+\ Return current working directory name.
+\ The given string object remains valid until the next f_* operation.
+\ May throw x-fr-* exception.
+\ ( -- addr len )
 : f_getcwd
   path 255 fs_f_getcwd ( ior )
-  path>str ( ior c-addr len )
-  rot ( len c-addr ior )
+  check-throw-ior ( )
+  path path>str ( addr len )
 ;
 
 \
@@ -327,9 +441,12 @@ const char fs_fs[] =  R"fs_fs(
 \
 
 \ Get total and free bytes on volume.
-\ ( -- tot free ior )
+\ FIXME
+\ ( -- tot free )
 : f_getfree
-  s0"
-  fs_f_getfree
+  s0" "
+  fs_f_getfree ( tot free ior )
+  check-throw-ior
 ;
+
 )fs_fs";

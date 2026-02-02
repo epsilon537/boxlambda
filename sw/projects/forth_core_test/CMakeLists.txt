@@ -20,7 +20,7 @@ target_include_directories(forth_core_test
 #Function defined in parent CMakeLists.txt file:
 link_and_create_image(forth_core_test ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
 
-target_link_libraries(forth_core_test forth_core timer gpio bootstrap)
+target_link_libraries(forth_core_test fatfs forth_core forth_fs timer gpio bootstrap)
 
 add_flash_sw_target(forth_core_test)
 
