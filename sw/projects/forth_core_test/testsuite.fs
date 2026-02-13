@@ -75,21 +75,6 @@ const char testsuite[] =  R"testsuite(
     BUF0
 ;
 
-\ : >number ( ud1 c-addr1 u1 -- ud2 c-addr2 u2 )
-\     begin
-\         dup
-\     while
-\         over c@ digit
-\         0= if drop exit then
-\         >r 2swap base @
-\         tuck * >r um* r> + \ Inlined Swapforth ud* ( ud1 u -- ud2 )
-\         r> s>d d+ 2swap
-\         1 /string
-\     repeat
-\ ;
-
-: chars ( u -- u ) [0-foldable] ;
-: char+ ( u -- u+1 ) 1+ [1-foldable] ;
 
 : erase ( addr u -- ) 0 fill ;
 
@@ -134,10 +119,6 @@ const char testsuite[] =  R"testsuite(
 
 : within ( n1|u1 n2|u2 n3|u3 -- flag ) over - >r - r> u< [3-foldable] ;
 
-
-
-: /string dup >r - swap r> + swap ;
-
 : 1/string 1 /string ;
 
 
@@ -168,8 +149,6 @@ const char testsuite[] =  R"testsuite(
     drop r>
     tuck -
 ;
-
-100 buffer: pad
 
 \ [ifdef] RISC-V
 
@@ -237,8 +216,6 @@ const char testsuite[] =  R"testsuite(
 
 : dmin ( d1 d2 -- d ) 2over 2over d< if 2drop else 2nip then [4-foldable] ;
 : dmax ( d1 d2 -- d ) 2over 2over d< if 2nip else 2drop then [4-foldable] ;
-
-: m+ ( d n -- d' ) s>d d+ [3-foldable] ;
 
 : d.r  ( d n -- )
     >r
@@ -599,6 +576,56 @@ test-pool-memory 32 test-pool add-pool
 T{ test-pool pool-free-count -> 4 }T
 
 \ ------------------------------------------------------------------------
+TESTING /STRING
+
+: s1 s" /string test" ;
+
+T{ s1  5 /STRING -> s1 SWAP 5 + SWAP 5 - }T
+T{ s1 10 /STRING -4 /STRING -> s1 6 /STRING }T
+T{ s1  0 /STRING -> s1 }T
+
+\ ------------------------------------------------------------------------
+TESTING >NUMBER
+
+hex
+
+CREATE GN-BUF 0 C,
+: GN-STRING GN-BUF 1 ;
+: GN-CONSUMED GN-BUF CHAR+ 0 ;
+: GN' [CHAR] ' WORD CHAR+ C@ GN-BUF C! GN-STRING ;
+T{ 0 0 GN' 0' >NUMBER ->         0 0 GN-CONSUMED }T
+T{ 0 0 GN' 1' >NUMBER ->         1 0 GN-CONSUMED }T
+T{ 1 0 GN' 1' >NUMBER -> BASE @ 1+ 0 GN-CONSUMED }T
+\ FOLLOWING SHOULD FAIL TO CONVERT
+T{ 0 0 GN' -' >NUMBER ->         0 0 GN-STRING   }T
+T{ 0 0 GN' +' >NUMBER ->         0 0 GN-STRING   }T
+T{ 0 0 GN' .' >NUMBER ->         0 0 GN-STRING   }T
+
+: >NUMBER-BASED
+   BASE @ >R BASE ! >NUMBER R> BASE ! ;
+
+T{ 0 0 GN' 2'       10 >NUMBER-BASED ->  2 0 GN-CONSUMED }T
+T{ 0 0 GN' 2'        2 >NUMBER-BASED ->  0 0 GN-STRING   }T
+T{ 0 0 GN' F'       10 >NUMBER-BASED ->  F 0 GN-CONSUMED }T
+T{ 0 0 GN' G'       10 >NUMBER-BASED ->  0 0 GN-STRING   }T
+\ T{ 0 0 GN' G' MAX-BASE >NUMBER-BASED -> 10 0 GN-CONSUMED }T
+\ T{ 0 0 GN' Z' MAX-BASE >NUMBER-BASED -> 23 0 GN-CONSUMED }T
+
+: GN1 ( UD BASE -- UD' LEN )
+   \ UD SHOULD EQUAL UD' AND LEN SHOULD BE ZERO.
+   BASE @ >R BASE !
+   <# #S #>
+   0 0 2SWAP >NUMBER SWAP DROP    \ RETURN LENGTH ONLY
+   R> BASE ! ;
+
+T{        0   0        2 GN1 ->        0   0 0 }T
+T{ MAX-UINT   0        2 GN1 -> MAX-UINT   0 0 }T
+T{ MAX-UINT DUP        2 GN1 -> MAX-UINT DUP 0 }T
+\ T{        0   0 MAX-BASE GN1 ->        0   0 0 }T
+\ T{ MAX-UINT   0 MAX-BASE GN1 -> MAX-UINT   0 0 }T
+\ T{ MAX-UINT DUP MAX-BASE GN1 -> MAX-UINT DUP 0 }T
+
+\ ------------------------------------------------------------------------
 TESTING INTERPRETED STRINGS
 
 s" 123"
@@ -625,9 +652,68 @@ T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
 T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
 
 \ ------------------------------------------------------------------------
+TESTING SPRINTF
+
+hex
+
+0 INVERT 1 RSHIFT           CONSTANT MID-UINT
+0 INVERT 1 RSHIFT INVERT    CONSTANT MID-UINT+1
+
+\ empty string
+T{ s" " pad sprintf s" " compare -> <TRUE> }T
+
+\ hai
+T{ s" hai" pad sprintf s" hai" compare -> <TRUE> }T
+
+\ test %c
+T{ 'r' 'a' 'h' 'c' s" %c%c%c%c" pad sprintf s" char" compare -> <TRUE> }T
+
+\ test %%
+T{ s" %%" pad sprintf s" %" compare -> <TRUE> }T
+
+max-uint ffffffffffffffff = constant 64-bit
+
+\ test %n
+T{ 0 s" %n" pad sprintf s" 0" compare -> <TRUE> }T
+T{ max-uint s" %n" pad sprintf s" -1" compare -> <TRUE> }T
+\ test %u
+T{ 0 s" %u" pad sprintf s" 0" compare -> <TRUE> }T
+\ test %dn
+T{ 0 0 s" %dn" pad sprintf s" 0" compare -> <TRUE> }T
+T{ max-uint max-uint s" %dn" pad sprintf s" -1" compare -> <TRUE> }T
+\ test %du
+T{ 0 0 s" %du" pad sprintf s" 0" compare -> <TRUE> }T
+\ test %s
+T{ s" bar" s" foo" s" %s%s" pad sprintf s" foobar" compare -> <TRUE> }T
+
+\ right justify
+T{ 0 s" %2n" pad sprintf s"  0" compare -> <TRUE> }T
+T{ 'a' s" %2c" pad sprintf s"  a" compare -> <TRUE> }T
+T{ s" %2%" pad sprintf s"  %" compare -> <TRUE> }T
+T{ s" bar" s" %6s" pad sprintf s"    bar" compare -> <TRUE> }T
+T{ s" foobar" s" %3s" pad sprintf s" foobar" compare -> <TRUE> }T
+T{ 1 s" %02n" pad sprintf s" 01" compare -> <TRUE> }T
+T{ 'a' s" %02c" pad sprintf s" 0a" compare -> <TRUE> }T
+T{ s" %02%" pad sprintf s" 0%" compare -> <TRUE> }T
+T{ s" bar" s" %06s" pad sprintf s" 000bar" compare -> <TRUE> }T
+T{ s" foobar" s" %03s" pad sprintf s" foobar" compare -> <TRUE> }T
+
+\ left justify
+T{ 0 s" %-2n" pad sprintf s" 0 " compare -> <TRUE> }T
+T{ 'a' s" %-2c" pad sprintf s" a " compare -> <TRUE> }T
+T{ s" %-2%" pad sprintf s" % " compare -> <TRUE> }T
+T{ s" bar" s" %-6s" pad sprintf s" bar   " compare -> <TRUE> }T
+T{ s" foobar" s" %-3s" pad sprintf s" foobar" compare -> <TRUE> }T
+T{ 1 s" %-02n" pad sprintf s" 1 " compare -> <TRUE> }T
+T{ 'a' s" %-02c" pad sprintf s" a " compare -> <TRUE> }T
+T{ s" %-02%" pad sprintf s" % " compare -> <TRUE> }T
+T{ s" bar" s" %-06s" pad sprintf s" bar   " compare -> <TRUE> }T
+T{ s" foobar" s" %-03s" pad sprintf s" foobar" compare -> <TRUE> }T
+
+\ ------------------------------------------------------------------------
 TESTING C STRINGS
 
-256 buffer: test-buf
+#256 buffer: test-buf
 test-buf s" Hello" cstr ( addr )
 test-buf s0len ( len )
 T{ 5 = -> <TRUE> }T
@@ -643,7 +729,7 @@ T{ s" Hello" compare -> <true> }T
 
 T{ cstr-test s0>s s" Hello" compare -> <true> }T
 
-256 buffer: test-buf2
+#256 buffer: test-buf2
 test-buf2 cstr" Hello"
 test-buf2 s0len ( len )
 T{ 5 = -> <TRUE> }T
@@ -654,22 +740,156 @@ T{ s" Hello" compare -> <true> }T
 \ ------------------------------------------------------------------------
 TESTING FILE SYSTEM
 
-256 buffer: fs-buf
+#256 buffer: fs-buf
 
+\ Basics:
+\ Check FA mode values
+T{ FA_READ -> $1 }T
+T{ FA_WRITE -> $2 }T
+T{ FA_OPEN_EXISTING -> $0 }T
+T{ FA_CREATE_NEW -> $4 }T
+T{ FA_CREATE_ALWAYS -> $8 }T
+T{ FA_OPEN_ALWAYS -> $10 }T
+T{ FA_OPEN_APPEND -> $30 }T
+
+\ Check FR IOR values
+T{ FR_OK -> $0 }T
+T{ FR_DISK_ERR -> $1 }T
+T{ FR_INT_ERR -> $2 }T
+T{ FR_NOT_READY -> $3 }T
+T{ FR_NO_FILE -> $4 }T
+T{ FR_NO_PATH -> $5 }T
+T{ FR_INVALID_NAME -> $6 }T
+T{ FR_DENIED -> $7 }T
+T{ FR_EXIST -> $8 }T
+T{ FR_INVALID_OBJECT -> $9 }T
+T{ FR_WRITE_PROTECTED -> $A }T
+T{ FR_INVALID_DRIVE -> $B }T
+T{ FR_NOT_ENABLED -> $C }T
+T{ FR_NO_FILESYSTEM -> $D }T
+T{ FR_MKFS_ABORTED -> $E }T
+T{ FR_TIMEOUT -> $F }T
+T{ FR_LOCKED -> $10 }T
+T{ FR_NOT_ENOUGH_CORE -> $11 }T
+T{ FR_TOO_MANY_OPEN_FILES -> $12 }T
+T{ FR_INVALID_PARAMETER -> $13 }T
+
+\ Check ior>exception mapping
+T{ FR_DISK_ERR ior>exception -> ' x-fr-disk-err }T
+T{ FR_INT_ERR ior>exception -> ' x-fr-int-err }T
+T{ FR_NOT_READY ior>exception -> ' x-fr-not-ready }T
+T{ FR_NO_FILE ior>exception -> ' x-fr-no-file }T
+T{ FR_NO_PATH ior>exception -> ' x-fr-no-path }T
+T{ FR_INVALID_NAME ior>exception -> ' x-fr-invalid-name }T
+T{ FR_DENIED ior>exception -> ' x-fr-denied }T
+T{ FR_EXIST ior>exception -> ' x-fr-exist }T
+T{ FR_INVALID_OBJECT ior>exception -> ' x-fr-invalid-object }T
+T{ FR_WRITE_PROTECTED ior>exception -> ' x-fr-write-protected }T
+T{ FR_INVALID_DRIVE ior>exception -> ' x-fr-invalid-drive }T
+T{ FR_NOT_ENABLED ior>exception -> ' x-fr-not-enabled }T
+T{ FR_NO_FILESYSTEM ior>exception -> ' x-fr-no-filesystem }T
+T{ FR_MKFS_ABORTED ior>exception -> ' x-fr-mkfs-aborted }T
+T{ FR_TIMEOUT ior>exception -> ' x-fr-timeout }T
+T{ FR_LOCKED ior>exception -> ' x-fr-locked }T
+T{ FR_NOT_ENOUGH_CORE ior>exception -> ' x-fr-not-enough-core }T
+T{ FR_TOO_MANY_OPEN_FILES ior>exception -> ' x-fr-too-many-open-files }T
+T{ FR_INVALID_PARAMETER ior>exception -> ' x-fr-invalid-parameter }T
+
+\ Check f_open, f_close, f_read, f_write
 [: s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;] try ?except_error ( fil )
-[: dup s" Hello World!" f_write ;] try ?except_error ( fil nbw )
+dup [: s" Hello World!" f_write ;] try ?except_error ( fil nbw )
 \ 12 bytes written
-12 = ?assert ( fil )
+#12 = ?assert ( fil )
+dup [: f_sync ;] try ?except_error ( fil )
+[: f_close ;] try ?except_error ( )
+
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
+dup #12 = ?assert ( fil numbytes )
+fs-buf swap ( fil fs-buf len )
+s" Hello World!" compare ?assert
+[: f_close ;] try ?except_error ( )
+
+\ Check f_lseek, f_tell, f_eof and f_size
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: f_eof ;] try ?except_error 0= ?assert ( fil )
+dup [: f_size ;] try ?except_error #12 = ?assert ( fil )
+dup [: 6 f_lseek ;] try ?except_error ( fil )
+dup [: f_eof ;] try ?except_error 0= ?assert ( fil )
+dup [: f_tell ;] try ?except_error ( fil pos )
+6 = ?assert ( fil )
+dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
+dup 6 = ?assert ( fil numbytes )
+fs-buf swap ( fil fs-buf len )
+s" World!" compare ?assert
+dup [: f_eof ;] try ?except_error ?assert ( fil )
+[: f_close ;] try ?except_error ( )
+
+\ Check truncate
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ FA_WRITE or or f_open ;] try ?except_error ( fil )
+dup [: 5 f_lseek ;] try ?except_error ( fil )
+dup [: f_truncate ;] try ?except_error ( fil )
+dup [: 0 f_lseek ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
+dup 5 = ?assert ( fil numbytes )
+fs-buf swap ( fil fs-buf len )
+s" Hello" compare ?assert
+[: f_close ;] try ?except_error ( )
+
+\ Check f_putc
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_WRITE or f_open ;] try ?except_error ( fil )
+dup [: f_truncate ;] try ?except_error ( fil )
+dup [: $42 f_putc ;] try ?except_error ( fil )
 [: f_close ;] try ?except_error ( )
 [: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
-dup [: fs-buf 256 f_read ;] try ?except_error ( fil numbytes )
-dup 12 = ?assert ( fil numbytes )
-fs-buf swap ( fil fs-buf len )
-.( 2.1 )
-s" Hello World!" compare ?assert
-.( 3 )
+dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
+1 = ?assert ( fil )
+fs-buf c@ $42 = ?assert ( fil )
 [: f_close ;] try ?except_error ( )
-.( 4 )
+
+\ Check f_gets
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_WRITE or f_open ;] try ?except_error ( fil )
+dup [: f_truncate ;] try ?except_error ( fil )
+dup [: esc-s" \'Hello World\',\nForth shouted happily." f_write ;] try ?except_error ( fil nbw )
+\ 37 bytes written
+#37 = ?assert ( fil )
+[: f_close ;] try ?except_error ( )
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup #15 = ?assert ( fil addr len )
+esc-s" \'Hello World\',\n" compare ?assert ( fil )
+[: f_close ;] try ?except_error ( )
+
+\ Negative testing:
+\ [:
+\   MAX_NUM_OPEN_FILES 1+ 0 do
+\     <# #>
+\     s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;]
+\     dup ( blocksize blocksize )
+\     [: test-heap allocate ;] try ( blocksize addr exception-code )
+\     0= if ( blocksize addr )
+\       i allocations a! ( blocksize addr )
+\     else ( blocksize )
+\       drop
+\       0 i allocations a!
+\       ." test-heap exhausted. OK." cr
+\       leave
+\     then
+\     i 1+ num-allocations ! ( blocksize )
+\   loop
+\ ;] try ?except_error ( fil )
+
+\ Check too many open files
+\ Check f_open exception
+\ Check f_close exception
+\ Check f_read exception
+\ Check f_write exception
+\ Check f_lseek exception
+\ Check truncate exception
+\ Check f_sync exception.
+\ Check f_gets exception.
+\ Check f_putc exception.
+\ Check f_puts exception.
 
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS

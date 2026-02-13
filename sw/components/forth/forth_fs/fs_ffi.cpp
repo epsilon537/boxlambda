@@ -148,9 +148,9 @@ void fs_f_expand() {
 }
 
 void fs_f_gets() {
-  FIL *fp = (FIL *)forth_popda();
   int len = (int)forth_popda();
   TCHAR *buff = (TCHAR *)forth_popda();
+  FIL *fp = (FIL *)forth_popda();
 
   TCHAR *res = f_gets(buff, len, fp);
 
@@ -158,8 +158,8 @@ void fs_f_gets() {
 }
 
 void fs_f_putc() {
-  FIL *fp = (FIL *)forth_popda();
   TCHAR c = (const TCHAR)forth_popda();
+  FIL *fp = (FIL *)forth_popda();
 
   int res = f_putc(c, fp);
 
@@ -167,8 +167,8 @@ void fs_f_putc() {
 }
 
 void fs_f_puts() {
-  FIL *fp = (FIL *)forth_popda();
   const TCHAR* s = (const TCHAR *)forth_popda();
+  FIL *fp = (FIL *)forth_popda();
 
   int res = f_puts(s, fp);
 
@@ -430,7 +430,7 @@ void fs_ffi_init() {
   forth_register_cfun(fs_f_sync, "fs_f_sync");
   forth_register_cfun(fs_f_expand, "fs_f_expand");
   forth_register_cfun(fs_f_gets, "fs_f_gets");
-  forth_register_cfun(fs_f_puts, "fs_f_putc");
+  forth_register_cfun(fs_f_putc, "fs_f_putc");
   forth_register_cfun(fs_f_puts, "fs_f_puts");
   forth_register_cfun(fs_f_tell, "fs_f_tell");
   forth_register_cfun(fs_f_eof, "fs_f_eof");

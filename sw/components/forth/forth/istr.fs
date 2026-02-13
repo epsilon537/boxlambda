@@ -94,6 +94,15 @@ create str-heap 16 4096 heap-size allot
   move ( heap-addr )
 ;
 
+\ Allocate heap memory and string-pool entry, store given string in it, and return
+\ the new location's addr/len pair.
+\ ( addr len -- addr' len )
+: alloc-store-str
+  tuck ( len addr len )
+  store-str-heap ( len addr' ) \ Allocate heap memory and store string in heap
+  swap 2dup set-str-pool-entry ( addr' len ) \ Store string addr/len in string-pool
+;
+
 \ Compile or interpret a string and give back its address and length when executed.
 \ ( -- addr len )
 : s"
@@ -101,9 +110,7 @@ create str-heap 16 4096 heap-size allot
     postpone s" \ Compiled string.
   else
     [char] " parse ( addr len )
-    tuck ( len addr len )
-    store-str-heap ( len addr ) \ Allocate heap memory and store string in heap
-    swap 2dup set-str-pool-entry ( addr len ) \ Store string addr/len in string-pool
+    alloc-store-str
   then
   [immediate]
 ;

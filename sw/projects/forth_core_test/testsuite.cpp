@@ -14,6 +14,8 @@
 #include "pool.fs"
 #include "cstr.fs"
 #include "istr.fs"
+#include "escstr.fs"
+#include "printf.fs"
 #include "fs.fs"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
@@ -113,9 +115,17 @@ int main(void) {
 
   forth_load_buf((char*)istr_fs, /*verbose=*/ false);
 
+  printf("Compiling escstr.fs...\n");
+
+  forth_load_buf((char*)escstr_fs, /*verbose=*/ false);
+
   printf("Compiling cstr.fs...\n");
 
   forth_load_buf((char*)cstr_fs, /*verbose=*/ false);
+
+  printf("Compiling printf.fs...\n");
+
+  forth_load_buf((char*)printf_fs, /*verbose=*/ false);
 
   printf("Loading fs.fs...\n");
 

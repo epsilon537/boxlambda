@@ -1393,6 +1393,59 @@ numbertable exp-coef
     then
 ;
 
+\ pad
+
+#1024 buffer: pad
+
+\ chars and char+
+: chars ( u -- u ) [0-foldable] ;
+: char+ ( u -- u+1 ) 1+ [1-foldable] ;
+
+\ /string
+: /STRING  DUP >R - SWAP R> CHARS + SWAP ;
+
+: um+ ( u1 u2 -- u carry )
+  over +            \ compute sum
+  dup rot u<        \ detect unsigned overflow
+;
+
+\ Add n to d
+\ ( d n -- d )
+: m+ ( d n -- d' ) s>d d+ [3-foldable] ;
+
+\ >number
+: >digit ( char -- d true | 0 ) \ "to-digit"
+  \ convert char to a digit according to base followed by true, or false if out of range
+  DUP [ char 9 1+ literal, ] <
+  IF [char] 0 - \ convert '0'-'9'
+    DUP 0< IF DROP 0 EXIT THEN \ reject < '0'
+  ELSE
+    DUP [char] a < IF BL + THEN \ convert to lowercase, exploiting ASCII
+    [char] a -
+    DUP 0< IF DROP 0 EXIT THEN \ reject non-letter < 'a'
+    #10 + \ convert 'a'-'z'
+  THEN
+  DUP BASE @ < DUP 0= IF NIP THEN ( d true | false ) \ reject beyond base
+;
+
+: >NUMBER ( ud1 c-addr1 u1 -- ud2 c-addr2 u2 ) \ "to-number"
+  2SWAP 2>R
+  BEGIN ( c-addr u ) ( R: ud.accum )
+    DUP WHILE \ character left to inspect
+      OVER C@ >digit
+    WHILE \ digit parsed within base
+      2R> BASE @ s>d ud* ( c-addr u d.digit ud.accum ) \ scale accum by base
+      ROT M+ 2>R \ add current digit to accum
+      1 /STRING ( c-addr1+1 u1-1 )
+  REPEAT THEN
+  2R> 2SWAP ( ud2 c-addr/2 u2 )
+;
+
+\ max and min int values
+0 INVERT                    CONSTANT MAX-UINT
+0 INVERT 1 RSHIFT           CONSTANT MAX-INT
+0 INVERT 1 RSHIFT INVERT    CONSTANT MIN-INT
+
 \ Setting the MTIMER Comparator
 : set-raw-time-cmp ( u -- ) s>d mtime64 d+ mtimecmp64! ;
 

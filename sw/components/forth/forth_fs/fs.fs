@@ -32,7 +32,6 @@ filinfo /FILINFO 0 fill
 
 \ Set date in global filinfo object.
 \ ( dd mm yyyy -- )
-\ FIXME
 : filinfo.setfdate
   1980 - $7f and 9 lshift -rot ( yy0000 dd mm )
   $f and 5 lshift -rot ( mm00 yy0000 dd )
@@ -51,7 +50,6 @@ filinfo /FILINFO 0 fill
 
 \ Set time in global filinfo object.
 \ ( hh mm ss -- )
-\ FIXME
 : filinfo.setftime
   shr and $1f -rot ( 0000ss hh mm )
   and $3f 5 rshift -rot ( mm00 0000ss hh )
@@ -112,6 +110,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 : x-fr-locked ." FR: (16) The operation is rejected according to the file sharing policy" cr ;
 : x-fr-not-enough-core ." FR: (17) LFN working buffer could not be allocated" cr ;
 : x-fr-too-many-open-files ." FS: (18) Number of open files > FF-FS-LOCK" cr ;
+: x-fr-invalid-parameter ." FS: (19) The given parameter is invalid or there is an inconsistent for the volume." cr ;
 : x-fr-unknown ." FR: (??) Unknown exception" cr ;
 
 \ ( ior -- xt)
@@ -136,6 +135,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
     FR_LOCKED of ['] x-fr-locked endof
     FR_NOT_ENOUGH_CORE of ['] x-fr-not-enough-core endof
     FR_TOO_MANY_OPEN_FILES of ['] x-fr-too-many-open-files endof
+    FR_INVALID_PARAMETER of ['] x-fr-invalid-parameter endof
     ['] x-fr-unknown
   endcase
 ;
@@ -218,7 +218,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 
 \ Truncate file size to current read/write pointer.
 \ May throw x-fr-* exception.
-\ ( fl-il -- )
+\ ( fil -- )
 : f_truncate
   fs_f_truncate
   check-throw-ior
@@ -232,36 +232,23 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   check-throw-ior
 ;
 
-\ Prepare or allocate a contiguous data area to the file.
-\ May throw x-fr-* exception.
-\ ( fil size opt -- )
-: f_expand
-  fs_f_expand
-  check-throw-ior
-;
-
 \ Read a string from the file
 \ May throw x-fr-* exception.
-\ ( fil len buf -- )
+\ ( fil buf buflen -- strlen )
 : f_gets
-  fs_f_gets
-  check-throw-ior
+  rot >r ( buf buflen)
+  r@ -rot ( fil buf buflen )
+  fs_f_gets ( adr )
+  r> fs_f_error .s 0= averts x-fr-int-err ( adr )
+  dup s0len ( adr len )
 ;
 
 \ Write a character to the file
 \ May throw x-fr-* exception.
 \ ( fil c -- )
 : f_putc
-  fs_f_putc
-  check-throw-ior
-;
-
-\ Write a string to the file
-\ May throw x-fr-* exception.
-\ ( fil str -- )
-: f_puts
-  fs_f_puts
-  check-throw-ior
+  fs_f_putc ( bw )
+  1 = averts x-fr-int-err ( )
 ;
 
 \ Get current read/write pointer
@@ -441,7 +428,6 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \
 
 \ Get total and free bytes on volume.
-\ FIXME
 \ ( -- tot free )
 : f_getfree
   s0" "
