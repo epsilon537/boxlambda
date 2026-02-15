@@ -45,6 +45,7 @@ AM_ATTR(AM_RDO) //Read-only
 AM_ATTR(AM_ARC) //Archive
 AM_ATTR(AM_SYS) //System
 AM_ATTR(AM_HID) //Hidden
+AM_ATTR(AM_DIR) //Directory
 
 #define FR_CODE(name) void fr_code_##name() { forth_pushda(name); }
 
@@ -401,6 +402,7 @@ void fs_ffi_init() {
   forth_register_cfun(am_attr_AM_ARC, "AM_ARC");
   forth_register_cfun(am_attr_AM_SYS, "AM_SYS");
   forth_register_cfun(am_attr_AM_HID, "AM_HID");
+  forth_register_cfun(am_attr_AM_DIR, "AM_DIR");
   forth_register_cfun(fr_code_FR_OK, "FR_OK");
   forth_register_cfun(fr_code_FR_DISK_ERR, "FR_DISK_ERR");
   forth_register_cfun(fr_code_FR_INT_ERR, "FR_INT_ERR");

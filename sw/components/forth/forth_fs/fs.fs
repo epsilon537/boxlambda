@@ -51,9 +51,9 @@ filinfo /FILINFO 0 fill
 \ Set time in global filinfo object.
 \ ( hh mm ss -- )
 : filinfo.setftime
-  shr and $1f -rot ( 0000ss hh mm )
-  and $3f 5 rshift -rot ( mm00 0000ss hh )
-  and $1f 11 rshift ( mm00 0000ss hh0000 )
+  shr $1f and -rot ( 0000ss hh mm )
+  $3f and 5 lshift -rot ( mm00 0000ss hh )
+  $1f and #11 lshift ( mm00 0000ss hh0000 )
   or or ( hhmmss )
   filinfo ftime+ + !
 ;
@@ -62,12 +62,13 @@ filinfo /FILINFO 0 fill
 \ ( -- hh mm ss )
 : filinfo.getftime
   filinfo ftime+ + @ \ ( hhmmss )
-  dup 11 rshift $1f and swap \ ( hh hhmmss )
-  dup 5 rshift $3f and -rot \ ( mm hh hhmmss )
-  $1f and shl -rot \ ( ss mm hh )
+  dup #11 rshift $1f and swap \ ( hh hhmmss )
+  dup 5 rshift $3f and swap \ ( hh mm hhmmss )
+  $1f and shl \ ( hh mm ss )
 ;
 
 \ Retrieve attributes from global filinfo object.
+\ AM_RDO, AM_ARC, AM_SYS, AM_HID, AM_DIR
 \ ( -- attrib )
 : filinfo.fattrib filinfo fattrib+ + c@ ;
 
@@ -239,7 +240,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   rot >r ( buf buflen)
   r@ -rot ( fil buf buflen )
   fs_f_gets ( adr )
-  r> fs_f_error .s 0= averts x-fr-int-err ( adr )
+  r> fs_f_error 0= averts x-fr-int-err ( adr )
   dup s0len ( adr len )
 ;
 
@@ -304,25 +305,21 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   check-throw-ior
 ;
 
-\ Rewind directory
-\ May throw x-fr-* exception.
-\ ( dir -- )
-: f_rewind
-  0 ( dir 0 )
-  fs_f_readdir
-  check-throw-ior
-;
-
 \ Open the directory specified in addr/len1 input string and read first
 \ item matching pattern specified in addr/len2 input string.
 \ Put result in filinfo object.
 \ May throw x-fr-* exception.
-\ ( addr1 len1 addr2 len2 dir -- )
+\ ( addr1 len1 addr2 len2 -- dir )
 : f_findfirst
-  >r path2 str>path path str>path ( )
-  r@ filinfo path path2 ( dir nfo path pattern )
-  fs_f_findfirst ( ior )
-  check-throw-ior ( )
+  path2 str>path path str>path ( )
+  dir-pool allocate-pool ( dir )
+  dup filinfo path path2 ( dir dir nfo path pattern )
+  fs_f_findfirst ( dir ior )
+  ?dup if ( dir ior )
+    over ( dir ior dir )
+    dir-pool free-pool ( dir ior )
+    check-throw-ior ( dir )
+  then ( dir )
 ;
 
 \ Find next entry matching pattern.

@@ -861,35 +861,117 @@ esc-s" \'Hello World\',\n" compare ?assert ( fil )
 [: f_close ;] try ?except_error ( )
 
 \ Negative testing:
-\ [:
-\   MAX_NUM_OPEN_FILES 1+ 0 do
-\     <# #>
-\     s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;]
-\     dup ( blocksize blocksize )
-\     [: test-heap allocate ;] try ( blocksize addr exception-code )
-\     0= if ( blocksize addr )
-\       i allocations a! ( blocksize addr )
-\     else ( blocksize )
-\       drop
-\       0 i allocations a!
-\       ." test-heap exhausted. OK." cr
-\       leave
-\     then
-\     i 1+ num-allocations ! ( blocksize )
-\   loop
-\ ;] try ?except_error ( fil )
 
 \ Check too many open files
-\ Check f_open exception
+\ and check f_open exception
+
+create fils MAX_NUM_OPEN_FILES 1+ cells allot
+
+[:
+  MAX_NUM_OPEN_FILES 1+ 0 do
+    i s" fs_tst%n.txt" pad sprintf FA_CREATE_ALWAYS FA_WRITE or f_open
+    i fils a!
+  loop
+;] try ' x-pool-allocate-failed = ?assert
+
+[:
+  MAX_NUM_OPEN_FILES 0 do
+    i fils a@ f_close
+  loop
+;] try ?except_error
+
 \ Check f_close exception
+[: 1000 f_close ;] try 0> ?assert
+
 \ Check f_read exception
+[: 1000 0 1 f_read ;] try 0> ?assert
+
 \ Check f_write exception
+[: 1000 0 1 f_write ;] try 0> ?assert
+
 \ Check f_lseek exception
+[: 1000 0 f_lseek ;] try 0> ?assert
+
 \ Check truncate exception
+[: 1000 f_truncate ;] try 0> ?assert
+
 \ Check f_sync exception.
+[: 1000 f_sync ;] try 0> ?assert
+
 \ Check f_gets exception.
+[: 1000 0 1 f_gets ;] try 0> ?assert
+
 \ Check f_putc exception.
-\ Check f_puts exception.
+[: 1000 0 f_putc ;] try 0> ?assert
+
+\ Make directory, cd into it, make a files and a subdir, list the dir, check the entries' attributes,
+\ close the directory, remove the files, remove the directory.
+
+\ Preparation
+[: s" test_dir" f_chdir ;] try drop \ cd into test_dir if it exists
+[: s" test_subdir" f_unlink ;] try drop \ remove test_subdir if it already exists.
+[: s" fs_test.txt" f_unlink ;] try drop \ remove fs_test.txt if it already exists.
+[: s" fs_test_renamed.txt" 0 AM_RDO f_chmod ;] try ?except_error
+[: s" fs_test_renamed.txt" f_unlink ;] try drop \ remove fs_test_renamed.txt if it already exists.
+[: s" .." f_chdir ;] try drop
+[: s" test_dir" f_unlink ;] try drop \ remove test_dir if it already exists.
+
+[: s" test_dir" f_mkdir ;] try ?except_error
+[: s" test_dir" f_stat ;] try ?except_error
+filinfo.fname s" test_dir" compare ?assert
+filinfo.fattrib AM_DIR and 0> ?assert
+[: s" test_dir" f_chdir ;] try ?except_error
+[: f_getcwd ;] try ?except_error s" /test_dir" compare ?assert
+
+[: s" test_subdir" f_mkdir ;] try ?except_error \ create a subdir
+
+[: s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;] try ?except_error ( fil ) \ create a file
+dup [: s" Hello World!" f_write ;] try ?except_error ( fil nbw )
+\ 12 bytes written
+#12 = ?assert ( fil )
+dup [: f_sync ;] try ?except_error ( fil )
+[: f_close ;] try ?except_error ( )
+
+[: s" .." f_chdir ;] try ?except_error
+[: s" test_dir" f_opendir ;] try ?except_error ( dir )
+
+dup [: f_readdir ;] try ?except_error
+filinfo.fname s" test_subdir" compare ?assert
+filinfo.fattrib AM_DIR and 0> ?assert
+
+dup [: f_readdir ;] try ?except_error
+filinfo.fname s" fs_test.txt" compare ?assert
+filinfo.fsize #12 = ?assert
+
+dup [: f_readdir ;] try ?except_error
+filinfo.fname s" " compare ?assert
+
+[: f_closedir ;] try ?except_error
+
+\ cd into the test_dir and rename the file
+[: s" test_dir" f_chdir ;] try ?except_error
+[: s" fs_test.txt" s" fs_test_renamed.txt" f_rename ;] try ?except_error
+[: s" fs_test_renamed.txt" f_stat ;] try ?except_error
+
+\ do an ls *.txt on the current dir
+[: s" ." s" *.txt" f_findfirst ;] try ?except_error
+filinfo.fname s" fs_test_renamed.txt" compare ?assert
+dup [: f_findnext ;] try ?except_error
+filinfo.fname s" " compare ?assert
+[: f_closedir ;] try ?except_error
+
+\ Change the file's timestamp and make it read-only
+#11 #02 #2033 filinfo.setfdate
+#10 #20 #30 filinfo.setftime
+[: s" fs_test_renamed.txt" f_utime ;] try ?except_error
+[: s" fs_test_renamed.txt" AM_RDO AM_RDO f_chmod ;] try ?except_error
+[: s" fs_test_renamed.txt" f_stat ;] try ?except_error
+filinfo.fattrib AM_RDO and 0> ?assert
+T{ filinfo.getfdate -> #11 #02 #2033 }T
+T{ filinfo.getftime -> #10 #20 #30 }T
+
+\ [: s" test_dir" f_unlink ;] try ?except_error
+\ [: s" test_dir" f_stat ;] try ' x-fr-no-file = ?assert
 
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
