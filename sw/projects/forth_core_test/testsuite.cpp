@@ -17,6 +17,7 @@
 #include "escstr.fs"
 #include "printf.fs"
 #include "fs.fs"
+#include "shell.fs"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -130,6 +131,10 @@ int main(void) {
   printf("Loading fs.fs...\n");
 
   forth_load_buf((char*)fs_fs, /*verbose=*/ false);
+
+  printf("Loading shell.fs...\n");
+
+  forth_load_buf((char*)shell_fs, /*verbose=*/ false);
 
   printf("Forth-C FFI testcases...\n");
 

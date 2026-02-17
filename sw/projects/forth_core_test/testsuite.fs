@@ -743,6 +743,14 @@ TESTING FILE SYSTEM
 #256 buffer: fs-buf
 
 \ Basics:
+T{ AM_RDO -> $1 }T
+T{ AM_HID -> $2 }T
+T{ AM_SYS -> $4 }T
+T{ AM_DIR -> $10 }T
+T{ AM_ARC -> $20 }T
+
+\ Check AM_* values
+
 \ Check FA mode values
 T{ FA_READ -> $1 }T
 T{ FA_WRITE -> $2 }T
@@ -858,6 +866,11 @@ dup [: esc-s" \'Hello World\',\nForth shouted happily." f_write ;] try ?except_e
 dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
 dup #15 = ?assert ( fil addr len )
 esc-s" \'Hello World\',\n" compare ?assert ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+2drop
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup 0= ?assert ( fil addr len )
+2drop
 [: f_close ;] try ?except_error ( )
 
 \ Negative testing:
@@ -866,6 +879,12 @@ esc-s" \'Hello World\',\n" compare ?assert ( fil )
 \ and check f_open exception
 
 create fils MAX_NUM_OPEN_FILES 1+ cells allot
+
+[:
+  MAX_NUM_OPEN_FILES 1+ 0 do
+    [: i s" fs_tst%n.txt" pad sprintf f_unlink ;] try drop
+  loop
+;] execute
 
 [:
   MAX_NUM_OPEN_FILES 1+ 0 do
@@ -911,8 +930,13 @@ create fils MAX_NUM_OPEN_FILES 1+ cells allot
 [: s" test_dir" f_chdir ;] try drop \ cd into test_dir if it exists
 [: s" test_subdir" f_unlink ;] try drop \ remove test_subdir if it already exists.
 [: s" fs_test.txt" f_unlink ;] try drop \ remove fs_test.txt if it already exists.
-[: s" fs_test_renamed.txt" 0 AM_RDO f_chmod ;] try ?except_error
+[: s" fs_test_renamed.txt" 0 AM_RDO f_chmod ;] try drop
 [: s" fs_test_renamed.txt" f_unlink ;] try drop \ remove fs_test_renamed.txt if it already exists.
+[:
+  MAX_NUM_OPEN_DIRS 1+ 0 do
+    [: i s" dir_tst%n" pad sprintf f_unlink ;] try drop ( )
+  loop
+;] execute
 [: s" .." f_chdir ;] try drop
 [: s" test_dir" f_unlink ;] try drop \ remove test_dir if it already exists.
 
@@ -970,8 +994,43 @@ filinfo.fattrib AM_RDO and 0> ?assert
 T{ filinfo.getfdate -> #11 #02 #2033 }T
 T{ filinfo.getftime -> #10 #20 #30 }T
 
-\ [: s" test_dir" f_unlink ;] try ?except_error
-\ [: s" test_dir" f_stat ;] try ' x-fr-no-file = ?assert
+\ Total should be larger than free
+[: f_getfree ;] try ?except_error > ?assert
+
+\ Negative testing
+
+\ Check too many open dirs
+
+create dirs MAX_NUM_OPEN_DIRS 1+ cells allot
+
+[:
+  MAX_NUM_OPEN_DIRS 1+ 0 do
+    i s" dir_tst%n" pad sprintf ( addr len )
+    2dup f_mkdir
+    f_opendir ( dir )
+    i dirs a!
+  loop
+;] try ' x-pool-allocate-failed = ?assert
+
+[:
+  MAX_NUM_OPEN_DIRS 0 do
+    i dirs a@ f_closedir
+  loop
+;] try ?except_error
+
+[: s" non-existing-dir" f_opendir ;] try 0> ?assert
+[: 1000 f_closedir ;] try 0> ?assert
+[: 1000 f_readdir ;] try 0> ?assert
+[: s" non-existing-dir" s" *.*" f_findfirst ;] try 0> ?assert
+[: 1000 f_findnext ;] try 0> ?assert
+[: s" non-existing-dir" f_stat ;] try 0> ?assert
+[: s" non-existing-dir" f_unlink ;] try 0> ?assert
+[: s" non-existing-dir" s" doesntmatter" f_rename ;] try 0> ?assert
+[: s" non-existing-dir" 0 0 f_chmod ;] try 0> ?assert
+[: s" non-existing-dir" f_utime ;] try 0> ?assert
+
+[: s" .." f_chdir ;] try ?except_error
+[: s" test_dir" f_mkdir ;] try 0> ?assert
 
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS

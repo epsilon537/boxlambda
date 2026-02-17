@@ -235,13 +235,17 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 
 \ Read a string from the file
 \ May throw x-fr-* exception.
-\ ( fil buf buflen -- strlen )
+\ ( fil buf buflen -- adr len )
 : f_gets
   rot >r ( buf buflen)
   r@ -rot ( fil buf buflen )
   fs_f_gets ( adr )
   r> fs_f_error 0= averts x-fr-int-err ( adr )
-  dup s0len ( adr len )
+  dup if ( adr )
+    dup s0len ( adr len )
+  else
+    0 ( 0 0 )
+  then
 ;
 
 \ Write a character to the file
@@ -425,6 +429,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \
 
 \ Get total and free bytes on volume.
+\ May throw x-fr-* exception.
 \ ( -- tot free )
 : f_getfree
   s0" "
