@@ -263,6 +263,7 @@ const char testsuite[] =  R"testsuite(
 \ locals using { ... } and the FSL use of }
 
 HEX
+.s
 
 \ SET THE FOLLOWING FLAG TO TRUE FOR MORE VERBOSE OUTPUT; THIS MAY
 \ ALLOW YOU TO TELL WHICH TEST CAUSED YOUR SYSTEM TO HANG.
@@ -348,8 +349,6 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
 \ I ALSO HAVEN'T THOUGHT OF A WAY TO TEST ENVIRONMENT?...
 
 CR
-TESTING CORE WORDS
-HEX
 
 \ ------------------------------------------------------------------------
 TESTING EXCEPTIONS
@@ -574,6 +573,27 @@ create test-pool-memory-2 32 allot
 test-pool-memory 32 test-pool add-pool
 
 T{ test-pool pool-free-count -> 4 }T
+
+\ ------------------------------------------------------------------------
+TESTING temp allocator
+
+variable saved-mark
+temp-mark> saved-mark !
+
+256 [: saved-mark @ = ?assert ;] with-temp-allot
+temp-mark> saved-mark @ = ?assert
+
+temp-mark>
+256 temp-allot ( mark )
+dup temp-mark> swap - 256 = ?assert ( mark )
+>temp-mark ( )
+temp-mark> saved-mark @ = ?assert
+
+700 temp-allot
+[: 700 temp-allot ;] try ' x-temp-allot-failed = ?assert
+
+temp-allot-reset
+temp-mark> saved-mark @ = ?assert
 
 \ ------------------------------------------------------------------------
 TESTING /STRING
@@ -1031,6 +1051,30 @@ create dirs MAX_NUM_OPEN_DIRS 1+ cells allot
 
 [: s" .." f_chdir ;] try ?except_error
 [: s" test_dir" f_mkdir ;] try 0> ?assert
+
+\ ------------------------------------------------------------------------
+TESTING FS REDIRECTION
+[: ." fs-redirection test" cr ;] &>file redirout.txt
+
+[: s" redirout.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup #20 = ?assert ( fil addr len )
+esc-s" fs-redirection test\n" compare ?assert ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup 0= ?assert ( fil addr len )
+2drop
+[: f_close ;] try ?except_error ( )
+
+[: ." appending..." cr ;] &>>file redirout.txt
+
+[: s" redirout.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup #20 = ?assert ( fil addr len )
+esc-s" fs-redirection test\n" compare ?assert ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup #13 = ?assert ( fil addr len )
+esc-s" appending...\n" compare ?assert ( fil )
+[: f_close ;] try ?except_error ( )
 
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
@@ -4159,6 +4203,12 @@ T{ ememword -> 9753 }T
 T{ ' imemword ramvar-here < -> <TRUE> }T
 T{ ' ememword $20000000 > -> <TRUE> }T
 T{ ' ememword 1024 1024 * 256 * $20000000 + < -> <TRUE> }T
+T{ compiletoemem? -> <TRUE> }T
+compileto> dup 0<> ?assert ( compileto )
+compiletoimem ( compileto )
+compileto> 0= ?assert ( compileto )
+>compileto ( )
+T{ compileto> -> <TRUE> }T
 
 \ ------------------------------------------------------------------------------
 TESTING INTERRUPTS

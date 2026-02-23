@@ -21,6 +21,7 @@ target_sources(forth_core
   PRIVATE
     mecrisp-quintus-boxlambda.s
     forth.cpp
+    stdio_redirect_ffi.cpp
     init.fs
     stamp
 )
@@ -40,4 +41,6 @@ target_include_directories(forth_core
     ${PROJECT_SOURCE_DIR}/registers/generated
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+target_link_libraries(forth_core bootstrap )
 

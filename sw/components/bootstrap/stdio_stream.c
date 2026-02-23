@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "stdio_stream.h"
 #include "uart.h"
 
 static int uart_putc(char c, FILE *file) {
@@ -27,13 +27,20 @@ static int uart_getc(FILE *file) {
   return c;
 }
 
-static FILE __stdio = FDEV_SETUP_STREAM(uart_putc,
+FILE stdin_stream = FDEV_SETUP_STREAM(
+ NULL,
  uart_getc,
  NULL,
- _FDEV_SETUP_RW);
+ _FDEV_SETUP_READ);
 
+FILE stdout_stream = FDEV_SETUP_STREAM(
+ uart_putc,
+ NULL,
+ NULL,
+ _FDEV_SETUP_WRITE);
 
-FILE *const stdin = &__stdio;
-FILE *const stdout = &__stdio;
-FILE *const stderr = &__stdio;
+FILE *const stdin = &stdin_stream;
+FILE *const stdout = &stdout_stream;
+FILE *const stderr = &stdout_stream;
+
 

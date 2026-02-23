@@ -16,4 +16,4 @@ target_include_directories(forth_fs
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_link_libraries(forth_fs fatfs forth_core)
+target_link_libraries(forth_fs fatfs forth_core )

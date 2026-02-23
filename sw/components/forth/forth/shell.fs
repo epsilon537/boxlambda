@@ -145,14 +145,12 @@ const char shell_fs[] =  R"shell_fs(
 : cp
 ;
 
-256 buffer: catbuf
-
 \ cat <filename>
 : cat
   token FA_OPEN_EXISTING FA_READ or f_open ( fil )
   cr
   begin ( fil )
-    dup catbuf 256 f_gets ( fil addr len )
+    dup 256 [: 256 f_gets ;] with-temp-allot
     dup while ( fil addr len )
       type ( fil )
   repeat
@@ -185,6 +183,97 @@ const char shell_fs[] =  R"shell_fs(
   cr
   f_getfree s" Total: %n Free: %n" printf
   cr
+;
+
+\ Redirect input stream to given file.
+\ Input will be read from file until EOF is reached.
+\ ( "filename" -- )
+: <file
+  token FA_OPEN_EXISTING FA_READ or f_open
+  [: key<console key-fil @ f_close ;] key<file
+;
+
+\ Redirect stdout to given file in overwrite mode. Don't emit to console.
+\ usage: [: <statements to be executed with redirection :] >file file.log
+\ ( xt "filename" -- )
+: >file
+  token FA_CREATE_ALWAYS FA_WRITE or f_open ( xt fil )
+  >r ( xt R: fil )
+  r@ emit>file ( xt R: fil )
+  execute ( R: fil )
+  emit>console
+  r> f_close
+;
+
+\ Redirect stdout to given file in overwrite mode and emit to console.
+\ usage: [: <statements to be executed with redirection :] tee>file file.log
+\ ( xt "filename -- )
+: &>file
+  token FA_CREATE_ALWAYS FA_WRITE or f_open ( xt fil )
+  >r ( xt R: fil )
+  r@ tee>file ( xt R: fil )
+  execute ( R: fil )
+  emit>console
+  r> f_close
+;
+
+\ Redirect stdout to given file in append mode. Don't emit to console.
+\ usage: [: <statements to be executed with redirection :] >>file file.log
+\ ( xt "filename" -- )
+: >>file
+  token FA_OPEN_APPEND FA_WRITE or f_open ( xt fil )
+  >r ( xt R: fil )
+  r@ emit>file ( xt R: fil )
+  execute ( R: fil )
+  emit>console
+  r> f_close
+;
+
+\ Redirect stdout to given file in append mode and emit to console.
+\ usage: [: <statements to be executed with redirection :] tee>>file file.log
+\ ( xt "filename -- )
+: &>>file
+  token FA_OPEN_APPEND FA_WRITE or f_open ( xt fil )
+  >r ( xt R: fil )
+  r@ tee>file ( xt R: fil )
+  execute ( R: fil )
+  tee-end
+  r> f_close
+;
+
+create include-stack MAX_NUM_OPEN_FILES cells allot
+0 variable include-sp   \ stack pointer
+
+: include-push ( x -- )
+  include-sp @ ( x sp )
+  dup MAX_NUM_OPEN_FILES < ?assert ( x sp )
+  tuck cells include-stack + ! ( sp )
+  1+ include-sp ! ;
+
+: include-pop ( -- x )
+  include-sp @ ( sp )
+  dup 0> ?assert ( sp )
+  1- dup include-sp ! ( sp-1 )
+  cells include-stack + @ ( x )
+;
+
+: include-eof
+  include-pop f_close
+  include-pop ?dup if
+    dup include-push
+    eof-hook @ key<file
+  else
+    key<console
+  then
+;
+
+: include
+  include-sp @ 0= if
+    0 include-push
+  then
+  token FA_OPEN_EXISTING FA_READ or f_open ( fil )
+  dup include-push ( fil )
+  ['] include-eof key<file
 ;
 
 )shell_fs";

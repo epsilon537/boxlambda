@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include "fs_ffi.h"
+#include "stdio_redirect_ffi.h"
 #include "ff.h"
 
 #include "gpio.h"
@@ -12,11 +13,13 @@
 #include "init.fs"
 #include "heap.fs"
 #include "pool.fs"
+#include "temp-alloc.fs"
 #include "cstr.fs"
 #include "istr.fs"
 #include "escstr.fs"
 #include "printf.fs"
 #include "fs.fs"
+#include "fs_redirect.fs"
 #include "shell.fs"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
@@ -81,6 +84,7 @@ int main(void) {
   gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
 
   forth_core_init();
+  stdio_redirect_ffi_init();
 
   printf("Forth init complete.\n");
 
@@ -112,6 +116,10 @@ int main(void) {
 
   forth_load_buf((char*)pool_fs, /*verbose=*/ false);
 
+  printf("Compiling temp-alloc.fs...\n");
+
+  forth_load_buf((char*)temp_alloc_fs, /*verbose=*/ false);
+
   printf("Compiling istr.fs...\n");
 
   forth_load_buf((char*)istr_fs, /*verbose=*/ false);
@@ -131,6 +139,10 @@ int main(void) {
   printf("Loading fs.fs...\n");
 
   forth_load_buf((char*)fs_fs, /*verbose=*/ false);
+
+  printf("Loading fs_redirect.fs...\n");
+
+  forth_load_buf((char*)fs_redirect_fs, /*verbose=*/ false);
 
   printf("Loading shell.fs...\n");
 

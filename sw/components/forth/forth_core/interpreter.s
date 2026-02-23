@@ -123,7 +123,7 @@ interpret_vanilla:
   call token
   # ( Address Length )
 
-  # Prüfe, ob der String leer ist  Check if token is empty - that designates an empty input buffer.
+  # Check if token is empty - that designates an empty input buffer.
   bne x8, zero, 2f
     ddrop
     pop x1

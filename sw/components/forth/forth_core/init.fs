@@ -1446,6 +1446,12 @@ numbertable exp-coef
 0 INVERT 1 RSHIFT           CONSTANT MAX-INT
 0 INVERT 1 RSHIFT INVERT    CONSTANT MIN-INT
 
+: x-assert ." Assert failed!" cr ;
+
+: ?assert ( f -- )
+  averts x-assert
+;
+
 \ Setting the MTIMER Comparator
 : set-raw-time-cmp ( u -- ) s>d mtime64 d+ mtimecmp64! ;
 

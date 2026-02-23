@@ -192,8 +192,7 @@ query:
   push x1
 
   call source_in # Aktueller Offset in den Inputbuffer  Zero characters consumed yet
-  li x15, 0
-  sc x15, 0(x8)
+  sc x0, 0(x8)
   drop
 
   call tib

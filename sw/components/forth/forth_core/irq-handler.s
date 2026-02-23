@@ -20,7 +20,7 @@
 
 # Interrupt handler for RISC-V
 
-.macro initinterrupt Name:req, Asmname:req, Routine:req, Alignment
+.macro initinterrupt Name:req, Asmname:req, Routine:req
 
 #------------------------------------------------------------------------------
   Definition Flag_visible|Flag_variable, "irq-\Name" # ( -- addr )
@@ -30,12 +30,6 @@
   laf x8, irq_hook_\Name
   ret
   .varinit \Routine  # Start value for unused interrupts
-
-  .ifb \Alignment
-    .align 2
-  .else
-    .align \Alignment
-  .endif
 
 .globl \Asmname
 \Asmname:

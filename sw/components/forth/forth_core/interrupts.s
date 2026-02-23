@@ -147,8 +147,7 @@ unhandled:                             #   and handler for unused interrupts
 fault:
 # -----------------------------------------------------------------------------
   push x1
-  # write "Unhandled Exception "
-  write "Unhandled Interrupt "
+  write "Unhandled Exception "
   call interrupt_cause
   call hexdot
   write "at "
@@ -172,4 +171,11 @@ fault:
   initinterrupt vs0, _vs0_irq_handler, unhandled
   initinterrupt vera, _vera_irq_handler, unhandled
   initinterrupt timer, _timer_irq_handler, unhandled
+
+# .globl _exc_handler
+# _exc_handler:
+#   call fault
+#   laf x15, quit
+#   csrw mepc, x15
+#   mret
 

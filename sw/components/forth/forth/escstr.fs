@@ -1,13 +1,13 @@
 const char escstr_fs[] =  R"escstr_fs(
 \ Port of escsapedstrings.txt by Mattias Koch, extended to supported interpreter mode.
 
-256 buffer: tmp-buf
+0 variable tmp-buf
 0 variable tmp-size
 
 : char-to-tmp ( c -- )
   tmp-size @ 256 u<
   if
-    tmp-buf tmp-size @ + c!
+    tmp-buf @ tmp-size @ + c!
     1 tmp-size +!
   else
     drop
@@ -51,23 +51,25 @@ const char escstr_fs[] =  R"escstr_fs(
   repeat
   2drop
 
-  tmp-buf tmp-size @
+  tmp-buf @ tmp-size @
 ;
 
 : esc-s" ( parses up to "  -- addr len )
-  state @ if
-    [char] " parse
-    escape-string
-    postpone (s")
-    string,
-  else
-    [char] " parse ( addr len )
-    escape-string ( addr' len' )
-    tuck ( len addr len )
-    store-str-heap ( len addr ) \ Allocate heap memory and store string in heap
-    swap 2dup set-str-pool-entry ( addr len ) \ Store string addr/len in string-pool
-  then
+  256 [:
+    tmp-buf !
+    state @ if
+      [char] " parse
+      escape-string
+      postpone (s")
+      string,
+    else
+      [char] " parse ( addr len )
+      escape-string ( addr' len' )
+      tuck ( len addr len )
+      store-str-heap ( len addr ) \ Allocate heap memory and store string in heap
+      swap 2dup set-str-pool-entry ( addr len ) \ Store string addr/len in string-pool
+    then
+  ;] with-temp-allot
 [immediate] ;
-
 
 )escstr_fs";
