@@ -115,7 +115,7 @@ int main(void) {
 
   printf("Loading shell.fs...\n");
 
-  forth_load_buf((char*)shell_fs, /*verbose=*/ true);
+  forth_load_buf((char*)shell_fs, /*verbose=*/ false);
 
   forth_execute_word("welcome");
 

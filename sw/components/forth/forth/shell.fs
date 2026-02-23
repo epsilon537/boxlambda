@@ -143,6 +143,27 @@ const char shell_fs[] =  R"shell_fs(
 
 \ cp from to
 : cp
+  token FA_OPEN_EXISTING FA_READ or f_open ( infil )
+  token FA_CREATE_ALWAYS FA_WRITE or f_open ( infil ofil )
+  swap 256 [: ( ofil infil buf )
+    ." 1: " .s cr
+    >r ( ofil infil )
+    begin ( ofil infil )
+      2dup ( ofil infil ofil infil )
+      r@ 256 ( ofil infil ofil infil buf btr )
+      ." 2:" .s cr
+      f_read ( ofil infil ofil br )
+      dup while ( ofil infil ofil br )
+        r@ swap ( ofil infil ofil buf btw )
+        ." 3:" .s cr
+        f_write ( ofil infil bw )
+        drop ( ofil infil )
+    repeat ( ofil infil )
+    rdrop ( ofil infil ofil br )
+    2drop ( ofil infil )
+  ;] with-temp-allot
+  ." 4:" .s cr
+  f_close f_close ( )
 ;
 
 \ cat <filename>
@@ -176,6 +197,7 @@ const char shell_fs[] =  R"shell_fs(
   f_closedir ( )
 ;
 
+\ FIXME: TBD
 : touch
 ;
 
@@ -241,38 +263,68 @@ const char shell_fs[] =  R"shell_fs(
   r> f_close
 ;
 
+\ A stack to keep track of recursive includes.
 create include-stack MAX_NUM_OPEN_FILES cells allot
 0 variable include-sp   \ stack pointer
 
-: include-push ( x -- )
+\ Push include file descriptor on the include-stack.
+\ ( x -- )
+: include-push
   include-sp @ ( x sp )
   dup MAX_NUM_OPEN_FILES < ?assert ( x sp )
   tuck cells include-stack + ! ( sp )
   1+ include-sp ! ;
 
-: include-pop ( -- x )
+\ Pop include file descriptor from the include-stack.
+\ ( -- x )
+: include-pop
   include-sp @ ( sp )
   dup 0> ?assert ( sp )
   1- dup include-sp ! ( sp-1 )
   cells include-stack + @ ( x )
 ;
 
+\ This word is invoked when an include file reaches
+\ end-of-file. It switches the redirected input
+\ to the previous include file descriptor on the stack,
+\ or, when all include files have been processed, to
+\ the console.
+\ ( -- )
 : include-eof
+  \ Close the file on top of the stack, this is the
+  \ file that has reached eof.
   include-pop f_close
+  \ Pop the next file off the stack and check if it's
+  \ an actual file.
   include-pop ?dup if
+    \ It is a file. Put it back on the stack and
+    \ redirect the input to this file.
+    \ Keep the same eof handler.
     dup include-push
     eof-hook @ key<file
   else
+    \ A 0 on the stack indicates we should switch
+    \ input back to the console.
     key<console
   then
 ;
 
+
+\ Load forth code from a file with the specified path.
+\ include may be used recursively, i.e. the file being
+\ included itself may contain one or more include calls.
+\ ( "path" -- )
 : include
+  \ If this is the first (i.e. top-level) include, push
+  \ a 0 on the include stack. The 0 indicates when to
+  \ switch back the input to the console.
   include-sp @ 0= if
     0 include-push
   then
   token FA_OPEN_EXISTING FA_READ or f_open ( fil )
   dup include-push ( fil )
+  \ Redirect input to the opened file, invoke
+  \ include-eof when the end of the file is reached.
   ['] include-eof key<file
 ;
 
