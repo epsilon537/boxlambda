@@ -1,6 +1,6 @@
 const char fs_redirect_fs[] =  R"fs_redirect_fs(
 
-0 variable emit-fil
+  0 variable emit-fil
 
 \ ( c -- )
 : (emit>fil)
@@ -26,6 +26,13 @@ const char fs_redirect_fs[] =  R"fs_redirect_fs(
 : emit>console
   ['] serial-emit hook-emit !
   ['] serial-emit? hook-emit? !
+;
+
+\ Set emit-hook and emit-hook? to drop all output.
+\ ( -- )
+: emit>null
+  ['] drop hook-emit !
+  ['] true hook-emit? !
 ;
 
 \ Set emit-hook and emit-hook? to emit-to-open-file-and-console handlers.
@@ -57,11 +64,12 @@ const char fs_redirect_fs[] =  R"fs_redirect_fs(
 ;
 
 \ Read one character from key-fil file handler.
-\ Revert to console when eof is reached.
+\ Call installed eof-hook when eof is reached.
 \ ( -- c )
 : (key<fil)
   key-fil @ key-buf 1 f_read
   0= if
+    true accept-echo !
     eof-hook @ execute
     key \ retry
   else
@@ -74,11 +82,13 @@ const char fs_redirect_fs[] =  R"fs_redirect_fs(
 ;
 
 \ Set key-hook to get input from given file handle.
+\ Accept echo is disabled while input is being read from file.
 \ Calls xt when eof is reached.
 \ ( fil xt -- )
 : key<file
   eof-hook !
   key-fil !
+  false accept-echo !
   ['] (key<fil) hook-key !
   ['] (key<fil?) hook-key? !
 ;

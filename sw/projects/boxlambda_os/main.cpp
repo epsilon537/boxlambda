@@ -19,6 +19,7 @@
 #include "fs.fs"
 #include "fs_redirect.fs"
 #include "shell.fs"
+#include "conditional-comp.fs"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -116,6 +117,10 @@ int main(void) {
   printf("Loading shell.fs...\n");
 
   forth_load_buf((char*)shell_fs, /*verbose=*/ false);
+
+  printf("Loading conditional-comp.fs...\n");
+
+  forth_load_buf((char*)conditional_comp, /*verbose=*/ false);
 
   forth_execute_word("welcome");
 

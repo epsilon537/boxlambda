@@ -207,12 +207,30 @@ const char shell_fs[] =  R"shell_fs(
   cr
 ;
 
-\ Redirect input stream to given file.
-\ Input will be read from file until EOF is reached.
-\ ( "filename" -- )
+: x-eof ." End Of File Exception" cr ;
+
+\ Execute the given xt, taking input from the given file.
+\ If end-of-file is reached before the xt completes,
+\ an x-eof exception is raised.
+\ Example usage:
+\ create sbf 80 allot
+\ sbf dup 80 [: accept ;] <file name.txt esc-s" \nHello %s\n" printf
+\ ( xt "filename" -- )
 : <file
-  token FA_OPEN_EXISTING FA_READ or f_open
-  [: key<console key-fil @ f_close ;] key<file
+  token FA_OPEN_EXISTING FA_READ or f_open >r ( xt )
+  r@ [: key<console key-fil @ f_close ['] x-eof ?raise ;] key<file ( xt )
+  execute ( )
+  key<console
+  r> f_close
+;
+
+\ Execute xt with all output suspended.
+\ usage: [: <statements to be executed with output suspended :] >null
+\ ( xt -- )
+: >null
+  emit>null
+  execute
+  emit>console
 ;
 
 \ Redirect stdout to given file in overwrite mode. Don't emit to console.
@@ -266,6 +284,7 @@ const char shell_fs[] =  R"shell_fs(
 \ A stack to keep track of recursive includes.
 create include-stack MAX_NUM_OPEN_FILES cells allot
 0 variable include-sp   \ stack pointer
+0 variable saved-quit-hook
 
 \ Push include file descriptor on the include-stack.
 \ ( x -- )
@@ -284,48 +303,38 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
   cells include-stack + @ ( x )
 ;
 
-\ This word is invoked when an include file reaches
-\ end-of-file. It switches the redirected input
-\ to the previous include file descriptor on the stack,
-\ or, when all include files have been processed, to
-\ the console.
-\ ( -- )
-: include-eof
-  \ Close the file on top of the stack, this is the
-  \ file that has reached eof.
-  include-pop f_close
-  \ Pop the next file off the stack and check if it's
-  \ an actual file.
-  include-pop ?dup if
-    \ It is a file. Put it back on the stack and
-    \ redirect the input to this file.
-    \ Keep the same eof handler.
-    dup include-push
-    eof-hook @ key<file
-  else
-    \ A 0 on the stack indicates we should switch
-    \ input back to the console.
-    key<console
-  then
-;
-
+0 variable include-source-id
 
 \ Load forth code from a file with the specified path.
 \ include may be used recursively, i.e. the file being
 \ included itself may contain one or more include calls.
 \ ( "path" -- )
 : include
-  \ If this is the first (i.e. top-level) include, push
-  \ a 0 on the include stack. The 0 indicates when to
-  \ switch back the input to the console.
-  include-sp @ 0= if
-    0 include-push
-  then
+  include-source-id @ include-push
   token FA_OPEN_EXISTING FA_READ or f_open ( fil )
-  dup include-push ( fil )
-  \ Redirect input to the opened file, invoke
-  \ include-eof when the end of the file is reached.
-  ['] include-eof key<file
+  dup include-source-id ! ( fil )
+  80 [: ( fil buf )
+    begin ( fil buf )
+      2dup 80 f_gets ( fil buf adr len )
+      dup 0> while ( fil buf adr len )
+        1- evaluate ( fil buf )
+    repeat
+  ;] with-temp-allot ( fil buf adr len )
+  2drop drop ( fil )
+  f_close ( )
+  include-pop ( source-id )
+  include-source-id !
+;
+
+\ ( -- )
+: refill
+  include-source-id @ ?dup if
+    80 [: ( fil buf )
+      80 f_gets ( adr len )
+      setsource ;] with-temp-allot
+  else
+    query
+  then
 ;
 
 )shell_fs";

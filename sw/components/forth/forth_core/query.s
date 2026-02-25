@@ -34,6 +34,14 @@
 #    drop
 #    pop {pc}
 
+#------------------------------------------------------------------------------
+  Definition Flag_visible|Flag_variable, "accept-echo" # ( -- addr )
+  CoreVariable accept_echo
+#------------------------------------------------------------------------------
+  pushdaaddrf accept_echo
+  ret
+  .varinit -1 # By default, accepted characters are echoed.
+
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "accept"
 accept: # ( c-addr maxlength -- length ) Collecting your keystrokes !
@@ -54,39 +62,43 @@ accept: # ( c-addr maxlength -- length ) Collecting your keystrokes !
   popda x10
 
   li x15, 127        # Delete
-  beq x10, x15, 5f   # Should do the same as backspace
+  beq x10, x15, 6f   # Should do the same as backspace
 
   li x15, 32         # ASCII 0-31 are control characters which need special handling
-  bltu x10, x15, 3f  # Branch if this is a control character.
+  bltu x10, x15, 4f  # Branch if this is a control character.
 
    # Just add a normal character and echo it back. Do this only if there is buffer space left.
 2: bgeu x12, x8, 1b # No more characters if buffer is full !
 
+    laf x15, accept_echo
+    lc x15, 0(x15)
+    beq x15, x0, 3f # Skip emit of accept-echo is false.
+
     pushda x10
     call emit
-
+3:
     sb x10, 0(x11)
     addi x11, x11, 1
     addi x12, x12, 1
     j 1b
 
-3: # Handle control characters
+4: # Handle control characters
 
   li x15, 9  # Replace TAB with space and include as normal character.
-  bne x10, x15, 4f
+  bne x10, x15, 5f
     li x10, 32
     j 2b
-4:
+5:
 
   li x15, 10    # Finish with LF
-  beq x10, x15, 7f
+  beq x10, x15, 8f
   li x15, 13    # Finish with CR
-  beq x10, x15, 7f
+  beq x10, x15, 8f
 
   li x15, 8          # Backspace ?
   bne x10, x15, 1b   # Ignore all other control characters.
 
-5: # Delete a character.
+6: # Delete a character.
   beq x12, zero, 1b  # Zero characters in buffer ? Then we cannot delete one.
 
   call dotquote # Clear a character visually. Emit sequence to delete one character in terminal.
@@ -99,13 +111,6 @@ accept: # ( c-addr maxlength -- length ) Collecting your keystrokes !
   # pushdaconst 8
   # call emit
 
-
-      # Unicode-Zeichen sind so aufgebaut:
-      # 11xx xxxx,  10xx xxxx,  10xx xxxx......
-      # Wenn das letzte Zeichen also vorne ein 10 hat,
-      # muss ich so lange weiterlöschen, bis ich eins mit 11 vorne erwische.
-      # Prüfe natürlich immer, ob der Puffer vielleicht schon leer ist. Ausgetrickst !
-
       # Remove character from buffer and watch for Unicode !
       # Unicode: Maybe I have to remove more than one byte from buffer.
       # Unicode-Characters have this format:
@@ -113,7 +118,7 @@ accept: # ( c-addr maxlength -- length ) Collecting your keystrokes !
       # When the last character has 10... then I have to delete until i reach a character that has 11....
       # Always check if buffer may be already empty !
 
-6:beq x12, zero, 1b  # Anything available to be deleted ?
+7:beq x12, zero, 1b  # Anything available to be deleted ?
 
   addi x11, x11, -1
   addi x12, x12, -1
@@ -124,10 +129,9 @@ accept: # ( c-addr maxlength -- length ) Collecting your keystrokes !
 
   andi x15, x10, 0x40  # Have I reached the first byte of this particular Unicode character yet ?
   bne x15, zero, 1b    # Properly deleted the whole Unicode character.
-  j 6b                 # No ? Remove one more byte from the string.
+  j 7b                 # No ? Remove one more byte from the string.
 
-
-7: # Return has been pressed: Store string length, print space and leave.
+8: # Return has been pressed: Store string length, print space and leave.
   mv x8, x12
   pop_x1_x10_x12
   j space
