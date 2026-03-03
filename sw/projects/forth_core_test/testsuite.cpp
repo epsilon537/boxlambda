@@ -9,7 +9,6 @@
 
 #include "gpio.h"
 #include "forth.h"
-#include "testsuite.fs"
 #include "init.fs"
 #include "heap.fs"
 #include "pool.fs"
@@ -21,6 +20,7 @@
 #include "fs.fs"
 #include "fs_redirect.fs"
 #include "shell.fs"
+#include "testsuite.fs"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 

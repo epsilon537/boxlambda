@@ -1,3 +1,2 @@
-add_subdirectory(forth_core)
-add_subdirectory(forth_fs)
+add_subdirectory(core)
 

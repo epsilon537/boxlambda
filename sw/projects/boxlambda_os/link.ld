@@ -16,8 +16,12 @@ PROVIDE(__datastack_size = 1024);
 
 /*'emem' is the external memory section.*/
 __emem = 0x20000000;
-__emem_size = 256m; /*256MB external memory.*/
+__emem_size = 256m; /*255MB external memory (the 256th MB is used as FS_MEM).*/
 __heap_size = 128m;
+
+/* RAM Filesystem memory section.*/
+__fs_mem = 0x2ff00000;
+__fs_mem_size = 1m;
 
 /*'fmem' is the flash memory section.*/
 __fmem = 0x11600000;
@@ -33,9 +37,10 @@ ENTRY(_start)
 
 MEMORY
 {
-    imem : ORIGIN = __imem, LENGTH = __imem_size
-    emem : ORIGIN = __emem, LENGTH = __emem_size
-    fmem : ORIGIN = __fmem, LENGTH = __fmem_size
+    imem   : ORIGIN = __imem, LENGTH = __imem_size
+    emem   : ORIGIN = __emem, LENGTH = __emem_size
+    fs_mem : ORIGIN = __fs_mem, LENGTH = __fs_mem_size
+    fmem   : ORIGIN = __fmem, LENGTH = __fmem_size
 }
 
 SECTIONS
@@ -224,6 +229,8 @@ SECTIONS
 
     PROVIDE (__heap_start = ADDR(.heap));
 
+    PROVIDE(__fs_image_start = ORIGIN(fs_mem));
+    PROVIDE(__fs_image_size  = LENGTH(fs_mem));
 
     /* Throw away C++ exception handling information */
 

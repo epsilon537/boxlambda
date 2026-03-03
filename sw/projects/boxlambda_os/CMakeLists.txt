@@ -2,24 +2,51 @@
 # BoxLambda Operating System (WIP)
 #
 
-add_executable(boxlambda_os
+# Put the contents of the fs/ directory in an FAT image.
+
+set(FS_IMAGE ${CMAKE_CURRENT_BINARY_DIR}/boxfs.bin)
+set(FORTH_DIR ${PROJECT_SOURCE_DIR}/sw/components/forth)
+
+add_custom_command(
+      OUTPUT
+          ${FS_IMAGE}
+      COMMAND
+          ${PROJECT_SOURCE_DIR}/scripts/gen_fs_img.sh ${FS_IMAGE} ${FORTH_DIR}/fs
+      WORKING_DIRECTORY
+          ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT
+          "Creating file system image."
+      VERBATIM
+  )
+
+add_custom_target(boxfs
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS
+        ${FS_IMAGE}
+    COMMENT
+        "BoxLambda FS image generation target."
+)
+
+add_executable(boxkern
    main.cpp
 )
 
-target_compile_options(boxlambda_os
+target_compile_options(boxkern
  PRIVATE
   -O2 -g
 )
 
-target_include_directories(boxlambda_os
+target_include_directories(boxkern
   PRIVATE
-   ${PROJECT_SOURCE_DIR}/sw/components/forth/forth
+   ${FORTH_DIR}/core
+   ${FORTH_DIR}/fs/forth
 )
 
 #Function defined in parent CMakeLists.txt file:
-link_and_create_image(boxlambda_os ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
+link_and_create_image(boxkern ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
 
-target_link_libraries(boxlambda_os fatfs forth_core forth_fs gpio bootstrap)
+target_link_libraries(boxkern fatfs forth_core gpio bootstrap)
 
-add_flash_sw_target(boxlambda_os)
+add_flash_sw_target(boxkern)
 

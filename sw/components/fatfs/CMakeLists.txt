@@ -8,6 +8,8 @@ target_sources(fatfs
     ../../../sub/fatfs/source/ffsystem.c
     ../../../sub/fatfs/source/ffunicode.c
     diskio.cpp
+    diskio_sd.cpp
+    diskio_ram.cpp
 )
 
 target_compile_definitions(fatfs
@@ -23,6 +25,7 @@ target_compile_options(fatfs
 
 target_include_directories(fatfs
     PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${PROJECT_SOURCE_DIR}/sub/fatfs/source #Paths to include files users of fatfs are expected to use.
 )
 

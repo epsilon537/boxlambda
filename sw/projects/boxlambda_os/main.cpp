@@ -1,12 +1,15 @@
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <assert.h>
 
 #include "gpio.h"
 #include "forth.h"
 #include "fs_ffi.h"
 #include "stdio_redirect_ffi.h"
+#include "diskio_ram.h"
 #include "ff.h"
 #include "init.fs"
 #include "heap.fs"
@@ -36,12 +39,16 @@ void	_exit (int status) {
 	while (1);
 }
 
+//The RAM FS image location.
+extern char __fs_image_start[];
+extern char __fs_image_size[];
+
+// The file system objects
+FATFS fs_sd;
+FATFS fs_ram;
+
 #ifdef __cplusplus
 }
-
-// The file system object
-FATFS fs;
-
 #endif
 
 int main(void) {
@@ -87,12 +94,23 @@ int main(void) {
 
   printf("Mounting file system...\n");
   /* Clear file system object */
-  memset(&fs, 0, sizeof(FATFS));
+  memset(&fs_sd, 0, sizeof(FATFS));
 
-  FRESULT res = f_mount(&fs, "", 1);
+  FRESULT res = f_mount(&fs_sd, "0:", 1);
   if (res != FR_OK)
   {
-    printf("FatFS mount error! %d\n", res);
+    printf("SD FatFS mount error! %d\n", res);
+    return -1;
+  }
+
+  disk_ram_init((unsigned char *)__fs_image_start, (unsigned long)__fs_image_size);
+
+  memset(&fs_ram, 0, sizeof(FATFS));
+
+  res = f_mount(&fs_ram, "1:", 1);
+  if (res != FR_OK)
+  {
+    printf("RAM FatFS mount error! %d\n", res);
     return -1;
   }
 

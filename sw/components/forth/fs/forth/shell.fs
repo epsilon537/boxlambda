@@ -54,6 +54,7 @@ const char shell_fs[] =  R"shell_fs(
 ;
 
 \ ls with *- or ?-containing pattern string: "ls", "ls *.fs" , "ls *.?xt"
+\ ( "pattern string" -- )
 : ls
   s" ." token
   dup 0= if
@@ -77,13 +78,21 @@ const char shell_fs[] =  R"shell_fs(
   f_closedir ( )
 ;
 
+\ mkdir <dirname>
+\ ( "dirname" -- )
+: mkdir
+  token f_mkdir
+;
+
 \ cd <dirname>
+\ ( "dirname" -- )
 : cd
   token f_chdir
   cr
 ;
 
 \ pwd
+\ ( -- )
 : pwd
   cr
   f_getcwd type
@@ -130,6 +139,7 @@ const char shell_fs[] =  R"shell_fs(
 ;
 
 \ chmod <fname> +/-<attrib> . e.g. chmod test.txt -rdo
+\ ( "fname" "+/-attrib" -- )
 : chmod
   token ( addr len )
   token str>attrib ( addr len val mask )
@@ -137,11 +147,13 @@ const char shell_fs[] =  R"shell_fs(
 ;
 
 \ mv from to
+\ ( "from" "to" -- )
 : mv
   token token f_rename
 ;
 
 \ cp from to
+\ ( "from" "to" -- )
 : cp
   token FA_OPEN_EXISTING FA_READ or f_open ( infil )
   token FA_CREATE_ALWAYS FA_WRITE or f_open ( infil ofil )
@@ -167,6 +179,7 @@ const char shell_fs[] =  R"shell_fs(
 ;
 
 \ cat <filename>
+\ ( "filename" -- )
 : cat
   token FA_OPEN_EXISTING FA_READ or f_open ( fil )
   cr
@@ -181,6 +194,7 @@ const char shell_fs[] =  R"shell_fs(
 ;
 
 \ rm <file or dir pattern string>, e.g. rm *.txt
+\ ( "pattern" -- )
 : rm
   s" ." token ( addr1 len1 addr2 len2 )
   f_findfirst ( dir )
@@ -201,6 +215,7 @@ const char shell_fs[] =  R"shell_fs(
 : touch
 ;
 
+\ ( -- )
 : df
   cr
   f_getfree s" Total: %n Free: %n" printf
@@ -326,6 +341,10 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
   include-source-id !
 ;
 
+\ An alternative query that also supports input
+\ from file. The file id is indicated in variable
+\ include-source-id. If set to 0, refill invokes
+\ query.
 \ ( -- )
 : refill
   include-source-id @ ?dup if

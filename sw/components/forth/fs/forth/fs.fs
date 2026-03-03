@@ -384,7 +384,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   check-throw-ior ( )
 ;
 
-\ Change timestamp of file or subdirectory with given name to value specified in filinfo.
+\ Change timestamp (time and date) of file or subdirectory with given name to value specified in filinfo.
 \ May throw x-fr-* exception.
 \ ( addr len -- )
 : f_utime
@@ -398,6 +398,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \ May throw x-fr-* exception.
 \ ( addr len -- )
 : f_mkdir
+  \ Make dir
   path str>path ( )
   path ( path )
   fs_f_mkdir ( ior )

@@ -71,16 +71,17 @@ create charbuf 1 allot
 : parse-cmdspec ( dst src srcend -- dst src srcend )
   swap 1+ swap ( dst src+1 srcend )
   parse-min-field-width ( dst src+1 srcend )
+  base @ >r ( dst src+1)
   >r ( dst src+1 )
   dup >r ( dst src+1 )
   c@ ( dst c )
   case ( dst )
     [char] % of s" %" add-field endof ( dst )
     [char] c of swap charbuf c! charbuf 1 add-field endof
-    [char] n of swap dup s>d dabs <# #s rot sign #> add-field endof
-    [char] u of swap 0 <# #s #> add-field endof
+    [char] n of decimal swap dup s>d dabs <# #s rot sign #> add-field endof
+    [char] u of decimal swap 0 <# #s #> add-field endof
     [char] s of -rot add-field endof
-    [char] d of r> 1+ dup >r
+    [char] d of decimal r> 1+ dup >r
       c@ case
         [char] n of -rot tuck dabs <# #s rot sign #> add-field endof
         [char] u of -rot <# #s #> add-field endof
@@ -88,6 +89,7 @@ create charbuf 1 allot
       endof
   endcase
   r> r> ( dst src+1 srcend )
+  r> base ! ( dst src+1)
 ;
 
 \ Prints n*x into buffer c-addr2 using the format string at c-addr1 u.
