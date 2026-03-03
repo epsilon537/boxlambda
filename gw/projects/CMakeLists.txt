@@ -141,7 +141,7 @@ function (gw_project_rules_dfx_vivado)
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/load_gw.sh ${_board} dfx_project.bit
+          ${PROJECT_SOURCE_DIR}/scripts/target.py -load_bit dfx_project.bit
       COMMENT
           "Loading bitstream to target."
       VERBATIM
@@ -152,7 +152,7 @@ function (gw_project_rules_dfx_vivado)
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/flash_gw.sh ${_board} dfx_project.bit
+          ${PROJECT_SOURCE_DIR}/target.py -flash_bit dfx_project.bit
       COMMENT
           "Flashing bitstream to target."
       VERBATIM
@@ -305,7 +305,7 @@ function (gw_project_rules_vivado)
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/load_gw.sh ${_board} project.bit
+          ${PROJECT_SOURCE_DIR}/scripts/target.py -load_bit project.bit
       COMMENT
           "Loading bitstream to target."
       VERBATIM
@@ -316,7 +316,7 @@ function (gw_project_rules_vivado)
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/flash_gw.sh ${_board} project.bit
+          ${PROJECT_SOURCE_DIR}/scripts/target.py -flash_bit project.bit
       COMMENT
           "Flashing bitstream to target."
       VERBATIM

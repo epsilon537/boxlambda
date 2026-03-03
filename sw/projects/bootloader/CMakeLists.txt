@@ -48,7 +48,7 @@ add_custom_target(bootloader_flash_sw
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/flash_sw.sh -b ${_board} bootloader.bin
+          ${PROJECT_SOURCE_DIR}/scripts/target.py -flash_boot bootloader.bin
       COMMENT
           "Flashing bootloader to target."
       VERBATIM

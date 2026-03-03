@@ -11,7 +11,7 @@ function(add_flash_sw_target _tgt)
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/flash_sw.sh ${_board} ${_tgt}.bin
+            ${PROJECT_SOURCE_DIR}/scripts/target -flash_app ${_tgt}.bin
         COMMENT
             "Flashing SW to target."
         VERBATIM
