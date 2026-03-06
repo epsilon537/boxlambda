@@ -3,7 +3,7 @@
 : trace_on
   ." Enabling tracing..." cr
   hook-interpret @ trace-saved-hook-interpret !
-  [: ." -> " source type ."  <- " cr trace-saved-hook-interpret @ execute ;] hook-interpret !
+      [: cr .s .rs ." -> " source type ."  <- " cr trace-saved-hook-interpret @ execute .s .rs ;] hook-interpret !
 ;
 
 : trace_off

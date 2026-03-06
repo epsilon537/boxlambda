@@ -158,23 +158,19 @@ const char shell_fs[] =  R"shell_fs(
   token FA_OPEN_EXISTING FA_READ or f_open ( infil )
   token FA_CREATE_ALWAYS FA_WRITE or f_open ( infil ofil )
   swap 256 [: ( ofil infil buf )
-    ." 1: " .s cr
     >r ( ofil infil )
     begin ( ofil infil )
       2dup ( ofil infil ofil infil )
       r@ 256 ( ofil infil ofil infil buf btr )
-      ." 2:" .s cr
       f_read ( ofil infil ofil br )
       dup while ( ofil infil ofil br )
         r@ swap ( ofil infil ofil buf btw )
-        ." 3:" .s cr
         f_write ( ofil infil bw )
         drop ( ofil infil )
     repeat ( ofil infil )
     rdrop ( ofil infil ofil br )
     2drop ( ofil infil )
   ;] with-temp-allot
-  ." 4:" .s cr
   f_close f_close ( )
 ;
 
@@ -296,6 +292,10 @@ const char shell_fs[] =  R"shell_fs(
   r> f_close
 ;
 
+127 constant MAX-LINE-LENGTH
+
+: x-line-too-long MAX-LINE-LENGTH s" Line too long. Max. length = %n." printf ;
+
 \ A stack to keep track of recursive includes.
 create include-stack MAX_NUM_OPEN_FILES cells allot
 0 variable include-sp   \ stack pointer
@@ -318,25 +318,31 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
   cells include-stack + @ ( x )
 ;
 
+0 variable include-verbose
 0 variable include-source-id
 
 \ Load forth code from a file with the specified path.
 \ include may be used recursively, i.e. the file being
 \ included itself may contain one or more include calls.
+\ May raise x-line-too-long
 \ ( "path" -- )
 : include
   include-source-id @ include-push
   token FA_OPEN_EXISTING FA_READ or f_open ( fil )
-  dup include-source-id ! ( fil )
-  80 [: ( fil buf )
-    begin ( fil buf )
-      2dup 80 f_gets ( fil buf adr len )
-      dup 0> while ( fil buf adr len )
-        1- evaluate ( fil buf )
-    repeat
-  ;] with-temp-allot ( fil buf adr len )
-  2drop drop ( fil )
-  f_close ( )
+  dup include-source-id ! >r ( R: fil )
+  temp-mark> >r ( R: fil mark )
+  MAX-LINE-LENGTH 1+ temp-allot ( R: fil mark )
+  begin ( n*x R: fil mark )
+    2r@ MAX-LINE-LENGTH 1+ f_gets ( n*x addr len R: fil mark )
+    dup MAX-LINE-LENGTH 1+ = triggers x-line-too-long ( n*x addr len R: fil mark )
+    dup 0> while ( n*x addr len R: fil mark )
+      include-verbose @ if
+        2dup type
+      then
+      1- evaluate ( n*x R: fil mark )
+  repeat
+  2drop ( n*x R: fil mark )
+  2r> >temp-mark f_close ( n*x )
   include-pop ( source-id )
   include-source-id !
 ;

@@ -425,6 +425,42 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   path path>str ( addr len )
 ;
 
+\ Read one compare one buffer worth of data between to open files
+\ ( fil0 fil1 buf0 buf1 -- noteqf bothzerof)
+: (f_cmp_buf)
+    2dup 2-rot ( buf0 buf1 fil0 fil1 buf0 buf1 )
+    swap -rot ( buf0 buf1 fil0 buf0 fil1 buf1 )
+    256 f_read ( buf0 buf1 fil0 buf0 len1 )
+    -rot 256 f_read ( buf0 buf1 len1 len0 )
+    2dup d0= >r ( buf0 buf1 len1 len0 R: bothzero )
+    -rot ( buf0 len0 buf1 len1 R: bothzero )
+    compare not ( noteq R: bothzero )
+    r> ( noteq bothzero )
+;
+
+\ Compare two files, identified by filename. Pushes true if identical, false otherwise.
+\ ( addr1 len1 addr2 len2 -- f )
+: f_cmp
+  FA_OPEN_EXISTING FA_READ or f_open ( addr1 len1 fil0 )
+  -rot FA_OPEN_EXISTING FA_READ or f_open ( fil0 fil1 )
+  temp-mark> ( fil0 fil1 mark0 )
+  256 temp-allot temp-mark> ( fil0 fil1 mark0 mark1 )
+  2>r ( fil0 fil1 R: mark0 mark1 )
+  0 0
+  begin ( fil0 fil1 f f R: mark0 mark1 )
+    2drop ( fil0 fil1 R: mark0 mark1 )
+    2dup 2r@ ( fil0 fil1 fil0 fil1 mark0 mark1 R: mark0 mark1 )
+    (f_cmp_buf) ( fil0 fil1 noteq bothzero R: mark0 mark1 )
+    2dup or ( fil0 fil1 noteq bothzero f R: mark0 mark1 )
+  until ( fil0 fil1 noteq bothzero R: mark0 mark1 )
+  rdrop ( fil0 fil1 noteq bothzero R: mark0 )
+  r> >temp-mark ( fil0 fil1 noteq bothzero )
+  swap not and ( fil0 fil1 f )
+  -rot ( f fil0 fil1 )
+  f_close
+  f_close ( f )
+;
+
 \
 \ Volume Management and System Configuration:
 \

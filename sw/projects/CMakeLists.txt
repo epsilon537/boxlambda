@@ -7,11 +7,21 @@ function(add_flash_sw_target _tgt)
     set(_board arty_a7_35t)
   endif()
 
+  add_custom_target(${_tgt}_load_sw
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND
+            ${PROJECT_SOURCE_DIR}/scripts/target.py -load_app ${_tgt}.bin -run
+        COMMENT
+            "Loading SW to target."
+        VERBATIM
+  )
+
   add_custom_target(${_tgt}_flash_sw
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/target -flash_app ${_tgt}.bin
+            ${PROJECT_SOURCE_DIR}/scripts/target.py -flash_app ${_tgt}.bin
         COMMENT
             "Flashing SW to target."
         VERBATIM
