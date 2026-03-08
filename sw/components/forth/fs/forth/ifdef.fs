@@ -1,4 +1,3 @@
-const char conditional_comp[] =  R"conditional_comp(
 \ Idea similar to http://lars.nocrew.org/dpans/dpansa15.htm#A.15.6.2.2532
 
 : nexttoken ( -- addr len )
@@ -41,5 +40,4 @@ const char conditional_comp[] =  R"conditional_comp(
 : [if]   ( ? -- )                 0=  if postpone [else] then [immediate] [1-foldable] ;
 : [ifdef]  ( -- ) token find drop 0=  if postpone [else] then [immediate] [0-foldable] ;
 : [ifndef] ( -- ) token find drop 0<> if postpone [else] then [immediate] [0-foldable] ;
-)conditional_comp";
 

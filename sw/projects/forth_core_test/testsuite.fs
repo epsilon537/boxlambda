@@ -100,6 +100,11 @@ const char testsuite[] =  R"testsuite(
     tuck -
 ;
 
+\ Interactive string printing.
+: .( ( -- )
+    [char] ) parse type cr
+[immediate] ;
+
 \ [ifdef] RISC-V
 
 : w@unaligned ( addr -- x ) dup h@ swap 2+ h@ 16 lshift or ;

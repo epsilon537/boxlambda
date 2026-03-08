@@ -75,24 +75,6 @@ forth_core_init_: # Forth core initialization. Called once, at boot time.
   ret
 
 # -----------------------------------------------------------------------------
-.global forth_repl_
-forth_repl_: # Enter the Forth REPL
-# -----------------------------------------------------------------------------
-  # We're called from C: save ra, x8 and x9 on the stack
-  # Since we're called from C, the stack pointer will be 16-byte aligned, following
-  # the RISC-V C calling convention.
-  push_x1_x8_x9
-
-  # Get TOS and PSP from the datastack object.
-  laf x14, datastack
-  lc x8, 0(x14)
-  lc x9, 4(x14)
-
-  # We don't return from quit. If we want to exit from the REPL, the "bye" Word is
-  # invoked which handles the return to C.
-  j quit
-
-# -----------------------------------------------------------------------------
 Reset:
 # -----------------------------------------------------------------------------
 
@@ -122,6 +104,9 @@ forth_core_fun_: # C interface to call a core forth function such as find or exe
   # the RISC-V C calling convention.
 
   push_x1_x8_x9
+
+  laf x15, gp_tp_sp
+  sc sp, 8(x15)
 
   # Get TOS and PSP from the datastack object.
   laf x14, datastack

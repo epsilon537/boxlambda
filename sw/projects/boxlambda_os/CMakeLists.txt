@@ -61,8 +61,7 @@ target_compile_options(boxkern
 
 target_include_directories(boxkern
   PRIVATE
-   ${FORTH_DIR}/core
-   ${FORTH_DIR}/fs/forth
+   ${PROJECT_SOURCE_DIR}/sw/components/common
 )
 
 #Function defined in parent CMakeLists.txt file:
@@ -85,7 +84,7 @@ add_custom_target(boxkernfs_load
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}
     COMMAND
-        ${PROJECT_SOURCE_DIR}/scripts/target.py -load_fs ${FS_IMAGE} -load_app boxkern.bin -run
+        ${PROJECT_SOURCE_DIR}/scripts/target.py -reset -load_fs ${FS_IMAGE} -load_app boxkern.bin -run
     DEPENDS
         boxkernfs
     COMMENT

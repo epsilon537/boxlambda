@@ -1,4 +1,3 @@
-const char pool_fs[] =  R"pool_fs(
 \ BoxLambda port of zeptoforth's pool.fs by Ruben Lysens.
 \
 \ Original header:
@@ -112,4 +111,3 @@ end-structure
 \ Get the pool total count
 : pool-total-count ( pool -- u ) pool-total-count @ ;
 
-)pool_fs";

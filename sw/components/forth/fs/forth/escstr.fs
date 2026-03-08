@@ -1,4 +1,3 @@
-const char escstr_fs[] =  R"escstr_fs(
 \ Port of escsapedstrings.txt by Mattias Koch, extended to supported interpreter mode.
 
 0 variable tmp-buf
@@ -72,4 +71,3 @@ const char escstr_fs[] =  R"escstr_fs(
   ;] with-temp-allot
 [immediate] ;
 
-)escstr_fs";

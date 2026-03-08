@@ -1,5 +1,3 @@
-const char fs_fs[] =  R"fs_fs(
-
 \ path is the principle working buffer for filesystem paths.
 256 buffer: path
 
@@ -233,14 +231,17 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   check-throw-ior
 ;
 
-\ Read a string from the file
+\ Read a string from the file.
+\ Note that reading from eof returns 0 0 as adr len.
+\ Note that when eof is reached or buflen is reached,
+\      the returned line might not contain a \n.
 \ May throw x-fr-* exception.
 \ ( fil buf buflen -- adr len )
 : f_gets
-  rot >r ( buf buflen)
-  r@ -rot ( fil buf buflen )
-  fs_f_gets ( adr )
-  r> fs_f_error 0= averts x-fr-int-err ( adr )
+  rot >r ( buf buflen R: fil )
+  r@ -rot ( fil buf buflen R: fil )
+  fs_f_gets ( adr R: fil )
+  r> fs_f_error 0= averts x-fr-int-err ( adr R: fil )
   dup if ( adr )
     dup s0len ( adr len )
   else
@@ -262,7 +263,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 
 \ Test for end of file.
 \ ( fil -- flag )
-: f_eof fs_f_eof ;
+: f_eof fs_f_eof 0<> ;
 
 \ Get file size
 \ ( fil -- size )
@@ -474,4 +475,3 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   check-throw-ior
 ;
 
-)fs_fs";

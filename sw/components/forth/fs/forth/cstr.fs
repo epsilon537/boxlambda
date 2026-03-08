@@ -1,4 +1,3 @@
-const char cstr_fs[] =  R"cstr_fs(
 \ C FFI for strings
 
 255 constant CSTRLENMAX
@@ -57,4 +56,3 @@ const char cstr_fs[] =  R"cstr_fs(
   cstr   \ ( )
 ;
 
-)cstr_fs";

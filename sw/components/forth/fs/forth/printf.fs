@@ -1,4 +1,3 @@
-const char printf_fs[] =  R"printf_fs(
 \ From repo: https://github.com/jkotlinski/forth-strfmt
 
 0 variable min-field-width
@@ -122,6 +121,5 @@ create charbuf 1 allot
 ;
 
 \ Prints n*x using the format string at c-addr u.
-: printf ( n*x c-addr u -- ) pad sprintf type ;
+: printf ( n*x c-addr u -- ) 1024 [: sprintf ;] with-temp-allot type ;
 
-)printf_fs";

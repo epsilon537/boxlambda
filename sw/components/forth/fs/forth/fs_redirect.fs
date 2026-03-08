@@ -1,5 +1,3 @@
-const char fs_redirect_fs[] =  R"fs_redirect_fs(
-
   0 variable emit-fil
 
 \ ( c -- )
@@ -93,4 +91,3 @@ const char fs_redirect_fs[] =  R"fs_redirect_fs(
   ['] (key<fil?) hook-key? !
 ;
 
-)fs_redirect_fs";

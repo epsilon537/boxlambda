@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "fatal.h"
 
 #include "gpio.h"
 #include "forth.h"
@@ -11,18 +12,7 @@
 #include "stdio_redirect_ffi.h"
 #include "diskio_ram.h"
 #include "ff.h"
-#include "init.fs"
-#include "heap.fs"
-#include "cstr.fs"
-#include "escstr.fs"
-#include "pool.fs"
-#include "temp-alloc.fs"
-#include "istr.fs"
-#include "printf.fs"
-#include "fs.fs"
-#include "fs_redirect.fs"
-#include "shell.fs"
-#include "conditional-comp.fs"
+#include "uart.h"
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -34,7 +24,7 @@ void _init(void) {
 }
 
 //_exit is executed by the picolibc exit function.
-//An implementation has to be provided to be able to user assert().
+//An implementation has to be provided to be able to use assert().
 void	_exit (int status) {
 	while (1);
 }
@@ -47,9 +37,77 @@ extern char __fs_image_size[];
 FATFS fs_sd;
 FATFS fs_ram;
 
+const char *sd_boot_path = "/sd/forth";
+const char *ram_boot_path = "/ram/forth";
+
 #ifdef __cplusplus
 }
 #endif
+
+// Attempts to mount SD and/or RAM disk and detect boot dir. Prompts user and retries if needed. Returns boot path.
+const char *mount_get_boot_dir() {
+  printf("Mounting file system...\n");
+  /* Clear file system object */
+  memset(&fs_sd, 0, sizeof(FATFS));
+
+  const char *boot_path = 0;
+
+  bool fs_mounted = false;
+
+  bool fr;
+  FILINFO fno;
+
+  while (true) {
+    FRESULT res = f_mount(&fs_sd, "0:", 1);
+    if (res != FR_OK)
+    {
+      printf("No SD FatFS detected.\n");
+    }
+    else {
+      printf("SD FatFS mounted.\n");
+      fr = f_stat(sd_boot_path, &fno);
+      if ((fr == 0) && (fno.fattrib & AM_DIR)) {
+        printf("Boot path %s found;\n", sd_boot_path);
+        boot_path = sd_boot_path;
+      }
+
+      fs_mounted = true;
+    }
+
+    disk_ram_init((unsigned char *)__fs_image_start, (unsigned long)__fs_image_size);
+
+    memset(&fs_ram, 0, sizeof(FATFS));
+
+    res = f_mount(&fs_ram, "1:", 1);
+    if (res != FR_OK)
+    {
+      printf("No RAM FatFS detected.\n");
+    }
+    else {
+      printf("RAM FatFS mounted.\n");
+      fr = f_stat(ram_boot_path, &fno);
+      if ((fr == 0) && (fno.fattrib & AM_DIR)) {
+        printf("Boot path %s found;\n", ram_boot_path);
+        boot_path = ram_boot_path; //RAM boot takes precedence over SD boot.
+      }
+
+      fs_mounted = true;
+    }
+
+    if (fs_mounted && boot_path) break;
+
+    if (!fs_mounted) {
+      printf("No Filesystem found. Please insert FAT formatted SD card or upload RAM disk. Then press enter to continue.\n");
+    }
+    else {
+      printf("No forth/ boot directory found. Please insert SD card or upload RAM disk with boot directory. Then press enter to continue.\n");
+    }
+
+    getchar();
+  }
+
+  return boot_path;
+}
 
 int main(void) {
   uint32_t leds = 0xF;
@@ -60,94 +118,46 @@ int main(void) {
   printf("Initializing Forth...\n");
 
   forth_core_init();
-  stdio_redirect_ffi_init();
 
   printf("Forth core init complete.\n");
 
-  printf("Compiling init.fs...\n");
+  const char *boot_path = mount_get_boot_dir();
 
-  forth_load_buf((char*)init_fs, /*verbose=*/ false);
+  printf("Booting from %s.\n", boot_path);
 
-  printf("Compiling heap.fs...\n");
+  FRESULT fr = f_chdir(boot_path);
+  assert(fr == 0);
 
-  forth_load_buf((char*)heap_fs, /*verbose=*/ false);
+  forth_eval_file_or_die("early.fs", /*verbose=*/ false);
 
-  printf("Compiling pool.fs...\n");
+  printf("Redirecting stdio to Forth...\n");
+  stdio_redirect_ffi_init();
 
-  forth_load_buf((char*)pool_fs, /*verbose=*/ false);
-
-  printf("Compiling temp-alloc.fs...\n");
-
-  forth_load_buf((char*)temp_alloc_fs, /*verbose=*/ false);
-
-  printf("Compiling istr.fs...\n");
-
-  forth_load_buf((char*)istr_fs, /*verbose=*/ false);
-
-  printf("Compiling escstr.fs...\n");
-
-  forth_load_buf((char*)escstr_fs, /*verbose=*/ false);
-
-  printf("Compiling printf.fs...\n");
-
-  forth_load_buf((char*)printf_fs, /*verbose=*/ false);
-
-  printf("Mounting file system...\n");
-  /* Clear file system object */
-  memset(&fs_sd, 0, sizeof(FATFS));
-
-  FRESULT res = f_mount(&fs_sd, "0:", 1);
-  if (res != FR_OK)
-  {
-    printf("SD FatFS mount error! %d\n", res);
-    return -1;
-  }
-
-  disk_ram_init((unsigned char *)__fs_image_start, (unsigned long)__fs_image_size);
-
-  memset(&fs_ram, 0, sizeof(FATFS));
-
-  res = f_mount(&fs_ram, "1:", 1);
-  if (res != FR_OK)
-  {
-    printf("RAM FatFS mount error! %d\n", res);
-    return -1;
-  }
+  forth_eval_file_or_die("except.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("lambda.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("struct.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("heap.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("pool.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("temp-alloc.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("istr.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("escstr.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("tonumber.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("printf.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("cstr.fs", /*verbose=*/ false);
 
   printf("Initializing Forth Filesystem FFI...\n");
 
   fs_ffi_init();
 
-  printf("Forth FS FFI init complete.\n");
+  forth_eval_file_or_die("fs.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("fs_redirect.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("shell.fs", /*verbose=*/ false);
 
-  printf("Loading cstr.fs...\n");
+  fr = f_chdir(".."); // cd to root of boot volume
+  assert(fr == 0);
 
-  forth_load_buf((char*)cstr_fs, /*verbose=*/ false);
+  forth_eval_file_or_die("forth/init.fs", /*verbose=*/ false);
 
-  printf("Loading fs.fs...\n");
-
-  forth_load_buf((char*)fs_fs, /*verbose=*/ false);
-
-  printf("Loading fs_redirect.fs...\n");
-
-  forth_load_buf((char*)fs_redirect_fs, /*verbose=*/ false);
-
-  printf("Loading shell.fs...\n");
-
-  forth_load_buf((char*)shell_fs, /*verbose=*/ false);
-
-  printf("Loading conditional-comp.fs...\n");
-
-  forth_load_buf((char*)conditional_comp, /*verbose=*/ false);
-
-  forth_execute_word("welcome");
-
-  forth_eval(".( Ready. ) cr");
-
-  forth_repl();
-
-  printf("\nForth REPL exited.\n");
-
-  while (1);
+  die("\nForth REPL exited.\n");
 }
 

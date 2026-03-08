@@ -1,4 +1,3 @@
-const char shell_fs[] =  R"shell_fs(
 \ Some basic shell-like commands for interactive use
 
 \ Convert filinfo.fattrib to a string.
@@ -292,9 +291,10 @@ const char shell_fs[] =  R"shell_fs(
   r> f_close
 ;
 
-127 constant MAX-LINE-LENGTH
+#128 constant MAX-LINE-LENGTH
+#10 constant NEWLINE
 
-: x-line-too-long MAX-LINE-LENGTH s" Line too long. Max. length = %n." printf ;
+: x-line-truncated MAX-LINE-LENGTH s" Line got truncated. Max. length = %n." printf ;
 
 \ A stack to keep track of recursive includes.
 create include-stack MAX_NUM_OPEN_FILES cells allot
@@ -324,7 +324,7 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
 \ Load forth code from a file with the specified path.
 \ include may be used recursively, i.e. the file being
 \ included itself may contain one or more include calls.
-\ May raise x-line-too-long
+\ May raise x-line-truncated
 \ ( "path" -- )
 : include
   include-source-id @ include-push
@@ -333,15 +333,16 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
   temp-mark> >r ( R: fil mark )
   MAX-LINE-LENGTH 1+ temp-allot ( R: fil mark )
   begin ( n*x R: fil mark )
-    2r@ MAX-LINE-LENGTH 1+ f_gets ( n*x addr len R: fil mark )
-    dup MAX-LINE-LENGTH 1+ = triggers x-line-too-long ( n*x addr len R: fil mark )
-    dup 0> while ( n*x addr len R: fil mark )
-      include-verbose @ if
+    1 rpick f_eof not while ( n*x R: fil mark )
+      2r@ MAX-LINE-LENGTH f_gets ( n*x addr len R: fil mark )
+      \ if the line doesn't end with \n, it got truncated
+      2dup + 1- c@ NEWLINE <> triggers x-line-truncated ( n*x addr len R: fil mark )
+      include-verbose @ if ( n*x addr len R: fil mark )
         2dup type
       then
+      \ strip trailing \n
       1- evaluate ( n*x R: fil mark )
   repeat
-  2drop ( n*x R: fil mark )
   2r> >temp-mark f_close ( n*x )
   include-pop ( source-id )
   include-source-id !
@@ -361,6 +362,4 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
     query
   then
 ;
-
-)shell_fs";
 

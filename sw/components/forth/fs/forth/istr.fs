@@ -1,4 +1,3 @@
-const char istr_fs[] =  R"istr_fs(
 \ BoxLambda Interpretive string support by Ruben Lysens.
 
 \ String pool: 256 addr-len pairs:
@@ -115,4 +114,3 @@ create str-heap 16 4096 heap-size allot
   [immediate]
 ;
 
-)istr_fs";

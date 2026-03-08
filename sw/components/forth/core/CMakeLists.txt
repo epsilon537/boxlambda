@@ -23,7 +23,6 @@ target_sources(forth_core
     forth.cpp
     stdio_redirect_ffi.cpp
     fs_ffi.cpp
-    init.fs
     stamp
 )
 
@@ -40,6 +39,7 @@ target_compile_definitions(forth_core
 target_include_directories(forth_core
   PUBLIC
     ${PROJECT_SOURCE_DIR}/registers/generated
+    ${PROJECT_SOURCE_DIR}/sw/components/common
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

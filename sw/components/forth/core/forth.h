@@ -37,7 +37,6 @@ extern Forth_Datastack datastack;
 
 // Initialize the Forth environment.
 void forth_core_init();
-void forth_repl();
 
 // Push a value onto the data stack
 void forth_pushda(uint32_t val);
@@ -61,7 +60,11 @@ void forth_evaluate(const char *s, uint32_t count);
 
 // Evaluate the multi-line buffer pointed to by s line-by-line?
 // If verbose flag is set, print each line as its being loaded.
-void forth_load_buf(char *s, bool verbose);
+void forth_eval_buf(char *s, bool verbose);
+
+// Load the given file and evaluate it.
+// Uses printf. Errors are considered fatal.
+void forth_eval_file_or_die(const char *filename, bool verbose);
 
 // Register a C function with signature: void fun(void). Fun uses the datastack object for parameter passing.
 #define forth_register_cfun(fun, wordname) \

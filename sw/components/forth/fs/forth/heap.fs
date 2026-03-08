@@ -1,4 +1,3 @@
-const char heap_fs[] =  R"heap_fs(
 \ BoxLambda port of zeptoforth's heap.fs module by Ruben Lysens.
 \
 \ Original header:
@@ -557,4 +556,3 @@ end-structure
   heap-size +
 ;
 
-)heap_fs";

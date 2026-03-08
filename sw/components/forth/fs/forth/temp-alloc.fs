@@ -1,5 +1,3 @@
-const char temp_alloc_fs[] =  R"temp_alloc_fs(
-
 compileto> variable saved-compile-to
 
 compiletoimem
@@ -37,6 +35,4 @@ temp-space variable temp-here
   temp-space temp-here ! ;
 
 saved-compile-to @ >compileto
-
-)temp_alloc_fs";
 

@@ -447,7 +447,7 @@ create:
     ddup
     write "Redefine "
     call type # Display the new token name again
-    write ". "
+    writeln ". "
 2:
 
   call align4komma
