@@ -151,12 +151,13 @@
   token token f_rename
 ;
 
-\ cp from to
-\ ( "from" "to" -- )
-: cp
-  token FA_OPEN_EXISTING FA_READ or f_open ( infil )
-  token FA_CREATE_ALWAYS FA_WRITE or f_open ( infil ofil )
-  swap 256 [: ( ofil infil buf )
+\ ( src-addr src-len dst-addr dst-len -- )
+: (cp-file-to-file)
+  2swap ." Copying " 2dup type
+  2swap ."  to " 2dup type cr
+  FA_CREATE_ALWAYS FA_WRITE or f_open ( src-addr src-len ofil )
+  -rot FA_OPEN_EXISTING FA_READ or f_open ( ofil infil )
+  256 [: ( ofil infil buf )
     >r ( ofil infil )
     begin ( ofil infil )
       2dup ( ofil infil ofil infil )
@@ -171,6 +172,46 @@
     2drop ( ofil infil )
   ;] with-temp-allot
   f_close f_close ( )
+;
+
+\ ( src-file-a src-file-l dst-dir-a dst-dir-l )
+: (cp-file-to-dir)
+    2swap 2dup 2rot ( srcfile-a srcfile-l srcfile-a srcfile-l dstfile-a dstfile-l )
+    s" %s/%s" 128 [:
+      ( srcfile-a srcfile-l srcfile-a srcfile-l dstdir-a dstdir-l pat-str-a pat-str-l )
+      sprintf ( srcfile-addr srcfile-len dstpath-addr dstpath-len )
+      (cp-file-to-file) ( )
+    ;] with-temp-allot
+;
+
+\ ( pattern-addr pattern-len dst-dir dst-len -- )
+: (cp-pattern-to-dir)
+  2>r ( pattern-a pattern-l R: dstdir-a dstdir-l )
+  s" ." 2swap ( srcdir-a srcdir-l pattern-a pattern-l R: dstdir-a dstdir-l )
+  f_findfirst ( dir R: dstdir-addr dstdir-len )
+  begin ( dir R: dstdir-addr dstdir-len )
+    filinfo.fname ( dir srcfile-addr srcfile-len R: dstdir-a dstdir-l )
+    dup 0> while
+      2r@ (cp-file-to-dir) ( dir srcfile-a srcfile-l dstdir-a dstdir-l R: dstdir-a dstdir-l )
+      dup f_findnext  ( dir R: dstdir-a dstdir-l )
+  repeat
+  2drop 2rdrop ( dir )
+  f_closedir ( )
+;
+
+\ cp source-file dest-file
+\ cp source-file dest-dir
+\ cp source-pattern dest-dir
+\ ( "from" "to" -- )
+: cp
+  cr
+  token token ( src-addr src-len dst-addr dst-len )
+  [: 2dup f_stat ( src-addr src-len dst-addr dst-len )
+    filinfo.fattrib AM_DIR and 0> if
+      (cp-pattern-to-dir)
+    then ;] try if
+    (cp-file-to-file)
+  then
 ;
 
 \ cat <filename>
@@ -244,7 +285,7 @@
 ;
 
 \ Redirect stdout to given file in overwrite mode. Don't emit to console.
-\ usage: [: <statements to be executed with redirection :] >file file.log
+\ usage: [: <statements to be executed with redirection ;] >file file.log
 \ ( xt "filename" -- )
 : >file
   token FA_CREATE_ALWAYS FA_WRITE or f_open ( xt fil )
@@ -256,7 +297,7 @@
 ;
 
 \ Redirect stdout to given file in overwrite mode and emit to console.
-\ usage: [: <statements to be executed with redirection :] tee>file file.log
+\ usage: [: <statements to be executed with redirection ;] tee>file file.log
 \ ( xt "filename -- )
 : &>file
   token FA_CREATE_ALWAYS FA_WRITE or f_open ( xt fil )
@@ -268,7 +309,7 @@
 ;
 
 \ Redirect stdout to given file in append mode. Don't emit to console.
-\ usage: [: <statements to be executed with redirection :] >>file file.log
+\ usage: [: <statements to be executed with redirection ;] >>file file.log
 \ ( xt "filename" -- )
 : >>file
   token FA_OPEN_APPEND FA_WRITE or f_open ( xt fil )
@@ -280,7 +321,7 @@
 ;
 
 \ Redirect stdout to given file in append mode and emit to console.
-\ usage: [: <statements to be executed with redirection :] tee>>file file.log
+\ usage: [: <statements to be executed with redirection ;] tee>>file file.log
 \ ( xt "filename -- )
 : &>>file
   token FA_OPEN_APPEND FA_WRITE or f_open ( xt fil )

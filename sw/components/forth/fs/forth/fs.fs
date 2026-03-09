@@ -254,7 +254,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \ ( fil c -- )
 : f_putc
   fs_f_putc ( bw )
-  1 = averts x-fr-int-err ( )
+  0> averts x-fr-int-err ( )
 ;
 
 \ Get current read/write pointer
