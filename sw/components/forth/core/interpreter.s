@@ -397,22 +397,3 @@ quit_vanilla:  # Main loop of Forth system.
   writeln " ok."
   j quit_vanilla
 
-check_exception:
-  push x1
-  beq x8, zero, 1f
-
-  # If we get here, an exception was raised.
-  write "***Exception***: "
-
-  call _try # Wrap the exception handler call in a try block
-
-  beq x8, zero, 1f
-  # If we get here, an exception was raised.
-  write "***Exception***: "
-
-  call execute
-1:
-  drop
-  pop x1
-  ret
-

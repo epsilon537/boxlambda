@@ -18,6 +18,19 @@ include forth/dict.fs
   cr
 ;
 
+\ A quit loop that prints the cwd as a prompt
+: quit_w_cwd
+  begin
+    f_getcwd type s" > " type
+    query
+    interpret
+    cr
+  again
+;
+
 welcome
 s" Ready." type cr
-quit
+
+' quit_w_cwd hook-quit !
+quit_w_cwd
+
