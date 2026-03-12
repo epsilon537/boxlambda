@@ -144,6 +144,7 @@ nav:
         - Software Test Builds:
             - Forth Core Test: sw-test-build-forth-core.md
             - uLisp (Experimental): sw-test-build-ulisp.md
+      - Debugging: debugging.md
     - Build System:
         - The Directory Structure: build_sys_dir_struct.md
         - The Gateware Build System:
