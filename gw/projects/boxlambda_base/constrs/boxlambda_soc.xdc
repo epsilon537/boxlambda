@@ -1,8 +1,3 @@
-## This file is a general .xdc for the Arty A7-35 Rev. D
-## To use it in a project:
-## - uncomment the lines corresponding to used pins
-## - rename the used ports (in each line, after get_ports) according to the top level signal names in the project
-
 ## Clock Constraints
 set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { ext_clk_100 }]; #IO_L12P_T1_MRCC_35 Sch=gclk[100]
 create_clock -add -name ext_clk_pin -period 10.00 [get_ports { ext_clk_100 }];

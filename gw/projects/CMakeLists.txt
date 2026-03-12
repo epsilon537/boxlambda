@@ -22,12 +22,7 @@ function (gw_project_rules_dfx_vivado)
   set(_mem_file_list ${gw_project_rules_dfx_vivado_MEM_FILE_LIST})
   set(_vs_insts ${gw_project_rules_dfx_vivado_VS_INSTS})
   set(_vs_default_comps ${gw_project_rules_dfx_vivado_VS_DEFAULT_COMPONENTS})
-
-  if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-    set(_board arty_a7_100t)
-  else()
-    set(_board arty_a7_35t)
-  endif()
+  set(_board arty_a7_100t)
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
@@ -180,12 +175,7 @@ function (gw_project_rules_vivado)
   set(_prj_name ${gw_project_rules_vivado_PROJECT_NAME})
   set(_mem_file_tgt ${gw_project_rules_vivado_MEM_FILE_TARGET})
   set(_mem_file_list ${gw_project_rules_vivado_MEM_FILE_LIST})
-
-  if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-    set(_board arty_a7_100t)
-  else()
-    set(_board arty_a7_35t)
-  endif()
+  set(_board arty_a7_100t)
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.

@@ -38,12 +38,6 @@ else()
   link_and_create_image(bootloader ${CMAKE_CURRENT_SOURCE_DIR}/link_bootloader.ld)
 endif()
 
-if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-  set(_board arty_a7_100t)
-else()
-  set(_board arty_a7_35t)
-endif()
-
 add_custom_target(bootloader_flash_sw
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}

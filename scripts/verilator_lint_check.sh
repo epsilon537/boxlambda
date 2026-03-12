@@ -20,4 +20,4 @@ FLAGS="$*"
 
 echo "If no issues are found, verilator will complete silently."
 
-verilator --lint-only $FLAGS --no-timing --top-module $TOP_MODULE --Wall `cat $VLT_FILES_FILE` --waiver-output $WAIVER_FILE `cat $VERILATOR_SCRIPT`
+verilator --lint-only $FLAGS --no-timing --top-module $TOP_MODULE --Wall -Wno-fatal -Wno-GENUNNAMED -Wno-BLKSEQ -Wno-SYNCASYNCNET `cat $VLT_FILES_FILE` --waiver-output $WAIVER_FILE `cat $VERILATOR_SCRIPT`

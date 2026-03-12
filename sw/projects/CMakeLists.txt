@@ -1,11 +1,7 @@
 #Function adding a *_flash_sw target/rule for SW project builds:
 
 function(add_flash_sw_target _tgt)
-  if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-    set(_board arty_a7_100t)
-  else()
-    set(_board arty_a7_35t)
-  endif()
+  set(_board arty_a7_100t)
 
   add_custom_target(${_tgt}_load_sw
         WORKING_DIRECTORY
