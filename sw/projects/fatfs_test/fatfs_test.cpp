@@ -6,16 +6,21 @@
 #include "uart.h"
 #include "mcycle.h"
 #include "ff.h"
+#include "diskio_ram.h"
 
-#define DISK_DEV_NUM       "0:"
 #define STR_ROOT_DIRECTORY ""
 const char *file_name = STR_ROOT_DIRECTORY "Basic.bin";
 const char *text_file_name = STR_ROOT_DIRECTORY "log.txt";
 
 /** Size of the file to write/read.*/
 #define DATA_SIZE 2048
-static uint8_t data_buffer[DATA_SIZE];
+uint8_t data_buffer[DATA_SIZE];
 #define TEST_SIZE   (4 * 1024)
+
+uint8_t mkfs_work[FF_MAX_SS];
+
+#define RAM_FS_IMAGE_SIZE (128*1024)
+uint8_t ram_fs_image[RAM_FS_IMAGE_SIZE];
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,6 +36,10 @@ void  _exit (int status) {
   while (1);
 }
 
+static FATFS sdfs;
+static FATFS ramfs;
+static FIL file_object;
+
 #ifdef __cplusplus
 }
 #endif
@@ -38,7 +47,7 @@ void  _exit (int status) {
 //This FatFs test function is derived from avrxml/asf's run_fatfs_test.
 //
 //Returns 0 if OK. Negative on error
-static int fatfs_test(void)
+static int fatfs_test(FATFS* fatfs, const char* volname, bool mkfs)
 {
   uint32_t i;
   UINT byte_to_read;
@@ -48,18 +57,32 @@ static int fatfs_test(void)
   FRESULT res;
   DIR dirs;
 
-  /* Declare these as static to avoid stack usage.
-   * They each contain an array of maximum sector size.
-   */
-  static FATFS fs;
-  static FIL file_object;
+  if (mkfs) {
+    printf("Formatting...\n");
+    res = f_mkfs (
+      volname, /*path*/
+      0, /*opt*/
+      mkfs_work, /*work*/
+      FF_MAX_SS); /*len*/
+
+    if (res != FR_OK) {
+      printf("FatFS mkfs error! %d\n", res);
+        return -1;
+    }
+  }
 
   printf("Mounting...\n");
   /* Clear file system object */
-  memset(&fs, 0, sizeof(FATFS));
-  res = f_mount(&fs, "", 1);
+  memset(fatfs, 0, sizeof(FATFS));
+  res = f_mount(fatfs, volname, 1);
   if (res != FR_OK) {
     printf("FatFS mount error! %d\n", res);
+      return -1;
+  }
+
+  res = f_chdrive(volname);
+  if (res != FR_OK) {
+    printf("FatFS chdrive error! %d\n", res);
       return -1;
   }
 
@@ -169,15 +192,30 @@ static int fatfs_test(void)
       return -1;
   }
 
-  printf("Test Successful.\n");
   return 0;
 }
 
 int main(void) {
-    uint32_t leds = 0xF;
+  uint32_t leds = 0xF;
 
-  printf("Starting fatfs_test...\n");
-  fatfs_test();
+  printf("Starting fatfs_test on SD...\n");
+
+  /*SD FS test*/
+  if (fatfs_test(&sdfs, "0:", /*mkfs*/ false) != 0) {
+    printf("SD Filesystem test failed.\n");
+    return -1;
+  }
+
+  printf("Starting fatfs_test on RAM disk...\n");
+  /*RAM FS test*/
+  disk_ram_init((unsigned char *)ram_fs_image, (unsigned long)(RAM_FS_IMAGE_SIZE));
+  if (fatfs_test(&ramfs, "1:", /*mkfs*/ true) !=0) {
+    printf("RAM Filesystem test failed.\n");
+    return -1;
+  }
+
+  printf("Test Successful.\n");
 
   return 0;
 }
+
