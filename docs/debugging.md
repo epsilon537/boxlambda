@@ -67,6 +67,8 @@ pkill -f openocd
 pkill -f hw_server
 ```
 
+Thanks to [W. Shepherd Pitts](https://github.com/wspitts2) for this suggestion.
+
 ### Connecting GDB
 
 In another linux terminal, launch gdb with the `hello_world` executable:

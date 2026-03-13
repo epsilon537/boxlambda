@@ -105,7 +105,7 @@ To summarize:
 3. The `riscv-dbg` core provides debug support for the connected Ibex RISCV32 core.
 4. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called `remote_bitbang`.
 
-For a step-by-step guide on setting up a debug session, refer to [this section](gw-test-build-hello-world.md#connecting-gdb-to-the-hello-world-build-on-verilator).
+For a step-by-step guide on setting up a debug session, refer to [this section](debugging.md).
 
 ## OpenOCD and RISCV-DBG on Arty-A7 FPGA
 
@@ -142,6 +142,8 @@ to use the PMOD JTAG interface, make the following changes:
 2. In `gw/projects/boxlambda_base/constrs/boxlambda_soc.sv`, add the following constraint: `set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets tck_IBUF]`.
 
 Then [rebuild the gateware](https://boxlambda.readthedocs.io/en/latest/installation/#building-and-flashing-from-source).
+
+Thanks to [W. Shepherd Pitts](https://github.com/wspitts2) for this suggestion.
 
 ### Starting a Debug Session on the Arty-A7
 

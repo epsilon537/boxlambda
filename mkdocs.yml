@@ -6,6 +6,9 @@ markdown_extensions:
       generic: true
   - attr_list
   - md_in_html
+  - toc:
+      permalink: true
+      toc_depth: 4
 
 extra_javascript:
   - javascripts/mathjax.js
@@ -36,11 +39,6 @@ extra:
       link: mailto:ruben.lysens2@gmail.com
 
 repo_url: https://github.com/epsilon537/boxlambda
-
-markdown_extensions:
-  - toc:
-      permalink: true
-      toc_depth: 4
 
 nav:
     - About:

@@ -136,8 +136,7 @@ starts here. Corresponds to Forth variable `(dp)`, taking into account that
 referencing a variable in Forth puts the variable's *address* on the stack, not
 its value. Word `here` puts the content of the variable on the stack. In other
 words, `here`is equivalent to `' (dp) @`.
-- `SecondDictionaryPointer`: The *secondary* dictionary pointer. See the [previous
-section](#two-dictionaries) for a discussion of the two dictionaries.
+- `SecondDictionaryPointer`: The *secondary* dictionary pointer. See [An IMEM and EMEM Dictionary section](#an-imem-and-emem-dictionary) for a discussion of the two dictionaries.
 - `ThreadEnd`: Points to the most recently defined word. Corresponds to Forth
 variable `(latest)`, again taking into account that referencing a variable in
 Forth puts the variable's *address* on the stack, not its value.
