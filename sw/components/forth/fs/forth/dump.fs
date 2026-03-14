@@ -1,8 +1,5 @@
 \ A convenient memory dump helper
 
-: u.4 ( u -- ) 0 <# # # # # #> type ;
-: u.2 ( u -- ) 0 <# # # #> type ;
-
 : dump16 ( addr -- ) \ Print 16 bytes memory
   base @ >r hex
   $F bic

@@ -82,6 +82,5 @@ add_subdirectory(ibex_perf_test)
 add_subdirectory(ulisp)
 add_subdirectory(time_rtc_set)
 add_subdirectory(boxlambda_os)
-add_subdirectory(forth_core_test)
 
 

@@ -13,6 +13,9 @@
 #include "diskio_ram.h"
 #include "ff.h"
 #include "uart.h"
+#ifdef FORTH_CORE_TEST
+#include "forth_core_test.h"
+#endif /*FORTH_CORE_TEST*/
 
 #define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
 
@@ -156,7 +159,12 @@ int main(void) {
   fr = f_chdir(".."); // cd to root of boot volume
   assert(fr == 0);
 
-  forth_eval_file_or_die("forth/init.fs", /*verbose=*/ false);
+#ifdef FORTH_CORE_TEST
+  forth_core_test();
+  forth_eval("create FORTH_CORE_TEST");
+#endif /*FORTH_CORE_TEST*/
+
+  forth_eval("include forth/init.fs");
 
   die("\nForth REPL exited.\n");
 }

@@ -2,7 +2,7 @@ compileto> variable saved-compile-to
 
 compiletoimem
 
-create temp-space 1024 allot
+create temp-space 4096 allot
 temp-space variable temp-here
 
 : x-temp-allot-failed ( -- ) ." temp allot failed" cr ;
@@ -26,7 +26,8 @@ temp-space variable temp-here
 
 : with-temp-allot ( u xt -- )
   temp-mark> >r ( u xt R: mark )
-  swap temp-allot ( xt R: mark )
+  swap
+  temp-allot ( xt R: mark )
   r@ swap execute ( R: mark )
   r> >temp-mark ;
 

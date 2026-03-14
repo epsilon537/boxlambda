@@ -1,7 +1,10 @@
-include forth/ifdef.fs
 include forth/disasm.fs
 include forth/dump.fs
+include forth/ifdef.fs
 include forth/dict.fs
+[ifdef] FORTH_CORE_TEST
+include test/testsuite.fs
+[then]
 
 : Flamingo cr
   ."      _" cr
@@ -23,8 +26,8 @@ include forth/dict.fs
   begin
     f_getcwd type s" > " type
     query
-    interpret
     cr
+    interpret
   again
 ;
 

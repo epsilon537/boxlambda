@@ -219,14 +219,16 @@
 : cat
   token FA_OPEN_EXISTING FA_READ or f_open ( fil )
   cr
-  begin ( fil )
-    dup 256 [: 256 f_gets ;] with-temp-allot
-    dup while ( fil addr len )
-      type ( fil )
-  repeat
+  256 [: ( fil buf )
+    begin ( fil buf )
+      over f_eof not while ( fil buf )
+        2dup 256 f_gets ( fil buf addr len )
+        type ( fil buf )
+    repeat
+    drop ( buf )
+    f_close
+  ;] with-temp-allot
   cr
-  2drop
-  f_close
 ;
 
 \ rm <file or dir pattern string>, e.g. rm *.txt
@@ -389,16 +391,23 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
   include-source-id !
 ;
 
+create refill-buf MAX-LINE-LENGTH allot
+
 \ An alternative query that also supports input
 \ from file. The file id is indicated in variable
 \ include-source-id. If set to 0, refill invokes
 \ query.
+\ May raise x-line-truncated and x-eof
 \ ( -- )
 : refill
-  include-source-id @ ?dup if
-    80 [: ( fil buf )
-      80 f_gets ( adr len )
-      setsource ;] with-temp-allot
+  include-source-id @ ?dup if ( fil )
+    0 >in !
+    dup f_eof triggers x-eof ( fil )
+    refill-buf MAX-LINE-LENGTH f_gets ( adr len )
+    \ if the line doesn't end with \n, it got truncated
+    2dup + 1- c@ NEWLINE <> triggers x-line-truncated ( addr len )
+    \ strip trailing \n
+    1- setsource ( )
   else
     query
   then

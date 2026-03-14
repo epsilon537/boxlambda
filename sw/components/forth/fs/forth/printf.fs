@@ -121,5 +121,5 @@ create charbuf 1 allot
 ;
 
 \ Prints n*x using the format string at c-addr u.
-: printf ( n*x c-addr u -- ) 1024 [: sprintf ;] with-temp-allot type ;
+: printf ( n*x c-addr u -- ) 256 [: sprintf type ;] with-temp-allot ;
 

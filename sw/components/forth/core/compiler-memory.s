@@ -302,7 +302,7 @@ four_allot:
 # Forget everything except the Forth Core.
 # There are two sets of Pointers: One set for EMEM, one set for IMEM Dictionary.
 # -----------------------------------------------------------------------------
-  Definition Flag_visible, "forget"
+  Definition Flag_visible, "forgetall"
 # -----------------------------------------------------------------------------
   push x1
   call compiletoemem

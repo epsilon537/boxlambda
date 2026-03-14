@@ -3,7 +3,6 @@
 #
 
 # Put the contents of the fs/ directory in an FAT image.
-
 set(FS_IMAGE ${CMAKE_CURRENT_BINARY_DIR}/boxfs.bin)
 set(FORTH_DIR ${PROJECT_SOURCE_DIR}/sw/components/forth)
 
@@ -50,44 +49,67 @@ add_custom_target(boxfs_load
         "BoxLambda FS image loading target."
 )
 
-add_executable(boxkern
-   main.cpp
+function(add_boxlambda_kernel TARGET)
+    set(oneValueArgs)
+    set(multiValueArgs SOURCES)
+    cmake_parse_arguments(KERNEL "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    add_executable(${TARGET} ${KERNEL_SOURCES})
+
+    target_compile_options(${TARGET}
+        PRIVATE
+            -O2 -g
+    )
+
+    target_include_directories(${TARGET}
+        PRIVATE
+            ${PROJECT_SOURCE_DIR}/sw/components/common
+    )
+
+    target_link_libraries(${TARGET}
+        fatfs
+        forth_core
+        gpio
+        bootstrap
+    )
+
+    link_and_create_image(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
+endfunction()
+
+add_boxlambda_kernel(boxkern
+    SOURCES
+        main.cpp
 )
-
-target_compile_options(boxkern
- PRIVATE
-  -O2 -g
-)
-
-target_include_directories(boxkern
-  PRIVATE
-   ${PROJECT_SOURCE_DIR}/sw/components/common
-)
-
-#Function defined in parent CMakeLists.txt file:
-link_and_create_image(boxkern ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
-
-target_link_libraries(boxkern fatfs forth_core gpio bootstrap)
 
 add_flash_sw_target(boxkern)
 
-add_custom_target(boxkernfs
-    WORKING_DIRECTORY
-        ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS
-        boxkern ${FS_IMAGE}
-    COMMENT
-        "BoxLambda Kernel and FS image generation target."
+add_boxlambda_kernel(boxkerntest
+    SOURCES
+        main.cpp
+        forth_core_test.cpp
 )
 
-add_custom_target(boxkernfs_load
-    WORKING_DIRECTORY
-        ${CMAKE_CURRENT_BINARY_DIR}
-    COMMAND
-        ${PROJECT_SOURCE_DIR}/scripts/target.py -reset -load_fs ${FS_IMAGE} -load_app boxkern.bin -run
-    DEPENDS
-        boxkernfs
-    COMMENT
-        "BoxLambda Kernel and FS image loading target."
-)
+target_compile_definitions(boxkerntest PRIVATE FORTH_CORE_TEST)
+
+function(add_kernel_fs_targets TARGET)
+    add_custom_target(${TARGET}fs
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        DEPENDS ${TARGET} ${FS_IMAGE}
+        COMMENT "BoxLambda ${TARGET} and FS image generation target."
+    )
+
+    add_custom_target(${TARGET}fs_load
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py
+                -reset
+                -load_fs ${FS_IMAGE}
+                -load_app ${TARGET}.bin
+                -run
+        DEPENDS ${TARGET}fs
+        COMMENT "BoxLambda ${TARGET} and FS image loading target."
+    )
+endfunction()
+
+add_kernel_fs_targets(boxkern)
+add_kernel_fs_targets(boxkerntest)
 

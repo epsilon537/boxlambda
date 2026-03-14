@@ -4,28 +4,33 @@
   begin
     token          \ Fetch new token.
   dup 0= while      \ If length of token is zero, end of line is reached.
-\   2drop cr query   \ Fetch new line.
-    2drop ."  ok." cr refill  \ Request a next line.
+    2drop refill  \ Request a next line.
   repeat
 ;
 
 : [else] ( -- )
   1 \ Initial level of nesting
-  begin
+  begin ( level )
     nexttoken ( level addr len )
 
     2dup s" [if]"     compare
  >r 2dup s" [ifdef]"  compare r> or
- >r 2dup s" [ifndef]" compare r> or
+ >r 2dup s" [ifndef]" compare r> or ( level addr len f )
 
     if
-      2drop 1+  \ One more level of nesting
+      2drop 1+  ( level+1 ) \ One more level of nesting
     else
-      2dup s" [else]" compare
+      2dup s" [else]" compare ( level addr len f )
       if
-        2drop 1- dup if 1+ then  \ Finished if [else] is reached in level 1. Skip [else] branch otherwise.
-      else
-        s" [then]" compare if 1- then  \ Level completed.
+        2drop 1- ( level-1 )
+        dup if
+          1+ ( level )
+        then  \ Finished if [else] is reached in level 1. Skip [else] branch otherwise.
+      else ( level addr len )
+        s" [then]"
+        compare ( level f )
+        if 1- ( level-1)
+        then  \ Level completed.
       then
     then
 

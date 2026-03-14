@@ -1,4 +1,3 @@
-const char testsuite[] =  R"testsuite(
 \  These definitions have a different behaviour in Mecrisp-Quintus:
 \ ------------------------------------------------------------------------
 
@@ -65,10 +64,6 @@ const char testsuite[] =  R"testsuite(
 \ : */mod ( n1 n2 n3 -- n4 n5 ) >r m* r> sm/rem [3-foldable] ;
 \ : */    ( n1 n2 n3 -- n4 )    */mod nip [3-foldable] ;
 
-: 0> ( n -- ? ) 0 > [1-foldable] ;
-
-: within ( n1|u1 n2|u2 n3|u3 -- flag ) over - >r - r> u< [3-foldable] ;
-
 : 1/string 1 /string ;
 
 
@@ -100,22 +95,9 @@ const char testsuite[] =  R"testsuite(
     tuck -
 ;
 
-\ Interactive string printing.
-: .( ( -- )
-    [char] ) parse type cr
-[immediate] ;
-
-\ [ifdef] RISC-V
-
 : w@unaligned ( addr -- x ) dup h@ swap 2+ h@ 16 lshift or ;
 : >body ( addr -- addr* )  begin dup 4 - w@unaligned $000FFFFF and $00078467 ( jalr x8, ...[x15] ) <> while 2 + repeat [1-foldable] ;
 : >bdy 4 - w@unaligned .s ;
-
-\ [else] \ MIPS
-
-\ : >body ( addr -- addr* ) begin dup 8 - @ $01E04009 ( jalr $8, $15, $zero ) <> while 4 + repeat [1-foldable] ;
-
-\ [then]
 
 \ ------------------------------------------------------------------------
 \  These CORE-EXT definitions are not part of Mecrisp-Quintus for default:
@@ -4264,4 +4246,3 @@ TESTING COMPLETE
 
 bye
 
-)testsuite";

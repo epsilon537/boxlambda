@@ -63,8 +63,9 @@
 
 \ positive?
 \ ( x -- flag )
-: 0>
-  0 > ;
+: 0> ( n -- ? ) 0 > [1-foldable] ;
+
+: within ( n1|u1 n2|u2 n3|u3 -- flag ) over - >r - r> u< [3-foldable] ;
 
 \ Roll takes the element u deep in the stack and moves it to the top,
 \ shifting the elements above it down by one.
