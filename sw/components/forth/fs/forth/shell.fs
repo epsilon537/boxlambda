@@ -373,25 +373,21 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
   include-source-id @ include-push
   token FA_OPEN_EXISTING FA_READ or f_open ( fil )
   dup include-source-id ! >r ( R: fil )
-  temp-mark> >r ( R: fil mark )
-  MAX-LINE-LENGTH 1+ temp-allot ( R: fil mark )
-  begin ( n*x R: fil mark )
-    1 rpick f_eof not while ( n*x R: fil mark )
-      2r@ MAX-LINE-LENGTH f_gets ( n*x addr len R: fil mark )
+  begin ( n*x R: fil )
+    r@ f_eof not while ( n*x R: fil )
+      r@ tib MAX-LINE-LENGTH f_gets ( n*x addr len R: fil )
       \ if the line doesn't end with \n, it got truncated
-      2dup + 1- c@ NEWLINE <> triggers x-line-truncated ( n*x addr len R: fil mark )
-      include-verbose @ if ( n*x addr len R: fil mark )
+      2dup + 1- c@ NEWLINE <> triggers x-line-truncated ( n*x addr len R: fil )
+      include-verbose @ if ( n*x addr len R: fil )
         2dup type
       then
       \ strip trailing \n
       1- evaluate ( n*x R: fil mark )
   repeat
-  2r> >temp-mark f_close ( n*x )
+  r> f_close ( n*x )
   include-pop ( source-id )
   include-source-id !
 ;
-
-create refill-buf MAX-LINE-LENGTH allot
 
 \ An alternative query that also supports input
 \ from file. The file id is indicated in variable
@@ -403,7 +399,7 @@ create refill-buf MAX-LINE-LENGTH allot
   include-source-id @ ?dup if ( fil )
     0 >in !
     dup f_eof triggers x-eof ( fil )
-    refill-buf MAX-LINE-LENGTH f_gets ( adr len )
+    tib MAX-LINE-LENGTH f_gets ( adr len )
     \ if the line doesn't end with \n, it got truncated
     2dup + 1- c@ NEWLINE <> triggers x-line-truncated ( addr len )
     \ strip trailing \n
