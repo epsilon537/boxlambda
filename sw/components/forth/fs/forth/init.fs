@@ -3,6 +3,7 @@ include forth/dump.fs
 include forth/ifdef.fs
 include forth/dict.fs
 [ifdef] FORTH_CORE_TEST
+true include-verbose !
 include test/testsuite.fs
 [then]
 

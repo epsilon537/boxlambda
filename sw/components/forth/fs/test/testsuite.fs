@@ -96,7 +96,8 @@
 ;
 
 : w@unaligned ( addr -- x ) dup h@ swap 2+ h@ 16 lshift or ;
-: >body ( addr -- addr* )  begin dup 4 - w@unaligned $000FFFFF and $00078467 ( jalr x8, ...[x15] ) <> while 2 + repeat [1-foldable] ;
+: >body ( addr -- addr* )
+  begin dup 4 - w@unaligned $000FFFFF and $00078467 ( jalr x8, ...[x15] ) <> while 2 + repeat [1-foldable] ;
 : >bdy 4 - w@unaligned .s ;
 
 \ ------------------------------------------------------------------------
@@ -526,8 +527,8 @@ dup temp-mark> swap - 256 = ?assert ( mark )
 >temp-mark ( )
 temp-mark> saved-mark @ = ?assert
 
-700 temp-allot
-[: 700 temp-allot ;] try ' x-temp-allot-failed = ?assert
+3000 temp-allot
+[: 3000 temp-allot ;] try ' x-temp-allot-failed = ?assert
 
 temp-allot-reset
 temp-mark> saved-mark @ = ?assert
@@ -615,6 +616,8 @@ hex
 
 0 INVERT 1 RSHIFT           CONSTANT MID-UINT
 0 INVERT 1 RSHIFT INVERT    CONSTANT MID-UINT+1
+
+1024 buffer: pad
 
 \ empty string
 T{ s" " pad sprintf s" " compare -> <TRUE> }T
@@ -837,6 +840,8 @@ dup 0= ?assert ( fil addr len )
 
 create fils MAX_NUM_OPEN_FILES 1+ cells allot
 
+fils MAX_NUM_OPEN_FILES 1+ cells 0 fill
+
 [:
   MAX_NUM_OPEN_FILES 1+ 0 do
     [: i s" fs_tst%n.txt" pad sprintf f_unlink ;] try drop
@@ -852,7 +857,9 @@ create fils MAX_NUM_OPEN_FILES 1+ cells allot
 
 [:
   MAX_NUM_OPEN_FILES 0 do
-    i fils a@ f_close
+    i fils a@ ?dup if
+      f_close
+    then
   loop
 ;] try ?except_error
 
@@ -902,7 +909,7 @@ create fils MAX_NUM_OPEN_FILES 1+ cells allot
 filinfo.fname s" test_dir" compare ?assert
 filinfo.fattrib AM_DIR and 0> ?assert
 [: s" test_dir" f_chdir ;] try ?except_error
-[: f_getcwd ;] try ?except_error s" /test_dir" compare ?assert
+[: f_getcwd ;] try ?except_error s" /ram/test_dir" compare ?assert
 
 [: s" test_subdir" f_mkdir ;] try ?except_error \ create a subdir
 
