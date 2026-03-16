@@ -25,7 +25,7 @@ include test/testsuite.fs
 \ A quit loop that prints the cwd as a prompt
 : quit_w_cwd
   begin
-    f_getcwd type s" > " type
+    cr f_getcwd type s" > " type
     query
     cr
     interpret

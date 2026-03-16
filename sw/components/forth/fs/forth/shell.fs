@@ -52,14 +52,12 @@
   sprintf
 ;
 
-\ ls with *- or ?-containing pattern string: "ls", "ls *.fs" , "ls *.?xt"
+\ ls with *- or ?-containing "dir/file" pattern string: "ls ./*.fs" , "ls ../*"
+\ * and ? are wildcards in the pattern string.
 \ ( "pattern string" -- )
 : ls
-  s" ." token
-  dup 0= if
-    2drop
-    s" *"
-  then ( addr1 len1 addr2 len2 )
+  token
+  2dup dirname 2swap basename ( dir base )
   f_findfirst ( dir )
   begin
     filinfo.fname ( dir addr1 len1 )
@@ -68,8 +66,7 @@
       filinfo.getftime time>str ( dir addr1 len1 addr2 len2 addr3 len3 )
       filinfo.getfdate date>str ( dir addr1 len1 addr2 len2 addr3 len3 addr4 len4 )
       filinfo.fsize ( dir addr1 len1 addr2 len2 addr3 len3 addr3 len4 size )
-      s" %08n %s %s %s %s" printf ( dir )
-      cr ( dir )
+      s" %08n %s %s %s %s" printf cr ( dir )
       dup f_findnext  ( dir )
   repeat
   2drop
@@ -92,7 +89,6 @@
 \ ( -- )
 : pwd
   f_getcwd type
-  cr
 ;
 
 \ ( addr len - val mask )
@@ -199,9 +195,9 @@
 \ cp source-file dest-file
 \ cp source-file dest-dir
 \ cp source-pattern dest-dir
+\ * and ? are wildcards in the pattern string.
 \ ( "from" "to" -- )
 : cp
-  cr
   token token ( src-addr src-len dst-addr dst-len )
   [: 2dup f_stat ( src-addr src-len dst-addr dst-len )
     filinfo.fattrib AM_DIR and 0> if
@@ -215,7 +211,6 @@
 \ ( "filename" -- )
 : cat
   token FA_OPEN_EXISTING FA_READ or f_open ( fil )
-  cr
   256 [: ( fil buf )
     begin ( fil buf )
       over f_eof not while ( fil buf )
@@ -225,10 +220,10 @@
     drop ( buf )
     f_close
   ;] with-temp-allot
-  cr
 ;
 
 \ rm <file or dir pattern string>, e.g. rm *.txt
+\ * and ? are wildcards in the pattern string.
 \ ( "pattern" -- )
 : rm
   s" ." token ( addr1 len1 addr2 len2 )

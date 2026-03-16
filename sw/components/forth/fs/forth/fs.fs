@@ -496,3 +496,41 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   check-throw-ior
 ;
 
+\ Extract the directory name portion of a path string
+\ ( addr len -- addr len )
+: dirname
+  dup 0> if ( addr len )
+    over + 1- ( startaddr endaddr )
+    over swap ( startaddr startaddr endaddr )
+    ?do ( startaddr )
+      i c@ [char] / = if
+        dup i swap ( startaddr endaddr startaddr )
+        - ( startaddr len )
+        unloop
+        exit
+      then
+      -1
+    +loop
+    0 ( addr len )
+  then
+;
+
+\ Extract the basename portion of a path string
+\ ( addr len -- addr len )
+: basename
+  dup 0> if
+    2dup ( startaddr len startaddr len )
+    over + 1- ( startaddr len startaddr endaddr )
+    do ( startaddr len )
+      i c@ [char] / = if
+        i 1+ ( startaddr len curaddr)
+        -rot ( curaddr startaddr len )
+        + ( curaddr endaddr )
+        over - ( curaddr len )
+        unloop
+        exit
+      then
+      -1
+    +loop ( startaddr len )
+  then
+;
