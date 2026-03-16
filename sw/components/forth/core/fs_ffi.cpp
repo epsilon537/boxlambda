@@ -2,6 +2,7 @@
 #include "fs_ffi.h"
 #include "ff.h" // Fat FS
 #include <stddef.h>
+#include <assert.h>
 
 // FAT FS datastructures
 
@@ -69,6 +70,23 @@ FR_CODE(FR_LOCKED)    /* (16) The operation is rejected according to the file sh
 FR_CODE(FR_NOT_ENOUGH_CORE)  /* (17) LFN working buffer could not be allocated */
 FR_CODE(FR_TOO_MANY_OPEN_FILES) /* (18) Number of open files > FF_FS_LOCK */
 FR_CODE(FR_INVALID_PARAMETER) /* (19) Given parameter is invalid */
+
+Fs_Volume_t *vols_ = 0;
+unsigned num_vols_ = 0;
+
+FATFS *findVolByName(const TCHAR *name) {
+  assert(name);
+  assert(vols_);
+
+  for (unsigned ii=0; ii<num_vols_; ii++) {
+    assert(vols_[ii].name);
+
+    if (!strcmp(name, vols_[ii].name))
+      return &(vols_[ii].vol);
+  }
+
+  return 0;
+}
 
 // File Access
 
@@ -341,9 +359,31 @@ void fs_f_getcwd() {
 void fs_f_mount() {
   BYTE opt = (const BYTE)forth_popda();
   const TCHAR* path = (const TCHAR *)forth_popda();
-  FATFS *fs = (FATFS *)forth_popda();
+  FATFS *fs = findVolByName(path);
+  FRESULT res;
 
-  FRESULT res = f_mount(fs, path, opt);
+  if (!fs) {
+    res = FR_NO_PATH;
+  }
+  else {
+    res = f_mount(fs, path, opt);
+  }
+
+  forth_pushda(res);
+}
+
+void fs_f_umount() {
+  const TCHAR* path = (const TCHAR *)forth_popda();
+  FRESULT res;
+
+  //FATFS quirk: unmounting an unknown path unmounts the default drive,
+  //so let's match the volume name before unmounting.
+  //
+  FATFS *fs = findVolByName(path);
+  if (fs)
+    res = f_unmount(path);
+  else
+    res = FR_NO_PATH;
 
   forth_pushda(res);
 }
@@ -364,13 +404,21 @@ void fs_f_mkfs() {
 // ( drvnumstr -- res [ free tot ])
 void fs_f_getfree() {
   const TCHAR* path = (const TCHAR *)forth_popda();
-  FATFS *fs;
-  DWORD fre_clust;
+  DWORD fre_clust=0;
   DWORD fre_sect=0, tot_sect=0;
+  FRESULT res;
 
-  FRESULT res = f_getfree(path, &fre_clust, &fs);
+  //FATFS quirk: getfree on an unknown path getfrees the default drive,
+  //so let's match the volume name before getfreeing.
+  //
+  FATFS *fs = findVolByName(path);
+  if (fs)
+    res = f_getfree(path, &fre_clust, &fs);
+  else
+    res = FR_NO_PATH;
 
-  if (!res) {
+  if (res == FR_OK) {
+    assert(fs);
     /* Get total sectors and free sectors */
     tot_sect = ((fs->n_fatent - 2) * fs->csize)/2;
     fre_sect = (fre_clust * fs->csize)/2;
@@ -381,7 +429,10 @@ void fs_f_getfree() {
   forth_pushda(res);
 }
 
-void fs_ffi_init() {
+void fs_ffi_init(Fs_Volume_t vols[], unsigned num_vols) {
+  vols_ = vols;
+  num_vols_ = num_vols;
+
   forth_register_cfun(slashFIL, "/FIL");
   forth_register_cfun(slashFATFS, "/FATFS");
   forth_register_cfun(slashDIR, "/DIR");
@@ -453,6 +504,7 @@ void fs_ffi_init() {
   forth_register_cfun(fs_f_chdrive, "fs_f_chdrive");
   forth_register_cfun(fs_f_getcwd, "fs_f_getcwd");
   forth_register_cfun(fs_f_mount, "fs_f_mount");
+  forth_register_cfun(fs_f_umount, "fs_f_umount");
   forth_register_cfun(fs_f_mkfs, "fs_f_mkfs");
   forth_register_cfun(fs_f_getfree, "fs_f_getfree");
 }

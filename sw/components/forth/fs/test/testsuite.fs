@@ -1023,25 +1023,28 @@ esc-s" appending...\n" compare ?assert ( fil )
 \ ------------------------------------------------------------------------
 TESTING SHELL
 
-[: ." -> " source type ."  <- " cr (interpret) ;] hook-interpret !
-hook-interpret @ s" interpret hook: %n" printf cr
+\ ls test
 [: rm ;] try tst_dir drop
 mkdir tst_dir
-[: ls ;] >file ls.log tst_dir
-[: cd ;] >>file ls.log tst_dir
+[: ." ls tst_dir" cr ;] >file tst_dir/ls.log
+[: ls ;] >>file tst_dir/ls.log tst_dir
+[: ." cd tst_dir " cr ;] >>file tst_dir/ls.log
+cd tst_dir
+[: ." pwd" cr ;] >>file ls.log
 [: pwd ;] >>file ls.log
-[: cd ;] >>file ls.log ..
-[: ls ;] >>file ls.log tst_dir
-[: pwd ;] >>file ls.log
-.( ls.log )
-cat ls.log
-[: s" ls.log" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
-dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-2drop \ drop 1st line
-dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-2dup type
-esc-s" 00000000 2019/10/01 00:00:00 DIR --- --- --- --- tst_dir\n" compare ?assert
-[: f_close ;] try ?except_error ( )
+[: ." Creating some files... " cr ;] >>file ls.log
+[: ." a file" ;] >file file0.tst
+cp file0.tst file1.tst
+cp file1.tst pile.tst
+[: ." ls" cr ;] >>file ls.log
+[: ls ;] >>file ls.log
+[: ." ls file*" cr ;] >>file ls.log
+[: ls ;] >>file ls.log file*
+[: ." cd .." cr ;] >>file ls.log
+cd ..
+.( ls.log: )
+cat tst_dir/ls.log
+quit
 
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
@@ -4250,6 +4253,4 @@ TESTING COMPLETE
 
 \ words
 .s
-
-bye
 

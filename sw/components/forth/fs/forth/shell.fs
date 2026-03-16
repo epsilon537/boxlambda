@@ -61,7 +61,6 @@
     s" *"
   then ( addr1 len1 addr2 len2 )
   f_findfirst ( dir )
-  cr
   begin
     filinfo.fname ( dir addr1 len1 )
     dup 0> while
@@ -87,13 +86,11 @@
 \ ( "dirname" -- )
 : cd
   token f_chdir
-  cr
 ;
 
 \ pwd
 \ ( -- )
 : pwd
-  cr
   f_getcwd type
   cr
 ;
@@ -236,7 +233,6 @@
 : rm
   s" ." token ( addr1 len1 addr2 len2 )
   f_findfirst ( dir )
-  cr
   begin
     filinfo.fname ( dir addr1 len1 )
     dup 0> while
@@ -253,11 +249,22 @@
 : touch
 ;
 
-\ ( -- )
+\ Unmount a volume. Supported volumes are /sd and /ram
+\ ( "volume" -- )
+: umount
+  token f_umount
+;
+
+\ Mount a volume. Supported volumes are /sd and /ram
+\ ( "volume" -- )
+: mount
+  token f_mount
+;
+
+\ Get volume usage info. Supported volume names are /sd and /ram
+\ ( "volume" -- )
 : df
-  cr
-  f_getfree s" Total: %n Free: %n" printf
-  cr
+  token f_getfree s" Free: %n KB Total: %n KB" printf cr
 ;
 
 : x-eof ." End Of File Exception" cr ;

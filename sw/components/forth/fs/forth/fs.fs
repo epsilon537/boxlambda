@@ -466,12 +466,33 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \ Volume Management and System Configuration:
 \
 
-\ Get total and free bytes on volume.
+\ Mount a volume.
+\ Pass in volume name, e.g. s" /ram", or s" /sd"
 \ May throw x-fr-* exception.
-\ ( -- tot free )
+\ ( addr len -- )
+: f_mount
+  path str>path ( )
+  path 1 fs_f_mount
+  check-throw-ior
+;
+
+\ Unmount a volume.
+\ Pass in volume name, e.g. s" /ram", or s" /sd"
+\ May throw x-fr-* exception.
+\ ( addr len -- )
+: f_umount
+  path str>path ( )
+  path fs_f_umount
+  check-throw-ior
+;
+
+\ Get total and free bytes on volume.
+\ Pass in volume name, e.g. s" /ram", or s" /sd"
+\ May throw x-fr-* exception.
+\ ( addr len -- tot free )
 : f_getfree
-  s0" "
-  fs_f_getfree ( tot free ior )
+  path str>path ( )
+  path fs_f_getfree ( tot free ior )
   check-throw-ior
 ;
 

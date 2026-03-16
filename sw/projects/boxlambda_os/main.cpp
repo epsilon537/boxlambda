@@ -37,9 +37,13 @@ extern char __fs_image_start[];
 extern char __fs_image_size[];
 
 // The file system objects
-FATFS fs_sd;
-FATFS fs_ram;
+#define NUM_VOLS 2
+#define SD_VOL 0
+#define RAM_VOL 1
+Fs_Volume_t volumes[NUM_VOLS];
 
+const char *sd_vol_name = "/sd";
+const char *ram_vol_name = "/ram";
 const char *sd_boot_path = "/sd/forth";
 const char *ram_boot_path = "/ram/forth";
 
@@ -47,11 +51,15 @@ const char *ram_boot_path = "/ram/forth";
 }
 #endif
 
-// Attempts to mount SD and/or RAM disk and detect boot dir. Prompts user and retries if needed. Returns boot path.
+// Attempts to mount SD and/or RAM disk and detect boot dir. Prompts user and retries if needed. Returns boot path. Operates on volumes array.
 const char *mount_get_boot_dir() {
   printf("Mounting file system...\n");
-  /* Clear file system object */
-  memset(&fs_sd, 0, sizeof(FATFS));
+
+  /* Initialize the volume objects. */
+  memset(&(volumes[SD_VOL].vol), 0, sizeof(FATFS));
+  memset(&(volumes[RAM_VOL].vol), 0, sizeof(FATFS));
+  volumes[SD_VOL].name = sd_vol_name;
+  volumes[RAM_VOL].name = ram_vol_name;
 
   const char *boot_path = 0;
 
@@ -61,7 +69,7 @@ const char *mount_get_boot_dir() {
   FILINFO fno;
 
   while (true) {
-    FRESULT res = f_mount(&fs_sd, "0:", 1);
+    FRESULT res = f_mount(&(volumes[SD_VOL].vol), volumes[SD_VOL].name, 1);
     if (res != FR_OK)
     {
       printf("No SD FatFS detected.\n");
@@ -79,9 +87,7 @@ const char *mount_get_boot_dir() {
 
     disk_ram_init((unsigned char *)__fs_image_start, (unsigned long)__fs_image_size);
 
-    memset(&fs_ram, 0, sizeof(FATFS));
-
-    res = f_mount(&fs_ram, "1:", 1);
+    res = f_mount(&(volumes[RAM_VOL].vol), volumes[RAM_VOL].name, 1);
     if (res != FR_OK)
     {
       printf("No RAM FatFS detected.\n");
@@ -150,7 +156,7 @@ int main(void) {
 
   printf("Initializing Forth Filesystem FFI...\n");
 
-  fs_ffi_init();
+  fs_ffi_init(volumes, NUM_VOLS);
 
   forth_eval_file_or_die("fs.fs", /*verbose=*/ false);
   forth_eval_file_or_die("fs_redirect.fs", /*verbose=*/ false);
