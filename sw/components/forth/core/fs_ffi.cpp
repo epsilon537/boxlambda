@@ -339,8 +339,14 @@ void fs_f_chdir() {
 
 void fs_f_chdrive() {
   const TCHAR* path = (const TCHAR *)forth_popda();
+  FRESULT res;
 
-  FRESULT res = f_chdrive(path);
+  //Match the volume name before changing drive.
+  FATFS *fs = findVolByName(path);
+  if (fs)
+    res = f_chdrive(path);
+  else
+    res = FR_NO_PATH;
 
   forth_pushda(res);
 }

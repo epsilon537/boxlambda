@@ -244,19 +244,24 @@
 : touch
 ;
 
-\ Unmount a volume. Supported volumes are /sd and /ram
+\ Change drive. Supported volumes are sd0: and ram:
+\ ( "volume" -- )
+: chdrive
+  token f_chdrive
+;
+\ Unmount a volume. Supported volumes are sd0: and ram:
 \ ( "volume" -- )
 : umount
   token f_umount
 ;
 
-\ Mount a volume. Supported volumes are /sd and /ram
+\ Mount a volume. Supported volumes are sd0: and ram0:
 \ ( "volume" -- )
 : mount
   token f_mount
 ;
 
-\ Get volume usage info. Supported volume names are /sd and /ram
+\ Get volume usage info. Supported volume names are sd0: and ram0:
 \ ( "volume" -- )
 : df
   token f_getfree s" Free: %n KB Total: %n KB" printf cr

@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include "fatal.h"
+#include "inout.h"
 
 #include "gpio.h"
 #include "forth.h"
@@ -42,17 +43,46 @@ extern char __fs_image_size[];
 #define RAM_VOL 1
 Fs_Volume_t volumes[NUM_VOLS];
 
-const char *sd_vol_name = "/sd";
-const char *ram_vol_name = "/ram";
-const char *sd_boot_path = "/sd/forth";
-const char *ram_boot_path = "/ram/forth";
+const char *sd_vol_name = "sd0:";
+const char *ram_vol_name = "ram:";
 
 #ifdef __cplusplus
 }
 #endif
 
-// Attempts to mount SD and/or RAM disk and detect boot dir. Prompts user and retries if needed. Returns boot path. Operates on volumes array.
-const char *mount_get_boot_dir() {
+// Attempts to mount volumes and checks is boot path exists.
+// Returns true if boot path is found.
+bool mount_vol(Fs_Volume_t& vol) {
+  bool boot_path_found = false;
+  static char boot_path[] = "XXX:forth";
+
+  assert(vol.name);
+
+  FRESULT res = f_mount(&(vol.vol), vol.name, 1);
+  if (res == FR_OK) {
+    printf("%s mounted.\n", vol.name);
+
+    memcpy(boot_path, vol.name, 4);
+    FILINFO fno;
+    res = f_stat(boot_path, &fno);
+    if ((res == FR_OK) && (fno.fattrib & AM_DIR)) {
+      printf("Boot path %s found.\n", boot_path);
+      boot_path_found = true;
+    }
+    else {
+      printf("No boot path found on %s.\n", vol.name);
+    }
+  }
+  else {
+    printf("No FatFS detected on %s.\n", vol.name);
+  }
+
+  return boot_path_found;
+}
+
+// Attempts to mount SD and/or RAM disk and detect boot dir. Prompts user and retries if needed. Returns boot volume. Operates on volumes array.
+// Returns boot volume name.
+const char *mount_vols() {
   printf("Mounting file system...\n");
 
   /* Initialize the volume objects. */
@@ -61,61 +91,26 @@ const char *mount_get_boot_dir() {
   volumes[SD_VOL].name = sd_vol_name;
   volumes[RAM_VOL].name = ram_vol_name;
 
-  const char *boot_path = 0;
-
-  bool fs_mounted = false;
-
-  bool fr;
-  FILINFO fno;
+  const char *boot_vol = 0;
 
   while (true) {
-    FRESULT res = f_mount(&(volumes[SD_VOL].vol), volumes[SD_VOL].name, 1);
-    if (res != FR_OK)
-    {
-      printf("No SD FatFS detected.\n");
-    }
-    else {
-      printf("SD FatFS mounted.\n");
-      fr = f_stat(sd_boot_path, &fno);
-      if ((fr == 0) && (fno.fattrib & AM_DIR)) {
-        printf("Boot path %s found;\n", sd_boot_path);
-        boot_path = sd_boot_path;
-      }
+    if (mount_vol(volumes[SD_VOL]))
+      boot_vol=volumes[SD_VOL].name;
+    if (mount_vol(volumes[RAM_VOL]))
+      boot_vol=volumes[RAM_VOL].name; //Overrules sd0 as boot volume.
 
-      fs_mounted = true;
+    if (boot_vol) {
+      FRESULT res = f_chdrive(boot_vol);
+      assert(res == FR_OK);
+      break;
     }
 
-    disk_ram_init((unsigned char *)__fs_image_start, (unsigned long)__fs_image_size);
-
-    res = f_mount(&(volumes[RAM_VOL].vol), volumes[RAM_VOL].name, 1);
-    if (res != FR_OK)
-    {
-      printf("No RAM FatFS detected.\n");
-    }
-    else {
-      printf("RAM FatFS mounted.\n");
-      fr = f_stat(ram_boot_path, &fno);
-      if ((fr == 0) && (fno.fattrib & AM_DIR)) {
-        printf("Boot path %s found;\n", ram_boot_path);
-        boot_path = ram_boot_path; //RAM boot takes precedence over SD boot.
-      }
-
-      fs_mounted = true;
-    }
-
-    if (fs_mounted && boot_path) break;
-
-    if (!fs_mounted) {
-      printf("No Filesystem found. Please insert FAT formatted SD card or upload RAM disk. Then press enter to continue.\n");
-    }
-    else {
-      printf("No forth/ boot directory found. Please insert SD card or upload RAM disk with boot directory. Then press enter to continue.\n");
-    }
+    printf("No bootable filesystem found. Please insert FAT formatted SD card or upload RAM disk. Then press enter to continue.\n");
 
     getchar();
   }
 
-  return boot_path;
+  return boot_vol;
 }
 
 int main(void) {
@@ -130,40 +125,36 @@ int main(void) {
 
   printf("Forth core init complete.\n");
 
-  const char *boot_path = mount_get_boot_dir();
+  disk_ram_init((unsigned char *)__fs_image_start, (unsigned long)__fs_image_size);
 
-  printf("Booting from %s.\n", boot_path);
+  const char *boot_vol = mount_vols();
 
-  FRESULT fr = f_chdir(boot_path);
-  assert(fr == 0);
+  printf("Booting from volume %s.\n", boot_vol);
 
-  forth_eval_file_or_die("early.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/early.fs", /*verbose=*/ false);
 
   printf("Redirecting stdio to Forth...\n");
   stdio_redirect_ffi_init();
 
-  forth_eval_file_or_die("except.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("lambda.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("struct.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("heap.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("pool.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("temp-alloc.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("istr.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("escstr.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("tonumber.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("printf.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("cstr.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/except.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/lambda.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/struct.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/heap.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/pool.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/temp-alloc.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/istr.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/escstr.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/tonumber.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/printf.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/cstr.fs", /*verbose=*/ false);
 
   printf("Initializing Forth Filesystem FFI...\n");
 
   fs_ffi_init(volumes, NUM_VOLS);
 
-  forth_eval_file_or_die("fs.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("fs_redirect.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("shell.fs", /*verbose=*/ false);
-
-  fr = f_chdir(".."); // cd to root of boot volume
-  assert(fr == 0);
+  forth_eval_file_or_die("forth/fs.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/fs_redirect.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/shell.fs", /*verbose=*/ false);
 
 #ifdef FORTH_CORE_TEST
   forth_core_test();

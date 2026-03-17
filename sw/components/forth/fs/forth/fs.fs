@@ -486,6 +486,12 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   check-throw-ior
 ;
 
+: f_chdrive
+  path str>path ( )
+  path fs_f_chdrive
+  check-throw-ior
+;
+
 \ Get total and free bytes on volume.
 \ Pass in volume name, e.g. s" /ram", or s" /sd"
 \ May throw x-fr-* exception.

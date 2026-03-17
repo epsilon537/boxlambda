@@ -959,7 +959,17 @@ T{ filinfo.getfdate -> #11 #02 #2033 }T
 T{ filinfo.getftime -> #10 #20 #30 }T
 
 \ Total should be larger than free
-[: f_getfree ;] try ?except_error > ?assert
+[: s" /ram" f_getfree ;] try ?except_error > ?assert
+
+\ dirname and basename
+s" abc/def" dirname s" abc" compare ?assert
+s" abc/def" basename s" def" compare ?assert
+s" abc" dirname s" " compare ?assert
+s" abc" basename s" abc" compare ?assert
+s" " dirname s" " compare ?assert
+s" " basename s" " compare ?assert
+s" /" dirname s" " compare ?assert
+s" /" basename s" " compare ?assert
 
 \ Negative testing
 
