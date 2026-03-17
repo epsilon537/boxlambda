@@ -61,6 +61,13 @@ def parse_args():
     )
 
     parser.add_argument(
+        "-dump_fs",
+        metavar="DUMP_FS",
+        type=Path,
+        help="Dump filesystem.",
+    )
+
+    parser.add_argument(
         "-load_app",
         metavar="LOAD_APP_IMAGE",
         type=Path,
@@ -97,8 +104,10 @@ def main():
 
     print("=== Target Control ===")
 
+    shell_cmd_lists_early = []
     openocd_cmd_list = []
     openfpga_cmd_list = []
+    shell_cmd_lists_late = []
 
     if args.verilator:
         print("Connection to verilator model requested")
@@ -133,6 +142,14 @@ def main():
         print(f"Loading filesystem image: {args.load_fs}")
         openocd_cmd_list += ["-c", f"set LOAD_FS {args.load_fs}"]
 
+    if args.dump_fs:
+        print(f"Dumping filesystem to dir: {args.dump_fs}")
+        shell_cmd_lists_early.append(["rm", "-f", f"{args.dump_fs}.img"])
+        shell_cmd_lists_early.append(["rm", "-rf", args.dump_fs])
+        openocd_cmd_list += ["-c", f"set DUMP_FS {args.dump_fs}.img"]
+        shell_cmd_lists_late.append(["mkdir", args.dump_fs])
+        shell_cmd_lists_late.append(["mcopy", "-i", f"{args.dump_fs}.img", "-s", "::*", args.dump_fs])
+
     if args.load_app:
         validate_file(args.load_app, "Application image")
         print(f"Loading application image: {args.load_app}")
@@ -146,6 +163,11 @@ def main():
         print("Wait for GDB requested")
         openocd_cmd_list += ["-c", "set GDB 1"]
 
+    if shell_cmd_lists_early:
+        for cmd_list in shell_cmd_lists_early:
+            subprocess.run(["echo"] + cmd_list)
+            subprocess.run(cmd_list)
+
     if openfpga_cmd_list:
         openfpga_cmd_list = ["openFPGALoader", "-b", "arty_a7_100t"] + openfpga_cmd_list
         subprocess.run(["echo"] + openfpga_cmd_list)
@@ -155,6 +177,11 @@ def main():
         openocd_cmd_list = ["openocd"] + openocd_cmd_list + ["-f", OPENOCD_CFG]
         subprocess.run(["echo"] + openocd_cmd_list)
         subprocess.run(openocd_cmd_list)
+
+    if shell_cmd_lists_late:
+        for cmd_list in shell_cmd_lists_late:
+            subprocess.run(["echo"] + cmd_list)
+            subprocess.run(cmd_list)
 
     if not (openfpga_cmd_list or openocd_cmd_list):
         print("Nothing to do. Use -h for help.")

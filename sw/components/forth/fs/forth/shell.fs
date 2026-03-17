@@ -88,7 +88,7 @@
 \ pwd
 \ ( -- )
 : pwd
-  f_getcwd type
+  f_getcwd type cr
 ;
 
 \ ( addr len - val mask )

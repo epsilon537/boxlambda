@@ -909,7 +909,7 @@ fils MAX_NUM_OPEN_FILES 1+ cells 0 fill
 filinfo.fname s" test_dir" compare ?assert
 filinfo.fattrib AM_DIR and 0> ?assert
 [: s" test_dir" f_chdir ;] try ?except_error
-[: f_getcwd ;] try ?except_error s" /ram/test_dir" compare ?assert
+[: f_getcwd ;] try ?except_error s" ram:/test_dir" compare ?assert
 
 [: s" test_subdir" f_mkdir ;] try ?except_error \ create a subdir
 
@@ -959,7 +959,7 @@ T{ filinfo.getfdate -> #11 #02 #2033 }T
 T{ filinfo.getftime -> #10 #20 #30 }T
 
 \ Total should be larger than free
-[: s" /ram" f_getfree ;] try ?except_error > ?assert
+[: s" ram:" f_getfree ;] try ?except_error > ?assert
 
 \ dirname and basename
 s" abc/def" dirname s" abc" compare ?assert
@@ -1046,14 +1046,17 @@ cd tst_dir
 [: ." a file" ;] >file file0.tst
 cp file0.tst file1.tst
 cp file1.tst pile.tst
-[: ." ls" cr ;] >>file ls.log
-[: ls ;] >>file ls.log
+[: ." ls ./*" cr ;] >>file ls.log
+[: ls ;] >>file ls.log ./*
 [: ." ls file*" cr ;] >>file ls.log
 [: ls ;] >>file ls.log file*
 [: ." cd .." cr ;] >>file ls.log
 cd ..
+[: ." pwd" cr ;] >>file tst_dir/ls.log
+[: pwd ;] >>file tst_dir/ls.log
 .( ls.log: )
 cat tst_dir/ls.log
+s" tst_dir/ls.log" s" test/ls.log" f_cmp ?assert
 quit
 
 \ ------------------------------------------------------------------------
