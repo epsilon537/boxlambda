@@ -1033,7 +1033,7 @@ esc-s" appending...\n" compare ?assert ( fil )
 \ ------------------------------------------------------------------------
 TESTING SHELL
 
-\ ls test
+\ ls, cd end pwd test
 [: rm ;] try tst_dir drop
 mkdir tst_dir
 [: ." ls tst_dir" cr ;] >file tst_dir/ls.log
@@ -1054,9 +1054,37 @@ cp file1.tst pile.tst
 cd ..
 [: ." pwd" cr ;] >>file tst_dir/ls.log
 [: pwd ;] >>file tst_dir/ls.log
-.( ls.log: )
-cat tst_dir/ls.log
 s" tst_dir/ls.log" s" test/ls.log" f_cmp ?assert
+
+\ chdrive test
+[: ." chdrive sd0:" cr ;] >file ram:/tst_dir/chdrive.log
+chdrive sd0:
+[: ." pwd" cr ;] >>file ram:/tst_dir/chdrive.log
+[: pwd ;] >>file ram:/tst_dir/chdrive.log
+[: ." chdrive ram:" cr ;] >>file ram:/tst_dir/chdrive.log
+chdrive ram:
+[: ." pwd" cr ;] >>file ram:/tst_dir/chdrive.log
+[: pwd ;] >>file ram:/tst_dir/chdrive.log
+s" tst_dir/chdrive.log" s" test/chdrive.log" f_cmp ?assert
+
+\ umount mount test
+[: ." umount sd0:" cr ;] >file ram:/tst_dir/mount.log
+[: umount ;] >>file ram:/tst_dir/mount.log sd0:
+[: ." chdrive sd0:" cr ;] >>file ram:/tst_dir/mount.log
+[: chdrive ;] >>file ram:/tst_dir/mount.log sd0:
+[: ." pwd to trigger exception" cr ;] >>file ram:/tst_dir/mount.log
+[: pwd ;] try 0> ?assert
+[: ." mount sd0:" cr ;] >>file ram:/tst_dir/mount.log
+[: mount ;] >>file ram:/tst_dir/mount.log sd0:
+[: ." pwd success" cr ;] >>file ram:/tst_dir/mount.log
+[: pwd ;] >>file ram:/tst_dir/mount.log
+[: ." chdrive ram:" cr ;] >>file ram:/tst_dir/mount.log
+[: chdrive ;] >>file ram:/tst_dir/mount.log ram:
+[: pwd ;] >>file ram:/tst_dir/mount.log
+[: ." chdrive ram:" cr ;] >>file ram:/tst_dir/mount.log
+
+s" tst_dir/mount.log" s" test/mount.log" f_cmp ?assert
+
 quit
 
 \ ------------------------------------------------------------------------

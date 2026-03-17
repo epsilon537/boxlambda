@@ -1,0 +1,6 @@
+chdrive sd0:
+pwd
+sd0:/
+chdrive ram:
+pwd
+ram:/

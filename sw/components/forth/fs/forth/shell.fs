@@ -210,6 +210,7 @@
 \ cat <filename>
 \ ( "filename" -- )
 : cat
+  cr
   token FA_OPEN_EXISTING FA_READ or f_open ( fil )
   256 [: ( fil buf )
     begin ( fil buf )
