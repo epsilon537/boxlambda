@@ -1,0 +1,6 @@
+mkdir torm
+ls ./torm
+00000000 2019/10/01 00:00:00 DIR --- --- --- --- torm
+rm torm
+Removing: torm
+ls ./torm

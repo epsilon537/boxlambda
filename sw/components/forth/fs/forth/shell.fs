@@ -265,6 +265,7 @@
 \ Get volume usage info. Supported volume names are sd0: and ram0:
 \ ( "volume" -- )
 : df
+  cr
   token f_getfree s" Free: %n KB Total: %n KB" printf cr
 ;
 

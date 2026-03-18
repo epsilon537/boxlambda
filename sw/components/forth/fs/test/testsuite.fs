@@ -1033,7 +1033,7 @@ esc-s" appending...\n" compare ?assert ( fil )
 \ ------------------------------------------------------------------------
 TESTING SHELL
 
-\ ls, cd end pwd test
+\ ls, cd and pwd test
 [: rm ;] try tst_dir drop
 mkdir tst_dir
 [: ." ls tst_dir" cr ;] >file tst_dir/ls.log
@@ -1085,7 +1085,52 @@ s" tst_dir/chdrive.log" s" test/chdrive.log" f_cmp ?assert
 
 s" tst_dir/mount.log" s" test/mount.log" f_cmp ?assert
 
+\ df test
+: dfcheck
+  [: s" ram:/tst_dir/df.log" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+  dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+  2drop ( fil )
+  dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+  2dup type ( fil addr len )
+  source 2>r ( fil addr len )
+  setsource ( fil )
+  >in dup @ >r 0 swap ! ( fil )
+  token s" Free:" compare ?assert
+  token number 1 = ?assert drop
+  token s" KB" compare ?assert
+  token s" Total:" compare ?assert
+  token number 1 = ?assert drop
+  r> >in ! ( fil )
+  2r> setsource ( fil )
+  f_close ( )
+;
+[: df ;] >file ram:/tst_dir/df.log ram:
+dfcheck
+
+\ rm and mkdir test
+cd tst_dir
+[: ." mkdir torm" cr ;] >file ram:/tst_dir/rm.log
+[: mkdir ;] >>file ram:/tst_dir/mount.log torm
+[: ." ls ./torm" cr ;] >>file ram:/tst_dir/rm.log
+[: ls ;] >>file ram:/tst_dir/rm.log ./torm
+[: ." rm torm" cr ;] >>file ram:/tst_dir/rm.log
+[: rm ;] >>file ram:/tst_dir/rm.log torm
+[: ." ls ./torm" cr ;] >>file ram:/tst_dir/rm.log
+[: ls ;] >>file ram:/tst_dir/rm.log ./torm
+cd ..
+
+s" tst_dir/rm.log" s" test/rm.log" f_cmp ?assert
+
 quit
+
+\ Negative testing
+\ Invalid volume names
+[: chdrive ;] try bogus: ?assert
+[: mount ;] try bogus: ?assert
+[: umount ;] try bogus: ?assert
+[: df ;] try bogus: ?assert
+[: ls ;] try bogus:/* ?assert
+
 
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
