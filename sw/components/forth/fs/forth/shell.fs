@@ -54,10 +54,12 @@
 
 \ ls with *- or ?-containing "dir/file" pattern string: "ls ./*.fs" , "ls ../*"
 \ * and ? are wildcards in the pattern string.
-\ ( "pattern string" -- )
+\ ( "pattern" -- )
 : ls
-  token
-  2dup dirname 2swap basename ( dir base )
+  cr
+  token ( addr len )
+  2dup dirname ( pataddr patlen diraddr dirlen )
+  2swap basename ( diraddr dirlen baseaddr baselen )
   f_findfirst ( dir )
   begin
     filinfo.fname ( dir addr1 len1 )
@@ -167,9 +169,9 @@
   f_close f_close ( )
 ;
 
-\ ( src-file-a src-file-l dst-dir-a dst-dir-l )
+\ ( src-file-a src-file-l dst-dir-a dst-dir-l -- )
 : (cp-file-to-dir)
-    2swap 2dup 2rot ( srcfile-a srcfile-l srcfile-a srcfile-l dstfile-a dstfile-l )
+    2swap 2dup 2rot ( srcfile-a srcfile-l srcfile-a srcfile-l dstdir-a dstdir-l )
     s" %s/%s" 128 [:
       ( srcfile-a srcfile-l srcfile-a srcfile-l dstdir-a dstdir-l pat-str-a pat-str-l )
       sprintf ( srcfile-addr srcfile-len dstpath-addr dstpath-len )
@@ -177,18 +179,33 @@
     ;] with-temp-allot
 ;
 
+0 0 2variable srcfile
+0 0 2variable srcdir
+0 0 2variable dstdir
+
 \ ( pattern-addr pattern-len dst-dir dst-len -- )
 : (cp-pattern-to-dir)
-  2>r ( pattern-a pattern-l R: dstdir-a dstdir-l )
-  s" ." 2swap ( srcdir-a srcdir-l pattern-a pattern-l R: dstdir-a dstdir-l )
-  f_findfirst ( dir R: dstdir-addr dstdir-len )
-  begin ( dir R: dstdir-addr dstdir-len )
-    filinfo.fname ( dir srcfile-addr srcfile-len R: dstdir-a dstdir-l )
-    dup 0> while
-      2r@ (cp-file-to-dir) ( dir srcfile-a srcfile-l dstdir-a dstdir-l R: dstdir-a dstdir-l )
-      dup f_findnext  ( dir R: dstdir-a dstdir-l )
+  temp-mark> >r 128 temp-allot
+  temp-mark> >r 128 temp-allot
+
+  dstdir 2! ( pata patl )
+  2dup dirname 2dup srcdir 2! ( pata patl srcda srcdl )
+  2swap basename ( srcda srddl basea basel )
+
+  f_findfirst ( dir )
+  begin ( dir )
+    filinfo.fname 2dup srcfile 2! ( dir srcfa srcfl )
+    swap drop ( dir srcfl )
+    0> while ( dir )
+      srcdir 2@ srcfile 2@
+      0 rpick pathname ( dir srcpa srcpl )
+      dstdir 2@ srcfile 2@
+      1 rpick pathname ( dir srcpa srcpl dstpa dstpl )
+      (cp-file-to-file) ( dir )
+      dup f_findnext  ( dir )
   repeat
-  2drop 2rdrop ( dir )
+  rdrop
+  r> >temp-mark
   f_closedir ( )
 ;
 
@@ -223,21 +240,27 @@
   ;] with-temp-allot
 ;
 
-\ rm <file or dir pattern string>, e.g. rm *.txt
+\ rm <file or dir pattern string>, e.g. rm dir/*.txt
 \ * and ? are wildcards in the pattern string.
 \ ( "pattern" -- )
 : rm
-  s" ." token ( addr1 len1 addr2 len2 )
+  cr
+  temp-mark> >r 128 temp-allot
+  token
+  2dup dirname 2dup srcdir 2!
+  2swap basename ( dira dirl base basel )
   f_findfirst ( dir )
   begin
-    filinfo.fname ( dir addr1 len1 )
-    dup 0> while
-      2dup s" Removing: %s" printf ( dir addr1 len1 )
+    filinfo.fname 2dup srcfile 2! ( dir srcfa srcfl )
+    swap drop ( dir srcfl )
+    0> while
+      srcdir 2@ srcfile 2@ r@ pathname ( dir patha pathl )
+      2dup s" Removing: %s" printf ( dir patha pathl )
       f_unlink ( dir )
       cr ( dir )
       dup f_findnext  ( dir )
   repeat
-  2drop
+  r> >temp-mark
   f_closedir ( )
 ;
 

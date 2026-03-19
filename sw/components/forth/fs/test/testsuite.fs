@@ -1107,7 +1107,7 @@ s" tst_dir/mount.log" s" test/mount.log" f_cmp ?assert
 [: df ;] >file ram:/tst_dir/df.log ram:
 dfcheck
 
-\ rm and mkdir test
+\ rm file and mkdir test
 cd tst_dir
 [: ." mkdir torm" cr ;] >file ram:/tst_dir/rm.log
 [: mkdir ;] >>file ram:/tst_dir/mount.log torm
@@ -1121,7 +1121,20 @@ cd ..
 
 s" tst_dir/rm.log" s" test/rm.log" f_cmp ?assert
 
+\ cat test
+[: cat ;] >file ram:/tst_dir/cat.log ram:/tst_dir/rm.log
+
+s" tst_dir/cat.log" s" test/cat.log" f_cmp ?assert
+
+\ cp test
+cp ram:/test/cpdir/cpfile0 ram:/tst_dir/cpfile0.cp
+s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert
 quit
+rm ram:/tst_dir/cpfile0.cp
+cp ram:/test/cpdir/* ram:/tst_dir
+s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert
+s" /test/cpdir/cpfile1" s" ram:/tst_dir/cpfile1.cp" f_cmp ?assert
+
 
 \ Negative testing
 \ Invalid volume names

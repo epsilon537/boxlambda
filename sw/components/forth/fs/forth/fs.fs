@@ -540,3 +540,35 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
     +loop ( startaddr len )
   then
 ;
+
+\ Combine a directory name and a basename into a full path name
+\ ( dira dirl basa basl buf - patha pathl )
+: pathname
+      >r 2swap s" %s/%s" r>
+      sprintf
+;
+
+0 0 2variable patterndir
+
+\ Iterate over each file matching given pattern,
+\ invoke xt passing in full file path.
+\ ( xt pata patl -- )
+: patternmap
+  temp-mark> >r 128 temp-allot
+  2dup dirname 2dup patterndir 2!
+  2swap basename ( xt dira dirl base basel )
+  f_findfirst ( xt dir )
+  begin
+    filinfo.fname ( xt dir srcfa srcfl )
+    swap drop ( xt dir srcfl )
+    0> while ( xt dir )
+      srcdir 2@ filinfo.fname r@ pathname ( xt dir patha pathl )
+      2over drop ( xt dir patha pathl xt )
+      execute ( xt dir )
+      dup f_findnext  ( xt dir )
+  repeat
+  r> >temp-mark
+  f_closedir ( )
+  drop
+;
+
