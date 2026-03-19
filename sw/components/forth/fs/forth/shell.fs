@@ -57,22 +57,16 @@
 \ ( "pattern" -- )
 : ls
   cr
-  token ( addr len )
-  2dup dirname ( pataddr patlen diraddr dirlen )
-  2swap basename ( diraddr dirlen baseaddr baselen )
-  f_findfirst ( dir )
-  begin
-    filinfo.fname ( dir addr1 len1 )
-    dup 0> while
-      filinfo.fattrib fattrib>str ( dir addr1 len1 addr2 len2 )
-      filinfo.getftime time>str ( dir addr1 len1 addr2 len2 addr3 len3 )
-      filinfo.getfdate date>str ( dir addr1 len1 addr2 len2 addr3 len3 addr4 len4 )
-      filinfo.fsize ( dir addr1 len1 addr2 len2 addr3 len3 addr3 len4 size )
+  token ( pata patl )
+  [: ( patha pathl )
+      basename ( basea basel )
+      filinfo.fattrib fattrib>str
+      filinfo.getftime time>str
+      filinfo.getfdate date>str
+      filinfo.fsize
       s" %08n %s %s %s %s" printf cr ( dir )
-      dup f_findnext  ( dir )
-  repeat
-  2drop
-  f_closedir ( )
+  ;] ( pata patl xt )
+  pattern-each
 ;
 
 \ mkdir <dirname>
@@ -169,44 +163,22 @@
   f_close f_close ( )
 ;
 
-\ ( src-file-a src-file-l dst-dir-a dst-dir-l -- )
-: (cp-file-to-dir)
-    2swap 2dup 2rot ( srcfile-a srcfile-l srcfile-a srcfile-l dstdir-a dstdir-l )
-    s" %s/%s" 128 [:
-      ( srcfile-a srcfile-l srcfile-a srcfile-l dstdir-a dstdir-l pat-str-a pat-str-l )
-      sprintf ( srcfile-addr srcfile-len dstpath-addr dstpath-len )
-      (cp-file-to-file) ( )
-    ;] with-temp-allot
-;
-
-0 0 2variable srcfile
-0 0 2variable srcdir
 0 0 2variable dstdir
 
 \ ( pattern-addr pattern-len dst-dir dst-len -- )
 : (cp-pattern-to-dir)
-  temp-mark> >r 128 temp-allot
-  temp-mark> >r 128 temp-allot
-
   dstdir 2! ( pata patl )
-  2dup dirname 2dup srcdir 2! ( pata patl srcda srcdl )
-  2swap basename ( srcda srddl basea basel )
 
-  f_findfirst ( dir )
-  begin ( dir )
-    filinfo.fname 2dup srcfile 2! ( dir srcfa srcfl )
-    swap drop ( dir srcfl )
-    0> while ( dir )
-      srcdir 2@ srcfile 2@
-      0 rpick pathname ( dir srcpa srcpl )
-      dstdir 2@ srcfile 2@
-      1 rpick pathname ( dir srcpa srcpl dstpa dstpl )
-      (cp-file-to-file) ( dir )
-      dup f_findnext  ( dir )
-  repeat
-  rdrop
-  r> >temp-mark
-  f_closedir ( )
+  [: ( srcpa srcpl )
+    2dup basename ( srcpa srcpl dstfa dstfl )
+    dstdir 2@ ( srcpa srcpl dstfa dstfl dstda dstdl )
+    2swap ( srcpa srcpl dstda dstdl dstfa dstfl )
+    128 [:
+      pathname ( srcpa srcpl dstpa dstpl )
+      (cp-file-to-file) ( )
+    ;] with-temp-allot
+  ;] ( pata patl xt )
+  pattern-each
 ;
 
 \ cp source-file dest-file
@@ -245,23 +217,13 @@
 \ ( "pattern" -- )
 : rm
   cr
-  temp-mark> >r 128 temp-allot
   token
-  2dup dirname 2dup srcdir 2!
-  2swap basename ( dira dirl base basel )
-  f_findfirst ( dir )
-  begin
-    filinfo.fname 2dup srcfile 2! ( dir srcfa srcfl )
-    swap drop ( dir srcfl )
-    0> while
-      srcdir 2@ srcfile 2@ r@ pathname ( dir patha pathl )
-      2dup s" Removing: %s" printf ( dir patha pathl )
-      f_unlink ( dir )
-      cr ( dir )
-      dup f_findnext  ( dir )
-  repeat
-  r> >temp-mark
-  f_closedir ( )
+  [: ( patha pathl )
+    2dup s" Removing: %s" printf ( patha pathl )
+    f_unlink ( dir )
+    cr ( dir )
+  ;] ( pata patl xt )
+  pattern-each
 ;
 
 \ FIXME: TBD

@@ -552,17 +552,19 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 
 \ Iterate over each file matching given pattern,
 \ invoke xt passing in full file path.
-\ ( xt pata patl -- )
-: patternmap
+\ ( pata patl xt -- )
+: pattern-each
   temp-mark> >r 128 temp-allot
-  2dup dirname 2dup patterndir 2!
+  -rot ( xt pata patl )
+  2dup dirname ( xt pata patl dira dirl )
+  2dup patterndir 2! ( xt pata patl dira dirl )
   2swap basename ( xt dira dirl base basel )
   f_findfirst ( xt dir )
   begin
     filinfo.fname ( xt dir srcfa srcfl )
     swap drop ( xt dir srcfl )
     0> while ( xt dir )
-      srcdir 2@ filinfo.fname r@ pathname ( xt dir patha pathl )
+      patterndir 2@ filinfo.fname r@ pathname ( xt dir patha pathl )
       2over drop ( xt dir patha pathl xt )
       execute ( xt dir )
       dup f_findnext  ( xt dir )
