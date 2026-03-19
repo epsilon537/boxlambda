@@ -962,14 +962,19 @@ T{ filinfo.getftime -> #10 #20 #30 }T
 [: s" ram:" f_getfree ;] try ?except_error > ?assert
 
 \ dirname and basename
-s" abc/def" dirname s" abc" compare ?assert
-s" abc/def" basename s" def" compare ?assert
-s" abc" dirname s" " compare ?assert
+s" 123/abc/def" dirname s" 123/abc/" compare ?assert
+s" 123/abc/def" basename s" def" compare ?assert
+s" abc" dirname s" ./" compare ?assert
 s" abc" basename s" abc" compare ?assert
-s" " dirname s" " compare ?assert
+s" " dirname s" ./" compare ?assert
 s" " basename s" " compare ?assert
-s" /" dirname s" " compare ?assert
+s" /" dirname s" /" compare ?assert
 s" /" basename s" " compare ?assert
+
+256 buffer: pathbuf
+s" ./" s" abc" pathbuf pathname s" ./abc" compare ?assert
+s" /" s" abc" pathbuf pathname s" /abc" compare ?assert
+s" abc/" s" def" pathbuf pathname s" abc/def" compare ?assert
 
 \ Negative testing
 
@@ -1134,7 +1139,6 @@ rm ram:/tst_dir/cpfile0.cp
 cp ram:/test/cpdir/* ram:/tst_dir
 s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert
 s" /test/cpdir/cpfile1" s" ram:/tst_dir/cpfile1.cp" f_cmp ?assert
-
 
 \ Negative testing
 \ Invalid volume names

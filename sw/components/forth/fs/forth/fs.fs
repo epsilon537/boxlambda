@@ -314,6 +314,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \ item matching pattern specified in addr/len2 input string.
 \ Put result in filinfo object.
 \ May throw x-fr-* exception.
+\ See pattern-each for an easy to use wrapper around f_findfirst/next.
 \ ( addr1 len1 addr2 len2 -- dir )
 : f_findfirst
   path2 str>path path str>path ( )
@@ -508,17 +509,17 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   dup 0> if ( addr len )
     over + 1- ( startaddr endaddr )
     over swap ( startaddr startaddr endaddr )
-    ?do ( startaddr )
+    do ( startaddr )
       i c@ [char] / = if
-        dup i swap ( startaddr endaddr startaddr )
+        dup i 1+ swap ( startaddr endaddr startaddr )
         - ( startaddr len )
         unloop
         exit
       then
       -1
     +loop
-    0 ( addr len )
   then
+  drop s" ./"
 ;
 
 \ Extract the basename portion of a path string
@@ -544,7 +545,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \ Combine a directory name and a basename into a full path name
 \ ( dira dirl basa basl buf - patha pathl )
 : pathname
-      >r 2swap s" %s/%s" r>
+      >r 2swap s" %s%s" r>
       sprintf
 ;
 

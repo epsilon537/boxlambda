@@ -219,9 +219,8 @@
   cr
   token
   [: ( patha pathl )
-    2dup s" Removing: %s" printf ( patha pathl )
+    2dup s" Removing: %s" printf cr ( patha pathl )
     f_unlink ( dir )
-    cr ( dir )
   ;] ( pata patl xt )
   pattern-each
 ;
