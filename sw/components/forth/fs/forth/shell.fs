@@ -134,16 +134,10 @@
   f_chmod ( )
 ;
 
-\ mv from to
-\ ( "from" "to" -- )
-: mv
-  token token f_rename
-;
+0 0 2variable dstdir
 
 \ ( src-addr src-len dst-addr dst-len -- )
 : (cp-file-to-file)
-  2swap ." Copying " 2dup type
-  2swap ."  to " 2dup type cr
   FA_CREATE_ALWAYS FA_WRITE or f_open ( src-addr src-len ofil )
   -rot FA_OPEN_EXISTING FA_READ or f_open ( ofil infil )
   256 [: ( ofil infil buf )
@@ -163,7 +157,53 @@
   f_close f_close ( )
 ;
 
-0 0 2variable dstdir
+\ ( src-addr src-len dst-addr dst-len -- )
+: (mv-file-to-file)
+  2over ." Moving " 2dup type
+  2swap ."  to " 2dup type cr
+  \ f_rename doesn't work for directory iteration,
+  \ using copy followed by remove instead.
+  (cp-file-to-file)
+  f_unlink
+;
+
+\ ( pattern-addr pattern-len dst-dir dst-len -- )
+: (mv-pattern-to-dir)
+  dstdir 2! ( pata patl )
+
+  [: ( srcpa srcpl )
+    2dup basename ( srcpa srcpl dstfa dstfl )
+    dstdir 2@ ( srcpa srcpl dstfa dstfl dstda dstdl )
+    2swap ( srcpa srcpl dstda dstdl dstfa dstfl )
+    128 [:
+      pathname ( srcpa srcpl dstpa dstpl )
+      (mv-file-to-file) ( )
+    ;] with-temp-allot
+  ;] ( pata patl xt )
+  pattern-each
+;
+
+\ mv source-file dest-file
+\ mv source-file dest-dir
+\ mv source-pattern dest-dir
+\ * and ? are wildcards in the pattern string.
+\ ( "from" "to" -- )
+: mv
+  token token ( src-addr src-len dst-addr dst-len )
+  [: 2dup f_stat ( src-addr src-len dst-addr dst-len )
+    filinfo.fattrib AM_DIR and 0> if
+      (mv-pattern-to-dir)
+    then ;] try if
+    (mv-file-to-file)
+  then
+;
+
+\ ( src-addr src-len dst-addr dst-len -- )
+: (cp-file-to-file)
+  2swap ." Copying " 2dup type
+  2swap ."  to " 2dup type cr
+  (cp-file-to-file)
+;
 
 \ ( pattern-addr pattern-len dst-dir dst-len -- )
 : (cp-pattern-to-dir)

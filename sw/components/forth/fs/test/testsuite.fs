@@ -970,11 +970,16 @@ s" " dirname s" ./" compare ?assert
 s" " basename s" " compare ?assert
 s" /" dirname s" /" compare ?assert
 s" /" basename s" " compare ?assert
+s" .." dirname s" ../" compare ?assert
+s" .." basename s" " compare ?assert
+s" ." dirname s" ./" compare ?assert
+s" ." basename s" " compare ?assert
 
 256 buffer: pathbuf
 s" ./" s" abc" pathbuf pathname s" ./abc" compare ?assert
 s" /" s" abc" pathbuf pathname s" /abc" compare ?assert
 s" abc/" s" def" pathbuf pathname s" abc/def" compare ?assert
+s" abc" s" def" pathbuf pathname s" abc/def" compare ?assert
 
 \ Negative testing
 
@@ -1112,10 +1117,20 @@ s" tst_dir/mount.log" s" test/mount.log" f_cmp ?assert
 [: df ;] >file ram:/tst_dir/df.log ram:
 dfcheck
 
-\ rm file and mkdir test
+\ rm and mkdir test
 cd tst_dir
 [: ." mkdir torm" cr ;] >file ram:/tst_dir/rm.log
-[: mkdir ;] >>file ram:/tst_dir/mount.log torm
+[: mkdir ;] >>file ram:/tst_dir/rm.log torm
+[: ." mkdir torm/torm0" cr ;] >>file ram:/tst_dir/rm.log
+[: mkdir ;] >>file ram:/tst_dir/rm.log torm/torm0
+[: ." mkdir torm/torm1" cr ;] >>file ram:/tst_dir/rm.log
+[: mkdir ;] >>file ram:/tst_dir/rm.log torm/torm1
+[: ." ls ./torm/*" cr ;] >>file ram:/tst_dir/rm.log
+[: ls ;] >>file ram:/tst_dir/rm.log ./torm/*
+[: ." rm torm/torm*" cr ;] >>file ram:/tst_dir/rm.log
+[: rm ;] >>file ram:/tst_dir/rm.log torm/torm*
+[: ." ls ./torm/*" cr ;] >>file ram:/tst_dir/rm.log
+[: ls ;] >>file ram:/tst_dir/rm.log ./torm/*
 [: ." ls ./torm" cr ;] >>file ram:/tst_dir/rm.log
 [: ls ;] >>file ram:/tst_dir/rm.log ./torm
 [: ." rm torm" cr ;] >>file ram:/tst_dir/rm.log
@@ -1134,11 +1149,22 @@ s" tst_dir/cat.log" s" test/cat.log" f_cmp ?assert
 \ cp test
 cp ram:/test/cpdir/cpfile0 ram:/tst_dir/cpfile0.cp
 s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert
-quit
 rm ram:/tst_dir/cpfile0.cp
 cp ram:/test/cpdir/* ram:/tst_dir
 s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert
 s" /test/cpdir/cpfile1" s" ram:/tst_dir/cpfile1.cp" f_cmp ?assert
+rm ram:/tst_dir/cpfile*
+
+\ mv test
+[: ." mv test/cpdir/* tst_dir" cr ;] >file ram:/tst_dir/mv.log
+[: mv ;] >>file ram:/tst_dir/mv.log test/cpdir/* tst_dir
+[: ." ls tst_dir/cpfile*" cr ;] >>file ram:/tst_dir/mv.log
+[: ls ;] >>file ram:/tst_dir/mv.log tst_dir/cpfile*
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/mv.log
+[: ls ;] >>file ram:/tst_dir/mv.log test/cpdir/*
+s" tst_dir/mv.log" s" test/mv.log" f_cmp ?assert
+
+quit
 
 \ Negative testing
 \ Invalid volume names

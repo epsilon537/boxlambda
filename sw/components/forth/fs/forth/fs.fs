@@ -506,25 +506,36 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \ Extract the directory name portion of a path string
 \ ( addr len -- addr len )
 : dirname
-  dup 0> if ( addr len )
-    over + 1- ( startaddr endaddr )
-    over swap ( startaddr startaddr endaddr )
-    do ( startaddr )
-      i c@ [char] / = if
-        dup i 1+ swap ( startaddr endaddr startaddr )
-        - ( startaddr len )
-        unloop
-        exit
-      then
-      -1
-    +loop
+  2dup s" .." compare if
+    2drop s" ../"
+  else
+    dup 0> if ( addr len )
+      over + 1- ( startaddr endaddr )
+      over swap ( startaddr startaddr endaddr )
+      do ( startaddr )
+        i c@ [char] / = if ( startaddr )
+          dup i 1+ swap ( startaddr endaddr startaddr )
+          - ( startaddr len )
+          unloop
+          exit
+        then
+        -1 ( startaddr-1 )
+      +loop
+      0
+    then
+    2drop s" ./"
   then
-  drop s" ./"
 ;
 
 \ Extract the basename portion of a path string
 \ ( addr len -- addr len )
 : basename
+  2dup s" .." compare if
+    drop 0
+  then
+  2dup s" ." compare if
+    drop 0
+  then
   dup 0> if
     2dup ( startaddr len startaddr len )
     over + 1- ( startaddr len startaddr endaddr )
@@ -545,7 +556,9 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \ Combine a directory name and a basename into a full path name
 \ ( dira dirl basa basl buf - patha pathl )
 : pathname
-      >r 2swap s" %s%s" r>
+      >r 2swap
+      2dup 1- + c@ [char] / = if 1- then
+      s" %s/%s" r>
       sprintf
 ;
 
