@@ -1213,6 +1213,11 @@ mv tst_dir/cpfile* /test/cpdir
 
 s" tst_dir/chmod.log" s" test/chmod.log" f_cmp ?assert
 
+\ include test
+include /test/testinc.fs
+s" testinc" find drop 0> ?assert
+s" testincinc" find drop ?assert
+
 quit
 
 \ Negative testing
