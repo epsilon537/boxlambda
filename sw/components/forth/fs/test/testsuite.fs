@@ -1222,8 +1222,6 @@ include /test/testinc.fs
 s" testinc" find drop 0> ?assert
 s" testincinc" find drop ?assert
 
-quit
-
 \ Negative testing
 \ Invalid volume names
 [: chdrive ;] try bogus: ?assert
@@ -1232,7 +1230,51 @@ quit
 [: df ;] try bogus: ?assert
 [: ls ;] try bogus:/* ?assert
 
+\ ------------------------------------------------------------------------
+TESTING CONDITIONAL COMPILATION
 
+false [if]
+create false-if
+[else]
+create false-else
+[then]
+s" false-if" find drop 0= ?assert
+s" false-else" find drop 0> ?assert
+
+true [if]
+create true-if
+[else]
+create true-else
+[then]
+s" true-if" find drop 0> ?assert
+s" true-else" find drop 0= ?assert
+
+[ifdef] IFDEFFLAG
+create false-ifdef
+[else]
+create false-ifdef-else
+[then]
+s" false-ifdef" find drop 0= ?assert
+s" false-ifdef-else" find drop 0> ?assert
+
+[ifndef] IFDEFFLAG
+create ifndef-if
+[else]
+create ifndef-else
+[then]
+s" ifndef-if" find drop 0> ?assert
+s" ifndef-else" find drop 0= ?assert
+
+create IFDEFFLAG
+[ifdef] IFDEFFLAG
+create ifdef-if
+[else]
+create ifdef-else
+[then]
+s" ifdef-if" find drop 0> ?assert
+s" ifdef-else" find drop 0= ?assert
+
+quit
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
 

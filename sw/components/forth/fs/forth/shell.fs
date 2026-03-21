@@ -313,21 +313,6 @@
 
 : x-eof ." End Of File Exception" cr ;
 
-\ Execute the given xt, taking input from the given file.
-\ If end-of-file is reached before the xt completes,
-\ an x-eof exception is raised.
-\ Example usage:
-\ create sbf 80 allot
-\ sbf dup 80 [: accept ;] <file name.txt esc-s" \nHello %s\n" printf
-\ ( xt "filename" -- )
-: <file
-  token FA_OPEN_EXISTING FA_READ or f_open >r ( xt )
-  r@ [: key<console key-fil @ f_close ['] x-eof ?raise ;] key<file ( xt )
-  execute ( )
-  key<console
-  r> f_close
-;
-
 \ Execute xt with all output suspended.
 \ usage: [: <statements to be executed with output suspended :] >null
 \ ( xt -- )
