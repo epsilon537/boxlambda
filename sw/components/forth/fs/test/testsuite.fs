@@ -1018,6 +1018,10 @@ create dirs MAX_NUM_OPEN_DIRS 1+ cells allot
 
 \ ------------------------------------------------------------------------
 TESTING FS REDIRECTION
+[: hook-emit @ hook-emit? @ ;] >null ?assert ' drop = ?assert
+hook-emit @ ' serial-emit = ?assert
+hook-emit? @ ' serial-emit? = ?assert
+
 [: ." fs-redirection test" cr ;] &>file redirout.txt
 
 [: s" redirout.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
