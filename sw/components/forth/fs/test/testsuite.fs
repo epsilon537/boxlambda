@@ -1151,8 +1151,8 @@ cp ram:/test/cpdir/cpfile0 ram:/tst_dir/cpfile0.cp
 s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert
 rm ram:/tst_dir/cpfile0.cp
 cp ram:/test/cpdir/* ram:/tst_dir
-s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert
-s" /test/cpdir/cpfile1" s" ram:/tst_dir/cpfile1.cp" f_cmp ?assert
+[: s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0" f_cmp ;] try ?except_error ?assert
+[: s" /test/cpdir/cpfile1" s" ram:/tst_dir/cpfile1" f_cmp ;] try ?except_error ?assert
 rm ram:/tst_dir/cpfile*
 
 \ mv test
@@ -1163,6 +1163,55 @@ rm ram:/tst_dir/cpfile*
 [: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/mv.log
 [: ls ;] >>file ram:/tst_dir/mv.log test/cpdir/*
 s" tst_dir/mv.log" s" test/mv.log" f_cmp ?assert
+mv tst_dir/cpfile* /test/cpdir
+
+\ chmod test
+[: ." chmod test/cpdir/*0 +rdo" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +rdo
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 -rdo" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -rdo
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 -arc" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -arc
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 +arc" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +arc
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 +sys" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +sys
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 -sys" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -sys
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 +hid" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +hid
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 -hid" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -hid
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 +bla" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +bla
+[: ." chmod test/cpdir/*0 bla" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 bla
+
+s" tst_dir/chmod.log" s" test/chmod.log" f_cmp ?assert
 
 quit
 

@@ -126,12 +126,28 @@
   2nip ( val mask )
 ;
 
-\ chmod <fname> +/-<attrib> . e.g. chmod test.txt -rdo
-\ ( "fname" "+/-attrib" -- )
+0 0 2variable chmodvalmask
+
+\ chmod <fname> +/-<attrib> . e.g. chmod dir/file.* -rdo
+\ ( "pattern" "+/-attrib" -- )
 : chmod
-  token ( addr len )
-  token str>attrib ( addr len val mask )
-  f_chmod ( )
+  cr
+  token ( pata patl )
+  token ( pata patl attra attrl )
+  2dup str>attrib or 0= if
+    ." Unknown attribute: " type cr
+    2drop
+  else
+    ." Applying " 2dup type ."  to: " cr
+    str>attrib chmodvalmask 2! ( pata patl )
+
+    [: ( srcfa srcfl )
+      2dup type cr
+      chmodvalmask 2@
+      f_chmod
+    ;] ( pata patl xt )
+    pattern-each
+  then
 ;
 
 0 0 2variable dstdir
@@ -189,11 +205,12 @@
 \ * and ? are wildcards in the pattern string.
 \ ( "from" "to" -- )
 : mv
+  cr
   token token ( src-addr src-len dst-addr dst-len )
-  [: 2dup f_stat ( src-addr src-len dst-addr dst-len )
-    filinfo.fattrib AM_DIR and 0> if
-      (mv-pattern-to-dir)
-    then ;] try if
+  [: 2dup f_stat ;] try 0= ( src-addr src-len dst-addr dst-len f )
+  filinfo.fattrib AM_DIR and 0> and if
+    (mv-pattern-to-dir)
+  else
     (mv-file-to-file)
   then
 ;
@@ -227,11 +244,12 @@
 \ * and ? are wildcards in the pattern string.
 \ ( "from" "to" -- )
 : cp
+  cr
   token token ( src-addr src-len dst-addr dst-len )
-  [: 2dup f_stat ( src-addr src-len dst-addr dst-len )
-    filinfo.fattrib AM_DIR and 0> if
-      (cp-pattern-to-dir)
-    then ;] try if
+  [: 2dup f_stat ;] try 0= ( src-addr src-len dst-addr dst-len f )
+  filinfo.fattrib AM_DIR and 0> and if
+    (cp-pattern-to-dir)
+  else
     (cp-file-to-file)
   then
 ;
