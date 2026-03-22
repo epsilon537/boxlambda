@@ -181,6 +181,16 @@
 
 : s>f ( n -- f ) 0 swap [1-foldable] ;
 
+: testsuite-interpret
+  ['] (interpret) try ?dup if
+    ." ***Exception***: " execute
+    cr
+    begin again
+  then
+;
+
+' testsuite-interpret hook-interpret !
+
 \ ------------------------------------------------------------------------
 \ For testing of the ansification layer. Slightly changed, some parts are commented out.
 \ See original at https://github.com/gerryjackson/forth2012-test-suite/tree/master
@@ -584,7 +594,7 @@ T{ MAX-UINT DUP        2 GN1 -> MAX-UINT DUP 0 }T
 \ T{ MAX-UINT DUP MAX-BASE GN1 -> MAX-UINT DUP 0 }T
 
 \ ------------------------------------------------------------------------
-TESTING INTERPRETED STRINGS
+TESTING INTERPRETED STRINGS (istr.fs)
 
 s" 123"
 T{ evaluate -> 123 }T
@@ -696,6 +706,7 @@ T{ 5 = -> <TRUE> }T
 
 test-buf2 s0>s ( addr len )
 T{ s" Hello" compare -> <true> }T
+
 
 \ ------------------------------------------------------------------------
 TESTING FILESYSTEM
@@ -1248,6 +1259,13 @@ s" testincinc" find drop ?assert
 [: cd ;] try bogus 0> ?assert
 
 \ ------------------------------------------------------------------------
+
+TESTING ESCAPED STRINGS
+
+[: .esc-s" a\tb\nc\r\\\'" ;] >file ram:/tst_dir/escstr.log
+s" tst_dir/escstr.log" s" test/escstr.log" f_cmp ?assert
+
+\ ------------------------------------------------------------------------
 TESTING CONDITIONAL COMPILATION
 
 false [if]
@@ -1292,6 +1310,7 @@ s" ifdef-if" find drop 0> ?assert
 s" ifdef-else" find drop 0= ?assert
 
 quit
+
 \ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
 

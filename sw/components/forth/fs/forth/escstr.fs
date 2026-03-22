@@ -71,3 +71,8 @@
   ;] with-temp-allot
 [immediate] ;
 
+: .esc-s"
+  postpone esc-s"
+  postpone type
+[immediate] [compileonly] ;
+
