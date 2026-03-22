@@ -1,9 +1,9 @@
 umount sd0:
-chdrive sd0:
+chdrv sd0:
 pwd to trigger exception
 mount sd0:
 pwd success
 sd0:/
-chdrive ram:
+chdrv ram:
 ram:/
-chdrive ram:
+chdrv ram:

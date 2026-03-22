@@ -154,8 +154,11 @@
 
 \ ( src-addr src-len dst-addr dst-len -- )
 : (cp-file-to-file)
-  FA_CREATE_ALWAYS FA_WRITE or f_open ( src-addr src-len ofil )
-  -rot FA_OPEN_EXISTING FA_READ or f_open ( ofil infil )
+  \ Open input file first so that if there's an exception
+  \ we don't end up with an empty output file
+  2swap FA_OPEN_EXISTING FA_READ or f_open ( dsta dstl ifil )
+  -rot FA_CREATE_ALWAYS FA_WRITE or f_open ( ifil ofil )
+  swap ( ofil ifil )
   256 [: ( ofil infil buf )
     >r ( ofil infil )
     begin ( ofil infil )
@@ -289,7 +292,7 @@
 
 \ Change drive. Supported volumes are sd0: and ram:
 \ ( "volume" -- )
-: chdrive
+: chdrv
   token f_chdrive
 ;
 \ Unmount a volume. Supported volumes are sd0: and ram:

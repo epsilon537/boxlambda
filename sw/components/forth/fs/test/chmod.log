@@ -68,3 +68,6 @@ Unknown attribute: +bla
 chmod test/cpdir/*0 bla
 
 Unknown attribute: bla
+chmod test/cpdir/*0
+
+Unknown attribute: 

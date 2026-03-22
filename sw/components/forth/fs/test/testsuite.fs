@@ -1070,32 +1070,30 @@ cd ..
 [: pwd ;] >>file tst_dir/ls.log
 s" tst_dir/ls.log" s" test/ls.log" f_cmp ?assert
 
-\ chdrive test
-[: ." chdrive sd0:" cr ;] >file ram:/tst_dir/chdrive.log
-chdrive sd0:
-[: ." pwd" cr ;] >>file ram:/tst_dir/chdrive.log
-[: pwd ;] >>file ram:/tst_dir/chdrive.log
-[: ." chdrive ram:" cr ;] >>file ram:/tst_dir/chdrive.log
-chdrive ram:
-[: ." pwd" cr ;] >>file ram:/tst_dir/chdrive.log
-[: pwd ;] >>file ram:/tst_dir/chdrive.log
-s" tst_dir/chdrive.log" s" test/chdrive.log" f_cmp ?assert
-
-\ umount mount test
+\ chdrv test
+[: ." chdrv sd0:" cr ;] >file ram:/tst_dir/chdrv.log
+chdrv sd0:
+[: ." pwd" cr ;] >>file ram:/tst_dir/chdrv.log
+[: pwd ;] >>file ram:/tst_dir/chdrv.log
+[: ." chdrv ram:" cr ;] >>file ram:/tst_dir/chdrv.log
+chdrv ram:
+[: ." pwd" cr ;] >>file ram:/tst_dir/chdrv.log
+[: pwd ;] >>file ram:/tst_dir/chdrv.log
+s" tst_dir/chdrv.log" s" test/chdrv.log" f_cmp ?assert
 [: ." umount sd0:" cr ;] >file ram:/tst_dir/mount.log
 [: umount ;] >>file ram:/tst_dir/mount.log sd0:
-[: ." chdrive sd0:" cr ;] >>file ram:/tst_dir/mount.log
-[: chdrive ;] >>file ram:/tst_dir/mount.log sd0:
+[: ." chdrv sd0:" cr ;] >>file ram:/tst_dir/mount.log
+[: chdrv ;] >>file ram:/tst_dir/mount.log sd0:
 [: ." pwd to trigger exception" cr ;] >>file ram:/tst_dir/mount.log
 [: pwd ;] try 0> ?assert
 [: ." mount sd0:" cr ;] >>file ram:/tst_dir/mount.log
 [: mount ;] >>file ram:/tst_dir/mount.log sd0:
 [: ." pwd success" cr ;] >>file ram:/tst_dir/mount.log
 [: pwd ;] >>file ram:/tst_dir/mount.log
-[: ." chdrive ram:" cr ;] >>file ram:/tst_dir/mount.log
-[: chdrive ;] >>file ram:/tst_dir/mount.log ram:
+[: ." chdrv ram:" cr ;] >>file ram:/tst_dir/mount.log
+[: chdrv ;] >>file ram:/tst_dir/mount.log ram:
 [: pwd ;] >>file ram:/tst_dir/mount.log
-[: ." chdrive ram:" cr ;] >>file ram:/tst_dir/mount.log
+[: ." chdrv ram:" cr ;] >>file ram:/tst_dir/mount.log
 
 s" tst_dir/mount.log" s" test/mount.log" f_cmp ?assert
 
@@ -1214,6 +1212,8 @@ mv tst_dir/cpfile* /test/cpdir
 [: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +bla
 [: ." chmod test/cpdir/*0 bla" cr ;] >>file ram:/tst_dir/chmod.log
 [: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 bla
+[: ." chmod test/cpdir/*0" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0
 
 s" tst_dir/chmod.log" s" test/chmod.log" f_cmp ?assert
 
@@ -1224,11 +1224,28 @@ s" testincinc" find drop ?assert
 
 \ Negative testing
 \ Invalid volume names
-[: chdrive ;] try bogus: ?assert
+[: chdrv ;] try bogus: ?assert
 [: mount ;] try bogus: ?assert
 [: umount ;] try bogus: ?assert
 [: df ;] try bogus: ?assert
 [: ls ;] try bogus:/* ?assert
+[: include ;] try notexisting.fs 0> ?assert
+[: mv ;] try /test/mv.log 0> ?assert
+[: mv ;] try /tst_dir/doesntexist /tst_dir/alsnot 0> ?assert
+[: s" /tst_dir/alsnot" f_stat ;] try 0> ?assert
+[: mv ;] try /tst_dir/* /tst_dir/doesnotexist 0> ?assert
+[: s" /tst_dir/doesnotexist" f_stat ;] try 0> ?assert
+[: mv ;] try /tst_dir /tst_dir2 0> ?assert
+[: s" /tst_dir/tst_dir2" f_stat ;] try 0> ?assert
+[: cp ;] try /tst_dir/doesntexist /tst_dir/alsnot 0> ?assert
+[: s" /tst_dir/alsnot" f_stat ;] try 0> ?assert
+[: cp ;] try /tst_dir/* /tst_dir/doesnotexist 0> ?assert
+[: s" /tst_dir/doesnotexist" f_stat ;] try 0> ?assert
+[: cp ;] try /tst_dir /tst_dir2 0> ?assert
+[: s" /tst_dir/tst_dir2" f_stat ;] try 0> ?assert
+[: cat ;] try doesntexist 0> ?assert
+[: mkdir ;] try /tst_dir 0> ?assert
+[: cd ;] try bogus 0> ?assert
 
 \ ------------------------------------------------------------------------
 TESTING CONDITIONAL COMPILATION
