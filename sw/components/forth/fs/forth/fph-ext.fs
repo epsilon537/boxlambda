@@ -1,0 +1,58 @@
+\ From Wil Baden's "FPH Popular Extensions"
+\ http://www.wilbaden.com/neil_bawd/fphpop.txt
+
+: tnegate                           ( t . . -- -t . . )
+    >r  2dup or dup if drop  dnegate 1  then
+    r> +  negate ;
+
+: t*                                ( d . n -- t . . )
+                                    ( d0 d1 n)
+    2dup xor >r                     ( r: sign)
+    >r dabs r> abs
+    2>r                             ( d0)( r: sign d1 n)
+    r@ um* 0                        ( t0 d1 0)
+    2r> um*                         ( t0 d1 0 d1*n .)( r: sign)
+    d+                              ( t0 t1 t2)
+    r> 0< if tnegate then ;
+
+: t/                                ( t . . u -- d . )
+                                    ( t0 t1 t2 u)
+    over >r >r                      ( t0 t1 t2)( r: t2 u)
+    dup 0< if tnegate then
+    r@ um/mod                       ( t0 rem d1)
+    rot rot                         ( d1 t0 rem)
+    r> um/mod                       ( d1 rem' d0)( r: t2)
+    nip swap                        ( d0 d1)
+    r> 0< if dnegate then ;
+
+: m*/  ( d . n u -- d . )  >r t*  r> t/ ;
+
+: dmin ( d1 d2 -- d ) 2over 2over d< if 2drop else 2nip then [4-foldable] ;
+: dmax ( d1 d2 -- d ) 2over 2over d< if 2nip else 2drop then [4-foldable] ;
+
+: d.r  ( d n -- )
+    >r
+    dup >r dabs <# #s r> sign #>
+    r> over - spaces type
+;
+
+: .r  ( n1 n2 -- )
+    >r s>d r> d.r
+;
+
+: u.r  ( u n -- )
+    0 swap d.r
+;
+
+: 2or  ( d1 d2 -- d ) >r swap >r or  r> r> or  [4-foldable] ;
+: 2and ( d1 d2 -- d ) >r swap >r and r> r> and [4-foldable] ;
+: 2xor ( d1 d2 -- d ) >r swap >r xor r> r> xor [4-foldable] ;
+
+: d>= ( d1 d2 -- ? ) d< not [4-foldable] ;
+: d<= ( d1 d2 -- ? ) d> not [4-foldable] ;
+
+: du>= ( d1 d2 -- ? ) du< not [4-foldable] ;
+: du<= ( d1 d2 -- ? ) du> not [4-foldable] ;
+
+: s>f ( n -- f ) 0 swap [1-foldable] ;
+

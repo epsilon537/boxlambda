@@ -1,3 +1,7 @@
+include /forth/core-compat.fs
+include /forth/fph-ext.fs
+
+\ ------------------------------------------------------------------------
 \  These definitions have a different behaviour in Mecrisp-Quintus:
 \ ------------------------------------------------------------------------
 
@@ -5,181 +9,8 @@
 : 2variable ( -- ) 0. 2variable ;
 
 \ ------------------------------------------------------------------------
-\  These CORE definitions are not part of Mecrisp-Quintus for default:
+\ Interpreter hook stopping the testsuite if there's an exception
 \ ------------------------------------------------------------------------
-
-256 buffer: BUF0
-
-: word ( c -- c-addr )
-    begin
-        source >r >in @ + c@ over =
-        r> >in @ xor and
-    while
-        1 >in +!
-    repeat
-
-    parse
-    dup BUF0 c!
-    BUF0 1+ swap move
-    BUF0
-;
-
-
-: erase ( addr u -- ) 0 fill ;
-
-
-: sgn ( u1 n1 -- n2 ) \ n2 is u1 with the sign of n1
-    0< if negate then
-[2-foldable] ;
-
-\ Divide d1 by n1, giving the symmetric quotient n3 and the remainder
-\ n2.
-: sm/rem ( d1 n1 -- n2 n3 )
-    2dup xor >r     \ combined sign, for quotient
-    over >r         \ sign of dividend, for remainder
-    abs >r dabs r>
-    um/mod          ( remainder quotient )
-    swap r> sgn     \ apply to remainder
-    swap r> sgn     \ apply to quotient
-[3-foldable] ;
-
-\ Divide d1 by n1, giving the floored quotient n3 and the remainder n2.
-\ Adapted from hForth
-: fm/mod ( d1 n1 -- n2 n3 )
-    dup >r 2dup xor >r
-    >r dabs r@ abs
-    um/mod
-    r> 0< if
-        swap negate swap
-    then
-    r> 0< if
-        negate         \ negative quotient
-        over if
-            r@ rot - swap 1-
-        then
-    then
-    r> drop
-[3-foldable] ;
-
-\ : */mod ( n1 n2 n3 -- n4 n5 ) >r m* r> sm/rem [3-foldable] ;
-\ : */    ( n1 n2 n3 -- n4 )    */mod nip [3-foldable] ;
-
-: 1/string 1 /string ;
-
-
-: isspace? ( c -- f )
-    $21 u< ;
-
-: isnotspace? ( c -- f )
-    isspace? 0= ;
-
-: xt-skip   ( addr1 n1 xt -- addr2 n2 ) \ gforth
-    \ skip all characters satisfying xt ( c -- f )
-    >r
-    BEGIN
-        over c@ r@ execute
-        over and
-    WHILE
-        1/string
-    REPEAT
-    r> drop ;
-
-
-: parse-name ( "name" -- c-addr u )
-    source >in @ /string
-    ['] isspace? xt-skip over >r
-    ['] isnotspace?
-    xt-skip ( end-word restlen r: start-word )
-    2dup 1 min + source drop - >in !
-    drop r>
-    tuck -
-;
-
-: w@unaligned ( addr -- x ) dup h@ swap 2+ h@ 16 lshift or ;
-: >body ( addr -- addr* )
-  begin dup 4 - w@unaligned $000FFFFF and $00078467 ( jalr x8, ...[x15] ) <> while 2 + repeat [1-foldable] ;
-: >bdy 4 - w@unaligned .s ;
-
-\ ------------------------------------------------------------------------
-\  These CORE-EXT definitions are not part of Mecrisp-Quintus for default:
-\ ------------------------------------------------------------------------
-
-: compile, ( addr -- ) call, ;
-
-: :noname ( -- addr ) 0 s" : (noname)" evaluate drop (latest) @ 2 cells + skipstring ;
-
-\ ------------------------------------------------------------------------
-\  These DOUBLE definitions are not part of Mecrisp-Quintus for default:
-\ ------------------------------------------------------------------------
-
- 0 CONSTANT <FALSE>
--1 CONSTANT <TRUE>
-
-: literal ( n -- ) literal, [immediate] ;
-
-: 2literal ( d -- )
-    swap postpone literal postpone literal
-; [immediate]
-
-: d>s ( d -- n ) drop ;
-
-\ From Wil Baden's "FPH Popular Extensions"
-\ http://www.wilbaden.com/neil_bawd/fphpop.txt
-
-: tnegate                           ( t . . -- -t . . )
-    >r  2dup or dup if drop  dnegate 1  then
-    r> +  negate ;
-
-: t*                                ( d . n -- t . . )
-                                    ( d0 d1 n)
-    2dup xor >r                     ( r: sign)
-    >r dabs r> abs
-    2>r                             ( d0)( r: sign d1 n)
-    r@ um* 0                        ( t0 d1 0)
-    2r> um*                         ( t0 d1 0 d1*n .)( r: sign)
-    d+                              ( t0 t1 t2)
-    r> 0< if tnegate then ;
-
-: t/                                ( t . . u -- d . )
-                                    ( t0 t1 t2 u)
-    over >r >r                      ( t0 t1 t2)( r: t2 u)
-    dup 0< if tnegate then
-    r@ um/mod                       ( t0 rem d1)
-    rot rot                         ( d1 t0 rem)
-    r> um/mod                       ( d1 rem' d0)( r: t2)
-    nip swap                        ( d0 d1)
-    r> 0< if dnegate then ;
-
-: m*/  ( d . n u -- d . )  >r t*  r> t/ ;
-
-: dmin ( d1 d2 -- d ) 2over 2over d< if 2drop else 2nip then [4-foldable] ;
-: dmax ( d1 d2 -- d ) 2over 2over d< if 2nip else 2drop then [4-foldable] ;
-
-: d.r  ( d n -- )
-    >r
-    dup >r dabs <# #s r> sign #>
-    r> over - spaces type
-;
-
-: .r  ( n1 n2 -- )
-    >r s>d r> d.r
-;
-
-: u.r  ( u n -- )
-    0 swap d.r
-;
-
-: 2or  ( d1 d2 -- d ) >r swap >r or  r> r> or  [4-foldable] ;
-: 2and ( d1 d2 -- d ) >r swap >r and r> r> and [4-foldable] ;
-: 2xor ( d1 d2 -- d ) >r swap >r xor r> r> xor [4-foldable] ;
-
-: d>= ( d1 d2 -- ? ) d< not [4-foldable] ;
-: d<= ( d1 d2 -- ? ) d> not [4-foldable] ;
-
-: du>= ( d1 d2 -- ? ) du< not [4-foldable] ;
-: du<= ( d1 d2 -- ? ) du> not [4-foldable] ;
-
-: s>f ( n -- f ) 0 swap [1-foldable] ;
 
 : testsuite-interpret
   ['] (interpret) try ?dup if
@@ -210,26 +41,26 @@
 \ agree with the Forth 200X file ttester.fs. This avoids clashes with
 \ locals using { ... } and the FSL use of }
 
-HEX
+hex
 .s
 
-\ SET THE FOLLOWING FLAG TO TRUE FOR MORE VERBOSE OUTPUT; THIS MAY
-\ ALLOW YOU TO TELL WHICH TEST CAUSED YOUR SYSTEM TO HANG.
-VARIABLE VERBOSE
-\   FALSE VERBOSE !
-   TRUE VERBOSE !
+\ set the following flag to true for more verbose output; this may
+\ allow you to tell which test caused your system to hang.
+variable verbose
+\   false verbose !
+   true verbose !
 
-: EMPTY-STACK   \ ( ... -- ) EMPTY STACK: HANDLES UNDERFLOWED STACK TOO.
-   DEPTH ?DUP IF DUP 0< IF NEGATE 0 DO 0 LOOP ELSE 0 DO DROP LOOP THEN THEN ;
+: empty-stack   \ ( ... -- ) empty stack: handles underflowed stack too.
+   depth ?dup if dup 0< if negate 0 do 0 loop else 0 do drop loop then then ;
 
-VARIABLE #ERRORS 0 #ERRORS !
+variable #errors 0 #errors !
 
-: ERROR      \ ( C-ADDR U -- ) DISPLAY AN ERROR MESSAGE FOLLOWED BY
-      \ THE LINE THAT HAD THE ERROR.
-   CR TYPE SOURCE TYPE       \ DISPLAY LINE CORRESPONDING TO ERROR
-   EMPTY-STACK               \ THROW AWAY EVERY THING ELSE
-   #ERRORS @ 1 + #ERRORS !
-   QUIT  \ *** Uncomment this line to QUIT on an error
+: error      \ ( c-addr u -- ) display an error message followed by
+      \ the line that had the error.
+   cr type source type       \ display line corresponding to error
+   empty-stack               \ throw away every thing else
+   #errors @ 1 + #errors !
+   quit  \ *** uNCOMMENT THIS LINE TO quit ON AN ERROR
 ;
 
 \ "text" -- )
