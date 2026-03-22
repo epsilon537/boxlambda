@@ -1,5 +1,5 @@
-include /forth/core-compat.fs
-include /forth/fph-ext.fs
+include /test/core-compat.fs
+include /test/fph-ext.fs
 
 \ ------------------------------------------------------------------------
 \  These definitions have a different behaviour in Mecrisp-Quintus:
@@ -538,6 +538,9 @@ T{ 5 = -> <TRUE> }T
 test-buf2 s0>s ( addr len )
 T{ s" Hello" compare -> <true> }T
 
+\ Negative testing
+
+[: test-buf2 0 256 cstr ;] try ' x-string-too-long = ?assert
 
 \ ------------------------------------------------------------------------
 TESTING FILESYSTEM

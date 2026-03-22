@@ -1,3 +1,9 @@
+\ BoxLambda Forth:
+\ The definitions below are referenced by the original Mecrisp testsuite.fs.
+\ They are useful Forth standard core and core extension words, so I put them
+\ in their own module. They are currently not considered part of the BoxLambda OS
+\ Word set, however.
+
 \ ------------------------------------------------------------------------
 \  These CORE definitions are not part of Mecrisp-Quintus for default:
 \ ------------------------------------------------------------------------

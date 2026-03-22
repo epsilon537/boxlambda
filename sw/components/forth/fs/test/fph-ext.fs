@@ -1,3 +1,8 @@
+\ BoxLambda Forth: The definitions below are referenced by the original Mecrisp
+\ testsuite.fs. They are useful FPH extension words, so I put them in their own
+\ module. They are currently not considered part of the BoxLambda OS Word set,
+\ however.
+
 \ From Wil Baden's "FPH Popular Extensions"
 \ http://www.wilbaden.com/neil_bawd/fphpop.txt
 
