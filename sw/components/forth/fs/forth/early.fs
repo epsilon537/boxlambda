@@ -1,11 +1,12 @@
+\ BoxLambda Forth
 \
-\ Some early definitions extending the core words,
-\ too small to put in their own module.
-\
+\ Some early definitions extending the core
+\ assembly word set.
 
 \ Setting the MTIMER Comparator
 : set-raw-time-cmp ( u -- ) s>d mtime64 d+ mtimecmp64! ;
 
+\ IRQ ID constants
 16 constant irq-id-fast-0
 7 constant irq-id-timer
 13 irq-id-fast-0 + constant irq-id-vera
@@ -25,13 +26,15 @@
 \ Register a C function so it can be called from Forth.
 \ Define: ( fun "name" -- )
 \ Execute: ( i*x -- j*x )
-\ Table contains:
-\ - C function pointer.
 : c-fun create , does> @ call-c ;
 
 \ Interactive string printing.
-: .( ( -- )
-    [char] ) parse type cr
+: ." ( -- )
+  state @ if
+    postpone ."
+  else
+    [char] " parse type cr
+  then
 [immediate] ;
 
 \ Align an address to a power of two
@@ -42,24 +45,20 @@
 
 \ Add the size of n cells to x)
 \ ( x n -- x+n*cell )
-: cells+
-  cell * + ;
+: cells+ cell * + ;
 
 \
-\ array accessors
+\ array
 \
+\ Cell array
+: array ( n -- ) ( i -- addr)
+     create cells allot
+     does> swap cells+ ;
 
-: a@ ( i base -- x )
-    swap cells+ @ ;
-
-: a! ( x i base -- )
-    swap cells+ ! ;
-
-: b@ ( i base -- c )
-    + c@ ;
-
-: b! ( c i base -- )
-    + c! ;
+\ Byte array
+: carray ( n -- ) ( i -- addr)
+     create cells allot
+     does> swap + ;
 
 \ positive?
 \ ( x -- flag )
@@ -82,9 +81,11 @@
 : chars ( u -- u ) [0-foldable] ;
 : char+ ( u -- u+1 ) 1+ [1-foldable] ;
 
-\ /string
+\ Move string pointer forward by n and reduce string length by n.
+\ (addr u n -- addr' u')
 : /string  dup >r - swap r> chars + swap ;
 
+\ Unsigned addition with carry.
 : um+ ( u1 u2 -- u carry )
   over +            \ compute sum
   dup rot u<        \ detect unsigned overflow

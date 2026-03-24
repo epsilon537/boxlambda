@@ -1,3 +1,6 @@
+\ The definitions below come from the Mecrisp Quintus Forth distribution,
+\ the foundation of BoxLambda's Forth.
+\
 \ RISC-V 32 IM Disassembler, Copyright (C) 2018  Matthias Koch
 \ This is free software under GNU General Public License v3.
 \ Usage: Specify your target address in disasm-$ and give disasm-step some calls.

@@ -54,12 +54,11 @@ void forth_core_test() {
   printf("Registering test_c_fun with Forth...\n");
   forth_register_cfun(test_c_fun, "test_c_fun");
   printf("Forth evaluating string: 11 22 test_c_fun . . cr with various RS alignments...\n");
-  forth_eval(": test_c_fun_ret_s s\" test_c_fun returned \" ;");
-  forth_eval("11 22 test_c_fun .( test_c_fun returned ) . . cr");
-  forth_eval("11 22 0 >r test_c_fun rdrop .( test_c_fun returned ) . . cr");
-  forth_eval("11 22 0 >r 0 >r test_c_fun rdrop rdrop .( test_c_fun returned ) . . cr");
-  forth_eval("11 22 0 >r 0 >r 0 >r test_c_fun rdrop rdrop rdrop .( test_c_fun returned ) . . cr");
-  forth_eval("11 22 0 >r 0 >r 0 >r 0 >r test_c_fun rdrop rdrop rdrop rdrop .( test_c_fun returned ) . . cr");
+  forth_eval("11 22 test_c_fun .\" test_c_fun returned: \" . . cr");
+  forth_eval("11 22 0 >r test_c_fun rdrop .\" test_c_fun returned: \" . . cr");
+  forth_eval("11 22 0 >r 0 >r test_c_fun rdrop rdrop .\" test_c_fun returned: \" . . cr");
+  forth_eval("11 22 0 >r 0 >r 0 >r test_c_fun rdrop rdrop rdrop .\" test_c_fun returned: \" . . cr");
+  forth_eval("11 22 0 >r 0 >r 0 >r 0 >r test_c_fun rdrop rdrop rdrop rdrop .\" test_c_fun returned: \" . . cr");
 
   printf("Executing .s:\n");
   forth_execute_word(".s");

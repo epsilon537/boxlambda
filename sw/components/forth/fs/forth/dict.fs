@@ -1,3 +1,6 @@
+\ The definitions below come from the Mecrisp Quintus Forth distribution,
+\ the foundation of BoxLambda's Forth.
+\
 \ -----------------------------------------------------------------------------
 \   A few tools for dictionary wizardy
 \ -----------------------------------------------------------------------------

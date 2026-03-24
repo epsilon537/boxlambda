@@ -22,6 +22,11 @@ include /test/fph-ext.fs
 
 ' testsuite-interpret hook-interpret !
 
+\ Interactive string printing word used by testsuite
+: .( ( -- )
+    [char] ) parse type cr
+[immediate] ;
+
 \ ------------------------------------------------------------------------
 \ For testing of the ansification layer. Slightly changed, some parts are commented out.
 \ See original at https://github.com/gerryjackson/forth2012-test-suite/tree/master
@@ -175,6 +180,8 @@ TESTING EXCEPTIONS
   ['] throws-exception-2 try suppress x-test-exception-2
 ;
 
+.s
+
 T{ try-throw-exception-1 -> ' x-test-exception-1 }T
 T{ try-throw-exception-2 -> ' x-test-exception-2 }T
 T{ try-throw-exception-2 -> ' x-test-exception-2 }T
@@ -205,7 +212,7 @@ here constant test-heap-end
 8 256 test-heap init-heap
 
 test-heap-size 128 / 2+ constant max-allocations
-create allocations max-allocations cells allot
+max-allocations array allocations[]
 0 1 nvariable num-allocations
 
 \ Compiling a function so we can use loops.
@@ -216,10 +223,10 @@ create allocations max-allocations cells allot
     dup ( blocksize blocksize )
     [: test-heap allocate ;] try ( blocksize addr exception-code )
     0= if ( blocksize addr )
-      i allocations a! ( blocksize addr )
+      i allocations[] ! ( blocksize addr )
     else ( blocksize )
       drop
-      0 i allocations a!
+      0 i allocations[] !
       ." test-heap exhausted. OK." cr
       leave
     then
@@ -230,7 +237,7 @@ create allocations max-allocations cells allot
 
 : test-heap-free-all
   num-allocations @ 0 do
-    i allocations a@ test-heap free
+    i allocations[] @ test-heap free
   loop
   0 num-allocations !
 ;
@@ -246,19 +253,19 @@ T{ num-allocations @ max-allocations < -> <TRUE> }T
 : test-heap-addr-check
   num-allocations @ 0 do
     \ within heap address range
-    i allocations a@ test-heap <= if
+    i allocations[] @ test-heap <= if
       S" Allocation out of range 1, idx: " i . ERROR
       leave
     then
 
-    i allocations a@ test-heap-end >= if
+    i allocations[] @ test-heap-end >= if
       S" Allocation out of range 2, idx: " i . ERROR
       leave
     then
 
     \ At least 512 apart
     i 0> if
-      i allocations a@ i 1- allocations a@ - 512 < if
+      i allocations[] @ i 1- allocations[] @ - 512 < if
         S" Allocation spacing error, idx: " i . ERROR
         leave
       then
@@ -287,29 +294,29 @@ T{ num-allocations @ saved-num-allocations @ = -> <TRUE> }T
 .( Resize check )
 
 : test-heap-resize-alloc-0
-  0 allocations a@ test-heap resize
+  0 allocations[] @ test-heap resize
 ;
 
 \ Attempt to resize allocation 0 to 1K. This should fail.
 T{ 1024 ' test-heap-resize-alloc-0 try ' x-allocate-failed = nip -> <TRUE> }T
 
 \ Free allocation 1 then retry the resize...
-1 allocations a@ test-heap free
+1 allocations[] @ test-heap free
 \ Now it should work, without changing the address.
-T{ 1024 ' test-heap-resize-alloc-0 try swap 0 allocations a@ = -> 0 <TRUE> }T
+T{ 1024 ' test-heap-resize-alloc-0 try swap 0 allocations[] @ = -> 0 <TRUE> }T
 \ Free the resized block so we have a 1K space to allocate again.
-0 allocations a@ test-heap free
+0 allocations[] @ test-heap free
 
 \ Allocate 2 small blocks
-256 test-heap allocate 0 allocations a!
-256 test-heap allocate 1 allocations a!
+256 test-heap allocate 0 allocations[] !
+256 test-heap allocate 1 allocations[] !
 \ Now resizing the first block to 300 should work, but with a new address.
-T{ 300 ' test-heap-resize-alloc-0 try swap 0 allocations a@ <> -> 0 <TRUE> }T
+T{ 300 ' test-heap-resize-alloc-0 try swap 0 allocations[] @ <> -> 0 <TRUE> }T
 
 \ ------------------------------------------------------------------------
 TESTING pool
 
-create test-pool-allocations 16 allot
+16 array test-pool-allocations[]
 
 create test-pool pool-size allot
 8 test-pool init-pool
@@ -318,20 +325,20 @@ create test-pool-memory 32 allot
 test-pool-memory 32 test-pool add-pool
 
 : test-pool-alloc-all
-  test-pool allocate-pool 0 test-pool-allocations a!
-  test-pool allocate-pool 1 test-pool-allocations a!
-  test-pool allocate-pool 2 test-pool-allocations a!
-  test-pool allocate-pool 3 test-pool-allocations a!
+  test-pool allocate-pool 0 test-pool-allocations[] !
+  test-pool allocate-pool 1 test-pool-allocations[] !
+  test-pool allocate-pool 2 test-pool-allocations[] !
+  test-pool allocate-pool 3 test-pool-allocations[] !
 ;
 
 T{ test-pool pool-block-size -> 8 }T
 T{ test-pool pool-free-count -> 4 }T
 
 T{ ' test-pool-alloc-all try -> 0 }T
-T{ 0 test-pool-allocations a@ test-pool-memory 0 + = -> <TRUE> }T
-T{ 1 test-pool-allocations a@ test-pool-memory 8 + = -> <TRUE> }T
-T{ 2 test-pool-allocations a@ test-pool-memory 16 + = -> <TRUE> }T
-T{ 3 test-pool-allocations a@ test-pool-memory 24 + = -> <TRUE> }T
+T{ 0 test-pool-allocations[] @ test-pool-memory 0 + = -> <TRUE> }T
+T{ 1 test-pool-allocations[] @ test-pool-memory 8 + = -> <TRUE> }T
+T{ 2 test-pool-allocations[] @ test-pool-memory 16 + = -> <TRUE> }T
+T{ 3 test-pool-allocations[] @ test-pool-memory 24 + = -> <TRUE> }T
 
 T{ test-pool pool-free-count -> 0 }T
 T{ test-pool pool-total-count -> 4 }T
@@ -339,10 +346,10 @@ T{ test-pool pool-total-count -> 4 }T
 T{ test-pool ' allocate-pool try nip ' x-pool-allocate-failed = -> <TRUE> }T
 
 
-0 test-pool-allocations a@ test-pool free-pool
-1 test-pool-allocations a@ test-pool free-pool
-2 test-pool-allocations a@ test-pool free-pool
-3 test-pool-allocations a@ test-pool free-pool
+0 test-pool-allocations[] @ test-pool free-pool
+1 test-pool-allocations[] @ test-pool free-pool
+2 test-pool-allocations[] @ test-pool free-pool
+3 test-pool-allocations[] @ test-pool free-pool
 
 T{ test-pool pool-free-count -> 4 }T
 
@@ -683,9 +690,9 @@ dup 0= ?assert ( fil addr len )
 \ Check too many open files
 \ and check f_open exception
 
-create fils MAX_NUM_OPEN_FILES 1+ cells allot
+MAX_NUM_OPEN_FILES 1+ array fils[]
 
-fils MAX_NUM_OPEN_FILES 1+ cells 0 fill
+0 fils[] MAX_NUM_OPEN_FILES 1+ cells 0 fill
 
 [:
   MAX_NUM_OPEN_FILES 1+ 0 do
@@ -696,13 +703,13 @@ fils MAX_NUM_OPEN_FILES 1+ cells 0 fill
 [:
   MAX_NUM_OPEN_FILES 1+ 0 do
     i s" fs_tst%n.txt" pad sprintf FA_CREATE_ALWAYS FA_WRITE or f_open
-    i fils a!
+    i fils[] !
   loop
 ;] try ' x-pool-allocate-failed = ?assert
 
 [:
   MAX_NUM_OPEN_FILES 0 do
-    i fils a@ ?dup if
+    i fils[] @ ?dup if
       f_close
     then
   loop
@@ -830,20 +837,20 @@ s" abc" s" def" pathbuf pathname s" abc/def" compare ?assert
 
 \ Check too many open dirs
 
-create dirs MAX_NUM_OPEN_DIRS 1+ cells allot
+MAX_NUM_OPEN_DIRS 1+ array dirs[]
 
 [:
   MAX_NUM_OPEN_DIRS 1+ 0 do
     i s" dir_tst%n" pad sprintf ( addr len )
     2dup f_mkdir
     f_opendir ( dir )
-    i dirs a!
+    i dirs[] !
   loop
 ;] try ' x-pool-allocate-failed = ?assert
 
 [:
   MAX_NUM_OPEN_DIRS 0 do
-    i dirs a@ f_closedir
+    i dirs[] @ f_closedir
   loop
 ;] try ?except_error
 

@@ -1,3 +1,6 @@
+\ The definitions below come from the Mecrisp Quintus Forth distribution,
+\ the foundation of BoxLambda's Forth.
+\
 \ A convenient memory dump helper
 
 : dump16 ( addr -- ) \ Print 16 bytes memory
