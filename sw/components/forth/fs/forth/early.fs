@@ -37,6 +37,12 @@
   then
 [immediate] ;
 
+: span ( addr len -- start end )
+  over + ;
+
+: bounds ( addr len -- end start )
+  over + swap ;
+
 \ Align an address to a power of two
 : alignto ( a power -- a ) swap 1- swap 1- or 1+ ;
 

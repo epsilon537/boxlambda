@@ -1,5 +1,7 @@
+\ BoxLambda Forth
 \
-\ Exceptions
+\ Exceptions. The definitions below are taken from ZeptoForth
+\ See: https://github.com/tabemann/zeptoforth/blob/master/src/common/forth/basic.fs
 \
 
 \ Assert that a value is true, otherwise raise a specified exception
@@ -63,6 +65,7 @@
 
 : x-assert ." Assert failed!" cr ;
 
+\ Raise x-assert exception if f is false.
 : ?assert ( f -- )
   averts x-assert
 ;

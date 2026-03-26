@@ -1,3 +1,8 @@
+\ BoxLambda Forth
+\ -----------------------------------------------------------------------------
+\ FATFS-based filesystem access
+\ -----------------------------------------------------------------------------
+
 \ path is the principle working buffer for filesystem paths.
 256 buffer: path
 
@@ -112,6 +117,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 : x-fr-invalid-parameter ." FS: (19) The given parameter is invalid or there is an inconsistent for the volume." cr ;
 : x-fr-unknown ." FR: (??) Unknown exception" cr ;
 
+\ FATFS IO result (FRESULT) to exception mapping
 \ ( ior -- xt)
 : ior>exception
   case
@@ -139,7 +145,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   endcase
 ;
 
-\ Check IOR and throw exception if non-zero
+\ Check FatFS IO result and throw exception if non-zero
 \ ( ior -- )
 : check-throw-ior ior>exception ?raise ;
 
@@ -277,6 +283,17 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \ Directory Access:
 \
 
+\ Check directory IO results.
+\ Free dir object and throw exception on error.
+\ ( dir ior -- dir )
+: _check-dir-ior
+  ?dup if ( dir ior )
+    over ( dir ior dir )
+    dir-pool free-pool ( dir ior )
+    check-throw-ior
+  then ( dir )
+;
+
 \ Open the directory specified in the input string.
 \ May throw x-fr-* and x-pool-* exceptions.
 \ ( addr len -- dir )
@@ -285,11 +302,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   dir-pool allocate-pool ( dir )
   dup path ( dir dir path )
   fs_f_opendir ( dir ior )
-  ?dup if ( dir ior )
-    over ( dir ior dir )
-    dir-pool free-pool ( dir ior )
-    check-throw-ior ( dir )
-  then ( dir )
+  _check-dir-ior ( dir )
 ;
 
 \ Close directory
@@ -321,11 +334,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   dir-pool allocate-pool ( dir )
   dup filinfo path path2 ( dir dir nfo path pattern )
   fs_f_findfirst ( dir ior )
-  ?dup if ( dir ior )
-    over ( dir ior dir )
-    dir-pool free-pool ( dir ior )
-    check-throw-ior ( dir )
-  then ( dir )
+  _check-dir-ior ( dir )
 ;
 
 \ Find next entry matching pattern.
@@ -427,40 +436,38 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   path path>str ( addr len )
 ;
 
-\ Read one compare one buffer worth of data between to open files
-\ ( fil0 fil1 buf0 buf1 -- noteqf bothzerof)
-: (f_cmp_buf)
-    2dup 2-rot ( buf0 buf1 fil0 fil1 buf0 buf1 )
-    swap -rot ( buf0 buf1 fil0 buf0 fil1 buf1 )
-    256 f_read ( buf0 buf1 fil0 buf0 len1 )
-    -rot 256 f_read ( buf0 buf1 len1 len0 )
-    2dup d0= >r ( buf0 buf1 len1 len0 R: bothzero )
-    -rot ( buf0 len0 buf1 len1 R: bothzero )
-    compare not ( noteq R: bothzero )
-    r> ( noteq bothzero )
+begin-structure fil-buf
+  field: .fil
+  field: .buf
+end-structure
+
+create fil-buf0 fil-buf allot
+create fil-buf1 fil-buf allot
+
+\ Read and compare one buffer worth of data between to open files
+\ ( -- noteqf bothzerof)
+: _f_cmp_buf
+    fil-buf0 .fil @ fil-buf0 .buf @ 256 f_read ( len0 )
+    fil-buf1 .fil @ fil-buf1 .buf @ 256 f_read ( len0 len1 )
+    2dup d0= >r ( len0 len1 R: bothzero )
+    fil-buf0 .buf @ -rot fil-buf1 .buf @ swap ( buf0 len0 buf1 len1 )
+    compare not r> ( noteq bothzero )
 ;
 
 \ Compare two files, identified by filename. Pushes true if identical, false otherwise.
-\ ( addr1 len1 addr2 len2 -- f )
+\ ( addr0 len0 addr1 len1 -- f )
 : f_cmp
-  FA_OPEN_EXISTING FA_READ or f_open ( addr1 len1 fil0 )
-  -rot FA_OPEN_EXISTING FA_READ or f_open ( fil0 fil1 )
-  temp-mark> ( fil0 fil1 mark0 )
-  256 temp-allot temp-mark> ( fil0 fil1 mark0 mark1 )
-  2>r ( fil0 fil1 R: mark0 mark1 )
-  0 0
-  begin ( fil0 fil1 f f R: mark0 mark1 )
-    2drop ( fil0 fil1 R: mark0 mark1 )
-    2dup 2r@ ( fil0 fil1 fil0 fil1 mark0 mark1 R: mark0 mark1 )
-    (f_cmp_buf) ( fil0 fil1 noteq bothzero R: mark0 mark1 )
-    2dup or ( fil0 fil1 noteq bothzero f R: mark0 mark1 )
-  until ( fil0 fil1 noteq bothzero R: mark0 mark1 )
-  rdrop ( fil0 fil1 noteq bothzero R: mark0 )
-  r> >temp-mark ( fil0 fil1 noteq bothzero )
-  swap not and ( fil0 fil1 f )
-  -rot ( f fil0 fil1 )
-  f_close
-  f_close ( f )
+  FA_OPEN_EXISTING FA_READ or f_open fil-buf1 .fil ! ( addr0 len0 )
+  FA_OPEN_EXISTING FA_READ or f_open fil-buf0 .fil ! ( )
+  temp-mark> fil-buf0 .buf ! 256 temp-allot ( )
+  temp-mark> fil-buf1 .buf ! 256 temp-allot ( )
+  0 0 begin
+    _f_cmp_buf ( noteq bothzero )
+  2dup or until ( noteq bothzero )
+  fil-buf0 .buf @ >temp-mark ( noteq bothzero )
+  swap not and ( f )
+  fil-buf1 .fil @ f_close ( f )
+  fil-buf0 .fil @ f_close ( f )
 ;
 
 \
@@ -507,84 +514,64 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 \ ( addr len -- addr len )
 : dirname
   2dup s" .." compare if
-    2drop s" ../"
-  else
-    dup 0> if ( addr len )
-      over + 1- ( startaddr endaddr )
-      over swap ( startaddr startaddr endaddr )
-      do ( startaddr )
-        i c@ [char] / = if ( startaddr )
-          dup i 1+ swap ( startaddr endaddr startaddr )
-          - ( startaddr len )
-          unloop
-          exit
-        then
-        -1 ( startaddr-1 )
-      +loop
-      0
-    then
-    2drop s" ./"
+    2drop s" ../" exit
+  then ( addr len )
+  ?dup if ( addr len )
+    over + 1- ( startaddr endaddr )
+    over swap ( startaddr startaddr endaddr )
+    do ( startaddr )
+      i c@ [char] / = if ( startaddr )
+        dup i 1+ swap - ( startaddr len )
+        unloop exit
+      then
+    -1 +loop ( startaddr )
   then
+  drop s" ./"
 ;
 
 \ Extract the basename portion of a path string
 \ ( addr len -- addr len )
 : basename
-  2dup s" .." compare if
-    drop 0
-  then
-  2dup s" ." compare if
-    drop 0
-  then
-  dup 0> if
-    2dup ( startaddr len startaddr len )
-    over + 1- ( startaddr len startaddr endaddr )
-    do ( startaddr len )
-      i c@ [char] / = if
-        i 1+ ( startaddr len curaddr)
-        -rot ( curaddr startaddr len )
-        + ( curaddr endaddr )
-        over - ( curaddr len )
-        unloop
-        exit
+  2dup 2>r 2dup s" .." compare 2r> s" ." compare or ( addr len f )
+  if drop 0 then \ Make it a zero length string
+  dup 0> if ( addr olen )
+    2dup span ( startaddr olen startaddr endaddr )
+    do ( startaddr olen )
+      i 1- c@ [char] / = if ( startaddr olen )
+        bounds drop ( endaddr )
+        i tuck - ( curaddr nlen )
+        unloop exit
       then
-      -1
-    +loop ( startaddr len )
+    -1 +loop ( startaddr olen )
   then
 ;
 
 \ Combine a directory name and a basename into a full path name
 \ ( dira dirl basa basl buf - patha pathl )
 : pathname
-      >r 2swap
-      2dup 1- + c@ [char] / = if 1- then
-      s" %s/%s" r>
-      sprintf
+    >r 2swap
+    2dup 1- + c@ [char] / = if 1- then
+    s" %s/%s" r>
+    sprintf
 ;
 
-0 0 2variable patterndir
+0 0 2variable glob
 
-\ Iterate over each file matching given pattern,
+\ Iterate over each file matching given glob pattern string,
 \ invoke xt passing in full file path.
 \ ( pata patl xt -- )
-: pattern-each
-  temp-mark> >r 128 temp-allot
-  -rot ( xt pata patl )
-  2dup dirname ( xt pata patl dira dirl )
-  2dup patterndir 2! ( xt pata patl dira dirl )
-  2swap basename ( xt dira dirl base basel )
-  f_findfirst ( xt dir )
+: glob-each
+  >r glob 2! ( R: xt )
+  temp-mark> >r 128 temp-allot ( R: xt mark )
+  glob 2@ dirname glob 2@ basename f_findfirst ( dir R: xt mark )
   begin
-    filinfo.fname ( xt dir srcfa srcfl )
-    swap drop ( xt dir srcfl )
-    0> while ( xt dir )
-      patterndir 2@ filinfo.fname r@ pathname ( xt dir patha pathl )
-      2over drop ( xt dir patha pathl xt )
-      execute ( xt dir )
-      dup f_findnext  ( xt dir )
+    filinfo.fname nip ( dir srcfl R: xt mark )
+    while ( dir R: xt mark )
+      glob 2@ dirname filinfo.fname r@ pathname ( dir patha pathl R: xt mark )
+      1 rpick execute ( dir R: xt mark )
+      dup f_findnext  ( dir R: xt mark )
   repeat
-  r> >temp-mark
+  r> >temp-mark rdrop ( dir )
   f_closedir ( )
-  drop
 ;
 

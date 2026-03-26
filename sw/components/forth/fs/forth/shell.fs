@@ -66,7 +66,7 @@
       filinfo.fsize
       s" %08n %s %s %s %s" printf cr ( dir )
   ;] ( pata patl xt )
-  pattern-each
+  glob-each
 ;
 
 \ mkdir <dirname>
@@ -146,14 +146,14 @@
       chmodvalmask 2@
       f_chmod
     ;] ( pata patl xt )
-    pattern-each
+    glob-each
   then
 ;
 
 0 0 2variable dstdir
 
 \ ( src-addr src-len dst-addr dst-len -- )
-: (cp-file-to-file)
+: _cp-file-to-file
   \ Open input file first so that if there's an exception
   \ we don't end up with an empty output file
   2swap FA_OPEN_EXISTING FA_READ or f_open ( dsta dstl ifil )
@@ -177,17 +177,17 @@
 ;
 
 \ ( src-addr src-len dst-addr dst-len -- )
-: (mv-file-to-file)
+: _mv-file-to-file
   2over ." Moving " 2dup type
   2swap ."  to " 2dup type cr
   \ f_rename doesn't work for directory iteration,
   \ using copy followed by remove instead.
-  (cp-file-to-file)
+  _cp-file-to-file
   f_unlink
 ;
 
 \ ( pattern-addr pattern-len dst-dir dst-len -- )
-: (mv-pattern-to-dir)
+: _mv-pattern-to-dir
   dstdir 2! ( pata patl )
 
   [: ( srcpa srcpl )
@@ -196,10 +196,10 @@
     2swap ( srcpa srcpl dstda dstdl dstfa dstfl )
     128 [:
       pathname ( srcpa srcpl dstpa dstpl )
-      (mv-file-to-file) ( )
+      _mv-file-to-file ( )
     ;] with-temp-allot
   ;] ( pata patl xt )
-  pattern-each
+  glob-each
 ;
 
 \ mv source-file dest-file
@@ -212,21 +212,21 @@
   token token ( src-addr src-len dst-addr dst-len )
   [: 2dup f_stat ;] try 0= ( src-addr src-len dst-addr dst-len f )
   filinfo.fattrib AM_DIR and 0> and if
-    (mv-pattern-to-dir)
+    _mv-pattern-to-dir
   else
-    (mv-file-to-file)
+    _mv-file-to-file
   then
 ;
 
 \ ( src-addr src-len dst-addr dst-len -- )
-: (cp-file-to-file)
+: _cp-file-to-file
   2swap ." Copying " 2dup type
   2swap ."  to " 2dup type cr
-  (cp-file-to-file)
+  _cp-file-to-file
 ;
 
 \ ( pattern-addr pattern-len dst-dir dst-len -- )
-: (cp-pattern-to-dir)
+: _cp-pattern-to-dir
   dstdir 2! ( pata patl )
 
   [: ( srcpa srcpl )
@@ -235,10 +235,10 @@
     2swap ( srcpa srcpl dstda dstdl dstfa dstfl )
     128 [:
       pathname ( srcpa srcpl dstpa dstpl )
-      (cp-file-to-file) ( )
+      _cp-file-to-file ( )
     ;] with-temp-allot
   ;] ( pata patl xt )
-  pattern-each
+  glob-each
 ;
 
 \ cp source-file dest-file
@@ -251,9 +251,9 @@
   token token ( src-addr src-len dst-addr dst-len )
   [: 2dup f_stat ;] try 0= ( src-addr src-len dst-addr dst-len f )
   filinfo.fattrib AM_DIR and 0> and if
-    (cp-pattern-to-dir)
+    _cp-pattern-to-dir
   else
-    (cp-file-to-file)
+    _cp-file-to-file
   then
 ;
 
@@ -283,7 +283,7 @@
     2dup s" Removing: %s" printf cr ( patha pathl )
     f_unlink ( dir )
   ;] ( pata patl xt )
-  pattern-each
+  glob-each
 ;
 
 \ FIXME: TBD

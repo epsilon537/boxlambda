@@ -1,3 +1,4 @@
+\ BoxLambda Forth
 \ Port of escsapedstrings.txt by Mattias Koch, extended to supported interpreter mode.
 
 0 variable tmp-buf
@@ -71,6 +72,8 @@
   ;] with-temp-allot
 [immediate] ;
 
+\ Print escaped string
+\ ( parses up to "  -- )
 : .esc-s"
   postpone esc-s"
   postpone type
