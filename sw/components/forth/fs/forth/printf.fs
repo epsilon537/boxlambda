@@ -1,4 +1,6 @@
-\ From repo: https://github.com/jkotlinski/forth-strfmt
+\ BoxLambda Forth
+\ printf and sprintf adapted from repo:
+\ https://github.com/jkotlinski/forth-strfmt
 
 0 variable min-field-width
 create left-justify 1 allot
@@ -22,27 +24,22 @@ create charbuf 1 allot
     r@ 0> if
       dup r@ bl fill r@ +
     then
-      rdrop
-    else
-      drop
+    rdrop
+  else
+    drop
   then
 ;
 
 : add-field ( dst c-addr u -- dst ) pad-left >r over r@ move r> pad-right ;
 
 : parse-min-field-width ( src srcend -- src srcend )
-  over ( src srcend src )
-  c@ ( src srcend c )
-  [char] - ( src srcend c '-' )
-  = ( src srcend f )
-  dup if ( src srcend f )
+  over c@ ( src srcend c )
+  '-' = dup if ( src srcend f )
     rot 1+ -rot ( src+1 srcend f )
   then
   left-justify c! ( src+1 srcend )
-  over ( src+1 srcend src+1 )
-  c@ [char] 0 ( src+1 srcend c '0')
-  = ( src+1 srcend f )
-  if ( src+1 srcend )
+  over c@ ( src+1 srcend c )
+  '0' = if ( src+1 srcend )
     swap 1+ swap ( src+2 srcend )
     '0' ( src+2 srcend '0' )
   else
@@ -50,35 +47,26 @@ create charbuf 1 allot
   then
   pad-char c! ( src+1 srcend )
   base @ >r decimal ( src+1 srcend )
-  over  ( src+1 srcend src+1)
-  - ( src+1 len )
-  0 ( src+1 len 0 )
-  -rot ( 0 src+1 len )
-  0 ( 0 src+1 len 0 )
-  -rot ( 0 0 src+1 len )
+  over - ( src+1 len )
+  0 0 2swap ( 0 0 src+1 len )
   >number ( numlo numhi addr len )
-  rot ( numlo addr len numhi )
-  drop ( numlo addr len )
-  rot ( addr len numlo )
+  2swap drop ( addr len numlo )
   min-field-width ! ( addr len )
-  over ( addr len addr )
-  + ( addr addrend )
-  r> ( addr addrend base )
-  base ! ( addr addrend )
+  span ( addr addrend )
+  r> base ! ( addr addrend )
 ;
 
 : parse-cmdspec ( dst src srcend -- dst src srcend )
   swap 1+ swap ( dst src+1 srcend )
   parse-min-field-width ( dst src+1 srcend )
-  base @ >r ( dst src+1)
-  >r ( dst src+1 )
-  dup >r ( dst src+1 )
-  c@ ( dst c )
-  case ( dst )
+  base @ 2>r ( dst src+1 R: srcend base )
+  dup >r ( dst src+1 R: srcend base src+1 )
+  c@ case ( dst )
     [char] % of s" %" add-field endof ( dst )
     [char] c of swap charbuf c! charbuf 1 add-field endof
     [char] n of decimal swap dup s>d dabs <# #s rot sign #> add-field endof
     [char] u of decimal swap 0 <# #s #> add-field endof
+    [char] x of hex swap 0 <# #s #> add-field endof
     [char] s of -rot add-field endof
     [char] d of decimal r> 1+ dup >r
       c@ case
@@ -87,37 +75,30 @@ create charbuf 1 allot
       endcase
       endof
   endcase
-  r> r> ( dst src+1 srcend )
-  r> base ! ( dst src+1)
+  r> 2r> ( dst src+1 srcend base )
+  base ! ( dst src+1 srcend )
 ;
 
-\ Prints n*x into buffer c-addr2 using the format string at c-addr1 u.
-\ caddr2 u3 is the resulting string.
-: sprintf ( n*x caddr1 u1 caddr2 -- caddr2 u3 )
-  dup >r ( n*x caddr1 u1 caddr2 )
-  -rot ( n*x caddr2 caddr1 u1 )
-  over ( n*x caddr2 caddr1 u1 caddr1 )
-  + ( n*x caddr2 caddr1 caddr1end )
+\ Prints n*x into buffer addr2 using the format string at addr1 u.
+\ addr2 u3 is the resulting string.
+: sprintf ( n*x addr1 u1 addr2 -- addr2 u3 )
+  dup >r ( n*x addr1 u1 addr2 R: addr2 )
+  -rot ( n*x addr2 addr1 u1 R: addr2 )
+  span ( n*x addr2 addr1 addr1end R: addr2 )
   begin
-    2dup < while ( n*x caddr2 caddr1 caddr1end )
-      over c@ [char] % = if ( n*x caddr2 caddr1 caddr1end )
+    2dup < while ( n*x addr2 addr1 addr1end R: addr2 )
+      over c@ '%' = if ( n*x addr2 addr1 addr1end R: addr2 )
         parse-cmdspec
       else
-        -rot ( n*x caddr1end caddr2 caddr1 )
-        2dup ( n*x caddr1end caddr2 caddr1 caddr2 caddr1 )
-        c@ ( n*x caddr1end caddr2 caddr1 caddr2 c )
-        swap ( n*x caddr1end caddr2 caddr1 c caddr2 )
-        c! ( n*x caddr1end caddr2 caddr1 )
-        -rot ( n*x caddr1 caddr1end caddr2 )
-        1+ ( n*x caddr1 caddr1end caddr2+1 )
-        -rot ( n*x caddr2+1 caddr1 caddr1end )
-      then ( n*x caddr2+1 caddr1 caddr1end )
-      swap 1+ swap ( n*x caddr2+1 caddr1+1 caddr1end )
-  repeat ( caddr2end caddr1end caddr1end )
-  2drop ( caddr2end )
-  r> ( caddr2end caddr2 )
-  tuck ( caddr2 caddr2end caddr2 )
-  - ( caddr2 u2 )
+        -rot ( n*x addr1end addr2 addr1 R: addr2 )
+        2dup c@ swap c! ( n*x addr1end addr2 addr1 R: addr2 )
+        -rot 1+ -rot ( n*x addr2+1 addr1 addr1end R: addr2 )
+      then ( n*x addr2+1 addr1 addr1end R: addr2 )
+      swap 1+ swap ( n*x addr2+1 addr1+1 addr1end R: addr2 )
+  repeat ( addr2end addr1end addr1end R: addr2 )
+  2drop ( addr2end R: addr2 )
+  r> ( addr2end addr2 )
+  tuck - ( addr2 u2 )
 ;
 
 \ Prints n*x using the format string at c-addr u.

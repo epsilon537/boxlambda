@@ -1,4 +1,4 @@
-\ BoxLambda port of zeptoforth's pool.fs by Ruben Lysens.
+\ BoxLambda port of Zeptoforth's pool.fs.
 \
 \ Original header:
 \

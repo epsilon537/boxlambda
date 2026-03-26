@@ -1,9 +1,10 @@
+\ BoxLambda Forth
 \ Idea similar to http://lars.nocrew.org/dpans/dpansa15.htm#A.15.6.2.2532
 
 : nexttoken ( -- addr len )
   begin
-    token          \ Fetch new token.
-  dup 0= while      \ If length of token is zero, end of line is reached.
+    token         \ Fetch new token.
+  dup 0= while    \ If length of token is zero, end of line is reached.
     2drop refill  \ Request a next line.
   repeat
 ;

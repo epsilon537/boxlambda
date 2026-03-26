@@ -1,4 +1,4 @@
-\ BoxLambda port of zeptoforth's heap.fs module by Ruben Lysens.
+\ BoxLambda port of Zeptoforth's heap.fs module.
 \
 \ Original header:
 \

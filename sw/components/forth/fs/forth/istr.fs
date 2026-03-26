@@ -1,4 +1,4 @@
-\ BoxLambda Interpretive string support by Ruben Lysens.
+\ BoxLambda Interpretive string support.
 
 \ String pool: 256 addr-len pairs:
 
@@ -15,7 +15,7 @@ str-pool-entry str-pool init-pool
 256 str-pool-entry * constant str-pool-mem-sz
 create str-pool-mem str-pool-mem-sz allot
 \ O-initialize it before adding it to the pool.
-\ Note that add-pool will hijacking the first cell
+\ Note that add-pool will hijack the first cell
 \ of each element to build a linked list.
 str-pool-mem str-pool-mem-sz 0 fill
 str-pool-mem str-pool-mem-sz str-pool add-pool
@@ -73,7 +73,7 @@ create str-heap 16 4096 heap-size allot
     dup .len 0 swap ! ( pool-ptr )
     dup str-pool free-pool ( pool-ptr ) \ Release the string pool entry.
   then
-  drop
+  drop ( )
 ;
 
 \ Enter string into the string pool.
