@@ -1,42 +1,40 @@
+\ BoxLambda Forth
 \ Some basic shell-like commands for interactive use
+
+\ Copy attribute string template into string object
+\ to be selectively modified by _---_if_not_set below.
+\ ( -- addr len )
+: _attrstr
+  s" RDO HID SYS XXX DIR ARC" drop
+  s"                        " ( a0 a1 l1 )
+  2dup 2>r ( a0 a1 l1 R: a1 l1 )
+  move ( R: a1 l1)
+  2r> ( a1 l1 )
+;
+
+\ If attribute at given bit position if not set,
+\ replace attribute name in string object with ---
+\ ( addr attrs bitnum -- )
+: _---_if_not_set
+  >r ( addr attrs R: bitnum )
+  r@ bit and 0= if ( addr R: bitnum )
+    r@ 4 * + ( addr+offset R: bitnum )
+    dup 3 '-' fill ( R: bitnum )
+  then
+  drop rdrop ( )
+;
 
 \ Convert filinfo.fattrib to a string.
 \ ( attrs -- addr len )
 : fattrib>str
-  >r
-  r@ AM_RDO and if
-    s" RDO"
-  else
-    s" ---"
-  then
-  r@ AM_ARC and if
-    s" ARC"
-  else
-    s" ---"
-  then
-  r@ AM_SYS and if
-    s" SYS"
-  else
-    s" ---"
-  then
-  r@ AM_HID and if
-    s" HID"
-  else
-    s" ---"
-  then
-  r@ AM_DIR and if
-    s" DIR"
-  else
-    s" ---"
-  then
-
-  rdrop
-
-  s" %s %s %s %s %s"
-  s" xxx-xxx-xxx-xxx-xxx" drop ( a1 l1 a2 l2 a3 l3 a4 l4 a5 l5 pata patl buf )
-  sprintf
+  _attrstr >r swap ( addr attrs R: len )
+  6 0 do ( addr attrs )
+    2dup i _---_if_not_set ( addr attrs )
+  loop
+  drop r> ( addr len )
 ;
 
+\ Convert filesystem time object to string
 \ ( hh mm ss - addr len )
 : time>str
   -rot swap ( ss mm hh )
@@ -45,6 +43,7 @@
   sprintf
 ;
 
+\ Convert filesystem date object to string
 \ ( dd mm yyyy - addr len )
 : date>str
   s" %04n/%02n/%02n"
@@ -52,9 +51,8 @@
   sprintf
 ;
 
-\ ls with *- or ?-containing "dir/file" pattern string: "ls ./*.fs" , "ls ../*"
-\ * and ? are wildcards in the pattern string.
-\ ( "pattern" -- )
+\ ls with glob pattern string: "ls ./*.fs" , "ls ../*"
+\ ( "glob-pattern" -- )
 : ls
   cr
   token ( pata patl )
@@ -87,60 +85,45 @@
   f_getcwd type cr
 ;
 
-\ ( addr len - val mask )
+\ +/-rdo/hid/sys/xxx/dir/arc -> attrib value and mask
+\ ( addr len -- val mask )
 : str>attrib
-  2dup s" -rdo" compare if
-    0 AM_RDO
-  else
-    2dup s" +rdo" compare if
-      AM_RDO AM_RDO
-    else
-      2dup s" -arc" compare if
-        0 AM_ARC
-      else
-        2dup s" +arc" compare if
-          AM_ARC AM_ARC
-        else
-          2dup s" -sys" compare if
-            0 AM_SYS
-          else
-            2dup s" +sys" compare if
-              AM_SYS AM_SYS
-            else
-              2dup s" -hid" compare if
-                0 AM_HID
-              else
-                2dup s" +hid" compare if
-                  AM_HID AM_HID
-                else
-                  0 0
-                then ( addr len val mask )
-              then
-            then
-          then
-        then
+  4 = if ( ain )
+    1+
+    s" rdohidsysxxxdirarc" drop ( ain aref )
+    6 0 do
+      2dup 3 tuck ( ain aref ain 3 aref 3 )
+      compare if ( ain aref )
+        drop ( ain )
+        i bit swap ( bit ain )
+        1- c@ case ( bit )
+          '-' of 0 swap endof ( 0 bit )
+          '+' of dup endof ( bit bit )
+          drop 0 0 ( 0 0 )
+        endcase
+        unloop exit
       then
-    then
+      3 + ( ain aref+3 )
+    loop ( ain aref )
+    drop ( ain )
   then
-
-  2nip ( val mask )
+  drop 0 0
 ;
 
 0 0 2variable chmodvalmask
 
 \ chmod <fname> +/-<attrib> . e.g. chmod dir/file.* -rdo
-\ ( "pattern" "+/-attrib" -- )
+\ ( "glob-pattern" "+/-attrib" -- )
 : chmod
   cr
-  token ( pata patl )
-  token ( pata patl attra attrl )
-  2dup str>attrib or 0= if
+  token token ( pata patl attra attrl )
+  2dup str>attrib or
+  0= if
     ." Unknown attribute: " type cr
     2drop
   else
     ." Applying " 2dup type ."  to: " cr
     str>attrib chmodvalmask 2! ( pata patl )
-
     [: ( srcfa srcfl )
       2dup type cr
       chmodvalmask 2@
