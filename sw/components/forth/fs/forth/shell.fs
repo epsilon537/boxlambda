@@ -133,28 +133,21 @@
   then
 ;
 
-0 0 2variable dstdir
-
 \ ( src-addr src-len dst-addr dst-len -- )
 : _cp-file-to-file
   \ Open input file first so that if there's an exception
   \ we don't end up with an empty output file
   2swap FA_OPEN_EXISTING FA_READ or f_open ( dsta dstl ifil )
   -rot FA_CREATE_ALWAYS FA_WRITE or f_open ( ifil ofil )
-  swap ( ofil ifil )
-  256 [: ( ofil infil buf )
-    >r ( ofil infil )
-    begin ( ofil infil )
-      2dup ( ofil infil ofil infil )
-      r@ 256 ( ofil infil ofil infil buf btr )
-      f_read ( ofil infil ofil br )
-      dup while ( ofil infil ofil br )
-        r@ swap ( ofil infil ofil buf btw )
-        f_write ( ofil infil bw )
-        drop ( ofil infil )
-    repeat ( ofil infil )
-    rdrop ( ofil infil ofil br )
-    2drop ( ofil infil )
+  256 [: ( ifil ofil buf )
+    >r 2>r ( R: buf ifil ofil )
+    begin
+      1 rpick 2 rpick 256 f_read ( br )
+      dup while ( br )
+        0 rpick 2 rpick rot f_write ( bw )
+        drop ( )
+    repeat ( br )
+    drop 2r> rdrop ( ifil ofil )
   ;] with-temp-allot
   f_close f_close ( )
 ;
@@ -169,9 +162,11 @@
   f_unlink
 ;
 
-\ ( pattern-addr pattern-len dst-dir dst-len -- )
-: _mv-pattern-to-dir
-  dstdir 2! ( pata patl )
+0 0 2variable dstdir
+
+\ ( glob-addr glob-len dst-dir dst-len -- )
+: _mv-glob-to-dir
+  dstdir 2! ( globa globl )
 
   [: ( srcpa srcpl )
     2dup basename ( srcpa srcpl dstfa dstfl )
@@ -181,7 +176,7 @@
       pathname ( srcpa srcpl dstpa dstpl )
       _mv-file-to-file ( )
     ;] with-temp-allot
-  ;] ( pata patl xt )
+  ;] ( globa globl xt )
   glob-each
 ;
 
@@ -195,7 +190,7 @@
   token token ( src-addr src-len dst-addr dst-len )
   [: 2dup f_stat ;] try 0= ( src-addr src-len dst-addr dst-len f )
   filinfo.fattrib AM_DIR and 0> and if
-    _mv-pattern-to-dir
+    _mv-glob-to-dir
   else
     _mv-file-to-file
   then
@@ -386,29 +381,25 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
 0 variable include-verbose
 0 variable include-source-id
 
-\ Load forth code from a file with the specified path.
+\ Load and evaluate forth code from a file with the given path.
 \ include may be used recursively, i.e. the file being
 \ included itself may contain one or more include calls.
 \ May raise x-line-truncated
-\ ( "path" -- )
+\ ( n*x "path" -- m*y )
 : include
   include-source-id @ include-push
-  token FA_OPEN_EXISTING FA_READ or f_open ( fil )
-  dup include-source-id ! >r ( R: fil )
+  token FA_OPEN_EXISTING FA_READ or f_open ( n*x fil )
+  dup include-source-id ! >r ( n*x R: fil )
   begin ( n*x R: fil )
     r@ f_eof not while ( n*x R: fil )
       r@ tib MAX-LINE-LENGTH f_gets ( n*x addr len R: fil )
       \ if the line doesn't end with \n, it got truncated
       2dup + 1- c@ NEWLINE <> triggers x-line-truncated ( n*x addr len R: fil )
-      include-verbose @ if ( n*x addr len R: fil )
-        2dup type
-      then
-      \ strip trailing \n
-      1- evaluate ( n*x R: fil mark )
-  repeat
-  r> f_close ( n*x )
-  include-pop ( source-id )
-  include-source-id !
+      include-verbose @ if 2dup type then ( n*x addr len R: fil )
+      1- evaluate ( m*y R: fil mark ) \ 1- strips trailing \n
+  repeat ( m*y R: fil )
+  r> f_close ( m*y )
+  include-pop include-source-id ! ( m*y )
 ;
 
 \ An alternative query that also supports input
@@ -419,13 +410,12 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
 \ ( -- )
 : refill
   include-source-id @ ?dup if ( fil )
-    0 >in !
+    0 >in ! ( fil )
     dup f_eof triggers x-eof ( fil )
     tib MAX-LINE-LENGTH f_gets ( adr len )
     \ if the line doesn't end with \n, it got truncated
     2dup + 1- c@ NEWLINE <> triggers x-line-truncated ( addr len )
-    \ strip trailing \n
-    1- setsource ( )
+    1- setsource ( ) \ 1- strips trailing \n
   else
     query
   then
