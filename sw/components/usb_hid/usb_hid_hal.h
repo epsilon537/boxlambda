@@ -2,22 +2,11 @@
 #define USB_HID_HAL_H
 
 #include <assert.h>
+#include "inout.h"
 #include "usb_hid_regs.h"
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#ifndef IN
-#define IN
-#endif
-
-#ifndef OUT
-#define OUT
-#endif
-
-#ifndef INOUT
-#define INOUT
 #endif
 
 /*

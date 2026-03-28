@@ -13,6 +13,7 @@ target_compile_options(vera
 target_include_directories(vera
     PUBLIC
       ${PROJECT_SOURCE_DIR}/sw/components/memmap/
+      ${PROJECT_SOURCE_DIR}/sw/components/common/
       ${PROJECT_SOURCE_DIR}/registers/generated/
       ${CMAKE_CURRENT_LIST_DIR}
 )

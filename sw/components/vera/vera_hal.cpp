@@ -667,7 +667,7 @@ void Vera::display_enable(bool enable) {
   VERA->DC_VIDEO_bf.OUTPUT_MODE = enable ? VERA_DC_VIDEO_OUTPUT_MODE_VGA : VERA_DC_VIDEO_OUTPUT_MODE_DIS;
 }
 
-void Vera::screen_boundaries_set(VERA_IN Vera_screen_boundaries_t *boundaries) {
+void Vera::screen_boundaries_set(IN Vera_screen_boundaries_t *boundaries) {
   assert(boundaries);
   assert (boundaries->hstart < boundaries->hstop);
   assert (boundaries->vstart < boundaries->vstop);

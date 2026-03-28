@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+// export stdin and stdout stream objects to allow stdio redirection.
 extern FILE stdin_stream;
 extern FILE stdout_stream;
 

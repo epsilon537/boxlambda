@@ -1,9 +1,9 @@
-// FATFS Media interface dispatching layer
+// BoxLambda FATFS Media interface dispatching layer
 
 #include "ff.h"    // From FATFS
 #include "diskio.h"  // From FATFS as well
-#include "diskio_sd.h"
-#include "diskio_ram.h"
+#include "diskio_sd.h" // SD Media Interface
+#include "diskio_ram.h" // RAM Media Interface
 
 typedef struct {
   DSTATUS (*status)(void);
@@ -17,6 +17,9 @@ static const disk_driver_t drivers[] = {
   { disk_sd_status, disk_sd_initialize, disk_sd_read, disk_sd_write, disk_sd_ioctl },
   { disk_ram_status, disk_ram_initialize_fatfs, disk_ram_read, disk_ram_write, disk_ram_ioctl },
 };
+
+// pdrv==0 -> SD
+// pdfrv==1 -> RAM
 
 DSTATUS  disk_status( BYTE pdrv)
 {
@@ -55,20 +58,13 @@ DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff) {
     return drivers[pdrv].ioctl(cmd, buff);
 }
 
+// Shared by both media interfaces.
 DWORD  get_fattime(void) {
   DWORD  result;
   unsigned  thedate, clocktime;
 
-#ifdef  _BOARD_HAS_VERSION
-  thedate   = *_version;
-#else
   thedate = 0x20191001;
-#endif
-#ifdef  _BOARD_HAS_BUILDTIME
-  clocktime = *_buildtime;
-#else
   clocktime = 0x0; // Midnight
-#endif
 
 #ifdef  _BOARD_HAS_RTC
   clocktime = _rtc->r_clock;

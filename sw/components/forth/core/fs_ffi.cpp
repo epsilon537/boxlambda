@@ -4,24 +4,29 @@
 #include <stddef.h>
 #include <assert.h>
 
-// FAT FS datastructures
+// FAT FS datastructure accessors:
 
+// /FIL
 void slashFIL() {
   forth_pushda(sizeof(FIL));
 }
 
+// /FATFS
 void slashFATFS() {
   forth_pushda(sizeof(FATFS));
 }
 
+// /DIR
 void slashDIR() {
   forth_pushda(sizeof(DIR));
 }
 
+// /FILINFO
 void slashFILINFO() {
   forth_pushda(sizeof(FILINFO));
 }
 
+// FILINFO struct element offset accessors: fsizeplus, fdateplus, ftimeplus, fattribplus, fnameplus
 #define FILINFOPLUS(field) void field##plus() { forth_pushda(offsetof(FILINFO, field)); }
 
 FILINFOPLUS(fsize)
@@ -30,6 +35,7 @@ FILINFOPLUS(ftime)
 FILINFOPLUS(fattrib)
 FILINFOPLUS(fname)
 
+// FA_FLAGS accessors: fa_flag_READ, fa_flag_WRITE, ...
 #define FA_FLAG(name) void fa_flag_##name() { forth_pushda(name); }
 
 FA_FLAG(FA_READ)
@@ -40,6 +46,7 @@ FA_FLAG(FA_CREATE_ALWAYS)
 FA_FLAG(FA_OPEN_ALWAYS)
 FA_FLAG(FA_OPEN_APPEND)
 
+// AM_ATTR accessors: am_attr_AM_RDO, am_attr_AM_ARC, ...
 #define AM_ATTR(name) void am_attr_##name() { forth_pushda(name); }
 
 AM_ATTR(AM_RDO) //Read-only
@@ -48,6 +55,7 @@ AM_ATTR(AM_SYS) //System
 AM_ATTR(AM_HID) //Hidden
 AM_ATTR(AM_DIR) //Directory
 
+// FR_CODE accessors: fr_code_FR_OK, fr_code_FR_DISK_ERR, ...
 #define FR_CODE(name) void fr_code_##name() { forth_pushda(name); }
 
 FR_CODE(FR_OK)    /* (0) Succeeded */
@@ -71,9 +79,12 @@ FR_CODE(FR_NOT_ENOUGH_CORE)  /* (17) LFN working buffer could not be allocated *
 FR_CODE(FR_TOO_MANY_OPEN_FILES) /* (18) Number of open files > FF_FS_LOCK */
 FR_CODE(FR_INVALID_PARAMETER) /* (19) Given parameter is invalid */
 
+// Pointer and size of vol[] array.
 Fs_Volume_t *vols_ = 0;
 unsigned num_vols_ = 0;
 
+// Look up in the vols_ array the volume with given name, return pointer to its FATFS object.
+// Return null point if name is not found.
 FATFS *findVolByName(const TCHAR *name) {
   assert(name);
   assert(vols_);
@@ -88,7 +99,10 @@ FATFS *findVolByName(const TCHAR *name) {
   return 0;
 }
 
-// File Access
+// File Access:
+// 1. Pop input arguments of the stack
+// 2. Invoked FATFS function
+// 3. Push output arguments on the stack
 
 void fs_f_open() {
   BYTE mode = (BYTE)forth_popda();
@@ -341,7 +355,10 @@ void fs_f_chdrive() {
   const TCHAR* path = (const TCHAR *)forth_popda();
   FRESULT res;
 
-  //Match the volume name before changing drive.
+  // Only change the drive if the given name
+  // is known, otherwise return an error.
+  // This works around quirky FATFS behavior returning
+  // default volume if volume name is not found.
   FATFS *fs = findVolByName(path);
   if (fs)
     res = f_chdrive(path);
@@ -368,6 +385,10 @@ void fs_f_mount() {
   FATFS *fs = findVolByName(path);
   FRESULT res;
 
+  // Only mount the drive if the given name
+  // is known, otherwise return an error.
+  // This works around quirky FATFS behavior mounting
+  // default volume if volume name is not found.
   if (!fs) {
     res = FR_NO_PATH;
   }
@@ -384,7 +405,6 @@ void fs_f_umount() {
 
   //FATFS quirk: unmounting an unknown path unmounts the default drive,
   //so let's match the volume name before unmounting.
-  //
   FATFS *fs = findVolByName(path);
   if (fs)
     res = f_unmount(path);
@@ -407,7 +427,7 @@ void fs_f_mkfs() {
 
 // Get total and free bytes for given drive number.
 // Free and total values are only returned if res is 0.
-// ( drvnumstr -- res [ free tot ])
+// ( drvnumstr -- [ tot free ] res )
 void fs_f_getfree() {
   const TCHAR* path = (const TCHAR *)forth_popda();
   DWORD fre_clust=0;
@@ -416,7 +436,6 @@ void fs_f_getfree() {
 
   //FATFS quirk: getfree on an unknown path getfrees the default drive,
   //so let's match the volume name before getfreeing.
-  //
   FATFS *fs = findVolByName(path);
   if (fs)
     res = f_getfree(path, &fre_clust, &fs);
@@ -439,6 +458,7 @@ void fs_ffi_init(Fs_Volume_t vols[], unsigned num_vols) {
   vols_ = vols;
   num_vols_ = num_vols;
 
+  // Register all of the above with Forth.
   forth_register_cfun(slashFIL, "/FIL");
   forth_register_cfun(slashFATFS, "/FATFS");
   forth_register_cfun(slashDIR, "/DIR");

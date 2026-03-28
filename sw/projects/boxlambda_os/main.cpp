@@ -1,3 +1,6 @@
+//
+// This is the BoxLambda kernel (BoxKern) top-level/main module.
+//
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -18,8 +21,6 @@
 #include "forth_core_test.h"
 #endif /*FORTH_CORE_TEST*/
 
-#define GPIO_SIM_INDICATOR 0xf0 //If GPIO inputs 7:4 have this value, this is a simulation.
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -33,7 +34,7 @@ void	_exit (int status) {
 	while (1);
 }
 
-//The RAM FS image location.
+//The RAM disk image location variables provide by linker.
 extern char __fs_image_start[];
 extern char __fs_image_size[];
 
@@ -50,7 +51,7 @@ const char *ram_vol_name = "ram:";
 }
 #endif
 
-// Attempts to mount volumes and checks is boot path exists.
+// Attempts to mount given volume and checks if boot path (/forth/) exists.
 // Returns true if boot path is found.
 bool mount_vol(Fs_Volume_t& vol) {
   bool boot_path_found = false;
@@ -80,7 +81,9 @@ bool mount_vol(Fs_Volume_t& vol) {
   return boot_path_found;
 }
 
-// Attempts to mount SD and/or RAM disk and detect boot dir. Prompts user and retries if needed. Returns boot volume. Operates on volumes array.
+// Attempts to mount sd0: and/or ram: volumes and detect boot dir (/forth/).
+// If both volumes have a boot directory, ram: takes precedence.
+// Prompts user and retries if needed. Returns boot volume. Operates on volumes[] array.
 // Returns boot volume name.
 const char *mount_vols() {
   printf("Mounting file system...\n");
@@ -97,7 +100,7 @@ const char *mount_vols() {
     if (mount_vol(volumes[SD_VOL]))
       boot_vol=volumes[SD_VOL].name;
     if (mount_vol(volumes[RAM_VOL]))
-      boot_vol=volumes[RAM_VOL].name; //Overrules sd0 as boot volume.
+      boot_vol=volumes[RAM_VOL].name; //ram: overrules sd0 as boot volume.
 
     if (boot_vol) {
       FRESULT res = f_chdrive(boot_vol);
@@ -131,11 +134,18 @@ int main(void) {
 
   printf("Booting from volume %s.\n", boot_vol);
 
+  // Early.fs has to go first. It defines words used by the FFI modules below.
   forth_eval_file_or_die("forth/early.fs", /*verbose=*/ false);
 
+  // Up to this point stdio is handled by bootstrap/stdio_stream.[ch]
+  // We now switch it over to Forth.
   printf("Redirecting stdio to Forth...\n");
   stdio_redirect_ffi_init();
 
+  printf("Initializing Forth Filesystem FFI...\n");
+  fs_ffi_init(volumes, NUM_VOLS);
+
+  // The order is important. They build up a stack, with shell.fs on top.
   forth_eval_file_or_die("forth/except.fs", /*verbose=*/ false);
   forth_eval_file_or_die("forth/lambda.fs", /*verbose=*/ false);
   forth_eval_file_or_die("forth/struct.fs", /*verbose=*/ false);
@@ -148,19 +158,17 @@ int main(void) {
   forth_eval_file_or_die("forth/printf.fs", /*verbose=*/ false);
   forth_eval_file_or_die("forth/cstr.fs", /*verbose=*/ false);
 
-  printf("Initializing Forth Filesystem FFI...\n");
-
-  fs_ffi_init(volumes, NUM_VOLS);
-
   forth_eval_file_or_die("forth/fs.fs", /*verbose=*/ false);
   forth_eval_file_or_die("forth/fs_redirect.fs", /*verbose=*/ false);
   forth_eval_file_or_die("forth/shell.fs", /*verbose=*/ false);
 
+// Set when building boxkerntest.
 #ifdef FORTH_CORE_TEST
-  forth_core_test();
-  forth_eval("create FORTH_CORE_TEST");
+  forth_core_test(); // Execute the Forth <-> C FFI testsuite.
+  forth_eval("create FORTH_CORE_TEST"); // Used by an [ifdef] block in init.fs used to execute the Forth testsuite.
 #endif /*FORTH_CORE_TEST*/
 
+  // We now transfer control to init.fs. Control does not return unless the user invokes 'bye'.
   forth_eval("include forth/init.fs");
 
   die("\nForth REPL exited.\n");

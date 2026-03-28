@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+// Set up C stdio to Forth emit/key redirection.
 void stdio_redirect_ffi_init();
 
 #ifdef __cplusplus

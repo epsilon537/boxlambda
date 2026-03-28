@@ -15,5 +15,6 @@ target_compile_options(usb_hid
 target_include_directories(usb_hid
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}
+        ${PROJECT_SOURCE_DIR}/sw/components/common/
         ${PROJECT_SOURCE_DIR}/registers/generated/
 )

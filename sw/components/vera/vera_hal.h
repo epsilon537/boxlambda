@@ -3,12 +3,8 @@
 
 #include "memmap.h"
 #include "vera_regs.h"
+#include "inout.h"
 #include <assert.h>
-
-//Indication of an output parameter
-#define VERA_OUT
-//Indication of an input parameters
-#define VERA_IN
 
 #define VERA_IRQ_VSYNC VERA_IEN_VSYNC_MASK
 #define VERA_IRQ_LINE VERA_IEN_LINE_MASK
@@ -320,7 +316,7 @@ public:
   // @output param tileset: reference to the id of the tileset with which this sprite is associate.
   // @output param tile_idx: reference to the index of the tile in the tileset containing the sprite's pixel
   // data.
-  void tile_get(VERA_OUT uint32_t& tileset_id, VERA_OUT uint32_t& tile_idx);
+  void tile_get(OUT uint32_t& tileset_id, OUT uint32_t& tile_idx);
 
   // @param x: x-position of the sprite. Range: 0..1023.
   void x_set(uint16_t x);
@@ -502,7 +498,7 @@ public:
   // @output param tileset_id: id of tileset holding the bitmap.
   // @output param tile_idx: idx of the bitmap within the tileset.
   // @return true if in bitmap mode, false if not.
-  bool bitmap_get(VERA_OUT uint32_t &tileset_id, VERA_OUT uint32_t &tile_idx);
+  bool bitmap_get(OUT uint32_t &tileset_id, OUT uint32_t &tile_idx);
 
   // Set Layer bitmap palette offset. Assumes Bitmap mode.
   // The color index of bitmap pixels is modified by the palette offset using the following logic:
@@ -658,11 +654,11 @@ public:
 
   // Set the boundaries of the active screen with the 640x480 space.
   // @param boundaries: pointer to screen boundaries structure.
-  static void screen_boundaries_set(VERA_IN Vera_screen_boundaries_t *boundaries);
+  static void screen_boundaries_set(IN Vera_screen_boundaries_t *boundaries);
 
   // Retrieve the boundaries of the active screen with the 640x480 space.
   // @output param boundaries: Pointer to screen boundaries structure.
-  static void screen_boundaries_get(VERA_OUT Vera_screen_boundaries_t *boundaries);
+  static void screen_boundaries_get(OUT Vera_screen_boundaries_t *boundaries);
 
   //
   // Lower-Level VRAM access functions:
