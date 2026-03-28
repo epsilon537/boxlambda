@@ -1,7 +1,13 @@
-compileto> variable saved-compile-to
+\ BoxLambda Forth
+\
+\ Temporary Memory Allocator
+\
 
+\ Save compile-to state and switch to IMEM.
+compileto> variable saved-compile-to
 compiletoimem
 
+\ The temporary memory pool
 create temp-space 4096 allot
 temp-space variable temp-here
 
@@ -24,6 +30,9 @@ temp-space variable temp-here
 : >temp-mark ( mark -- )
   temp-here ! ;
 
+\ Execute xt passing in a buffer of u bytes at TOS.
+\ Release buffer when xt has completed.
+\ E.g. 256 [: <do-stuff-with-buf> ;] with-temp-alloc.
 : with-temp-allot ( u xt -- )
   temp-mark> >r ( u xt R: mark )
   swap
@@ -35,5 +44,6 @@ temp-space variable temp-here
 : temp-allot-reset ( -- )
   temp-space temp-here ! ;
 
+\ Restore compile-to state.
 saved-compile-to @ >compileto
 

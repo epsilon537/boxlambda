@@ -1,5 +1,6 @@
+\ BoxLambda Forth
 \
-\ Structures
+\ Structures - Based on ZeptoForth's structures, without the syntax checking.
 \
 
 \ Begin declaring a structure
@@ -39,5 +40,4 @@
   : aligned
     dup literal, postpone + postpone ; 2 cells +
 ;
-
 

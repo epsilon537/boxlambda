@@ -1,14 +1,18 @@
+\ BoxLambda Forth
+\
 \ >number
+\
+
 : >digit ( char -- d true | 0 ) \ "to-digit"
   \ convert char to a digit according to base followed by true, or false if out of range
   dup [ char 9 1+ literal, ] <
-  if [char] 0 - \ convert '0'-'9'
+  if '0' - \ convert '0'-'9'
     dup 0< if drop 0 exit then \ reject < '0'
   else
-    dup [char] a < if bl + then \ convert to lowercase, exploiting ascii
-    [char] a -
-    dup 0< if drop 0 exit then \ reject non-letter < 'a'
-    #10 + \ convert 'a'-'z'
+    dup 'a' < if #32 + then \ convert to lowercase, exploiting ascii
+    'a' -
+    dup 0< if drop 0 exit then \ reject < 'a'
+    #10 +
   then
   dup base @ < dup 0= if nip then ( d true | false ) \ reject beyond base
 ;
