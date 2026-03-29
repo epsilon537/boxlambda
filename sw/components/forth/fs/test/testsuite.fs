@@ -135,1024 +135,6 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
 CR
 
 \ ------------------------------------------------------------------------
-TESTING EXCEPTIONS
-
-: x-test-exception-1 ." Test exception 1." cr ;
-: x-test-exception-2 ." Test exception 2." cr ;
-
-: throws-exception-2
-  true averts x-test-exception-1
-  true triggers x-test-exception-2
-
-  S" Exception-2 not thrown" ERROR
-;
-
-: throws-exception-1
-  false triggers x-test-exception-2
-  false averts x-test-exception-1
-
-  S" Exception-1 not thrown" ERROR
-;
-
-: no-throw
-  cr ." Not throwing exception" cr
-  \ Just return something to indicate we got here.
-  decimal #2785
-;
-
-: try-throw-exception-1
-  ['] throws-exception-1 try
-;
-
-: try-throw-exception-2
-  ['] throws-exception-2 try
-;
-
-: try-no-throw
-  ['] no-throw try
-;
-
-: throw-1-suppress-2
-  ['] throws-exception-1 try suppress x-test-exception-2
-;
-
-: throw-2-suppress-2
-  ['] throws-exception-2 try suppress x-test-exception-2
-;
-
-.s
-
-T{ try-throw-exception-1 -> ' x-test-exception-1 }T
-T{ try-throw-exception-2 -> ' x-test-exception-2 }T
-T{ try-throw-exception-2 -> ' x-test-exception-2 }T
-T{ try-no-throw -> #2785 0 }T
-T{ throw-1-suppress-2 -> ' x-test-exception-1 }T
-T{ throw-2-suppress-2 -> 0 }T
-
-T{ ' throws-exception-1 try -> ' x-test-exception-1 }T
-T{ ' throws-exception-2 try -> ' x-test-exception-2 }T
-T{ ' no-throw try -> #2785 0  }T
-T{ ' throws-exception-1 try suppress x-test-exception-2 -> ' x-test-exception-1 }T
-T{ ' throws-exception-2 try suppress x-test-exception-2 -> 0 }T
-
-\ ------------------------------------------------------------------------------
-TESTING LAMBDA
-
-: test-lambda [: + ;] ;
-
-T{ test-lambda 23 24 rot execute -> 47  }T
-T{ [: + ;] 23 24 rot execute -> 47  }T
-
-\ ------------------------------------------------------------------------
-TESTING HEAP
-8 256 heap-size constant test-heap-size
-T{ test-heap-size 8 256 * 2dup > -rot 2 * < -> <TRUE> <TRUE> }T ( Between requested size and twice requested size )
-create test-heap test-heap-size allot
-here constant test-heap-end
-8 256 test-heap init-heap
-
-test-heap-size 128 / 2+ constant max-allocations
-max-allocations array allocations[]
-0 1 nvariable num-allocations
-
-\ Compiling a function so we can use loops.
-\ ( blocksize -- )
-: test-heap-alloc
-  \ Allocate blocks until exhausted.
-  max-allocations 0 do
-    dup ( blocksize blocksize )
-    [: test-heap allocate ;] try ( blocksize addr exception-code )
-    0= if ( blocksize addr )
-      i allocations[] ! ( blocksize addr )
-    else ( blocksize )
-      drop
-      0 i allocations[] !
-      ." test-heap exhausted. OK." cr
-      leave
-    then
-    i 1+ num-allocations ! ( blocksize )
-  loop
-  drop
-;
-
-: test-heap-free-all
-  num-allocations @ 0 do
-    i allocations[] @ test-heap free
-  loop
-  0 num-allocations !
-;
-
-.( Allocate check )
-
-512 test-heap-alloc
-T{ num-allocations @ 0> -> <TRUE> }T
-T{ num-allocations @ max-allocations < -> <TRUE> }T
-
-.( Address range check )
-
-: test-heap-addr-check
-  num-allocations @ 0 do
-    \ within heap address range
-    i allocations[] @ test-heap <= if
-      S" Allocation out of range 1, idx: " i . ERROR
-      leave
-    then
-
-    i allocations[] @ test-heap-end >= if
-      S" Allocation out of range 2, idx: " i . ERROR
-      leave
-    then
-
-    \ At least 512 apart
-    i 0> if
-      i allocations[] @ i 1- allocations[] @ - 512 < if
-        S" Allocation spacing error, idx: " i . ERROR
-        leave
-      then
-    then
-  loop
-;
-
-test-heap-addr-check
-
-.( Free-realloc check )
-
-num-allocations @ 1 nvariable saved-num-allocations
-
-test-heap-free-all
-\ Reallocate all again, using small blocks
-128 test-heap-alloc
-
-T{ num-allocations @ saved-num-allocations @ >= -> <TRUE> }T
-T{ num-allocations @ 128 * test-heap-size <= -> <TRUE> }T
-
-test-heap-free-all
-\ Reallocate all again, using again the 512 sized blocks.
-512 test-heap-alloc
-T{ num-allocations @ saved-num-allocations @ = -> <TRUE> }T
-
-.( Resize check )
-
-: test-heap-resize-alloc-0
-  0 allocations[] @ test-heap resize
-;
-
-\ Attempt to resize allocation 0 to 1K. This should fail.
-T{ 1024 ' test-heap-resize-alloc-0 try ' x-allocate-failed = nip -> <TRUE> }T
-
-\ Free allocation 1 then retry the resize...
-1 allocations[] @ test-heap free
-\ Now it should work, without changing the address.
-T{ 1024 ' test-heap-resize-alloc-0 try swap 0 allocations[] @ = -> 0 <TRUE> }T
-\ Free the resized block so we have a 1K space to allocate again.
-0 allocations[] @ test-heap free
-
-\ Allocate 2 small blocks
-256 test-heap allocate 0 allocations[] !
-256 test-heap allocate 1 allocations[] !
-\ Now resizing the first block to 300 should work, but with a new address.
-T{ 300 ' test-heap-resize-alloc-0 try swap 0 allocations[] @ <> -> 0 <TRUE> }T
-
-\ ------------------------------------------------------------------------
-TESTING pool
-
-16 array test-pool-allocations[]
-
-create test-pool pool-size allot
-8 test-pool init-pool
-
-create test-pool-memory 32 allot
-test-pool-memory 32 test-pool add-pool
-
-: test-pool-alloc-all
-  test-pool allocate-pool 0 test-pool-allocations[] !
-  test-pool allocate-pool 1 test-pool-allocations[] !
-  test-pool allocate-pool 2 test-pool-allocations[] !
-  test-pool allocate-pool 3 test-pool-allocations[] !
-;
-
-T{ test-pool pool-block-size -> 8 }T
-T{ test-pool pool-free-count -> 4 }T
-
-T{ ' test-pool-alloc-all try -> 0 }T
-T{ 0 test-pool-allocations[] @ test-pool-memory 0 + = -> <TRUE> }T
-T{ 1 test-pool-allocations[] @ test-pool-memory 8 + = -> <TRUE> }T
-T{ 2 test-pool-allocations[] @ test-pool-memory 16 + = -> <TRUE> }T
-T{ 3 test-pool-allocations[] @ test-pool-memory 24 + = -> <TRUE> }T
-
-T{ test-pool pool-free-count -> 0 }T
-T{ test-pool pool-total-count -> 4 }T
-
-T{ test-pool ' allocate-pool try nip ' x-pool-allocate-failed = -> <TRUE> }T
-
-
-0 test-pool-allocations[] @ test-pool free-pool
-1 test-pool-allocations[] @ test-pool free-pool
-2 test-pool-allocations[] @ test-pool free-pool
-3 test-pool-allocations[] @ test-pool free-pool
-
-T{ test-pool pool-free-count -> 4 }T
-
-T{ ' test-pool-alloc-all try -> 0 }T
-
-create test-pool-memory-2 32 allot
-test-pool-memory 32 test-pool add-pool
-
-T{ test-pool pool-free-count -> 4 }T
-
-\ ------------------------------------------------------------------------
-TESTING temp allocator
-
-variable saved-mark
-temp-mark> saved-mark !
-
-256 [: saved-mark @ = ?assert ;] with-temp-allot
-temp-mark> saved-mark @ = ?assert
-
-temp-mark>
-256 temp-allot ( mark )
-dup temp-mark> swap - 256 = ?assert ( mark )
->temp-mark ( )
-temp-mark> saved-mark @ = ?assert
-
-3000 temp-allot
-[: 3000 temp-allot ;] try ' x-temp-allot-failed = ?assert
-
-temp-allot-reset
-temp-mark> saved-mark @ = ?assert
-
-\ ------------------------------------------------------------------------
-TESTING /STRING
-
-: s1 s" /string test" ;
-
-T{ s1  5 /STRING -> s1 SWAP 5 + SWAP 5 - }T
-T{ s1 10 /STRING -4 /STRING -> s1 6 /STRING }T
-T{ s1  0 /STRING -> s1 }T
-
-\ ------------------------------------------------------------------------
-TESTING >NUMBER
-
-hex
-
-CREATE GN-BUF 0 C,
-: GN-STRING GN-BUF 1 ;
-: GN-CONSUMED GN-BUF CHAR+ 0 ;
-: GN' [CHAR] ' WORD CHAR+ C@ GN-BUF C! GN-STRING ;
-T{ 0 0 GN' 0' >NUMBER ->         0 0 GN-CONSUMED }T
-T{ 0 0 GN' 1' >NUMBER ->         1 0 GN-CONSUMED }T
-T{ 1 0 GN' 1' >NUMBER -> BASE @ 1+ 0 GN-CONSUMED }T
-\ FOLLOWING SHOULD FAIL TO CONVERT
-T{ 0 0 GN' -' >NUMBER ->         0 0 GN-STRING   }T
-T{ 0 0 GN' +' >NUMBER ->         0 0 GN-STRING   }T
-T{ 0 0 GN' .' >NUMBER ->         0 0 GN-STRING   }T
-
-: >NUMBER-BASED
-   BASE @ >R BASE ! >NUMBER R> BASE ! ;
-
-T{ 0 0 GN' 2'       10 >NUMBER-BASED ->  2 0 GN-CONSUMED }T
-T{ 0 0 GN' 2'        2 >NUMBER-BASED ->  0 0 GN-STRING   }T
-T{ 0 0 GN' F'       10 >NUMBER-BASED ->  F 0 GN-CONSUMED }T
-T{ 0 0 GN' G'       10 >NUMBER-BASED ->  0 0 GN-STRING   }T
-\ T{ 0 0 GN' G' MAX-BASE >NUMBER-BASED -> 10 0 GN-CONSUMED }T
-\ T{ 0 0 GN' Z' MAX-BASE >NUMBER-BASED -> 23 0 GN-CONSUMED }T
-
-: GN1 ( UD BASE -- UD' LEN )
-   \ UD SHOULD EQUAL UD' AND LEN SHOULD BE ZERO.
-   BASE @ >R BASE !
-   <# #S #>
-   0 0 2SWAP >NUMBER SWAP DROP    \ RETURN LENGTH ONLY
-   R> BASE ! ;
-
-T{        0   0        2 GN1 ->        0   0 0 }T
-T{ MAX-UINT   0        2 GN1 -> MAX-UINT   0 0 }T
-T{ MAX-UINT DUP        2 GN1 -> MAX-UINT DUP 0 }T
-\ T{        0   0 MAX-BASE GN1 ->        0   0 0 }T
-\ T{ MAX-UINT   0 MAX-BASE GN1 -> MAX-UINT   0 0 }T
-\ T{ MAX-UINT DUP MAX-BASE GN1 -> MAX-UINT DUP 0 }T
-
-\ ------------------------------------------------------------------------
-TESTING INTERPRETED STRINGS (istr.fs)
-
-s" 123"
-T{ evaluate -> 123 }T
-s" 456"
-T{ evaluate -> 456 }T
-
-: istr-test s" 789" ;
-istr-test
-T{ evaluate -> 789 }T
-
-T{ istr-dump -> }T
-
-T{ str-pool-mem istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
-1 istr-free
-T{ str-pool-mem istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
-T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
-2 istr-free
-T{ str-pool-mem istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
-T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
-
-\ ------------------------------------------------------------------------
-TESTING SPRINTF
-
-hex
-
-0 INVERT 1 RSHIFT           CONSTANT MID-UINT
-0 INVERT 1 RSHIFT INVERT    CONSTANT MID-UINT+1
-
-1024 buffer: pad
-
-\ empty string
-T{ s" " pad sprintf s" " compare -> <TRUE> }T
-
-\ hai
-T{ s" hai" pad sprintf s" hai" compare -> <TRUE> }T
-
-\ test %c
-T{ 'r' 'a' 'h' 'c' s" %c%c%c%c" pad sprintf s" char" compare -> <TRUE> }T
-
-\ test %%
-T{ s" %%" pad sprintf s" %" compare -> <TRUE> }T
-
-max-uint ffffffffffffffff = constant 64-bit
-
-\ test %n
-T{ 0 s" %n" pad sprintf s" 0" compare -> <TRUE> }T
-T{ max-uint s" %n" pad sprintf s" -1" compare -> <TRUE> }T
-\ test %u
-T{ 0 s" %u" pad sprintf s" 0" compare -> <TRUE> }T
-\ test %dn
-T{ 0 0 s" %dn" pad sprintf s" 0" compare -> <TRUE> }T
-T{ max-uint max-uint s" %dn" pad sprintf s" -1" compare -> <TRUE> }T
-\ test %du
-T{ 0 0 s" %du" pad sprintf s" 0" compare -> <TRUE> }T
-\ test %s
-T{ s" bar" s" foo" s" %s%s" pad sprintf s" foobar" compare -> <TRUE> }T
-
-\ right justify
-T{ 0 s" %2n" pad sprintf s"  0" compare -> <TRUE> }T
-T{ 'a' s" %2c" pad sprintf s"  a" compare -> <TRUE> }T
-T{ s" %2%" pad sprintf s"  %" compare -> <TRUE> }T
-T{ s" bar" s" %6s" pad sprintf s"    bar" compare -> <TRUE> }T
-T{ s" foobar" s" %3s" pad sprintf s" foobar" compare -> <TRUE> }T
-T{ 1 s" %02n" pad sprintf s" 01" compare -> <TRUE> }T
-T{ 'a' s" %02c" pad sprintf s" 0a" compare -> <TRUE> }T
-T{ s" %02%" pad sprintf s" 0%" compare -> <TRUE> }T
-T{ s" bar" s" %06s" pad sprintf s" 000bar" compare -> <TRUE> }T
-T{ s" foobar" s" %03s" pad sprintf s" foobar" compare -> <TRUE> }T
-
-\ left justify
-T{ 0 s" %-2n" pad sprintf s" 0 " compare -> <TRUE> }T
-T{ 'a' s" %-2c" pad sprintf s" a " compare -> <TRUE> }T
-T{ s" %-2%" pad sprintf s" % " compare -> <TRUE> }T
-T{ s" bar" s" %-6s" pad sprintf s" bar   " compare -> <TRUE> }T
-T{ s" foobar" s" %-3s" pad sprintf s" foobar" compare -> <TRUE> }T
-T{ 1 s" %-02n" pad sprintf s" 1 " compare -> <TRUE> }T
-T{ 'a' s" %-02c" pad sprintf s" a " compare -> <TRUE> }T
-T{ s" %-02%" pad sprintf s" % " compare -> <TRUE> }T
-T{ s" bar" s" %-06s" pad sprintf s" bar   " compare -> <TRUE> }T
-T{ s" foobar" s" %-03s" pad sprintf s" foobar" compare -> <TRUE> }T
-
-\ ------------------------------------------------------------------------
-TESTING C STRINGS
-
-#256 buffer: test-buf
-test-buf s" Hello" cstr ( addr )
-test-buf s0len ( len )
-T{ 5 = -> <TRUE> }T
-
-T{ test-buf s0len -> 5 }T
-
-test-buf s0>s ( addr len )
-T{ s" Hello" compare -> <true> }T
-
-: cstr-test
-  s0" Hello"
-;
-
-T{ cstr-test s0>s s" Hello" compare -> <true> }T
-
-#256 buffer: test-buf2
-test-buf2 cstr" Hello"
-test-buf2 s0len ( len )
-T{ 5 = -> <TRUE> }T
-
-test-buf2 s0>s ( addr len )
-T{ s" Hello" compare -> <true> }T
-
-\ Negative testing
-
-[: test-buf2 0 256 cstr ;] try ' x-string-too-long = ?assert
-
-\ ------------------------------------------------------------------------
-TESTING FILESYSTEM
-
-#256 buffer: fs-buf
-
-\ Basics:
-T{ AM_RDO -> $1 }T
-T{ AM_HID -> $2 }T
-T{ AM_SYS -> $4 }T
-T{ AM_DIR -> $10 }T
-T{ AM_ARC -> $20 }T
-
-\ Check AM_* values
-
-\ Check FA mode values
-T{ FA_READ -> $1 }T
-T{ FA_WRITE -> $2 }T
-T{ FA_OPEN_EXISTING -> $0 }T
-T{ FA_CREATE_NEW -> $4 }T
-T{ FA_CREATE_ALWAYS -> $8 }T
-T{ FA_OPEN_ALWAYS -> $10 }T
-T{ FA_OPEN_APPEND -> $30 }T
-
-\ Check FR IOR values
-T{ FR_OK -> $0 }T
-T{ FR_DISK_ERR -> $1 }T
-T{ FR_INT_ERR -> $2 }T
-T{ FR_NOT_READY -> $3 }T
-T{ FR_NO_FILE -> $4 }T
-T{ FR_NO_PATH -> $5 }T
-T{ FR_INVALID_NAME -> $6 }T
-T{ FR_DENIED -> $7 }T
-T{ FR_EXIST -> $8 }T
-T{ FR_INVALID_OBJECT -> $9 }T
-T{ FR_WRITE_PROTECTED -> $A }T
-T{ FR_INVALID_DRIVE -> $B }T
-T{ FR_NOT_ENABLED -> $C }T
-T{ FR_NO_FILESYSTEM -> $D }T
-T{ FR_MKFS_ABORTED -> $E }T
-T{ FR_TIMEOUT -> $F }T
-T{ FR_LOCKED -> $10 }T
-T{ FR_NOT_ENOUGH_CORE -> $11 }T
-T{ FR_TOO_MANY_OPEN_FILES -> $12 }T
-T{ FR_INVALID_PARAMETER -> $13 }T
-
-\ Check ior>exception mapping
-T{ FR_DISK_ERR ior>exception -> ' x-fr-disk-err }T
-T{ FR_INT_ERR ior>exception -> ' x-fr-int-err }T
-T{ FR_NOT_READY ior>exception -> ' x-fr-not-ready }T
-T{ FR_NO_FILE ior>exception -> ' x-fr-no-file }T
-T{ FR_NO_PATH ior>exception -> ' x-fr-no-path }T
-T{ FR_INVALID_NAME ior>exception -> ' x-fr-invalid-name }T
-T{ FR_DENIED ior>exception -> ' x-fr-denied }T
-T{ FR_EXIST ior>exception -> ' x-fr-exist }T
-T{ FR_INVALID_OBJECT ior>exception -> ' x-fr-invalid-object }T
-T{ FR_WRITE_PROTECTED ior>exception -> ' x-fr-write-protected }T
-T{ FR_INVALID_DRIVE ior>exception -> ' x-fr-invalid-drive }T
-T{ FR_NOT_ENABLED ior>exception -> ' x-fr-not-enabled }T
-T{ FR_NO_FILESYSTEM ior>exception -> ' x-fr-no-filesystem }T
-T{ FR_MKFS_ABORTED ior>exception -> ' x-fr-mkfs-aborted }T
-T{ FR_TIMEOUT ior>exception -> ' x-fr-timeout }T
-T{ FR_LOCKED ior>exception -> ' x-fr-locked }T
-T{ FR_NOT_ENOUGH_CORE ior>exception -> ' x-fr-not-enough-core }T
-T{ FR_TOO_MANY_OPEN_FILES ior>exception -> ' x-fr-too-many-open-files }T
-T{ FR_INVALID_PARAMETER ior>exception -> ' x-fr-invalid-parameter }T
-
-\ Check f_open, f_close, f_read, f_write
-[: s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;] try ?except_error ( fil )
-dup [: s" Hello World!" f_write ;] try ?except_error ( fil nbw )
-\ 12 bytes written
-#12 = ?assert ( fil )
-dup [: f_sync ;] try ?except_error ( fil )
-[: f_close ;] try ?except_error ( )
-
-[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
-dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
-dup #12 = ?assert ( fil numbytes )
-fs-buf swap ( fil fs-buf len )
-s" Hello World!" compare ?assert
-[: f_close ;] try ?except_error ( )
-
-\ Check f_lseek, f_tell, f_eof and f_size
-[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
-dup [: f_eof ;] try ?except_error 0= ?assert ( fil )
-dup [: f_size ;] try ?except_error #12 = ?assert ( fil )
-dup [: 6 f_lseek ;] try ?except_error ( fil )
-dup [: f_eof ;] try ?except_error 0= ?assert ( fil )
-dup [: f_tell ;] try ?except_error ( fil pos )
-6 = ?assert ( fil )
-dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
-dup 6 = ?assert ( fil numbytes )
-fs-buf swap ( fil fs-buf len )
-s" World!" compare ?assert
-dup [: f_eof ;] try ?except_error ?assert ( fil )
-[: f_close ;] try ?except_error ( )
-
-\ Check truncate
-[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ FA_WRITE or or f_open ;] try ?except_error ( fil )
-dup [: 5 f_lseek ;] try ?except_error ( fil )
-dup [: f_truncate ;] try ?except_error ( fil )
-dup [: 0 f_lseek ;] try ?except_error ( fil )
-dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
-dup 5 = ?assert ( fil numbytes )
-fs-buf swap ( fil fs-buf len )
-s" Hello" compare ?assert
-[: f_close ;] try ?except_error ( )
-
-\ Check f_putc
-[: s" fs_test.txt" FA_OPEN_EXISTING FA_WRITE or f_open ;] try ?except_error ( fil )
-dup [: f_truncate ;] try ?except_error ( fil )
-dup [: $42 f_putc ;] try ?except_error ( fil )
-[: f_close ;] try ?except_error ( )
-[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
-dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
-1 = ?assert ( fil )
-fs-buf c@ $42 = ?assert ( fil )
-[: f_close ;] try ?except_error ( )
-
-\ Check f_gets
-[: s" fs_test.txt" FA_OPEN_EXISTING FA_WRITE or f_open ;] try ?except_error ( fil )
-dup [: f_truncate ;] try ?except_error ( fil )
-dup [: esc-s" \'Hello World\',\nForth shouted happily." f_write ;] try ?except_error ( fil nbw )
-\ 37 bytes written
-#37 = ?assert ( fil )
-[: f_close ;] try ?except_error ( )
-[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
-dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-dup #15 = ?assert ( fil addr len )
-esc-s" \'Hello World\',\n" compare ?assert ( fil )
-dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-2drop
-dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-dup 0= ?assert ( fil addr len )
-2drop
-[: f_close ;] try ?except_error ( )
-
-\ Negative testing:
-
-\ Check too many open files
-\ and check f_open exception
-
-MAX_NUM_OPEN_FILES 1+ array fils[]
-
-0 fils[] MAX_NUM_OPEN_FILES 1+ cells 0 fill
-
-[:
-  MAX_NUM_OPEN_FILES 1+ 0 do
-    [: i s" fs_tst%n.txt" pad sprintf f_unlink ;] try drop
-  loop
-;] execute
-
-[:
-  MAX_NUM_OPEN_FILES 1+ 0 do
-    i s" fs_tst%n.txt" pad sprintf FA_CREATE_ALWAYS FA_WRITE or f_open
-    i fils[] !
-  loop
-;] try ' x-pool-allocate-failed = ?assert
-
-[:
-  MAX_NUM_OPEN_FILES 0 do
-    i fils[] @ ?dup if
-      f_close
-    then
-  loop
-;] try ?except_error
-
-\ Check f_close exception
-[: 1000 f_close ;] try 0> ?assert
-
-\ Check f_read exception
-[: 1000 0 1 f_read ;] try 0> ?assert
-
-\ Check f_write exception
-[: 1000 0 1 f_write ;] try 0> ?assert
-
-\ Check f_lseek exception
-[: 1000 0 f_lseek ;] try 0> ?assert
-
-\ Check truncate exception
-[: 1000 f_truncate ;] try 0> ?assert
-
-\ Check f_sync exception.
-[: 1000 f_sync ;] try 0> ?assert
-
-\ Check f_gets exception.
-[: 1000 0 1 f_gets ;] try 0> ?assert
-
-\ Check f_putc exception.
-[: 1000 0 f_putc ;] try 0> ?assert
-
-\ Make directory, cd into it, make a files and a subdir, list the dir, check the entries' attributes,
-\ close the directory, remove the files, remove the directory.
-
-\ Preparation
-[: s" test_dir" f_chdir ;] try drop \ cd into test_dir if it exists
-[: s" test_subdir" f_unlink ;] try drop \ remove test_subdir if it already exists.
-[: s" fs_test.txt" f_unlink ;] try drop \ remove fs_test.txt if it already exists.
-[: s" fs_test_renamed.txt" 0 AM_RDO f_chmod ;] try drop
-[: s" fs_test_renamed.txt" f_unlink ;] try drop \ remove fs_test_renamed.txt if it already exists.
-[:
-  MAX_NUM_OPEN_DIRS 1+ 0 do
-    [: i s" dir_tst%n" pad sprintf f_unlink ;] try drop ( )
-  loop
-;] execute
-[: s" .." f_chdir ;] try drop
-[: s" test_dir" f_unlink ;] try drop \ remove test_dir if it already exists.
-
-[: s" test_dir" f_mkdir ;] try ?except_error
-[: s" test_dir" f_stat ;] try ?except_error
-filinfo.fname s" test_dir" compare ?assert
-filinfo.fattrib AM_DIR and 0> ?assert
-[: s" test_dir" f_chdir ;] try ?except_error
-[: f_getcwd ;] try ?except_error s" ram:/test_dir" compare ?assert
-
-[: s" test_subdir" f_mkdir ;] try ?except_error \ create a subdir
-
-[: s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;] try ?except_error ( fil ) \ create a file
-dup [: s" Hello World!" f_write ;] try ?except_error ( fil nbw )
-\ 12 bytes written
-#12 = ?assert ( fil )
-dup [: f_sync ;] try ?except_error ( fil )
-[: f_close ;] try ?except_error ( )
-
-[: s" .." f_chdir ;] try ?except_error
-[: s" test_dir" f_opendir ;] try ?except_error ( dir )
-
-dup [: f_readdir ;] try ?except_error
-filinfo.fname s" test_subdir" compare ?assert
-filinfo.fattrib AM_DIR and 0> ?assert
-
-dup [: f_readdir ;] try ?except_error
-filinfo.fname s" fs_test.txt" compare ?assert
-filinfo.fsize #12 = ?assert
-
-dup [: f_readdir ;] try ?except_error
-filinfo.fname s" " compare ?assert
-
-[: f_closedir ;] try ?except_error
-
-\ cd into the test_dir and rename the file
-[: s" test_dir" f_chdir ;] try ?except_error
-[: s" fs_test.txt" s" fs_test_renamed.txt" f_rename ;] try ?except_error
-[: s" fs_test_renamed.txt" f_stat ;] try ?except_error
-
-\ do an ls *.txt on the current dir
-[: s" ." s" *.txt" f_findfirst ;] try ?except_error
-filinfo.fname s" fs_test_renamed.txt" compare ?assert
-dup [: f_findnext ;] try ?except_error
-filinfo.fname s" " compare ?assert
-[: f_closedir ;] try ?except_error
-
-\ Change the file's timestamp and make it read-only
-#11 #02 #2033 filinfo.setfdate
-#10 #20 #30 filinfo.setftime
-[: s" fs_test_renamed.txt" f_utime ;] try ?except_error
-[: s" fs_test_renamed.txt" AM_RDO AM_RDO f_chmod ;] try ?except_error
-[: s" fs_test_renamed.txt" f_stat ;] try ?except_error
-filinfo.fattrib AM_RDO and 0> ?assert
-T{ filinfo.getfdate -> #11 #02 #2033 }T
-T{ filinfo.getftime -> #10 #20 #30 }T
-
-\ Total should be larger than free
-[: s" ram:" f_getfree ;] try ?except_error > ?assert
-
-\ dirname and basename
-s" 123/abc/def" dirname s" 123/abc/" compare ?assert
-s" 123/abc/def" basename s" def" compare ?assert
-s" abc" dirname s" ./" compare ?assert
-s" abc" basename s" abc" compare ?assert
-s" " dirname s" ./" compare ?assert
-s" " basename s" " compare ?assert
-s" /" dirname s" /" compare ?assert
-s" /" basename s" " compare ?assert
-s" .." dirname s" ../" compare ?assert
-s" .." basename s" " compare ?assert
-s" ." dirname s" ./" compare ?assert
-s" ." basename s" " compare ?assert
-
-256 buffer: pathbuf
-s" ./" s" abc" pathbuf pathname s" ./abc" compare ?assert
-s" /" s" abc" pathbuf pathname s" /abc" compare ?assert
-s" abc/" s" def" pathbuf pathname s" abc/def" compare ?assert
-s" abc" s" def" pathbuf pathname s" abc/def" compare ?assert
-
-\ Negative testing
-
-\ Check too many open dirs
-
-MAX_NUM_OPEN_DIRS 1+ array dirs[]
-
-[:
-  MAX_NUM_OPEN_DIRS 1+ 0 do
-    i s" dir_tst%n" pad sprintf ( addr len )
-    2dup f_mkdir
-    f_opendir ( dir )
-    i dirs[] !
-  loop
-;] try ' x-pool-allocate-failed = ?assert
-
-[:
-  MAX_NUM_OPEN_DIRS 0 do
-    i dirs[] @ f_closedir
-  loop
-;] try ?except_error
-
-[: s" non-existing-dir" f_opendir ;] try 0> ?assert
-[: 1000 f_closedir ;] try 0> ?assert
-[: 1000 f_readdir ;] try 0> ?assert
-[: s" non-existing-dir" s" *.*" f_findfirst ;] try 0> ?assert
-[: 1000 f_findnext ;] try 0> ?assert
-[: s" non-existing-dir" f_stat ;] try 0> ?assert
-[: s" non-existing-dir" f_unlink ;] try 0> ?assert
-[: s" non-existing-dir" s" doesntmatter" f_rename ;] try 0> ?assert
-[: s" non-existing-dir" 0 0 f_chmod ;] try 0> ?assert
-[: s" non-existing-dir" f_utime ;] try 0> ?assert
-
-[: s" .." f_chdir ;] try ?except_error
-[: s" test_dir" f_mkdir ;] try 0> ?assert
-
-\ ------------------------------------------------------------------------
-TESTING FS REDIRECTION
-[: hook-emit @ hook-emit? @ ;] >null ?assert ' drop = ?assert
-hook-emit @ ' serial-emit = ?assert
-hook-emit? @ ' serial-emit? = ?assert
-
-[: ." fs-redirection test" cr ;] &>file redirout.txt
-
-[: s" redirout.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
-dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-dup #20 = ?assert ( fil addr len )
-esc-s" fs-redirection test\n" compare ?assert ( fil )
-dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-dup 0= ?assert ( fil addr len )
-2drop
-[: f_close ;] try ?except_error ( )
-
-[: ." appending..." cr ;] &>>file redirout.txt
-
-[: s" redirout.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
-dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-dup #20 = ?assert ( fil addr len )
-esc-s" fs-redirection test\n" compare ?assert ( fil )
-dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-dup #13 = ?assert ( fil addr len )
-esc-s" appending...\n" compare ?assert ( fil )
-[: f_close ;] try ?except_error ( )
-
-\ ------------------------------------------------------------------------
-TESTING SHELL
-
-\ ls, cd and pwd test
-[: rm ;] try tst_dir drop
-mkdir tst_dir
-[: ." ls tst_dir" cr ;] >file tst_dir/ls.log
-[: ls ;] >>file tst_dir/ls.log tst_dir
-[: ." cd tst_dir " cr ;] >>file tst_dir/ls.log
-cd tst_dir
-[: ." pwd" cr ;] >>file ls.log
-[: pwd ;] >>file ls.log
-[: ." Creating some files... " cr ;] >>file ls.log
-[: ." a file" ;] >file file0.tst
-cp file0.tst file1.tst
-cp file1.tst pile.tst
-[: ." ls ./*" cr ;] >>file ls.log
-[: ls ;] >>file ls.log ./*
-[: ." ls file*" cr ;] >>file ls.log
-[: ls ;] >>file ls.log file*
-[: ." cd .." cr ;] >>file ls.log
-cd ..
-[: ." pwd" cr ;] >>file tst_dir/ls.log
-[: pwd ;] >>file tst_dir/ls.log
-s" tst_dir/ls.log" s" test/ls.log" f_cmp ?assert
-
-\ chdrv test
-[: ." chdrv sd0:" cr ;] >file ram:/tst_dir/chdrv.log
-chdrv sd0:
-[: ." pwd" cr ;] >>file ram:/tst_dir/chdrv.log
-[: pwd ;] >>file ram:/tst_dir/chdrv.log
-[: ." chdrv ram:" cr ;] >>file ram:/tst_dir/chdrv.log
-chdrv ram:
-[: ." pwd" cr ;] >>file ram:/tst_dir/chdrv.log
-[: pwd ;] >>file ram:/tst_dir/chdrv.log
-s" tst_dir/chdrv.log" s" test/chdrv.log" f_cmp ?assert
-[: ." umount sd0:" cr ;] >file ram:/tst_dir/mount.log
-[: umount ;] >>file ram:/tst_dir/mount.log sd0:
-[: ." chdrv sd0:" cr ;] >>file ram:/tst_dir/mount.log
-[: chdrv ;] >>file ram:/tst_dir/mount.log sd0:
-[: ." pwd to trigger exception" cr ;] >>file ram:/tst_dir/mount.log
-[: pwd ;] try 0> ?assert
-[: ." mount sd0:" cr ;] >>file ram:/tst_dir/mount.log
-[: mount ;] >>file ram:/tst_dir/mount.log sd0:
-[: ." pwd success" cr ;] >>file ram:/tst_dir/mount.log
-[: pwd ;] >>file ram:/tst_dir/mount.log
-[: ." chdrv ram:" cr ;] >>file ram:/tst_dir/mount.log
-[: chdrv ;] >>file ram:/tst_dir/mount.log ram:
-[: pwd ;] >>file ram:/tst_dir/mount.log
-[: ." chdrv ram:" cr ;] >>file ram:/tst_dir/mount.log
-
-s" tst_dir/mount.log" s" test/mount.log" f_cmp ?assert
-
-\ df test
-: dfcheck
-  [: s" ram:/tst_dir/df.log" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
-  dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-  2drop ( fil )
-  dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
-  2dup type ( fil addr len )
-  source 2>r ( fil addr len )
-  setsource ( fil )
-  >in dup @ >r 0 swap ! ( fil )
-  token s" Free:" compare ?assert
-  token number 1 = ?assert drop
-  token s" KB" compare ?assert
-  token s" Total:" compare ?assert
-  token number 1 = ?assert drop
-  r> >in ! ( fil )
-  2r> setsource ( fil )
-  f_close ( )
-;
-[: df ;] >file ram:/tst_dir/df.log ram:
-dfcheck
-
-\ rm and mkdir test
-cd tst_dir
-[: ." mkdir torm" cr ;] >file ram:/tst_dir/rm.log
-[: mkdir ;] >>file ram:/tst_dir/rm.log torm
-[: ." mkdir torm/torm0" cr ;] >>file ram:/tst_dir/rm.log
-[: mkdir ;] >>file ram:/tst_dir/rm.log torm/torm0
-[: ." mkdir torm/torm1" cr ;] >>file ram:/tst_dir/rm.log
-[: mkdir ;] >>file ram:/tst_dir/rm.log torm/torm1
-[: ." ls ./torm/*" cr ;] >>file ram:/tst_dir/rm.log
-[: ls ;] >>file ram:/tst_dir/rm.log ./torm/*
-[: ." rm torm/torm*" cr ;] >>file ram:/tst_dir/rm.log
-[: rm ;] >>file ram:/tst_dir/rm.log torm/torm*
-[: ." ls ./torm/*" cr ;] >>file ram:/tst_dir/rm.log
-[: ls ;] >>file ram:/tst_dir/rm.log ./torm/*
-[: ." ls ./torm" cr ;] >>file ram:/tst_dir/rm.log
-[: ls ;] >>file ram:/tst_dir/rm.log ./torm
-[: ." rm torm" cr ;] >>file ram:/tst_dir/rm.log
-[: rm ;] >>file ram:/tst_dir/rm.log torm
-[: ." ls ./torm" cr ;] >>file ram:/tst_dir/rm.log
-[: ls ;] >>file ram:/tst_dir/rm.log ./torm
-cd ..
-
-s" tst_dir/rm.log" s" test/rm.log" f_cmp ?assert
-
-\ cat test
-[: cat ;] >file ram:/tst_dir/cat.log ram:/tst_dir/rm.log
-
-s" tst_dir/cat.log" s" test/cat.log" f_cmp ?assert
-
-\ cp test
-cp ram:/test/cpdir/cpfile0 ram:/tst_dir/cpfile0.cp
-s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert
-rm ram:/tst_dir/cpfile0.cp
-cp ram:/test/cpdir/* ram:/tst_dir
-[: s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0" f_cmp ;] try ?except_error ?assert
-[: s" /test/cpdir/cpfile1" s" ram:/tst_dir/cpfile1" f_cmp ;] try ?except_error ?assert
-rm ram:/tst_dir/cpfile*
-
-\ mv test
-[: ." mv test/cpdir/* tst_dir" cr ;] >file ram:/tst_dir/mv.log
-[: mv ;] >>file ram:/tst_dir/mv.log test/cpdir/* tst_dir
-[: ." ls tst_dir/cpfile*" cr ;] >>file ram:/tst_dir/mv.log
-[: ls ;] >>file ram:/tst_dir/mv.log tst_dir/cpfile*
-[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/mv.log
-[: ls ;] >>file ram:/tst_dir/mv.log test/cpdir/*
-s" tst_dir/mv.log" s" test/mv.log" f_cmp ?assert
-mv tst_dir/cpfile* /test/cpdir
-
-\ chmod test
-[: ." chmod test/cpdir/*0 +rdo" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +rdo
-[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
-[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
-
-[: ." chmod test/cpdir/*0 -rdo" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -rdo
-[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
-[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
-
-[: ." chmod test/cpdir/*0 -arc" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -arc
-[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
-[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
-
-[: ." chmod test/cpdir/*0 +arc" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +arc
-[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
-[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
-
-[: ." chmod test/cpdir/*0 +sys" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +sys
-[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
-[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
-
-[: ." chmod test/cpdir/*0 -sys" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -sys
-[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
-[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
-
-[: ." chmod test/cpdir/*0 +hid" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +hid
-[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
-[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
-
-[: ." chmod test/cpdir/*0 -hid" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -hid
-[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
-[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
-
-[: ." chmod test/cpdir/*0 +bla" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +bla
-[: ." chmod test/cpdir/*0 bla" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 bla
-[: ." chmod test/cpdir/*0" cr ;] >>file ram:/tst_dir/chmod.log
-[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0
-
-s" tst_dir/chmod.log" s" test/chmod.log" f_cmp ?assert
-
-\ include test
-include /test/testinc.fs
-s" testinc" find drop 0> ?assert
-s" testincinc" find drop ?assert
-
-\ Negative testing
-\ Invalid volume names
-[: chdrv ;] try bogus: ?assert
-[: mount ;] try bogus: ?assert
-[: umount ;] try bogus: ?assert
-[: df ;] try bogus: ?assert
-[: ls ;] try bogus:/* ?assert
-[: include ;] try notexisting.fs 0> ?assert
-[: mv ;] try /test/mv.log 0> ?assert
-[: mv ;] try /tst_dir/doesntexist /tst_dir/alsnot 0> ?assert
-[: s" /tst_dir/alsnot" f_stat ;] try 0> ?assert
-[: mv ;] try /tst_dir/* /tst_dir/doesnotexist 0> ?assert
-[: s" /tst_dir/doesnotexist" f_stat ;] try 0> ?assert
-[: mv ;] try /tst_dir /tst_dir2 0> ?assert
-[: s" /tst_dir/tst_dir2" f_stat ;] try 0> ?assert
-[: cp ;] try /tst_dir/doesntexist /tst_dir/alsnot 0> ?assert
-[: s" /tst_dir/alsnot" f_stat ;] try 0> ?assert
-[: cp ;] try /tst_dir/* /tst_dir/doesnotexist 0> ?assert
-[: s" /tst_dir/doesnotexist" f_stat ;] try 0> ?assert
-[: cp ;] try /tst_dir /tst_dir2 0> ?assert
-[: s" /tst_dir/tst_dir2" f_stat ;] try 0> ?assert
-[: cat ;] try doesntexist 0> ?assert
-[: mkdir ;] try /tst_dir 0> ?assert
-[: cd ;] try bogus 0> ?assert
-
-\ ------------------------------------------------------------------------
-
-TESTING ESCAPED STRINGS
-
-[: .esc-s" a\tb\nc\r\\\'" ;] >file ram:/tst_dir/escstr.log
-s" tst_dir/escstr.log" s" test/escstr.log" f_cmp ?assert
-
-\ ------------------------------------------------------------------------
-TESTING CONDITIONAL COMPILATION
-
-false [if]
-create false-if
-[else]
-create false-else
-[then]
-s" false-if" find drop 0= ?assert
-s" false-else" find drop 0> ?assert
-
-true [if]
-create true-if
-[else]
-create true-else
-[then]
-s" true-if" find drop 0> ?assert
-s" true-else" find drop 0= ?assert
-
-[ifdef] IFDEFFLAG
-create false-ifdef
-[else]
-create false-ifdef-else
-[then]
-s" false-ifdef" find drop 0= ?assert
-s" false-ifdef-else" find drop 0> ?assert
-
-[ifndef] IFDEFFLAG
-create ifndef-if
-[else]
-create ifndef-else
-[then]
-s" ifndef-if" find drop 0> ?assert
-s" ifndef-else" find drop 0= ?assert
-
-create IFDEFFLAG
-[ifdef] IFDEFFLAG
-create ifdef-if
-[else]
-create ifdef-else
-[then]
-s" ifdef-if" find drop 0> ?assert
-s" ifdef-else" find drop 0= ?assert
-
-quit
-
-\ ------------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
 
 T{ -> }T               \ START WITH CLEAN SLATE
@@ -2144,19 +1126,19 @@ T{ OUTPUT-TEST -> }T
 
 
 \ ------------------------------------------------------------------------
-TESTING INPUT: ACCEPT
-
-CREATE ABUF 50 CHARS ALLOT
-
-: ACCEPT-TEST
-   CR ." PLEASE TYPE UP TO 80 CHARACTERS:" CR
-   ABUF 50 ACCEPT
-   CR ." RECEIVED: " [CHAR] " EMIT
-   ABUF SWAP TYPE [CHAR] " EMIT CR
-;
-
-T{ ACCEPT-TEST -> }T
-
+\ TESTING INPUT: ACCEPT
+\
+\ CREATE ABUF 50 CHARS ALLOT
+\
+\ : ACCEPT-TEST
+\    CR ." PLEASE TYPE UP TO 80 CHARACTERS:" CR
+\    ABUF 50 ACCEPT
+\    CR ." RECEIVED: " [CHAR] " EMIT
+\    ABUF SWAP TYPE [CHAR] " EMIT CR
+\ ;
+\
+\ T{ ACCEPT-TEST -> }T
+\
 \ ------------------------------------------------------------------------
 TESTING DICTIONARY SEARCH RULES
 
@@ -2754,6 +1736,8 @@ T{ .R&U.R -> }T
 \ -----------------------------------------------------------------------------
 TESTING PAD ERASE
 \ Must handle different size characters i.e. 1 CHARS >= 1
+
+100 BUFFER: PAD
 
 84 CONSTANT CHARS/PAD      \ Minimum size of PAD in chars
 CHARS/PAD CHARS CONSTANT AUS/PAD
@@ -4354,6 +3338,1022 @@ T{ tstructinst bytefield4 tstructinst - -> 24 }T
 T{ tstructinst plusfield tstructinst - -> 25 }T
 T{ tstructinst bytefield5 tstructinst - -> 35 }T
 T{ tstruct -> 36 }T
+
+\ ------------------------------------------------------------------------
+TESTING EXCEPTIONS
+
+: x-test-exception-1 ." Test exception 1." cr ;
+: x-test-exception-2 ." Test exception 2." cr ;
+
+: throws-exception-2
+  true averts x-test-exception-1
+  true triggers x-test-exception-2
+
+  S" Exception-2 not thrown" ERROR
+;
+
+: throws-exception-1
+  false triggers x-test-exception-2
+  false averts x-test-exception-1
+
+  S" Exception-1 not thrown" ERROR
+;
+
+: no-throw
+  cr ." Not throwing exception" cr
+  \ Just return something to indicate we got here.
+  decimal #2785
+;
+
+: try-throw-exception-1
+  ['] throws-exception-1 try
+;
+
+: try-throw-exception-2
+  ['] throws-exception-2 try
+;
+
+: try-no-throw
+  ['] no-throw try
+;
+
+: throw-1-suppress-2
+  ['] throws-exception-1 try suppress x-test-exception-2
+;
+
+: throw-2-suppress-2
+  ['] throws-exception-2 try suppress x-test-exception-2
+;
+
+.s
+
+T{ try-throw-exception-1 -> ' x-test-exception-1 }T
+T{ try-throw-exception-2 -> ' x-test-exception-2 }T
+T{ try-throw-exception-2 -> ' x-test-exception-2 }T
+T{ try-no-throw -> #2785 0 }T
+T{ throw-1-suppress-2 -> ' x-test-exception-1 }T
+T{ throw-2-suppress-2 -> 0 }T
+
+T{ ' throws-exception-1 try -> ' x-test-exception-1 }T
+T{ ' throws-exception-2 try -> ' x-test-exception-2 }T
+T{ ' no-throw try -> #2785 0  }T
+T{ ' throws-exception-1 try suppress x-test-exception-2 -> ' x-test-exception-1 }T
+T{ ' throws-exception-2 try suppress x-test-exception-2 -> 0 }T
+
+\ ------------------------------------------------------------------------------
+TESTING LAMBDA
+
+: test-lambda [: + ;] ;
+
+T{ test-lambda 23 24 rot execute -> 47  }T
+T{ [: + ;] 23 24 rot execute -> 47  }T
+
+\ ------------------------------------------------------------------------
+TESTING HEAP
+8 256 heap-size constant test-heap-size
+T{ test-heap-size 8 256 * 2dup > -rot 2 * < -> <TRUE> <TRUE> }T ( Between requested size and twice requested size )
+create test-heap test-heap-size allot
+here constant test-heap-end
+8 256 test-heap init-heap
+
+test-heap-size 128 / 2+ constant max-allocations
+max-allocations array allocations[]
+0 1 nvariable num-allocations
+
+\ Compiling a function so we can use loops.
+\ ( blocksize -- )
+: test-heap-alloc
+  \ Allocate blocks until exhausted.
+  max-allocations 0 do
+    dup ( blocksize blocksize )
+    [: test-heap allocate ;] try ( blocksize addr exception-code )
+    0= if ( blocksize addr )
+      i allocations[] ! ( blocksize addr )
+    else ( blocksize )
+      drop
+      0 i allocations[] !
+      ." test-heap exhausted. OK." cr
+      leave
+    then
+    i 1+ num-allocations ! ( blocksize )
+  loop
+  drop
+;
+
+: test-heap-free-all
+  num-allocations @ 0 do
+    i allocations[] @ test-heap free
+  loop
+  0 num-allocations !
+;
+
+.( Allocate check )
+
+512 test-heap-alloc
+T{ num-allocations @ 0> -> <TRUE> }T
+T{ num-allocations @ max-allocations < -> <TRUE> }T
+
+.( Address range check )
+
+: test-heap-addr-check
+  num-allocations @ 0 do
+    \ within heap address range
+    i allocations[] @ test-heap <= if
+      S" Allocation out of range 1, idx: " i . ERROR
+      leave
+    then
+
+    i allocations[] @ test-heap-end >= if
+      S" Allocation out of range 2, idx: " i . ERROR
+      leave
+    then
+
+    \ At least 512 apart
+    i 0> if
+      i allocations[] @ i 1- allocations[] @ - 512 < if
+        S" Allocation spacing error, idx: " i . ERROR
+        leave
+      then
+    then
+  loop
+;
+
+test-heap-addr-check
+
+.( Free-realloc check )
+
+num-allocations @ 1 nvariable saved-num-allocations
+
+test-heap-free-all
+\ Reallocate all again, using small blocks
+128 test-heap-alloc
+
+T{ num-allocations @ saved-num-allocations @ >= -> <TRUE> }T
+T{ num-allocations @ 128 * test-heap-size <= -> <TRUE> }T
+
+test-heap-free-all
+\ Reallocate all again, using again the 512 sized blocks.
+512 test-heap-alloc
+T{ num-allocations @ saved-num-allocations @ = -> <TRUE> }T
+
+.( Resize check )
+
+: test-heap-resize-alloc-0
+  0 allocations[] @ test-heap resize
+;
+
+\ Attempt to resize allocation 0 to 1K. This should fail.
+T{ 1024 ' test-heap-resize-alloc-0 try ' x-allocate-failed = nip -> <TRUE> }T
+
+\ Free allocation 1 then retry the resize...
+1 allocations[] @ test-heap free
+\ Now it should work, without changing the address.
+T{ 1024 ' test-heap-resize-alloc-0 try swap 0 allocations[] @ = -> 0 <TRUE> }T
+\ Free the resized block so we have a 1K space to allocate again.
+0 allocations[] @ test-heap free
+
+\ Allocate 2 small blocks
+256 test-heap allocate 0 allocations[] !
+256 test-heap allocate 1 allocations[] !
+\ Now resizing the first block to 300 should work, but with a new address.
+T{ 300 ' test-heap-resize-alloc-0 try swap 0 allocations[] @ <> -> 0 <TRUE> }T
+
+\ ------------------------------------------------------------------------
+TESTING pool
+
+16 array test-pool-allocations[]
+
+create test-pool pool-size allot
+8 test-pool init-pool
+
+create test-pool-memory 32 allot
+test-pool-memory 32 test-pool add-pool
+
+: test-pool-alloc-all
+  test-pool allocate-pool 0 test-pool-allocations[] !
+  test-pool allocate-pool 1 test-pool-allocations[] !
+  test-pool allocate-pool 2 test-pool-allocations[] !
+  test-pool allocate-pool 3 test-pool-allocations[] !
+;
+
+T{ test-pool pool-block-size -> 8 }T
+T{ test-pool pool-free-count -> 4 }T
+
+T{ ' test-pool-alloc-all try -> 0 }T
+T{ 0 test-pool-allocations[] @ test-pool-memory 0 + = -> <TRUE> }T
+T{ 1 test-pool-allocations[] @ test-pool-memory 8 + = -> <TRUE> }T
+T{ 2 test-pool-allocations[] @ test-pool-memory 16 + = -> <TRUE> }T
+T{ 3 test-pool-allocations[] @ test-pool-memory 24 + = -> <TRUE> }T
+
+T{ test-pool pool-free-count -> 0 }T
+T{ test-pool pool-total-count -> 4 }T
+
+T{ test-pool ' allocate-pool try nip ' x-pool-allocate-failed = -> <TRUE> }T
+
+
+0 test-pool-allocations[] @ test-pool free-pool
+1 test-pool-allocations[] @ test-pool free-pool
+2 test-pool-allocations[] @ test-pool free-pool
+3 test-pool-allocations[] @ test-pool free-pool
+
+T{ test-pool pool-free-count -> 4 }T
+
+T{ ' test-pool-alloc-all try -> 0 }T
+
+create test-pool-memory-2 32 allot
+test-pool-memory 32 test-pool add-pool
+
+T{ test-pool pool-free-count -> 4 }T
+
+\ ------------------------------------------------------------------------
+TESTING temp allocator
+
+variable saved-mark
+temp-mark> saved-mark !
+
+256 [: saved-mark @ = ?assert ;] with-temp-allot
+temp-mark> saved-mark @ = ?assert
+
+temp-mark>
+256 temp-allot ( mark )
+dup temp-mark> swap - 256 = ?assert ( mark )
+>temp-mark ( )
+temp-mark> saved-mark @ = ?assert
+
+3000 temp-allot
+[: 3000 temp-allot ;] try ' x-temp-allot-failed = ?assert
+
+temp-allot-reset
+temp-mark> saved-mark @ = ?assert
+
+\ ------------------------------------------------------------------------
+TESTING /STRING
+
+: s1 s" /string test" ;
+
+T{ s1  5 /STRING -> s1 SWAP 5 + SWAP 5 - }T
+T{ s1 10 /STRING -4 /STRING -> s1 6 /STRING }T
+T{ s1  0 /STRING -> s1 }T
+
+\ ------------------------------------------------------------------------
+TESTING >NUMBER
+
+hex
+
+CREATE GN-BUF 0 C,
+: GN-STRING GN-BUF 1 ;
+: GN-CONSUMED GN-BUF CHAR+ 0 ;
+: GN' [CHAR] ' WORD CHAR+ C@ GN-BUF C! GN-STRING ;
+T{ 0 0 GN' 0' >NUMBER ->         0 0 GN-CONSUMED }T
+T{ 0 0 GN' 1' >NUMBER ->         1 0 GN-CONSUMED }T
+T{ 1 0 GN' 1' >NUMBER -> BASE @ 1+ 0 GN-CONSUMED }T
+\ FOLLOWING SHOULD FAIL TO CONVERT
+T{ 0 0 GN' -' >NUMBER ->         0 0 GN-STRING   }T
+T{ 0 0 GN' +' >NUMBER ->         0 0 GN-STRING   }T
+T{ 0 0 GN' .' >NUMBER ->         0 0 GN-STRING   }T
+
+: >NUMBER-BASED
+   BASE @ >R BASE ! >NUMBER R> BASE ! ;
+
+T{ 0 0 GN' 2'       10 >NUMBER-BASED ->  2 0 GN-CONSUMED }T
+T{ 0 0 GN' 2'        2 >NUMBER-BASED ->  0 0 GN-STRING   }T
+T{ 0 0 GN' F'       10 >NUMBER-BASED ->  F 0 GN-CONSUMED }T
+T{ 0 0 GN' G'       10 >NUMBER-BASED ->  0 0 GN-STRING   }T
+\ T{ 0 0 GN' G' MAX-BASE >NUMBER-BASED -> 10 0 GN-CONSUMED }T
+\ T{ 0 0 GN' Z' MAX-BASE >NUMBER-BASED -> 23 0 GN-CONSUMED }T
+
+: GN1 ( UD BASE -- UD' LEN )
+   \ UD SHOULD EQUAL UD' AND LEN SHOULD BE ZERO.
+   BASE @ >R BASE !
+   <# #S #>
+   0 0 2SWAP >NUMBER SWAP DROP    \ RETURN LENGTH ONLY
+   R> BASE ! ;
+
+T{        0   0        2 GN1 ->        0   0 0 }T
+T{ MAX-UINT   0        2 GN1 -> MAX-UINT   0 0 }T
+T{ MAX-UINT DUP        2 GN1 -> MAX-UINT DUP 0 }T
+\ T{        0   0 MAX-BASE GN1 ->        0   0 0 }T
+\ T{ MAX-UINT   0 MAX-BASE GN1 -> MAX-UINT   0 0 }T
+\ T{ MAX-UINT DUP MAX-BASE GN1 -> MAX-UINT DUP 0 }T
+
+\ ------------------------------------------------------------------------
+TESTING INTERPRETED STRINGS (istr.fs)
+
+s" 123"
+T{ evaluate -> 123 }T
+s" 456"
+T{ evaluate -> 456 }T
+
+: istr-test s" 789" ;
+istr-test
+T{ evaluate -> 789 }T
+
+T{ istr-dump -> }T
+
+T{ str-pool-mem istr-allocated? -> <TRUE> }T
+T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <TRUE> }T
+T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
+1 istr-free
+T{ str-pool-mem istr-allocated? -> <TRUE> }T
+T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
+T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
+2 istr-free
+T{ str-pool-mem istr-allocated? -> <TRUE> }T
+T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
+T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
+
+\ ------------------------------------------------------------------------
+TESTING SPRINTF
+
+hex
+
+0 INVERT 1 RSHIFT           CONSTANT MID-UINT
+0 INVERT 1 RSHIFT INVERT    CONSTANT MID-UINT+1
+
+1024 buffer: pad
+
+\ empty string
+T{ s" " pad sprintf s" " compare -> <TRUE> }T
+
+\ hai
+T{ s" hai" pad sprintf s" hai" compare -> <TRUE> }T
+
+\ test %c
+T{ 'r' 'a' 'h' 'c' s" %c%c%c%c" pad sprintf s" char" compare -> <TRUE> }T
+
+\ test %%
+T{ s" %%" pad sprintf s" %" compare -> <TRUE> }T
+
+max-uint ffffffffffffffff = constant 64-bit
+
+\ test %n
+T{ 0 s" %n" pad sprintf s" 0" compare -> <TRUE> }T
+T{ max-uint s" %n" pad sprintf s" -1" compare -> <TRUE> }T
+\ test %u
+T{ 0 s" %u" pad sprintf s" 0" compare -> <TRUE> }T
+\ test %dn
+T{ 0 0 s" %dn" pad sprintf s" 0" compare -> <TRUE> }T
+T{ max-uint max-uint s" %dn" pad sprintf s" -1" compare -> <TRUE> }T
+\ test %du
+T{ 0 0 s" %du" pad sprintf s" 0" compare -> <TRUE> }T
+\ test %s
+T{ s" bar" s" foo" s" %s%s" pad sprintf s" foobar" compare -> <TRUE> }T
+
+\ right justify
+T{ 0 s" %2n" pad sprintf s"  0" compare -> <TRUE> }T
+T{ 'a' s" %2c" pad sprintf s"  a" compare -> <TRUE> }T
+T{ s" %2%" pad sprintf s"  %" compare -> <TRUE> }T
+T{ s" bar" s" %6s" pad sprintf s"    bar" compare -> <TRUE> }T
+T{ s" foobar" s" %3s" pad sprintf s" foobar" compare -> <TRUE> }T
+T{ 1 s" %02n" pad sprintf s" 01" compare -> <TRUE> }T
+T{ 'a' s" %02c" pad sprintf s" 0a" compare -> <TRUE> }T
+T{ s" %02%" pad sprintf s" 0%" compare -> <TRUE> }T
+T{ s" bar" s" %06s" pad sprintf s" 000bar" compare -> <TRUE> }T
+T{ s" foobar" s" %03s" pad sprintf s" foobar" compare -> <TRUE> }T
+
+\ left justify
+T{ 0 s" %-2n" pad sprintf s" 0 " compare -> <TRUE> }T
+T{ 'a' s" %-2c" pad sprintf s" a " compare -> <TRUE> }T
+T{ s" %-2%" pad sprintf s" % " compare -> <TRUE> }T
+T{ s" bar" s" %-6s" pad sprintf s" bar   " compare -> <TRUE> }T
+T{ s" foobar" s" %-3s" pad sprintf s" foobar" compare -> <TRUE> }T
+T{ 1 s" %-02n" pad sprintf s" 1 " compare -> <TRUE> }T
+T{ 'a' s" %-02c" pad sprintf s" a " compare -> <TRUE> }T
+T{ s" %-02%" pad sprintf s" % " compare -> <TRUE> }T
+T{ s" bar" s" %-06s" pad sprintf s" bar   " compare -> <TRUE> }T
+T{ s" foobar" s" %-03s" pad sprintf s" foobar" compare -> <TRUE> }T
+
+\ ------------------------------------------------------------------------
+TESTING C STRINGS
+
+#256 buffer: test-buf
+test-buf s" Hello" cstr ( addr )
+test-buf s0len ( len )
+T{ 5 = -> <TRUE> }T
+
+T{ test-buf s0len -> 5 }T
+
+test-buf s0>s ( addr len )
+T{ s" Hello" compare -> <true> }T
+
+: cstr-test
+  s0" Hello"
+;
+
+T{ cstr-test s0>s s" Hello" compare -> <true> }T
+
+#256 buffer: test-buf2
+test-buf2 cstr" Hello"
+test-buf2 s0len ( len )
+T{ 5 = -> <TRUE> }T
+
+test-buf2 s0>s ( addr len )
+T{ s" Hello" compare -> <true> }T
+
+\ Negative testing
+
+[: test-buf2 0 256 cstr ;] try ' x-string-too-long = ?assert
+
+\ ------------------------------------------------------------------------
+TESTING FILESYSTEM
+
+#256 buffer: fs-buf
+
+\ Basics:
+T{ AM_RDO -> $1 }T
+T{ AM_HID -> $2 }T
+T{ AM_SYS -> $4 }T
+T{ AM_DIR -> $10 }T
+T{ AM_ARC -> $20 }T
+
+\ Check AM_* values
+
+\ Check FA mode values
+T{ FA_READ -> $1 }T
+T{ FA_WRITE -> $2 }T
+T{ FA_OPEN_EXISTING -> $0 }T
+T{ FA_CREATE_NEW -> $4 }T
+T{ FA_CREATE_ALWAYS -> $8 }T
+T{ FA_OPEN_ALWAYS -> $10 }T
+T{ FA_OPEN_APPEND -> $30 }T
+
+\ Check FR IOR values
+T{ FR_OK -> $0 }T
+T{ FR_DISK_ERR -> $1 }T
+T{ FR_INT_ERR -> $2 }T
+T{ FR_NOT_READY -> $3 }T
+T{ FR_NO_FILE -> $4 }T
+T{ FR_NO_PATH -> $5 }T
+T{ FR_INVALID_NAME -> $6 }T
+T{ FR_DENIED -> $7 }T
+T{ FR_EXIST -> $8 }T
+T{ FR_INVALID_OBJECT -> $9 }T
+T{ FR_WRITE_PROTECTED -> $A }T
+T{ FR_INVALID_DRIVE -> $B }T
+T{ FR_NOT_ENABLED -> $C }T
+T{ FR_NO_FILESYSTEM -> $D }T
+T{ FR_MKFS_ABORTED -> $E }T
+T{ FR_TIMEOUT -> $F }T
+T{ FR_LOCKED -> $10 }T
+T{ FR_NOT_ENOUGH_CORE -> $11 }T
+T{ FR_TOO_MANY_OPEN_FILES -> $12 }T
+T{ FR_INVALID_PARAMETER -> $13 }T
+
+\ Check ior>exception mapping
+T{ FR_DISK_ERR ior>exception -> ' x-fr-disk-err }T
+T{ FR_INT_ERR ior>exception -> ' x-fr-int-err }T
+T{ FR_NOT_READY ior>exception -> ' x-fr-not-ready }T
+T{ FR_NO_FILE ior>exception -> ' x-fr-no-file }T
+T{ FR_NO_PATH ior>exception -> ' x-fr-no-path }T
+T{ FR_INVALID_NAME ior>exception -> ' x-fr-invalid-name }T
+T{ FR_DENIED ior>exception -> ' x-fr-denied }T
+T{ FR_EXIST ior>exception -> ' x-fr-exist }T
+T{ FR_INVALID_OBJECT ior>exception -> ' x-fr-invalid-object }T
+T{ FR_WRITE_PROTECTED ior>exception -> ' x-fr-write-protected }T
+T{ FR_INVALID_DRIVE ior>exception -> ' x-fr-invalid-drive }T
+T{ FR_NOT_ENABLED ior>exception -> ' x-fr-not-enabled }T
+T{ FR_NO_FILESYSTEM ior>exception -> ' x-fr-no-filesystem }T
+T{ FR_MKFS_ABORTED ior>exception -> ' x-fr-mkfs-aborted }T
+T{ FR_TIMEOUT ior>exception -> ' x-fr-timeout }T
+T{ FR_LOCKED ior>exception -> ' x-fr-locked }T
+T{ FR_NOT_ENOUGH_CORE ior>exception -> ' x-fr-not-enough-core }T
+T{ FR_TOO_MANY_OPEN_FILES ior>exception -> ' x-fr-too-many-open-files }T
+T{ FR_INVALID_PARAMETER ior>exception -> ' x-fr-invalid-parameter }T
+
+\ Check f_open, f_close, f_read, f_write
+[: s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;] try ?except_error ( fil )
+dup [: s" Hello World!" f_write ;] try ?except_error ( fil nbw )
+\ 12 bytes written
+#12 = ?assert ( fil )
+dup [: f_sync ;] try ?except_error ( fil )
+[: f_close ;] try ?except_error ( )
+
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
+dup #12 = ?assert ( fil numbytes )
+fs-buf swap ( fil fs-buf len )
+s" Hello World!" compare ?assert
+[: f_close ;] try ?except_error ( )
+
+\ Check f_lseek, f_tell, f_eof and f_size
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: f_eof ;] try ?except_error 0= ?assert ( fil )
+dup [: f_size ;] try ?except_error #12 = ?assert ( fil )
+dup [: 6 f_lseek ;] try ?except_error ( fil )
+dup [: f_eof ;] try ?except_error 0= ?assert ( fil )
+dup [: f_tell ;] try ?except_error ( fil pos )
+6 = ?assert ( fil )
+dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
+dup 6 = ?assert ( fil numbytes )
+fs-buf swap ( fil fs-buf len )
+s" World!" compare ?assert
+dup [: f_eof ;] try ?except_error ?assert ( fil )
+[: f_close ;] try ?except_error ( )
+
+\ Check truncate
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ FA_WRITE or or f_open ;] try ?except_error ( fil )
+dup [: 5 f_lseek ;] try ?except_error ( fil )
+dup [: f_truncate ;] try ?except_error ( fil )
+dup [: 0 f_lseek ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
+dup 5 = ?assert ( fil numbytes )
+fs-buf swap ( fil fs-buf len )
+s" Hello" compare ?assert
+[: f_close ;] try ?except_error ( )
+
+\ Check f_putc
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_WRITE or f_open ;] try ?except_error ( fil )
+dup [: f_truncate ;] try ?except_error ( fil )
+dup [: $42 f_putc ;] try ?except_error ( fil )
+[: f_close ;] try ?except_error ( )
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_read ;] try ?except_error ( fil numbytes )
+1 = ?assert ( fil )
+fs-buf c@ $42 = ?assert ( fil )
+[: f_close ;] try ?except_error ( )
+
+\ Check f_gets
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_WRITE or f_open ;] try ?except_error ( fil )
+dup [: f_truncate ;] try ?except_error ( fil )
+dup [: esc-s" \'Hello World\',\nForth shouted happily." f_write ;] try ?except_error ( fil nbw )
+\ 37 bytes written
+#37 = ?assert ( fil )
+[: f_close ;] try ?except_error ( )
+[: s" fs_test.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup #15 = ?assert ( fil addr len )
+esc-s" \'Hello World\',\n" compare ?assert ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+2drop
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup 0= ?assert ( fil addr len )
+2drop
+[: f_close ;] try ?except_error ( )
+
+\ Negative testing:
+
+\ Check too many open files
+\ and check f_open exception
+
+MAX_NUM_OPEN_FILES 1+ array fils[]
+
+0 fils[] MAX_NUM_OPEN_FILES 1+ cells 0 fill
+
+[:
+  MAX_NUM_OPEN_FILES 1+ 0 do
+    [: i s" fs_tst%n.txt" pad sprintf f_unlink ;] try drop
+  loop
+;] execute
+
+[:
+  MAX_NUM_OPEN_FILES 1+ 0 do
+    i s" fs_tst%n.txt" pad sprintf FA_CREATE_ALWAYS FA_WRITE or f_open
+    i fils[] !
+  loop
+;] try ' x-pool-allocate-failed = ?assert
+
+[:
+  MAX_NUM_OPEN_FILES 0 do
+    i fils[] @ ?dup if
+      f_close
+    then
+  loop
+;] try ?except_error
+
+\ Check f_close exception
+[: 1000 f_close ;] try 0> ?assert
+
+\ Check f_read exception
+[: 1000 0 1 f_read ;] try 0> ?assert
+
+\ Check f_write exception
+[: 1000 0 1 f_write ;] try 0> ?assert
+
+\ Check f_lseek exception
+[: 1000 0 f_lseek ;] try 0> ?assert
+
+\ Check truncate exception
+[: 1000 f_truncate ;] try 0> ?assert
+
+\ Check f_sync exception.
+[: 1000 f_sync ;] try 0> ?assert
+
+\ Check f_gets exception.
+[: 1000 0 1 f_gets ;] try 0> ?assert
+
+\ Check f_putc exception.
+[: 1000 0 f_putc ;] try 0> ?assert
+
+\ Make directory, cd into it, make a files and a subdir, list the dir, check the entries' attributes,
+\ close the directory, remove the files, remove the directory.
+
+\ Preparation
+[: s" test_dir" f_chdir ;] try drop \ cd into test_dir if it exists
+[: s" test_subdir" f_unlink ;] try drop \ remove test_subdir if it already exists.
+[: s" fs_test.txt" f_unlink ;] try drop \ remove fs_test.txt if it already exists.
+[: s" fs_test_renamed.txt" 0 AM_RDO f_chmod ;] try drop
+[: s" fs_test_renamed.txt" f_unlink ;] try drop \ remove fs_test_renamed.txt if it already exists.
+[:
+  MAX_NUM_OPEN_DIRS 1+ 0 do
+    [: i s" dir_tst%n" pad sprintf f_unlink ;] try drop ( )
+  loop
+;] execute
+[: s" .." f_chdir ;] try drop
+[: s" test_dir" f_unlink ;] try drop \ remove test_dir if it already exists.
+
+[: s" test_dir" f_mkdir ;] try ?except_error
+[: s" test_dir" f_stat ;] try ?except_error
+filinfo.fname s" test_dir" compare ?assert
+filinfo.fattrib AM_DIR and 0> ?assert
+[: s" test_dir" f_chdir ;] try ?except_error
+[: f_getcwd ;] try ?except_error s" ram:/test_dir" compare ?assert
+
+[: s" test_subdir" f_mkdir ;] try ?except_error \ create a subdir
+
+[: s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;] try ?except_error ( fil ) \ create a file
+dup [: s" Hello World!" f_write ;] try ?except_error ( fil nbw )
+\ 12 bytes written
+#12 = ?assert ( fil )
+dup [: f_sync ;] try ?except_error ( fil )
+[: f_close ;] try ?except_error ( )
+
+[: s" .." f_chdir ;] try ?except_error
+[: s" test_dir" f_opendir ;] try ?except_error ( dir )
+
+dup [: f_readdir ;] try ?except_error
+filinfo.fname s" test_subdir" compare ?assert
+filinfo.fattrib AM_DIR and 0> ?assert
+
+dup [: f_readdir ;] try ?except_error
+filinfo.fname s" fs_test.txt" compare ?assert
+filinfo.fsize #12 = ?assert
+
+dup [: f_readdir ;] try ?except_error
+filinfo.fname s" " compare ?assert
+
+[: f_closedir ;] try ?except_error
+
+\ cd into the test_dir and rename the file
+[: s" test_dir" f_chdir ;] try ?except_error
+[: s" fs_test.txt" s" fs_test_renamed.txt" f_rename ;] try ?except_error
+[: s" fs_test_renamed.txt" f_stat ;] try ?except_error
+
+\ do an ls *.txt on the current dir
+[: s" ." s" *.txt" f_findfirst ;] try ?except_error
+filinfo.fname s" fs_test_renamed.txt" compare ?assert
+dup [: f_findnext ;] try ?except_error
+filinfo.fname s" " compare ?assert
+[: f_closedir ;] try ?except_error
+
+\ Change the file's timestamp and make it read-only
+#11 #02 #2033 filinfo.setfdate
+#10 #20 #30 filinfo.setftime
+[: s" fs_test_renamed.txt" f_utime ;] try ?except_error
+[: s" fs_test_renamed.txt" AM_RDO AM_RDO f_chmod ;] try ?except_error
+[: s" fs_test_renamed.txt" f_stat ;] try ?except_error
+filinfo.fattrib AM_RDO and 0> ?assert
+T{ filinfo.getfdate -> #11 #02 #2033 }T
+T{ filinfo.getftime -> #10 #20 #30 }T
+
+\ Total should be larger than free
+[: s" ram:" f_getfree ;] try ?except_error > ?assert
+
+\ dirname and basename
+s" 123/abc/def" dirname s" 123/abc/" compare ?assert
+s" 123/abc/def" basename s" def" compare ?assert
+s" abc" dirname s" ./" compare ?assert
+s" abc" basename s" abc" compare ?assert
+s" " dirname s" ./" compare ?assert
+s" " basename s" " compare ?assert
+s" /" dirname s" /" compare ?assert
+s" /" basename s" " compare ?assert
+s" .." dirname s" ../" compare ?assert
+s" .." basename s" " compare ?assert
+s" ." dirname s" ./" compare ?assert
+s" ." basename s" " compare ?assert
+
+256 buffer: pathbuf
+s" ./" s" abc" pathbuf pathname s" ./abc" compare ?assert
+s" /" s" abc" pathbuf pathname s" /abc" compare ?assert
+s" abc/" s" def" pathbuf pathname s" abc/def" compare ?assert
+s" abc" s" def" pathbuf pathname s" abc/def" compare ?assert
+
+\ Negative testing
+
+\ Check too many open dirs
+
+MAX_NUM_OPEN_DIRS 1+ array dirs[]
+
+[:
+  MAX_NUM_OPEN_DIRS 1+ 0 do
+    i s" dir_tst%n" pad sprintf ( addr len )
+    2dup f_mkdir
+    f_opendir ( dir )
+    i dirs[] !
+  loop
+;] try ' x-pool-allocate-failed = ?assert
+
+[:
+  MAX_NUM_OPEN_DIRS 0 do
+    i dirs[] @ f_closedir
+  loop
+;] try ?except_error
+
+[: s" non-existing-dir" f_opendir ;] try 0> ?assert
+[: 1000 f_closedir ;] try 0> ?assert
+[: 1000 f_readdir ;] try 0> ?assert
+[: s" non-existing-dir" s" *.*" f_findfirst ;] try 0> ?assert
+[: 1000 f_findnext ;] try 0> ?assert
+[: s" non-existing-dir" f_stat ;] try 0> ?assert
+[: s" non-existing-dir" f_unlink ;] try 0> ?assert
+[: s" non-existing-dir" s" doesntmatter" f_rename ;] try 0> ?assert
+[: s" non-existing-dir" 0 0 f_chmod ;] try 0> ?assert
+[: s" non-existing-dir" f_utime ;] try 0> ?assert
+
+[: s" .." f_chdir ;] try ?except_error
+[: s" test_dir" f_mkdir ;] try 0> ?assert
+
+\ ------------------------------------------------------------------------
+TESTING FS REDIRECTION
+[: hook-emit @ hook-emit? @ ;] >null ?assert ' drop = ?assert
+hook-emit @ ' serial-emit = ?assert
+hook-emit? @ ' serial-emit? = ?assert
+
+[: ." fs-redirection test" cr ;] &>file redirout.txt
+
+[: s" redirout.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup #20 = ?assert ( fil addr len )
+esc-s" fs-redirection test\n" compare ?assert ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup 0= ?assert ( fil addr len )
+2drop
+[: f_close ;] try ?except_error ( )
+
+[: ." appending..." cr ;] &>>file redirout.txt
+
+[: s" redirout.txt" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup #20 = ?assert ( fil addr len )
+esc-s" fs-redirection test\n" compare ?assert ( fil )
+dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+dup #13 = ?assert ( fil addr len )
+esc-s" appending...\n" compare ?assert ( fil )
+[: f_close ;] try ?except_error ( )
+
+\ ------------------------------------------------------------------------
+TESTING SHELL
+
+\ ls, cd and pwd test
+[: rm ;] try tst_dir drop
+mkdir tst_dir
+[: ." ls tst_dir" cr ;] >file tst_dir/ls.log
+[: ls ;] >>file tst_dir/ls.log tst_dir
+[: ." cd tst_dir " cr ;] >>file tst_dir/ls.log
+cd tst_dir
+[: ." pwd" cr ;] >>file ls.log
+[: pwd ;] >>file ls.log
+[: ." Creating some files... " cr ;] >>file ls.log
+[: ." a file" ;] >file file0.tst
+cp file0.tst file1.tst
+cp file1.tst pile.tst
+[: ." ls ./*" cr ;] >>file ls.log
+[: ls ;] >>file ls.log ./*
+[: ." ls file*" cr ;] >>file ls.log
+[: ls ;] >>file ls.log file*
+[: ." cd .." cr ;] >>file ls.log
+cd ..
+[: ." pwd" cr ;] >>file tst_dir/ls.log
+[: pwd ;] >>file tst_dir/ls.log
+s" tst_dir/ls.log" s" test/ls.log" f_cmp ?assert
+
+\ chdrv test
+[: ." chdrv sd0:" cr ;] >file ram:/tst_dir/chdrv.log
+chdrv sd0:
+[: ." pwd" cr ;] >>file ram:/tst_dir/chdrv.log
+[: pwd ;] >>file ram:/tst_dir/chdrv.log
+[: ." chdrv ram:" cr ;] >>file ram:/tst_dir/chdrv.log
+chdrv ram:
+[: ." pwd" cr ;] >>file ram:/tst_dir/chdrv.log
+[: pwd ;] >>file ram:/tst_dir/chdrv.log
+s" tst_dir/chdrv.log" s" test/chdrv.log" f_cmp ?assert
+[: ." umount sd0:" cr ;] >file ram:/tst_dir/mount.log
+[: umount ;] >>file ram:/tst_dir/mount.log sd0:
+[: ." chdrv sd0:" cr ;] >>file ram:/tst_dir/mount.log
+[: chdrv ;] >>file ram:/tst_dir/mount.log sd0:
+[: ." pwd to trigger exception" cr ;] >>file ram:/tst_dir/mount.log
+[: pwd ;] try 0> ?assert
+[: ." mount sd0:" cr ;] >>file ram:/tst_dir/mount.log
+[: mount ;] >>file ram:/tst_dir/mount.log sd0:
+[: ." pwd success" cr ;] >>file ram:/tst_dir/mount.log
+[: pwd ;] >>file ram:/tst_dir/mount.log
+[: ." chdrv ram:" cr ;] >>file ram:/tst_dir/mount.log
+[: chdrv ;] >>file ram:/tst_dir/mount.log ram:
+[: pwd ;] >>file ram:/tst_dir/mount.log
+[: ." chdrv ram:" cr ;] >>file ram:/tst_dir/mount.log
+
+s" tst_dir/mount.log" s" test/mount.log" f_cmp ?assert
+
+\ df test
+: dfcheck
+  [: s" ram:/tst_dir/df.log" FA_OPEN_EXISTING FA_READ or f_open ;] try ?except_error ( fil )
+  dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+  2drop ( fil )
+  dup [: fs-buf #256 f_gets ;] try ?except_error ( fil addr len )
+  2dup type ( fil addr len )
+  source 2>r ( fil addr len )
+  setsource ( fil )
+  >in dup @ >r 0 swap ! ( fil )
+  token s" Free:" compare ?assert
+  token number 1 = ?assert drop
+  token s" KB" compare ?assert
+  token s" Total:" compare ?assert
+  token number 1 = ?assert drop
+  r> >in ! ( fil )
+  2r> setsource ( fil )
+  f_close ( )
+;
+[: df ;] >file ram:/tst_dir/df.log ram:
+dfcheck
+
+\ rm and mkdir test
+cd tst_dir
+[: ." mkdir torm" cr ;] >file ram:/tst_dir/rm.log
+[: mkdir ;] >>file ram:/tst_dir/rm.log torm
+[: ." mkdir torm/torm0" cr ;] >>file ram:/tst_dir/rm.log
+[: mkdir ;] >>file ram:/tst_dir/rm.log torm/torm0
+[: ." mkdir torm/torm1" cr ;] >>file ram:/tst_dir/rm.log
+[: mkdir ;] >>file ram:/tst_dir/rm.log torm/torm1
+[: ." ls ./torm/*" cr ;] >>file ram:/tst_dir/rm.log
+[: ls ;] >>file ram:/tst_dir/rm.log ./torm/*
+[: ." rm torm/torm*" cr ;] >>file ram:/tst_dir/rm.log
+[: rm ;] >>file ram:/tst_dir/rm.log torm/torm*
+[: ." ls ./torm/*" cr ;] >>file ram:/tst_dir/rm.log
+[: ls ;] >>file ram:/tst_dir/rm.log ./torm/*
+[: ." ls ./torm" cr ;] >>file ram:/tst_dir/rm.log
+[: ls ;] >>file ram:/tst_dir/rm.log ./torm
+[: ." rm torm" cr ;] >>file ram:/tst_dir/rm.log
+[: rm ;] >>file ram:/tst_dir/rm.log torm
+[: ." ls ./torm" cr ;] >>file ram:/tst_dir/rm.log
+[: ls ;] >>file ram:/tst_dir/rm.log ./torm
+cd ..
+
+s" tst_dir/rm.log" s" test/rm.log" f_cmp ?assert
+
+\ cat test
+[: cat ;] >file ram:/tst_dir/cat.log ram:/tst_dir/rm.log
+
+s" tst_dir/cat.log" s" test/cat.log" f_cmp ?assert
+
+\ cp test
+cp ram:/test/cpdir/cpfile0 ram:/tst_dir/cpfile0.cp
+s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert
+rm ram:/tst_dir/cpfile0.cp
+cp ram:/test/cpdir/* ram:/tst_dir
+[: s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0" f_cmp ;] try ?except_error ?assert
+[: s" /test/cpdir/cpfile1" s" ram:/tst_dir/cpfile1" f_cmp ;] try ?except_error ?assert
+rm ram:/tst_dir/cpfile*
+
+\ mv test
+[: ." mv test/cpdir/* tst_dir" cr ;] >file ram:/tst_dir/mv.log
+[: mv ;] >>file ram:/tst_dir/mv.log test/cpdir/* tst_dir
+[: ." ls tst_dir/cpfile*" cr ;] >>file ram:/tst_dir/mv.log
+[: ls ;] >>file ram:/tst_dir/mv.log tst_dir/cpfile*
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/mv.log
+[: ls ;] >>file ram:/tst_dir/mv.log test/cpdir/*
+s" tst_dir/mv.log" s" test/mv.log" f_cmp ?assert
+mv tst_dir/cpfile* /test/cpdir
+
+\ chmod test
+[: ." chmod test/cpdir/*0 +rdo" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +rdo
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 -rdo" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -rdo
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 -arc" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -arc
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 +arc" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +arc
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 +sys" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +sys
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 -sys" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -sys
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 +hid" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +hid
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 -hid" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 -hid
+[: ." ls test/cpdir/*" cr ;] >>file ram:/tst_dir/chmod.log
+[: ls ;] >>file ram:/tst_dir/chmod.log test/cpdir/*
+
+[: ." chmod test/cpdir/*0 +bla" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 +bla
+[: ." chmod test/cpdir/*0 bla" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0 bla
+[: ." chmod test/cpdir/*0" cr ;] >>file ram:/tst_dir/chmod.log
+[: chmod ;] >>file ram:/tst_dir/chmod.log test/cpdir/*0
+
+s" tst_dir/chmod.log" s" test/chmod.log" f_cmp ?assert
+
+\ include test
+include /test/testinc.fs
+s" testinc" find drop 0> ?assert
+s" testincinc" find drop ?assert
+
+\ Negative testing
+\ Invalid volume names
+[: chdrv ;] try bogus: ?assert
+[: mount ;] try bogus: ?assert
+[: umount ;] try bogus: ?assert
+[: df ;] try bogus: ?assert
+[: ls ;] try bogus:/* ?assert
+[: include ;] try notexisting.fs 0> ?assert
+[: mv ;] try /test/mv.log 0> ?assert
+[: mv ;] try /tst_dir/doesntexist /tst_dir/alsnot 0> ?assert
+[: s" /tst_dir/alsnot" f_stat ;] try 0> ?assert
+[: mv ;] try /tst_dir/* /tst_dir/doesnotexist 0> ?assert
+[: s" /tst_dir/doesnotexist" f_stat ;] try 0> ?assert
+[: mv ;] try /tst_dir /tst_dir2 0> ?assert
+[: s" /tst_dir/tst_dir2" f_stat ;] try 0> ?assert
+[: cp ;] try /tst_dir/doesntexist /tst_dir/alsnot 0> ?assert
+[: s" /tst_dir/alsnot" f_stat ;] try 0> ?assert
+[: cp ;] try /tst_dir/* /tst_dir/doesnotexist 0> ?assert
+[: s" /tst_dir/doesnotexist" f_stat ;] try 0> ?assert
+[: cp ;] try /tst_dir /tst_dir2 0> ?assert
+[: s" /tst_dir/tst_dir2" f_stat ;] try 0> ?assert
+[: cat ;] try doesntexist 0> ?assert
+[: mkdir ;] try /tst_dir 0> ?assert
+[: cd ;] try bogus 0> ?assert
+
+\ ------------------------------------------------------------------------
+
+TESTING ESCAPED STRINGS
+
+[: .esc-s" a\tb\nc\r\\\'" ;] >file ram:/tst_dir/escstr.log
+s" tst_dir/escstr.log" s" test/escstr.log" f_cmp ?assert
+
+\ ------------------------------------------------------------------------
+TESTING CONDITIONAL COMPILATION
+
+false [if]
+create false-if
+[else]
+create false-else
+[then]
+s" false-if" find drop 0= ?assert
+s" false-else" find drop 0> ?assert
+
+true [if]
+create true-if
+[else]
+create true-else
+[then]
+s" true-if" find drop 0> ?assert
+s" true-else" find drop 0= ?assert
+
+[ifdef] IFDEFFLAG
+create false-ifdef
+[else]
+create false-ifdef-else
+[then]
+s" false-ifdef" find drop 0= ?assert
+s" false-ifdef-else" find drop 0> ?assert
+
+[ifndef] IFDEFFLAG
+create ifndef-if
+[else]
+create ifndef-else
+[then]
+s" ifndef-if" find drop 0> ?assert
+s" ifndef-else" find drop 0= ?assert
+
+create IFDEFFLAG
+[ifdef] IFDEFFLAG
+create ifdef-if
+[else]
+create ifdef-else
+[then]
+s" ifdef-if" find drop 0> ?assert
+s" ifdef-else" find drop 0= ?assert
 
 TESTING COMPLETE
 
