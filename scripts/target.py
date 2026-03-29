@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+# BoxLambda target interaction script.
+# This script is a wrapper around openocd, openFPGAloader and mcopy.
+# It allows the user to:
+# - reset the target
+# - flash or load a bitstream, bootloader, and/or application image.
+# - upload or download a ram disk image.
+# - attach a debugger.
+
 import argparse
 import sys
 import subprocess
@@ -104,9 +112,14 @@ def main():
 
     print("=== Target Control ===")
 
+    # The parsed arguments are mapped to command lists to be executed by
+    # the shell, openocd and/or openFPGAloader.
+
+    # List of shell commands to execute before running openocd or openFPGAloader
     shell_cmd_lists_early = []
     openocd_cmd_list = []
     openfpga_cmd_list = []
+    # List of shell commands to execute after running openocd or openFPGAloader
     shell_cmd_lists_late = []
 
     if args.verilator:
@@ -162,6 +175,8 @@ def main():
     if args.gdb:
         print("Wait for GDB requested")
         openocd_cmd_list += ["-c", "set GDB 1"]
+
+    # Now we execute the command lists:
 
     if shell_cmd_lists_early:
         for cmd_list in shell_cmd_lists_early:

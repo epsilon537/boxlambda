@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# This script creates: a FAT image file containing the contents of the given source dir.
+# This script creates a FAT image file containing the contents of the given source dir.
 # This script is used by the build system.
 
 if [[ "$#" < 2  || "$1" == "-h" ]]
@@ -13,6 +13,7 @@ IMG_FILE="$1"
 
 SRC_DIR="$2"
 
+# The image has to be exactly 1MB in size. This is expected by the BoxLambda kernel.
 dd if=/dev/zero of=$IMG_FILE bs=1M count=1
 mkfs.fat -S 512 $IMG_FILE
 mcopy -i $IMG_FILE -s $SRC_DIR/* ::/

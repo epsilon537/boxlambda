@@ -2,9 +2,9 @@
 # BoxLambda Operating System (WIP)
 #
 
-# Put the contents of the fs/ directory in an FAT image.
+# Put the contents of the forth/fs/ directory in an FAT image.
 set(FS_IMAGE ${CMAKE_CURRENT_BINARY_DIR}/boxfs.bin)
-set(FORTH_DIR ${PROJECT_SOURCE_DIR}/sw/components/forth)
+set(FORTH_FS_DIR ${PROJECT_SOURCE_DIR}/sw/components/forth/fs)
 
 # Dummy output which is never actually produced. Anything that depends on
 # this will always be rebuilt.
@@ -19,7 +19,7 @@ add_custom_command(
       OUTPUT
           ${FS_IMAGE}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/gen_fs_img.sh ${FS_IMAGE} ${FORTH_DIR}/fs
+          ${PROJECT_SOURCE_DIR}/scripts/gen_fs_img.sh ${FS_IMAGE} ${FORTH_FS_DIR}
       DEPENDS
           always_rebuild
       WORKING_DIRECTORY
@@ -76,6 +76,9 @@ function(add_boxlambda_kernel TARGET)
     link_and_create_image(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
 endfunction()
 
+# Two BoxLambda kernel variants:
+
+# 1. boxkern: the regular BoxLambda kernel
 add_boxlambda_kernel(boxkern
     SOURCES
         main.cpp
@@ -83,12 +86,15 @@ add_boxlambda_kernel(boxkern
 
 add_flash_sw_target(boxkern)
 
+# 2. boxkerntest: the BoxLambda kernel + testsuite
 add_boxlambda_kernel(boxkerntest
     SOURCES
         main.cpp
         forth_core_test.cpp
 )
 
+# boxkerntest builds all the same files as boxkern, plus one
+# additional file, forth_core_test.cpp, and with the following flag set:
 target_compile_definitions(boxkerntest PRIVATE FORTH_CORE_TEST)
 
 function(add_kernel_fs_targets TARGET)
@@ -110,6 +116,8 @@ function(add_kernel_fs_targets TARGET)
     )
 endfunction()
 
+# Add ramdisk filesystem image building and loading targets *fs and *fs_load for
+# the regular boxkern and for the boxkern-with-testsuite.
 add_kernel_fs_targets(boxkern)
 add_kernel_fs_targets(boxkerntest)
 

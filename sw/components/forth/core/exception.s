@@ -1,5 +1,5 @@
-# BoxLambda port of ZeptoForth's exception handling mechanism
-# by Ruben Lysens/Epsilon527.
+# BoxLambda RISC-V adaptation of ZeptoForth's exception handling mechanism
+# by Ruben Lysens/Epsilon537.
 #
 # Original header:
 #
