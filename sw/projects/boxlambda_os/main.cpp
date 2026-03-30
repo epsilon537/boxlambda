@@ -36,7 +36,7 @@ void	_exit (int status) {
 
 //The RAM disk image location variables provide by linker.
 extern char __fs_image_start[];
-extern char __fs_image_size[];
+extern char __fs_image_end[];
 
 // The file system objects
 #define NUM_VOLS 2
@@ -128,7 +128,8 @@ int main(void) {
 
   printf("Forth core init complete.\n");
 
-  disk_ram_init((unsigned char *)__fs_image_start, (unsigned long)__fs_image_size);
+  disk_ram_init((unsigned char *)__fs_image_start,
+                (unsigned long)(__fs_image_end - __fs_image_start));
 
   const char *boot_vol = mount_vols();
 
