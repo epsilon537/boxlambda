@@ -19,4 +19,4 @@ OUTDIR="$5"
 shift 5
 FLAGS="$*"
 
-verilator $FLAGS --top-module $TOP_MODULE -Wall -Wno-fatal -Wno-GENUNNAMED -Wno-BLKSEQ -Wno-SYNCASYNCNET -cc --trace-fst --exe -x-assign 0 --timing --timescale-override 1ns/1ns --build --prefix Vmodel --Mdir $OUTDIR/verilator $VLT_FILES $VLT_CPP_FILES $VERILATOR_SCRIPT && cp -f $OUTDIR/verilator/Vmodel $OUTDIR/Vmodel
+verilator $FLAGS --no-timing --top-module $TOP_MODULE -Wall -cc --trace-fst --exe -x-assign 0 --build --prefix Vmodel --Mdir $OUTDIR/verilator $VLT_FILES $VLT_CPP_FILES $VERILATOR_SCRIPT && cp -f $OUTDIR/verilator/Vmodel $OUTDIR/Vmodel
