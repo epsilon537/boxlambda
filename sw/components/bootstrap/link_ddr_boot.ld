@@ -18,7 +18,7 @@ __heap_size = 128m;
 
 /*'fmem' is the flash memory section.*/
 __fmem = 0x11600000;
-__fmem_size = 2m; /*2MB flash memory available for the SW image.*/
+__fmem_size = 2m; /*2MB flash memory available for the SW image*/
 
 ENTRY(_start)
 
@@ -38,6 +38,28 @@ SECTIONS
         KEEP (*(.init.header))
         *(.init.enter)
         *(.init)
+        *(.text.startup .text.startup.*)
+        *(.etext .etext.*)
+
+        . = ALIGN(8);
+    } >emem
+
+    PROVIDE( __ecode_end = . );
+    PROVIDE( __ecode_start = ADDR(.etext) );
+    PROVIDE( __ecode_source = LOADADDR(.etext) );
+
+    .edata : ALIGN_WITH_INPUT {
+        *(.edata .edata.*)
+
+        . = ALIGN(8);
+    } >emem
+
+    PROVIDE( __edata_end = . );
+    PROVIDE( __edata_start = ADDR(.edata) );
+    PROVIDE( __edata_source = LOADADDR(.edata) );
+
+    .itext : {
+        KEEP (*(.vectors))
         *(.text.unlikely .text.unlikely.*)
         *(.text .text.*)
         *(.gnu.linkonce.t.*)
@@ -59,35 +81,11 @@ SECTIONS
         KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
         KEEP (*(.fini_array .dtors))
         PROVIDE_HIDDEN ( __fini_array_end = . );
-    } >emem
-
-    PROVIDE( __ecode_end = . );
-    PROVIDE( __ecode_start = ADDR(.etext) );
-    PROVIDE( __ecode_source = LOADADDR(.etext) );
-    PROVIDE( __ecode_size = __ecode_end - __ecode_start );
-
-    .itext : {
-        KEEP (*(.vectors))
-        *(.itext .itext.*)
-
-        . = ALIGN(8);
     } >imem AT>emem
 
     PROVIDE( __icode_end = . );
     PROVIDE( __icode_start = ADDR(.itext) );
     PROVIDE( __icode_source = LOADADDR(.itext) );
-    PROVIDE( __icode_size = __icode_end - __icode_start );
-
-    .idata : ALIGN_WITH_INPUT {
-        *(.idata .idata.*)
-
-        . = ALIGN(8);
-    } >imem AT>emem
-
-    PROVIDE( __idata_end = . );
-    PROVIDE( __idata_start = ADDR(.idata) );
-    PROVIDE( __idata_source = LOADADDR(.idata) );
-    PROVIDE( __idata_size = __idata_end - __idata_start );
 
    /*
     * Data values which are preserved across reset
@@ -97,9 +95,9 @@ SECTIONS
         KEEP(*(SORT_BY_NAME(.preserve.*)))
         KEEP(*(.preserve))
         PROVIDE(__preserve_end__ = .);
-    } >emem
+    } >imem AT>emem
 
-    .edata : ALIGN_WITH_INPUT {
+    .idata : ALIGN_WITH_INPUT {
         *(.data .data.*)
         *(.gnu.linkonce.d.*)
 
@@ -121,35 +119,33 @@ SECTIONS
 
         *(.sdata .sdata.* .sdata2.*)
         *(.gnu.linkonce.s.*)
-    } >emem
+
+    } >imem AT>emem
 
    /* Thread local initialized data.*/
     .tdata : ALIGN_WITH_INPUT {
         *(.tdata .tdata.* .gnu.linkonce.td.*)
-    } >emem
+    } >imem AT>emem
 
     PROVIDE( __tdata_end = . );
     PROVIDE( __tdata_start = ADDR(.tdata) );
     PROVIDE( __tdata_source = LOADADDR(.tdata) );
-    PROVIDE( __tdata_size = SIZEOF(.tdata) );
     PROVIDE( __tls_base = ADDR(.tdata));
-    PROVIDE( __image_size = __tdata_source + __tdata_size - __ecode_source );
+    PROVIDE( __image_size = __tdata_source + __tdata_end - __tdata_start - __ecode_source );
 
-    PROVIDE( __edata_end = . );
-    PROVIDE( __edata_start = ADDR(.edata) );
-    PROVIDE( __edata_source = LOADADDR(.edata) );
-    PROVIDE( __edata_size = __edata_end - __edata_start );
+    PROVIDE( __idata_end = . );
+    PROVIDE( __idata_start = ADDR(.idata) );
+    PROVIDE( __idata_source = LOADADDR(.idata) );
 
     .tbss (NOLOAD) : {
         *(.tbss .tbss.* .gnu.linkonce.tb.*)
         *(.tcommon)
-    } >emem
+    } >imem
 
     PROVIDE( __tls_end = . );
     PROVIDE( __tbss_end = . );
+    PROVIDE( __ibss_start = ADDR(.tbss));
     PROVIDE( __tbss_start = ADDR(.tbss));
-    PROVIDE( __tbss_size = SIZEOF(.tbss) );
-    PROVIDE( __tls_size = __tls_end - __tls_base );
 
    /*
     * The linker special cases .tbss segments which are
@@ -162,27 +158,24 @@ SECTIONS
     */
     .tbss_space (NOLOAD) : {
         . = . + SIZEOF(.tbss);
-    } >emem
+    } >imem
 
-    .ebss (NOLOAD) : {
+    .ibss (NOLOAD) : {
         *(.sbss*)
         *(.gnu.linkonce.sb.*)
         *(.bss .bss.*)
         *(.gnu.linkonce.b.*)
         *(COMMON)
-    } >emem
-
-    PROVIDE( __ebss_start = ADDR(.tbss) );
-    PROVIDE( __ebss_end = . );
-    PROVIDE( __ebss_size = SIZEOF(.ebss) );
-
-    .ibss (NOLOAD) : {
-        *(.ibss .ibss.*)
     } >imem
 
     PROVIDE( __ibss_end = . );
-    PROVIDE( __ibss_start = ADDR(.ibss) );
-    PROVIDE( __ibss_size = SIZEOF(.ibss) );
+
+    .ebss (NOLOAD) : {
+        *(.ebss .ebss.*)
+    } >emem
+
+    PROVIDE( __ebss_end = . );
+    PROVIDE( __ebss_start = ADDR(.ebss) );
 
     /*Put the heap in emem*/
     .heap (NOLOAD) : {
@@ -191,7 +184,6 @@ SECTIONS
     } >emem
 
     PROVIDE (__heap_start = ADDR(.heap));
-
 
     /* Throw away C++ exception handling information */
 

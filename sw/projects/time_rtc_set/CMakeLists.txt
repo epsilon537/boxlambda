@@ -12,7 +12,7 @@ target_compile_options(time_rtc_set
 )
 
 link_and_create_image(time_rtc_set
- ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+ ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_boot.ld)
 
 target_link_libraries(time_rtc_set rtcc i2c gpio riscv timelib bootstrap)
 

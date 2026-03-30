@@ -215,8 +215,8 @@ int main(int argc, char** argv, char** env) {
     tick();
     tick();
 
-    // When not in interactive mode, simulate for 300000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 300000000)) {
+    // When not in interactive mode, simulate for 400000000 timeprecision periods
+    while (interactive_mode || (contextp->time() < 400000000)) {
         // Evaluate model
         tick();
     }

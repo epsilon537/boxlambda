@@ -402,7 +402,7 @@ void Vera_sprite::tile_set(uint32_t tileset_id, uint32_t tile_idx) {
   attrs_[3] = ww;
 }
 
-void Vera_sprite::tile_get(VERA_OUT uint32_t &tileset_id, VERA_OUT uint32_t& tile_idx) {
+void Vera_sprite::tile_get(OUT uint32_t &tileset_id, OUT uint32_t& tile_idx) {
   tileset_id = tileset_id_;
   tile_idx = tile_idx_;
 }
@@ -599,7 +599,7 @@ void Vera_layer::bitmap_set(uint32_t tileset_id, uint32_t tile_idx) {
   vera_layer_regs_->TILEBASE_bf.TILE_BASE_ADDR_16_11 = ((uint32_t)tileset.tile_data(tile_idx) - VERA_VRAM_BASE)>>11;
 }
 
-bool Vera_layer::bitmap_get(VERA_OUT uint32_t &tileset_id, VERA_OUT uint32_t &tile_idx) {
+bool Vera_layer::bitmap_get(OUT uint32_t &tileset_id, OUT uint32_t &tile_idx) {
   tileset_id = tileset_id_;
   tile_idx = tile_idx_;
   return vera_layer_regs_->CONFIG_bf.BITMAP_MODE == 1;
@@ -680,7 +680,7 @@ void Vera::screen_boundaries_set(IN Vera_screen_boundaries_t *boundaries) {
   VERA->DC_VSTOP = boundaries->vstop;
 }
 
-void Vera::screen_boundaries_get(VERA_OUT Vera_screen_boundaries_t *boundaries) {
+void Vera::screen_boundaries_get(OUT Vera_screen_boundaries_t *boundaries) {
   assert(boundaries);
 
   boundaries->hstart = VERA->DC_HSTART ;

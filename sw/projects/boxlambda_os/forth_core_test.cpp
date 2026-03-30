@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include "forth.h"
 
+// C <-> Forth FFI test functions
+
 //This function will be registered with Forth as a test.
 void test_c_fun() {
   uint32_t sp;

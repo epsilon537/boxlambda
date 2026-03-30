@@ -20,7 +20,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "sim")
   link_and_create_image(ym2149_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 else()
   link_and_create_image(ym2149_test
-  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_boot.ld)
 endif()
 
 target_link_libraries(ym2149_test gpio riscv bootstrap)

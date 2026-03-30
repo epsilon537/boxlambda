@@ -65,7 +65,6 @@ SECTIONS
     PROVIDE(__icode_end = .);
     PROVIDE( __icode_start = ADDR(.itext) );
     PROVIDE( __icode_source = ADDR(.itext) );
-    PROVIDE( __icode_size = __icode_end - __icode_start );
 
    /*
     * Data values which are preserved across reset
@@ -116,9 +115,6 @@ SECTIONS
     PROVIDE( __tdata_start = ADDR(.tdata));
     PROVIDE( __tdata_source = LOADADDR(.tdata) );
     PROVIDE( __tdata_source_end = LOADADDR(.tdata) + SIZEOF(.tdata) );
-    PROVIDE( __tdata_size = SIZEOF(.tdata) );
-
-    PROVIDE( __idata_size = __idata_end - __idata_start );
 
     .tbss (NOLOAD) : {
         *(.tbss .tbss.* .gnu.linkonce.tb.*)
@@ -127,11 +123,11 @@ SECTIONS
         PROVIDE( __tbss_end = . );
     } >imem
 
+    PROVIDE( __ibss_end = .);
+
     /*Notice that __bss_start is set here*/
     PROVIDE( __ibss_start = ADDR(.tbss));
     PROVIDE( __tbss_start = ADDR(.tbss));
-    PROVIDE( __tbss_size = SIZEOF(.tbss) );
-    PROVIDE( __tls_size = __tls_end - __tls_base );
 
    /*
     * The linker special cases .tbss segments which are
@@ -155,7 +151,6 @@ SECTIONS
     } >imem
 
     PROVIDE( __ibss_end = . );
-    PROVIDE( __ibss_size = __ibss_end - __ibss_start );
 
     /* Define a stack region to make sure it fits in memory */
     .stack (NOLOAD) : {
@@ -171,13 +166,13 @@ SECTIONS
 
     /*We don't have any other emem sections*/
     PROVIDE( __ecode_start = 0 );
+    PROVIDE( __ecode_end = 0 );
     PROVIDE( __ecode_source = 0 );
-    PROVIDE( __ecode_size = 0 );
     PROVIDE( __edata_start = 0 );
     PROVIDE( __edata_source = 0 );
-    PROVIDE( __edata_size = 0 );
+    PROVIDE( __edata_end = 0 );
     PROVIDE( __ebss_start = 0 );
-    PROVIDE( __ebss_size = 0 );
+    PROVIDE( __ebss_end = 0 );
 
     /* crt0 expects this but value is not relevant for images that boot from
     * imem.*/

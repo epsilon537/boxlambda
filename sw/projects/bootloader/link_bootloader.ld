@@ -74,7 +74,6 @@ SECTIONS
     PROVIDE( __icode_end = . );
     PROVIDE( __icode_start = ADDR(.itext) );
     PROVIDE( __icode_source = LOADADDR(.itext) );
-    PROVIDE( __icode_size = __icode_end - __icode_start );
 
     .etext : {
         *(.etext .etext.*)
@@ -85,7 +84,6 @@ SECTIONS
     PROVIDE( __ecode_end = . );
     PROVIDE( __ecode_start = ADDR(.etext) );
     PROVIDE( __ecode_source = LOADADDR(.etext) );
-    PROVIDE( __ecode_size = __ecode_end - __ecode_start );
 
     .edata : ALIGN_WITH_INPUT {
         *(.edata .edata.*)
@@ -96,7 +94,6 @@ SECTIONS
     PROVIDE( __edata_end = . );
     PROVIDE( __edata_start = ADDR(.edata) );
     PROVIDE( __edata_source = LOADADDR(.edata) );
-    PROVIDE( __edata_size = __edata_end - __edata_start );
 
    /*
     * Data values which are preserved across reset
@@ -141,13 +138,11 @@ SECTIONS
     PROVIDE( __tdata_end = . );
     PROVIDE( __tdata_start = ADDR(.tdata) );
     PROVIDE( __tdata_source = LOADADDR(.tdata) );
-    PROVIDE( __tdata_size = SIZEOF(.tdata) );
     PROVIDE( __tls_base = ADDR(.tdata));
 
     PROVIDE( __idata_end = . );
     PROVIDE( __idata_start = ADDR(.idata) );
     PROVIDE( __idata_source = LOADADDR(.idata) );
-    PROVIDE( __idata_size = __idata_end - __idata_start );
 
     .tbss (NOLOAD) : {
         *(.tbss .tbss.* .gnu.linkonce.tb.*)
@@ -158,8 +153,6 @@ SECTIONS
     PROVIDE( __tbss_end = . );
     PROVIDE( __ibss_start = ADDR(.tbss));
     PROVIDE( __tbss_start = ADDR(.tbss));
-    PROVIDE( __tbss_size = SIZEOF(.tbss) );
-    PROVIDE( __tls_size = __tls_end - __tls_base );
 
    /*
     * The linker special cases .tbss segments which are
@@ -183,7 +176,6 @@ SECTIONS
     } >imem
 
     PROVIDE( __ibss_end = . );
-    PROVIDE( __ibss_size = __ibss_end - __ibss_start );
 
     .ebss (NOLOAD) : {
         *(.ebss .ebss.*)
@@ -191,7 +183,6 @@ SECTIONS
 
     PROVIDE( __ebss_end = . );
     PROVIDE( __ebss_start = ADDR(.ebss) );
-    PROVIDE( __ebss_size = __ebss_end - __ebss_start );
 
     /*Put the heap in emem*/
     .heap (NOLOAD) : {

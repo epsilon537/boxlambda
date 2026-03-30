@@ -434,6 +434,8 @@ int sdspi_test(void) {
     }
   }
 
+  printf("Read sector test complete.\n");
+
 //
 //
 // WRITE SECTOR

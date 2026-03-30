@@ -24,5 +24,5 @@ else()
   )
 
   #This test requires a longer timeout.
-  set_tests_properties(sdspi_test_test PROPERTIES TIMEOUT 400)
+  set_tests_properties(sdspi_test_test PROPERTIES TIMEOUT 800)
 endif()

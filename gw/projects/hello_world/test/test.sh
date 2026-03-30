@@ -19,7 +19,7 @@ sleep 3
 VMODEL_PROCESS_ID=`jobs -p`
 
 #Launch riscv-openocd and connect to the model
-openocd -f $SRC_ROOT_DIR/scripts/verilator.openocd.cfg &
+target.py -verilator -gdb &
 sleep 3
 
 #Launch gdb, connect to target via openocd, execute a via debug actions as indicated in test.gdb script.
@@ -39,6 +39,9 @@ else
 fi
 
 $GDB --batch -x $SRC_ROOT_DIR/gw/projects/hello_world/test/test.gdb ../../../sw/projects/hello_world/hello_world > gdb.log
+
+#Kill the most recent background job, i.e. the target.py process.
+kill %+
 
 #Kill the Vmodel process so it doesn't linger forever in the background.
 kill -9 $VMODEL_PROCESS_ID

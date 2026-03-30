@@ -26,7 +26,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "sim")
   link_and_create_image(stsound_test ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 else()
   link_and_create_image(stsound_test
-  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_boot.ld)
 endif()
 
 target_link_libraries(stsound_test sdram stsound fatfs gpio riscv bootstrap)
