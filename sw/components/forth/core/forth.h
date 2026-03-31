@@ -66,6 +66,10 @@ void forth_eval_buf(char *s, bool verbose);
 // Uses printf. Errors are considered fatal.
 void forth_eval_file_or_die(const char *filename, bool verbose);
 
+// Parse the file containing the list of boxkern_includes, evaluating
+// each boxkern_include file in turn/
+void forth_eval_boxkern_includes_or_die(const char *filename, bool verbose);
+
 // Register a C function with signature: void fun(void). Fun uses the datastack object for parameter passing.
 #define forth_register_cfun(fun, wordname) \
            forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)

@@ -160,4 +160,100 @@ void forth_eval_file_or_die(const char *filename, bool verbose) {
   assert(fr == 0);
 }
 
+// Skip over whitespaces in string. Return 0 if end sentinel is reached.
+char *skip_whitespace(char *inpos, char *strend) {
+  assert(inpos); assert(strend);
+
+  while (inpos < strend) {
+    switch (*inpos) {
+      case ' ' : ;
+      case '\t': break;
+      default: return inpos;
+    }
+
+    ++inpos;
+  }
+
+  return 0;
+}
+
+// Skip over whitespaces in string. Return 0 if end sentinel is reached.
+char *skip_nonwhitespace(char * inpos, char *strend) {
+  assert(inpos); assert(strend);
+
+  while (inpos < strend) {
+    switch (*inpos) {
+      case ' ' : ;
+      case '\t': return inpos;
+      default: ;
+    }
+
+    ++inpos;
+  }
+
+  return 0;
+}
+
+FIL boxkern_include_fil;
+char boxkern_include_buf[MAX_LINE_LENGTH+1];
+
+void forth_eval_boxkern_includes_or_die(const char *filename, bool verbose) {
+  FRESULT fr;
+  FILINFO fno;
+
+  printf("Parsing %ss...\n", filename);
+
+  fr = f_stat(filename, &fno);
+  if (fr || (fno.fattrib & AM_DIR))
+    die("File not found: %s.\n", filename);
+
+  fr = f_open(&boxkern_include_fil, filename, FA_READ);
+  assert(fr == 0);
+
+  size_t len;
+  char *line, *pos, *strend;
+
+  //Guarantee an end sentinel for strlen.
+  boxkern_include_buf[MAX_LINE_LENGTH] = 0;
+
+  while (!f_eof(&boxkern_include_fil)) {
+    line = f_gets(boxkern_include_buf, MAX_LINE_LENGTH, &boxkern_include_fil);
+    assert(line);
+    len = strlen(line);
+    assert(len > 0); //Should at least contain \n.
+
+    if (len >= MAX_LINE_LENGTH) die("Line got truncated: %s.\n", line);
+
+    //Remove terminating newline.
+    --len; line[len] = 0;
+
+    strend = line + len;
+    pos = line;
+
+    // Skip lines starting with \.
+    if (line[0] == '\\') continue;
+
+    pos = skip_whitespace(pos, strend);
+    if (!pos) continue;
+
+    // Line starting with boxkern_include
+    if (strstr(pos, "boxkern_include") == pos) {
+      // Skip over boxkern_include and the whitespace that follows
+      pos = skip_nonwhitespace(pos, strend);
+      if (pos == 0) die("Invalid line: %s\n", line);
+      pos = skip_whitespace(pos, strend);
+      if (pos == 0) die("Invalid line: %s\n", line);
+
+      //What remains of the line is the name of the file we want to evaluate
+      forth_eval_file_or_die(pos, verbose);
+    }
+    else {
+      die("Invalid line: %s\n", line);
+    }
+  }
+
+  fr = f_close(&boxkern_include_fil);
+  assert(fr == 0);
+}
+
 

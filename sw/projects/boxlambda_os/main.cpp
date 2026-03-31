@@ -146,22 +146,10 @@ int main(void) {
   printf("Initializing Forth Filesystem FFI...\n");
   fs_ffi_init(volumes, NUM_VOLS);
 
-  // The order is important. They build up a stack, with shell.fs on top.
-  forth_eval_file_or_die("forth/except.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/lambda.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/struct.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/heap.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/pool.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/temp-alloc.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/istr.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/escstr.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/tonumber.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/printf.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/cstr.fs", /*verbose=*/ false);
 
-  forth_eval_file_or_die("forth/fs.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/fs_redirect.fs", /*verbose=*/ false);
-  forth_eval_file_or_die("forth/shell.fs", /*verbose=*/ false);
+  // Parse the file containing the list of boxkern_includes, evaluating
+  // each boxkern_include file in turn/
+  forth_eval_boxkern_includes_or_die("forth/boxkern-includes.fs", /*verbose*/ false);
 
 // Set when building boxkerntest.
 #ifdef FORTH_CORE_TEST

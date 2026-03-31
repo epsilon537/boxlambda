@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   codebase.
 - Added `forth_eval_file_or_die()` function to `forth.h/cpp`.
 - New Forth Features:
+    - boxkern_include, a pre-include Word include mechanism.
     - Forth core Words `>compileto` and `compileto>` to save/restore compile-to
       (IMEM or EMEM) state.
     - Exception handling, Zeptoforth-based, adapted to RISC-V.
