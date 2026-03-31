@@ -5,7 +5,7 @@
 # It allows the user to:
 # - reset the target
 # - flash or load a bitstream, bootloader, and/or application image.
-# - upload or download a ram disk image.
+# - upload or download a directory as RAM disk image.
 # - attach a debugger.
 
 import argparse
@@ -63,16 +63,16 @@ def parse_args():
 
     parser.add_argument(
         "-load_fs",
-        metavar="LOAD_FS_IMAGE",
+        metavar="LOAD_FS",
         type=Path,
-        help="Load filesystem image.",
+        help="Upload directory as RAM filesystem image.",
     )
 
     parser.add_argument(
         "-dump_fs",
         metavar="DUMP_FS",
         type=Path,
-        help="Dump filesystem.",
+        help="Dump RAM filesystem image to directory.",
     )
 
     parser.add_argument(
@@ -151,12 +151,16 @@ def main():
         openocd_cmd_list += ["-c", "set RESET 1"]
 
     if args.load_fs:
-        validate_file(args.load_fs, "Filesystem image")
-        print(f"Loading filesystem image: {args.load_fs}")
-        openocd_cmd_list += ["-c", f"set LOAD_FS {args.load_fs}"]
+        print(f"Uploading dir as RAM disk: {args.load_fs}")
+        shell_cmd_lists_early.append(["dd", "if=/dev/zero", "of=boxfs.img", "bs=1M", "count=1"])
+        shell_cmd_lists_early.append(["mkfs.fat", "-S", "512", "boxfs.img"])
+        #subprocess doesn't go through shell -> use python to do the globbing.
+        files = [str(p) for p in Path(args.load_fs).glob("*")]
+        shell_cmd_lists_early.append(["mcopy", "-i", "boxfs.img", "-s", *files, "::/"])
+        openocd_cmd_list += ["-c", f"set LOAD_FS boxfs.img"]
 
     if args.dump_fs:
-        print(f"Dumping filesystem to dir: {args.dump_fs}")
+        print(f"Dumping RAM disk to dir: {args.dump_fs}")
         shell_cmd_lists_early.append(["rm", "-f", f"{args.dump_fs}.img"])
         shell_cmd_lists_early.append(["rm", "-rf", args.dump_fs])
         openocd_cmd_list += ["-c", f"set DUMP_FS {args.dump_fs}.img"]

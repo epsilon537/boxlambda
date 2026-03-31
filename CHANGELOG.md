@@ -10,10 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Introduced target.py, a target interaction script handling target reset,
   flashing/loading bitstream/bootloader/application image, up/downloading
-  ram disk image, debugger attachment.
+  ram disk images, debugger attachment.
 - Introduced FATFS media interface for RAM disks: `sw/components/fatfs/diskio_ram.cpp`.
-- Introduced `gen_fs_img.sh`, a script that turns a given directory into
-  a FAT RAM disk image that can be uploaded to BoxLambda.
 - Created two FATFS volumes on BoxLambda OS: the SD disk `sd0:`, and a RAM disk `ram:`.
 - Introduced FATFS FFI for Forth: `sw/components/forth/core/fs_ffi.cpp`.
 - Redirection of Picolibc's stdio to Forth's `emit` and `key`.
@@ -67,6 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Renamed `link_ddr_to_imem_boot.ld` to `link_ddr_boot.ld`.
 - Bootloader spins (if all switches are off) before loading application image instead of after
   loading application image.
+- Increased JTAG clock speed to 25MHz.
 
 ### Removed
 
@@ -78,6 +77,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `forth_eval*` variants are sufficient.
 - Removed `sw/projects/forth_core_test/`. This is now the `boxkerntestfs` target of
   `sw/projects/boxlambda_os`.
+- Removed WSL references.
 
 ## Label `v0.3.1`: Changes sinces label `v0.3.0` - 2025-12-24
 

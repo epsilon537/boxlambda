@@ -3,48 +3,13 @@
 #
 
 # Put the contents of the forth/fs/ directory in an FAT image.
-set(FS_IMAGE ${CMAKE_CURRENT_BINARY_DIR}/boxfs.bin)
 set(FORTH_FS_DIR ${PROJECT_SOURCE_DIR}/sw/components/forth/fs)
-
-# Dummy output which is never actually produced. Anything that depends on
-# this will always be rebuilt.
-add_custom_command(
-    OUTPUT always_rebuild
-    COMMAND cmake -E echo
-    COMMENT
-        "always_rebuild dummy command."
-)
-
-add_custom_command(
-      OUTPUT
-          ${FS_IMAGE}
-      COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/gen_fs_img.sh ${FS_IMAGE} ${FORTH_FS_DIR}
-      DEPENDS
-          always_rebuild
-      WORKING_DIRECTORY
-          ${CMAKE_CURRENT_BINARY_DIR}
-      COMMENT
-          "Creating file system image."
-      VERBATIM
-  )
-
-add_custom_target(boxfs
-    WORKING_DIRECTORY
-        ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS
-        ${FS_IMAGE}
-    COMMENT
-        "BoxLambda FS image generation target."
-)
 
 add_custom_target(boxfs_load
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}
     COMMAND
-        ${PROJECT_SOURCE_DIR}/scripts/target.py -load_fs ${FS_IMAGE}
-    DEPENDS
-        boxfs
+        ${PROJECT_SOURCE_DIR}/scripts/target.py -load_fs ${FORTH_FS_DIR}
     COMMENT
         "BoxLambda FS image loading target."
 )
@@ -98,25 +63,19 @@ add_boxlambda_kernel(boxkerntest
 target_compile_definitions(boxkerntest PRIVATE FORTH_CORE_TEST)
 
 function(add_kernel_fs_targets TARGET)
-    add_custom_target(${TARGET}fs
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS ${TARGET} ${FS_IMAGE}
-        COMMENT "BoxLambda ${TARGET} and FS image generation target."
-    )
-
     add_custom_target(${TARGET}fs_load
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py
                 -reset
-                -load_fs ${FS_IMAGE}
+                -load_fs ${FORTH_FS_DIR}
                 -load_app ${TARGET}.bin
                 -run
-        DEPENDS ${TARGET}fs
+        DEPENDS ${TARGET}
         COMMENT "BoxLambda ${TARGET} and FS image loading target."
     )
 endfunction()
 
-# Add ramdisk filesystem image building and loading targets *fs and *fs_load for
+# Add ramdisk filesystem image building and loading target *fs_load for
 # the regular boxkern and for the boxkern-with-testsuite.
 add_kernel_fs_targets(boxkern)
 add_kernel_fs_targets(boxkerntest)
