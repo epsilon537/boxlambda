@@ -1,5 +1,6 @@
 include /test/core-compat.fs
 include /test/fph-ext.fs
+include /forth/irq.fs
 
 \ ------------------------------------------------------------------------
 \  These definitions have a different behaviour in Mecrisp-Quintus:
