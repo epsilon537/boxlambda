@@ -66,6 +66,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Bootloader spins (if all switches are off) before loading application image instead of after
   loading application image.
 - Increased JTAG clock speed to 25MHz.
+- Moved test gateware and software components and directories to a `test/` subdirectory.
 
 ### Removed
 
