@@ -1,0 +1,16 @@
+start
+
+XXXXXX>
+(vera :banana)
+Error: Action keyword not found: :banana Known keywords: (:init :map :tileset :p
+ixel :linecapture :spritebank :ien :isr :irqline :scanline :display :sprites :hs
+cale :vscale :bordercolor :boundaries :layer :palette :sprite)
+XXXXXX> (vera :layer 0 :banana)
+Error: Action keyword not found: :banana Known keywords: (:enable :disable :enab
+led :hscroll :vscroll :map :tileset :bitmap :pal-offset)
+XXXXXX> (vera :sprite 0 :banana)
+Error: Action keyword not found: :banana Known keywords: (:init :tileset :x :y :
+z :pal-offset :mask :hflip :vflip :info)
+XXXXXX>
+'end
+end

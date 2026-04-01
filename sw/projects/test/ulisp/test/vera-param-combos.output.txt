@@ -1,0 +1,29 @@
+start
+
+XXXXXX>
+(vera :map 1 :width 32 :height 32 :map-type 2)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 2)
+
+XXXXXX> (vera :tileset 2 :width 8 :height 8 :bpp 1 :num-tiles 2)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 1 :num-tiles 2 :tilesize-bytes 8)
+
+XXXXXX> (vera :layer 1 :tileset 2 :map 1)
+2
+
+XXXXXX> (vera :layer 1 :tileset)
+2
+
+XXXXXX> (vera :layer 1 :map)
+1
+
+XXXXXX>
+(vera :sprite 1 :y 20 :x 10 :vflip :enable :mask 3)
+20
+
+XXXXXX> (vera :sprite 1 :info)
+(:tileset nil :tile nil :x 10 :y 20 :z 0 :pal-offset 0 :mask 3 :hflip :disabled
+:vflip :enabled)
+
+XXXXXX>
+'end
+end

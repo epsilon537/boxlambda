@@ -1,0 +1,20 @@
+#SW test project builds:
+add_subdirectory(hello_world)
+add_subdirectory(ddr_test)
+add_subdirectory(vera_test)
+add_subdirectory(sdspi_test)
+add_subdirectory(fatfs_test)
+add_subdirectory(ym2149_test)
+add_subdirectory(stsound_test)
+add_subdirectory(usb_hid_sys_test)
+add_subdirectory(spiflash_test)
+add_subdirectory(timer_uart_gpio_irqs)
+add_subdirectory(i2c_test)
+add_subdirectory(rtcc_test)
+add_subdirectory(reset_test)
+add_subdirectory(dfx_test)
+add_subdirectory(invalid_address)
+add_subdirectory(ibex_perf_test)
+add_subdirectory(time_rtc_set)
+
+

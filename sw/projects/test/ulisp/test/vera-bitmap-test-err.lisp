@@ -1,0 +1,23 @@
+'start
+(vera :init)
+(vera :tileset 0 :width 320 :height 1 :bpp 1 :num-tiles 1)
+(vera :tileset 0 :width 320 :height 1 :bpp 1 :num-tiles 1)
+(vera :tileset 0 :deinit)
+(vera :tileset 0 :deinit)
+(vera :tileset 0 :width 320)
+(vera :tileset 0 :width 320 :height 1)
+(vera :tileset 0 :width 320 :height 1 :bpp 1)
+(vera :tileset 0 :width 320 :height 1 :bpp 1 :num-tiles 0)
+(vera :tileset 0 :width 321 :height 1 :bpp 1 :num-tiles 1)
+(vera :tileset 0 :width 320 :height 0 :bpp 1 :num-tiles 1)
+(vera :tileset 0 :width 320 :height 1 :bpp 10 :num-tiles 1)
+(vera :tileset 1 :width 320 :height 240 :bpp 8 :num-tiles 1)
+(vera :tileset 2 :width 320 :height 240 :bpp 8 :num-tiles 1)
+
+
+
+
+
+
+'end
+

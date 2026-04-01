@@ -1,0 +1,47 @@
+start
+
+XXXXXX> (vera :display :enable)
+1
+
+XXXXXX> (vera :layer 0 :enable)
+1
+
+XXXXXX> (vera :map 0 :width 32 :height 32 :map-type +vera-map-type-txt16+)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 0)
+
+XXXXXX> (vera :layer 0 :map 0)
+0
+
+XXXXXX> (vera :map 0 :entry :x 0 :y 0 :val 257)
+257
+
+XXXXXX> (dolist (w (list 8 16))
+  (dolist (h (list 8 16))
+    (vera :tileset 0 :width w :height h :bpp 1 :num-tiles 8)
+    (vera :layer 0 :tileset 0)
+    (vera :pixel :tileset 0 :tile 1 :x (- w 1) :y (- h 1) :val 1)
+    (print (vera :pixel :tileset 0 :tile 1 :x (- w 1) :y (- h 1)))
+    (vera :irqline (- h 1))
+    (vera :linecapture :enable)
+    (loop (if (= (vera :linecapture :enabled) 0) (return)))
+    (print (vera :linecapture :pixel :x (- w 1)))
+    (vera :pixel :tileset 0 :tile 1 :x (- w 1) :y (- h 1) :val 0)
+    (vera :tileset 0 :deinit)))
+
+1
+(:r 15 :g 15 :b 15)
+1
+(:r 15 :g 15 :b 15)
+1
+(:r 15 :g 15 :b 15)
+1
+(:r 15 :g 15 :b 15)
+nil
+
+XXXXXX>
+
+
+
+
+'end
+end

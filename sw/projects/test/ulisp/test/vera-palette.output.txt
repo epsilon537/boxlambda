@@ -1,0 +1,110 @@
+start
+
+XXXXXX> (vera :display :enable)
+1
+
+XXXXXX> (vera :layer 0 :enable)
+1
+
+XXXXXX> (vera :tileset 0 :width 320 :height 32 :bpp 8 :num-tiles 1)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num-tiles 1 :tilesize-bytes 10240
+)
+
+XXXXXX> (vera :layer 0 :bitmap :tileset 0 :tile 0)
+(:tileset 0 :tile 0)
+
+XXXXXX> (vera :pixel :tileset 0 tile 0 :x 0 :y 0 :val 255)
+Error: undefined: tile
+XXXXXX> (print (vera :pixel :tileset 0 :tile 0 :x 0 :y 0))
+
+0
+0
+
+XXXXXX>
+(vera :irqline 0)
+0
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 0))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x 1))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+(vera :palette 0 :r 3 :g 2 :b 1)
+(:r 3 :g 2 :b 1)
+
+XXXXXX> (vera :palette 255 :r 1 :g 2 :b 3)
+(:r 1 :g 2 :b 3)
+
+XXXXXX> (print (vera :palette 0))
+
+(:r 3 :g 2 :b 1)
+(:r 3 :g 2 :b 1)
+
+XXXXXX> (print (vera :palette 255))
+
+(:r 1 :g 2 :b 3)
+(:r 1 :g 2 :b 3)
+
+XXXXXX>
+(vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 0))
+
+(:r 3 :g 2 :b 1)
+(:r 3 :g 2 :b 1)
+
+XXXXXX> (print (vera :linecapture :pixel :x 1))
+
+(:r 3 :g 2 :b 1)
+(:r 3 :g 2 :b 1)
+
+XXXXXX>
+(vera :palette :restore)
+nil
+
+XXXXXX> (print (vera :palette 0))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :palette 255))
+
+(:r 15 :g 0 :b 11)
+(:r 15 :g 0 :b 11)
+
+XXXXXX>
+(vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 0))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x 1))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+'end
+end

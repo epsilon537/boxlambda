@@ -1,0 +1,87 @@
+V - Init map w params: width height map_type
+V  - Invalid params.
+V  - Double reinit.
+V  - Deinit-reinit.
+V  - Double deinit.
+V  - Read back.
+V  - Exhaust VRAM.
+
+V - Init tileset w params: width height bpp num_tiles
+V  - Attempt invalid params
+V  - Attempt to reinit
+V  - Deinit-reinit
+V  - Double deinit
+V  - Read back
+V  - Exhaust VRAM.
+V  - Try to install invalid tileset at layer, bitmap, sprite.
+
+V - Init bitmap w params: width height bpp
+V  - Attempt invalid params
+V  - Attempt to reinit
+V  - Deinit-reinit
+V  - Double deinit
+V  - Read back
+V  - Exhaust VRAM.
+
+V - Irqline/scanline: Wait until line irq then read scanline
+M - Turn display off then back on, read back display state
+V - Modify hscale, read back
+V - Modify vscale, read back
+V - Modify screen boundaries, read back
+
+Layers:
+V - Turn layer off then back on, read back state.
+V - Modify hscroll
+V - Modify vscoll
+
+Map types:
+V - TXT16: Create map entries w different fore- and background colors.
+V - TXT256: Create map entries w different foreground colors.
+V - TILE: Create map entries w different h- and v-flips and palette offsets.
+
+Tiles:
+V - Try different widths, heights, color depths.
+
+Bitmaps:
+V - Try different widths, heights, color depths.
+
+V - Set tile in four corners of map.
+V - Read back.
+V - Attempt invalid row/col.
+
+V - Draw tile. Params width height bpp.
+V - Attempt invalid x/y
+V - Read back.
+
+V - Draw bitmap. Params width height bpp.
+V - Attempt invalid x/y
+V - Read back.
+
+V - Modify bitmap palette offset. Read back.
+
+V - Modify palette entries. First, last, read back.
+V - Restore default palette.
+V - Check system palette colors.
+V - Use border color. Read back.
+
+Sprite:
+V - Switch sprite banks, get sprite bank
+V - Init sprite. Params tileset_id tile_idx
+V - Attempt invalid params
+V - Read back
+
+V - Modify sprite x. Read back.
+V - Modify sprite y. Read back.
+V - Modify sprite palette offset. Read back.
+V - Modify z-depth. Read back.
+V - Modify h-flip. Read back.
+V - Modify v-flip. Read back.
+
+V - Test collision mask. Read back.
+
+V - Draw sprite. Use sprite tile sizes.
+V - Attempt invalid x y
+
+
+
+
