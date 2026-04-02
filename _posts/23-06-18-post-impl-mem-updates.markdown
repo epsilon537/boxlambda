@@ -4,6 +4,8 @@ title: 'Post-Implementation Memory Updates.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 18 July 2023: Added the RAM_DECOMP("power") section.*
 
 *Updated 23 December 2025:*
@@ -137,7 +139,7 @@ I organized the gateware build rules as follows:
 
 *Gateware Build Targets.*
 
-For a full description of BoxLambda's build system, see [https://boxlambda.readthedocs.io/en/latest/build-system/](https://boxlambda.readthedocs.io/en/latest/build_sys_dir_struct/).
+For a full description of BoxLambda's build system, see [https://boxlambda.readthedocs.io/en/jun_18_23/build-system/](https://boxlambda.readthedocs.io/en/jun_18_23/build-system/).
 
 Other BoxLambda Changes
 -----------------------
@@ -163,8 +165,8 @@ Other BoxLambda Changes
 		```
 
 - I created two linker script variants:
-    - **boxlambda/sw/components/bootstrap/link_internal_mem_64K.ld**: This is the linker script for an internal memory size of 64KB. This script results in a software image that can run both on the Arty-A7-35T and the Arty-A7-100T (FPGA and simulation).
-    - **boxlambda/sw/components/bootstrap/link_internal_mem_256K.ld**: This is the linker script for an internal memory size of 256KB. This script results in a software image that only runs on the Arty-A7-100T (FPGA and simulation).
+    - [boxlambda/sw/components/bootstrap/link_internal_mem_64K.ld](https://github.com/epsilon537/boxlambda/blob/e6e6cecc55c062ca38ac347138408f1a83d1e281/sw/components/bootstrap/link_internal_mem_64K.ld): This is the linker script for an internal memory size of 64KB. This script results in a software image that can run both on the Arty-A7-35T and the Arty-A7-100T (FPGA and simulation).
+    - [boxlambda/sw/components/bootstrap/link_internal_mem_256K.ld](https://github.com/epsilon537/boxlambda/blob/e6e6cecc55c062ca38ac347138408f1a83d1e281/sw/components/bootstrap/link_internal_mem_256K.ld): This is the linker script for an internal memory size of 256KB. This script results in a software image that only runs on the Arty-A7-100T (FPGA and simulation).
 
 - I created two simulation build tree variants:
     - **sim-a7-35** for Verilator simulation of Arty-A7-35T builds
@@ -176,7 +178,7 @@ Try It Out
 Setup
 =====
 
-1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/jun_18_23/prerequisites/).
 2. Get the BoxLambda repository:
 	```
 	git clone https://github.com/epsilon537/boxlambda/

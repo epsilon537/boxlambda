@@ -5,6 +5,8 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 In the previous post, I outlined the operating system architecture I have in mind for BoxLambda. I’ve now taken the first step toward that architecture: porting Matthias Koch’s [Mecrisp Quintus Forth](https://mecrisp.sourceforge.net) to BoxLambda and adding a Forth–C FFI, allowing C code to call Forth code and vice versa.
 
 # Context
@@ -29,7 +31,7 @@ I'm using the following two specific terms in this post:
 - **Word**: When I write *Word* with a captital *W*, I'm referring to a Forth Word.
 - **Non-Core Word**: A Forth Word that is not part of the Forth core.
 
-For a complete list of terms and abbreviations used in BoxLambda, see [here](https://boxlambda.readthedocs.io/en/latest/terms-and-abbreviations/).
+For a complete list of terms and abbreviations used in BoxLambda, see [here](https://boxlambda.readthedocs.io/en/dec_29_25/terms-and-abbreviations/).
 
 # BoxLambda Modifications to the Mecrisp Forth Core
 
@@ -73,9 +75,9 @@ core).
 
 ## Modif 3: Booting Forth from C
 
-The original Mecrisp Forth boots the Forth core directly from flash memory. The early boot code is part of the Mecrisp Forth core. BoxLambda, on the other hand, first boots up a C environment (see [here](https://boxlambda.readthedocs.io/en/latest/sw_bootloader/)), then the C environment boots up the Forth environment using the Forth-C FFI. The next section discusses the Forth-C FFI in more detail.
+The original Mecrisp Forth boots the Forth core directly from flash memory. The early boot code is part of the Mecrisp Forth core. BoxLambda, on the other hand, first boots up a C environment (see [here](https://boxlambda.readthedocs.io/en/dec_29_25/sw_bootloader/)), then the C environment boots up the Forth environment using the Forth-C FFI. The next section discusses the Forth-C FFI in more detail.
 
-From BoxLambda OS's [main.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/boxlambda_os/main.cpp):
+From BoxLambda OS's [main.cpp](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/projects/boxlambda_os/main.cpp):
 
 ```
   forth_core_init();
@@ -126,7 +128,7 @@ ckomma: # Write 8 bits in Dictionary
   ret
 ```
 
-The top-level source file is [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, and recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
+The top-level source file is [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, and recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
 
 [![Forth Core Org](../assets/forth-core_org.png)](../assets/forth-core_org.png)
 
@@ -134,7 +136,7 @@ The top-level source file is [mecrisp-quintus-boxlambda.s](https://github.com/ep
 
 ## Key Variables
 
-Understanding the purpose of the following variables, defined in [forth-core.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth-core.s), is essential to be able to understand the Forth Core:
+Understanding the purpose of the following variables, defined in [forth-core.s](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/forth-core.s), is essential to be able to understand the Forth Core:
 
 - `DictionaryPointer`: The *primary* dictionary pointer. Dictionary search
 starts here. `DictionaryPointer` corresponds to Forth variable `(dp)`, taking into account that
@@ -169,22 +171,22 @@ preprocessing stage, matches the run-time mechanism executed by
 
 ### Inefficiencies
 
-If you look at the definitions of core variables (for example, [hook-emit](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/terminalhooks.s)), you’ll see that each variable’s initial value is placed immediately after its code. [catchmempointers.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/catchmempointers.s) then copies this value to the variable’s location at the end of IMEM. This is wasteful: each core variable occupies two IMEM locations—one for the variable itself and one for its initial value. This behavior is a legacy of the boot-from-flash design. I plan to fix this in a future release.
+If you look at the definitions of core variables (for example, [hook-emit](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/terminalhooks.s)), you’ll see that each variable’s initial value is placed immediately after its code. [catchmempointers.s](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/catchmempointers.s) then copies this value to the variable’s location at the end of IMEM. This is wasteful: each core variable occupies two IMEM locations—one for the variable itself and one for its initial value. This behavior is a legacy of the boot-from-flash design. I plan to fix this in a future release.
 
 # The Forth-C Foreign Function Interface (FFI)
 
 API:
 
-- [sw/components/forth_core/forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h)
+- [sw/components/forth_core/forth.h](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/forth.h)
 
 Implementation:
 
-- [sw/components/forth_core/forth.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.cpp)
-- The `c-fun` Word in [sw/components/forth_core/init.fs](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/init.fs)
-- Forth-to-C: [sw/components/forth_core/c-ffi.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/c-ffi.s)
-- C-to-Forth: [sw/components/forth_core/mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s)
+- [sw/components/forth_core/forth.cpp](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/forth.cpp)
+- The `c-fun` Word in [sw/components/forth_core/init.fs](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/init.fs)
+- Forth-to-C: [sw/components/forth_core/c-ffi.s](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/c-ffi.s)
+- C-to-Forth: [sw/components/forth_core/mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/mecrisp-quintus-boxlambda.s)
 
-The BoxLambda C-Forth FFI is loosely based on Peter Schmid's work for the [Mecrisp Cube project](https://github.com/spyren/Mecrisp-Cube/tree/master).
+The BoxLambda C-Forth FFI is loosely based on Peter Schmid's work for the [Mecrisp Cube project](https://github.com/spyren/Mecrisp-Cube).
 
 C uses a single stack to manage the call stack, stack frames (local variables), and—when many parameters are involved—parameter passing. Forth, by contrast, uses two stacks: a *Return Stack* and a *Data Stack*. The Return Stack is used to track the call stack and stack frames, while the Data Stack is used for parameter passing.
 
@@ -193,7 +195,7 @@ fit. It doesn't require any additional software constructs. The C compiler
 manages the C stack, while on the Forth side, the Mecrisp Quintus Forth Core is already using the
 RISC-V stack pointer register (x2) as the return stack pointer.
 
-The Data Stack does require a software construct. The [forth_core_init_](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s) assembly function initializes a global `datastack` object with the following layout in C (see [forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h)):
+The Data Stack does require a software construct. The [forth_core_init_](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/mecrisp-quintus-boxlambda.s) assembly function initializes a global `datastack` object with the following layout in C (see [forth.h](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/forth.h)):
 
 ```
 typedef struct {
@@ -278,7 +280,7 @@ If C needs to call Forth Word `foo` many times, it's better to store foo's execu
 
 When Forth calls C, it updates the `datastack` object with its current *TOS* and *PSP* values. It then invokes one of the registered C functions. The registered C function retrieves input parameters from the stack using `forth_popda()` and pushes output parameters/return values on the stack using `forth_pushda()`.
 
-C functions are registered with Forth using the following macro from [forth.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/forth.h):
+C functions are registered with Forth using the following macro from [forth.h](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/forth.h):
 
 ```
 // Register a C function with signature: void fun(void). Fun uses the datastack object for parameter passing.
@@ -333,7 +335,7 @@ ok
 
 ## Loading init.fs
 
-The file [init.fs](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/init.fs) contains auxilliary Forth Words, such as the disassembler. At the moment, BoxLambda OS [initialization code](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/boxlambda_os/main.cpp) is loading init.fs as a single, large text string, using the `forth_load_buf()` function:
+The file [init.fs](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/init.fs) contains auxilliary Forth Words, such as the disassembler. At the moment, BoxLambda OS [initialization code](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/projects/boxlambda_os/main.cpp) is loading init.fs as a single, large text string, using the `forth_load_buf()` function:
 
 ```
   forth_load_buf((char*)init_fs, /*verbose=*/ false);
@@ -382,7 +384,7 @@ I also save the C stack pointer (x2/sp) into a global variable upon entry
 into Forth so I can restore the stack to this point if the Forth `reset` Word is
 invoked.
 
-See `forth_core_init_` and `forth_core_fun_` in [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/mecrisp-quintus-boxlambda.s).
+See `forth_core_init_` and `forth_core_fun_` in [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/mecrisp-quintus-boxlambda.s).
 
 ### Register Usage in case of Forth Calling C
 
@@ -410,15 +412,15 @@ The table below summarizes the actions to be taken per register.
 | x15    | a5    | Function argument, not preserved across calls/no need save before use | Free scratch register, not preserved across calls | None. |
 | x16-31 | --    | -- | Not used in vanilla forth core | None. |
 
-See `call-c` in [c-ffi.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/c-ffi.s) along with Word `c-fun` in [init.fs](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth_core/init.fs).
+See `call-c` in [c-ffi.s](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/c-ffi.s) along with Word `c-fun` in [init.fs](https://github.com/epsilon537/boxlambda/blob/v0.3.1/sw/components/forth_core/init.fs).
 
 # The Forth Word List
 
-The current Forth Word list can be found [here](https://boxlambda.readthedocs.io/en/latest/forth-glossary/).
+The current Forth Word list can be found [here](https://boxlambda.readthedocs.io/en/dec_29_25/forth-glossary/).
 
 # Try It Out
 
-For instructions to build and flash the BoxLambda Gateware, Bootloader and OS, see [here](installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+For instructions to build and flash the BoxLambda Gateware, Bootloader and OS, see [here](https://boxlambda.readthedocs.io/en/dec_29_25/installation/).
 
 Once booted up, you're dropped in the Forth REPL and can start entering Forth instructions. Here's a quick example hooking up a timer ISR and setting a one-shot timer:
 
@@ -487,7 +489,7 @@ see mtime-irq-handle
 
 ## The Forth Core Test Suite
 
-To build and run the Forth Core test suite, see [here](https://boxlambda.readthedocs.io/en/latest/sw-test-build-forth-core/).
+To build and run the Forth Core test suite, see [here](https://boxlambda.readthedocs.io/en/dec_29_25/sw-test-build-forth-core/).
 
 # Conclusion
 
@@ -499,7 +501,7 @@ Next, I’ll be integrating the FatFS filesystem into the Forth environment.
 
 - [Mecrisp Forth](https://mecrisp.sourceforge.net).
 - [Mecrisp Stellaris Unofficial Documentation](https://mecrisp-stellaris-folkdoc.sourceforge.io/index.html#index).
-- [Mecrisp Cube](https://github.com/spyren/Mecrisp-Cube/tree/master).
-- [BoxLambda Documentation](https://boxlambda.readthedocs.io/en/latest/).
+- [Mecrisp Cube](https://github.com/spyren/Mecrisp-Cube).
+- [BoxLambda Documentation](https://boxlambda.readthedocs.io/en/dec_29_25/).
 
 

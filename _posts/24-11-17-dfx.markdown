@@ -5,6 +5,8 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Partial FPGA Reconfiguration* is an FPGA feature that allows you to dynamically reconfigure a portion of an FPGA design while the remaining part of the design remains unchanged and operational. The Arty A7 100T has this feature and I started adding support for it in BoxLambda. While it's still a work in progress, I have reached a point where I can dynamically load a gateware component in the BoxLambda SoC, under the control of the SoC itself. To demonstrate this feature, I developed a test program that dynamically loads a J1B CPU core and boots the SwapForth run-time firmware on this core. There are, however, some caveats.
 
 Recap
@@ -29,7 +31,7 @@ Summarizing the current state of affairs of BoxLambda, we have:
 - Automated testing on Verilator and CocoTB.
 - A Linux CMake and Bender-based Software and Gateware build system.
 
-The BoxLambda SoC top-level: [gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)
+The BoxLambda SoC top-level: [gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/dfx/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)
 
 Terminology
 -----------
@@ -148,11 +150,11 @@ See section [Try It Yourself](#try-it-yourself) below for instructions for build
 
 **The j1b_test Test SoC project directory**:
 
-[https://github.com/epsilon537/boxlambda/tree/master/gw/projects/j1b_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/j1b_test)
+[https://github.com/epsilon537/boxlambda/tree/dfx/gw/projects/j1b_test](https://github.com/epsilon537/boxlambda/tree/dfx/gw/projects/j1b_test)
 
 **The j1b_test Test Program**:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/j1b_test/j1b_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/j1b_test/j1b_test.cpp)
+[https://github.com/epsilon537/boxlambda/blob/dfx/sw/projects/j1b_test/j1b_test.cpp](https://github.com/epsilon537/boxlambda/blob/dfx/sw/projects/j1b_test/j1b_test.cpp)
 
 Phase 2: Defining the RP and RMs
 --------------------------------
@@ -235,7 +237,7 @@ module boxlambda_soc #(...)(...)
 endmodule
 ```
 
-Empty vs0 module declaration (In practice, I'm using the [vs0_stub source](https://github.com/epsilon537/boxlambda/blob/master/gw/components/vs0_stub/rtl/vs0.sv) with the module body *ifdef'd* out):
+Empty vs0 module declaration (In practice, I'm using the [vs0_stub source](https://github.com/epsilon537/boxlambda/blob/dfx/gw/components/vs0_stub/rtl/vs0.sv) with the module body *ifdef'd* out):
 
 ```
 module vs0 (
@@ -277,7 +279,7 @@ endmodule
 
 Step 2: Synthesize the RMs
 ==========================
-Synthesize components *vs0_stub* and *vs0_j1b* Out of Context (OOC). For each, generate a synthesis checkpoint: *vs0_stub_synth.dcp* and *vs0_j1b_synth.dcp*. 
+Synthesize components *vs0_stub* and *vs0_j1b* Out of Context (OOC). For each, generate a synthesis checkpoint: *vs0_stub_synth.dcp* and *vs0_j1b_synth.dcp*.
 
 Make a note of the resource utilization of *vs0_j1b*. When we're defining the RP's Pblock, we want to make sure it's big enough to hold this RM.
 
@@ -304,7 +306,7 @@ read_checkpoint -cell boxlambda_soc_inst/vs0_inst vs0_stub_synth.dcp
 
 Step 5: Create a Pblock for the RP
 ==================================
-Create a Pblock for RP *VS0* by staking out the Pblock's region in the design's floor plan. 
+Create a Pblock for RP *VS0* by staking out the Pblock's region in the design's floor plan.
 
 ![Pblock with properties](../assets/pblock_w_properties.png)
 
@@ -353,7 +355,7 @@ set_property RESET_AFTER_RECONFIG true [get_pblocks pblock_vs0]
 set_property SNAPPING_MODE ON [get_pblocks pblock_vs0]
 ```
 
-The placement of the Pblock within the floor plan significantly impacts routing. It might require some experimentation to determine which placements are routable and meet timing. For some projects, this could be a challenging task, but for Boxlambda, with its relatively slow clock and plenty of free space on the device, it was not an issue. 
+The placement of the Pblock within the floor plan significantly impacts routing. It might require some experimentation to determine which placements are routable and meet timing. For some projects, this could be a challenging task, but for Boxlambda, with its relatively slow clock and plenty of free space on the device, it was not an issue.
 
 One guideline I have encountered is to first implement the design with the biggest candidate RM statically instantiated in the build (i.e. without using DFX), then check where the Vivado router placed the module (you can highlight the instance in the floor plan) and use that information to guide the placement of the RP.
 
@@ -424,19 +426,19 @@ I captured the above steps into a handful of Vivado scripts executed by BoxLambd
 - **Step 1**: Project Synthesis:
     - **Directory**: *build/arty-a7-100t/gw/projects/\<project>*
     - **Build Command**: `make <project_name>_synth`
-    - **Vivado Scripts Invoked**: [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl).
+    - **Vivado Scripts Invoked**: [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/dfx/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/dfx/scripts/vivado_synth.tcl).
 - **Step 2**: Component OOC Synthesis:
-    - **Directory**: *build/arty-a7-100t/gw/components/\<component>* 
+    - **Directory**: *build/arty-a7-100t/gw/components/\<component>*
     - **Build Command**: `make <component_name>_synth`
-    - **Vivado Scripts Invoked**: [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_synth.tcl) (same scripts as used for project synthesis, but the *create_project* script is invoked with a *-ooc* flag).
+    - **Vivado Scripts Invoked**: [scripts/vivado_create_project.tcl](https://github.com/epsilon537/boxlambda/blob/dfx/scripts/vivado_create_project.tcl) followed by [scripts/vivado_synth.tcl](https://github.com/epsilon537/boxlambda/blob/dfx/scripts/vivado_synth.tcl) (same scripts as used for project synthesis, but the *create_project* script is invoked with a *-ooc* flag).
 - **Steps 3-7**: Building the project's static bitstream file as well as the bitstream file of the default RM:
-    - **Directory**: *build/arty-a7-100t/gw/projects/\<project>* 
+    - **Directory**: *build/arty-a7-100t/gw/projects/\<project>*
     - **Build Command**: `make <project_name>_bit`
-    - **Vivado Script Invoked**: [scripts/vivado_impl_dfx_prj.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_prj.tcl)
+    - **Vivado Script Invoked**: [scripts/vivado_impl_dfx_prj.tcl](https://github.com/epsilon537/boxlambda/blob/dfx/scripts/vivado_impl_dfx_prj.tcl)
 - **Steps 8-10**: Building the alternate RM's bitstream file:
-    - **Directory**: *build/arty-a7-100t/gw/components/\<component>* 
+    - **Directory**: *build/arty-a7-100t/gw/components/\<component>*
     - **Build Command**: `make <component_name>_bit`
-    - **Vivado Script Invoked**: [scripts/vivado_impl_dfx_rm.tcl](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_impl_dfx_rm.tcl).
+    - **Vivado Script Invoked**: [scripts/vivado_impl_dfx_rm.tcl](https://github.com/epsilon537/boxlambda/blob/dfx/scripts/vivado_impl_dfx_rm.tcl).
 
 The [Try It Yourself: DFX Test](#the-dfx-test-on-fpga) section below walks you through the complete build and test procedure.
 
@@ -464,7 +466,7 @@ To manage the loading of an RM into an RP from the SoC itself, a DFX Controller 
 
     ![DFX Flow 4](../assets/dfx_flow_4.png)
 
-The software program monitors the progression via the DFX Controller status register. 
+The software program monitors the progression via the DFX Controller status register.
 
 The *dfx_test* program contains a software routine that implements the complete sequence. See function *dfx_load_module()* in file [sw/projects/dfx_test/dfx_cli.cpp](https://github.com/epsilon537/boxlambda/blob/98b4f4e6d4bf33efa24f122d65c103f06b76289e/sw/projects/dfx_test/dfx_cli.cpp).
 
@@ -515,7 +517,7 @@ The DFX Controller IP bus interfaces are AXI-based. BoxLambda is Wishbone based.
 
 Here's the RTL:
 
-[gw/components/wb_dx_controller/rtl/wb_dfx_controller.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv)
+[gw/components/wb_dx_controller/rtl/wb_dfx_controller.sv](https://github.com/epsilon537/boxlambda/blob/dfx/gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv)
 
 The DFX Test Program Structure and CLI
 --------------------------------------
@@ -526,7 +528,7 @@ The DFX Test Program Structure and CLI
 
 The DFX Test Program is not an automatic test case like the previous BoxLambda test cases. It runs exclusively on the Arty-A7-100T and requires user interaction through a CLI. The CLI commands are grouped into modules:
 
-- [dfx_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/dfx_cli.cpp): This is a CLI wrapper around the [dfx_hal](https://github.com/epsilon537/boxlambda/blob/master/sw/components/dfx/dfx_controller_hal.h) component. Most commands let you interact with the DFX Controller at a low level. However, there's one high-level command, **dfx_load_module**, that implements the entire sequence of loading an RM's bitstream file from the filesystem into the VS0 RP.
+- [dfx_cli](https://github.com/epsilon537/boxlambda/blob/dfx/sw/projects/dfx_test/dfx_cli.cpp): This is a CLI wrapper around the [dfx_hal](https://github.com/epsilon537/boxlambda/blob/dfx/sw/components/dfx/dfx_controller_hal.h) component. Most commands let you interact with the DFX Controller at a low level. However, there's one high-level command, **dfx_load_module**, that implements the entire sequence of loading an RM's bitstream file from the filesystem into the VS0 RP.
 
     ```
     * dfx_control
@@ -548,7 +550,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
      * dfx_load_module
             dfx_load_module <filename>
     ```
-- [j1b_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/j1b_cli.cpp): This CLI allows you to boot the SwapForth firmware image on the J1B core and to transfer serial port I/O to the J1B providing access to its REPL.
+- [j1b_cli](https://github.com/epsilon537/boxlambda/blob/dfx/sw/projects/dfx_test/j1b_cli.cpp): This CLI allows you to boot the SwapForth firmware image on the J1B core and to transfer serial port I/O to the J1B providing access to its REPL.
 
     ```
      * j1b_boot
@@ -557,7 +559,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
             Forward UART I/O to J1B.
     ```
 
-- [mem_fs_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/mem_fs_cli/mem_fs_cli.cpp): This CLI module provides file system commands such as *ls* and *rm* as well as commands for loading files into memory and save memory buffers to files.
+- [mem_fs_cli](https://github.com/epsilon537/boxlambda/blob/dfx/sw/components/mem_fs_cli/mem_fs_cli.cpp): This CLI module provides file system commands such as *ls* and *rm* as well as commands for loading files into memory and save memory buffers to files.
 
     ```
      * rm
@@ -574,7 +576,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
             list directory contents.
     ```
 
-- [ymodem_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ymodem_cli/ymodem_cli.cpp): The **ymodem_rx** command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to BoxLambda. While I could copy everything onto an SD card and then move that card from PC to BoxLambda, I prefer this method as it involves fewer moving parts.
+- [ymodem_cli](https://github.com/epsilon537/boxlambda/blob/dfx/sw/components/ymodem_cli/ymodem_cli.cpp): The **ymodem_rx** command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to BoxLambda. While I could copy everything onto an SD card and then move that card from PC to BoxLambda, I prefer this method as it involves fewer moving parts.
 
     ```
      * ymodem_rx
@@ -586,7 +588,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
 The Core Signature Register
 ===========================
 
-The block diagram above shows a [vs0_hal](https://github.com/epsilon537/boxlambda/blob/master/sw/components/vs0_hal/vs0_hal.h). This HAL contains definitions that are common across all VS0 RM variants (currently just *vs0_j1b* and *vs0_stub*): 
+The block diagram above shows a [vs0_hal](https://github.com/epsilon537/boxlambda/blob/dfx/sw/components/vs0_hal/vs0_hal.h). This HAL contains definitions that are common across all VS0 RM variants (currently just *vs0_j1b* and *vs0_stub*):
 - The base address and size of the VS0 RM address space.
 - The VS0 Signature Register at the end of the VS0 RM address space. All VS0 RM variants are expected to implement this register and return a value that is unique to the RM. This allows software to identify the RM loaded into the RP before attempting to access RM-specific registers or memory. The *dfx_read_core_sig* command in the *dfx_cli* module reads this register.
 
@@ -621,14 +623,14 @@ Regarding the lack of portability, I will treat DFX as an optional feature. Simi
 
 Other Changes
 -------------
-Not all changes I make between blog posts are directly related to the topic at hand. In the past, I used to capture these updates here, but moving forward, I’ll track them in a dedicated [CHANGELOG.md](https://github.com/epsilon537/boxlambda/blob/master/CHANGELOG.md) file.
+Not all changes I make between blog posts are directly related to the topic at hand. In the past, I used to capture these updates here, but moving forward, I’ll track them in a dedicated [CHANGELOG.md](https://github.com/epsilon537/boxlambda/blob/dfx/CHANGELOG.md) file.
 
 Try It Yourself
 ---------------
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/nov_17_24/prerequisites/).
 2. Get the BoxLambda repository:
 
     ```
@@ -668,7 +670,7 @@ The J1B Test on Verilator
     DUT: J1B program length in bytes: 32768
     DUT: Taking J1B out of reset...
     DUT: Sending test string: 42 EMIT
-    DUT: 
+    DUT:
     DUT: Test string sent. Forwarding UART...
     DUT:  * ok
     SIM: String matched.
@@ -700,7 +702,7 @@ The J1B Test on FPGA
 
     ```
     : star 42 emit ;  ok
-    cr star cr star cr star 
+    cr star cr star cr star
     *
     *
     * ok
@@ -709,7 +711,7 @@ The J1B Test on FPGA
 The DFX Test on FPGA
 ====================
 
-1. Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/latest/pmods/#microsd-pmod) and insert a FAT formatted SD card.
+1. Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/nov_17_24/pmods/#microsd-pmod) and insert a FAT formatted SD card.
 
 2. Connect a terminal program to Arty's USB serial port. I suggest using a terminal program that supports Ymodem transfers such as *Minicom*. **Settings: 115200 8N1**.
 
@@ -806,7 +808,7 @@ The DFX Test on FPGA
 12. Confirm that all the required files are on the filesystem by running the *ls* CLI command:
 
     ```
-    > ls 
+    > ls
        <DIR>   SYSTEM~1
          32768 NUC.BIN
         592780 VS0_J1B
@@ -842,7 +844,7 @@ The DFX Test on FPGA
 15. Finally, we forward the serial port to the J1B core so we can access its REPL:
 
     ```
-    > j1b_fwd_uart 
+    > j1b_fwd_uart
     Reading core signature register...
     Read signature value: 0xf041011b
     Signature correct. Checking if J1B has been booted up...
@@ -852,7 +854,7 @@ The DFX Test on FPGA
 16. You can now start entering Forth instructions.
 
     ```
-    CR 42 emit CR 
+    CR 42 emit CR
     *
      ok
     ```

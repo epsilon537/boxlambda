@@ -3,6 +3,9 @@ layout: post
 title: 'SPI Flash Access, Boot, and Core.'
 comments: true
 ---
+
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 10 June 2025: Corrected the example code retrieving the Flash
 ID. The previously shown code included a CFG_USERMODE flag which isn't
 needed.*
@@ -128,9 +131,9 @@ BoxLambda's SPI Flash core uses the ZipCPU spixpress core as a starting point. I
 
 The BoxLambda version of the Spiflash core and Flashsim co-simulator can be found here:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/spiflash/rtl/spiflash.v](https://github.com/epsilon537/boxlambda/blob/master/gw/components/spiflash/rtl/spiflash.v)
+[https://github.com/epsilon537/boxlambda/blob/spi_flash/gw/components/spiflash/rtl/spiflash.v](https://github.com/epsilon537/boxlambda/blob/spi_flash/gw/components/spiflash/rtl/spiflash.v)
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/spiflash/sim/flashsim.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/components/spiflash/sim/flashsim.cpp)
+[https://github.com/epsilon537/boxlambda/blob/spi_flash/gw/components/spiflash/sim/flashsim.cpp](https://github.com/epsilon537/boxlambda/blob/spi_flash/gw/components/spiflash/sim/flashsim.cpp)
 
 Reading from Flash - the Data Interface
 =======================================
@@ -196,7 +199,7 @@ As an example, the Flash Driver code sequence to read the Flash Device ID looks 
 
 The primary purpose of the Control Interface is to allow software to write to Flash. One does not simply write a byte to flash, however. The appropriate sector needs to be identified, erased, and paged (written). The **flashdrvr** software module implements this logic. BoxLambda's *flashdrvr* module is a simplified version of the one found in the *qspiflash* repo. All the logic related to Quad- or Dual-SPI flash support has been removed.
 
-[https://github.com/epsilon537/boxlambda/tree/master/sw/components/flashdrvr](https://github.com/epsilon537/boxlambda/tree/master/sw/components/flashdrvr)
+[https://github.com/epsilon537/boxlambda/tree/spi_flash/sw/components/flashdrvr](https://github.com/epsilon537/boxlambda/tree/spi_flash/sw/components/flashdrvr)
 
 Timing
 ======
@@ -240,7 +243,7 @@ Booting Software from Flash
 ---------------------------
 To be able to boot a software image from flash memory, I need to define a new boot sequence. The boot sequence is split across two modules:
 - [vectors.S](): Assembly code containing the Boot Vector and early startup code (nothing more than setting the CPU registers to zero, really).
-- **crt0** ([.c](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap/crt0.c) and [.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/crt0.h)): Contains the bulk of the startup code, including relocation and initialization of code, data, and BSS segments. Crt0 sets up the "C" environment. So far, I've been using the crt0 module that comes with picolibc, but because customization is required for the flash boot sequence, I put the BoxLambda variant in [sw/components/bootstrap/](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap).
+- **crt0** ([.c](https://github.com/epsilon537/boxlambda/tree/spi_flash/sw/components/bootstrap/crt0.c) and [.h](https://github.com/epsilon537/boxlambda/blob/spi_flash/sw/components/bootstrap/crt0.h)): Contains the bulk of the startup code, including relocation and initialization of code, data, and BSS segments. Crt0 sets up the "C" environment. So far, I've been using the crt0 module that comes with picolibc, but because customization is required for the flash boot sequence, I put the BoxLambda variant in [sw/components/bootstrap/](https://github.com/epsilon537/boxlambda/tree/spi_flash/sw/components/bootstrap).
 
 The flash boot sequence looks like this:
 
@@ -251,7 +254,7 @@ The flash boot sequence looks like this:
 Note that, technically, BoxLambda doesn't boot from Flash Memory. It boots from CMEM at address offset 0x80. There, it executes the early startup code defined in *vectors.S* before jumping to the CRT0 code located in Flash Memory.
 I could have just pointed the Ibex Boot Vector to Flash Memory, but because I already have so many test programs that execute directly from CMEM, I decided to keep the Boot-from-CMEM feature, and from there branch to Flash Memory if so desired. The CMEM software program that just branches to the flash boot code (i.e. containing just *vectors.S*) is located here:
 
-[https://github.com/epsilon537/boxlambda/tree/master/sw/projects/cmem_to_flash_vector](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/cmem_to_flash_vector)
+[https://github.com/epsilon537/boxlambda/tree/spi_flash/sw/projects/cmem_to_flash_vector](https://github.com/epsilon537/boxlambda/tree/spi_flash/sw/projects/cmem_to_flash_vector)
 
 The Linker Script
 =================
@@ -309,8 +312,8 @@ MEMORY
 ```
 
 BoxLambda has two linker scripts:
-- [link_cmem_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_cmem_boot.ld): For software images that boot from CMEM.
-- [link_flash_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_flash_boot.ld): For software images that boot from Flash.
+- [link_cmem_boot.ld](https://github.com/epsilon537/boxlambda/blob/spi_flash/sw/components/bootstrap/link_cmem_boot.ld): For software images that boot from CMEM.
+- [link_flash_boot.ld](https://github.com/epsilon537/boxlambda/blob/spi_flash/sw/components/bootstrap/link_flash_boot.ld): For software images that boot from Flash.
 
 Note that BoxLambda no longer has separate linker scripts for the Arty-A7-35T and the Arty-A7-100T. The CMEM and DMEM sizes are passed to the linker via symbols defined by the build system. These symbols no longer have to be defined inside the linker scripts, so the same linker scripts can be used for the Arty-A7-35T and the Arty-A7-100T.
 
@@ -338,7 +341,7 @@ The **spiflash_test** program does the following:
 5. Write a different character string of the same length to the same Flash Memory location.
 6. Read back the character string from Flash Memory and compare it against the written string.
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/spiflash_test/spiflash_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/spiflash_test/spiflash_test.cpp)
+[https://github.com/epsilon537/boxlambda/blob/spi_flash/sw/projects/spiflash_test/spiflash_test.cpp](https://github.com/epsilon537/boxlambda/blob/spi_flash/sw/projects/spiflash_test/spiflash_test.cpp)
 
 Other Changes
 -------------
@@ -387,7 +390,7 @@ Try It Yourself
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/may_23_24/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
@@ -480,13 +483,11 @@ A single-SPI flash core is a tiny core that can add a lot of value to a project.
 
 References
 ----------
-[Spansion S25FL128S Flash Datasheet](https://www.infineon.com/dgdl/Infineon-S25FL128S_S25FL256S_128_Mb_(16_MB)_256_Mb_(32_MB)_3.0V_SPI_Flash_Memory-DataSheet-v18_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ecfb6a64a17&utm_source=cypress&utm_medium=referral&utm_campaign=202110_globe_en_all_integration-files&_ga=2.126822669.1446861363.1715422103-205165240.1710706435)
-
-[Micron N25Q128A13ESF40F Flash Datasheet](https://www.mouser.co.uk/datasheet/2/671/micts06184_1-2290782.pdf)
+[Spansion S25FL128S Flash Datasheet](https://www.mouser.com/datasheet/2/100/CYPR_S_A0011122469_1-2541373.pdf?srsltid=AfmBOorUkZctaUwDGElpL98FRA8BJ3WfRI3XJ128usetyl1UP_-8_1Lb)
 
 [Artix 7 Datasheet](https://docs.amd.com/v/u/en-US/ds181_Artix_7_Data_Sheet)
 
-[7 Series FPGAs SelectIO Resources](https://doc.inmys.ru/open?path=ic%5Cfpga%5Cxilinx%5Cug471_7Series_SelectIO.pdf)
+[7 Series FPGAs SelectIO Resources](https://docs.amd.com/v/u/en-US/ug471_7Series_SelectIO)
 
 [Arty A7 Reference Manual](https://digilent.com/reference/programmable-logic/arty-a7/reference-manual)
 

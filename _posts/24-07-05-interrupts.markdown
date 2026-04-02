@@ -5,6 +5,8 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025:*
 - *Removed references to PicoRV DMA which is no longer included in the SoC.*
 - *Removed reference to 'On WSL' documentation.*
@@ -106,11 +108,11 @@ The RISC-V Machine Timer Registers specification can be found in section 3.1.15 
 
 This is the timer module software API:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/components/timer/timer.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/timer/timer.h)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/sw/components/timer/timer.h](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/components/timer/timer.h)
 
 And this is the timer core's verilog code:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_timer/rtl/wb_timer.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_timer/rtl/wb_timer.sv)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/gw/components/wb_timer/rtl/wb_timer.sv](https://github.com/epsilon537/boxlambda/blob/interrupts/gw/components/wb_timer/rtl/wb_timer.sv)
 [https://github.com/epsilon537/ibex/blob/boxlambda/shared/rtl/timer.sv](https://github.com/epsilon537/ibex/blob/boxlambda/shared/rtl/timer.sv)
 
 Ibex RISC-V Interrupt Assignments
@@ -183,7 +185,7 @@ To be able to access the CSRs easily from C/C++ I'm using Five Embeddev's *riscv
 
 The library consists of a single .h file, which I copied into BoxLambda's *riscv* software component directory:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/riscv-csr.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/riscv-csr.h)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/sw/components/riscv/riscv-csr.h](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/components/riscv/riscv-csr.h)
 
 Vectored Mode
 =============
@@ -195,7 +197,7 @@ Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry 
 
 Inverted Dependencies and Weak Bindings
 =======================================
-The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: If you insert into the vector table a straightforward call to your application-specific interrupt service routine, you end up with an inverted dependency. You don't want the lowest layer platform code to depend directly on the higher layer application code. To get around that issue, I defined *weak bindings* for all the interrupts service routines inside vectors.S:
+The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: If you insert into the vector table a straightforward call to your application-specific interrupt service routine, you end up with an inverted dependency. You don't want the lowest layer platform code to depend directly on the higher layer application code. To get around that issue, I defined *weak bindings* for all the interrupts service routines inside vectors.S:
 
 ```
 // Weak bindings for the fast IRQs. These will be overridden in the
@@ -245,7 +247,7 @@ _exc_handler:          //_exc_handler is overridden in the interrupts SW module.
   jal x0, _exc_handler
 ```
 
-As you can see, the weak bindings jump to *_exc_handler*, and the default _exc_handler jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h):
+As you can see, the weak bindings jump to *_exc_handler*, and the default _exc_handler jumps to itself. The idea is that these default weak bindings never get invoked and that they get overruled with actual interrupt service routine implementations in higher layer code. I put the C language declarations of the interrupt service routines in [interrupts.h](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/components/interrupts/interrupts.h):
 
 ```
 void _rm_2_irq_handler(void) __attribute__((interrupt("machine")));
@@ -331,7 +333,7 @@ Enabling Interrupts
 ===================
 To receive interrupts, you need to enable the global CPU interrupt, *mstatus.MIE*, as well as the specific Machine Interrupts you want to receive by setting their bits in the MIE CSR.
 
-[Interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h) defines functions to enable and disable global as well as specific machine interrupts:
+[Interrupts.h](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/components/interrupts/interrupts.h) defines functions to enable and disable global as well as specific machine interrupts:
 
 ```
 /* Disable the global interrupt line at CPU level.*/
@@ -375,17 +377,17 @@ The Interrupt API
 - It declares, but does not define (that's up to application code), all interrupt service routines.
 - It provides functions to enable/disable global and machine interrupts.
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/sw/components/interrupts/interrupts.h](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/components/interrupts/interrupts.h)
 
 Testing
 -------
 The VERA, SDSPI, and USB interrupts I tested by extending their respective system test cases to include validation of interrupt triggers.
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/vera_test/vera_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/vera_test/vera_test.c)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/sw/projects/vera_test/vera_test.c](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/projects/vera_test/vera_test.c)
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/sdspi_test/sdtest.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/sdspi_test/sdtest.c)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/sw/projects/sdspi_test/sdtest.c](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/projects/sdspi_test/sdtest.c)
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/usb_hid_sys_test/usb_hid_sys_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/usb_hid_sys_test/usb_hid_sys_test.cpp)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/sw/projects/usb_hid_sys_test/usb_hid_sys_test.cpp](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/projects/usb_hid_sys_test/usb_hid_sys_test.cpp)
 
 For testing Timer, GPIO, and UART interrupts, I created a separate system test case called **timer_uart_gpio_irqs**.
 
@@ -393,11 +395,11 @@ Some external interaction is required for GPIO and UART testing. On FPGA, follow
 
 This is the test program running on Ibex:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c](https://github.com/epsilon537/boxlambda/blob/interrupts/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c)
 
 And this is the verilator test bench code:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/projects/timer_uart_gpio_irqs/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/timer_uart_gpio_irqs/sim/sim_main.cpp)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/gw/projects/timer_uart_gpio_irqs/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/interrupts/gw/projects/timer_uart_gpio_irqs/sim/sim_main.cpp)
 
 Other Changes
 -------------
@@ -420,7 +422,7 @@ Try It Yourself
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/jul_5_24/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

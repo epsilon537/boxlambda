@@ -5,6 +5,8 @@ comments: true
 youtubeId: whIKsVm54Ko
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025:*
 - *Corrected link to Bender in documentation.*
 - *Removed reference to 'On WSL' documentation.*
@@ -62,7 +64,7 @@ For the most part, I was able to use the *YM2149_PSG_system* code as-is. I just 
 
 - I added a Wishbone front end.
 - I made I2S support optional, controlled by a *USE_I2S* define.
-- Rather than have the top-level YM2149_PSG_system module include the Verilog files of the submodules it depends on, I added all required modules separately to the BoxLambda project in a *Bender.yml* manifest (see [https://boxlambda.readthedocs.io/en/latest/build_sys_gw_build_struct/#bender](https://boxlambda.readthedocs.io/en/latest/build_sys_gw_build_struct/#the-gateware-build-structure)). BoxLambda's build system dependency checking doesn't work well will Verilog modules including other Verilog modules.
+- Rather than have the top-level YM2149_PSG_system module include the Verilog files of the submodules it depends on, I added all required modules separately to the BoxLambda project in a *Bender.yml* manifest (see [https://boxlambda.readthedocs.io/en/aug_19_23/build_sys_gw_build_struct/#bender](https://boxlambda.readthedocs.io/en/aug_19_23/build-system/#bender)). BoxLambda's build system dependency checking doesn't work well will Verilog modules including other Verilog modules.
 - I made a few code tweaks to pacify Vivado's synthesizer.
 
 I forked the *YM2149_PSG_system* repo to track my changes:
@@ -118,7 +120,7 @@ The Uwe Beis article above describes the idea well enough. However, I was unable
 
 Here is my Verilog code:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/audio_dac/rtl/one_bit_dac.sv)
+[https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/components/audio_dac/rtl/one_bit_dac.sv)
 
 It wasn't obvious to me how to size the two accumulators used in the implementation so that they don't overflow and create conversion errors. I ended up adding logic that checks for overflows and experimented with different audio samples. The outcome was that for a 16-bit input signal, the stage-1 accumulator needs to be 20 bits in size and the stage-2 accumulator needs to be 22 bits in size.
 
@@ -132,11 +134,11 @@ I created a test project to test the one-bit DAC. The RTL consists of a sine wav
 
 Here's the top-level Verilog:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/rtl/audio_dac_test.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/rtl/audio_dac_test.sv)
+[https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/projects/audio_dac_test/rtl/audio_dac_test.sv](https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/projects/audio_dac_test/rtl/audio_dac_test.sv)
 
-The Verilator testbench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to **pcm_out.py** and the DAC samples as a Python array to **dac_out.py**. The testbench will also flag an error if any accumulator overflows are reported.
+The Verilator testbench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/projects/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to **pcm_out.py** and the DAC samples as a Python array to **dac_out.py**. The testbench will also flag an error if any accumulator overflows are reported.
 
-The Verilator testbench executes for 0.5s simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/audio_dac_test/test/dac_test.py)) imports the generated *pcm_out.py* and *dac_out.py* and performs the following operations:
+The Verilator testbench executes for 0.5s simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/projects/audio_dac_test/test/dac_test.py)) imports the generated *pcm_out.py* and *dac_out.py* and performs the following operations:
 1. The PCM samples and DAC samples are converted to numpy arrays and normalized.
 2. Both signals are sent through a low-pass filter.
 3. An FFT is taken of the filtered signals, so we have a frequency domain view and a time domain view of both signals.
@@ -145,7 +147,7 @@ The Verilator testbench executes for 0.5s simulated time. Then, a python module 
 
 The test project code is located here:
 
-[https://github.com/epsilon537/boxlambda/tree/master/gw/projects/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/audio_dac_test)
+[https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/gw/projects/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/gw/projects/audio_dac_test)
 
 See the [Try It Out](#try-it-out) section below for instructions to build and run the test yourself.
 
@@ -155,7 +157,7 @@ This test project is a BoxLambda SoC with the *YM2149_PSG_system* core and the o
 Through software, the *YM2149_PSG_system* core is configured to produce six tones at six different pitches.
 Similar to the previous test, the Verilator testbench code checks for accumulator overflows and saves the generated audio samples to *pcm_out.py* and *dac_out.py* for further analysis in Python.
 
-The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/ym2149_dac_test/test/ym2149_test.py)) imports the generated *dac_out.py* and performs the following operations:
+The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/projects/ym2149_dac_test/test/ym2149_test.py)) imports the generated *dac_out.py* and performs the following operations:
 1. The DAC samples are converted to a numpy array and normalized.
 2. The normalized signal is sent through a low-pass filter.
 3. The frequency spectrum of the filtered signal is computed.
@@ -164,7 +166,7 @@ The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob
 
 The test project code is located here:
 
-[https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test)
+[https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/gw/projects/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/gw/projects/ym2149_dac_test)
 
 See the [Try It Out](#try-it-out) section below for instructions to build and run the test yourself.
 
@@ -188,7 +190,7 @@ The *ST-Sound* code base is written for Windows, but it was easy to add a Linux 
 
 It's convenient to have a Linux port available to cross-check against, but what I needed, of course, was a BoxLambda port of the StSound library, using the YM2149 audio core. I created the port as a BoxLambda software component:
 
-[https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound)
+[https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/sw/components/stsound)
 
 As you can see in the *CMakeLists.txt*, the port references some of the original *ST-Sound* library files unmodified in the *stsound* git submodule. The *ST-Sound* library files that required significant modification I copied locally to the *boxlambda/sw/component/stsound/* directory.
 
@@ -220,22 +222,22 @@ The script returns a correlation score. If we have an 80% match or more, the tes
 
 The Verilator test bench is located here:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/projects/stsound_test/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/stsound_test/sim/sim_main.cpp)
+[https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/projects/stsound_test/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/projects/stsound_test/sim/sim_main.cpp)
 
 The test scripts and related files are here:
 
-[https://github.com/epsilon537/boxlambda/tree/master/gw/projects/stsound_test/test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/stsound_test/test)
+[https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/gw/projects/stsound_test/test](https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/gw/projects/stsound_test/test)
 
 Relevant Files and Directories
 ------------------------------
-- [gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/audio_dac/rtl/one_bit_dac.sv): The Delta-Sigma audio DAC.
+- [gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/gw/components/audio_dac/rtl/one_bit_dac.sv): The Delta-Sigma audio DAC.
 - [sub/ym2149_psg_system](https://github.com/epsilon537/YM2149_PSG_system): The dual YM2149 PSG system core.
-- [gw/projects/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/audio_dac_test): The Audio DAC test project.
-- [gw/projects/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test): The YM2149 DAC Test project.
+- [gw/projects/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/gw/projects/audio_dac_test): The Audio DAC test project.
+- [gw/projects/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/gw/projects/ym2149_dac_test): The YM2149 DAC Test project.
 - [sub/StSound](https://github.com/epsilon537/StSound): The ST-Sound Library repo.
-- [sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/master/sw/components/stsound): The BoxLambda port of the ST-Sound Library.
-- [gw/projects/stsound_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/stsound_test): The ST-Sound Test project.
-- [sw/components/ym2149_sys_hal/ym2149_sys_regs.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ym2149_sys_hal/ym2149_sys_regs.h): YM2419 PSG system register interface.
+- [sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/sw/components/stsound): The BoxLambda port of the ST-Sound Library.
+- [gw/projects/stsound_test](https://github.com/epsilon537/boxlambda/tree/dual_ym2149_audio/gw/projects/stsound_test): The ST-Sound Test project.
+- [sw/components/ym2149_sys_hal/ym2149_sys_regs.h](https://github.com/epsilon537/boxlambda/blob/dual_ym2149_audio/sw/components/ym2149_sys_hal/ym2149_sys_regs.h): YM2419 PSG system register interface.
 
 Try It Out
 ----------
@@ -243,7 +245,7 @@ Try It Out
 Setup
 =====
 
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/aug_19_23/prerequisites/).
 2. Get the BoxLambda repository:
 	```
 	git clone https://github.com/epsilon537/boxlambda/

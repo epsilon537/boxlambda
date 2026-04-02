@@ -4,6 +4,8 @@ title: 'An attempt at a PicoRV32-based Soft DMA Controller - Optimizations.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 16 November 2023: Added FPGA resource utilization.*
 
 *Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
@@ -107,7 +109,7 @@ A couple of things are worth noting:
 
 *The PicoRV Burst FSM in the PicoRV DMA Core.*
 
-The Burst FSM module Verilog code can be found here: [picorv_burst_fsm.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/rtl/picorv_burst_fsm.sv).
+The Burst FSM module Verilog code can be found here: [picorv_burst_fsm.sv](https://github.com/epsilon537/boxlambda/blob/picorv_dma_2/gw/components/picorv_dma/rtl/picorv_burst_fsm.sv).
 
 A DMA wordcopy using Burst Mode results in 92% bus utilization.
 
@@ -133,7 +135,7 @@ This is the current utilization:
 PicoRV Burst Mode Programs
 ==========================
 
-[Wordcopy_burst.picoasm](https://github.com/epsilon537/boxlambda/blob/master/sw/components/picorv_dma/test/wordcopy_burst.picoasm) is a PicoRV assembly program for doing word-aligned DMA copies, using Burst Mode.
+[Wordcopy_burst.picoasm](https://github.com/epsilon537/boxlambda/blob/picorv_dma_2/sw/components/picorv_dma/test/wordcopy_burst.picoasm) is a PicoRV assembly program for doing word-aligned DMA copies, using Burst Mode.
 This is the core loop:
 
 ```
@@ -152,15 +154,15 @@ burst_loop:
     ...
 ```
 
-[Bytecopy_burst.picoasm](https://github.com/epsilon537/boxlambda/blob/master/sw/components/picorv_dma/test/bytecopy_burst.picoasm) is a PicoRV assembly program implementing byte copy / unaligned word copy using Burst Mode. The core loop of the program is identical to the one shown above. However, it does require quite a bit of set-up code and wind-down code to handle all the alignment cases as well as transfer sizes that are not necessarily a multiple of 4 words.
+[Bytecopy_burst.picoasm](https://github.com/epsilon537/boxlambda/blob/picorv_dma_2/sw/components/picorv_dma/test/bytecopy_burst.picoasm) is a PicoRV assembly program implementing byte copy / unaligned word copy using Burst Mode. The core loop of the program is identical to the one shown above. However, it does require quite a bit of set-up code and wind-down code to handle all the alignment cases as well as transfer sizes that are not necessarily a multiple of 4 words.
 
 Testing
 -------
-[picorv_burst_fsm_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/test/picorv_burst_fsm_test.py) is a CoCoTB test script testing the PicoRV Burst FSM module in isolation.
+[picorv_burst_fsm_test.py](https://github.com/epsilon537/boxlambda/blob/picorv_dma_2/sw/components/picorv_dma/test/burst_fsm_test.picoasm) is a CoCoTB test script testing the PicoRV Burst FSM module in isolation.
 
-The original [picorv_dma_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/test/picorv_dma_test.py) CoCoTB test script has been extended to include Burst Mode test cases.
+The original [picorv_dma_test.py](https://github.com/epsilon537/boxlambda/blob/picorv_dma_2/gw/components/picorv_dma/test/picorv_dma_test.py) CoCoTB test script has been extended to include Burst Mode test cases.
 
-Burst Mode introduced quite a bit of complexity. To test everything thoroughly, I added a system test, [picorv_dma_sys_test_ext](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/picorv_dma_sys_test_ext/picorv_dma_sys_test_ext.c), consisting of multiple nested loops iterating over all permutations of a series of test vectors:
+Burst Mode introduced quite a bit of complexity. To test everything thoroughly, I added a system test, [picorv_dma_sys_test_ext](https://github.com/epsilon537/boxlambda/blob/picorv_dma_2/sw/projects/picorv_dma_sys_test_ext/picorv_dma_sys_test_ext.c), consisting of multiple nested loops iterating over all permutations of a series of test vectors:
 
 - Source Memory Type: Internal, External, VRAM.
 - Destination Memory Type: Internal, External, VRAM.
@@ -207,7 +209,7 @@ Try It Out
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/nov_16_23/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

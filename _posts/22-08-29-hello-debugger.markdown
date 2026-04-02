@@ -4,10 +4,12 @@ title: 'Hello Debugger!'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 Recap
 -----
 Here's a summary of the current state of BoxLambda. We currently have:
-- A test build consisting of an Ibex RISCV core, a Wishbone shared bus, internal memory, a timer, two GPIO ports, and a UART core. 
+- A test build consisting of an Ibex RISCV core, a Wishbone shared bus, internal memory, a timer, two GPIO ports, and a UART core.
 - A simple *Hello World* and LED toggling test program running on the test build.
 - An Arty-A7-35T FPGA version of the test build.
 - A Verilator version of the test build, for a faster development cycle and automated testing.
@@ -52,7 +54,7 @@ boxlambda
 └── sub
     ├── common_cells
     ├── tech_cells_generic
-    ├── pulpino	
+    ├── pulpino
     └── riscv-dbg
 
 ```
@@ -64,16 +66,16 @@ RISCV-DBG has two top-levels:
 - [sub/riscv-dbg/src/dm_top.sv](https://github.com/epsilon537/riscv-dbg/blob/b241f967f0dd105f7c5e020a395bbe0ec54e40e4/src/dm_top.sv)
 - [sub/riscv-dbg/src/dmi_jtag.sv](https://github.com/epsilon537/riscv-dbg/blob/b241f967f0dd105f7c5e020a395bbe0ec54e40e4/src/dmi_jtag.sv)
 
-Recall that BoxLambda uses a Wishbone interconnect. The Ibex_WB submodule implements a Wishbone wrapper for the Ibex RISCV core. It does the same for RISCV-DBG's *dm_top*:  
+Recall that BoxLambda uses a Wishbone interconnect. The Ibex_WB submodule implements a Wishbone wrapper for the Ibex RISCV core. It does the same for RISCV-DBG's *dm_top*:
 [sub/ibex_wb/rtl/wb_dm_top.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_dm_top.sv)
 
-Refer to the *ibex_soc* example to see how RISCV-DBG is instantiated:  
+Refer to the *ibex_soc* example to see how RISCV-DBG is instantiated:
 [sub/ibex_wb/soc/fpga/arty-a7-35/rtl/ibex_soc.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/soc/fpga/arty-a7-35/rtl/ibex_soc.sv)
 
 OpenOCD and RISCV-DBG Bring-Up on Verilator
 -------------------------------------------
 The riscv-dbg testbench makefile shows how to test OpenOCD JTAG debugging on a Verilator model. The JTAG transport protocol is a simple socket-based protocol called **Remote Bitbang**.
-The remote bitbang spec is just one page: 
+The remote bitbang spec is just one page:
 
 [https://github.com/openocd-org/openocd/blob/master/doc/manual/jtag/drivers/remote_bitbang.txt](https://github.com/openocd-org/openocd/blob/master/doc/manual/jtag/drivers/remote_bitbang.txt)
 
@@ -94,7 +96,7 @@ With that fix in place, I can build and run a Verilator model, connect OpenOCD t
 
 The *Try It Out* section below shows the steps needed to recreate this OpenOCD JTAG debug session on Verilator.
 
-The OpenOCD configuration file for JTAG Debugging on Verilator is checked into the *openocd* directory:  
+The OpenOCD configuration file for JTAG Debugging on Verilator is checked into the *openocd* directory:
 [openocd/verilator_riscv_dbg.cfg](https://github.com/epsilon537/boxlambda/blob/f696f21b3e50f66678f4e32806a65abdbdf42455/openocd/verilator_riscv_dbg.cfg)
 
 To summarize:
@@ -112,7 +114,7 @@ The project directory also contains a [test script](https://github.com/epsilon53
 2. Connect OpenOCD to the model
 3. Connect GDB to OpenOCD (and thus to the model)
 4. Execute a UART register dump on the target
-5. Check the UART register contents against expected results. 
+5. Check the UART register contents against expected results.
 
 ```
 boxlambda
@@ -124,20 +126,20 @@ boxlambda
 │       │   └── sim_main.sv
 │       └── test
 │           ├── test.sh
-│           └── test.gdb 
+│           └── test.gdb
 ├── components
 │   └── riscv-dbg
 └── sub
     ├── common_cells
     ├── tech_cells_generic
-    ├── pulpino	
+    ├── pulpino
     └── riscv-dbg
 
 ```
 
 OpenOCD and RISCV-DBG bring-up on Arty-A7 FPGA
 ----------------------------------------------
-With the Verilator setup up and running, I had enough confidence in the system to try out OpenOCD JTAG debug access on FPGA. 
+With the Verilator setup up and running, I had enough confidence in the system to try out OpenOCD JTAG debug access on FPGA.
 
 The obvious approach would be to bring out the JTAG signals to PMOD pins and hook up a JTAG adapter. However, there's an alternative method that doesn't require a JTAG adapter. The riscv-dbg JTAG TAP can be hooked into the FPGA scan chain which is normally used to program the bitstream into the FPGA. On the Arty-A7, bitstream programming is done using the FTDI USB serial port, so no special adapters are needed.
 
@@ -155,13 +157,13 @@ On the OpenOCD side, the transport protocol for this Debug-Access-via-FPGA-scan-
 
 OpenOCD Configuration for the Arty A7 FTDI Setup
 ================================================
-So far so good. However, it wasn't obvious to me what OpenOCD configuration settings I should be using. The OpenOCD documentation recommends creating new configurations starting from existing, similar configurations. Other than that, the documentation appears to be more concerned about properly organizing the configuration into an interface, board, and target section than it is about providing detailed info about how you should go about setting up a specific JTAG configuration. 
+So far so good. However, it wasn't obvious to me what OpenOCD configuration settings I should be using. The OpenOCD documentation recommends creating new configurations starting from existing, similar configurations. Other than that, the documentation appears to be more concerned about properly organizing the configuration into an interface, board, and target section than it is about providing detailed info about how you should go about setting up a specific JTAG configuration.
 
 Still, the given advice worked out. I found the OpenOCD config files for two other Arty A7-based projects online:
 - **Saxon SoC**: [https://github.com/SpinalHDL/SaxonSoc/blob/dev-0.3/bsp/digilent/ArtyA7SmpLinux/openocd/usb_connect.cfg](https://github.com/SpinalHDL/SaxonSoc/blob/dev-0.3/bsp/digilent/ArtyA7SmpLinux/openocd/usb_connect.cfg)
 - **Shakti SoC**: [https://gitlab.com/shaktiproject/cores/shakti-soc/-/blob/master/fpga/boards/artya7-100t/c-class/shakti-arty.cfg](https://gitlab.com/shaktiproject/cores/shakti-soc/-/blob/master/fpga/boards/artya7-100t/c-class/shakti-arty.cfg)
 
-From those two config files, and some table data provided in the [riscv-dbg documentation]([https://github.com/epsilon537/riscv-dbg/blob/master/doc/debug-system.md), I pieced together a config file that works. I checked in the file under [openocd/digilent_arty_a7.cfg](https://github.com/epsilon537/boxlambda/blob/102233debcb1e632e6a36c31a836c7619aaf8b29/openocd/digilent_arty_a7.cfg).
+From those two config files, and some table data provided in the [riscv-dbg documentation]([https://github.com/epsilon537/riscv-dbg/blob/boxlambda/doc/debug-system.md), I pieced together a config file that works. I checked in the file under [openocd/digilent_arty_a7.cfg](https://github.com/epsilon537/boxlambda/blob/102233debcb1e632e6a36c31a836c7619aaf8b29/openocd/digilent_arty_a7.cfg).
 
 To summarize:
 
@@ -211,7 +213,7 @@ New Prerequisites
   7. ```sudo make install```
   8. Add the install directory (*/usr/local/bin* in my case) to your PATH.
 
-- *riscv32-unknown-elf-gdb*, which is installed as part of the riscv32 toolchain, has a dependency on **libncursesw5**. You might not have that library on your system yet. Install it as follows:  
+- *riscv32-unknown-elf-gdb*, which is installed as part of the riscv32 toolchain, has a dependency on **libncursesw5**. You might not have that library on your system yet. Install it as follows:
 `sudo apt install -y libncursesw5`
 
 Try It Out
@@ -219,17 +221,17 @@ Try It Out
 
 Repository setup
 ================
-   0. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+   0. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
    1. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-   3. Switch to the *hello_dbg* tag: 
+   3. Switch to the *hello_dbg* tag:
 ```
 git checkout hello_dbg
 ```
-   4. Get the submodules: 
+   4. Get the submodules:
 ```
 git submodule update --init --recursive
 ```
@@ -241,11 +243,11 @@ Connecting GDB to the Ibex RISCV32 processor on Arty A7
 cd projects/hello_dbg
 make impl
 ```
-   2. Start Vivado and download the generated bitstream to your Arty A7-35T:  
+   2. Start Vivado and download the generated bitstream to your Arty A7-35T:
    *projects/hello_dbg/generated/project.runs/impl_1/ibex_soc.bit*
    3. Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
    4. If you're running on WSL, check the **When on WSL** note below.
-   5. Start OpenOCD with the *digilent_arty_a7.cfg* config file: 
+   5. Start OpenOCD with the *digilent_arty_a7.cfg* config file:
 ```
 sudo openocd -f <boxlambda root directory>/openocd/digilent_arty_a7.cfg
 Info : clock speed 1000 kHz
@@ -260,7 +262,7 @@ Ready for Remote Connections
 Info : Listening on port 6666 for tcl connections
 Info : Listening on port 4444 for telnet connections
 ```
-   6. Launch GDB with hello.elf:	
+   6. Launch GDB with hello.elf:
 ```
 cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
 riscv32-unknown-elf-gdb hello.elf
@@ -282,7 +284,7 @@ If you're running on WSL, you need to make sure that the USB port connected to t
 On my machine, these are the steps:
 
 1. From a Windows Command Shell:
-	
+
 	```
 	C:\Users\ruben>usbipd wsl list
 	BUSID  VID:PID    DEVICE                                                        STATE
@@ -330,7 +332,7 @@ Connecting GDB to the Ibex RISCV32 processor on Verilator
 	[riscv.cpu] Target successfully examined.
 	Ready for Remote Connections on port 3333.
 	```
-1. Launch GDB with hello.elf:	
+1. Launch GDB with hello.elf:
 
 	```
 	cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
@@ -371,8 +373,8 @@ Test Passed.
 
 Interesting Links
 -----------------
-- [OpenOCD JTAG Primer](https://openocd.org/doc/doxygen/html/primerjtag.html): Say *JTAG* to a software engineer and he'll think *Debug*. Say *JTAG* to a hardware engineer and he'll think *Boundary Scan*. This primer clears up the confusion. 
-- [https://github.com/epsilon537/riscv-dbg/blob/master/doc/debug-system.md]([https://github.com/epsilon537/riscv-dbg/blob/master/doc/debug-system.md): The riscv-dbg debug system documentation.
+- [OpenOCD JTAG Primer](https://openocd.org/doc/doxygen/html/primerjtag.html): Say *JTAG* to a software engineer and he'll think *Debug*. Say *JTAG* to a hardware engineer and he'll think *Boundary Scan*. This primer clears up the confusion.
+- [https://github.com/epsilon537/riscv-dbg/blob/boxlambda/doc/debug-system.md]([https://github.com/epsilon537/riscv-dbg/blob/boxlambda/doc/debug-system.md): The riscv-dbg debug system documentation.
 
 
 

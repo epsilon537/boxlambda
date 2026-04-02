@@ -4,11 +4,13 @@ title: 'Testing with Verilator.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 Recap
 -----
 
 I currently have the following for BoxLambda:
-- A test build for an Arty-A7-35T, consisting of an Ibex RISCV core, a Wishbone shared bus, some internal memory, a timer, two GPIO ports, and a UART core. 
+- A test build for an Arty-A7-35T, consisting of an Ibex RISCV core, a Wishbone shared bus, some internal memory, a timer, two GPIO ports, and a UART core.
 - A simple *Hello World* and LED toggling test program running on the FPGA test build.
 - A Makefile and Bender-based build system with lint checking.
 
@@ -36,7 +38,7 @@ Verilator
 
 Verilator is a compiler. It compiles, or rather *verilates*, an HDL design into a C++ model. It then picks up any user-provided C++ testbench/wrapper code and compiles the whole thing into an executable, optionally with the ability to generate traces. So you can run your FPGA design as an executable on your PC, and it's *fast*. How cool is that!
 
-C++ is not an ideal language for test case development, but it'll get the job done, and it's a compiled language, so it's *fast*. 
+C++ is not an ideal language for test case development, but it'll get the job done, and it's a compiled language, so it's *fast*.
 
 Overall, Verilator meets my test bench criteria very well.
 
@@ -76,10 +78,10 @@ int main(int argc, char** argv, char** env) {
     std::unique_ptr<UARTSIM> uart{new UARTSIM(0)}; //Uart co-simulation from wbuart32.
     // Using unique_ptr is similar to "VerilatedContext* contextp = new VerilatedContext" then deleting at end.
     const std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
-    
+
     // Verilator must compute traced signals
     contextp->traceEverOn(true);
-    
+
     VerilatedFstC* tfp = new VerilatedFstC;
     bool tracing_enable = false, interactive_mode = false;
 
@@ -120,7 +122,7 @@ int main(int argc, char** argv, char** env) {
       top->trace(tfp, 99); //Trace 99 levels deep.
       tfp->open("simx.fst");
     }
-    
+
     // Set Vtop's input signals
     top->ck_rst_n = !0; top->clk100mhz = 0; top->uart_rx = 0; top->tck = 0; top->trst_n = 1;
     top->tms = 0; top->tdi = 0;
@@ -129,7 +131,7 @@ int main(int argc, char** argv, char** env) {
     unsigned char gpio0Prev = 0, gpio1Prev = 0;
     std::string uartRxStringPrev;
     std::string gpio0String; //Accumulate GPIO0 value changes as a string into this variable
-    
+
     // Simulate for 10000000 timeprecision periods
     while (contextp->time() < 10000000) {
         contextp->timeInc(1);  // 1 timeprecision period passes...
@@ -143,7 +145,7 @@ int main(int argc, char** argv, char** env) {
 	    top->ck_rst_n = !0;  // Deassert reset
 	  }
 	}
-	
+
 	top->clk100mhz = 1; top->eval(); // Evaluate model.
 	if (tracing_enable) tfp->dump(contextp->time());
 
@@ -187,7 +189,7 @@ int main(int argc, char** argv, char** env) {
       mvprintw(16, 0, "Press any key to exit.");
       while (getch() == ERR);
     }
-    
+
     // Final model cleanup
     top->final();
     endwin(); // End curses.
@@ -204,7 +206,7 @@ int main(int argc, char** argv, char** env) {
     else {
       printf("UART check passed.\n");
     }
-    
+
     std::string gpio0CheckString("F0F0F0F0F0F0F0F0F0F0");
     if (gpio0CheckString.compare(gpio0String) != 0) {
       printf("GPIO0 check failed\n");
@@ -240,7 +242,7 @@ I'm using GPIO1 bits 3:0 for this purpose. In a simulation, I set these bits to 
 ```
   //GPIO1 bits3:0 = 0xf indicate we're running inside a simulator.
   if ((gpio_get_input(&gpio1) & 0xf) == GPIO1_SIM_INDICATOR)
-    uart_printf(&uart0, "This is a simulation.\n");    
+    uart_printf(&uart0, "This is a simulation.\n");
   else
     uart_printf(&uart0, "This is not a simulation.\n");
 ```
@@ -273,7 +275,7 @@ New Build System Targets
 - In a project directory:
   - **make sim**: builds the project's Verilator test bench.
   - **make test**: builds the project's Verilator test bench, then runs it in batch mode (non-interactive mode).
-  
+
 - In the root directory:
   - **make test**: recursively builds and runs the Verilator test bench in each project directory. *make test* fails if any of the executed test benches flag a test failure (via a non-zero return code).
 
@@ -282,7 +284,7 @@ Try It Out
 
 To try out the proof-of-concept Verilator Test Bench:
 
-0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/sep_20_22_lbl/prerequisites/).
 1. ```git clone https://github.com/epsilon537/boxlambda/```
 2. ```cd boxlambda```
 3. Switch to the *testing_with_verilator* tag: ```git checkout testing_with_verilator```

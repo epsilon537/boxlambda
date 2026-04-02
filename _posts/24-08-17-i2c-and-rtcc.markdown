@@ -5,6 +5,8 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 BoxLambda is a computer. A computer should be able to keep the time and date, even when switched off. One way to keep the time and date is by using a *Real-Time Clock and Calendar* (RTCC) module with a coin cell battery backup. The RTCC is an external PMOD component, interfacing with the BoxLambda SoC using I3C.
 
 Recap
@@ -28,7 +30,7 @@ This is a summary of the current state of affairs of BoxLambda. We have:
 - Automated testing on Verilator and CocoTB.
 - A Linux-based CMake and Bender-based Software and Gateware build system.
 
-The BoxLambda SoC top-level: [gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)
+The BoxLambda SoC top-level: [gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/i2c_rtcc/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)
 
 I2C
 ---
@@ -210,7 +212,7 @@ I'm sure Digilent has good reasons for adding these pull-up pins, but I don't kn
 I2C Software API
 ================
 
-[boxlambda/sw/components/i2c/i2c.h](https://github.com/epsilon537/boxlambda/tree/master/sw/components/i2c/i2c.h)
+[boxlambda/sw/components/i2c/i2c.h](https://github.com/epsilon537/boxlambda/tree/i2c_rtcc/sw/components/i2c/i2c.h)
 
 BoxLambda's I2C component is based on the [TinyWireM](https://github.com/adafruit/TinyWireM) API, which in turn is derived from Arduino's [Wire](https://www.arduino.cc/reference/en/language/functions/communication/wire/) API. This API makes it easy to port I2C-dependent components, such as the MCP79412RTC library, discussed [below](#rtcc-software-api).
 
@@ -274,9 +276,9 @@ The only limitation is that a bulk transaction can't be more than 257 bytes long
 
 The I2C Test Application
 ========================
-The test code running on the RISCV processor: [boxlambda/sw/projects/rtcc_test/i2c_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/i2c_test/i2c_test.cpp)
+The test code running on the RISCV processor: [boxlambda/sw/projects/rtcc_test/i2c_test.cpp](https://github.com/epsilon537/boxlambda/blob/i2c_rtcc/sw/projects/i2c_test/i2c_test.cpp)
 
-The Verilator test bench code: [boxlambda/gw/projects/i2c_test/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/i2c_test/sim/sim_main.cpp)
+The Verilator test bench code: [boxlambda/gw/projects/i2c_test/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/i2c_rtcc/gw/projects/i2c_test/sim/sim_main.cpp)
 
 The Verilator version of the I2C Test Application uses an I2C slave co-simulator object provided by the WBI2C repo:
 - [boxlambda/sub/wbi2c/bench/cpp/i2csim.h](https://github.com/epsilon537/wbi2c/blob/boxlambda/bench/cpp/i2csim.h)
@@ -380,8 +382,8 @@ Example usage:
 The RTCC Test Application
 =========================
 
-- [boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/rtcc_test/rtcc_test.cpp)
-- [boxlambda/sw/projects/rtcc_test/rtcc_cli.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/rtcc_test/rtcc_cli.cpp)
+- [boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](https://github.com/epsilon537/boxlambda/blob/i2c_rtcc/sw/projects/rtcc_test/rtcc_test.cpp)
+- [boxlambda/sw/projects/rtcc_test/rtcc_cli.cpp](https://github.com/epsilon537/boxlambda/blob/i2c_rtcc/sw/projects/rtcc_test/rtcc_cli.cpp)
 
 The Real-Time Clock and Calendar test program does the following:
 
@@ -405,7 +407,7 @@ Try It Yourself
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/aug_17_24/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

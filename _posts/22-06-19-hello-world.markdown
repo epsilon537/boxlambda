@@ -4,12 +4,14 @@ title: 'First Contact: Hello World!'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 After the [IRQ post](https://epsilon537.github.io/boxlambda/interrupts-and-fpga-utilization/), I started looking for the shortest path to get something simple to work. The idea is to bring up something small, an embryonic version of the project. Iteratively, I then keep growing this small system until I end up with a system that meets the goals. After each iteration, the project should be functioning somewhat better than it was before.
 
 ![Iterative Design Spiral](../assets/iterative_design_spiral.jpg){:class="img-responsive"}
 *Iterative Design Spiral*
 
-Halfway through the first iteration, I realized I needed to figure out my git workflow, or I wouldn't be able to commit and push my work. Hence, the [previous post](https://epsilon537.github.io/boxlambda/git-workflow-and-setup/). 
+Halfway through the first iteration, I realized I needed to figure out my git workflow, or I wouldn't be able to commit and push my work. Hence, the [previous post](https://epsilon537.github.io/boxlambda/git-workflow-and-setup/).
 
 ### The Tiny System
 
@@ -34,7 +36,7 @@ The *ibex_wb* SoC includes the following cores:
 - **wbuart32**: UART core. The ibex_wb project was pointing to a 3-year-old version. I modified it to use the BoxLambda ibex fork.
 - **riscv_dbg**: JTAG debug interface. This is a pretty complex core. I *ifdef'd* it out for the time being. To be revisited.
 - **wb_gpio**: GPIO core, for sampling buttons and switches and driving LEDs.
-- **wb_timer**: A timer core, so we can do things like *usleep(<delay>)* from software. 
+- **wb_timer**: A timer core, so we can do things like *usleep(<delay>)* from software.
 - **spramx32**: Single Port RAM. To be replaced at some point by a Dual-Port RAM.
 - **core2wb/core_if/wb_if/slave2wb**: Ibex to Wishbone interfacing logic.
 
@@ -48,7 +50,7 @@ The software is located in the [*ibex_wb/soc/fpga/arty-a7-35/sw/*](https://githu
 - **libs/soc/** contains drivers for the cores
 - **examples/** contains example programs. I tested the *hello* and the *blinky* programs.
 
-**ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello/** contains a simple Makefile to build the software and generate a **hello.mem** file. hello.mem holds the initial contents of the internal memory of the SoC. The file's contents are included in the FPGA bitstream. 
+**ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello/** contains a simple Makefile to build the software and generate a **hello.mem** file. hello.mem holds the initial contents of the internal memory of the SoC. The file's contents are included in the FPGA bitstream.
 
 The same directory also contains a linker script, **link.ld**, that specifies how much memory is available, and where all the code, data, and stack should go:
 
@@ -67,7 +69,7 @@ The same directory also contains a linker script, **link.ld**, that specifies ho
 		.vectors : ...
 
 		.text : { ...
-		
+
 		.data : { ...
 
 		.bss : { ...
@@ -96,7 +98,7 @@ The same directory also contains a linker script, **link.ld**, that specifies ho
 
 The original *ibex_wb* repository appears to be dormant or abandoned in an unpolished state. There's no documentation, Makefile, or other type of project file that specifies how the SoC should be synthesized. Luckily, SystemVerilog is fairly self-describing. Once you've found the top-level, usually a file with the word *top* in it, it's a matter of recursively adding referenced modules until all references have been resolved. Easy enough. I added all files in a Vivado project file. It's checked in here:
 
-[https://github.com/epsilon537/boxlambda/tree/develop/fpga/vivado/hello_world](https://github.com/epsilon537/boxlambda/tree/develop/fpga/vivado/hello_world)
+[https://github.com/epsilon537/boxlambda/tree/hello_world/fpga/vivado/hello_world](https://github.com/epsilon537/boxlambda/tree/hello_world/fpga/vivado/hello_world)
 
 ### Simulating and Running the SoC
 
@@ -109,7 +111,7 @@ Initially, nothing worked, of course. There are always bugs. There were bugs in 
 		return 0;
 	}
 
-The problem is that *main()* returns after printing *Hello world*. Returning from *main()* causes the system to restart. As a result, I was only seeing *HHHHH...* on the serial port. The system was restarting before the rest of *(H)ello world* made it out to the serial port. As a fix, I added a *while()* loop after the *uart_printf()* statement. 
+The problem is that *main()* returns after printing *Hello world*. Returning from *main()* causes the system to restart. As a result, I was only seeing *HHHHH...* on the serial port. The system was restarting before the rest of *(H)ello world* made it out to the serial port. As a fix, I added a *while()* loop after the *uart_printf()* statement.
 
 I was able to find these issues by loading the design in the Vivado simulator and looking at the waveforms (CPU bus transactions, state of the UART transmit FIFO, etc.).
 Getting the simulation going was not straightforward either, however. Vivado tripped over the compilation of a .c file, code-generated by Vivado itself. By looking at the references in the failing code, I was able to trace the issue back to a specific SystemVerilog code snippet in the ibex code base. I filed a bug report for it:
@@ -127,14 +129,14 @@ First Iteration complete
 ------------------------
 The build is rough around the edges. Vivado reports synthesis and implementation warnings. The *.xpr* project file is just a blob of files without organization. But I do have a tiny, working project. The first iteration is complete. Feel free to try it out:
 
-0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/sep_20_22_lbl/installation-and-test-builds/#prerequisites).
 1. **git clone https://github.com/epsilon537/boxlambda/**,
 2. **cd boxlambda**
 5. Switch to the *hello_world* tag: **git checkout hello_world**.
 4. Get the submodules: **git submodule update --init --recursive**.
 5. Build the software:
    1. **cd fpga/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello**
-   2. **make**  
+   2. **make**
 6. Open project file *fpga/vivado/hello_world/hello_world.xpr* in Vivado.
 7. In Vivado, start a simulation, or synthesize the design and generate a bitstream to load onto your Arty A7-35T.
 
@@ -152,7 +154,7 @@ The *riscv-dbg* core is not a trivial module. It contains quite a bit of logic a
 **Estimated FPGA Resource Utilization on Nexys A7-100T:**
 
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse |
 |----------------|--------|------|---------------|-----------|------|------------|-----------|-----------|
 |**Slice LUTs**|0|2122|3390|5673|416|554|380|205|205|
 |**Slice Registers**|0|1441|911|426|5060|622|167|185|185|
@@ -168,14 +170,14 @@ The *riscv-dbg* core is not a trivial module. It contains quite a bit of logic a
 
 **Estimated FPGA Resource Utilization on Arty A7-35T:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | riscv-dbg | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse
 |----------------|--------|------|---------------|-----------|------|------------|-----------|-----------
 |**Slice LUTs**|0|2122|3390|5673|416|554|380|205|205
 |**Slice Registers**|0|1441|911|426|5060|622|167|185|185
 |**Block RAM Tile**|**16**|25|0|0|1|0.5|0|0
 |**DSPs**|0|2|1|0|0|0|0|0
 
-| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
+| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization
 |----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------
 |**Slice LUTs**|536|393|438|440|20.00%|17702|20800|85.11%
 |**Slice Registers**|749|324|346|641|20.00%|13268|41600|31.90%
@@ -185,4 +187,4 @@ The *riscv-dbg* core is not a trivial module. It contains quite a bit of logic a
 Interesting Links
 -----------------
 
-[https://opentitan.org/](https://opentitan.org/): It doesn't take a lot of digging to find your way from the Ibex project to OpenTitan. OpenTitan is a very complete ecosystem for RISCV-based SoCs. OpenTitan is using the TileLink bus protocol rather than Wishbone. To be honest, discovering OpenTitan and TileLink triggered a bit of an existential crisis for BoxLambda. Wouldn't it be better for BoxLambda to use TileLink and OpenTitan as a baseline instead of Wishbone and the collection of components? I eventually decided to stay the course. BoxLambda will hopefully be a long-running project and, now and then, cool new stuff is bound to cross my path. It wouldn't be good for the project to switch directions every time I come across another interesting project. 
+[https://opentitan.org/](https://opentitan.org/): It doesn't take a lot of digging to find your way from the Ibex project to OpenTitan. OpenTitan is a very complete ecosystem for RISCV-based SoCs. OpenTitan is using the TileLink bus protocol rather than Wishbone. To be honest, discovering OpenTitan and TileLink triggered a bit of an existential crisis for BoxLambda. Wouldn't it be better for BoxLambda to use TileLink and OpenTitan as a baseline instead of Wishbone and the collection of components? I eventually decided to stay the course. BoxLambda will hopefully be a long-running project and, now and then, cool new stuff is bound to cross my path. It wouldn't be good for the project to switch directions every time I come across another interesting project.

@@ -4,6 +4,8 @@ title: 'Understanding VERA.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 13 March 2023: Parts of this article have been updated since the original post:*
 
 - *Replaced the term Main RAM with VRAM.*
@@ -11,7 +13,7 @@ comments: true
 - *Added the FPGA device targeted by VERA.*
 - *Indicated that collision detection is limited to Sprite-to-Sprite collision detection.*
 - *Some rewording.*
-  
+
 Frank van den Hoef's [VERA Versatile Embedded Retro Adapter](https://github.com/fvdhoef/vera-module), used by the Commander X16 project, is a standalone FPGA with an 8-bit external bus interface. I spent some time studying VERA's Video Controller implementation, out of interest, and because I need a good understanding of VERA to be able to integrate it properly into the BoxLambda SoC.
 
 Video Generator Features
@@ -57,11 +59,11 @@ The Composer
 The Composer receives basic control signals from the video_vga block: *next pixel*, *next line*, *next frame*, *vblank*. It uses these signals for the following purposes:
 
 - Generate control/timing signals towards the other blocks, e.g. *line index*, *render start*, *frame done*, *sprite Line Buffer erase start*.
-- Keep track of the horizontal and vertical screen position counters, both regular and scaled.  
+- Keep track of the horizontal and vertical screen position counters, both regular and scaled.
 - Generate line IRQs.
 - Determine the active area of the screen, where the border isn't shown.
 - Compose the display, reading out the pixel data from the three Line Buffers.
-   
+
 The Layer Renderer
 ------------------
 The Layer Render's implementation is, conceptually at least, reasonably straightforward:
@@ -88,12 +90,12 @@ Other responsibilities of the Layer Renderer include:
 - Handling of the different colors-depths: 8bpp, 4bpp, 2bpp, 1bpp.
 - Handling of the different tile widths and heights.
 - Tile V-flip and H-flip.
-  
+
 The Layer Line Buffer
 ---------------------
 The Layer Renderer has an 8-bit write-only interface to its Line Buffer. The Line Buffer contains 8 bits per entry. One entry corresponds to one pixel.
-The Layer Line Buffer implements a double buffering scheme: While the renderer is writing out one scanline, the Composer is reading out the other line. When they are done with the respective scanlines, they switch places.  
-  
+The Layer Line Buffer implements a double buffering scheme: While the renderer is writing out one scanline, the Composer is reading out the other line. When they are done with the respective scanlines, they switch places.
+
 The Sprite Renderer
 -------------------
 The Sprite Renderer's operation is a bit more complicated:
@@ -168,7 +170,7 @@ One final aspect I looked at is the behavior of the system with everything maxed
 - Layer 1 enabled in 8bpp Tile Mode with 8x8 tiles.
 - The maximum number of 8bpp sprites enabled.
 
-In this configuration, the VRAM bus is maximally loaded. Will the system hold up, i.e. will the renderers be able to render out a scanline within their cycle budgets? We know the Sprite Renderer has built-in protection to prevent overruns, but what about the Layer Renderers? 
+In this configuration, the VRAM bus is maximally loaded. Will the system hold up, i.e. will the renderers be able to render out a scanline within their cycle budgets? We know the Sprite Renderer has built-in protection to prevent overruns, but what about the Layer Renderers?
 
 It looks like it's working out fine:
 
@@ -186,12 +188,12 @@ In other configurations, however, e.g. when the external bus is replaced with a 
 
 The Simulation
 --------------
-I used BoxLambda's build infrastructure to create a Verilator simulation model of VERA, so I could study the waveforms. I instantiated the VERA repository as a git submodule in BoxLambda and I created a [vera_standalone gateware project directory](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/vera_standalone), to be built in a simulation build tree.
+I used BoxLambda's build infrastructure to create a Verilator simulation model of VERA, so I could study the waveforms. I instantiated the VERA repository as a git submodule in BoxLambda and I created a [vera_standalone gateware project directory](https://github.com/epsilon537/boxlambda/tree/understanding_vera/gw/projects/vera_standalone), to be built in a simulation build tree.
 
-The simulation setup, implemented in [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/vera_standalone/sim/sim_main.cpp), is straightforward. These are the steps:
+The simulation setup, implemented in [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/understanding_vera/gw/projects/vera_standalone/sim/sim_main.cpp), is straightforward. These are the steps:
 
-1. The VERA model is instantiated with the Sprite Attribute RAM preconfigured. The Sprite Attribute RAM configuration loop is implemented in the [sprite_ram.v](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/vera_standalone/sim/sprite_ram.v) module:
-   
+1. The VERA model is instantiated with the Sprite Attribute RAM preconfigured. The Sprite Attribute RAM configuration loop is implemented in the [sprite_ram.v](https://github.com/epsilon537/boxlambda/blob/understanding_vera/gw/projects/vera_standalone/sim/sprite_ram.v) module:
+
    ```
     for (i=(256-2*128); i<256; i=i+2) begin
       mem[i][11:0]  = 'h100;   // addr
@@ -210,7 +212,7 @@ The simulation setup, implemented in [sim_main.cpp](https://github.com/epsilon53
 
 2. The model runs for 500 clock cycles to give the VERA synchronizer time to take the system out of reset.
 3. The model is configured using register writes over the external bus. The external bus register write access is implemented in the **ext_bus_wr()** function in *sim_main.cpp*:
-   
+
    ```
     ext_bus_wr(VERA_DC_VIDEO, 0x71); //sprite enable, Layer 1 enable, Layer 0 enable, VGA output mode.
     ext_bus_wr(VERA_L0_CONFIG, 0x23); //Tile Mode, 8bpp.
@@ -232,17 +234,17 @@ I had to make a few minor modifications in the VERA code base to be able to make
 Try It Out
 ----------
 
-1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/mar_6_23/installation-and-test-builds/#prerequisites).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-3. Switch to the *understanding_vera* tag: 
+3. Switch to the *understanding_vera* tag:
 ```
 git checkout understanding_vera
 ```
-4. Set up the repository. This initializes the git submodules used and creates the default build trees: 
+4. Set up the repository. This initializes the git submodules used and creates the default build trees:
 ```
 ./boxlambda_setup.sh
 ```

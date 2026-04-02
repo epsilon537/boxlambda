@@ -4,6 +4,8 @@ title: 'Key Components Part 3: DMA and Peripherals.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 Let's wrap up the selection of key components for the BoxLambda computer.
 
 # DMA
@@ -26,7 +28,7 @@ I had this post, with the Ant Micro selection, ready to go. But then I happened 
 
 Praxos has tiny CPU with a small amount of program and data memory embedded in the core, allowing you to write microcode specifying the DMA behavior you want: word/non-word alignment, incrementing/decrementing/non-incrementing source and/or destination address, strides between transfers, combining sources, barrel shifting... Maximum flexibility!
 
-It's not perfect though. Praxos only has one bus master port, an Avalon port at that. It should be doable to slap a standard Wishbone port onto it, but in its current form, I think it won't be able to take advantage of Wishbone's pipelined burst mode. That's unfortunate for a DMAC. 
+It's not perfect though. Praxos only has one bus master port, an Avalon port at that. It should be doable to slap a standard Wishbone port onto it, but in its current form, I think it won't be able to take advantage of Wishbone's pipelined burst mode. That's unfortunate for a DMAC.
 
 Still, having the option to hack together my own application-specific DMA microcode sounds like a lot of fun. I just have to go with the Praxos option.
 
@@ -64,4 +66,4 @@ I think that completes the list of Key Components for the time being. More compo
 Interesting Links
 -----------------
 - [Amiga HRM, Blitter Section](http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node0118.html): An in-depth description of Amiga's Blitter. A good example of how well-designed the Commodore Amiga was.
-- [www.zipcpu.com](http://www.zipcpu.com): The author of this website, Mr. Gisselquist, is a very experienced FPGA developer. He has contributed a lot of knowledge to the public domain, in the form of verilog code, Blog articles, and tutorials. The [Verilog tutorial](https://zipcpu.com/tutorial/) on this site also serves as a great introduction to formal verification, a frequently recurring topic in the ZipCPU Blog posts. 
+- [www.zipcpu.com](https://zipcpu.com): The author of this website, Mr. Gisselquist, is a very experienced FPGA developer. He has contributed a lot of knowledge to the public domain, in the form of verilog code, Blog articles, and tutorials. The [Verilog tutorial](https://zipcpu.com/tutorial/) on this site also serves as a great introduction to formal verification, a frequently recurring topic in the ZipCPU Blog posts.

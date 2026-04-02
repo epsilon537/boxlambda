@@ -4,6 +4,8 @@ title: 'Warnings and Verilator Lint.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 Recap
 -----
 We currently have a simple *Hello World* test project for an Arty-A7-35T, consisting of an Ibex RISCV core, a Wishbone shared bus, some internal memory, a timer, GPIO, and UART core. We can build a simple *Hello World* test program for the processor and include that into the FPGA build. Software compilation and FPGA synthesis and implementation are managed by a Makefile and Bender based build system.
@@ -14,9 +16,9 @@ Vivado Warnings
 ---------------
 If like me, you have a software background, you'll probably see warnings as errors. They're often benign but, ideally, they should be fixed.
 
-Vivado synthesis doesn't seem to work like that. Vivado generates warnings for code that, to me at least, looks perfectly alright. For example: 
+Vivado synthesis doesn't seem to work like that. Vivado generates warnings for code that, to me at least, looks perfectly alright. For example:
 
-You attach a simple slave to a shared bus. The slave doesn't require all input signals from the bus (e.g. a subset of the address lines). The slave also drives some of the optional output signals to a constant zero (e.g. an error signal). 
+You attach a simple slave to a shared bus. The slave doesn't require all input signals from the bus (e.g. a subset of the address lines). The slave also drives some of the optional output signals to a constant zero (e.g. an error signal).
 
 When synthesizing this slave module, Vivado will generate a warning for each unconnected input signal and for each output signal that's driven by a constant. In other words: in Vivado, **Warnings are not Errors**. Warnings need to be reviewed, but they don't necessarily need to be fixed.
 
@@ -24,7 +26,7 @@ Btw, I'm just referring to regular Vivado warnings here. Vivado may also generat
 
 Synthesizing a component separately also generates a lot of additional warnings, compared to synthesizing that same component embedded in a project build, with all the inputs, outputs, and clocks hooked up. Many of those warnings can be avoided by adding constraints specifically for the standalone synthesis of that component, but I don't think it's worth the effort. I decided to focus instead on reviewing and fixing as many warnings as possible in project builds. Right now, that's just the *Hello World* build.
 
-There's also the matter of warnings deep inside third-party code. Warnings near a component's *surface* you have to be careful with, as those can point to integration issues. Several layers deep, however, you're looking at third-party code internals that is presumably being actively maintained by someone else. I take a look when I see such a warning, but I will think twice before making changes. On the other hand, abandoned third-party code, such as ibex_wb, I will treat as my own. 
+There's also the matter of warnings deep inside third-party code. Warnings near a component's *surface* you have to be careful with, as those can point to integration issues. Several layers deep, however, you're looking at third-party code internals that is presumably being actively maintained by someone else. I take a look when I see such a warning, but I will think twice before making changes. On the other hand, abandoned third-party code, such as ibex_wb, I will treat as my own.
 
 To summarize, here's how I'm handling Vivado warnings:
 
@@ -37,7 +39,7 @@ With that pragmatic mindset adopted, I was able to make progress. I fixed a bunc
 
 Lint Checking
 -------------
-Because Vivado synthesis spits out such confusing warnings, I wanted a second opinion. I decided to add **Verilator lint** checking to the build system. Verilator lint performs static code analysis and will find coding issues that Vivado synthesis often does not. Moreover, it does this very quickly. Without linting, finding and fixing coding errors is a slow process: 
+Because Vivado synthesis spits out such confusing warnings, I wanted a second opinion. I decided to add **Verilator lint** checking to the build system. Verilator lint performs static code analysis and will find coding issues that Vivado synthesis often does not. Moreover, it does this very quickly. Without linting, finding and fixing coding errors is a slow process:
 
 1. Make some code changes.
 2. Kick-off synthesis.
@@ -70,7 +72,7 @@ It's common to insert lint waivers into code, telling the lint checker to not is
    // verilator lint_on PINMISSING
 ```
 
-Inserting lint waivers into your own source code is fine, but it's annoying to insert waivers into third-party code. You end up with a bunch of little deviations from the vanilla code base. Those deviations turn into a bunch of little merge conflicts down the road when you *git pull* the latest-and-greatest from the third-party repository. 
+Inserting lint waivers into your own source code is fine, but it's annoying to insert waivers into third-party code. You end up with a bunch of little deviations from the vanilla code base. Those deviations turn into a bunch of little merge conflicts down the road when you *git pull* the latest-and-greatest from the third-party repository.
 
 You can avoid that issue by putting lint waivers in separate *.vlt* files instead of inserting them directly into source code. In *.vlt* files, you can specify to which file, and code block within a file, to apply the waiver. For instance, my *.vlt* file for the ibex component looks like this:
 
@@ -100,7 +102,7 @@ I added new targets to the *Bender.yml* files to accommodate lint checking. We c
 ```
   - target: ibex_wb_core
     files:
-      - rtl/ibex_wb_core_wrapper.sv    
+      - rtl/ibex_wb_core_wrapper.sv
 ```
 
 - **vivado**: set when synthesizing using Vivado.
@@ -122,7 +124,7 @@ Try It Out
 
 To try out the latest code:
 
-0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+0. Install the [prerequisites](https://boxlambda.readthedocs.io/en/sep_20_22_lbl/installation-and-test-builds/#prerequisites).
 1. **git clone https://github.com/epsilon537/boxlambda/**,
 2. **cd boxlambda**
 3. Switch to the *warnings_and_lint* tag: **git checkout warnings_and_lint**.
