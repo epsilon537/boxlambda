@@ -4,6 +4,8 @@ title: 'The Interconnect, Harvard Architecture, and Dual Port RAM.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025:*
 - *Corrected link to UpdateMem and XPM Memories in documentation.*
 - *Removed reference to 'On WSL' documentation.*
@@ -119,9 +121,9 @@ Instruction fetches go to CMEM port 0. Data accesses go to DMEM port 0. In this 
 
 The Dual-Port RAM Modules
 =========================
-A [wb_dpram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv) module selects one of two DPRAM implementations depending on whether we're targeting simulation or FPGA synthesis.
+A [wb_dpram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/interconnect/gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv) module selects one of two DPRAM implementations depending on whether we're targeting simulation or FPGA synthesis.
 
-On FPGA, I'm using an **XPM_MEMORY_TDPRAM** instance. Using an XPM macro for internal memory allows me to do post-synthesis memory image updates in the bitstream file, as described [here](https://boxlambda.readthedocs.io/en/latest/build_sys_building_gw/#updatemem-and-xpm-memories).
+On FPGA, I'm using an **XPM_MEMORY_TDPRAM** instance. Using an XPM macro for internal memory allows me to do post-synthesis memory image updates in the bitstream file, as described [here](https://boxlambda.readthedocs.io/en/jan_6_24/build_sys_gw_build_struct/#updatemem-and-xpm-memories).
 
 Here is the XPM_MEMORY_TDPRAM documentation:
 
@@ -212,7 +214,7 @@ So far, each *gw/project/* build defined its own Test SoC. Each new Test SoC cop
 
 Going forward, I'll be maintaining just one SoC module:
 
-[gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv).
+[gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/interconnect/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv).
 
 ```
 /*The parameterized BoxLambda SoC.*/
@@ -293,7 +295,7 @@ module boxlambda_soc #(
 ```
 
 Different *gw/project/* builds still exist. They just differ in the way they instantiate *boxlambda_soc*, including or excluding specific subcomponents. Most *gw/projects*
- reference the same [top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/top/rtl/top.sv), but with a different combination of *defines* in their *Bender.yml* manifest.
+ reference the same [top.sv](https://github.com/epsilon537/boxlambda/blob/interconnect/gw/projects/top/rtl/top.sv), but with a different combination of *defines* in their *Bender.yml* manifest.
 
 ![BoxLambda SoC Component Build Diagram.](../assets/BoxLambda_SoC_Component_Build_Diagram.png)
 
@@ -306,7 +308,7 @@ Try It Out
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/jan_6_24/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

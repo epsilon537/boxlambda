@@ -4,6 +4,8 @@ title: 'Interrupts, and estimated FPGA Resource Utilization.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 About interrupts
 ----------------
 
@@ -45,8 +47,8 @@ We can freely assign 15 local interrupts. I've got the following list:
   - Quad SPI
   - ICAP
   - DFX Controller
-  - GPIO. 
-  
+  - GPIO.
+
   That's 10 interrupts in total.
 
 The interrupts are serviced in order of priority, the highest number being the highest priority.
@@ -92,7 +94,7 @@ The synthesis tool turns a module's Verilog/System Verilog/VHDL source code into
 
 Here's an example utilization report, generated during the synthesis of the MIG core:
 
-[https://github.com/epsilon537/boxlambda/blob/main/doc/mig_7series_0_utilization_synth.rpt](https://github.com/epsilon537/boxlambda/blob/main/doc/mig_7series_0_utilization_synth.rpt)
+[https://github.com/epsilon537/boxlambda/blob/interrupts/doc/mig_7series_0_utilization_synth.rpt](https://github.com/epsilon537/boxlambda/blob/interrupts/doc/mig_7series_0_utilization_synth.rpt)
 
 For most of the cores, synthesis was just a matter of pointing Vivado to the core's source tree and hitting the *Run Synthesis* button. There were a few exceptions:
 
@@ -113,7 +115,7 @@ I organized the utilization numbers from the different cores into a table and co
 
 **BoxLambda Estimated FPGA Resource Utilization on Nexys A7-100T:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse |
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------|
 |**Slice LUTs**|0|2122|3390|5673|554|380|205|205|
 |**Slice Registers**|0|1441|911|5060|622|167|185|185|
@@ -135,7 +137,7 @@ Overall it's an easy fit, with room to spare. All the pressure is on the Block R
 
 **BoxLambda Estimated FPGA Resource Utilization on Arty A7-35T, before adjustment:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse | 
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse |
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------|
 |**Slice LUTs**|0|2122|3390|5673|554|380|205|205|
 |**Slice Registers**|0|1441|911|5060|622|167|185|185|
@@ -154,14 +156,14 @@ If we reduce the amount of DPRAM to 64KB and reduce the margin on Block RAM to 1
 
 **BoxLambda Estimated FPGA Resource Utilization on Arty A7-35T, after adjustment:**
 
-| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse 
+| Resources Type |  DPRAM | Vera | Ibex RV32IMCB | MIG | Dual JT49 | Praxos DMA | ps2 keyb. | ps2 mouse
 |----------------|--------|------|---------------|-----|------|------------|-----------|-----------
 |**Slice LUTs**|0|2122|3390|5673|554|380|205|205
 |**Slice Registers**|0|1441|911|5060|622|167|185|185
 |**Block RAM Tile**|**16**|25|0|0|1|0.5|0|0
 |**DSPs**|0|2|1|0|0|0|0|0
 
-| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization 
+| Resources Type | sdspi | wbi2c | wbuart | Quad SPI | Margin Pct. | Total (incl. margin) | Avl. Resources | Pct. Utilization
 |----------------|-------|-------|--------|----------|-------------|----------------------|----------------|------------------
 |**Slice LUTs**|536|393|438|440|20.00%|17203|20800|82.71%
 |**Slice Registers**|749|324|346|641|20.00%|12757|41600|30.67%

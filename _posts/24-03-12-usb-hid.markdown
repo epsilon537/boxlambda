@@ -5,6 +5,8 @@ comments: true
 youtubeId: qZe9CCA0zFE
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
 
 ![BoxLambda Block Diagram.](../assets/Arch_Diagram_USB_Focus.png)
@@ -153,7 +155,7 @@ The Simulation Setup
 
 To test USB mouse support, I'm using Pbing's mouse emulation as-is. To test USB keyboard support, I created a firmware variant that emulates a keyboard with a key being pressed. The firmware also accepts the SetReport messages for LED control and will set GPIOs depending on the value of the received LED bitmap.
 
-The simulation top-level, [sim_main.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/usb_hid_sys_test/sim/sim_main.sv), hooks up the mouse and the keyboard emulations to the two usb_hid_host instances of the BoxLambda SoC. *Sim_main.sv* includes logic tracking the USB ports' output enables and driving the USB D+/D- lines high or low to emulate the pull-up/pull-down behavior of a low-speed USB device (See [https://www.beyondlogic.org/usbnutshell/usb2.shtml#SpeedIdentification](https://www.beyondlogic.org/usbnutshell/usb2.shtml#SpeedIdentification)).
+The simulation top-level, [sim_main.sv](https://github.com/epsilon537/boxlambda/blob/usb_hid_host/gw/projects/usb_hid_sys_test/sim/sim_main.sv), hooks up the mouse and the keyboard emulations to the two usb_hid_host instances of the BoxLambda SoC. *Sim_main.sv* includes logic tracking the USB ports' output enables and driving the USB D+/D- lines high or low to emulate the pull-up/pull-down behavior of a low-speed USB device (See [https://www.beyondlogic.org/usbnutshell/usb2.shtml#SpeedIdentification](https://www.beyondlogic.org/usbnutshell/usb2.shtml#SpeedIdentification)).
 
 The *usb_hid_device* repo
 =========================
@@ -202,7 +204,7 @@ The management of these reset domains and reset sources is organized by a **rese
 
 The reset_ctrl module code is located here:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/reset_ctrl/rtl/reset_ctrl.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/reset_ctrl/rtl/reset_ctrl.sv)
+[https://github.com/epsilon537/boxlambda/blob/usb_hid_host/gw/components/reset_ctrl/rtl/reset_ctrl.sv](https://github.com/epsilon537/boxlambda/blob/usb_hid_host/gw/components/reset_ctrl/rtl/reset_ctrl.sv)
 
 Software
 --------
@@ -212,7 +214,7 @@ The USB HID HAL
 
 The USB HID HAL is a very thin Hardware Access Layer, mapping directly to the two USB cores' registers:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/components/usb_hid/usb_hid_hal.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/usb_hid/usb_hid_hal.h)
+[https://github.com/epsilon537/boxlambda/blob/usb_hid_host/sw/components/usb_hid/usb_hid_hal.h](https://github.com/epsilon537/boxlambda/blob/usb_hid_host/sw/components/usb_hid/usb_hid_hal.h)
 
 The USB HID System Test Case
 ============================
@@ -220,7 +222,7 @@ The USB HID System Test Case, running both on Verilator and on FPGA, continuousl
 
 Additionally, when Switch 0 (SW0) is set to *On* and a USB keyboard is connected, the keyboard LEDs will be turned on and off in a rotating pattern.
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/usb_hid_sys_test/usb_hid_sys_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/usb_hid_sys_test/usb_hid_sys_test.c)
+[https://github.com/epsilon537/boxlambda/blob/usb_hid_host/sw/projects/usb_hid_sys_test/usb_hid_sys_test.c](https://github.com/epsilon537/boxlambda/blob/usb_hid_host/sw/projects/usb_hid_sys_test/usb_hid_sys_test.c)
 
 The usb_hid_host firmware
 =========================
@@ -248,7 +250,7 @@ Try It Out
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/mar_12_24/installation-and-test-builds/#prerequisites).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

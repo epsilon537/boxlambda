@@ -5,6 +5,8 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025:*
 - *Fixed link to bootloader in documentation.*
 - *Fixed link to uLisp test build in documentation.*
@@ -55,7 +57,7 @@ This is the gateware's block diagram:
 
 ![BoxLambda Block Diagram.](../assets/Arch_Diagram_dual_bus_DFX.png)
 
-Project documentation: [https://boxlambda.readthedocs.io/en/latest/](https://boxlambda.readthedocs.io/en/latest/)
+Project documentation: [https://boxlambda.readthedocs.io/en/nov_3_25/](https://boxlambda.readthedocs.io/en/nov_3_25/)
 
 The Repo: [https://github.com/epsilon537/boxlambda](https://github.com/epsilon537/boxlambda)
 <br/><br/>
@@ -172,7 +174,7 @@ well-written Forth for RISC-V based systems. An excellent code base to really
 *grok* Forth and easy to port to BoxLambda.
 - [TCC Tiny C Compiler](https://bellard.org/tcc/): a C compiler that can
 conceivably be ported to a constrained platform such as BoxLambda.
-- [Lua](https://www.lua.org) and [eLua](https://eluaproject.net). Lua is a
+- [Lua](https://www.lua.org) and [eLua](https://github.com/elua/elua). Lua is a
 lightweight, byte-code compiled, embeddable scripting language, easy to port, and
 with a well-designed C-FFI. I considered Lua as a higher-level scripting
 language to complement Forth.
@@ -183,7 +185,7 @@ compiler](http://www.ulisp.com/show?4Y20). Could be an interesting complement to
 Forth.
 - [viless](https://github.com/brentr/viless): A bare-metal version of *vi*, a
 candidate text editor for BoxLambda.
-[Kilo](https://viewsourcecode.org/snaptoken/kilo/) is another option.
+[Kilo](https://github.com/antirez/kilo) is another option.
 
 DuskOS is an amazing project. It would be great to be part of that story and to
 port that system to BoxLambda. A few things are holding me back, however. The OS
@@ -218,7 +220,7 @@ The two main subsystems are the **BoxLambda Kernel** (**BoxKern**) and the
 The BoxKern image is stored in flash memory. The Bootloader loads the kernel
 into EMEM, then transfers control to it. The kernel's *CRT0* startup code then
 further unpacks specific sections into EMEM and IMEM. (See
-[here](https://boxlambda.readthedocs.io/en/latest/sw_bootloader/) for a
+[here](https://boxlambda.readthedocs.io/en/nov_3_25/sw_comp_bootloader/) for a
 more detailed description of the boot sequence).
 
 The Mercrisp Forth Environment lives as Forth source code on the SD card
@@ -314,10 +316,7 @@ default.
 
 I spent an inordinate amount of time evaluating projects and programming
 languages for BoxLambda. It's just too much fun. I have prototypes on BoxLambda
-of [uLisp](https://boxlambda.readthedocs.io/en/latest/sw-test-build-ulisp/), *Lua*,
-[Mecrisp
-Forth](https://boxlambda.readthedocs.io/en/latest/sw-test-build-forth-core/),
-and *vi*. I wrote a [RISC-V disassembler for
+of *uLisp*, *Lua*, *Mecrisp Forth*, and *vi*. I wrote a [RISC-V disassembler for
 DuskOS](https://git.sr.ht/~vdupras/duskos/tree/master/item/fs/asm/riscvd.fs),
 and I've been diving into Project Oberon, ELF loaders, and small-footprint C
 compilers.

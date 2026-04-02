@@ -4,6 +4,8 @@ title: 'Git Workflow and Setup.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 Git Workflow
 ------------
 
@@ -24,9 +26,9 @@ boxlambda/doc
 boxlambda/fpga/ibex (ibex fork git submodule)
 boxlambda/fpga/wbuart32 (wbuart32 fork git submodule)
 boxlambda/fpga/<other FPGA git submodules>
-boxlambda/fpga/<BoxLambda specific FPGA files that don't fit in any of the submodules> 
+boxlambda/fpga/<BoxLambda specific FPGA files that don't fit in any of the submodules>
 boxlambda/sw/<SW fork git submodules>
-boxlambda/sw/<BoxLambda SW files that don't fit in any of the submodules> 
+boxlambda/sw/<BoxLambda SW files that don't fit in any of the submodules>
 ```
 
 Each of the git submodules is a fork of a GitHub project discussed in earlier posts. For example, *boxlambda/fpga/ibex/* contains [my ibex fork](https://github.com/epsilon537/ibex), not the [original ibex repository](https://github.com/lowRISC/ibex).
@@ -41,15 +43,15 @@ In the BoxLambda repository itself, I have the following long-running branches:
 - **master**: I will submit releases to this branch. The master branch should always be in good shape.
 - **develop**: This is where the work is happening. Things will be in flux here. This branch will not always be in good shape.
 - **gh-pages**: This branch holds the BoxLambda Blog files. GitHub Pages are by default on the *gh-pages* branch of a GitHub project.
-- **boxlambda-gh-pages-wip**: This branch holds work-in-progress Blog updates. This branch also contains some config file modifs specifically for local previewing, which is why this is a long-running branch, rather than a topic branch. When updates are ready for release, I merge them to *gh-pages*. 
+- **boxlambda-gh-pages-wip**: This branch holds work-in-progress Blog updates. This branch also contains some config file modifs specifically for local previewing, which is why this is a long-running branch, rather than a topic branch. When updates are ready for release, I merge them to *gh-pages*.
 
 I already pushed this structure to GitHub. Feel free to take a look around:
 
-[https://github.com/epsilon537/boxlambda](https://github.com/epsilon537/boxlambda)
+[https://github.com/epsilon537/boxlambda/tree/hello_world](https://github.com/epsilon537/boxlambda/tree/hello_world)
 
 GitHub does a great job displaying submodule subdirectories:
 
-[https://github.com/epsilon537/boxlambda/tree/develop/fpga](https://github.com/epsilon537/boxlambda/tree/develop/fpga)
+[https://github.com/epsilon537/boxlambda/tree/hello_world/fpga](https://github.com/epsilon537/boxlambda/tree/hello_world/fpga)
 
 My Setup
 --------
@@ -58,11 +60,11 @@ I'm working on Ubuntu WSL on Windows 11. It would be better to work on a native 
 
 WSL is working well for me. My C: drive shows up as */mnt/c* under Linux, so sharing files between Linux and Windows is easy. The clipboard also works seamlessly between Windows and Linux and the Linux apps run right inside the Windows desktop.
 
-Xilinx's Vivado installation was straightforward. As a test, I built Ibex's Arty A7 example using the [README](https://github.com/lowRISC/ibex/blob/master/examples/fpga/artya7/README.md) instructions. Synthesis, implementation, and bitstream generation went just fine. 
+Xilinx's Vivado installation was straightforward. As a test, I built Ibex's Arty A7 example using the [README](https://github.com/lowRISC/ibex/blob/master/examples/simple_system/README.md) instructions. Synthesis, implementation, and bitstream generation went just fine.
 
 However, when I tried to program the bitstream on my Arty A7 board, connected via USB, I noticed that Vivado wasn't detecting the board. *Ugh*. WSL is not perfect after all.
 
-As a workaround, I installed the Vivado Lab edition on the Windows side. Unlike a regular Vivado installation, the Lab edition is very small. It's intended for lab machines physically connected to FPGA targets. With the Vivado Lab edition on Windows, I can launch the hardware server, **hw_server.bat**, on the Windows side. The hardware server on the Windows side is detecting my USB connected target just fine. I can connect to the hardware server from Vivado on the Linux side by IP address. 
+As a workaround, I installed the Vivado Lab edition on the Windows side. Unlike a regular Vivado installation, the Lab edition is very small. It's intended for lab machines physically connected to FPGA targets. With the Vivado Lab edition on Windows, I can launch the hardware server, **hw_server.bat**, on the Windows side. The hardware server on the Windows side is detecting my USB connected target just fine. I can connect to the hardware server from Vivado on the Linux side by IP address.
 
 ![Connecting to Target from Vivado on WSL](../assets/ConnectingToHWfromVivadoWSL.jpg){:class="img-responsive"}
 *Connecting to Target from Vivado on WSL*
@@ -79,7 +81,7 @@ I'm currently using the following tools:
 
 - Vivado ML Edition V2021.2, Linux version.
 - Vivado Lab Edition V2021.2, Windows version (for the hardware server).
-- RISCV Compiler Toolchain **rv32imcb**. This is the cross compiler for building the code that'll run on the Ibex processor. I'm using the pre-built binaries from *lowRISC*: 
+- RISCV Compiler Toolchain **rv32imcb**. This is the cross compiler for building the code that'll run on the Ibex processor. I'm using the pre-built binaries from *lowRISC*:
 
 	[https://github.com/lowRISC/lowrisc-toolchains/releases](https://github.com/lowRISC/lowrisc-toolchains/releases)
 

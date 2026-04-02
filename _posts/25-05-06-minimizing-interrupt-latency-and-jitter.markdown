@@ -5,6 +5,8 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 In this post, I'll explore ways to improve interrupt latency and jitter on the BoxLambda SoC.
 
 Recap
@@ -184,7 +186,7 @@ To accommodate such use cases, I added an `MTIMEBLK` register to the Timer core.
 
 You program a Timer interrupt to fire a few clock cycles before the desired time. Then, inside the timer ISR, you write to `MTIMEBLK` to block until the desired time is reached exactly.
 
-The [timer_uart_gpio_irqs](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) test implements this mechanism:
+The [timer_uart_gpio_irqs](https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) test implements this mechanism:
 
 ```
 volatile uint32_t timer_irq_expected_at = 0;
@@ -232,7 +234,7 @@ This mechanism can also be used to remove jitter from periodic interrupts, such 
 
 Other Changes
 -------------
-See the [CHANGELOG](https://github.com/epsilon537/boxlambda/blob/master/CHANGELOG.md).
+See the [CHANGELOG](https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/CHANGELOG.md).
 
 Try It Yourself
 ---------------
@@ -240,7 +242,7 @@ Try It Yourself
 Setup
 =====
 
-[Install the prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+[Install the prerequisites](https://boxlambda.readthedocs.io/en/may_6_25/prerequisites/).
 
 1. Get the repository:
   ```
@@ -267,7 +269,7 @@ Setup
 
 ## The Ibex Performance Test on Verilator
 
-The [Ibex Performance Test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ibex_perf_test/ibex_perf_test.c) now includes an interrupt latency measurement test.
+The [Ibex Performance Test](https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/sw/projects/ibex_perf_test/ibex_perf_test.c) now includes an interrupt latency measurement test.
 
 Build the **ibex_perf_test** project:
 
@@ -318,7 +320,7 @@ In the terminal emulator, you should see the same output as in the Verilator tes
 
 ### The Timer, UART, and GPIO Interrupt Test on Verilator
 
-The [Timer, UART, and GPIO Interrupt Test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) includes a timer interrupt test implementing the interrupt jitter removal mechanism.
+The [Timer, UART, and GPIO Interrupt Test](https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) includes a timer interrupt test implementing the interrupt jitter removal mechanism.
 
 Build the *timer_uart_gpio_irqs* gateware project:
 
@@ -363,7 +365,7 @@ Follow the prompts on the serial port terminal. Push the Arty's buttons or enter
 
 Conclusion
 ----------
-The tweaking of the BoxLambda SoC gateware to meet the requirements is now complete. The SoC is a simple, low-latency system with predictable behavior down to the clock cycle. **This is a milestone!** 
+The tweaking of the BoxLambda SoC gateware to meet the requirements is now complete. The SoC is a simple, low-latency system with predictable behavior down to the clock cycle. **This is a milestone!**
 
 ![Celebrate.](../assets/celebrate.png)
 

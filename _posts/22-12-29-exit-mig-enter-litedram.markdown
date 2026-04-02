@@ -4,6 +4,8 @@ title: 'Exit MIG, Enter LiteDRAM.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025:*
 - *Corrected link to Gateware Architecure in documentation.*
 - *Removed reference to 'On WSL' documentation.*
@@ -99,7 +101,7 @@ You specify the configuration details in a *.yml* file. A Python script parses t
 
 Details are a bit sparse, but luckily example configurations are provided:
 
-[https://github.com/enjoy-digital/litedram/tree/master/examples](https://github.com/enjoy-digital/litedram/tree/master/examples)
+[https://github.com/enjoy-digital/litedram/tree/master/examples](https://github.com/enjoy-digital/litedram/blob/master/examples)
 
 Starting from the *arty.yml* example, I created the following LiteDRAM configuration file for BoxLambda:
 
@@ -159,7 +161,7 @@ Some points about the above:
 - The *PHY layer*, *Electrical* and *Core* sections I left exactly as-is in the given Arty example.
 - In the *General* section, I set *cpu* to *None*. BoxLambda already has a CPU. We don't need LiteX to generate one.
 - In the *Frequency* section, I set *sys_clk_freq* to 50MHz. 50MHz has been the system clock frequency in the previous BoxLambda test builds as well. Also, I haven't been able to close timing at 100MHz.
-- In the *User Ports* section, I specified two 32-bit Wishbone ports. In the [BoxLambda Architecture Diagram](https://boxlambda.readthedocs.io/en/latest/gw_architecture/), you'll see that BoxLambda has two system buses. The memory controller is hooked up to both.
+- In the *User Ports* section, I specified two 32-bit Wishbone ports. In the [BoxLambda Architecture Diagram](https://boxlambda.readthedocs.io/en/dec_29_22/architecture/), you'll see that BoxLambda has two system buses. The memory controller is hooked up to both.
 
 I generate two LiteDRAM core variants from this configuration:
 
@@ -244,7 +246,7 @@ Integrating the LiteDRAM core
 
 I created a *litedram_wrapper* module around *litedram.v*:
 
-[https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv)
+[https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/common/rtl/litedram_wrapper.sv)
 
 This wrapper contains:
 - byte-to-word address adaptation on all three Wishbone ports.
@@ -305,7 +307,7 @@ With those changes in place, Ibex instruction and data transactions to LiteDRAM 
 *ddr_test_soc*
 ==============
 
-[/projects/ddr_test/rtl/ddr_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/projects/ddr_test/rtl/ddr_test_soc.sv) has the test build's top-level. It's based on the previous test build's top-level, extended with the LiteDRAM wrapper instance.
+[/projects/ddr_test/rtl/ddr_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/enter_litedram/projects/ddr_test/rtl/ddr_test_soc.sv) has the test build's top-level. It's based on the previous test build's top-level, extended with the LiteDRAM wrapper instance.
 
 ```
   litedram_wrapper litedram_wrapper_inst (
@@ -396,8 +398,8 @@ The most relevant files are **csr.h** and **sdram_phy.h**. They contain the regi
 It's not clear to me why the *liblitedram* is not part of the LiteDRAM repository, but's not a big deal. I integrated the *sdram_init()* function from *liblitedram* in the BoxLambda code base and it's working fine.
 
 To get things to build, I added Litex as a git submodule, to get access to *liblitedram*. I also tweaked some *CPPFLAGS* and include paths. The resulting Makefiles are checked-in here:
-- FPGA: [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile)
-- Sim: [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile)
+- FPGA: [https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/fpga/Makefile](https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/fpga/Makefile)
+- Sim: [https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/sim/Makefile](https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/sim/Makefile)
 
 It's worth noting that *liblitedram* expects a standard C environment, which I added in [the previous BoxLambda update](https://epsilon537.github.io/boxlambda/libc-for-boxlambda/).
 
@@ -405,7 +407,7 @@ DDR Test
 --------
 The DDR test program is located here:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c)
+[https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/ddr_test.c](https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/ddr_test.c)
 
 The program boots from internal memory. It invokes *sdram_init()*, then performs a memory test over user port 0, followed by user port 1. Finally, the program verifies CPU instruction execution from DDR by relocating a test function from internal memory to DDR and branching to it.
 
@@ -414,25 +416,25 @@ The memory test function used is a slightly modified version of the *memtest()* 
 Relevant Files
 --------------
 - [https://github.com/enjoy-digital/litex/blob/master/litex/soc/software/liblitedram/sdram.c](https://github.com/enjoy-digital/litex/blob/master/litex/soc/software/liblitedram/sdram.c)
-- [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/common/rtl/litedram_wrapper.sv)
-- [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/rtl/litedram.v](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/rtl/litedram.v)
-- [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/rtl/litedram.v](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/rtl/litedram.v)
-- [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/artya7dram.yml](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/artya7dram.yml)
-- [https://github.com/epsilon537/boxlambda/blob/master/projects/ddr_test/rtl/ddr_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/projects/ddr_test/rtl/ddr_test_soc.sv)
-- [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c)
-- [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/fpga/Makefile)
-- [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/sim/Makefile)
-- [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/sw/include/generated/csr.h](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/sw/include/generated/csr.h)
-- [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/sw/include/generated/sdram_phy.h](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/arty/sw/include/generated/sdram_phy.h)
-- [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/csr.h](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/csr.h)
-- [https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/sdram_phy.h](https://github.com/epsilon537/boxlambda/blob/master/components/litedram/sim/sw/include/generated/sdram_phy.h)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/common/rtl/litedram_wrapper.sv)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/arty/rtl/litedram.v](https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/arty/rtl/litedram.v)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/sim/rtl/litedram.v](https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/sim/rtl/litedram.v)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/artya7dram.yml](https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/artya7dram.yml)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/projects/ddr_test/rtl/ddr_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/enter_litedram/projects/ddr_test/rtl/ddr_test_soc.sv)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/ddr_test.c](https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/ddr_test.c)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/fpga/Makefile](https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/fpga/Makefile)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/sim/Makefile](https://github.com/epsilon537/boxlambda/blob/enter_litedram/sw/projects/ddr_test/sim/Makefile)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/arty/sw/include/generated/csr.h](https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/arty/sw/include/generated/csr.h)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/arty/sw/include/generated/sdram_phy.h](https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/arty/sw/include/generated/sdram_phy.h)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/sim/sw/include/generated/csr.h](https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/sim/sw/include/generated/csr.h)
+- [https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/sim/sw/include/generated/sdram_phy.h](https://github.com/epsilon537/boxlambda/blob/enter_litedram/components/litedram/sim/sw/include/generated/sdram_phy.h)
 
 Try It Out
 ----------
 
 Repository setup
 ================
-   1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+   1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/dec_29_22/installation-and-test-builds/#prerequisites).
    2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

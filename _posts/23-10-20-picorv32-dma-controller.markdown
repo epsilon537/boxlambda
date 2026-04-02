@@ -4,6 +4,8 @@ title: 'An attempt at a PicoRV32-based Soft DMA Controller.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 13 November 2023: Corrected performance number:*
 - *Bus utilization for 4x unrolled wordcopy is 25%, not 30%.*
 - *Fixed broken picorv_dma tag.*
@@ -65,12 +67,12 @@ The PicoRV DMA Core Block Diagram
 
 The DMA core's top-level is located here:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/rtl/picorv_dma_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/rtl/picorv_dma_top.sv)
+[https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/components/picorv_dma/rtl/picorv_dma_top.sv](https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/components/picorv_dma/rtl/picorv_dma_top.sv)
 
 Memory accesses coming from the PicoRV processor are mapped into three address spaces:
 - 0x10002000-0x10003000: PicoRV **Program Memory**, or to be more accurate, Program Memory and Local Data.
 - 0x10003000-0x10003080: The DMA Core's **System Registers** and **Host Interface Registers** (HIR), not to be confused with PicoRV's own registers (x0-x31).
-- All other memory accesses are considered non-local and are turned into Wishbone Bus Master (WBM) transactions. These WBM transactions are dispatched to WBM port 0 or port 1 based on a cut-off address (0x50000000). The intent is to attach port 0 to the Processor Bus and port 1 to the DMA Bus. See BoxLambda's [Architecture Diagram](https://boxlambda.readthedocs.io/en/latest/gw_architecture/).
+- All other memory accesses are considered non-local and are turned into Wishbone Bus Master (WBM) transactions. These WBM transactions are dispatched to WBM port 0 or port 1 based on a cut-off address (0x50000000). The intent is to attach port 0 to the Processor Bus and port 1 to the DMA Bus. See BoxLambda's [Architecture Diagram](https://boxlambda.readthedocs.io/en/oct_20_23/architecture/#the-arty-a7-100t-configuration).
 
 These address spaces match with the world view of BoxLambda's Ibex RISC-V host processor.
 
@@ -140,7 +142,7 @@ loop:
     j wait_start
 ```
 
-The Ibex host processor program loads the microprogram binary into the DMA core and takes the core out of reset using a simple [HAL-level API](https://github.com/epsilon537/boxlambda/blob/master/sw/components/picorv_dma/picorv_dma_hal.h):
+The Ibex host processor program loads the microprogram binary into the DMA core and takes the core out of reset using a simple [HAL-level API](https://github.com/epsilon537/boxlambda/blob/picorv_dma/sw/components/picorv_dma/picorv_dma_hal.h):
 
 ```
 picorv_load_program(picorv_wordcopy_picobin, picorv_wordcopy_picobin_len);
@@ -169,7 +171,7 @@ Although Ibex and PicoRV32 are both 32-bit RISC-V processors, the programming mo
 
 The article tells you to create three files in the CMake modules directory. Here are the files I created for *ASM_PICO*:
 
-[https://github.com/epsilon537/boxlambda/tree/master/cmake](https://github.com/epsilon537/boxlambda/tree/master/cmake)
+[https://github.com/epsilon537/boxlambda/tree/picorv_dma/cmake](https://github.com/epsilon537/boxlambda/tree/picorv_dma/cmake)
 
 I needed to come up with a new filename extension for PicoRV assembly files because CMake toolchain selection is done based on the filename extension. I decided to go for **.picoasm** for the source code and **.picobin** for the generated binaries.
 
@@ -211,11 +213,11 @@ async def wb_read(dut, addr):
 
 A CocoTB test module consists of one or more test cases that get discovered automatically by the framework. Here is my CocoTB test module for the PicoRV DMA core:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/test/picorv_dma_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/components/picorv_dma/test/picorv_dma_test.py)
+[https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/components/picorv_dma/test/picorv_dma_test.py](https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/components/picorv_dma/test/picorv_dma_test.py)
 
 Depending on the test case, the test script will load a different *Picoasm* program into to core. The *Picoasm* test programs are located here:
 
-[https://github.com/epsilon537/boxlambda/tree/master/sw/components/picorv_dma/test](https://github.com/epsilon537/boxlambda/tree/master/sw/components/picorv_dma/test)
+[https://github.com/epsilon537/boxlambda/tree/picorv_dma/sw/components/picorv_dma/test](https://github.com/epsilon537/boxlambda/tree/picorv_dma/sw/components/picorv_dma/test)
 
 Please be aware that I'm an absolute newbie when it comes to CocoTB. Do not take that script as an example of a 'good' CocotB test module. I'm pretty sure that if I look back at this script after getting more experience with the tool, I'll cringe. Anyway, this is what I was able to whip with my current understanding of CocoTB. It works and it was a big help to get the core up and running. It was a pleasure to write the test cases. Writing Python code is just much easier, faster, and less tedious than writing in C/C++, or Verilog.
 
@@ -293,11 +295,11 @@ In the system test case, a test program running on the host processor configures
 
 The System Test SoC is located here:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/projects/picorv_dma_sys_test/rtl/picorv_dma_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/picorv_dma_sys_test/rtl/picorv_dma_test_soc.sv)
+[https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/projects/picorv_dma_sys_test/rtl/picorv_dma_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/projects/picorv_dma_sys_test/rtl/picorv_dma_test_soc.sv)
 
 The System Test Software is here:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/picorv_dma_sys_test/main.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/picorv_dma_sys_test/main.c)
+[https://github.com/epsilon537/boxlambda/blob/picorv_dma/sw/projects/picorv_dma_sys_test/main.c](https://github.com/epsilon537/boxlambda/blob/picorv_dma/sw/projects/picorv_dma_sys_test/main.c)
 
 Performance
 -----------
@@ -324,15 +326,15 @@ Praxos
 Before I settled on the PicoRV-based DMA Controller, I integrated a Praxos-based DMA controller into BoxLambda. The design is essentially the same as shown in the PicoRV DMA block diagram but using a Praxos core instead of the PicoRV.
 
 I did get it to work. The core and its unit test are located here:
-[https://github.com/epsilon537/boxlambda/tree/master/gw/components/praxos](https://github.com/epsilon537/boxlambda/tree/master/gw/components/praxos)
+[https://github.com/epsilon537/boxlambda/tree/picorv_dma/gw/components/praxos](https://github.com/epsilon537/boxlambda/tree/picorv_dma/gw/components/praxos)
 
 The system test SoC and software are here:
-- [https://github.com/epsilon537/boxlambda/blob/master/gw/projects/praxos_test/rtl/praxos_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/praxos_test/rtl/praxos_test_soc.sv)
-- [https://github.com/epsilon537/boxlambda/blob/master/sw/projects/praxos_test/main.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/praxos_test/main.c)
+- [https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/projects/praxos_test/rtl/praxos_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/projects/praxos_test/rtl/praxos_test_soc.sv)
+- [https://github.com/epsilon537/boxlambda/blob/picorv_dma/sw/projects/praxos_test/main.c](https://github.com/epsilon537/boxlambda/blob/picorv_dma/sw/projects/praxos_test/main.c)
 
 The main reason I abandoned the Praxos approach is because I got frustrated with the limitations of the Praxos microcode. It took 250 lines of code to write a byte copy program, and it ran very slowly:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/praxos/test/praxos_asm_test.pxasm](https://github.com/epsilon537/boxlambda/blob/master/gw/components/praxos/test/praxos_asm_test.pxasm)
+[https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/components/praxos/test/praxos_asm_test.pxasm](https://github.com/epsilon537/boxlambda/blob/picorv_dma/gw/components/praxos/test/praxos_asm_test.pxasm)
 
 Possibly, I was going about it the wrong way. There may be a more elegant solution, but I didn't see it, and I didn't have much to go on. I certainly could have made it much better by adding a few instructions to the processor, e.g. a barrel shift, but I figured it would be better to invest in a core that already has a great ISA. Enter PicoRV.
 
@@ -341,7 +343,7 @@ Try It Out
 
 Setup
 =====
-1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Software Prerequisites](https://boxlambda.readthedocs.io/en/oct_20_23/prerequisites/).
 2. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

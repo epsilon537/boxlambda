@@ -5,6 +5,8 @@ comments: true
 mathjax: yes
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 22 June 2025: Included Prefetcher FSM diagram.*
 
 *Updated 13 April 2025: I corrected the breakdown of the 6 clock cycle register access time in [this](#the-single-instruction-prefetcher) section.*
@@ -261,7 +263,7 @@ Access to VRAM is arranged into time slots. If you write the VRAM accessing code
 
 Other Changes
 -------------
-See [CHANGELOG.md](https://github.com/epsilon537/boxlambda/blob/master/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/epsilon537/boxlambda/blob/latency_shakeup/CHANGELOG.md).
 
 Try It Yourself
 ---------------

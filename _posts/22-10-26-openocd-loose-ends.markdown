@@ -4,6 +4,8 @@ title: 'OpenOCD: Tying Up Loose Ends.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 Recap
 -----
 In my [previous post](https://epsilon537.github.io/boxlambda/hello-debugger/), OpenOCD-based debug support was brought up for the Ibex RISCV core. The debug core implementation is based on [RISCV-dbg](https://github.com/pulp-platform/riscv-dbg).
@@ -19,7 +21,7 @@ Target reset
 ------------
 While I can attach to a target just fine, the target does not respond to reset commands, not from the OpenOCD configuration script, nor from the GDB monitor.
 
-Some experimentation with the RISCV-dbg code base trace prints and investigation of waveforms showed that the target was not responding to the *JTAG TRST* signal being asserted. A bit of code reading revealed that this happened (or, more accurately, didn't happen) because I had left the **ndmreset** signal unconnected in the *ibex_soc.sv* top-level. 
+Some experimentation with the RISCV-dbg code base trace prints and investigation of waveforms showed that the target was not responding to the *JTAG TRST* signal being asserted. A bit of code reading revealed that this happened (or, more accurately, didn't happen) because I had left the **ndmreset** signal unconnected in the *ibex_soc.sv* top-level.
 
 *Ndmreset* stands for *Non-Debug-Module-Reset*. It's an output signal of the debug core. It's supposed to reset the entire system, except the debug core itself. So that's what I did. I tied ndmreset to the reset input port of every core, except the debug core. That fixed the problem.
 
@@ -31,7 +33,7 @@ A Run-Time Flag for the Verilator Model to indicate that OpenOCD Debug Access is
 The RISCV-dbg debug core logic blocks on a socket when run in Verilator. This blocks the entire simulation until a socket connection is made by OpenOCD.
 This is inconvenient because it means I have to compile out the RISCV-dbg core if I just wanted to run a simulation without a debug session. Instead of having to decide at build-time, I want to choose at run-time whether or not I want to attach OpenOCD to a simulation.
 
-To fix this issue, I added a *jtag_set_bypass()* function to the *sim_jtag* module. If the bypass is set, the *sim_jtag* socket calls are bypassed: 
+To fix this issue, I added a *jtag_set_bypass()* function to the *sim_jtag* module. If the bypass is set, the *sim_jtag* socket calls are bypassed:
 
 ```
 void jtag_set_bypass(int set_bypass) {
@@ -60,12 +62,12 @@ Vmodel Usage:
 -d: attach debugger.
 ```
 
-If the *-d* flag is specified, the Verilator model waits for OpenOCD to connect before continuing the simulation. 
+If the *-d* flag is specified, the Verilator model waits for OpenOCD to connect before continuing the simulation.
 If the *-d* flag is not given, the Verilator model will execute without waiting for an OpenOCD connection.
 
 User-Level Access to the Arty A7 USB JTAG Adapter.
 --------------------------------------------------
-OpenOCD access to the USB JTAG adapter works when run as root, but not when run at user-level. This indicates there's a permission problem. A Google search quickly shows that I have to add a rule to **/etc/udev/rules.d** to get user-level access to the Arty USB JTAG adapter. 
+OpenOCD access to the USB JTAG adapter works when run as root, but not when run at user-level. This indicates there's a permission problem. A Google search quickly shows that I have to add a rule to **/etc/udev/rules.d** to get user-level access to the Arty USB JTAG adapter.
 
 I created a file, **/etc/udev/rules.d/99-openocd.rules**, with the following contents:
 
@@ -92,15 +94,15 @@ Reboot again, launch OpenOCD again, and... success! Hurrah!
 
 #### USBIPD-WIN
 
-Keep in mind that for USB device access to work at all on WSL, it's necessary to attach the USB device to WSL (by default, USB ports stay under native Windows control). This is done using **usbipd-win**, which can be installed from this location: 
+Keep in mind that for USB device access to work at all on WSL, it's necessary to attach the USB device to WSL (by default, USB ports stay under native Windows control). This is done using **usbipd-win**, which can be installed from this location:
 
 [https://github.com/dorssel/usbipd-win/releases](https://github.com/dorssel/usbipd-win/releases).
 
-Additional info about connecting USB devices to WSL can be found here: 
+Additional info about connecting USB devices to WSL can be found here:
 
 [https://learn.microsoft.com/en-us/windows/wsl/connect-usb](https://learn.microsoft.com/en-us/windows/wsl/connect-usb).
 
-For convenience, I created a one-line Windows batch script that attaches the Arty USB JTAG port to WSL: 
+For convenience, I created a one-line Windows batch script that attaches the Arty USB JTAG port to WSL:
 
 *\<boxlambda root directory\>/wsl/usb_fwd_to_wsl.bat*:
 
@@ -128,24 +130,24 @@ I've been looking for other Jekyll themes that support both blogging and documen
 
 I moved all documentation over to *Read the Docs* and organized it into sections. I hope you like the result:
 
-[https://boxlambda.readthedocs.io/en/latest/](https://boxlambda.readthedocs.io/en/latest/)
+[https://boxlambda.readthedocs.io/en/oct_26_22_lbl/](https://boxlambda.readthedocs.io/en/oct_26_22_lbl/)
 
 Try It Out
 ----------
 
 Repository setup
 ================
-   0. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/). 
+   0. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/oct_26_22_lbl/installation-and-test-builds/#prerequisites).
    1. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/
 cd boxlambda
 ```
-   3. Switch to the *openocd_loose_ends* tag: 
+   3. Switch to the *openocd_loose_ends* tag:
 ```
 git checkout openocd_loose_ends
 ```
-   4. Get the submodules: 
+   4. Get the submodules:
 ```
 git submodule update --init --recursive
 ```
@@ -160,7 +162,7 @@ make impl
 make run
 ```
    3. Verify that the *Hello World* test program is running: The four LEDs on the Arty A7 should be blinking simultaneously.
-   4. Start OpenOCD with the *digilent_arty_a7.cfg* config file. 
+   4. Start OpenOCD with the *digilent_arty_a7.cfg* config file.
       Note: If OpenOCD can't connect to the USB JTAG adapter, your USB device permissions might not be set correctly. Check the *User-Level Access to the Arty A7 USB JTAG Adapter* section above for a fix.
 ```
 openocd -f <boxlambda root directory>/openocd/digilent_arty_a7.cfg
@@ -176,7 +178,7 @@ Ready for Remote Connections
 Info : Listening on port 6666 for tcl connections
 Info : Listening on port 4444 for telnet connections
 ```
-   5. Launch GDB with hello.elf:	
+   5. Launch GDB with hello.elf:
 ```
 cd <boxlambda root directory>/sub/ibex_wb/soc/fpga/arty-a7-35/sw/examples/hello
 riscv32-unknown-elf-gdb hello.elf
@@ -189,7 +191,7 @@ Remote debugging using localhost:3333
 81        jal x0, reset_handler
 ```
       Notice that the CPU is stopped at the very first instruction of the boot sequence.
-   
+
 Connecting GDB to the Ibex RISCV32 processor on Verilator
 =========================================================
    1. Build the test project:

@@ -4,6 +4,8 @@ title: 'Integrating VERA.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
 
 ![VERA in the BoxLambda Architecture.](../assets/Arch_Diagram_VERA_focus.drawio.png)
@@ -468,7 +470,7 @@ Try It Out
 
 Setup
 =====
-1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/apr_20_23/installation-and-test-builds/#prerequisites).
 1. Get the BoxLambda repository:
 	```
 	git clone https://github.com/epsilon537/boxlambda/

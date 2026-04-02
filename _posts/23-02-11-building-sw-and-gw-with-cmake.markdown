@@ -4,6 +4,8 @@ title: 'Building Software and Gateware with CMake and Bender.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025:*
 - *Corrected link to Bender in documentation.*
 - *Removed reference to 'On WSL' documentation.*
@@ -29,7 +31,7 @@ Around the time I integrated [Picolibc into BoxLambda](https://epsilon537.github
 - **Support for build options**: I want to be able to specify whether the build tree is to be used for simulation builds, or for FPGA synthesis.
 - **Support for different FPGA targets**: Arty-A7-35T and Arty-A7-100T to begin with.
 
-I thought this would be a good opportunity to try out [Meson](https://mesonbuild.com/), a modern build system generator with a clean, elegant python-like syntax. The Meson experiment came to a halt pretty quickly, however. I just couldn't get my head around the fact that the Meson DSL does not include functions or macros. I ended up with a bunch of virtually identical *meson.build* files because I didn't have a way to abstract common patterns. You can take a look at BoxLambda's [meson branch](https://github.com/epsilon537/boxlambda/tree/meson) if you're interested.
+I thought this would be a good opportunity to try out [Meson](https://mesonbuild.com/), a modern build system generator with a clean, elegant python-like syntax. The Meson experiment came to a halt pretty quickly, however. I just couldn't get my head around the fact that the Meson DSL does not include functions or macros. I ended up with a bunch of virtually identical *meson.build* files because I didn't have a way to abstract common patterns.
 
 I decided to switch over to [CMake](https://cmake.org/). Compared to Meson, CMake has a more cluttered, messy syntax, but it is more flexible. It has functions, macros, and all the other goodies you can expect of a build system generator:
 
@@ -45,7 +47,7 @@ Sidenote: Gateware
 ------------------
 I first encountered the term *Gateware* in the [LiteX project](https://github.com/enjoy-digital/litex).
 
-[Gateware comprises the description (of behaviour, structure and/or connections) of digital logic gates, a high level abstraction thereof, and/or the implementation thereof in (re)configurable logic devices (such as FPGAs and ASICs)](https://www.gateware.org/definition-of-gateware).
+Gateware comprises the description (of behaviour, structure and/or connections) of digital logic gates, a high level abstraction thereof, and/or the implementation thereof in (re)configurable logic devices (such as FPGAs and ASICs).
 
 I think the term covers its meaning very well and it's the perfect counterpart for software. I'll be using it from here on out.
 
@@ -319,7 +321,7 @@ Implementation
 
 *CMakeLists Organization.*
 
-The actual gateware build recipes (Bender interaction, verilating, synthesizing...) are implemented by a set of bash and tcl scripts kept in the [scripts/](https://github.com/epsilon537/boxlambda/tree/master/scripts) directory:
+The actual gateware build recipes (Bender interaction, verilating, synthesizing...) are implemented by a set of bash and tcl scripts kept in the [scripts/](https://github.com/epsilon537/boxlambda/tree/boxlambda_cmake/scripts) directory:
 
 ```
 	bender_gen_constraints_file_list.sh
@@ -340,16 +342,16 @@ Having the build recipes as scripts instead of CMake allows me to invoke and tes
 
 The CMake build instructions define the various targets and the relationships between them, and invoke the above build scripts when needed.
 
-The CMake build definitions are located as close as possible to the part of the tree to which they apply, e.g. the *gw_project_rules()* function can be found in the [gw/projects/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/CMakeLists.txt) file. *Gw_component_rules()* can be found in the [gw/components/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/components/CMakeLists.txt) file. Gateware build instructions common to components and projects are located in the [gw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/CMakeLists.txt) file.
+The CMake build definitions are located as close as possible to the part of the tree to which they apply, e.g. the *gw_project_rules()* function can be found in the [gw/projects/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/boxlambda_cmake/gw/projects/CMakeLists.txt) file. *Gw_component_rules()* can be found in the [gw/components/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/boxlambda_cmake/gw/components/CMakeLists.txt) file. Gateware build instructions common to components and projects are located in the [gw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/boxlambda_cmake/gw/CMakeLists.txt) file.
 
 Cross-Compilation
 =================
-RISC-V cross-compilation is set up by passing in a *toolchain file* to CMake. The toolchain file is located in [scripts/toolchain.cmake](https://github.com/epsilon537/boxlambda/blob/master/scripts/toolchain.cmake).
+RISC-V cross-compilation is set up by passing in a *toolchain file* to CMake. The toolchain file is located in [scripts/toolchain.cmake](https://github.com/epsilon537/boxlambda/blob/boxlambda_cmake/scripts/toolchain.cmake).
 
 Picolibc GCC specs file
 =======================
 The Picolibc GCC specs file expects absolute paths. I'm using CMake's *configure_file()* to replace placeholders
-in [scripts/picolibc.specs.in](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc.specs.in) with the project source directory's absolute path. The resulting *picolibc.specs* is written in the root of the build tree. This way, the Picolibc library build for BoxLambda can be checked into the source tree and the user won't need to build and install it from source when setting up BoxLambda.
+in [scripts/picolibc.specs.in](https://github.com/epsilon537/boxlambda/blob/boxlambda_cmake/scripts/picolibc.specs.in) with the project source directory's absolute path. The resulting *picolibc.specs* is written in the root of the build tree. This way, the Picolibc library build for BoxLambda can be checked into the source tree and the user won't need to build and install it from source when setting up BoxLambda.
 
 Bender Interaction Hack
 =======================
@@ -361,7 +363,7 @@ GNU Make, CMake's backend, uses the modification date of dependencies to decide 
 	- If it's different, the file is copied over, making it the Bender script output file to be used by the next build step. The Bender script output file is a dependency for synthesis, so synthesis will be triggered.
 	- If the temporary file is the same as the Bender script output file used by the previous build of that target, the temporary file is discarded. Synthesis will not be triggered.
 
-This mechanism is implemented in the [scripts/bender_gen_vivado_sources.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/bender_gen_vivado_sources.sh) and [scripts/bender_gen_verilator_sources.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/bender_gen_verilator_sources.sh) scripts. The same scripts also generate a *DepFile*: a dependency list of all the sources referenced in the Bender manifest. This DepFile is referenced by the synthesis target so synthesis (or verilation) will be triggered if any of the sources change.
+This mechanism is implemented in the [scripts/bender_gen_vivado_sources.sh](https://github.com/epsilon537/boxlambda/blob/boxlambda_cmake/scripts/bender_gen_vivado_sources.sh) and [scripts/bender_gen_verilator_sources.sh](https://github.com/epsilon537/boxlambda/blob/boxlambda_cmake/scripts/bender_gen_verilator_sources.sh) scripts. The same scripts also generate a *DepFile*: a dependency list of all the sources referenced in the Bender manifest. This DepFile is referenced by the synthesis target so synthesis (or verilation) will be triggered if any of the sources change.
 
 ![CMake and Bender Interaction.](../assets/CMake_Bender_Interaction.drawio.png)
 
@@ -371,9 +373,9 @@ I ran into a [minor Bender issue](https://github.com/pulp-platform/bender/issues
 
 Boxlambda_setup.sh
 ------------------
-`make setup` has been replaced with the [boxlambda_setup.sh](https://github.com/epsilon537/boxlambda/blob/master/boxlambda_setup.sh) script in the repository root directory. The script initializes the git submodules used and creates the default build trees (*build/sim/*, *build/arty-a7-35/*, and *build/arty-a7-100/*).
+`make setup` has been replaced with the [boxlambda_setup.sh](https://github.com/epsilon537/boxlambda/blob/boxlambda_cmake/boxlambda_setup.sh) script in the repository root directory. The script initializes the git submodules used and creates the default build trees (*build/sim/*, *build/arty-a7-35/*, and *build/arty-a7-100/*).
 
-*Make setup* also used to build the Picolibc library for BoxLambda. As said in the previous section, that is no longer needed. The compiled library is [checked into the source tree](https://github.com/epsilon537/boxlambda/tree/master/sw/picolibc-install).
+*Make setup* also used to build the Picolibc library for BoxLambda. As said in the previous section, that is no longer needed. The compiled library is [checked into the source tree](https://github.com/epsilon537/boxlambda/tree/boxlambda_cmake/sw/picolibc-install).
 
 Try It Out
 ----------

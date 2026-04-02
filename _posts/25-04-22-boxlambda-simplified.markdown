@@ -4,7 +4,10 @@ title: 'BoxLambda Simplified.'
 comments: true
 mathjax: yes
 ---
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 25 April 2025: Punctuation.*
+
 *Updated 23 April 2025: Corrected the architecture diagram in the Recap section. It was showing the new architecture block diagram instead of the old one that was used as the baseline for the changes described in this post.*
 
 In this post, I remove more functionality than I'm adding, and BoxLambda becomes a lot simpler and faster as a result. I'll also briefly describe how the RISC-V GNU toolchain for BoxLambda is built.
@@ -65,12 +68,12 @@ This architecture is straightforward: A CPU with an instruction and a data port,
 Multiple Bus Masters, but not simultaneously
 ============================================
 OK, I bent the truth a little. Both buses still have multiple bus masters:
-- The Data Bus is connected to: 
+- The Data Bus is connected to:
     - The Ibex CPU data port.
     - VS0 (DFX Virtual Socket 0) port 1.
     - The Debug Module.
 
-- The Instruction Bus is connected to: 
+- The Instruction Bus is connected to:
     - The Ibex CPU instruction port.
     - VS0 port 0.
 
@@ -87,8 +90,8 @@ The Debug Module is not active during normal operation.
 In other words, during normal operation only the CPU is active. You won't have multiple masters competing for the bus, so register and internal memory access times remain known and constant.
 
 Here is the Instruction and Data bus verilog code:
-- [https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/instruction_bus.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/instruction_bus.sv)
-- [https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/data_bus.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/data_bus.sv)
+- [https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/gw/components/interconnect/rtl/instruction_bus.sv](https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/gw/components/interconnect/rtl/instruction_bus.sv)
+- [https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/gw/components/interconnect/rtl/data_bus.sv](https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/gw/components/interconnect/rtl/data_bus.sv)
 
 Arbiters without Overhead (most of the time)
 ============================================
@@ -205,7 +208,7 @@ riscv32-boxlambda-elf/
     └── licenses
 ```
 
-The toolchain tarball is checked into the BoxLambda repo. The [boxlambda_setup.sh](https://github.com/epsilon537/boxlambda/blob/master/boxlambda_setup.sh) script unpacks the toolchain tarball in the *boxlambda/tools/* directory, so the user no longer needs to provide the toolchain as a prerequisite.
+The toolchain tarball is checked into the BoxLambda repo. The [boxlambda_setup.sh](https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/boxlambda_setup.sh) script unpacks the toolchain tarball in the *boxlambda/tools/* directory, so the user no longer needs to provide the toolchain as a prerequisite.
 
 Try It Yourself
 ---------------
@@ -213,7 +216,7 @@ Try It Yourself
 Setup
 =====
 
-[Install the prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+[Install the prerequisites](https://boxlambda.readthedocs.io/en/may_6_25/prerequisites/).
 
 1. Get the repository:
   ```
@@ -240,9 +243,9 @@ Setup
 
 ### Peeking Words with the DFX test program on FPGA
 
-The [peekw CLI command](https://github.com/epsilon537/boxlambda/blob/master/sw/components/peek_poke_cli/peek_poke_cli.cpp), in addition to retrieving the value of the given register or memory location, measures the instruction cycle count of the load word (*lw*) transaction. This can be used to measure how long it takes to read a word from specific slaves (IMEM, UART...).
+The [peekw CLI command](https://github.com/epsilon537/boxlambda/blob/boxlambda_simplified/sw/components/peek_poke_cli/peek_poke_cli.cpp), in addition to retrieving the value of the given register or memory location, measures the instruction cycle count of the load word (*lw*) transaction. This can be used to measure how long it takes to read a word from specific slaves (IMEM, UART...).
 
-Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/latest/pmods/#microsd-pmod) and insert a FAT-formatted SD card.
+Hook up the MicroSD PMOD as described [here](https://boxlambda.readthedocs.io/en/may_6_25/pmods/#microsd-pmod) and insert a FAT-formatted SD card.
 
 Connect a terminal emulator to Arty's USB serial port. I suggest using a terminal emulator that supports Ymodem transfers, such as *Minicom*. **Settings: 115200 8N1**.
 

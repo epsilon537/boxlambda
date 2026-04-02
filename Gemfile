@@ -23,3 +23,4 @@ end
 gem "tzinfo", "~> 1.2"
 gem "tzinfo-data"
 
+gem "html-proofer"

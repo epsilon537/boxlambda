@@ -4,6 +4,8 @@ title: 'A C Standard Library for BoxLambda.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
 
 BoxLambda is a hardware-software cross-over project (see [About BoxLambda](https://epsilon537.github.io/boxlambda/about/)). The previous posts have been mostly about hardware (as far as FPGA logic can be considered hardware). This post will be about software for a change.
@@ -128,7 +130,7 @@ Picolibc is a relatively generic code base that needs to be tied to the platform
 
 More detail for each of these follows in the subsections below. I have grouped them into a single software component called **bootstrap**:
 
-[https://github.com/epsilon537/boxlambda/tree/develop/sw/bootstrap](https://github.com/epsilon537/boxlambda/tree/develop/sw/bootstrap)
+[https://github.com/epsilon537/boxlambda/tree/picolibc/sw/bootstrap](https://github.com/epsilon537/boxlambda/tree/picolibc/sw/bootstrap)
 
 An application wishing to use the standard C library has to link in this bootstrap component along with the picolibc library itself.
 
@@ -136,7 +138,7 @@ The Vector Table
 ================
 The vector table is a table with code entry points for all sorts of CPU events: interrupts, exceptions, etc. The Boot/Reset Vector, i.e. the very first instruction executed when the CPU comes out of reset, is part of this table.
 
-I'm using the Vector Table from the *Hello World* example program included in the *ibex_wb* repository. The Vector Table file is located at [boxlambda/sw/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/develop/sw/bootstrap/vectors.S).
+I'm using the Vector Table from the *Hello World* example program included in the *ibex_wb* repository. The Vector Table file is located at [boxlambda/sw/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/picolibc/sw/bootstrap/vectors.S).
 
 The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to **_start**, the entry point into picolibc's **crt0** module.
 
@@ -197,7 +199,7 @@ void set_stdio_to_uart(struct uart *uart) {
 }
 ```
 
-[boxlambda/sw/bootstrap/stdio_to_uart.c](https://github.com/epsilon537/boxlambda/blob/develop/sw/bootstrap/stdio_to_uart.c)
+[boxlambda/sw/bootstrap/stdio_to_uart.c](https://github.com/epsilon537/boxlambda/blob/picolibc/sw/bootstrap/stdio_to_uart.c)
 
 The **set_stdio_to_uart()** function is to be called from the application, before any standard library calls that require standard IO. The application needs to provide a pointer to an initialized *uart* object.
 
@@ -222,13 +224,13 @@ __ram_size = 32k;
 __stack_size = 512;
 ```
 
-[boxlambda/sw/bootstrap/link_internal_mem.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/bootstrap/link_internal_mem.ld)
+[boxlambda/sw/bootstrap/link_internal_mem.ld](https://github.com/epsilon537/boxlambda/blob/picolibc/sw/bootstrap/link_internal_mem.ld)
 
 I can't say that I like this link map. There's no good reason to split internal memory in two this way, I don't like the symbol names being used, and I don't understand half of what's going on in this very big and complicated link map file. Now is not the time to design a new link map for BoxLambda though. We don't even have external memory defined yet. To be revisited.
 
 Linking against the picolibc library
 ======================================
-To link the picolibc library into an application image, the picolibc *spec file* needs to be passed to GCC. The code snippet below is taken from the *picolibc_test* program's [Makefile](https://github.com/epsilon537/boxlambda/blob/develop/projects/picolibc_test/src/Makefile):
+To link the picolibc library into an application image, the picolibc *spec file* needs to be passed to GCC. The code snippet below is taken from the *picolibc_test* program's [Makefile](https://github.com/epsilon537/boxlambda/blob/picolibc/projects/picolibc_test/src/Makefile):
 
 ```
 #Compile with picolibc specs to pull in picolibc library code.
@@ -241,7 +243,7 @@ All the pieces are now in place to create a test build.
 I'll be using the same FPGA build as for the *hello_dbg* test (Ibex CPU, RISCV-DBG debug core, internal memory, and UART), with a test program that exercises some basic standard C functions, including standard input and output.
 
 The test build project is located here:
-[boxlambda/projects/picolibc_test](https://github.com/epsilon537/boxlambda/tree/develop/projects/picolibc_test)
+[boxlambda/projects/picolibc_test](https://github.com/epsilon537/boxlambda/tree/picolibc/projects/picolibc_test)
 
 Simulation Changes
 ==================
@@ -269,7 +271,7 @@ In *sim_main.cpp* these methods are used like this:
 
 The Test Application
 ====================
-The test application program running on the Ibex processor is located in [boxlambda/projects/picolibc_test/src/picolibc_test.c](https://github.com/epsilon537/boxlambda/blob/develop/projects/picolibc_test/src/picolibc_test.c)
+The test application program running on the Ibex processor is located in [boxlambda/projects/picolibc_test/src/picolibc_test.c](https://github.com/epsilon537/boxlambda/blob/picolibc/projects/picolibc_test/src/picolibc_test.c)
 
 ```
 #include <stdio.h>
@@ -356,7 +358,7 @@ Try It Out
 
 Repository setup
 ================
-   0. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+   0. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/nov_7_22_lbl/installation-and-test-builds/#prerequisites).
    1. Get the BoxLambda repository:
 ```
 git clone https://github.com/epsilon537/boxlambda/

@@ -4,6 +4,8 @@ title: 'Bringing up the SD-Card Controller and File System.'
 comments: true
 ---
 
+*Updated 2 April 2026: Corrected stale links.*
+
 *Updated 23 December 2025: Removed reference to 'On WSL' documentation.*
 
 I spent a couple of days bringing up an SD-Card Controller and a file system. It was a straightforward exercise thanks to Dan Gisselquist's [SDSPI repository](https://github.com/ZipCPU/sdspi).
@@ -50,7 +52,7 @@ The SDSPI Core
 
 *SDSPI in the BoxLambda Architecture.*
 
-I created a Test SoC containing all of the previously enabled BoxLambda components as well as the SDSPI core. See the Block Diagram Above. The core is instantiated in the [sdspi_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/rtl/sdspi_test_soc.sv) top-level module as follows:
+I created a Test SoC containing all of the previously enabled BoxLambda components as well as the SDSPI core. See the Block Diagram Above. The core is instantiated in the [sdspi_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/sd_and_fs/gw/projects/sdspi_test/rtl/sdspi_test_soc.sv) top-level module as follows:
 
 ```
 sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
@@ -84,7 +86,7 @@ I currently don't have interrupts hooked up.
 
 *SDSPI Simplified Block Diagram.*
 
-I've been studying the core's internals a bit and created the above, simplified block diagram. I won't be going into the details here, however. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
+I've been studying the core's internals a bit and created the above, simplified block diagram. I won't be going into the details here, however. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/sdspi.pdf) and the source code.
 
 SDSPISIM
 ========
@@ -101,15 +103,15 @@ Here're the hooks to both co-simulators in the test bench's **tick()** function.
   top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 ```
 
-For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/sim/sim_main.cpp) in the *sdspi_test* project.
+For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/sd_and_fs/gw/projects/sdspi_test/sim/sim_main.cpp) in the *sdspi_test* project.
 
 SDSPISIM reads from and writes to an **sdcard.img** file. That file can be mounted in Linux, so you can FAT format it and put files on it for the simulated system to use, or vice versa. See the [FatFS Test on Verilator](#fatfs-test-on-verilator) section below for an example.
 
 SDSPI Operation
 ===============
-The SDSPI core's register interface, the initialization sequence, and the overall operation of the core are well-documented in the SDSPI core [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/spec.pdf).
+The SDSPI core's register interface, the initialization sequence, and the overall operation of the core are well-documented in the SDSPI core [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/sdspi.pdf).
 
-[Sdtest.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's *sdtest.c* in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The *Zbasic* repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
+[Sdtest.c](https://github.com/epsilon537/boxlambda/blob/sd_and_fs/sw/projects/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's *sdtest.c* in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The *Zbasic* repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
 
 *Sdtest.c* runs on the RISCV processor that's part of the SDSPI Test SoC build outlined above.
 
@@ -158,7 +160,7 @@ Relative to the default settings, I modified the following:
 
 FatFs_Test
 ==========
-FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/fatfs_test/fatfs_test.c).
+FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](https://github.com/epsilon537/boxlambda/blob/sd_and_fs/sw/projects/fatfs_test/fatfs_test.c).
 
 With the endianness fix in place, *fatfs_test is* working fine, both in Verilator and on FPGA.
 
@@ -179,15 +181,15 @@ The *fatfs_test* code together with the FatFs library and the Picolibc library s
 
 Relevant Files and Directories
 ------------------------------
-- [gw/projects/sdspi_test/rtl/sdspi_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/rtl/sdspi_test_soc.sv): The SDSPI Test SoC top-level module instantiating the SDSPI core.
-- [sw/projects/sdspi_test/sdtest.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/sdspi_test/sdtest.c): A test program verifying low-level SD Card access using the SDSPI core.
-- [sw/projects/fatfs_test/fatfs_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/fatfs_test/fatfs_test.c): A test program verifying file system level access to the SD Card, using the FatFS library with SDSPI bindings.
-- [gw/projects/sdspi_test/](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/sdspi_test): BoxLambda test build based on the SDSPI Test SoC, running the *sdtest.c* program.
-- [gw/projects/fatfs_test/](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/fatfs_test): BoxLambda test build based on the SDSPI Test SoC, running the *fatfs_test.c* program.
+- [gw/projects/sdspi_test/rtl/sdspi_test_soc.sv](https://github.com/epsilon537/boxlambda/blob/sd_and_fs/gw/projects/sdspi_test/rtl/sdspi_test_soc.sv): The SDSPI Test SoC top-level module instantiating the SDSPI core.
+- [sw/projects/sdspi_test/sdtest.c](https://github.com/epsilon537/boxlambda/blob/sd_and_fs/sw/projects/sdspi_test/sdtest.c): A test program verifying low-level SD Card access using the SDSPI core.
+- [sw/projects/fatfs_test/fatfs_test.c](https://github.com/epsilon537/boxlambda/blob/sd_and_fs/sw/projects/fatfs_test/fatfs_test.c): A test program verifying file system level access to the SD Card, using the FatFS library with SDSPI bindings.
+- [gw/projects/sdspi_test/](https://github.com/epsilon537/boxlambda/tree/sd_and_fs/gw/projects/sdspi_test): BoxLambda test build based on the SDSPI Test SoC, running the *sdtest.c* program.
+- [gw/projects/fatfs_test/](https://github.com/epsilon537/boxlambda/tree/sd_and_fs/gw/projects/fatfs_test): BoxLambda test build based on the SDSPI Test SoC, running the *fatfs_test.c* program.
 - [sub/sdspi/](https://github.com/epsilon537/sdspi/tree/boxlambda): BoxLambda git submodule referencing the BoxLambda fork of the SDSPI repo. Note that the selected branch in this repo is *boxlambda*.
 - [sub/fatfs/](https://github.com/epsilon537/fatfs/tree/boxlambda): BoxLambda git submodule referencing the BoxLambda fork of the FatFS repo. Note that the selected branch in this repo is *boxlambda*.
-- [sw/components/fatfs/](https://github.com/epsilon537/boxlambda/tree/master/sw/components/fatfs): BoxLambda software component to be used by software project builds wishing to use FatFS.
-- [gw/components/sdspi/](https://github.com/epsilon537/boxlambda/tree/master/gw/components/sdspi): BoxLambda gateware component to be used by gateware project builds wishing to include the SDSPI core.
+- [sw/components/fatfs/](https://github.com/epsilon537/boxlambda/tree/sd_and_fs/sw/components/fatfs): BoxLambda software component to be used by software project builds wishing to use FatFS.
+- [gw/components/sdspi/](https://github.com/epsilon537/boxlambda/tree/sd_and_fs/gw/components/sdspi): BoxLambda gateware component to be used by gateware project builds wishing to include the SDSPI core.
 
 Try It Out
 ----------
@@ -195,7 +197,7 @@ Try It Out
 Setup
 =====
 
-1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/latest/prerequisites/).
+1. Install the [Prerequisites](https://boxlambda.readthedocs.io/en/may_12_23/installation-and-test-builds/#prerequisites).
 2. Get the BoxLambda repository:
 	```
 	git clone https://github.com/epsilon537/boxlambda/

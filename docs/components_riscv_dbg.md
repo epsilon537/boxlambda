@@ -105,11 +105,11 @@ To summarize:
 3. The `riscv-dbg` core provides debug support for the connected Ibex RISCV32 core.
 4. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called `remote_bitbang`.
 
-For a step-by-step guide on setting up a debug session, refer to [this section](gw-test-build-hello-world.md#connecting-gdb-to-the-hello-world-build-on-verilator).
+For a step-by-step guide on setting up a debug session, refer to [this section](debugging.md).
 
 ## OpenOCD and RISCV-DBG on Arty-A7 FPGA
 
-The most straightforward approach for debugging on the Arty-A7 FPGA would be to expose the JTAG signals to PMOD pins and use a JTAG adapter. However, an alternative approach eliminates the need for a JTAG adapter. The `riscv-dbg` JTAG TAP can be integrated into the FPGA scan chain, typically used to program the FPGA bitstream.
+The most straightforward approach for debugging on the Arty-A7 FPGA would be to expose the JTAG signals to PMOD pins and use a JTAG adapter (see the following subsection to take that path). However, an alternative approach eliminates the need for a JTAG adapter. The `riscv-dbg` JTAG TAP can be integrated into the FPGA scan chain, typically used to program the FPGA bitstream.
 
 On the Arty-A7, bitstream programming is done through the FTDI-based USB serial port, eliminating the need for special adapters. The `riscv-dbg` codebase provides two variants for this configuration:
 
@@ -133,9 +133,21 @@ To summarize:
 4. The FPGA scan chain is accessible via the board’s FTDI-based USB serial port.
 5. The OpenOCD transport protocol used for this connection is `ftdi`.
 
+### Alternative: Connecting a JTAG Debugger via JTAG PMOD
+
+The previous section describes the JTAG connection via the onboard USB JTAG interface. If instead, you prefer
+to use the PMOD JTAG interface, make the following changes:
+
+1. In `gw/components/riscv-dbg/Bender.yml`, under the `vivado` target, replace `../../sub/riscv-dbg/src/dmi_bscane_tap.sv` with `../../sub/riscv-dbg/src/dmi_jtag_tap.sv`
+2. In `gw/projects/boxlambda_base/constrs/boxlambda_soc.sv`, add the following constraint: `set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets tck_IBUF]`.
+
+Then [rebuild the gateware](https://boxlambda.readthedocs.io/en/latest/installation/#building-and-flashing-from-source).
+
+Thanks to [W. Shepherd Pitts](https://github.com/wspitts2) for this suggestion.
+
 ### Starting a Debug Session on the Arty-A7
 
-For detailed steps on setting up an OpenOCD JTAG debug session on the Arty-A7, refer to [this section](gw-test-build-hello-world.md#connecting-gdb-to-the-hello-world-build-on-arty-a7).
+For detailed steps on setting up an OpenOCD JTAG debug session on the Arty-A7, refer to [this section](debugging.md).
 
 ## RISCV-DBG Clock Frequency
 
