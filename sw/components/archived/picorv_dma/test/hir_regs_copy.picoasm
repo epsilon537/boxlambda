@@ -1,0 +1,20 @@
+.include "picoasm_hal.h"
+
+/*HIR register copy test program.*/
+
+    .text
+    .balign 4
+    .globl _start
+
+_start:
+    li a1, HIR_REGS_BASE_ADDR
+    li a2, HIR_REGS_END_ADDR
+loop:
+    /*Copy HIR0->HIR1, HIR2->HIR3, etc.*/
+    lw t0, 0(a1)
+    sw t0, 4(a1)
+    addi a1, a1, 8
+    bltu a1, a2, loop
+
+spin:
+    j spin

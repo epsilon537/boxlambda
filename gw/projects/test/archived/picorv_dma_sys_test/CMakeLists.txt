@@ -1,0 +1,24 @@
+if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+  #gw_project_rules_vivado() function is defined in the parent CMakeLists.txt.
+  gw_project_rules_vivado(
+      TOP_MODULE picorv_dma_test_soc
+      PROJECT_NAME picorv_dma_sys_test
+      MEM_FILE_TARGET picorv_dma_sys_test
+  )
+else()
+  #gw_project_rules_verilator() function is defined in the parent CMakeLists.txt.
+  gw_project_rules_verilator(
+      TOP_MODULE sim_main
+      PROJECT_NAME picorv_dma_sys_test
+      MEM_FILE_TARGET picorv_dma_sys_test
+      VERILATOR_FLAGS
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/"
+          "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
+  )
+
+  #Add testcase.
+  add_test(NAME picorv_dma_sys_test_test
+      COMMAND ./Vmodel
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
+endif()

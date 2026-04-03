@@ -1,0 +1,18 @@
+.include "picoasm_hal.h"
+
+/*Wait for IRQ-in, then copy IRQ-in to IRQ-out*/
+
+    .text
+    .balign 4
+    .globl _start
+_start:
+    li a1, SYS_REG_BASE
+loop:
+    lw t0, IRQ_IN(a1)
+    /*Spin until not zero.*/
+    beqz t0, loop
+    /*Copy the IRQ-in value to the IRQ output register*/
+    sw t0, IRQ_OUT(a1)
+
+spin:
+    j spin

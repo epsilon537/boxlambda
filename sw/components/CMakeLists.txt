@@ -1,4 +1,3 @@
-add_subdirectory(archived)
 add_subdirectory(test)
 add_subdirectory(bootstrap)
 add_subdirectory(sdram)
