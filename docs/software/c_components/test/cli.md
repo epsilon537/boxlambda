@@ -13,10 +13,10 @@ For bringing up and debugging test applications, it's sometimes convenient to ha
 
 I'm using the Embedded-CLI library as-is. I just added a small helper module to bind the CLI to BoxLambda's UART and to avoid code duplication across test applications:
 
-[boxlambda/sw/components/embedded_cli/embedded_cli_setup.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/embedded_cli/embedded_cli_setup.h)
+[boxlambda/sw/components/embedded_cli/embedded_cli_setup.h](../../../../sw/components/embedded_cli/embedded_cli_setup.h)
 
 For an example of the CLI API usage, check the `rtcc_test` app:
 
-[boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/rtcc_test/rtcc_test.cpp)
-[boxlambda/sw/projects/rtcc_test/rtcc_cli.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/rtcc_test/rtcc_cli.cpp)
+[boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](../../../../sw/projects/rtcc_test/rtcc_test.cpp)
+[boxlambda/sw/projects/rtcc_test/rtcc_cli.cpp](../../../../sw/projects/rtcc_test/rtcc_cli.cpp)
 

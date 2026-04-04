@@ -33,7 +33,7 @@ The Ibex RISCV core does not natively include Wishbone ports. `Wb_ibex_core` wra
 
 ## Ibex Core Configuration
 
-The Ibex core is instantiated with the following parameters (see [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)):
+The Ibex core is instantiated with the following parameters (see [boxlambda_soc.sv](../../../gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)):
 
 ```
 wb_ibex_core #(
@@ -71,7 +71,7 @@ For information on the compiler and compile flags used to generate code for this
 
 ## The Single Instruction Prefetcher
 
-![The Single Instruction Prefetch Buffer in the Ibex Core.](assets/ibex_single_prefetch_buffer.png)
+![The Single Instruction Prefetch Buffer in the Ibex Core.](../../assets/ibex_single_prefetch_buffer.png)
 
 *The Single Instruction Prefetch Buffer in the Ibex Core.*
 
@@ -79,7 +79,7 @@ An **Instruction Prefetcher** is a mechanism that anticipates future memory acce
 
 The module is implemented as an FSM:
 
-[![The Single Instruction Prefetcher FSM.](assets/single_prefetch_buffer_fsm.png)](assets/single_prefetch_buffer_fsm.png)
+[![The Single Instruction Prefetcher FSM.](../../assets/single_prefetch_buffer_fsm.png)](../../assets/single_prefetch_buffer_fsm.png)
 
 *The Single Instruction Prefetch FSM.*
 
@@ -100,7 +100,7 @@ The single instruction prefetcher supports only uncompressed instructions. That'
 
 To reduce the ISR prologue and epilogue overhead, the CPU's register file includes an *interrupt shadow register bank*:
 
-![The Ibex Register File including an Interrupt Shadow Register Bank](assets/irq_shadow_registers.png)
+![The Ibex Register File including an Interrupt Shadow Register Bank](../../assets/irq_shadow_registers.png)
 
 The CPU register file has two register banks:
 
@@ -131,7 +131,7 @@ There are two such interfaces. One for data, one for instructions.
 [Core2wb](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/core2wb.sv) effectively has two states: Idle and Transaction Ongoing. In the Idle state, when Ibex signals a transaction request (`core.req`), a single access pipelined Wishbone transaction is generated, and `core2wb` goes to the Transaction Ongoing state. When a WB ACK or ERR response is received, `core2wb` goes back to Idle. While in the Transaction Ongoing state, the memory interface grant (`gnt`) signal is held low, so further transaction requests are stalled until `core2wb` is idle again.
 Currently, multiple outstanding transactions are not supported.
 
-![Core2WB State Diagram.](assets/core2wb_fsm_new.png)
+![Core2WB State Diagram.](../../assets/core2wb_fsm_new.png)
 
 *Core2WB State Diagram.*
 
@@ -182,7 +182,7 @@ The table below summarizes the instruction cycle counts on BoxLambda according t
 
 The Ibex repo/submodule sources are not referenced directly. The source code needs to be *exported* using *fusesoc*. This is done during the code generation step of a gateware build.
 
-This is the wrapper script performing the export: [scripts/gen_ibex_core.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/gen_ibex_core.sh)
+This is the wrapper script performing the export: [scripts/gen_ibex_core.sh](../../../scripts/gen_ibex_core.sh)
 
 ## Ibex Core Clock Frequency
 

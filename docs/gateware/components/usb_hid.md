@@ -10,7 +10,7 @@
     [boxlambda/gw/components/usb_hid_host](https://github.com/epsilon537/boxlambda/tree/master/gw/components/usb_hid_host)
 
 - **Usb_hid_host Top-Level**:
-    [gw/components/usb_hid_host/rtl/usb_hid_host_top.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/usb_hid_host/rtl/usb_hid_host_top.sv)
+    [gw/components/usb_hid_host/rtl/usb_hid_host_top.sv](../../../gw/components/usb_hid_host/rtl/usb_hid_host_top.sv)
 
 - **Usb_hid_device Repo**, BoxLambda fork, `boxlambda` branch:
     [https://github.com/epsilon537/usb_hid_device](https://github.com/epsilon537/usb_hid_device)
@@ -28,7 +28,7 @@
 
 The USB HID Host core used by BoxLambda is based on the NAND2Mario usb_hid_host core.
 
-![NAND2Mario usb_hid_host core.](assets/usb_hid_host_orig.png)
+![NAND2Mario usb_hid_host core.](../../assets/usb_hid_host_orig.png)
 
 *The NAND2Mario usb_hid_host core.*
 
@@ -65,19 +65,19 @@ For the lower-level details, e.g., how to set up a *Control Transfer* to the dev
 
 Briefly, the USB host controls keyboard LEDs by sending a *SetReport* message to the device using a [Control Transfer](https://www.beyondlogic.org/usbnutshell/usb4.shtml#Control). The message contains a bitmap specifying which LEDs should be on and off.
 
-![SetReport Keyboard LED bitmap.](assets/keyboard_led_bitmap.jpg)
+![SetReport Keyboard LED bitmap.](../../assets/keyboard_led_bitmap.jpg)
 
 *SetReport Keyboard LED bitmap.*
 
 The entire packet sequence looks like this:
 
-![SetReport Sequence Diagram.](assets/SetReportSeqDiagram.png)
+![SetReport Sequence Diagram.](../../assets/SetReportSeqDiagram.png)
 
 *SetReport Sequence Diagram.*
 
 ## Adding Keyboard LED Control to the NAND2Mario usb_hid_host core
 
-![Keyboard LED Control in usb_hid_host.](assets/keyboard_led_ctrl_in_usb_hid_host.png)
+![Keyboard LED Control in usb_hid_host.](../../assets/keyboard_led_ctrl_in_usb_hid_host.png)
 
 *Keyboard LED control in the usb_hid_host core.*
 
@@ -91,7 +91,7 @@ With these UKP changes, the usb_hid_host core can, upon request, have the UKP fi
 
 ## Wishbone Frontend and Clock Domain Crossing
 
-![usb_hid_host with Wishbone frontend.](assets/usb_hid_host_new.png)
+![usb_hid_host with Wishbone frontend.](../../assets/usb_hid_host_new.png)
 
 *Usb_hid_host core in USB Clock Domain with Wishbone Frontend in System Clock Domain.*
 
@@ -113,9 +113,9 @@ The design is based on a [J1](https://github.com/pbing/J1_WB) processor executin
 
 To test USB mouse support, I'm using Pbing's mouse emulation as-is. To test USB keyboard support, I created a firmware variant that emulates a keyboard with a key being pressed. The firmware also accepts the SetReport messages for LED control and will set GPIOs depending on the value of the received LED bitmap.
 
-The simulation top-level, [sim_main.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/usb_hid_sys_test/sim/sim_main.sv), hooks up the mouse and the keyboard emulations to the two usb_hid_host instances of the BoxLambda SoC. `Sim_main.sv` includes logic tracking the USB ports' output enables and driving the USB D+/D- lines high or low to emulate the pull-up/pull-down behavior of a low-speed USB device (See [https://www.beyondlogic.org/usbnutshell/usb2.shtml#SpeedIdentification](https://www.beyondlogic.org/usbnutshell/usb2.shtml#SpeedIdentification)).
+The simulation top-level, [sim_main.sv](../../../gw/projects/usb_hid_sys_test/sim/sim_main.sv), hooks up the mouse and the keyboard emulations to the two usb_hid_host instances of the BoxLambda SoC. `Sim_main.sv` includes logic tracking the USB ports' output enables and driving the USB D+/D- lines high or low to emulate the pull-up/pull-down behavior of a low-speed USB device (See [https://www.beyondlogic.org/usbnutshell/usb2.shtml#SpeedIdentification](https://www.beyondlogic.org/usbnutshell/usb2.shtml#SpeedIdentification)).
 
-![Simulation Setup.](assets/usb_hid_host_and_device.png)
+![Simulation Setup.](../../assets/usb_hid_host_and_device.png)
 
 *USB HID System Test Simulation Setup.*
 

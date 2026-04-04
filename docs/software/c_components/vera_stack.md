@@ -12,13 +12,13 @@ maps directly to the C++ API.
 - **VERA uLisp Convenience API (Experimental)**: A more expressive, higher level API using
 keyword arguments built on top of the VERA uLisp HAL.
 
-![VERA Software Stack.](assets/vera_sw_stack.png)
+![VERA Software Stack.](../../assets/vera_sw_stack.png)
 
 *The VERA Software Stack.*
 
 ## The VERA API Concepts
 
-![VERA Pixels, Tiles, Tilesets, Maps.](assets/vera_pixels_tiles_tilesets_maps.png)
+![VERA Pixels, Tiles, Tilesets, Maps.](../../assets/vera_pixels_tiles_tilesets_maps.png)
 
 *The VERA API Concepts.*
 
@@ -44,11 +44,11 @@ to 64x64 pixels. In addition to a x- and y- position, sprites have a
 
 ## The C++ VERA HAL
 
-**VERA HAL**: [sw/components/vera/vera_hal.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/vera/vera_hal.h)
+**VERA HAL**: [sw/components/vera/vera_hal.h](../../../sw/components/vera/vera_hal.h)
 
 The VERA Hardware Abstraction Layer is a C++ class hierarchy:
 
-![VERA Hardware Abstraction Layer.](assets/vera_hal.png)
+![VERA Hardware Abstraction Layer.](../../assets/vera_hal.png)
 
 *VERA Hardware Abstraction Layer (HAL).*
 
@@ -82,7 +82,7 @@ object representing the bitmap.
 
 The above C++ HAL is integrated into the BoxLambda uLisp port as an extension:
 
-[sw/projects/ulisp/ulisp-boxlambda.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ulisp/ulisp-boxlambda.cpp).
+[sw/projects/ulisp/ulisp-boxlambda.cpp](../../../sw/projects/ulisp/ulisp-boxlambda.cpp).
 
 The uLisp version of the VERA HAL looks like this:
 
@@ -418,7 +418,7 @@ Vera graphics API. General form: (vera :<action> [:<param keyword> [param value]
 495045>
 ```
 
-The lisp code can be found here: [sw/projects/ulisp/LispLibrary.lisp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ulisp/LispLibrary.lisp).
+The lisp code can be found here: [sw/projects/ulisp/LispLibrary.lisp](../../../sw/projects/ulisp/LispLibrary.lisp).
 
 The VERA Convenience API is more expressive, but also slower than the lower-level [uLisp VERA HAL API](#the-ulisp-vera-hal). For code that requires a level of performance, e.g., pixel drawing in a nested loop, it's better to use the uLisp VERA HAL API directly.
 
@@ -480,7 +480,7 @@ front of layer 1.
 
 The result looks like this (sorry for the potato picture quality):
 
-![VERA uLisp Example.](assets/vera_ulisp_example.jpeg)
+![VERA uLisp Example.](../../assets/vera_ulisp_example.jpeg)
 
 *VERA uLisp Example.*
 

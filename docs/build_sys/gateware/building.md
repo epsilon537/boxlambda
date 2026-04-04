@@ -63,7 +63,7 @@ cmake_install.cmake       hello_world.vivado_sources.dep     project.ip_user_fil
 
 ### What Happens When You Run *make hello_world_(synth|bit)*?
 
-![Gateware Build Targets.](assets/gw_build_targets.drawio.png)
+![Gateware Build Targets.](../../assets/gw_build_targets.drawio.png)
 
 *Gateware Build Targets.*
 
@@ -108,10 +108,10 @@ Changing the contents of a `.mem` file does not require a full FPGA resynthesis 
 
 When Vivado implements an XPM memory, such as `xpm_memory_tdpram`, it generates a **Memory Map Information (MMI)** file, which describes how individual block RAMs compose a contiguous logical data space. The *UpdateMem* tool requires this MMI file to determine the locations in the bitstream file that need to be updated.
 
-![Merging a .mem file into a bitstream file.](assets/merge_mem_file_into_bitstream_file.drawio.png)
+![Merging a .mem file into a bitstream file.](../../assets/merge_mem_file_into_bitstream_file.drawio.png)
 
 *Merging a .mem file into a Bitstream File.*
 
-The *UpdateMem* script can be found here: [scripts/vivado_updatemem.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/vivado_updatemem.sh)
+The *UpdateMem* script can be found here: [scripts/vivado_updatemem.sh](../../../scripts/vivado_updatemem.sh)
 
 

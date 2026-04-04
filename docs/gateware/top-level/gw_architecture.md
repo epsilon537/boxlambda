@@ -2,7 +2,7 @@
 
 ## Base Configuration
 
-![Base Configuration Block Diagram](assets/Arch_Diagram_dual_bus_no_DFX.png)
+![Base Configuration Block Diagram](../../assets/Arch_Diagram_dual_bus_no_DFX.png)
 *BoxLambda Base Configuration Block Diagram.*
 
 This diagram illustrates the base configuration without DFX support. I will present the extended configuration with DFX support further down.
@@ -30,7 +30,7 @@ The CPU has memory-mapped access to DDR memory and can execute code directly fro
 
 ## DFX Configuration
 
-![DFX Configuration Block Diagram](assets/Arch_Diagram_dual_bus_DFX.png)
+![DFX Configuration Block Diagram](../../assets/Arch_Diagram_dual_bus_DFX.png)
 *BoxLambda DFX Configuration Block Diagram.*
 
 This diagram shows the Dynamic Function Exchange (DFX) configuration. DFX, also known as Partial FPGA Reconfiguration, allows dynamic logic updates.

@@ -5,7 +5,7 @@
 
 This project builds the 'official' BoxLambda DFX Configuration as described in the [Gaterware Architecture section](gw_architecture.md#dfx-configuration).
 
-![DFX Terminology applied to the BoxLambda SoC](assets/dfx_terminology.png)
+![DFX Terminology applied to the BoxLambda SoC](../../assets/dfx_terminology.png)
 
 *DFX Terminology applied to the BoxLambda SoC.*
 
@@ -75,7 +75,7 @@ read_checkpoint -cell boxlambda_soc_inst/vs0_inst vs0_stub_synth.dcp
 
 In the Vivado GUI, create a Pblock for RP `VS1` by outlining its region in the design’s floor plan. The procedure for VS1 is the same as for VS0.
 
-![Pblock with properties](assets/pblock_w_properties.png)
+![Pblock with properties](../../assets/pblock_w_properties.png)
 
 *A Pblock on the Floor Plan.*
 
@@ -83,7 +83,7 @@ In the Vivado GUI, create a Pblock for RP `VS1` by outlining its region in the d
 2. In the floor plan window, click the *Draw Pblock* button.
 3. Draw a rectangular region while keeping track of the number of selected resources (e.g., LUTs, BRAM) to ensure enough resources are available for the largest RM.
 
-   ![Pblock with resources](assets/pblock_w_resources.png)
+   ![Pblock with resources](../../assets/pblock_w_resources.png)
 
    *When outlining a Pblock, the selected resources are shown.*
 
@@ -118,7 +118,7 @@ One guideline is to first implement the design with the largest candidate RM sta
 
 Add the Pblock constraints from the previous step to the project's DFX constraints file, specified in the project build's `Bender.yml` file. For the BoxLambda DFX project, the constraints file is:
 
-[gw/projects/boxlambda_dfx/constrs/pblocks.xdc](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_dfx/constrs/pblocks.xdc)
+[gw/projects/boxlambda_dfx/constrs/pblocks.xdc](../../../gw/projects/boxlambda_dfx/constrs/pblocks.xdc)
 
 ### Step 8: Update the Project Build CMakeLists.txt
 
@@ -157,7 +157,7 @@ This step generates multiple bitstream files:
 
 ## Caveat: Re-implement RMs if the Static Design Changes
 
-![pblock routing](assets/pblock_routing.png)
+![pblock routing](../../assets/pblock_routing.png)
 
 *Pblock selective routing constraints.*
 
@@ -165,7 +165,7 @@ It was initially assumed that if, in addition to creating a Pblock, the RP’s P
 
 A Pblock constrains the RM’s routing within the Pblock boundaries but does not constrain the Static Design’s routing outside the Pblock. As a result, changes to the Static Design’s routing (both inside and outside the Pblock) require the RMs to be re-implemented to accommodate the updated Static Design routing.
 
-![static design changes in pblock](assets/static_design_changes_in_pblock.png)
+![static design changes in pblock](../../assets/static_design_changes_in_pblock.png)
 
 For more details, refer to this Xilinx-AMD support article: [https://adaptivesupport.amd.com/s/article/61284?language=en_US](https://adaptivesupport.amd.com/s/article/61284?language=en_US).
 

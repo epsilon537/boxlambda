@@ -10,7 +10,7 @@ Central to Bender is the package manifest file, `Bender.yml`. This manifest spec
 
 A **package directory** is a directory containing a `Bender.yml` file. Running Bender in such a directory generates a flat list of all sources from the current package and its dependencies. Additionally, Bender can output this list along with any `defines` for a given target as a Tcl script, simplifying Vivado integration.
 
-![Project View of the Build System](assets/Project_Build_Diagram.png)
+![Project View of the Build System](../../assets/Project_Build_Diagram.png)
 
 *Project/Component/Submodule View of the Build System.*
 
@@ -62,7 +62,7 @@ The following components currently rely on code generation:
 Instead of adding lint waivers directly to the source code of Git submodules, these waivers are grouped into `.vlt` files located in the corresponding gateware component or project subdirectory. This approach avoids unnecessary changes to the submodule source code.
 
 Example:
-[gw/components/ibex/lint.vlt](https://github.com/epsilon537/boxlambda/blob/master/gw/components/ibex/lint.vlt)
+[gw/components/ibex/lint.vlt](../../../gw/components/ibex/lint.vlt)
 
 ## The Gateware CMakeLists
 
@@ -185,7 +185,7 @@ The `gw_project_rules_dfx_vivado()` parameters:
 
 ### CMakeList Organization
 
-![Gateware CMakeLists Organization.](assets/CMakeLists_gw_org.png)
+![Gateware CMakeLists Organization.](../../assets/CMakeLists_gw_org.png)
 
 *Gateware CMakeLists Organization.*
 
@@ -216,5 +216,5 @@ The build recipes are implemented as separate scripts outside the CMakeLists so 
 
 The CMake build instructions define the various targets, the relationships between them, and invoke the above build scripts when needed.
 
-The CMake build definitions are located as close as possible to the part of the tree to which they apply, for example, the `gw_project_rules()` function can be found in the [gw/projects/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/CMakeLists.txt) file. `Gw_component_rules()` can be found in the [gw/components/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/components/CMakeLists.txt) file. Gateware build instructions common to both components and projects are located in the [gw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/gw/CMakeLists.txt) file.
+The CMake build definitions are located as close as possible to the part of the tree to which they apply, for example, the `gw_project_rules()` function can be found in the [gw/projects/CMakeLists.txt](../../../gw/projects/CMakeLists.txt) file. `Gw_component_rules()` can be found in the [gw/components/CMakeLists.txt](../../../gw/components/CMakeLists.txt) file. Gateware build instructions common to both components and projects are located in the [gw/CMakeLists.txt](../../../gw/CMakeLists.txt) file.
 

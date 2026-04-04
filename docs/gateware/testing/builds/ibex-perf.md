@@ -70,7 +70,7 @@ TOP.sim_main.dut.boxlambda_soc_inst.wb_ibex_core.u_top.u_ibex_core.if_stage_i.ge
 TOP.sim_main.dut.boxlambda_soc_inst.wb_ibex_core.u_top.u_ibex_core.if_stage_i.gen_single_prefetch_buffer.single_prefetch_buffer_i.instr_rvalid_i
 ```
 
-[![Ibex Performance Test Waveform](assets/ibex_perf_test.png)](assets/ibex_perf_test.png)
+[![Ibex Performance Test Waveform](../../../assets/ibex_perf_test.png)](../../../assets/ibex_perf_test.png)
 *Ibex Performance Test Waveform.*
 
 To navigate the waveform, check the ID stage's `pc_id_i` values against the addresses in the disassembly of the `ibex_perf_test` executable.

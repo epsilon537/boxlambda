@@ -10,10 +10,10 @@
   [boxlambda/gw/components/interconnect](https://github.com/epsilon537/boxlambda/tree/master/gw/components/interconnect)
 
 - **Instruction Bus Module**:
-  [boxlambda/gw/components/interconnect/rtl/instruction_bus.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/instruction_bus.sv)
+  [boxlambda/gw/components/interconnect/rtl/instruction_bus.sv](../../../gw/components/interconnect/rtl/instruction_bus.sv)
 
 - **Data Bus Module**:
-  [boxlambda/gw/components/interconnect/rtl/data_bus.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/data_bus.sv)
+  [boxlambda/gw/components/interconnect/rtl/data_bus.sv](../../../gw/components/interconnect/rtl/data_bus.sv)
 
 The interconnect serves as the backbone connecting the internal components of the SoC. BoxLambda uses the Wishbone *Pipelined* bus protocol, as defined in the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
 
@@ -21,7 +21,7 @@ Using the pipelined wishbone bus protocol does *not* imply that BoxLamba support
 
 ## The Instruction Bus and the Data Bus
 
-![BoxLambda Block Diagram](assets/Arch_Diagram_dual_bus_DFX.png)
+![BoxLambda Block Diagram](../../assets/Arch_Diagram_dual_bus_DFX.png)
 *BoxLambda Block Diagram.*
 
 The Ibex CPU has an instruction and a data port, respectively connected via an Instruction and a Data Bus to the slaves they need to be able to reach. The few slaves that have to be hooked up to both buses use a 2-to-1 wishbone arbiter to select between the two buses. In theory, the arbitration will introduce delays when there's concurrent access. In practice, the programmer will know when he's in such a situation and there will be no surprises (or maybe a little one. See the [Arbiters without Overhead](#arbiters-without-overhead-most-of-the-time) section below).
@@ -37,7 +37,7 @@ Note that both buses have multiple bus masters:
     - The Ibex CPU instruction port.
     - VS0 port 0.
 
-[![The Data Bus and the Instruction Bus.](assets/data_bus_and_instruction_bus.png)](assets/data_bus_and_instruction_bus.png)
+[![The Data Bus and the Instruction Bus.](../../assets/data_bus_and_instruction_bus.png)](../../assets/data_bus_and_instruction_bus.png)
 
 *The Data Bus and the Instruction Bus.*
 
@@ -53,7 +53,7 @@ In other words, during normal operation, only the CPU is active. You won't have 
 
 The wishbone arbiters present a minor problem, however. Arbiters typically introduce some transaction overhead. Luckily, there's a way to avoid that: I added a parameter to the arbiter module that allows you to select a default port. Transactions going through the default port will not suffer arbitration overhead when there are no requests on the other ports. The Bus Master-facing arbiters have their default port connected to the CPU.
 
-[![Arbiter without arbitration overhead on the default port.](assets/arbiter_wo_overhead.png)](assets/arbiter_wo_overhead.png)
+[![Arbiter without arbitration overhead on the default port.](../../assets/arbiter_wo_overhead.png)](../../assets/arbiter_wo_overhead.png)
 
 *Arbiter without arbitration overhead on the default port.*
 
@@ -65,13 +65,13 @@ The arbiter design is adapted from [Alex Forencich's](https://github.com/alexfor
 
 BoxLambda uses Word Addressing rather than Byte Addressing.
 
-![Byte vs. Word Addressing.](assets/byte_vs_word_addressing.png)
+![Byte vs. Word Addressing.](../../assets/byte_vs_word_addressing.png)
 
 *Byte Addressing (left) vs. Word Addressing (right).*
 
 A byte can still be accessed using a word-addressed bus. This is achieved through byte enable signals:
 
-![Word Addressing a byte with byte enables.](assets/addressing_a_byte_w_byte_enables.png)
+![Word Addressing a byte with byte enables.](../../assets/addressing_a_byte_w_byte_enables.png)
 
 *Addressing a byte using Word Addressing and Byte Enables.*
 

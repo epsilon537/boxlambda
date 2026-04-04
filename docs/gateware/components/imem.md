@@ -10,12 +10,12 @@
     [boxlambda/gw/components/wb_dp_ram](https://github.com/epsilon537/boxlambda/tree/master/gw/components/wb_dp_ram)
 
 - **DPRAM Core Top-Level**:
-    [gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv)
+    [gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv](../../../gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv)
 
 - **XPM_MEMORY_TDPRAM Documentation**:
     [https://docs.amd.com/r/2023.1-English/ug953-vivado-7series-libraries/XPM_MEMORY_TDPRAM](https://docs.amd.com/r/2023.1-English/ug953-vivado-7series-libraries/XPM_MEMORY_TDPRAM)
 
-![Dual-Port IMEM.](assets/imem.png)
+![Dual-Port IMEM.](../../assets/imem.png)
 
 *Dual-Port IMEM.*
 

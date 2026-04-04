@@ -13,7 +13,7 @@
 
 OpenOCD is an open-source software package that interfaces with a hardware debugger's JTAG port via various transport protocols. On BoxLambda, the hardware debug logic is implemented by `riscv-dbg`. The overall setup is illustrated below:
 
-![OpenOCD General Setup](assets/OpenOCD_Setup_General.drawio.png)
+![OpenOCD General Setup](../../assets/OpenOCD_Setup_General.drawio.png)
 *OpenOCD General Setup*
 
 ### The RISCV-DBG Component
@@ -27,7 +27,7 @@ OpenOCD is an open-source software package that interfaces with a hardware debug
 As their names suggest, `common_cells` and `tech_cells_generic` provide essential building blocks like FIFOs, CDC logic, and reset logic. The `pulpino` dependency is minimal, limited to a few clock management cells.
 
 To integrate these dependencies, git submodules were created under the `sub/` directory in the BoxLambda repository. A `Bender.yml` manifest in the `riscv-dbg` component directory references all the necessary sources:
-[gw/components/riscv-dbg/Bender.yml](https://github.com/epsilon537/boxlambda/blob/master/gw/components/riscv-dbg/Bender.yml).
+[gw/components/riscv-dbg/Bender.yml](../../../gw/components/riscv-dbg/Bender.yml).
 
 The directory structure looks as follows:
 
@@ -61,7 +61,7 @@ In the Verilator model, the JTAG transport protocol is **Remote Bitbang**, a sim
 
 The Verilator setup is shown below:
 
-![BoxLambda OpenOCD Verilator Setup](assets/OpenOCD_Setup_Verilator.drawio.png)
+![BoxLambda OpenOCD Verilator Setup](../../assets/OpenOCD_Setup_Verilator.drawio.png)
 *BoxLambda OpenOCD Verilator Setup*
 
 The *hello_world* project (`gw/projects/hello_world/`) demonstrates the OpenOCD Verilator setup. Its test script performs the following steps:
@@ -96,7 +96,7 @@ boxlambda
 ```
 
 The OpenOCD configuration file for Verilator-based debugging:
-[`verilator.openocd.cfg`](https://github.com/epsilon537/boxlambda/blob/master/scripts/verilator.openocd.cfg)
+[`verilator.openocd.cfg`](../../../scripts/verilator.openocd.cfg)
 
 To summarize:
 
@@ -120,10 +120,10 @@ Both files implement the same module (`dmi_jtag_tap`) with identical ports, enab
 
 On the OpenOCD side, the transport protocol used for this debug-access-via-FPGA-scan-chain-over-FTDI setup is called `ftdi`. The configuration is depicted below:
 
-![BoxLambda OpenOCD Arty A7 FTDI Setup](assets/OpenOCD_Setup_Arty_A7.drawio.png)
+![BoxLambda OpenOCD Arty A7 FTDI Setup](../../assets/OpenOCD_Setup_Arty_A7.drawio.png)
 *BoxLambda OpenOCD Arty A7 FTDI Setup*
 
-OpenOCD configuration files for debugging on the Arty-A7 are available in the `scripts/` directory: [`scripts/arty_a7_100t.openocd.cfg`](https://github.com/epsilon537/boxlambda/blob/master/scripts/arty_a7_100t.openocd.cfg)
+OpenOCD configuration files for debugging on the Arty-A7 are available in the `scripts/` directory: [`scripts/arty_a7_100t.openocd.cfg`](../../../scripts/arty_a7_100t.openocd.cfg)
 
 To summarize:
 

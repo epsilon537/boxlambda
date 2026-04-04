@@ -4,7 +4,7 @@
 
 An example of a CoCoTB test bench is the Ibex *Single Instruction Prefetcher* test bench. This is the test script:
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/ibex/test/ibex_single_prefetch_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/components/ibex/test/ibex_single_prefetch_test.py)
+[../../../../gw/components/ibex/test/ibex_single_prefetch_test.py](../../../../gw/components/ibex/test/ibex_single_prefetch_test.py)
 
 The test bench is added as a CMake test to the build system, like this:
 

@@ -83,8 +83,8 @@ Note that depending on whether we're building for simulation or FPGA, two varian
 
 Other linker script variants:
 
-- [link_ddr_to_ddr_boot.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/link_ddr_to_ddr_boot.ld): Creates a image to be loaded into EMEM by the bootloader. From there, the image will unpack itself further into EMEM.
-- [boxlambda_os/link.ld](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/boxlambda_os/link.ld): The linker script used by the BoxLambda OS. Note the Forth sections.
+- [link_ddr_to_ddr_boot.ld](../../../sw/components/bootstrap/link_ddr_to_ddr_boot.ld): Creates a image to be loaded into EMEM by the bootloader. From there, the image will unpack itself further into EMEM.
+- [boxlambda_os/link.ld](../../../sw/projects/boxlambda_os/link.ld): The linker script used by the BoxLambda OS. Note the Forth sections.
 
 #### Linker Script Details
 
@@ -149,7 +149,7 @@ MEMORY
 
 ### Software CMakeList Organization
 
-![Software CMakeLists Organization.](assets/CMakeLists_sw_org.png)
+![Software CMakeLists Organization.](../../assets/CMakeLists_sw_org.png)
 
 *Software CMakeLists Organization.*
 

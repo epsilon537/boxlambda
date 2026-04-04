@@ -43,9 +43,9 @@ I selected:
 - Target OS: *bare-metal*
 - Additional support languages: *C++*
 
-The resulting crosstool-ng config file can be found [here](https://github.com/epsilon537/boxlambda/blob/master/scripts/crosstool-ng.config).
+The resulting crosstool-ng config file can be found [here](../../../scripts/crosstool-ng.config).
 
-The toolchain tarball is checked into the BoxLambda repo under [assets/](https://github.com/epsilon537/boxlambda/tree/master/assets). The [boxlambda_setup.sh](https://github.com/epsilon537/boxlambda/blob/master/boxlambda_setup.sh) script unpacks the toolchain tarball in the `boxlambda/tools/` directory, so the user no longer needs to provide the toolchain as a prerequisite.
+The toolchain tarball is checked into the BoxLambda repo under [../../assets/](https://github.com/epsilon537/boxlambda/tree/master/assets). The [boxlambda_setup.sh](../../../boxlambda_setup.sh) script unpacks the toolchain tarball in the `boxlambda/tools/` directory, so the user no longer needs to provide the toolchain as a prerequisite.
 
 ### RISC-V GCC Compile Flags
 
@@ -70,5 +70,5 @@ The following compile flags are used:
 
 ### Toolchain.cmake
 
-RISC-V cross-compilation for C and C++ is set up by passing in a *Toolchain File* to CMake. The toolchain file specifies the names of the compiler executables and the compile flags. The file is located in [scripts/toolchain.cmake](https://github.com/epsilon537/boxlambda/blob/master/scripts/toolchain.cmake).
+RISC-V cross-compilation for C and C++ is set up by passing in a *Toolchain File* to CMake. The toolchain file specifies the names of the compiler executables and the compile flags. The file is located in [scripts/toolchain.cmake](../../../scripts/toolchain.cmake).
 

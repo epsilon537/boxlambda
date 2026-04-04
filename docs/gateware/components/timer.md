@@ -18,13 +18,13 @@ The Timer module is part of the **Ibex** RISCV repo. See the [Ibex Component pag
 
 BoxLambda's `wb_timer` defines a third register: `mtimeblk`. A write operation to this register blocks the CPU until the lower 8 bits of the `mtime` register match the written value. This mechanism can be used to absorb Timer interrupt jitter, as shown in the diagram below:
 
-![Absorbing Timer Interrupt Jitter with MTIMEBLK](assets/mtimeblk_mechanism.png)
+![Absorbing Timer Interrupt Jitter with MTIMEBLK](../../assets/mtimeblk_mechanism.png)
 
 *Absorbing Timer Interrupt Jitter with MTIMEBLK.*
 
 You program a Timer interrupt to fire a few clock cycles before the desired time. Then, inside the timer ISR, you write to `MTIMEBLK` to block until the desired time is reached exactly.
 
-The [timer_uart_gpio_irqs](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) test implements this mechanism.
+The [timer_uart_gpio_irqs](../../../sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) test implements this mechanism.
 
 ## Timer Clock Frequency
 

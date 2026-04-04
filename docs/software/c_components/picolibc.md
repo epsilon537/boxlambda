@@ -39,9 +39,9 @@ The differences between the derived scripts and the base scripts are minimal:
 - In `do-boxlambda-configure`, `picocrt` is set to `false`. We're not using the picolibc crt0 module. BoxLambda has its own variant of the crt0 module in the `bootstrap` software component.
 
 ### picolibc_build.sh
-![Building Picolibc.](assets/building_picolibc.drawio.png)
+![Building Picolibc.](../../assets/building_picolibc.drawio.png)
 
-I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/picolibc_build.sh) shell script. This script is invoked by the build system (in [sw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/master/sw/CMakeLists.txt)) during build tree configuration time. The picolibc build and install directories are placed inside the build tree:
+I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](../../../scripts/picolibc_build.sh) shell script. This script is invoked by the build system (in [sw/CMakeLists.txt](../../../sw/CMakeLists.txt)) during build tree configuration time. The picolibc build and install directories are placed inside the build tree:
 
 - **Picolibc build directory**: `<build dir>/sw/picolibc-build`
 - **Picolibc install directory**: `<build dir>/sw/picolibc-install`
@@ -70,7 +70,7 @@ The Picolibc GCC specs file can be found in the Picolib install directory.
 
 ### Some Glue Required
 
-![Picolibc on BoxLambda.](assets/picolibc_on_boxlambda.drawio.png)
+![Picolibc on BoxLambda.](../../assets/picolibc_on_boxlambda.drawio.png)
 
 *Picolibc on BoxLambda.*
 
@@ -90,7 +90,7 @@ An application using the standard C library has to link in this bootstrap compon
 
 The vector table is a table with code entry points for all sorts of CPU events: interrupts, exceptions, etc. The Boot/Reset Vector, i.e., the very first instruction executed when the CPU comes out of reset, is part of this table.
 
-The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S).
+The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S](../../../sw/components/bootstrap/vectors.S).
 
 The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to `_start`, the entry point into the `crt0` module.
 
@@ -101,8 +101,8 @@ For more info on `vectors.S`, check the [Interrupt Handling](forth_irqs.md) page
 *Crt0*, C-Run-Time-0, is the start-up code in charge of setting up a C environment (zeroing the BSS segment, setting up the stack, etc.) before calling `main()`.
 BoxLambda's version of crt0 can be found here:
 
-[boxlambda/sw/components/bootstrap/crt0.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/crt0.c).
-[boxlambda/sw/components/bootstrap/crt0.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/crt0.h).
+[boxlambda/sw/components/bootstrap/crt0.c](../../../sw/components/bootstrap/crt0.c).
+[boxlambda/sw/components/bootstrap/crt0.h](../../../sw/components/bootstrap/crt0.h).
 
 ### Standard Input, Output, and Error
 
@@ -148,11 +148,11 @@ FILE *const stderr = &__stdio;
 
 ```
 
-[boxlambda/sw/components/bootstrap/stdio_to_uart.c](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/stdio_to_uart.c)
+[boxlambda/sw/components/bootstrap/stdio_to_uart.c](../../../sw/components/bootstrap/stdio_to_uart.c)
 
 ## Software Startup Sequence
 
-![The Boot from IMEM Sequence](assets/imem_boot_sequence.png)
+![The Boot from IMEM Sequence](../../assets/imem_boot_sequence.png)
 
 *The Software Startup Sequence.*
 

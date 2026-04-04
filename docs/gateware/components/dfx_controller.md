@@ -8,19 +8,19 @@ To manage the loading of an RM into an RP from the SoC, a DFX Controller needs t
 
 1. A software program loads the RM's partial bitstream file into a memory buffer.
 
-    ![DFX Flow 1](assets/dfx_flow_1.png)
+    ![DFX Flow 1](../../assets/dfx_flow_1.png)
 
 2. The software program shuts down the DFX Controller, configures the address and size of the bitstream memory buffer in the DFX Controller's `BS INFO` registers, and then re-enables the DFX Controller.
 
-    ![DFX Flow 2](assets/dfx_flow_2.png)
+    ![DFX Flow 2](../../assets/dfx_flow_2.png)
 
 3. The software program issues a trigger to the DFX Controller using the `SW_TRIGGER` register. This causes the DFX Controller to start fetching the bitstream data from the configured memory location and feed it to the internal configuration access port (`ICAP`).
 
-    ![DFX Flow 3](assets/dfx_flow_3.png)
+    ![DFX Flow 3](../../assets/dfx_flow_3.png)
 
 4. When the RP is configured, the DFX Controller resets the RP/RM.
 
-    ![DFX Flow 4](assets/dfx_flow_4.png)
+    ![DFX Flow 4](../../assets/dfx_flow_4.png)
 
 The software program monitors the progression via the DFX Controller status register.
 
@@ -32,7 +32,7 @@ The RM's partial bitstream, which is read from memory by the DFX Controller, is 
 
 ## DFX Controller Parameterization
 
-![DFX Controller Options](assets/dfx_controller_options.png)
+![DFX Controller Options](../../assets/dfx_controller_options.png)
 
 *DFX Controller Selected Parameters.*
 
@@ -49,7 +49,7 @@ The DFX Controller requires some parameterization, as shown in the screenshots a
 
 The resulting DFX Controller instance and register map look like this:
 
-![DFX Controller IP and Register Map](assets/dfx_controller_ip_addr_map.png)
+![DFX Controller IP and Register Map](../../assets/dfx_controller_ip_addr_map.png)
 
 *DFX Controller IP and Register Map.*
 
@@ -59,11 +59,11 @@ Note that if you were to add a second RP to the design, the DFX Controller would
 
 The DFX Controller IP bus interfaces are AXI-based, while BoxLambda is Wishbone-based. To bridge the two bus protocols, I'm using ZipCPU's [wbm2axilite](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/wbm2axilite.v) and [aximrd2wbsp](https://github.com/epsilon537/wb2axip/blob/c8dd694b472e74c53dcf9fa588b64e2b10ef65c0/rtl/aximrd2wbsp.v). The resulting `wb_dfx_controller` module looks like this:
 
-![WB DFX Controller Block Diagram](assets/wb_dfx_controller.png)
+![WB DFX Controller Block Diagram](../../assets/wb_dfx_controller.png)
 
 *wb_dfx_controller block diagram.*
 
 Here's the RTL:
 
-[gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv)
+[gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv](../../../gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv)
 

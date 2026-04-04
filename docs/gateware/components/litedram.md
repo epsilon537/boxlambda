@@ -93,7 +93,7 @@ Two LiteDRAM core variants are generated from this configuration:
 
 The LiteDRAM cores are generated during the code generation step of a gateware build. The generated files are stored in the `<build_tree/codegen/litedram/` directory.
 
-This is the build script performing the code generation: [scripts/gen_litedram_core.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/gen_litedram_core.sh)
+This is the build script performing the code generation: [scripts/gen_litedram_core.sh](../../../scripts/gen_litedram_core.sh)
 
 ## LiteDRAM Interface
 
@@ -162,7 +162,7 @@ Some points worth noting about this interface:
 
 ## *Litedram_wrapper*
 
-[https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv)
+[../../../gw/components/litedram/common/rtl/litedram_wrapper.sv](../../../gw/components/litedram/common/rtl/litedram_wrapper.sv)
 
 `Litedram_wrapper` contains a Pipelined-to-Classic Wishbone adaptation. The adapter logic comes from the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The `stall` signal is used to avoid pipelining:
 

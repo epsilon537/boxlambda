@@ -1,6 +1,6 @@
 # USB_HID_Host Hardware Access Layer
 
-**Usb_hid_host HAL**: [sw/components/usb_hid/usb_hid_hal.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/usb_hid/usb_hid_hal.h)
+**Usb_hid_host HAL**: [sw/components/usb_hid/usb_hid_hal.h](../../../sw/components/usb_hid/usb_hid_hal.h)
 
 - **Included in OS**: No
 

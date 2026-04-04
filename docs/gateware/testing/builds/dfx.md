@@ -5,13 +5,13 @@ J1B is a 32-bit, minimal instruction set stack processor. It's one of the suppor
 To demonstrate DFX support in BoxLambda, I created a test program called `dfx_test` that loads a J1B core into the SoC's *Virtual Socket 0* and then boots the SwapForth run-time firmware image on this core, presenting the user with a Forth REPL.
 
 
-![The DFX Test Program](assets/dfx_test_program.png)
+![The DFX Test Program](../../../assets/dfx_test_program.png)
 
 *The DFX Test Program.*
 
 The DFX Test Program is not an automatic test case like the previous BoxLambda test cases. It runs exclusively on the Arty-A7-100T and requires user interaction through a CLI. The CLI commands are grouped into modules:
 
-- [dfx_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/dfx_cli.cpp): This is a CLI wrapper around the [dfx_hal](https://github.com/epsilon537/boxlambda/blob/master/sw/components/dfx/dfx_controller_hal.h) component. Most commands let you interact with the DFX Controller at a low level. However, there's one high-level command, `dfx_load_module`, that implements the entire sequence of loading an RM's bitstream file from the filesystem into the VS0 RP.
+- [dfx_cli](../../../../sw/projects/dfx_test/dfx_cli.cpp): This is a CLI wrapper around the [dfx_hal](../../../../sw/components/dfx/dfx_controller_hal.h) component. Most commands let you interact with the DFX Controller at a low level. However, there's one high-level command, `dfx_load_module`, that implements the entire sequence of loading an RM's bitstream file from the filesystem into the VS0 RP.
 
         * dfx_control
                 dfx_control <cmd> <extra byte> <extra halfword> : Write to DFX Control Register.
@@ -32,14 +32,14 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
          * dfx_load_module
                 dfx_load_module <filename>
 
-- [j1b_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/dfx_test/j1b_cli.cpp): This CLI allows you to boot the SwapForth firmware image on the J1B core and to transfer serial port I/O to the J1B providing access to its REPL.
+- [j1b_cli](../../../../sw/projects/dfx_test/j1b_cli.cpp): This CLI allows you to boot the SwapForth firmware image on the J1B core and to transfer serial port I/O to the J1B providing access to its REPL.
 
          * j1b_boot
                 j1b_boot <filename>: Boot J1B core with given FW image.
          * j1b_fwd_uart
                 Forward UART I/O to J1B.
 
-- [mem_fs_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/mem_fs_cli/mem_fs_cli.cpp): This CLI module provides file system commands such as `ls` and `rm` as well as commands for loading files into memory and save memory buffers to files.
+- [mem_fs_cli](../../../../sw/components/mem_fs_cli/mem_fs_cli.cpp): This CLI module provides file system commands such as `ls` and `rm` as well as commands for loading files into memory and save memory buffers to files.
 
          * rm
                 rm <filename> : Remove (delete) file.
@@ -54,14 +54,14 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
          * ls
                 list directory contents.
 
-- [ymodem_cli](https://github.com/epsilon537/boxlambda/blob/master/sw/components/ymodem_cli/ymodem_cli.cpp): The `ymodem_rx` command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to BoxLambda. While I could copy everything onto an SD card and then move that card from PC to BoxLambda, I prefer this method as it involves fewer moving parts.
+- [ymodem_cli](../../../../sw/components/ymodem_cli/ymodem_cli.cpp): The `ymodem_rx` command allows you to transfer files from the host PC to BoxLambda's SD Card file system. I use it to transfer the RM bitstreams and J1B firmware to BoxLambda. While I could copy everything onto an SD card and then move that card from PC to BoxLambda, I prefer this method as it involves fewer moving parts.
 
          * ymodem_rx
                 ymodem_rx <filename>: Ymodem rx and save to give file.
          * ymodem_tx_buf
                 ymodem_tx_buf <filename> <hex address> <size_in_bytes>: Ymodem transmit given memory buffer with given filename
 
-![dfx test sw](assets/dfx_test_sw.png)
+![dfx test sw](../../../assets/dfx_test_sw.png)
 
 *Structure of the dfx_test software program.*
 

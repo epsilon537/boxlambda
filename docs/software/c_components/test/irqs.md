@@ -1,6 +1,6 @@
 # Ibex RISC-V Interrupt Handling in Test C Components
 
-API: [https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h)
+API: [../../../../sw/components/interrupts/interrupts.h](../../../../sw/components/interrupts/interrupts.h)
 
 This section is specific to interrupt handling in Gateware test builds. See section [Interrupt Handling Software](forth_irqs.md) for general notes about the interrupt handling software.
 
@@ -56,7 +56,7 @@ The corresponding disassembly:
 
 To receive interrupts, you need to enable the global CPU interrupt, `mstatus.MIE`, as well as the specific Machine Interrupts you want to receive by setting their bits in the MIE CSR.
 
-[Interrupts.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/interrupts/interrupts.h) defines functions to enable and disable global as well as specific machine interrupts:
+[Interrupts.h](../../../../sw/components/interrupts/interrupts.h) defines functions to enable and disable global as well as specific machine interrupts:
 
 ```
 /* Disable the global interrupt line at CPU level.*/

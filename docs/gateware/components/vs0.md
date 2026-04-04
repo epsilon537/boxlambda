@@ -64,13 +64,13 @@ Currently, two VS0 RMs are included in the BoxLambda source tree to demonstrate 
 
 - `VS0_stub` is an almost-empty module. All it does is properly terminate the VS0 module interface signals, so they aren't left dangling. Wishbone reads and writes to the module are acknowledged, but no functionality is triggered.
 
-![The vs0_stub](assets/vs0_stub.png)
+![The vs0_stub](../../assets/vs0_stub.png)
 
 *The vs0_stub.*
 
 - `VS0_j1b` is a J1B Core fitted to the VS0 interface.
 
-![The J1B Core fitted to the VS0 interface](assets/vs0_j1b.png)
+![The J1B Core fitted to the VS0 interface](../../assets/vs0_j1b.png)
 
 *The J1B Core fitted to the VS0 interface.*
 

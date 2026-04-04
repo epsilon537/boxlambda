@@ -33,7 +33,7 @@ This is the I2C Bus Master core top-level:
 
 WBI2C implements the traditional I2C protocol used to access 8-bit I2C slave registers. The protocol uses an address frame consisting of a 7-bit slave address and a read/write bit, followed by one or more byte-sized data frames. The first of these data frames contains the slave register address.
 
-![I2C transaction with 7-bit slave address](assets/I2C-Bits-Protocol.jpg)
+![I2C transaction with 7-bit slave address](../../assets/I2C-Bits-Protocol.jpg)
 
 *I2C transaction with 7-bit slave address and 8-bit slave register address (Source: STEMpedia).*
 
@@ -46,7 +46,7 @@ A quick note on terminology:
 
 ## Theory of Operation
 
-![WBI2C Master Core](assets/wbi2c_master.png)
+![WBI2C Master Core](../../assets/wbi2c_master.png)
 
 *The WBI2C Master Core.*
 
@@ -143,7 +143,7 @@ module wbi2cmaster #(
 
 How do you map a pair of unidirectional ports to a bidirectional inout port at the FPGA's top-level without an output enable signal to control the direction? The answer lies in the clever nature of I2C's physical layer. The SCL and SDA lines have external pull-ups:
 
-![I2C bus with pull-up resistors](assets/i2c_bus_w_pullups.png)
+![I2C bus with pull-up resistors](../../assets/i2c_bus_w_pullups.png)
 
 *I2C bus with pull-up resistors (Source: projectfpga.com)*
 
@@ -183,7 +183,7 @@ module boxlambda_top (
 
 You might expect that the SCL and SDA pull-up resistors connect directly to the 3V3 power rail. On the Arty A7, that's not the case. The SCL and SDA pull-up resistors connect to an **SCL Pull-Up Pin** (`SCL PUP`) and **SDA Pull-Up Pin** (`SDA PUP`) respectively. For these pull-ups to work, the pull-up pins have to be statically driven high. That's what the last two lines in the above code snippet are for.
 
-![SCL and SDA Pull-Up Pins on Arty A7 Schematic](assets/scl_sda_pup_schematic.png)
+![SCL and SDA Pull-Up Pins on Arty A7 Schematic](../../assets/scl_sda_pup_schematic.png)
 
 *SCL and SDA Pull-Up Pins (PUP) on Arty A7 Schematic Diagram.*
 

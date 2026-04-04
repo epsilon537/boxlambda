@@ -45,6 +45,6 @@ make ddr_test_load
 ```
 Verify the test program's output in the terminal. You should see something like this:
 
-![ddr_test on Arty - Putty Terminal](assets/ddr_test_arty.png)
+![ddr_test on Arty - Putty Terminal](../../../assets/ddr_test_arty.png)
 
 *DDR Test on Arty A7.*

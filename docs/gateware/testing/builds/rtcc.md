@@ -1,7 +1,7 @@
 # Real-Time Clock and Calendar Test
 
-- [boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/rtcc_test/rtcc_test.cpp)
-- [boxlambda/sw/projects/rtcc_test/rtcc_cli.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/rtcc_test/rtcc_cli.cpp)
+- [boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](../../../../sw/projects/rtcc_test/rtcc_test.cpp)
+- [boxlambda/sw/projects/rtcc_test/rtcc_cli.cpp](../../../../sw/projects/rtcc_test/rtcc_cli.cpp)
 
 The Real-Time Clock and Calendar test program does the following:
 

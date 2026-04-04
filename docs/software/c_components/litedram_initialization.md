@@ -29,7 +29,7 @@ In addition to register definitions, `sdram_phy.h` contains a function called `i
 
 [https://github.com/epsilon537/litex/tree/master/litex/soc/software/liblitedram](https://github.com/epsilon537/litex/tree/master/litex/soc/software/liblitedram)
 
-![sdram_init()](assets/sdram_init.drawio.png)
+![sdram_init()](../../assets/sdram_init.drawio.png)
 
 *sdram_init() vs. init_sequence().*
 
@@ -39,7 +39,7 @@ The `sdram_init()` function is part of the `sdram` software component in the Box
 
 The DDR test program is located here:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/ddr_test/ddr_test.c)
+[../../../sw/projects/ddr_test/ddr_test.c](../../../sw/projects/ddr_test/ddr_test.c)
 
 The program boots from internal memory. It invokes `sdram_init()`, performs a memory test, and verifies CPU instruction execution from DDR by relocating a test function from internal memory to DDR and branching to it.
 

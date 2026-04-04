@@ -6,7 +6,7 @@
 
 The MCycle API gives access to the Ibex processor's cycle counter. It also provides a cycle counter-based implementation of the micro-sleep function `usleep`.
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/mcycle.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/mcycle.h)
+[../../../sw/components/riscv/mcycle.h](../../../sw/components/riscv/mcycle.h)
 
 ## CSRs
 
@@ -23,5 +23,5 @@ To be able to access the CSRs easily from C/C++, I'm using Five Embeddev's `risc
 
 The library consists of a single `.h` file, which I copied into BoxLambda's *riscv* software component directory:
 
-[https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/riscv-csr.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/riscv/riscv-csr.h)
+[../../../sw/components/riscv/riscv-csr.h](../../../sw/components/riscv/riscv-csr.h)
 

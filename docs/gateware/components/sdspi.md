@@ -17,7 +17,7 @@
 
 ## The MicroSD Card Interface and SPI Mode
 
-![Arty A7 with MicroSD PMOD in JD port.](assets/arty_w_microsd_pmod.jpeg)
+![Arty A7 with MicroSD PMOD in JD port.](../../assets/arty_w_microsd_pmod.jpeg)
 
 *SDSPI in the BoxLambda Architecture.*
 
@@ -32,7 +32,7 @@ Other than the SPI signals (`SCK`, `MISO`, `MOSI`, `CS`), the MicroSD card inter
 
 ## SDSPI Core
 
-`Sdspi_test` is a test SoC containing the SDSPI core along with other BoxLambda components. The SDSPI core is instantiated in the [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv) module as follows:
+`Sdspi_test` is a test SoC containing the SDSPI core along with other BoxLambda components. The SDSPI core is instantiated in the [boxlambda_soc.sv](../../../gw/components/boxlambda_soc/rtl/boxlambda_soc.sv) module as follows:
 
 ```
 sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
@@ -61,7 +61,7 @@ sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
 The Wishbone signals plug straight into the test SoC's system bus. The SD Card interface signals go straight to the top-level ports.
 Interrupts are currently not hooked up.
 
-![SDSPI Block Diagram.](assets/sdspi_block_diagram.drawio.png)
+![SDSPI Block Diagram.](../../assets/sdspi_block_diagram.drawio.png)
 
 *SDSPI Simplified Block Diagram.*
 
@@ -82,7 +82,7 @@ Here are the hooks to both co-simulators in the test bench's `tick()` function. 
   top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 ```
 
-For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/sdspi_test/sim/sim_main.cpp) in the *sdspi_test* project.
+For the complete test bench code, see [sim_main.cpp](../../../gw/projects/sdspi_test/sim/sim_main.cpp) in the *sdspi_test* project.
 
 `SDSPISIM` reads from and writes to an `sdcard.img` file. That file can be mounted in Linux. You can FAT-format it and store files on it to be used by the simulated system (or vice versa).
 
@@ -90,7 +90,7 @@ For the complete test bench code, see [sim_main.cpp](https://github.com/epsilon5
 
 The SDSPI core's register interface, the initialization sequence, and the overall operation of the core are well-documented in the SDSPI core [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/sdspi.pdf).
 
-[Sdtest.c](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's `sdtest.c` in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The `Zbasic` repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
+[Sdtest.c](../../../sw/projects/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's `sdtest.c` in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The `Zbasic` repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
 
 ## SDSPI Clock Frequency
 
