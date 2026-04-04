@@ -25,7 +25,7 @@ The terminal window should look like this:
 
 ## Vera_integrated on the Arty A7
 
-Hook up the VGA PMOD as described [here](pmods.md#vga-pmod).
+Hook up the VGA PMOD as described [here](../../../installation/pmods.md#vga-pmod).
 
 Build the vera_integrated project in an Arty A7 build tree:
 ```

@@ -148,7 +148,7 @@ FILE *const stderr = &__stdio;
 
 ```
 
-[boxlambda/sw/components/bootstrap/stdio_to_uart.c](../../../sw/components/bootstrap/stdio_to_uart.c)
+[boxlambda/sw/components/bootstrap/stdio_stream.c](../../../sw/components/bootstrap/stdio_stream.c)
 
 ## Software Startup Sequence
 

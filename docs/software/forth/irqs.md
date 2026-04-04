@@ -56,7 +56,7 @@ _exc_handler:          //_exc_handler is overridden in the interrupt SW module.
   jal x0, _exc_handler
 ```
 
-As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings are never invoked and are instead replaced by actual interrupt service routine implementations in higher-layer code. On the BoxLambda OS build, the Forth Core will take ownership of all the IRQ vectors. See [interrupts.s](../../../sw/components/forth_core/interrupts.s). In gateware test builds, test C code may bind some or all of the IRQs. See [Ibex RISC-V Interrupt Handling in Test C Components](../c_components/test/irqs.md).
+As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings are never invoked and are instead replaced by actual interrupt service routine implementations in higher-layer code. On the BoxLambda OS build, the Forth Core will take ownership of all the IRQ vectors. See [interrupts.s](../../../sw/components/forth/core/interrupts.s). In gateware test builds, test C code may bind some or all of the IRQs. See [Ibex RISC-V Interrupt Handling in Test C Components](../c_components/test/irqs.md).
 
 ## The IRQ Shadow Registers
 
@@ -135,4 +135,4 @@ dint
 50000000 3 * set-raw-time-cmp
 ```
 
-See also [sw/projects/forth_core_test/testsuite.fs](../../../sw/projects/forth_core_test/testsuite.fs).
+See also [sw/projects/forth/fs/test/testsuite.fs](../../../sw/projects/forth/fs/test/testsuite.fs).

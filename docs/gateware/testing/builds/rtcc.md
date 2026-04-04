@@ -1,7 +1,7 @@
 # Real-Time Clock and Calendar Test
 
-- [boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](../../../../sw/projects/rtcc_test/rtcc_test.cpp)
-- [boxlambda/sw/projects/rtcc_test/rtcc_cli.cpp](../../../../sw/projects/rtcc_test/rtcc_cli.cpp)
+- [boxlambda/sw/projects/test/rtcc_test/rtcc_test.cpp](../../../../sw/projects/test/rtcc_test/rtcc_test.cpp)
+- [boxlambda/sw/projects/test/rtcc_test/rtcc_cli.cpp](../../../../sw/projects/test/rtcc_test/rtcc_cli.cpp)
 
 The Real-Time Clock and Calendar test program does the following:
 
@@ -13,7 +13,7 @@ This test program does *not* run on Verilator.
 
 ## The RTCC Test on FPGA
 
-Hook up the RTCC PMOD as described [here](pmods.md#rtcc-pmod).
+Hook up the RTCC PMOD as described [here](../../../installation/pmods.md#rtcc-pmod).
 
 Connect a terminal emulator to Arty's USB serial port. **Settings: 1000000 8N1**.
 

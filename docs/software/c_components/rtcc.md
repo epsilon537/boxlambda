@@ -58,6 +58,6 @@ Example usage:
 ```
 For additional example code, check the `rtcc_test` app:
 
-- [boxlambda/sw/projects/rtcc_test/rtcc_test.cpp](../../../sw/projects/rtcc_test/rtcc_test.cpp)
-- [boxlambda/sw/projects/rtcc_test/rtcc_cli.cpp](../../../sw/projects/rtcc_test/rtcc_cli.cpp)
+- [boxlambda/sw/projects/test/rtcc_test/rtcc_test.cpp](../../../sw/projects/test/rtcc_test/rtcc_test.cpp)
+- [boxlambda/sw/projects/test/rtcc_test/rtcc_cli.cpp](../../../sw/projects/test/rtcc_test/rtcc_cli.cpp)
 

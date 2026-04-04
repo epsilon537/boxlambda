@@ -3,7 +3,7 @@
 **BoxLambda DFX Project in the BoxLambda Directory Tree**:
 [boxlambda/gw/projects/boxlambda-dfx](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_dfx)
 
-This project builds the 'official' BoxLambda DFX Configuration as described in the [Gaterware Architecture section](gw_architecture.md#dfx-configuration).
+This project builds the 'official' BoxLambda DFX Configuration as described in the [Gaterware Architecture section](../top-level/gw_architecture.md#dfx-configuration).
 
 ![DFX Terminology applied to the BoxLambda SoC](../../assets/dfx_terminology.png)
 
@@ -25,7 +25,7 @@ Currently, the BoxLambda SoC has only one RP, VS0, but additional RPs can be cre
 
 ### Step 1: Reparameterize the DFX Controller to Manage a Second RP
 
-Refer to the section on [DFX Controller Parameterization](components_dfx_controller.md#dfx-controller-parameterization).
+Refer to the section on [DFX Controller Parameterization](../components/dfx_controller.md#dfx-controller-parameterization).
 
 ### Step 2: Synthesize the SoC with an Empty RP
 
@@ -143,7 +143,7 @@ gw_project_rules_dfx_vivado(
 )
 ```
 
-Here, `vs1_default` is the default RM for VS1. More details on creating RMs are available [here](components_vs0.md#creating-a-new-vs0-rm-dfx).
+Here, `vs1_default` is the default RM for VS1. More details on creating RMs are available [here](../components/vs0.md#creating-a-new-vs0-rm-dfx).
 
 ### Step 9: Route the Design and Generate the Bitstreams
 

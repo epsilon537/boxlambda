@@ -24,7 +24,7 @@ BoxLambda's `wb_timer` defines a third register: `mtimeblk`. A write operation t
 
 You program a Timer interrupt to fire a few clock cycles before the desired time. Then, inside the timer ISR, you write to `MTIMEBLK` to block until the desired time is reached exactly.
 
-The [timer_uart_gpio_irqs](../../../sw/projects/timer_uart_gpio_irqs/timer_uart_gpio_irqs.c) test implements this mechanism.
+The [timer_uart_gpio_irqs](../../../sw/projects/test/timer_uart_gpio_irqs/timer_uart_gpio_irqs.cpp) test implements this mechanism.
 
 ## Timer Clock Frequency
 

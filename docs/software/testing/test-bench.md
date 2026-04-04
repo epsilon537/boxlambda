@@ -2,5 +2,5 @@
 
 ## Running Regression Tests
 
-See [here](gw-test-bench.md#running-regression-tests).
+See [here](../../../gateware/testing/bench/test-bench.md#running-regression-tests).
 

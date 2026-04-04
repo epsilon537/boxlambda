@@ -117,11 +117,11 @@ I created a test project to test the one-bit DAC. The RTL consists of a sine wav
 
 Here's the top-level Verilog:
 
-[../../../gw/projects/audio_dac_test/rtl/audio_dac_test.sv](../../../gw/projects/audio_dac_test/rtl/audio_dac_test.sv)
+[../../../gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv](../../../gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv)
 
-The Verilator testbench ([sim_main.cpp](../../../gw/projects/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The testbench will also flag an error if any accumulator overflows are reported.
+The Verilator testbench ([sim_main.cpp](../../../gw/projects/test/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The testbench will also flag an error if any accumulator overflows are reported.
 
-The Verilator testbench executes for 0.5s of simulated time. Then, a python module ([dac_test.py](../../../gw/projects/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
+The Verilator testbench executes for 0.5s of simulated time. Then, a python module ([dac_test.py](../../../gw/projects/test/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
 
 1. The PCM samples and DAC samples are converted to numpy arrays and normalized.
 2. Both signals are sent through a low-pass filter.
@@ -133,7 +133,7 @@ The test project code is located here:
 
 [https://github.com/epsilon537/boxlambda/tree/master/gw/projects/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/audio_dac_test)
 
-See [here](gw-test-build-ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
+See [here](../testing/builds/ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
 
 ## The YM2149 DAC Test Project - a Chord of Six Pitches.
 
@@ -141,7 +141,7 @@ This test project is a BoxLambda SoC with the `YM2149_PSG_system` core and the o
 Through software, the `YM2149_PSG_system` core is configured to produce six tones at six different pitches.
 Similar to the previous test, the Verilator testbench code checks for accumulator overflows and saves the generated audio samples to `pcm_out.py` and `dac_out.py` for further analysis in Python.
 
-The Python script ([ym2149_test.py](../../../gw/projects/ym2149_dac_test/test/ym2149_test.py)) imports the generated `dac_out.py` and performs the following operations:
+The Python script ([ym2149_test.py](../../../gw/projects/test/ym2149_dac_test/test/ym2149_test.py)) imports the generated `dac_out.py` and performs the following operations:
 
 1. The DAC samples are converted to a numpy array and normalized.
 2. The normalized signal is sent through a low-pass filter.
@@ -153,7 +153,7 @@ The test project code is located here:
 
 [https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test)
 
-See [here](gw-test-build-ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
+See [here](../testing/builds/ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
 
 ## Dual YM2149 PSG Core Clock Frequency
 

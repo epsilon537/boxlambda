@@ -12,7 +12,7 @@
   [boxlambda/gw/components/ibex](https://github.com/epsilon537/boxlambda/tree/master/gw/components/ibex)
 
 - **Ibex Core Top-Level Module**:
-[sub/ibex/rtl/ibex_top.sv](https://github.com/epsilon537/ibex/blob/acdf41b2bf3ed2f33ed5c29e65c1625d22e4aab5/rtl/ibex_top.sv)
+[sub/ibex/rtl/ibex_top.sv](https://github.com/epsilon537/ibex/blob/boxlambda/rtl/ibex_top.sv)
 
 ### Ibex Wishbone Wrapper (*Ibex_WB*)
 
@@ -27,7 +27,7 @@
   [boxlambda/gw/components/ibex_wb_core](https://github.com/epsilon537/boxlambda/tree/master/gw/components/ibex_wb_core)
 
 - **Ibex WB Core Top-Level**:
-[sub/ibex_wb/rtl/wb_ibex_core.sv](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_ibex_core.sv)
+[sub/ibex_wb/rtl/wb_ibex_core.sv](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/wb_ibex_core.sv)
 
 The Ibex RISCV core does not natively include Wishbone ports. `Wb_ibex_core` wraps around the vanilla Ibex core and attaches Core-to-Wishbone port adapters to its instruction and data ports.
 
@@ -67,7 +67,7 @@ The `boot_addr` port name of `wb_ibex_core` is somewhat misleading. `Boot_addr` 
 
 Note that there's no Instruction or Data Cache. Instruction or data accesses go directly to IMEM or DDR memory.
 
-For information on the compiler and compile flags used to generate code for this processor configuration, see section [The Cross-Compiler](build_sys_building_sw.md#the-cross-compiler).
+For information on the compiler and compile flags used to generate code for this processor configuration, see section [The Cross-Compiler](../../build_sys/software/building.md#the-cross-compiler).
 
 ## The Single Instruction Prefetcher
 
@@ -116,7 +116,7 @@ With this design, the `irq_mem` bank is up-to-date when the CPU enters IRQ mode.
 
 **Caveat**: `irq_mode` is just a 1-bit signal. It can't track nested interrupts. This limitation is acceptable for BoxLambda.
 
-To benefit from the interrupt shadow register optimization, ISRs written in C should be declared with the `naked` attribute. See [the naked attribute](test_c_comp_irqs.md#the-naked-attribute) section for details.
+To benefit from the interrupt shadow register optimization, ISRs written in C should be declared with the `naked` attribute. See [the naked attribute](../../software/c_components/test/irqs.md#the-naked-attribute) section for details.
 
 ### Core2WB
 

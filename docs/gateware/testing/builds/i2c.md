@@ -1,8 +1,8 @@
 # I2C Test
 
-The I2C test code running on the RISCV processor: [boxlambda/sw/projects/rtcc_test/i2c_test.cpp](../../../../sw/projects/i2c_test/i2c_test.cpp)
+The I2C test code running on the RISCV processor: [boxlambda/sw/projects/test/rtcc_test/i2c_test.cpp](../../../../sw/projects/test/i2c_test/i2c_test.cpp)
 
-The Verilator test bench code: [boxlambda/gw/projects/i2c_test/sim/sim_main.cpp](../../../../gw/projects/i2c_test/sim/sim_main.cpp)
+The Verilator test bench code: [boxlambda/gw/projects/test/i2c_test/sim/sim_main.cpp](../../../../gw/projects/test/i2c_test/sim/sim_main.cpp)
 
 The Verilator version of the I2C Test Application uses an I2C slave co-simulator object provided by the WBI2C repo:
 
@@ -50,7 +50,7 @@ DUT: Push btn[0] to start CLI.
 
 ## The I2C Test on FPGA
 
-Hook up the RTCC PMOD as described [here](pmods.md#rtcc-pmod).
+Hook up the RTCC PMOD as described [here](../../../installation/pmods.md#rtcc-pmod).
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 

@@ -18,9 +18,9 @@ This section describes the OS Boot Sequence. It starts where the [Bootloader Boo
 
 After the Bootloader has transferred control to the OS image it has loaded into EMEM, the OS start-up code goes through the following sequence:
 
-1. `crt0.c` sets up a basic C environment as described [here](c_comp_picolibc.md#software-startup-sequence), unpacking and initializing the different sections into IMEM and EMEM as shown in the memory layout diagram above.
+1. `crt0.c` sets up a basic C environment as described [here](../c_components/picolibc.md#software-startup-sequence), unpacking and initializing the different sections into IMEM and EMEM as shown in the memory layout diagram above.
 2. BoxLambda OS's `main()` initializes Forth by calling `forth_core_init()`.
-3. `main()` loads [init.fs](../../../sw/components/forth_core/init.fs) into the Forth environment using `forth_load_buf()`.
+3. `main()` loads [init.fs](../../../sw/components/forth/fs/forth/init.fs) into the Forth environment using `forth_load_buf()`.
 4. `main()` invokes the `welcome` Word followed by a `Ready.` statement.
 5. `main()` transfers control to the Forth REPL by calling `forth_repl()`.
 

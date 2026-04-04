@@ -2,7 +2,7 @@
 
 **uLisp**: [http://www.ulisp.com](http://www.ulisp.com)
 
-**The software project directory**: [sw/projects/ulisp](../../../../sw/projects/ulisp)
+**The software project directory**: [sw/projects/ulisp](../../../../sw/projects/archived/ulisp)
 
 This is an experimental BoxLambda port of uLisp. The port is at a very
 early stage. The program boots and provides access to the [VERA
@@ -132,7 +132,7 @@ Vera graphics API. General form: (vera :<action> [:<param keyword> [param value]
 
 ## The uLisp Test Suite
 
-[sw/projects/ulisp/test](../../../../sw/projects/ulisp/test) contains a suite of uLisp test scripts used to verify the integration of BoxLambda features into uLisp.
+[sw/projects/ulisp/test](../../../../sw/projects/archived/ulisp/test) contains a suite of uLisp test scripts used to verify the integration of BoxLambda features into uLisp.
 
 The test suite can be run under the control of a host PC using the `lisp_test.py` Python module. `Lisp_test.py` assumes that the target boots into uLisp. The Python module interacts with the target via the serial port (a screen session) and openFPGAloader (to trigger reboots between scripts).
 

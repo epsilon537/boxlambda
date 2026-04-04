@@ -19,7 +19,7 @@
 The FatFs library does not provide the device/media-specific *Storage Device Controls*. Those have to come from the device implementer. Two modules are provided:
 
 - [sw/components/sdspi/sdcard.h](../../../sw/components/sdspi/sdcard.h), provided by the SDSPI software component.
-- [sw/components/fatfs/diskio.c](../../../sw/components/fatfs/diskio.c), part of the FatFS software component.
+- [sw/components/fatfs/diskio.c](../../../sw/components/fatfs/diskio.cpp), part of the FatFS software component.
 
 ![FatFs Media Access Interface.](../../assets/FatFs_Media_Access_Interface.drawio.png)
 
@@ -43,5 +43,5 @@ Relative to the default settings, I modified the following:
 
 ## FatFs_Test
 
-FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](../../../sw/projects/fatfs_test/fatfs_test.c).
+FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](../../../sw/projects/test/fatfs_test/fatfs_test.c).
 

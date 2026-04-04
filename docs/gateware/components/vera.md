@@ -68,10 +68,10 @@ memory accessible by software.
 
 To set up a VGA line capture, software configures the VGA line to capture in the
 Line IRQ register, then sets the `CAPTURE_EN` bit is the
-[CTRL_STATUS](registers/generated/vera_regs.md#ctrl_status) register.
+[CTRL_STATUS](../../registers/generated/vera_regs.md#ctrl_status) register.
 Once the capture has been completed, VERA resets the `CAPTURE_EN` bit. Software
 can now read the captured data in the [VGA Line Capture
-RAM](memory_map.md#vera-vga-line-capture-ram).
+RAM](../../registers/memory_map.md#vera-vga-line-capture-ram).
 
 ## The Composer
 

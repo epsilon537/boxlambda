@@ -55,11 +55,11 @@ The script returns a correlation score. If we have an 80% match or more, the tes
 
 The Verilator test bench is located here:
 
-[../../../gw/projects/stsound_test/sim/sim_main.cpp](../../../gw/projects/stsound_test/sim/sim_main.cpp)
+[../../../gw/projects/test/stsound_test/sim/sim_main.cpp](../../../gw/projects/test/stsound_test/sim/sim_main.cpp)
 
 The test scripts and related files are here:
 
 [https://github.com/epsilon537/boxlambda/tree/master/gw/projects/stsound_test/test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/stsound_test/test)
 
-See [here](gw-test-build-ym2149.md#st-sound-test-on-verilator) for instructions to build and run the test yourself.
+See [here](../../gateware/testing/builds/ym2149.md#st-sound-test-on-verilator) for instructions to build and run the test yourself.
 

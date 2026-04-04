@@ -30,7 +30,7 @@ Where *action* is one of the following:
     - Depends on: No dependencies.
     - Build tree: `arty-a7-100` build tree.
 
-See [here](build_sys_gw_build_struct.md#four-layers) for more info on the `gw_codegen` target.
+See [here](build_struct.md#four-layers) for more info on the `gw_codegen` target.
 
 ### Some Examples
 
@@ -69,7 +69,7 @@ cmake_install.cmake       hello_world.vivado_sources.dep     project.ip_user_fil
 
 When you run `make hello_world_synth`, the following steps occur:
 
-1. *Make* triggers the `gw_codegen` rule, executing all dependent gateware code generation *custom commands* (See also [this section](build_sys_gw_build_struct.md#four-layers)). **Note that because the code generators are always re-run, a `make \*_synth` build always rebuilds.**
+1. *Make* triggers the `gw_codegen` rule, executing all dependent gateware code generation *custom commands* (See also [this section](build_struct.md#four-layers)). **Note that because the code generators are always re-run, a `make \*_synth` build always rebuilds.**
 2. *Make* runs the `bender script` command on the `Bender.yml` file in the `gw/projects/hello_world/` directory. This command is wrapped in the `scripts/bender_gen_vivado_source.sh` shell script.
 3. The `bender script` processes the `Bender.yml` manifest and any dependent components' manifests.
 4. The `bender script` generates a list of all HDL sources that make up the project.

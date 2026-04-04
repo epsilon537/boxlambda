@@ -24,9 +24,6 @@ The following clocks are present in the SoC:
 - **Reset Controller Top-Level**:
   [gw/components/reset_ctrl/rtl/reset_ctrl.sv](../../../gw/components/reset_ctrl/rtl/reset_ctrl.sv)
 
-- **Reset Controller HAL**:
-  [sw/components/reset/reset_hal.h](../../../sw/components/reset/reset_hal.h)
-
 ## Reset Domains
 
 BoxLambda includes the following synchronous **reset domains**:
@@ -59,6 +56,6 @@ The `reset_ctrl` module source code is located here:
 
 Software can trigger resets by writing to the *Reset Control Register* and retrieve the reason for the most recent reset by reading the *Reset Reason Register*.
 
-See the [Reset Register Map](registers/generated/reset_regs.md#reset-register-map) for details.
+See the [Reset Register Map](../../registers/generated/reset_regs.md#reset-register-map) for details.
 
 The [Reset Test](../testing/builds/reset.md) application demonstrates the use of these registers.

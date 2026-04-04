@@ -82,7 +82,7 @@ object representing the bitmap.
 
 The above C++ HAL is integrated into the BoxLambda uLisp port as an extension:
 
-[sw/projects/ulisp/ulisp-boxlambda.cpp](../../../sw/projects/ulisp/ulisp-boxlambda.cpp).
+[sw/projects/archived/ulisp/ulisp-boxlambda.cpp](../../../sw/projects/archived/ulisp/ulisp-boxlambda.cpp).
 
 The uLisp version of the VERA HAL looks like this:
 
@@ -418,7 +418,7 @@ Vera graphics API. General form: (vera :<action> [:<param keyword> [param value]
 495045>
 ```
 
-The lisp code can be found here: [sw/projects/ulisp/LispLibrary.lisp](../../../sw/projects/ulisp/LispLibrary.lisp).
+The lisp code can be found here: [sw/projects/archived/ulisp/LispLibrary.lisp](../../../sw/projects/archived/ulisp/LispLibrary.lisp).
 
 The VERA Convenience API is more expressive, but also slower than the lower-level [uLisp VERA HAL API](#the-ulisp-vera-hal). For code that requires a level of performance, e.g., pixel drawing in a nested loop, it's better to use the uLisp VERA HAL API directly.
 

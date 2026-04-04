@@ -12,5 +12,5 @@
 
 ## Example
 
-See [Interrupt Handling Example](forth_irqs.md#interrupt-handling-example).
+See [Interrupt Handling Example](irqs.md#interrupt-handling-example).
 

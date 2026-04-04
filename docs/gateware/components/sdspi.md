@@ -65,7 +65,7 @@ Interrupts are currently not hooked up.
 
 *SDSPI Simplified Block Diagram.*
 
-The above is a simplified block diagram illustrating the SDSPI core internals. I won't be going into the details here. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/gpl-3.0.pdf) and the source code.
+The above is a simplified block diagram illustrating the SDSPI core internals. I won't be going into the details here. Dan Gisselquist did a great job documenting the core in the [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/sdspi.pdf) and the source code.
 
 ## SDSPISIM
 
@@ -82,7 +82,7 @@ Here are the hooks to both co-simulators in the test bench's `tick()` function. 
   top->uart_rx = (*uart)(top->uart_tx, top->rootp->sim_main__DOT__dut__DOT__wb_uart__DOT__wbuart__DOT__uart_setup);
 ```
 
-For the complete test bench code, see [sim_main.cpp](../../../gw/projects/sdspi_test/sim/sim_main.cpp) in the *sdspi_test* project.
+For the complete test bench code, see [gw/projects/test/sddspi_test/sim/sim_main.cpp](../../../gw/projects/test/sdspi_test/sim/sim_main.cpp).
 
 `SDSPISIM` reads from and writes to an `sdcard.img` file. That file can be mounted in Linux. You can FAT-format it and store files on it to be used by the simulated system (or vice versa).
 
@@ -90,7 +90,7 @@ For the complete test bench code, see [sim_main.cpp](../../../gw/projects/sdspi_
 
 The SDSPI core's register interface, the initialization sequence, and the overall operation of the core are well-documented in the SDSPI core [spec](https://github.com/ZipCPU/sdspi/blob/master/doc/sdspi.pdf).
 
-[Sdtest.c](../../../sw/projects/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's `sdtest.c` in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The `Zbasic` repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
+[Sdtest.c](../../../sw/projects/test/sdspi_test/sdtest.c) demonstrates and tests the SDSPI core operation. This is a modified version of Dan's `sdtest.c` in the [Zbasic repo](https://github.com/ZipCPU/zbasic). The `Zbasic` repo integrates the SDSPI core and other peripherals developed by Dan into a [ZipCPU Platform](https://zipcpu.com/projects.html).
 
 ## SDSPI Clock Frequency
 

@@ -32,9 +32,9 @@ CRT0 start-up sequence to set up the C/C++ environment. The bootloader is built
 using the
 [link_bootloader.ld](../../sw/projects/bootloader/link_bootloader.ld)
 link script. The application image is based on the
-[link_ddr_to_ddr_boot.ld](../../sw/components/bootstrap/link_ddr_to_ddr_boot.ld)
+[link_ddr_boot.ld](../../sw/components/bootstrap/link_ddr_boot.ld)
 script or the
-[link_ddr_to_imem_boot.ld](../../sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+[link_imem_boot.ld](../../sw/components/bootstrap/link_imem_boot.ld)
 (or a combination of both), depending on whether the application executes from
 EMEM or IMEM after start-up.
 

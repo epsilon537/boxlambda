@@ -178,5 +178,5 @@ The SPI bus clock frequency is 25MHz and is derived from the System Clock Domain
 
 ## SpiFlash Memory Layout
 
-See [BoxLambda Memory Map](memory_map.md#spi-flash)
+See [BoxLambda Memory Map](../../registers/memory_map.md#spi-flash)
 

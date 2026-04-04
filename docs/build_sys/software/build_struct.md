@@ -79,11 +79,10 @@ target_link_libraries(hello_world gpio riscv bootstrap)
 add_flash_sw_target(hello_world)
 ```
 
-Note that depending on whether we're building for simulation or FPGA, two variants of the linker script are used. `link_imem_boot.ld` creates an image that boots directly from IMEM. `link_ddr_to_imem_boot.ld` creates an image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
+Note that depending on whether we're building for simulation or FPGA, two variants of the linker script are used. [link_imem_boot.ld](../../../sw/components/bootstrap/link_imem_boot.ld) creates an image that boots directly from IMEM. [link_ddr_boot.ld](../../../sw/components/bootstrap/link_ddr_boot.ld) creates an image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
 
 Other linker script variants:
 
-- [link_ddr_to_ddr_boot.ld](../../../sw/components/bootstrap/link_ddr_to_ddr_boot.ld): Creates a image to be loaded into EMEM by the bootloader. From there, the image will unpack itself further into EMEM.
 - [boxlambda_os/link.ld](../../../sw/projects/boxlambda_os/link.ld): The linker script used by the BoxLambda OS. Note the Forth sections.
 
 #### Linker Script Details

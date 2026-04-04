@@ -52,7 +52,7 @@ boxlambda
 - [`dmi_jtag.sv`](https://github.com/epsilon537/riscv-dbg/blob/b241f967f0dd105f7c5e020a395bbe0ec54e40e4/src/dmi_jtag.sv)
 
 BoxLambda uses a Wishbone interconnect. The `ibex_wb` submodule provides a Wishbone wrapper for the Ibex RISCV core. Similarly, it wraps `dm_top` for `riscv-dbg`:
-[`wb_dm_top.sv`](https://github.com/epsilon537/ibex_wb/blob/87a97e38f3cf15bee80eb69bfa82166c00842b1e/rtl/wb_dm_top.sv)
+[`wb_dm_top.sv`](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/wb_dm_top.sv)
 
 ### OpenOCD and RISCV-DBG on Verilator
 
@@ -95,8 +95,7 @@ boxlambda
     └── riscv-dbg
 ```
 
-The OpenOCD configuration file for Verilator-based debugging:
-[`verilator.openocd.cfg`](../../../scripts/verilator.openocd.cfg)
+The OpenOCD configuration file: [scripts/openocd.cfg](../../../scripts/openocd.cfg) (see the *if..VERILATOR* section).
 
 To summarize:
 
@@ -123,7 +122,7 @@ On the OpenOCD side, the transport protocol used for this debug-access-via-FPGA-
 ![BoxLambda OpenOCD Arty A7 FTDI Setup](../../assets/OpenOCD_Setup_Arty_A7.drawio.png)
 *BoxLambda OpenOCD Arty A7 FTDI Setup*
 
-OpenOCD configuration files for debugging on the Arty-A7 are available in the `scripts/` directory: [`scripts/arty_a7_100t.openocd.cfg`](../../../scripts/arty_a7_100t.openocd.cfg)
+OpenOCD configuration file for debugging on the Arty-A7 is available in the `scripts/` directory: [scripts/openocd.cfg](../../../scripts/openocd.cfg)
 
 To summarize:
 
@@ -141,7 +140,7 @@ to use the PMOD JTAG interface, make the following changes:
 1. In `gw/components/riscv-dbg/Bender.yml`, under the `vivado` target, replace `../../sub/riscv-dbg/src/dmi_bscane_tap.sv` with `../../sub/riscv-dbg/src/dmi_jtag_tap.sv`
 2. In `gw/projects/boxlambda_base/constrs/boxlambda_soc.sv`, add the following constraint: `set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets tck_IBUF]`.
 
-Then [rebuild the gateware](https://boxlambda.readthedocs.io/en/latest/installation/#building-and-flashing-from-source).
+Then [rebuild the gateware](../../installation/installation.md#building-and-flashing-from-source).
 
 Thanks to [W. Shepherd Pitts](https://github.com/wspitts2) for this suggestion.
 

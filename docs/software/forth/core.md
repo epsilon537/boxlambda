@@ -3,7 +3,7 @@
 - **Forth Core Software Component in the BoxLambda Directory Tree**:
  [sw/components/forth_core](https://github.com/epsilon537/boxlambda/tree/master/sw/components/forth_core)
 
-- **Forth Core Entry Point**: [sw/components/forth_core/mecrisp-quintus-boxlambda.s](../../../sw/components/forth_core/mecrisp-quintus-boxlambda.s)
+- **Forth Core Entry Point**: [sw/components/forth/core/mecrisp-quintus-boxlambda.s](../../../sw/components/forth/core/mecrisp-quintus-boxlambda.s)
 
 BoxLambda's Forth is based on version 1.1.1d of Matthias Koch's [Mecrisp Quintus](https://mecrisp.sourceforge.net). This section discusses the Forth *Core*, i.e., the RISC-V assembly language code base that bootstraps the Forth environment.
 

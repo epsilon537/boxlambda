@@ -5,8 +5,6 @@
 This build runs the Forth regression test suite. The testsuite is based on the Mecrisp
 Forth testsuite, augmented with Words specifically added for BoxLambda (C-FFI, `c,`, `halign`, `compiletoimem`,...).
 
-The program expects user input at some point. To automate this part, the program can be executed under the control of a `pexpect` based Python script that will provide the required input at the right time. The Python script also checks the expected output against a [reference output file](../../../../sw/projects/forth_core_test/test/forth_core_test.output.txt) and provides the overall pass/fail status to the ctest bench.
-
 ## Building and Running Forh Core Test on FPGA
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.

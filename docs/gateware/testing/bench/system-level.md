@@ -38,13 +38,13 @@ The test bench performs the following tasks:
 
 Here is the source code for the proof-of-concept test bench:
 
-[../../../../gw/projects/hello_world/sim/sim_main.cpp](../../../../gw/projects/hello_world/sim/sim_main.cpp)
+[../../../../gw/projects/test/hello_world/sim/sim_main.cpp](../../../../gw/projects/test/hello_world/sim/sim_main.cpp)
 
 Other, more elaborate system test benches include:
 
-- [*gw/projects/vera_integrated/sim/sim_main.cpp*](../../../../gw/projects/vera_integrated/sim/sim_main.cpp): This test bench captures the DUT's VGA output and renders it to an SDL frame buffer.
-- [*gw/projects/sdspi_test/sim/sim_main.cpp*](../../../../gw/projects/sdspi_test/sim/sim_main.cpp): This test bench includes ZipCPU's SDSPISIM co-simulator.
-- [*gw/projects/ym2149_dac_test/sim/sim_main.cpp*](../../../../gw/projects/ym2149_dac_test/sim/sim_main.cpp): This test bench captures the Audio DAC bitstream and PSG's PCM output, saving it to two Python files for further analysis by a Python script.
+- [*gw/projects/test/vera_integrated/sim/sim_main.cpp*](../../../../gw/projects/test/vera_integrated/sim/sim_main.cpp): This test bench captures the DUT's VGA output and renders it to an SDL frame buffer.
+- [*gw/projects/test/sdspi_test/sim/sim_main.cpp*](../../../../gw/projects/test/sdspi_test/sim/sim_main.cpp): This test bench includes ZipCPU's SDSPISIM co-simulator.
+- [*gw/projects/test/ym2149_dac_test/sim/sim_main.cpp*](../../../../gw/projects/test/ym2149_dac_test/sim/sim_main.cpp): This test bench captures the Audio DAC bitstream and PSG's PCM output, saving it to two Python files for further analysis by a Python script.
 
 ## Are We Running in a Simulation?
 

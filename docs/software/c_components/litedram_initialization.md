@@ -39,7 +39,7 @@ The `sdram_init()` function is part of the `sdram` software component in the Box
 
 The DDR test program is located here:
 
-[../../../sw/projects/ddr_test/ddr_test.c](../../../sw/projects/ddr_test/ddr_test.c)
+[../../../sw/projects/test/ddr_test/ddr_test.c](../../../sw/projects/test/ddr_test/ddr_test.c)
 
 The program boots from internal memory. It invokes `sdram_init()`, performs a memory test, and verifies CPU instruction execution from DDR by relocating a test function from internal memory to DDR and branching to it.
 

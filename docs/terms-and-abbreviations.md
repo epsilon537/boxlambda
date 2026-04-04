@@ -54,7 +54,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Forth**: A stack-based programming language.
 - **FTDI**: Future Technology Devices International, known for USB-to-UART adapters.
 - **FSM**: Finite State Machine, a circuit with finite states.
-- **Gateware**: Describes and implements digital logic in FPGAs/ASICs ([definition](https://www.gateware.org/definition-of-gateware)).
+- **Gateware**: Describes and implements digital logic in FPGAs/ASICs.
 - **GCC**: GNU Compiler Collection.
 - **GPIO**: General-Purpose Input/Output pin.
 - **Harvard Architecture**: CPU architecture with separate instruction and data memory. Used by BoxLambda’s Ibex processor.

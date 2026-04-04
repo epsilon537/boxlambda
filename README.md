@@ -208,7 +208,5 @@ Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Archit
     - [Memory Map](docs/registers/memory_map.md)
 - Misc.:
   - [Git Workflow](docs/misc/git-workflow.md)
-  - Documentation Builds:
-      - [Blog](docs/doc-builds/blog.md)
-      - [MkDocs](docs/doc-builds/mkdocs.md)
+  - [Blog](docs/doc-builds/blog.md)
 

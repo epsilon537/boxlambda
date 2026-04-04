@@ -2,14 +2,14 @@
 
 API:
 
-- [sw/components/forth_core/forth.h](../../../sw/components/forth_core/forth.h):
+- [sw/components/forth/core/forth.h](../../../sw/components/forth/core/forth.h):
 
 Implementation:
 
-- [sw/components/forth_core/forth.cpp](../../../sw/components/forth_core/forth.cpp)
-- The `c-fun` Word in [sw/components/forth_core/init.fs](../../../sw/components/forth_core/init.fs)
-- Forth to C: [sw/components/forth_core/c-ffi.s](../../../sw/components/forth_core/c-ffi.s)
-- C to Forth: [sw/components/forth_core/mecrisp-quintus-boxlambda.s](../../../sw/components/forth_core/mecrisp-quintus-boxlambda.s)
+- [sw/components/forth/core/forth.cpp](../../../sw/components/forth/core/forth.cpp)
+- The `c-fun` Word in [sw/components/forth/fs/forth/init.fs](../../../sw/components/forth/fs/forth/init.fs)
+- Forth to C: [sw/components/forth/core/c-ffi.s](../../../sw/components/forth/core/c-ffi.s)
+- C to Forth: [sw/components/forth/core/mecrisp-quintus-boxlambda.s](../../../sw/components/forth/core/mecrisp-quintus-boxlambda.s)
 
 The BoxLambda C-Forth FFI is loosely based on Peter Schmid's work for the [Mecrisp Cube project](https://github.com/spyren/Mecrisp-Cube/tree/master).
 
