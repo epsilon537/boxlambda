@@ -60,7 +60,7 @@ As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_
 
 ## The IRQ Shadow Registers
 
-The CPU switches to an [interrupt register bank](components_ibex.md#interrupt-shadow-registers) when entering interrupt mode. This means that the ISR doesn't need to save and restore the registers it uses. The regular ISR prologue and epilogue code (saving and restoring registers) can be skipped. Such an ISR is called a *naked* ISR.
+The CPU switches to an [interrupt register bank](../../gateware/components/ibex.md#interrupt-shadow-registers) when entering interrupt mode. This means that the ISR doesn't need to save and restore the registers it uses. The regular ISR prologue and epilogue code (saving and restoring registers) can be skipped. Such an ISR is called a *naked* ISR.
 
 The interrupt shadow register feature, combined with naked ISRs, results in very low interrupt overhead. For a timer interrupt, for example, the ISR timing looks like this:
 
@@ -135,4 +135,4 @@ dint
 50000000 3 * set-raw-time-cmp
 ```
 
-See also [sw/projects/forth/fs/test/testsuite.fs](../../../sw/projects/forth/fs/test/testsuite.fs).
+See also [sw/components/forth/fs/test/testsuite.fs](../../../sw/components/forth/fs/test/testsuite.fs).

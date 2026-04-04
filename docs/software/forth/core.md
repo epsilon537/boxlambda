@@ -1,7 +1,7 @@
 # The Mecrisp Forth Core
 
 - **Forth Core Software Component in the BoxLambda Directory Tree**:
- [sw/components/forth_core](https://github.com/epsilon537/boxlambda/tree/master/sw/components/forth_core)
+ [sw/components/forth/core](../../../sw/components/forth/core)
 
 - **Forth Core Entry Point**: [sw/components/forth/core/mecrisp-quintus-boxlambda.s](../../../sw/components/forth/core/mecrisp-quintus-boxlambda.s)
 
@@ -102,7 +102,7 @@ ckomma: # Write 8 bits in Dictionary
   ret
 ```
 
-The top-level source file is [mecrisp-quintus-boxlambda.s](../../../sw/components/forth_core/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
+The top-level source file is [mecrisp-quintus-boxlambda.s](../../../sw/components/forth/core/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
 
 ![Forth Core Org](../../assets/forth-core_org.png)
 
@@ -129,7 +129,7 @@ The link map also defines the following linker variables associated with those s
 
 #### Forth Assembler Variables and Symbols
 
-Understanding the purpose of the following variables, defined in [forth-core.s](../../../sw/components/forth_core/forth-core.s), is essential to be able to understand the Forth Core:
+Understanding the purpose of the following variables, defined in [forth-core.s](../../../sw/components/forth/core/forth-core.s), is essential to be able to understand the Forth Core:
 
 - `DictionaryPointer`: The *primary* dictionary pointer. Dictionary search
 starts here. Corresponds to Forth variable `(dp)`, taking into account that

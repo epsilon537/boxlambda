@@ -4,7 +4,7 @@ The USB HID System Test Case, running both on Verilator and on FPGA, continuousl
 
 Additionally, when Switch 0 (SW0) is set to *On* and a USB keyboard is connected, the keyboard LEDs will be turned on and off in a rotating pattern.
 
-[../../../../sw/projects/test/usb_hid_sys_test/usb_hid_sys_test.c](../../../../sw/projects/test/usb_hid_sys_test/usb_hid_sys_test.c)
+[../../../../sw/projects/test/usb_hid_sys_test/usb_hid_sys_test.cpp](../../../../sw/projects/test/usb_hid_sys_test/usb_hid_sys_test.cpp)
 
 ## The USB HID Test on Verilator
 

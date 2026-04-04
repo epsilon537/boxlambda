@@ -43,5 +43,5 @@ Relative to the default settings, I modified the following:
 
 ## FatFs_Test
 
-FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](../../../sw/projects/test/fatfs_test/fatfs_test.c).
+FatFs itself does not provide a test suite, but I found a simple test sequence in [another project](https://github.com/avrxml/asf/blob/master/thirdparty/fatfs/unit_tests/unit_tests.c). I used that code as the starting point for a BoxLambda [fatfs_test](../../../sw/projects/test/fatfs_test/fatfs_test.cpp).
 

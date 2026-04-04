@@ -143,7 +143,7 @@ sudo umount /mnt/sd
 
 ## FatFS Test on Arty A7
 
-Hook up the MicroSD PMOD as described [here](pmods.md#microsd-pmod).
+Hook up the MicroSD PMOD as described [here](../../../installation/pmods.md#microsd-pmod).
 
 Note that this is a destructive test. The contents of the SD card will be destroyed.
 
