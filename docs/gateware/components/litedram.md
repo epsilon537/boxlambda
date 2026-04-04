@@ -174,4 +174,4 @@ Some points worth noting about this interface:
 
 ### LiteDRAM Clock Frequency
 
-See [Clocks and Reset](clocks_and_reset.md)
+See [Clocks and Reset](../top-level/clocks_and_reset.md)

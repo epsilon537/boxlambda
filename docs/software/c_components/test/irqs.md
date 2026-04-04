@@ -2,7 +2,7 @@
 
 API: [../../../../sw/components/interrupts/interrupts.h](../../../../sw/components/interrupts/interrupts.h)
 
-This section is specific to interrupt handling in Gateware test builds. See section [Interrupt Handling Software](forth_irqs.md) for general notes about the interrupt handling software.
+This section is specific to interrupt handling in Gateware test builds. See section [Interrupt Handling Software](../../forth/irqs.md) for general notes about the interrupt handling software.
 
 `Interrupts.h` contains the interrupt API:
 

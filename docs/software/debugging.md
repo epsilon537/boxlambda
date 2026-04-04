@@ -2,11 +2,11 @@
 
 ## On the Arty A7
 
-I will use the [*hello_world* test program](gw-test-build-hello-world.md) as an example:
+I will use the [*hello_world* test program](../gateware/testing/builds/hello-world.md) as an example:
 
 **Important**
 
-The steps below assume that you have executed the BoxLambda [installation procedure](installation.md), including
+The steps below assume that you have executed the BoxLambda [installation procedure](../installation/installation.md), including
 the flashing of the bitstream and the bootloader image. If you haven't done so yet, please do that first.
 
 To build and debug the *Hello World!* example, go through the following steps:

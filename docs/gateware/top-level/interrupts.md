@@ -38,7 +38,7 @@ The modification of **sdspi** is almost identical. Here, the events are:
 - `ISR[0]`: The device transitioned from a `busy` state to an `idle` state.
 - `ISR[1]`: The removal of an SD card is detected.
 
-Except for [wb_timer](components_timer.md), which follows its own protocol, the other cores in the BoxLambda SoC already implement the event-based protocol.
+Except for [wb_timer](../components/timer.md), which follows its own protocol, the other cores in the BoxLambda SoC already implement the event-based protocol.
 
 ### Edge-Triggered Interrupt Controllers Connected to a Level-Sensitive CPU
 
@@ -109,9 +109,9 @@ The following table lists the BoxLambda interrupts and the events they report:
 
 ## Interrupt Jitter
 
-When the CPU receives an IRQ, it has to complete that instruction before it can jump to the interrupt vector. This constraint causes some interrupt latency jitter/variation. For asynchronous events, such as key presses, that won't matter. However, for critically timed events, there may be cases where you want to execute a sequence of instructions *exactly* at a given time, without any jitter. The [Timer module](components_timer.md#timer) includes a mechanism (`mtimeblk`) that can be used to remove this jitter.
+When the CPU receives an IRQ, it has to complete that instruction before it can jump to the interrupt vector. This constraint causes some interrupt latency jitter/variation. For asynchronous events, such as key presses, that won't matter. However, for critically timed events, there may be cases where you want to execute a sequence of instructions *exactly* at a given time, without any jitter. The [Timer module](../../software/c_components/test/timer.md#timer) includes a mechanism (`mtimeblk`) that can be used to remove this jitter.
 
 ## Interrupt Handling Software
 
-See the [Interrupt Handling](forth_irqs.md) page.
+See the [Interrupt Handling](../../software/forth/irqs.md) page.
 

@@ -61,4 +61,4 @@ Software can trigger resets by writing to the *Reset Control Register* and retri
 
 See the [Reset Register Map](registers/generated/reset_regs.md#reset-register-map) for details.
 
-The [Reset Test](gw-test-build-reset.md) application demonstrates the use of these registers.
+The [Reset Test](../testing/builds/reset.md) application demonstrates the use of these registers.

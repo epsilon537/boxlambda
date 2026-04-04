@@ -13,11 +13,11 @@ This project builds the 'official' BoxLambda DFX Configuration as described in t
 
 The goal of adding DFX support to BoxLambda is to enable BoxLambda software applications to dynamically load an application-specific gateware component into the SoC's *Virtual Socket 0 (VS0)* placeholder component. This component acts as a gateware assist for the software application.
 
-In the BoxLambda SoC, instance `boxlambda_soc_inst/vs0_inst` is set up as a Reconfigurable Partition (RP). To demonstrate DFX, two Reconfigurable Modules (RMs) fitting this RP are created: `vs0_j1b` and `vs0_stub`. More details on these components can be found on the [VS0 page](components_vs0.md).
+In the BoxLambda SoC, instance `boxlambda_soc_inst/vs0_inst` is set up as a Reconfigurable Partition (RP). To demonstrate DFX, two Reconfigurable Modules (RMs) fitting this RP are created: `vs0_j1b` and `vs0_stub`. More details on these components can be found on the [VS0 page](../components/vs0.md).
 
 ## Building and Running BoxLambda DFX
 
-See [DFX Test](gw-test-build-dfx.md).
+See [DFX Test](../testing/builds/dfx.md).
 
 ## Adding a Reconfigurable Partition (RP)
 

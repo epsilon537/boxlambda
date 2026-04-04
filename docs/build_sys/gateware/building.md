@@ -1,6 +1,6 @@
 # Building the Gateware
 
-Assuming all [Prerequisites](prerequisites.md) are installed, navigate to the desired build tree and run the following command:
+Assuming all [Prerequisites](../../installation/prerequisites.md) are installed, navigate to the desired build tree and run the following command:
 
 ```
 make <gw_component_or_project_name><action>

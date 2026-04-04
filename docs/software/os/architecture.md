@@ -11,7 +11,7 @@ The two main subsystems are the **BoxLambda Kernel** (**BoxKern**) and the
 The BoxKern image is stored in flash memory. The Bootloader loads the kernel
 into EMEM, then transfers control to it. The kernel's *CRT0* startup code then
 further unpacks specific sections into EMEM and IMEM. (See
-[here](sw_bootloader.md) for a more detailed description of the boot
+[here](../bootloader.md) for a more detailed description of the boot
 sequence).
 
 The Mercrisp Forth Environment lives as Forth source code on the SD card

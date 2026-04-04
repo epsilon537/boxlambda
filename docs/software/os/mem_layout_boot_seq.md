@@ -14,7 +14,7 @@ TBD
 
 ## Boot Sequence
 
-This section describes the OS Boot Sequence. It starts where the [Bootloader Boot Sequence section](sw_bootloader.md#boot-sequence) leaves off.
+This section describes the OS Boot Sequence. It starts where the [Bootloader Boot Sequence section](../bootloader.md#boot-sequence) leaves off.
 
 After the Bootloader has transferred control to the OS image it has loaded into EMEM, the OS start-up code goes through the following sequence:
 

@@ -11,7 +11,7 @@ The program expects user input at some point. To automate this part, the program
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 
-Make sure the `boxlambda_base` release bitstream is flashed onto the target. If that's not the case yet, follow the steps in [this section](installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+Make sure the `boxlambda_base` release bitstream is flashed onto the target. If that's not the case yet, follow the steps in [this section](../../../installation/installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
 Build the Forth Core Test software project:
 

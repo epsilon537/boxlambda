@@ -52,7 +52,7 @@ core).
 
 ### Booting Forth from C
 
-The original Mecrisp Forth boots the Forth core directly from flash memory, i.e., the early boot code is part of the Forth core. BoxLambda, on the other hand, first boots up a C environment (see [here](sw_bootloader.md#boot-sequence)), then the C environment boots the Forth environment using the [Forth-C FFI](forth-c-ffi.md#the-forth-c-ffi-api) API.
+The original Mecrisp Forth boots the Forth core directly from flash memory, i.e., the early boot code is part of the Forth core. BoxLambda, on the other hand, first boots up a C environment (see [here](../bootloader.md#boot-sequence)), then the C environment boots the Forth environment using the [Forth-C FFI](c-ffi.md) API.
 
 From BoxLambda OS's [main.cpp](../../../sw/projects/boxlambda_os/main.cpp):
 

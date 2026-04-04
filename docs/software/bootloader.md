@@ -40,5 +40,5 @@ EMEM or IMEM after start-up.
 
 ## Building and Flashing the Bootloader
 
-For instructions to build and flash the Bootloader, see [this section](installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+For instructions to build and flash the Bootloader, see [this section](../installation/installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 

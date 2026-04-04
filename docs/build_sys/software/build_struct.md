@@ -14,7 +14,7 @@ The software build system is organized into four layers:
    Submodules are Git submodules containing, among other things, source code referenced from the *Software Component Layer*. The software build system does not directly build at this level. Makefiles located in the *Submodule Layer* are not executed.
 
 4. **The Code Generation Layer**:
-   Some components require some form of transformation to be turned into source code. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) in its `CMakefile.txt`. The custom command is added as a dependency to the generic `cgen` target, which gets executed as part of `make regen`, the build tree (re-)generation command. Except for the [Register Access Layer](c_comp_register_access_layer.md), code-generated files are written to the `codegen/` subdirectory in the build tree.
+   Some components require some form of transformation to be turned into source code. The component in question provides specific code generation instructions in the form of a *custom command* (`add_custom_command`) in its `CMakefile.txt`. The custom command is added as a dependency to the generic `cgen` target, which gets executed as part of `make regen`, the build tree (re-)generation command. Except for the [Register Access Layer](../../software/c_components/register_access_layer.md), code-generated files are written to the `codegen/` subdirectory in the build tree.
 
 The following software components currently rely on code generation:
 

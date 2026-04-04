@@ -11,7 +11,7 @@
 
 - **Included in OS**: No
 
-The Real-Time Clock and Calendar (RTCC) software component is based on the [MCP79412RTC](https://github.com/epsilon537/MCP79412RTC) library. The library interfaces with Digilent's [PMOD RTCC](components_rtcc.md) via I2C.
+The Real-Time Clock and Calendar (RTCC) software component is based on the [MCP79412RTC](https://github.com/epsilon537/MCP79412RTC) library. The library interfaces with Digilent's [PMOD RTCC](../../installation/pmods.md#rtcc_pmod) via I2C.
 
 The library allows you to set and get a time and date (among other things). The RTCC's coin cell battery backup ensures that the time and date will be maintained while the host (BoxLambda) is turned off.
 

@@ -3,7 +3,7 @@
 This glossary is taken from the Mecrisp Quintus README, with modifications for
 BoxLambda.
 
-The coverage of specific platform components such as [Interrupt Handling](forth_irqs.md) and [Time Handling](forth_time.md) is factored out into separate subsections.
+The coverage of specific platform components such as [Interrupt Handling](irqs.md) and [Time Handling](time.md) is factored out into separate subsections.
 
 Mecrisp-Quintus is case-insensitive, but only for letters 'a' to 'z'.
 UTF-8 Unicode encoded characters beyond 7 bit ASCII are case-sensitive.

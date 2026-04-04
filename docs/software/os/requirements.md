@@ -1,6 +1,6 @@
 # OS Requirements
 
-The [original requirements](requirements.md) relevant for the software side of BoxLambda
+The [original requirements](../../requirements.md) relevant for the software side of BoxLambda
 are:
 
 - **Simplicity**: It must be easy to jump in and do something: create, hack,
