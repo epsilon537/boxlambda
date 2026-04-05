@@ -2,7 +2,7 @@
 
 ## On the Arty A7
 
-I will use the [*hello_world* test program](../gateware/testing/builds/hello-world.md) as an example:
+I will use the [*hello_world* test program](../gateware/test/builds/hello-world.md) as an example:
 
 **Important**
 

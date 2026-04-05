@@ -17,7 +17,7 @@ In the BoxLambda SoC, instance `boxlambda_soc_inst/vs0_inst` is set up as a Reco
 
 ## Building and Running BoxLambda DFX
 
-See [DFX Test](../testing/builds/dfx.md).
+See [DFX Test](../test/builds/dfx.md).
 
 ## Adding a Reconfigurable Partition (RP)
 

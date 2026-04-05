@@ -19,7 +19,7 @@
     boxlambda/sub/usb_hid_device/.
 
 - **Usb_hid_device Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/usb_hid_device](../../../gw/components/usb_hid_device)
+    [boxlambda/gw/components/test/usb_hid_device](../../../gw/components/test/usb_hid_device)
 
 - **Usb_hid_device Top-Level**:
     [sub/usb_hid_device/rtl/top_usb_device.sv](https://github.com/epsilon537/usb_hid_device/blob/boxlambda/rtl/top_usb_device.sv)

@@ -133,7 +133,7 @@ The test project code is located here:
 
 [../../../gw/projects/test/audio_dac_test](../../../gw/projects/test/audio_dac_test)
 
-See [here](../testing/builds/ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
+See [here](../test/builds/ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
 
 ## The YM2149 DAC Test Project - a Chord of Six Pitches.
 
@@ -153,7 +153,7 @@ The test project code is located here:
 
 [../../../gw/projects/test/ym2149_dac_test](../../../gw/projects/test/ym2149_dac_test)
 
-See [here](../testing/builds/ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
+See [here](../test/builds/ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
 
 ## Dual YM2149 PSG Core Clock Frequency
 

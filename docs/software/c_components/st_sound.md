@@ -61,5 +61,5 @@ The test scripts and related files are here:
 
 [../../../gw/projects/test/stsound_test/test](../../../gw/projects/test/stsound_test/test)
 
-See [here](../../gateware/testing/builds/ym2149.md#st-sound-test-on-verilator) for instructions to build and run the test yourself.
+See [here](../../gateware/test/builds/ym2149.md#st-sound-test-on-verilator) for instructions to build and run the test yourself.
 
