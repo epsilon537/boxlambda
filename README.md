@@ -157,7 +157,7 @@ Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Archit
       - [SDSPI](docs/software/c_components/sdspi.md)
       - [FatFs](docs/software/c_components/fat_fs.md)
       - [ST-Sound](docs/software/c_components/st_sound.md)
-      - [VERA Stack](docs/software/c_components/vera_stack.md)
+      - [VERA HAL](docs/software/c_components/vera_hal.md)
       - [USB HID](docs/software/c_components/usb_hid.md)
       - [Flash Driver](docs/software/c_components/flashdrvr.md)
       - [UART](docs/software/c_components/uart.md)
@@ -180,7 +180,6 @@ Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Archit
     - [The Software Test Bench](docs/software/test/test-bench.md)
     - Software Test Builds:
         - [Forth Core Test](docs/software/test/builds/forth-core.md)
-        - [uLisp (docs/Experimental)](docs/software/test/builds/ulisp.md)
   - [Debugging](docs/software/debugging.md)
 - Build System:
     - [The Directory Structure](docs/build_sys/dir_struct.md)
