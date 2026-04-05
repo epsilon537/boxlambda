@@ -7,7 +7,7 @@
     boxlambda/sub/embedded-cli/.
 
 - **Embedded CLI Software Component in the BoxLambda Directory Tree**:
-  [boxlambda/sw/components/embedded_cli](https://github.com/epsilon537/boxlambda/tree/master/sw/components/embedded_cli)
+  [boxlambda/sw/components/test/embedded_cli](../../../../sw/components/test/embedded_cli)
 
 For bringing up and debugging test applications, it's sometimes convenient to have access to a Command-Line Interface (CLI) from which you can easily issue custom commands such as `peekw` (peek word), `pokew` (poke word), `i2cread`, `settime`, etc. The [Embedded CLI library](https://github.com/epsilon537/embedded-cli) makes it easy to add a CLI to an application.
 

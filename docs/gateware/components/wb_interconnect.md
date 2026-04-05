@@ -7,7 +7,7 @@
   boxlambda/sub/verilog-wishbone/
 
 - **Interconnect Component in the BoxLambda Directory Tree**:
-  [boxlambda/gw/components/interconnect](https://github.com/epsilon537/boxlambda/tree/master/gw/components/interconnect)
+  [boxlambda/gw/components/interconnect](../../../gw/components/interconnect)
 
 - **Instruction Bus Module**:
   [boxlambda/gw/components/interconnect/rtl/instruction_bus.sv](../../../gw/components/interconnect/rtl/instruction_bus.sv)

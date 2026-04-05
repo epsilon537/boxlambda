@@ -7,7 +7,7 @@
     `boxlambda/sub/sdspi/`
 
 - **SDSPI Gateware Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/sdspi](https://github.com/epsilon537/boxlambda/tree/master/gw/components/sdspi)
+    [boxlambda/gw/components/sdspi](../../../gw/components/sdspi)
 
 - **SDSPI Core Top-Level**:
     [sub/sdspi/rtl/sdspi.v](https://github.com/epsilon537/sdspi/blob/boxlambda/rtl/sdspi.v)

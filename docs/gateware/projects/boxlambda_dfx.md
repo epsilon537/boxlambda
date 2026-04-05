@@ -1,7 +1,7 @@
 # The BoxLambda DFX Gateware Project Build (Experimental/Advanced)
 
 **BoxLambda DFX Project in the BoxLambda Directory Tree**:
-[boxlambda/gw/projects/boxlambda-dfx](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_dfx)
+[boxlambda/gw/projects/boxlambda-dfx](../../../gw/projects/boxlambda_dfx)
 
 This project builds the 'official' BoxLambda DFX Configuration as described in the [Gaterware Architecture section](../top-level/gw_architecture.md#dfx-configuration).
 

@@ -19,7 +19,7 @@ The following clocks are present in the SoC:
 ## Reset Controller
 
 - **Reset Controller Component in the BoxLambda Directory Tree**:
-  [boxlambda/gw/components/reset_ctrl](https://github.com/epsilon537/boxlambda/tree/master/gw/components/reset_ctrl)
+  [boxlambda/gw/components/reset_ctrl](../../../gw/components/reset_ctrl)
 
 - **Reset Controller Top-Level**:
   [gw/components/reset_ctrl/rtl/reset_ctrl.sv](../../../gw/components/reset_ctrl/rtl/reset_ctrl.sv)

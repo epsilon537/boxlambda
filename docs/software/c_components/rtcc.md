@@ -7,7 +7,7 @@
     boxlambda/sub/MCP79412RTC/.
 
 - **RTCC Software Component in the BoxLambda Directory Tree**:
-  [boxlambda/sw/components/rtcc](https://github.com/epsilon537/boxlambda/tree/master/sw/components/rtcc)
+  [boxlambda/sw/components/rtcc](../../../sw/components/rtcc)
 
 - **Included in OS**: No
 

@@ -1,6 +1,6 @@
 # The Forth Core Test Build
 
-**The software project directory**: [sw/projects/forth_core_test](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/forth_core_test)
+**The software project directory**: [sw/projects/boxlambda_os](../../../../sw/projects/boxlambda_os)
 
 This build runs the Forth regression test suite. The testsuite is based on the Mecrisp
 Forth testsuite, augmented with Words specifically added for BoxLambda (C-FFI, `c,`, `halign`, `compiletoimem`,...).
@@ -156,31 +156,4 @@ ______/|________ (7 |` ______\|/_______a:f
 ```
 
 The test leaves you at the Forth prompt.
-
-### Running Forth Core Test Automatically
-
-The Forth Core Test can also be run automatically, under the control of a
-Python script. To do that, go through the following steps:
-
-1. Close the serial port terminal (if you have it open). The Python script will
-take control of the serial port.
-
-2. Navigate to the `sw/projects/forth_core_test/test` directory in the **source
-tree** (not the build tree) and run the python script:
-
-```
-cd sw/projects/forth_core_test/test
-python3 forth_core_test.py
-```
-<ol start="3">
-3. You should see the following output:
-
-```
-Board Reset and OpenOCD start...
-Resetting target...
-...
-Checking output against reference...
-Test passed.
-Terminating...
-```
 

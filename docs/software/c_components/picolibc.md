@@ -12,7 +12,7 @@
     [https://keithp.com/picolibc/](https://keithp.com/picolibc/)
 
 - **Bootstrap Software Component in the BoxLambda Directory Tree**:
-  [boxlambda/sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap)
+  [boxlambda/sw/components/bootstrap](../../../sw/components/bootstrap)
 
 - **Included in OS**: Yes
 
@@ -82,7 +82,7 @@ Picolibc is a relatively generic code base that needs to be tied to the platform
 
 More detail for each of these follows in the subsections below. I have grouped them into a single software component called **bootstrap**:
 
-[https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/master/sw/components/bootstrap)
+[../../../sw/components/bootstrap](../../../sw/components/bootstrap)
 
 An application using the standard C library has to link in this bootstrap component.
 

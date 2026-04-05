@@ -1,7 +1,7 @@
 # The BoxLambda Base Gateware Build
 
 - **BoxLambda Base Project in the BoxLambda Directory Tree**:
-  [boxlambda/gw/projects/boxlambda-base](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_base)
+  [boxlambda/gw/projects/boxlambda-base](../../../gw/projects/boxlambda_base)
 
 This project builds the 'official' BoxLambda Base Configuration, as described in the [Gateware Architecture section](../top-level/gw_architecture.md#base-configuration).
 

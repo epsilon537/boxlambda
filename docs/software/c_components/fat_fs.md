@@ -10,7 +10,7 @@
     [http://elm-chan.org/fsw/ff/00index_e.html](http://elm-chan.org/fsw/ff/00index_e.html)
 
 - **FatFs Software Component in the BoxLambda Directory Tree**:
-  [boxlambda/sw/components/fatfs](https://github.com/epsilon537/boxlambda/tree/master/sw/components/fatfs)
+  [boxlambda/sw/components/fatfs](../../../sw/components/fatfs)
 
 - **Included in OS**: No
 

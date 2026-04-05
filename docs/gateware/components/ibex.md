@@ -9,7 +9,7 @@
   boxlambda/sub/ibex/.
 
 - **Ibex Component in the BoxLambda Directory Tree**:
-  [boxlambda/gw/components/ibex](https://github.com/epsilon537/boxlambda/tree/master/gw/components/ibex)
+  [boxlambda/gw/components/ibex](../../../gw/components/ibex)
 
 - **Ibex Core Top-Level Module**:
 [sub/ibex/rtl/ibex_top.sv](https://github.com/epsilon537/ibex/blob/boxlambda/rtl/ibex_top.sv)
@@ -23,8 +23,8 @@
   `boxlambda/sub/ibex_wb/`.
 
 - **Ibex WB Components in the BoxLambda Directory Tree**:
-  [boxlambda/gw/components/ibex_wb_common](https://github.com/epsilon537/boxlambda/tree/master/gw/components/ibex_wb_common)
-  [boxlambda/gw/components/ibex_wb_core](https://github.com/epsilon537/boxlambda/tree/master/gw/components/ibex_wb_core)
+  [boxlambda/gw/components/ibex_wb_common](../../../gw/components/ibex_wb_common)
+  [boxlambda/gw/components/ibex_wb_core](../../../gw/components/ibex_wb_core)
 
 - **Ibex WB Core Top-Level**:
 [sub/ibex_wb/rtl/wb_ibex_core.sv](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/wb_ibex_core.sv)

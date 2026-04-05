@@ -189,7 +189,7 @@ The `gw_project_rules_dfx_vivado()` parameters:
 
 *Gateware CMakeLists Organization.*
 
-The actual gateware build recipes (Bender interaction, verilating, synthesizing...) are implemented by a set of bash and tcl scripts kept in the [scripts/](https://github.com/epsilon537/boxlambda/tree/master/scripts) directory:
+The actual gateware build recipes (Bender interaction, verilating, synthesizing...) are implemented by a set of bash and tcl scripts kept in the [scripts/](../../../scripts) directory:
 
 ```
     bender_gen_prj_constraints_file_list.sh

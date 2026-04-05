@@ -1,10 +1,10 @@
 # SPI Flash Controller
 
 - **SPI Flash Gateware Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/spiflash](https://github.com/epsilon537/boxlambda/tree/master/gw/components/spiflash)
+    [boxlambda/gw/components/spiflash](../../../gw/components/spiflash)
 
 - **SPI Flash Core Top-Level**:
-    [boxlambda/gw/components/spiflash/rtl/spiflash.v](https://github.com/epsilon537/boxlambda/tree/master/gw/components/spiflash/rtl/spiflash.v)
+    [boxlambda/gw/components/spiflash/rtl/spiflash.v](../../../gw/components/spiflash/rtl/spiflash.v)
 
 ![SPI Flash On On BoxLambda](../../assets/spiflash_on_boxlambda.png)
 

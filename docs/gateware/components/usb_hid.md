@@ -7,7 +7,7 @@
     boxlambda/sub/usb_hid_host/.
 
 - **Usb_hid_host Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/usb_hid_host](https://github.com/epsilon537/boxlambda/tree/master/gw/components/usb_hid_host)
+    [boxlambda/gw/components/usb_hid_host](../../../gw/components/usb_hid_host)
 
 - **Usb_hid_host Top-Level**:
     [gw/components/usb_hid_host/rtl/usb_hid_host_top.sv](../../../gw/components/usb_hid_host/rtl/usb_hid_host_top.sv)
@@ -19,7 +19,7 @@
     boxlambda/sub/usb_hid_device/.
 
 - **Usb_hid_device Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/usb_hid_device](https://github.com/epsilon537/boxlambda/tree/master/gw/components/usb_hid_device)
+    [boxlambda/gw/components/usb_hid_device](../../../gw/components/usb_hid_device)
 
 - **Usb_hid_device Top-Level**:
     [sub/usb_hid_device/rtl/top_usb_device.sv](https://github.com/epsilon537/usb_hid_device/blob/boxlambda/rtl/top_usb_device.sv)

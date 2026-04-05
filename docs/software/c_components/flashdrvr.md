@@ -4,7 +4,7 @@
 
 - **Included in OS**: No
 
-[boxlambda/sw/components/flashdrvr](https://github.com/epsilon537/boxlambda/tree/master/sw/components/flashdrvr)
+[boxlambda/sw/components/flashdrvr](../../../sw/components/flashdrvr)
 
 The primary purpose of the SPI Flash Control Interface is to allow software to write to Flash. One does not simply write a byte to flash, however. The appropriate sector needs to be identified, erased, and paged (written). The `flashdrvr` software module implements this logic.
 

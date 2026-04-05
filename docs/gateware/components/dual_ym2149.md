@@ -7,7 +7,7 @@
     boxlambda/sub/ym2149_psg_system/.
 
 - **YM2149_PSG_system Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/ym2149](https://github.com/epsilon537/boxlambda/tree/master/gw/components/ym2149)
+    [boxlambda/gw/components/ym2149](../../../gw/components/ym2149)
 
 - **YM2149_PSG_system Core Top-Level**:
     [sub/ym2149_psg_system/YM2149_PSG_system_wb.sv](https://github.com/epsilon537/YM2149_PSG_system/blob/boxlambda/YM2149_PSG_system_wb.sv)
@@ -131,7 +131,7 @@ The Verilator testbench executes for 0.5s of simulated time. Then, a python modu
 
 The test project code is located here:
 
-[https://github.com/epsilon537/boxlambda/tree/master/gw/projects/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/audio_dac_test)
+[../../../gw/projects/test/audio_dac_test](../../../gw/projects/test/audio_dac_test)
 
 See [here](../testing/builds/ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
 
@@ -151,7 +151,7 @@ The Python script ([ym2149_test.py](../../../gw/projects/test/ym2149_dac_test/te
 
 The test project code is located here:
 
-[https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/ym2149_dac_test)
+[../../../gw/projects/test/ym2149_dac_test](../../../gw/projects/test/ym2149_dac_test)
 
 See [here](../testing/builds/ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
 

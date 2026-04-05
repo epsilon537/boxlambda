@@ -7,7 +7,7 @@
   `boxlambda/sub/riscv-dbg/`
 
 - **RISCV-DBG Gateware Component in the BoxLambda Directory Tree**:
-  [boxlambda/gw/components/riscv-dbg](https://github.com/epsilon537/boxlambda/tree/master/gw/components/riscv-dbg)
+  [boxlambda/gw/components/riscv-dbg](../../../gw/components/riscv-dbg)
 
 ## RISCV OpenOCD
 
