@@ -204,7 +204,7 @@ Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Archit
     - [YM2149](docs/registers/generated/ym2149_regs.md)
     - [DFX Controller Control Register](docs/registers/generated/dfx_controller_ctrl_reg.md)
     - [DFX Controller Other Registers](docs/registers/generated/dfx_controller_other_regs.md)
-    - [LiteDRAM Registers](docs/registers/litedram_regs.md)
+    - [LiteDRAM Registers](docs/registers/litedram_generated/markdown/index.md)
     - [Memory Map](docs/registers/memory_map.md)
 - Misc.:
   - [Git Workflow](docs/misc/git-workflow.md)

@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Added documentation top-level to README.md.
 - Introduced target.py, a target interaction script handling target reset,
   flashing/loading bitstream/bootloader/application image, up/downloading
   ram disk images, debugger attachment.
@@ -68,6 +69,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   loading application image.
 - Increased JTAG clock speed to 25MHz.
 - Moved test gateware and software components and directories to a `test/` subdirectory.
+- Moved documentation from read-the-docs.org to `docs/` and made all internal references relative.
+- Changed litedram register documentation generation from html to markdown.
 
 ### Removed
 
