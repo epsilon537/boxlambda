@@ -17,7 +17,7 @@
 
 ## The MicroSD Card Interface and SPI Mode
 
-![Arty A7 with MicroSD PMOD in JD port.](../../assets/arty_w_microsd_pmod.jpeg)
+![Arty A7 with MicroSD PMOD in JD port.](../../assets/arty-w-microsd-pmod.jpeg)
 
 *SDSPI in the BoxLambda Architecture.*
 
@@ -61,7 +61,7 @@ sdspi #(.OPT_LITTLE_ENDIAN(1'b1)) sdspi_inst (
 The Wishbone signals plug straight into the test SoC's system bus. The SD Card interface signals go straight to the top-level ports.
 Interrupts are currently not hooked up.
 
-![SDSPI Block Diagram.](../../assets/sdspi_block_diagram.drawio.png)
+![SDSPI Block Diagram.](../../assets/sdspi-block-diagram.drawio.png)
 
 *SDSPI Simplified Block Diagram.*
 

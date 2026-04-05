@@ -7,7 +7,7 @@ environment for experimenting with software and FPGA gateware.
 ## The Physical Setup
 
 [![The physical
-setup.](assets/physical_setup.png)](assets/physical_setup.png)
+setup.](assets/physical-setup.png)](assets/physical-setup.png)
 
 *The physical setup.*
 
@@ -35,12 +35,12 @@ Verilator.
 
 ## Gateware Block Diagram
 
-![BoxLambda Gateware Block Diagram.](assets/Arch_Diagram_dual_bus_DFX.png)
+![BoxLambda Gateware Block Diagram.](assets/Arch-Diagram-dual-bus-DFX.png)
 
 ## Software Block Diagram
 
 [![BoxLambda OS
-Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Architecture.png)
+Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Architecture.png)
 
 *BoxLambda OS Architecture Block Diagram.*
 
@@ -89,33 +89,33 @@ Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Archit
     - [Installation](docs/installation/installation.md)
 - Gateware:
   - Top-Level:
-      - [Gateware Architecture](docs/gateware/top-level/gw_architecture.md)
-      - [Clocks and Reset](docs/gateware/top-level/clocks_and_reset.md)
+      - [Gateware Architecture](docs/gateware/top-level/gw-architecture.md)
+      - [Clocks and Reset](docs/gateware/top-level/clocks-and-reset.md)
       - [Interrupts](docs/gateware/top-level/interrupts.md)
-      - [LEDs and Switches](docs/gateware/top-level/leds_and_switches.md)
+      - [LEDs and Switches](docs/gateware/top-level/leds-and-switches.md)
       - [FPGA Resource Utilization](docs/gateware/top-level/fpga-resource-utilization.md)
   - Gateware Components:
-      - [BoxLambda SoC](docs/gateware/components/boxlambda_soc.md)
-      - [Wishbone Interconnect](docs/gateware/components/wb_interconnect.md)
+      - [BoxLambda SoC](docs/gateware/components/boxlambda-soc.md)
+      - [Wishbone Interconnect](docs/gateware/components/wb-interconnect.md)
       - [RISCV Ibex Processor](docs/gateware/components/ibex.md)
       - [IMEM](docs/gateware/components/imem.md)
-      - [RISCV-DBG Debug Core](docs/gateware/components/riscv_dbg.md)
+      - [RISCV-DBG Debug Core](docs/gateware/components/riscv-dbg.md)
       - [LiteDRAM Memory Controller](docs/gateware/components/litedram.md)
       - [VERA (docs/Wishbone) Graphics](docs/gateware/components/vera.md)
       - [SDSPI SD Card Controller](docs/gateware/components/sdspi.md)
       - [SPI Flash Controller](docs/gateware/components/spiflash.md)
-      - [Dual YM2149 PSG Sound Core](docs/gateware/components/dual_ym2149.md)
-      - [USB HID Keyboard and Mouse](docs/gateware/components/usb_hid.md)
+      - [Dual YM2149 PSG Sound Core](docs/gateware/components/dual-ym2149.md)
+      - [USB HID Keyboard and Mouse](docs/gateware/components/usb-hid.md)
       - [UART](docs/gateware/components/uart.md)
       - [GPIO](docs/gateware/components/gpio.md)
       - [Timer](docs/gateware/components/timer.md)
       - [I2C](docs/gateware/components/i2c.md)
       - [RTCC](docs/gateware/components/rtcc.md)
       - [VS0](docs/gateware/components/vs0.md)
-      - [DFX Controller](docs/gateware/components/dfx_controller.md)
+      - [DFX Controller](docs/gateware/components/dfx-controller.md)
   - Gateware Project Builds:
-      - [BoxLambda Base](docs/gateware/projects/boxlambda_base.md)
-      - [BoxLambda DFX (docs/Experimental/Advanced)](docs/gateware/projects/boxlambda_dfx.md)
+      - [BoxLambda Base](docs/gateware/projects/boxlambda-base.md)
+      - [BoxLambda DFX (docs/Experimental/Advanced)](docs/gateware/projects/boxlambda-dfx.md)
   - Gateware Testing:
     - The Gateware Test Bench:
         - [The Test Bench](docs/gateware/test/bench/test-bench.md)
@@ -140,7 +140,7 @@ Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Archit
   - [OS Requirements](docs/software/os/requirements.md)
   - [OS Architecture](docs/software/os/architecture.md)
   - [OS Build](docs/software/os/build.md)
-  - [OS Memory Layout and Boot Sequence](docs/software/os/mem_layout_boot_seq.md)
+  - [OS Memory Layout and Boot Sequence](docs/software/os/mem-layout-boot-seq.md)
   - [OS User Interface](docs/software/os/ui.md)
   - Forth:
     - [The Mecrisp Forth Core](docs/software/forth/core.md)
@@ -150,60 +150,60 @@ Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Archit
     - [Time Handling](docs/software/forth/time.md)
   - [Bootloader](docs/software/bootloader.md)
   - C Components:
-      - [About C Components](docs/software/c_components/about.md)
-      - [Register Access Layer](docs/software/c_components/register_access_layer.md)
-      - [PicoLibc and the Bootstrap Component](docs/software/c_components/picolibc.md)
-      - [LiteDRAM Initialization](docs/software/c_components/litedram_initialization.md)
-      - [SDSPI](docs/software/c_components/sdspi.md)
-      - [FatFs](docs/software/c_components/fat_fs.md)
-      - [ST-Sound](docs/software/c_components/st_sound.md)
-      - [VERA HAL](docs/software/c_components/vera_hal.md)
-      - [USB HID](docs/software/c_components/usb_hid.md)
-      - [Flash Driver](docs/software/c_components/flashdrvr.md)
-      - [UART](docs/software/c_components/uart.md)
-      - [GPIO](docs/software/c_components/gpio.md)
-      - [RISC-V](docs/software/c_components/riscv.md)
-      - [I2C](docs/software/c_components/i2c.md)
-      - [Real-Time Clock and Calendar](docs/software/c_components/rtcc.md)
-      - [DFX Controller HAL](docs/software/c_components/dfx_controller_hal.md)
+      - [About C Components](docs/software/c-components/about.md)
+      - [Register Access Layer](docs/software/c-components/register-access-layer.md)
+      - [PicoLibc and the Bootstrap Component](docs/software/c-components/picolibc.md)
+      - [LiteDRAM Initialization](docs/software/c-components/litedram-initialization.md)
+      - [SDSPI](docs/software/c-components/sdspi.md)
+      - [FatFs](docs/software/c-components/fat-fs.md)
+      - [ST-Sound](docs/software/c-components/st-sound.md)
+      - [VERA HAL](docs/software/c-components/vera-hal.md)
+      - [USB HID](docs/software/c-components/usb-hid.md)
+      - [Flash Driver](docs/software/c-components/flashdrvr.md)
+      - [UART](docs/software/c-components/uart.md)
+      - [GPIO](docs/software/c-components/gpio.md)
+      - [RISC-V](docs/software/c-components/riscv.md)
+      - [I2C](docs/software/c-components/i2c.md)
+      - [Real-Time Clock and Calendar](docs/software/c-components/rtcc.md)
+      - [DFX Controller HAL](docs/software/c-components/dfx-controller-hal.md)
   - Test C Components:
-      - [About Test C Components](docs/software/c_components/test/about.md)
-      - [Timer](docs/software/c_components/test/timer.md)
-      - [Interrupt Handling](docs/software/c_components/test/irqs.md)
-      - [Embedded CLI](docs/software/c_components/test/cli.md)
-      - [Ymodem](docs/software/c_components/test/ymodem.md)
-      - [Memory and File System CLI](docs/software/c_components/test/mem_fs_cli.md)
-      - [Peek and Poke CLI](docs/software/c_components/test/peek_poke_cli.md)
-      - [J1B HAL](docs/software/c_components/test/j1b_hal.md)
-      - [VS0 HAL](docs/software/c_components/test/vs0_hal.md)
+      - [About Test C Components](docs/software/c-components/test/about.md)
+      - [Timer](docs/software/c-components/test/timer.md)
+      - [Interrupt Handling](docs/software/c-components/test/irqs.md)
+      - [Embedded CLI](docs/software/c-components/test/cli.md)
+      - [Ymodem](docs/software/c-components/test/ymodem.md)
+      - [Memory and File System CLI](docs/software/c-components/test/mem-fs-cli.md)
+      - [Peek and Poke CLI](docs/software/c-components/test/peek-poke-cli.md)
+      - [J1B HAL](docs/software/c-components/test/j1b-hal.md)
+      - [VS0 HAL](docs/software/c-components/test/vs0-hal.md)
   - Software Testing:
     - [The Software Test Bench](docs/software/test/test-bench.md)
     - Software Test Builds:
         - [Forth Core Test](docs/software/test/builds/forth-core.md)
   - [Debugging](docs/software/debugging.md)
 - Build System:
-    - [The Directory Structure](docs/build_sys/dir_struct.md)
+    - [The Directory Structure](docs/build-sys/dir-struct.md)
     - The Gateware Build System:
-      - [The Gateware Build Structure](docs/build_sys/gateware/build_struct.md)
-      - [Building the Gateware](docs/build_sys/gateware/building.md)
+      - [The Gateware Build Structure](docs/build-sys/gateware/build-struct.md)
+      - [Building the Gateware](docs/build-sys/gateware/building.md)
     - The Software Build System:
-      - [The Software Build Structure](docs/build_sys/software/build_struct.md)
-      - [Building the Software](docs/build_sys/software/building.md)
+      - [The Software Build Structure](docs/build-sys/software/build-struct.md)
+      - [Building the Software](docs/build-sys/software/building.md)
 - Register and Memory Map:
-    - [Reset](docs/registers/generated/reset_regs.md)
-    - [UART](docs/registers/generated/uart_regs.md)
-    - [GPIO](docs/registers/generated/gpio_regs.md)
-    - [MTIMER](docs/registers/generated/mtimer_regs.md)
-    - [I2C Master](docs/registers/generated/i2c_master_regs.md)
-    - [USB HID](docs/registers/generated/usb_hid_regs.md)
-    - [SDSPI](docs/registers/generated/sdspi_regs.md)
-    - [SPI Flash](docs/registers/generated/spiflash_regs.md)
-    - [VERA](docs/registers/generated/vera_regs.md)
-    - [YM2149](docs/registers/generated/ym2149_regs.md)
-    - [DFX Controller Control Register](docs/registers/generated/dfx_controller_ctrl_reg.md)
-    - [DFX Controller Other Registers](docs/registers/generated/dfx_controller_other_regs.md)
-    - [LiteDRAM Registers](docs/registers/litedram_generated/markdown/index.md)
-    - [Memory Map](docs/registers/memory_map.md)
+    - [Reset](docs/registers/generated/reset-regs.md)
+    - [UART](docs/registers/generated/uart-regs.md)
+    - [GPIO](docs/registers/generated/gpio-regs.md)
+    - [MTIMER](docs/registers/generated/mtimer-regs.md)
+    - [I2C Master](docs/registers/generated/i2c-master-regs.md)
+    - [USB HID](docs/registers/generated/usb-hid-regs.md)
+    - [SDSPI](docs/registers/generated/sdspi-regs.md)
+    - [SPI Flash](docs/registers/generated/spiflash-regs.md)
+    - [VERA](docs/registers/generated/vera-regs.md)
+    - [YM2149](docs/registers/generated/ym2149-regs.md)
+    - [DFX Controller Control Register](docs/registers/generated/dfx-controller-ctrl-reg.md)
+    - [DFX Controller Other Registers](docs/registers/generated/dfx-controller-other-regs.md)
+    - [LiteDRAM Registers](docs/registers/litedram-generated/markdown/index.md)
+    - [Memory Map](docs/registers/memory-map.md)
 - Misc.:
   - [Git Workflow](docs/misc/git-workflow.md)
   - [Blog](docs/misc/blog.md)

@@ -4,7 +4,7 @@
 
 Hook up [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start) to PMOD ports JB and JC. Connect a VGA display.
 
-![VGA PMOD Setup.](../assets/vera_fpga_test_setup.jpg)
+![VGA PMOD Setup.](../assets/vera-fpga-test-setup.jpg)
 
 *VGA PMOD Setup.*
 
@@ -12,7 +12,7 @@ Hook up [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start)
 
 Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd-card-slot/) to port `JD` and insert an SD card into the card reader.
 
-![MicroSD PMOD Setup.](../assets/microsd_pmod.jpg)
+![MicroSD PMOD Setup.](../assets/microsd-pmod.jpg)
 
 *MicroSD PMOD Setup.*
 
@@ -29,7 +29,7 @@ To make space for the keyboard and mouse, I moved the audio PMOD to the ChipKit 
 | 5 `GND` | ChipKit Header GND |
 | 6 `VCC` | ChipKit Header 3V3 |
 
-![Audio PMOD Setup.](../assets/audio_pmod.jpg)
+![Audio PMOD Setup.](../assets/audio-pmod.jpg)
 
 *Audio PMOD Setup.*
 
@@ -37,7 +37,7 @@ To make space for the keyboard and mouse, I moved the audio PMOD to the ChipKit 
 
 I'm using the following PMOD from Machdyne:
 
-![USB Host Dual Socket PMOD.](../assets/usb_host_dual_socket_pmod.jpg)
+![USB Host Dual Socket PMOD.](../assets/usb-host-dual-socket-pmod.jpg)
 
 *The Machdyne USB host dual socket PMOD.*
 
@@ -45,7 +45,7 @@ I'm using the following PMOD from Machdyne:
 
 Hook up the PMOD to port `JA` and connect a keyboard and/or a mouse.
 
-![USB PMOD Setup](../assets/usb_pmod_setup.jpg)
+![USB PMOD Setup](../assets/usb-pmod-setup.jpg)
 
 *Arty A7 Setup with USB PMOD attached to port JA.*
 
@@ -64,7 +64,7 @@ There aren't enough PMOD ports on the Arty A7 to accommodate all BoxLambda perip
 | 3 `GND` | ChipKit Header GND |
 | 4 `VCC` | ChipKit Header IOREF |
 
-![RTCC PMOD Setup.](../assets/rtcc_pmod.jpg)
+![RTCC PMOD Setup.](../assets/rtcc-pmod.jpg)
 
 *RTCC PMOD Setup.*
 

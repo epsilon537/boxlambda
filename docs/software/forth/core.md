@@ -40,7 +40,7 @@ All Forth *Core* Words are defined as RISC-V32 assembly code. Forth Core Words a
 
 Any Word created *after* initialization time is a *non-core* Word.
 
-![Dictionary Search Order](../../assets/dictionary_search_order.png)
+![Dictionary Search Order](../../assets/dictionary-search-order.png)
 
 *Dictionary Search Order.*
 
@@ -104,7 +104,7 @@ ckomma: # Write 8 bits in Dictionary
 
 The top-level source file is [mecrisp-quintus-boxlambda.s](../../../sw/components/forth/core/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
 
-![Forth Core Org](../../assets/forth-core_org.png)
+![Forth Core Org](../../assets/forth-core-org.png)
 
 *Forth Core Organization.*
 

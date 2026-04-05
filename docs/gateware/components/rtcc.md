@@ -8,7 +8,7 @@ The MCP79410 datasheet: [http://ww1.microchip.com/downloads/en/DeviceDoc/22266d.
 
 The MCP79410 uses a low-cost 32.768 kHz crystal. Typically, these crystals are not very accurate. Over time, the clock will drift relative to the wall clock. However, Digilent's RTCC PMOD uses a *CMR200T_E* crystal with a reasonably good frequency tolerance of ±10ppm.
 
-![CMT200T E](../../assets/CMR200T_E.png)
+![CMT200T E](../../assets/CMR200T-E.png)
 
 *CMR200T E crystal.*
 

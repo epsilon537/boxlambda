@@ -30,7 +30,7 @@ VERA Wishbone's feature summary:
 
 ## Overview
 
-[![The VERA Wishbone Block Diagram.](../../assets/vera_wishbone.drawio.png)](../../assets/vera_wishbone.drawio.png)
+[![The VERA Wishbone Block Diagram.](../../assets/vera-wishbone.drawio.png)](../../assets/vera-wishbone.drawio.png)
 
 *The VERA Wishbone Block Diagram.*
 
@@ -51,7 +51,7 @@ The video RAM (VRAM) is a dual-port RAM instance of four byte-wide columns (matc
 
 DPRAM port 0 is exclusively for the CPU. DPRAM port 1 is shared by the two Line Renderers and the Sprite Renderer. The `vram_if` module arbitrates access to port 1 using a time slot scheduler. There are three equal time slot *beats*, each one clock cycle wide. Each port is assigned one slot during which it can access VRAM. The duration of a timeslot is one clock cycle.
 
-![Time Slot Scheduled VRAM Access.](../../assets/vram_if_timeslot_scheduling.drawio.png)
+![Time Slot Scheduled VRAM Access.](../../assets/vram-if-timeslot-scheduling.drawio.png)
 
 *Time Slot Scheduled VRAM Access.*
 
@@ -62,16 +62,16 @@ mechanism. When requested by software (wishbone register), the RGB pixel data of
 the scanline corresponding to the IRQ line number is recorded into a 640x16
 memory accessible by software.
 
-![VERA VGA Line Capture.](../../assets/vga_line_capture.png)
+![VERA VGA Line Capture.](../../assets/vga-line-capture.png)
 
 *VERA VGA Line Capture.*
 
 To set up a VGA line capture, software configures the VGA line to capture in the
 Line IRQ register, then sets the `CAPTURE_EN` bit is the
-[CTRL_STATUS](../../registers/generated/vera_regs.md#ctrl_status) register.
+[CTRL_STATUS](../../registers/generated/vera-regs.md#ctrl_status) register.
 Once the capture has been completed, VERA resets the `CAPTURE_EN` bit. Software
 can now read the captured data in the [VGA Line Capture
-RAM](../../registers/memory_map.md#vera-vga-line-capture-ram).
+RAM](../../registers/memory-map.md#vera-vga-line-capture-ram).
 
 ## The Composer
 
@@ -96,7 +96,7 @@ Steps 1 and 2 are always sequential, but as much as possible, they overlap with 
 Below you see the waveform of the Layer Renderer operating in 8bpp Tile Mode, 8 pixel wide tiles. One full FSM (Finite State Machine) cycle is shown, i.e., the pattern between the two vertical cursors is repeating.
 You can see the VRAM reads (`buf_strobe` and `bus_ack`) happening in parallel with the Line Buffer writes (`lb_wridx_r`). You can also see how the Renderer FSM cycles through its states (`fetch map`, `wait fetch map`, `fetch tile`, `wait fetch tile`, `render`, etc.).
 
-![Layer Rendering Waveform.](../../assets/layer_render_l0_only_tile_mode_8bpp_tile_w_8.jpg)
+![Layer Rendering Waveform.](../../assets/layer-render-l0-only-tile-mode-8bpp-tile-w-8.jpg)
 
 *Layer Rendering Waveform.*
 
@@ -129,7 +129,7 @@ The sequence of scanning the sprite attribute RAM, retrieving sprite pixel data,
 
 In the waveform below, you can see two sprites getting rendered out on a scanline: sprite ID 4 at position 192, and sprite ID 5 at position 256. The two sprites have 8bpp color depth and are 8 pixels wide. You can see that, for each sprite, two VRAM read operations are performed (`bus_strobe` and `bus_ack` signals), and 8 entries are accessed in the Sprite Line Buffer (`linebuf_idx_r`).
 
-![Sprite Rendering Waveform.](../../assets/spr_render_8bpp_8w.jpg)
+![Sprite Rendering Waveform.](../../assets/spr-render-8bpp-8w.jpg)
 
 *Sprite Rendering Waveform.*
 
@@ -141,11 +141,11 @@ The Sprite Attribute RAM consists of two banks of 64 sprite IDs. A bit in the `V
 
 Sprite Banking may help with sprite multiplexing or animation: While one sprite bank is active, software can prepare the inactive bank's entries and switch over at the right moment, triggered by a `line_irq`, for instance.
 
-![Double Buffering with Sprite Banks.](../../assets/sprite_banking_double_buffering.drawio.png)
+![Double Buffering with Sprite Banks.](../../assets/sprite-banking-double-buffering.drawio.png)
 
 *Double Buffering with Sprite Banks Example.*
 
-![Sprite Multiplexing with Sprite Banks.](../../assets/sprite_banking_muxing.drawio.png)
+![Sprite Multiplexing with Sprite Banks.](../../assets/sprite-banking-muxing.drawio.png)
 
 *Sprite Multiplexing with Sprite Banks Example.*
 
@@ -157,7 +157,7 @@ The Sprites-per-Scanline limit is inversely proportional to the sprite width. Th
 
 The original Sprite Renderer code kept track of rendering time to decide when to abort rendering, to avoid exceeding its time budget. VERA Wishbone replaces that code with logic that keeps track of the number of sprite pixels rendered. When 512 sprite pixels are rendered, further sprite rendering is aborted for the given scanline.
 
-![512 Sprite Pixel Limit Examples.](../../assets/sprite_pixel_limit_examples.drawio.png)
+![512 Sprite Pixel Limit Examples.](../../assets/sprite-pixel-limit-examples.drawio.png)
 
 *Examples of the 512 Sprite Pixel Limit.*
 

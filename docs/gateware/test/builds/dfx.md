@@ -5,7 +5,7 @@ J1B is a 32-bit, minimal instruction set stack processor. It's one of the suppor
 To demonstrate DFX support in BoxLambda, I created a test program called `dfx_test` that loads a J1B core into the SoC's *Virtual Socket 0* and then boots the SwapForth run-time firmware image on this core, presenting the user with a Forth REPL.
 
 
-![The DFX Test Program](../../../assets/dfx_test_program.png)
+![The DFX Test Program](../../../assets/dfx-test-program.png)
 
 *The DFX Test Program.*
 
@@ -61,7 +61,7 @@ The DFX Test Program is not an automatic test case like the previous BoxLambda t
          * ymodem_tx_buf
                 ymodem_tx_buf <filename> <hex address> <size_in_bytes>: Ymodem transmit given memory buffer with given filename
 
-![dfx test sw](../../../assets/dfx_test_sw.png)
+![dfx test sw](../../../assets/dfx-test-sw.png)
 
 *Structure of the dfx_test software program.*
 

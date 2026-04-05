@@ -22,7 +22,7 @@ are not all in the off position, the bootloader will start the application by
 jumping to its entry point at address `0x20000008` in EMEM.
 6. The application start-up code creates code/data/BSS sections in IMEM and/or EMEM as it sees fit.
 
-![The Bootloader](../assets/boxlambda_sw_env_boot.png)
+![The Bootloader](../assets/boxlambda-sw-env-boot.png)
 
 *The Boot Sequence.*
 

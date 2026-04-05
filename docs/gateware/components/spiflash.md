@@ -6,7 +6,7 @@
 - **SPI Flash Core Top-Level**:
     [boxlambda/gw/components/spiflash/rtl/spiflash.v](../../../gw/components/spiflash/rtl/spiflash.v)
 
-![SPI Flash On On BoxLambda](../../assets/spiflash_on_boxlambda.png)
+![SPI Flash On On BoxLambda](../../assets/spiflash-on-boxlambda.png)
 
 *SPI Flash on BoxLambda.*
 
@@ -14,7 +14,7 @@
 
 ### Quad-SPI Flash vs. Single-SPI Flash
 
-![Arty A7 SPI Flash](../../assets/arty_spiflash.png)
+![Arty A7 SPI Flash](../../assets/arty-spiflash.png)
 
 *Arty A7 SPI Flash (source: Arty A7 Reference Manual)*.
 
@@ -23,7 +23,7 @@ The Arty A7 has a quad-SPI flash device, so using a quad-SPI flash core would ma
 - A single-SPI flash core is less complex than a quad-SPI flash core. Single-SPI flash is also slower than quad-SPI flash, but I don't have a specific performance requirement for flash access. I do have a simplicity requirement, so I choose to trade performance for simplicity.
 - The flash device used on the Arty A7 depends on the PCB revision. Some revisions use Micron, others use Spansion. Quad-SPI flash access is not standardized across SPI flash devices, however. E.g., the command sequence needed to get the device into quad-SPI mode is device-dependent. The latency between a read command and the resulting data is device-dependent as well in quad-SPI mode. In single-SPI mode, these devices behave the same (at least when it comes to the limited feature set I'll be using in BoxLambda).
 
-![Arty A7 PCB revisions and their flash devices](../../assets/arty_flash_devices.jpg)
+![Arty A7 PCB revisions and their flash devices](../../assets/arty-flash-devices.jpg)
 
 *Arty A7 PCB revisions and their flash devices.*
 
@@ -55,7 +55,7 @@ Dan Gisselquist wrote this article describing the design of the single-SPI core:
 
 [https://zipcpu.com/blog/2018/08/16/spiflash.html](https://zipcpu.com/blog/2018/08/16/spiflash.html)
 
-![SPI Flash Core Diagram](../../assets/spiflash_core_diagram.png)
+![SPI Flash Core Diagram](../../assets/spiflash-core-diagram.png)
 
 *The simplified SpiXpress SPI Flash Core Design.*
 
@@ -67,7 +67,7 @@ BoxLambda's SPI Flash core uses the ZipCPU spixpress core as a starting point. I
 - I added a clock divider parameter for `SCK`. I'm using a clock divider value of two in the BoxLambda SoC.
 - The core shifts out the serial output data at the SCK falling edge and shifts in the serial input data at the `SCK` rising edge. I modified the `Flashsim` co-simulator module to match this behavior. This is the standard SPI timing design.
 
-![SPI Timing Design](../../assets/spi_rising_falling_edge.png)
+![SPI Timing Design](../../assets/spi-rising-falling-edge.png)
 
 - I removed the pipeline logic.
 - BoxLambda is a little-endian platform. When reading 32-bit words from Flash, the input is shifted in in little-endian fashion.
@@ -82,7 +82,7 @@ The BoxLambda version of the Spiflash core and Flashsim co-simulator can be foun
 
 The SPI Flash core has a 32-bit Wishbone read interface. Through this interface, the user can request the core to read 32-bit words at a time from Flash memory. At the SPI level, the transaction looks like this:
 
-![Word read SPI Flash Transaction](../../assets/spiflash_word_read.png)
+![Word read SPI Flash Transaction](../../assets/spiflash-word-read.png)
 
 *Reading a 32-bit word from SPI Flash. 8 (C)ommand bits, followed by 24 (A)ddress bits, followed by 32 (D)ata bits.*
 
@@ -150,7 +150,7 @@ For MOSI timing, I'm taking into account the following delays:
 - Estimated trace propagation delay assuming a signal speed of 15cm/ns: 0.5ns
 - SPI Flash setup and hold time requirement: 2ns / 3ns
 
-![SPI Flash MOSI Timing](../../assets/spi_flash_mosi_timing.png)
+![SPI Flash MOSI Timing](../../assets/spi-flash-mosi-timing.png)
 
 *SPI Flash MOSI Timing.*
 
@@ -164,7 +164,7 @@ For MISO timing, I'm taking into account the following delays:
 - SPI flash Clock Low to Output valid delay: 8ns
 - The FPGA IOB pad input delay: 1.5ns
 
-![SPI Flash MISO Timing](../../assets/spi_flash_miso_timing.png)
+![SPI Flash MISO Timing](../../assets/spi-flash-miso-timing.png)
 
 *SPI Flash MISO Timing.*
 
@@ -178,5 +178,5 @@ The SPI bus clock frequency is 25MHz and is derived from the System Clock Domain
 
 ## SpiFlash Memory Layout
 
-See [BoxLambda Memory Map](../../registers/memory_map.md#spi-flash)
+See [BoxLambda Memory Map](../../registers/memory-map.md#spi-flash)
 

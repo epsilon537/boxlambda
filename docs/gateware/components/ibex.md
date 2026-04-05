@@ -67,11 +67,11 @@ The `boot_addr` port name of `wb_ibex_core` is somewhat misleading. `Boot_addr` 
 
 Note that there's no Instruction or Data Cache. Instruction or data accesses go directly to IMEM or DDR memory.
 
-For information on the compiler and compile flags used to generate code for this processor configuration, see section [The Cross-Compiler](../../build_sys/software/building.md#the-cross-compiler).
+For information on the compiler and compile flags used to generate code for this processor configuration, see section [The Cross-Compiler](../../build-sys/software/building.md#the-cross-compiler).
 
 ## The Single Instruction Prefetcher
 
-![The Single Instruction Prefetch Buffer in the Ibex Core.](../../assets/ibex_single_prefetch_buffer.png)
+![The Single Instruction Prefetch Buffer in the Ibex Core.](../../assets/ibex-single-prefetch-buffer.png)
 
 *The Single Instruction Prefetch Buffer in the Ibex Core.*
 
@@ -79,7 +79,7 @@ An **Instruction Prefetcher** is a mechanism that anticipates future memory acce
 
 The module is implemented as an FSM:
 
-[![The Single Instruction Prefetcher FSM.](../../assets/single_prefetch_buffer_fsm.png)](../../assets/single_prefetch_buffer_fsm.png)
+[![The Single Instruction Prefetcher FSM.](../../assets/single-prefetch-buffer-fsm.png)](../../assets/single-prefetch-buffer-fsm.png)
 
 *The Single Instruction Prefetch FSM.*
 
@@ -100,7 +100,7 @@ The single instruction prefetcher supports only uncompressed instructions. That'
 
 To reduce the ISR prologue and epilogue overhead, the CPU's register file includes an *interrupt shadow register bank*:
 
-![The Ibex Register File including an Interrupt Shadow Register Bank](../../assets/irq_shadow_registers.png)
+![The Ibex Register File including an Interrupt Shadow Register Bank](../../assets/irq-shadow-registers.png)
 
 The CPU register file has two register banks:
 
@@ -116,7 +116,7 @@ With this design, the `irq_mem` bank is up-to-date when the CPU enters IRQ mode.
 
 **Caveat**: `irq_mode` is just a 1-bit signal. It can't track nested interrupts. This limitation is acceptable for BoxLambda.
 
-To benefit from the interrupt shadow register optimization, ISRs written in C should be declared with the `naked` attribute. See [the naked attribute](../../software/c_components/test/irqs.md#the-naked-attribute) section for details.
+To benefit from the interrupt shadow register optimization, ISRs written in C should be declared with the `naked` attribute. See [the naked attribute](../../software/c-components/test/irqs.md#the-naked-attribute) section for details.
 
 ### Core2WB
 
@@ -131,7 +131,7 @@ There are two such interfaces. One for data, one for instructions.
 [Core2wb](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/core2wb.sv) effectively has two states: Idle and Transaction Ongoing. In the Idle state, when Ibex signals a transaction request (`core.req`), a single access pipelined Wishbone transaction is generated, and `core2wb` goes to the Transaction Ongoing state. When a WB ACK or ERR response is received, `core2wb` goes back to Idle. While in the Transaction Ongoing state, the memory interface grant (`gnt`) signal is held low, so further transaction requests are stalled until `core2wb` is idle again.
 Currently, multiple outstanding transactions are not supported.
 
-![Core2WB State Diagram.](../../assets/core2wb_fsm_new.png)
+![Core2WB State Diagram.](../../assets/core2wb-fsm-new.png)
 
 *Core2WB State Diagram.*
 

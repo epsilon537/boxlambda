@@ -1,7 +1,7 @@
 # OS Architecture
 
 [![BoxLambda OS
-Architecture.](../../assets/BoxLambda_OS_Architecture.png)](../../assets/BoxLambda_OS_Architecture.png)
+Architecture.](../../assets/BoxLambda-OS-Architecture.png)](../../assets/BoxLambda-OS-Architecture.png)
 
 *BoxLambda OS Architecture Block Diagram.*
 
@@ -65,7 +65,7 @@ Instead of a line-oriented prompt, I would like to provide a REPL that allows
 you to move freely all over the screen, as is the case on the Commodore 64, for
 instance. The **Canvas REPL** can perform double duty as a text editor.
 
-[![The Canvas REPL.](../../assets/canvas_repl.png)](../../assets/canvas_repl.png)
+[![The Canvas REPL.](../../assets/canvas-repl.png)](../../assets/canvas-repl.png)
 
 *The Canvas REPL.*
 

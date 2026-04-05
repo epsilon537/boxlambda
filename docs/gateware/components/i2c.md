@@ -46,7 +46,7 @@ A quick note on terminology:
 
 ## Theory of Operation
 
-![WBI2C Master Core](../../assets/wbi2c_master.png)
+![WBI2C Master Core](../../assets/wbi2c-master.png)
 
 *The WBI2C Master Core.*
 
@@ -114,7 +114,7 @@ The [I2C Test Application](../test/builds/i2c.md) implements this example.
 
 ## Working with I2C slaves that don't follow the Slave Register Address Frame Format
 
-Although the WBI2C core by design assumes that an I2C data frame starts with an 8-bit slave register address, this core *can* work with I2C slaves that don't follow this format. See [here](../../software/c_components/i2c.md#slave-register-protocol-not-assumed) for more info.
+Although the WBI2C core by design assumes that an I2C data frame starts with an 8-bit slave register address, this core *can* work with I2C slaves that don't follow this format. See [here](../../software/c-components/i2c.md#slave-register-protocol-not-assumed) for more info.
 
 ## Where are the Output Enables?
 
@@ -143,7 +143,7 @@ module wbi2cmaster #(
 
 How do you map a pair of unidirectional ports to a bidirectional inout port at the FPGA's top-level without an output enable signal to control the direction? The answer lies in the clever nature of I2C's physical layer. The SCL and SDA lines have external pull-ups:
 
-![I2C bus with pull-up resistors](../../assets/i2c_bus_w_pullups.png)
+![I2C bus with pull-up resistors](../../assets/i2c-bus-w-pullups.png)
 
 *I2C bus with pull-up resistors (Source: projectfpga.com)*
 
@@ -183,7 +183,7 @@ module boxlambda_top (
 
 You might expect that the SCL and SDA pull-up resistors connect directly to the 3V3 power rail. On the Arty A7, that's not the case. The SCL and SDA pull-up resistors connect to an **SCL Pull-Up Pin** (`SCL PUP`) and **SDA Pull-Up Pin** (`SDA PUP`) respectively. For these pull-ups to work, the pull-up pins have to be statically driven high. That's what the last two lines in the above code snippet are for.
 
-![SCL and SDA Pull-Up Pins on Arty A7 Schematic](../../assets/scl_sda_pup_schematic.png)
+![SCL and SDA Pull-Up Pins on Arty A7 Schematic](../../assets/scl-sda-pup-schematic.png)
 
 *SCL and SDA Pull-Up Pins (PUP) on Arty A7 Schematic Diagram.*
 

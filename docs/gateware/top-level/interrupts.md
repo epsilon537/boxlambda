@@ -6,7 +6,7 @@ A core, such as a UART, may raise an interrupt request (IRQ) when it detects an 
 
 - **Condition-Based Interrupts**: A core that implements condition-based interrupts will assert its interrupt request (IRQ) line when a certain condition is met, as long as that condition persists. The CPU's interrupt handler routine must resolve the condition generating the interrupt before returning from the interrupt. For example, a UART core that implements condition-based interrupts will assert its IRQ line when the RX FIFO is not empty. The IRQ line remains asserted as long as the RX FIFO is not empty. This means that the interrupt handler must either read all the data from the RX FIFO or disable the corresponding UART interrupt before returning. If the interrupt handler returns before emptying the FIFO or disabling the interrupt source, the CPU would be immediately re-interrupted.
 
-![Condition-Based Interrupts](../../assets/condition_based_irq.png)
+![Condition-Based Interrupts](../../assets/condition-based-irq.png)
 
 *Condition-Based Interrupt Example.*
 
@@ -14,7 +14,7 @@ Note that in the condition-based interrupt example, there is no explicit interru
 
 - **Event-Based Interrupts**: A core implementing event-based interrupts will assert its IRQ line when a specific event occurs. The IRQ line remains asserted until the CPU clears/acknowledges the event by writing to an interrupt register inside the core. For example, a UART core that implements event-based interrupts will assert its IRQ line when the RX FIFO transitions from empty to non-empty. The IRQ line remains asserted until the CPU writes a 1 into the `Rx_Data_Avl` bit position of the UART core's Interrupt Status Register.
 
-![Event-Based Interrupts](../../assets/event_based_irq.png)
+![Event-Based Interrupts](../../assets/event-based-irq.png)
 
 *Event-Based Interrupt Example.*
 
@@ -50,13 +50,13 @@ However, when I modified the UART core to generate event-based interrupts, I ess
 
 Here’s the original UART core:
 
-![UART Level Sensitive Interrupts](../../assets/uart_level_sensitive_irq_orig.png)
+![UART Level Sensitive Interrupts](../../assets/uart-level-sensitive-irq-orig.png)
 
 *The UART Core before modification: Level Sensitivity from source to CPU.*
 
 Here’s the UART core after modification:
 
-![UART Edge Triggered Interrupts](../../assets/uart_edge_triggered_irqs_new.png)
+![UART Edge Triggered Interrupts](../../assets/uart-edge-triggered-irqs-new.png)
 
 *The UART Core after modification: Level-Sensitive CPU with a 'Mini' Edge-Triggered Interrupt Controller inside the UART Core.*
 
@@ -68,7 +68,7 @@ From this perspective, the overall interrupt architecture of the BoxLambda SoC c
 
 ## Ibex RISC-V Interrupt Assignments
 
-![BoxLambda Interrupts](../../assets/irq_diagram.png)
+![BoxLambda Interrupts](../../assets/irq-diagram.png)
 
 *BoxLambda Interrupt Diagram.*
 
