@@ -68,11 +68,17 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
 
 - Sound and graphics support retro-style 2D demos and gameplay.
 
-## Status (December 2025)
+## Status (April 2026)
 
 - **Infrastructure** (build system, etc.): Complete.
 - **Gateware**: Complete and meeting requirements.
-- **Software**: Early stage development. OS architecture defined. BoxLambda C Core partially completed. Mecrisp Forth Core partially completed. Mecrisp Forth Environment not started yet.
+- **Software**: Development ongoing.
+  - OS architecture: defined.
+  - BoxLambda C Core: partially completed.
+  - Mecrisp Forth Core: completed.
+  - Mecrisp Forth Environment: partially completed.
+  - Forth<->C FFI: completed.
+  - Filesystem layer: completed.
 
 ## Links
 
@@ -137,11 +143,12 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
         - [Invalid Address Test](docs/gateware/test/builds/invalid-addr.md)
         - [Ibex Performance Test](docs/gateware/test/builds/ibex-perf.md)
 - Software:
-  - [OS Requirements](docs/software/os/requirements.md)
-  - [OS Architecture](docs/software/os/architecture.md)
-  - [OS Build](docs/software/os/build.md)
-  - [OS Memory Layout and Boot Sequence](docs/software/os/mem-layout-boot-seq.md)
-  - [OS User Interface](docs/software/os/ui.md)
+  - OS:
+      - [Requirements](docs/software/os/requirements.md)
+      - [Architecture](docs/software/os/architecture.md)
+      - [Build](docs/software/os/build.md)
+      - [Memory Layout and Boot Sequence](docs/software/os/mem-layout-boot-seq.md)
+      - [User Interface](docs/software/os/ui.md)
   - Forth:
     - [The Mecrisp Forth Core](docs/software/forth/core.md)
     - [The Forth-C FFI](docs/software/forth/c-ffi.md)
@@ -189,6 +196,8 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
     - The Software Build System:
       - [The Software Build Structure](docs/build-sys/software/build-struct.md)
       - [Building the Software](docs/build-sys/software/building.md)
+- Tools:
+    - [Target.py](docs/tools/target_py.md)
 - Register and Memory Map:
     - [Reset](docs/registers/generated/reset-regs.md)
     - [UART](docs/registers/generated/uart-regs.md)

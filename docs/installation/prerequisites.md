@@ -60,6 +60,22 @@ sudo apt install gdb-multiarch
 
 On Arch Linux, the regular `gdb` package includes multiarch support, so you should just install `gdb` instead of `gdb-multiarch`.
 
+## Mtools
+
+Utilities such as `mcopy` to access FAT disks without mounting them. Used to create RAM disks for BoxLambda.
+
+```
+sudo apt install mtools
+```
+
+## Dosfstools
+
+Utilities such as `mkfs.fat` to create FAT disk images. Used to create RAM disks for BoxLambda.
+
+```
+sudo apt install dosfstools
+```
+
 ## Additional Prerequisites for Building and Running the Verilator Test Cases
 
 ### SDL2
@@ -110,7 +126,7 @@ The following tools are automatically installed (if not already installed) by so
 
 - [OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD, Python)](https://github.com/YosysHQ/oss-cad-suite-build)
 - [Bender](https://github.com/pulp-platform/bender)
-- Python packages NumPy, SciPy, Matplotlib, Corsair, Pyte.
+- Python packages NumPy, SciPy, Matplotlib, Corsair, markdown-it-py, Sphinx, MarkupSafe.
 - [BoxLambda fork of Litex](https://github.com/epsilon537/litex)
 - **riscv32-boxlambda-elf**: RISCV32 GNU toolchain custom-built for BoxLambda.
 

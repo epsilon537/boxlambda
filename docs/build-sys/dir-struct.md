@@ -14,6 +14,8 @@
 │   │   └── <generated register map header files and documentation>
 │   └── generators/
 │       └── <register map code generator templates>
+├── docs/
+│   └── <documentation>
 ├── sub/
 │   └── <git submodules>
 ├── gw/

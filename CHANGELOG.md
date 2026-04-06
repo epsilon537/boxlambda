@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Introduced FATFS FFI for Forth: `sw/components/forth/core/fs_ffi.cpp`.
 - Redirection of Picolibc's stdio to Forth's `emit` and `key`.
 - Re-added picorv_dma gw and sw components and projects in the `archived/` subdirectories.
-- Software components `sw/common/` containing common utility definitions suc
+- Software components `sw/common/` containing common utility definitions such
   as IN, OUT, INOUT parameters and die(...) macro.
 - Add added `forth/fs/` (forth filesystem) directory tree containing the BoxLambda Forth
   codebase.

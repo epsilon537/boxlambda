@@ -1,27 +1,23 @@
 #Lint suggested waivers
 *.lint
-#Picolibc generated files
-sw/picolibc-build
-#vscode
-.vscode
 #litex stuff
-sub/liteeth
-sub/liteiclink
-sub/litejesd204b
-sub/litepcie
-sub/litesata
-sub/litescope
-sub/litesdcard
-sub/litespi
-sub/litex-boards
-sub/migen
-sub/pythondata*
-sub/valentyusb
+/sub/liteeth
+/sub/liteiclink
+/sub/litejesd204b
+/sub/litepcie
+/sub/litesata
+/sub/litescope
+/sub/litesdcard
+/sub/litespi
+/sub/litex-boards
+/sub/migen
+/sub/pythondata*
+/sub/valentyusb
 #Tools directory
-tools
+/tools
 #build trees
-build
-CMakeUserPresets.json
+/build
+/CMakeUserPresets.json
 #python derived files
 __pycache__
 
