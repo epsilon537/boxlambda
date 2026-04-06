@@ -15,7 +15,7 @@ include /forth/dict.fs
 
 \ This flag is set when building the boxkerntest target.
 [ifdef] FORTH_CORE_TEST
-true include-verbose !
+false include-verbose !
 include /test/testsuite.fs
 [then]
 

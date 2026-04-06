@@ -47,8 +47,10 @@ On `develop` branch:
 1. Update `CHANGELOG.md`.
 2. In `sim_a7_100` build tree, build all and run ctest.
 3. In `arty_a7_100` build tree, build all.
-4. Flash `boxlambda_base` gateware project build and bootloader.
-5. Run in boxlambda_os software project build directory the `boxkerntestfs` software test suite.
+4. Copy from `arty_a7_100` build tree to `binaries` directory: `boxlambda_base.bit`, `bootloader.bin`, `boxlambda_os.bin`.
+5. Flash `boxlambda_base` gateware project build and bootloader.
+6. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
+7. Run `markdown-link-check.sh`.
 
 On `master` branch:
 
@@ -58,7 +60,7 @@ On `master` branch:
 4. In `arty_a7_100` build tree, build all.
 4. Flash `boxlambda_base` gateware project build, `bootloader`, and `boxlambda_os`.
 6. Check bootloader version string.
-7. Run `forth_core_test.py` test suite.
+7. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
 8. Copy from `arty_a7_100` build tree to `binaries` directory: `boxlambda_base.bit`, `bootloader.bin`, `boxlambda_os.bin`.
 9. `git commit` the binaries.
 10. Update tag to include the new binaries: `git -f tag vX.Y.Z`.

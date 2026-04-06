@@ -185,8 +185,7 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
       - [VS0 HAL](docs/software/c-components/test/vs0-hal.md)
   - Software Testing:
     - [The Software Test Bench](docs/software/test/test-bench.md)
-    - Software Test Builds:
-        - [Forth Core Test](docs/software/test/builds/forth-core.md)
+    - [Forth Test Suite](docs/software/test/builds/forth-testsuite.md)
   - [Debugging](docs/software/debugging.md)
 - Build System:
     - [The Directory Structure](docs/build-sys/dir-struct.md)
