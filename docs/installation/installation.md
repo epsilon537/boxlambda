@@ -7,7 +7,8 @@ To install BoxLambda:
 3. [Get the repository](#getting-the-repository).
 4. [Set up the environment](#setting-up-the-environment).
 5. [Activate the environment](#activating-the-tools-environment).
-6. [Flash the bitstream, bootloader, and OS binaries](#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+6. [Prepare the SD card](#preparing-the-sd-card).
+7. [Flash the bitstream, bootloader, and OS binary](#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
 The first four steps should be executed once. Activating the environment is required every time you're working with BoxLambda.
 
@@ -74,70 +75,72 @@ If you have multiple BoxLambda workspaces, you only need to activate the tools e
 
 To deactivate the environment again, enter `deactivate`.
 
-### Installing the BoxLambda Base Bitstream, BootLoader, and OS
+## Preparing the SD card
 
-#### Flashing the Release Binaries
+Copy the contents of the `fs/` directory onto a FAT-formatted SD card. Insert the SD card into the
+[MicroSD PMOD](pmods.md#microsd-pmod).
+
+## Installing the BoxLambda Base Bitstream, BootLoader, and OS
+
+### Flashing the Release Binaries
 
 The BoxLambda repo contains a `binaries/` subdirectory with release binaries. To flash those to the target:
 
 Connect a terminal emulator to the Arty's USB serial port. **Settings: 1000000 8N1**.
 
-Set one of the board switches to *On*. It doesn't matter which one.
-
 From the repo root directory, navigate to the `binaries` subdirectory and flash the release bootloader image, the OS image, and the release bitstream image:
 
 ```
 cd binaries
-flash_sw.sh arty_a7_100t -b bootloader.bin
-flash_sw.sh arty_a7_100t boxlambda_os.bin
-flash_gw.sh arty_a7_100t boxlambda_base.bit
+target.py -flash_bit boxlambda_base.bit
+target.py -flash_boot bootloader.bin
+target.py -flash_app boxkern
+target.py -reset
 ```
 
-Note the `-b` flag when flashing the bootloader binary, indicating to the `flash_sw.sh` script to write to the flash memory region set aside for the bootloader.
-
-Once flashing is complete, the target will be reset. In the terminal, you should first see the bootloader image, then the OS image booting up:
+After complete the `target.py -reset` command, the target will be reset. In the terminal, you should first see the bootloader image, then the OS image booting up:
 
 ```
-BoxLambda bootloader
+sd0:/> BoxLambda bootloader
 --------------------
-Version: v0.3.0
+Version: picorv_dma_2_devel-367-g85b7bde-dirty
 Initializing SDRAM...
 Initializing SDRAM @0x20000000...
 Switching SDRAM to software control.
 Read leveling:
   m0, b00: |00000000000000000000000000000000| delays: -
-  m0, b01: |11111111111111111111111111111000| delays: 14+-14
-  m0, b02: |00000000000000000000000000000000| delays: -
-  m0, b03: |00000000000000000000000000000000| delays: -
-  m0, b04: |00000000000000000000000000000000| delays: -
-  m0, b05: |00000000000000000000000000000000| delays: -
-  m0, b06: |00000000000000000000000000000000| delays: -
-  m0, b07: |00000000000000000000000000000000| delays: -
-  best: m0, b01 delays: 14+-14
-  m1, b00: |00000000000000000000000000000000| delays: -
-  m1, b01: |11111111111111111111111111111100| delays: 14+-14
-  m1, b02: |00000000000000000000000000000000| delays: -
-  m1, b03: |00000000000000000000000000000000| delays: -
-  m1, b04: |00000000000000000000000000000000| delays: -
-  m1, b05: |00000000000000000000000000000000| delays: -
-  m1, b06: |00000000000000000000000000000000| delays: -
+  ...
   m1, b07: |00000000000000000000000000000000| delays: -
   best: m1, b01 delays: 14+-14
 Switching SDRAM to hardware control.
 Done.
-Done.
 Application image magic number check OK.
-Application image size: 77364 bytes
+Application image size: 148772 bytes
 Copying SW image from Flash to DDR...
 Done.
 Booting application image...
-Initializing Forth.
+Initializing Forth...
 
 Mecrisp-Quintus 1.1.1 for RISC-V RV32IM by Matthias Koch.
 BoxLambda port by Ruben Lysens/Epsilon537.
 Forth core init complete.
-Compiling Forth included_tools...
-Redefine forget. Redefine u.4. Redefine u.2.
+Mounting file system...
+CID: 534d5402:47323341:7d604971:3168018d
+sd0: mounted.
+Boot path sd0:forth found.
+No FatFS detected on ram:.
+Booting from volume sd0:.
+Loading forth/early.fs...
+Redirecting stdio to Forth...
+Initializing Forth Filesystem FFI...
+Parsing forth/boxkern-includes.fss...
+Loading forth/utils.fs...
+Redefine .".
+Loading forth/except.fs...
+...
+Loading forth/fs-redirect.fs...
+Loading forth/shell.fs...
+Redefine _cp-file-to-file.
 
      _
     ^-)
@@ -146,13 +149,25 @@ Redefine forget. Redefine u.4. Redefine u.2.
        |>         ) |>        |)
 ______/|________ (7 |` ______\|/_______a:f
 
+Ready.
+
+sd0:/>
 ```
 
 You're now in the Forth REPL and can start entering Forth statements.
 
-#### Building and Flashing from Source
+### Building and Loading from Source
 
-If you prefer, you can build the BoxLambda Base bitstream, the Bootloader and the OS software image from source. From the repo root directory:
+I'm continuously modifying and testing the code. To avoid having to update the SD card and flash the binaries each time, I added a
+mechanism that let's you:
+1. load the bitstream and OS binary onto the device (without flashing)
+2. load a RAM disk onto the device. At boot time, when the system detects the RAM disk, it will load the Forth modules from that RAM
+disk instead of the SD card.
+
+#### Building and Flashing Bootloader
+
+For the bootloader I currently don't have load target implemented (I use GDB when I want to load the bootloader). The following instructions
+show how to build and flash the bootloader:
 
 ```
 cd build/arty-a7-100/sw/projects/bootloader
@@ -160,23 +175,48 @@ make bootloader
 make bootloader_flash_sw
 ```
 
-Again from the repo root directory:
-
-```
-cd build/arty-a7-100/sw/projects/boxlambda_os
-make bootloader
-make bootloader_flash_sw
-```
-
-And once more from the repo root directory:
+#### Building and Flashing/Loading Boxlambda_base Bitstream
 
 ```
 cd build/arty-a7-100/gw/projects/boxlambda_base
 make boxlambda_base.bit
+```
+
+This step will take a few minutes to complete. Once done, you can choose to
+load the bitstream...:
+
+```
+make boxlambda_base_load
+```
+
+...or to flash it:
+
+```
 make boxlambda_base_flash_gw
 ```
 
-The `make boxlambda_base.bit` step will take a few minutes to complete. The other build steps should complete in a few seconds.
+#### Building and Flashing/Loading BoxLambda OS
 
-You should see the same output on the serial port terminal as shown in the previous section.
+```
+cd build/arty-a7-100/sw/projects/boxlambda_os
+make boxkern
+```
+
+To flash the OS binary:
+
+```
+make boxkern_flash_sw
+```
+
+To load the OS binary (instead of flashing):
+
+```
+make boxkern_load
+```
+
+To load the OS binary as well as the `fs/` target filesystem as a RAM disk:
+
+```
+make boxkernfs_load
+```
 

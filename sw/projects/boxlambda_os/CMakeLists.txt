@@ -2,8 +2,8 @@
 # BoxLambda Operating System (WIP)
 #
 
-# Put the contents of the forth/fs/ directory in an FAT image.
-set(FORTH_FS_DIR ${PROJECT_SOURCE_DIR}/sw/components/forth/fs)
+# Put the contents of the fs/ directory in an FAT image.
+set(FORTH_FS_DIR ${PROJECT_SOURCE_DIR}/fs)
 
 add_custom_target(boxfs_load
     WORKING_DIRECTORY
@@ -33,7 +33,7 @@ function(add_boxlambda_kernel TARGET)
 
     target_link_libraries(${TARGET}
         fatfs
-        forth_core
+        forth
         gpio
         bootstrap
     )

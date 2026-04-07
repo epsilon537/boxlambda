@@ -80,6 +80,10 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
   - Forth<->C FFI: completed.
   - Filesystem layer: completed.
 
+## Changelog
+
+- [Changelog](CHANGELOG.md)
+
 ## Links
 
 - **Source Code**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)

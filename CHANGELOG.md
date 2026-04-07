@@ -14,13 +14,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   ram disk images, debugger attachment.
 - Introduced FATFS media interface for RAM disks: `sw/components/fatfs/diskio_ram.cpp`.
 - Created two FATFS volumes on BoxLambda OS: the SD disk `sd0:`, and a RAM disk `ram:`.
-- Introduced FATFS FFI for Forth: `sw/components/forth/core/fs_ffi.cpp`.
+- Introduced FATFS FFI for Forth: `sw/components/forth/fs_ffi.cpp`.
 - Redirection of Picolibc's stdio to Forth's `emit` and `key`.
 - Re-added picorv_dma gw and sw components and projects in the `archived/` subdirectories.
 - Software components `sw/common/` containing common utility definitions such
   as IN, OUT, INOUT parameters and die(...) macro.
-- Add added `forth/fs/` (forth filesystem) directory tree containing the BoxLambda Forth
-  codebase.
+- Added `fs/` (filesystem) directory tree containing the target filesystem.
 - Added `forth_eval_file_or_die()` function to `forth.h/cpp`.
 - New Forth Features:
     - boxkern_include, a pre-include Word include mechanism.
@@ -53,6 +52,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Critical C-FFI stack setup bugfix in the `call-c` Word.
 - Avoid SDA (Small Data Access) optimization when referencing linker generated variables
   (linker generated variables are ABS symbol and shouldn't be accessed GP-relative).
+- Fixed numerous broken links in the documentation and the blog.
 
 ### Changed
 
@@ -61,7 +61,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   use cases presented by target.py.
 - Enabled FATFS LF-CRLF conversion in FATFS, support for filename length of up to 32 characters,
   RTC support (not yet hooked up to RTC PMOD, however), f_expand.
-- Renamed software component `forth_core` to `forth/core`.
+- Renamed software component `forth_core` to `forth`.
 - Renamed Forth core Word `forget` to `forgetall`.
 - Renamed `forth_load_buf()` to `forth_eval_buf()` (`forth.h`).
 - Renamed `link_ddr_to_imem_boot.ld` to `link_ddr_boot.ld`.
@@ -69,7 +69,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   loading application image.
 - Increased JTAG clock speed to 25MHz.
 - Moved test gateware and software components and directories to a `test/` subdirectory.
-- Moved documentation from read-the-docs.org to `docs/` and made all internal references relative.
+- Moved documentation from [read-the-docs.org](read-the-docs.org) to `docs/` and made all internal references relative.
 - Changed litedram register documentation generation from html to markdown.
 
 ### Removed
