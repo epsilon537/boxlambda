@@ -69,7 +69,7 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![psg0_cha_tone_period_fine](md-img/psg0-cha-tone-period-fine.svg)
+![psg0_cha_tone_period_fine](md_img/psg0_cha_tone_period_fine.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -86,7 +86,7 @@ Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![psg0_cha_tone_period_coarse](md-img/psg0-cha-tone-period-coarse.svg)
+![psg0_cha_tone_period_coarse](md_img/psg0_cha_tone_period_coarse.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -103,7 +103,7 @@ Address offset: 0x00000008
 
 Reset value: 0x00000000
 
-![psg0_chb_tone_period_fine](md-img/psg0-chb-tone-period-fine.svg)
+![psg0_chb_tone_period_fine](md_img/psg0_chb_tone_period_fine.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -120,7 +120,7 @@ Address offset: 0x0000000c
 
 Reset value: 0x00000000
 
-![psg0_chb_tone_period_coarse](md-img/psg0-chb-tone-period-coarse.svg)
+![psg0_chb_tone_period_coarse](md_img/psg0_chb_tone_period_coarse.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -137,7 +137,7 @@ Address offset: 0x00000010
 
 Reset value: 0x00000000
 
-![psg0_chc_tone_period_fine](md-img/psg0-chc-tone-period-fine.svg)
+![psg0_chc_tone_period_fine](md_img/psg0_chc_tone_period_fine.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -154,7 +154,7 @@ Address offset: 0x00000014
 
 Reset value: 0x00000000
 
-![psg0_chc_tone_period_coarse](md-img/psg0-chc-tone-period-coarse.svg)
+![psg0_chc_tone_period_coarse](md_img/psg0_chc_tone_period_coarse.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -171,7 +171,7 @@ Address offset: 0x00000018
 
 Reset value: 0x00000000
 
-![psg0_noise_period](md-img/psg0-noise-period.svg)
+![psg0_noise_period](md_img/psg0_noise_period.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -188,7 +188,7 @@ Address offset: 0x0000001c
 
 Reset value: 0x00000000
 
-![psg0_disable](md-img/psg0-disable.svg)
+![psg0_disable](md_img/psg0_disable.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -210,7 +210,7 @@ Address offset: 0x00000020
 
 Reset value: 0x00000000
 
-![psg0_cha_lvl](md-img/psg0-cha-lvl.svg)
+![psg0_cha_lvl](md_img/psg0_cha_lvl.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -228,7 +228,7 @@ Address offset: 0x00000024
 
 Reset value: 0x00000000
 
-![psg0_chb_lvl](md-img/psg0-chb-lvl.svg)
+![psg0_chb_lvl](md_img/psg0_chb_lvl.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -246,7 +246,7 @@ Address offset: 0x00000028
 
 Reset value: 0x00000000
 
-![psg0_chc_lvl](md-img/psg0-chc-lvl.svg)
+![psg0_chc_lvl](md_img/psg0_chc_lvl.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -264,7 +264,7 @@ Address offset: 0x0000002c
 
 Reset value: 0x00000000
 
-![psg0_env_period_fine](md-img/psg0-env-period-fine.svg)
+![psg0_env_period_fine](md_img/psg0_env_period_fine.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -281,7 +281,7 @@ Address offset: 0x00000030
 
 Reset value: 0x00000000
 
-![psg0_env_period_coarse](md-img/psg0-env-period-coarse.svg)
+![psg0_env_period_coarse](md_img/psg0_env_period_coarse.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -298,7 +298,7 @@ Address offset: 0x00000034
 
 Reset value: 0x00000000
 
-![psg0_env_shape](md-img/psg0-env-shape.svg)
+![psg0_env_shape](md_img/psg0_env_shape.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -315,7 +315,7 @@ Address offset: 0x00000040
 
 Reset value: 0x00000000
 
-![psg1_cha_tone_period_fine](md-img/psg1-cha-tone-period-fine.svg)
+![psg1_cha_tone_period_fine](md_img/psg1_cha_tone_period_fine.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -332,7 +332,7 @@ Address offset: 0x00000044
 
 Reset value: 0x00000000
 
-![psg1_cha_tone_period_coarse](md-img/psg1-cha-tone-period-coarse.svg)
+![psg1_cha_tone_period_coarse](md_img/psg1_cha_tone_period_coarse.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -349,7 +349,7 @@ Address offset: 0x00000048
 
 Reset value: 0x00000000
 
-![psg1_chb_tone_period_fine](md-img/psg1-chb-tone-period-fine.svg)
+![psg1_chb_tone_period_fine](md_img/psg1_chb_tone_period_fine.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -366,7 +366,7 @@ Address offset: 0x0000004c
 
 Reset value: 0x00000000
 
-![psg1_chb_tone_period_coarse](md-img/psg1-chb-tone-period-coarse.svg)
+![psg1_chb_tone_period_coarse](md_img/psg1_chb_tone_period_coarse.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -383,7 +383,7 @@ Address offset: 0x00000050
 
 Reset value: 0x00000000
 
-![psg1_chc_tone_period_fine](md-img/psg1-chc-tone-period-fine.svg)
+![psg1_chc_tone_period_fine](md_img/psg1_chc_tone_period_fine.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -400,7 +400,7 @@ Address offset: 0x00000054
 
 Reset value: 0x00000000
 
-![psg1_chc_tone_period_coarse](md-img/psg1-chc-tone-period-coarse.svg)
+![psg1_chc_tone_period_coarse](md_img/psg1_chc_tone_period_coarse.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -417,7 +417,7 @@ Address offset: 0x00000058
 
 Reset value: 0x00000000
 
-![psg1_noise_period](md-img/psg1-noise-period.svg)
+![psg1_noise_period](md_img/psg1_noise_period.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -434,7 +434,7 @@ Address offset: 0x0000005c
 
 Reset value: 0x00000000
 
-![psg1_disable](md-img/psg1-disable.svg)
+![psg1_disable](md_img/psg1_disable.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -456,7 +456,7 @@ Address offset: 0x00000060
 
 Reset value: 0x00000000
 
-![psg1_cha_lvl](md-img/psg1-cha-lvl.svg)
+![psg1_cha_lvl](md_img/psg1_cha_lvl.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -474,7 +474,7 @@ Address offset: 0x00000064
 
 Reset value: 0x00000000
 
-![psg1_chb_lvl](md-img/psg1-chb-lvl.svg)
+![psg1_chb_lvl](md_img/psg1_chb_lvl.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -492,7 +492,7 @@ Address offset: 0x00000068
 
 Reset value: 0x00000000
 
-![psg1_chc_lvl](md-img/psg1-chc-lvl.svg)
+![psg1_chc_lvl](md_img/psg1_chc_lvl.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -510,7 +510,7 @@ Address offset: 0x0000006c
 
 Reset value: 0x00000000
 
-![psg1_env_period_fine](md-img/psg1-env-period-fine.svg)
+![psg1_env_period_fine](md_img/psg1_env_period_fine.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -527,7 +527,7 @@ Address offset: 0x00000070
 
 Reset value: 0x00000000
 
-![psg1_env_period_coarse](md-img/psg1-env-period-coarse.svg)
+![psg1_env_period_coarse](md_img/psg1_env_period_coarse.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -544,7 +544,7 @@ Address offset: 0x00000074
 
 Reset value: 0x00000000
 
-![psg1_env_shape](md-img/psg1-env-shape.svg)
+![psg1_env_shape](md_img/psg1_env_shape.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -561,7 +561,7 @@ Address offset: 0x00000200
 
 Reset value: 0x00000000
 
-![filter_mixer_vola](md-img/filter-mixer-vola.svg)
+![filter_mixer_vola](md_img/filter_mixer_vola.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -578,7 +578,7 @@ Address offset: 0x00000204
 
 Reset value: 0x00000000
 
-![filter_mixer_volb](md-img/filter-mixer-volb.svg)
+![filter_mixer_volb](md_img/filter_mixer_volb.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -595,7 +595,7 @@ Address offset: 0x00000208
 
 Reset value: 0x00000000
 
-![filter_mixer_volc](md-img/filter-mixer-volc.svg)
+![filter_mixer_volc](md_img/filter_mixer_volc.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -612,7 +612,7 @@ Address offset: 0x0000020c
 
 Reset value: 0x00000000
 
-![filter_mixer_vold](md-img/filter-mixer-vold.svg)
+![filter_mixer_vold](md_img/filter_mixer_vold.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -629,7 +629,7 @@ Address offset: 0x00000210
 
 Reset value: 0x00000000
 
-![filter_mixer_vole](md-img/filter-mixer-vole.svg)
+![filter_mixer_vole](md_img/filter_mixer_vole.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -646,7 +646,7 @@ Address offset: 0x00000214
 
 Reset value: 0x00000000
 
-![filter_mixer_volf](md-img/filter-mixer-volf.svg)
+![filter_mixer_volf](md_img/filter_mixer_volf.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -663,7 +663,7 @@ Address offset: 0x00000218
 
 Reset value: 0x00000000
 
-![filter_mixer_mvol](md-img/filter-mixer-mvol.svg)
+![filter_mixer_mvol](md_img/filter_mixer_mvol.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -680,7 +680,7 @@ Address offset: 0x0000021c
 
 Reset value: 0x00000000
 
-![filter_mixer_inv](md-img/filter-mixer-inv.svg)
+![filter_mixer_inv](md_img/filter_mixer_inv.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -702,7 +702,7 @@ Address offset: 0x00000220
 
 Reset value: 0x00000000
 
-![filter_mixer_bass](md-img/filter-mixer-bass.svg)
+![filter_mixer_bass](md_img/filter_mixer_bass.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -719,7 +719,7 @@ Address offset: 0x00000224
 
 Reset value: 0x00000000
 
-![filter_mixer_treble](md-img/filter-mixer-treble.svg)
+![filter_mixer_treble](md_img/filter_mixer_treble.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |

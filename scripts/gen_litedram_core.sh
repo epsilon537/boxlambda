@@ -25,8 +25,10 @@ pushd .
 cd $EXP_DIR
 litedram_gen $YML_FILE $SIM_OPT --doc --gen_user_clkx2 --gateware-dir rtl --software-dir sw --name litedram
 
-sphinx-build -M markdown build/doc/ ../../../../docs/registers/litedram_generated/
-cp -f ../../../../docs/registers/litedram_generated/markdown/index-orig.md ../../../../docs/registers/litedram_generated/markdown/index.md
+rm -rf ../../../../docs/registers/litedram-generated/*
+sphinx-build -M markdown build/doc/ litedram-generated/
+cp -f ../../../../scripts/litedram-index-orig.md litedram-generated/markdown/litedram-index.md
+cp -rf litedram-generated/markdown/* ../../../../docs/registers/
 
 popd
 

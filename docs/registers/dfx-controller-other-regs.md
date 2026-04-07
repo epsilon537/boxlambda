@@ -45,7 +45,7 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![status](md-img/status.svg)
+![status](md_img/status.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -90,7 +90,7 @@ Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![sw_trigger](md-img/sw-trigger.svg)
+![sw_trigger](md_img/sw_trigger.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -108,7 +108,7 @@ Address offset: 0x00000020
 
 Reset value: 0x00000000
 
-![trigger_0](md-img/trigger-0.svg)
+![trigger_0](md_img/trigger_0.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -124,7 +124,7 @@ Address offset: 0x00000024
 
 Reset value: 0x00000000
 
-![trigger_1](md-img/trigger-1.svg)
+![trigger_1](md_img/trigger_1.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -140,7 +140,7 @@ Address offset: 0x00000040
 
 Reset value: 0x00000000
 
-![rm_bs_index_0](md-img/rm-bs-index-0.svg)
+![rm_bs_index_0](md_img/rm_bs_index_0.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -157,7 +157,7 @@ Address offset: 0x00000044
 
 Reset value: 0x00000000
 
-![rm_control_0](md-img/rm-control-0.svg)
+![rm_control_0](md_img/rm_control_0.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -194,7 +194,7 @@ Address offset: 0x00000048
 
 Reset value: 0x00000000
 
-![rm_bs_index_1](md-img/rm-bs-index-1.svg)
+![rm_bs_index_1](md_img/rm_bs_index_1.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -211,7 +211,7 @@ Address offset: 0x0000004c
 
 Reset value: 0x00000000
 
-![rm_control_1](md-img/rm-control-1.svg)
+![rm_control_1](md_img/rm_control_1.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -248,7 +248,7 @@ Address offset: 0x00000060
 
 Reset value: 0x00000000
 
-![bs_id_0](md-img/bs-id-0.svg)
+![bs_id_0](md_img/bs_id_0.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -264,7 +264,7 @@ Address offset: 0x00000064
 
 Reset value: 0x00000000
 
-![bs_address_0](md-img/bs-address-0.svg)
+![bs_address_0](md_img/bs_address_0.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -280,7 +280,7 @@ Address offset: 0x00000068
 
 Reset value: 0x00000000
 
-![bs_size_0](md-img/bs-size-0.svg)
+![bs_size_0](md_img/bs_size_0.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -296,7 +296,7 @@ Address offset: 0x00000070
 
 Reset value: 0x00000000
 
-![bs_id_1](md-img/bs-id-1.svg)
+![bs_id_1](md_img/bs_id_1.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -312,7 +312,7 @@ Address offset: 0x00000074
 
 Reset value: 0x00000000
 
-![bs_address_1](md-img/bs-address-1.svg)
+![bs_address_1](md_img/bs_address_1.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -328,7 +328,7 @@ Address offset: 0x00000078
 
 Reset value: 0x00000000
 
-![bs_size_1](md-img/bs-size-1.svg)
+![bs_size_1](md_img/bs_size_1.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |

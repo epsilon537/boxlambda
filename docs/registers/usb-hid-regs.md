@@ -41,7 +41,7 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![ien](md-img/ien.svg)
+![ien](md_img/ien.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -59,7 +59,7 @@ Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![isr](md-img/isr.svg)
+![isr](md_img/isr.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -77,7 +77,7 @@ Address offset: 0x00000008
 
 Reset value: 0x00000000
 
-![status](md-img/status.svg)
+![status](md_img/status.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -104,7 +104,7 @@ Address offset: 0x0000000c
 
 Reset value: 0x00000000
 
-![key_mods](md-img/key-mods.svg)
+![key_mods](md_img/key_mods.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -128,7 +128,7 @@ Address offset: 0x00000010
 
 Reset value: 0x00000000
 
-![keys](md-img/keys.svg)
+![keys](md_img/keys.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -147,7 +147,7 @@ Address offset: 0x00000014
 
 Reset value: 0x00000000
 
-![mouse](md-img/mouse.svg)
+![mouse](md_img/mouse.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -168,7 +168,7 @@ Address offset: 0x00000018
 
 Reset value: 0x00000000
 
-![game](md-img/game.svg)
+![game](md_img/game.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -184,7 +184,7 @@ Address offset: 0x0000001c
 
 Reset value: 0x00000000
 
-![report_0](md-img/report-0.svg)
+![report_0](md_img/report_0.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -200,7 +200,7 @@ Address offset: 0x00000020
 
 Reset value: 0x00000000
 
-![report_1](md-img/report-1.svg)
+![report_1](md_img/report_1.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -216,7 +216,7 @@ Address offset: 0x00000024
 
 Reset value: 0x00000000
 
-![leds](md-img/leds.svg)
+![leds](md_img/leds.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |

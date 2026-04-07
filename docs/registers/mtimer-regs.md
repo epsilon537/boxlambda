@@ -36,7 +36,7 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![mtime](md-img/mtime.svg)
+![mtime](md_img/mtime.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -52,7 +52,7 @@ Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![mtimeh](md-img/mtimeh.svg)
+![mtimeh](md_img/mtimeh.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -68,7 +68,7 @@ Address offset: 0x00000008
 
 Reset value: 0x00000000
 
-![mtimecmp](md-img/mtimecmp.svg)
+![mtimecmp](md_img/mtimecmp.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -84,7 +84,7 @@ Address offset: 0x0000000c
 
 Reset value: 0x00000000
 
-![mtimecmph](md-img/mtimecmph.svg)
+![mtimecmph](md_img/mtimecmph.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -100,7 +100,7 @@ Address offset: 0x00000010
 
 Reset value: 0x00000000
 
-![mtimeblk](md-img/mtimeblk.svg)
+![mtimeblk](md_img/mtimeblk.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |

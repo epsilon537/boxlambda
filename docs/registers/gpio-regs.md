@@ -40,7 +40,7 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![rgpio_in](md-img/rgpio-in.svg)
+![rgpio_in](md_img/rgpio_in.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -56,7 +56,7 @@ Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![rgpio_out](md-img/rgpio-out.svg)
+![rgpio_out](md_img/rgpio_out.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -72,7 +72,7 @@ Address offset: 0x00000008
 
 Reset value: 0x00000000
 
-![rgpio_oe](md-img/rgpio-oe.svg)
+![rgpio_oe](md_img/rgpio_oe.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -88,7 +88,7 @@ Address offset: 0x0000000c
 
 Reset value: 0x00000000
 
-![rgpio_inte](md-img/rgpio-inte.svg)
+![rgpio_inte](md_img/rgpio_inte.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -104,7 +104,7 @@ Address offset: 0x00000010
 
 Reset value: 0x00000000
 
-![rgpio_ptrig](md-img/rgpio-ptrig.svg)
+![rgpio_ptrig](md_img/rgpio_ptrig.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -120,7 +120,7 @@ Address offset: 0x00000018
 
 Reset value: 0x00000000
 
-![rgpio_ctrl_status](md-img/rgpio-ctrl-status.svg)
+![rgpio_ctrl_status](md_img/rgpio_ctrl_status.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -138,7 +138,7 @@ Address offset: 0x0000001c
 
 Reset value: 0x00000000
 
-![rgpio_ints](md-img/rgpio-ints.svg)
+![rgpio_ints](md_img/rgpio_ints.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -154,7 +154,7 @@ Address offset: 0x00000020
 
 Reset value: 0x00000000
 
-![rgpio_eclk](md-img/rgpio-eclk.svg)
+![rgpio_eclk](md_img/rgpio_eclk.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -170,7 +170,7 @@ Address offset: 0x00000024
 
 Reset value: 0x00000000
 
-![rgpio_nec](md-img/rgpio-nec.svg)
+![rgpio_nec](md_img/rgpio_nec.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |

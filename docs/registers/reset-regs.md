@@ -33,7 +33,7 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![ctrl](md-img/ctrl.svg)
+![ctrl](md_img/ctrl.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -52,7 +52,7 @@ Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![reason](md-img/reason.svg)
+![reason](md_img/reason.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |

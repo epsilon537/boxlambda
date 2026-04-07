@@ -54,7 +54,7 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![ctrl_status](md-img/ctrl-status.svg)
+![ctrl_status](md_img/ctrl_status.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -72,7 +72,7 @@ Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![dc_border](md-img/dc-border.svg)
+![dc_border](md_img/dc_border.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -89,7 +89,7 @@ Address offset: 0x00000008
 
 Reset value: 0x00000000
 
-![ien](md-img/ien.svg)
+![ien](md_img/ien.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -108,7 +108,7 @@ Address offset: 0x0000000c
 
 Reset value: 0x00000000
 
-![isr](md-img/isr.svg)
+![isr](md_img/isr.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -129,7 +129,7 @@ Address offset: 0x00000010
 
 Reset value: 0x00000000
 
-![irqline](md-img/irqline.svg)
+![irqline](md_img/irqline.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -146,7 +146,7 @@ Address offset: 0x00000014
 
 Reset value: 0x00000000
 
-![scanline](md-img/scanline.svg)
+![scanline](md_img/scanline.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -163,7 +163,7 @@ Address offset: 0x00000018
 
 Reset value: 0x00000000
 
-![dc_video](md-img/dc-video.svg)
+![dc_video](md_img/dc_video.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -191,7 +191,7 @@ Address offset: 0x00000020
 
 Reset value: 0x00000000
 
-![dc_hscale](md-img/dc-hscale.svg)
+![dc_hscale](md_img/dc_hscale.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -208,7 +208,7 @@ Address offset: 0x00000024
 
 Reset value: 0x00000000
 
-![dc_vscale](md-img/dc-vscale.svg)
+![dc_vscale](md_img/dc_vscale.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -225,7 +225,7 @@ Address offset: 0x00000028
 
 Reset value: 0x00000000
 
-![dc_hstart](md-img/dc-hstart.svg)
+![dc_hstart](md_img/dc_hstart.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -242,7 +242,7 @@ Address offset: 0x0000002c
 
 Reset value: 0x00000000
 
-![dc_hstop](md-img/dc-hstop.svg)
+![dc_hstop](md_img/dc_hstop.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -259,7 +259,7 @@ Address offset: 0x00000030
 
 Reset value: 0x00000000
 
-![dc_vstart](md-img/dc-vstart.svg)
+![dc_vstart](md_img/dc_vstart.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -276,7 +276,7 @@ Address offset: 0x00000034
 
 Reset value: 0x00000000
 
-![dc_vstop](md-img/dc-vstop.svg)
+![dc_vstop](md_img/dc_vstop.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -293,7 +293,7 @@ Address offset: 0x00000040
 
 Reset value: 0x00000000
 
-![l0_config](md-img/l0-config.svg)
+![l0_config](md_img/l0_config.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -341,7 +341,7 @@ Address offset: 0x00000044
 
 Reset value: 0x00000000
 
-![l0_mapbase](md-img/l0-mapbase.svg)
+![l0_mapbase](md_img/l0_mapbase.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -358,7 +358,7 @@ Address offset: 0x00000048
 
 Reset value: 0x00000000
 
-![l0_tilebase](md-img/l0-tilebase.svg)
+![l0_tilebase](md_img/l0_tilebase.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -391,7 +391,7 @@ Address offset: 0x00000050
 
 Reset value: 0x00000000
 
-![l0_hscroll](md-img/l0-hscroll.svg)
+![l0_hscroll](md_img/l0_hscroll.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -409,7 +409,7 @@ Address offset: 0x00000054
 
 Reset value: 0x00000000
 
-![l0_vscroll](md-img/l0-vscroll.svg)
+![l0_vscroll](md_img/l0_vscroll.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -426,7 +426,7 @@ Address offset: 0x00000080
 
 Reset value: 0x00000000
 
-![l1_config](md-img/l1-config.svg)
+![l1_config](md_img/l1_config.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -474,7 +474,7 @@ Address offset: 0x00000084
 
 Reset value: 0x00000000
 
-![l1_mapbase](md-img/l1-mapbase.svg)
+![l1_mapbase](md_img/l1_mapbase.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -491,7 +491,7 @@ Address offset: 0x00000088
 
 Reset value: 0x00000000
 
-![l1_tilebase](md-img/l1-tilebase.svg)
+![l1_tilebase](md_img/l1_tilebase.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -524,7 +524,7 @@ Address offset: 0x00000090
 
 Reset value: 0x00000000
 
-![l1_hscroll](md-img/l1-hscroll.svg)
+![l1_hscroll](md_img/l1_hscroll.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -542,7 +542,7 @@ Address offset: 0x00000094
 
 Reset value: 0x00000000
 
-![l1_vscroll](md-img/l1-vscroll.svg)
+![l1_vscroll](md_img/l1_vscroll.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |

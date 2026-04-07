@@ -37,7 +37,7 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![cmd](md-img/cmd.svg)
+![cmd](md_img/cmd.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -72,7 +72,7 @@ Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![dat](md-img/dat.svg)
+![dat](md_img/dat.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -88,7 +88,7 @@ Address offset: 0x00000008
 
 Reset value: 0x00000000
 
-![fifo_0](md-img/fifo-0.svg)
+![fifo_0](md_img/fifo_0.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -104,7 +104,7 @@ Address offset: 0x0000000c
 
 Reset value: 0x00000000
 
-![fifo_1](md-img/fifo-1.svg)
+![fifo_1](md_img/fifo_1.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -120,7 +120,7 @@ Address offset: 0x00000010
 
 Reset value: 0x00000000
 
-![isr](md-img/isr.svg)
+![isr](md_img/isr.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -138,7 +138,7 @@ Address offset: 0x00000014
 
 Reset value: 0x00000000
 
-![ien](md-img/ien.svg)
+![ien](md_img/ien.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
