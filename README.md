@@ -191,7 +191,6 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
   - Software Testing:
     - [The Software Test Bench](docs/software/test/test-bench.md)
     - [Forth Test Suite](docs/software/test/builds/forth-testsuite.md)
-  - [Debugging](docs/software/debugging.md)
 - Build System:
     - [The Directory Structure](docs/build-sys/dir-struct.md)
     - The Gateware Build System:
@@ -202,6 +201,7 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
       - [Building the Software](docs/build-sys/software/building.md)
 - Tools:
     - [Target.py](docs/tools/target_py.md)
+    - [Debugging](docs/tools/debugging.md)
 - Register and Memory Map:
     - [Reset](docs/registers/reset-regs.md)
     - [UART](docs/registers/uart-regs.md)

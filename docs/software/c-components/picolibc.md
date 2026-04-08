@@ -107,50 +107,17 @@ BoxLambda's version of crt0 can be found here:
 ### Standard Input, Output, and Error
 
 The PicoLibc integrator needs to supply `stdin`, `stdout`, and `stderr` instances and associated `getc()` and `putc()` implementations to connect them to an actual IO device.
-We'll be using the UART as our IO device for the time being. Down the road, we can extend that with keyboard input and screen output implementation.
+Initially, we'll be using the UART as our IO device.
 
-```
-static int uart_putc(char c, FILE *file) {
-  int res;
+See [sw/components/bootstrap/stdio_stream.c](../../../sw/components/bootstrap/stdio_stream.c).
 
-  (void) file;		/* Not used in this function */
+[stdio_stream.h](../../../sw/components/stdio_stream.h) exports the `stdin` and `stdout` stream objects so standard IO
+can be redirected at any time after boot-up. The BoxKern makes use of this by forwarding stdio to the Forth
+environment. See the [OS Boot Sequence](../../os/boot-seq.md) for details.
 
-  {
-    while (!uart_tx_ready());
-    uart_tx((uint8_t)c);
-    res = (int)c;
-  }
+## Early Software Startup Sequence
 
-  return res;
-}
-
-static int uart_getc(FILE *file) {
-  int c;
-  (void) file;		/* Not used in this function */
-
-  {
-    while (!uart_rx_ready());
-    c = (int)uart_rx();
-  }
-
-  return c;
-}
-
-static FILE __stdio = FDEV_SETUP_STREAM(uart_putc,
- uart_getc,
- NULL,
- _FDEV_SETUP_RW);
-
-
-FILE *const stdin = &__stdio;
-FILE *const stdout = &__stdio;
-FILE *const stderr = &__stdio;
-
-```
-
-[sw/components/bootstrap/stdio_stream.c](../../../sw/components/bootstrap/stdio_stream.c)
-
-## Software Startup Sequence
+The following diagram shows the early software startup sequence up to the invokation of `main()`.
 
 ![The Boot from IMEM Sequence](../../assets/imem-boot-sequence.png)
 

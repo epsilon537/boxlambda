@@ -178,6 +178,25 @@ Info : Listening on port 6666 for tcl connections
 Info : Listening on port 4444 for telnet connections
 ```
 
+### Connect to a Verilator model
+
+E.g., to debug software running on the model.
+
+```
+$ target.py -verilator -gdb
+=== Target Control ===
+Connection to verilator model requested
+Wait for GDB requested
+openocd -c set VERILATOR 1 -c set GDB 1 -f /home/epsilon/work/boxlambda/scripts/openocd.cfg
+Open On-Chip Debugger 0.12.0+dev-00519-gb6ee13720-dirty (2024-11-17-07:21)
+Licensed under GNU GPL v2
+For bug reports, read
+	http://openocd.org/doc/doxygen/bugs.html
+1
+1
+TAP: riscv.cpu
+```
+
 ### Download the RAM disk from the target
 
 ```
