@@ -4,16 +4,16 @@
   [https://github.com/epsilon537/verilog-wishbone](https://github.com/epsilon537/verilog-wishbone)
 
 - **Wishbone Arbiter and MUX Submodule in the BoxLambda Directory Tree**:
-  boxlambda/sub/verilog-wishbone/
+  sub/verilog-wishbone/
 
 - **Interconnect Component in the BoxLambda Directory Tree**:
-  [boxlambda/gw/components/interconnect](../../../gw/components/interconnect)
+  [gw/components/interconnect](../../../gw/components/interconnect)
 
 - **Instruction Bus Module**:
-  [boxlambda/gw/components/interconnect/rtl/instruction_bus.sv](../../../gw/components/interconnect/rtl/instruction_bus.sv)
+  [gw/components/interconnect/rtl/instruction_bus.sv](../../../gw/components/interconnect/rtl/instruction_bus.sv)
 
 - **Data Bus Module**:
-  [boxlambda/gw/components/interconnect/rtl/data_bus.sv](../../../gw/components/interconnect/rtl/data_bus.sv)
+  [gw/components/interconnect/rtl/data_bus.sv](../../../gw/components/interconnect/rtl/data_bus.sv)
 
 The interconnect serves as the backbone connecting the internal components of the SoC. BoxLambda uses the Wishbone *Pipelined* bus protocol, as defined in the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
 

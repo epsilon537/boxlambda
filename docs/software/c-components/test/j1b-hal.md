@@ -1,7 +1,7 @@
 # J1B HAL
 
 **J1B HAL API**:
-[boxlambda/sw/components/j1b_hal/j1b_hal.h](../../../../sw/components/test/j1b_hal/j1b_hal.h)
+[sw/components/j1b_hal/j1b_hal.h](../../../../sw/components/test/j1b_hal/j1b_hal.h)
 
 The J1B Hardware Access Layer (HAL) provides access to the J1B demo core's register interface and includes a function for loading firmware into the core. The [dfx_test](../../../../sw/projects/test/dfx_test) program uses the J1B HAL to perform the following tasks:
 

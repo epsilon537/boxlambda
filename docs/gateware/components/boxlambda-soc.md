@@ -1,7 +1,7 @@
 # The BoxLambda SoC Component
 
 - **BoxLambda SoC Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/boxlambda_soc](../../../gw/components/boxlambda_soc)
+    [gw/components/boxlambda_soc](../../../gw/components/boxlambda_soc)
 
 - **BoxLambda SoC Module**:
     [gw/components/boxlambda_soc/rtl/boxlambda_soc.sv](../../../gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)

@@ -3,9 +3,9 @@
 - **Included in OS**: No
 
 - **I2C Software Component in the BoxLambda Directory Tree**:
-  [boxlambda/sw/components/i2c](../../../sw/components/i2c)
+  [sw/components/i2c](../../../sw/components/i2c)
 - **I2C API**:
-  [boxlambda/sw/components/i2c/i2c.h](../../../sw/components/i2c/i2c.h)
+  [sw/components/i2c/i2c.h](../../../sw/components/i2c/i2c.h)
 
 BoxLambda's I2C component is based on the [TinyWireM](https://github.com/adafruit/TinyWireM) API, which in turn is derived from Arduino's [Wire](https://www.arduino.cc/reference/en/language/functions/communication/wire/) API. This API makes it easy to port I2C-dependent components, such as the MCP79412RTC library, discussed [here](rtcc.md).
 

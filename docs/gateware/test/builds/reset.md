@@ -1,8 +1,8 @@
 # Reset Test
 
-The reset test code running on the RISCV processor: [boxlambda/sw/projects/test/reset_test/reset_test.cpp](../../../../sw/projects/test/reset_test/reset_test.cpp)
+The reset test code running on the RISCV processor: [sw/projects/test/reset_test/reset_test.cpp](../../../../sw/projects/test/reset_test/reset_test.cpp)
 
-The Verilator test bench code: [boxlambda/gw/projects/test/reset_test/sim/sim_main.cpp](../../../../gw/projects/test/reset_test/sim/sim_main.cpp)
+The Verilator test bench code: [gw/projects/test/reset_test/sim/sim_main.cpp](../../../../gw/projects/test/reset_test/sim/sim_main.cpp)
 
 The reset test checks the software interaction with BoxLambda's reset controller. The test does the following:
 

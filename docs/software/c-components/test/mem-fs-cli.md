@@ -1,7 +1,7 @@
 # Memory and File System CLI
 
 - **Mem_fs_cli CLI Component in the BoxLambda Directory Tree**:
-  [boxlambda/sw/components/test/mem_fs_cli](../../../../sw/components/test/mem_fs_cli)
+  [sw/components/test/mem_fs_cli](../../../../sw/components/test/mem_fs_cli)
 
 This component provides CLI access to memory management and file system functions.
 

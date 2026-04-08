@@ -1,7 +1,7 @@
 # DFX Controller HAL
 
 **DFX Controller HAL**:
-[boxlambda/sw/components/dfx/dfx_controller_hal.h](../../../sw/components/dfx/dfx_controller_hal.h)
+[sw/components/dfx/dfx_controller_hal.h](../../../sw/components/dfx/dfx_controller_hal.h)
 
 - **Included in OS**: No
 

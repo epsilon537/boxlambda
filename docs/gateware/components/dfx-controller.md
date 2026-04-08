@@ -24,7 +24,7 @@ To manage the loading of an RM into an RP from the SoC, a DFX Controller needs t
 
 The software program monitors the progression via the DFX Controller status register.
 
-The `dfx_test` program contains a software routine that implements the complete sequence. See the function `dfx_load_module()` in the file [sw/projects/dfx_test/dfx_cli.cpp](https://github.com/epsilon537/boxlambda/blob/98b4f4e6d4bf33efa24f122d65c103f06b76289e/sw/projects/dfx_test/dfx_cli.cpp).
+The `dfx_test` program contains a software routine that implements the complete sequence. See the function `dfx_load_module()` in the file [sw/projects/test/dfx_test/dfx_cli.cpp](../../../sw/projects/test/dfx_test/dfx_cli.cpp).
 
 ### Binary for ICAP
 

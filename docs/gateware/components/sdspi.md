@@ -4,10 +4,10 @@
     [https://github.com/epsilon537/sdspi/tree/boxlambda](https://github.com/epsilon537/sdspi/tree/boxlambda).
 
 - **SDSPI Submodule in the BoxLambda Directory Tree**:
-    `boxlambda/sub/sdspi/`
+    `sub/sdspi/`
 
 - **SDSPI Gateware Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/sdspi](../../../gw/components/sdspi)
+    [gw/components/sdspi](../../../gw/components/sdspi)
 
 - **SDSPI Core Top-Level**:
     [sub/sdspi/rtl/sdspi.v](https://github.com/epsilon537/sdspi/blob/boxlambda/rtl/sdspi.v)

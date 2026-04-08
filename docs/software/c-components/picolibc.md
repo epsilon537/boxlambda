@@ -6,13 +6,13 @@
     [https://github.com/epsilon537/picolibc](https://github.com/epsilon537/picolibc)
 
 - **PicoLibc Submodule in the BoxLambda Directory Tree**:
-    boxlambda/sub/picolibc/.
+    sub/picolibc/.
 
 - **PicoLibc Website**:
     [https://keithp.com/picolibc/](https://keithp.com/picolibc/)
 
 - **Bootstrap Software Component in the BoxLambda Directory Tree**:
-  [boxlambda/sw/components/bootstrap](../../../sw/components/bootstrap)
+  [sw/components/bootstrap](../../../sw/components/bootstrap)
 
 - **Included in OS**: Yes
 
@@ -90,7 +90,7 @@ An application using the standard C library has to link in this bootstrap compon
 
 The vector table is a table with code entry points for all sorts of CPU events: interrupts, exceptions, etc. The Boot/Reset Vector, i.e., the very first instruction executed when the CPU comes out of reset, is part of this table.
 
-The Vector Table file is located at [boxlambda/sw/components/bootstrap/vectors.S](../../../sw/components/bootstrap/vectors.S).
+The Vector Table file is located at [sw/components/bootstrap/vectors.S](../../../sw/components/bootstrap/vectors.S).
 
 The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to `_start`, the entry point into the `crt0` module.
 
@@ -101,8 +101,8 @@ For more info on `vectors.S`, check the [Interrupt Handling](../forth/irqs.md) p
 *Crt0*, C-Run-Time-0, is the start-up code in charge of setting up a C environment (zeroing the BSS segment, setting up the stack, etc.) before calling `main()`.
 BoxLambda's version of crt0 can be found here:
 
-[boxlambda/sw/components/bootstrap/crt0.c](../../../sw/components/bootstrap/crt0.c).
-[boxlambda/sw/components/bootstrap/crt0.h](../../../sw/components/bootstrap/crt0.h).
+[sw/components/bootstrap/crt0.c](../../../sw/components/bootstrap/crt0.c).
+[sw/components/bootstrap/crt0.h](../../../sw/components/bootstrap/crt0.h).
 
 ### Standard Input, Output, and Error
 
@@ -148,7 +148,7 @@ FILE *const stderr = &__stdio;
 
 ```
 
-[boxlambda/sw/components/bootstrap/stdio_stream.c](../../../sw/components/bootstrap/stdio_stream.c)
+[sw/components/bootstrap/stdio_stream.c](../../../sw/components/bootstrap/stdio_stream.c)
 
 ## Software Startup Sequence
 

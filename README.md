@@ -151,7 +151,8 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
       - [Requirements](docs/software/os/requirements.md)
       - [Architecture](docs/software/os/architecture.md)
       - [Build](docs/software/os/build.md)
-      - [Memory Layout and Boot Sequence](docs/software/os/mem-layout-boot-seq.md)
+      - [Memory Layout](docs/software/os/mem-layout.md)
+      - [Boot Sequence](docs/software/os/boot-seq.md)
       - [User Interface](docs/software/os/ui.md)
   - Forth:
     - [The Mecrisp Forth Core](docs/software/forth/core.md)

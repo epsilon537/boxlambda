@@ -1,13 +1,13 @@
 # I2C Test
 
-The I2C test code running on the RISCV processor: [boxlambda/sw/projects/test/rtcc_test/i2c_test.cpp](../../../../sw/projects/test/i2c_test/i2c_test.cpp)
+The I2C test code running on the RISCV processor: [sw/projects/test/rtcc_test/i2c_test.cpp](../../../../sw/projects/test/i2c_test/i2c_test.cpp)
 
-The Verilator test bench code: [boxlambda/gw/projects/test/i2c_test/sim/sim_main.cpp](../../../../gw/projects/test/i2c_test/sim/sim_main.cpp)
+The Verilator test bench code: [gw/projects/test/i2c_test/sim/sim_main.cpp](../../../../gw/projects/test/i2c_test/sim/sim_main.cpp)
 
 The Verilator version of the I2C Test Application uses an I2C slave co-simulator object provided by the WBI2C repo:
 
-- [boxlambda/sub/wbi2c/bench/cpp/i2csim.h](https://github.com/epsilon537/wbi2c/blob/boxlambda/bench/cpp/i2csim.h)
-- [boxlambda/sub/wbi2c/bench/cpp/i2csim.cpp](https://github.com/epsilon537/wbi2c/blob/boxlambda/bench/cpp/i2csim.cpp)
+- [sub/wbi2c/bench/cpp/i2csim.h](https://github.com/epsilon537/wbi2c/blob/boxlambda/bench/cpp/i2csim.h)
+- [sub/wbi2c/bench/cpp/i2csim.cpp](https://github.com/epsilon537/wbi2c/blob/boxlambda/bench/cpp/i2csim.cpp)
 
 The I2C System Test Case runs on Verilator and FPGA, albeit with different test features. The program does the following:
 

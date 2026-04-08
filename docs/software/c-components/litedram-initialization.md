@@ -4,9 +4,9 @@
   [https://github.com/epsilon537/litex](https://github.com/epsilon537/litex).
 
 - **LiteX Submodule in the BoxLambda Directory Tree**:
-  `boxlambda/sub/litex/`.
+  `sub/litex/`.
 
-- **SDRAM Software Component in the BoxLambda Directory Tree**: [boxlambda/sw/components/sdram](../../../sw/components/sdram)
+- **SDRAM Software Component in the BoxLambda Directory Tree**: [sw/components/sdram](../../../sw/components/sdram)
 
 - **Included in OS**: Yes
 

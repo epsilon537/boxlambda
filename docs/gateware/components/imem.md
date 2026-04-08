@@ -4,10 +4,10 @@
     [https://github.com/epsilon537/verilog-wishbone](https://github.com/epsilon537/verilog-wishbone).
 
 - **DPRAM Submodule in the BoxLambda Directory Tree**:
-    boxlambda/sub/verilog_wishbone/.
+    sub/verilog_wishbone/.
 
 - **DPRAM Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/wb_dp_ram](../../../gw/components/wb_dp_ram)
+    [gw/components/wb_dp_ram](../../../gw/components/wb_dp_ram)
 
 - **DPRAM Core Top-Level**:
     [gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv](../../../gw/components/wb_dp_ram/rtl/wb_dp_ram_wrapper.sv)

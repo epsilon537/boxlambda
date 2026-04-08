@@ -4,10 +4,10 @@
     [https://github.com/epsilon537/wbi2c](https://github.com/epsilon537/wbi2c)
 
 - **I2C Submodule in the BoxLambda Directory Tree**:
-    boxlambda/sub/wbi2c/
+    sub/wbi2c/
 
 - **I2C Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/i2c_master](../../../gw/components/i2c_master)
+    [gw/components/i2c_master](../../../gw/components/i2c_master)
 
 - **I2C Core Top-Level**:
     [https://github.com/epsilon537/wbi2c/blob/boxlambda/rtl/wbi2cmaster.v](https://github.com/epsilon537/wbi2c/blob/boxlambda/rtl/wbi2cmaster.v)

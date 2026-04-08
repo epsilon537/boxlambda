@@ -4,10 +4,10 @@
   [https://github.com/epsilon537/litex](https://github.com/epsilon537/litex).
 
 - **LiteX Submodule in the BoxLambda Directory Tree**:
-  boxlambda/sub/litex/.
+  sub/litex/.
 
 - **LiteDRAM Component in the BoxLambda Directory Tree**:
-  [boxlambda/gw/components/litedram](../../../gw/components/litedram)
+  [gw/components/litedram](../../../gw/components/litedram)
 
 SDRAM memory access is complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. As much as possible, BoxLambda aims for deterministic behavior. Unfortunately, in the case of SDRAM, we'll have to make an exception. I couldn't find any memory controller designs that offer predictable memory access latency, and I'm not up to making one myself.
 

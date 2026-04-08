@@ -1,7 +1,7 @@
 # SDSPI
 
 - **SDSPI Software Component in the BoxLambda Directory Tree**:
-  [boxlambda/sw/components/sdspi/](../../../sw/components/sdspi)
+  [sw/components/sdspi/](../../../sw/components/sdspi)
 
 - **Included in OS**: No
 

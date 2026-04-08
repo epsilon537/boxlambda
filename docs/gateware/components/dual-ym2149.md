@@ -4,10 +4,10 @@
     [https://github.com/epsilon537/YM2149_PSG_system](https://github.com/epsilon537/YM2149_PSG_system).
 
 - **YM2149_PSG_system Submodule in the BoxLambda Directory Tree**:
-    boxlambda/sub/ym2149_psg_system/.
+    sub/ym2149_psg_system/.
 
 - **YM2149_PSG_system Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/ym2149](../../../gw/components/ym2149)
+    [gw/components/ym2149](../../../gw/components/ym2149)
 
 - **YM2149_PSG_system Core Top-Level**:
     [sub/ym2149_psg_system/YM2149_PSG_system_wb.sv](https://github.com/epsilon537/YM2149_PSG_system/blob/boxlambda/YM2149_PSG_system_wb.sv)

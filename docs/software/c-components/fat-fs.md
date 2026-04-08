@@ -4,13 +4,13 @@
     [https://github.com/epsilon537/fatfs/tree/boxlambda](https://github.com/epsilon537/fatfs/tree/boxlambda)
 
 - **FatFs Submodule in the BoxLambda Directory Tree**:
-    boxlambda/sub/fatfs/.
+    sub/fatfs/.
 
 - **FatFs Website**:
     [http://elm-chan.org/fsw/ff/00index_e.html](http://elm-chan.org/fsw/ff/00index_e.html)
 
 - **FatFs Software Component in the BoxLambda Directory Tree**:
-  [boxlambda/sw/components/fatfs](../../../sw/components/fatfs)
+  [sw/components/fatfs](../../../sw/components/fatfs)
 
 - **Included in OS**: No
 

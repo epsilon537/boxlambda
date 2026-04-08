@@ -1,6 +1,6 @@
 # VS0 HAL Overview
 
-The **VS0 HAL API** provides common definitions for all VS0 RM variants, currently including `vs0_j1b` and `vs0_stub`. You can find the API here: [boxlambda/sw/components/vs0_hal/vs0_hal.h](../../../../sw/components/vs0_hal/vs0_hal.h).
+The **VS0 HAL API** provides common definitions for all VS0 RM variants, currently including `vs0_j1b` and `vs0_stub`. You can find the API here: [sw/components/vs0_hal/vs0_hal.h](../../../../sw/components/vs0_hal/vs0_hal.h).
 
 ## Key Features:
 

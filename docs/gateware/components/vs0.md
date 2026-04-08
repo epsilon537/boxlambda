@@ -1,10 +1,10 @@
 # VS0 - DFX Reconfigurable Partition
 
 - **VS0 Stub** Component in the BoxLambda Directory Tree:
-  [boxlambda/gw/components/vs0_stub](../../../gw/components/vs0_stub)
+  [gw/components/vs0_stub](../../../gw/components/vs0_stub)
 
 - **VS0 J1B** Component in the BoxLambda Directory Tree:
-  [boxlambda/gw/components/test/vs0_j1b](../../../gw/components/test/vs0_j1b)
+  [gw/components/test/vs0_j1b](../../../gw/components/test/vs0_j1b)
 
 VS0 is a component with two Bus Master ports, one Bus Slave port, an interrupt vector input, and an interrupt line output. No other specifications are provided for this module. Different BoxLambda variants may implement it in different ways. It could be a stack processor, a DSP, or it might remain unused.
 

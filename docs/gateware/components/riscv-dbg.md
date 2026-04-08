@@ -4,10 +4,10 @@
   [https://github.com/epsilon537/riscv-dbg](https://github.com/epsilon537/riscv-dbg)
 
 - **RISCV-DBG Submodule in the BoxLambda Directory Tree**:
-  `boxlambda/sub/riscv-dbg/`
+  `sub/riscv-dbg/`
 
 - **RISCV-DBG Gateware Component in the BoxLambda Directory Tree**:
-  [boxlambda/gw/components/riscv-dbg](../../../gw/components/riscv-dbg)
+  [gw/components/riscv-dbg](../../../gw/components/riscv-dbg)
 
 ## RISCV OpenOCD
 

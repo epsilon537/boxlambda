@@ -4,10 +4,10 @@
     [https://github.com/epsilon537/wbuart32](https://github.com/epsilon537/wbuart32)
 
 - **Wbuart32 Submodule in the BoxLambda Directory Tree**:
-    boxlambda/sub/wbuart32/
+    sub/wbuart32/
 
 - **Wbuart Component in the BoxLambda Directory Tree**:
-    [boxlambda/gw/components/wbuart](../../../gw/components/wbuart)
+    [gw/components/wbuart](../../../gw/components/wbuart)
 
 - **Wbuart Top-Level**:
     [sub/wbuart32/rtl/wbuart.v](https://github.com/epsilon537/wbuart32/blob/boxlambda/rtl/wbuart.v)

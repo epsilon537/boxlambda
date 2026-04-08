@@ -45,7 +45,7 @@ I selected:
 
 The resulting crosstool-ng config file can be found [here](../../../scripts/crosstool-ng.config).
 
-The toolchain tarball is checked into the BoxLambda repo under [../../assets/](../../../assets). The [boxlambda_setup.sh](../../../boxlambda_setup.sh) script unpacks the toolchain tarball in the `boxlambda/tools/` directory, so the user no longer needs to provide the toolchain as a prerequisite.
+The toolchain tarball is checked into the BoxLambda repo under [../../assets/](../../../assets). The [boxlambda_setup.sh](../../../boxlambda_setup.sh) script unpacks the toolchain tarball in the `tools/` directory, so the user no longer needs to provide the toolchain as a prerequisite.
 
 ### RISC-V GCC Compile Flags
 
