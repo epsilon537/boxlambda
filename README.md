@@ -157,7 +157,7 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
   - Forth:
     - [The Mecrisp Forth Core](docs/software/forth/core.md)
     - [The Forth-C FFI](docs/software/forth/c-ffi.md)
-    - [Forth Word Glossary](docs/software/forth/glossary.md)
+    - [Forth Word Glossary](docs/software/forth/words.md)
     - [Interrupt Handling](docs/software/forth/irqs.md)
     - [Time Handling](docs/software/forth/time.md)
   - [Bootloader](docs/software/bootloader.md)

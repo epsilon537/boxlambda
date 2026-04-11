@@ -1,17 +1,16 @@
 # Forth Word Glossary
 
-This glossary is taken from the Mecrisp Quintus README, with modifications for
-BoxLambda.
+I decided to put all Forth Words on a single page for easy reference. Some Words will require more context than a one-liner can describe.
+In such case, the one-liner contains a link to a page with additional info.
 
-The coverage of specific platform components such as [Interrupt Handling](irqs.md) and [Time Handling](time.md) is factored out into separate subsections.
-
-Mecrisp-Quintus is case-insensitive, but only for letters 'a' to 'z'.
-UTF-8 Unicode encoded characters beyond 7 bit ASCII are case-sensitive.
-
-Words with `(BoxLambda)` in the description have been added or modified as part of
-the BoxLambda port of Mecrisp.
+Most of these Words are not created by me. They come from Mecrisp Forth, ZeptoForth and other resource. As much as I would like to give
+credit where credit is due, I don't think it's particularly helpful to do it on this already jam-packed page.
+Where applicable, the Forth source code contains references to their origins.
 
 ## Terminal-IO  (exactly ANS, some logical extensions)
+
+[terminal.s](../../../sw/components/forth/terminal.s)words.mdwords.md
+[terminalhooks.s](../../../sw/components/forth/terminalhook.s)
 
 ```
         emit?           ( -- Flag ) Ready to send a character ?
@@ -34,6 +33,8 @@ the BoxLambda port of Mecrisp.
 ```
 
 ## Stack Jugglers  (exactly ANS, some logical extensions)
+
+[stackjugglers.s](../../../sw/components/forth/stackjugglers.s)
 
 Single-Jugglers:
 
@@ -61,6 +62,8 @@ Single-Jugglers:
 
 Double-Jugglers:        They perform the same for double numbers.
 
+[double.s](../../../sw/components/forth/double.s)
+
 ```
         2nip            ( x1 x2 x3 x4 -- x3 x4 )
         2drop           ( x1 x2 -- )
@@ -79,6 +82,8 @@ Double-Jugglers:        They perform the same for double numbers.
 
 Stack pointers:
 
+[stackjugglers.s](../../../sw/components/forth/stackjugglers.s)
+
 ```
         sp@             ( -- a-addr )  Fetch  data stack pointer
         sp!             ( a-addr -- )  Store  data stack pointer
@@ -87,6 +92,8 @@ Stack pointers:
 ```
 
 ## Logic  (exactly ANS, some logical extensions)
+
+[logic.s](../../../sw/components/forth/logic.s)
 
 Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves
 like "31 and ar/r/lshift". 32 lshift does nothing.
@@ -111,6 +118,9 @@ like "31 and ar/r/lshift". 32 lshift does nothing.
 
 ## Calculus for single numbers  (exactly ANS, some logical extensions)
 
+[multiplydivide.s](../../../sw/components/forth/multiplydivide.s)
+[calculations.s](../../../sw/components/forth/calculations.s)
+
 ```
         u/mod           ( u1 u2 -- u3 u4 ) 32/32 = 32 rem 32 Division
                                            u1 / u2 = u4 remainder u3
@@ -118,10 +128,6 @@ like "31 and ar/r/lshift". 32 lshift does nothing.
         mod             ( n1 n2 -- n3 ) n1 / n2 = remainder n3
         /               ( n1 n2 -- n3 ) n1 / n2 = n3
         *               ( u1|n1 u2|n2 -- u3|n3 ) 32*32 = 32 Multiplication
-        min             ( n1 n2 -- n1|n2 ) Keeps smaller of top two items
-        max             ( n1 n2 -- n1|n2 ) Keeps greater of top two items
-        umin            ( u1 u2 -- u1|u2 ) Keeps unsigned smaller
-        umax            ( u1 u2 -- u1|u2 ) Keeps unsigned greater
         2-              ( u1|n1 -- u2|n2 ) Subtracts two, optimized
         1-              ( u1|n1 -- u2|n2 ) Subtracts one, optimized
         2+              ( u1|n1 -- u2|n2 ) Adds two, optimized
@@ -136,6 +142,9 @@ like "31 and ar/r/lshift". 32 lshift does nothing.
 ```
 
 ## Calculus involving double numbers  (exactly ANS, some logical extensions)
+
+[double.s](../../../sw/components/forth/double.s)
+[multiplydivide.s](../../../sw/components/forth/multiplydivide.s)
 
 ```
         um*             ( u1 u2 -- ud )        32*32 = 64 Multiplication
@@ -179,31 +188,18 @@ instead of a dot.
 Fixpoint numbers are stored ( n-comma n-whole ) and can be handled
 like signed double numbers.
 
+[double.s](../../../sw/components/forth/double.s)
+
 ```
         f/              ( df1 df2 -- df3 ) Division of two fixpoint numbers
         f*              ( df1 df2 -- df3 ) Multiplication
-
-        hold<           ( char -- )
-                        Adds character to pictured number output buffer
-                        from behind.
-        f#S             ( n-comma1 -- n-comma2 )
-                        Adds 32 comma-digits to number output
-        f#              ( n-comma1 -- n-comma2 )
-                        Adds one comma-digit to number output
-        f.              ( df -- )
-                        Prints a fixpoint number with 32 fractional digits
-        f.n             ( df n -- )
-                        Prints a fixpoint number with n fractional digits
-
-        number          ( c-addr length -- 0 )
-                                        -- n 1 )
-                                        -- n-low n-high 2 )
-                        Tries to convert a string to a number.
 ```
 
 ## Comparisons  (exactly ANS, some logical extensions)
 
 Single-Comparisons:
+
+[comparisons.s](../../../sw/components/forth/comparisons.s)
 
 ```
         u<=             ( u1 u2 -- flag )  Unsigned comparisions
@@ -219,9 +215,15 @@ Single-Comparisons:
         0=              ( x -- flag )
         <>              ( x1 x2 -- flag )
         =               ( x1 x2 -- flag )
+        min             ( n1 n2 -- n1|n2 ) Keeps smaller of top two items
+        max             ( n1 n2 -- n1|n2 ) Keeps greater of top two items
+        umin            ( u1 u2 -- u1|u2 ) Keeps unsigned smaller
+        umax            ( u1 u2 -- u1|u2 ) Keeps unsigned greater
 ```
 
 Double-Comparisons:            They perform the same for double numbers.
+
+[double.s](../../../sw/components/forth/double.s)
 
 ```
         du>             ( ud1 ud2 -- flag )
@@ -236,12 +238,16 @@ Double-Comparisons:            They perform the same for double numbers.
 
 Specials:
 
+[calculation.s](../../../sw/components/forth/calculations.s)
+
 ```
         slt             ( u1 u2 -- 0 | 1 ) Set if less than
         sltu            ( u1 u2 -- 0 | 1 ) Set if less than, unsigned
 ```
 
 ## Number base  (exactly ANS)
+
+[calculation.s](../../../sw/components/forth/calculations.s)
 
 ```
         binary          ( -- ) Sets base to 2
@@ -251,6 +257,11 @@ Specials:
 ```
 
 ## Memory access  (subtle differences to ANS, special cpu-specific extensions)
+
+[memory.s](../../../sw/components/forth/memory.s)
+[compiler.s](../../../sw/components/forth/compiler.s)
+[compiler-memory.s](../../../sw/components/forth/compiler-memory.s)
+[double.s](../../../sw/components/forth/double.s)
 
 ```
         move            ( c-addr1 c-addr2 u -- ) Moves u Bytes in Memory
@@ -300,26 +311,36 @@ Specials:
         c+!             ( u|n a-addr -- )  Add to byte memory location
 ```
 
-## Strings and beautiful output (exactly ANS, some logical extensions)
+## Comments
+
+[strings.s](../../../sw/components/forth/strings.s)
+
+```
+        ( Comment )     Ignore Comment
+        \ Comment       Comment to end of line
+```
+
+## Strings and formatted output (exactly ANS, some logical extensions)
 
 String routines:
+
+[strings.s](../../../sw/components/forth/strings.s)
+[numberstrings.s](../../../sw/components/forth/numberstrings.s)
+[numberoutput.s](../../../sw/components/forth/numberoutput.s)
+[istr.fs](../../../fs/forth/istr.fs)
+[utils.fs](../../../fs/forth/utils.fs)
 
 ```
         type            ( c-addr length -- )
                         Prints a string.
 
-        s" Hello"       Compiles a string and
-                        ( -- c-addr length )
-                        gives back its address and length when executed.
+        s" Hello"       ( -- c-addr length )
+                        Core: Compiles a string and gives back its address and length when executed.
+                        istr.fs: Adds execution mode behavior.
 
-        ." Hello"       Compiles a string and
-                        ( -- )
-                        prints it when executed.
-
-        ( Comment )     Ignore Comment
-        \ Comment       Comment to end of line
-
-        .( Text )       Immediately print the text between the parentheses.
+        ." Hello"       ( -- )
+                        Core: Compiles a string to be printed when executed.
+                        utils.fs: Adds exection mode behavior.
 
         cr              ( -- ) Emits line feed
         bl              ( -- 32 ) ASCII code for Space
@@ -329,7 +350,10 @@ String routines:
         compare         ( caddr-1 len-1 c-addr-2 len-2 -- flag )
                         Compares two strings
 
-        accept          ( c-addr maxlength -- length ) Read input into a string.
+        number          ( c-addr length -- 0 )
+                                        -- n 1 )
+                                        -- n-low n-high 2 )
+                        Tries to convert a string to a number.
 ```
 
 Counted string routines:
@@ -346,9 +370,6 @@ Counted string routines:
 
         count           ( cstr-addr -- c-addr length )
                         Convert counted string into addr-length string
-
-        skipstring      ( cstr-addr -- a-addr )
-                        Increases the pointer to the aligned end of the string.
 ```
 
 Pictured numerical output:
@@ -379,9 +400,23 @@ Pictured numerical output:
         .               ( n -- ) Print single number
         ud.             ( ud -- ) Print unsigned double number
         d.              ( d -- ) Print double number
+
+        hold<           ( char -- )
+                        Adds character to pictured number output buffer
+                        from behind.
+        f#S             ( n-comma1 -- n-comma2 )
+                        Adds 32 comma-digits to number output
+        f#              ( n-comma1 -- n-comma2 )
+                        Adds one comma-digit to number output
+        f.              ( df -- )
+                        Prints a fixpoint number with 32 fractional digits
+        f.n             ( df n -- )
+                        Prints a fixpoint number with n fractional digits
 ```
 
-Deep insights:
+## Deep insights:
+
+[deepinsight.s](../../../sw/components/forth/deepinsight.s)
 
 ```
         words           ( -- ) Prints list of defined words.
@@ -392,9 +427,14 @@ Deep insights:
         hex.            ( u -- ) Prints 32 bit unsigned in hex base,
                                  needs emit only.
                                  This is independent of number subsystem.
+        unused          ( -- u ) Get current amount of free memory
 ```
 
 ## User input and its interpretation (exactly ANS, some logical extensions)
+
+[query.s](../../../sw/components/forth/query.s)
+[token.s](../../../sw/components/forth/token.s)
+[interpreter.s](../../../sw/components/forth/interpreter.s)
 
 ```
         query           ( -- ) Fetches user input to input buffer
@@ -404,6 +444,8 @@ Deep insights:
         setsource       ( c-addr len -- ) Change source
         source          ( -- c-addr len ) Current source
         >in             ( -- addr ) Variable with current offset into source
+
+        accept          ( c-addr maxlength -- length ) Read input into a string.
 
         token           ( -- c-addr len ) Cuts one token out of input buffer
         parse           ( char -- c-addr len )
@@ -418,15 +460,19 @@ Deep insights:
 
 ## Dictionary expansion  (exactly ANS, some logical extensions)
 
+[compiler.s](../../../sw/components/forth/compiler.s)
+[compiler-memory.s](../../../sw/components/forth/compiler-memory.s)
+[calculations.s](../../../sw/components/forth/calculations.s)
+[utils.fs](../../../fs/forth/utils.fs)
+
 ```
         align           ( -- ) Word-align dictionary pointer
-        halign          ( -- ) Halfword-align dictionary pointer (BoxLambda)
+        halign          ( -- ) Halfword-align dictionary pointer
         aligned         ( c-addr -- a-addr ) Advances to next aligned address
-        haligned        ( c-addr -- a-addr ) Advances to next half-word aligned address (BoxLambda)
+        haligned        ( c-addr -- a-addr ) Advances to next half-word aligned address
         cell+           ( x -- x+4 ) Add size of one cell
         cells           ( n -- 4*n ) Calculate size of n cells
 
-        unused          ( -- u ) Get current amount of free memory
         allot           ( n -- ) Tries to advance Dictionary Pointer by n bytes
                                  Aborts, if not enough space available
         here            ( -- a-addr|h-addr )
@@ -435,17 +481,15 @@ Deep insights:
         (latest)        ( -- a-addr ) Variable: Latest definition
 
         ,               ( u|n -- ) Appends a single number to dictionary
-        h,              ( u|n -- ) Appends a halfword to dictionary (BoxLamba)
-        c,              ( u|n -- ) Appends a byte to dictionary (BoxLambda)
+        h,              ( u|n -- ) Appends a halfword to dictionary
+        c,              ( u|n -- ) Appends a byte to dictionary
 
-        compiletoemem?  ( -- ? ) Currently compiling into emem ? (BoxLambda)
-        compiletoemem   ( -- ) Makes emem the target for compiling (BoxLambda)
-        compiletoimem   ( -- ) Makes imem the target for compiling (BoxLambda)
+        compiletoemem?  ( -- ? ) Currently compiling into emem?
+        compiletoemem   ( -- ) Makes emem the target for compiling
+        compiletoimem   ( -- ) Makes imem the target for compiling
 
-        forget          ( -- ) Forget everything except the Forth Core.
-
-        addrinimem?     ( addr -- flag ) Location in imem ? (BoxLambda)
-        addrinemem?     ( addr -- flag ) Location in emem ? (BoxLambda)
+        addrinimem?     ( addr -- flag ) Location in imem?
+        addrinemem?     ( addr -- flag ) Location in emem?
 
         string,         ( c-addr len -- ) Inserts a string of maximum 255 characters without runtime
         literal,        ( u|n -- ) Compiles a literal with runtime
@@ -466,24 +510,20 @@ Deep insights:
                                           to get x into given register.
 ```
 
-Can x be encoded as immediate for...
-
-```
-        uj-encoding?    ( x -- x false | bitmask true ) ... unconditional jumps
-        sb-encoding?    ( x -- x false | bitmask true ) ...   conditional jumps
-```
-
 ## Flags and inventory
 
 Note that `[immediate]` needs to be *inside* of the definition, not after the `;`. There is no `immediate` Word variant that goes *after* the definition.
 
+[compiler-memory.s](../../../sw/components/forth/compiler-memory.s)
+[compiler.s](../../../sw/components/forth/compiler.s)
+
 ```
         smudge          ( -- ) Makes current definition visible,
                                takes care of proper ending
-        [inline]        ( -- ) Makes current definition inlineable. (BoxLambda).
-        [noframe]       ( -- ) No need to push/pop link register when compiling this definition. (BoxLambda)
-        [immediate]     ( -- ) Makes current definition immediate. (BoxLambda)
-        [compileonly]   ( -- ) Makes current definition compileonly. (BoxLambda)
+        [inline]        ( -- ) Makes current definition inlineable.
+        [noframe]       ( -- ) No need to push/pop link register when compiling this definition.
+        [immediate]     ( -- ) Makes current definition immediate.
+        [compileonly]   ( -- ) Makes current definition compileonly.
         setflags        ( x -- ) Sets Flags with a mask. This isn't immediate,
                                but for flash, place it inside your definition !
         (create) name   ( -- ) Creates and links a new invisible dictionary
@@ -494,15 +534,18 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
         hook-find       ( -- a-addr ) Hook for redirecting find
         (find)          ( c-addr len -- a-addr flags ) Default find implementation
 
-        [0-foldable]    ( -- ) Current word becomes foldable with zero constants (BoxLambda)
-        [1-foldable]    ( -- ) Current word becomes foldable with one constants (BoxLambda)
-        [2-foldable]    ( -- ) Current word becomes foldable with two constants (BoxLambda)
-        [3-foldable]    ( -- ) Current word becomes foldable with 3   constants (BoxLambda)
+        [0-foldable]    ( -- ) Current word becomes foldable with zero constants
+        [1-foldable]    ( -- ) Current word becomes foldable with one constants
+        [2-foldable]    ( -- ) Current word becomes foldable with two constants
+        [3-foldable]    ( -- ) Current word becomes foldable with 3   constants
             ...
-        [7-foldable]    ( -- ) Current word becomes foldable with 7   constants (BoxLambda)
+        [7-foldable]    ( -- ) Current word becomes foldable with 7   constants
 ```
 
 ## Compiler essentials  (subtle differences to ANS)
+
+[compiler.s](../../../sw/components/forth/compiler.s)
+[buildsdoes.s](../../../sw/components/forth/buildsdoes.s)
 
 ```
         execute         ( a-addr -- ) Calls subroutine
@@ -528,9 +571,13 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
 
 ## Control structures (exactly ANS)
 
-Internally, they have complicated compile-time stack effects.
+Control structures are immediate and compileonly.
+
+Internally they have complicated compile-time stack effects.
 
 Decisions:
+
+[controlstructures.s](../../../sw/components/forth/controlstructures.s)
 
 ```
 flag if ... then
@@ -543,6 +590,8 @@ flag if ... else ... then
 ```
 
 Case:
+
+[case.s](../../../sw/components/forth/case.s)
 
 ```
 n case
@@ -560,6 +609,8 @@ n case
 ```
 
 Indefinite Loops:
+
+[controlstructures.s](../../../sw/components/forth/controlstructures.s)
 
 ```
 begin ... again
@@ -579,6 +630,9 @@ begin ... flag while ... flag while ... repeat ... else ... then
 ```
 
 Definite Loops:
+
+[doloop.s](../../../sw/components/forth/doloop.s)
+[compiler.s](../../../sw/components/forth/compiler.s)
 
 ```
 limit index   do ... [one or more leave(s)] ... loop
@@ -621,9 +675,13 @@ limit index   do ... [one or more leave(s)] ... loop
                         Begins a loop
 ```
 
-## Misc
+
+## C Foreign Function Interface
 
 ```
-        risc-v          ( -- ) Welcome message if arch is RISC-V
+        c-fun           Define: ( fun "name" -- )
+                        Execute: ( i*x -- j*x )
+                        Register a C function so it can be called from Forth.
+                        See c-ffi.md#forth-calling-c.
 ```
 
