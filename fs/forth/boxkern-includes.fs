@@ -13,6 +13,9 @@
 \ The order is important. The modules build up a stack, with shell.fs on top.
 
 boxkern_include forth/utils.fs
+boxkern_include forth/range.fs
+boxkern_include forth/units.fs
+boxkern_include forth/array.fs
 boxkern_include forth/except.fs
 boxkern_include forth/lambda.fs
 boxkern_include forth/struct.fs

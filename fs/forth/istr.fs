@@ -114,3 +114,12 @@ create str-heap 16 4096 heap-size allot
   [immediate]
 ;
 
+\ Interpretive string printing.
+: ." ( -- )
+  state @ if
+    postpone ."
+  else
+    [char] " parse type cr
+  then
+[immediate] ;
+

@@ -17,7 +17,7 @@
 \ ( addr attrs bitnum -- )
 : _---_if_not_set
   >r ( addr attrs R: bitnum )
-  r@ bit and 0= if ( addr R: bitnum )
+  r@ bitval and 0= if ( addr R: bitnum )
     r@ 4 * + ( addr+offset R: bitnum )
     dup 3 '-' fill ( R: bitnum )
   then
@@ -95,7 +95,7 @@
       2dup 3 tuck ( ain aref ain 3 aref 3 )
       compare if ( ain aref )
         drop ( ain )
-        i bit swap ( bit ain )
+        i bitval swap ( bit ain )
         1- c@ case ( bit )
           '-' of 0 swap endof ( 0 bit )
           '+' of dup endof ( bit bit )

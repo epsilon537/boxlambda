@@ -7,6 +7,41 @@ Most of these Words are not created by me. They come from Mecrisp Forth, ZeptoFo
 credit where credit is due, I don't think it's particularly helpful to do it on this already jam-packed page.
 Where applicable, the Forth source code contains references to their origins.
 
+## Constants and Units
+
+[units.fs](../../../fs/units.fs)
+
+`cell` The size in bytes of one cell
+
+`max-uint` Maximum unsigned integer value
+
+`max-int` Maximum signed integer value
+
+`min-int` Minimum signed integer value
+
+`cells+ ( x n -- x+n*cell )` Add the size of n cells to x
+
+`chars ( u -- u )`
+- Returns the size of u chars (which is u). Used for clarity, to put a unit behind a number. e.g. `8 chars`
+
+`char ( a -- a+1 )` Advance a by one char.
+
+## Range Related Words
+
+`span ( addr len -- start end )` Convert addr len to start-end address span.
+
+`bounds ( addr len -- end start )` Convert addr len to end-start address span.
+
+`within ( n low high -- flag )` True if n is within the range [low..high[
+
+## Arrays
+
+`array <name> ( n -- ) executes: ( i -- addr)`
+  - Create an array of n cells with given name. `i <name>` returns the address of the i-th cell.
+
+`carray <name> ( n -- ) executes: ( i -- addr)`
+  - Create an array of n bytes with given name. `i <name>` returns the address of the i-th byte.
+
 ## Terminal-IO  (exactly ANS, some logical extensions)
 
 [terminal.s](../../../sw/components/forth/terminal.s)words.mdwords.md
@@ -43,6 +78,7 @@ Where applicable, the Forth source code contains references to their origins.
 ## Stack Jugglers  (exactly ANS, some logical extensions)
 
 [stackjugglers.s](../../../sw/components/forth/stackjugglers.s)
+[utils.fs](../../../fs/forth/utils.fs)
 
 ### Single-Jugglers
 
@@ -67,6 +103,9 @@ Where applicable, the Forth source code contains references to their origins.
 `dup ( x -- x x )`
 
 `pick ( ... xi+1 xi ... x1 x0 i -- ... x1 x0 xi )` Picks one element from deep below
+
+`roll ( xu ... x0 u -- xu-1 ... x0 xu )`
+- Roll takes the element u deep in the stack and moves it to the top, shifting the elements above it down by one.
 
 `>r ( x -- ) (R: -- x )`
 
@@ -120,9 +159,10 @@ Where applicable, the Forth source code contains references to their origins.
 
 `rp! ( a-addr -- )` Store return stack pointer
 
-## Logic  (exactly ANS, some logical extensions)
+## Logic and Bit Manipulation
 
 [logic.s](../../../sw/components/forth/logic.s)
+[utils.fs](../../../fs/forth/utils.fs)
 
 Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves
 like "31 and ar/r/lshift". 32 lshift does nothing.
@@ -140,6 +180,8 @@ like "31 and ar/r/lshift". 32 lshift does nothing.
 `ror ( x1 -- x2 )` Logical right-rotation of one bit-place
 
 `rol ( x1 -- x2 )` Logical  left-rotation of one bit-place
+
+`bitval ( u -- u' )` Integer value corresponding to bit position u (i.e. 1<<u).
 
 `bic ( x1 x2 -- x3 )` Bit clear, identical to "not and"
 
@@ -200,6 +242,9 @@ like "31 and ar/r/lshift". 32 lshift does nothing.
 
 [double.s](../../../sw/components/forth/double.s)
 [multiplydivide.s](../../../sw/components/forth/multiplydivide.s)
+[utils.fs](../../../forth/utils.fs)
+
+`um+ ( u1 u2 -- u carry )` Unsigned addition with carry.
 
 `um* ( u1 u2 -- ud )` 32*32 = 64 Multiplication
 
@@ -210,6 +255,8 @@ like "31 and ar/r/lshift". 32 lshift does nothing.
 `um/mod ( ud u1 -- u2 u3 )` ud / u1 = u3 remainder u2
 
 `ud/mod ( ud1 ud2 -- ud3 ud4 )` 64/64 = 64 rem 64 Division ud1 / ud2 = ud4 remainder ud3
+
+`m+ ( d n -- d' )` Add n to d
 
 `m* ( n1 n2 -- d )` n1 * n2 = d
 
@@ -270,6 +317,7 @@ like signed double numbers.
 ### Single Comparisons
 
 [comparisons.s](../../../sw/components/forth/comparisons.s)
+[utils.fs](../../../fs/forth/utils.fs)
 
 `u<= ( u1 u2 -- flag )` Unsigned comparisions
 
@@ -288,6 +336,7 @@ like signed double numbers.
 `< ( n1 n2 -- flag )`
 
 `0< ( n - flag )` Negative ?
+`0> ( n - flag )` Positive ?
 
 `0<> ( x -- flag )`
 
@@ -444,7 +493,7 @@ like signed double numbers.
 
 `." Hello"       ( -- )`
 - Core: Compiles a string to be printed when executed.
-- utils.fs: Adds exection mode behavior.
+- istr.fs: Adds exection mode behavior.
 
 `cr ( -- )` Emits line feed
 
@@ -455,6 +504,8 @@ like signed double numbers.
 `spaces ( n -- )` Emits n spaces if n is positive
 
 `compare ( caddr-1 len-1 c-addr-2 len-2 -- flag )` Compares two strings
+
+`/string (addr u n -- addr' u')` Move string pointer forward by n and reduce string length by n.
 
 ```
 number ( c-addr length -- 0 )
@@ -479,9 +530,9 @@ number ( c-addr length -- 0 )
 
 `digit ( char -- u true | false )` Converts a char to a digit
 
-`[char] *        ( -- char )` Compiles code of following char when executed
+`[char] * ( -- char )` Compiles code of following char when executed
 
-`char *          ( -- char )` gives code of following char
+`char * ( -- char )` gives code of following char
 
 `hold ( char -- )` Adds character to pictured number output buffer from the front.
 
@@ -571,6 +622,8 @@ number ( c-addr length -- 0 )
 [compiler-memory.s](../../../sw/components/forth/compiler-memory.s)
 [calculations.s](../../../sw/components/forth/calculations.s)
 [utils.fs](../../../fs/forth/utils.fs)
+
+`alignto ( a power -- a )` Align an address to a power of two
 
 `align ( -- )` Word-align dictionary pointer
 
