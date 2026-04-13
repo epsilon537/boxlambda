@@ -4,78 +4,260 @@ I decided to put all Forth Words on a single page for easy reference. Some Words
 In such case, the one-liner contains a link to a page with additional info.
 
 Most of these Words are not created by me. They come from Mecrisp Forth, ZeptoForth and other resource. As much as I would like to give
-credit where credit is due, I don't think it's particularly helpful to do it on this already jam-packed page.
-Where applicable, the Forth source code contains references to their origins.
+credit where credit is due, I don't think it's particularly helpful to do this for each Word on this already jam-packed page.
+Where applicable, the Forth source code contains references to their origins. In some cases, I included the origin in the title, e.g.
+[ZeptoForth Heap](#zeptoforth-heap).
 
 ## Constants and Units
 
 [units.fs](../../../fs/units.fs)
 
-`cell` The size in bytes of one cell
+`cell` The size in bytes of one cell.
 
-`max-uint` Maximum unsigned integer value
+`max-uint` Maximum unsigned integer value.
 
-`max-int` Maximum signed integer value
+`max-int` Maximum signed integer value.
 
-`min-int` Minimum signed integer value
+`min-int` Minimum signed integer value.
 
-`cells+ ( x n -- x+n*cell )` Add the size of n cells to x
+`cells+ ( x n -- x+n*cell )` Add the size of n cells to x.
 
 `chars ( u -- u )`
-- Returns the size of u chars (which is u). Used for clarity, to put a unit behind a number. e.g. `8 chars`
+- Returns the size of u chars (which is u). Used for clarity, to put a unit behind a number. e.g. `8 chars`.
 
 `char ( a -- a+1 )` Advance a by one char.
 
 ## Range Related Words
 
+[range.fs](../../../fs/range.fs)
+
 `span ( addr len -- start end )` Convert addr len to start-end address span.
 
 `bounds ( addr len -- end start )` Convert addr len to end-start address span.
 
-`within ( n low high -- flag )` True if n is within the range [low..high[
+`within ( n low high -- flag )` True if n is within the range [low..high[.
 
 ## Arrays
 
-`array <name> ( n -- ) executes: ( i -- addr)`
+[array.fs](../../../fs/array.fs)
+
+`array <name> ( compile time: n -- ) ( run time: i -- addr)`
   - Create an array of n cells with given name. `i <name>` returns the address of the i-th cell.
 
-`carray <name> ( n -- ) executes: ( i -- addr)`
+`carray <name> ( compile time: n -- ) ( run time: i -- addr)`
   - Create an array of n bytes with given name. `i <name>` returns the address of the i-th byte.
 
-## Terminal-IO  (exactly ANS, some logical extensions)
+## ZeptoForth Exceptions
 
-[terminal.s](../../../sw/components/forth/terminal.s)words.mdwords.md
+[exception.s](../../../sw/components/forth/exception.s)
+[except.fs](../../../fs/except.fs)
+
+`?raise ( xt|0 -- | 0 )` Raise exception xt if non-zero.
+
+`try ( xt1 -- xt2|0 )` Execute xt1. Catch and return exception raised. Return 0 if no exception was raised.
+
+`averts ( f "exception name" -- )` Assert that a value is true, otherwise raise a specified exception.
+
+`triggers ( f "exception name" -- )` Assert that a value is false, otherwise raise a specified exception.
+
+`suppress ( exc|0 "exception name" -- exc|0 )`
+- Check whether an exception, typically returned by `try`, matches a specified
+exception and if it does, replace it with zero, marking no exception
+otherwise passing the specified argument through.
+
+`x-assert ( -- )` Assert exception.
+
+`?assert ( f -- )` Raise x-assert exception if f is false.
+
+Example:
+```
+: x-spc-exception ." Don't press space!" ;
+
+: foo-no-catch
+  ." Press any key except space." cr key bl = triggers x-spc-exception
+  ." Thank you for not pressing space" cr
+;
+
+: foo-w-catch
+  [: ." Press any key except space." cr key bl = triggers x-spc-exception ;] try
+  ?dup if
+    ." Exception caught. Rethrowing..." cr
+    ?raise
+  else
+    ." Thank you for not pressing space. " cr
+  then
+;
+```
+
+## ZeptoForth Lambda Anonymous Functions
+
+[lambda.fs](../../../fs/forth/lambda.fs)
+
+`[: ( -- )`
+- Immediate. Begin Lambda.
+
+`;] ( compile-time: -- ) ( run-time: -- xt )`
+- Compile-only Immediate. End Lambda. At run-time, returns the xt address of the code between `[:` and `:]`.
+
+Example 1:
+```
+  token
+  [: 2dup f_stat ;] try 0=
+```
+
+Example 2:
+```
+: rm
+  cr
+  token
+  [: ( patha pathl )
+    2dup s" Removing: %s" printf cr ( patha pathl )
+    f_unlink ( dir )
+  ;] ( pata patl xt )
+  glob-each
+;
+```
+
+## ZeptoForth Structs
+
+[struct.fs](../../../fs/forth/struct.fs)
+
+`begin-structure ( "name" -- addr offset )` Begin declaring a structure.
+
+`end-structure ( addr offset -- )` Finish declaring a structure.
+
+`+field: ( offset size "name" -- offset )` Create an arbitrary-sized field.
+
+`cfield: ( offset "name" -- offset )` Create a byte-sized field.
+
+`hfield: ( offset "name" -- offset )` Create a halfword-sized field.
+
+`field: ( offset "name" -- offset )` Create a cell-sized field.
+
+`2field: ( offset "name" -- offset )` Create a double cell-sized field.
+
+Example:
+```
+begin-structure fil-buf
+  field: .fil
+  field: .buf
+end-structure
+
+create fil-buf0 fil-buf allot
+create fil-buf1 fil-buf allot
+
+fil-buf0 .fil @ fil-buf0 .buf @ 256 f_read
+```
+
+## ZeptoForth Heap
+
+[heap.fs](../../../fs/forth/heap.fs)
+
+Heaps are created by the user and consist of discretes blocks that are allocated, freed, and resized as multiples; the size of allocations plus a cell taken up by a block count is rounded up to the next full number of blocks. There is by no global heap. Note that the time taken up by heap allocation or resizing is bounded by a maximum which is defined by the number of blocks in the heap; any heap allocation or resizing may take this full time. On the other hand, the time taken up by freeing an allocation is determined solely by the number of blocks comprising the allocation.
+
+
+`heap-size ( block-size block-count -- heap-bytes )` Get the size in bytes of a heap with the given block size in bytes and block count.
+
+`init-heap ( block-size block-count addr -- )` Initialize a heap at *addr* with the given block size in bytes and block count; note that the size of the available memory at *addr* should be equal to or greater than the number of bytes returned by `heap-size` for *block-size* and *block-count*.
+
+`allocate ( size heap -- addr )` Allocate memory in a heap of *size* bytes and return its address; if the memory cannot be allocated due to insufficient contiguous memory being available, *x-allocate-failed* is raised.
+
+`free ( addr heap -- )` Free memory at *addr* in a heap.
+
+`resize ( size addr heap -- new-addr )`
+- Resize memory in a heap at *addr* to a new size in bytes, returning its new address. If sufficient memory is available for resizing at *addr* the allocation is expanded without moving or copying it and *addr* is returned. Otherwise, the allocation at *addr* is freed, and its contents is copied to a new allocation, whose address is returned. Note that if insufficient memory is available in the heap for resizing the allocation, the existing allocation is preserved, and *x-allocate-failed* is raised.
+
+Exceptions:
+```
+x-allocate-failed
+x-internal-error
+x-memory-not-allocated
+```
+
+## ZeptoForth Pool
+
+[pool.fs](../../../fs/forth/pool.fs)
+
+Pools are created by the user and consist of discretes blocks that are allocated and freed individual as wholes. There is by default no global pool. Allocating and freeing blocks in pools occurs in constant time and are fast, unlike allocation, resizing, and freeing in heaps.
+
+`pool-size ( -- bytes )` Get the size of a pool header in bytes.
+
+`init-pool ( block-size addr -- )` Initialize a pool at *addr* with the given block size of *block-size* bytes. Note that no space for storing blocks is available in a pool when it is first initialized; to add memory to a pool use `add-pool`.
+
+`add-pool ( addr bytes pool -- )` Add memory starting at *addr* of size *bytes* to *pool* as discrete blocks; only a multiple of the block size of the pool will be added to the pool, so if *bytes* is not a multiple of said block size not all of the space in the memory provided will be used.
+
+`allocate-pool ( pool -- addr )` Allocate a block in *pool* and return its address. If no blocks are available in the pool, `x-allocate-failed` is raised.
+
+`free-pool ( addr pool -- )` Free a block at *addr* in *pool*, making it available to future allocation.
+
+`pool-block-size ( pool -- bytes )` Get the block size of a pool.
+
+`pool-free-count ( pool -- count )` Get the number of free blocks in a pool.
+
+`pool-total-count ( pool -- count )` Get the total number of blocks in a pool.
+
+Exceptions:
+```
+x-allocate-failed
+```
+
+## Temporary Memory Allocator
+
+[temp-alloc.fs](../../../fs/forth/temp-alloc.fs)
+
+`temp-allot ( u -- )` Allot u bytes from temporary buffer may throw x-temp-allot-failed.
+
+`temp-mark> ( -- mark )` Get temp allocator mark. The mark can be used as an address.
+
+`>temp-mark ( mark -- )` Revert to mark
+
+`with-temp-allot ( u xt -- )`
+- Execute xt passing in a buffer of u bytes at TOS. Release buffer when xt has completed.
+
+Example:
+```
+: printf ( n*x c-addr u -- ) 256 [: sprintf type ;] with-temp-allot ;
+```
+
+Exceptions:
+```
+x-temp-allot-failed
+```
+
+## Terminal-IO
+
+[terminal.s](../../../sw/components/forth/terminal.s)
 [terminalhooks.s](../../../sw/components/forth/terminalhook.s)
 
-`emit? ( -- Flag )` Ready to send a character ?
+`emit? ( -- Flag )` Ready to send a character?
 
-`key? ( -- Flag )` Checks if a key is waiting
+`key? ( -- Flag )` Checks if a key is waiting.
 
-`key ( -- Char )` Waits for and fetches the pressed key
+`key ( -- Char )` Waits for and fetches the pressed key.
 
 `emit ( Char -- )` Emits a character.
 
-`hook-emit? ( -- a-addr )` Hooks for redirecting
+```
+hook-emit? ( -- a-addr )
+hook-key? ( -- a-addr )
+hook-key ( -- a-addr )
+hook-emit ( -- a-addr )
+```
+- Hooks for redirecting terminal IO on the fly.
 
-`hook-key? ( -- a-addr )` terminal IO
+```
+serial-emit? ( -- Flag )
+serial-key? ( -- Flag )
+serial-key ( -- Char )
+serial-emit ( Char -- )
+```
+- Serial interface terminal routines as default communications.
 
-`hook-key ( -- a-addr )` on the fly
+`hook-pause ( -- a-addr )` Hook for a multitasker.
 
-`hook-emit ( -- a-addr )`
+`pause ( -- )` Task switch, none for default.
 
-`serial-emit? ( -- Flag )` Serial interface
-
-`serial-key? ( -- Flag )` terminal routines
-
-`serial-key ( -- Char )` as default communications
-
-`serial-emit ( Char -- )`
-
-`hook-pause ( -- a-addr )` Hook for a multitasker
-
-`pause ( -- )` Task switch, none for default
-
-## Stack Jugglers  (exactly ANS, some logical extensions)
+## Stack Jugglers
 
 [stackjugglers.s](../../../sw/components/forth/stackjugglers.s)
 [utils.fs](../../../fs/forth/utils.fs)
@@ -102,7 +284,7 @@ Where applicable, the Forth source code contains references to their origins.
 
 `dup ( x -- x x )`
 
-`pick ( ... xi+1 xi ... x1 x0 i -- ... x1 x0 xi )` Picks one element from deep below
+`pick ( ... xi+1 xi ... x1 x0 i -- ... x1 x0 xi )` Picks one element from deep below.
 
 `roll ( xu ... x0 u -- xu-1 ... x0 xu )`
 - Roll takes the element u deep in the stack and moves it to the top, shifting the elements above it down by one.
@@ -151,53 +333,52 @@ Where applicable, the Forth source code contains references to their origins.
 
 [stackjugglers.s](../../../sw/components/forth/stackjugglers.s)
 
-`sp@ ( -- a-addr )` Fetch  data stack pointer
+`sp@ ( -- a-addr )` Fetch data stack pointer.
 
-`sp! ( a-addr -- )` Store  data stack pointer
+`sp! ( a-addr -- )` Store data stack pointer.
 
-`rp@ ( -- a-addr )` Fetch return stack pointer
+`rp@ ( -- a-addr )` Fetch return stack pointer.
 
-`rp! ( a-addr -- )` Store return stack pointer
+`rp! ( a-addr -- )` Store return stack pointer.
 
 ## Logic and Bit Manipulation
 
 [logic.s](../../../sw/components/forth/logic.s)
 [utils.fs](../../../fs/forth/utils.fs)
 
-Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves
-like "31 and ar/r/lshift". 32 lshift does nothing.
+Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves like "31 and ar/r/lshift". 32 lshift does nothing.
 
-`arshift ( x1 u -- x2 )` Arithmetic right-shift of u bit-places
+`arshift ( x1 u -- x2 )` Arithmetic right-shift of u bit-places.
 
-`rshift ( x1 u -- x2 )` Logical right-shift of u bit-places
+`rshift ( x1 u -- x2 )` Logical right-shift of u bit-places.
 
-`lshift ( x1 u -- x2 )` Logical  left-shift of u bit-places
+`lshift ( x1 u -- x2 )` Logical  left-shift of u bit-places.
 
-`shr ( x1 -- x2 )` Logical right-shift of one bit-place
+`shr ( x1 -- x2 )` Logical right-shift of one bit-place.
 
-`shl ( x1 -- x2 )` Logical  left-shift of one bit-place
+`shl ( x1 -- x2 )` Logical  left-shift of one bit-place.
 
-`ror ( x1 -- x2 )` Logical right-rotation of one bit-place
+`ror ( x1 -- x2 )` Logical right-rotation of one bit-place.
 
-`rol ( x1 -- x2 )` Logical  left-rotation of one bit-place
+`rol ( x1 -- x2 )` Logical  left-rotation of one bit-place.
 
 `bitval ( u -- u' )` Integer value corresponding to bit position u (i.e. 1<<u).
 
-`bic ( x1 x2 -- x3 )` Bit clear, identical to "not and"
+`bic ( x1 x2 -- x3 )` Bit clear, identical to "not and".
 
-`not ( x1 -- x2 )` Invert all bits
+`not ( x1 -- x2 )` Invert all bits.
 
-`xor ( x1 x2 -- x3 )` Bitwise Exclusive-OR
+`xor ( x1 x2 -- x3 )` Bitwise Exclusive-OR.
 
-`or ( x1 x2 -- x3 )` Bitwise OR
+`or ( x1 x2 -- x3 )` Bitwise OR.
 
-`and ( x1 x2 -- x3 )` Bitwise AND
+`and ( x1 x2 -- x3 )` Bitwise AND.
 
-`false ( --  0 )` False-Flag
+`false ( --  0 )` False-Flag.
 
-`true ( -- -1 )` True-Flag
+`true ( -- -1 )` True-Flag.
 
-`clz ( x1 -- u )` Count leading zeros
+`clz ( x1 -- u )` Count leading zeros.
 
 ## Calculus
 
@@ -206,37 +387,37 @@ like "31 and ar/r/lshift". 32 lshift does nothing.
 [multiplydivide.s](../../../sw/components/forth/multiplydivide.s)
 [calculations.s](../../../sw/components/forth/calculations.s)
 
-`u/mod ( u1 u2 -- u3 u4 )` 32/32 = 32 rem 32 Division
-                                           u1 / u2 = u4 remainder u3
-`/mod ( n1 n2 -- n3 n4 )` n1 / n2 = n4 rem n3
+`u/mod ( u1 u2 -- u3 u4 )` 32/32 = 32 rem 32 Division. u1 / u2 = u4 remainder u3.
 
-`mod ( n1 n2 -- n3 )` n1 / n2 = remainder n3
+`/mod ( n1 n2 -- n3 n4 )` n1 / n2 = n4 rem n3.
 
-`/ ( n1 n2 -- n3 )` n1 / n2 = n3
+`mod ( n1 n2 -- n3 )` n1 / n2 = remainder n3.
 
-`* ( u1|n1 u2|n2 -- u3|n3 )` 32*32 = 32 Multiplication
+`/ ( n1 n2 -- n3 )` n1 / n2 = n3.
 
-`2- ( u1|n1 -- u2|n2 )` Subtracts two, optimized
+`* ( u1|n1 u2|n2 -- u3|n3 )` 32*32 = 32 Multiplication.
 
-`1- ( u1|n1 -- u2|n2 )` Subtracts one, optimized
+`2- ( u1|n1 -- u2|n2 )` Subtracts two, optimized.
 
-`2+ ( u1|n1 -- u2|n2 )` Adds two, optimized
+`1- ( u1|n1 -- u2|n2 )` Subtracts one, optimized.
 
-`1+ ( u1|n1 -- u2|n2 )` Adds one, optimized
+`2+ ( u1|n1 -- u2|n2 )` Adds two, optimized.
+
+`1+ ( u1|n1 -- u2|n2 )` Adds one, optimized.
 
 `even ( u1|n1 -- u2|n2 )` Makes even. Adds one if uneven.
 
-`2* ( n1 -- n2 )` Arithmetic  left-shift
+`2* ( n1 -- n2 )` Arithmetic  left-shift.
 
-`2/ ( n1 -- n2 )` Arithmetic right-shift
+`2/ ( n1 -- n2 )` Arithmetic right-shift.
 
-`abs ( n -- u )` Absolute value
+`abs ( n -- u )` Absolute value.
 
-`negate ( n1 -- n2 )` Negate
+`negate ( n1 -- n2 )` Negate.
 
-`- ( u1|n1 u2|n2 -- u3|n3 )` Subtraction
+`- ( u1|n1 u2|n2 -- u3|n3 )` Subtraction.
 
-`+ ( u1|n1 u2|n2 -- u3|n3 )` Addition
+`+ ( u1|n1 u2|n2 -- u3|n3 )` Addition.
 
 ### Double Number Calculus (exactly ANS, some logical extensions)
 
@@ -246,57 +427,57 @@ like "31 and ar/r/lshift". 32 lshift does nothing.
 
 `um+ ( u1 u2 -- u carry )` Unsigned addition with carry.
 
-`um* ( u1 u2 -- ud )` 32*32 = 64 Multiplication
+`um* ( u1 u2 -- ud )` 32*32 = 64 Multiplication.
 
-`ud* ( ud1|d1 ud2|d2 -- ud3|d3 )` 64*64 = 64 Multiplication
+`ud* ( ud1|d1 ud2|d2 -- ud3|d3 )` 64*64 = 64 Multiplication.
 
-`udm* ( ud1 ud2 -- ud3-Low ud4-High )` 64*64=128 Multiplication
+`udm* ( ud1 ud2 -- ud3-Low ud4-High )` 64*64=128 Multiplication.
 
-`um/mod ( ud u1 -- u2 u3 )` ud / u1 = u3 remainder u2
+`um/mod ( ud u1 -- u2 u3 )` ud / u1 = u3 remainder u2.
 
-`ud/mod ( ud1 ud2 -- ud3 ud4 )` 64/64 = 64 rem 64 Division ud1 / ud2 = ud4 remainder ud3
+`ud/mod ( ud1 ud2 -- ud3 ud4 )` 64/64 = 64 rem 64 Division ud1 / ud2 = ud4 remainder ud3.
 
-`m+ ( d n -- d' )` Add n to d
+`m+ ( d n -- d' )` Add n to d.
 
-`m* ( n1 n2 -- d )` n1 * n2 = d
+`m* ( n1 n2 -- d )` n1 * n2 = d.
 
-`m/mod ( d  n1 -- n2 n3 )` d  / n1 = n3 remainder r2
+`m/mod ( d  n1 -- n2 n3 )` d  / n1 = n3 remainder r2.
 
-`d/mod ( d1 d2 -- d3 d4 )` d1 / d2 = d4 remainder d3
+`d/mod ( d1 d2 -- d3 d4 )` d1 / d2 = d4 remainder d3.
 
-`d/ ( d1 d2 -- d3 )` d1 / d2 = d3
+`d/ ( d1 d2 -- d3 )` d1 / d2 = d3.
 
-`*/ ( n1 n2 n3 -- n4 )` n1 * n2 / n3 = n4
+`*/ ( n1 n2 n3 -- n4 )` n1 * n2 / n3 = n4.
 
-`u*/ ( u1 u2 u3 -- u4 )` u1 * u2 / u3 = u4
+`u*/ ( u1 u2 u3 -- u4 )` u1 * u2 / u3 = u4.
 
-`*/mod ( n1 n2 n3 -- n4 n5 )` n1 * n2 / n3 = n5 remainder n4
+`*/mod ( n1 n2 n3 -- n4 n5 )` n1 * n2 / n3 = n5 remainder n4.
 
-`u*/mod ( u1 u2 u3 -- u4 u5 )` u1 * u2 / u3 = u5 remainder u4
+`u*/mod ( u1 u2 u3 -- u4 u5 )` u1 * u2 / u3 = u5 remainder u4.
 
-`d2* ( d1 -- d2 )` Arithmetic  left-shift
+`d2* ( d1 -- d2 )` Arithmetic  left-shift.
 
-`d2/ ( d1 -- d2 )` Arithmetic right-shift
+`d2/ ( d1 -- d2 )` Arithmetic right-shift.
 
-`dshl ( ud1 -- ud2 )` Logical  left-shift, same as d2*
+`dshl ( ud1 -- ud2 )` Logical  left-shift, same as d2*.
 
-`dshr ( ud1 -- ud2 )` Logical right-shift
+`dshr ( ud1 -- ud2 )` Logical right-shift.
 
-`dabs ( d -- ud )` Absolute value
+`dabs ( d -- ud )` Absolute value.
 
-`dnegate ( d1 -- d2 )` Negate
+`dnegate ( d1 -- d2 )` Negate.
 
-`d- ( ud1|d1 ud2|d2 -- ud3|d3 )` Subtraction
+`d- ( ud1|d1 ud2|d2 -- ud3|d3 )` Subtraction.
 
-`d+ ( ud1|d1 ud2|d2 -- ud3|d3 )` Addition
+`d+ ( ud1|d1 ud2|d2 -- ud3|d3 )` Addition.
 
-`s>d ( n -- d )` Makes a signed single number double length
+`s>d ( n -- d )` Makes a signed single number double length.
 
-`2arshift ( d1 u -- d2 )` Arithmetic double right-shift of u bit-places
+`2arshift ( d1 u -- d2 )` Arithmetic double right-shift of u bit-places.
 
-`2rshift ( d1 u -- d2 )` Logical    double right-shift of u bit-places
+`2rshift ( d1 u -- d2 )` Logical    double right-shift of u bit-places.
 
-`2lshift ( d1 u -- d2 )` Logical    double  left-shift of u bit-places
+`2lshift ( d1 u -- d2 )` Logical    double  left-shift of u bit-places.
 
 ## Fixed point numbers
 
@@ -308,9 +489,9 @@ like signed double numbers.
 
 [double.s](../../../sw/components/forth/double.s)
 
-`f/ ( df1 df2 -- df3 )` Division of two fixpoint numbers
+`f/ ( df1 df2 -- df3 )` Division of two fixpoint numbers.
 
-`f* ( df1 df2 -- df3 )` Multiplication
+`f* ( df1 df2 -- df3 )` Multiplication.
 
 ## Comparisons  (exactly ANS, some logical extensions)
 
@@ -319,7 +500,7 @@ like signed double numbers.
 [comparisons.s](../../../sw/components/forth/comparisons.s)
 [utils.fs](../../../fs/forth/utils.fs)
 
-`u<= ( u1 u2 -- flag )` Unsigned comparisions
+`u<= ( u1 u2 -- flag )` Unsigned comparisions.
 
 `u>= ( u1 u2 -- flag )`
 
@@ -327,7 +508,7 @@ like signed double numbers.
 
 `u< ( u1 u2 -- flag )`
 
-`<= ( n1 n2 -- flag )` Signed comparisions
+`<= ( n1 n2 -- flag )` Signed comparisions.
 
 `>= ( n1 n2 -- flag )`
 
@@ -335,8 +516,8 @@ like signed double numbers.
 
 `< ( n1 n2 -- flag )`
 
-`0< ( n - flag )` Negative ?
-`0> ( n - flag )` Positive ?
+`0< ( n - flag )` Negative?
+`0> ( n - flag )` Positive?
 
 `0<> ( x -- flag )`
 
@@ -346,13 +527,13 @@ like signed double numbers.
 
 `= ( x1 x2 -- flag )`
 
-`min ( n1 n2 -- n1|n2 )` Keeps smaller of top two items
+`min ( n1 n2 -- n1|n2 )` Keeps smaller of top two items.
 
-`max ( n1 n2 -- n1|n2 )` Keeps greater of top two items
+`max ( n1 n2 -- n1|n2 )` Keeps greater of top two items.
 
-`umin ( u1 u2 -- u1|u2 )` Keeps unsigned smaller
+`umin ( u1 u2 -- u1|u2 )` Keeps unsigned smaller.
 
-`umax ( u1 u2 -- u1|u2 )` Keeps unsigned greater
+`umax ( u1 u2 -- u1|u2 )` Keeps unsigned greater.
 
 ### Double-Comparisons
 
@@ -378,102 +559,102 @@ like signed double numbers.
 
 [calculation.s](../../../sw/components/forth/calculations.s)
 
-`slt ( u1 u2 -- 0 | 1 )` Set if less than
+`slt ( u1 u2 -- 0 | 1 )` Set if less than.
 
-`sltu ( u1 u2 -- 0 | 1 )` Set if less than, unsigned
+`sltu ( u1 u2 -- 0 | 1 )` Set if less than, unsigned.
 
-## Number base  (exactly ANS)
+## Number base
 
 [calculation.s](../../../sw/components/forth/calculations.s)
 
-`binary ( -- )` Sets base to 2
+`binary ( -- )` Sets base to 2.
 
-`decimal ( -- )` Sets base to 10
+`decimal ( -- )` Sets base to 10.
 
-`hex ( -- )` Sets base to 16
+`hex ( -- )` Sets base to 16.
 
-`base ( -- a-addr )` Base variable address
+`base ( -- a-addr )` Base variable address.
 
-## Memory access  (subtle differences to ANS, special cpu-specific extensions)
+## Memory access
 
 [memory.s](../../../sw/components/forth/memory.s)
 [compiler.s](../../../sw/components/forth/compiler.s)
 [compiler-memory.s](../../../sw/components/forth/compiler-memory.s)
 [double.s](../../../sw/components/forth/double.s)
 
-`move ( c-addr1 c-addr2 u -- )` Moves u Bytes in Memory
+`move ( c-addr1 c-addr2 u -- )` Moves u Bytes in Memory.
 
-`fill ( c-addr u c )` Fill u Bytes of Memory with value c
+`fill ( c-addr u c )` Fill u Bytes of Memory with value c.
 
-`cbit@ ( mask c-addr -- flag )` Test BIts in byte-location
+`cbit@ ( mask c-addr -- flag )` Test BIts in byte-location.
 
-`hbit@ ( mask h-addr -- flag )` Test BIts in halfword-location
+`hbit@ ( mask h-addr -- flag )` Test BIts in halfword-location.
 
-`bit@ ( mask a-addr -- flag )` Test BIts in word-location
+`bit@ ( mask a-addr -- flag )` Test BIts in word-location.
 
-`cxor! ( mask c-addr -- )` Toggle bits in byte-location
+`cxor! ( mask c-addr -- )` Toggle bits in byte-location.
 
-`hxor! ( mask h-addr -- )` Toggle bits in halfword-location
+`hxor! ( mask h-addr -- )` Toggle bits in halfword-location.
 
-`xor! ( mask a-addr -- )` Toggle bits in word-location
+`xor! ( mask a-addr -- )` Toggle bits in word-location.
 
-`cbic! ( mask c-addr -- )` Clear BIts in byte-location
+`cbic! ( mask c-addr -- )` Clear BIts in byte-location.
 
-`hbic! ( mask h-addr -- )` Clear BIts in halfword-location
+`hbic! ( mask h-addr -- )` Clear BIts in halfword-location.
 
-`bic! ( mask a-addr -- )` Clear BIts in word-location
+`bic! ( mask a-addr -- )` Clear BIts in word-location.
 
-`cbis! ( mask c-addr -- )` Set BIts in byte-location
+`cbis! ( mask c-addr -- )` Set BIts in byte-location.
 
-`hbis! ( mask h-addr -- )` Set BIts in halfword-location
+`hbis! ( mask h-addr -- )` Set BIts in halfword-location.
 
-`bis! ( mask a-addr -- )` Set BIts in word-location
+`bis! ( mask a-addr -- )` Set BIts in word-location.
 
 `2constant name  ( ud|d -- )` Makes a double constant.
 
 `constant name  ( u|n -- )` Makes a single constant.
 
-`2variable name  ( ud|d -- )` Makes an initialized double variable
+`2variable name  ( ud|d -- )` Makes an initialized double variable.
 
-`variable name  ( n|n -- )` Makes an initialized single variable
+`variable name  ( n|n -- )` Makes an initialized single variable.
 
-`nvariable name  ( n1*u|n n1 -- )` Makes an initialized variable with specified size of n1 words Maximum is 15 words
+`nvariable name  ( n1*u|n n1 -- )` Makes an initialized variable with specified size of n1 words Maximum is 15 words.
 
-`buffer: name    ( u -- )` Creates a buffer in RAM with u bytes length
+`buffer: name    ( u -- )` Creates a buffer in RAM with u bytes length.
 
-`2@ ( a-addr -- ud|d )` Fetches double number from memory
+`2@ ( a-addr -- ud|d )` Fetches double number from memory.
 
-`2! ( ud|d a-addr -- )` Stores double number in memory
+`2! ( ud|d a-addr -- )` Stores double number in memory.
 
-`@ ( a-addr -- u|n )` Fetches single number from memory
+`@ ( a-addr -- u|n )` Fetches single number from memory.
 
-`! ( u|n a-addr -- )` Stores single number in memory
+`! ( u|n a-addr -- )` Stores single number in memory.
 
-`+! ( u|n a-addr -- )` Add to memory location
+`+! ( u|n a-addr -- )` Add to memory location.
 
-`h@ ( h-addr -- u )` Fetches halfword from memory
+`h@ ( h-addr -- u )` Fetches halfword from memory.
 
-`h@signed ( h-addr -- n )` Fetches halfword with sign extension
+`h@signed ( h-addr -- n )` Fetches halfword with sign extension.
 
-`h! ( u h-addr )` Stores halfword in memory
+`h! ( u h-addr )` Stores halfword in memory.
 
-`h+! ( u|n h-addr -- )` Add to halfword memory location
+`h+! ( u|n h-addr -- )` Add to halfword memory location.
 
-`c@ ( c-addr -- char )` Fetches byte from memory
+`c@ ( c-addr -- char )` Fetches byte from memory.
 
-`c@signed ( c-addr -- n )` Fetches byte with sign extension
+`c@signed ( c-addr -- n )` Fetches byte with sign extension.
 
-`c! ( char c-addr )` Stores byte in memory
+`c! ( char c-addr )` Stores byte in memory.
 
-`c+! ( u|n a-addr -- )` Add to byte memory location
+`c+! ( u|n a-addr -- )` Add to byte memory location.
 
 ## Comments
 
 [strings.s](../../../sw/components/forth/strings.s)
 
-`( Comment )` Ignore Comment
+`( Comment )` Ignore Comment.
 
-`\ Comment` Comment to end of line
+`\ Comment` Comment to end of line.
 
 ## Strings and formatted output (exactly ANS, some logical extensions)
 
@@ -484,26 +665,27 @@ like signed double numbers.
 [numberoutput.s](../../../sw/components/forth/numberoutput.s)
 [istr.fs](../../../fs/forth/istr.fs)
 [utils.fs](../../../fs/forth/utils.fs)
+[tonumber.fs](../../../fs/forth/tonumber.fs)
 
 `type ( c-addr length -- )` Prints a string.
 
-`s" Hello"       ( -- c-addr length )`
-- Core: Compiles a string and gives back its address and length when executed.
-- istr.fs: Adds execution mode behavior.
+`s" text"       ( -- c-addr length )`
+- Core: Compile-only Immediate. Compiles the string given on input stream. The compiled code, when executed, puts the string address and length on the data stack.
+- istr.fs: Adds intepretive execution mode behavior. Take string data from input stream, put string address and length on the data stack.
 
-`." Hello"       ( -- )`
+`." text" ( -- )`
 - Core: Compiles a string to be printed when executed.
-- istr.fs: Adds exection mode behavior.
+- istr.fs: Adds intpretive exection mode behavior. Take string data from input stream and print it.
 
-`cr ( -- )` Emits line feed
+`cr ( -- )` Emits line feed.
 
-`bl ( -- 32 )` ASCII code for Space
+`bl ( -- 32 )` ASCII code for Space.
 
-`space ( -- )` Emits space
+`space ( -- )` Emits space.
 
-`spaces ( n -- )` Emits n spaces if n is positive
+`spaces ( n -- )` Emits n spaces if n is positive.
 
-`compare ( caddr-1 len-1 c-addr-2 len-2 -- flag )` Compares two strings
+`compare ( caddr-1 len-1 c-addr-2 len-2 -- flag )` Compares two strings.
 
 `/string (addr u n -- addr' u')` Move string pointer forward by n and reduce string length by n.
 
@@ -514,6 +696,18 @@ number ( c-addr length -- 0 )
 ```
 - Tries to convert a string to a number.
 
+`>digit ( char -- d true | 0 )` char to digit.
+
+`>number ( ud1 c-addr1 u1 -- ud2 c-addr2 u2 )`
+- ud2 is the unsigned result of converting the characters within the string
+specified by c-addr1 u1 into digits, using the number in `base`, and adding
+each into ud1 after multiplying ud1 by the number in `base`. Conversion
+continues left-to-right until a character that is not convertible, including
+any "+" or "-", is encountered or the string is entirely converted. c-addr2 is
+the location of the first unconverted character or the first character past the
+end of the string if the string was entirely converted. u2 is the number of
+unconverted characters in the string.
+
 ### Counted string routines
 
 `ctype ( cstr-addr -- )` Prints a counted string.
@@ -522,49 +716,111 @@ number ( c-addr length -- 0 )
 
 `cexpect ( cstr-addr maxlength -- )` Read input into a counted string.
 
-`count ( cstr-addr -- c-addr length )` Convert counted string into addr-length string
+`count ( cstr-addr -- c-addr length )` Convert counted string into addr-length string.
+
+### Escaped Strings
+
+[escstr.fs](../../../fs/forth/escstr.fs)
+
+`escape-string ( addr len -- addr' len' )`
+- In given string, substitute escape codes according to table below.
+
+`esc-s" ( parses up to "  -- addr len )`
+- Parse string from input string an substitute escape codes according to table below.
+
+`.esc-s" ( parses up to "  -- )`
+Parse string from input string, substitute escape codes according to table below, and print.
+
+| Escape Code | Substitution |
+|-------------|--------------|
+| \t | Tab |
+| \n | LF  |
+| \r | CR  |
+| \e | ESC |
+| \\ | \   |
+| '  | "   |
 
 ### Pictured numerical output
 
-`.digit ( u -- char )` Converts a digit to a char
+`.digit ( u -- char )` Converts a digit to a char.
 
-`digit ( char -- u true | false )` Converts a char to a digit
+`digit ( char -- u true | false )` Converts a char to a digit.
 
-`[char] * ( -- char )` Compiles code of following char when executed
+`[char] "<char>" ( compile time: "<char>" -- ) ( run time: -- <char> )`
+- Compile-only Immediate. Compiles ASCII code of input-stream-following char. When the compiled code executes, the ASCII code is put on the data stack.
 
-`char * ( -- char )` gives code of following char
+`char "<char>" ( -- <char> )` Take one character from the input stream and put its ASCII code on the data stack.
 
 `hold ( char -- )` Adds character to pictured number output buffer from the front.
 
-`sign ( n -- )` Add a minus sign to pictured number output buffer, if n is negative
+`sign ( n -- )` Add a minus sign to pictured number output buffer, if n is negative.
 
-`#S ( ud1|d1 -- 0 0 )` Add all remaining digits from the double length number to output buffer
+`#S ( ud1|d1 -- 0 0 )` Add all remaining digits from the double length number to output buffer.
 
-`# ( ud1|d1 -- ud2|d2 )` Add one digit from the double length number to output buffer
+`# ( ud1|d1 -- ud2|d2 )` Add one digit from the double length number to output buffer.
 
-`#> ( ud|d -- c-addr len )` Drops double-length number and finishes pictured numeric output ready for type
+`#> ( ud|d -- c-addr len )` Drops double-length number and finishes pictured numeric output ready for type.
 
-`<# ( -- )` Prepare pictured number output buffer
+`<# ( -- )` Prepare pictured number output buffer.
 
-`u. ( u -- )` Print unsigned single number
+`u. ( u -- )` Print unsigned single number.
 
-`. ( n -- )` Print single number
+`. ( n -- )` Print single number.
 
-`ud. ( ud -- )` Print unsigned double number
+`ud. ( ud -- )` Print unsigned double number.
 
-`d. ( d -- )` Print double number
+`d. ( d -- )` Print double number.
 
 `hold< ( char -- )` Adds character to pictured number output buffer from behind.
 
-`f#S ( n-comma1 -- n-comma2 )` Adds 32 comma-digits to number output
+`f#S ( n-comma1 -- n-comma2 )` Adds 32 comma-digits to number output.
 
-`f# ( n-comma1 -- n-comma2 )` Adds one comma-digit to number output
+`f# ( n-comma1 -- n-comma2 )` Adds one comma-digit to number output.
 
-`f. ( df -- )` Prints a fixpoint number with 32 fractional digits
+`f. ( df -- )` Prints a fixpoint number with 32 fractional digits.
 
-`f.n ( df n -- )` Prints a fixpoint number with n fractional digits
+`f.n ( df n -- )` Prints a fixpoint number with n fractional digits.
 
 `hex. ( u -- )` Prints 32 bit unsigned in hex base, needs emit only. This is independent of number subsystem.
+
+## jkotlinski Printf-Style Printing and Formatting
+
+[printf.fs](../../../fs/forth/printf.fs)
+
+`sprintf ( n*x addr1 u1 addr2 -- addr2 u3 )` Prints n*x into buffer addr2 using the format string at addr1 u. addr2 u3 is the resulting string.
+
+`printf ( n*x c-addr u -- )` Prints n*x using the format string at c-addr u.
+
+The format string contains ordinary characters (except %), which are copied unchanged to the destination buffer, and conversion specifications. Conversion specifications have the following format:
+- Introductory % character
+- An optional - that specifies left justify
+- An optional 0 that left-pads using 0 instead of space
+- An optional decimal integer value that specifies minimum field width
+- A conversion format specifier
+
+Format Specifiers:
+```
+% - %
+c - character
+n - signed number
+u - unsigned number
+x - hexadecimal number
+dn - double-cell signed number
+du - double-cell unsigned number
+s - string (c-addr u)
+```
+
+Examples:
+```
+10 s" Joe" s" %s has a %n%% discount!" printf
+Joe has a 10% discount! ok
+
+10 s" %05n" printf
+00010 ok
+
+s" spaced" s" %-10s out" printf
+spaced     out ok``
+```
 
 ## Deep insights
 
@@ -572,15 +828,15 @@ number ( c-addr length -- 0 )
 
 `words ( -- )` Prints list of defined words.
 
-`.s ( many -- many )` Prints stack contents, signed
+`.s ( many -- many )` Prints stack contents, signed.
 
-`u.s ( many -- many )` Prints stack contents, unsigned
+`u.s ( many -- many )` Prints stack contents, unsigned.
 
-`h.s ( many -- many )` Prints stack contents, unsigned, hex
+`h.s ( many -- many )` Prints stack contents, unsigned, hex.
 
-`.rs ( many -- many )` Prints return stack contents
+`.rs ( many -- many )` Prints return stack contents.
 
-`unused ( -- u )` Get current amount of free memory
+`unused ( -- u )` Get current amount of free memory.
 
 ## User input and its interpretation (exactly ANS, some logical extensions)
 
@@ -588,98 +844,98 @@ number ( c-addr length -- 0 )
 [token.s](../../../sw/components/forth/token.s)
 [interpreter.s](../../../sw/components/forth/interpreter.s)
 
-`query ( -- )` Fetches user input to input buffer
+`query ( -- )` Fetches user input to input buffer.
 
-`tib ( -- cstr-addr )` Input buffer
+`tib ( -- cstr-addr )` Input buffer.
 
-`current-source ( -- addr )` Double-Variable which contains source
+`current-source ( -- addr )` Double-Variable which contains source.
 
-`setsource ( c-addr len -- )` Change source
+`setsource ( c-addr len -- )` Change source.
 
-`source ( -- c-addr len )` Current source
+`source ( -- c-addr len )` Current source.
 
-`>in ( -- addr )` Variable with current offset into source
+`>in ( -- addr )` Variable with current offset into source.
 
 `accept ( c-addr maxlength -- length )` Read input into a string.
 
-`token ( -- c-addr len )` Cuts one token out of input buffer
+`token ( -- c-addr len )` Cuts one token out of input buffer.
 
-`parse ( char -- c-addr len )` Cuts anything delimited by char out of input buffer
+`parse ( char -- c-addr len )` Cuts anything delimited by char out of input buffer.
 
-`evaluate ( any addr len -- any )` Interpret given string
+`evaluate ( any addr len -- any )` Interpret given string.
 
 `interpret ( any -- any )` Execute, compile, fold, optimize...
 
-`quit ( many -- )` (R: many -- ) Resets Stacks
+`quit ( many -- )` (R: many -- ) Resets Stacks.
 
-`hook-quit ( -- a-addr )` Hook for changing the inner quit loop
+`hook-quit ( -- a-addr )` Hook for changing the inner quit loop.
 
-`(quit) ( any -- any )` Standard REPL, default for hook-quit
+`(quit) ( any -- any )` Standard REPL, default for hook-quit.
 
-## Dictionary expansion  (exactly ANS, some logical extensions)
+## Dictionary expansion
 
 [compiler.s](../../../sw/components/forth/compiler.s)
 [compiler-memory.s](../../../sw/components/forth/compiler-memory.s)
 [calculations.s](../../../sw/components/forth/calculations.s)
 [utils.fs](../../../fs/forth/utils.fs)
 
-`alignto ( a power -- a )` Align an address to a power of two
+`alignto ( a power -- a )` Align an address to a power of two.
 
-`align ( -- )` Word-align dictionary pointer
+`align ( -- )` Word-align dictionary pointer.
 
-`halign ( -- )` Halfword-align dictionary pointer
+`halign ( -- )` Halfword-align dictionary pointer.
 
-`aligned ( c-addr -- a-addr )` Advances to next aligned address
+`aligned ( c-addr -- a-addr )` Advances to next aligned address.
 
-`haligned ( c-addr -- a-addr )` Advances to next half-word aligned address
+`haligned ( c-addr -- a-addr )` Advances to next half-word aligned address.
 
-`cell+ ( x -- x+4 )` Add size of one cell
+`cell+ ( x -- x+4 )` Add size of one cell.
 
-`cells ( n -- 4*n )` Calculate size of n cells
+`cells ( n -- 4*n )` Calculate size of n cells.
 
-`allot ( n -- )` Tries to advance Dictionary Pointer by n bytes. Aborts, if not enough space available
+`allot ( n -- )` Tries to advance Dictionary Pointer by n bytes. Aborts, if not enough space available.
 
-`here ( -- a-addr|h-addr )` Gives current position in Dictionary
+`here ( -- a-addr|h-addr )` Gives current position in Dictionary.
 
-`(dp) ( -- a-addr )` Variable: Dictionary pointer
+`(dp) ( -- a-addr )` Variable: Dictionary pointer.
 
-`(latest) ( -- a-addr )` Variable: Latest definition
+`(latest) ( -- a-addr )` Variable: Latest definition.
 
-`, ( u|n -- )` Appends a single number to dictionary
+`, ( u|n -- )` Appends a single number to dictionary.
 
-`h, ( u|n -- )` Appends a halfword to dictionary
+`h, ( u|n -- )` Appends a halfword to dictionary.
 
-`c, ( u|n -- )` Appends a byte to dictionary
+`c, ( u|n -- )` Appends a byte to dictionary.
 
 `compiletoemem? ( -- ? )` Currently compiling into emem?
 
-`compiletoemem ( -- )` Makes emem the target for compiling
+`compiletoemem ( -- )` Makes emem the target for compiling.
 
-`compiletoimem ( -- )` Makes imem the target for compiling
+`compiletoimem ( -- )` Makes imem the target for compiling.
 
 `addrinimem? ( addr -- flag )` Location in imem?
 
 `addrinemem? ( addr -- flag )` Location in emem?
 
-`string, ( c-addr len -- )` Inserts a string of maximum 255 characters without runtime
+`string, ( c-addr len -- )` Inserts a string of maximum 255 characters without runtime.
 
-`literal, ( u|n -- )` Compiles a literal with runtime
+`literal, ( u|n -- )` Compiles a literal with runtime.
 
-`inline, ( a-addr -- )` Inlines the chosen subroutine
+`inline, ( a-addr -- )` Inlines the chosen subroutine.
 
-`call, ( a-addr -- )` Compiles a call to a subroutine
+`call, ( a-addr -- )` Compiles a call to a subroutine.
 
-`ret, ( -- )` Compiles a ret opcode
+`ret, ( -- )` Compiles a ret opcode.
 
-`ramvar-here ( -- a-addr )` Gives current RAM management pointer
+`ramvar-here ( -- a-addr )` Gives current RAM management pointer.
 
-`dictionarystart ( -- a-addr )` Current entry point for dictionary search
+`dictionarystart ( -- a-addr )` Current entry point for dictionary search.
 
 `dictionarynext ( a-addr -- a-addr flag )` Scans dictionary chain and returns true if end is reached.
 
-`skipdefinition ( addr -- addr* )` Skip after the next ret opcode
+`skipdefinition ( addr -- addr* )` Skip after the next ret opcode.
 
-`(sp) ( -- a-addr)` Variable to compare data stack pointer before and after compilation of definitions
+`(sp) ( -- a-addr)` Variable to compare data stack pointer before and after compilation of definitions.
 
 `registerliteral, ( x register -- )` Generate shortest possible sequence to get x into given register.
 
@@ -690,7 +946,7 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
 [compiler-memory.s](../../../sw/components/forth/compiler-memory.s)
 [compiler.s](../../../sw/components/forth/compiler.s)
 
-`smudge ( -- )` Makes current definition visible, takes care of proper ending
+`smudge ( -- )` Makes current definition visible, takes care of proper ending.
 
 `[inline] ( -- )` Makes current definition inlineable.
 
@@ -700,58 +956,98 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
 
 `[compileonly] ( -- )` Makes current definition compileonly.
 
-`setflags ( x -- )` Sets Flags with a mask. This isn't immediate, but for flash, place it inside your definition !
+`setflags ( x -- )` Sets Flags with a mask. This isn't immediate, but for flash, place it inside your definition!
 
 `(create) name   ( -- )` Creates and links a new invisible dictionary header that does nothing.
 
-`find ( c-addr len -- a-addr flags )` Searches for a String in Dictionary. Gives back flags, which are different to ANS !
+`find ( c-addr len -- a-addr flags )` Searches for a String in Dictionary. Gives back flags, which are different to ANS!
 
-`hook-find ( -- a-addr )` Hook for redirecting find
+`hook-find ( -- a-addr )` Hook for redirecting find.
 
-`(find) ( c-addr len -- a-addr flags )` Default find implementation
+`(find) ( c-addr len -- a-addr flags )` Default find implementation.
 
-`[0-foldable] ( -- )` Current word becomes foldable with zero constants
+`[0-foldable] ( -- )` Current word becomes foldable with zero constants.
 
-`[1-foldable] ( -- )` Current word becomes foldable with one constants
+`[1-foldable] ( -- )` Current word becomes foldable with one constants.
 
-`[2-foldable] ( -- )` Current word becomes foldable with two constants
+`[2-foldable] ( -- )` Current word becomes foldable with two constants.
 
 ...
 
-`[7-foldable] ( -- )` Current word becomes foldable with 7   constants
+`[7-foldable] ( -- )` Current word becomes foldable with 7 constants.
 
-## Compiler essentials  (subtle differences to ANS)
+## Compiler essentials
 
 [compiler.s](../../../sw/components/forth/compiler.s)
 [buildsdoes.s](../../../sw/components/forth/buildsdoes.s)
 
-`execute ( a-addr -- )` Calls subroutine
+`execute ( xt -- )` Calls the executable token.
 
-`recurse ( -- )` Lets the current definition call itself
+`recurse ( -- )` Lets the current definition call itself.
 
-`' name          ( -- a-addr )` Tries to find name in dictionary gives back executable address
+`' ( "Word" -- addr )`
+- Tries to find Word in dictionary and put its address on the data stack.
+Quits (i.e restarts REPL) if Word is not found.
 
-`['] name        ( -- a-addr)` Tick that compiles the executable address of found word as literal
+`['] (compile-time: "Word" -- ) (run-time: -- addr )`
+- Compile-only Immediate. Compiles the executable address of found Word as literal.
 
-`postpone name   ( -- )` Helps compile immediate words.
+`postpone ( "Word" -- )`
+- Used inside Immediate Words. Selects the compile-time behavior of the postponed Word.
 
-`does> ( -- )` executes: ( -- a-addr ) Gives address to where you have stored data.
+Example:
+```
+\ Begin lambda
+: [: ( -- )
+  state @ if
+    \ [: is invoked as a compiling word, i.e. a code-generating word that
+    \ executes when it's encountered in the definition of an other word.
+    \ When [: _executes_... it compiles an 'ahead'. This ahead pushes
+    \ 2 items on the stack: patchaddr and structmatchconst
+    postpone ahead ( patchaddr structmatchconst )
+    \ [: puts 'here' on the stack. This the entry point of the code that 'ahead' is skipping
+    \ over.
+    here -rot ( lambdaentry patchaddr structmatchconst )
+    \ [: compiles an 'add sp, sp -4 sw ra, (sp)', i.e. it generates a prologue.
+    postpone push_ra ( lambdaentry patchaddr structmatchconst )
+  else
+    \ [: is invoked while in execution state.
+    ] \ Enter compilation state and push following 3 items on the stack for ;] to consume.
+    here 0 0 \ ( lambdaentry patchaddr structmatchconst )
+    postpone push_ra
+  then
+  [immediate]
+;
+```
 
-`<builds ( -- )` Makes Dictionary header and reserves space for special call.
+`create ( "name" -- )` Takes a word from the input stream and creates a dictionary entry with that name.
 
-`create name     ( -- )` Create a definition with default action which cannot be changed later. Equivalent to: `create <builds does>`
+`: <Defining Word> create <compile-time operations> does> <run-time operations> ;`
+- `does> ( Compile-time: -- )` marks the end of the compile-time behavior and the beginning of the run-time
+behavior of the Defining Word.
+- `does> ( Run-time: -- addr )` puts the address of the defined Word instance on the data stack.
 
-`state ( -- a-addr )` Address of state variable
+Example:
 
-`] ( -- )` Switch to compile state
+```
+: constant create , does> @ ;
 
-`[ ( -- )` Switch to execute state
+42 constant istheanswer
 
-`; ( -- )` Finishes new definition
+istheanswer . cr
+```
 
-`: name          ( -- )` Opens new definition
+`state ( -- a-addr )` Address of state variable.
 
-## Control structures (exactly ANS)
+`] ( -- )` Switch to compile state.
+
+`[ ( -- )` Switch to execute state.
+
+`; ( -- )` Finishes new definition.
+
+`: name          ( -- )` Opens new definition.
+
+## Control structures
 
 Control structures are immediate and compileonly.
 
@@ -785,15 +1081,15 @@ n case
   endcase
 ```
 
-`case ( n -- n )` Begins case structure
+`case ( n -- n )` Begins case structure.
 
-`of ( m -- )` Compares m with n, choose this if n=m
+`of ( m -- )` Compares m with n, choose this if n=m.
 
-`?of ( n flag -- )` Flag-of, for custom comparisons
+`?of ( n flag -- )` Flag-of, for custom comparisons.
 
-`endof ( -- )` End of one possibility
+`endof ( -- )` End of one possibility.
 
-`endcase ( n -- )` Ends case structure, discards n
+`endcase ( n -- )` Ends case structure, discards n.
 
 ### Indefinite Loops
 
@@ -808,11 +1104,11 @@ begin ... flag while ... flag while ... repeat ... else ... then
 
 `repeat ( -- )` Finish of a middle-flag-checking loop.
 
-`while ( flag -- )` Check a flag in the middle of a loop
+`while ( flag -- )` Check a flag in the middle of a loop.
 
-`until ( flag -- )` begin ... flag until
+`until ( flag -- )` begin ... flag until.
 
-`again ( -- )` begin ... again is an endless loop
+`again ( -- )` begin ... again is an endless loop.
 
 `begin ( -- )`
 
@@ -828,28 +1124,50 @@ limit index   do ... [one or more leave(s)] ... loop
              ?do ... [one or more leave(s)] ... n +loop
 ```
 
-`k ( -- u|n )` Gives third  loop index
+`k ( -- u|n )` Gives third  loop index.
 
-`j ( -- u|n )` Gives second loop index
+`j ( -- u|n )` Gives second loop index.
 
-`i ( -- u|n )` Gives innermost loop index
+`i ( -- u|n )` Gives innermost loop index.
 
-`unloop (R: old-limit old-index -- )` Drops innermost loop structure, pops back old loop structures to loop registers
+`unloop (R: old-limit old-index -- )` Drops innermost loop structure, pops back old loop structures to loop registers.
 
 `exit ( -- )` Returns from current definition. Compiles a ret opcode.
 
-`leave ( -- ) (R: old-limit old-index -- )` Leaves current innermost loop promptly
+`leave ( -- ) (R: old-limit old-index -- )` Leaves current innermost loop promptly.
 
-`+loop ( u|n -- ) (R: unchanged | old-limit old-index -- )` Adds number to current loop index register and checks whether to continue or not
+`+loop ( u|n -- ) (R: unchanged | old-limit old-index -- )` Adds number to current loop index register and checks whether to continue or not.
 
 `loop ( -- ) (R: unchanged | old-limit old-index -- )` Increments current loop index register by one and checks whether to continue or not.
 
-`?do ( Limit Index -- ) (R: unchanged | -- old-limit old-index )` Begins a loop if limit and index are not equal
+`?do ( Limit Index -- ) (R: unchanged | -- old-limit old-index )` Begins a loop if limit and index are not equal.
 
-`do ( Limit Index -- ) (R: -- old-limit old-index )` Begins a loop
+`do ( Limit Index -- ) (R: -- old-limit old-index )` Begins a loop.
 
 ## C Foreign Function Interface
 
-`c-fun Define: ( fun "name" -- ) Execute: ( i*x -- j*x )`
+[early.fs](../../../fs/forth/early.fs)
+[cstr.fs](../../../fs/forth/cstr.fs)
+
+`c-fun Define: ( compile time: fun "name" -- ) ( run time: i*x -- j*x )`
 - Register a C function so it can be called from Forth. See [Forth Calling C](c-ffi.md#forth-calling-c).
+
+`CSTRLENMAX` Maximum C string length constant.
+
+`s0len ( addr -- u )` calculate the length of a 0-terminated string.
+
+`s0>s ( adr -- adr len)` Convert 0-terminated string to Forth string.
+
+`+0c! ( adr len -- )` 0-terminate Forth string, assume there's space for the 0-terminator.
+
+`s0" ( "string" -- adr )` Compiles a 0-terminated string and gives back its address when executed. May raise x-string-too-long.
+
+`cstr ( buf256 adr len -- )` Copy len bytes from addr to buf256 of at least 256 bytes and add 0-terminator. May raise x-string-too-long.
+
+`cstr" ( buf256 "text" -- )` Copy Forth string into buffer of at least 256 bytes and 0-terminate. May raise x-string-too-long.
+
+Exceptions:
+```
+x-string-too-long
+```
 

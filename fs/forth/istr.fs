@@ -103,7 +103,7 @@ create str-heap 16 4096 heap-size allot
 ;
 
 \ Compile or interpret a string and give back its address and length when executed.
-\ ( -- addr len )
+\ ( "string" -- addr len )
 : s"
   state @ if
     postpone s" \ Compiled string.
@@ -115,7 +115,7 @@ create str-heap 16 4096 heap-size allot
 ;
 
 \ Interpretive string printing.
-: ." ( -- )
+: ." ( "string" -- )
   state @ if
     postpone ."
   else

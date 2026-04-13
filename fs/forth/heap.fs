@@ -95,7 +95,7 @@ end-structure
 
 \ Get whether a block has been allocated
 : block-allocated? ( index heap -- allocated? )
-  swap tuck swap bitmap-index@ swap $1F and bit and 0<>
+  swap tuck swap bitmap-index@ swap $1F and bitval and 0<>
 ;
 
 \ Get the group size of a block
