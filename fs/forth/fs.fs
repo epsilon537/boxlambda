@@ -190,26 +190,26 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 ;
 
 \ Internal variable used to hold a numbytes value.
-0 variable (fs_nbytes)
+0 variable _fs_nbytes
 
 \ Read n bytes from file into buffer
 \ May throw x-fr-* exception.
 \ ( fil buf numbytes -- numbytes )
 : f_read
-  (fs_nbytes)     \ ( fp buf btr *br )
+  _fs_nbytes     \ ( fp buf btr *br )
   fs_f_read       \ ( ior )
   check-throw-ior \ ( )
-  (fs_nbytes) @   \ ( nbytes )
+  _fs_nbytes @   \ ( nbytes )
 ;
 
 \ Write n bytes from buffer into file.
 \ May throw x-fr-* exception.
 \ ( fil buf numbytes -- numbytes )
 : f_write
-  (fs_nbytes)        \ ( fp buf btw *bw )
+  _fs_nbytes        \ ( fp buf btw *bw )
   fs_f_write         \ ( ior )
   check-throw-ior    \ ( )
-  (fs_nbytes) @      \ ( nbytes )
+  _fs_nbytes @      \ ( nbytes )
 ;
 
 \ Moves the file read/write pointer of an open file. Can also be used to expand
@@ -475,7 +475,7 @@ create fil-buf1 fil-buf allot
 \
 
 \ Mount a volume.
-\ Pass in volume name, e.g. s" /ram", or s" /sd"
+\ Pass in volume name, e.g. s" ram:", or s" sd0:"
 \ May throw x-fr-* exception.
 \ ( addr len -- )
 : f_mount
@@ -485,7 +485,7 @@ create fil-buf1 fil-buf allot
 ;
 
 \ Unmount a volume.
-\ Pass in volume name, e.g. s" /ram", or s" /sd"
+\ Pass in volume name, e.g. s" ram:", or s" sd0:"
 \ May throw x-fr-* exception.
 \ ( addr len -- )
 : f_umount
@@ -494,6 +494,10 @@ create fil-buf1 fil-buf allot
   check-throw-ior
 ;
 
+\ Change drive.
+\ Pass in volume name, e.g. s" ram:", or s" sd0:"
+\ May throw x-fr-* exception.
+\ ( addr len -- )
 : f_chdrive
   path str>path ( )
   path fs_f_chdrive
