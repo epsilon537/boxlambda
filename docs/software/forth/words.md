@@ -1173,6 +1173,8 @@ x-string-too-long
 
 ## Filesystem
 
+[fs.fs](../../../fs/forth/fs.fs)
+
 File Access:
 
 `f_open ( addr len mode -- fil )`
@@ -1338,6 +1340,8 @@ x-fr-unknown
 
 ## Output Redirection to File
 
+[fs-redirect.fs](../../../fs/forth/fs-redirect.fs)
+
 `emit>file ( fil -- )` Set emit-hook and emit-hook? to emit-to-open-file handlers.
 
 `emit>console ( -- )` Set emit-hook and emit-hook? to console handlers.
@@ -1352,6 +1356,8 @@ x-fr-unknown
 `tee-end ( -- )` Remove tee>file emit hook. Restore previous emit handler.
 
 # Shell
+
+[shell.fs](../../../fs/forth/shell.fs)
 
 Some basic shell-like commands for interactive use.
 
@@ -1426,3 +1432,27 @@ x-eof
 x-line-truncated
 ```
 
+## Conditional Execution/Compilation
+
+[ifdef.fs](../../../fs/forth/ifdef.fs)
+
+`[if] (? -- )` Start conditional execution/compilation if flag is true.
+`[ifdef] ( "Word" -- )` Start conditional execution/compilation if Word is defined.
+`[ifndef] ( "Word" -- )` Start conditional execution/compilation if Word is not defined.
+`[else] ( -- )` Start the else-case in [if(n)(def)]/[else]/[then].
+`[then] ( -- )` Finish conditional execution/compilation.
+
+## Mecrisp RISC-V 32 IM Disassembler
+
+[disasm.fs](../../../fs/forth/disasm.fs)
+[dump.fs](../../../fs/forth/dump.fs)
+
+`disasm-$` Variable holding current position for disassembling.
+
+`disasm-step ( -- )` Disassemble instruction at `disasm-$` and advance `disasm-$`.
+
+`list ( -- )` A quick list of Words.
+
+`see ( "Word" -- )` Disassemble the definition of Word from beginning to first ret.
+
+`dump ( addr len -- ) \ Print a memory region`
