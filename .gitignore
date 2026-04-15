@@ -1,5 +1,7 @@
 #Lint suggested waivers
 *.lint
+#Backup files
+*.bkp
 #litex stuff
 /sub/liteeth
 /sub/liteiclink

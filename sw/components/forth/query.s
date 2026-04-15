@@ -195,7 +195,7 @@ query:
 # -----------------------------------------------------------------------------
   push x1
 
-  call source_in # Aktueller Offset in den Inputbuffer  Zero characters consumed yet
+  call source_in # Set >in to 0.
   sc x0, 0(x8)
   drop
 
