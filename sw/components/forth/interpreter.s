@@ -21,7 +21,7 @@
 # Interpreter and optimisations
 
 # -----------------------------------------------------------------------------
-  Definition Flag_visible, "evaluate" # ( -- )
+  Definition Flag_visible, "evaluate" # ( any addr len -- any )
 # -----------------------------------------------------------------------------
 evaluate:
   push x1

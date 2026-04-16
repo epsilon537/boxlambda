@@ -161,6 +161,8 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
     - [Forth Word Glossary](docs/software/forth/words.md)
     - [Interrupt Handling](docs/software/forth/irqs.md)
     - [Exception Handling](docs/software/forth/exception-handling.md)
+    - [Interpreting](docs/software/forth/interpreting.md)
+    - [Include](docs/software/forth/include.md)
   - [Bootloader](docs/software/bootloader.md)
   - C Components:
       - [About C Components](docs/software/c-components/about.md)

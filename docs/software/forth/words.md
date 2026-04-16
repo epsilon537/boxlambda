@@ -61,6 +61,8 @@ Where applicable, the Forth source code contains references to their origins. In
 [exception.s](../../../sw/components/forth/exception.s)
 [except.fs](../../../fs/except.fs)
 
+See [Forth Exception Handling](exception-handling).
+
 `?raise ( xt|0 -- | 0 )`
 - Raise exception xt if non-zero.
 
@@ -1041,6 +1043,8 @@ spaced     out ok``
 [token.s](../../../sw/components/forth/token.s)
 [interpreter.s](../../../sw/components/forth/interpreter.s)
 
+See [Interpreting Console Input](intepreting.md).
+
 `query ( -- )`
 - Fetches user input to input buffer.
 
@@ -1759,6 +1763,7 @@ Some basic shell-like commands for interactive use.
   include may be used recursively, i.e. the file being
   included itself may contain one or more include calls.
   May raise x-line-truncated.
+- See [Include File Evaluation](include.md)
 
 `refill ( -- )`
 - An alternative query that also supports input

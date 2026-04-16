@@ -79,28 +79,28 @@ create charbuf 1 allot
   base ! ( dst src+1 srcend )
 ;
 
-\ Prints n*x into buffer addr2 using the format string at addr1 u.
+\ Prints any into buffer addr2 using the format string at addr1 u.
 \ addr2 u3 is the resulting string.
-: sprintf ( n*x addr1 u1 addr2 -- addr2 u3 )
-  dup >r ( n*x addr1 u1 addr2 R: addr2 )
-  -rot ( n*x addr2 addr1 u1 R: addr2 )
-  span ( n*x addr2 addr1 addr1end R: addr2 )
+: sprintf ( any addr1 u1 addr2 -- addr2 u3 )
+  dup >r ( any addr1 u1 addr2 R: addr2 )
+  -rot ( any addr2 addr1 u1 R: addr2 )
+  span ( any addr2 addr1 addr1end R: addr2 )
   begin
-    2dup < while ( n*x addr2 addr1 addr1end R: addr2 )
-      over c@ '%' = if ( n*x addr2 addr1 addr1end R: addr2 )
+    2dup < while ( any addr2 addr1 addr1end R: addr2 )
+      over c@ '%' = if ( any addr2 addr1 addr1end R: addr2 )
         parse-cmdspec
       else
-        -rot ( n*x addr1end addr2 addr1 R: addr2 )
-        2dup c@ swap c! ( n*x addr1end addr2 addr1 R: addr2 )
-        -rot 1+ -rot ( n*x addr2+1 addr1 addr1end R: addr2 )
-      then ( n*x addr2+1 addr1 addr1end R: addr2 )
-      swap 1+ swap ( n*x addr2+1 addr1+1 addr1end R: addr2 )
+        -rot ( any addr1end addr2 addr1 R: addr2 )
+        2dup c@ swap c! ( any addr1end addr2 addr1 R: addr2 )
+        -rot 1+ -rot ( any addr2+1 addr1 addr1end R: addr2 )
+      then ( any addr2+1 addr1 addr1end R: addr2 )
+      swap 1+ swap ( any addr2+1 addr1+1 addr1end R: addr2 )
   repeat ( addr2end addr1end addr1end R: addr2 )
   2drop ( addr2end R: addr2 )
   r> ( addr2end addr2 )
   tuck - ( addr2 u2 )
 ;
 
-\ Prints n*x using the format string at c-addr u.
-: printf ( n*x c-addr u -- ) 256 [: sprintf type ;] with-temp-allot ;
+\ Prints any using the format string at c-addr u.
+: printf ( any c-addr u -- ) 256 [: sprintf type ;] with-temp-allot ;
 

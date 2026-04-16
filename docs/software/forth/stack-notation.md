@@ -25,6 +25,8 @@ An `addr len` pair typically specifies an memory area of `len` bytes starting at
 
 `f`: a boolean flag (0=false, non-zero=true)
 
+`any` : a variable number arguments is taken from or put on the data stack. E.g. `: printf ( any addr u -- )`.
+
 Often, I'll use short descriptive words to name stack items: `buf`, `buflen`, `fil`,...
 
 ## Stack signature of a Word taking data from the Input Stream

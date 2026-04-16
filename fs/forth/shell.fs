@@ -386,21 +386,21 @@ create include-stack MAX_NUM_OPEN_FILES cells allot
 \ include may be used recursively, i.e. the file being
 \ included itself may contain one or more include calls.
 \ May raise x-line-truncated
-\ ( n*x "path" -- m*y )
+\ ( any "path" -- any )
 : include
   include-source-id @ include-push
-  token FA_OPEN_EXISTING FA_READ or f_open ( n*x fil )
-  dup include-source-id ! >r ( n*x R: fil )
-  begin ( n*x R: fil )
-    r@ f_eof not while ( n*x R: fil )
-      r@ tib MAX-LINE-LENGTH f_gets ( n*x addr len R: fil )
+  token FA_OPEN_EXISTING FA_READ or f_open ( any fil )
+  dup include-source-id ! >r ( any R: fil )
+  begin ( any R: fil )
+    r@ f_eof not while ( any R: fil )
+      r@ tib MAX-LINE-LENGTH f_gets ( any addr len R: fil )
       \ if the line doesn't end with \n, it got truncated
-      2dup + 1- c@ NEWLINE <> triggers x-line-truncated ( n*x addr len R: fil )
-      include-verbose @ if 2dup type then ( n*x addr len R: fil )
-      1- evaluate ( m*y R: fil mark ) \ 1- strips trailing \n
-  repeat ( m*y R: fil )
-  r> f_close ( m*y )
-  include-pop include-source-id ! ( m*y )
+      2dup + 1- c@ NEWLINE <> triggers x-line-truncated ( any addr len R: fil )
+      include-verbose @ if 2dup type then ( any addr len R: fil )
+      1- evaluate ( any R: fil mark ) \ 1- strips trailing \n
+  repeat ( any R: fil )
+  r> f_close ( any )
+  include-pop include-source-id ! ( any )
 ;
 
 \ An alternative query that also supports input
