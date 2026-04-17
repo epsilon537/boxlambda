@@ -163,6 +163,7 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
     - [Exception Handling](docs/software/forth/exception-handling.md)
     - [Interpreting](docs/software/forth/interpreting.md)
     - [Include](docs/software/forth/include.md)
+    - [Filesystem Stack](docs/software/forth/fs-stack.md)
   - [Bootloader](docs/software/bootloader.md)
   - C Components:
       - [About C Components](docs/software/c-components/about.md)

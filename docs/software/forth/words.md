@@ -8,6 +8,8 @@ credit where credit is due, I don't think it's particularly helpful to do this f
 Where applicable, the Forth source code contains references to their origins. In some cases, I included the origin in the title, e.g.
 [ZeptoForth Heap](#zeptoforth-heap).
 
+To get a sense of how the various software modules referenced below relate to each other, take a look at the [stack](fs-stack.md).
+
 ## Constants and Units
 
 [units.fs](../../../fs/units.fs)
