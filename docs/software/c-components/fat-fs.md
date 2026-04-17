@@ -12,20 +12,33 @@
 - **FatFs Software Component in the BoxLambda Directory Tree**:
   [sw/components/fatfs](../../../sw/components/fatfs)
 
-- **Included in OS**: No
+- **Included in OS**: Yes
 
 [FatFs](http://elm-chan.org/fsw/ff/00index_e.html) is a lightweight software library for small systems that implements FAT file system support. It's written in ANSI C89 and has no dependencies other than a minimal C environment. It'll compile out of the box in virtually any environment.
 
-The FatFs library does not provide the device/media-specific *Storage Device Controls*. Those have to come from the device implementer. Two modules are provided:
+The FatFs library does not provide the device/media-specific *Storage Device Controls*. Those have to come from the device implementer. The BoxLambda `fatfs` component provides the following modules:
 
-- [sw/components/sdspi/sdcard.h](../../../sw/components/sdspi/sdcard.h), provided by the SDSPI software component.
-- [sw/components/fatfs/diskio.c](../../../sw/components/fatfs/diskio.cpp), part of the FatFS software component.
+- The *Storage Device Control Dispatcher*, [diskio.cpp](../../../sw/components/fatfs/diskio.cpp), dispatches FAT FS requests to RAM Disk Device Control or SD Card Device controls, depending on selected volume.
+- [The RAM Disk Device Controller](#the-ram-disk-device-controller).
+- [The SD Card Device Controller](#the-sd-card-device-controller).
 
-![FatFs Media Access Interface.](../../assets/FatFs-Media-Access-Interface.drawio.png)
+![FatFs Media Access Interface.](../../assets/FatFs-Media-Access-Interface.png)
 
 *FatFs Media Access Interface.*
 
-Both modules are based on ZipCPU's implementation in his [SDSPI repo](https://github.com/epsilon537/sdspi).
+## The RAM Disk Device Controller
+
+[diskio_ram.cpp](../../../sw/components/fatfs/diskio_ram.cpp)
+
+The RAM Disk Device Controller treats a given memory region as a RAM disk. This allows an external host to easily transfer disk images to or from the target. See [target.py](../../tools/target_py.md).
+
+The BoxLambda OS configures external memory region `0x11600000-0x11800000` (2MB) for RAM disk usage. See the [link map](../../../sw/projects/boxlambda_os/link.ld).
+
+## The SD Card Device Controller
+
+[diskio_sd.cpp](../../../sw/components/fatfs/diskio_sd.cpp)
+
+The SD Card Device Controller relies on ZipCPU's SD Card driver for its implementation. See the [SDSPI software component](sdspi.md).
 
 ## FatFs Configuration
 
@@ -34,10 +47,11 @@ All configuration options are well-documented and centralized in the `ffconf.h` 
 Relative to the default settings, I modified the following:
 
 - **Enable FF_USE_FIND**: filtered directory read functions, `f_findfirst()` and `f_findnext()`.
-- **Enable FF_USE_STRFUNC**: string functions, `f_gets()`, `f_putc()`, `f_puts()`, and `f_printf()`.
+- **Enable FF_USE_STRFUNC**: string functions, `f_gets()`, `f_putc()`, `f_puts()` and `f_printf()`, with LF-CRLF conversion.
 - **Enable FF_FS_RPATH**: support for relative paths.
-- **Enable FF_FS_NORTC**: I *disabled* the timestamp feature. TBD: Hook this up
-  to BoxLambda's RTC.
+- **Enable FF_USE_LFN** with **FF_MAX_LFN=32**.
+- **Enable FF_USE_EXPAND**: support for `f_expand` function.
+- **FF_VOLUME_STRS sd0 and ram**.
 
 [https://github.com/epsilon537/fatfs/blob/boxlambda/source/ffconf.h](https://github.com/epsilon537/fatfs/blob/boxlambda/source/ffconf.h)
 

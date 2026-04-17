@@ -3,7 +3,7 @@
 - **SDSPI Software Component in the BoxLambda Directory Tree**:
   [sw/components/sdspi/](../../../sw/components/sdspi)
 
-- **Included in OS**: No
+- **Included in OS**: Yes
 
 The SDSPI software component provides the following APIs:
 
@@ -14,6 +14,5 @@ The SDCard module is based on ZipCPU's SDCard implementation in his [SDSPI repo]
 
 ## SDSPI Test
 
-The SDSPI Test program tests the SDSPI core using the SDSPI HAL. It does not use
-the SDCard API.
+The SDSPI Test program tests the SDSPI core using the SDSPI HAL. It does not use the SDCard API.
 
