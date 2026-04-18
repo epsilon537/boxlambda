@@ -29,8 +29,7 @@ After the Bootloader has transferred control to the OS image it has loaded into 
 The syntax is limited to lines starting with `\`, which are ignored, and lines starting with the word `boxkern_include` followed by the full
 path of a `.fs` module to be evaluated. That `.fs` module must not include any submodules itself.
 
-The boxkern_include files are loaded and passed to Forth by the BoxKern at boot time. This allows a limited form of Forth module loading until the
-Forth 'include' Word can be defined. The order of boxkern_includes is important.
+The BoxKern loads and passes `boxkern_include` files to the Forth environment at boot time using [Forth-C FFI function](../forth/c-ffi.md)  `forth_eval_boxkern_invludes_or_die()`. This mechanism allows a limited form of Forth module loading until the Forth 'include' Word can be defined. The order of boxkern_includes is important.
 
 The modules build up a stack, with [shell.fs](../../../fs/forth/shell.fs) on top.
 

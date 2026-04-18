@@ -112,7 +112,7 @@ The top-level source file is [mecrisp-quintus-boxlambda.s](../../../sw/component
 
 #### Forth Linker Sections and Variables
 
-The [link map](../../../sw/projects/boxlambda_os/link.ld) defines the following sections:
+The [link map](../../../sw/projects/boxlambda_os/link.ld) defines the following Forth sections:
 
 - `.forth_core`: Forth core assembly code section. Part of the `.itext` section.
 - `.forth_imem`: IMEM memory area reserved for Forth code.

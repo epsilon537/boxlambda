@@ -155,6 +155,7 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
       - [Boot Sequence](docs/software/os/boot-seq.md)
       - [User Interface](docs/software/os/ui.md)
       - [Filesystem](docs/software/os/filesystem.md)
+      - [Linker Script](docs/software/os/linker-script.md)
   - Forth:
     - [The Mecrisp Forth Core](docs/software/forth/core.md)
     - [The Forth-C FFI](docs/software/forth/c-ffi.md)
@@ -198,7 +199,7 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
     - [The Software Test Bench](docs/software/test/test-bench.md)
     - [Forth Test Suite](docs/software/test/builds/forth-testsuite.md)
 - Build System:
-    - [The Directory Structure](docs/build-sys/dir-struct.md)
+    - [The Directory Structure and Build Trees](docs/build-sys/dir-struct.md)
     - The Gateware Build System:
       - [The Gateware Build Structure](docs/build-sys/gateware/build-struct.md)
       - [Building the Gateware](docs/build-sys/gateware/building.md)

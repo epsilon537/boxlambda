@@ -1138,6 +1138,12 @@ See [Interpreting Console Input](intepreting.md).
 `c, ( u|n -- )`
 - Appends a byte to dictionary.
 
+`compileto>` ( -- f )
+- Retrieve compile-to state.
+
+`>compileto` ( f -- )
+- Restore compile-to state.
+
 `compiletoemem? ( -- ? )`
 - Currently compiling into emem?
 
@@ -1476,13 +1482,21 @@ File Access:
 `f_open ( addr len mode -- fil )`
 - Open the file specified in input string.
   Mode argument is a combination of following values:
+
   FA_READ:Specifies read access to the file. Data can be read from the file.
+
   FA_WRITE: Specifies write access to the file. Data can be written to the file. Combine with FA_READ for read-write access.
+
   FA_OPEN_EXISTING:	Opens the file. The function fails if the file is not existing. (Default)
+
   FA_CREATE_ALWAYS: Creates a new file. If the file is existing, the file is truncated and overwritten.
+
   FA_CREATE_NEW: Creates a new file. The function fails if the file is existing.
+
   FA_OPEN_ALWAYS: Opens the file. If it is not exist, a new file is created.
+
   FA_OPEN_APPEND: Same as FA_OPEN_ALWAYS except the read/write pointer is set end of the file.
+
   May throw x-fr-* and x-pool-* exceptions.
 
 `f_close ( fil -- )` Close file
