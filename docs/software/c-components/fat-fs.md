@@ -28,13 +28,17 @@ The FatFs library does not provide the device/media-specific *Storage Device Con
 
 ## The RAM Disk Device Controller
 
+Volume name: `ram:`:
+
 [diskio_ram.cpp](../../../sw/components/fatfs/diskio_ram.cpp)
 
 The RAM Disk Device Controller treats a given memory region as a RAM disk. This allows an external host to easily transfer disk images to or from the target. See [target.py](../../tools/target_py.md).
 
-The BoxLambda OS configures external memory region `0x11600000-0x11800000` (2MB) for RAM disk usage. See the [link map](../../../sw/projects/boxlambda_os/link.ld).
+The BoxKern configures external memory region `0x11600000-0x11800000` (2MB) for RAM disk usage. See the [link map](../../../sw/projects/boxlambda_os/link.ld).
 
 ## The SD Card Device Controller
+
+Volume name: `sd0:`:
 
 [diskio_sd.cpp](../../../sw/components/fatfs/diskio_sd.cpp)
 

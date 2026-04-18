@@ -147,13 +147,14 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
         - [Invalid Address Test](docs/gateware/test/builds/invalid-addr.md)
         - [Ibex Performance Test](docs/gateware/test/builds/ibex-perf.md)
 - Software:
-  - OS:
+  - BoxLambda OS:
       - [Requirements](docs/software/os/requirements.md)
       - [Architecture](docs/software/os/architecture.md)
       - [Build](docs/software/os/build.md)
       - [Memory Layout](docs/software/os/mem-layout.md)
       - [Boot Sequence](docs/software/os/boot-seq.md)
       - [User Interface](docs/software/os/ui.md)
+      - [Filesystem](docs/software/os/filesystem.md)
   - Forth:
     - [The Mecrisp Forth Core](docs/software/forth/core.md)
     - [The Forth-C FFI](docs/software/forth/c-ffi.md)
@@ -182,6 +183,7 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
       - [I2C](docs/software/c-components/i2c.md)
       - [Real-Time Clock and Calendar](docs/software/c-components/rtcc.md)
       - [DFX Controller HAL](docs/software/c-components/dfx-controller-hal.md)
+      - [Common](docs/software/c-components/common.md)
   - Test C Components:
       - [About Test C Components](docs/software/c-components/test/about.md)
       - [Timer](docs/software/c-components/test/timer.md)

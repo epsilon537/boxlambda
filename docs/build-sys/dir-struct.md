@@ -11,13 +11,18 @@
 │   ├── definitions/
 │   │   └── <Corsair .yaml format register map definitions>
 │   ├── generated/
-│   │   └── <generated register map header files and documentation>
+│   │   └── <generated register map header files>
 │   └── generators/
 │       └── <register map code generator templates>
 ├── docs/
 │   └── <documentation>
 ├── sub/
 │   └── <git submodules>
+├── fs/ <target filesystem>
+│   ├── forth/
+│   │   └── <forth modules>
+│   └── test/
+│       └── <test files>
 ├── gw/
 │   ├── CMakeLists.txt
 │   ├── ip/
@@ -32,28 +37,51 @@
 │   │   │   ├── CMakeLists.txt
 │   │   │   ├── lint.vlt
 │   │   │   └── Bender.yml
-│   │   └── <other gw component directories>
+│   │   ├── <other gw component directories>
+│   │   ├── test/
+│   │   │   └── <test gateware components>
+│   │   └── archived/
+│   │       └── <archived/unmaintaned gateware components>
 │   └── projects/
 │       ├── CMakeLists.txt
-│       ├── ddr_test/
+│       ├── boxlambda_base/
 │       │   ├── constr/
 │       │   ├── rtl/
 │       │   ├── sim/
 │       │   ├── CMakeLists.txt
 │       │   ├── lint.vlt
 │       │   └── Bender.yml
-│       └── <other gw project directories>
+│       ├── boxlambda_dfx/
+│       │   ├── constr/
+│       │   ├── sim/
+│       │   ├── CMakeLists.txt
+│       │   └── Bender.yml
+│       └── test/
+│           ├── ddr_test/
+│           │   ├── sim/
+│           │   ├── CMakeLists.txt
+│           │   └── Bender.yml
+│           └── archived/
+│               └── <archived/unmaintaned gateware components>
 ├── sw/
 │   ├── CMakeLists.txt
 │   ├── components/
 │   │   ├── CMakeLists.txt
-│   │   └── <sw component directories>
+│   │   ├── <sw component directories>
+│   │   ├── test/
+│   │   │   └── <test sw component directories>
+│   │   └── archived/
+│   │       └── <archived/unmaintained sw components>
 │   └── projects/
 │       ├── CMakeLists.txt
 │       ├── ddr_test/
 │       │   ├── CMakeLists.txt
 │       │   └── <ddr_test sources>
-│       └── <other sw project directories>
+│       ├── <other sw project directories>
+│       ├── test/
+│       │   └── <test sw project directories>
+│       └── archived/
+│           └── <archived/unmaintained sw projects>
 ├── tools/
 │   └── <3rd party tools used by build system>
 └── build/
@@ -65,7 +93,7 @@
              └── <code-generated files>
 ```
 
-**Note**: The software tree (`sw/`) is separate from the gateware tree (`gw/`), and the build trees (`build/`) are distinct from both the software and gateware source trees.
+Note that the software tree (`sw/`) is separate from the gateware tree (`gw/`), and the build trees (`build/`) are distinct from both the software and gateware source trees.
 
 ## The Build Trees
 
