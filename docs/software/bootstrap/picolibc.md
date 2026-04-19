@@ -1,4 +1,4 @@
-# Picolibc and the Bootstrap Component
+# The Bootstrap Component
 
 - **PicoLibc Version**: 1.8.6
 
@@ -167,4 +167,3 @@ int main(void) {
 ```
 
 Notice the `_init()` function. The PicoLibc startup code executes this function before calling `main()`. This is where we set up the UART.
-

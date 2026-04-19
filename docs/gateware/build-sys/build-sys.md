@@ -1,4 +1,4 @@
-# The Gateware Build Structure
+# The Gateware Build System
 
 ## Bender
 

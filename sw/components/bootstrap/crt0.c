@@ -59,35 +59,35 @@ static void local_memset(char *dst, char val, unsigned num_bytes);
  * flash memory.*/
 static void __attribute__((used)) __section(".init") _cstart(void) {
   /* BoxLambda: Copy emem code segment if needed.*/
-  if (__ecode_start != __ecode_source) {
-    local_memcpy(__ecode_start, __ecode_source, (uintptr_t)(__ecode_end - __ecode_start));
+  if (&__ecode_start != &__ecode_source) {
+    local_memcpy(&__ecode_start, &__ecode_source, &__ecode_end - &__ecode_start);
   }
 
   /*edata segment*/
-  if (__edata_start != __edata_source) {
-    local_memcpy(__edata_start, __edata_source, (uintptr_t)(__edata_end - __edata_start));
+  if (&__edata_start != &__edata_source) {
+    local_memcpy(&__edata_start, &__edata_source, &__edata_end - &__edata_start);
   }
 
   /*eBSS segment*/
-  local_memset(__ebss_start, '\0', (uintptr_t)(__ebss_end - __ebss_start));
+  local_memset(&__ebss_start, '\0', &__ebss_end - &__ebss_start);
 
   /* icode segment.*/
-  if (__icode_start != __icode_source) {
-    local_memcpy(__icode_start, __icode_source, (uintptr_t)(__icode_end - __icode_start));
+  if (&__icode_start != &__icode_source) {
+    local_memcpy(&__icode_start, &__icode_source, &__icode_end - &__icode_start);
   }
 
   /*idata segment*/
-  if (__idata_start != __idata_source) {
-    local_memcpy(__idata_start, __idata_source, (uintptr_t)(__idata_end - __idata_start));
+  if (&__idata_start != &__idata_source) {
+    local_memcpy(&__idata_start, &__idata_source, &__idata_end - &__idata_start);
   }
 
   /*iBSS segment*/
-  local_memset(__ibss_start, '\0', (uintptr_t)(__ibss_end - __ibss_start));
+  local_memset(&__ibss_start, '\0', &__ibss_end - &__ibss_start);
 
 /* BoxLambda: code and data has now been relocated, at this point we
  * can make non-local function calls. */
 #ifdef PICOLIBC_TLS
-  _set_tls(__tls_base);
+  _set_tls(&__tls_base);
 #endif
 #if defined(_HAVE_INITFINI_ARRAY) && CONSTRUCTORS
   __libc_init_array();
@@ -272,7 +272,7 @@ __attribute((aligned(4))) _trap(void) {
 /* Reference __image_size as an address to avoid small data access
  * optimization on the linker generated variable (linker generated
  * variables are ABS symbols, not mapped into any section so not
- * guaranteed to be access through gp+offset).*/
+ * guaranteed to be accessed through gp+offset).*/
 unsigned const header_magic[2] __attribute__((section(".init.header"))) =
   {IMAGE_HEADER_MAGIC_NUMBER, (unsigned)&__image_size};
 

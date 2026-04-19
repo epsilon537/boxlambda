@@ -146,16 +146,18 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
         - [DFX Test](docs/gateware/test/builds/dfx.md)
         - [Invalid Address Test](docs/gateware/test/builds/invalid-addr.md)
         - [Ibex Performance Test](docs/gateware/test/builds/ibex-perf.md)
+  - The Gateware Build System:
+    - [The Gateware Build System](docs/gateware/build-sys/build-sys.md)
+    - [Building the Gateware](docs/gateware/build-sys/building.md)
 - Software:
   - BoxLambda OS:
-      - [Requirements](docs/software/os/requirements.md)
-      - [Architecture](docs/software/os/architecture.md)
-      - [Build](docs/software/os/build.md)
-      - [Memory Layout](docs/software/os/mem-layout.md)
-      - [Boot Sequence](docs/software/os/boot-seq.md)
-      - [User Interface](docs/software/os/ui.md)
-      - [Filesystem](docs/software/os/filesystem.md)
-      - [Linker Script](docs/software/os/linker-script.md)
+    - [Requirements](docs/software/os/requirements.md)
+    - [Architecture](docs/software/os/architecture.md)
+    - [Build](docs/software/os/build.md)
+    - [Memory Layout](docs/software/os/mem-layout.md)
+    - [Boot Sequence](docs/software/os/boot-seq.md)
+    - [User Interface](docs/software/os/ui.md)
+    - [Filesystem](docs/software/os/filesystem.md)
   - Forth:
     - [The Mecrisp Forth Core](docs/software/forth/core.md)
     - [The Forth-C FFI](docs/software/forth/c-ffi.md)
@@ -166,11 +168,13 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
     - [Interpreting](docs/software/forth/interpreting.md)
     - [Include](docs/software/forth/include.md)
     - [Filesystem Stack](docs/software/forth/fs-stack.md)
-  - [Bootloader](docs/software/bootloader.md)
+  - Bootstrap:
+    - [The Bootstrap Component](docs/software/bootstrap/picolibc.md)
+    - [Bootloader](docs/software/bootstrap/bootloader.md)
+    - [The Linker Script](docs/software/bootstrap/linker_script.md)
   - C Components:
       - [About C Components](docs/software/c-components/about.md)
       - [Register Access Layer](docs/software/c-components/register-access-layer.md)
-      - [PicoLibc and the Bootstrap Component](docs/software/c-components/picolibc.md)
       - [LiteDRAM Initialization](docs/software/c-components/litedram-initialization.md)
       - [SDSPI](docs/software/c-components/sdspi.md)
       - [FatFs](docs/software/c-components/fat-fs.md)
@@ -198,14 +202,10 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
   - Software Testing:
     - [The Software Test Bench](docs/software/test/test-bench.md)
     - [Forth Test Suite](docs/software/test/builds/forth-testsuite.md)
-- Build System:
-    - [The Directory Structure and Build Trees](docs/build-sys/dir-struct.md)
-    - The Gateware Build System:
-      - [The Gateware Build Structure](docs/build-sys/gateware/build-struct.md)
-      - [Building the Gateware](docs/build-sys/gateware/building.md)
-    - The Software Build System:
-      - [The Software Build Structure](docs/build-sys/software/build-struct.md)
-      - [Building the Software](docs/build-sys/software/building.md)
+  - The Software Build System:
+    - [The Build System](docs/software/build-sys/build-sys.md)
+    - [Building the Software](docs/software/build-sys/building.md)
+- [The Directory Structure and Build Trees](docs/dir-struct.md)
 - Tools:
     - [Target.py](docs/tools/target_py.md)
     - [Debugging](docs/tools/debugging.md)

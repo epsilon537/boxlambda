@@ -9,7 +9,7 @@
 - **BoxLambda Top Module**:
     [gw/projects/boxlambda_base/rtl/boxlambda_top.sv](../../../gw/projects/boxlambda_base/rtl/boxlambda_top.sv)
 
-The BoxLambda SoC module is defined as a gateware component. The [Gateware Build Structure](../../build-sys/gateware/build-struct.md) section describes the three-layer gateware build structure. The diagram below shows how the BoxLambda SoC component fits into that build structure.
+The BoxLambda SoC module is defined as a gateware component. The [Gateware Build Structure](../build-sys/build-struct.md) section describes the three-layer gateware build structure. The diagram below shows how the BoxLambda SoC component fits into that build structure.
 
 ![BoxLambda SoC Component Build Diagram](../../assets/BoxLambda-SoC-Component-Build-Diagram.png)
 

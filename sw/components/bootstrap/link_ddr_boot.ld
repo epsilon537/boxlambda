@@ -46,6 +46,7 @@ SECTIONS
 
     PROVIDE( __ecode_end = . );
     PROVIDE( __ecode_start = ADDR(.etext) );
+    PROVIDE( __image_start = __ecode_start );
     PROVIDE( __ecode_source = LOADADDR(.etext) );
 
     .edata : ALIGN_WITH_INPUT {
@@ -131,7 +132,8 @@ SECTIONS
     PROVIDE( __tdata_start = ADDR(.tdata) );
     PROVIDE( __tdata_source = LOADADDR(.tdata) );
     PROVIDE( __tls_base = ADDR(.tdata));
-    PROVIDE( __image_size = __tdata_source + __tdata_end - __tdata_start - __ecode_source );
+    PROVIDE( __image_end = __tdata_end );
+    PROVIDE( __image_size = __image_start - __image_end );
 
     PROVIDE( __idata_end = . );
     PROVIDE( __idata_start = ADDR(.idata) );

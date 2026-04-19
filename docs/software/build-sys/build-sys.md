@@ -1,4 +1,4 @@
-# The Software Build Structure
+# The Software Build System
 
 ## Four Layers
 
@@ -79,76 +79,54 @@ target_link_libraries(hello_world gpio riscv bootstrap)
 add_flash_sw_target(hello_world)
 ```
 
-Note that depending on whether we're building for simulation or FPGA, two variants of the linker script are used. [link_imem_boot.ld](../../../sw/components/bootstrap/link_imem_boot.ld) creates an image that boots directly from IMEM. [link_ddr_boot.ld](../../../sw/components/bootstrap/link_ddr_boot.ld) creates an image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
+Note that depending on whether we're building for simulation or FPGA, two variants of the linker script are used. See [the Linker Script](../../bootstrap/linker_script.md) for more details.
 
-Other linker script variants:
-
-- [boxlambda_os/link.ld](../../../sw/projects/boxlambda_os/link.ld): The linker script used by the BoxLambda OS. Note the Forth sections.
-
-#### Linker Script Details
-
-Through a *linker script*, we tell the linker where in memory to place the program code, data, and stack.
-
-The Linker Script defines the following:
-
-- Relevant Memories on the target device: In the case of BoxLambda, these are `imem` and `emem` (=DDR memory).
-```
-MEMORY
-{
-    imem : ORIGIN = __imem, LENGTH = __imem_size
-    emem : ORIGIN = __emem, LENGTH = __emem_size
-}
-```
-- The mapping of input to output sections. Input sections are defined in the source code and default to .text, .bss, and .data when not explicitly specified. Typical output sections for BoxLambda are: `.etext`, `.edata`, `ebss`, `.itext`, `.idata`, `.tdata`, `.tbss`, `.ibss`, `.heap`, and `.stack`.
-```
-    .itext : {
-        ...
-        /* code */
-        *(.text.unlikely .text.unlikely.*)
-        *(.text.startup .text.startup.*)
-        *(.text .text.*)
-        *(.gnu.linkonce.t.*)
-        ...
-```
-- The mapping of output sections to memories:
-```
-    ...
-    .itext : {...
-    } >imem
-    ...
-    .idata : ALIGN_WITH_INPUT {...
-    } >imem
-    ...
-    .ibss (NOLOAD) : {...
-    } >imem
-    ...
-    .heap (NOLOAD) : {...
-    } >emem
-```
-  - Code, Data, and BSS input sections go to `imem` or `emem` depending on their assignment to *.itext/data/bss* or *.etext/data/bss* output sections.
-  - The stack typically goes to `imem`.
-  - The heap goes to `emem`.
-- Symbols used by the CRT0 code for section relocation, BSS initialization, etc. For BoxLambda, the key symbols are:
-    - `__icode_source / __icode_start / __icode_size`: source address, destination address, and size of the IMEM code section. In the `link_imem_boot.ld` case, `__icode_source` and `__icode_start` point to the same IMEM address. In the `link_ddr_to_imem_boot.ld` case, `__icode_source` points to EMEM and `__icode_start` points to IMEM.
-    - `__ecode_source / __ecode_start / __ecode_size`: source address, destination address, and size of the EMEM code section.
-    - `__idata_source / __idata_start / __idata_size`: source address, destination address, and size of the IMEM data section. In the `link_imem_boot.ld` case ; `__data_source` and `__data_start` point to the same IMEM address. In the `link_ddr_to_imem_boot.ld` case ; `__idata_source` and `__idata_start` point to the same IMEM address.
-    - `__edata_source / __edata_start / __edata_size`: source address, destination address, and size of the EMEM data section.
-    - `__ibss_start / __ibss_size`: Address and size of BSS section in IMEM to zero out.
-    - `__ebss_start / __ebss_size`: Address and size of BSS section in EMEM to zero out.
-```
-    .itext : {
-       ...
-    } >imem
-
-    PROVIDE(__icode_end = .);
-    PROVIDE( __icode_start = ADDR(.itext) );
-    PROVIDE( __icode_source = ADDR(.itext) );
-    PROVIDE( __icode_size = __icode_end - __icode_start );
-```
-
-### Software CMakeList Organization
+## Software CMakeList Organization
 
 ![Software CMakeLists Organization.](../../assets/CMakeLists-sw-org.png)
 
 *Software CMakeLists Organization.*
+
+## The Cross-Compiler
+
+The RISCV cross-compiler is a custom-built **riscv32-boxlambda-elf** toolchain. The compiler build is created using the excellent [Crosstool-ng](https://crosstool-ng.github.io/) project. *Crosstool-ng* uses a menuconfig similar to the Linux kernel menuconfig. You just focus on the specifics of the toolchain you want to build (RISC-V, 32-bit, Static Toolchain...). The tool selects good defaults for all the rest.
+
+I selected:
+
+- Target Architecture: *riscv*
+- Architecture level: *rv32im_zicsr_za_zb_zbs*
+- ABI: *ilp32*
+- *Build Static Toolchain*
+- Tuple's vendor string: *boxlambda*
+- Target OS: *bare-metal*
+- Additional support languages: *C++*
+
+The resulting crosstool-ng config file can be found [here](../../../scripts/crosstool-ng.config).
+
+The toolchain tarball is checked into the BoxLambda repo under [../../assets/](../../../assets). The [boxlambda_setup.sh](../../../boxlambda_setup.sh) script unpacks the toolchain tarball in the `tools/` directory, so the user no longer needs to provide the toolchain as a prerequisite.
+
+### RISC-V GCC Compile Flags
+
+The following compile flags are used:
+
+- `march=rv32im_zba_zbb_zbs_zicsr`:
+    - `rv32`: 32-bit RISC-V base architecture.
+    - `i`: Base integer instruction set (mandatory).
+    - `m`: Integer multiplication and division extension.
+    - `zba`: Bit-Manipulation instructions for address generation.
+    - `zbb`: Bit-Manipulation Base sub-extension.
+    - `zbs`: Single-bit instructions.
+    - `zicsr`: Control and Status Register (csr) instructions.
+
+- `-mabi=ilp32`:
+    - `i`: Integer-based ABI (does not use floating-point registers for function arguments/returns).
+    - `l`: Long and int types are 32-bit.
+    - `p`: Pointers are 32-bit wide.
+    - `32`: Indicates a 32-bit ABI (used for RV32 architectures).
+
+- `Wl,--no-warn-rwx-segments`: Avoid linker warning because executable segments are writable. This is intentional on BoxLambda.
+
+### Toolchain.cmake
+
+RISC-V cross-compilation for C and C++ is set up by passing in a *Toolchain File* to CMake. The toolchain file specifies the names of the compiler executables and the compile flags. The file is located in [scripts/toolchain.cmake](../../../scripts/toolchain.cmake).
 

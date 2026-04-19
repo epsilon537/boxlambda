@@ -22,21 +22,13 @@ are not all in the off position, the bootloader will start the application by
 jumping to its entry point at address `0x20000008` in EMEM.
 6. The application start-up code creates code/data/BSS sections in IMEM and/or EMEM as it sees fit.
 
-![The Bootloader](../assets/boxlambda-sw-env-boot.png)
+![The Bootloader](../../assets/boxlambda-sw-env-boot.png)
 
 *The Boot Sequence.*
 
 It's worth noting that the bootloader, as well as the application images, are
 complete, standalone C/C++ programs built against PicoLibc and using the usual
-CRT0 start-up sequence to set up the C/C++ environment. The bootloader is built
-using the
-[link_bootloader.ld](../../sw/projects/bootloader/link_bootloader.ld)
-link script. The application image is based on the
-[link_ddr_boot.ld](../../sw/components/bootstrap/link_ddr_boot.ld)
-script or the
-[link_imem_boot.ld](../../sw/components/bootstrap/link_imem_boot.ld)
-(or a combination of both), depending on whether the application executes from
-EMEM or IMEM after start-up.
+CRT0 start-up sequence to set up the C/C++ environment.
 
 ## Building and Flashing the Bootloader
 
