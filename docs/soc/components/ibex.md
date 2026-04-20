@@ -67,7 +67,7 @@ The `boot_addr` port name of `wb_ibex_core` is somewhat misleading. `Boot_addr` 
 
 Note that there's no Instruction or Data Cache. Instruction or data accesses go directly to IMEM or DDR memory.
 
-For information on the compiler and compile flags used to generate code for this processor configuration, see section [The Cross-Compiler](../../software/build-sys/building.md#the-cross-compiler).
+For information on the compiler and compile flags used to generate code for this processor configuration, see section [The Cross-Compiler](../../software/base-platform/build-sys/building.md#the-cross-compiler).
 
 ## The Single Instruction Prefetcher
 
@@ -116,7 +116,7 @@ With this design, the `irq_mem` bank is up-to-date when the CPU enters IRQ mode.
 
 **Caveat**: `irq_mode` is just a 1-bit signal. It can't track nested interrupts. This limitation is acceptable for BoxLambda.
 
-To benefit from the interrupt shadow register optimization, ISRs written in C should be declared with the `naked` attribute. See [the naked attribute](../../software/c-components/test/irqs.md#the-naked-attribute) section for details.
+To benefit from the interrupt shadow register optimization, ISRs written in C should be declared with the `naked` attribute. See [the naked attribute](../../software/base-platform/c-components/test/irqs.md#the-naked-attribute) section for details.
 
 ### Core2WB
 

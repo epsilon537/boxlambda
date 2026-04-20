@@ -9,7 +9,7 @@ LEDs 0-3 have a fixed role in BoxLambda:
 | 2 | **Init Error** | Lights up red when the SDRAM Memory Controller detects an error. |
 | 3 | **SD Card Detect** | Lights up green when an SD card is detected in the SD PMOD card slot. |
 
-LEDs 4-7 are assigned to the GPIO core. See the [GPIO component](../../soc/components/gpio.md) page.
+LEDs 4-7 are assigned to the GPIO core. See the [GPIO component](../components/gpio.md) page.
 
 # Switches
 
