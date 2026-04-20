@@ -1,9 +1,9 @@
 # The Mecrisp Forth Core
 
 - **Forth Core Software Component in the BoxLambda Directory Tree**:
- [sw/components/forth/core](../../../sw/components/forth/core)
+ [sw/components/forth/](../../../sw/components/forth/)
 
-- **Forth Core Entry Point**: [sw/components/forth/core/mecrisp-quintus-boxlambda.s](../../../sw/components/forth/core/mecrisp-quintus-boxlambda.s)
+- **Forth Core Entry Point**: [sw/components/forth/mecrisp-quintus-boxlambda.s](../../../sw/components/forth/mecrisp-quintus-boxlambda.s)
 
 BoxLambda's Forth is based on version 1.1.1d of Matthias Koch's [Mecrisp Quintus](https://mecrisp.sourceforge.net). This section discusses the Forth *Core*, i.e., the RISC-V assembly language code base that bootstraps the Forth environment.
 
@@ -52,7 +52,7 @@ core).
 
 ### Booting Forth from C
 
-The original Mecrisp Forth boots the Forth core directly from flash memory, i.e., the early boot code is part of the Forth core. BoxLambda, on the other hand, first boots up a C environment (see [here](../bootloader.md#boot-sequence)), then the C environment boots the Forth environment using the [Forth-C FFI](c-ffi.md) API.
+The original Mecrisp Forth boots the Forth core directly from flash memory, i.e., the early boot code is part of the Forth core. BoxLambda, on the other hand, first boots up a C environment (see [here](../bootstrap/bootloader.md#boot-sequence)), then the C environment boots the Forth environment using the [Forth-C FFI](c-ffi.md) API.
 
 From BoxLambda OS's [main.cpp](../../../sw/projects/boxlambda_os/main.cpp):
 
@@ -102,7 +102,7 @@ ckomma: # Write 8 bits in Dictionary
   ret
 ```
 
-The top-level source file is [mecrisp-quintus-boxlambda.s](../../../sw/components/forth/core/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
+The top-level source file is [mecrisp-quintus-boxlambda.s](../../../sw/components/forth/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
 
 ![Forth Core Org](../../assets/forth-core-org.png)
 
@@ -129,7 +129,7 @@ The link map also defines the following linker variables associated with those s
 
 #### Forth Assembler Variables and Symbols
 
-Understanding the purpose of the following variables, defined in [forth-core.s](../../../sw/components/forth/core/forth-core.s), is essential to be able to understand the Forth Core:
+Understanding the purpose of the following variables, defined in [forth-core.s](../../../sw/components/forth/forth-core.s), is essential to be able to understand the Forth Core:
 
 - `DictionaryPointer`: The *primary* dictionary pointer. Dictionary search
 starts here. Corresponds to Forth variable `(dp)`, taking into account that

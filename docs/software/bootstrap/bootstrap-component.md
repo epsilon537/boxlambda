@@ -111,9 +111,9 @@ Initially, we'll be using the UART as our IO device.
 
 See [sw/components/bootstrap/stdio_stream.c](../../../sw/components/bootstrap/stdio_stream.c).
 
-[stdio_stream.h](../../../sw/components/stdio_stream.h) exports the `stdin` and `stdout` stream objects so standard IO
+[stdio_stream.h](../../../sw/components/bootstrap/stdio_stream.h) exports the `stdin` and `stdout` stream objects so standard IO
 can be redirected at any time after boot-up. The BoxKern makes use of this by forwarding stdio to the Forth
-environment. See the [OS Boot Sequence](../../os/boot-seq.md) for details.
+environment. See the [OS Boot Sequence](../os/boot-seq.md) for details.
 
 ## Early Software Startup Sequence
 

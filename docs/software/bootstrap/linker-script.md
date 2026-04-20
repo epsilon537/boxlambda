@@ -80,6 +80,6 @@ What would happen if you did create an `__icode_size` linker variable and refere
 
 - [bootstrap/link_imem_boot.ld](../../../sw/components/bootstrap/link_imem_boot.ld) creates a test image that boots directly from IMEM.
 - [bootstrap/link_ddr_boot.ld](../../../sw/components/bootstrap/link_ddr_boot.ld) creates an application or test image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
-- [bootloader/link.ld](../../../sw/projects/bootloader/link_bootloader.ld): the link script used to create the bootloader.
+- [bootloader/link.ld](../../../sw/projects/bootloader/link.ld): the link script used to create the bootloader.
 - [boxlambda_os/link.ld](../../../sw/projects/boxlambda_os/link.ld): the link script used to create the BoxKern application image . This link script is derived from `link_ddr_boot.ld`. It contains additional [sections and variables for the Forth subsystem](../forth/core.md#forth-linker-sections-and-variables) and the RAM disk region `fs_mem`.
 

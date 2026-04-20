@@ -104,7 +104,7 @@ To summarize:
 3. The `riscv-dbg` core provides debug support for the connected Ibex RISCV32 core.
 4. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called `remote_bitbang`.
 
-For a step-by-step guide on setting up a debug session, refer to [this section](../../software/debugging.md).
+For a step-by-step guide on setting up a debug session, refer to [this section](../../tools/debugging.md).
 
 ## OpenOCD and RISCV-DBG on Arty-A7 FPGA
 
@@ -146,7 +146,7 @@ Thanks to [W. Shepherd Pitts](https://github.com/wspitts2) for this suggestion.
 
 ### Starting a Debug Session on the Arty-A7
 
-For detailed steps on setting up an OpenOCD JTAG debug session on the Arty-A7, refer to [this section](../../software/debugging.md).
+For detailed steps on setting up an OpenOCD JTAG debug session on the Arty-A7, refer to [this section](../../tools/debugging.md).
 
 ## RISCV-DBG Clock Frequency
 

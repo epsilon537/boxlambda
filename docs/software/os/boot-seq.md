@@ -1,10 +1,10 @@
 # OS Boot Sequence
 
-This section describes the OS Boot Sequence. It starts where the [Bootloader Boot Sequence section](../bootloader.md#boot-sequence) leaves off.
+This section describes the OS Boot Sequence. It starts where the [Bootloader Boot Sequence section](../bootstrap/bootloader.md#boot-sequence) leaves off.
 
 After the Bootloader has transferred control to the OS image it has loaded into EMEM, the OS start-up code goes through the following sequence:
 
-1. `crt0.c` sets up a basic C environment as described [here](../c-components/picolibc.md#software-startup-sequence), unpacking and initializing the different sections into IMEM and EMEM as shown in the memory layout diagram above, an invokes BoxLambda OS's `main()`.
+1. `crt0.c` sets up a basic C environment as described [here](../bootstrap/bootstrap-component.md#software-startup-sequence), unpacking and initializing the different sections into IMEM and EMEM as shown in the memory layout diagram above, an invokes BoxLambda OS's `main()`.
 2. `main()` goes through the following steps:
     1. Initialize Forth by calling `forth_core_init()`.
     2. Find and mount a filesystem boot volume:

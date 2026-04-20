@@ -1,7 +1,7 @@
 # The Bootloader
 
 **Bootloader Software Project in the BoxLambda Directory Tree**:
- [sw/projects/bootloader](../../sw/projects/bootloader)
+ [sw/projects/bootloader](../../../sw/projects/bootloader)
 
 The Bootloader is only used on FPGA.
 
@@ -32,5 +32,5 @@ CRT0 start-up sequence to set up the C/C++ environment.
 
 ## Building and Flashing the Bootloader
 
-For instructions to build and flash the Bootloader, see [this section](../installation/installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+See [here](../../installation/installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 

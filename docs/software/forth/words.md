@@ -12,7 +12,7 @@ To get a sense of how the various software modules referenced below relate to ea
 
 ## Constants and Units
 
-[units.fs](../../../fs/units.fs)
+[units.fs](../../../fs/forth/units.fs)
 
 `cell`
 - The size in bytes of one cell.
@@ -37,7 +37,7 @@ To get a sense of how the various software modules referenced below relate to ea
 
 ## Range Related Words
 
-[range.fs](../../../fs/range.fs)
+[range.fs](../../../fs/forth/range.fs)
 
 `span ( addr len -- start end )`
 - Convert addr len to start-end address span.
@@ -50,7 +50,7 @@ To get a sense of how the various software modules referenced below relate to ea
 
 ## Arrays
 
-[array.fs](../../../fs/array.fs)
+[array.fs](../../../fs/forth/array.fs)
 
 `array <name> ( compile time: n -- ) ( run time: i -- addr)`
 - Create an array of n cells with given name. `i <name>` returns the address of the i-th cell.
@@ -61,9 +61,9 @@ To get a sense of how the various software modules referenced below relate to ea
 ## ZeptoForth Exceptions
 
 [exception.s](../../../sw/components/forth/exception.s)
-[except.fs](../../../fs/except.fs)
+[except.fs](../../../fs/forth/except.fs)
 
-See [Forth Exception Handling](exception-handling).
+See [Forth Exception Handling](exception-handling.md).
 
 `?raise ( xt|0 -- | 0 )`
 - Raise exception xt if non-zero.
@@ -268,7 +268,7 @@ x-temp-allot-failed
 ## Terminal-IO
 
 [terminal.s](../../../sw/components/forth/terminal.s)
-[terminalhooks.s](../../../sw/components/forth/terminalhook.s)
+[terminalhooks.s](../../../sw/components/forth/terminalhooks.s)
 
 `emit? ( -- Flag )`
 - Ready to send a character?
@@ -508,7 +508,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 [double.s](../../../sw/components/forth/double.s)
 [multiplydivide.s](../../../sw/components/forth/multiplydivide.s)
-[utils.fs](../../../forth/utils.fs)
+[utils.fs](../../../fs/forth/utils.fs)
 
 `um+ ( u1 u2 -- u carry )`
 - Unsigned addition with carry.
@@ -1045,7 +1045,7 @@ spaced     out ok``
 [token.s](../../../sw/components/forth/token.s)
 [interpreter.s](../../../sw/components/forth/interpreter.s)
 
-See [Interpreting Console Input](intepreting.md).
+See [Interpreting Console Input](interpreting.md).
 
 `query ( -- )`
 - Fetches user input to input buffer.
@@ -1813,7 +1813,7 @@ x-line-truncated
 `[then] ( -- )`
 - Finish conditional execution/compilation.
 
-Example from [init.fs](../../../forth/init.fs):
+Example from [init.fs](../../../fs/forth/init.fs):
 ```
 include /forth/ifdef.fs
 

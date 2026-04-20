@@ -56,7 +56,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Modified hello_world GDB test, using target.py instead of openocd directly.
+- Modified hello_world GDB test, using `target.py` instead of openocd directly.
 - Extended the openocd.cfg script to support the various target interaction
   use cases presented by target.py.
 - Enabled FATFS LF-CRLF conversion in FATFS, support for filename length of up to 32 characters,

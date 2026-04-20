@@ -265,7 +265,7 @@ CoreDictionaryStart: # Set entry point for Dictionary
 .include "roll.s"
 .endif
 
-.include "comparisions.s"
+.include "comparisons.s"
 .include "calculations.s"
 
 .include "terminal.s"

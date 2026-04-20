@@ -2,14 +2,14 @@
 
 API:
 
-- [sw/components/forth/core/forth.h](../../../sw/components/forth/core/forth.h):
+- [sw/components/forth/forth.h](../../../sw/components/forth/forth.h):
 
 Implementation:
 
-- [sw/components/forth/core/forth.cpp](../../../sw/components/forth/core/forth.cpp)
-- The `c-fun` Word in [sw/components/forth/fs/forth/init.fs](../../../sw/components/forth/fs/forth/init.fs)
-- Forth to C: [sw/components/forth/core/c-ffi.s](../../../sw/components/forth/core/c-ffi.s)
-- C to Forth: [sw/components/forth/core/mecrisp-quintus-boxlambda.s](../../../sw/components/forth/core/mecrisp-quintus-boxlambda.s)
+- [sw/components/forth/forth.cpp](../../../sw/components/forth/forth.cpp)
+- The `c-fun` Word in [fs/forth/init.fs](../../../fs/forth/init.fs)
+- Forth to C: [sw/components/forth/c-ffi.s](../../../sw/components/forth/c-ffi.s)
+- C to Forth: [sw/components/forth/mecrisp-quintus-boxlambda.s](../../../sw/components/forth/mecrisp-quintus-boxlambda.s)
 
 The BoxLambda C-Forth FFI is loosely based on Peter Schmid's work for the [Mecrisp Cube project](https://github.com/spyren/Mecrisp-Cube/tree/master).
 
@@ -24,7 +24,7 @@ fit. It doesn't require any additional software constructs. The C compiler
 manages the C stack, while on the Forth side, the Mecrisp Quintus Forth Core is already using the
 RISC-V stack pointer register (x2) as the return stack pointer.
 
-The Data Stack does require a software construct. The `forth_core_init()` function initializes a global `datastack` object with the following layout in C (see [forth.h](../../../sw/components/forth/core/forth.h)):
+The Data Stack does require a software construct. The `forth_core_init()` function initializes a global `datastack` object with the following layout in C (see [forth.h](../../../sw/components/forth/forth.h)):
 
 ```
 typedef struct {
@@ -109,7 +109,7 @@ If C needs to call Forth Word `foo` many times, it's better to store foo's execu
 
 When Forth calls C, it updates the `datastack` object with its current *TOS* and *PSP* values. It then invokes one of the registered C functions. The registered C function retrieves input parameters from the stack using `forth_popda()` and pushes output parameters/return values on the stack using `forth_pushda()`.
 
-C functions are registered with Forth using the following macro from [forth.h](../../../sw/components/forth/core/forth.h):
+C functions are registered with Forth using the following macro from [forth.h](../../../sw/components/forth/forth.h):
 
 ```
 // Register a C function with signature: void fun(void). Fun uses the datastack object for parameter passing.
@@ -160,7 +160,7 @@ The `. . cr` after calling `cbar` pops the output arguments off the stack, print
 
 ## The Forth-C FFI API
 
-[sw/components/forth/core/forth.h](../../../sw/components/forth/core/forth.h):
+[sw/components/forth/forth.h](../../../sw/components/forth/forth.h):
 
 
 ```
@@ -249,7 +249,7 @@ We'll also save the C stack pointer (x2/sp) into a global variable upon entry
 into Forth so we can restore to this point if the Forth *reset* Word is
 invoked.
 
-See `forth_core_init_` and `forth_core_fun_` in [mecrisp-quintus-boxlambda.s](../../../sw/components/forth/core/mecrisp-quintus-boxlambda.s).
+See `forth_core_init_` and `forth_core_fun_` in [mecrisp-quintus-boxlambda.s](../../../sw/components/forth/mecrisp-quintus-boxlambda.s).
 
 ### Register Usage in case of Forth Calling C
 
@@ -277,5 +277,5 @@ The table below summarizes the actions that should be taken per register.
 | x15    | a5    | Function argument, not preserved across calls/no need save before use | Free scratch register, not preserved across calls | None. |
 | x16-31 | --    | -- | Unused in vanilla forth cores | None. |
 
-See `call-c` in [c-ffi.s](../../../sw/components/forth/core/c-ffi.s) along with Word `c-fun` in [init.fs](../../../sw/components/forth/fs/forth/init.fs).
+See `call-c` in [c-ffi.s](../../../sw/components/forth/c-ffi.s) along with Word `c-fun` in [early.fs](../../../fs/forth/early.fs).
 

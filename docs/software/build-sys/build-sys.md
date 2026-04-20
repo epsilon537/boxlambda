@@ -79,7 +79,7 @@ target_link_libraries(hello_world gpio riscv bootstrap)
 add_flash_sw_target(hello_world)
 ```
 
-Note that depending on whether we're building for simulation or FPGA, two variants of the linker script are used. See [the Linker Script](../../bootstrap/linker_script.md) for more details.
+Note that depending on whether we're building for simulation or FPGA, two variants of the linker script are used. See [the Linker Script](../bootstrap/linker-script.md) for more details.
 
 ## Software CMakeList Organization
 

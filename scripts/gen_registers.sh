@@ -17,6 +17,4 @@ do
 done
 
 rm -rf ../docs/registers/generated/*
-mv generated/*.md ../docs/registers/generated/
-mv generated/md_img ../docs/registers/generated/
 

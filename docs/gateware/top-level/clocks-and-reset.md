@@ -56,6 +56,6 @@ The `reset_ctrl` module source code is located here:
 
 Software can trigger resets by writing to the *Reset Control Register* and retrieve the reason for the most recent reset by reading the *Reset Reason Register*.
 
-See the [Reset Register Map](../../registers/generated/reset-regs.md#reset-register-map) for details.
+See the [Reset Register Map](../../registers/reset-regs.md#reset-register-map) for details.
 
 The [Reset Test](../test/builds/reset.md) application demonstrates the use of these registers.
