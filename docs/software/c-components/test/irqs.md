@@ -24,7 +24,7 @@ void __attribute__((naked)) _dfx_irq_handler(void);
 
 ### The *naked* attribute
 
-The CPU switches to an [interrupt register bank](../../../gateware/components/ibex.md#interrupt-shadow-registers) when entering interrupt mode. This means that the ISR doesn't need to save and restore the registers it uses. The regular ISR prologue and epilogue code (saving and restoring registers) can be skipped. This is done by declaring the ISR function with the GCC `naked` attribute.
+The CPU switches to an [interrupt register bank](../../../soc/components/ibex.md#interrupt-shadow-registers) when entering interrupt mode. This means that the ISR doesn't need to save and restore the registers it uses. The regular ISR prologue and epilogue code (saving and restoring registers) can be skipped. This is done by declaring the ISR function with the GCC `naked` attribute.
 
 Because the `naked` attribute skips all epilogue code, we have to insert the `mret` instruction ourselves in the ISR.
 

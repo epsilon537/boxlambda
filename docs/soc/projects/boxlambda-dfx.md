@@ -1,9 +1,9 @@
-# The BoxLambda DFX Gateware Project Build (Experimental/Advanced)
+# The BoxLambda DFX SoC Project Build (Experimental/Advanced)
 
 **BoxLambda DFX Project in the BoxLambda Directory Tree**:
 [gw/projects/boxlambda-dfx](../../../gw/projects/boxlambda_dfx)
 
-This project builds the 'official' BoxLambda DFX Configuration as described in the [Gaterware Architecture section](../top-level/gw-architecture.md#dfx-configuration).
+This project builds the 'official' BoxLambda DFX Configuration as described in the [SoC Architecture section](../top-level/soc-architecture.md#dfx-configuration).
 
 ![DFX Terminology applied to the BoxLambda SoC](../../assets/dfx-terminology.png)
 

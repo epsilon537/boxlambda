@@ -200,7 +200,7 @@ scanline (VERA always outputs 640x480 VGA). Each entry has the following format:
 	</tr>
 </table>
 
-See [here](../gateware/components/vera.md#the-video-vga-block-vga-line-capture) for a description of the VGA line capture mechanism.
+See [here](../soc/components/vera.md#the-video-vga-block-vga-line-capture) for a description of the VGA line capture mechanism.
 
 ## VERA VRAM
 
