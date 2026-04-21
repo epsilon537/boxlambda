@@ -19,14 +19,13 @@ theme:
     name: material
     logo: assets/boxlambda-logo-simple-white.png
     favicon: assets/boxlambda-logo-simple.png
-    features:
       - navigation.tracking
       - navigation.instant
       - navigation.sections
-      - navigation.tabs
-      - navigation.tabs.sticky
+      - navigation.expand
       - navigation.path
       - navigation.top
+      - navigation.indexes
 
 extra:
   social:
