@@ -67,7 +67,7 @@ The `boot_addr` port name of `wb_ibex_core` is somewhat misleading. `Boot_addr` 
 
 Note that there's no Instruction or Data Cache. Instruction or data accesses go directly to IMEM or DDR memory.
 
-For information on the compiler and compile flags used to generate code for this processor configuration, see section [The Cross-Compiler](../../software/base-platform/build-sys/building.md#the-cross-compiler).
+For information on the compiler and compile flags used to generate code for this processor configuration, see section [The Cross-Compiler](../../tools/cross-compiler.md).
 
 ## The Single Instruction Prefetcher
 

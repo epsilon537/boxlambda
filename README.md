@@ -91,5 +91,5 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
 
 ## Documentation
 
-- [Documentation](docs/README.md)
+- [Documentation](https://boxlambda.readthedocs.io/en/latest/)
 

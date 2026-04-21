@@ -6,7 +6,7 @@
 
 After the Bootloader has transferred control to the OS image it has loaded into EMEM, the OS start-up code goes through the following sequence:
 
-1. `crt0.c` sets up a basic C environment as described [here](../../base-platform/bootstrap/bootstrap-component.md#software-startup-sequence), unpacking and initializing the different sections into IMEM and EMEM as shown in the memory layout diagram above, an invokes BoxLambda OS's `main()`.
+1. `crt0.c` sets up a basic C environment as described [here](../../base-platform/bootstrap/bootstrap-component.md#early-software-startup-sequence), unpacking and initializing the different sections into IMEM and EMEM as shown in the memory layout diagram above, an invokes BoxLambda OS's `main()`.
 2. `main()` goes through the following steps:
     1. Initialize Forth by calling `forth_core_init()`.
     2. Find and mount a filesystem boot volume:

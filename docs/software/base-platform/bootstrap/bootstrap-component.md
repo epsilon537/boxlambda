@@ -115,7 +115,7 @@ See [sw/components/bootstrap/stdio_stream.c](../../../../sw/components/bootstrap
 
 [stdio_stream.h](../../../../sw/components/bootstrap/stdio_stream.h) exports the `stdin` and `stdout` stream objects so standard IO
 can be redirected at any time after boot-up. The BoxKern makes use of this by forwarding stdio to the Forth
-environment. See the [OS Boot Sequence](../../applications/boxlambda-os/boot-seq.md) for details.
+environment. See the [OS Boot Sequence](../../applications/boxlambda-os/top-level-and-boot-seq.md) for details.
 
 ## Early Software Startup Sequence
 

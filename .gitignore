@@ -2,6 +2,8 @@
 *.lint
 #Backup files
 *.bkp
+#exported docs
+site_docs
 #litex stuff
 /sub/liteeth
 /sub/liteiclink

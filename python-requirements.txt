@@ -8,6 +8,8 @@ cffi==1.17.1
 chardet==5.2.0
 charset-normalizer==3.4.1
 cli_exit_tools==1.2.7
+click==8.1.8
+colorama==0.4.6
 contourpy==1.3.1
 corsair==1.0.4
 cssselect==1.2.0
@@ -18,6 +20,7 @@ edalize @ git+https://github.com/lowRISC/edalize.git@5ae2c3e1ca306e27d81ce5fcc76
 flake8==7.1.1
 fonttools==4.55.8
 fusesoc @ git+https://github.com/lowRISC/fusesoc.git@14dfc825ced58fe1fb343662fa80fc4fbd0fdc50
+ghp-import==2.1.0
 hjson==3.1.0
 idna==3.10
 imagesize==1.4.1
@@ -34,15 +37,25 @@ markdown-it-py==4.0.0
 matplotlib==3.10.0
 mccabe==0.7.0
 mdviewer==0.2.3
+mergedeep==1.3.4
 mistletoe==1.4.0
+mkdocs==1.6.1
+mkdocs-get-deps==0.2.0
+mkdocs-glightbox==0.4.0
+mkdocs-material==9.6.1
+mkdocs-material-extensions==1.3.1
 more-itertools==10.6.0
 numpy==2.2.2
 okonomiyaki==2.0.0
+packaging==24.2
 Pallets-Sphinx-Themes==2.3.0
+paginate==0.5.7
 pandas==2.2.3
 pathlib3x==2.0.3
+pathspec==0.12.1
 pexpect==4.9.0
 pillow==11.1.0
+platformdirs==4.3.6
 portalocker==3.1.1
 premailer==3.8.0
 PyBoolector==3.2.4.20240823.1
@@ -52,6 +65,7 @@ pydantic==2.10.6
 pydantic_core==2.27.2
 pyflakes==3.2.0
 Pygments==2.19.1
+pymdown-extensions==10.14.3
 pyparsing==3.2.1
 python-dateutil==2.9.0.post0
 python-jsonschema-objects==0.5.7
@@ -59,6 +73,8 @@ pytz==2025.1
 pyucis==0.1.4.11087239919
 pyvsc==0.9.3.10985030023
 PyYAML==6.0.2
+pyyaml_env_tag==0.1
+regex==2024.11.6
 reportlab==4.2.5
 requests==2.32.3
 rst2pdf==0.103.1
@@ -86,9 +102,9 @@ typeguard==2.13.3
 tzdata==2025.1
 urllib3==2.3.0
 zipp==3.21.0
-corsair==1.0.4
 Jinja2==3.1.6
 MarkupSafe==3.0.2
 six==1.17.0
 svgwrite==1.4.3
+watchdog==6.0.0
 wavedrom==2.0.3.post3

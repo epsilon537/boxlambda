@@ -119,6 +119,7 @@
 - [The Directory Structure and Build Trees](dir-struct.md)
 - Tools:
     - [Target.py](tools/target_py.md)
+    - [The Cross-Compiler](tools/cross-compiler.md)
     - [Debugging](tools/debugging.md)
 - Register and Memory Map:
     - [Reset](registers/reset-regs.md)

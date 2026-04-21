@@ -206,7 +206,7 @@ void forth_eval_boxkern_includes_or_die(const char *filename, bool verbose);
 
 ## BoxKern-Includes
 
-See [The BoxKern-Includes Mechanisnm](../boot-seq.md#the-boxkern-includes-mechanism) in the Boot Sequence section.
+See [The BoxKern-Includes Mechanisnm](../top-level-and-boot-seq.md#the-boxkern-includes-mechanism) in the Boot Sequence section.
 
 ## Register Usage
 
