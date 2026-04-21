@@ -60,14 +60,23 @@ From BoxLambda OS's [main.cpp](../../../../../sw/projects/boxlambda_os/main.cpp)
   forth_core_init();
 
   printf("Forth core init complete.\n");
+  ...
 
-  printf("Compiling Forth included_tools...\n");
+  // Early.fs has to go first. It defines words used by the FFI modules below.
+  forth_eval_file_or_die("forth/early.fs", /*verbose=*/ false);
 
-  forth_load_buf((char*)included_tools, /*verbose=*/ false);
+  // Up to this point stdio is handled by bootstrap/stdio_stream.[ch]
+  // We now switch it over to Forth.
+  printf("Redirecting stdio to Forth...\n");
+  stdio_redirect_ffi_init();
 
-  forth_execute_word("welcome");
+  ...
+  // Parse the file containing the list of boxkern_includes, evaluating
+  // each boxkern_include file in turn/
+  forth_eval_boxkern_includes_or_die("forth/boxkern-includes.fs", /*verbose*/ false);
 
-  forth_repl();
+  // We now transfer control to init.fs. Control does not return unless the user invokes 'bye'.
+  forth_eval("include forth/init.fs");
 ```
 
 ### English Translation

@@ -69,14 +69,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   loading application image.
 - Increased JTAG clock speed to 25MHz.
 - Moved test gateware and software components and directories to a `test/` subdirectory.
-- Moved documentation from [read-the-docs.org](read-the-docs.org) to `docs/` and made all internal references relative.
+- Moved documentation to `docs/` and made all internal references relative.
 - Changed litedram register documentation generation from html to markdown.
 
 ### Removed
 
 - Removed stray references to obsoleted target arty_a7_35t (thanks @wspitts2).
-- Removed load_gw.sh, flash_gw.sh, flash_sw.sh, openocd_arty_a7_100t.sh,
-  openocd_verilator.sh, replaced by target.py.
+- Removed `load_gw.sh`, `flash_gw.sh`, `flash_sw.sh`, `openocd_arty_a7_100t.sh`,
+  `openocd_verilator.sh`, replaced by `target.py`.
 - Removed unused `link_ddr_to_ddr_boot.ld` linker script.
 - Removed unnecessary `forth_repl()` function from the Forth FFI. The available
   `forth_eval*` variants are sufficient.

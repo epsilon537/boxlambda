@@ -42,9 +42,9 @@ MEMORY
   - The stack typically goes to `imem`.
   - The heap goes to `emem`.
 - Symbols used by the CRT0 code for section relocation, BSS initialization, etc. For BoxLambda, the key symbols are:
-    - `__icode_source / __icode_start / __icode_end`: source address, destination start address, and destination end address of the IMEM code section. In the `link_imem_boot.ld` case, `__icode_source` and `__icode_start` point to the same IMEM address. In the `link_ddr_to_imem_boot.ld` case, `__icode_source` points to EMEM and `__icode_start` points to IMEM.
+    - `__icode_source / __icode_start / __icode_end`: source address, destination start address, and destination end address of the IMEM code section. In the `link_imem_boot.ld` case, `__icode_source` and `__icode_start` point to the same IMEM address. In the `link_ddr_boot.ld` case, `__icode_source` points to EMEM and `__icode_start` points to IMEM.
     - `__ecode_source / __ecode_start / __ecode_end`: source address, destination start address, and destination end address of the EMEM code section.
-    - `__idata_source / __idata_start / __idata_end`: source address, destination start address, and destination end address of the IMEM data section. In the `link_imem_boot.ld` case ; `__data_source` and `__data_start` point to the same IMEM address. In the `link_ddr_to_imem_boot.ld` case ; `__idata_source` and `__idata_start` point to the same IMEM address.
+    - `__idata_source / __idata_start / __idata_end`: source address, destination start address, and destination end address of the IMEM data section. In the `link_imem_boot.ld` case ; `__data_source` and `__data_start` point to the same IMEM address. In the `link_ddr_boot.ld` case ; `__idata_source` and `__idata_start` point to the same IMEM address.
     - `__edata_source / __edata_start / __edata_end`: source address, destination start address, and destination end address of the EMEM data section.
     - `__ibss_start / __ibss_end`: Start and end address of the BSS section in IMEM to zero out.
     - `__ebss_start / __ebss_size`: Start and end address of the BSS section in EMEM to zero out.

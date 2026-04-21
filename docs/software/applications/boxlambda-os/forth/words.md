@@ -1138,6 +1138,15 @@ See [Interpreting Console Input](interpreting.md).
 `c, ( u|n -- )`
 - Appends a byte to dictionary.
 
+`forget ( "word" -- )`
+- Forget the give word.
+
+` del ( -- )`
+- Delete the latest definition.
+
+`forgetall ( -- )`
+- Forget everything except the Forth Core.
+
 `compileto>` ( -- f )
 - Retrieve compile-to state.
 

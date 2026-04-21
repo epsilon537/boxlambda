@@ -1,4 +1,4 @@
-# OS Architecture
+# BoxLambda OS Architecture
 
 [![BoxLambda OS
 Architecture.](../../../assets/BoxLambda-OS-Architecture.png)](../../../assets/BoxLambda-OS-Architecture.png)

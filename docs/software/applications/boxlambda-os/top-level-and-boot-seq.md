@@ -1,4 +1,8 @@
-# BoxLambda OS Boot Sequence
+# BoxLambda OS Top-Level
+
+**BoxLambda OS Software Project top-level in the BoxLambda Directory Tree**: [sw/projects/boxlambda_os](../../../../sw/projects/boxlambda_os/main.cpp)
+
+## Boot Sequence
 
 After the Bootloader has transferred control to the OS image it has loaded into EMEM, the OS start-up code goes through the following sequence:
 

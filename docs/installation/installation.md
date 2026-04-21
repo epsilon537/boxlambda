@@ -154,7 +154,83 @@ Ready.
 sd0:/>
 ```
 
-You're now in the Forth REPL and can start entering Forth statements.
+You're now in the Forth REPL and can start entering Forth statements. Try `ls`, `cd` and `cat` to navigate around the filesystem
+and look at files:
+
+```
+sd0:/> ls *
+
+00000000 2026/04/06 22:24:16 --- --- --- --- DIR --- forth
+00000000 2026/04/06 22:24:18 --- --- --- --- DIR --- test
+
+sd0:/> cd forth
+
+sd0:/forth> ls *
+...
+00000490 2026/03/31 17:31:56 --- --- --- --- --- ARC irq.fs
+00001137 2026/03/31 17:32:52 --- --- --- --- --- ARC boxkern-includes.fs
+00001749 2026/03/31 17:33:42 --- --- --- --- --- ARC utils.fs
+00000328 2026/03/31 17:35:02 --- --- --- --- --- ARC early.fs
+00001219 2026/04/06 20:34:52 --- --- --- --- --- ARC init.fs
+
+sd0:/forth> cat irq.fs
+
+\ Setting the MTIMER Comparator
+: set-raw-time-cmp ( u -- ) s>d mtime64 d+ mtimecmp64! ;
+
+\ IRQ ID constants
+16 constant irq-id-fast-0
+7 constant irq-id-timer
+13 irq-id-fast-0 + constant irq-id-vera
+12 irq-id-fast-0 + constant irq-id-vs00
+08 irq-id-fast-0 + constant irq-id-dfx
+10 irq-id-fast-0 + constant irq-id-sdpsi
+08 irq-id-fast-0 + constant irq-id-usb-hid-1
+07 irq-id-fast-0 + constant irq-id-usb-hid-0
+07 irq-id-fast-0 + constant irq-id-i2c
+05 irq-id-fast-0 + constant irq-id-uart
+
+sd0:/forth>
+```
+
+Create a `hello-world.fs` module and transfer it to the target:
+- In a linux terminal, navigate to the `fs/test` directory and create a `hello-world.fs` file with contents `: hello-world ." Hello World." cr ;`:
+
+```
+$ cd fs/test
+fs/test$ echo ": hello-world .\" Hello World.\" cr ;" > hello-world.fs
+```
+
+- Transfer the `fs/` directory, including the new `hello-world.fs` file to the target as a RAM disk:
+
+```
+/fs/test$ cd ../..
+$ target.py -load_fs fs
+=== Target Control ===
+Uploading dir as RAM disk: fs
+...
+Loading Filesystem image...
+Done.
+```
+
+- On the target, navigate to `ram:/test`, source the `hello-world.fs` file, and execute the `hello-world` Word it created:
+
+```
+sd0:/forth> chdrv ram:
+
+ram:/> cd test
+
+ram:/test> ls *
+...
+00000036 2026/04/21 19:33:52 --- --- --- --- --- ARC hello-world.fs
+...
+ram:/test> include hello-world.fs
+
+ram:/test> hello-world
+Hello World.
+
+ram:/test>
+```
 
 ### Building and Loading from Source
 

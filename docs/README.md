@@ -99,9 +99,8 @@
       - BoxLambda OS:
         - [Requirements](software/applications/boxlambda-os/requirements.md)
         - [Architecture](software/applications/boxlambda-os/architecture.md)
-        - [Build](software/applications/boxlambda-os/build.md)
         - [Memory Layout](software/applications/boxlambda-os/mem-layout.md)
-        - [Boot Sequence](software/applications/boxlambda-os/boot-seq.md)
+        - [Top-Level and Boot Sequence](software/applications/boxlambda-os/top-level-and-boot-seq.md)
         - [User Interface](software/applications/boxlambda-os/ui.md)
         - [Filesystem](software/applications/boxlambda-os/filesystem.md)
         - Forth:
@@ -114,6 +113,7 @@
           - [Interpreting](software/applications/boxlambda-os/forth/interpreting.md)
           - [Include](software/applications/boxlambda-os/forth/include.md)
           - [Filesystem Stack](software/applications/boxlambda-os/forth/fs-stack.md)
+        - [Try It Out](software/applications/boxlambda-os/try-it-out.md)
         - Testing:
           - [Forth Test Suite](software/applications/boxlambda-os/test/forth-testsuite.md)
 - [The Directory Structure and Build Trees](dir-struct.md)

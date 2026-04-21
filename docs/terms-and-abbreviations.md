@@ -8,6 +8,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Bit-Banging**: Software manually toggling pins to emulate hardware communication.
 - **Bitstream**: A file containing the programming data for an FPGA chip.
 - **Blitter**: A type of DMA used in 2D graphics for bitmap manipulation in video memory.
+- **BoxKern**: The BoxLambda OS Kernel.
 - **BPP**: Bits Per Pixel.
 - **BSCANE**: A Xilinx primitive for accessing the FPGA's JTAG scan chain.
 - **BSS**: Block Starting Symbol. Zero-initialized data in an object file or executable.
@@ -29,6 +30,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **CYC**: A Wishbone Bus Signal.
 - **DAC**: Digital-to-Analog Converter.
 - **.data**: Segment holding pre-initialized data.
+- **Datastack**: The Forth Datastack, an alternate name for the Forth Parameter Stack.
 - **DDR PHY**: Double Data Rate (RAM) Physical Interface.
 - **DDR SDRAM**: Double Data Rate Synchronous DRAM.
 - **Delta-Sigma Modulation**: A method for digital-to-analog/analog-to-digital conversion ([overview](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html)).
@@ -120,6 +122,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **PMOD**: Digilent’s Peripheral Module Interface standard.
 - **POR**: Power-On Reset.
 - **PSG**: Programmable Sound Generator.
+- **PSP**: Parameter Stack Pointer, The Parameter Stack is an alternate name for the Forth Datastack.
 - **PUP**: Pull-Up Pin.
 - **PWM**: Pulse Width Modulation.
 - **RC Filter**: Resistor-Capacitor low-pass filter.
@@ -129,6 +132,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Reset Domain**: Clock subdomain controlled by specific reset signals.
 - **RP**: Reconfigurable Partition - Part of Xilinx's DFX solution.
 - **RM**: Reconfigurable Module - Part of Xilinx's DFX solution.
+- **RS**: The Forth Return Stack.
 - **RTCC**: Real-Time Clock and Calendar.
 - **RTL**: Register-Transfer Level - An abstraction of a digital design, typically described in Verilog, SystemVerilog, or VHDL.
 - **RV32IMCB**: RISC-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
@@ -158,6 +162,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **TAP**: Test Access Port - Part of the JTAG interface.
 - **TCK**: Test Clock - JTAG clock signal.
 - **Tcl**: A standard embedded command language for EDA applications.
+- **TOS**: The item on top of the Forth datastack.
 - **Udev**: A device manager for the Linux kernel.
 - **UKP**: A tiny 5-bit processor used in the `usb_hid_host` core.
 - **USB HID**: USB Human Interface Device - A class for peripherals like keyboards and mice.

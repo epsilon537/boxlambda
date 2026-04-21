@@ -71,7 +71,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "sim")
   ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 else()
   link_and_create_image(hello_world
-  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_to_imem_boot.ld)
+  ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_ddr_boot.ld)
 endif()
 
 target_link_libraries(hello_world gpio riscv bootstrap)
