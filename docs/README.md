@@ -60,6 +60,7 @@
     - [Building the SoC](soc/build-sys/building.md)
 - Software:
   - The Base Platform:
+      - [Architecture](software/base-platform/architecture.md)
       - Bootstrap:
         - [The Bootstrap Component](software/base-platform/bootstrap/bootstrap-component.md)
         - [Bootloader](software/base-platform/bootstrap/bootloader.md)
@@ -91,9 +92,6 @@
           - [Peek and Poke CLI](software/base-platform/c-components/test/peek-poke-cli.md)
           - [J1B HAL](software/base-platform/c-components/test/j1b-hal.md)
           - [VS0 HAL](software/base-platform/c-components/test/vs0-hal.md)
-      - Software Testing:
-        - [The Software Test Bench](software/base-platform/test/test-bench.md)
-        - [Forth Test Suite](software/base-platform/test/builds/forth-testsuite.md)
       - The Software Build System:
         - [The Build System](software/base-platform/build-sys/build-sys.md)
         - [Building the Software](software/base-platform/build-sys/building.md)
@@ -116,6 +114,8 @@
           - [Interpreting](software/applications/boxlambda-os/forth/interpreting.md)
           - [Include](software/applications/boxlambda-os/forth/include.md)
           - [Filesystem Stack](software/applications/boxlambda-os/forth/fs-stack.md)
+        - Testing:
+          - [Forth Test Suite](software/applications/boxlambda-os/test/forth-testsuite.md)
 - [The Directory Structure and Build Trees](dir-struct.md)
 - Tools:
     - [Target.py](tools/target_py.md)

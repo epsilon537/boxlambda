@@ -23,6 +23,7 @@ BoxLambda uses the Picolibc standard C library implementation.
 ## Building Picolibc
 
 ### Picolibc Configuration Scripts
+
 A Picolibc build for a new system requires configuration scripts for that system in the [picolibc/scripts/](https://github.com/epsilon537/picolibc/tree/boxlambda/scripts) directory. They specify such things as the compiler toolchain to use, GCC processor architecture flags, and CPP preprocessor flags, tweaking specific library features.
 
 I'm using `boxlambda` as the base name for the new scripts.
@@ -39,6 +40,7 @@ The differences between the derived scripts and the base scripts are minimal:
 - In `do-boxlambda-configure`, `picocrt` is set to `false`. We're not using the picolibc crt0 module. BoxLambda has its own variant of the crt0 module in the `bootstrap` software component.
 
 ### picolibc_build.sh
+
 ![Building Picolibc.](../../../assets/building-picolibc.drawio.png)
 
 I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](../../../../scripts/picolibc_build.sh) shell script. This script is invoked by the build system (in [sw/CMakeLists.txt](../../../../sw/CMakeLists.txt)) during build tree configuration time. The picolibc build and install directories are placed inside the build tree:
@@ -80,7 +82,7 @@ Picolibc is a relatively generic code base that needs to be tied to the platform
 - A Link Map
 - Standard IO Setup
 
-More detail for each of these follows in the subsections below. I have grouped them into a single software component called **bootstrap**:
+I have grouped them into a single software component called **bootstrap**:
 
 [../../../sw/components/bootstrap](../../../../sw/components/bootstrap)
 

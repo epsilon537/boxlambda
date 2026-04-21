@@ -1,6 +1,4 @@
-# OS Boot Sequence
-
-This section describes the OS Boot Sequence. It starts where the [Bootloader Boot Sequence section](../../base-platform/bootstrap/bootloader.md#boot-sequence) leaves off.
+# BoxLambda OS Boot Sequence
 
 After the Bootloader has transferred control to the OS image it has loaded into EMEM, the OS start-up code goes through the following sequence:
 
