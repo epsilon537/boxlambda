@@ -42,6 +42,8 @@ repo_url: https://github.com/epsilon537/boxlambda
 
 nav:
   - About: index.md
+  - Start Here: start-here.md
+  - Full Index: full-index.md
   - Terms and Abbreviations: terms-and-abbreviations.md
   - Requirements: requirements.md
   - Installation:

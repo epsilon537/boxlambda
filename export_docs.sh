@@ -25,6 +25,7 @@ BRANCH=$1
 
 rm -rf site_docs
 python3 scripts/export_docs.py --ref $BRANCH
+python3 scripts/gen_full_index.py
 cp README.md site_docs/index.md
 
 mkdocs serve
