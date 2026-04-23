@@ -140,26 +140,26 @@ nav:
         - The Software Build System:
           - The Build System: software/base-platform/build-sys/build-sys.md
           - Building the Software: software/base-platform/build-sys/building.md
-      - BoxLambda OS:
-        - Requirements: software/boxlambda-os/requirements.md
-        - Architecture: software/boxlambda-os/architecture.md
-        - Memory Layout: software/boxlambda-os/mem-layout.md
-        - Top-Level and Boot Sequence: software/boxlambda-os/top-level-and-boot-seq.md
-        - User Interface: software/boxlambda-os/ui.md
-        - Filesystem: software/boxlambda-os/filesystem.md
-        - Forth:
-          - The Mecrisp Forth Core: software/boxlambda-os/forth/core.md
-          - The Forth-C FFI: software/boxlambda-os/forth/c-ffi.md
-          - Stack Notation: software/boxlambda-os/forth/stack-notation.md
-          - Forth Word Glossary: software/boxlambda-os/forth/words.md
-          - Interrupt Handling: software/boxlambda-os/forth/irqs.md
-          - Exception Handling: software/boxlambda-os/forth/exception-handling.md
-          - Interpreting: software/boxlambda-os/forth/interpreting.md
-          - Include: software/boxlambda-os/forth/include.md
-          - Filesystem Stack: software/boxlambda-os/forth/fs-stack.md
-        - Try It Out: software/boxlambda-os/try-it-out.md
-        - Testing:
-          - Forth Test Suite: software/boxlambda-os/test/forth-testsuite.md
+    - BoxLambda OS:
+      - Requirements: software/boxlambda-os/requirements.md
+      - Architecture: software/boxlambda-os/architecture.md
+      - Memory Layout: software/boxlambda-os/mem-layout.md
+      - OS Top-Level and Boot Sequence: software/boxlambda-os/top-level-and-boot-seq.md
+      - User Interface: software/boxlambda-os/ui.md
+      - Filesystem: software/boxlambda-os/filesystem.md
+      - Forth:
+        - The Mecrisp Forth Core: software/boxlambda-os/forth/core.md
+        - The Forth-C FFI: software/boxlambda-os/forth/c-ffi.md
+        - Stack Notation: software/boxlambda-os/forth/stack-notation.md
+        - Forth Word List: software/boxlambda-os/forth/words.md
+        - Interrupt Handling: software/boxlambda-os/forth/irqs.md
+        - Exception Handling: software/boxlambda-os/forth/exception-handling.md
+        - Interpreting: software/boxlambda-os/forth/interpreting.md
+        - Include: software/boxlambda-os/forth/include.md
+        - Filesystem Stack: software/boxlambda-os/forth/fs-stack.md
+      - Try It Out: software/boxlambda-os/try-it-out.md
+      - Testing:
+        - Forth Test Suite: software/boxlambda-os/test/forth-testsuite.md
   - The Directory Structure and Build Trees: dir-struct.md
   - Tools:
       - Target.py: tools/target_py.md

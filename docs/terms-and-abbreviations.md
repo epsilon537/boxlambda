@@ -2,6 +2,7 @@
 
 This section clarifies some of the more ambiguous terms and abbreviations used elsewhere in the documentation.
 
+- **ABI**: Application Binary Interface. The low-level contract that defines how compiled code interacts at runtime.
 - **ACK**: A Wishbone Bus Signal.
 - **API**: Application Programming Interface.
 - **AXI**: Advanced eXtensible Interface, ARM's SoC bus specification.
@@ -48,16 +49,19 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **EDA tool**: Electronic Design Automation tool, e.g., Vivado.
 - **EMEM**: External Memory (SDRAM).
 - **ERR**: A Wishbone Bus Signal.
+- **Execution Token: See *xt*.
 - **FFI**: Foreign Function Interface, e.g. the interface used to allow C code to call Forth code.
 - **FFT**: Fast Fourier Transform, converting signals to frequency components.
 - **FHDL**: Fragmented Hardware Description Language, used by Migen and LiteX.
 - **FIFO**: First-In-First-Out queue implementation.
 - **Fork**: Copy of a GitHub repository under a user account.
 - **Forth**: A stack-based programming language.
+- **fs_mem**: Filesystem memory, a section of external memory used by the BoxLambda OS as a RAM disk.
 - **FTDI**: Future Technology Devices International, known for USB-to-UART adapters.
 - **FSM**: Finite State Machine, a circuit with finite states.
 - **Gateware**: Describes and implements digital logic in FPGAs/ASICs.
 - **GCC**: GNU Compiler Collection.
+- **gp**: Global Pointer. A dedicated CPU register that holds the base address of a region of memory containing global and static variables. It lets the program access global data quickly using small offsets from a fixed base address.
 - **GPIO**: General-Purpose Input/Output pin.
 - **Harvard Architecture**: CPU architecture with separate instruction and data memory. Used by BoxLambda’s Ibex processor.
 - **HAL**: Hardware Access Layer, a low-level software API.
@@ -84,6 +88,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **J1**: A small Forth CPU core.
 - **Jekyll**: A static, blog-aware, website generator written in Ruby.
 - **JTAG**: Debugging interface standard.
+- **Lambda**: An anonymous function.
 - **Linting**: Static code analysis.
 - **LiteDRAM**: Configurable DRAM core in LiteX.
 - **LiteX**: SoC builder framework using Migen.
@@ -186,7 +191,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Word**: In this documentation, a *Word* written with capital *W* signifies a Forth Word.
 - **WSL**: Windows Subsystem for Linux.
 - **Xbar**: Cross-Bar - A type of interconnect used in SoC bus fabrics.
-- **XT**: Execution Token. A value that uniquely identifies a word’s executable code, allowing the program to execute that word indirectly.
+- **xt**: Execution Token. A value that uniquely identifies a word’s executable code, allowing the program to execute that word indirectly.
 - **XPM**: Xilinx Parameterized Macro.
 - **YM**: A music file format for the YM2149 chip ([YM Format](http://leonard.oxg.free.fr/ymformat.html)).
 - **YM2149**: A Yamaha sound chip from the 1980s. See also JT49.

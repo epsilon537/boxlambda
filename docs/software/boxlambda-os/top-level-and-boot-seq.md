@@ -6,7 +6,7 @@
 
 After the Bootloader has transferred control to the OS image it has loaded into EMEM, the OS start-up code goes through the following sequence:
 
-1. `crt0.c` sets up a basic C environment as described [here](../base-platform/bootstrap/bootstrap.md#early-software-startup-sequence), unpacking and initializing the different sections into IMEM and EMEM as shown in the memory layout diagram above, an invokes BoxLambda OS's `main()`.
+1. `crt0.c` sets up a basic C environment as described in the [early software startup sequence](../base-platform/bootstrap/bootstrap.md#early-software-startup-sequence).
 2. `main()` goes through the following steps:
     1. Initialize Forth by calling `forth_core_init()`.
     2. Find and mount a filesystem boot volume:
@@ -22,16 +22,14 @@ After the Bootloader has transferred control to the OS image it has loaded into 
 
 ![The OS Boot Sequence](../../assets/boxkern-boot.png)
 
-*The OS Boot Sequence.*
+*The BoxLambda OS Boot Sequence.*
 
 ## The BoxKern-Includes Mechanism
 
 [fs/forth/boxkern-includes.fs](../../../fs/forth/boxkern-includes.fs) may look like a Forth module but it not is a Forth module.
 
 The syntax is limited to lines starting with `\`, which are ignored, and lines starting with the word `boxkern_include` followed by the full
-path of a `.fs` module to be evaluated. That `.fs` module must not include any submodules itself.
+path of a `.fs` Forth module to be evaluated. That Forth module must not include any submodules itself.
 
-The BoxKern loads and passes `boxkern_include` files to the Forth environment at boot time using [Forth-C FFI function](forth/c-ffi.md)  `forth_eval_boxkern_invludes_or_die()`. This mechanism allows a limited form of Forth module loading until the Forth 'include' Word can be defined. The order of boxkern_includes is important.
-
-The modules build up a stack, with [shell.fs](../../../fs/forth/shell.fs) on top.
+The BoxKern loads and passes `boxkern_include` files to the Forth environment at boot time using [Forth-C FFI function](forth/c-ffi.md)  `forth_eval_boxkern_includes_or_die()`. This mechanism allows a limited form of Forth module loading until the Forth `include` Word can be defined. The order of the modules listed in `boxkern-includes.fs` is important because new Words build upon previously defined Words. The modules in `boxkern-includes.fs` build up a stack, with [shell.fs](../../../fs/forth/shell.fs) on top.
 
