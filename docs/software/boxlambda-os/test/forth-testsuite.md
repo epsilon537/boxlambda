@@ -1,6 +1,6 @@
 # The Forth Test Suite
 
-**The software project directory**: [sw/projects/boxlambda_os](../../../../../sw/projects/boxlambda_os)
+**The software project directory**: [sw/projects/boxlambda_os](../../../../sw/projects/boxlambda_os)
 
 This build runs the Forth regression test suite. The testsuite is based on the Mecrisp
 Forth testsuite, augmented with Words specifically added for BoxLambda (C-FFI, `c,`, `halign`, `compiletoimem`,...).
@@ -9,7 +9,7 @@ Forth testsuite, augmented with Words specifically added for BoxLambda (C-FFI, `
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 
-Make sure the `boxlambda_base` release bitstream is flashed onto the target. If that's not the case yet, follow the steps in [this section](../../../../installation/installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+Make sure the `boxlambda_base` release bitstream is flashed onto the target. If that's not the case yet, follow the steps in [this section](../../../installation/installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
 Build the Forth Test Suite and load the test binary and file system onto the target:
 

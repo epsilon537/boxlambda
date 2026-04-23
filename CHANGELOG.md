@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## Label `v0.4.0`: Changes sinces label `v0.3.1` - 2026-03-30
 
+### Contributors
+
+Thanks to [W. Shepherd Pitts](https://github.com/wspitts2) for JTAG and OpenOCD related feedback/corrections.
+
 ### Added
 
 - Added documentation top-level to README.md.

@@ -12,7 +12,7 @@ To get a sense of how the various software modules referenced below relate to ea
 
 ## Constants and Units
 
-[units.fs](../../../../../fs/forth/units.fs)
+[units.fs](../../../../fs/forth/units.fs)
 
 `cell`
 - The size in bytes of one cell.
@@ -37,7 +37,7 @@ To get a sense of how the various software modules referenced below relate to ea
 
 ## Range Related Words
 
-[range.fs](../../../../../fs/forth/range.fs)
+[range.fs](../../../../fs/forth/range.fs)
 
 `span ( addr len -- start end )`
 - Convert addr len to start-end address span.
@@ -50,7 +50,7 @@ To get a sense of how the various software modules referenced below relate to ea
 
 ## Arrays
 
-[array.fs](../../../../../fs/forth/array.fs)
+[array.fs](../../../../fs/forth/array.fs)
 
 `array <name> ( compile time: n -- ) ( run time: i -- addr)`
 - Create an array of n cells with given name. `i <name>` returns the address of the i-th cell.
@@ -60,8 +60,8 @@ To get a sense of how the various software modules referenced below relate to ea
 
 ## ZeptoForth Exceptions
 
-[exception.s](../../../../../sw/components/forth/exception.s)
-[except.fs](../../../../../fs/forth/except.fs)
+[exception.s](../../../../sw/components/forth/exception.s)
+[except.fs](../../../../fs/forth/except.fs)
 
 See [Forth Exception Handling](exception-handling.md).
 
@@ -110,7 +110,7 @@ Example:
 
 ## ZeptoForth Lambda Anonymous Functions
 
-[lambda.fs](../../../../../fs/forth/lambda.fs)
+[lambda.fs](../../../../fs/forth/lambda.fs)
 
 `[: ( -- )`
 - Immediate. Begin Lambda.
@@ -139,7 +139,7 @@ Example 2:
 
 ## ZeptoForth Structs
 
-[struct.fs](../../../../../fs/forth/struct.fs)
+[struct.fs](../../../../fs/forth/struct.fs)
 
 `begin-structure ( "name" -- addr offset )`
 - Begin declaring a structure.
@@ -177,7 +177,7 @@ fil-buf0 .fil @ fil-buf0 .buf @ 256 f_read
 
 ## ZeptoForth Heap
 
-[heap.fs](../../../../../fs/forth/heap.fs)
+[heap.fs](../../../../fs/forth/heap.fs)
 
 Heaps are created by the user and consist of discretes blocks that are allocated, freed, and resized as multiples; the size of allocations plus a cell taken up by a block count is rounded up to the next full number of blocks. There is by no global heap. Note that the time taken up by heap allocation or resizing is bounded by a maximum which is defined by the number of blocks in the heap; any heap allocation or resizing may take this full time. On the other hand, the time taken up by freeing an allocation is determined solely by the number of blocks comprising the allocation.
 
@@ -206,7 +206,7 @@ x-memory-not-allocated
 
 ## ZeptoForth Pool
 
-[pool.fs](../../../../../fs/forth/pool.fs)
+[pool.fs](../../../../fs/forth/pool.fs)
 
 Pools are created by the user and consist of discretes blocks that are allocated and freed individual as wholes. There is by default no global pool. Allocating and freeing blocks in pools occurs in constant time and are fast, unlike allocation, resizing, and freeing in heaps.
 
@@ -241,7 +241,7 @@ x-allocate-failed
 
 ## Temporary Memory Allocator
 
-[temp-alloc.fs](../../../../../fs/forth/temp-alloc.fs)
+[temp-alloc.fs](../../../../fs/forth/temp-alloc.fs)
 
 `temp-allot ( u -- )`
 - Allot u bytes from temporary buffer may throw x-temp-allot-failed.
@@ -267,8 +267,8 @@ x-temp-allot-failed
 
 ## Terminal-IO
 
-[terminal.s](../../../../../sw/components/forth/terminal.s)
-[terminalhooks.s](../../../../../sw/components/forth/terminalhooks.s)
+[terminal.s](../../../../sw/components/forth/terminal.s)
+[terminalhooks.s](../../../../sw/components/forth/terminalhooks.s)
 
 `emit? ( -- Flag )`
 - Ready to send a character?
@@ -306,8 +306,8 @@ serial-emit ( Char -- )
 
 ## Stack Jugglers
 
-[stackjugglers.s](../../../../../sw/components/forth/stackjugglers.s)
-[utils.fs](../../../../../fs/forth/utils.fs)
+[stackjugglers.s](../../../../sw/components/forth/stackjugglers.s)
+[utils.fs](../../../../fs/forth/utils.fs)
 
 ### Single-Jugglers
 
@@ -352,7 +352,7 @@ serial-emit ( Char -- )
 
 ### Double-Jugglers
 
-[double.s](../../../../../sw/components/forth/double.s)
+[double.s](../../../../sw/components/forth/double.s)
 
 `2nip ( x1 x2 x3 x4 -- x3 x4 )`
 
@@ -380,7 +380,7 @@ serial-emit ( Char -- )
 
 ### Stack pointers
 
-[stackjugglers.s](../../../../../sw/components/forth/stackjugglers.s)
+[stackjugglers.s](../../../../sw/components/forth/stackjugglers.s)
 
 `sp@ ( -- a-addr )`
 - Fetch data stack pointer.
@@ -396,8 +396,8 @@ serial-emit ( Char -- )
 
 ## Logic and Bit Manipulation
 
-[logic.s](../../../../../sw/components/forth/logic.s)
-[utils.fs](../../../../../fs/forth/utils.fs)
+[logic.s](../../../../sw/components/forth/logic.s)
+[utils.fs](../../../../fs/forth/utils.fs)
 
 Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves like "31 and ar/r/lshift". 32 lshift does nothing.
 
@@ -453,8 +453,8 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 ### Single Number Calculus (exactly ANS, some logical extensions)
 
-[multiplydivide.s](../../../../../sw/components/forth/multiplydivide.s)
-[calculations.s](../../../../../sw/components/forth/calculations.s)
+[multiplydivide.s](../../../../sw/components/forth/multiplydivide.s)
+[calculations.s](../../../../sw/components/forth/calculations.s)
 
 `u/mod ( u1 u2 -- u3 u4 )`
 - 32/32 = 32 rem 32 Division. u1 / u2 = u4 remainder u3.
@@ -506,9 +506,9 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 ### Double Number Calculus (exactly ANS, some logical extensions)
 
-[double.s](../../../../../sw/components/forth/double.s)
-[multiplydivide.s](../../../../../sw/components/forth/multiplydivide.s)
-[utils.fs](../../../../../fs/forth/utils.fs)
+[double.s](../../../../sw/components/forth/double.s)
+[multiplydivide.s](../../../../sw/components/forth/multiplydivide.s)
+[utils.fs](../../../../fs/forth/utils.fs)
 
 `um+ ( u1 u2 -- u carry )`
 - Unsigned addition with carry.
@@ -599,7 +599,7 @@ instead of a dot.
 Fixpoint numbers are stored ( n-comma n-whole ) and can be handled
 like signed double numbers.
 
-[double.s](../../../../../sw/components/forth/double.s)
+[double.s](../../../../sw/components/forth/double.s)
 
 `f/ ( df1 df2 -- df3 )`
 - Division of two fixpoint numbers.
@@ -611,8 +611,8 @@ like signed double numbers.
 
 ### Single Comparisons
 
-[comparisons.s](../../../../../sw/components/forth/comparisons.s)
-[utils.fs](../../../../../fs/forth/utils.fs)
+[comparisons.s](../../../../sw/components/forth/comparisons.s)
+[utils.fs](../../../../fs/forth/utils.fs)
 
 `u<= ( u1 u2 -- flag )`
 - Unsigned comparisions.
@@ -658,7 +658,7 @@ like signed double numbers.
 
 ### Double-Comparisons
 
-[double.s](../../../../../sw/components/forth/double.s)
+[double.s](../../../../sw/components/forth/double.s)
 
 `du> ( ud1 ud2 -- flag )`
 
@@ -678,7 +678,7 @@ like signed double numbers.
 
 ### Specials
 
-[calculation.s](../../../../../sw/components/forth/calculations.s)
+[calculation.s](../../../../sw/components/forth/calculations.s)
 
 `slt ( u1 u2 -- 0 | 1 )`
 - Set if less than.
@@ -688,7 +688,7 @@ like signed double numbers.
 
 ## Number base
 
-[calculation.s](../../../../../sw/components/forth/calculations.s)
+[calculation.s](../../../../sw/components/forth/calculations.s)
 
 `binary ( -- )`
 - Sets base to 2.
@@ -704,10 +704,10 @@ like signed double numbers.
 
 ## Memory access
 
-[memory.s](../../../../../sw/components/forth/memory.s)
-[compiler.s](../../../../../sw/components/forth/compiler.s)
-[compiler-memory.s](../../../../../sw/components/forth/compiler-memory.s)
-[double.s](../../../../../sw/components/forth/double.s)
+[memory.s](../../../../sw/components/forth/memory.s)
+[compiler.s](../../../../sw/components/forth/compiler.s)
+[compiler-memory.s](../../../../sw/components/forth/compiler-memory.s)
+[double.s](../../../../sw/components/forth/double.s)
 
 `move ( c-addr1 c-addr2 u -- )`
 - Moves u Bytes in Memory.
@@ -810,7 +810,7 @@ like signed double numbers.
 
 ## Comments
 
-[strings.s](../../../../../sw/components/forth/strings.s)
+[strings.s](../../../../sw/components/forth/strings.s)
 
 `( Comment )`
 - Ignore Comment.
@@ -822,12 +822,12 @@ like signed double numbers.
 
 ### String routines
 
-[strings.s](../../../../../sw/components/forth/strings.s)
-[numberstrings.s](../../../../../sw/components/forth/numberstrings.s)
-[numberoutput.s](../../../../../sw/components/forth/numberoutput.s)
-[istr.fs](../../../../../fs/forth/istr.fs)
-[utils.fs](../../../../../fs/forth/utils.fs)
-[tonumber.fs](../../../../../fs/forth/tonumber.fs)
+[strings.s](../../../../sw/components/forth/strings.s)
+[numberstrings.s](../../../../sw/components/forth/numberstrings.s)
+[numberoutput.s](../../../../sw/components/forth/numberoutput.s)
+[istr.fs](../../../../fs/forth/istr.fs)
+[utils.fs](../../../../fs/forth/utils.fs)
+[tonumber.fs](../../../../fs/forth/tonumber.fs)
 
 `type ( c-addr length -- )`
 - Prints a string.
@@ -894,7 +894,7 @@ unconverted characters in the string.
 
 ### Escaped Strings
 
-[escstr.fs](../../../../../fs/forth/escstr.fs)
+[escstr.fs](../../../../fs/forth/escstr.fs)
 
 `escape-string ( addr len -- addr' len' )`
 - In given string, substitute escape codes according to table below.
@@ -978,7 +978,7 @@ Parse string from input string, substitute escape codes according to table below
 
 ## jkotlinski Printf-Style Printing and Formatting
 
-[printf.fs](../../../../../fs/forth/printf.fs)
+[printf.fs](../../../../fs/forth/printf.fs)
 
 `sprintf ( n*x addr1 u1 addr2 -- addr2 u3 )`
 - Prints n*x into buffer addr2 using the format string at addr1 u. addr2 u3 is the resulting string.
@@ -1019,7 +1019,7 @@ spaced     out ok``
 
 ## Deep insights
 
-[deepinsight.s](../../../../../sw/components/forth/deepinsight.s)
+[deepinsight.s](../../../../sw/components/forth/deepinsight.s)
 
 `words ( -- )`
 - Prints list of defined words.
@@ -1041,9 +1041,9 @@ spaced     out ok``
 
 ## User input and its interpretation (exactly ANS, some logical extensions)
 
-[query.s](../../../../../sw/components/forth/query.s)
-[token.s](../../../../../sw/components/forth/token.s)
-[interpreter.s](../../../../../sw/components/forth/interpreter.s)
+[query.s](../../../../sw/components/forth/query.s)
+[token.s](../../../../sw/components/forth/token.s)
+[interpreter.s](../../../../sw/components/forth/interpreter.s)
 
 See [Interpreting Console Input](interpreting.md).
 
@@ -1091,10 +1091,10 @@ See [Interpreting Console Input](interpreting.md).
 
 ## Dictionary expansion
 
-[compiler.s](../../../../../sw/components/forth/compiler.s)
-[compiler-memory.s](../../../../../sw/components/forth/compiler-memory.s)
-[calculations.s](../../../../../sw/components/forth/calculations.s)
-[utils.fs](../../../../../fs/forth/utils.fs)
+[compiler.s](../../../../sw/components/forth/compiler.s)
+[compiler-memory.s](../../../../sw/components/forth/compiler-memory.s)
+[calculations.s](../../../../sw/components/forth/calculations.s)
+[utils.fs](../../../../fs/forth/utils.fs)
 
 `alignto ( a power -- a )`
 - Align an address to a power of two.
@@ -1205,8 +1205,8 @@ See [Interpreting Console Input](interpreting.md).
 
 Note that `[immediate]` needs to be *inside* of the definition, not after the `;`. There is no `immediate` Word variant that goes *after* the definition.
 
-[compiler-memory.s](../../../../../sw/components/forth/compiler-memory.s)
-[compiler.s](../../../../../sw/components/forth/compiler.s)
+[compiler-memory.s](../../../../sw/components/forth/compiler-memory.s)
+[compiler.s](../../../../sw/components/forth/compiler.s)
 
 `smudge ( -- )`
 - Makes current definition visible, takes care of proper ending.
@@ -1254,8 +1254,8 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
 
 ## Compiler essentials
 
-[compiler.s](../../../../../sw/components/forth/compiler.s)
-[buildsdoes.s](../../../../../sw/components/forth/buildsdoes.s)
+[compiler.s](../../../../sw/components/forth/compiler.s)
+[buildsdoes.s](../../../../sw/components/forth/buildsdoes.s)
 
 `execute ( xt -- )`
 - Calls the executable token.
@@ -1339,7 +1339,7 @@ Internally they have complicated compile-time stack effects.
 
 ### Decisions
 
-[controlstructures.s](../../../../../sw/components/forth/controlstructures.s)
+[controlstructures.s](../../../../sw/components/forth/controlstructures.s)
 
 ```
 flag if ... then
@@ -1354,7 +1354,7 @@ ahead ... then
 
 Case:
 
-[case.s](../../../../../sw/components/forth/case.s)
+[case.s](../../../../sw/components/forth/case.s)
 
 ```
 n case
@@ -1382,7 +1382,7 @@ n case
 
 ### Indefinite Loops
 
-[controlstructures.s](../../../../../sw/components/forth/controlstructures.s)
+[controlstructures.s](../../../../sw/components/forth/controlstructures.s)
 
 ```
 begin ... again
@@ -1408,8 +1408,8 @@ begin ... flag while ... flag while ... repeat ... else ... then
 -
 ### Definite Loops
 
-[doloop.s](../../../../../sw/components/forth/doloop.s)
-[compiler.s](../../../../../sw/components/forth/compiler.s)
+[doloop.s](../../../../sw/components/forth/doloop.s)
+[compiler.s](../../../../sw/components/forth/compiler.s)
 
 ```
 limit index   do ... [one or more leave(s)] ... loop
@@ -1450,8 +1450,8 @@ limit index   do ... [one or more leave(s)] ... loop
 
 ## C Foreign Function Interface
 
-[early.fs](../../../../../fs/forth/early.fs)
-[cstr.fs](../../../../../fs/forth/cstr.fs)
+[early.fs](../../../../fs/forth/early.fs)
+[cstr.fs](../../../../fs/forth/cstr.fs)
 
 `c-fun Define: ( compile time: fun "name" -- ) ( run time: i*x -- j*x )`
 - Register a C function so it can be called from Forth. See [Forth Calling C](c-ffi.md#forth-calling-c).
@@ -1484,7 +1484,7 @@ x-string-too-long
 
 ## Filesystem
 
-[fs.fs](../../../../../fs/forth/fs.fs)
+[fs.fs](../../../../fs/forth/fs.fs)
 
 File Access:
 
@@ -1696,7 +1696,7 @@ x-fr-unknown
 
 ## Output Redirection to File
 
-[fs-redirect.fs](../../../../../fs/forth/fs-redirect.fs)
+[fs-redirect.fs](../../../../fs/forth/fs-redirect.fs)
 
 `emit>file ( fil -- )`
 - Set emit-hook and emit-hook? to emit-to-open-file handlers.
@@ -1717,7 +1717,7 @@ x-fr-unknown
 
 # Shell
 
-[shell.fs](../../../../../fs/forth/shell.fs)
+[shell.fs](../../../../fs/forth/shell.fs)
 
 Some basic shell-like commands for interactive use.
 
@@ -1805,7 +1805,7 @@ x-line-truncated
 
 ## Conditional Execution/Compilation
 
-[ifdef.fs](../../../../../fs/forth/ifdef.fs)
+[ifdef.fs](../../../../fs/forth/ifdef.fs)
 
 `[if] (? -- )`
 - Start conditional execution/compilation if flag is true.
@@ -1822,7 +1822,7 @@ x-line-truncated
 `[then] ( -- )`
 - Finish conditional execution/compilation.
 
-Example from [init.fs](../../../../../fs/forth/init.fs):
+Example from [init.fs](../../../../fs/forth/init.fs):
 ```
 include /forth/ifdef.fs
 
@@ -1840,8 +1840,8 @@ include /test/testsuite.fs
 
 ## Mecrisp RISC-V 32 IM Disassembler
 
-[disasm.fs](../../../../../fs/forth/disasm.fs)
-[dump.fs](../../../../../fs/forth/dump.fs)
+[disasm.fs](../../../../fs/forth/disasm.fs)
+[dump.fs](../../../../fs/forth/dump.fs)
 
 `disasm-$`
 - Variable holding current position for disassembling.

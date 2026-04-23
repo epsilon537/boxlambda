@@ -2,13 +2,13 @@
 
 The following diagram illustrates Word `foo` successfully *trying* `bar`, i.e. bar does not raise an exception.
 
-[![Foo Successfully tries bar..](../../../../assets/foo-tries-bar-no-exception.png)](../../../../assets/foo-tries-bar-no-exception.png)
+[![Foo Successfully tries bar..](../../../assets/foo-tries-bar-no-exception.png)](../../../assets/foo-tries-bar-no-exception.png)
 
 *Foo Successfully tries bar.*
 
 In the next diagram, `foo` again *tries* `bar`, but this time, `bar` raises an exception called `x-y-z`:
 
-[![Foo tries bar with exception.](../../../../assets/foo-tries-bar-throws-exception.png)](../../../../assets/foo-tries-bar-throws-exception.png)
+[![Foo tries bar with exception.](../../../assets/foo-tries-bar-throws-exception.png)](../../../assets/foo-tries-bar-throws-exception.png)
 
 *Foo tries bar, with exception.*
 

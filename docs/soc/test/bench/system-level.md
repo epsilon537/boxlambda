@@ -38,7 +38,7 @@ The test bench performs the following tasks:
 
 Here is the source code for the proof-of-concept test bench:
 
-[../../../../gw/projects/test/hello_world/sim/sim_main.cpp](../../../../gw/projects/test/hello_world/sim/sim_main.cpp)
+[gw/projects/test/hello_world/sim/sim_main.cpp](../../../../gw/projects/test/hello_world/sim/sim_main.cpp)
 
 Other, more elaborate system test benches include:
 

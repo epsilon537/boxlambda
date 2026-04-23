@@ -1,6 +1,6 @@
 # OS Requirements
 
-The [original requirements](../../../requirements.md) relevant for the software side of BoxLambda
+The [original requirements](../../requirements.md) relevant for the software side of BoxLambda
 are:
 
 - **Simplicity**: It must be easy to jump in and do something: create, hack,
@@ -70,7 +70,7 @@ editor, and metaprogramming capabilities you wouldn't believe.
 To get a sense of what a unique language Forth is, check out this article. It's
 long but quite entertaining:
 
-[![the programming language that writes itself.](../../../assets/forth-article.png)](https://ratfactor.com/forth/the_programming_language_that_writes_itself.html)
+[![the programming language that writes itself.](../../assets/forth-article.png)](https://ratfactor.com/forth/the_programming_language_that_writes_itself.html)
 
 Forth begs to be explored on an experimental homebrew computer such as
 BoxLambda. Learning Forth is *not* a walk in the park. It requires a different

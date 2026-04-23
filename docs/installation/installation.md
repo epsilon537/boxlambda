@@ -194,6 +194,7 @@ sd0:/forth>
 ```
 
 Create a `hello-world.fs` module and transfer it to the target:
+
 - In a linux terminal, navigate to the `fs/test` directory and create a `hello-world.fs` file with contents `: hello-world ." Hello World." cr ;`:
 
 ```
@@ -236,14 +237,16 @@ ram:/test>
 
 I'm continuously modifying and testing the code. To avoid having to update the SD card and flash the binaries each time, I added a
 mechanism that let's you:
+
 1. load the bitstream and OS binary onto the device (without flashing)
 2. load a RAM disk onto the device. At boot time, when the system detects the RAM disk, it will load the Forth modules from that RAM
 disk instead of the SD card.
 
 #### Building and Flashing Bootloader
 
-For the bootloader I currently don't have load target implemented (I use GDB when I want to load the bootloader). The following instructions
-show how to build and flash the bootloader:
+Application images and filesystems can be loaded, but the bootloader has to be flashed onto the target (although you can use GDB to load the bootloader into RAM without flashing).
+
+The following instructions show how to build and flash the bootloader:
 
 ```
 cd build/arty-a7-100/sw/projects/bootloader
@@ -251,7 +254,7 @@ make bootloader
 make bootloader_flash_sw
 ```
 
-#### Building and Flashing/Loading Boxlambda_base Bitstream
+#### Building and Flashing or Loading Boxlambda_base Bitstream
 
 ```
 cd build/arty-a7-100/gw/projects/boxlambda_base
@@ -271,7 +274,7 @@ make boxlambda_base_load
 make boxlambda_base_flash_gw
 ```
 
-#### Building and Flashing/Loading BoxLambda OS
+#### Building and Flashing or Loading BoxLambda OS
 
 ```
 cd build/arty-a7-100/sw/projects/boxlambda_os

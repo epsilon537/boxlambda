@@ -8,7 +8,7 @@
           <mxGeometry x="-120" y="121" width="720" height="60" as="geometry" />
         </mxCell>
         <mxCell id="D1s2G5tnAzkQPAnKsTXi-11" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="50" y="121" width="350" height="110" as="geometry" />
+          <mxGeometry x="50" y="121" width="350" height="139" as="geometry" />
         </mxCell>
         <mxCell id="D1s2G5tnAzkQPAnKsTXi-10" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
           <mxGeometry x="50" y="-25" width="350" height="110" as="geometry" />
@@ -22,8 +22,8 @@
         <mxCell id="D1s2G5tnAzkQPAnKsTXi-3" value="Components" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="260" y="160" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="D1s2G5tnAzkQPAnKsTXi-4" value="Bootstrap" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
-          <mxGeometry x="80" y="140" width="120" height="60" as="geometry" />
+        <mxCell id="D1s2G5tnAzkQPAnKsTXi-4" value="Bootstrap" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#e1d5e7;strokeColor=#9673a6;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="70" y="140" width="150" height="110" as="geometry" />
         </mxCell>
         <mxCell id="D1s2G5tnAzkQPAnKsTXi-5" value="Projects/&lt;div&gt;Applications&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="240" y="-5" width="120" height="60" as="geometry" />
@@ -35,7 +35,7 @@
           <mxGeometry x="260" y="15" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="D1s2G5tnAzkQPAnKsTXi-8" value="Build System" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="50" y="260" width="350" height="60" as="geometry" />
+          <mxGeometry x="50" y="290" width="350" height="60" as="geometry" />
         </mxCell>
         <mxCell id="D1s2G5tnAzkQPAnKsTXi-9" value="BootLoader" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="80" y="-5" width="120" height="60" as="geometry" />
@@ -45,6 +45,9 @@
             <mxPoint x="230" y="460" as="sourcePoint" />
             <mxPoint x="230" y="490" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="dmHGafww44WNM8_V1O6o-2" value="IRQs/vectors/&lt;div&gt;crt0/picolibc&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="80" y="176" width="130" height="55" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

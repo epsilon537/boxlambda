@@ -1,4 +1,4 @@
-# The Bootstrap Component
+# Bootstrap
 
 - **PicoLibc Version**: 1.8.6
 
@@ -96,7 +96,7 @@ The Vector Table file is located at [sw/components/bootstrap/vectors.S](../../..
 
 The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to `_start`, the entry point into the `crt0` module.
 
-For more info on `vectors.S`, check the [Interrupt Handling](../../applications/boxlambda-os/forth/irqs.md) page.
+For more info on `vectors.S`, check the [Interrupt Handling](irqs.md) page.
 
 ### Crt0
 

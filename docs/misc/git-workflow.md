@@ -51,20 +51,22 @@ On `develop` branch:
 5. Flash `boxlambda_base` gateware project build and bootloader.
 6. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
 7. Run `markdown-link-check.sh`.
+8. Run `export_docs.sh develop`.
 
 On `master` branch:
 
 1. Merge `develop`.
 2. In `sim_a7_100` build tree, build all and run ctest.
-3. `git tag vX.Y.Z`.
-4. In `arty_a7_100` build tree, build all.
-4. Flash `boxlambda_base` gateware project build, `bootloader`, and `boxlambda_os`.
-6. Check bootloader version string.
-7. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
-8. Copy from `arty_a7_100` build tree to `binaries` directory: `boxlambda_base.bit`, `bootloader.bin`, `boxlambda_os.bin`.
-9. `git commit` the binaries.
-10. Update tag to include the new binaries: `git -f tag vX.Y.Z`.
-11. `git push origin vX.Y.Z`.
-12. On GitHub boxlambda repo, navigate to *releases*, then *Draft a new release*.
-13. On GitHub boxlambda repo, update/close open issues.
+3. Run `export_docs.sh master`.
+4. `git tag vX.Y.Z`.
+5. In `arty_a7_100` build tree, build all.
+6. Flash `boxlambda_base` gateware project build, `bootloader`, and `boxlambda_os`.
+7. Check bootloader version string.
+8. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
+9. Copy from `arty_a7_100` build tree to `binaries` directory: `boxlambda_base.bit`, `bootloader.bin`, `boxlambda_os.bin`.
+10. `git commit` the binaries.
+11. Update tag to include the new binaries: `git -f tag vX.Y.Z`.
+12. `git push origin vX.Y.Z`.
+13. On GitHub boxlambda repo, navigate to *releases*, then *Draft a new release*.
+14. On GitHub boxlambda repo, update/close open issues.
 

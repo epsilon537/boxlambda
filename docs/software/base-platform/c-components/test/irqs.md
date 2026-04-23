@@ -2,7 +2,7 @@
 
 API: [../../../../sw/components/interrupts/interrupts.h](../../../../../sw/components/interrupts/interrupts.h)
 
-This section is specific to interrupt handling in Gateware test builds. See section [Interrupt Handling Software](../../../applications/boxlambda-os/forth/irqs.md) for general notes about the interrupt handling software.
+This section is specific to interrupt handling in Gateware test builds. See [Base Platform Interrupt Handling section](../../bootstrap/irqs.md) for general notes about the interrupt handling software.
 
 `Interrupts.h` contains the interrupt API:
 
@@ -23,7 +23,6 @@ void __attribute__((naked)) _dfx_irq_handler(void);
 ```
 
 ### The *naked* attribute
-
 The CPU switches to an [interrupt register bank](../../../../soc/components/ibex.md#interrupt-shadow-registers) when entering interrupt mode. This means that the ISR doesn't need to save and restore the registers it uses. The regular ISR prologue and epilogue code (saving and restoring registers) can be skipped. This is done by declaring the ISR function with the GCC `naked` attribute.
 
 Because the `naked` attribute skips all epilogue code, we have to insert the `mret` instruction ourselves in the ISR.

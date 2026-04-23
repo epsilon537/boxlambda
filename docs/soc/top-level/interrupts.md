@@ -113,5 +113,5 @@ When the CPU receives an IRQ, it has to complete that instruction before it can 
 
 ## Interrupt Handling Software
 
-See the [Interrupt Handling](../../software/applications/boxlambda-os/forth/irqs.md) page.
+See the [Interrupt Handling](../../software/base-platform/bootstrap/irqs.md) page.
 

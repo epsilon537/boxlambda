@@ -1,6 +1,6 @@
 site_name: BoxLambda Documentation
 site_url: !ENV READTHEDOCS_CANONICAL_URL
-docs_dir: site_docs
+docs_dir: !ENV DOCS_DIR
 
 markdown_extensions:
   - pymdownx.arithmatex:
@@ -106,9 +106,10 @@ nav:
     - The Base Platform:
         - Architecture: software/base-platform/architecture.md
         - Bootstrap:
-          - The Bootstrap Component: software/base-platform/bootstrap/bootstrap-component.md
+          - Bootstrap: software/base-platform/bootstrap/bootstrap.md
           - Bootloader: software/base-platform/bootstrap/bootloader.md
           - The Linker Script: software/base-platform/bootstrap/linker-script.md
+          - Interrupts: software/base-platform/bootstrap/irqs.md
         - C Components:
             - About C Components: software/base-platform/c-components/about.md
             - Register Access Layer: software/base-platform/c-components/register-access-layer.md
@@ -139,31 +140,31 @@ nav:
         - The Software Build System:
           - The Build System: software/base-platform/build-sys/build-sys.md
           - Building the Software: software/base-platform/build-sys/building.md
-    - Applications:
-        - BoxLambda OS:
-          - Requirements: software/applications/boxlambda-os/requirements.md
-          - Architecture: software/applications/boxlambda-os/architecture.md
-          - Memory Layout: software/applications/boxlambda-os/mem-layout.md
-          - Top-Level and Boot Sequence: software/applications/boxlambda-os/top-level-and-boot-seq.md
-          - User Interface: software/applications/boxlambda-os/ui.md
-          - Filesystem: software/applications/boxlambda-os/filesystem.md
-          - Forth:
-            - The Mecrisp Forth Core: software/applications/boxlambda-os/forth/core.md
-            - The Forth-C FFI: software/applications/boxlambda-os/forth/c-ffi.md
-            - Stack Notation: software/applications/boxlambda-os/forth/stack-notation.md
-            - Forth Word Glossary: software/applications/boxlambda-os/forth/words.md
-            - Interrupt Handling: software/applications/boxlambda-os/forth/irqs.md
-            - Exception Handling: software/applications/boxlambda-os/forth/exception-handling.md
-            - Interpreting: software/applications/boxlambda-os/forth/interpreting.md
-            - Include: software/applications/boxlambda-os/forth/include.md
-            - Filesystem Stack: software/applications/boxlambda-os/forth/fs-stack.md
-          - Try It Out: software/applications/boxlambda-os/try-it-out.md
-          - Testing:
-            - Forth Test Suite: software/applications/boxlambda-os/test/forth-testsuite.md
+      - BoxLambda OS:
+        - Requirements: software/boxlambda-os/requirements.md
+        - Architecture: software/boxlambda-os/architecture.md
+        - Memory Layout: software/boxlambda-os/mem-layout.md
+        - Top-Level and Boot Sequence: software/boxlambda-os/top-level-and-boot-seq.md
+        - User Interface: software/boxlambda-os/ui.md
+        - Filesystem: software/boxlambda-os/filesystem.md
+        - Forth:
+          - The Mecrisp Forth Core: software/boxlambda-os/forth/core.md
+          - The Forth-C FFI: software/boxlambda-os/forth/c-ffi.md
+          - Stack Notation: software/boxlambda-os/forth/stack-notation.md
+          - Forth Word Glossary: software/boxlambda-os/forth/words.md
+          - Interrupt Handling: software/boxlambda-os/forth/irqs.md
+          - Exception Handling: software/boxlambda-os/forth/exception-handling.md
+          - Interpreting: software/boxlambda-os/forth/interpreting.md
+          - Include: software/boxlambda-os/forth/include.md
+          - Filesystem Stack: software/boxlambda-os/forth/fs-stack.md
+        - Try It Out: software/boxlambda-os/try-it-out.md
+        - Testing:
+          - Forth Test Suite: software/boxlambda-os/test/forth-testsuite.md
   - The Directory Structure and Build Trees: dir-struct.md
   - Tools:
       - Target.py: tools/target_py.md
       - The Cross-Compiler: tools/cross-compiler.md
+      - Bender: tools/bender.md
       - Debugging: tools/debugging.md
   - Register and Memory Map:
       - Reset: registers/reset-regs.md

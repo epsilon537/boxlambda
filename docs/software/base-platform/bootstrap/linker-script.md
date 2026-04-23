@@ -12,7 +12,7 @@ MEMORY
     emem : ORIGIN = __emem, LENGTH = __emem_size
 }
 ```
-- The mapping of input to output sections. Input sections are defined in the source code and default to .text, .bss, and .data when not explicitly specified. Typical output sections for BoxLambda are: `.etext`, `.edata`, `ebss`, `.itext`, `.idata`, `.tdata`, `.tbss`, `.ibss`, `.heap`, and `.stack`.
+- The mapping of input to output sections. Input sections are defined in the source code and default to `.text`, `.bss`, and `.data` when not explicitly specified. Typical output sections for BoxLambda are: `.etext`, `.edata`, `ebss`, `.itext`, `.idata`, `.tdata`, `.tbss`, `.ibss`, `.heap`, and `.stack`.
 ```
     .itext : {
         ...
@@ -60,9 +60,9 @@ MEMORY
 
 ### Why no Linker-Defined Size Variables?
 
-Linker-defined variables such as `__icode_start` are not true variables. They are not storage objects, they are address markers. In other words, it's meaningless to get the value of `__icode_start`. What you want is its *address*, i.e. `&__icode_start`. This address corresponds to the start of the *icode* section.
+Linker-defined variables such as `__icode_start` are not true variables. They are address markers only, not storage objects. For example, it's meaningless to get the value of `__icode_start`. What you want is its *address*, i.e. `&__icode_start`. This address corresponds to the start of the *icode* section.
 
-This is also true for linker-defined size variables. For example if `__icode_size` is linker-defined as:
+This is also true for linker-defined size variables. For example, if `__icode_size` is linker-defined as:
 
 ```
 PROVIDE( __icode_size = __icode_end - icode_start)

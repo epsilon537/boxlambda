@@ -28,5 +28,6 @@ python3 scripts/export_docs.py --ref $BRANCH
 python3 scripts/gen_full_index.py
 cp README.md site_docs/index.md
 
+export DOCS_DIR=site_docs
 mkdocs serve
 

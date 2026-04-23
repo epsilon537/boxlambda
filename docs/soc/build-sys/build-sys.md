@@ -10,10 +10,6 @@ Central to Bender is the package manifest file, `Bender.yml`. This manifest spec
 
 A **package directory** is a directory containing a `Bender.yml` file. Running Bender in such a directory generates a flat list of all sources from the current package and its dependencies. Additionally, Bender can output this list along with any `defines` for a given target as a Tcl script, simplifying Vivado integration.
 
-![Project View of the Build System](../../assets/Project-Build-Diagram.png)
-
-*Project/Component/Submodule View of the Build System.*
-
 ### Bender Targets
 
 The build system currently uses the following Bender targets:
@@ -33,9 +29,12 @@ The build system currently uses the following Bender targets:
 - `memory_vivado`: Set when retrieving `.mem` files required for Vivado synthesis of the component or project.
 - `memory_verilator`: Set when retrieving `.mem` files needed for Verilator simulations.
 - `vivado_ip_arty-a7-100`: Set in Arty-A7-100 builds when retrieving `.xci` files of Vivado IPs referenced in the component or project.
-- `vivado_ip_arty-a7-35`: Set in Arty-A7-35 builds for `.xci` files of Vivado IPs. **(Deprecated)**
 
 ## Four Layers
+
+![Project View of the Build System](../../assets/Project-Build-Diagram.png)
+
+*Project/Component/Submodule View of the Build System.*
 
 The gateware system is organized into four layers:
 

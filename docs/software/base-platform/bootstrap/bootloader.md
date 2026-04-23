@@ -21,7 +21,7 @@ image at flash memory location `0x11600000`. If an image is detected, it is copi
 memory offset 0.
 6. The bootloader starts the application by jumping to its entry point at address `0x20000008` in EMEM.
 7. The application start-up code creates code/data/BSS sections in IMEM and/or EMEM as described in
-[Early Software Startup Sequence](bootstrap-component.md#early-software-startup-sequence).
+[Early Software Startup Sequence](bootstrap.md#early-software-startup-sequence).
 
 ![The Bootloader](../../../assets/boxlambda-sw-env-boot.png)
 

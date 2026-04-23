@@ -1,7 +1,7 @@
 # BoxLambda OS Architecture
 
 [![BoxLambda OS
-Architecture.](../../../assets/BoxLambda-OS-Architecture.png)](../../../assets/BoxLambda-OS-Architecture.png)
+Architecture.](../../assets/BoxLambda-OS-Architecture.png)](../../assets/BoxLambda-OS-Architecture.png)
 
 *BoxLambda OS Architecture Block Diagram.*
 
@@ -11,7 +11,7 @@ The two main subsystems are the **BoxLambda Kernel** (**BoxKern**) and the
 The BoxKern image is stored in flash memory. The Bootloader loads the kernel
 into EMEM, then transfers control to it. The kernel's *CRT0* startup code then
 further unpacks specific sections into EMEM and IMEM. (See
-[here](../../base-platform/bootstrap/bootloader.md) for a more detailed description of the boot
+[here](../base-platform/bootstrap/bootloader.md) for a more detailed description of the boot
 sequence).
 
 The Mercrisp Forth Environment lives as Forth source code on the SD card
@@ -51,7 +51,7 @@ project.
 ## The Mecrisp Forth Environment
 
 [![
-Flamingo.](../../../assets/flamingo.png)](../../../assets/flamingo.png)
+Flamingo.](../../assets/flamingo.png)](../../assets/flamingo.png)
 *Mecrisp Forth's Welcome message - ASCII art from Adreas Freise.*
 
 Most *new* code will be written in Forth or in assembly language in the Forth
@@ -65,7 +65,7 @@ Instead of a line-oriented prompt, I would like to provide a REPL that allows
 you to move freely all over the screen, as is the case on the Commodore 64, for
 instance. The **Canvas REPL** can perform double duty as a text editor.
 
-[![The Canvas REPL.](../../../assets/canvas-repl.png)](../../../assets/canvas-repl.png)
+[![The Canvas REPL.](../../assets/canvas-repl.png)](../../assets/canvas-repl.png)
 
 *The Canvas REPL.*
 

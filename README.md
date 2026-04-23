@@ -73,12 +73,12 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
 - **Infrastructure** (build system, etc.): Complete.
 - **Gateware**: Complete and meeting requirements.
 - **Software**: Development ongoing.
-  - OS architecture: defined.
-  - BoxLambda C Core: partially completed.
-  - Mecrisp Forth Core: completed.
-  - Mecrisp Forth Environment: partially completed.
-  - Forth<->C FFI: completed.
-  - Filesystem layer: completed.
+    - **OS architecture**: defined.
+    - **BoxLambda C Core**: partially completed.
+    - **Mecrisp Forth Core**: completed.
+    - **Mecrisp Forth Environment**: partially completed.
+    - **Forth<->C FFI**: completed.
+    - **Filesystem layer**: completed.
 
 ## Changelog
 

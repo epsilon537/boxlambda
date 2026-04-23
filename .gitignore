@@ -4,6 +4,7 @@
 *.bkp
 #exported docs
 site_docs
+site
 #litex stuff
 /sub/liteeth
 /sub/liteiclink

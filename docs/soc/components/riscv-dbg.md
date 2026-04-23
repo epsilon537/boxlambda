@@ -140,7 +140,7 @@ to use the PMOD JTAG interface, make the following changes:
 1. In `gw/components/riscv-dbg/Bender.yml`, under the `vivado` target, replace `../../sub/riscv-dbg/src/dmi_bscane_tap.sv` with `../../sub/riscv-dbg/src/dmi_jtag_tap.sv`
 2. In `gw/projects/boxlambda_base/constrs/boxlambda_soc.sv`, add the following constraint: `set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets tck_IBUF]`.
 
-Then [rebuild the gateware](../../installation/installation.md#building-and-flashingloading-boxlambda_base-bitstream).
+Then [rebuild the gateware](../../installation/installation.md#building-and-flashing-or-loading-boxlambda_base-bitstream).
 
 Thanks to [W. Shepherd Pitts](https://github.com/wspitts2) for this suggestion.
 
