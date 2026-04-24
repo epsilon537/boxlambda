@@ -12,7 +12,7 @@ In the next diagram, `foo` again *tries* `bar`, but this time, `bar` raises an e
 
 *Foo tries bar, with exception.*
 
-Raising an exception outside of a try block will end up *restoring* the state to whatever the `ExcStackFramePtr` variable happens to be pointing to.
+Raising an exception *outside* of a try block will end up *restoring* the state to whatever the `ExcStackFramePtr` variable happens to be pointing to.
 To avoid unpleasant surprises, the top-level REPL, i.e. the quit loop, is put within a try-block.
 
 ## Caveat
@@ -46,5 +46,5 @@ foo . cr
 bar . cr
 ```
 
-`Foo . cr` will print the value 3. However, `Bar . cr` will print the value 6 because in bar's case, `double-it` reaches outside of the data stack frame restored by `?raise`.
+`Foo . cr` will print the value 3. However, `bar . cr` will print the value 6 because in bar's case, `double-it` reaches outside of the data stack frame restored by `?raise`.
 

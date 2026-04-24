@@ -1,6 +1,7 @@
 # Forth Filesystem Stack
 
-This diagram shows the various software modules making up the [Word List](words.md) organized as a stack:
+This diagram shows how the Forth modules referenced in the [Word List](words.md) build on each other to reach Forth-level filesystem and shell
+access:
 
 [![Forth Filesystem Stack.](../../../assets/fs-stack-layered.png)](../../../assets/fs-stack-layered.png)
 

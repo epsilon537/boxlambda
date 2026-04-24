@@ -105,7 +105,7 @@ otherwise passing the specified argument through.
 
 `?assert ( f -- )`
 
-- Raise x-assert exception if f is false.
+- Raise `x-assert` exception if f is false.
 
 Example:
 ```
@@ -220,7 +220,7 @@ Heaps are created by the user and consist of discretes blocks that are allocated
 
 `allocate ( size heap -- addr )`
 
-- Allocate memory in a heap of *size* bytes and return its address; if the memory cannot be allocated due to insufficient contiguous memory being available, *x-allocate-failed* is raised.
+- Allocate memory in a heap of *size* bytes and return its address; if the memory cannot be allocated due to insufficient contiguous memory being available, `x-allocate-failed` is raised.
 
 `free ( addr heap -- )`
 
@@ -228,7 +228,7 @@ Heaps are created by the user and consist of discretes blocks that are allocated
 
 `resize ( size addr heap -- new-addr )`
 
-- Resize memory in a heap at *addr* to a new size in bytes, returning its new address. If sufficient memory is available for resizing at *addr* the allocation is expanded without moving or copying it and *addr* is returned. Otherwise, the allocation at *addr* is freed, and its contents is copied to a new allocation, whose address is returned. Note that if insufficient memory is available in the heap for resizing the allocation, the existing allocation is preserved, and *x-allocate-failed* is raised.
+- Resize memory in a heap at *addr* to a new size in bytes, returning its new address. If sufficient memory is available for resizing at *addr* the allocation is expanded without moving or copying it and *addr* is returned. Otherwise, the allocation at *addr* is freed, and its contents is copied to a new allocation, whose address is returned. Note that if insufficient memory is available in the heap for resizing the allocation, the existing allocation is preserved, and `x-allocate-failed` is raised.
 
 Exceptions:
 ```
@@ -286,7 +286,7 @@ x-allocate-failed
 
 `temp-allot ( u -- )`
 
-- Allot u bytes from temporary buffer may throw x-temp-allot-failed.
+- Allot u bytes from temporary buffer may throw `x-temp-allot-failed`.
 
 `temp-mark> ( -- mark )`
 
@@ -1795,15 +1795,15 @@ limit index   do ... [one or more leave(s)] ... loop
 
 `s0" ( "string" -- adr )`
 
-- Compiles a 0-terminated string and gives back its address when executed. May raise x-string-too-long.
+- Compiles a 0-terminated string and gives back its address when executed. May raise `x-string-too-long`.
 
 `cstr ( buf256 adr len -- )`
 
-- Copy len bytes from addr to buf256 of at least 256 bytes and add 0-terminator. May raise x-string-too-long.
+- Copy len bytes from addr to buf256 of at least 256 bytes and add 0-terminator. May raise `x-string-too-long`.
 
 `cstr" ( buf256 "text" -- )`
 
-- Copy Forth string into buffer of at least 256 bytes and 0-terminate. May raise x-string-too-long.
+- Copy Forth string into buffer of at least 256 bytes and 0-terminate. May raise `x-string-too-long`.
 
 Exceptions:
 ```
@@ -1829,7 +1829,7 @@ File Access:
     - `FA_OPEN_ALWAYS`: Opens the file. If it is not exist, a new file is created.
     - `FA_OPEN_APPEND`: Same as FA_OPEN_ALWAYS except the read/write pointer is set end of the file.
 
-  May throw `x-fr-*` and x-pool-* exceptions.
+  May throw `x-fr-*` and `x-pool-*` exceptions.
 
 `f_close ( fil -- )`
 
@@ -1891,7 +1891,7 @@ Directory Access:
 
 `f_opendir ( addr len -- dir )`
 
-- Open the directory specified in the input string. May throw `x-fr-*` and x-pool-* exceptions.
+- Open the directory specified in the input string. May throw `x-fr-*` and `x-pool-*` exceptions.
 
 `f_closedir ( dir -- )`
 

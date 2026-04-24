@@ -27,7 +27,7 @@ target.py -reset -gdb
 This makes the connection from the host to the target using the onboard USB JTAG interface.
 Target.py is a Python wrapper script that acts as a frontend for *openocd* and *openFPGALoader*.
 
-You should see something like this in the linux terminal running *target.py*:
+You should see something like this in the linux terminal running `target.py`:
 
 ```
 === Target Control ===
@@ -54,7 +54,7 @@ Resetting target...
 Info : JTAG tap: riscv.cpu tap/device found: 0x13631093 (mfg: 0x049 (Xilinx), part: 0x3631, ver: 0x1)
 ```
 
-### In Case of 'unable to open ftdi device' Error
+### In Case of `unable to open ftdi device` Error
 
 ```
 Error: libusb_claim_interface() failed with LIBUSB_ERROR_BUSY Error: unable to open ftdi device with vid 0403, pid 6010, description 'Digilent USB Device', serial '*' at bus location '*'
@@ -98,7 +98,7 @@ Notice that the CPU is stopped at the very first instruction of the executable b
 ### Debugging a different bitstream
 
 The previous steps assume the bitstream has been flashed onto the device. If you want to
-load a bitstream and debug a bitstream onto the device, without flashing, replace the `target.py`
+load and debug a bitstream onto the device, without flashing, replace the `target.py`
 command in the instructions above with the following:
 
 ```
@@ -154,7 +154,7 @@ Notice that the CPU is stopped at the very first instruction of the software boo
 
 ### *Ignoring Packet Error, Continuing...*
 
-When GDB is connected to a Verilator target, you might occasionally get an annoying *'Ignoring packet error, continuing...'* message in the GDB console. This happens because GDB's interaction with a running Verilator model is slow. You can avoid the message by increasing GDB's `remotetimeout` value. The default value is 2 (seconds). On my system, increasing the value to 10 does the trick. In the GDB console, or your `~/.gdbinit` file, enter the following command:
+When GDB is connected to a Verilator target, you might occasionally get an annoying `Ignoring packet error, continuing...` message in the GDB console. This happens because GDB's interaction with a running Verilator model is slow. You can avoid the message by increasing GDB's `remotetimeout` value. The default value is 2 (seconds). On my system, increasing the value to 10 does the trick. In the GDB console, or your `~/.gdbinit` file, enter the following command:
 
 ```
 set remotetimeout 10

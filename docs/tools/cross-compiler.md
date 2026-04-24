@@ -4,13 +4,13 @@ The RISCV cross-compiler is a custom-built **riscv32-boxlambda-elf** toolchain. 
 
 I selected:
 
-- Target Architecture: *riscv*
-- Architecture level: *rv32im_zicsr_za_zb_zbs*
-- ABI: *ilp32*
+- Target Architecture: `riscv`
+- Architecture level: `rv32im_zicsr_za_zb_zbs`
+- ABI: `ilp32`
 - *Build Static Toolchain*
-- Tuple's vendor string: *boxlambda*
-- Target OS: *bare-metal*
-- Additional support languages: *C++*
+- Tuple's vendor string: `boxlambda`
+- Target OS: `bare-metal`
+- Additional support languages: `C++`
 
 The resulting crosstool-ng config file can be found [here](../../scripts/crosstool-ng.config).
 

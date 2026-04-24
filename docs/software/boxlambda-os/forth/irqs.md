@@ -1,3 +1,3 @@
 # Interrupt Handling
 
-See [here](../../base-platform/bootstrap/irqs.md).
+See [Base Platform Interrupt Handling](../../base-platform/bootstrap/irqs.md).

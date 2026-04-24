@@ -1,13 +1,14 @@
 # Target.py
 
-Target.py is a target interaction script handling:
+`Target.py` is a target interaction script handling:
 
 - target reset
 - flashing/loading bitstream/bootloader/application images
 - up/downloading ram disk images
 - debugger attachment
 
-Target.py is a wrapper around tools such as openocd, OpenFPGAloader and mcopy.
+`Target.py` is a wrapper around tools such as openocd, OpenFPGAloader and mcopy.
+
 ```
 usage: target.py [-h] [-verilator] [-flash_bit FLASH_BITSTREAM] [-flash_boot FLASH_BOOT_IMAGE]
                  [-flash_app FLASH_APP_IMAGE] [-load_bit LOAD_BITSTREAM] [-reset] [-load_fs LOAD_FS]
@@ -35,7 +36,7 @@ options:
   -gdb                  Wait for GDB to connect.
 ```
 
-Target.py is easy to use directly. It's also used internally by the build system, for instance to implement targets such as `make boxkernfs_load`.
+`Target.py` is easy to use directly. It's also used internally by the build system, for instance to implement targets such as `make boxkernfs_load`.
 
 ## Example use cases
 
