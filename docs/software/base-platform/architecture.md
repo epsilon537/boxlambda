@@ -15,6 +15,6 @@ The BoxLambda Base Platform consists of:
 - a build system allowing the user to easily add components and **applications** using those components.
 
     - The **Bootloader** is one such application.
-    - The main application is the [BoxLambda OS](../applications/boxlambda-os/architecture.md).
+    - The main application is the [BoxLambda OS](../boxlambda-os/architecture.md).
     - Other applications include test programs supporting test gateware builds such as the [DDR test](../../soc/test/builds/ddr.md), [USB-HID test](../../soc/test/builds/usb-hid.md).
 

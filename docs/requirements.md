@@ -1,6 +1,6 @@
 # The Requirements
 
-This section discusses general requirements. The OS chapter has a [section](software/applications/boxlambda-os/requirements.md) discussing requirements applying specifically to the OS architecture.
+This section discusses general requirements. The OS chapter has a [section](software/boxlambda-os/requirements.md) discussing requirements applying specifically to the OS architecture.
 
 ## Simplicity
 
