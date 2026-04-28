@@ -108,18 +108,16 @@ BoxLambda's version of crt0 can be found here:
 
 ### Standard Input, Output, and Error
 
-The PicoLibc integrator needs to supply `stdin`, `stdout`, and `stderr` instances and associated `getc()` and `putc()` implementations to connect them to an actual IO device.
-Initially, we'll be using the UART as our IO device.
+The PicoLibc integrator must provide `stdin`, `stdout`, and `stderr` instances and corresponding `getc()` and `putc()` implementations to connect them to an I/O device.
+Initially, we'll be using the UART as our I/O device.
 
 See [sw/components/bootstrap/stdio_stream.c](../../../../sw/components/bootstrap/stdio_stream.c).
 
-[stdio_stream.h](../../../../sw/components/bootstrap/stdio_stream.h) exports the `stdin` and `stdout` stream objects so standard IO
-can be redirected at any time after boot-up. The BoxKern makes use of this by forwarding stdio to the Forth
-environment. See the [OS Boot Sequence](../../boxlambda-os/top-level-and-boot-seq.md) for details.
+[stdio_stream.h](../../../../sw/components/bootstrap/stdio_stream.h) exports the `stdin` and `stdout` stream objects, allowing standard I/O to be redirected at any time after boot-up. The BoxKern utilizes this functionality by forwarding stdio to the Forth environment. Refer to the [OS Boot Sequence](../../boxlambda-os/top-level-and-boot-seq.md) for more details.
 
 ## Early Software Startup Sequence
 
-The following diagram shows the early software startup sequence up to the invokation of `main()`.
+The following diagram shows the early software startup sequence up to the invocation of `main()`.
 
 ![The Boot from IMEM Sequence](../../../assets/imem-boot-sequence.png)
 
@@ -169,3 +167,4 @@ int main(void) {
 ```
 
 Notice the `_init()` function. The PicoLibc startup code executes this function before calling `main()`. This is where we set up the UART.
+

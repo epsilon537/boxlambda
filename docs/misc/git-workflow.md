@@ -10,35 +10,36 @@ sub
 └── ...
 ```
 
-Each of the git submodules is a fork of a GitHub project discussed in earlier posts. For example, `sub/ibex/` contains [my ibex fork](https://github.com/epsilon537/ibex), not the [original ibex repository](https://github.com/lowRISC/ibex).
+Each git submodule is a fork of a GitHub project. For example, `sub/ibex/` contains [my ibex fork](https://github.com/epsilon537/ibex), not the [original ibex repository](https://github.com/lowRISC/ibex).
 
-In each of the forked submodules, two branches are relevant:
+In each forked submodule, there are two relevant branches:
 
-- `master`: I'm keeping the master branch in sync with the master branch of the repository I forked from. Having this branch makes it easy to pull in updates as well as to submit the occasional pull request to the original project.
-- `boxlambda`: On this branch, I'll be making changes for BoxLambda.
+- `master`: I keep this branch in sync with the master branch of the original repository to make it easy to pull updates and submit occasional pull requests.
+- `boxlambda`: This branch is where modifications for BoxLambda will be made.
 
-In the BoxLambda repository itself, I have the following long-running branches:
+In the BoxLambda repository, there are several long-running branches:
 
-- `master`: I will submit releases to this branch. The master branch should always be in good shape.
-- `develop`: This is where the work is happening. Things will be in flux here. This branch will not always be in good shape.
-- `gh-pages`: This branch holds the BoxLambda Blog files. GitHub Pages are by default on the `gh-pages` branch of a GitHub project.
-- `boxlambda-gh-pages-wip`: This branch holds work-in-progress Blog updates. This branch also contains some config file modifications specifically for local previewing, which is why this is a long-running branch, rather than a topic branch. When updates are ready for release, I merge them to `gh-pages`.
+- `master`: Releases are submitted to this branch, ensuring that it's always in good shape.
+- `develop`: Active development happens on this branch, with changes being constantly made, so it may not always be stable.
+- `gh-pages`: This branch holds the BoxLambda Blog files. By default, GitHub Pages use the `gh-pages` branch of a project.
+- `boxlambda-gh-pages-wip`: Work-in-progress Blog updates and some config file modifications for local previewing are in this branch. When updates are ready for release, they're merged to the `gh-pages` branch.
 
 # Adding Submodules
 
-I use the following sequence to add a git submodule:
+To add a new git submodule:
 
-1. I fork the repo in GitHub.
-2. Still in GitHub, in the forked repo, I create a `boxlambda` branch and make it the default branch.
-3. In the root directory of my local boxlambda repo, I run the following commands:
-```
-    git submodule add <URL to forked repo> sub/<submodule name>
-    git commit -m 'Add submodule <submodule name>`
-    cd sub/<submodule name>
-    git remote set-url origin git@github.com:epsilon537/<repo name>.git
+1. Fork the repo on GitHub.
+2. In your forked repo, create a `boxlambda` branch and set it as default.
+3. Run the following commands in the root directory of your local BoxLambda repository:
+
+```bash
+git submodule add <URL to forked repo> sub/<submodule name>
+git commit -m 'Add submodule <submodule name>'
+cd sub/<submodule name>
+git remote set-url origin git@github.com:epsilon537/<repo name>.git
 ```
 
-That last step is necessary to switch the remote URL from HTTPS to SSH. I prefer to use SSH-based authentication.
+The last step is necessary to switch the remote URL from HTTPS to SSH for authentication preference.
 
 # Creating a new release (*Note to Self*)
 
@@ -67,6 +68,6 @@ On `master` branch:
 10. `git commit` the binaries.
 11. Update tag to include the new binaries: `git -f tag vX.Y.Z`.
 12. `git push origin vX.Y.Z`.
-13. On GitHub boxlambda repo, navigate to *releases*, then *Draft a new release*.
+13. On GitHub boxlambda repo, navigate to *Releases*, then *Draft a new release*.
 14. On GitHub boxlambda repo, update/close open issues.
 

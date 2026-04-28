@@ -1,6 +1,6 @@
 # Start Here
 
-To get a good sense of what BoxLambda is about, read through the following sections:
+To gain a clear understanding of what BoxLambda is about, read through the following sections:
 
 1. [The About Page](index.md).
 2. [The SoC Architecture](soc/top-level/soc-architecture.md).

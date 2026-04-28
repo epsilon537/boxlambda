@@ -12,13 +12,13 @@ In the next diagram, `foo` again *tries* `bar`, but this time, `bar` raises an e
 
 *Foo tries bar, with exception.*
 
-Raising an exception *outside* of a try block will end up *restoring* the state to whatever the `ExcStackFramePtr` variable happens to be pointing to.
-To avoid unpleasant surprises, the top-level REPL, i.e. the quit loop, is put within a try-block.
+Raising an exception *outside* of a try block results *restoring* the state to whatever the `ExcStackFramePtr` variable points to.
+To avoid unexpected behavior, the top-level REPL (i.e. the quit loop) is placed within a try-block.
 
 ## Caveat
 
-A caveat to keep in mind: A raised exception restores the Data Stack to the point before the try call.
-This means that within a try-block, code that might throw an exception should not manipulate data stack items *outside* of the try-block.
+A caveat to keep in mind: A raised exception returns the Data Stack to its state before the try call.
+Consequently, code within a try-block that might throw an exception should not manipulate data stack items *outside* of the try-block.
 
 For example:
 

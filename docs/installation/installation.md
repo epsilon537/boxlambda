@@ -98,7 +98,7 @@ target.py -flash_app boxkern
 target.py -reset
 ```
 
-After complete the `target.py -reset` command, the target will be reset. In the terminal, you should first see the bootloader image, then the OS image booting up:
+After completing the `target.py -reset` command, the target will be reset. In the terminal, you should first see the bootloader image, then the OS image booting up:
 
 ```
 sd0:/> BoxLambda bootloader
@@ -236,11 +236,10 @@ ram:/test>
 ### Building and Loading from Source
 
 I'm continuously modifying and testing the code. To avoid having to update the SD card and flash the binaries each time, I added a
-mechanism that let's you:
+mechanism that lets you:
 
 1. load the bitstream and OS binary onto the device (without flashing)
-2. load a RAM disk onto the device. At boot time, when the system detects the RAM disk, it will load the Forth modules from that RAM
-disk instead of the SD card.
+2. load a RAM disk onto the device. At boot time, when the system detects the RAM disk, it will load the Forth modules from that RAM disk instead of the SD card.
 
 #### Building and Flashing Bootloader
 

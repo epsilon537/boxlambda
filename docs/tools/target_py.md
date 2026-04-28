@@ -1,13 +1,13 @@
 # Target.py
 
-`Target.py` is a target interaction script handling:
+ `Target.py` is a target interaction script responsible for:
 
-- target reset
-- flashing/loading bitstream/bootloader/application images
-- up/downloading ram disk images
-- debugger attachment
+- handling target reset,
+- flashing or loading bitstreams, bootloaders, and applications,
+- uploading or downloading ram disk images, and
+- attaching a debugger.
 
-`Target.py` is a wrapper around tools such as openocd, OpenFPGAloader and mcopy.
+`Target.py` functions as a wrapper around tools like OpenOCD, OpenFpgaLoader, and mcopy.
 
 ```
 usage: target.py [-h] [-verilator] [-flash_bit FLASH_BITSTREAM] [-flash_boot FLASH_BOOT_IMAGE]
@@ -36,7 +36,7 @@ options:
   -gdb                  Wait for GDB to connect.
 ```
 
-`Target.py` is easy to use directly. It's also used internally by the build system, for instance to implement targets such as `make boxkernfs_load`.
+`Target.py` is easy to use directly. It is also used internally by the build system. For example, it is used to implement targets such as make boxkernfs_load.
 
 ## Example use cases
 
@@ -100,7 +100,7 @@ Writing: [==================================================] 100.00%
 Done
 ```
 
-### Reset target (booting bitstream and bootloader from flash), load boxkern application image, load forth/fs directory as RAM disk, and run
+### Reset target (booting bitstream and bootloader from flash), load boxkern application image, load forth/fs directory as RAM disk, and execute
 
 ```
 $ target.py -reset -load_app boxkern -load_fs ../../../../../sw/components/forth/fs -run

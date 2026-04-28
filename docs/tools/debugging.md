@@ -25,7 +25,7 @@ target.py -reset -gdb
 ```
 
 This makes the connection from the host to the target using the onboard USB JTAG interface.
-Target.py is a Python wrapper script that acts as a frontend for *openocd* and *openFPGALoader*.
+Target.py is a Python wrapper script that acts as a frontend for *OpenOCD* and *openFPGALoader*.
 
 You should see something like this in the linux terminal running `target.py`:
 
@@ -60,7 +60,7 @@ Info : JTAG tap: riscv.cpu tap/device found: 0x13631093 (mfg: 0x049 (Xilinx), pa
 Error: libusb_claim_interface() failed with LIBUSB_ERROR_BUSY Error: unable to open ftdi device with vid 0403, pid 6010, description 'Digilent USB Device', serial '*' at bus location '*'
 ```
 
-If you run into the above error message, you might still have an openocd or vivado hw_server process running somewhere. Kill it from the linux terminal as follows:
+If you run into the above error message, you might still have an OpenOCD or Vivado HW Server process running somewhere. Kill it from the linux terminal as follows:
 
 ```
 pkill -f openocd
@@ -79,7 +79,7 @@ gdb hello_world
 
 ```
 
-Connect GDB to the target and load the exectuable into memmory. From the GDB shell:
+Connect GDB to the target and load the exectuable into memory. From the GDB shell:
 
 ```
 (gdb) target extended-remote localhost:3333
@@ -122,7 +122,7 @@ Launch the Verilator model with the `-d` flag to indicate that a debugger will b
 ./Vmodel -d
 ```
 
-In another linux terminal, run *target.py* with the `-verilator` and `-gdb` flags to connect openocd to the Verilator model and to wait for a
+In another linux terminal, run *target.py* with the `-verilator` and `-gdb` flags to connect OpenOCD to the Verilator model and to wait for a
 GDB connection:
 
 

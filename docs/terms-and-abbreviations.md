@@ -31,7 +31,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **CYC**: A Wishbone Bus Signal.
 - **DAC**: Digital-to-Analog Converter.
 - **.data**: Segment holding pre-initialized data.
-- **Datastack**: The Forth Datastack, an alternate name for the Forth Parameter Stack.
+- **Data Stack**: The Forth Data Stack, an alternate name for the Forth Parameter Stack.
 - **DDR PHY**: Double Data Rate (RAM) Physical Interface.
 - **DDR SDRAM**: Double Data Rate Synchronous DRAM.
 - **Delta-Sigma Modulation**: A method for digital-to-analog/analog-to-digital conversion ([overview](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html)).
@@ -61,7 +61,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **FSM**: Finite State Machine, a circuit with finite states.
 - **Gateware**: Describes and implements digital logic in FPGAs/ASICs.
 - **GCC**: GNU Compiler Collection.
-- **gp**: Global Pointer. A dedicated CPU register that holds the base address of a region of memory containing global and static variables. It lets the program access global data quickly using small offsets from a fixed base address.
+- **gp**: Global Pointer. A dedicated CPU register that holds the base address of a region of memory containing global and static variables. It enables the program to access global data quickly using small offsets from a fixed base address.
 - **GPIO**: General-Purpose Input/Output pin.
 - **Harvard Architecture**: CPU architecture with separate instruction and data memory. Used by BoxLambda’s Ibex processor.
 - **HAL**: Hardware Access Layer, a low-level software API.
@@ -127,7 +127,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **PMOD**: Digilent’s Peripheral Module Interface standard.
 - **POR**: Power-On Reset.
 - **PSG**: Programmable Sound Generator.
-- **PSP**: Parameter Stack Pointer, The Parameter Stack is an alternate name for the Forth Datastack.
+- **PSP**: Parameter Stack Pointer, The Parameter Stack is an alternate name for the Forth Data Stack.
 - **PUP**: Pull-Up Pin.
 - **PWM**: Pulse Width Modulation.
 - **RC Filter**: Resistor-Capacitor low-pass filter.
@@ -167,7 +167,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **TAP**: Test Access Port - Part of the JTAG interface.
 - **TCK**: Test Clock - JTAG clock signal.
 - **Tcl**: A standard embedded command language for EDA applications.
-- **TOS**: The item on top of the Forth datastack.
+- **TOS**: The item on top of the Forth Data Stack.
 - **Udev**: A device manager for the Linux kernel.
 - **UKP**: A tiny 5-bit processor used in the `usb_hid_host` core.
 - **USB HID**: USB Human Interface Device - A class for peripherals like keyboards and mice.

@@ -15,7 +15,7 @@ I've been using the following stack notations, going by example:
 
 `len`: a length.
 
-An `addr len` pair typically specifies an memory area of `len` bytes starting at address `addr`. A typical use case is passing strings.
+An `addr len` pair typically specifies a memory area of `len` bytes starting at address `addr`. A typical use case is passing strings.
 
 `n`: a number
 
@@ -25,15 +25,15 @@ An `addr len` pair typically specifies an memory area of `len` bytes starting at
 
 `f`: a boolean flag (0=false, non-zero=true)
 
-`any` : a variable number arguments is taken from or put on the data stack. E.g. `: printf ( any addr u -- )`.
+`any` : a variable number of arguments is taken from or put on the data stack. For example, `: printf ( any addr u -- )`.
 
-Often, I'll use short descriptive words to name stack items: `buf`, `buflen`, `fil`,...
+I often use short descriptive names for stack items: `buf`, `buflen`, `fil`, etc.
 
 ## Stack signature of a Word taking data from the Input Stream
 
 - `: foo ( "text" n -- )`
 
-`Foo` takes text from the input stream. An accompanying comments clarifies how much text to take: up to a specific delimiter, a token, one character...
+`Foo` takes text from the input stream. An accompanying comment clarifies how much text to take: up to a specific delimiter, a token, one character...
 `Foo` takes one number from the data stack. It does not put any items on the data stack.
 
 - `: foo" ( "text" -- )`
@@ -44,8 +44,8 @@ A variant of the previous example. `Foo` takes text from the input stream up to 
 
 - `: foo (compile-time: "token" -- ) (run-time: -- addr )`
 
-`Foo` is an Immediate. At compile-time it takes a token from the input stream. It does not take anything from or put anything on the data stack.
-At compile-time `foo` writes code which at run-time has the stack effect `( -- addr )`, i.e. the compiled code puts an item on the data stack.
+`Foo` is an Immediate. At compile-time, it takes a token from the input stream. It does not take anything from or put anything on the data stack.
+At compile-time, `foo` writes code which at run-time has the stack effect `( -- addr )`, i.e. the compiled code puts an item on the data stack.
 
 ## Stack comments:
 

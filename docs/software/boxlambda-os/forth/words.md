@@ -1,46 +1,41 @@
 # Forth Word List
 
-I decided to put all Forth Words on a single page for easy reference. Some Words will require more context than a one-liner can describe.
-In such case, the one-liner contains a link to a page with additional info.
+I decided to place all Forth Words on a single page for easy reference. Some Words will require more context than a one-liner can provide.
+In such cases, the one-liner contains a link to a page with additional info.
 
-Most of these Words are not created by me. They come from Mecrisp Forth, ZeptoForth and other resource. As much as I would like to give
-credit where credit is due, I don't think it's particularly helpful to do this for each Word on this already jam-packed page.
-Where applicable, the Forth source code contains references to their origins. In some cases, I included the origin in the title, e.g.
-[ZeptoForth Heap](#zeptoforth-heap).
+Most of these Words are not original to me; they come from Mecrisp Forth, ZeptoForth, and other resources. I would like to give credit where it's due, but doing so for each Word on this already crowded page seems impractical. The Forth source code contains references to their origins. In some cases, I have included the origin in the title, such as [ZeptoForth Heap](zeptoforth-heap).
 
-To get a sense of how the various software modules referenced below relate to each other, take a look at the [stack](fs-stack.md).
+To understand how the various software modules referenced below are related to each other, examine the [stack](fs-stack.md).
 
 ## Constants and Units
 
 [units.fs](../../../../fs/forth/units.fs)
 
-`cell`
-
-- The size in bytes of one cell.
+`cell` size in bytes.
 
 `max-uint`
 
-- Maximum unsigned integer value.
+- Maximum value for an unsigned integer.
 
 `max-int`
 
-- Maximum signed integer value.
+- Maximum value for a signed integer.
 
 `min-int`
 
-- Minimum signed integer value.
+- Minimum value for a signed integer.
 
-`cells+ ( x n -- x+n*cell )`
+`cells+  ( x n -- x + n * Cell )`
 
-- Add the size of n cells to x.
+- Add the size of `n` cells to `x`.
 
-`chars ( u -- u )`
+`chars  ( u -- u )`
 
-- Returns the size of u chars (which is u). Used for clarity, to put a unit behind a number. e.g. `8 chars`.
+- Returns the size of `u` characters, which is equal to `u`. Used for clarity, to put a unit behind a number. For example, `8 Chars`.
 
-`char ( a -- a+1 )`
+`char  ( a -- a + 1 )`
 
-- Advance a by one char.
+- Increment `a` by one character.
 
 ## Range Related Words
 
@@ -95,9 +90,7 @@ See [Forth Exception Handling](exception-handling.md).
 
 `suppress ( exc|0 "exception name" -- exc|0 )`
 
-- Check whether an exception, typically returned by `try`, matches a specified
-exception and if it does, replace it with zero, marking no exception
-otherwise passing the specified argument through.
+ Check if an exception, typically returned by try, matches a specified exception. If it does, replace it with zero to indicate no exception. Otherwise, pass the specified argument through.
 
 `x-assert ( -- )`
 
@@ -207,12 +200,11 @@ fil-buf0 .fil @ fil-buf0 .buf @ 256 f_read
 
 [heap.fs](../../../../fs/forth/heap.fs)
 
-Heaps are created by the user and consist of discretes blocks that are allocated, freed, and resized as multiples; the size of allocations plus a cell taken up by a block count is rounded up to the next full number of blocks. There is by no global heap. Note that the time taken up by heap allocation or resizing is bounded by a maximum which is defined by the number of blocks in the heap; any heap allocation or resizing may take this full time. On the other hand, the time taken up by freeing an allocation is determined solely by the number of blocks comprising the allocation.
-
+Heaps are created by users and consist of discrete blocks that are allocated, freed, and resized in multiples. The size of an allocation, plus a cell used for storing the block count, is rounded up to the next full number of blocks. No global heap exists. Note that the time required for heap allocation or resizing is bounded by a maximum defined by the number of blocks in the heap; any heap allocation or resizing may take this maximal time. In contrast, the time required for freeing an allocation is determined solely by the number of blocks comprising the allocation.
 
 `heap-size ( block-size block-count -- heap-bytes )`
 
-- Get the size in bytes of a heap with the given block size in bytes and block count.
+- Determine the size in bytes of a heap with the given block size and block count.
 
 `init-heap ( block-size block-count addr -- )`
 
@@ -228,7 +220,7 @@ Heaps are created by the user and consist of discretes blocks that are allocated
 
 `resize ( size addr heap -- new-addr )`
 
-- Resize memory in a heap at *addr* to a new size in bytes, returning its new address. If sufficient memory is available for resizing at *addr* the allocation is expanded without moving or copying it and *addr* is returned. Otherwise, the allocation at *addr* is freed, and its contents is copied to a new allocation, whose address is returned. Note that if insufficient memory is available in the heap for resizing the allocation, the existing allocation is preserved, and `x-allocate-failed` is raised.
+- Resize memory in a heap at *addr* to a new size in bytes, returning its new address. If sufficient memory is available for resizing at *addr* the allocation is expanded without moving or copying it and *addr* is returned. Otherwise, the allocation at *addr* is freed, and its contents are copied to a new allocation, whose address is returned. Note that if insufficient memory is available in the heap for resizing the allocation, the existing allocation is preserved, and `x-allocate-failed` is raised.
 
 Exceptions:
 ```
@@ -241,7 +233,7 @@ x-memory-not-allocated
 
 [pool.fs](../../../../fs/forth/pool.fs)
 
-Pools are created by the user and consist of discretes blocks that are allocated and freed individual as wholes. There is by default no global pool. Allocating and freeing blocks in pools occurs in constant time and are fast, unlike allocation, resizing, and freeing in heaps.
+ Pools are created by users and consist of discrete blocks that are allocated and freed as a single unit. By default, there is no global pool. Allocating and freeing blocks in pools occur in constant time and are fast, unlike allocation, resizing, and freeing in heaps.
 
 `pool-size ( -- bytes )`
 
@@ -249,7 +241,7 @@ Pools are created by the user and consist of discretes blocks that are allocated
 
 `init-pool ( block-size addr -- )`
 
-- Initialize a pool at *addr* with the given block size of *block-size* bytes. Note that no space for storing blocks is available in a pool when it is first initialized; to add memory to a pool use `add-pool`.
+- Initialize a pool at *addr* with the given block size of *block-size* bytes. Note that no space for storing blocks is available in a pool when it is first initialized; to add memory to a pool, use `add-pool`.
 
 `add-pool ( addr bytes pool -- )`
 
@@ -463,15 +455,15 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `arshift ( x1 u -- x2 )`
 
-- Arithmetic right-shift of u bit-places.
+- Arithmetic right-shift of `u` bit-places.
 
 `rshift ( x1 u -- x2 )`
 
-- Logical right-shift of u bit-places.
+- Logical right-shift of `u` bit-places.
 
 `lshift ( x1 u -- x2 )`
 
-- Logical  left-shift of u bit-places.
+- Logical  left-shift of `u` bit-places.
 
 `shr ( x1 -- x2 )`
 
@@ -491,7 +483,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `bitval ( u -- u' )`
 
-- Integer value corresponding to bit position u (i.e. 1<<u).
+- Integer value corresponding to bit position u (i.e., 1<<u).
 
 `bic ( x1 x2 -- x3 )`
 
@@ -515,11 +507,11 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `false ( --  0 )`
 
-- False-Flag.
+- False flag.
 
 `true ( -- -1 )`
 
-- True-Flag.
+- True flag.
 
 `clz ( x1 -- u )`
 
@@ -696,7 +688,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `s>d ( n -- d )`
 
-- Makes a signed single number double length.
+- Makes a signed single number double-length.
 
 `2arshift ( d1 u -- d2 )`
 
@@ -704,25 +696,25 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `2rshift ( d1 u -- d2 )`
 
-- Logical    double right-shift of u bit-places.
+- Logical double right-shift of u bit-places.
 
 `2lshift ( d1 u -- d2 )`
 
-- Logical    double  left-shift of u bit-places.
+- Logical double left-shift of u bit-places.
 
-## Fixed point numbers
+## Fixed-Point numbers
 
-S31.32 fixpoint numbers are written like `3,14159`, i.e. written with a comma
+S31.32 fixed-point numbers are written like `3,14159`, i.e., written with a comma
 instead of a dot.
 
-Fixpoint numbers are stored ( n-comma n-whole ) and can be handled
+Fixed-point numbers are stored ( n-comma n-whole ) and can be handled
 like signed double numbers.
 
 [double.s](../../../../sw/components/forth/double.s)
 
 `f/ ( df1 df2 -- df3 )`
 
-- Division of two fixpoint numbers.
+- Division of two fixed-point numbers.
 
 `f* ( df1 df2 -- df3 )`
 
@@ -737,7 +729,7 @@ like signed double numbers.
 
 `u<= ( u1 u2 -- flag )`
 
-- Unsigned comparisions.
+- Unsigned comparisons.
 
 `u>= ( u1 u2 -- flag )`
 
@@ -747,7 +739,7 @@ like signed double numbers.
 
 `<= ( n1 n2 -- flag )`
 
-- Signed comparisions.
+- Signed comparisons.
 
 `>= ( n1 n2 -- flag )`
 
@@ -758,7 +750,10 @@ like signed double numbers.
 `0< ( n - flag )`
 
 - Negative?
-`0> ( n - flag )` Positive?
+
+`0> ( n - flag )`
+
+- Positive?
 
 `0<> ( x -- flag )`
 
@@ -845,59 +840,59 @@ like signed double numbers.
 
 `move ( c-addr1 c-addr2 u -- )`
 
-- Moves u Bytes in Memory.
+- Moves u bytes in memory.
 
 `fill ( c-addr u c )`
 
-- Fill u Bytes of Memory with value c.
+- Fill u bytes of memory with value c.
 
 `cbit@ ( mask c-addr -- flag )`
 
-- Test BIts in byte-location.
+- Test bits in byte location.
 
 `hbit@ ( mask h-addr -- flag )`
 
-- Test BIts in halfword-location.
+- Test bits in halfword location.
 
 `bit@ ( mask a-addr -- flag )`
 
-- Test BIts in word-location.
+- Test bits in word location.
 
 `cxor! ( mask c-addr -- )`
 
-- Toggle bits in byte-location.
+- Toggle bits in byte location.
 
 `hxor! ( mask h-addr -- )`
 
-- Toggle bits in halfword-location.
+- Toggle bits in halfword location.
 
 `xor! ( mask a-addr -- )`
 
-- Toggle bits in word-location.
+- Toggle bits in word location.
 
 `cbic! ( mask c-addr -- )`
 
-- Clear BIts in byte-location.
+- Clear bits in byte location.
 
 `hbic! ( mask h-addr -- )`
 
-- Clear BIts in halfword-location.
+- Clear bits in halfword location.
 
 `bic! ( mask a-addr -- )`
 
-- Clear BIts in word-location.
+- Clear bits in word location.
 
 `cbis! ( mask c-addr -- )`
 
-- Set BIts in byte-location.
+- Set bits in byte location.
 
 `hbis! ( mask h-addr -- )`
 
-- Set BIts in halfword-location.
+- Set bits in halfword location.
 
 `bis! ( mask a-addr -- )`
 
-- Set BIts in word-location.
+- Set bits in word location.
 
 `2constant name  ( ud|d -- )`
 
@@ -917,7 +912,7 @@ like signed double numbers.
 
 `nvariable name  ( n1*u|n n1 -- )`
 
-- Makes an initialized variable with specified size of n1 words Maximum is 15 words.
+- Makes an initialized variable with specified size of n1 words. Maximum is 15 words.
 
 `buffer: name    ( u -- )`
 
@@ -1012,7 +1007,7 @@ like signed double numbers.
 
 - Core: Compiles a string to be printed when executed.
 
-- `istr.fs`: Adds interpretive exection mode behavior. Take string data from input stream and print it.
+- `istr.fs`: Adds interpretive execution mode behavior. Take string data from input stream and print it.
 
 `cr ( -- )`
 
@@ -1131,11 +1126,11 @@ Parse string from input string, substitute escape codes according to table below
 
 `#S ( ud1|d1 -- 0 0 )`
 
-- Add all remaining digits from the double length number to output buffer.
+- Add all remaining digits from the double-length number to output buffer.
 
 `# ( ud1|d1 -- ud2|d2 )`
 
-- Add one digit from the double length number to output buffer.
+- Add one digit from the double-length number to output buffer.
 
 `#> ( ud|d -- c-addr len )`
 
@@ -1195,21 +1190,16 @@ Parse string from input string, substitute escape codes according to table below
 
 `printf ( n*x c-addr u -- )`
 
-- Prints n*x using the format string at c-addr u.
-
-The format string contains ordinary characters (except %), which are copied unchanged to the destination buffer, and conversion specifications. Conversion specifications have the following format:
+- Prints n*x using the format string at caddr u. The format string consists of ordinary characters (except %), which are copied verbatim to the destination buffer, and conversion specifications. Conversion specifications have the following structure:
 
 - Introductory % character
-
-- An optional - that specifies left justify
-
-- An optional 0 that left-pads using 0 instead of space
-
-- An optional decimal integer value that specifies minimum field width
-
+- An optional '-' that signifies left justification
+- An optional '0' that pads with zeros instead of spaces
+- An optional decimal integer value specifying the minimum field width
 - A conversion format specifier
 
 Format Specifiers:
+
 ```
 % - %
 c - character
@@ -1279,7 +1269,7 @@ See [Interpreting Console Input](interpreting.md).
 
 `current-source ( -- addr )`
 
-- Double-Variable which contains source.
+- Double variable which contains source.
 
 `setsource ( c-addr len -- )`
 
@@ -1390,7 +1380,7 @@ See [Interpreting Console Input](interpreting.md).
 
 `forget ( "word" -- )`
 
-- Forget the give word.
+- Forget the given word.
 
 ` del ( -- )`
 
@@ -1497,7 +1487,7 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
 
 `[compileonly] ( -- )`
 
-- Makes current definition compileonly.
+- Makes current definition compile-only.
 
 `setflags ( x -- )`
 
@@ -1509,7 +1499,7 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
 
 `find ( c-addr len -- a-addr flags )`
 
-- Searches for a String in Dictionary. Gives back flags, which are different to ANS!
+- Searches for a String in Dictionary. Gives back flags, which are different from ANS!
 
 `hook-find ( -- a-addr )`
 
@@ -1525,7 +1515,7 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
 
 `[1-foldable] ( -- )`
 
-- Current word becomes foldable with one constants.
+- Current word becomes foldable with one constant.
 
 `[2-foldable] ( -- )`
 
@@ -1548,12 +1538,12 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
 
 `recurse ( -- )`
 
-- Lets the current definition call itself.
+- Enables the current definition to call itself.
 
 `' ( "Word" -- addr )`
 
 - Tries to find Word in dictionary and put its address on the data stack.
-Quits (i.e restarts REPL) if Word is not found.
+Quits (i.e., restarts REPL) if Word is not found.
 
 `['] (compile-time: "Word" -- ) (run-time: -- addr )`
 
@@ -1569,11 +1559,11 @@ Example:
 : [: ( -- )
   state @ if
     \ [: is invoked as a compiling word, i.e. a code-generating word that
-    \ executes when it's encountered in the definition of an other word.
+    \ executes when it's encountered in the definition of another word.
     \ When [: _executes_... it compiles an 'ahead'. This ahead pushes
     \ 2 items on the stack: patchaddr and structmatchconst
     postpone ahead ( patchaddr structmatchconst )
-    \ [: puts 'here' on the stack. This the entry point of the code that 'ahead' is skipping
+    \ [: puts 'here' on the stack. This is the entry point of the code that 'ahead' is skipping
     \ over.
     here -rot ( lambdaentry patchaddr structmatchconst )
     \ [: compiles an 'add sp, sp -4 sw ra, (sp)', i.e. it generates a prologue.
@@ -1631,7 +1621,7 @@ istheanswer . cr
 
 ## Control structures
 
-Control structures are immediate and compileonly.
+Control structures are immediate and compile-only.
 
 Internally they have complicated compile-time stack effects.
 
@@ -1818,16 +1808,15 @@ File Access:
 
 `f_open ( addr len mode -- fil )`
 
-- Open the file specified in input string.
-  Mode argument is a combination of following values:
+- Open the file specified in the input string. The mode argument is a combination of the following values:
 
-    - `FA_READ`:Specifies read access to the file. Data can be read from the file.
+    - `FA_READ`: Specifies read access to the file. Data can be read from the file.
     - `FA_WRITE`: Specifies write access to the file. Data can be written to the file. Combine with FA_READ for read-write access.
-    - `FA_OPEN_EXISTING`:	Opens the file. The function fails if the file is not existing. (Default)
-    - `FA_CREATE_ALWAYS`: Creates a new file. If the file is existing, the file is truncated and overwritten.
-    - `FA_CREATE_NEW`: Creates a new file. The function fails if the file is existing.
-    - `FA_OPEN_ALWAYS`: Opens the file. If it is not exist, a new file is created.
-    - `FA_OPEN_APPEND`: Same as FA_OPEN_ALWAYS except the read/write pointer is set end of the file.
+    - `FA_OPEN_EXISTING`: Opens the existing file. The function fails if the file does not exist (default).
+    - `FA_CREATE_ALWAYS`: Creates a new file and opens it. If the file already exists, it is truncated and overwritten.
+    - `FA_CREATE_NEW`: Creates a new file. The function fails if the file already exists.
+    - `FA_OPEN_ALWAYS`: Opens the file or creates a new one if it does not exist.
+    - `FA_OPEN_APPEND`: Opens the existing file and sets the read/write pointer to the end of the file.
 
   May throw `x-fr-*` and `x-pool-*` exceptions.
 
@@ -1863,7 +1852,7 @@ File Access:
 
 - Read a string from the file.
   Note that reading from eof returns 0 0 as adr len.
-  Note that when eof is reached or buflen is reached,
+  Note that when eof or buflen is reached,
        the returned line might not contain a \n.
   May throw `x-fr-*` exception.
 
@@ -1907,7 +1896,7 @@ Directory Access:
   item matching pattern specified in addr/len2 input string.
   Put result in filinfo object.
   May throw `x-fr-*` exception.
-  See pattern-each for an easy to use wrapper around f_findfirst/next.
+  See pattern-each for an easy-to-use wrapper around f_findfirst/next.
 
 `f_findnext ( dir -- )`
 
@@ -2177,8 +2166,8 @@ Some basic shell-like commands for interactive use.
 `include ( any "path" -- any )`
 
 - Load and evaluate forth code from a file with the given path.
-  include may be used recursively, i.e. the file being
-  included itself may contain one or more include calls.
+  `include` may be used recursively, i.e., an included file
+  may contain one or more include calls.
   May raise `x-line-truncated`.
 
 - See [Include File Evaluation](include.md)

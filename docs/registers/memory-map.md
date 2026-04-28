@@ -217,3 +217,4 @@ High- and variable latency read-write external memory.
 - **Size**: 256 Mbytes
 
 Note that the *BoxKern* allocates region`0x2ff00000-0x30000000` to [RAM disk usage](../software/base-platform/c-components/fat-fs.md#the-ram-disk-device-controller).
+

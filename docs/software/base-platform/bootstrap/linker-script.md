@@ -47,7 +47,7 @@ MEMORY
     - `__idata_source / __idata_start / __idata_end`: source address, destination start address, and destination end address of the IMEM data section. In the `link_imem_boot.ld` case ; `__data_source` and `__data_start` point to the same IMEM address. In the `link_ddr_boot.ld` case ; `__idata_source` and `__idata_start` point to the same IMEM address.
     - `__edata_source / __edata_start / __edata_end`: source address, destination start address, and destination end address of the EMEM data section.
     - `__ibss_start / __ibss_end`: Start and end address of the BSS section in IMEM to zero out.
-    - `__ebss_start / __ebss_size`: Start and end address of the BSS section in EMEM to zero out.
+    - `__ebss_start / __ebss_end`: Start and end address of the BSS section in EMEM to zero out.
 ```
     .itext : {
        ...
@@ -74,7 +74,7 @@ The correct way to get the *icode* section's size value is by taking the **addre
 local_memcpy(&__icode_start, &__icode_source, &__icode_end - &__icode_start);
 ```
 
-What would happen if you did create an `__icode_size` linker variable and reference in C by value, e.g. `(unsigned)__icode_size`? It might work, until it didn't. One issue is that the compiler might consider the `__icode_size` variable access as eligible for *Small Data Access* optimization. In that case, the compiler will attempt to generate code using global pointer (*gp*) relative addressing. The problem with that is that `__icode_size` is not an object in the gp-relative addressable range. In fact, `__icode_size` not a true object at all. The compilation will abort with an error message.
+What would happen if you did create an `__icode_size` linker variable and reference in C by value, e.g. `(unsigned)__icode_size`? It might work, until it doesn't. One issue is that the compiler might consider the `__icode_size` variable access as eligible for *Small Data Access* optimization. In that case, the compiler will attempt to generate code using global pointer (*gp*) relative addressing. The problem with that is that `__icode_size` is not an object in the gp-relative addressable range. In fact, `__icode_size` not a true object at all. The compilation will abort with an error message.
 
 ## Linker Script Variants
 

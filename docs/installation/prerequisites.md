@@ -110,16 +110,6 @@ Perl is required if you would like to tinker with the usb_hid_host firmware. You
 sudo apt-get install perl.
 ```
 
-## Additional Prerequisites for Automated Testing on FPGA
-
-## Screen
-
-The Screen utility is used for automated serial port interaction in *lisp_test.py*.
-
-```
-sudo apt-get install screen.
-```
-
 ## Hidden Tool Dependencies
 
 The following tools are automatically installed (if not already installed) by sourcing the `activate_env.sh` script:

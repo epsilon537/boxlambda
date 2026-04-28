@@ -9,7 +9,7 @@ Forth testsuite, augmented with Words specifically added for BoxLambda (C-FFI, `
 
 Connect a terminal emulator such as Putty or Minicom to Arty's USB serial port. **Settings: 1000000 8N1**.
 
-Make sure the `boxlambda_base` release bitstream is flashed onto the target. If that's not the case yet, follow the steps in [this section](../../../installation/installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+Ensure that the `boxlambda_base` release bitstream is flashed onto the target. If that's not the case yet, follow the steps in [this section](../../../installation/installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
 Build the Forth Test Suite and load the test binary and file system onto the target:
 

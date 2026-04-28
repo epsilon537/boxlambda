@@ -16,7 +16,7 @@ The `common` software component contains some common definitions used by other s
       die("File not found: %s.\n", filename);
     ```
 
-- [inout.h](../../../../sw/components/common/inout.h): Defines `IN`, `OUT` and `INOUT` parameter prefixes
+- [inout.h](../../../../sw/components/common/inout.h): Defines `IN`, `OUT` and `INOUT` parameter prefixes.
 
     Example: `void foo(IN uint32_t *inp, OUT uint32_t *outp, INOUT uint32_t *inoutp)`
 
