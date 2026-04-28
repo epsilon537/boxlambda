@@ -3,7 +3,7 @@
 I decided to place all Forth Words on a single page for easy reference. Some Words will require more context than a one-liner can provide.
 In such cases, the one-liner contains a link to a page with additional info.
 
-Most of these Words are not original to me; they come from Mecrisp Forth, ZeptoForth, and other resources. I would like to give credit where it's due, but doing so for each Word on this already crowded page seems impractical. The Forth source code contains references to their origins. In some cases, I have included the origin in the title, such as [ZeptoForth Heap](zeptoforth-heap).
+Most of these Words are not original to me; they come from Mecrisp Forth, ZeptoForth, and other resources. I would like to give credit where it's due, but doing so for each Word on this already crowded page seems impractical. The Forth source code contains references to their origins. In some cases, I have included the origin in the title, such as [ZeptoForth Heap](#zeptoforth-heap).
 
 To understand how the various software modules referenced below are related to each other, examine the [stack](fs-stack.md).
 

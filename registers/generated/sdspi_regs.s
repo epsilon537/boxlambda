@@ -17,7 +17,7 @@
 .equ SDSPI_CMD_WR_WIDTH, 1
 .equ SDSPI_CMD_WR_LSB, 10
 .equ SDSPI_CMD_WR_MASK, 0x400
-# CMD.F - Set if FIFO data transmision accompanies command.
+# CMD.F - Set if FIFO data transmission accompanies command.
 .equ SDSPI_CMD_F_WIDTH, 1
 .equ SDSPI_CMD_F_LSB, 11
 .equ SDSPI_CMD_F_MASK, 0x800
