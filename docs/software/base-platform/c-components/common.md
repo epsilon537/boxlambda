@@ -1,6 +1,6 @@
 # Common Utilities
 
-- **Commont Software Component in the BoxLambda Directory Tree**:
+- **Common Software Component in the BoxLambda Directory Tree**:
   [sw/components/common/](../../../../sw/components/common)
 
 - **Included in OS**: Yes

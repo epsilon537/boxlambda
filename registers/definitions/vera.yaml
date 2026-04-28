@@ -135,7 +135,7 @@ regmap:
     address: 32
     bitfields:
     -   name: VALUE
-        description: the horizonal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+        description: the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
         reset: 0
         width: 8
         lsb: 0
@@ -195,7 +195,7 @@ regmap:
     address: 64
     bitfields:
     -   name: COLOR_DEPTH
-        description: Number of bits pers pixel to encode color information.
+        description: Number of bits per pixel to encode color information.
         enums:
         -   name: ONE_BPP
             description: 1 bpp.
@@ -341,7 +341,7 @@ regmap:
     address: 128
     bitfields:
     -   name: COLOR_DEPTH
-        description: Number of bits pers pixel to encode color information.
+        description: Number of bits per pixel to encode color information.
         enums:
         -   name: ONE_BPP
             description: 1 bpp.

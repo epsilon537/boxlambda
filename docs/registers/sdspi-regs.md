@@ -49,7 +49,7 @@ Reset value: 0x00000000
 | BUSY             | 14     | ro              | 0x0        | Busy bit, set while command is running. |
 | -                | 13     | -               | 0x0        | Reserved |
 | SEL              | 12     | rw              | 0x0        | 1 = select FIFO[0], 0 = select FIFO[1]. |
-| F                | 11     | rw              | 0x0        | Set if FIFO data transmision accompanies command. |
+| F                | 11     | rw              | 0x0        | Set if FIFO data transmission accompanies command. |
 | WR               | 10     | rw              | 0x0        | 1 to write from FIFO to card, 0 to read from card into FIFO. Assumes F is set. |
 | ERESP            | 9:8    | rw              | 0x0        | Expected response. |
 | R1_CMD           | 7:0    | rw              | 0x00       | On write, if bits [7:6]==01 and card idle, remaining bits are sent to card. Contains R1 response when command has completed. |

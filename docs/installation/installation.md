@@ -154,7 +154,7 @@ Ready.
 sd0:/>
 ```
 
-You're now in the Forth REPL and can start entering Forth statements. Try `ls`, `cd` and `cat` to navigate around the filesystem
+You're now in the Forth REPL and can start entering Forth statements. Try `ls`, `cd` and `cat` to navigate around the file system
 and look at files:
 
 ```
@@ -243,7 +243,7 @@ mechanism that lets you:
 
 #### Building and Flashing Bootloader
 
-Application images and filesystems can be loaded, but the bootloader has to be flashed onto the target (although you can use GDB to load the bootloader into RAM without flashing).
+Application images and file systems can be loaded, but the bootloader has to be flashed onto the target (although you can use GDB to load the bootloader into RAM without flashing).
 
 The following instructions show how to build and flash the bootloader:
 
@@ -292,7 +292,7 @@ To load the OS binary (instead of flashing):
 make boxkern_load
 ```
 
-To load the OS binary as well as the `fs/` target filesystem as a RAM disk:
+To load the OS binary as well as the `fs/` target file system as a RAM disk:
 
 ```
 make boxkernfs_load

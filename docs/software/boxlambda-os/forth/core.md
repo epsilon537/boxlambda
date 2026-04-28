@@ -157,7 +157,7 @@ towards lower memory. When *catchmempointers* has completed, the pointer value
 is stored in `VariablesPointer`. In other words, `VariablesPointer` acts like a *here*
 pointer for core variables. The corresponding Word is `ramvar-here`.
 
-The Forth Core code base relies heavily on GNU assembler preprocessing macros and symbols.
+The Forth Core code base relies heavily on GNU assembler pre-processing macros and symbols.
 The following preprocessor symbols play an important role in the Forth core:
 
 - `CoreDictionaryStart`: Core dictionary entry point.
@@ -168,7 +168,7 @@ using the `ramallot` macro.
 the end of IMEM. The `CoreVariable, name` macro decrements the pointer to make
 space for one variable, then assigns the current pointer value to the given
 symbol *name*. This allocation mechanism, executing during the assembler
-preprocessing stage, matches the run-time mechanism executed by
+pre-processing stage, matches the run-time mechanism executed by
 `catchmempointer.s` to populate these variables with their initial values.
 
 ##### Inefficiencies

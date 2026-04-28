@@ -26,12 +26,12 @@ PSG chips usually also include one or more envelope generators that control the 
 ## The YM2149
 
 The YM2149 is a little PSG chip used in 80s arcade games, consoles, and home computer systems such as MSX and the Atari ST. The chip has a 3-channel square wave generator, a noise generator, and an envelope generator.
-Here's the datasheet:
+Here's the data sheet:
 [http://www.ym2149.com/ym2149.pdf](http://www.ym2149.com/ym2149.pdf)
 
 ![YM2149 Block Diagram.](../../assets/ym2149-block-diagram-from-datasheet.jpg)
 
-*YM2149 Block Diagram as shown in the datasheet.*
+*YM2149 Block Diagram as shown in the data sheet.*
 
 ## A Dual YM2149 PSG Audio core: *YM2149_PSG_System*
 
@@ -43,7 +43,7 @@ My initial plan was to instantiate this core twice and add the PCM output signal
 
 [https://github.com/nockieboy/YM2149_PSG_system](https://github.com/nockieboy/YM2149_PSG_system)
 
-The project even supports I2S output, but currently, I just have a simple audio amplifier PMOD, so I wouldn't be using I2S (I added it to the wishlist).
+The project even supports I2S output, but currently, I just have a simple audio amplifier PMOD, so I wouldn't be using I2S (I added it to the wish list).
 
 For the most part, I was able to use the `YM2149_PSG_system` code as-is. I just had to make a few small tweaks to integrate the core into BoxLambda:
 
@@ -119,9 +119,9 @@ Here's the top-level Verilog:
 
 [../../../gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv](../../../gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv)
 
-The Verilator testbench ([sim_main.cpp](../../../gw/projects/test/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The testbench will also flag an error if any accumulator overflows are reported.
+The Verilator test bench ([sim_main.cpp](../../../gw/projects/test/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The test bench will also flag an error if any accumulator overflows are reported.
 
-The Verilator testbench executes for 0.5s of simulated time. Then, a python module ([dac_test.py](../../../gw/projects/test/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
+The Verilator test bench executes for 0.5s of simulated time. Then, a python module ([dac_test.py](../../../gw/projects/test/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
 
 1. The PCM samples and DAC samples are converted to numpy arrays and normalized.
 2. Both signals are sent through a low-pass filter.
@@ -139,7 +139,7 @@ See [here](../test/builds/ym2149.md#audio-dac-test-on-verilator) for instruction
 
 This test project is a BoxLambda SoC with the `YM2149_PSG_system` core and the one-bit DAC integrated.
 Through software, the `YM2149_PSG_system` core is configured to produce six tones at six different pitches.
-Similar to the previous test, the Verilator testbench code checks for accumulator overflows and saves the generated audio samples to `pcm_out.py` and `dac_out.py` for further analysis in Python.
+Similar to the previous test, the Verilator test bench code checks for accumulator overflows and saves the generated audio samples to `pcm_out.py` and `dac_out.py` for further analysis in Python.
 
 The Python script ([ym2149_test.py](../../../gw/projects/test/ym2149_dac_test/test/ym2149_test.py)) imports the generated `dac_out.py` and performs the following operations:
 

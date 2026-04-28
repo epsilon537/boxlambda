@@ -65,7 +65,7 @@ them.
 Forth is a unique, minimalistic, extremely powerful programming language,
 perfect for running on constrained systems. It features a REPL, an interpreter
 doing double duty as a compiler (a *competer*? *interpiler*?), an assembler,
-editor, and metaprogramming capabilities you wouldn't believe.
+editor, and meta programming capabilities you wouldn't believe.
 
 To get a sense of what a unique language Forth is, check out this article. It's
 long but quite entertaining:

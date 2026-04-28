@@ -17,7 +17,7 @@
 
 The interconnect serves as the backbone connecting the internal components of the SoC. BoxLambda uses the Wishbone *Pipelined* bus protocol, as defined in the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
 
-Using the pipelined wishbone bus protocol does *not* imply that BoxLamba supports multiple outstanding transactions. It doesn't, currently. BoxLambda uses the pipelined protocol to have the option of supporting multiple outstanding transactions in case some day the need arises.
+Using the pipelined wishbone bus protocol does *not* imply that BoxLambda supports multiple outstanding transactions. It doesn't, currently. BoxLambda uses the pipelined protocol to have the option of supporting multiple outstanding transactions in case some day the need arises.
 
 ## The Instruction Bus and the Data Bus
 

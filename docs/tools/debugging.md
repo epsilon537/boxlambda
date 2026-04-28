@@ -25,7 +25,7 @@ target.py -reset -gdb
 ```
 
 This makes the connection from the host to the target using the onboard USB JTAG interface.
-Target.py is a Python wrapper script that acts as a frontend for *OpenOCD* and *openFPGALoader*.
+Target.py is a Python wrapper script that acts as a front-end for *OpenOCD* and *openFPGALoader*.
 
 You should see something like this in the linux terminal running `target.py`:
 
@@ -79,7 +79,7 @@ gdb hello_world
 
 ```
 
-Connect GDB to the target and load the exectuable into memory. From the GDB shell:
+Connect GDB to the target and load the executable into memory. From the GDB shell:
 
 ```
 (gdb) target extended-remote localhost:3333
@@ -107,9 +107,9 @@ target.py -bit <bitstream file> -reset -gdb
 
 ## On Verilator
 
-To debug `hello_world` on verilator:
+To debug `hello_world` on Verilator:
 
-Build the verilator testbench:
+Build the Verilator test bench:
 
 ```
 cd build/sim-a7-100/gw/projects/hello_world
@@ -148,7 +148,7 @@ Remote debugging using localhost:3333
 81        jal x0, reset_handler
 ```
 
-You don't need to load the executable. It's already loaded into memory by the verilator model.
+You don't need to load the executable. It's already loaded into memory by the Verilator model.
 
 Notice that the CPU is stopped at the very first instruction of the software boot sequence.
 

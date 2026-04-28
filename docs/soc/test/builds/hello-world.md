@@ -21,12 +21,12 @@ make hello_world_load
 
 To try out the Verilator Test Bench for *Hello World*:
 
-Build the testbench:
+Build the test bench:
 ```
 cd build/sim-a7-100/gw/projects/hello_world
 make hello_world_sim
 ```
-Execute the testbench, with (```./Vmodel -i```) or without (```./Vmodel -t```) tracing:
+Execute the test bench, with (```./Vmodel -i```) or without (```./Vmodel -t```) tracing:
 ```
 ./Vmodel -i/-t
 ```

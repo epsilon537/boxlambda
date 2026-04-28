@@ -32,5 +32,5 @@ ctest -I <test number>
 
 To run all tests, simply run the `ctest` command without any parameters.
 
-Currently, ctest in the `sim-a7-100` buil tree only runs gateware test cases, while ctest in the `arty-a7-100` build tree runs software testcases against a connected FPGA target.
+Currently, ctest in the `sim-a7-100` build tree only runs gateware test cases, while ctest in the `arty-a7-100` build tree runs software test cases against a connected FPGA target.
 

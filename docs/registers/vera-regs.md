@@ -196,7 +196,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| VALUE            | 7:0    | rw              | 0x00       | the horizonal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
+| VALUE            | 7:0    | rw              | 0x00       | the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
 
 Back to [Register map](#register-map-summary).
 
@@ -302,7 +302,7 @@ Reset value: 0x00000000
 | MAP_WIDTH        | 5:4    | rw              | 0x0        | Tile map width. |
 | T256C            | 3      | rw              | 0x0        | When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes. |
 | BITMAP_MODE      | 2      | rw              | 0x0        | 1 selects bitmap mode, 0 selects tile mode. |
-| COLOR_DEPTH      | 1:0    | rw              | 0x0        | Number of bits pers pixel to encode color information. |
+| COLOR_DEPTH      | 1:0    | rw              | 0x0        | Number of bits per pixel to encode color information. |
 
 Enumerated values for L0_CONFIG.COLOR_DEPTH.
 
@@ -435,7 +435,7 @@ Reset value: 0x00000000
 | MAP_WIDTH        | 5:4    | rw              | 0x0        | Tile map width. |
 | T256C            | 3      | rw              | 0x0        | When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes. |
 | BITMAP_MODE      | 2      | rw              | 0x0        | 1 selects bitmap mode, 0 selects tile mode. |
-| COLOR_DEPTH      | 1:0    | rw              | 0x0        | Number of bits pers pixel to encode color information. |
+| COLOR_DEPTH      | 1:0    | rw              | 0x0        | Number of bits per pixel to encode color information. |
 
 Enumerated values for L1_CONFIG.COLOR_DEPTH.
 

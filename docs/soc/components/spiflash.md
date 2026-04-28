@@ -41,7 +41,7 @@ To have a bit more control over timing, I would like to be able to configure a S
 
 ### Simulating Flash
 
-As always, I want to simulate the entire setup in Verilator. I'll need to attach a SPI Flash co-simulation model to the testbench.
+As always, I want to simulate the entire setup in Verilator. I'll need to attach a SPI Flash co-simulation model to the test bench.
 
 ## The ZipCPU SpiXpress core
 

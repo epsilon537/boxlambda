@@ -1170,11 +1170,11 @@ Parse string from input string, substitute escape codes according to table below
 
 `f. ( df -- )`
 
-- Prints a fixpoint number with 32 fractional digits.
+- Prints a fixed-point number with 32 fractional digits.
 
 `f.n ( df n -- )`
 
-- Prints a fixpoint number with n fractional digits.
+- Prints a fixed-point number with n fractional digits.
 
 `hex. ( u -- )`
 

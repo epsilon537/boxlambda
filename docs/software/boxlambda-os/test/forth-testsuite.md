@@ -2,8 +2,8 @@
 
 **The software project directory**: [sw/projects/boxlambda_os](../../../../sw/projects/boxlambda_os)
 
-This build runs the Forth regression test suite. The testsuite is based on the Mecrisp
-Forth testsuite, augmented with Words specifically added for BoxLambda (C-FFI, `c,`, `halign`, `compiletoimem`,...).
+This build runs the Forth regression test suite. The test suite is based on the Mecrisp
+Forth test suite, augmented with Words specifically added for BoxLambda (C-FFI, `c,`, `halign`, `compiletoimem`,...).
 
 ## Building and Running the Forth Test Suite on FPGA
 
