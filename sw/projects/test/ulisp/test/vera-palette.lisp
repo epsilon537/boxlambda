@@ -1,0 +1,34 @@
+'start
+(vera :display :enable)
+(vera :layer 0 :enable)
+(vera :tileset 0 :width 320 :height 32 :bpp 8 :num-tiles 1)
+(vera :layer 0 :bitmap :tileset 0 :tile 0)
+(vera :pixel :tileset 0 tile 0 :x 0 :y 0 :val 255)
+(print (vera :pixel :tileset 0 :tile 0 :x 0 :y 0))
+
+(vera :irqline 0)
+(vera :linecapture :enable)
+(loop (if (= (vera :linecapture :enabled) 0) (return)))
+(print (vera :linecapture :pixel :x 0))
+(print (vera :linecapture :pixel :x 1))
+
+(vera :palette 0 :r 3 :g 2 :b 1)
+(vera :palette 255 :r 1 :g 2 :b 3)
+(print (vera :palette 0))
+(print (vera :palette 255))
+
+(vera :linecapture :enable)
+(loop (if (= (vera :linecapture :enabled) 0) (return)))
+(print (vera :linecapture :pixel :x 0))
+(print (vera :linecapture :pixel :x 1))
+
+(vera :palette :restore)
+(print (vera :palette 0))
+(print (vera :palette 255))
+
+(vera :linecapture :enable)
+(loop (if (= (vera :linecapture :enabled) 0) (return)))
+(print (vera :linecapture :pixel :x 0))
+(print (vera :linecapture :pixel :x 1))
+
+'end

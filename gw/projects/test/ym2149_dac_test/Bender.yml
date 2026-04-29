@@ -1,0 +1,50 @@
+#See https://boxlambda.readthedocs.io/en/latest/build-system/#bender-targets for a list of used Bender targets.
+
+# Package metadata. Required.
+package:
+  # The name of the package. Required.
+  name: ym2149_dac_test
+
+dependencies:
+  # Path dependency.
+  boxlambda_soc: { path: "../../../components/boxlambda_soc" }
+
+sources:
+  - target: prj_constraints
+    files:
+      - ../../boxlambda_base/constrs/boxlambda_soc.xdc
+  - target: vivado
+    defines:
+      VRAM_SIZE_BYTES: 131072
+      CPU_RAM_SIZE_BYTES: 262144
+      NO_MODPORT_EXPRESSIONS: ~
+      DEBUG_MODULE_ACTIVE: ~
+      YM2149: ~
+      SDSPI: ~
+      DRAM: ~
+      VERA: ~
+      SPIFLASH: ~
+      #TRACE_ALL_INSTRUCTIONS: ~
+      IBEX_BOOT_ADDR: 32'h11500000
+    files:
+      - ../../boxlambda_base/rtl/boxlambda_top.sv
+  - target: verilator
+    defines:
+      VRAM_SIZE_BYTES: 131072
+      CPU_RAM_SIZE_BYTES: 262144
+      NO_MODPORT_EXPRESSIONS: ~
+      DEBUG_MODULE_ACTIVE: ~
+      YM2149: ~
+      SDSPI: ~
+      DRAM: ~
+      VERA: ~
+      SPIFLASH: ~
+      #TRACE_ALL_INSTRUCTIONS: ~
+      IBEX_BOOT_ADDR: 32'h00000000
+    files:
+      - sim/sim_main.cpp
+      - ../../boxlambda_base/sim/sim_main.sv
+      - ../../boxlambda_base/lint.vlt
+      - ../../boxlambda_base/rtl/boxlambda_top.sv
+
+

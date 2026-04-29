@@ -1,0 +1,6 @@
+chdrv sd0:
+pwd
+sd0:/
+chdrv ram:
+pwd
+ram:/

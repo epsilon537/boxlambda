@@ -1,0 +1,177 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
+  <diagram id="x_i0iXnSfOSuQYjc9vuA" name="Page-1">
+    <mxGraphModel dx="2912" dy="1348" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fuN3j1AHzackoleht8x1-15" value="BoxKern" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry y="80" width="360" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-12" value="Forth Core" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-280" y="80" width="240" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-10" value="Filesystem" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="400" y="80" width="360" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-9" value="sd0: or ram: volume" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="440" y="120" width="280" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-8" value="forth/" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="480" y="160" width="200" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-1" value="main()" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="190" y="240" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-2" value="crt0" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="190" y="120" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-3" value="C stdio" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="30" y="395" width="120" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-4" value="early.fs" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="520" y="200" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-5" value="boxkern-includes.fs" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="520" y="240" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-6" value="init.fs" style="rounded=0;whiteSpace=wrap;html=1;align=left;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="520" y="280" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-7" value="..." style="rounded=0;whiteSpace=wrap;html=1;align=left;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="520" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-11" value="FFI" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-100" y="120" width="210" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-20" value="" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-250" y="377.5" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-13" value="emit" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-250" y="377.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-14" value="key" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-250" y="417.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-16" value="" style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-2" target="fuN3j1AHzackoleht8x1-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="790" as="sourcePoint" />
+            <mxPoint x="440" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-18" value="FATFS" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="190" y="360" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-19" value="" style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-1" target="fuN3j1AHzackoleht8x1-11">
+          <mxGeometry x="0.282" y="-46" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-360" y="630" as="sourcePoint" />
+            <mxPoint x="80" y="360" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-21" value="redirect to" style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-3" target="fuN3j1AHzackoleht8x1-20">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-340" y="600" as="sourcePoint" />
+            <mxPoint x="-290" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-23" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-11" target="fuN3j1AHzackoleht8x1-18">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="400" as="sourcePoint" />
+            <mxPoint x="30" y="710" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-26" value="" style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-18" target="fuN3j1AHzackoleht8x1-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="290" y="770" as="sourcePoint" />
+            <mxPoint x="340" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-27" value="mount" style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-1" target="fuN3j1AHzackoleht8x1-18">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-30" y="870" as="sourcePoint" />
+            <mxPoint x="20" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-28" value="fs_* Words" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-250" y="200" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-29" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-28" target="fuN3j1AHzackoleht8x1-32">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-280" y="620" as="sourcePoint" />
+            <mxPoint x="-100" y="233.0769230769231" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-30" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-3" target="fuN3j1AHzackoleht8x1-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-120" y="600" as="sourcePoint" />
+            <mxPoint x="-70" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-31" value="&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;forth_core_init())&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-55" y="160" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-32" value="&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;fs_ffi_init()&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-55" y="200" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-33" value="&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;stdio_redirect_ffi_init()&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-55" y="240" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-34" value="Forth evaluate 1." style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-1" target="fuN3j1AHzackoleht8x1-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="640" as="sourcePoint" />
+            <mxPoint x="350" y="590" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-35" value="2." style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-1" target="fuN3j1AHzackoleht8x1-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="780" as="sourcePoint" />
+            <mxPoint x="470" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-36" value="3." style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-1" target="fuN3j1AHzackoleht8x1-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="270" y="710" as="sourcePoint" />
+            <mxPoint x="320" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-37" value="quit" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-250" y="480" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-38" value="start Forth REPL" style="endArrow=classic;html=1;rounded=0;fontSize=18;fontStyle=1" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-6" target="fuN3j1AHzackoleht8x1-37">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="790" as="sourcePoint" />
+            <mxPoint x="490" y="740" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="580" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-39" value="forth_eval_file_or_die()" style="rounded=0;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-55" y="280" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-40" value="include" style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=18;" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-6" target="fuN3j1AHzackoleht8x1-7">
+          <mxGeometry x="-0.3333" y="20" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="830" y="330" as="sourcePoint" />
+            <mxPoint x="820" y="320" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="710" y="300" />
+              <mxPoint x="710" y="340" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fuN3j1AHzackoleht8x1-41" value="boxkern_include" style="endArrow=classic;html=1;rounded=0;fontSize=18;fontStyle=1" edge="1" parent="1" source="fuN3j1AHzackoleht8x1-5" target="fuN3j1AHzackoleht8x1-7">
+          <mxGeometry x="-0.4667" y="20" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="810" y="220" as="sourcePoint" />
+            <mxPoint x="860" y="170" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="750" y="260" />
+              <mxPoint x="750" y="340" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

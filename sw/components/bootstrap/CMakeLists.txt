@@ -6,7 +6,7 @@ target_sources(bootstrap
     PRIVATE
         vectors.S
         crt0.c
-        stdio_to_uart.c
+        stdio_stream.c
 )
 
 #Paths to include files users of bootstrap are expected to use.

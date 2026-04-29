@@ -1,0 +1,96 @@
+start
+
+XXXXXX> (vera :display :enable)
+1
+
+XXXXXX> (vera :layer 0 :enabled)
+0
+
+XXXXXX> (vera :layer 1 :enabled)
+0
+
+XXXXXX> (vera :map 0 :width 32 :height 32 :map-type +vera-map-type-tile+)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 2)
+
+XXXXXX> (vera :map 1 :width 32 :height 32 :map-type +vera-map-type-tile+)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 2)
+
+XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 8 :num-tiles 32)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num-tiles 32 :tilesize-bytes 256)
+
+XXXXXX> (vera :layer 0 :map 0)
+0
+
+XXXXXX> (vera :layer 1 :map 1)
+1
+
+XXXXXX> (vera :layer 0 :tileset 0)
+0
+
+XXXXXX> (vera :layer 1 :tileset 0)
+0
+
+XXXXXX> (vera :map 0 :entry :x 1 :y 1 :val 1)
+1
+
+XXXXXX> (vera :map 1 :entry :x 1 :y 1 :val 2)
+2
+
+XXXXXX>
+(dotimes (ii 16)
+  (vera :pixel :tileset 0 :tile 1 :x 0 :y ii :val +vera-color-red+))
+nil
+
+XXXXXX>
+(dotimes (ii 16)
+  (vera :pixel :tileset 0 :tile 2 :x ii :y 0 :val +vera-color-blue+))
+nil
+
+XXXXXX>
+
+(vera :irqline 16)
+16
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (vera :linecapture :pixel :x 16)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (vera :layer 0 :enable)
+1
+
+XXXXXX> (vera :layer 0 :enabled)
+1
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (vera :linecapture :pixel :x 16)
+(:r 8 :g 0 :b 0)
+
+XXXXXX>
+(vera :layer 1 :enable)
+1
+
+XXXXXX> (vera :layer 1 :enabled)
+1
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (vera :linecapture :pixel :x 16)
+(:r 0 :g 0 :b 10)
+
+XXXXXX>
+'end
+end

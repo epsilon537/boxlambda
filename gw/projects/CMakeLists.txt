@@ -22,12 +22,7 @@ function (gw_project_rules_dfx_vivado)
   set(_mem_file_list ${gw_project_rules_dfx_vivado_MEM_FILE_LIST})
   set(_vs_insts ${gw_project_rules_dfx_vivado_VS_INSTS})
   set(_vs_default_comps ${gw_project_rules_dfx_vivado_VS_DEFAULT_COMPONENTS})
-
-  if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-    set(_board arty_a7_100t)
-  else()
-    set(_board arty_a7_35t)
-  endif()
+  set(_board arty_a7_100t)
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
@@ -141,7 +136,7 @@ function (gw_project_rules_dfx_vivado)
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/load_gw.sh ${_board} dfx_project.bit
+          ${PROJECT_SOURCE_DIR}/scripts/target.py -load_bit dfx_project.bit
       COMMENT
           "Loading bitstream to target."
       VERBATIM
@@ -152,7 +147,7 @@ function (gw_project_rules_dfx_vivado)
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/flash_gw.sh ${_board} dfx_project.bit
+          ${PROJECT_SOURCE_DIR}/target.py -flash_bit dfx_project.bit
       COMMENT
           "Flashing bitstream to target."
       VERBATIM
@@ -180,12 +175,7 @@ function (gw_project_rules_vivado)
   set(_prj_name ${gw_project_rules_vivado_PROJECT_NAME})
   set(_mem_file_tgt ${gw_project_rules_vivado_MEM_FILE_TARGET})
   set(_mem_file_list ${gw_project_rules_vivado_MEM_FILE_LIST})
-
-  if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-    set(_board arty_a7_100t)
-  else()
-    set(_board arty_a7_35t)
-  endif()
+  set(_board arty_a7_100t)
 
   # Dummy output which is never actually produced. Anything that depends on
   # this will always be rebuilt.
@@ -305,7 +295,7 @@ function (gw_project_rules_vivado)
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/load_gw.sh ${_board} project.bit
+          ${PROJECT_SOURCE_DIR}/scripts/target.py -load_bit project.bit
       COMMENT
           "Loading bitstream to target."
       VERBATIM
@@ -316,7 +306,7 @@ function (gw_project_rules_vivado)
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/flash_gw.sh ${_board} project.bit
+          ${PROJECT_SOURCE_DIR}/scripts/target.py -flash_bit project.bit
       COMMENT
           "Flashing bitstream to target."
       VERBATIM
@@ -469,29 +459,12 @@ function (gw_project_rules_verilator)
   endif()
 endfunction()
 
-add_subdirectory(hello_world)
-add_subdirectory(ddr_test)
-add_subdirectory(vera_integrated)
-add_subdirectory(sdspi_test)
-add_subdirectory(fatfs_test)
-add_subdirectory(audio_dac_test)
-add_subdirectory(ym2149_dac_test)
-if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-  add_subdirectory(stsound_test)
-endif()
-add_subdirectory(usb_hid_sys_test)
-add_subdirectory(spiflash_test)
-add_subdirectory(timer_uart_gpio_irqs)
-add_subdirectory(i2c_test)
 if(CMAKE_BUILD_TYPE STREQUAL "fpga")
-  add_subdirectory(rtcc_test)
   add_subdirectory(boxlambda_base)
 endif()
-add_subdirectory(reset_test)
 if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
   add_subdirectory(boxlambda_dfx)
 endif()
-add_subdirectory(invalid_address)
-add_subdirectory(ibex_perf_test)
+  add_subdirectory(test)
 
 

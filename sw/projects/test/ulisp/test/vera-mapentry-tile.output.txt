@@ -1,0 +1,131 @@
+start
+
+XXXXXX>
+(vera :display :enable)
+1
+
+XXXXXX> (vera :tileset 0 :width 16 :height 16 :bpp 8 :num-tiles 32)
+(:addr XXXXXXXXX :width 16 :height 16 :bpp 8 :num-tiles 32 :tilesize-bytes 256)
+
+XXXXXX>
+(dotimes (ii 16)
+  (dotimes (jj (1+ ii))
+    (vera-tileset-pixel 0 1 jj ii +vera-color-blue+)))
+nil
+
+XXXXXX>
+
+
+
+
+
+
+
+
+(vera :map 0 :width 32 :height 32 :map-type +vera-map-type-tile+)
+(:addr XXXXXXXXX :width 32 :height 32 :map-type 2)
+
+XXXXXX> (vera :layer 0 :map 0)
+0
+
+XXXXXX> (vera :layer 0 :tileset 0)
+0
+
+XXXXXX>
+(defvar row1 10)
+row1
+
+XXXXXX> (defvar col1 20)
+col1
+
+XXXXXX> (defvar row2 20)
+row2
+
+XXXXXX> (defvar col2 10)
+col2
+
+XXXXXX> (defvar row3 16)
+row3
+
+XXXXXX> (defvar col3 16)
+col3
+
+XXXXXX>
+(vera :map 0 :entry :x col1 :y row1 :val 1)
+1
+
+XXXXXX> (vera :map 0 :entry :x col2 :y row2 :val (logior +vera-mapentry-hflip-ma
+sk+ +vera-mapentry-vflip-mask+ 1))
+3073
+
+XXXXXX> (vera :map 0 :entry :x col3 :y row3 :val (logior (ash 1 +vera-mapentry-p
+al-offset-shift+) 1))
+4097
+
+XXXXXX> (vera :layer 0 :enable)
+1
+
+XXXXXX> (dolist (rowcol (list (cons row1 col1) (cons row2 col2) (cons row3 col3)
+))
+  (vera :irqline (* 16 (car rowcol)))
+  (vera :linecapture :enable)
+  (loop (if (= (vera :linecapture :enabled) 0) (return)))
+  (dotimes (ii 16)
+    (print (vera :linecapture :pixel :x (+ (* 16 (cdr rowcol)) ii)))))
+
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 0 :g 0 :b 10)
+(:r 6 :g 6 :b 6)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+nil
+
+XXXXXX>
+
+
+
+'end
+end

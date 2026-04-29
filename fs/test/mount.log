@@ -1,0 +1,9 @@
+umount sd0:
+chdrv sd0:
+pwd to trigger exception
+mount sd0:
+pwd success
+sd0:/
+chdrv ram:
+ram:/
+chdrv ram:

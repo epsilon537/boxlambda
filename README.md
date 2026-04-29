@@ -7,7 +7,7 @@ environment for experimenting with software and FPGA gateware.
 ## The Physical Setup
 
 [![The physical
-setup.](assets/physical_setup.png)](assets/physical_setup.png)
+setup.](assets/physical-setup.png)](assets/physical-setup.png)
 
 *The physical setup.*
 
@@ -35,12 +35,12 @@ Verilator.
 
 ## Gateware Block Diagram
 
-![BoxLambda Gateware Block Diagram.](assets/Arch_Diagram_dual_bus_DFX.png)
+![BoxLambda Gateware Block Diagram.](assets/Arch-Diagram-dual-bus-DFX.png)
 
 ## Software Block Diagram
 
 [![BoxLambda OS
-Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Architecture.png)
+Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Architecture.png)
 
 *BoxLambda OS Architecture Block Diagram.*
 
@@ -68,14 +68,29 @@ Architecture.](assets/BoxLambda_OS_Architecture.png)](assets/BoxLambda_OS_Archit
 
 - Sound and graphics support retro-style 2D demos and gameplay.
 
-## Status (December 2025)
+## Status (April 2026)
 
 - **Infrastructure** (build system, etc.): Complete.
 - **Gateware**: Complete and meeting requirements.
-- **Software**: Early stage development. OS architecture defined. BoxLambda C Core partially completed. Mecrisp Forth Core partially completed. Mecrisp Forth Environment not started yet.
+- **Software**: Development ongoing.
+    - **OS architecture**: defined.
+    - **BoxLambda C Core**: partially completed.
+    - **Mecrisp Forth Core**: completed.
+    - **Mecrisp Forth Environment**: partially completed.
+    - **Forth<->C FFI**: completed.
+    - **Filesystem layer**: completed.
+
+## Changelog
+
+- [Changelog](CHANGELOG.md)
 
 ## Links
 
 - **Source Code**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
 - **Project Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
-- **Project Documentation**: [https://boxlambda.readthedocs.io/en/latest/](https://boxlambda.readthedocs.io/en/latest/)
+
+## Documentation
+
+- [Start Here](https://boxlambda.readthedocs.io/en/latest/start-here/)
+- [Full Documentation Index](https://boxlambda.readthedocs.io/en/latest/full-index/)
+

@@ -4,6 +4,90 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `v0.4.0`: Changes sinces label `v0.3.1` - 2026-03-30
+
+### Contributors
+
+Thanks to [W. Shepherd Pitts](https://github.com/wspitts2) for JTAG and OpenOCD related feedback/corrections.
+
+### Added
+
+- Added documentation top-level to README.md.
+- Introduced target.py, a target interaction script handling target reset,
+  flashing/loading bitstream/bootloader/application image, up/downloading
+  ram disk images, debugger attachment.
+- Introduced FATFS media interface for RAM disks: `sw/components/fatfs/diskio_ram.cpp`.
+- Created two FATFS volumes on BoxLambda OS: the SD disk `sd0:`, and a RAM disk `ram:`.
+- Introduced FATFS FFI for Forth: `sw/components/forth/fs_ffi.cpp`.
+- Redirection of Picolibc's stdio to Forth's `emit` and `key`.
+- Re-added picorv_dma gw and sw components and projects in the `archived/` subdirectories.
+- Software components `sw/common/` containing common utility definitions such
+  as IN, OUT, INOUT parameters and die(...) macro.
+- Added `fs/` (filesystem) directory tree containing the target filesystem.
+- Added `forth_eval_file_or_die()` function to `forth.h/cpp`.
+- New Forth Features:
+    - boxkern_include, a pre-include Word include mechanism.
+    - Forth core Words `>compileto` and `compileto>` to save/restore compile-to
+      (IMEM or EMEM) state.
+    - Exception handling, Zeptoforth-based, adapted to RISC-V.
+    - `struct.fs`: Zeptoforth style structs.
+    - `cstrs.fs`: Convert Forth strings to C strings and vice versa.
+    - `istr.fs`: Interpretive string support (Mecrisp natively only supports compiled strings).
+    - `tonumber.fs`: >number implementation.
+    - `printf.fs`: C-style printf and sprintf, adapted from https://github.com/jkotlinski/forth-strfmt.
+    - `lambda.fs`: Zeptoforth-style [: ... ;] anonymous functions.
+    - `dict.fs`: Mecrisp Forth dictionary wizardry tools.
+    - `fixpt-math-lib.fs`: Mecrisp Forth fixed point math library.
+    - `ifdef.fs`: Derived from Mecrisp codebase, extended to support conditional compilation
+      in include files.
+    - `disasm.fs`: Mecrisp Forth Quintus RISC-V disassembler.
+    - `dump.fs`: Mecrisp Forth memory dump.
+    - `escstr.fs`: Escaped string support (\t, \n, \\, etc.).
+    - `fs.fs`: FATFS filesystem API.
+    - `fs_redict.fs`: emit/stdout redirection to file.
+    - `heap.fs`: Zeptoforth module to create and manage heaps.
+    - `pool.fs`: Zeptoforth module to create and manager resource pools.
+    - `temp-alloc`: Temporary memory allocator (mark>, >mark, ...).
+    - `shell.fs`: Shell-like commands for filesystem interaction.
+    - cwd-based prompt as seen in Mecrisp Cube.
+
+### Fixed
+
+- Critical C-FFI stack setup bugfix in the `call-c` Word.
+- Avoid SDA (Small Data Access) optimization when referencing linker generated variables
+  (linker generated variables are ABS symbol and shouldn't be accessed GP-relative).
+- Fixed numerous broken links in the documentation and the blog.
+
+### Changed
+
+- Modified hello_world GDB test, using `target.py` instead of openocd directly.
+- Extended the openocd.cfg script to support the various target interaction
+  use cases presented by target.py.
+- Enabled FATFS LF-CRLF conversion in FATFS, support for filename length of up to 32 characters,
+  RTC support (not yet hooked up to RTC PMOD, however), f_expand.
+- Renamed software component `forth_core` to `forth`.
+- Renamed Forth core Word `forget` to `forgetall`.
+- Renamed `forth_load_buf()` to `forth_eval_buf()` (`forth.h`).
+- Renamed `link_ddr_to_imem_boot.ld` to `link_ddr_boot.ld`.
+- Bootloader spins (if all switches are off) before loading application image instead of after
+  loading application image.
+- Increased JTAG clock speed to 25MHz.
+- Moved test gateware and software components and directories to a `test/` subdirectory.
+- Moved documentation to `docs/` and made all internal references relative.
+- Changed litedram register documentation generation from html to markdown.
+
+### Removed
+
+- Removed stray references to obsoleted target arty_a7_35t (thanks @wspitts2).
+- Removed `load_gw.sh`, `flash_gw.sh`, `flash_sw.sh`, `openocd_arty_a7_100t.sh`,
+  `openocd_verilator.sh`, replaced by `target.py`.
+- Removed unused `link_ddr_to_ddr_boot.ld` linker script.
+- Removed unnecessary `forth_repl()` function from the Forth FFI. The available
+  `forth_eval*` variants are sufficient.
+- Removed `sw/projects/forth_core_test/`. This is now the `boxkerntestfs` target of
+  `sw/projects/boxlambda_os`.
+- Removed WSL references.
+
 ## Label `v0.3.1`: Changes sinces label `v0.3.0` - 2025-12-24
 
 ### Added

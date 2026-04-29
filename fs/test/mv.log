@@ -1,0 +1,10 @@
+mv test/cpdir/* tst_dir
+
+Moving test/cpdir/cpfile0 to tst_dir/cpfile0
+Moving test/cpdir/cpfile1 to tst_dir/cpfile1
+ls tst_dir/cpfile*
+
+00000009 2019/10/01 00:00:00 --- --- --- --- --- ARC cpfile0
+00000009 2019/10/01 00:00:00 --- --- --- --- --- ARC cpfile1
+ls test/cpdir/*
+

@@ -1,0 +1,140 @@
+start
+
+XXXXXX> (vera :display :enable)
+1
+
+XXXXXX> (vera :sprites :enable)
+1
+
+XXXXXX>
+(defvar w 64)
+w
+
+XXXXXX> (defvar h 64)
+h
+
+XXXXXX> (defvar bpp 8)
+bpp
+
+XXXXXX> (vera :tileset 0 :width w :height h :bpp bpp :num-tiles 8)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 8 :num-tiles 8 :tilesize-bytes 4096)
+
+XXXXXX> (vera :tileset 0 :info)
+(:addr XXXXXXXXX :width 64 :height 64 :bpp 8 :num-tiles 8 :tilesize-bytes 4096)
+
+XXXXXX> (vera :sprite 1 :init)
+nil
+
+XXXXXX> (vera :sprite 1 :tileset 0 :tile 2)
+nil
+
+XXXXXX> (vera :sprite 1 :z +vera-sprite-z-l1+)
+3
+
+XXXXXX> (dotimes (yy h)
+  (dotimes (xx (min w (1+ yy)))
+    (vera-tileset-pixel 0 2 xx yy +vera-color-cyan+)))
+nil
+
+XXXXXX>
+
+
+
+
+
+
+
+
+
+
+
+
+
+(vera :sprite 1 :hflip :enable)
+1
+
+XXXXXX> (vera :sprite 1 :hflip :enabled)
+1
+
+XXXXXX> (vera :irqline 0)
+0
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 63))
+
+(:r 10 :g 15 :b 14)
+(:r 10 :g 15 :b 14)
+
+XXXXXX> (print (vera :linecapture :pixel :x 62))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+(vera :irqline (- h 1))
+63
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 0))
+
+(:r 10 :g 15 :b 14)
+(:r 10 :g 15 :b 14)
+
+XXXXXX> (print (vera :linecapture :pixel :x 7))
+
+(:r 10 :g 15 :b 14)
+(:r 10 :g 15 :b 14)
+
+XXXXXX> (print (vera :linecapture :pixel :x (1- (min w h))))
+
+(:r 10 :g 15 :b 14)
+(:r 10 :g 15 :b 14)
+
+XXXXXX> (print (vera :linecapture :pixel :x (min w h)))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+(vera :irqline h)
+64
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 0))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x 7))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x (1- (min w h))))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX> (print (vera :linecapture :pixel :x (min w h)))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+'end
+end

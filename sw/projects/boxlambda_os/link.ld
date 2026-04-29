@@ -16,8 +16,12 @@ PROVIDE(__datastack_size = 1024);
 
 /*'emem' is the external memory section.*/
 __emem = 0x20000000;
-__emem_size = 256m; /*256MB external memory.*/
+__emem_size = 256m; /*255MB external memory (the 256th MB is used as FS_MEM).*/
 __heap_size = 128m;
+
+/* RAM Filesystem memory section.*/
+__fs_mem = 0x2ff00000;
+__fs_mem_size = 1m;
 
 /*'fmem' is the flash memory section.*/
 __fmem = 0x11600000;
@@ -29,13 +33,18 @@ __forth_imem_size = 92k;
 /*Forth external memory size*/
 __forth_emem_size = 1m;
 
+/* Application images to be loaded from flash by the bootloader
+ * start with this value. The bootloader checks this.*/
+IMAGE_HEADER_MAGIC_NUMBER = 0xB07A3BDA;
+
 ENTRY(_start)
 
 MEMORY
 {
-    imem : ORIGIN = __imem, LENGTH = __imem_size
-    emem : ORIGIN = __emem, LENGTH = __emem_size
-    fmem : ORIGIN = __fmem, LENGTH = __fmem_size
+    imem   : ORIGIN = __imem, LENGTH = __imem_size
+    emem   : ORIGIN = __emem, LENGTH = __emem_size
+    fs_mem : ORIGIN = __fs_mem, LENGTH = __fs_mem_size
+    fmem   : ORIGIN = __fmem, LENGTH = __fmem_size
 }
 
 SECTIONS
@@ -47,7 +56,12 @@ SECTIONS
     PROVIDE(__datastack_end = __datastack - __datastack_size);
 
     .etext : {
-        KEEP (*(.init.header))
+        /* Application images start with this 2-word header:
+         * a magic number followed by the image size. */
+        LONG(IMAGE_HEADER_MAGIC_NUMBER)
+        /*Image size*/
+        LONG(__tdata_source + SIZEOF(.tdata) - LOADADDR(.etext))
+
         *(.init.enter)
         *(.init)
         *(.text.unlikely .text.unlikely.*)
@@ -76,7 +90,6 @@ SECTIONS
     PROVIDE( __ecode_end = . );
     PROVIDE( __ecode_start = ADDR(.etext) );
     PROVIDE( __ecode_source = LOADADDR(.etext) );
-    PROVIDE( __ecode_size = __ecode_end - __ecode_start );
 
     .itext : {
         KEEP (*(.vectors))
@@ -90,7 +103,6 @@ SECTIONS
     PROVIDE( __icode_end = . );
     PROVIDE( __icode_start = ADDR(.itext) );
     PROVIDE( __icode_source = LOADADDR(.itext) );
-    PROVIDE( __icode_size = __icode_end - __icode_start );
 
     .idata : ALIGN_WITH_INPUT {
         *(.idata .idata.*)
@@ -101,7 +113,6 @@ SECTIONS
     PROVIDE( __idata_end = . );
     PROVIDE( __idata_start = ADDR(.idata) );
     PROVIDE( __idata_source = LOADADDR(.idata) );
-    PROVIDE( __idata_size = __idata_end - __idata_start );
 
    /*
     * Data values which are preserved across reset
@@ -145,14 +156,11 @@ SECTIONS
     PROVIDE( __tdata_end = . );
     PROVIDE( __tdata_start = ADDR(.tdata) );
     PROVIDE( __tdata_source = LOADADDR(.tdata) );
-    PROVIDE( __tdata_size = SIZEOF(.tdata) );
     PROVIDE( __tls_base = ADDR(.tdata));
-    PROVIDE( __image_size = __tdata_source + __tdata_size - __ecode_source );
 
     PROVIDE( __edata_end = . );
     PROVIDE( __edata_start = ADDR(.edata) );
     PROVIDE( __edata_source = LOADADDR(.edata) );
-    PROVIDE( __edata_size = __edata_end - __edata_start );
 
     .tbss (NOLOAD) : {
         *(.tbss .tbss.* .gnu.linkonce.tb.*)
@@ -162,8 +170,6 @@ SECTIONS
     PROVIDE( __tls_end = . );
     PROVIDE( __tbss_end = . );
     PROVIDE( __tbss_start = ADDR(.tbss));
-    PROVIDE( __tbss_size = SIZEOF(.tbss) );
-    PROVIDE( __tls_size = __tls_end - __tls_base );
 
    /*
     * The linker special cases .tbss segments which are
@@ -188,7 +194,6 @@ SECTIONS
 
     PROVIDE( __ebss_start = ADDR(.tbss) );
     PROVIDE( __ebss_end = . );
-    PROVIDE( __ebss_size = SIZEOF(.ebss) );
 
     .forth_imem (NOLOAD) : {
         . += __forth_imem_size;
@@ -196,7 +201,6 @@ SECTIONS
 
     PROVIDE( __forth_imem_end = . );
     PROVIDE( __forth_imem_start = ADDR(.forth_imem) );
-    PROVIDE( __forth_imem_size = SIZEOF(.forth_imem) );
 
     .ibss (NOLOAD) : {
         *(.ibss .ibss.*)
@@ -206,7 +210,6 @@ SECTIONS
 
     PROVIDE( __ibss_end = . );
     PROVIDE( __ibss_start = ADDR(.ibss) );
-    PROVIDE( __ibss_size = SIZEOF(.ibss) );
 
     .forth_emem (NOLOAD) : {
         . += __forth_emem_size;
@@ -214,7 +217,6 @@ SECTIONS
 
     PROVIDE( __forth_emem_end = . );
     PROVIDE( __forth_emem_start = ADDR(.forth_emem) );
-    PROVIDE( __forth_emem_size = SIZEOF(.forth_emem) );
 
     /*Put the heap in emem*/
     .heap (NOLOAD) : {
@@ -224,6 +226,8 @@ SECTIONS
 
     PROVIDE (__heap_start = ADDR(.heap));
 
+    PROVIDE(__fs_image_start = ORIGIN(fs_mem));
+    PROVIDE(__fs_image_end  = __fs_image_start + LENGTH(fs_mem));
 
     /* Throw away C++ exception handling information */
 

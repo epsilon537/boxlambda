@@ -90,7 +90,7 @@
 # DC_HSCALE - Display composer horizontal scale register.
 .equ VERA_DC_HSCALE_ADDR, 0x20
 
-# DC_HSCALE.VALUE - the horizonal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+# DC_HSCALE.VALUE - the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
 .equ VERA_DC_HSCALE_VALUE_WIDTH, 8
 .equ VERA_DC_HSCALE_VALUE_LSB, 0
 .equ VERA_DC_HSCALE_VALUE_MASK, 0xff
@@ -132,7 +132,7 @@
 # L0_CONFIG - Layer 0 Configuration regiser.
 .equ VERA_L0_CONFIG_ADDR, 0x40
 
-# L0_CONFIG.COLOR_DEPTH - Number of bits pers pixel to encode color information.
+# L0_CONFIG.COLOR_DEPTH - Number of bits per pixel to encode color information.
 .equ VERA_L0_CONFIG_COLOR_DEPTH_WIDTH, 2
 .equ VERA_L0_CONFIG_COLOR_DEPTH_LSB, 0
 .equ VERA_L0_CONFIG_COLOR_DEPTH_MASK, 0x3
@@ -195,7 +195,7 @@
 # L1_CONFIG - Layer 1 Configuration regiser.
 .equ VERA_L1_CONFIG_ADDR, 0x80
 
-# L1_CONFIG.COLOR_DEPTH - Number of bits pers pixel to encode color information.
+# L1_CONFIG.COLOR_DEPTH - Number of bits per pixel to encode color information.
 .equ VERA_L1_CONFIG_COLOR_DEPTH_WIDTH, 2
 .equ VERA_L1_CONFIG_COLOR_DEPTH_LSB, 0
 .equ VERA_L1_CONFIG_COLOR_DEPTH_MASK, 0x3

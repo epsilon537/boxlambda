@@ -1,0 +1,174 @@
+start
+
+XXXXXX>
+(vera :display :enable)
+1
+
+XXXXXX> (vera :layer 0 :enable)
+1
+
+XXXXXX> (vera :tileset 0 :width 320 :height 32 :bpp 8 :num-tiles 1)
+(:addr XXXXXXXXX :width 320 :height 32 :bpp 8 :num-tiles 1 :tilesize-bytes 10240
+)
+
+XXXXXX> (vera :layer 0 :bitmap :tileset 0 :tile 0)
+(:tileset 0 :tile 0)
+
+XXXXXX>
+(vera-tileset-pixel 0 0 0 0 +vera-color-black+)
+0
+
+XXXXXX> (vera-tileset-pixel 0 0 1 0 +vera-color-white+)
+1
+
+XXXXXX> (vera-tileset-pixel 0 0 2 0 +vera-color-red+)
+2
+
+XXXXXX> (vera-tileset-pixel 0 0 3 0 +vera-color-cyan+)
+3
+
+XXXXXX> (vera-tileset-pixel 0 0 4 0 +vera-color-purple+)
+4
+
+XXXXXX> (vera-tileset-pixel 0 0 5 0 +vera-color-green+)
+5
+
+XXXXXX> (vera-tileset-pixel 0 0 6 0 +vera-color-blue+)
+6
+
+XXXXXX> (vera-tileset-pixel 0 0 7 0 +vera-color-yellow+)
+7
+
+XXXXXX> (vera-tileset-pixel 0 0 8 0 +vera-color-orange+)
+8
+
+XXXXXX> (vera-tileset-pixel 0 0 9 0 +vera-color-brown+)
+9
+
+XXXXXX> (vera-tileset-pixel 0 0 10 0 +vera-color-light-red+)
+10
+
+XXXXXX> (vera-tileset-pixel 0 0 11 0 +vera-color-dark-grey+)
+11
+
+XXXXXX> (vera-tileset-pixel 0 0 12 0 +vera-color-grey+)
+12
+
+XXXXXX> (vera-tileset-pixel 0 0 13 0 +vera-color-light-green+)
+13
+
+XXXXXX> (vera-tileset-pixel 0 0 14 0 +vera-color-light-blue+)
+14
+
+XXXXXX> (vera-tileset-pixel 0 0 15 0 +vera-color-light-grey+)
+15
+
+XXXXXX>
+
+
+
+
+
+
+
+
+(vera-tileset-pixel 0 0 16 0 +vera-color-grayscale-0+)
+16
+
+XXXXXX> (vera-tileset-pixel 0 0 17 0 +vera-color-grayscale-1+)
+17
+
+XXXXXX> (vera-tileset-pixel 0 0 18 0 +vera-color-grayscale-2+)
+18
+
+XXXXXX> (vera-tileset-pixel 0 0 19 0 +vera-color-grayscale-3+)
+19
+
+XXXXXX> (vera-tileset-pixel 0 0 20 0 +vera-color-grayscale-4+)
+20
+
+XXXXXX> (vera-tileset-pixel 0 0 21 0 +vera-color-grayscale-5+)
+21
+
+XXXXXX> (vera-tileset-pixel 0 0 22 0 +vera-color-grayscale-6+)
+22
+
+XXXXXX> (vera-tileset-pixel 0 0 23 0 +vera-color-grayscale-7+)
+23
+
+XXXXXX> (vera-tileset-pixel 0 0 24 0 +vera-color-grayscale-8+)
+24
+
+XXXXXX> (vera-tileset-pixel 0 0 25 0 +vera-color-grayscale-9+)
+25
+
+XXXXXX> (vera-tileset-pixel 0 0 26 0 +vera-color-grayscale-10+)
+26
+
+XXXXXX> (vera-tileset-pixel 0 0 27 0 +vera-color-grayscale-11+)
+27
+
+XXXXXX> (vera-tileset-pixel 0 0 28 0 +vera-color-grayscale-12+)
+28
+
+XXXXXX> (vera-tileset-pixel 0 0 29 0 +vera-color-grayscale-13+)
+29
+
+XXXXXX> (vera-tileset-pixel 0 0 30 0 +vera-color-grayscale-14+)
+30
+
+XXXXXX> (vera-tileset-pixel 0 0 31 0 +vera-color-grayscale-15+)
+31
+
+XXXXXX>
+(vera :irqline 0)
+0
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (dotimes (ii 32)
+  (print (vera :linecapture :pixel :x ii)))
+
+(:r 0 :g 0 :b 0)
+(:r 15 :g 15 :b 15)
+(:r 8 :g 0 :b 0)
+(:r 10 :g 15 :b 14)
+(:r 12 :g 4 :b 12)
+(:r 0 :g 12 :b 5)
+(:r 0 :g 0 :b 10)
+(:r 14 :g 14 :b 7)
+(:r 13 :g 8 :b 5)
+(:r 6 :g 4 :b 0)
+(:r 15 :g 7 :b 7)
+(:r 3 :g 3 :b 3)
+(:r 7 :g 7 :b 7)
+(:r 10 :g 15 :b 6)
+(:r 0 :g 8 :b 15)
+(:r 11 :g 11 :b 11)
+(:r 0 :g 0 :b 0)
+(:r 1 :g 1 :b 1)
+(:r 2 :g 2 :b 2)
+(:r 3 :g 3 :b 3)
+(:r 4 :g 4 :b 4)
+(:r 5 :g 5 :b 5)
+(:r 6 :g 6 :b 6)
+(:r 7 :g 7 :b 7)
+(:r 8 :g 8 :b 8)
+(:r 9 :g 9 :b 9)
+(:r 10 :g 10 :b 10)
+(:r 11 :g 11 :b 11)
+(:r 12 :g 12 :b 12)
+(:r 13 :g 13 :b 13)
+(:r 14 :g 14 :b 14)
+(:r 15 :g 15 :b 15)
+nil
+
+XXXXXX>
+
+
+'end
+end

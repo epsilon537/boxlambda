@@ -209,12 +209,12 @@ typedef enum {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t VALUE : 8; // the horizonal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+    uint32_t VALUE : 8; // the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
     uint32_t : 24; // reserved
   };
 } vera_dc_hscale_t;
 
-// DC_HSCALE.VALUE - the horizonal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+// DC_HSCALE.VALUE - the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
 #define VERA_DC_HSCALE_VALUE_WIDTH 8
 #define VERA_DC_HSCALE_VALUE_LSB 0
 #define VERA_DC_HSCALE_VALUE_MASK 0xff
@@ -311,7 +311,7 @@ typedef union {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t COLOR_DEPTH : 2; // Number of bits pers pixel to encode color information.
+    uint32_t COLOR_DEPTH : 2; // Number of bits per pixel to encode color information.
     uint32_t BITMAP_MODE : 1; // 1 selects bitmap mode, 0 selects tile mode.
     uint32_t T256C : 1; // When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes.
     uint32_t MAP_WIDTH : 2; // Tile map width.
@@ -320,7 +320,7 @@ typedef union {
   };
 } vera_l0_config_t;
 
-// L0_CONFIG.COLOR_DEPTH - Number of bits pers pixel to encode color information.
+// L0_CONFIG.COLOR_DEPTH - Number of bits per pixel to encode color information.
 #define VERA_L0_CONFIG_COLOR_DEPTH_WIDTH 2
 #define VERA_L0_CONFIG_COLOR_DEPTH_LSB 0
 #define VERA_L0_CONFIG_COLOR_DEPTH_MASK 0x3
@@ -471,7 +471,7 @@ typedef union {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t COLOR_DEPTH : 2; // Number of bits pers pixel to encode color information.
+    uint32_t COLOR_DEPTH : 2; // Number of bits per pixel to encode color information.
     uint32_t BITMAP_MODE : 1; // 1 selects bitmap mode, 0 selects tile mode.
     uint32_t T256C : 1; // When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes.
     uint32_t MAP_WIDTH : 2; // Tile map width.
@@ -480,7 +480,7 @@ typedef union {
   };
 } vera_l1_config_t;
 
-// L1_CONFIG.COLOR_DEPTH - Number of bits pers pixel to encode color information.
+// L1_CONFIG.COLOR_DEPTH - Number of bits per pixel to encode color information.
 #define VERA_L1_CONFIG_COLOR_DEPTH_WIDTH 2
 #define VERA_L1_CONFIG_COLOR_DEPTH_LSB 0
 #define VERA_L1_CONFIG_COLOR_DEPTH_MASK 0x3

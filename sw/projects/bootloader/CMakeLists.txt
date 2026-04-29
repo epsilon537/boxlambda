@@ -35,20 +35,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "sim")
   link_and_create_image(bootloader
   ${PROJECT_SOURCE_DIR}/sw/components/bootstrap/link_imem_boot.ld)
 else()
-  link_and_create_image(bootloader ${CMAKE_CURRENT_SOURCE_DIR}/link_bootloader.ld)
-endif()
-
-if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-  set(_board arty_a7_100t)
-else()
-  set(_board arty_a7_35t)
+  link_and_create_image(bootloader ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
 endif()
 
 add_custom_target(bootloader_flash_sw
       WORKING_DIRECTORY
           ${CMAKE_CURRENT_BINARY_DIR}
       COMMAND
-          ${PROJECT_SOURCE_DIR}/scripts/flash_sw.sh -b ${_board} bootloader.bin
+          ${PROJECT_SOURCE_DIR}/scripts/target.py -flash_boot bootloader.bin
       COMMENT
           "Flashing bootloader to target."
       VERBATIM

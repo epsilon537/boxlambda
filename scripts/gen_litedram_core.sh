@@ -23,7 +23,12 @@ mkdir -p $EXP_DIR
 pushd .
 
 cd $EXP_DIR
-litedram_gen $YML_FILE $SIM_OPT --gen_user_clkx2 --gateware-dir rtl --software-dir sw --name litedram
+litedram_gen $YML_FILE $SIM_OPT --doc --gen_user_clkx2 --gateware-dir rtl --software-dir sw --name litedram
+
+rm -rf ../../../../docs/registers/litedram-generated/*
+sphinx-build -M markdown build/doc/ litedram-generated/
+cp -f ../../../../scripts/litedram-index-orig.md litedram-generated/markdown/litedram-index.md
+cp -rf litedram-generated/markdown/* ../../../../docs/registers/
 
 popd
 

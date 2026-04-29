@@ -1,0 +1,131 @@
+start
+
+XXXXXX> (vera :display :enable)
+1
+
+XXXXXX> (vera :sprites :enable)
+1
+
+XXXXXX>
+(defvar w 8)
+w
+
+XXXXXX> (defvar h 8)
+h
+
+XXXXXX> (defvar bpp 8)
+bpp
+
+XXXXXX>
+(vera :tileset 0 :width w :height h :bpp bpp :num-tiles 8)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num-tiles 8 :tilesize-bytes 64)
+
+XXXXXX> (vera :tileset 0 :info)
+(:addr XXXXXXXXX :width 8 :height 8 :bpp 8 :num-tiles 8 :tilesize-bytes 64)
+
+XXXXXX> (vera :sprite 1 :init)
+nil
+
+XXXXXX> (vera :sprite 65 :init)
+nil
+
+XXXXXX> (vera :sprite 1 :tileset 0 :tile 1)
+nil
+
+XXXXXX> (vera :sprite 65 :tileset 0 :tile 1)
+nil
+
+XXXXXX> (vera :sprite 65 :pal-offset 1)
+1
+
+XXXXXX> (vera :sprite 1 :z +vera-sprite-z-l1+)
+3
+
+XXXXXX> (vera :sprite 65 :z +vera-sprite-z-l1+)
+3
+
+XXXXXX> (vera :pixel :tileset 0 :tile 1 :x 0 :y 0 :val +vera-color-cyan+)
+3
+
+XXXXXX>
+(vera :sprite 1 :x 40 :y 50)
+40
+
+XXXXXX> (vera :sprite 65 :x 100 :y 200)
+100
+
+XXXXXX>
+(vera :irqline 50)
+50
+
+XXXXXX> (vera :spritebank :select 0)
+0
+
+XXXXXX> (vera :spritebank :selected)
+0
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 40))
+
+(:r 10 :g 15 :b 14)
+(:r 10 :g 15 :b 14)
+
+XXXXXX>
+(vera :irqline 200)
+200
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 100))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+(vera :irqline 50)
+50
+
+XXXXXX> (vera :spritebank :select 1)
+1
+
+XXXXXX> (vera :spritebank :selected)
+1
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 40))
+
+(:r 0 :g 0 :b 0)
+(:r 0 :g 0 :b 0)
+
+XXXXXX>
+(vera :irqline 200)
+200
+
+XXXXXX> (vera :linecapture :enable)
+1
+
+XXXXXX> (loop (if (= (vera :linecapture :enabled) 0) (return)))
+nil
+
+XXXXXX> (print (vera :linecapture :pixel :x 100))
+
+(:r 3 :g 3 :b 3)
+(:r 3 :g 3 :b 3)
+
+XXXXXX>
+'end
+end

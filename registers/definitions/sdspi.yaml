@@ -32,7 +32,7 @@ regmap:
         lsb: 10
         access: rw
     -   name: F
-        description: Set if FIFO data transmision accompanies command.
+        description: Set if FIFO data transmission accompanies command.
         reset: 0
         width: 1
         lsb: 11

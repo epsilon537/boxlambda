@@ -8,7 +8,6 @@ package:
 dependencies:
   # Path dependency.
   boxlambda_soc: { path: "../../components/boxlambda_soc" }
-  vs0_stub: { path: "../../components/vs0_stub" }
 
 sources:
   - target: prj_constraints

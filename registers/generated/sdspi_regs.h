@@ -24,7 +24,7 @@ typedef union {
     uint32_t R1_CMD : 8; // On write, if bits [7:6]==01 and card idle, remaining bits are sent to card. Contains R1 response when command has completed.
     uint32_t ERESP : 2; // Expected response.
     uint32_t WR : 1; // 1 to write from FIFO to card, 0 to read from card into FIFO. Assumes F is set.
-    uint32_t F : 1; // Set if FIFO data transmision accompanies command.
+    uint32_t F : 1; // Set if FIFO data transmission accompanies command.
     uint32_t SEL : 1; // 1 = select FIFO[0], 0 = select FIFO[1].
     uint32_t : 1; // reserved
     uint32_t BUSY : 1; // Busy bit, set while command is running.
@@ -59,7 +59,7 @@ typedef enum {
 #define SDSPI_CMD_WR_MASK 0x400
 #define SDSPI_CMD_WR_RESET 0x0
 
-// CMD.F - Set if FIFO data transmision accompanies command.
+// CMD.F - Set if FIFO data transmission accompanies command.
 #define SDSPI_CMD_F_WIDTH 1
 #define SDSPI_CMD_F_LSB 11
 #define SDSPI_CMD_F_MASK 0x800

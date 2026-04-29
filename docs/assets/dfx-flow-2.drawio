@@ -1,0 +1,85 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="Page-1" id="tFK9sel5gqJRU3fnG7-m">
+    <mxGraphModel dx="2920" dy="1343" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="D411IudcnbfjO5LLRN3c-1" value="DFX Controller" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="360" y="120" width="180" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-2" value="Memory" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="362.5" y="480" width="177.5" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-3" value="File System" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="150" y="481" width="170" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-4" value="RP" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="600" y="480" width="175" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-5" value="ICAP" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="627.5" y="341.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-6" value="Software" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="140" y="218.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-7" value="RM Partial Bitstream&lt;div style=&quot;font-size: 12px;&quot;&gt;File&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="175" y="511" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-8" value="RM Partial Bitstream Memory Buffer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#000000;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="390" y="510" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-10" value="addr" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="371.5" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-11" value="size" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="445" y="371.5" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-12" value="BS_INFO_0 Reg." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="341.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-13" value="enable DFX Ctrl" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="311.5" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-14" value="DFX Ctrl Reg." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="281.5" width="105" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-15" value="trigger" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="248.5" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-16" value="SW_TRIG Reg." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="218.5" width="105" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-17" value="status" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="190.5" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-18" value="DFX_STATUS Reg." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="395" y="160.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-19" value="" style="endArrow=classic;html=1;rounded=0;fontStyle=1;fontSize=12;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="D411IudcnbfjO5LLRN3c-6" target="D411IudcnbfjO5LLRN3c-10" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="60" y="460" as="sourcePoint" />
+            <mxPoint x="330" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-21" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" parent="1" source="D411IudcnbfjO5LLRN3c-10" target="D411IudcnbfjO5LLRN3c-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="830" as="sourcePoint" />
+            <mxPoint x="560" y="780" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-22" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="D411IudcnbfjO5LLRN3c-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="250" y="180" as="sourcePoint" />
+            <mxPoint x="400" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="D411IudcnbfjO5LLRN3c-23" value="&lt;b&gt;2. Disable DFX Control,&amp;nbsp;&lt;/b&gt;&lt;div&gt;&lt;b&gt;Configure BS_INFO_0 register,&amp;nbsp;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;Re-enable DFX Control&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="110" y="332" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A2dS_FP8n_vr4bEnCUFy-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-10" y="317" width="930" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

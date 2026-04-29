@@ -1,17 +1,23 @@
 #Function adding a *_flash_sw target/rule for SW project builds:
 
 function(add_flash_sw_target _tgt)
-  if (BL_TARGET_FPGA STREQUAL "arty-a7-100")
-    set(_board arty_a7_100t)
-  else()
-    set(_board arty_a7_35t)
-  endif()
+  set(_board arty_a7_100t)
+
+  add_custom_target(${_tgt}_load_sw
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND
+            ${PROJECT_SOURCE_DIR}/scripts/target.py -load_app ${_tgt}.bin -run
+        COMMENT
+            "Loading SW to target."
+        VERBATIM
+  )
 
   add_custom_target(${_tgt}_flash_sw
         WORKING_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}
         COMMAND
-            ${PROJECT_SOURCE_DIR}/scripts/flash_sw.sh ${_board} ${_tgt}.bin
+            ${PROJECT_SOURCE_DIR}/scripts/target.py -flash_app ${_tgt}.bin
         COMMENT
             "Flashing SW to target."
         VERBATIM
@@ -56,26 +62,8 @@ function(link_and_create_image _tgt _link_script)
 endfunction()
 
 #SW project builds:
-add_subdirectory(hello_world)
-add_subdirectory(ddr_test)
-add_subdirectory(vera_test)
-add_subdirectory(sdspi_test)
-add_subdirectory(fatfs_test)
-add_subdirectory(ym2149_test)
-add_subdirectory(stsound_test)
-add_subdirectory(usb_hid_sys_test)
-add_subdirectory(spiflash_test)
 add_subdirectory(bootloader)
-add_subdirectory(timer_uart_gpio_irqs)
-add_subdirectory(i2c_test)
-add_subdirectory(rtcc_test)
-add_subdirectory(reset_test)
-add_subdirectory(dfx_test)
-add_subdirectory(invalid_address)
-add_subdirectory(ibex_perf_test)
-add_subdirectory(ulisp)
-add_subdirectory(time_rtc_set)
 add_subdirectory(boxlambda_os)
-add_subdirectory(forth_core_test)
+add_subdirectory(test)
 
 
