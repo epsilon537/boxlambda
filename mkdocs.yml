@@ -1,6 +1,6 @@
 site_name: BoxLambda Documentation
 site_url: !ENV READTHEDOCS_CANONICAL_URL
-docs_dir: !ENV DOCS_DIR
+docs_dir: site_docs
 
 markdown_extensions:
   - pymdownx.arithmatex:
