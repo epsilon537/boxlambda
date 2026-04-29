@@ -62,12 +62,15 @@ On `master` branch:
 4. `git tag vX.Y.Z`.
 5. In `arty_a7_100` build tree, build all.
 6. Flash `boxlambda_base` gateware project build, `bootloader`, and `boxlambda_os`.
-7. Check bootloader version string.
-8. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
-9. Copy from `arty_a7_100` build tree to `binaries` directory: `boxlambda_base.bit`, `bootloader.bin`, `boxlambda_os.bin`.
-10. `git commit` the binaries.
-11. Update tag to include the new binaries: `git -f tag vX.Y.Z`.
-12. `git push origin vX.Y.Z`.
-13. On GitHub boxlambda repo, navigate to *Releases*, then *Draft a new release*.
-14. On GitHub boxlambda repo, update/close open issues.
+7. Copy the contents of directory `fs/` to an SD card and boot the target from that SD card.
+8. Check bootloader version string.
+9. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
+10. Copy from `arty_a7_100` build tree to `binaries` directory: `boxlambda_base.bit`, `bootloader.bin`, `boxlambda_os.bin`.
+11. `git commit` the binaries.
+12. Update tag to include the new binaries: `git -f tag vX.Y.Z`.
+13. `git push origin vX.Y.Z`.
+14. On GitHub boxlambda repo, navigate to *Releases*, then *Draft a new release*.
+15. On GitHub boxlambda repo, update/close open issues.
+16. In read-the-docs, create a new released based on the new tag.
+
 
