@@ -1,0 +1,34 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.2 Chrome/134.0.6998.178 Electron/35.1.2 Safari/537.36" version="26.2.2">
+  <diagram name="Page-1" id="7-9XjLPsnqjM2BI8476O">
+    <mxGraphModel dx="2064" dy="1324" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Cp5Lng8UVyLp5Xlw59Np-6" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="640" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Cp5Lng8UVyLp5Xlw59Np-1" value="sub/picolibc" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="200" y="40" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Cp5Lng8UVyLp5Xlw59Np-2" value="do-boxlambda-configure" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fontSize=18;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="361" y="120" as="sourcePoint" />
+            <mxPoint x="361" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Cp5Lng8UVyLp5Xlw59Np-3" value="&amp;lt;build dir&amp;gt;/sw/picolibc_build" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="200" y="200" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Cp5Lng8UVyLp5Xlw59Np-4" value="ninja &amp;amp;&amp;amp; ninja install" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fontSize=18;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="279" as="sourcePoint" />
+            <mxPoint x="360" y="339" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Cp5Lng8UVyLp5Xlw59Np-5" value="&amp;lt;build dir/sw/picolibc_install" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="200" y="360" width="320" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

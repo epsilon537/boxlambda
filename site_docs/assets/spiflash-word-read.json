@@ -1,0 +1,9 @@
+{signal: [
+  {name: 'sys_clk', wave: 'p....................'},
+  {name: 'cs_n', wave: '10.................1.'},
+  {name: 'sck', wave: 'x010101010101010101xx'},
+  {name: 'mo', wave: 'x=.=|=.=.=|=.xxxxxxxx', data: ["C7","C6","C0","A23","A22","A0"]},
+  {name: 'si', wave: 'x.=.=|=.=.=|=.xxxxxxx', data: ["C7","C6","C0","A23","A22","A0"]},
+  {name: 'so', wave: 'xxxxxxxxxxxxx=.=|=.xx', data: ["D31","D30","D0"]},
+  {name: 'mi', wave: 'xxxxxxxxxxxxxx=.=|=.x', data: ["D31","D30","D0"]},
+  ]}
