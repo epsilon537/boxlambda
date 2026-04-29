@@ -33,6 +33,10 @@ __forth_imem_size = 92k;
 /*Forth external memory size*/
 __forth_emem_size = 1m;
 
+/* Application images to be loaded from flash by the bootloader
+ * start with this value. The bootloader checks this.*/
+IMAGE_HEADER_MAGIC_NUMBER = 0xB07A3BDA;
+
 ENTRY(_start)
 
 MEMORY
@@ -52,7 +56,12 @@ SECTIONS
     PROVIDE(__datastack_end = __datastack - __datastack_size);
 
     .etext : {
-        KEEP (*(.init.header))
+        /* Application images start with this 2-word header:
+         * a magic number followed by the image size. */
+        LONG(IMAGE_HEADER_MAGIC_NUMBER)
+        /*Image size*/
+        LONG(__tdata_source + SIZEOF(.tdata) - LOADADDR(.etext))
+
         *(.init.enter)
         *(.init)
         *(.text.unlikely .text.unlikely.*)
@@ -80,7 +89,6 @@ SECTIONS
 
     PROVIDE( __ecode_end = . );
     PROVIDE( __ecode_start = ADDR(.etext) );
-    PROVIDE( __image_start = __ecode_start );
     PROVIDE( __ecode_source = LOADADDR(.etext) );
 
     .itext : {
@@ -149,8 +157,6 @@ SECTIONS
     PROVIDE( __tdata_start = ADDR(.tdata) );
     PROVIDE( __tdata_source = LOADADDR(.tdata) );
     PROVIDE( __tls_base = ADDR(.tdata));
-    PROVIDE( __image_end = __tdata_end );
-    PROVIDE( __image_size = __image_end - __image_start );
 
     PROVIDE( __edata_end = . );
     PROVIDE( __edata_start = ADDR(.edata) );

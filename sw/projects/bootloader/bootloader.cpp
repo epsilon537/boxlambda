@@ -13,6 +13,9 @@
 #include "version.h"
 #include "crt0.h"
 
+/* The first word in an application image has this magic number */
+#define IMAGE_HEADER_MAGIC_NUMBER 0xB07A3BDA
+
 #define GPIO_PRE_SDRAM 0x1
 #define GPIO_SDRAM_OK 0x2
 #define GPIO_SDRAM_FAIL 0x3

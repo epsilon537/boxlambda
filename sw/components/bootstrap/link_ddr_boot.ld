@@ -20,6 +20,10 @@ __heap_size = 128m;
 __fmem = 0x11600000;
 __fmem_size = 2m; /*2MB flash memory available for the SW image*/
 
+/* Application images to be loaded from flash by the bootloader
+ * start with this value. The bootloader checks this.*/
+IMAGE_HEADER_MAGIC_NUMBER = 0xB07A3BDA;
+
 ENTRY(_start)
 
 MEMORY
@@ -35,7 +39,12 @@ SECTIONS
     PROVIDE(__stack = ORIGIN(imem) + LENGTH(imem));
 
     .etext : {
-        KEEP (*(.init.header))
+        /* Application images start with this 2-word header:
+         * a magic number followed by the image size. */
+        LONG(IMAGE_HEADER_MAGIC_NUMBER)
+        /*Image size*/
+        LONG(__tdata_source + SIZEOF(.tdata) - LOADADDR(.etext))
+
         *(.init.enter)
         *(.init)
         *(.text.startup .text.startup.*)
@@ -46,7 +55,6 @@ SECTIONS
 
     PROVIDE( __ecode_end = . );
     PROVIDE( __ecode_start = ADDR(.etext) );
-    PROVIDE( __image_start = __ecode_start );
     PROVIDE( __ecode_source = LOADADDR(.etext) );
 
     .edata : ALIGN_WITH_INPUT {
@@ -132,8 +140,6 @@ SECTIONS
     PROVIDE( __tdata_start = ADDR(.tdata) );
     PROVIDE( __tdata_source = LOADADDR(.tdata) );
     PROVIDE( __tls_base = ADDR(.tdata));
-    PROVIDE( __image_end = __tdata_end );
-    PROVIDE( __image_size = __image_start - __image_end );
 
     PROVIDE( __idata_end = . );
     PROVIDE( __idata_start = ADDR(.idata) );

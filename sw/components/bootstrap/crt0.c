@@ -268,14 +268,6 @@ __attribute((aligned(4))) _trap(void) {
 }
 #endif
 
-/* An application image starts with this header. */
-/* Reference __image_size as an address to avoid small data access
- * optimization on the linker generated variable (linker generated
- * variables are ABS symbols, not mapped into any section so not
- * guaranteed to be accessed through gp+offset).*/
-unsigned const header_magic[2] __attribute__((section(".init.header"))) =
-  {IMAGE_HEADER_MAGIC_NUMBER, (unsigned)&__image_size};
-
 void __attribute__((naked)) __section(".init.enter") __attribute__((used))
 _start(void) {
 

@@ -19,6 +19,7 @@ sleep 3
 VMODEL_PROCESS_ID=`jobs -p`
 
 #Launch riscv-openocd and connect to the model
+echo "Launching target.py..."
 target.py -verilator -gdb &
 sleep 3
 
@@ -38,12 +39,14 @@ else
   export GDB=gdb
 fi
 
-$GDB --batch -x $SRC_ROOT_DIR/gw/projects/test/hello_world/test/test.gdb ../../../../sw/projects/test/hello_world/hello_world > gdb.log
+$GDB -nx --batch -x $SRC_ROOT_DIR/gw/projects/test/hello_world/test/test.gdb ../../../../sw/projects/test/hello_world/hello_world > gdb.log
 
 #Kill the most recent background job, i.e. the target.py process.
+echo "Killing target.py..."
 kill %+
 
 #Kill the Vmodel process so it doesn't linger forever in the background.
+echo "Killing Vmodel..."
 kill -9 $VMODEL_PROCESS_ID
 
 #Check if log contains given output, confirming we had a valid connection with the target.
