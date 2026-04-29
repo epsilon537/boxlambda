@@ -67,7 +67,7 @@ On `master` branch:
 9. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
 10. Copy from `arty_a7_100` build tree to `binaries` directory: `boxlambda_base.bit`, `bootloader.bin`, `boxlambda_os.bin`.
 11. `git commit` the binaries.
-12. Update tag to include the new binaries: `git -f tag vX.Y.Z`.
+12. Update tag to include the new binaries: `git tag -f vX.Y.Z`.
 13. `git push origin vX.Y.Z`.
 14. On GitHub boxlambda repo, navigate to *Releases*, then *Draft a new release*.
 15. On GitHub boxlambda repo, update/close open issues.
