@@ -16,26 +16,6 @@ then
   exit 1
 fi
 
-#Check if venv directory exists
-if [ -d venv ]; then
-  echo "venv found. Activating..."
-  source venv/bin/activate
-else
-  echo "No venv found. Creating one..."
-  python -m venv venv
-
-  echo "Activating venv..."
-  source venv/bin/activate
-
-  echo "Installing required Python packages..."
-  if python -m pip install -qq -U -r requirements.txt ; then
-    echo "OK"
-  else
-    "Pip install failed. Aborting..."
-    return 1
-  fi
-fi
-
 echo "Installing gems..."
 rm -f Gemfile.lock
 if bundle install ; then
