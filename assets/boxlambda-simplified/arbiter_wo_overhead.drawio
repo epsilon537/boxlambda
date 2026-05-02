@@ -1,0 +1,99 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.4 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="26.0.4">
+  <diagram name="Page-1" id="-1rJxSDqtO_nejIG83L5">
+    <mxGraphModel dx="2070" dy="1343" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-2" value="Wishbone&lt;div&gt;Slave&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=middle;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="80" y="740" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-1" value="WB Ibex CPU" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="80" y="600" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-11" value="read word&lt;div&gt;2 clock cycles&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=0.653;entryY=0.989;entryDx=0;entryDy=0;entryPerimeter=0;fontStyle=1" parent="1" source="dwDNBTxYJj4Oz3zc9BqD-1" target="dwDNBTxYJj4Oz3zc9BqD-1" edge="1">
+          <mxGeometry x="0.7425" y="18" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="840" as="sourcePoint" />
+            <mxPoint x="410" y="790" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="121" y="760" />
+              <mxPoint x="158" y="760" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-1" value="WB Ibex CPU" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="295" y="600" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-5" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="335" y="740" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-2" value="" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;rotation=-180;" vertex="1" parent="o52_d7hCdASR2TJmySQh-5">
+          <mxGeometry width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-4" value="WB Arbiter" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="o52_d7hCdASR2TJmySQh-5">
+          <mxGeometry x="40" y="5" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-6" value="Wishbone&lt;div&gt;Slave&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=middle;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="355" y="830" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-7" value="read word&lt;div&gt;2 clock cycles&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=0.653;entryY=0.989;entryDx=0;entryDy=0;entryPerimeter=0;fontStyle=1" edge="1" parent="1">
+          <mxGeometry x="0.8805" y="7" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="335" y="661" as="sourcePoint" />
+            <mxPoint x="372" y="660" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="335" y="710" />
+              <mxPoint x="372" y="710" />
+              <mxPoint x="372" y="850" />
+              <mxPoint x="415" y="850" />
+              <mxPoint x="415" y="690" />
+              <mxPoint x="372" y="690" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-9" value="Default Port" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="345" y="710" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-10" value="Other Bus Master" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="780" y="600" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-11" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="690" y="740" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-12" value="" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;rotation=-180;" vertex="1" parent="o52_d7hCdASR2TJmySQh-11">
+          <mxGeometry width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-13" value="WB Arbiter" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="o52_d7hCdASR2TJmySQh-11">
+          <mxGeometry x="40" y="5" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-14" value="Wishbone&lt;div&gt;Slave&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=middle;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="710" y="830" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-15" value="read word&lt;div&gt;3 clock cycles&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;fontStyle=1;exitX=0.375;exitY=1.033;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="o52_d7hCdASR2TJmySQh-10" target="o52_d7hCdASR2TJmySQh-10">
+          <mxGeometry x="0.8061" y="10" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="661" as="sourcePoint" />
+            <mxPoint x="727" y="660" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="825" y="680" />
+              <mxPoint x="770" y="680" />
+              <mxPoint x="770" y="850" />
+              <mxPoint x="810" y="850" />
+              <mxPoint x="810" y="700" />
+              <mxPoint x="870" y="700" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-16" value="Non-Default Port" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="750" y="710" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-17" value="Other Bus Master" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="435" y="600" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o52_d7hCdASR2TJmySQh-18" value="WB Ibex CPU" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="640" y="600" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

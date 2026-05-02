@@ -1,0 +1,58 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="Page-1" id="9njubowyfSg2haKw-gr1">
+    <mxGraphModel dx="2070" dy="1343" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ugU8k-yZXvJaa_w0K4QB-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=default;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="810" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-1" value="vs0_stub" style="rounded=1;whiteSpace=wrap;html=1;fontSize=18;fontStyle=1;verticalAlign=bottom;" parent="1" vertex="1">
+          <mxGeometry x="260" y="240" width="420" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-17" value="&lt;b&gt;Virtual Socket 0 Interface&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=18;dashed=1;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="280" y="100" width="380" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-4" value="&lt;div style=&quot;font-size: 18px;&quot;&gt;Register&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;Interface&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=1;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="280" y="280" width="120" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-11" value="Wishbone&amp;nbsp;&lt;div&gt;Slave Port&lt;/div&gt;" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fontSize=18;fillColor=default;" parent="1" target="xy2FCuA8-idvxYoNVxFc-4" edge="1">
+          <mxGeometry x="-1" y="-20" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="190" as="sourcePoint" />
+            <mxPoint x="370" y="90" as="targetPoint" />
+            <mxPoint x="20" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-12" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Wisbone&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Master Port&lt;/font&gt;&lt;/div&gt;" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=default;" parent="1" edge="1">
+          <mxGeometry x="1" y="20" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="280" as="sourcePoint" />
+            <mxPoint x="490" y="190" as="targetPoint" />
+            <mxPoint x="20" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-13" value="not used" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="460" y="290" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-15" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;irq_in/out&lt;/font&gt;" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry x="1" y="20" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600" y="280" as="sourcePoint" />
+            <mxPoint x="600" y="190" as="targetPoint" />
+            <mxPoint x="20" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-16" value="not used" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="570" y="290" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-18" value="signature&lt;div style=&quot;font-size: 18px;&quot;&gt;reg.&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="460" y="340" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="xy2FCuA8-idvxYoNVxFc-21" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="xy2FCuA8-idvxYoNVxFc-4" target="xy2FCuA8-idvxYoNVxFc-18" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="500" y="550" as="sourcePoint" />
+            <mxPoint x="550" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
