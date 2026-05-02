@@ -1,0 +1,198 @@
+# Terms and Abbreviations
+
+This section clarifies some of the more ambiguous terms and abbreviations used elsewhere in the documentation.
+
+- **ABI**: Application Binary Interface. The low-level contract that defines how compiled code interacts at runtime.
+- **ACK**: A Wishbone Bus Signal.
+- **API**: Application Programming Interface.
+- **AXI**: Advanced eXtensible Interface, ARM's SoC bus specification.
+- **Bit-Banging**: Software manually toggling pins to emulate hardware communication.
+- **Bitstream**: A file containing the programming data for an FPGA chip.
+- **Blitter**: A type of DMA used in 2D graphics for bitmap manipulation in video memory.
+- **BoxKern**: The BoxLambda OS Kernel.
+- **BPP**: Bits Per Pixel.
+- **BSCANE**: A Xilinx primitive for accessing the FPGA's JTAG scan chain.
+- **BSS**: Block Starting Symbol. Zero-initialized data in an object file or executable.
+- **Bus Arbiter**: Decides which requesting bus master accesses the shared bus in a shared interconnect.
+- **CDC**: Clock Domain Crossing; signals moving between clock domains.
+- **CLI**: Command Line Interface.
+- **Clock Domain**: A design section driven by one or coupled clocks.
+- **CMEM**: Code Memory, holding CPU instructions and load segments in BoxLambda.
+- **CoCoTB**: Python-based RTL testbench environment ([cocotb.org](https://www.cocotb.org/)).
+- **Code Segment**: Executable instructions in an object file or executable.
+- **Console**: A terminal with screen, keyboard, and optional mouse; used for I/O.
+- **Constraints File**: Maps HDL module ports to FPGA pins and defines clocks ([reference guide](https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file)).
+- **CPP**: C Preprocessor used by the C compiler and PicoRV assembler.
+- **CPU**: Central Processing Unit.
+- **CRC**: Cyclic Redundancy Check, a checksum algorithm.
+- **CRT0**: Execution startup routines in C programs.
+- **Crossbar Interconnect**: A switching fabric enabling non-blocking M-to-N connections.
+- **CSR**: Control and Status Register.
+- **CYC**: A Wishbone Bus Signal.
+- **DAC**: Digital-to-Analog Converter.
+- **.data**: Segment holding pre-initialized data.
+- **Data Stack**: The Forth Data Stack, an alternate name for the Forth Parameter Stack.
+- **DDR PHY**: Double Data Rate (RAM) Physical Interface.
+- **DDR SDRAM**: Double Data Rate Synchronous DRAM.
+- **Delta-Sigma Modulation**: A method for digital-to-analog/analog-to-digital conversion ([overview](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html)).
+- **DFX**: Dynamic Function Exchange, Xilinx’s solution for partial FPGA reconfiguration ([guide](https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug909-vivado-partial-reconfiguration.pdf)).
+- **DFX Controller**: Manages DFX designs, including bitstream delivery and logical decoupling.
+- **DMA**: Direct Memory Access, offloading memory operations from the CPU.
+- **DM Reset**: Debug Module Reset signal/domain.
+- **DSP**: Digital Signal Processing.
+- **DMAC**: DMA Controller.
+- **DMEM**: Data Memory in BoxLambda, holding CPU data and BSS segments.
+- **Double Buffering**: Rendering technique eliminating visual artifacts.
+- **DPRAM**: Dual-Port RAM.
+- **DTM**: Debug Transport Module.
+- **DUT**: Device Under Test.
+- **EDA tool**: Electronic Design Automation tool, e.g., Vivado.
+- **EMEM**: External Memory (SDRAM).
+- **ERR**: A Wishbone Bus Signal.
+- **Execution Token: See *xt*.
+- **FFI**: Foreign Function Interface, e.g. the interface used to allow C code to call Forth code.
+- **FFT**: Fast Fourier Transform, converting signals to frequency components.
+- **FHDL**: Fragmented Hardware Description Language, used by Migen and LiteX.
+- **FIFO**: First-In-First-Out queue implementation.
+- **Fork**: Copy of a GitHub repository under a user account.
+- **Forth**: A stack-based programming language.
+- **fs_mem**: Filesystem memory, a section of external memory used by the BoxLambda OS as a RAM disk.
+- **FTDI**: Future Technology Devices International, known for USB-to-UART adapters.
+- **FSM**: Finite State Machine, a circuit with finite states.
+- **Gateware**: Describes and implements digital logic in FPGAs/ASICs.
+- **GCC**: GNU Compiler Collection.
+- **gp**: Global Pointer. A dedicated CPU register that holds the base address of a region of memory containing global and static variables. It enables the program to access global data quickly using small offsets from a fixed base address.
+- **GPIO**: General-Purpose Input/Output pin.
+- **Harvard Architecture**: CPU architecture with separate instruction and data memory. Used by BoxLambda’s Ibex processor.
+- **HAL**: Hardware Access Layer, a low-level software API.
+- **HIR**: Host Interface Registers for DMA cores.
+- **I2C**: Inter-Integrated Circuit, a two-wire synchronous serial bus.
+- **I2C Slave Address**: Unique address distinguishing devices on an I2C bus.
+- **I2S**: Interface for digital audio data transfer.
+- **Ibex**: BoxLambda’s RISC-V CPU core.
+- **IC**: Integrated Circuit.
+- **ICAP**: Internal Configuration Access Port, for FPGA configuration ([overview](https://www.xilinx.com/products/intellectual-property/axi_hwicap.html)).
+- **Icarus**: Open-source Verilog simulator ([project page](https://steveicarus.github.io/iverilog/)).
+- **IEN**: Interrupt Enable Register.
+- **I/F**: Interface.
+- **IMEM**: Internal Memory.
+- **Instruction Prefetcher**: A hardware mechanism that anticipates future memory accesses and fetches instructions before they are actually needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access.
+- **Interconnect**: Wishbone bus fabric.
+- **IO**: Input/Output.
+- **IOB**: Input/Output Block connecting FPGA to IO ports ([guide](https://digilent.com/reference/programmable-logic/arty-a7/reference-manual)).
+- **IP-XACT**: XML format describing reusable circuit designs.
+- **IP Package**: Vivado encapsulation of an IP component.
+- **IRQ**: Interrupt Request.
+- **ISA**: Instruction Set Architecture.
+- **ISR**: Interrupt Service Routine or Interrupt Status Register.
+- **J1**: A small Forth CPU core.
+- **Jekyll**: A static, blog-aware, website generator written in Ruby.
+- **JTAG**: Debugging interface standard.
+- **Lambda**: An anonymous function.
+- **Linting**: Static code analysis.
+- **LiteDRAM**: Configurable DRAM core in LiteX.
+- **LiteX**: SoC builder framework using Migen.
+- **LSB**: Least Significant Bit.
+- **LSU**: Load Store Unit.
+- **LUT**: Look-Up Table.
+- **Machine Mode**: RISC-V’s privilege level used by BoxLambda.
+- **MCP**: Multi-Cycle Path for CDC signals.
+- **Makefile**: File defining build tasks for the *Make* utility.
+- **Memory File**: Contains initial Block RAM contents for FPGAs.
+- **Memory Mapped IO**: Mapping memory and I/O devices to the same address space.
+- **MkDocs**: Python-based static site generator, used to build the BoxLambda read-the-docs documentation.
+- **MIG**: Xilinx’s Memory Interface Generator.
+- **MiniEdgeIC**: Edge Triggered Interrupt Controller in BoxLambda.
+- **MEMC**: Memory Controller.
+- **Migen**: Python-based toolbox for digital hardware design.
+- **MMI**: XML file describing block RAM logical data space.
+- **Mtime**: RISC-V Machine Timer Register.
+- **Mtimecmp**: RISC-V Machine Timer Compare Register.
+- **MSB**: Most Significant Bit.
+- **MUX**: Multiplexer.
+- **NDM Reset**: Non-Debug Module reset signal/domain.
+- **Nested Interrupt**: High-priority interrupt during another ISR.
+- **NMI**: Non-Maskable Interrupt.
+- **OLOGIC**: Synchronous block for FPGA output data ([guide](https://digilent.com/reference/programmable-logic/arty-a7/reference-manual)).
+- **OpenOCD**: Open-source debugger for JTAG.
+- **Partition Pins**: Logical/physical connections in FPGA reconfigurations.
+- **Pblock**: User-defined FPGA resource region.
+- **PCB**: Printed Circuit Board.
+- **PCM**: Pulse-Code Modulation for digital audio.
+- **PDM**: Pulse Density Modulation.
+- **PicoRV32**: Size-optimized RISC-V CPU, used as a DMA controller.
+- **Pip**: Python package manager.
+- **PIT**: Programmable Interval Timer.
+- **PLL Primitive**: FPGA clock primitive using phase-locked loops.
+- **PMOD**: Digilent’s Peripheral Module Interface standard.
+- **POR**: Power-On Reset.
+- **PSG**: Programmable Sound Generator.
+- **PSP**: Parameter Stack Pointer, The Parameter Stack is an alternate name for the Forth Data Stack.
+- **PUP**: Pull-Up Pin.
+- **PWM**: Pulse Width Modulation.
+- **RC Filter**: Resistor-Capacitor low-pass filter.
+- **RM/RP**: Reconfigurable Module/Partition in Xilinx’s DFX.
+- **REPL**: Read-Eval-Print-Loop, an interactive language shell.
+- **Repo**: Git Repository.
+- **Reset Domain**: Clock subdomain controlled by specific reset signals.
+- **RP**: Reconfigurable Partition - Part of Xilinx's DFX solution.
+- **RM**: Reconfigurable Module - Part of Xilinx's DFX solution.
+- **RS**: The Forth Return Stack.
+- **RTCC**: Real-Time Clock and Calendar.
+- **RTL**: Register-Transfer Level - An abstraction of a digital design, typically described in Verilog, SystemVerilog, or VHDL.
+- **RV32IMCB**: RISC-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
+- **Scatter-Gather DMA**: A method for transferring data between non-contiguous memory blocks using smaller contiguous transfers.
+- **Scan Line**: One line in the raster scanning pattern of a VGA display.
+- **SCL**: I2C Serial Clock Line.
+- **SD**: Secure Digital - A proprietary flash memory card format developed by the SD Association.
+- **SDA**: I2C Serial Data Line.
+- **SDL**: Simple DirectMedia Layer - A library for cross-platform development, providing access to audio, input devices, and graphics.
+- **SDRAM**: Synchronous Dynamic Random-Access Memory - Operates in sync with an external clock signal.
+- **Shared Bus Interconnect**: A type of interconnect where a single bus master accesses a common bus and selects one bus slave. Arbitration is used to decide access.
+- **Slice**: The basic logical unit of a Xilinx FPGA.
+- **SNDH**: A music file format used on Atari ST.
+- **(Software) Image**: A snapshot of computer memory stored as a file.
+- **SoC**: System-on-a-Chip - An integrated circuit combining most components of a computer system.
+- **SPI**: Serial Peripheral Interface - A synchronous serial communication protocol.
+- **Sprite**: A computer graphic manipulated as a single entity on-screen.
+- **Static Design**: The static part of a design that doesn't change during partial reconfiguration. It includes static logic and routing.
+- **STB**: Wishbone Strobe Bus Signal.
+- **Stderr**: Standard Error - Associated with error output in the Standard C library.
+- **Stdin**: Standard Input - Associated with input devices in the Standard C library.
+- **Stdout**: Standard Output - Associated with output devices in the Standard C library.
+- **Stdio**: Standard Input and Output - The C library header for I/O functions like `printf()` and `scanf()`.
+- **ST-Sound**: A library for playing YM music files ([GitHub Repository](https://github.com/arnaud-carre/StSound)).
+- **Synthesis**: Converts HDL (e.g., Verilog) source code into a gate-level netlist.
+- **.text**/**Text Segment**: See *Code Segment*.
+- **TAP**: Test Access Port - Part of the JTAG interface.
+- **TCK**: Test Clock - JTAG clock signal.
+- **Tcl**: A standard embedded command language for EDA applications.
+- **TOS**: The item on top of the Forth Data Stack.
+- **Udev**: A device manager for the Linux kernel.
+- **UKP**: A tiny 5-bit processor used in the `usb_hid_host` core.
+- **USB HID**: USB Human Interface Device - A class for peripherals like keyboards and mice.
+- **USB HIDBP**: USB HID Boot Protocol.
+- **VCS**: Version Control Subsystem.
+- **Vectored Mode**: A RISC-V interrupt mode with separate entry points in a vector table.
+- **Venv**: Virtual Environment - A Python environment with its own Python interpreter and packages.
+- **Verilate**: The process of compiling HDL into C++ using Verilator.
+- **Verilator**: A tool that compiles HDL into C++.
+- **VERA**: Versatile Embedded Retro Adapter - Graphics core for BoxLambda.
+- **VGA**: Video Graphics Array - A standard for displaying color graphics.
+- **VM**: Virtual Machine - A virtual environment functioning as a computer system.
+- **Von Neumann Architecture**: A computer architecture with a unified memory for instructions and data. Used in PicoRV processors.
+- **VRAM**: Video RAM.
+- **WB**: Wishbone.
+- **WBM**: Wishbone Bus Master.
+- **WBS**: Wishbone Bus Slave.
+- **Weak Binding**: A software symbol definition that can be overridden by a non-weak redefinition.
+- **WIP**: Work In Progress.
+- **Wishbone**: An open-source SoC bus specification ([Wishbone Spec](https://cdn.opencores.org/downloads/wbspec_b4.pdf)).
+- **Word**: In this documentation, a *Word* written with capital *W* signifies a Forth Word.
+- **WSL**: Windows Subsystem for Linux.
+- **Xbar**: Cross-Bar - A type of interconnect used in SoC bus fabrics.
+- **xt**: Execution Token. A value that uniquely identifies a word’s executable code, allowing the program to execute that word indirectly.
+- **XPM**: Xilinx Parameterized Macro.
+- **YM**: A music file format for the YM2149 chip ([YM Format](http://leonard.oxg.free.fr/ymformat.html)).
+- **YM2149**: A Yamaha sound chip from the 1980s. See also JT49.
+

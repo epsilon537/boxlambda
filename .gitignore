@@ -3,8 +3,10 @@
 #Backup files
 *.bkp
 #exported docs
-site_docs
 site
+#Jekyll gemfile and site
+Gemfile.lock
+_site
 #litex stuff
 /sub/liteeth
 /sub/liteiclink

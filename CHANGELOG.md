@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `v0.4.1`: Changes sinces label `v0.4.0` - 2026-04-30
+
+### Added
+
+- Documentation: Added the RAM disk file system to the OS Architecture Diagram.
+- Documentation: Added Blog release protocol.
+
+### Fixed
+
+- Documentation fix: Currently using Vivado 2023.1, not 2025.1.
+
+### Changed
+
+- Documentation: Updated diagrams used in README.md.
+- Generating GitHub `README.md`, ReadtheDocs `index.md` and Jekyll `about.md` from `README.md.j2` Jinja2 template.
+- Updated release protocol.
+- Moved jekyll site from `gh-pages/boxlambda-gh-pages-wip` to `master/develop` branch, `jekyll/` directory.
+
+### Removed
+
+- Nothing.
+
 ## Label `v0.4.0`: Changes sinces label `v0.3.1` - 2026-04-29
 
 ### Contributors

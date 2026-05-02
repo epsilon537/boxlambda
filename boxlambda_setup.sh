@@ -81,6 +81,16 @@ fi
 
 popd > /dev/null
 
+echo "Installing gems..."
+rm -f Gemfile.lock
+if bundle install ; then
+  echo "OK"
+else
+  echo "bundle install failed. Please run 'sudo gem update system' and retry."
+  echo "Aborting."
+  return 1
+fi
+
 #Activate the environment
 source activate_env.sh
 

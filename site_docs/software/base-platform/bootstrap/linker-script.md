@@ -1,0 +1,103 @@
+# The Linker Script
+
+Through a *linker script*, we tell the linker where in memory to place the program code, data, and stack.
+
+The Linker Script defines the following:
+
+- Relevant Memories on the target device: In the case of BoxLambda, these are `imem` and `emem` (=DDR memory).
+```
+MEMORY
+{
+    imem : ORIGIN = __imem, LENGTH = __imem_size
+    emem : ORIGIN = __emem, LENGTH = __emem_size
+}
+```
+- The mapping of input to output sections. Input sections are defined in the source code and default to `.text`, `.bss`, and `.data` when not explicitly specified. Typical output sections for BoxLambda are: `.etext`, `.edata`, `ebss`, `.itext`, `.idata`, `.tdata`, `.tbss`, `.ibss`, `.heap`, and `.stack`.
+```
+    .itext : {
+        ...
+        /* code */
+        *(.text.unlikely .text.unlikely.*)
+        *(.text.startup .text.startup.*)
+        *(.text .text.*)
+        *(.gnu.linkonce.t.*)
+        ...
+```
+- The mapping of output sections to memories:
+```
+    ...
+    .itext : {...
+    } >imem
+    ...
+    .idata : ALIGN_WITH_INPUT {...
+    } >imem
+    ...
+    .ibss (NOLOAD) : {...
+    } >imem
+    ...
+    .heap (NOLOAD) : {...
+    } >emem
+```
+  - Code, Data, and BSS input sections go to `imem` or `emem` depending on their assignment to *.itext/data/bss* or *.etext/data/bss* output sections.
+  - The stack typically goes to `imem`.
+  - The heap goes to `emem`.
+- Symbols used by the CRT0 code for section relocation, BSS initialization, etc. For BoxLambda, the key symbols are:
+    - `__icode_source / __icode_start / __icode_end`: source address, destination start address, and destination end address of the IMEM code section. In the `link_imem_boot.ld` case, `__icode_source` and `__icode_start` point to the same IMEM address. In the `link_ddr_boot.ld` case, `__icode_source` points to EMEM and `__icode_start` points to IMEM.
+    - `__ecode_source / __ecode_start / __ecode_end`: source address, destination start address, and destination end address of the EMEM code section.
+    - `__idata_source / __idata_start / __idata_end`: source address, destination start address, and destination end address of the IMEM data section. In the `link_imem_boot.ld` case ; `__data_source` and `__data_start` point to the same IMEM address. In the `link_ddr_boot.ld` case ; `__idata_source` and `__idata_start` point to the same IMEM address.
+    - `__edata_source / __edata_start / __edata_end`: source address, destination start address, and destination end address of the EMEM data section.
+    - `__ibss_start / __ibss_end`: Start and end address of the BSS section in IMEM to zero out.
+    - `__ebss_start / __ebss_end`: Start and end address of the BSS section in EMEM to zero out.
+```
+    .itext : {
+       ...
+    } >imem
+
+    PROVIDE(__icode_end = .);
+    PROVIDE( __icode_start = ADDR(.itext) );
+    PROVIDE( __icode_source = ADDR(.itext) );
+```
+
+### Why no Linker-Defined Size Variables?
+
+Linker-defined variables such as `__icode_start` are not true variables. They are address markers only, not storage objects. For example, it's meaningless to get the value of `__icode_start`. What you want is its *address*, i.e. `&__icode_start`. This address corresponds to the start of the *icode* section.
+
+Things get a bit weird when creating linker-defined size variables. For example:
+
+```
+PROVIDE( __icode_size = __icode_end - icode_start)
+```
+
+In C, should you get the icode section size by taking the address of `__icode_size`? That's just confusing. I avoid linker-defined size variables altogether. Instead, I create *__xxx_start* and *__xxx_end* linker variables and I compute the size in C code as `&__xxx_end - &__xxx_start`. For example:
+
+```
+local_memcpy(&__icode_start, &__icode_source, &__icode_end - &__icode_start);
+```
+
+## Linker Script Variants
+
+- [bootstrap/link_imem_boot.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/link_imem_boot.ld) creates a test image that boots directly from IMEM.
+- [bootstrap/link_ddr_boot.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/link_ddr_boot.ld) creates an application or test image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
+- [bootloader/link.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/bootloader/link.ld): the link script used to create the bootloader.
+- [boxlambda_os/link.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/boxlambda_os/link.ld): the link script used to create the BoxLambda OS application image . This link script is derived from `link_ddr_boot.ld`. It contains additional [sections and variables for the Forth subsystem](../../boxlambda-os/forth/core.md#forth-linker-sections-and-variables) and the RAM disk region `fs_mem`.
+
+### The Application Image Header
+
+The `link_ddr_boot.ld` script generates an application image intended for loading into EMEM by the bootloader. These images start with a two-word header:
+
+1. A magic number: 0xB07A3BDA
+2. The image size
+
+The bootloader verifies the magic number to ensure it's indeed dealing with an application image. Only after confirming the magic number will the bootloader consider the image size value as valid, i.e., as the amount of data to copy from flash to RAM.
+
+In the `link_ddr_boot.ld` script, the two-word header is created by the following lines at the beginning of the `.etext` section:
+
+```
+        /* Application images start with this 2-word header:
+         * a magic number followed by the image size. */
+        LONG(IMAGE_HEADER_MAGIC_NUMBER)
+        /*Image size*/
+        LONG(__tdata_source + SIZEOF(.tdata) - LOADADDR(.etext))
+```
+
+

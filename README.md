@@ -1,3 +1,4 @@
+
 # About BoxLambda
 
 BoxLambda is a hardware-software crossover project creating a homebrew,
@@ -6,8 +7,12 @@ environment for experimenting with software and FPGA gateware.
 
 ## The Physical Setup
 
+
 [![The physical
-setup.](assets/physical-setup.png)](assets/physical-setup.png)
+setup.](docs/assets/physical-setup.png)](docs/assets/physical-setup.png)
+
+
+
 
 *The physical setup.*
 
@@ -35,12 +40,20 @@ Verilator.
 
 ## Gateware Block Diagram
 
-![BoxLambda Gateware Block Diagram.](assets/Arch-Diagram-dual-bus-DFX.png)
+
+![BoxLambda Gateware Block Diagram.](docs/assets/Arch-Diagram-dual-bus-DFX.png)
+
+
+
 
 ## Software Block Diagram
 
+
 [![BoxLambda OS
-Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Architecture.png)
+Architecture.](docs/assets/BoxLambda-OS-Architecture.png)](docs/assets/BoxLambda-OS-Architecture.png)
+
+
+
 
 *BoxLambda OS Architecture Block Diagram.*
 
@@ -82,15 +95,20 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
 
 ## Changelog
 
+
 - [Changelog](CHANGELOG.md)
+
+
+
 
 ## Links
 
-- **Source Code**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
-- **Project Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
+- **Repo**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
+- **Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
+- **develop**: [https://github.com/epsilon537/boxlambda/tree/develop](https://github.com/epsilon537/boxlambda/tree/develop)
 
 ## Documentation
 
-- [Start Here](https://boxlambda.readthedocs.io/en/latest/start-here/)
-- [Full Documentation Index](https://boxlambda.readthedocs.io/en/latest/full-index/)
+- [Start Here](https://boxlambda.readthedocs.io/en/develop/start-here/)
+- [Full Documentation Index](https://boxlambda.readthedocs.io/en/develop/full-index/)
 

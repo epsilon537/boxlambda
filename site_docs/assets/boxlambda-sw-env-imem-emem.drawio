@@ -1,0 +1,34 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
+  <diagram name="Page-1" id="luAgRAH9EknPuCR7I0ll">
+    <mxGraphModel dx="782" dy="1348" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5RJPnJKM7HbxB2cbXeRu-1" value="EMEM (256MB)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="320" y="80" width="120" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="5RJPnJKM7HbxB2cbXeRu-2" value="IMEM (256KB)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="120" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="5RJPnJKM7HbxB2cbXeRu-3" value="OS and&lt;div&gt;System API&lt;/div&gt;&lt;div&gt;(resident)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5RJPnJKM7HbxB2cbXeRu-4" value="Lisp&lt;div&gt;Interpreter and&lt;/div&gt;&lt;div&gt;Environment&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5RJPnJKM7HbxB2cbXeRu-5" value="Forth&lt;div&gt;emem words&lt;/div&gt;&lt;div&gt;(compile to emem)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5RJPnJKM7HbxB2cbXeRu-6" value="Forth&lt;div&gt;imem words&lt;/div&gt;&lt;div&gt;(compile to imem)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5RJPnJKM7HbxB2cbXeRu-7" value="Forth Interpreter/Compiler&lt;div&gt;and Environment&lt;/div&gt;&lt;div&gt;(dictionary, data stack,&lt;/div&gt;&lt;div&gt;resturn stack)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="180" width="120" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="5RJPnJKM7HbxB2cbXeRu-9" value="OS and&lt;div&gt;System API selected libs&lt;/div&gt;&lt;div&gt;(optional/loadable)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="310" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
