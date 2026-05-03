@@ -10,6 +10,7 @@ fi
 
 VERSION=$1
 
+cp -f Gemfile jekyll/Gemfile
 jinja2 README.md.j2 -D target=jekyll -D version=$VERSION > jekyll/about.md
 
 bundle exec jekyll serve --source jekyll --drafts

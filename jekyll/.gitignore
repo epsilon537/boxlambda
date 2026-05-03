@@ -6,5 +6,6 @@ site
 .jekyll-metadata
 *.bkp
 vendor
+Gemfile.lock
 
 
