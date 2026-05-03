@@ -1,14 +1,10 @@
 *~
 _site
-site
 .sass-cache
 .jekyll-cache
 .jekyll-metadata
 *.bkp
 vendor
-.editorconfig
-settings.json
-venv
 Gemfile.lock
 
 

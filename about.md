@@ -4,18 +4,24 @@ title: About BoxLambda
 permalink: /about/
 ---
 
+# About BoxLambda
+
 BoxLambda is a hardware-software crossover project creating a homebrew,
 retro-style FPGA-based microcomputer. The goal is to create a sandbox
 environment for experimenting with software and FPGA gateware.
 
-# The Physical Setup
+## The Physical Setup
+
+
+
 
 [![The physical
-setup.](../assets/physical_setup.png)](../assets/physical_setup.png)
+setup.](../assets/about/physical-setup.png)](../assets/about/physical-setup.png)
+
 
 *The physical setup.*
 
-# Current Features
+## Current Features
 
 - Target FPGA: Arty-A7-100T.
 - Ibex RISC-V core with machine timer and hardware interrupt support.
@@ -37,18 +43,26 @@ setup.](../assets/physical_setup.png)](../assets/physical_setup.png)
 Verilator.
 - Mecrisp Forth core + C FFI.
 
-# Gateware Block Diagram
+## Gateware Block Diagram
 
-![BoxLambda Gateware Block Diagram.](../assets/Arch_Diagram_dual_bus_DFX.png)
 
-# Software Block Diagram
+
+
+![BoxLambda Gateware Block Diagram.](../assets/about/Arch-Diagram-dual-bus-DFX.png)
+
+
+## Software Block Diagram
+
+
+
 
 [![BoxLambda OS
-Architecture.](../assets/BoxLambda_OS_Architecture.png)](../assets/BoxLambda_OS_Architecture.png)
+Architecture.](../assets/about/BoxLambda-OS-Architecture.png)](../assets/about/BoxLambda-OS-Architecture.png)
+
 
 *BoxLambda OS Architecture Block Diagram.*
 
-# Key Goals
+## Key Goals
 
 - Create a sandbox for experimenting with software and FPGA gateware:
     - It should be **easy** to jump in and do something: create, hack, tinker.
@@ -72,14 +86,34 @@ Architecture.](../assets/BoxLambda_OS_Architecture.png)](../assets/BoxLambda_OS_
 
 - Sound and graphics support retro-style 2D demos and gameplay.
 
-# Status (December 2025)
+## Status (April 2026)
 
 - **Infrastructure** (build system, etc.): Complete.
 - **Gateware**: Complete and meeting requirements.
-- **Software**: Early stage development. OS architecture defined. BoxLambda C Core partially completed. Mecrisp Forth Core partially completed. Mecrisp Forth Environment not started yet.
+- **Software**: Development ongoing.
+    - **OS architecture**: defined.
+    - **BoxLambda C Core**: partially completed.
+    - **Mecrisp Forth Core**: completed.
+    - **Mecrisp Forth Environment**: partially completed.
+    - **Forth<->C FFI**: completed.
+    - **Filesystem layer**: completed.
 
-# Links
+## Changelog
 
-- **Source Code**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
-- **Project Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
-- **Project Documentation**: [https://boxlambda.readthedocs.io/en/latest/](https://boxlambda.readthedocs.io/en/latest/)
+
+
+
+- [Changelog](https://github.com/epsilon537/boxlambda/tree/develop/CHANGELOG.md)
+
+
+## Links
+
+- **Repo**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
+- **Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
+- **develop**: [https://github.com/epsilon537/boxlambda/tree/develop](https://github.com/epsilon537/boxlambda/tree/develop)
+
+## Documentation
+
+- [Start Here](https://boxlambda.readthedocs.io/en/develop/start-here/)
+- [Full Documentation Index](https://boxlambda.readthedocs.io/en/develop/full-index/)
+

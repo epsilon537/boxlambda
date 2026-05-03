@@ -20,7 +20,7 @@ This is the software architecture I'm working towards:
 
 This post focuses on the yellow boxes.
 
-For an overview of what BoxLambda is about and its current features, see [here](../about/).
+For an overview of what BoxLambda is about and its current features, see [here](../about).
 
 # Terminology
 
