@@ -22,6 +22,6 @@ Point your browser to [http://127.0.0.1:4000/boxlambda/](http://127.0.0.1:4000/b
 3. Check spelling and grammar.
 4. Move draft to `jekyll/_posts` and add date to filename.
 5. Check for broken links using `lychee -i *.md` in the `jekyll/_posts` directory.
-6. Commit all files in the `jekyll/` directory.
+6. Ensure all changes in current branch are committed.
 7. Release by executing `export_blog.sh vX.Y.Z`.
 

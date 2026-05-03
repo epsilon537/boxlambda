@@ -25,6 +25,7 @@ if ! git diff --quiet -- "$DIR" || \
 fi
 
 jinja2 README.md.j2 -D target=jekyll -D version=$VERSION > jekyll/about.md
+git commit -m "jekyll/about.md update" jekyll/about.md
 
 git subtree split --prefix=jekyll -b jekyll-split
 git switch gh-pages
