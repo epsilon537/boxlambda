@@ -6,21 +6,10 @@ Ruby and Bundler are required to build the BoxLambda blog website. Install them 
 sudo apt-get install rubygems ruby-bundler
 ```
 
-Check out the `gh-pages` branch:
-```
-git checkout gh-pages
-```
-
-Source the `jekyll_env_setup.sh` script to ensure that the gems needed to build Jekyll are installed:
-
-```
-source jekyll_env_setup.sh
-```
-
 Build the blog by executing the following command:
 
 ```
-make jekyll
+make_blog.sh
 ```
 
 Point your browser to [http://127.0.0.1:4000/boxlambda/](http://127.0.0.1:4000/boxlambda/) to see the Jekyll Blog website.
@@ -29,9 +18,10 @@ Point your browser to [http://127.0.0.1:4000/boxlambda/](http://127.0.0.1:4000/b
 
 0. [Release code and documentation](git-workflow.md#creating-a-new-release-note-to-self).
 1. Write draft in `develop` branch, `jekyll/_drafts` directory. Use labeled links to code and documentation.
-2. Test site using `make_blog develop`
+2. Test site using `make_blog`.
 3. Check spelling and grammar.
 4. Move draft to `jekyll/_posts` and add date to filename.
 5. Check for broken links using `lychee -i *.md` in the `jekyll/_posts` directory.
-6. Release by executing `export_blog.sh vX.Y.Z`.
+6. Commit all files in the `jekyll/` directory.
+7. Release by executing `export_blog.sh vX.Y.Z`.
 
