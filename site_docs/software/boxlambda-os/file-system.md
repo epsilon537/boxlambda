@@ -1,4 +1,4 @@
-# The Target filesystem
+# The Target File System
 
 The `fs/` directory in the Boxlambda repo is the root of the target filesystem. Its structure will evolve over time. Currently, it contains two directories:
 

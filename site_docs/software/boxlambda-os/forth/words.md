@@ -1800,7 +1800,7 @@ Exceptions:
 x-string-too-long
 ```
 
-## Filesystem
+## File system
 
 [fs.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/fs.fs)
 

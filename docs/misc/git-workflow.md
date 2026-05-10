@@ -51,7 +51,7 @@ On `develop` branch:
 4. (Re)Populate `binaries/` by runing `export_binaries.sh` from the repo root directory.
 5. Flash `boxlambda_base` gateware project build and bootloader.
 6. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
-8. Run `export_docs.sh develop`.
+8. Run `export_docs.sh develop`. Check the output for errors.
 7. Check documentation links by running `lychee -i *.md` from the `site_docs/` directory.
 
 On `master` branch:
