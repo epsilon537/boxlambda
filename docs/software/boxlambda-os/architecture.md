@@ -14,8 +14,8 @@ further unpacks specific sections into EMEM and IMEM. (See
 [here](../base-platform/bootstrap/bootloader.md) for a more detailed description of the boot
 sequence).
 
-The Mercrisp Forth Environment lives as Forth source code on the SD card
-filesystem.
+The Mercrisp Forth Environment lives as Forth source code on the SD card and/or RAM disk
+file system.
 
 ## The BoxKern
 
@@ -41,10 +41,10 @@ start-up code and the definitions of key Forth words, such as
 interpreter/compiler words, that make up the core of the Forth system. After
 booting the Mecrisp Forth Core, you have a small, operational Forth system.
 
-I'm adding Filesystem Access (*FS Access*) words to the set of original Mecrisp
-core words so that after booting the core, the remaining Forth words can be
-loaded as Forth *.fs* source code files from the SD card filesystem. The
-filesystem access words are based on those found in Peter Schmid's [Mecrisp
+I'm adding file system access Words to the set of original Mecrisp
+core Words so that after booting the core, the remaining Forth Words can be
+loaded as Forth *.fs* source code files from the SD card or RAM disk file system. The
+file system access Words are based on those found in Peter Schmid's [Mecrisp
 Cube](https://github.com/spyren/Mecrisp-Cube/blob/master/sdcard/man/FileSystem.md)
 project.
 

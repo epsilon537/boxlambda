@@ -1800,7 +1800,7 @@ Exceptions:
 x-string-too-long
 ```
 
-## Filesystem
+## File system
 
 [fs.fs](../../../../fs/forth/fs.fs)
 

@@ -1,7 +1,7 @@
 # The Bootloader
 
 **Bootloader Software Project in the BoxLambda Directory Tree**:
- [sw/projects/bootloader](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/bootloader)
+ [sw/projects/bootloader](https://github.com/epsilon537/boxlambda/tree/develop/sw/projects/bootloader)
 
 The Bootloader is only used on FPGA.
 

@@ -6,7 +6,7 @@
 - **LiteX Submodule in the BoxLambda Directory Tree**:
   `sub/litex/`.
 
-- **SDRAM Software Component in the BoxLambda Directory Tree**: [sw/components/sdram](https://github.com/epsilon537/boxlambda/tree/master/sw/components/sdram)
+- **SDRAM Software Component in the BoxLambda Directory Tree**: [sw/components/sdram](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/sdram)
 
 - **Included in OS**: Yes
 
@@ -39,7 +39,7 @@ The `sdram_init()` function is part of the `sdram` software component in the Box
 
 The DDR test program is located here:
 
-[../../../sw/projects/test/ddr_test/ddr_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/test/ddr_test/ddr_test.cpp)
+[../../../sw/projects/test/ddr_test/ddr_test.cpp](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/test/ddr_test/ddr_test.cpp)
 
 The program boots from internal memory. It invokes `sdram_init()`, performs a memory test, and verifies CPU instruction execution from DDR by relocating a test function from internal memory to DDR and branching to it.
 

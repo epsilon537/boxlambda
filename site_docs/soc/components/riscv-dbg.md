@@ -7,7 +7,7 @@
   `sub/riscv-dbg/`
 
 - **RISCV-DBG Gateware Component in the BoxLambda Directory Tree**:
-  [gw/components/riscv-dbg](https://github.com/epsilon537/boxlambda/tree/master/gw/components/riscv-dbg)
+  [gw/components/riscv-dbg](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/riscv-dbg)
 
 ## RISCV OpenOCD
 
@@ -27,7 +27,7 @@ OpenOCD is an open-source software package that interfaces with a hardware debug
 As their names suggest, `common_cells` and `tech_cells_generic` provide essential building blocks like FIFOs, CDC logic, and reset logic. The `pulpino` dependency is minimal, limited to a few clock management cells.
 
 To integrate these dependencies, git submodules were created under the `sub/` directory in the BoxLambda repository. A `Bender.yml` manifest in the `riscv-dbg` component directory references all the necessary sources:
-[gw/components/riscv-dbg/Bender.yml](https://github.com/epsilon537/boxlambda/blob/master/gw/components/riscv-dbg/Bender.yml).
+[gw/components/riscv-dbg/Bender.yml](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/riscv-dbg/Bender.yml).
 
 The directory structure looks as follows:
 
@@ -95,7 +95,7 @@ boxlambda
     └── riscv-dbg
 ```
 
-The OpenOCD configuration file: [scripts/openocd.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/openocd.cfg) (see the *if..VERILATOR* section).
+The OpenOCD configuration file: [scripts/openocd.cfg](https://github.com/epsilon537/boxlambda/blob/develop/scripts/openocd.cfg) (see the *if..VERILATOR* section).
 
 To summarize:
 
@@ -122,7 +122,7 @@ On the OpenOCD side, the transport protocol used for this debug-access-via-FPGA-
 ![BoxLambda OpenOCD Arty A7 FTDI Setup](../../assets/OpenOCD-Setup-Arty-A7.drawio.png)
 *BoxLambda OpenOCD Arty A7 FTDI Setup*
 
-OpenOCD configuration file for debugging on the Arty-A7 is available in the `scripts/` directory: [scripts/openocd.cfg](https://github.com/epsilon537/boxlambda/blob/master/scripts/openocd.cfg)
+OpenOCD configuration file for debugging on the Arty-A7 is available in the `scripts/` directory: [scripts/openocd.cfg](https://github.com/epsilon537/boxlambda/blob/develop/scripts/openocd.cfg)
 
 To summarize:
 

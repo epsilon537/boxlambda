@@ -7,7 +7,7 @@
     sub/wbuart32/
 
 - **Wbuart Component in the BoxLambda Directory Tree**:
-    [gw/components/wbuart](https://github.com/epsilon537/boxlambda/tree/master/gw/components/wbuart)
+    [gw/components/wbuart](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/wbuart)
 
 - **Wbuart Top-Level**:
     [sub/wbuart32/rtl/wbuart.v](https://github.com/epsilon537/wbuart32/blob/boxlambda/rtl/wbuart.v)

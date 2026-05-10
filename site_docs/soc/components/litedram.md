@@ -7,7 +7,7 @@
   sub/litex/.
 
 - **LiteDRAM Component in the BoxLambda Directory Tree**:
-  [gw/components/litedram](https://github.com/epsilon537/boxlambda/tree/master/gw/components/litedram)
+  [gw/components/litedram](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/litedram)
 
 SDRAM memory access is complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. As much as possible, BoxLambda aims for deterministic behavior. Unfortunately, in the case of SDRAM, we'll have to make an exception. I couldn't find any memory controller designs that offer predictable memory access latency, and I'm not up to making one myself.
 
@@ -93,7 +93,7 @@ Two LiteDRAM core variants are generated from this configuration:
 
 The LiteDRAM cores are generated during the code generation step of a gateware build. The generated files are stored in the `<build_tree/codegen/litedram/` directory.
 
-This is the build script performing the code generation: [scripts/gen_litedram_core.sh](https://github.com/epsilon537/boxlambda/blob/master/scripts/gen_litedram_core.sh)
+This is the build script performing the code generation: [scripts/gen_litedram_core.sh](https://github.com/epsilon537/boxlambda/blob/develop/scripts/gen_litedram_core.sh)
 
 ## LiteDRAM Interface
 
@@ -162,7 +162,7 @@ Some points worth noting about this interface:
 
 ## *Litedram_wrapper*
 
-[../../../gw/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/litedram/common/rtl/litedram_wrapper.sv)
+[../../../gw/components/litedram/common/rtl/litedram_wrapper.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/litedram/common/rtl/litedram_wrapper.sv)
 
 `Litedram_wrapper` contains a Pipelined-to-Classic Wishbone adaptation. The adapter logic comes from the Wishbone B4 spec section 5.2, *Pipelined master connected to standard slave*. The `stall` signal is used to avoid pipelining:
 

@@ -7,7 +7,7 @@
     sub/ym2149_psg_system/.
 
 - **YM2149_PSG_system Component in the BoxLambda Directory Tree**:
-    [gw/components/ym2149](https://github.com/epsilon537/boxlambda/tree/master/gw/components/ym2149)
+    [gw/components/ym2149](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/ym2149)
 
 - **YM2149_PSG_system Core Top-Level**:
     [sub/ym2149_psg_system/YM2149_PSG_system_wb.sv](https://github.com/epsilon537/YM2149_PSG_system/blob/boxlambda/YM2149_PSG_system_wb.sv)
@@ -102,7 +102,7 @@ The Uwe Beis article above describes the idea well enough. However, I was unable
 
 Here is my Verilog code:
 
-[../../../gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/audio_dac/rtl/one_bit_dac.sv)
+[../../../gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/audio_dac/rtl/one_bit_dac.sv)
 
 It wasn't obvious to me how to size the two accumulators used in the implementation so that they don't overflow and create conversion errors. I ended up adding logic that checks for overflows and experimented with different audio samples. The outcome was that for a 16-bit input signal, the stage-1 accumulator needs to be 20 bits in size and the stage-2 accumulator needs to be 22 bits in size.
 
@@ -117,11 +117,11 @@ I created a test project to test the one-bit DAC. The RTL consists of a sine wav
 
 Here's the top-level Verilog:
 
-[../../../gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv)
+[../../../gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv)
 
-The Verilator test bench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/test/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The test bench will also flag an error if any accumulator overflows are reported.
+The Verilator test bench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/test/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The test bench will also flag an error if any accumulator overflows are reported.
 
-The Verilator test bench executes for 0.5s of simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/test/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
+The Verilator test bench executes for 0.5s of simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/test/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
 
 1. The PCM samples and DAC samples are converted to numpy arrays and normalized.
 2. Both signals are sent through a low-pass filter.
@@ -131,7 +131,7 @@ The Verilator test bench executes for 0.5s of simulated time. Then, a python mod
 
 The test project code is located here:
 
-[../../../gw/projects/test/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/test/audio_dac_test)
+[../../../gw/projects/test/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/develop/gw/projects/test/audio_dac_test)
 
 See [here](../test/builds/ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
 
@@ -141,7 +141,7 @@ This test project is a BoxLambda SoC with the `YM2149_PSG_system` core and the o
 Through software, the `YM2149_PSG_system` core is configured to produce six tones at six different pitches.
 Similar to the previous test, the Verilator test bench code checks for accumulator overflows and saves the generated audio samples to `pcm_out.py` and `dac_out.py` for further analysis in Python.
 
-The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/test/ym2149_dac_test/test/ym2149_test.py)) imports the generated `dac_out.py` and performs the following operations:
+The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/test/ym2149_dac_test/test/ym2149_test.py)) imports the generated `dac_out.py` and performs the following operations:
 
 1. The DAC samples are converted to a numpy array and normalized.
 2. The normalized signal is sent through a low-pass filter.
@@ -151,7 +151,7 @@ The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob
 
 The test project code is located here:
 
-[../../../gw/projects/test/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/test/ym2149_dac_test)
+[../../../gw/projects/test/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/develop/gw/projects/test/ym2149_dac_test)
 
 See [here](../test/builds/ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
 

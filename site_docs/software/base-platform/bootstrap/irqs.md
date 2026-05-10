@@ -6,7 +6,7 @@ Ibex handles interrupts in *Vectored Mode*. Each interrupt has a separate entry 
 
 ## Vectors.S Weak Bindings
 
-The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/master/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide, so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: if you insert a straightforward call to your application-specific interrupt service routine into the vector table, you introduce an inverted dependency. You don’t want the lowest-level platform code to depend directly on higher-level application code. To get around that issue, I defined *weak bindings* for all the interrupt service routines inside `vectors.S`:
+The interrupt entry points are all defined in the bootstrap component's [vector.S](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/vectors.S) module. Each entry point is 4 bytes wide, so there's just enough space for an instruction to jump to the actual interrupt service routine of the interrupt in question. This creates a small problem: if you insert a straightforward call to your application-specific interrupt service routine into the vector table, you introduce an inverted dependency. You don’t want the lowest-level platform code to depend directly on higher-level application code. To get around that issue, I defined *weak bindings* for all the interrupt service routines inside `vectors.S`:
 
 ```
 // Weak bindings for the fast IRQs. These will be overridden in the
@@ -58,7 +58,7 @@ _exc_handler:          //_exc_handler is overridden in the interrupt SW module.
 
 As you can see, the weak bindings jump to `_exc_handler`, and the default `_exc_handler` jumps to itself. The idea is that these default weak bindings are never invoked and are instead replaced by actual interrupt service routine implementations in higher-layer code:
 
-- On the BoxLambda OS build, the Forth Core will take ownership of all the IRQ vectors. See [interrupts.s](https://github.com/epsilon537/boxlambda/blob/master/sw/components/forth/interrupts.s).
+- On the BoxLambda OS build, the Forth Core will take ownership of all the IRQ vectors. See [interrupts.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/interrupts.s).
 - In gateware test builds, test C code may bind some or all of the IRQs. See [Ibex RISC-V Interrupt Handling in Test C Components](../c-components/test/irqs.md).
 
 ## The IRQ Shadow Registers

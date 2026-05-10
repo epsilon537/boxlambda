@@ -1,10 +1,10 @@
 # SPI Flash Controller
 
 - **SPI Flash Gateware Component in the BoxLambda Directory Tree**:
-    [gw/components/spiflash](https://github.com/epsilon537/boxlambda/tree/master/gw/components/spiflash)
+    [gw/components/spiflash](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/spiflash)
 
 - **SPI Flash Core Top-Level**:
-    [gw/components/spiflash/rtl/spiflash.v](https://github.com/epsilon537/boxlambda/blob/master/gw/components/spiflash/rtl/spiflash.v)
+    [gw/components/spiflash/rtl/spiflash.v](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/spiflash/rtl/spiflash.v)
 
 ![SPI Flash On On BoxLambda](../../assets/spiflash-on-boxlambda.png)
 
@@ -74,9 +74,9 @@ BoxLambda's SPI Flash core uses the ZipCPU spixpress core as a starting point. I
 
 The BoxLambda version of the Spiflash core and Flashsim co-simulator can be found here:
 
-[../../../gw/components/spiflash/rtl/spiflash.v](https://github.com/epsilon537/boxlambda/blob/master/gw/components/spiflash/rtl/spiflash.v)
+[../../../gw/components/spiflash/rtl/spiflash.v](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/spiflash/rtl/spiflash.v)
 
-[../../../gw/components/spiflash/sim/flashsim.cpp](https://github.com/epsilon537/boxlambda/blob/master/gw/components/spiflash/sim/flashsim.cpp)
+[../../../gw/components/spiflash/sim/flashsim.cpp](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/spiflash/sim/flashsim.cpp)
 
 ## Reading from Flash - the Data Interface
 

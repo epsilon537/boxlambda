@@ -1,28 +1,34 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
   <diagram name="Page-1" id="TPdYwVjqV7o428QBksKn">
-    <mxGraphModel dx="1632" dy="1348" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2912" dy="1348" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="q5KGv9En6vbrBQ0iFdMa-10" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Forth Shell&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=bottom;" parent="1" vertex="1">
+        <mxCell id="3muqYPtP2onNnxtbAODL-1" value="" style="rounded=0;whiteSpace=wrap;html=1;gradientColor=#CCCCCC;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-70" y="50" width="600" height="860" as="geometry" />
+        </mxCell>
+        <mxCell id="IQo8POE9wDzD7ju7Y3nm-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-240" y="400" width="940" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="q5KGv9En6vbrBQ0iFdMa-10" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Forth Shell&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=bottom;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-70" y="50" width="600" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="q5KGv9En6vbrBQ0iFdMa-2" value="&lt;b&gt;BoxKern (incl. Mecrisp Forth Core)&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;align=left;fontSize=18;" parent="1" vertex="1">
+        <mxCell id="q5KGv9En6vbrBQ0iFdMa-2" value="&lt;b&gt;BoxKern (incl. Mecrisp Forth Core)&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;align=left;fontSize=18;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-70" y="660" width="600" height="250" as="geometry" />
         </mxCell>
         <mxCell id="q5KGv9En6vbrBQ0iFdMa-7" value="Mecrisp Forth Core" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;verticalAlign=bottom;align=left;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="-10" y="690" width="235" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="q5KGv9En6vbrBQ0iFdMa-6" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Foundation&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=bottom;" parent="1" vertex="1">
+        <mxCell id="q5KGv9En6vbrBQ0iFdMa-6" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Foundation&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=bottom;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-70" y="530" width="600" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="q5KGv9En6vbrBQ0iFdMa-5" value="String Handling" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;verticalAlign=bottom;fontSize=18;align=left;" parent="1" vertex="1">
+        <mxCell id="q5KGv9En6vbrBQ0iFdMa-5" value="String Handling" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;verticalAlign=bottom;fontSize=18;align=left;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-70" y="270" width="600" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="q5KGv9En6vbrBQ0iFdMa-4" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Forth Filesystem Access&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=bottom;" parent="1" vertex="1">
+        <mxCell id="q5KGv9En6vbrBQ0iFdMa-4" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Forth Filesystem Access&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=bottom;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-70" y="150" width="600" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="q5KGv9En6vbrBQ0iFdMa-3" value="Resource Management" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;align=left;verticalAlign=bottom;" parent="1" vertex="1">
+        <mxCell id="q5KGv9En6vbrBQ0iFdMa-3" value="Resource Management" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;align=left;verticalAlign=bottom;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-70" y="400" width="600" height="130" as="geometry" />
         </mxCell>
         <mxCell id="hJB8fuzzdYW6NZIhmDOO-1" value="shell.fs" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
@@ -67,13 +73,13 @@
         <mxCell id="hJB8fuzzdYW6NZIhmDOO-25" value="fs-redirect.fs" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="90" y="170" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="PIvnRvjFvhDiZYqDHUjn-1" value="istr.fs" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+        <mxCell id="PIvnRvjFvhDiZYqDHUjn-1" value="istr.fs" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="240" y="300" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="PIvnRvjFvhDiZYqDHUjn-2" value="escstr.fs" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+        <mxCell id="PIvnRvjFvhDiZYqDHUjn-2" value="escstr.fs" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="380" y="300" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="PIvnRvjFvhDiZYqDHUjn-3" value="heap.fs" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+        <mxCell id="PIvnRvjFvhDiZYqDHUjn-3" value="heap.fs" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="320" y="430" width="120" height="60" as="geometry" />
         </mxCell>
       </root>

@@ -6,9 +6,9 @@ Linux. The package installation commands below are Ubuntu-based. I also have a B
 
 ## Vivado
 
-**Vivado ML** Edition V2025.1, Linux version:
+**Vivado ML** Edition V2023.1, Linux version:
 
-[https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2025-1.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2025-1.html)
+[https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/archive.html](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/archive.html)
 
 Make sure you also install your Arty A7 board files. Digilent has excellent instructions for installing Vivado and Digilent board files:
 
@@ -116,7 +116,7 @@ The following tools are automatically installed (if not already installed) by so
 
 - [OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD, Python)](https://github.com/YosysHQ/oss-cad-suite-build)
 - [Bender](https://github.com/pulp-platform/bender)
-- [Python packages](https://github.com/epsilon537/boxlambda/blob/master/python-requirements.txt)
+- [Python packages](https://github.com/epsilon537/boxlambda/blob/develop/python-requirements.txt)
 - [BoxLambda fork of Litex](https://github.com/epsilon537/litex)
 - **riscv32-boxlambda-elf**: RISCV32 GNU toolchain custom-built for BoxLambda.
 

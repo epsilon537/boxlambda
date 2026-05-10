@@ -24,7 +24,7 @@ To manage the loading of an RM into an RP from the SoC, a DFX Controller needs t
 
 The software program monitors the progression via the DFX Controller status register.
 
-The `dfx_test` program contains a software routine that implements the complete sequence. See the function `dfx_load_module()` in the file [sw/projects/test/dfx_test/dfx_cli.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/test/dfx_test/dfx_cli.cpp).
+The `dfx_test` program contains a software routine that implements the complete sequence. See the function `dfx_load_module()` in the file [sw/projects/test/dfx_test/dfx_cli.cpp](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/test/dfx_test/dfx_cli.cpp).
 
 ### Binary for ICAP
 
@@ -65,5 +65,5 @@ The DFX Controller IP bus interfaces are AXI-based, while BoxLambda is Wishbone-
 
 Here's the RTL:
 
-[gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv)
+[gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/wb_dfx_controller/rtl/wb_dfx_controller.sv)
 

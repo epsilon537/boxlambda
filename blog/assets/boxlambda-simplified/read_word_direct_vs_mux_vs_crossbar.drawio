@@ -1,0 +1,73 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.4 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="26.0.4">
+  <diagram name="Page-1" id="-1rJxSDqtO_nejIG83L5">
+    <mxGraphModel dx="1255" dy="814" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-24" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry y="190" width="840" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-21" value="WB Crossbar" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="600" y="281" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-22" value="WB Staller" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="600" y="200" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-2" value="Wishbone&lt;div&gt;Slave&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=middle;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="120" y="240" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-1" value="WB Ibex CPU" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="120" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-11" value="read word&lt;div&gt;2 clock cycles&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=0.653;entryY=0.989;entryDx=0;entryDy=0;entryPerimeter=0;fontStyle=1" edge="1" parent="1" source="dwDNBTxYJj4Oz3zc9BqD-1" target="dwDNBTxYJj4Oz3zc9BqD-1">
+          <mxGeometry x="0.7425" y="18" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="340" as="sourcePoint" />
+            <mxPoint x="450" y="290" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="161" y="260" />
+              <mxPoint x="198" y="260" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-13" value="WB Ibex CPU" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="360" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-14" value="WB MUX" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="340" y="200" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-15" value="Wishbone&lt;div&gt;Slave&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=middle;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="360" y="280" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-16" value="read word&lt;div&gt;2 clock cycles&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=0.653;entryY=0.989;entryDx=0;entryDy=0;entryPerimeter=0;fontStyle=1" edge="1" parent="1">
+          <mxGeometry x="0.8679" y="16" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="399" y="160" as="sourcePoint" />
+            <mxPoint x="436" y="159" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="399" y="300" />
+              <mxPoint x="436" y="300" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-17" value="WB Ibex CPU" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="600" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-19" value="Wishbone&lt;div&gt;Slave&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=middle;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="600" y="361" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dwDNBTxYJj4Oz3zc9BqD-20" value="read word&lt;div&gt;6 clock cycles&lt;/div&gt;" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=0.653;entryY=0.989;entryDx=0;entryDy=0;entryPerimeter=0;fontStyle=1" edge="1" parent="1">
+          <mxGeometry x="0.9156" y="16" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="639" y="160" as="sourcePoint" />
+            <mxPoint x="676" y="159" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="639" y="390" />
+              <mxPoint x="676" y="390" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

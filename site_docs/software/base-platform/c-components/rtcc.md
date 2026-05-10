@@ -7,7 +7,7 @@
     sub/MCP79412RTC/.
 
 - **RTCC Software Component in the BoxLambda Directory Tree**:
-  [sw/components/rtcc](https://github.com/epsilon537/boxlambda/tree/master/sw/components/rtcc)
+  [sw/components/rtcc](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/rtcc)
 
 - **Included in OS**: No
 
@@ -58,6 +58,6 @@ Example usage:
 ```
 For additional example code, check the `rtcc_test` app:
 
-- [sw/projects/test/rtcc_test/rtcc_test.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/test/rtcc_test/rtcc_test.cpp)
-- [sw/projects/test/rtcc_test/rtcc_cli.cpp](https://github.com/epsilon537/boxlambda/blob/master/sw/projects/test/rtcc_test/rtcc_cli.cpp)
+- [sw/projects/test/rtcc_test/rtcc_test.cpp](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/test/rtcc_test/rtcc_test.cpp)
+- [sw/projects/test/rtcc_test/rtcc_cli.cpp](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/test/rtcc_test/rtcc_cli.cpp)
 

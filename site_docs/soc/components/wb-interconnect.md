@@ -7,13 +7,13 @@
   sub/verilog-wishbone/
 
 - **Interconnect Component in the BoxLambda Directory Tree**:
-  [gw/components/interconnect](https://github.com/epsilon537/boxlambda/tree/master/gw/components/interconnect)
+  [gw/components/interconnect](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/interconnect)
 
 - **Instruction Bus Module**:
-  [gw/components/interconnect/rtl/instruction_bus.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/instruction_bus.sv)
+  [gw/components/interconnect/rtl/instruction_bus.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/interconnect/rtl/instruction_bus.sv)
 
 - **Data Bus Module**:
-  [gw/components/interconnect/rtl/data_bus.sv](https://github.com/epsilon537/boxlambda/blob/master/gw/components/interconnect/rtl/data_bus.sv)
+  [gw/components/interconnect/rtl/data_bus.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/interconnect/rtl/data_bus.sv)
 
 The interconnect serves as the backbone connecting the internal components of the SoC. BoxLambda uses the Wishbone *Pipelined* bus protocol, as defined in the [Wishbone B4 specification](https://github.com/fossi-foundation/wishbone/blob/master/documents/spec/wbspec_b4.pdf).
 

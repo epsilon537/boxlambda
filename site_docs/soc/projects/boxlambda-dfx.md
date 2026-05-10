@@ -1,7 +1,7 @@
 # The BoxLambda DFX SoC Project Build (Experimental/Advanced)
 
 **BoxLambda DFX Project in the BoxLambda Directory Tree**:
-[gw/projects/boxlambda-dfx](https://github.com/epsilon537/boxlambda/tree/master/gw/projects/boxlambda_dfx)
+[gw/projects/boxlambda-dfx](https://github.com/epsilon537/boxlambda/tree/develop/gw/projects/boxlambda_dfx)
 
 This project builds the 'official' BoxLambda DFX Configuration as described in the [SoC Architecture section](../top-level/soc-architecture.md#dfx-configuration).
 
@@ -118,7 +118,7 @@ One guideline is to first implement the design with the largest candidate RM sta
 
 Add the Pblock constraints from the previous step to the project's DFX constraints file, specified in the project build's `Bender.yml` file. For the BoxLambda DFX project, the constraints file is:
 
-[gw/projects/boxlambda_dfx/constrs/pblocks.xdc](https://github.com/epsilon537/boxlambda/blob/master/gw/projects/boxlambda_dfx/constrs/pblocks.xdc)
+[gw/projects/boxlambda_dfx/constrs/pblocks.xdc](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/boxlambda_dfx/constrs/pblocks.xdc)
 
 ### Step 8: Update the Project Build CMakeLists.txt
 

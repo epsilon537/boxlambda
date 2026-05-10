@@ -1,6 +1,6 @@
 # The Forth Test Suite
 
-**The software project directory**: [sw/projects/boxlambda_os](https://github.com/epsilon537/boxlambda/tree/master/sw/projects/boxlambda_os)
+**The software project directory**: [sw/projects/boxlambda_os](https://github.com/epsilon537/boxlambda/tree/develop/sw/projects/boxlambda_os)
 
 This build runs the Forth regression test suite. The test suite is based on the Mecrisp
 Forth test suite, augmented with Words specifically added for BoxLambda (C-FFI, `c,`, `halign`, `compiletoimem`,...).

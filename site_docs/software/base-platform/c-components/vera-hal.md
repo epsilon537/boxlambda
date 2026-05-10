@@ -32,7 +32,7 @@ to 64x64 pixels. In addition to a x- and y- position, sprites have a
 
 ## The C++ VERA HAL
 
-**VERA HAL**: [sw/components/vera/vera_hal.h](https://github.com/epsilon537/boxlambda/blob/master/sw/components/vera/vera_hal.h)
+**VERA HAL**: [sw/components/vera/vera_hal.h](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/vera/vera_hal.h)
 
 The VERA Hardware Abstraction Layer is a C++ class hierarchy:
 

@@ -4,10 +4,10 @@
     [https://github.com/pbatard/xtreamerdev](https://github.com/pbatard/xtreamerdev)
 
 - **Ymodem Software Component in the BoxLambda Directory Tree**:
-  [sw/components/test/ymodem](https://github.com/epsilon537/boxlambda/tree/master/sw/components/test/ymodem)
+  [sw/components/test/ymodem](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/test/ymodem)
 
 - **Ymodem CLI Component in the BoxLambda Directory Tree**:
-  [sw/components/test/ymodem_cli](https://github.com/epsilon537/boxlambda/tree/master/sw/components/test/ymodem_cli)
+  [sw/components/test/ymodem_cli](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/test/ymodem_cli)
 
 This software component is a BoxLambda port of Xtreamerdev's Ymodem protocol implementation. The Ymodem API enables file transfers over the serial port. The `ymodem_receive()` function initiates a Ymodem transfer in BoxLambda's receive direction, storing the received file data in a memory buffer. The `modem_transmit()` function transfers the contents of a given memory buffer to the host PC using the Ymodem protocol.
 

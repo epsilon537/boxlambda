@@ -1,0 +1,5 @@
+{signal: [
+  {name: 'sys_clk2x', wave: 'p...................'},
+  {name: "picorv_instr",  wave: "x=..=..=......=..=..", data: ["lw <src>", "addi <src>", "sw <dst>", "addi <dst>", "bltu <src>"] },
+  {name: 'Wishbone', wave: 'x=..=..=..=..=..=..x', data:["Read 0", "Read 1", "Read 2", "Read 3", "Write 0", "Write 1"]},
+]}

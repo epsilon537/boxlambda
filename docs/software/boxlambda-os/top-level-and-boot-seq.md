@@ -26,7 +26,7 @@ After the Bootloader has transferred control to the OS image it has loaded into 
 
 ## The BoxKern-Includes Mechanism
 
-[fs/forth/boxkern-includes.fs](../../../fs/forth/boxkern-includes.fs) may look like a Forth module but it not.
+[fs/forth/boxkern-includes.fs](../../../fs/forth/boxkern-includes.fs) may look like a Forth module but it's not.
 
 The syntax is limited to lines starting with `\`, which are ignored, and lines beginning with the word `boxkern_include` followed by the full path of an `.fs` Forth module to be evaluated. These Forth modules must not include any submodules themselves.
 
