@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Generating GitHub `README.md`, ReadtheDocs `index.md` and Jekyll `about.md` from `README.md.j2` Jinja2 template.
 - Updated release protocol.
 - Moved jekyll site from `gh-pages/boxlambda-gh-pages-wip` to `master/develop` branch, `jekyll/` directory.
+- Minor updates to documentation diagrams.
 
 ### Removed
 

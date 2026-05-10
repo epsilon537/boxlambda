@@ -4,7 +4,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="0daiTf68YZ4BLp1BL1AQ-1" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" vertex="1" parent="1">
+        <mxCell id="0daiTf68YZ4BLp1BL1AQ-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFF88;strokeColor=none;" vertex="1" parent="1">
           <mxGeometry x="-70" y="-140" width="300" height="260" as="geometry" />
         </mxCell>
         <mxCell id="bJ89ZypMK8XNjYrZLiZU-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" parent="1" vertex="1">
@@ -22,7 +22,7 @@
         <mxCell id="OARbE5i2TE2-9IFa1Utr-72" value="" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0" parent="1" vertex="1">
           <mxGeometry x="-540" y="40" width="60" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-64" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=none;fontStyle=0;glass=0;" parent="1" vertex="1">
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-64" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFF88;strokeColor=none;fontStyle=0;glass=0;" parent="1" vertex="1">
           <mxGeometry x="-61.800000000000004" y="-40" width="140" height="160" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-61" value="Driver Proxies" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;" parent="1" vertex="1">
@@ -82,13 +82,13 @@
         <mxCell id="OARbE5i2TE2-9IFa1Utr-20" value="BoxKern Proxies" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;fillColor=#cce5ff;strokeColor=#36393d;" parent="1" vertex="1">
           <mxGeometry x="-320" y="130" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-21" value="Tools / Utilities /&lt;br&gt;FS &#39;Shell&#39; commands" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=21;" parent="1" vertex="1">
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-21" value="Tools / Utilities /&lt;br&gt;FS &#39;Shell&#39; commands" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=21;fillColor=#ffff88;strokeColor=#36393d;" parent="1" vertex="1">
           <mxGeometry x="-410" y="-40" width="230" height="60" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-22" value="Forth Application Code" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#666666;fontStyle=0;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="-620" y="-120" width="440" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-23" value="FS Access" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-23" value="FS Access" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;fontStyle=1;fillColor=#ffff88;strokeColor=#36393d;" parent="1" vertex="1">
           <mxGeometry x="-158.2" y="300" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-25" value="USB HID&amp;nbsp;&lt;div&gt;Driver&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=0" parent="1" vertex="1">
@@ -172,7 +172,7 @@
             <mxPoint x="45" y="840" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-69" value="Console Driver" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-69" value="Console Driver" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;fontStyle=1;fillColor=#ffff88;strokeColor=#36393d;" parent="1" vertex="1">
           <mxGeometry x="365" y="540" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-73" value="" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontStyle=0" parent="1" source="OARbE5i2TE2-9IFa1Utr-71" target="OARbE5i2TE2-9IFa1Utr-25" edge="1">
