@@ -1,0 +1,143 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="Page-1" id="FxAT83l2I24fsU9_To9M">
+    <mxGraphModel dx="2920" dy="1343" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-1" value="dfx_test" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="170" y="500" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-2" value="dfx_cli" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="200" y="760" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-3" value="j1b_cli" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="360" y="760" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-4" value="dfx_hal" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="120" y="960" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-5" value="j1b_hal" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="360" y="880" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-6" value="mem_fs_cli" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="40" y="760" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-7" value="ymodem_cli" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="-120" y="760" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-8" value="embedded_cli" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="170" y="610" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-9" value="fatfs" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="40" y="880" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-10" value="" style="endArrow=block;html=1;rounded=0;endFill=0;endSize=18;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-6" target="L2MOC_75w7veJ-Dqnz-z-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-10" y="730" as="sourcePoint" />
+            <mxPoint x="40" y="680" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="100" y="720" />
+              <mxPoint x="230" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-11" value="" style="endArrow=block;html=1;rounded=0;endFill=0;endSize=18;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-3" target="L2MOC_75w7veJ-Dqnz-z-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="110" y="770" as="sourcePoint" />
+            <mxPoint x="240" y="680" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="420" y="720" />
+              <mxPoint x="230" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-12" value="" style="endArrow=block;html=1;rounded=0;endFill=0;endSize=18;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-2" target="L2MOC_75w7veJ-Dqnz-z-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="270" y="770" as="sourcePoint" />
+            <mxPoint x="240" y="680" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="260" y="720" />
+              <mxPoint x="230" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-13" value="" style="endArrow=block;html=1;rounded=0;endFill=0;endSize=18;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-7" target="L2MOC_75w7veJ-Dqnz-z-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="110" y="770" as="sourcePoint" />
+            <mxPoint x="240" y="680" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-60" y="720" />
+              <mxPoint x="230" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-14" value="" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-7" target="L2MOC_75w7veJ-Dqnz-z-9" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-420" y="810" as="sourcePoint" />
+            <mxPoint x="-370" y="760" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-60" y="850" />
+              <mxPoint x="100" y="850" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-15" value="" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-6" target="L2MOC_75w7veJ-Dqnz-z-9" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-50" y="830" as="sourcePoint" />
+            <mxPoint x="30" y="890" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-16" value="" style="endArrow=classic;html=1;rounded=0;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-3" target="L2MOC_75w7veJ-Dqnz-z-5" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="470" y="1060" as="sourcePoint" />
+            <mxPoint x="520" y="1010" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-18" value="" style="endArrow=classic;html=1;rounded=0;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-1" target="L2MOC_75w7veJ-Dqnz-z-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="610" as="sourcePoint" />
+            <mxPoint x="510" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-19" value="" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-2" target="L2MOC_75w7veJ-Dqnz-z-9" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="70" y="1120" as="sourcePoint" />
+            <mxPoint x="120" y="1070" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="230" y="850" />
+              <mxPoint x="100" y="850" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-21" value="" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-3" target="L2MOC_75w7veJ-Dqnz-z-9" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="720" y="830" as="sourcePoint" />
+            <mxPoint x="770" y="780" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="390" y="850" />
+              <mxPoint x="100" y="850" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-22" value="" style="endArrow=classic;html=1;rounded=0;jumpStyle=arc;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-2" target="L2MOC_75w7veJ-Dqnz-z-4" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="1180" as="sourcePoint" />
+            <mxPoint x="400" y="1130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-23" value="vs0_hal" style="rounded=0;whiteSpace=wrap;html=1;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="280" y="960" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L2MOC_75w7veJ-Dqnz-z-24" value="" style="endArrow=classic;html=1;rounded=0;jumpStyle=arc;edgeStyle=orthogonalEdgeStyle;fontSize=17;fontStyle=1" parent="1" source="L2MOC_75w7veJ-Dqnz-z-2" target="L2MOC_75w7veJ-Dqnz-z-23" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="1020" as="sourcePoint" />
+            <mxPoint x="510" y="970" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QXSUGpvKOl6AZy_GSNIQ-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=17;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="-360" y="760" width="1080" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

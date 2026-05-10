@@ -1,0 +1,9 @@
+{signal: [
+  {name: 'sys_clk', wave: 'p..|...'},
+  {name: 'picorv_valid', wave: '01.|.0.'},
+  {name: 'wb_stb', wave: '010|...'},
+  {name: 'wb_ack', wave: '0..|10.'},
+  {name: 'picorv_rdy', wave: '0..|10.'},
+  {name: 'wb_cyc', wave: '01.|.0.'},
+  
+]}
