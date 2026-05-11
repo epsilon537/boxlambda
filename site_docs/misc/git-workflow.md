@@ -56,17 +56,23 @@ On `develop` branch:
 
 On `master` branch:
 
-1. Merge `develop`.
-2. In `sim_a7_100` build tree, build all and run ctest.
-4. `git tag vX.Y.Z`.
-5. In `arty_a7_100` build tree, build all.
-6. Flash `boxlambda_base` gateware project build, `bootloader`, and `boxlambda_os`.
-7. Copy the contents of directory `fs/` to an SD card and boot the target from that SD card.
-8. Check bootloader version string.
-9. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
-10. (Re)Populate `binaries/` by runing `export_binaries.sh` from the repo root directory.
-11. `git commit` the binaries.
-12. Run `export_docs.sh vX.Y.Z` from the repo root directory.
+1. Merge `develop`:
+
+        git merge
+        git checkout --theirs .
+        git add .
+        git commit
+
+2. In `sim_a7_100` build tree, build all and run `ctest`.
+3. `git tag vX.Y.Z`.
+4. In `arty_a7_100` build tree, build all.
+5. Flash `boxlambda_base` gateware project build, `bootloader`, and `boxlambda_os`.
+6. Copy the contents of directory `fs/` to an SD card and boot the target from that SD card.
+7. Check bootloader version string.
+8. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
+9. (Re)Populate `binaries/` by runing `export_binaries.sh` from the repo root directory.
+10. `git commit` the binaries.
+11. Run `export_docs.sh vX.Y.Z` from the repo root directory.
 12. Update tag to include the new binaries and exported docs: `git tag -f vX.Y.Z`.
 13. `git push origin vX.Y.Z`.
 14. On GitHub boxlambda repo, navigate to *Releases*, then *Draft a new release*.

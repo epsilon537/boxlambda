@@ -14,6 +14,8 @@
 │   │   └── <generated register map header files>
 │   └── generators/
 │       └── <register map code generator templates>
+├── blog/
+│   └── <Jekyll blog posts>
 ├── docs/
 │   └── <documentation>
 ├── sub/
