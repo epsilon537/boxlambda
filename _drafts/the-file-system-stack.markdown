@@ -318,7 +318,7 @@ try ?except_error ( fil )
 This pattern also solves a common hurdle: using compile-only words (like if..then) at the REPL. You can invoke them interactively by wrapping them in a lambda:
 
 ```
-> true [: if s" True" else s" False" then ;] type cr
+> true [: if s" True" else s" False" then ;] execute type cr
 ```
 
 #### Implementation
@@ -399,8 +399,10 @@ To keep word signatures clean and logical, I prefer using exceptions:
 ```
 : x-test-exception ." Test exception." cr ;
 
-[: [: ." Triggering exception..." ['] x-test-exception ?raise ;]
-try if execute else ." no exception" then ;]
+[:
+  [: ." Triggering exception..." ['] x-test-exception ?raise ;] try
+  ?dup if ." Caught exception: " execute then
+;] execute
 ```
 
 #### Under the Hood: RISC-V Assembly
