@@ -9,7 +9,7 @@
   sub/ibex/.
 
 - **Ibex Component in the BoxLambda Directory Tree**:
-  [gw/components/ibex](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/ibex)
+  [gw/components/ibex](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/components/ibex)
 
 - **Ibex Core Top-Level Module**:
 [sub/ibex/rtl/ibex_top.sv](https://github.com/epsilon537/ibex/blob/boxlambda/rtl/ibex_top.sv)
@@ -23,8 +23,8 @@
   `sub/ibex_wb/`.
 
 - **Ibex WB Components in the BoxLambda Directory Tree**:
-  [gw/components/ibex_wb_common](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/ibex_wb_common)
-  [gw/components/ibex_wb_core](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/ibex_wb_core)
+  [gw/components/ibex_wb_common](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/components/ibex_wb_common)
+  [gw/components/ibex_wb_core](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/components/ibex_wb_core)
 
 - **Ibex WB Core Top-Level**:
 [sub/ibex_wb/rtl/wb_ibex_core.sv](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/wb_ibex_core.sv)
@@ -33,7 +33,7 @@ The Ibex RISCV core does not natively include Wishbone ports. `Wb_ibex_core` wra
 
 ## Ibex Core Configuration
 
-The Ibex core is instantiated with the following parameters (see [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)):
+The Ibex core is instantiated with the following parameters (see [boxlambda_soc.sv](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/components/boxlambda_soc/rtl/boxlambda_soc.sv)):
 
 ```
 wb_ibex_core #(
@@ -182,7 +182,7 @@ The table below summarizes the instruction cycle counts on BoxLambda according t
 
 The Ibex repo/submodule sources are not referenced directly. The source code needs to be *exported* using *fusesoc*. This is done during the code generation step of a gateware build.
 
-This is the wrapper script performing the export: [scripts/gen_ibex_core.sh](https://github.com/epsilon537/boxlambda/blob/develop/scripts/gen_ibex_core.sh)
+This is the wrapper script performing the export: [scripts/gen_ibex_core.sh](https://github.com/epsilon537/boxlambda/blob/v0.4.1/scripts/gen_ibex_core.sh)
 
 ## Ibex Core Clock Frequency
 

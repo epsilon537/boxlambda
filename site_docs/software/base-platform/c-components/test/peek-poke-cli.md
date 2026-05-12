@@ -1,7 +1,7 @@
 # Peek and Poke CLI
 
 - **Peek_poke_cli CLI Component in the BoxLambda Directory Tree**:
-  [sw/components/test/peek_poke_cli](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/test/peek_poke_cli)
+  [sw/components/test/peek_poke_cli](https://github.com/epsilon537/boxlambda/tree/v0.4.1/sw/components/test/peek_poke_cli)
 
 This component provides CLI commands to peek and poke memory locations and registers.
 

@@ -6,6 +6,6 @@ This diagram illustrates how the Forth modules listed in the [Word List](words.m
 
 *Forth Filesystem Stack.*
 
-The Forth filesystem module `fs.fs` binds to FATFS via the [fs_ffi.cpp](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/fs_ffi.cpp)
+The Forth filesystem module `fs.fs` binds to FATFS via the [fs_ffi.cpp](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/forth/fs_ffi.cpp)
 FFI module. See [here](c-ffi.md) for more info on the Forth-C FFI.
 

@@ -116,7 +116,7 @@ The following tools are automatically installed (if not already installed) by so
 
 - [OSS CAD Suite (CoCoTB, iverilog, GTKWave, openFPGALoader, OpenOCD, Python)](https://github.com/YosysHQ/oss-cad-suite-build)
 - [Bender](https://github.com/pulp-platform/bender)
-- [Python packages](https://github.com/epsilon537/boxlambda/blob/develop/python-requirements.txt)
+- [Python packages](https://github.com/epsilon537/boxlambda/blob/v0.4.1/python-requirements.txt)
 - [BoxLambda fork of Litex](https://github.com/epsilon537/litex)
 - **riscv32-boxlambda-elf**: RISCV32 GNU toolchain custom-built for BoxLambda.
 

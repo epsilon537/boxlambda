@@ -19,10 +19,10 @@ The following clocks are present in the SoC:
 ## Reset Controller
 
 - **Reset Controller Component in the BoxLambda Directory Tree**:
-  [gw/components/reset_ctrl](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/reset_ctrl)
+  [gw/components/reset_ctrl](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/components/reset_ctrl)
 
 - **Reset Controller Top-Level**:
-  [gw/components/reset_ctrl/rtl/reset_ctrl.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/reset_ctrl/rtl/reset_ctrl.sv)
+  [gw/components/reset_ctrl/rtl/reset_ctrl.sv](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/components/reset_ctrl/rtl/reset_ctrl.sv)
 
 ## Reset Domains
 
@@ -50,7 +50,7 @@ The management of non-DFX reset domains and sources is handled by the `reset_ctr
 *BoxLambda's Reset Controller.*
 
 The `reset_ctrl` module source code is located here:
-[gw/components/reset_ctrl/rtl/reset_ctrl.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/reset_ctrl/rtl/reset_ctrl.sv)
+[gw/components/reset_ctrl/rtl/reset_ctrl.sv](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/components/reset_ctrl/rtl/reset_ctrl.sv)
 
 ## Reset Controller Registers
 

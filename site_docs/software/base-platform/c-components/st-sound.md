@@ -7,7 +7,7 @@
     sub/StSound/.
 
 - **ST-Sound Component in the BoxLambda Directory Tree**:
-    [sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/stsound)
+    [sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/v0.4.1/sw/components/stsound)
 
 - **Included in OS**: No
 
@@ -25,7 +25,7 @@ The *ST-Sound* code base is written for Windows, but it was easy to add a Linux 
 
 I ported the ST-Sound library to BoxLambda, using the YM2149 audio core:
 
-[../../../sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/stsound)
+[../../../sw/components/stsound](https://github.com/epsilon537/boxlambda/tree/v0.4.1/sw/components/stsound)
 
 As you can see in the `CMakeLists.txt`, the port references some of the original *ST-Sound* library files unmodified in the *stsound* git submodule. The *ST-Sound* library files that required significant modification, I copied locally to the `sw/component/stsound/` directory.
 
@@ -55,11 +55,11 @@ The script returns a correlation score. If we have an 80% match or more, the tes
 
 The Verilator test bench is located here:
 
-[../../../gw/projects/test/stsound_test/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/test/stsound_test/sim/sim_main.cpp)
+[../../../gw/projects/test/stsound_test/sim/sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/projects/test/stsound_test/sim/sim_main.cpp)
 
 The test scripts and related files are here:
 
-[../../../gw/projects/test/stsound_test/test](https://github.com/epsilon537/boxlambda/tree/develop/gw/projects/test/stsound_test/test)
+[../../../gw/projects/test/stsound_test/test](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/projects/test/stsound_test/test)
 
 See [here](../../../soc/test/builds/ym2149.md#st-sound-test-on-verilator) for instructions to build and run the test yourself.
 

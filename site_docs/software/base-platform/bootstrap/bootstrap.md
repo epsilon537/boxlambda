@@ -12,7 +12,7 @@
     [https://keithp.com/picolibc/](https://keithp.com/picolibc/)
 
 - **Bootstrap Software Component in the BoxLambda Directory Tree**:
-  [sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/bootstrap)
+  [sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/v0.4.1/sw/components/bootstrap)
 
 - **Included in OS**: Yes
 
@@ -43,7 +43,7 @@ The differences between the derived scripts and the base scripts are minimal:
 
 ![Building Picolibc.](../../../assets/building-picolibc.drawio.png)
 
-I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/develop/scripts/picolibc_build.sh) shell script. This script is invoked by the build system (in [sw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/develop/sw/CMakeLists.txt)) during build tree configuration time. The picolibc build and install directories are placed inside the build tree:
+I grouped the PicoLibc build and install instructions in a [picolibc_build.sh](https://github.com/epsilon537/boxlambda/blob/v0.4.1/scripts/picolibc_build.sh) shell script. This script is invoked by the build system (in [sw/CMakeLists.txt](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/CMakeLists.txt)) during build tree configuration time. The picolibc build and install directories are placed inside the build tree:
 
 - **Picolibc build directory**: `<build dir>/sw/picolibc-build`
 - **Picolibc install directory**: `<build dir>/sw/picolibc-install`
@@ -84,7 +84,7 @@ Picolibc is a relatively generic code base that needs to be tied to the platform
 
 I have grouped them into a single software component called **bootstrap**:
 
-[../../../sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/bootstrap)
+[../../../sw/components/bootstrap](https://github.com/epsilon537/boxlambda/tree/v0.4.1/sw/components/bootstrap)
 
 An application using the standard C library has to link in this bootstrap component.
 
@@ -92,7 +92,7 @@ An application using the standard C library has to link in this bootstrap compon
 
 The vector table is a table with code entry points for all sorts of CPU events: interrupts, exceptions, etc. The Boot/Reset Vector, i.e., the very first instruction executed when the CPU comes out of reset, is part of this table.
 
-The Vector Table file is located at [sw/components/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/vectors.S).
+The Vector Table file is located at [sw/components/bootstrap/vectors.S](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/bootstrap/vectors.S).
 
 The Ibex Boot/Reset vector is at offset 0x80. After some CPU register initialization, the code branches off to `_start`, the entry point into the `crt0` module.
 
@@ -103,17 +103,17 @@ For more info on `vectors.S`, check the [Interrupt Handling](irqs.md) page.
 *Crt0*, C-Run-Time-0, is the start-up code in charge of setting up a C environment (zeroing the BSS segment, setting up the stack, etc.) before calling `main()`.
 BoxLambda's version of crt0 can be found here:
 
-[sw/components/bootstrap/crt0.c](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/crt0.c).
-[sw/components/bootstrap/crt0.h](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/crt0.h).
+[sw/components/bootstrap/crt0.c](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/bootstrap/crt0.c).
+[sw/components/bootstrap/crt0.h](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/bootstrap/crt0.h).
 
 ### Standard Input, Output, and Error
 
 The PicoLibc integrator must provide `stdin`, `stdout`, and `stderr` instances and corresponding `getc()` and `putc()` implementations to connect them to an I/O device.
 Initially, we'll be using the UART as our I/O device.
 
-See [sw/components/bootstrap/stdio_stream.c](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/stdio_stream.c).
+See [sw/components/bootstrap/stdio_stream.c](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/bootstrap/stdio_stream.c).
 
-[stdio_stream.h](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/stdio_stream.h) exports the `stdin` and `stdout` stream objects, allowing standard I/O to be redirected at any time after boot-up. The BoxKern utilizes this functionality by forwarding stdio to the Forth environment. Refer to the [OS Boot Sequence](../../boxlambda-os/top-level-and-boot-seq.md) for more details.
+[stdio_stream.h](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/bootstrap/stdio_stream.h) exports the `stdin` and `stdout` stream objects, allowing standard I/O to be redirected at any time after boot-up. The BoxKern utilizes this functionality by forwarding stdio to the Forth environment. Refer to the [OS Boot Sequence](../../boxlambda-os/top-level-and-boot-seq.md) for more details.
 
 ## Early Software Startup Sequence
 

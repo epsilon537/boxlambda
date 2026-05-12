@@ -7,7 +7,7 @@
   sub/vera_wishbone/.
 
 - **VERA Gateware Component in the BoxLambda Directory Tree**:
-  [gw/components/vera](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/vera)
+  [gw/components/vera](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/components/vera)
 
 - **VERA Wishbone Core Top-Level**:
 [sub/vera_wishbone/fpga/source/vera_top.v](https://github.com/epsilon537/vera_wishbone/blob/boxlambda/fpga/source/vera_top.v)

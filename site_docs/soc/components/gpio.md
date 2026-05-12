@@ -7,7 +7,7 @@
     sub/gpio/
 
 - **GPIO Component in the BoxLambda Directory Tree**:
-    [gw/components/gpio](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/gpio)
+    [gw/components/gpio](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/components/gpio)
 
 - **GPIO Core Top-Level**:
     [sub/gpio/rtl/verilog/gpio_top.v](https://github.com/epsilon537/gpio/blob/boxlambda/rtl/verilog/gpio_top.v)

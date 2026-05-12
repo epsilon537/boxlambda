@@ -76,10 +76,10 @@ local_memcpy(&__icode_start, &__icode_source, &__icode_end - &__icode_start);
 
 ## Linker Script Variants
 
-- [bootstrap/link_imem_boot.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/link_imem_boot.ld) creates a test image that boots directly from IMEM.
-- [bootstrap/link_ddr_boot.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/bootstrap/link_ddr_boot.ld) creates an application or test image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
-- [bootloader/link.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/bootloader/link.ld): the link script used to create the bootloader.
-- [boxlambda_os/link.ld](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/boxlambda_os/link.ld): the link script used to create the BoxLambda OS application image . This link script is derived from `link_ddr_boot.ld`. It contains additional [sections and variables for the Forth subsystem](../../boxlambda-os/forth/core.md#forth-linker-sections-and-variables) and the RAM disk region `fs_mem`.
+- [bootstrap/link_imem_boot.ld](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/bootstrap/link_imem_boot.ld) creates a test image that boots directly from IMEM.
+- [bootstrap/link_ddr_boot.ld](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/bootstrap/link_ddr_boot.ld) creates an application or test image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
+- [bootloader/link.ld](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/projects/bootloader/link.ld): the link script used to create the bootloader.
+- [boxlambda_os/link.ld](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/projects/boxlambda_os/link.ld): the link script used to create the BoxLambda OS application image . This link script is derived from `link_ddr_boot.ld`. It contains additional [sections and variables for the Forth subsystem](../../boxlambda-os/forth/core.md#forth-linker-sections-and-variables) and the RAM disk region `fs_mem`.
 
 ### The Application Image Header
 

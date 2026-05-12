@@ -5,7 +5,7 @@
 The Register Access Layer is code-generated from `.yaml` register definition
 files using [Corsair](https://github.com/esynr3z/corsair).
 
-The register definition files are located in directory [registers/definitions](https://github.com/epsilon537/boxlambda/tree/develop/registers/definitions).
+The register definition files are located in directory [registers/definitions](https://github.com/epsilon537/boxlambda/tree/v0.4.1/registers/definitions).
 
 The generated C/C++ register access header files are located in directory
 [registers/generated](https://github.com/epsilon537/boxlambda/tree/develop/registers/generated).
@@ -13,7 +13,7 @@ The generated C/C++ register access header files are located in directory
 The template used to generate the C/C++ register access header files can be
 found here:
 
-[registers/generators/c_header_nocstd.j2](https://github.com/epsilon537/boxlambda/blob/develop/registers/generators/c_header_nocstd.j2)
+[registers/generators/c_header_nocstd.j2](https://github.com/epsilon537/boxlambda/blob/v0.4.1/registers/generators/c_header_nocstd.j2)
 
 Also the Register Map documentation section is generated from the register
 definition files.
@@ -21,7 +21,7 @@ definition files.
 ## The DFX Controller Register Interface
 
 Due to a limitation of the Corsair tool, the DFX Controller register interface is split across two header files,
-[dfx_controller_ctrl_reg.h](https://github.com/epsilon537/boxlambda/blob/develop/registers/generated/dfx_controller_ctrl_reg.h) and [dfx_controller_other_regs.h](https://github.com/epsilon537/boxlambda/blob/develop/registers/generated/dfx_controller_other_regs.h). The write-only Control
+[dfx_controller_ctrl_reg.h](https://github.com/epsilon537/boxlambda/blob/v0.4.1/registers/generated/dfx_controller_ctrl_reg.h) and [dfx_controller_other_regs.h](https://github.com/epsilon537/boxlambda/blob/v0.4.1/registers/generated/dfx_controller_other_regs.h). The write-only Control
 register and the read-only Status register are located at the same address.
 Corsair doesn't support two register definitions at the same address. The
 workaround is to define the two registers in separate files.

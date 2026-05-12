@@ -112,6 +112,6 @@ When Vivado implements an XPM memory, such as `xpm_memory_tdpram`, it generates 
 
 *Merging a .mem file into a Bitstream File.*
 
-The *UpdateMem* script can be found here: [scripts/vivado_updatemem.sh](https://github.com/epsilon537/boxlambda/blob/develop/scripts/vivado_updatemem.sh)
+The *UpdateMem* script can be found here: [scripts/vivado_updatemem.sh](https://github.com/epsilon537/boxlambda/blob/v0.4.1/scripts/vivado_updatemem.sh)
 
 

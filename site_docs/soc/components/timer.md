@@ -3,10 +3,10 @@
 The Timer module is part of the **Ibex** RISCV repo. See the [Ibex Component page](ibex.md) for the Ibex repo link and submodule path.
 
 - **Timer Component in the BoxLambda Directory Tree**:
-    [gw/components/wb_timer](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/wb_timer)
+    [gw/components/wb_timer](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/components/wb_timer)
 
 - **Timer Module Top-Level**:
-    [gw/components/wb_timer/rtl/wb_timer.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/wb_timer/rtl/wb_timer.sv)
+    [gw/components/wb_timer/rtl/wb_timer.sv](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/components/wb_timer/rtl/wb_timer.sv)
 
 - **Timer Spec**: See section 3.1.15 (*Machine Timer Registers*) of the RISC-V Privileged Specification:
     [https://riscv.org/wp-content/uploads/2017/05/riscv-privileged-v1.10.pdf](https://riscv.org/wp-content/uploads/2017/05/riscv-privileged-v1.10.pdf)
@@ -24,7 +24,7 @@ BoxLambda's `wb_timer` defines a third register: `mtimeblk`. A write operation t
 
 You program a Timer interrupt to fire a few clock cycles before the desired time. Then, inside the timer ISR, you write to `MTIMEBLK` to block until the desired time is reached exactly.
 
-The [timer_uart_gpio_irqs](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/test/timer_uart_gpio_irqs/timer_uart_gpio_irqs.cpp) test implements this mechanism.
+The [timer_uart_gpio_irqs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/projects/test/timer_uart_gpio_irqs/timer_uart_gpio_irqs.cpp) test implements this mechanism.
 
 ## Timer Clock Frequency
 
