@@ -12,7 +12,7 @@ fi
 
 VERSION=$1
 
-DIR="jekyll"
+DIR="blog"
 
 # Check for any changes (tracked or untracked) under DIR
 if ! git diff --quiet -- "$DIR" || \
@@ -24,15 +24,15 @@ if ! git diff --quiet -- "$DIR" || \
   exit 1
 fi
 
-jinja2 README.md.j2 -D target=jekyll -D version=$VERSION > jekyll/about.md
-git commit -m "jekyll/about.md update" jekyll/about.md
+jinja2 README.md.j2 -D target=jekyll -D version=$VERSION > blog/about.md
+git commit -m "blog/about.md update" blog/about.md
 
-git subtree split --prefix=jekyll -b jekyll-split
+git subtree split --prefix=blog -b blog-split
 git switch gh-pages
-git merge jekyll-split --allow-unrelated-histories
+git merge blog-split --allow-unrelated-histories
 git checkout --theirs .
 git add .
 git commit -m 'Releasing Blog.'
 git push
 git switch -
-
+git branch -d blog-split
