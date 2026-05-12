@@ -5,29 +5,29 @@ comments: true
 mathjax: yes
 ---
 
-The BoxLambda OS Forth environment now as file system access. It requires a small stack of Forth modules to attain an abstraction level sufficiently high for convenient, shell-level access to the file system.
+BoxLambda OS now supports file system access within its Forth environment. A layered stack of Forth modules provides the abstraction required for convenient, shell-level file operations.
 
 # Context
 
-This is the software architecture I'm working towards:
+The diagram below illustrates the software architecture I am working towards for the BoxLambda OS.
 
 [![BoxLambda OS Architecture.](../assets/the-file-system-stack/BoxLambda_OS_Architecture_FS_Focus.png)](../assets/the-file-system-stack/BoxLambda_OS_Architecture_FS_Focus.png)
 
 *BoxLambda OS Architecture. Click to zoom.*
 
-This post focuses on the yellow boxes.
+This post specifically focuses on the **yellow boxes**.
 
-For an overview of what BoxLambda is about and its current features, see [here](../about/).
+For a broader overview of BoxLambda's goals and current feature set, [see the About page](../about/).
 
 # File System Access Words
 
-BoxLambda's Forth file system access is derived from Spyren's [Mecrisp Cube](https://github.com/spyren/Mecrisp-Cube/blob/master/sdcard/man/FileSystem.md) project. I didn't re-use the Mecrisp Cube code, but I did borrow several ideas from this project, such as:
+BoxLambda’s Forth file system implementation is inspired by Spyren’s [Mecrisp Cube](https://github.com/spyren/Mecrisp-Cube/blob/master/sdcard/man/FileSystem.md) project. While I did not reuse the Mecrisp Cube codebase directly, I adopted several of its core architectural concepts, including:
 
-- The Forth Fileystem API as a proxy of the [FatFS C API](https://elm-chan.org/fsw/ff/).
-- Standard Output redirection.
-- Shell commands for interactive use.
+*   **A Forth File System API:** Acting as a proxy for the [FatFS C API](https://elm-chan.org/fsw/ff/).
+*   **Standard Output Redirection:** For seamlessly directing output to files.
+*   **Shell Commands:** Providing a familiar interface for interactive use.
 
-Here are some examples to give you an idea of how the API works:
+The following examples demonstrate the API's syntax and capabilities:
 
 ## File Open, Write, Read, Close
 
@@ -49,9 +49,9 @@ s" Hello World!" compare ?assert
 [: f_close ;] try ?except_error ( )
 ```
 
-The `[: .. ;]` blocks are *lambdas*, a.k.a. *anonymous functions*. In the context of the example above, they denote the boundaries of an exception handling try-block. See the [Lambdas](#lambdas-anonymous-functions) and [Exception Handling](#exception-handling) sections below.
+The [: .. ;] blocks represent lambdas (anonymous functions). In these examples, they define the scope of an exception-handling try block. For further details, refer to the [Lambdas](#lambdas-anonymous-functions) and [Exception Handling](#exception-handling) sections below.
 
-## Current Directory, Make Directory, Change Directory, Remove File or Directory
+## Directory Operations
 
 ```
 [: f_getcwd ;] try ?except_error type cr
@@ -61,7 +61,9 @@ The `[: .. ;]` blocks are *lambdas*, a.k.a. *anonymous functions*. In the contex
 [: s" test_dir" f_unlink ;] try ?except_error
 ```
 
-## Iterating over Glob Matches in a directory
+## Iterating over Glob Matches
+
+To process multiple files, you can use a glob pattern. The `glob-each` word takes a pattern and a lambda, executing the lambda for every matching entry found in the directory:
 
 ```
   s" ./*.txt"
@@ -78,13 +80,15 @@ The `[: .. ;]` blocks are *lambdas*, a.k.a. *anonymous functions*. In the contex
 
 ## Redirecting Standard Output to a File
 
+You can easily capture output that would normally go to the console and redirect it to a file using the `>file` Word:
+
 ```
 [: ." fs-redirection test" cr ;] >file redirout.txt
 ```
 
 ## Shell Commands
 
-The above examples show programatic use of File System Access Words, i.e., their use in compiled code. Although these Words can also be used in execution mode, they're a bit cumbersome to use interactively. The [shell.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.0/fs/forth/shell.fs) Words are designed to be used interactively, so you get the feel of a (bare bones) OS shell on the Forth REPL:
+The examples above demonstrate the programmatic use of the File System Access Words—ideal for compiled code, but somewhat cumbersome for interactive use. To bridge this gap, [shell.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/shell.fs) provides a set of Words designed for the REPL, giving the Forth environment the feel of a (bare-bones) OS shell:
 
 ```
 sd0:/> ls *
@@ -122,11 +126,11 @@ sd0:/forth> cat irq.fs
 sd0:/forth>
 ```
 
-You can find the file system Word list in the documentation [here](). The Words are defined in the following modules:
+You can find the file system Word list in the documentation [here](https://boxlambda.readthedocs.io/en/v0.4.1/software/boxlambda-os/forth/words/#filesystem). The Words are defined in the following modules:
 
-- [fs.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.0/fs/forth/fs.fs)
-- [fs-redirect.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.0/fs/forth/fs-redirect.fs)
-- [shell.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.0/fs/forth/shell.fs)
+- [fs.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/fs.fs): Core file system words.
+- [fs-redirect.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/fs-redirect.fs): Logic for I/O redirection.
+- [shell.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/shell.fs): Interactive shell commands like `ls`, `cd`, and `cat`.
 
 # The File System Stack
 
@@ -134,13 +138,13 @@ You can find the file system Word list in the documentation [here](). The Words 
 
 *BoxLambda File System Stack. Click to zoom.*
 
-A Forth Core is quite bare bones. You are expected to provided your own abstractions, tailored to the problem you're trying to solve. In the case of BoxLambda's Forth file system and shell, these abstractions form a small software stack. The stacked components are further discussed below.
+A Forth core is inherently minimalist, providing only the bare essentials. As a developer, you are expected to provide your own abstractions tailored to the specific problems you are solving. For BoxLambda’s file system and shell, these abstractions form a compact software stack. The following sections dive into each of these stacked components.
 
 ## String Handling
 
 File/Directory names and shell commands require a toolkit of string-formatting Words for ease-of-use and testability:
 
-- [printf.fs](): C printf/sprintf style string formatting:
+- [printf.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/printf.fs): C-style printf/sprintf style string formatting:
 
   ```
   basename ( basea basel )
@@ -151,9 +155,9 @@ File/Directory names and shell commands require a toolkit of string-formatting W
   s" %08n %s %s %s %s" printf cr ( dir )
   ```
 
-- [cstr.fs](): Forth-string-to-C-string conversion and vice versa, for interfacing with FatFS in the BoxLambda Kernel.
-- [istr.fs](): Out of the box, Mecrisp only supports compiled strings. For interactive testing of the file system API, it's convenient to have an `s"` Word that can be used in execution mode.
-- [escstr.fs](): Support for escaped strings:
+- [cstr.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/cstr.fs): Handles conversions between Forth strings and null-terminated C-strings, which is essential for interfacing with the FatFS C API in the BoxLambda kernel.
+- [istr.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/istr.fs): By default, Mecrisp only supports compiled strings. This module provides a version of `s"` that works in execution mode (interactively), which is convenient for testing the file system API on the fly.
+- [escstr.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/escstr.fs): Adds support for escaped characters within strings:
 
   ```
   esc-s" \'Hello World\',\nForth shouted happily." type
@@ -163,8 +167,9 @@ File/Directory names and shell commands require a toolkit of string-formatting W
 
 ### Heaps and Pools
 
-Heaps and pools simplify the implementation of interactive strings and help to keep track of open file descriptors.
-- [heap.fs](): Borrowed from [ZeptoForth](). Create a heap, allocate some memory from heap, release memory back to heap when no longer needed.
+Heaps and pools simplify the implementation of interactive strings and help manage open file descriptors.
+
+- [heap.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/heap.fs): Borrowed from ZeptoForth. Provides support for creating a heap, allocating memory from it, and releasing that memory when it is no longer needed.
 
   ```
   8 256 heap-size constant test-heap-size
@@ -176,7 +181,7 @@ Heaps and pools simplify the implementation of interactive strings and help to k
   test-heap free
   ```
 
-- [pool.fs](): Borrowed from [ZeptoForth](). Create a pool of a given block size, allocate a block from pool, release block back to pool when no longer needed.
+- [pool.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/pool.fs): Provides a fixed-block allocator. This is ideal for managing a set of identically sized resources, such as file descriptors, ensuring efficient reuse without fragmentation.
 
   ```
   create test-pool pool-size allot
@@ -192,9 +197,9 @@ Heaps and pools simplify the implementation of interactive strings and help to k
 
 ### Temporary Memory Allocation
 
-[temp-alloc.fs]()
+[temp-alloc.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/temp-alloc.fs)
 
-Example:
+The primary Word is `with-temp-allot`. In the following example, a 256-byte buffer is allocated and passed on the stack to a lambda. Once the lambda finishes execution, the buffer is automatically released:
 
 ```
 \ cat <filename>
@@ -214,11 +219,9 @@ Example:
 ;
 ```
 
-In this example, a 256 byte buffer is allocated and put on the TOS for the lambda, i.e., the [: .. ;] block to use. Once
-the lambda block has completed execution, the buffer is released again.
-`Temp-alloc.fs` also provides `temp-mark>`, `temp-allot` and `>temp-mark`, to get a mark, allocate temporary memory
-(moving the mark) and going back to a previously saved mark when you no longer need the memory. The equivalent of the
-previous example using temp markers is:
+For more granular control, `temp-alloc.fs` also provides a "marker" system using `temp-mark>`, `temp-allot`, and `>temp-mark`. This allows you to save a point in memory, perform multiple allocations, and then revert the memory state back to the saved marker in one go.
+
+The equivalent implementation of `cat` using markers looks like this:
 
 ```
 \ cat <filename>
@@ -239,13 +242,15 @@ previous example using temp markers is:
 ;
 ```
 
-## Foundational
+## Foundational Building Blocks
 
-These are basic language building blocks (a reminder of how low-level Forth really is, out of the box):
+These modules provide basic language features that aren't present in a bare-bones Forth core (serving as a reminder of how minimalist the Forth environment is out of the box).
 
 ### Structures (ZeptoForth)
 
-[struct.fs]()
+[struct.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/struct.fs)
+
+The following example defines a structure to group a file handle with a buffer and uses it to compare data between two files:
 
 ```
 begin-structure fil-buf
@@ -256,7 +261,7 @@ end-structure
 create fil-buf0 fil-buf allot
 create fil-buf1 fil-buf allot
 
-\ Read and compare one buffer worth of data between to open files
+\ Read and compare one buffer worth of data between two open files
 \ ( -- noteqf bothzerof)
 : _f_cmp_buf
     fil-buf0 .fil @ fil-buf0 .buf @ 256 f_read ( len0 )
@@ -268,7 +273,7 @@ create fil-buf1 fil-buf allot
 
 ### Lambdas - Anonymous Functions
 
-[lambda.fs]()
+[lambda.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/lambda.fs)
 
 A regular Word is created and invoked like this:
 
@@ -284,46 +289,47 @@ By contrast, a lambda is created and invoked like this:
 execute
 ```
 
+
+
 A lambda is a function without a name. You invoke the function by calling the execution token that's put on
 the data stack by the `;]` Word.
 
-Calling this a *lambda* is a stretch. Lambda functions usually create a [closure](). That is not the case
-here. You get an anonymous function, but not an enclosed environment as part of the package.
+Calling this a *lambda* is a stretch in the functional programming sense. True lambda functions create a [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)) - an enclosed environment of captured variables. That is not the case here. You get an anonymous function, but not an enclosed environment as part of the package.
 
-Despite this limitation, lambdas are quite handy in many situations. Whereever you see a Word that takes an execution token as input, you can provide a lambda definition instead:
+Despite this limitation, lambdas are quite handy in many situations. Wherever a Word expects an execution token as input, you can provide a lambda definition inline:
 
-For example, `try` is defined as:
+#### Example: Exception Handling with `Try`
+
+The `try` Word is defined as:
 
 ```
 try ( xt1 -- xt2|0 )
 ```
-`Try` executes xt1. It catches and return any exception raised during the execution of xt1. `Try` returns 0 if no exception was raised.
-
-You can use `try` like this:
+It executes xt1, catching and returning any exception raised during execution. If no exception occurs, it returns 0. Using a lambda here allows you to wrap complex operations without defining a throwaway word:
 
 ```
 [: s" fs_test.txt" FA_CREATE_ALWAYS FA_WRITE or f_open ;]
 try ?except_error ( fil )
 ```
 
-This also works in execution mode. When you encounter a compile-only Word, you can invoke it
-from the REPL by putting it inside a `[: .. ;]` block:
+#### Example: Execution Mode Wrapper
+
+This pattern also solves a common hurdle: using compile-only words (like if..then) at the REPL. You can invoke them interactively by wrapping them in a lambda:
 
 ```
-> true [: if s" True" else s" False" then ;] type cr
+> true [: if s" True" else s" False" then ;] execute type cr
 ```
 
 #### Implementation
 
-If, like me, you're new to Forth and struggling with concepts such as `postpone`, it's
-instructive to take a loot at the implementation of `[:` and `:]`:
+If you are new to Forth and find yourself wrestling with concepts like `postpone`, the implementation of `[:` and `;]` is highly instructive. These words demonstrate how Forth can "weave" code by switching between compilation and execution states.
 
 ```
 \ Begin lambda
 : [: ( -- )
   state @ if
     \ [: is invoked as a compiling word, i.e. a code-generating word that
-    \ executes when it's encountered in the definition of an other word.
+    \ executes when it's encountered in the definition of another word.
     \ When [: _executes_... it compiles an 'ahead'. This ahead pushes
     \ 2 items on the stack: patchaddr and structmatchconst
     postpone ahead ( patchaddr structmatchconst )
@@ -365,7 +371,7 @@ instructive to take a loot at the implementation of `[:` and `:]`:
 ;
 ```
 
-So, the end result of `... [: <lambdadef> ;] ... ` is:
+When you write ... [: <lambdadef> ;] ... inside a word definition, the generated code structure looks like this:
 
 ```
        ahead
@@ -376,35 +382,31 @@ xt:    prologue
        xt
 ```
 
-i.e., `[: .. ;]` produces an xt representing the instructions within the `[: .. ;]` block.
+In essence, `[: .. ;]` embeds a block of code that is bypassed during the parent word's normal execution flow, instead leaving an execution token (xt) on the stack so that the block can be called explicitly later.
 
 ### Exception Handling
 
-[exception.fs]()
-[exception.s](https://github.com/epsilon537/boxlambda/blob/v0.4.0/sw/components/forth/exception.s)
+[exception.s](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/forth/exception.s)
+[exception.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/except.fs)
 
-File system operations can return a wide variety of error codes. Without exception handling,
-you have to propagate the return code to the caller, and the caller to its caller, etc. until you
-get to a point in the application where you can actually handle the error. All the Words in that
-chain end up with an additional output parameter, the error code, in their stack signature.
+File system operations can return a vast array of error codes. Without a proper exception-handling mechanism, you are forced to propagate these return codes up through the entire call chain until they can be handled. This often results in "stack signature pollution," where every Word in the chain requires an additional output parameter just for the error code.
 
-I get confused when a Words produces more than two output parameters, so I prefer to work with exceptions
-instead of error return codes:
+To keep word signatures clean and logical, I prefer using exceptions:
 
-`Try` executes a piece of code (a Word or a Lambda). When that piece of code encounters an error,
-it raises an exception (using `?raise`), aborting the operation invoked by `try`. The data and
-return stack are rewound to where they were before the exection of the try block. Additionally,
-`try` *catches* and returns the exception code that was raised, so subsequent code can act
-on it:
+`Try` executes a piece of code (a Word or a lambda). If that code encounters an error, it raises an exception using `?raise`. This aborts the current operation, rewinds both the data and return stacks to their pre-try state, and returns the exception code. This allows subsequent code to catch and act on the error.
 
 ```
 : x-test-exception ." Test exception." cr ;
 
-[: [: ." Triggering exception..." ['] x-test-exception ?raise ;]
-try if execute else ." no exception" then ;]
+[:
+  [: ." Triggering exception..." ['] x-test-exception ?raise ;] try
+  ?dup if ." Caught exception: " execute then
+;] execute
 ```
 
-`Try` and `?raise` are part of the Forth core. They are a RISC-V adaptation of exceptions as implemented in ZeptoForth. It's 30 lines of quite interesting assembly code:
+#### Under the Hood: RISC-V Assembly
+
+`Try` and `?raise` are part of the BoxLambda Forth core. They are a RISC-V adaptation of the exception system found in ZeptoForth. The implementation is remarkably concise—about 30 lines of assembly—leveraging an `ExceptionFramePointer` to manage the stack state:
 
 ```
   Definition Flag_visible, "?raise" # ( xt|0 -- | 0 )
@@ -435,7 +437,7 @@ _try: # Try to see if an exception occurs
   sc sp, 0(x14) # Make the next Exception Frame current
   popda x15 # Call the xt on the datastack
   jalr ra, x15
-  laf x14, ExceptionFramePointer # If we returned here, no exception occured.
+  laf x14, ExceptionFramePointer # If we returned here, no exception occurred.
   pop x15 # This and the next two pops remove the created ExceptionStackFrame.
   sc x15, 0(x14) # Restore previous ExceptionFramePointer.
   pop x0 # Pop and discard the exception frame's saved PSP.
@@ -445,35 +447,29 @@ _try: # Try to see if an exception occurs
 
 ```
 
-The following diagram illustrates Word `foo` successfully *trying* `bar`, i.e. bar does *not* raise an exception.
+#### Visualizing the Flow
+
+The following diagram illustrates the Word `foo` successfully "trying" `bar` when no exception is raised:
 
 [![Foo Successfully tries bar..](../assets/the-file-system-stack/foo-tries-bar-no-exception.png)](../assets/the-file-system-stack/foo-tries-bar-no-exception.png)
 
 *Foo Successfully tries bar.*
 
-In the next diagram, `foo` again *tries* `bar`, but this time, `bar` raises an exception called `x-y-z`:
+In the next diagram, `bar` raises an exception called `x-y-z`. Notice how the execution skips the remaining logic in `bar` and jumps back to the handler in `foo`:
 
 [![Foo tries bar with exception.](../assets/the-file-system-stack/foo-tries-bar-throws-exception.png)](../assets/the-file-system-stack/foo-tries-bar-throws-exception.png)
 
 *Foo tries bar, with exception.*
 
-Raising an exception *outside* of a try block would result in setting the state to whatever the `ExcStackFramePtr` variable points to.
-To avoid unexpected behavior, the top-level REPL (i.e. the quit loop) is placed within a try-block.
+#### Top-Level Safety
 
-Finally, [exception.fs]() defines some useful exception handling-related convenience Words such as
-
-```
-<this condition> averts <this exception>
-<this condition> triggers <this exception>
-suppress <this exception>
-```
+Raising an exception outside of a try-block would jump to an undefined state. To prevent this, the top-level REPL (the quit loop) is itself wrapped in a try-block, ensuring the system remains stable even when an interactive command fails.
 
 #### Caveat
 
-A caveat to keep in mind: A raised exception returns the data and return stack to their state right before the `<xt> try` statement.
-Consequently, code within a try-block that might throw an exception should not manipulate data stack items *outside* of the try-block.
+When an exception is raised, the data and return stacks are restored to their exact state at the moment the `<xt> try` statement was called. Consequently, any code within a `try` block that might throw an exception should avoid manipulating data stack items that existed *before* the block began.
 
-For example:
+Consider the following example:
 
 ```
 : x-y-z ." x-y-z exception raised." cr;
@@ -503,9 +499,9 @@ bar . cr
 
 ## The File System FFI
 
-The FAT FS Foreign Function Interface (FFI) follows the pattern discussed in the [previous blog post]().
+The FatFS Foreign Function Interface (FFI) follows the integration pattern discussed in my [previous post on Forth and C interfacing](https://epsilon537.github.io/boxlambda/forth-and-c/).
 
-Here is the FFI binding for the `f_open` function, for example:
+The C-side wrapper handles the transition by popping arguments from the Forth data stack, invoking the FatFS library function, and pushing the result back onto the stack. Here is the FFI binding for `f_open`:
 
 ```
 // File Access:
@@ -526,8 +522,7 @@ void fs_f_open() {
 forth_register_cfun(fs_f_open, "fs_f_open");
 ```
 
-On the Forth side of the fence, the `f_open` Word invokes
-`fs_f_open` as follows:
+On the Forth side, `f_open` acts as a high-level wrapper around `fs_f_open`. It handles the necessary plumbing—allocating a file descriptor from the pool and converting the path string—while ensuring that any errors returned by the C function are immediately converted into Forth exceptions:
 
 ```
 \ Open the file specified in input string.
@@ -549,6 +544,8 @@ On the Forth side of the fence, the `f_open` Word invokes
 
 # Include
 
+The ability to load and execute Forth modules from the file system is fundamental to the BoxLambda OS. The following fragment from [init.fs](https://github.com/epsilon537.github.io/boxlambda/blob/v0.4.1/fs/forth/init.fs) illustrates this in action:
+
 ```
 include /forth/ifdef.fs
 
@@ -563,22 +560,22 @@ include /test/testsuite.fs
 [then]
 ```
 
-The code fragment above is from [init.fs](). The `include` Word, i.e., the ability to load and execute Forth modules from the file system, is the main reason I targeted file system access early on in the OS project. File system-based module loading makes it possible to create and modify the Forth code base directly on the target, without having to modify and recompile the BoxLambda kernel.
+Implementing the `include` Word was a high priority early in the project. It enables a self-hosted development workflow: I can create and modify Forth source files directly on the target hardware without needing to recompile the BoxLambda kernel.
 
-This diagram shows how the `include` Word works:
+The following diagram illustrates the internal process of the include word:
 
-[![Include File Evaluation.](../assets/the-file-system-stack/include-file-evaluation.png)](../../../assets/the-file-system-stack/include-file-evaluation.png)
+[![Include File Evaluation.](../assets/the-file-system-stack/include-file-evaluation.png)](../assets/the-file-system-stack/include-file-evaluation.png)
 
 *Forth Include File Evaluation.*
 
-`Include` give us file system-based module loading. However, as the file system stack in the previous section shows, `include` itself depends on quite a few other Forth modules. It would be good if those could be loaded from the file system as well. This is where the BoxKern-Include mechanism comes in:
-
 ## The BoxKern-Includes Mechanism
 
-This is [fs/forth/boxkern-includes.fs]():
+To break the "chicken and egg" problem of loading the file system stack using a Word (`include`) that hasn't been defined yet, I implemented the BoxKern-Includes mechanism.
+
+This is [fs/forth/boxkern-includes.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/boxkern-includes.fs):
 
 ```
-\ This may look like a Forth module but this not is a Forth module.
+\ This may look like a Forth module but it's not.
 ...
 \ The order is important. The modules build up a stack, with shell.fs on top.
 boxkern_include forth/units.fs
@@ -601,38 +598,53 @@ boxkern_include forth/fs-redirect.fs
 boxkern_include forth/shell.fs
 ```
 
-`Boxkern-includes.fs` may look like a Forth module but it's not. The syntax is limited to:
-- lines starting with `\`, which are ignored
-- lines beginning with the word `boxkern_include` followed by the full path of an `.fs` Forth module to be evaluated. These Forth modules must not include any submodules themselves.
+While `boxkern-includes.fs` uses an `.fs` extension, it is technically a configuration file with a very restricted syntax:
 
-The BoxLambda kernel loads and passes `boxkern_include` files to the Forth environment at boot time using [Forth-C FFI function]()  `forth_eval_boxkern_includes_or_die()`. This mechanism allows a limited form of Forth module loading until the Forth `include` Word can be defined. The order of the modules listed in `boxkern-includes.fs` is important because new Words build upon previously defined Words. The modules in `boxkern-includes.fs` build up a stack, with [shell.fs]() on top.
+- Lines starting with `\` are ignored.
+
+- Lines beginning with `boxkern_include` specify the full path of a Forth module to be evaluated.
+
+- Constraint: Modules loaded this way must not contain nested include calls.
+
+The BoxLambda kernel processes this file during the boot sequence via the C function `forth_eval_boxkern_includes_or_die()`. By parsing this list and passing the contents of each file to the Forth environment, the kernel bootstraps the system layer by layer.
+
+The order of these files is critical; each module provides the foundational words required by the next. Once `shell.fs` is loaded at the top of this stack, the system finally has the full interactive capabilities and the standard include word needed for normal operations.
 
 # The RAM Disk and Target.py
 
-I don't have an editor running yet on BoxLambda. For the time being, I have to write Forth modules on a host PC and then transfer them to BoxLambda. To make that process relatively painless, I created on BoxLambda a RAM disk whose contents can be updated through external JTAG access. I combine this with a host PC script that can quickly transfer a directory of files from the host to the RAM disk location on the target.
+Since BoxLambda doesn't yet have a native text editor, Forth modules are developed on a host PC and transferred to the target. To make this process efficient, I implemented a RAM disk on BoxLambda that can be updated via external JTAG access.
 
+This setup allows for a high-speed "edit-transfer-test" cycle. I can modify a Forth word on my PC and have the updated module running on the FPGA in seconds, without ever touching an SD card or re-flashing the kernel.
 ![FatFs Media Access Interface.](../assets/the-file-system-stack/FatFs-Media-Access-Interface.png)
 
 *FatFs Media Access Interface.*
 
-[diskio_ram.cpp]() is the RAM Disk Device Controller. This module plugs into the FATFS component using its [Media Access Interface]():
+## RAM Disk Implementation
 
-The RAM Disk Device Controller treats a given memory region as a RAM disk. The BoxLambda kernel configures external memory region `0x2ff00000-0x30000000` (1MB) for this purpose.
+The [diskio_ram.cpp](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/fatfs/diskio_ram.cpp) module serves as the RAM Disk Device Controller, plugging into the FatFS component via its Media Access Interface. It treats a specific memory region as a disk; the BoxLambda kernel configures the external memory region at `0x2ff00000 - 0x30000000` (size: 1MB) for this purpose.
 
-## Target.py
+## The Host-to-Target Workflow
 
-A host tool called `target.py` manages the transfer of host directories as disk images to or from the target memory location. `Target.py` is a wrapper around tools like OpenOCD and mcopy.
+Because the RAM disk is just a region of memory, we can bypass the BoxLambda OS entirely for file transfers using a host-side script called `target.py`. This tool acts as a wrapper around OpenOCD and mcopy, streamlining the transfer process:
 
-For example: To create a `hello-world.fs` module and transfer it to the target:
+1. Format Locally: `target.py` creates a FAT file system image on the host and populates it with the desired Forth modules.
 
-- In a linux terminal, navigate to the repo's `fs/test` directory and create a `hello-world.fs` file with contents `: hello-world ." Hello World." cr ;`:
+2. Transfer via JTAG: It uses OpenOCD to write that image directly into the BoxLambda memory at address `0x2ff00000`.
+
+3. Mount on Target: On the BoxLambda side, FatFS detects the valid file system structure and mounts it as the `ram:` drive.
+
+## The Edit-Transfer-Test Cycle
+
+Here is a practical example of creating a `hello-world.fs` module and transferring it to the target.
+
+1. On the Host: Navigate to the repository's `fs/test` directory and create the Forth module:
 
   ```
   $ cd fs/test
   fs/test$ echo ": hello-world .\" Hello World.\" cr ;" > hello-world.fs
   ```
 
-- Transfer the contents `fs/` directory, including the new `hello-world.fs` file, to the target as a RAM disk:
+2. The Transfer: Upload the contents of the `fs/` directory (including your new file) to the target memory as a RAM disk image:
 
   ```
   /fs/test$ cd ../..
@@ -644,7 +656,7 @@ For example: To create a `hello-world.fs` module and transfer it to the target:
   Done.
   ```
 
-- On the target, navigate to directory `ram:/test`, *include* the `hello-world.fs` file, and execute the `hello-world` Word it created:
+3.  **On the Target:** Switch to the RAM drive, include the file, and run the new Word:
 
   ```
   sd0:/forth> chdrv ram:
@@ -663,47 +675,42 @@ For example: To create a `hello-world.fs` module and transfer it to the target:
   ram:/test>
   ```
 
+`Target.py` is a versatile tool that handles more than just file transfers. For a complete description of its capabilities, check the [official documentation](https://boxlambda.readthedocs.io/en/v0.4.1/tools/target_py/).
+
 # The Target File System Tree
 
-The `fs/` directory in the Boxlambda repo is the root of the target filesystem. Its structure will evolve over time. Currently, it contains two directories:
+The `fs/` directory in the Boxlambda repository is the root of the target file system. Its structure will evolve over time, but it currently contains two primary directories:
 
-- `forth/` contains the system's `*.fs` Forth modules.
-- `test/` contains test files used by the Forth test suite.
+- `forth/`: Contains the system's `*.fs` Forth modules.
 
-The example in the previous section shows how to transfer the contents of the `fs/` directory to BoxLambda's RAM disk.
+- `test/`: Contains test files used by the Forth test suite.
 
-Another option is to copy the contents of the `fs/` directory to an SD card and insert that card into BoxLambda's microSD slot. Then press the reset button to reboot BoxLambda from the SD card (see [here]() for details).
-
-`Target.py` can do a lot more than file transfer. See [here]() for a complete description.
+The JTAG transfer shown above is the fastest way to iterate, but you can also copy the `fs/` directory to a physical microSD card. Once inserted, you can reboot BoxLambda to load the system from the SD card (see the [installation guide](https://boxlambda.readthedocs.io/en/v0.4.1/installation/installation/#preparing-the-sd-card) for details).
 
 # Other Changes
 
-- I introduced the Word `refill` as an alternate `query` that also supports input from files (rather than just console input).
-The file id is indicated in variable `include-source-id`. If set to 0, `refill` invokes query. The `refill` Word allows
-the construction of conditional compilation Words [if/ifdef/else/endif]() which can be used during the evaluation of modules using
-`include`.
-- The [BoxLambda ReadTheDocs documentation]() tree used to live in a separate branch. I moved it into the `develop`/`master` source code branch so that the
-documentation co-exists with the source code. This approach allows easier cross-referencing (using relative paths) and helps to keept the documentation in sync with the code base.
+- The `refill` Word: I introduced `refill` as a more flexible alternative to `query`. Unlike `query`, which is strictly for console input, `refill` supports input from files by checking the `include-source-id` variable. If the ID is 0, it defaults to console input; otherwise, it pulls from the active file. This is a critical building block for implementing conditional compilation words like [if/ifdef/else/endif](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/ifdef.fs), which are essential for managing complex module evaluations during an include operation.
+
+- Documentation Integration: The [BoxLambda ReadTheDocs documentation](https://boxlambda.readthedocs.io/en/v0.4.1/) formerly lived in a separate branch. I have moved it into the main develop/master branch so that the documentation co-exists directly with the source code. This makes cross-referencing much simpler via relative paths and ensures that the documentation and the codebase remain in sync as the project evolves.
 
 # Acknowledgements
 
-- [ZeptoForth](): ZeptoForth is a Forth treasure chest. I'm shamelessly borrowing code from this project left and right. It's my main
-Forth learning resource at the moment.
-- [MecrispCube](): The FFI, shell-like Words and the Forth file-system API are all based on ideas I've learned from the Mecrisp Cube project.
-- [W. Shepherd Pitts](https://github.com/wspitts2) provided useful feedback on my old [JTAG and OpenOCD]() post. His feedback made me
-realize that I was handling the cross-referencing between blog, documentation, and code all wrong. This in turn resulted in a major restructuring of the blog and documentation pages.
+- [ZeptoForth](https://github.com/tabemann/zeptoforth): ZeptoForth is a true Forth treasure chest. I am shamelessly borrowing code and patterns from this project left and right; it is my primary learning resource for Forth at the moment.
+- [MecrispCube](https://github.com/spyren/Mecrisp-Cube/tree/master): The FFI implementation, the shell-like words, and the Forth file-system API are all heavily inspired by ideas I picked up from the Mecrisp Cube project.
+- [Mecrisp Quintus](https://mecrisp.sourceforge.net): The Forth core at the heart of it all.
+- [W. Shepherd Pitts](https://github.com/wspitts2) provided useful feedback on my old [JTAG and OpenOCD](https://epsilon537.github.io/boxlambda/openocd-loose-ends/) post. Our exchange made me realize that my approach to cross-referencing between the blog, documentation, and source code was flawed. This in turn resulted in a major restructuring of the blog and documentation pages.
 
 # Conclusion
 
-With a Forth interpreter-compiler, a file system and a shell, BoxLambda's OS is starting to resemble an OS and is gradually becoming less dependent on a host PC and cross compiler toolchain to nurse it along.
+With a Forth interpreter-compiler, a file system, and a shell, BoxLambda OS is starting to function as a standalone OS. The system is becoming less dependent on the host PC and cross-compiler toolchain, moving toward a self-hosted environment where the system can be extended and maintained from within.
 
-Next steps:
-- **Fast boot**: The current system compiles itself from source as it's booting from the file system. This system is very flexible. Code
-changes can be made directly on the file system and don't need to be pre-built into a binary. Unfortunatley, this system is also
-slow. Even with the handful of Forth modules that BoxLambda currently has, it takes a few seconds to boot up. I'll be looking at
-methods to improve the boot time, for instance by adding the option to commit the compiled Forth dictionary to disk and to load it from
-disk at boot time.
-- **VERA graphics driver**: I'll create a Forth module that drives the [VERA Graphics subsystem](). This will be a key building block for the [Canvas REPL/Editor]().
+## Next steps
+
+- **Fast boot**: Currently, the system compiles itself from source every time it boots from the file system. While this offers incredible flexibility—allowing for direct code changes on the disk without a rebuild—it is relatively slow. Even with the current modest set of Forth modules, boot-up takes several seconds. I will be exploring methods to improve this, such as committing the compiled Forth dictionary to disk and loading it as a binary image at boot time.
+
+- **VERA graphics driver**: My next major task is to develop a Forth module for the [VERA Graphics subsystem](https://boxlambda.readthedocs.io/en/v0.4.1/soc/components/vera/). This will serve as a foundational building block for the envisioned [Canvas REPL/Editor](https://boxlambda.readthedocs.io/en/v0.4.1/software/boxlambda-os/architecture/#the-canvas-repl-editor).
+
+The File System Stack provides the infrastructure needed to manage the project more effectively. Now it's time to start building out the drivers and tools that sit on top of it.
 
 Thanks for reading!
 
