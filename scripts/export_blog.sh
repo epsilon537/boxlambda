@@ -31,8 +31,10 @@ git subtree split --prefix=blog -b blog-split
 git switch gh-pages
 git merge blog-split --allow-unrelated-histories
 git checkout --theirs .
-git add .
+git add _posts/
+git add assets/
+git add about.md
 git commit -m 'Releasing Blog.'
 git push
 git switch -
-git branch -d blog-split
+git branch -D blog-split
