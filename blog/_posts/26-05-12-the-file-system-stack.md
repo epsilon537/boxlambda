@@ -544,7 +544,7 @@ On the Forth side, `f_open` acts as a high-level wrapper around `fs_f_open`. It 
 
 # Include
 
-The ability to load and execute Forth modules from the file system is fundamental to the BoxLambda OS. The following fragment from [init.fs](https://github.com/epsilon537.github.io/boxlambda/blob/v0.4.1/fs/forth/init.fs) illustrates this in action:
+The ability to load and execute Forth modules from the file system is fundamental to the BoxLambda OS. The following fragment from [init.fs](https://github.com/epsilon537/boxlambda/blob/v0.4.1/fs/forth/init.fs) illustrates this in action:
 
 ```
 include /forth/ifdef.fs
