@@ -136,6 +136,88 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
 CR
 
 \ ------------------------------------------------------------------------
+TESTING WORDLISTS
+
+[: rm ;] try tst_dir/* drop
+[: rm ;] try tst_dir drop
+
+mkdir tst_dir
+
+max-order 1+ array testwids
+
+: testwids-init
+  max-order 1+ 0 do
+    wordlist i testwids !
+  loop
+;
+
+testwids-init
+
+[: max-order 1+ 0 do i testwids @ loop max-order 1+ set-order ;] try ' x-order-overflow = ?assert
+
+[: 0 set-order ;] try ' x-empty-search-order = ?assert
+
+[: forth max-order 1- 0 do i testwids @ loop max-order set-order ;] try 0= ?assert
+
+get-order max-order = ?assert
+
+[: 0 max-order 2- do i testwids @ = ?assert -1 +loop ;] execute
+
+T{ -> forth }T
+
+0 testwids @ set-current
+get-current 0 testwids @ = ?assert
+
+: wid-foo 0 testwids @ ;
+: this-wid wid-foo ;
+
+1 testwids @ set-current
+get-current 1 testwids @ = ?assert
+
+: wid-goo 1 testwids @ ;
+: this-wid wid-goo ;
+
+forth 1 set-order
+
+T{ token wid-foo find drop -> 0 }T
+T{ token wid-goo find drop -> 0 }T
+
+forth 0 testwids @ 2 set-order
+wid-foo 0 testwids @ = ?assert
+T{ token wid-goo find drop -> 0 }T
+
+0 testwids @ forth 2 set-order
+wid-foo 0 testwids @ = ?assert
+T{ token wid-goo find drop -> 0 }T
+
+forth 1 testwids @ 2 set-order
+wid-goo 1 testwids @ = ?assert
+T{ token wid-foo find drop -> 0 }T
+
+1 testwids @ forth 2 set-order
+wid-goo 1 testwids @ = ?assert
+T{ token wid-foo find drop -> 0 }T
+
+forth 0 testwids @ 1 testwids @ 3 set-order
+wid-foo 0 testwids @ = ?assert
+wid-goo 1 testwids @ = ?assert
+this-wid 1 testwids @ = ?assert
+
+forth 1 testwids @ 0 testwids @ 3 set-order
+wid-foo 0 testwids @ = ?assert
+wid-goo 1 testwids @ = ?assert
+this-wid 0 testwids @ = ?assert
+
+[: 0 testwids @ wid-list ;] >file tst_dir/testwid0.log
+[: 1 testwids @ wid-list ;] >file tst_dir/testwid1.log
+
+s" tst_dir/testwid0.log" s" test/testwid0.ref" f_cmp ?assert
+s" tst_dir/testwid1.log" s" test/testwid1.ref" f_cmp ?assert
+
+forth 1 set-order
+forth set-current
+
+\ -----------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
 
 T{ -> }T               \ START WITH CLEAN SLATE
@@ -1638,6 +1720,7 @@ VARIABLE NN1
 VARIABLE NN2
 :NONAME 1234 ; NN1 !
 :NONAME 9876 ; NN2 !
+
 T{ NN1 @ EXECUTE -> 1234 }T
 T{ NN2 @ EXECUTE -> 9876 }T
 
@@ -3411,6 +3494,7 @@ T{ [: + ;] 23 24 rot execute -> 47  }T
 
 \ ------------------------------------------------------------------------
 TESTING HEAP
+
 8 256 heap-size constant test-heap-size
 T{ test-heap-size 8 256 * 2dup > -rot 2 * < -> <TRUE> <TRUE> }T ( Between requested size and twice requested size )
 create test-heap test-heap-size allot
@@ -3569,6 +3653,8 @@ T{ test-pool pool-free-count -> 4 }T
 \ ------------------------------------------------------------------------
 TESTING temp allocator
 
+temp-space temp-mark> = ?assert
+
 variable saved-mark
 temp-mark> saved-mark !
 
@@ -3653,15 +3739,12 @@ T{ istr-dump -> }T
 
 T{ str-pool-mem istr-allocated? -> <TRUE> }T
 T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
 1 istr-free
 T{ str-pool-mem istr-allocated? -> <TRUE> }T
 T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
-T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
-2 istr-free
-T{ str-pool-mem istr-allocated? -> <TRUE> }T
+0 istr-free
+T{ str-pool-mem istr-allocated? -> <FALSE> }T
 T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
-T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
 
 \ ------------------------------------------------------------------------
 TESTING SPRINTF
@@ -4106,6 +4189,7 @@ esc-s" appending...\n" compare ?assert ( fil )
 TESTING SHELL
 
 \ ls, cd and pwd test
+[: rm ;] try tst_dir/* drop
 [: rm ;] try tst_dir drop
 mkdir tst_dir
 [: ." ls tst_dir" cr ;] >file tst_dir/ls.log

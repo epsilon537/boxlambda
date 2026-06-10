@@ -1,21 +1,22 @@
 cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
-project(BoxLambda VERSION 0.1.0 LANGUAGES C CXX ASM)
+project(
+  BoxLambda
+  VERSION 0.1.0
+  LANGUAGES C CXX ASM)
 
-#Build systems like Ninja can handle multiple configurations in one build tree.
-#We currently don't support that.
+# Build systems like Ninja can handle multiple configurations in one build tree.
+# We currently don't support that.
 
-get_property(isMultiConfig GLOBAL
-    PROPERTY GENERATOR_IS_MULTI_CONFIG
-)
+get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 
 if(isMultiConfig)
   message(FATAL_ERROR "MultiConfig is not supported.")
 endif()
 
-#Currently, two build types are supported: -DCMAKE_BUILD_TYPE=fpga and -DCMAKE_BUILD_TYPE=sim
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY
-    STRINGS fpga sim)
+# Currently, two build types are supported: -DCMAKE_BUILD_TYPE=fpga and
+# -DCMAKE_BUILD_TYPE=sim
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS fpga sim)
 
 set(allowedBuildTypes fpga sim)
 
@@ -25,64 +26,81 @@ endif()
 
 message("Build Type: ${CMAKE_BUILD_TYPE}.")
 
-#A sw target. Builds all software projects
+# Generate the verible.filelist
+file(GLOB_RECURSE VERILOG_FILES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/*.v
+     ${CMAKE_SOURCE_DIR}/*.sv ${CMAKE_SOURCE_DIR}/*.svh)
+
+set(FILTERED_VERILOG_FILES "")
+
+# Exclude the build/ dir.
+foreach(f ${VERILOG_FILES})
+  if(NOT f MATCHES "/build/")
+    list(APPEND FILTERED_VERILOG_FILES ${f})
+  endif()
+endforeach()
+
+file(WRITE verible.filelist "")
+foreach(f ${FILTERED_VERILOG_FILES})
+  file(APPEND verible.filelist "${f}\n")
+endforeach()
+
+# A sw target. Builds all software projects
 add_custom_target(sw)
 
-#A codegeneration target. Components that require
-#code generation will add their codegeneration target as a
-#dependency to this target.
+# A codegeneration target. Components that require code generation will add
+# their codegeneration target as a dependency to this target.
 add_custom_target(cgen)
 
-#make regen rule, to completely remove and regenerate the build tree.
-add_custom_target(regen
-    WORKING_DIRECTORY
-        ${CMAKE_CURRENT_BINARY_DIR}
-    COMMAND
-        rm -rf sw && rm -rf gw
-    COMMAND
-        ${CMAKE_COMMAND} .
-    COMMAND
-        ${CMAKE_MAKE_PROGRAM} cgen
-    COMMENT
-        "Removing and regenerating build tree."
-    VERBATIM
-)
+# make regen rule, to completely remove and regenerate the build tree.
+add_custom_target(
+  regen
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND rm -rf sw && rm -rf gw && rm -rf codegen && rm -rf registers
+  COMMAND ${CMAKE_COMMAND} .
+  COMMAND ${CMAKE_MAKE_PROGRAM} cgen
+  COMMENT "Removing and regenerating build tree."
+  VERBATIM)
 
 enable_testing()
 
-#The registers tree
+# The registers tree
 add_subdirectory(registers)
 
-#The software tree
+# The software tree
 add_subdirectory(sw)
 
-#The gateware tree
+# The gateware tree
 add_subdirectory(gw)
 
-#A rule to check if the BoxLambda environment is active.
-add_custom_target(check_env
-    WORKING_DIRECTORY
-        ${PROJECT_SOURCE_DIR}/scripts
-    COMMAND
-        ./check_env.sh
-    COMMENT
-        "Checking if BoxLambda environment has been activated."
-    VERBATIM
-)
+# A rule to check if the BoxLambda environment is active.
+add_custom_target(
+  check_env
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/scripts
+  COMMAND ./check_env.sh
+  COMMENT "Checking if BoxLambda environment has been activated."
+  VERBATIM)
 
-#Add check_env as a dependency to all targets.
-#There has to be a better way to do this but I can't find it. This beats having to add
-#the dependency to each target individually.
-function (_get_all_cmake_targets out_var current_dir)
-    get_property(targets DIRECTORY ${current_dir} PROPERTY BUILDSYSTEM_TARGETS)
-    get_property(subdirs DIRECTORY ${current_dir} PROPERTY SUBDIRECTORIES)
+# Add check_env as a dependency to all targets. There has to be a better way to
+# do this but I can't find it. This beats having to add the dependency to each
+# target individually.
+function(_get_all_cmake_targets out_var current_dir)
+  get_property(
+    targets
+    DIRECTORY ${current_dir}
+    PROPERTY BUILDSYSTEM_TARGETS)
+  get_property(
+    subdirs
+    DIRECTORY ${current_dir}
+    PROPERTY SUBDIRECTORIES)
 
-    foreach(subdir ${subdirs})
-        _get_all_cmake_targets(subdir_targets ${subdir})
-        list(APPEND targets ${subdir_targets})
-    endforeach()
+  foreach(subdir ${subdirs})
+    _get_all_cmake_targets(subdir_targets ${subdir})
+    list(APPEND targets ${subdir_targets})
+  endforeach()
 
-    set(${out_var} ${targets} PARENT_SCOPE)
+  set(${out_var}
+      ${targets}
+      PARENT_SCOPE)
 endfunction()
 
 # Run at end of top-level CMakeLists
@@ -91,4 +109,3 @@ _get_all_cmake_targets(all_targets ${CMAKE_CURRENT_LIST_DIR})
 foreach(tgt ${all_targets})
   add_dependencies(${tgt} check_env)
 endforeach()
-

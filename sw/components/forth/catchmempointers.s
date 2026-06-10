@@ -37,13 +37,10 @@
   laf x14, ThreadEnd
   la x15, CoreDictionaryStart
   sc x15, 0(x14)
-
- #  write "Setze ThreadEnd:"
- #  pushdaconst ThreadEnd
- #  lc x8, 0(x8)
- #  # laf x8, CoreDictionaryStart
- #  call hexdot
- #  writeln ""
+  
+  # Point Current to ThreadEnd, the initial/default wordlist.
+  la x15, Current
+  sc x14, 0(x15)
 
   # Register allocation here:
 
@@ -134,8 +131,6 @@ ScanCoreWords_MemAlloc_complete:
   popda x10
   beq x10, zero, ScanCoreWords
 
-  laf x10, SecondThreadEnd
-  sc x0, 0(x10) # Set SecondThreadEnd pointer to 0. Not used in BoxLambda version of mecrisp.
   drop
 
   laf x10, VariablesPointer # Store x7, the variable tracking pointer, into VariablesPointer.

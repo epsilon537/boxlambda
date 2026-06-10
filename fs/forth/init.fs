@@ -12,10 +12,11 @@ include /forth/ifdef.fs
 include /forth/disasm.fs
 include /forth/dump.fs
 include /forth/dict.fs
+include /forth/wordlist.fs
 
 \ This flag is set when building the boxkerntest target.
 [ifdef] FORTH_CORE_TEST
-false include-verbose !
+true include-verbose !
 include /test/testsuite.fs
 [then]
 

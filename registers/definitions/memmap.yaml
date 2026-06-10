@@ -1,0 +1,97 @@
+# BoxLambda Master Memory Map Specification
+
+memory_map:
+  - name: IMEM_BASE
+    value: "0x00000000"
+    comment: "Internal Memory Base"
+
+  - name: IMEM_SIZE_BYTES
+    value: "256 * 1024"
+    comment: "256 KB"
+
+  - name: BOOTLOADER_IMG_SIZE_BYTES
+    value: "0x00100000"
+    comment: "Bootloader Image Size"
+
+  - name: APP_SW_IMG_SIZE_BYTES
+    value: "0x00200000"
+    comment: "Application Software Image Size"
+
+  - name: SPIFLASH_BASE
+    value: "0x11000000"
+    comment: "SPI Flash Memory Base"
+
+  - name: SPIFLASH_SIZE_BYTES
+    value: "16 * 1024 * 1024"
+    comment: "16 MB Flash Array"
+
+  - name: SPIFLASH_BITSTREAM_BASE
+    value: "SPIFLASH_BASE"
+    comment: "FPGA Bitstream Base address"
+
+  - name: SPIFLASH_BITSTREAM_SIZE_BYTES
+    value: "0x00400000"
+    comment: "4 MB Bitstream Size Allocation"
+
+  - name: SPIFLASH_BOOTLOADER_BASE
+    value: "SPIFLASH_BASE + 0x00500000"
+    comment: "Bootloader Base Address. Note the 0x100000 gap from the end of the bitstream"
+
+  - name: SPIFLASH_BOOTLOADER_SIZE_BYTES
+    value: "BOOTLOADER_IMG_SIZE_BYTES"
+
+  - name: SPIFLASH_SW_BASE
+    value: "SPIFLASH_BOOTLOADER_BASE + SPIFLASH_BOOTLOADER_SIZE_BYTES"
+    comment: "Application Software Image Base Address"
+
+  - name: SPIFLASH_SW_SIZE_BYTES
+    value: "APP_SW_IMG_SIZE_BYTES"
+
+  - name: SPIFLASH_NVDATA_BASE
+    value: "SPIFLASH_SW_BASE + SPIFLASH_SW_SIZE_BYTES"
+    comment: "Non-Volatile Data Base Addess"
+
+  - name: SPIFLASH_NVDATA_SIZE_BYTES
+    value: "4 * 1024 * 1024"
+    comment: "4 MB"
+
+  - name: VERA_VRAM_BASE
+    value: "0x12040000"
+    comment: "VERA Video RAM Base"
+
+  - name: VERA_VRAM_SIZE_BYTES
+    value: "128 * 1024"
+    comment: "128 KB"
+
+  - name: VERA_SPRITE_RAM_BASE
+    value: "0x12001000"
+
+  - name: VERA_SPRITE_RAM_SIZE_BYTES
+    value: "1024"
+
+  - name: VERA_PALETTE_RAM_BASE
+    value: "0x12002000"
+
+  - name: VERA_PALETTE_RAM_SIZE_BYTES
+    value: "512"
+
+  - name: VERA_CAPTURE_RAM_BASE
+    value: "0x12003000"
+
+  - name: VERA_CAPTURE_RAM_SIZE_BYTES
+    value: "640 * 4"
+
+  - name: SDRAM_BASE
+    value: "0x20000000"
+
+  - name: SDRAM_SIZE_BYTES
+    value: "256 * 1024 * 1024"
+    comment: "256 MB"
+
+  - name: RAM_DISK_BASE
+    value: "0x2ff00000"
+
+  - name: RAM_DISK_SIZE_BYTES
+    value: "1 * 1024 * 1024"
+    comment: "1 MB"
+

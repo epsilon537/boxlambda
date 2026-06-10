@@ -35,7 +35,14 @@
 : m+ ( d n -- d' ) s>d d+ [3-foldable] ;
 
 \ 1<<u
-: bitval ( u -- u )
+: 1<< ( u -- u )
   1 swap lshift [inline]
 ;
 
+\ In number n, set bitposition to bitvalue
+( n bitvalue bitpos -- n')
+: setbit
+  >r 1 and ( n bitvalue R: bitpos )
+  r@ lshift swap ( orval n R: bitpos )
+  r> 1<< not and or
+;

@@ -1,0 +1,36 @@
+{# MACRO #}
+
+{#- module name #}
+{% macro module_name() %}
+    {%- if prefix %}
+{{ prefix }}
+    {%- else %}
+{{ file_name }}
+    {%- endif %}
+{%- endmacro %}
+
+{#- module prefix #}
+{% macro module_prefix() %}
+{{ module_name() }}_
+{%- endmacro %}
+
+{#- TEMPLATE NAMESPACE #}
+{% set tmp = namespace() %}
+
+{#- TEMPLATE #}
+\ --- {{ module_name() }}
+
+{{ "$%x" % config['base_address'] }} constant {{ module_prefix()|upper }}BASE_ADDR
+
+{% for reg in rmap %}
+\ {{ reg.name }} - {{ reg.description }}
+{{ "$%x" % (reg.address) }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_ADDR
+
+    {% for bf in reg %}
+\ {{ reg.name }}.{{ bf.name }} - {{ bf.description }}
+{{ bf.width }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_WIDTH
+{{ bf.lsb }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_LSB
+{{ "$%x" % (bf.mask) }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_MASK
+    {% endfor %}
+{% endfor %}
+

@@ -462,6 +462,7 @@ create fil-buf1 fil-buf allot
   temp-mark> fil-buf0 .buf ! 256 temp-allot ( )
   temp-mark> fil-buf1 .buf ! 256 temp-allot ( )
   0 0 begin
+    2drop
     _f_cmp_buf ( noteq bothzero )
   2dup or until ( noteq bothzero )
   fil-buf0 .buf @ >temp-mark ( noteq bothzero )
@@ -559,23 +560,38 @@ create fil-buf1 fil-buf allot
     sprintf
 ;
 
-0 0 2variable glob
+begin-structure glob-ctxt-struct
+  field: .glob-xt
+  field: .glob-dir
+  2field: .glob-pat
+  128 +field: .glob-buf
+end-structure 
+
+( glob-ctxt -- )
+: (glob-each)
+  >r ( R: ctxt )
+  r@ .glob-pat 2@ dirname r@ .glob-pat 2@ basename f_findfirst ( dir R: ctxt )
+  r@ .glob-dir ! ( R: ctxt )
+  begin
+    filinfo.fname nip while ( R: ctxt )
+      r@ .glob-pat 2@ dirname filinfo.fname r@ .glob-buf pathname ( patha pathl R: ctxt )
+      r@ .glob-xt @ execute ( R: ctxt )
+      r@ .glob-dir @ f_findnext  ( R: ctxt )
+  repeat ( R: ctxt )
+  rdrop
+;
 
 \ Iterate over each file matching given glob pattern string,
 \ invoke xt passing in full file path.
 \ ( pata patl xt -- )
 : glob-each
-  >r glob 2! ( R: xt )
-  temp-mark> >r 128 temp-allot ( R: xt mark )
-  glob 2@ dirname glob 2@ basename f_findfirst ( dir R: xt mark )
-  begin
-    filinfo.fname nip ( dir srcfl R: xt mark )
-    while ( dir R: xt mark )
-      glob 2@ dirname filinfo.fname r@ pathname ( dir patha pathl R: xt mark )
-      1 rpick execute ( dir R: xt mark )
-      dup f_findnext  ( dir R: xt mark )
-  repeat
-  r> >temp-mark rdrop ( dir )
-  f_closedir ( )
+  glob-ctxt-struct [:
+    >r r@ .glob-xt ! r@ .glob-pat 2! 0 r@ .glob-dir ! r> ( ctxt )
+    \ If an exception is raised, catch it, release resources and rethrow.
+    [: dup (glob-each) ;] try ( ctxt exception|0 )
+    swap ( exception|0 ctxt )
+    .glob-dir @ ?dup if f_closedir then ( exception|0 )
+  ;] with-temp-allot ( exception|0 )
+  ?raise ( )
 ;
 

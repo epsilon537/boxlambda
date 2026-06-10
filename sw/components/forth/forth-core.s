@@ -44,25 +44,14 @@
 #   Type of memory
 # -----------------------------------------------------------------------------
 
-  .ifdef erasedmemcontainszero
-    .equ erasedbyte, 0
-    .equ erasedhalfword, 0
-    .equ erasedword, 0
-    .equ eraseddword, 0
+  .equ erasedbyte,     0xFF
+  .equ erasedhalfword, 0xFFFF
+  .equ erasedword,     0xFFFFFFFF
+  .equ eraseddword,    0xFFFFFFFFFFFFFFFF
 
-    .equ writtenhalfword, 0xFFFF
-    .equ writtenword,     0xFFFFFFFF
-    .equ writtendword,    0xFFFFFFFFFFFFFFFF
-  .else
-    .equ erasedbyte,     0xFF
-    .equ erasedhalfword, 0xFFFF
-    .equ erasedword,     0xFFFFFFFF
-    .equ eraseddword,    0xFFFFFFFFFFFFFFFF
-
-    .equ writtenhalfword, 0
-    .equ writtenword, 0
-    .equ writtendword, 0
-  .endif
+  .equ writtenhalfword, 0
+  .equ writtenword, 0
+  .equ writtendword, 0
 
   .equ writtencell, writtenword
   .equ erasedcell,  erasedword
@@ -103,13 +92,8 @@
     .equ "Code_\Name", .        # Labels for a more readable assembler listing only
 .endm
 
-.ifdef erasedmemcontainszero
-  .equ Flag_invisible,  0              # Erased Flash needs to give invisible Flags.
-  .equ Flag_visible,    1 << SIGNSHIFT # 0x80000000
-.else
-  .equ Flag_invisible, -1
-  .equ Flag_visible,    0
-.endif
+.equ Flag_invisible, -1
+.equ Flag_visible,    0
 
 
 .equ Flag_immediate,  Flag_visible | 0x0010
@@ -172,11 +156,11 @@
 # Variables of core that are not visible
 # Variables for Primary/Secondary dictionary management
 
-ramallot Dictionarypointer, CELL        # These five variables need to be exactly in this order in memory.
-ramallot SecondDictionarypointer, CELL   # Dictionarypointer +  4
-ramallot ThreadEnd, CELL                # Dictionarypointer +  8
-ramallot SecondThreadEnd, CELL           # Dictionarypointer + 12
-ramallot VariablesPointer, CELL         # Dictionarypointer + 16
+ramallot Dictionarypointer, CELL
+ramallot SecondDictionarypointer, CELL
+ramallot ThreadEnd, CELL 
+ramallot Current, CELL
+ramallot VariablesPointer, CELL     
 
 ramallot constantfoldingpointer, CELL
 ramallot leavepointer, CELL
@@ -299,7 +283,7 @@ CoreDictionaryStart: # Set entry point for Dictionary
 # Finalize the core dictionary structure and put a pointer
 # -----------------------------------------------------------------------------
 
-  Definition_EndOfCore Flag_invisible, "--- End of Core ---"
+  Definition_EndOfCore Flag_visible, "(end-sentinel)"
 
 # -----------------------------------------------------------------------------
 #  End of Dictionary

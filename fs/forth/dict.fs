@@ -5,12 +5,15 @@
 \   A few tools for dictionary wizardy
 \ -----------------------------------------------------------------------------
 
+-1 constant Flag_Invisible
+
 : executablelocation? ( addr -- ? )
   dup  addrinimem?              \ In imem
   over ramvar-here u< and     \ and below the variables and buffers
   swap addrinemem? or           \ or in emem ?
 ;
 
+: link>link ( addr -- addr* ) 0 cells + ; 
 : link>flags ( addr -- addr* ) 1 cells + ;
 : link>name  ( addr -- addr* ) 2 cells + ;
 : link>code  ( addr -- addr* ) 2 cells + skipstring ;
