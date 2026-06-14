@@ -19,6 +19,8 @@ boxkern_include forth/array.fs
 boxkern_include forth/except.fs
 boxkern_include forth/lambda.fs
 boxkern_include forth/struct.fs
+boxkern_include forth/stack.fs
+boxkern_include forth/compileto.fs
 boxkern_include forth/heap.fs
 boxkern_include forth/pool.fs
 boxkern_include forth/temp-alloc.fs

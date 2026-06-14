@@ -4,8 +4,7 @@
 \
 
 \ Save compile-to state and switch to IMEM.
-compileto> variable saved-compile-to
-compiletoimem
+compileto-save compiletoimem
 
 \ The temporary memory pool
 create temp-space 4096 allot
@@ -45,5 +44,5 @@ temp-space variable temp-here
   temp-space temp-here ! ;
 
 \ Restore compile-to state.
-saved-compile-to @ >compileto
+compileto-restore
 

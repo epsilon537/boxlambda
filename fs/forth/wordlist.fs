@@ -4,6 +4,9 @@
 \ specifying across which wordlists, and in which order, word search (find)
 \ should take place and specifying to which wordlist new words should be added.
 
+compileto-save
+compiletoimem
+
 \ The maximum number of wordlists in the search-order list.
 16 constant max-order
 
@@ -11,7 +14,7 @@ $ffffffff constant erasedcell
 
 max-order 1+ cells buffer: search-order
 
-: x-order-overflow ( -- ) ." searc-order list overflow" cr ;
+: x-order-overflow ( -- ) ." search-order list overflow" cr ;
 
 : x-empty-search-order ( -- ) ." search-order list empty" cr ;
 
@@ -173,4 +176,6 @@ search-order variable wordlistptr
 ;
 
 wordlist-init
+
+compileto-restore
 

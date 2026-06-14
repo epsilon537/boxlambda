@@ -11,8 +11,6 @@ To understand how the various software modules referenced below are related to e
 
 [units.fs](../../../../fs/forth/units.fs)
 
-`cell` size in bytes.
-
 `max-uint`
 
 - Maximum value for an unsigned integer.
@@ -28,6 +26,18 @@ To understand how the various software modules referenced below are related to e
 `cells+  ( x n -- x + n * Cell )`
 
 - Add the size of `n` cells to `x`.
+
+`cell+ ( x -- x+4 )`
+
+- Add size of one cell.
+
+`cells ( n -- 4*n )`
+
+- Calculate size of n cells.
+
+`cell`
+
+- Cell size in bytes.
 
 `chars  ( u -- u )`
 
@@ -1350,14 +1360,6 @@ See [Interpreting Console Input](interpreting.md).
 `haligned ( c-addr -- a-addr )`
 
 - Advances to next half-word aligned address.
-
-`cell+ ( x -- x+4 )`
-
-- Add size of one cell.
-
-`cells ( n -- 4*n )`
-
-- Calculate size of n cells.
 
 `allot ( n -- )`
 

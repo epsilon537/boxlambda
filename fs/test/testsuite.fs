@@ -136,6 +136,66 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
 CR
 
 \ ------------------------------------------------------------------------
+TESTING STACK OBJECTS
+
+T{ 4 stack-create teststack -> }T
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 0 }T
+T{ teststack stack-free -> 4 }T
+T{ teststack stack-base -> teststack stack-top }T
+
+T{ 1 teststack stack-push -> }T
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 1 }T
+T{ teststack stack-free -> 3 }T
+T{ teststack stack-base 1 cells+ -> teststack stack-top }T
+
+2 teststack stack-push
+3 teststack stack-push
+4 teststack stack-push
+[: 5 teststack stack-push ;] try ' x-stack-obj-overflow = ?assert
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 4 }T
+T{ teststack stack-free -> 0 }T
+T{ teststack stack-base 4 cells+ -> teststack stack-top }T
+
+T{ teststack stack-pop -> 4 }T
+T{ teststack stack-pop -> 3 }T
+T{ teststack stack-pop -> 2 }T
+T{ teststack stack-pop -> 1 }T
+[: teststack stack-pop ;] try ' x-stack-obj-underflow = ?assert
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 0 }T
+T{ teststack stack-free -> 4 }T
+T{ teststack stack-base -> teststack stack-top }T
+
+1 teststack stack-push
+2 teststack stack-push
+3 teststack stack-push
+4 teststack stack-push
+
+4 teststack stack-find dup ?assert
+T{ @ -> 4 }T
+2 teststack stack-find dup ?assert
+T{ @ -> 2 }T
+1 teststack stack-find dup ?assert
+T{ @ -> 1 }T
+
+T{ 7 teststack stack-find -> 0 }T
+
+2 teststack stack-find teststack >stack-top
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 1 }T
+T{ teststack stack-free -> 3 }T
+T{ teststack stack-base cell+ -> teststack stack-top }T
+
+T{ teststack stack-base teststack >stack-top -> }T
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 0 }T
+T{ teststack stack-free -> 4 }T
+T{ teststack stack-base -> teststack stack-top }T
+
+\ ------------------------------------------------------------------------
 TESTING WORDLISTS
 
 [: rm ;] try tst_dir/* drop
@@ -216,6 +276,62 @@ s" tst_dir/testwid1.log" s" test/testwid1.ref" f_cmp ?assert
 
 forth 1 set-order
 forth set-current
+
+\ -----------------------------------------------------------------------
+TESTING MDOULES
+
+begin-module testmod
+  : testmodword 5368 ;
+  
+  begin-module nestmod
+    : nestmodword 9633 ;
+  end-module
+end-module
+
+T{ s" testmodword" find -> 0 0 }T
+T{ s" nestmodword" find -> 0 0 }T
+T{ s" nestmod" find -> 0 0 }T
+
+testmod import
+T{ testmodword -> 5368 }T
+T{ s" nestmodword" find -> 0 0 }T
+
+nestmod import
+T{ testmodword -> 5368 }T
+T{ nestmodword -> 9633 }T
+
+nestmod unimport
+T{ testmodword -> 5368 }T
+T{ s" nestmodword" find -> 0 0 }T
+
+testmod unimport
+T{ s" testmodword" find -> 0 0 }T
+T{ s" nestmodword" find -> 0 0 }T
+T{ s" nestmod" find -> 0 0 }T
+
+T{ testmod :: testmodword -> 5368 }T
+T{ testmod :: nestmod :: nestmodword -> 9633 }T
+
+T{ s" testmodword" find -> 0 0 }T
+T{ s" nestmodword" find -> 0 0 }T
+T{ s" nestmod" find -> 0 0 }T
+
+begin-module sibmod
+  testmod import
+  : sibmodword testmodword ;
+end-module
+
+T{ s" testmodword" find -> 0 0 }T
+T{ s" nestmodword" find -> 0 0 }T
+T{ s" sibmodword" find -> 0 0 }T
+T{ s" nestmod" find -> 0 0 }T
+
+sibmod import
+
+T{ s" testmodword" find -> 0 0 }T
+T{ sibmodword -> 5368 }T
+
+sibmod unimport
 
 \ -----------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
@@ -3353,6 +3469,15 @@ compiletoimem ( compileto )
 compileto> 0= ?assert ( compileto )
 >compileto ( )
 T{ compileto> -> <TRUE> }T
+compiletoemem
+compileto-save
+  compiletoimem
+  compileto-save
+    compiletoemem
+  compileto-restore
+  T{ compiletoemem? -> <FALSE> }T
+compileto-restore
+T{ compiletoemem? -> <TRUE> }T
 
 \ ------------------------------------------------------------------------------
 TESTING INTERRUPTS

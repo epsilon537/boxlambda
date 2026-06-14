@@ -13,6 +13,7 @@ include /forth/disasm.fs
 include /forth/dump.fs
 include /forth/dict.fs
 include /forth/wordlist.fs
+include /forth/module.fs
 
 \ This flag is set when building the boxkerntest target.
 [ifdef] FORTH_CORE_TEST
