@@ -1,0 +1,128 @@
+regmap:
+-   name: MODEADDR
+    description: Sprite RAM Mode and VRAM Address Attribute (16-bit).
+    address: 0
+    bitfields:
+    -   name: MODE
+        description: 0=4BPP mode, 1=8BPP mode.
+        reset: 0
+        width: 1
+        lsb: 15
+        access: wo
+        enums:
+        -   name: 4BPP
+            description: 4 bits per pixel sprite mode.
+            value: 0
+        -   name: 8BPP
+            description: 8 bits per pixel sprite mode.
+            value: 1
+    -   name: ADDR
+        description: VRAM Address bits 16:5.
+        reset: 0
+        width: 12
+        lsb: 0
+        access: wo
+-   name: X
+    description: Sprite RAM X Attribute (16-bit).
+    address: 2
+    bitfields:
+    -   description: Sprite X position.
+        reset: 0
+        width: 10
+        lsb: 0
+        access: wo
+-   name: Y
+    description: Sprite RAM Y Attribute (16-bit).
+    address: 4
+    bitfields:
+    -   description: Sprite Y position.
+        reset: 0
+        width: 10
+        lsb: 0
+        access: wo
+-   name: FLAGS
+    description: Sprite RAM Flags Attribute (16-bit).
+    address: 6
+    bitfields:
+    -   name: HEIGHT
+        description: Sprite Height
+        reset: 0
+        width: 2
+        lsb: 14
+        access: wo
+        enums:
+        -   name: H8
+            description: 8 pixel sprite height
+            value: 0
+        -   name: H16
+            description: 16 pixel sprite height
+            value: 1
+        -   name: H32
+            description: 32 pixel sprite height
+            value: 2
+        -   name: H64
+            description: 64 pixel sprite height
+            value: 3
+    -   name: WIDTH
+        description: Sprite Width
+        reset: 0
+        width: 2
+        lsb: 12
+        access: wo
+        enums:
+        -   name: W8
+            description: 8 pixel sprite width
+            value: 0
+        -   name: W16
+            description: 16 pixel sprite width
+            value: 1
+        -   name: W32
+            description: 32 pixel sprite width
+            value: 2
+        -   name: W64
+            description: 64 pixel sprite width
+            value: 3
+    -   name: PALOFFSET
+        description: Sprite Palette Offset.
+        reset: 0
+        width: 4
+        lsb: 8
+        access: wo
+    -   name: COLMASK
+        description: Collision Mask
+        reset: 0
+        width: 4
+        lsb: 4
+        access: wo
+    -   name: ZDEPTH
+        description: Z Depth
+        reset: 0
+        width: 2
+        lsb: 2
+        access: wo
+        enums:
+        -   name: DIS
+            description: Sprite disabled.
+            value: 0
+        -   name: BG_L0
+            description: Between background and L0.
+            value: 1
+        -   name: L0_L1
+            description: Between L0 and L1.
+            value: 2
+        -   name: L1
+            description: In front of L1.
+            value: 3
+    -   name: VFLIP
+        description: Vertical Flip
+        reset: 0
+        width: 1
+        lsb: 1
+        access: wo
+    -   name: HFLIP
+        description: Horizontal Flip
+        reset: 0
+        width: 1
+        lsb: 0
+        access: wo
+

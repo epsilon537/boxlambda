@@ -23,7 +23,7 @@ Base address: 0x12000000
 | Name                     | Address    | Description |
 | :---                     | :---       | :---        |
 | [CTRL_STATUS](#ctrl_status) | 0x00000000 | Control/Status register. |
-| [DC_BORDER](#dc_border)  | 0x00000004 | Display composer border register. |
+| [DC_BORDERCOLOR](#dc_bordercolor) | 0x00000004 | Display composer border color register. |
 | [IEN](#ien)              | 0x00000008 | Interrupt enable register. |
 | [ISR](#isr)              | 0x0000000c | Interrupt status register. |
 | [IRQLINE](#irqline)      | 0x00000010 | Interrupt line register. |
@@ -64,20 +64,20 @@ Reset value: 0x00000000
 
 Back to [Register map](#register-map-summary).
 
-## DC_BORDER
+## DC_BORDERCOLOR
 
-Display composer border register.
+Display composer border color register.
 
 Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![dc_border](md_img/dc_border.svg)
+![dc_bordercolor](md_img/dc_bordercolor.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| BORDER_COLOR     | 7:0    | rw              | 0x00       | Border color |
+| val              | 7:0    | rw              | 0x00       | Border color |
 
 Back to [Register map](#register-map-summary).
 
@@ -94,9 +94,15 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:3   | -               | 0x0000000  | Reserved |
-| SPRCOL           | 2      | rw              | 0x0        | Sprite collision interrupt enable. |
-| LINE             | 1      | rw              | 0x0        | Line interrupt enable. |
-| VSYNC            | 0      | rw              | 0x0        | Vertical sync interrupt enable. |
+| val              | 2:0    | rw              | 0x0        | interrupt enable register. |
+
+Enumerated values for IEN.val.
+
+| Name             | Value   | Description |
+| :---             | :---    | :---        |
+| VSYNC            | 0x1    | Vertical sync interrupt enable. |
+| LINE             | 0x2    | Line interrupt enable. |
+| SPRCOL           | 0x4    | Sprite collision interrupt enable. |
 
 Back to [Register map](#register-map-summary).
 
@@ -115,9 +121,7 @@ Reset value: 0x00000000
 | -                | 31:8   | -               | 0x000000   | Reserved |
 | SPR_COLLISIONS   | 7:4    | ro              | 0x0        | Sprite collisions as determined by sprite renderer. |
 | -                | 3      | -               | 0x0        | Reserved |
-| SPRCOL           | 2      | rw1c            | 0x0        | Sprite collision interrupt status. |
-| LINE             | 1      | rw1c            | 0x0        | Line interrupt status. |
-| VSYNC            | 0      | rw1c            | 0x0        | Vertical sync interrupt status. |
+| ISR              | 2:0    | rw1c            | 0x0        | interrupt status register |
 
 Back to [Register map](#register-map-summary).
 
@@ -134,7 +138,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Scanline on which to generate line interrupt. |
+| val              | 9:0    | rw              | 0x00       | Scanline on which to generate line interrupt. |
 
 Back to [Register map](#register-map-summary).
 
@@ -151,7 +155,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | ro              | 0x00       | Current scanline. |
+| val              | 9:0    | ro              | 0x00       | Current scanline. |
 
 Back to [Register map](#register-map-summary).
 
@@ -196,7 +200,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| VALUE            | 7:0    | rw              | 0x00       | the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
+| val              | 7:0    | rw              | 0x00       | the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
 
 Back to [Register map](#register-map-summary).
 
@@ -213,7 +217,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| VALUE            | 7:0    | rw              | 0x00       | the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
+| val              | 7:0    | rw              | 0x00       | the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
 
 Back to [Register map](#register-map-summary).
 
@@ -230,7 +234,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Horizontal start of active part of screen in 640x480 space. |
+| val              | 9:0    | rw              | 0x00       | Horizontal start of active part of screen in 640x480 space. |
 
 Back to [Register map](#register-map-summary).
 
@@ -247,7 +251,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Horizontal stop of active part of screen in 640x480 space. |
+| val              | 9:0    | rw              | 0x00       | Horizontal stop of active part of screen in 640x480 space. |
 
 Back to [Register map](#register-map-summary).
 
@@ -264,7 +268,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Vertical start of active part of screen in 640x480 space. |
+| val              | 9:0    | rw              | 0x00       | Vertical start of active part of screen in 640x480 space. |
 
 Back to [Register map](#register-map-summary).
 
@@ -281,7 +285,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Vertical stop of active part of screen in 640x480 space. |
+| val              | 9:0    | rw              | 0x00       | Vertical stop of active part of screen in 640x480 space. |
 
 Back to [Register map](#register-map-summary).
 
@@ -301,10 +305,10 @@ Reset value: 0x00000000
 | MAP_HEIGHT       | 7:6    | rw              | 0x0        | Tile map height. |
 | MAP_WIDTH        | 5:4    | rw              | 0x0        | Tile map width. |
 | T256C            | 3      | rw              | 0x0        | When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes. |
-| BITMAP_MODE      | 2      | rw              | 0x0        | 1 selects bitmap mode, 0 selects tile mode. |
-| COLOR_DEPTH      | 1:0    | rw              | 0x0        | Number of bits per pixel to encode color information. |
+| BITMAPMODE       | 2      | rw              | 0x0        | 1 selects bitmap mode, 0 selects tile mode. |
+| COLORDEPTH       | 1:0    | rw              | 0x0        | Number of bits per pixel to encode color information. |
 
-Enumerated values for L0_CONFIG.COLOR_DEPTH.
+Enumerated values for L0_CONFIG.COLORDEPTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
@@ -317,19 +321,19 @@ Enumerated values for L0_CONFIG.MAP_WIDTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILES_32         | 0x0    | 32 tiles wide. |
-| TILES_64         | 0x1    | 64 tiles wide. |
-| TILES_128        | 0x2    | 128 tiles wide. |
-| TILES_256        | 0x3    | 256 tiles wide. |
+| W32              | 0x0    | 32 tiles wide. |
+| W64              | 0x1    | 64 tiles wide. |
+| W128             | 0x2    | 128 tiles wide. |
+| W256             | 0x3    | 256 tiles wide. |
 
 Enumerated values for L0_CONFIG.MAP_HEIGHT.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILES_32         | 0x0    | 32 tiles high. |
-| TILES_64         | 0x1    | 64 tiles high. |
-| TILES_128        | 0x2    | 128 tiles high. |
-| TILES_256        | 0x3    | 256 tiles high. |
+| H32              | 0x0    | 32 tiles high. |
+| H64              | 0x1    | 64 tiles high. |
+| H128             | 0x2    | 128 tiles high. |
+| H256             | 0x3    | 256 tiles high. |
 
 Back to [Register map](#register-map-summary).
 
@@ -346,7 +350,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| ADDR_16_9        | 7:0    | rw              | 0x00       | Bits 16:9 of the base address of the tile map. |
+| val              | 7:0    | rw              | 0x00       | Bits 16:9 of the base address of the tile map. |
 
 Back to [Register map](#register-map-summary).
 
@@ -363,7 +367,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| TILE_BASE_ADDR_16_11 | 7:2    | rw              | 0x0        | Bits 16:11 of the base address of the tile data. |
+| TILE_BASEADDR    | 7:2    | rw              | 0x0        | Bits 16:11 of the base address of the tile data. |
 | TILE_HEIGHT      | 1      | rw              | 0x0        | Tile height. |
 | TILE_BITMAP_WIDTH | 0      | rw              | 0x0        | Tile or Bitmap width. |
 
@@ -371,15 +375,15 @@ Enumerated values for L0_TILEBASE.TILE_BITMAP_WIDTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILE_BITMAP_W_8_320 | 0x0    | 8 pixel tile width, 320 pixels bitmap width. |
-| TILE_BITMAP_W_16_640 | 0x1    | 16 pixel tile width, 640 pixels bitmap width. |
+| W_8_320          | 0x0    | 8 pixel tile width, 320 pixels bitmap width. |
+| W_16_640         | 0x1    | 16 pixel tile width, 640 pixels bitmap width. |
 
 Enumerated values for L0_TILEBASE.TILE_HEIGHT.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILE_HEIGHT_8    | 0x0    | 8 pixel tile height. |
-| TILE_HEIGHT_16   | 0x1    | 16 pixel tile height. |
+| H8               | 0x0    | 8 pixel tile height. |
+| H16              | 0x1    | 16 pixel tile height. |
 
 Back to [Register map](#register-map-summary).
 
@@ -396,7 +400,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| HSCROLL_11_8_PAL_OFFSET | 11:8   | rw              | 0x0        | In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors. |
+| HSCROLL_11_8_PALOFFSET | 11:8   | rw              | 0x0        | In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors. |
 | HSCROLL_7_0      | 7:0    | rw              | 0x00       | Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
 
 Back to [Register map](#register-map-summary).
@@ -414,7 +418,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| VALUE            | 11:0   | rw              | 0x000      | Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down. |
+| val              | 11:0   | rw              | 0x000      | Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down. |
 
 Back to [Register map](#register-map-summary).
 
@@ -434,10 +438,10 @@ Reset value: 0x00000000
 | MAP_HEIGHT       | 7:6    | rw              | 0x0        | Tile map height. |
 | MAP_WIDTH        | 5:4    | rw              | 0x0        | Tile map width. |
 | T256C            | 3      | rw              | 0x0        | When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes. |
-| BITMAP_MODE      | 2      | rw              | 0x0        | 1 selects bitmap mode, 0 selects tile mode. |
-| COLOR_DEPTH      | 1:0    | rw              | 0x0        | Number of bits per pixel to encode color information. |
+| BITMAPMODE       | 2      | rw              | 0x0        | 1 selects bitmap mode, 0 selects tile mode. |
+| COLORDEPTH       | 1:0    | rw              | 0x0        | Number of bits per pixel to encode color information. |
 
-Enumerated values for L1_CONFIG.COLOR_DEPTH.
+Enumerated values for L1_CONFIG.COLORDEPTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
@@ -450,19 +454,19 @@ Enumerated values for L1_CONFIG.MAP_WIDTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILES_32         | 0x0    | 32 tiles wide. |
-| TILES_64         | 0x1    | 64 tiles wide. |
-| TILES_128        | 0x2    | 128 tiles wide. |
-| TILES_256        | 0x3    | 256 tiles wide. |
+| W32              | 0x0    | 32 tiles wide. |
+| W64              | 0x1    | 64 tiles wide. |
+| W128             | 0x2    | 128 tiles wide. |
+| W256             | 0x3    | 256 tiles wide. |
 
 Enumerated values for L1_CONFIG.MAP_HEIGHT.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILES_32         | 0x0    | 32 tiles high. |
-| TILES_64         | 0x1    | 64 tiles high. |
-| TILES_128        | 0x2    | 128 tiles high. |
-| TILES_256        | 0x3    | 256 tiles high. |
+| H32              | 0x0    | 32 tiles high. |
+| H64              | 0x1    | 64 tiles high. |
+| H128             | 0x2    | 128 tiles high. |
+| H256             | 0x3    | 256 tiles high. |
 
 Back to [Register map](#register-map-summary).
 
@@ -479,7 +483,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| ADDR_16_9        | 7:0    | rw              | 0x00       | Bits 16:9 of the base address of the tile map. |
+| val              | 7:0    | rw              | 0x00       | Bits 16:9 of the base address of the tile map. |
 
 Back to [Register map](#register-map-summary).
 
@@ -496,7 +500,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| TILE_BASE_ADDR_16_11 | 7:2    | rw              | 0x0        | Bits 16:11 of the base address of the tile data. |
+| TILE_BASEADDR    | 7:2    | rw              | 0x0        | Bits 16:11 of the base address of the tile data. |
 | TILE_HEIGHT      | 1      | rw              | 0x0        | Tile height. |
 | TILE_BITMAP_WIDTH | 0      | rw              | 0x0        | Tile or Bitmap width. |
 
@@ -504,15 +508,15 @@ Enumerated values for L1_TILEBASE.TILE_BITMAP_WIDTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILE_BITMAP_W_8_320 | 0x0    | 8 pixel tile width, 320 pixels bitmap width. |
-| TILE_BITMAP_W_16_640 | 0x1    | 16 pixel tile width, 640 pixels bitmap width. |
+| W_8_320          | 0x0    | 8 pixel tile width, 320 pixels bitmap width. |
+| W_16_640         | 0x1    | 16 pixel tile width, 640 pixels bitmap width. |
 
 Enumerated values for L1_TILEBASE.TILE_HEIGHT.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
-| TILE_HEIGHT_8    | 0x0    | 8 pixel tile height. |
-| TILE_HEIGHT_16   | 0x1    | 16 pixel tile height. |
+| H8               | 0x0    | 8 pixel tile height. |
+| H16              | 0x1    | 16 pixel tile height. |
 
 Back to [Register map](#register-map-summary).
 
@@ -529,7 +533,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| HSCROLL_11_8_PAL_OFFSET | 11:8   | rw              | 0x0        | In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors. |
+| HSCROLL_11_8_PALOFFSET | 11:8   | rw              | 0x0        | In Tile Mode, specifies bits 11:8 of the horizontal scroll offset. In Bitmap Mode, specifies the palette offset of the bitmap colors. |
 | HSCROLL_7_0      | 7:0    | rw              | 0x00       | Specifies bits 7:0 of the horizontal scroll offset. Increasing the value will cause the picture to move left, decreasing will cause the picture to move right. |
 
 Back to [Register map](#register-map-summary).
@@ -547,6 +551,6 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| VALUE            | 11:0   | rw              | 0x000      | Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down. |
+| val              | 11:0   | rw              | 0x000      | Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down. |
 
 Back to [Register map](#register-map-summary).

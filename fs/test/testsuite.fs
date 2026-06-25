@@ -376,6 +376,67 @@ T{ 1S 0S XOR -> 1S }T
 T{ 1S 1S XOR -> 0S }T
 
 \ ------------------------------------------------------------------------
+TESTING Basic Utilities
+
+create tst-vec $baba , $abba , $baab , $abab ,
+
+T{ $abba tst-vec 4 find-in -> tst-vec cell+ }T
+T{ $baba tst-vec 4 find-in -> tst-vec }T
+T{ $abab tst-vec 4 find-in -> tst-vec 3 cells+ }T
+T{ $b0b0 tst-vec 4 find-in -> 0 }T
+
+T{ 0 log2 -> 0 }T
+T{ 1 log2 -> 0 }T
+T{ 2 log2 -> 1 }T
+T{ $401 log2 -> #11 }T
+T{ #1024 log2 -> #10 }T
+T{ #1023 log2 -> #10 }T
+T{ $ffffffff log2 -> #32 }T
+
+T{ 8 8/ -> 1 }T
+T{ #81 8/ -> #10 }T
+T{ #80 8/ -> #10 }T
+T{ #79 8/ -> 9 }T
+T{ 8 4/ -> 2 }T
+T{ #81 4/ -> #20 }T
+T{ #80 4/ -> #20 }T
+T{ #79 4/ -> #19 }T
+
+
+variable treg
+$deadbeef treg !
+
+treg $ff00 8 bitfield@ tregb1@
+treg $ff00 8 bitfield! tregb1!
+treg $ff0000 #16 bitfield@ tregb2@
+treg $ff0000 #16 bitfield! tregb2!
+
+T{ tregb1@ -> $be }T
+T{ tregb2@ -> $ad }T
+T{ $54 tregb1! -> }T
+T{ $45 tregb2! -> }T
+T{ tregb1@ -> $54 }T
+T{ tregb2@ -> $45 }T
+T{ treg @ -> $de4554ef }T
+
+$deadbeef treg !
+
+$f000 #12 bitfield16@ n3@
+$000f #0  bitfield16@ n0@
+$f000 #12 bitfield16! n3!
+$000f #0  bitfield16! n0!
+
+T{ treg n3@ -> $b }T
+T{ treg n0@ -> $f }T
+
+5 treg n3!
+4 treg n0!
+
+T{ treg @ -> $dead5ee4 }T
+
+quit
+
+\ ------------------------------------------------------------------------
 TESTING 2* 2/ LSHIFT RSHIFT
 
 ( WE TRUST 1S, INVERT, AND BITSSET?; WE WILL CONFIRM RSHIFT LATER )

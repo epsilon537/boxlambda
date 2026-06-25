@@ -23,7 +23,7 @@ Base address: 0x12000000
 | Name                     | Address    | Description |
 | :---                     | :---       | :---        |
 | [CTRL_STATUS](#ctrl_status) | 0x00000000 | Control/Status register. |
-| [DC_BORDER](#dc_border)  | 0x00000004 | Display composer border register. |
+| [DC_BORDER_COLOR](#dc_border_color) | 0x00000004 | Display composer border color register. |
 | [IEN](#ien)              | 0x00000008 | Interrupt enable register. |
 | [ISR](#isr)              | 0x0000000c | Interrupt status register. |
 | [IRQLINE](#irqline)      | 0x00000010 | Interrupt line register. |
@@ -64,20 +64,20 @@ Reset value: 0x00000000
 
 Back to [Register map](#register-map-summary).
 
-## DC_BORDER
+## DC_BORDER_COLOR
 
-Display composer border register.
+Display composer border color register.
 
 Address offset: 0x00000004
 
 Reset value: 0x00000000
 
-![dc_border](md_img/dc_border.svg)
+![dc_border_color](md_img/dc_border_color.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| BORDER_COLOR     | 7:0    | rw              | 0x00       | Border color |
+| val              | 7:0    | rw              | 0x00       | Border color |
 
 Back to [Register map](#register-map-summary).
 
@@ -134,7 +134,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Scanline on which to generate line interrupt. |
+| val              | 9:0    | rw              | 0x00       | Scanline on which to generate line interrupt. |
 
 Back to [Register map](#register-map-summary).
 
@@ -151,7 +151,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | ro              | 0x00       | Current scanline. |
+| val              | 9:0    | ro              | 0x00       | Current scanline. |
 
 Back to [Register map](#register-map-summary).
 
@@ -196,7 +196,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| VALUE            | 7:0    | rw              | 0x00       | the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
+| val              | 7:0    | rw              | 0x00       | the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
 
 Back to [Register map](#register-map-summary).
 
@@ -213,7 +213,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| VALUE            | 7:0    | rw              | 0x00       | the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
+| val              | 7:0    | rw              | 0x00       | the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
 
 Back to [Register map](#register-map-summary).
 
@@ -230,7 +230,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Horizontal start of active part of screen in 640x480 space. |
+| val              | 9:0    | rw              | 0x00       | Horizontal start of active part of screen in 640x480 space. |
 
 Back to [Register map](#register-map-summary).
 
@@ -247,7 +247,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Horizontal stop of active part of screen in 640x480 space. |
+| val              | 9:0    | rw              | 0x00       | Horizontal stop of active part of screen in 640x480 space. |
 
 Back to [Register map](#register-map-summary).
 
@@ -264,7 +264,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Vertical start of active part of screen in 640x480 space. |
+| val              | 9:0    | rw              | 0x00       | Vertical start of active part of screen in 640x480 space. |
 
 Back to [Register map](#register-map-summary).
 
@@ -281,7 +281,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:10  | -               | 0x00000    | Reserved |
-| VALUE            | 9:0    | rw              | 0x00       | Vertical stop of active part of screen in 640x480 space. |
+| val              | 9:0    | rw              | 0x00       | Vertical stop of active part of screen in 640x480 space. |
 
 Back to [Register map](#register-map-summary).
 
@@ -414,7 +414,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| VALUE            | 11:0   | rw              | 0x000      | Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down. |
+| val              | 11:0   | rw              | 0x000      | Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down. |
 
 Back to [Register map](#register-map-summary).
 
@@ -547,6 +547,6 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:12  | -               | 0x00000    | Reserved |
-| VALUE            | 11:0   | rw              | 0x000      | Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down. |
+| val              | 11:0   | rw              | 0x000      | Specifies the vertical scroll offset. A value between 0 and 4095 can be used. Increasing the value will cause the picture to move up, decreasing will cause the picture to move down. |
 
 Back to [Register map](#register-map-summary).

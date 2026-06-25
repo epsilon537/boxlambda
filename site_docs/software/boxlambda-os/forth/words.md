@@ -11,8 +11,6 @@ To understand how the various software modules referenced below are related to e
 
 [units.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/units.fs)
 
-`cell` size in bytes.
-
 `max-uint`
 
 - Maximum value for an unsigned integer.
@@ -28,6 +26,18 @@ To understand how the various software modules referenced below are related to e
 `cells+  ( x n -- x + n * Cell )`
 
 - Add the size of `n` cells to `x`.
+
+`cell+ ( x -- x+4 )`
+
+- Add size of one cell.
+
+`cells ( n -- 4*n )`
+
+- Calculate size of n cells.
+
+`cell`
+
+- Cell size in bytes.
 
 `chars  ( u -- u )`
 
@@ -90,7 +100,7 @@ See [Forth Exception Handling](exception-handling.md).
 
 `suppress ( exc|0 "exception name" -- exc|0 )`
 
- Check if an exception, typically returned by try, matches a specified exception. If it does, replace it with zero to indicate no exception. Otherwise, pass the specified argument through.
+Check if an exception, typically returned by try, matches a specified exception. If it does, replace it with zero to indicate no exception. Otherwise, pass the specified argument through.
 
 `x-assert ( -- )`
 
@@ -101,6 +111,7 @@ See [Forth Exception Handling](exception-handling.md).
 - Raise `x-assert` exception if f is false.
 
 Example:
+
 ```
 : x-spc-exception ." Don't press space!" ;
 
@@ -130,15 +141,17 @@ Example:
 
 `;] ( compile-time: -- ) ( run-time: -- xt )`
 
-- Compile-only Immediate. End Lambda definition. At run-time, returns the *xt* of the code between `[:` and `:]`.
+- Compile-only Immediate. End Lambda definition. At run-time, returns the _xt_ of the code between `[:` and `:]`.
 
 Example 1:
+
 ```
   token
   [: 2dup f_stat ;] try 0=
 ```
 
 Example 2:
+
 ```
 : rm
   cr
@@ -184,6 +197,7 @@ Example 2:
 - Create a double cell-sized field.
 
 Example:
+
 ```
 begin-structure fil-buf
   field: .fil
@@ -208,21 +222,22 @@ Heaps are created by users and consist of discrete blocks that are allocated, fr
 
 `init-heap ( block-size block-count addr -- )`
 
-- Initialize a heap at *addr* with the given block size in bytes and block count; note that the size of the available memory at *addr* should be equal to or greater than the number of bytes returned by `heap-size` for *block-size* and *block-count*.
+- Initialize a heap at _addr_ with the given block size in bytes and block count; note that the size of the available memory at _addr_ should be equal to or greater than the number of bytes returned by `heap-size` for _block-size_ and _block-count_.
 
 `allocate ( size heap -- addr )`
 
-- Allocate memory in a heap of *size* bytes and return its address; if the memory cannot be allocated due to insufficient contiguous memory being available, `x-allocate-failed` is raised.
+- Allocate memory in a heap of _size_ bytes and return its address; if the memory cannot be allocated due to insufficient contiguous memory being available, `x-allocate-failed` is raised.
 
 `free ( addr heap -- )`
 
-- Free memory at *addr* in a heap.
+- Free memory at _addr_ in a heap.
 
 `resize ( size addr heap -- new-addr )`
 
-- Resize memory in a heap at *addr* to a new size in bytes, returning its new address. If sufficient memory is available for resizing at *addr* the allocation is expanded without moving or copying it and *addr* is returned. Otherwise, the allocation at *addr* is freed, and its contents are copied to a new allocation, whose address is returned. Note that if insufficient memory is available in the heap for resizing the allocation, the existing allocation is preserved, and `x-allocate-failed` is raised.
+- Resize memory in a heap at _addr_ to a new size in bytes, returning its new address. If sufficient memory is available for resizing at _addr_ the allocation is expanded without moving or copying it and _addr_ is returned. Otherwise, the allocation at _addr_ is freed, and its contents are copied to a new allocation, whose address is returned. Note that if insufficient memory is available in the heap for resizing the allocation, the existing allocation is preserved, and `x-allocate-failed` is raised.
 
 Exceptions:
+
 ```
 x-allocate-failed
 x-internal-error
@@ -233,7 +248,7 @@ x-memory-not-allocated
 
 [pool.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/pool.fs)
 
- Pools are created by users and consist of discrete blocks that are allocated and freed as a single unit. By default, there is no global pool. Allocating and freeing blocks in pools occur in constant time and are fast, unlike allocation, resizing, and freeing in heaps.
+Pools are created by users and consist of discrete blocks that are allocated and freed as a single unit. By default, there is no global pool. Allocating and freeing blocks in pools occur in constant time and are fast, unlike allocation, resizing, and freeing in heaps.
 
 `pool-size ( -- bytes )`
 
@@ -241,19 +256,19 @@ x-memory-not-allocated
 
 `init-pool ( block-size addr -- )`
 
-- Initialize a pool at *addr* with the given block size of *block-size* bytes. Note that no space for storing blocks is available in a pool when it is first initialized; to add memory to a pool, use `add-pool`.
+- Initialize a pool at _addr_ with the given block size of _block-size_ bytes. Note that no space for storing blocks is available in a pool when it is first initialized; to add memory to a pool, use `add-pool`.
 
 `add-pool ( addr bytes pool -- )`
 
-- Add memory starting at *addr* of size *bytes* to *pool* as discrete blocks; only a multiple of the block size of the pool will be added to the pool, so if *bytes* is not a multiple of said block size not all of the space in the memory provided will be used.
+- Add memory starting at _addr_ of size _bytes_ to _pool_ as discrete blocks; only a multiple of the block size of the pool will be added to the pool, so if _bytes_ is not a multiple of said block size not all of the space in the memory provided will be used.
 
 `allocate-pool ( pool -- addr )`
 
-- Allocate a block in *pool* and return its address. If no blocks are available in the pool, `x-allocate-failed` is raised.
+- Allocate a block in _pool_ and return its address. If no blocks are available in the pool, `x-allocate-failed` is raised.
 
 `free-pool ( addr pool -- )`
 
-- Free a block at *addr* in *pool*, making it available to future allocation.
+- Free a block at _addr_ in _pool_, making it available to future allocation.
 
 `pool-block-size ( pool -- bytes )`
 
@@ -268,6 +283,7 @@ x-memory-not-allocated
 - Get the total number of blocks in a pool.
 
 Exceptions:
+
 ```
 x-allocate-failed
 ```
@@ -293,11 +309,13 @@ x-allocate-failed
 - Execute xt, passing in a buffer of u bytes at TOS. Release buffer when xt has completed.
 
 Example:
+
 ```
 : printf ( n*x c-addr u -- ) 256 [: sprintf type ;] with-temp-allot ;
 ```
 
 Exceptions:
+
 ```
 x-temp-allot-failed
 ```
@@ -463,7 +481,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `lshift ( x1 u -- x2 )`
 
-- Logical  left-shift of `u` bit-places.
+- Logical left-shift of `u` bit-places.
 
 `shr ( x1 -- x2 )`
 
@@ -471,7 +489,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `shl ( x1 -- x2 )`
 
-- Logical  left-shift of one bit-place.
+- Logical left-shift of one bit-place.
 
 `ror ( x1 -- x2 )`
 
@@ -479,9 +497,9 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `rol ( x1 -- x2 )`
 
-- Logical  left-rotation of one bit-place.
+- Logical left-rotation of one bit-place.
 
-`bitval ( u -- u' )`
+`1<< ( u -- u' )`
 
 - Integer value corresponding to bit position u (i.e., 1<<u).
 
@@ -542,7 +560,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `* ( u1|n1 u2|n2 -- u3|n3 )`
 
-- 32*32 = 32 Multiplication.
+- 32\*32 = 32 Multiplication.
 
 `2- ( u1|n1 -- u2|n2 )`
 
@@ -566,7 +584,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `2* ( n1 -- n2 )`
 
-- Arithmetic  left-shift.
+- Arithmetic left-shift.
 
 `2/ ( n1 -- n2 )`
 
@@ -600,15 +618,15 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `um* ( u1 u2 -- ud )`
 
-- 32*32 = 64 Multiplication.
+- 32\*32 = 64 Multiplication.
 
 `ud* ( ud1|d1 ud2|d2 -- ud3|d3 )`
 
-- 64*64 = 64 Multiplication.
+- 64\*64 = 64 Multiplication.
 
 `udm* ( ud1 ud2 -- ud3-Low ud4-High )`
 
-- 64*64=128 Multiplication.
+- 64\*64=128 Multiplication.
 
 `um/mod ( ud u1 -- u2 u3 )`
 
@@ -624,11 +642,11 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `m* ( n1 n2 -- d )`
 
-- n1 * n2 = d.
+- n1 \* n2 = d.
 
 `m/mod ( d  n1 -- n2 n3 )`
 
-- d  / n1 = n3 remainder r2.
+- d / n1 = n3 remainder r2.
 
 `d/mod ( d1 d2 -- d3 d4 )`
 
@@ -640,23 +658,23 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `*/ ( n1 n2 n3 -- n4 )`
 
-- n1 * n2 / n3 = n4.
+- n1 \* n2 / n3 = n4.
 
 `u*/ ( u1 u2 u3 -- u4 )`
 
-- u1 * u2 / u3 = u4.
+- u1 \* u2 / u3 = u4.
 
 `*/mod ( n1 n2 n3 -- n4 n5 )`
 
-- n1 * n2 / n3 = n5 remainder n4.
+- n1 \* n2 / n3 = n5 remainder n4.
 
 `u*/mod ( u1 u2 u3 -- u4 u5 )`
 
-- u1 * u2 / u3 = u5 remainder u4.
+- u1 \* u2 / u3 = u5 remainder u4.
 
 `d2* ( d1 -- d2 )`
 
-- Arithmetic  left-shift.
+- Arithmetic left-shift.
 
 `d2/ ( d1 -- d2 )`
 
@@ -664,7 +682,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `dshl ( ud1 -- ud2 )`
 
-- Logical  left-shift, same as d2*.
+- Logical left-shift, same as d2\*.
 
 `dshr ( ud1 -- ud2 )`
 
@@ -720,7 +738,7 @@ like signed double numbers.
 
 - Multiplication.
 
-## Comparisons  (exactly ANS, some logical extensions)
+## Comparisons (exactly ANS, some logical extensions)
 
 ### Single Comparisons
 
@@ -1048,13 +1066,13 @@ number ( c-addr length -- 0 )
 `>number ( ud1 c-addr1 u1 -- ud2 c-addr2 u2 )`
 
 - ud2 is the unsigned result of converting the characters within the string
-specified by c-addr1 u1 into digits, using the number in `base`, and adding
-each into ud1 after multiplying ud1 by the number in `base`. Conversion
-continues left-to-right until a character that is not convertible, including
-any "+" or "-", is encountered or the string is entirely converted. c-addr2 is
-the location of the first unconverted character or the first character past the
-end of the string if the string was entirely converted. u2 is the number of
-unconverted characters in the string.
+  specified by c-addr1 u1 into digits, using the number in `base`, and adding
+  each into ud1 after multiplying ud1 by the number in `base`. Conversion
+  continues left-to-right until a character that is not convertible, including
+  any "+" or "-", is encountered or the string is entirely converted. c-addr2 is
+  the location of the first unconverted character or the first character past the
+  end of the string if the string was entirely converted. u2 is the number of
+  unconverted characters in the string.
 
 ### Counted string routines
 
@@ -1090,13 +1108,13 @@ unconverted characters in the string.
 Parse string from input string, substitute escape codes according to table below, and print.
 
 | Escape Code | Substitution |
-|-------------|--------------|
-| \t | Tab |
-| \n | LF  |
-| \r | CR  |
-| \e | ESC |
-| \\ | \   |
-| '  | "   |
+| ----------- | ------------ |
+| \t          | Tab          |
+| \n          | LF           |
+| \r          | CR           |
+| \e          | ESC          |
+| \\          | \            |
+| '           | "            |
 
 ### Formatted Numerical Output
 
@@ -1186,11 +1204,11 @@ Parse string from input string, substitute escape codes according to table below
 
 `sprintf ( n*x addr1 u1 addr2 -- addr2 u3 )`
 
-- Prints n*x into buffer addr2 using the format string at addr1 u. addr2 u3 is the resulting string.
+- Prints n\*x into buffer addr2 using the format string at addr1 u. addr2 u3 is the resulting string.
 
 `printf ( n*x c-addr u -- )`
 
-- Prints n*x using the format string at caddr u. The format string consists of ordinary characters (except %), which are copied verbatim to the destination buffer, and conversion specifications. Conversion specifications have the following structure:
+- Prints n\*x using the format string at caddr u. The format string consists of ordinary characters (except %), which are copied verbatim to the destination buffer, and conversion specifications. Conversion specifications have the following structure:
 
 - Introductory % character
 - An optional '-' that signifies left justification
@@ -1212,6 +1230,7 @@ s - string (c-addr u)
 ```
 
 Examples:
+
 ```
 10 s" Joe" s" %s has a %n%% discount!" printf
 Joe has a 10% discount! ok
@@ -1342,14 +1361,6 @@ See [Interpreting Console Input](interpreting.md).
 
 - Advances to next half-word aligned address.
 
-`cell+ ( x -- x+4 )`
-
-- Add size of one cell.
-
-`cells ( n -- 4*n )`
-
-- Calculate size of n cells.
-
 `allot ( n -- )`
 
 - Tries to advance Dictionary Pointer by n bytes. Aborts, if not enough space available.
@@ -1382,7 +1393,7 @@ See [Interpreting Console Input](interpreting.md).
 
 - Forget the given word.
 
-` del ( -- )`
+`del ( -- )`
 
 - Delete the latest definition.
 
@@ -1444,11 +1455,11 @@ See [Interpreting Console Input](interpreting.md).
 
 `dictionarystart ( -- a-addr )`
 
-- Current entry point for dictionary search.
+- Current entry point for dictionary search, i.e. `(latest) @`.
 
 `dictionarynext ( a-addr -- a-addr flag )`
 
-- Scans dictionary chain and returns true if end is reached.
+- Fetches the next entry in the dictionary chain. Returns true if end is reached.
 
 `skipdefinition ( addr -- addr* )`
 
@@ -1464,7 +1475,7 @@ See [Interpreting Console Input](interpreting.md).
 
 ## Flags and inventory
 
-Note that `[immediate]` needs to be *inside* of the definition, not after the `;`. There is no `immediate` Word variant that goes *after* the definition.
+Note that `[immediate]` needs to be _inside_ of the definition, not after the `;`. There is no `immediate` Word variant that goes _after_ the definition.
 
 [compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler-memory.s)
 [compiler.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler.s)
@@ -1543,7 +1554,7 @@ Note that `[immediate]` needs to be *inside* of the definition, not after the `;
 `' ( "Word" -- addr )`
 
 - Tries to find Word in dictionary and put its address on the data stack.
-Quits (i.e., restarts REPL) if Word is not found.
+  Quits (i.e., restarts REPL) if Word is not found.
 
 `['] (compile-time: "Word" -- ) (run-time: -- addr )`
 
@@ -1554,6 +1565,7 @@ Quits (i.e., restarts REPL) if Word is not found.
 - Used inside Immediate Words. Selects the compile-time behavior of the postponed Word.
 
 Example:
+
 ```
 \ Begin lambda
 : [: ( -- )
@@ -1585,7 +1597,7 @@ Example:
 `: <Defining Word> create <compile-time operations> does> <run-time operations> ;`
 
 - `does> ( Compile-time: -- )` marks the end of the compile-time behavior and the beginning of the run-time
-behavior of the Defining Word.
+  behavior of the Defining Word.
 
 - `does> ( Run-time: -- addr )` puts the address of the defined Word instance on the data stack.
 
@@ -1704,8 +1716,8 @@ begin ... flag while ... flag while ... repeat ... else ... then
 
 `begin ( -- )`
 
-
 -
+
 ### Definite Loops
 
 [doloop.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/doloop.s)
@@ -1720,7 +1732,7 @@ limit index   do ... [one or more leave(s)] ... loop
 
 `k ( -- u|n )`
 
-- Gives third  loop index.
+- Gives third loop index.
 
 `j ( -- u|n )`
 
@@ -1796,6 +1808,7 @@ limit index   do ... [one or more leave(s)] ... loop
 - Copy Forth string into buffer of at least 256 bytes and 0-terminate. May raise `x-string-too-long`.
 
 Exceptions:
+
 ```
 x-string-too-long
 ```
@@ -1809,14 +1822,13 @@ File Access:
 `f_open ( addr len mode -- fil )`
 
 - Open the file specified in the input string. The mode argument is a combination of the following values:
-
-    - `FA_READ`: Specifies read access to the file. Data can be read from the file.
-    - `FA_WRITE`: Specifies write access to the file. Data can be written to the file. Combine with FA_READ for read-write access.
-    - `FA_OPEN_EXISTING`: Opens the existing file. The function fails if the file does not exist (default).
-    - `FA_CREATE_ALWAYS`: Creates a new file and opens it. If the file already exists, it is truncated and overwritten.
-    - `FA_CREATE_NEW`: Creates a new file. The function fails if the file already exists.
-    - `FA_OPEN_ALWAYS`: Opens the file or creates a new one if it does not exist.
-    - `FA_OPEN_APPEND`: Opens the existing file and sets the read/write pointer to the end of the file.
+  - `FA_READ`: Specifies read access to the file. Data can be read from the file.
+  - `FA_WRITE`: Specifies write access to the file. Data can be written to the file. Combine with FA_READ for read-write access.
+  - `FA_OPEN_EXISTING`: Opens the existing file. The function fails if the file does not exist (default).
+  - `FA_CREATE_ALWAYS`: Creates a new file and opens it. If the file already exists, it is truncated and overwritten.
+  - `FA_CREATE_NEW`: Creates a new file. The function fails if the file already exists.
+  - `FA_OPEN_ALWAYS`: Opens the file or creates a new one if it does not exist.
+  - `FA_OPEN_APPEND`: Opens the existing file and sets the read/write pointer to the end of the file.
 
   May throw `x-fr-*` and `x-pool-*` exceptions.
 
@@ -1853,7 +1865,7 @@ File Access:
 - Read a string from the file.
   Note that reading from eof returns 0 0 as adr len.
   Note that when eof or buflen is reached,
-       the returned line might not contain a \n.
+  the returned line might not contain a \n.
   May throw `x-fr-*` exception.
 
 `f_putc ( fil c -- )`
@@ -1936,7 +1948,7 @@ File and Directory Management:
 
 - `filinfo.setfdate ( dd mm yyyy -- )` Set date in global filinfo object.
 
-- `filinfo.getfdate ( -- dd mm yyyy )` Retrieve date from global  filinfo object.
+- `filinfo.getfdate ( -- dd mm yyyy )` Retrieve date from global filinfo object.
 
 - `filinfo.setftime ( hh mm ss -- )` Set time in global filinfo object.
 
@@ -2029,6 +2041,7 @@ Pathname accessors:
 - Print the IO return code string.
 
 Exceptions:
+
 ```
 x-fr-disk-err
 x-fr-int-err
@@ -2181,6 +2194,7 @@ Some basic shell-like commands for interactive use.
   May raise `x-line-truncated` and `x-eof`.
 
 Exceptions:
+
 ```
 x-eof
 x-line-truncated
@@ -2211,6 +2225,7 @@ x-line-truncated
 - Finish conditional execution/compilation.
 
 Example from [init.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/init.fs):
+
 ```
 include /forth/ifdef.fs
 
@@ -2384,6 +2399,7 @@ See also [Interrupt Handling](irqs.md).
 - UART irq id.
 
 Example:
+
 ```
 \ IRQ handler routine
 : mtime-irq-handle
@@ -2428,4 +2444,3 @@ dint
 - Get 64-bit uptime in cycles.
 
 Example: Interrupt Handling Example in previous subsection.
-

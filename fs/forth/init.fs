@@ -14,6 +14,7 @@ include /forth/dump.fs
 include /forth/dict.fs
 include /forth/wordlist.fs
 include /forth/module.fs
+include /forth/bitfield.fs
 
 \ This flag is set when building the boxkerntest target.
 [ifdef] FORTH_CORE_TEST

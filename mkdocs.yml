@@ -175,7 +175,9 @@ nav:
       - USB HID: registers/usb-hid-regs.md
       - SDSPI: registers/sdspi-regs.md
       - SPI Flash: registers/spiflash-regs.md
-      - VERA: registers/vera-regs.md
+      - VERA: 
+        - VERA registers: registers/vera-regs.md
+        - VERA Sprite Attribute RAM: registers/vera-spr-attr-ram.md
       - YM2149: registers/ym2149-regs.md
       - DFX Controller Control Register: registers/dfx-controller-ctrl-reg.md
       - DFX Controller Other Registers: registers/dfx-controller-other-regs.md

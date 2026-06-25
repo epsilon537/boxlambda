@@ -1,7 +1,6 @@
 # BoxLambda Memory Map
 
-Next to memory-mapped registers, BoxLambda includes the following memory
-regions:
+Next to memory-mapped registers, BoxLambda includes the following memory blocks. Memories are byte-, half-word- and word-accessible following natural address alignment rules.
 
 ## IMEM
 
@@ -39,86 +38,7 @@ Write-only Sprite attribute RAM.
 - **Address Range**: `0x12001000-0x12001400`
 - **Size**: 1 Kbyte
 
-Two banks of 64 entries of the following format:
-
-<table>
-	<tr>
-		<th>Word</th>
-		<th>31/15</th>
-		<th>30/14</th>
-		<th>29/13</th>
-		<th>28/12</th>
-		<th>27/11</th>
-		<th>26/10</th>
-		<th>25/9</th>
-		<th>24/8</th>
-		<th>23/7</th>
-		<th>22/6</th>
-		<th>21/5</th>
-		<th>20/4</th>
-		<th>19/3</th>
-		<th>18/2</th>
-		<th>17/1</th>
-		<th>16/0</th>
-	</tr>
-		<tr>
-		<td>Word 0 Bits 15-0</td>
-		<td align="center" colspan="1">Mode</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="12">Address (16:5)</td>
-	</tr>
-	<tr>
-		<td>Word 0 Bits 31-16</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="10">X</td>
-	</tr>
-	<tr>
-		<td>Word 1 Bits 15-0</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="1">-</td>
-		<td align="center" colspan="10">Y</td>
-	</tr>
-	<tr>
-		<td>Word 1 Bits 31-16</td>
-		<td align="center" colspan="2">Sprite height</td>
-		<td align="center" colspan="2">Sprite width</td>
-		<td align="center" colspan="4">Palette offset</td>
-		<td align="center" colspan="4">Collision mask</td>
-		<td align="center" colspan="2">Z-depth</td>
-		<td align="center" colspan="1">V-flip</td>
-		<td align="center" colspan="1">H-flip</td>
-	</tr>
-</table>
-
-| Mode | Description |
-| ---- | ----------- |
-| 0    | 4 bpp       |
-| 1    | 8 bpp       |
-
-| Z-depth | Description                           |
-| ------- | ------------------------------------- |
-| 0       | Sprite disabled                       |
-| 1       | Sprite between background and layer 0 |
-| 2       | Sprite between layer 0 and layer 1    |
-| 3       | Sprite in front of layer 1            |
-
-| Sprite width / height | Description |
-| --------------------- | ----------- |
-| 0                     | 8 pixels    |
-| 1                     | 16 pixels   |
-| 2                     | 32 pixels   |
-| 3                     | 64 pixels   |
+Two banks of 64 entries. Each entry consists of 4 16-bit attributes. The attribute layout is described in the [VERA Sprite Attribute RAM layout](./vera-spr-attr-ram.md) section.
 
 **Rendering Priority** The sprite memory location dictates the order in which it is rendered. The sprite whose attributes are at the lowest location will be rendered in front of all other sprites; the sprite at the highest location will be rendered behind all other sprites, and so forth.
 
@@ -138,18 +58,18 @@ Write-only color palette RAM.
 The palette translates 8-bit color indexes into 12-bit output colors. The palette has 256 entries, each with the following format:
 
 <table>
-	<tr>
-		<th>Bit&nbsp;31-12</th>
-		<th>Bit&nbsp;11-8</th>
-		<th>Bit&nbsp;7-4</th>
-		<th>Bit&nbsp;3-0</th>
-	</tr>
-	<tr>
-		<td align="center">-</td>
-		<td align="center">Red</td>
-		<td align="center">Green</td>
-		<td align="center">Blue</td>
-	</tr>
+ <tr>
+  <th>Bit&nbsp;31-12</th>
+  <th>Bit&nbsp;11-8</th>
+  <th>Bit&nbsp;7-4</th>
+  <th>Bit&nbsp;3-0</th>
+ </tr>
+ <tr>
+  <td align="center">-</td>
+  <td align="center">Red</td>
+  <td align="center">Green</td>
+  <td align="center">Blue</td>
+ </tr>
 </table>
 
 At reset, the palette RAM will contain the following predefined palette:
@@ -186,18 +106,18 @@ The memory has 640 entries, one entry per displayed pixel in the captured
 scanline (VERA always outputs 640x480 VGA). Each entry has the following format:
 
 <table>
-	<tr>
-		<th>Bit&nbsp;31-12</th>
-		<th>Bit&nbsp;11-8</th>
-		<th>Bit&nbsp;7-4</th>
-		<th>Bit&nbsp;3-0</th>
-	</tr>
-	<tr>
-		<td align="center">-</td>
-		<td align="center">Red</td>
-		<td align="center">Green</td>
-		<td align="center">Blue</td>
-	</tr>
+ <tr>
+  <th>Bit&nbsp;31-12</th>
+  <th>Bit&nbsp;11-8</th>
+  <th>Bit&nbsp;7-4</th>
+  <th>Bit&nbsp;3-0</th>
+ </tr>
+ <tr>
+  <td align="center">-</td>
+  <td align="center">Red</td>
+  <td align="center">Green</td>
+  <td align="center">Blue</td>
+ </tr>
 </table>
 
 See [here](../soc/components/vera.md#the-video-vga-block-vga-line-capture) for a description of the VGA line capture mechanism.
@@ -216,5 +136,4 @@ High- and variable latency read-write external memory.
 - **Address Range**: `0x20000000-0x30000000`
 - **Size**: 256 Mbytes
 
-Note that the *BoxKern* allocates region`0x2ff00000-0x30000000` to [RAM disk usage](../software/base-platform/c-components/fat-fs.md#the-ram-disk-device-controller).
-
+Note that the _BoxKern_ allocates region`0x2ff00000-0x30000000` to [RAM disk usage](../software/base-platform/c-components/fat-fs.md#the-ram-disk-device-controller).

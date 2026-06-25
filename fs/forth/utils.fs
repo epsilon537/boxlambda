@@ -21,7 +21,7 @@
 ;
 
 \ Move string pointer forward by n and reduce string length by n.
-\ (addr u n -- addr' u')
+\ (addr u n -- addr' u' )
 : /string  dup >r - swap r> chars + swap ;
 
 \ Unsigned addition with carry.
@@ -40,9 +40,38 @@
 ;
 
 \ In number n, set bitposition to bitvalue
-( n bitvalue bitpos -- n')
+\ ( n bitvalue bitpos -- n' )
 : setbit
   >r 1 and ( n bitvalue R: bitpos )
   r@ lshift swap ( orval n R: bitpos )
   r> 1<< not and or
 ;
+
+\ Find x in list of n consecutive cells. Return its address or 0 if not found.
+\ ( x list n -- addr | 0 )
+: find-in
+  0 do ( x addr )
+    2dup @ = if ( x addr ) 
+      unloop nip exit
+    then
+    cell+ ( x addr )
+  loop
+  2drop 0
+;
+
+\ ( x - log2(x) )
+: log2
+  32 0 do ( x )
+    dup i 1<< u<= if ( x )
+      drop i unloop exit
+    then
+  loop 
+  drop 32
+;
+
+\ Divide by 8.
+: 8/ 3 rshift [inline] [1-foldable] ;
+
+\ Divide by 4.
+: 4/ 2 rshift [inline] [1-foldable] ;
+

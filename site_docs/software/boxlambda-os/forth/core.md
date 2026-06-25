@@ -138,17 +138,11 @@ The link map also defines the following linker variables associated with those s
 
 #### Forth Assembler Variables and Symbols
 
-Understanding the purpose of the following variables, defined in [forth-core.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/forth-core.s), is essential to be able to understand the Forth Core:
+Understanding the purpose of the following assembler variables, defined in [forth-core.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/forth-core.s), is essential to be able to understand the Forth Core:
 
-- `DictionaryPointer`: The _primary_ dictionary pointer. Dictionary search
-  starts here. Corresponds to Forth variable `(dp)`, taking into account that
-  referencing a variable in Forth puts the variable's _address_ on the stack, not
-  its value. Word `here` puts the content of the variable on the stack. In other
-  words, `here`is equivalent to `' (dp) @`.
-- `SecondDictionaryPointer`: The _secondary_ dictionary pointer. See [An IMEM and EMEM Dictionary section](#an-imem-and-emem-dictionary) for a discussion of the two dictionaries.
-- `ThreadEnd`: Points to the most recently defined word. Corresponds to Forth
-  variable `(latest)`, again taking into account that referencing a variable in
-  Forth puts the variable's _address_ on the stack, not its value.
+- `DictionaryPointer`: Holds the _primary_ dictionary pointer. This is where the next dictionary entry will be written. Corresponds to to Forth variable `(dp)`. Word `here` puts the content of `(dp)` on the stack.
+- `SecondDictionaryPointer`: Holds the _secondary_ dictionary pointer. See [An IMEM and EMEM Dictionary section](#an-imem-and-emem-dictionary) for a discussion of the two dictionaries.
+- `ThreadEnd`: Holds the pointer to the most recently defined word. Dictionary search starts here. Corresponds to Forth variable `(latest)`.
 - `VariablesPointer`: Core variables such as `base`, `state`, `>in`, hooks...
   are placed and initialized at the end of the `.forth_imem` section. As core variables are placed during the
   `catchmempointers.s` phase of initialization, the pointer advances downwards,

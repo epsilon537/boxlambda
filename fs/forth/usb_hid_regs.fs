@@ -1,0 +1,99 @@
+\ --- USB_HID
+\ --- 32-bit register bitfield accessors
+
+$0 constant USB_HID_BASE_ADDR
+
+
+\ IEN - Interrupt Enable Register
+USB_HID_BASE_ADDR $0 + constant USB_HID_IEN_ADDR
+
+\ -- Address Mask Offset
+USB_HID_IEN_ADDR $1 #0 bitfield@ USB_HID_IEN_USB_REPORT@
+USB_HID_IEN_ADDR $1 #0 bitfield! USB_HID_IEN_USB_REPORT!
+USB_HID_IEN_ADDR $2 #1 bitfield@ USB_HID_IEN_LED_REPORT@
+USB_HID_IEN_ADDR $2 #1 bitfield! USB_HID_IEN_LED_REPORT!
+
+\ ISR - Interrupt Status Register
+USB_HID_BASE_ADDR $4 + constant USB_HID_ISR_ADDR
+
+\ -- Address Mask Offset
+USB_HID_ISR_ADDR $1 #0 bitfield@ USB_HID_ISR_USB_REPORT@
+USB_HID_ISR_ADDR $1 #0 bitfield! USB_HID_ISR_USB_REPORT!
+USB_HID_ISR_ADDR $2 #1 bitfield@ USB_HID_ISR_LED_REPORT@
+USB_HID_ISR_ADDR $2 #1 bitfield! USB_HID_ISR_LED_REPORT!
+
+\ STATUS - Status Register
+USB_HID_BASE_ADDR $8 + constant USB_HID_STATUS_ADDR
+
+\ -- Address Mask Offset
+USB_HID_STATUS_ADDR $3 #0 bitfield@ USB_HID_STATUS_USB_TYP@
+
+  #0 constant USB_HID_STATUS_USB_TYP_NO_DEV \ No device 
+  #1 constant USB_HID_STATUS_USB_TYP_KEYB \ Keyboard 
+  #2 constant USB_HID_STATUS_USB_TYP_MOUSE \ Mouse 
+  #3 constant USB_HID_STATUS_USB_TYP_GAME \ Game pad 
+
+USB_HID_STATUS_ADDR $4 #2 bitfield@ USB_HID_STATUS_CONN_ERR@
+
+\ KEY_MODS - Key modifiers
+USB_HID_BASE_ADDR $c + constant USB_HID_KEY_MODS_ADDR
+
+\ -- Address Mask Offset
+USB_HID_KEY_MODS_ADDR $1 #0 bitfield@ USB_HID_KEY_MODS_LCTRL@
+USB_HID_KEY_MODS_ADDR $2 #1 bitfield@ USB_HID_KEY_MODS_LSHIFT@
+USB_HID_KEY_MODS_ADDR $4 #2 bitfield@ USB_HID_KEY_MODS_LALT@
+USB_HID_KEY_MODS_ADDR $8 #3 bitfield@ USB_HID_KEY_MODS_LMETA@
+USB_HID_KEY_MODS_ADDR $10 #4 bitfield@ USB_HID_KEY_MODS_RCTRL@
+USB_HID_KEY_MODS_ADDR $20 #5 bitfield@ USB_HID_KEY_MODS_RSHIFT@
+USB_HID_KEY_MODS_ADDR $40 #6 bitfield@ USB_HID_KEY_MODS_RALT@
+USB_HID_KEY_MODS_ADDR $80 #7 bitfield@ USB_HID_KEY_MODS_RMETA@
+
+\ KEYS - Keys register
+USB_HID_BASE_ADDR $10 + constant USB_HID_KEYS_ADDR
+
+\ -- Address Mask Offset
+USB_HID_KEYS_ADDR $ff #0 bitfield@ USB_HID_KEYS_KEY_0@
+USB_HID_KEYS_ADDR $ff00 #8 bitfield@ USB_HID_KEYS_KEY_1@
+USB_HID_KEYS_ADDR $ff0000 #16 bitfield@ USB_HID_KEYS_KEY_2@
+USB_HID_KEYS_ADDR $ff000000 #24 bitfield@ USB_HID_KEYS_KEY_3@
+
+\ MOUSE - Mouse register
+USB_HID_BASE_ADDR $14 + constant USB_HID_MOUSE_ADDR
+
+\ -- Address Mask Offset
+USB_HID_MOUSE_ADDR $ff #0 bitfield@ USB_HID_MOUSE_DY@
+USB_HID_MOUSE_ADDR $ff00 #8 bitfield@ USB_HID_MOUSE_DX@
+USB_HID_MOUSE_ADDR $10000 #16 bitfield@ USB_HID_MOUSE_BTN_LEFT@
+USB_HID_MOUSE_ADDR $20000 #17 bitfield@ USB_HID_MOUSE_BTN_RIGHT@
+USB_HID_MOUSE_ADDR $40000 #18 bitfield@ USB_HID_MOUSE_BTN_MIDDLE@
+
+\ GAME - Game pad register
+USB_HID_BASE_ADDR $18 + constant USB_HID_GAME_ADDR
+
+\ -- Address Mask Offset
+USB_HID_GAME_ADDR $ffffffff #0 bitfield@ USB_HID_GAME_VALUE@
+
+\ REPORT_0 - USB report 0 register
+USB_HID_BASE_ADDR $1c + constant USB_HID_REPORT_0_ADDR
+
+\ -- Address Mask Offset
+USB_HID_REPORT_0_ADDR $ffffffff #0 bitfield@ USB_HID_REPORT_0_VALUE@
+
+\ REPORT_1 - USB report 1 register
+USB_HID_BASE_ADDR $20 + constant USB_HID_REPORT_1_ADDR
+
+\ -- Address Mask Offset
+USB_HID_REPORT_1_ADDR $ffffffff #0 bitfield@ USB_HID_REPORT_1_VALUE@
+
+\ LEDS - LED register
+USB_HID_BASE_ADDR $24 + constant USB_HID_LEDS_ADDR
+
+\ -- Address Mask Offset
+USB_HID_LEDS_ADDR $1 #0 bitfield@ USB_HID_LEDS_NUM_LOCK@
+USB_HID_LEDS_ADDR $1 #0 bitfield! USB_HID_LEDS_NUM_LOCK!
+USB_HID_LEDS_ADDR $2 #1 bitfield@ USB_HID_LEDS_CAPS_LOCK@
+USB_HID_LEDS_ADDR $2 #1 bitfield! USB_HID_LEDS_CAPS_LOCK!
+USB_HID_LEDS_ADDR $4 #2 bitfield@ USB_HID_LEDS_SCROLL_LOCK@
+USB_HID_LEDS_ADDR $4 #2 bitfield! USB_HID_LEDS_SCROLL_LOCK!
+USB_HID_LEDS_ADDR $8 #3 bitfield@ USB_HID_LEDS_COMPOSE@
+USB_HID_LEDS_ADDR $8 #3 bitfield! USB_HID_LEDS_COMPOSE!

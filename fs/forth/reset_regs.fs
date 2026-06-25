@@ -1,0 +1,27 @@
+\ --- RESET
+\ --- 32-bit register bitfield accessors
+
+$100000d0 constant RESET_BASE_ADDR
+
+
+\ CTRL - Reset control register
+RESET_BASE_ADDR $0 + constant RESET_CTRL_ADDR
+
+\ -- Address Mask Offset
+RESET_CTRL_ADDR $1 #0 bitfield@ RESET_CTRL_NDM_RESET@
+RESET_CTRL_ADDR $1 #0 bitfield! RESET_CTRL_NDM_RESET!
+RESET_CTRL_ADDR $2 #1 bitfield@ RESET_CTRL_DM_RESET@
+RESET_CTRL_ADDR $2 #1 bitfield! RESET_CTRL_DM_RESET!
+RESET_CTRL_ADDR $4 #2 bitfield@ RESET_CTRL_USB_RESET@
+RESET_CTRL_ADDR $4 #2 bitfield! RESET_CTRL_USB_RESET!
+
+\ REASON - Reset reason register
+RESET_BASE_ADDR $4 + constant RESET_REASON_ADDR
+
+\ -- Address Mask Offset
+RESET_REASON_ADDR $1 #0 bitfield@ RESET_REASON_POR@
+RESET_REASON_ADDR $2 #1 bitfield@ RESET_REASON_SW_NDM@
+RESET_REASON_ADDR $4 #2 bitfield@ RESET_REASON_SW_DM@
+RESET_REASON_ADDR $8 #3 bitfield@ RESET_REASON_NDM@
+RESET_REASON_ADDR $10 #4 bitfield@ RESET_REASON_EXT@
+RESET_REASON_ADDR $20 #5 bitfield@ RESET_REASON_SW_USB@

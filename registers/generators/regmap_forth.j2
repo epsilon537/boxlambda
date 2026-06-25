@@ -9,6 +9,13 @@
     {%- endif %}
 {%- endmacro %}
 
+{#- bitfield prefix #}
+{% macro bitfield_prefix(bf) %}
+  {% if bf.name != "val" %}
+_{{ bf.name.upper() }}
+  {%- endif %}
+{%- endmacro %}
+
 {#- module prefix #}
 {% macro module_prefix() %}
 {{ module_name() }}_
@@ -19,18 +26,49 @@
 
 {#- TEMPLATE #}
 \ --- {{ module_name() }}
+{% if config['data_width'] == 32 %}
+\ --- 32-bit register bitfield accessors
 
 {{ "$%x" % config['base_address'] }} constant {{ module_prefix()|upper }}BASE_ADDR
 
-{% for reg in rmap %}
-\ {{ reg.name }} - {{ reg.description }}
-{{ "$%x" % (reg.address) }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_ADDR
+  {% for reg in rmap %}
 
-    {% for bf in reg %}
-\ {{ reg.name }}.{{ bf.name }} - {{ bf.description }}
-{{ bf.width }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_WIDTH
-{{ bf.lsb }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_LSB
-{{ "$%x" % (bf.mask) }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_MASK
-    {% endfor %}
-{% endfor %}
+\ {{ reg.name }} - {{ reg.description }}
+{{ module_prefix()|upper }}BASE_ADDR {{ "$%x" % (reg.address) }} + constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_ADDR
+
+\ -- Address Mask Offset
+      {% for bf in reg %}
+          {% if bf.access in ['ro', 'rw'] %}
+          {% endif %}
+{{ module_prefix()|upper }}{{ reg.name.upper() }}_ADDR {{ "$%x" % bf.mask }} #{{ bf.lsb }} bitfield@ {{ module_prefix()|upper }}{{ reg.name.upper() }}{{ bitfield_prefix(bf) }}@
+          {% if bf.access in ['wo', 'rw', 'rw1c'] %}
+{{ module_prefix()|upper }}{{ reg.name.upper() }}_ADDR {{ "$%x" % bf.mask }} #{{ bf.lsb }} bitfield! {{ module_prefix()|upper }}{{ reg.name.upper() }}{{ bitfield_prefix(bf) }}!
+          {% endif %}
+          {% if bf.enums %}
+
+              {% for enum in bf %}
+  #{{ enum.value }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_{{ enum.name.upper() }} \ {{ enum.description }} 
+              {% endfor %}
+
+          {% endif %}
+      {% endfor %}
+  {% endfor %}
+{% else %}
+\ --- 16-bit value bitfield accessors
+  {% for reg in rmap %}
+
+\ -- Mask Offset
+      {% for bf in reg %}
+{{ "$%x" % bf.mask }} #{{ bf.lsb }} bitfield16@ {{ module_prefix()|upper }}{{ reg.name.upper() }}{{ bitfield_prefix(bf) }}@
+{{ "$%x" % bf.mask }} #{{ bf.lsb }} bitfield16! {{ module_prefix()|upper }}{{ reg.name.upper() }}{{ bitfield_prefix(bf) }}!
+          {% if bf.enums %}
+
+              {% for enum in bf %}
+  #{{ enum.value }} constant {{ module_prefix()|upper }}{{ reg.name.upper() }}_{{ bf.name.upper() }}_{{ enum.name.upper() }} \ {{ enum.description }} 
+              {% endfor %}
+
+          {% endif %}
+      {% endfor %}
+  {% endfor %}
+{% endif %}
 

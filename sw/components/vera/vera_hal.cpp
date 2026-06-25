@@ -35,10 +35,6 @@ struct Vera_layer_regs_t {
   };
 };
 
-static const Vera_bpp_t bpp_dec[4] = {VERA_BPP_1, VERA_BPP_2, VERA_BPP_4,
-                                      VERA_BPP_8};
-static const Vera_map_size_t map_size_dec[4] = {
-    VERA_MAP_SZ_32, VERA_MAP_SZ_64, VERA_MAP_SZ_128, VERA_MAP_SZ_256};
 static const uint16_t default_palette[256] = {
     0x000, 0xfff, 0x800, 0xafe, 0xc4c, 0x0c5, 0x00a, 0xee7, 0xd85, 0x640, 0xf77,
     0x333, 0x777, 0xaf6, 0x08f, 0xbbb, 0x000, 0x111, 0x222, 0x333, 0x444, 0x555,
