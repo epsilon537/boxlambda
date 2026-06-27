@@ -11,7 +11,7 @@
 #define SPIFLASH_SIZE_BYTES              16777216 // 16 MB Flash Array
 #define SPIFLASH_BITSTREAM_BASE          (0x11000000U) // FPGA Bitstream Base address
 #define SPIFLASH_BITSTREAM_SIZE_BYTES    4194304 // 4 MB Bitstream Size Allocation
-#define SPIFLASH_BOOTLOADER_BASE         (0x11500000U) // Bootloader Base Address. Note the 0x100000 gap from the end of the bitstream
+#define SPIFLASH_BOOTLOADER_BASE         (0x11500000U) // Bootloader Base Address.
 #define SPIFLASH_BOOTLOADER_SIZE_BYTES   1048576
 #define SPIFLASH_SW_BASE                 (0x11600000U) // Application Software Image Base Address
 #define SPIFLASH_SW_SIZE_BYTES           2097152

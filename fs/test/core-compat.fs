@@ -115,12 +115,3 @@
  0 CONSTANT <FALSE>
 -1 CONSTANT <TRUE>
 
-: literal ( n -- ) literal, [immediate] ;
-
-: 2literal ( d -- )
-    swap postpone literal postpone literal
-; [immediate]
-
-: d>s ( d -- n ) drop ;
-
-

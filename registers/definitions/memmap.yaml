@@ -35,7 +35,7 @@ memory_map:
 
   - name: SPIFLASH_BOOTLOADER_BASE
     value: "SPIFLASH_BASE + 0x00500000"
-    comment: "Bootloader Base Address. Note the 0x100000 gap from the end of the bitstream"
+    comment: "Bootloader Base Address."
 
   - name: SPIFLASH_BOOTLOADER_SIZE_BYTES
     value: "BOOTLOADER_IMG_SIZE_BYTES"

@@ -28,4 +28,5 @@ _site
 #python derived files
 __pycache__
 
+#aider
 .aider*

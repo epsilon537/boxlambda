@@ -1,7 +1,7 @@
 \ BoxLambda Forth
 \ Register bitfield accessors
 
-: bitfield: ( address mask offset "name" -- )
+: bitfield@ ( address mask offset "name" -- )
     create
         \ compile-time: store the parameters into the dictionary body
         , , ,
@@ -29,7 +29,7 @@
         r> !               \                   ( )
 ;
 
-: bitfield16: ( mask offset "name" -- )
+: bitfield16@ ( mask offset "name" -- )
     create
         \ compile-time: store the parameters into the dictionary body
         h, h,

@@ -23,7 +23,17 @@ max-order stack-create (wordlist-search-order-stack)
 : ::
   >r get-order r> swap 1+ set-order
   hook-find @ (module-prev-find-hook) !
-  ['] (find-drop-module) hook-find !
+  ['] (find-drop-module) hook-find [immediate] !
+;
+
+\ Extend the given module/namespace. It works like begin-module
+\ but takes an existing module wid as input parameter rather than
+\ creating a new one.
+( wid -- )
+: continue-module
+  get-current (wordlist-current-stack) stack-push ( wid )
+  dup set-current ( wid )
+  >r get-order r> swap 1+ set-order ( )
 ;
 
 \ Create a new module/namespace with the given name.
@@ -34,9 +44,7 @@ max-order stack-create (wordlist-search-order-stack)
 ( "name" -- )
 : begin-module
   wordlist dup constant ( wid )
-  get-current (wordlist-current-stack) stack-push ( wid )
-  dup set-current ( wid )
-  >r get-order r> swap 1+ set-order ( )
+  continue-module
 ;
 
 \ Revert search-order and current to the state before begin-module.

@@ -88,7 +88,7 @@ def format_forth(name, val):
     """Formats address keys to 8-digit lowercase hex, and sizes to decimals."""
     if "BASE" in name or "ADDR" in name:
         return f"${val:08x}"
-    return str(val)
+    return f"#{val}"
 
 
 def generate_c_header(entries, resolved):
@@ -120,6 +120,7 @@ def generate_forth_file(entries, resolved):
         comment = f" \\ {item['comment']}" if "comment" in item else ""
         lines.append(f"{fs_val:<16} constant {name}{comment}")
 
+    lines.append("")
     return "\n".join(lines)
 
 

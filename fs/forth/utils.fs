@@ -75,3 +75,12 @@
 \ Divide by 4.
 : 4/ 2 rshift [inline] [1-foldable] ;
 
+: literal ( n -- ) literal, [immediate] ;
+
+: 2literal ( d -- )
+    swap postpone literal postpone literal
+; [immediate]
+
+: d>s ( d -- n ) drop ;
+
+
