@@ -75,6 +75,9 @@
 \ Divide by 4.
 : 4/ 2 rshift [inline] [1-foldable] ;
 
+\ Divide by cell size
+: cell/ 4/ [inline] [1-foldable] ;
+
 : literal ( n -- ) literal, [immediate] ;
 
 : 2literal ( d -- )
@@ -82,5 +85,10 @@
 ; [immediate]
 
 : d>s ( d -- n ) drop ;
+
+$10 constant FLAG-IMMEDIATE
+
+: immediate-constant create , FLAG-IMMEDIATE setflags does> @ ;
+
 
 

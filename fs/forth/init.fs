@@ -18,6 +18,8 @@ include /forth/bitfield.fs
 include /forth/memmap.fs
 include /forth/vera_regs.fs
 include /forth/vera_spr_attr_ram.fs
+include /forth/vec2.fs
+include /forth/anon-list.fs
 include /forth/vera.fs
 
 \ This flag is set when building the boxkerntest target.

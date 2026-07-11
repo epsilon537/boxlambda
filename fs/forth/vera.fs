@@ -1,6 +1,8 @@
 \ BoxLambda Forth
 \ VERA Graphics Driver
 
+\ 'position' in the definitions below is a vec2.
+
 begin-module vera
 
   \ --- System Limits and Enumerations ---
@@ -15,52 +17,21 @@ begin-module vera
   NUM_SPRITE_BANKS NUM_SPRITES_IN_BANK * constant NUM_SPRITES
   #127 constant MAX_SPRITE_ID
 
-  begin-module point
-    ( x y -- point )
-    : <point> 16 lshift swap $ffff and or [inline] ;
-
-    ( point -- x y )
-    : xy@ dup and $ffff swap 16 rshift [inline] ;
-
-    ( y point -- )
-    : y! $ffff and swap 16 rshift or [inline] ;
-
-    ( point -- y )
-    : y@ 16 rshift [inline] ;
-    
-    ( dy point -- )
-    : y+! swap 16 lshift + [inline] ;
-
-    ( x point -- )
-    : x! $ffff0000 and swap $ffff and or [inline] ;
-
-    ( point -- x )
-    : x@ $ffff and [inline] ;
-
-    ( dx point -- )
-    : x+!
-      tuck + $ffff and ( point y )
-      swap $ffff0000 and or 
-    ;
-  end-module
-
   \ --- VRAM ---
 
   begin-module vram
 
+    : x-alloc-failed ." VRAM allocation failed." cr ;
+
     #2048 constant BLOCK_SZ_BYTES
-    #9 constant LOG_BLOCK_SZ
+    BLOCK_SZ_BYTES log2 constant LOG_BLOCK_SZ
     VERA_VRAM_SIZE_BYTES LOG_BLOCK_SZ rshift constant NUM_BLOCKS
 
     create blocks_ NUM_BLOCKS chars allot
-    blocks_ NUM_BLOCKS 0 fill
 
-    : wr-word ( data addr -- ) VERA_VRAM_BASE + ! [inline] ;
-    : wr-byte ( data addr -- ) VERA_VRAM_BASE + c! [inline] ;
-    : rd-word ( addr -- data ) VERA_VRAM_BASE + @ [inline] ;
-    : rd-byte ( addr -- data ) VERA_VRAM_BASE + c@ [inline] ;
+    : reset blocks_ NUM_BLOCKS 0 fill ;
 
-    : x-alloc-failed ." VRAM allocation failed." cr ;
+    reset
 
     \ --- VRAM Allocation Subsystem ---
     \ In the blocks_ array, at offset, attempt to find requested blocks.
@@ -85,7 +56,7 @@ begin-module vera
     \ array. Return the start index of this chunk.
     \ Raise x-vram-alloc-failed exception if no chunk is found.
 
-    \ ( num-blocks -- block-idx )
+    \ ( num-blocks -- block-idx|-1 )
     : (find-free-chunk)
       \ Start scanning from offset 0
       NUM_BLOCKS 0 do ( num-blocks )
@@ -93,13 +64,12 @@ begin-module vera
         dup i swap (find-free-blocks) ( num-blocks found-blocks )
         \ If not found, increment offset and loop.
         over >= if ( num-blocks )
-          unloop
+          drop i
+          unloop exit
         then
-        1+ ( block-idx+1 )
       loop
-      \ stop scanning if we've reached the end of the blocks_ array.
 
-      dup = NUM_BLOCKS triggers x-alloc-failed ( block-idx )
+      drop -1
     ;
 
     ( num-blocks block-idx -- )
@@ -111,15 +81,17 @@ begin-module vera
 
     : (find-alloc-blocks) ( num-blocks -- block-idx )
       dup (find-free-chunk) ( num-blocks block-idx )
+      dup -1 = triggers x-alloc-failed
       tuck (allocate-blocks) ( block-idx )
     ;
 
     \ Allocate memory in VRAM for a tilemap, tiledata, bitmap or sprites.
     \ The 'init' Words use this function to allocate their resources.
-    \ size-bytes: the number of bytes to allocate (use one the vera_compute* Words).
-    \ If successful a 2KB-aligned Pointer to allocated block of memory in VRAM. 
+    \ size-bytes: the number of bytes to allocate.
+    \ If successful a 2KB-aligned Pointer to allocated block of memory in VRAM.
     \ In not successful an x-vram-alloc-failed exception is raised.
     : alloc ( size-bytes -- addr )
+      dup ?assert \ Size can't be 0.
       \ Convert size in bytes to block size, rounding up.
       [ BLOCK_SZ_BYTES 1- ] literal + LOG_BLOCK_SZ rshift ( num-blocks )
       (find-alloc-blocks) ( block-idx )
@@ -140,17 +112,27 @@ begin-module vera
       VERA_VRAM_BASE - LOG_BLOCK_SZ rshift ( block-idx )
       (free)
     ;
+
+    \ Return the VRAM base address.
+    \ ( -- vram-base-addr )
+    : base VERA_VRAM_BASE ;
+
   end-module
 
   \ --- Tile Map API
-
   begin-module tilemap
 
     begin-structure tilemap-struct
       field:  .base
+      field:  .position \ transient
       hfield: .width
       hfield: .height
+      hfield: .tile-idx \ transient
       cfield: .type
+      cfield: .color \ transient
+      cfield: .paloffset \ transient
+      cfield: .vflip \ transient
+      cfield: .hflip \ transient
     end-structure
 
     \ Initialize the tilemap object. This must be done only once.
@@ -161,17 +143,9 @@ begin-module vera
     \ ( "name" -- )
     : <tilemap> create here tilemap-struct allot init ;
 
-    \ Set map width in the tilemap object: 32, 64, 128, 256
-    \ ( width tilemap -- )
-    : width! .width h! ;
-
     \ Retrieve map width from the tilemap object.
     \ ( tilemap -- width )
     : width@ .width h@ ;
-
-    \ Set map height in the tilemap object: 32, 64, 128, 256
-    \ ( height tilemap -- )
-    : height! .height h! ;
 
     \ Retrieve map height from the tilemap object.
     \ ( tilemap -- height )
@@ -182,10 +156,6 @@ begin-module vera
     1 constant TXT256
     2 constant TILE
 
-    \ Set the map type : TXT16/TXT256/TILE.
-    \ ( type tilemap -- )
-    : type! .type c! ;
-
     \ Retrieve the map type from the map object
     \ ( tilemap -- type )
     : type@ .type c@ ;
@@ -194,80 +164,90 @@ begin-module vera
     \ ( tilemap -- addr )
     : base@ .base @ ;
 
+    ( size -- f )
+    : (size-is-valid) l{ 32 , 64 , 128 , 256 }l find-in 0<> ;
+
+    ( type -- f )
+    : (type-is-valid) l{ TXT16 , TXT256 , TILE }l find-in 0<> ;
+
+    ( tilemap -- tilemap )
+    : { ;
+
+    \ Set map width in the tilemap object: 32, 64, 128, 256
+    \ ( tilemap width -- tilemap )
+    : width
+      dup (size-is-valid) ?assert
+      over .width h! ;
+
+    \ Set map height in the tilemap object: 32, 64, 128, 256
+    \ ( tilemap height -- tilemap )
+    : height
+      dup (size-is-valid) ?assert
+      over .height h! ;
+
+    \ Set the map type : TXT16/TXT256/TILE.
+    \ ( tilemap type -- tilemap )
+    : type
+      dup (type-is-valid) ?assert
+      over .type c! ;
+
     \ (Re)Allocate VRAM for this tilemap to accommodate the width and height
     \ If VRAM was previously allocated for this tilemap,
     \ this VRAM will be released before reallocating VRAM.
     \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
     \ ( tilemap -- )
-    : vram-alloc
+    : }config!
       dup base@ ?dup if
-        [ vram ] :: free
+        vram :: free
       then ( map )
       dup .base 0 swap ! ( map )
       \ Allocate VRAM (2 * width * height ) and set map base address field.
       dup width@ ( map width )
       over height@ ( map width height )
       * 2* ( map sz )
-      [ vram ] :: alloc ( map vram )
+      vram :: alloc ( map vram )
       swap .base !
     ;
 
-    \ Get the address of the entry at point in given map
-    : point>addr ( point tilemap -- addr )
+    \ Get the address of the entry at position in given map
+    : (position>addr) ( position tilemap -- addr )
       \ Calculate 2*(row*width_ + col)
-      2dup width@ swap [ point ] :: y@  * ( point map y*w )
-      rot [ point ] :: x@ + 2* ( map offset )
+      2dup width@ swap vec2.y * ( position map y*w )
+      rot vec2.x + 2* ( map offset )
       swap base@ ( offset base )
       dup ?assert
       +
     ;
 
-    \ Write 16-bit value at point of given map
-    : at-point! ( mapentry point tilemap -- ) point>addr h! ;
+    \ Set mapentry at given position in tilemap.
+    \ position is a vec2, i.e. x first (column), then y (row).
+    ( mapentry position tilemap -- )
+    : (mapentry!) (position>addr) h! ;
 
-    \ Read 16-bit value at point of given map
-    : at-point@ ( point tilemap -- mapentry ) point>addr h@ ;
+    \ Get mapentry at given in tilemap.
+    \ position is a vec2, i.e. x first (column), then y (row).
+    ( position tilemap -- mapentry )
+    : (mapentry@) (position>addr) h@ ;
 
-    \ Pack chr, fg and bg color into a 1bpp 16 color textmode map entry value
-    \ ( chr fg bg - mapentry )
-    : pack-txt16
-      12 lshift ( bgshifted )
-      -rot 8 lshift ( bgshifted chr fgshifted )
-      or or
-    ;
+    ( mapentry row col tilemap )
+    : mapentry! -rot swap vec2 swap (mapentry!) ;
+
+    ( row col tilemap -- mapentry )
+    : mapentry@ -rot swap vec2 swap (mapentry@) ;
 
     \ Unpack chr, fg and bg color from a 1bpp 16 color textmode map entry value
-    \ ( mapentry - chr fg bg )
+    \ ( mapentry -- chr fg bg )
     : unpack-txt16
       dup $ff and ( mapentry chr )
       swap dup 8 rshift $f and ( chr mapentry fg )
       swap 12 rshift $f and ( chr fg bg )
     ;
 
-    \ Pack chr and fg color into a 1bpp 256 color textmode map entry value
-    \ ( chr fg -- mapentry )
-    : pack-txt256
-      8 lshift or
-    ;
-
-    \ UnPack chr and fg color from a 1bpp 256 color textmode map entry value
+    \ Unpack chr and fg color from a 1bpp 256 color textmode map entry value
     \ ( mapentry -- chr fg )
     : unpack-txt256
       dup $ff and ( mapentry chr )
       swap 8 rshift $ff and ( chr fg )
-    ;
-
-    \ Pack tile, hflip, vflip and pal_offset into a 2/4/8bbp tile map entry value
-    \ The color index of tile pixels is modified by the palette offset using the
-    \ following logic:
-    \ - Color index 0 (transparent) and 16-255 are unmodified.
-    \ - Color index 1-15 is modified by adding 16 x palette offset.
-    \ ( tile-idx hflip vflip pal_offset -- mapentry )
-    : pack-tile
-      12 lshift -rot
-      11 lshift -rot
-      10 lshift -rot
-      or or or or
     ;
 
     \ Unpack tile, hflip, vflip and pal_offset from a 2/4/8bbp tile map entry value
@@ -282,6 +262,86 @@ begin-module vera
       swap 11 rshift 1 and ( tile-idx hflip mapentry vflip )
       swap 12 rshift $f and ( tile-idx hflip vflip paloffset )
     ;
+
+    ( tilemap bg -- tilemap )
+    : bg
+      over .type c@ TXT16 = ?assert
+      4 lshift ( tilemap bgshifted )
+      over .color c@ ( tilemap bshifted oldcolor )
+      $f and or      ( tilemap newcolor )
+      over .color c! ( tilemap )
+    ;
+
+    ( tilemap fg -- tilemap )
+    : fg
+      over .type c@ TXT16 = if
+        $f and         ( tilemap fgmasked )
+        over .color c@ ( tilemap fgmasked oldcolor )
+        $f0 and or      ( tilemap newcolor )
+      then
+      over .color c! ( tilemap )
+    ;
+
+    ( tilemap tile-idx -- tilemap )
+    : idx over .tile-idx h! ;
+
+    ( tilemap paloffset -- tilemap )
+    : paloffset
+      over .type c@ TILE = ?assert
+      over .paloffset c!
+    ;
+
+    ( tilemap vflip -- tilemap )
+    : vflip
+      over .type c@ TILE = ?assert
+      over .vflip c!
+    ;
+
+    ( tilemap hflip -- tilemap )
+    : hflip
+      over .type c@ TILE = ?assert
+      over .vflip c!
+    ;
+
+    ( tilemap row col -- tilemap )
+    : position
+      swap vec2 ( tilemap vec2 )
+      over .position !
+    ;
+
+    \ Write mapentry using attributes specified in {}mapentry! block.
+    : }mapentry! ( tilemap -- ) 
+      dup .type c@ TILE = if ( tilemap )
+        dup .paloffset c@ 12 lshift ( tilemap mapentry )
+        over .vflip c@ 1 and 11 lshift or ( tilemap mapentry )
+        over .hflip c@ 1 and 10 lshift or ( tilemap mapentry )
+        over .tile-idx h@ $3ff and or ( tilemap mapentry )
+      else
+        dup .color c@ 8 lshift ( tilemap mapentry )
+        over .tile-idx h@ ( tilemap mapentry tileidx )
+        $ff and or ( tilemap mapentry )
+      then
+      over .position @ ( tilemap mapentry position )
+      rot (mapentry!) ( )
+    ;
+
+    \ Read from VRAM, mapentry specified by { <row> <col> position }mapentry@ and 
+    \ decode it, populating fg, bg, paloffset, vflip and hflip attributes.
+    \ This is useful for mapentry read-modify-write operations.
+    : }mapentry@ ( tilemap -- )
+      >r ( R: tilemap )
+      r@ .position @ r@ (mapentry@) ( mapentry R: tilemap )
+      r@ .type c@ TILE = if ( mapentry R: tilemap )
+        dup 12 rshift r@ .paloffset c! ( mapentry R: tilemap )
+        dup $800 and 0= r@ .vflip c! ( mapentry R: tilemap )
+        dup $400 and 0= r@ .hflip c! ( mapentry R: tilemap )
+        $3ff and r> .tile-idx h! ( )
+      else
+        dup 8 rshift r@ .color c! ( mapentry R: tilemap )
+        $ff and r> .tile-idx h! ( )
+      then
+    ;
+
   end-module
 
   \
@@ -289,30 +349,34 @@ begin-module vera
   \
   begin-module pixel
 
-    ( base width point -- ptr )
-    : (8bpp-byte-ptr) [ point ] :: xy@ rot * + + [inline] ;
+    ( base width position -- ptr )
+    : (8bpp-byte-ptr) vec2.xy rot * + + [inline] ;
 
-    ( pxlval point base width -- )
+    ( pxlval position base width -- )
     : 8bpp! 
       rot (8bpp-byte-ptr) ( pxval ptr )
       c! ( )
     ;
 
-    ( point base width -- pxlval )
+    ( position base width -- pxlval )
     : 8bpp@ 
       rot (8bpp-byte-ptr) ( ptr )
       c@ ( pxlval )
     ;
 
-    ( base width point -- ptr )
-    : (4bpp-byte-ptr) [ point ] :: xy@ rot * + 2/ + [inline] ;
+    ( base width position -- ptr )
+    : (4bpp-byte-ptr) vec2.xy rot * + 2/ + [inline] ;
 
-    ( x -- bitoffset )
-    : (4bpp-x-bitoffset) and 2 lshift [inline] ;
-
-    ( pxlval point base -- )
+    ( position -- bitoffset )
+    : (4bpp-x-bitoffset)
+      vec2.x
+      1 dup rot \ 1 1 x
+      and - \ 1-x&1
+      2 lshift [inline] ;
+    
+    ( pxlval position base width -- )
     : 4bpp! 
-      rot dup [ point ] :: x@ (4bpp-x-bitoffset) >r ( pxlval base y width point R: bitoffset )
+      rot dup (4bpp-x-bitoffset) >r ( pxlval base y width position R: bitoffset )
       (4bpp-byte-ptr) ( pxval ptr R: bitoffset )
       dup c@ ( pxlval ptr oldbyte R: bitoffset )
       $f r@ lshift bic ( pxlval ptr oldbytemasked R: bitoffset )
@@ -320,27 +384,28 @@ begin-module vera
       swap c! ( )
     ;
 
-    ( point base width -- pxlval )
+    ( position base width -- pxlval )
     : 4bpp@
-      rot dup (4bpp-x-bitoffset) >r ( base width point R: bitoffset )
+      rot dup (4bpp-x-bitoffset) >r ( base width position R: bitoffset )
       (4bpp-byte-ptr) ( ptr R: bitoffset )
       c@ ( oldbyte R: bitoffset )
       r> rshift $f and ( pxlval )
     ;
 
-    ( base width point -- ptr )
-    : (2bpp-byte-ptr) [ point ] :: xy@ rot * + 4/ + [inline] ;
+    ( base width position -- ptr )
+    : (2bpp-byte-ptr) vec2.xy rot * + 4/ + [inline] ;
 
-    ( x -- bitoffset )
+    ( position -- bitoffset )
     : (2bpp-x-bitoffset)
+      vec2.x
       3 dup rot \ 3 3 x 
       and - \ 3-x&3 
       shl \ (3-x&3)*2
     ;
 
-    ( pxlval point base width -- )
+    ( pxlval position base width -- )
     : 2bpp!
-      rot dup [ point ] :: x@ (2bpp-x-bitoffset) >r ( pxlval base width point R: bitoffset )
+      rot dup (2bpp-x-bitoffset) >r ( pxlval base width position R: bitoffset )
       (2bpp-byte-ptr) ( pxval ptr R: bitoffset )
       dup c@ ( pxlval ptr oldbyte R: bitoffset )
       3 r@ lshift bic ( pxlval ptr oldbytemasked R: bitoffset )
@@ -348,32 +413,32 @@ begin-module vera
       swap c! ( )
     ;
 
-    ( point base width -- pxlval )
+    ( position base width -- pxlval )
     : 2bpp@
-      rot dup (2bpp-x-bitoffset) >r ( base width point R: bitoffset )
+      rot dup (2bpp-x-bitoffset) >r ( base width position R: bitoffset )
       (2bpp-byte-ptr) ( ptr R: bitoffset )
       c@ ( oldbyte R: bitoffset )
       r> rshift 3 and ( pxlval )
     ;
 
-    ( base width point -- ptr )
-    : (1bpp-byte-ptr) [ point ] :: xy@ rot * + 8/ + [inline] ;
+    ( base width position -- ptr )
+    : (1bpp-byte-ptr) vec2.xy rot * + 8/ + [inline] ;
 
-    ( x -- bitoffset )
-    : (1bpp-x-bitoffset) 7 dup rot ( 7 7 x ) and ( 7-x&7 ) [inline] ;
+    ( position -- bitoffset )
+    : (1bpp-x-bitoffset) vec2.x 7 dup rot ( 7 7 x ) and - ( 7-x&7 ) [inline] ;
 
-    ( pxlval point base width -- )
+    ( pxlval position base width -- )
     : 1bpp!
-      rot dup [ point ] :: x@ (1bpp-x-bitoffset) >r ( pxlval base width point R: bitoffset )
+      rot dup (1bpp-x-bitoffset) >r ( pxlval base width position R: bitoffset )
       (1bpp-byte-ptr) ( pxlval ptr R: bitoffset )
       dup c@ ( pxlval ptr oldbyte R: bitoffset )
       rot r> setbit ( ptr newbyte )
       swap c! ( )
     ;
 
-    ( point base width -- pxlval )
+    ( position base width -- pxlval )
     : 1bpp@
-      rot dup (1bpp-x-bitoffset) >r ( base width point R: bitoffset )
+      rot dup (1bpp-x-bitoffset) >r ( base width position R: bitoffset )
       (1bpp-byte-ptr) ( ptr R: bitoffset )
       c@ r> rshift 1 and ( pxlval )
     ;
@@ -389,10 +454,13 @@ begin-module vera
       field:  .base
       field:  .pxl-set
       field:  .pxl-get
+      field:  .position \ transient
+      field:  .bitmapaddr \ transient
       hfield: .width
       hfield: .height
       hfield: .bpp
       hfield: .num-tiles
+      hfield: .color
     end-structure
 
     \ Initialize the tileset object. This must be done only once.
@@ -402,72 +470,94 @@ begin-module vera
     \ ( "name" -- )
     : <tileset> create here tileset-struct allot init ;
  
-    \ Retrieve tileset base address in VRAM.
-    ( tileset -- addr )
-    : base@ .base @ ;
-
-    \ Set the tileset width in the tileset object.
-    \   - 8, 16 for regular tiles.
-    \   - 8, 16, 32, 64 for sprites.
-    \   - 320, 640 for bitmaps.
-    ( width tileset -- )
-    : width!
-      .width h! 
-    ;
-
     \ Retrieve the tileset width from the tileset object
     ( tileset -- width )
     : width@ .width h@ ;
 
-    \ Set the tileset height in the tileset object
-    \   - 8 or 16 for regular tiles.
-    \   - 8, 16, 32, 64 for sprites.
-    \   - Any positive value for bitmaps.
-    ( height tileset -- )
-    : height! .height h! ;
+    \ Retrieve tileset base address in VRAM.
+    ( tileset -- addr )
+    : base@ .base @ ;
 
     \ Retrieve the tileset height
     ( tileset -- height )
     : height@ .height h@ ;
 
-    \ Set the tileset BPP in the tileset object
-    \   - 1, 2, 4, 8 for regular tiles and bitmaps.
-    \   - 4, 8 for sprites.
-    ( bpp tileset -- )
-    : bpp!
-      2dup .bpp h! ( bpp tileset )
-      [ pixel import ]
-      swap case
-        1 of ['] 1bpp! ['] 1bpp@ endof
-        2 of ['] 2bpp! ['] 2bpp@ endof
-        4 of ['] 4bpp! ['] 4bpp@ endof
-        8 of ['] 8bpp! ['] 8bpp@ endof
-      endcase ( tileset setter getter )
-      [ pixel unimport ]
-      -rot over ( getter tileset setter tileset )
-      .pxl-set !
-      .pxl-get !
-    ;
-
     \ Retrieve the tileset BPP from the tileset object.
     ( tileset -- bpp )
     : bpp@ .bpp h@ ;
-
-    \ Set the number of tiles in the tileset.
-    \ Retrieve the number of tiles allocated to the tileset.
-    \ Range: 0..1023
-    ( num tileset -- )
-    : num-tiles!
-      over < 1024 ?assert
-      .num-tiles h! 
-    ;
 
     ( tileset -- num-tiles )
     : num-tiles@ .num-tiles h@ ;
 
     \ Retrieve the tilesize in bytes for the given tileset.
     ( tileset -- tilesize-bytes )
-    : tilesize@ dup bpp@ swap dup width@ swap height@ * * * 8/ ;
+    : tilesize@ dup bpp@ swap dup width@ swap height@ * * 8/ ;
+
+    \ Given a VRAM address and a tileset, compute the tile index corresponding to that address.
+    ( addr tileset -- tile-idx )
+   : addr>tile-idx
+     dup base@ dup ?assert ( addr tileset baseaddr )
+     rot swap - ( tileset offset )
+     swap tilesize@ ( offset tilesize )
+     / ( tileidx )
+   ;
+
+    \ Given a tile index in a tileset, compute to  pointer to the pixel data of a tile in the tileset.
+    \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
+    \ @param tileset: Tileset object
+    ( tile-idx tileset -- addr )
+    : tile-idx>addr
+      dup tilesize@ rot * ( tileset tilesize*tile-idx ) 
+      swap base@ dup ?assert
+      + ;
+
+    ( tileset -- tileset )
+    : { ;
+
+    \ Set the tileset width in the tileset object.
+    \   - 8, 16 for regular tiles.
+    \   - 8, 16, 32, 64 for sprites.
+    \   - 320, 640 for bitmaps.
+    ( tileset width -- tileset )
+    : width
+      over .width h! 
+    ;
+
+    \ Set the tileset height in the tileset object
+    \   - 8 or 16 for regular tiles.
+    \   - 8, 16, 32, 64 for sprites.
+    \   - Any positive value for bitmaps.
+    ( tileset height -- tileset )
+    : height over .height h! ;
+
+    \ Set the tileset BPP in the tileset object
+    \   - 1, 2, 4, 8 for regular tiles and bitmaps.
+    \   - 4, 8 for sprites.
+    ( tileset bpp -- tileset )
+    : bpp
+      swap >r ( bpp R: tileset )
+      dup r@ .bpp h! ( bpp R: tileset )
+      [ pixel import ]
+      case
+        1 of ['] 1bpp! ['] 1bpp@ endof
+        2 of ['] 2bpp! ['] 2bpp@ endof
+        4 of ['] 4bpp! ['] 4bpp@ endof
+        8 of ['] 8bpp! ['] 8bpp@ endof
+        false ?assert
+      endcase ( setter getter R: tileset )
+      [ pixel unimport ]
+      r@ .pxl-get ! ( R: tileset )
+      r@ .pxl-set ! ( R: tileset )
+      r> ( tileset )
+    ;
+
+    \ Set the number of tiles in the tileset.
+    \ Range: 0..1023
+    ( tileset num -- tileset )
+    : tiles
+      dup 1024 < ?assert ( tileset num )
+      over .num-tiles h! 
+    ;
 
     \ (Re)Allocate VRAM for this tileset to accommodate
     \ num-tiles, bpp, width and height.
@@ -475,48 +565,62 @@ begin-module vera
     \ this VRAM will be released before reallocating VRAM.
     \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
     ( tileset -- )
-    : vram-alloc
-      dup base@ ?dup if
-        [ vram ] :: free
-      then ( tileset )
-      dup .base 0 swap ! ( tileset )
-      dup tilesize@ swap dup num-tiles@ * [ vram ] :: alloc ( tileset addr )
-      swap .base ! ( )
+    : }config!
+      >r ( R: tileset )
+      r@ base@ ?dup if
+        vram :: free
+      then ( R: tileset )
+      0 r@ .base ! ( R: tileset )
+      r@ tilesize@ r@ num-tiles@ * 
+      vram :: alloc ( addr R: tileset )
+      r> .base ! ( R: tileset )
     ;
 
-    \ Get a pointer to the pixel data of a tile in the tileset.
-    \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
-    \ @param tileset: Tileset object
-    ( tile-idx tileset -- addr )
-    : (bitmap-ptr) 
-      dup tilesize@ rot * ( tileset tilesize*tile-idx ) 
-      swap base@ dup ?assert
-      + ;
+    \ { for pixels:
 
-    \ Get a bitmap descriptor from the tileset.
-    \ A bitmap descriptor is a double consisting of the tuple (tileset bitmap-ptr).
     \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
     \ @param tileset: Tileset object
-    ( tile-idx tileset -- bitmap-descr )
-    : >bitmap tuck (bitmap-ptr) [inline] ;
-\
+    ( tileset tile-idx -- tileset )
+    : tile 
+      2dup swap num-tiles@ <= ?assert ( tileset tile-idx )
+      over tile-idx>addr ( tileset addr )
+      over .bitmapaddr ! ( tileset )
+    ;
+
+    ( tileset color -- tileset )
+    : color
+      over .color h!
+    ;
+
+    ( tileset x y -- tileset )
+    : position vec2 over .position ! ;
+
     \ Set a pixel in the given tile.
-    \ A bitmap descriptor is a double consisting of the tuple (tileset bitmap-ptr).
-    \ ( pxlval point bitmap-descr -- )
-    : pxl!
-      over width@ ( pxlval point tileset addr width )
-      rot .pxl-set @ ( pxlval point addr width pxl-setter )
+\   ( tileset -- )
+    : }pxl!
+      >r ( R: tileset )
+      r@ .color h@
+      r@ .position @
+      r@ .bitmapaddr @
+      r@ .width h@ 
+      r> .pxl-set @
+      ( color position addr width pxl-setter )
       execute
     ;
 
-    \ Get a pixel from the given tile.
-    \ A bitmap descriptor is a double consisting of the tuple (tileset bitmap-ptr).
-    \ ( point bitmap-descr -- pxlval )
-    : pxl@
-      over width@ ( point tileset addr width )
-      rot .pxl-get @ ( point addr width pxl-getter )
-      execute
+    \ Read the pixel color from the given position on the given tile.
+    \ ( tileset -- color )
+    : }pxl@
+      >r ( R: tileset )
+      r@ .position @
+      r@ .bitmapaddr @
+      r@ .width h@
+      r@ .pxl-get @
+      ( position addr width pxl-getter R: tileset )
+      execute ( color R: tileset )
+      dup r> .color ! ( color )
     ;
+
   end-module
 
   \ --- Sprite API ---
@@ -525,6 +629,7 @@ begin-module vera
 
     begin-structure sprite-struct
       field:  .tileset
+      field:  .tile-idx
       field:  .attr-ram-ptr
       hfield: .attr-addr
       hfield: .attr-x
@@ -532,109 +637,90 @@ begin-module vera
       hfield: .attr-flags
     end-structure
 
-    : init ( sprite -- ) sprite-struct 0 fill ;
-
-    \ Create and initialize a sprite object.
-    \ ( "name" -- )
-    : <sprite> create here sprite-struct allot init ;
-
     \ Calculate the sprite attribute RAM address from the given sprite id.
     \ ( id -- addr )
     : (id>ram) 8 * VERA_SPRITE_RAM_BASE + [inline] ;
 
     \ Calculate the sprite id from the given sprite attribute RAM address.
     \ ( addr -- id )
-    : (ram>id) VERA_SPRITE_RAM_BASE -  [inline] ;
+    : (ram>id) VERA_SPRITE_RAM_BASE - 8 / [inline] ;
 
-    \ Set the sprite id in the sprite object.
-    : id! ( id sprite -- ) swap (id>ram) swap .attr-ram-ptr ! ;
+    : init ( sprite-idx sprite -- )
+      over NUM_SPRITES u< ?assert
+      dup sprite-struct 0 fill ( sprite-idx sprite )
+      swap (id>ram) ( sprite ramaddr )
+      swap .attr-ram-ptr ! ( sprite )
+    ;
+
+    \ Create and initialize a sprite object.
+    \ sprite-idx must be in range 0..NUM_SPRITES-1.
+    \ ( sprite-idx "name" -- )
+    : <sprite> 
+      create here sprite-struct allot ( sprite-idx sprite )
+      init ;
 
     \ Retrieve the sprite id from the sprite object.
     : id@ ( sprite -- id ) .attr-ram-ptr @ (ram>id) ;
 
     \ Get the sprite's current coordinates.
-    \ ( sprite -- point )
-    : point@ dup .attr-x h@ swap .attr-y h@ [ point ] :: <point> ;
-
-    \ ( point sprite -- )
-    : point!
-        swap ( sprite point )
-        2dup [ point ] :: x@ swap .attr-x h!
-        [ point ] :: y@ swap .attr-y h!
-    ;
+    \ ( sprite -- x y )
+    : position@ dup .attr-x h@ swap .attr-y h@ ;
 
     \ ( tilesize - tilesize-encoded )
-    : (sizeenc) log2 3 - [inline] ;
+    : (sizeenc) log2 3 - ;
 
     \ ( tilesize-encoded -- tilesize )
-    : (sizedec) 3 + 1<< [inline] ;
-
-    \ Set the sprite width
-    \ ( width sprite -- )
-    : width! swap (sizeenc) swap .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH! ;
+    : (sizedec) 3 + 1<< ;
 
     \ Get the sprite width
     \ ( sprite -- width )
-    : width@ .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH@ (sizedec) ;
-
-    \ Set the sprite height
-    \ ( height sprite -- )
-    : height!
-      swap (sizeenc) swap .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT! ;
+    : widthattr@ .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH@ (sizedec) ;
 
     \ Get the sprite height
     \ ( sprite -- height )
-    : height@
+    : heightattr@
       .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT@ (sizedec) ;
 
-    \ ( vflip sprite -- )
-    : vflip! .attr-flags VERA_SPRITE_ATTR_FLAGS_VFLIP! ;
+    \ Set the sprite width
+    \ ( width sprite -- )
+    : (width!) swap (sizeenc) swap .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH! ;
+
+    \ Set the sprite height
+    \ ( height sprite -- )
+    : (height!)
+      swap (sizeenc) swap .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT! ;
 
     \ ( sprite -- f )
     : vflip@ .attr-flags VERA_SPRITE_ATTR_FLAGS_VFLIP@ 0<> ;
 
-    \ ( hflip sprite -- )
-    : hflip! .attr-flags VERA_SPRITE_ATTR_FLAGS_HFLIP! ;
-
     \ ( sprite -- f )
     : hflip@ .attr-flags VERA_SPRITE_ATTR_FLAGS_HFLIP@ 0<> ;
 
-    begin-module zdepth
-      VERA_SPRITE_ATTR_FLAGS_ZDEPTH_DIS constant DIS \ Sprite disabled. 
-      VERA_SPRITE_ATTR_FLAGS_ZDEPTH_BG_L0 constant BG_L0 \ Between background and L0. 
-      VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L0_L1 constant L0_L1 \ Between L0 and L1. 
-      VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L1 constant L1 \ In front of L1. 
-    end-module
-
-    \ ( zdepth sprite -- )
-    : zdepth! .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH! ;
+    VERA_SPRITE_ATTR_FLAGS_ZDEPTH_DIS constant DIS \ Sprite disabled. 
+    VERA_SPRITE_ATTR_FLAGS_ZDEPTH_BG_L0 constant BG_L0 \ Between background and L0. 
+    VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L0_L1 constant L0_L1 \ Between L0 and L1. 
+    VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L1 constant L1 \ In front of L1. 
 
     \ ( sprite -- f )
-    : zdepth@ .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH@ 0<> ;
-
-    \ ( colmask sprite -- )
-    : colmask! .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK! ;
+    : zdepth@ .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH@ ;
 
     \ ( sprite -- colmask )
     : colmask@ .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK@ ;
-
-    \ ( paloffset sprite -- )
-    : paloffset! .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET! ;
 
     \ ( sprite -- paloffset )
     : paloffset@ .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET@ ;
 
     \ Set the sprite's BPP. 8 or 4.
     \ ( bpp sprite -- )
-    : bpp! = 8 swap .attr-addr swap VERA_SPRITE_ATTR_MODEADDR_MODE! ;
+    : (bpp!) swap 8 = swap .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE! ;
 
     \ Get the sprite's BPP (8 or 4).
     \ ( sprite -- bpp )
-    : bpp@ .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE@ if 8 else 4 then ;
+    : bppmode@ .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE@ if 8 else 4 then ;
 
     \ Set the sprite's VRAM address
     \ ( addr sprite -- )
-    : addr!
+    : (addr!)
       swap VERA_VRAM_BASE - 5 rshift ( sprite addr )
       swap .attr-addr VERA_SPRITE_ATTR_MODEADDR_ADDR!
     ;
@@ -646,47 +732,119 @@ begin-module vera
       5 lshift VERA_VRAM_BASE +
     ;
 
-    \ Set the bitmap to be used in the sprite object.
-    \ A bitmap descriptor is a double consisting of the tuple (tileset bitmap-ptr).
-    : bitmap! ( bitmap-descr sprite -- )
-      tuck swap addr! ( tileset sprite )
-      2dup swap [ tileset ] :: bpp@ bpp! ( tileset sprite ) 
-      2dup swap [ tileset ] :: width@ width! ( tileset sprite )
-      swap [ tileset ] :: height@ height! ( )
+    \ Retrieve the tileset corresponding to this sprite.
+    \ ( sprite -- tileset )
+    : tset@ .tileset @ [inline] ;
+
+    \ Retrieve the tile-idx corresponding to this sprite.
+    \ ( sprite -- tile-idx )
+    : tidx@ .tile-idx @ [inline] ;
+
+    ( sprite -- sprite )
+    : { ;
+
+    \ ( sprite x y -- sprite )
+    : position
+        rot >r ( x y R: sprite )
+        r@ .attr-y h!
+        r@ .attr-x h!
+        r> ( sprite )
     ;
 
-    \ Retrieve the descriptor of the bitmap containing the sprite's pixel data.
-    \ A bitmap descriptor is a double consisting of the tuple (tileset bitmap-ptr).
-    \ ( sprite -- bitmap )
-    : bitmap@ 
-      dup .tileset @ ( sprite tileset )
-      swap addr@ ( tileset addr )
+    \ ( sprite vflip -- sprite )
+    : vflip over .attr-flags VERA_SPRITE_ATTR_FLAGS_VFLIP! ;
+
+    \ ( sprite hflip -- sprite )
+    : hflip over .attr-flags VERA_SPRITE_ATTR_FLAGS_HFLIP! ;
+
+    \ ( sprite zdepth -- sprite )
+    : zdepth over .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH! ;
+
+    \ ( sprite colmask -- sprite )
+    : colmask over .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK! ;
+
+    \ ( sprite paloffset -- sprite )
+    : paloffset over .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET! ;
+
+    \ Set the tile index to be used in the sprite object.
+    \ ( sprite tile-idx -- sprite )
+    : tidx
+      2dup swap .tile-idx ! ( sprite tile-idx )
+      \ Compute and set the address attribute if we have a tileset.
+      \ If we don't have a tileset yet, this is deferred until the tileset
+      \ is specified.
+      over .tileset @ ?dup if ( sprite tile-idx tileset )
+        tileset :: tile-idx>addr ( sprite addr ) 
+        over (addr!) ( sprite )
+      else
+        drop ( sprite )
+      then
+    ;
+ 
+    \ Set the tileset to be used in the sprite object.
+    \ When modifying the tileset used by a sprite object, keep in mind that
+    \ the corresponding tile index (tidx, see above) has to be valid (within
+    \ range) for the new tileset.
+    : tset ( sprite tileset -- sprite )
+      swap >r ( tileset R : sprite )
+      r@ .tile-idx @ ( tileset tile-idx R: sprite )
+      over tileset :: tile-idx>addr r@ (addr!) ( tileset R: sprite )
+      dup tileset :: bpp@ r@ (bpp!) ( tileset R: sprite )
+      dup tileset :: width@ r@ (width!) ( tileset R: sprite )
+      dup tileset :: height@ r@ (height!) ( tileset R: sprite )
+      r@ .tileset ! ( R: sprite )
+      r>
     ;
 
-    \ Commit the sprite object's configration to hardware, 
+    \ Commit the sprite's attributes to hardware, 
     \ i.e. to the sprite attribute RAM.
     \ ( sprite -- )
-    : commit
-      dup .attr-ram-ptr .attr-addr
-      2dup @ swap !
-      cell+ @ swap cell+ !
+    : }config!
+      dup .attr-ram-ptr @ ( sprite attr-ram-addr )
+      dup ?assert ( sprite attr-ram-addr )
+      swap .attr-addr ( attr-ram-addr attr-addr )
+      2dup @ ( attr-ram-addr attr-addr attr-ram-addr attr0/1 ) 
+      swap ! ( attr-ram-addr attr-addr )
+      cell+ @ ( attr-ram-addr attr1/2 )
+      swap cell+ ( attr1/2 attr-ram-addr' )
+      !
     ;
   end-module
 
   begin-module layer
 
-    : enable ( f layer -- ) if VERA_DC_VIDEO_L1_ENABLE! else VERA_DC_VIDEO_L0_ENABLE! then ;
+    begin-structure layer-struct
+      field:  .tileset
+      field:  .tilemap
+      hfield: .tile-idx
+      cfield: .id
+    end-structure
 
-    : enabled? ( layer -- f ) if VERA_DC_VIDEO_L1_ENABLE@ else VERA_DC_VIDEO_L0_ENABLE@ then 0<> ;
+    \ Initialize a layer object
+    : init ( id layer -- )
+      over NUM_LAYERS < ?assert
+      dup layer-struct 0 fill
+      .id c!
+    ;
+
+    \ l0 and l1 are the objects to be passed into the public words below.
+    create l0 layer-struct allot
+    create l1 layer-struct allot
+    0 l0 init
+    1 l1 init
+
+    : enable ( f layer -- ) .id c@ if VERA_DC_VIDEO_L1_ENABLE! else VERA_DC_VIDEO_L0_ENABLE! then ;
+
+    : enabled? ( layer -- f ) .id c@ if VERA_DC_VIDEO_L1_ENABLE@ else VERA_DC_VIDEO_L0_ENABLE@ then 0<> ;
 
     \ Set tilemap base address for the given layer
-    \ ( addr layer -- )
+    \ ( addr layer-id -- )
     : (map-base!)
-      swap VERA_VRAM_BASE - 9 rshift ( layer vram-base )
+      swap VERA_VRAM_BASE - 9 rshift ( layer-id vram-base )
       swap if VERA_L1_MAPBASE! else VERA_L0_MAPBASE! then
     ;
 
-      ( layer -- addr )
+      ( layer-id -- addr )
     : (map-base@)
       if VERA_L1_MAPBASE@ else VERA_L0_MAPBASE@ then
       9 lshift VERA_VRAM_BASE +
@@ -697,42 +855,30 @@ begin-module vera
     : (sizedec) 5 + 1<< [inline] ;
 
     \ Set tilemap width for given layer
-    \ ( width layer -- )
+    \ ( width layer-id -- )
     : (map-width!)
       swap (sizeenc)
       swap if VERA_L1_CONFIG_MAP_WIDTH! else VERA_L0_CONFIG_MAP_WIDTH! then
     ;
 
-    \ ( layer -- width )
+    \ ( layer-id -- width )
     : (map-width@) if VERA_L1_CONFIG_MAP_WIDTH@ else VERA_L0_CONFIG_MAP_WIDTH@ then (sizedec) ;
 
-      ( height layer -- )
+      ( height layer-id -- )
     : (map-height!)
       swap (sizeenc)
       swap if VERA_L1_CONFIG_MAP_HEIGHT! else VERA_L0_CONFIG_MAP_HEIGHT! then
     ;
 
-      ( layer -- height )
+      ( layer-id -- height )
     : (map-height@)
       if VERA_L1_CONFIG_MAP_HEIGHT@ else VERA_L0_CONFIG_MAP_HEIGHT@ then (sizedec) ;
 
-      ( f layer -- )
+      ( f layer-id -- )
     : (t256c!) if VERA_L1_CONFIG_T256C! else VERA_L0_CONFIG_T256C! then ;
 
-      ( layer -- f )
+      ( layer-id -- f )
     : (t256c@) if VERA_L1_CONFIG_T256C@ else VERA_L0_CONFIG_T256C@ then 0<> ;
-
-    \ Configure the given map object into the given layer
-    ( map layer -- )
-    : tilemap!
-      swap ( layer map )
-      2dup [ tilemap ] :: type@ [ tilemap ] :: TXT256 = ( layer map layer t256c )
-      swap (t256c!) ( layer map )
-      2dup [ tilemap ] :: width@ swap (map-width!) ( layer map )
-      2dup [ tilemap ] :: height@ swap (map-height!) ( layer map )
-      [ tilemap ] :: base@ dup ?assert
-      swap (map-base!) ( )
-    ;
 
     ( bpp - bpp-encoded )
     : (bppenc) log2 [inline] ;
@@ -740,107 +886,154 @@ begin-module vera
     ( bpp-encoded -- bpp )
     : (bppdec) 1<< [inline] ;
 
-    ( bpp layer -- )
+    ( bpp layer-id -- )
     : (bpp!)
       swap (bppenc) ( layer bpp-encoded )
       swap if VERA_L1_CONFIG_COLORDEPTH! else VERA_L0_CONFIG_COLORDEPTH! then
     ;
 
-    ( layer -- bpp )
+    ( layer-id -- bpp )
     : (bpp@)
       swap if VERA_L1_CONFIG_COLORDEPTH@ else VERA_L0_CONFIG_COLORDEPTH@ then
       (bppdec)
     ;
 
-    ( f layer -- )
+    ( f layer-id -- )
     : (bitmap-mode!) if VERA_L1_CONFIG_BITMAPMODE! else VERA_L0_CONFIG_BITMAPMODE! then ;
 
-    ( layer -- f )
+    ( layer-id -- f )
     : (bitmap-mode@) if VERA_L1_CONFIG_BITMAPMODE@ else VERA_L0_CONFIG_BITMAPMODE@ then 0<> ;
 
-    ( paloffset layer -- )
+    ( paloffset layer-id -- )
     : (bitmap-paloffset!) if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET! else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET! then ;
 
-    ( layer -- paloffset )
+    ( layer-id -- paloffset )
     : (bitmap-paloffset@) if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET@ else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET! then ;
 
-    ( hscroll layer -- )
+    ( hscroll layer-id -- )
     : (hscroll!)
-      dup (bitmap-mode@) if ( hscroll layer )
+      dup (bitmap-mode@) if ( hscroll layer-id )
         if VERA_L1_HSCROLL_ADDR else VERA_L0_HSCROLL_ADDR then ( hscroll addr )
         !
-      else ( hscroll layer )
+      else ( hscroll layer-id )
         if VERA_L1_HSCROLL_HSCROLL_7_0! else VERA_L0_HSCROLL_HSCROLL_7_0! then
       then
     ;
 
-    ( layer -- hscroll )
+    ( layer-id -- hscroll )
     : (hscroll@)
-      dup (bitmap-mode@) if ( layer )
+      dup (bitmap-mode@) if ( layer-id )
         if VERA_L1_HSCROLL_ADDR else VERA_L0_HSCROLL_ADDR then ( addr )
         @
-      else ( layer )
+      else ( layer-id )
         if VERA_L1_HSCROLL_HSCROLL_7_0@ else VERA_L0_HSCROLL_HSCROLL_7_0@ then
       then
     ;
 
-    ( hscroll layer -- )
+    ( hscroll layer-id -- )
     : (vscroll!) if VERA_L1_VSCROLL! else VERA_L0_VSCROLL! then ! ;
 
-    ( layer -- vscroll )
+    ( layer-id -- vscroll )
     : (vscroll@) if VERA_L1_VSCROLL@ else VERA_L0_VSCROLL@ then ;
 
     \ In bitmap mode, true sets bitmap width 640, false 320.
     \ In tile mode, true sets tile width 16, false 8.
-    \ ( f layer -- )
+    \ ( f layer-id -- )
     : (tile-width!) if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH! else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH! then ;
 
-    ( layer -- f )
+    ( layer-id -- f )
     : (tile-width@) if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH@ else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH@ then 0<> ;
 
     \ True sets tile height 16, false 8.
-    \ ( f layer -- )
+    \ ( f layer-id -- )
     : (tile-height!) if VERA_L1_TILEBASE_TILE_HEIGHT! else VERA_L0_TILEBASE_TILE_HEIGHT! then ;
 
-    ( layer -- f )
+    ( layer-id -- f )
     : (tile-height@) if VERA_L1_TILEBASE_TILE_HEIGHT@ else VERA_L0_TILEBASE_TILE_HEIGHT@ then 0<> ;
 
-    ( addr layer -- )
+    ( addr layer-id -- )
     : (tile-addr!)
       swap VERA_VRAM_BASE - 11 rshift ( layer addr )
       swap if VERA_L1_TILEBASE_TILE_BASEADDR! else VERA_L1_TILEBASE_TILE_BASEADDR! then
     ;
 
-    ( layer -- addr )
+    ( layer -- addr-id )
     : (tile-addr@)
       if VERA_L1_TILEBASE_TILE_BASEADDR@ else VERA_L1_TILEBASE_TILE_BASEADDR@ then
       11 lshift VERA_VRAM_BASE +
     ;
 
     \ Configure given tileset into given layer.
-    ( tileset layer -- )
-    : tileset!
-      swap
-      2dup [ tileset ] :: bpp@ (bpp!) ( layer tileset )
-      over false (bitmap-mode!) ( layer tileset )
-      2dup [ tileset ] :: width@ 16 = (tile-width!) ( layer tileset )
-      2dup [ tileset ] :: height@ 16 = (tile-height!) ( layer tileset )
-      [ tileset ] :: base@ dup ?assert
+    ( layer-id tileset -- )
+    : (tileset!)
+      [ tileset import ]
+      2dup bpp@ (bpp!) ( layer-id tileset )
+      over false (bitmap-mode!) ( layer-id tileset )
+      2dup width@ 16 = (tile-width!) ( layer-id tileset )
+      2dup height@ 16 = (tile-height!) ( layer-id tileset )
+      base@ dup ?assert
       (tile-addr!)
+      [ tileset unimport ]
     ;
 
     \ Configure given bitmap (identified by a bitmap descriptor) into the given layer.
-    \ A bitmap descriptor is a double consisting of the tuple (tileset bitmap-addr).
-    ( bitmap-descr layer -- )
-    : bitmap!
-      >r ( tileset tileaddr R: layer )
-      over [ tileset ] :: bpp@ ( tileset tile-addr bpp R: layer )
+    ( tileset tile-idx layer-id -- )
+    : (bitmap!)
+      [ tileset import ]
+      >r ( tileset tile-idx R: layer )
+      over tile-idx>addr ( tileset tile-addr R: layer )
+      over bpp@ ( tileset tile-addr bpp R: layer )
       r@ swap (bpp!) ( tileset tile-addr R: layer )
       r@ true (bitmap-mode!) ( tileset tile-addr R: layer )
-      swap [ tileset ] :: width@ 640 = ( tile-addr f R: layer )
+      swap width@ 640 = ( tile-addr f R: layer )
       r@ swap (tile-width!) ( tile-addr R: layer )
       r@ 0 (tile-height!) ( tile-addr R: layer )
       r> swap (tile-addr!) ( )
+      [ tileset unimport ]
+    ;
+
+    ( layer -- layer )
+    : { ;
+
+    \ Set the tilemap to be used by this layer (configuring tilemapmode)
+    ( layer map -- layer )
+    : tmap over .tilemap ! ;
+
+    \ Set the tileset to be used by this layer (tilemapmode and bitmapmode)
+    ( layer tileset -- layer )
+    : tset over .tileset ! ;
+ 
+    \ Set the tile index to be used by this layer (bitmapmode)
+    ( layer tile-idx -- layer )
+    : tidx over .tile-idx h! ;
+
+    \ Configure the layer in tilemap mode. tmap and tset must be specified.
+    ( layer -- )
+    : }tilemap-mode!
+      [ tilemap import ]
+      dup .id c@ ( layer layer-id )
+      over .tilemap @ ( layer layer-id map )
+      dup ?assert
+      2dup type@ TXT256 = ( layer layer-id map layer-id t256c )
+      swap (t256c!) ( layer layer-id map )
+      2dup width@ swap (map-width!) ( layer layer-id map )
+      2dup height@ swap (map-height!) ( layer layer-id map )
+      base@ dup ?assert ( layer layer-id base )
+      over (map-base!) ( layer layer-id )
+      [ tilemap unimport ]
+      swap .tileset @ ( layer-id tileset )
+      dup ?assert
+      (tileset!)
+    ;
+
+    \ Configure the layer in bitmap mode. tset and tidx must be specified.
+    ( layer -- )
+    : }bitmap-mode!
+      dup .id c@ ( layer layer-id )
+      over .tileset @ ( layer layer-id tileset )
+      dup ?assert
+      rot .tile-idx h@ ( layer-id tileset tile-idx )
+      (bitmap!)
     ;
   end-module
 
@@ -951,7 +1144,7 @@ begin-module vera
     : hscale! ( scale-ufix1-7 -- ) VERA_DC_HSCALE! ;
     : hscale@ ( -- scale-ufix1-7 ) VERA_DC_HSCALE@ ;
     : vscale! ( scale-ufix1-7 -- ) VERA_DC_VSCALE! ;
-    : vscale! ( -- scale-ufix1-7 ) VERA_DC_VSCALE@ ;
+    : vscale@ ( -- scale-ufix1-7 ) VERA_DC_VSCALE@ ;
     : bordercolor! ( pal-idx -- ) VERA_DC_BORDERCOLOR! ;
     : bordercolor@ ( -- pal-idx ) VERA_DC_BORDERCOLOR@ ;
 

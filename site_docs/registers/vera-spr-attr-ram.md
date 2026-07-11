@@ -22,28 +22,28 @@ Base address: 0x12001000
 
 | Name                     | Address    | Description |
 | :---                     | :---       | :---        |
-| [SPRITE_ATTR_ADDR](#sprite_attr_addr) | 0x00000000 | Sprite RAM Address Attribute (16-bit). |
-| [SPRITE_ATTR_X](#sprite_attr_x) | 0x00000002 | Sprite RAM X Attribute (16-bit). |
-| [SPRITE_ATTR_Y](#sprite_attr_y) | 0x00000004 | Sprite RAM Y Attribute (16-bit). |
-| [SPRITE_ATTR_FLAGS](#sprite_attr_flags) | 0x00000006 | Sprite RAM Flags Attribute (16-bit). |
+| [MODEADDR](#modeaddr)    | 0x00000000 | Sprite RAM Mode and VRAM Address Attribute (16-bit). |
+| [X](#x)                  | 0x00000002 | Sprite RAM X Attribute (16-bit). |
+| [Y](#y)                  | 0x00000004 | Sprite RAM Y Attribute (16-bit). |
+| [FLAGS](#flags)          | 0x00000006 | Sprite RAM Flags Attribute (16-bit). |
 
-## SPRITE_ATTR_ADDR
+## MODEADDR
 
-Sprite RAM Address Attribute (16-bit).
+Sprite RAM Mode and VRAM Address Attribute (16-bit).
 
 Address offset: 0x00000000
 
 Reset value: 0x0000
 
-![sprite_attr_addr](md_img/sprite_attr_addr.svg)
+![modeaddr](md_img/modeaddr.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | MODE             | 15     | wo              | 0x0        | 0=4BPP mode, 1=8BPP mode. |
 | -                | 14:12  | -               | 0x0        | Reserved |
-| ADDR_16_5        | 11:0   | wo              | 0x000      | VRAM Address bits 16:5. |
+| ADDR             | 11:0   | wo              | 0x000      | VRAM Address bits 16:5. |
 
-Enumerated values for SPRITE_ATTR_ADDR.MODE.
+Enumerated values for MODEADDR.MODE.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
@@ -52,7 +52,7 @@ Enumerated values for SPRITE_ATTR_ADDR.MODE.
 
 Back to [Register map](#register-map-summary).
 
-## SPRITE_ATTR_X
+## X
 
 Sprite RAM X Attribute (16-bit).
 
@@ -60,16 +60,16 @@ Address offset: 0x00000002
 
 Reset value: 0x0000
 
-![sprite_attr_x](md_img/sprite_attr_x.svg)
+![x](md_img/x.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 15:10  | -               | 0x0        | Reserved |
-| X                | 9:0    | wo              | 0x00       | Sprite X position. |
+| val              | 9:0    | wo              | 0x00       | Sprite X position. |
 
 Back to [Register map](#register-map-summary).
 
-## SPRITE_ATTR_Y
+## Y
 
 Sprite RAM Y Attribute (16-bit).
 
@@ -77,16 +77,16 @@ Address offset: 0x00000004
 
 Reset value: 0x0000
 
-![sprite_attr_y](md_img/sprite_attr_y.svg)
+![y](md_img/y.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 15:10  | -               | 0x0        | Reserved |
-| Y                | 9:0    | wo              | 0x00       | Sprite Y position. |
+| val              | 9:0    | wo              | 0x00       | Sprite Y position. |
 
 Back to [Register map](#register-map-summary).
 
-## SPRITE_ATTR_FLAGS
+## FLAGS
 
 Sprite RAM Flags Attribute (16-bit).
 
@@ -94,19 +94,19 @@ Address offset: 0x00000006
 
 Reset value: 0x0000
 
-![sprite_attr_flags](md_img/sprite_attr_flags.svg)
+![flags](md_img/flags.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | HEIGHT           | 15:14  | wo              | 0x0        | Sprite Height |
 | WIDTH            | 13:12  | wo              | 0x0        | Sprite Width |
-| PAL_OFFSET       | 11:8   | wo              | 0x0        | Sprite Palette Offset. |
-| COL_MASK         | 7:4    | wo              | 0x0        | Collision Mask |
-| Z_DEPTH          | 3:2    | wo              | 0x0        | Z Depth |
-| V_FLIP           | 1      | wo              | 0x0        | Vertical Flip |
-| H_FLIP           | 0      | wo              | 0x0        | Horizontal Flip |
+| PALOFFSET        | 11:8   | wo              | 0x0        | Sprite Palette Offset. |
+| COLMASK          | 7:4    | wo              | 0x0        | Collision Mask |
+| ZDEPTH           | 3:2    | wo              | 0x0        | Z Depth |
+| VFLIP            | 1      | wo              | 0x0        | Vertical Flip |
+| HFLIP            | 0      | wo              | 0x0        | Horizontal Flip |
 
-Enumerated values for SPRITE_ATTR_FLAGS.Z_DEPTH.
+Enumerated values for FLAGS.ZDEPTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
@@ -115,7 +115,7 @@ Enumerated values for SPRITE_ATTR_FLAGS.Z_DEPTH.
 | L0_L1            | 0x2    | Between L0 and L1. |
 | L1               | 0x3    | In front of L1. |
 
-Enumerated values for SPRITE_ATTR_FLAGS.WIDTH.
+Enumerated values for FLAGS.WIDTH.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
@@ -124,7 +124,7 @@ Enumerated values for SPRITE_ATTR_FLAGS.WIDTH.
 | W32              | 0x2    | 32 pixel sprite width |
 | W64              | 0x3    | 64 pixel sprite width |
 
-Enumerated values for SPRITE_ATTR_FLAGS.HEIGHT.
+Enumerated values for FLAGS.HEIGHT.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |

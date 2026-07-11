@@ -1502,7 +1502,7 @@ Note that `[immediate]` needs to be _inside_ of the definition, not after the `;
 
 `setflags ( x -- )`
 
-- Sets Flags with a mask. This isn't immediate, but for flash, place it inside your definition!
+- Sets Flags of latest definition.
 
 `(create) name   ( -- )`
 

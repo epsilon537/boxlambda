@@ -282,7 +282,9 @@ TESTING MDOULES
 
 begin-module testmod
   : testmodword 5368 ;
-  
+end-module  
+
+testmod continue-module
   begin-module nestmod
     : nestmodword 9633 ;
   end-module
@@ -311,6 +313,8 @@ T{ s" nestmod" find -> 0 0 }T
 
 T{ testmod :: testmodword -> 5368 }T
 T{ testmod :: nestmod :: nestmodword -> 9633 }T
+[: testmod :: testmodword ;] execute 5368 = ?assert
+[: testmod :: nestmod :: nestmodword ;] execute 9633 = ?assert
 
 T{ s" testmodword" find -> 0 0 }T
 T{ s" nestmodword" find -> 0 0 }T
@@ -433,6 +437,154 @@ T{ treg n0@ -> $f }T
 4 treg n0!
 
 T{ treg @ -> $dead5ee4 }T
+
+\ ------------------------------------------------------------------------
+TESTING vec2
+
+\ 1. Basic Vector Packing & Unpacking
+
+T{  #10  #20 vec2 -> $0014000A }T  \ 10 ($A) in lower 16-bits, 20 ($14) in upper 16-bits
+T{  #0    #0 vec2 -> 0          }T
+T{ $FFFF $FFFF vec2 -> $FFFFFFFF }T  \ Maximum unsigned limits
+
+\ Field Extractor Verification
+T{ $0014000A vec2.x  -> #10  }T
+T{ $0014000A vec2.y  -> #20  }T
+T{ $0014000A vec2.xy -> #10 #20 }T
+
+\ 2. Vector Addition (`vec2+`)
+
+\ Standard clean addition
+T{ #10 #20 vec2  #5 #2 vec2 vec2+ -> #15 #22 vec2 }T
+
+\ Lower 16-bit X Overflow (Should roll over cleanly, NOT bleed into Y)
+\ $FFFF + $0001 = $0000 (with no carry propagated to Y)
+T{ $FFFF #10 vec2   1  #5 vec2 vec2+ -> 0 #15 vec2 }T
+
+\ Upper 16-bit Y Overflow (Should roll over cleanly at the cell boundary)
+T{ #10 $FFFF vec2   #5  1 vec2 vec2+ -> #15 0 vec2 }T
+
+\ Simultaneous X and Y Overflow
+T{ $FFFF $FFFF vec2  1  1 vec2 vec2+ -> 0 0 vec2 }T
+
+\ 3. Vector Subtraction (`vec2-`)
+
+\ Standard clean subtraction
+T{ #20 #40 vec2  #5 #10 vec2 vec2- -> #15 #30 vec2 }T
+
+\ X Underflow (Should wrap to $FFFF without corrupting Y)
+T{   0 #10 vec2   1   0 vec2 vec2- -> $FFFF #10 vec2 }T
+
+\ Y Underflow (Should wrap to $FFFF)
+T{ #10   0 vec2   0   1 vec2 vec2- -> #10 $FFFF vec2 }T
+
+\ 4. Dot Product (`vec2dot`)
+
+\ Standard dot product: (3*5) + (4*6) = 15 + 24 = 39
+T{ #3 #4 vec2  #5 #6 vec2 vec2dot -> #39 }T
+
+\ Zero properties
+T{ 0 0 vec2  #10 #10 vec2 vec2dot -> 0 }T
+
+\ Orthogonal vectors (Dot product must equal 0)
+T{ #0 #5 vec2  #5 #0 vec2 vec2dot -> 0 }T
+
+\ 5. Scalar Multiplication (`vec2*`)
+
+\ Standard clean multiplication
+T{ #2 #4 vec2  #3 vec2* -> #6 #12 vec2 }T
+
+\ X Multiplication Overflow (Verifies it cuts off safely at $FFFF instead of bleeding into Y)
+\ #20000 * #4 = 80000 -> 80000 AND $FFFF = 14464 ($3880)
+T{ #20000 #5 vec2  #4 vec2* -> #14464 #20 vec2 }T
+
+\ Y Multiplication Overflow (Verifies it wraps cleanly at the 32-bit cell border)
+\ #20 * #4 = 80; #20000 * #4 = 80000 -> 80000 AND $FFFF = 14464 ($3880)
+T{ #5 #20000 vec2  #4 vec2* -> #20 #14464 vec2 }T
+
+\ 6. Console Print Verification
+
+: test-print CR #10 #20 vec2 .vec2 CR ;
+[: #10 #20 vec2 .vec2 ;] >file tst_dir/vec2.log
+s" tst_dir/vec2.log" s" test/vec2.log" f_cmp ?assert
+
+\ ------------------------------------------------------------------------
+TESTING VRAM allocator
+
+vera :: vram import
+
+reset
+
+\ --- Single block allocation -----------------------------------------------
+
+T{ 1 alloc -> VERA_VRAM_BASE }T
+
+VERA_VRAM_BASE free
+
+\ --- Allocation rounds up ---------------------------------------------------
+
+T{ BLOCK_SZ_BYTES alloc -> VERA_VRAM_BASE }T
+VERA_VRAM_BASE free
+
+T{ BLOCK_SZ_BYTES 1+ alloc -> VERA_VRAM_BASE }T
+VERA_VRAM_BASE free
+
+\ --- Consecutive allocations ------------------------------------------------
+
+1 alloc constant a1
+1 alloc constant a2
+1 alloc constant a3
+
+T{ a1 -> VERA_VRAM_BASE }T
+T{ a2 -> VERA_VRAM_BASE BLOCK_SZ_BYTES + }T
+T{ a3 -> VERA_VRAM_BASE BLOCK_SZ_BYTES 2* + }T
+
+a1 free
+a2 free
+a3 free
+
+\ --- Reuse freed block ------------------------------------------------------
+
+1 alloc constant b1
+1 alloc constant b2
+
+b1 free
+
+T{ 1 alloc -> b1 }T
+
+b2 free
+b1 free
+
+\ --- Multi-block allocation -------------------------------------------------
+
+T{ BLOCK_SZ_BYTES 3 * alloc
+   -> VERA_VRAM_BASE }T
+
+VERA_VRAM_BASE free
+
+\ --- Hole is too small ------------------------------------------------------
+
+1 alloc constant c1
+1 alloc constant c2
+1 alloc constant c3
+
+c2 free
+
+\ Two-block allocation should skip the one-block hole.
+T{ BLOCK_SZ_BYTES 2 * alloc
+   -> VERA_VRAM_BASE BLOCK_SZ_BYTES 3 * + }T
+
+c1 free
+c3 free
+VERA_VRAM_BASE BLOCK_SZ_BYTES 3 * + free
+
+\ --- Allocate entire VRAM ---------------------------------------------------
+
+T{ VERA_VRAM_SIZE_BYTES alloc -> VERA_VRAM_BASE }T
+
+VERA_VRAM_BASE free
+
+vera :: vram unimport
 
 quit
 
