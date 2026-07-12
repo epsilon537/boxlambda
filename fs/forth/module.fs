@@ -65,17 +65,25 @@ max-order stack-create (wordlist-search-order-stack)
   0 ?assert
 ;
 
-\ Add the given module to the top of the wordlist search order.
-( module -- )
-: import
+\ run-time portion of import
+: (import)
   >r get-order r> swap 1+ set-order ( )
 ;
 
-\ Remove the given module from the search-order. If the module
-\ appears more than once in the search-order, only the top-most
-\ entry is removed.
+\ Add the given module to the top of the wordlist search order.
 ( module -- )
-: unimport
+: import
+  state @ if
+    postpone literal
+    postpone (import)
+  else
+    (import)
+  then
+  [immediate]
+;
+
+\ run-time portion of unimport
+: (unimport)
   >r 
   get-order ( x1..xm m R: wid )
   begin
@@ -93,5 +101,19 @@ max-order stack-create (wordlist-search-order-stack)
   loop ( x1..xm-1 R: m )
   r>
   set-order ( )
+;
+
+\ Remove the given module from the search-order. If the module
+\ appears more than once in the search-order, only the top-most
+\ entry is removed.
+( module -- )
+: unimport
+  state @ if
+    postpone literal
+    postpone (unimport)
+  else
+    (unimport)
+  then
+  [immediate]
 ;
 
