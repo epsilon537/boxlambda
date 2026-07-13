@@ -586,6 +586,60 @@ VERA_VRAM_BASE free
 
 vera :: vram unimport
 
+\ --- Immediate utility words --------------------------------------------
+$1234 immediate-constant tst-imm-const
+
+: imm-const-tst tst-imm-const literal ;
+
+T{ imm-const-tst -> $1234 }T
+
+: tst-compile-or-exec [: ." In tst-compile-or-exec" $5678 ;] compile-or-execute [immediate] ;
+
+T{ [: tst-compile-or-exec ;] execute -> $5678 }T
+T{ tst-compile-or-exec -> $5678 }T
+
+\ ------------------------------------------------------------------------
+TESTING anonymous lists and iterators
+
+[: l{ 1 , 2 , 3 }l ;] execute
+3 = ?assert
+dup @ 1 = ?assert
+dup cell+ @ 2 = ?assert
+dup 2 cells+ @ 3 = ?assert
+drop
+
+[: h{ 4 h, 5 h, 6 }h ;] execute
+3 = ?assert
+dup h@ 4 = ?assert
+2+ dup h@ 5 = ?assert
+2+ h@ 6 = ?assert
+
+[: c{ 7 c, 8 c, 9 }c ;] execute
+3 = ?assert
+dup c@ 7 = ?assert
+1+ dup c@ 8 = ?assert
+1+ c@ 9 = ?assert
+
+3 stack-create iterstack
+
+[: l{ 1 , 2 , 3 }l [: iterstack stack-push ;] iter ;] execute
+
+T{ iterstack stack-pop -> 3 }T
+T{ iterstack stack-pop -> 2 }T
+T{ iterstack stack-pop -> 1 }T
+
+[: h{ 4 h, 5 h, 6 }h [: iterstack stack-push ;] hiter ;] execute
+
+T{ iterstack stack-pop -> 6 }T
+T{ iterstack stack-pop -> 5 }T
+T{ iterstack stack-pop -> 4 }T
+
+[: c{ 7 c, 8 c, 9 }c [: iterstack stack-push ;] citer ;] execute
+
+T{ iterstack stack-pop -> 9 }T
+T{ iterstack stack-pop -> 8 }T
+T{ iterstack stack-pop -> 7 }T
+
 quit
 
 \ ------------------------------------------------------------------------

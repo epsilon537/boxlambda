@@ -1254,11 +1254,15 @@ begin-module vera
 
   begin-module palette
 
+    \ Shadow memory. VERA's palette memory is write-only.
+    256 harray shadow_mem
+
     \ Expects standard 4-bit color fields mapped linearly
     \ Write an entry into the palette.
     \ @param idx: the palete color index
     \ @param rgb: the 12-bit RGB triple
     : write ( rgb idx -- )
+      2dup shadow_mem h!
       swap ( idx rgb )
       $fff and ( idx rgbmasked )
       swap ( rgbmasked idx )
@@ -1268,7 +1272,7 @@ begin-module vera
     \ Read the RGB value of a palette entry
     \ @param idx: the palete color index:
     \ @return: the 12-bit RGB triple
-    : read ( idx -- rgb ) 4 * VERA_PALETTE_RAM_BASE + @ ;
+    : read ( idx -- rgb ) shadow_mem h@ ;
 
   end-module
 
