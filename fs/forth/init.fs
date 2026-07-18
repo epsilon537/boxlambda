@@ -13,7 +13,10 @@ include /forth/disasm.fs
 include /forth/dump.fs
 include /forth/dict.fs
 include /forth/wordlist.fs
+include /forth/traceinside.fs
+include /forth/assert.fs
 include /forth/module.fs
+quit
 include /forth/bitfield.fs
 include /forth/memmap.fs
 include /forth/vera_regs.fs
@@ -27,6 +30,8 @@ vera import
 \ This flag is set when building the boxkerntest target.
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
+include /test/vera/vera-bitmap-1bpp.fs
+quit
 include /test/testsuite.fs
 [then]
 

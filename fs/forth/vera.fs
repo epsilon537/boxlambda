@@ -1,8 +1,6 @@
 \ BoxLambda Forth
 \ VERA Graphics Driver
 
-\ 'position' in the definitions below is a vec2.
-
 begin-module vera
 
   \ --- System Limits and Enumerations ---
@@ -10,11 +8,11 @@ begin-module vera
   #524 constant SCANLINE_MAX
   #1023 constant HSTOP_MAX
   #1023 constant VSTOP_MAX
-  #1024 constant MAX_NUM_TILES_IN_TILESET
-  #2 constant NUM_LAYERS
-  #2 constant NUM_SPRITE_BANKS
-  #64 constant NUM_SPRITES_IN_BANK
-  NUM_SPRITE_BANKS NUM_SPRITES_IN_BANK * constant NUM_SPRITES
+  #1024 constant MAX_TILES_IN_TILESET
+  #2 constant #LAYERS
+  #2 constant #SPRITE_BANKS
+  #64 constant #SPRITES_IN_BANK
+  #SPRITE_BANKS #SPRITES_IN_BANK * constant #SPRITES
   #127 constant MAX_SPRITE_ID
 
   \ --- VRAM ---
@@ -25,62 +23,54 @@ begin-module vera
 
     #2048 constant BLOCK_SZ_BYTES
     BLOCK_SZ_BYTES log2 constant LOG_BLOCK_SZ
-    VERA_VRAM_SIZE_BYTES LOG_BLOCK_SZ rshift constant NUM_BLOCKS
+    VERA_VRAM_SIZE_BYTES LOG_BLOCK_SZ rshift constant #BLOCKS
 
-    create blocks_ NUM_BLOCKS chars allot
+    create blocks_ #BLOCKS chars allot
 
-    : reset blocks_ NUM_BLOCKS 0 fill ;
+    : reset blocks_ #BLOCKS 0 fill ;
 
     reset
 
+
     \ --- VRAM Allocation Subsystem ---
     \ In the blocks_ array, at offset, attempt to find requested blocks.
-    \ Return actual number of blocks found (might be less than requested).
-    : (find-free-blocks) ( offset requested -- found )
-      >r 0 ( offset found R: requested )
-      begin
-        \ Stop scanning if requested number is found.
-        dup r@ < >r ( offset found R: requested f )
-        \ Stop scanning if we reached the end of blocks_.
-        over NUM_BLOCKS < >r ( offset found f R: requested f f )
-        \ Stop scanning if the block is not free.
-        over blocks_ + c@ 0=  ( offset found f R: requested f f ) 
-        2r> and and while ( offset found R: requested )
-          \ Increment offset and found
-          1 dup d+ ( offset+1 found+1 R: requested )
+    \ Return actual # of blocks found (might be less than requested).
+    : (find-free-blocks) ( requested offset -- found )
+      begin ( left offset )
+        over 0> \ Anything left to find? ( left offset f )
+        over #BLOCKS < and \ offset < end of blocks_? ( left offset f )
+        over blocks_ + c@ 0= and \ blocks_[offset] free? ( left offset f )
+        while \ While all of the above are true, keep going. ( left offset )
+          1+ swap 1- swap \ Increment offset and decrement left ( left offset )
       repeat
-      rdrop swap drop ( found )
+      drop ( left )
     ;
 
-    \ Find a chunk of num-blocks consecutive free blocks in the blocks_
+    \ Find a chunk of #blocks consecutive free blocks in the blocks_
     \ array. Return the start index of this chunk.
     \ Raise x-vram-alloc-failed exception if no chunk is found.
-
-    \ ( num-blocks -- block-idx|-1 )
+    \ ( #blocks -- block-idx|-1 )
     : (find-free-chunk)
-      \ Start scanning from offset 0
-      NUM_BLOCKS 0 do ( num-blocks )
-        \ Attempt to find num-blocks starting from offset block-idx.
-        dup i swap (find-free-blocks) ( num-blocks found-blocks )
-        \ If not found, increment offset and loop.
-        over >= if ( num-blocks )
+      #BLOCKS 0 do \ Start scanning from offset 0 ( #blocks )
+        \ Attempt to find #blocks starting from offset i.
+        dup i (find-free-blocks) ( #blocks remaining-blocks )
+        0= if \ If no remaining-blocks, we're done. ( #blocks )
           drop i
           unloop exit
         then
       loop
-
       drop -1
     ;
 
-    ( num-blocks block-idx -- )
+    ( #blocks block-idx -- )
     : (allocate-blocks)
-      blocks_ + ( num-blocks vram_block_ptr )
-      2dup c! ( num-blocks vram_block_ptr )
+      blocks_ + ( #blocks vram_block_ptr )
+      2dup c! ( #blocks vram_block_ptr )
       1+ swap 1- $ff fill ( )
     ;
 
-    : (find-alloc-blocks) ( num-blocks -- block-idx )
-      dup (find-free-chunk) ( num-blocks block-idx )
+    : (find-alloc-blocks) ( #blocks -- block-idx )
+      dup (find-free-chunk) ( #blocks block-idx )
       dup -1 = triggers x-alloc-failed
       tuck (allocate-blocks) ( block-idx )
     ;
@@ -93,7 +83,7 @@ begin-module vera
     : alloc ( size-bytes -- addr )
       dup ?assert \ Size can't be 0.
       \ Convert size in bytes to block size, rounding up.
-      [ BLOCK_SZ_BYTES 1- ] literal + LOG_BLOCK_SZ rshift ( num-blocks )
+      [ BLOCK_SZ_BYTES 1- ] literal + LOG_BLOCK_SZ rshift ( #blocks )
       (find-alloc-blocks) ( block-idx )
       \ Convert to address
       LOG_BLOCK_SZ lshift VERA_VRAM_BASE +
@@ -102,7 +92,7 @@ begin-module vera
     \ ( block-idx -- )
     : (free)
       blocks_ + ( vram_block_ptr )
-      dup c@ ( vram_block_ptr num-blocks )
+      dup c@ ( vram_block_ptr #blocks )
       0 fill ( )
     ;
 
@@ -129,7 +119,7 @@ begin-module vera
       hfield: .height
       hfield: .tile-idx \ transient
       cfield: .type
-      cfield: .color \ transient
+      cfield: .cidx \ transient
       cfield: .paloffset \ transient
       cfield: .vflip \ transient
       cfield: .hflip \ transient
@@ -256,9 +246,9 @@ begin-module vera
         [ tilemap import ]
         over type@ TXT16 = ?assert
         4 lshift ( tilemap bgshifted )
-        over .color c@ ( tilemap bshifted oldcolor )
+        over .cidx c@ ( tilemap bshifted oldcolor )
         $f and or      ( tilemap newcolor )
-        over .color c! ( tilemap )
+        over .cidx c! ( tilemap )
         [ tilemap unimport ]
       ;
 
@@ -267,10 +257,10 @@ begin-module vera
         [ tilemap import ]
         over type@ TXT16 = if
           $f and         ( tilemap fgmasked )
-          over .color c@ ( tilemap fgmasked oldcolor )
+          over .cidx c@ ( tilemap fgmasked oldcolor )
           $f0 and or      ( tilemap newcolor )
         then
-        over .color c! ( tilemap )
+        over .cidx c! ( tilemap )
         [ tilemap unimport ]
       ;
 
@@ -305,10 +295,10 @@ begin-module vera
         [ tilemap unimport ]
       ;
 
-      ( tilemap row col -- tilemap )
-      : position
+      ( tilemap col row -- tilemap )
+      : xy 
         [ tilemap import ]
-        swap vec2 ( tilemap vec2 )
+        vec2 ( tilemap vec2 )
         over .position !
         [ tilemap unimport ]
       ;
@@ -322,7 +312,7 @@ begin-module vera
           over .hflip c@ 1 and 10 lshift or ( tilemap mapentry )
           over .tile-idx h@ $3ff and or ( tilemap mapentry )
         else
-          dup .color c@ 8 lshift ( tilemap mapentry )
+          dup .cidx c@ 8 lshift ( tilemap mapentry )
           over .tile-idx h@ ( tilemap mapentry tileidx )
           $ff and or ( tilemap mapentry )
         then
@@ -341,7 +331,7 @@ begin-module vera
             over .hflip c@ 1 and 10 lshift or ( tilemap mapentry )
             over .tile-idx h@ $3ff and or ( tilemap mapentry )
           else
-            dup .color c@ 8 lshift ( tilemap mapentry )
+            dup .cidx c@ 8 lshift ( tilemap mapentry )
             over .tile-idx h@ ( tilemap mapentry tileidx )
             $ff and or ( tilemap mapentry )
           then
@@ -367,7 +357,7 @@ begin-module vera
             dup $400 and 0= r@ .hflip c! ( mapentry R: tilemap )
             $3ff and r> .tile-idx h! ( )
           else
-            dup 8 rshift r@ .color c! ( mapentry R: tilemap )
+            dup 8 rshift r@ .cidx c! ( mapentry R: tilemap )
             $ff and r> .tile-idx h! ( )
           then
           [ tilemap unimport ]
@@ -531,13 +521,10 @@ begin-module vera
       field:  .base
       field:  .pxl-set
       field:  .pxl-get
-      field:  .position \ transient
-      field:  .bitmapaddr \ transient
       hfield: .width
       hfield: .height
       hfield: .bpp
-      hfield: .num-tiles
-      hfield: .color
+      hfield: .#tiles
     end-structure
 
     \ Initialize the tileset object. This must be done only once.
@@ -559,8 +546,14 @@ begin-module vera
     ( tileset -- bpp )
     : bpp@ .bpp h@ ;
 
-    ( tileset -- num-tiles )
-    : num-tiles@ .num-tiles h@ ;
+    ( tileset -- #tiles )
+    : #tiles@ .#tiles h@ ;
+
+    ( tileset -- )
+    : print
+      >r r@ #tiles@ r@ bpp@ r@ height@ r@ width@ r> base@
+      s" Tileset: $%x base, %n width, %n height, %n bpp, %n tiles" printf cr
+    ;
 
     \ Retrieve the tilesize in bytes for the given tileset.
     ( tileset -- tilesize-bytes )
@@ -568,18 +561,18 @@ begin-module vera
 
     \ Given a VRAM address and a tileset, compute the tile index corresponding to that address.
     ( addr tileset -- tile-idx )
-   : addr>tile-idx
-     dup base@ dup ?assert ( addr tileset baseaddr )
-     rot swap - ( tileset offset )
-     swap tilesize@ ( offset tilesize )
-     / ( tileidx )
-   ;
+    : addr>tidx
+      dup base@ dup ?assert ( addr tileset baseaddr )
+      rot swap - ( tileset offset )
+      swap tilesize@ ( offset tilesize )
+      / ( tileidx )
+    ;
 
     \ Given a tile index in a tileset, compute to  pointer to the pixel data of a tile in the tileset.
     \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
     \ @param tileset: Tileset object
     ( tile-idx tileset -- addr )
-    : tile-idx>addr
+    : tidx>addr
       dup tilesize@ rot * ( tileset tilesize*tile-idx ) 
       swap base@ dup ?assert
       + ;
@@ -628,11 +621,11 @@ begin-module vera
       ( tileset num -- tileset )
       : tiles
         dup 1024 < ?assert ( tileset num )
-        over .num-tiles h! 
+        over .#tiles h! 
       ;
 
       \ (Re)Allocate VRAM for this tileset to accommodate
-      \ num-tiles, bpp, width and height.
+      \ #tiles, bpp, width and height.
       \ If VRAM was previously allocated for this tileset,
       \ this VRAM will be released before reallocating VRAM.
       \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
@@ -644,7 +637,7 @@ begin-module vera
             vram :: free
           then ( R: tileset )
           0 r@ .base ! ( R: tileset )
-          r@ tilesize@ r@ num-tiles@ * 
+          r@ tilesize@ r@ #tiles@ * 
           vram :: alloc ( addr R: tileset )
           r> .base ! ( R: tileset )
         ;] compile-or-execute
@@ -666,52 +659,55 @@ begin-module vera
   pixel continue-module
     begin-module config
 
+      0 variable position
+      0 variable bitmapaddr
+      0 variable cidx 
+
       \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
       \ @param tileset: Tileset object
       ( tileset tile-idx -- tileset )
-      : tile 
-        2dup swap tileset :: num-tiles@ <= ?assert ( tileset tile-idx )
-        over tileset :: tile-idx>addr ( tileset addr )
-        over tileset :: .bitmapaddr ! ( tileset )
+      : tidx 
+        2dup swap tileset :: #tiles@ <= ?assert ( tileset tile-idx )
+        over tileset :: tidx>addr ( tileset addr )
+        bitmapaddr ! ( tileset )
       ;
-
-      ( tileset color -- tileset )
-      : color
-        over tileset :: .color h!
+      ( tileset cidx -- tileset )
+      : cidx
+        cidx h!
       ;
 
       ( tileset x y -- tileset )
-      : position vec2 over tileset :: .position ! ;
+      : xy vec2 position ! ;
 
       \ Set a pixel in the given tile.
       ( tileset -- )
       : }set
         [:
           >r ( R: tileset )
-          r@ tileset :: .color h@
-          r@ tileset :: .position @
-          r@ tileset :: .bitmapaddr @
+          cidx @
+          position @
+          bitmapaddr @
           r@ tileset :: .width h@ 
           r> tileset :: .pxl-set @
           ( color position addr width pxl-setter )
-        execute
+          execute
         ;] compile-or-execute
         config unimport
         [immediate]
       ;
 
-      \ Read the pixel color from the given position on the given tile.
-      \ ( tileset -- color )
+      \ Read the pixel cidx from the given position on the given tile.
+      \ ( tileset -- cidx )
       : }get
         [:
           >r ( R: tileset )
-          r@ tileset :: .position @
-          r@ tileset :: .bitmapaddr @
+          position @
+          bitmapaddr @
           r@ tileset :: .width h@
-          r@ tileset :: .pxl-get @
-          ( position addr width pxl-getter R: tileset )
-          execute ( color R: tileset )
-          dup r> tileset :: .color ! ( color )
+          r> tileset :: .pxl-get @
+          ( position addr width pxl-getter )
+          execute ( cidx )
+          cidx ! ( cidx )
         ;] compile-or-execute
         config unimport
         [immediate]
@@ -746,7 +742,7 @@ begin-module vera
     : (ram>id) VERA_SPRITE_RAM_BASE - 8 / [inline] ;
 
     : init ( sprite-idx sprite -- )
-      over NUM_SPRITES u< ?assert
+      over #SPRITES u< ?assert
       dup sprite-struct 0 fill ( sprite-idx sprite )
       swap (id>ram) ( sprite ramaddr )
       swap .attr-ram-ptr ! ( sprite )
@@ -757,7 +753,7 @@ begin-module vera
 
     \ Get the sprite's current coordinates.
     \ ( sprite -- x y )
-    : position@ dup .attr-x h@ swap .attr-y h@ ;
+    : xy@ dup .attr-x h@ swap .attr-y h@ ;
 
     \ ( tilesize - tilesize-encoded )
     : (sizeenc) log2 3 - ;
@@ -835,7 +831,7 @@ begin-module vera
 
     begin-module config
       \ ( sprite x y -- sprite )
-      : position
+      : xy 
           rot >r ( x y R: sprite )
           r@ .attr-y h!
           r@ .attr-x h!
@@ -859,13 +855,13 @@ begin-module vera
 
       \ Set the tile index to be used in the sprite object.
       \ ( sprite tile-idx -- sprite )
-      : tile-idx
+      : tidx
         2dup swap .tile-idx ! ( sprite tile-idx )
         \ Compute and set the address attribute if we have a tileset.
         \ If we don't have a tileset yet, this is deferred until the tileset
         \ is specified.
         over .tileset @ ?dup if ( sprite tile-idx tileset )
-          tileset :: tile-idx>addr ( sprite addr ) 
+          tileset :: tidx>addr ( sprite addr ) 
           over (addr!) ( sprite )
         else
           drop ( sprite )
@@ -876,10 +872,10 @@ begin-module vera
       \ When modifying the tileset used by a sprite object, keep in mind that
       \ the corresponding tile index (tidx, see above) has to be valid (within
       \ range) for the new tileset.
-      : tileset ( sprite tileset -- sprite )
+      : tset ( sprite tileset -- sprite )
         swap >r ( tileset R : sprite )
         r@ .tile-idx @ ( tileset tile-idx R: sprite )
-        over tileset :: tile-idx>addr r@ (addr!) ( tileset R: sprite )
+        over tileset :: tidx>addr r@ (addr!) ( tileset R: sprite )
         dup tileset :: bpp@ r@ (bpp!) ( tileset R: sprite )
         dup tileset :: width@ r@ (width!) ( tileset R: sprite )
         dup tileset :: height@ r@ (height!) ( tileset R: sprite )
@@ -930,7 +926,7 @@ begin-module vera
 
     \ Initialize a layer object
     : init ( id layer -- )
-      over NUM_LAYERS < ?assert
+      over #LAYERS < ?assert
       dup layer-struct 0 fill
       .id c!
     ;
@@ -1090,7 +1086,7 @@ begin-module vera
     : (bitmap!)
       [ tileset import ]
       >r ( tileset tile-idx R: layer )
-      over tile-idx>addr ( tileset tile-addr R: layer )
+      over tidx>addr ( tileset tile-addr R: layer )
       over bpp@ ( tileset tile-addr bpp R: layer )
       r@ swap (bpp!) ( tileset tile-addr R: layer )
       r@ true (bitmap-mode!) ( tileset tile-addr R: layer )
@@ -1103,11 +1099,11 @@ begin-module vera
 
     \ Retrieve tileset used by this layer
     ( layer -- tileset )
-    : tileset@ .tileset @ ;
+    : tset@ .tileset @ ;
 
     \ Retrieve tile-idx used by this layer (bitmap mode).
     ( layer -- tileset )
-    : tile-idx@ .tile-idx h@ ;
+    : tidx@ .tile-idx h@ ;
 
     \ Retrieve tilemap used by this layer (tilemap mode).
     ( layer -- tilemap )
@@ -1120,11 +1116,11 @@ begin-module vera
 
       \ Set the tileset to be used by this layer (tilemapmode and bitmapmode)
       ( layer tileset -- layer )
-      : tileset over .tileset ! ;
+      : tset over .tileset ! ;
   
       \ Set the tile index to be used by this layer (bitmapmode)
       ( layer tile-idx -- layer )
-      : tile-idx over .tile-idx h! ;
+      : tidx over .tile-idx h! ;
 
       \ Configure the layer in tilemap mode. tmap and tset must be specified.
       ( layer -- )

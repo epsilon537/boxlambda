@@ -63,7 +63,7 @@
   [immediate]
 ;
 
-: x-assert ." Assert failed!" cr ;
+: x-assert ." Assert failed!" ;
 
 \ Raise x-assert exception if f is false.
 : ?assert ( f -- )
