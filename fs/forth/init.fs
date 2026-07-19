@@ -3,6 +3,20 @@
 \ point that the include Word has been created, i.e. right after the
 \ BoxKern has exeuted shell.fs.
 
+\ A quit loop that prints the cwd as a prompt
+: quit_w_cwd ( -- )
+  begin
+    cr f_getcwd type s" > " type
+    query
+    cr
+    interpret
+  again
+;
+
+\ Update the quit hook so that if quit is called,
+\ we get back into the quit_w_cwd loop.
+' quit_w_cwd hook-quit !
+
 \ Note that ifdef/else is defined here. Forth modules
 \ earlier in the boot sequence such as fs.fs and shell.fs
 \ (see sw/projects/boxlambda_os/main.cpp) don't have access to
@@ -11,12 +25,11 @@ include /forth/ifdef.fs
 
 include /forth/disasm.fs
 include /forth/dump.fs
-include /forth/dict.fs
+include /forth/pre-dict.fs
 include /forth/wordlist.fs
-include /forth/traceinside.fs
+include /forth/dict.fs
 include /forth/assert.fs
 include /forth/module.fs
-quit
 include /forth/bitfield.fs
 include /forth/memmap.fs
 include /forth/vera_regs.fs
@@ -30,8 +43,8 @@ vera import
 \ This flag is set when building the boxkerntest target.
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
-include /test/vera/vera-bitmap-1bpp.fs
-quit
+\ include /test/vera/vera-bitmap-1bpp.fs
+\ quit
 include /test/testsuite.fs
 [then]
 
@@ -51,21 +64,8 @@ include /test/testsuite.fs
   cr
 ;
 
-\ A quit loop that prints the cwd as a prompt
-: quit_w_cwd ( -- )
-  begin
-    cr f_getcwd type s" > " type
-    query
-    cr
-    interpret
-  again
-;
-
 Flamingo cr
 ." Ready." cr
 
-\ Update the quit hook so that if quit is called,
-\ we get back into the quit_w_cwd loop.
-' quit_w_cwd hook-quit !
 quit_w_cwd
 

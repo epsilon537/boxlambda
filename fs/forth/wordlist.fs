@@ -34,7 +34,7 @@ wordlist-tbl constant forth
 $ffffffff constant erasedcell
 
 \ search-order is a 0 terminated array of wids.
-max-order 1+ cells buffer: search-order
+max-order 1+ array search-order
 
 : x-wid-overflow ( -- ) ." Max. number of wids exceeded" cr ;
 
@@ -51,47 +51,32 @@ max-order 1+ cells buffer: search-order
   dup 0= triggers x-empty-search-order
   dup >r ( wid0..widn n R: n )
   0 ?do
-    i cells search-order + ! 
+    i search-order ! 
   loop ( R: n )
-  0 r> cells search-order + !  \ zero terminated order
+  0 r> search-order !  \ zero terminated order
 ;
 
 \ Return the number of wordlists (wids) in the search order.
 : (search-order-n) ( -- n )
-  0 begin ( n )
-    dup cells search-order +  @ ( n wid )
-    while 1+ ( n+1 )
-  repeat
+  0 0 search-order max-order 1+ find-in ( addr-of-0 )
+  dup ?assert
+  0 search-order - cell/
 ;
 
 \ Retrieve the search order list and the length (n) of that list.
 \ widn is the first wordlist being search, wid0 is the last.
 ( -- wid0 ... widn n )
 : get-order
-  (search-order-n) dup 0= if exit then ( n )
-  dup >r ( n R: n )
-  cells search-order + ( iter R: n )
-  begin 
-    1 cells - ( wid0..widx iter' R: n ) 
-    dup @ ( wid0..widx iter wid R: n )
-    swap ( wid0..widy iter R: n )
-    dup search-order = ( wid0..widy iter f R: n )
-  until
-  drop ( wid0..widn R: n )
+  (search-order-n) dup ?assert
+  >r ( R: n )
+  0 r@ 1- do
+   i search-order @ ( wid0..widx R: n )
+   -1
+  +loop
   r> ( wid0..widn n )
 ;
 
-\ Print the wordlist search order, first-to-last.
-( -- )
-: .order
-  cr
-  get-order 0 ?do 
-    dup hex. space 
-    .wordlist-name @ ctype cr
-  loop
-;
-
-\ Create a new wordlist and return its wordlist-id (wid). 
+\ Create a new wordlist and return its wordlist-id (wid).
 ( -- wid )
 : wordlist
   wordlist-top @ ( top )
@@ -108,14 +93,28 @@ max-order 1+ cells buffer: search-order
 ( wid -- caddr )
 : wordlist-name@ .wordlist-name @ ;
 
+\ Print the wordlist info
+( wid -- )
+: .wordlist
+    dup hex. space 
+    wordlist-name@ ctype cr
+;
+
+\ Print the wordlist search order, first-to-last.
+( -- )
+: .order
+  cr
+  get-order 0 ?do 
+    .wordlist
+  loop
+;
+
 \ The current wordlist. New words are added to this list.
 0 variable current-wid
 
 \ Get the current wordlist. New words are added to the current wordlist.
 ( -- wid )
-: get-current
-  current-wid @
-;
+: get-current current-wid @ ;
 
 \ Set the current wordlist. New words are added to the current wordlist.
 ( wid -- )
@@ -127,21 +126,19 @@ max-order 1+ cells buffer: search-order
 \ Fetches the next entry in the wordlist chain. Returns true if end of the wordlist is reached.
 ( link-addr - addr flag )
 : wordlist-next
-  \ Follow the link to the next word.
-  link>link @ ( link-addr ) 
-  \ check if it's pointing to a valid word.
-  dup erasedcell = ( link-addr true/false )
+  link>link @ \ Follow the link to the next word. ( link-addr ) 
+  dup erasedcell = \ check if it's pointing to a valid word. ( link-addr true/false )
 ;
 
 \ Current entry point for the given wordlist.
 : wordlist-start ( wid -- lfa ) .wordlist-start @ ;
 
-\ List all the words in a give wordlist.
+\ List all the words in a given wordlist.
 : wordlist-list ( wid -- )
   cr
   wordlist-start
   begin
-    dup 8 + ctype space
+    dup link>name ctype space
     wordlist-next
   until
   drop
@@ -154,20 +151,16 @@ max-order 1+ cells buffer: search-order
 \ Scans dictionary chain search-order aware and returns true if end is reached.
 ( link-addr -- addr flag)
 : dictionarynext
-  \ Follow the link to the next word.
-  link>link @ ( link-addr ) 
-  \ check if it's pointing to a valid word.
-  dup erasedcell <> if ( link-addr )
-  \ link is pointing to a valid word. Return false.
-    false exit ( link-addr false )
+  link>link @ \ Follow the link to the next word. ( link-addr ) 
+  dup erasedcell <> if \ check if it's pointing to a valid word. ( link-addr )
+    false exit \ link is pointing to a valid word. Return false. ( link-addr false )
   then
   drop \ End of current wordlist reached. Move on to next one in the search-order.
   cell wordlistptr +! ( )
-  \ wordlistptr points to a search-order cell. That cell points to a wid.
+  \ wordlistptr points to a search-order cell, which points to a wid.
   wordlistptr @ @ ( wid )
   dup if ( wid ) \ wid is valid. Recurse.
-    .wordlist-start
-    recurse exit
+    .wordlist-start recurse exit
   then ( 0 )
   true ( 0 true ) \ End of search order reached. Return true.
 ;
@@ -176,43 +169,36 @@ max-order 1+ cells buffer: search-order
 ( -- link-addr )
 : dictionarystart
   \ (Re)Set the wordlistptr to the start of the search-order.
-  search-order dup wordlistptr ! ( search-order )
-  \ Get the first wid in the search-order.
-  @ ( wid )
-  \ Return the first word in the wid wordlist.
-  .wordlist-start @ ( link-addr )
+  0 search-order dup wordlistptr ! ( search-order )
+  @ \ Get the first wid in the search-order. ( wid )
+  .wordlist-start @ \ Return the first word in the wid wordlist. ( link-addr )
 ;
 
-\ This version of dictionarystart scans across all wids
+\ This version of dictionarystart scans across all wids.
+\ Both the word address and the wid it belongs to are returned.
 ( -- link-addr wid )
 : dictionarystart-all-wids
   \ (Re)Set the wordlistptr to the start of the wordlist-tbl
   wordlist-tbl dup wordlistptr ! ( wordlistptr )
-  \ Return the first word of the first wordlist.
-  .wordlist-start @ ( link-addr )
-  \ And its wid
-  wordlistptr @ ( link-addr wid )
+  .wordlist-start @ \ Return the first word of the first wordlist. ( link-addr )
+  wordlistptr @     \ And its wid ( link-addr wid )
 ;
 
-\ Scans dictionary chain across all wids and returns true if end is reached.
-( link-addr -- addr wid flag)
+\ Scans dictionary chain across all wids, returns a word-address and its wid
+\ if a word is found. Returns 0 0 if end is reached.
+( link-addr -- addr wid|0 )
 : dictionarynext-all-wids
-  \ Follow the link to the next word.
-  link>link @ ( link-addr ) 
-  \ check if it's pointing to a valid word.
-  dup erasedcell <> if ( link-addr )
-    \ link is pointing to a valid word. Return false.
-    wordlistptr @
-    false exit ( link-addr wid false )
+  link>link @ \ Follow the link to the next word. ( link-addr ) 
+  dup erasedcell <> if \ check if it's pointing to a valid word. ( link-addr )
+    \ link is pointing to a valid word, return link-addr and wid
+    wordlistptr @ exit ( link-addr wid )
   then
   drop \ End of current wordlist reached. Move on to next one.
-  wordlistptr dup @ wordlist-struct + ( wordlistptr-addr wordlistptr )
-  dup rot ! ( wordlistptr )
+  wordlist-struct wordlistptr +! wordlistptr @ ( wordlistptr )
   dup wordlist-top @ <> if \ not at the end yet? ( wordlistptr )
-    .wordlist-start
-    recurse exit
+    .wordlist-start recurse exit
   then
-  drop 0 0 true ( 0 0 true ) \ End of search order reached. Return true.
+  drop 0 false \ End of search order reached.
 ;
 
 \ This is the wordlist search-order aware version of find.
@@ -222,7 +208,7 @@ max-order 1+ cells buffer: search-order
 : (find-wordlist)
   dictionarystart ( addr len link )
   begin ( addr len link )
-    dup link>flags @ Flag_invisible <> if ( addr len link )
+    dup link>flags @ FLAG-INVISIBLE <> if ( addr len link )
       >r ( addr len R: link )
       r@ link>name count ( addr len link-addr link-len R: link )
       2over compare if ( addr len R: link ) \ Found:

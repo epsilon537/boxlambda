@@ -86,10 +86,6 @@
 
 : d>s ( d -- n ) drop ;
 
-$10 constant FLAG-IMMEDIATE
-
-: immediate-constant create , FLAG-IMMEDIATE setflags does> @ ;
-
 : compile-or-execute ( xt -- )
   state @ if
     call,

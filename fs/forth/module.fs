@@ -17,6 +17,24 @@ max-order stack-create (wordlist-search-order-stack)
   (module-prev-find-hook) @ hook-find !
 ;
 
+\ Get the xt of the following word, to be found in given namespace. E.g. mymod ::' foo
+( wid "name" -- xt )
+: ::'
+  [: >r get-order r> swap 1+ set-order ;] execute
+  '
+  [: get-order nip 1- set-order ;] execute
+  [immediate]
+;
+
+\ Compile into the definition, the xt of the following word, to be found in given namespace E.g. mymod ::['] foo
+( wid "name" -- xt )
+: ::[']
+  [: >r get-order r> swap 1+ set-order ;] execute
+  ' literal,
+  [: get-order nip 1- set-order ;] execute
+  [immediate] [compileonly]
+;
+
 \ Set wid at the top of the search order for the next word search,
 \ then remove wid from the top of the search order.
 ( wid -- )
@@ -44,6 +62,7 @@ max-order stack-create (wordlist-search-order-stack)
 ( "name" -- )
 : begin-module
   wordlist dup immediate-constant ( wid )
+  (latest) @ link>name over wordlist-name! ( wid )
   continue-module
 ;
 

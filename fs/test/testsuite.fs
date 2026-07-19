@@ -85,7 +85,8 @@ variable #errors 0 #errors !
 
 : ?assert ( f -- )
   0= if
-    s" assert failed: " error
+    s" testsuite assert failed: " error
+    quit
   then
 ;
 
@@ -196,6 +197,24 @@ T{ teststack stack-free -> 4 }T
 T{ teststack stack-base -> teststack stack-top }T
 
 \ ------------------------------------------------------------------------
+TESTING DICTIONARY UTILITIES
+
+begin-module tst-dict-utils
+  : dict-utils-foo ." Testing dict utils" cr ;
+  variable dict-utils-var
+end-module
+
+tst-dict-utils import
+
+T{ ' dict-utils-foo inside-code>link link>code -> ' dict-utils-foo }T
+T{ ' dict-utils-foo code>link link>code -> ' dict-utils-foo }T
+T{ ' dict-utils-foo inside-code>link link>wid -> tst-dict-utils }T
+T{ ' dict-utils-foo inside-code>link link>name count s" dict-utils-foo" compare -> true }T
+dict-utils-var variable>link link>name count s" dict-utils-var" compare -> true }T
+
+tst-dict-utils unimport
+
+\ -------------------------------------------------------------------------
 TESTING WORDLISTS
 
 [: rm ;] try tst_dir/* drop
@@ -268,21 +287,28 @@ wid-foo 0 testwids @ = ?assert
 wid-goo 1 testwids @ = ?assert
 this-wid 0 testwids @ = ?assert
 
-[: 0 testwids @ wid-list ;] >file tst_dir/testwid0.log
-[: 1 testwids @ wid-list ;] >file tst_dir/testwid1.log
+[: 0 testwids @ wordlist-list ;] >file tst_dir/testwid0.log
+[: 1 testwids @ wordlist-list ;] >file tst_dir/testwid1.log
 
 s" tst_dir/testwid0.log" s" test/testwid0.ref" f_cmp ?assert
 s" tst_dir/testwid1.log" s" test/testwid1.ref" f_cmp ?assert
+
+0 testwids @ .wordlist
+1 testwids @ .wordlist
+
+.order
 
 forth 1 set-order
 forth set-current
 
 \ -----------------------------------------------------------------------
-TESTING MDOULES
+TESTING MODULES
 
 begin-module testmod
   : testmodword 5368 ;
 end-module  
+
+testmod wordlist-name@ count s" testmod" compare ?assert
 
 testmod continue-module
   begin-module nestmod
@@ -312,6 +338,8 @@ T{ s" nestmodword" find -> 0 0 }T
 T{ s" nestmod" find -> 0 0 }T
 
 T{ testmod :: testmodword -> 5368 }T
+T{ testmod ::' testmodword execute -> 5368 }T
+T{ [: testmod ::['] testmodword execute ;] execute -> 5368 }T
 T{ testmod :: nestmod :: nestmodword -> 9633 }T
 [: testmod :: testmodword ;] execute 5368 = ?assert
 [: testmod :: nestmod :: nestmodword ;] execute 9633 = ?assert
@@ -336,6 +364,8 @@ T{ s" testmodword" find -> 0 0 }T
 T{ sibmodword -> 5368 }T
 
 sibmod unimport
+
+quit
 
 \ -----------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
@@ -639,8 +669,6 @@ T{ iterstack stack-pop -> 4 }T
 T{ iterstack stack-pop -> 9 }T
 T{ iterstack stack-pop -> 8 }T
 T{ iterstack stack-pop -> 7 }T
-
-quit
 
 \ ------------------------------------------------------------------------
 TESTING 2* 2/ LSHIFT RSHIFT

@@ -926,8 +926,8 @@ begin-module vera
 
     \ Initialize a layer object
     : init ( id layer -- )
-      over #LAYERS < ?assert
-      dup layer-struct 0 fill
+      over #LAYERS < ?assert ( id layer )
+      dup layer-struct 0 fill ( id layer )
       .id c!
     ;
 
