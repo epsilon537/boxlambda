@@ -83,8 +83,7 @@ typedef union {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint16_t HFLIP : 1; // Horizontal Flip
-    uint16_t VFLIP : 1; // Vertical Flip
+    uint16_t FLIP : 2; // Vertical and/or Horizontal Flip
     uint16_t ZDEPTH : 2; // Z Depth
     uint16_t COLMASK : 4; // Collision Mask
     uint16_t PALOFFSET : 4; // Sprite Palette Offset.
@@ -93,17 +92,16 @@ typedef union {
   };
 } vera_sprite_attr_flags_t;
 
-// FLAGS.HFLIP - Horizontal Flip
-#define VERA_SPRITE_ATTR_FLAGS_HFLIP_WIDTH 1
-#define VERA_SPRITE_ATTR_FLAGS_HFLIP_LSB 0
-#define VERA_SPRITE_ATTR_FLAGS_HFLIP_MASK 0x1
-#define VERA_SPRITE_ATTR_FLAGS_HFLIP_RESET 0x0
-
-// FLAGS.VFLIP - Vertical Flip
-#define VERA_SPRITE_ATTR_FLAGS_VFLIP_WIDTH 1
-#define VERA_SPRITE_ATTR_FLAGS_VFLIP_LSB 1
-#define VERA_SPRITE_ATTR_FLAGS_VFLIP_MASK 0x2
-#define VERA_SPRITE_ATTR_FLAGS_VFLIP_RESET 0x0
+// FLAGS.FLIP - Vertical and/or Horizontal Flip
+#define VERA_SPRITE_ATTR_FLAGS_FLIP_WIDTH 2
+#define VERA_SPRITE_ATTR_FLAGS_FLIP_LSB 0
+#define VERA_SPRITE_ATTR_FLAGS_FLIP_MASK 0x3
+#define VERA_SPRITE_ATTR_FLAGS_FLIP_RESET 0x0
+typedef enum {
+    VERA_SPRITE_ATTR_FLAGS_FLIP_HFLIP = 0x1, //Horizontal Flip
+    VERA_SPRITE_ATTR_FLAGS_FLIP_VFLIP = 0x2, //Vertical Flip
+    VERA_SPRITE_ATTR_FLAGS_FLIP_HFLIP_VFLIP = 0x3, //Horizonal and Vertical Flip
+} vera_sprite_attr_flags_flip_t;
 
 // FLAGS.ZDEPTH - Z Depth
 #define VERA_SPRITE_ATTR_FLAGS_ZDEPTH_WIDTH 2

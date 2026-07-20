@@ -113,16 +113,20 @@ regmap:
         -   name: L1
             description: In front of L1.
             value: 3
-    -   name: VFLIP
-        description: Vertical Flip
+    -   name: FLIP
+        description: Vertical and/or Horizontal Flip
         reset: 0
-        width: 1
-        lsb: 1
-        access: wo
-    -   name: HFLIP
-        description: Horizontal Flip
-        reset: 0
-        width: 1
+        width: 2
         lsb: 0
         access: wo
+        enums:
+        -   name: HFLIP
+            description: Horizontal Flip
+            value: 1
+        -   name: VFLIP
+            description: Vertical Flip
+            value: 2
+        -   name: HFLIP_VFLIP
+            description: Horizonal and Vertical Flip
+            value: 3
 

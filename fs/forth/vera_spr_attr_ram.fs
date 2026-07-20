@@ -20,10 +20,13 @@ $3ff #0 bitfield16@ VERA_SPRITE_ATTR_Y@
 $3ff #0 bitfield16! VERA_SPRITE_ATTR_Y!
 
 \ -- Mask Offset
-$1 #0 bitfield16@ VERA_SPRITE_ATTR_FLAGS_HFLIP@
-$1 #0 bitfield16! VERA_SPRITE_ATTR_FLAGS_HFLIP!
-$2 #1 bitfield16@ VERA_SPRITE_ATTR_FLAGS_VFLIP@
-$2 #1 bitfield16! VERA_SPRITE_ATTR_FLAGS_VFLIP!
+$3 #0 bitfield16@ VERA_SPRITE_ATTR_FLAGS_FLIP@
+$3 #0 bitfield16! VERA_SPRITE_ATTR_FLAGS_FLIP!
+
+  #1 constant VERA_SPRITE_ATTR_FLAGS_FLIP_HFLIP \ Horizontal Flip 
+  #2 constant VERA_SPRITE_ATTR_FLAGS_FLIP_VFLIP \ Vertical Flip 
+  #3 constant VERA_SPRITE_ATTR_FLAGS_FLIP_HFLIP_VFLIP \ Horizonal and Vertical Flip 
+
 $c #2 bitfield16@ VERA_SPRITE_ATTR_FLAGS_ZDEPTH@
 $c #2 bitfield16! VERA_SPRITE_ATTR_FLAGS_ZDEPTH!
 

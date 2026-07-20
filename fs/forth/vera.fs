@@ -16,8 +16,9 @@ begin-module vera
   #127 constant MAX_SPRITE_ID
 
   \ For setting the flip attribute of mapentries and sprites
-  #2 constant VFLIP
-  #1 constant HFLIP
+  VERA_SPRITE_ATTR_FLAGS_FLIP_VFLIP constant VFLIP
+  VERA_SPRITE_ATTR_FLAGS_FLIP_HFLIP  constant HFLIP
+  VERA_SPRITE_ATTR_FLAGS_FLIP_HFLIP_VFLIP  constant VFLIP_HFLIP
 
   \ --- VRAM ---
 
@@ -279,7 +280,7 @@ begin-module vera
         [ tilemap unimport ]
       ;
 
-      \ Set flip to: VFLIP, HFLIP, or VFLIP HFLIP or
+      \ flip values: VFLIP, HFLIP, or VFLIP_HFLIP
       ( tilemap flip -- tilemap )
       : flip
         [ tilemap import ]
@@ -317,7 +318,7 @@ begin-module vera
       ;
 
       \ Read from VRAM, mapentry specified by { <row> <col> position }mapentry@ and 
-      \ decode it, populating fg, bg, paloffset, vflip and hflip attributes.
+      \ decode it, populating fg, bg, paloffset, flip attributes.
       \ This is useful for mapentry read-modify-write operations.
       ( tilemap -- )
       : }get
@@ -370,17 +371,16 @@ begin-module vera
     swap 8 rshift $ff and ( chr fg )
   ;
 
-  \ Unpack tile, hflip, vflip and pal_offset from a 2/4/8bbp tile map entry value
+  \ Unpack tile, flip and pal_offset from a 2/4/8bbp tile map entry value
   \ The color index of tile pixels is modified by the palette offset using the
   \ following logic:
   \ - Color index 0 (transparent) and 16-255 are unmodified.
   \ - Color index 1-15 is modified by adding 16 x palette offset.
-  \ ( mapentry -- tile-idx hflip vflip paloffset )
+  \ ( mapentry -- tile-idx flip paloffset )
   : unpack-tile
     dup $3ff and ( mapentry tile-idx )
-    swap 10 rshift 1 and ( tile-idx mapentry hflip )
-    swap 11 rshift 1 and ( tile-idx hflip mapentry vflip )
-    swap 12 rshift $f and ( tile-idx hflip vflip paloffset )
+    swap 10 rshift 3 and ( tile-idx mapentry flip )
+    swap 12 rshift $f and ( tile-idx flip paloffset )
   ;
 
   \ -- Pixel API
@@ -751,10 +751,7 @@ begin-module vera
       swap (sizeenc) swap .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT! ;
 
     \ ( sprite -- f )
-    : vflip@ .attr-flags VERA_SPRITE_ATTR_FLAGS_VFLIP@ 0<> ;
-
-    \ ( sprite -- f )
-    : hflip@ .attr-flags VERA_SPRITE_ATTR_FLAGS_HFLIP@ 0<> ;
+    : flip@ .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP@ 0<> ;
 
     VERA_SPRITE_ATTR_FLAGS_ZDEPTH_DIS constant DIS \ Sprite disabled. 
     VERA_SPRITE_ATTR_FLAGS_ZDEPTH_BG_L0 constant BG_L0 \ Between background and L0. 
@@ -809,11 +806,9 @@ begin-module vera
           r> ( sprite )
       ;
 
-      \ ( sprite vflip -- sprite )
-      : vflip over .attr-flags VERA_SPRITE_ATTR_FLAGS_VFLIP! ;
-
-      \ ( sprite hflip -- sprite )
-      : hflip over .attr-flags VERA_SPRITE_ATTR_FLAGS_HFLIP! ;
+      \ flip values: VFLIP, HFLIP, or VFLIP_HFLIP
+      \ ( sprite flip -- sprite )
+      : flip over .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP! ;
 
       \ ( sprite zdepth -- sprite )
       : zdepth over .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH! ;
