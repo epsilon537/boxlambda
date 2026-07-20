@@ -15,6 +15,10 @@ begin-module vera
   #SPRITE_BANKS #SPRITES_IN_BANK * constant #SPRITES
   #127 constant MAX_SPRITE_ID
 
+  \ For setting the flip attribute of mapentries and sprites
+  #2 constant VFLIP
+  #1 constant HFLIP
+
   \ --- VRAM ---
 
   begin-module vram
@@ -114,15 +118,9 @@ begin-module vera
 
     begin-structure tilemap-struct
       field:  .base
-      field:  .position \ transient
       hfield: .width
       hfield: .height
-      hfield: .tile-idx \ transient
       cfield: .type
-      cfield: .cidx \ transient
-      cfield: .paloffset \ transient
-      cfield: .vflip \ transient
-      cfield: .hflip \ transient
     end-structure
 
     \ Initialize the tilemap object. This must be done only once.
@@ -156,7 +154,7 @@ begin-module vera
     ( type -- f )
     : (type-is-valid) l{ TXT16 , TXT256 , TILE }l find-in 0<> ;
 
-    begin-module config
+    begin-module params
       \ tilemap :: { }set attributes
 
       \ Set map width in the tilemap object: 32, 64, 128, 256
@@ -200,10 +198,10 @@ begin-module vera
           vram :: alloc ( map vram )
           swap .base !
         ;] compile-or-execute
-        config unimport
+        params unimport
         [immediate]
       ;
-    end-module \ tilemap :: config
+    end-module \ tilemap :: params
   end-module \ tilemap
 
   \ Create and initialize a tilemap object.
@@ -212,7 +210,7 @@ begin-module vera
 
   \ Opening bracket for tilemap{ ... }set
   ( tilemap -- tilemap )
-  : tilemap{ tilemap :: config import [immediate] ;
+  : tilemap{ tilemap :: params import [immediate] ;
 
   begin-module mapentry
 
@@ -238,17 +236,23 @@ begin-module vera
     ( position tilemap -- mapentry )
     : (mapentry@) (position>addr) h@ ;
 
-    begin-module config
+    begin-module params
       \ mapentry :: { }set/get attributes
+
+      0 variable (position)
+      0 variable (chr)
+      0 variable (color)
+      0 variable (paloffset)
+      0 variable (flip)
 
       ( tilemap bg -- tilemap )
       : bg
         [ tilemap import ]
         over type@ TXT16 = ?assert
         4 lshift ( tilemap bgshifted )
-        over .cidx c@ ( tilemap bshifted oldcolor )
-        $f and or      ( tilemap newcolor )
-        over .cidx c! ( tilemap )
+        (color) @ ( tilemap bshifted oldcolor )
+        $f and or     ( tilemap newcolor )
+        (color) ! ( tilemap )
         [ tilemap unimport ]
       ;
 
@@ -257,116 +261,83 @@ begin-module vera
         [ tilemap import ]
         over type@ TXT16 = if
           $f and         ( tilemap fgmasked )
-          over .cidx c@ ( tilemap fgmasked oldcolor )
+          (color) @ ( tilemap fgmasked oldcolor )
           $f0 and or      ( tilemap newcolor )
         then
-        over .cidx c! ( tilemap )
+        (color) ! ( tilemap )
         [ tilemap unimport ]
       ;
 
       ( tilemap tile-idx -- tilemap )
-      : idx 
-        [ tilemap import ]
-        over .tile-idx h! 
-        [ tilemap unimport ]
-      ;
+      : chr (chr) ! ;
 
       ( tilemap paloffset -- tilemap )
       : paloffset
         [ tilemap import ]
         over type@ TILE = ?assert
-        over .paloffset c!
+        (paloffset) !
         [ tilemap unimport ]
       ;
 
-      ( tilemap vflip -- tilemap )
-      : vflip
+      \ Set flip to: VFLIP, HFLIP, or VFLIP HFLIP or
+      ( tilemap flip -- tilemap )
+      : flip
         [ tilemap import ]
         over type@ TILE = ?assert
-        over .vflip c!
-        [ tilemap unimport ]
-      ;
-
-      ( tilemap hflip -- tilemap )
-      : hflip
-        [ tilemap import ]
-        over type@ TILE = ?assert
-        over .vflip c!
+        (flip) !
         [ tilemap unimport ]
       ;
 
       ( tilemap col row -- tilemap )
       : xy 
-        [ tilemap import ]
         vec2 ( tilemap vec2 )
-        over .position !
-        [ tilemap unimport ]
-      ;
-
-      \ Run-time portion of }set 
-      : }set ( tilemap -- ) 
-        [ tilemap import ]
-        dup type@ TILE = if ( tilemap )
-          dup .paloffset c@ 12 lshift ( tilemap mapentry )
-          over .vflip c@ 1 and 11 lshift or ( tilemap mapentry )
-          over .hflip c@ 1 and 10 lshift or ( tilemap mapentry )
-          over .tile-idx h@ $3ff and or ( tilemap mapentry )
-        else
-          dup .cidx c@ 8 lshift ( tilemap mapentry )
-          over .tile-idx h@ ( tilemap mapentry tileidx )
-          $ff and or ( tilemap mapentry )
-        then
-        over .position @ ( tilemap mapentry position )
-        rot (mapentry!) ( )
-        [ tilemap unimport ]
+        (position) !
       ;
 
       \ Write mapentry using attributes specified in {}mapentry! block.y
+      ( tilemap -- )
       : }set
         [:
           [ tilemap import ]
           dup type@ TILE = if ( tilemap )
-            dup .paloffset c@ 12 lshift ( tilemap mapentry )
-            over .vflip c@ 1 and 11 lshift or ( tilemap mapentry )
-            over .hflip c@ 1 and 10 lshift or ( tilemap mapentry )
-            over .tile-idx h@ $3ff and or ( tilemap mapentry )
+            dup (paloffset) @ #12 lshift ( tilemap mapentry )
+            over (flip) @ 3 and #10 lshift or ( tilemap mapentry )
+            over (chr) @ $3ff and or ( tilemap mapentry )
           else
-            dup .cidx c@ 8 lshift ( tilemap mapentry )
-            over .tile-idx h@ ( tilemap mapentry tileidx )
+            dup (color) @ 8 lshift ( tilemap mapentry )
+            over (chr) @ ( tilemap mapentry tileidx )
             $ff and or ( tilemap mapentry )
           then
-          over .position @ ( tilemap mapentry position )
+          over (position) @ ( tilemap mapentry position )
           rot (mapentry!) ( )
           [ tilemap unimport ]
         ;] compile-or-execute
-        config unimport
+        params unimport
         [immediate]
       ;
 
       \ Read from VRAM, mapentry specified by { <row> <col> position }mapentry@ and 
       \ decode it, populating fg, bg, paloffset, vflip and hflip attributes.
       \ This is useful for mapentry read-modify-write operations.
+      ( tilemap -- )
       : }get
         [:
           [ tilemap import ]
-          >r ( R: tilemap )
-          r@ .position @ r@ (mapentry@) ( mapentry R: tilemap )
-          r@ type@ TILE = if ( mapentry R: tilemap )
-            dup 12 rshift r@ .paloffset c! ( mapentry R: tilemap )
-            dup $800 and 0= r@ .vflip c! ( mapentry R: tilemap )
-            dup $400 and 0= r@ .hflip c! ( mapentry R: tilemap )
-            $3ff and r> .tile-idx h! ( )
+          (position) @ over (mapentry@) ( tilemap mapentry )
+          swap type@ TILE = if ( mapentry )
+            dup #12 rshift (paloffset) ! ( mapentry )
+            dup #10 rshift 3 and (flip) ! ( mapentry )
+            $3ff and (chr) ! ( )
           else
-            dup 8 rshift r@ .cidx c! ( mapentry R: tilemap )
-            $ff and r> .tile-idx h! ( )
+            dup 8 rshift (color) ! ( mapentry )
+            $ff and (chr) ! ( )
           then
           [ tilemap unimport ]
         ;] compile-or-execute
-        config unimport
+        params unimport
         [immediate]
       ;
-
-    end-module \ mapentry :: config
+    end-module \ mapentry :: params
 
     \ set a 16-bit mapentry value at row/col in given tilemap
     ( mapentry row col tilemap )
@@ -380,7 +351,7 @@ begin-module vera
 
   \ Opening bracket for mapentry{ ... }set and { ... }get
   ( tilemap -- tilemap )
-  : mapentry{ mapentry :: config import [immediate] ;
+  : mapentry{ mapentry :: params import [immediate] ;
 
   \ Keeping the 16-bit mapentry unpack words directly in the vera namespace for convenience:
 
@@ -577,7 +548,7 @@ begin-module vera
       swap base@ dup ?assert
       + ;
 
-    begin-module config
+    begin-module params
 
       \ Set the tileset width in the tileset object.
       \   - 8, 16 for regular tiles.
@@ -641,10 +612,10 @@ begin-module vera
           vram :: alloc ( addr R: tileset )
           r> .base ! ( R: tileset )
         ;] compile-or-execute
-        config unimport
+        params unimport
         [immediate]
       ;
-    end-module \ tileset :: config
+    end-module \ tileset :: params
 
   end-module \ tileset
 
@@ -654,14 +625,14 @@ begin-module vera
 
   \ Opening bracket for tileset{ ... }set
   ( tileset -- tileset )
-  : tileset{ tileset :: config import [immediate] ;
+  : tileset{ tileset :: params import [immediate] ;
 
   pixel continue-module
-    begin-module config
+    begin-module params
 
-      0 variable position
-      0 variable bitmapaddr
-      0 variable cidx 
+      0 variable (position)
+      0 variable (bitmapaddr)
+      0 variable (cidx)
 
       \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
       \ @param tileset: Tileset object
@@ -669,30 +640,30 @@ begin-module vera
       : tidx 
         2dup swap tileset :: #tiles@ <= ?assert ( tileset tile-idx )
         over tileset :: tidx>addr ( tileset addr )
-        bitmapaddr ! ( tileset )
+        (bitmapaddr) ! ( tileset )
       ;
       ( tileset cidx -- tileset )
       : cidx
-        cidx h!
+        (cidx) h!
       ;
 
       ( tileset x y -- tileset )
-      : xy vec2 position ! ;
+      : xy vec2 (position) ! ;
 
       \ Set a pixel in the given tile.
       ( tileset -- )
       : }set
         [:
           >r ( R: tileset )
-          cidx @
-          position @
-          bitmapaddr @
+          (cidx) @
+          (position) @
+          (bitmapaddr) @
           r@ tileset :: .width h@ 
           r> tileset :: .pxl-set @
           ( color position addr width pxl-setter )
           execute
         ;] compile-or-execute
-        config unimport
+        params unimport
         [immediate]
       ;
 
@@ -701,24 +672,24 @@ begin-module vera
       : }get
         [:
           >r ( R: tileset )
-          position @
-          bitmapaddr @
+          (position) @
+          (bitmapaddr) @
           r@ tileset :: .width h@
           r> tileset :: .pxl-get @
           ( position addr width pxl-getter )
           execute ( cidx )
-          cidx ! ( cidx )
+          (cidx) ! ( cidx )
         ;] compile-or-execute
-        config unimport
+        params unimport
         [immediate]
       ;
-    end-module \ pixel :: config
+    end-module \ pixel :: params
 
   end-module \ pixel
 
   \ Opening bracket for pixel{ ... }set/get
   ( tileset -- tileset )
-  : pixel{ pixel :: config import [immediate] ;
+  : pixel{ pixel :: params import [immediate] ;
 
   \ -- Sprite API
 
@@ -829,7 +800,7 @@ begin-module vera
     \ ( sprite -- tile-idx )
     : tidx@ .tile-idx @ [inline] ;
 
-    begin-module config
+    begin-module params
       \ ( sprite x y -- sprite )
       : xy 
           rot >r ( x y R: sprite )
@@ -897,10 +868,10 @@ begin-module vera
           swap cell+ ( attr1/2 attr-ram-addr' )
           !
         ;] compile-or-execute
-        config unimport
+        params unimport
         [immediate]
       ;
-    end-module \ sprite :: config
+    end-module \ sprite :: params
 
   end-module
 
@@ -913,7 +884,7 @@ begin-module vera
 
   \ Opening bracket for sprite{ ... }set
   ( sprite -- sprite )
-  : sprite{ sprite :: config import [immediate] ;
+  : sprite{ sprite :: params import [immediate] ;
 
   begin-module layer
 
@@ -1109,7 +1080,7 @@ begin-module vera
     ( layer -- tilemap )
     : tilemap@ .tileset @ ;
 
-    begin-module config
+    begin-module params 
       \ Set the tilemap to be used by this layer (configuring tilemapmode)
       ( layer map -- layer )
       : tilemap over .tilemap ! ;
@@ -1141,7 +1112,7 @@ begin-module vera
           dup ?assert
           (tileset!)
         ;] compile-or-execute
-        config unimport
+        params unimport
         [immediate]
       ;
 
@@ -1155,10 +1126,10 @@ begin-module vera
           rot .tile-idx h@ ( layer-id tileset tile-idx )
           (bitmap!)
         ;] compile-or-execute
-        config unimport
+        params unimport
         [immediate]
       ;
-    end-module \ layer :: config
+    end-module \ layer :: params 
 
   end-module \ layer
 
@@ -1170,7 +1141,7 @@ begin-module vera
 
   \ opening brack for layer{ ... }tilemap-mode or layer :: { ... }bitmap-mode
   ( layer -- layer )
-  : layer{ layer :: config import [immediate] ;
+  : layer{ layer :: params import [immediate] ;
 
   begin-module line-capture
     ( f -- )
