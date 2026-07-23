@@ -24,6 +24,7 @@
         swap cell+ dup @   \ mask              ( v offset pfa+ mask )
         swap cell+ @ >r    \ address           ( v offset mask R: addr )
         -rot lshift        \ v<<offset         ( mask vshifted R: addr )
+        over and           \ vshifted&mask     ( mask vshiftedmasked R: addr )
         r@ @               \ read register     ( mask vshifted old R: addr )
         rot bic or         \                   ( new R: addr ) 
         r> !               \                   ( )

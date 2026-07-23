@@ -149,36 +149,51 @@ begin-module vera
     \ ( tilemap -- addr )
     : base@ .base @ ;
 
-    ( size -- f )
-    : (size-is-valid) l{ 32 , 64 , 128 , 256 }l find-in 0<> ;
-
-    ( type -- f )
-    : (type-is-valid) l{ TXT16 , TXT256 , TILE }l find-in 0<> ;
+    \ Deinitialize the tilemap, freeing VRAM resources.
+    ( tilemap -- )
+    : deinit
+      dup base@ vram :: free
+      0 swap .base !
+    ;
+  
+    ( tilemap -- )
+    : print
+      >r r@ type@ r@ height@ r@ width@ r> base@
+      s" Tilemap: $%x base, %n width, %n height, %n type" printf cr
+    ;
 
     begin-module params
       \ tilemap :: { }set attributes
 
+      ( size -- f )
+      : (size-is-valid?) l{ 32 , 64 , 128 , 256 }l find-in 0<> ;
+
       \ Set map width in the tilemap object: 32, 64, 128, 256
       \ ( tilemap width -- tilemap )
       : width
-        dup (size-is-valid) ?assert
-        over .width h! ;
+        dup (size-is-valid?) ?assert
+        over .width h! 
+      ;
 
       \ Set map height in the tilemap object: 32, 64, 128, 256
       \ ( tilemap height -- tilemap )
       : height
-        dup (size-is-valid) ?assert
-        over .height h! ;
+        dup (size-is-valid?) ?assert
+        over .height h! 
+      ;
 
       \ Map types
       TXT16 constant TXT16
       TXT256 constant TXT256
       TILE constant TILE
 
+      ( type -- f )
+      : (type-is-valid?) l{ TXT16 , TXT256 , TILE }l find-in 0<> ;
+
       \ Set the map type : TXT16/TXT256/TILE.
       \ ( tilemap type -- tilemap )
       : type
-        dup (type-is-valid) ?assert
+        dup (type-is-valid?) ?assert
         over .type c! ;
 
       \ (Re)Allocate VRAM for this tilemap to accommodate the width and height
@@ -289,11 +304,8 @@ begin-module vera
         [ tilemap unimport ]
       ;
 
-      ( tilemap col row -- tilemap )
-      : xy 
-        vec2 ( tilemap vec2 )
-        (position) !
-      ;
+      ( tilemap vec2 -- tilemap )
+      : xy over (position) ! ;
 
       \ Write mapentry using attributes specified in {}mapentry! block.y
       ( tilemap -- )
@@ -341,12 +353,12 @@ begin-module vera
     end-module \ mapentry :: params
 
     \ set a 16-bit mapentry value at row/col in given tilemap
-    ( mapentry row col tilemap )
-    : set -rot swap vec2 swap tilemap :: (mapentry!) ;
+    ( mapentry vec2 tilemap )
+    : set (mapentry!) ;
 
-    \ get the 16-bit mapentry value from row/col in given tilemap
-    ( row col tilemap -- mapentry )
-    : get -rot swap vec2 swap tilemap :: (mapentry@) ;
+    \ get the 16-bit mapentry value from position in given tilemap
+    ( vec2 tilemap -- mapentry )
+    : get (mapentry@) ;
 
   end-module \ mapentry
 
@@ -509,6 +521,13 @@ begin-module vera
     ( tileset -- addr )
     : base@ .base @ ;
 
+    \ Deinitialize the tileset, freeing VRAM resources.
+    ( tileset -- )
+    : deinit
+      dup base@ vram :: free
+      0 swap .base !
+    ;
+
     \ Retrieve the tileset height
     ( tileset -- height )
     : height@ .height h@ ;
@@ -544,8 +563,10 @@ begin-module vera
     \ @param tileset: Tileset object
     ( tile-idx tileset -- addr )
     : tidx>addr
-      dup tilesize@ rot * ( tileset tilesize*tile-idx ) 
-      swap base@ dup ?assert
+      dup tilesize@ ( tile-idx tileset tilesize )
+      rot * ( tileset tilesize*tile-idx ) 
+      swap base@ ( tilesize*tile-idx base )
+      dup ?assert
       + ;
 
     begin-module params
@@ -556,6 +577,7 @@ begin-module vera
       \   - 320, 640 for bitmaps.
       ( tileset width -- tileset )
       : width
+        \ value will be validated when applied to tileset, bitmap or sprite.
         over .width h! 
       ;
 
@@ -564,13 +586,20 @@ begin-module vera
       \   - 8, 16, 32, 64 for sprites.
       \   - Any positive value for bitmaps.
       ( tileset height -- tileset )
-      : height over .height h! ;
+      : height
+        \ value will be validated when applied to tileset, bitmap or sprite.
+        over .height h! 
+      ;
+
+      ( bpp -- f )
+      : (bpp-is-valid?) l{ 1 , 2 , 4 , 8 }l find-in 0<> ;
 
       \ Set the tileset BPP in the tileset object
       \   - 1, 2, 4, 8 for regular tiles and bitmaps.
       \   - 4, 8 for sprites.
       ( tileset bpp -- tileset )
       : bpp
+        dup (bpp-is-valid?) ?assert
         swap >r ( bpp R: tileset )
         dup r@ .bpp h! ( bpp R: tileset )
         [ pixel import ]
@@ -632,30 +661,29 @@ begin-module vera
 
       0 variable (position)
       0 variable (bitmapaddr)
-      0 variable (cidx)
+      0 variable (color)
 
       \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
       \ @param tileset: Tileset object
       ( tileset tile-idx -- tileset )
-      : tidx 
+      : tidx
         2dup swap tileset :: #tiles@ <= ?assert ( tileset tile-idx )
         over tileset :: tidx>addr ( tileset addr )
         (bitmapaddr) ! ( tileset )
       ;
-      ( tileset cidx -- tileset )
-      : cidx
-        (cidx) h!
-      ;
 
-      ( tileset x y -- tileset )
-      : xy vec2 (position) ! ;
+      ( tileset color -- tileset )
+      : color (color) ! ;
+
+      ( tileset vec2 -- tileset )
+      : xy (position) ! ;
 
       \ Set a pixel in the given tile.
       ( tileset -- )
       : }set
         [:
           >r ( R: tileset )
-          (cidx) @
+          (color) @
           (position) @
           (bitmapaddr) @
           r@ tileset :: .width h@ 
@@ -667,8 +695,8 @@ begin-module vera
         [immediate]
       ;
 
-      \ Read the pixel cidx from the given position on the given tile.
-      \ ( tileset -- cidx )
+      \ Read the pixel color from the given position on the given tile.
+      \ ( tileset -- color )
       : }get
         [:
           >r ( R: tileset )
@@ -677,8 +705,8 @@ begin-module vera
           r@ tileset :: .width h@
           r> tileset :: .pxl-get @
           ( position addr width pxl-getter )
-          execute ( cidx )
-          (cidx) ! ( cidx )
+          execute ( color )
+          dup (color) ! ( color )
         ;] compile-or-execute
         params unimport
         [immediate]
@@ -706,11 +734,11 @@ begin-module vera
 
     \ Calculate the sprite attribute RAM address from the given sprite id.
     \ ( id -- addr )
-    : (id>ram) 8 * VERA_SPRITE_RAM_BASE + [inline] ;
+    : (id>ram) 8 * VERA_SPRITE_RAM_BASE + ;
 
     \ Calculate the sprite id from the given sprite attribute RAM address.
     \ ( addr -- id )
-    : (ram>id) VERA_SPRITE_RAM_BASE - 8 / [inline] ;
+    : (ram>id) VERA_SPRITE_RAM_BASE - 8 / ;
 
     : init ( sprite-idx sprite -- )
       over #SPRITES u< ?assert
@@ -723,8 +751,8 @@ begin-module vera
     : id@ ( sprite -- id ) .attr-ram-ptr @ (ram>id) ;
 
     \ Get the sprite's current coordinates.
-    \ ( sprite -- x y )
-    : xy@ dup .attr-x h@ swap .attr-y h@ ;
+    \ ( sprite -- vec2 )
+    : xy@ dup .attr-x h@ swap .attr-y h@ vec2 ;
 
     \ ( tilesize - tilesize-encoded )
     : (sizeenc) log2 3 - ;
@@ -741,25 +769,34 @@ begin-module vera
     : height@
       .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT@ (sizedec) ;
 
+    ( size -- f )
+    : (spritesize-is-valid?) l{ 8 , 16 , 32 , 64 }l find-in 0<> ;
+
     \ Set the sprite width
     \ ( width sprite -- )
-    : (width!) swap (sizeenc) swap .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH! ;
+    : (width!) 
+      over (spritesize-is-valid?) ?assert
+      swap (sizeenc) 
+      swap .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH! 
+    ;
 
     \ Set the sprite height
     \ ( height sprite -- )
     : (height!)
-      swap (sizeenc) swap .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT! ;
+      over (spritesize-is-valid?) ?assert
+      swap (sizeenc) swap .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT! 
+    ;
 
-    \ ( sprite -- f )
-    : flip@ .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP@ 0<> ;
+    \ ( sprite -- flip )
+    : flip@ .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP@ ;
 
     VERA_SPRITE_ATTR_FLAGS_ZDEPTH_DIS constant DIS \ Sprite disabled. 
     VERA_SPRITE_ATTR_FLAGS_ZDEPTH_BG_L0 constant BG_L0 \ Between background and L0. 
     VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L0_L1 constant L0_L1 \ Between L0 and L1. 
     VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L1 constant L1 \ In front of L1. 
 
-    \ ( sprite -- f )
-    : zdepth@ .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH@ ;
+    \ ( sprite -- zdepth )
+    : z@ .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH@ ;
 
     \ ( sprite -- colmask )
     : colmask@ .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK@ ;
@@ -767,9 +804,15 @@ begin-module vera
     \ ( sprite -- paloffset )
     : paloffset@ .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET@ ;
 
+    ( bpp -- f )
+    : (bpp-is-valid?) l{ 4 , 8 }l find-in 0<> ;
+
     \ Set the sprite's BPP. 8 or 4.
     \ ( bpp sprite -- )
-    : (bpp!) swap 8 = swap .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE! ;
+    : (bpp!) 
+      over (bpp-is-valid?) ?assert
+      swap 8 = swap .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE! 
+    ;
 
     \ Get the sprite's BPP (8 or 4).
     \ ( sprite -- bpp )
@@ -791,16 +834,26 @@ begin-module vera
 
     \ Retrieve the tileset corresponding to this sprite.
     \ ( sprite -- tileset )
-    : tset@ .tileset @ [inline] ;
+    : tset@ .tileset @ ;
 
     \ Retrieve the tile-idx corresponding to this sprite.
     \ ( sprite -- tile-idx )
-    : tidx@ .tile-idx @ [inline] ;
+    : tidx@ .tile-idx @ ;
+
+    ( sprite -- )
+    : print
+      >r 
+      r@ colmask@ r@ z@ r@ flip@ r@ height@ r@ width@ r@ xy@ vec2.xy swap r@ id@
+      s" sprite: %n id, %n x, %n y, %n w, %n h, %n flip, %n z, $%x colmask" printf cr
+      r@ tidx@ r@ tset@ r@ addr@ r@ bpp@ r> paloffset@
+      s" %n paloffset, %n bpp, $%x addr, $%x tset, %n tidx" printf cr
+    ;
 
     begin-module params
-      \ ( sprite x y -- sprite )
+      \ ( sprite vec2 -- sprite )
       : xy 
-          rot >r ( x y R: sprite )
+          swap >r ( vec2 R: sprite )
+          vec2.xy ( x y R: sprite )
           r@ .attr-y h!
           r@ .attr-x h!
           r> ( sprite )
@@ -811,7 +864,7 @@ begin-module vera
       : flip over .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP! ;
 
       \ ( sprite zdepth -- sprite )
-      : zdepth over .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH! ;
+      : z over .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH! ;
 
       \ ( sprite colmask -- sprite )
       : colmask over .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK! ;
@@ -909,7 +962,7 @@ begin-module vera
     ;
 
       ( layer -- addr )
-    : tilemap-base@
+    : tmap-base@
       .id c@
       if VERA_L1_MAPBASE@ else VERA_L0_MAPBASE@ then
       9 lshift VERA_VRAM_BASE +
@@ -927,7 +980,7 @@ begin-module vera
     ;
 
     \ ( layer -- width )
-    : tilemap-width@ .id c@ if VERA_L1_CONFIG_MAP_WIDTH@ else VERA_L0_CONFIG_MAP_WIDTH@ then (sizedec) ;
+    : tmap-width@ .id c@ if VERA_L1_CONFIG_MAP_WIDTH@ else VERA_L0_CONFIG_MAP_WIDTH@ then (sizedec) ;
 
       ( height layer-id -- )
     : (tilemap-height!)
@@ -936,7 +989,7 @@ begin-module vera
     ;
 
       ( layer-id -- height )
-    : tilemap-height@
+    : tmap-height@
       .id c@
       if VERA_L1_CONFIG_MAP_HEIGHT@ else VERA_L0_CONFIG_MAP_HEIGHT@ then (sizedec) ;
 
@@ -947,10 +1000,10 @@ begin-module vera
     : t256c@ .id c@ if VERA_L1_CONFIG_T256C@ else VERA_L0_CONFIG_T256C@ then 0<> ;
 
     ( bpp - bpp-encoded )
-    : (bppenc) log2 [inline] ;
+    : (bppenc) log2 ;
 
     ( bpp-encoded -- bpp )
-    : (bppdec) 1<< [inline] ;
+    : (bppdec) 1<< ;
 
     ( bpp layer-id -- )
     : (bpp!)
@@ -1009,21 +1062,22 @@ begin-module vera
     \ In bitmap mode, true sets bitmap width 640, false 320.
     \ In tile mode, true sets tile width 16, false 8.
     \ ( f layer-id -- )
-    : (tile-width!) if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH! else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH! then ;
+    : (tile-width!) 
+      if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH! else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH! then ;
 
-    ( layer -- f )
-    : tile-width@ .id c@ if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH@ else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH@ then 0<> ;
+    ( layer -- width-bit )
+    : tile-width@ .id c@ if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH@ else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH@ then ;
 
     \ True sets tile height 16, false 8.
     \ ( f layer-id -- )
     : (tile-height!) if VERA_L1_TILEBASE_TILE_HEIGHT! else VERA_L0_TILEBASE_TILE_HEIGHT! then ;
 
-    ( layer -- f )
-    : tile-height@ .id c@ if VERA_L1_TILEBASE_TILE_HEIGHT@ else VERA_L0_TILEBASE_TILE_HEIGHT@ then 0<> ;
+    ( layer -- height )
+    : tile-height@ .id c@ if VERA_L1_TILEBASE_TILE_HEIGHT@ else VERA_L0_TILEBASE_TILE_HEIGHT@ then ;
 
     ( addr layer-id -- )
     : (tile-base!)
-      swap VERA_VRAM_BASE - 11 rshift ( layer addr )
+      swap VERA_VRAM_BASE - 11 rshift ( layer-id addr )
       swap if VERA_L1_TILEBASE_TILE_BASEADDR! else VERA_L0_TILEBASE_TILE_BASEADDR! then
     ;
 
@@ -1034,32 +1088,42 @@ begin-module vera
       11 lshift VERA_VRAM_BASE +
     ;
 
+    ( size -- f )
+    : (tilesize-is-valid?) l{ 8 , 16 }l find-in 0<> ;
+
     \ Configure given tileset into given layer.
     ( layer-id tileset -- )
     : (tileset!)
       [ tileset import ]
-      2dup bpp@ (bpp!) ( layer-id tileset )
-      over false (bitmap-mode!) ( layer-id tileset )
-      2dup width@ 16 = (tile-width!) ( layer-id tileset )
-      2dup height@ 16 = (tile-height!) ( layer-id tileset )
-      base@ dup ?assert
-      (tile-base!)
+      >r ( layer-id R: tileset )
+      r@ bpp@ over (bpp!) ( layer-id R: tileset )
+      false over (bitmap-mode!) ( layer-id R: tileset )
+      r@ width@ ( layer-id width R: tileset )
+      dup (tilesize-is-valid?) ?assert
+      16 = swap over (tile-width!) ( layer-id R: tileset )
+      r@ height@ ( layer-id height R: tileset )
+      dup (tilesize-is-valid?) ?assert
+      16 = over (tile-height!) ( layer-id R: tileset )
+      r> base@ dup ?assert ( layer-id base R: tileset )
+      swap (tile-base!)
       [ tileset unimport ]
     ;
+
+    ( size -- f )
+    : (bitmap-width-is-valid?) l{ 320 , 640 }l find-in 0<> ;
 
     \ Configure given bitmap (identified by a bitmap descriptor) into the given layer.
     ( tileset tile-idx layer-id -- )
     : (bitmap!)
       [ tileset import ]
-      >r ( tileset tile-idx R: layer )
-      over tidx>addr ( tileset tile-addr R: layer )
-      over bpp@ ( tileset tile-addr bpp R: layer )
-      r@ swap (bpp!) ( tileset tile-addr R: layer )
-      r@ true (bitmap-mode!) ( tileset tile-addr R: layer )
-      swap width@ 640 = ( tile-addr f R: layer )
-      r@ swap (tile-width!) ( tile-addr R: layer )
-      r@ 0 (tile-height!) ( tile-addr R: layer )
-      r> swap (tile-base!) ( )
+      >r ( tileset tile-idx R: layer-id )
+      over tidx>addr r@ (tile-base!) ( tileset R: layer-id )
+      dup bpp@ r@ (bpp!) ( tileset R: layer-id )
+      width@ ( width R: layer-id )
+      dup (bitmap-width-is-valid?) ?assert ( width R: layer-id )
+      640 = r@ (tile-width!) ( f R: layer-id )
+      0 r@ (tile-height!) ( R: layer-id )
+      true r> (bitmap-mode!) ( )
       [ tileset unimport ]
     ;
 
@@ -1073,12 +1137,30 @@ begin-module vera
 
     \ Retrieve tilemap used by this layer (tilemap mode).
     ( layer -- tilemap )
-    : tilemap@ .tileset @ ;
+    : tmap@ .tileset @ ;
 
-    begin-module params 
+    ( layer -- )
+    : print
+      >r 
+      r@ enabled? s" enabled: %n" printf cr
+      r@ bitmap-mode@ if
+        ." bitmap mode" cr
+        r@ tidx@ r@ tset@ r@ tile-base@ r@ tile-height@ r@ tile-width@ r@ vscroll@ r@ hscroll@ r@ paloffset@ r> bpp@
+        s" layer: %n bpp, %n paloffset, %n hscroll, %n vscroll, %n width, %n height, %n base, %n tset, %n tidx" 
+        printf cr
+      else
+        ." tile mode" cr
+        r@ tmap@ r@ tidx@ r@ tset@ r@ tile-base@ r@ tile-height@ r@ tile-width@ r@ vscroll@ r@ hscroll@ r@ bpp@
+        s" layer: %n bpp, %n hscroll, %n vscroll, %n width, %n height, %n base, %n tset, %n tidx, $%x tilemap " printf cr
+        r@ tmap@ r@ t256c@ tmap-height@ r@ tmap-width@ r@ tmap-base@
+        s" layer: $x%x tmap-base, %n tmap-width, %n tmap-height, %n t256c" printf cr
+      then
+    ;
+
+    begin-module params
       \ Set the tilemap to be used by this layer (configuring tilemapmode)
       ( layer map -- layer )
-      : tilemap over .tilemap ! ;
+      : tmap over .tilemap ! ;
 
       \ Set the tileset to be used by this layer (tilemapmode and bitmapmode)
       ( layer tileset -- layer )
@@ -1119,7 +1201,7 @@ begin-module vera
           over .tileset @ ( layer layer-id tileset )
           dup ?assert
           rot .tile-idx h@ ( layer-id tileset tile-idx )
-          (bitmap!)
+          rot (bitmap!)
         ;] compile-or-execute
         params unimport
         [immediate]
@@ -1239,7 +1321,7 @@ begin-module vera
   end-module
 
   \ -- VERA top-level definitions
-  : display-enable ( flag -- ) VERA_DC_VIDEO_OUTPUT_MODE! ;
+  : display-enable ( flag -- ) if 1 else 0 then VERA_DC_VIDEO_OUTPUT_MODE! ;
 
   : display-enabled? ( -- flag ) VERA_DC_VIDEO_OUTPUT_MODE@ 0<> ;
 
