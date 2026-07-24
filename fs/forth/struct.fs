@@ -5,7 +5,7 @@
 
 \ Begin declaring a structure
 : begin-structure ( "name" -- addr offset )
-  <builds here 0 4 allot does> @
+  create here 0 4 allot does> @
 ;
 
 \ Finish declaring a structure

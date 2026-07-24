@@ -124,17 +124,26 @@ begin-module vera
       cfield: .type
     end-structure
 
-    \ Initialize the tilemap object. This must be done only once.
+    typechecker tm-typecheck
+
+    \ Initialize the tilemap object.
     \ ( tilemap -- )
-    : init tilemap-struct 0 fill ;
+    : init 
+      dup tilemap-struct 0 fill 
+      init-type tm-typecheck
+    ;
 
     \ Retrieve map width from the tilemap object.
     \ ( tilemap -- width )
-    : width@ .width h@ ;
+    : width@ 
+      tm-typecheck
+      .width h@ ;
 
     \ Retrieve map height from the tilemap object.
     \ ( tilemap -- height )
-    : height@ .height h@ ;
+    : height@ 
+      tm-typecheck
+      .height h@ ;
 
     \ Map types
     0 constant TXT16
@@ -143,21 +152,27 @@ begin-module vera
 
     \ Retrieve the map type from the map object
     \ ( tilemap -- type )
-    : type@ .type c@ ;
+    : type@
+      tm-typecheck
+      .type c@ ;
 
     \ Retrieve tilemap base address in VRAM.
     \ ( tilemap -- addr )
-    : base@ .base @ ;
+    : base@ 
+      tm-typecheck
+      .base @ ;
 
     \ Deinitialize the tilemap, freeing VRAM resources.
     ( tilemap -- )
     : deinit
+      tm-typecheck
       dup base@ vram :: free
       0 swap .base !
     ;
   
     ( tilemap -- )
     : print
+      tm-typecheck
       >r r@ type@ r@ height@ r@ width@ r> base@
       s" Tilemap: $%x base, %n width, %n height, %n type" printf cr
     ;
@@ -203,6 +218,7 @@ begin-module vera
       \ ( tilemap -- )
       : }set
         [: 
+          tm-typecheck
           dup base@ ?dup if
           vram :: free
           then ( map )
@@ -226,7 +242,9 @@ begin-module vera
 
   \ Opening bracket for tilemap{ ... }set
   ( tilemap -- tilemap )
-  : tilemap{ tilemap :: params import [immediate] ;
+  : tilemap{ 
+    tilemap :: tm-typecheck
+    tilemap :: params import [immediate] ;
 
   begin-module mapentry
 
@@ -312,6 +330,7 @@ begin-module vera
       : }set
         [:
           [ tilemap import ]
+          tm-typecheck
           dup type@ TILE = if ( tilemap )
             dup (paloffset) @ #12 lshift ( tilemap mapentry )
             over (flip) @ 3 and #10 lshift or ( tilemap mapentry )
@@ -336,6 +355,7 @@ begin-module vera
       : }get
         [:
           [ tilemap import ]
+          tm-typecheck
           (position) @ over (mapentry@) ( tilemap mapentry )
           swap type@ TILE = if ( mapentry )
             dup #12 rshift (paloffset) ! ( mapentry )
@@ -354,17 +374,23 @@ begin-module vera
 
     \ set a 16-bit mapentry value at row/col in given tilemap
     ( mapentry vec2 tilemap )
-    : set (mapentry!) ;
+    : set 
+      tilemap :: tm-typecheck
+      (mapentry!) ;
 
     \ get the 16-bit mapentry value from position in given tilemap
     ( vec2 tilemap -- mapentry )
-    : get (mapentry@) ;
+    : get
+      tilemap :: tm-typecheck
+      (mapentry@) ;
 
   end-module \ mapentry
 
   \ Opening bracket for mapentry{ ... }set and { ... }get
   ( tilemap -- tilemap )
-  : mapentry{ mapentry :: params import [immediate] ;
+  : mapentry{ 
+    tilemap :: tm-typecheck
+    mapentry :: params import [immediate] ;
 
   \ Keeping the 16-bit mapentry unpack words directly in the vera namespace for convenience:
 
@@ -509,49 +535,69 @@ begin-module vera
       hfield: .bpp
       hfield: .#tiles
     end-structure
+    
+    typechecker ts-typecheck
 
-    \ Initialize the tileset object. This must be done only once.
-    : init ( tileset -- ) tileset-struct 0 fill ;
+    \ Initialize the tileset object.
+    : init ( tileset -- ) 
+      dup tileset-struct 0 fill 
+      init-type ts-typecheck
+    ;
 
     \ Retrieve the tileset width from the tileset object
     ( tileset -- width )
-    : width@ .width h@ ;
+    : width@ 
+      ts-typecheck
+      .width h@ ;
 
     \ Retrieve tileset base address in VRAM.
     ( tileset -- addr )
-    : base@ .base @ ;
+    : base@ 
+      ts-typecheck
+      .base @ ;
 
     \ Deinitialize the tileset, freeing VRAM resources.
     ( tileset -- )
     : deinit
+      ts-typecheck
       dup base@ vram :: free
       0 swap .base !
     ;
 
     \ Retrieve the tileset height
     ( tileset -- height )
-    : height@ .height h@ ;
+    : height@ 
+      ts-typecheck
+      .height h@ ;
 
     \ Retrieve the tileset BPP from the tileset object.
     ( tileset -- bpp )
-    : bpp@ .bpp h@ ;
+    : bpp@ 
+      ts-typecheck
+      .bpp h@ ;
 
     ( tileset -- #tiles )
-    : #tiles@ .#tiles h@ ;
+    : #tiles@ 
+      ts-typecheck
+      .#tiles h@ ;
 
     ( tileset -- )
     : print
+      ts-typecheck
       >r r@ #tiles@ r@ bpp@ r@ height@ r@ width@ r> base@
       s" Tileset: $%x base, %n width, %n height, %n bpp, %n tiles" printf cr
     ;
 
     \ Retrieve the tilesize in bytes for the given tileset.
     ( tileset -- tilesize-bytes )
-    : tilesize@ dup bpp@ swap dup width@ swap height@ * * 8/ ;
+    : tilesize@ 
+      ts-typecheck
+      dup bpp@ swap dup width@ swap height@ * * 8/ ;
 
     \ Given a VRAM address and a tileset, compute the tile index corresponding to that address.
     ( addr tileset -- tile-idx )
     : addr>tidx
+      ts-typecheck
       dup base@ dup ?assert ( addr tileset baseaddr )
       rot swap - ( tileset offset )
       swap tilesize@ ( offset tilesize )
@@ -563,6 +609,7 @@ begin-module vera
     \ @param tileset: Tileset object
     ( tile-idx tileset -- addr )
     : tidx>addr
+      ts-typecheck
       dup tilesize@ ( tile-idx tileset tilesize )
       rot * ( tileset tilesize*tile-idx ) 
       swap base@ ( tilesize*tile-idx base )
@@ -632,6 +679,7 @@ begin-module vera
       ( tileset -- )
       : }set
         [:
+          ts-typecheck
           >r ( R: tileset )
           r@ base@ ?dup if
             vram :: free
@@ -654,7 +702,9 @@ begin-module vera
 
   \ Opening bracket for tileset{ ... }set
   ( tileset -- tileset )
-  : tileset{ tileset :: params import [immediate] ;
+  : tileset{
+    tileset :: ts-typecheck
+    tileset :: params import [immediate] ;
 
   pixel continue-module
     begin-module params
@@ -732,6 +782,8 @@ begin-module vera
       hfield: .attr-flags
     end-structure
 
+    typechecker sprite-typecheck
+
     \ Calculate the sprite attribute RAM address from the given sprite id.
     \ ( id -- addr )
     : (id>ram) 8 * VERA_SPRITE_RAM_BASE + ;
@@ -744,15 +796,20 @@ begin-module vera
       over #SPRITES u< ?assert
       dup sprite-struct 0 fill ( sprite-idx sprite )
       swap (id>ram) ( sprite ramaddr )
-      swap .attr-ram-ptr ! ( sprite )
+      over .attr-ram-ptr ! ( sprite )
+      init-type sprite-typecheck
     ;
 
     \ Retrieve the sprite id from the sprite object.
-    : id@ ( sprite -- id ) .attr-ram-ptr @ (ram>id) ;
+    : id@ ( sprite -- id ) 
+      sprite-typecheck
+      .attr-ram-ptr @ (ram>id) ;
 
     \ Get the sprite's current coordinates.
     \ ( sprite -- vec2 )
-    : xy@ dup .attr-x h@ swap .attr-y h@ vec2 ;
+    : xy@ 
+      sprite-typecheck
+      dup .attr-x h@ swap .attr-y h@ vec2 ;
 
     \ ( tilesize - tilesize-encoded )
     : (sizeenc) log2 3 - ;
@@ -762,11 +819,14 @@ begin-module vera
 
     \ Get the sprite width
     \ ( sprite -- width )
-    : width@ .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH@ (sizedec) ;
+    : width@ 
+      sprite-typecheck
+      .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH@ (sizedec) ;
 
     \ Get the sprite height
     \ ( sprite -- height )
     : height@
+      sprite-typecheck
       .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT@ (sizedec) ;
 
     ( size -- f )
@@ -788,7 +848,9 @@ begin-module vera
     ;
 
     \ ( sprite -- flip )
-    : flip@ .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP@ ;
+    : flip@ 
+      sprite-typecheck
+      .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP@ ;
 
     VERA_SPRITE_ATTR_FLAGS_ZDEPTH_DIS constant DIS \ Sprite disabled. 
     VERA_SPRITE_ATTR_FLAGS_ZDEPTH_BG_L0 constant BG_L0 \ Between background and L0. 
@@ -796,13 +858,19 @@ begin-module vera
     VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L1 constant L1 \ In front of L1. 
 
     \ ( sprite -- zdepth )
-    : z@ .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH@ ;
+    : z@ 
+      sprite-typecheck
+      .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH@ ;
 
     \ ( sprite -- colmask )
-    : colmask@ .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK@ ;
+    : colmask@ 
+      sprite-typecheck
+      .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK@ ;
 
     \ ( sprite -- paloffset )
-    : paloffset@ .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET@ ;
+    : paloffset@ 
+      sprite-typecheck
+      .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET@ ;
 
     ( bpp -- f )
     : (bpp-is-valid?) l{ 4 , 8 }l find-in 0<> ;
@@ -816,7 +884,9 @@ begin-module vera
 
     \ Get the sprite's BPP (8 or 4).
     \ ( sprite -- bpp )
-    : bpp@ .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE@ if 8 else 4 then ;
+    : bpp@ 
+      sprite-typecheck
+      .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE@ if 8 else 4 then ;
 
     \ Set the sprite's VRAM address
     \ ( addr sprite -- )
@@ -828,13 +898,16 @@ begin-module vera
     \ Get the sprite's VRAM address
     \ ( sprite -- addr )
     : addr@ 
+      sprite-typecheck
       .attr-addr VERA_SPRITE_ATTR_MODEADDR_ADDR@ 
       5 lshift VERA_VRAM_BASE +
     ;
 
     \ Retrieve the tileset corresponding to this sprite.
     \ ( sprite -- tileset )
-    : tset@ .tileset @ ;
+    : tset@ 
+      sprite-typecheck
+      .tileset @ ;
 
     \ Retrieve the tile-idx corresponding to this sprite.
     \ ( sprite -- tile-idx )
@@ -842,6 +915,7 @@ begin-module vera
 
     ( sprite -- )
     : print
+      sprite-typecheck
       >r 
       r@ colmask@ r@ z@ r@ flip@ r@ height@ r@ width@ r@ xy@ vec2.xy swap r@ id@
       s" sprite: %n id, %n x, %n y, %n w, %n h, %n flip, %n z, $%x colmask" printf cr
@@ -907,6 +981,7 @@ begin-module vera
       \ ( sprite -- )
       : }set
         [:
+          sprite-typecheck
           dup .attr-ram-ptr @ ( sprite attr-ram-addr )
           dup ?assert ( sprite attr-ram-addr )
           swap .attr-addr ( attr-ram-addr attr-addr )
@@ -932,7 +1007,9 @@ begin-module vera
 
   \ Opening bracket for sprite{ ... }set
   ( sprite -- sprite )
-  : sprite{ sprite :: params import [immediate] ;
+  : sprite{ 
+    sprite :: sprite-typecheck
+    sprite :: params import [immediate] ;
 
   begin-module layer
 
@@ -943,16 +1020,23 @@ begin-module vera
       cfield: .id
     end-structure
 
+    typechecker layer-typecheck
+
     \ Initialize a layer object
     : init ( id layer -- )
       over #LAYERS < ?assert ( id layer )
       dup layer-struct 0 fill ( id layer )
-      .id c!
+      tuck .id c!
+      init-type layer-typecheck
     ;
 
-    : enable ( f layer -- ) .id c@ if VERA_DC_VIDEO_L1_ENABLE! else VERA_DC_VIDEO_L0_ENABLE! then ;
+    : enable ( f layer -- ) 
+      layer-typecheck
+      .id c@ if VERA_DC_VIDEO_L1_ENABLE! else VERA_DC_VIDEO_L0_ENABLE! then ;
 
-    : enabled? ( layer -- f ) .id c@ if VERA_DC_VIDEO_L1_ENABLE@ else VERA_DC_VIDEO_L0_ENABLE@ then 0<> ;
+    : enabled? ( layer -- f ) 
+      layer-typecheck
+      .id c@ if VERA_DC_VIDEO_L1_ENABLE@ else VERA_DC_VIDEO_L0_ENABLE@ then 0<> ;
 
     \ Set tilemap base address for the given layer
     \ ( addr layer-id -- )
@@ -963,6 +1047,7 @@ begin-module vera
 
       ( layer -- addr )
     : tmap-base@
+      layer-typecheck
       .id c@
       if VERA_L1_MAPBASE@ else VERA_L0_MAPBASE@ then
       9 lshift VERA_VRAM_BASE +
@@ -980,7 +1065,9 @@ begin-module vera
     ;
 
     \ ( layer -- width )
-    : tmap-width@ .id c@ if VERA_L1_CONFIG_MAP_WIDTH@ else VERA_L0_CONFIG_MAP_WIDTH@ then (sizedec) ;
+    : tmap-width@ 
+      layer-typecheck
+      .id c@ if VERA_L1_CONFIG_MAP_WIDTH@ else VERA_L0_CONFIG_MAP_WIDTH@ then (sizedec) ;
 
       ( height layer-id -- )
     : (tilemap-height!)
@@ -990,6 +1077,7 @@ begin-module vera
 
       ( layer-id -- height )
     : tmap-height@
+      layer-typecheck
       .id c@
       if VERA_L1_CONFIG_MAP_HEIGHT@ else VERA_L0_CONFIG_MAP_HEIGHT@ then (sizedec) ;
 
@@ -997,7 +1085,9 @@ begin-module vera
     : (t256c!) if VERA_L1_CONFIG_T256C! else VERA_L0_CONFIG_T256C! then ;
 
       ( layer -- f )
-    : t256c@ .id c@ if VERA_L1_CONFIG_T256C@ else VERA_L0_CONFIG_T256C@ then 0<> ;
+    : t256c@ 
+      layer-typecheck
+      .id c@ if VERA_L1_CONFIG_T256C@ else VERA_L0_CONFIG_T256C@ then 0<> ;
 
     ( bpp - bpp-encoded )
     : (bppenc) log2 ;
@@ -1013,6 +1103,7 @@ begin-module vera
 
     ( layer -- bpp )
     : bpp@
+      layer-typecheck
       .id c@
       swap if VERA_L1_CONFIG_COLORDEPTH@ else VERA_L0_CONFIG_COLORDEPTH@ then
       (bppdec)
@@ -1022,16 +1113,21 @@ begin-module vera
     : (bitmap-mode!) if VERA_L1_CONFIG_BITMAPMODE! else VERA_L0_CONFIG_BITMAPMODE! then ;
 
     ( layer -- f )
-    : bitmap-mode@ .id c@ if VERA_L1_CONFIG_BITMAPMODE@ else VERA_L0_CONFIG_BITMAPMODE@ then 0<> ;
+    : bitmap-mode@ 
+      layer-typecheck
+      .id c@ if VERA_L1_CONFIG_BITMAPMODE@ else VERA_L0_CONFIG_BITMAPMODE@ then 0<> ;
 
     ( paloffset layer-id -- )
     : (paloffset!) if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET! else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET! then ;
 
     ( layer -- paloffset )
-    : paloffset@ .id c@ if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET@ else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET! then ;
+    : paloffset@ 
+      layer-typecheck
+      .id c@ if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET@ else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET! then ;
 
     ( hscroll layer -- )
     : hscroll!
+      layer-typecheck
       dup .id c@ ( hscroll layer id )
       swap bitmap-mode@ if ( hscroll id )
         if VERA_L1_HSCROLL_ADDR else VERA_L0_HSCROLL_ADDR then ( hscroll addr )
@@ -1043,6 +1139,7 @@ begin-module vera
 
     ( layer -- hscroll )
     : hscroll@
+      layer-typecheck
       dup .id c@ ( layer id )
       swap bitmap-mode@ if ( id )
         if VERA_L1_HSCROLL_ADDR else VERA_L0_HSCROLL_ADDR then ( addr )
@@ -1054,10 +1151,13 @@ begin-module vera
 
     ( hscroll layer -- )
     : vscroll! 
+      layer-typecheck
       .id c@ if VERA_L1_VSCROLL! else VERA_L0_VSCROLL! then ! ;
 
     ( layer -- vscroll )
-    : vscroll@ .id c@ if VERA_L1_VSCROLL@ else VERA_L0_VSCROLL@ then ;
+    : vscroll@ 
+      layer-typecheck
+      .id c@ if VERA_L1_VSCROLL@ else VERA_L0_VSCROLL@ then ;
 
     \ In bitmap mode, true sets bitmap width 640, false 320.
     \ In tile mode, true sets tile width 16, false 8.
@@ -1066,14 +1166,18 @@ begin-module vera
       if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH! else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH! then ;
 
     ( layer -- width-bit )
-    : tile-width@ .id c@ if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH@ else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH@ then ;
+    : tile-width@ 
+      layer-typecheck
+      .id c@ if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH@ else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH@ then ;
 
     \ True sets tile height 16, false 8.
     \ ( f layer-id -- )
     : (tile-height!) if VERA_L1_TILEBASE_TILE_HEIGHT! else VERA_L0_TILEBASE_TILE_HEIGHT! then ;
 
     ( layer -- height )
-    : tile-height@ .id c@ if VERA_L1_TILEBASE_TILE_HEIGHT@ else VERA_L0_TILEBASE_TILE_HEIGHT@ then ;
+    : tile-height@ 
+      layer-typecheck
+      .id c@ if VERA_L1_TILEBASE_TILE_HEIGHT@ else VERA_L0_TILEBASE_TILE_HEIGHT@ then ;
 
     ( addr layer-id -- )
     : (tile-base!)
@@ -1083,6 +1187,7 @@ begin-module vera
 
     ( layer -- addr-id )
     : tile-base@
+      layer-typecheck
       .id c@
       if VERA_L1_TILEBASE_TILE_BASEADDR@ else VERA_L0_TILEBASE_TILE_BASEADDR@ then
       11 lshift VERA_VRAM_BASE +
@@ -1129,18 +1234,25 @@ begin-module vera
 
     \ Retrieve tileset used by this layer
     ( layer -- tileset )
-    : tset@ .tileset @ ;
+    : tset@ 
+      layer-typecheck
+      .tileset @ ;
 
     \ Retrieve tile-idx used by this layer (bitmap mode).
     ( layer -- tileset )
-    : tidx@ .tile-idx h@ ;
+    : tidx@ 
+      layer-typecheck
+      .tile-idx h@ ;
 
     \ Retrieve tilemap used by this layer (tilemap mode).
     ( layer -- tilemap )
-    : tmap@ .tileset @ ;
+    : tmap@ 
+      layer-typecheck
+      .tileset @ ;
 
     ( layer -- )
     : print
+      layer-typecheck
       >r 
       r@ enabled? s" enabled: %n" printf cr
       r@ bitmap-mode@ if
@@ -1174,6 +1286,7 @@ begin-module vera
       ( layer -- )
       : }tilemap-mode
         [:
+          layer-typecheck
           [ vera :: tilemap import ]
           dup .id c@ ( layer layer-id )
           over .tilemap @ ( layer layer-id map )
@@ -1197,6 +1310,7 @@ begin-module vera
       ( layer -- )
       : }bitmap-mode
         [: 
+          layer-typecheck
           dup .id c@ ( layer layer-id )
           over .tileset @ ( layer layer-id tileset )
           dup ?assert
@@ -1218,7 +1332,9 @@ begin-module vera
 
   \ opening brack for layer{ ... }tilemap-mode or layer :: { ... }bitmap-mode
   ( layer -- layer )
-  : layer{ layer :: params import [immediate] ;
+  : layer{ 
+    layer :: layer-typecheck
+    layer :: params import [immediate] ;
 
   begin-module line-capture
     ( f -- )
