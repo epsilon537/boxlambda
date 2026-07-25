@@ -17,13 +17,16 @@
 \ we get back into the quit_w_cwd loop.
 ' quit_w_cwd hook-quit !
 
-create RTTC
-
 \ Note that ifdef/else is defined here. Forth modules
 \ earlier in the boot sequence such as fs.fs and shell.fs
 \ (see sw/projects/boxlambda_os/main.cpp) don't have access to
 \ ifdef/else.
 include /forth/ifdef.fs
+
+[ifdef] FORTH_CORE_TEST
+create RTTC \ Enable run-time type checking
+[then]
+
 include /forth/rttc-struct.fs
 include /forth/disasm.fs
 include /forth/dump.fs

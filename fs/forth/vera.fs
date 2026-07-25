@@ -242,9 +242,7 @@ begin-module vera
 
   \ Opening bracket for tilemap{ ... }set
   ( tilemap -- tilemap )
-  : tilemap{ 
-    tilemap :: tm-typecheck
-    tilemap :: params import [immediate] ;
+  : tilemap{ tilemap :: params import [immediate] ;
 
   begin-module mapentry
 
@@ -275,96 +273,85 @@ begin-module vera
 
       0 variable (position)
       0 variable (chr)
-      0 variable (color)
+      0 variable (fg)
+      0 variable (bg)
       0 variable (paloffset)
       0 variable (flip)
+      0 variable (tmap)
 
-      ( tilemap bg -- tilemap )
-      : bg
-        [ tilemap import ]
-        over type@ TXT16 = ?assert
-        4 lshift ( tilemap bgshifted )
-        (color) @ ( tilemap bshifted oldcolor )
-        $f and or     ( tilemap newcolor )
-        (color) ! ( tilemap )
-        [ tilemap unimport ]
-      ;
+      ( tilemap -- )
+      : tmap 
+        tilemap :: tm-typecheck
+        (tmap) ! ;
 
-      ( tilemap fg -- tilemap )
-      : fg
-        [ tilemap import ]
-        over type@ TXT16 = if
-          $f and         ( tilemap fgmasked )
-          (color) @ ( tilemap fgmasked oldcolor )
-          $f0 and or      ( tilemap newcolor )
-        then
-        (color) ! ( tilemap )
-        [ tilemap unimport ]
-      ;
+      ( bg -- )
+      : bg (bg) ! ;
 
-      ( tilemap tile-idx -- tilemap )
+      ( fg -- )
+      : fg (fg) ! ;
+
+      ( char-code -- )
       : chr (chr) ! ;
 
-      ( tilemap paloffset -- tilemap )
-      : paloffset
-        [ tilemap import ]
-        over type@ TILE = ?assert
-        (paloffset) !
-        [ tilemap unimport ]
-      ;
+      ( paloffset -- )
+      : paloffset (paloffset) ! ;
 
       \ flip values: VFLIP, HFLIP, or VFLIP_HFLIP
-      ( tilemap flip -- tilemap )
-      : flip
-        [ tilemap import ]
-        over type@ TILE = ?assert
-        (flip) !
-        [ tilemap unimport ]
-      ;
+      ( flip -- )
+      : flip (flip) ! ;
 
-      ( tilemap vec2 -- tilemap )
-      : xy over (position) ! ;
+      ( vec2 -- )
+      : xy (position) ! ;
 
-      \ Write mapentry using attributes specified in {}mapentry! block.y
-      ( tilemap -- )
+      \ Write mapentry using attributes specified in {}mapentry!
+      ( -- )
       : }set
         [:
           [ tilemap import ]
-          tm-typecheck
-          dup type@ TILE = if ( tilemap )
-            dup (paloffset) @ #12 lshift ( tilemap mapentry )
-            over (flip) @ 3 and #10 lshift or ( tilemap mapentry )
-            over (chr) @ $3ff and or ( tilemap mapentry )
-          else
-            dup (color) @ 8 lshift ( tilemap mapentry )
-            over (chr) @ ( tilemap mapentry tileidx )
-            $ff and or ( tilemap mapentry )
-          then
-          over (position) @ ( tilemap mapentry position )
-          rot (mapentry!) ( )
+          (tmap) @ type@ case 
+            TILE of  
+              (paloffset) @ #12 lshift ( mapentry )
+              (flip) @ 3 and #10 lshift or ( mapentry )
+              (chr) @ $3ff and or ( mapentry )
+            endof
+            TXT16 of
+              (fg) @ $f and 12 lshift
+              (bg) @ $f and 8 lshift or
+              (chr) @ $ff and or ( mapentry )
+            endof
+            (fg) @ $ff and 8 lshift
+            (chr) @ $ff and or ( mapentry )
+          endcase
+          (position) @ ( mapentry position )
+          (tmap) @ (mapentry!) ( )
           [ tilemap unimport ]
         ;] compile-or-execute
         params unimport
         [immediate]
       ;
 
-      \ Read from VRAM, mapentry specified by { <row> <col> position }mapentry@ and 
+      \ Read from VRAM, mapentry specified by { <tmap> tmap <vec> position }mapentry@ and 
       \ decode it, populating fg, bg, paloffset, flip attributes.
       \ This is useful for mapentry read-modify-write operations.
-      ( tilemap -- )
+      ( -- )
       : }get
         [:
           [ tilemap import ]
-          tm-typecheck
-          (position) @ over (mapentry@) ( tilemap mapentry )
-          swap type@ TILE = if ( mapentry )
-            dup #12 rshift (paloffset) ! ( mapentry )
-            dup #10 rshift 3 and (flip) ! ( mapentry )
-            $3ff and (chr) ! ( )
-          else
-            dup 8 rshift (color) ! ( mapentry )
+          (position) @ (tmap) @ (mapentry@) ( mapentry )
+          (tmap) @ type@ case 
+            TILE of
+              dup #12 rshift (paloffset) ! ( mapentry )
+              dup #10 rshift 3 and (flip) ! ( mapentry )
+              $3ff and (chr) ! ( )
+            endof
+            TXT16 of
+              dup 12 rshift (bg) ! ( mapentry )
+              dup 8 rshift $f and (fg) ! ( mapentry )
+              $ff and (chr) ! ( )
+            endof
+            dup 8 rshift (fg) ! ( mapentry )
             $ff and (chr) ! ( )
-          then
+          endcase
           [ tilemap unimport ]
         ;] compile-or-execute
         params unimport
@@ -387,9 +374,8 @@ begin-module vera
   end-module \ mapentry
 
   \ Opening bracket for mapentry{ ... }set and { ... }get
-  ( tilemap -- tilemap )
+  ( -- )
   : mapentry{ 
-    tilemap :: tm-typecheck
     mapentry :: params import [immediate] ;
 
   \ Keeping the 16-bit mapentry unpack words directly in the vera namespace for convenience:
@@ -702,42 +688,42 @@ begin-module vera
 
   \ Opening bracket for tileset{ ... }set
   ( tileset -- tileset )
-  : tileset{
-    tileset :: ts-typecheck
-    tileset :: params import [immediate] ;
+  : tileset{ tileset :: params import [immediate] ;
 
   pixel continue-module
     begin-module params
 
       0 variable (position)
+      0 variable (tidx)
       0 variable (bitmapaddr)
       0 variable (color)
+      0 variable (tset)
 
-      \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
-      \ @param tileset: Tileset object
-      ( tileset tile-idx -- tileset )
-      : tidx
-        2dup swap tileset :: #tiles@ <= ?assert ( tileset tile-idx )
-        over tileset :: tidx>addr ( tileset addr )
-        (bitmapaddr) ! ( tileset )
-      ;
+      ( tileset -- )
+      : tset 
+        tileset :: ts-typecheck
+        (tset) ! ;
 
-      ( tileset color -- tileset )
+      \ tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
+      ( tile-idx -- )
+      : tidx (tidx) ! ;
+
+      ( color -- ) 
       : color (color) ! ;
 
-      ( tileset vec2 -- tileset )
+      ( vec2 -- ) 
       : xy (position) ! ;
 
       \ Set a pixel in the given tile.
-      ( tileset -- )
+      ( -- )
       : }set
         [:
-          >r ( R: tileset )
           (color) @
           (position) @
-          (bitmapaddr) @
-          r@ tileset :: .width h@ 
-          r> tileset :: .pxl-set @
+          (tidx) @ dup (tset) @ tileset :: #tiles@ <= ?assert
+          (tset) @ tileset :: tidx>addr 
+          (tset) @ tileset :: .width h@ 
+          (tset) @ tileset :: .pxl-set @
           ( color position addr width pxl-setter )
           execute
         ;] compile-or-execute
@@ -746,14 +732,14 @@ begin-module vera
       ;
 
       \ Read the pixel color from the given position on the given tile.
-      \ ( tileset -- color )
+      \ ( -- color )
       : }get
         [:
-          >r ( R: tileset )
           (position) @
-          (bitmapaddr) @
-          r@ tileset :: .width h@
-          r> tileset :: .pxl-get @
+          (tidx) @ dup (tset) @ tileset :: #tiles@ <= ?assert
+          (tset) @ tileset :: tidx>addr 
+          (tset) @ tileset :: .width h@
+          (tset) @ tileset :: .pxl-get @
           ( position addr width pxl-getter )
           execute ( color )
           dup (color) ! ( color )
@@ -766,7 +752,7 @@ begin-module vera
   end-module \ pixel
 
   \ Opening bracket for pixel{ ... }set/get
-  ( tileset -- tileset )
+  ( -- tileset )
   : pixel{ pixel :: params import [immediate] ;
 
   \ -- Sprite API
@@ -966,6 +952,7 @@ begin-module vera
       \ the corresponding tile index (tidx, see above) has to be valid (within
       \ range) for the new tileset.
       : tset ( sprite tileset -- sprite )
+        tileset :: ts-typecheck
         swap >r ( tileset R : sprite )
         r@ .tile-idx @ ( tileset tile-idx R: sprite )
         over tileset :: tidx>addr r@ (addr!) ( tileset R: sprite )
@@ -1007,9 +994,7 @@ begin-module vera
 
   \ Opening bracket for sprite{ ... }set
   ( sprite -- sprite )
-  : sprite{ 
-    sprite :: sprite-typecheck
-    sprite :: params import [immediate] ;
+  : sprite{ sprite :: params import [immediate] ;
 
   begin-module layer
 
@@ -1271,12 +1256,16 @@ begin-module vera
 
     begin-module params
       \ Set the tilemap to be used by this layer (configuring tilemapmode)
-      ( layer map -- layer )
-      : tmap over .tilemap ! ;
+      ( layer tmap -- layer )
+      : tmap 
+        tilemap :: tm-typecheck
+        over .tilemap ! ;
 
       \ Set the tileset to be used by this layer (tilemapmode and bitmapmode)
       ( layer tileset -- layer )
-      : tset over .tileset ! ;
+      : tset 
+        tileset :: ts-typecheck
+        over .tileset ! ;
   
       \ Set the tile index to be used by this layer (bitmapmode)
       ( layer tile-idx -- layer )
@@ -1332,9 +1321,7 @@ begin-module vera
 
   \ opening brack for layer{ ... }tilemap-mode or layer :: { ... }bitmap-mode
   ( layer -- layer )
-  : layer{ 
-    layer :: layer-typecheck
-    layer :: params import [immediate] ;
+  : layer{ layer :: params import [immediate] ;
 
   begin-module line-capture
     ( f -- )
