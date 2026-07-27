@@ -52,6 +52,8 @@ true include-verbose !
 cd /test/vera/
 include vera-bitmap-1bpp.fs
 include vera-bitmap-2bpp.fs
+include vera-bitmap-4bpp.fs
+include vera-bitmap-8bpp.fs
 quit
 cd /
 include /test/testsuite.fs
