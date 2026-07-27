@@ -1223,7 +1223,7 @@ begin-module vera
     layer :: typecheck
     layer :: .id c@ if VERA_L1_CONFIG_MAP_WIDTH@ else VERA_L0_CONFIG_MAP_WIDTH@ then layer :: sizedec ;
 
-    ( layer-id -- height )
+    ( layer -- height )
   : layer-tmap-height@
     layer :: typecheck
     layer :: .id c@
@@ -1250,7 +1250,7 @@ begin-module vera
   ( layer -- paloffset )
   : layer-paloffset@ 
     layer :: typecheck
-    layer :: .id c@ if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET@ else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET! then ;
+    layer :: .id c@ if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET@ else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET@ then ;
 
   ( hscroll layer -- )
   : layer-hscroll!
@@ -1286,15 +1286,21 @@ begin-module vera
     layer :: typecheck
     layer :: .id c@ if VERA_L1_VSCROLL@ else VERA_L0_VSCROLL@ then ;
 
-  ( layer -- width-bit )
+  ( layer -- width )
   : layer-tile-width@ 
     layer :: typecheck
-    layer :: .id c@ if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH@ else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH@ then ;
+    dup layer :: .id c@ 
+    if VERA_L1_TILEBASE_TILE_BITMAP_WIDTH@ else VERA_L0_TILEBASE_TILE_BITMAP_WIDTH@ then ( layer w )
+    1+ ( layer w=1|2 )
+    swap layer-bitmap-mode@ if 320 else 8 then *
+  ;
 
   ( layer -- height )
   : layer-tile-height@ 
     layer :: typecheck
-    layer :: .id c@ if VERA_L1_TILEBASE_TILE_HEIGHT@ else VERA_L0_TILEBASE_TILE_HEIGHT@ then ;
+    layer :: .id c@ if VERA_L1_TILEBASE_TILE_HEIGHT@ else VERA_L0_TILEBASE_TILE_HEIGHT@ then
+    1+ 8 *
+  ;
 
   ( layer -- addr-id )
   : layer-tile-base@
@@ -1326,20 +1332,20 @@ begin-module vera
   : layer-print
     layer :: typecheck
     >r 
-    r@ layer-enabled? s" enabled: %n" printf cr
+    r@ layer-enabled? if s" enabled" else s" disabled" then printf cr
     r@ layer-bitmap-mode@ if
       ." bitmap mode" cr
       r@ layer-tidx@ r@ layer-tset@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
       r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-paloffset@ r> layer-bpp@
-      s" layer: %n bpp, %n paloffset, %n hscroll, %n vscroll, %n width, %n height, %n base, %n tset, %n tidx" 
+      s" %n bpp, %n paloffset, %n hscroll, %n vscroll, %n width, %n height, $%x base, $%x tset, %n tidx" 
       printf cr
     else
       ." tile mode" cr
       r@ layer-tmap@ r@ layer-tidx@ r@ layer-tset@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
       r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-bpp@
-      s" layer: %n bpp, %n hscroll, %n vscroll, %n width, %n height, %n base, %n tset, %n tidx, $%x tilemap " printf cr
-      r@ layer-tmap@ r@ layer-t256c@ layer-tmap-height@ r@ layer-tmap-width@ r@ layer-tmap-base@
-      s" layer: $x%x tmap-base, %n tmap-width, %n tmap-height, %n t256c" printf cr
+      s" %n bpp, %n hscroll, %n vscroll, %n width, %n height, $%x base, $%x tset, %n tidx, $%x tilemap " printf cr
+      r@ layer-tmap@ r@ layer-t256c@ r@ layer-tmap-height@ r@ layer-tmap-width@ r@ layer-tmap-base@
+      s" $%x tmap-base, %n tmap-width, %n tmap-height, %n t256c" printf cr
     then
   ;
 
