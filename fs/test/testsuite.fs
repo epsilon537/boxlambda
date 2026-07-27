@@ -365,8 +365,6 @@ T{ sibmodword -> 5368 }T
 
 sibmod unimport
 
-quit
-
 \ -----------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
 
@@ -447,8 +445,8 @@ treg $ff0000 #16 bitfield! tregb2!
 
 T{ tregb1@ -> $be }T
 T{ tregb2@ -> $ad }T
-T{ $54 tregb1! -> }T
-T{ $45 tregb2! -> }T
+T{ $ffffff54 tregb1! -> }T
+T{ $ffffff45 tregb2! -> }T
 T{ tregb1@ -> $54 }T
 T{ tregb2@ -> $45 }T
 T{ treg @ -> $de4554ef }T
@@ -463,10 +461,12 @@ $000f #0  bitfield16! n0!
 T{ treg n3@ -> $b }T
 T{ treg n0@ -> $f }T
 
-5 treg n3!
-4 treg n0!
+$fff5 treg n3!
+$fff4 treg n0!
 
 T{ treg @ -> $dead5ee4 }T
+
+quit
 
 \ ------------------------------------------------------------------------
 TESTING vec2

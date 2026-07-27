@@ -49,10 +49,10 @@ vera import
 \ This flag is set when building the boxkerntest target.
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
-cd /test/vera/
-include vera-bitmap-1bpp.fs
-quit
-cd /
+\ cd /test/vera/
+\ include vera-bitmap-1bpp.fs
+\ quit
+\ cd /
 include /test/testsuite.fs
 [then]
 

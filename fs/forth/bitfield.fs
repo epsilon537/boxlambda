@@ -47,14 +47,14 @@
     create \ compile-time: store parameters in dictionary
         h, h,
     does>
-        ( bitfield-v addr pfa )
-        dup h@          \ offset               ( bitfieldv addr pfa offset )
-        swap 2 + h@     \ mask                 ( bitfieldv addr offset mask )
-        rot >r                                 ( bitfieldv offset mask R: addr )
-        r@ h@                                  ( bitfieldv offset mask val R: addr )
-        swap bic                               ( bitfieldv offset valmasked R: addr )
-        -rot                                   ( valmasked bitfieldv offset R: addr )
-        lshift or                              ( newval R: addr )
-        r> h!                                  ( )
+        ( v addr pfa )
+        dup h@          \ offset               ( v addr pfa offset )
+        swap 2 + h@     \ mask                 ( v addr offset mask )
+        rot >r                                 ( v offset mask R: addr )
+        -rot lshift                            ( mask vshifted R: addr )
+        over and                               ( mask vshiftedmasked R: addr )
+        r@ h@                                  ( mask vshiftedmasked regval R: addr )
+        rot bic                                ( vshiftedmasked regvalmasked R: addr )
+        or r> h!                                  ( )
 ;
 
