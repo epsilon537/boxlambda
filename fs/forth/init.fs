@@ -51,6 +51,7 @@ vera import
 true include-verbose !
 cd /test/vera/
 include vera-bitmap-1bpp.fs
+include vera-bitmap-2bpp.fs
 quit
 cd /
 include /test/testsuite.fs

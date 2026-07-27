@@ -189,7 +189,8 @@ begin-module vera
         dup .width h@ ( map width )
         over .height h@ ( map width height )
         * 2* ( map sz )
-        vram-alloc ( map vram )
+        dup vram-alloc ( map sz vram )
+        dup rot 0 fill ( map vram ) 
         swap .base !
       ;] compile-or-execute
       tmap-params unimport
@@ -470,7 +471,8 @@ begin-module vera
     pixel :: 4bpp-byte-ptr ( pxval ptr R: bitoffset )
     dup c@ ( pxlval ptr oldbyte R: bitoffset )
     $f r@ lshift bic ( pxlval ptr oldbytemasked R: bitoffset )
-    rot r> lshift or ( ptr newbyte )
+    rot $f and ( ptr oldbytemasked pxlvalmasked R: bitoffset )
+    r> lshift or ( ptr newbyte )
     swap c! ( )
   ;
 
@@ -488,7 +490,8 @@ begin-module vera
     pixel :: 2bpp-byte-ptr ( pxval ptr R: bitoffset )
     dup c@ ( pxlval ptr oldbyte R: bitoffset )
     3 r@ lshift bic ( pxlval ptr oldbytemasked R: bitoffset )
-    rot r> lshift or ( ptr newbyte )
+    rot 3 and ( ptr oldbytemasked pxlvalmasked R: bitoffset )
+    r> lshift or ( ptr newbyte )
     swap c! ( )
   ;
 
@@ -615,8 +618,9 @@ begin-module vera
           vram-free
         then ( R: tileset )
         0 r@ .base ! ( R: tileset )
-        r@ tilesize@ r@ .#tiles h@ * 
-        vram-alloc ( addr R: tileset )
+        r@ tilesize@ r@ .#tiles h@ * ( sz R: tileset )
+        dup vram-alloc ( sz addr R: tileset )
+        dup rot 0 fill ( addr R: tileset )
         r> .base ! ( )
       ;] compile-or-execute
       tset-params unimport
