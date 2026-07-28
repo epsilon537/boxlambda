@@ -1426,24 +1426,48 @@ begin-module vera
   : grayscale #15 and GRAYSCALE_0 + [1-foldable] ;
 
   \ Shadow memory. VERA's palette memory is write-only.
-  256 harray (shadow-palette)
+  create (shadow-palette)
+  include /forth/vera-palette.fs
 
-  \ Expects standard 4-bit color fields mapped linearly
-  \ Write an entry into the palette.
-  \ @param idx: the palete color index
-  \ @param rgb: the 12-bit RGB triple
-  : pal-write ( rgb idx -- )
-    2dup (shadow-palette) h!
+  ( rgb idx -- )
+  : (pal-write)
     swap ( idx rgb )
     $fff and ( idx rgbmasked )
     swap ( rgbmasked idx )
     4 * VERA_PALETTE_RAM_BASE + !
   ;
 
+  \ Expects standard 4-bit color fields mapped linearly
+  \ Write an entry into the palette.
+  \ @param idx: the palete color index
+  \ @param rgb: the 12-bit RGB triple
+  : pal-write ( rgb idx -- )
+    2dup 2* (shadow-palette) + h!
+    (pal-write)
+  ;
+
   \ Read the RGB value of a palette entry
   \ @param idx: the palete color index:
   \ @return: the 12-bit RGB triple
-  : pal-read ( idx -- rgb ) (shadow-palette) h@ ;
+  : pal-read ( idx -- rgb ) 2* (shadow-palette) + h@ ;
+
+  \ Load the shadow-palette into VERA's palette memory.
+  : pal-init
+    256 0 do
+      i pal-read i (pal-write)
+    loop
+  ;
+
+  pal-init
+
+  \ Load a palette into VERA palette memory
+  \ addr points to a block of 256 half-words, each half-word specifying a 12-bit rgb value
+  \ corresponding to its index.
+  ( addr -- )
+  : pal-load
+    move (shadow-palette) 512 \ Copy it to the shadow-palette first
+    pal-init \ Then install shadow-palette into VERA palette memory.
+  ;
 
   \ -- VERA top-level definitions
   : display-enable ( flag -- ) if 1 else 0 then VERA_DC_VIDEO_OUTPUT_MODE! ;
