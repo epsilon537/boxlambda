@@ -1142,13 +1142,13 @@ begin-module vera
 
     \ Set the tilemap to be used by this layer (configuring tilemapmode)
     ( layer tmap -- layer )
-    : tmap 
+    : tmap
       tilemap :: typecheck
       over .tilemap ! ;
 
     \ Set the tileset to be used by this layer (tilemapmode and bitmapmode)
     ( layer tileset -- layer )
-    : tset 
+    : tset
       tileset :: typecheck
       over .tileset ! ;
 
@@ -1255,6 +1255,12 @@ begin-module vera
   : layer-paloffset@ 
     layer :: typecheck
     layer :: .id c@ if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET@ else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET@ then ;
+
+  ( paloffset layer -- )
+  : layer-paloffset! 
+    layer :: typecheck
+    layer :: .id c@ layer :: paloffset!
+  ;
 
   ( hscroll layer -- )
   : layer-hscroll!
@@ -1430,7 +1436,7 @@ begin-module vera
   include /forth/vera-palette.fs
 
   ( rgb idx -- )
-  : (pal-write)
+  : (pal!)
     swap ( idx rgb )
     $fff and ( idx rgbmasked )
     swap ( rgbmasked idx )
@@ -1441,20 +1447,20 @@ begin-module vera
   \ Write an entry into the palette.
   \ @param idx: the palete color index
   \ @param rgb: the 12-bit RGB triple
-  : pal-write ( rgb idx -- )
+  : pal! ( rgb idx -- )
     2dup 2* (shadow-palette) + h!
-    (pal-write)
+    (pal!)
   ;
 
   \ Read the RGB value of a palette entry
   \ @param idx: the palete color index:
   \ @return: the 12-bit RGB triple
-  : pal-read ( idx -- rgb ) 2* (shadow-palette) + h@ ;
+  : pal@ ( idx -- rgb ) 2* (shadow-palette) + h@ ;
 
   \ Load the shadow-palette into VERA's palette memory.
   : pal-init
     256 0 do
-      i pal-read i (pal-write)
+      i pal@ i (pal!)
     loop
   ;
 
