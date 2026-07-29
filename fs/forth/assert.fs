@@ -1,11 +1,31 @@
 \ Assert version indicating which word failed.
 
-: ?assert ( f -- )
-  0= if 
-    r@ dup ." Assert failed at $" hex. cr
-    traceinside. cr
-    quit
+\ Set to zero to continue execution after a failing assert.
+\ E.g. for negative testing purposes.
+1 variable quit-on-xassert
+
+\ Set to 0 to disable xassert checking.
+1 variable xassert-enable
+
+\ Pass in an xt that returns a flag. If the flag is false, report assert failure and location of failure.
+: xassert ( xt -- )
+  xassert-enable @ if
+    [:
+      execute 0= if 
+        quit-on-xassert @ if
+          r@ dup ." Assert failed at $" hex. cr
+          traceinside. cr
+          quit
+        else
+          ." Assert failed." cr
+          r@ inside-code>link dup link>wid wordlist-name@ ctype ." :: " link>name ctype cr
+        then
+      then
+    ;] 
+  else
+    [: drop ;]
   then
+  compile-or-execute [immediate]
 ;
 
 0 variable (init-type)
