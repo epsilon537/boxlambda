@@ -97,7 +97,7 @@ begin-module vera
   \ If successful a 2KB-aligned Pointer to allocated block of memory in VRAM.
   \ In not successful an x-vram-alloc-failed exception is raised.
   : vram-alloc ( size-bytes -- addr )
-    [: dup ;] xassert \ Size can't be 0.
+    dup 0= if exit then
     \ Convert size in bytes to block size, rounding up.
     [ vram :: BLOCK-SZ-BYTES 1- ] literal + vram :: LOG-BLK-SZ rshift ( #blocks )
     vram :: find-alloc-blocks ( block-idx )
@@ -562,46 +562,45 @@ begin-module vera
   begin-module tset-params
     tileset import
 
+    ( size -- f )
+    : (width-is-valid?) l{ 8 , 16 , 32 , 64 , 320 , 640 }l find-in 0<> ;
+
     \ Set the tileset width in the tileset object.
     \   - 8, 16 for regular tiles.
     \   - 8, 16, 32, 64 for sprites.
     \   - 320, 640 for bitmaps.
     ( tileset width -- tileset )
     : width
-      \ value will be validated when applied to tileset, bitmap or sprite.
+      [: dup (width-is-valid?) ;] xassert
       over .width h! 
     ;
 
     \ Set the tileset height in the tileset object
     \   - 8 or 16 for regular tiles.
     \   - 8, 16, 32, 64 for sprites.
-    \   - Any positive value for bitmaps.
+    \   - 1..4095 for bitmaps.
     ( tileset height -- tileset )
     : height
-      \ value will be validated when applied to tileset, bitmap or sprite.
+      [: dup 0> over 4096 < and ;] xassert
       over .height h! 
     ;
-
-    ( bpp -- f )
-    : (bpp-is-valid?) l{ 1 , 2 , 4 , 8 }l find-in 0<> ;
 
     \ Set the tileset BPP in the tileset object
     \   - 1, 2, 4, 8 for regular tiles and bitmaps.
     \   - 4, 8 for sprites.
     ( tileset bpp -- tileset )
     : bpp
-      [: dup (bpp-is-valid?) ;] xassert
       swap >r ( bpp R: tileset )
-      dup r@ .bpp h! ( bpp R: tileset )
-      case
+      dup case
         1 of ['] pxl-1bpp! ['] pxl-1bpp@ endof
         2 of ['] pxl-2bpp! ['] pxl-2bpp@ endof
         4 of ['] pxl-4bpp! ['] pxl-4bpp@ endof
         8 of ['] pxl-8bpp! ['] pxl-8bpp@ endof
-        [: false ;] xassert
-      endcase ( setter getter R: tileset )
-      r@ .pxl-get ! ( R: tileset )
-      r@ .pxl-set ! ( R: tileset )
+        [: false ;] xassert 0 0
+      endcase ( bpp setter getter R: tileset )
+      r@ .pxl-get !
+      r@ .pxl-set !
+      r@ .bpp h! ( R: tileset )
       r> ( tileset )
     ;
 
