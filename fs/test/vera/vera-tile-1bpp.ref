@@ -4,7 +4,7 @@ width: 8  height: 8
 Tileset: $12040800 base, 8 width, 8 height, 1 bpp, 8 tiles
 layer 0 enabled
 tile mode
-1 bpp, 0 hscroll, 0 vscroll, 8 width, 8 height, $12040800 base, $2005A470 tset, 0 tidx, $2005A470 tilemap 
+1 bpp, 0 hscroll, 0 vscroll, 8 width, 8 height, $12040800 base, 0 tidx,
 $12040000 tmap-base, 32 tmap-width, 32 tmap-height, 0 t256c
 pxl[w-1,h-1]: 1 
 [w-1, h-1] capture: $00000FFF 
@@ -12,7 +12,7 @@ width: 8  height: 16
 Tileset: $12040800 base, 8 width, 16 height, 1 bpp, 8 tiles
 layer 0 enabled
 tile mode
-1 bpp, 0 hscroll, 0 vscroll, 8 width, 16 height, $12040800 base, $2005A470 tset, 0 tidx, $2005A470 tilemap 
+1 bpp, 0 hscroll, 0 vscroll, 8 width, 16 height, $12040800 base, 0 tidx,
 $12040000 tmap-base, 32 tmap-width, 32 tmap-height, 0 t256c
 pxl[w-1,h-1]: 1 
 [w-1, h-1] capture: $00000FFF 
@@ -20,7 +20,7 @@ width: 16  height: 8
 Tileset: $12040800 base, 16 width, 8 height, 1 bpp, 8 tiles
 layer 0 enabled
 tile mode
-1 bpp, 0 hscroll, 0 vscroll, 16 width, 8 height, $12040800 base, $2005A470 tset, 0 tidx, $2005A470 tilemap 
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 8 height, $12040800 base, 0 tidx,
 $12040000 tmap-base, 32 tmap-width, 32 tmap-height, 0 t256c
 pxl[w-1,h-1]: 1 
 [w-1, h-1] capture: $00000FFF 
@@ -28,7 +28,7 @@ width: 16  height: 16
 Tileset: $12040800 base, 16 width, 16 height, 1 bpp, 8 tiles
 layer 0 enabled
 tile mode
-1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040800 base, $2005A470 tset, 0 tidx, $2005A470 tilemap 
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040800 base, 0 tidx,
 $12040000 tmap-base, 32 tmap-width, 32 tmap-height, 0 t256c
 pxl[w-1,h-1]: 1 
 [w-1, h-1] capture: $00000FFF 

@@ -156,21 +156,21 @@ begin-module vera
     \ Set map width in the tilemap object: 32, 64, 128, 256
     \ ( tilemap width -- tilemap )
     : width
-      [: dup (size-is-valid?) ;] xassert
+       dup (size-is-valid?) }xassert
       over .width h! 
     ;
 
     \ Set map height in the tilemap object: 32, 64, 128, 256
     \ ( tilemap height -- tilemap )
     : height
-      [: dup (size-is-valid?) ;] xassert
+      xassert{ dup (size-is-valid?) }xassert
       over .height h! 
     ;
 
     \ Set the map type : TXT16/TXT256/TILE.
     \ ( tilemap type -- tilemap )
     : type
-      [: dup (tmap-type-is-valid?) ;] xassert
+      xassert{ dup (tmap-type-is-valid?) }xassert
       over .type c! ;
 
     \ (Re)Allocate VRAM for this tilemap to accommodate the width and height
@@ -257,7 +257,7 @@ begin-module vera
       2dup tmap-width@ swap vec2.y * ( position map y*w )
       rot vec2.x + 2* ( map offset )
       swap tmap-base@ ( offset base )
-      [: dup ;] xassert
+      xassert{ dup }xassert
       +
       [ tilemap unimport ]
     ;
@@ -306,7 +306,7 @@ begin-module vera
     \ flip values: VFLIP, HFLIP, or VFLIP_HFLIP
     ( flip -- )
     : flip 
-      [: dup (flip-is-valid?) ;] xassert
+      xassert{ dup (flip-is-valid?) }xassert
       (flip) ! ;
 
     ( vec2 -- )
@@ -571,7 +571,7 @@ begin-module vera
     \   - 320, 640 for bitmaps.
     ( tileset width -- tileset )
     : width
-      [: dup (width-is-valid?) ;] xassert
+      xassert{ dup (width-is-valid?) }xassert
       over .width h! 
     ;
 
@@ -581,7 +581,7 @@ begin-module vera
     \   - 1..4095 for bitmaps.
     ( tileset height -- tileset )
     : height
-      [: dup 0> over 4096 < and ;] xassert
+      xassert{ dup 0> over 4096 < and }xassert
       over .height h! 
     ;
 
@@ -596,7 +596,7 @@ begin-module vera
         2 of ['] pxl-2bpp! ['] pxl-2bpp@ endof
         4 of ['] pxl-4bpp! ['] pxl-4bpp@ endof
         8 of ['] pxl-8bpp! ['] pxl-8bpp@ endof
-        [: false ;] xassert 0 0
+        xassert{ false }xassert 0 0
       endcase ( bpp setter getter R: tileset )
       r@ .pxl-get !
       r@ .pxl-set !
@@ -608,7 +608,7 @@ begin-module vera
     \ Range: 0..1023
     ( tileset num -- tileset )
     : tiles
-      [: dup 1024 < ;] xassert ( tileset num )
+      xassert{ dup 1024 < }xassert ( tileset num )
       over .#tiles h! 
     ;
 
@@ -647,7 +647,7 @@ begin-module vera
   : tset-addr>tidx
     tileset :: typecheck
     dup tileset :: .base @ 
-    [: dup ;] xassert ( addr tileset baseaddr )
+    xassert{ dup }xassert ( addr tileset baseaddr )
     rot swap - ( tileset offset )
     swap tileset :: tilesize@ ( offset tilesize )
     / ( tileidx )
@@ -662,7 +662,7 @@ begin-module vera
     dup tileset :: tilesize@ ( tile-idx tileset tilesize )
     rot * ( tileset tilesize*tile-idx ) 
     swap tileset :: .base @ ( tilesize*tile-idx base )
-    [: dup ;] xassert
+    xassert{ dup }xassert
     + ;
 
   \ Retrieve the tilesize in bytes for the given tileset.
@@ -745,8 +745,8 @@ begin-module vera
     : }set
       [:
         (color) @
-        (position) @ [: dup (tset) @ tileset :: pos-in-range? ;] xassert
-        (tidx) @ [: dup (tset) @ tset-#tiles@ <= ;] xassert
+        (position) @ xassert{ dup (tset) @ tileset :: pos-in-range? }xassert
+        (tidx) @ xassert{ dup (tset) @ tset-#tiles@ <= }xassert
         (tset) @ tset-tidx>addr
         (tset) @ tset-width@
         (tset) @ tileset :: .pxl-set @
@@ -761,8 +761,8 @@ begin-module vera
     \ ( -- color )
     : }get
       [:
-        (position) @ [: dup (tset) @ tileset :: pos-in-range? ;] xassert
-        (tidx) @ [: dup (tset) @ tset-#tiles@ <= ;] xassert
+        (position) @ xassert{ dup (tset) @ tileset :: pos-in-range? }xassert
+        (tidx) @ xassert{ dup (tset) @ tset-#tiles@ <= }xassert
         (tset) @ tset-tidx>addr 
         (tset) @ tset-width@
         (tset) @ tileset :: .pxl-get @
@@ -810,7 +810,7 @@ begin-module vera
     : ram>id VERA_SPRITE_RAM_BASE - 8 / ;
 
     : init ( sprite-idx sprite -- )
-      [: over #SPRITES u< ;] xassert
+      xassert{ over #SPRITES u< }xassert
       dup sprite-struct 0 fill ( sprite-idx sprite )
       swap id>ram ( sprite ramaddr )
       over .attr-ram-ptr ! ( sprite )
@@ -829,7 +829,7 @@ begin-module vera
     \ Set the sprite width
     \ ( width sprite -- )
     : width! 
-      [: over spritesize-is-valid? ;] xassert
+      xassert{ over spritesize-is-valid? }xassert
       swap sizeenc 
       swap .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH! 
     ;
@@ -837,7 +837,7 @@ begin-module vera
     \ Set the sprite height
     \ ( height sprite -- )
     : height!
-      [: over spritesize-is-valid? ;] xassert
+      xassert{ over spritesize-is-valid? }xassert
       swap sizeenc swap .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT! 
     ;
 
@@ -847,7 +847,7 @@ begin-module vera
     \ Set the sprite's BPP. 8 or 4.
     \ ( bpp sprite -- )
     : bpp! 
-      [: over bpp-is-valid? ;] xassert
+      xassert{ over bpp-is-valid? }xassert
       swap 8 = swap .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE! 
     ;
 
@@ -875,12 +875,12 @@ begin-module vera
       \ flip values: VFLIP, HFLIP, or VFLIP_HFLIP
       \ ( sprite flip -- sprite )
       : flip 
-        [: dup (flip-is-valid?) ;] xassert
+        xassert{ dup (flip-is-valid?) }xassert
         over .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP! ;
 
       \ ( sprite zdepth -- sprite )
       : z
-        [: dup (zdepth-is-valid?) ;] xassert
+        xassert{ dup (zdepth-is-valid?) }xassert
         over .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH! ;
 
       \ ( sprite colmask -- sprite )
@@ -927,7 +927,7 @@ begin-module vera
         [:
           typecheck
           dup .attr-ram-ptr @ ( sprite attr-ram-addr )
-          [: dup xassert ;] ( sprite attr-ram-addr )
+          xassert{ dup }xassert ( sprite attr-ram-addr )
           swap .attr-addr ( attr-ram-addr attr-addr )
           2dup @ ( attr-ram-addr attr-addr attr-ram-addr attr0/1 ) 
           swap ! ( attr-ram-addr attr-addr )
@@ -1043,7 +1043,7 @@ begin-module vera
 
     \ Initialize a layer object
     : init ( id layer -- )
-      [: over #LAYERS < ;] xassert ( id layer )
+      xassert{ over #LAYERS < }xassert ( id layer )
       dup layer-struct 0 fill ( id layer )
       tuck .id c!
       init-type typecheck
@@ -1117,13 +1117,13 @@ begin-module vera
     ( tilemap layer-id -- )
     : tilemap!
       swap 
-      [: dup ;] xassert
+      xassert{ dup }xassert
       >r ( layer-id R: tilemap )
       r@ tmap-type@ TMAP-TXT256 = ( id 256c R: tilemap )
       over t256c! ( id R: tilemap )
       r@ tmap-width@ over tilemap-width! ( id R: tilemap )
       r@ tmap-height@ over tilemap-height! ( id R: tilemap )
-      r> tmap-base@ [: dup ;] xassert ( id tmap-base )
+      r> tmap-base@ xassert{ dup }xassert ( id tmap-base )
       swap tilemap-base! ( R: layer )
     ;
 
@@ -1131,17 +1131,17 @@ begin-module vera
     ( tileset layer-id -- )
     : tileset!
       swap
-      [: dup ;] xassert
+      xassert{ dup }xassert
       >r ( layer-id R: tileset )
       r@ tset-bpp@ over bpp! ( layer-id R: tileset )
       false over bitmap-mode! ( layer-id R: tileset )
       r@ tset-width@ ( layer-id width R: tileset )
-      [: dup tilesize-is-valid? ;] xassert
+      xassert{ dup tilesize-is-valid? }xassert
       16 = over tile-width! ( layer-id R: tileset )
       r@ tset-height@ ( layer-id height R: tileset )
-      [: dup tilesize-is-valid? ;] xassert
+      xassert{ dup tilesize-is-valid? }xassert
       16 = over tile-height! ( layer-id R: tileset )
-      r> tset-base@ [: dup ;] xassert ( layer-id base )
+      r> tset-base@ xassert{ dup }xassert ( layer-id base )
       swap tile-base!
     ;
 
@@ -1155,7 +1155,7 @@ begin-module vera
       over tset-tidx>addr r@ tile-base! ( tileset R: layer-id )
       dup tset-bpp@ r@ bpp! ( tileset R: layer-id )
       tset-width@ ( width R: layer-id )
-      [: dup bitmap-width-is-valid? ;] xassert ( width R: layer-id )
+      xassert{ dup bitmap-width-is-valid? }xassert ( width R: layer-id )
       640 = r@ tile-width! ( f R: layer-id )
       0 r@ tile-height! ( R: layer-id )
       true r> bitmap-mode! ( )
@@ -1203,7 +1203,7 @@ begin-module vera
         typecheck
         dup .id c@ ( layer layer-id )
         over .tileset @ ( layer layer-id tileset )
-        [: dup ;] xassert
+        xassert{ dup }xassert
         rot .tile-idx h@ ( layer-id tileset tile-idx )
         rot bitmap!
       ;] compile-or-execute
@@ -1370,15 +1370,15 @@ begin-module vera
     s" layer %n %s" printf cr
     r@ layer-bitmap-mode@ if
       ." bitmap mode" cr
-      r@ layer-tidx@ r@ layer-tset@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
+      r@ layer-tidx@ r@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
       r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-paloffset@ r> layer-bpp@
-      s" %n bpp, %n paloffset, %n hscroll, %n vscroll, %n width, %n height, $%x base, $%x tset, %n tidx" 
+      s" %n bpp, %n paloffset, %n hscroll, %n vscroll, %n width, %n height, $%x base, %n tidx" 
       printf cr
     else
       ." tile mode" cr
-      r@ layer-tmap@ r@ layer-tidx@ r@ layer-tset@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
+      r@ layer-tidx@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
       r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-bpp@
-      s" %n bpp, %n hscroll, %n vscroll, %n width, %n height, $%x base, $%x tset, %n tidx, $%x tilemap " printf cr
+      s" %n bpp, %n hscroll, %n vscroll, %n width, %n height, $%x base, %n tidx," printf cr
       r@ layer-t256c@ r@ layer-tmap-height@ r@ layer-tmap-width@ r> layer-tmap-base@
       s" $%x tmap-base, %n tmap-width, %n tmap-height, %n t256c" printf cr
     then
