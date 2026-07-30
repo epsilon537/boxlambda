@@ -279,7 +279,7 @@ begin-module vera
     mapentry import
 
     0 variable (position)
-    0 variable (chr)
+    0 variable (tidx)
     0 variable (fg)
     0 variable (bg)
     0 variable (paloffset)
@@ -297,8 +297,8 @@ begin-module vera
     ( fg -- )
     : fg (fg) ! ;
 
-    ( char-code -- )
-    : chr (chr) ! ;
+    ( tile-idx -- )
+    : tidx (tidx) ! ;
 
     ( paloffset -- )
     : paloffset (paloffset) ! ;
@@ -321,15 +321,15 @@ begin-module vera
           TMAP-TILE of  
             (paloffset) @ #12 lshift ( mapentry )
             (flip) @ 3 and #10 lshift or ( mapentry )
-            (chr) @ $3ff and or ( mapentry )
+            (tidx) @ $3ff and or ( mapentry )
           endof
           TMAP-TXT16 of
-            (fg) @ $f and 12 lshift
-            (bg) @ $f and 8 lshift or
-            (chr) @ $ff and or ( mapentry )
+            (fg) @ $f and 8 lshift
+            (bg) @ $f and #12 lshift or
+            (tidx) @ $ff and or ( mapentry )
           endof
           (fg) @ $ff and 8 lshift
-          (chr) @ $ff and or ( mapentry )
+          (tidx) @ $ff and or ( mapentry )
         endcase
         (position) @ ( mapentry position )
         (tmap) @ mapentry! ( )
@@ -351,15 +351,15 @@ begin-module vera
           TMAP-TILE of
             dup #12 rshift (paloffset) ! ( mapentry )
             dup #10 rshift 3 and (flip) ! ( mapentry )
-            $3ff and (chr) ! ( )
+            $3ff and (tidx) ! ( )
           endof
           TMAP-TXT16 of
             dup 12 rshift (bg) ! ( mapentry )
             dup 8 rshift $f and (fg) ! ( mapentry )
-            $ff and (chr) ! ( )
+            $ff and (tidx) ! ( )
           endof
           dup 8 rshift (fg) ! ( mapentry )
-          $ff and (chr) ! ( )
+          $ff and (tidx) ! ( )
         endcase
         [ tilemap unimport ]
       ;] compile-or-execute
@@ -383,25 +383,25 @@ begin-module vera
 
   \ get the 16-bit mapentry value from position in given tilemap
   ( vec2 tilemap -- mapentry )
-  : mapeentry@
+  : mapentry@
     tilemap :: typecheck
     mapentry :: mapentry@ ;
 
   \ Keeping the 16-bit mapentry unpack words directly in the vera namespace for convenience:
 
-  \ Unpack chr, fg and bg color from a 1bpp 16 color textmode map entry value
-  \ ( mapentry -- chr fg bg )
+  \ Unpack tidx, fg and bg color from a 1bpp 16 color textmode map entry value
+  \ ( mapentry -- tidx fg bg )
   : unpack-txt16
-    dup $ff and ( mapentry chr )
-    swap dup 8 rshift $f and ( chr mapentry fg )
-    swap 12 rshift $f and ( chr fg bg )
+    dup $ff and ( mapentry tidx )
+    swap dup 8 rshift $f and ( tidx mapentry fg )
+    swap 12 rshift $f and ( tidx fg bg )
   ;
 
-  \ Unpack chr and fg color from a 1bpp 256 color textmode map entry value
-  \ ( mapentry -- chr fg )
+  \ Unpack tidx and fg color from a 1bpp 256 color textmode map entry value
+  \ ( mapentry -- tidx fg )
   : unpack-txt256
-    dup $ff and ( mapentry chr )
-    swap 8 rshift $ff and ( chr fg )
+    dup $ff and ( mapentry tidx )
+    swap 8 rshift $ff and ( tidx fg )
   ;
 
   \ Unpack tile, flip and pal_offset from a 2/4/8bbp tile map entry value
@@ -1056,9 +1056,9 @@ begin-module vera
       swap if VERA_L1_MAPBASE! else VERA_L0_MAPBASE! then
     ;
 
-    : sizeenc log2 5 - [inline] ;
+    : sizeenc log2 5 - ;
 
-    : sizedec 5 + 1<< [inline] ;
+    : sizedec 5 + 1<< ;
 
     \ Set tilemap width for given layer
     \ ( width layer-id -- )
@@ -1113,19 +1113,35 @@ begin-module vera
     ( size -- f )
     : tilesize-is-valid? l{ 8 , 16 }l find-in 0<> ;
 
+    \ Configure given tilemap into given layer.
+    ( tilemap layer-id -- )
+    : tilemap!
+      swap 
+      [: dup ;] xassert
+      >r ( layer-id R: tilemap )
+      r@ tmap-type@ TMAP-TXT256 = ( id 256c R: tilemap )
+      over t256c! ( id R: tilemap )
+      r@ tmap-width@ over tilemap-width! ( id R: tilemap )
+      r@ tmap-height@ over tilemap-height! ( id R: tilemap )
+      r> tmap-base@ [: dup ;] xassert ( id tmap-base )
+      swap tilemap-base! ( R: layer )
+    ;
+
     \ Configure given tileset into given layer.
-    ( layer-id tileset -- )
+    ( tileset layer-id -- )
     : tileset!
+      swap
+      [: dup ;] xassert
       >r ( layer-id R: tileset )
       r@ tset-bpp@ over bpp! ( layer-id R: tileset )
       false over bitmap-mode! ( layer-id R: tileset )
       r@ tset-width@ ( layer-id width R: tileset )
       [: dup tilesize-is-valid? ;] xassert
-      16 = swap over tile-width! ( layer-id R: tileset )
+      16 = over tile-width! ( layer-id R: tileset )
       r@ tset-height@ ( layer-id height R: tileset )
       [: dup tilesize-is-valid? ;] xassert
       16 = over tile-height! ( layer-id R: tileset )
-      [: r> tset-base@ dup ;] xassert ( layer-id base R: tileset )
+      r> tset-base@ [: dup ;] xassert ( layer-id base )
       swap tile-base!
     ;
 
@@ -1170,18 +1186,11 @@ begin-module vera
     : }tilemap-mode
       [:
         typecheck
-        dup .id c@ ( layer layer-id )
-        over .tilemap @ ( layer layer-id tmap )
-        [: dup ;] xassert
-        2dup tmap-type@ TMAP-TXT256 = ( layer layer-id tmap layer-id t256c )
-        swap t256c! ( layer layer-id map )
-        2dup tmap-width@ swap tilemap-width! ( layer layer-id tmap )
-        2dup tmap-height@ swap tilemap-height! ( layer layer-id tmap )
-        tmap-base@ [: dup ;] xassert ( layer layer-id base )
-        over tilemap-base! ( layer layer-id )
-        swap .tileset @ ( layer-id tileset )
-        [: dup ;] xassert
-        tileset!
+        >r ( R: layer )
+        r@ .tilemap @ ( tmap R: layer )
+        r@ .id c@ tilemap!
+        r@ .tileset @ ( tileset R: layer )
+        r> .id c@ tileset!
       ;] compile-or-execute
       layer-params unimport
       [immediate]
@@ -1215,6 +1224,11 @@ begin-module vera
   0 l0 layer :: init
   1 l1 layer :: init
 
+  : layer-id@ ( layer -- id )
+    layer :: typecheck
+    layer :: .id c@
+  ;
+    
   : layer-enable ( f layer -- ) 
     layer :: typecheck
     layer :: .id c@ if VERA_DC_VIDEO_L1_ENABLE! else VERA_DC_VIDEO_L0_ENABLE! then ;
@@ -1351,7 +1365,9 @@ begin-module vera
   : layer-print
     layer :: typecheck
     >r 
-    r@ layer-enabled? if s" enabled" else s" disabled" then printf cr
+    r@ layer-enabled? if s" enabled" else s" disabled" then
+    r@ layer-id@
+    s" layer %n %s" printf cr
     r@ layer-bitmap-mode@ if
       ." bitmap mode" cr
       r@ layer-tidx@ r@ layer-tset@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
@@ -1363,7 +1379,7 @@ begin-module vera
       r@ layer-tmap@ r@ layer-tidx@ r@ layer-tset@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
       r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-bpp@
       s" %n bpp, %n hscroll, %n vscroll, %n width, %n height, $%x base, $%x tset, %n tidx, $%x tilemap " printf cr
-      r@ layer-tmap@ r@ layer-t256c@ r@ layer-tmap-height@ r@ layer-tmap-width@ r@ layer-tmap-base@
+      r@ layer-t256c@ r@ layer-tmap-height@ r@ layer-tmap-width@ r> layer-tmap-base@
       s" $%x tmap-base, %n tmap-width, %n tmap-height, %n t256c" printf cr
     then
   ;
