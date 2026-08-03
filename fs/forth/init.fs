@@ -33,10 +33,7 @@ include /forth/dump.fs
 include /forth/pre-dict.fs
 include /forth/wordlist.fs
 include /forth/dict.fs
-
-true include-verbose !
 include /forth/run-time-checking.fs
-
 include /forth/module.fs
 include /forth/bitfield.fs
 include /forth/memmap.fs
@@ -57,6 +54,8 @@ vera import
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
 cd /test/vera/
+include vera-sprite-pixels-w8.fs
+quit
 include vera-bitmap-1bpp.fs
 include vera-bitmap-2bpp.fs
 include vera-bitmap-4bpp.fs
@@ -65,6 +64,7 @@ include vera-bitmap-paloffset.fs
 include vera-bitmap-pos-err.fs
 include vera-bitmap-test-err.fs
 include vera-tile-1bpp.fs
+include vera-tile-2-4-8bpp.fs
 quit
 cd /
 include /test/testsuite.fs
