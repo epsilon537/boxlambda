@@ -54,7 +54,7 @@ vera import
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
 cd /test/vera/
-include vera-sprite-pixels-w8.fs
+include vera-sprite-pixels.fs
 quit
 include vera-bitmap-1bpp.fs
 include vera-bitmap-2bpp.fs
