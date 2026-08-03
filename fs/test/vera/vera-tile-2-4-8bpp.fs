@@ -47,4 +47,5 @@
 s" tst_dir/vera-tile-2-4-8bpp.log" s" vera-tile-2-4-8bpp.ref" f_cmp ?assert
 
 ts tset-deinit
+tm tmap-deinit
 
