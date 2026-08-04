@@ -99,7 +99,7 @@
     dup #16 rshift $ff and ( stackv params-out ) 
     over 8 rshift $ff and ( stackv params-out depth-in )
     rot #24 rshift $ff and ( params-out depth-in params-in ) 
-    - + ( expected ) 
+    - + ( expected )
     depth 1- ( expected actual )
     2dup <> if ( expected actual )
       r@ dup ." Stack signature mismatch at $" hex. cr ( expected actual ra )
@@ -115,7 +115,16 @@
 ;
 
 ( out in -- )
-: stack-check-in 
+: stack-check-in
+  dup 3 + depth > if ( out in )
+      r@ dup ." Stack underflow at $" hex. cr ( out in ra )
+      traceinside. cr ( out in  )
+      ." Actual depth: " depth 2- cr ( out in )
+      ." Required depth: " dup . ( out in )
+      2drop
+      .s cr
+      quit
+  then
   \ Replace 0 entry on top of stack by an actual entry containing
   \ #in #out and depth-in
   (stack-check-stack) stack-pop drop ( out in )

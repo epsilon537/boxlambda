@@ -1,0 +1,10 @@
+l0 enabled? 0 
+l1 enabled? 0 
+Tileset: $12040000 base, 16 width, 16 height, 8 bpp, 32 tiles
+Tilemap: $12042000 base, 32 width, 32 height, 2 type
+Tilemap: $12042800 base, 32 width, 32 height, 2 type
+16, 16 capture: $00000000 
+l0 enabled? -1 
+16, 16 capture: $00000800 
+l1 enabled? -1 
+16, 16 capture: $0000000A 

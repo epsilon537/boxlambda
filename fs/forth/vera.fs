@@ -1265,6 +1265,7 @@ begin-module vera
     : tilemap!
       [ 2 0 stack-checker ]
       swap 
+      tilemap :: typecheck
       xassert{ dup }xassert
       >r ( layer-id R: tilemap )
       r@ tmap-type@ TMAP-TXT256 = ( id 256c R: tilemap )
@@ -1280,6 +1281,7 @@ begin-module vera
     : tileset!
       [ 2 0 stack-checker ]
       swap
+      tileset :: typecheck
       xassert{ dup }xassert
       >r ( layer-id R: tileset )
       r@ tset-bpp@ over bpp! ( layer-id R: tileset )
@@ -1303,6 +1305,7 @@ begin-module vera
       [ 3 0 stack-checker ]
       >r ( tileset tile-idx R: layer-id )
       over tset-tidx>addr r@ tile-base! ( tileset R: layer-id )
+      tileset :: typecheck
       dup tset-bpp@ r@ bpp! ( tileset R: layer-id )
       tset-width@ ( width R: layer-id )
       xassert{ dup bitmap-width-is-valid? }xassert ( width R: layer-id )
@@ -1563,12 +1566,12 @@ begin-module vera
   ;
 
   ( f -- )
-  : line-capture-enable 
+  : line-capture-enable
     [ 1 0 stack-checker ]
     VERA_CTRL_STATUS_CAPTURE_EN! ;
 
   ( -- f )
-  : line-capture-enabled? 
+  : line-capture-enabled?
     [ 0 1 stack-checker ]
     VERA_CTRL_STATUS_CAPTURE_EN@ 0<> ;
 
