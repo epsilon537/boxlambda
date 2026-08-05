@@ -158,6 +158,17 @@ begin-module vera
       init-type typecheck
     ;
 
+    \ check if given position is within the width/height boundaries
+    ( position tilemap -- f )
+    : pos-in-range?
+      [ 2 1 stack-checker ]
+      typecheck
+      >r
+      vec2.xy ( x y R: tilemap )
+      dup 0 >= swap r@ .height h@ < and ( x f R: tileset )
+      swap dup 0 >= swap r> .width h@ < and ( f f )
+      and
+    ;
   end-module \ tilemap
 
   begin-module tmap-params
@@ -366,6 +377,7 @@ begin-module vera
           xassert{ false }xassert 0
         endcase
         r@ .position @ ( mapentry position R: tilemap )
+        xassert{ dup r@ tilemap :: pos-in-range? }xassert
         r> mapentry! ( )
         [ tilemap unimport ]
       ;] compile-or-execute
@@ -383,6 +395,7 @@ begin-module vera
         [ 1 0 stack-checker ]
         >r
         r@ .position @ r@ mapentry@ ( mapentry )
+        xassert{ dup r@ tilemap :: pos-in-range? }xassert
         r@ tmap-type@ case 
           TMAP-TILE of
             dup #12 rshift r@ .paloffset c! ( mapentry )

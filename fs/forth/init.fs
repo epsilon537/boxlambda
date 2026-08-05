@@ -55,7 +55,7 @@ vera import
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
 cd /test/vera/
-include vera-map-corners.fs
+include vera-map-pos-err.fs
 quit
 include vera-bitmap-1bpp.fs
 include vera-bitmap-2bpp.fs
@@ -73,6 +73,7 @@ include vera-layers.fs
 include vera-mapentry-tile.fs
 include vera-mapentry-txt16.fs
 include vera-mapentry-txt256.fs
+include vera-map-corners.fs
 quit
 cd /
 include /test/testsuite.fs
