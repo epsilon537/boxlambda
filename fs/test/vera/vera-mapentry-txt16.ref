@@ -1,0 +1,38 @@
+Tileset: $12040000 base, 16 width, 16 height, 1 bpp, 32 tiles
+Tilemap: $12040800 base, 32 width, 32 height, 0 type
+layer 0 disabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 32 tmap-width, 32 tmap-height, 0 t256c
+capture: 0 : 00000FFF 
+capture: 1 : 000000C5 
+capture: 2 : 000000C5 
+capture: 3 : 000000C5 
+capture: 4 : 000000C5 
+capture: 5 : 000000C5 
+capture: 6 : 000000C5 
+capture: 7 : 000000C5 
+capture: 8 : 000000C5 
+capture: 9 : 000000C5 
+capture: 10 : 000000C5 
+capture: 11 : 000000C5 
+capture: 12 : 000000C5 
+capture: 13 : 000000C5 
+capture: 14 : 000000C5 
+capture: 15 : 00000FFF 
+capture: 0 : 00000EE7 
+capture: 1 : 0000000A 
+capture: 2 : 0000000A 
+capture: 3 : 0000000A 
+capture: 4 : 0000000A 
+capture: 5 : 0000000A 
+capture: 6 : 0000000A 
+capture: 7 : 0000000A 
+capture: 8 : 0000000A 
+capture: 9 : 0000000A 
+capture: 10 : 0000000A 
+capture: 11 : 0000000A 
+capture: 12 : 0000000A 
+capture: 13 : 0000000A 
+capture: 14 : 0000000A 
+capture: 15 : 00000EE7 

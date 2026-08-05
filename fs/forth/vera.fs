@@ -359,8 +359,11 @@ begin-module vera
             r@ .bg c@ $f and #12 lshift or
             r@ .tidx h@ $ff and or ( mapentry R: tilemap )
           endof
-          r@ .fg c@ $ff and 8 lshift
-          r@ .tidx h@ $ff and or ( mapentry R: tilemap )
+          TMAP-TXT256 of
+            r@ .fg c@ $ff and 8 lshift
+            r@ .tidx h@ $ff and or ( mapentry R: tilemap )
+          endof
+          xassert{ false }xassert 0
         endcase
         r@ .position @ ( mapentry position R: tilemap )
         r> mapentry! ( )
@@ -391,8 +394,11 @@ begin-module vera
             dup 8 rshift $f and r@ .fg c! ( mapentry )
             $ff and r@ .tidx h! ( )
           endof
-          dup 8 rshift r@ .fg c! ( mapentry )
-          $ff and r@ .tidx h! ( )
+          TMAP-TXT256 of
+            dup 8 rshift r@ .fg c! ( mapentry )
+            $ff and r@ .tidx h! ( )
+          endof
+          xassert{ false }xassert
         endcase
         [ tilemap unimport ]
       ;] compile-or-execute

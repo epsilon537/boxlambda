@@ -119,7 +119,7 @@
   dup 3 + depth > if ( out in )
       r@ dup ." Stack underflow at $" hex. cr ( out in ra )
       traceinside. cr ( out in  )
-      ." Actual depth: " depth 2- cr ( out in )
+      ." Actual depth: " depth 2- . cr ( out in )
       ." Required depth: " dup . ( out in )
       2drop
       .s cr
