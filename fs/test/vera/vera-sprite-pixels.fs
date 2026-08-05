@@ -9,6 +9,8 @@
 
   true display-enable
   true sprites-enable
+  false l0 layer-enable
+  false l1 layer-enable
 
   l{ 8 , 16 , 32 , 64 }l
   [:
@@ -24,7 +26,7 @@
         spr spr{ ts tset 2 tidx SPR-L1 z }set
         h @ 0 do
           w @ i 1+ min 0 ?do
-            pxl{ ts tset 2 tidx i j vec2 xy CYAN color }set
+            ts pxl{ 2 tidx i j vec2 xy CYAN color }set
           loop
         loop
         0 irqline-set
@@ -46,10 +48,9 @@
         ." x7 yend capture: $" 7 line-capture-pxl@ hex. cr
         ." xend-1 yend capture: $" w @ h @ min 1- line-capture-pxl@ hex. cr
         ." xend yend capture: $" w @ h @ min line-capture-pxl@ hex. cr
-        pxl{ ts tset 1 tidx w @ 1- h @ 1- vec2 xy #0 color }set
         h @ 0 do
           w @ i 1+ min 0 ?do
-            pxl{ ts tset 2 tidx i j vec2 xy 0 color }set
+            ts pxl{ 2 tidx i j vec2 xy 0 color }set
           loop
         loop
       ;] iter

@@ -46,6 +46,7 @@ include /forth/iter.fs
 true stack-checking-enable !
 [then]
 
+true include-verbose !
 include /forth/vera.fs
 
 vera import
@@ -54,7 +55,7 @@ vera import
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
 cd /test/vera/
-include vera-layers.fs
+include vera-mapentry-tile.fs
 quit
 include vera-bitmap-1bpp.fs
 include vera-bitmap-2bpp.fs
@@ -68,6 +69,7 @@ include vera-tile-2-4-8bpp.fs
 include vera-sprite-pixels.fs
 include vera-map-corners-256.fs
 include vera-map-test.fs
+include vera-layers.fs
 quit
 cd /
 include /test/testsuite.fs

@@ -14,8 +14,8 @@ create rows 32  , 64  , 128 , 256 , 256 , 256 ,
   ts tset-print
 
   16 0 do
-    pxl{ ts tset 1 tidx i i vec2 xy 1 color }set
-    pxl{ ts tset 1 tidx 15 i - i vec2 xy 1 color }set
+    ts pxl{ 1 tidx i i vec2 xy 1 color }set
+    ts pxl{ 1 tidx 15 i - i vec2 xy 1 color }set
   loop
 
   6 0 do
@@ -24,11 +24,12 @@ create rows 32  , 64  , 128 , 256 , 256 , 256 ,
     tm tmap{ c @ width r @ height TMAP-TXT16 type }set
     tm tmap-print
     l0 layer{ ts tset tm tmap }tilemap-mode
+    true l0 layer-enable
     l0 layer-print
-    mapentry{ tm tmap GREEN bg WHITE fg 1 tidx 0 0 vec2 xy }set
-    mapentry{ tm tmap BLUE bg WHITE fg 1 tidx c @ 1- 0 vec2 xy }set
-    mapentry{ tm tmap PURPLE bg YELLOW fg 1 tidx 0 r @ 1- vec2 xy }set
-    mapentry{ tm tmap GREEN bg GREY fg 1 tidx c @ 1- r @ 1- vec2 xy }set
+    tm mapentry{ GREEN bg WHITE fg 1 tidx 0 0 vec2 xy }set
+    tm mapentry{ BLUE bg WHITE fg 1 tidx c @ 1- 0 vec2 xy }set
+    tm mapentry{ PURPLE bg YELLOW fg 1 tidx 0 r @ 1- vec2 xy }set
+    tm mapentry{ GREEN bg GREY fg 1 tidx c @ 1- r @ 1- vec2 xy }set
     ." 0 0: " 0 0 vec2 tm mapentry@ hex. cr
     ." c-1 0: " c @ 1- 0 vec2 tm mapentry@ hex. cr
     ." 0 r-1: " 0 r @ 1- vec2 tm mapentry@ hex. cr

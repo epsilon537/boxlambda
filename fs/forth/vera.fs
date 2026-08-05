@@ -20,7 +20,7 @@ begin-module vera
   1 constant HFLIP
   3 constant VFLIP_HFLIP
 
-  : (flip-is-valid?) l{ VFLIP , HFLIP , VFLIP_HFLIP }l find-in 0<> ;
+  : (flip-is-valid?) l{ 0 , VFLIP , HFLIP , VFLIP_HFLIP }l find-in 0<> ;
 
   \ --- VRAM ---
 
@@ -137,9 +137,15 @@ begin-module vera
 
     begin-structure tilemap-struct
       field:  .base
+      field:  .position \ transient
       hfield: .width
       hfield: .height
+      hfield: .tidx \ transient
       cfield: .type
+      cfield: .fg \ transient
+      cfield: .bg \ transient
+      cfield: .paloffset \ transient
+      cfield: .flip \ transient
     end-structure
 
     typechecker typecheck
@@ -301,75 +307,63 @@ begin-module vera
   begin-module mapentry-params
     \ mapentry :: { }set/get attributes
     mapentry import
+    tilemap import
 
-    0 variable (position)
-    0 variable (tidx)
-    0 variable (fg)
-    0 variable (bg)
-    0 variable (paloffset)
-    0 variable (flip)
-    0 variable (tmap)
+    ( tilemap bg -- tilemap )
+    : bg
+      [ 2 1 stack-checker ]
+      over .bg c! ;
 
-    ( tilemap -- )
-    : tmap 
-      [ 1 0 stack-checker ]
-      tilemap :: typecheck
-      (tmap) ! ;
+    ( tilemap fg -- tilemap )
+    : fg
+      [ 2 1 stack-checker ]
+      over .fg c! ;
 
-    ( bg -- )
-    : bg 
-      [ 1 0 stack-checker ]
-      (bg) ! ;
+    ( tilemap tile-idx -- tilemap )
+    : tidx
+      [ 2 1 stack-checker ]
+      over .tidx h! ;
 
-    ( fg -- )
-    : fg 
-      [ 1 0 stack-checker ]
-      (fg) ! ;
+    ( tilemap paloffset -- tilemap )
+    : paloffset
+      [ 2 1 stack-checker ]
+      over .paloffset c! ;
 
-    ( tile-idx -- )
-    : tidx 
-      [ 1 0 stack-checker ]
-      (tidx) ! ;
-
-    ( paloffset -- )
-    : paloffset 
-      [ 1 0 stack-checker ]
-      (paloffset) ! ;
-
-    \ flip values: VFLIP, HFLIP, or VFLIP_HFLIP
-    ( flip -- )
-    : flip 
-      [ 1 0 stack-checker ]
+    \ flip values: 0, VFLIP, HFLIP, or VFLIP_HFLIP
+    ( tilemap flip -- tilemap )
+    : flip
+      [ 2 1 stack-checker ]
       xassert{ dup (flip-is-valid?) }xassert
-      (flip) ! ;
+      over .flip c! ;
 
-    ( vec2 -- )
+    ( tilemap vec2 -- tilemap )
     : xy
-      [ 1 0 stack-checker ]
-      (position) ! ;
+      [ 2 1 stack-checker ]
+      over .position ! ;
 
     \ Write mapentry using attributes specified in {}mapentry!
-    ( -- )
+    ( tilemap -- )
     : }set
       [:
         [ tilemap import ]
-        [ 0 0 stack-checker ]
-        (tmap) @ tmap-type@ case 
+        [ 1 0 stack-checker ]
+        >r ( R: tilemap )
+        r@ tmap-type@ case 
           TMAP-TILE of  
-            (paloffset) @ #12 lshift ( mapentry )
-            (flip) @ 3 and #10 lshift or ( mapentry )
-            (tidx) @ $3ff and or ( mapentry )
+            r@ .paloffset c@ #12 lshift ( mapentry R: tilemap )
+            r@ .flip c@ 3 and #10 lshift or ( mapentry R: tilemap )
+            r@ .tidx h@ $3ff and or ( mapentry R: tilemap )
           endof
           TMAP-TXT16 of
-            (fg) @ $f and 8 lshift
-            (bg) @ $f and #12 lshift or
-            (tidx) @ $ff and or ( mapentry )
+            r@ .fg c@ $f and 8 lshift
+            r@ .bg c@ $f and #12 lshift or
+            r@ .tidx h@ $ff and or ( mapentry R: tilemap )
           endof
-          (fg) @ $ff and 8 lshift
-          (tidx) @ $ff and or ( mapentry )
+          r@ .fg c@ $ff and 8 lshift
+          r@ .tidx h@ $ff and or ( mapentry R: tilemap )
         endcase
-        (position) @ ( mapentry position )
-        (tmap) @ mapentry! ( )
+        r@ .position @ ( mapentry position R: tilemap )
+        r> mapentry! ( )
         [ tilemap unimport ]
       ;] compile-or-execute
       mapentry-params unimport
@@ -379,25 +373,26 @@ begin-module vera
     \ Read from VRAM, mapentry specified by { <tmap> tmap <vec> position }mapentry@ and 
     \ decode it, populating fg, bg, paloffset, flip attributes.
     \ This is useful for mapentry read-modify-write operations.
-    ( -- )
+    ( tilemap -- )
     : }get
       [:
         [ tilemap import ]
-        [ 0 0 stack-checker ]
-        (position) @ (tmap) @ mapentry@ ( mapentry )
-        (tmap) @ tmap-type@ case 
+        [ 1 0 stack-checker ]
+        >r
+        r@ .position @ r@ mapentry@ ( mapentry )
+        r@ tmap-type@ case 
           TMAP-TILE of
-            dup #12 rshift (paloffset) ! ( mapentry )
-            dup #10 rshift 3 and (flip) ! ( mapentry )
-            $3ff and (tidx) ! ( )
+            dup #12 rshift r@ .paloffset c! ( mapentry )
+            dup #10 rshift 3 and r@ .flip c! ( mapentry )
+            $3ff and r@ .tidx h! ( )
           endof
           TMAP-TXT16 of
-            dup 12 rshift (bg) ! ( mapentry )
-            dup 8 rshift $f and (fg) ! ( mapentry )
-            $ff and (tidx) ! ( )
+            dup 12 rshift r@ .bg c! ( mapentry )
+            dup 8 rshift $f and r@ .fg c! ( mapentry )
+            $ff and r@ .tidx h! ( )
           endof
-          dup 8 rshift (fg) ! ( mapentry )
-          $ff and (tidx) ! ( )
+          dup 8 rshift r@ .fg c! ( mapentry )
+          $ff and r@ .tidx h! ( )
         endcase
         [ tilemap unimport ]
       ;] compile-or-execute
@@ -409,7 +404,7 @@ begin-module vera
   end-module \ mapentry-params
 
   \ Opening bracket for mapentry{ ... }set and { ... }get
-  ( -- )
+  ( tilemap -- tilemap )
   : mapentry{ 
     mapentry-params import [immediate] ;
 
@@ -591,10 +586,14 @@ begin-module vera
       field:  .base
       field:  .pxl-set
       field:  .pxl-get
+      field:  .position \ transient
+      field:  .bitmapaddr \ transient   
       hfield: .width
       hfield: .height
       hfield: .bpp
       hfield: .#tiles
+      hfield: .tidx \ transient
+      cfield: .color \ transient
     end-structure
     
     typechecker typecheck
@@ -800,46 +799,36 @@ begin-module vera
   : <tset> create here tileset :: tileset-struct allot tileset :: init ;
 
   begin-module pxl-params
-
-    0 variable (position)
-    0 variable (tidx)
-    0 variable (bitmapaddr)
-    0 variable (color)
-    0 variable (tset)
-
-    ( tileset -- )
-    : tset 
-      [ 1 0 stack-checker ]
-      tileset :: typecheck
-      (tset) ! ;
+    tileset import
 
     \ tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
-    ( tile-idx -- )
+    ( tileset tile-idx -- tileset )
     : tidx
-      [ 1 0 stack-checker ]
-      (tidx) ! ;
+      [ 2 1 stack-checker ]
+      over .tidx h! ;
 
-    ( color -- ) 
+    ( tileset color -- tileset ) 
     : color
-      [ 1 0 stack-checker ]
-      (color) ! ;
+      [ 2 1 stack-checker ]
+      over .color c! ;
 
-    ( vec2 -- ) 
+    ( tileset vec2 -- ) 
     : xy 
-      [ 1 0 stack-checker ]
-      (position) ! ;
+      [ 2 1 stack-checker ]
+      over .position ! ;
 
     \ Set a pixel in the given tile.
-    ( -- )
+    ( tileset -- )
     : }set
       [:
-        [ 0 0 stack-checker ]
-        (color) @
-        (position) @ xassert{ dup (tset) @ tileset :: pos-in-range? }xassert
-        (tidx) @ xassert{ dup (tset) @ tset-#tiles@ <= }xassert
-        (tset) @ tset-tidx>addr
-        (tset) @ tset-width@
-        (tset) @ tileset :: .pxl-set @
+        [ 1 0 stack-checker ]
+        >r ( R: tileset )
+        r@ .color c@
+        r@ .position @ xassert{ dup r@ tileset :: pos-in-range? }xassert
+        r@ .tidx h@ xassert{ dup r@ tset-#tiles@ <= }xassert
+        r@ tset-tidx>addr
+        r@ tset-width@
+        r> tileset :: .pxl-set @
         ( color position addr width pxl-setter )
         execute
       ;] compile-or-execute
@@ -848,18 +837,19 @@ begin-module vera
     ;
 
     \ Read the pixel color from the given position on the given tile.
-    \ ( -- color )
+    \ ( tileset -- color )
     : }get
       [:
-        [ 0 1 stack-checker ]
-        (position) @ xassert{ dup (tset) @ tileset :: pos-in-range? }xassert
-        (tidx) @ xassert{ dup (tset) @ tset-#tiles@ <= }xassert
-        (tset) @ tset-tidx>addr 
-        (tset) @ tset-width@
-        (tset) @ tileset :: .pxl-get @
-        ( position addr width pxl-getter )
+        [ 1 1 stack-checker ]
+        >r ( R: tileset )
+        r@ .position @ xassert{ dup r@ tileset :: pos-in-range? }xassert
+        r@ .tidx h@ xassert{ dup r@ tset-#tiles@ <= }xassert
+        r@ tset-tidx>addr 
+        r@ tset-width@
+        r@ tileset :: .pxl-get @
+        ( position addr width pxl-getter R: tileset )
         execute ( color )
-        dup (color) ! ( color )
+        dup r> .color c! ( color )
       ;] compile-or-execute
       pxl-params unimport
       [immediate]
@@ -867,7 +857,7 @@ begin-module vera
   end-module \ pxl-params
 
   \ Opening bracket for pxl{ ... }set/get
-  ( -- tileset )
+  ( tileset -- tileset )
   : pxl{ pxl-params import [immediate] ;
 
   \ -- Sprite API

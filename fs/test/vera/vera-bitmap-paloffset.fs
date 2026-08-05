@@ -15,7 +15,7 @@
     ts tset{ 320 width 32 height (bpp) @ bpp 1 tiles }set
     ts tset-print
     l0 layer{ ts tset 0 tidx }bitmap-mode
-    pxl{ ts tset 0 tidx 0 0 vec2 xy 1 color }set
+    ts pxl{ 0 tidx 0 0 vec2 xy 1 color }set
 
     0 l0 layer-paloffset!
     ." paloffset: " l0 layer-paloffset@ . cr

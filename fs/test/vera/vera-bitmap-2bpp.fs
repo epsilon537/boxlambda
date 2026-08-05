@@ -16,10 +16,10 @@
       ts tset{ w @ width h @ height 2 bpp 1 tiles }set
       ts tset-print
       l0 layer{ ts tset 0 tidx }bitmap-mode
-      pxl{ ts tset 0 tidx 0 0 vec2 xy #103 color }set
-      pxl{ w @ 1- 0 vec2 xy }set
-      pxl{ 0 h @ 1- vec2 xy }set
-      pxl{ w @ 1- h @ 1- vec2 xy }set
+      ts pxl{ 0 tidx 0 0 vec2 xy #103 color }set
+      ts pxl{ w @ 1- 0 vec2 xy }set
+      ts pxl{ 0 h @ 1- vec2 xy }set
+      ts pxl{ w @ 1- h @ 1- vec2 xy }set
       0 irqline-set
       true line-capture-enable
       begin line-capture-enabled? not until
@@ -48,10 +48,10 @@
       1 line-capture-pxl@ hex. cr
       w @ 2- line-capture-pxl@ hex. cr
       w @ 1- line-capture-pxl@ hex. cr
-      pxl{ ts tset 0 0 vec2 xy 0 color }set
-      pxl{ w @ 1- 0 vec2 xy }set
-      pxl{ 0 h @ 1- vec2 xy }set
-      pxl{ w @ 1- h @ 1- vec2 xy }set
+      ts pxl{ 0 0 vec2 xy 0 color }set
+      ts pxl{ w @ 1- 0 vec2 xy }set
+      ts pxl{ 0 h @ 1- vec2 xy }set
+      ts pxl{ w @ 1- h @ 1- vec2 xy }set
     ;] iter
   ;] iter
 ;
