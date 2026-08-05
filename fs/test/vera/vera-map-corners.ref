@@ -1,0 +1,82 @@
+Tileset: $12040000 base, 16 width, 16 height, 1 bpp, 32 tiles
+Tilemap: $12040800 base, 32 width, 32 height, 0 type
+layer 0 enabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 32 tmap-width, 32 tmap-height, 0 t256c
+0 0: 00005101 
+c-1 0: 00006101 
+0 r-1: 00004701 
+c-1 r-1: 00005C01 
+Tilemap: $12040800 base, 32 width, 64 height, 0 type
+layer 0 enabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 32 tmap-width, 64 tmap-height, 0 t256c
+0 0: 00005101 
+c-1 0: 00006101 
+0 r-1: 00004701 
+c-1 r-1: 00005C01 
+Tilemap: $12040800 base, 32 width, 128 height, 0 type
+layer 0 enabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 32 tmap-width, 128 tmap-height, 0 t256c
+0 0: 00005101 
+c-1 0: 00006101 
+0 r-1: 00004701 
+c-1 r-1: 00005C01 
+Tilemap: $12040800 base, 64 width, 32 height, 0 type
+layer 0 enabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 64 tmap-width, 32 tmap-height, 0 t256c
+0 0: 00005101 
+c-1 0: 00006101 
+0 r-1: 00004701 
+c-1 r-1: 00005C01 
+Tilemap: $12040800 base, 64 width, 64 height, 0 type
+layer 0 enabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 64 tmap-width, 64 tmap-height, 0 t256c
+0 0: 00005101 
+c-1 0: 00006101 
+0 r-1: 00004701 
+c-1 r-1: 00005C01 
+Tilemap: $12040800 base, 64 width, 128 height, 0 type
+layer 0 enabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 64 tmap-width, 128 tmap-height, 0 t256c
+0 0: 00005101 
+c-1 0: 00006101 
+0 r-1: 00004701 
+c-1 r-1: 00005C01 
+Tilemap: $12040800 base, 128 width, 32 height, 0 type
+layer 0 enabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 128 tmap-width, 32 tmap-height, 0 t256c
+0 0: 00005101 
+c-1 0: 00006101 
+0 r-1: 00004701 
+c-1 r-1: 00005C01 
+Tilemap: $12040800 base, 128 width, 64 height, 0 type
+layer 0 enabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 128 tmap-width, 64 tmap-height, 0 t256c
+0 0: 00005101 
+c-1 0: 00006101 
+0 r-1: 00004701 
+c-1 r-1: 00005C01 
+Tilemap: $12040800 base, 128 width, 128 height, 0 type
+layer 0 enabled
+tile mode
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+$12040800 tmap-base, 128 tmap-width, 128 tmap-height, 0 t256c
+0 0: 00005101 
+c-1 0: 00006101 
+0 r-1: 00004701 
+c-1 r-1: 00005C01 
