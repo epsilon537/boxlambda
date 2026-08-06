@@ -30,7 +30,7 @@ create cols col1 , col2 ,
   l0 layer-print
 
   tm mapentry{ col1 row1 vec2 xy GREEN fg 1 tidx }set
-  tm mapentry{ col2 row2 vec2 xy #10 grayscale fg 1 tidx }set
+  tm mapentry{ col2 row2 vec2 xy #10 greyscale fg 1 tidx }set
 
   true l0 layer-enable
   false l1 layer-enable

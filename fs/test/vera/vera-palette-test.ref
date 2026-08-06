@@ -1,0 +1,21 @@
+Tileset: $12040000 base, 320 width, 32 height, 8 bpp, 1 tiles
+layer 0 enabled
+bitmap mode
+8 bpp, 0 paloffset, 0 hscroll, 0 vscroll, 320 width, 8 height, $12040000 base, 0 tidx
+pxl 0,0 : 255 
+pxl 1,0 : 0 
+Default palette line capture
+00000F0B 
+00000000 
+
+Modified palette:
+pal 0: 00000321 
+pal 255: 00000123 
+00000123 
+00000321 
+
+Restored palette:
+pal 0: 00000000 
+pal 255: 00000F0B 
+00000F0B 
+00000000 

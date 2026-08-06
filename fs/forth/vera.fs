@@ -1560,7 +1560,7 @@ begin-module vera
     s" layer %n %s" printf cr
     r@ layer-bitmap-mode@ if
       ." bitmap mode" cr
-      r@ layer-tidx@ r@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
+      r@ layer-tidx@  r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
       r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-paloffset@ r> layer-bpp@
       s" %n bpp, %n paloffset, %n hscroll, %n vscroll, %n width, %n height, $%x base, %n tidx" 
       printf cr
@@ -1656,24 +1656,26 @@ begin-module vera
   #7 constant YELLOW
   #8 constant ORANGE
   #9 constant BROWN
-  #10 constant LIGHT_RED
-  #11 constant DARK_GREY
+  #10 constant LIGHT-RED
+  #11 constant DARK-GREY
   #12 constant GREY
-  #13 constant LIGHT_GREEN
-  #14 constant LIGHT_BLUE
-  #15 constant LIGHT_GREY
-  #16 constant GRAYSCALE_0 
-  #31 constant GRAYSCALE_15 
+  #13 constant LIGHT-GREEN
+  #14 constant LIGHT-BLUE
+  #15 constant LIGHT-GREY
+  #16 constant GREYSCALE-0 
+  #31 constant GREYSCALE-15 
 
   \ Mask given value to 0-15 range and
-  \ return corresponding grayscale value in the default VERA color palette.
+  \ return corresponding greyscale value in the default VERA color palette.
   \ ( n -- n' )
-  : grayscale #15 and GRAYSCALE_0 + [1-foldable] ;
+  : greyscale #15 and GREYSCALE-0 + [1-foldable] ;
 
   \ Shadow memory. VERA's palette memory is write-only.
-  create (shadow-palette)
+  create (orig-palette)
   include /forth/vera-palette.fs
+  create (shadow-palette) 2 256 * allot
 
+  
   ( rgb idx -- )
   : (pal!)
     swap ( idx rgb )
@@ -1699,8 +1701,9 @@ begin-module vera
     [ 1 1 stack-checker ]
     2* (shadow-palette) + h@ ;
 
-  \ Load the shadow-palette into VERA's palette memory.
+  \ Load the original into the shadow-palette and VERA's palette memory.
   : pal-init
+    (orig-palette) (shadow-palette) 2 256 * move
     256 0 do
       i pal@ i (pal!)
     loop

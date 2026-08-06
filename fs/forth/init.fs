@@ -46,7 +46,6 @@ include /forth/iter.fs
 true stack-checking-enable !
 [then]
 
-true include-verbose !
 include /forth/vera.fs
 
 vera import
@@ -55,7 +54,7 @@ vera import
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
 cd /test/vera/
-include vera-map-pos-err.fs
+include vera-palette-sys-colors.fs
 quit
 include vera-bitmap-1bpp.fs
 include vera-bitmap-2bpp.fs
@@ -74,6 +73,10 @@ include vera-mapentry-tile.fs
 include vera-mapentry-txt16.fs
 include vera-mapentry-txt256.fs
 include vera-map-corners.fs
+include vera-map-pos-err.fs
+include vera-map-test-cont.fs
+include vera-map-test-err.fs
+include vera-palette-test.fs
 quit
 cd /
 include /test/testsuite.fs
