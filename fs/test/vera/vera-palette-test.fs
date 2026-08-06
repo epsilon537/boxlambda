@@ -13,7 +13,7 @@
   ." pxl 0,0 : " ts pxl{ 0 0 vec2 xy }get . cr
   ." pxl 1,0 : " ts pxl{ 1 0 vec2 xy }get . cr
 
-  0 irqline-set
+  0 irqline!
 
   true line-capture-enable
   begin line-capture-enabled? not until

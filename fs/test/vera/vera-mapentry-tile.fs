@@ -42,7 +42,7 @@ create cols col1 , col2 , col3 ,
   3 0 do
     i cells rows + @ row !
     i cells cols + @ col !
-    row @ #16 * irqline-set
+    row @ #16 * irqline!
     true line-capture-enable
     begin line-capture-enabled? not until
     #16 0 do

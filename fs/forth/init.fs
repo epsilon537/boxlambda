@@ -54,7 +54,7 @@ vera import
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
 cd /test/vera/
-include vera-palette-sys-colors.fs
+include vera-scroll.fs
 quit
 include vera-bitmap-1bpp.fs
 include vera-bitmap-2bpp.fs
@@ -77,6 +77,10 @@ include vera-map-pos-err.fs
 include vera-map-test-cont.fs
 include vera-map-test-err.fs
 include vera-palette-test.fs
+include vera-palette-sys-colors.fs
+include vera-scale.fs
+include vera-scanline.fs
+include vera-screen-boundaries.fs
 quit
 cd /
 include /test/testsuite.fs

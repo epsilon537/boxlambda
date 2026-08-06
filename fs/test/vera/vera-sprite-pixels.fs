@@ -29,19 +29,19 @@
             ts pxl{ 2 tidx i j vec2 xy CYAN color }set
           loop
         loop
-        0 irqline-set
+        0 irqline!
         true line-capture-enable
         begin line-capture-enabled? not until
         ." x0 y0 capture: $" 0 line-capture-pxl@ hex. cr
         ." x1 y0 capture: $" 1 line-capture-pxl@ hex. cr
-        h @ 1- irqline-set
+        h @ 1- irqline!
         true line-capture-enable
         begin line-capture-enabled? not until
         ." x0 yend-1 capture: $" 0 line-capture-pxl@ hex. cr
         ." x7 yend-1 capture: $" 7 line-capture-pxl@ hex. cr
         ." xend-1 yend-1 capture: $" w @ h @ min 1- line-capture-pxl@ hex. cr
         ." xend yend-1 capture: $" w @ h @ min line-capture-pxl@ hex. cr
-        h @ irqline-set
+        h @ irqline!
         true line-capture-enable
         begin line-capture-enabled? not until
         ." x0  yend capture: $" 0 line-capture-pxl@ hex. cr

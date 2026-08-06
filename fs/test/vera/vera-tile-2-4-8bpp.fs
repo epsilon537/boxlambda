@@ -32,7 +32,7 @@
         l0 layer-print
         ts pxl{ 1 tidx w @ 1- h @ 1- vec2 xy #101 color }set
         ." pxl[w-1,h-1]: " ts pxl{ }get . cr
-        h @ 1- irqline-set
+        h @ 1- irqline!
         true line-capture-enable
         begin line-capture-enabled? not until
         ." [w-1, h-1] capture: $" w @ 1- line-capture-pxl@ hex. cr

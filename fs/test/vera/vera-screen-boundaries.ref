@@ -1,0 +1,25 @@
+bordercolor: 
+6 
+boundaries: 
+380 
+100 
+540 
+100 
+line capture y=99: 
+0000000A 
+0000000A 
+
+line capture y=100: 
+0000000A 
+00000000 
+00000000 
+0000000A 
+
+line capture y=379: 
+0000000A 
+00000000 
+00000000 
+0000000A 
+line capture y=380: 
+0000000A 
+0000000A 

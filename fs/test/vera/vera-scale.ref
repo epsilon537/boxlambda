@@ -1,0 +1,11 @@
+Tilemap: $12040000 base, 32 width, 32 height, 2 type
+Tileset: $12040800 base, 16 width, 16 height, 8 bpp, 32 tiles
+capture 14: 00000000 
+capture 15: 00000FFF 
+capture 16: 00000000 
+hscale: 64 
+vscale: 64 
+capture 29: 00000000 
+capture 30: 00000FFF 
+capture 31: 00000FFF 
+capture 32: 00000000 

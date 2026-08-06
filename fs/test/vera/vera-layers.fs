@@ -27,7 +27,7 @@
     ts pxl{ 2 tidx 0 i vec2 xy BLUE color }set
   loop
  
-  #16 irqline-set
+  #16 irqline!
   true line-capture-enable
   begin line-capture-enabled? not until
   ." 16, 16 capture: $" 16 line-capture-pxl@ hex. cr

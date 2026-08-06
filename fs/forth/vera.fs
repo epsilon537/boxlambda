@@ -1490,17 +1490,19 @@ begin-module vera
     then
   ;
 
-  ( hscroll layer -- )
+  ( vscroll layer -- )
   : layer-vscroll! 
     [ 2 0 stack-checker ]
     layer :: typecheck
-    layer :: .id c@ if VERA_L1_VSCROLL! else VERA_L0_VSCROLL! then ! ;
+    layer :: .id c@ if VERA_L1_VSCROLL! else VERA_L0_VSCROLL! then
+  ;
 
   ( layer -- vscroll )
   : layer-vscroll@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
-    layer :: .id c@ if VERA_L1_VSCROLL@ else VERA_L0_VSCROLL@ then ;
+    layer :: .id c@ if VERA_L1_VSCROLL@ else VERA_L0_VSCROLL@ then
+  ;
 
   ( layer -- width )
   : layer-tile-width@ 
@@ -1631,15 +1633,15 @@ begin-module vera
   \ enabled.
   \ @param scanline: scanline number on which the trigger the line IRQ, must be
   \ <= VERA_SCANLINE_MAX.
-  : irqline-set ( scanline -- ) 
+  : irqline! ( scanline -- ) 
     [ 1 0 stack-checker ]
     VERA_IRQLINE! ;
 
-  : irqline-get ( -- scanline ) 
+  : irqline@ ( -- scanline ) 
     [ 0 1 stack-checker ]
     VERA_IRQLINE@ ;
 
-  : scanline-get ( -- scanline ) 
+  : scanline@ ( -- scanline ) 
     [ 0 1 stack-checker ]
     VERA_SCANLINE@ ;
 
@@ -1741,19 +1743,24 @@ begin-module vera
   : hscale! ( scale-ufix1-7 -- ) 
     [ 1 0 stack-checker ]
     VERA_DC_HSCALE! ;
+
   : hscale@ ( -- scale-ufix1-7 ) 
     [ 0 1 stack-checker ]
     VERA_DC_HSCALE@ ;
+
   : vscale! ( scale-ufix1-7 -- ) 
-    VERA_DC_VSCALE! 
     [ 1 0 stack-checker ]
+    VERA_DC_VSCALE! 
     ;
+
   : vscale@ ( -- scale-ufix1-7 ) 
     [ 0 1 stack-checker ]
     VERA_DC_VSCALE@ ;
+
   : bordercolor! ( pal-idx -- ) 
     [ 1 0 stack-checker ]
     VERA_DC_BORDERCOLOR! ;
+
   : bordercolor@ ( -- pal-idx ) 
     [ 0 1 stack-checker ]
     VERA_DC_BORDERCOLOR@ ;

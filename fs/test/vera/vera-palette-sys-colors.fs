@@ -31,7 +31,7 @@
     ts pxl{ 0 tidx i 16 + 0 vec2 xy i greyscale color }set
   loop
 
-  0 irqline-set
+  0 irqline!
   true line-capture-enable
   begin line-capture-enabled? not until
 

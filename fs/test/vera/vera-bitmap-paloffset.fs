@@ -19,7 +19,7 @@
 
     0 l0 layer-paloffset!
     ." paloffset: " l0 layer-paloffset@ . cr
-    0 irqline-set
+    0 irqline!
     true line-capture-enable
     begin line-capture-enabled? not until
     ." pxl[0,0] capture: " 0 line-capture-pxl@ hex. cr
