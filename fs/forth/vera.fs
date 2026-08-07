@@ -4,11 +4,11 @@
 begin-module vera
 
   \ --- System Limits and Enumerations ---
-  #479 constant SCANLINE_VISIBLE_MAX
-  #524 constant SCANLINE_MAX
-  #1023 constant HSTOP_MAX
-  #1023 constant VSTOP_MAX
-  #1024 constant MAX_TILES_IN_TILESET
+  #479 constant SCANLINE-VISIBLE-MAX
+  #524 constant SCANLINE-MAX
+  #1023 constant HSTOP-MAX
+  #1023 constant VSTOP-MAX
+  #1024 constant MAX-TILES-IN-TILESET
   #2 constant #LAYERS
   #2 constant #SPRITE_BANKS
   #64 constant #SPRITES_IN_BANK
@@ -970,6 +970,16 @@ begin-module vera
       swap VERA_VRAM_BASE - 5 rshift ( sprite addr )
       swap .attr-addr VERA_SPRITE_ATTR_MODEADDR_ADDR!
     ;
+
+    \ check if given position is within the boundaries
+    ( position -- f )
+    : pos-in-range?
+      [ 1 1 stack-checker ]
+      vec2.xy ( x y )
+      dup 0 >= swap VSTOP-MAX <= and ( x f )
+      swap dup 0 >= swap HSTOP-MAX <= and ( f f )
+      and
+    ;
     end-module
 
     begin-module spr-params
@@ -978,6 +988,7 @@ begin-module vera
       \ ( sprite vec2 -- sprite )
       : xy 
           [ 2 1 stack-checker ]
+          xassert{ dup sprite :: pos-in-range? }xassert
           swap >r ( vec2 R: sprite )
           vec2.xy ( x y R: sprite )
           r@ .attr-y h!
@@ -1017,6 +1028,7 @@ begin-module vera
         \ If we don't have a tileset yet, this is deferred until the tileset
         \ is specified.
         over .tileset @ ?dup if ( sprite tile-idx tileset )
+          xassert{ 2dup tset-#tiles@ < }xassert ( sprite tile-idx tileset )
           tset-tidx>addr ( sprite addr ) 
           over addr! ( sprite )
         else
@@ -1033,6 +1045,7 @@ begin-module vera
         tileset :: typecheck
         swap >r ( tileset R : sprite )
         r@ .tile-idx @ ( tileset tile-idx R: sprite )
+        xassert{ 2dup swap tset-#tiles@ < }xassert ( tileset tile-idx R: sprite )
         over tset-tidx>addr r@ addr! ( tileset R: sprite )
         dup tset-bpp@ r@ bpp! ( tileset R: sprite )
         dup tset-width@ r@ width! ( tileset R: sprite )
@@ -1155,8 +1168,8 @@ begin-module vera
     >r 
     r@ spr-colmask@ r@ spr-z@ r@ spr-flip@ r@ spr-height@ r@ spr-width@ r@ spr-xy@ vec2.xy swap r@ spr-id@
     s" sprite: %n id, %n x, %n y, %n w, %n h, %n flip, %n z, $%x colmask" printf cr
-    r@ spr-tidx@ r@ spr-tset@ r@ spr-addr@ r@ spr-bpp@ r> spr-paloffset@
-    s" %n paloffset, %n bpp, $%x addr, $%x tset, %n tidx" printf cr
+    r@ spr-tidx@ r@ spr-addr@ r@ spr-bpp@ r> spr-paloffset@
+    s" %n paloffset, %n bpp, $%x addr %n tidx" printf cr
   ;
 
   \ Create and initialize a sprite object.

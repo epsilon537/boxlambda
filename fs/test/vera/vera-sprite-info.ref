@@ -1,0 +1,3 @@
+Tileset: $12040000 base, 32 width, 32 height, 8 bpp, 8 tiles
+sprite: 1 id, 5 x, 6 y, 32 w, 32 h, 1 flip, 2 z, $1 colmask
+1 paloffset, 8 bpp, $12040400 addr 1 tidx

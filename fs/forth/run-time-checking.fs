@@ -49,7 +49,15 @@
     false (init-type) !
     [: swap ! ;]
   else
-    [: over @ <> if r@ dup ." Typecheck failed at $" hex. cr traceinside. cr quit then ;]
+    [: over @ <> if 
+         quit-on-xassert @ if
+           r@ dup ." Typecheck failed at $" hex. cr traceinside. cr quit 
+         else
+           ." Typecheck failed" cr
+           r@ inside-code>link dup link>wid wordlist-name@ ctype ." :: " link>name ctype cr
+         then
+       then 
+    ;]
   then
   compile-or-execute
 [else]

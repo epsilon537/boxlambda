@@ -1,0 +1,9 @@
+Tileset: $12040000 base, 64 width, 64 height, 8 bpp, 8 tiles
+2 
+x0 y63 capture: $00000AFE 
+x1 y63 capture: $00000000 
+x0 y0 capture: $00000AFE 
+x7 y0 capture: $00000AFE 
+x63 y0 capture: $00000AFE 
+x64 y0 capture: $00000000 
+x0 y64 capture: $00000000 
