@@ -1004,7 +1004,7 @@ begin-module vera
       : colmask over .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK! ;
 
       \ ( sprite paloffset -- sprite )
-      : paloffset 
+      : paloffset
         [ 2 1 stack-checker ]
         over .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET! ;
 
@@ -1602,14 +1602,14 @@ begin-module vera
   \ @param mask: bitwise OR of VERA_IRQs to enable.
   : irq-enable ( mask -- ) 
     [ 1 0 stack-checker ]
-    VERA_IEN_ADDR tuck @ or ! ;
+    VERA_IEN_ADDR @ or VERA_IEN_ADDR ! ;
 
   \ Disable IRQs. The passed in mask will be inverted and  AND'd with the
   \ installed mask.
   \ @param mask: bitwise OR of VERA_IRQs to disable.
   : irq-disable ( mask -- ) 
     [ 1 0 stack-checker ]
-    VERA_IEN_ADDR tuck @ swap bic ! ;
+    VERA_IEN_ADDR @ swap bic VERA_IEN_ADDR ! ;
 
   \ Retrieve the enabled IRQs bitmask.
   \ @return: a bitmask of enabled VERA_IRQs.
@@ -1775,14 +1775,14 @@ begin-module vera
     [ 0 4 stack-checker ]
     VERA_DC_HSTART@ VERA_DC_HSTOP@ VERA_DC_VSTART@ VERA_DC_VSTOP@ ;
 
-  ( f -- )
+  ( 1|0 -- )
   : sprite-bank! 
     [ 1 0 stack-checker ]
     VERA_CTRL_STATUS_SBNK! ;
 
-  ( -- f )
+  ( -- 1|0 )
   : sprite-bank@ 
     [ 0 1 stack-checker ]
-    VERA_CTRL_STATUS_SBNK@ 0<> ;
+    VERA_CTRL_STATUS_SBNK@ ;
 end-module
 

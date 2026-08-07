@@ -1,0 +1,7 @@
+Tileset: $12040000 base, 8 width, 8 height, 8 bpp, 8 tiles
+sprite-bank: 0 
+capture 40, 50: $00000AFE 
+capture 100, 200 $00000000 
+sprite-bank: 1 
+capture 40, 50: $00000000 
+capture 100, 200 $00000333 
