@@ -1,0 +1,18 @@
+Tileset: $12041000 base, 8 width, 8 height, 8 bpp, 8 tiles
+( 0 , 0 )
+Sprite disabled: 
+0 
+x0 y0 capture: $00000000 
+Sprite behind l0: 
+1 
+x0 y0 capture: $00000333 
+l0 enable: 
+x0 y0 capture: $00000AFE 
+Sprite between l0 and l1: 
+2 
+x0 y0 capture: $00000333 
+l1 enable: 
+x0 y0 capture: $00000866 
+sprite in front of l1: 
+3 
+x0 y0 capture: $00000333 

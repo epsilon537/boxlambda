@@ -54,7 +54,7 @@ vera import
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
 cd /test/vera/
-include vera-sprite-xy.fs
+include vera-tileset-params.fs
 quit
 include vera-bitmap-1bpp.fs
 include vera-bitmap-2bpp.fs
@@ -90,6 +90,10 @@ include vera-sprite-info.fs
 include vera-sprite-paloffset.fs
 include vera-sprite-params-err.fs
 include vera-sprite-vflip.fs
+include vera-sprite-xy.fs
+include vera-sprite-z.fs
+include vera-tile-pos-err.fs
+include vera-tileset-params-err.fs
 quit
 cd /
 include /test/testsuite.fs

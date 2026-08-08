@@ -1,0 +1,32 @@
+width: 8  height: 8 bpp: 1 
+Tileset: $12040000 base, 8 width, 8 height, 1 bpp, 8 tiles
+width: 8  height: 8 bpp: 2 
+Tileset: $12040000 base, 8 width, 8 height, 2 bpp, 8 tiles
+width: 8  height: 8 bpp: 4 
+Tileset: $12040000 base, 8 width, 8 height, 4 bpp, 8 tiles
+width: 8  height: 8 bpp: 8 
+Tileset: $12040000 base, 8 width, 8 height, 8 bpp, 8 tiles
+width: 16  height: 16 bpp: 1 
+Tileset: $12040000 base, 16 width, 16 height, 1 bpp, 8 tiles
+width: 16  height: 16 bpp: 2 
+Tileset: $12040000 base, 16 width, 16 height, 2 bpp, 8 tiles
+width: 16  height: 16 bpp: 4 
+Tileset: $12040000 base, 16 width, 16 height, 4 bpp, 8 tiles
+width: 16  height: 16 bpp: 8 
+Tileset: $12040000 base, 16 width, 16 height, 8 bpp, 8 tiles
+width: 32  height: 32 bpp: 1 
+Tileset: $12040000 base, 32 width, 32 height, 1 bpp, 8 tiles
+width: 32  height: 32 bpp: 2 
+Tileset: $12040000 base, 32 width, 32 height, 2 bpp, 8 tiles
+width: 32  height: 32 bpp: 4 
+Tileset: $12040000 base, 32 width, 32 height, 4 bpp, 8 tiles
+width: 32  height: 32 bpp: 8 
+Tileset: $12040000 base, 32 width, 32 height, 8 bpp, 8 tiles
+width: 64  height: 64 bpp: 1 
+Tileset: $12040000 base, 64 width, 64 height, 1 bpp, 8 tiles
+width: 64  height: 64 bpp: 2 
+Tileset: $12040000 base, 64 width, 64 height, 2 bpp, 8 tiles
+width: 64  height: 64 bpp: 4 
+Tileset: $12040000 base, 64 width, 64 height, 4 bpp, 8 tiles
+width: 64  height: 64 bpp: 8 
+Tileset: $12040000 base, 64 width, 64 height, 8 bpp, 8 tiles
