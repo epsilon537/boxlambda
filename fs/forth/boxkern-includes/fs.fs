@@ -9,7 +9,7 @@
 \ path2 is the secondary working buffer for filessystem paths (f_rename / f_findfirst).
 256 buffer: path2
 
-\ Put a pathname string of max 255 bytes in the path object.
+\ Put a pathname string of max 255 bytes in the given path object.
 \ ( c-addr len path -- )
 : str>path -rot cstr ;
 

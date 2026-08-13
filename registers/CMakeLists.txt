@@ -15,7 +15,7 @@ set(register_modules
 
 set(memmap_yaml ${CMAKE_CURRENT_SOURCE_DIR}/definitions/memmap.yaml)
 set(c_header ${CMAKE_CURRENT_SOURCE_DIR}/generated/memmap.h)
-set(forth_header ${PROJECT_SOURCE_DIR}/fs/forth/memmap.fs)
+set(forth_header ${PROJECT_SOURCE_DIR}/fs/forth/boxkern-includes/memmap.fs)
 
 # A codegeneration rule to generate the register access layer
 add_custom_target(

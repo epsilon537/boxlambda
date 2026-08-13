@@ -1686,11 +1686,8 @@ begin-module vera
   : greyscale #15 and GREYSCALE-0 + [1-foldable] ;
 
   \ Shadow memory. VERA's palette memory is write-only.
-  create (orig-palette)
-  include /forth/vera-palette.fs
   create (shadow-palette) 2 256 * allot
-
-  
+ 
   ( rgb idx -- )
   : (pal!)
     swap ( idx rgb )

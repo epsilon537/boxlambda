@@ -1,42 +1,50 @@
 //
 // This is the BoxLambda kernel (BoxKern) top-level/main module.
 //
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-#include <assert.h>
 #include "fatal.h"
 #include "inout.h"
+#include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "gpio.h"
-#include "forth.h"
-#include "fs_ffi.h"
-#include "stdio_redirect_ffi.h"
 #include "diskio_ram.h"
 #include "ff.h"
+#include "forth-fastboot.h"
+#include "forth.h"
+#include "fs_ffi.h"
+#include "gpio.h"
+#include "memmap.h"
+#include "stdio_redirect_ffi.h"
 #include "uart.h"
-#ifdef FORTH_CORE_TEST
+
+#define GPIO_SKIP_FASTBOOT_INDICATOR 0x10
+#define GPIO_FORTH_CORE_TEST 0x20
+
 #include "forth_core_test.h"
-#endif /*FORTH_CORE_TEST*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 //_init is executed by picolibc startup code before main().
-void _init(void) {
-}
+void _init(void) {}
 
 //_exit is executed by the picolibc exit function.
-//An implementation has to be provided to be able to use assert().
-void	_exit (int status) {
-	while (1);
+// An implementation has to be provided to be able to use assert().
+void _exit(int status) {
+  while (1)
+    ;
 }
 
-//The RAM disk image location variables provide by linker.
+//
+// Linker Variables:
+//
 extern char __fs_image_start;
 extern char __fs_image_end;
+extern char __boxkern_forth_image_start;
+extern char __boxkern_forth_image_end;
 
 // The file system objects
 #define NUM_VOLS 2
@@ -46,6 +54,13 @@ Fs_Volume_t volumes[NUM_VOLS];
 
 const char *sd_vol_name = "sd0:";
 const char *ram_vol_name = "ram:";
+const char *forth_img_path = "forth/forth.img";
+
+#define FASTBOOT_OPT_SKIP 0
+#define FASTBOOT_OPT_LOAD 1
+#define FASTBOOT_OPT_COMPILE 2
+// FASTBOOT_OPT is set in top-level makefile.
+volatile uint32_t fastboot_opt = FASTBOOT_OPT;
 
 #ifdef __cplusplus
 }
@@ -53,7 +68,7 @@ const char *ram_vol_name = "ram:";
 
 // Attempts to mount given volume and checks if boot path (/forth/) exists.
 // Returns true if boot path is found.
-bool mount_vol(Fs_Volume_t& vol) {
+bool mount_vol(Fs_Volume_t &vol) {
   bool boot_path_found = false;
   static char boot_path[] = "XXX:forth";
 
@@ -69,12 +84,10 @@ bool mount_vol(Fs_Volume_t& vol) {
     if ((res == FR_OK) && (fno.fattrib & AM_DIR)) {
       printf("Boot path %s found.\n", boot_path);
       boot_path_found = true;
-    }
-    else {
+    } else {
       printf("No boot path found on %s.\n", vol.name);
     }
-  }
-  else {
+  } else {
     printf("No FatFS detected on %s.\n", vol.name);
   }
 
@@ -83,8 +96,8 @@ bool mount_vol(Fs_Volume_t& vol) {
 
 // Attempts to mount sd0: and/or ram: volumes and detect boot dir (/forth/).
 // If both volumes have a boot directory, ram: takes precedence.
-// Prompts user and retries if needed. Returns boot volume. Operates on volumes[] array.
-// Returns boot volume name.
+// Prompts user and retries if needed. Returns boot volume. Operates on
+// volumes[] array. Returns boot volume name.
 const char *mount_vols() {
   printf("Mounting file system...\n");
 
@@ -98,9 +111,9 @@ const char *mount_vols() {
 
   while (true) {
     if (mount_vol(volumes[SD_VOL]))
-      boot_vol=volumes[SD_VOL].name;
+      boot_vol = volumes[SD_VOL].name;
     if (mount_vol(volumes[RAM_VOL]))
-      boot_vol=volumes[RAM_VOL].name; //ram: overrules sd0 as boot volume.
+      boot_vol = volumes[RAM_VOL].name; // ram: overrules sd0 as boot volume.
 
     if (boot_vol) {
       FRESULT res = f_chdrive(boot_vol);
@@ -108,7 +121,8 @@ const char *mount_vols() {
       break;
     }
 
-    printf("No bootable filesystem found. Please insert FAT formatted SD card or upload RAM disk. Then press enter to continue.\n");
+    printf("No bootable filesystem found. Please insert FAT formatted SD card "
+           "or upload RAM disk. Then press enter to continue.\n");
 
     getchar();
   }
@@ -120,7 +134,7 @@ int main(void) {
   uint32_t leds = 0xF;
 
   gpio_init();
-  gpio_set_direction(0x0000000F); //4 outputs, 20 inputs
+  gpio_set_direction(0x0000000F); // 4 outputs, 20 inputs
 
   printf("Initializing Forth...\n");
 
@@ -128,7 +142,7 @@ int main(void) {
 
   printf("Forth core init complete.\n");
 
-  disk_ram_init((unsigned char*)&__fs_image_start,
+  disk_ram_init((unsigned char *)&__fs_image_start,
                 &__fs_image_end - &__fs_image_start);
 
   const char *boot_vol = mount_vols();
@@ -136,7 +150,7 @@ int main(void) {
   printf("Booting from volume %s.\n", boot_vol);
 
   // Early.fs has to go first. It defines words used by the FFI modules below.
-  forth_eval_file_or_die("forth/early.fs", /*verbose=*/ false);
+  forth_eval_file_or_die("forth/early.fs", /*verbose=*/false);
 
   // Up to this point stdio is handled by bootstrap/stdio_stream.[ch]
   // We now switch it over to Forth.
@@ -146,20 +160,52 @@ int main(void) {
   printf("Initializing Forth Filesystem FFI...\n");
   fs_ffi_init(volumes, NUM_VOLS);
 
+  forth_fastboot_init();
 
-  // Parse the file containing the list of boxkern_includes, evaluating
-  // each boxkern_include file in turn/
-  forth_eval_boxkern_includes_or_die("forth/boxkern-includes.fs", /*verbose*/ false);
+  if (((gpio_get_input() & 0xf0) == GPIO_SKIP_FASTBOOT_INDICATOR) &&
+      (fastboot_opt == FASTBOOT_OPT_LOAD)) {
+    printf("GPIO skip fastboot detected.\n");
+    fastboot_opt = FASTBOOT_OPT_SKIP;
+  }
 
-// Set when building boxkerntest.
-#ifdef FORTH_CORE_TEST
-  forth_core_test(); // Execute the Forth <-> C FFI testsuite.
-  forth_eval("create FORTH_CORE_TEST"); // Used by an [ifdef] block in init.fs used to execute the Forth testsuite.
-#endif /*FORTH_CORE_TEST*/
+  switch (fastboot_opt) {
+  case FASTBOOT_OPT_COMPILE:
+    printf("Compiling fastboot forth image...\n");
 
-  // We now transfer control to init.fs. Control does not return unless the user invokes 'bye'.
+    // Parse the file containing the list of boxkern_includes, evaluating
+    // each boxkern_include file in turn/
+    forth_eval_boxkern_includes_or_die(
+        "forth/boxkern-includes/boxkern-includes.fs",
+        /*verbose*/ false);
+    forth_eval("fastboot-save");
+    break;
+
+  case FASTBOOT_OPT_LOAD:
+    printf("Loading fastboot forth image...\n");
+    forth_fastboot_load(&__boxkern_forth_image_start,
+                        &__boxkern_forth_image_end);
+    break;
+
+  default:
+    printf("Skipping fastboot. Loading boxkern-includes from source...\n");
+
+    // Parse the file containing the list of boxkern_includes, evaluating
+    // each boxkern_include file in turn/
+    forth_eval_boxkern_includes_or_die("forth/boxkern-includes.fs",
+                                       /*verbose*/ false);
+    break;
+  }
+
+  if (gpio_get_input() & GPIO_FORTH_CORE_TEST) {
+    forth_core_test(); // Execute the Forth <-> C FFI testsuite.
+    // Used by an [ifdef] block in init.fs used to execute the Forth testsuite.
+    forth_eval("create FORTH_CORE_TEST");
+  }
+
+  // We now transfer control to init.fs. Control does not return unless the
+  // user invokes 'bye'.
+  printf("Executing forth/init.fs...\n");
   forth_eval("include forth/init.fs");
 
   die("\nForth REPL exited.\n");
 }
-

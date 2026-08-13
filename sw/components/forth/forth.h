@@ -10,13 +10,13 @@ extern "C" {
 //
 // Linker Variables:
 //
-extern uint32_t __forth_ram_start[];
-extern uint32_t __forth_ram_end[];
-extern uint32_t __forth_imem_start[];
-extern uint32_t __forth_imem_end[];
-extern uint32_t __datastack[];
-extern uint32_t __datastack_size[];
-extern uint32_t __datastack_end[];
+extern char __forth_emem_start;
+extern char __forth_emem_end;
+extern char __forth_imem_start;
+extern char __forth_imem_end;
+extern char __datastack;
+extern char __datastack_size;
+extern char __datastack_end;
 
 //
 // Forth Data Stack Accessor:
@@ -70,9 +70,10 @@ void forth_eval_file_or_die(const char *filename, bool verbose);
 // each boxkern_include file in turn/
 void forth_eval_boxkern_includes_or_die(const char *filename, bool verbose);
 
-// Register a C function with signature: void fun(void). Fun uses the datastack object for parameter passing.
-#define forth_register_cfun(fun, wordname) \
-           forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)
+// Register a C function with signature: void fun(void). Fun uses the datastack
+// object for parameter passing.
+#define forth_register_cfun(fun, wordname)                                     \
+  forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)
 
 #ifdef __cplusplus
 }

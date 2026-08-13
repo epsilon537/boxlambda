@@ -16,15 +16,12 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 OPENOCD_CFG = f"{SCRIPT_DIR}/openocd.cfg"
 
+
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Load and control BoxLambda target."
-    )
+    parser = argparse.ArgumentParser(description="Load and control BoxLambda target.")
 
     parser.add_argument(
-        "-verilator",
-        action="store_true",
-        help="Connect to verilator model instead of FPGA."
+        "-verilator", action="store_true", help="Connect to verilator model instead of FPGA."
     )
 
     parser.add_argument(
@@ -94,6 +91,13 @@ def parse_args():
         help="Wait for GDB to connect.",
     )
 
+    parser.add_argument(
+        "-wait_for_status",
+        metavar="WAIT_FOR_STATUS",
+        type=int,
+        help="Wait for given status on target.",
+    )
+
     return parser.parse_args()
 
 
@@ -154,7 +158,7 @@ def main():
         print(f"Uploading dir as RAM disk: {args.load_fs}")
         shell_cmd_lists_early.append(["dd", "if=/dev/zero", "of=boxfs.img", "bs=1M", "count=1"])
         shell_cmd_lists_early.append(["mkfs.fat", "-S", "512", "boxfs.img"])
-        #subprocess doesn't go through shell -> use python to do the globbing.
+        # subprocess doesn't go through shell -> use python to do the globbing.
         files = [str(p) for p in Path(args.load_fs).glob("*")]
         shell_cmd_lists_early.append(["mcopy", "-i", "boxfs.img", "-s", *files, "::/"])
         openocd_cmd_list += ["-c", f"set LOAD_FS boxfs.img"]
@@ -165,7 +169,9 @@ def main():
         shell_cmd_lists_early.append(["rm", "-rf", args.dump_fs])
         openocd_cmd_list += ["-c", f"set DUMP_FS {args.dump_fs}.img"]
         shell_cmd_lists_late.append(["mkdir", args.dump_fs])
-        shell_cmd_lists_late.append(["mcopy", "-i", f"{args.dump_fs}.img", "-s", "::*", args.dump_fs])
+        shell_cmd_lists_late.append(
+            ["mcopy", "-i", f"{args.dump_fs}.img", "-s", "::*", args.dump_fs]
+        )
 
     if args.load_app:
         validate_file(args.load_app, "Application image")
@@ -179,6 +185,10 @@ def main():
     if args.gdb:
         print("Wait for GDB requested")
         openocd_cmd_list += ["-c", "set GDB 1"]
+
+    if args.wait_for_status:
+        print(f"Waiting for target status: {args.wait_for_status}")
+        openocd_cmd_list += ["-c", f"set WAIT_FOR_STATUS {args.wait_for_status}"]
 
     # Now we execute the command lists:
 
@@ -205,6 +215,6 @@ def main():
     if not (openfpga_cmd_list or openocd_cmd_list):
         print("Nothing to do. Use -h for help.")
 
+
 if __name__ == "__main__":
     main()
-

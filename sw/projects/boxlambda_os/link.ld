@@ -16,12 +16,15 @@ PROVIDE(__datastack_size = 1024);
 
 /*'emem' is the external memory section.*/
 __emem = 0x20000000;
-__emem_size = 256m; /*255MB external memory (the 256th MB is used as FS_MEM).*/
-__heap_size = 128m;
+__emem_size = 128m; /*128MB 'general' emem*/
+__heap_size = 16m;
 
-/* RAM Filesystem memory section.*/
-__fs_mem = 0x2ff00000;
+__forth_emem = 0x28000000; /*Forth dictionary external memory region*/
+__forth_emem_size = 16m;
+__fs_mem = 0x2ff00000; /* RAM Filesystem memory section.*/
 __fs_mem_size = 1m;
+__openocd = 0x2feff000;
+__openocd_size = 0x1000;
 
 /*'fmem' is the flash memory section.*/
 __fmem = 0x11600000;
@@ -30,8 +33,6 @@ __fmem_size = 2m; /*2MB flash memory available for the SW image.*/
 /*Forth IMEM size*/
 __forth_imem_size = 92k;
 
-/*Forth external memory size*/
-__forth_emem_size = 1m;
 
 /* Application images to be loaded from flash by the bootloader
  * start with this value. The bootloader checks this.*/
@@ -43,6 +44,8 @@ MEMORY
 {
     imem   : ORIGIN = __imem, LENGTH = __imem_size
     emem   : ORIGIN = __emem, LENGTH = __emem_size
+    forth_emem   : ORIGIN = __forth_emem, LENGTH = __forth_emem_size
+    openocd : ORIGIN = __openocd, LENGTH = __openocd_size
     fs_mem : ORIGIN = __fs_mem, LENGTH = __fs_mem_size
     fmem   : ORIGIN = __fmem, LENGTH = __fmem_size
 }
@@ -195,6 +198,23 @@ SECTIONS
     PROVIDE( __ebss_start = ADDR(.tbss) );
     PROVIDE( __ebss_end = . );
 
+    /* Put the boxkern forth image in emem */
+    .boxkern_forth_image :
+    {
+        . = ALIGN(4);
+        __boxkern_forth_image_start = .;
+        KEEP(*(.boxkern_forth_image))
+        __boxkern_forth_image_end = .;
+    } > emem
+
+    /*Put the heap in emem*/
+    .heap (NOLOAD) : {
+        . += (__heap_size);
+        __heap_end = .;
+    } >emem
+
+    PROVIDE (__heap_start = ADDR(.heap));
+
     .forth_imem (NOLOAD) : {
         . += __forth_imem_size;
     } >imem
@@ -213,18 +233,10 @@ SECTIONS
 
     .forth_emem (NOLOAD) : {
         . += __forth_emem_size;
-    } >emem
+    } >forth_emem
 
     PROVIDE( __forth_emem_end = . );
     PROVIDE( __forth_emem_start = ADDR(.forth_emem) );
-
-    /*Put the heap in emem*/
-    .heap (NOLOAD) : {
-        . += (__heap_size);
-        __heap_end = .;
-    } >emem
-
-    PROVIDE (__heap_start = ADDR(.heap));
 
     PROVIDE(__fs_image_start = ORIGIN(fs_mem));
     PROVIDE(__fs_image_end  = __fs_image_start + LENGTH(fs_mem));

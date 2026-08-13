@@ -2,10 +2,14 @@
 
 \ Set to zero to continue execution after a failing assert.
 \ E.g. for negative testing purposes.
-1 variable quit-on-xassert
+0 variable quit-on-xassert
 
 \ Set to 0 to disable xassert checking.
-1 variable xassert-enable
+0 variable xassert-enable
+
+0 variable stack-checking-enable
+
+0 variable rttc-struct \ Enable run-time type checking on structs
 
 \ Put an assert statement between xassert{ ... }xassert
 \ E.g xassert{ this-must-be-true }xassert
@@ -43,35 +47,46 @@
 : typechecker
   create FLAG-IMMEDIATE setflags \ Make the created Word immediate.
   does> 
-[ifdef] RTTC
-  literal, 
-  (init-type) @ if
-    false (init-type) !
-    [: swap ! ;]
+  rttc-struct @ if
+    literal, 
+    (init-type) @ if
+      false (init-type) !
+      [: swap ! ;]
+    else
+      [: over @ <> if 
+          quit-on-xassert @ if
+            r@ dup ." Typecheck failed at $" hex. cr traceinside. cr quit 
+          else
+            ." Typecheck failed" cr
+            r@ inside-code>link dup link>wid wordlist-name@ ctype ." :: " link>name ctype cr
+          then
+        then 
+      ;]
+    then
+    compile-or-execute
   else
-    [: over @ <> if 
-         quit-on-xassert @ if
-           r@ dup ." Typecheck failed at $" hex. cr traceinside. cr quit 
-         else
-           ." Typecheck failed" cr
-           r@ inside-code>link dup link>wid wordlist-name@ ctype ." :: " link>name ctype cr
-         then
-       then 
-    ;]
+    drop
+    (init-type) @ if 
+      false (init-type) !
+      [: drop ;] compile-or-execute
+    then
   then
-  compile-or-execute
-[else]
-  drop
-  (init-type) @ if 
-    false (init-type) !
-    [: drop ;] compile-or-execute
-  then
-[then]
 ;
 
 \ Set the struct instance to the given type.
 ( struct-inst "typechecker" -- )
 : init-type true (init-type) ! ' execute [immediate] [compileonly] ;
+
+\ Begin declaring a structure
+: begin-structure ( "name" -- addr offset )
+  create here
+  rttc-struct @ if
+    4
+  else
+    0 
+  then
+  4 allot does> @
+;
 
 \ Usage example:
 \
@@ -97,7 +112,6 @@
 \     tm-typecheck \ print message with wordname/location if typecheck fails.
 \     .width h@ ;
 
-0 variable stack-checking-enable
 
 128 stack-create (stack-check-stack)
 
@@ -172,5 +186,4 @@
 : ; stack-checking-enable @ if postpone stack-check-out then postpone ; [immediate] ;
 
 : exit stack-checking-enable @ if postpone stack-check-out then postpone exit [immediate] ;
-
 

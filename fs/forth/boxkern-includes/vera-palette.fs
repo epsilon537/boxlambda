@@ -1,4 +1,5 @@
 \ VERA Default Palette colors
+create (orig-palette)
 $000 h, $fff h, $800 h, $afe h, $c4c h, $0c5 h, $00a h, $ee7 h, $d85 h, $640 h, $f77 h,
 $333 h, $777 h, $af6 h, $08f h, $bbb h, $000 h, $111 h, $222 h, $333 h, $444 h, $555 h,
 $666 h, $777 h, $888 h, $999 h, $aaa h, $bbb h, $ccc h, $ddd h, $eee h, $fff h, $211 h,

@@ -168,10 +168,6 @@ ramallot Entrypoint, CELL
 
 ramallot ExceptionFramePointer, CELL
 
-.ifdef within_os # Specials for Linux targets
-  ramallot arguments, CELL
-.endif
-
 .equ Numberbufferlength, 18*CELL-1 # Number buffer (Length+1 mod CELL = 0)
 ramallot Numberbuffer, Numberbufferlength+1 # Reserviere mal großzügig 72 Bytes RAM für den Numberbuffer
 
@@ -180,7 +176,7 @@ ramallot Numberbuffer, Numberbufferlength+1 # Reserviere mal großzügig 72 Byte
 .endif
 
   # When forth_init is called from C, the gp, tp and sp are saved in this
-  # locationa.
+  # location.
   ramallot gp_tp_sp, 3*CELL
 
 .equ Maximuminput,   tiblength        # Input buffer for an Address-Length string
