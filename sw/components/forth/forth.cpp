@@ -145,20 +145,23 @@ void forth_eval_file_or_die(const char *filename, bool verbose) {
 
   size_t len;
   char *line;
-
+  uint32_t line_num = 1;
   while (!f_eof(&eval_fil)) {
     line = f_gets(eval_buf, MAX_LINE_LENGTH, &eval_fil);
     assert(line);
     len = strlen(line);
 
     if (line[len - 1] != NEWLINE)
-      die("line got truncated: %s.\n", line);
+      die("file %s, line %d got truncated (len=%d): %s.\n", filename, line_num,
+          len, line);
 
     if (verbose)
       printf("%s", line);
 
     // Skip the trailing newline.
     forth_evaluate(line, len - 1);
+
+    ++line_num;
   }
 
   fr = f_close(&eval_fil);

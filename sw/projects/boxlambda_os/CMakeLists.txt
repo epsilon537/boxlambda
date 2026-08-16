@@ -38,16 +38,6 @@ link_and_create_image(
 # FASTBOOT_OPT=2 corresponds to FASTBOOT_OPT_COMPILE
 target_compile_definitions(boxkern PRIVATE FASTBOOT_OPT=2)
 
-add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/fs/boxkern-forth.img
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -reset -load_fs
-          ${FORTH_FS_DIR} -load_app boxkern.bin -run
-  COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -wait_for_status 1
-  COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -dump_fs fs
-  DEPENDS boxkern
-  COMMENT "Compiling boxkern-forth.img")
-
 file(
   GLOB_RECURSE
   BOXKERN_FORTH_SOURCES
@@ -55,14 +45,25 @@ file(
   "${PROJECT_SOURCE_DIR}/fs/forth/boxkern-includes/*.fs")
 
 add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth.img
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -reset -load_fs
+          ${FORTH_FS_DIR} -load_app boxkern.bin -run
+  COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -wait_for_status 1
+  COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -dump_fs fs
+  COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/fs/boxkern-forth.img boxkern-forth.img
+  DEPENDS boxkern
+          ${BOXKERN_FORTH_SOURCES}
+  COMMENT "Compiling boxkern-forth.img")
+
+add_custom_command(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth-img.o
   COMMAND
     ${CMAKE_OBJCOPY} -I binary -O elf32-littleriscv -B riscv --rename-section
     .data=.boxkern_forth_image,alloc,load,readonly,data,contents
-    ${CMAKE_CURRENT_BINARY_DIR}/fs/boxkern-forth.img
+    ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth.img
     ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth-img.o
-  DEPENDS ${BOXKERN_FORTH_SOURCES}
-          ${CMAKE_CURRENT_BINARY_DIR}/fs/boxkern-forth.img)
+  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth.img)
 
 add_custom_target(boxkernforth_compile
                   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth-img.o)
