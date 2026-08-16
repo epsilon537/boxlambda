@@ -35,6 +35,7 @@
   IRQ-LINE-MASK irq-ack
   irq-get IRQ-LINE-MASK and 0= ?assert
   begin irq-get IRQ-LINE-MASK and until
+  IRQ-LINE-MASK irq-disable
   IRQ-LINE-MASK irq-ack
 
   ." Checking sprcol irq... "

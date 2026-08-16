@@ -34,7 +34,10 @@ begin-module vera
 
     create blocks_ #BLOCKS chars allot
 
-    : reset blocks_ #BLOCKS 0 fill ;
+    : reset 
+      blocks_ #BLOCKS 0 fill
+      VERA_VRAM_BASE VERA_VRAM_SIZE_BYTES 0 fill 
+    ;
 
     reset
 
@@ -1282,6 +1285,18 @@ begin-module vera
     ( size -- f )
     : tilesize-is-valid? l{ 8 , 16 }l find-in 0<> ;
 
+    ( layer-id -- )
+    : scroll-reset
+      [ 1 0 stack-checker ]
+      if 
+        0 VERA_L1_HSCROLL_ADDR !
+        0 VERA_L1_VSCROLL_ADDR !
+      else 
+        0 VERA_L0_HSCROLL_ADDR !
+        0 VERA_L0_VSCROLL_ADDR !
+      then
+    ;
+
     \ Configure given tilemap into given layer.
     ( tilemap layer-id -- )
     : tilemap!
@@ -1306,6 +1321,10 @@ begin-module vera
       tileset :: typecheck
       xassert{ dup }xassert
       >r ( layer-id R: tileset )
+      \ Reset the scroll registers when installing a tileset
+      \ to avoid side-effect from paloffset left over if we
+      \ were previously in bitmap mode.
+      dup scroll-reset ( layer-id R: tileset )
       r@ tset-bpp@ over bpp! ( layer-id R: tileset )
       false over bitmap-mode! ( layer-id R: tileset )
       r@ tset-width@ ( layer-id width R: tileset )
@@ -1326,6 +1345,10 @@ begin-module vera
     : bitmap!
       [ 3 0 stack-checker ]
       >r ( tileset tile-idx R: layer-id )
+      \ Reset the scroll registers when installing a bitmap
+      \ to avoid hscroll bleeding into paloffset if we
+      \ were previously in tile mode.
+      r@ scroll-reset ( tileset tile-idx R: layer-id )
       over tset-tidx>addr r@ tile-base! ( tileset R: layer-id )
       tileset :: typecheck
       dup tset-bpp@ r@ bpp! ( tileset R: layer-id )
@@ -1453,8 +1476,8 @@ begin-module vera
   : layer-bpp@
     [ 1 1 stack-checker ]
     layer :: typecheck
-    layer :: .id c@
-    swap if VERA_L1_CONFIG_COLORDEPTH@ else VERA_L0_CONFIG_COLORDEPTH@ then
+    layer :: .id c@ ( id )
+    if VERA_L1_CONFIG_COLORDEPTH@ else VERA_L0_CONFIG_COLORDEPTH@ then
     layer :: bppdec
   ;
 
@@ -1483,10 +1506,10 @@ begin-module vera
     layer :: typecheck
     dup layer :: .id c@ ( hscroll layer id )
     swap layer-bitmap-mode@ if ( hscroll id )
+      if VERA_L1_HSCROLL_HSCROLL_7_0! else VERA_L0_HSCROLL_HSCROLL_7_0! then
+    else ( hscroll id )
       if VERA_L1_HSCROLL_ADDR else VERA_L0_HSCROLL_ADDR then ( hscroll addr )
       !
-    else ( hscroll layer id )
-      if VERA_L1_HSCROLL_HSCROLL_7_0! else VERA_L0_HSCROLL_HSCROLL_7_0! then
     then
   ;
 
@@ -1496,10 +1519,10 @@ begin-module vera
     layer :: typecheck
     dup layer :: .id c@ ( layer id )
     swap layer-bitmap-mode@ if ( id )
+      if VERA_L1_HSCROLL_HSCROLL_7_0@ else VERA_L0_HSCROLL_HSCROLL_7_0@ then
+    else ( id )
       if VERA_L1_HSCROLL_ADDR else VERA_L0_HSCROLL_ADDR then ( addr )
       @
-    else ( id )
-      if VERA_L1_HSCROLL_HSCROLL_7_0@ else VERA_L0_HSCROLL_HSCROLL_7_0@ then
     then
   ;
 
@@ -1531,8 +1554,12 @@ begin-module vera
   : layer-tile-height@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
-    layer :: .id c@ if VERA_L1_TILEBASE_TILE_HEIGHT@ else VERA_L0_TILEBASE_TILE_HEIGHT@ then
-    1+ 8 *
+    dup layer-bitmap-mode@ if ( layer )
+      drop 0
+    else
+      layer :: .id c@ if VERA_L1_TILEBASE_TILE_HEIGHT@ else VERA_L0_TILEBASE_TILE_HEIGHT@ then
+      1+ 8 *
+    then
   ;
 
   ( layer -- addr-id )
@@ -1575,9 +1602,9 @@ begin-module vera
     s" layer %n %s" printf cr
     r@ layer-bitmap-mode@ if
       ." bitmap mode" cr
-      r@ layer-tidx@  r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
+      r@ layer-tidx@  r@ layer-tile-base@ r@ layer-tile-width@ 
       r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-paloffset@ r> layer-bpp@
-      s" %n bpp, %n paloffset, %n hscroll, %n vscroll, %n width, %n height, $%x base, %n tidx" 
+      s" %n bpp, %n paloffset, %n hscroll, %n vscroll, %n width, $%x base, %n tidx" 
       printf cr
     else
       ." tile mode" cr
@@ -1776,12 +1803,12 @@ begin-module vera
     VERA_DC_BORDERCOLOR@ ;
 
   \ Set screen boundaries
-  : boundaries! ( hstart hstop vstart vstop -- ) 
+  : boundaries! ( hstart hstop vstart vstop -- )
     [ 4 0 stack-checker ]
     VERA_DC_VSTOP! VERA_DC_VSTART! VERA_DC_HSTOP! VERA_DC_HSTART! ;
 
   \ Get screen boundaries
-  : boundaries@ ( -- hstart hstop vstart vstop ) 
+  : boundaries@ ( -- hstart hstop vstart vstop )
     [ 0 4 stack-checker ]
     VERA_DC_HSTART@ VERA_DC_HSTOP@ VERA_DC_VSTART@ VERA_DC_VSTOP@ ;
 

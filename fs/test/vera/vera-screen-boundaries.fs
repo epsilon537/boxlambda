@@ -47,6 +47,8 @@
   ." line capture y=380: " cr
   #100 line-capture-pxl@ hex. cr
   #539 line-capture-pxl@ hex. cr
+
+  #0 #640 #0 #480 boundaries!
 ;
 
 [: screen-boundaries-test ;] &>file tst_dir/vera-screen-boundaries.log

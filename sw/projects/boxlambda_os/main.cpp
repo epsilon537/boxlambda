@@ -162,7 +162,7 @@ int main(void) {
 
   forth_fastboot_init();
 
-  if (((gpio_get_input() & 0xf0) == GPIO_SKIP_FASTBOOT_INDICATOR) &&
+  if ((gpio_get_input() & GPIO_SKIP_FASTBOOT_INDICATOR) &&
       (fastboot_opt == FASTBOOT_OPT_LOAD)) {
     printf("GPIO skip fastboot detected.\n");
     fastboot_opt = FASTBOOT_OPT_SKIP;
@@ -191,8 +191,9 @@ int main(void) {
 
     // Parse the file containing the list of boxkern_includes, evaluating
     // each boxkern_include file in turn/
-    forth_eval_boxkern_includes_or_die("forth/boxkern-includes.fs",
-                                       /*verbose*/ false);
+    forth_eval_boxkern_includes_or_die(
+        "forth/boxkern-includes/boxkern-includes.fs",
+        /*verbose*/ false);
     break;
   }
 

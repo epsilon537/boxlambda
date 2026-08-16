@@ -5,7 +5,11 @@
 : bitmap-4bpp-test
 
   true l0 layer-enable
+  false l1 layer-enable
   true display-enable
+  false sprites-enable
+
+  vram :: reset
 
   l{ 320 , 640 }l
   [:

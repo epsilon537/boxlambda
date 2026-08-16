@@ -39,6 +39,9 @@
   ." capture 30: " #30 line-capture-pxl@ hex. cr
   ." capture 31: " #31 line-capture-pxl@ hex. cr
   ." capture 32: " #32 line-capture-pxl@ hex. cr
+
+  $80 hscale!
+  $80 vscale!
 ;
 
 [: vera-scale-test ;] &>file tst_dir/vera-scale.log

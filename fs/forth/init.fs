@@ -10,6 +10,9 @@ true stack-checking-enable !
 true rttc-struct !
 
 include /forth/vera.fs
+
+vera import
+
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
 cd /test/vera/
@@ -56,8 +59,6 @@ quit
 cd /
 include /test/testsuite.fs
 [then]
-
-vera import
 
 \ a:f's flamingo as a the welcome message.
 : Flamingo cr

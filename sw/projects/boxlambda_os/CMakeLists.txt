@@ -39,7 +39,7 @@ link_and_create_image(
 target_compile_definitions(boxkern PRIVATE FASTBOOT_OPT=2)
 
 add_custom_command(
-  OUTPUT fs/boxkern-forth.img
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/fs/boxkern-forth.img
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -reset -load_fs
           ${FORTH_FS_DIR} -load_app boxkern.bin -run

@@ -15,6 +15,8 @@ create cols col1 , col2 ,
 : mapentry-txt256
 
   true display-enable
+  false l0 layer-enable
+  false l1 layer-enable
 
   ts tset{ #16 width #16 height 1 bpp #32 tiles }set
   ts tset-print

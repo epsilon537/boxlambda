@@ -41,6 +41,8 @@
   true line-capture-enable
   begin line-capture-enabled? not until
   ." capture 100, 200 $" #100 line-capture-pxl@ hex. cr
+
+  0 sprite-bank!
 ;
 
 [: sprite-bank ;] &>file tst_dir/vera-sprite-bank.log

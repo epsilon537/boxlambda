@@ -195,22 +195,22 @@ def main():
     if shell_cmd_lists_early:
         for cmd_list in shell_cmd_lists_early:
             subprocess.run(["echo"] + cmd_list)
-            subprocess.run(cmd_list)
+            subprocess.run(cmd_list, check=True)
 
     if openfpga_cmd_list:
         openfpga_cmd_list = ["openFPGALoader", "-b", "arty_a7_100t"] + openfpga_cmd_list
         subprocess.run(["echo"] + openfpga_cmd_list)
-        subprocess.run(openfpga_cmd_list)
+        subprocess.run(openfpga_cmd_list, check=True)
 
     if openocd_cmd_list:
         openocd_cmd_list = ["openocd"] + openocd_cmd_list + ["-f", OPENOCD_CFG]
         subprocess.run(["echo"] + openocd_cmd_list)
-        subprocess.run(openocd_cmd_list)
+        subprocess.run(openocd_cmd_list, check=True)
 
     if shell_cmd_lists_late:
         for cmd_list in shell_cmd_lists_late:
             subprocess.run(["echo"] + cmd_list)
-            subprocess.run(cmd_list)
+            subprocess.run(cmd_list, check=True)
 
     if not (openfpga_cmd_list or openocd_cmd_list):
         print("Nothing to do. Use -h for help.")

@@ -79,4 +79,6 @@
 s" tst_dir/vera-sprite-z.log" s" vera-sprite-z.ref" f_cmp ?assert
 
 ts tset-deinit
+tm0 tmap-deinit
+tm1 tmap-deinit
 
