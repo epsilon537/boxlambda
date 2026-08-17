@@ -47,10 +47,9 @@ file(
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth.img
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -reset -load_fs
-          ${FORTH_FS_DIR} -load_app boxkern.bin -run
-  COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -wait_for_status 1
-  COMMAND ${PROJECT_SOURCE_DIR}/scripts/target.py -dump_fs fs
+  COMMAND
+    ${PROJECT_SOURCE_DIR}/scripts/target.py -reset -load_fs ${FORTH_FS_DIR}
+    -load_app boxkern.bin -run -wait_for_status 1 -dump_fs fs
   COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/fs/boxkern-forth.img boxkern-forth.img
   DEPENDS boxkern
           ${BOXKERN_FORTH_SOURCES}

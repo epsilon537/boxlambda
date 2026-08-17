@@ -132,13 +132,13 @@ char eval_buf[MAX_LINE_LENGTH];
 
 void forth_eval_file_or_die(const char *filename, bool verbose) {
   FRESULT fr;
-  FILINFO fno;
+  static FILINFO fno;
 
   printf("Loading %s...\n", filename);
 
   fr = f_stat(filename, &fno);
   if (fr || (fno.fattrib & AM_DIR))
-    die("File not found: %s.\n", filename);
+    die("File not found: %s. Err. code %d\n", filename, fr);
 
   fr = f_open(&eval_fil, filename, FA_READ);
   assert(fr == 0);
@@ -212,7 +212,7 @@ char boxkern_include_buf[MAX_LINE_LENGTH + 1];
 
 void forth_eval_boxkern_includes_or_die(const char *filename, bool verbose) {
   FRESULT fr;
-  FILINFO fno;
+  static FILINFO fno;
 
   printf("Parsing %s...\n", filename);
 

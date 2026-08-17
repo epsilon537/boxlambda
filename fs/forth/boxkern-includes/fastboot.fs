@@ -2,7 +2,7 @@
 : fastboot-save
   compileto-save
   compiletoemem
-  \ save forth imem and meme up to here to following file:
+  \ save forth imem and emem up to here to following file:
   256 [: ( buf )
     >r
     s" /boxkern-forth.img" ( addr len R: buf )
