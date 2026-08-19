@@ -2,7 +2,7 @@
 
 \ Set to zero to continue execution after a failing assert.
 \ E.g. for negative testing purposes.
-0 variable quit-on-xassert
+1 variable quit-on-xassert
 
 \ Set to 0 to disable xassert checking.
 0 variable xassert-enable

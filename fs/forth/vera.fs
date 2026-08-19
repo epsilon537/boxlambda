@@ -178,40 +178,43 @@ begin-module vera
     \ tilemap :: { }set attributes
     tilemap import
 
+    0 variable tmap
+
     ( size -- f )
     : (size-is-valid?) l{ 32 , 64 , 128 , 256 }l find-in 0<> ;
 
     \ Set map width in the tilemap object: 32, 64, 128, 256
-    \ ( tilemap width -- tilemap )
+    \ ( width -- )
     : width
-      [ 2 1 stack-checker ]
+      [ 1 0 stack-checker ]
       dup (size-is-valid?) }xassert
-      over .width h! 
+      tmap @ .width h! 
     ;
 
     \ Set map height in the tilemap object: 32, 64, 128, 256
-    \ ( tilemap height -- tilemap )
+    \ ( height -- )
     : height
-      [ 2 1 stack-checker ]
+      [ 1 0 stack-checker ]
       xassert{ dup (size-is-valid?) }xassert
-      over .height h! 
+      tmap @ .height h! 
     ;
 
     \ Set the map type : TXT16/TXT256/TILE.
-    \ ( tilemap type -- tilemap )
+    \ ( type -- )
     : type
-      [ 2 1 stack-checker ]
+      [ 1 0 stack-checker ]
       xassert{ dup (tmap-type-is-valid?) }xassert
-      over .type c! ;
+      tmap @ .type c! ;
 
     \ (Re)Allocate VRAM for this tilemap to accommodate the width and height
     \ If VRAM was previously allocated for this tilemap,
     \ this VRAM will be released before reallocating VRAM.
     \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
-    \ ( tilemap -- )
+    \ ( -- )
     : }set
       [: 
-        [ 1 0 stack-checker ]
+        [ 0 0 stack-checker ]
+        tmap @
         typecheck
         dup .base @ ?dup if
         vram-free
@@ -233,8 +236,11 @@ begin-module vera
   end-module \ tmap-params
 
   \ Opening bracket for tmap{ ... }set
-  ( tilemap -- tilemap )
-  : tmap{ tmap-params import [immediate] ;
+  ( tilemap -- )
+  : tmap{
+    [: tmap-params :: tmap ! ;] compile-or-execute
+    tmap-params import 
+    [immediate] ;
 
   \ Retrieve map width from the tilemap object.
   \ ( tilemap -- width )
@@ -320,68 +326,68 @@ begin-module vera
 
   begin-module mapentry-params
     \ mapentry :: { }set/get attributes
-    mapentry import
     tilemap import
+    tmap-params import
+    mapentry import
 
-    ( tilemap bg -- tilemap )
+    ( bg -- )
     : bg
-      [ 2 1 stack-checker ]
-      over .bg c! ;
+      [ 1 0 stack-checker ]
+      tmap @ .bg c! ;
 
-    ( tilemap fg -- tilemap )
+    ( fg -- )
     : fg
-      [ 2 1 stack-checker ]
-      over .fg c! ;
+      [ 1 0 stack-checker ]
+      tmap @ .fg c! ;
 
-    ( tilemap tile-idx -- tilemap )
+    ( tile-idx -- )
     : tidx
-      [ 2 1 stack-checker ]
-      over .tidx h! ;
+      [ 1 0 stack-checker ]
+      tmap @ .tidx h! ;
 
-    ( tilemap paloffset -- tilemap )
+    ( paloffset -- )
     : paloffset
-      [ 2 1 stack-checker ]
-      over .paloffset c! ;
+      [ 1 0 stack-checker ]
+      tmap @ .paloffset c! ;
 
     \ flip values: 0, VFLIP, HFLIP, or VFLIP_HFLIP
-    ( tilemap flip -- tilemap )
+    ( flip -- )
     : flip
-      [ 2 1 stack-checker ]
+      [ 1 0 stack-checker ]
       xassert{ dup (flip-is-valid?) }xassert
-      over .flip c! ;
+      tmap @ .flip c! ;
 
-    ( tilemap vec2 -- tilemap )
+    ( vec2 -- )
     : xy
-      [ 2 1 stack-checker ]
-      over .position ! ;
+      [ 1 0 stack-checker ]
+      tmap @ .position ! ;
 
     \ Write mapentry using attributes specified in {}mapentry!
-    ( tilemap -- )
+    ( -- )
     : }set
       [:
         [ tilemap import ]
-        [ 1 0 stack-checker ]
-        >r ( R: tilemap )
-        r@ tmap-type@ case 
+        [ 0 0 stack-checker ]
+        tmap @ tmap-type@ case 
           TMAP-TILE of  
-            r@ .paloffset c@ #12 lshift ( mapentry R: tilemap )
-            r@ .flip c@ 3 and #10 lshift or ( mapentry R: tilemap )
-            r@ .tidx h@ $3ff and or ( mapentry R: tilemap )
+            tmap @ .paloffset c@ #12 lshift ( mapentry )
+            tmap @ .flip c@ 3 and #10 lshift or ( mapentry )
+            tmap @ .tidx h@ $3ff and or ( mapentry )
           endof
           TMAP-TXT16 of
-            r@ .fg c@ $f and 8 lshift
-            r@ .bg c@ $f and #12 lshift or
-            r@ .tidx h@ $ff and or ( mapentry R: tilemap )
+            tmap @ .fg c@ $f and 8 lshift
+            tmap @ .bg c@ $f and #12 lshift or
+            tmap @ .tidx h@ $ff and or ( mapentry )
           endof
           TMAP-TXT256 of
-            r@ .fg c@ $ff and 8 lshift
-            r@ .tidx h@ $ff and or ( mapentry R: tilemap )
+            tmap @ .fg c@ $ff and 8 lshift
+            tmap @ .tidx h@ $ff and or ( mapentry )
           endof
           xassert{ false }xassert 0
         endcase
-        r@ .position @ ( mapentry position R: tilemap )
-        xassert{ dup r@ tilemap :: pos-in-range? }xassert
-        r> mapentry! ( )
+        tmap @ .position @ ( mapentry position )
+        xassert{ dup tmap @ tilemap :: pos-in-range? }xassert
+        tmap @ mapentry! ( )
         [ tilemap unimport ]
       ;] compile-or-execute
       mapentry-params unimport
@@ -391,28 +397,27 @@ begin-module vera
     \ Read from VRAM, mapentry specified by { <tmap> tmap <vec> position }mapentry@ and 
     \ decode it, populating fg, bg, paloffset, flip attributes.
     \ This is useful for mapentry read-modify-write operations.
-    ( tilemap -- )
+    ( -- )
     : }get
       [:
         [ tilemap import ]
-        [ 1 0 stack-checker ]
-        >r
-        r@ .position @ r@ mapentry@ ( mapentry )
-        xassert{ dup r@ tilemap :: pos-in-range? }xassert
-        r@ tmap-type@ case 
+        [ 0 0 stack-checker ]
+        tmap @ .position @ tmap @ mapentry@ ( mapentry )
+        xassert{ dup tmap @ tilemap :: pos-in-range? }xassert
+        tmap @ tmap-type@ case 
           TMAP-TILE of
-            dup #12 rshift r@ .paloffset c! ( mapentry )
-            dup #10 rshift 3 and r@ .flip c! ( mapentry )
+            dup #12 rshift tmap @ .paloffset c! ( mapentry )
+            dup #10 rshift 3 and tmap @ .flip c! ( mapentry )
             $3ff and r@ .tidx h! ( )
           endof
           TMAP-TXT16 of
-            dup 12 rshift r@ .bg c! ( mapentry )
-            dup 8 rshift $f and r@ .fg c! ( mapentry )
-            $ff and r@ .tidx h! ( )
+            dup 12 rshift tmap @ .bg c! ( mapentry )
+            dup 8 rshift $f and tmap @ .fg c! ( mapentry )
+            $ff and tmap @ .tidx h! ( )
           endof
           TMAP-TXT256 of
-            dup 8 rshift r@ .fg c! ( mapentry )
-            $ff and r@ .tidx h! ( )
+            dup 8 rshift tmap @ .fg c! ( mapentry )
+            $ff and tmap @ .tidx h! ( )
           endof
           xassert{ false }xassert
         endcase
@@ -422,13 +427,17 @@ begin-module vera
       [immediate]
     ;
 
+    tilemap unimport
+    tmap-params unimport
     mapentry unimport
   end-module \ mapentry-params
 
   \ Opening bracket for mapentry{ ... }set and { ... }get
-  ( tilemap -- tilemap )
+  ( tilemap -- )
   : mapentry{ 
-    mapentry-params import [immediate] ;
+    [: tmap-params :: tmap ! ;] compile-or-execute
+    mapentry-params import 
+  [immediate] ;
 
   \ set a 16-bit mapentry value at row/col in given tilemap
   ( mapentry vec2 tilemap -- )
@@ -649,6 +658,8 @@ begin-module vera
   begin-module tset-params
     tileset import
 
+    0 variable tset
+
     ( size -- f )
     : (width-is-valid?) l{ 8 , 16 , 32 , 64 , 320 , 640 }l find-in 0<> ;
 
@@ -656,51 +667,49 @@ begin-module vera
     \   - 8, 16 for regular tiles.
     \   - 8, 16, 32, 64 for sprites.
     \   - 320, 640 for bitmaps.
-    ( tileset width -- tileset )
+    ( width -- )
     : width
-      [ 2 1 stack-checker ]
+      [ 1 0 stack-checker ]
       xassert{ dup (width-is-valid?) }xassert
-      over .width h! 
+      tset @ .width h! 
     ;
 
     \ Set the tileset height in the tileset object
     \   - 8 or 16 for regular tiles.
     \   - 8, 16, 32, 64 for sprites.
     \   - 1..4095 for bitmaps.
-    ( tileset height -- tileset )
+    ( height -- )
     : height
-      [ 2 1 stack-checker ]
+      [ 1 0 stack-checker ]
       xassert{ dup 0> over 4096 < and }xassert
-      over .height h! 
+      tset @ .height h! 
     ;
 
     \ Set the tileset BPP in the tileset object
     \   - 1, 2, 4, 8 for regular tiles and bitmaps.
     \   - 4, 8 for sprites.
-    ( tileset bpp -- tileset )
+    ( bpp -- )
     : bpp
-      [ 2 1 stack-checker ]
-      swap >r ( bpp R: tileset )
+      [ 1 0 stack-checker ]
       dup case
         1 of ['] pxl-1bpp! ['] pxl-1bpp@ endof
         2 of ['] pxl-2bpp! ['] pxl-2bpp@ endof
         4 of ['] pxl-4bpp! ['] pxl-4bpp@ endof
         8 of ['] pxl-8bpp! ['] pxl-8bpp@ endof
         xassert{ false }xassert 0 0
-      endcase ( bpp setter getter R: tileset )
-      r@ .pxl-get !
-      r@ .pxl-set !
-      r@ .bpp h! ( R: tileset )
-      r> ( tileset )
+      endcase ( bpp setter getter )
+      tset @ .pxl-get !
+      tset @ .pxl-set !
+      tset @ .bpp h!
     ;
 
     \ Set the number of tiles in the tileset.
     \ Range: 0..1023
-    ( tileset num -- tileset )
+    ( num -- )
     : tiles
-      [ 2 1 stack-checker ]
-      xassert{ dup 1024 < }xassert ( tileset num )
-      over .#tiles h! 
+      [ 1 0 stack-checker ]
+      xassert{ dup 1024 < }xassert ( num )
+      tset @ .#tiles h! 
     ;
 
     \ (Re)Allocate VRAM for this tileset to accommodate
@@ -708,20 +717,20 @@ begin-module vera
     \ If VRAM was previously allocated for this tileset,
     \ this VRAM will be released before reallocating VRAM.
     \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
-    ( tileset -- )
+    ( -- )
     : }set
       [:
-        [ 1 0 stack-checker ]
+        [ 0 0 stack-checker ]
+        tset @
         typecheck
-        >r ( R: tileset )
-        r@ .base @ ?dup if
+        .base @ ?dup if
           vram-free
-        then ( R: tileset )
-        0 r@ .base ! ( R: tileset )
-        r@ tilesize@ r@ .#tiles h@ * ( sz R: tileset )
-        dup vram-alloc ( sz addr R: tileset )
-        dup rot 0 fill ( addr R: tileset )
-        r> .base ! ( )
+        then
+        0 tset @ .base !
+        tset @ tilesize@ tset @ .#tiles h@ * ( sz )
+        dup vram-alloc ( sz addr )
+        dup rot 0 fill ( addr )
+        tset @ .base ! ( )
       ;] compile-or-execute
       tset-params unimport
       [immediate]
@@ -731,8 +740,11 @@ begin-module vera
   end-module \ tset-params
 
   \ Opening bracket for tset{ ... }set
-  ( tileset -- tileset )
-  : tset{ tset-params import [immediate] ;
+  ( -- )
+  : tset{ 
+    [: tset-params :: tset ! ;] compile-or-execute
+    tset-params import 
+    [immediate] ;
 
   \ Given a VRAM address and a tileset, compute the tile index corresponding to that address.
   ( addr tileset -- tile-idx )
@@ -822,35 +834,35 @@ begin-module vera
 
   begin-module pxl-params
     tileset import
+    tset-params import
 
     \ tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
-    ( tileset tile-idx -- tileset )
+    ( tile-idx -- )
     : tidx
-      [ 2 1 stack-checker ]
-      over .tidx h! ;
+      [ 1 0 stack-checker ]
+      tset @ .tidx h! ;
 
-    ( tileset color -- tileset ) 
+    ( color -- ) 
     : color
-      [ 2 1 stack-checker ]
-      over .color c! ;
+      [ 1 0 stack-checker ]
+      tset @ .color c! ;
 
-    ( tileset vec2 -- ) 
+    ( vec2 -- ) 
     : xy 
-      [ 2 1 stack-checker ]
-      over .position ! ;
+      [ 1 0 stack-checker ]
+      tset @ .position ! ;
 
     \ Set a pixel in the given tile.
-    ( tileset -- )
+    ( -- )
     : }set
       [:
-        [ 1 0 stack-checker ]
-        >r ( R: tileset )
-        r@ .color c@
-        r@ .position @ xassert{ dup r@ tileset :: pos-in-range? }xassert
-        r@ .tidx h@ xassert{ dup r@ tset-#tiles@ <= }xassert
-        r@ tset-tidx>addr
-        r@ tset-width@
-        r> tileset :: .pxl-set @
+        [ 0 0 stack-checker ]
+        tset @ .color c@
+        tset @ .position @ xassert{ dup tset @ pos-in-range? }xassert
+        tset @ .tidx h@ xassert{ dup tset @ tset-#tiles@ <= }xassert
+        tset @ tset-tidx>addr
+        tset @ tset-width@
+        tset @ tileset :: .pxl-set @
         ( color position addr width pxl-setter )
         execute
       ;] compile-or-execute
@@ -859,28 +871,32 @@ begin-module vera
     ;
 
     \ Read the pixel color from the given position on the given tile.
-    \ ( tileset -- color )
+    \ ( -- color )
     : }get
       [:
-        [ 1 1 stack-checker ]
-        >r ( R: tileset )
-        r@ .position @ xassert{ dup r@ tileset :: pos-in-range? }xassert
-        r@ .tidx h@ xassert{ dup r@ tset-#tiles@ <= }xassert
-        r@ tset-tidx>addr 
-        r@ tset-width@
-        r@ tileset :: .pxl-get @
-        ( position addr width pxl-getter R: tileset )
+        [ 0 1 stack-checker ]
+        tset @ .position @ xassert{ dup tset @ tileset :: pos-in-range? }xassert
+        tset @ .tidx h@ xassert{ dup tset @ tset-#tiles@ <= }xassert
+        tset @ tset-tidx>addr 
+        tset @ tset-width@
+        tset @ tileset :: .pxl-get @
+        ( position addr width pxl-getter )
         execute ( color )
-        dup r> .color c! ( color )
+        dup tset @ .color c! ( color )
       ;] compile-or-execute
       pxl-params unimport
       [immediate]
     ;
+
+    tset-params unimport
+    tileset unimport
   end-module \ pxl-params
 
   \ Opening bracket for pxl{ ... }set/get
-  ( tileset -- tileset )
-  : pxl{ pxl-params import [immediate] ;
+  ( tileset -- )
+  : pxl{ 
+    [: tset-params :: tset ! ;] compile-or-execute
+    pxl-params import [immediate] ;
 
   \ -- Sprite API
 
@@ -988,81 +1004,80 @@ begin-module vera
     begin-module spr-params
       sprite import
 
-      \ ( sprite vec2 -- sprite )
+      0 variable spr
+
+      \ ( vec2 --)
       : xy 
-          [ 2 1 stack-checker ]
+          [ 1 0 stack-checker ]
           xassert{ dup sprite :: pos-in-range? }xassert
-          swap >r ( vec2 R: sprite )
-          vec2.xy ( x y R: sprite )
-          r@ .attr-y h!
-          r@ .attr-x h!
-          r> ( sprite )
+          vec2.xy ( x y )
+          spr @ .attr-y h!
+          spr @ .attr-x h!
       ;
 
 
       \ flip values: VFLIP, HFLIP, or VFLIP_HFLIP
-      \ ( sprite flip -- sprite )
+      \ ( flip -- )
       : flip 
-        [ 2 1 stack-checker ]
+        [ 1 0 stack-checker ]
         xassert{ dup (flip-is-valid?) }xassert
-        over .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP! ;
+        spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP! ;
 
-      \ ( sprite zdepth -- sprite )
+      \ ( zdepth -- )
       : z
-        [ 2 1 stack-checker ]
+        [ 1 0 stack-checker ]
         xassert{ dup (zdepth-is-valid?) }xassert
-        over .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH! ;
+        spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH! ;
 
-      \ ( sprite colmask -- sprite )
-        [ 2 1 stack-checker ]
-      : colmask over .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK! ;
+      \ ( sprite -- )
+        [ 1 0 stack-checker ]
+      : colmask spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK! ;
 
-      \ ( sprite paloffset -- sprite )
+      \ ( paloffset -- )
       : paloffset
-        [ 2 1 stack-checker ]
-        over .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET! ;
+        [ 1 0 stack-checker ]
+        spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET! ;
 
       \ Set the tile index to be used in the sprite object.
-      \ ( sprite tile-idx -- sprite )
+      \ ( tile-idx -- )
       : tidx
-        [ 2 1 stack-checker ]
-        2dup swap .tile-idx ! ( sprite tile-idx )
+        [ 1 0 stack-checker ]
+        dup spr @ .tile-idx ! ( tile-idx )
         \ Compute and set the address attribute if we have a tileset.
         \ If we don't have a tileset yet, this is deferred until the tileset
         \ is specified.
-        over .tileset @ ?dup if ( sprite tile-idx tileset )
-          xassert{ 2dup tset-#tiles@ < }xassert ( sprite tile-idx tileset )
-          tset-tidx>addr ( sprite addr ) 
-          over addr! ( sprite )
+        spr @ .tileset @ ?dup if ( tile-idx tileset )
+          xassert{ 2dup tset-#tiles@ < }xassert ( tile-idx tileset )
+          tset-tidx>addr ( addr ) 
+          spr @ addr! ( )
         else
-          drop ( sprite )
+          drop ( )
         then
       ;
-  
+
       \ Set the tileset to be used in the sprite object.
       \ When modifying the tileset used by a sprite object, keep in mind that
       \ the corresponding tile index (tidx, see above) has to be valid (within
       \ range) for the new tileset.
-      : tset ( sprite tileset -- sprite )
-        [ 2 1 stack-checker ]
+      : tset ( tileset -- )
+        [ 1 0 stack-checker ]
         tileset :: typecheck
-        swap >r ( tileset R : sprite )
-        r@ .tile-idx @ ( tileset tile-idx R: sprite )
-        xassert{ 2dup swap tset-#tiles@ < }xassert ( tileset tile-idx R: sprite )
-        over tset-tidx>addr r@ addr! ( tileset R: sprite )
-        dup tset-bpp@ r@ bpp! ( tileset R: sprite )
-        dup tset-width@ r@ width! ( tileset R: sprite )
-        dup tset-height@ r@ height! ( tileset R: sprite )
-        r@ .tileset ! ( R: sprite )
-        r>
+        spr @ .tile-idx @ ( tileset tile-idx )
+        xassert{ 2dup swap tset-#tiles@ < }xassert ( tileset tile-idx )
+        over tset-tidx>addr spr @ addr! ( tileset )
+        dup tset-bpp@ spr @ bpp! ( tileset )
+        dup tset-width@ spr @ width! ( tileset )
+        dup tset-height@ spr @ height! ( tileset )
+        spr @ .tileset ! ( )
       ;
 
       \ Commit the sprite's attributes to hardware, 
       \ i.e. to the sprite attribute RAM.
-      \ ( sprite -- )
+      \ ( -- )
       : }set
         [:
-          [ 1 0 stack-checker ]
+          [ 0 0 stack-checker ]
+          spr @
           typecheck
           dup .attr-ram-ptr @ ( sprite attr-ram-addr )
           xassert{ dup }xassert ( sprite attr-ram-addr )
@@ -1082,7 +1097,10 @@ begin-module vera
 
   \ Opening bracket for spr{ ... }set
   ( sprite -- sprite )
-  : spr{ spr-params import [immediate] ;
+  : spr{ 
+    [: spr-params :: spr ! ;] compile-or-execute
+    spr-params import 
+    [immediate] ;
 
   \ Get the sprite's VRAM address
   \ ( sprite -- addr )
@@ -1363,37 +1381,39 @@ begin-module vera
   begin-module layer-params
     layer import
 
+    0 variable lyr
+
     \ Set the tilemap to be used by this layer (configuring tilemapmode)
-    ( layer tmap -- layer )
+    ( tmap -- )
     : tmap
-      [ 2 1 stack-checker ]
+      [ 1 0 stack-checker ]
       tilemap :: typecheck
-      over .tilemap ! ;
+      lyr @ .tilemap ! ;
 
     \ Set the tileset to be used by this layer (tilemapmode and bitmapmode)
-    ( layer tileset -- layer )
+    ( tileset -- )
     : tset
-      [ 2 1 stack-checker ]
+      [ 1 0 stack-checker ]
       tileset :: typecheck
-      over .tileset ! ;
+      lyr @ .tileset ! ;
 
     \ Set the tile index to be used by this layer (bitmapmode)
-    ( layer tile-idx -- layer )
+    ( tile-idx -- )
     : tidx 
-      [ 2 1 stack-checker ]
-      over .tile-idx h! ;
+      [ 1 0 stack-checker ]
+      lyr @ .tile-idx h! ;
 
     \ Configure the layer in tilemap mode. tmap and tset must be specified.
-    ( layer -- )
+    ( -- )
     : }tilemap-mode
       [:
-        [ 1 0 stack-checker ]
+        [ 0 0 stack-checker ]
+        lyr @
         typecheck
-        >r ( R: layer )
-        r@ .tilemap @ ( tmap R: layer )
-        r@ .id c@ tilemap!
-        r@ .tileset @ ( tileset R: layer )
-        r> .id c@ tileset!
+        .tilemap @ ( tmap )
+        lyr @ .id c@ tilemap!
+        lyr @ .tileset @ ( tileset )
+        lyr @ .id c@ tileset!
       ;] compile-or-execute
       layer-params unimport
       [immediate]
@@ -1403,7 +1423,8 @@ begin-module vera
     ( layer -- )
     : }bitmap-mode
       [: 
-        [ 1 0 stack-checker ]
+        [ 0 0 stack-checker ]
+        lyr @
         typecheck
         dup .id c@ ( layer layer-id )
         over .tileset @ ( layer layer-id tileset )
@@ -1420,7 +1441,9 @@ begin-module vera
 
   \ opening brack for layer{ ... }tilemap-mode or layer :: { ... }bitmap-mode
   ( layer -- layer )
-  : layer{ layer-params import [immediate] ;
+  : layer{ 
+    [: layer-params :: lyr ! ;] compile-or-execute
+    layer-params import [immediate] ;
 
   \ l0 and l1 are the objects to be passed into the public words below.
   create l0 layer :: layer-struct allot
