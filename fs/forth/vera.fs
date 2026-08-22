@@ -292,6 +292,9 @@ begin-module vera
   : <tmap> 
     create here tilemap :: tilemap-struct allot tilemap :: init ;
 
+  compileto-save
+  compiletoimem
+
   \ --- Tile Map API
   begin-module mapentry
 
@@ -607,6 +610,8 @@ begin-module vera
     pixel :: 1bpp-byte-ptr ( ptr R: bitoffset )
     c@ r> rshift 1 and ( pxlval )
   ;
+
+  compileto-restore
 
   \ -- Tileset API
   \ A tileset is used to represent tiles, sprite pixel data and bitmaps.

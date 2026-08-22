@@ -19,7 +19,7 @@
   xassert-enable @ 0= if 
     begin
       nexttoken ( addr len)
-      s" )xassert" compare
+      s" }xassert" compare
     until
   then
   [immediate] ;

@@ -4,10 +4,10 @@
 \ point that the include Word has been created, i.e. right after the
 \ BoxKern has exeuted shell.fs.
 
-\ Enable run-time type checking
-true xassert-enable !
-true stack-checking-enable !
-true rttc-struct !
+\ disable run-time type checking
+false xassert-enable !
+false stack-checking-enable !
+false rttc-struct !
 
 include /forth/vera.fs
 

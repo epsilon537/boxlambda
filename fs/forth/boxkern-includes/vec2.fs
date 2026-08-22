@@ -1,6 +1,9 @@
 \ BoxLambda Forth
 \ 2D vector
 
+compileto-save
+compiletoimem
+
 ( x y -- vec )
 : vec2 16 lshift swap $ffff and or [inline] ;
 
@@ -46,4 +49,6 @@
 
 ( v -- )
 : .vec2 vec2.xy ." ( " swap . ." , " . ." )" ;
+
+compileto-restore
 
