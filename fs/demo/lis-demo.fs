@@ -29,6 +29,7 @@ calc-sin-table
 $10000 variable xf
 $10000 variable yf
 64 variable ph
+0 variable frametoggle
 
 ( y addr len -- )
 : txt-line
@@ -43,7 +44,7 @@ $10000 variable yf
 : draw-xf-yf
   40 [:
     >r 
-    yf @ 12 rshift xf @ 12 rshift s" x: %n y: %n             " r@ sprintf
+    yf @ 12 rshift xf @ 12 rshift s" x: %n y: %n                " r@ sprintf
     #1 -rot txt-line
     r> 
   ;] with-temp-allot
@@ -87,7 +88,7 @@ $10000 variable yf
 
   tsb tset{ XRES width YRES height 1 bpp 2 tiles }set
   tsb tset-print
-  l0 layer{ tsb tset 1 tidx }bitmap-mode
+  l0 layer{ tsb tset 0 tidx }bitmap-mode
   l0 layer-print
 
   tsc tset{ 8 width 8 height 1 bpp 256 tiles }set
@@ -117,10 +118,11 @@ $10000 variable yf
 
   draw-xf-yf
 
-  tsb pxl{ 0 tidx x @ y @ vec2 xy WHITE color }set
-
   begin
-    0 tsb tset-tidx>addr tsb tset-tilesize@ 0 fill
+    frametoggle @ 1 xor frametoggle !
+    frametoggle @ tsb tset-tidx>addr tsb tset-tilesize@ 0 fill
+
+    tsb pxl{ frametoggle @ tidx 0 xy WHITE color }set
 
     ph @
     256 0 do
@@ -135,9 +137,10 @@ $10000 variable yf
 
     begin scanline@ 470 >= until
 
-    0 tsb tset-tidx>addr 1 tsb tset-tidx>addr tsb tset-tilesize@ move
+    l0 layer{ tsb tset frametoggle @ tidx }bitmap-mode
 
     keyctrl
+
   again
 ;
 
