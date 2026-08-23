@@ -641,12 +641,25 @@ begin-module vera
       init-type typecheck
     ;
 
+    ( tileset --- f )
+    : is-bitmap?
+      [ 1 1 stack-checker ]
+      typecheck
+      .width h@ 320 >=
+    ;
+
     \ Retrieve the tilesize in bytes for the given tileset.
     ( tileset -- tilesize-bytes )
     : tilesize@ 
       [ 1 1 stack-checker ]
       typecheck
-      dup .bpp h@ swap dup .width h@ swap .height h@ * * 8/ ;
+      >r
+      r@ .bpp h@ r@ .width h@ r@ .height h@ * * 8/ ( sz R: tset )
+      r> is-bitmap? if ( sz )
+        \ Round up bitmaps to nearest higher multiple of $800 to meet tile-base address requirement
+        $7ff + $fffff800 and
+      then
+    ;
 
     \ check if given position is within the width/height boundaries
     ( position tileset -- f )
@@ -658,6 +671,7 @@ begin-module vera
       swap dup 0 >= swap r> .width h@ < and ( f f )
       and
     ;
+
   end-module \ tileset
 
   begin-module tset-params

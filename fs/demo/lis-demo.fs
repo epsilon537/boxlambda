@@ -7,9 +7,8 @@ include /demo/font-loader.fs
 compileto-save
 compiletoimem
 
-<tset> tss
-<tset> tsd
-<tset> tso
+<tset> tsb
+<tset> tsc
 <tmap> tm
 
 create sin-table 256 cells allot
@@ -86,22 +85,20 @@ $10000 variable yf
 
 : lis-demo
 
-  tss tset{ XRES width YRES height 1 bpp 1 tiles }set
-  tsd tset{ XRES width YRES height 1 bpp 1 tiles }set
-  tss tset-print
-  tsd tset-print
-  l0 layer{ tsd tset 0 tidx }bitmap-mode
+  tsb tset{ XRES width YRES height 1 bpp 2 tiles }set
+  tsb tset-print
+  l0 layer{ tsb tset 1 tidx }bitmap-mode
   l0 layer-print
 
-  tso tset{ 8 width 8 height 1 bpp 256 tiles }set
+  tsc tset{ 8 width 8 height 1 bpp 256 tiles }set
   tm tmap{ 64 width 32 height TMAP-TXT16 type }set
-  tso tset-print
+  tsc tset-print
   tm tmap-print
 
-  l1 layer{ tso tset tm tmap }tilemap-mode
+  l1 layer{ tsc tset tm tmap }tilemap-mode
   l1 layer-print
 
-  tso s" night-in-tokyo.fnt" load-font
+  tsc s" night-in-tokyo.fnt" load-font
 
   true l0 layer-enable
   true l1 layer-enable
@@ -120,25 +117,25 @@ $10000 variable yf
 
   draw-xf-yf
 
-  tss pxl{ 0 tidx x @ y @ vec2 xy WHITE color }set
+  tsb pxl{ 0 tidx x @ y @ vec2 xy WHITE color }set
 
   begin
-    0 tss tset-tidx>addr tss tset-tilesize@ 0 fill
+    0 tsb tset-tidx>addr tsb tset-tilesize@ 0 fill
 
     ph @
     256 0 do
       i xf @ * 16 rshift 255 and cells sin-table + @ 160 + ( ph x )
       over i yf @ * 16 rshift + 255 and cells sin-table + @ 120 + ( ph x y )
       vec2 ( ph vec2 )
-      tss pxl{ ( vec2 ) xy }set ( ph )
+      tsb pxl{ ( vec2 ) xy }set ( ph )
     2 +loop
     drop ( )
  
     ph @ 1 + 255 and ph !
 
-    begin scanline@ 460 >= until
+    begin scanline@ 470 >= until
 
-    0 tss tset-tidx>addr 0 tsd tset-tidx>addr tss tset-tilesize@ move
+    0 tsb tset-tidx>addr 1 tsb tset-tidx>addr tsb tset-tilesize@ move
 
     keyctrl
   again
