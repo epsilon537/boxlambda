@@ -183,7 +183,10 @@
 
 : : : stack-checking-enable @ if ] postpone push_ra postpone (stack-check-in-prologue) then [immediate] ;
 
+: does> postpone does> stack-checking-enable @ if postpone (stack-check-in-prologue) then [immediate] ;
+
 : ; stack-checking-enable @ if postpone stack-check-out then postpone ; [immediate] ;
 
 : exit stack-checking-enable @ if postpone stack-check-out then postpone exit [immediate] ;
+
 

@@ -5,9 +5,12 @@
 \ BoxKern has exeuted shell.fs.
 
 \ disable run-time type checking
-false xassert-enable !
-false stack-checking-enable !
-false rttc-struct !
+true xassert-enable !
+true rttc-struct !
+
+[ifdef] FORTH_CORE_TEST
+true stack-checking-enable !
+[then]
 
 include /forth/vera.fs
 

@@ -187,7 +187,7 @@ begin-module vera
     \ ( width -- )
     : width
       [ 1 0 stack-checker ]
-      dup (size-is-valid?) }xassert
+      xassert{ dup (size-is-valid?) }xassert
       tmap @ .width h! 
     ;
 

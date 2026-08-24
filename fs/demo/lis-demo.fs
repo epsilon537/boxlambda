@@ -16,7 +16,7 @@ create sin-table 256 cells allot
 : calc-sin-table
   256 0 do
     0 i 360,0 f* 256,0 f/  \ a=i*360/256
-    sin 100,0 f*         \ 100*sin(a)
+    sin 100,0 f*           \ 100*sin(a)
     0,5 d+ nip             \ round to int
     sin-table i cells + !
   loop
