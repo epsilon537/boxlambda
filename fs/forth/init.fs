@@ -58,6 +58,8 @@ include vera-sprite-z.fs
 include vera-tile-pos-err.fs
 include vera-tileset-params-err.fs
 include vera-tileset-params.fs
+include vera-stack-params.fs
+include vera-bitmap-tilesize.fs
 quit
 cd /
 include /test/testsuite.fs
