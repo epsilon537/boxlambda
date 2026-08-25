@@ -5,9 +5,11 @@ spr-params:: tset
 Typecheck failed
 vera:: tset-#tiles@
 Typecheck failed
-vera:: tset-tidx>addr
+tileset:: tidx>addr
 Typecheck failed
 tileset:: tilesize@
+Typecheck failed
+tileset:: is-bitmap?
 Typecheck failed
 vera:: tset-bpp@
 Assert failed.

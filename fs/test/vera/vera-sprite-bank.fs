@@ -10,11 +10,11 @@
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ 8 width 8 height 8 bpp 8 tiles }set
+  ts tset{ 8 width 8 height 8 bpp 8 tiles }apply
   ts tset-print
-  spr1 spr{ ts tset 1 tidx SPR-L1 z 0 paloffset #40 #50 vec2 xy }set
-  spr65 spr{ ts tset 1 tidx SPR-L1 z 1 paloffset #100 #200 vec2 xy }set
-  ts pxl{ 1 tidx 0 0 vec2 xy CYAN color }set
+  spr1 spr{ ts tset 1 tidx SPR-L1 z 0 paloffset #40 #50 vec2 xy }apply
+  spr65 spr{ ts tset 1 tidx SPR-L1 z 1 paloffset #100 #200 vec2 xy }apply
+  ts pxl{ 1 tidx 0 0 vec2 xy CYAN color }apply
 
   #50 irqline!
   0 sprite-bank!

@@ -5,11 +5,11 @@
   true l0 layer-enable
   true display-enable
 
-  ts tset{ #320 width #32 height 8 bpp 1 tiles }set
+  ts tset{ #320 width #32 height 8 bpp 1 tiles }apply
   ts tset-print
   l0 layer{ ts tset 0 tidx }bitmap-mode
   l0 layer-print
-  ts pxl{ 0 tidx 0 0 vec2 xy #255 color }set
+  ts pxl{ 0 tidx 0 0 vec2 xy #255 color }apply
   ." pxl 0,0 : " ts pxl{ 0 0 vec2 xy }get . cr
   ." pxl 1,0 : " ts pxl{ 1 0 vec2 xy }get . cr
 

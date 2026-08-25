@@ -36,7 +36,7 @@ $10000 variable yf
   0 do ( y addr )
     over i swap vec2 ( y addr vec2 )
     over i + c@ $20 - ( y addr vec2 tidx )
-    tm mapentry{ ( tidx ) tidx ( vec2 ) xy YELLOW fg BLACK bg }set ( y addr )
+    tm mapentry{ ( tidx ) tidx ( vec2 ) xy YELLOW fg BLACK bg }apply ( y addr )
   loop
   2drop
 ;
@@ -86,13 +86,13 @@ $10000 variable yf
 
 : lis-demo
 
-  tsb tset{ XRES width YRES height 1 bpp 2 tiles }set
+  tsb tset{ XRES width YRES height 1 bpp 2 tiles }apply
   tsb tset-print
   l0 layer{ tsb tset 0 tidx }bitmap-mode
   l0 layer-print
 
-  tsc tset{ 8 width 8 height 1 bpp 256 tiles }set
-  tm tmap{ 64 width 32 height TMAP-TXT16 type }set
+  tsc tset{ 8 width 8 height 1 bpp 256 tiles }apply
+  tm tmap{ 64 width 32 height TMAP-TXT16 type }apply
   tsc tset-print
   tm tmap-print
 
@@ -122,14 +122,14 @@ $10000 variable yf
     frametoggle @ 1 xor frametoggle !
     frametoggle @ tsb tset-tidx>addr tsb tset-tilesize@ 0 fill
 
-    tsb pxl{ frametoggle @ tidx 0 xy WHITE color }set
+    tsb pxl{ frametoggle @ tidx WHITE color }set
 
     ph @
     256 0 do
       i xf @ * 16 rshift 255 and cells sin-table + @ 160 + ( ph x )
       over i yf @ * 16 rshift + 255 and cells sin-table + @ 120 + ( ph x y )
       vec2 ( ph vec2 )
-      tsb pxl{ ( vec2 ) xy }set ( ph )
+      tsb pxl{ ( vec2 ) xy }apply ( ph )
     2 +loop
     drop ( )
  
@@ -145,4 +145,6 @@ $10000 variable yf
 ;
 
 compileto-restore
+
+lis-demo
 

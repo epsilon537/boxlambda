@@ -8,23 +8,23 @@
   false l1 layer-enable
   ." l0 enabled? " l0 layer-enabled? . cr
   ." l1 enabled? " l1 layer-enabled? . cr
-  ts tset{ #16 width #16 height 8 bpp #32 tiles }set
+  ts tset{ #16 width #16 height 8 bpp #32 tiles }apply
   ts tset-print
-  tm0 tmap{ #32 width #32 height TMAP-TILE type }set
-  tm1 tmap{ #32 width #32 height TMAP-TILE type }set
+  tm0 tmap{ #32 width #32 height TMAP-TILE type }apply
+  tm1 tmap{ #32 width #32 height TMAP-TILE type }apply
   tm0 tmap-print
   tm1 tmap-print
   l0 layer{ ts tset tm0 tmap }tilemap-mode
   l1 layer{ ts tset tm1 tmap }tilemap-mode
-  tm0 mapentry{ 1 1 vec2 xy 1 tidx }set
-  tm1 mapentry{ 1 1 vec2 xy 2 tidx }set
+  tm0 mapentry{ 1 1 vec2 xy 1 tidx }apply
+  tm1 mapentry{ 1 1 vec2 xy 2 tidx }apply
 
   #16 0 do
-    ts pxl{ 1 tidx 0 i vec2 xy RED color }set
+    ts pxl{ 1 tidx 0 i vec2 xy RED color }apply
   loop
 
   #16 0 do
-    ts pxl{ 2 tidx 0 i vec2 xy BLUE color }set
+    ts pxl{ 2 tidx 0 i vec2 xy BLUE color }apply
   loop
  
   #16 irqline!

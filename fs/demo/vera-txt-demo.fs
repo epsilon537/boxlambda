@@ -34,7 +34,7 @@ YRES 8 / constant #ROWS
       then
       swap vec2 cursor ! ( key )
       \ Erase char at cursor
-      tm mapentry{ 0 tidx cursor @ xy YELLOW fg BLACK bg }set
+      tm mapentry{ 0 tidx cursor @ xy YELLOW fg BLACK bg }apply
     endof
 
     #13 of 
@@ -44,12 +44,12 @@ YRES 8 / constant #ROWS
       then
       0 swap vec2 cursor ! ( key )
       \ Erase char at cursor
-      tm mapentry{ 0 tidx cursor @ xy YELLOW fg BLACK bg }set
+      tm mapentry{ 0 tidx cursor @ xy YELLOW fg BLACK bg }apply
     endof
 
     $20 - ( key tidx )
     \ draw the character at the cursor position
-    tm mapentry{ ( tidx ) tidx cursor @ xy YELLOW fg BLACK bg }set
+    tm mapentry{ ( tidx ) tidx cursor @ xy YELLOW fg BLACK bg }apply
     cursor @ vec2.xy swap 1+ swap ( key x y )
     over #COLS = if ( key x y )
       nip 0 swap ( key x y )
@@ -63,30 +63,31 @@ YRES 8 / constant #ROWS
   endcase
 
   \ Draw the cursor
-  spr spr{ cursor @ 8 * xy }set
+  spr spr{ cursor @ 8 * xy }apply
 ;
 
 : (init-spr-tile)
   8 0 do
-    ts-spr pxl{ 0 tidx i 0 vec2 xy BLACK color }set
-    ts-spr pxl{ 0 tidx i 1 vec2 xy BLACK color }set
-    ts-spr pxl{ 0 tidx i 2 vec2 xy BLACK color }set
-    ts-spr pxl{ 0 tidx i 3 vec2 xy BLACK color }set
-    ts-spr pxl{ 0 tidx i 4 vec2 xy BLACK color }set
-    ts-spr pxl{ 0 tidx i 5 vec2 xy BLACK color }set
-    ts-spr pxl{ 0 tidx i 6 vec2 xy WHITE color }set
-    ts-spr pxl{ 0 tidx i 7 vec2 xy WHITE color }set
+    ts-spr pxl{ 0 tidx }set
+    ts-spr pxl{ i 0 vec2 xy BLACK color }apply
+    ts-spr pxl{ i 1 vec2 xy }apply
+    ts-spr pxl{ i 2 vec2 xy }apply
+    ts-spr pxl{ i 3 vec2 xy }apply
+    ts-spr pxl{ i 4 vec2 xy }apply
+    ts-spr pxl{ i 5 vec2 xy }apply
+    ts-spr pxl{ i 6 vec2 xy WHITE color }apply
+    ts-spr pxl{ i 7 vec2 xy }apply
   loop
 ;
 
 ( -- )
 : vera-txt-demo
   0 0 vec2 cursor !
-  ts tset{ 8 width 8 height 1 bpp 256 tiles }set
-  ts-spr tset{ 8 width 8 height 4 bpp 1 tiles }set
+  ts tset{ 8 width 8 height 1 bpp 256 tiles }apply
+  ts-spr tset{ 8 width 8 height 4 bpp 1 tiles }apply
   (init-spr-tile)
-  tm tmap{ 64 width 32 height TMAP-TXT16 type }set
-  spr spr{ ts-spr tset 0 tidx SPR-L0-L1 z cursor @ 8 * xy }set
+  tm tmap{ 64 width 32 height TMAP-TXT16 type }apply
+  spr spr{ ts-spr tset 0 tidx SPR-L0-L1 z cursor @ 8 * xy }apply
 
   l0 layer{ ts tset tm tmap }tilemap-mode
 

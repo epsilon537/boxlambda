@@ -172,6 +172,24 @@ begin-module vera
       swap dup 0 >= swap r> .width h@ < and ( f f )
       and
     ;
+
+    ( tilemap -- )
+    : apply
+      [ 1 0 stack-checker ]
+      typecheck
+      dup .base @ ?dup if
+      vram-free
+      then ( map )
+      dup .base 0 swap ! ( map )
+      \ Allocate VRAM (2 * width * height ) and set map base address field.
+      dup .width h@ ( map width )
+      over .height h@ ( map width height )
+      * 2* ( map sz )
+      dup vram-alloc ( map sz vram )
+      dup rot 0 fill ( map vram ) 
+      swap .base !
+    ;
+
   end-module \ tilemap
 
   begin-module tmap-params
@@ -211,23 +229,18 @@ begin-module vera
     \ this VRAM will be released before reallocating VRAM.
     \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
     \ ( -- )
-    : }set
+    : }apply
       [: 
         [ 0 0 stack-checker ]
         tmap @
-        typecheck
-        dup .base @ ?dup if
-        vram-free
-        then ( map )
-        dup .base 0 swap ! ( map )
-        \ Allocate VRAM (2 * width * height ) and set map base address field.
-        dup .width h@ ( map width )
-        over .height h@ ( map width height )
-        * 2* ( map sz )
-        dup vram-alloc ( map sz vram )
-        dup rot 0 fill ( map vram ) 
-        swap .base !
+        apply
       ;] compile-or-execute
+      tmap-params unimport
+      [immediate]
+    ;
+
+    \ ( -- )
+    : }set
       tmap-params unimport
       [immediate]
     ;
@@ -241,6 +254,11 @@ begin-module vera
     [: tmap-params :: tmap ! ;] compile-or-execute
     tmap-params import 
     [immediate] ;
+
+  ( tilemap -- )
+  : tmap-params-apply
+    tilemap :: apply
+  ;
 
   \ Retrieve map width from the tilemap object.
   \ ( tilemap -- width )
@@ -325,6 +343,34 @@ begin-module vera
       [ 2 1 stack-checker ]
       position>addr h@ ;
 
+    ( tilemap -- )
+    : mapentry-apply
+      [ 1 0 stack-checker ]
+      [ tilemap import ]
+      typecheck
+      dup .type c@ case 
+        TMAP-TILE of  
+          dup .paloffset c@ #12 lshift ( tmap mapentry )
+          over .flip c@ 3 and #10 lshift or ( tmap mapentry )
+          over .tidx h@ $3ff and or ( tmap mapentry )
+        endof
+        TMAP-TXT16 of
+          dup .fg c@ $f and 8 lshift
+          over .bg c@ $f and #12 lshift or
+          over .tidx h@ $ff and or ( tmap mapentry )
+        endof
+        TMAP-TXT256 of
+          dup .fg c@ $ff and 8 lshift
+          over .tidx h@ $ff and or ( tmap mapentry )
+        endof
+        xassert{ false }xassert 0
+      endcase
+      over .position @ ( tmap mapentry position )
+      rot ( mapentry position tmap )
+      xassert{ 2dup tilemap :: pos-in-range? }xassert
+      mapentry! ( )
+      [ tilemap unimport ]
+    ;
   end-module \ mapentry
 
   begin-module mapentry-params
@@ -367,37 +413,23 @@ begin-module vera
 
     \ Write mapentry using attributes specified in {}mapentry!
     ( -- )
-    : }set
+    : }apply
       [:
-        [ tilemap import ]
         [ 0 0 stack-checker ]
-        tmap @ tmap-type@ case 
-          TMAP-TILE of  
-            tmap @ .paloffset c@ #12 lshift ( mapentry )
-            tmap @ .flip c@ 3 and #10 lshift or ( mapentry )
-            tmap @ .tidx h@ $3ff and or ( mapentry )
-          endof
-          TMAP-TXT16 of
-            tmap @ .fg c@ $f and 8 lshift
-            tmap @ .bg c@ $f and #12 lshift or
-            tmap @ .tidx h@ $ff and or ( mapentry )
-          endof
-          TMAP-TXT256 of
-            tmap @ .fg c@ $ff and 8 lshift
-            tmap @ .tidx h@ $ff and or ( mapentry )
-          endof
-          xassert{ false }xassert 0
-        endcase
-        tmap @ .position @ ( mapentry position )
-        xassert{ dup tmap @ tilemap :: pos-in-range? }xassert
-        tmap @ mapentry! ( )
-        [ tilemap unimport ]
+        tmap @
+        mapentry :: mapentry-apply
       ;] compile-or-execute
       mapentry-params unimport
       [immediate]
     ;
 
-    \ Read from VRAM, mapentry specified by { <tmap> tmap <vec> position }mapentry@ and 
+    ( -- )
+    : }set
+      mapentry-params unimport
+      [immediate]
+    ;
+
+    \ Read from VRAM, mapentry specified by { <vec> position }mapentry@ and 
     \ decode it, populating fg, bg, paloffset, flip attributes.
     \ This is useful for mapentry read-modify-write operations.
     ( -- )
@@ -440,21 +472,29 @@ begin-module vera
   : mapentry{ 
     [: tmap-params :: tmap ! ;] compile-or-execute
     mapentry-params import 
-  [immediate] ;
+    [immediate] 
+  ;
+
+  ( tilemap -- )
+  : mapentry-apply
+    mapentry :: mapentry-apply
+  ;
 
   \ set a 16-bit mapentry value at row/col in given tilemap
   ( mapentry vec2 tilemap -- )
   : mapentry!
    [ 3 0 stack-checker ]
     tilemap :: typecheck
-    mapentry :: mapentry! ;
+    mapentry :: mapentry! 
+  ;
 
   \ get the 16-bit mapentry value from position in given tilemap
   ( vec2 tilemap -- mapentry )
   : mapentry@
     [ 2 1 stack-checker ]
     tilemap :: typecheck
-    mapentry :: mapentry@ ;
+    mapentry :: mapentry@ 
+  ;
 
   \ Keeping the 16-bit mapentry unpack words directly in the vera namespace for convenience:
 
@@ -672,6 +712,47 @@ begin-module vera
       and
     ;
 
+    ( tset -- )
+    : apply
+      [ 1 0 stack-checker ]
+      typecheck
+      dup .base @ ?dup if
+        vram-free
+      then
+      0 over .base !
+      dup tilesize@ over .#tiles h@ * ( tset sz )
+      dup vram-alloc ( tset sz addr )
+      dup rot 0 fill ( tset addr )
+      swap .base ! ( )
+    ;
+
+    \ Given a tile index in a tileset, compute to  pointer to the pixel data of a tile in the tileset.
+    \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
+    \ @param tileset: Tileset object
+    ( tile-idx tileset -- addr )
+    : tidx>addr
+      [ 2 1 stack-checker ]
+      typecheck
+      dup tilesize@ ( tile-idx tileset tilesize )
+      rot * ( tileset tilesize*tile-idx ) 
+      swap .base @ ( tilesize*tile-idx base )
+      xassert{ dup }xassert
+      + ;
+
+    ( tset -- )
+    : apply-pxl
+      [ 1 0 stack-checker ]
+      typecheck
+      >r
+      r@ .color c@
+      r@ .position @ xassert{ dup r@ pos-in-range? }xassert
+      r@ .tidx h@ xassert{ dup r@ .#tiles h@ <= }xassert
+      r@ tidx>addr
+      r@ .width h@
+      r> .pxl-set @
+      ( color position addr width pxl-setter )
+      execute
+    ;
   end-module \ tileset
 
   begin-module tset-params
@@ -737,20 +818,18 @@ begin-module vera
     \ this VRAM will be released before reallocating VRAM.
     \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
     ( -- )
-    : }set
+    : }apply
       [:
         [ 0 0 stack-checker ]
         tset @
-        typecheck
-        .base @ ?dup if
-          vram-free
-        then
-        0 tset @ .base !
-        tset @ tilesize@ tset @ .#tiles h@ * ( sz )
-        dup vram-alloc ( sz addr )
-        dup rot 0 fill ( addr )
-        tset @ .base ! ( )
+        apply
       ;] compile-or-execute
+      tset-params unimport
+      [immediate]
+    ;
+
+    ( -- )
+    : }set
       tset-params unimport
       [immediate]
     ;
@@ -764,6 +843,11 @@ begin-module vera
     [: tset-params :: tset ! ;] compile-or-execute
     tset-params import 
     [immediate] ;
+
+  ( tset -- )
+  : tset-params-apply
+    tileset :: apply
+  ;
 
   \ Given a VRAM address and a tileset, compute the tile index corresponding to that address.
   ( addr tileset -- tile-idx )
@@ -782,13 +866,8 @@ begin-module vera
   \ @param tileset: Tileset object
   ( tile-idx tileset -- addr )
   : tset-tidx>addr
-    [ 2 1 stack-checker ]
-    tileset :: typecheck
-    dup tileset :: tilesize@ ( tile-idx tileset tilesize )
-    rot * ( tileset tilesize*tile-idx ) 
-    swap tileset :: .base @ ( tilesize*tile-idx base )
-    xassert{ dup }xassert
-    + ;
+    tileset :: tidx>addr
+  ;
 
   \ Retrieve the tilesize in bytes for the given tileset.
   ( tileset -- tilesize-bytes )
@@ -873,18 +952,18 @@ begin-module vera
 
     \ Set a pixel in the given tile.
     ( -- )
-    : }set
+    : }apply
       [:
         [ 0 0 stack-checker ]
-        tset @ .color c@
-        tset @ .position @ xassert{ dup tset @ pos-in-range? }xassert
-        tset @ .tidx h@ xassert{ dup tset @ tset-#tiles@ <= }xassert
-        tset @ tset-tidx>addr
-        tset @ tset-width@
-        tset @ tileset :: .pxl-set @
-        ( color position addr width pxl-setter )
-        execute
+        tset @
+        apply-pxl
       ;] compile-or-execute
+      pxl-params unimport
+      [immediate]
+    ;
+
+    ( -- )
+    : }set
       pxl-params unimport
       [immediate]
     ;
@@ -916,6 +995,11 @@ begin-module vera
   : pxl{ 
     [: tset-params :: tset ! ;] compile-or-execute
     pxl-params import [immediate] ;
+
+  ( tileset -- )
+  : pxl-apply
+    tileset :: apply-pxl
+  ;
 
   \ -- Sprite API
 
@@ -1018,6 +1102,20 @@ begin-module vera
       swap dup 0 >= swap HSTOP-MAX <= and ( f f )
       and
     ;
+
+    ( spr -- )
+    : apply
+      [ 1 0 stack-checker ]
+      typecheck
+      dup .attr-ram-ptr @ ( sprite attr-ram-addr )
+      xassert{ dup }xassert ( sprite attr-ram-addr )
+      swap .attr-addr ( attr-ram-addr attr-addr )
+      2dup @ ( attr-ram-addr attr-addr attr-ram-addr attr0/1 ) 
+      swap ! ( attr-ram-addr attr-addr )
+      cell+ @ ( attr-ram-addr attr1/2 )
+      swap cell+ ( attr1/2 attr-ram-addr' )
+      !
+    ;
     end-module
 
     begin-module spr-params
@@ -1093,24 +1191,21 @@ begin-module vera
       \ Commit the sprite's attributes to hardware, 
       \ i.e. to the sprite attribute RAM.
       \ ( -- )
-      : }set
+      : }apply
         [:
           [ 0 0 stack-checker ]
           spr @
-          typecheck
-          dup .attr-ram-ptr @ ( sprite attr-ram-addr )
-          xassert{ dup }xassert ( sprite attr-ram-addr )
-          swap .attr-addr ( attr-ram-addr attr-addr )
-          2dup @ ( attr-ram-addr attr-addr attr-ram-addr attr0/1 ) 
-          swap ! ( attr-ram-addr attr-addr )
-          cell+ @ ( attr-ram-addr attr1/2 )
-          swap cell+ ( attr1/2 attr-ram-addr' )
-          !
+          apply
         ;] compile-or-execute
         spr-params unimport
         [immediate]
       ;
 
+      \ ( -- )
+      : }set
+        spr-params unimport
+        [immediate]
+      ;
       sprite unimport
     end-module \ spr-params
 
@@ -1120,6 +1215,11 @@ begin-module vera
     [: spr-params :: spr ! ;] compile-or-execute
     spr-params import 
     [immediate] ;
+
+  ( sprite -- )
+  : spr-apply
+    sprite :: apply
+  ;
 
   \ Get the sprite's VRAM address
   \ ( sprite -- addr )

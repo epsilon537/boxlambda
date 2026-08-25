@@ -8,10 +8,10 @@ false quit-on-xassert !
   l{ 64 , 128 , 256 }l
   [:
     wh !
-    tm tmap{ wh @ width wh @ height TMAP-TXT16 type }set
+    tm tmap{ wh @ width wh @ height TMAP-TXT16 type }apply
     tm tmap-print
-    tm mapentry{ wh @ 0 vec2 xy BLUE bg WHITE fg 1 tidx }set
-    tm mapentry{ 0 wh @ vec2 xy BLUE bg WHITE fg 1 tidx }set
+    tm mapentry{ wh @ 0 vec2 xy BLUE bg WHITE fg 1 tidx }apply
+    tm mapentry{ 0 wh @ vec2 xy BLUE bg WHITE fg 1 tidx }apply
   ;] iter
 ;
 

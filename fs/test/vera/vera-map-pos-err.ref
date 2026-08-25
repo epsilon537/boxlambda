@@ -1,15 +1,15 @@
 Tilemap: $12040000 base, 64 width, 64 height, 0 type
 Assert failed.
-mapentry-params:: }set
+mapentry:: mapentry-apply
 Assert failed.
-mapentry-params:: }set
+mapentry:: mapentry-apply
 Tilemap: $12040000 base, 128 width, 128 height, 0 type
 Assert failed.
-mapentry-params:: }set
+mapentry:: mapentry-apply
 Assert failed.
-mapentry-params:: }set
+mapentry:: mapentry-apply
 Tilemap: $12040000 base, 256 width, 256 height, 0 type
 Assert failed.
-mapentry-params:: }set
+mapentry:: mapentry-apply
 Assert failed.
-mapentry-params:: }set
+mapentry:: mapentry-apply

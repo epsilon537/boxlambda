@@ -21,12 +21,12 @@
       l{ 4 , 8 }l
       [:
         b !
-        ts tset{ w @ width h @ height b @ bpp 8 tiles }set
+        ts tset{ w @ width h @ height b @ bpp 8 tiles }apply
         ts tset-print
-        spr spr{ ts tset 2 tidx SPR-L1 z }set
+        spr spr{ ts tset 2 tidx SPR-L1 z }apply
         h @ 0 do
           w @ i 1+ min 0 ?do
-            ts pxl{ 2 tidx i j vec2 xy CYAN color }set
+            ts pxl{ 2 tidx i j vec2 xy CYAN color }apply
           loop
         loop
         0 irqline!
@@ -50,7 +50,7 @@
         ." xend yend capture: $" w @ h @ min line-capture-pxl@ hex. cr
         h @ 0 do
           w @ i 1+ min 0 ?do
-            ts pxl{ 2 tidx i j vec2 xy 0 color }set
+            ts pxl{ 2 tidx i j vec2 xy 0 color }apply
           loop
         loop
       ;] iter

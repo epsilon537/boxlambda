@@ -12,7 +12,7 @@ create heights 256 , 32 ,
   2 0 do
     i cells widths + @ w !
     i cells heights + @ h !
-    tm tmap{ w @ width h @ height t @ type }set
+    tm tmap{ w @ width h @ height t @ type }apply
     tm tmap-print
     1 t +!
   loop

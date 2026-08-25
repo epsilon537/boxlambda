@@ -13,7 +13,7 @@
     l{ 0 , 1 , 2 }l
     [:
       mt !
-      tm tmap{ wh @ width wh @ height mt @ type }set
+      tm tmap{ wh @ width wh @ height mt @ type }apply
       tm tmap-print
     ;] iter
   ;] iter

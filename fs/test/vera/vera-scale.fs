@@ -5,19 +5,19 @@
 
   true display-enable
 
-  tm tmap{ #32 width #32 height TMAP-TILE type }set
+  tm tmap{ #32 width #32 height TMAP-TILE type }apply
   tm tmap-print
-  ts tset{ #16 width #16 height 8 bpp #32 tiles }set
+  ts tset{ #16 width #16 height 8 bpp #32 tiles }apply
   ts tset-print
   l0 layer{ ts tset tm tmap }tilemap-mode
   true l0 layer-enable
   false l1 layer-enable
 
-  tm mapentry{ 0 0 vec2 xy 0 flip 0 paloffset 1 tidx }set
+  tm mapentry{ 0 0 vec2 xy 0 flip 0 paloffset 1 tidx }apply
 
   #16 0 do
-    ts pxl{ 1 tidx i i vec2 xy WHITE color }set
-    ts pxl{ 1 tidx #15 i - i vec2 xy WHITE color }set
+    ts pxl{ 1 tidx i i vec2 xy WHITE color }apply
+    ts pxl{ 1 tidx #15 i - i vec2 xy WHITE color }apply
   loop
 
   #15 irqline!

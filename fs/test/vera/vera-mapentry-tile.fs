@@ -20,23 +20,23 @@ create cols col1 , col2 , col3 ,
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ #16 width #16 height 8 bpp #32 tiles }set
+  ts tset{ #16 width #16 height 8 bpp #32 tiles }apply
   ts tset-print
 
   16 0 do
     i 1+ 0 ?do
-      ts pxl{ 1 tidx i j vec2 xy BLUE color }set
+      ts pxl{ 1 tidx i j vec2 xy BLUE color }apply
     loop
   loop
 
-  tm tmap{ #32 width #32 height TMAP-TILE type }set
+  tm tmap{ #32 width #32 height TMAP-TILE type }apply
   tm tmap-print
   l0 layer{ ts tset tm tmap }tilemap-mode
   l0 layer-print
 
-  tm mapentry{ col1 row1 vec2 xy 0 flip 0 paloffset 1 tidx }set
-  tm mapentry{ col2 row2 vec2 xy VFLIP_HFLIP flip 0 paloffset 1 tidx }set
-  tm mapentry{ col3 row3 vec2 xy 0 flip 1 paloffset 1 tidx }set
+  tm mapentry{ col1 row1 vec2 xy 0 flip 0 paloffset 1 tidx }apply
+  tm mapentry{ col2 row2 vec2 xy VFLIP_HFLIP flip 0 paloffset 1 tidx }apply
+  tm mapentry{ col3 row3 vec2 xy 0 flip 1 paloffset 1 tidx }apply
 
   true l0 layer-enable
   false l1 layer-enable

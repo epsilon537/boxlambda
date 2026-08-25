@@ -9,13 +9,13 @@
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ #64 width #64 height 8 bpp 4 tiles }set
+  ts tset{ #64 width #64 height 8 bpp 4 tiles }apply
   ts tset-print
-  spr spr{ ts tset 2 tidx SPR-L1 z 0 paloffset 0 0 vec2 xy }set
+  spr spr{ ts tset 2 tidx SPR-L1 z 0 paloffset 0 0 vec2 xy }apply
 
   64 0 do
     64 i 1+ min 0 ?do
-      ts pxl{ 2 tidx i j vec2 xy CYAN color }set
+      ts pxl{ 2 tidx i j vec2 xy CYAN color }apply
     loop
   loop
 
@@ -24,7 +24,7 @@
   begin line-capture-enabled? not until
   ." x0 y0 capture: $" #0 line-capture-pxl@ hex. cr
 
-  spr spr{ 1 paloffset }set
+  spr spr{ 1 paloffset }apply
 
   spr spr-paloffset@ . cr
 

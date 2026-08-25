@@ -8,10 +8,10 @@
   true l0 layer-enable
   true display-enable
 
-  tm tmap{ 32 width 32 height TMAP-TXT16 type }set
+  tm tmap{ 32 width 32 height TMAP-TXT16 type }apply
   tm tmap-print
 
-  tm mapentry{ 0 0 vec2 xy 0 bg 1 fg 1 tidx }set
+  tm mapentry{ 0 0 vec2 xy 0 bg 1 fg 1 tidx }apply
   0 0 vec2 tm mapentry@ unpack-txt16
   s" mapentry[0,0]: %n bg %n fg %n tidx" printf cr
 
@@ -22,17 +22,17 @@
     [:
       h !
       ." width: " w @ . ."  height: " h @ . cr
-      ts tset{ w @ width h @ height 1 bpp 8 tiles }set
+      ts tset{ w @ width h @ height 1 bpp 8 tiles }apply
       ts tset-print
       l0 layer{ ts tset tm tmap }tilemap-mode
       l0 layer-print
-      ts pxl{ 1 tidx w @ 1- h @ 1- vec2 xy #1 color }set
+      ts pxl{ 1 tidx w @ 1- h @ 1- vec2 xy #1 color }apply
       ." pxl[w-1,h-1]: " ts pxl{ }get . cr
       h @ 1- irqline!
       true line-capture-enable
       begin line-capture-enabled? not until
       ." [w-1, h-1] capture: $" w @ 1- line-capture-pxl@ hex. cr
-      ts pxl{ 1 tidx w @ 1- h @ 1- vec2 xy #0 color }set
+      ts pxl{ 1 tidx w @ 1- h @ 1- vec2 xy #0 color }apply
     ;] iter
   ;] iter
 ;

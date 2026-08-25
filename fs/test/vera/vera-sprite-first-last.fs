@@ -10,14 +10,14 @@
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ 8 width 8 height 8 bpp 8 tiles }set
+  ts tset{ 8 width 8 height 8 bpp 8 tiles }apply
   ts tset-print
-  spr0 spr{ ts tset 2 tidx SPR-L1 z 0 paloffset #40 #50 vec2 xy 1 colmask }set
-  spr63 spr{ ts tset 2 tidx SPR-L1 z 0 paloffset #40 #70 vec2 xy 1 colmask }set
+  spr0 spr{ ts tset 2 tidx SPR-L1 z 0 paloffset #40 #50 vec2 xy 1 colmask }apply
+  spr63 spr{ ts tset 2 tidx SPR-L1 z 0 paloffset #40 #70 vec2 xy 1 colmask }apply
 
   8 0 do
     8 i 1+ min 0 ?do
-      ts pxl{ 2 tidx i j vec2 xy CYAN color }set
+      ts pxl{ 2 tidx i j vec2 xy CYAN color }apply
     loop
   loop
 

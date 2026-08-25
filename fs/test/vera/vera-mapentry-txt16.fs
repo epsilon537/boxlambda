@@ -18,21 +18,21 @@ create cols col1 , col2 ,
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ #16 width #16 height 1 bpp #32 tiles }set
+  ts tset{ #16 width #16 height 1 bpp #32 tiles }apply
   ts tset-print
 
   16 0 do
-    ts pxl{ 1 tidx i i vec2 xy WHITE color }set
-    ts pxl{ 1 tidx 15 i - i vec2 xy WHITE color }set
+    ts pxl{ 1 tidx i i vec2 xy WHITE color }apply
+    ts pxl{ 1 tidx 15 i - i vec2 xy WHITE color }apply
   loop
 
-  tm tmap{ #32 width #32 height TMAP-TXT16 type }set
+  tm tmap{ #32 width #32 height TMAP-TXT16 type }apply
   tm tmap-print
   l0 layer{ ts tset tm tmap }tilemap-mode
   l0 layer-print
 
-  tm mapentry{ col1 row1 vec2 xy GREEN bg WHITE fg 1 tidx }set
-  tm mapentry{ col2 row2 vec2 xy BLUE bg YELLOW fg 1 tidx }set
+  tm mapentry{ col1 row1 vec2 xy GREEN bg WHITE fg 1 tidx }apply
+  tm mapentry{ col2 row2 vec2 xy BLUE bg YELLOW fg 1 tidx }apply
 
   true l0 layer-enable
   false l1 layer-enable
