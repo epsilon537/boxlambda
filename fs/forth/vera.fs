@@ -476,7 +476,7 @@ begin-module vera
   ;
 
   ( tilemap -- )
-  : mapentry-apply
+  : mapentry-params-apply
     mapentry :: mapentry-apply
   ;
 
@@ -997,7 +997,7 @@ begin-module vera
     pxl-params import [immediate] ;
 
   ( tileset -- )
-  : pxl-apply
+  : pxl-params-apply
     tileset :: apply-pxl
   ;
 
@@ -1217,7 +1217,7 @@ begin-module vera
     [immediate] ;
 
   ( sprite -- )
-  : spr-apply
+  : spr-params-apply
     sprite :: apply
   ;
 
