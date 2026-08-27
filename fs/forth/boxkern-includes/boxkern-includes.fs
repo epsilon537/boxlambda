@@ -12,6 +12,7 @@
 
 \ The order is important. The modules build up a stack, with shell.fs on top.
 
+boxkern_include forth/boxkern-includes/on-quit.fs
 boxkern_include forth/boxkern-includes/units.fs
 boxkern_include forth/boxkern-includes/utils.fs
 boxkern_include forth/boxkern-includes/range.fs

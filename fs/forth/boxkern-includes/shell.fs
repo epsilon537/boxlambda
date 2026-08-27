@@ -358,26 +358,25 @@
 : x-line-truncated MAX-LINE-LENGTH s" Line got truncated. Max. length = %n." printf ;
 
 \ A stack to keep track of recursive includes.
-create include-stack MAX_NUM_OPEN_FILES cells allot
-0 variable include-sp   \ stack pointer
-0 variable saved-quit-hook
+MAX_NUM_OPEN_FILES stack-create (include-stack)
+
+hook-on-quit @ variable include-prev-on-quit-hook
+
+: include-on-quit-hook
+  \ Reset the stack on quit
+  (include-stack) stack-base (include-stack) >stack-top
+  include-prev-on-quit-hook @ execute
+;
+
+' include-on-quit-hook hook-on-quit !
 
 \ Push include file descriptor on the include-stack.
 \ ( x -- )
-: include-push
-  include-sp @ ( x sp )
-  dup MAX_NUM_OPEN_FILES < ?assert ( x sp )
-  tuck cells include-stack + ! ( sp )
-  1+ include-sp ! ;
+: include-push (include-stack) stack-push ;
 
 \ Pop include file descriptor from the include-stack.
 \ ( -- x )
-: include-pop
-  include-sp @ ( sp )
-  dup 0> ?assert ( sp )
-  1- dup include-sp ! ( sp-1 )
-  cells include-stack + @ ( x )
-;
+: include-pop (include-stack) stack-pop ;
 
 0 variable include-verbose
 0 variable include-source-id

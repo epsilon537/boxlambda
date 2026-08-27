@@ -115,6 +115,16 @@
 
 128 stack-create (stack-check-stack)
 
+hook-on-quit @ variable stack-check-prev-on-quit-hook
+
+: stack-check-on-quit-hook
+  \ Reset stack-check-stack on quit
+  (stack-check-stack) stack-base (stack-check-stack) >stack-top
+  stack-check-prev-on-quit-hook @ execute
+;
+
+' stack-check-on-quit-hook hook-on-quit !
+
 : stack-check-out 
   (stack-check-stack) stack-pop
   ?dup if
