@@ -34,13 +34,13 @@ boxkern_include forth/boxkern-includes/fs.fs
 boxkern_include forth/boxkern-includes/fs-redirect.fs
 boxkern_include forth/boxkern-includes/shell.fs
 boxkern_include forth/boxkern-includes/ifdef.fs
-boxkern_include forth/boxkern-includes/prompt.fs
 boxkern_include forth/boxkern-includes/disasm.fs
 boxkern_include forth/boxkern-includes/dump.fs
 boxkern_include forth/boxkern-includes/pre-dict.fs
 boxkern_include forth/boxkern-includes/wordlist.fs
 boxkern_include forth/boxkern-includes/dict.fs
 boxkern_include forth/boxkern-includes/run-time-checking.fs
+boxkern_include forth/boxkern-includes/prompt.fs
 boxkern_include forth/boxkern-includes/module.fs
 boxkern_include forth/boxkern-includes/bitfield.fs
 boxkern_include forth/boxkern-includes/memmap.fs

@@ -1,3 +1,15 @@
+hook-interpret @ variable prompt-prev-interpret
+
+: interpret-w-except-trace
+  prompt-prev-interpret @ try ?dup if ( exc )
+   ." ***Uncaught Exception***" cr 
+   ." Raised by: " raised-by @ traceinside. cr
+   execute
+  then
+;
+
+' interpret-w-except-trace hook-interpret !
+
 \ A quit loop that prints the cwd as a prompt
 : quit_w_cwd ( -- )
   \ Invoked on-quit hook to invoke custom clean-ups

@@ -75,11 +75,6 @@ interpret:
 
   # If we get here, an exception was raised.
   write "***Exception***: "
-  call _try # Wrap the exception handler call in a try block
-
-  beq x8, zero, 1f
-  # If we get here, an exception was raised, again
-  write "***Exception***: "
   call execute
 
 1:

@@ -63,11 +63,9 @@
   [immediate]
 ;
 
-\ Early version of assert
-: ?assert ( f -- )
-  0= if 
-    r@ dup ." Assert failed at $" hex. cr
-    quit
-  then
-;
+: x-assert ." Assert failed!" cr ;
 
+\ Raise x-assert exception if f is false.
+: ?assert ( f -- )
+  averts x-assert
+;
