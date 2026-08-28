@@ -24,8 +24,6 @@ include vera-bitmap-2bpp.fs
 include vera-bitmap-4bpp.fs
 include vera-bitmap-8bpp.fs
 include vera-bitmap-paloffset.fs
-include vera-bitmap-pos-err.fs
-include vera-bitmap-test-err.fs
 include vera-tile-1bpp.fs
 include vera-tile-2-4-8bpp.fs
 include vera-sprite-pixels.fs
@@ -36,9 +34,7 @@ include vera-mapentry-tile.fs
 include vera-mapentry-txt16.fs
 include vera-mapentry-txt256.fs
 include vera-map-corners.fs
-include vera-map-pos-err.fs
 include vera-map-test-cont.fs
-include vera-map-test-err.fs
 include vera-palette-test.fs
 include vera-palette-sys-colors.fs
 include vera-scale.fs
@@ -51,15 +47,22 @@ include vera-sprite-first-last.fs
 include vera-sprite-hflip.fs
 include vera-sprite-info.fs
 include vera-sprite-paloffset.fs
-include vera-sprite-params-err.fs
 include vera-sprite-vflip.fs
 include vera-sprite-xy.fs
 include vera-sprite-z.fs
-include vera-tile-pos-err.fs
-include vera-tileset-params-err.fs
 include vera-tileset-params.fs
 include vera-stack-params.fs
 include vera-bitmap-tilesize.fs
+\ Run error test cases with stack-checking disabled.
+\ It would get in the way of raised exceptions.
+false stack-checking-enable !
+include vera-bitmap-pos-err.fs
+include vera-bitmap-test-err.fs
+include vera-map-pos-err.fs
+include vera-map-test-err.fs
+include vera-sprite-params-err.fs
+include vera-tile-pos-err.fs
+include vera-tileset-params-err.fs
 quit
 cd /
 include /test/testsuite.fs

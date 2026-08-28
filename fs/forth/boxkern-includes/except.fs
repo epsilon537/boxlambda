@@ -6,14 +6,14 @@
 
 \ Assert that a value is true, otherwise raise a specified exception
 : averts ( f "name" -- )
-  ' ( f xt )
-  state @ if
+  ' 
+  state @ if ( xt )
     postpone 0=
-    postpone if
-    rot literal,
+    postpone if ( xt j-addr 2 )
+    rot literal, ( j-addr 2 )
     postpone ?raise
     postpone then
-  else
+  else ( f xt )
     swap 0= if
       ?raise
     else

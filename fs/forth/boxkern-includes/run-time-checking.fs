@@ -1,9 +1,5 @@
 \ Assert version indicating which word failed.
 
-\ Set to zero to continue execution after a failing assert.
-\ E.g. for negative testing purposes.
-1 variable quit-on-xassert
-
 \ Set to 0 to disable xassert checking.
 0 variable xassert-enable
 
@@ -22,24 +18,20 @@
       s" }xassert" compare
     until
   then
-  [immediate] ;
+  [immediate] [compileonly] ;
 
 : }xassert
-  [:
-    0= if 
-      quit-on-xassert @ if
-        r@ dup ." Assert failed at $" hex. cr
-        traceinside. cr
-        quit
-      else
-        ." Assert failed." cr
-        r@ inside-code>link dup link>wid wordlist-name@ ctype ." :: " link>name ctype cr
-      then
-    then
-  ;] compile-or-execute
-  [immediate] ;
+  postpone 0=
+  postpone if
+  ['] x-assert
+  literal,
+  postpone ?raise
+  postpone then
+  [immediate] [compileonly] ;
 
 0 variable (init-type)
+
+: x-typecheck-failed ." Typecheck failed." cr ;
 
 \ Create a typechecker instance for structs
 \ ( "name" -- ) 
@@ -51,24 +43,23 @@
     literal, 
     (init-type) @ if
       false (init-type) !
-      [: swap ! ;]
+      postpone swap 
+      postpone !
     else
-      [: over @ <> if 
-          quit-on-xassert @ if
-            r@ dup ." Typecheck failed at $" hex. cr traceinside. cr quit 
-          else
-            ." Typecheck failed" cr
-            r@ inside-code>link dup link>wid wordlist-name@ ctype ." :: " link>name ctype cr
-          then
-        then 
-      ;]
+      postpone over
+      postpone @
+      postpone <>
+      postpone if
+      ['] x-typecheck-failed
+      literal,
+      postpone ?raise
+      postpone then
     then
-    compile-or-execute
   else
     drop
     (init-type) @ if 
       false (init-type) !
-      [: drop ;] compile-or-execute
+      postpone drop
     then
   then
 ;
@@ -126,47 +117,53 @@ hook-on-quit @ variable stack-check-prev-on-quit-hook
 ' stack-check-on-quit-hook hook-on-quit !
 
 : stack-check-out 
-  (stack-check-stack) stack-pop
-  ?dup if
-    dup #16 rshift $ff and ( stackv params-out ) 
-    over 8 rshift $ff and ( stackv params-out depth-in )
-    rot #24 rshift $ff and ( params-out depth-in params-in ) 
-    - + ( expected )
-    depth 1- ( expected actual )
-    2dup <> if ( expected actual )
-      r@ dup ." Stack signature mismatch at $" hex. cr ( expected actual ra )
-      traceinside. cr ( expected actual )
-      ." Actual depth: " . cr
-      ." Expected depth: " . cr
-      .s cr
-      quit
-    else
-      2drop
+  stack-checking-enable @ if
+    (stack-check-stack) stack-pop
+    ?dup if
+      dup #16 rshift $ff and ( stackv params-out ) 
+      over 8 rshift $ff and ( stackv params-out depth-in )
+      rot #24 rshift $ff and ( params-out depth-in params-in ) 
+      - + ( expected )
+      depth 1- ( expected actual )
+      2dup <> if ( expected actual )
+        r@ dup ." Stack signature mismatch at $" hex. cr ( expected actual ra )
+        traceinside. cr ( expected actual )
+        ." Actual depth: " . cr
+        ." Expected depth: " . cr
+        .s cr
+        quit
+      else
+        2drop
+      then
     then
   then
 ;
 
 ( out in -- )
 : stack-check-in
-  dup 3 + depth > if ( out in )
-      r@ dup ." Stack underflow at $" hex. cr ( out in ra )
-      traceinside. cr ( out in  )
-      ." Actual depth: " depth 2- . cr ( out in )
-      ." Required depth: " dup . ( out in )
-      2drop
-      .s cr
-      quit
+  stack-checking-enable @ if
+    dup 3 + depth > if ( out in )
+        r@ dup ." Stack underflow at $" hex. cr ( out in ra )
+        traceinside. cr ( out in  )
+        ." Actual depth: " depth 2- . cr ( out in )
+        ." Required depth: " dup . ( out in )
+        2drop
+        .s cr
+        quit
+    then
+    \ Replace 0 entry on top of stack by an actual entry containing
+    \ #in #out and depth-in
+    (stack-check-stack) stack-pop drop ( out in )
+    #24 lshift ( out inshifted )
+    swap #16 lshift ( inshifted outshifted ) 
+    or ( inoutshifted )
+    depth 1- 8 lshift ( inoutshifted depth-in-shifted )
+    or ( inoutdepthshifted )
+    1 or ( inoutdepthshifted|1 )  
+    (stack-check-stack) stack-push ( )
+  else
+    2drop
   then
-  \ Replace 0 entry on top of stack by an actual entry containing
-  \ #in #out and depth-in
-  (stack-check-stack) stack-pop drop ( out in )
-  #24 lshift ( out inshifted )
-  swap #16 lshift ( inshifted outshifted ) 
-  or ( inoutshifted )
-  depth 1- 8 lshift ( inoutshifted depth-in-shifted )
-  or ( inoutdepthshifted )
-  1 or ( inoutdepthshifted|1 )  
-  (stack-check-stack) stack-push ( )
 ;
 
 \ Invoke as follows (example):
@@ -182,8 +179,10 @@ hook-on-quit @ variable stack-check-prev-on-quit-hook
 : stack-checker stack-checking-enable @ if literal, literal, ['] stack-check-in call, else 2drop then ;
 
 : (stack-check-in-prologue)
-  \ Push a 0 entry onto the stack. It might get replaced by an actual entry by stack-check-in.
-  0 (stack-check-stack) stack-push 
+  stack-checking-enable @ if
+    \ Push a 0 entry onto the stack. It might get replaced by an actual entry by stack-check-in.
+    0 (stack-check-stack) stack-push 
+  then
 ;
 
 \ Redefining these to hook into Word entry and exit points...
@@ -199,4 +198,5 @@ hook-on-quit @ variable stack-check-prev-on-quit-hook
 
 : exit stack-checking-enable @ if postpone stack-check-out then postpone exit [immediate] ;
 
+\ : try postpone try postpone dup postpone if postpone stack-check-out postpone then [immediate] ;
 

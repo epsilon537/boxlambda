@@ -5,6 +5,7 @@ hook-interpret @ variable prompt-prev-interpret
    ." ***Uncaught Exception***" cr 
    ." Raised by: " raised-by @ traceinside. cr
    execute
+   quit
   then
 ;
 

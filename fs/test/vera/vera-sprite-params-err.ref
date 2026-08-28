@@ -1,44 +1,16 @@
 Tileset: $12040000 base, 32 width, 32 height, 8 bpp, 8 tiles
 1: 
-Typecheck failed
-spr-params:: tset
-Typecheck failed
-vera:: tset-#tiles@
-Typecheck failed
-tileset:: tidx>addr
-Typecheck failed
-tileset:: tilesize@
-Typecheck failed
-tileset:: is-bitmap?
-Typecheck failed
-vera:: tset-bpp@
-Assert failed.
-sprite:: bpp!
-Typecheck failed
-vera:: tset-width@
-Assert failed.
-sprite:: width!
-Typecheck failed
-vera:: tset-height@
-Assert failed.
-sprite:: height!
+Typecheck failed.
 2: 
-Assert failed.
-spr-params:: tidx
+Assert failed!
 3: 
-Assert failed.
-spr-params:: tset
-Assert failed.
-spr-params:: z
+Assert failed!
 4: 
-Assert failed.
-spr-params:: xy
+Assert failed!
 5: 
-Assert failed.
-spr-params:: xy
+Assert failed!
 6: 
-Assert failed.
-spr-params:: flip
+Assert failed!
 7: 
 sprite: 1 id, 5 x, 6 y, 32 w, 32 h, 1 flip, 2 z, $1 colmask
 1 paloffset, 8 bpp, $12041C00 addr 7 tidx
