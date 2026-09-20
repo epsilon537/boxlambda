@@ -6,9 +6,9 @@
   true display-enable
 
   ts tset{ #16 width #16 height 8 bpp #32 tiles }apply
-  ts tset-print
+  ts tset.
   tm tmap{ #32 width #32 height TMAP-TILE type }apply
-  tm tmap-print
+  tm tmap.
   l0 layer{ ts tset tm tmap }tilemap-mode
   true l0 layer-enable
   false l1 layer-enable

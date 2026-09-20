@@ -4,7 +4,7 @@
 \ point that the include Word has been created, i.e. right after the
 \ BoxKern has exeuted shell.fs.
 
-\ disable run-time type checking
+\ enable run-time type checking
 true xassert-enable !
 true rttc-struct !
 

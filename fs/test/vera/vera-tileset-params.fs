@@ -15,7 +15,7 @@
       b !
       ." width: " w @ . ."  height: " h @ . ." bpp: " b @ . cr
       ts tset{ w @ width h @ height b @ bpp 8 tiles }apply
-      ts tset-print
+      ts tset.
     ;] iter
   ;] iter
 ;

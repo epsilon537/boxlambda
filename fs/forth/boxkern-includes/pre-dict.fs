@@ -1,5 +1,4 @@
-\ The definitions below come from the Mecrisp Quintus Forth distribution,
-\ the foundation of BoxLambda's Forth.
+\ BoxLambda Forth
 \
 \ -----------------------------------------------------------------------------
 \   A few tools for dictionary wizardy
@@ -10,7 +9,12 @@ $10 constant FLAG-IMMEDIATE
 $80 constant FLAG-RAMALLOT
 $100 constant FLAG-BUFFER
 
+\ Like constant, but the created constant acts as an immediate.
+( u|n "name" -- )
 : immediate-constant create , FLAG-IMMEDIATE setflags does> @ ;
+
+\ The definitions below come from the Mecrisp Quintus Forth distribution,
+\ the foundation of BoxLambda's Forth.
 
 : executablelocation? ( addr -- ? )
   dup  addrinimem?              \ In imem

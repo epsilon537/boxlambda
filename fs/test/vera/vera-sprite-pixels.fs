@@ -22,7 +22,7 @@
       [:
         b !
         ts tset{ w @ width h @ height b @ bpp 8 tiles }apply
-        ts tset-print
+        ts tset.
         spr spr{ ts tset 2 tidx SPR-L1 z }apply
         h @ 0 do
           w @ i 1+ min 0 ?do

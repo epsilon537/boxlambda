@@ -5,18 +5,27 @@
 : x-stack-obj-overflow ( -- ) ." stack object overflow" cr ;
 : x-stack-obj-underflow ( -- ) ." stack object underflow" cr ;
 
+\ The stack object structure:
+\ --------
+\ 0: stack-top -------------------|
+\ 1: stack-end ---------------------|
+\ 2: stack-base: stack slot 0     | |
+\ 3:             stack slot 1     | |
+\ ...                           <-| |
+\ n+1:           stack slot n-1     |
+\ --------                       <--|
 begin-structure stack-struct
-  field: .stack-top
-  field: .stack-end
-  field: .stack-base
+  field: .stack-top \ Pointer to next free slot. Increments as items are pushed.
+  field: .stack-end \ Pointer to cell past end of space allocated to stack. Top must not go past this.
+  field: .stack-base \ Not a pointer. The stack slots start here. Top must not go below this address.
 end-structure
 
 \ Create an empty stack object of n elements.
 ( n "name" -- )
 : stack-create
-  create here >r 2 + cells allot ( R: stack )
+  create here >r 2 + cells allot ( R: stack ) \ Add 2 cells for stack-top and stack-end.
   here r@ .stack-end ! ( R: stack )
-  r@ .stack-base r> .stack-top !
+  r@ .stack-base r> .stack-top ! \ Stack is empty when stack-top == stack-base.
 ;
 
 \ Push x on the stack.
@@ -50,7 +59,7 @@ end-structure
 : stack-max-depth
   dup .stack-end @ swap .stack-base - 2 rshift
 ;
-  
+
 \ Returns the number of free elements left on the stack.
 ( stack -- n )
 : stack-free
@@ -66,16 +75,20 @@ end-structure
 ( stack -- stack-top-addr )
 : stack-top .stack-top @ ;
 
-\ Set the stack top to the given address
-\ E.g. <stack> stack-base <stack> >stack-top resets the stack.
-\ Raises x-stack-obj-underflow or x-stack-obj-overflow if given
-\ address is outside the stack object range.
+\ Set the stack top to the given address.
+\ E.g. <stack> dup stack-base >stack-top resets the stack.
+\ Raises x-stack-obj-underflow or x-stack-obj-overflow if given address is 
+\ outside the stack object range.
 ( addr stack -- )
 : >stack-top
   2dup .stack-base >= averts x-stack-obj-underflow
   2dup .stack-end @ < averts x-stack-obj-overflow
   .stack-top !
 ;
+
+\ Reset the stack.
+( stack -- )
+: stack-reset dup stack-base >stack-top ;
 
 \ Find x in the stack and return its address or 0 if not found.
 ( x stack -- addr|0 )

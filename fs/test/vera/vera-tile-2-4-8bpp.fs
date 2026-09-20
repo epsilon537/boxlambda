@@ -11,7 +11,7 @@
   true display-enable
 
   tm tmap{ 32 width 32 height TMAP-TILE type }apply
-  tm tmap-print
+  tm tmap.
 
   tm mapentry{ 0 0 vec2 xy 0 bg 1 fg 1 tidx }apply
   0 0 vec2 tm mapentry@ unpack-txt16
@@ -27,9 +27,9 @@
       [:
         b !
         ts tset{ w @ width h @ height b @ bpp 8 tiles }apply
-        ts tset-print
+        ts tset.
         l0 layer{ ts tset tm tmap }tilemap-mode
-        l0 layer-print
+        l0 layer.
         ts pxl{ 1 tidx w @ 1- h @ 1- vec2 xy #101 color }apply
         ." pxl[w-1,h-1]: " ts pxl{ }get . cr
         h @ 1- irqline!

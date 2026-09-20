@@ -4,7 +4,7 @@ hook-on-quit @ variable compileto-prev-on-quit-hook
 
 : compileto-on-quit-hook
   \ Reset the stack on quit
-  (compileto-stack) stack-base (compileto-stack) >stack-top
+  (compileto-stack) stack-reset
   compileto-prev-on-quit-hook @ execute
 ;
 

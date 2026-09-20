@@ -9,7 +9,7 @@
   true display-enable
 
   ts tset{ 16 width 16 height 1 bpp 32 tiles }apply
-  ts tset-print
+  ts tset.
 
   16 0 do
     ts pxl{ 1 tidx i i vec2 xy 1 color }apply
@@ -23,11 +23,11 @@
     [:
       r !
       tm tmap{ c @ width r @ height TMAP-TXT16 type }apply
-      tm tmap-print
+      tm tmap.
       l0 layer{ ts tset tm tmap }tilemap-mode
       true l0 layer-enable
       false l1 layer-enable
-      l0 layer-print
+      l0 layer.
       tm mapentry{ GREEN bg WHITE fg 1 tidx 0 0 vec2 xy }apply
       tm mapentry{ BLUE bg WHITE fg 1 tidx c @ 1- 0 vec2 xy }apply
       tm mapentry{ PURPLE bg YELLOW fg 1 tidx 0 r @ 1- vec2 xy }apply

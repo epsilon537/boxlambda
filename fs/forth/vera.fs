@@ -16,35 +16,36 @@ begin-module vera
   #127 constant MAX_SPRITE_ID
 
   \ For setting the flip attribute of mapentries and sprites
-  2 constant VFLIP
-  1 constant HFLIP
-  3 constant VFLIP_HFLIP
+  #2 constant VFLIP
+  #1 constant HFLIP
+  #3 constant VFLIP_HFLIP
 
+  \ Used for parameter validation.
+  \ Returns true if given mapentry or sprite flip value is valid.
+  ( flip-value -- f )
   : (flip-is-valid?) l{ 0 , VFLIP , HFLIP , VFLIP_HFLIP }l find-in 0<> ;
 
   \ --- VRAM ---
 
+  \ - VRAM internal helper Words.
   begin-module vram
 
     : x-alloc-failed ." VRAM allocation failed." cr ;
 
+    \ This block size ensures that Vera alignment requirements
+    \ are met when programming VRAM addresses in Vera registers.
+    \ There is one case for bitmaps where more strict alignment is
+    \ required. This is handled separately in the tilesize@ Word.
     #2048 constant BLOCK-SZ-BYTES
     BLOCK-SZ-BYTES log2 constant LOG-BLK-SZ
     VERA_VRAM_SIZE_BYTES LOG-BLK-SZ rshift constant #BLOCKS
 
     create blocks_ #BLOCKS chars allot
 
-    : reset 
-      blocks_ #BLOCKS 0 fill
-      VERA_VRAM_BASE VERA_VRAM_SIZE_BYTES 0 fill 
-    ;
-
-    reset
-
-    \ --- VRAM Allocation Subsystem ---
     \ In the blocks_ array, at offset, attempt to find requested blocks.
     \ Return actual # of blocks found (might be less than requested).
-    : find-free-blocks ( requested offset -- found )
+    ( requested offset -- found )
+    : find-free-blocks
       [ 2 1 stack-checker ]
       begin ( left offset )
         over 0> \ Anything left to find? ( left offset f )
@@ -59,7 +60,7 @@ begin-module vera
     \ Find a chunk of #blocks consecutive free blocks in the blocks_
     \ array. Return the start index of this chunk.
     \ Raise x-vram-alloc-failed exception if no chunk is found.
-    \ ( #blocks -- block-idx|-1 )
+    ( #blocks -- block-idx|-1 )
     : find-free-chunk
       [ 1 1 stack-checker ]
       #BLOCKS 0 do \ Start scanning from offset 0 ( #blocks )
@@ -73,6 +74,7 @@ begin-module vera
       drop -1
     ;
 
+    \ Allocate #blocks consecutive blocks starting at block-idx
     ( #blocks block-idx -- )
     : allocate-blocks
       [ 2 0 stack-checker ]
@@ -81,15 +83,18 @@ begin-module vera
       1+ swap 1- $ff fill ( )
     ;
 
-    : find-alloc-blocks ( #blocks -- block-idx )
+    \ Find and allocate #blocks consecutive blocks in VRAM.
+    ( #blocks -- block-idx )
+    : find-alloc-blocks
       [ 1 1 stack-checker ]
       dup find-free-chunk ( #blocks block-idx )
       dup -1 = triggers x-alloc-failed
       tuck allocate-blocks ( block-idx )
     ;
 
-    \ ( block-idx -- )
-    : free
+    \ Release the given VRAM block.
+    ( block-idx -- )
+    : free-block
       [ 1 0 stack-checker ]
       blocks_ + ( vram_block_ptr )
       dup c@ ( vram_block_ptr #blocks )
@@ -97,14 +102,24 @@ begin-module vera
     ;
   end-module \ VRAM
 
-  : vram-reset vram :: reset ;
+  \ - Public VRAM API:
+
+  \ Reset VRAM, release all VRAM resources.
+  ( -- )
+  : vram-reset
+    blocks_ #BLOCKS 0 fill
+    VERA_VRAM_BASE VERA_VRAM_SIZE_BYTES 0 fill 
+  ;
+
+  vram-reset
 
   \ Allocate memory in VRAM for a tilemap, tiledata, bitmap or sprites.
   \ The 'init' Words use this function to allocate their resources.
   \ size-bytes: the number of bytes to allocate.
   \ If successful a 2KB-aligned Pointer to allocated block of memory in VRAM.
   \ In not successful an x-vram-alloc-failed exception is raised.
-  : vram-alloc ( size-bytes -- addr )
+  ( size-bytes -- addr )
+  : vram-alloc
     [ 1 1 stack-checker ]
     dup 0= if exit then
     \ Convert size in bytes to block size, rounding up.
@@ -115,53 +130,53 @@ begin-module vera
   ;
 
   \ Release VRAM allocated with vram-alloc.
-  : vram-free ( addr -- )
+  ( addr -- )
+  : vram-free
     [ 1 0 stack-checker ]
     \ Convert addr to block-idx
     VERA_VRAM_BASE - vram :: LOG-BLK-SZ rshift ( block-idx )
-    vram :: free
+    vram :: free-block
   ;
 
   \ Return the VRAM base address.
-  \ ( -- vram-base-addr )
+  ( -- vram-base-addr )
   : vram-base VERA_VRAM_BASE ;
 
-  \ --- Tile Map API
+  \ --- Tile Maps
 
   \ Map types
-  0 constant TMAP-TXT16
-  1 constant TMAP-TXT256
-  2 constant TMAP-TILE
+  #0 constant TMAP-TXT16
+  #1 constant TMAP-TXT256
+  #2 constant TMAP-TILE
 
-  ( type -- f )
-  : (tmap-type-is-valid?) l{ TMAP-TXT16 , TMAP-TXT256 , TMAP-TILE }l find-in 0<> ;
-
+  \ - Tilemap internal helper Words.
   begin-module tilemap
 
+    \ Tilemap object structure, including transient fields for the mapentry API.
     begin-structure tilemap-struct
       field:  .base
-      field:  .position \ transient
+      field:  .position \ transient, used by mapentry
       hfield: .width
       hfield: .height
-      hfield: .tidx \ transient
+      hfield: .tidx \ transient, used by mapentry
       cfield: .type
-      cfield: .fg \ transient
-      cfield: .bg \ transient
-      cfield: .paloffset \ transient
-      cfield: .flip \ transient
+      cfield: .fg \ transient, used by mapentry
+      cfield: .bg \ transient, used by mapentry
+      cfield: .paloffset \ transient, used by mapentry
+      cfield: .flip \ transient, used by mapentry
     end-structure
 
     typechecker typecheck
 
     \ Initialize the tilemap object.
-    \ ( tilemap -- )
-    : init 
+    ( tilemap -- )
+    : init
       [ 1 0 stack-checker ]
-      dup tilemap-struct 0 fill 
+      dup tilemap-struct 0 fill
       init-type typecheck
     ;
 
-    \ check if given position is within the width/height boundaries
+    \ Check if given position is within the tilemap's width/height boundaries.
     ( position tilemap -- f )
     : pos-in-range?
       [ 2 1 stack-checker ]
@@ -173,6 +188,7 @@ begin-module vera
       and
     ;
 
+    \ Apply the tilemap parameters entered in a tmap{...}set block.
     ( tilemap -- )
     : apply
       [ 1 0 stack-checker ]
@@ -189,36 +205,46 @@ begin-module vera
       dup rot 0 fill ( map vram ) 
       swap .base !
     ;
-
   end-module \ tilemap
 
+  \ - Public Tilemap API:
+  \
+  \ A tilemap is a grid of tiles (e.g. a font). The grid is characterized by width,
+  \ height and tile type. The grid is populated used the mapentry{...} API.
+
+  \ Tilemap parameters in a tmap{...}set/apply block.
   begin-module tmap-params
-    \ tilemap :: { }set attributes
     tilemap import
 
+    \ Keeps track of the tilemap object to which the attributes will be applied.
     0 variable tmap
 
+    \ Used for parameter validation. Returns true if given width or height is valid.
     ( size -- f )
     : (size-is-valid?) l{ 32 , 64 , 128 , 256 }l find-in 0<> ;
 
-    \ Set map width in the tilemap object: 32, 64, 128, 256
-    \ ( width -- )
+    \ Set map width in the tilemap object: 32, 64, 128, 256.
+    ( width -- )
     : width
       [ 1 0 stack-checker ]
       xassert{ dup (size-is-valid?) }xassert
       tmap @ .width h! 
     ;
 
-    \ Set map height in the tilemap object: 32, 64, 128, 256
-    \ ( height -- )
+    \ Set map height in the tilemap object: 32, 64, 128, 256.
+    ( height -- )
     : height
       [ 1 0 stack-checker ]
       xassert{ dup (size-is-valid?) }xassert
       tmap @ .height h! 
     ;
 
+    \ Used for validation purposes. Returns true if given type value is valid.
+    ( type -- f )
+    : (tmap-type-is-valid?) l{ TMAP-TXT16 , TMAP-TXT256 , TMAP-TILE }l find-in 0<> ;
+
     \ Set the map type : TXT16/TXT256/TILE.
-    \ ( type -- )
+    ( type -- )
     : type
       [ 1 0 stack-checker ]
       xassert{ dup (tmap-type-is-valid?) }xassert
@@ -228,7 +254,7 @@ begin-module vera
     \ If VRAM was previously allocated for this tilemap,
     \ this VRAM will be released before reallocating VRAM.
     \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
-    \ ( -- )
+    ( -- )
     : }apply
       [: 
         [ 0 0 stack-checker ]
@@ -239,7 +265,9 @@ begin-module vera
       [immediate]
     ;
 
-    \ ( -- )
+    \ Record the given tilemap parameters in the tilemap object, but don't apply
+    \ the parameters yet. Useful when setting parameters piecemeal.
+    ( -- )
     : }set
       tmap-params unimport
       [immediate]
@@ -248,41 +276,42 @@ begin-module vera
     tilemap unimport
   end-module \ tmap-params
 
-  \ Opening bracket for tmap{ ... }set
+  \ Opening bracket for tmap{ ... }set/apply.
   ( tilemap -- )
   : tmap{
     [: tmap-params :: tmap ! ;] compile-or-execute
     tmap-params import 
     [immediate] ;
 
+  \ Apply the tilemap parameters previously recorded in a tmap{...}set block.
   ( tilemap -- )
   : tmap-params-apply
     tilemap :: apply
   ;
 
   \ Retrieve map width from the tilemap object.
-  \ ( tilemap -- width )
+  ( tilemap -- width )
   : tmap-width@ 
     [ 1 1 stack-checker ]
     tilemap :: typecheck
     tilemap :: .width h@ ;
 
   \ Retrieve map height from the tilemap object.
-  \ ( tilemap -- height )
+  ( tilemap -- height )
   : tmap-height@ 
     [ 1 1 stack-checker ]
     tilemap :: typecheck
     tilemap :: .height h@ ;
 
   \ Retrieve the map type from the map object
-  \ ( tilemap -- type )
+  ( tilemap -- type )
   : tmap-type@
     [ 1 1 stack-checker ]
     tilemap :: typecheck
     tilemap :: .type c@ ;
 
   \ Retrieve tilemap base address in VRAM.
-  \ ( tilemap -- addr )
+  ( tilemap -- addr )
   : tmap-base@ 
     [ 1 1 stack-checker ]
     tilemap :: typecheck
@@ -297,8 +326,9 @@ begin-module vera
     0 swap tilemap :: .base !
   ;
 
+  \ Print the tilemap object attributes.
   ( tilemap -- )
-  : tmap-print
+  : tmap.
     [ 1 0 stack-checker ]
     tilemap :: typecheck
     >r r@ tmap-type@ r@ tmap-height@ r@ tmap-width@ r> tmap-base@
@@ -306,18 +336,19 @@ begin-module vera
   ;
 
   \ Create and initialize a tilemap object.
-  \ ( "name" -- )
+  ( "name" -- )
   : <tmap> 
     create here tilemap :: tilemap-struct allot tilemap :: init ;
 
   compileto-save
   compiletoimem
 
-  \ --- Tile Map API
+  \ --- Tilemap mapentry internal Words.
   begin-module mapentry
 
     \ Get the address of the entry at position in given map
-    : position>addr ( position tilemap -- addr )
+    ( position tilemap -- addr )
+    : position>addr
       [ tilemap import ]
       [ 2 1 stack-checker ]
       \ Calculate 2*(row*width_ + col)
@@ -332,7 +363,7 @@ begin-module vera
     \ Set mapentry at given position in tilemap.
     \ position is a vec2, i.e. x first (column), then y (row).
     ( mapentry position tilemap -- )
-    : mapentry! 
+    : mapentry!
       [ 3 0 stack-checker ]
       position>addr h! ;
 
@@ -343,6 +374,8 @@ begin-module vera
       [ 2 1 stack-checker ]
       position>addr h@ ;
 
+    \ Apply the mapentry parameters previously set in a
+    \ mapentry{...}set block.
     ( tilemap -- )
     : mapentry-apply
       [ 1 0 stack-checker ]
@@ -373,45 +406,52 @@ begin-module vera
     ;
   end-module \ mapentry
 
+  \ - Tilemap mapentry public API:
+
+  \ Tilemap mapentry parameters in a tmap{...}set/apply block.
   begin-module mapentry-params
     \ mapentry :: { }set/get attributes
     tilemap import
-    tmap-params import
     mapentry import
 
+    \ Set mapentry background color.
     ( bg -- )
     : bg
       [ 1 0 stack-checker ]
       tmap @ .bg c! ;
 
+    \ Set mapentry foreground color.
     ( fg -- )
     : fg
       [ 1 0 stack-checker ]
       tmap @ .fg c! ;
 
+    \ Set mapentry tile index (character code).
     ( tile-idx -- )
     : tidx
       [ 1 0 stack-checker ]
       tmap @ .tidx h! ;
 
+    \ Set mapentry palette offset.
     ( paloffset -- )
     : paloffset
       [ 1 0 stack-checker ]
       tmap @ .paloffset c! ;
 
-    \ flip values: 0, VFLIP, HFLIP, or VFLIP_HFLIP
+    \ Set mapentry flip value: 0, VFLIP, HFLIP, or VFLIP_HFLIP
     ( flip -- )
     : flip
       [ 1 0 stack-checker ]
       xassert{ dup (flip-is-valid?) }xassert
       tmap @ .flip c! ;
 
+    \ Set mapentry xy position in the tilemap. The input parameter is a vec2 object (see vec2.fs).
     ( vec2 -- )
     : xy
       [ 1 0 stack-checker ]
       tmap @ .position ! ;
 
-    \ Write mapentry using attributes specified in {}mapentry!
+    \ Apply the mapentry as specified in the ( tilemap ) mapentry{...}apply block.
     ( -- )
     : }apply
       [:
@@ -423,13 +463,15 @@ begin-module vera
       [immediate]
     ;
 
+    \ Record the given mapentry parameters in the tilemap object, but don't apply
+    \ the parameters yet. Useful when setting parameters piecemeal.
     ( -- )
     : }set
       mapentry-params unimport
       [immediate]
     ;
 
-    \ Read from VRAM, mapentry specified by { <vec> position }mapentry@ and 
+    \ Read from VRAM the mapentry specified by ( tilemap ) mapentry{ <vec2> xy }get and
     \ decode it, populating fg, bg, paloffset, flip attributes.
     \ This is useful for mapentry read-modify-write operations.
     ( -- )
@@ -463,11 +505,10 @@ begin-module vera
     ;
 
     tilemap unimport
-    tmap-params unimport
     mapentry unimport
   end-module \ mapentry-params
 
-  \ Opening bracket for mapentry{ ... }set and { ... }get
+  \ Opening bracket for ( tilemap ) mapentry{ ... }apply/set/get.
   ( tilemap -- )
   : mapentry{ 
     [: tmap-params :: tmap ! ;] compile-or-execute
@@ -475,12 +516,14 @@ begin-module vera
     [immediate] 
   ;
 
+  \ Apply the mapnetry parameters previously recorded in a mapentry{...}set block.
   ( tilemap -- )
   : mapentry-params-apply
     mapentry :: mapentry-apply
   ;
 
-  \ set a 16-bit mapentry value at row/col in given tilemap
+  \ Set a 16-bit mapentry value at given position tilemap. 
+  \ The position is specified by a vec2 object (see vec2.fs).
   ( mapentry vec2 tilemap -- )
   : mapentry!
    [ 3 0 stack-checker ]
@@ -488,7 +531,8 @@ begin-module vera
     mapentry :: mapentry! 
   ;
 
-  \ get the 16-bit mapentry value from position in given tilemap
+  \ Read the 16-bit mapentry value from position in given tilemap
+  \ The position is specified by a vec2 object (see vec2.fs).
   ( vec2 tilemap -- mapentry )
   : mapentry@
     [ 2 1 stack-checker ]
@@ -499,7 +543,7 @@ begin-module vera
   \ Keeping the 16-bit mapentry unpack words directly in the vera namespace for convenience:
 
   \ Unpack tidx, fg and bg color from a 1bpp 16 color textmode map entry value
-  \ ( mapentry -- tidx fg bg )
+  ( mapentry -- tidx fg bg )
   : unpack-txt16
     [ 1 3 stack-checker ]
     dup $ff and ( mapentry tidx )
@@ -508,7 +552,7 @@ begin-module vera
   ;
 
   \ Unpack tidx and fg color from a 1bpp 256 color textmode map entry value
-  \ ( mapentry -- tidx fg )
+  ( mapentry -- tidx fg )
   : unpack-txt256
     [ 1 2 stack-checker ]
     dup $ff and ( mapentry tidx )
@@ -520,7 +564,7 @@ begin-module vera
   \ following logic:
   \ - Color index 0 (transparent) and 16-255 are unmodified.
   \ - Color index 1-15 is modified by adding 16 x palette offset.
-  \ ( mapentry -- tile-idx flip paloffset )
+  ( mapentry -- tile-idx flip paloffset )
   : unpack-tile
     [ 1 3 stack-checker ]
     dup $3ff and ( mapentry tile-idx )
@@ -528,22 +572,28 @@ begin-module vera
     swap 12 rshift $f and ( tile-idx flip paloffset )
   ;
 
-  \ -- Pixel API
-  \ Getting and Setting pixels in tiles:
-
+  \ Internal Words for getting and setting pixels in tiles:
   begin-module pixel
 
-    ( base width position -- ptr )
-    : 8bpp-byte-ptr 
+    \ Calculate the byte pointer holding given position
+    \ in 8bpp tile/bitmap of given width starting at
+    \ given address.
+    \ ( base width position -- ptr )
+    : 8bpp-byte-ptr
       [ 3 1 stack-checker ]
       vec2.xy rot * + + ;
 
-    ( base width position -- ptr )
-    : 4bpp-byte-ptr 
+    \ Calculate the byte pointer holding given position
+    \ in 4bpp tile/bitmap of given width starting at
+    \ given address.
+    \ ( base width position -- ptr )
+    : 4bpp-byte-ptr
       [ 3 1 stack-checker ]
       vec2.xy rot * + 2/ + ;
 
-    ( position -- bitoffset )
+    \ In a 4bpp tile/bitmap, calculate the bitoffset within a byte corresponding
+    \ to the given vec2 position.
+    \ ( position -- bitoffset )
     : 4bpp-x-bitoffset
       [ 1 1 stack-checker ]
       vec2.x
@@ -551,12 +601,17 @@ begin-module vera
       and - \ 1-x&1
       2 lshift ;
 
-    ( base width position -- ptr )
-    : 2bpp-byte-ptr 
+    \ Calculate the byte pointer holding given position
+    \ in 2bpp tile/bitmap of given width starting at
+    \ given address.
+    \ ( base width position -- ptr )
+    : 2bpp-byte-ptr
       [ 3 1 stack-checker ]
       vec2.xy rot * + 4/ + ;
 
-    ( position -- bitoffset )
+    \ In a 2bpp tile/bitmap, calculate the bitoffset within a byte corresponding
+    \ to the given vec2 position.
+    \ ( position -- bitoffset )
     : 2bpp-x-bitoffset
       [ 1 1 stack-checker ]
       vec2.x
@@ -565,34 +620,38 @@ begin-module vera
       shl \ (3-x&3)*2
     ;
 
-    ( base width position -- ptr )
-    : 1bpp-byte-ptr 
+    \ Calculate the byte pointer holding given position
+    \ in 1bpp tile/bitmap of given width starting at
+    \ given address.
+    \ ( base width position -- ptr )
+    : 1bpp-byte-ptr
       [ 3 1 stack-checker ]
       vec2.xy rot * + 8/ + ;
 
-    ( position -- bitoffset )
-    : 1bpp-x-bitoffset 
+    \ In a 1bpp tile/bitmap, calculate the bitoffset within a byte corresponding
+    \ to the given vec2 position.
+    \ ( position -- bitoffset )
+    : 1bpp-x-bitoffset
       [ 1 1 stack-checker ]
       vec2.x 7 dup rot ( 7 7 x ) and - ( 7-x&7 ) ;
 
-  end-module \ pixel
-
+  \ -- Getting and settig pixels in various BPP modes:
   ( pxlval position base width -- )
-  : pxl-8bpp! 
+  : 8bpp!
     [ 4 0 stack-checker ]
     rot pixel :: 8bpp-byte-ptr ( pxval ptr )
     c! ( )
   ;
 
   ( position base width -- pxlval )
-  : pxl-8bpp@ 
+  : 8bpp@
     [ 3 1 stack-checker ]
     rot pixel :: 8bpp-byte-ptr ( ptr )
     c@ ( pxlval )
   ;
 
   ( pxlval position base width -- )
-  : pxl-4bpp! 
+  : 4bpp!
     [ 4 0 stack-checker ]
     rot dup pixel :: 4bpp-x-bitoffset >r ( pxlval base y width position R: bitoffset )
     pixel :: 4bpp-byte-ptr ( pxval ptr R: bitoffset )
@@ -604,7 +663,7 @@ begin-module vera
   ;
 
   ( position base width -- pxlval )
-  : pxl-4bpp@
+  : 4bpp@
     [ 3 1 stack-checker ]
     rot dup pixel :: 4bpp-x-bitoffset >r ( base width position R: bitoffset )
     pixel :: 4bpp-byte-ptr ( ptr R: bitoffset )
@@ -613,7 +672,7 @@ begin-module vera
   ;
 
   ( pxlval position base width -- )
-  : pxl-2bpp!
+  : 2bpp!
     [ 4 0 stack-checker ]
     rot dup pixel :: 2bpp-x-bitoffset >r ( pxlval base width position R: bitoffset )
     pixel :: 2bpp-byte-ptr ( pxval ptr R: bitoffset )
@@ -625,7 +684,7 @@ begin-module vera
   ;
 
   ( position base width -- pxlval )
-  : pxl-2bpp@
+  : 2bpp@
     [ 3 1 stack-checker ]
     rot dup pixel :: 2bpp-x-bitoffset >r ( base width position R: bitoffset )
     pixel :: 2bpp-byte-ptr ( ptr R: bitoffset )
@@ -634,7 +693,7 @@ begin-module vera
   ;
 
   ( pxlval position base width -- )
-  : pxl-1bpp!
+  : 1bpp!
     [ 4 0 stack-checker ]
     rot dup pixel :: 1bpp-x-bitoffset >r ( pxlval base width position R: bitoffset )
     pixel :: 1bpp-byte-ptr ( pxlval ptr R: bitoffset )
@@ -644,43 +703,45 @@ begin-module vera
   ;
 
   ( position base width -- pxlval )
-  : pxl-1bpp@
+  : 1bpp@
     [ 3 1 stack-checker ]
     rot dup pixel :: 1bpp-x-bitoffset >r ( base width position R: bitoffset )
     pixel :: 1bpp-byte-ptr ( ptr R: bitoffset )
     c@ r> rshift 1 and ( pxlval )
   ;
+  end-module \ pixel
 
   compileto-restore
 
-  \ -- Tileset API
-  \ A tileset is used to represent tiles, sprite pixel data and bitmaps.
-
+  \ --- Tileset internal Words.
   begin-module tileset
 
+    \ The tileset object structure, including transient fields for the pxl{...} API.
     begin-structure tileset-struct
       field:  .base
       field:  .pxl-set
       field:  .pxl-get
-      field:  .position \ transient
-      field:  .bitmapaddr \ transient   
+      field:  .position \ transient, used by pxl{}
+      field:  .bitmapaddr \ transient, used by pxl{}
       hfield: .width
       hfield: .height
       hfield: .bpp
       hfield: .#tiles
-      hfield: .tidx \ transient
-      cfield: .color \ transient
+      hfield: .tidx \ transient, used by pxl{}
+      cfield: .color \ transient, used by pxl{}
     end-structure
     
     typechecker typecheck
 
     \ Initialize the tileset object.
-    : init ( tileset -- ) 
+    ( tileset -- )
+    : init
       [ 1 0 stack-checker ]
       dup tileset-struct 0 fill 
       init-type typecheck
     ;
 
+    \ Returns true if it's a bitmap tileset (as opposed to regular tiles/fonts or sprites).
     ( tileset --- f )
     : is-bitmap?
       [ 1 1 stack-checker ]
@@ -701,7 +762,7 @@ begin-module vera
       then
     ;
 
-    \ check if given position is within the width/height boundaries
+    \ Check if given position is within the width/height boundaries.
     ( position tileset -- f )
     : pos-in-range?
       [ 2 1 stack-checker ]
@@ -712,6 +773,7 @@ begin-module vera
       and
     ;
 
+    \ Applies the parameters configured in a tset{...} block.
     ( tset -- )
     : apply
       [ 1 0 stack-checker ]
@@ -726,7 +788,8 @@ begin-module vera
       swap .base ! ( )
     ;
 
-    \ Given a tile index in a tileset, compute to  pointer to the pixel data of a tile in the tileset.
+    \ Given a tile index in a tileset, compute the address (in VRAM) of the pixel data
+    \ of that tile.
     \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
     \ @param tileset: Tileset object
     ( tile-idx tileset -- addr )
@@ -739,6 +802,7 @@ begin-module vera
       xassert{ dup }xassert
       + ;
 
+    \ Apply (draw) the pixel specified in a pxl{...} block.
     ( tset -- )
     : apply-pxl
       [ 1 0 stack-checker ]
@@ -755,11 +819,16 @@ begin-module vera
     ;
   end-module \ tileset
 
+  \ -- Tileset Public API
+  \ A tileset is used to represent tiles (e.g. a font), sprite pixel data, and bitmaps.
+
+  \ Tileset parameters in a tset{...}set/apply block.
   begin-module tset-params
     tileset import
 
     0 variable tset
 
+    \ Used for parameter validation
     ( size -- f )
     : (width-is-valid?) l{ 8 , 16 , 32 , 64 , 320 , 640 }l find-in 0<> ;
 
@@ -792,10 +861,10 @@ begin-module vera
     : bpp
       [ 1 0 stack-checker ]
       dup case
-        1 of ['] pxl-1bpp! ['] pxl-1bpp@ endof
-        2 of ['] pxl-2bpp! ['] pxl-2bpp@ endof
-        4 of ['] pxl-4bpp! ['] pxl-4bpp@ endof
-        8 of ['] pxl-8bpp! ['] pxl-8bpp@ endof
+        1 of pxl ::['] 1bpp! pxl ::['] 1bpp@ endof
+        2 of pxl ::['] 2bpp! pxl ::['] 2bpp@ endof
+        4 of pxl ::['] 4bpp! pxl ::['] 4bpp@ endof
+        8 of pxl ::['] 8bpp! pxl ::['] 8bpp@ endof
         xassert{ false }xassert 0 0
       endcase ( bpp setter getter )
       tset @ .pxl-get !
@@ -828,6 +897,8 @@ begin-module vera
       [immediate]
     ;
 
+    \ Store the parameters given in the tset{...}set block, but don't apply
+    \ them yet.
     ( -- )
     : }set
       tset-params unimport
@@ -844,6 +915,7 @@ begin-module vera
     tset-params import 
     [immediate] ;
 
+  \ Apply the parameters previously configured in a tset{...}
   ( tset -- )
   : tset-params-apply
     tileset :: apply
@@ -861,7 +933,8 @@ begin-module vera
     / ( tileidx )
   ;
 
-  \ Given a tile index in a tileset, compute to  pointer to the pixel data of a tile in the tileset.
+  \ Given a tile index in a tileset, compute the address (in VRAM) of the pixel data
+  \ of that tile.
   \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
   \ @param tileset: Tileset object
   ( tile-idx tileset -- addr )
@@ -875,7 +948,7 @@ begin-module vera
     [ 1 1 stack-checker ]
     tileset :: tilesize@ ;
 
-  \ Retrieve the tileset width from the tileset object
+  \ Retrieve the tileset width from the tileset object.
   ( tileset -- width )
   : tset-width@ 
     [ 1 1 stack-checker ]
@@ -898,28 +971,30 @@ begin-module vera
     0 swap tileset :: .base !
   ;
 
-  \ Retrieve the tileset height
+  \ Retrieve the tileset height.
   ( tileset -- height )
   : tset-height@ 
     [ 1 1 stack-checker ]
     tileset :: typecheck
     tileset :: .height h@ ;
 
-  \ Retrieve the tileset BPP from the tileset object.
+  \ Retrieve the tileset bits-per-pixel from the tileset object.
   ( tileset -- bpp )
   : tset-bpp@ 
     [ 1 1 stack-checker ]
     tileset :: typecheck
     tileset :: .bpp h@ ;
 
+  \ Retrieve the number of tiles in the tileset.
   ( tileset -- #tiles )
   : tset-#tiles@ 
     [ 1 1 stack-checker ]
     tileset :: typecheck
     tileset :: .#tiles h@ ;
 
+  \ Print the tileset attributes.
   ( tileset -- )
-  : tset-print
+  : tset.
     [ 1 0 stack-checker ]
     tileset :: typecheck
     >r r@ tset-#tiles@ r@ tset-bpp@ r@ tset-height@ r@ tset-width@ r> tset-base@
@@ -930,6 +1005,7 @@ begin-module vera
   \ ( "name" -- )
   : <tset> create here tileset :: tileset-struct allot tileset :: init ;
 
+  \ Pixel parameters in a <tset> pxl{...}set/apply block.
   begin-module pxl-params
     tileset import
     tset-params import
@@ -940,17 +1016,19 @@ begin-module vera
       [ 1 0 stack-checker ]
       tset @ .tidx h! ;
 
+    \ The pixel's color (palette index).
     ( color -- ) 
     : color
       [ 1 0 stack-checker ]
       tset @ .color c! ;
 
+    \ The pixel's position, specified as a vec2 (see vec2.fs).
     ( vec2 -- ) 
     : xy 
       [ 1 0 stack-checker ]
       tset @ .position ! ;
 
-    \ Set a pixel in the given tile.
+    \ Draw the pixel as specified in the pxl{...}apply block.
     ( -- )
     : }apply
       [:
@@ -962,13 +1040,16 @@ begin-module vera
       [immediate]
     ;
 
+    \ Store the pixel parameters specified in the pxl{...}set block, but don't
+    \ apply them yet. Useful if some but not all parameters are known yet (e.g.
+    \ in a loop, where the remaining parameters are specified inside the loop).
     ( -- )
     : }set
       pxl-params unimport
       [immediate]
     ;
 
-    \ Read the pixel color from the given position on the given tile.
+    \ Read the pixel color from the position and tile given in the pxl{...}get block.
     \ ( -- color )
     : }get
       [:
@@ -996,21 +1077,22 @@ begin-module vera
     [: tset-params :: tset ! ;] compile-or-execute
     pxl-params import [immediate] ;
 
+  \ Apply the parameters previously specified in a pxl{...}set block.
   ( tileset -- )
   : pxl-params-apply
     tileset :: apply-pxl
   ;
 
-  \ -- Sprite API
+  \ -- Sprites.
 
-  VERA_SPRITE_ATTR_FLAGS_ZDEPTH_DIS constant SPR-DIS \ Sprite disabled. 
-  VERA_SPRITE_ATTR_FLAGS_ZDEPTH_BG_L0 constant SPR-BG-L0 \ Between background and L0. 
-  VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L0_L1 constant SPR-L0-L1 \ Between L0 and L1. 
-  VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L1 constant SPR-L1 \ In front of L1. 
+  VERA_SPRITE_ATTR_FLAGS_ZDEPTH_DIS constant SPR-DIS \ Sprite disabled.
+  VERA_SPRITE_ATTR_FLAGS_ZDEPTH_BG_L0 constant SPR-BG-L0 \ Between background and L0.
+  VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L0_L1 constant SPR-L0-L1 \ Between L0 and L1.
+  VERA_SPRITE_ATTR_FLAGS_ZDEPTH_L1 constant SPR-L1 \ In front of L1.
 
-  : (zdepth-is-valid?) l{ SPR-DIS , SPR-BG-L0 , SPR-L0-L1 , SPR-L1 }l find-in 0<> ;
-
+  \ --- Sprite internal Words.
   begin-module sprite
+    \ The sprite object structure.
     begin-structure sprite-struct
       field:  .tileset
       field:  .tile-idx
@@ -1024,13 +1106,13 @@ begin-module vera
     typechecker typecheck
 
     \ Calculate the sprite attribute RAM address from the given sprite id.
-    \ ( id -- addr )
+    ( id -- addr )
     : id>ram
       [ 1 1 stack-checker ]
       8 * VERA_SPRITE_RAM_BASE + ;
 
     \ Calculate the sprite id from the given sprite attribute RAM address.
-    \ ( addr -- id )
+    ( addr -- id )
     : ram>id
       [ 1 1 stack-checker ]
       VERA_SPRITE_RAM_BASE - 8 / ;
@@ -1044,21 +1126,24 @@ begin-module vera
       init-type typecheck
     ;
 
-    \ ( tilesize - tilesize-encoded )
+    \ Encode the sprite size to store in sprite attribyte RAM
+    ( tilesize - tilesize-encoded )
     : sizeenc
       [ 1 1 stack-checker ]
       log2 3 - ;
 
-    \ ( tilesize-encoded -- tilesize )
+    \ Decode the sprite size stored in the spirte attribute RAM
+    ( tilesize-encoded -- tilesize )
     : sizedec 
       [ 1 1 stack-checker ]
       3 + 1<< ;
 
+    \ Returns true is given value is a valid sprite width or height.
     ( size -- f )
     : spritesize-is-valid? l{ 8 , 16 , 32 , 64 }l find-in 0<> ;
 
     \ Set the sprite width
-    \ ( width sprite -- )
+    ( width sprite -- )
     : width! 
       [ 2 0 stack-checker ]
       xassert{ over spritesize-is-valid? }xassert
@@ -1067,18 +1152,19 @@ begin-module vera
     ;
 
     \ Set the sprite height
-    \ ( height sprite -- )
+    ( height sprite -- )
     : height!
       [ 2 0 stack-checker ]
       xassert{ over spritesize-is-valid? }xassert
       swap sizeenc swap .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT! 
     ;
 
+    \ Returns true is the given bits-per-pixel value is valid for sprites.
     ( bpp -- f )
     : bpp-is-valid? l{ 4 , 8 }l find-in 0<> ;
 
     \ Set the sprite's BPP. 8 or 4.
-    \ ( bpp sprite -- )
+    ( bpp sprite -- )
     : bpp! 
       [ 2 0 stack-checker ]
       xassert{ over bpp-is-valid? }xassert
@@ -1086,14 +1172,14 @@ begin-module vera
     ;
 
     \ Set the sprite's VRAM address
-    \ ( addr sprite -- )
+    ( addr sprite -- )
     : addr!
       [ 2 0 stack-checker ]
       swap VERA_VRAM_BASE - 5 rshift ( sprite addr )
       swap .attr-addr VERA_SPRITE_ATTR_MODEADDR_ADDR!
     ;
 
-    \ check if given position is within the boundaries
+    \ Check if given position is within the boundaries
     ( position -- f )
     : pos-in-range?
       [ 1 1 stack-checker ]
@@ -1103,6 +1189,7 @@ begin-module vera
       and
     ;
 
+    \ Apply the pameters specified in a spr{...}set/apply block.
     ( spr -- )
     : apply
       [ 1 0 stack-checker ]
@@ -1118,12 +1205,14 @@ begin-module vera
     ;
     end-module
 
+    \ Sprite parameters in a <spr> spr{...}set/apply block.
     begin-module spr-params
       sprite import
 
       0 variable spr
 
-      \ ( vec2 --)
+      \ Set the sprite position, specified by a vec2 (see vec2.fs).
+      ( vec2 --)
       : xy 
           [ 1 0 stack-checker ]
           xassert{ dup sprite :: pos-in-range? }xassert
@@ -1133,29 +1222,35 @@ begin-module vera
       ;
 
 
-      \ flip values: VFLIP, HFLIP, or VFLIP_HFLIP
-      \ ( flip -- )
+      \ Set the sprite flip value: VFLIP, HFLIP, or VFLIP_HFLIP
+      ( flip -- )
       : flip 
         [ 1 0 stack-checker ]
         xassert{ dup (flip-is-valid?) }xassert
         spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP! ;
 
-      \ ( zdepth -- )
+      : (zdepth-is-valid?) l{ SPR-DIS , SPR-BG-L0 , SPR-L0-L1 , SPR-L1 }l find-in 0<> ;
+
+      \ set the sprite z (depth) value: SPR-DIS, SPR-BG-L0, SPR-L0-L1, SPR-L1.
+      ( zdepth -- )
       : z
         [ 1 0 stack-checker ]
         xassert{ dup (zdepth-is-valid?) }xassert
         spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH! ;
 
-      \ ( sprite -- )
+      \ Set the sprite collision mask.
+      ( colmask -- )
         [ 1 0 stack-checker ]
       : colmask spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK! ;
 
+      \ Set the sprite palette offset.
       \ ( paloffset -- )
       : paloffset
         [ 1 0 stack-checker ]
         spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET! ;
 
-      \ Set the tile index to be used in the sprite object.
+      \ Set the tile index to be used by the sprite object. The tile index combined with the tileset object (:tset below)
+      \ identify the sprite pixel data.
       \ ( tile-idx -- )
       : tidx
         [ 1 0 stack-checker ]
@@ -1188,8 +1283,7 @@ begin-module vera
         spr @ .tileset ! ( )
       ;
 
-      \ Commit the sprite's attributes to hardware, 
-      \ i.e. to the sprite attribute RAM.
+      \ Commit the sprite's attributes to hardware, i.e. to the sprite attribute RAM.
       \ ( -- )
       : }apply
         [:
@@ -1201,6 +1295,8 @@ begin-module vera
         [immediate]
       ;
 
+      \ Store the sprite attributes specified in the spr{...}set block, but don't apply them to
+      \ hardware yet.
       \ ( -- )
       : }set
         spr-params unimport
@@ -1209,20 +1305,21 @@ begin-module vera
       sprite unimport
     end-module \ spr-params
 
-  \ Opening bracket for spr{ ... }set
+  \ Opening bracket for spr{ ... }set/apply.
   ( sprite -- sprite )
   : spr{ 
     [: spr-params :: spr ! ;] compile-or-execute
     spr-params import 
     [immediate] ;
 
+  \ Apply (commit to hardware) the sprite attributes previously set in a spr{...}set block.
   ( sprite -- )
   : spr-params-apply
     sprite :: apply
   ;
 
   \ Get the sprite's VRAM address
-  \ ( sprite -- addr )
+  ( sprite -- addr )
   : spr-addr@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
@@ -1231,78 +1328,84 @@ begin-module vera
   ;
 
   \ Retrieve the sprite id from the sprite object.
-  : spr-id@ ( sprite -- id ) 
+  ( sprite -- id )
+  : spr-id@
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-ram-ptr @ sprite :: ram>id ;
 
-  \ Get the sprite's current coordinates.
-  \ ( sprite -- vec2 )
+  \ Get the sprite's current coordinates. Returns a vec2 (see vec2.fs).
+  ( sprite -- vec2 )
   : spr-xy@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     dup sprite :: .attr-x h@ swap sprite :: .attr-y h@ vec2 ;
 
-  \ Get the sprite width
-  \ ( sprite -- width )
+  \ Get the sprite width.
+  ( sprite -- width )
   : spr-width@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH@ sprite :: sizedec ;
 
-  \ Get the sprite height
+  \ Get the sprite height.
   \ ( sprite -- height )
   : spr-height@
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT@ sprite :: sizedec ;
 
+  \ Get the sprite's flip value: VFLIP, HFLIP, or VFLIP_HFLIP
   \ ( sprite -- flip )
   : spr-flip@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP@ ;
 
+  \ Get the sprite's z-depth: SPR-DIS, SPR-BG-L0, SPR-L0-L1, SPR-L1.
   \ ( sprite -- zdepth )
   : spr-z@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH@ ;
 
+  \ Get the sprite's collision mask.
   \ ( sprite -- colmask )
   : spr-colmask@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK@ ;
 
+  \ Get the sprite's palette offset.
   \ ( sprite -- paloffset )
   : spr-paloffset@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET@ ;
 
-  \ Get the sprite's BPP (8 or 4).
+  \ Get the sprite's bits-per-pixel value (8 or 4).
   \ ( sprite -- bpp )
   : spr-bpp@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE@ if 8 else 4 then ;
 
-  \ Retrieve the tileset corresponding to this sprite.
+  \ Retrieve the tileset used by this sprite (tileset, tile index combo).
   \ ( sprite -- tileset )
   : spr-tset@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .tileset @ ;
 
-  \ Retrieve the tile-idx corresponding to this sprite.
+  \ Retrieve the tile-idx used by this sprite (tileset, tile index combo).
   \ ( sprite -- tile-idx )
   : spr-tidx@ 
     [ 1 1 stack-checker ]
     sprite :: .tile-idx @ ;
 
+  \ Print the sprite's attributes.
   ( sprite -- )
-  : spr-print
+  : spr.
     [ 1 0 stack-checker ]
     sprite :: typecheck
     >r 
@@ -1320,8 +1423,10 @@ begin-module vera
     create here sprite :: sprite-struct allot ( sprite-idx sprite )
     sprite :: init ;
 
+  \ --- Layer internal Words.
   begin-module layer
 
+    \ The layer object structure.
     begin-structure layer-struct
       field:  .tileset
       field:  .tilemap
@@ -1348,40 +1453,49 @@ begin-module vera
       swap if VERA_L1_MAPBASE! else VERA_L0_MAPBASE! then
     ;
 
-    : sizeenc log2 5 - ;
+    \ Encode the map size to store in the layer config register.
+    ( size - sizeencoded )
+    : mapsizeenc log2 5 - ;
 
-    : sizedec 5 + 1<< ;
+    \ Decode the map size stored in the layer config register.
+    ( size - sizedecoded )
+    : mapsizedec 5 + 1<< ;
 
-    \ Set tilemap width for given layer
-    \ ( width layer-id -- )
+    \ Set tilemap width for given layer.
+    ( width layer-id -- )
     : tilemap-width!
       [ 2 0 stack-checker ]
-      swap sizeenc
+      swap mapsizeenc
       swap if VERA_L1_CONFIG_MAP_WIDTH! else VERA_L0_CONFIG_MAP_WIDTH! then
     ;
 
-      ( height layer-id -- )
+    \ Set tilemap height for given layer.
+    ( height layer-id -- )
     : tilemap-height!
       [ 2 0 stack-checker ]
-      swap sizeenc
+      swap mapsizeenc
       swap if VERA_L1_CONFIG_MAP_HEIGHT! else VERA_L0_CONFIG_MAP_HEIGHT! then
     ;
 
+    \ Enable/disable T256c mode.
       ( f layer-id -- )
     : t256c! 
       [ 2 0 stack-checker ]
       if VERA_L1_CONFIG_T256C! else VERA_L0_CONFIG_T256C! then ;
 
+    \ Encode the bits-per-pixel setting to store in the layer config register.
     ( bpp - bpp-encoded )
     : bppenc 
       [ 1 1 stack-checker ]
       log2 ;
 
+    \ Decode the bits-per-pixel setting stored in the layer config register.
     ( bpp-encoded -- bpp )
     : bppdec 
       [ 1 1 stack-checker ]
       1<< ;
 
+    \ Set the layer's bits-per-pixel.
     ( bpp layer-id -- )
     : bpp!
       [ 2 0 stack-checker ]
@@ -1389,11 +1503,13 @@ begin-module vera
       swap if VERA_L1_CONFIG_COLORDEPTH! else VERA_L0_CONFIG_COLORDEPTH! then
     ;
 
+    \ Enable/disable bitmap mode.
     ( f layer-id -- )
     : bitmap-mode! 
       [ 2 0 stack-checker ]
       if VERA_L1_CONFIG_BITMAPMODE! else VERA_L0_CONFIG_BITMAPMODE! then ;
 
+    \ The palette offsetr to be used by this layer.
     ( paloffset layer-id -- )
     : paloffset! 
       [ 2 0 stack-checker ]
@@ -1412,6 +1528,7 @@ begin-module vera
       [ 2 0 stack-checker ]
       if VERA_L1_TILEBASE_TILE_HEIGHT! else VERA_L0_TILEBASE_TILE_HEIGHT! then ;
 
+    \ Set the tile base address.
     ( addr layer-id -- )
     : tile-base!
       [ 2 0 stack-checker ]
@@ -1419,9 +1536,7 @@ begin-module vera
       swap if VERA_L1_TILEBASE_TILE_BASEADDR! else VERA_L0_TILEBASE_TILE_BASEADDR! then
     ;
 
-    ( size -- f )
-    : tilesize-is-valid? l{ 8 , 16 }l find-in 0<> ;
-
+    \ Reset the horizontal and vertical scroll value to 0.
     ( layer-id -- )
     : scroll-reset
       [ 1 0 stack-checker ]
@@ -1435,6 +1550,7 @@ begin-module vera
     ;
 
     \ Configure given tilemap into given layer.
+    \ The tilemap attributes are used to configure the layer.
     ( tilemap layer-id -- )
     : tilemap!
       [ 2 0 stack-checker ]
@@ -1450,7 +1566,12 @@ begin-module vera
       swap tilemap-base! ( R: layer )
     ;
 
+    \ Returns true if tilesize value is valid. Used for parameter validation.
+    ( size -- f )
+    : tilesize-is-valid? l{ 8 , 16 }l find-in 0<> ;
+
     \ Configure given tileset into given layer.
+    \ The tileset attributes are used to configure the layer.
     ( tileset layer-id -- )
     : tileset!
       [ 2 0 stack-checker ]
@@ -1474,10 +1595,12 @@ begin-module vera
       swap tile-base!
     ;
 
+    \ Returns true if bitmap value is valid. Used for parameter validation.
     ( size -- f )
     : bitmap-width-is-valid? l{ 320 , 640 }l find-in 0<> ;
 
     \ Configure given bitmap (identified by a bitmap descriptor) into the given layer.
+    \ The tileset + tile-idx attributes are used to configure the layer.
     ( tileset tile-idx layer-id -- )
     : bitmap!
       [ 3 0 stack-checker ]
@@ -1497,26 +1620,27 @@ begin-module vera
     ;
   end-module \ layer
 
+  \ Layer parameters in a l0/l1 layer{...}tilemap-mode/bitmap-mode block.
   begin-module layer-params
     layer import
 
     0 variable lyr
 
-    \ Set the tilemap to be used by this layer (configuring tilemapmode)
+    \ Set the tilemap to be used by this layer (configuring tilemapmode).
     ( tmap -- )
     : tmap
       [ 1 0 stack-checker ]
       tilemap :: typecheck
       lyr @ .tilemap ! ;
 
-    \ Set the tileset to be used by this layer (tilemapmode and bitmapmode)
+    \ Set the tileset to be used by this layer (tilemapmode and bitmapmode).
     ( tileset -- )
     : tset
       [ 1 0 stack-checker ]
       tileset :: typecheck
       lyr @ .tileset ! ;
 
-    \ Set the tile index to be used by this layer (bitmapmode)
+    \ Set the tile index to be used by this layer (bitmapmode).
     ( tile-idx -- )
     : tidx 
       [ 1 0 stack-checker ]
@@ -1570,23 +1694,30 @@ begin-module vera
   0 l0 layer :: init
   1 l1 layer :: init
 
-  : layer-id@ ( layer -- id )
+  \ Retrieve the layer id from the layer object.
+  \ ( layer -- id )
+  : layer-id@
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@
   ;
-    
-  : layer-enable ( f layer -- ) 
+ 
+  \ Enable/disable the layer.
+  \ ( f layer -- )
+  : layer-enable
     [ 2 0 stack-checker ]
     layer :: typecheck
     layer :: .id c@ if VERA_DC_VIDEO_L1_ENABLE! else VERA_DC_VIDEO_L0_ENABLE! then ;
 
-  : layer-enabled? ( layer -- f ) 
+  \ Returns true if the layer is enabled.
+  ( layer -- f )
+  : layer-enabled?
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@ if VERA_DC_VIDEO_L1_ENABLE@ else VERA_DC_VIDEO_L0_ENABLE@ then 0<> ;
 
-    ( layer -- addr )
+  \ Retrieve the layer's tilemap base address.
+  ( layer -- addr )
   : layer-tmap-base@
     [ 1 1 stack-checker ]
     layer :: typecheck
@@ -1595,25 +1726,29 @@ begin-module vera
     9 lshift VERA_VRAM_BASE +
   ;
 
-  \ ( layer -- width )
+  \ Retrieve the layer's tilemap width.
+  ( layer -- width )
   : layer-tmap-width@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
-    layer :: .id c@ if VERA_L1_CONFIG_MAP_WIDTH@ else VERA_L0_CONFIG_MAP_WIDTH@ then layer :: sizedec ;
+    layer :: .id c@ if VERA_L1_CONFIG_MAP_WIDTH@ else VERA_L0_CONFIG_MAP_WIDTH@ then layer :: mapsizedec ;
 
-    ( layer -- height )
+  \ Retrieve the layer's tilemap height.
+  ( layer -- height )
   : layer-tmap-height@
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@
-    if VERA_L1_CONFIG_MAP_HEIGHT@ else VERA_L0_CONFIG_MAP_HEIGHT@ then layer :: sizedec ;
+    if VERA_L1_CONFIG_MAP_HEIGHT@ else VERA_L0_CONFIG_MAP_HEIGHT@ then layer :: mapsizedec ;
 
-    ( layer -- f )
+  \ Returns true if the layer is in T256c mode.
+  ( layer -- f )
   : layer-t256c@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@ if VERA_L1_CONFIG_T256C@ else VERA_L0_CONFIG_T256C@ then 0<> ;
 
+  \ Retrieve the layer's bits-per-pixel.
   ( layer -- bpp )
   : layer-bpp@
     [ 1 1 stack-checker ]
@@ -1623,18 +1758,21 @@ begin-module vera
     layer :: bppdec
   ;
 
+  \ Returns true if the layer is in bitmap mode.
   ( layer -- f )
   : layer-bitmap-mode@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@ if VERA_L1_CONFIG_BITMAPMODE@ else VERA_L0_CONFIG_BITMAPMODE@ then 0<> ;
 
+  \ Retrieve the layer's palette offset.
   ( layer -- paloffset )
   : layer-paloffset@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@ if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET@ else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET@ then ;
 
+  \ Set the layer's palette offset.
   ( paloffset layer -- )
   : layer-paloffset! 
     [ 2 0 stack-checker ]
@@ -1642,6 +1780,7 @@ begin-module vera
     layer :: .id c@ layer :: paloffset!
   ;
 
+  \ Set the layer's horizontal scroll value.
   ( hscroll layer -- )
   : layer-hscroll!
     [ 2 0 stack-checker ]
@@ -1655,6 +1794,7 @@ begin-module vera
     then
   ;
 
+  \ Retrieve the layer's horizontal scroll value.
   ( layer -- hscroll )
   : layer-hscroll@
     [ 1 1 stack-checker ]
@@ -1668,6 +1808,7 @@ begin-module vera
     then
   ;
 
+  \ Set the layer's vertical value.
   ( vscroll layer -- )
   : layer-vscroll! 
     [ 2 0 stack-checker ]
@@ -1675,6 +1816,7 @@ begin-module vera
     layer :: .id c@ if VERA_L1_VSCROLL! else VERA_L0_VSCROLL! then
   ;
 
+  \ Retrieve the layer's vertical scroll valye.
   ( layer -- vscroll )
   : layer-vscroll@ 
     [ 1 1 stack-checker ]
@@ -1682,6 +1824,7 @@ begin-module vera
     layer :: .id c@ if VERA_L1_VSCROLL@ else VERA_L0_VSCROLL@ then
   ;
 
+  \ Retrieve the layer width.
   ( layer -- width )
   : layer-tile-width@ 
     [ 1 1 stack-checker ]
@@ -1692,6 +1835,7 @@ begin-module vera
     swap layer-bitmap-mode@ if 320 else 8 then *
   ;
 
+  \ Retrieve the layer height.
   ( layer -- height )
   : layer-tile-height@ 
     [ 1 1 stack-checker ]
@@ -1704,6 +1848,7 @@ begin-module vera
     then
   ;
 
+  \ Retrieve the layer's tile base address.
   ( layer -- addr-id )
   : layer-tile-base@
     [ 1 1 stack-checker ]
@@ -1734,8 +1879,9 @@ begin-module vera
     layer :: typecheck
     layer :: .tileset @ ;
 
+  \ Print the layer attributes.
   ( layer -- )
-  : layer-print
+  : layer.
     layer :: typecheck
     [ 1 0 stack-checker ]
     >r 
@@ -1758,17 +1904,19 @@ begin-module vera
     then
   ;
 
+  \ Enable/disable VGA line capture.
   ( f -- )
   : line-capture-enable
     [ 1 0 stack-checker ]
     VERA_CTRL_STATUS_CAPTURE_EN! ;
 
+  \ Returns true if VGA line capture is pending. Returns false if line capture has been completed.
   ( -- f )
   : line-capture-enabled?
     [ 0 1 stack-checker ]
     VERA_CTRL_STATUS_CAPTURE_EN@ 0<> ;
 
-  \  Read the RGB value of a pixel on the captured line.
+  \ Read the RGB value of a pixel on the captured line.
   \ @param x: the pixel's x position. Range: 0..639.
   \ @return: 12-bit RGB triple.
   : line-capture-pxl@ ( x -- rgb ) 
@@ -1776,38 +1924,44 @@ begin-module vera
     4 * VERA_CAPTURE_RAM_BASE + @ $fff and ;
 
   \ --- Interrupt Subsystem ---
+
   VERA_IEN_VAL_VSYNC constant IRQ-VSYNC-MASK
   VERA_IEN_VAL_LINE constant IRQ-LINE-MASK
   VERA_IEN_VAL_SPRCOL constant IRQ-SPRCOL-MASK
 
   \ Enable IRQs. The passed in mask will be OR'd with the installed mask.
   \ @param mask: bitwise OR of VERA_IRQs to enable.
-  : irq-enable ( mask -- ) 
+  ( mask -- )
+  : irq-enable
     [ 1 0 stack-checker ]
     VERA_IEN_ADDR @ or VERA_IEN_ADDR ! ;
 
   \ Disable IRQs. The passed in mask will be inverted and  AND'd with the
   \ installed mask.
   \ @param mask: bitwise OR of VERA_IRQs to disable.
-  : irq-disable ( mask -- ) 
+  ( mask -- ) 
+  : irq-disable
     [ 1 0 stack-checker ]
     VERA_IEN_ADDR @ swap bic VERA_IEN_ADDR ! ;
 
   \ Retrieve the enabled IRQs bitmask.
   \ @return: a bitmask of enabled VERA_IRQs.
-  : irq-enabled ( -- mask ) 
+  ( -- mask )
+  : irq-enabled
     [ 0 1 stack-checker ]
     VERA_IEN_ADDR @ ;
 
   \ Retrieve the active IRQs.
   \ @return: a bitmask of active VERA_IRQs.
-  : irq-get ( -- active-mask ) 
+  ( -- active-mask )
+  : irq-get
     [ 0 1 stack-checker ]
     VERA_ISR_ADDR @ VERA_IEN_ADDR @ and ;
 
   \ Acknowledge IRQs.
   \ @param mask: bitwise OR of VERA_IRQs to acknowledge.
-  : irq-ack ( mask -- ) 
+  ( mask -- )
+  : irq-ack
     [ 1 0 stack-checker ]
     VERA_ISR_ISR! ;
 
@@ -1815,14 +1969,18 @@ begin-module vera
   \ enabled.
   \ @param scanline: scanline number on which the trigger the line IRQ, must be
   \ <= VERA_SCANLINE_MAX.
-  : irqline! ( scanline -- ) 
+  ( scanline -- )
+  : irqline!
     [ 1 0 stack-checker ]
     VERA_IRQLINE! ;
 
-  : irqline@ ( -- scanline ) 
+  \ Retrieve the line IRQ's scanline value.
+  ( -- scanline )
+  : irqline@
     [ 0 1 stack-checker ]
     VERA_IRQLINE@ ;
 
+  \ Retrieve the current VGA scanline value.
   : scanline@ ( -- scanline ) 
     [ 0 1 stack-checker ]
     VERA_SCANLINE@ ;
@@ -1857,6 +2015,7 @@ begin-module vera
   \ Shadow memory. VERA's palette memory is write-only.
   create (shadow-palette) 2 256 * allot
  
+  \ Internal Word used by pal! and pal-init.
   ( rgb idx -- )
   : (pal!)
     swap ( idx rgb )
@@ -1869,7 +2028,8 @@ begin-module vera
   \ Write an entry into the palette.
   \ @param idx: the palete color index
   \ @param rgb: the 12-bit RGB triple
-  : pal! ( rgb idx -- )
+  ( rgb idx -- )
+  : pal!
     [ 2 0 stack-checker ]
     2dup 2* (shadow-palette) + h!
     (pal!)
@@ -1878,7 +2038,8 @@ begin-module vera
   \ Read the RGB value of a palette entry
   \ @param idx: the palete color index:
   \ @return: the 12-bit RGB triple
-  : pal@ ( idx -- rgb ) 
+  ( idx -- rgb )
+  : pal@
     [ 1 1 stack-checker ]
     2* (shadow-palette) + h@ ;
 
@@ -1892,7 +2053,7 @@ begin-module vera
 
   pal-init
 
-  \ Load a palette into VERA palette memory
+  \ Load a palette into VERA palette memory.
   \ addr points to a block of 256 half-words, each half-word specifying a 12-bit rgb value
   \ corresponding to its index.
   ( addr -- )
@@ -1903,62 +2064,88 @@ begin-module vera
   ;
 
   \ -- VERA top-level definitions
-  : display-enable ( flag -- ) 
+
+  \ Enable/disable the display.
+  ( flag -- )
+  : display-enable
     [ 1 0 stack-checker ]
     if 1 else 0 then VERA_DC_VIDEO_OUTPUT_MODE! ;
 
-  : display-enabled? ( -- flag ) 
+  \ Returns true if the display is enabled.
+  ( -- flag )
+  : display-enabled?
     [ 0 1 stack-checker ]
     VERA_DC_VIDEO_OUTPUT_MODE@ 0<> ;
 
-  : sprites-enable ( flag -- ) 
+  \ Enable/disable sprite rendering.
+  ( flag -- )
+  : sprites-enable
     [ 1 0 stack-checker ]
     VERA_DC_VIDEO_SPR_ENABLE! ;
 
-  : sprites-enabled? ( -- flag ) 
+  \ Returns true is sprite rendering is enabled.
+  ( -- flag )
+  : sprites-enabled?
     [ 0 1 stack-checker ]
     VERA_DC_VIDEO_SPR_ENABLE@ 0<> ;
 
-  : hscale! ( scale-ufix1-7 -- ) 
+  \ Set the horizontal scaling value. The passed in value is a unsigned fixed point 1.7 value.
+  ( scale-ufix1-7 -- )
+  : hscale!
     [ 1 0 stack-checker ]
     VERA_DC_HSCALE! ;
 
-  : hscale@ ( -- scale-ufix1-7 ) 
+  \ Retrieve the horizontal scaling value (unsigned fixed point 1.7 value).
+  ( -- scale-ufix1-7 )
+  : hscale@
     [ 0 1 stack-checker ]
     VERA_DC_HSCALE@ ;
 
-  : vscale! ( scale-ufix1-7 -- ) 
+  
+  \ Set the vertical scaling value. The passed in value is a unsigned fixed point 1.7 value.
+  ( scale-ufix1-7 -- )
+  : vscale!
     [ 1 0 stack-checker ]
     VERA_DC_VSCALE! 
     ;
 
-  : vscale@ ( -- scale-ufix1-7 ) 
+  \ Retrieve the vertical scaling value (unsigned fixed point 1.7 value).
+  ( -- scale-ufix1-7 )
+  : vscale@
     [ 0 1 stack-checker ]
     VERA_DC_VSCALE@ ;
 
-  : bordercolor! ( pal-idx -- ) 
+  \ Set the border color (palette index).
+  ( pal-idx -- )
+  : bordercolor!
     [ 1 0 stack-checker ]
     VERA_DC_BORDERCOLOR! ;
 
-  : bordercolor@ ( -- pal-idx ) 
+  \ Retrieve the border color palette index.
+  ( -- pal-idx ) 
+  : bordercolor@
     [ 0 1 stack-checker ]
     VERA_DC_BORDERCOLOR@ ;
 
-  \ Set screen boundaries
-  : boundaries! ( hstart hstop vstart vstop -- )
+  \ Set screen boundaries.
+  ( hstart hstop vstart vstop -- )
+  : boundaries!
     [ 4 0 stack-checker ]
     VERA_DC_VSTOP! VERA_DC_VSTART! VERA_DC_HSTOP! VERA_DC_HSTART! ;
 
   \ Get screen boundaries
-  : boundaries@ ( -- hstart hstop vstart vstop )
+  ( -- hstart hstop vstart vstop )
+  : boundaries@
     [ 0 4 stack-checker ]
     VERA_DC_HSTART@ VERA_DC_HSTOP@ VERA_DC_VSTART@ VERA_DC_VSTOP@ ;
 
+  \ Select the sprite bank to use.
   ( 1|0 -- )
   : sprite-bank! 
     [ 1 0 stack-checker ]
     VERA_CTRL_STATUS_SBNK! ;
 
+  \ Get the selected sprite bank.
   ( -- 1|0 )
   : sprite-bank@ 
     [ 0 1 stack-checker ]

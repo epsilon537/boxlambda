@@ -1,3 +1,4 @@
+\ BoxLambda Forth
 \ VERA Default Palette colors
 create (orig-palette)
 $000 h, $fff h, $800 h, $afe h, $c4c h, $0c5 h, $00a h, $ee7 h, $d85 h, $640 h, $f77 h,

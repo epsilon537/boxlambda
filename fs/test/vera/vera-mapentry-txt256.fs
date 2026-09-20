@@ -19,7 +19,7 @@ create cols col1 , col2 ,
   false l1 layer-enable
 
   ts tset{ #16 width #16 height 1 bpp #32 tiles }apply
-  ts tset-print
+  ts tset.
 
   16 0 do
     ts pxl{ 1 tidx i i vec2 xy WHITE color }apply
@@ -27,9 +27,9 @@ create cols col1 , col2 ,
   loop
 
   tm tmap{ #32 width #32 height TMAP-TXT256 type }apply
-  tm tmap-print
+  tm tmap.
   l0 layer{ ts tset tm tmap }tilemap-mode
-  l0 layer-print
+  l0 layer.
 
   tm mapentry{ col1 row1 vec2 xy GREEN fg 1 tidx }apply
   tm mapentry{ col2 row2 vec2 xy #10 greyscale fg 1 tidx }apply

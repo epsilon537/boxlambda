@@ -364,7 +364,7 @@ hook-on-quit @ variable include-prev-on-quit-hook
 
 : include-on-quit-hook
   \ Reset the stack on quit
-  (include-stack) stack-base (include-stack) >stack-top
+  (include-stack) stack-reset
   include-prev-on-quit-hook @ execute
 ;
 

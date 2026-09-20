@@ -9,11 +9,11 @@
   ." l0 enabled? " l0 layer-enabled? . cr
   ." l1 enabled? " l1 layer-enabled? . cr
   ts tset{ #16 width #16 height 8 bpp #32 tiles }apply
-  ts tset-print
+  ts tset.
   tm0 tmap{ #32 width #32 height TMAP-TILE type }apply
   tm1 tmap{ #32 width #32 height TMAP-TILE type }apply
-  tm0 tmap-print
-  tm1 tmap-print
+  tm0 tmap.
+  tm1 tmap.
   l0 layer{ ts tset tm0 tmap }tilemap-mode
   l1 layer{ ts tset tm1 tmap }tilemap-mode
   tm0 mapentry{ 1 1 vec2 xy 1 tidx }apply

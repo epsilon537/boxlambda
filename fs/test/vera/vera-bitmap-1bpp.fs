@@ -18,7 +18,7 @@
     [:
       h !
       ts tset{ w @ width h @ height 1 bpp 1 tiles }apply
-      ts tset-print
+      ts tset.
       l0 layer{ ts tset 0 tidx }bitmap-mode
       ts pxl{ 0 tidx 0 0 vec2 xy #101 color }apply
       ts pxl{ w @ 1- 0 vec2 xy }apply

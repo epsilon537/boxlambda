@@ -14,7 +14,7 @@
     [:
       mt !
       tm tmap{ wh @ width wh @ height mt @ type }apply
-      tm tmap-print
+      tm tmap.
     ;] iter
   ;] iter
 ;

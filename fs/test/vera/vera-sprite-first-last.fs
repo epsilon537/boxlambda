@@ -11,7 +11,7 @@
   false l1 layer-enable
 
   ts tset{ 8 width 8 height 8 bpp 8 tiles }apply
-  ts tset-print
+  ts tset.
   spr0 spr{ ts tset 2 tidx SPR-L1 z 0 paloffset #40 #50 vec2 xy 1 colmask }apply
   spr63 spr{ ts tset 2 tidx SPR-L1 z 0 paloffset #40 #70 vec2 xy 1 colmask }apply
 

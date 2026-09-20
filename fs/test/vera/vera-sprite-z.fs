@@ -12,7 +12,7 @@
   tm0 tmap{ 32 width 32 height TMAP-TILE type }apply
   tm1 tmap{ 32 width 32 height TMAP-TILE type }apply
   ts tset{ #8 width #8 height 8 bpp 8 tiles }apply
-  ts tset-print
+  ts tset.
   l0 layer{ ts tset tm0 tmap }tilemap-mode
   l1 layer{ ts tset tm1 tmap }tilemap-mode
   tm0 mapentry{ 0 0 vec2 xy 0 paloffset 2 tidx }apply

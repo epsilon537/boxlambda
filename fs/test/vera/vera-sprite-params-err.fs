@@ -7,7 +7,7 @@
   true sprites-enable
 
   ts tset{ #32 width #32 height 8 bpp 8 tiles }apply
-  ts tset-print
+  ts tset.
   ." 1: " cr
   [: spr spr{ 1 tidx 0 tset SPR-L0-L1 z 1 paloffset 5 6 vec2 xy 1 colmask HFLIP flip }apply ;] try ?dup if execute then
   ." 2: " cr
@@ -23,7 +23,7 @@
   ." 7: " cr
   [: spr spr{ 7 tidx ts tset SPR-L0-L1 z 1 paloffset 5 6 vec2 xy 1 colmask HFLIP flip }apply ;] try ?dup if execute then
  
-  spr spr-print
+  spr spr.
 ;
 
 [: sprite-params-err ;] &>file tst_dir/vera-sprite-params-err.log
