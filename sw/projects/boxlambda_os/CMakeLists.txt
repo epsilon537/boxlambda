@@ -44,6 +44,14 @@ file(
   CONFIGURE_DEPENDS
   "${PROJECT_SOURCE_DIR}/fs/forth/boxkern-includes/*.fs")
 
+# Executing the boxkern executable built with FASTBOOT_OPT_COMPILE will cause it
+# to produce a boxkern-forth.img on the target file system. The command below
+# waits for this to happen, then retrieves the generated boxkern-forth.img. -
+# The waiting is done by continously polling a specific location on the target
+# through openocd. The target will set this location to 1 when it has generated
+# boxkern-forth.img. - Retrieving boxkern-forth.img is done by -dump_fs fs. It
+# retrieves via openocd the entire ramdisk and saves its contents in the fs/
+# directory on the host. Then the .img file is taken from there.
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth.img
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -55,6 +63,7 @@ add_custom_command(
           ${BOXKERN_FORTH_SOURCES}
   COMMENT "Compiling boxkern-forth.img")
 
+# Convert the .img file to a .o file, to be linked in in the next build stage.
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth-img.o
   COMMAND
@@ -67,6 +76,8 @@ add_custom_command(
 add_custom_target(boxkernforth_compile
                   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/boxkern-forth-img.o)
 
+# Build the boxkern executable again, this time setting FASTBOOT_OPT_LOAD and
+# linking in th boxkern-forth-img.o file.
 add_executable(
   boxkernforth
   main.cpp
@@ -95,6 +106,8 @@ link_and_create_image(
 # FASTBOOT_OPT=1 corresponds to FASTBOOT_OPT_LOAD
 target_compile_definitions(boxkernforth PRIVATE FASTBOOT_OPT=1)
 
+# A convenience target loading the boxkern and Forth file system onto the
+# target.
 add_custom_target(
   boxkernforth_fs_load
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

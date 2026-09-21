@@ -23,7 +23,7 @@ __forth_emem = 0x28000000; /*Forth dictionary external memory region*/
 __forth_emem_size = 16m;
 __fs_mem = 0x2ff00000; /* RAM Filesystem memory section.*/
 __fs_mem_size = 1m;
-__openocd = 0x2feff000;
+__openocd = 0x2feff000; /* Workspace for openocd. */
 __openocd_size = 0x1000;
 
 /*'fmem' is the flash memory section.*/
@@ -198,7 +198,7 @@ SECTIONS
     PROVIDE( __ebss_start = ADDR(.tbss) );
     PROVIDE( __ebss_end = . );
 
-    /* Put the boxkern forth image in emem */
+    /* Put the boxkern forth fastboot image in emem */
     .boxkern_forth_image :
     {
         . = ALIGN(4);

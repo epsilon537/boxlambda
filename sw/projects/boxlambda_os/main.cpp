@@ -20,6 +20,7 @@
 #include "stdio_redirect_ffi.h"
 #include "uart.h"
 
+// Definitions for the switches on the target. 0x10=SW0, 0x20=SW1
 #define GPIO_SKIP_FASTBOOT_INDICATOR 0x10
 #define GPIO_FORTH_CORE_TEST 0x20
 
@@ -41,9 +42,9 @@ void _exit(int status) {
 //
 // Linker Variables:
 //
-extern char __fs_image_start;
+extern char __fs_image_start; // The target RAM disk
 extern char __fs_image_end;
-extern char __boxkern_forth_image_start;
+extern char __boxkern_forth_image_start; // The Forth fastboot image
 extern char __boxkern_forth_image_end;
 
 // The file system objects
@@ -54,10 +55,15 @@ Fs_Volume_t volumes[NUM_VOLS];
 
 const char *sd_vol_name = "sd0:";
 const char *ram_vol_name = "ram:";
-const char *forth_img_path = "forth/forth.img";
 
+// fastboot=FASTBOOT_OPT_SKIP, skips fastboot, i.e. performs a slow boot,
+// compiling Forth from scratch during boot.
 #define FASTBOOT_OPT_SKIP 0
+// fastboot=FASTBOOT_OPT_LOAD, loads (restores) the Forth state from the
+// linked-in boxkern_forth_image.
 #define FASTBOOT_OPT_LOAD 1
+// fastboot=FASTBOOT_OPT_COMPILE, slow boots, then saves the Forth state to
+// a boxkern-forth.img file.
 #define FASTBOOT_OPT_COMPILE 2
 // FASTBOOT_OPT is set in top-level makefile.
 volatile uint32_t fastboot_opt = FASTBOOT_OPT;
@@ -160,8 +166,11 @@ int main(void) {
   printf("Initializing Forth Filesystem FFI...\n");
   fs_ffi_init(volumes, NUM_VOLS);
 
+  // Initialize fastboot support.
   forth_fastboot_init();
 
+  // If the image is built for fastboot, we can still skip fastboot by setting
+  // the skip-fastboot switch.
   if ((gpio_get_input() & GPIO_SKIP_FASTBOOT_INDICATOR) &&
       (fastboot_opt == FASTBOOT_OPT_LOAD)) {
     printf("GPIO skip fastboot detected.\n");
@@ -169,18 +178,21 @@ int main(void) {
   }
 
   switch (fastboot_opt) {
-  case FASTBOOT_OPT_COMPILE:
+  case FASTBOOT_OPT_COMPILE: // This option produces a Forth fastboot image
+                             // file.
     printf("Compiling fastboot forth image...\n");
 
     // Parse the file containing the list of boxkern_includes, evaluating
-    // each boxkern_include file in turn/
+    // each boxkern_include file in turn...
     forth_eval_boxkern_includes_or_die(
         "forth/boxkern-includes/boxkern-includes.fs",
         /*verbose*/ false);
+    // The execute the fastboot-save Word, producing the fastboot image file.
     forth_eval("fastboot-save");
     break;
 
-  case FASTBOOT_OPT_LOAD:
+  case FASTBOOT_OPT_LOAD: // This option loads (restore) the Forth state from
+                          // the linked-in fastboot image.
     printf("Loading fastboot forth image...\n");
     forth_fastboot_load(&__boxkern_forth_image_start,
                         &__boxkern_forth_image_end);
@@ -197,6 +209,7 @@ int main(void) {
     break;
   }
 
+  // Activate the testsuite by setting the test switch.
   if (gpio_get_input() & GPIO_FORTH_CORE_TEST) {
     forth_core_test(); // Execute the Forth <-> C FFI testsuite.
     // Used by an [ifdef] block in init.fs used to execute the Forth testsuite.

@@ -8,6 +8,8 @@
 #include <string.h>
 
 void forth_save_state() {
+  // Stack signature: ( emem_end_addr cstr --- )
+
   const TCHAR *img_path = (const TCHAR *)forth_popda();
   char *emem_end_addr = (char *)forth_popda();
   FIL fil;
@@ -16,9 +18,11 @@ void forth_save_state() {
   if (res == FR_OK) {
     UINT bw;
 
+    // Save all of forth_imem
     res = f_write(&fil, (const void *)&__forth_imem_start,
                   &__forth_imem_end - &__forth_imem_start, &bw);
     if (res == FR_OK) {
+      // Save forth_emem up to the given emem end address.
       res = f_write(&fil, (const void *)&__forth_emem_start,
                     emem_end_addr - &__forth_emem_start, &bw);
 
@@ -31,6 +35,8 @@ void forth_save_state() {
   forth_pushda(res);
 }
 
+// The counterpart of the save-state function above, restoring the Forth
+// state using given image.
 void forth_fastboot_load(const char *boxkern_forth_image_start,
                          const char *boxkern_forth_image_end) {
   uint32_t forth_imem_size = &__forth_imem_end - &__forth_imem_start;
@@ -45,6 +51,5 @@ void forth_fastboot_load(const char *boxkern_forth_image_start,
 }
 
 void forth_fastboot_init() {
-  // ( emem_end_addr cstr --- )
   forth_register_cfun(forth_save_state, "forth-save-state");
 }
