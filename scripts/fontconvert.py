@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# Helper script to convert a https://damieng.com/typography/zx-origins/
+# .h font file to a .fnt file that can be used by the BoxLambda Forth font-loader.
+
 import re
 import sys
 

@@ -1,8 +1,11 @@
+\ BoxLambda Forth
+
+\ Fastboot helper Word:
+\ Save forth imem and emem up to here to file boxkern-forth.img
 ( -- )
 : fastboot-save
   compileto-save
   compiletoemem
-  \ save forth imem and emem up to here to following file:
   256 [: ( buf )
     >r
     s" /boxkern-forth.img" ( addr len R: buf )

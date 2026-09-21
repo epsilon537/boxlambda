@@ -1,8 +1,6 @@
 \ BoxLambda Forth
 \ init.fs executes after fastboot has completed or, in case of slowboot,
 \ after evaulating slowboot-includes.fs.
-\ point that the include Word has been created, i.e. right after the
-\ BoxKern has exeuted shell.fs.
 
 \ enable run-time type checking
 true xassert-enable !

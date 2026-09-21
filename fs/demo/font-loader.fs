@@ -1,14 +1,21 @@
+\ BoxLambda Forth
+\ VERA font loader module.
+
 : x-process-font-dot-star-err ." Font file ./* error" cr ;
 
+\ Process glyph object structure
 begin-structure process-glyph-struct
-  field: .glyph-base
-  field: .font-fp
-  field: .fontline
-  field: .fontlinelen
+  field: .glyph-base \ Address of glyph (character data) being process in VRAM.
+  field: .font-fp \ .fnt font file pointer.
+  field: .fontline \ Pointer to temp buffer holding one line of the font file.
+  field: .fontlinelen \ Length of the line.
 end-structure
 
+\ process-glyph-struct singleton instance.
 create (pgs) process-glyph-struct allot
 
+\ Convert a line of 8 . and/or * to a byte
+\ E.g. ...**... -> $18
 ( addr -- c )
 : s>c
   [ 1 1 stack-checker ]
@@ -23,7 +30,8 @@ create (pgs) process-glyph-struct allot
   drop ( c )
 ;
 
-\ True means a complete fontline has been read
+\ Read one font line from the font file into the .fontline buffer.
+\ True means a complete fontline has been read.
 ( -- f )
 : read-font-line
   [ 0 1 stack-checker ]
@@ -33,6 +41,7 @@ create (pgs) process-glyph-struct allot
     dup (pgs) .fontlinelen ! ( len )
     0= if true
     else
+      \ Skip empty lines and lines starting with #.
       (pgs) .fontline @ c@ ( char )
       dup [char] # <> ( char f )
       over #13 <> ( char f f )
@@ -43,6 +52,9 @@ create (pgs) process-glyph-struct allot
   (pgs) .fontlinelen @ 8 >= ( f )
 ;
 
+\ Process one 8x8 glyph, i.e. read the glyph definition
+\ from the font file, convert it to 8 bytes and store at
+\ the glyph's position in VRAM.
 \ May raise x-process-font-err.
 \ True means a complete glyph has been processed.
 ( -- f )
@@ -60,6 +72,7 @@ create (pgs) process-glyph-struct allot
   loop
 ;
 
+\ Load font file, process all glyphs and store in given VERA tileset.
 \ May raise x-process-font-err, x-fr-* and x-pool-* exceptions.
 ( tileset filename-addr filename-len --  #glyphs )
 : load-font
