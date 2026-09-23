@@ -50,4 +50,5 @@ boxkern_include forth/boxkern-includes/vera-palette.fs
 boxkern_include forth/boxkern-includes/vec2.fs
 boxkern_include forth/boxkern-includes/iter.fs
 boxkern_include forth/boxkern-includes/fastboot.fs
+boxkern_include forth/boxkern-includes/vera.fs
 

@@ -2,15 +2,9 @@
 \ init.fs executes after fastboot has completed or, in case of slowboot,
 \ after evaulating slowboot-includes.fs.
 
-\ enable run-time type checking
-true xassert-enable !
-true rttc-struct !
-
 [ifdef] FORTH_CORE_TEST
 true stack-checking-enable !
 [then]
-
-include /forth/vera.fs
 
 vera import
 

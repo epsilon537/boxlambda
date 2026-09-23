@@ -2,13 +2,13 @@
 \ Run-time Checking tools.
 
 \ Set to 1/0 to enable/disable xassert checking.
-0 variable xassert-enable
+1 variable xassert-enable
 
 \ Set to 1/0 to enable/disable stack checking.
 0 variable stack-checking-enable
 
 \ Set to 1/0 to enable/disable run-time type checking on structs.
-0 variable rttc-struct
+1 variable rttc-struct
 
 \ -- Assert version that can be compiled out entirely and indicates which Word failed.
 
