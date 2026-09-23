@@ -31,4 +31,5 @@
 s" tst_dir/vera-sprite-params-err.log" s" vera-sprite-params-err.ref" f_cmp ?assert
 
 ts tset-deinit
+spr spr-deinit
 

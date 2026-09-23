@@ -63,7 +63,7 @@ max-order stack-create (wordlist-search-order-stack) \ Used to temporarily save 
   \ Install (find-drop-module) as a temporary find hook. The previous
   \ find hook will be restored by (find-drop-module) itself.
   hook-find @ (module-prev-find-hook) !
-  ['] (find-drop-module) hook-find ! [immediate]
+  ['] (find-restore-search-order) hook-find ! [immediate]
 ;
 
 \ Extend the given module/namespace. It works like begin-module

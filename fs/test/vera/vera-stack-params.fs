@@ -11,14 +11,14 @@
 : stack-params-test
   ts0 tset{ 320 width 32 height 4 bpp 8 tiles }apply
   ts0 tset.
-  vram :: reset
+  vram-reset
   8 4 32 320 ts1 tset{ width height bpp tiles }set
   ts1 tset-params-apply
   ts1 tset.
 
   tm0 tmap{ 32 width 64 height 2 type }apply
   tm0 tmap.
-  vram :: reset
+  vram-reset
   2 64 32 tm1 tmap{ width height type }set
   tm1 tmap-params-apply
   tm1 tmap.
@@ -26,7 +26,7 @@
   tm1 mapentry{ 3 2 vec2 xy 1 flip 2 paloffset 2 tidx }apply
   3 2 vec2 tm1 mapentry@ hex. cr
   tm1 mapentry{ 3 2 vec2 xy 0 flip 0 paloffset 0 tidx }apply
-  2 2 1 3 2 vec2 tm1 mapentry{ xy flip 2 paloffset tidx }set
+  2 2 1 3 2 vec2 tm1 mapentry{ xy flip paloffset tidx }set
   tm1 mapentry-params-apply
   3 2 vec2 tm1 mapentry@ hex. cr
 
@@ -52,5 +52,6 @@ s" tst_dir/vera-stack-params.log" s" vera-stack-params.ref" f_cmp ?assert
 ts1 tset-deinit
 ts2 tset-deinit
 tm1 tmap-deinit
-
+spr1 spr-deinit
+spr2 spr-deinit
 

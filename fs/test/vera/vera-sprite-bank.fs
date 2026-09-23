@@ -50,4 +50,6 @@
 s" tst_dir/vera-sprite-bank.log" s" vera-sprite-bank.ref" f_cmp ?assert
 
 ts tset-deinit
+spr1 spr-deinit
+spr65 spr-deinit
 

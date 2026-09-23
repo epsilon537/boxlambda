@@ -38,4 +38,5 @@
 s" tst_dir/vera-sprite-paloffset.log" s" vera-sprite-paloffset.ref" f_cmp ?assert
 
 ts tset-deinit
+spr spr-deinit
 

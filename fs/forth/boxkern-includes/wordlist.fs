@@ -191,7 +191,7 @@ max-order 1+ array search-order
 ( -- link-addr wid )
 : dictionarystart-all-wids
   \ (Re)Set the (wordlistptr) to the start of the wordlist-tbl
-  wordlist-tbl dup (wordlistptr) ! ( (wordlistptr) )
+  wordlist-tbl dup (wordlistptr) ! ( wordlistptr )
   .wordlist-start @ \ Return the first word of the first wordlist. ( link-addr )
   (wordlistptr) @     \ And its wid ( link-addr wid )
 ;
@@ -206,8 +206,8 @@ max-order 1+ array search-order
     (wordlistptr) @ exit ( link-addr wid )
   then
   drop \ End of current wordlist reached. Move on to next one.
-  wordlist-struct (wordlistptr) +! (wordlistptr) @ ( (wordlistptr) )
-  dup wordlist-top @ <> if \ not at the end yet? ( (wordlistptr) )
+  wordlist-struct (wordlistptr) +! (wordlistptr) @ ( wordlistptr )
+  dup wordlist-top @ <> if \ not at the end yet? ( wordlistptr )
     .wordlist-start recurse exit
   then
   drop 0 false \ End of search order reached.

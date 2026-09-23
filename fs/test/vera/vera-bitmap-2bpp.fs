@@ -9,7 +9,7 @@
   true display-enable
   false sprites-enable
 
-  vram :: reset
+  vram-reset
 
   l{ 320 , 640 }l
   [:

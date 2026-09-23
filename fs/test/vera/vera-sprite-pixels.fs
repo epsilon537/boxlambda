@@ -46,6 +46,7 @@
         begin line-capture-enabled? not until
         ." x0  yend capture: $" 0 line-capture-pxl@ hex. cr
         ." x7 yend capture: $" 7 line-capture-pxl@ hex. cr
+
         ." xend-1 yend capture: $" w @ h @ min 1- line-capture-pxl@ hex. cr
         ." xend yend capture: $" w @ h @ min line-capture-pxl@ hex. cr
         h @ 0 do
@@ -63,4 +64,5 @@
 s" tst_dir/vera-sprite-pixels.log" s" vera-sprite-pixels.ref" f_cmp ?assert
 
 ts tset-deinit
+spr spr-deinit
 

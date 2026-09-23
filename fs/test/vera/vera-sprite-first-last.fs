@@ -40,3 +40,6 @@ s" tst_dir/vera-sprite-first-last.log" s" vera-sprite-first-last.ref" f_cmp ?ass
 
 ts tset-deinit
 
+spr0 spr-deinit
+spr63 spr-deinit
+

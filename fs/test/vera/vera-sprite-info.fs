@@ -18,4 +18,5 @@
 s" tst_dir/vera-sprite-info.log" s" vera-sprite-info.ref" f_cmp ?assert
 
 ts tset-deinit
+spr spr-deinit
 

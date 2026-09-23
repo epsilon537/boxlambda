@@ -49,4 +49,5 @@
 s" tst_dir/vera-sprite-hflip.log" s" vera-sprite-hflip.ref" f_cmp ?assert
 
 ts tset-deinit
+spr spr-deinit
 

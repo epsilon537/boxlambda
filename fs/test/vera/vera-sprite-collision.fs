@@ -56,4 +56,6 @@
 s" tst_dir/vera-sprite-collision.log" s" vera-sprite-collision.ref" f_cmp ?assert
 
 ts tset-deinit
+spr1 spr-deinit
+spr2 spr-deinit
 

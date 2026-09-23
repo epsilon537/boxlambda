@@ -107,7 +107,7 @@ begin-module vera
   \ Reset VRAM, release all VRAM resources.
   ( -- )
   : vram-reset
-    blocks_ #BLOCKS 0 fill
+    vram :: blocks_ vram :: #BLOCKS 0 fill
     VERA_VRAM_BASE VERA_VRAM_SIZE_BYTES 0 fill 
   ;
 
@@ -418,45 +418,45 @@ begin-module vera
     ( bg -- )
     : bg
       [ 1 0 stack-checker ]
-      tmap @ .bg c! ;
+      tmap-params :: tmap @ .bg c! ;
 
     \ Set mapentry foreground color.
     ( fg -- )
     : fg
       [ 1 0 stack-checker ]
-      tmap @ .fg c! ;
+      tmap-params :: tmap @ .fg c! ;
 
     \ Set mapentry tile index (character code).
     ( tile-idx -- )
     : tidx
       [ 1 0 stack-checker ]
-      tmap @ .tidx h! ;
+      tmap-params :: tmap @ .tidx h! ;
 
     \ Set mapentry palette offset.
     ( paloffset -- )
     : paloffset
       [ 1 0 stack-checker ]
-      tmap @ .paloffset c! ;
+      tmap-params :: tmap @ .paloffset c! ;
 
     \ Set mapentry flip value: 0, VFLIP, HFLIP, or VFLIP_HFLIP
     ( flip -- )
     : flip
       [ 1 0 stack-checker ]
       xassert{ dup (flip-is-valid?) }xassert
-      tmap @ .flip c! ;
+      tmap-params :: tmap @ .flip c! ;
 
     \ Set mapentry xy position in the tilemap. The input parameter is a vec2 object (see vec2.fs).
     ( vec2 -- )
     : xy
       [ 1 0 stack-checker ]
-      tmap @ .position ! ;
+      tmap-params :: tmap @ .position ! ;
 
     \ Apply the mapentry as specified in the ( tilemap ) mapentry{...}apply block.
     ( -- )
     : }apply
       [:
         [ 0 0 stack-checker ]
-        tmap @
+        tmap-params :: tmap @
         mapentry :: mapentry-apply
       ;] compile-or-execute
       mapentry-params unimport
@@ -479,22 +479,22 @@ begin-module vera
       [:
         [ tilemap import ]
         [ 0 0 stack-checker ]
-        tmap @ .position @ tmap @ mapentry@ ( mapentry )
-        xassert{ dup tmap @ tilemap :: pos-in-range? }xassert
-        tmap @ tmap-type@ case 
+        tmap-params :: tmap @ .position @ tmap-params :: tmap @ mapentry@ ( mapentry )
+        xassert{ dup tmap-params :: tmap @ tilemap :: pos-in-range? }xassert
+        tmap-params :: tmap @ tmap-type@ case 
           TMAP-TILE of
-            dup #12 rshift tmap @ .paloffset c! ( mapentry )
-            dup #10 rshift 3 and tmap @ .flip c! ( mapentry )
+            dup #12 rshift tmap-params :: tmap @ .paloffset c! ( mapentry )
+            dup #10 rshift 3 and tmap-params :: tmap @ .flip c! ( mapentry )
             $3ff and r@ .tidx h! ( )
           endof
           TMAP-TXT16 of
-            dup 12 rshift tmap @ .bg c! ( mapentry )
-            dup 8 rshift $f and tmap @ .fg c! ( mapentry )
-            $ff and tmap @ .tidx h! ( )
+            dup 12 rshift tmap-params :: tmap @ .bg c! ( mapentry )
+            dup 8 rshift $f and tmap-params :: tmap @ .fg c! ( mapentry )
+            $ff and tmap-params :: tmap @ .tidx h! ( )
           endof
           TMAP-TXT256 of
-            dup 8 rshift tmap @ .fg c! ( mapentry )
-            $ff and tmap @ .tidx h! ( )
+            dup 8 rshift tmap-params :: tmap @ .fg c! ( mapentry )
+            $ff and tmap-params :: tmap @ .tidx h! ( )
           endof
           xassert{ false }xassert
         endcase
@@ -861,10 +861,10 @@ begin-module vera
     : bpp
       [ 1 0 stack-checker ]
       dup case
-        1 of pxl ::['] 1bpp! pxl ::['] 1bpp@ endof
-        2 of pxl ::['] 2bpp! pxl ::['] 2bpp@ endof
-        4 of pxl ::['] 4bpp! pxl ::['] 4bpp@ endof
-        8 of pxl ::['] 8bpp! pxl ::['] 8bpp@ endof
+        1 of pixel ::['] 1bpp! pixel ::['] 1bpp@ endof
+        2 of pixel ::['] 2bpp! pixel ::['] 2bpp@ endof
+        4 of pixel ::['] 4bpp! pixel ::['] 4bpp@ endof
+        8 of pixel ::['] 8bpp! pixel ::['] 8bpp@ endof
         xassert{ false }xassert 0 0
       endcase ( bpp setter getter )
       tset @ .pxl-get !
@@ -1422,6 +1422,14 @@ begin-module vera
     [ 1 0 stack-checker ]
     create here sprite :: sprite-struct allot ( sprite-idx sprite )
     sprite :: init ;
+
+  \ Reset the sprite attritbute RAM for the given sprite object.
+  ( sprite -- )
+  : spr-deinit
+    [ 1 0 stack-checker ]
+    sprite :: typecheck
+    sprite :: .attr-ram-ptr @ 8 0 fill
+  ;
 
   \ --- Layer internal Words.
   begin-module layer
@@ -2150,5 +2158,12 @@ begin-module vera
   : sprite-bank@ 
     [ 0 1 stack-checker ]
     VERA_CTRL_STATUS_SBNK@ ;
+
+  \ Reset the sprite attribute RAM and reset sprite bank to 0.
+  ( -- )
+  : sprite-reset
+    VERA_SPRITE_RAM_BASE #SPRITES 8 * 0 fill 
+    0 sprite-bank!
+  ;
 end-module
 

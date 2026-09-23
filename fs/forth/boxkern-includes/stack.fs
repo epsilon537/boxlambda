@@ -76,7 +76,7 @@ end-structure
 : stack-top .stack-top @ ;
 
 \ Set the stack top to the given address.
-\ E.g. <stack> dup stack-base >stack-top resets the stack.
+\ E.g. <stack> dup stack-base swap >stack-top resets the stack.
 \ Raises x-stack-obj-underflow or x-stack-obj-overflow if given address is 
 \ outside the stack object range.
 ( addr stack -- )
@@ -88,7 +88,10 @@ end-structure
 
 \ Reset the stack.
 ( stack -- )
-: stack-reset dup stack-base >stack-top ;
+: stack-reset
+  dup stack-base ( stack addr ) 
+  swap >stack-top 
+;
 
 \ Find x in the stack and return its address or 0 if not found.
 ( x stack -- addr|0 )
