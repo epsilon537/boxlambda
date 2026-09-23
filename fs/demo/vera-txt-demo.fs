@@ -2,6 +2,10 @@
 \ A very basic VERA text mode demo. Renders entered characters on a 320x240 screen configured
 \ in 8x8 text mode.
 
+." Compiling demo, will take a few seconds..." cr
+
+vram-reset
+
 include /demo/font-loader.fs
 
 320 constant XRES
@@ -135,6 +139,13 @@ YRES 8 / constant #ROWS
   tm tmap.
   l0 layer.
   spr spr.
+
+  cr
+  ." VERA Text Mode Demo" cr
+  ." -------------------" cr
+  ." Enter some text. It should appear on the VGA display." cr
+  ." <Enter> and <BackSpace> should also work. Cursor keys not yet." cr
+  ." <ESC> exits the demo." cr
 
   \ Editing loop
   begin 

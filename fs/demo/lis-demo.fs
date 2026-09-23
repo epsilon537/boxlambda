@@ -1,6 +1,10 @@
 \ BoxLambda Forth
 \ Lissajous curves VERA bitmap mode demo.
 
+." Compiling demo, will take a few seconds..." cr
+
+vram-reset
+
 include /demo/font-loader.fs
 
 320 constant XRES
@@ -142,17 +146,17 @@ $10000 variable yf \ y frequency
 : lis-demo
 
   tsb tset{ XRES width YRES height 1 bpp 2 tiles }apply \ tileset of 2 bitmaps for double buffering.
-  tsb tset-print
+  tsb tset.
   l0 layer{ tsb tset 0 tidx }bitmap-mode
-  l0 layer-print
+  l0 layer.
 
   tsc tset{ 8 width 8 height 1 bpp 256 tiles }apply \ tileset for the font.
   tm tmap{ 64 width 32 height TMAP-TXT16 type }apply \ text grid tile map.
-  tsc tset-print
-  tm tmap-print
+  tsc tset.
+  tm tmap.
 
   l1 layer{ tsc tset tm tmap }tilemap-mode
-  l1 layer-print
+  l1 layer.
 
   tsc s" night-in-tokyo.fnt" load-font \ load the font into the tileset. See font-loader.fs.
 
@@ -164,6 +168,8 @@ $10000 variable yf \ y frequency
 
   true display-enable
  
+  ." Rendering Lissajous animation on VGA display. Press <ESC> to quit." cr
+
   \ Print on screen handy help message for the user.
   #29 s"  Press x/X/y/Y to adjust frequencies." ( addr len )
   txt-line
