@@ -2,23 +2,14 @@
 layout: page
 title: About BoxLambda
 permalink: /about/
----
-
-# About BoxLambda
-
+--- 
 BoxLambda is a hardware-software crossover project creating a homebrew,
 retro-style FPGA-based microcomputer. The goal is to create a sandbox
 environment for experimenting with software and FPGA gateware.
 
 ## The Physical Setup
 
-
-
-
-[![The physical
-setup.](../assets/about/physical-setup.png)](../assets/about/physical-setup.png)
-
-
+[![The physical setup.](../assets/about/physical-setup.png)](../assets/about/physical-setup.png)
 *The physical setup.*
 
 ## Current Features
@@ -45,44 +36,34 @@ Verilator.
 
 ## Gateware Block Diagram
 
-
-
-
 ![BoxLambda Gateware Block Diagram.](../assets/about/Arch-Diagram-dual-bus-DFX.png)
-
 
 ## Software Block Diagram
 
-
-
-
-[![BoxLambda OS
-Architecture.](../assets/about/BoxLambda-OS-Architecture.png)](../assets/about/BoxLambda-OS-Architecture.png)
-
-
+[![BoxLambda OS Architecture.](../assets/about/BoxLambda-OS-Architecture.png)](../assets/about/BoxLambda-OS-Architecture.png)
 *BoxLambda OS Architecture Block Diagram.*
 
 ## Key Goals
 
 - Create a sandbox for experimenting with software and FPGA gateware:
-    - It should be **easy** to jump in and do something: create, hack, tinker.
-        - **Simple Enough for One Person**: A motivated individual can develop a solid understanding of the entire system, including software and hardware.
-        - **Deterministic Behavior**: The duration of operations such as internal memory or register access must be predictable by design.
-        - **Self-Contained Run-Time Environment** supporting high-level interactive and low-level systems programming.
-    - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components. Optionally, support Partial FPGA Reconfiguration.
+  - It should be **easy** to jump in and do something: create, hack, tinker.
+    - **Simple Enough for One Person**: A motivated individual can develop a solid understanding of the entire system, including software and hardware.
+    - **Deterministic Behavior**: The duration of operations such as internal memory or register access must be predictable by design.
+    - **Self-Contained Run-Time Environment** supporting high-level interactive and low-level systems programming.
+  - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components. Optionally, support Partial FPGA Reconfiguration.
 
 - Target Hardware: Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start).
 
 - The computer supports the following peripherals:
-    - USB HID Keyboard
-    - USB HID Mouse (optional)
-    - USB HID Joystick (optional)
-    - Real-Time Clock and Calendar (optional)
-    - Serial port
-    - SD card storage
-    - Flash Memory storage
-    - VGA Display
-    - Audio output
+  - USB HID Keyboard
+  - USB HID Mouse (optional)
+  - USB HID Joystick (optional)
+  - Real-Time Clock and Calendar (optional)
+  - Serial port
+  - SD card storage
+  - Flash Memory storage
+  - VGA Display
+  - Audio output
 
 - Sound and graphics support retro-style 2D demos and gameplay.
 
@@ -91,29 +72,23 @@ Architecture.](../assets/about/BoxLambda-OS-Architecture.png)](../assets/about/B
 - **Infrastructure** (build system, etc.): Complete.
 - **Gateware**: Complete and meeting requirements.
 - **Software**: Development ongoing.
-    - **OS architecture**: defined.
-    - **BoxLambda C Core**: partially completed.
-    - **Mecrisp Forth Core**: completed.
-    - **Mecrisp Forth Environment**: partially completed.
-    - **Forth<->C FFI**: completed.
-    - **Filesystem layer**: completed.
+  - **OS architecture**: defined.
+  - **BoxLambda C Core**: partially completed.
+  - **Mecrisp Forth Core**: completed.
+  - **Mecrisp Forth Environment**: partially completed.
+  - **Forth<->C FFI**: completed.
+  - **Filesystem layer**: completed.
 
 ## Changelog
 
-
-
-
-- [Changelog](https://github.com/epsilon537/boxlambda/tree/v0.4.1/CHANGELOG.md)
-
-
+- [Changelog](https://github.com/epsilon537/boxlambda/tree/--help/CHANGELOG.md)
 ## Links
 
 - **Repo**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
 - **Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
-- **v0.4.1**: [https://github.com/epsilon537/boxlambda/tree/v0.4.1](https://github.com/epsilon537/boxlambda/tree/v0.4.1)
+- **--help**: [https://github.com/epsilon537/boxlambda/tree/--help](https://github.com/epsilon537/boxlambda/tree/--help)
 
 ## Documentation
 
-- [Start Here](https://boxlambda.readthedocs.io/en/v0.4.1/start-here/)
-- [Full Documentation Index](https://boxlambda.readthedocs.io/en/v0.4.1/full-index/)
-
+- [Start Here](https://boxlambda.readthedocs.io/en/--help/start-here/)
+- [Full Documentation Index](https://boxlambda.readthedocs.io/en/--help/full-index/)
