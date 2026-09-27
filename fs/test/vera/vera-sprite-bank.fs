@@ -12,8 +12,8 @@
 
   ts tset{ 8 width 8 height 8 bpp 8 tiles }apply
   ts tset.
-  spr1 spr{ ts tset 1 tidx SPR-L1 z 0 paloffset #40 #50 vec2 xy }apply
-  spr65 spr{ ts tset 1 tidx SPR-L1 z 1 paloffset #100 #200 vec2 xy }apply
+  spr1 spr{ ts tset 1 tidx SPR-L1 z 0 pal-group #40 #50 vec2 xy }apply
+  spr65 spr{ ts tset 1 tidx SPR-L1 z 1 pal-group #100 #200 vec2 xy }apply
   ts pxl{ 1 tidx 0 0 vec2 xy CYAN color }apply
 
   #50 irqline!

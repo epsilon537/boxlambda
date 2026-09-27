@@ -23,10 +23,10 @@
   tm1 tmap-params-apply
   tm1 tmap.
 
-  tm1 mapentry{ 3 2 vec2 xy 1 flip 2 paloffset 2 tidx }apply
+  tm1 mapentry{ 3 2 vec2 xy 1 flip 2 pal-group 2 tidx }apply
   3 2 vec2 tm1 mapentry@ hex. cr
-  tm1 mapentry{ 3 2 vec2 xy 0 flip 0 paloffset 0 tidx }apply
-  2 2 1 3 2 vec2 tm1 mapentry{ xy flip paloffset tidx }set
+  tm1 mapentry{ 3 2 vec2 xy 0 flip 0 pal-group 0 tidx }apply
+  2 2 1 3 2 vec2 tm1 mapentry{ xy flip pal-group tidx }set
   tm1 mapentry-params-apply
   3 2 vec2 tm1 mapentry@ hex. cr
 
@@ -38,9 +38,9 @@
   1 2 vec2 ts1 pxl{ xy }get hex. cr
 
   ts2 tset{ #32 width #32 height 8 bpp 8 tiles }apply
-  spr1 spr{ ts2 tset 1 tidx SPR-L0-L1 z 1 paloffset 5 6 vec2 xy 1 colmask HFLIP flip }apply
+  spr1 spr{ ts2 tset 1 tidx SPR-L0-L1 z 1 pal-group 5 6 vec2 xy 1 colmask HFLIP flip }apply
   spr1 spr.
-  HFLIP 1 5 6 vec2 1 SPR-L0-L1 1 ts2 spr2 spr{ tset tidx z paloffset xy colmask flip }set
+  HFLIP 1 5 6 vec2 1 SPR-L0-L1 1 ts2 spr2 spr{ tset tidx z pal-group xy colmask flip }set
   spr2 spr-params-apply
   spr2 spr.
 ;

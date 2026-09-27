@@ -13,7 +13,9 @@ begin-module vera
   #2 constant #SPRITE_BANKS
   #64 constant #SPRITES_IN_BANK
   #SPRITE_BANKS #SPRITES_IN_BANK * constant #SPRITES
-  #127 constant MAX_SPRITE_ID
+  #SPRITES 1- constant MAX_SPRITE_ID
+  #16 constant #PAL-GROUPS
+  #16 constant #COLORS-IN-PAL-GROUP
 
   \ For setting the flip attribute of mapentries and sprites
   #2 constant VFLIP
@@ -114,10 +116,10 @@ begin-module vera
   vram-reset
 
   \ Allocate memory in VRAM for a tilemap, tiledata, bitmap or sprites.
-  \ The 'init' Words use this function to allocate their resources.
+  \ The tileset and tilemap creation/initialization Words use this Word to allocate their resources.
   \ size-bytes: the number of bytes to allocate.
-  \ If successful a 2KB-aligned Pointer to allocated block of memory in VRAM.
-  \ In not successful an x-vram-alloc-failed exception is raised.
+  \ If successful, returns a 2KB-aligned Pointer to allocated block of memory in VRAM.
+  \ In not successful an vram :: x-alloc-failed exception is raised.
   ( size-bytes -- addr )
   : vram-alloc
     [ 1 1 stack-checker ]
@@ -162,7 +164,7 @@ begin-module vera
       cfield: .type
       cfield: .fg \ transient, used by mapentry
       cfield: .bg \ transient, used by mapentry
-      cfield: .paloffset \ transient, used by mapentry
+      cfield: .pal-group \ transient, used by mapentry
       cfield: .flip \ transient, used by mapentry
     end-structure
 
@@ -209,7 +211,7 @@ begin-module vera
 
   \ - Public Tilemap API:
   \
-  \ A tilemap is a grid of tiles (e.g. a font). The grid is characterized by width,
+  \ A tilemap is a grid of tiles. The grid is characterized by width,
   \ height and tile type. The grid is populated used the mapentry{...} API.
 
   \ Tilemap parameters in a tmap{...}set/apply block.
@@ -253,7 +255,7 @@ begin-module vera
     \ (Re)Allocate VRAM for this tilemap to accommodate the width and height
     \ If VRAM was previously allocated for this tilemap,
     \ this VRAM will be released before reallocating VRAM.
-    \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
+    \ Throws vram :: x-alloc-failed exception if VRAM allocation failed.
     ( -- )
     : }apply
       [: 
@@ -303,7 +305,7 @@ begin-module vera
     tilemap :: typecheck
     tilemap :: .height h@ ;
 
-  \ Retrieve the map type from the map object
+  \ Retrieve the map type from the tilemap object
   ( tilemap -- type )
   : tmap-type@
     [ 1 1 stack-checker ]
@@ -383,7 +385,7 @@ begin-module vera
       typecheck
       dup .type c@ case 
         TMAP-TILE of  
-          dup .paloffset c@ #12 lshift ( tmap mapentry )
+          dup .pal-group c@ #12 lshift ( tmap mapentry )
           over .flip c@ 3 and #10 lshift or ( tmap mapentry )
           over .tidx h@ $3ff and or ( tmap mapentry )
         endof
@@ -432,11 +434,11 @@ begin-module vera
       [ 1 0 stack-checker ]
       tmap-params :: tmap @ .tidx h! ;
 
-    \ Set mapentry palette offset.
-    ( paloffset -- )
-    : paloffset
+    \ Set mapentry palette group.
+    ( pal-group -- )
+    : pal-group
       [ 1 0 stack-checker ]
-      tmap-params :: tmap @ .paloffset c! ;
+      tmap-params :: tmap @ .pal-group c! ;
 
     \ Set mapentry flip value: 0, VFLIP, HFLIP, or VFLIP_HFLIP
     ( flip -- )
@@ -472,7 +474,7 @@ begin-module vera
     ;
 
     \ Read from VRAM the mapentry specified by ( tilemap ) mapentry{ <vec2> xy }get and
-    \ decode it, populating fg, bg, paloffset, flip attributes.
+    \ decode it, populating fg, bg, pal-group, flip attributes.
     \ This is useful for mapentry read-modify-write operations.
     ( -- )
     : }get
@@ -483,7 +485,7 @@ begin-module vera
         xassert{ dup tmap-params :: tmap @ tilemap :: pos-in-range? }xassert
         tmap-params :: tmap @ tmap-type@ case 
           TMAP-TILE of
-            dup #12 rshift tmap-params :: tmap @ .paloffset c! ( mapentry )
+            dup #12 rshift tmap-params :: tmap @ .pal-group c! ( mapentry )
             dup #10 rshift 3 and tmap-params :: tmap @ .flip c! ( mapentry )
             $3ff and r@ .tidx h! ( )
           endof
@@ -516,7 +518,7 @@ begin-module vera
     [immediate] 
   ;
 
-  \ Apply the mapnetry parameters previously recorded in a mapentry{...}set block.
+  \ Apply the mapentry parameters previously recorded in a mapentry{...}set block.
   ( tilemap -- )
   : mapentry-params-apply
     mapentry :: mapentry-apply
@@ -542,7 +544,7 @@ begin-module vera
 
   \ Keeping the 16-bit mapentry unpack words directly in the vera namespace for convenience:
 
-  \ Unpack tidx, fg and bg color from a 1bpp 16 color textmode map entry value
+  \ Unpack tidx, fg and bg color from a 16 color textmode map entry value.
   ( mapentry -- tidx fg bg )
   : unpack-txt16
     [ 1 3 stack-checker ]
@@ -551,7 +553,7 @@ begin-module vera
     swap 12 rshift $f and ( tidx fg bg )
   ;
 
-  \ Unpack tidx and fg color from a 1bpp 256 color textmode map entry value
+  \ Unpack tidx and fg color from a 256 color textmode map entry value.
   ( mapentry -- tidx fg )
   : unpack-txt256
     [ 1 2 stack-checker ]
@@ -559,17 +561,16 @@ begin-module vera
     swap 8 rshift $ff and ( tidx fg )
   ;
 
-  \ Unpack tile, flip and pal_offset from a 2/4/8bbp tile map entry value
-  \ The color index of tile pixels is modified by the palette offset using the
-  \ following logic:
-  \ - Color index 0 (transparent) and 16-255 are unmodified.
-  \ - Color index 1-15 is modified by adding 16 x palette offset.
-  ( mapentry -- tile-idx flip paloffset )
+  \ Unpack tile, flip and palette group from a 2/4/8bpp tile map entry value.
+  \ The color index of tile pixels is processed using the following logic:
+  \ - Color indices 0 (transparent) and 16-255 are palette absolute.
+  \ - Color indices 1-15 are relative to the palette group.
+  ( mapentry -- tile-idx flip pal-group )
   : unpack-tile
     [ 1 3 stack-checker ]
     dup $3ff and ( mapentry tile-idx )
     swap 10 rshift 3 and ( tile-idx mapentry flip )
-    swap 12 rshift $f and ( tile-idx flip paloffset )
+    swap 12 rshift $f and ( tile-idx flip pal-group )
   ;
 
   \ Internal Words for getting and setting pixels in tiles:
@@ -885,7 +886,7 @@ begin-module vera
     \ #tiles, bpp, width and height.
     \ If VRAM was previously allocated for this tileset,
     \ this VRAM will be released before reallocating VRAM.
-    \ Throws x-vram-alloc-failed exception if VRAM allocation failed.
+    \ Throws x-alloc-failed exception if VRAM allocation failed.
     ( -- )
     : }apply
       [:
@@ -935,8 +936,8 @@ begin-module vera
 
   \ Given a tile index in a tileset, compute the address (in VRAM) of the pixel data
   \ of that tile.
-  \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
-  \ @param tileset: Tileset object
+  \ tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
+  \ tileset: Tileset object
   ( tile-idx tileset -- addr )
   : tset-tidx>addr
     tileset :: tidx>addr
@@ -961,15 +962,6 @@ begin-module vera
     [ 1 1 stack-checker ]
     tileset :: typecheck
     tileset :: .base @ ;
-
-  \ Deinitialize the tileset, freeing VRAM resources.
-  ( tileset -- )
-  : tset-deinit
-    [ 1 0 stack-checker ]
-    tileset :: typecheck
-    dup tileset :: .base @ vram-free
-    0 swap tileset :: .base !
-  ;
 
   \ Retrieve the tileset height.
   ( tileset -- height )
@@ -1004,6 +996,15 @@ begin-module vera
   \ Create and initialize a tileset object.
   \ ( "name" -- )
   : <tset> create here tileset :: tileset-struct allot tileset :: init ;
+
+  \ Deinitialize the tileset, freeing VRAM resources.
+  ( tileset -- )
+  : tset-deinit
+    [ 1 0 stack-checker ]
+    tileset :: typecheck
+    dup tileset :: .base @ vram-free
+    0 swap tileset :: .base !
+  ;
 
   \ Pixel parameters in a <tset> pxl{...}set/apply block.
   begin-module pxl-params
@@ -1243,9 +1244,9 @@ begin-module vera
         [ 1 0 stack-checker ]
       : colmask spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK! ;
 
-      \ Set the sprite palette offset.
-      \ ( paloffset -- )
-      : paloffset
+      \ Set the sprite palette group.
+      \ ( pal-group -- )
+      : pal-group
         [ 1 0 stack-checker ]
         spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET! ;
 
@@ -1376,9 +1377,9 @@ begin-module vera
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK@ ;
 
-  \ Get the sprite's palette offset.
-  \ ( sprite -- paloffset )
-  : spr-paloffset@ 
+  \ Get the sprite's palette group.
+  \ ( sprite -- pal-group )
+  : spr-pal-group@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET@ ;
@@ -1411,8 +1412,8 @@ begin-module vera
     >r 
     r@ spr-colmask@ r@ spr-z@ r@ spr-flip@ r@ spr-height@ r@ spr-width@ r@ spr-xy@ vec2.xy swap r@ spr-id@
     s" sprite: %n id, %n x, %n y, %n w, %n h, %n flip, %n z, $%x colmask" printf cr
-    r@ spr-tidx@ r@ spr-addr@ r@ spr-bpp@ r> spr-paloffset@
-    s" %n paloffset, %n bpp, $%x addr %n tidx" printf cr
+    r@ spr-tidx@ r@ spr-addr@ r@ spr-bpp@ r> spr-pal-group@
+    s" %n pal-group, %n bpp, $%x addr %n tidx" printf cr
   ;
 
   \ Create and initialize a sprite object.
@@ -1517,9 +1518,9 @@ begin-module vera
       [ 2 0 stack-checker ]
       if VERA_L1_CONFIG_BITMAPMODE! else VERA_L0_CONFIG_BITMAPMODE! then ;
 
-    \ The palette offsetr to be used by this layer.
-    ( paloffset layer-id -- )
-    : paloffset! 
+    \ The palette group to be used by this layer.
+    ( pal-group layer-id -- )
+    : pal-group! 
       [ 2 0 stack-checker ]
       if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET! else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET! then ;
 
@@ -1588,7 +1589,7 @@ begin-module vera
       xassert{ dup }xassert
       >r ( layer-id R: tileset )
       \ Reset the scroll registers when installing a tileset
-      \ to avoid side-effect from paloffset left over if we
+      \ to avoid side-effect from palette offset left over if we
       \ were previously in bitmap mode.
       dup scroll-reset ( layer-id R: tileset )
       r@ tset-bpp@ over bpp! ( layer-id R: tileset )
@@ -1614,7 +1615,7 @@ begin-module vera
       [ 3 0 stack-checker ]
       >r ( tileset tile-idx R: layer-id )
       \ Reset the scroll registers when installing a bitmap
-      \ to avoid hscroll bleeding into paloffset if we
+      \ to avoid hscroll bleeding into palette offset if we
       \ were previously in tile mode.
       r@ scroll-reset ( tileset tile-idx R: layer-id )
       over tset-tidx>addr r@ tile-base! ( tileset R: layer-id )
@@ -1773,19 +1774,19 @@ begin-module vera
     layer :: typecheck
     layer :: .id c@ if VERA_L1_CONFIG_BITMAPMODE@ else VERA_L0_CONFIG_BITMAPMODE@ then 0<> ;
 
-  \ Retrieve the layer's palette offset.
-  ( layer -- paloffset )
-  : layer-paloffset@ 
+  \ Retrieve the layer's palette group.
+  ( layer -- pal-group )
+  : layer-pal-group@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@ if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET@ else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET@ then ;
 
-  \ Set the layer's palette offset.
-  ( paloffset layer -- )
-  : layer-paloffset! 
+  \ Set the layer's palette group.
+  ( pal-group layer -- )
+  : layer-pal-group! 
     [ 2 0 stack-checker ]
     layer :: typecheck
-    layer :: .id c@ layer :: paloffset!
+    layer :: .id c@ layer :: pal-group!
   ;
 
   \ Set the layer's horizontal scroll value.
@@ -1832,9 +1833,9 @@ begin-module vera
     layer :: .id c@ if VERA_L1_VSCROLL@ else VERA_L0_VSCROLL@ then
   ;
 
-  \ Retrieve the layer width.
+  \ Retrieve the layer's tile or bitmap width.
   ( layer -- width )
-  : layer-tile-width@ 
+  : layer-tile-width@
     [ 1 1 stack-checker ]
     layer :: typecheck
     dup layer :: .id c@ 
@@ -1843,7 +1844,7 @@ begin-module vera
     swap layer-bitmap-mode@ if 320 else 8 then *
   ;
 
-  \ Retrieve the layer height.
+  \ Retrieve the layer's tile height.
   ( layer -- height )
   : layer-tile-height@ 
     [ 1 1 stack-checker ]
@@ -1856,7 +1857,7 @@ begin-module vera
     then
   ;
 
-  \ Retrieve the layer's tile base address.
+  \ Retrieve the layer's tile VRAM base address.
   ( layer -- addr-id )
   : layer-tile-base@
     [ 1 1 stack-checker ]
@@ -1874,7 +1875,7 @@ begin-module vera
     layer :: .tileset @ ;
 
   \ Retrieve tile-idx used by this layer (bitmap mode).
-  ( layer -- tileset )
+  ( layer -- tile-idx )
   : layer-tidx@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
@@ -1899,8 +1900,8 @@ begin-module vera
     r@ layer-bitmap-mode@ if
       ." bitmap mode" cr
       r@ layer-tidx@  r@ layer-tile-base@ r@ layer-tile-width@ 
-      r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-paloffset@ r> layer-bpp@
-      s" %n bpp, %n paloffset, %n hscroll, %n vscroll, %n width, $%x base, %n tidx" 
+      r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-pal-group@ r> layer-bpp@
+      s" %n bpp, %n pal-group, %n hscroll, %n vscroll, %n width, $%x base, %n tidx" 
       printf cr
     else
       ." tile mode" cr
@@ -1995,7 +1996,23 @@ begin-module vera
 
   \ --- Palette API
 
-  \ Color Palette Indices
+  \ --- Palette Internal Words
+  begin-module palette
+    \ Shadow memory. VERA's palette memory is write-only.
+    create shadow-palette 2 256 * allot
+ 
+  \ Internal Word used by pal! and pal-init.
+  ( rgb idx -- )
+  : pal!
+    swap ( idx rgb )
+    $fff and ( idx rgbmasked )
+    swap ( rgbmasked idx )
+    4 * VERA_PALETTE_RAM_BASE + !
+  ;
+
+  end-module
+
+  \ Paletter Group 0 Color Palette Indices
   #0 constant BLACK
   #1 constant WHITE
   #2 constant RED
@@ -2015,47 +2032,89 @@ begin-module vera
   #16 constant GREYSCALE-0 
   #31 constant GREYSCALE-15 
 
-  \ Mask given value to 0-15 range and
-  \ return corresponding greyscale value in the default VERA color palette.
-  \ ( n -- n' )
+  \ Palette Group 1 - Grey scale equivalent of the colors in Palette Group 0
+  \ (in default VERA color palette).
+
+  \ Given a Palette Group 0 color index, returns the corresponding greyscale
+  \ color palette index.
+  ( n -- n' )
   : greyscale #15 and GREYSCALE-0 + [1-foldable] ;
 
-  \ Shadow memory. VERA's palette memory is write-only.
-  create (shadow-palette) 2 256 * allot
- 
-  \ Internal Word used by pal! and pal-init.
-  ( rgb idx -- )
-  : (pal!)
-    swap ( idx rgb )
-    $fff and ( idx rgbmasked )
-    swap ( rgbmasked idx )
-    4 * VERA_PALETTE_RAM_BASE + !
-  ;
-
-  \ Expects standard 4-bit color fields mapped linearly
   \ Write an entry into the palette.
-  \ @param idx: the palete color index
-  \ @param rgb: the 12-bit RGB triple
+  \ idx: the palete color index (0..255).
+  \ rgb: the 12-bit RGB triple.
   ( rgb idx -- )
   : pal!
     [ 2 0 stack-checker ]
-    2dup 2* (shadow-palette) + h!
-    (pal!)
+    2dup 2* palette :: shadow-palette + h!
+    palette :: pal!
   ;
 
-  \ Read the RGB value of a palette entry
-  \ @param idx: the palete color index:
-  \ @return: the 12-bit RGB triple
+  \ Read the RGB value of a palette entry.
+  \ idx: the palete color index.
+  \ returns the 12-bit RGB triple.
   ( idx -- rgb )
   : pal@
     [ 1 1 stack-checker ]
-    2* (shadow-palette) + h@ ;
+    2* palette :: shadow-palette + h@ ;
+
+  \ Convert given palette group id and relative index (0..15) to its absolute 
+  \ color palette index value (0..255).
+  ( pal-group-id rel-idx -- abs-idx )
+  : pal-group>pal-abs 
+    [ 2 1 stack-checker ]
+    swap 4 lshift or ;
+
+  \ Convert a color palette absolute index (0..255) to the palette group it belongs to and 
+  \ the relative index within this group.
+  ( abs-idx -- pal-group-id rel-idx )
+  : pal-abs>pal-group
+    [ 1 2 stack-checker ]
+    dup 4 rshift swap $f and ;
+  ;
+
+  \ Set all 16 rgb colors in the given palette group. Note palette group id on top-of-stack.
+  ( rgb0 .. rgb15 pal-group-id -- )
+  : pal-group!
+    [ 17 0 stack-checker ]
+    0 pal-group>pal-abs ( rgb0 .. rgb15 abs-idx )
+    dup 15 + ( rgb0 .. rgb15 start-idx end-idx )
+    do
+      i pal!
+    -1 +loop
+  ;
+
+  \ Set one of the 16 colors in the given palette group.
+  ( rgb pal-group-id idx -- )
+  : pal-group-1!
+    [ 3 0 stack-checker ]
+    pal-group>pal-abs pal!
+  ;
+
+  \ Retrieve all 16 rgb color from given palette group.
+  ( pal-group-id -- rgb0 .. rgb15 )
+  : pal-group@
+    [ 1 16 stack-checker ]
+    0 pal-group>pal-abs ( abs-idx )
+    dup 16 + swap ( end-idx start-idx )
+    do
+      i pal@
+    loop
+  ;
+
+  \ Retrieve the rgb color value from given relative index (0..15) in given palette group.
+  ( pal-group-id idx -- rgb )
+  : pal-group-1@
+    [ 2 1 stack-checker ]
+    pal-group>pal-abs pal@
+  ;
 
   \ Load the original into the shadow-palette and VERA's palette memory.
+  ( -- )
   : pal-init
-    (orig-palette) (shadow-palette) 2 256 * move
+    (orig-palette) palette :: shadow-palette 2 256 * move
     256 0 do
-      i pal@ i (pal!)
+      i pal@ i palette :: pal!
     loop
   ;
 
@@ -2067,7 +2126,7 @@ begin-module vera
   ( addr -- )
   : pal-load
     [ 1 0 stack-checker ]
-    move (shadow-palette) 512 \ Copy it to the shadow-palette first
+    move palette :: shadow-palette 512 \ Copy it to the shadow-palette first
     pal-init \ Then install shadow-palette into VERA palette memory.
   ;
 

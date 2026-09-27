@@ -34,9 +34,9 @@ create cols col1 , col2 , col3 ,
   l0 layer{ ts tset tm tmap }tilemap-mode
   l0 layer.
 
-  tm mapentry{ col1 row1 vec2 xy 0 flip 0 paloffset 1 tidx }apply
-  tm mapentry{ col2 row2 vec2 xy VFLIP_HFLIP flip 0 paloffset 1 tidx }apply
-  tm mapentry{ col3 row3 vec2 xy 0 flip 1 paloffset 1 tidx }apply
+  tm mapentry{ col1 row1 vec2 xy 0 flip 0 pal-group 1 tidx }apply
+  tm mapentry{ col2 row2 vec2 xy VFLIP_HFLIP flip 0 pal-group 1 tidx }apply
+  tm mapentry{ col3 row3 vec2 xy 0 flip 1 pal-group 1 tidx }apply
 
   true l0 layer-enable
   false l1 layer-enable

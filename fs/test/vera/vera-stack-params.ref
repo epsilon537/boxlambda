@@ -7,6 +7,6 @@ Tilemap: $12040000 base, 32 width, 64 height, 2 type
 00000003 
 00000003 
 sprite: 1 id, 5 x, 6 y, 32 w, 32 h, 1 flip, 2 z, $1 colmask
-1 paloffset, 8 bpp, $12041400 addr 1 tidx
+1 pal-group, 8 bpp, $12041400 addr 1 tidx
 sprite: 2 id, 5 x, 6 y, 32 w, 32 h, 1 flip, 2 z, $1 colmask
-1 paloffset, 8 bpp, $12041400 addr 1 tidx
+1 pal-group, 8 bpp, $12041400 addr 1 tidx

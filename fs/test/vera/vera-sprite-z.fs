@@ -15,10 +15,10 @@
   ts tset.
   l0 layer{ ts tset tm0 tmap }tilemap-mode
   l1 layer{ ts tset tm1 tmap }tilemap-mode
-  tm0 mapentry{ 0 0 vec2 xy 0 paloffset 2 tidx }apply
-  tm1 mapentry{ 0 0 vec2 xy 2 paloffset 2 tidx }apply
+  tm0 mapentry{ 0 0 vec2 xy 0 pal-group 2 tidx }apply
+  tm1 mapentry{ 0 0 vec2 xy 2 pal-group 2 tidx }apply
 
-  spr spr{ ts tset 2 tidx SPR-DIS z 1 paloffset 0 0 vec2 xy }apply
+  spr spr{ ts tset 2 tidx SPR-DIS z 1 pal-group 0 0 vec2 xy }apply
 
 
   false l0 layer-enable

@@ -14,7 +14,7 @@
   false l1 layer-enable
   false sprites-enable
 
-  tm mapentry{ 2 2 vec2 xy 0 flip 0 paloffset 1 tidx }apply
+  tm mapentry{ 2 2 vec2 xy 0 flip 0 pal-group 1 tidx }apply
 
   #16 0 do
     ts pxl{ 1 tidx i i vec2 xy WHITE color }apply

@@ -8,7 +8,7 @@
 
   ts tset{ #32 width #32 height 8 bpp 8 tiles }apply
   ts tset.
-  spr spr{ ts tset 1 tidx SPR-L0-L1 z 1 paloffset 5 6 vec2 xy 1 colmask HFLIP flip }apply
+  spr spr{ ts tset 1 tidx SPR-L0-L1 z 1 pal-group 5 6 vec2 xy 1 colmask HFLIP flip }apply
   
   spr spr.
 ;

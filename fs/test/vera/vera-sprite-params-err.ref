@@ -13,4 +13,4 @@ Assert failed!
 Assert failed!
 7: 
 sprite: 1 id, 5 x, 6 y, 32 w, 32 h, 1 flip, 2 z, $1 colmask
-1 paloffset, 8 bpp, $12041C00 addr 7 tidx
+1 pal-group, 8 bpp, $12041C00 addr 7 tidx
