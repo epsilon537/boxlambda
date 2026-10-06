@@ -1,15 +1,15 @@
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm
 
 : vera-scroll-test
 
   true display-enable
 
-  ts tset{ #16 width #16 height 8 bpp #32 tiles }apply
-  ts tset.
+  ts sheet{ #16 width #16 height 8 bpp #32 tiles }apply
+  ts sheet.
   tm tmap{ #32 width #32 height TMAP-TILE type }apply
   tm tmap.
-  l0 layer{ ts tset tm tmap }tilemap-mode
+  tm ts l0 layer-tilemap-mode
   true l0 layer-enable
   false l1 layer-enable
   false sprites-enable
@@ -45,6 +45,6 @@
 
 s" tst_dir/vera-scroll.log" s" vera-scroll.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 tm tmap-deinit
 

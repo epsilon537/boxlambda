@@ -22,6 +22,7 @@ hook-interpret @ variable prompt-prev-interpret
     query
     cr
     interpret
+    istr-free-all
   again
 ;
 

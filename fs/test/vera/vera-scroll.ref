@@ -1,4 +1,4 @@
-Tileset: $12040000 base, 16 width, 16 height, 8 bpp, 32 tiles
+Tileset Sheet: $12040000 base, 16 width, 16 height, 8 bpp, 32 tiles
 Tilemap: $12042000 base, 32 width, 32 height, 2 type
 hscroll: 16 
 vscroll: 16 

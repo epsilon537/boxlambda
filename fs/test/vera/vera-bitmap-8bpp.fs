@@ -1,6 +1,6 @@
 0 variable w
 0 variable h
-<tset> ts
+<sheet-bitmap> bitmap
 
 : bitmap-8bpp-test
 
@@ -17,13 +17,13 @@
     l{ 32 , 64 }l
     [:
       h !
-      ts tset{ w @ width h @ height 8 bpp 1 tiles }apply
-      ts tset.
-      l0 layer{ ts tset 0 tidx }bitmap-mode
-      ts pxl{ 0 tidx 0 0 vec2 xy #255 color }apply
-      ts pxl{ w @ 1- 0 vec2 xy }apply
-      ts pxl{ 0 h @ 1- vec2 xy }apply
-      ts pxl{ w @ 1- h @ 1- vec2 xy }apply
+      bitmap sheet{ w @ width h @ height 8 bpp }apply
+      bitmap sheet.
+      bitmap l0 layer-bitmap-mode
+      bitmap pxl{ 0 0 vec2 xy #255 color }apply
+      bitmap pxl{ w @ 1- 0 vec2 xy }apply
+      bitmap pxl{ 0 h @ 1- vec2 xy }apply
+      bitmap pxl{ w @ 1- h @ 1- vec2 xy }apply
       0 irqline!
       true line-capture-enable
       begin line-capture-enabled? not until
@@ -52,10 +52,10 @@
       1 line-capture-pxl@ hex. cr
       w @ 2- line-capture-pxl@ hex. cr
       w @ 1- line-capture-pxl@ hex. cr
-      ts pxl{ 0 0 vec2 xy 0 color }apply
-      ts pxl{ w @ 1- 0 vec2 xy }apply
-      ts pxl{ 0 h @ 1- vec2 xy }apply
-      ts pxl{ w @ 1- h @ 1- vec2 xy }apply
+      bitmap pxl{ 0 0 vec2 xy 0 color }apply
+      bitmap pxl{ w @ 1- 0 vec2 xy }apply
+      bitmap pxl{ 0 h @ 1- vec2 xy }apply
+      bitmap pxl{ w @ 1- h @ 1- vec2 xy }apply
     ;] iter
   ;] iter
 ;
@@ -64,5 +64,5 @@
 
 s" tst_dir/vera-bitmap-8bpp.log" s" vera-bitmap-8bpp.ref" f_cmp ?assert
 
-ts tset-deinit
+bitmap sheet-deinit
 

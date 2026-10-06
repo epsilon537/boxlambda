@@ -1,4 +1,4 @@
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm
 
 : vera-scale-test
@@ -7,9 +7,9 @@
 
   tm tmap{ #32 width #32 height TMAP-TILE type }apply
   tm tmap.
-  ts tset{ #16 width #16 height 8 bpp #32 tiles }apply
-  ts tset.
-  l0 layer{ ts tset tm tmap }tilemap-mode
+  ts sheet{ #16 width #16 height 8 bpp #32 tiles }apply
+  ts sheet.
+  tm ts l0 layer-tilemap-mode
   true l0 layer-enable
   false l1 layer-enable
 
@@ -48,6 +48,6 @@
 
 s" tst_dir/vera-scale.log" s" vera-scale.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 tm tmap-deinit
 

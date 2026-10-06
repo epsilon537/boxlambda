@@ -3,15 +3,15 @@ create rows 32  , 64  , 128 , 256 , 256 , 256 ,
 0 variable r
 0 variable c
 
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm
 
 : map-corners-256
 
   true display-enable
 
-  ts tset{ 16 width 16 height 1 bpp 32 tiles }apply
-  ts tset.
+  ts sheet{ 16 width 16 height 1 bpp 32 tiles }apply
+  ts sheet.
 
   16 0 do
     ts pxl{ 1 tidx i i vec2 xy 1 color }apply
@@ -23,7 +23,7 @@ create rows 32  , 64  , 128 , 256 , 256 , 256 ,
     i cells rows + @ r !
     tm tmap{ c @ width r @ height TMAP-TXT16 type }apply
     tm tmap.
-    l0 layer{ ts tset tm tmap }tilemap-mode
+    tm ts l0 layer-tilemap-mode
     true l0 layer-enable
     l0 layer.
     tm mapentry{ GREEN bg WHITE fg 1 tidx 0 0 vec2 xy }apply
@@ -41,6 +41,6 @@ create rows 32  , 64  , 128 , 256 , 256 , 256 ,
 
 s" tst_dir/vera-map-corners-256.log" s" vera-map-corners-256.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 tm tmap-deinit
 

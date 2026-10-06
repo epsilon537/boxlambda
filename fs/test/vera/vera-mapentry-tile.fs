@@ -11,7 +11,7 @@ create cols col1 , col2 , col3 ,
 0 variable row
 0 variable col
 
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm
 
 : mapentry-tile
@@ -20,8 +20,8 @@ create cols col1 , col2 , col3 ,
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ #16 width #16 height 8 bpp #32 tiles }apply
-  ts tset.
+  ts sheet{ #16 width #16 height 8 bpp #32 tiles }apply
+  ts sheet.
 
   16 0 do
     i 1+ 0 ?do
@@ -31,7 +31,7 @@ create cols col1 , col2 , col3 ,
 
   tm tmap{ #32 width #32 height TMAP-TILE type }apply
   tm tmap.
-  l0 layer{ ts tset tm tmap }tilemap-mode
+  tm ts l0 layer-tilemap-mode
   l0 layer.
 
   tm mapentry{ col1 row1 vec2 xy 0 flip 0 pal-group 1 tidx }apply
@@ -57,6 +57,6 @@ create cols col1 , col2 , col3 ,
 
 s" tst_dir/vera-mapentry-tile.log" s" vera-mapentry-tile.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 tm tmap-deinit
 

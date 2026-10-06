@@ -1,17 +1,17 @@
-<tset> ts
+<sheet-bitmap> bitmap
 
 : palette-test
 
   true l0 layer-enable
   true display-enable
 
-  ts tset{ #320 width #32 height 8 bpp 1 tiles }apply
-  ts tset.
-  l0 layer{ ts tset 0 tidx }bitmap-mode
+  bitmap sheet{ #320 width #32 height 8 bpp }apply
+  bitmap sheet.
+  bitmap l0 layer-bitmap-mode
   l0 layer.
-  ts pxl{ 0 tidx 0 0 vec2 xy #255 color }apply
-  ." pxl 0,0 : " ts pxl{ 0 0 vec2 xy }get . cr
-  ." pxl 1,0 : " ts pxl{ 1 0 vec2 xy }get . cr
+  bitmap pxl{ 0 0 vec2 xy #255 color }apply
+  ." pxl 0,0 : " bitmap pxl{ 0 0 vec2 xy }get . cr
+  ." pxl 1,0 : " bitmap pxl{ 1 0 vec2 xy }get . cr
 
   0 irqline!
 
@@ -46,5 +46,5 @@
 
 s" tst_dir/vera-palette-test.log" s" vera-palette-test.ref" f_cmp ?assert
 
-ts tset-deinit
+bitmap sheet-deinit
 

@@ -1,5 +1,5 @@
 0 variable (bpp)
-<tset> ts
+<sheet-bitmap> bitmap 
 
 : bitmap-pal-group-test
 
@@ -12,10 +12,10 @@
 
     ." bpp: " (bpp) @ . cr
 
-    ts tset{ 320 width 32 height (bpp) @ bpp 1 tiles }apply
-    ts tset.
-    l0 layer{ ts tset 0 tidx }bitmap-mode
-    ts pxl{ 0 tidx 0 0 vec2 xy 1 color }apply
+    bitmap sheet{ 320 width 32 height (bpp) @ bpp }apply
+    bitmap sheet.
+    bitmap l0 layer-bitmap-mode
+    bitmap pxl{ 0 0 vec2 xy 1 color }apply
 
     0 l0 layer-pal-group!
     ." pal-group: " l0 layer-pal-group@ . cr
@@ -46,5 +46,4 @@
 
 s" tst_dir/vera-bitmap-pal-group.log" s" vera-bitmap-pal-group.ref" f_cmp ?assert
 
-ts tset-deinit
-
+bitmap sheet-deinit

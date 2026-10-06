@@ -44,7 +44,20 @@ begin-module vera
 
     create blocks_ #BLOCKS chars allot
 
-    \ In the blocks_ array, at offset, attempt to find requested blocks.
+    \ Diagnostic print of # free and allocated blocks.
+    ( -- )
+    : usage
+      0 ( allocated-blocks )
+      #BLOCKS 0 do
+        blocks_ i + c@ if
+          1+
+        then
+      loop
+      #BLOCKS over - ( allocated free )
+      s" VRAM: free blocks: %n, allocated blocks: %n" printf cr
+    ;
+
+    \ In the blocks_ array, at offset, attempt to find requested consecutive blocks.
     \ Return actual # of blocks found (might be less than requested).
     ( requested offset -- found )
     : find-free-blocks
@@ -113,10 +126,8 @@ begin-module vera
     VERA_VRAM_BASE VERA_VRAM_SIZE_BYTES 0 fill 
   ;
 
-  vram-reset
-
   \ Allocate memory in VRAM for a tilemap, tiledata, bitmap or sprites.
-  \ The tileset and tilemap creation/initialization Words use this Word to allocate their resources.
+  \ The sheet and tilemap creation/initialization Words use this Word to allocate their resources.
   \ size-bytes: the number of bytes to allocate.
   \ If successful, returns a 2KB-aligned Pointer to allocated block of memory in VRAM.
   \ In not successful an vram :: x-alloc-failed exception is raised.
@@ -143,6 +154,12 @@ begin-module vera
   \ Return the VRAM base address.
   ( -- vram-base-addr )
   : vram-base VERA_VRAM_BASE ;
+
+  \ Print VRAM usage.
+  ( -- )
+  : vram.
+    vram :: usage
+  ;
 
   \ --- Tile Maps
 
@@ -185,7 +202,7 @@ begin-module vera
       typecheck
       >r
       vec2.xy ( x y R: tilemap )
-      dup 0 >= swap r@ .height h@ < and ( x f R: tileset )
+      dup 0 >= swap r@ .height h@ < and ( x f R: sheet )
       swap dup 0 >= swap r> .width h@ < and ( f f )
       and
     ;
@@ -291,28 +308,28 @@ begin-module vera
     tilemap :: apply
   ;
 
-  \ Retrieve map width from the tilemap object.
+  \ Returns the tilemap's width.
   ( tilemap -- width )
   : tmap-width@ 
     [ 1 1 stack-checker ]
     tilemap :: typecheck
     tilemap :: .width h@ ;
 
-  \ Retrieve map height from the tilemap object.
+  \ Returns the tilemap's height.
   ( tilemap -- height )
   : tmap-height@ 
     [ 1 1 stack-checker ]
     tilemap :: typecheck
     tilemap :: .height h@ ;
 
-  \ Retrieve the map type from the tilemap object
+  \ Returns the tilemap's type.
   ( tilemap -- type )
   : tmap-type@
     [ 1 1 stack-checker ]
     tilemap :: typecheck
     tilemap :: .type c@ ;
 
-  \ Retrieve tilemap base address in VRAM.
+  \ Retruns the tilemap's base address.
   ( tilemap -- addr )
   : tmap-base@ 
     [ 1 1 stack-checker ]
@@ -434,7 +451,7 @@ begin-module vera
       [ 1 0 stack-checker ]
       tmap-params :: tmap @ .tidx h! ;
 
-    \ Set mapentry palette group.
+    \ Set mapentry palette group. 0..15.
     ( pal-group -- )
     : pal-group
       [ 1 0 stack-checker ]
@@ -714,11 +731,15 @@ begin-module vera
 
   compileto-restore
 
-  \ --- Tileset internal Words.
-  begin-module tileset
+  \ Sheet types
+  #0 constant SHEET-BITMAP
+  #1 constant SHEET-TILESET
 
-    \ The tileset object structure, including transient fields for the pxl{...} API.
-    begin-structure tileset-struct
+  \ --- Sheet internal Words.
+  begin-module sheet
+
+    \ The sheet object structure, including transient fields for the pxl{...} API.
+    begin-structure sheet-struct
       field:  .base
       field:  .pxl-set
       field:  .pxl-get
@@ -727,135 +748,175 @@ begin-module vera
       hfield: .width
       hfield: .height
       hfield: .bpp
-      hfield: .#tiles
-      hfield: .tidx \ transient, used by pxl{}
+      hfield: .#tiles \ Always 1 for bitmap sheets
+      hfield: .tidx \ transient, used by pxl{}, always 0 in case of bitmaps.
       cfield: .color \ transient, used by pxl{}
+      cfield: .type \ SHEET-BITMAP or SHEET-TILESET
     end-structure
     
     typechecker typecheck
 
-    \ Initialize the tileset object.
-    ( tileset -- )
+    \ Initialize the sheet object.
+    ( sheet type -- )
     : init
-      [ 1 0 stack-checker ]
-      dup tileset-struct 0 fill 
+      [ 2 0 stack-checker ]
+      over sheet-struct 0 fill ( sheet type )
+      dup SHEET-BITMAP = if ( sheet type )
+        over 1 swap .#tiles h!
+      then ( sheet type )
+      over .type c! ( sheet )
       init-type typecheck
     ;
 
-    \ Returns true if it's a bitmap tileset (as opposed to regular tiles/fonts or sprites).
-    ( tileset --- f )
-    : is-bitmap?
+    \ Returns the sheet type: SHEET-BITMAP or SHEET-TILESET.
+    ( sheet --- type )
+    : type@
       [ 1 1 stack-checker ]
       typecheck
-      .width h@ 320 >=
+      .type c@
     ;
 
-    \ Retrieve the tilesize in bytes for the given tileset.
-    ( tileset -- tilesize-bytes )
+    \ Retrieve the size in bytes one tile in the given tileset sheet.
+    ( sheet -- size )
     : tilesize@ 
       [ 1 1 stack-checker ]
       typecheck
       >r
-      r@ .bpp h@ r@ .width h@ r@ .height h@ * * 8/ ( sz R: tset )
-      r> is-bitmap? if ( sz )
+      xassert{ r@ type@ SHEET-TILESET = }xassert
+      r@ .bpp h@ r@ .width h@ r> .height h@ * * 8/ ( sz )
+    ;
+
+    \ Retrieve the size in bytes of the given sheet.
+    ( sheet -- size )
+    : size@ 
+      [ 1 1 stack-checker ]
+      typecheck
+      >r
+      r@ type@ SHEET-BITMAP = if ( sz )
+        r@ .bpp h@ r@ .width h@ r> .height h@ * * 8/ ( sz )
         \ Round up bitmaps to nearest higher multiple of $800 to meet tile-base address requirement
         $7ff + $fffff800 and
+      else
+        r@ .#tiles h@ r@ .bpp h@ r@ .width h@ r> .height h@ * * * 8/ ( sz )
       then
     ;
 
     \ Check if given position is within the width/height boundaries.
-    ( position tileset -- f )
+    ( position sheet -- f )
     : pos-in-range?
       [ 2 1 stack-checker ]
       >r
-      vec2.xy ( x y R: tileset )
-      dup 0 >= swap r@ .height h@ < and ( x f R: tileset )
+      vec2.xy ( x y R: sheet )
+      dup 0 >= swap r@ .height h@ < and ( x f R: sheet )
       swap dup 0 >= swap r> .width h@ < and ( f f )
       and
     ;
 
-    \ Applies the parameters configured in a tset{...} block.
-    ( tset -- )
+    \ Applies the parameters configured in a sheet{...} block.
+    ( sheet -- )
     : apply
       [ 1 0 stack-checker ]
       typecheck
       dup .base @ ?dup if
         vram-free
       then
-      0 over .base !
-      dup tilesize@ over .#tiles h@ * ( tset sz )
-      dup vram-alloc ( tset sz addr )
-      dup rot 0 fill ( tset addr )
+      0 over .base ! ( sheet )
+      dup size@ ( sheet sz )
+      dup vram-alloc ( sheet sz addr )
+      dup rot 0 fill ( sheet addr )
       swap .base ! ( )
     ;
 
-    \ Given a tile index in a tileset, compute the address (in VRAM) of the pixel data
+    \ Given a tile index in a tileset sheet, compute the address (in VRAM) of the pixel data
     \ of that tile.
-    \ @param tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
-    \ @param tileset: Tileset object
-    ( tile-idx tileset -- addr )
+    \ @param tile_idx: Index of the tile in the sheet. Range 0..num_tiles-1.
+    \ @param sheet: Sheet object
+    ( tile-idx sheet -- addr )
     : tidx>addr
       [ 2 1 stack-checker ]
       typecheck
-      dup tilesize@ ( tile-idx tileset tilesize )
-      rot * ( tileset tilesize*tile-idx ) 
+      dup tilesize@ ( tile-idx sheet tilesize )
+      rot * ( sheet tilesize*tile-idx ) 
       swap .base @ ( tilesize*tile-idx base )
       xassert{ dup }xassert
       + ;
 
     \ Apply (draw) the pixel specified in a pxl{...} block.
-    ( tset -- )
+    ( sheet -- )
     : apply-pxl
       [ 1 0 stack-checker ]
       typecheck
       >r
       r@ .color c@
       r@ .position @ xassert{ dup r@ pos-in-range? }xassert
-      r@ .tidx h@ xassert{ dup r@ .#tiles h@ <= }xassert
-      r@ tidx>addr
+      r@ type@ SHEET-BITMAP = if
+        r@ .base @
+      else
+        r@ .tidx h@ xassert{ dup r@ .#tiles h@ <= }xassert
+        r@ tidx>addr
+      then
       r@ .width h@
       r> .pxl-set @
       ( color position addr width pxl-setter )
       execute
     ;
-  end-module \ tileset
+  end-module \ sheet
 
-  \ -- Tileset Public API
-  \ A tileset is used to represent tiles (e.g. a font), sprite pixel data, and bitmaps.
+  \ -- Sheet Public API
+  \ A sheet is used to represent tiles (e.g. a font), sprite pixel data, and bitmaps.
 
-  \ Tileset parameters in a tset{...}set/apply block.
-  begin-module tset-params
-    tileset import
+  \ Sheet parameters in a sheet{...}set/apply block.
+  begin-module sheet-params
+    sheet import
 
-    0 variable tset
+    0 variable (sheet)
 
     \ Used for parameter validation
     ( size -- f )
-    : (width-is-valid?) l{ 8 , 16 , 32 , 64 , 320 , 640 }l find-in 0<> ;
+    : (tset-wh-is-valid?) l{ 8 , 16 , 32 , 64 }l find-in 0<> ;
 
-    \ Set the tileset width in the tileset object.
+    \ Used for parameter validation
+    ( size -- f )
+    : (bitmap-width-is-valid?) l{ 320 , 640 }l find-in 0<> ;
+
+    \ Set the sheet width in the sheet object.
     \   - 8, 16 for regular tiles.
     \   - 8, 16, 32, 64 for sprites.
     \   - 320, 640 for bitmaps.
     ( width -- )
     : width
       [ 1 0 stack-checker ]
-      xassert{ dup (width-is-valid?) }xassert
-      tset @ .width h! 
+      xassert{ 
+        (sheet) @ type@ SHEET-TILESET = if ( width )
+          dup (tset-wh-is-valid?) ( width f )
+        else
+          dup (bitmap-width-is-valid?) ( width f )
+        then
+      }xassert
+      (sheet) @ ( width sheet )
+      .width h! 
     ;
 
-    \ Set the tileset height in the tileset object
+    \ Set the sheet height in the sheet object
     \   - 8 or 16 for regular tiles.
     \   - 8, 16, 32, 64 for sprites.
     \   - 1..4095 for bitmaps.
     ( height -- )
     : height
       [ 1 0 stack-checker ]
-      xassert{ dup 0> over 4096 < and }xassert
-      tset @ .height h! 
+      xassert{
+        (sheet) @ type@ SHEET-TILESET = if ( height )
+          dup (tset-wh-is-valid?) ( height f )
+        else
+          dup 0> ( height f ) 
+          over 4096 < and ( height f )
+        then
+      }xassert
+      (sheet) @ ( height sheet )
+      .height h! 
     ;
 
-    \ Set the tileset BPP in the tileset object
+    \ Set the sheet BPP in the sheet object
     \   - 1, 2, 4, 8 for regular tiles and bitmaps.
     \   - 4, 8 for sprites.
     ( bpp -- )
@@ -868,173 +929,206 @@ begin-module vera
         8 of pixel ::['] 8bpp! pixel ::['] 8bpp@ endof
         xassert{ false }xassert 0 0
       endcase ( bpp setter getter )
-      tset @ .pxl-get !
-      tset @ .pxl-set !
-      tset @ .bpp h!
+      (sheet) @ .pxl-get !
+      (sheet) @ .pxl-set !
+      (sheet) @ .bpp h!
     ;
 
-    \ Set the number of tiles in the tileset.
+    \ Set the number of tiles in the tilesheet.
     \ Range: 0..1023
     ( num -- )
     : tiles
       [ 1 0 stack-checker ]
-      xassert{ dup 1024 < }xassert ( num )
-      tset @ .#tiles h! 
+      (sheet) @ ( num sheet )
+      xassert{ 
+        2dup type@ SHEET-TILESET = ( num sheet num f )
+        swap 1024 < and ( num sheet f )
+      }xassert ( num sheet )
+      .#tiles h! 
     ;
 
-    \ (Re)Allocate VRAM for this tileset to accommodate
+    \ (Re)Allocate VRAM for this sheet to accommodate
     \ #tiles, bpp, width and height.
-    \ If VRAM was previously allocated for this tileset,
+    \ If VRAM was previously allocated for this sheet,
     \ this VRAM will be released before reallocating VRAM.
     \ Throws x-alloc-failed exception if VRAM allocation failed.
     ( -- )
     : }apply
       [:
         [ 0 0 stack-checker ]
-        tset @
+        (sheet) @
         apply
       ;] compile-or-execute
-      tset-params unimport
+      sheet-params unimport
       [immediate]
     ;
 
-    \ Store the parameters given in the tset{...}set block, but don't apply
+    \ Store the parameters given in the sheet{...}set block, but don't apply
     \ them yet.
     ( -- )
     : }set
-      tset-params unimport
+      sheet-params unimport
       [immediate]
     ;
 
-    tileset unimport
-  end-module \ tset-params
+    sheet unimport
+  end-module \ sheet-params
 
-  \ Opening bracket for tset{ ... }set
+  \ Opening bracket for sheet{ ... }set
   ( -- )
-  : tset{ 
-    [: tset-params :: tset ! ;] compile-or-execute
-    tset-params import 
+  : sheet{ 
+    [: sheet-params :: (sheet) ! ;] compile-or-execute
+    sheet-params import 
     [immediate] ;
 
-  \ Apply the parameters previously configured in a tset{...}
-  ( tset -- )
-  : tset-params-apply
-    tileset :: apply
+  \ Apply the parameters previously configured in a sheet{...}
+  \ Throws x-alloc-failed exception if VRAM allocation failed.
+  ( sheet -- )
+  : sheet-params-apply
+    sheet :: apply
   ;
 
-  \ Given a VRAM address and a tileset, compute the tile index corresponding to that address.
+  \ Given a VRAM address and a tileset sheet, compute the tile index corresponding to that address.
   ( addr tileset -- tile-idx )
-  : tset-addr>tidx
+  : sheet-addr>tidx
     [ 2 1 stack-checker ]
-    tileset :: typecheck
-    dup tileset :: .base @ 
-    xassert{ dup }xassert ( addr tileset baseaddr )
-    rot swap - ( tileset offset )
-    swap tileset :: tilesize@ ( offset tilesize )
+    sheet :: typecheck
+    dup sheet :: .base @ ( addr sheet baseaddr )
+    xassert{ 
+      2dup swap ( addr sheet baseaddr baseaddr sheet )
+      sheet :: type@ SHEET-TILESET = and 
+    }xassert
+    rot swap - ( sheet offset )
+    swap sheet :: tilesize@ ( offset tilesize )
     / ( tileidx )
   ;
 
-  \ Given a tile index in a tileset, compute the address (in VRAM) of the pixel data
+  \ Given a tile index in a tileset sheet, compute the address (in VRAM) of the pixel data
   \ of that tile.
-  \ tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
-  \ tileset: Tileset object
+  \ tile_idx: Index of the tile in the sheet. Range 0..num_tiles-1.
+  \ sheet: Sheet object
   ( tile-idx tileset -- addr )
-  : tset-tidx>addr
-    tileset :: tidx>addr
+  : sheet-tidx>addr
+    sheet :: tidx>addr
   ;
 
-  \ Retrieve the tilesize in bytes for the given tileset.
-  ( tileset -- tilesize-bytes )
-  : tset-tilesize@ 
+  \ Returns the size in bytes of one tile in the given tileset. Tileset sheets only.
+  ( sheet -- tilesize-bytes )
+  : sheet-tilesize@ 
     [ 1 1 stack-checker ]
-    tileset :: tilesize@ ;
+    sheet :: tilesize@ ;
 
-  \ Retrieve the tileset width from the tileset object.
-  ( tileset -- width )
-  : tset-width@ 
+  \ Returns the sheet size in bytes.
+  ( sheet -- tilesize-bytes )
+  : sheet-size@ 
     [ 1 1 stack-checker ]
-    tileset :: typecheck
-    tileset :: .width h@ ;
+    sheet :: size@ ;
 
-  \ Retrieve tileset base address in VRAM.
-  ( tileset -- addr )
-  : tset-base@ 
+  \ Returns the sheet width.
+  ( sheet -- width )
+  : sheet-width@ 
     [ 1 1 stack-checker ]
-    tileset :: typecheck
-    tileset :: .base @ ;
+    sheet :: typecheck
+    sheet :: .width h@ ;
 
-  \ Retrieve the tileset height.
-  ( tileset -- height )
-  : tset-height@ 
+  \ Retrieve the sheet height.
+  ( sheet -- height )
+  : sheet-height@ 
     [ 1 1 stack-checker ]
-    tileset :: typecheck
-    tileset :: .height h@ ;
+    sheet :: typecheck
+    sheet :: .height h@ ;
 
-  \ Retrieve the tileset bits-per-pixel from the tileset object.
-  ( tileset -- bpp )
-  : tset-bpp@ 
+  \ Returns the sheet base address in VRAM.
+  ( sheet -- addr )
+  : sheet-base@ 
     [ 1 1 stack-checker ]
-    tileset :: typecheck
-    tileset :: .bpp h@ ;
+    sheet :: typecheck
+    sheet :: .base @ ;
 
-  \ Retrieve the number of tiles in the tileset.
-  ( tileset -- #tiles )
-  : tset-#tiles@ 
+  \ Retrieve the sheet's bits-per-pixel.
+  ( sheet -- bpp )
+  : sheet-bpp@ 
     [ 1 1 stack-checker ]
-    tileset :: typecheck
-    tileset :: .#tiles h@ ;
+    sheet :: typecheck
+    sheet :: .bpp h@ ;
 
-  \ Print the tileset attributes.
-  ( tileset -- )
-  : tset.
+  \ Retrieve the number of tiles in the sheet. Always returns 1 in case of a bitmap sheet.
+  ( sheet -- #tiles )
+  : sheet-#tiles@ 
+    [ 1 1 stack-checker ]
+    sheet :: typecheck
+    sheet :: .#tiles h@ 
+  ;
+
+  \ Returns the sheet type: SHEET-BITMAP or SHEET-TILESET.
+  ( sheet -- type )
+  : sheet-type@
+    sheet :: type@
+  ;
+
+  \ Print the sheet attributes.
+  ( sheet -- )
+  : sheet.
     [ 1 0 stack-checker ]
-    tileset :: typecheck
-    >r r@ tset-#tiles@ r@ tset-bpp@ r@ tset-height@ r@ tset-width@ r> tset-base@
-    s" Tileset: $%x base, %n width, %n height, %n bpp, %n tiles" printf cr
+    sheet :: typecheck
+    >r
+    r@ sheet :: type@ SHEET-TILESET = if
+      r@ sheet-#tiles@ r@ sheet-bpp@ r@ sheet-height@ r@ sheet-width@ r> sheet-base@
+      s" Tileset Sheet: $%x base, %n width, %n height, %n bpp, %n tiles" printf cr
+    else
+      r@ sheet-bpp@ r@ sheet-height@ r@ sheet-width@ r> sheet-base@
+      s" Bitmap Sheet: $%x base, %n width, %n height, %n bpp" printf cr
+    then
   ;
 
-  \ Create and initialize a tileset object.
+  \ Create and initialize a bitmap sheet object.
   \ ( "name" -- )
-  : <tset> create here tileset :: tileset-struct allot tileset :: init ;
+  : <sheet-bitmap> create here sheet :: sheet-struct allot SHEET-BITMAP sheet :: init ;
 
-  \ Deinitialize the tileset, freeing VRAM resources.
-  ( tileset -- )
-  : tset-deinit
+  \ Create and initialize a tileset sheet object.
+  \ ( "name" -- )
+  : <sheet-tileset> create here sheet :: sheet-struct allot SHEET-TILESET sheet :: init ;
+\
+  \ Deinitialize the sheet, freeing VRAM resources.
+  ( sheet -- )
+  : sheet-deinit
     [ 1 0 stack-checker ]
-    tileset :: typecheck
-    dup tileset :: .base @ vram-free
-    0 swap tileset :: .base !
+    sheet :: typecheck
+    dup sheet :: .base @ vram-free
+    0 swap sheet :: .base !
   ;
 
-  \ Pixel parameters in a <tset> pxl{...}set/apply block.
+  \ Pixel parameters in a <sheet> pxl{...}set/apply block.
   begin-module pxl-params
-    tileset import
-    tset-params import
+    sheet import
+    sheet-params import
 
-    \ tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
+    \ tile_idx: Index of the tile in the tileset sheet. Range 0..num_tiles-1.
     ( tile-idx -- )
     : tidx
       [ 1 0 stack-checker ]
-      tset @ .tidx h! ;
+      xassert{ (sheet) @ sheet-type@ SHEET-TILESET = }xassert
+      (sheet) @ .tidx h! 
+    ;
 
     \ The pixel's color (palette index).
     ( color -- ) 
     : color
       [ 1 0 stack-checker ]
-      tset @ .color c! ;
+      (sheet) @ .color c! ;
 
     \ The pixel's position, specified as a vec2 (see vec2.fs).
     ( vec2 -- ) 
     : xy 
       [ 1 0 stack-checker ]
-      tset @ .position ! ;
+      (sheet) @ .position ! ;
 
     \ Draw the pixel as specified in the pxl{...}apply block.
     ( -- )
     : }apply
       [:
         [ 0 0 stack-checker ]
-        tset @
+        (sheet) @
         apply-pxl
       ;] compile-or-execute
       pxl-params unimport
@@ -1055,33 +1149,37 @@ begin-module vera
     : }get
       [:
         [ 0 1 stack-checker ]
-        tset @ .position @ xassert{ dup tset @ tileset :: pos-in-range? }xassert
-        tset @ .tidx h@ xassert{ dup tset @ tset-#tiles@ <= }xassert
-        tset @ tset-tidx>addr 
-        tset @ tset-width@
-        tset @ tileset :: .pxl-get @
+        (sheet) @ .position @ xassert{ dup (sheet) @ sheet :: pos-in-range? }xassert
+        (sheet) @ sheet-type@ SHEET-BITMAP = if
+          (sheet) @ sheet-base@
+        else
+          (sheet) @ .tidx h@ xassert{ dup (sheet) @ sheet-#tiles@ <= }xassert
+          (sheet) @ sheet-tidx>addr
+        then
+        (sheet) @ sheet-width@
+        (sheet) @ sheet :: .pxl-get @
         ( position addr width pxl-getter )
         execute ( color )
-        dup tset @ .color c! ( color )
+        dup (sheet) @ .color c! ( color )
       ;] compile-or-execute
       pxl-params unimport
       [immediate]
     ;
 
-    tset-params unimport
-    tileset unimport
+    sheet-params unimport
+    sheet unimport
   end-module \ pxl-params
 
   \ Opening bracket for pxl{ ... }set/get
-  ( tileset -- )
+  ( sheet -- )
   : pxl{ 
-    [: tset-params :: tset ! ;] compile-or-execute
+    [: sheet-params :: (sheet) ! ;] compile-or-execute
     pxl-params import [immediate] ;
 
   \ Apply the parameters previously specified in a pxl{...}set block.
-  ( tileset -- )
+  ( sheet -- )
   : pxl-params-apply
-    tileset :: apply-pxl
+    sheet :: apply-pxl
   ;
 
   \ -- Sprites.
@@ -1095,7 +1193,7 @@ begin-module vera
   begin-module sprite
     \ The sprite object structure.
     begin-structure sprite-struct
-      field:  .tileset
+      field:  .sheet
       field:  .tile-idx
       field:  .attr-ram-ptr
       hfield: .attr-addr
@@ -1127,13 +1225,13 @@ begin-module vera
       init-type typecheck
     ;
 
-    \ Encode the sprite size to store in sprite attribyte RAM
+    \ Encode the sprite size to store in sprite attribute RAM
     ( tilesize - tilesize-encoded )
     : sizeenc
       [ 1 1 stack-checker ]
       log2 3 - ;
 
-    \ Decode the sprite size stored in the spirte attribute RAM
+    \ Decode the sprite size stored in the sprite attribute RAM
     ( tilesize-encoded -- tilesize )
     : sizedec 
       [ 1 1 stack-checker ]
@@ -1250,38 +1348,37 @@ begin-module vera
         [ 1 0 stack-checker ]
         spr @ .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET! ;
 
-      \ Set the tile index to be used by the sprite object. The tile index combined with the tileset object (:tset below)
+      \ Set the tile index to be used by the sprite object. The tile index combined with the sheet object (:sheet below)
       \ identify the sprite pixel data.
       \ ( tile-idx -- )
       : tidx
         [ 1 0 stack-checker ]
         dup spr @ .tile-idx ! ( tile-idx )
-        \ Compute and set the address attribute if we have a tileset.
-        \ If we don't have a tileset yet, this is deferred until the tileset
+        \ Compute and set the address attribute if we have a sheet.
+        \ If we don't have a sheet yet, this is deferred until the sheet
         \ is specified.
-        spr @ .tileset @ ?dup if ( tile-idx tileset )
-          xassert{ 2dup tset-#tiles@ < }xassert ( tile-idx tileset )
-          tset-tidx>addr ( addr ) 
+        spr @ .sheet @ ?dup if ( tile-idx sheet ) xassert{ 2dup sheet-#tiles@ < }xassert ( tile-idx sheet )
+          sheet-tidx>addr ( addr ) 
           spr @ addr! ( )
         else
           drop ( )
         then
       ;
 
-      \ Set the tileset to be used in the sprite object.
-      \ When modifying the tileset used by a sprite object, keep in mind that
+      \ Set the tileset sheet to be used in the sprite object.
+      \ When modifying the sheet used by a sprite object, keep in mind that
       \ the corresponding tile index (tidx, see above) has to be valid (within
-      \ range) for the new tileset.
-      : tset ( tileset -- )
+      \ range) for the new sheet.
+      : sheet ( sheet -- )
         [ 1 0 stack-checker ]
-        tileset :: typecheck
-        spr @ .tile-idx @ ( tileset tile-idx )
-        xassert{ 2dup swap tset-#tiles@ < }xassert ( tileset tile-idx )
-        over tset-tidx>addr spr @ addr! ( tileset )
-        dup tset-bpp@ spr @ bpp! ( tileset )
-        dup tset-width@ spr @ width! ( tileset )
-        dup tset-height@ spr @ height! ( tileset )
-        spr @ .tileset ! ( )
+        sheet :: typecheck
+        spr @ .tile-idx @ ( sheet tile-idx )
+        xassert{ 2dup swap sheet-#tiles@ < }xassert ( sheet tile-idx )
+        over sheet-tidx>addr spr @ addr! ( sheet )
+        dup sheet-bpp@ spr @ bpp! ( sheet )
+        dup sheet-width@ spr @ width! ( sheet )
+        dup sheet-height@ spr @ height! ( sheet )
+        spr @ .sheet ! ( )
       ;
 
       \ Commit the sprite's attributes to hardware, i.e. to the sprite attribute RAM.
@@ -1319,7 +1416,7 @@ begin-module vera
     sprite :: apply
   ;
 
-  \ Get the sprite's VRAM address
+  \ Returns the sprite's VRAM address.
   ( sprite -- addr )
   : spr-addr@ 
     [ 1 1 stack-checker ]
@@ -1328,77 +1425,77 @@ begin-module vera
     5 lshift VERA_VRAM_BASE +
   ;
 
-  \ Retrieve the sprite id from the sprite object.
+  \ Returns the sprite's id.
   ( sprite -- id )
   : spr-id@
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-ram-ptr @ sprite :: ram>id ;
 
-  \ Get the sprite's current coordinates. Returns a vec2 (see vec2.fs).
+  \ Returns the sprite's current coordinates. Returns a vec2 (see vec2.fs).
   ( sprite -- vec2 )
   : spr-xy@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     dup sprite :: .attr-x h@ swap sprite :: .attr-y h@ vec2 ;
 
-  \ Get the sprite width.
+  \ Returns the sprite's width.
   ( sprite -- width )
   : spr-width@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_WIDTH@ sprite :: sizedec ;
 
-  \ Get the sprite height.
+  \ Reutrns the sprite's height.
   \ ( sprite -- height )
   : spr-height@
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_HEIGHT@ sprite :: sizedec ;
 
-  \ Get the sprite's flip value: VFLIP, HFLIP, or VFLIP_HFLIP
+  \ Returns the sprite's flip value: VFLIP, HFLIP, or VFLIP_HFLIP
   \ ( sprite -- flip )
   : spr-flip@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_FLIP@ ;
 
-  \ Get the sprite's z-depth: SPR-DIS, SPR-BG-L0, SPR-L0-L1, SPR-L1.
+  \ Returns the sprite's z-depth: SPR-DIS, SPR-BG-L0, SPR-L0-L1, SPR-L1.
   \ ( sprite -- zdepth )
   : spr-z@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_ZDEPTH@ ;
 
-  \ Get the sprite's collision mask.
+  \ Returns the sprite's collision mask.
   \ ( sprite -- colmask )
   : spr-colmask@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_COLMASK@ ;
 
-  \ Get the sprite's palette group.
+  \ Returns the sprite's palette group.
   \ ( sprite -- pal-group )
   : spr-pal-group@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-flags VERA_SPRITE_ATTR_FLAGS_PALOFFSET@ ;
 
-  \ Get the sprite's bits-per-pixel value (8 or 4).
+  \ Returns the sprite's bits-per-pixel value (8 or 4).
   \ ( sprite -- bpp )
   : spr-bpp@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
     sprite :: .attr-addr VERA_SPRITE_ATTR_MODEADDR_MODE@ if 8 else 4 then ;
 
-  \ Retrieve the tileset used by this sprite (tileset, tile index combo).
+  \ Returns the tileset sheet used by this sprite.
   \ ( sprite -- tileset )
-  : spr-tset@ 
+  : spr-sheet@ 
     [ 1 1 stack-checker ]
     sprite :: typecheck
-    sprite :: .tileset @ ;
+    sprite :: .sheet @ ;
 
-  \ Retrieve the tile-idx used by this sprite (tileset, tile index combo).
+  \ Retruns the tile index used by this sprite.
   \ ( sprite -- tile-idx )
   : spr-tidx@ 
     [ 1 1 stack-checker ]
@@ -1424,7 +1521,7 @@ begin-module vera
     create here sprite :: sprite-struct allot ( sprite-idx sprite )
     sprite :: init ;
 
-  \ Reset the sprite attritbute RAM for the given sprite object.
+  \ Reset the sprite attribute RAM for the given sprite object.
   ( sprite -- )
   : spr-deinit
     [ 1 0 stack-checker ]
@@ -1437,9 +1534,8 @@ begin-module vera
 
     \ The layer object structure.
     begin-structure layer-struct
-      field:  .tileset
+      field:  .sheet
       field:  .tilemap
-      hfield: .tile-idx
       cfield: .id
     end-structure
 
@@ -1518,12 +1614,6 @@ begin-module vera
       [ 2 0 stack-checker ]
       if VERA_L1_CONFIG_BITMAPMODE! else VERA_L0_CONFIG_BITMAPMODE! then ;
 
-    \ The palette group to be used by this layer.
-    ( pal-group layer-id -- )
-    : pal-group! 
-      [ 2 0 stack-checker ]
-      if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET! else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET! then ;
-
     \ In bitmap mode, true sets bitmap width 640, false 320.
     \ In tile mode, true sets tile width 16, false 8.
     \ ( f layer-id -- )
@@ -1575,127 +1665,54 @@ begin-module vera
       swap tilemap-base! ( R: layer )
     ;
 
-    \ Returns true if tilesize value is valid. Used for parameter validation.
+    \ Returns true if tile width/height value is valid. Used for parameter validation.
     ( size -- f )
-    : tilesize-is-valid? l{ 8 , 16 }l find-in 0<> ;
+    : tilewh-is-valid? l{ 8 , 16 }l find-in 0<> ;
 
-    \ Configure given tileset into given layer.
-    \ The tileset attributes are used to configure the layer.
-    ( tileset layer-id -- )
+    \ Configure given tileset sheet into given layer.
+    \ The sheet attributes are used to configure the layer.
+    ( sheet layer-id -- )
     : tileset!
       [ 2 0 stack-checker ]
       swap
-      tileset :: typecheck
-      xassert{ dup }xassert
-      >r ( layer-id R: tileset )
-      \ Reset the scroll registers when installing a tileset
+      sheet :: typecheck
+      xassert{ dup sheet-type@ SHEET-TILESET = }xassert ( sheet layer-id )
+      >r ( layer-id R: sheet )
+      \ Reset the scroll registers when installing a sheet
       \ to avoid side-effect from palette offset left over if we
       \ were previously in bitmap mode.
-      dup scroll-reset ( layer-id R: tileset )
-      r@ tset-bpp@ over bpp! ( layer-id R: tileset )
-      false over bitmap-mode! ( layer-id R: tileset )
-      r@ tset-width@ ( layer-id width R: tileset )
-      xassert{ dup tilesize-is-valid? }xassert
-      16 = over tile-width! ( layer-id R: tileset )
-      r@ tset-height@ ( layer-id height R: tileset )
-      xassert{ dup tilesize-is-valid? }xassert
-      16 = over tile-height! ( layer-id R: tileset )
-      r> tset-base@ xassert{ dup }xassert ( layer-id base )
+      dup scroll-reset ( layer-id R: sheet )
+      r@ sheet-bpp@ over bpp! ( layer-id R: sheet )
+      false over bitmap-mode! ( layer-id R: sheet )
+      r@ sheet-width@ ( layer-id width R: sheet )
+      xassert{ dup tilewh-is-valid? }xassert
+      16 = over tile-width! ( layer-id R: sheet )
+      r@ sheet-height@ ( layer-id height R: sheet )
+      xassert{ dup tilewh-is-valid? }xassert
+      16 = over tile-height! ( layer-id R: sheet )
+      r> sheet-base@ xassert{ dup }xassert ( layer-id base )
       swap tile-base!
     ;
 
-    \ Returns true if bitmap value is valid. Used for parameter validation.
-    ( size -- f )
-    : bitmap-width-is-valid? l{ 320 , 640 }l find-in 0<> ;
-
     \ Configure given bitmap (identified by a bitmap descriptor) into the given layer.
-    \ The tileset + tile-idx attributes are used to configure the layer.
-    ( tileset tile-idx layer-id -- )
+    \ The sheet attributes are used to configure the layer.
+    ( sheet layer-id -- )
     : bitmap!
       [ 3 0 stack-checker ]
-      >r ( tileset tile-idx R: layer-id )
+      >r ( sheet R: layer-id )
       \ Reset the scroll registers when installing a bitmap
       \ to avoid hscroll bleeding into palette offset if we
       \ were previously in tile mode.
-      r@ scroll-reset ( tileset tile-idx R: layer-id )
-      over tset-tidx>addr r@ tile-base! ( tileset R: layer-id )
-      tileset :: typecheck
-      dup tset-bpp@ r@ bpp! ( tileset R: layer-id )
-      tset-width@ ( width R: layer-id )
-      xassert{ dup bitmap-width-is-valid? }xassert ( width R: layer-id )
-      640 = r@ tile-width! ( f R: layer-id )
+      r@ scroll-reset ( sheet R: layer-id )
+      sheet :: typecheck
+      xassert{ dup sheet-type@ SHEET-BITMAP = }xassert ( sheet R: layer-id )
+      dup sheet-base@ r@ tile-base! ( sheet R: layer-id )
+      dup sheet-bpp@ r@ bpp! ( sheet R: layer-id )
+      sheet-width@ 640 = r@ tile-width! ( f R: layer-id )
       0 r@ tile-height! ( R: layer-id )
       true r> bitmap-mode! ( )
     ;
   end-module \ layer
-
-  \ Layer parameters in a l0/l1 layer{...}tilemap-mode/bitmap-mode block.
-  begin-module layer-params
-    layer import
-
-    0 variable lyr
-
-    \ Set the tilemap to be used by this layer (configuring tilemapmode).
-    ( tmap -- )
-    : tmap
-      [ 1 0 stack-checker ]
-      tilemap :: typecheck
-      lyr @ .tilemap ! ;
-
-    \ Set the tileset to be used by this layer (tilemapmode and bitmapmode).
-    ( tileset -- )
-    : tset
-      [ 1 0 stack-checker ]
-      tileset :: typecheck
-      lyr @ .tileset ! ;
-
-    \ Set the tile index to be used by this layer (bitmapmode).
-    ( tile-idx -- )
-    : tidx 
-      [ 1 0 stack-checker ]
-      lyr @ .tile-idx h! ;
-
-    \ Configure the layer in tilemap mode. tmap and tset must be specified.
-    ( -- )
-    : }tilemap-mode
-      [:
-        [ 0 0 stack-checker ]
-        lyr @
-        typecheck
-        .tilemap @ ( tmap )
-        lyr @ .id c@ tilemap!
-        lyr @ .tileset @ ( tileset )
-        lyr @ .id c@ tileset!
-      ;] compile-or-execute
-      layer-params unimport
-      [immediate]
-    ;
-
-    \ Configure the layer in bitmap mode. tset and tidx must be specified.
-    ( layer -- )
-    : }bitmap-mode
-      [: 
-        [ 0 0 stack-checker ]
-        lyr @
-        typecheck
-        dup .id c@ ( layer layer-id )
-        over .tileset @ ( layer layer-id tileset )
-        xassert{ dup }xassert
-        rot .tile-idx h@ ( layer-id tileset tile-idx )
-        rot bitmap!
-      ;] compile-or-execute
-      layer-params unimport
-      [immediate]
-    ;
-
-    layer unimport
-  end-module \ layer-params 
-
-  \ opening brack for layer{ ... }tilemap-mode or layer :: { ... }bitmap-mode
-  ( layer -- layer )
-  : layer{ 
-    [: layer-params :: lyr ! ;] compile-or-execute
-    layer-params import [immediate] ;
 
   \ l0 and l1 are the objects to be passed into the public words below.
   create l0 layer :: layer-struct allot
@@ -1703,7 +1720,7 @@ begin-module vera
   0 l0 layer :: init
   1 l1 layer :: init
 
-  \ Retrieve the layer id from the layer object.
+  \ Returns layer object's the layer id (0 or 1).
   \ ( layer -- id )
   : layer-id@
     [ 1 1 stack-checker ]
@@ -1711,6 +1728,26 @@ begin-module vera
     layer :: .id c@
   ;
  
+  \ Configure the layer in tilemap mode.
+  ( tmap tileset layer -- )
+  : layer-tilemap-mode
+    [ 3 0 stack-checker ]
+    layer :: typecheck
+    layer-id@ >r ( tmap sheet R: layer-id )
+    swap r@ layer :: tilemap! ( sheet R: layer-id )
+    r> layer :: tileset!
+  ;
+
+  \ Configure the layer in bitmap mode.
+  ( bitmap layer -- )
+  : layer-bitmap-mode
+    [ 2 0 stack-checker ]
+    layer :: typecheck
+    xassert{ over }xassert
+    layer-id@ ( bitmap layer-id )
+    layer :: bitmap!
+  ;
+
   \ Enable/disable the layer.
   \ ( f layer -- )
   : layer-enable
@@ -1725,7 +1762,7 @@ begin-module vera
     layer :: typecheck
     layer :: .id c@ if VERA_DC_VIDEO_L1_ENABLE@ else VERA_DC_VIDEO_L0_ENABLE@ then 0<> ;
 
-  \ Retrieve the layer's tilemap base address.
+  \ Returns the layer's tilemap base address.
   ( layer -- addr )
   : layer-tmap-base@
     [ 1 1 stack-checker ]
@@ -1735,7 +1772,7 @@ begin-module vera
     9 lshift VERA_VRAM_BASE +
   ;
 
-  \ Retrieve the layer's tilemap width.
+  \ Returns the layer's tilemap width.
   ( layer -- width )
   : layer-tmap-width@ 
     [ 1 1 stack-checker ]
@@ -1769,24 +1806,25 @@ begin-module vera
 
   \ Returns true if the layer is in bitmap mode.
   ( layer -- f )
-  : layer-bitmap-mode@ 
+  : layer-bitmap-mode@
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@ if VERA_L1_CONFIG_BITMAPMODE@ else VERA_L0_CONFIG_BITMAPMODE@ then 0<> ;
 
-  \ Retrieve the layer's palette group.
+  \ Returns the layer's palette group (assumes bitmap mode).
   ( layer -- pal-group )
-  : layer-pal-group@ 
+  : layer-pal-group@
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@ if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET@ else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET@ then ;
 
-  \ Set the layer's palette group.
+  \ Set the palette group to be used by this layer (bitmap mode).
   ( pal-group layer -- )
   : layer-pal-group! 
     [ 2 0 stack-checker ]
     layer :: typecheck
-    layer :: .id c@ layer :: pal-group!
+    layer :: .id c@
+    if VERA_L1_HSCROLL_HSCROLL_11_8_PALOFFSET! else VERA_L0_HSCROLL_HSCROLL_11_8_PALOFFSET! then
   ;
 
   \ Set the layer's horizontal scroll value.
@@ -1803,7 +1841,7 @@ begin-module vera
     then
   ;
 
-  \ Retrieve the layer's horizontal scroll value.
+  \ Returns the layer's horizontal scroll value.
   ( layer -- hscroll )
   : layer-hscroll@
     [ 1 1 stack-checker ]
@@ -1833,9 +1871,9 @@ begin-module vera
     layer :: .id c@ if VERA_L1_VSCROLL@ else VERA_L0_VSCROLL@ then
   ;
 
-  \ Retrieve the layer's tile or bitmap width.
+  \ Returns the layer's tile or bitmap width.
   ( layer -- width )
-  : layer-tile-width@
+  : layer-width@
     [ 1 1 stack-checker ]
     layer :: typecheck
     dup layer :: .id c@ 
@@ -1844,7 +1882,7 @@ begin-module vera
     swap layer-bitmap-mode@ if 320 else 8 then *
   ;
 
-  \ Retrieve the layer's tile height.
+  \ Retruns the layer's tile height. Returns 0 if the layer is in bitmap mode.
   ( layer -- height )
   : layer-tile-height@ 
     [ 1 1 stack-checker ]
@@ -1857,9 +1895,9 @@ begin-module vera
     then
   ;
 
-  \ Retrieve the layer's tile VRAM base address.
+  \ Returns the layer's VRAM base address.
   ( layer -- addr-id )
-  : layer-tile-base@
+  : layer-base@
     [ 1 1 stack-checker ]
     layer :: typecheck
     layer :: .id c@
@@ -1867,47 +1905,40 @@ begin-module vera
     11 lshift VERA_VRAM_BASE +
   ;
 
-  \ Retrieve tileset used by this layer
-  ( layer -- tileset )
-  : layer-tset@ 
+  \ Returns sheet object used by this layer
+  ( layer -- sheet )
+  : layer-sheet@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
-    layer :: .tileset @ ;
+    layer :: .sheet @ ;
 
-  \ Retrieve tile-idx used by this layer (bitmap mode).
-  ( layer -- tile-idx )
-  : layer-tidx@ 
-    [ 1 1 stack-checker ]
-    layer :: typecheck
-    layer :: .tile-idx h@ ;
-
-  \ Retrieve tilemap used by this layer (tilemap mode).
+  \ Returns tilemap object used by this layer (tilemap mode).
   ( layer -- tilemap )
   : layer-tmap@ 
     [ 1 1 stack-checker ]
     layer :: typecheck
-    layer :: .tileset @ ;
+    layer :: .tilemap @ ;
 
   \ Print the layer attributes.
   ( layer -- )
   : layer.
     layer :: typecheck
     [ 1 0 stack-checker ]
-    >r 
+    >r
     r@ layer-enabled? if s" enabled" else s" disabled" then
     r@ layer-id@
     s" layer %n %s" printf cr
     r@ layer-bitmap-mode@ if
       ." bitmap mode" cr
-      r@ layer-tidx@  r@ layer-tile-base@ r@ layer-tile-width@ 
+      r@ layer-base@ r@ layer-width@ 
       r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-pal-group@ r> layer-bpp@
-      s" %n bpp, %n pal-group, %n hscroll, %n vscroll, %n width, $%x base, %n tidx" 
+      s" %n bpp, %n pal-group, %n hscroll, %n vscroll, %n width, $%x base" 
       printf cr
     else
       ." tile mode" cr
-      r@ layer-tidx@ r@ layer-tile-base@ r@ layer-tile-height@ r@ layer-tile-width@ 
+      r@ layer-base@ r@ layer-tile-height@ r@ layer-width@ 
       r@ layer-vscroll@ r@ layer-hscroll@ r@ layer-bpp@
-      s" %n bpp, %n hscroll, %n vscroll, %n width, %n height, $%x base, %n tidx," printf cr
+      s" %n bpp, %n hscroll, %n vscroll, %n width, %n height, $%x base," printf cr
       r@ layer-t256c@ r@ layer-tmap-height@ r@ layer-tmap-width@ r> layer-tmap-base@
       s" $%x tmap-base, %n tmap-width, %n tmap-height, %n t256c" printf cr
     then
@@ -1947,21 +1978,19 @@ begin-module vera
 
   \ Disable IRQs. The passed in mask will be inverted and  AND'd with the
   \ installed mask.
-  \ @param mask: bitwise OR of VERA_IRQs to disable.
+  \ mask: bitwise OR of VERA_IRQs to disable.
   ( mask -- ) 
   : irq-disable
     [ 1 0 stack-checker ]
     VERA_IEN_ADDR @ swap bic VERA_IEN_ADDR ! ;
 
-  \ Retrieve the enabled IRQs bitmask.
-  \ @return: a bitmask of enabled VERA_IRQs.
+  \ Returns the enabled IRQs bitmask.
   ( -- mask )
   : irq-enabled
     [ 0 1 stack-checker ]
     VERA_IEN_ADDR @ ;
 
-  \ Retrieve the active IRQs.
-  \ @return: a bitmask of active VERA_IRQs.
+  \ Returns a bitmask of active VERA_IRQs.
   ( -- active-mask )
   : irq-get
     [ 0 1 stack-checker ]
@@ -1974,7 +2003,7 @@ begin-module vera
     [ 1 0 stack-checker ]
     VERA_ISR_ISR! ;
 
-  \ Set/Get the scanline on which to trigger the line IRQ if VERA_IRQ_LINE is
+  \ Set the scanline on which to trigger the line IRQ if VERA_IRQ_LINE is
   \ enabled.
   \ @param scanline: scanline number on which the trigger the line IRQ, must be
   \ <= VERA_SCANLINE_MAX.
@@ -1983,13 +2012,13 @@ begin-module vera
     [ 1 0 stack-checker ]
     VERA_IRQLINE! ;
 
-  \ Retrieve the line IRQ's scanline value.
+  \ Returns the line IRQ's scanline value.
   ( -- scanline )
   : irqline@
     [ 0 1 stack-checker ]
     VERA_IRQLINE@ ;
 
-  \ Retrieve the current VGA scanline value.
+  \ Retruns the current VGA scanline value.
   : scanline@ ( -- scanline ) 
     [ 0 1 stack-checker ]
     VERA_SCANLINE@ ;
@@ -2118,8 +2147,6 @@ begin-module vera
     loop
   ;
 
-  pal-init
-
   \ Load a palette into VERA palette memory.
   \ addr points to a block of 256 half-words, each half-word specifying a 12-bit rgb value
   \ corresponding to its index.
@@ -2224,5 +2251,14 @@ begin-module vera
     VERA_SPRITE_RAM_BASE #SPRITES 8 * 0 fill 
     0 sprite-bank!
   ;
+
+  \ Initialize the Vera subsystem.
+  ( -- )
+  : vera-init
+    vram-reset
+    pal-init
+    sprite-reset
+  ;
+
 end-module
 

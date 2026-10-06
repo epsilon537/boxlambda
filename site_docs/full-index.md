@@ -113,6 +113,7 @@ Complete structured overview of all documentation pages.
       - [The Forth-C FFI](software/boxlambda-os/forth/c-ffi.md)
       - [Stack Notation](software/boxlambda-os/forth/stack-notation.md)
       - [Word List](software/boxlambda-os/forth/words.md)
+      - [VERA Graphics](software/boxlambda-os/forth/vera.md)
       - [Interrupt Handling](software/boxlambda-os/forth/irqs.md)
       - [Exception Handling](software/boxlambda-os/forth/exception-handling.md)
       - [Interpreting](software/boxlambda-os/forth/interpreting.md)

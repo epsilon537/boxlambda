@@ -2,6 +2,11 @@ include /test/core-compat.fs
 include /test/fph-ext.fs
 include /forth/irq.fs
 
+\ Empty the interactive string pool. Normally the quit loop takes care of
+\ that, but it's a long while yet before quit gets a chance to run.
+
+istr-free-all
+
 \ ------------------------------------------------------------------------
 \  These definitions have a different behaviour in Mecrisp-Quintus:
 \ ------------------------------------------------------------------------
@@ -12,16 +17,6 @@ include /forth/irq.fs
 \ ------------------------------------------------------------------------
 \ Interpreter hook stopping the testsuite if there's an exception
 \ ------------------------------------------------------------------------
-
-: testsuite-interpret
-  ['] (interpret) try ?dup if
-    ." ***Exception***: " execute
-    cr
-    begin again
-  then
-;
-
-' testsuite-interpret hook-interpret !
 
 \ Interactive string printing word used by testsuite
 : .( ( -- )
@@ -537,82 +532,81 @@ T{ #5 #20000 vec2  #4 vec2* -> #20 #14464 vec2 }T
 s" tst_dir/vec2.log" s" test/vec2.log" f_cmp ?assert
 
 \ ------------------------------------------------------------------------
-TESTING VRAM allocator
+TESTING VRAM ALLOCATOR
 
-vera :: vram import
+vera import
+vram import
 
-reset
+vram-reset
 
 \ --- Single block allocation -----------------------------------------------
 
-T{ 1 alloc -> VERA_VRAM_BASE }T
+T{ 1 vram-alloc -> VERA_VRAM_BASE }T
 
-VERA_VRAM_BASE free
+VERA_VRAM_BASE vram-free
 
 \ --- Allocation rounds up ---------------------------------------------------
 
-T{ BLOCK_SZ_BYTES alloc -> VERA_VRAM_BASE }T
-VERA_VRAM_BASE free
+T{ BLOCK-SZ-BYTES vram-alloc -> VERA_VRAM_BASE }T
+VERA_VRAM_BASE vram-free
 
-T{ BLOCK_SZ_BYTES 1+ alloc -> VERA_VRAM_BASE }T
-VERA_VRAM_BASE free
+T{ BLOCK-SZ-BYTES 1+ vram-alloc -> VERA_VRAM_BASE }T
+VERA_VRAM_BASE vram-free
 
 \ --- Consecutive allocations ------------------------------------------------
 
-1 alloc constant a1
-1 alloc constant a2
-1 alloc constant a3
+1 vram-alloc constant a1
+1 vram-alloc constant a2
+1 vram-alloc constant a3
 
 T{ a1 -> VERA_VRAM_BASE }T
-T{ a2 -> VERA_VRAM_BASE BLOCK_SZ_BYTES + }T
-T{ a3 -> VERA_VRAM_BASE BLOCK_SZ_BYTES 2* + }T
+T{ a2 -> VERA_VRAM_BASE BLOCK-SZ-BYTES + }T
+T{ a3 -> VERA_VRAM_BASE BLOCK-SZ-BYTES 2* + }T
 
-a1 free
-a2 free
-a3 free
+a1 vram-free
+a2 vram-free
+a3 vram-free
 
 \ --- Reuse freed block ------------------------------------------------------
 
-1 alloc constant b1
-1 alloc constant b2
+1 vram-alloc constant b1
+1 vram-alloc constant b2
 
-b1 free
+b1 vram-free
 
-T{ 1 alloc -> b1 }T
+T{ 1 vram-alloc -> b1 }T
 
-b2 free
-b1 free
+b2 vram-free
+b1 vram-free
 
 \ --- Multi-block allocation -------------------------------------------------
 
-T{ BLOCK_SZ_BYTES 3 * alloc
+T{ BLOCK-SZ-BYTES 3 * vram-alloc
    -> VERA_VRAM_BASE }T
 
-VERA_VRAM_BASE free
+VERA_VRAM_BASE vram-free
 
 \ --- Hole is too small ------------------------------------------------------
 
-1 alloc constant c1
-1 alloc constant c2
-1 alloc constant c3
+1 vram-alloc constant c1
+1 vram-alloc constant c2
+1 vram-alloc constant c3
 
-c2 free
+c2 vram-free
 
 \ Two-block allocation should skip the one-block hole.
-T{ BLOCK_SZ_BYTES 2 * alloc
-   -> VERA_VRAM_BASE BLOCK_SZ_BYTES 3 * + }T
+T{ BLOCK-SZ-BYTES 2 * vram-alloc
+   -> VERA_VRAM_BASE BLOCK-SZ-BYTES 3 * + }T
 
-c1 free
-c3 free
-VERA_VRAM_BASE BLOCK_SZ_BYTES 3 * + free
+c1 vram-free
+c3 vram-free
+VERA_VRAM_BASE BLOCK-SZ-BYTES 3 * + vram-free
 
 \ --- Allocate entire VRAM ---------------------------------------------------
 
-T{ VERA_VRAM_SIZE_BYTES alloc -> VERA_VRAM_BASE }T
+T{ VERA_VRAM_SIZE_BYTES vram-alloc -> VERA_VRAM_BASE }T
 
-VERA_VRAM_BASE free
-
-vera :: vram unimport
+VERA_VRAM_BASE vram-free
 
 \ --- Immediate utility words --------------------------------------------
 $1234 immediate-constant tst-imm-const
@@ -1380,10 +1374,10 @@ T{ VARIABLE V1 -> }T
 T{ 123 V1 ! -> }T
 T{ V1 @ -> 123 }T
 
-T{ : NOP : POSTPONE ; ; -> }T
-T{ NOP NOP1 NOP NOP2 -> }T
-T{ NOP1 -> }T
-T{ NOP2 -> }T
+\ T{ : NOP : POSTPONE ; ; -> }T
+\ T{ NOP NOP1 NOP NOP2 -> }T
+\ T{ NOP1 -> }T
+\ T{ NOP2 -> }T
 
 T{ : DOES1 DOES> @ 1 + ; -> }T
 T{ : DOES2 DOES> @ 2 + ; -> }T
@@ -3780,7 +3774,7 @@ TESTING INTERRUPTS
 0 1 nvariable saved-mip
 
 : mtime-irq-handle
-  mip saved-mip !
+  mip mie and saved-mip !
   mcause saved-mcause !
   ." IRQ mip : " mip hex. cr
   ." IRQ mcause : " mcause hex. cr
@@ -3811,6 +3805,13 @@ T{ saved-mcause @ -> $80000007 }T
 
 \ ------------------------------------------------------------------------------
 TESTING STRUCTS
+
+\ Reverting to original begin-structure defintion for testing purposes.
+\ rttc-struct has this redefined.
+: begin-structure
+  create here
+    0 4 allot does> @
+;
 
 begin-structure tstruct
   cfield: bytefield1
@@ -4155,14 +4156,36 @@ T{ evaluate -> 789 }T
 
 T{ istr-dump -> }T
 
-T{ str-pool-mem istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <TRUE> }T
-1 istr-free
-T{ str-pool-mem istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
-0 istr-free
-T{ str-pool-mem istr-allocated? -> <FALSE> }T
-T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
+( ptr -- idx )
+: pool-ptr>idx
+  str-pool-mem - str-pool-entry /
+;
+
+( -- addr )
+: find-allocated-pool-ptr
+  str-pool-mem ( pool-ptr )
+  max-strings 0 do
+    dup istr-allocated? if ( pool-ptr )
+      unloop
+      exit
+    then
+    str-pool-entry +
+  loop
+  false ?assert
+;
+
+variable pool-ptr
+
+find-allocated-pool-ptr pool-ptr !
+
+T{ pool-ptr @ istr-allocated? -> <TRUE> }T
+T{ pool-ptr @ str-pool-entry 1 * + istr-allocated? -> <TRUE> }T
+pool-ptr @ pool-ptr>idx 1+ istr-free
+T{ pool-ptr @ istr-allocated? -> <TRUE> }T
+T{ pool-ptr @ str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
+pool-ptr @ pool-ptr>idx istr-free
+T{ pool-ptr @ istr-allocated? -> <FALSE> }T
+T{ pool-ptr @ str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
 
 \ ------------------------------------------------------------------------
 TESTING SPRINTF
@@ -4423,28 +4446,28 @@ MAX_NUM_OPEN_FILES 1+ array fils[]
 ;] try ?except_error
 
 \ Check f_close exception
-[: 1000 f_close ;] try 0> ?assert
+[: 1000 f_close ;] try 0<> ?assert
 
 \ Check f_read exception
-[: 1000 0 1 f_read ;] try 0> ?assert
+[: 1000 fs-buf 1 f_read ;] try 0<> ?assert
 
 \ Check f_write exception
-[: 1000 0 1 f_write ;] try 0> ?assert
+[: 1000 fs-buf 1 f_write ;] try 0<> ?assert
 
 \ Check f_lseek exception
-[: 1000 0 f_lseek ;] try 0> ?assert
+[: 1000 0 f_lseek ;] try 0<> ?assert
 
 \ Check truncate exception
-[: 1000 f_truncate ;] try 0> ?assert
+[: 1000 f_truncate ;] try 0<> ?assert
 
 \ Check f_sync exception.
-[: 1000 f_sync ;] try 0> ?assert
+[: 1000 f_sync ;] try 0<> ?assert
 
 \ Check f_gets exception.
-[: 1000 0 1 f_gets ;] try 0> ?assert
+[: 1000 fs-buf 10 f_gets ;] try 0<> ?assert
 
 \ Check f_putc exception.
-[: 1000 0 f_putc ;] try 0> ?assert
+[: 1000 0 f_putc ;] try 0<> ?assert
 
 \ Make directory, cd into it, make a files and a subdir, list the dir, check the entries' attributes,
 \ close the directory, remove the files, remove the directory.

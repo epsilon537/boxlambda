@@ -1,5 +1,5 @@
 
-<tset> ts
+<sheet-tileset> ts
 1 <spr> spr1
 2 <spr> spr2
 
@@ -10,10 +10,10 @@
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ #64 width #64 height 8 bpp 8 tiles }apply
-  ts tset.
-  spr1 spr{ ts tset 2 tidx SPR-L1 z 0 pal-group #40 #50 vec2 xy 1 colmask }apply
-  spr2 spr{ ts tset 2 tidx SPR-L1 z 0 pal-group #200 #200 vec2 xy 1 colmask }apply
+  ts sheet{ #64 width #64 height 8 bpp 8 tiles }apply
+  ts sheet.
+  spr1 spr{ ts sheet 2 tidx SPR-L1 z 0 pal-group #40 #50 vec2 xy 1 colmask }apply
+  spr2 spr{ ts sheet 2 tidx SPR-L1 z 0 pal-group #200 #200 vec2 xy 1 colmask }apply
 
   64 0 do
     64 i 1+ min 0 ?do
@@ -43,7 +43,7 @@
   IRQ-SPRCOL-MASK and 0= ?assert
  
   ." Moving spr2 to collision..." cr
-  spr2 spr{ ts tset 2 tidx SPR-L1 z 0 pal-group #40 #50 vec2 xy 1 colmask }apply
+  spr2 spr{ ts sheet 2 tidx SPR-L1 z 0 pal-group #40 #50 vec2 xy 1 colmask }apply
 
   ." Waiting for sprcol irq..." cr
   begin irq-get IRQ-SPRCOL-MASK and until
@@ -55,7 +55,7 @@
 
 s" tst_dir/vera-sprite-collision.log" s" vera-sprite-collision.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 spr1 spr-deinit
 spr2 spr-deinit
 

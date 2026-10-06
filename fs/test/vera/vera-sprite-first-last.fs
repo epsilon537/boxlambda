@@ -1,5 +1,5 @@
 
-<tset> ts
+<sheet-tileset> ts
 0 <spr> spr0
 63 <spr> spr63
 
@@ -10,10 +10,10 @@
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ 8 width 8 height 8 bpp 8 tiles }apply
-  ts tset.
-  spr0 spr{ ts tset 2 tidx SPR-L1 z 0 pal-group #40 #50 vec2 xy 1 colmask }apply
-  spr63 spr{ ts tset 2 tidx SPR-L1 z 0 pal-group #40 #70 vec2 xy 1 colmask }apply
+  ts sheet{ 8 width 8 height 8 bpp 8 tiles }apply
+  ts sheet.
+  spr0 spr{ ts sheet 2 tidx SPR-L1 z 0 pal-group #40 #50 vec2 xy 1 colmask }apply
+  spr63 spr{ ts sheet 2 tidx SPR-L1 z 0 pal-group #40 #70 vec2 xy 1 colmask }apply
 
   8 0 do
     8 i 1+ min 0 ?do
@@ -38,7 +38,7 @@
 
 s" tst_dir/vera-sprite-first-last.log" s" vera-sprite-first-last.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 
 spr0 spr-deinit
 spr63 spr-deinit

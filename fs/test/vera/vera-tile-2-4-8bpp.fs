@@ -2,7 +2,7 @@
 0 variable h
 0 variable b
 
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm
 
 : tile-2-4-8bpp-test
@@ -26,9 +26,9 @@
       l{ 2 , 4 , 8 }l
       [:
         b !
-        ts tset{ w @ width h @ height b @ bpp 8 tiles }apply
-        ts tset.
-        l0 layer{ ts tset tm tmap }tilemap-mode
+        ts sheet{ w @ width h @ height b @ bpp 8 tiles }apply
+        ts sheet.
+        tm ts l0 layer-tilemap-mode
         l0 layer.
         ts pxl{ 1 tidx w @ 1- h @ 1- vec2 xy #101 color }apply
         ." pxl[w-1,h-1]: " ts pxl{ }get . cr
@@ -46,6 +46,6 @@
 
 s" tst_dir/vera-tile-2-4-8bpp.log" s" vera-tile-2-4-8bpp.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 tm tmap-deinit
 

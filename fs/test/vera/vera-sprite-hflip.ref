@@ -1,4 +1,4 @@
-Tileset: $12040000 base, 64 width, 64 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 64 height, 8 bpp, 8 tiles
 1 
 x63 y0 capture: $00000AFE 
 x62 y0 capture: $00000000 

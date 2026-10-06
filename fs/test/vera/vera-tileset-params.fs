@@ -1,7 +1,7 @@
 0 variable w
 0 variable h
 0 variable b
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm
 
 : tileset-params
@@ -14,8 +14,8 @@
     [:
       b !
       ." width: " w @ . ."  height: " h @ . ." bpp: " b @ . cr
-      ts tset{ w @ width h @ height b @ bpp 8 tiles }apply
-      ts tset.
+      ts sheet{ w @ width h @ height b @ bpp 8 tiles }apply
+      ts sheet.
     ;] iter
   ;] iter
 ;
@@ -24,5 +24,5 @@
 
 s" tst_dir/vera-tileset-params.log" s" vera-tileset-params.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 

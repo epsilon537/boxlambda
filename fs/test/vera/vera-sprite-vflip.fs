@@ -1,5 +1,5 @@
 
-<tset> ts
+<sheet-tileset> ts
 1 <spr> spr
 
 : sprite-vflip
@@ -9,9 +9,9 @@
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ #64 width #64 height 8 bpp 8 tiles }apply
-  ts tset.
-  spr spr{ ts tset 2 tidx SPR-L1 z 0 pal-group 0 0 vec2 xy 1 colmask VFLIP flip }apply
+  ts sheet{ #64 width #64 height 8 bpp 8 tiles }apply
+  ts sheet.
+  spr spr{ ts sheet 2 tidx SPR-L1 z 0 pal-group 0 0 vec2 xy 1 colmask VFLIP flip }apply
   
   spr spr-flip@ . cr
 
@@ -45,6 +45,6 @@
 
 s" tst_dir/vera-sprite-vflip.log" s" vera-sprite-vflip.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 spr spr-deinit
 

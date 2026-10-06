@@ -9,7 +9,7 @@ create cols col1 , col2 ,
 0 variable row
 0 variable col
 
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm
 
 : mapentry-txt16
@@ -18,8 +18,8 @@ create cols col1 , col2 ,
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ #16 width #16 height 1 bpp #32 tiles }apply
-  ts tset.
+  ts sheet{ #16 width #16 height 1 bpp #32 tiles }apply
+  ts sheet.
 
   16 0 do
     ts pxl{ 1 tidx i i vec2 xy WHITE color }apply
@@ -28,7 +28,7 @@ create cols col1 , col2 ,
 
   tm tmap{ #32 width #32 height TMAP-TXT16 type }apply
   tm tmap.
-  l0 layer{ ts tset tm tmap }tilemap-mode
+  tm ts l0 layer-tilemap-mode
   l0 layer.
 
   tm mapentry{ col1 row1 vec2 xy GREEN bg WHITE fg 1 tidx }apply
@@ -53,6 +53,6 @@ create cols col1 , col2 ,
 
 s" tst_dir/vera-mapentry-txt16.log" s" vera-mapentry-txt16.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 tm tmap-deinit
 

@@ -1,4 +1,4 @@
-Tileset: $12040000 base, 320 width, 32 height, 2 bpp, 1 tiles
+Bitmap Sheet: $12040000 base, 320 width, 32 height, 2 bpp
 00000AFE 
 00000000 
 00000000 
@@ -15,7 +15,7 @@ Tileset: $12040000 base, 320 width, 32 height, 2 bpp, 1 tiles
 00000000 
 00000000 
 00000000 
-Tileset: $12040000 base, 320 width, 64 height, 2 bpp, 1 tiles
+Bitmap Sheet: $12040000 base, 320 width, 64 height, 2 bpp
 00000AFE 
 00000000 
 00000000 
@@ -32,7 +32,7 @@ Tileset: $12040000 base, 320 width, 64 height, 2 bpp, 1 tiles
 00000000 
 00000000 
 00000000 
-Tileset: $12040000 base, 640 width, 32 height, 2 bpp, 1 tiles
+Bitmap Sheet: $12040000 base, 640 width, 32 height, 2 bpp
 00000AFE 
 00000000 
 00000000 
@@ -49,7 +49,7 @@ Tileset: $12040000 base, 640 width, 32 height, 2 bpp, 1 tiles
 00000000 
 00000000 
 00000000 
-Tileset: $12040000 base, 640 width, 64 height, 2 bpp, 1 tiles
+Bitmap Sheet: $12040000 base, 640 width, 64 height, 2 bpp
 00000AFE 
 00000000 
 00000000 

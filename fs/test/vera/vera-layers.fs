@@ -1,4 +1,4 @@
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm0
 <tmap> tm1
 
@@ -8,14 +8,14 @@
   false l1 layer-enable
   ." l0 enabled? " l0 layer-enabled? . cr
   ." l1 enabled? " l1 layer-enabled? . cr
-  ts tset{ #16 width #16 height 8 bpp #32 tiles }apply
-  ts tset.
+  ts sheet{ #16 width #16 height 8 bpp #32 tiles }apply
+  ts sheet.
   tm0 tmap{ #32 width #32 height TMAP-TILE type }apply
   tm1 tmap{ #32 width #32 height TMAP-TILE type }apply
   tm0 tmap.
   tm1 tmap.
-  l0 layer{ ts tset tm0 tmap }tilemap-mode
-  l1 layer{ ts tset tm1 tmap }tilemap-mode
+  tm0 ts l0 layer-tilemap-mode
+  tm1 ts l1 layer-tilemap-mode
   tm0 mapentry{ 1 1 vec2 xy 1 tidx }apply
   tm1 mapentry{ 1 1 vec2 xy 2 tidx }apply
 
@@ -53,5 +53,5 @@ s" tst_dir/vera-layers.log" s" vera-layers.ref" f_cmp ?assert
 
 tm0 tmap-deinit
 tm1 tmap-deinit
-ts tset-deinit
+ts sheet-deinit
 

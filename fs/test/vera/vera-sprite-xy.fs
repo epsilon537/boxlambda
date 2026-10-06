@@ -1,5 +1,5 @@
 
-<tset> ts
+<sheet-tileset> ts
 1 <spr> spr
 
 : sprite-xy
@@ -9,9 +9,9 @@
   false l0 layer-enable
   false l1 layer-enable
 
-  ts tset{ #64 width #64 height 8 bpp 8 tiles }apply
-  ts tset.
-  spr spr{ ts tset 2 tidx SPR-L1 z #40 #50 vec2 xy }apply
+  ts sheet{ #64 width #64 height 8 bpp 8 tiles }apply
+  ts sheet.
+  spr spr{ ts sheet 2 tidx SPR-L1 z #40 #50 vec2 xy }apply
 
   spr spr-xy@ .vec2 cr
 
@@ -46,6 +46,6 @@
 
 s" tst_dir/vera-sprite-xy.log" s" vera-sprite-xy.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 spr spr-deinit
 

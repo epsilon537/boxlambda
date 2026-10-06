@@ -76,6 +76,14 @@ create str-heap 16 4096 heap-size allot
   drop ( )
 ;
 
+\ Free (release) all strings in the string table.
+( -- )
+: istr-free-all
+  max-strings 0 do
+    i istr-free
+  loop
+;
+
 \ Enter string into the string pool.
 \ ( addr len -- )
 : set-str-pool-entry

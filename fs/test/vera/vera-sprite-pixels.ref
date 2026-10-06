@@ -1,4 +1,4 @@
-Tileset: $12040000 base, 8 width, 8 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 8 width, 8 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -9,7 +9,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 8 width, 8 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 8 width, 8 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -20,7 +20,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 8 width, 16 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 8 width, 16 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -31,7 +31,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 8 width, 16 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 8 width, 16 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -42,7 +42,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 8 width, 32 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 8 width, 32 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -53,7 +53,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 8 width, 32 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 8 width, 32 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -64,7 +64,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 8 width, 64 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 8 width, 64 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -75,7 +75,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 8 width, 64 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 8 width, 64 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -86,7 +86,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 16 width, 8 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 16 width, 8 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -97,7 +97,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 16 width, 8 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 16 width, 8 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -108,7 +108,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 16 width, 16 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 16 width, 16 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -119,7 +119,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 16 width, 16 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 16 width, 16 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -130,7 +130,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 16 width, 32 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 16 width, 32 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -141,7 +141,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 16 width, 32 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 16 width, 32 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -152,7 +152,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 16 width, 64 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 16 width, 64 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -163,7 +163,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 16 width, 64 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 16 width, 64 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -174,7 +174,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 32 width, 8 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 32 width, 8 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -185,7 +185,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 32 width, 8 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 32 width, 8 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -196,7 +196,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 32 width, 16 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 32 width, 16 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -207,7 +207,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 32 width, 16 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 32 width, 16 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -218,7 +218,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 32 width, 32 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 32 width, 32 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -229,7 +229,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 32 width, 32 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 32 width, 32 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -240,7 +240,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 32 width, 64 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 32 width, 64 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -251,7 +251,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 32 width, 64 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 32 width, 64 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -262,7 +262,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 64 width, 8 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 8 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -273,7 +273,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 64 width, 8 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 8 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -284,7 +284,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 64 width, 16 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 16 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -295,7 +295,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 64 width, 16 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 16 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -306,7 +306,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 64 width, 32 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 32 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -317,7 +317,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 64 width, 32 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 32 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -328,7 +328,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 64 width, 64 height, 4 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 64 height, 4 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 
@@ -339,7 +339,7 @@ x0  yend capture: $00000000
 x7 yend capture: $00000000 
 xend-1 yend capture: $00000000 
 xend yend capture: $00000000 
-Tileset: $12040000 base, 64 width, 64 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 64 height, 8 bpp, 8 tiles
 x0 y0 capture: $00000AFE 
 x1 y0 capture: $00000000 
 x0 yend-1 capture: $00000AFE 

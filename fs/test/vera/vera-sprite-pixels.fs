@@ -2,7 +2,7 @@
 0 variable h
 0 variable b
 
-<tset> ts
+<sheet-tileset> ts
 1 <spr> spr
 
 : sprite-pixels
@@ -21,9 +21,9 @@
       l{ 4 , 8 }l
       [:
         b !
-        ts tset{ w @ width h @ height b @ bpp 8 tiles }apply
-        ts tset.
-        spr spr{ ts tset 2 tidx SPR-L1 z }apply
+        ts sheet{ w @ width h @ height b @ bpp 8 tiles }apply
+        ts sheet.
+        spr spr{ ts sheet 2 tidx SPR-L1 z }apply
         h @ 0 do
           w @ i 1+ min 0 ?do
             ts pxl{ 2 tidx i j vec2 xy CYAN color }apply
@@ -63,6 +63,6 @@
 
 s" tst_dir/vera-sprite-pixels.log" s" vera-sprite-pixels.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 spr spr-deinit
 

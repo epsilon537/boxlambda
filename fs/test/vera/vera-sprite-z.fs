@@ -1,5 +1,5 @@
 
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm0
 <tmap> tm1
 1 <spr> spr
@@ -11,14 +11,14 @@
 
   tm0 tmap{ 32 width 32 height TMAP-TILE type }apply
   tm1 tmap{ 32 width 32 height TMAP-TILE type }apply
-  ts tset{ #8 width #8 height 8 bpp 8 tiles }apply
-  ts tset.
-  l0 layer{ ts tset tm0 tmap }tilemap-mode
-  l1 layer{ ts tset tm1 tmap }tilemap-mode
+  ts sheet{ #8 width #8 height 8 bpp 8 tiles }apply
+  ts sheet.
+  tm0 ts l0 layer-tilemap-mode
+  tm1 ts l1 layer-tilemap-mode
   tm0 mapentry{ 0 0 vec2 xy 0 pal-group 2 tidx }apply
   tm1 mapentry{ 0 0 vec2 xy 2 pal-group 2 tidx }apply
 
-  spr spr{ ts tset 2 tidx SPR-DIS z 1 pal-group 0 0 vec2 xy }apply
+  spr spr{ ts sheet 2 tidx SPR-DIS z 1 pal-group 0 0 vec2 xy }apply
 
 
   false l0 layer-enable
@@ -78,7 +78,7 @@
 
 s" tst_dir/vera-sprite-z.log" s" vera-sprite-z.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 tm0 tmap-deinit
 tm1 tmap-deinit
 spr spr-deinit

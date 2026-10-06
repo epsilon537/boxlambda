@@ -247,10 +247,11 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
   rot >r ( buf buflen R: fil )
   r@ -rot ( fil buf buflen R: fil )
   fs_f_gets ( adr R: fil )
-  r> fs_f_error 0= averts x-fr-int-err ( adr R: fil )
   dup if ( adr )
+    rdrop
     dup s0len ( adr len )
   else
+    r> fs_f_eof averts x-fr-int-err ( 0 )
     0 ( 0 0 )
   then
 ;
@@ -277,7 +278,7 @@ dir-pool-memory DIR_POOL_MEM_SZ dir-pool add-pool
 
 \ Test for an error
 \ ( fil -- flag )
-: f_error fs_f_error ;
+: f_error fs_f_error cr ;
 
 \
 \ Directory Access:

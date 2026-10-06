@@ -103,8 +103,15 @@ Reset value: 0x0000
 | PALOFFSET        | 11:8   | wo              | 0x0        | Sprite Palette Offset. |
 | COLMASK          | 7:4    | wo              | 0x0        | Collision Mask |
 | ZDEPTH           | 3:2    | wo              | 0x0        | Z Depth |
-| VFLIP            | 1      | wo              | 0x0        | Vertical Flip |
-| HFLIP            | 0      | wo              | 0x0        | Horizontal Flip |
+| FLIP             | 1:0    | wo              | 0x0        | Vertical and/or Horizontal Flip |
+
+Enumerated values for FLAGS.FLIP.
+
+| Name             | Value   | Description |
+| :---             | :---    | :---        |
+| HFLIP            | 0x1    | Horizontal Flip |
+| VFLIP            | 0x2    | Vertical Flip |
+| HFLIP_VFLIP      | 0x3    | Horizonal and Vertical Flip |
 
 Enumerated values for FLAGS.ZDEPTH.
 

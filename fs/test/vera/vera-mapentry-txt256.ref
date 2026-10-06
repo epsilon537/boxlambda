@@ -1,8 +1,8 @@
-Tileset: $12040000 base, 16 width, 16 height, 1 bpp, 32 tiles
+Tileset Sheet: $12040000 base, 16 width, 16 height, 1 bpp, 32 tiles
 Tilemap: $12040800 base, 32 width, 32 height, 1 type
 layer 0 disabled
 tile mode
-1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base, 0 tidx,
+1 bpp, 0 hscroll, 0 vscroll, 16 width, 16 height, $12040000 base,
 $12040800 tmap-base, 32 tmap-width, 32 tmap-height, -1 t256c
 capture: 0 : 000000C5 
 capture: 1 : 00000000 

@@ -1,4 +1,4 @@
-Tileset: $12040000 base, 64 width, 64 height, 8 bpp, 8 tiles
+Tileset Sheet: $12040000 base, 64 width, 64 height, 8 bpp, 8 tiles
 spr1 colmask: 1 
 spr2 colmask: 1 
 Waiting full frame...

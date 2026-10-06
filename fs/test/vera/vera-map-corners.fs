@@ -1,15 +1,15 @@
 0 variable r
 0 variable c
 
-<tset> ts
+<sheet-tileset> ts
 <tmap> tm
 
 : map-corners
 
   true display-enable
 
-  ts tset{ 16 width 16 height 1 bpp 32 tiles }apply
-  ts tset.
+  ts sheet{ 16 width 16 height 1 bpp 32 tiles }apply
+  ts sheet.
 
   16 0 do
     ts pxl{ 1 tidx i i vec2 xy 1 color }apply
@@ -24,7 +24,7 @@
       r !
       tm tmap{ c @ width r @ height TMAP-TXT16 type }apply
       tm tmap.
-      l0 layer{ ts tset tm tmap }tilemap-mode
+      tm ts l0 layer-tilemap-mode
       true l0 layer-enable
       false l1 layer-enable
       l0 layer.
@@ -44,6 +44,6 @@
 
 s" tst_dir/vera-map-corners.log" s" vera-map-corners.ref" f_cmp ?assert
 
-ts tset-deinit
+ts sheet-deinit
 tm tmap-deinit
 
