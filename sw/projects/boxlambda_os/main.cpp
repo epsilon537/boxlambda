@@ -219,7 +219,6 @@ int main(void) {
   // We now transfer control to init.fs. Control does not return unless the
   // user invokes 'bye'.
   printf("Executing forth/init.fs...\n");
-  forth_eval("true include-verbose !");
   forth_eval("include forth/init.fs");
 
   die("\nForth REPL exited.\n");

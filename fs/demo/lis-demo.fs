@@ -1,7 +1,7 @@
 \ BoxLambda Forth
 \ Lissajous curves VERA bitmap mode demo.
 
-." Compiling demo, will take a few seconds..." cr
+true include-verbose !
 
 vram-reset
 
@@ -13,8 +13,9 @@ include /demo/font-loader.fs
 compileto-save
 compiletoimem
 
-<tset> tsb \ bitmap tileset
-<tset> tsc \ font tileset
+<sheet-bitmap> bitmap0
+<sheet-bitmap> bitmap1
+<sheet-tileset> tsc \ font tileset
 <tmap> tm \ Text grid tilemap
 
 create sin-table \ 256 cells
@@ -56,7 +57,7 @@ create sin-table \ 256 cells
 $10000 variable xf \ x frequency
 $10000 variable yf \ y frequency
 64 variable ph \ phase difference between x and y.
-0 variable frametoggle \ toggle for rendering to bitmap 0 or 1 for double buffering.
+0 variable bitmapptr \ toggle for rendering to bitmap 0 or 1 for double buffering.
 
 \ Draw a line of text at give y position.
 ( y addr len -- )
@@ -112,11 +113,13 @@ $10000 variable yf \ y frequency
 ( -- )
 : drawloop
   begin
-    \ double bufferin toggle
-    frametoggle @ 1 xor frametoggle !
-    frametoggle @ tsb tset-tidx>addr tsb tset-tilesize@ 0 fill \ Erase the bitmap
+    \ double buffering toggle
+    bitmapptr dup @ bitmap0 = if ( bitmapptr )
+      bitmap1 else bitmap0
+    then ( bitmapptr bitmap )
+    swap !
 
-    tsb pxl{ frametoggle @ tidx WHITE color }set \ Set pixel color to white
+    bitmapptr @ sheet-base@ bitmapptr @ sheet-size@ 0 fill \ Erase the bitmap
 
     \ Draw 256 points
     ph @
@@ -126,7 +129,7 @@ $10000 variable yf \ y frequency
       \ sin((i*yf+ph))
       over i yf @ * 16 rshift + 255 and cells sin-table + @ 120 + ( ph x y )
       vec2 ( ph vec2 )
-      tsb pxl{ ( vec2 ) xy }apply ( ph )
+      bitmapptr @ pxl{ ( vec2 ) xy }apply ( ph )
     2 +loop
     drop ( )
  
@@ -135,7 +138,7 @@ $10000 variable yf \ y frequency
 
     \ Double buffer switch.
     begin scanline@ 470 >= until
-    l0 layer{ tsb tset frametoggle @ tidx }bitmap-mode
+    bitmapptr @ l0 layer-bitmap-mode
 
     keyctrl
   again
@@ -145,17 +148,21 @@ $10000 variable yf \ y frequency
 ( -- )
 : lis-demo
 
-  tsb tset{ XRES width YRES height 1 bpp 2 tiles }apply \ tileset of 2 bitmaps for double buffering.
-  tsb tset.
-  l0 layer{ tsb tset 0 tidx }bitmap-mode
+  bitmap0 sheet{ XRES width YRES height 1 bpp }apply \ bitmap0 for double buffering.
+  bitmap0 pxl{ WHITE color }set \ Set pixel color to white
+  bitmap1 sheet{ XRES width YRES height 1 bpp }apply \ bitmap1 for double buffering.
+  bitmap1 pxl{ WHITE color }set \ Set pixel color to white
+  bitmap0 sheet.
+  bitmap1 sheet.
+  bitmap0 l0 layer-bitmap-mode
   l0 layer.
 
-  tsc tset{ 8 width 8 height 1 bpp 256 tiles }apply \ tileset for the font.
+  tsc sheet{ 8 width 8 height 1 bpp 256 tiles }apply \ tileset for the font.
   tm tmap{ 64 width 32 height TMAP-TXT16 type }apply \ text grid tile map.
-  tsc tset.
+  tsc sheet.
   tm tmap.
 
-  l1 layer{ tsc tset tm tmap }tilemap-mode
+  tm tsc l1 layer-tilemap-mode
   l1 layer.
 
   tsc s" night-in-tokyo.fnt" load-font \ load the font into the tileset. See font-loader.fs.

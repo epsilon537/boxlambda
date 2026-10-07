@@ -83,7 +83,7 @@ create (pgs) process-glyph-struct allot
     (pgs) .fontline ! ( tset )
     0 ( tset tidx )
     begin
-      2dup swap tset-tidx>addr (pgs) .glyph-base ! ( tset tidx )
+      2dup swap sheet-tidx>addr (pgs) .glyph-base ! ( tset tidx )
       process-glyph ( tset tidx f )
       while ( tset tidx )
         1+

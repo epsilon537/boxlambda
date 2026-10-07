@@ -2,7 +2,7 @@
 \ A very basic VERA text mode demo. Renders entered characters on a 320x240 screen configured
 \ in 8x8 text mode.
 
-." Compiling demo, will take a few seconds..." cr
+true include-verbose !
 
 vram-reset
 
@@ -14,9 +14,9 @@ XRES 8 / constant #COLS
 YRES 8 / constant #ROWS
 
 \ Tileset for the font, holding the font definition (pixel data).
-<tset> ts
+<sheet-tileset> ts
 \ Tileset for the cursor sprite, holding the sprite pixel data.
-<tset> ts-spr
+<sheet-tileset> ts-spr
 \ Tilemap, i.e. the on-screen grid of 40x30 characters.
 <tmap> tm
 \ The cursor sprite object, holding sprite position etc.
@@ -111,15 +111,15 @@ YRES 8 / constant #ROWS
 ( -- )
 : vera-txt-demo
   0 0 vec2 cursor ! \ Set initial cursor position to upper left corner.
-  ts tset{ 8 width 8 height 1 bpp 256 tiles }apply \ Create tileset object for font.
-  ts-spr tset{ 8 width 8 height 4 bpp 1 tiles }apply \ Create tileset object for cursor sprite.
+  ts sheet{ 8 width 8 height 1 bpp 256 tiles }apply \ Create tileset object for font.
+  ts-spr sheet{ 8 width 8 height 4 bpp 1 tiles }apply \ Create tileset object for cursor sprite.
   (init-spr-tile) \ Generate the sprite pixel data.
   \ Create the tilemap object. 64 and 32 are the most suitable accepted width and height values
   \ to accommodate a 40x30 grid.
   tm tmap{ 64 width 32 height TMAP-TXT16 type }apply
-  spr spr{ ts-spr tset 0 tidx SPR-L0-L1 z cursor @ 8 * xy }apply \ Create the cursor sprite object.
+  spr spr{ ts-spr sheet 0 tidx SPR-L0-L1 z cursor @ 8 * xy }apply \ Create the cursor sprite object.
 
-  l0 layer{ ts tset tm tmap }tilemap-mode \ Using layer 0 in tilemap mode.
+  tm ts l0 layer-tilemap-mode \ Using layer 0 in tilemap mode.
 
   cr
   ts token load-font \ Load the font into the tileset (see font-loader.fs).
@@ -135,7 +135,7 @@ YRES 8 / constant #ROWS
   true display-enable
 
   \ Print diagnostic info of the VERA objects we just created.
-  ts tset.
+  ts sheet.
   tm tmap.
   l0 layer.
   spr spr.
