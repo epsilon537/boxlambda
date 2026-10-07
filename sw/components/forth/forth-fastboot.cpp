@@ -16,15 +16,20 @@ void forth_save_state() {
 
   FRESULT res = f_open(&fil, img_path, FA_CREATE_ALWAYS | FA_WRITE);
   if (res == FR_OK) {
-    UINT bw;
+    UINT btw, bw;
 
+    btw = &__forth_imem_end - &__forth_imem_start;
     // Save all of forth_imem
-    res = f_write(&fil, (const void *)&__forth_imem_start,
-                  &__forth_imem_end - &__forth_imem_start, &bw);
+    res = f_write(&fil, (const void *)&__forth_imem_start, btw, &bw);
+    if (bw < btw)
+      die("Can't save %s, disk full.\n", img_path);
+
     if (res == FR_OK) {
+      btw = emem_end_addr - &__forth_emem_start;
       // Save forth_emem up to the given emem end address.
-      res = f_write(&fil, (const void *)&__forth_emem_start,
-                    emem_end_addr - &__forth_emem_start, &bw);
+      res = f_write(&fil, (const void *)&__forth_emem_start, btw, &bw);
+      if (bw < btw)
+        die("Can't save %s, disk full.\n", img_path);
 
       if (res == FR_OK) {
         res = f_close(&fil);

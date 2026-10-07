@@ -9,6 +9,8 @@ s" /boxkern-forth.img" fastboot-path str>path ( ) \ Convert to C string
 : fastboot-save
   compileto-save
   compiletoemem
+  \ Create some extra space on RAM disk by wiping out boxkern-includes.
+  s" rm ram:/forth/boxkern-includes/*" evaluate
   here fastboot-path forth-save-state ( )
   compileto-restore
   $00000001 SDRAM_BASE ! \ Indicate to host that compilation is complete
