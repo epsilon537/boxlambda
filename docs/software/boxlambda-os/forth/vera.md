@@ -1,5 +1,21 @@
 # VERA Graphics
 
+## Concepts
+
+The VERA Forth Module is designed around the following concepts:
+
+- **Sheets**: Sheets hold pixel data in VRAM. There are two types of sheets:
+    - **Tilesets**: The sheet is subdivided into a number of tiles, e.g. a font or a sprite sheet. Tilesets are configured using the `sheet-tileset{}` API.
+    - **Bitmaps**: The sheet is a screen wide bitmap. Bitmaps are configured using the `sheet-bitmap` API.
+- **Pixels**: The pixel API, `pxl{}`, is used to set or get pixels in a sheet.
+- **Tilemaps** and **MapEntries**: A Tilemap divides the screen into a grid of *MapEntries*. Each MapEntry in this grid references a specific tile in a tileset (e.g. by its ASCII character code). Tilemaps are configured with the `tmap{}` API. MapEntries are accessed using the `mapentry{}` API.
+- **Sprites**: Moveable objects. Sprites are associated with tiles in a tilesheet for their pixel data. Sprites are manipulated with the `spr{}` API.
+- **Layers**: VERA has two layers `l1` and `l0`. Each layer can be configured in *tilemap mode* or *bitmap mode*. When in tilemap mode, the layer is associated with a tilemap and tileset sheet. When in bitmap mode, the layer is associated with a bitmap sheet. Layers are configured using the `layer{}` API.
+
+[![VERA Module Concepts.](../../../assets/vera-module-concepts.png)](../../../assets/vera-module-concepts.png)
+
+*VERA Module Concepts.*
+
 ## Palette Groups
 
 VERA divides the 256 color palette is into 16 Palette Groups of 16 colors each.
@@ -10,9 +26,65 @@ Pixels have a color index of either 0-3 (2bpp), 0-15 (4bpp), 0-255 (8bpp). This 
 
 The palette group to use is specified as a [mapentry](), [sprite]() or [bitmap sheet]() attribute.
 
+[![Palette Group Referencers.](../../../assets/vera-pal-group-refs.png)](../../../assets/vera-pal-group-refs.drawio.png)
+
+*Palette Groups referenced from sprites, mapentries and bitmap mode layers.*
+
+This is the default palette:
+
+[![The Default Palette.](../../../assets/default-palette.png)](../../../assets/default-palette.png)
+
+*The Default Palette (click to zoom).*
+
+## Z-Depth and Transparency
+
+Pixels set to color index 0 are transparent.
+
+If both layers are enabled, Layer 1 sits in front of Layer 0. Sprites can be positioned in front of or behind a given layer using their *z-depth* attribute, as illustrated in the following diagram:
+
+[![Z-Depth.](../../../assets/vera-z-depth.png)](../../../assets/vera-z-depth.png)
+
+*Z-Depth.*
+
+- `SPR-L1`: position the sprite in front of Layer 1.
+- `SPR-L0-L1`: position the sprite between Layer 0 and Layer 1.
+- `SPR-BG-L0`: position the sprite between the background Layer 0.
+- `SPR-DIS`: position the sprite behind the background, i.e. disable the sprite.
+
 ## Parameter Blocks
 
-TBD
+The VERA module API relies heavily on *Parameter Blocks* to configure the attributes of objects. Here's an example:
+
+```
+<sheet-tileset> ts
+ts sheet{ 8 width 8 height 1 bpp 256 tiles }apply
+```
+
+Here `ts` is a tileset sheet object and `sheet{...}apply` is the parameter block used to configure the tileset sheet.
+The attributes within a parameter block can be specified in any order. The following two lines are equivalent:
+
+```
+ts sheet{ 8 width 8 height 1 bpp 256 tiles }apply
+ts sheet{ 256 tiles 8 height 8 width 1 bpp }apply
+```
+
+Forth being stack oriented, this statement...
+
+`ts sheet{ 8 width 8 height 1 bpp 256 tiles }apply`
+
+...is equivalent to this statement:
+
+`ts 256 1 8 8 sheet{ width height bpp tiles }apply`
+
+Attributes can also be specified incrementally using `}set` followed by `}apply`:
+
+```
+ts sheet{ 8 width 8 height }set
+ts sheet{ 1bpp }set
+ts sheet{ 256 tiles }apply
+```
+
+`}set` records the given attributes in the object, `}apply` commits them to VERA hardware.
 
 ## Exceptions
 
@@ -25,7 +97,7 @@ TBD
 `SCANLINE-VISIBLE-MAX`
 
 - The highest VGA scanline value before wrapping back to 0.
-  Note that scanlines between SCANLINE-MAX and SCANLINE-VISIBLE-MAX will not be visible.
+  Note that scanlines between `SCANLINE-MAX` and `SCANLINE-VISIBLE-MAX` will not be visible.
 
 `SCANLINE-MAX`
 
@@ -64,6 +136,10 @@ TBD
 `MAX_SPRITE_ID`
 
 - The maximum sprite ID value supported by VERA.
+
+`#PAL-GROUPS`
+
+- The number of Palette Groups.
 
 ## VRAM
 
@@ -565,6 +641,20 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 ## Color Palette
 
 ```
+#0 constant PG-C64
+#1 constant PG-GREYSCALE
+#2 constant PG-PICO-8
+#3 constant PG-MIYAZAKI-16
+#4 constant PG-SWEETIE-16
+#5 constant PG-VANILLA-MILKSHAKE
+#6 constant PG-SARA-98C
+#7 constant PG-YUNO
+#8 constant PG-AAP-SPLENDOR-128
+```
+
+- Palette Group IDs.
+
+```
 #0 constant BLACK
 #1 constant WHITE
 #2 constant RED
@@ -581,15 +671,13 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 #13 constant LIGHT-GREEN
 #14 constant LIGHT-BLUE
 #15 constant LIGHT-GREY
-#16 constant GREYSCALE-0
-#31 constant GREYSCALE-15
 ```
 
-- Color Palette Indices
+- Palette Group 0 Color Palette Indices. The Commodore 64 Color Palette.
 
 `greyscale ( n -- n' )`
 
-- Mask given value to 0-15 range and return corresponding greyscale value in the default VERA color palette.
+- Palette Group 1 - Linear grey scale.
 
 `pal! ( rgb idx -- )`
 
@@ -609,7 +697,7 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 `pal-group! ( rgb0 .. rgb15 pal-group-id -- )`
 
-- Set all 16 rgb colors in the given palette group. Note palette group id on top-of-stack.
+- Set all 16 rgb colors in the indicated palette group. Note the palette group id on top-of-stack.
  
 `pal-group-1! ( rgb pal-group-id idx -- )`
 
@@ -625,11 +713,11 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 `pal-init ( -- )`
 
-- Load the original into the shadow-palette and VERA's palette memory.
+- Load the original palette into the shadow-palette and VERA's palette memory. The vera module maintains a shadow palette in memory because the VERA's hardware palette memory is write-only.
 
 `pal-load ( addr -- )`
 
-- Load a palette into VERA palette memory. addr points to a block of 256 half-words, each half-word specifying a 12-bit rgb value corresponding to its index.
+- Load a palette into VERA palette memory (and the shadow palette). addr points to a block of 256 half-words, each half-word specifying a 12-bit rgb value corresponding to its index.
 
 ## Top-Level Definitions
 
@@ -667,7 +755,7 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 `bordercolor! ( pal-idx -- )`
 
-- Set the border color (palette index).
+- Set the border color palette index.
 
 `bordercolor@ ( -- pal-idx )`
 
@@ -679,11 +767,15 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 `sprite-bank!  ( 1|0 -- )`
 
-- Select the sprite bank to use.
+- Select the sprite bank to use. 0 or 1.
 
 `sprite-bank@ ( -- 1|0 )`
 
 - Get the selected sprite bank.
+
+`sprite-reset ( -- )`
+
+- Reset the sprite attribute RAM and reset sprite bank to 0.
 
 `vera-init ( -- )`
 

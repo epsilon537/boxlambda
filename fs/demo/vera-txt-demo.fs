@@ -108,7 +108,7 @@ YRES 8 / constant #ROWS
 ;
 
 \ The VERA text demo entry point.
-( -- )
+( "font-file-name" -- )
 : vera-txt-demo
   0 0 vec2 cursor ! \ Set initial cursor position to upper left corner.
   ts sheet{ 8 width 8 height 1 bpp 256 tiles }apply \ Create tileset object for font.

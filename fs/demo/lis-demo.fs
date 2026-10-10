@@ -59,7 +59,7 @@ $10000 variable yf \ y frequency
 64 variable ph \ phase difference between x and y.
 0 variable bitmapptr \ toggle for rendering to bitmap 0 or 1 for double buffering.
 
-\ Draw a line of text at give y position.
+\ Print a line of text at give y position.
 ( y addr len -- )
 : txt-line
   0 do ( y addr )

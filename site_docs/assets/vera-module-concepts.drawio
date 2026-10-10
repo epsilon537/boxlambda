@@ -67,10 +67,10 @@
         <mxCell id="Z1MaoaHq7Lk89GsDoyUm-77" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;strokeColor=none;" value="&lt;b&gt;...&lt;/b&gt;" vertex="1">
           <mxGeometry height="80" width="80" x="280" y="840" as="geometry" />
         </mxCell>
-        <mxCell id="mWSoqo5MDjDpAHCGw6vB-2" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=60;fontSize=32;fontStyle=1" value="&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;l0 layer{...}&lt;/span&gt;" vertex="1">
+        <mxCell id="mWSoqo5MDjDpAHCGw6vB-2" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=60;fontSize=32;fontStyle=1;fillColor=#dae8fc;gradientColor=#7ea6e0;strokeColor=#6c8ebf;" value="&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;l0 layer{...}&lt;/span&gt;" vertex="1">
           <mxGeometry height="175" width="335" x="-560" y="585" as="geometry" />
         </mxCell>
-        <mxCell id="mWSoqo5MDjDpAHCGw6vB-1" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=60;fontSize=32;fontStyle=1" value="&lt;div&gt;l1 layer{...}&lt;/div&gt;" vertex="1">
+        <mxCell id="mWSoqo5MDjDpAHCGw6vB-1" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=60;fontSize=32;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;gradientColor=#7ea6e0;" value="&lt;div&gt;l1 layer{...}&lt;/div&gt;" vertex="1">
           <mxGeometry height="175" width="335" x="-560" y="305" as="geometry" />
         </mxCell>
         <mxCell id="mWSoqo5MDjDpAHCGw6vB-3" edge="1" parent="1" source="mWSoqo5MDjDpAHCGw6vB-1" style="endArrow=classic;html=1;rounded=0;exitX=0.899;exitY=0.657;exitDx=0;exitDy=0;exitPerimeter=0;" value="">

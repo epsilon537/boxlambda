@@ -1,14 +1,90 @@
 # VERA Graphics
 
+## Concepts
+
+The VERA Forth Module is designed around the following concepts:
+
+- **Sheets**: Sheets hold pixel data in VRAM. There are two types of sheets:
+    - **Tilesets**: The sheet is subdivided into a number of tiles, e.g. a font or a sprite sheet. Tilesets are configured using the `sheet-tileset{}` API.
+    - **Bitmaps**: The sheet is a screen wide bitmap. Bitmaps are configured using the `sheet-bitmap` API.
+- **Pixels**: The pixel API, `pxl{}`, is used to set or get pixels in a sheet.
+- **Tilemaps** and **MapEntries**: A Tilemap divides the screen into a grid of *MapEntries*. Each MapEntry in this grid references a specific tile in a tileset (e.g. by its ASCII character code). Tilemaps are configured with the `tmap{}` API. MapEntries are accessed using the `mapentry{}` API.
+- **Sprites**: Moveable objects. Sprites are associated with tiles in a tilesheet for their pixel data. Sprites are manipulated with the `spr{}` API.
+- **Layers**: VERA has two layers `l1` and `l0`. Each layer can be configured in *tilemap mode* or *bitmap mode*. When in tilemap mode, the layer is associated with a tilemap and tileset sheet. When in bitmap mode, the layer is associated with a bitmap sheet. Layers are configured using the `layer{}` API.
+
+[![VERA Module Concepts.](../../../assets/vera-module-concepts.png)](../../../assets/vera-module-concepts.png)
+
+*VERA Module Concepts.*
+
 ## Palette Groups
 
 VERA divides the 256 color palette is into 16 Palette Groups of 16 colors each.
-Pixels in tiles (regular tiles, sprites or bitmaps) have a color index of either 0-3 (2bpp), 0-15 (4bpp), 0-255 (8bpp). This color index is processed using the following logic:
+Pixels have a color index of either 0-3 (2bpp), 0-15 (4bpp), 0-255 (8bpp). This color index is processed using the following logic:
 
   - Color indices 0 (transparent) and 16-255 are palette-absolute.
   - Color indices 1-15 are relative to the selected palette group.
 
-The palette group to use is specified as a [mapentry](), [sprite] or [bitmap]() attribute.
+The palette group to use is specified as a [mapentry](), [sprite]() or [bitmap sheet]() attribute.
+
+[![Palette Group Referencers.](../../../assets/vera-pal-group-refs.png)](../../../assets/vera-pal-group-refs.drawio.png)
+
+*Palette Groups referenced from sprites, mapentries and bitmap mode layers.*
+
+This is the default palette:
+
+[![The Default Palette.](../../../assets/default-palette.png)](../../../assets/default-palette.png)
+
+*The Default Palette (click to zoom).*
+
+## Z-Depth and Transparency
+
+Pixels set to color index 0 are transparent.
+
+If both layers are enabled, Layer 1 sits in front of Layer 0. Sprites can be positioned in front of or behind a given layer using their *z-depth* attribute, as illustrated in the following diagram:
+
+[![Z-Depth.](../../../assets/vera-z-depth.png)](../../../assets/vera-z-depth.png)
+
+*Z-Depth.*
+
+- `SPR-L1`: position the sprite in front of Layer 1.
+- `SPR-L0-L1`: position the sprite between Layer 0 and Layer 1.
+- `SPR-BG-L0`: position the sprite between the background Layer 0.
+- `SPR-DIS`: position the sprite behind the background, i.e. disable the sprite.
+
+## Parameter Blocks
+
+The VERA module API relies heavily on *Parameter Blocks* to configure the attributes of objects. Here's an example:
+
+```
+<sheet-tileset> ts
+ts sheet{ 8 width 8 height 1 bpp 256 tiles }apply
+```
+
+Here `ts` is a tileset sheet object and `sheet{...}apply` is the parameter block used to configure the tileset sheet.
+The attributes within a parameter block can be specified in any order. The following two lines are equivalent:
+
+```
+ts sheet{ 8 width 8 height 1 bpp 256 tiles }apply
+ts sheet{ 256 tiles 8 height 8 width 1 bpp }apply
+```
+
+Forth being stack oriented, this statement...
+
+`ts sheet{ 8 width 8 height 1 bpp 256 tiles }apply`
+
+...is equivalent to this statement:
+
+`ts 256 1 8 8 sheet{ width height bpp tiles }apply`
+
+Attributes can also be specified incrementally using `}set` followed by `}apply`:
+
+```
+ts sheet{ 8 width 8 height }set
+ts sheet{ 1bpp }set
+ts sheet{ 256 tiles }apply
+```
+
+`}set` records the given attributes in the object, `}apply` commits them to VERA hardware.
 
 ## Exceptions
 
@@ -21,7 +97,7 @@ The palette group to use is specified as a [mapentry](), [sprite] or [bitmap]() 
 `SCANLINE-VISIBLE-MAX`
 
 - The highest VGA scanline value before wrapping back to 0.
-  Note that scanlines between SCANLINE-MAX and SCANLINE-VISIBLE-MAX will not be visible.
+  Note that scanlines between `SCANLINE-MAX` and `SCANLINE-VISIBLE-MAX` will not be visible.
 
 `SCANLINE-MAX`
 
@@ -37,9 +113,9 @@ The palette group to use is specified as a [mapentry](), [sprite] or [bitmap]() 
 - The maximum value of VSTOP (vertical stop), specified in native 640x480 display space.
   VSTART and VSTOP determine the vertically active part of the screen.
 
-`MAX-TILES-IN-TILESET`
+`MAX-TILES-IN-SHEET`
 
-- The maximum number of tiles a tileset can hold.
+- The maximum number of tiles a sheet can hold.
 
 `#LAYERS`
 
@@ -61,6 +137,10 @@ The palette group to use is specified as a [mapentry](), [sprite] or [bitmap]() 
 
 - The maximum sprite ID value supported by VERA.
 
+`#PAL-GROUPS`
+
+- The number of Palette Groups.
+
 ## VRAM
 
 `vram-reset ( -- )`
@@ -69,7 +149,7 @@ The palette group to use is specified as a [mapentry](), [sprite] or [bitmap]() 
 
 `vram-alloc ( size-bytes -- addr )`
 
-- Allocate memory in VRAM for a tilemap, tiledata, bitmap or sprites. The tileset and tilemap creation/initialization Words use this Word to allocate their resources.  
+- Allocate memory in VRAM for a tilemap, bitmap, tiles, or sprites. The [sheet and tilemap creation/initialization Words]() use this Word to allocate their resources.  
   `size-bytes`: the number of bytes to allocate.  
   If successful, returns a 2KB-aligned Pointer to allocated block of memory in VRAM.  
   If not successful, a vram :: x-alloc-failed exception is raised.
@@ -81,6 +161,10 @@ The palette group to use is specified as a [mapentry](), [sprite] or [bitmap]() 
 `vram-base ( -- vram-base-addr )`
 
 - Return the VRAM base address.
+ 
+- vram. ( -- )`
+
+- Print VRAM usage.
 
 ## Tile Maps
 
@@ -112,15 +196,15 @@ A Tilemap is a grid of tiles. The grid is characterized by width, height and til
 
 `tmap-width@  ( tilemap -- width )`
 
-- Retrieve map width from the tilemap object. Returns 32, 64, 128 or 256.
+- Retruns the tilemap's width. Returns 32, 64, 128 or 256.
 
 `tmap-height@ ( tilemap -- height )`
 
-- Retrieve map height from the tilemap object. Returns 32, 64, 128 or 256.
+- Returns the tilemap's height. Returns 32, 64, 128 or 256.
 
 `tmap-type@ ( tilemap -- type )`
 
-- Retrieve the map type from the tilemap object. Returns `TMAP-TXT16`, `TMAP-TXT256` or `TMAP-TILE`.
+- Returns the tilemaps type. Returns `TMAP-TXT16`, `TMAP-TXT256` or `TMAP-TILE`.
 
 `tmap-base@ ( tilemap -- addr )`
 
@@ -192,14 +276,19 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
   - Color indices 0 (transparent) and 16-255 are palette absolute.
   - Color indices 1-15 are relative to the palette group.
 
-## Tilesets
+## Sheets
 
-`<tset> tset{ <width> width <height> height <bpp> bpp <#tiles> tiles }apply`
-`<tset> tset{ <width> width <height> height <bpp> bpp <#tiles> tiles }set`
+A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single *Bitmap* (a display-wide image).
 
-- A tileset parameter block. The <...> items indicated what type of value is expected on
+`<tileset> sheet{ <width> width <height> height <bpp> bpp <#tiles> tiles }apply`
+`<tileset> sheet{ <width> width <height> height <bpp> bpp <#tiles> tiles }set`
+`<bitmap> sheet{ <width> width <height> height <bpp> bpp }apply`
+`<bitmap> sheet{ <width> width <height> height <bpp> bpp }set`
+
+- A sheet parameter block. The `<...>` items indicated what type of value is expected on
   the top of the stack at this point, to be consumed by the following Word.
-  - `<tset>`: A tileset object.
+  - `<tileset>`: A tileset sheet object.
+  - `<bitmap>`: A bitmap sheet object.
   - `<width>`: The tile width:
     - 8 or 16 for regular tiles.
     - 8, 16, 32 or 64 for sprites.
@@ -211,94 +300,109 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
   - `<bpp>`: Bits per pixel:
     - 1, 2, 4 or 8 for regular tiles and bitmaps.
     - 4 or 8 for sprites.
-  - `<#tiles>`: The number of tiles in the tileset. 0..1023.
+  - `<#tiles>`: The number of tiles in the tileset. 0..1023. Not used in case of bitmaps.
 
-  `}apply ( -- )` ends a tileset parameter block and (re)allocates VRAM for this tileset
-  to accommodate #tiles, bpp, width and height.
-  If VRAM was previously allocated for this tilemap, this VRAM will be released before reallocating VRAM.
+  `}apply ( -- )` ends a sheet parameter block and (re)allocates VRAM for this sheet to accommodate #tiles, bpp, width and height.
+  If VRAM was previously allocated for this sheet, this VRAM will be released before reallocating VRAM.
   Throws vram :: x-alloc-failed exception if VRAM allocation failed.
 
-  `}set ( -- )` ends a tileset parameter block and records the given tileset parameters in the tileset object, but doesn't apply the parameters yet. Useful when setting parameters piecemeal.
+  `}set ( -- )` ends a sheet parameter block and records the given sheet parameters in the sheet object, but doesn't apply the parameters yet. Useful when setting parameters piecemeal.
 
-`tset-params-apply ( tileset -- )`
+`sheet-params-apply ( sheet -- )`
 
-- Apply the tileset parameters previously recorded in a tset{...}set block.
+- Apply the sheet parameters previously recorded in a `sheet{...}set` block.
 
-`tset-addr>tidx ( addr tileset -- tile-idx )`
+`sheet-addr>tidx ( addr tileset -- tile-idx )`
 
-- Given a VRAM address and a tileset, compute the tile index corresponding to that address.
+- Given a VRAM address and a sheet, compute the tile index corresponding to that address. Tileset sheets only.
 
-`tset-tidx>addr ( tile-idx tileset -- addr )`
+`sheet-tidx>addr ( tile-idx tileset -- addr )`
 
-- Given a tile index in a tileset, compute the address (in VRAM) of the pixel data of that tile.
-  tile_idx: Index of the tile in the tileset. Range 0..num_tiles-1.
-  tileset: Tileset object.
+- Given a tile index in a sheet, compute the address (in VRAM) of the pixel data of that tile. Tileset sheets only.
+  tile_idx: Index of the tile in the sheet. Range 0..num_tiles-1.
+  sheet: Sheet object.
 
-`tset-tilesize@ ( tileset -- tilesize-bytes )`
+`sheet-tilesize@ ( tileset -- tilesize-bytes )`
 
-- Retrieve the tilesize in bytes for the given tileset.
+- Returns the size in bytes of one tile in the given tileset. Tileset sheets only.
 
-`tset-width@ ( tileset -- width )`
+`sheet-size@ ( sheet -- sheetsize-bytes )`
 
-- Retrieve the tileset width from the tileset object.
+- Returns the sheet size in bytes.
 
-`tset-height@  ( tileset -- height )`
+`sheet-width@ ( sheet -- width )`
 
-- Retrieve the tileset height.
+- Returns the sheet width.
 
-`tset-bpp@ ( tileset -- bpp )`
+`sheet-height@  ( sheet -- height )`
 
-- Retrieve the tileset bits-per-pixel from the tileset object.
+- Returns the sheet height.
 
-`tset-#tiles@  ( tileset -- #tiles )`
+`sheet-bpp@ ( sheet -- bpp )`
 
-- Retrieve the number of tiles in the tileset.
+- Returns the sheet's bits-per-pixel.
 
-`tset-base@  ( tileset -- addr )`
+`sheet-#tiles@  ( sheet -- #tiles )`
 
-- Retrieve tileset base address in VRAM.
+- Returns the number of tiles in the sheet. Always returns 1 in case of a bitmap sheet.
 
-`tset. ( tileset -- )`
+`sheet-base@  ( sheet -- addr )`
 
-- Print the tileset attributes.
+- Retrieve sheet base address in VRAM.
 
-`tset-deinit ( tileset -- )`
+`sheet-type@ ( sheet -- type )`
 
-- Deinitialize the tileset, freeing VRAM resources.
+- Returns the sheet type: `SHEET-BITMAP` or `SHEET-TILESET`.
 
-`<tset> ( "name" -- )`
+`sheet. ( sheet -- )`
 
-- Create and initialize a tileset object.
+- Print the sheet attributes.
+
+`sheet-deinit ( sheet -- )`
+
+- Deinitialize the sheet, freeing VRAM resources.
+
+`<sheet-bitmap> ( "name" -- )`
+
+- Create and initialize a bitmap sheet object.
+
+`<sheet-tileset> ( "name" -- )`
+
+- Create and initialize a tileset sheet object.
 
 ## Pixels
 
-`<tset> pxl{ <tidx> tidx <color> color <vec2> xy }apply`
-`<tset> pxl{ <tidx> tidx <color> color <vec2> xy }set`
-`<tset> pxl{ <tidx> tidx <vec2> xy }get`
+`<tileset> pxl{ <tidx> tidx <color> color <vec2> xy }apply`
+`<tileset> pxl{ <tidx> tidx <color> color <vec2> xy }set`
+`<tileset> pxl{ <tidx> tidx <vec2> xy }get`
+`<bitmap> pxl{ <color> color <vec2> xy }apply`
+`<bitmap> pxl{ <color> color <vec2> xy }set`
+`<bitmap> pxl{ <vec2> xy }get`
 
 - A pixel parameter block. The <...> items indicated what type of value is expected on
   the top of the stack at this point, to be consumed by the following Word.
-  - `<tset>`: A tileset object.
-  - `<tidx>`: Index of the tile in the tileset. 0..num_tiles-1.
+  - `<tileset>`: A tileset sheet object.
+  - `<bitmap>`: A bitmap sheet object.
+  - `<tidx>`: Index of the tile in the tileset sheet. `0..num_tiles-1.`
   - `<color>`: The pixel color palette index.
   - `<vec2>`: The pixel position in the tile, specified as a vec2. See [vec2.fs]().
 
   `}apply ( -- )` ends a pixel parameter block and draw the pixel in the tile as specified.
 
-  `}set ( -- )` ends a pixel parameter block and records the given pixel parameters in the tileset object, but doesn't apply the parameters yet. Useful when setting parameters piecemeal.
+  `}set ( -- )` ends a pixel parameter block and records the given pixel parameters in the sheet object, but doesn't apply the parameters yet. Useful when setting parameters piecemeal.
 
-  `}get ( -- color )` ends a pixel parameter block. Returns the pixel color from the position and tile given.
+  `}get ( -- color )` ends a pixel parameter block. Returns the pixel color from the given position within the tile or bitmap.
 
-`pxl-params-apply ( tileset -- )`
+`pxl-params-apply ( sheet -- )`
 
 - Apply the pixel parameters previously recorded in a pxl{...}set block.
 
 ## Sprites
 
-`<spr> spr{ <vec2> xy <flip> flip <z> z <colmask> colmask <pal-group> pal-group <tidx> tidx <tset> tset }apply`
-`<spr> spr{ <vec2> xy <flip> flip <z> z <colmask> colmask <pal-group> pal-group <tidx> tidx <tset> tset }set`
+`<spr> spr{ <vec2> xy <flip> flip <z> z <colmask> colmask <pal-group> pal-group <tidx> tidx <tileset> sheet }apply`
+`<spr> spr{ <vec2> xy <flip> flip <z> z <colmask> colmask <pal-group> pal-group <tidx> tidx <tileset> sheet }set`
 
-- A sprite parameter block. The <...> items indicated what type of value is expected on
+- A sprite parameter block. The `<...>` items indicated what type of value is expected on
   the top of the stack at this point, to be consumed by the following Word.
   - `<spr>`: A sprite object
   - `<vec2>`: The sprite position in the tile, specified as a vec2. See [vec2.fs]().
@@ -309,63 +413,60 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
     `SPR-L0-L1` : Position sprite between Layer 0 and Layer 1.
     `SPR-L1`: Position sprite in front of layer 1.
   - `<colmask>`: Set the sprite collision mask.
-  - `<pal-group>`: Palette group.
-    Each pixel has a color index of either 0-15 (4bpp) or 0-255 (8bpp). This color index is processed using the following logic:
-    - Color indices 0 (transparent) and 16-255 are palette absolute.
-    - Color indices 1-15 are relative to the palette group.
-  - `<tidx>`: Index of the tile in the tileset containing the sprite's pixel data.
-  - `<tset>`: A tileset object.
+  - `<pal-group>`: The sprite's palette group id. See [Palette Groups]().
+  - `<tidx>`: Index of the tile in the sheet containing the sprite's pixel data.
+  - `<tileset>`: A tileset sheet object.
 
   `}apply ( -- )`: Commit the sprite's attributes to hardware, i.e. to the sprite attribute RAM.
   `}set ( -- )`: Store the sprite attributes specified in the spr{...}set block, but don't apply them to hardware yet.
 
 `spr-addr@ ( sprite -- addr )`
 
-- Get the sprite's VRAM address
+- Returns the sprite's VRAM address.
 
 `spr-id@ ( sprite -- id )`
 
-- Retrieve the sprite id from the sprite object.
+- Retruns the sprite's id.
 
 `spr-xy@  ( sprite -- vec2 )`
 
-- Get the sprite's current coordinates. Returns a vec2. See [vec2.fs]().
+- Returns the sprite's current coordinates. Returns a vec2. See [vec2.fs]().
 
 `spr-width@  ( sprite -- width )`
 
-- Get the sprite width.
+- Returns the sprite's width.
 
 `spr-height@  ( sprite -- height )`
 
-- Get the sprite height.
+- Returns the sprite's height.
 
 `spr-flip@ ( sprite -- flip )`
 
-- Get the sprite's flip value: `VFLIP`, `HFLIP`, or `VFLIP_HFLIP`.
+- Returns the sprite's flip value: `VFLIP`, `HFLIP`, or `VFLIP_HFLIP`.
 
 `spr-z@ ( sprite -- zdepth )`
 
-- Get the sprite's z-depth: `SPR-DIS`, `SPR-BG-L0`, `SPR-L0-L1`, `SPR-L1`.
+- Returns the sprite's z-depth: `SPR-DIS`, `SPR-BG-L0`, `SPR-L0-L1`, `SPR-L1`.
 
 `spr-colmask@ ( sprite -- colmask )`
 
-- Get the sprite's collision mask.
+- Returns the sprite's collision mask.
 
 `spr-pal-group@  ( sprite -- pal-group )`
 
-- Get the sprite's palette group id.
+- Returns the sprite's palette group id. See [Palette Groups]().
 
 `spr-bpp@  ( sprite -- bpp )`
 
-- Get the sprite's bits-per-pixel value (8 or 4).
+- Returns the sprite's bits-per-pixel value (8 or 4).
 
-`spr-tset@ ( sprite -- tileset )`
+`spr-sheet@ ( sprite -- tileset )`
 
-- Retrieve the tileset used by this sprite (tileset, tile index combo).
+- Returns the tileset sheet used by this sprite.
 
 `spr-tidx@ ( sprite -- tile-idx )`
 
-- Retrieve the tile-idx used by this sprite (tileset, tile index combo).
+- Returns the tile index used by this sprite.
 
 `spr. ( sprite -- )`
 
@@ -373,30 +474,30 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
 
 `<spr> ( sprite-idx "name" -- )`
 
-- Create and initialize a sprite object. sprite-idx must be in range 0..NUM_SPRITES-1.
+- Create and initialize a sprite object. `sprite-idx` must be in range `0..NUM_SPRITES-1`.
 
 `spr-deinit ( sprite -- )`
 
-- Reset the sprite attritbute RAM for the given sprite object.
+- Reset the sprite attribute RAM for the given sprite object.
 
 ## Layers
 
-`<lyr> layer{ <tmap> tmap <tset> tset }tilemap-mode`
-`<lyr> layer{ <tset> tset <tidx> tidx }bitmap-mode`
-
-- A layer parameter block. The <...> items indicated what type of value is expected on
-  the top of the stack at this point, to be consumed by the following Word.
-  - `<lyr>`: The layer object: `l0` or `l1`.
-  - `<tmap>`: Tilemap object.
-  - `<tset>`: Tileset object.
-  - `<tidx>`: Index of the tile in the tileset.
-
-  `}tilemap-mode ( -- )`: Configure the layer in tilemap mode.
-  `}bitmap-mode ( -- )`: Configure the layer in bitmap mode.
-
 `layer-id@ ( layer -- id )`
 
-- Retrieve the layer id from the layer object.
+- Returns the layer object's layer id.
+
+`layer-tilemap-mode ( tmap sheet layer -- )`
+
+- Configure the layer in tilemap mode. tmap and sheet must be specified.
+  - `<layer>`: The layer object: `l0` or `l1`.
+  - `<tmap>`: Tilemap object.
+  - `<tileset>`: Tileset sheet object.
+
+`layer-bitmap-mode ( bitmap layer -- )`
+
+- Configure the layer in bitmap mode.
+  - `<layer>`: The layer object: `l0` or `l1`.
+  - `<bitmap>`: bitmap sheet object.
 
 `layer-enable ( f layer -- )`
 
@@ -408,35 +509,35 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
 
 `layer-tmap-base@ ( layer -- addr )`
 
-- Retrieve the layer's tilemap base address.
+- Returns the layer's tilemap base address. Assumes tilemap mode.
 
 `layer-tmap-width@ ( layer -- width )`
 
-- Retrieve the layer's tilemap width.
+- Returns the layer's tilemap width. Assumes tilemap mode.
 
 `layer-tmap-height@ ( layer -- height )`
 
-- Retrieve the layer's tilemap height.
+- Returns the layer's tilemap height. Assumes tilemap mode.
 
 `layer-t256c@  ( layer -- f )`
 
-- Returns true if the layer is in T256c mode.
+- Returns true if the layer is in T256c mode. Assumes tilemap mode.
 
 `layer-bpp@ ( layer -- bpp )`
 
-- Retrieve the layer's bits-per-pixel.
+- Returns the layer's bits-per-pixel.
 
 `layer-bitmap-mode@ ( layer -- f )`
 
 - Returns true if the layer is in bitmap mode.
+ 
+`layer-pal-group! ( pal-group layer -- )`
+
+- Set the palette group to be used by this layer (bitmap mode).
 
 `layer-pal-group@ ( layer -- pal-group )`
 
-- Retrieve the layer's palette group id.
-
-`layer-pal-group! ( pal-group layer -- )`
-
-- Set the layer's palette group.
+- Returns the layer's palette group id (bitmap mode).
 
 `layer-hscroll! ( hscroll layer -- )`
 
@@ -444,7 +545,7 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
 
 `layer-hscroll@ ( layer -- hscroll )`
 
-- Retrieve the layer's horizontal scroll value.
+- Returns the layer's horizontal scroll value.
 
 `layer-vscroll! ( vscroll layer -- )`
 
@@ -452,31 +553,27 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
 
 `layer-vscroll@ ( layer -- vscroll )`
 
-- Retrieve the layer's vertical scroll value.
+- Returns the layer's vertical scroll value.
 
-`layer-tile-width@ ( layer -- width )`
+`layer-width@ ( layer -- width )`
 
-- Retrieve the layer's tile or bitmap width.
+- Returns the layer's tile or bitmap width.
 
 `layer-tile-height@ ( layer -- height )`
 
-- Retrieve the layer's tile or height. Returns 0 when in bitmap mode.
+- Returns the layer's tile height. Returns 0 when in bitmap mode.
 
-`layer-tile-base@ ( layer -- addr-id )`
+`layer-base@ ( layer -- addr-id )`
 
-- Retrieve the layer's tile VRAM base address.
+- Returns the layer's VRAM base address.
 
-`layer-tset@  ( layer -- tileset )`
+`layer-sheet@  ( layer -- sheet )`
 
-- Retrieve tileset used by this layer.
-
-`layer-tidx@ ( layer -- tile-idx )`
-
-- Retrieve tile-idx used by this layer (bitmap mode).
+- Returns sheet object used by this layer.
 
 `layer-tmap@ ( layer -- tilemap )`
 
-- Retrieve tilemap used by this layer (tilemap mode).
+- Returns tilemap object used by this layer (tilemap mode).
 
 `layer. ( layer -- )`
 
@@ -508,39 +605,54 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
 `irq-disable ( mask -- )`
 
 - Disable IRQs. The passed in mask will be inverted and AND'd with the installed mask.
-  mask: bitwise OR of VERA_IRQs to disable.
+  - `mask`: bitwise OR of VERA_IRQs to disable.
 
 `irq-enable ( mask -- )`
 
 - Enable IRQs. The passed in mask will be OR'd with the installed mask.
-  mask: bitwise OR of VERA_IRQs to enable.
+  - `mask`: bitwise OR of VERA_IRQs to enable.
 
 `irq-enabled ( -- mask )`
 
-- Retrieve the enabled IRQs bitmask. Returns a bitmask of enabled VERA_IRQs.
+- Returns a bitmask of enabled VERA_IRQs.
 
 `irq-get ( -- active-mask )`
 
-- Retrieve the active IRQs. Returns a bitmask of active VERA_IRQs.
+- Returns a bitmask of active VERA_IRQs.
 
 `irq-ack ( mask -- )`
 
--Acknowledge IRQs. Mask: bitwise OR of VERA_IRQs to acknowledge.
+- Acknowledge IRQs. 
+  - `mask`: bitwise OR of VERA_IRQs to acknowledge.
 
 `irqline! ( scanline -- )`
 
-Set/Get the scanline on which to trigger the line IRQ if VERA_IRQ_LINE is enabled.
-scanline: scanline number on which the trigger the line IRQ, must be <= VERA_SCANLINE_MAX.
+Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
+  - `scanline`: scanline number on which the trigger the line IRQ, must be <= `VERA_SCANLINE_MAX`.
 
 `irqline@ ( -- scanline )`
 
-- Retrieve the line IRQ's scanline value.
+- Returns the line IRQ's scanline value.
 
 `scanline@ ( -- scanline )`
 
-- Retrieve the current VGA scanline value.
+- Returns the current VGA scanline value.
 
 ## Color Palette
+
+```
+#0 constant PG-C64
+#1 constant PG-GREYSCALE
+#2 constant PG-PICO-8
+#3 constant PG-MIYAZAKI-16
+#4 constant PG-SWEETIE-16
+#5 constant PG-VANILLA-MILKSHAKE
+#6 constant PG-SARA-98C
+#7 constant PG-YUNO
+#8 constant PG-AAP-SPLENDOR-128
+```
+
+- Palette Group IDs.
 
 ```
 #0 constant BLACK
@@ -559,15 +671,13 @@ scanline: scanline number on which the trigger the line IRQ, must be <= VERA_SCA
 #13 constant LIGHT-GREEN
 #14 constant LIGHT-BLUE
 #15 constant LIGHT-GREY
-#16 constant GREYSCALE-0
-#31 constant GREYSCALE-15
 ```
 
-- Color Palette Indices
+- Palette Group 0 Color Palette Indices. The Commodore 64 Color Palette.
 
 `greyscale ( n -- n' )`
 
-- Mask given value to 0-15 range and return corresponding greyscale value in the default VERA color palette.
+- Palette Group 1 - Linear grey scale.
 
 `pal! ( rgb idx -- )`
 
@@ -587,7 +697,7 @@ scanline: scanline number on which the trigger the line IRQ, must be <= VERA_SCA
 
 `pal-group! ( rgb0 .. rgb15 pal-group-id -- )`
 
-- Set all 16 rgb colors in the given palette group. Note palette group id on top-of-stack.
+- Set all 16 rgb colors in the indicated palette group. Note the palette group id on top-of-stack.
  
 `pal-group-1! ( rgb pal-group-id idx -- )`
 
@@ -603,11 +713,11 @@ scanline: scanline number on which the trigger the line IRQ, must be <= VERA_SCA
 
 `pal-init ( -- )`
 
-- Load the original into the shadow-palette and VERA's palette memory.
+- Load the original palette into the shadow-palette and VERA's palette memory. The vera module maintains a shadow palette in memory because the VERA's hardware palette memory is write-only.
 
 `pal-load ( addr -- )`
 
-- Load a palette into VERA palette memory. addr points to a block of 256 half-words, each half-word specifying a 12-bit rgb value corresponding to its index.
+- Load a palette into VERA palette memory (and the shadow palette). addr points to a block of 256 half-words, each half-word specifying a 12-bit rgb value corresponding to its index.
 
 ## Top-Level Definitions
 
@@ -645,7 +755,7 @@ scanline: scanline number on which the trigger the line IRQ, must be <= VERA_SCA
 
 `bordercolor! ( pal-idx -- )`
 
-- Set the border color (palette index).
+- Set the border color palette index.
 
 `bordercolor@ ( -- pal-idx )`
 
@@ -657,9 +767,17 @@ scanline: scanline number on which the trigger the line IRQ, must be <= VERA_SCA
 
 `sprite-bank!  ( 1|0 -- )`
 
-- Select the sprite bank to use.
+- Select the sprite bank to use. 0 or 1.
 
 `sprite-bank@ ( -- 1|0 )`
 
 - Get the selected sprite bank.
+
+`sprite-reset ( -- )`
+
+- Reset the sprite attribute RAM and reset sprite bank to 0.
+
+`vera-init ( -- )`
+
+- Initialize the Vera subsystem. Performs a VRAM, palette and sprite reset.
 

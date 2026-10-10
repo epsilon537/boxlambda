@@ -15,7 +15,6 @@ begin-module vera
   #SPRITE_BANKS #SPRITES_IN_BANK * constant #SPRITES
   #SPRITES 1- constant MAX_SPRITE_ID
   #16 constant #PAL-GROUPS
-  #16 constant #COLORS-IN-PAL-GROUP
 
   \ For setting the flip attribute of mapentries and sprites
   #2 constant VFLIP
@@ -433,13 +432,13 @@ begin-module vera
     tilemap import
     mapentry import
 
-    \ Set mapentry background color.
+    \ Set mapentry background color. Only used in TMAP-TXT16 mode.
     ( bg -- )
     : bg
       [ 1 0 stack-checker ]
       tmap-params :: tmap @ .bg c! ;
 
-    \ Set mapentry foreground color.
+    \ Set mapentry foreground color. Only used in TMAP-TXT16 and TMAP-TXT256.
     ( fg -- )
     : fg
       [ 1 0 stack-checker ]
@@ -451,7 +450,7 @@ begin-module vera
       [ 1 0 stack-checker ]
       tmap-params :: tmap @ .tidx h! ;
 
-    \ Set mapentry palette group. 0..15.
+    \ Set mapentry palette group. 0..15 (TMAP-TILE only).
     ( pal-group -- )
     : pal-group
       [ 1 0 stack-checker ]
@@ -2041,7 +2040,18 @@ begin-module vera
 
   end-module
 
-  \ Paletter Group 0 Color Palette Indices
+  \ Palette Group IDs
+  #0 constant PG-C64
+  #1 constant PG-GREYSCALE
+  #2 constant PG-PICO-8
+  #3 constant PG-MIYAZAKI-16
+  #4 constant PG-SWEETIE-16
+  #5 constant PG-VANILLA-MILKSHAKE
+  #6 constant PG-SARA-98C
+  #7 constant PG-YUNO
+  #8 constant PG-AAP-SPLENDOR-128
+
+  \ Palette Group 0 Color Palette Indices
   #0 constant BLACK
   #1 constant WHITE
   #2 constant RED
@@ -2061,11 +2071,7 @@ begin-module vera
   #16 constant GREYSCALE-0 
   #31 constant GREYSCALE-15 
 
-  \ Palette Group 1 - Grey scale equivalent of the colors in Palette Group 0
-  \ (in default VERA color palette).
-
-  \ Given a Palette Group 0 color index, returns the corresponding greyscale
-  \ color palette index.
+  \ Palette Group 1 - Linear grey scale (in default VERA color palette).
   ( n -- n' )
   : greyscale #15 and GREYSCALE-0 + [1-foldable] ;
 
@@ -2102,7 +2108,7 @@ begin-module vera
     dup 4 rshift swap $f and ;
   ;
 
-  \ Set all 16 rgb colors in the given palette group. Note palette group id on top-of-stack.
+  \ Set all 16 rgb colors in the indicated palette group. Note the palette group id on top-of-stack.
   ( rgb0 .. rgb15 pal-group-id -- )
   : pal-group!
     [ 17 0 stack-checker ]
@@ -2138,7 +2144,7 @@ begin-module vera
     pal-group>pal-abs pal@
   ;
 
-  \ Load the original into the shadow-palette and VERA's palette memory.
+  \ Load the original palette into the shadow-palette and VERA's palette memory.
   ( -- )
   : pal-init
     (orig-palette) palette :: shadow-palette 2 256 * move
@@ -2209,7 +2215,7 @@ begin-module vera
     [ 0 1 stack-checker ]
     VERA_DC_VSCALE@ ;
 
-  \ Set the border color (palette index).
+  \ Set the border color palette index.
   ( pal-idx -- )
   : bordercolor!
     [ 1 0 stack-checker ]
