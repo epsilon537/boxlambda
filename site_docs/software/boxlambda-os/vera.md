@@ -784,27 +784,9 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 `vera-init ( -- )`
 
-- Initialize the Vera subsystem. Performs a VRAM, palette and sprite reset.
+- Initialize the Vera subsystem. Performs a VRAM, palette and sprite reset. Executed during `init.fs` evaluation.
 
 ## Examples
 
-Below are a few basic examples illustrating different aspects of VERA API usage.
-
-- [Lissajous Animation](): Run the following command from the Forth prompt to start this demo:
-
-```
-include demo/forth/lis-demo.fs
-```
-
-- [Text Mode Demo](): Run the following command from the Forth prompt to start this demo:
-
-```
-include demo/forth/vera-txt-demo.fs
-```
-
-- [VERA Palette Demo](): Run the following command from the Forth prompt to start this demo:
-
-```
-include demo/forth/vera-pal-demo.fs
-```
+See [Try It Out](try-it-out.md#try-it-out).
 

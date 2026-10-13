@@ -125,6 +125,8 @@ Complete structured overview of all documentation pages.
       - [Arrays](software/boxlambda-os/forth-generic/arrays.md)
       - [Memory Management](software/boxlambda-os/forth-generic/memory-management.md)
       - [Lambda Anonymous Functions](software/boxlambda-os/forth-generic/lambda.md)
+      - [Iterators and Anonymous Lists](software/boxlambda-os/forth-generic/iterators.md)
+      - [Namespace Management](software/boxlambda-os/forth-generic/namespaces.md)
       - [Stack Notation](software/boxlambda-os/forth-generic/stack-notation.md)
     - [Try It Out](software/boxlambda-os/try-it-out.md)
     - **Testing**
