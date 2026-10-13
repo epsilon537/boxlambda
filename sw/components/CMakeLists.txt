@@ -1,7 +1,6 @@
 add_subdirectory(test)
 add_subdirectory(bootstrap)
 add_subdirectory(sdram)
-add_subdirectory(vera)
 add_subdirectory(sdspi)
 add_subdirectory(fatfs)
 add_subdirectory(stsound)
@@ -18,4 +17,3 @@ add_subdirectory(timelib)
 add_subdirectory(dfx)
 add_subdirectory(arduino)
 add_subdirectory(forth)
-
