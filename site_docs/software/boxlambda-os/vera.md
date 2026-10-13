@@ -786,6 +786,61 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 - Initialize the Vera subsystem. Performs a VRAM, palette and sprite reset. Executed during `init.fs` evaluation.
 
+## The VERA Font Loader
+
+[font-loader.fs]()
+
+`load-font ( tileset filename-addr filename-len --  #glyphs )`
+
+- Load font file, process all glyphs and store in given VERA tileset. May raise `x-process-font-err`, `x-fr-*` and `x-pool-* exceptions`.
+
+The VERA font loader module is used to load a 1 BPP 8x8 font from file into a VERA tileset sheet.
+
+Font files look like this:
+
+```
+...
+# $21 ASC: $41 'A'
+
+..**....
+..*.*...
+..*..*..
+..****..
+..*..*..
+..*..*..
+..*..*..
+........
+
+# $22 ASC: $42 'B'
+
+..**....
+..*.*...
+..*..*..
+..***...
+..*..*..
+..*..*..
+..****..
+........
+
+...
+```
+
+Font files are text files so they can easily be edited by hand. I'm using a script that allows me to convert font files from DamienG's [ZX Origins](https://damieng.com/typography/zx-origins/) page to the above format:
+
+[scripts/fontconvert.py]()
+
+Some example font files:
+
+- [altered-chrome.fnt]().
+- [district-digital.fnt]().
+- [night-in-tokyo.fnt]().
+
+### Exceptions
+
+`x-process-font-dot-star-err` 
+
+- Font file `.` or `*` error.
+
 ## Examples
 
 See [Try It Out](try-it-out.md#try-it-out).

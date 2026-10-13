@@ -5,7 +5,7 @@ true include-verbose !
 
 vram-reset
 
-include /demo/font-loader.fs
+include /forth/font-loader.fs
 
 320 constant XRES
 240 constant YRES
