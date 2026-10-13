@@ -154,6 +154,7 @@ nav:
       - Exception Handling: software/boxlambda-os/exception-handling.md
       - Interrupt Handling: software/boxlambda-os/irqs.md
       - Time Handling: software/boxlambda-os/time-handling.md
+      - Dictionary Tools: software/boxlambda-os/dict-tools.md
       - RISC-V Disassembler: software/boxlambda-os/riscv-disassembler.md
       - Forth Generic:
         - Credits: software/boxlambda-os/forth-generic/credits.md
@@ -166,6 +167,7 @@ nav:
         - Lambda Anonymous Functions: software/boxlambda-os/forth-generic/lambda.md
         - Iterators and Anonymous Lists: software/boxlambda-os/forth-generic/iterators.md
         - Namespace Management: software/boxlambda-os/forth-generic/namespaces.md
+        - Bit Fields: software/boxlambda-os/forth-generic/bitfields.md
         - Stack Notation: software/boxlambda-os/forth-generic/stack-notation.md
       - Try It Out: software/boxlambda-os/try-it-out.md
       - Testing:

@@ -47,7 +47,7 @@
 ;
 
 \ Find the wordlist a given link belongs to. 
-: link>wid  ( link -- wid | 0 ) \ Try to find this code start address in dictionary
+: link>wid  ( link -- wid | 0 )
   searching-for !
   dictionarystart-all-wids
   begin ( dict-link dict-wid )
@@ -96,18 +96,18 @@
   variable>link ?dup if link>name ctype then
 ;
 
-: forget ( -- ) \ Usage: forget name
+: forget ( "name" -- ) \ Usage: forget name
   ' code>link
   dup @ (latest) !
   (dp) !
 ;
 
-: del ( -- ) \ Remove the latest definition in RAM.
+: del ( -- ) \ Remove the latest definition from the dictionary.
     (latest) @ (dp) !
     (latest) @ @ (latest) !
 ;
 
-\ Find which word addr belongs to.
+\ Find which Word addr belongs to.
 : traceinside. ( addr -- )
   inside-code>link ( link|0 ) 
   dup if ( link|0 )

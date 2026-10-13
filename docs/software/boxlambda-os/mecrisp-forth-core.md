@@ -189,3 +189,6 @@ Forth Words have the following structure in the dictionary:
 ```
 
 An empty link field or name length of zero denotes the end of the dictionary chain.
+
+See [Dictionary Tools](dict-tools.md#dictionary-tools) for Words to navigate the dictionary structure.
+

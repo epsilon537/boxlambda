@@ -837,7 +837,15 @@ like signed double numbers.
 
 `>compileto` ( f -- )
 
-- Restore compile-to state.
+- Store compile-to state.
+
+`compileto-save ( -- )`
+
+- Save the current compile-to state.
+
+`compileto-restore ( -- )`
+
+- Restore the compile-to state.
 
 `compiletoemem? ( -- ? )`
 

@@ -648,27 +648,31 @@ like signed double numbers.
 
 - Set bits in word location.
 
-`2constant name  ( ud|d -- )`
+`2constant ( ud|d "name" -- )`
 
 - Makes a double constant.
 
-`constant name  ( u|n -- )`
+`constant name  ( u|n "name" -- )`
 
 - Makes a single constant.
 
-`2variable name  ( ud|d -- )`
+`immediate-constant create ( u|n "name" -- )`
+
+- Like constant, but the created constant acts as an immediate.
+
+`2variable ( ud|d "name" -- )`
 
 - Makes an initialized double variable.
 
-`variable name  ( n|n -- )`
+`variable ( n|n "name" -- )`
 
 - Makes an initialized single variable.
 
-`nvariable name  ( n1*u|n n1 -- )`
+`nvariable ( n1*u|n n1 "name" -- )`
 
 - Makes an initialized variable with specified size of n1 words. Maximum is 15 words.
 
-`buffer: name    ( u -- )`
+`buffer: ( u "name" -- )`
 
 - Creates a buffer in RAM with u bytes length.
 
@@ -837,7 +841,15 @@ like signed double numbers.
 
 `>compileto` ( f -- )
 
-- Restore compile-to state.
+- Store compile-to state.
+
+`compileto-save ( -- )`
+
+- Save the current compile-to state.
+
+`compileto-restore ( -- )`
+
+- Restore the compile-to state.
 
 `compiletoemem? ( -- ? )`
 

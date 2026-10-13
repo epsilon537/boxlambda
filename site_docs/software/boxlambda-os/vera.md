@@ -841,7 +841,7 @@ Some example font files:
 
 - Font file `.` or `*` error.
 
-## Examples
+## VERA Examples
 
 See [Try It Out](try-it-out.md#try-it-out).
 

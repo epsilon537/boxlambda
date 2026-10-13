@@ -6,6 +6,10 @@
 
 - Create an array of n cells with given name. `i <name>` returns the address of the i-th cell.
 
+`harray <name> ( compile time: n -- ) ( run time: i -- addr)`
+
+- Create an array of n halfwords with given name. `i <name>` returns the address of the i-th halfword.
+
 `carray <name> ( compile time: n -- ) ( run time: i -- addr)`
 
 - Create an array of n bytes with given name. `i <name>` returns the address of the i-th byte.
