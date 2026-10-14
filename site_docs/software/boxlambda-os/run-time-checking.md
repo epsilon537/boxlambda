@@ -23,7 +23,7 @@ Run-Time Checking tools.
 
 `x-assert`
 
-- Assert exception.
+- Assert failed.
 
 ## Struct Typechecking
 

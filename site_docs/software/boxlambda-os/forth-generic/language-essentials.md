@@ -28,9 +28,13 @@
 
 - Calculate size of n cells.
 
-`cell`
+`cell ( -- n )`
 
 - Cell size in bytes.
+
+`cell/ ( n -- n' )`
+
+- Divide by cell size.
 
 `chars  ( u -- u )`
 
@@ -320,11 +324,23 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `2* ( n1 -- n2 )`
 
-- Arithmetic left-shift.
+- Arithmetic left-shift 1 position.
 
 `2/ ( n1 -- n2 )`
 
-- Arithmetic right-shift.
+- Arithmetic right-shift 1 position.
+
+`4/ ( n1 -- n2 )`
+
+- Arithmetic right-shift 2 positions.
+
+`8/ ( n1 -- n2 )`
+
+- Arithmetic right-shift 3 positions.
+
+`log2 ( x - log2(x) )`
+
+- Returns the bit position of the highest bit set to 1 in x. Note: returns 0 if x is 0.
 
 `abs ( n -- u )`
 
@@ -647,6 +663,10 @@ like signed double numbers.
 `bis! ( mask a-addr -- )`
 
 - Set bits in word location.
+
+`setbit ( n bitvalue bitpos -- n' )`
+
+- In number n, set bit position to bit value.
 
 `2constant ( ud|d "name" -- )`
 
@@ -984,6 +1004,7 @@ Note that `[immediate]` needs to be _inside_ of the definition, not after the `;
 
 [compiler.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler.s)
 [buildsdoes.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/buildsdoes.s)
+[utils.fs]()
 
 `execute ( xt -- )`
 
@@ -1072,6 +1093,10 @@ istheanswer . cr
 `: name          ( -- )`
 
 - Opens new definition.
+
+`compile-or-execute ( xt -- )`
+
+- Depending on execution state, compile a call to or execute xt.
 
 ## Control structures
 

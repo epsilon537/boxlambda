@@ -123,6 +123,7 @@ Complete structured overview of all documentation pages.
       - [Language Essentials](software/boxlambda-os/forth-generic/language-essentials.md)
       - [Strings and Formatted Output](software/boxlambda-os/forth-generic/string-format.md)
       - [Conditional Execution/Compilation](software/boxlambda-os/forth-generic/ifdef.md)
+      - [Stacks](software/boxlambda-os/forth-generic/stacks.md)
       - [Structs](software/boxlambda-os/forth-generic/structs.md)
       - [Arrays](software/boxlambda-os/forth-generic/arrays.md)
       - [Memory Management](software/boxlambda-os/forth-generic/memory-management.md)
@@ -130,6 +131,7 @@ Complete structured overview of all documentation pages.
       - [Iterators and Anonymous Lists](software/boxlambda-os/forth-generic/iterators.md)
       - [Namespace Management](software/boxlambda-os/forth-generic/namespaces.md)
       - [Bit Fields](software/boxlambda-os/forth-generic/bitfields.md)
+      - [2D Vectors](software/boxlambda-os/forth-generic/vec2.md)
       - [Stack Notation](software/boxlambda-os/forth-generic/stack-notation.md)
     - [Try It Out](software/boxlambda-os/try-it-out.md)
     - **Testing**

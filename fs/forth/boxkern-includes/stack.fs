@@ -28,7 +28,7 @@ end-structure
   r@ .stack-base r> .stack-top ! \ Stack is empty when stack-top == stack-base.
 ;
 
-\ Push x on the stack.
+\ Push x on the stack. May raise x-stack-obj-overflow.
 \ ( x stack -- )
 : stack-push
   >r ( x R: stack )
@@ -38,7 +38,7 @@ end-structure
   cell+ r> .stack-top ! 
 ;
 
-\ Pop x from the stack.
+\ Pop x from the stack. May raise x-stack-obj-underflow.
 \ ( stack -- x )
 : stack-pop
   >r ( R: stack )

@@ -59,7 +59,8 @@
   2drop 0
 ;
 
-\ ( x - log2(x) )
+\ Returns the bit position of the highest bit set to 1 in x. Note: returns 0 if x is 0.
+\ ( x -- log2(x) )
 : log2
   32 0 do ( x )
     dup i 1<< u<= if ( x )
@@ -86,6 +87,7 @@
 
 : d>s ( d -- n ) drop ;
 
+\ Depending on execution state, compile a call to or execute xt.
 : compile-or-execute ( xt -- )
   state @ if
     call,

@@ -39,6 +39,8 @@ This is the default palette:
 
 *The Default Palette (click to zoom).*
 
+The individual palette groups are 12-bit RGB versions of their namesakes on [https://lospec.com/palette-list](https://lospec.com/palette-list). Thanks to Matthias Koch for the tip.
+
 ## Z-Depth and Transparency
 
 Pixels set to color index 0 are transparent.
