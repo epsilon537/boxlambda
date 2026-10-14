@@ -117,6 +117,7 @@ Complete structured overview of all documentation pages.
     - [Time Handling](software/boxlambda-os/time-handling.md)
     - [Dictionary Tools](software/boxlambda-os/dict-tools.md)
     - [RISC-V Disassembler](software/boxlambda-os/riscv-disassembler.md)
+    - [Run-Time Checking](software/boxlambda-os/run-time-checking.md)
     - **Forth Generic**
       - [Credits](software/boxlambda-os/forth-generic/credits.md)
       - [Language Essentials](software/boxlambda-os/forth-generic/language-essentials.md)

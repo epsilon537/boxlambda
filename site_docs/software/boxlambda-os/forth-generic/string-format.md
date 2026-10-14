@@ -25,6 +25,10 @@
 
 - `istr.fs`: Adds interpretive execution mode behavior. Take string data from input stream and print it.
 
+`istr-free-all ( -- )`
+
+- Free (release) all strings in the interactive string table.
+
 `cr ( -- )`
 
 - Emits line feed.

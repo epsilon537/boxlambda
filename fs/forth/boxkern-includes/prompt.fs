@@ -30,4 +30,3 @@ hook-interpret @ variable prompt-prev-interpret
 \ we get back into the quit_w_cwd loop.
 ' quit_w_cwd hook-quit !
 
-

@@ -11,6 +11,8 @@ The following diagram illustrates the Forth core interpreting console input:
 [query.s](../../../sw/components/forth/query.s)
 [token.s](../../../sw/components/forth/token.s)
 [interpreter.s](../../../sw/components/forth/interpreter.s)
+[on-quit.fs]()
+[prompt.fs]()
 
 `query ( -- )`
 
@@ -56,9 +58,21 @@ The following diagram illustrates the Forth core interpreting console input:
 
 - Execute, compile, fold, optimize...
 
+`hook-interpret ( -- a-addr )`
+
+- Hook for changing the interpreter implementation.
+
+`(interpret) ( -- )`
+
+- The Mecrisp Forth interpreter implementation.
+
+`(interpret-w-except-trace) ( -- )`
+
+- Wrapper around Mecrisp Forth's `(interpret)` that prints which Word triggered the exception when an uncaught exception occurs (see [Forth Exceptions]()).
+
 `quit ( many -- ) (R: many -- )`
 
-- Resets Stacks.
+- Enter the REPL. Resets Stacks.
 
 `hook-quit ( -- a-addr )`
 
@@ -66,5 +80,13 @@ The following diagram illustrates the Forth core interpreting console input:
 
 `(quit) ( any -- any )`
 
-- Standard REPL, default for hook-quit.
+- Original Mecrisp Forth REPL.
+
+`hook-on-quit ( -- a-addr )`
+
+- Hook in here any clean-up etc. that needs to happen whenever quit is invoked. The custom quit-hook in `prompt.fs` will invoke this chain prior to entering the quit loop. This variable is defined early in the include list to allow early `boxkern-includes` to install their on-quit hooks (see. [compileto.fs]() for example).
+
+`quit_w_cwd ( -- )`
+
+- A quit loop that invokes the on-quit hook and prints the current working directory as a prompt. Installed into `hook-quit` during start-up.
 

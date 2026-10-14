@@ -73,14 +73,6 @@ bar . cr
 
 Check if an exception, typically returned by try, matches a specified exception. If it does, replace it with zero to indicate no exception. Otherwise, pass the specified argument through.
 
-`x-assert ( -- )`
-
-- Assert exception.
-
-`?assert ( f -- )`
-
-- Raise `x-assert` exception if f is false.
-
 Example:
 
 ```

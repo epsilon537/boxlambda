@@ -1,5 +1,8 @@
 # BoxLambda Memory Map
 
+[memmap.fs]()
+[memmap.h]()
+
 Next to memory-mapped registers, BoxLambda includes the following memory blocks. Memories are byte-, half-word- and word-accessible following natural address alignment rules.
 
 ## IMEM
