@@ -53,6 +53,10 @@ bar . cr
 [exception.s](../../../sw/components/forth/exception.s)
 [except.fs](../../../fs/forth/except.fs)
 
+`raised-by`
+
+- Variable. Keeps track of which Word raised an exception.
+
 `?raise ( xt|0 -- | 0 )`
 
 - Raise exception xt if non-zero.

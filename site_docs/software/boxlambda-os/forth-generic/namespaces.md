@@ -3,10 +3,15 @@
 ## Word Lists
 
 [wordlist.fs]()
+[compiler-memory.fs]()
 
 The wordlist module adds support for creating multiple wordlists. The module allows you to specify across which wordlists (and in which order) Word search (find) should take place and to which wordlist new Words should be added.
 
 This module serves as a building block for the [Modules]() module and should not be used directly by applications.
+
+`forth`
+
+- Constant. The wid of the default wordlist.
 
 `set-order ( wid0 ... widn n -- )`
 
@@ -35,6 +40,10 @@ This module serves as a building block for the [Modules]() module and should not
 `.order ( -- )`
 
 - Print the wordlist search order, first-to-last.
+
+`(current)`
+
+- Variable. Points to the current wordlist. New words are added to the current wordlist.
 
 `get-current ( -- wid )`
 

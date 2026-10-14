@@ -73,7 +73,6 @@ Complete structured overview of all documentation pages.
       - [Interrupts](software/base-platform/bootstrap/irqs.md)
     - **C Components**
       - [About C Components](software/base-platform/c-components/about.md)
-      - [Register Access Layer](software/base-platform/c-components/register-access-layer.md)
       - [LiteDRAM Initialization](software/base-platform/c-components/litedram-initialization.md)
       - [SDSPI](software/base-platform/c-components/sdspi.md)
       - [FatFs](software/base-platform/c-components/fat-fs.md)
@@ -143,6 +142,7 @@ Complete structured overview of all documentation pages.
   - [Bender](tools/bender.md)
   - [Debugging](tools/debugging.md)
 - **Register and Memory Map**
+  - [Register Access Layer](registers/register-access-layer.md)
   - [Reset](registers/reset-regs.md)
   - [UART](registers/uart-regs.md)
   - [GPIO](registers/gpio-regs.md)

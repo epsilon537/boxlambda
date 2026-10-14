@@ -148,6 +148,11 @@ Thanks to [W. Shepherd Pitts](https://github.com/wspitts2) for this suggestion.
 
 For detailed steps on setting up an OpenOCD JTAG debug session on the Arty-A7, refer to [this section](../../tools/debugging.md).
 
+### OpenOCD Work Area
+
+Some OpenOCD features (such as polling a target memory location while the target is in a running state) require a work area in target memory. [Openocd.cfg]() configures memory area `0x2feff000-0x2efffff` for this purpose.
+The BoxLambda OS [link map]() has this memory area reserved for OpenOCD.
+
 ## RISCV-DBG Clock Frequency
 
 The `riscv-dbg` components `dm_top` and `dmi_jtag` operate in the 50 MHz system clock domain.

@@ -829,7 +829,7 @@ like signed double numbers.
 
 `(latest) ( -- a-addr )`
 
-- Variable: Latest definition.
+- Variable: Latest definition. Equivalent to `(current) @`. See [WordLists]().
 
 `, ( u|n -- )`
 
