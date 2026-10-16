@@ -33,20 +33,18 @@ environment for experimenting with software and FPGA gateware.
 - Harvard architecture-based interconnect.
 - Low-latency register and memory access across the SoC.
 - Predictable instruction cycle counts.
-- DFX Partial FPGA Reconfiguration support.
+- DFX Partial FPGA Reconfiguration support (OS support TBD).
 - DDR3 external memory access through the Litex memory controller.
 - OpenOCD-based debug access on FPGA and Verilator.
-- VERA-based VGA graphics: 2 layers, tile or bitmap mode, 2 banks of 64 sprites,
-128KB Video RAM, 256 color palette.
-- Dual YM2149 PSG Audio.
-- SD Card Controller and FatFs File System.
-- 24-pin GPIO, UART, SPI Flash Controller, I2C Controller.
-- Real-time Clock and Calendar (RTCC) support.
-- USB HID Keyboard and Mouse support.
-- Picolibc-based standard C environment.
-- Test application suite covering all SoC components, running on both FPGA and
-Verilator.
-- Mecrisp Forth core + C FFI.
+- VERA-based VGA graphics: 2 layers, tile or bitmap mode, 2 banks of 64 sprites, 128KB Video RAM, 256 color palette, Forth supported.
+- Dual YM2149 PSG Audio (OS support TBD).
+- SD Card Controller and FatFs File System, OS supported. 
+- 24-pin GPIO, UART, SPI Flash Controller, I2C Controller (OS support TBD).
+- Real-time Clock and Calendar support (OS support TBD).
+- USB HID Keyboard and Mouse support (OS support TBD).
+- SoC test suite covering all components, running on both FPGA and Verilator. 
+- Software Test suite covering all OS features, running on FPGA.
+- BoxLambda OS: Mecrisp-based Forth software environment with C FFI (WIP).
 
 ## Gateware Block Diagram
 
@@ -102,17 +100,17 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
 
 - Sound and graphics support retro-style 2D demos and gameplay.
 
-## Status (April 2026)
+## Status (October 2026)
 
 - **Infrastructure** (build system, etc.): Complete.
 - **Gateware**: Complete and meeting requirements.
 - **Software**: Development ongoing.
   - **OS architecture**: defined.
-  - **BoxLambda C Core**: partially completed.
-  - **Mecrisp Forth Core**: completed.
-  - **Mecrisp Forth Environment**: partially completed.
+  - **BoxLambda OS Kernel**: partially completed.
+  - **BoxLambda OS Forth Environment**: ongoing.
   - **Forth<->C FFI**: completed.
   - **Filesystem layer**: completed.
+  - **Graphics layer**: completed.
 
 ## Changelog
 
