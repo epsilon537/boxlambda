@@ -47,7 +47,7 @@ _Dictionary Search Order (default/single wordlist)._
 Initially, the system has a single wordlist. A dictionary search starts from the latest non-core Word and proceeds to the oldest non-core Word, regardless of whether that non-core Word is created in EMEM or IMEM. The
 search then continues from **oldest** Core Word (i.e., the first Word created by the Forth core) to **newest** Core Word (the last Word created by the Forth core).
 
-Once the [wordlist.fs]() module is loaded, the system can maintain multiple wordlists and the user can configure the order of the wordlists to search. Wordlists do the leg work for the [module.fs]() namespace API.
+Once the [wordlist.fs](../../../fs/forth/boxkern-includes/wordlist.fs) module is loaded, the system can maintain multiple wordlists and the user can configure the order of the wordlists to search. Wordlists do the leg work for the [module.fs](forth-generic/namespaces.md#modules) namespace API.
 
 ### Booting Forth from C
 
@@ -125,7 +125,7 @@ The [link map](../../../sw/projects/boxlambda_os/link.ld) defines the following 
 - `.forth_core`: Forth core assembly code section. Part of the `.itext` section.
 - `.forth_imem`: IMEM memory area reserved for Forth code.
 - `.forth_emem`: EMEM memory area reserved for Forth code.
-- `.boxkern_forth_image`: Pre-compiled part of the BoxKern Forth code base, used to implement the [Fast Boot]() procedure. Assigned to EMEM.
+- `.boxkern_forth_image`: Pre-compiled part of the BoxKern Forth code base, used to implement the [Fast Boot](top-level-and-boot-seq.md#fast-boot) procedure. Assigned to EMEM.
 
 The link map also defines the following linker variables associated with those sections:
 
@@ -142,7 +142,7 @@ Understanding the purpose of the following assembler variables, defined in [fort
 
 - `DictionaryPointer`: Holds the _primary_ dictionary pointer. This is where the next dictionary entry will be written. Corresponds to to Forth variable `(dp)`. Word `here` puts the content of `(dp)` on the stack.
 - `SecondDictionaryPointer`: Holds the _secondary_ dictionary pointer. See [An IMEM and EMEM Dictionary section](#an-imem-and-emem-dictionary) for a discussion of the two dictionaries.
-- `ThreadEnd`: Holds the pointer to the most recently defined Word in the initial/default wordlist (the initial wordlist is named `forth`. See [Wordlists]()).
+- `ThreadEnd`: Holds the pointer to the most recently defined Word in the initial/default wordlist (the initial wordlist is named `forth`. See [Wordlists](forth-generic/namespaces.md#word-lists)).
 - `Current`: Holds the point to the current wordlist. Initially points to `ThreadEnd`. Correspond to Forth variable `(current)`. Forth variable `(latest)` is equivalent to `(current) @`.
 - `VariablesPointer`: Core variables such as `base`, `state`, `>in`, hooks...
   are placed and initialized at the end of the `.forth_imem` section. As core variables are placed during the

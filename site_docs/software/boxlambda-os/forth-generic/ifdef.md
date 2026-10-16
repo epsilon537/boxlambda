@@ -1,6 +1,6 @@
 # Conditional Execution/Compilation
 
-[ifdef.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/ifdef.fs)
+[ifdef.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/ifdef.fs)
 
 `[if] (? -- )`
 

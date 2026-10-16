@@ -1,7 +1,7 @@
 # Arrays
 
-[array.fs](../../../../fs/forth/array.fs)
-[utils.fs]()
+[array.fs](../../../../fs/forth/boxkern-includes/array.fs)
+[utils.fs](../../../../fs/forth/boxkern-includes/utils.fs)
 
 `array <name> ( compile time: n -- ) ( run time: i -- addr)`
 

@@ -150,8 +150,8 @@ For detailed steps on setting up an OpenOCD JTAG debug session on the Arty-A7, r
 
 ### OpenOCD Work Area
 
-Some OpenOCD features (such as polling a target memory location while the target is in a running state) require a work area in target memory. [Openocd.cfg]() configures memory area `0x2feff000-0x2efffff` for this purpose.
-The BoxLambda OS [link map]() has this memory area reserved for OpenOCD.
+Some OpenOCD features (such as polling a target memory location while the target is in a running state) require a work area in target memory. [Openocd.cfg](https://github.com/epsilon537/boxlambda/blob/develop/scripts/openocd.cfg) configures memory area `0x2feff000-0x2efffff` for this purpose.
+The BoxLambda OS [link map](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/boxlambda_os/link.ld) has this memory area reserved for OpenOCD.
 
 ## RISCV-DBG Clock Frequency
 

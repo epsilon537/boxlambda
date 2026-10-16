@@ -282,7 +282,7 @@ See `call-c` in [c-ffi.s](https://github.com/epsilon537/boxlambda/blob/develop/s
 ## Words
 
 [early.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/early.fs)
-[cstr.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/cstr.fs)
+[cstr.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/cstr.fs)
 
 `c-fun Define: ( compile time: fun "name" -- ) ( run time: i*x -- j*x )`
 

@@ -1,6 +1,6 @@
 # ZeptoForth Lambda Anonymous Functions
 
-[lambda.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/lambda.fs)
+[lambda.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/lambda.fs)
 
 `[: ( -- )`
 

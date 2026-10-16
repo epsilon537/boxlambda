@@ -6,19 +6,19 @@ See [Installing the BoxLambda Base Bitstream, BootLoader, and OS](../../installa
 
 Below are a few basic examples illustrating different aspects of the VERA graphics subsystem:
 
-- [Lissajous Animation](): Run the following command from the Forth prompt to start this demo:
+- [Lissajous Animation](../../../fs/demo/lis-demo.fs): Run the following command from the Forth prompt to start this demo:
 
 ```
 include demo/forth/lis-demo.fs
 ```
 
-- [Text Mode Demo](): Run the following command from the Forth prompt to start this demo:
+- [Text Mode Demo](../../../fs/demo/vera-txt-demo.fs): Run the following command from the Forth prompt to start this demo:
 
 ```
 include demo/forth/vera-txt-demo.fs
 ```
 
-- [VERA Palette Demo](): Run the following command from the Forth prompt to start this demo:
+- [VERA Palette Demo](../../../fs/demo/vera-pal-demo.fs): Run the following command from the Forth prompt to start this demo:
 
 ```
 include demo/forth/vera-pal-demo.fs

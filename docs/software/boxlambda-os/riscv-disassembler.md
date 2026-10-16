@@ -1,7 +1,7 @@
 # Mecrisp RISC-V 32 IM Disassembler
 
-[disasm.fs](../../../fs/forth/disasm.fs)
-[dump.fs](../../../fs/forth/dump.fs)
+[disasm.fs](../../../fs/forth/boxkern-includes/disasm.fs)
+[dump.fs](../../../fs/forth/boxkern-includes/dump.fs)
 
 `disasm-$`
 

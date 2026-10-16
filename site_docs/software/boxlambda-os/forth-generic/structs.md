@@ -1,6 +1,6 @@
 # ZeptoForth Structs
 
-[struct.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/struct.fs)
+[struct.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/struct.fs)
 
 `begin-structure ( "name" -- addr offset )`
 

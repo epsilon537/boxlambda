@@ -1,7 +1,7 @@
 # Run-Time Checking
 
-[run-time-checking.fs]()
-[except.fs]()
+[run-time-checking.fs](../../../fs/forth/boxkern-includes/run-time-checking.fs)
+[except.fs](../../../fs/forth/boxkern-includes/except.fs)
 
 Run-Time Checking tools.
 

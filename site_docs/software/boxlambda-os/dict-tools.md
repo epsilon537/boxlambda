@@ -1,7 +1,7 @@
 # Dictionary Tools
 
-[pre-dict.fs]()
-[dict.fs]()
+[pre-dict.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/pre-dict.fs)
+[dict.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/dict.fs)
 
 ## Flag Field Constants
 

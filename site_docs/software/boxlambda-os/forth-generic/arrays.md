@@ -1,7 +1,7 @@
 # Arrays
 
-[array.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/array.fs)
-[utils.fs]()
+[array.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/array.fs)
+[utils.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/utils.fs)
 
 `array <name> ( compile time: n -- ) ( run time: i -- addr)`
 

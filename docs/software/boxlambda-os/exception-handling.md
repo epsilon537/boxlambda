@@ -51,7 +51,7 @@ bar . cr
 ## Words
 
 [exception.s](../../../sw/components/forth/exception.s)
-[except.fs](../../../fs/forth/except.fs)
+[except.fs](../../../fs/forth/boxkern-includes/except.fs)
 
 `raised-by`
 

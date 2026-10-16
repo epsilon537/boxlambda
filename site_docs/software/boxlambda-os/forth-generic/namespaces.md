@@ -2,12 +2,12 @@
 
 ## Word Lists
 
-[wordlist.fs]()
-[compiler-memory.fs]()
+[wordlist.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/wordlist.fs)
+[compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler-memory.s)
 
 The wordlist module adds support for creating multiple wordlists. The module allows you to specify across which wordlists (and in which order) Word search (find) should take place and to which wordlist new Words should be added.
 
-This module serves as a building block for the [Modules]() module and should not be used directly by applications.
+This module serves as a building block for the [Modules](#modules) module and should not be used directly by applications.
 
 `forth`
 

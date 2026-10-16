@@ -1,7 +1,7 @@
 # VERA Graphics
 
-- The VERA Graphics Forth Module: [forth/boxkern-includes/vera.fs]()
-- The VERA Default Palette: [forth/boxkern-includes/vera-palette.fs]()
+- The VERA Graphics Forth Module: [forth/boxkern-includes/vera.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/vera.fs)
+- The VERA Default Palette: [forth/boxkern-includes/vera-palette.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/vera-palette.fs)
 
 ## Concepts
 
@@ -27,7 +27,7 @@ Pixels have a color index of either 0-3 (2bpp), 0-15 (4bpp), 0-255 (8bpp). This 
   - Color indices 0 (transparent) and 16-255 are palette-absolute.
   - Color indices 1-15 are relative to the selected palette group.
 
-The palette group to use is specified as a [mapentry](), [sprite]() or [bitmap sheet]() attribute.
+The palette group to use is specified as a [mapentry](#map-entry), [sprite](#sprites) or [bitmap sheet](#sheets) attribute.
 
 [![Palette Group References.](../../assets/vera-pal-group-refs.png)](../../assets/vera-pal-group-refs.png)
 
@@ -156,7 +156,7 @@ ts sheet{ 256 tiles }apply
 
 `vram-alloc ( size-bytes -- addr )`
 
-- Allocate memory in VRAM for a tilemap, bitmap, tiles, or sprites. The [sheet and tilemap creation/initialization Words]() use this Word to allocate their resources.  
+- Allocate memory in VRAM for a tilemap, bitmap, tiles, or sprites. The sheet and tilemap creation/initialization Words use this Word to allocate their resources.  
   `size-bytes`: the number of bytes to allocate.  
   If successful, returns a 2KB-aligned Pointer to allocated block of memory in VRAM.  
   If not successful, a vram :: x-alloc-failed exception is raised.
@@ -248,7 +248,7 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
   - `<tidx>`: Index of the tile to draw at this mapentry position.
   - `<pal-group>`: Palette group. 0..15. Only used in tile mode. See [Palette Groups](#palette-groups).
   - `<flip>`: Flip tile: `VFLIP`, `HFLIP`, `VFLIP_HFLIP` or 0.
-  - `<vec2>`: The column and row position of the mapentry, specified as a vec2 object. See [vec2.fs]().
+  - `<vec2>`: The column and row position of the mapentry, specified as a vec2 object. See [2D Vectors](forth-generic/vec2.md).
 
   `}apply ( -- )` ends a mapentry parameter block and applies the mapentry as specified.
 
@@ -263,11 +263,11 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
 
 `mapentry! ( mapentry vec2 tilemap -- )`
 
-- Set a 16-bit mapentry value at given position tilemap. The position is specified by a vec2 object. See [vec2.fs]().
+- Set a 16-bit mapentry value at given position tilemap. The position is specified by a vec2 object. See [2D Vectors](forth-generic/vec2.md).
 
 `mapentry@ ( vec2 tilemap -- mapentry )`
 
-- Read the 16-bit mapentry value from position in given tilemap. The position is specified by a vec2 object [vec2.fs]().
+- Read the 16-bit mapentry value from position in given tilemap. The position is specified by a vec2 object [2D Vectors](forth-generic/vec2.md).
 
 `unpack-txt16 ( mapentry -- tidx fg bg )`
 
@@ -392,7 +392,7 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
   - `<bitmap>`: A bitmap sheet object.
   - `<tidx>`: Index of the tile in the tileset sheet. `0..num_tiles-1.`
   - `<color>`: The pixel color palette index.
-  - `<vec2>`: The pixel position in the tile, specified as a vec2. See [vec2.fs]().
+  - `<vec2>`: The pixel position in the tile, specified as a vec2. See [2D Vectors](forth-generic/vec2.md).
 
   `}apply ( -- )` ends a pixel parameter block and draw the pixel in the tile as specified.
 
@@ -412,15 +412,15 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
 - A sprite parameter block. The `<...>` items indicated what type of value is expected on
   the top of the stack at this point, to be consumed by the following Word.
   - `<spr>`: A sprite object
-  - `<vec2>`: The sprite position in the tile, specified as a vec2. See [vec2.fs]().
+  - `<vec2>`: The sprite position in the tile, specified as a vec2. See [2D Vectors](forth-generic/vec2.md).
   - `<flip>`: Flip the sprite: `VFLIP`, `HFLIP`, `VFLIP_HFLIP` or 0.
-  - `<z>`: The sprite's z-depth. See section [Z-Depth and Transparancy]().
+  - `<z>`: The sprite's z-depth. See section [Z-Depth and Transparancy](#z-depth-and-transparency).
       - `SPR-DIS` : Disable the sprite (or, if you will, position it behind the background).
       - `SPR-BG-L0` : Position sprite between background and Layer 0.
       - `SPR-L0-L1` : Position sprite between Layer 0 and Layer 1.
       - `SPR-L1`: Position sprite in front of layer 1.
   - `<colmask>`: Set the sprite collision mask.
-  - `<pal-group>`: The sprite's palette group id. See [Palette Groups]().
+  - `<pal-group>`: The sprite's palette group id. See [Palette Groups](#palette-groups).
   - `<tidx>`: Index of the tile in the sheet containing the sprite's pixel data.
   - `<tileset>`: A tileset sheet object.
 
@@ -437,7 +437,7 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
 
 `spr-xy@  ( sprite -- vec2 )`
 
-- Returns the sprite's current coordinates. Returns a vec2. See [vec2.fs]().
+- Returns the sprite's current coordinates. Returns a vec2. See [2D Vectors](forth-generic/vec2.md).
 
 `spr-width@  ( sprite -- width )`
 
@@ -461,7 +461,7 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
 
 `spr-pal-group@  ( sprite -- pal-group )`
 
-- Returns the sprite's palette group id. See [Palette Groups]().
+- Returns the sprite's palette group id. See [Palette Groups](#palette-groups).
 
 `spr-bpp@  ( sprite -- bpp )`
 
@@ -790,7 +790,7 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 ## The VERA Font Loader
 
-[font-loader.fs]()
+[font-loader.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/font-loader.fs)
 
 `load-font ( tileset filename-addr filename-len --  #glyphs )`
 
@@ -829,13 +829,13 @@ Font files look like this:
 
 Font files are text files so they can easily be edited by hand. I'm using a script that allows me to convert font files from DamienG's [ZX Origins](https://damieng.com/typography/zx-origins/) page to the above format:
 
-[scripts/fontconvert.py]()
+[scripts/fontconvert.py](https://github.com/epsilon537/boxlambda/blob/develop/scripts/fontconvert.py)
 
 Some example font files:
 
-- [altered-chrome.fnt]().
-- [district-digital.fnt]().
-- [night-in-tokyo.fnt]().
+- [altered-chrome.fnt](https://github.com/epsilon537/boxlambda/blob/develop/fs/demo/altered-chrome.fnt).
+- [district-digital.fnt](https://github.com/epsilon537/boxlambda/blob/develop/fs/demo/district-digital.fnt).
+- [night-in-tokyo.fnt](https://github.com/epsilon537/boxlambda/blob/develop/fs/demo/night-in-tokyo.fnt).
 
 ### Exceptions
 

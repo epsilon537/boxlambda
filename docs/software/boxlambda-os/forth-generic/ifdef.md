@@ -1,6 +1,6 @@
 # Conditional Execution/Compilation
 
-[ifdef.fs](../../../../fs/forth/ifdef.fs)
+[ifdef.fs](../../../../fs/forth/boxkern-includes/ifdef.fs)
 
 `[if] (? -- )`
 

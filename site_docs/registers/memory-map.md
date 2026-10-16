@@ -1,7 +1,7 @@
 # BoxLambda Memory Map
 
-[memmap.fs]()
-[memmap.h]()
+[memmap.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/memmap.fs)
+[memmap.h](https://github.com/epsilon537/boxlambda/blob/develop/registers/generated/memmap.h)
 
 Next to memory-mapped registers, BoxLambda includes the following memory blocks. Memories are byte-, half-word- and word-accessible following natural address alignment rules.
 

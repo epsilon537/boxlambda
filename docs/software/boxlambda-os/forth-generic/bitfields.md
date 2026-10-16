@@ -1,6 +1,6 @@
 # Bit Fields
 
-[bitfield.fs]()
+  [bitfield.fs](../../../../fs/forth/boxkern-includes/bitfield.fs)
 
 Register bit field accessors.
 

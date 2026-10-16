@@ -52,7 +52,7 @@ On `develop` branch:
 5. Flash `boxlambda_base` gateware project build and bootloader.
 6. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
 8. Run `export_docs.sh develop`. Check the output for errors.
-7. Check documentation links by running `lychee -i *.md` from the `site_docs/` directory.
+7. Check documentation links by running `lychee -i site_docs` from the workspace root directory.
 
 On `master` branch:
 

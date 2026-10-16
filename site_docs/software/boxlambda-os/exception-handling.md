@@ -51,7 +51,7 @@ bar . cr
 ## Words
 
 [exception.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/exception.s)
-[except.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/except.fs)
+[except.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/except.fs)
 
 `raised-by`
 

@@ -1,7 +1,7 @@
 # Dictionary Tools
 
-[pre-dict.fs]()
-[dict.fs]()
+[pre-dict.fs](../../../fs/forth/boxkern-includes/pre-dict.fs)
+[dict.fs](../../../fs/forth/boxkern-includes/dict.fs)
 
 ## Flag Field Constants
 

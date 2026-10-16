@@ -3,7 +3,7 @@
 The `fs/` directory in the Boxlambda repo is the root of the target filesystem. Its structure will evolve over time. Currently, it contains the following directories:
 
 - `forth/` contains the system's `*.fs` Forth modules evaluated from source (by the application or `init.fs`) 
-- `forth/boxkern-includes/` contains the BoxKern-Include modules. To allow a fast boot procedure, these modules are compiled into the BoxKern executable and don't need to be evaluated from source. (see [here]()).
+- `forth/boxkern-includes/` contains the BoxKern-Include modules. To allow a fast boot procedure, these modules are compiled into the BoxKern executable and don't need to be evaluated from source. (see [BoxLambda OS Boot Sequence](top-level-and-boot-seq.md#boot-sequence)).
 - `test/` contains test files used by the Forth test suite.
 - `demos/` contains examples/demos. Execute them from the prompt using the following command: 
 
@@ -424,6 +424,6 @@ This diagram shows how the `include` Word works:
 
 *Forth Include File Evaluation.*
 
-The above refers to the regular Forth `include` Word, defined in [shell.fs](). The BoxKern also provides a way
+The above refers to the regular Forth `include` Word, defined in [shell.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/shell.fs). The BoxKern also provides a way
 to load and evaluate Forth modules from C code. This mechanism is discussed in [the BoxKern-Includes Mechanism](top-level-and-boot-seq.md#the-boxkern-includes-mechanism).
 

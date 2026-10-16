@@ -11,8 +11,8 @@ The following diagram illustrates the Forth core interpreting console input:
 [query.s](../../../sw/components/forth/query.s)
 [token.s](../../../sw/components/forth/token.s)
 [interpreter.s](../../../sw/components/forth/interpreter.s)
-[on-quit.fs]()
-[prompt.fs]()
+[on-quit.fs](../../../fs/forth/boxkern-includes/utils.fs)
+[prompt.fs](../../../fs/forth/boxkern-includes/prompt.fs)
 
 `query ( -- )`
 
@@ -68,7 +68,7 @@ The following diagram illustrates the Forth core interpreting console input:
 
 `(interpret-w-except-trace) ( -- )`
 
-- Wrapper around Mecrisp Forth's `(interpret)` that prints which Word triggered the exception when an uncaught exception occurs (see [Forth Exceptions]()).
+- Wrapper around Mecrisp Forth's `(interpret)` that prints which Word triggered the exception when an uncaught exception occurs (see [Forth Exceptions](exception-handling.md)).
 
 `quit ( many -- ) (R: many -- )`
 
@@ -84,7 +84,7 @@ The following diagram illustrates the Forth core interpreting console input:
 
 `hook-on-quit ( -- a-addr )`
 
-- Hook in here any clean-up etc. that needs to happen whenever quit is invoked. The custom quit-hook in `prompt.fs` will invoke this chain prior to entering the quit loop. This variable is defined early in the include list to allow early `boxkern-includes` to install their on-quit hooks (see. [compileto.fs]() for example).
+- Hook in here any clean-up etc. that needs to happen whenever quit is invoked. The custom quit-hook in `prompt.fs` will invoke this chain prior to entering the quit loop. This variable is defined early in the include list to allow early `boxkern-includes` to install their on-quit hooks (see. [compileto.fs](../../../fs/forth/boxkern-includes/compileto.fs) for example).
 
 `quit_w_cwd ( -- )`
 

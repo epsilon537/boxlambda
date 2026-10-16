@@ -20,7 +20,7 @@ found here:
 
 ## Forth
 
-The generated Forth register access files are located in the [fs]() directory. The files are name `<soc-component>_regs.fs`, e.g. `gpio_regs.fs`.
+The generated Forth register access files are located in the [fs/forth/](https://github.com/epsilon537/boxlambda/tree/develop/fs/forth) directory. The files are name `<soc-component>_regs.fs`, e.g. `gpio_regs.fs`.
 
 The template used to generate the Forth register access header files can be
 found here:

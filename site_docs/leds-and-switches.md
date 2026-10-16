@@ -27,7 +27,7 @@ If switches 0-3 are all in the on position, test applications may treat that as 
 
 | Switch # | Name | Description |
 |-------|------|-------------|
-| 0 | **Fastboot** | When reset, the OS boots up using [Fast Boot](). When set, the OS performs a [Slow Boot](). |
+| 0 | **Fastboot** | When reset, the OS boots up using *Fast Boot*. When set, the OS performs a *Slow Boot*. See [BoxLambda OS Boot Sequence](software/boxlambda-os/top-level-and-boot-seq.md#boot-sequence). |
 | 1 | **Test** | When set, the OS executes the testsuite after boot. |
 | 2 | **TBD** | To be defined. |
 | 3 | **TBD** | To be defined. |

@@ -5,9 +5,9 @@
 [strings.s](../../../../sw/components/forth/strings.s)
 [numberstrings.s](../../../../sw/components/forth/numberstrings.s)
 [numberoutput.s](../../../../sw/components/forth/numberoutput.s)
-[istr.fs](../../../../fs/forth/istr.fs)
-[utils.fs](../../../../fs/forth/utils.fs)
-[tonumber.fs](../../../../fs/forth/tonumber.fs)
+[istr.fs](../../../../fs/forth/boxkern-includes/istr.fs)
+[utils.fs](../../../../fs/forth/boxkern-includes/utils.fs)
+[tonumber.fs](../../../../fs/forth/boxkern-includes/tonumber.fs)
 
 `type ( c-addr length -- )`
 
@@ -96,7 +96,7 @@ number ( c-addr length -- 0 )
 
 ## Escaped Strings
 
-[escstr.fs](../../../../fs/forth/escstr.fs)
+[escstr.fs](../../../../fs/forth/boxkern-includes/escstr.fs)
 
 `escape-string ( addr len -- addr' len' )`
 
@@ -202,7 +202,7 @@ Parse string from input string, substitute escape codes according to table below
 
 ## jkotlinski Printf-Style Printing and Formatting
 
-[printf.fs](../../../../fs/forth/printf.fs)
+[printf.fs](../../../../fs/forth/boxkern-includes/printf.fs)
 
 `sprintf ( n*x addr1 u1 addr2 -- addr2 u3 )`
 

@@ -2,7 +2,7 @@
 
 ## Constants and Units
 
-[units.fs](../../../../fs/forth/units.fs)
+[units.fs](../../../../fs/forth/boxkern-includes/units.fs)
 
 `max-uint`
 
@@ -46,7 +46,7 @@
 
 ## Range Related Words
 
-[range.fs](../../../../fs/forth/range.fs)
+[range.fs](../../../../fs/forth/boxkern-includes/range.fs)
 
 `span ( addr len -- start end )`
 
@@ -110,7 +110,7 @@ serial-emit ( Char -- )
 ## Stack Jugglers
 
 [stackjugglers.s](../../../../sw/components/forth/stackjugglers.s)
-[utils.fs](../../../../fs/forth/utils.fs)
+[utils.fs](../../../../fs/forth/boxkern-includes/utils.fs)
 
 ### Single-Jugglers
 
@@ -207,7 +207,7 @@ serial-emit ( Char -- )
 ## Logic and Bit Manipulation
 
 [logic.s](../../../../sw/components/forth/logic.s)
-[utils.fs](../../../../fs/forth/utils.fs)
+[utils.fs](../../../../fs/forth/boxkern-includes/utils.fs)
 
 Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves like "31 and ar/r/lshift". 32 lshift does nothing.
 
@@ -362,7 +362,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 [double.s](../../../../sw/components/forth/double.s)
 [multiplydivide.s](../../../../sw/components/forth/multiplydivide.s)
-[utils.fs](../../../../fs/forth/utils.fs)
+[utils.fs](../../../../fs/forth/boxkern-includes/utils.fs)
 
 `um+ ( u1 u2 -- u carry )`
 
@@ -495,7 +495,7 @@ like signed double numbers.
 ### Single Comparisons
 
 [comparisons.s](../../../../sw/components/forth/comparisons.s)
-[utils.fs](../../../../fs/forth/utils.fs)
+[utils.fs](../../../../fs/forth/boxkern-includes/utils.fs)
 
 `u<= ( u1 u2 -- flag )`
 
@@ -793,7 +793,7 @@ like signed double numbers.
 [compiler.s](../../../../sw/components/forth/compiler.s)
 [compiler-memory.s](../../../../sw/components/forth/compiler-memory.s)
 [calculations.s](../../../../sw/components/forth/calculations.s)
-[utils.fs](../../../../fs/forth/utils.fs)
+[utils.fs](../../../../fs/forth/boxkern-includes/utils.fs)
 
 `alignto ( a power -- a )`
 
@@ -829,7 +829,7 @@ like signed double numbers.
 
 `(latest) ( -- a-addr )`
 
-- Variable: Latest definition. Equivalent to `(current) @`. See [WordLists]().
+- Variable: Latest definition. Equivalent to `(current) @`. See [WordLists](namespaces.md#word-lists).
 
 `, ( u|n -- )`
 
@@ -1004,7 +1004,7 @@ Note that `[immediate]` needs to be _inside_ of the definition, not after the `;
 
 [compiler.s](../../../../sw/components/forth/compiler.s)
 [buildsdoes.s](../../../../sw/components/forth/buildsdoes.s)
-[utils.fs]()
+[utils.fs](../../../../fs/forth/boxkern-includes/utils.fs)
 
 `execute ( xt -- )`
 

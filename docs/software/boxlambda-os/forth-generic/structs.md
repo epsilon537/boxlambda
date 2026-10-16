@@ -1,6 +1,6 @@
 # ZeptoForth Structs
 
-[struct.fs](../../../../fs/forth/struct.fs)
+[struct.fs](../../../../fs/forth/boxkern-includes/struct.fs)
 
 `begin-structure ( "name" -- addr offset )`
 

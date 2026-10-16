@@ -1,6 +1,6 @@
 # ZeptoForth Lambda Anonymous Functions
 
-[lambda.fs](../../../../fs/forth/lambda.fs)
+[lambda.fs](../../../../fs/forth/boxkern-includes/lambda.fs)
 
 `[: ( -- )`
 

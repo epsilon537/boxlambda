@@ -282,7 +282,7 @@ See `call-c` in [c-ffi.s](../../../sw/components/forth/c-ffi.s) along with Word 
 ## Words
 
 [early.fs](../../../fs/forth/early.fs)
-[cstr.fs](../../../fs/forth/cstr.fs)
+[cstr.fs](../../../fs/forth/boxkern-includes/cstr.fs)
 
 `c-fun Define: ( compile time: fun "name" -- ) ( run time: i*x -- j*x )`
 
