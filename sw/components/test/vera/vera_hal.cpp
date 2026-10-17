@@ -621,13 +621,13 @@ void Vera_layer::tileset_set(uint32_t tileset_id) {
   tileset_id_ = tileset_id;
   tile_idx_ = ~0U;
 
-  vera_layer_regs_->CONFIG_bf.COLOR_DEPTH = color_depth_enc(tileset.bpp());
-  vera_layer_regs_->CONFIG_bf.BITMAP_MODE = 0;
+  vera_layer_regs_->CONFIG_bf.COLORDEPTH = color_depth_enc(tileset.bpp());
+  vera_layer_regs_->CONFIG_bf.BITMAPMODE = 0;
   vera_layer_regs_->TILEBASE_bf.TILE_BITMAP_WIDTH =
       (uint32_t)(tileset.width() == VERA_TILE_SZ_16);
   vera_layer_regs_->TILEBASE_bf.TILE_HEIGHT =
       (uint32_t)(tileset.height() == VERA_TILE_SZ_16);
-  vera_layer_regs_->TILEBASE_bf.TILE_BASE_ADDR_16_11 =
+  vera_layer_regs_->TILEBASE_bf.TILE_BASEADDR =
       ((uint32_t)tileset.tileset_base() - VERA_VRAM_BASE) >> 11;
 }
 
@@ -640,28 +640,28 @@ void Vera_layer::bitmap_set(uint32_t tileset_id, uint32_t tile_idx) {
 
   Vera_tileset &tileset = vera.tileset[tileset_id];
 
-  vera_layer_regs_->CONFIG_bf.COLOR_DEPTH = color_depth_enc(tileset.bpp());
-  vera_layer_regs_->CONFIG_bf.BITMAP_MODE = 1;
+  vera_layer_regs_->CONFIG_bf.COLORDEPTH = color_depth_enc(tileset.bpp());
+  vera_layer_regs_->CONFIG_bf.BITMAPMODE = 1;
   vera_layer_regs_->TILEBASE_bf.TILE_BITMAP_WIDTH =
       (uint32_t)(tileset.width() == VERA_TILE_SZ_640);
   vera_layer_regs_->TILEBASE_bf.TILE_HEIGHT = 0;
-  vera_layer_regs_->TILEBASE_bf.TILE_BASE_ADDR_16_11 =
+  vera_layer_regs_->TILEBASE_bf.TILE_BASEADDR =
       ((uint32_t)tileset.tile_data(tile_idx) - VERA_VRAM_BASE) >> 11;
 }
 
 bool Vera_layer::bitmap_get(OUT uint32_t &tileset_id, OUT uint32_t &tile_idx) {
   tileset_id = tileset_id_;
   tile_idx = tile_idx_;
-  return vera_layer_regs_->CONFIG_bf.BITMAP_MODE == 1;
+  return vera_layer_regs_->CONFIG_bf.BITMAPMODE == 1;
 }
 
 void Vera_layer::bitmap_pal_offset_set(uint8_t offset) {
   assert(offset < 16);
-  vera_layer_regs_->HSCROLL_bf.HSCROLL_11_8_PAL_OFFSET = (uint32_t)offset;
+  vera_layer_regs_->HSCROLL_bf.HSCROLL_11_8_PALOFFSET = (uint32_t)offset;
 }
 
 uint8_t Vera_layer::bitmap_pal_offset_get() {
-  return (uint8_t)vera_layer_regs_->HSCROLL_bf.HSCROLL_11_8_PAL_OFFSET;
+  return (uint8_t)vera_layer_regs_->HSCROLL_bf.HSCROLL_11_8_PALOFFSET;
 }
 
 void Vera_layer::set_id_(uint32_t layer) {

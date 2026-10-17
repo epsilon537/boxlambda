@@ -1,7 +1,14 @@
-if(CMAKE_BUILD_TYPE STREQUAL "fpga")
+if(CMAKE_BUILD_TYPE
+   STREQUAL
+   "fpga")
   # gw_project_rules_vivado() function is defined in the parent CMakeLists.txt.
-  gw_project_rules_vivado(TOP_MODULE boxlambda_top PROJECT_NAME spiflash_test
-                          MEM_FILE_TARGET bootloader)
+  gw_project_rules_vivado(
+    TOP_MODULE
+    boxlambda_top
+    PROJECT_NAME
+    spiflash_test
+    MEM_FILE_TARGET
+    bootloader)
 else()
   # gw_project_rules_verilator() function is defined in the parent
   # CMakeLists.txt.
@@ -16,9 +23,11 @@ else()
     "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/wbuart32/bench/cpp/"
     "-CFLAGS -I${PROJECT_SOURCE_DIR}/sub/riscv-dbg/tb/remote_bitbang"
     "-CFLAGS -I${PROJECT_SOURCE_DIR}/gw/components/spiflash/sim/"
-    "-CFLAGS -I${PROJECT_SOURCE_DIR}/sw/registers/generated")
+    "-CFLAGS -I${PROJECT_SOURCE_DIR}/registers/generated")
 
-  add_dependencies(spiflash_test_sim spiflash_test)
+  add_dependencies(
+    spiflash_test_sim
+    spiflash_test)
 
   # Add testcase.
   add_test(

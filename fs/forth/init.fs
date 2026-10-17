@@ -8,6 +8,10 @@ vera-init
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
 cd /test/vera/
+
+include vera-test-palette.fs
+(test-palette) pal-load
+
 include vera-bitmap-1bpp.fs
 vram.
 include vera-bitmap-2bpp.fs

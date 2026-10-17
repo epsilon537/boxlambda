@@ -6,9 +6,9 @@
 #include "vera_regs.h"
 #include <assert.h>
 
-#define VERA_IRQ_VSYNC VERA_IEN_VSYNC_MASK
-#define VERA_IRQ_LINE VERA_IEN_LINE_MASK
-#define VERA_IRQ_SPRCOL VERA_IEN_SPRCOL_MASK
+#define VERA_IRQ_VSYNC VERA_IEN_VAL_VSYNC
+#define VERA_IRQ_LINE VERA_IEN_VAL_LINE
+#define VERA_IRQ_SPRCOL VERA_IEN_VAL_SPRCOL
 
 #define VERA_SCANLINE_VISIBLE_MAX 479
 #define VERA_SCANLINE_MAX 524
@@ -695,12 +695,12 @@ public:
   // Set the border color
   // @param palletteIndex: Color palette index of border color.
   static inline void bordercolor_set(uint8_t paletteIndex) {
-    VERA->DC_BORDER = paletteIndex;
+    VERA->DC_BORDERCOLOR = paletteIndex;
   }
 
   // Get the border color
   // @return: Color palette index of the border color.
-  static inline uint8_t bordercolor_get() { return VERA->DC_BORDER; }
+  static inline uint8_t bordercolor_get() { return VERA->DC_BORDERCOLOR; }
 
   // Set the boundaries of the active screen with the 640x480 space.
   // @param boundaries: pointer to screen boundaries structure.

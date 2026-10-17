@@ -35,7 +35,7 @@
   cr
 
   ." Restored palette:" cr
-  pal-init
+  (test-palette) pal-load
   ." pal 0: " 0 pal@ hex. cr
   ." pal 255: " #255 pal@ hex. cr
   0 line-capture-pxl@ hex. cr

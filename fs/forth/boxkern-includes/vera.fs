@@ -2144,23 +2144,22 @@ begin-module vera
     pal-group>pal-abs pal@
   ;
 
-  \ Load the original palette into the shadow-palette and VERA's palette memory.
-  ( -- )
-  : pal-init
-    (orig-palette) palette :: shadow-palette 2 256 * move
-    256 0 do
-      i pal@ i palette :: pal!
-    loop
-  ;
-
   \ Load a palette into VERA palette memory.
   \ addr points to a block of 256 half-words, each half-word specifying a 12-bit rgb value
   \ corresponding to its index.
   ( addr -- )
   : pal-load
     [ 1 0 stack-checker ]
-    move palette :: shadow-palette 512 \ Copy it to the shadow-palette first
-    pal-init \ Then install shadow-palette into VERA palette memory.
+    palette :: shadow-palette 512 move \ Copy it to the shadow-palette first
+    256 0 do \ Then install in palette memory.
+      i pal@ i palette :: pal!
+    loop
+  ;
+
+  \ Load the original palette into the shadow-palette and VERA's palette memory.
+  ( -- )
+  : pal-init
+    (orig-palette) pal-load
   ;
 
   \ -- VERA top-level definitions
