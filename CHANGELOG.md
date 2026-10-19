@@ -25,24 +25,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `vec2.fs` : 2D vectors.
 - `hook-on-quit`: A resource clean-up Forth hook executed when re-entering the quit loop (REPL). 
 - `compileto-save` and `compileto-restore`, to facilitate temporarily switching Forth compilation to EMEM/IMEM.
-- Misc. Words added: `harray` (halfword array), `span` and `bounds` (range Words), `find-in` (search in cell array), `log2`, and `compile-or-execute`.
-- Added suport to `target.py` for OpenOCD polling of target memory locations while the target is in running state.
+- Misc. Words added: `harray` (halfword array), `span` and `bounds` (range Words), `find-in` (search in cell array), `log2`, `compile-or-execute`, and `fdump` (file hex dump).
+- Added support to `target.py` for OpenOCD polling of target memory locations while the target is in running state.
 
 ### Fixed
 
-- Fixed a bug where Word `f_gets` silently ignored errors.
-- Fixed a stack balance bug in Word `f_cmp`.
+- Fixed Word `f_gets` silently ignoring errors.
+- Fixed stack balancing bug in Word `f_cmp`.
 
 ### Changed
 
-- Split Forth module `dict.fs` into `pre-dict.fs`, evaluated early-stage and, `dict.fs` evaluated late-stage.
+- Split Forth module `dict.fs` into `pre-dict.fs`, evaluated early-stage, and, `dict.fs` evaluated late-stage.
 - Made `dict.fs` dictionary tools wordlist aware.
 - When an uncaught exception occurs, the Forth interpreter prints the Word that generated the exception.
 - Assembled a custom VERA palette from sources at [https://lospec.com/palette-list](https://lospec.com/palette-list) and made this the BoxLambda OS default palette.
-- Assigned Forth test suite execution to a board switch rather than a compile-time-switch.
+- Assigned Forth test suite execution to a board switch rather than a compile-time switch.
 - Moved the C++ VERA HAL to test components.
-- Added file name and line number to 'line got truncated' error message during `boxlambda-includes` evaluation.
-- The Forth interactive string table (see `istr.fs`) is now cleared after each pass through the interpreter loop (i.e. right before returning to the prompt on the REPL).
+- Added file name and line number to `line got truncated` error message during `boxlambda-includes` evaluation.
+- The Forth interactive string table (see `istr.fs`) is now cleared after each pass through the interpreter loop (i.e., right before returning to the prompt on the REPL).
 - Reorganized BoxLambda OS documentation section.
 
 ### Removed

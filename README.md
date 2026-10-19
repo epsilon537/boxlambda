@@ -1,8 +1,8 @@
 # About BoxLambda
 
-BoxLambda is a hardware-software crossover project creating a homebrew,
-retro-style FPGA-based microcomputer. The goal is to create a sandbox
-environment for experimenting with software and FPGA gateware.
+BoxLambda is a hardware-software crossover project creating an experimental,
+retro-style, FPGA-based microcomputer. The goal is to create a new computer
+to explore old ideas.
 
 ## The Physical Setup
 
@@ -21,7 +21,7 @@ environment for experimenting with software and FPGA gateware.
 - OpenOCD-based debug access on FPGA and Verilator.
 - VERA-based VGA graphics: 2 layers, tile or bitmap mode, 2 banks of 64 sprites, 128KB Video RAM, 256 color palette, Forth supported.
 - Dual YM2149 PSG Audio (OS support TBD).
-- SD Card Controller and FatFs File System, OS supported. 
+- SD Card Controller and FatFs File System.
 - 24-pin GPIO, UART, SPI Flash Controller, I2C Controller (OS support TBD).
 - Real-time Clock and Calendar support (OS support TBD).
 - USB HID Keyboard and Mouse support (OS support TBD).
@@ -45,7 +45,7 @@ environment for experimenting with software and FPGA gateware.
     - **Simple Enough for One Person**: A motivated individual can develop a solid understanding of the entire system, including software and hardware.
     - **Deterministic Behavior**: The duration of operations such as internal memory or register access must be predictable by design.
     - **Self-Contained Run-Time Environment** supporting high-level interactive and low-level systems programming.
-  - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components. Optionally, support Partial FPGA Reconfiguration.
+  - Create a **Modular Architecture** that allows a mix-and-match of software and hardware components. Optionally, support Partial FPGA Reconfiguration.
 
 - Target Hardware: Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start).
 
