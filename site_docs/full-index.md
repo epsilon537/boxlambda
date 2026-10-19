@@ -134,7 +134,7 @@ Complete structured overview of all documentation pages.
       - [2D Vectors](software/boxlambda-os/forth-generic/vec2.md)
       - [Stack Notation](software/boxlambda-os/forth-generic/stack-notation.md)
     - **Testing**
-      - [Forth Test Suite](software/boxlambda-os/test/forth-testsuite.md)
+      - [BoxLambda OS Test Suite](software/boxlambda-os/test/boxlambda-os-testsuite.md)
 - [The Directory Structure and Build Trees](dir-struct.md)
 - **Tools**
   - [Target.py](tools/target_py.md)

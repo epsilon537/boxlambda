@@ -94,7 +94,7 @@ Hello World.
 ram:/test>
 ```
 
-### Examples/Demos
+## Examples/Demos
 
 Below are a few basic examples illustrating different aspects of the VERA graphics subsystem. A VGA display must be hooked up to see these demos (see [here](pmods.md#vga-pmod)).
 

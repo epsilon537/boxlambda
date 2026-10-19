@@ -85,7 +85,7 @@ Copy the contents of the `fs/` directory onto a FAT-formatted SD card. Insert th
 
 On the board, set switch 3 to the *on* position and switches 2-0 to the *off* position.
 
-[![Switch Settings.](../../assets/installation-switch-settings.png)](../../assets/installation-switch-settings.png)
+[![Switch Settings.](../assets/installation-switch-settings.png)](../assets/installation-switch-settings.png)
 
 *Switch Settings.*
 
