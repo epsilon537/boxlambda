@@ -149,16 +149,13 @@ SECTIONS
 
         *(.sdata .sdata.* .sdata2.*)
         *(.gnu.linkonce.s.*)
-    } >emem
 
-    /* Put the boxkern forth fastboot image in emem */
-    .boxkern_forth_image :
-    {
+        /* Put the boxkern forth fastboot image in emem */
         . = ALIGN(4);
         __boxkern_forth_image_start = .;
         KEEP(*(.boxkern_forth_image))
         __boxkern_forth_image_end = .;
-    } > emem
+    } >emem
 
    /* Thread local initialized data.*/
     .tdata : ALIGN_WITH_INPUT {
