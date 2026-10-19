@@ -11,6 +11,7 @@ Complete structured overview of all documentation pages.
   - [Prerequisites](installation/prerequisites.md)
   - [Peripherals/PMODs](installation/pmods.md)
   - [Installation](installation/installation.md)
+  - [Try It Out](installation/try-it-out.md)
 - [LEDs and Switches](leds-and-switches.md)
 - **The SoC**
   - **Top-Level**
@@ -132,7 +133,6 @@ Complete structured overview of all documentation pages.
       - [Bit Fields](software/boxlambda-os/forth-generic/bitfields.md)
       - [2D Vectors](software/boxlambda-os/forth-generic/vec2.md)
       - [Stack Notation](software/boxlambda-os/forth-generic/stack-notation.md)
-    - [Try It Out](software/boxlambda-os/try-it-out.md)
     - **Testing**
       - [Forth Test Suite](software/boxlambda-os/test/forth-testsuite.md)
 - [The Directory Structure and Build Trees](dir-struct.md)

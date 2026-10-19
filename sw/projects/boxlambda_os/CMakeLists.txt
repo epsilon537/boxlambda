@@ -115,3 +115,5 @@ add_custom_target(
           ${FORTH_FS_DIR} -load_app boxkernforth.bin -run
   DEPENDS boxkernforth
   COMMENT "Loading boxkern-forth with ramdisk.")
+
+add_flash_sw_target(boxkernforth)

@@ -4731,6 +4731,15 @@ s" tst_dir/rm.log" s" test/rm.log" f_cmp ?assert
 
 s" tst_dir/cat.log" s" test/cat.log" f_cmp ?assert
 
+\ fdump test
+false paging-enabled !
+
+[: fdump ;] >file ram:/tst_dir/fdump.log ram:/tst_dir/rm.log
+
+s" tst_dir/fdump.log" s" test/fdump.log" f_cmp ?assert
+
+true paging-enabled !
+
 \ cp test
 cp ram:/test/cpdir/cpfile0 ram:/tst_dir/cpfile0.cp
 s" /test/cpdir/cpfile0" s" ram:/tst_dir/cpfile0.cp" f_cmp ?assert

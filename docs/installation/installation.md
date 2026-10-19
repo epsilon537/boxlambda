@@ -8,6 +8,7 @@ To install BoxLambda:
 4. [Set up the environment](#setting-up-the-environment).
 5. [Activate the environment](#activating-the-tools-environment).
 6. [Prepare the SD card](#preparing-the-sd-card).
+7. [Set the Switches](#set-the-switches).
 7. [Flash the bitstream, bootloader, and OS binary](#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
 The first four steps should be executed once. Activating the environment is required every time you're working with BoxLambda.
@@ -80,9 +81,17 @@ To deactivate the environment again, enter `deactivate`.
 Copy the contents of the `fs/` directory onto a FAT-formatted SD card. Insert the SD card into the
 [MicroSD PMOD](pmods.md#microsd-pmod).
 
+## Set the Switches
+
+On the board, set switch 3 to the *on* position and switches 2-0 to the *off* position.
+
+[![Switch Settings.](../../assets/installation-switch-settings.png)](../../assets/installation-switch-settings.png)
+
+*Switch Settings.*
+
 ## Installing the BoxLambda Base Bitstream, BootLoader, and OS
 
-### Flashing the Release Binaries
+### Option 1: Flashing the Release Binaries
 
 The BoxLambda repo contains a `binaries/` subdirectory with release binaries. To flash those to the target:
 
@@ -162,102 +171,9 @@ Ready.
 sd0:/>
 ```
 
-You're now in the Forth REPL and can start entering Forth statements. Try `ls`, `cd` and `cat` to navigate around the file system
-and look at files:
+You're now in the Forth REPL and can start entering Forth statements. [Try It Out](try-it-out.md).
 
-```
-sd0:/> ls *
-
-00000000 2026/10/17 10:34:26 --- --- --- --- DIR --- test
-00000000 2026/10/17 10:34:32 --- --- --- --- DIR --- forth
-00000000 2026/10/17 10:34:32 --- --- --- --- DIR --- demo
-
-sd0:/> cd forth
-
-sd0:/forth> ls *
-
-00000335 2026/05/12 10:07:42 --- --- --- --- --- ARC early.fs
-00020441 2026/05/12 10:07:42 --- --- --- --- --- ARC fixpt-math-lib.fs
-00000490 2026/05/12 10:07:42 --- --- --- --- --- ARC irq.fs
-00000452 2026/05/12 10:07:42 --- --- --- --- --- ARC trace.fs
-00004558 2026/10/16 13:01:34 --- --- --- --- --- ARC uart_regs.fs
-00000947 2026/10/16 13:01:34 --- --- --- --- --- ARC reset_regs.fs
-00002466 2026/10/16 13:01:34 --- --- --- --- --- ARC gpio_regs.fs
-00001373 2026/10/16 13:01:34 --- --- --- --- --- ARC mtimer_regs.fs
-00001562 2026/10/16 13:01:34 --- --- --- --- --- ARC i2c_master_regs.fs
-00003661 2026/10/16 13:01:34 --- --- --- --- --- ARC usb_hid_regs.fs
-00002495 2026/10/16 13:01:36 --- --- --- --- --- ARC sdspi_regs.fs
-00000522 2026/10/16 13:01:36 --- --- --- --- --- ARC spiflash_regs.s
-00014902 2026/10/16 13:01:36 --- --- --- --- --- ARC ym2149_regs.fs
-00007007 2026/10/16 13:01:36 --- --- --- --- --- ARC dfx_controller_other_regs.fs
-00000924 2026/10/16 13:01:38 --- --- --- --- --- ARC dfx_controller_ctrl_reg.fs
-00000000 2026/10/17 10:34:32 --- --- --- --- DIR --- boxkern-includes
-00002499 2026/10/07 14:23:40 --- --- --- --- --- ARC font-loader.fs
-00002376 2026/10/16 13:01:36 --- --- --- --- --- ARC vera_spr_attr_ram.fs
-00002269 2026/10/16 15:07:44 --- --- --- --- --- ARC init.fs
-
-sd0:/forth>
-sd0:/forth> cat irq.fs
-
-\ Setting the MTIMER Comparator
-: set-raw-time-cmp ( u -- ) s>d mtime64 d+ mtimecmp64! ;
-
-\ IRQ ID constants
-16 constant irq-id-fast-0
-7 constant irq-id-timer
-13 irq-id-fast-0 + constant irq-id-vera
-12 irq-id-fast-0 + constant irq-id-vs00
-08 irq-id-fast-0 + constant irq-id-dfx
-10 irq-id-fast-0 + constant irq-id-sdpsi
-08 irq-id-fast-0 + constant irq-id-usb-hid-1
-07 irq-id-fast-0 + constant irq-id-usb-hid-0
-07 irq-id-fast-0 + constant irq-id-i2c
-05 irq-id-fast-0 + constant irq-id-uart
-
-sd0:/forth>
-```
-
-Create a `hello-world.fs` module and transfer it to the target:
-
-- In a linux terminal, navigate to the `fs/test` directory and create a `hello-world.fs` file with contents `: hello-world ." Hello World." cr ;`:
-
-```
-$ cd fs/test
-fs/test$ echo ": hello-world .\" Hello World.\" cr ;" > hello-world.fs
-```
-
-- Transfer the `fs/` directory, including the new `hello-world.fs` file to the target as a RAM disk:
-
-```
-/fs/test$ cd ../..
-$ target.py -load_fs fs
-=== Target Control ===
-Uploading dir as RAM disk: fs
-...
-Loading Filesystem image...
-Done.
-```
-
-- On the target, navigate to `ram:/test`, source the `hello-world.fs` file, and execute the `hello-world` Word it created:
-
-```
-sd0:/forth> chdrv ram:
-
-ram:/> cd test
-
-ram:/test> ls *
-...
-00000036 2026/04/21 19:33:52 --- --- --- --- --- ARC hello-world.fs
-...
-ram:/test> include hello-world.fs
-
-ram:/test> hello-world
-Hello World.
-
-ram:/test>
-```
-
-### Building and Loading from Source
+### Option 2: Building and Loading from Source
 
 I'm continuously modifying and testing the code. To avoid having to update the SD card and flash the binaries each time, I added a
 mechanism that lets you:
@@ -301,24 +217,24 @@ make boxlambda_base_flash_gw
 
 ```
 cd build/arty-a7-100/sw/projects/boxlambda_os
-make boxkern
+make boxkernforth
 ```
 
 To flash the OS binary:
 
 ```
-make boxkern_flash_sw
+make boxkernforth_flash_sw
 ```
 
 To load the OS binary (instead of flashing):
 
 ```
-make boxkern_load
+make boxkernforth_load
 ```
 
 To load the OS binary as well as the `fs/` target file system as a RAM disk:
 
 ```
-make boxkernfs_load
+make boxkernforthfs_load
 ```
 

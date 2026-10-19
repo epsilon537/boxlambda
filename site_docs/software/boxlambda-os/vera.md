@@ -845,5 +845,5 @@ Some example font files:
 
 ## VERA Examples
 
-See [Try It Out](try-it-out.md#try-it-out).
+See [Try It Out](../../installation/try-it-out.md#examplesdemos).
 
