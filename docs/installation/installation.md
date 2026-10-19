@@ -94,28 +94,42 @@ From the repo root directory, navigate to the `binaries` subdirectory and flash 
 cd binaries
 target.py -flash_bit boxlambda_base.bit
 target.py -flash_boot bootloader.bin
-target.py -flash_app boxkern
+target.py -flash_app boxkernforth.bin
 target.py -reset
 ```
 
 After completing the `target.py -reset` command, the target will be reset. In the terminal, you should first see the bootloader image, then the OS image booting up:
 
 ```
-sd0:/> BoxLambda bootloader
+BoxLambda bootloader
 --------------------
-Version: picorv_dma_2_devel-367-g85b7bde-dirty
+Version: vx.y.z
 Initializing SDRAM...
 Initializing SDRAM @0x20000000...
 Switching SDRAM to software control.
 Read leveling:
   m0, b00: |00000000000000000000000000000000| delays: -
-  ...
+  m0, b01: |11111111111111111111111111111100| delays: 14+-14
+  m0, b02: |00000000000000000000000000000000| delays: -
+  m0, b03: |00000000000000000000000000000000| delays: -
+  m0, b04: |00000000000000000000000000000000| delays: -
+  m0, b05: |00000000000000000000000000000000| delays: -
+  m0, b06: |00000000000000000000000000000000| delays: -
+  m0, b07: |00000000000000000000000000000000| delays: -
+  best: m0, b01 delays: 14+-14
+  m1, b00: |00000000000000000000000000000000| delays: -
+  m1, b01: |11111111111111111111111111111100| delays: 14+-14
+  m1, b02: |00000000000000000000000000000000| delays: -
+  m1, b03: |00000000000000000000000000000000| delays: -
+  m1, b04: |00000000000000000000000000000000| delays: -
+  m1, b05: |00000000000000000000000000000000| delays: -
+  m1, b06: |00000000000000000000000000000000| delays: -
   m1, b07: |00000000000000000000000000000000| delays: -
   best: m1, b01 delays: 14+-14
 Switching SDRAM to hardware control.
 Done.
 Application image magic number check OK.
-Application image size: 148772 bytes
+Application image size: 471500 bytes
 Copying SW image from Flash to DDR...
 Done.
 Booting application image...
@@ -133,14 +147,8 @@ Booting from volume sd0:.
 Loading forth/early.fs...
 Redirecting stdio to Forth...
 Initializing Forth Filesystem FFI...
-Parsing forth/boxkern-includes.fss...
-Loading forth/utils.fs...
-Redefine .".
-Loading forth/except.fs...
-...
-Loading forth/fs-redirect.fs...
-Loading forth/shell.fs...
-Redefine _cp-file-to-file.
+Loading fastboot forth image...
+Executing forth/init.fs...
 
      _
     ^-)
@@ -160,19 +168,35 @@ and look at files:
 ```
 sd0:/> ls *
 
-00000000 2026/04/06 22:24:16 --- --- --- --- DIR --- forth
-00000000 2026/04/06 22:24:18 --- --- --- --- DIR --- test
+00000000 2026/10/17 10:34:26 --- --- --- --- DIR --- test
+00000000 2026/10/17 10:34:32 --- --- --- --- DIR --- forth
+00000000 2026/10/17 10:34:32 --- --- --- --- DIR --- demo
 
 sd0:/> cd forth
 
 sd0:/forth> ls *
-...
-00000490 2026/03/31 17:31:56 --- --- --- --- --- ARC irq.fs
-00001137 2026/03/31 17:32:52 --- --- --- --- --- ARC boxkern-includes.fs
-00001749 2026/03/31 17:33:42 --- --- --- --- --- ARC utils.fs
-00000328 2026/03/31 17:35:02 --- --- --- --- --- ARC early.fs
-00001219 2026/04/06 20:34:52 --- --- --- --- --- ARC init.fs
 
+00000335 2026/05/12 10:07:42 --- --- --- --- --- ARC early.fs
+00020441 2026/05/12 10:07:42 --- --- --- --- --- ARC fixpt-math-lib.fs
+00000490 2026/05/12 10:07:42 --- --- --- --- --- ARC irq.fs
+00000452 2026/05/12 10:07:42 --- --- --- --- --- ARC trace.fs
+00004558 2026/10/16 13:01:34 --- --- --- --- --- ARC uart_regs.fs
+00000947 2026/10/16 13:01:34 --- --- --- --- --- ARC reset_regs.fs
+00002466 2026/10/16 13:01:34 --- --- --- --- --- ARC gpio_regs.fs
+00001373 2026/10/16 13:01:34 --- --- --- --- --- ARC mtimer_regs.fs
+00001562 2026/10/16 13:01:34 --- --- --- --- --- ARC i2c_master_regs.fs
+00003661 2026/10/16 13:01:34 --- --- --- --- --- ARC usb_hid_regs.fs
+00002495 2026/10/16 13:01:36 --- --- --- --- --- ARC sdspi_regs.fs
+00000522 2026/10/16 13:01:36 --- --- --- --- --- ARC spiflash_regs.s
+00014902 2026/10/16 13:01:36 --- --- --- --- --- ARC ym2149_regs.fs
+00007007 2026/10/16 13:01:36 --- --- --- --- --- ARC dfx_controller_other_regs.fs
+00000924 2026/10/16 13:01:38 --- --- --- --- --- ARC dfx_controller_ctrl_reg.fs
+00000000 2026/10/17 10:34:32 --- --- --- --- DIR --- boxkern-includes
+00002499 2026/10/07 14:23:40 --- --- --- --- --- ARC font-loader.fs
+00002376 2026/10/16 13:01:36 --- --- --- --- --- ARC vera_spr_attr_ram.fs
+00002269 2026/10/16 15:07:44 --- --- --- --- --- ARC init.fs
+
+sd0:/forth>
 sd0:/forth> cat irq.fs
 
 \ Setting the MTIMER Comparator

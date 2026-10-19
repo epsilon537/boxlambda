@@ -348,7 +348,11 @@ Some basic shell-like commands for interactive use.
 
 `cat ( "filename" -- )`
 
-- `cat <filename>`.
+- Print the contents of the given text file.
+
+`fdump ( "filename" -- )`
+
+- Hex dump the given file.
 
 `rm ( "pattern" -- )`
 

@@ -62,8 +62,8 @@ const char *ram_vol_name = "ram:";
 // fastboot=FASTBOOT_OPT_LOAD, loads (restores) the Forth state from the
 // linked-in boxkern_forth_image.
 #define FASTBOOT_OPT_LOAD 1
-// fastboot=FASTBOOT_OPT_COMPILE, slow boots, main.cpthen saves the Forth state
-// to a boxkern-forth.img file.
+// fastboot=FASTBOOT_OPT_COMPILE, slow boots, main.cpp then saves the Forth
+// state to a boxkern-forth.img file.
 #define FASTBOOT_OPT_COMPILE 2
 // FASTBOOT_OPT is set in top-level makefile.
 volatile uint32_t fastboot_opt = FASTBOOT_OPT;

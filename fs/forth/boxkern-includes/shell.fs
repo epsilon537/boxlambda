@@ -235,6 +235,58 @@
   then
 ;
 
+true variable paging-enabled
+
+\ Returns true if abort requested.
+( -- f )
+: (paging)
+  false ( f )
+  paging-enabled @ if ( f )
+    drop ( )
+    ." --- Press <Esc> to abort, any other key to continue. --- "
+    key 27 = ( f )
+  then ( f )
+;
+
+0 variable fdump-block-offset
+
+( -- )
+: (fdump-block-init)
+  0 fdump-block-offset !
+;
+
+( addr len -- )
+: (fdump-block)
+  0 do ( addr )
+    i $f and 0= if ( addr )
+      cr
+      fdump-block-offset @ s" %08x : " printf ( addr )
+      16 fdump-block-offset +!
+    then ( addr )
+    dup i + c@ s" %02x " printf ( addr )
+  loop ( addr )
+  drop ( )
+  cr
+;
+
+\ file dump <filename>
+\ ( "filename" -- )
+: fdump
+  (fdump-block-init)
+  token FA_OPEN_EXISTING FA_READ or f_open ( fil )
+  256 [: ( fil buf )
+    begin ( fil buf )
+      over f_eof not while ( fil buf )
+        2dup 256 f_read ( fil buf len )
+        over swap ( fil buf buf len )
+        (fdump-block) ( fil buf )
+        (paging) if 2drop exit then ( fil buf )
+    repeat ( fil buf )
+    drop ( fil )
+    f_close ( )
+  ;] with-temp-allot
+;
+
 \ cat <filename>
 \ ( "filename" -- )
 : cat

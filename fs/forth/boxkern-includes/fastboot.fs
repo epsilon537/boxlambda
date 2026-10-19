@@ -1,7 +1,7 @@
 \ BoxLambda Forth
 
 create fastboot-path 32 allot
-s" /boxkern-forth.img" fastboot-path str>path ( ) \ Convert to C string
+s" ram:/boxkern-forth.img" fastboot-path str>path ( ) \ Convert to C string
 
 \ Fastboot helper Word:
 \ Save forth imem and emem up to here to file boxkern-forth.img

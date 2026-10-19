@@ -151,6 +151,15 @@ SECTIONS
         *(.gnu.linkonce.s.*)
     } >emem
 
+    /* Put the boxkern forth fastboot image in emem */
+    .boxkern_forth_image :
+    {
+        . = ALIGN(4);
+        __boxkern_forth_image_start = .;
+        KEEP(*(.boxkern_forth_image))
+        __boxkern_forth_image_end = .;
+    } > emem
+
    /* Thread local initialized data.*/
     .tdata : ALIGN_WITH_INPUT {
         *(.tdata .tdata.* .gnu.linkonce.td.*)
@@ -197,15 +206,6 @@ SECTIONS
 
     PROVIDE( __ebss_start = ADDR(.tbss) );
     PROVIDE( __ebss_end = . );
-
-    /* Put the boxkern forth fastboot image in emem */
-    .boxkern_forth_image :
-    {
-        . = ALIGN(4);
-        __boxkern_forth_image_start = .;
-        KEEP(*(.boxkern_forth_image))
-        __boxkern_forth_image_end = .;
-    } > emem
 
     /*Put the heap in emem*/
     .heap (NOLOAD) : {

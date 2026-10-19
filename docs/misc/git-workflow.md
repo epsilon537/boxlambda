@@ -49,8 +49,8 @@ On `develop` branch:
 2. In `sim_a7_100` build tree, build all and run ctest.
 3. In `arty_a7_100` build tree, build all.
 4. (Re)Populate `binaries/` by runing `export_binaries.sh` from the repo root directory.
-5. Flash `boxlambda_base` gateware project build and bootloader.
-6. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
+5. Flash the `boxlambda_base` gateware project build and the bootloader.
+6. Set the *test* switch (switch 1) on the board and run `make boxkernforth_fs_load` from the `boxlambda_os` software project build directory.
 8. Run `export_docs.sh develop`. Check the output for errors.
 7. Check documentation links by running `lychee -i site_docs` from the workspace root directory.
 
