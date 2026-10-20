@@ -13,7 +13,7 @@ In the next diagram, `foo` again *tries* `bar`, but this time, `bar` raises an e
 *Foo tries bar, with exception.*
 
 Raising an exception *outside* of a try block results *restoring* the state to whatever the `ExcStackFramePtr` variable points to.
-To avoid unexpected behavior, the top-level REPL (i.e. the quit loop) is placed within a try-block.
+To avoid unexpected behavior, the top-level REPL (i.e., the quit loop) is placed within a try-block.
 
 ## Caveat
 

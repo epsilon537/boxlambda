@@ -8,12 +8,12 @@
 The VERA Forth Module is designed around the following concepts:
 
 - **Sheets**: Sheets hold pixel data in VRAM. There are two types of sheets:
-    - **Tilesets**: The sheet is subdivided into a number of tiles, e.g. a font or a sprite sheet. Tilesets are configured using the `sheet-tileset{}` API.
-    - **Bitmaps**: The sheet is a screen wide bitmap. Bitmaps are configured using the `sheet-bitmap` API.
+    - **Tilesets**: The sheet is subdivided into a number of tiles, e.g., a font or a sprite sheet. Tilesets are configured using the `sheet-tileset{}` API.
+    - **Bitmaps**: The sheet is a screen-wide bitmap. Bitmaps are configured using the `sheet-bitmap` API.
 - **Pixels**: The pixel API, `pxl{}`, is used to set or get pixels in a sheet.
-- **Tilemaps** and **MapEntries**: A Tilemap divides the screen into a grid of *MapEntries*. Each MapEntry in this grid references a specific tile in a tileset (e.g. by its ASCII character code). Tilemaps are configured with the `tmap{}` API. MapEntries are accessed using the `mapentry{}` API.
-- **Sprites**: Moveable objects. Sprites are associated with tiles in a tilesheet for their pixel data. Sprites are manipulated with the `spr{}` API.
-- **Layers**: VERA has two layers `l1` and `l0`. Each layer can be configured in *tilemap mode* or *bitmap mode*. When in tilemap mode, the layer is associated with a tilemap and tileset sheet. When in bitmap mode, the layer is associated with a bitmap sheet. Layers are configured using the `layer{}` API.
+- **Tilemaps** and **MapEntries**: A Tilemap divides the screen into a grid of *MapEntries*. Each MapEntry in this grid references a specific tile in a tileset (e.g., by its ASCII character code). Tilemaps are configured with the `tmap{}` API. MapEntries are accessed using the `mapentry{}` API.
+- **Sprites**: Movable objects. Sprites are associated with tiles in a tilesheet for their pixel data. Sprites are manipulated with the `spr{}` API.
+- **Layers**: VERA has two layers, `l1` and `l0`. Each layer can be configured in *tilemap mode* or *bitmap mode*. When in tilemap mode, the layer is associated with a tilemap and tileset sheet. When in bitmap mode, the layer is associated with a bitmap sheet. Layers are configured using the `layer{}` API.
 
 [![VERA Module Concepts.](../../assets/vera-module-concepts.png)](../../assets/vera-module-concepts.png)
 
@@ -21,13 +21,13 @@ The VERA Forth Module is designed around the following concepts:
 
 ## Palette Groups
 
-VERA divides the 256 color palette is into 16 Palette Groups of 16 colors each.
+VERA divides the 256-color palette into 16 Palette Groups of 16 colors each.
 Pixels have a color index of either 0-3 (2bpp), 0-15 (4bpp), 0-255 (8bpp). This color index is processed using the following logic:
 
   - Color indices 0 (transparent) and 16-255 are palette-absolute.
   - Color indices 1-15 are relative to the selected palette group.
 
-The palette group to use is specified as a [mapentry](#map-entry), [sprite](#sprites) or [bitmap sheet](#sheets) attribute.
+The palette group to use is specified as a [mapentry](#map-entry), [sprite](#sprites), or [bitmap sheet](#sheets) attribute.
 
 [![Palette Group References.](../../assets/vera-pal-group-refs.png)](../../assets/vera-pal-group-refs.png)
 
@@ -53,8 +53,8 @@ If both layers are enabled, Layer 1 sits in front of Layer 0. Sprites can be pos
 
 - `SPR-L1`: position the sprite in front of Layer 1.
 - `SPR-L0-L1`: position the sprite between Layer 0 and Layer 1.
-- `SPR-BG-L0`: position the sprite between the background Layer 0.
-- `SPR-DIS`: position the sprite behind the background, i.e. disable the sprite.
+- `SPR-BG-L0`: position the sprite between the background and Layer 0.
+- `SPR-DIS`: position the sprite behind the background, i.e., disable the sprite.
 
 ## Parameter Blocks
 

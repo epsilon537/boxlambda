@@ -1,6 +1,6 @@
 # Stack Objects
 
-Simple stack object with cell-size elements.
+Simple stack object with cell-sized elements.
 
 `stack-create ( n "name" -- )`
 
@@ -20,7 +20,7 @@ Simple stack object with cell-size elements.
 
 `stack-max-depth ( stack -- n )`
 
-- Return the maximum number of elements on the stack.
+- Returns the maximum number of elements on the stack.
 
 `stack-free ( stack -- n )`
 
@@ -28,7 +28,7 @@ Simple stack object with cell-size elements.
 
 `stack-base ( stack -- stack-base-addr )`
 
-- Return the base address of the stack
+- Returns the base address of the stack.
 
 `stack-top ( stack -- stack-top-addr )`
 

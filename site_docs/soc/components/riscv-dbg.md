@@ -100,15 +100,15 @@ The OpenOCD configuration file: [scripts/openocd.cfg](https://github.com/epsilon
 To summarize:
 
 1. The above OpenOCD config file is used to connect to the JTAG TAP of a Verilator model.
-2. The JTAG TAP is implemented by the `riscv-dbg` core.
+2. The `riscv-dbg` core implements the JTAG TAP.
 3. The `riscv-dbg` core provides debug support for the connected Ibex RISCV32 core.
-4. The JTAG TAP is accessed using a socket-based OpenOCD transport protocol called `remote_bitbang`.
+4. The JTAG TAP is accessed through OpenOCD's socket-based `remote_bitbang` transport.
 
 For a step-by-step guide on setting up a debug session, refer to [this section](../../tools/debugging.md).
 
 ## OpenOCD and RISCV-DBG on Arty-A7 FPGA
 
-The most straightforward approach for debugging on the Arty-A7 FPGA would be to expose the JTAG signals to PMOD pins and use a JTAG adapter (see the following subsection to take that path). However, an alternative approach eliminates the need for a JTAG adapter. The `riscv-dbg` JTAG TAP can be integrated into the FPGA scan chain, typically used to program the FPGA bitstream.
+The most straightforward approach to debug the Arty-A7 FPGA would be to route the JTAG signals to PMOD pins and use a JTAG adapter (see the following subsection to take that path). However, an alternative approach eliminates the need for a JTAG adapter. The `riscv-dbg` JTAG TAP can be integrated into the FPGA scan chain, typically used to program the FPGA bitstream.
 
 On the Arty-A7, bitstream programming is done through the FTDI-based USB serial port, eliminating the need for special adapters. The `riscv-dbg` codebase provides two variants for this configuration:
 
@@ -150,12 +150,12 @@ For detailed steps on setting up an OpenOCD JTAG debug session on the Arty-A7, r
 
 ### OpenOCD Work Area
 
-Some OpenOCD features (such as polling a target memory location while the target is in a running state) require a work area in target memory. [Openocd.cfg](https://github.com/epsilon537/boxlambda/blob/develop/scripts/openocd.cfg) configures memory area `0x2feff000-0x2efffff` for this purpose.
+Some OpenOCD features (such as polling a target memory location while the target is running) require a work area in target memory. [Openocd.cfg](https://github.com/epsilon537/boxlambda/blob/develop/scripts/openocd.cfg) configures memory area `0x2feff000-0x2efffff` for this purpose.
 The BoxLambda OS [link map](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/boxlambda_os/link.ld) has this memory area reserved for OpenOCD.
 
 ## RISCV-DBG Clock Frequency
 
 The `riscv-dbg` components `dm_top` and `dmi_jtag` operate in the 50 MHz system clock domain.
 
-The JTAG clock (`tck`) is driven via the FPGA’s JTAG chain using the Xilinx `BSCANE2` primitive. This primitive is instantiated in the [`dmi_bscane_tap`](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_bscane_tap.sv) module.
+The FPGA’s JTAG chain drives the JTAG clock (`tck`) using the Xilinx `BSCANE2` primitive. This primitive is instantiated in the [`dmi_bscane_tap`](https://github.com/epsilon537/riscv-dbg/blob/boxlambda/src/dmi_bscane_tap.sv) module.
 

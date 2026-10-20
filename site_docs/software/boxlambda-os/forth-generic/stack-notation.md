@@ -45,7 +45,7 @@ A variant of the previous example. `Foo` takes text from the input stream up to 
 - `: foo (compile-time: "token" -- ) (run-time: -- addr )`
 
 `Foo` is an Immediate. At compile-time, it takes a token from the input stream. It does not take anything from or put anything on the data stack.
-At compile-time, `foo` writes code which at run-time has the stack effect `( -- addr )`, i.e. the compiled code puts an item on the data stack.
+At compile-time, `foo` writes code which at run-time has the stack effect `( -- addr )`, i.e., the compiled code puts an item on the data stack.
 
 ## Stack comments:
 

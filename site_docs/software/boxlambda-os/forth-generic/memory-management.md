@@ -24,7 +24,7 @@ Heaps are created by users and consist of discrete blocks that are allocated, fr
 
 `resize ( size addr heap -- new-addr )`
 
-- Resize memory in a heap at _addr_ to a new size in bytes, returning its new address. If sufficient memory is available for resizing at _addr_ the allocation is expanded without moving or copying it and _addr_ is returned. Otherwise, the allocation at _addr_ is freed, and its contents are copied to a new allocation, whose address is returned. Note that if insufficient memory is available in the heap for resizing the allocation, the existing allocation is preserved, and `x-allocate-failed` is raised.
+- Resize memory in a heap at _addr_ to a new size in bytes, returning its new address. If sufficient memory is available for resizing at _addr_, the allocation is expanded without moving or copying it, and _addr_ is returned. Otherwise, the allocation at _addr_ is freed, and its contents are copied to a new allocation, whose address is returned. Note that if insufficient memory is available in the heap for resizing the allocation, the existing allocation is preserved, and `x-allocate-failed` is raised.
 
 Exceptions:
 
@@ -50,7 +50,7 @@ Pools are created by users and consist of discrete blocks that are allocated and
 
 `add-pool ( addr bytes pool -- )`
 
-- Add memory starting at _addr_ of size _bytes_ to _pool_ as discrete blocks; only a multiple of the block size of the pool will be added to the pool, so if _bytes_ is not a multiple of said block size not all of the space in the memory provided will be used.
+- Add memory starting at _addr_ of size _bytes_ to _pool_ as discrete blocks; only a multiple of the block size of the pool will be added to the pool, so if _bytes_ is not a multiple of said block size, not all of the space in the memory provided will be used.
 
 `allocate-pool ( pool -- addr )`
 
@@ -84,7 +84,7 @@ x-allocate-failed
 
 `temp-allot ( u -- )`
 
-- Allot u bytes from temporary buffer may throw `x-temp-allot-failed`.
+- Allot u bytes from temporary buffer. May throw `x-temp-allot-failed`.
 
 `temp-mark> ( -- mark )`
 

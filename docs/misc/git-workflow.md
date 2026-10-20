@@ -14,14 +14,14 @@ Each git submodule is a fork of a GitHub project. For example, `sub/ibex/` conta
 
 In each forked submodule, there are two relevant branches:
 
-- `master`: I keep this branch in sync with the master branch of the original repository to make it easy to pull updates and submit occasional pull requests.
+- `master`: I keep this branch in sync with the original repository's `master` branch to make it easy to pull updates and submit occasional pull requests.
 - `boxlambda`: This branch is where modifications for BoxLambda will be made.
 
 In the BoxLambda repository, there are several long-running branches:
 
-- `master`: Releases are submitted to this branch, ensuring that it's always in good shape.
+- `master`: Only releases are submitted to this branch, ensuring that this branch remains in good shape.
 - `develop`: Active development happens on this branch, with changes being constantly made, so it may not always be stable.
-- `gh-pages`: This branch holds the BoxLambda Blog files. By default, GitHub Pages use the `gh-pages` branch of a project.
+- `gh-pages`: This branch holds the BoxLambda Blog files. By default, GitHub Pages uses the `gh-pages` branch of a project.
 - `boxlambda-gh-pages-wip`: Work-in-progress Blog updates and some config file modifications for local previewing are in this branch. When updates are ready for release, they're merged to the `gh-pages` branch.
 
 # Adding Submodules
@@ -48,9 +48,9 @@ On `develop` branch:
 1. Update `CHANGELOG.md`.
 2. In `sim_a7_100` build tree, build all and run ctest.
 3. In `arty_a7_100` build tree, build all.
-4. (Re)Populate `binaries/` by runing `export_binaries.sh` from the repo root directory.
+4. (Re)Populate `binaries/` by running `export_binaries.sh` from the repo root directory.
 5. Flash the `boxlambda_base` gateware project build and the bootloader.
-6. Set the *test* switch (switch 1) on the board and run `make boxkernforth_fs_load` from the `boxlambda_os` software project build directory.
+6. Set the *test* switch (switch 1) on the board and `make boxkernforth_fs_load` from the `boxlambda_os` software project build directory.
 8. Run `export_docs.sh develop`. Check the output for errors.
 7. Check documentation links by running `lychee -i site_docs` from the workspace root directory.
 
@@ -70,13 +70,13 @@ On `master` branch:
 6. Copy the contents of directory `fs/` to an SD card and boot the target from that SD card.
 7. Check bootloader version string.
 8. Run the `boxkerntestfs` software test suite in `boxlambda_os` software project build directory.
-9. (Re)Populate `binaries/` by runing `export_binaries.sh` from the repo root directory.
+9. (Re)Populate `binaries/` by running `export_binaries.sh` from the repo root directory.
 10. `git commit` the binaries.
 11. Run `export_docs.sh vX.Y.Z` from the repo root directory and commit.
 12. Update tag to include the new binaries and exported docs: `git tag -f vX.Y.Z`.
 13. `git push origin vX.Y.Z`.
 14. On GitHub boxlambda repo, navigate to *Releases*, then *Draft a new release*.
 15. On GitHub boxlambda repo, update/close open issues.
-16. In read-the-docs, create a new released based on the vX.Y.Z tag.
+16. In read-the-docs, create a new release based on the vX.Y.Z tag.
 
 

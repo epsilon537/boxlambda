@@ -5,14 +5,14 @@
 
 - **Forth Core Entry Point**: [sw/components/forth/mecrisp-quintus-boxlambda.s](../../../sw/components/forth/mecrisp-quintus-boxlambda.s)
 
-BoxLambda's Forth is based on version 1.1.1d of Matthias Koch's [Mecrisp Quintus](https://mecrisp.sourceforge.net). This section discusses the Forth _Core_, i.e., the RISC-V assembly language code base that bootstraps the Forth environment.
+BoxLambda's Forth is based on version 1.1.1d of Matthias Koch's [Mecrisp Quintus](https://mecrisp.sourceforge.net). This section discusses the Forth _Core_, i.e., the RISC-V assembly language codebase that bootstraps the Forth environment.
 
 I’ll flesh this section out over time. For now, these are my notes on the parts of the Mecrisp Forth core relevant to bringing up the codebase on BoxLambda.
 
 ## BoxLambda changes relative to the original Mecrisp Quintus Core
 
 This section summarizes the most important changes I made to the original
-Mecrisp code base when porting it to BoxLambda.
+Mecrisp codebase when porting it to BoxLambda.
 
 ### Flash Memory Dictionary Removed
 
@@ -47,7 +47,7 @@ _Dictionary Search Order (default/single wordlist)._
 Initially, the system has a single wordlist. A dictionary search starts from the latest non-core Word and proceeds to the oldest non-core Word, regardless of whether that non-core Word is created in EMEM or IMEM. The
 search then continues from **oldest** Core Word (i.e., the first Word created by the Forth core) to **newest** Core Word (the last Word created by the Forth core).
 
-Once the [wordlist.fs](../../../fs/forth/boxkern-includes/wordlist.fs) module is loaded, the system can maintain multiple wordlists and the user can configure the order of the wordlists to search. Wordlists do the leg work for the [module.fs](forth-generic/namespaces.md#modules) namespace API.
+Once the [wordlist.fs](../../../fs/forth/boxkern-includes/wordlist.fs) module is loaded, the system can maintain multiple wordlists and the user can configure the order of the wordlists to search. Wordlists do the legwork for the [module.fs](forth-generic/namespaces.md#modules) namespace API.
 
 ### Booting Forth from C
 
@@ -80,7 +80,7 @@ From BoxLambda OS's [main.cpp](../../../sw/projects/boxlambda_os/main.cpp):
 
 ### English Translation
 
-The original Mecrisp codebase contains many German words and comments. I translated these into English. In several places, comments appeared in both English and German. For the sake of brevity, I removed the redundant German comments. I hope this causes no offense.
+The original Mecrisp codebase contains many German words and comments. I translated these into English. In several places, comments appeared in both English and German. For the sake of brevity, I removed the redundant German comments. I hope this does not offend.
 
 ### Conditional Compilation
 
@@ -125,7 +125,7 @@ The [link map](../../../sw/projects/boxlambda_os/link.ld) defines the following 
 - `.forth_core`: Forth core assembly code section. Part of the `.itext` section.
 - `.forth_imem`: IMEM memory area reserved for Forth code.
 - `.forth_emem`: EMEM memory area reserved for Forth code.
-- `.boxkern_forth_image`: Pre-compiled part of the BoxKern Forth code base, used to implement the [Fast Boot](top-level-and-boot-seq.md#fast-boot) procedure. Assigned to EMEM.
+- `.boxkern_forth_image`: Pre-compiled part of the BoxKern Forth codebase, used to implement the [Fast Boot](top-level-and-boot-seq.md#fast-boot) procedure. Assigned to EMEM.
 
 The link map also defines the following linker variables associated with those sections:
 
@@ -140,10 +140,10 @@ The link map also defines the following linker variables associated with those s
 
 Understanding the purpose of the following assembler variables, defined in [forth-core.s](../../../sw/components/forth/forth-core.s), is essential to be able to understand the Forth Core:
 
-- `DictionaryPointer`: Holds the _primary_ dictionary pointer. This is where the next dictionary entry will be written. Corresponds to to Forth variable `(dp)`. Word `here` puts the content of `(dp)` on the stack.
+- `DictionaryPointer`: Holds the _primary_ dictionary pointer. This is where the next dictionary entry will be written. Corresponds to Forth variable `(dp)`. Word `here` puts the content of `(dp)` on the stack.
 - `SecondDictionaryPointer`: Holds the _secondary_ dictionary pointer. See [An IMEM and EMEM Dictionary section](#an-imem-and-emem-dictionary) for a discussion of the two dictionaries.
 - `ThreadEnd`: Holds the pointer to the most recently defined Word in the initial/default wordlist (the initial wordlist is named `forth`. See [Wordlists](forth-generic/namespaces.md#word-lists)).
-- `Current`: Holds the point to the current wordlist. Initially points to `ThreadEnd`. Correspond to Forth variable `(current)`. Forth variable `(latest)` is equivalent to `(current) @`.
+- `Current`: Holds the point to the current wordlist. Initially points to `ThreadEnd`. Corresponds to Forth variable `(current)`. Forth variable `(latest)` is equivalent to `(current) @`.
 - `VariablesPointer`: Core variables such as `base`, `state`, `>in`, hooks...
   are placed and initialized at the end of the `.forth_imem` section. As core variables are placed during the
   `catchmempointers.s` phase of initialization, the pointer advances downwards,
@@ -151,7 +151,7 @@ Understanding the purpose of the following assembler variables, defined in [fort
   is stored in `VariablesPointer`. In other words, `VariablesPointer` acts like a _here_
   pointer for core variables. The corresponding Word is `ramvar-here`.
 
-The Forth Core code base relies heavily on GNU assembler pre-processing macros and symbols.
+The Forth Core codebase relies heavily on GNU assembler pre-processing macros and symbols.
 The following preprocessor symbols play an important role in the Forth core:
 
 - `CoreDictionaryStart`: Core dictionary entry point.
@@ -170,7 +170,7 @@ The following preprocessor symbols play an important role in the Forth core:
 If you look at the definitions of core variables (e.g., `hook-emit`), you'll see
 that the initial value of the variable is placed right after the code.
 `Catchmempointers.s` will copy it from there to the variable location at the
-end of IMEM. This is a wasteful. Each core variable takes up two IMEM
+end of IMEM. This is wasteful. Each core variable takes up two IMEM
 locations: one for the variable itself, one for its initial value. It results from the
 boot-from-flash legacy in the original Mecrisp Forth code. I will remove this
 inefficiency in a future release.

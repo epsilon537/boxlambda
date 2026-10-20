@@ -1,9 +1,9 @@
 # The File System and Shell
 
-The `fs/` directory in the Boxlambda repo is the root of the target filesystem. Its structure will evolve over time. Currently, it contains the following directories:
+The `fs/` directory in the Boxlambda repo is the root of the target filesystem. Its structure will evolve. Currently, it contains the following directories:
 
 - `forth/` contains the system's `*.fs` Forth modules evaluated from source (by the application or `init.fs`) 
-- `forth/boxkern-includes/` contains the BoxKern-Include modules. To allow a fast boot procedure, these modules are compiled into the BoxKern executable and don't need to be evaluated from source. (see [BoxLambda OS Boot Sequence](top-level-and-boot-seq.md#boot-sequence)).
+- `forth/boxkern-includes/` contains the BoxKern-Include modules. To speed up the boot procedure, these modules are compiled into the BoxKern executable rather than evaluated from source at runtime (see [BoxLambda OS Boot Sequence](top-level-and-boot-seq.md#boot-sequence)).
 - `test/` contains test files used by the Forth test suite.
 - `demos/` contains examples/demos. Execute them from the prompt using the following command: 
 

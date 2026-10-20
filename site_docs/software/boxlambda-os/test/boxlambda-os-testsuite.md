@@ -8,9 +8,9 @@ The BoxLambda OS test suite is based on the Mecrisp Forth test suite, augmented 
 
 2. Ensure all release binaries are flashed onto the target. If that's not the case yet, follow the steps in [this section](../../../installation/installation.md#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
-3. Set switch 1 to *On*, switches 0, 2 and 3 to *Off*. This tells the BoxLambda OS to start executing the testsuite after boot.
+3. Set switch 1 to *On*, switches 0, 2 and 3 to *Off*. This tells the BoxLambda OS to start executing the test suite after boot.
 
-4. Boot BoxLambda OS with RAM disk. From the worksace root directory, run the following command: 
+4. Boot BoxLambda OS with RAM disk. From the workspace root directory, run the following command: 
 
 ```
 target.py -load_app binaries/boxkernforth.bin -load_fs fs -run

@@ -17,7 +17,7 @@ compiletoimem
   or
 ;
 
-\ Substract 2 2D vectors.
+\ Subtract 2 2D vectors.
 ( v1 v2 -- vdiff )
 : vec2-
   2dup - $ffff and ( v1 v2 xdiff )

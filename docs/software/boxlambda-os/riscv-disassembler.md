@@ -17,10 +17,9 @@
 
 `see ( "Word" -- )`
 
-- Disassemble the definition of Word from beginning to first ret.
+- Disassemble the definition of Word from beginning to first `ret`.
 
 `dump ( addr len -- )`
 
 - Print the contents of a memory region.
-
 

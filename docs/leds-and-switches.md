@@ -13,12 +13,12 @@ LEDs 4-7 are assigned to the GPIO core. See the [GPIO component](soc/components/
 
 # Switches
 
-The role of the switches depend on the running application:
+The role of the switches depends on the running application:
 
 ## Bootloader
 
-- If switches 0-3 are all in the off position, the bootloader will spin *before* loading the application image, allowing a debugger to connect.
-- If switch 2 is on, the bootloader will spin *after* loading the application image, allowing a debugger to connect.
+- If switches 0-3 are all in the off position, the bootloader will spin *before* loading the application image from flash, allowing a debugger to connect.
+- If switch 2 is on, the bootloader will spin *after* loading the application image from flash, allowing a debugger to connect.
 
 ## Test Applications
 

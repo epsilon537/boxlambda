@@ -10,7 +10,7 @@
 
 `vec2- ( v1 v2 -- vdiff )`
 
-- Substract 2 2D vectors.
+- Subtract 2 2D vectors.
 
 `vec2.x ( v -- x )`
 

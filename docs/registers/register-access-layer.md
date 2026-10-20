@@ -5,8 +5,7 @@ files using [Corsair](https://github.com/esynr3z/corsair).
 
 The register definition files are located in directory [registers/definitions](../../registers/definitions).
 
-Also the Register Map documentation section is generated from the register
-definition files.
+Also the Register Map documentation section is generated from the register definition files.
 
 ## C/C++
 
@@ -20,7 +19,7 @@ found here:
 
 ## Forth
 
-The generated Forth register access files are located in the [fs/forth/](../../fs/forth/) directory. The files are name `<soc-component>_regs.fs`, e.g. `gpio_regs.fs`.
+The generated Forth register access files are located in the [fs/forth/](../../fs/forth/) directory. The files are named `<soc-component>_regs.fs`, e.g. `gpio_regs.fs`.
 
 The template used to generate the Forth register access header files can be
 found here:

@@ -817,7 +817,7 @@ like signed double numbers.
 
 `allot ( n -- )`
 
-- Tries to advance Dictionary Pointer by n bytes. Aborts, if not enough space available.
+- Tries to advance Dictionary Pointer by n bytes. Aborts if not enough space available.
 
 `here ( -- a-addr|h-addr )`
 
@@ -937,7 +937,7 @@ like signed double numbers.
 
 ## Flags and inventory
 
-Note that `[immediate]` needs to be _inside_ of the definition, not after the `;`. There is no `immediate` Word variant that goes _after_ the definition.
+Note that `[immediate]` needs to be _inside_ the definition, not after the `;`. There is no `immediate` Word variant that goes _after_ the definition.
 
 [compiler-memory.s](../../../../sw/components/forth/compiler-memory.s)
 [compiler.s](../../../../sw/components/forth/compiler.s)
@@ -972,7 +972,7 @@ Note that `[immediate]` needs to be _inside_ of the definition, not after the `;
 
 `find ( c-addr len -- a-addr flags )`
 
-- Searches for a String in Dictionary. Gives back flags, which are different from ANS!
+- Searches for a String in Dictionary. Returns flags that are different from ANS!
 
 `hook-find ( -- a-addr )`
 
@@ -1102,7 +1102,7 @@ istheanswer . cr
 
 Control structures are immediate and compile-only.
 
-Internally they have complicated compile-time stack effects.
+Internally, they have complicated compile-time stack effects.
 
 ### Decisions
 

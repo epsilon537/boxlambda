@@ -104,7 +104,7 @@ number ( c-addr length -- 0 )
 
 `esc-s" ( parses up to "  -- addr len )`
 
-- Parse string from input string an substitute escape codes according to table below.
+- Parse string from input string and substitute escape codes according to table below.
 
 `.esc-s" ( parses up to "  -- )`
 Parse string from input string, substitute escape codes according to table below, and print.
@@ -142,7 +142,7 @@ Parse string from input string, substitute escape codes according to table below
 
 `sign ( n -- )`
 
-- Add a minus sign to pictured number output buffer, if n is negative.
+- Add a minus sign to pictured number output buffer if n is negative.
 
 `#S ( ud1|d1 -- 0 0 )`
 
@@ -198,7 +198,7 @@ Parse string from input string, substitute escape codes according to table below
 
 `hex. ( u -- )`
 
-- Prints 32 bit unsigned in hex base, needs emit only. This is independent of number subsystem.
+- Prints 32-bit unsigned in hex base, needs emit only. This is independent of number subsystem.
 
 ## jkotlinski Printf-Style Printing and Formatting
 
@@ -212,11 +212,11 @@ Parse string from input string, substitute escape codes according to table below
 
 - Prints n\*x using the format string at caddr u. The format string consists of ordinary characters (except %), which are copied verbatim to the destination buffer, and conversion specifications. Conversion specifications have the following structure:
 
-- Introductory % character
-- An optional '-' that signifies left justification
-- An optional '0' that pads with zeros instead of spaces
-- An optional decimal integer value specifying the minimum field width
-- A conversion format specifier
+- Introductory % character.
+- An optional '-' that signifies left justification.
+- An optional '0' that pads with zeros instead of spaces.
+- An optional decimal integer value specifying the minimum field width.
+- A conversion format specifier.
 
 Format Specifiers:
 

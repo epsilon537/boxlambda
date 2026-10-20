@@ -51,7 +51,7 @@ uint32_t forth_find_word(const char *s);
 void forth_execute_xt(uint32_t xt);
 
 // A wrapper for the two previous actions. Look up a word,
-// if found, executed it and return 0. If not found, return -1.
+// if found, execute it and return 0. If not found, return -1.
 uint32_t forth_execute_word(const char *s);
 
 // Evaluate the given string.
@@ -59,7 +59,7 @@ void forth_evaluate(const char *s, uint32_t count);
 #define forth_eval(s) forth_evaluate(s, strlen(s))
 
 // Evaluate the multi-line buffer pointed to by s line-by-line?
-// If verbose flag is set, print each line as its being loaded.
+// If verbose flag is set, print each line as it's being loaded.
 void forth_eval_buf(char *s, bool verbose);
 
 // Load the given file and evaluate it.

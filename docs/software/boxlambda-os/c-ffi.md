@@ -20,7 +20,7 @@ stack is used to keep track of the call stack and stack frames. The Data Stack
 is used for parameter passing.
 
 On BoxLambda, the C stack acts as a return stack when in Forth space. It's a natural
-fit. It doesn't require any additional software constructs. The C compiler
+fit. It requires no additional software constructs. The C compiler
 manages the C stack, while on the Forth side, the Mecrisp Quintus Forth Core is already using the
 RISC-V stack pointer register (x2) as the return stack pointer.
 
@@ -72,7 +72,7 @@ Here's an example of C calling Forth:
   printf("Foo returned %d and %d.\n", res1, res2);
 ```
 
-In this example, `foo` is a Word that takes 2 arguments and return two values. For example:
+In this example, `foo` is a Word that takes 2 arguments and returns two values. For example:
 
 ```
 : foo ." In foo..." 2dup . . cr /mod ;
@@ -117,7 +117,7 @@ C functions are registered with Forth using the following macro from [forth.h](.
            forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)
 ```
 
-Note the expected ```void fun(void)``` signature. Forth registered C functions don't have any C-style input parameters or return values. The `datastack` object is used exclusively for parameter passing.
+Note the expected ```void fun(void)``` signature. Forth-registered C functions don't have any C-style input parameters or return values. The `datastack` object is used exclusively for parameter passing.
 
 ### Example
 
@@ -180,7 +180,7 @@ uint32_t forth_find_word(const char *s);
 void forth_execute_xt(uint32_t xt);
 
 // A wrapper for the two previous actions. Look up a word,
-// if found, executed it and return 0. If not found, return -1.
+// if found, execute it and return 0. If not found, return -1.
 uint32_t forth_execute_word(const char *s);
 
 // Evaluate the given string.
@@ -188,7 +188,7 @@ void forth_evaluate(const char *s, uint32_t count);
 #define forth_eval(s) forth_evaluate(s, strlen(s))
 
 // Evaluate the multi-line buffer pointed to by s line-by-line?
-// If verbose flag is set, print each line as its being loaded.
+// If verbose flag is set, print each line as it's being loaded.
 void forth_eval_buf(char *s, bool verbose);
 
 // Load the given file and evaluate it.
@@ -219,7 +219,7 @@ Mecrisp Quintus Forth register usage convention.
 
 To maintain the C environment when C calls a Forth Word, the Forth code has to execute as if it were a C function.
 
-The table below summarizes the actions that should be taken per register when C calls Forth:
+The table below summarizes the actions that should be taken for each register when C calls Forth:
 
 | Register to preserve | C ABI Name | C ABI Description | Mecrisp Forth Description | Required action when C calls Forth |
 |----------|------------|-------------------|---------------------------|-----------------------------------|

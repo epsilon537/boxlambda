@@ -3,7 +3,7 @@
 [memmap.fs](../../fs/forth/boxkern-includes/memmap.fs)
 [memmap.h](../../registers/generated/memmap.h)
 
-Next to memory-mapped registers, BoxLambda includes the following memory blocks. Memories are byte-, half-word- and word-accessible following natural address alignment rules.
+Next to memory-mapped registers, BoxLambda includes the following memory blocks. Memory is byte-, half-word-, and word-accessible following natural address alignment rules.
 
 ## IMEM
 
@@ -43,9 +43,9 @@ Write-only Sprite attribute RAM.
 
 Two banks of 64 entries. Each entry consists of 4 16-bit attributes. The attribute layout is described in the [VERA Sprite Attribute RAM layout](./vera-spr-attr-ram.md) section.
 
-**Rendering Priority** The sprite memory location dictates the order in which it is rendered. The sprite whose attributes are at the lowest location will be rendered in front of all other sprites; the sprite at the highest location will be rendered behind all other sprites, and so forth.
+**Rendering Priority** The sprite memory location dictates the rendering order. The sprite whose attributes are at the lowest location will be rendered in front of all other sprites; the sprite at the highest location will be rendered behind all other sprites, and so forth.
 
-**Palette offset** works in the same way as with the layers.
+**Palette offset** works the same way as it does for layers.
 
 The active sprite bank is selected by the SBNK bit in the CTRL register.
 
@@ -96,7 +96,9 @@ At reset, the palette RAM will contain the following predefined palette:
 
 - Color indexes 0-15 contain the C64 color palette.
 - Color indexes 16-31 contain a grayscale ramp.
-- Color indexes 32-255 contain various hues, saturation levels, brightness levels.
+- Color indexes 32-255 contain various hues, saturation levels, and brightness levels.
+
+Note: BoxLambda OS will overwrite this default palette with a [custom palette](../software/boxlambda-os/vera.md#palette-groups).
 
 ## VERA VGA Line Capture RAM
 
@@ -134,9 +136,10 @@ Low- and fixed-latency video memory.
 
 ## SDRAM
 
-High- and variable latency read-write external memory.
+High- and variable-latency read-write external memory.
 
 - **Address Range**: `0x20000000-0x30000000`
 - **Size**: 256 Mbytes
 
-Note that the _BoxKern_ allocates region`0x2ff00000-0x30000000` to [RAM disk usage](../software/base-platform/c-components/fat-fs.md#the-ram-disk-device-controller).
+Refer to the [OS Memory Layout](../software/boxlambda-os/mem-layout.md) section to see how the BoxLambda OS subdivides the external memory region.
+

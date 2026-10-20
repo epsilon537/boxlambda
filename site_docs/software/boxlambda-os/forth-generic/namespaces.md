@@ -19,7 +19,7 @@ This module serves as a building block for the [Modules](#modules) module and sh
 
 `get-order ( -- wid0 ... widn n )`
 
-- Retrieve the search order list and the length (n) of that list. `widn` is the first wordlist being search, `wid0` is the last.
+- Retrieve the search order list and the length (n) of that list. `widn` is the first wordlist being searched, `wid0` is the last.
 
 `wordlist ( -- wid )`
 
@@ -106,11 +106,11 @@ Adds support for creating and managing modules (namespaces). Builds on the [word
 
 `::['] ( wid "name" -- xt )`
 
-- Compile into the definition, the xt of the following Word, to be found in given namespace E.g. `mymod ::['] foo`.
+- Compile into the definition the xt of the following Word, to be found in given namespace. E.g. `mymod ::['] foo`.
 
 `begin-module ( "name" -- )`
 
-- Create a new module/namespace with the given name. This creates a new wordlist, makes it current and puts it on top of the search order. Assigns the wordlist id (`wid`) to a constant with the passed in name. This constant becomes the module identifier.
+- Create a new module/namespace with the given name. This creates a new wordlist, makes it current, and puts it on top of the search order. Assigns the wordlist id (`wid`) to a constant with the passed-in name. This constant becomes the module identifier.
 
 `continue-module ( wid -- )`
 

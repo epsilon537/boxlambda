@@ -22,10 +22,10 @@ VERA Wishbone's feature summary:
 
 - 32-bit pipelined Wishbone slave interface.
 - VGA output format at a fixed resolution of 640x480@60Hz (same as original VERA).
-- Software configurable VGA line capture mechanism.
+- Software-configurable VGA line capture mechanism.
 - Support for 2 layers, both supporting either tile or bitmap mode (same as original VERA).
 - Support for 2 banks of 64 sprites. Guaranteed max. of 512 sprite pixels per scanline.
-- Configurable Embedded video RAM size of up to 128kB.
+- Configurable embedded video RAM size of up to 128kB.
 - Palette with 256 colors selected from a total range of 4096 colors (same as original VERA).
 
 ## Overview

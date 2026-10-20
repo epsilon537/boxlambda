@@ -11,7 +11,7 @@ To install BoxLambda:
 7. [Set the Switches](#set-the-switches).
 7. [Flash the bitstream, bootloader, and OS binary](#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
-The first four steps should be executed once. Activating the environment is required every time you're working with BoxLambda.
+The first four steps only need to be performed once. Activate the environment each time you work on BoxLambda.
 
 ## Getting the Repository
 
@@ -60,7 +60,7 @@ Serial Port Settings: **1000000 8N1**
 
 ## Activating the Tools Environment
 
-When working with BoxLambda, its tools environment has to be activated. This is done by sourcing the `activate_env.sh` script.
+When working with BoxLambda, its tools environment must be activated. This is done by sourcing the `activate_env.sh` script.
 
 ```
 source activate_env.sh
@@ -175,15 +175,14 @@ You're now in the Forth REPL and can start entering Forth statements. [Try It Ou
 
 ### Option 2: Building and Loading from Source
 
-I'm continuously modifying and testing the code. To avoid having to update the SD card and flash the binaries each time, I added a
-mechanism that lets you:
+I'm continuously modifying and testing the code. To avoid having to update the SD card and flash the binaries each time, I added a mechanism that lets you:
 
 1. load the bitstream and OS binary onto the device (without flashing)
 2. load a RAM disk onto the device. At boot time, when the system detects the RAM disk, it will load the Forth modules from that RAM disk instead of the SD card.
 
 #### Building and Flashing Bootloader
 
-Application images and file systems can be loaded, but the bootloader has to be flashed onto the target (although you can use GDB to load the bootloader into RAM without flashing).
+Application images and file systems can be loaded directly, but the bootloader must be flashed onto the target. Alternatively, you can use GDB to load the bootloader into RAM without flashing it.
 
 The following instructions show how to build and flash the bootloader:
 

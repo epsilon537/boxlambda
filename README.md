@@ -45,8 +45,7 @@ to explore old ideas.
     - **Simple Enough for One Person**: A motivated individual can develop a solid understanding of the entire system, including software and hardware.
     - **Deterministic Behavior**: The duration of operations such as internal memory or register access must be predictable by design.
     - **Self-Contained Run-Time Environment** supporting high-level interactive and low-level systems programming.
-  - Create a **Modular Architecture** that allows a mix-and-match of software and hardware components. Optionally, support Partial FPGA Reconfiguration.
-
+  - Create a **Modular Architecture** that allows software and hardware components to be mixed and matched, with optional support for FPGA Partial Reconfiguration.
 - Target Hardware: Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start).
 
 - The computer supports the following peripherals:
@@ -67,9 +66,7 @@ to explore old ideas.
 - **Infrastructure** (build system, etc.): Complete.
 - **Gateware**: Complete and meeting requirements.
 - **Software**: Development ongoing.
-  - **OS architecture**: defined.
-  - **BoxLambda OS Kernel**: partially completed.
-  - **BoxLambda OS Forth Environment**: ongoing.
+  - **BoxLambda OS Forth Environment**: Development ongoing.
   - **Forth<->C FFI**: completed.
   - **Filesystem layer**: completed.
   - **Graphics layer**: completed.

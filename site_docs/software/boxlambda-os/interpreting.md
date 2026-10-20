@@ -84,7 +84,7 @@ The following diagram illustrates the Forth core interpreting console input:
 
 `hook-on-quit ( -- a-addr )`
 
-- Hook in here any clean-up etc. that needs to happen whenever quit is invoked. The custom quit-hook in `prompt.fs` will invoke this chain prior to entering the quit loop. This variable is defined early in the include list to allow early `boxkern-includes` to install their on-quit hooks (see. [compileto.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/compileto.fs) for example).
+- Hook in here any clean-up etc. that needs to happen whenever quit is invoked. The custom quit-hook in `prompt.fs` will invoke this chain before entering the quit loop. This variable is defined early in the include list to allow early `boxkern-includes` to install their on-quit hooks (see [compileto.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/compileto.fs) for example).
 
 `quit_w_cwd ( -- )`
 

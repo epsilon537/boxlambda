@@ -4,7 +4,7 @@
 
 - handling target reset,
 - flashing or loading bitstreams, bootloaders, and applications,
-- uploading or downloading ram disk images, and
+- uploading or downloading RAM disk images, and
 - attaching a debugger.
 - listening for target events.
 

@@ -4,9 +4,11 @@ See [Base Platform Interrupt Handling](../base-platform/bootstrap/irqs.md).
 
 ## Words
 
+[interrupt-common.s](../../../sw/components/forth/interrupt-common.s)
+
 `reset ( -- )`
 
-- Reset on hardware level, if possible.
+- Reset at the hardware level.
 
 `dint ( -- )`
 

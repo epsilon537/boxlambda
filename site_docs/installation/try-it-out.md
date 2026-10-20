@@ -1,6 +1,6 @@
 # Try It Out
 
-From the Forth REPL, try `ls`, `cd` and `cat` to navigate around the file system and look at files:
+From the Forth REPL, try `ls`, `cd`, and `cat` to navigate around the file system and look at files:
 
 ```
 sd0:/> ls *
@@ -63,7 +63,7 @@ $ cd fs/test
 fs/test$ echo ": hello-world .\" Hello World.\" cr ;" > hello-world.fs
 ```
 
-- Transfer the `fs/` directory, including the new `hello-world.fs` file to the target as a RAM disk:
+- Transfer the `fs/` directory, including the new `hello-world.fs` file, to the target as a RAM disk:
 
 ```
 /fs/test$ cd ../..
