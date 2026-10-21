@@ -35,12 +35,12 @@ Base address: 0x12000000
 | [DC_HSTOP](#dc_hstop)    | 0x0000002c | Display compser horizontal stop register. |
 | [DC_VSTART](#dc_vstart)  | 0x00000030 | Display composer vertical start register. |
 | [DC_VSTOP](#dc_vstop)    | 0x00000034 | Display composer vertical stop register. |
-| [L0_CONFIG](#l0_config)  | 0x00000040 | Layer 0 Configuration regiser. |
+| [L0_CONFIG](#l0_config)  | 0x00000040 | Layer 0 Configuration register. |
 | [L0_MAPBASE](#l0_mapbase) | 0x00000044 | Layer 0 map base register. |
 | [L0_TILEBASE](#l0_tilebase) | 0x00000048 | Layer 0 tile base register. |
 | [L0_HSCROLL](#l0_hscroll) | 0x00000050 | Layer 0 horizontal scroll register. |
 | [L0_VSCROLL](#l0_vscroll) | 0x00000054 | Layer 0 vertical scroll register. |
-| [L1_CONFIG](#l1_config)  | 0x00000080 | Layer 1 Configuration regiser. |
+| [L1_CONFIG](#l1_config)  | 0x00000080 | Layer 1 Configuration register. |
 | [L1_MAPBASE](#l1_mapbase) | 0x00000084 | Layer 1 map base register. |
 | [L1_TILEBASE](#l1_tilebase) | 0x00000088 | Layer 1 tile base register. |
 | [L1_HSCROLL](#l1_hscroll) | 0x00000090 | Layer 1 horizontal scroll register. |
@@ -291,7 +291,7 @@ Back to [Register map](#register-map-summary).
 
 ## L0_CONFIG
 
-Layer 0 Configuration regiser.
+Layer 0 Configuration register.
 
 Address offset: 0x00000040
 
@@ -424,7 +424,7 @@ Back to [Register map](#register-map-summary).
 
 ## L1_CONFIG
 
-Layer 1 Configuration regiser.
+Layer 1 Configuration register.
 
 Address offset: 0x00000080
 

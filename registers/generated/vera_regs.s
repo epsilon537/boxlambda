@@ -113,7 +113,7 @@
 .equ VERA_DC_VSTOP_VAL_WIDTH, 10
 .equ VERA_DC_VSTOP_VAL_LSB, 0
 .equ VERA_DC_VSTOP_VAL_MASK, 0x3ff
-# L0_CONFIG - Layer 0 Configuration regiser.
+# L0_CONFIG - Layer 0 Configuration register.
 .equ VERA_L0_CONFIG_ADDR, 0x40
 
 # L0_CONFIG.COLORDEPTH - Number of bits per pixel to encode color information.
@@ -176,7 +176,7 @@
 .equ VERA_L0_VSCROLL_VAL_WIDTH, 12
 .equ VERA_L0_VSCROLL_VAL_LSB, 0
 .equ VERA_L0_VSCROLL_VAL_MASK, 0xfff
-# L1_CONFIG - Layer 1 Configuration regiser.
+# L1_CONFIG - Layer 1 Configuration register.
 .equ VERA_L1_CONFIG_ADDR, 0x80
 
 # L1_CONFIG.COLORDEPTH - Number of bits per pixel to encode color information.

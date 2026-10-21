@@ -108,7 +108,7 @@ ts sheet{ 256 tiles }apply
 
 `SCANLINE-MAX`
 
-- The highest visible VGA scaline value.
+- The highest visible VGA scanline value.
 
 `HSTOP-MAX`
 
@@ -169,7 +169,7 @@ ts sheet{ 256 tiles }apply
 
 - Return the VRAM base address.
  
-- vram. ( -- )`
+- `vram. ( -- )`
 
 - Print VRAM usage.
 
@@ -742,7 +742,7 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 `sprites-enabled? ( -- flag )`
 
-- Returns true is sprite rendering is enabled.
+- Returns true if sprite rendering is enabled.
 
 `hscale! ( scale-ufix1-7 -- )`
 

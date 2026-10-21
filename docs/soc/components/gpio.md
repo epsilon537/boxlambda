@@ -1,19 +1,14 @@
 # GPIO
 
-- **GPIO Repo**, BoxLambda fork, `boxlambda` branch:
-    [https://github.com/epsilon537/gpio](https://github.com/epsilon537/gpio)
+- **GPIO Repo**, BoxLambda fork, `boxlambda` branch: [https://github.com/epsilon537/gpio](https://github.com/epsilon537/gpio)
 
-- **GPIO Submodule in the BoxLambda Directory Tree**:
-    sub/gpio/
+- **GPIO Submodule in the BoxLambda Directory Tree**: `sub/gpio/`
 
-- **GPIO Component in the BoxLambda Directory Tree**:
-    [gw/components/gpio](../../../gw/components/gpio)
+- **GPIO Component in the BoxLambda Directory Tree**: [gw/components/gpio](../../../gw/components/gpio)
 
-- **GPIO Core Top-Level**:
-    [sub/gpio/rtl/verilog/gpio_top.v](https://github.com/epsilon537/gpio/blob/boxlambda/rtl/verilog/gpio_top.v)
+- **GPIO Core Top-Level**: [sub/gpio/rtl/verilog/gpio_top.v](https://github.com/epsilon537/gpio/blob/boxlambda/rtl/verilog/gpio_top.v)
 
-- **GPIO Core Spec:**:
-    [sub/gpio/rtl/doc/gpio_spec.pdf](https://github.com/epsilon537/gpio/blob/boxlambda/doc/gpio_spec.pdf)
+- **GPIO Core Spec:**: [sub/gpio/rtl/doc/gpio_spec.pdf](https://github.com/epsilon537/gpio/blob/boxlambda/doc/gpio_spec.pdf)
 
 The GPIO core comes from OpenCores.org. The authors are Damjan Lampret and Goran Djakovic. This core is very configurable and has a lot of features. Among other things:
 

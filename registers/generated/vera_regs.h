@@ -282,7 +282,7 @@ typedef union {
 #define VERA_DC_VSTOP_VAL_MASK 0x3ff
 #define VERA_DC_VSTOP_VAL_RESET 0x0
 
-// L0_CONFIG - Layer 0 Configuration regiser.
+// L0_CONFIG - Layer 0 Configuration register.
 #define VERA_L0_CONFIG_ADDR 0x40
 #define VERA_L0_CONFIG_RESET 0x0
 typedef union {
@@ -442,7 +442,7 @@ typedef union {
 #define VERA_L0_VSCROLL_VAL_MASK 0xfff
 #define VERA_L0_VSCROLL_VAL_RESET 0x0
 
-// L1_CONFIG - Layer 1 Configuration regiser.
+// L1_CONFIG - Layer 1 Configuration register.
 #define VERA_L1_CONFIG_ADDR 0x80
 #define VERA_L1_CONFIG_RESET 0x0
 typedef union {
@@ -660,7 +660,7 @@ typedef struct {
     };
     __IO uint32_t RESERVED1[2];
     union {
-        __IO uint32_t L0_CONFIG; // Layer 0 Configuration regiser.
+        __IO uint32_t L0_CONFIG; // Layer 0 Configuration register.
         __IO vera_l0_config_t L0_CONFIG_bf; // Bit access for L0_CONFIG register
     };
     union {
@@ -682,7 +682,7 @@ typedef struct {
     };
     __IO uint32_t RESERVED3[10];
     union {
-        __IO uint32_t L1_CONFIG; // Layer 1 Configuration regiser.
+        __IO uint32_t L1_CONFIG; // Layer 1 Configuration register.
         __IO vera_l1_config_t L1_CONFIG_bf; // Bit access for L1_CONFIG register
     };
     union {

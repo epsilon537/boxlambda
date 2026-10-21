@@ -9,7 +9,7 @@
 - **Ymodem CLI Component in the BoxLambda Directory Tree**:
   [sw/components/test/ymodem_cli](../../../../../sw/components/test/ymodem_cli)
 
-This software component is a BoxLambda port of Xtreamerdev's Ymodem protocol implementation. The Ymodem API enables file transfers over the serial port. The `ymodem_receive()` function initiates a Ymodem transfer in BoxLambda's receive direction, storing the received file data in a memory buffer. The `modem_transmit()` function transfers the contents of a given memory buffer to the host PC using the Ymodem protocol.
+This software component is a BoxLambda port of Xtreamerdev's Ymodem protocol implementation. The Ymodem API enables file transfers over the serial port. The `ymodem_receive()` function initiates a Ymodem transfer in BoxLambda's receive direction, storing the received file data in a memory buffer. The `ymodem_send()` function transfers the contents of a given memory buffer to the host PC using the Ymodem protocol.
 
 `ymodem.h`:
 

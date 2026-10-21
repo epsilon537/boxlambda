@@ -20,8 +20,8 @@ UART_SETUP_ADDR $7000000 #24 bitfield! UART_SETUP_PFT!
   #0 constant UART_SETUP_PFT_P_NONE \ No parity 
   #4 constant UART_SETUP_PFT_P_ODD \ Odd Parity 
   #5 constant UART_SETUP_PFT_P_EVEN \ Even Parity 
-  #6 constant UART_SETUP_PFT_P_SPC \ Party bit is a space 
-  #7 constant UART_SETUP_PFT_P_MK \ Party bit is a mark 
+  #6 constant UART_SETUP_PFT_P_SPC \ Parity bit is a space 
+  #7 constant UART_SETUP_PFT_P_MK \ Parity bit is a mark 
 
 UART_SETUP_ADDR $8000000 #27 bitfield@ UART_SETUP_S@
 UART_SETUP_ADDR $8000000 #27 bitfield! UART_SETUP_S!

@@ -275,7 +275,7 @@ typedef union {
 #define YM2149_PSG0_ENV_PERIOD_FINE_VALUE_MASK 0xff
 #define YM2149_PSG0_ENV_PERIOD_FINE_VALUE_RESET 0x0
 
-// PSG0_ENV_PERIOD_COARSE - Envelope frequeny coarse adjustment.
+// PSG0_ENV_PERIOD_COARSE - Envelope frequency coarse adjustment.
 #define YM2149_PSG0_ENV_PERIOD_COARSE_ADDR 0x30
 #define YM2149_PSG0_ENV_PERIOD_COARSE_RESET 0x0
 typedef union {
@@ -569,7 +569,7 @@ typedef union {
 #define YM2149_PSG1_ENV_PERIOD_FINE_VALUE_MASK 0xff
 #define YM2149_PSG1_ENV_PERIOD_FINE_VALUE_RESET 0x0
 
-// PSG1_ENV_PERIOD_COARSE - Envelope frequeny coarse adjustment.
+// PSG1_ENV_PERIOD_COARSE - Envelope frequency coarse adjustment.
 #define YM2149_PSG1_ENV_PERIOD_COARSE_ADDR 0x70
 #define YM2149_PSG1_ENV_PERIOD_COARSE_RESET 0x0
 typedef union {
@@ -860,7 +860,7 @@ typedef struct {
         __IO ym2149_psg0_env_period_fine_t PSG0_ENV_PERIOD_FINE_bf; // Bit access for PSG0_ENV_PERIOD_FINE register
     };
     union {
-        __IO uint32_t PSG0_ENV_PERIOD_COARSE; // Envelope frequeny coarse adjustment.
+        __IO uint32_t PSG0_ENV_PERIOD_COARSE; // Envelope frequency coarse adjustment.
         __IO ym2149_psg0_env_period_coarse_t PSG0_ENV_PERIOD_COARSE_bf; // Bit access for PSG0_ENV_PERIOD_COARSE register
     };
     union {
@@ -917,7 +917,7 @@ typedef struct {
         __IO ym2149_psg1_env_period_fine_t PSG1_ENV_PERIOD_FINE_bf; // Bit access for PSG1_ENV_PERIOD_FINE register
     };
     union {
-        __IO uint32_t PSG1_ENV_PERIOD_COARSE; // Envelope frequeny coarse adjustment.
+        __IO uint32_t PSG1_ENV_PERIOD_COARSE; // Envelope frequency coarse adjustment.
         __IO ym2149_psg1_env_period_coarse_t PSG1_ENV_PERIOD_COARSE_bf; // Bit access for PSG1_ENV_PERIOD_COARSE register
     };
     union {

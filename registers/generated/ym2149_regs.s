@@ -118,7 +118,7 @@
 .equ YM2149_PSG0_ENV_PERIOD_FINE_VALUE_WIDTH, 8
 .equ YM2149_PSG0_ENV_PERIOD_FINE_VALUE_LSB, 0
 .equ YM2149_PSG0_ENV_PERIOD_FINE_VALUE_MASK, 0xff
-# PSG0_ENV_PERIOD_COARSE - Envelope frequeny coarse adjustment.
+# PSG0_ENV_PERIOD_COARSE - Envelope frequency coarse adjustment.
 .equ YM2149_PSG0_ENV_PERIOD_COARSE_ADDR, 0x30
 
 # PSG0_ENV_PERIOD_COARSE.VALUE - Envelope frequency coarse adjustment.
@@ -248,7 +248,7 @@
 .equ YM2149_PSG1_ENV_PERIOD_FINE_VALUE_WIDTH, 8
 .equ YM2149_PSG1_ENV_PERIOD_FINE_VALUE_LSB, 0
 .equ YM2149_PSG1_ENV_PERIOD_FINE_VALUE_MASK, 0xff
-# PSG1_ENV_PERIOD_COARSE - Envelope frequeny coarse adjustment.
+# PSG1_ENV_PERIOD_COARSE - Envelope frequency coarse adjustment.
 .equ YM2149_PSG1_ENV_PERIOD_COARSE_ADDR, 0x70
 
 # PSG1_ENV_PERIOD_COARSE.VALUE - Envelope frequency coarse adjustment.

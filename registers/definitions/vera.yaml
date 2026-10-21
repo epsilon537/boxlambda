@@ -167,7 +167,7 @@ regmap:
         lsb: 0
         access: rw
 -   name: L0_CONFIG
-    description: Layer 0 Configuration regiser.
+    description: Layer 0 Configuration register.
     address: 64
     bitfields:
     -   name: COLORDEPTH
@@ -311,7 +311,7 @@ regmap:
         access: rw
 
 -   name: L1_CONFIG
-    description: Layer 1 Configuration regiser.
+    description: Layer 1 Configuration register.
     address: 128
     bitfields:
     -   name: COLORDEPTH

@@ -48,8 +48,8 @@ typedef enum {
     UART_SETUP_PFT_P_NONE = 0x0, //No parity
     UART_SETUP_PFT_P_ODD = 0x4, //Odd Parity
     UART_SETUP_PFT_P_EVEN = 0x5, //Even Parity
-    UART_SETUP_PFT_P_SPC = 0x6, //Party bit is a space
-    UART_SETUP_PFT_P_MK = 0x7, //Party bit is a mark
+    UART_SETUP_PFT_P_SPC = 0x6, //Parity bit is a space
+    UART_SETUP_PFT_P_MK = 0x7, //Parity bit is a mark
 } uart_setup_pft_t;
 
 // SETUP.S - Number of stop bits - 1

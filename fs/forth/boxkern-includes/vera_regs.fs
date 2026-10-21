@@ -112,7 +112,7 @@ VERA_BASE_ADDR $34 + constant VERA_DC_VSTOP_ADDR
 VERA_DC_VSTOP_ADDR $3ff #0 bitfield@ VERA_DC_VSTOP@
 VERA_DC_VSTOP_ADDR $3ff #0 bitfield! VERA_DC_VSTOP!
 
-\ L0_CONFIG - Layer 0 Configuration regiser.
+\ L0_CONFIG - Layer 0 Configuration register.
 VERA_BASE_ADDR $40 + constant VERA_L0_CONFIG_ADDR
 
 \ -- Address Mask Offset
@@ -187,7 +187,7 @@ VERA_BASE_ADDR $54 + constant VERA_L0_VSCROLL_ADDR
 VERA_L0_VSCROLL_ADDR $fff #0 bitfield@ VERA_L0_VSCROLL@
 VERA_L0_VSCROLL_ADDR $fff #0 bitfield! VERA_L0_VSCROLL!
 
-\ L1_CONFIG - Layer 1 Configuration regiser.
+\ L1_CONFIG - Layer 1 Configuration register.
 VERA_BASE_ADDR $80 + constant VERA_L1_CONFIG_ADDR
 
 \ -- Address Mask Offset

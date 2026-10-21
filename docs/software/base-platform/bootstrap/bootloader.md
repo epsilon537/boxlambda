@@ -16,7 +16,7 @@ and executes from there without requiring any pre-setup steps from a bootloader.
 4. The bootloader checks the switch settings. If all four switches are in the *off* position, the
 bootloader will spin in a loop, allowing a debugger to connect. If the switches are not all in the off position,
 the bootloader continues to the next step.
-4. Using a magic number check, the bootloader detects the presence of an application
+5. Using a magic number check, the bootloader detects the presence of an application
 image at flash memory location `0x11600000`. If an image is detected, it is copied to EMEM, starting at EMEM
 memory offset 0.
 6. The bootloader starts the application by jumping to its entry point at address `0x20000008` in EMEM.
