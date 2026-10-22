@@ -88,7 +88,7 @@ The `link_ddr_boot.ld` script generates an application image intended for loadin
 1. A magic number: 0xB07A3BDA
 2. The image size
 
-The bootloader verifies the magic number to ensure it's indeed dealing with an application image. Only after confirming the magic number will the bootloader consider the image size value as valid, i.e., as the amount of data to copy from flash to RAM.
+The bootloader verifies the magic number to ensure it is an application image. Only after confirming the magic number will the bootloader consider the image size value as valid, i.e., as the amount of data to copy from flash to RAM.
 
 In the `link_ddr_boot.ld` script, the two-word header is created by the following lines at the beginning of the `.etext` section:
 

@@ -38,7 +38,7 @@ x-memory-not-allocated
 
 [pool.fs](../../../../fs/forth/boxkern-includes/pool.fs)
 
-Pools are created by users and consist of discrete blocks that are allocated and freed as a single unit. By default, there is no global pool. Allocating and freeing blocks in pools occur in constant time and are fast, unlike allocation, resizing, and freeing in heaps.
+Pools are created by users and consist of discrete blocks that are allocated and freed as a single unit. By default, there is no global pool. Allocating and freeing blocks in pools occur in constant time and is fast, unlike allocation, resizing, and freeing in heaps.
 
 `pool-size ( -- bytes )`
 
@@ -50,7 +50,7 @@ Pools are created by users and consist of discrete blocks that are allocated and
 
 `add-pool ( addr bytes pool -- )`
 
-- Add memory starting at _addr_ of size _bytes_ to _pool_ as discrete blocks; only a multiple of the block size of the pool will be added to the pool, so if _bytes_ is not a multiple of said block size, not all of the space in the memory provided will be used.
+- Adds _bytes_ of memory starting at _addr_ to _pool_ as discrete blocks. Only a multiple of the pool's block size will be added. If _bytes_ is not a multiple of the block size, not all of the provided memory will be used.
 
 `allocate-pool ( pool -- addr )`
 

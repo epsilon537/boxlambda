@@ -105,6 +105,6 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| VALUE            | 7:0    | rw              | 0x00       | A write operation to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value. |
+| VALUE            | 7:0    | rw              | 0x00       | Writing to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value. |
 
 Back to [Register map](#register-map-summary).

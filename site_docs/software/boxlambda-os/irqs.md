@@ -18,7 +18,7 @@ See [Base Platform Interrupt Handling](../base-platform/bootstrap/irqs.md).
 
 - Enables interrupts.
 
-`eint ( -- )`
+`eint? ( -- )`
 
 - Are interrupts enabled ?
 

@@ -51,7 +51,7 @@ Reset value: 0x00000000
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:24  | -               | 0x00       | Reserved |
 | RM_ID            | 23:8   | ro              | 0x0000     | ID of Reconfigurable module to which the status applies. |
-| SHUTDOWN         | 7      | ro              | 0x0        | Set if controller is int shutdown state. |
+| SHUTDOWN         | 7      | ro              | 0x0        | Set if controller is in shutdown state. |
 | ERR              | 6:3    | ro              | 0x0        | Error state. |
 | STATE            | 2:0    | ro              | 0x0        | Current state. |
 

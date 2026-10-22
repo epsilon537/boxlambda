@@ -91,7 +91,7 @@ VERA_BASE_ADDR $28 + constant VERA_DC_HSTART_ADDR
 VERA_DC_HSTART_ADDR $3ff #0 bitfield@ VERA_DC_HSTART@
 VERA_DC_HSTART_ADDR $3ff #0 bitfield! VERA_DC_HSTART!
 
-\ DC_HSTOP - Display compser horizontal stop register.
+\ DC_HSTOP - Display composer horizontal stop register.
 VERA_BASE_ADDR $2c + constant VERA_DC_HSTOP_ADDR
 
 \ -- Address Mask Offset

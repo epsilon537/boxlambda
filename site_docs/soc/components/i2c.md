@@ -21,7 +21,7 @@ For info about the I2C protocol in general, please check the following resources
 
 ## WBI2C
 
-Although it's perfectly doable to implement I2C in software using bit banging, I chose to use a gateware-assist. I'm using the I2C Bus Master core of ZipCPU's WBI2C repo. As usual, I forked the repo so I can easily implement customizations for BoxLambda. Here's the GitHub page:
+Although it's perfectly feasible to implement I2C in software using bit banging, I chose to use a gateware-assisted approach. I'm using the I2C Bus Master core from ZipCPU's WBI2C repository. As usual, I forked the repository to easily implement customizations for BoxLambda. Here's the GitHub page:
 
 [https://github.com/epsilon537/wbi2c](https://github.com/epsilon537/wbi2c)
 
@@ -82,7 +82,7 @@ To read from a single I2C slave register:
 
 ### Multi-Byte Transactions
 
-The 256-byte memory is overkill for reading and writing individual slave registers. The advantage of this memory comes into play when reading or writing a byte *sequence*. Instead of babysitting the entire transaction byte-by-byte, a bulk transaction can be kicked off. The CPU can move on to other tasks while the transaction is ongoing. In a multi-byte transaction, WBI2C automatically increments the slave register address value after each byte sent/retrieved, wrapping around to 0 if the address value goes beyond 255.
+The 256-byte proxy memory is overkill for individual slave register accesses. Its advantage becomes apparent when reading or writing a byte *sequence*. Instead of the CPU managing the transaction byte-by-byte, a bulk transaction can be initiated, allowing the CPU to perform other tasks while the transaction is ongoing. In a multi-byte transaction, WBI2C automatically increments the slave register address after each byte sent or retrieved, wrapping around to 0 if the address exceeds 255.
 
 For example, let's say an I2C slave with 7-bit address 0x6F has a 64-byte SRAM at the register address range 32-95. We want to write a 16-byte character string to this SRAM, starting at register address 32.
 

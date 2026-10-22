@@ -5,7 +5,7 @@
 [wordlist.fs](../../../../fs/forth/boxkern-includes/wordlist.fs)
 [compiler-memory.s](../../../../sw/components/forth/compiler-memory.s)
 
-The wordlist module adds support for creating multiple wordlists. The module allows you to specify across which wordlists (and in which order) Word search (find) should take place and to which wordlist new Words should be added.
+The wordlist module adds support for creating multiple wordlists. It allows you to specify which wordlists to search (and in what order) and to which wordlist new words should be added.
 
 This module serves as a building block for the [Modules](#modules) module and should not be used directly by applications.
 
@@ -59,7 +59,7 @@ This module serves as a building block for the [Modules](#modules) module and sh
 
 `dictionarynext ( link-addr -- addr flag)`
 
-- Return next entry in dictionary chain (search-order aware). Returns a Word link address and false if a Word is found. Returns 0 true if end is reached.
+- Returns the next entry in the dictionary chain (search-order aware). Returns a word link address and `false` if a word is found. Returns `0` and `true` if the end is reached.
 
 `dictionarystart ( -- link-addr )`
 

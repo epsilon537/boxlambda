@@ -41,7 +41,7 @@ git remote set-url origin git@github.com:epsilon537/<repo name>.git
 
 The last step is necessary to switch the remote URL from HTTPS to SSH for authentication preference.
 
-# Creating a new release (*Note to Self*)
+# Creating a new release
 
 On `develop` branch:
 
@@ -77,6 +77,6 @@ On `master` branch:
 13. `git push origin vX.Y.Z`.
 14. On GitHub boxlambda repo, navigate to *Releases*, then *Draft a new release*.
 15. On GitHub boxlambda repo, update/close open issues.
-16. In read-the-docs, create a new release based on the vX.Y.Z tag.
+16. In read-the-docs, create a new release based on the `vX.Y.Z` tag.
 
 

@@ -124,7 +124,7 @@ regmap:
         lsb: 0
         access: rw
     -   name: CARD_REMOVED
-        description: Set to enabled CARD_REMOVED interrupt.
+        description: Set to enable CARD_REMOVED interrupt.
         reset: 0
         width: 1
         lsb: 1

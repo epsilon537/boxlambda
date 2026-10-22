@@ -146,7 +146,7 @@ File and Directory Management:
 
 `f_rename ( addr1 len1 addr2 len2 -- )`
 
-- Rename/move fil/dir in addr/len1 string addr/len2 string. May throw `x-fr-*` exception.
+- Rename/move file/directory named in addr/len1 string to addr/len2 string. May throw `x-fr-*` exception.
 
 `f_chmod ( addr len attr mask -- )`
 
@@ -371,11 +371,11 @@ Some basic shell-like commands for interactive use.
 
 `mount ( "volume" -- )`
 
-- Mount a volume. Supported volumes are `sd0:` and `ram0:`
+- Mount a volume. Supported volumes are `sd0:` and `ram:`
 
 `df ( "volume" -- )`
 
-- Get volume usage info. Supported volume names are `sd0:` and `ram0:`
+- Get volume usage info. Supported volume names are `sd0:` and `ram:`
 
 `>null ( xt -- )`
 

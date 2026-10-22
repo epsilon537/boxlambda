@@ -29,7 +29,7 @@
 - **Ibex WB Core Top-Level**:
 [sub/ibex_wb/rtl/wb_ibex_core.sv](https://github.com/epsilon537/ibex_wb/blob/boxlambda/rtl/wb_ibex_core.sv)
 
-The Ibex RISCV core does not natively include Wishbone ports. `Wb_ibex_core` wraps around the vanilla Ibex core and attaches Core-to-Wishbone port adapters to its instruction and data ports.
+The Ibex RISC-V core does not natively include Wishbone ports. `Wb_ibex_core` wraps the vanilla Ibex core, attaching Core-to-Wishbone port adapters to its instruction and data ports.
 
 ## Ibex Core Configuration
 
@@ -55,7 +55,7 @@ wb_ibex_core #(
 - Single Cycle Multiplier.
 - Balanced Support for Bit Manipulation extensions, meaning: `Zba` (address generation), `Zbb` (base), `Zbs` (single-bit operations), `Zbf` (bit-field placement), `Zbt` (ternary operations).
 - Single Instruction Prefetcher: This is a custom prefetcher that prefetches just one instruction. This helps ensure that the instruction cycle counts remain constant. See [the next section](#the-single-instruction-prefetcher).
-- Branch Target ALU disabled. The branch target ALU removes stalls from taken branches. While this feature reduces stalls from branches taken, enabling it currently results in timing closure issues.
+- Branch Target ALU disabled. Although this feature reduces stalls from taken branches, enabling it currently results in timing closure issues.
 - Writeback stage disabled.
 - ICache disabled.
 - Dynamic branch prediction disabled.
@@ -63,7 +63,7 @@ wb_ibex_core #(
 - Memory protection disabled.
 - Debug Module support enabled.
 
-The `boot_addr` port name of `wb_ibex_core` is somewhat misleading. `Boot_addr` specifies the base address of the vector table. The Reset Vector - the first instruction executed when the processor comes out of reset - is at offset 0x80 relative to this base address. Hence, the *real* Boot Address for BoxLambda is address 0x80.
+The `boot_addr` port name of `wb_ibex_core` is somewhat misleading. While `boot_addr` specifies the base address of the vector table, the Reset Vector (the first instruction executed when the processor comes out of reset) is at offset 0x80 relative to this base address. Hence, the *real* boot address for BoxLambda is 0x80.
 
 Note that there's no Instruction or Data Cache. Instruction or data accesses go directly to IMEM or DDR memory.
 
@@ -75,7 +75,7 @@ For information on the compiler and compile flags used to generate code for this
 
 *The Single Instruction Prefetch Buffer in the Ibex Core.*
 
-An **Instruction Prefetcher** is a mechanism that anticipates future memory accesses and fetches instructions before they are needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access. Because the prefetcher caches upcoming instructions, instruction cycle counts may vary. However, for BoxLambda, deterministic execution is a key goal. BoxLambda requires consistent cycle counts. To achieve this, the standard Ibex prefetcher module was replaced with a custom single-instruction prefetcher.
+An **Instruction Prefetcher** is a mechanism that anticipates future memory accesses and fetches instructions before they are needed. This helps reduce memory latency and improves performance by avoiding stalls caused by slow memory access. Because the prefetcher caches upcoming instructions, instruction cycle counts may vary. However, deterministic execution with consistent cycle counts is a key goal for BoxLambda. To achieve this, the standard Ibex prefetcher module was replaced with a custom single-instruction prefetcher.
 
 The module is implemented as an FSM:
 
@@ -94,7 +94,7 @@ This prefetcher is very simple. It prefetches one 32-bit (i.e., uncompressed) in
 - If a `branch_i` request occurs while an instruction fetch transaction is ongoing, the ongoing transaction is discarded upon completion (not propagated to the IF stage). Then the branch address instruction is fetched.
 - When a `branch_i` request is issued to respond to an IRQ, the `addr_o` being output by the prefetcher at the moment the `branch_i` strobe arrives is the address of the instruction being interrupted. Execution resumes from this address when the IRQ has been serviced.
 
-The single instruction prefetcher supports only uncompressed instructions. That's fine because BoxLambda software builds only use uncompressed instructions. Having a mix of 16-bit compressed and 32-bit uncompressible instructions would again result in less predictable instruction cycle counts, due to unaligned instruction fetches, for instance.
+The single instruction prefetcher supports only uncompressed instructions. That's fine because BoxLambda software builds only use uncompressed instructions. A mix of 16-bit compressed and 32-bit uncompressed instructions would again result in less predictable instruction cycle counts, for instance, due to unaligned instruction fetches.
 
 ## Interrupt Shadow Registers
 

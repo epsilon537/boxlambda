@@ -23,7 +23,7 @@ typedef union {
   struct {
     uint32_t STATE : 3; // Current state.
     uint32_t ERR : 4; // Error state.
-    uint32_t SHUTDOWN : 1; // Set if controller is int shutdown state.
+    uint32_t SHUTDOWN : 1; // Set if controller is in shutdown state.
     uint32_t RM_ID : 16; // ID of Reconfigurable module to which the status applies.
     uint32_t : 8; // reserved
   };
@@ -60,7 +60,7 @@ typedef enum {
     DFX_OTHER_STATUS_ERR_UNKNOWN = 0xf, //Unknown error.
 } dfx_other_status_err_t;
 
-// STATUS.SHUTDOWN - Set if controller is int shutdown state.
+// STATUS.SHUTDOWN - Set if controller is in shutdown state.
 #define DFX_OTHER_STATUS_SHUTDOWN_WIDTH 1
 #define DFX_OTHER_STATUS_SHUTDOWN_LSB 7
 #define DFX_OTHER_STATUS_SHUTDOWN_MASK 0x80

@@ -100,7 +100,7 @@ typedef union {
 typedef enum {
     VERA_SPRITE_ATTR_FLAGS_FLIP_HFLIP = 0x1, //Horizontal Flip
     VERA_SPRITE_ATTR_FLAGS_FLIP_VFLIP = 0x2, //Vertical Flip
-    VERA_SPRITE_ATTR_FLAGS_FLIP_HFLIP_VFLIP = 0x3, //Horizonal and Vertical Flip
+    VERA_SPRITE_ATTR_FLAGS_FLIP_HFLIP_VFLIP = 0x3, //Horizontal and Vertical Flip
 } vera_sprite_attr_flags_flip_t;
 
 // FLAGS.ZDEPTH - Z Depth

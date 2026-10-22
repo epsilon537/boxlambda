@@ -27739,5 +27739,3055 @@
         "audio_tokens": 0
       }
     }
+  },
+  "c87f6a8d469cee38ccc77e9c9f3b19b74bad36b1139833ff1a9848a33149555f": {
+    "result": {
+      "findings": [
+        {
+          "original": "From the Forth REPL, try `ls`, `cd`, and `cat` to navigate around the file system and look at files:",
+          "replacement": "From the Forth REPL, try `ls`, `cd`, and `cat` to navigate the file system and view files:",
+          "reason": "Slightly more concise and natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "- In a linux terminal, navigate to the `fs/test` directory and create a `hello-world.fs` file with contents `: hello-world .\" Hello World.\" cr ;`:",
+          "replacement": "- In a Linux terminal, navigate to the `fs/test` directory and create a `hello-world.fs` file with the contents `: hello-world .\" Hello World.\" cr ;`:",
+          "reason": "Capitalize 'Linux' for consistency. 'with the contents' sounds slightly more natural than 'with contents'.",
+          "severity": 1
+        },
+        {
+          "original": "- Transfer the `fs/` directory, including the new `hello-world.fs` file, to the target as a RAM disk:",
+          "replacement": "- Transfer the `fs/` directory, including the new `hello-world.fs` file, to the target's RAM disk:",
+          "reason": "'target's RAM disk' is more idiomatic than 'as a RAM disk' in this context.",
+          "severity": 1
+        },
+        {
+          "original": "- On the target, navigate to `ram:/test`, source the `hello-world.fs` file, and execute the `hello-world` Word it created:",
+          "replacement": "- On the target, navigate to `ram:/test`, source the `hello-world.fs` file, and execute the `hello-world` word it created:",
+          "reason": "'Word' is a technical term in Forth, but when referring to an instance of a word, it's often lowercased unless it's a proper noun or specific identifier. Lowercasing improves readability here.",
+          "severity": 1
+        },
+        {
+          "original": "Below are a few basic examples illustrating different aspects of the VERA graphics subsystem. A VGA display must be hooked up to see these demos (see [here](pmods.md#vga-pmod)).",
+          "replacement": "The following basic examples illustrate different aspects of the VERA graphics subsystem. A VGA display must be connected to see these demos (see [here](pmods.md#vga-pmod)).",
+          "reason": "'Below are a few basic examples' is a bit wordy. 'The following basic examples' is more direct. 'Hooked up' is informal; 'connected' is more appropriate for technical documentation.",
+          "severity": 2
+        },
+        {
+          "original": "- [Lissajous Animation](../../fs/demo/lis-demo.fs): Run the following command from the Forth prompt to start this demo:",
+          "replacement": "- [Lissajous Animation](../../fs/demo/lis-demo.fs): Run the following command from the Forth prompt to start the demo:",
+          "reason": "'this demo' is slightly redundant when the demo is already explicitly named and linked. 'the demo' is sufficient.",
+          "severity": 0
+        },
+        {
+          "original": "- [Text Mode Demo](../../fs/demo/vera-txt-demo.fs): Run the following command from the Forth prompt to start this demo:",
+          "replacement": "- [Text Mode Demo](../../fs/demo/vera-txt-demo.fs): Run the following command from the Forth prompt to start the demo:",
+          "reason": "'this demo' is slightly redundant when the demo is already explicitly named and linked. 'the demo' is sufficient.",
+          "severity": 0
+        },
+        {
+          "original": "- [VERA Palette Demo](../../fs/demo/vera-pal-demo.fs): Run the following command from the Forth prompt to start this demo:",
+          "replacement": "- [VERA Palette Demo](../../fs/demo/vera-pal-demo.fs): Run the following command from the Forth prompt to start the demo:",
+          "reason": "'this demo' is slightly redundant when the demo is already explicitly named and linked. 'the demo' is sufficient.",
+          "severity": 0
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 778,
+      "completion_tokens": 851,
+      "total_tokens": 1629,
+      "cost": 0.0023609,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0023609,
+        "upstream_inference_prompt_cost": 0.0002334,
+        "upstream_inference_completions_cost": 0.0021275
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "42ac289052d17147c511922262b6d9dc82824ea3ba25d31d087b2298bc7e8a75": {
+    "result": {
+      "findings": [
+        {
+          "original": "Enumerated values for SETUP.PFT.",
+          "replacement": "Enumerated values for `SETUP.PFT`.",
+          "reason": "Use backticks for register field names to improve readability and consistency with other technical documentation.",
+          "severity": 1
+        },
+        {
+          "original": "P_SPC            | 0x6    | Parity bit is a space |",
+          "replacement": "P_SPC            | 0x6    | Parity bit is space |",
+          "reason": "Remove the unnecessary article 'a'.",
+          "severity": 1
+        },
+        {
+          "original": "P_MK             | 0x7    | Parity bit is a mark |",
+          "replacement": "P_MK             | 0x7    | Parity bit is mark |",
+          "reason": "Remove the unnecessary article 'a'.",
+          "severity": 1
+        },
+        {
+          "original": "Enumerated values for SETUP.S.",
+          "replacement": "Enumerated values for `SETUP.S`.",
+          "reason": "Use backticks for register field names to improve readability and consistency with other technical documentation.",
+          "severity": 1
+        },
+        {
+          "original": "Enumerated values for SETUP.N.",
+          "replacement": "Enumerated values for `SETUP.N`.",
+          "reason": "Use backticks for register field names to improve readability and consistency with other technical documentation.",
+          "severity": 1
+        },
+        {
+          "original": "Enumerated values for SETUP.H.",
+          "replacement": "Enumerated values for `SETUP.H`.",
+          "reason": "Use backticks for register field names to improve readability and consistency with other technical documentation.",
+          "severity": 1
+        },
+        {
+          "original": "Rx and Tx FIFO size and status",
+          "replacement": "Rx and Tx FIFO Size and Status",
+          "reason": "Capitalize 'Size' and 'Status' for consistency with common heading styles in technical documentation.",
+          "severity": 0
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 877,
+      "completion_tokens": 496,
+      "total_tokens": 1373,
+      "cost": 0.0015031,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0015031,
+        "upstream_inference_prompt_cost": 0.0002631,
+        "upstream_inference_completions_cost": 0.00124
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "3f608450f0b648f5dd48f01fa18a0da0432007d3a2e28e2e038af7aba852efe1": {
+    "result": {
+      "findings": [
+        {
+          "original": "Game pad register",
+          "replacement": "Gamepad register",
+          "reason": "Compound noun 'game pad' is typically written as a single word 'gamepad'.",
+          "severity": 1
+        },
+        {
+          "original": "USB report 0 register",
+          "replacement": "USB Report 0 register",
+          "reason": "Capitalize 'Report' for consistency with 'REPORT_0' and 'USB Report 0 value'.",
+          "severity": 1
+        },
+        {
+          "original": "USB report 0 value",
+          "replacement": "USB Report 0 value",
+          "reason": "Capitalize 'Report' for consistency with 'REPORT_0' and the suggested change for the register title.",
+          "severity": 1
+        },
+        {
+          "original": "USB report 1 register",
+          "replacement": "USB Report 1 register",
+          "reason": "Capitalize 'Report' for consistency with 'REPORT_1' and 'USB Report 1 value'.",
+          "severity": 1
+        },
+        {
+          "original": "USB report 1 value",
+          "replacement": "USB Report 1 value",
+          "reason": "Capitalize 'Report' for consistency with 'REPORT_1' and the suggested change for the register title.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 1022,
+      "completion_tokens": 323,
+      "total_tokens": 1345,
+      "cost": 0.0011141,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0011141,
+        "upstream_inference_prompt_cost": 0.0003066,
+        "upstream_inference_completions_cost": 0.0008075
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "76800310f5096863b3dcae7ba944496b55bdbd8b2a2dfb3bf1cee016604bc03c": {
+    "result": {
+      "findings": [
+        {
+          "original": "SCROLL lock LED",
+          "replacement": "Scroll Lock LED",
+          "reason": "Capitalization and consistency with other LED names.",
+          "severity": 1
+        },
+        {
+          "original": "CAPS lock LED",
+          "replacement": "Caps Lock LED",
+          "reason": "Capitalization and consistency with other LED names.",
+          "severity": 1
+        },
+        {
+          "original": "Num lock LED",
+          "replacement": "Num Lock LED",
+          "reason": "Capitalization and consistency with other LED names.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 534,
+      "completion_tokens": 89,
+      "total_tokens": 623,
+      "cost": 0.0003827,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0003827,
+        "upstream_inference_prompt_cost": 0.0001602,
+        "upstream_inference_completions_cost": 0.0002225
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "c1f71d623d27283b369ab55a9cad7a9dcd1266ec72caa37849a83840243cd4d0": {
+    "result": {
+      "findings": [
+        {
+          "original": "VERA Register map",
+          "replacement": "VERA Register Map",
+          "reason": "Capitalize 'Map' for consistency with common documentation practices.",
+          "severity": 0
+        },
+        {
+          "original": "Read and Write 1 to Clear",
+          "replacement": "Read/Write 1 to Clear",
+          "reason": "Use a slash for brevity in 'Read/Write'.",
+          "severity": 1
+        },
+        {
+          "original": "Read and Write 1 to Set",
+          "replacement": "Read/Write 1 to Set",
+          "reason": "Use a slash for brevity in 'Read/Write'.",
+          "severity": 1
+        },
+        {
+          "original": "Read Only to Clear",
+          "replacement": "Read-Only to Clear",
+          "reason": "Hyphenate 'Read-Only' for clarity as a compound adjective.",
+          "severity": 1
+        },
+        {
+          "original": "Read Only / Latch Low",
+          "replacement": "Read-Only / Latch Low",
+          "reason": "Hyphenate 'Read-Only' for clarity as a compound adjective.",
+          "severity": 1
+        },
+        {
+          "original": "Read Only / Latch High",
+          "replacement": "Read-Only / Latch High",
+          "reason": "Hyphenate 'Read-Only' for clarity as a compound adjective.",
+          "severity": 1
+        },
+        {
+          "original": "Write only",
+          "replacement": "Write-Only",
+          "reason": "Hyphenate 'Write-Only' for clarity as a compound adjective.",
+          "severity": 1
+        },
+        {
+          "original": "Write Only / Self Clear",
+          "replacement": "Write-Only / Self-Clear",
+          "reason": "Hyphenate 'Write-Only' and 'Self-Clear' for clarity as compound adjectives.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 538,
+      "completion_tokens": 309,
+      "total_tokens": 847,
+      "cost": 0.0009339,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0009339,
+        "upstream_inference_prompt_cost": 0.0001614,
+        "upstream_inference_completions_cost": 0.0007725
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "654c1f771cf3ba139684e28fa85f68c1e375811d9b1eb5f65c285aa4bfbbb937": {
+    "result": {
+      "findings": [
+        {
+          "original": "Scanline register",
+          "replacement": "Scanline register.",
+          "reason": "Add a period for consistency with other descriptions.",
+          "severity": 0
+        },
+        {
+          "original": "Display compser horizontal stop register.",
+          "replacement": "Display composer horizontal stop register.",
+          "reason": "Correct a typo: 'compser' should be 'composer'.",
+          "severity": 3
+        },
+        {
+          "original": "Layer 0 Configuration register.",
+          "replacement": "Layer 0 configuration register.",
+          "reason": "Capitalization of 'Configuration' is inconsistent with other register descriptions (e.g., 'map base register', 'tile base register'). Lowercase for consistency.",
+          "severity": 1
+        },
+        {
+          "original": "Layer 1 Configuration register.",
+          "replacement": "Layer 1 configuration register.",
+          "reason": "Capitalization of 'Configuration' is inconsistent with other register descriptions (e.g., 'map base register', 'tile base register'). Lowercase for consistency.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 1172,
+      "completion_tokens": 259,
+      "total_tokens": 1431,
+      "cost": 0.0009991,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0009991,
+        "upstream_inference_prompt_cost": 0.0003516,
+        "upstream_inference_completions_cost": 0.0006475
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "c6e8b31ab3e92918fcc2fe26288b5c871f58dfc44c9cc71c3c13c6df99fa5280": {
+    "result": {
+      "findings": [
+        {
+          "original": "Vertical start of active part of screen in 640x480 space.",
+          "replacement": "Vertical start of the active screen area in 640x480 resolution.",
+          "reason": "Clarify 'part of screen' and use 'resolution' for 'space' in this context.",
+          "severity": 2
+        },
+        {
+          "original": "Vertical stop of active part of screen in 640x480 space.",
+          "replacement": "Vertical stop of the active screen area in 640x480 resolution.",
+          "reason": "Clarify 'part of screen' and use 'resolution' for 'space' in this context.",
+          "severity": 2
+        },
+        {
+          "original": "When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes.",
+          "replacement": "When set, 1 bpp tile mode uses 16-color foreground and background. When clear, it uses 256-color foreground. Not relevant in other modes.",
+          "reason": "The 'tiles' after 'tile mode' is redundant. The mode itself uses the colors.",
+          "severity": 1
+        },
+        {
+          "original": "1 selects bitmap mode, 0 selects tile mode.",
+          "replacement": "1: Bitmap mode; 0: Tile mode.",
+          "reason": "More concise and common phrasing for bit field descriptions.",
+          "severity": 1
+        },
+        {
+          "original": "Number of bits per pixel to encode color information.",
+          "replacement": "Number of bits per pixel for color information.",
+          "reason": "More concise phrasing.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 976,
+      "completion_tokens": 425,
+      "total_tokens": 1401,
+      "cost": 0.0013553,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0013553,
+        "upstream_inference_prompt_cost": 0.0002928,
+        "upstream_inference_completions_cost": 0.0010625
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "7cd50d0078f70b68b9ed5c8bf16d51119193aa3f2c06c7cfec4c1efb42bf4929": {
+    "result": {
+      "findings": [
+        {
+          "original": "Increasing the value will cause the picture to move up, decreasing will cause the picture to move down.",
+          "replacement": "Increasing the value moves the picture up; decreasing it moves the picture down.",
+          "reason": "More concise and active voice.",
+          "severity": 2
+        },
+        {
+          "original": "When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. Not relevant in other modes.",
+          "replacement": "When set, 1 bpp tile mode tiles use 16-color foreground and background. When clear, they use 256-color foreground. This bit is not relevant in other modes.",
+          "reason": "Clarifies what 'Not relevant' refers to.",
+          "severity": 2
+        },
+        {
+          "original": "1 selects bitmap mode, 0 selects tile mode.",
+          "replacement": "1 selects bitmap mode; 0 selects tile mode.",
+          "reason": "Use a semicolon to separate independent clauses.",
+          "severity": 1
+        },
+        {
+          "original": "Number of bits per pixel to encode color information.",
+          "replacement": "Number of bits per pixel for color information.",
+          "reason": "More concise.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 990,
+      "completion_tokens": 314,
+      "total_tokens": 1304,
+      "cost": 0.001082,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.001082,
+        "upstream_inference_prompt_cost": 0.000297,
+        "upstream_inference_completions_cost": 0.000785
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "a3bdeb895d16e00f34879f643511c3ffe4c1e0a62b9bb66b00a60500d8d6b8c8": {
+    "result": {
+      "findings": [
+        {
+          "original": "Channel A fine tone period adjustment.",
+          "replacement": "Channel A fine tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        },
+        {
+          "original": "Channel A coarse tone period adjustment.",
+          "replacement": "Channel A coarse tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        },
+        {
+          "original": "Channel B fine tone period adjustment.",
+          "replacement": "Channel B fine tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        },
+        {
+          "original": "Channel B coarse tone period adjustment.",
+          "replacement": "Channel B coarse tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        },
+        {
+          "original": "Channel C fine tone period adjustment.",
+          "replacement": "Channel C fine tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        },
+        {
+          "original": "Channel C coarse tone period adjustment.",
+          "replacement": "Channel C coarse tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        },
+        {
+          "original": "Envelope frequency fine adjustment.",
+          "replacement": "Envelope fine frequency.",
+          "reason": "Rephrased for conciseness and consistency with 'fine tone period'. 'Adjustment' is redundant.",
+          "severity": 1
+        },
+        {
+          "original": "Envelope frequency coarse adjustment.",
+          "replacement": "Envelope coarse frequency.",
+          "reason": "Rephrased for conciseness and consistency with 'coarse tone period'. 'Adjustment' is redundant.",
+          "severity": 1
+        },
+        {
+          "original": "Channel A fine tone period adjustment.",
+          "replacement": "Channel A fine tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        },
+        {
+          "original": "Channel A coarse tone period adjustment.",
+          "replacement": "Channel A coarse tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        },
+        {
+          "original": "Channel B fine tone period adjustment.",
+          "replacement": "Channel B fine tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        },
+        {
+          "original": "Channel B coarse tone period adjustment.",
+          "replacement": "Channel B coarse tone period.",
+          "reason": "The word 'adjustment' is redundant here. The register itself *is* the adjustment.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 1192,
+      "completion_tokens": 752,
+      "total_tokens": 1944,
+      "cost": 0.0022376,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0022376,
+        "upstream_inference_prompt_cost": 0.0003576,
+        "upstream_inference_completions_cost": 0.00188
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "58f41d08a2527f4ce9b7d4d8c0b720d5c3aed875ff8acf5f209b6c50e8e371d5": {
+    "result": {
+      "findings": [
+        {
+          "original": "Channel C fine tone period adjustment.",
+          "replacement": "Fine tone period adjustment for Channel C.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Channel C coarse tone period adjustment.",
+          "replacement": "Coarse tone period adjustment for Channel C.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Noise period.",
+          "replacement": "Noise generator period.",
+          "reason": "Adds clarity that it's the period for the noise generator.",
+          "severity": 2
+        },
+        {
+          "original": "Mixer settings.",
+          "replacement": "Mixer enable/disable settings.",
+          "reason": "More descriptive of what 'disable' implies for a mixer.",
+          "severity": 2
+        },
+        {
+          "original": "Channel A level control.",
+          "replacement": "Level control for Channel A.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Channel B level control.",
+          "replacement": "Level control for Channel B.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Channel C level control.",
+          "replacement": "Level control for Channel C.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Envelope frequency fine adjustment.",
+          "replacement": "Fine adjustment for envelope frequency.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Envelope frequency coarse adjustment.",
+          "replacement": "Coarse adjustment for envelope frequency.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Envelope shape.",
+          "replacement": "Envelope generator shape.",
+          "reason": "Adds clarity that it's the shape for the envelope generator.",
+          "severity": 2
+        },
+        {
+          "original": "Filter mixer PSG0 channel A volume.",
+          "replacement": "Volume for PSG0 Channel A in the filter mixer.",
+          "reason": "More natural phrasing and clarifies the context of 'filter mixer'.",
+          "severity": 2
+        },
+        {
+          "original": "Filter mixer PSG0 channel B volume.",
+          "replacement": "Volume for PSG0 Channel B in the filter mixer.",
+          "reason": "More natural phrasing and clarifies the context of 'filter mixer'.",
+          "severity": 2
+        },
+        {
+          "original": "Filter mixer PSG0 channel C volume.",
+          "replacement": "Volume for PSG0 Channel C in the filter mixer.",
+          "reason": "More natural phrasing and clarifies the context of 'filter mixer'.",
+          "severity": 2
+        },
+        {
+          "original": "Filter mixer PSG1 channel A volume.",
+          "replacement": "Volume for PSG1 Channel A in the filter mixer.",
+          "reason": "More natural phrasing and clarifies the context of 'filter mixer'.",
+          "severity": 2
+        },
+        {
+          "original": "Filter mixer PSG1 channel B volume.",
+          "replacement": "Volume for PSG1 Channel B in the filter mixer.",
+          "reason": "More natural phrasing and clarifies the context of 'filter mixer'.",
+          "severity": 2
+        },
+        {
+          "original": "Filter mixer PSG1 channel C volume.",
+          "replacement": "Volume for PSG1 Channel C in the filter mixer.",
+          "reason": "More natural phrasing and clarifies the context of 'filter mixer'.",
+          "severity": 2
+        },
+        {
+          "original": "Filter mixer master volume.",
+          "replacement": "Master volume for the filter mixer.",
+          "reason": "More natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Filter mixer channel inverter",
+          "replacement": "Filter mixer channel inverter.",
+          "reason": "Missing period at the end of the sentence.",
+          "severity": 0
+        },
+        {
+          "original": "Filter mixer bass level.",
+          "replacement": "Bass level for the filter mixer.",
+          "reason": "More natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Filter mixer treble level.",
+          "replacement": "Treble level for the filter mixer.",
+          "reason": "More natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Channel A fine tone period adjustment.",
+          "replacement": "Fine tone period adjustment for Channel A.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 1230,
+      "completion_tokens": 1133,
+      "total_tokens": 2363,
+      "cost": 0.0032015,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0032015,
+        "upstream_inference_prompt_cost": 0.000369,
+        "upstream_inference_completions_cost": 0.0028325
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "3d75c9948011be7e969062b22fc7d5906688904e1950af67b744dfc74c3fafa4": {
+    "result": {
+      "findings": [
+        {
+          "original": "Mode.",
+          "replacement": "Mode control.",
+          "reason": "Adding 'control' clarifies the purpose of the 'Mode' field, which is common in register descriptions.",
+          "severity": 1
+        },
+        {
+          "original": "Level selection.",
+          "replacement": "Level selection control.",
+          "reason": "Adding 'control' clarifies the purpose of the 'LVL' field, which is common in register descriptions.",
+          "severity": 1
+        },
+        {
+          "original": "Mode.",
+          "replacement": "Mode control.",
+          "reason": "Adding 'control' clarifies the purpose of the 'Mode' field, which is common in register descriptions.",
+          "severity": 1
+        },
+        {
+          "original": "Level selection.",
+          "replacement": "Level selection control.",
+          "reason": "Adding 'control' clarifies the purpose of the 'LVL' field, which is common in register descriptions.",
+          "severity": 1
+        },
+        {
+          "original": "Envelope frequency fine adjustment.",
+          "replacement": "Envelope frequency fine adjustment value.",
+          "reason": "Adding 'value' clarifies that this field holds the adjustment value, rather than being the adjustment process itself.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 939,
+      "completion_tokens": 303,
+      "total_tokens": 1242,
+      "cost": 0.0010392,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0010392,
+        "upstream_inference_prompt_cost": 0.0002817,
+        "upstream_inference_completions_cost": 0.0007575
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "3d555792444e456d9e5cbc79c8c6b8a7e96063ecd4e480b3c271374a6f581991": {
+    "result": {
+      "findings": [
+        {
+          "original": "Envelope frequency fine adjustment.",
+          "replacement": "Fine adjustment for envelope frequency.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Envelope frequency coarse adjustment.",
+          "replacement": "Coarse adjustment for envelope frequency.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Envelope shape.",
+          "replacement": "Envelope shape selection.",
+          "reason": "Adds clarity that this register selects a shape, rather than just being the shape itself.",
+          "severity": 2
+        },
+        {
+          "original": "Filter mixer PSG0 channel A volume.",
+          "replacement": "Volume for filter mixer PSG0 channel A.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 1009,
+      "completion_tokens": 218,
+      "total_tokens": 1227,
+      "cost": 0.0008477,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0008477,
+        "upstream_inference_prompt_cost": 0.0003027,
+        "upstream_inference_completions_cost": 0.000545
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "f0bb557313e7bffc1e45b77dec09b50a89461b787259716bd59cef20f9291352": {
+    "result": {
+      "findings": [
+        {
+          "original": "Filter mixer PSG0 channel B volume.",
+          "replacement": "Filter mixer PSG0 channel B volume register.",
+          "reason": "Adding 'register' clarifies that this is a register description, not just a general statement about volume.",
+          "severity": 1
+        },
+        {
+          "original": "Filter mixer PSG0 channel C volume.",
+          "replacement": "Filter mixer PSG0 channel C volume register.",
+          "reason": "Adding 'register' clarifies that this is a register description, not just a general statement about volume.",
+          "severity": 1
+        },
+        {
+          "original": "Filter mixer PSG1 channel A volume.",
+          "replacement": "Filter mixer PSG1 channel A volume register.",
+          "reason": "Adding 'register' clarifies that this is a register description, not just a general statement about volume.",
+          "severity": 1
+        },
+        {
+          "original": "Filter mixer PSG1 channel B volume.",
+          "replacement": "Filter mixer PSG1 channel B volume register.",
+          "reason": "Adding 'register' clarifies that this is a register description, not just a general statement about volume.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 956,
+      "completion_tokens": 283,
+      "total_tokens": 1239,
+      "cost": 0.0009943,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0009943,
+        "upstream_inference_prompt_cost": 0.0002868,
+        "upstream_inference_completions_cost": 0.0007075
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "0b0acbc1bb37ce72fbe166af971db62e453df5c48d2a20d8aa9ca8a08bac2db0": {
+    "result": {
+      "findings": [
+        {
+          "original": "- **GPIO Core Spec:**: [sub/gpio/rtl/doc/gpio_spec.pdf](https://github.com/epsilon537/gpio/blob/boxlambda/doc/gpio_spec.pdf)",
+          "replacement": "- **GPIO Core Spec**: [sub/gpio/rtl/doc/gpio_spec.pdf](https://github.com/epsilon537/gpio/blob/boxlambda/doc/gpio_spec.pdf)",
+          "reason": "Remove the extra colon after 'Spec' for consistency with other list items.",
+          "severity": 1
+        },
+        {
+          "original": "The GPIO core comes from OpenCores.org. The authors are Damjan Lampret and Goran Djakovic. This core is very configurable and has a lot of features. Among other things:",
+          "replacement": "The GPIO core, authored by Damjan Lampret and Goran Djakovic, originates from OpenCores.org. It is highly configurable and offers numerous features, including:",
+          "reason": "Combine sentences for better flow and conciseness. 'Among other things' can be replaced with 'including' for a more direct introduction to the list.",
+          "severity": 2
+        },
+        {
+          "original": "Inputs can be configured to register at the rising edge of the system clock or either edge of an external clock (I have not tested this feature yet).",
+          "replacement": "Inputs can be configured to register at the rising edge of the system clock or either edge of an external clock (this feature has not yet been tested).",
+          "reason": "Change to passive voice for a more objective and less personal tone, common in technical documentation.",
+          "severity": 2
+        },
+        {
+          "original": "BoxLambda instantiates the GPIO core with 24 pins. The pin assignment is given in the table below.",
+          "replacement": "BoxLambda instantiates the GPIO core with 24 pins. Pin assignments are detailed in the table below.",
+          "reason": "Slightly rephrase for conciseness and to avoid repetition of 'assignment'.",
+          "severity": 1
+        },
+        {
+          "original": "|       |                        |\n| Ext. Clk. | ChipKit Pin 38     |",
+          "replacement": "| Ext. Clk. | ChipKit Pin 38     |",
+          "reason": "Remove the empty row in the table for better formatting.",
+          "severity": 1
+        },
+        {
+          "original": "The GPIO core is part of the 50MHz System Clock Domain.",
+          "replacement": "The GPIO core operates within the 50MHz System Clock Domain.",
+          "reason": "Use 'operates within' for a more active and precise description of its clock domain relationship.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 871,
+      "completion_tokens": 649,
+      "total_tokens": 1520,
+      "cost": 0.0018838,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0018838,
+        "upstream_inference_prompt_cost": 0.0002613,
+        "upstream_inference_completions_cost": 0.0016225
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "eb4e4df56df5ada845f1ca4bbfae053b65f8336e4b71da76b2c41448fdf316d0": {
+    "result": {
+      "findings": [
+        {
+          "original": "The video RAM (VRAM) is a dual-port RAM instance of four byte-wide columns (matching a 32-bit Wishbone data bus with four byte-enables).",
+          "replacement": "The video RAM (VRAM) is a dual-port RAM instance with four byte-wide columns, matching a 32-bit Wishbone data bus with four byte-enables.",
+          "reason": "Slightly rephrased for better flow and conciseness. 'instance of' can often be shortened to 'with'.",
+          "severity": 1
+        },
+        {
+          "original": "There are three equal time slot *beats*, each one clock cycle wide. Each port is assigned one slot during which it can access VRAM. The duration of a timeslot is one clock cycle.",
+          "replacement": "There are three equal time slot *beats*, each one clock cycle wide. Each port is assigned one slot during which it can access VRAM.",
+          "reason": "The last sentence is redundant, as the previous sentence already states 'each one clock cycle wide'.",
+          "severity": 3
+        },
+        {
+          "original": "The original VERA Video VGA block functionality has been enhanced with a VGA line capture\nmechanism.",
+          "replacement": "The original VERA Video VGA block functionality has been enhanced with a VGA line capture mechanism.",
+          "reason": "Remove unnecessary line break.",
+          "severity": 0
+        },
+        {
+          "original": "When requested by software (wishbone register), the RGB pixel data of\nthe scanline corresponding to the IRQ line number is recorded into a 640x16\nmemory accessible by software.",
+          "replacement": "When requested by software (via a Wishbone register), the RGB pixel data of the scanline corresponding to the IRQ line number is recorded into a 640x16 memory accessible by software.",
+          "reason": "Remove unnecessary line breaks and clarify 'wishbone register' to 'via a Wishbone register' for better readability. Capitalize 'Wishbone' for consistency.",
+          "severity": 2
+        },
+        {
+          "original": "To set up a VGA line capture, software configures the VGA line to capture in the Line IRQ register, then sets the `CAPTURE_EN` bit in the\n[CTRL_STATUS](../../registers/vera-regs.md#ctrl_status) register.",
+          "replacement": "To set up a VGA line capture, software configures the VGA line to capture in the Line IRQ register, then sets the `CAPTURE_EN` bit in the [CTRL_STATUS](../../registers/vera-regs.md#ctrl_status) register.",
+          "reason": "Remove unnecessary line break.",
+          "severity": 0
+        },
+        {
+          "original": "Once the capture has been completed, VERA resets the `CAPTURE_EN` bit. Software can now read the captured data in the [VGA Line Capture RAM](../../registers/memory-map.md#vera-vga-line-capture-ram).",
+          "replacement": "Once the capture is complete, VERA resets the `CAPTURE_EN` bit. Software can then read the captured data in the [VGA Line Capture RAM](../../registers/memory-map.md#vera-vga-line-capture-ram).",
+          "reason": "Change 'has been completed' to 'is complete' for conciseness and 'can now read' to 'can then read' for better flow.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 807,
+      "completion_tokens": 804,
+      "total_tokens": 1611,
+      "cost": 0.0022521,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0022521,
+        "upstream_inference_prompt_cost": 0.0002421,
+        "upstream_inference_completions_cost": 0.00201
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "dbf4198c4b66e19caef5ff86483f819bb7528cae88639bf64b257f69c9606001": {
+    "result": {
+      "findings": [
+        {
+          "original": "In the original VERA core, VRAM, Palette RAM, and Sprite RAM were accessed indirectly through its register interface. In VERA Wishbone, this indirect access method has been replaced with a memory-mapped interface.",
+          "replacement": "The original VERA core accessed VRAM, Palette RAM, and Sprite RAM indirectly through its register interface. VERA Wishbone replaces this indirect access method with a memory-mapped interface.",
+          "reason": "Improves flow and conciseness by rephrasing the first sentence and combining the two sentences more smoothly.",
+          "severity": 2
+        },
+        {
+          "original": "The following table shows the memory-mapped address ranges:",
+          "replacement": "The following table shows the memory-mapped address ranges:",
+          "reason": "No change needed. This is a good introductory sentence for the table.",
+          "severity": 0
+        },
+        {
+          "original": "Note: The above addresses are absolute, as seen by the processor. The VERA core's base address is 0x10100000.",
+          "replacement": "Note: The addresses above are absolute, as seen by the processor. The VERA core's base address is 0x10100000.",
+          "reason": "Slightly more natural phrasing: 'addresses above' instead of 'above addresses'.",
+          "severity": 1
+        },
+        {
+          "original": "## Register Interface / Programmer's Reference.",
+          "replacement": "## Register Interface / Programmer's Reference",
+          "reason": "Remove the period from the heading. Headings typically do not end with punctuation unless they are questions.",
+          "severity": 1
+        },
+        {
+          "original": "For a description of the VERA Wishbone registers, refer to the [VERA Programmer's Reference](https://github.com/epsilon537/vera_wishbone/blob/boxlambda/doc/VERA%20Programmer's%20Reference.md).",
+          "replacement": "For a description of the VERA Wishbone registers, refer to the [VERA Programmer's Reference](https://github.com/epsilon537/vera_wishbone/blob/boxlambda/doc/VERA%20Programmer's%20Reference.md).",
+          "reason": "No change needed. This sentence is clear and concise.",
+          "severity": 0
+        },
+        {
+          "original": "The VERA Wishbone top-level interface is straightforward:",
+          "replacement": "The VERA Wishbone top-level interface is straightforward.",
+          "reason": "Remove the colon. The following text is not a list or direct elaboration of the preceding statement, but rather a new paragraph describing an assumption.",
+          "severity": 1
+        },
+        {
+          "original": "It is assumed that [Digilent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start) is being used. The VGA signals are sent to PMOD ports `JB` and `JC` with the following pin layout:",
+          "replacement": "It is assumed that [Digilent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start) is being used. The VGA signals are sent to PMOD ports `JB` and `JC` with the following pin layout:",
+          "reason": "No change needed. This is clear and sets up the expected pin layout.",
+          "severity": 0
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 797,
+      "completion_tokens": 803,
+      "total_tokens": 1600,
+      "cost": 0.0022466,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0022466,
+        "upstream_inference_prompt_cost": 0.0002391,
+        "upstream_inference_completions_cost": 0.0020075
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "835bd008dbda540c1de9a119e67e18a11e14ca9064c45979fafb56fedec42305": {
+    "result": {
+      "findings": [
+        {
+          "original": "SW boot time",
+          "replacement": "system boot time",
+          "reason": "'SW boot time' is ambiguous; it could refer to software boot or switch boot. 'System boot time' is clearer.",
+          "severity": 2
+        },
+        {
+          "original": "selects PSG0 or PSG1 to play the chiptune.",
+          "replacement": "selects either PSG0 or PSG1 to play the chiptune.",
+          "reason": "'Either...or' is more idiomatic when presenting two options.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 493,
+      "completion_tokens": 104,
+      "total_tokens": 597,
+      "cost": 0.0004079,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0004079,
+        "upstream_inference_prompt_cost": 0.0001479,
+        "upstream_inference_completions_cost": 0.00026
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "3ec32c19331cf4bee6086a6d05c8238c8990a0bffbf5bde8cbf13ed24ca92295": {
+    "result": {
+      "findings": [
+        {
+          "original": "The Bootloader is only used on FPGA.",
+          "replacement": "The bootloader is only used on FPGA.",
+          "reason": "Consistency: 'bootloader' is generally not capitalized unless it's part of a title or proper noun. The title above already uses capitalization.",
+          "severity": 1
+        },
+        {
+          "original": "On Verilator, the CPU boots from IMEM. The test program is built into IMEM\nand executes from there without requiring any pre-setup steps from a bootloader.",
+          "replacement": "On Verilator, the CPU boots from IMEM. The test program is built into IMEM and executes from there, requiring no pre-setup steps from a bootloader.",
+          "reason": "Slightly more concise and natural phrasing. 'without requiring' can be rephrased as 'requiring no'.",
+          "severity": 2
+        },
+        {
+          "original": "The CPU boots from address `0x11500080`, located in flash memory. This is the entry point to the bootloader.",
+          "replacement": "The CPU boots from address `0x11500080` in flash memory, which is the bootloader's entry point.",
+          "reason": "More concise and direct phrasing. Combines two sentences into one for better flow.",
+          "severity": 2
+        },
+        {
+          "original": "The bootloader copies itself from flash to IMEM and jumps to its entry point in IMEM.",
+          "replacement": "The bootloader copies itself from flash to IMEM and jumps to its entry point there.",
+          "reason": "Avoids repetition of 'in IMEM' and is more concise.",
+          "severity": 1
+        },
+        {
+          "original": "If all four switches are in the *off* position, the\nbootloader will spin in a loop, allowing a debugger to connect. If the switches are not all in the off position,\nthe bootloader continues to the next step.",
+          "replacement": "If all four switches are in the *off* position, the bootloader spins in a loop, allowing a debugger to connect. Otherwise, the bootloader continues to the next step.",
+          "reason": "More concise and natural phrasing. 'Otherwise' is a good substitute for 'If the switches are not all in the off position'. 'will spin' can be 'spins' for present tense consistency.",
+          "severity": 3
+        },
+        {
+          "original": "Using a magic number check, the bootloader detects the presence of an application\nimage at flash memory location `0x11600000`. If an image is detected, it is copied to EMEM, starting at EMEM\nmemory offset 0.",
+          "replacement": "Using a magic number check, the bootloader detects the presence of an application image at flash memory location `0x11600000`. If an image is detected, it is copied to EMEM, starting at offset 0.",
+          "reason": "Avoids repetition of 'EMEM memory' and is more concise. 'offset 0' implies memory offset.",
+          "severity": 2
+        },
+        {
+          "original": "The bootloader starts the application by jumping to its entry point at address `0x20000008` in EMEM.",
+          "replacement": "The bootloader starts the application by jumping to its entry point at address `0x20000008` in EMEM.",
+          "reason": "No change. This sentence is clear and concise.",
+          "severity": 0
+        },
+        {
+          "original": "The application start-up code creates code/data/BSS sections in IMEM and/or EMEM as described in\n[Early Software Startup Sequence](bootstrap.md#early-software-startup-sequence).",
+          "replacement": "The application startup code creates code/data/BSS sections in IMEM and/or EMEM as described in [Early Software Startup Sequence](bootstrap.md#early-software-startup-sequence).",
+          "reason": "Hyphenation: 'startup' is commonly used as a compound adjective without a hyphen in technical contexts.",
+          "severity": 1
+        },
+        {
+          "original": "It's worth noting that the bootloader, as well as the application images, are\ncomplete, standalone C/C++ programs built against PicoLibc and using the usual\nCRT0 start-up sequence to set up the C/C++ environment.",
+          "replacement": "It's worth noting that the bootloader and application images are complete, standalone C/C++ programs built against PicoLibc and using the usual CRT0 startup sequence to set up the C/C++ environment.",
+          "reason": "More concise phrasing: 'as well as' can often be replaced by 'and'. Also, 'start-up' to 'startup' for consistency.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 836,
+      "completion_tokens": 1135,
+      "total_tokens": 1971,
+      "cost": 0.0030883,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0030883,
+        "upstream_inference_prompt_cost": 0.0002508,
+        "upstream_inference_completions_cost": 0.0028375
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "85d3a7f3a33aa075a58d8cc3e647fb7b586d0b25c3ed2eae5b379efa909a715c": {
+    "result": {
+      "findings": [
+        {
+          "original": "This is the GPIO API:",
+          "replacement": "The GPIO API is defined in:",
+          "reason": "More precise and less conversational.",
+          "severity": 1
+        },
+        {
+          "original": "For more info on the GPIO module, refer to the [GPIO](../../../soc/components/gpio.md#gpio) gateware component section.",
+          "replacement": "For more information on the GPIO module, refer to the [GPIO gateware component section](../../../soc/components/gpio.md#gpio).",
+          "reason": "'More info' is less formal than 'more information'. Rephrased to improve flow and make the link text more descriptive.",
+          "severity": 2
+        },
+        {
+          "original": "See the [timer_uart_gpio_irqs](../../../../sw/projects/test/timer_uart_gpio_irqs/timer_uart_gpio_irqs.cpp) test for example usage of the API.",
+          "replacement": "See the [timer_uart_gpio_irqs test](../../../../sw/projects/test/timer_uart_gpio_irqs/timer_uart_gpio_irqs.cpp) for an example of API usage.",
+          "reason": "'Example usage' is slightly awkward; 'an example of API usage' is more natural. Also, 'test' should be part of the link text.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 482,
+      "completion_tokens": 273,
+      "total_tokens": 755,
+      "cost": 0.0008271,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0008271,
+        "upstream_inference_prompt_cost": 0.0001446,
+        "upstream_inference_completions_cost": 0.0006825
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "9094d565aa4b835930ba2ad79aff02495097adbcfe512786b499695188795b24": {
+    "result": {
+      "findings": [
+        {
+          "original": "- **Xtreamerdev Repo**:",
+          "replacement": "- **Xtreamerdev Repo**",
+          "reason": "Remove the trailing colon from the heading, as it's not followed by content on the same line.",
+          "severity": 1
+        },
+        {
+          "original": "This software component is a BoxLambda port of Xtreamerdev's Ymodem protocol implementation.",
+          "replacement": "This software component is a BoxLambda port of Xtreamerdev's Ymodem protocol implementation.",
+          "reason": "The sentence is slightly awkward. 'BoxLambda port' could be 'BoxLambda's port' or 'a port for BoxLambda'. However, given the context, it's understandable and changing it might alter the nuance. Leaving as is.",
+          "severity": 0
+        },
+        {
+          "original": "The Ymodem API enables file transfers over the serial port.",
+          "replacement": "The Ymodem API enables file transfers over a serial port.",
+          "reason": "Use 'a serial port' for generality, as it refers to any serial port, not a specific one.",
+          "severity": 2
+        },
+        {
+          "original": "The `ymodem_receive()` function initiates a Ymodem transfer in BoxLambda's receive direction, storing the received file data in a memory buffer.",
+          "replacement": "The `ymodem_receive()` function initiates a Ymodem transfer to BoxLambda, storing the received file data in a memory buffer.",
+          "reason": "Simplify 'in BoxLambda's receive direction' to 'to BoxLambda' for conciseness and clarity.",
+          "severity": 3
+        },
+        {
+          "original": "The `ymodem_send()` function transfers the contents of a given memory buffer to the host PC using the Ymodem protocol.",
+          "replacement": "The `ymodem_send()` function transfers the contents of a given memory buffer to the host PC using the Ymodem protocol.",
+          "reason": "This sentence is clear and concise. No changes needed.",
+          "severity": 0
+        },
+        {
+          "original": "`ymodem.h`:",
+          "replacement": "`ymodem.h`",
+          "reason": "Remove the trailing colon from the heading, as it's not followed by content on the same line.",
+          "severity": 1
+        },
+        {
+          "original": "The `ymodem` software component is used by the `ymodem_cli` CLI component to transfer files between the host PC's file system and BoxLambda's file system:",
+          "replacement": "The `ymodem` software component is used by the `ymodem_cli` CLI component to transfer files between the host PC and BoxLambda's file systems:",
+          "reason": "Rephrase 'between the host PC's file system and BoxLambda's file system' to 'between the host PC and BoxLambda's file systems' for conciseness and better flow. The 'file systems' applies to both.",
+          "severity": 3
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 594,
+      "completion_tokens": 705,
+      "total_tokens": 1299,
+      "cost": 0.0019407,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0019407,
+        "upstream_inference_prompt_cost": 0.0001782,
+        "upstream_inference_completions_cost": 0.0017625
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "94fc78c563829cff213255b4e36b38df761fa34636abe3ac89f1419659f9b836": {
+    "result": {
+      "findings": [
+        {
+          "original": "The two main subsystems are the BoxLambda Kernel (**BoxKern**) C environment and the Forth Environment.",
+          "replacement": "The two main subsystems are the BoxLambda Kernel (**BoxKern**) C environment and the Forth environment.",
+          "reason": "Consistency: 'Forth Environment' is capitalized in the first sentence but not elsewhere. Lowercasing it here matches the rest of the document.",
+          "severity": 1
+        },
+        {
+          "original": "The BoxKern image is stored in flash memory. The Bootloader loads the kernel into EMEM, then transfers control to it. The kernel's *CRT0* startup code then\nfurther unpacks specific sections into EMEM and IMEM. (See [here](top-level-and-boot-seq.md) for a more detailed description of the boot sequence).",
+          "replacement": "The BoxKern image is stored in flash memory. The bootloader loads the kernel into EMEM, then transfers control to it. The kernel's *CRT0* startup code then further unpacks specific sections into EMEM and IMEM. (See [here](top-level-and-boot-seq.md) for a more detailed description of the boot sequence.)",
+          "reason": "Consistency: 'Bootloader' is capitalized here but not elsewhere. Lowercasing it matches the rest of the document. Also, move the period inside the parenthesis for standard punctuation.",
+          "severity": 1
+        },
+        {
+          "original": "The BoxKern contains a Mecrisp Forth core and a pre-compiled Forth environment called **boxkern-includes**, set up at boot time. The Forth environment is further enhanced with Forth source code modules on the SD card and/or RAM disk file system.",
+          "replacement": "The BoxKern contains a Mecrisp Forth core and a pre-compiled Forth environment called **boxkern-includes**, set up at boot time. This Forth environment is further enhanced with Forth source code modules on the SD card and/or RAM disk file system.",
+          "reason": "Clarity: 'The Forth environment' could be interpreted as a general concept. Adding 'This' clarifies that it refers to the specific environment mentioned in the previous sentence.",
+          "severity": 2
+        },
+        {
+          "original": "The BoxKern **C Core** contains C/C++ drivers, libraries, and C runtime. The C Core is mostly about leveraging existing non-Forth code, such as **FatFs**.",
+          "replacement": "The BoxKern **C Core** contains C/C++ drivers, libraries, and the C runtime. The C Core primarily leverages existing non-Forth code, such as **FatFs**.",
+          "reason": "Wordiness/Clarity: 'C runtime' should be 'the C runtime'. 'is mostly about leveraging' can be more concisely stated as 'primarily leverages'.",
+          "severity": 2
+        },
+        {
+          "original": "This is the mechanism used to\ncall Forth from C code and C from Forth code. BoxKern drivers and libraries\nexport their functionality to the Forth environments through the FFI.",
+          "replacement": "This mechanism allows calling Forth from C code and C from Forth code. BoxKern drivers and libraries export their functionality to the Forth environments through the FFI.",
+          "reason": "Flow: 'This is the mechanism used to call' can be rephrased for better flow as 'This mechanism allows calling'.",
+          "severity": 2
+        },
+        {
+          "original": "In the current BoxLambda code base, Picolibc's *stdin*\nand *stdout* are associated with the serial port. This I/O method has to be\nreplaced by a Console Driver which forwards output to and takes input from the\nForth-side REPL.",
+          "replacement": "In the current BoxLambda code base, Picolibc's *stdin* and *stdout* are associated with the serial port. This I/O method must be replaced by a Console Driver that forwards output to and takes input from the Forth-side REPL.",
+          "reason": "Formality/Precision: 'has to be' can be replaced with the more direct and precise 'must be' in technical documentation. 'which' should be 'that' when referring to a restrictive clause.",
+          "severity": 3
+        },
+        {
+          "original": "The Mecrisp Forth Core is written in RISC-V assembly language. It contains Forth start-up code and definitions of key Forth words, such as interpreter/compiler words, that form the core of the Forth system. After\nbooting the Mecrisp Forth Core, you have a small, operational Forth system.",
+          "replacement": "The Mecrisp Forth Core is written in RISC-V assembly language. It contains Forth startup code and definitions of key Forth words (such as interpreter/compiler words) that form the core of the Forth system. After booting the Mecrisp Forth Core, you have a small, operational Forth system.",
+          "reason": "Punctuation/Clarity: 'start-up' is typically 'startup' as a compound adjective or noun. Using parentheses for the 'such as' clause improves readability.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 803,
+      "completion_tokens": 1163,
+      "total_tokens": 1966,
+      "cost": 0.0031484,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0031484,
+        "upstream_inference_prompt_cost": 0.0002409,
+        "upstream_inference_completions_cost": 0.0029075
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "d06539ae72b7404797bd86300584fbd045e70455473c141790a7c1f993413b3c": {
+    "result": {
+      "findings": [
+        {
+          "original": "The Mecrisp Forth Core is complemented with the *BoxKern-Includes*, a set of pre-compiled Forth modules that are an essential part of the operating system. File system access and the graphics driver API, for instance, are part of the *boxkern-includes* list.",
+          "replacement": "The Mecrisp Forth Core is complemented by *BoxKern-Includes*, a set of pre-compiled Forth modules essential to the operating system. For instance, file system access and the graphics driver API are part of *BoxKern-Includes*.",
+          "reason": "Improved flow, reduced wordiness, and corrected inconsistent capitalization of 'BoxKern-Includes'.",
+          "severity": 3
+        },
+        {
+          "original": "Most *new* code will be written in Forth or in assembly language in the Forth environment. Not everything in the Forth environment is new software, however. BoxLambda borrows much from existing Forth gems such as [Mecrisp Forth Quintus](https://mecrisp.sourceforge.net) and [ZeptoForth](https://github.com/tabemann/zeptoforth).",
+          "replacement": "Most *new* code will be written in Forth or assembly language within the Forth environment. However, not everything in the Forth environment is new software. BoxLambda borrows heavily from existing Forth projects such as [Mecrisp Forth Quintus](https://mecrisp.sourceforge.net) and [ZeptoForth](https://github.com/tabemann/zeptoforth).",
+          "reason": "Improved phrasing for 'in assembly language in the Forth environment' and 'borrows much from existing Forth gems'. 'Projects' is more precise than 'gems'.",
+          "severity": 2
+        },
+        {
+          "original": "Instead of a line-oriented prompt, I would like to provide a REPL that allows\nyou to move freely all over the screen, as is the case on the Commodore 64, for\ninstance. The **Canvas REPL** can perform double duty as a text editor.",
+          "replacement": "Instead of a line-oriented prompt, the **Canvas REPL** allows users to move freely across the screen, similar to the Commodore 64. It can also perform double duty as a text editor.",
+          "reason": "Changed 'I would like to provide' to a more objective and direct statement. Improved flow and conciseness.",
+          "severity": 3
+        },
+        {
+          "original": "Note that the REPL takes its input from the USB HID keyboards and sends its\noutput to the attached VGA display. There is no serial port terminal.",
+          "replacement": "The REPL takes input from USB HID keyboards and sends output to the attached VGA display. There is no serial port terminal.",
+          "reason": "Removed 'Note that' for conciseness. Simplified 'takes its input from the' and 'sends its output to the'.",
+          "severity": 2
+        },
+        {
+          "original": "The *BoxKern Proxies* are Forth-side proxies of BoxKern drivers and libraries. The\nproxies access the BoxKern drivers/libs through the FFI.",
+          "replacement": "The *BoxKern Proxies* are Forth-side proxies for BoxKern drivers and libraries. They access BoxKern drivers/libs through the FFI.",
+          "reason": "Changed 'proxies of' to 'proxies for' for better idiom. Replaced 'The proxies' with 'They' for conciseness.",
+          "severity": 2
+        },
+        {
+          "original": "The greyed-out parts in the block diagram are components that are not essential\nto create a working system. These components are likely added later (some\npossibly never). This is just a crude binary partitioning of what really\nis an [iterative spiraling\napproach](https://epsilon537.github.io/boxlambda/hello-world/). I start from\nsomething small but working (e.g., the Mecrisp Forth core running in a serial port\nterminal) and keep growing it. The greyed-out parts are among the parts to be\nadded last.",
+          "replacement": "The greyed-out parts in the block diagram are components not essential for a working system. These components will likely be added later (some possibly never). This represents a crude binary partitioning of what is actually an [iterative spiraling approach](https://epsilon537.github.io/boxlambda/hello-world/). The development starts with something small but working (e.g., the Mecrisp Forth core running in a serial port terminal) and expands from there. The greyed-out parts are among those to be added last.",
+          "reason": "Improved conciseness ('components that are not essential' to 'components not essential'). Changed 'likely added later' to 'will likely be added later' for better tense. Rephrased 'what really is' to 'what is actually'. Changed 'I start from' to 'The development starts with' for a more objective tone. Improved phrasing for 'keep growing it'.",
+          "severity": 3
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 850,
+      "completion_tokens": 1139,
+      "total_tokens": 1989,
+      "cost": 0.0031025,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0031025,
+        "upstream_inference_prompt_cost": 0.000255,
+        "upstream_inference_completions_cost": 0.0028475
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "d7c21e6004bcab4ebc350a9e03250f132cb763e8ecc738d348f6ff1b603babe8": {
+    "result": {
+      "findings": [
+        {
+          "original": "I would like to have a way to extend the non-Forth part of the system\nwithout making the extension part of the kernel monolith.",
+          "replacement": "To extend the non-Forth part of the system without making the extension part of the kernel monolith, a mechanism is needed.",
+          "reason": "Rephrased for a more objective and less personal tone, common in technical documentation.",
+          "severity": 2
+        },
+        {
+          "original": "Lua, Lisp, or Smalltalk could be\nadded to the system in such a way, for example.",
+          "replacement": "For example, languages like Lua, Lisp, or Smalltalk could be added to the system in this way.",
+          "reason": "Improved flow and slightly more concise phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "These executables can\ncommunicate with the rest of the system through the FFI.",
+          "replacement": "These executables communicate with the rest of the system through the FFI.",
+          "reason": "Changed 'can communicate' to 'communicate' for a more direct and definitive statement, assuming this is the intended mechanism.",
+          "severity": 1
+        },
+        {
+          "original": "The top layer is an 80x60\ncharacter grid displaying the Canvas REPL.",
+          "replacement": "The top layer is an 80x60 character grid that displays the Canvas REPL.",
+          "reason": "Added 'that' for slightly smoother phrasing.",
+          "severity": 0
+        },
+        {
+          "original": "The bottom layer is a 2-bit-per-pixel\n640x480 bitmap.",
+          "replacement": "The bottom layer is a 640x480 bitmap with 2 bits per pixel.",
+          "reason": "Rephrased for better readability; '2-bit-per-pixel 640x480 bitmap' is a bit clunky.",
+          "severity": 2
+        },
+        {
+          "original": "The *GFX Primitives* module will render to this layer by\ndefault.",
+          "replacement": "The *GFX Primitives* module renders to this layer by default.",
+          "reason": "Changed 'will render' to 'renders' for a more present-tense, descriptive tone typical of architectural documentation.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 525,
+      "completion_tokens": 563,
+      "total_tokens": 1088,
+      "cost": 0.001565,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.001565,
+        "upstream_inference_prompt_cost": 0.0001575,
+        "upstream_inference_completions_cost": 0.0014075
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "0b8b006c00656a1e475477adeb98ac6fc860857045f098afcceec186bb14ef56": {
+    "result": {
+      "findings": [
+        {
+          "original": "The following diagram illustrates Word `foo` successfully *trying* `bar`, i.e. bar does not raise an exception.",
+          "replacement": "The following diagram illustrates Word `foo` successfully *trying* `bar`, meaning `bar` does not raise an exception.",
+          "reason": "The abbreviation 'i.e.' is often considered overly formal in technical documentation. 'Meaning' or 'that is' are more natural alternatives.",
+          "severity": 1
+        },
+        {
+          "original": "*Foo Successfully tries bar.*",
+          "replacement": "*Foo Successfully Tries Bar.*",
+          "reason": "Capitalization for consistency with the diagram title and other headings.",
+          "severity": 0
+        },
+        {
+          "original": "Raising an exception *outside* of a try block results *restoring* the state to whatever the `ExcStackFramePtr` variable points to.",
+          "replacement": "Raising an exception *outside* of a try block restores the state to whatever the `ExcStackFramePtr` variable points to.",
+          "reason": "Awkward phrasing. 'Results restoring' should be 'restores'.",
+          "severity": 3
+        },
+        {
+          "original": "To avoid unexpected behavior, the top-level REPL (i.e., the quit loop) is placed within a try-block.",
+          "replacement": "To avoid unexpected behavior, the top-level REPL (the quit loop) is placed within a try-block.",
+          "reason": "The parenthetical 'i.e., the quit loop' is redundant; 'the quit loop' already clarifies what the REPL is in this context. Removing 'i.e.,' makes it more concise.",
+          "severity": 1
+        },
+        {
+          "original": "A caveat to keep in mind: A raised exception returns the Data Stack to its state before the try call.",
+          "replacement": "A raised exception returns the Data Stack to its state before the `try` call.",
+          "reason": "The phrase 'A caveat to keep in mind' is a bit wordy. The sentence itself is the caveat. Also, 'try call' should be backticked as it refers to the `try` word.",
+          "severity": 2
+        },
+        {
+          "original": "Consequently, code within a try-block that might throw an exception should not manipulate data stack items *outside* of the try-block.",
+          "replacement": "Consequently, code within a `try`-block that might throw an exception should not manipulate data stack items *outside* of the `try`-block.",
+          "reason": "Consistency: 'try-block' should be backticked as it refers to the `try` word's block.",
+          "severity": 1
+        },
+        {
+          "original": "`Foo . cr` will print the value 3. However, `bar . cr` will print the value 6 because in bar's case, `double-it` reaches outside of the data stack frame restored by `?raise`.",
+          "replacement": "`Foo . cr` will print the value 3. However, `bar . cr` will print the value 6 because in `bar`'s case, `double-it` reaches outside of the data stack frame restored by `?raise`.",
+          "reason": "Consistency: 'bar' should be backticked as it refers to a Word.",
+          "severity": 1
+        },
+        {
+          "original": "Variable. Tracks which Word raised an exception.",
+          "replacement": "Variable that tracks which Word raised an exception.",
+          "reason": "More natural phrasing for a definition.",
+          "severity": 1
+        },
+        {
+          "original": "Raise exception xt if non-zero.",
+          "replacement": "Raises exception `xt` if `xt` is non-zero.",
+          "reason": "More precise and consistent phrasing for a definition. 'xt' should be backticked.",
+          "severity": 1
+        },
+        {
+          "original": "Execute xt1. Catch and return exception raised. Return 0 if no exception was raised.",
+          "replacement": "Executes `xt1`. Catches and returns the exception raised. Returns 0 if no exception was raised.",
+          "reason": "More precise and consistent phrasing for a definition. 'xt1' should be backticked. Clarified 'the exception' and 'Returns 0'.",
+          "severity": 1
+        },
+        {
+          "original": "Assert that a value is true, otherwise raise a specified exception.",
+          "replacement": "Asserts that a value is true; otherwise, raises a specified exception.",
+          "reason": "More precise and consistent phrasing for a definition. Improved punctuation.",
+          "severity": 1
+        },
+        {
+          "original": "Assert that a value is false, otherwise raise a specified exception.",
+          "replacement": "Asserts that a value is false; otherwise, raises a specified exception.",
+          "reason": "More precise and consistent phrasing for a definition. Improved punctuation.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 874,
+      "completion_tokens": 1147,
+      "total_tokens": 2021,
+      "cost": 0.0031297,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0031297,
+        "upstream_inference_prompt_cost": 0.0002622,
+        "upstream_inference_completions_cost": 0.0028675
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "e8a2e1204d4c43a396869c07e8156c64466361bbd47f2dcb442f2140192c738f": {
+    "result": {
+      "findings": [
+        {
+          "original": "The `fs/` directory in the Boxlambda repo is the root of the target filesystem. Its structure will evolve. Currently, it contains the following directories:",
+          "replacement": "The `fs/` directory in the Boxlambda repository is the root of the target filesystem. Its structure will evolve, but currently, it contains the following directories:",
+          "reason": "Improve flow and conciseness. 'repo' is informal; 'repository' is more appropriate for documentation. 'Currently, it contains' can be integrated more smoothly.",
+          "severity": 2
+        },
+        {
+          "original": "- `forth/` contains the system's `*.fs` Forth modules evaluated from source (by the application or `init.fs`) ",
+          "replacement": "- `forth/` contains the system's `*.fs` Forth modules, which are evaluated from source (by the application or `init.fs`).",
+          "reason": "Improve grammar and add a period for sentence completion.",
+          "severity": 2
+        },
+        {
+          "original": "- `forth/boxkern-includes/` contains the BoxKern-Include modules. To speed up the boot procedure, these modules are compiled into the BoxKern executable rather than evaluated from source at runtime (see [BoxLambda OS Boot Sequence](top-level-and-boot-seq.md#boot-sequence)).",
+          "replacement": "- `forth/boxkern-includes/` contains the BoxKern-Include modules. To speed up the boot procedure, these modules are compiled into the BoxKern executable rather than evaluated from source at runtime (see [BoxLambda OS Boot Sequence](top-level-and-boot-seq.md#boot-sequence)).",
+          "reason": "The original sentence is grammatically correct and clear. No change needed.",
+          "severity": 0
+        },
+        {
+          "original": "- `demos/` contains examples/demos. Execute them from the prompt using the following command:",
+          "replacement": "- `demos/` contains examples/demos. Execute them from the prompt using the following command:",
+          "reason": "The original sentence is grammatically correct and clear. No change needed.",
+          "severity": 0
+        },
+        {
+          "original": "Refer to the [Shell section](#shell) to see how to navigate the target file system from the Forth REPL.",
+          "replacement": "Refer to the [Shell section](#shell) for instructions on navigating the target file system from the Forth REPL.",
+          "reason": "More concise and natural phrasing. 'to see how to' can often be replaced with 'for instructions on' or similar.",
+          "severity": 2
+        },
+        {
+          "original": "Refer to the [Installation section](../../installation/installation.md) to see how to put the target file system on an SD card or on a target RAM disk.",
+          "replacement": "Refer to the [Installation section](../../installation/installation.md) for instructions on putting the target file system on an SD card or a target RAM disk.",
+          "reason": "More concise and natural phrasing. 'to see how to' can often be replaced with 'for instructions on' or similar. Also, 'on a target RAM disk' is slightly more natural than 'on a target RAM disk'.",
+          "severity": 2
+        },
+        {
+          "original": "This diagram illustrates how the relevant Forth modules are stacked upon one another to attain Forth-level filesystem and shell access:",
+          "replacement": "This diagram illustrates how the relevant Forth modules are stacked to provide Forth-level filesystem and shell access:",
+          "reason": "More concise and direct phrasing. 'upon one another' is slightly wordy, and 'to attain' can be simplified to 'to provide'.",
+          "severity": 2
+        },
+        {
+          "original": "The Forth filesystem module `fs.fs` binds to FATFS via the [fs_ffi.cpp](../../../sw/components/forth/fs_ffi.cpp)\nFFI module. See [here](c-ffi.md) for more info on the Forth-C FFI.",
+          "replacement": "The Forth filesystem module `fs.fs` binds to FATFS via the [fs_ffi.cpp](../../../sw/components/forth/fs_ffi.cpp) FFI module. See [here](c-ffi.md) for more information on the Forth-C FFI.",
+          "reason": "Correct 'more info' to 'more information' for formal documentation. Remove unnecessary newline.",
+          "severity": 2
+        },
+        {
+          "original": "The file system access Words are based on those found in Peter Schmid's [Mecrisp Cube](https://github.com/spyren/Mecrisp-Cube/blob/master/sdcard/man/FileSystem.md) project.",
+          "replacement": "The file system access Words are based on those found in Peter Schmid's [Mecrisp Cube](https://github.com/spyren/Mecrisp-Cube/blob/master/sdcard/man/FileSystem.md) project.",
+          "reason": "The original sentence is grammatically correct and clear. No change needed.",
+          "severity": 0
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 820,
+      "completion_tokens": 1170,
+      "total_tokens": 1990,
+      "cost": 0.003171,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.003171,
+        "upstream_inference_prompt_cost": 0.000246,
+        "upstream_inference_completions_cost": 0.002925
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "d95ab763ecd73e88cc1715c4288401616e25a2e5afec5a13d3576124f7f12037": {
+    "result": {
+      "findings": [
+        {
+          "original": "Iterate executing an xt over a byte array.",
+          "replacement": "Iterates by executing an xt for each byte in an array.",
+          "reason": "Clarify that 'xt' is executed for each element.",
+          "severity": 2
+        },
+        {
+          "original": "Iterate executing an xt over a halfword array.",
+          "replacement": "Iterates by executing an xt for each halfword in an array.",
+          "reason": "Clarify that 'xt' is executed for each element.",
+          "severity": 2
+        },
+        {
+          "original": "Iterate executing an xt over a cell array",
+          "replacement": "Iterates by executing an xt for each cell in an array.",
+          "reason": "Clarify that 'xt' is executed for each element.",
+          "severity": 2
+        },
+        {
+          "original": "An anonymous list of cells, e.g. `l{ 4 ,  5 , 6 , }l`.",
+          "replacement": "An anonymous list of cells. For example: `l{ 4 ,  5 , 6 , }l`.",
+          "reason": "Improve punctuation and flow.",
+          "severity": 1
+        },
+        {
+          "original": "An anonymous list of halfwords, e.g. `h{ 4 h,  5 h, 6 h, }h`.",
+          "replacement": "An anonymous list of halfwords. For example: `h{ 4 h,  5 h, 6 h, }h`.",
+          "reason": "Improve punctuation and flow.",
+          "severity": 1
+        },
+        {
+          "original": "An anonymous list of bytes, e.g. `c{ 4 c,  5 c, 6 c, }c`.",
+          "replacement": "An anonymous list of bytes. For example: `c{ 4 c,  5 c, 6 c, }c`.",
+          "reason": "Improve punctuation and flow.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 616,
+      "completion_tokens": 363,
+      "total_tokens": 979,
+      "cost": 0.0010923,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0010923,
+        "upstream_inference_prompt_cost": 0.0001848,
+        "upstream_inference_completions_cost": 0.0009075
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "a97c7ad5822e32a29a5d5a52e0ec09337f49e40f0fa793fb57a1a6900a0ec31c": {
+    "result": {
+      "findings": [
+        {
+          "original": "- 32*32 = 64 Multiplication.",
+          "replacement": "- Multiplies two 32-bit unsigned numbers, returning a 64-bit unsigned product.",
+          "reason": "More descriptive and precise than just the operation and bit widths.",
+          "severity": 3
+        },
+        {
+          "original": "- 64*64 = 64 Multiplication.",
+          "replacement": "- Multiplies two 64-bit numbers, returning a 64-bit product. The input and output can be signed or unsigned.",
+          "reason": "More descriptive and precise. Clarifies the signed/unsigned flexibility indicated by `ud1|d1`.",
+          "severity": 3
+        },
+        {
+          "original": "- 64*64=128 Multiplication.",
+          "replacement": "- Multiplies two 64-bit unsigned numbers, returning a 128-bit unsigned product.",
+          "reason": "More descriptive and precise. Specifies unsigned based on `ud` prefix.",
+          "severity": 3
+        },
+        {
+          "original": "- ud / u1 = u3 remainder u2.",
+          "replacement": "- Divides a 64-bit unsigned number (`ud`) by a 32-bit unsigned number (`u1`), returning a 32-bit unsigned quotient (`u3`) and a 32-bit unsigned remainder (`u2`).",
+          "reason": "More descriptive and precise, explicitly stating bit widths and types.",
+          "severity": 3
+        },
+        {
+          "original": "- 64/64 = 64 rem 64 Division ud1 / ud2 = ud4 remainder ud3.",
+          "replacement": "- Divides a 64-bit number (`ud1`) by another 64-bit number (`ud2`), returning a 64-bit quotient (`ud4`) and a 64-bit remainder (`ud3`). The input and output can be signed or unsigned.",
+          "reason": "More descriptive and precise. Clarifies the signed/unsigned flexibility indicated by `ud1|d1` in the signature of `d/mod` (which this entry seems to describe, despite the `ud/mod` heading). Assuming `ud/mod` is for unsigned, the replacement should be: \"- Divides a 64-bit unsigned number (`ud1`) by another 64-bit unsigned number (`ud2`), returning a 64-bit unsigned quotient (`ud4`) and a 64-bit unsigned remainder (`ud3`).\"",
+          "severity": 4
+        },
+        {
+          "original": "- d / n1 = n3 remainder r2.",
+          "replacement": "- Divides a double-length number (`d`) by a single-length number (`n1`), returning a single-length quotient (`n3`) and a single-length remainder (`n2`).",
+          "reason": "Corrects `r2` to `n2` based on the stack effect `n2 n3`. Uses 'single-length' and 'double-length' for clarity.",
+          "severity": 3
+        },
+        {
+          "original": "- d1 / d2 = d4 remainder d3.",
+          "replacement": "- Divides a double-length number (`d1`) by another double-length number (`d2`), returning a double-length quotient (`d4`) and a double-length remainder (`d3`).",
+          "reason": "Uses 'double-length' for clarity.",
+          "severity": 2
+        },
+        {
+          "original": "- d1 / d2 = d3.",
+          "replacement": "- Divides a double-length number (`d1`) by another double-length number (`d2`), returning a double-length quotient (`d3`).",
+          "reason": "Uses 'double-length' for clarity.",
+          "severity": 2
+        },
+        {
+          "original": "- n1 * n2 / n3 = n4.",
+          "replacement": "- Multiplies `n1` by `n2`, then divides the 64-bit intermediate product by `n3`, returning a 32-bit quotient (`n4`).",
+          "reason": "Clarifies the intermediate product's size, which is a common feature of `*/`.",
+          "severity": 3
+        },
+        {
+          "original": "- u1 * u2 / u3 = u4.",
+          "replacement": "- Multiplies `u1` by `u2`, then divides the 64-bit unsigned intermediate product by `u3`, returning a 32-bit unsigned quotient (`u4`).",
+          "reason": "Clarifies the intermediate product's size and unsigned nature.",
+          "severity": 3
+        },
+        {
+          "original": "- n1 * n2 / n3 = n5 remainder n4.",
+          "replacement": "- Multiplies `n1` by `n2`, then divides the 64-bit intermediate product by `n3`, returning a 32-bit quotient (`n5`) and a 32-bit remainder (`n4`).",
+          "reason": "Clarifies the intermediate product's size and explicitly labels quotient/remainder.",
+          "severity": 3
+        },
+        {
+          "original": "- u1 * u2 / u3 = u5 remainder u4.",
+          "replacement": "- Multiplies `u1` by `u2`, then divides the 64-bit unsigned intermediate product by `u3`, returning a 32-bit unsigned quotient (`u5`) and a 32-bit unsigned remainder (`u4`).",
+          "reason": "Clarifies the intermediate product's size, unsigned nature, and explicitly labels quotient/remainder.",
+          "severity": 3
+        },
+        {
+          "original": "- Arithmetic left-shift.",
+          "replacement": "- Performs an arithmetic left-shift on a double-length number.",
+          "reason": "More complete description.",
+          "severity": 1
+        },
+        {
+          "original": "- Arithmetic right-shift.",
+          "replacement": "- Performs an arithmetic right-shift on a double-length number.",
+          "reason": "More complete description.",
+          "severity": 1
+        },
+        {
+          "original": "- Logical left-shift, same as d2*.",
+          "replacement": "- Performs a logical left-shift on a double-length unsigned number. This is equivalent to `d2*`.",
+          "reason": "More complete description and clarifies 'unsigned' based on `ud1`.",
+          "severity": 2
+        },
+        {
+          "original": "- Logical right-shift.",
+          "replacement": "- Performs a logical right-shift on a double-length unsigned number.",
+          "reason": "More complete description and clarifies 'unsigned' based on `ud1`.",
+          "severity": 2
+        },
+        {
+          "original": "- Absolute value.",
+          "replacement": "- Returns the absolute value of a double-length number.",
+          "reason": "More complete description.",
+          "severity": 1
+        },
+        {
+          "original": "- Negate.",
+          "replacement": "- Negates a double-length number.",
+          "reason": "More complete description.",
+          "severity": 1
+        },
+        {
+          "original": "- Subtraction.",
+          "replacement": "- Subtracts two double-length numbers. The input and output can be signed or unsigned.",
+          "reason": "More complete description and clarifies signed/unsigned flexibility.",
+          "severity": 2
+        },
+        {
+          "original": "- Addition.",
+          "replacement": "- Adds two double-length numbers. The input and output can be signed or unsigned.",
+          "reason": "More complete description and clarifies signed/unsigned flexibility.",
+          "severity": 2
+        },
+        {
+          "original": "- Makes a signed single number double-length.",
+          "replacement": "- Extends a signed single-length number to a signed double-length number.",
+          "reason": "More precise terminology for the operation.",
+          "severity": 2
+        },
+        {
+          "original": "- Arithmetic double right-shift of u bit-places.",
+          "replacement": "- Performs an arithmetic right-shift on a double-length number by `u` bit-places.",
+          "reason": "More natural phrasing.",
+          "severity": 2
+        },
+        {
+          "original": "- Logical double right-shift of u bit-places.",
+          "replacement": "- Performs a logical right-shift on a double-length number by `u` bit-places.",
+          "reason": "More natural phrasing.",
+          "severity": 2
+        },
+        {
+          "original": "- Logical double left-shift of u bit-places.",
+          "replacement": "- Performs a logical left-shift on a double-length number by `u` bit-places.",
+          "reason": "More natural phrasing.",
+          "severity": 2
+        },
+        {
+          "original": "S31.32 fixed-point numbers are written like `3,14159`, i.e., written with a comma\ninstead of a dot.",
+          "replacement": "S31.32 fixed-point numbers are written with a comma instead of a dot, for example, `3,14159`.",
+          "reason": "More concise and natural phrasing.",
+          "severity": 2
+        },
+        {
+          "original": "Fixed-point numbers are stored ( n-comma n-whole ) and can be handled\nlike signed double numbers.",
+          "replacement": "Fixed-point numbers are stored as ( n-comma n-whole ) on the stack and can be handled like signed double-length numbers.",
+          "reason": "Clarifies 'stored' context (on the stack) and uses consistent 'double-length' terminology.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 1237,
+      "completion_tokens": 2268,
+      "total_tokens": 3505,
+      "cost": 0.0060411,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0060411,
+        "upstream_inference_prompt_cost": 0.0003711,
+        "upstream_inference_completions_cost": 0.00567
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "6b89a4320b1c9f3ab8a1653bf745e8f0df76e42c8935ed1708219ee565ae209d": {
+    "result": {
+      "findings": [
+        {
+          "original": "- Division of two fixed-point numbers.",
+          "replacement": "Divides two fixed-point numbers.",
+          "reason": "More concise and active voice.",
+          "severity": 1
+        },
+        {
+          "original": "- Multiplication.",
+          "replacement": "Multiplies two fixed-point numbers.",
+          "reason": "More descriptive and consistent with the previous entry.",
+          "severity": 2
+        },
+        {
+          "original": "## Comparisons (exactly ANS, some logical extensions)",
+          "replacement": "## Comparisons (ANS-compliant with logical extensions)",
+          "reason": "More concise and natural phrasing.",
+          "severity": 2
+        },
+        {
+          "original": "- Unsigned comparisons.",
+          "replacement": "Performs unsigned comparisons.",
+          "reason": "More active voice and consistent with other descriptions.",
+          "severity": 1
+        },
+        {
+          "original": "- Signed comparisons.",
+          "replacement": "Performs signed comparisons.",
+          "reason": "More active voice and consistent with other descriptions.",
+          "severity": 1
+        },
+        {
+          "original": "- Negative?",
+          "replacement": "Checks if `n` is negative.",
+          "reason": "More formal and descriptive than a question.",
+          "severity": 2
+        },
+        {
+          "original": "- Positive?",
+          "replacement": "Checks if `n` is positive.",
+          "reason": "More formal and descriptive than a question.",
+          "severity": 2
+        },
+        {
+          "original": "- Keeps smaller of top two items.",
+          "replacement": "Returns the smaller of the top two stack items.",
+          "reason": "More precise and uses standard Forth terminology ('stack items').",
+          "severity": 2
+        },
+        {
+          "original": "- Keeps greater of top two items.",
+          "replacement": "Returns the greater of the top two stack items.",
+          "reason": "More precise and uses standard Forth terminology ('stack items').",
+          "severity": 2
+        },
+        {
+          "original": "- Keeps unsigned smaller.",
+          "replacement": "Returns the unsigned smaller of the top two stack items.",
+          "reason": "More precise and uses standard Forth terminology ('stack items').",
+          "severity": 2
+        },
+        {
+          "original": "- Keeps unsigned greater.",
+          "replacement": "Returns the unsigned greater of the top two stack items.",
+          "reason": "More precise and uses standard Forth terminology ('stack items').",
+          "severity": 2
+        },
+        {
+          "original": "- Set if less than.",
+          "replacement": "Sets flag if `u1` is less than `u2`.",
+          "reason": "More descriptive and clarifies the arguments.",
+          "severity": 2
+        },
+        {
+          "original": "- Set if less than, unsigned.",
+          "replacement": "Sets flag if `u1` is less than `u2` (unsigned).",
+          "reason": "More descriptive and clarifies the arguments.",
+          "severity": 2
+        },
+        {
+          "original": "- Sets base to 2.",
+          "replacement": "Sets the number base to 2.",
+          "reason": "Adds 'number' for clarity.",
+          "severity": 1
+        },
+        {
+          "original": "- Sets base to 10.",
+          "replacement": "Sets the number base to 10.",
+          "reason": "Adds 'number' for clarity.",
+          "severity": 1
+        },
+        {
+          "original": "- Sets base to 16.",
+          "replacement": "Sets the number base to 16.",
+          "reason": "Adds 'number' for clarity.",
+          "severity": 1
+        },
+        {
+          "original": "- Base variable address.",
+          "replacement": "Returns the address of the `BASE` variable.",
+          "reason": "More descriptive and uses standard Forth `BASE` terminology.",
+          "severity": 2
+        },
+        {
+          "original": "- Moves u bytes in memory.",
+          "replacement": "Moves `u` bytes from `c-addr1` to `c-addr2`.",
+          "reason": "More precise, specifying source and destination.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 1128,
+      "completion_tokens": 997,
+      "total_tokens": 2125,
+      "cost": 0.0028309,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0028309,
+        "upstream_inference_prompt_cost": 0.0003384,
+        "upstream_inference_completions_cost": 0.0024925
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "d9e52d69ee236ed180a4750bb55f651b84856baab71645506934ce18839c8812": {
+    "result": {
+      "findings": [
+        {
+          "original": "The wordlist module adds support for creating multiple wordlists. The module allows you to specify across which wordlists (and in which order) Word search (find) should take place and to which wordlist new Words should be added.",
+          "replacement": "The wordlist module adds support for creating multiple wordlists. It allows you to specify which wordlists to search (and in what order) and to which wordlist new words should be added.",
+          "reason": "Simplify phrasing, remove repetition of 'module', and improve flow. 'Word search (find)' is a bit clunky; 'search' is sufficient. Capitalization of 'Word' and 'Words' is inconsistent and unnecessary.",
+          "severity": 3
+        },
+        {
+          "original": "This module serves as a building block for the [Modules](#modules) module and should not be used directly by applications.",
+          "replacement": "This module serves as a building block for the [Modules](#modules) module and should not be used directly by applications.",
+          "reason": "The repetition of 'module' is slightly awkward. Consider 'This module serves as a building block for the [Modules](#modules) and should not be used directly by applications.' if 'Modules' is clearly a module name. However, without more context, preserving 'module' might be safer to avoid ambiguity.",
+          "severity": 1
+        },
+        {
+          "original": "- Constant. The wid of the default wordlist.",
+          "replacement": "- Constant. The `wid` of the default wordlist.",
+          "reason": "Use backticks for `wid` to indicate it's a code/technical term.",
+          "severity": 1
+        },
+        {
+          "original": "- Set the search order list and the length (n) of the search order list. `widn` is the first wordlist to search, `wid0` the last. May throw `x-order-overflow`.",
+          "replacement": "- Sets the search order list and its length (`n`). `widn` is the first wordlist to search, `wid0` the last. May throw `x-order-overflow`.",
+          "reason": "Improve conciseness and use consistent verb tense for descriptions. Use backticks for `n`.",
+          "severity": 2
+        },
+        {
+          "original": "- Retrieve the search order list and the length (n) of that list. `widn` is the first wordlist being searched, `wid0` is the last.",
+          "replacement": "- Retrieves the search order list and its length (`n`). `widn` is the first wordlist searched, `wid0` is the last.",
+          "reason": "Improve conciseness and use consistent verb tense for descriptions. Use backticks for `n`. 'being searched' can be simplified.",
+          "severity": 2
+        },
+        {
+          "original": "- Create a new wordlist and return its wordlist-id (`wid`).",
+          "replacement": "- Creates a new wordlist and returns its wordlist ID (`wid`).",
+          "reason": "Use consistent verb tense for descriptions. 'wordlist-id' is usually 'wordlist ID'.",
+          "severity": 2
+        },
+        {
+          "original": "- Set the given counted string as wordlist name.",
+          "replacement": "- Sets the given counted string as the wordlist name.",
+          "reason": "Use consistent verb tense for descriptions and add 'the' for better flow.",
+          "severity": 1
+        },
+        {
+          "original": "- Get the name of this wid as a counted string.",
+          "replacement": "- Gets the name of this `wid` as a counted string.",
+          "reason": "Use consistent verb tense for descriptions and backticks for `wid`.",
+          "severity": 1
+        },
+        {
+          "original": "- Print the wordlist info",
+          "replacement": "- Prints the wordlist info.",
+          "reason": "Use consistent verb tense for descriptions and add a period.",
+          "severity": 1
+        },
+        {
+          "original": "- Print the wordlist search order, first-to-last.",
+          "replacement": "- Prints the wordlist search order, first-to-last.",
+          "reason": "Use consistent verb tense for descriptions.",
+          "severity": 1
+        },
+        {
+          "original": "- Variable. Points to the current wordlist. New words are added to the current wordlist.",
+          "replacement": "- Variable. Points to the current wordlist. New words are added to it.",
+          "reason": "Avoid repetition of 'the current wordlist'.",
+          "severity": 1
+        },
+        {
+          "original": "- Get the current wordlist. New words are added to the current wordlist.",
+          "replacement": "- Gets the current wordlist. New words are added to it.",
+          "reason": "Use consistent verb tense for descriptions and avoid repetition.",
+          "severity": 2
+        },
+        {
+          "original": "- Set the current wordlist. New words are added to the current wordlist.",
+          "replacement": "- Sets the current wordlist. New words are added to it.",
+          "reason": "Use consistent verb tense for descriptions and avoid repetition.",
+          "severity": 2
+        },
+        {
+          "original": "- List all the words in a given wordlist.",
+          "replacement": "- Lists all words in a given wordlist.",
+          "reason": "Use consistent verb tense for descriptions and improve conciseness.",
+          "severity": 1
+        },
+        {
+          "original": "- Return next entry in dictionary chain (search-order aware). Returns a Word link address and false if a Word is found. Returns 0 true if end is reached.",
+          "replacement": "- Returns the next entry in the dictionary chain (search-order aware). Returns a word link address and `false` if a word is found. Returns `0` and `true` if the end is reached.",
+          "reason": "Use consistent verb tense for descriptions. Clarify 'Word' capitalization. Use backticks for boolean and numeric literals. Clarify the return values for '0 true'.",
+          "severity": 3
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 896,
+      "completion_tokens": 1400,
+      "total_tokens": 2296,
+      "cost": 0.0037688,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0037688,
+        "upstream_inference_prompt_cost": 0.0002688,
+        "upstream_inference_completions_cost": 0.0035
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "0fe69de3a5bd37c1925513c5a132fb0b853a1f7f7d1d4938b91abafbb38a864c": {
+    "result": {
+      "findings": [
+        {
+          "original": "Returns the link field of the first Word of the first wordlist in the search-order.",
+          "replacement": "Returns the link field of the first word in the first wordlist in the search order.",
+          "reason": "Capitalizing 'Word' is inconsistent with 'wordlist' and 'search-order'. 'Word' is a technical term in Forth, but here it refers to a generic word, not a specific Forth 'Word' object.",
+          "severity": 1
+        },
+        {
+          "original": "This version of `dictionarystart` scans across all wids, regardless of the configured search-order. Both the Word's link address and the wid it belongs to are returned.",
+          "replacement": "This version of `dictionarystart` scans across all WIDs, regardless of the configured search order. It returns both the word's link address and the WID it belongs to.",
+          "reason": "Consistency: 'WID' is often capitalized as an acronym. 'Word' should be lowercase for consistency. Improved flow and conciseness.",
+          "severity": 2
+        },
+        {
+          "original": "Scans dictionary chain across all wids, returns a Word's link address and its wid if a Word is found. Returns 0 0 if end is reached.",
+          "replacement": "Scans the dictionary chain across all WIDs. If a word is found, it returns the word's link address and its WID. Returns `0 0` if the end is reached.",
+          "reason": "Improved clarity and flow. Consistency in 'WID' capitalization. Added backticks for `0 0`.",
+          "severity": 2
+        },
+        {
+          "original": "This is the wordlist search-order aware version of find. It works like the forth core's find Word, but it's using the redefined search-order aware `dictionarystart/next` Words.",
+          "replacement": "This is the wordlist search-order aware version of `find`. It works like the Forth core's `find` word, but it uses the redefined search-order aware `dictionarystart/next` words.",
+          "reason": "Consistency: 'find' and 'Word' should be treated as code/technical terms. 'Forth' is a proper noun. 'it's using' -> 'it uses' for better formality in documentation.",
+          "severity": 2
+        },
+        {
+          "original": "Initializes the wordlist module. Executes during `wordlist.fs` evaluation.",
+          "replacement": "Initializes the wordlist module. It executes during `wordlist.fs` evaluation.",
+          "reason": "Adds a subject 'It' for better grammatical flow.",
+          "severity": 1
+        },
+        {
+          "original": "Max. number of wids exceeded.",
+          "replacement": "Maximum number of WIDs exceeded.",
+          "reason": "Expand abbreviation 'Max.' and capitalize 'WIDs' for consistency.",
+          "severity": 1
+        },
+        {
+          "original": "Search-Order list overflow.",
+          "replacement": "Search-order list overflow.",
+          "reason": "Consistency: 'Search-order' is not typically capitalized unless it's a proper noun or at the start of a sentence.",
+          "severity": 1
+        },
+        {
+          "original": "Search-Order list empty.",
+          "replacement": "Search-order list empty.",
+          "reason": "Consistency: 'Search-order' is not typically capitalized unless it's a proper noun or at the start of a sentence.",
+          "severity": 1
+        },
+        {
+          "original": "Adds support for creating and managing modules (namespaces). Builds on the [wordlist module](#word-lists).",
+          "replacement": "Adds support for creating and managing modules (namespaces). It builds on the [wordlist module](#word-lists).",
+          "reason": "Adds a subject 'It' for better grammatical flow.",
+          "severity": 1
+        },
+        {
+          "original": "Get the xt of the following Word, to be found in given namespace. E.g. `mymod ::' foo`.",
+          "replacement": "Gets the XT of the following word, to be found in the given namespace. E.g., `mymod ::' foo`.",
+          "reason": "Third-person singular verb 'Gets'. Capitalize 'XT' as it's an acronym. Lowercase 'word' for consistency. Add comma after 'E.g.'.",
+          "severity": 2
+        },
+        {
+          "original": "Compile into the definition the xt of the following Word, to be found in given namespace. E.g. `mymod ::['] foo`.",
+          "replacement": "Compiles into the definition the XT of the following word, to be found in the given namespace. E.g., `mymod ::['] foo`.",
+          "reason": "Third-person singular verb 'Compiles'. Capitalize 'XT' as it's an acronym. Lowercase 'word' for consistency. Add comma after 'E.g.'.",
+          "severity": 2
+        },
+        {
+          "original": "Create a new module/namespace with the given name. This creates a new wordlist, makes it current, and puts it on top of the search order. Assigns the wordlist id (`wid`) to a constant with the passed-in name. This constant becomes the module identifier.",
+          "replacement": "Creates a new module/namespace with the given name. This action creates a new wordlist, makes it current, and places it on top of the search order. It assigns the wordlist ID (WID) to a constant with the passed-in name. This constant then becomes the module identifier.",
+          "reason": "Third-person singular verb 'Creates'. Clarified 'This' to 'This action'. 'puts it on top' -> 'places it on top' for slightly more formal tone. Capitalized 'ID' and 'WID' for consistency. Added 'then' for better flow.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 881,
+      "completion_tokens": 1371,
+      "total_tokens": 2252,
+      "cost": 0.0036918,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0036918,
+        "upstream_inference_prompt_cost": 0.0002643,
+        "upstream_inference_completions_cost": 0.0034275
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "9d1e4d10eb42a4039127f1d8c3d12dbd171680d9064300fd500c7b30af0b1b5b": {
+    "result": {
+      "findings": [
+        {
+          "original": "It works like begin-module but takes an existing module `wid` as input parameter rather than creating a new one.",
+          "replacement": "This extends an existing module `wid`, similar to `begin-module` but without creating a new one.",
+          "reason": "Reword for clarity and conciseness. 'input parameter' is redundant with 'takes'.",
+          "severity": 2
+        },
+        {
+          "original": "Revert search-order and current to the state before `begin-module`.",
+          "replacement": "Reverts the search order and current module to their states before `begin-module`.",
+          "reason": "Add 'the' for natural phrasing and pluralize 'states' for consistency.",
+          "severity": 1
+        },
+        {
+          "original": "Add the given module to the top of the wordlist search order.",
+          "replacement": "Adds the specified module to the top of the wordlist search order.",
+          "reason": "Use 'specified' for consistency with technical documentation and improve flow.",
+          "severity": 1
+        },
+        {
+          "original": "Remove the given module from the search-order. If the module appears more than once in the search-order, only the top-most entry is removed.",
+          "replacement": "Removes the specified module from the search order. If the module appears multiple times in the search order, only the topmost entry is removed.",
+          "reason": "Use 'specified' for consistency, 'multiple times' for better phrasing, and 'topmost' as a single word.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 494,
+      "completion_tokens": 295,
+      "total_tokens": 789,
+      "cost": 0.0008857,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0008857,
+        "upstream_inference_prompt_cost": 0.0001482,
+        "upstream_inference_completions_cost": 0.0007375
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "0f9c3f6f3d8a1ac197f7a7f750366dd67486c399f7a1a130b3d2036b8be41de6": {
+    "result": {
+      "findings": [
+        {
+          "original": "Simple stack object with cell-sized elements.",
+          "replacement": "A simple stack object with cell-sized elements.",
+          "reason": "Add an article for better flow.",
+          "severity": 1
+        },
+        {
+          "original": "- Create an empty stack object of n elements.",
+          "replacement": "- Creates an empty stack object with a capacity of n elements.",
+          "reason": "Use the third-person singular verb for consistency with other descriptions. 'of n elements' is slightly ambiguous; 'capacity of n elements' is clearer.",
+          "severity": 2
+        },
+        {
+          "original": "- Push x on the stack. May raise `x-stack-obj-overflow`.",
+          "replacement": "- Pushes x onto the stack. May raise `x-stack-obj-overflow`.",
+          "reason": "Use the third-person singular verb for consistency. 'onto' is more idiomatic than 'on' for pushing.",
+          "severity": 1
+        },
+        {
+          "original": "- Pop x from the stack. May raise `x-stack-obj-underflow`.",
+          "replacement": "- Pops x from the stack. May raise `x-stack-obj-underflow`.",
+          "reason": "Use the third-person singular verb for consistency.",
+          "severity": 1
+        },
+        {
+          "original": "- Number of elements currently on the stack",
+          "replacement": "- Returns the number of elements currently on the stack.",
+          "reason": "Clarify that the word returns a value, consistent with other descriptions.",
+          "severity": 2
+        },
+        {
+          "original": "- Returns the maximum number of elements on the stack.",
+          "replacement": "- Returns the maximum capacity of the stack (the total number of elements it can hold).",
+          "reason": "Clarify 'maximum number of elements' to distinguish it from 'current depth'. 'Capacity' is a more precise term here.",
+          "severity": 2
+        },
+        {
+          "original": "- Returns the number of free elements left on the stack.",
+          "replacement": "- Returns the number of free elements remaining on the stack.",
+          "reason": "'Remaining' is slightly more idiomatic than 'left on' in this context.",
+          "severity": 1
+        },
+        {
+          "original": "- Returns the base address of the stack.",
+          "replacement": "- Returns the base address of the stack's storage.",
+          "reason": "Clarify that it's the storage area's base address, not the stack object itself.",
+          "severity": 1
+        },
+        {
+          "original": "- Returns the address of the next free element on the stack. Note that this may point one cell past the end of the stack max. depth.",
+          "replacement": "- Returns the address of the next available element on the stack. Note that this address may point one cell beyond the stack's maximum depth.",
+          "reason": "'Available' is slightly more precise than 'free' in this context. 'Beyond' is more idiomatic than 'past the end of'. 'Maximum depth' is clearer than 'max. depth'.",
+          "severity": 2
+        },
+        {
+          "original": "- Set the stack top to the given address. E.g. `<stack> dup stack-base swap >stack-top` resets the stack. Raises `x-stack-obj-underflow` or `x-stack-obj-overflow` if given address is outside the stack object range.",
+          "replacement": "- Sets the stack top to the given address. For example, `<stack> dup stack-base swap >stack-top` resets the stack. Raises `x-stack-obj-underflow` or `x-stack-obj-overflow` if the given address is outside the stack object's valid range.",
+          "reason": "Use the third-person singular verb for consistency. 'For example' is more formal than 'E.g.'. 'Valid range' is more precise than 'stack object range'.",
+          "severity": 2
+        },
+        {
+          "original": "- Reset the stack.",
+          "replacement": "- Resets the stack.",
+          "reason": "Use the third-person singular verb for consistency.",
+          "severity": 1
+        },
+        {
+          "original": "- Find x in the stack and return its address or 0 if not found.",
+          "replacement": "- Finds x within the stack and returns its address, or 0 if not found.",
+          "reason": "Use the third-person singular verb for consistency. 'Within' is slightly more precise than 'in' for searching. Add a comma for better readability.",
+          "severity": 1
+        },
+        {
+          "original": "- Stack object overflow.",
+          "replacement": "- Indicates a stack object overflow.",
+          "reason": "Clarify that this is a description of what the exception indicates.",
+          "severity": 1
+        },
+        {
+          "original": "- Stack object underflow.",
+          "replacement": "- Indicates a stack object underflow.",
+          "reason": "Clarify that this is a description of what the exception indicates.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 779,
+      "completion_tokens": 1172,
+      "total_tokens": 1951,
+      "cost": 0.0031637,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0031637,
+        "upstream_inference_prompt_cost": 0.0002337,
+        "upstream_inference_completions_cost": 0.00293
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "137eac17d53aa42d6edef2b39f66ef1097cf1c9a050902afd33be3725c134f26": {
+    "result": {
+      "findings": [
+        {
+          "original": "Only the lower 16 bits of the x and y values are used.",
+          "replacement": "Only the lower 16 bits of the x and y coordinates are used.",
+          "reason": "Clarify that 'values' refers to the coordinates.",
+          "severity": 1
+        },
+        {
+          "original": "Add 2 2D vectors.",
+          "replacement": "Adds two 2D vectors.",
+          "reason": "Use consistent third-person singular present tense for descriptions.",
+          "severity": 2
+        },
+        {
+          "original": "Subtract 2 2D vectors.",
+          "replacement": "Subtracts two 2D vectors.",
+          "reason": "Use consistent third-person singular present tense for descriptions.",
+          "severity": 2
+        },
+        {
+          "original": "Extract the x components of a 2D vector.",
+          "replacement": "Extracts the x component of a 2D vector.",
+          "reason": "'Components' should be singular as it refers to a single x component. Use consistent third-person singular present tense for descriptions.",
+          "severity": 3
+        },
+        {
+          "original": "Extract the y component of a 2D vector.",
+          "replacement": "Extracts the y component of a 2D vector.",
+          "reason": "Use consistent third-person singular present tense for descriptions.",
+          "severity": 2
+        },
+        {
+          "original": "Extract the x and y components of a 2D vector.",
+          "replacement": "Extracts the x and y components of a 2D vector.",
+          "reason": "Use consistent third-person singular present tense for descriptions.",
+          "severity": 2
+        },
+        {
+          "original": "Compute the dot product of 2 2D vectors.",
+          "replacement": "Computes the dot product of two 2D vectors.",
+          "reason": "Use consistent third-person singular present tense for descriptions.",
+          "severity": 2
+        },
+        {
+          "original": "Scale a 2D vector. Regular `*` is faster, but this version avoid overflow rollover in the other dimension.",
+          "replacement": "Scales a 2D vector. The regular `*` operator is faster, but this version avoids overflow rollover in the other dimension.",
+          "reason": "Use consistent third-person singular present tense for descriptions. Clarify 'regular *' as an operator and correct 'avoid' to 'avoids'.",
+          "severity": 3
+        },
+        {
+          "original": "Print a 2D vector.",
+          "replacement": "Prints a 2D vector.",
+          "reason": "Use consistent third-person singular present tense for descriptions.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 649,
+      "completion_tokens": 479,
+      "total_tokens": 1128,
+      "cost": 0.0013922,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0013922,
+        "upstream_inference_prompt_cost": 0.0001947,
+        "upstream_inference_completions_cost": 0.0011975
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "da9631705638797116aff6cae8c777094ec969a26364faee9f88f8b654f81881": {
+    "result": {
+      "findings": [
+        {
+          "original": "Note that the BoxLambda OS allocates region `0x2ff00000-0x30000000` for [RAM disk usage](../base-platform/c-components/fat-fs.md#the-ram-disk-device-controller).",
+          "replacement": "The BoxLambda OS allocates the region `0x2ff00000-0x30000000` for [RAM disk usage](../base-platform/c-components/fat-fs.md#the-ram-disk-device-controller).",
+          "reason": "Remove 'Note that' for conciseness.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 463,
+      "completion_tokens": 146,
+      "total_tokens": 609,
+      "cost": 0.0005039,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0005039,
+        "upstream_inference_prompt_cost": 0.0001389,
+        "upstream_inference_completions_cost": 0.000365
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "1f1ebaa47606e2fa0397ec2a9ceb602a3e9e61e32be26f774425003027c49897": {
+    "result": {
+      "findings": [
+        {
+          "original": "Run-Time Checking tools.",
+          "replacement": "Tools for run-time checking.",
+          "reason": "Slightly more natural phrasing.",
+          "severity": 1
+        },
+        {
+          "original": "Put an assert statement between xassert{ ... }xassert. Any number of statements can be put between the { }, but they must end with a flag. If the flag is false, an `x-assert` exception is raised. `xassert{...}xassert` blocks are compiled out if `xassert-enable` is set to 0.",
+          "replacement": "Place an assert statement between `xassert{ ... }xassert`. Any number of statements can be placed within the block, but they must conclude with a flag. If this flag is false, an `x-assert` exception is raised. `xassert{...}xassert` blocks are compiled out if `xassert-enable` is set to 0.",
+          "reason": "Improved clarity and flow. 'Put' is less formal than 'place'. Clarified 'the { }' to 'the block' for better readability. 'conclude with a flag' is more precise than 'end with a flag'.",
+          "severity": 2
+        },
+        {
+          "original": "- Defining Word: Create a typechecker instance for structs.",
+          "replacement": "- Defining Word: Creates a typechecker instance for structs.",
+          "reason": "Consistent tense with other descriptions. 'Creates' is more active and descriptive for a 'Defining Word'.",
+          "severity": 1
+        },
+        {
+          "original": "For instance, in execution mode create a stack-checker instance and specify the number of input and output params. If, after the stack-checked Word's execution, the stack doesn't have the expected depth, a failure will be reported, and execution stops.",
+          "replacement": "For instance, in execution mode, create a `stack-checker` instance and specify the number of input and output parameters. If, after the stack-checked Word's execution, the stack does not have the expected depth, a failure will be reported, and execution stops.",
+          "reason": "Added a comma for readability. Changed 'params' to 'parameters' for consistency and formality. Changed 'doesn't' to 'does not' for slightly more formal tone in documentation.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 796,
+      "completion_tokens": 541,
+      "total_tokens": 1337,
+      "cost": 0.0015913,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0015913,
+        "upstream_inference_prompt_cost": 0.0002388,
+        "upstream_inference_completions_cost": 0.0013525
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "fabce98cb6a6947b70873d42fddeccfe816ba99f748d65b7fd7e720e93b2176c": {
+    "result": {
+      "findings": [
+        {
+          "original": "BoxLambda OS Software Project top-level in the BoxLambda Directory Tree",
+          "replacement": "BoxLambda OS Software Project Top-Level Directory",
+          "reason": "More concise and clearer phrasing. 'top-level' is already in the main heading.",
+          "severity": 2
+        },
+        {
+          "original": "The OS boot sequences is preceded by the bootloader boot sequence",
+          "replacement": "The OS boot sequence is preceded by the bootloader boot sequence",
+          "reason": "Grammar: 'sequences' should be singular to match 'is preceded'.",
+          "severity": 4
+        },
+        {
+          "original": "After the Bootloader has transferred control to the OS image it has loaded into EMEM, the OS start-up code goes through the following sequence:",
+          "replacement": "After the bootloader transfers control to the OS image loaded into EMEM, the OS startup code performs the following sequence:",
+          "reason": "More concise and active voice. 'start-up' is usually 'startup' as an adjective. 'goes through' can be replaced with 'performs'.",
+          "severity": 3
+        },
+        {
+          "original": "Evaluate the Forth modules listed in [fs/forth/boxkern-includes.fs](../../../fs/forth/boxkern-includes/boxkern-includes.fs).",
+          "replacement": "Evaluates the Forth modules listed in [fs/forth/boxkern-includes.fs](../../../fs/forth/boxkern-includes/boxkern-includes.fs).",
+          "reason": "Consistency with the preceding numbered list item, which uses a verb ('sets up'). This section describes what the OS does.",
+          "severity": 2
+        },
+        {
+          "original": "Transfer control to Forth by evaluating [fs/forth/init.fs](../../../fs/forth/init.fs). `init.fs` is expected to invoke the `quit` Word, starting the Forth REPL.",
+          "replacement": "Transfers control to Forth by evaluating [fs/forth/init.fs](../../../fs/forth/init.fs). `init.fs` is expected to invoke the `quit` Word, starting the Forth REPL.",
+          "reason": "Consistency with the preceding numbered list item, which uses a verb ('sets up'). This section describes what the OS does.",
+          "severity": 2
+        },
+        {
+          "original": "Copy the pre-compiled `boxkern_forth_img` into place, instantly populating the Forth dictionary with all the Words from the [boxkern-includes](../../../fs/forth/boxkern-includes/boxkern-includes.fs) modules.",
+          "replacement": "Copies the pre-compiled `boxkern_forth_img` into place, instantly populating the Forth dictionary with all the Words from the [boxkern-includes](../../../fs/forth/boxkern-includes/boxkern-includes.fs) modules.",
+          "reason": "Consistency with the preceding numbered list item, which uses a verb ('sets up'). This section describes what the OS does.",
+          "severity": 2
+        },
+        {
+          "original": "Transfer control to Forth by evaluating [fs/forth/init.fs](../../../fs/forth/init.fs). `init.fs` is expected to invoke the `quit` Word, starting the Forth REPL.",
+          "replacement": "Transfers control to Forth by evaluating [fs/forth/init.fs](../../../fs/forth/init.fs). `init.fs` is expected to invoke the `quit` Word, starting the Forth REPL.",
+          "reason": "Consistency with the preceding numbered list item, which uses a verb ('sets up'). This section describes what the OS does.",
+          "severity": 2
+        },
+        {
+          "original": "The `boxkern_forth_img`, used during Fast Boot, is generated by performing a Slow Boot and recording the resulting Forth state (dictionary and core variables):",
+          "replacement": "The `boxkern_forth_img` used during Fast Boot is generated by performing a Slow Boot and recording the resulting Forth state (dictionary and core variables).",
+          "reason": "Remove unnecessary comma. The parenthetical phrase is restrictive.",
+          "severity": 1
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 836,
+      "completion_tokens": 961,
+      "total_tokens": 1797,
+      "cost": 0.0026533,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0026533,
+        "upstream_inference_prompt_cost": 0.0002508,
+        "upstream_inference_completions_cost": 0.0024025
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "3df6b86d66bcb2a7dfcab15a2137e019958530fb98cdf827dbf62918d311da91": {
+    "result": {
+      "findings": [
+        {
+          "original": "5. `target.py` transfers the target filesystem to the host PC and extracts `boxkern_forth.img`.\n5. The build system links the `boxkern_forth.img` into the Fast Boot BoxKern executable `boxkernforth`.",
+          "replacement": "5. `target.py` transfers the target filesystem to the host PC and extracts `boxkern_forth.img`.\n6. The build system links `boxkern_forth.img` into the Fast Boot BoxKern executable `boxkernforth`.",
+          "reason": "The second '5' should be '6' to maintain sequential numbering.",
+          "severity": 3
+        },
+        {
+          "original": "The syntax is limited to lines starting with `\\`, which are ignored, and lines beginning with the word `boxkern_include` followed by the full path of an `.fs` Forth module to be evaluated. These Forth modules must not include any submodules themselves.",
+          "replacement": "The syntax is limited to lines starting with `\\` (which are ignored) and lines beginning with the word `boxkern_include` followed by the full path of an `.fs` Forth module to be evaluated. These Forth modules must not include any submodules themselves.",
+          "reason": "Improved punctuation for clarity and flow.",
+          "severity": 1
+        },
+        {
+          "original": "The BoxKern loads and passes `boxkern_include` files to the Forth environment at boot time using [Forth-C FFI function](c-ffi.md)  `forth_eval_boxkern_includes_or_die()`.",
+          "replacement": "The BoxKern loads and passes `boxkern_include` files to the Forth environment at boot time using the [Forth-C FFI function](c-ffi.md) `forth_eval_boxkern_includes_or_die()`.",
+          "reason": "Added 'the' for better grammar and flow.",
+          "severity": 1
+        },
+        {
+          "original": "This mechanism allows a limited form of Forth module loading until the Forth `include` Word can be defined.",
+          "replacement": "This mechanism allows a limited form of Forth module loading until the Forth `include` word can be defined.",
+          "reason": "Lowercase 'word' when referring to the general concept, consistent with 'Forth module loading'.",
+          "severity": 2
+        },
+        {
+          "original": "The order of the modules listed in `boxkern-includes.fs` is important because new Words build upon previously defined Words.",
+          "replacement": "The order of the modules listed in `boxkern-includes.fs` is important because new words build upon previously defined words.",
+          "reason": "Lowercase 'words' when referring to the general concept, consistent with 'Forth module loading'.",
+          "severity": 2
+        },
+        {
+          "original": "The modules in `boxkern-includes.fs` build up a stack, with [shell.fs](../../../fs/forth/boxkern-includes/shell.fs) on top.",
+          "replacement": "The modules in `boxkern-includes.fs` build up a stack, with [shell.fs](../../../fs/forth/boxkern-includes/shell.fs) at the top.",
+          "reason": "'at the top' is more idiomatic for describing the position in a stack.",
+          "severity": 1
+        },
+        {
+          "original": "When [Fast Boot](#fast-boot) is used, the modules listed in the `boxkern-includes.fs` list are part of the pre-compiled `boxkern_forth.img`, so `boxkern-includes.fs` evaluation can be skipped.",
+          "replacement": "When [Fast Boot](#fast-boot) is used, the modules listed in `boxkern-includes.fs` are part of the pre-compiled `boxkern_forth.img`, so `boxkern-includes.fs` evaluation can be skipped.",
+          "reason": "Removed redundant 'the ... list' for conciseness.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 916,
+      "completion_tokens": 924,
+      "total_tokens": 1840,
+      "cost": 0.0025848,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0025848,
+        "upstream_inference_prompt_cost": 0.0002748,
+        "upstream_inference_completions_cost": 0.00231
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "d8add8463e888d41a3c5b1228141b410c758359583edc23556c22d73c393bb3e": {
+    "result": {
+      "findings": [
+        {
+          "original": "Fastboot helper Word: Save forth imem and emem up to `here` to file `boxkern-forth.img`. See [Generating boxkern_forth.img](#generating-boxkern_forthimg).",
+          "replacement": "Saves Forth IMEM and EMEM up to `here` to the file `boxkern-forth.img`. See [Generating boxkern_forth.img](#generating-boxkern_forthimg).",
+          "reason": "Rephrase as a concise action for a dictionary entry. Remove 'helper Word' as it's implied by the context of a 'Word' definition.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 447,
+      "completion_tokens": 134,
+      "total_tokens": 581,
+      "cost": 0.0004691,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0004691,
+        "upstream_inference_prompt_cost": 0.0001341,
+        "upstream_inference_completions_cost": 0.000335
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "473e1063ff18dc2edff11ff82c5096f83ab3f5e98a04dc5ac7a951fc60a1f53f": {
+    "result": {
+      "findings": [
+        {
+          "original": "Note that scanlines between `SCANLINE-MAX` and `SCANLINE-VISIBLE-MAX` will not be visible.",
+          "replacement": "Note that scanlines between `SCANLINE-VISIBLE-MAX` and `SCANLINE-MAX` will not be visible.",
+          "reason": "The range should be ordered from lower to higher value for clarity.",
+          "severity": 2
+        },
+        {
+          "original": "- The highest visible VGA scanline value.",
+          "replacement": "- The highest visible VGA scanline value. (This refers to `SCANLINE-VISIBLE-MAX`.)",
+          "reason": "The previous entry defined `SCANLINE-MAX`. This entry defines `SCANLINE-VISIBLE-MAX` but the heading is missing. Adding a parenthetical note clarifies which constant is being described.",
+          "severity": 3
+        },
+        {
+          "original": "HSTART and HSTOP determine the horizontally active part of the screen.",
+          "replacement": "HSTART and HSTOP determine the horizontally active display area.",
+          "reason": "Using 'display area' is slightly more precise and common terminology than 'part of the screen'.",
+          "severity": 1
+        },
+        {
+          "original": "VSTART and VSTOP determine the vertically active part of the screen.",
+          "replacement": "VSTART and VSTOP determine the vertically active display area.",
+          "reason": "Using 'display area' is slightly more precise and common terminology than 'part of the screen'.",
+          "severity": 1
+        },
+        {
+          "original": "- Reset VRAM, release all VRAM resources.",
+          "replacement": "- Resets VRAM and releases all VRAM resources.",
+          "reason": "Consistent verb tense with other function descriptions (e.g., 'Return the VRAM base address').",
+          "severity": 1
+        },
+        {
+          "original": "- Allocate memory in VRAM for a tilemap, bitmap, tiles, or sprites. The sheet and tilemap creation/initialization Words use this Word to allocate their resources.  \n  `size-bytes`: the number of bytes to allocate.  \n  If successful, returns a 2KB-aligned Pointer to allocated block of memory in VRAM.  \n  If not successful, a vram :: x-alloc-failed exception is raised.",
+          "replacement": "- Allocates memory in VRAM for a tilemap, bitmap, tiles, or sprites. Sheet and tilemap creation/initialization Words use this Word to allocate their resources.\n  `size-bytes`: The number of bytes to allocate.\n  If successful, returns a 2KB-aligned pointer to the allocated block of memory in VRAM.\n  If not successful, a `vram::x-alloc-failed` exception is raised.",
+          "reason": "Consistent verb tense. Improved formatting for parameter description. 'Pointer' should not be capitalized unless it's a specific type name. Backticks for the exception name improve readability.",
+          "severity": 2
+        },
+        {
+          "original": "- Release VRAM allocated with vram-alloc.",
+          "replacement": "- Releases VRAM allocated with `vram-alloc`.",
+          "reason": "Consistent verb tense. Backticks for the function name improve readability.",
+          "severity": 1
+        },
+        {
+          "original": "- Return the VRAM base address.",
+          "replacement": "- Returns the VRAM base address.",
+          "reason": "Consistent verb tense.",
+          "severity": 1
+        },
+        {
+          "original": "- `vram. ( -- )`\n\n- Print VRAM usage.",
+          "replacement": "`vram. ( -- )`\n\n- Prints VRAM usage.",
+          "reason": "The bullet point for `vram.` is redundant as it's already a code block. Consistent verb tense for the description.",
+          "severity": 2
+        },
+        {
+          "original": "A Tilemap is a grid of tiles. The grid is characterized by width, height and tile type. The grid is populated used the `mapentry{...}` API described in the next subsection.",
+          "replacement": "A tilemap is a grid of tiles, characterized by its width, height, and tile type. The grid is populated using the `mapentry{...}` API described in the next subsection.",
+          "reason": "Improved sentence flow and grammar ('populated using' instead of 'populated used'). 'Tilemap' should be lowercase when used as a common noun.",
+          "severity": 3
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 950,
+      "completion_tokens": 1022,
+      "total_tokens": 1972,
+      "cost": 0.00284,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.00284,
+        "upstream_inference_prompt_cost": 0.000285,
+        "upstream_inference_completions_cost": 0.002555
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "931e09ff7a9161badbb511de4b11ef875b57ff1b2f528913f668f397acd8b08d": {
+    "result": {
+      "findings": [
+        {
+          "original": "addr points to a block of 256 half-words, each half-word specifying a 12-bit rgb value corresponding to its index.",
+          "replacement": "The `addr` parameter points to a block of 256 half-words, where each half-word specifies a 12-bit RGB value corresponding to its index.",
+          "reason": "Clarify 'addr' as a parameter, improve flow, and capitalize 'RGB' for consistency.",
+          "severity": 2
+        },
+        {
+          "original": "The passed in value is a unsigned fixed point 1.7 value.",
+          "replacement": "The value passed in is an unsigned fixed-point 1.7 value.",
+          "reason": "Improve phrasing and hyphenate 'fixed-point'.",
+          "severity": 2
+        },
+        {
+          "original": "Retrieve the horizontal scaling value (unsigned fixed point 1.7 value).",
+          "replacement": "Retrieve the horizontal scaling value (unsigned fixed-point 1.7 value).",
+          "reason": "Hyphenate 'fixed-point'.",
+          "severity": 1
+        },
+        {
+          "original": "The passed in value is a unsigned fixed point 1.7 value.",
+          "replacement": "The value passed in is an unsigned fixed-point 1.7 value.",
+          "reason": "Improve phrasing and hyphenate 'fixed-point'.",
+          "severity": 2
+        },
+        {
+          "original": "Retrieve the vertical scaling value (unsigned fixed point 1.7 value).",
+          "replacement": "Retrieve the vertical scaling value (unsigned fixed-point 1.7 value).",
+          "reason": "Hyphenate 'fixed-point'.",
+          "severity": 1
+        },
+        {
+          "original": "Select the sprite bank to use. 0 or 1.",
+          "replacement": "Select the sprite bank to use (0 or 1).",
+          "reason": "Integrate the parenthetical information more smoothly.",
+          "severity": 1
+        },
+        {
+          "original": "Get the selected sprite bank.",
+          "replacement": "Retrieve the selected sprite bank.",
+          "reason": "Use 'Retrieve' for consistency with other `@` words.",
+          "severity": 1
+        },
+        {
+          "original": "Initialize the Vera subsystem. Performs a VRAM, palette and sprite reset. Executed during `init.fs` evaluation.",
+          "replacement": "Initialize the VERA subsystem. This performs a VRAM, palette, and sprite reset. It is executed during `init.fs` evaluation.",
+          "reason": "Improve sentence structure, add a serial comma, and capitalize 'VERA' for consistency.",
+          "severity": 2
+        },
+        {
+          "original": "Load font file, process all glyphs and store in given VERA tileset. May raise `x-process-font-err`, `x-fr-*` and `x-pool-* exceptions`.",
+          "replacement": "Load a font file, process all glyphs, and store them in the given VERA tileset. This may raise `x-process-font-err`, `x-fr-*`, and `x-pool-*` exceptions.",
+          "reason": "Improve flow, add articles, use a serial comma, and clarify the exception phrasing.",
+          "severity": 2
+        },
+        {
+          "original": "The VERA font loader module is used to load a 1 BPP 8x8 font from file into a VERA tileset sheet.",
+          "replacement": "The VERA font loader module loads a 1 BPP 8x8 font from a file into a VERA tileset sheet.",
+          "reason": "Make the sentence more concise and active.",
+          "severity": 2
+        }
+      ]
+    },
+    "usage": {
+      "prompt_tokens": 939,
+      "completion_tokens": 881,
+      "total_tokens": 1820,
+      "cost": 0.0024842,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0024842,
+        "upstream_inference_prompt_cost": 0.0002817,
+        "upstream_inference_completions_cost": 0.0022025
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
   }
 }

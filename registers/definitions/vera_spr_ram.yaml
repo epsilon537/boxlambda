@@ -127,6 +127,6 @@ regmap:
             description: Vertical Flip
             value: 2
         -   name: HFLIP_VFLIP
-            description: Horizonal and Vertical Flip
+            description: Horizontal and Vertical Flip
             value: 3
 

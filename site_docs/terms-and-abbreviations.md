@@ -154,7 +154,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **RTCC**: Real-Time Clock and Calendar.
 - **RTTC**: Run-Time Type Checking.
 - **RTL**: Register-Transfer Level - an abstraction of a digital design, typically described in Verilog, SystemVerilog, or VHDL.
-- **RV32IMCB**: RISC-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
+- **RV32IMCB**: RISC-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulation Extensions.
 - **Scatter-Gather DMA**: A method for transferring data between non-contiguous memory blocks using smaller contiguous transfers.
 - **Scan Line**: One line in the raster scanning pattern of a VGA display.
 - **SCL**: I2C Serial Clock Line.

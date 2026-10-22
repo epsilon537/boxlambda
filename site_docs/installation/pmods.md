@@ -18,7 +18,7 @@ Hook up Digilent's [MicroSD PMOD](https://digilent.com/shop/pmod-microsd-microsd
 
 ## Audio PMOD
 
-To make space for the keyboard and mouse, I moved the audio PMOD to the ChipKit header of the Arty A7 board. Hook up Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) as follows:
+To accommodate the keyboard and mouse, I moved the audio PMOD to the ChipKit header of the Arty A7 board. Connect Digilent's [PMOD Amp2](https://digilent.com/shop/pmod-amp2-audio-amplifier/) as follows:
 
 | Audio PMOD Pin | Arty A7 Board Pin |
 |----------------|-------------------|
@@ -51,11 +51,11 @@ Hook up the PMOD to port `JA` and connect a keyboard and/or a mouse.
 
 ## RTCC PMOD
 
-The Real-Time Clock and Calendar PMOD is from Digilent:
+The Real-Time Clock and Calendar (RTCC) PMOD is from Digilent:
 
 [https://digilent.com/shop/pmod-rtcc-real-time-clock-calendar/](https://digilent.com/shop/pmod-rtcc-real-time-clock-calendar/)
 
-There aren't enough PMOD ports on the Arty A7 to accommodate all BoxLambda peripherals. Instead of using a PMOD port, I hooked up the RTCC PMOD to the I2C pins of the ChipKit Header:
+The Arty A7 lacks sufficient PMOD ports on the Arty A7 to accommodate all BoxLambda peripherals. I connected the RTCC PMOD to the I2C pins of the ChipKit Header instead of using a dedicated PMOD port:
 
 | RTCC PMOD Pin | Arty A7 Board Pin |
 |----------|-------------|

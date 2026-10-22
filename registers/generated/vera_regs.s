@@ -74,14 +74,14 @@
 # DC_HSCALE - Display composer horizontal scale register.
 .equ VERA_DC_HSCALE_ADDR, 0x20
 
-# DC_HSCALE.val - the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+# DC_HSCALE.val - the horizontal fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel.
 .equ VERA_DC_HSCALE_VAL_WIDTH, 8
 .equ VERA_DC_HSCALE_VAL_LSB, 0
 .equ VERA_DC_HSCALE_VAL_MASK, 0xff
 # DC_VSCALE - Display composer vertical scale register.
 .equ VERA_DC_VSCALE_ADDR, 0x24
 
-# DC_VSCALE.val - the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+# DC_VSCALE.val - the vertical fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel.
 .equ VERA_DC_VSCALE_VAL_WIDTH, 8
 .equ VERA_DC_VSCALE_VAL_LSB, 0
 .equ VERA_DC_VSCALE_VAL_MASK, 0xff
@@ -92,7 +92,7 @@
 .equ VERA_DC_HSTART_VAL_WIDTH, 10
 .equ VERA_DC_HSTART_VAL_LSB, 0
 .equ VERA_DC_HSTART_VAL_MASK, 0x3ff
-# DC_HSTOP - Display compser horizontal stop register.
+# DC_HSTOP - Display composer horizontal stop register.
 .equ VERA_DC_HSTOP_ADDR, 0x2c
 
 # DC_HSTOP.val - Horizontal stop of active part of screen in 640x480 space.

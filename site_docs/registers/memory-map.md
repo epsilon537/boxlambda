@@ -3,7 +3,7 @@
 [memmap.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/memmap.fs)
 [memmap.h](https://github.com/epsilon537/boxlambda/blob/develop/registers/generated/memmap.h)
 
-Next to memory-mapped registers, BoxLambda includes the following memory blocks. Memory is byte-, half-word-, and word-accessible following natural address alignment rules.
+In addition to memory-mapped registers, BoxLambda includes the following memory blocks. Memory is byte-, half-word-, and word-accessible following natural address alignment rules.
 
 ## IMEM
 
@@ -43,7 +43,7 @@ Write-only Sprite attribute RAM.
 
 Two banks of 64 entries. Each entry consists of 4 16-bit attributes. The attribute layout is described in the [VERA Sprite Attribute RAM layout](./vera-spr-attr-ram.md) section.
 
-**Rendering Priority** The sprite memory location dictates the rendering order. The sprite whose attributes are at the lowest location will be rendered in front of all other sprites; the sprite at the highest location will be rendered behind all other sprites, and so forth.
+**Rendering Priority** The sprite memory location dictates the rendering order. The sprite whose attributes are at the lowest memory location will be rendered in front of all other sprites; the sprite at the highest location will be rendered behind all other sprites, and so forth.
 
 **Palette offset** works the same way as it does for layers.
 
@@ -102,7 +102,7 @@ Note: BoxLambda OS will overwrite this default palette with a [custom palette](.
 
 ## VERA VGA Line Capture RAM
 
-Read-only RAM containing one VGA scanline worth of captured pixel data.
+Read-only RAM containing one VGA scanline's worth of captured pixel data.
 
 - **Address Range**: `0x12003000-0x12003a00`
 - **Size**: 2560 bytes

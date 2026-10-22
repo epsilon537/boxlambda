@@ -7,7 +7,7 @@
 
 BoxLambda's Forth is based on version 1.1.1d of Matthias Koch's [Mecrisp Quintus](https://mecrisp.sourceforge.net). This section discusses the Forth _Core_, i.e., the RISC-V assembly language codebase that bootstraps the Forth environment.
 
-I’ll flesh this section out over time. For now, these are my notes on the parts of the Mecrisp Forth core relevant to bringing up the codebase on BoxLambda.
+This section will be expanded over time. For now, it contains notes on the parts of the Mecrisp Forth core relevant to bringing up the codebase on BoxLambda.
 
 ## BoxLambda changes relative to the original Mecrisp Quintus Core
 
@@ -16,7 +16,7 @@ Mecrisp codebase when porting it to BoxLambda.
 
 ### Flash Memory Dictionary Removed
 
-This is the biggest one. The original Mecrisp Forth code is written to boot from flash memory and includes mechanisms to compile Words into flash memory. These mechanisms are quite clever and make up a significant portion of the original Forth core. I don't need this feature for BoxLambda, however. Non-volatile storage on BoxLambda is primarily filesystem-based, utilizing an SD Card. BoxLambda uses flash memory for bitstreams, firmware, and key system variables, but not for storing user programs. BoxLambda's Forth does not include a flash-based dictionary.
+This is the biggest one. The original Mecrisp Forth code is designed to boot from flash memory and includes mechanisms to compile Words into flash memory. These mechanisms are quite clever and and constitute a significant portion of the original Forth core. However, this feature is not needed for BoxLambda. Non-volatile storage on BoxLambda is primarily filesystem-based, utilizing an SD Card. BoxLambda uses flash memory for bitstreams, firmware, and key system variables, but not for storing user programs. Consequently, BoxLambda's Forth does not include a flash-based dictionary.
 
 ### An IMEM and EMEM Dictionary
 
@@ -51,7 +51,7 @@ Once the [wordlist.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/f
 
 ### Booting Forth from C
 
-The original Mecrisp Forth boots the Forth core directly from flash memory, i.e., the early boot code is part of the Forth core. BoxLambda, on the other hand, first boots up a C environment (see [here](../base-platform/bootstrap/bootloader.md#boot-sequence)), then the C environment boots the Forth environment using the [Forth-C FFI](c-ffi.md) API.
+The original Mecrisp Forth boots directly from flash memory, i.e., the early boot code is part of the Forth core. BoxLambda, on the other hand, first boots a C environment (see [here](../base-platform/bootstrap/bootloader.md#boot-sequence)), then the C environment boots the Forth environment using the [Forth-C FFI](c-ffi.md) API.
 
 From BoxLambda OS's [main.cpp](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/boxlambda_os/main.cpp):
 
@@ -143,13 +143,10 @@ Understanding the purpose of the following assembler variables, defined in [fort
 - `DictionaryPointer`: Holds the _primary_ dictionary pointer. This is where the next dictionary entry will be written. Corresponds to Forth variable `(dp)`. Word `here` puts the content of `(dp)` on the stack.
 - `SecondDictionaryPointer`: Holds the _secondary_ dictionary pointer. See [An IMEM and EMEM Dictionary section](#an-imem-and-emem-dictionary) for a discussion of the two dictionaries.
 - `ThreadEnd`: Holds the pointer to the most recently defined Word in the initial/default wordlist (the initial wordlist is named `forth`. See [Wordlists](forth-generic/namespaces.md#word-lists)).
-- `Current`: Holds the point to the current wordlist. Initially points to `ThreadEnd`. Corresponds to Forth variable `(current)`. Forth variable `(latest)` is equivalent to `(current) @`.
-- `VariablesPointer`: Core variables such as `base`, `state`, `>in`, hooks...
-  are placed and initialized at the end of the `.forth_imem` section. As core variables are placed during the
-  `catchmempointers.s` phase of initialization, the pointer advances downwards,
-  towards lower memory. When _catchmempointers_ has completed, the pointer value
-  is stored in `VariablesPointer`. In other words, `VariablesPointer` acts like a _here_
-  pointer for core variables. The corresponding Word is `ramvar-here`.
+- `Current`: Holds the pointer to the current wordlist. Initially points to `ThreadEnd`. Corresponds to Forth variable `(current)`. Forth variable `(latest)` is equivalent to `(current) @`.
+- `VariablesPointer`: Core variables such as `base`, `state`, `>in`, hooks... are placed and initialized at the end of the `.forth_imem` section. As core variables are placed during the
+  `catchmempointers.s` phase of initialization, the pointer advances downwards, towards lower memory. Once _catchmempointers_ has completed, the pointer value
+  is stored in `VariablesPointer`. In other words, `VariablesPointer` acts like a _here_ pointer for core variables. The corresponding Word is `ramvar-here`.
 
 The Forth Core codebase relies heavily on GNU assembler pre-processing macros and symbols.
 The following preprocessor symbols play an important role in the Forth core:
@@ -171,9 +168,8 @@ If you look at the definitions of core variables (e.g., `hook-emit`), you'll see
 that the initial value of the variable is placed right after the code.
 `Catchmempointers.s` will copy it from there to the variable location at the
 end of IMEM. This is wasteful. Each core variable takes up two IMEM
-locations: one for the variable itself, one for its initial value. It results from the
-boot-from-flash legacy in the original Mecrisp Forth code. I will remove this
-inefficiency in a future release.
+locations: one for the variable itself, one for its initial value. This inefficiency results from the
+boot-from-flash legacy in the original Mecrisp Forth code and will be removed in a future release.
 
 ### Dictionary structure
 

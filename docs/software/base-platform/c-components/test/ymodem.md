@@ -19,7 +19,7 @@ unsigned long ymodem_receive(unsigned char *buf, unsigned long length);
 unsigned long ymodem_send(unsigned char *buf, unsigned long size, char* filename);
 ```
 
-The `ymodem` software component is used by the `ymodem_cli` CLI component to transfer files between the host PC's file system and BoxLambda's file system:
+The `ymodem` software component is used by the `ymodem_cli` CLI component to transfer files between the host PC and BoxLambda's file system:
 
 ```
 * ymodem_rx

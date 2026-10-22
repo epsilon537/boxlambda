@@ -116,7 +116,7 @@ regmap:
     description: Display composer horizontal scale register.
     address: 32
     bitfields:
-    -   description: the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+    -   description: the horizontal fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel.
         reset: 0
         width: 8
         lsb: 0
@@ -125,7 +125,7 @@ regmap:
     description: Display composer vertical scale register.
     address: 36
     bitfields:
-    -   description: the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+    -   description: the vertical fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel.
         reset: 0
         width: 8
         lsb: 0
@@ -140,7 +140,7 @@ regmap:
         lsb: 0
         access: rw
 -   name: DC_HSTOP
-    description: Display compser horizontal stop register.
+    description: Display composer horizontal stop register.
     address: 44
     bitfields:
     -   description: Horizontal stop of active part of screen in 640x480 space.

@@ -24,7 +24,7 @@ In the event-based interrupt example, the interrupt is explicitly acknowledged b
 
 The original **wbuart** and **sdspi** cores use condition-based interrupts. However, I find the event-based protocol easier to work with, so I modified these cores to generate event-based interrupts.
 
-For **wbuart**, I added an Interrupt Enable (IEN) register and an Interrupt Status (ISR) register. The ISR bits get set when specific events occur:
+For **wbuart**, an Interrupt Enable (IEN) register and an Interrupt Status (ISR) register were added. The ISR bits are set when specific events occur:
 
 - `ISR[0]`: The UART Rx FIFO goes from an empty to a non-empty state.
 - `ISR[1]`: The UART Rx FIFO goes from less-than-half-full to half-full.

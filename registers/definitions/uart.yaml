@@ -251,7 +251,7 @@ regmap:
         lsb: 2
         access: rw
     -   name: TX_FIFO_HALF_EMPTY
-        description: Enabled TX_FIFO_HALF_EMPTY interrupt.
+        description: Enable TX_FIFO_HALF_EMPTY interrupt.
         width: 1
         lsb: 3
         access: rw

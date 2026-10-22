@@ -21,8 +21,8 @@ Key components include:
 call Forth from C code and C from Forth code. BoxKern drivers and libraries
 export their functionality to the Forth environments through the FFI.
 - **The Console Driver**: In the current BoxLambda code base, Picolibc's *stdin*
-and *stdout* are associated with the serial port. This I/O method has to be
-replaced by a Console Driver which forwards output to and takes input from the
+and *stdout* are associated with the serial port. This I/O method must be
+replaced by a Console Driver that forwards output to and takes input from the
 Forth-side REPL.
 
 ## The Mecrisp Forth Core and Boxkern-Includes
@@ -30,7 +30,7 @@ Forth-side REPL.
 The Mecrisp Forth Core is written in RISC-V assembly language. It contains Forth start-up code and definitions of key Forth words, such as interpreter/compiler words, that form the core of the Forth system. After
 booting the Mecrisp Forth Core, you have a small, operational Forth system.
 
-The Mecrisp Forth Core is complemented with the *BoxKern-Includes*, a set of pre-compiled Forth modules that are an essential part of the operating system. File system access and the graphics driver API, for instance, are part of the *boxkern-includes* list.
+The Mecrisp Forth Core is complemented by the *BoxKern-Includes*, a set of pre-compiled Forth modules that are an essential to the operating system. File system access and the graphics driver API, for instance, are part of the *boxkern-includes* list.
 
 ## The Forth Environment
 
@@ -41,9 +41,7 @@ Most *new* code will be written in Forth or in assembly language in the Forth en
 
 ### The Canvas REPL / Editor
 
-Instead of a line-oriented prompt, I would like to provide a REPL that allows
-you to move freely all over the screen, as is the case on the Commodore 64, for
-instance. The **Canvas REPL** can perform double duty as a text editor.
+Instead of a line-oriented prompt, the **Canvas REPL** allows users to move freely across the screen, similar to the Commodore 64. It can also perform double duty as a text editor.
 
 [![The Canvas REPL.](../../assets/canvas-repl.png)](../../assets/canvas-repl.png)
 
@@ -59,14 +57,7 @@ proxies access the BoxKern drivers/libs through the FFI.
 
 # The Extras
 
-The greyed-out parts in the block diagram are components that are not essential
-to create a working system. These components are likely added later (some
-possibly never). This is just a crude binary partitioning of what really
-is an [iterative spiraling
-approach](https://epsilon537.github.io/boxlambda/hello-world/). I start from
-something small but working (e.g., the Mecrisp Forth core running in a serial port
-terminal) and keep growing it. The greyed-out parts are among the parts to be
-added last.
+The greyed-out parts in the block diagram are components not essential for a working system. These components will likely be added later (some possibly never). This represents a crude binary partitioning of what is actually an [iterative spiraling approach](https://epsilon537.github.io/boxlambda/hello-world/). The development starts with something small but working (e.g., the Mecrisp Forth core running in a serial port terminal) and expands from there. The greyed-out parts are among those to be added last.
 
 ## Binary Executables and ELF Loader
 

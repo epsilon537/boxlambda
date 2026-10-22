@@ -100,7 +100,7 @@ By default, the variable is set to:
 VIVADO_FLAGS="-nolog -nojournal -notrace"
 ```
 
-To debug build issues, I unset `VIVADO_FLAGS` to enable detailed logs and trace messages.
+To debug build issues, unset `VIVADO_FLAGS` to enable detailed logs and trace messages.
 
 ### UpdateMem and XPM Memories
 

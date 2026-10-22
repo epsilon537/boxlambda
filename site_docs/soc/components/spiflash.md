@@ -21,7 +21,7 @@
 The Arty A7 has a quad-SPI flash device, so using a quad-SPI flash core would make sense. I chose to use a single-SPI flash core, however, for a couple of reasons:
 
 - A single-SPI flash core is less complex than a quad-SPI flash core. Single-SPI flash is also slower than quad-SPI flash, but I don't have a specific performance requirement for flash access. I do have a simplicity requirement, so I choose to trade performance for simplicity.
-- The flash device used on the Arty A7 depends on the PCB revision. Some revisions use Micron, others use Spansion. Quad-SPI flash access is not standardized across SPI flash devices, however. E.g., the command sequence needed to get the device into quad-SPI mode is device-dependent. The latency between a read command and the resulting data is device-dependent as well in quad-SPI mode. In single-SPI mode, these devices behave the same (at least when it comes to the limited feature set I'll be using in BoxLambda).
+- The flash device on the Arty A7 varies by PCB revision, with some using Micron and others Spansion. Quad-SPI flash access is not standardized across SPI flash devices; for example, the command sequence to enter quad-SPI mode and the read command-to-data latency are both device-dependent. In contrast, these devices behave consistently in single-SPI mode (at least for the limited feature set used in BoxLambda).
 
 ![Arty A7 PCB revisions and their flash devices](../../assets/arty-flash-devices.jpg)
 
@@ -29,7 +29,7 @@ The Arty A7 has a quad-SPI flash device, so using a quad-SPI flash core would ma
 
 ### Memory Mapped Read Access
 
-I would like to be able to boot software from flash memory. That means that the CPU should be able to read from flash memory as if it were a regular ROM module. The flash core should present to the SoC a memory-mapped Wishbone read interface that can address the entire 16MB flash memory range.
+To enable booting software from flash memory, the CPU must be able to read from flash memory as if it were a regular ROM module. The flash core should present a memory-mapped Wishbone read interface to the SoC, capable of addressing the entire 16MB flash memory range.
 
 ### Writing to Flash
 
@@ -65,7 +65,7 @@ BoxLambda's SPI Flash core uses the ZipCPU spixpress core as a starting point. I
 
 - The `SCK` output port of the core is the actual SPI clock signal, rather than an enable signal to be used in conjunction with a DDR primitive.
 - I added a clock divider parameter for `SCK`. I'm using a clock divider value of two in the BoxLambda SoC.
-- The core shifts out the serial output data at the SCK falling edge and shifts in the serial input data at the `SCK` rising edge. I modified the `Flashsim` co-simulator module to match this behavior. This is the standard SPI timing design.
+- The core shifts out the serial output data at the `SCK` falling edge and shifts in the serial input data at the `SCK` rising edge. I modified the `Flashsim` co-simulator module to match this behavior. This is the standard SPI timing design.
 
 ![SPI Timing Design](../../assets/spi-rising-falling-edge.png)
 

@@ -209,7 +209,7 @@ serial-emit ( Char -- )
 [logic.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/logic.s)
 [utils.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/utils.fs)
 
-Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves like "31 and ar/r/lshift". 32 lshift does nothing.
+On RISC-V, shift operations only decode the lowest 5 bits. Therefore, `ar/r/lshift` behaves like `31 and ar/r/lshift`. For example, `32 lshift` performs no shift.
 
 `arshift ( x1 u -- x2 )`
 
@@ -284,7 +284,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `u/mod ( u1 u2 -- u3 u4 )`
 
-- 32/32 = 32 rem 32 Division. u1 / u2 = u4 remainder u3.
+- 32-bit by 32-bit division, resulting in a 32-bit remainder and a 32-bit quotient. `u1 / u2 = u4` (quotient) with `u3` (remainder).
 
 `/mod ( n1 n2 -- n3 n4 )`
 
@@ -300,7 +300,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `* ( u1|n1 u2|n2 -- u3|n3 )`
 
-- 32\*32 = 32 Multiplication.
+- 32-bit by 32-bit multiplication, resulting in a 32-bit product.
 
 `2- ( u1|n1 -- u2|n2 )`
 
@@ -370,23 +370,23 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `um* ( u1 u2 -- ud )`
 
-- 32\*32 = 64 Multiplication.
+- Multiplies two 32-bit unsigned numbers, returning a 64-bit unsigned product.
 
 `ud* ( ud1|d1 ud2|d2 -- ud3|d3 )`
 
-- 64\*64 = 64 Multiplication.
+- Multiplies two 64-bit numbers, returning a 64-bit product. The input and output can be signed or unsigned.
 
 `udm* ( ud1 ud2 -- ud3-Low ud4-High )`
 
-- 64\*64=128 Multiplication.
+- Multiplies two 64-bit unsigned numbers, returning a 128-bit unsigned product.
 
 `um/mod ( ud u1 -- u2 u3 )`
 
-- ud / u1 = u3 remainder u2.
+- Divides a 64-bit unsigned number (`ud`) by a 32-bit unsigned number (`u1`), returning a 32-bit unsigned quotient (`u3`) and a 32-bit unsigned remainder (`u2`).
 
 `ud/mod ( ud1 ud2 -- ud3 ud4 )`
 
-- 64/64 = 64 rem 64 Division ud1 / ud2 = ud4 remainder ud3.
+- Divides a 64-bit number (`ud1`) by another 64-bit number (`ud2`), returning a 64-bit quotient (`ud4`) and a 64-bit remainder (`ud3`). The input and output can be signed or unsigned.
 
 `m+ ( d n -- d' )`
 
@@ -398,7 +398,7 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `m/mod ( d  n1 -- n2 n3 )`
 
-- d / n1 = n3 remainder r2.
+- Divides a double-length number (`d`) by a single-length number (`n1`), returning a single-length quotient (`n3`) and a single-length remainder (`n2`).
 
 `d/mod ( d1 d2 -- d3 d4 )`
 
@@ -410,19 +410,19 @@ Shifts decode the lowest 5 bits only on RISC-V. Therefore, ar/r/lshift behaves l
 
 `*/ ( n1 n2 n3 -- n4 )`
 
-- n1 \* n2 / n3 = n4.
+- Multiplies `n1` by `n2`, then divides the 64-bit intermediate product by `n3`, returning a 32-bit quotient (`n4`).
 
 `u*/ ( u1 u2 u3 -- u4 )`
 
-- u1 \* u2 / u3 = u4.
+- Multiplies `u1` by `u2`, then divides the 64-bit unsigned intermediate product by `u3`, returning a 32-bit unsigned quotient (`u4`).
 
 `*/mod ( n1 n2 n3 -- n4 n5 )`
 
-- n1 \* n2 / n3 = n5 remainder n4.
+- Multiplies `n1` by `n2`, then divides the 64-bit intermediate product by `n3`, returning a 32-bit quotient (`n5`) and a 32-bit remainder (`n4`).
 
 `u*/mod ( u1 u2 u3 -- u4 u5 )`
 
-- u1 \* u2 / u3 = u5 remainder u4.
+- Multiplies `u1` by `u2`, then divides the 64-bit unsigned intermediate product by `u3`, returning a 32-bit unsigned quotient (`u5`) and a 32-bit unsigned remainder (`u4`).
 
 `d2* ( d1 -- d2 )`
 
@@ -893,7 +893,7 @@ like signed double numbers.
 
 `string, ( c-addr len -- )`
 
-- Inserts a string of maximum 255 characters without runtime.
+- Compiles a string of maximum 255 characters without runtime.
 
 `literal, ( u|n -- )`
 

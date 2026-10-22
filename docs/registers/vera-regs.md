@@ -32,7 +32,7 @@ Base address: 0x12000000
 | [DC_HSCALE](#dc_hscale)  | 0x00000020 | Display composer horizontal scale register. |
 | [DC_VSCALE](#dc_vscale)  | 0x00000024 | Display composer vertical scale register. |
 | [DC_HSTART](#dc_hstart)  | 0x00000028 | Display composer horizontal start register. |
-| [DC_HSTOP](#dc_hstop)    | 0x0000002c | Display compser horizontal stop register. |
+| [DC_HSTOP](#dc_hstop)    | 0x0000002c | Display composer horizontal stop register. |
 | [DC_VSTART](#dc_vstart)  | 0x00000030 | Display composer vertical start register. |
 | [DC_VSTOP](#dc_vstop)    | 0x00000034 | Display composer vertical stop register. |
 | [L0_CONFIG](#l0_config)  | 0x00000040 | Layer 0 Configuration register. |
@@ -200,7 +200,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| val              | 7:0    | rw              | 0x00       | the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
+| val              | 7:0    | rw              | 0x00       | the horizontal fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel. |
 
 Back to [Register map](#register-map-summary).
 
@@ -217,7 +217,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| val              | 7:0    | rw              | 0x00       | the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel. |
+| val              | 7:0    | rw              | 0x00       | the vertical fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel. |
 
 Back to [Register map](#register-map-summary).
 
@@ -240,7 +240,7 @@ Back to [Register map](#register-map-summary).
 
 ## DC_HSTOP
 
-Display compser horizontal stop register.
+Display composer horizontal stop register.
 
 Address offset: 0x0000002c
 

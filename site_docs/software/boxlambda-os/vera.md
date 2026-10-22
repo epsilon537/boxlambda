@@ -175,7 +175,7 @@ ts sheet{ 256 tiles }apply
 
 ### Tile Maps
 
-A Tilemap is a grid of tiles. The grid is characterized by width, height and tile type. The grid is populated used the `mapentry{...}` API described in the next subsection.
+A tilemap is a grid of tiles, characterized by its width, height, and tile type. The grid is populated using the `mapentry{...}` API described in the next subsection.
 
 `<tmap> tmap{ <width> width <height> height <type> type }apply`  
 `<tmap> tmap{ <width> width <height> height <type> type }set`
@@ -203,11 +203,11 @@ A Tilemap is a grid of tiles. The grid is characterized by width, height and til
 
 `tmap-width@  ( tilemap -- width )`
 
-- Retruns the tilemap's width. Returns 32, 64, 128 or 256.
+- Returns the tilemap's width (32, 64, 128, or 256).
 
 `tmap-height@ ( tilemap -- height )`
 
-- Returns the tilemap's height. Returns 32, 64, 128 or 256.
+- Returns the tilemap's height (32, 64, 128, or 256).
 
 `tmap-type@ ( tilemap -- type )`
 
@@ -570,7 +570,7 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
 
 - Returns the layer's tile height. Returns 0 when in bitmap mode.
 
-`layer-base@ ( layer -- addr-id )`
+`layer-base@ ( layer -- addr )`
 
 - Returns the layer's VRAM base address.
 
@@ -598,8 +598,8 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
 
 `line-capture-pxl@ ( x -- rgb )`
 
-- Read the RGB value of a pixel on the captured line. x: the pixel's x position. Range: 0..639.
-  returns: 12-bit RGB triple.
+- Read the RGB value of a pixel on the captured line. `x`: the pixel's x position. Range: 0..639.
+  Returns a 12-bit RGB triple.
 
 ### Interrupts
 
@@ -688,11 +688,11 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 `pal! ( rgb idx -- )`
 
-- Write an entry into the palette. idx: the palete color index. rgb: the 12-bit RGB triple.
+- Write an entry into the palette. `idx`: the palette color index. rgb: the 12-bit RGB triple.
 
 `pal@ ( idx -- rgb )`
 
-- Read the RGB value of a palette entry. idx: the palete color index. Returns the 12-bit RGB triple.
+- Read the RGB value of a palette entry. `idx`: the palette color index. Returns the 12-bit RGB triple.
 
 `pal-group>pal-abs ( pal-group-id rel-idx -- abs-idx )`
 

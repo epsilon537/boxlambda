@@ -9,7 +9,7 @@ To install BoxLambda:
 5. [Activate the environment](#activating-the-tools-environment).
 6. [Prepare the SD card](#preparing-the-sd-card).
 7. [Set the Switches](#set-the-switches).
-7. [Flash the bitstream, bootloader, and OS binary](#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+8. [Flash the bitstream, bootloader, and OS binary](#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
 The first four steps only need to be performed once. Activate the environment each time you work on BoxLambda.
 
@@ -44,7 +44,7 @@ If you want to force a reinstall of the tools, delete the `./tools/` directory a
 ### User-Level Access to the Arty A7 USB JTAG Adapter.
 
 When run at the user level, OpenOCD might not have permission to access the USB JTAG adapter. To fix this issue, add a rule to `/etc/udev/rules.d`.
-Create a file named `99-openocd.rules` in the `/etc/udev/rules.d` directory. This file should have the following contents:
+Create a file named `99-openocd.rules` in the `/etc/udev/rules.d` directory with the following contents:
 
 ```
 # Original FT2232 VID:PID
@@ -54,7 +54,7 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="666",
 
 ### Serial Port
 
-On my Linux system, when I plug in my Arty A7, the serial port shows up at `/dev/ttyUSB1`.
+On my Linux system, when I plug the Arty A7 is plugged in, the serial port shows up at `/dev/ttyUSB1`.
 
 Serial Port Settings: **1000000 8N1**
 
@@ -175,7 +175,7 @@ You're now in the Forth REPL and can start entering Forth statements. [Try It Ou
 
 ### Option 2: Building and Loading from Source
 
-I'm continuously modifying and testing the code. To avoid having to update the SD card and flash the binaries each time, I added a mechanism that lets you:
+As the code is continuously modified and tested, a mechanism has been added to avoid repeatedly updating the SD card and flashing binaries. This mechanism allows you to:
 
 1. load the bitstream and OS binary onto the device (without flashing)
 2. load a RAM disk onto the device. At boot time, when the system detects the RAM disk, it will load the Forth modules from that RAM disk instead of the SD card.

@@ -13,16 +13,9 @@ Implementation:
 
 The BoxLambda C-Forth FFI is loosely based on Peter Schmid's work for the [Mecrisp Cube project](https://github.com/spyren/Mecrisp-Cube/tree/master).
 
-C has one stack, which is used to keep track of the call stack, stack frames
-(local variables), and - when a lot of parameters are involved - parameter
-passing. Forth uses two stacks: a **Return Stack** and a **Data Stack**. The return
-stack is used to keep track of the call stack and stack frames. The Data Stack
-is used for parameter passing.
+C has one stack, used to keep track of the call stack, stack frames (local variables), and—when many parameters are involved—parameter passing. Forth uses two stacks: a **Return Stack** and a **Data Stack**. The Return Stack tracks the call stack and stack frames, while the Data Stack is used for parameter passing.
 
-On BoxLambda, the C stack acts as a return stack when in Forth space. It's a natural
-fit. It requires no additional software constructs. The C compiler
-manages the C stack, while on the Forth side, the Mecrisp Quintus Forth Core is already using the
-RISC-V stack pointer register (x2) as the return stack pointer.
+On BoxLambda, the C stack acts as the return stack when in Forth space. This is a natural fit, requiring no additional software constructs. The C compiler manages the C stack, and on the Forth side, the Mecrisp Quintus Forth Core already uses the RISC-V stack pointer register (x2) as the return stack pointer.
 
 The Data Stack does require a software construct. The `forth_core_init()` function initializes a global `datastack` object with the following layout in C (see [forth.h](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/forth.h)):
 
@@ -233,8 +226,8 @@ The table below summarizes the actions that should be taken for each register wh
 | x7     | t2    | Temporary, not preserved across calls | Scratch register, must be saved before use | None. |
 | x8     | s0/fp | Saved register/frame pointer, preserved across calls/must be saved before use | Top of data stack (TOS) | x8=datastack.tos upon entry. Datastack.tos=x8 when returning to C. |
 | x9     | s1    | Saved register, preserved across calls/must be saved before use | Data stack pointer (PSP) | x9=datastack.psp upon entry. Datastack.psp=x9 when returning to C. |
-| x10    | a0    | Function argument/return value, not preserved across calls/no need save before use | Scratch register, must be saved before use | None. |
-| x11    | a1    | Function argument/return value, not preserved across calls/no need save before use | Scratch register, must be saved before use | None. |
+| x10    | a0    | Function argument/return value, not preserved across calls/no need to save before use | Scratch register, must be saved before use | None. |
+| x11    | a1    | Function argument/return value, not preserved across calls/no need to save before use | Scratch register, must be saved before use | None. |
 | x12    | a2    | Function argument, not preserved across calls/no need save before use | Scratch register, must be saved before use | None. |
 | x13    | a3    | Function argument, not preserved across calls/no need save before use | Scratch register, must be saved before use | None. |
 | x14    | a4    | Function argument, not preserved across calls/no need save before use | Free scratch register, not preserved across calls | None. |

@@ -14,8 +14,7 @@ and executes from there without requiring any pre-setup steps from a bootloader.
 2. The bootloader copies itself from flash to IMEM and jumps to its entry point in IMEM.
 3. The bootloader initializes SDRAM (EMEM).
 4. The bootloader checks the switch settings. If all four switches are in the *off* position, the
-bootloader will spin in a loop, allowing a debugger to connect. If the switches are not all in the off position,
-the bootloader continues to the next step.
+bootloader spins in a loop, allowing a debugger to connect. Otherwise, the bootloader continues to the next step.
 5. Using a magic number check, the bootloader detects the presence of an application
 image at flash memory location `0x11600000`. If an image is detected, it is copied to EMEM, starting at EMEM
 memory offset 0.

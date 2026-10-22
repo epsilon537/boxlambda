@@ -49,7 +49,7 @@ The easiest way to understand what's going on is by going through the diagram fr
 
 The video RAM (VRAM) is a dual-port RAM instance of four byte-wide columns (matching a 32-bit Wishbone data bus with four byte-enables). The amount of RAM is configurable, up to 128KB, through a `VRAM_SIZE_BYTES` parameter/macro.
 
-DPRAM port 0 is exclusively for the CPU. DPRAM port 1 is shared by the two Line Renderers and the Sprite Renderer. The `vram_if` module arbitrates access to port 1 using a time slot scheduler. There are three equal time slot *beats*, each one clock cycle wide. Each port is assigned one slot during which it can access VRAM. The duration of a timeslot is one clock cycle.
+DPRAM port 0 is exclusively for the CPU. DPRAM port 1 is shared by the two Line Renderers and the Sprite Renderer. The `vram_if` module arbitrates access to port 1 using a time slot scheduler. There are three equal time slot *beats*, each one clock cycle wide. Each port is assigned one slot during which it can access VRAM.
 
 ![Time Slot Scheduled VRAM Access.](../../assets/vram-if-timeslot-scheduling.drawio.png)
 
@@ -82,7 +82,7 @@ The `composer` receives basic control signals from the `video_vga` block: `next 
 
 ## The Layer Renderer
 
-The Layer Render's implementation is, conceptually at least, reasonably straightforward:
+The Layer Renderer's implementation is, conceptually at least, reasonably straightforward:
 
 1. Depending on the scanline index and the current position in the Line Buffer, it retrieves the appropriate map entry from VRAM (assuming Tile Mode).
 2. It retrieves the corresponding tile pixel data, also from VRAM.

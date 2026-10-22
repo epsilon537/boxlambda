@@ -25,7 +25,7 @@ $798 h, $ad8 h, $de9 h, $fdb h, $d98 h, $fb7 h, $fe9 h, $fed h,
 \ Palette Group 6, SARA 98C
 $000 h, $dca h, $ea8 h, $d75 h, $a44 h, $712 h, $401 h, $eed h,
 $203 h, $316 h, $648 h, $96a h, $8ab h, $479 h, $146 h, $015 h,
-\ Palete Group 7, YUNO
+\ Palette Group 7, YUNO
 $000 h, $9ab h, $fff h, $733 h, $b76 h, $ea9 h, $fdc h, $56c h,
 $bcf h, $222 h, $444 h, $566 h, $398 h, $fb6 h, $d45 h, $f9a h,
 \ Palette Groups 8-15 AAP SPLENDOR 128

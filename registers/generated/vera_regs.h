@@ -186,12 +186,12 @@ typedef enum {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t VAL : 8; // the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+    uint32_t VAL : 8; // the horizontal fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel.
     uint32_t : 24; // reserved
   };
 } vera_dc_hscale_t;
 
-// DC_HSCALE.val - the horizontal fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+// DC_HSCALE.val - the horizontal fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel.
 #define VERA_DC_HSCALE_VAL_WIDTH 8
 #define VERA_DC_HSCALE_VAL_LSB 0
 #define VERA_DC_HSCALE_VAL_MASK 0xff
@@ -203,12 +203,12 @@ typedef union {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t VAL : 8; // the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+    uint32_t VAL : 8; // the vertical fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel.
     uint32_t : 24; // reserved
   };
 } vera_dc_vscale_t;
 
-// DC_VSCALE.val - the vertical fractional scaling factor of the active part of the display. Setting this value to 128 will output 1 output pixel for every input pixel. Setting this to 64 will output 2 output pixels for every input pixel.
+// DC_VSCALE.val - the vertical fractional scaling factor of the active part of the display. A value of 128 will output 1 output pixel for every input pixel. A value of 64 will output 2 output pixels for every input pixel.
 #define VERA_DC_VSCALE_VAL_WIDTH 8
 #define VERA_DC_VSCALE_VAL_LSB 0
 #define VERA_DC_VSCALE_VAL_MASK 0xff
@@ -231,7 +231,7 @@ typedef union {
 #define VERA_DC_HSTART_VAL_MASK 0x3ff
 #define VERA_DC_HSTART_VAL_RESET 0x0
 
-// DC_HSTOP - Display compser horizontal stop register.
+// DC_HSTOP - Display composer horizontal stop register.
 #define VERA_DC_HSTOP_ADDR 0x2c
 #define VERA_DC_HSTOP_RESET 0x0
 typedef union {
@@ -647,7 +647,7 @@ typedef struct {
         __IO vera_dc_hstart_t DC_HSTART_bf; // Bit access for DC_HSTART register
     };
     union {
-        __IO uint32_t DC_HSTOP; // Display compser horizontal stop register.
+        __IO uint32_t DC_HSTOP; // Display composer horizontal stop register.
         __IO vera_dc_hstop_t DC_HSTOP_bf; // Bit access for DC_HSTOP register
     };
     union {

@@ -174,7 +174,7 @@ typedef union {
   uint32_t UINT32;
   struct {
     uint32_t BUSY : 1; // Set to enable BUSY interrupt.
-    uint32_t CARD_REMOVED : 1; // Set to enabled CARD_REMOVED interrupt.
+    uint32_t CARD_REMOVED : 1; // Set to enable CARD_REMOVED interrupt.
     uint32_t : 30; // reserved
   };
 } sdspi_ien_t;
@@ -185,7 +185,7 @@ typedef union {
 #define SDSPI_IEN_BUSY_MASK 0x1
 #define SDSPI_IEN_BUSY_RESET 0x0
 
-// IEN.CARD_REMOVED - Set to enabled CARD_REMOVED interrupt.
+// IEN.CARD_REMOVED - Set to enable CARD_REMOVED interrupt.
 #define SDSPI_IEN_CARD_REMOVED_WIDTH 1
 #define SDSPI_IEN_CARD_REMOVED_LSB 1
 #define SDSPI_IEN_CARD_REMOVED_MASK 0x2

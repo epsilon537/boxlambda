@@ -2076,7 +2076,7 @@ begin-module vera
   : greyscale #15 and GREYSCALE-0 + [1-foldable] ;
 
   \ Write an entry into the palette.
-  \ idx: the palete color index (0..255).
+  \ idx: the palette color index (0..255).
   \ rgb: the 12-bit RGB triple.
   ( rgb idx -- )
   : pal!
@@ -2086,7 +2086,7 @@ begin-module vera
   ;
 
   \ Read the RGB value of a palette entry.
-  \ idx: the palete color index.
+  \ idx: the palette color index.
   \ returns the 12-bit RGB triple.
   ( idx -- rgb )
   : pal@

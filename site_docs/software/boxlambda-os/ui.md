@@ -4,7 +4,7 @@ A Canvas based REPL and Text Editor.
 
 A Canvas is a character grid of 76 columns and a variable number of rows.
 
-In memory a Canvas is a consecutive memory range of extended-ASCII encoded bytes. Offset 0 corresponds with the top-left character in the Canvas, the last offset correspond to the bottom-right character in the grid.
+In memory a Canvas is a consecutive range of extended-ASCII encoded bytes. Offset 0 corresponds with the top-left character in the Canvas, the last offset correspond to the bottom-right character in the grid.
 
 Multiple Canvases can exist in memory. They can be loaded from and saved to the file system. When saving, trailing spaces on each 80-wchar line are replaced with a newline. This allows canvas files to be read as regular text files by traditional text editors.
 

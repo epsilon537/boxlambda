@@ -28,11 +28,7 @@ found here:
 
 ## The DFX Controller Register Interface
 
-Due to a limitation of the Corsair tool, the DFX Controller register interface is split across two header files,
-[dfx_controller_ctrl_reg.h](https://github.com/epsilon537/boxlambda/blob/develop/registers/generated/dfx_controller_ctrl_reg.h) and [dfx_controller_other_regs.h](https://github.com/epsilon537/boxlambda/blob/develop/registers/generated/dfx_controller_other_regs.h). The write-only Control
-register and the read-only Status register are located at the same address.
-Corsair doesn't support two register definitions at the same address. The
-workaround is to define the two registers in separate files.
+Due to a limitation of the Corsair tool, the DFX Controller register interface is split across two header files: [dfx_controller_ctrl_reg.h](https://github.com/epsilon537/boxlambda/blob/develop/registers/generated/dfx_controller_ctrl_reg.h) and [dfx_controller_other_regs.h](https://github.com/epsilon537/boxlambda/blob/develop/registers/generated/dfx_controller_other_regs.h). The write-only Control register and the read-only Status register are located at the same address, but Corsair does not support two register definitions at the same address. The workaround is to define these two registers in separate files.
 
 ## The LiteDRAM Register Access Layer
 
