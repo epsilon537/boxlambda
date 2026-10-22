@@ -98,6 +98,8 @@ This module serves as a building block for the [Modules](#modules) module and sh
 
 ## Modules
 
+[module.fs](../../../../fs/forth/boxkern-includes/module.fs)
+
 Adds support for creating and managing modules (namespaces). Builds on the [wordlist module](#word-lists).
 
 `::' ( wid "name" -- xt )`

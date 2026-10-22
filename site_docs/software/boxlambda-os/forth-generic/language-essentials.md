@@ -612,7 +612,7 @@ like signed double numbers.
 
 - Moves u bytes in memory.
 
-`fill ( c-addr u c )`
+`fill ( c-addr u c -- )`
 
 - Fill u bytes of memory with value c.
 

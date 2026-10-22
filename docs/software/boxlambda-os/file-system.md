@@ -28,6 +28,8 @@ FFI module. See [here](c-ffi.md) for more info on the Forth-C FFI.
 
 ## Words
 
+The file system access Words are based on those found in Peter Schmid's [Mecrisp Cube](https://github.com/spyren/Mecrisp-Cube/blob/master/sdcard/man/FileSystem.md) project.
+
 ### File system
 
 [fs.fs](../../../fs/forth/boxkern-includes/fs.fs)

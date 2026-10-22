@@ -66,12 +66,9 @@ memory accessible by software.
 
 *VERA VGA Line Capture.*
 
-To set up a VGA line capture, software configures the VGA line to capture in the
-Line IRQ register, then sets the `CAPTURE_EN` bit is the
+To set up a VGA line capture, software configures the VGA line to capture in the Line IRQ register, then sets the `CAPTURE_EN` bit in the
 [CTRL_STATUS](../../registers/vera-regs.md#ctrl_status) register.
-Once the capture has been completed, VERA resets the `CAPTURE_EN` bit. Software
-can now read the captured data in the [VGA Line Capture
-RAM](../../registers/memory-map.md#vera-vga-line-capture-ram).
+Once the capture has been completed, VERA resets the `CAPTURE_EN` bit. Software can now read the captured data in the [VGA Line Capture RAM](../../registers/memory-map.md#vera-vga-line-capture-ram).
 
 ## The Composer
 
@@ -192,7 +189,7 @@ The following table shows the memory-mapped address ranges:
 | 0x10100000 - 0x10100100 | VERA Registers    | Read/Write |
 | 0x10101000 - 0x10101400 | Sprite attributes | Write Only |
 | 0x10102000 - 0x10102200 | Palette           | Write Only |
-| 0x10103000 - 0x10103a00 | Line Capture RAM  | Ready Only |
+| 0x10103000 - 0x10103a00 | Line Capture RAM  | Read Only  |
 | 0x10140000 - 0x10160000 | Video RAM (128KB) | Read/Write |
 
 Note: The above addresses are absolute, as seen by the processor. The VERA core's base address is 0x10100000.
@@ -237,7 +234,7 @@ module vera_top #(
   );
 ```
 
-It is assumed that [Diligent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start) is being used. The VGA signals are sent to PMOD ports `JB` and `JC` with the following pin layout:
+It is assumed that [Digilent's VGA PMOD](https://digilent.com/reference/pmod/pmodvga/start) is being used. The VGA signals are sent to PMOD ports `JB` and `JC` with the following pin layout:
 
 | Pin       | Description | Pin       | Description |
 | --------- | ----------- | --------- | ----------- |

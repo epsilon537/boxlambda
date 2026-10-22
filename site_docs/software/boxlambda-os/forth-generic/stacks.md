@@ -1,5 +1,7 @@
 # Stack Objects
 
+[stack.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/stack.fs)
+
 Simple stack object with cell-sized elements.
 
 `stack-create ( n "name" -- )`

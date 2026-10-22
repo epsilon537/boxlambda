@@ -104,15 +104,27 @@ Below are a few basic examples illustrating different aspects of the VERA graphi
 include demo/forth/lis-demo.fs
 ```
 
+[![The VERA Lissajous Animation Demo.](../assets/lis-demo.png)](../assets/lis-demo.png)
+
+*The VERA Lissajous Animation Demo.*
+
 - [Text Mode Demo](https://github.com/epsilon537/boxlambda/blob/develop/fs/demo/vera-txt-demo.fs): Run the following command from the Forth prompt to start this demo:
 
 ```
 include demo/forth/vera-txt-demo.fs
 ```
 
+[![The VERA Text Mode Demo.](../assets/vera-txt-demo.png)](../assets/vera-txt-demo.png)
+
+*The VERA Text Mode Demo.*
+
 - [VERA Palette Demo](https://github.com/epsilon537/boxlambda/blob/develop/fs/demo/vera-pal-demo.fs): Run the following command from the Forth prompt to start this demo:
 
 ```
 include demo/forth/vera-pal-demo.fs
 ```
+
+[![The VERA Palette Demo.](../assets/vera-pal-demo.png)](../assets/vera-pal-demo.png)
+
+*The VERA Palette Demo.*
 

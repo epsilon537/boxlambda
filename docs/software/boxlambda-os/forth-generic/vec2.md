@@ -1,5 +1,7 @@
 # 2D Vectors
 
+[vec2.fs](../../../../fs/forth/boxkern-includes/vec2.fs)
+
 `vec2 ( x y -- vec )`
 
 - Create a 2D vector value out of x and y coordinates. Only the lower 16 bits of the x and y values are used.

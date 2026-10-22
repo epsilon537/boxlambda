@@ -55,7 +55,7 @@ bar . cr
 
 `raised-by`
 
-- Variable. Keeps track of which Word raised an exception.
+- Variable. Tracks which Word raised an exception.
 
 `?raise ( xt|0 -- | 0 )`
 

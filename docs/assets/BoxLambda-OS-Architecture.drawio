@@ -4,17 +4,14 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="0daiTf68YZ4BLp1BL1AQ-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" value="" vertex="1">
-          <mxGeometry height="260" width="300" x="-70" y="-140" as="geometry" />
-        </mxCell>
-        <mxCell id="bJ89ZypMK8XNjYrZLiZU-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" value="" vertex="1">
-          <mxGeometry height="1240" width="120" x="-291" y="-280" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;verticalAlign=bottom;fontStyle=1;fontSize=18;align=right;strokeColor=none;" value="Mecrisp Forth Environment&amp;nbsp;&amp;nbsp;" vertex="1">
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;verticalAlign=bottom;fontStyle=1;fontSize=18;align=right;strokeColor=none;" value="BoxLambda Forth Environment&amp;nbsp;&amp;nbsp;" vertex="1">
           <mxGeometry height="370" width="530" x="-690" y="-140" as="geometry" />
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-83" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=default;strokeColor=none;" value="" vertex="1">
-          <mxGeometry height="220" width="145" x="340" y="-10" as="geometry" />
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-66" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-19" style="endArrow=classic;html=1;rounded=0;strokeWidth=3;edgeStyle=orthogonalEdgeStyle;" target="OARbE5i2TE2-9IFa1Utr-45" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="-890" y="190" as="sourcePoint" />
+            <mxPoint x="-840" y="140" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-71" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0" value="" vertex="1">
           <mxGeometry height="60" width="60" x="-600" y="40" as="geometry" />
@@ -22,23 +19,74 @@
         <mxCell id="OARbE5i2TE2-9IFa1Utr-72" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0" value="" vertex="1">
           <mxGeometry height="60" width="60" x="-540" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-64" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=none;fontStyle=0;glass=0;" value="" vertex="1">
-          <mxGeometry height="160" width="140" x="-61.800000000000004" y="-40" as="geometry" />
-        </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-61" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;" value="Driver Proxies" vertex="1">
           <mxGeometry height="60" width="120" x="-300" y="110" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-60" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;" value="Driver Proxies" vertex="1">
           <mxGeometry height="60" width="120" x="-310" y="120" as="geometry" />
         </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;" value="Canvas&lt;br&gt;REPL / Editor" vertex="1">
+          <mxGeometry height="60" width="140" x="-620" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;" value="RISC-V&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Assembler/&lt;/span&gt;&lt;div&gt;Disassembler&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="190" x="-620" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=18;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="VERA Driver" vertex="1">
+          <mxGeometry height="60" width="120" x="-530" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;fillColor=#cce5ff;strokeColor=#36393d;" value="BoxKern Proxies" vertex="1">
+          <mxGeometry height="60" width="120" x="-320" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=21;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Tools / Utilities /&lt;br&gt;FS &#39;Shell&#39; commands" vertex="1">
+          <mxGeometry height="60" width="230" x="-410" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#666666;fontStyle=0;fontSize=18;" value="Forth Application Code" vertex="1">
+          <mxGeometry height="60" width="440" x="-620" y="-120" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=0" value="USB HID&amp;nbsp;&lt;div&gt;Driver&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-670" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#666666;fontStyle=0;fontSize=18;" value="GFX Primitives&lt;div&gt;(point, line...)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="-460" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-62" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-26" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontStyle=0;fontSize=18;" target="OARbE5i2TE2-9IFa1Utr-19" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="-930" y="60" as="sourcePoint" />
+            <mxPoint x="-880" y="10" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-73" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-71" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontStyle=0" target="OARbE5i2TE2-9IFa1Utr-25" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="-770" y="130" as="sourcePoint" />
+            <mxPoint x="-720" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-74" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-72" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontStyle=0" target="OARbE5i2TE2-9IFa1Utr-19" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="-810" y="260" as="sourcePoint" />
+            <mxPoint x="-760" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-30" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fillColor=#f5f5f5;fontSize=18;fontStyle=0;strokeColor=#666666;fontColor=#333333;" value="BoxLambda Kernel (BoxKern)" vertex="1">
           <mxGeometry height="440" width="790" x="-240" y="240" as="geometry" />
         </mxCell>
+        <mxCell id="0daiTf68YZ4BLp1BL1AQ-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="260" width="300" x="-70" y="-140" as="geometry" />
+        </mxCell>
+        <mxCell id="bJ89ZypMK8XNjYrZLiZU-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="1240" width="120" x="-291" y="-280" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-83" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=default;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="220" width="145" x="340" y="-10" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-64" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=none;fontStyle=0;glass=0;" value="" vertex="1">
+          <mxGeometry height="160" width="140" x="-61.800000000000004" y="-40" as="geometry" />
+        </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=bottom;fillColor=#d5e8d4;fontSize=18;fontStyle=0;strokeColor=none;" value="Mecrisp &lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Forth Core&amp;nbsp;&lt;/span&gt;&lt;div&gt;&lt;div&gt;(RISC-V Assembly)&amp;nbsp;&lt;/div&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="390" width="220" x="-210" y="250" as="geometry" />
+          <mxGeometry height="220" width="220" x="-210" y="420" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;verticalAlign=bottom;fontSize=18;fontStyle=0;strokeColor=none;" value="BoxLambda C Core" vertex="1">
-          <mxGeometry height="390" width="480" x="40" y="250" as="geometry" />
+          <mxGeometry height="384" width="480" x="40" y="256" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=0;fillColor=#cce5ff;strokeColor=#36393d;" value="FatFS" vertex="1">
           <mxGeometry height="60" width="120" x="205" y="460" as="geometry" />
@@ -61,41 +109,14 @@
         <mxCell id="OARbE5i2TE2-9IFa1Utr-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="UART Driver" vertex="1">
           <mxGeometry height="60" width="110" x="60" y="540" as="geometry" />
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;" value="Canvas&lt;br&gt;REPL / Editor" vertex="1">
-          <mxGeometry height="60" width="140" x="-620" y="40" as="geometry" />
-        </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Interpreter/&lt;div&gt;Compiler&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="180" x="-190" y="461.12" as="geometry" />
+          <mxGeometry height="70" width="180" x="-188.2" y="515" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Forth Core&amp;nbsp;&lt;div&gt;Words&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="180" x="-190" y="381.12" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;" value="RISC-V&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Assembler/&lt;/span&gt;&lt;div&gt;Disassembler&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="190" x="-620" y="-40" as="geometry" />
+          <mxGeometry height="60" width="180" x="-188.2" y="446" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=0;fillColor=#cce5ff;strokeColor=#36393d;" value="SD Card Driver" vertex="1">
           <mxGeometry height="60" width="75" x="180" y="540" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="VERA Driver" vertex="1">
-          <mxGeometry height="60" width="120" x="-530" y="130" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;fillColor=#cce5ff;strokeColor=#36393d;" value="BoxKern Proxies" vertex="1">
-          <mxGeometry height="60" width="120" x="-320" y="130" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fontSize=21;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Tools / Utilities /&lt;br&gt;FS &#39;Shell&#39; commands" vertex="1">
-          <mxGeometry height="60" width="230" x="-410" y="-40" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#666666;fontStyle=0;fontSize=18;" value="Forth Application Code" vertex="1">
-          <mxGeometry height="60" width="440" x="-620" y="-120" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-23" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="FS Access" vertex="1">
-          <mxGeometry height="60" width="120" x="-158.2" y="300" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fontStyle=0" value="USB HID&amp;nbsp;&lt;div&gt;Driver&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="-670" y="130" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#666666;fontStyle=0;fontSize=18;" value="GFX Primitives&lt;div&gt;(point, line...)&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="150" x="-460" y="40" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-33" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-64" style="endArrow=classic;html=1;rounded=0;strokeWidth=4;" target="OARbE5i2TE2-9IFa1Utr-9" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
@@ -121,9 +142,6 @@
             <mxPoint x="-95.9" y="67.25490196078454" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Forth&lt;div&gt;FFI&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="200" x="-80" y="210" as="geometry" />
-        </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-47" parent="1" style="pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#00188D;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.veeam.sd_card;fontStyle=0" value="" vertex="1">
           <mxGeometry height="80" width="62.4" x="-30.00000000000005" y="-30" as="geometry" />
         </mxCell>
@@ -148,18 +166,6 @@
         <mxCell id="OARbE5i2TE2-9IFa1Utr-59" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=23;" value="Mono Audio Speaker" vertex="1">
           <mxGeometry height="30" width="190" x="330" y="150" as="geometry" />
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-62" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-26" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontStyle=0;fontSize=18;" target="OARbE5i2TE2-9IFa1Utr-19" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="-930" y="60" as="sourcePoint" />
-            <mxPoint x="-880" y="10" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-66" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-19" style="endArrow=classic;html=1;rounded=0;strokeWidth=3;edgeStyle=orthogonalEdgeStyle;" target="OARbE5i2TE2-9IFa1Utr-45" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="-890" y="190" as="sourcePoint" />
-            <mxPoint x="-840" y="140" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-67" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-7" style="endArrow=none;html=1;rounded=0;fontStyle=0" target="OARbE5i2TE2-9IFa1Utr-2" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
             <mxPoint x="-45" y="930" as="sourcePoint" />
@@ -172,20 +178,8 @@
             <mxPoint x="45" y="840" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-69" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Console Driver" vertex="1">
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-69" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;fontStyle=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Console Driver" vertex="1">
           <mxGeometry height="60" width="120" x="365" y="540" as="geometry" />
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-73" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-71" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontStyle=0" target="OARbE5i2TE2-9IFa1Utr-25" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="-770" y="130" as="sourcePoint" />
-            <mxPoint x="-720" y="80" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="OARbE5i2TE2-9IFa1Utr-74" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-72" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;fontStyle=0" target="OARbE5i2TE2-9IFa1Utr-19" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="-810" y="260" as="sourcePoint" />
-            <mxPoint x="-760" y="210" as="targetPoint" />
-          </mxGeometry>
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-79" edge="1" parent="1" source="OARbE5i2TE2-9IFa1Utr-41" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;strokeWidth=3;" target="OARbE5i2TE2-9IFa1Utr-25" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
@@ -261,7 +255,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="KBYGMlr28cjTZHuhUE9s-1" connectable="0" parent="1" style="group" value="" vertex="1">
-          <mxGeometry height="726" width="746.11" x="-860" y="300" as="geometry" />
+          <mxGeometry height="726" width="990" x="-860" y="300" as="geometry" />
         </mxCell>
         <mxCell id="OARbE5i2TE2-9IFa1Utr-45" parent="KBYGMlr28cjTZHuhUE9s-1" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.azure.computer" value="" vertex="1">
           <mxGeometry height="395.25" width="439.16" x="174.45" y="-44" as="geometry" />
@@ -302,6 +296,12 @@
             <mxPoint x="360" y="400" as="targetPoint" />
           </mxGeometry>
         </mxCell>
+        <mxCell id="WCv5k4V_vmpfBxEvVLPY-2" parent="KBYGMlr28cjTZHuhUE9s-1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;fillColor=#d5e8d4;fontSize=18;fontStyle=0;strokeColor=none;" value="boxkern-includes" vertex="1">
+          <mxGeometry height="149.14" width="220" x="650" y="-44" as="geometry" />
+        </mxCell>
+        <mxCell id="OARbE5i2TE2-9IFa1Utr-10" parent="KBYGMlr28cjTZHuhUE9s-1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0;fontSize=18;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Forth&lt;div&gt;FFI&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="200" x="790" y="71" as="geometry" />
+        </mxCell>
         <mxCell id="087D8oNIXL7bDijtrccl-2" parent="1" style="pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=light-dark(#00188d, #3d83b7);labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.veeam.ram;fontSize=23;fontStyle=1" value="RAM&lt;div&gt;File system&lt;/div&gt;" vertex="1">
           <mxGeometry height="85" width="148" x="67" y="-120" as="geometry" />
         </mxCell>
@@ -325,6 +325,9 @@
             <mxPoint x="550" y="830" as="sourcePoint" />
             <mxPoint x="600" y="780" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="WCv5k4V_vmpfBxEvVLPY-50" parent="1" style="shape=mxgraph.basic.polygon;polyCoords=[[0.75714,0],[0,0],[0,0.67273],[0.68571,1],[1,1],[1,0.72727]];polyCurves=[[],[],[],[],[]];polyline=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#dae8fc;gradientColor=default;opacity=20;opacityGroup=1;" value="" vertex="1">
+          <mxGeometry height="550" width="700" x="-690" y="-145.14" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

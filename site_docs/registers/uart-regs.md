@@ -62,8 +62,8 @@ Enumerated values for SETUP.PFT.
 | P_NONE           | 0x0    | No parity |
 | P_ODD            | 0x4    | Odd Parity |
 | P_EVEN           | 0x5    | Even Parity |
-| P_SPC            | 0x6    | Party bit is a space |
-| P_MK             | 0x7    | Party bit is a mark |
+| P_SPC            | 0x6    | Parity bit is a space |
+| P_MK             | 0x7    | Parity bit is a mark |
 
 Enumerated values for SETUP.S.
 

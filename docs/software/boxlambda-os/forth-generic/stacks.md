@@ -1,5 +1,7 @@
 # Stack Objects
 
+[stack.fs](../../../../fs/forth/boxkern-includes/stack.fs)
+
 Simple stack object with cell-sized elements.
 
 `stack-create ( n "name" -- )`

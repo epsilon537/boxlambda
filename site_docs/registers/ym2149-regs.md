@@ -34,7 +34,7 @@ Base address: 0x10001000
 | [PSG0_CHB_LVL](#psg0_chb_lvl) | 0x00000024 | Channel B level control. |
 | [PSG0_CHC_LVL](#psg0_chc_lvl) | 0x00000028 | Channel C level control. |
 | [PSG0_ENV_PERIOD_FINE](#psg0_env_period_fine) | 0x0000002c | Envelope frequency fine adjustment. |
-| [PSG0_ENV_PERIOD_COARSE](#psg0_env_period_coarse) | 0x00000030 | Envelope frequeny coarse adjustment. |
+| [PSG0_ENV_PERIOD_COARSE](#psg0_env_period_coarse) | 0x00000030 | Envelope frequency coarse adjustment. |
 | [PSG0_ENV_SHAPE](#psg0_env_shape) | 0x00000034 | Envelope shape. |
 | [PSG1_CHA_TONE_PERIOD_FINE](#psg1_cha_tone_period_fine) | 0x00000040 | Channel A fine tone period adjustment. |
 | [PSG1_CHA_TONE_PERIOD_COARSE](#psg1_cha_tone_period_coarse) | 0x00000044 | Channel A coarse tone period adjustment. |
@@ -48,7 +48,7 @@ Base address: 0x10001000
 | [PSG1_CHB_LVL](#psg1_chb_lvl) | 0x00000064 | Channel B level control. |
 | [PSG1_CHC_LVL](#psg1_chc_lvl) | 0x00000068 | Channel C level control. |
 | [PSG1_ENV_PERIOD_FINE](#psg1_env_period_fine) | 0x0000006c | Envelope frequency fine adjustment. |
-| [PSG1_ENV_PERIOD_COARSE](#psg1_env_period_coarse) | 0x00000070 | Envelope frequeny coarse adjustment. |
+| [PSG1_ENV_PERIOD_COARSE](#psg1_env_period_coarse) | 0x00000070 | Envelope frequency coarse adjustment. |
 | [PSG1_ENV_SHAPE](#psg1_env_shape) | 0x00000074 | Envelope shape. |
 | [FILTER_MIXER_VOLA](#filter_mixer_vola) | 0x00000200 | Filter mixer PSG0 channel A volume. |
 | [FILTER_MIXER_VOLB](#filter_mixer_volb) | 0x00000204 | Filter mixer PSG0 channel B volume. |
@@ -275,7 +275,7 @@ Back to [Register map](#register-map-summary).
 
 ## PSG0_ENV_PERIOD_COARSE
 
-Envelope frequeny coarse adjustment.
+Envelope frequency coarse adjustment.
 
 Address offset: 0x00000030
 
@@ -521,7 +521,7 @@ Back to [Register map](#register-map-summary).
 
 ## PSG1_ENV_PERIOD_COARSE
 
-Envelope frequeny coarse adjustment.
+Envelope frequency coarse adjustment.
 
 Address offset: 0x00000070
 
