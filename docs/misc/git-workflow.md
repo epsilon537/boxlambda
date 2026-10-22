@@ -58,7 +58,7 @@ On `master` branch:
 
 1. Merge `develop`:
 
-        git merge
+        git merge develop
         git checkout --theirs .
         git add .
         git commit

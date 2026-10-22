@@ -143,7 +143,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:2   | -               | 0x0000000  | Reserved |
-| CARD_REMOVED     | 1      | rw              | 0x0        | Set to enabled CARD_REMOVED interrupt. |
+| CARD_REMOVED     | 1      | rw              | 0x0        | Set to enable CARD_REMOVED interrupt. |
 | BUSY             | 0      | rw              | 0x0        | Set to enable BUSY interrupt. |
 
 Back to [Register map](#register-map-summary).

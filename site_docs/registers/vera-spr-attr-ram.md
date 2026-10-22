@@ -111,7 +111,7 @@ Enumerated values for FLAGS.FLIP.
 | :---             | :---    | :---        |
 | HFLIP            | 0x1    | Horizontal Flip |
 | VFLIP            | 0x2    | Vertical Flip |
-| HFLIP_VFLIP      | 0x3    | Horizonal and Vertical Flip |
+| HFLIP_VFLIP      | 0x3    | Horizontal and Vertical Flip |
 
 Enumerated values for FLAGS.ZDEPTH.
 
