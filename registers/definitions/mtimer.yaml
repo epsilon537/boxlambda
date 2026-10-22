@@ -44,7 +44,7 @@ regmap:
     address: 16
     bitfields:
     -   name: VALUE
-        description: A write operation to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value.
+        description: Writing to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value.
         reset: 0
         width: 8
         lsb: 0

@@ -11,7 +11,7 @@
 
 For bringing up and debugging test applications, it's sometimes convenient to have access to a Command-Line Interface (CLI) from which you can easily issue custom commands such as `peekw` (peek word), `pokew` (poke word), `i2cread`, `settime`, etc. The [Embedded CLI library](https://github.com/epsilon537/embedded-cli) makes it easy to add a CLI to an application.
 
-I'm using the Embedded-CLI library as-is. I just added a small helper module to bind the CLI to BoxLambda's UART and to avoid code duplication across test applications:
+The Embedded-CLI library is used as-is. A small helper module was added to bind the CLI to BoxLambda's UART and to avoid code duplication across test applications:
 
 [sw/components/test/embedded_cli/embedded_cli_setup.h](https://github.com/epsilon537/boxlambda/blob/v0.4.1/sw/components/test/embedded_cli/embedded_cli_setup.h)
 

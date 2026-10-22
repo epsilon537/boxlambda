@@ -1,0 +1,58 @@
+#10 constant row1
+#20 constant col1
+#20 constant row2
+#10 constant col2
+
+create rows row1 , row2 ,
+create cols col1 , col2 ,
+
+0 variable row
+0 variable col
+
+<sheet-tileset> ts
+<tmap> tm
+
+: mapentry-txt256
+
+  true display-enable
+  false l0 layer-enable
+  false l1 layer-enable
+
+  ts sheet{ #16 width #16 height 1 bpp #32 tiles }apply
+  ts sheet.
+
+  16 0 do
+    ts pxl{ 1 tidx i i vec2 xy WHITE color }apply
+    ts pxl{ 1 tidx 15 i - i vec2 xy WHITE color }apply
+  loop
+
+  tm tmap{ #32 width #32 height TMAP-TXT256 type }apply
+  tm tmap.
+  tm ts l0 layer-tilemap-mode
+  l0 layer.
+
+  tm mapentry{ col1 row1 vec2 xy GREEN fg 1 tidx }apply
+  tm mapentry{ col2 row2 vec2 xy #10 greyscale fg 1 tidx }apply
+
+  true l0 layer-enable
+  false l1 layer-enable
+
+  2 0 do
+    i cells rows + @ row !
+    i cells cols + @ col !
+    row @ #16 * irqline!
+    true line-capture-enable
+    begin line-capture-enabled? not until
+    #16 0 do
+      ." capture: " i . ." : " col @ #16 * i + line-capture-pxl@ hex. cr
+    loop
+  loop
+;
+
+[: mapentry-txt256 ;] &>file tst_dir/vera-mapentry-txt256.log
+
+s" tst_dir/vera-mapentry-txt256.log" s" vera-mapentry-txt256.ref" f_cmp ?assert
+
+ts sheet-deinit
+tm tmap-deinit
+

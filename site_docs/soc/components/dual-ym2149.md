@@ -7,7 +7,7 @@
     sub/ym2149_psg_system/.
 
 - **YM2149_PSG_system Component in the BoxLambda Directory Tree**:
-    [gw/components/ym2149](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/components/ym2149)
+    [gw/components/ym2149](https://github.com/epsilon537/boxlambda/tree/develop/gw/components/ym2149)
 
 - **YM2149_PSG_system Core Top-Level**:
     [sub/ym2149_psg_system/YM2149_PSG_system_wb.sv](https://github.com/epsilon537/YM2149_PSG_system/blob/boxlambda/YM2149_PSG_system_wb.sv)
@@ -15,7 +15,7 @@
 - **YM2149 Data Sheet**:
     [http://www.ym2149.com/ym2149.pdf](http://www.ym2149.com/ym2149.pdf)
 
-I added a Dual [**YM2149**](https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910) PSG core to BoxLambda. Each core provides three PSG channels, so one core can play a 3-channel audio track and the other core can play up to three overlapping sound effects.
+I added a dual [**YM2149**](https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910) PSG core to BoxLambda. Each YM2149 provides three PSG channels, so one can play a 3-channel audio track and the other can play up to three overlapping sound effects.
 
 ## Programmable Sound Generators (PSG)
 
@@ -77,7 +77,7 @@ The core can be configured to produce stereo I2S output, but for BoxLambda, we'l
 
 ## A Second Order Delta-Sigma DAC
 
-The `YM2149_PSG_System` core produces 16-bit PCM audio. The audio amplifier PMOD expects the audio signal on a single pin, however. To bring 16-bit PCM audio to a single digital pin, we need a **one-bit Digital-to-Analog converter**. If you've never heard of one-bit DACs before, it probably sounds terrible, but it works quite well. The idea is to generate, at a rate much higher than the input sample rate, a stream of pulses such that a moving average going over the pulse stream produces a signal that tracks the input 16-bit PCM signal.
+The `YM2149_PSG_System` core produces 16-bit PCM audio. However, the audio amplifier PMOD expects the audio signal on a single pin. To convert 16-bit PCM audio to a single digital pin, we need a **one-bit Digital-to-Analog converter**. If you've never heard of one-bit DACs before, it probably sounds terrible, but it works quite well. The idea is to generate, at a rate much higher than the input sample rate, a stream of pulses such that a moving average going over the pulse stream produces a signal that tracks the input 16-bit PCM signal.
 
 ![1-bit delta-sigma modulation (blue) of a sine wave (red).](../../assets/Pulse-density-modulation-1-period.gif)
 
@@ -93,7 +93,7 @@ There exist several ways to implement a one-bit DAC, with different pros and con
 
 *Second Order Delta Sigma Modulator Block Diagram from [https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html](https://www.beis.de/Elektronik/DeltaSigma/DeltaSigma.html).*
 
-I'll be using a **Second Order Delta-Sigma DAC**. An advantage of a second-order delta-sigma DAC is that it (more than its first-order counterpart) pushes the noise introduced by the Digital-to-Analog conversion out of the way, to higher frequency ranges where it gets filtered out by the low-pass filter.
+I'll be using a **Second Order Delta-Sigma DAC**. A second-order delta-sigma DAC offers the advantage of pushing the noise introduced by the Digital-to-Analog conversion (more effectively than its first-order counterpart) to higher frequency ranges, where it is filtered out by the low-pass filter.
 
 The Uwe Beis article above describes the idea well enough. However, I was unable to find a reference implementation that made sense to me. I ended up writing my own, borrowing ideas from the following implementations I found online:
 
@@ -102,7 +102,7 @@ The Uwe Beis article above describes the idea well enough. However, I was unable
 
 Here is my Verilog code:
 
-[../../../gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/components/audio_dac/rtl/one_bit_dac.sv)
+[../../../gw/components/audio_dac/rtl/one_bit_dac.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/components/audio_dac/rtl/one_bit_dac.sv)
 
 It wasn't obvious to me how to size the two accumulators used in the implementation so that they don't overflow and create conversion errors. I ended up adding logic that checks for overflows and experimented with different audio samples. The outcome was that for a 16-bit input signal, the stage-1 accumulator needs to be 20 bits in size and the stage-2 accumulator needs to be 22 bits in size.
 
@@ -117,21 +117,21 @@ I created a test project to test the one-bit DAC. The RTL consists of a sine wav
 
 Here's the top-level Verilog:
 
-[../../../gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv)
+[../../../gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/test/audio_dac_test/rtl/audio_dac_test.sv)
 
-The Verilator test bench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/projects/test/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes out the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The test bench will also flag an error if any accumulator overflows are reported.
+The Verilator test bench ([sim_main.cpp](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/test/audio_dac_test/sim/sim_main.cpp)) samples at 12.5MHz the 16-bit PCM signal and the one-bit DAC signal. It writes the PCM samples as a Python array to `pcm_out.py` and the DAC samples as a Python array to `dac_out.py`. The test bench also flags an error if any accumulator overflows are reported.
 
-The Verilator test bench executes for 0.5s of simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/projects/test/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
+The Verilator test bench executes for 0.5s of simulated time. Then, a python module ([dac_test.py](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/test/audio_dac_test/test/dac_test.py)) imports the generated `pcm_out.py` and `dac_out.py` and performs the following operations:
 
 1. The PCM samples and DAC samples are converted to numpy arrays and normalized.
 2. Both signals are sent through a low-pass filter.
-3. An FFT is taken of the filtered signals, so we have a frequency domain view and a time domain view of both signals.
+3. An FFT is perform on the filtered signals, providing both a frequency domain and a time domain view of each signal.
 4. The time domain and the frequency domain versions of the two signals are plotted against each other for visual inspection.
 5. The filtered DAC and PCM signals are correlated against each other. This is done both in the time domain and the frequency domain. If the correlation match is higher than 99%, the test is declared successful.
 
 The test project code is located here:
 
-[../../../gw/projects/test/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/projects/test/audio_dac_test)
+[../../../gw/projects/test/audio_dac_test](https://github.com/epsilon537/boxlambda/tree/develop/gw/projects/test/audio_dac_test)
 
 See [here](../test/builds/ym2149.md#audio-dac-test-on-verilator) for instructions to build and run the test yourself.
 
@@ -141,7 +141,7 @@ This test project is a BoxLambda SoC with the `YM2149_PSG_system` core and the o
 Through software, the `YM2149_PSG_system` core is configured to produce six tones at six different pitches.
 Similar to the previous test, the Verilator test bench code checks for accumulator overflows and saves the generated audio samples to `pcm_out.py` and `dac_out.py` for further analysis in Python.
 
-The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob/v0.4.1/gw/projects/test/ym2149_dac_test/test/ym2149_test.py)) imports the generated `dac_out.py` and performs the following operations:
+The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob/develop/gw/projects/test/ym2149_dac_test/test/ym2149_test.py)) imports the generated `dac_out.py` and performs the following operations:
 
 1. The DAC samples are converted to a numpy array and normalized.
 2. The normalized signal is sent through a low-pass filter.
@@ -151,7 +151,7 @@ The Python script ([ym2149_test.py](https://github.com/epsilon537/boxlambda/blob
 
 The test project code is located here:
 
-[../../../gw/projects/test/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/projects/test/ym2149_dac_test)
+[../../../gw/projects/test/ym2149_dac_test](https://github.com/epsilon537/boxlambda/tree/develop/gw/projects/test/ym2149_dac_test)
 
 See [here](../test/builds/ym2149.md#ym2149-dac-test-on-verilator) for instructions to build and run the test yourself.
 

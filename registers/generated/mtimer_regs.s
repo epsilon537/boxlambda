@@ -33,7 +33,7 @@
 # MTIMEBLK - Blocking time compare register.
 .equ MTIMER_MTIMEBLK_ADDR, 0x10
 
-# MTIMEBLK.VALUE - A write operation to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value.
+# MTIMEBLK.VALUE - Writing to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value.
 .equ MTIMER_MTIMEBLK_VALUE_WIDTH, 8
 .equ MTIMER_MTIMEBLK_VALUE_LSB, 0
 .equ MTIMER_MTIMEBLK_VALUE_MASK, 0xff

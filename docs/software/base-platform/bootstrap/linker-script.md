@@ -1,6 +1,6 @@
 # The Linker Script
 
-Through a *linker script*, we tell the linker where in memory to place the program code, data, and stack.
+A *linker script* tells the linker where to place the program's code, data, and stack in memory.
 
 The Linker Script defines the following:
 
@@ -79,7 +79,7 @@ local_memcpy(&__icode_start, &__icode_source, &__icode_end - &__icode_start);
 - [bootstrap/link_imem_boot.ld](../../../../sw/components/bootstrap/link_imem_boot.ld) creates a test image that boots directly from IMEM.
 - [bootstrap/link_ddr_boot.ld](../../../../sw/components/bootstrap/link_ddr_boot.ld) creates an application or test image to be loaded into EMEM by the bootloader. From there, the image will unpack itself into IMEM.
 - [bootloader/link.ld](../../../../sw/projects/bootloader/link.ld): the link script used to create the bootloader.
-- [boxlambda_os/link.ld](../../../../sw/projects/boxlambda_os/link.ld): the link script used to create the BoxLambda OS application image . This link script is derived from `link_ddr_boot.ld`. It contains additional [sections and variables for the Forth subsystem](../../boxlambda-os/forth/core.md#forth-linker-sections-and-variables) and the RAM disk region `fs_mem`.
+- [boxlambda_os/link.ld](../../../../sw/projects/boxlambda_os/link.ld): the link script used to create the BoxLambda OS application image. This link script is derived from `link_ddr_boot.ld`. It contains additional [sections and variables for the Forth subsystem](../../boxlambda-os/mecrisp-forth-core.md#forth-linker-sections-and-variables) and the RAM disk region `fs_mem`.
 
 ### The Application Image Header
 
@@ -88,7 +88,7 @@ The `link_ddr_boot.ld` script generates an application image intended for loadin
 1. A magic number: 0xB07A3BDA
 2. The image size
 
-The bootloader verifies the magic number to ensure it's indeed dealing with an application image. Only after confirming the magic number will the bootloader consider the image size value as valid, i.e., as the amount of data to copy from flash to RAM.
+The bootloader verifies the magic number to ensure it is an application image. Only after confirming the magic number will the bootloader consider the image size value as valid, i.e., as the amount of data to copy from flash to RAM.
 
 In the `link_ddr_boot.ld` script, the two-word header is created by the following lines at the beginning of the `.etext` section:
 

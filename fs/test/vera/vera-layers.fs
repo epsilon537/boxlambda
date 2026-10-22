@@ -1,0 +1,57 @@
+<sheet-tileset> ts
+<tmap> tm0
+<tmap> tm1
+
+: vera-layers
+  true display-enable
+  false l0 layer-enable
+  false l1 layer-enable
+  ." l0 enabled? " l0 layer-enabled? . cr
+  ." l1 enabled? " l1 layer-enabled? . cr
+  ts sheet{ #16 width #16 height 8 bpp #32 tiles }apply
+  ts sheet.
+  tm0 tmap{ #32 width #32 height TMAP-TILE type }apply
+  tm1 tmap{ #32 width #32 height TMAP-TILE type }apply
+  tm0 tmap.
+  tm1 tmap.
+  tm0 ts l0 layer-tilemap-mode
+  tm1 ts l1 layer-tilemap-mode
+  tm0 mapentry{ 1 1 vec2 xy 1 tidx }apply
+  tm1 mapentry{ 1 1 vec2 xy 2 tidx }apply
+
+  #16 0 do
+    ts pxl{ 1 tidx 0 i vec2 xy RED color }apply
+  loop
+
+  #16 0 do
+    ts pxl{ 2 tidx 0 i vec2 xy BLUE color }apply
+  loop
+ 
+  #16 irqline!
+  true line-capture-enable
+  begin line-capture-enabled? not until
+  ." 16, 16 capture: $" 16 line-capture-pxl@ hex. cr
+
+  true l0 layer-enable
+  ." l0 enabled? " l0 layer-enabled? . cr
+
+  true line-capture-enable
+  begin line-capture-enabled? not until
+  ." 16, 16 capture: $" 16 line-capture-pxl@ hex. cr
+
+  true l1 layer-enable
+  ." l1 enabled? " l1 layer-enabled? . cr
+
+  true line-capture-enable
+  begin line-capture-enabled? not until
+  ." 16, 16 capture: $" 16 line-capture-pxl@ hex. cr
+;
+
+[: vera-layers ;] &>file tst_dir/vera-layers.log
+
+s" tst_dir/vera-layers.log" s" vera-layers.ref" f_cmp ?assert
+
+tm0 tmap-deinit
+tm1 tmap-deinit
+ts sheet-deinit
+

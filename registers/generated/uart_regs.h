@@ -48,8 +48,8 @@ typedef enum {
     UART_SETUP_PFT_P_NONE = 0x0, //No parity
     UART_SETUP_PFT_P_ODD = 0x4, //Odd Parity
     UART_SETUP_PFT_P_EVEN = 0x5, //Even Parity
-    UART_SETUP_PFT_P_SPC = 0x6, //Party bit is a space
-    UART_SETUP_PFT_P_MK = 0x7, //Party bit is a mark
+    UART_SETUP_PFT_P_SPC = 0x6, //Parity bit is a space
+    UART_SETUP_PFT_P_MK = 0x7, //Parity bit is a mark
 } uart_setup_pft_t;
 
 // SETUP.S - Number of stop bits - 1
@@ -312,7 +312,7 @@ typedef union {
     uint32_t RX_DATA_AVL : 1; // Enable RX_DATA_AVL interrupt.
     uint32_t RX_FIFO_HALF_FULL : 1; // Enable RX_FIFO_HALF_FULL interrupt.
     uint32_t TX_FIFO_EMPTY : 1; // Enable TX_FIFO_EMPTY interrupt.
-    uint32_t TX_FIFO_HALF_EMPTY : 1; // Enabled TX_FIFO_HALF_EMPTY interrupt.
+    uint32_t TX_FIFO_HALF_EMPTY : 1; // Enable TX_FIFO_HALF_EMPTY interrupt.
     uint32_t : 28; // reserved
   };
 } uart_ien_t;
@@ -335,7 +335,7 @@ typedef union {
 #define UART_IEN_TX_FIFO_EMPTY_MASK 0x4
 #define UART_IEN_TX_FIFO_EMPTY_RESET 0x0
 
-// IEN.TX_FIFO_HALF_EMPTY - Enabled TX_FIFO_HALF_EMPTY interrupt.
+// IEN.TX_FIFO_HALF_EMPTY - Enable TX_FIFO_HALF_EMPTY interrupt.
 #define UART_IEN_TX_FIFO_HALF_EMPTY_WIDTH 1
 #define UART_IEN_TX_FIFO_HALF_EMPTY_LSB 3
 #define UART_IEN_TX_FIFO_HALF_EMPTY_MASK 0x8

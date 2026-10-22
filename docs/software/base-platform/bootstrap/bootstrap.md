@@ -76,7 +76,7 @@ The Picolibc GCC specs file can be found in the Picolib install directory.
 
 *Picolibc on BoxLambda.*
 
-Picolibc is a relatively generic code base that needs to be tied to the platform it's running on to function properly. To bring up the library on BoxLambda, we need to supply three pieces of code:
+Picolibc is a relatively generic codebase that needs to be tied to the platform it runs on to function properly. To bring up the library on BoxLambda, three pieces of code are required:
 
 - A Vector Table
 - A Link Map

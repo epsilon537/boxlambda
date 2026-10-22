@@ -5,12 +5,11 @@ echo "Setting up BoxLambda. Installing tools if needed. Initializing git submodu
 echo "Note: This script should be sourced from a boxlambda workspace root directory."
 
 if [ "${BASH_SOURCE-}" = "$0" ]; then
-    echo "You must source this script: \$ source $0" >&2
-    exit 1
+  echo "You must source this script: \$ source $0" >&2
+  exit 1
 fi
 
-if [[ "$#" > 0 && "$1" == "-h" ]]
-then
+if [[ "$#" > 0 && "$1" == "-h" ]]; then
   echo "$0 [-h] [-s]"
   echo "-h: Show help."
   echo "-s: Check out all submodules to boxlambda branch head (instead of detached head)."
@@ -18,7 +17,7 @@ then
 fi
 
 #Checking availability of key tools that user has to provide.
-if which vivado ; then
+if which vivado; then
   echo "Vivado found."
 else
   echo "Vivado not found. Please install Vivado and add it to your path."
@@ -29,7 +28,7 @@ if [ -z "$RISCV_PREFIX" ]; then
 fi
 
 #Install RISCV compiler
-pushd . > /dev/null
+pushd . >/dev/null
 mkdir -p tools
 cd tools
 
@@ -38,7 +37,7 @@ if [ -d riscv32-boxlambda-elf ]; then
 else
   echo "Unpacking riscv32 toolchain..."
 
-  if tar xf ../assets/riscv32-boxlambda-elf.tgz ; then
+  if tar xf ../assets/riscv32-boxlambda-elf.tgz; then
     echo "OK"
   else
     echo "Unpack of riscv32 toolchain failed. Aborting..."
@@ -55,7 +54,7 @@ else
   echo "Downloading and unpacking oss-cad-suite..."
   wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-02-26/oss-cad-suite-linux-x64-20250226.tgz
 
-  if tar xf oss-cad-suite-linux-x64-20250226.tgz ; then
+  if tar xf oss-cad-suite-linux-x64-20250226.tgz; then
     echo "OK"
   else
     echo "Unpack of oss-cad-suite failed. Aborting..."
@@ -70,7 +69,7 @@ if [ -f ./bender ]; then
 else
   echo "Downloading and installing Bender..."
   wget https://github.com/pulp-platform/bender/releases/download/v$BENDER_VERSION/bender-$BENDER_VERSION-x86_64-linux-gnu.tar.gz
-  if tar xf bender-$BENDER_VERSION-x86_64-linux-gnu.tar.gz ; then
+  if tar xf bender-$BENDER_VERSION-x86_64-linux-gnu.tar.gz; then
     echo "OK"
   else
     echo "Unpack of Bender failed. Aborting..."
@@ -79,11 +78,11 @@ else
   fi
 fi
 
-popd > /dev/null
+popd >/dev/null
 
 echo "Installing gems..."
 rm -f Gemfile.lock
-if bundle install ; then
+if bundle install; then
   echo "OK"
 else
   echo "bundle install failed. Please run 'sudo gem update system' and retry."
@@ -96,7 +95,7 @@ source activate_env.sh
 
 #Install required Python packages.
 echo "Installing required Python packages..."
-if python3 -m pip install -qq -U -r python-requirements.txt ; then
+if python3 -m pip install -qq -U -r python-requirements.txt; then
   echo "OK"
 else
   "Pip install failed. Aborting..."
@@ -107,12 +106,11 @@ cp -f python-requirements.txt ./tools/oss-cad-suite/.python_packages_installed
 echo "Retrieving git submodules..."
 git submodule update --init --recursive
 
-if [[ "$#" > 0 && "$1" == "-s" ]]
-then
-    echo "Recursively checking out submodules to HEAD of boxlambda branch."
-    git submodule foreach --recursive git checkout boxlambda
-    echo "Recursively pulling from remote."
-    git submodule foreach --recursive git pull
+if [[ "$#" > 0 && "$1" == "-s" ]]; then
+  echo "Recursively checking out submodules to HEAD of boxlambda branch."
+  git submodule foreach --recursive git checkout boxlambda
+  echo "Recursively pulling from remote."
+  git submodule foreach --recursive git pull
 fi
 
 #Install LiteX.
@@ -120,9 +118,9 @@ if [ -f ./tools/oss-cad-suite/bin/litedram_gen ]; then
   echo "Litex found."
 else
   echo "Installing Litex..."
-  pushd . > /dev/null
+  pushd . >/dev/null
   cd sub/litex/
-  if ./litex_setup.py --init --install ; then
+  if ./litex_setup.py --init --install; then
     echo "OK"
   else
     "Litex install failed. Aborting..."
@@ -139,7 +137,11 @@ rm -rf build
 cmake --fresh --preset=sim-a7-100
 cmake --fresh --preset=arty-a7-100
 
-#Run the code generation rules
+# For the LSPs
+ln -sf ./build/sim-a7-100/compile_commands.json .
+ln -sf ./build/sim-a7-100/verible.filelist .
+
+# Run the code generation rules
 pushd .
 cd build/sim-a7-100
 make cgen
@@ -155,4 +157,3 @@ deactivate
 echo
 echo "Setup complete."
 echo "Source activate_env.sh to activate the environment."
-

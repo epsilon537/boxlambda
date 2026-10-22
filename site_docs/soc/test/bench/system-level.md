@@ -19,7 +19,7 @@ The proof-of-concept system test bench for BoxLambda is based on the example cod
 
 [https://github.com/verilator/verilator/blob/master/examples/make_tracing_c/sim_main.cpp](https://github.com/verilator/verilator/blob/master/examples/make_tracing_c/sim_main.cpp)
 
-I have included `UARTSIM`, the UART co-simulation class provided by ZipCPU along with the UART Verilog implementation in the `wbuart32` repository:
+The test bench includes `UARTSIM`, the UART co-simulation class provided by ZipCPU, along with the UART Verilog implementation in the `wbuart32` repository:
 
 [https://github.com/epsilon537/wbuart32/tree/master/bench/cpp](https://github.com/epsilon537/wbuart32/tree/master/bench/cpp)
 

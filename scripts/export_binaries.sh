@@ -15,7 +15,6 @@ cp ./build/arty-a7-100/gw/projects/boxlambda_base/project.bit ./binaries/boxlamb
 # cp build/arty-a7-100/gw/components/vs0_j1b/vs0_j1b_pblock_vs0_partial.bin.bin_for_icap ./binaries/vs0_j1b.bin_for_icap
 
 cp ./build/arty-a7-100/sw/projects/bootloader/bootloader.bin ./binaries/
-cp ./build/arty-a7-100/sw/projects/boxlambda_os/boxkern.bin ./binaries/
+cp ./build/arty-a7-100/sw/projects/boxlambda_os/boxkernforth.bin ./binaries/
 
 echo "Done."
-

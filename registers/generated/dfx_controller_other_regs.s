@@ -13,7 +13,7 @@
 .equ DFX_STATUS_ERR_WIDTH, 4
 .equ DFX_STATUS_ERR_LSB, 3
 .equ DFX_STATUS_ERR_MASK, 0x78
-# STATUS.SHUTDOWN - Set if controller is int shutdown state.
+# STATUS.SHUTDOWN - Set if controller is in shutdown state.
 .equ DFX_STATUS_SHUTDOWN_WIDTH, 1
 .equ DFX_STATUS_SHUTDOWN_LSB, 7
 .equ DFX_STATUS_SHUTDOWN_MASK, 0x80

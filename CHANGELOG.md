@@ -4,6 +4,51 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Label `v0.5.0`: Changes sinces label `v0.4.1` - 2026-10-15
+
+### Added
+
+- Fast Boot: A BoxLambda OS mechanism accelerating the boot procedure by installing a pre-compiled Forth environment rather than evaluating all Forth modules from source at boot time.
+- `vera.fs` : VERA graphics Forth module.
+- `lis-demo.fs`: VERA graphics demo rendering Lissajous animation on VGA display.
+- `vera-pal-demo.fs`: VERA graphics demo displaying the default palette organized into Palette Groups.
+- `vera-txt-demo.fs`: VERA text mode demo.
+- `font-loader.fs` : VERA font loader module.
+- `module.fs`: Forth module API for namespace management.
+- `wordlist.fs` : Forth wordlist support.
+- `run-time-checking.fs` : Forth assert blocks, stack checking and struct type checking.
+- `*_regs.fs` : Forth Register Access Layer.
+- `memmap.fs`: BoxLambda Memory Map in Forth.
+- `iter.fs`: Forth iterators and anonymous lists.
+- `bitfield.fs`: Forth Register bitfield accessor API.
+- `stack.fs` : Simple stack objects with cell-size elements.
+- `vec2.fs` : 2D vectors.
+- `hook-on-quit`: A resource clean-up Forth hook executed when re-entering the quit loop (REPL). 
+- `compileto-save` and `compileto-restore`, to facilitate temporarily switching Forth compilation to EMEM/IMEM.
+- Misc. Words added: `harray` (halfword array), `span` and `bounds` (range Words), `find-in` (search in cell array), `log2`, `compile-or-execute`, and `fdump` (file hex dump).
+- Added support to `target.py` for OpenOCD polling of target memory locations while the target is in running state.
+
+### Fixed
+
+- Fixed Word `f_gets` silently ignoring errors.
+- Fixed stack balancing bug in Word `f_cmp`.
+
+### Changed
+
+- Split Forth module `dict.fs` into `pre-dict.fs`, evaluated early-stage, and, `dict.fs` evaluated late-stage.
+- Made `dict.fs` dictionary tools wordlist aware.
+- When an uncaught exception occurs, the Forth interpreter prints the Word that generated the exception.
+- Assembled a custom VERA palette from sources at [https://lospec.com/palette-list](https://lospec.com/palette-list) and made this the BoxLambda OS default palette.
+- Assigned Forth test suite execution to a board switch rather than a compile-time switch.
+- Moved the C++ VERA HAL to test components.
+- Added file name and line number to `line got truncated` error message during `boxlambda-includes` evaluation.
+- The Forth interactive string table (see `istr.fs`) is now cleared after each pass through the interpreter loop (i.e., right before returning to the prompt on the REPL).
+- Reorganized BoxLambda OS documentation section.
+
+### Removed
+
+Nothing.
+
 ## Label `v0.4.1`: Changes sinces label `v0.4.0` - 2026-04-30
 
 ### Added

@@ -16,7 +16,7 @@
 
 [FatFs](http://elm-chan.org/fsw/ff/00index_e.html) is a lightweight software library for small systems that implements FAT file system support. It's written in ANSI C89 and has no dependencies other than a minimal C environment. It'll compile out of the box in virtually any environment.
 
-The FatFs library does not provide the device/media-specific *Storage Device Controls*. Those have to come from the device implementer. The BoxLambda `fatfs` component provides the following modules:
+The FatFs library does not provide the device/media-specific *Storage Device Controls*; these must be provided by the device implementer. The BoxLambda `fatfs` component provides the following modules:
 
 - The *Storage Device Control Dispatcher*, [diskio.cpp](../../../../sw/components/fatfs/diskio.cpp), dispatches FAT FS requests to RAM Disk Device Control or SD Card Device controls, depending on selected volume.
 - [The RAM Disk Device Controller](#the-ram-disk-device-controller).

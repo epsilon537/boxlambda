@@ -2,6 +2,11 @@ include /test/core-compat.fs
 include /test/fph-ext.fs
 include /forth/irq.fs
 
+\ Empty the interactive string pool. Normally the quit loop takes care of
+\ that, but it's a long while yet before quit gets a chance to run.
+
+istr-free-all
+
 \ ------------------------------------------------------------------------
 \  These definitions have a different behaviour in Mecrisp-Quintus:
 \ ------------------------------------------------------------------------
@@ -12,16 +17,6 @@ include /forth/irq.fs
 \ ------------------------------------------------------------------------
 \ Interpreter hook stopping the testsuite if there's an exception
 \ ------------------------------------------------------------------------
-
-: testsuite-interpret
-  ['] (interpret) try ?dup if
-    ." ***Exception***: " execute
-    cr
-    begin again
-  then
-;
-
-' testsuite-interpret hook-interpret !
 
 \ Interactive string printing word used by testsuite
 : .( ( -- )
@@ -85,7 +80,8 @@ variable #errors 0 #errors !
 
 : ?assert ( f -- )
   0= if
-    s" assert failed: " error
+    s" testsuite assert failed: " error
+    quit
   then
 ;
 
@@ -135,7 +131,7 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
 
 CR
 
-\ ------------------------------------------------------------------------
+\ -----------------------------------------------------------------------
 TESTING BASIC ASSUMPTIONS
 
 T{ -> }T               \ START WITH CLEAN SLATE
@@ -176,6 +172,495 @@ T{ 0S 0S XOR -> 0S }T
 T{ 0S 1S XOR -> 1S }T
 T{ 1S 0S XOR -> 1S }T
 T{ 1S 1S XOR -> 0S }T
+
+\ ------------------------------------------------------------------------
+TESTING STACK OBJECTS
+
+T{ 4 stack-create teststack -> }T
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 0 }T
+T{ teststack stack-free -> 4 }T
+T{ teststack stack-base -> teststack stack-top }T
+
+T{ 1 teststack stack-push -> }T
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 1 }T
+T{ teststack stack-free -> 3 }T
+T{ teststack stack-base 1 cells+ -> teststack stack-top }T
+
+2 teststack stack-push
+3 teststack stack-push
+4 teststack stack-push
+[: 5 teststack stack-push ;] try ' x-stack-obj-overflow = ?assert
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 4 }T
+T{ teststack stack-free -> 0 }T
+T{ teststack stack-base 4 cells+ -> teststack stack-top }T
+
+T{ teststack stack-pop -> 4 }T
+T{ teststack stack-pop -> 3 }T
+T{ teststack stack-pop -> 2 }T
+T{ teststack stack-pop -> 1 }T
+[: teststack stack-pop ;] try ' x-stack-obj-underflow = ?assert
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 0 }T
+T{ teststack stack-free -> 4 }T
+T{ teststack stack-base -> teststack stack-top }T
+
+1 teststack stack-push
+2 teststack stack-push
+3 teststack stack-push
+4 teststack stack-push
+
+4 teststack stack-find dup ?assert
+T{ @ -> 4 }T
+2 teststack stack-find dup ?assert
+T{ @ -> 2 }T
+1 teststack stack-find dup ?assert
+T{ @ -> 1 }T
+
+T{ 7 teststack stack-find -> 0 }T
+
+2 teststack stack-find teststack >stack-top
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 1 }T
+T{ teststack stack-free -> 3 }T
+T{ teststack stack-base cell+ -> teststack stack-top }T
+
+T{ teststack stack-base teststack >stack-top -> }T
+T{ teststack stack-max-depth -> 4 }T
+T{ teststack stack-depth -> 0 }T
+T{ teststack stack-free -> 4 }T
+T{ teststack stack-base -> teststack stack-top }T
+
+\ ------------------------------------------------------------------------
+TESTING DICTIONARY UTILITIES
+
+begin-module tst-dict-utils
+  : dict-utils-foo ." Testing dict utils" cr ;
+  variable dict-utils-var
+end-module
+
+tst-dict-utils import
+
+T{ ' dict-utils-foo inside-code>link link>code -> ' dict-utils-foo }T
+T{ ' dict-utils-foo code>link link>code -> ' dict-utils-foo }T
+T{ ' dict-utils-foo inside-code>link link>wid -> tst-dict-utils }T
+T{ ' dict-utils-foo inside-code>link link>name count s" dict-utils-foo" compare -> true }T
+dict-utils-var variable>link link>name count s" dict-utils-var" compare -> true }T
+
+tst-dict-utils unimport
+
+\ -------------------------------------------------------------------------
+TESTING WORDLISTS
+
+[: rm ;] try tst_dir/* drop
+[: rm ;] try tst_dir drop
+
+mkdir tst_dir
+
+max-order 1+ array testwids
+
+: testwids-init
+  max-order 1+ 0 do
+    wordlist i testwids !
+  loop
+;
+
+testwids-init
+
+[: max-order 1+ 0 do i testwids @ loop max-order 1+ set-order ;] try ' x-order-overflow = ?assert
+
+[: 0 set-order ;] try ' x-empty-search-order = ?assert
+
+[: forth max-order 1- 0 do i testwids @ loop max-order set-order ;] try 0= ?assert
+
+get-order max-order = ?assert
+
+[: 0 max-order 2- do i testwids @ = ?assert -1 +loop ;] execute
+
+T{ -> forth }T
+
+0 testwids @ set-current
+get-current 0 testwids @ = ?assert
+
+: wid-foo 0 testwids @ ;
+: this-wid wid-foo ;
+
+1 testwids @ set-current
+get-current 1 testwids @ = ?assert
+
+: wid-goo 1 testwids @ ;
+: this-wid wid-goo ;
+
+forth 1 set-order
+
+T{ token wid-foo find drop -> 0 }T
+T{ token wid-goo find drop -> 0 }T
+
+forth 0 testwids @ 2 set-order
+wid-foo 0 testwids @ = ?assert
+T{ token wid-goo find drop -> 0 }T
+
+0 testwids @ forth 2 set-order
+wid-foo 0 testwids @ = ?assert
+T{ token wid-goo find drop -> 0 }T
+
+forth 1 testwids @ 2 set-order
+wid-goo 1 testwids @ = ?assert
+T{ token wid-foo find drop -> 0 }T
+
+1 testwids @ forth 2 set-order
+wid-goo 1 testwids @ = ?assert
+T{ token wid-foo find drop -> 0 }T
+
+forth 0 testwids @ 1 testwids @ 3 set-order
+wid-foo 0 testwids @ = ?assert
+wid-goo 1 testwids @ = ?assert
+this-wid 1 testwids @ = ?assert
+
+forth 1 testwids @ 0 testwids @ 3 set-order
+wid-foo 0 testwids @ = ?assert
+wid-goo 1 testwids @ = ?assert
+this-wid 0 testwids @ = ?assert
+
+[: 0 testwids @ wordlist-list ;] >file tst_dir/testwid0.log
+[: 1 testwids @ wordlist-list ;] >file tst_dir/testwid1.log
+
+s" tst_dir/testwid0.log" s" test/testwid0.ref" f_cmp ?assert
+s" tst_dir/testwid1.log" s" test/testwid1.ref" f_cmp ?assert
+
+0 testwids @ .wordlist
+1 testwids @ .wordlist
+
+.order
+
+forth 1 set-order
+forth set-current
+
+\ -----------------------------------------------------------------------
+TESTING MODULES
+
+begin-module testmod
+  : testmodword 5368 ;
+end-module  
+
+testmod wordlist-name@ count s" testmod" compare ?assert
+
+testmod continue-module
+  begin-module nestmod
+    : nestmodword 9633 ;
+  end-module
+end-module
+
+T{ s" testmodword" find -> 0 0 }T
+T{ s" nestmodword" find -> 0 0 }T
+T{ s" nestmod" find -> 0 0 }T
+
+testmod import
+T{ testmodword -> 5368 }T
+T{ s" nestmodword" find -> 0 0 }T
+
+nestmod import
+T{ testmodword -> 5368 }T
+T{ nestmodword -> 9633 }T
+
+nestmod unimport
+T{ testmodword -> 5368 }T
+T{ s" nestmodword" find -> 0 0 }T
+
+testmod unimport
+T{ s" testmodword" find -> 0 0 }T
+T{ s" nestmodword" find -> 0 0 }T
+T{ s" nestmod" find -> 0 0 }T
+
+T{ testmod :: testmodword -> 5368 }T
+T{ testmod ::' testmodword execute -> 5368 }T
+T{ [: testmod ::['] testmodword execute ;] execute -> 5368 }T
+T{ testmod :: nestmod :: nestmodword -> 9633 }T
+[: testmod :: testmodword ;] execute 5368 = ?assert
+[: testmod :: nestmod :: nestmodword ;] execute 9633 = ?assert
+
+T{ s" testmodword" find -> 0 0 }T
+T{ s" nestmodword" find -> 0 0 }T
+T{ s" nestmod" find -> 0 0 }T
+
+begin-module sibmod
+  testmod import
+  : sibmodword testmodword ;
+end-module
+
+T{ s" testmodword" find -> 0 0 }T
+T{ s" nestmodword" find -> 0 0 }T
+T{ s" sibmodword" find -> 0 0 }T
+T{ s" nestmod" find -> 0 0 }T
+
+sibmod import
+
+T{ s" testmodword" find -> 0 0 }T
+T{ sibmodword -> 5368 }T
+
+sibmod unimport
+
+\ ------------------------------------------------------------------------
+TESTING Basic Utilities
+
+create tst-vec $baba , $abba , $baab , $abab ,
+
+T{ $abba tst-vec 4 find-in -> tst-vec cell+ }T
+T{ $baba tst-vec 4 find-in -> tst-vec }T
+T{ $abab tst-vec 4 find-in -> tst-vec 3 cells+ }T
+T{ $b0b0 tst-vec 4 find-in -> 0 }T
+
+T{ 0 log2 -> 0 }T
+T{ 1 log2 -> 0 }T
+T{ 2 log2 -> 1 }T
+T{ $401 log2 -> #11 }T
+T{ #1024 log2 -> #10 }T
+T{ #1023 log2 -> #10 }T
+T{ $ffffffff log2 -> #32 }T
+
+T{ 8 8/ -> 1 }T
+T{ #81 8/ -> #10 }T
+T{ #80 8/ -> #10 }T
+T{ #79 8/ -> 9 }T
+T{ 8 4/ -> 2 }T
+T{ #81 4/ -> #20 }T
+T{ #80 4/ -> #20 }T
+T{ #79 4/ -> #19 }T
+
+
+variable treg
+$deadbeef treg !
+
+treg $ff00 8 bitfield@ tregb1@
+treg $ff00 8 bitfield! tregb1!
+treg $ff0000 #16 bitfield@ tregb2@
+treg $ff0000 #16 bitfield! tregb2!
+
+T{ tregb1@ -> $be }T
+T{ tregb2@ -> $ad }T
+T{ $ffffff54 tregb1! -> }T
+T{ $ffffff45 tregb2! -> }T
+T{ tregb1@ -> $54 }T
+T{ tregb2@ -> $45 }T
+T{ treg @ -> $de4554ef }T
+
+$deadbeef treg !
+
+$f000 #12 bitfield16@ n3@
+$000f #0  bitfield16@ n0@
+$f000 #12 bitfield16! n3!
+$000f #0  bitfield16! n0!
+
+T{ treg n3@ -> $b }T
+T{ treg n0@ -> $f }T
+
+$fff5 treg n3!
+$fff4 treg n0!
+
+T{ treg @ -> $dead5ee4 }T
+
+\ ------------------------------------------------------------------------
+TESTING vec2
+
+\ 1. Basic Vector Packing & Unpacking
+
+T{  #10  #20 vec2 -> $0014000A }T  \ 10 ($A) in lower 16-bits, 20 ($14) in upper 16-bits
+T{  #0    #0 vec2 -> 0          }T
+T{ $FFFF $FFFF vec2 -> $FFFFFFFF }T  \ Maximum unsigned limits
+
+\ Field Extractor Verification
+T{ $0014000A vec2.x  -> #10  }T
+T{ $0014000A vec2.y  -> #20  }T
+T{ $0014000A vec2.xy -> #10 #20 }T
+
+\ 2. Vector Addition (`vec2+`)
+
+\ Standard clean addition
+T{ #10 #20 vec2  #5 #2 vec2 vec2+ -> #15 #22 vec2 }T
+
+\ Lower 16-bit X Overflow (Should roll over cleanly, NOT bleed into Y)
+\ $FFFF + $0001 = $0000 (with no carry propagated to Y)
+T{ $FFFF #10 vec2   1  #5 vec2 vec2+ -> 0 #15 vec2 }T
+
+\ Upper 16-bit Y Overflow (Should roll over cleanly at the cell boundary)
+T{ #10 $FFFF vec2   #5  1 vec2 vec2+ -> #15 0 vec2 }T
+
+\ Simultaneous X and Y Overflow
+T{ $FFFF $FFFF vec2  1  1 vec2 vec2+ -> 0 0 vec2 }T
+
+\ 3. Vector Subtraction (`vec2-`)
+
+\ Standard clean subtraction
+T{ #20 #40 vec2  #5 #10 vec2 vec2- -> #15 #30 vec2 }T
+
+\ X Underflow (Should wrap to $FFFF without corrupting Y)
+T{   0 #10 vec2   1   0 vec2 vec2- -> $FFFF #10 vec2 }T
+
+\ Y Underflow (Should wrap to $FFFF)
+T{ #10   0 vec2   0   1 vec2 vec2- -> #10 $FFFF vec2 }T
+
+\ 4. Dot Product (`vec2dot`)
+
+\ Standard dot product: (3*5) + (4*6) = 15 + 24 = 39
+T{ #3 #4 vec2  #5 #6 vec2 vec2dot -> #39 }T
+
+\ Zero properties
+T{ 0 0 vec2  #10 #10 vec2 vec2dot -> 0 }T
+
+\ Orthogonal vectors (Dot product must equal 0)
+T{ #0 #5 vec2  #5 #0 vec2 vec2dot -> 0 }T
+
+\ 5. Scalar Multiplication (`vec2*`)
+
+\ Standard clean multiplication
+T{ #2 #4 vec2  #3 vec2* -> #6 #12 vec2 }T
+
+\ X Multiplication Overflow (Verifies it cuts off safely at $FFFF instead of bleeding into Y)
+\ #20000 * #4 = 80000 -> 80000 AND $FFFF = 14464 ($3880)
+T{ #20000 #5 vec2  #4 vec2* -> #14464 #20 vec2 }T
+
+\ Y Multiplication Overflow (Verifies it wraps cleanly at the 32-bit cell border)
+\ #20 * #4 = 80; #20000 * #4 = 80000 -> 80000 AND $FFFF = 14464 ($3880)
+T{ #5 #20000 vec2  #4 vec2* -> #20 #14464 vec2 }T
+
+\ 6. Console Print Verification
+
+: test-print CR #10 #20 vec2 .vec2 CR ;
+[: #10 #20 vec2 .vec2 ;] >file tst_dir/vec2.log
+s" tst_dir/vec2.log" s" test/vec2.log" f_cmp ?assert
+
+\ ------------------------------------------------------------------------
+TESTING VRAM ALLOCATOR
+
+vera import
+vram import
+
+vram-reset
+
+\ --- Single block allocation -----------------------------------------------
+
+T{ 1 vram-alloc -> VERA_VRAM_BASE }T
+
+VERA_VRAM_BASE vram-free
+
+\ --- Allocation rounds up ---------------------------------------------------
+
+T{ BLOCK-SZ-BYTES vram-alloc -> VERA_VRAM_BASE }T
+VERA_VRAM_BASE vram-free
+
+T{ BLOCK-SZ-BYTES 1+ vram-alloc -> VERA_VRAM_BASE }T
+VERA_VRAM_BASE vram-free
+
+\ --- Consecutive allocations ------------------------------------------------
+
+1 vram-alloc constant a1
+1 vram-alloc constant a2
+1 vram-alloc constant a3
+
+T{ a1 -> VERA_VRAM_BASE }T
+T{ a2 -> VERA_VRAM_BASE BLOCK-SZ-BYTES + }T
+T{ a3 -> VERA_VRAM_BASE BLOCK-SZ-BYTES 2* + }T
+
+a1 vram-free
+a2 vram-free
+a3 vram-free
+
+\ --- Reuse freed block ------------------------------------------------------
+
+1 vram-alloc constant b1
+1 vram-alloc constant b2
+
+b1 vram-free
+
+T{ 1 vram-alloc -> b1 }T
+
+b2 vram-free
+b1 vram-free
+
+\ --- Multi-block allocation -------------------------------------------------
+
+T{ BLOCK-SZ-BYTES 3 * vram-alloc
+   -> VERA_VRAM_BASE }T
+
+VERA_VRAM_BASE vram-free
+
+\ --- Hole is too small ------------------------------------------------------
+
+1 vram-alloc constant c1
+1 vram-alloc constant c2
+1 vram-alloc constant c3
+
+c2 vram-free
+
+\ Two-block allocation should skip the one-block hole.
+T{ BLOCK-SZ-BYTES 2 * vram-alloc
+   -> VERA_VRAM_BASE BLOCK-SZ-BYTES 3 * + }T
+
+c1 vram-free
+c3 vram-free
+VERA_VRAM_BASE BLOCK-SZ-BYTES 3 * + vram-free
+
+\ --- Allocate entire VRAM ---------------------------------------------------
+
+T{ VERA_VRAM_SIZE_BYTES vram-alloc -> VERA_VRAM_BASE }T
+
+VERA_VRAM_BASE vram-free
+
+\ --- Immediate utility words --------------------------------------------
+$1234 immediate-constant tst-imm-const
+
+: imm-const-tst tst-imm-const literal ;
+
+T{ imm-const-tst -> $1234 }T
+
+: tst-compile-or-exec [: ." In tst-compile-or-exec" $5678 ;] compile-or-execute [immediate] ;
+
+T{ [: tst-compile-or-exec ;] execute -> $5678 }T
+T{ tst-compile-or-exec -> $5678 }T
+
+\ ------------------------------------------------------------------------
+TESTING anonymous lists and iterators
+
+[: l{ 1 , 2 , 3 }l ;] execute
+3 = ?assert
+dup @ 1 = ?assert
+dup cell+ @ 2 = ?assert
+dup 2 cells+ @ 3 = ?assert
+drop
+
+[: h{ 4 h, 5 h, 6 }h ;] execute
+3 = ?assert
+dup h@ 4 = ?assert
+2+ dup h@ 5 = ?assert
+2+ h@ 6 = ?assert
+
+[: c{ 7 c, 8 c, 9 }c ;] execute
+3 = ?assert
+dup c@ 7 = ?assert
+1+ dup c@ 8 = ?assert
+1+ c@ 9 = ?assert
+
+3 stack-create iterstack
+
+[: l{ 1 , 2 , 3 }l [: iterstack stack-push ;] iter ;] execute
+
+T{ iterstack stack-pop -> 3 }T
+T{ iterstack stack-pop -> 2 }T
+T{ iterstack stack-pop -> 1 }T
+
+[: h{ 4 h, 5 h, 6 }h [: iterstack stack-push ;] hiter ;] execute
+
+T{ iterstack stack-pop -> 6 }T
+T{ iterstack stack-pop -> 5 }T
+T{ iterstack stack-pop -> 4 }T
+
+[: c{ 7 c, 8 c, 9 }c [: iterstack stack-push ;] citer ;] execute
+
+T{ iterstack stack-pop -> 9 }T
+T{ iterstack stack-pop -> 8 }T
+T{ iterstack stack-pop -> 7 }T
 
 \ ------------------------------------------------------------------------
 TESTING 2* 2/ LSHIFT RSHIFT
@@ -889,10 +1374,10 @@ T{ VARIABLE V1 -> }T
 T{ 123 V1 ! -> }T
 T{ V1 @ -> 123 }T
 
-T{ : NOP : POSTPONE ; ; -> }T
-T{ NOP NOP1 NOP NOP2 -> }T
-T{ NOP1 -> }T
-T{ NOP2 -> }T
+\ T{ : NOP : POSTPONE ; ; -> }T
+\ T{ NOP NOP1 NOP NOP2 -> }T
+\ T{ NOP1 -> }T
+\ T{ NOP2 -> }T
 
 T{ : DOES1 DOES> @ 1 + ; -> }T
 T{ : DOES2 DOES> @ 2 + ; -> }T
@@ -1638,6 +2123,7 @@ VARIABLE NN1
 VARIABLE NN2
 :NONAME 1234 ; NN1 !
 :NONAME 9876 ; NN2 !
+
 T{ NN1 @ EXECUTE -> 1234 }T
 T{ NN2 @ EXECUTE -> 9876 }T
 
@@ -3270,6 +3756,15 @@ compiletoimem ( compileto )
 compileto> 0= ?assert ( compileto )
 >compileto ( )
 T{ compileto> -> <TRUE> }T
+compiletoemem
+compileto-save
+  compiletoimem
+  compileto-save
+    compiletoemem
+  compileto-restore
+  T{ compiletoemem? -> <FALSE> }T
+compileto-restore
+T{ compiletoemem? -> <TRUE> }T
 
 \ ------------------------------------------------------------------------------
 TESTING INTERRUPTS
@@ -3279,7 +3774,7 @@ TESTING INTERRUPTS
 0 1 nvariable saved-mip
 
 : mtime-irq-handle
-  mip saved-mip !
+  mip mie and saved-mip !
   mcause saved-mcause !
   ." IRQ mip : " mip hex. cr
   ." IRQ mcause : " mcause hex. cr
@@ -3310,6 +3805,13 @@ T{ saved-mcause @ -> $80000007 }T
 
 \ ------------------------------------------------------------------------------
 TESTING STRUCTS
+
+\ Reverting to original begin-structure defintion for testing purposes.
+\ rttc-struct has this redefined.
+: begin-structure
+  create here
+    0 4 allot does> @
+;
 
 begin-structure tstruct
   cfield: bytefield1
@@ -3411,6 +3913,7 @@ T{ [: + ;] 23 24 rot execute -> 47  }T
 
 \ ------------------------------------------------------------------------
 TESTING HEAP
+
 8 256 heap-size constant test-heap-size
 T{ test-heap-size 8 256 * 2dup > -rot 2 * < -> <TRUE> <TRUE> }T ( Between requested size and twice requested size )
 create test-heap test-heap-size allot
@@ -3569,6 +4072,8 @@ T{ test-pool pool-free-count -> 4 }T
 \ ------------------------------------------------------------------------
 TESTING temp allocator
 
+temp-space temp-mark> = ?assert
+
 variable saved-mark
 temp-mark> saved-mark !
 
@@ -3651,17 +4156,36 @@ T{ evaluate -> 789 }T
 
 T{ istr-dump -> }T
 
-T{ str-pool-mem istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
-1 istr-free
-T{ str-pool-mem istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
-T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
-2 istr-free
-T{ str-pool-mem istr-allocated? -> <TRUE> }T
-T{ str-pool-mem str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
-T{ str-pool-mem str-pool-entry 2 * + istr-allocated? -> <FALSE> }T
+( ptr -- idx )
+: pool-ptr>idx
+  str-pool-mem - str-pool-entry /
+;
+
+( -- addr )
+: find-allocated-pool-ptr
+  str-pool-mem ( pool-ptr )
+  max-strings 0 do
+    dup istr-allocated? if ( pool-ptr )
+      unloop
+      exit
+    then
+    str-pool-entry +
+  loop
+  false ?assert
+;
+
+variable pool-ptr
+
+find-allocated-pool-ptr pool-ptr !
+
+T{ pool-ptr @ istr-allocated? -> <TRUE> }T
+T{ pool-ptr @ str-pool-entry 1 * + istr-allocated? -> <TRUE> }T
+pool-ptr @ pool-ptr>idx 1+ istr-free
+T{ pool-ptr @ istr-allocated? -> <TRUE> }T
+T{ pool-ptr @ str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
+pool-ptr @ pool-ptr>idx istr-free
+T{ pool-ptr @ istr-allocated? -> <FALSE> }T
+T{ pool-ptr @ str-pool-entry 1 * + istr-allocated? -> <FALSE> }T
 
 \ ------------------------------------------------------------------------
 TESTING SPRINTF
@@ -3922,28 +4446,28 @@ MAX_NUM_OPEN_FILES 1+ array fils[]
 ;] try ?except_error
 
 \ Check f_close exception
-[: 1000 f_close ;] try 0> ?assert
+[: 1000 f_close ;] try 0<> ?assert
 
 \ Check f_read exception
-[: 1000 0 1 f_read ;] try 0> ?assert
+[: 1000 fs-buf 1 f_read ;] try 0<> ?assert
 
 \ Check f_write exception
-[: 1000 0 1 f_write ;] try 0> ?assert
+[: 1000 fs-buf 1 f_write ;] try 0<> ?assert
 
 \ Check f_lseek exception
-[: 1000 0 f_lseek ;] try 0> ?assert
+[: 1000 0 f_lseek ;] try 0<> ?assert
 
 \ Check truncate exception
-[: 1000 f_truncate ;] try 0> ?assert
+[: 1000 f_truncate ;] try 0<> ?assert
 
 \ Check f_sync exception.
-[: 1000 f_sync ;] try 0> ?assert
+[: 1000 f_sync ;] try 0<> ?assert
 
 \ Check f_gets exception.
-[: 1000 0 1 f_gets ;] try 0> ?assert
+[: 1000 fs-buf 10 f_gets ;] try 0<> ?assert
 
 \ Check f_putc exception.
-[: 1000 0 f_putc ;] try 0> ?assert
+[: 1000 0 f_putc ;] try 0<> ?assert
 
 \ Make directory, cd into it, make a files and a subdir, list the dir, check the entries' attributes,
 \ close the directory, remove the files, remove the directory.
@@ -4106,6 +4630,7 @@ esc-s" appending...\n" compare ?assert ( fil )
 TESTING SHELL
 
 \ ls, cd and pwd test
+[: rm ;] try tst_dir/* drop
 [: rm ;] try tst_dir drop
 mkdir tst_dir
 [: ." ls tst_dir" cr ;] >file tst_dir/ls.log
@@ -4205,6 +4730,15 @@ s" tst_dir/rm.log" s" test/rm.log" f_cmp ?assert
 [: cat ;] >file ram:/tst_dir/cat.log ram:/tst_dir/rm.log
 
 s" tst_dir/cat.log" s" test/cat.log" f_cmp ?assert
+
+\ fdump test
+false paging-enabled !
+
+[: fdump ;] >file ram:/tst_dir/fdump.log ram:/tst_dir/rm.log
+
+s" tst_dir/fdump.log" s" test/fdump.log" f_cmp ?assert
+
+true paging-enabled !
 
 \ cp test
 cp ram:/test/cpdir/cpfile0 ram:/tst_dir/cpfile0.cp

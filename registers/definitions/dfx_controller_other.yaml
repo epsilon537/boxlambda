@@ -63,7 +63,7 @@ regmap:
             description: Unknown error.
             value: 15
     -   name: SHUTDOWN
-        description: Set if controller is int shutdown state.
+        description: Set if controller is in shutdown state.
         reset: 0
         width: 1
         lsb: 7

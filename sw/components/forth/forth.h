@@ -10,13 +10,13 @@ extern "C" {
 //
 // Linker Variables:
 //
-extern uint32_t __forth_ram_start[];
-extern uint32_t __forth_ram_end[];
-extern uint32_t __forth_imem_start[];
-extern uint32_t __forth_imem_end[];
-extern uint32_t __datastack[];
-extern uint32_t __datastack_size[];
-extern uint32_t __datastack_end[];
+extern char __forth_emem_start;
+extern char __forth_emem_end;
+extern char __forth_imem_start;
+extern char __forth_imem_end;
+extern char __datastack;
+extern char __datastack_size;
+extern char __datastack_end;
 
 //
 // Forth Data Stack Accessor:
@@ -51,7 +51,7 @@ uint32_t forth_find_word(const char *s);
 void forth_execute_xt(uint32_t xt);
 
 // A wrapper for the two previous actions. Look up a word,
-// if found, executed it and return 0. If not found, return -1.
+// if found, execute it and return 0. If not found, return -1.
 uint32_t forth_execute_word(const char *s);
 
 // Evaluate the given string.
@@ -59,7 +59,7 @@ void forth_evaluate(const char *s, uint32_t count);
 #define forth_eval(s) forth_evaluate(s, strlen(s))
 
 // Evaluate the multi-line buffer pointed to by s line-by-line?
-// If verbose flag is set, print each line as its being loaded.
+// If verbose flag is set, print each line as it's being loaded.
 void forth_eval_buf(char *s, bool verbose);
 
 // Load the given file and evaluate it.
@@ -70,9 +70,10 @@ void forth_eval_file_or_die(const char *filename, bool verbose);
 // each boxkern_include file in turn/
 void forth_eval_boxkern_includes_or_die(const char *filename, bool verbose);
 
-// Register a C function with signature: void fun(void). Fun uses the datastack object for parameter passing.
-#define forth_register_cfun(fun, wordname) \
-           forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)
+// Register a C function with signature: void fun(void). Fun uses the datastack
+// object for parameter passing.
+#define forth_register_cfun(fun, wordname)                                     \
+  forth_pushda((uint32_t)fun), forth_eval("c-fun " wordname)
 
 #ifdef __cplusplus
 }

@@ -1,21 +1,105 @@
 \ BoxLambda Forth
-\ init.fs executes as soon as the BoxLambda OS has booted up to the
-\ point that the include Word has been created, i.e. right after the
-\ BoxKern has exeuted shell.fs.
+\ init.fs executes after fastboot has completed or, in case of slowboot,
+\ after evaulating slowboot-includes.fs.
 
-\ Note that ifdef/else is defined here. Forth modules
-\ earlier in the boot sequence such as fs.fs and shell.fs
-\ (see sw/projects/boxlambda_os/main.cpp) don't have access to
-\ ifdef/else.
-include /forth/ifdef.fs
+vera import
+vera-init
 
-include /forth/disasm.fs
-include /forth/dump.fs
-include /forth/dict.fs
-
-\ This flag is set when building the boxkerntest target.
 [ifdef] FORTH_CORE_TEST
-false include-verbose !
+true include-verbose !
+cd /test/vera/
+
+include vera-test-palette.fs
+(test-palette) pal-load
+
+include vera-bitmap-1bpp.fs
+vram.
+include vera-bitmap-2bpp.fs
+vram.
+include vera-bitmap-4bpp.fs
+vram.
+include vera-bitmap-8bpp.fs
+vram.
+include vera-bitmap-pal-group.fs
+vram.
+include vera-tile-1bpp.fs
+vram.
+include vera-tile-2-4-8bpp.fs
+vram.
+include vera-sprite-pixels.fs
+vram.
+include vera-map-corners-256.fs
+vram.
+include vera-map-test.fs
+vram.
+include vera-layers.fs
+vram.
+include vera-mapentry-tile.fs
+vram.
+include vera-mapentry-txt16.fs
+vram.
+include vera-mapentry-txt256.fs
+vram.
+include vera-map-corners.fs
+vram.
+include vera-map-test-cont.fs
+vram.
+include vera-palette-test.fs
+vram.
+include vera-pal-group-test.fs
+vram.
+include vera-palette-sys-colors.fs
+vram.
+include vera-scale.fs
+vram.
+include vera-scanline.fs
+vram.
+include vera-screen-boundaries.fs
+vram.
+include vera-scroll.fs
+vram.
+include vera-sprite-bank.fs
+vram.
+include vera-sprite-collision.fs
+vram.
+include vera-sprite-first-last.fs
+vram.
+include vera-sprite-hflip.fs
+vram.
+include vera-sprite-info.fs
+vram.
+include vera-sprite-pal-group.fs
+vram.
+include vera-sprite-vflip.fs
+vram.
+include vera-sprite-xy.fs
+vram.
+include vera-sprite-z.fs
+vram.
+include vera-tileset-params.fs
+vram.
+include vera-stack-params.fs
+vram.
+include vera-bitmap-size.fs
+vram.
+\ Run error test cases with stack-checking disabled.
+\ It would get in the way of raised exceptions.
+false stack-checking-enable !
+include vera-bitmap-pos-err.fs
+vram.
+include vera-bitmap-test-err.fs
+vram.
+include vera-map-pos-err.fs
+vram.
+include vera-map-test-err.fs
+vram.
+include vera-sprite-params-err.fs
+vram.
+include vera-tile-pos-err.fs
+vram.
+include vera-tileset-params-err.fs
+vram.
+cd /
 include /test/testsuite.fs
 [then]
 
@@ -35,21 +119,8 @@ include /test/testsuite.fs
   cr
 ;
 
-\ A quit loop that prints the cwd as a prompt
-: quit_w_cwd ( -- )
-  begin
-    cr f_getcwd type s" > " type
-    query
-    cr
-    interpret
-  again
-;
-
 Flamingo cr
 ." Ready." cr
 
-\ Update the quit hook so that if quit is called,
-\ we get back into the quit_w_cwd loop.
-' quit_w_cwd hook-quit !
 quit_w_cwd
 

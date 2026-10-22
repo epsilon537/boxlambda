@@ -8,9 +8,10 @@ To install BoxLambda:
 4. [Set up the environment](#setting-up-the-environment).
 5. [Activate the environment](#activating-the-tools-environment).
 6. [Prepare the SD card](#preparing-the-sd-card).
-7. [Flash the bitstream, bootloader, and OS binary](#installing-the-boxlambda-base-bitstream-bootloader-and-os).
+7. [Set the Switches](#set-the-switches).
+8. [Flash the bitstream, bootloader, and OS binary](#installing-the-boxlambda-base-bitstream-bootloader-and-os).
 
-The first four steps should be executed once. Activating the environment is required every time you're working with BoxLambda.
+The first four steps only need to be performed once. Activate the environment each time you work on BoxLambda.
 
 ## Getting the Repository
 
@@ -43,7 +44,7 @@ If you want to force a reinstall of the tools, delete the `./tools/` directory a
 ### User-Level Access to the Arty A7 USB JTAG Adapter.
 
 When run at the user level, OpenOCD might not have permission to access the USB JTAG adapter. To fix this issue, add a rule to `/etc/udev/rules.d`.
-Create a file named `99-openocd.rules` in the `/etc/udev/rules.d` directory. This file should have the following contents:
+Create a file named `99-openocd.rules` in the `/etc/udev/rules.d` directory with the following contents:
 
 ```
 # Original FT2232 VID:PID
@@ -53,13 +54,13 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="666",
 
 ### Serial Port
 
-On my Linux system, when I plug in my Arty A7, the serial port shows up at `/dev/ttyUSB1`.
+On my Linux system, when I plug the Arty A7 is plugged in, the serial port shows up at `/dev/ttyUSB1`.
 
 Serial Port Settings: **1000000 8N1**
 
 ## Activating the Tools Environment
 
-When working with BoxLambda, its tools environment has to be activated. This is done by sourcing the `activate_env.sh` script.
+When working with BoxLambda, its tools environment must be activated. This is done by sourcing the `activate_env.sh` script.
 
 ```
 source activate_env.sh
@@ -80,9 +81,17 @@ To deactivate the environment again, enter `deactivate`.
 Copy the contents of the `fs/` directory onto a FAT-formatted SD card. Insert the SD card into the
 [MicroSD PMOD](pmods.md#microsd-pmod).
 
+## Set the Switches
+
+On the board, set switch 3 to the *on* position and switches 2-0 to the *off* position.
+
+[![Switch Settings.](../assets/installation-switch-settings.png)](../assets/installation-switch-settings.png)
+
+*Switch Settings.*
+
 ## Installing the BoxLambda Base Bitstream, BootLoader, and OS
 
-### Flashing the Release Binaries
+### Option 1: Flashing the Release Binaries
 
 The BoxLambda repo contains a `binaries/` subdirectory with release binaries. To flash those to the target:
 
@@ -94,28 +103,42 @@ From the repo root directory, navigate to the `binaries` subdirectory and flash 
 cd binaries
 target.py -flash_bit boxlambda_base.bit
 target.py -flash_boot bootloader.bin
-target.py -flash_app boxkern
+target.py -flash_app boxkernforth.bin
 target.py -reset
 ```
 
 After completing the `target.py -reset` command, the target will be reset. In the terminal, you should first see the bootloader image, then the OS image booting up:
 
 ```
-sd0:/> BoxLambda bootloader
+BoxLambda bootloader
 --------------------
-Version: picorv_dma_2_devel-367-g85b7bde-dirty
+Version: vx.y.z
 Initializing SDRAM...
 Initializing SDRAM @0x20000000...
 Switching SDRAM to software control.
 Read leveling:
   m0, b00: |00000000000000000000000000000000| delays: -
-  ...
+  m0, b01: |11111111111111111111111111111100| delays: 14+-14
+  m0, b02: |00000000000000000000000000000000| delays: -
+  m0, b03: |00000000000000000000000000000000| delays: -
+  m0, b04: |00000000000000000000000000000000| delays: -
+  m0, b05: |00000000000000000000000000000000| delays: -
+  m0, b06: |00000000000000000000000000000000| delays: -
+  m0, b07: |00000000000000000000000000000000| delays: -
+  best: m0, b01 delays: 14+-14
+  m1, b00: |00000000000000000000000000000000| delays: -
+  m1, b01: |11111111111111111111111111111100| delays: 14+-14
+  m1, b02: |00000000000000000000000000000000| delays: -
+  m1, b03: |00000000000000000000000000000000| delays: -
+  m1, b04: |00000000000000000000000000000000| delays: -
+  m1, b05: |00000000000000000000000000000000| delays: -
+  m1, b06: |00000000000000000000000000000000| delays: -
   m1, b07: |00000000000000000000000000000000| delays: -
   best: m1, b01 delays: 14+-14
 Switching SDRAM to hardware control.
 Done.
 Application image magic number check OK.
-Application image size: 148772 bytes
+Application image size: 471500 bytes
 Copying SW image from Flash to DDR...
 Done.
 Booting application image...
@@ -133,14 +156,8 @@ Booting from volume sd0:.
 Loading forth/early.fs...
 Redirecting stdio to Forth...
 Initializing Forth Filesystem FFI...
-Parsing forth/boxkern-includes.fss...
-Loading forth/utils.fs...
-Redefine .".
-Loading forth/except.fs...
-...
-Loading forth/fs-redirect.fs...
-Loading forth/shell.fs...
-Redefine _cp-file-to-file.
+Loading fastboot forth image...
+Executing forth/init.fs...
 
      _
     ^-)
@@ -154,96 +171,18 @@ Ready.
 sd0:/>
 ```
 
-You're now in the Forth REPL and can start entering Forth statements. Try `ls`, `cd` and `cat` to navigate around the file system
-and look at files:
+You're now in the Forth REPL and can start entering Forth statements. [Try It Out](try-it-out.md).
 
-```
-sd0:/> ls *
+### Option 2: Building and Loading from Source
 
-00000000 2026/04/06 22:24:16 --- --- --- --- DIR --- forth
-00000000 2026/04/06 22:24:18 --- --- --- --- DIR --- test
-
-sd0:/> cd forth
-
-sd0:/forth> ls *
-...
-00000490 2026/03/31 17:31:56 --- --- --- --- --- ARC irq.fs
-00001137 2026/03/31 17:32:52 --- --- --- --- --- ARC boxkern-includes.fs
-00001749 2026/03/31 17:33:42 --- --- --- --- --- ARC utils.fs
-00000328 2026/03/31 17:35:02 --- --- --- --- --- ARC early.fs
-00001219 2026/04/06 20:34:52 --- --- --- --- --- ARC init.fs
-
-sd0:/forth> cat irq.fs
-
-\ Setting the MTIMER Comparator
-: set-raw-time-cmp ( u -- ) s>d mtime64 d+ mtimecmp64! ;
-
-\ IRQ ID constants
-16 constant irq-id-fast-0
-7 constant irq-id-timer
-13 irq-id-fast-0 + constant irq-id-vera
-12 irq-id-fast-0 + constant irq-id-vs00
-08 irq-id-fast-0 + constant irq-id-dfx
-10 irq-id-fast-0 + constant irq-id-sdpsi
-08 irq-id-fast-0 + constant irq-id-usb-hid-1
-07 irq-id-fast-0 + constant irq-id-usb-hid-0
-07 irq-id-fast-0 + constant irq-id-i2c
-05 irq-id-fast-0 + constant irq-id-uart
-
-sd0:/forth>
-```
-
-Create a `hello-world.fs` module and transfer it to the target:
-
-- In a linux terminal, navigate to the `fs/test` directory and create a `hello-world.fs` file with contents `: hello-world ." Hello World." cr ;`:
-
-```
-$ cd fs/test
-fs/test$ echo ": hello-world .\" Hello World.\" cr ;" > hello-world.fs
-```
-
-- Transfer the `fs/` directory, including the new `hello-world.fs` file to the target as a RAM disk:
-
-```
-/fs/test$ cd ../..
-$ target.py -load_fs fs
-=== Target Control ===
-Uploading dir as RAM disk: fs
-...
-Loading Filesystem image...
-Done.
-```
-
-- On the target, navigate to `ram:/test`, source the `hello-world.fs` file, and execute the `hello-world` Word it created:
-
-```
-sd0:/forth> chdrv ram:
-
-ram:/> cd test
-
-ram:/test> ls *
-...
-00000036 2026/04/21 19:33:52 --- --- --- --- --- ARC hello-world.fs
-...
-ram:/test> include hello-world.fs
-
-ram:/test> hello-world
-Hello World.
-
-ram:/test>
-```
-
-### Building and Loading from Source
-
-I'm continuously modifying and testing the code. To avoid having to update the SD card and flash the binaries each time, I added a
-mechanism that lets you:
+As the code is continuously modified and tested, a mechanism has been added to avoid repeatedly updating the SD card and flashing binaries. This mechanism allows you to:
 
 1. load the bitstream and OS binary onto the device (without flashing)
 2. load a RAM disk onto the device. At boot time, when the system detects the RAM disk, it will load the Forth modules from that RAM disk instead of the SD card.
 
 #### Building and Flashing Bootloader
 
-Application images and file systems can be loaded, but the bootloader has to be flashed onto the target (although you can use GDB to load the bootloader into RAM without flashing).
+Application images and file systems can be loaded directly, but the bootloader must be flashed onto the target. Alternatively, you can use GDB to load the bootloader into RAM without flashing it.
 
 The following instructions show how to build and flash the bootloader:
 
@@ -277,24 +216,24 @@ make boxlambda_base_flash_gw
 
 ```
 cd build/arty-a7-100/sw/projects/boxlambda_os
-make boxkern
+make boxkernforth
 ```
 
 To flash the OS binary:
 
 ```
-make boxkern_flash_sw
+make boxkernforth_flash_sw
 ```
 
 To load the OS binary (instead of flashing):
 
 ```
-make boxkern_load
+make boxkernforth_load
 ```
 
 To load the OS binary as well as the `fs/` target file system as a RAM disk:
 
 ```
-make boxkernfs_load
+make boxkernforthfs_load
 ```
 

@@ -51,13 +51,13 @@ In other words, during normal operation, only the CPU is active. You won't have 
 
 ## Arbiters without Overhead (most of the time)
 
-The wishbone arbiters present a minor problem, however. Arbiters typically introduce some transaction overhead. Luckily, there's a way to avoid that: I added a parameter to the arbiter module that allows you to select a default port. Transactions going through the default port will not suffer arbitration overhead when there are no requests on the other ports. The Bus Master-facing arbiters have their default port connected to the CPU.
+The wishbone arbiters present a minor problem, however. Arbiters typically introduce some transaction overhead. Luckily, this can be avoided: I added a parameter to the arbiter module that allows selecting a default port. Transactions going through the default port will not suffer arbitration overhead when there are no requests on the other ports. The bus master-facing arbiters have their default port connected to the CPU.
 
 [![Arbiter without arbitration overhead on the default port.](../../assets/arbiter-wo-overhead.png)](../../assets/arbiter-wo-overhead.png)
 
 *Arbiter without arbitration overhead on the default port.*
 
-The arbiter design is adapted from [Alex Forencich's](https://github.com/alexforencich) wishbone arbiter implementation. The arbiter is code-generated using a Python script:
+The arbiter design is adapted from [Alex Forencich's](https://github.com/alexforencich) Wishbone arbiter implementation. The arbiter is code-generated using a Python script:
 
 [https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py](https://github.com/epsilon537/verilog-wishbone/blob/boxlambda/rtl/wb_arbiter.py)
 
@@ -83,7 +83,7 @@ The interconnect operates within the 50 MHz system clock domain.
 
 ## Handling Invalid Addresses
 
-The Data Bus can optionally acknowledge transactions to invalid addresses. With this feature enabled, if there is no slave response to a read or write request within a timeout period (512 clock cycles), the Data Bus will acknowledge the transaction. In case of read requests, a dummy value of `0xDEADBEEF` is returned.
+The data bus can optionally acknowledge transactions to invalid addresses. With this feature enabled, if there is no slave response to a read or write request within a timeout period (512 clock cycles), the Data Bus will acknowledge the transaction. In case of read requests, a dummy value of `0xDEADBEEF` is returned.
 
 The rationale behind this feature is to prevent a system lock-up when the user accidentally accesses an invalid address from the REPL.
 

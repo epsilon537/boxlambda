@@ -23,11 +23,21 @@
 # out of or in connection with the software or the use or other dealings in the
 # software.
 
+#------------------------------------------------------------------------------
+  Definition Flag_visible|Flag_variable, "raised-by" # ( -- addr )
+  CoreVariable raised_by
+#------------------------------------------------------------------------------
+  pushdaaddrf raised_by
+  ret
+  .varinit 0
+
 # -----------------------------------------------------------------------------
   Definition Flag_visible, "?raise" # ( xt|0 -- | 0 )
 _raise: # Raise an exception with the exception type in the TOS register.
 # -----------------------------------------------------------------------------
   beq x8, zero, 1f
+  laf x14, raised_by
+  sc ra, 0(x14)
   laf x14, ExceptionFramePointer
   lc x15, 0(x14)
   mv sp, x15      # Switch SP to ExceptionFrame.

@@ -30,10 +30,10 @@ regmap:
             description: Even Parity
             value: 5
         -   name: P_SPC
-            description: Party bit is a space
+            description: Parity bit is a space
             value: 6
         -   name: P_MK
-            description: Party bit is a mark
+            description: Parity bit is a mark
             value: 7
         -   name: P_NONE
             description: No parity
@@ -251,7 +251,7 @@ regmap:
         lsb: 2
         access: rw
     -   name: TX_FIFO_HALF_EMPTY
-        description: Enabled TX_FIFO_HALF_EMPTY interrupt.
+        description: Enable TX_FIFO_HALF_EMPTY interrupt.
         width: 1
         lsb: 3
         access: rw

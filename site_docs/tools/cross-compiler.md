@@ -2,7 +2,7 @@
 
 The RISCV cross-compiler is a custom-built **riscv32-boxlambda-elf** toolchain. The compiler build is created using the excellent [Crosstool-ng](https://crosstool-ng.github.io/) project. *Crosstool-ng* uses a menuconfig similar to the Linux kernel menuconfig. You just focus on the specifics of the toolchain you want to build (RISC-V, 32-bit, Static Toolchain...). The tool selects good defaults for all the rest.
 
-I selected:
+The following options were selected:
 
 - Target Architecture: `riscv`
 - Architecture level: `rv32im_zicsr_za_zb_zbs`

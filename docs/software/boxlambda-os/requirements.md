@@ -50,11 +50,7 @@ will still be useful for:
     - File transfers to or from a PC.
     - JTAG debugging of system software issues.
     - Flashing new firmware and bitstream images.
-- I'm going to use open-source third-party components wherever I see fit, just
-like I did on the Gateware side of the project. In practice, this means that
-parts of the OS will consist of cross-compiled C/C++ code. An *FFI* (*Foreign
-Function Interface*) between the cross-compiled code and the self-hosted code
-will be needed.
+- Open-source third-party components will be used where appropriate, similar to the Gateware side of the project. In practice, this means parts of the OS will consist of cross-compiled C/C++ code. An *FFI* (*Foreign Function Interface*) will be needed between the cross-compiled code and the self-hosted code.
 <br/><br/>
 
 ## Forth

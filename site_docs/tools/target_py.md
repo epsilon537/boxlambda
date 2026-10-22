@@ -4,8 +4,9 @@
 
 - handling target reset,
 - flashing or loading bitstreams, bootloaders, and applications,
-- uploading or downloading ram disk images, and
+- uploading or downloading RAM disk images, and
 - attaching a debugger.
+- listening for target events.
 
 `Target.py` functions as a wrapper around tools like OpenOCD, OpenFpgaLoader, and mcopy.
 
@@ -34,6 +35,8 @@ options:
                         Load application image.
   -run                  Execute the application image.
   -gdb                  Wait for GDB to connect.
+  -wait_for_status WAIT_FOR_STATUS
+                        Wait for given status on target.
 ```
 
 `Target.py` is easy to use directly. It is also used internally by the build system. For example, it is used to implement targets such as make boxkernfs_load.
@@ -296,3 +299,64 @@ Loading Filesystem image...
 Done.
 ```
 
+### Listen for Target Event.
+
+```
+target.py -reset -load_fs /home/epsilon/work/boxlambda/fs -load_app boxkern.bin -run -wait_for_status 1 -dump_fs fs
+=== Target Control ===
+Reset requested
+Uploading dir as RAM disk: /home/epsilon/work/boxlambda/fs
+Dumping RAM disk to dir: fs
+Loading application image: boxkern.bin
+Run requested
+Waiting for target status: 1
+dd if=/dev/zero of=boxfs.img bs=1M count=1
+1+0 records in
+1+0 records out
+1048576 bytes (1.0 MB, 1.0 MiB) copied, 0.00158149 s, 663 MB/s
+mkfs.fat -S 512 boxfs.img
+mkfs.fat 4.2 (2021-01-31)
+mcopy -i boxfs.img -s /home/epsilon/work/boxlambda/fs/forth /home/epsilon/work/boxlambda/fs/test /home/epsilon/work/boxlambda/fs/demo ::/
+rm -f fs.img
+rm -rf fs
+openocd -c set RESET 1 -c set LOAD_FS boxfs.img -c set DUMP_FS fs.img -c set LOAD_APP boxkern.bin -c set RUN 1 -c set WAIT_FOR_STATUS 1 -f /home/epsilon/work/boxlambda/scripts/openocd.cfg
+Open On-Chip Debugger 0.12.0+dev-00519-gb6ee13720-dirty (2024-11-17-07:21)
+Licensed under GNU GPL v2
+For bug reports, read
+	http://openocd.org/doc/doxygen/bugs.html
+1
+boxfs.img
+fs.img
+boxkern.bin
+1
+1
+init...
+Info : ftdi: if you experience problems at higher adapter clocks, try the command "ftdi tdo_sample_edge falling"
+Info : clock speed 25000 kHz
+Info : JTAG tap: riscv.cpu tap/device found: 0x13631093 (mfg: 0x049 (Xilinx), part: 0x3631, ver: 0x1)
+Info : datacount=2 progbufsize=8
+Info : Examined RISC-V core; found 1 harts
+Info :  hart 0: XLEN=32, misa=0x40901104
+Info : [riscv.cpu] Examination succeed
+Info : starting gdb server for riscv.cpu on 3333
+Info : Listening on port 3333 for gdb connections
+Resetting target...
+Info : JTAG tap: riscv.cpu tap/device found: 0x13631093 (mfg: 0x049 (Xilinx), part: 0x3631, ver: 0x1)
+Done.
+Loading Filesystem image...
+Done.
+Loading application image...
+Done.
+Execute application image...
+Done.
+Waiting for status
+1
+status: 0xb07a3bda
+status: 0xb07a3bda
+...
+status: 0xb07a3bda
+status: 0x1
+Done.
+Dumping Filesystem image...
+Done.
+```

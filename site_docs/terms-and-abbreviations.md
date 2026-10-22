@@ -10,6 +10,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Bitstream**: A file containing the programming data for an FPGA chip.
 - **Blitter**: A type of DMA used in 2D graphics for bitmap manipulation in video memory.
 - **BoxKern**: The BoxLambda OS Kernel.
+- **BoxKern-Includes**: The list of Forth modules pre-compiled into the BoxKern.
 - **BPP**: Bits Per Pixel.
 - **BSCANE**: A Xilinx primitive for accessing the FPGA's JTAG scan chain.
 - **BSS**: Block Starting Symbol. Zero-initialized data in an object file or executable.
@@ -22,8 +23,11 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Code Segment**: Executable instructions in an object file or executable.
 - **Console**: A terminal with screen, keyboard, and optional mouse; used for I/O.
 - **Constraints File**: Maps HDL module ports to FPGA pins and defines clocks ([reference guide](https://digilent.com/reference/programmable-logic/guides/vivado-xdc-file)).
+- **Corsair**: The tools used to generate the Register Access Layer and register map documentation. See [here](https://corsair.readthedocs.io/en/latest/introduction.html).
+- **Counted string (Forth)**: A string stored with a length count in the byte immediately preceding its character data. In traditional Forth systems, the count specifies the number of characters in the string, allowing its length to be determined without a terminating character.
 - **CPP**: C Preprocessor used by the C compiler and PicoRV assembler.
 - **CPU**: Central Processing Unit.
+- **CR**: Carriage Return, `\r`, ASCII code 13 (decimal).
 - **CRC**: Cyclic Redundancy Check, a checksum algorithm.
 - **CRT0**: Execution startup routines in C programs.
 - **Crossbar Interconnect**: A switching fabric enabling non-blocking M-to-N connections.
@@ -49,11 +53,13 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **EDA tool**: Electronic Design Automation tool, e.g., Vivado.
 - **EMEM**: External Memory (SDRAM).
 - **ERR**: A Wishbone Bus Signal.
+- **Escaped Strings**: Strings with escape codes in them, e.g., `\n`, `\t`.
 - **Execution Token: See *xt*.
-- **FFI**: Foreign Function Interface, e.g. the interface used to allow C code to call Forth code.
+- **FFI**: Foreign Function Interface, e.g., the interface used to allow C code to call Forth code.
 - **FFT**: Fast Fourier Transform, converting signals to frequency components.
 - **FHDL**: Fragmented Hardware Description Language, used by Migen and LiteX.
 - **FIFO**: First-In-First-Out queue implementation.
+- **Foldable (Mecrisp Forth)**: A Word whose execution can be evaluated at compile time, allowing the compiler to replace the word and its inputs with the resulting value in the compiled definition.
 - **Fork**: Copy of a GitHub repository under a user account.
 - **Forth**: A stack-based programming language.
 - **fs_mem**: Filesystem memory, a section of external memory used by the BoxLambda OS as a RAM disk.
@@ -66,6 +72,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Harvard Architecture**: CPU architecture with separate instruction and data memory. Used by BoxLambda’s Ibex processor.
 - **HAL**: Hardware Access Layer, a low-level software API.
 - **HIR**: Host Interface Registers for DMA cores.
+- **Hook (software)**: A mechanism that allows custom code to be invoked when a specific event occurs or at a defined point in a program's execution, enabling behavior to be extended or modified without changing the original code.
 - **I2C**: Inter-Integrated Circuit, a two-wire synchronous serial bus.
 - **I2C Slave Address**: Unique address distinguishing devices on an I2C bus.
 - **I2S**: Interface for digital audio data transfer.
@@ -85,10 +92,12 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **IRQ**: Interrupt Request.
 - **ISA**: Instruction Set Architecture.
 - **ISR**: Interrupt Service Routine or Interrupt Status Register.
+- **Iterator**: An object or mechanism that provides sequential access to the elements of a collection or sequence, one element at a time.
 - **J1**: A small Forth CPU core.
 - **Jekyll**: A static, blog-aware, website generator written in Ruby.
 - **JTAG**: Debugging interface standard.
 - **Lambda**: An anonymous function.
+- **LF**: Line Feed, `\n`, ASCII code 10 (decimal).
 - **Linting**: Static code analysis.
 - **LiteDRAM**: Configurable DRAM core in LiteX.
 - **LiteX**: SoC builder framework using Migen.
@@ -98,6 +107,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Machine Mode**: RISC-V’s privilege level used by BoxLambda.
 - **MCP**: Multi-Cycle Path for CDC signals.
 - **Makefile**: File defining build tasks for the *Make* utility.
+- **MapEntry**: VERA Graphics terminology. An entry in a tilemap.
 - **Memory File**: Contains initial Block RAM contents for FPGAs.
 - **Memory Mapped IO**: Mapping memory and I/O devices to the same address space.
 - **MkDocs**: Python-based static site generator, used to build the BoxLambda read-the-docs documentation.
@@ -110,11 +120,14 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **Mtimecmp**: RISC-V Machine Timer Compare Register.
 - **MSB**: Most Significant Bit.
 - **MUX**: Multiplexer.
+- **Namespace**: A named scope that groups identifiers and distinguishes them from identifiers in other namespaces, helping prevent naming conflicts.
 - **NDM Reset**: Non-Debug Module reset signal/domain.
 - **Nested Interrupt**: High-priority interrupt during another ISR.
 - **NMI**: Non-Maskable Interrupt.
 - **OLOGIC**: Synchronous block for FPGA output data ([guide](https://digilent.com/reference/programmable-logic/arty-a7/reference-manual)).
 - **OpenOCD**: Open-source debugger for JTAG.
+- **Palette Group**: VERA Graphics terminology. A sub-group of 16 colors within the 256-color VERA palette. Colors can be referenced relative to a Palette Group on VERA, the Palette Group ID acting as an offset in the color palette.
+- **Parameter Block**: A BoxLambda Forth term for a block of parameters delimited by `{` and `}`-based Words. E.g., `sheet{ 8 width 8 height 1 bpp 256 tiles }apply`.
 - **Partition Pins**: Logical/physical connections in FPGA reconfigurations.
 - **Pblock**: User-defined FPGA resource region.
 - **PCB**: Printed Circuit Board.
@@ -127,7 +140,7 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **PMOD**: Digilent’s Peripheral Module Interface standard.
 - **POR**: Power-On Reset.
 - **PSG**: Programmable Sound Generator.
-- **PSP**: Parameter Stack Pointer, The Parameter Stack is an alternate name for the Forth Data Stack.
+- **PSP**: Parameter Stack Pointer. The Parameter Stack is an alternate name for the Forth Data Stack.
 - **PUP**: Pull-Up Pin.
 - **PWM**: Pulse Width Modulation.
 - **RC Filter**: Resistor-Capacitor low-pass filter.
@@ -139,27 +152,30 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **RM**: Reconfigurable Module - Part of Xilinx's DFX solution.
 - **RS**: The Forth Return Stack.
 - **RTCC**: Real-Time Clock and Calendar.
-- **RTL**: Register-Transfer Level - An abstraction of a digital design, typically described in Verilog, SystemVerilog, or VHDL.
-- **RV32IMCB**: RISC-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulating Extensions.
+- **RTTC**: Run-Time Type Checking.
+- **RTL**: Register-Transfer Level - an abstraction of a digital design, typically described in Verilog, SystemVerilog, or VHDL.
+- **RV32IMCB**: RISC-V 32-bit Processor Variant with Multiplier/Divider, Compressed ISA, and Bit Manipulation Extensions.
 - **Scatter-Gather DMA**: A method for transferring data between non-contiguous memory blocks using smaller contiguous transfers.
 - **Scan Line**: One line in the raster scanning pattern of a VGA display.
 - **SCL**: I2C Serial Clock Line.
-- **SD**: Secure Digital - A proprietary flash memory card format developed by the SD Association.
+- **SD**: Secure Digital - a proprietary flash memory card format developed by the SD Association.
 - **SDA**: I2C Serial Data Line.
-- **SDL**: Simple DirectMedia Layer - A library for cross-platform development, providing access to audio, input devices, and graphics.
+- **SDL**: Simple DirectMedia Layer - a library for cross-platform development, providing access to audio, input devices, and graphics.
 - **SDRAM**: Synchronous Dynamic Random-Access Memory - Operates in sync with an external clock signal.
 - **Shared Bus Interconnect**: A type of interconnect where a single bus master accesses a common bus and selects one bus slave. Arbitration is used to decide access.
+- **Sheet**: A tileset or a bitmap. VERA Graphics terminology.
 - **Slice**: The basic logical unit of a Xilinx FPGA.
 - **SNDH**: A music file format used on Atari ST.
 - **(Software) Image**: A snapshot of computer memory stored as a file.
-- **SoC**: System-on-a-Chip - An integrated circuit combining most components of a computer system.
-- **SPI**: Serial Peripheral Interface - A synchronous serial communication protocol.
+- **SoC**: System-on-a-Chip - an integrated circuit combining most components of a computer system.
+- **SPI**: Serial Peripheral Interface - a synchronous serial communication protocol.
 - **Sprite**: A computer graphic manipulated as a single entity on-screen.
+- **Stack Juggler (Forth)**: A Forth Word that rearranges, duplicates, or removes items on the data stack without otherwise operating on their values. E.g., `dup`, `drop`, `swap`.
 - **Static Design**: The static part of a design that doesn't change during partial reconfiguration. It includes static logic and routing.
 - **STB**: Wishbone Strobe Bus Signal.
-- **Stderr**: Standard Error - Associated with error output in the Standard C library.
-- **Stdin**: Standard Input - Associated with input devices in the Standard C library.
-- **Stdout**: Standard Output - Associated with output devices in the Standard C library.
+- **Stderr**: Standard Error - associated with error output in the Standard C library.
+- **Stdin**: Standard Input - associated with input devices in the Standard C library.
+- **Stdout**: Standard Output - associated with output devices in the Standard C library.
 - **Stdio**: Standard Input and Output - The C library header for I/O functions like `printf()` and `scanf()`.
 - **ST-Sound**: A library for playing YM music files ([GitHub Repository](https://github.com/arnaud-carre/StSound)).
 - **Synthesis**: Converts HDL (e.g., Verilog) source code into a gate-level netlist.
@@ -167,19 +183,27 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **TAP**: Test Access Port - Part of the JTAG interface.
 - **TCK**: Test Clock - JTAG clock signal.
 - **Tcl**: A standard embedded command language for EDA applications.
+- **TIB (Forth)**: Terminal Input Buffer — a memory buffer that holds a line of input text being interpreted or processed by the Forth system.
+- **Tile**: A glyph in a tileset.
+- **Tilemap**: A grid of tiles to display on-screen, e.g., a terminal text grid. Each tilemap cell references a tile in a tileset sheet. VERA graphics terminology.
+- **Tileset**: A set of glyphs, e.g., a font or a sprite sheet. VERA graphics terminology.
+- **tmap**: Tilemap.
+- **Token (Forth)**: A sequence of characters recognized by the Forth text interpreter as a single unit, typically a word name or a number. The interpreter processes the token to execute a word, compile it, or convert it into a value.
 - **TOS**: The item on top of the Forth Data Stack.
+- **tset**: Tileset.
 - **Udev**: A device manager for the Linux kernel.
 - **UKP**: A tiny 5-bit processor used in the `usb_hid_host` core.
-- **USB HID**: USB Human Interface Device - A class for peripherals like keyboards and mice.
+- **USB HID**: USB Human Interface Device - a class for peripherals like keyboards and mice.
 - **USB HIDBP**: USB HID Boot Protocol.
 - **VCS**: Version Control Subsystem.
+- **vec2**: A 2D vector object in BoxLambda Forth.
 - **Vectored Mode**: A RISC-V interrupt mode with separate entry points in a vector table.
-- **Venv**: Virtual Environment - A Python environment with its own Python interpreter and packages.
+- **Venv**: Virtual Environment - a Python environment with its own Python interpreter and packages.
 - **Verilate**: The process of compiling HDL into C++ using Verilator.
 - **Verilator**: A tool that compiles HDL into C++.
 - **VERA**: Versatile Embedded Retro Adapter - Graphics core for BoxLambda.
-- **VGA**: Video Graphics Array - A standard for displaying color graphics.
-- **VM**: Virtual Machine - A virtual environment functioning as a computer system.
+- **VGA**: Video Graphics Array - a standard for displaying color graphics.
+- **VM**: Virtual Machine - a virtual environment functioning as a computer system.
 - **Von Neumann Architecture**: A computer architecture with a unified memory for instructions and data. Used in PicoRV processors.
 - **VRAM**: Video RAM.
 - **WB**: Wishbone.
@@ -189,10 +213,12 @@ This section clarifies some of the more ambiguous terms and abbreviations used e
 - **WIP**: Work In Progress.
 - **Wishbone**: An open-source SoC bus specification ([Wishbone Spec](https://cdn.opencores.org/downloads/wbspec_b4.pdf)).
 - **Word**: In this documentation, a *Word* written with capital *W* signifies a Forth Word.
+- **WordList**: A collection of Forth dictionary entries (Words) that can be searched to find the definition of a word. A word list provides a namespace for Forth words.
 - **WSL**: Windows Subsystem for Linux.
-- **Xbar**: Cross-Bar - A type of interconnect used in SoC bus fabrics.
+- **Xbar**: Cross-Bar - a type of interconnect used in SoC bus fabrics.
 - **xt**: Execution Token. A value that uniquely identifies a word’s executable code, allowing the program to execute that word indirectly.
 - **XPM**: Xilinx Parameterized Macro.
 - **YM**: A music file format for the YM2149 chip ([YM Format](http://leonard.oxg.free.fr/ymformat.html)).
 - **YM2149**: A Yamaha sound chip from the 1980s. See also JT49.
+- **Z-Depth**: The ordering of a sprite relative to (in-front-of/behind) the two VERA graphics layers and background. 
 

@@ -85,12 +85,12 @@ typedef union {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t VALUE : 8; // A write operation to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value.
+    uint32_t VALUE : 8; // Writing to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value.
     uint32_t : 24; // reserved
   };
 } mtimer_mtimeblk_t;
 
-// MTIMEBLK.VALUE - A write operation to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value.
+// MTIMEBLK.VALUE - Writing to this register blocks the CPU until the lower 8 bits of the MTIME register match the written value.
 #define MTIMER_MTIMEBLK_VALUE_WIDTH 8
 #define MTIMER_MTIMEBLK_VALUE_LSB 0
 #define MTIMER_MTIMEBLK_VALUE_MASK 0xff

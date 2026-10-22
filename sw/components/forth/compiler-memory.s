@@ -55,8 +55,10 @@ setflags_intern:
 setflags_ram:
 
   # Fetch flags of current definition
-  laf x14, ThreadEnd # Variable containing pointer to current definition
-  lc x14,    0(x14)  # Address of current definition
+  # laf x14, ThreadEnd # Variable containing pointer to current definition
+  laf x14, Current   # Current points to current wordlist pointer
+  lc x14,   0(x14)
+  lc x14,    0(x14)  # Address of current definition in current wordlist
   lc x15, CELL(x14)  # Fetch its Flags
 
   push x10
@@ -319,9 +321,13 @@ four_allot:
 
   # Set latest pointer to start of CoreDictionary. Recall that the
   # CoreDictionary is searched oldest-to-newest.
-  laf x14, ThreadEnd
-  la x15, CoreDictionaryStart
-  sc x15, 0(x14)
+  laf   x14, ThreadEnd
+  laf   x15, CoreDictionaryStart
+  sc   x15, 0(x14)
+
+  # Point Current to ThreadEnd, the initial/default wordlist.
+  la x15, Current
+  sc x14, 0(x15)
 
   pop x1
   ret
@@ -391,24 +397,24 @@ Secondpointerswap:
     sc x14, 1*CELL(x8)
     sc x15, 0*CELL(x8)
 
-    # In BoxLambda, only to the DictionaryPointers are swapped so
-    # new entries are compiled into IMEM or EMEM as needed, but all words
-    # remain linked in one single dictionary
-    #
-    # lc x14, 2*CELL(x8) # ThreadEnd
-    # lc x15, 3*CELL(x8) # SecondThreadEnd
-    # sc x14, 3*CELL(x8)
-    # sc x15, 2*CELL(x8)
-
   li x8, 0 # Trick: Allot will check for collisions, too, and reports RAM full then.
   pop x1
   j allot
 
 # -----------------------------------------------------------------------------
-  Definition Flag_visible|Flag_foldable_0, "(latest)"
+  Definition Flag_visible|Flag_foldable_0, "(current)"
 # -----------------------------------------------------------------------------
   pushdatos
-  laf x8, ThreadEnd
+  laf x8, Current
+  ret
+
+# -----------------------------------------------------------------------------
+  Definition Flag_visible, "(latest)"
+# -----------------------------------------------------------------------------
+  pushdatos
+  # laf x8, ThreadEnd
+  laf x8, Current
+  lc x8, 0(x8)
   ret
 
 # -----------------------------------------------------------------------------
@@ -457,11 +463,16 @@ create:
   call here
 
     # Write Link
-    pushdaaddrf ThreadEnd
+    # pushdaaddrf ThreadEnd
+    # lc x8, 0(x8)
+    pushdaaddrf Current
+    lc x8, 0(x8) 
     lc x8, 0(x8)
     call cellkomma # Old latest
 
-  laf x14, ThreadEnd # Set new latest
+  #laf x14, ThreadEnd # Set new latest
+  laf x14, Current
+  lc x14, 0(x14)
   sc x8, 0(x14)
   drop
 
@@ -551,8 +562,7 @@ variable_buffer_ram_prepare:
   Definition Flag_visible, "dictionarystart"
 dictionarystart: # Entry point for dictionary searches.
 # -----------------------------------------------------------------------------
-
-1:pushdatos
+  pushdatos
   laf x8, ThreadEnd            # In RAM:   Start with latest definition.
   lc x8, 0(x8)
   ret

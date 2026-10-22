@@ -9,7 +9,7 @@
 - **LiteDRAM Component in the BoxLambda Directory Tree**:
   [gw/components/litedram](https://github.com/epsilon537/boxlambda/tree/v0.4.1/gw/components/litedram)
 
-SDRAM memory access is complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. As much as possible, BoxLambda aims for deterministic behavior. Unfortunately, in the case of SDRAM, we'll have to make an exception. I couldn't find any memory controller designs that offer predictable memory access latency, and I'm not up to making one myself.
+SDRAM memory access is complicated. Memory access requests get queued in the memory controller, scheduled, and turned into a sequence of commands that vary in execution time depending on the previous memory locations that were recently accessed. BoxLambda aims for deterministic behavior whenever possible. Unfortunately, SDRAM requires an exception: I could not find any memory controller designs that offer predictable memory access latency, and I am not (yet) in a position to develop one myself.
 
 I decided to use the **LiteDRAM** memory controller: [https://github.com/enjoy-digital/litedram](https://github.com/enjoy-digital/litedram)
 

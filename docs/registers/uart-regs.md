@@ -62,8 +62,8 @@ Enumerated values for SETUP.PFT.
 | P_NONE           | 0x0    | No parity |
 | P_ODD            | 0x4    | Odd Parity |
 | P_EVEN           | 0x5    | Even Parity |
-| P_SPC            | 0x6    | Party bit is a space |
-| P_MK             | 0x7    | Party bit is a mark |
+| P_SPC            | 0x6    | Parity bit is a space |
+| P_MK             | 0x7    | Parity bit is a mark |
 
 Enumerated values for SETUP.S.
 
@@ -199,7 +199,7 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:4   | -               | 0x0000000  | Reserved |
-| TX_FIFO_HALF_EMPTY | 3      | rw              | 0x0        | Enabled TX_FIFO_HALF_EMPTY interrupt. |
+| TX_FIFO_HALF_EMPTY | 3      | rw              | 0x0        | Enable TX_FIFO_HALF_EMPTY interrupt. |
 | TX_FIFO_EMPTY    | 2      | rw              | 0x0        | Enable TX_FIFO_EMPTY interrupt. |
 | RX_FIFO_HALF_FULL | 1      | rw              | 0x0        | Enable RX_FIFO_HALF_FULL interrupt. |
 | RX_DATA_AVL      | 0      | rw              | 0x0        | Enable RX_DATA_AVL interrupt. |
