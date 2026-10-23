@@ -1,6 +1,6 @@
 # Bit Fields
 
-  [bitfield.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/bitfield.fs)
+  [bitfield.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/bitfield.fs)
 
 Register bit field accessors.
 

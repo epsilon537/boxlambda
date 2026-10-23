@@ -2,7 +2,7 @@
 
 ## Constants and Units
 
-[units.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/units.fs)
+[units.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/units.fs)
 
 `max-uint`
 
@@ -46,7 +46,7 @@
 
 ## Range Related Words
 
-[range.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/range.fs)
+[range.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/range.fs)
 
 `span ( addr len -- start end )`
 
@@ -62,8 +62,8 @@
 
 ## Terminal-IO
 
-[terminal.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/terminal.s)
-[terminalhooks.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/terminalhooks.s)
+[terminal.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/terminal.s)
+[terminalhooks.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/terminalhooks.s)
 
 `emit? ( -- Flag )`
 
@@ -109,8 +109,8 @@ serial-emit ( Char -- )
 
 ## Stack Jugglers
 
-[stackjugglers.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/stackjugglers.s)
-[utils.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/utils.fs)
+[stackjugglers.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/stackjugglers.s)
+[utils.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/utils.fs)
 
 ### Single-Jugglers
 
@@ -158,7 +158,7 @@ serial-emit ( Char -- )
 
 ### Double-Jugglers
 
-[double.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/double.s)
+[double.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/double.s)
 
 `2nip ( x1 x2 x3 x4 -- x3 x4 )`
 
@@ -186,7 +186,7 @@ serial-emit ( Char -- )
 
 ### Stack pointers
 
-[stackjugglers.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/stackjugglers.s)
+[stackjugglers.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/stackjugglers.s)
 
 `sp@ ( -- a-addr )`
 
@@ -206,8 +206,8 @@ serial-emit ( Char -- )
 
 ## Logic and Bit Manipulation
 
-[logic.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/logic.s)
-[utils.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/utils.fs)
+[logic.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/logic.s)
+[utils.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/utils.fs)
 
 On RISC-V, shift operations only decode the lowest 5 bits. Therefore, `ar/r/lshift` behaves like `31 and ar/r/lshift`. For example, `32 lshift` performs no shift.
 
@@ -279,8 +279,8 @@ On RISC-V, shift operations only decode the lowest 5 bits. Therefore, `ar/r/lshi
 
 ### Single Number Math (exactly ANS, some logical extensions)
 
-[multiplydivide.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/multiplydivide.s)
-[calculations.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/calculations.s)
+[multiplydivide.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/multiplydivide.s)
+[calculations.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/calculations.s)
 
 `u/mod ( u1 u2 -- u3 u4 )`
 
@@ -360,9 +360,9 @@ On RISC-V, shift operations only decode the lowest 5 bits. Therefore, `ar/r/lshi
 
 ### Double Number Math (exactly ANS, some logical extensions)
 
-[double.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/double.s)
-[multiplydivide.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/multiplydivide.s)
-[utils.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/utils.fs)
+[double.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/double.s)
+[multiplydivide.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/multiplydivide.s)
+[utils.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/utils.fs)
 
 `um+ ( u1 u2 -- u carry )`
 
@@ -480,7 +480,7 @@ instead of a dot.
 Fixed-point numbers are stored ( n-comma n-whole ) and can be handled
 like signed double numbers.
 
-[double.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/double.s)
+[double.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/double.s)
 
 `f/ ( df1 df2 -- df3 )`
 
@@ -494,8 +494,8 @@ like signed double numbers.
 
 ### Single Comparisons
 
-[comparisons.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/comparisons.s)
-[utils.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/utils.fs)
+[comparisons.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/comparisons.s)
+[utils.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/utils.fs)
 
 `u<= ( u1 u2 -- flag )`
 
@@ -551,7 +551,7 @@ like signed double numbers.
 
 ### Double-Comparisons
 
-[double.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/double.s)
+[double.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/double.s)
 
 `du> ( ud1 ud2 -- flag )`
 
@@ -571,7 +571,7 @@ like signed double numbers.
 
 ### Specials
 
-[calculation.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/calculations.s)
+[calculation.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/calculations.s)
 
 `slt ( u1 u2 -- 0 | 1 )`
 
@@ -583,7 +583,7 @@ like signed double numbers.
 
 ## Number base
 
-[calculation.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/calculations.s)
+[calculation.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/calculations.s)
 
 `binary ( -- )`
 
@@ -603,10 +603,10 @@ like signed double numbers.
 
 ## Memory access
 
-[memory.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/memory.s)
-[compiler.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler.s)
-[compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler-memory.s)
-[double.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/double.s)
+[memory.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/memory.s)
+[compiler.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/compiler.s)
+[compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/compiler-memory.s)
+[double.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/double.s)
 
 `move ( c-addr1 c-addr2 u -- )`
 
@@ -750,7 +750,7 @@ like signed double numbers.
 
 ## Comments
 
-[strings.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/strings.s)
+[strings.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/strings.s)
 
 `( Comment )`
 
@@ -762,7 +762,7 @@ like signed double numbers.
 
 ## Deep insights
 
-[deepinsight.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/deepinsight.s)
+[deepinsight.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/deepinsight.s)
 
 `words ( -- )`
 
@@ -790,10 +790,10 @@ like signed double numbers.
 
 ## Dictionary expansion
 
-[compiler.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler.s)
-[compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler-memory.s)
-[calculations.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/calculations.s)
-[utils.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/utils.fs)
+[compiler.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/compiler.s)
+[compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/compiler-memory.s)
+[calculations.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/calculations.s)
+[utils.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/utils.fs)
 
 `alignto ( a power -- a )`
 
@@ -939,8 +939,8 @@ like signed double numbers.
 
 Note that `[immediate]` needs to be _inside_ the definition, not after the `;`. There is no `immediate` Word variant that goes _after_ the definition.
 
-[compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler-memory.s)
-[compiler.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler.s)
+[compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/compiler-memory.s)
+[compiler.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/compiler.s)
 
 `smudge ( -- )`
 
@@ -1002,9 +1002,9 @@ Note that `[immediate]` needs to be _inside_ the definition, not after the `;`. 
 
 ## Compiler essentials
 
-[compiler.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler.s)
-[buildsdoes.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/buildsdoes.s)
-[utils.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/utils.fs)
+[compiler.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/compiler.s)
+[buildsdoes.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/buildsdoes.s)
+[utils.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/utils.fs)
 
 `execute ( xt -- )`
 
@@ -1106,7 +1106,7 @@ Internally, they have complicated compile-time stack effects.
 
 ### Decisions
 
-[controlstructures.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/controlstructures.s)
+[controlstructures.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/controlstructures.s)
 
 ```
 flag if ... then
@@ -1123,7 +1123,7 @@ ahead ... then
 
 Case:
 
-[case.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/case.s)
+[case.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/case.s)
 
 ```
 n case
@@ -1156,7 +1156,7 @@ n case
 
 ### Indefinite Loops
 
-[controlstructures.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/controlstructures.s)
+[controlstructures.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/controlstructures.s)
 
 ```
 begin ... again
@@ -1185,8 +1185,8 @@ begin ... flag while ... flag while ... repeat ... else ... then
 
 ### Definite Loops
 
-[doloop.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/doloop.s)
-[compiler.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler.s)
+[doloop.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/doloop.s)
+[compiler.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/compiler.s)
 
 ```
 limit index   do ... [one or more leave(s)] ... loop

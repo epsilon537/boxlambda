@@ -1,6 +1,6 @@
 # 2D Vectors
 
-[vec2.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/vec2.fs)
+[vec2.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/vec2.fs)
 
 `vec2 ( x y -- vec )`
 

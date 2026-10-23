@@ -23,7 +23,7 @@ This diagram illustrates how the relevant Forth modules are stacked upon one ano
 
 *Forth Filesystem Stack.*
 
-The Forth filesystem module `fs.fs` binds to FATFS via the [fs_ffi.cpp](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/fs_ffi.cpp)
+The Forth filesystem module `fs.fs` binds to FATFS via the [fs_ffi.cpp](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/fs_ffi.cpp)
 FFI module. See [here](c-ffi.md) for more info on the Forth-C FFI.
 
 ## Words
@@ -32,7 +32,7 @@ The file system access Words are based on those found in Peter Schmid's [Mecrisp
 
 ### File system
 
-[fs.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/fs.fs)
+[fs.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/fs.fs)
 
 File Access:
 
@@ -284,7 +284,7 @@ x-fr-unknown
 
 ### Output Redirection to File
 
-[fs-redirect.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/fs-redirect.fs)
+[fs-redirect.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/fs-redirect.fs)
 
 `emit>file ( fil -- )`
 
@@ -310,7 +310,7 @@ x-fr-unknown
 
 ### Shell
 
-[shell.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/shell.fs)
+[shell.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/shell.fs)
 
 Some basic shell-like commands for interactive use.
 
@@ -430,6 +430,6 @@ This diagram shows how the `include` Word works:
 
 *Forth Include File Evaluation.*
 
-The above refers to the regular Forth `include` Word, defined in [shell.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/shell.fs). The BoxKern also provides a way
+The above refers to the regular Forth `include` Word, defined in [shell.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/shell.fs). The BoxKern also provides a way
 to load and evaluate Forth modules from C code. This mechanism is discussed in [the BoxKern-Includes Mechanism](top-level-and-boot-seq.md#the-boxkern-includes-mechanism).
 

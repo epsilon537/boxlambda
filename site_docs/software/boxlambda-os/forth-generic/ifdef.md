@@ -1,6 +1,6 @@
 # Conditional Execution/Compilation
 
-[ifdef.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/ifdef.fs)
+[ifdef.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/ifdef.fs)
 
 `[if] (? -- )`
 
@@ -22,7 +22,7 @@
 
 - Finish conditional execution/compilation.
 
-Example from [init.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/init.fs):
+Example from [init.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/init.fs):
 
 ```
 include /forth/ifdef.fs

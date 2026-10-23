@@ -74,15 +74,15 @@ Architecture.](assets/BoxLambda-OS-Architecture.png)](assets/BoxLambda-OS-Archit
 
 ## Changelog
 
-- [Changelog](https://github.com/epsilon537/boxlambda/tree/develop/CHANGELOG.md)
+- [Changelog](https://github.com/epsilon537/boxlambda/tree/v0.5.0/CHANGELOG.md)
 
 ## Links
 
 - **Repo**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
 - **Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
-- **develop**: [https://github.com/epsilon537/boxlambda/tree/develop](https://github.com/epsilon537/boxlambda/tree/develop)
+- **v0.5.0**: [https://github.com/epsilon537/boxlambda/tree/v0.5.0](https://github.com/epsilon537/boxlambda/tree/v0.5.0)
 
 ## Documentation
 
-- [Start Here](https://boxlambda.readthedocs.io/en/develop/start-here/)
-- [Full Documentation Index](https://boxlambda.readthedocs.io/en/develop/full-index/)
+- [Start Here](https://boxlambda.readthedocs.io/en/v0.5.0/start-here/)
+- [Full Documentation Index](https://boxlambda.readthedocs.io/en/v0.5.0/full-index/)

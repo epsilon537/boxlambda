@@ -2,7 +2,7 @@
 
 ## ZeptoForth Heap
 
-[heap.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/heap.fs)
+[heap.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/heap.fs)
 
 Heaps are created by users and consist of discrete blocks that are allocated, freed, and resized in multiples. The size of an allocation, plus a cell used for storing the block count, is rounded up to the next full number of blocks. No global heap exists. Note that the time required for heap allocation or resizing is bounded by a maximum defined by the number of blocks in the heap; any heap allocation or resizing may take this maximal time. In contrast, the time required for freeing an allocation is determined solely by the number of blocks comprising the allocation.
 
@@ -36,7 +36,7 @@ x-memory-not-allocated
 
 ## ZeptoForth Pool
 
-[pool.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/pool.fs)
+[pool.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/pool.fs)
 
 Pools are created by users and consist of discrete blocks that are allocated and freed as a single unit. By default, there is no global pool. Allocating and freeing blocks in pools occur in constant time and is fast, unlike allocation, resizing, and freeing in heaps.
 
@@ -80,7 +80,7 @@ x-allocate-failed
 
 ## Temporary Memory Allocator
 
-[temp-alloc.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/temp-alloc.fs)
+[temp-alloc.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/temp-alloc.fs)
 
 `temp-allot ( u -- )`
 

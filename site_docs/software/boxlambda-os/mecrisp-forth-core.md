@@ -1,9 +1,9 @@
 # The Mecrisp Forth Core
 
 - **Forth Core Software Component in the BoxLambda Directory Tree**:
-  [sw/components/forth/](https://github.com/epsilon537/boxlambda/tree/develop/sw/components/forth)
+  [sw/components/forth/](https://github.com/epsilon537/boxlambda/tree/v0.5.0/sw/components/forth)
 
-- **Forth Core Entry Point**: [sw/components/forth/mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/mecrisp-quintus-boxlambda.s)
+- **Forth Core Entry Point**: [sw/components/forth/mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/mecrisp-quintus-boxlambda.s)
 
 BoxLambda's Forth is based on version 1.1.1d of Matthias Koch's [Mecrisp Quintus](https://mecrisp.sourceforge.net). This section discusses the Forth _Core_, i.e., the RISC-V assembly language codebase that bootstraps the Forth environment.
 
@@ -47,13 +47,13 @@ _Dictionary Search Order (default/single wordlist)._
 Initially, the system has a single wordlist. A dictionary search starts from the latest non-core Word and proceeds to the oldest non-core Word, regardless of whether that non-core Word is created in EMEM or IMEM. The
 search then continues from **oldest** Core Word (i.e., the first Word created by the Forth core) to **newest** Core Word (the last Word created by the Forth core).
 
-Once the [wordlist.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/wordlist.fs) module is loaded, the system can maintain multiple wordlists and the user can configure the order of the wordlists to search. Wordlists do the legwork for the [module.fs](forth-generic/namespaces.md#modules) namespace API.
+Once the [wordlist.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/wordlist.fs) module is loaded, the system can maintain multiple wordlists and the user can configure the order of the wordlists to search. Wordlists do the legwork for the [module.fs](forth-generic/namespaces.md#modules) namespace API.
 
 ### Booting Forth from C
 
 The original Mecrisp Forth boots directly from flash memory, i.e., the early boot code is part of the Forth core. BoxLambda, on the other hand, first boots a C environment (see [here](../base-platform/bootstrap/bootloader.md#boot-sequence)), then the C environment boots the Forth environment using the [Forth-C FFI](c-ffi.md) API.
 
-From BoxLambda OS's [main.cpp](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/boxlambda_os/main.cpp):
+From BoxLambda OS's [main.cpp](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/projects/boxlambda_os/main.cpp):
 
 ```
   forth_core_init();
@@ -110,7 +110,7 @@ ckomma: # Write 8 bits in Dictionary
   ret
 ```
 
-The top-level source file is [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
+The top-level source file is [mecrisp-quintus-boxlambda.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/mecrisp-quintus-boxlambda.s). I suggest starting code reading from the beginning of that file, working your way down, recursing into each `.include` file you come across. Recursing into include files isn't something I would typically do in a C code-reading session, but for understanding the Mecrisp Forth core, it is a must.
 
 ![Forth Core Org](../../assets/forth-core-org.png)
 
@@ -120,7 +120,7 @@ _Forth Core Organization._
 
 #### Forth Linker Sections and Variables
 
-The [link map](https://github.com/epsilon537/boxlambda/blob/develop/sw/projects/boxlambda_os/link.ld) defines the following Forth sections:
+The [link map](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/projects/boxlambda_os/link.ld) defines the following Forth sections:
 
 - `.forth_core`: Forth core assembly code section. Part of the `.itext` section.
 - `.forth_imem`: IMEM memory area reserved for Forth code.
@@ -138,7 +138,7 @@ The link map also defines the following linker variables associated with those s
 
 #### Forth Assembler Variables and Symbols
 
-Understanding the purpose of the following assembler variables, defined in [forth-core.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/forth-core.s), is essential to be able to understand the Forth Core:
+Understanding the purpose of the following assembler variables, defined in [forth-core.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/forth-core.s), is essential to be able to understand the Forth Core:
 
 - `DictionaryPointer`: Holds the _primary_ dictionary pointer. This is where the next dictionary entry will be written. Corresponds to Forth variable `(dp)`. Word `here` puts the content of `(dp)` on the stack.
 - `SecondDictionaryPointer`: Holds the _secondary_ dictionary pointer. See [An IMEM and EMEM Dictionary section](#an-imem-and-emem-dictionary) for a discussion of the two dictionaries.

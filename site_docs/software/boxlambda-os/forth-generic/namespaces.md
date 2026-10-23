@@ -2,8 +2,8 @@
 
 ## Word Lists
 
-[wordlist.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/wordlist.fs)
-[compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/compiler-memory.s)
+[wordlist.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/wordlist.fs)
+[compiler-memory.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/compiler-memory.s)
 
 The wordlist module adds support for creating multiple wordlists. It allows you to specify which wordlists to search (and in what order) and to which wordlist new words should be added.
 
@@ -98,7 +98,7 @@ This module serves as a building block for the [Modules](#modules) module and sh
 
 ## Modules
 
-[module.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/module.fs)
+[module.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/module.fs)
 
 Adds support for creating and managing modules (namespaces). Builds on the [wordlist module](#word-lists).
 

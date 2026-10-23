@@ -50,8 +50,8 @@ bar . cr
 
 ## Words
 
-[exception.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/exception.s)
-[except.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/except.fs)
+[exception.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/exception.s)
+[except.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/except.fs)
 
 `raised-by`
 

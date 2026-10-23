@@ -4,7 +4,7 @@ See [Base Platform Interrupt Handling](../base-platform/bootstrap/irqs.md).
 
 ## Words
 
-[interrupt-common.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/interrupt-common.s)
+[interrupt-common.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/interrupt-common.s)
 
 `reset ( -- )`
 

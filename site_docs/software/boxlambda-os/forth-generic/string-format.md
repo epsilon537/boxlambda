@@ -2,12 +2,12 @@
 
 ## String routines
 
-[strings.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/strings.s)
-[numberstrings.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/numberstrings.s)
-[numberoutput.s](https://github.com/epsilon537/boxlambda/blob/develop/sw/components/forth/numberoutput.s)
-[istr.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/istr.fs)
-[utils.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/utils.fs)
-[tonumber.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/tonumber.fs)
+[strings.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/strings.s)
+[numberstrings.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/numberstrings.s)
+[numberoutput.s](https://github.com/epsilon537/boxlambda/blob/v0.5.0/sw/components/forth/numberoutput.s)
+[istr.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/istr.fs)
+[utils.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/utils.fs)
+[tonumber.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/tonumber.fs)
 
 `type ( c-addr length -- )`
 
@@ -96,7 +96,7 @@ number ( c-addr length -- 0 )
 
 ## Escaped Strings
 
-[escstr.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/escstr.fs)
+[escstr.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/escstr.fs)
 
 `escape-string ( addr len -- addr' len' )`
 
@@ -202,7 +202,7 @@ Parse string from input string, substitute escape codes according to table below
 
 ## jkotlinski Printf-Style Printing and Formatting
 
-[printf.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/printf.fs)
+[printf.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/printf.fs)
 
 `sprintf ( n*x addr1 u1 addr2 -- addr2 u3 )`
 

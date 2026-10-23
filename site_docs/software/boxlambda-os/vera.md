@@ -1,7 +1,7 @@
 # VERA Graphics
 
-- The VERA Graphics Forth Module: [forth/boxkern-includes/vera.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/vera.fs)
-- The VERA Default Palette: [forth/boxkern-includes/vera-palette.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/boxkern-includes/vera-palette.fs)
+- The VERA Graphics Forth Module: [forth/boxkern-includes/vera.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/vera.fs)
+- The VERA Default Palette: [forth/boxkern-includes/vera-palette.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/boxkern-includes/vera-palette.fs)
 
 ## Concepts
 
@@ -790,7 +790,7 @@ Set the scanline on which to trigger the line IRQ if `VERA_IRQ_LINE` is enabled.
 
 ## The VERA Font Loader
 
-[font-loader.fs](https://github.com/epsilon537/boxlambda/blob/develop/fs/forth/font-loader.fs)
+[font-loader.fs](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/forth/font-loader.fs)
 
 `load-font ( tileset filename-addr filename-len --  #glyphs )`
 
@@ -829,13 +829,13 @@ Font files look like this:
 
 Font files are text files so they can easily be edited by hand. I'm using a script that allows me to convert font files from DamienG's [ZX Origins](https://damieng.com/typography/zx-origins/) page to the above format:
 
-[scripts/fontconvert.py](https://github.com/epsilon537/boxlambda/blob/develop/scripts/fontconvert.py)
+[scripts/fontconvert.py](https://github.com/epsilon537/boxlambda/blob/v0.5.0/scripts/fontconvert.py)
 
 Some example font files:
 
-- [altered-chrome.fnt](https://github.com/epsilon537/boxlambda/blob/develop/fs/demo/altered-chrome.fnt).
-- [district-digital.fnt](https://github.com/epsilon537/boxlambda/blob/develop/fs/demo/district-digital.fnt).
-- [night-in-tokyo.fnt](https://github.com/epsilon537/boxlambda/blob/develop/fs/demo/night-in-tokyo.fnt).
+- [altered-chrome.fnt](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/demo/altered-chrome.fnt).
+- [district-digital.fnt](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/demo/district-digital.fnt).
+- [night-in-tokyo.fnt](https://github.com/epsilon537/boxlambda/blob/v0.5.0/fs/demo/night-in-tokyo.fnt).
 
 ### Exceptions
 
