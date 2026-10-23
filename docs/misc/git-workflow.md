@@ -69,7 +69,7 @@ On `master` branch:
 5. Flash `boxlambda_base` gateware project build, `bootloader`, and `boxlambda_os`.
 6. Copy the contents of directory `fs/` to an SD card and boot the target from that SD card.
 7. Check bootloader version string.
-8. Run the software test suite by setting switch 1 and booting the device.
+8. Run the software test suite: Set switch 1 and run from the workspace root directory: `target.py -reset -load_fs fs -run`.
 9. (Re)Populate `binaries/` by running `export_binaries.sh` from the repo root directory.
 10. `git commit` the binaries.
 11. Run `export_docs.sh vX.Y.Z` from the repo root directory and commit.
