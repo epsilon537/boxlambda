@@ -74,7 +74,7 @@ On `master` branch:
 10. `git commit` the binaries.
 11. Run `export_docs.sh vX.Y.Z` from the repo root directory and commit.
 12. Update tag to include the new binaries and exported docs: `git tag -f vX.Y.Z`.
-13. `git push origin vX.Y.Z`.
+13. `git push origin master`.
 14. On GitHub boxlambda repo, navigate to *Releases*, then *Draft a new release*.
 15. On GitHub boxlambda repo, update/close open issues.
 16. In read-the-docs, create a new release based on the `vX.Y.Z` tag.
