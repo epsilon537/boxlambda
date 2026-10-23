@@ -16,7 +16,7 @@ Point your browser to [http://127.0.0.1:4000/boxlambda/](http://127.0.0.1:4000/b
 
 ## Blog Release Protocol
 
-0. [Release code and documentation](git-workflow.md#creating-a-new-release-note-to-self).
+0. [Release code and documentation](git-workflow.md#creating-a-new-release).
 1. Write draft in `develop` branch, `blog/_drafts` directory. Use labeled links to code and documentation.
 2. Test site using `make_blog`.
 3. Check spelling and grammar.
