@@ -180,7 +180,7 @@ A tilemap is a grid of tiles, characterized by its width, height, and tile type.
 `<tmap> tmap{ <width> width <height> height <type> type }apply`  
 `<tmap> tmap{ <width> width <height> height <type> type }set`
 
-- A tilemap parameter block. The `<...>` items indicated what type of value is expected on the top of the stack at this point, to be consumed by the following Word.
+- A tilemap parameter block. The `<...>` items indicate what type of value is expected on the top of the stack at this point, to be consumed by the following Word.
     - `<tmap>`: A tilemap object.
     - `<width>`: The tilemap width: 32, 64, 128 or 256.
     - `<height>`: The tilemap height: 32, 64, 128 or 256.

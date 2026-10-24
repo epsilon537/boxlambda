@@ -94,5 +94,5 @@ typechecker tm-typecheck
 ;
 ```
 
-For instance, in execution mode create a stack-checker instance and specify the number of input and output params. If, after the stack-checked Word's execution, the stack doesn't have the expected depth, a failure will be reported, and execution stops.
+For instance, in execution mode create a stack-checker instance and specify the number of input and output params. If, after the stack-checked Word's execution, the stack doesn't have the expected depth, a failure will be reported and execution stops.
 

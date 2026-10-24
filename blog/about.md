@@ -3,9 +3,9 @@ layout: page
 title: About BoxLambda
 permalink: /about/
 --- 
-BoxLambda is a hardware-software crossover project creating a homebrew,
-retro-style FPGA-based microcomputer. The goal is to create a sandbox
-environment for experimenting with software and FPGA gateware.
+BoxLambda is a hardware-software crossover project creating an experimental,
+retro-style, FPGA-based microcomputer. The goal is to create a new computer
+to explore old ideas.
 
 ## The Physical Setup
 
@@ -19,20 +19,18 @@ environment for experimenting with software and FPGA gateware.
 - Harvard architecture-based interconnect.
 - Low-latency register and memory access across the SoC.
 - Predictable instruction cycle counts.
-- DFX Partial FPGA Reconfiguration support.
+- DFX Partial FPGA Reconfiguration support (OS support TBD).
 - DDR3 external memory access through the Litex memory controller.
 - OpenOCD-based debug access on FPGA and Verilator.
-- VERA-based VGA graphics: 2 layers, tile or bitmap mode, 2 banks of 64 sprites,
-128KB Video RAM, 256 color palette.
-- Dual YM2149 PSG Audio.
+- VERA-based VGA graphics: 2 layers, tile or bitmap mode, 2 banks of 64 sprites, 128KB Video RAM, 256 color palette, Forth supported.
+- Dual YM2149 PSG Audio (OS support TBD).
 - SD Card Controller and FatFs File System.
-- 24-pin GPIO, UART, SPI Flash Controller, I2C Controller.
-- Real-time Clock and Calendar (RTCC) support.
-- USB HID Keyboard and Mouse support.
-- Picolibc-based standard C environment.
-- Test application suite covering all SoC components, running on both FPGA and
-Verilator.
-- Mecrisp Forth core + C FFI.
+- 24-pin GPIO, UART, SPI Flash Controller, I2C Controller (OS support TBD).
+- Real-time Clock and Calendar support (OS support TBD).
+- USB HID Keyboard and Mouse support (OS support TBD).
+- SoC test suite covering all components, running on both FPGA and Verilator. 
+- Software Test suite covering all OS features, running on FPGA.
+- BoxLambda OS: Mecrisp-based Forth software environment with C FFI (WIP).
 
 ## Gateware Block Diagram
 
@@ -50,8 +48,7 @@ Verilator.
     - **Simple Enough for One Person**: A motivated individual can develop a solid understanding of the entire system, including software and hardware.
     - **Deterministic Behavior**: The duration of operations such as internal memory or register access must be predictable by design.
     - **Self-Contained Run-Time Environment** supporting high-level interactive and low-level systems programming.
-  - Create a **Modular Architecture** allowing for a mix-and-match of software and hardware components. Optionally, support Partial FPGA Reconfiguration.
-
+  - Create a **Modular Architecture** that allows software and hardware components to be mixed and matched, with optional support for FPGA Partial Reconfiguration.
 - Target Hardware: Digilent's [Arty-A7](https://digilent.com/reference/programmable-logic/arty-a7/start).
 
 - The computer supports the following peripherals:
@@ -67,28 +64,26 @@ Verilator.
 
 - Sound and graphics support retro-style 2D demos and gameplay.
 
-## Status (April 2026)
+## Status (October 2026)
 
 - **Infrastructure** (build system, etc.): Complete.
 - **Gateware**: Complete and meeting requirements.
 - **Software**: Development ongoing.
-  - **OS architecture**: defined.
-  - **BoxLambda C Core**: partially completed.
-  - **Mecrisp Forth Core**: completed.
-  - **Mecrisp Forth Environment**: partially completed.
+  - **BoxLambda OS Forth Environment**: Development ongoing.
   - **Forth<->C FFI**: completed.
   - **Filesystem layer**: completed.
+  - **Graphics layer**: completed.
 
 ## Changelog
 
-- [Changelog](https://github.com/epsilon537/boxlambda/tree/--help/CHANGELOG.md)
+- [Changelog](https://github.com/epsilon537/boxlambda/tree/develop/CHANGELOG.md)
 ## Links
 
 - **Repo**: [https://github.com/epsilon537/boxlambda/](https://github.com/epsilon537/boxlambda/)
 - **Blog**: [https://epsilon537.github.io/boxlambda/](https://epsilon537.github.io/boxlambda/)
-- **--help**: [https://github.com/epsilon537/boxlambda/tree/--help](https://github.com/epsilon537/boxlambda/tree/--help)
+- **develop**: [https://github.com/epsilon537/boxlambda/tree/develop](https://github.com/epsilon537/boxlambda/tree/develop)
 
 ## Documentation
 
-- [Start Here](https://boxlambda.readthedocs.io/en/--help/start-here/)
-- [Full Documentation Index](https://boxlambda.readthedocs.io/en/--help/full-index/)
+- [Start Here](https://boxlambda.readthedocs.io/en/develop/start-here/)
+- [Full Documentation Index](https://boxlambda.readthedocs.io/en/develop/full-index/)
