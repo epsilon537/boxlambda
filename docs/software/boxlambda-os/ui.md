@@ -1,6 +1,6 @@
 # The User Interface
 
-A Canvas based REPL and Text Editor.
+## A Canvas based REPL and Text Editor.
 
 A Canvas is a character grid of 76 columns and a variable number of rows.
 
@@ -17,6 +17,7 @@ A Canvas has an *Input* and an *Output* cursor. The *Input Cursor* points to whe
 Cursor navigation, text insertion/overwrite and selection follows vi conventions.
 
 Commands/keyboard shortcuts are provided to:
+
 - allows the user to switch between input and output cursor navigation.
 - peg the output cursor to the input cursor.
 - trim to the line containing the active cursor.
@@ -29,6 +30,7 @@ Each Viewport is as wide as the screen, but its height and vertical offset on th
 Initially, the display consists of a single ViewPort covering the entire display.
 
 Commands/keyboard shortcuts are provided to:
+
 - split a ViewPort into a top and bottom ViewPort.
 - close a top or bottom ViewPort, in which case the remaining ViewPort takes over the entire display.
 
