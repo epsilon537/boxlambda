@@ -55,7 +55,7 @@ DPRAM port 0 is exclusively for the CPU. DPRAM port 1 is shared by the two Line 
 
 *Time Slot Scheduled VRAM Access.*
 
-## The Video VGA block - VGA line capture
+## VGA line capture
 
 The original VERA Video VGA block functionality has been enhanced with a VGA line capture
 mechanism. When requested by software (wishbone register), the RGB pixel data of

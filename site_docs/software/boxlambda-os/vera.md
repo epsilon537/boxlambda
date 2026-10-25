@@ -27,7 +27,7 @@ Pixels have a color index of either 0-3 (2bpp), 0-15 (4bpp), 0-255 (8bpp). This 
   - Color indices 0 (transparent) and 16-255 are palette-absolute.
   - Color indices 1-15 are relative to the selected palette group.
 
-The palette group to use is specified as a [mapentry](#map-entry), [sprite](#sprites), or [bitmap sheet](#sheets) attribute.
+The palette group is selected through the [mapentry](#map-entry), [sprite](#sprites), or bitmap-layer configuration, as illustrated below.
 
 [![Palette Group References.](../../assets/vera-pal-group-refs.png)](../../assets/vera-pal-group-refs.png)
 
@@ -237,7 +237,7 @@ The Mapentry API is used to enter characters/tiles, along with their attributes,
 `<tmap> mapentry{ <bg> bg <fg> fg <tidx> tidx <pal-group> pal-group <flip> flip <vec2> xy }set`  
 `<tmap> mapentry{ <vec2> xy }get`
 
-- A mapentry parameter block. The `<...>` items indicated what type of value is expected on
+- A mapentry parameter block. The `<...>` items indicate what type of value is expected on
   the top of the stack at this point, to be consumed by the following Word.
   - `<tmap>`: A tilemap object.
   - `<bg>`: Background color palette index. 0..15. Only used in 16 color text mode.
@@ -292,7 +292,7 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
 `<bitmap> sheet{ <width> width <height> height <bpp> bpp }apply`
 `<bitmap> sheet{ <width> width <height> height <bpp> bpp }set`
 
-- A sheet parameter block. The `<...>` items indicated what type of value is expected on
+- A sheet parameter block. The `<...>` items indicate what type of value is expected on
   the top of the stack at this point, to be consumed by the following Word.
   - `<tileset>`: A tileset sheet object.
   - `<bitmap>`: A bitmap sheet object.
@@ -386,7 +386,7 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
 `<bitmap> pxl{ <color> color <vec2> xy }set`
 `<bitmap> pxl{ <vec2> xy }get`
 
-- A pixel parameter block. The <...> items indicated what type of value is expected on
+- A pixel parameter block. The <...> items indicate what type of value is expected on
   the top of the stack at this point, to be consumed by the following Word.
   - `<tileset>`: A tileset sheet object.
   - `<bitmap>`: A bitmap sheet object.
@@ -394,7 +394,7 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
   - `<color>`: The pixel color palette index.
   - `<vec2>`: The pixel position in the tile, specified as a vec2. See [2D Vectors](forth-generic/vec2.md).
 
-  `}apply ( -- )` ends a pixel parameter block and draw the pixel in the tile as specified.
+  `}apply ( -- )` ends a pixel parameter block and draws the pixel in the tile as specified.
 
   `}set ( -- )` ends a pixel parameter block and records the given pixel parameters in the sheet object, but doesn't apply the parameters yet. Useful when setting parameters piecemeal.
 
@@ -409,12 +409,12 @@ A *Sheet* object can hold a *Tileset* (e.g. a font or sprite sheet) or a single 
 `<spr> spr{ <vec2> xy <flip> flip <z> z <colmask> colmask <pal-group> pal-group <tidx> tidx <tileset> sheet }apply`
 `<spr> spr{ <vec2> xy <flip> flip <z> z <colmask> colmask <pal-group> pal-group <tidx> tidx <tileset> sheet }set`
 
-- A sprite parameter block. The `<...>` items indicated what type of value is expected on
+- A sprite parameter block. The `<...>` items indicate what type of value is expected on
   the top of the stack at this point, to be consumed by the following Word.
   - `<spr>`: A sprite object
-  - `<vec2>`: The sprite position in the tile, specified as a vec2. See [2D Vectors](forth-generic/vec2.md).
+  - `<vec2>`: The sprite's position on scree, specified as a `vec2`. See [2D Vectors](forth-generic/vec2.md).
   - `<flip>`: Flip the sprite: `VFLIP`, `HFLIP`, `VFLIP_HFLIP` or 0.
-  - `<z>`: The sprite's z-depth. See section [Z-Depth and Transparancy](#z-depth-and-transparency).
+  - `<z>`: The sprite's z-depth. See section [Z-Depth and Transparency](#z-depth-and-transparency).
       - `SPR-DIS` : Disable the sprite (or, if you will, position it behind the background).
       - `SPR-BG-L0` : Position sprite between background and Layer 0.
       - `SPR-L0-L1` : Position sprite between Layer 0 and Layer 1.
