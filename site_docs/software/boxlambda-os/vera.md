@@ -27,7 +27,7 @@ Pixels have a color index of either 0-3 (2bpp), 0-15 (4bpp), 0-255 (8bpp). This 
   - Color indices 0 (transparent) and 16-255 are palette-absolute.
   - Color indices 1-15 are relative to the selected palette group.
 
-The palette group is selected through the [mapentry](map-entry), [sprite](#sprites), or bitmap-layer configuration, as illustrated below.
+The palette group is selected through the [mapentry](#map-entry), [sprite](#sprites), or bitmap-layer configuration, as illustrated below.
 
 [![Palette Group References.](../../assets/vera-pal-group-refs.png)](../../assets/vera-pal-group-refs.png)
 
