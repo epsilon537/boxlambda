@@ -55,8 +55,14 @@ SECTIONS
     /* Place the (return) stack pointer at the end of imem.*/
     PROVIDE(__stack = ORIGIN(imem) + LENGTH(imem));
     /* Put the data stack in front of it.*/
-    PROVIDE(__datastack = __stack - __stack_size);
+    PROVIDE(__stack_end = __stack - __stack_size);
+    PROVIDE(__datastack = __stack_end);
     PROVIDE(__datastack_end = __datastack - __datastack_size);
+    /* ... and again for the interrupt return and data stacks.*/
+    PROVIDE(__irq_returnstack = __datastack_end);
+    PROVIDE(__irq_returnstack_end = __irq_returnstack - __stack_size);
+    PROVIDE(__irq_datastack = __irq_returnstack_end);
+    PROVIDE(__irq_datastack_end = __irq_datastack - __datastack_size);
 
     .etext : {
         /* Application images start with this 2-word header:
@@ -222,7 +228,7 @@ SECTIONS
     .ibss (NOLOAD) : {
         *(.ibss .ibss.*)
         /* Check that the location pointer doesn't cross into the stack region*/
-        ASSERT(. < __datastack - __datastack_size, "IBSS doesn't fit in IMEM.");
+        ASSERT(. < __irq_datastack_end, "IBSS doesn't fit in IMEM.");
     } >imem
 
     PROVIDE( __ibss_end = . );

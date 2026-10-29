@@ -13,4 +13,3 @@
 07 irq-id-fast-0 + constant irq-id-i2c
 05 irq-id-fast-0 + constant irq-id-uart
 
-

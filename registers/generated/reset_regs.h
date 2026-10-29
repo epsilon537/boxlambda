@@ -21,30 +21,21 @@ extern "C" {
 typedef union {
   uint32_t UINT32;
   struct {
-    uint32_t NDM_RESET : 1; // Non-debug module reset
-    uint32_t DM_RESET : 1; // Debug module reset
-    uint32_t USB_RESET : 1; // USB module reset
+    uint32_t CTRL : 3; // Reset control
     uint32_t : 29; // reserved
   };
 } reset_ctrl_t;
 
-// CTRL.NDM_RESET - Non-debug module reset
-#define RESET_CTRL_NDM_RESET_WIDTH 1
-#define RESET_CTRL_NDM_RESET_LSB 0
-#define RESET_CTRL_NDM_RESET_MASK 0x1
-#define RESET_CTRL_NDM_RESET_RESET 0x0
-
-// CTRL.DM_RESET - Debug module reset
-#define RESET_CTRL_DM_RESET_WIDTH 1
-#define RESET_CTRL_DM_RESET_LSB 1
-#define RESET_CTRL_DM_RESET_MASK 0x2
-#define RESET_CTRL_DM_RESET_RESET 0x0
-
-// CTRL.USB_RESET - USB module reset
-#define RESET_CTRL_USB_RESET_WIDTH 1
-#define RESET_CTRL_USB_RESET_LSB 2
-#define RESET_CTRL_USB_RESET_MASK 0x4
-#define RESET_CTRL_USB_RESET_RESET 0x0
+// CTRL.CTRL - Reset control
+#define RESET_CTRL_CTRL_WIDTH 3
+#define RESET_CTRL_CTRL_LSB 0
+#define RESET_CTRL_CTRL_MASK 0x7
+#define RESET_CTRL_CTRL_RESET 0x0
+typedef enum {
+    RESET_CTRL_CTRL_NDM_RESET = 0x1, //Non-debug module reset
+    RESET_CTRL_CTRL_DM_RESET = 0x2, //Debug module reset
+    RESET_CTRL_CTRL_USB_RESET = 0x4, //Debug module reset
+} reset_ctrl_ctrl_t;
 
 // REASON - Reset reason register
 #define RESET_REASON_ADDR 0x4

@@ -153,6 +153,10 @@ fault:
   write "at "
   call interrupt_location
   call hexdot
+  write "Word at epc "
+  call interrupt_location
+  lc x8, 0(x8)
+  call hexdot
   writeln "!"
   pop x1
   ret
@@ -172,10 +176,10 @@ fault:
   initinterrupt vera, _vera_irq_handler, unhandled
   initinterrupt timer, _timer_irq_handler, unhandled
 
-# .globl _exc_handler
-# _exc_handler:
-#   call fault
-#   laf x15, quit
-#   csrw mepc, x15
-#   mret
+.globl _exc_handler
+_exc_handler:
+  call fault
+  laf x15, quit
+  csrw mepc, x15
+  mret
 

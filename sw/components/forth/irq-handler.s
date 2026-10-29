@@ -33,6 +33,8 @@
 
 .globl \Asmname
 \Asmname:
+  laf x9, __irq_datastack # Switch to IRQ data stack...
+  laf x2, __irq_returnstack # and IRQ return stack.
 
   laf x1, irq_hook_\Name
   j irq_common

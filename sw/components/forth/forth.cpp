@@ -22,6 +22,15 @@ void execute(void);
 
 Forth_Datastack datastack; // Initialized by forth_core_init.
 
+uint32_t *returnstack;
+uint32_t *returnstack_end;
+uint32_t *datastack_start;
+uint32_t *datastack_end;
+uint32_t *irq_datastack;
+uint32_t *irq_datastack_end;
+uint32_t *irq_returnstack;
+uint32_t *irq_returnstack_end;
+
 uint32_t evaluate_xt = 0;
 
 #ifdef __cplusplus
@@ -29,6 +38,14 @@ uint32_t evaluate_xt = 0;
 #endif
 
 void forth_core_init() {
+  returnstack = (uint32_t *)&__stack;
+  returnstack_end = (uint32_t *)&__stack_end;
+  datastack_start = (uint32_t *)&__datastack;
+  datastack_end = (uint32_t *)&__datastack_end;
+  irq_datastack = (uint32_t *)&__irq_datastack;
+  irq_datastack_end = (uint32_t *)&__irq_datastack_end;
+  irq_returnstack = (uint32_t *)&__irq_returnstack;
+  irq_returnstack_end = (uint32_t *)&__irq_returnstack_end;
   // forth_core_init_ will set up the datastack object.
   forth_core_init_();
 

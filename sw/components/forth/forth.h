@@ -14,9 +14,14 @@ extern char __forth_emem_start;
 extern char __forth_emem_end;
 extern char __forth_imem_start;
 extern char __forth_imem_end;
+extern char __stack;
+extern char __stack_end;
 extern char __datastack;
-extern char __datastack_size;
 extern char __datastack_end;
+extern char __irq_datastack;
+extern char __irq_datastack_end;
+extern char __irq_returnstack;
+extern char __irq_returnstack_end;
 
 //
 // Forth Data Stack Accessor:
@@ -27,6 +32,14 @@ typedef struct {
 } Forth_Datastack;
 
 extern Forth_Datastack datastack;
+extern uint32_t *returnstack;
+extern uint32_t *returnstack_end;
+extern uint32_t *datastack_start;
+extern uint32_t *datastack_end;
+extern uint32_t *irq_datastack;
+extern uint32_t *irq_datastack_end;
+extern uint32_t *irq_returnstack;
+extern uint32_t *irq_returnstack_end;
 
 // There is no Return Stack Accessor.
 // The call stack acts as return stack.

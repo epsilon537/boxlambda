@@ -3,21 +3,21 @@ regmap:
     description: Reset control register
     address: 0
     bitfields:
-    -   name: NDM_RESET
-        description: Non-debug module reset
-        width: 1
+    -   name: CTRL
+        description: Reset control
+        width: 3
         lsb: 0
         access: wo
-    -   name: DM_RESET
-        description: Debug module reset
-        width: 1
-        lsb: 1
-        access: wo
-    -   name: USB_RESET
-        description: USB module reset
-        width: 1
-        lsb: 2
-        access: wo
+        enums:
+          - name: NDM_RESET
+            description: Non-debug module reset
+            value: 1
+          - name: DM_RESET
+            description: Debug module reset
+            value: 2
+          - name: USB_RESET
+            description: Debug module reset
+            value: 4
 -   name: REASON
     description: Reset reason register
     address: 4

@@ -4,7 +4,8 @@ set(register_modules
     gpio
     mtimer
     i2c_master
-    usb_hid
+    usb_hid_0
+    usb_hid_1
     sdspi
     spiflash
     vera

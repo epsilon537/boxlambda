@@ -1,6 +1,18 @@
 \ BoxLambda Forth
 \ init.fs executes after fastboot has completed or, in case of slowboot,
 \ after evaulating slowboot-includes.fs.
+include /forth/irq.fs
+include /forth/os-timer.fs
+0 mie!
+eint
+os-timer-start
+
+include /forth/usb_hid_0_regs.fs
+include /forth/usb_hid_1_regs.fs
+include /forth/reset_regs.fs
+
+include /forth/usb-keyboard.fs
+usb-keyboard-start
 
 vera import
 vera-init
