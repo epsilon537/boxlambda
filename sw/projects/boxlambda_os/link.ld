@@ -235,7 +235,8 @@ SECTIONS
     PROVIDE( __ibss_start = ADDR(.ibss) );
 
     .forth_emem (NOLOAD) : {
-        . += __forth_emem_size;
+        KEEP(*(.forth_emem_code))
+        . += __forth_emem_size - 4;
     } >forth_emem
 
     PROVIDE( __forth_emem_end = . );

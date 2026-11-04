@@ -23,9 +23,10 @@
 # -----------------------------------------------------------------------------
 
 .option norelax
+.section .forth_emem_code, "awx", @nobits
+.space 4
 # The Forth core has its own section in the link map.
 .section .forth_core
-
 # -----------------------------------------------------------------------------
 # Include the Forth core of Mecrisp-Quintus
 # -----------------------------------------------------------------------------
