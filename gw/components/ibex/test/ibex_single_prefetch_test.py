@@ -232,6 +232,8 @@ async def ibex_no_prefetch_test(dut):
     await RisingEdge(dut.clk_i)
     dut.branch_i.value = 0
     dut.addr_i.value = 0
+    await Timer(1, "ns")
+    assert dut.addr_o.value == branchAddr
     dut.instr_rvalid_i.value = 1
     dut.instr_rdata_i.value = random.randint(0, 0xFFFFFFFF)
     await RisingEdge(dut.clk_i)
@@ -320,13 +322,8 @@ async def ibex_no_prefetch_test(dut):
     dut.instr_gnt_i.value = 0
 
     dut.branch_i.value = 1
-    # At this point, addr_o should hold the previous branch address because that's where the
-    # CPU will return to after handling the interrupt
-    assert dut.addr_o.value == branchAddr
-
     branchAddr = random.randint(0, 0x3FFFFFFF) * 4
     dut.addr_i.value = branchAddr
-
     # We have an interrupting branch request in the middle of an ongoing transaction.
     # When the ongoing transaction completes, it must not propagate to valid_o.
     valid_o_must_not_assert = True
