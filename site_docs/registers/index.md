@@ -7,7 +7,6 @@
 # Register Groups
 
 * [DDRCTRL](ddrctrl.md)
-* [DDRPHY](ddrphy.md)
 * [SDRAM](sdram.md)
 
 # Indices and tables

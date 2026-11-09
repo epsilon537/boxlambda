@@ -1,5 +1,5 @@
 regmap:
--   name: CTRL
+-   name: CONTROL
     description: Reset control register
     address: 0
     bitfields:

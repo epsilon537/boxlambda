@@ -22,7 +22,7 @@ Base address: 0x10000400
 
 | Name                     | Address    | Description |
 | :---                     | :---       | :---        |
-| [STATUS](#status)        | 0x00000000 | Status register. |
+| [DFX STATUS](#dfx status) | 0x00000000 | Status register. |
 | [SW_TRIGGER](#sw_trigger) | 0x00000004 | Software trigger register. |
 | [TRIGGER_0](#trigger_0)  | 0x00000020 | Trigger 0. |
 | [TRIGGER_1](#trigger_1)  | 0x00000024 | Trigger 1. |
@@ -37,7 +37,7 @@ Base address: 0x10000400
 | [BS_ADDRESS_1](#bs_address_1) | 0x00000074 | Bitstream 1 byte address. |
 | [BS_SIZE_1](#bs_size_1)  | 0x00000078 | Bitstream 1 size in bytes. |
 
-## STATUS
+## DFX STATUS
 
 Status register.
 
@@ -45,7 +45,7 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![status](md_img/status.svg)
+![dfx status](md_img/dfx status.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
@@ -55,7 +55,7 @@ Reset value: 0x00000000
 | ERR              | 6:3    | ro              | 0x0        | Error state. |
 | STATE            | 2:0    | ro              | 0x0        | Current state. |
 
-Enumerated values for STATUS.STATE.
+Enumerated values for DFX STATUS.STATE.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |
@@ -67,7 +67,7 @@ Enumerated values for STATUS.STATE.
 | RM_RESET         | 0x6    | Executing reconfigurable module reset step. |
 | VS_FULL          | 0x7    | Virtual Socket is full. |
 
-Enumerated values for STATUS.ERR.
+Enumerated values for DFX STATUS.ERR.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |

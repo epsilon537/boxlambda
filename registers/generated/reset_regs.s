@@ -2,13 +2,13 @@
 
 .equ RESET_BASE_ADDR, 0x100000d0
 
-# CTRL - Reset control register
-.equ RESET_CTRL_ADDR, 0x0
+# CONTROL - Reset control register
+.equ RESET_CONTROL_ADDR, 0x0
 
-# CTRL.CTRL - Reset control
-.equ RESET_CTRL_CTRL_WIDTH, 3
-.equ RESET_CTRL_CTRL_LSB, 0
-.equ RESET_CTRL_CTRL_MASK, 0x7
+# CONTROL.CTRL - Reset control
+.equ RESET_CONTROL_CTRL_WIDTH, 3
+.equ RESET_CONTROL_CTRL_LSB, 0
+.equ RESET_CONTROL_CTRL_MASK, 0x7
 # REASON - Reset reason register
 .equ RESET_REASON_ADDR, 0x4
 

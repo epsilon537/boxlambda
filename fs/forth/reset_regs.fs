@@ -4,16 +4,16 @@
 $100000d0 constant RESET_BASE_ADDR
 
 
-\ CTRL - Reset control register
-RESET_BASE_ADDR $0 + constant RESET_CTRL_ADDR
+\ CONTROL - Reset control register
+RESET_BASE_ADDR $0 + constant RESET_CONTROL_ADDR
 
 \ -- Address Mask Offset
-RESET_CTRL_ADDR $7 #0 bitfield@ RESET_CTRL_CTRL@
-RESET_CTRL_ADDR $7 #0 bitfield! RESET_CTRL_CTRL!
+RESET_CONTROL_ADDR $7 #0 bitfield@ RESET_CONTROL_CTRL@
+RESET_CONTROL_ADDR $7 #0 bitfield! RESET_CONTROL_CTRL!
 
-  #1 constant RESET_CTRL_CTRL_NDM_RESET \ Non-debug module reset 
-  #2 constant RESET_CTRL_CTRL_DM_RESET \ Debug module reset 
-  #4 constant RESET_CTRL_CTRL_USB_RESET \ Debug module reset 
+  #1 constant RESET_CONTROL_CTRL_NDM_RESET \ Non-debug module reset 
+  #2 constant RESET_CONTROL_CTRL_DM_RESET \ Debug module reset 
+  #4 constant RESET_CONTROL_CTRL_USB_RESET \ Debug module reset 
 
 
 \ REASON - Reset reason register

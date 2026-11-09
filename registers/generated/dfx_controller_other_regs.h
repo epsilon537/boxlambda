@@ -15,9 +15,9 @@ extern "C" {
 
 #define DFX_OTHER_BASE_ADDR 0x10000400
 
-// STATUS - Status register.
-#define DFX_OTHER_STATUS_ADDR 0x0
-#define DFX_OTHER_STATUS_RESET 0x0
+// DFX STATUS - Status register.
+#define DFX_OTHER_DFX STATUS_ADDR 0x0
+#define DFX_OTHER_DFX STATUS_RESET 0x0
 typedef union {
   uint32_t UINT32;
   struct {
@@ -27,50 +27,50 @@ typedef union {
     uint32_t RM_ID : 16; // ID of Reconfigurable module to which the status applies.
     uint32_t : 8; // reserved
   };
-} dfx_other_status_t;
+} dfx_other_dfx status_t;
 
-// STATUS.STATE - Current state.
-#define DFX_OTHER_STATUS_STATE_WIDTH 3
-#define DFX_OTHER_STATUS_STATE_LSB 0
-#define DFX_OTHER_STATUS_STATE_MASK 0x7
-#define DFX_OTHER_STATUS_STATE_RESET 0x0
+// DFX STATUS.STATE - Current state.
+#define DFX_OTHER_DFX STATUS_STATE_WIDTH 3
+#define DFX_OTHER_DFX STATUS_STATE_LSB 0
+#define DFX_OTHER_DFX STATUS_STATE_MASK 0x7
+#define DFX_OTHER_DFX STATUS_STATE_RESET 0x0
 typedef enum {
-    DFX_OTHER_STATUS_STATE_VS_EMPTY = 0x0, //Virtual socket empty.
-    DFX_OTHER_STATUS_STATE_HW_SHUTDOWN = 0x1, //Hardware shutdown step.
-    DFX_OTHER_STATUS_STATE_SW_SHUTDOWN = 0x2, //Executing software shutdown step.
-    DFX_OTHER_STATUS_STATE_LOADING = 0x4, //Loading the new reconfigurable module.
-    DFX_OTHER_STATUS_STATE_SW_STARTUP = 0x5, //Executing software startup step.
-    DFX_OTHER_STATUS_STATE_RM_RESET = 0x6, //Executing reconfigurable module reset step.
-    DFX_OTHER_STATUS_STATE_VS_FULL = 0x7, //Virtual Socket is full.
-} dfx_other_status_state_t;
+    DFX_OTHER_DFX STATUS_STATE_VS_EMPTY = 0x0, //Virtual socket empty.
+    DFX_OTHER_DFX STATUS_STATE_HW_SHUTDOWN = 0x1, //Hardware shutdown step.
+    DFX_OTHER_DFX STATUS_STATE_SW_SHUTDOWN = 0x2, //Executing software shutdown step.
+    DFX_OTHER_DFX STATUS_STATE_LOADING = 0x4, //Loading the new reconfigurable module.
+    DFX_OTHER_DFX STATUS_STATE_SW_STARTUP = 0x5, //Executing software startup step.
+    DFX_OTHER_DFX STATUS_STATE_RM_RESET = 0x6, //Executing reconfigurable module reset step.
+    DFX_OTHER_DFX STATUS_STATE_VS_FULL = 0x7, //Virtual Socket is full.
+} dfx_other_dfx status_state_t;
 
-// STATUS.ERR - Error state.
-#define DFX_OTHER_STATUS_ERR_WIDTH 4
-#define DFX_OTHER_STATUS_ERR_LSB 3
-#define DFX_OTHER_STATUS_ERR_MASK 0x78
-#define DFX_OTHER_STATUS_ERR_RESET 0x0
+// DFX STATUS.ERR - Error state.
+#define DFX_OTHER_DFX STATUS_ERR_WIDTH 4
+#define DFX_OTHER_DFX STATUS_ERR_LSB 3
+#define DFX_OTHER_DFX STATUS_ERR_MASK 0x78
+#define DFX_OTHER_DFX STATUS_ERR_RESET 0x0
 typedef enum {
-    DFX_OTHER_STATUS_ERR_NO_ERR = 0x0, //No error.
-    DFX_OTHER_STATUS_ERR_BAD_CONFIG = 0x1, //Bad configuration error.
-    DFX_OTHER_STATUS_ERR_BS = 0x2, //Bitstream error.
-    DFX_OTHER_STATUS_ERR_FETCH = 0x4, //Fetch error.
-    DFX_OTHER_STATUS_ERR_BS_FETCH = 0x5, //Bitstream and fetch error.
-    DFX_OTHER_STATUS_ERR_BAD_SIZE = 0x7, //Bad size error.
-    DFX_OTHER_STATUS_ERR_BAD_FORMAT = 0x8, //Bad format error.
-    DFX_OTHER_STATUS_ERR_UNKNOWN = 0xf, //Unknown error.
-} dfx_other_status_err_t;
+    DFX_OTHER_DFX STATUS_ERR_NO_ERR = 0x0, //No error.
+    DFX_OTHER_DFX STATUS_ERR_BAD_CONFIG = 0x1, //Bad configuration error.
+    DFX_OTHER_DFX STATUS_ERR_BS = 0x2, //Bitstream error.
+    DFX_OTHER_DFX STATUS_ERR_FETCH = 0x4, //Fetch error.
+    DFX_OTHER_DFX STATUS_ERR_BS_FETCH = 0x5, //Bitstream and fetch error.
+    DFX_OTHER_DFX STATUS_ERR_BAD_SIZE = 0x7, //Bad size error.
+    DFX_OTHER_DFX STATUS_ERR_BAD_FORMAT = 0x8, //Bad format error.
+    DFX_OTHER_DFX STATUS_ERR_UNKNOWN = 0xf, //Unknown error.
+} dfx_other_dfx status_err_t;
 
-// STATUS.SHUTDOWN - Set if controller is in shutdown state.
-#define DFX_OTHER_STATUS_SHUTDOWN_WIDTH 1
-#define DFX_OTHER_STATUS_SHUTDOWN_LSB 7
-#define DFX_OTHER_STATUS_SHUTDOWN_MASK 0x80
-#define DFX_OTHER_STATUS_SHUTDOWN_RESET 0x0
+// DFX STATUS.SHUTDOWN - Set if controller is in shutdown state.
+#define DFX_OTHER_DFX STATUS_SHUTDOWN_WIDTH 1
+#define DFX_OTHER_DFX STATUS_SHUTDOWN_LSB 7
+#define DFX_OTHER_DFX STATUS_SHUTDOWN_MASK 0x80
+#define DFX_OTHER_DFX STATUS_SHUTDOWN_RESET 0x0
 
-// STATUS.RM_ID - ID of Reconfigurable module to which the status applies.
-#define DFX_OTHER_STATUS_RM_ID_WIDTH 16
-#define DFX_OTHER_STATUS_RM_ID_LSB 8
-#define DFX_OTHER_STATUS_RM_ID_MASK 0xffff00
-#define DFX_OTHER_STATUS_RM_ID_RESET 0x0
+// DFX STATUS.RM_ID - ID of Reconfigurable module to which the status applies.
+#define DFX_OTHER_DFX STATUS_RM_ID_WIDTH 16
+#define DFX_OTHER_DFX STATUS_RM_ID_LSB 8
+#define DFX_OTHER_DFX STATUS_RM_ID_MASK 0xffff00
+#define DFX_OTHER_DFX STATUS_RM_ID_RESET 0x0
 
 // SW_TRIGGER - Software trigger register.
 #define DFX_OTHER_SW_TRIGGER_ADDR 0x4
@@ -360,8 +360,8 @@ typedef union {
 // Register map structure
 typedef struct {
     union {
-        __I uint32_t STATUS; // Status register.
-        __I dfx_other_status_t STATUS_bf; // Bit access for STATUS register
+        __I uint32_t DFX STATUS; // Status register.
+        __I dfx_other_dfx status_t DFX STATUS_bf; // Bit access for DFX STATUS register
     };
     union {
         __IO uint32_t SW_TRIGGER; // Software trigger register.

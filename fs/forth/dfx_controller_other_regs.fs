@@ -4,33 +4,33 @@
 $10000400 constant DFX_BASE_ADDR
 
 
-\ STATUS - Status register.
-DFX_BASE_ADDR $0 + constant DFX_STATUS_ADDR
+\ DFX STATUS - Status register.
+DFX_BASE_ADDR $0 + constant DFX_DFX STATUS_ADDR
 
 \ -- Address Mask Offset
-DFX_STATUS_ADDR $7 #0 bitfield@ DFX_STATUS_STATE@
+DFX_DFX STATUS_ADDR $7 #0 bitfield@ DFX_DFX STATUS_STATE@
 
-  #0 constant DFX_STATUS_STATE_VS_EMPTY \ Virtual socket empty. 
-  #1 constant DFX_STATUS_STATE_HW_SHUTDOWN \ Hardware shutdown step. 
-  #2 constant DFX_STATUS_STATE_SW_SHUTDOWN \ Executing software shutdown step. 
-  #4 constant DFX_STATUS_STATE_LOADING \ Loading the new reconfigurable module. 
-  #5 constant DFX_STATUS_STATE_SW_STARTUP \ Executing software startup step. 
-  #6 constant DFX_STATUS_STATE_RM_RESET \ Executing reconfigurable module reset step. 
-  #7 constant DFX_STATUS_STATE_VS_FULL \ Virtual Socket is full. 
+  #0 constant DFX_DFX STATUS_STATE_VS_EMPTY \ Virtual socket empty. 
+  #1 constant DFX_DFX STATUS_STATE_HW_SHUTDOWN \ Hardware shutdown step. 
+  #2 constant DFX_DFX STATUS_STATE_SW_SHUTDOWN \ Executing software shutdown step. 
+  #4 constant DFX_DFX STATUS_STATE_LOADING \ Loading the new reconfigurable module. 
+  #5 constant DFX_DFX STATUS_STATE_SW_STARTUP \ Executing software startup step. 
+  #6 constant DFX_DFX STATUS_STATE_RM_RESET \ Executing reconfigurable module reset step. 
+  #7 constant DFX_DFX STATUS_STATE_VS_FULL \ Virtual Socket is full. 
 
-DFX_STATUS_ADDR $78 #3 bitfield@ DFX_STATUS_ERR@
+DFX_DFX STATUS_ADDR $78 #3 bitfield@ DFX_DFX STATUS_ERR@
 
-  #0 constant DFX_STATUS_ERR_NO_ERR \ No error. 
-  #1 constant DFX_STATUS_ERR_BAD_CONFIG \ Bad configuration error. 
-  #2 constant DFX_STATUS_ERR_BS \ Bitstream error. 
-  #4 constant DFX_STATUS_ERR_FETCH \ Fetch error. 
-  #5 constant DFX_STATUS_ERR_BS_FETCH \ Bitstream and fetch error. 
-  #7 constant DFX_STATUS_ERR_BAD_SIZE \ Bad size error. 
-  #8 constant DFX_STATUS_ERR_BAD_FORMAT \ Bad format error. 
-  #15 constant DFX_STATUS_ERR_UNKNOWN \ Unknown error. 
+  #0 constant DFX_DFX STATUS_ERR_NO_ERR \ No error. 
+  #1 constant DFX_DFX STATUS_ERR_BAD_CONFIG \ Bad configuration error. 
+  #2 constant DFX_DFX STATUS_ERR_BS \ Bitstream error. 
+  #4 constant DFX_DFX STATUS_ERR_FETCH \ Fetch error. 
+  #5 constant DFX_DFX STATUS_ERR_BS_FETCH \ Bitstream and fetch error. 
+  #7 constant DFX_DFX STATUS_ERR_BAD_SIZE \ Bad size error. 
+  #8 constant DFX_DFX STATUS_ERR_BAD_FORMAT \ Bad format error. 
+  #15 constant DFX_DFX STATUS_ERR_UNKNOWN \ Unknown error. 
 
-DFX_STATUS_ADDR $80 #7 bitfield@ DFX_STATUS_SHUTDOWN@
-DFX_STATUS_ADDR $ffff00 #8 bitfield@ DFX_STATUS_RM_ID@
+DFX_DFX STATUS_ADDR $80 #7 bitfield@ DFX_DFX STATUS_SHUTDOWN@
+DFX_DFX STATUS_ADDR $ffff00 #8 bitfield@ DFX_DFX STATUS_RM_ID@
 
 \ SW_TRIGGER - Software trigger register.
 DFX_BASE_ADDR $4 + constant DFX_SW_TRIGGER_ADDR

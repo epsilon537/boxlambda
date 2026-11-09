@@ -1126,12 +1126,12 @@ Case:
 [case.s](../../../../sw/components/forth/case.s)
 
 ```
-n case
-     m1   of ... endof
-     m2   .. ... .....
-   flag  ?of ... endof
-    all others
-  endcase
+( n ) case
+         m1   of ... endof
+         m2   .. ... .....
+      flag  ?of ... endof
+         all others
+      endcase
 ```
 
 `case ( n -- n )`

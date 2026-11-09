@@ -22,10 +22,10 @@ Base address: 0x100000d0
 
 | Name                     | Address    | Description |
 | :---                     | :---       | :---        |
-| [CTRL](#ctrl)            | 0x00000000 | Reset control register |
+| [CONTROL](#control)      | 0x00000000 | Reset control register |
 | [REASON](#reason)        | 0x00000004 | Reset reason register |
 
-## CTRL
+## CONTROL
 
 Reset control register
 
@@ -33,14 +33,14 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![ctrl](md_img/ctrl.svg)
+![control](md_img/control.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:3   | -               | 0x0000000  | Reserved |
 | CTRL             | 2:0    | wo              | 0x0        | Reset control |
 
-Enumerated values for CTRL.CTRL.
+Enumerated values for CONTROL.CTRL.
 
 | Name             | Value   | Description |
 | :---             | :---    | :---        |

@@ -15,27 +15,27 @@ extern "C" {
 
 #define RESET_BASE_ADDR 0x100000d0
 
-// CTRL - Reset control register
-#define RESET_CTRL_ADDR 0x0
-#define RESET_CTRL_RESET 0x0
+// CONTROL - Reset control register
+#define RESET_CONTROL_ADDR 0x0
+#define RESET_CONTROL_RESET 0x0
 typedef union {
   uint32_t UINT32;
   struct {
     uint32_t CTRL : 3; // Reset control
     uint32_t : 29; // reserved
   };
-} reset_ctrl_t;
+} reset_control_t;
 
-// CTRL.CTRL - Reset control
-#define RESET_CTRL_CTRL_WIDTH 3
-#define RESET_CTRL_CTRL_LSB 0
-#define RESET_CTRL_CTRL_MASK 0x7
-#define RESET_CTRL_CTRL_RESET 0x0
+// CONTROL.CTRL - Reset control
+#define RESET_CONTROL_CTRL_WIDTH 3
+#define RESET_CONTROL_CTRL_LSB 0
+#define RESET_CONTROL_CTRL_MASK 0x7
+#define RESET_CONTROL_CTRL_RESET 0x0
 typedef enum {
-    RESET_CTRL_CTRL_NDM_RESET = 0x1, //Non-debug module reset
-    RESET_CTRL_CTRL_DM_RESET = 0x2, //Debug module reset
-    RESET_CTRL_CTRL_USB_RESET = 0x4, //Debug module reset
-} reset_ctrl_ctrl_t;
+    RESET_CONTROL_CTRL_NDM_RESET = 0x1, //Non-debug module reset
+    RESET_CONTROL_CTRL_DM_RESET = 0x2, //Debug module reset
+    RESET_CONTROL_CTRL_USB_RESET = 0x4, //Debug module reset
+} reset_control_ctrl_t;
 
 // REASON - Reset reason register
 #define RESET_REASON_ADDR 0x4
@@ -93,8 +93,8 @@ typedef union {
 // Register map structure
 typedef struct {
     union {
-        __O uint32_t CTRL; // Reset control register
-        __O reset_ctrl_t CTRL_bf; // Bit access for CTRL register
+        __O uint32_t CONTROL; // Reset control register
+        __O reset_control_t CONTROL_bf; // Bit access for CONTROL register
     };
     union {
         __I uint32_t REASON; // Reset reason register

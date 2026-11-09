@@ -8,9 +8,9 @@ eint
 os-timer-start
 
 include /forth/usb_hid_0_regs.fs
-include /forth/usb_hid_1_regs.fs
+include /forth/gpio_regs.fs
 include /forth/reset_regs.fs
-
+include /forth/leds.fs
 include /forth/usb-keyboard.fs
 usb-keyboard-start
 

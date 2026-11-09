@@ -1,42 +1,178 @@
 \ BoxLambda Forth
 \ USB HID dispatcher
 
-hook-os-timer @ variable (usb-prev-hook-timer)
-
-0 variable usb-os-ticks
-
 10 constant USB-KEYBOARD-DETECT-PERIOD
 
-0 variable usb-keyboard-report-count
+\ This variable if a USB keyboard is connected.
 false variable usb-keyboard-present
 
-: (usb-os-tick)
-  usb-os-ticks @ 1+ ( ticks )
+hook-os-timer @ variable (usb-prev-hook-timer)
+0 variable (usb-keyboard-detect-ticks)
+0 variable (usb-keyboard-report-count)
+
+( -- )
+: (keyboard-detect)
+  (usb-keyboard-detect-ticks) @ 1+ ( ticks )
   dup USB-KEYBOARD-DETECT-PERIOD >= if ( ticks )
     drop 0 ( ticks)
-    usb-keyboard-report-count @ 0> usb-keyboard-present ! ( ticks )
-    0 usb-keyboard-report-count ! ( ticks )
+    (usb-keyboard-report-count) @ 0> ( ticks f )
+    dup usb-keyboard-present ! ( ticks f )
+    dup led-keyboard-detect! ( ticks f )
+    \ Reset the core if keyboard is no longer present to allow re-detect/re-enumeration.
+    0= if RESET_CONTROL_CTRL_USB_RESET RESET_CONTROL_CTRL! then ( ticks )
+    0 (usb-keyboard-report-count) ! ( ticks )
   then
-  usb-os-ticks !
-  (usb-prev-hook-timer) @ execute
+  (usb-keyboard-detect-ticks) !
 ;
 
-' (usb-os-tick) hook-os-timer !
+0 variable (prev-keypress) \ The previous keys-pressed register value.
+0 variable (new-keypress)  \ The current keys-pressed register value.
+0 variable (prev-keymods) \ The previous USB_HID_0_KEY_MODS register value. Left/right folded.
+0 variable (new-keymods) \ The current USB_HID_0_KEY_MODS register value. Left/right folded.
+
+\ keymods bitmask values
+$1 constant KEYMOD-CTRL
+$2 constant KEYMOD-SHIFT
+$4 constant KEYMOD-ALT
+$8 constant KEYMOD-WIN
+
+\ Read keymods register and fold left/right.
+( -- keymods )
+: (read-keymods-fold)
+  USB_HID_0_KEY_MODS_ADDR @ dup 4 rshift or $f and
+;
+
+\ Read keys-pressed register.
+( -- keypress )
+: (read-keypress)
+  USB_HID_0_KEYS_ADDR @ ( keys-pressed )
+;
+
+( -- )
+: (update-keymods)
+  (new-keymods) @ (prev-keymods) !
+  (read-keymods-fold) (new-keymods) !
+;
+
+( -- )
+: (update-keypress)
+  (new-keypress) @ (prev-keypress) !
+  (read-keypress) (new-keypress) !
+;
+
+begin-structure key-event-struct-raw
+  cfield: .scancode
+  cfield: .modifiers
+  cfield: .upndown
+  cfield: .repeat
+end-structure
+
+create key-event-raw key-event-struct-raw allot
+
+( -- )
+: .key-event
+  key-event-raw .modifiers c@ key-event-raw .scancode c@
+  s" Raw key event: scancode: $%x modifiers: $%x " printf
+  key-event-raw .upndown c@ if ." up " else ." down " then
+  key-event-raw .repeat c@ if ." repeat" then
+  cr
+;
+
+' .key-event variable key-event-raw-hook
+
+( scancode upndown -- )
+: (report-key-event)
+  swap key-event-raw .scancode c! ( upndown )
+  dup if (prev-keymods) else (new-keymods) then @ ( upndown keymods )
+  key-event-raw .modifiers c! ( upndown )
+  key-event-raw .upndown c! ( )
+  false key-event-raw .repeat c! ( )
+  key-event-raw-hook @ ?dup if ( xt )
+    execute ( )
+  then ( )
+;
+
+\ Returns true if byte is found in at least one of the byte positions in word.
+( byte word -- f )
+: find-byte-in-word
+  4 0 do ( byte word )
+    2dup $ff and = if ( byte word )
+      2drop
+      unloop true exit
+    then
+    8 rshift ( byte word' )
+  loop
+  2drop ( )
+  false
+;
+
+( check against upndown -- )
+: (process-keychanges)
+  >r ( check against R: upndown )
+  >r ( check R: upndown against )
+  begin
+    dup while ( check R: upndown against )
+      dup $ff and ( check key R: upndown against )
+      dup r@ find-byte-in-word 0= if ( check key R: upndown against )
+        \ mismatch -> key-event.
+        dup 1 rpick (report-key-event) ( check key R: upndown against )
+      then
+      drop 8 rshift ( check' R: upndown against )
+  repeat ( check R: upndown against )
+  drop ( R: upndown against )
+  2rdrop ( )
+;
+
+( -- )
+: (process-keyups) \ Are any of the old keys no longer present in the new key-presses?
+  (prev-keypress) @ ( prev-keys )
+  (new-keypress) @ ( prev-keys new-keys )
+  true (process-keychanges) ( )
+;
+
+( -- )
+: (process-keydns) \ Are any of the new keys not yet present in the old key-presses?
+  (new-keypress) @ ( new-keys )
+  (prev-keypress) @ ( new-keys prev-keys )
+  false (process-keychanges) ( )
+;
+
+( -- )
+: (process-keyreport)
+  (update-keymods)
+  (update-keypress)
+  (new-keypress) @ (prev-keypress) @ <> if \ any key-press changes?
+    (process-keyups)
+    (process-keydns)
+  then
+;
 
 : (usb-hid-0-irq-handle)
-  USB_HID_0_ISR_USB_REPORT@ if 
+  USB_HID_0_ISR_USB_REPORT@ if
     \ Acknowledge the USB report interrupt in the USB core.
     1 USB_HID_0_ISR_USB_REPORT!
     USB_HID_0_STATUS_USB_TYP@ USB_HID_0_STATUS_USB_TYP_KEYB = if
-      1 usb-keyboard-report-count +!
+      1 (usb-keyboard-report-count) +!
     then
+    (process-keyreport) 
   then
 ;
 
 ' (usb-hid-0-irq-handle) irq-usb_hid_0 !
 
 ( -- )
+: (usb-keyboard-os-tick)
+  (keyboard-detect)
+  drop
+  (usb-prev-hook-timer) @ execute
+;
+
+' (usb-keyboard-os-tick) hook-os-timer !
+
+( -- )
 : usb-keyboard-start
+  \ Reset the core.
+  RESET_CONTROL_CTRL_USB_RESET RESET_CONTROL_CTRL!
   \ Clear the USB report interrupt in the USB core.
   1 USB_HID_0_ISR_USB_REPORT!
   1 USB_HID_0_IEN_USB_REPORT!
@@ -48,13 +184,4 @@ false variable usb-keyboard-present
   0 USB_HID_0_IEN_USB_REPORT!
   mie irq-id-usb-hid-0 1<< bic mie!
 ;
-: wait-for-keyboard
-  begin
-    USB_HID_0_STATUS_ADDR @ USB_HID_0_STATUS_USB_TYP_KEYB =
-  until
-;
-
-." Waiting for keyboard ... " cr
-\ wait-for-keyboard
-\ ." Keyboard detected" cr
 

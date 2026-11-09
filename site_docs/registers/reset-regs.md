@@ -22,10 +22,10 @@ Base address: 0x100000d0
 
 | Name                     | Address    | Description |
 | :---                     | :---       | :---        |
-| [CTRL](#ctrl)            | 0x00000000 | Reset control register |
+| [RST_CTRL](#rst_ctrl)    | 0x00000000 | Reset control register |
 | [REASON](#reason)        | 0x00000004 | Reset reason register |
 
-## CTRL
+## RST_CTRL
 
 Reset control register
 
@@ -33,14 +33,20 @@ Address offset: 0x00000000
 
 Reset value: 0x00000000
 
-![ctrl](md_img/ctrl.svg)
+![rst_ctrl](md_img/rst_ctrl.svg)
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:3   | -               | 0x0000000  | Reserved |
-| USB_RESET        | 2      | wo              | 0x0        | USB module reset |
-| DM_RESET         | 1      | wo              | 0x0        | Debug module reset |
-| NDM_RESET        | 0      | wo              | 0x0        | Non-debug module reset |
+| CTRL             | 2:0    | wo              | 0x0        | Reset control |
+
+Enumerated values for RST_CTRL.CTRL.
+
+| Name             | Value   | Description |
+| :---             | :---    | :---        |
+| NDM_RESET        | 0x1    | Non-debug module reset |
+| DM_RESET         | 0x2    | Debug module reset |
+| USB_RESET        | 0x4    | Debug module reset |
 
 Back to [Register map](#register-map-summary).
 

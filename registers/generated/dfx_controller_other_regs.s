@@ -2,25 +2,25 @@
 
 .equ DFX_BASE_ADDR, 0x10000400
 
-# STATUS - Status register.
-.equ DFX_STATUS_ADDR, 0x0
+# DFX STATUS - Status register.
+.equ DFX_DFX STATUS_ADDR, 0x0
 
-# STATUS.STATE - Current state.
-.equ DFX_STATUS_STATE_WIDTH, 3
-.equ DFX_STATUS_STATE_LSB, 0
-.equ DFX_STATUS_STATE_MASK, 0x7
-# STATUS.ERR - Error state.
-.equ DFX_STATUS_ERR_WIDTH, 4
-.equ DFX_STATUS_ERR_LSB, 3
-.equ DFX_STATUS_ERR_MASK, 0x78
-# STATUS.SHUTDOWN - Set if controller is in shutdown state.
-.equ DFX_STATUS_SHUTDOWN_WIDTH, 1
-.equ DFX_STATUS_SHUTDOWN_LSB, 7
-.equ DFX_STATUS_SHUTDOWN_MASK, 0x80
-# STATUS.RM_ID - ID of Reconfigurable module to which the status applies.
-.equ DFX_STATUS_RM_ID_WIDTH, 16
-.equ DFX_STATUS_RM_ID_LSB, 8
-.equ DFX_STATUS_RM_ID_MASK, 0xffff00
+# DFX STATUS.STATE - Current state.
+.equ DFX_DFX STATUS_STATE_WIDTH, 3
+.equ DFX_DFX STATUS_STATE_LSB, 0
+.equ DFX_DFX STATUS_STATE_MASK, 0x7
+# DFX STATUS.ERR - Error state.
+.equ DFX_DFX STATUS_ERR_WIDTH, 4
+.equ DFX_DFX STATUS_ERR_LSB, 3
+.equ DFX_DFX STATUS_ERR_MASK, 0x78
+# DFX STATUS.SHUTDOWN - Set if controller is in shutdown state.
+.equ DFX_DFX STATUS_SHUTDOWN_WIDTH, 1
+.equ DFX_DFX STATUS_SHUTDOWN_LSB, 7
+.equ DFX_DFX STATUS_SHUTDOWN_MASK, 0x80
+# DFX STATUS.RM_ID - ID of Reconfigurable module to which the status applies.
+.equ DFX_DFX STATUS_RM_ID_WIDTH, 16
+.equ DFX_DFX STATUS_RM_ID_LSB, 8
+.equ DFX_DFX STATUS_RM_ID_MASK, 0xffff00
 # SW_TRIGGER - Software trigger register.
 .equ DFX_SW_TRIGGER_ADDR, 0x4
 

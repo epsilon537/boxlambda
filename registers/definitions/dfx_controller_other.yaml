@@ -1,5 +1,5 @@
 regmap:
--   name: STATUS
+-   name: DFX STATUS
     description: Status register.
     address: 0
     bitfields:
