@@ -10,6 +10,14 @@ hook-os-timer @ variable (usb-prev-hook-timer)
 0 variable (usb-keyboard-detect-ticks)
 0 variable (usb-keyboard-report-count)
 
+\ Enable/disable software test mode
+( f -- )
+: usb-keyboard-sw-test-mode USB_HID_0_STATUS_BLOCK_REPORTS! ;
+
+\ Returns software test mode
+( -- f )
+: usb-keyboard-sw-test-mode? USB_HID_0_STATUS_BLOCK_REPORTS@ 0<> ;
+
 ( -- )
 : (keyboard-detect)
   (usb-keyboard-detect-ticks) @ 1+ ( ticks )
@@ -17,9 +25,12 @@ hook-os-timer @ variable (usb-prev-hook-timer)
     drop 0 ( ticks)
     (usb-keyboard-report-count) @ 0> ( ticks f )
     dup usb-keyboard-present ! ( ticks f )
-    dup led-keyboard-detect! ( ticks f )
+    dup led-keyboard-detect! 0= ( ticks f )
+    usb-keyboard-sw-test-mode? not and ( ticks f )
     \ Reset the core if keyboard is no longer present to allow re-detect/re-enumeration.
-    0= if RESET_CONTROL_CTRL_USB_RESET RESET_CONTROL_CTRL! then ( ticks )
+    if
+      RESET_CONTROL_CTRL_USB_RESET RESET_CONTROL_CTRL!
+    then ( ticks )
     0 (usb-keyboard-report-count) ! ( ticks )
   then
   (usb-keyboard-detect-ticks) !
@@ -87,9 +98,7 @@ create key-event-raw key-event-struct-raw allot
   key-event-raw .modifiers c! ( upndown )
   key-event-raw .upndown c! ( )
   false key-event-raw .repeat c! ( )
-  key-event-raw-hook @ ?dup if ( xt )
-    execute ( )
-  then ( )
+  key-event-raw-hook @ execute ( )
 ;
 
 \ Returns true if byte is found in at least one of the byte positions in word.
@@ -154,7 +163,7 @@ create key-event-raw key-event-struct-raw allot
     USB_HID_0_STATUS_USB_TYP@ USB_HID_0_STATUS_USB_TYP_KEYB = if
       1 (usb-keyboard-report-count) +!
     then
-    (process-keyreport) 
+    (process-keyreport)
   then
 ;
 
@@ -167,8 +176,6 @@ create key-event-raw key-event-struct-raw allot
   (usb-prev-hook-timer) @ execute
 ;
 
-' (usb-keyboard-os-tick) hook-os-timer !
-
 ( -- )
 : usb-keyboard-start
   \ Reset the core.
@@ -177,11 +184,13 @@ create key-event-raw key-event-struct-raw allot
   1 USB_HID_0_ISR_USB_REPORT!
   1 USB_HID_0_IEN_USB_REPORT!
   mie irq-id-usb-hid-0 1<< or mie!
+  ['] (usb-keyboard-os-tick) hook-os-timer !
 ;
 
 ( -- )
 : usb-keyboard-stop
   0 USB_HID_0_IEN_USB_REPORT!
   mie irq-id-usb-hid-0 1<< bic mie!
+  ['] (usb-prev-hook-timer) hook-os-timer !
 ;
 

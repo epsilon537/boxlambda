@@ -71,7 +71,8 @@ typedef union {
   struct {
     uint32_t USB_TYP : 2; // USB type
     uint32_t CONN_ERR : 1; // Connection error.
-    uint32_t : 29; // reserved
+    uint32_t BLOCK_REPORTS : 1; // Block incoming USB reports.
+    uint32_t : 28; // reserved
   };
 } usb_hid_0_status_t;
 
@@ -92,6 +93,12 @@ typedef enum {
 #define USB_HID_0_STATUS_CONN_ERR_LSB 2
 #define USB_HID_0_STATUS_CONN_ERR_MASK 0x4
 #define USB_HID_0_STATUS_CONN_ERR_RESET 0x0
+
+// STATUS.BLOCK_REPORTS - Block incoming USB reports.
+#define USB_HID_0_STATUS_BLOCK_REPORTS_WIDTH 1
+#define USB_HID_0_STATUS_BLOCK_REPORTS_LSB 3
+#define USB_HID_0_STATUS_BLOCK_REPORTS_MASK 0x8
+#define USB_HID_0_STATUS_BLOCK_REPORTS_RESET 0x0
 
 // KEY_MODS - Key modifiers
 #define USB_HID_0_KEY_MODS_ADDR 0xc
@@ -339,24 +346,24 @@ typedef struct {
         __IO usb_hid_0_isr_t ISR_bf; // Bit access for ISR register
     };
     union {
-        __I uint32_t STATUS; // Status Register
-        __I usb_hid_0_status_t STATUS_bf; // Bit access for STATUS register
+        __IO uint32_t STATUS; // Status Register
+        __IO usb_hid_0_status_t STATUS_bf; // Bit access for STATUS register
     };
     union {
-        __I uint32_t KEY_MODS; // Key modifiers
-        __I usb_hid_0_key_mods_t KEY_MODS_bf; // Bit access for KEY_MODS register
+        __IO uint32_t KEY_MODS; // Key modifiers
+        __IO usb_hid_0_key_mods_t KEY_MODS_bf; // Bit access for KEY_MODS register
     };
     union {
-        __I uint32_t KEYS; // Keys register
-        __I usb_hid_0_keys_t KEYS_bf; // Bit access for KEYS register
+        __IO uint32_t KEYS; // Keys register
+        __IO usb_hid_0_keys_t KEYS_bf; // Bit access for KEYS register
     };
     union {
-        __I uint32_t MOUSE; // Mouse register
-        __I usb_hid_0_mouse_t MOUSE_bf; // Bit access for MOUSE register
+        __IO uint32_t MOUSE; // Mouse register
+        __IO usb_hid_0_mouse_t MOUSE_bf; // Bit access for MOUSE register
     };
     union {
-        __I uint32_t GAME; // Game pad register
-        __I usb_hid_0_game_t GAME_bf; // Bit access for GAME register
+        __IO uint32_t GAME; // Game pad register
+        __IO usb_hid_0_game_t GAME_bf; // Bit access for GAME register
     };
     union {
         __I uint32_t REPORT_0; // USB report 0 register

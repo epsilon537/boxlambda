@@ -62,6 +62,7 @@ module wb_usb_hid_host (
 
   reg [1:0] wb_usb_typ;  //USB type register: 0: no device, 1: keyboard, 2: mouse, 3: gamepad
   reg wb_usb_conn_err;  //USB connection error register.
+  reg wb_usb_block_reports;  //SW test feature: block USB core reports when SW has control.
 
   // keyboard registers.
   reg [7:0] wb_usb_key_modifiers;
@@ -87,7 +88,7 @@ module wb_usb_hid_host (
   // Wishbone
   reg do_ack_wbs;
   wire do_wbs_wr_reg;
-  wire unused = &{wbs_sel, wbs_dat_w[31:4]};
+  wire unused = &{wbs_sel};
 
   //IRQ signalling.
   assign irq = |(wb_usb_isr & wb_usb_ien);
@@ -110,6 +111,7 @@ module wb_usb_hid_host (
       wb_usb_isr <= 2'b00;
       wb_usb_typ <= 2'b00;
       wb_usb_conn_err <= 1'b0;
+      wb_usb_block_reports <= 1'b0;
     end else begin
       //WBS ack on next clock cycle.
       do_ack_wbs <= 1'b0;
@@ -125,6 +127,22 @@ module wb_usb_hid_host (
         case (wbs_adr)
           4'd0: wb_usb_ien <= wbs_dat_w[1:0];
           4'd1: wb_usb_isr <= wb_usb_isr & ~wbs_dat_w[1:0];
+          4'd2: {wb_usb_block_reports, wb_usb_conn_err, wb_usb_typ} <= wbs_dat_w[3:0];
+          4'd3: wb_usb_key_modifiers <= wbs_dat_w[7:0];
+          4'd4: begin
+            {wb_usb_key4, wb_usb_key3, wb_usb_key2, wb_usb_key1} <= wbs_dat_w;
+            wb_usb_isr[0] <= 1'b1;
+          end
+          4'd5: begin
+            {wb_usb_mouse_btn, wb_usb_mouse_dx, wb_usb_mouse_dy} <= wbs_dat_w[23:0];
+            wb_usb_isr[0] <= 1'b1;
+          end
+          4'd6: begin
+            { wb_usb_game_l, wb_usb_game_r, wb_usb_game_u, wb_usb_game_d, wb_usb_game_a,
+              wb_usb_game_b, wb_usb_game_x, wb_usb_game_y, wb_usb_game_sel, wb_usb_game_sta }
+              <= wbs_dat_w[9:0];
+            wb_usb_isr[0] <= 1'b1;
+          end
           4'd9: begin
             update_leds_stb <= 1'b1;
             leds <= wbs_dat_w[3:0];
@@ -136,8 +154,8 @@ module wb_usb_hid_host (
       //update_led acknowledge received. Signal ISR.
       if (ack_update_leds_stb) wb_usb_isr[1] <= 1'b1;
 
-      //A USB report has been received.
-      if (usb_report_stb) begin
+      //A USB report has been received (and is not blocked by SW).
+      if (usb_report_stb && (!wb_usb_block_reports)) begin
         wb_usb_isr[0] <= 1'b1;
         {wb_usb_typ, wb_usb_conn_err} <= {usb_typ, usb_conn_err};
         {wb_usb_key_modifiers, wb_usb_key1, wb_usb_key2, wb_usb_key3, wb_usb_key4} <= {
@@ -169,7 +187,7 @@ module wb_usb_hid_host (
     case (wbs_adr)  //wbs address is a word address.
       4'd0: wbs_dat_r = {30'b0, wb_usb_ien};
       4'd1: wbs_dat_r = {30'b0, wb_usb_isr};
-      4'd2: wbs_dat_r = {29'b0, wb_usb_conn_err, wb_usb_typ};
+      4'd2: wbs_dat_r = {28'b0, wb_usb_block_reports, wb_usb_conn_err, wb_usb_typ};
       4'd3: wbs_dat_r = {24'b0, wb_usb_key_modifiers};
       4'd4: wbs_dat_r = {wb_usb_key4, wb_usb_key3, wb_usb_key2, wb_usb_key1};
       4'd5: wbs_dat_r = {8'b0, wb_usb_mouse_btn, wb_usb_mouse_dx, wb_usb_mouse_dy};

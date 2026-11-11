@@ -81,9 +81,10 @@ Reset value: 0x00000000
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
-| -                | 31:3   | -               | 0x0000000  | Reserved |
-| CONN_ERR         | 2      | ro              | 0x0        | Connection error. |
-| USB_TYP          | 1:0    | ro              | 0x0        | USB type |
+| -                | 31:4   | -               | 0x0000000  | Reserved |
+| BLOCK_REPORTS    | 3      | rw              | 0x0        | Block incoming USB reports. |
+| CONN_ERR         | 2      | rw              | 0x0        | Connection error. |
+| USB_TYP          | 1:0    | rw              | 0x0        | USB type |
 
 Enumerated values for STATUS.USB_TYP.
 
@@ -109,14 +110,14 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:8   | -               | 0x000000   | Reserved |
-| RMETA            | 7      | ro              | 0x0        | Right meta |
-| RALT             | 6      | ro              | 0x0        | Right alt |
-| RSHIFT           | 5      | ro              | 0x0        | Right shift |
-| RCTRL            | 4      | ro              | 0x0        | Right control |
-| LMETA            | 3      | ro              | 0x0        | Left meta |
-| LALT             | 2      | ro              | 0x0        | Left alt |
-| LSHIFT           | 1      | ro              | 0x0        | Left shift |
-| LCTRL            | 0      | ro              | 0x0        | Left control |
+| RMETA            | 7      | rw              | 0x0        | Right meta |
+| RALT             | 6      | rw              | 0x0        | Right alt |
+| RSHIFT           | 5      | rw              | 0x0        | Right shift |
+| RCTRL            | 4      | rw              | 0x0        | Right control |
+| LMETA            | 3      | rw              | 0x0        | Left meta |
+| LALT             | 2      | rw              | 0x0        | Left alt |
+| LSHIFT           | 1      | rw              | 0x0        | Left shift |
+| LCTRL            | 0      | rw              | 0x0        | Left control |
 
 Back to [Register map](#register-map-summary).
 
@@ -132,10 +133,10 @@ Reset value: 0x00000000
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
-| KEY_3            | 31:24  | ro              | 0x00       | Key 3 |
-| KEY_2            | 23:16  | ro              | 0x00       | Key 2 |
-| KEY_1            | 15:8   | ro              | 0x00       | Key 1 |
-| KEY_0            | 7:0    | ro              | 0x00       | Key 0 |
+| KEY_3            | 31:24  | rw              | 0x00       | Key 3 |
+| KEY_2            | 23:16  | rw              | 0x00       | Key 2 |
+| KEY_1            | 15:8   | rw              | 0x00       | Key 1 |
+| KEY_0            | 7:0    | rw              | 0x00       | Key 0 |
 
 Back to [Register map](#register-map-summary).
 
@@ -152,11 +153,11 @@ Reset value: 0x00000000
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
 | -                | 31:19  | -               | 0x000      | Reserved |
-| BTN_MIDDLE       | 18     | ro              | 0x0        | Middle button |
-| BTN_RIGHT        | 17     | ro              | 0x0        | Right button |
-| BTN_LEFT         | 16     | ro              | 0x0        | Left button |
-| DX               | 15:8   | ro              | 0x00       | Delta x |
-| DY               | 7:0    | ro              | 0x00       | Delta y |
+| BTN_MIDDLE       | 18     | rw              | 0x0        | Middle button |
+| BTN_RIGHT        | 17     | rw              | 0x0        | Right button |
+| BTN_LEFT         | 16     | rw              | 0x0        | Left button |
+| DX               | 15:8   | rw              | 0x00       | Delta x |
+| DY               | 7:0    | rw              | 0x00       | Delta y |
 
 Back to [Register map](#register-map-summary).
 
@@ -172,7 +173,7 @@ Reset value: 0x00000000
 
 | Name             | Bits   | Mode            | Reset      | Description |
 | :---             | :---   | :---            | :---       | :---        |
-| VALUE            | 31:0   | ro              | 0x00000000 | TBD |
+| VALUE            | 31:0   | rw              | 0x00000000 | TBD |
 
 Back to [Register map](#register-map-summary).
 

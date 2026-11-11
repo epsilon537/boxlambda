@@ -1,8 +1,15 @@
 #include "usb_hid_hal.h"
 
-void usb_hid_get_report(usb_hid_t *usb, USB_HID_Report_t *report) {
-    assert(report);
+void usb_hid_0_get_report(USB_HID_Report_t *report) {
+  assert(report);
 
-    report->report0 = usb->REPORT_0;
-    report->report1 = usb->REPORT_1;
+  report->report0 = USB_HID_0->REPORT_0;
+  report->report1 = USB_HID_0->REPORT_1;
+}
+
+void usb_hid_1_get_report(USB_HID_Report_t *report) {
+  assert(report);
+
+  report->report0 = USB_HID_0->REPORT_0;
+  report->report1 = USB_HID_0->REPORT_1;
 }

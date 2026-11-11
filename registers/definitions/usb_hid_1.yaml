@@ -40,7 +40,7 @@ regmap:
         reset: 0
         width: 2
         lsb: 0
-        access: ro
+        access: rw
         enums:
         -   name: NO_DEV
             description: No device
@@ -59,7 +59,13 @@ regmap:
         reset: 0
         width: 1
         lsb: 2
-        access: ro
+        access: rw
+    -   name: BLOCK_REPORTS
+        description: Block incoming USB reports.
+        reset: 0
+        width: 1
+        lsb: 3
+        access: rw
 -   name: KEY_MODS
     description: Key modifiers
     address: 12
@@ -69,49 +75,49 @@ regmap:
         reset: 0
         width: 1
         lsb: 0
-        access: ro
+        access: rw
     -   name: LSHIFT
         description: Left shift
         reset: 0
         width: 1
         lsb: 1
-        access: ro
+        access: rw
     -   name: LALT
         description: Left alt
         reset: 0
         width: 1
         lsb: 2
-        access: ro
+        access: rw
     -   name: LMETA
         description: Left meta
         reset: 0
         width: 1
         lsb: 3
-        access: ro
+        access: rw
     -   name: RCTRL
         description: Right control
         reset: 0
         width: 1
         lsb: 4
-        access: ro
+        access: rw
     -   name: RSHIFT
         description: Right shift
         reset: 0
         width: 1
         lsb: 5
-        access: ro
+        access: rw
     -   name: RALT
         description: Right alt
         reset: 0
         width: 1
         lsb: 6
-        access: ro
+        access: rw
     -   name: RMETA
         description: Right meta
         reset: 0
         width: 1
         lsb: 7
-        access: ro
+        access: rw
 -   name: KEYS
     description: Keys register
     address: 16
@@ -121,25 +127,25 @@ regmap:
         reset: 0
         width: 8
         lsb: 0
-        access: ro
+        access: rw
     -   name: KEY_1
         description: Key 1
         reset: 0
         width: 8
         lsb: 8
-        access: ro
+        access: rw
     -   name: KEY_2
         description: Key 2
         reset: 0
         width: 8
         lsb: 16
-        access: ro
+        access: rw
     -   name: KEY_3
         description: Key 3
         reset: 0
         width: 8
         lsb: 24
-        access: ro
+        access: rw
 -   name: MOUSE
     description: Mouse register
     address: 20
@@ -149,31 +155,31 @@ regmap:
         reset: 0
         width: 8
         lsb: 0
-        access: ro
+        access: rw
     -   name: DX
         description: Delta x
         reset: 0
         width: 8
         lsb: 8
-        access: ro
+        access: rw
     -   name: BTN_LEFT
         description: Left button
         reset: 0
         width: 1
         lsb: 16
-        access: ro
+        access: rw
     -   name: BTN_RIGHT
         description: Right button
         reset: 0
         width: 1
         lsb: 17
-        access: ro
+        access: rw
     -   name: BTN_MIDDLE
         description: Middle button
         reset: 0
         width: 1
         lsb: 18
-        access: ro
+        access: rw
 -   name: GAME
     description: Game pad register
     address: 24
@@ -183,7 +189,7 @@ regmap:
         reset: 0
         width: 32
         lsb: 0
-        access: ro
+        access: rw
 -   name: REPORT_0
     description: USB report 0 register
     address: 28
