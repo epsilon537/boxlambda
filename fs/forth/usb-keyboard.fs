@@ -191,14 +191,39 @@ create key-event-raw key-event-struct-raw allot
 
 ' (usb-hid-0-irq-handle) irq-usb_hid_0 !
 
+0 variable (usb-keyboard-no-repeat-keys)
+
+( k0 k1 k2 k3 -- )
+\ Specify 4 scancodes that won't repeat on long-press. 0 is dummy value.
+: usb-keyboard-no-repeat-keys!
+  0 ( k0 k1 k2 k3 acc )
+  4 0 do ( k0..kn acc )
+    swap ?dup if ( k0..kn-1 acc kn ) \ non-zero keys only.
+      swap 8 lshift ( k0..kn acc' )
+      or ( k0..kn-1 acc )
+    then
+  loop
+  (usb-keyboard-no-repeat-keys) !
+;
+
+( -- k0 k1 k2 k3 )
+: usb-keyboard-no-repeat-keys@
+  4 0 do
+    (usb-keyboard-no-repeat-keys) @ ( k0..kn-1 acc )
+    i 8 * rshift $ff and ( k0 .. kn )
+  loop
+;
+
 ( -- )
 : (report-keypress-repeat)
-  ." report-keypress-repeat" cr
   (new-keypress) @
   begin ( keypresses )
     dup while ( keypresses )
-      dup $ff and false true ( kepresses key upndown repeat )
-      (report-key-event)
+      dup $ff and ( keypresses key )
+      dup (usb-keyboard-no-repeat-keys) @ find-byte-in-word not if ( keypresses key )
+        dup false true (report-key-event) ( keypresses key )
+      then
+      drop
       8 rshift ( keypresses )
   repeat
   drop ( )
