@@ -18,7 +18,7 @@
   mtimer-seconds-to-clocks 1000000 s>d d/
 ;
 
-100 constant OS-TICK-MS
+10 constant OS-TICK-MS
 OS-TICK-MS mtimer-msec-to-clocks 2constant OS-TICK-CLOCKS
 
 0 variable os-ticks

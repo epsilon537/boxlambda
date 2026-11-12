@@ -1,7 +1,7 @@
 \ BoxLambda Forth
 \ USB HID dispatcher
 
-10 constant USB-KEYBOARD-DETECT-PERIOD
+100 constant USB-KEYBOARD-DETECT-PERIOD
 
 \ This variable if a USB keyboard is connected.
 false variable usb-keyboard-present
@@ -9,6 +9,11 @@ false variable usb-keyboard-present
 hook-os-timer @ variable (usb-prev-hook-timer)
 0 variable (usb-keyboard-detect-ticks)
 0 variable (usb-keyboard-report-count)
+
+50 variable usb-keyboard-repeat-start-ticks
+4 variable usb-keyboard-repeat-period-ticks
+0 variable (usb-keyboard-repeat-ticks)
+-1 variable (usb-keyboard-repeat-ticks-cmp)
 
 \ Enable/disable software test mode
 ( f -- )
@@ -19,7 +24,7 @@ hook-os-timer @ variable (usb-prev-hook-timer)
 : usb-keyboard-sw-test-mode? USB_HID_0_STATUS_BLOCK_REPORTS@ 0<> ;
 
 ( -- )
-: (keyboard-detect)
+: (usb-keyboard-detect)
   (usb-keyboard-detect-ticks) @ 1+ ( ticks )
   dup USB-KEYBOARD-DETECT-PERIOD >= if ( ticks )
     drop 0 ( ticks)
@@ -33,7 +38,7 @@ hook-os-timer @ variable (usb-prev-hook-timer)
     then ( ticks )
     0 (usb-keyboard-report-count) ! ( ticks )
   then
-  (usb-keyboard-detect-ticks) !
+  (usb-keyboard-detect-ticks) ! ( )
 ;
 
 0 variable (prev-keypress) \ The previous keys-pressed register value.
@@ -91,13 +96,14 @@ create key-event-raw key-event-struct-raw allot
 
 ' .key-event variable key-event-raw-hook
 
-( scancode upndown -- )
+( scancode upndown repeat -- )
 : (report-key-event)
-  swap key-event-raw .scancode c! ( upndown )
-  dup if (prev-keymods) else (new-keymods) then @ ( upndown keymods )
-  key-event-raw .modifiers c! ( upndown )
-  key-event-raw .upndown c! ( )
-  false key-event-raw .repeat c! ( )
+  -rot ( repeat scancode upndown )
+  swap key-event-raw .scancode c! ( repeat upndown )
+  dup if (prev-keymods) else (new-keymods) then @ ( repeat upndown keymods )
+  key-event-raw .modifiers c! ( repeat upndown )
+  key-event-raw .upndown c! ( repeat )
+  key-event-raw .repeat c! ( )
   key-event-raw-hook @ execute ( )
 ;
 
@@ -124,7 +130,8 @@ create key-event-raw key-event-struct-raw allot
       dup $ff and ( check key R: upndown against )
       dup r@ find-byte-in-word 0= if ( check key R: upndown against )
         \ mismatch -> key-event.
-        dup 1 rpick (report-key-event) ( check key R: upndown against )
+        dup 1 rpick false ( key upndown repeat )
+        (report-key-event) ( check key R: upndown against )
       then
       drop 8 rshift ( check' R: upndown against )
   repeat ( check R: upndown against )
@@ -146,6 +153,16 @@ create key-event-raw key-event-struct-raw allot
   false (process-keychanges) ( )
 ;
 
+( v -- )
+: (usb-keyboard-repeat-timer-start)
+  (usb-keyboard-repeat-ticks-cmp) !
+  0 (usb-keyboard-repeat-ticks) ! \ Restart the timer
+;
+
+: (usb-keyboard-repeat-timer-stop)
+  -1 (usb-keyboard-repeat-ticks-cmp) !
+;
+
 ( -- )
 : (process-keyreport)
   (update-keymods)
@@ -153,6 +170,11 @@ create key-event-raw key-event-struct-raw allot
   (new-keypress) @ (prev-keypress) @ <> if \ any key-press changes?
     (process-keyups)
     (process-keydns)
+    (new-keypress) @ if \ any keys pressed? -> (re)start the repeat timer.
+      usb-keyboard-repeat-start-ticks @ (usb-keyboard-repeat-timer-start)
+    else \ no keys pressed currently -> cancel repeat timer
+      (usb-keyboard-repeat-timer-stop)
+    then
   then
 ;
 
@@ -170,9 +192,31 @@ create key-event-raw key-event-struct-raw allot
 ' (usb-hid-0-irq-handle) irq-usb_hid_0 !
 
 ( -- )
+: (report-keypress-repeat)
+  ." report-keypress-repeat" cr
+  (new-keypress) @
+  begin ( keypresses )
+    dup while ( keypresses )
+      dup $ff and false true ( kepresses key upndown repeat )
+      (report-key-event)
+      8 rshift ( keypresses )
+  repeat
+  drop ( )
+;
+
+: (usb-keyboard-repeat)
+  (usb-keyboard-repeat-ticks) @ 1+ ( ticks )
+  dup (usb-keyboard-repeat-ticks) ! ( ticks )
+  (usb-keyboard-repeat-ticks-cmp) @ u>= if ( )
+    usb-keyboard-repeat-period-ticks @ (usb-keyboard-repeat-timer-start)
+    (report-keypress-repeat)
+  then
+;
+
+( -- )
 : (usb-keyboard-os-tick)
-  (keyboard-detect)
-  drop
+  (usb-keyboard-detect)
+  (usb-keyboard-repeat)
   (usb-prev-hook-timer) @ execute
 ;
 
