@@ -23,7 +23,8 @@ end-structure
 \ Create an empty stack object of n elements.
 ( n "name" -- )
 : stack-create
-  create here >r 2 + cells allot ( R: stack ) \ Add 2 cells for stack-top and stack-end.
+  \ n elements starting at stack-base and room for the other struct fields.
+  create here >r 1- cells stack-struct + allot ( R: stack )
   here r@ .stack-end ! ( R: stack )
   r@ .stack-base r> .stack-top ! \ Stack is empty when stack-top == stack-base.
 ;
@@ -62,7 +63,7 @@ end-structure
 
 \ Returns the number of free elements left on the stack.
 ( stack -- n )
-: stack-free
+: stack-#free
   dup .stack-end @ swap .stack-top @ - 2 rshift
 ;
 

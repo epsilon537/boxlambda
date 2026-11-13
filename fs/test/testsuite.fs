@@ -174,18 +174,56 @@ T{ 1S 0S XOR -> 1S }T
 T{ 1S 1S XOR -> 0S }T
 
 \ ------------------------------------------------------------------------
+TESTING QUEUE OBJECTS
+
+T{ 4 queue-create testq -> }T
+T{ testq queue-max-depth -> 3 }T
+T{ testq queue-depth -> 0 }T
+T{ testq queue-#free -> 3 }T
+
+T{ 1 testq queue-push -> }T
+T{ testq queue-max-depth -> 3 }T
+T{ testq queue-depth -> 1 }T
+T{ testq queue-#free -> 2 }T
+
+2 testq queue-push
+3 testq queue-push
+[: 4 testq queue-push ;] try ' x-queue-obj-overflow = ?assert
+T{ testq queue-max-depth -> 3 }T
+T{ testq queue-depth -> 3 }T
+T{ testq queue-#free -> 0 }T
+
+T{ testq queue-pop -> 1 }T
+T{ testq queue-pop -> 2 }T
+T{ testq queue-pop -> 3 }T
+[: testq queue-pop ;] try ' x-queue-obj-underflow = ?assert
+T{ testq queue-max-depth -> 3 }T
+T{ testq queue-depth -> 0 }T
+T{ testq queue-#free -> 3 }T
+
+
+1 testq queue-push
+2 testq queue-push
+3 testq queue-push
+
+T{ testq queue-reset -> }T
+T{ testq queue-max-depth -> 3 }T
+T{ testq queue-depth -> 0 }T
+T{ testq queue-#free -> 3 }T
+
+\ ------------------------------------------------------------------------
 TESTING STACK OBJECTS
 
 T{ 4 stack-create teststack -> }T
 T{ teststack stack-max-depth -> 4 }T
 T{ teststack stack-depth -> 0 }T
-T{ teststack stack-free -> 4 }T
+T{ teststack stack-#free -> 4 }T
 T{ teststack stack-base -> teststack stack-top }T
 
 T{ 1 teststack stack-push -> }T
 T{ teststack stack-max-depth -> 4 }T
 T{ teststack stack-depth -> 1 }T
-T{ teststack stack-free -> 3 }T
+T{ teststack stack-#free -> 3 }T
 T{ teststack stack-base 1 cells+ -> teststack stack-top }T
 
 2 teststack stack-push
@@ -194,7 +232,7 @@ T{ teststack stack-base 1 cells+ -> teststack stack-top }T
 [: 5 teststack stack-push ;] try ' x-stack-obj-overflow = ?assert
 T{ teststack stack-max-depth -> 4 }T
 T{ teststack stack-depth -> 4 }T
-T{ teststack stack-free -> 0 }T
+T{ teststack stack-#free -> 0 }T
 T{ teststack stack-base 4 cells+ -> teststack stack-top }T
 
 T{ teststack stack-pop -> 4 }T
@@ -204,7 +242,7 @@ T{ teststack stack-pop -> 1 }T
 [: teststack stack-pop ;] try ' x-stack-obj-underflow = ?assert
 T{ teststack stack-max-depth -> 4 }T
 T{ teststack stack-depth -> 0 }T
-T{ teststack stack-free -> 4 }T
+T{ teststack stack-#free -> 4 }T
 T{ teststack stack-base -> teststack stack-top }T
 
 1 teststack stack-push
@@ -224,13 +262,13 @@ T{ 7 teststack stack-find -> 0 }T
 2 teststack stack-find teststack >stack-top
 T{ teststack stack-max-depth -> 4 }T
 T{ teststack stack-depth -> 1 }T
-T{ teststack stack-free -> 3 }T
+T{ teststack stack-#free -> 3 }T
 T{ teststack stack-base cell+ -> teststack stack-top }T
 
 T{ teststack stack-base teststack >stack-top -> }T
 T{ teststack stack-max-depth -> 4 }T
 T{ teststack stack-depth -> 0 }T
-T{ teststack stack-free -> 4 }T
+T{ teststack stack-#free -> 4 }T
 T{ teststack stack-base -> teststack stack-top }T
 
 \ ------------------------------------------------------------------------

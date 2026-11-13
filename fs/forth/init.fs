@@ -7,6 +7,7 @@ include /forth/os-timer.fs
 eint
 os-timer-start
 
+include /forth/queue.fs
 include /forth/usb_hid_0_regs.fs
 include /forth/gpio_regs.fs
 include /forth/reset_regs.fs
