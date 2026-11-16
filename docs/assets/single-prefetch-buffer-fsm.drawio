@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36">
   <diagram name="Page-1" id="yhlD2b_mrxGAm6N7oatX">
-    <mxGraphModel dx="2558" dy="2223" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2264" dy="2030" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -17,7 +17,7 @@
           <mxGeometry height="390" width="750" x="40" y="520" as="geometry" />
         </mxCell>
         <mxCell id="_pQ5w_bISgEqmRKUSHvl-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;fillColor=none;strokeWidth=3;fontStyle=1" value="wait_for_valid_br_req_pending" vertex="1">
-          <mxGeometry height="238" width="390" x="-390" y="670" as="geometry" />
+          <mxGeometry height="310" width="390" x="-390" y="670" as="geometry" />
         </mxCell>
         <mxCell id="_pQ5w_bISgEqmRKUSHvl-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=none;align=left;strokeWidth=3;fontStyle=1" value="wait_for_ready" vertex="1">
           <mxGeometry height="470" width="450" x="140" y="930" as="geometry" />
@@ -145,7 +145,7 @@
             <mxPoint x="-120" y="490" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="_pQ5w_bISgEqmRKUSHvl-63" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" value="instr_rvalid_i" vertex="1">
+        <mxCell id="_pQ5w_bISgEqmRKUSHvl-63" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" value="instr_rvalid_i, branch_i" vertex="1">
           <mxGeometry height="60" width="130" x="-168" y="818" as="geometry" />
         </mxCell>
         <mxCell id="_pQ5w_bISgEqmRKUSHvl-64" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" value="ready_i,branch_i,instr_rvalid_i+err_i" vertex="1">
@@ -177,7 +177,7 @@
         <mxCell id="_pQ5w_bISgEqmRKUSHvl-72" parent="1" style="strokeWidth=1;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;" value="instr_addr_r&amp;lt;-br_pending_addr_r" vertex="1">
           <mxGeometry height="60" width="180" x="-380" y="818" as="geometry" />
         </mxCell>
-        <mxCell id="_pQ5w_bISgEqmRKUSHvl-73" edge="1" parent="1" source="_pQ5w_bISgEqmRKUSHvl-63" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="_pQ5w_bISgEqmRKUSHvl-72" value="1">
+        <mxCell id="_pQ5w_bISgEqmRKUSHvl-73" edge="1" parent="1" source="_pQ5w_bISgEqmRKUSHvl-63" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="_pQ5w_bISgEqmRKUSHvl-72" value="1,0">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
             <mxPoint x="-340" y="748" as="sourcePoint" />
             <mxPoint x="-290" y="698" as="targetPoint" />
@@ -327,7 +327,7 @@
             <mxPoint x="340" y="470" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="_pQ5w_bISgEqmRKUSHvl-126" edge="1" parent="1" source="_pQ5w_bISgEqmRKUSHvl-63" style="endArrow=classic;html=1;rounded=0;" value="0">
+        <mxCell id="_pQ5w_bISgEqmRKUSHvl-126" edge="1" parent="1" source="_pQ5w_bISgEqmRKUSHvl-63" style="endArrow=classic;html=1;rounded=0;" value="0,x">
           <mxGeometry height="50" relative="1" width="50" x="0.4948" as="geometry">
             <mxPoint as="offset" />
             <Array as="points">
@@ -437,6 +437,21 @@
         </mxCell>
         <mxCell id="3w94mnWVsIXNvxHGlytu-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="instr_req_o=0&lt;div&gt;instr_addr_o=instr_addr_r&lt;/div&gt;&lt;div&gt;addr_o=instr_addr_r&lt;/div&gt;&lt;div&gt;valid_o=0, err_o=0&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="180" x="290.63" y="960" as="geometry" />
+        </mxCell>
+        <mxCell id="deyXcqYMp2ngYJSGnvHG-1" parent="1" style="strokeWidth=1;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;" value="instr_addr_r&amp;lt;-addr_i" vertex="1">
+          <mxGeometry height="60" width="180" x="-380" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="deyXcqYMp2ngYJSGnvHG-2" edge="1" parent="1" source="_pQ5w_bISgEqmRKUSHvl-63" style="endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;" target="deyXcqYMp2ngYJSGnvHG-1" value="1,1">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="-30" y="730" as="sourcePoint" />
+            <mxPoint x="20" y="680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="deyXcqYMp2ngYJSGnvHG-3" edge="1" parent="1" source="deyXcqYMp2ngYJSGnvHG-1" style="endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="-650" y="980" as="sourcePoint" />
+            <mxPoint x="-440" y="850" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>

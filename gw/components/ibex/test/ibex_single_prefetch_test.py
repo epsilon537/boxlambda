@@ -274,8 +274,6 @@ async def ibex_no_prefetch_test(dut):
     # return valid w 1 cycle delay, assert branch_i at the same time
     await RisingEdge(dut.clk_i)
     dut.branch_i.value = 1
-    # save the old branch address before generating a new one.
-    oldBranchAddr = branchAddr
     branchAddr = random.randint(0, 0x3FFFFFFF) * 4
     dut.instr_rvalid_i.value = 1
     dut.instr_rdata_i.value = random.randint(0, 0xFFFFFFFF)
@@ -417,6 +415,62 @@ async def ibex_no_prefetch_test(dut):
 
     await RisingEdge(dut.clk_i)
     assert dut.valid_o.value == 0
+
+    # Tenth transaction: regular non-branch transaction interrupted by a branch between grant and valid
+    # interrupted yet again by a branch right on valid
+    instr_req_may_deassert = True
+    await RisingEdge(dut.clk_i)
+
+    # grant one the next cycle
+    await RisingEdge(dut.clk_i)
+    instr_req_may_deassert = True
+    dut.instr_gnt_i.value = 1
+
+    await RisingEdge(dut.clk_i)
+    dut.instr_gnt_i.value = 0
+
+    # Here's the interrupting branch request
+    dut.branch_i.value = 1
+    branchAddr = random.randint(0, 0x3FFFFFFF) * 4
+    dut.addr_i.value = branchAddr
+    valid_o_must_not_assert = (
+        True  # indicate to the valid_o monitoring task that valid_o must not assert
+    )
+
+    # return instr_rvalid w 1 cycle delay - this valid doesn't not propagate to valid_o.
+    await RisingEdge(dut.clk_i)
+    dut.branch_i.value = 0
+    dut.addr_i.value = 0
+    await Timer(1, "ns")
+    assert dut.addr_o.value == branchAddr
+    dut.instr_rvalid_i.value = 1
+    branchAddr = random.randint(0, 0x3FFFFFFF) * 4
+    dut.addr_i.value = branchAddr
+    dut.instr_rdata_i.value = random.randint(0, 0xFFFFFFFF)
+    dut.branch_i.value = 1
+    await RisingEdge(dut.clk_i)
+    await Timer(1, "ns")
+    assert dut.instr_req_o.value == 1
+    assert dut.instr_addr_o.value == branchAddr
+    dut.instr_rvalid_i.value = 0
+    dut.branch_i.value = 0
+
+    # grant right away
+    instr_req_may_deassert = True
+    dut.instr_gnt_i.value = 1
+
+    await RisingEdge(dut.clk_i)
+    dut.instr_gnt_i.value = 0
+
+    # return valid w 1 cycle delay - this one is in response to the interrupting branch request
+    await RisingEdge(dut.clk_i)
+    dut.instr_rvalid_i.value = 1
+    valid_o_must_not_assert = False  # valid_o is allowed to assert again
+    dut.instr_rdata_i.value = random.randint(0, 0xFFFFFFFF)
+    await Timer(1, "ns")
+    assert dut.valid_o.value == 1
+    assert dut.addr_o.value == branchAddr
+    assert dut.rdata_o.value == dut.instr_rdata_i.value
 
     instr_req_o_task.kill()
     valid_o_task.kill()

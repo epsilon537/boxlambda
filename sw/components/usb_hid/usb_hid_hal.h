@@ -24,6 +24,8 @@ typedef struct USB_HID_Report_t {
 void usb_hid_0_get_report(OUT USB_HID_Report_t *report);
 void usb_hid_1_get_report(OUT USB_HID_Report_t *report);
 
+void usb_hid_reset();
+
 #ifdef __cplusplus
 }
 #endif

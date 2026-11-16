@@ -22,6 +22,7 @@ sources:
       YM2149: ~
       SDSPI: ~
       DRAM: ~
+      USB_HID: ~
       VERA: ~
       SPIFLASH: ~
       IBEX_BOOT_ADDR: 32'h11500000
@@ -37,6 +38,7 @@ sources:
       YM2149: ~
       SDSPI: ~
       DRAM: ~
+      USB_HID: ~
       VERA: ~
       SPIFLASH: ~
       IBEX_BOOT_ADDR: 32'h00000000

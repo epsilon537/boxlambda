@@ -22,7 +22,7 @@ void __attribute__((naked)) _i2c_irq_handler(void);
 void __attribute__((naked)) _uart_irq_handler(void);
 void __attribute__((naked)) _dfx_irq_handler(void);
 
-//void _timer_irq_handler(void) __attribute__((interrupt("machine")));
+// void _timer_irq_handler(void) __attribute__((interrupt("machine")));
 void __attribute__((naked)) _timer_irq_handler(void);
 
 /* Exception Handler */
@@ -33,9 +33,14 @@ static inline void disable_global_irq(void) {
   CSR_CLR_BITS_IMM_MSTATUS(MSTATUS_MIE_BIT_MASK);
 }
 
-/*Enable the global interrupt line at CPU level.*/
+/* Enable the global interrupt line at CPU level.*/
 static inline void enable_global_irq(void) {
   CSR_SET_BITS_IMM_MSTATUS(MSTATUS_MIE_BIT_MASK);
+}
+
+/* Check if global interrupt is enabled. */
+static inline bool global_irq_is_enabled() {
+  return (csr_read_mstatus() & MSTATUS_MIE_BIT_MASK) != 0;
 }
 
 /*RISCV Interrupt IDs.*/
@@ -65,26 +70,24 @@ static inline void enable_global_irq(void) {
 #define IRQ_ID_USB_HID_0 IRQ_ID_FAST_07
 #define IRQ_ID_I2C IRQ_ID_FAST_06
 #define IRQ_ID_UART IRQ_ID_FAST_05
-//IRQ_ID_FAST_04, 03 and 02 are currently not assigned.
-//#define IRQ_ID_DFX IRQ_ID_FAST_01
-//#define IRQ_ID_ICAP IRQ_ID_FAST_00
+// IRQ_ID_FAST_04, 03 and 02 are currently not assigned.
+// #define IRQ_ID_DFX IRQ_ID_FAST_01
+// #define IRQ_ID_ICAP IRQ_ID_FAST_00
 
 /* Enable a specific interrupt ID at CPU level. Note that for interrupts
  * to go through, the global interrupt line also needs to be enabled
  * (enable_global_irq).*/
 static inline void enable_irq(uint32_t irq_id) {
-  csr_set_bits_mie(1<<irq_id);
+  csr_set_bits_mie(1 << irq_id);
 }
 
 /* Disable a specific interrupt ID at CPU level. */
 static inline void disable_irq(uint32_t irq_id) {
-  csr_clr_bits_mie(1<<irq_id);
+  csr_clr_bits_mie(1 << irq_id);
 }
 
 /* Disable all interrupt ids at CPU level.*/
-static inline void disable_all_irqs(void) {
-  csr_clr_bits_mie(~0u);
-}
+static inline void disable_all_irqs(void) { csr_clr_bits_mie(~0u); }
 
 #ifdef __cplusplus
 }

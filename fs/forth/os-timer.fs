@@ -48,3 +48,13 @@ OS-TICK-MS mtimer-msec-to-clocks 2constant OS-TICK-CLOCKS
   mie irq-id-timer 1<< bic mie!
 ;
 
+( ms -- )
+: sleep
+  mtimer-msec-to-clocks ( ud )
+  mtime64 d+ ( ud )
+  begin
+    2dup mtime64 d< ( ud )
+  until
+  2drop
+;
+

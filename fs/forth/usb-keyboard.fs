@@ -52,6 +52,8 @@ $2 constant KEYMOD-SHIFT
 $4 constant KEYMOD-ALT
 $8 constant KEYMOD-WIN
 
+32 queue-create (usb-keyboard-q)
+
 \ Read keymods register and fold left/right.
 ( -- keymods )
 : (read-keymods-fold)
@@ -73,7 +75,14 @@ $8 constant KEYMOD-WIN
 ( -- )
 : (update-keypress)
   (new-keypress) @ (prev-keypress) !
-  (read-keypress) (new-keypress) !
+  (usb-keyboard-q) queue-#free 8 < if
+    \ If the keyboard queue is nearly full, don't process new keypresses.
+    \ Act as if all keys are released. Nearly full to allow the key release events
+    \ to go through.
+    0 (new-keypress) !
+  else
+    (read-keypress) (new-keypress) !
+  then
 ;
 
 begin-structure key-event-struct-raw
@@ -85,16 +94,25 @@ end-structure
 
 create key-event-raw key-event-struct-raw allot
 
-( -- )
-: .key-event
-  key-event-raw .modifiers c@ key-event-raw .scancode c@
+(  key-event-raw -- )
+: usb-keyboard-event.
+  >r
+  r@ .modifiers c@ r@ .scancode c@
   s" Raw key event: scancode: $%x modifiers: $%x " printf
-  key-event-raw .upndown c@ if ." up " else ." down " then
-  key-event-raw .repeat c@ if ." repeat" then
+  r@ .upndown c@ if ." up " else ." down " then
+  r@ .repeat c@ if ." repeat" then
   cr
+  rdrop
 ;
 
-' .key-event variable key-event-raw-hook
+( -- )
+: (usb-keyboard-q-hook)
+  key-event-raw usb-keyboard-event. ." IRQ" cr
+  \ Pick up all 4 bytes at once.
+  \ key-event-raw .scancode @ (usb-keyboard-q) queue-push
+;
+
+' (usb-keyboard-q-hook) variable key-event-raw-hook
 
 ( scancode upndown repeat -- )
 : (report-key-event)
@@ -261,5 +279,52 @@ create key-event-raw key-event-struct-raw allot
   0 USB_HID_0_IEN_USB_REPORT!
   mie irq-id-usb-hid-0 1<< bic mie!
   ['] (usb-prev-hook-timer) hook-os-timer !
+;
+
+create (usb-keyboard-poll-latest-event) key-event-struct-raw allot
+
+( -- f )
+: usb-keyboard-overflow?
+  (usb-keyboard-q) queue-#free 8 <
+;
+
+( -- n )
+: usb-keyboard-#events-pending
+  (usb-keyboard-q) queue-depth
+;
+
+\ Non-blocking
+( -- event|0 )
+: usb-keyboard-poll-raw-event
+  (usb-keyboard-q) queue-depth 0> if ( )
+    (usb-keyboard-q) queue-pop ( event-val )
+    \ store all 4 bytes at once.
+    (usb-keyboard-poll-latest-event) .scancode ! ( )
+    (usb-keyboard-poll-latest-event) ( event )
+  else
+    0
+  then ( event|0 )
+;
+
+\ Blocking
+( -- event )
+: usb-keyboard-get-raw-event
+  begin
+    usb-keyboard-poll-raw-event ( event|0)
+  until ( )
+  (usb-keyboard-poll-latest-event) ( event )
+;
+
+: test
+  begin
+    ." Events pending: " usb-keyboard-#events-pending . cr
+    usb-keyboard-overflow? if
+      ." usb keyboard overflow!" cr
+    then
+    usb-keyboard-poll-raw-event ?dup if
+      usb-keyboard-event. cr
+    then
+    200 sleep
+  again
 ;
 
