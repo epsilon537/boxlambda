@@ -147,6 +147,11 @@ static void check_usb_0(uint32_t &usb_status_prev,
     }
   }
 
+  // Did we detect a report error? (read-reset)
+  uint32_t err_cnt = USB_HID_0->ERR_CNT;
+  if (err_cnt)
+    printf("USB0 report errors: %d\n", err_cnt);
+
   // Did we receive a new report (signalled via IRQ)?
   if (usb_report_irq_fired) {
     uint32_t key_mod;
@@ -247,6 +252,10 @@ static void check_usb_1(uint32_t &usb_status_prev,
       prevTimeClocks = curTimeClocks;
     }
   }
+
+  uint32_t err_cnt = USB_HID_1->ERR_CNT;
+  if (err_cnt)
+    printf("USB1 report errors: %d\n", err_cnt);
 
   // Did we receive a new report (signalled via IRQ)?
   if (usb_report_irq_fired) {

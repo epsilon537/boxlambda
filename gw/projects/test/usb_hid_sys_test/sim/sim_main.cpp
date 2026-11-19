@@ -1,11 +1,11 @@
-#include <getopt.h>
 #include <fcntl.h>
+#include <getopt.h>
 
 // For std::unique_ptr
 #include <memory>
 
-#include <string>
 #include <stdio.h>
+#include <string>
 
 // Include common routines
 #include <verilated.h>
@@ -15,7 +15,7 @@
 
 #include "verilated_fst_c.h"
 
-//To get access to the verilated model internals.
+// To get access to the verilated model internals.
 #include "Vmodel___024root.h"
 
 // From wbuart32
@@ -33,11 +33,11 @@ int prev_ledr_1 = 0;
 
 int ledg_acc = 0;
 
-//Uart co-simulation from wbuart32.
+// Uart co-simulation from wbuart32.
 std::unique_ptr<UARTSIM> uart{new UARTSIM(0)};
 
 // Used for tracing.
-VerilatedFstC* tfp = new VerilatedFstC;
+VerilatedFstC *tfp = new VerilatedFstC;
 
 // Construct a VerilatedContext to hold simulation time, etc.
 // Multiple modules (made later below with Vtop) may share the same
@@ -45,19 +45,20 @@ VerilatedFstC* tfp = new VerilatedFstC;
 // they should be independent from each other.
 std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
 
-// Construct the Verilated model, from Vmodel.h generated from Verilating this project.
-// Using unique_ptr is similar to "Vmodel* top = new Vmodel" then deleting at end.
+// Construct the Verilated model, from Vmodel.h generated from Verilating this
+// project. Using unique_ptr is similar to "Vmodel* top = new Vmodel" then
+// deleting at end.
 std::unique_ptr<Vmodel> top{new Vmodel{contextp.get()}};
 
-//Initialize UART rx buffer
+// Initialize UART rx buffer
 std::string uartRxString;
 
 // Legacy function required only so linking works on Cygwin and MSVC++
 double sc_time_stamp() { return 0; }
 
-//Clean-up logic.
+// Clean-up logic.
 static void cleanup() {
-  //Close trace file.
+  // Close trace file.
   if (tracing_enable)
     tfp->close();
 
@@ -65,7 +66,7 @@ static void cleanup() {
   top->final();
 }
 
-//One clock cycle of the 100MHz clock.
+// One clock cycle of the 100MHz clock.
 static void tick100(void) {
   top->clk_100 = 1;
   contextp->timeInc(1);
@@ -80,37 +81,42 @@ static void tick100(void) {
     tfp->dump(contextp->time());
 }
 
-//One clock cycle of the 50MHz clock.
+// One clock cycle of the 50MHz clock.
 static void tick50(void) {
-  //Two 100MHz clock cycles in one 50MHz clock cycle.
+  // Two 100MHz clock cycles in one 50MHz clock cycle.
   top->clk_50 = 1;
   tick100();
 
   top->clk_50 = 0;
   tick100();
 
-  //Set GPIO bit 4 (switch 0) to indicate to SW we want rotating keyboard LEDs
+  // Set GPIO bit 4 (switch 0) to indicate to SW we want rotating keyboard LEDs
   top->gp_in = 0x000010;
 
-  //Feed our model's uart_tx signal and baud rate to the UART co-simulator.
-  //and feed the UART co-simulator output to our model
-  top->uart_rx = (*uart)(top->uart_tx,
-  top->rootp->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wbuart_inst__DOT__uart_setup);
+  // Feed our model's uart_tx signal and baud rate to the UART co-simulator.
+  // and feed the UART co-simulator output to our model
+  top->uart_rx = (*uart)(
+      top->uart_tx,
+      top->rootp
+          ->sim_main__DOT__dut__DOT__boxlambda_soc_inst__DOT__wbuart_inst__DOT__uart_setup);
 
-  //Detect and print changes to UART
-  if (uart->get_rx_string().back() == '\n')  {
+  // Detect and print changes to UART
+  if (uart->get_rx_string().back() == '\n') {
     printf("DUT: %s", uart->get_rx_string().c_str());
 
-    //Accumulate the UART output in a uartRxString buffer, for analysis when the test has completed.
+    // Accumulate the UART output in a uartRxString buffer, for analysis when
+    // the test has completed.
     uartRxString += uart->get_rx_string();
 
     uart->clear_rx_string();
   }
 
-  //These LEDS come from the USB device cores. The ledg LEDS correspond to USB keyboard LEDs.
+  // These LEDS come from the USB device cores. The ledg LEDS correspond to USB
+  // keyboard LEDs.
   if (top->ledg_1 != prev_ledg_1) {
     printf("SIM: ledg_1 = %d\n", top->ledg_1);
-    ledg_acc |= top->ledg_1; //Keep track of which keyboard LEDs have been turned on.
+    ledg_acc |=
+        top->ledg_1; // Keep track of which keyboard LEDs have been turned on.
     prev_ledg_1 = top->ledg_1;
   }
 
@@ -136,7 +142,7 @@ static void tick50(void) {
 static void tick6(void) {
   top->clk_6 = 1;
 
-  //8 50MHz clock cycles in one 6.25MHz clock cycle.
+  // 8 50MHz clock cycles in one 6.25MHz clock cycle.
 
   tick50();
   tick50();
@@ -151,147 +157,158 @@ static void tick6(void) {
   tick50();
 }
 
-//We have a 6.25Mhz clock (for USB), a 50MHz clock, and a 100MHz clock.
-//Advance simulation by one 6.25Mhz clock cycle.
-static void tick(void) {
-  tick6();
-}
+// We have a 6.25Mhz clock (for USB), a 50MHz clock, and a 100MHz clock.
+// Advance simulation by one 6.25Mhz clock cycle.
+static void tick(void) { tick6(); }
 
-int main(int argc, char** argv, char** env) {
-    // Prevent unused variable warnings
-    if (false && argc && argv && env) {}
+int main(int argc, char **argv, char **env) {
+  // Prevent unused variable warnings
+  if (false && argc && argv && env) {
+  }
 
-    // Set debug level, 0 is off, 9 is highest presently used
-    // May be overridden by commandArgs argument parsing
-    contextp->debug(0);
+  // Set debug level, 0 is off, 9 is highest presently used
+  // May be overridden by commandArgs argument parsing
+  contextp->debug(0);
 
-    // Randomization reset policy
-    // May be overridden by commandArgs argument parsing
-    contextp->randReset(2);
+  // Randomization reset policy
+  // May be overridden by commandArgs argument parsing
+  contextp->randReset(2);
 
-    // Verilator must compute traced signals
-    contextp->traceEverOn(true);
+  // Verilator must compute traced signals
+  contextp->traceEverOn(true);
 
-    // Pass arguments so Verilated code can see them, e.g. $value$plusargs
-    // This needs to be called before you create any model
-    contextp->commandArgs(argc, argv);
+  // Pass arguments so Verilated code can see them, e.g. $value$plusargs
+  // This needs to be called before you create any model
+  contextp->commandArgs(argc, argv);
 
-    bool attach_debugger = false;
-    bool interactive_mode = false;
+  bool attach_debugger = false;
+  bool interactive_mode = false;
 
-    // Command line processing
-    for(;;) {
-      switch(getopt(argc, argv, "aith")) {
-      case 'a':
-        attach_debugger = true;
-        continue;
-      case 't':
-        printf("SIM: Tracing enabled\n");
-        tracing_enable = true;
-        continue;
-      case 'i':
-        printf("SIM: Interactive mode enabled\n");
-        interactive_mode = true;
-        continue;
-      case '?':
-      case 'h':
-      default :
-        printf("SIM: \nVmodel Usage:\n");
-        printf("SIM: -h: print this help\n");
-        printf("SIM: -a: attach debugger.\n");
-        printf("SIM: -t: enable tracing.\n");
-        printf("SIM: -i: enable interactive mode.\n");
-        return 0;
-        break;
+  // Command line processing
+  for (;;) {
+    switch (getopt(argc, argv, "aith")) {
+    case 'a':
+      attach_debugger = true;
+      continue;
+    case 't':
+      printf("SIM: Tracing enabled\n");
+      tracing_enable = true;
+      continue;
+    case 'i':
+      printf("SIM: Interactive mode enabled\n");
+      interactive_mode = true;
+      continue;
+    case '?':
+    case 'h':
+    default:
+      printf("SIM: \nVmodel Usage:\n");
+      printf("SIM: -h: print this help\n");
+      printf("SIM: -a: attach debugger.\n");
+      printf("SIM: -t: enable tracing.\n");
+      printf("SIM: -i: enable interactive mode.\n");
+      return 0;
+      break;
 
-      case -1:
-        break;
-      }
-
+    case -1:
       break;
     }
 
-    //Trace file
-    if (tracing_enable) {
-      top->trace(tfp, 99); //Trace 99 levels deep.
-      tfp->open("simx.fst");
+    break;
+  }
+
+  // Trace file
+  if (tracing_enable) {
+    top->trace(tfp, 99); // Trace 99 levels deep.
+    tfp->open("simx.fst");
+  }
+
+  jtag_set_bypass(!attach_debugger);
+
+  // Assert reset for a couple of clock cycles.
+  top->clk_100 = 0;
+  top->clk_50 = 0;
+  top->clk_6 = 0;
+
+  top->uart_rx = 0;
+
+  top->rst_ni = 0;
+  for (int ii = 0; ii < 32; ii++) {
+    tick();
+  }
+
+  // Take the system out of reset.
+  top->rst_ni = 1;
+
+  // When not in interactive mode, simulate for 200000000 timeprecision periods
+  while (interactive_mode || (contextp->time() < 200000000)) {
+    // Evaluate model
+    tick();
+  }
+
+  // Count keyboard reports in the UARTRxString buffer.
+  int numKeyboardReports = 0;
+  int pos = 0;
+
+  while (pos != std::string::npos) {
+    pos = uartRxString.find("Keyboard report", pos);
+    if (pos != std::string::npos) {
+      ++numKeyboardReports;
+      ++pos;
     }
+  }
 
-    jtag_set_bypass(!attach_debugger);
+  // Count error reports in the UARTRxString buffer.
+  int numErrorReports = 0;
+  pos = 0;
 
-    // Assert reset for a couple of clock cycles.
-    top->clk_100 = 0;
-    top->clk_50 = 0;
-    top->clk_6 = 0;
-
-    top->uart_rx = 0;
-
-    top->rst_ni = 0;
-    for (int ii=0;ii<32;ii++) {
-      tick();
+  while (pos != std::string::npos) {
+    pos = uartRxString.find("report errors", pos);
+    if (pos != std::string::npos) {
+      ++numErrorReports;
+      ++pos;
     }
+  }
+  // Count mouse reports in the UARTRxString buffer.
+  int numMouseReports = 0;
+  pos = 0;
 
-    //Take the system out of reset.
-    top->rst_ni = 1;
-
-    // When not in interactive mode, simulate for 200000000 timeprecision periods
-    while (interactive_mode || (contextp->time() < 200000000)) {
-      // Evaluate model
-      tick();
+  while (pos != std::string::npos) {
+    pos = uartRxString.find("Mouse report", pos);
+    if (pos != std::string::npos) {
+      ++numMouseReports;
+      ++pos;
     }
+  }
 
-    //Count keyboard reports in the UARTRxString buffer.
-    int numKeyboardReports = 0;
-    int pos=0;
+  // Count 'Led Report IRQ not received' reports in the UARTRxString buffer.
+  int numMissingIRQs = 0;
+  pos = 0;
 
-    while (pos != std::string::npos) {
-      pos = uartRxString.find("Keyboard report", pos);
-      if (pos != std::string::npos) {
-        ++numKeyboardReports;
-        ++pos;
-      }
+  while (pos != std::string::npos) {
+    pos = uartRxString.find("Led Report IRQ not received", pos);
+    if (pos != std::string::npos) {
+      ++numMissingIRQs;
+      ++pos;
     }
+  }
 
-    //Count mouse reports in the UARTRxString buffer.
-    int numMouseReports = 0;
-    pos = 0;
+  printf("SIM: numErrorReports: %d, numKeyboardReports: %d, "
+         "numMouseReports: %d, LED acc.: 0x%x\n",
+         numErrorReports, numKeyboardReports, numMouseReports, ledg_acc);
 
-    while (pos != std::string::npos) {
-      pos = uartRxString.find("Mouse report", pos);
-      if (pos != std::string::npos) {
-        ++numMouseReports;
-        ++pos;
-      }
-    }
+  int res = 0;
 
-    //Count 'Led Report IRQ not received' reports in the UARTRxString buffer.
-    int numMissingIRQs = 0;
-    pos = 0;
+  // We want at least 10 keyboard reports, 10 mouse reports, 0 missing IRQs and
+  // all leds turned on at least once;
+  if ((numKeyboardReports >= 10) && (numMouseReports >= 10) &&
+      (numMissingIRQs == 0) && (ledg_acc == 0x7) && (numErrorReports >= 10)) {
+    printf("SIM: Test passed.\n");
+    res = 0;
+  } else {
+    printf("SIM: Test failed.\n");
+    res = 1;
+  }
 
-    while (pos != std::string::npos) {
-      pos = uartRxString.find("Led Report IRQ not received", pos);
-      if (pos != std::string::npos) {
-        ++numMissingIRQs;
-        ++pos;
-      }
-    }
-
-    int res = 0;
-
-    //We want at least 10 keyboard reports, 10 mouse reports, 0 missing IRQs and all leds turned on at least once;
-    if ((numKeyboardReports >= 10) &&
-        (numMouseReports >= 10) &&
-        (numMissingIRQs == 0) &&
-        (ledg_acc == 0x7)) {
-      printf("SIM: Test passed.\n");
-      res = 0;
-    }
-    else {
-      printf("SIM: Test failed: numKeyboardReports: %d, numMouseReports: %d, LED acc.: 0x%x\n",
-            numKeyboardReports, numMouseReports, ledg_acc);
-      res = 1;
-    }
-
-    cleanup();
-    return res;
+  cleanup();
+  return res;
 }

@@ -20,6 +20,7 @@ module wb_usb_hid_host (
 
     input wire [1:0] usb_typ,  //USB type
     input wire usb_report_stb,  //USB report strobe indication
+    input wire usb_report_err_stb,  //USB report error strobe indication
     input wire usb_conn_err,  //USB connection error
 
     // keyboard signals
@@ -85,9 +86,12 @@ module wb_usb_hid_host (
 
   reg [63:0] wb_usb_dbg_hid_report;  // last HID report register.
 
+  reg [31:0] wb_usb_err_cnt;  // USB report error counter.
+  reg reset_usb_err_cnt;
+
   // Wishbone
   reg do_ack_wbs;
-  wire do_wbs_wr_reg;
+  wire do_wbs_wr_reg, do_wbs_rd_reg;
   wire unused = &{wbs_sel};
 
   //IRQ signalling.
@@ -95,6 +99,7 @@ module wb_usb_hid_host (
 
   //WB slave handshake.
   assign do_wbs_wr_reg = wbs_cyc && wbs_stb && wbs_we;
+  assign do_wbs_rd_reg = wbs_cyc && wbs_stb && !wbs_we;
   assign wbs_ack = do_ack_wbs & wbs_cyc;
   assign wbs_stall = 1'b0;
   assign wbs_err = 1'b0;
@@ -112,6 +117,8 @@ module wb_usb_hid_host (
       wb_usb_typ <= 2'b00;
       wb_usb_conn_err <= 1'b0;
       wb_usb_block_reports <= 1'b0;
+      wb_usb_err_cnt <= 32'b0;
+      reset_usb_err_cnt <= 1'b0;
     end else begin
       //WBS ack on next clock cycle.
       do_ack_wbs <= 1'b0;
@@ -120,6 +127,7 @@ module wb_usb_hid_host (
       end
 
       update_leds_stb <= 1'b0;
+
       //WBS register writes
       //A write to WB register 9 triggers an update_led action to the usb_hid_host module.
       //The usb_hid_host module will send the new led bitmap to the USB device using a SetReport transaction.
@@ -153,6 +161,21 @@ module wb_usb_hid_host (
 
       //update_led acknowledge received. Signal ISR.
       if (ack_update_leds_stb) wb_usb_isr[1] <= 1'b1;
+
+      //WBS register read-reset report error counter.
+      if (do_wbs_rd_reg && (wbs_adr == 4'd10)) begin
+        reset_usb_err_cnt <= 1'b1;
+      end
+
+      if (reset_usb_err_cnt && do_ack_wbs) begin
+        wb_usb_err_cnt <= 32'b0;
+        reset_usb_err_cnt <= 1'b0;
+      end
+
+      if (usb_report_err_stb) begin
+        //A USB report error has been received.
+        wb_usb_err_cnt <= wb_usb_err_cnt + 1'b1;
+      end
 
       //A USB report has been received (and is not blocked by SW).
       if (usb_report_stb && (!wb_usb_block_reports)) begin
@@ -208,6 +231,7 @@ module wb_usb_hid_host (
       4'd7: wbs_dat_r = wb_usb_dbg_hid_report[31:0];
       4'd8: wbs_dat_r = wb_usb_dbg_hid_report[63:32];
       4'd9: wbs_dat_r = {28'b0, leds};
+      4'd10: wbs_dat_r = wb_usb_err_cnt;
       default: wbs_dat_r = 32'd0;
     endcase
   end

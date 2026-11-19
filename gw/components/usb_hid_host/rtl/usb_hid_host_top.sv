@@ -47,6 +47,7 @@ module usb_hid_host_top (
   wire wb_update_leds_stb, usb_update_leds_stb;
   wire wb_ack_update_leds_stb, usb_ack_update_leds_stb;
   wire wb_report_stb, usb_report_stb;
+  wire wb_report_err_stb, usb_report_err_stb;
   wire wb_usb_rst_n;
 
   //Synchronize usb clock domain reset signal to WB clock domain.
@@ -75,6 +76,7 @@ module usb_hid_host_top (
       .wb_usb_rst_n(wb_usb_rst_n),
       .usb_typ(usb_typ),
       .usb_report_stb(wb_report_stb),
+      .usb_report_err_stb(wb_report_err_stb),
       .usb_conn_err(usb_conn_err),
       .usb_key_modifiers(usb_key_modifiers),
       .usb_key1(usb_key1),
@@ -130,6 +132,16 @@ module usb_hid_host_top (
       .r_pulse(wb_report_stb)
   );  //output pulse in r_clk domain.
 
+  //Synchronize usb_report_err_stb pulse to WB clock domain.
+  syncpls usb_report_err_syncpls (
+      .t_clk(usb_clk),  //transmitting clock.
+      .t_rst_n(usb_rst_n),  //reset in t_clk domain.
+      .t_pulse(usb_report_err_stb),  //input pulse in t_clk domain.
+      .r_clk(wb_clk),  //receiving clock.
+      .r_rst_n(wb_rst_n),  //reset in r_clk_domain.
+      .r_pulse(wb_report_err_stb)
+  );  //output pulse in r_clk domain.
+
   usb_hid_host usb_hid_host_inst (
       .usbclk(usb_clk),
       .usbrst_n(usb_rst_n),
@@ -143,6 +155,7 @@ module usb_hid_host_top (
       .leds(leds),
       .typ(usb_typ),
       .report(usb_report_stb),
+      .report_err(usb_report_err_stb),
       .conerr(usb_conn_err),
       .key_modifiers(usb_key_modifiers),
       .key1(usb_key1),

@@ -78,3 +78,6 @@
 [submodule "sub/libtmt"]
 	path = sub/libtmt
 	url = https://github.com/epsilon537/libtmt
+[submodule "sub/usb_hid_host_m1nl"]
+	path = sub/usb_hid_host_m1nl
+	url = https://github.com/epsilon537/usb_hid_host_m1nl

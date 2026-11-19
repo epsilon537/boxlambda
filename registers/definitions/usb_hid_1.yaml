@@ -238,4 +238,14 @@ regmap:
         width: 1
         lsb: 3
         access: rw
+-   name: ERR_CNT
+    description: USB report error counter
+    address: 40
+    bitfields:
+    -   name: VALUE
+        description: USB report error counter
+        reset: 0
+        width: 32
+        lsb: 0
+        access: roc
 

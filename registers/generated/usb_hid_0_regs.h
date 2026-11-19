@@ -334,6 +334,22 @@ typedef union {
 #define USB_HID_0_LEDS_COMPOSE_MASK 0x8
 #define USB_HID_0_LEDS_COMPOSE_RESET 0x0
 
+// ERR_CNT - USB report error counter
+#define USB_HID_0_ERR_CNT_ADDR 0x28
+#define USB_HID_0_ERR_CNT_RESET 0x0
+typedef union {
+  uint32_t UINT32;
+  struct {
+    uint32_t VALUE : 32; // USB report error counter
+  };
+} usb_hid_0_err_cnt_t;
+
+// ERR_CNT.VALUE - USB report error counter
+#define USB_HID_0_ERR_CNT_VALUE_WIDTH 32
+#define USB_HID_0_ERR_CNT_VALUE_LSB 0
+#define USB_HID_0_ERR_CNT_VALUE_MASK 0xffffffff
+#define USB_HID_0_ERR_CNT_VALUE_RESET 0x0
+
 
 // Register map structure
 typedef struct {
@@ -376,6 +392,10 @@ typedef struct {
     union {
         __IO uint32_t LEDS; // LED register
         __IO usb_hid_0_leds_t LEDS_bf; // Bit access for LEDS register
+    };
+    union {
+        __I uint32_t ERR_CNT; // USB report error counter
+        __I usb_hid_0_err_cnt_t ERR_CNT_bf; // Bit access for ERR_CNT register
     };
 } usb_hid_0_t;
 

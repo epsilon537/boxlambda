@@ -12,3 +12,5 @@ lint_off -rule DECLFILENAME -file "*/gw/components/usb_hid_host/../../../sub/usb
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/usb_hid_host/../../../sub/usb_hid_host/src/usb_hid_host.v" -match "Bits of signal are not used: 'save_b'[3]"
 
 lint_off -rule UNUSEDSIGNAL -file "*/gw/components/usb_hid_host/../../../sub/usb_hid_host/src/usb_hid_host_rom.v" -match "Bits of signal are not used: 'adr'[13:10]"
+
+lint_off -rule BLKSEQ -file "*/gw/components/usb_hid_host/../../../sub/usb_hid_host/src/usb_hid_host.v" -match "Blocking assignment '=' in sequential logic process"

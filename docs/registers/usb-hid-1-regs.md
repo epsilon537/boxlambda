@@ -32,6 +32,7 @@ Base address: 0x10000080
 | [REPORT_0](#report_0)    | 0x0000001c | USB report 0 register |
 | [REPORT_1](#report_1)    | 0x00000020 | USB report 1 register |
 | [LEDS](#leds)            | 0x00000024 | LED register |
+| [ERR_CNT](#err_cnt)      | 0x00000028 | USB report error counter |
 
 ## IEN
 
@@ -226,5 +227,21 @@ Reset value: 0x00000000
 | SCROLL_LOCK      | 2      | rw              | 0x0        | SCROLL lock LED |
 | CAPS_LOCK        | 1      | rw              | 0x0        | CAPS lock LED |
 | NUM_LOCK         | 0      | rw              | 0x0        | Num lock LED |
+
+Back to [Register map](#register-map-summary).
+
+## ERR_CNT
+
+USB report error counter
+
+Address offset: 0x00000028
+
+Reset value: 0x00000000
+
+![err_cnt](md_img/err_cnt.svg)
+
+| Name             | Bits   | Mode            | Reset      | Description |
+| :---             | :---   | :---            | :---       | :---        |
+| VALUE            | 31:0   | roc             | 0x00000000 | USB report error counter |
 
 Back to [Register map](#register-map-summary).
