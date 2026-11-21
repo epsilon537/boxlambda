@@ -12,16 +12,21 @@ include /forth/usb_hid_0_regs.fs
 include /forth/gpio_regs.fs
 include /forth/reset_regs.fs
 include /forth/leds.fs
-include /forth/usb-keyboard.fs
-usb-keyboard-start
+include /forth/scancodes.fs
+include /forth/keyboard.fs
+
+keyboard import
+keyb-start
 
 vera import
 vera-init
 
 [ifdef] FORTH_CORE_TEST
 true include-verbose !
-cd /test/vera/
 
+\ create VERA_TEST
+[ifdef] VERA_TEST
+cd /test/vera/
 include vera-test-palette.fs
 (test-palette) pal-load
 
@@ -113,7 +118,10 @@ vram.
 include vera-tileset-params-err.fs
 vram.
 cd /
+[then]
+
 include /test/testsuite.fs
+
 [then]
 
 \ a:f's flamingo as a the welcome message.

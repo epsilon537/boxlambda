@@ -272,6 +272,339 @@ T{ teststack stack-#free -> 4 }T
 T{ teststack stack-base -> teststack stack-top }T
 
 \ ------------------------------------------------------------------------
+TESTING KEYBOARD
+
+true keyb-sw-test-mode
+keyb-sw-test-mode? ?assert
+
+1000 sleep
+
+keyb-present @ 0= ?assert
+
+variable key-event-prev-raw-hook
+key-event-raw-hook @ key-event-prev-raw-hook !
+variable key-event-raw-hook-test-fired
+
+0 key-event-raw-hook-test-fired !
+
+: key-event-raw-hook-test
+  ." key-event-raw-hook >>>" cr
+  key-event-raw keyb-event. cr
+  key-event-raw .scancode c@ SCANCODE-P = ?assert
+  key-event-raw .modifiers c@ KEYMOD-CTRL = ?assert
+  key-event-raw .upndown c@ 0= ?assert
+  key-event-raw .repeat c@ 0= ?assert
+
+  1 key-event-raw-hook-test-fired +!
+
+  key-event-prev-raw-hook @ key-event-raw-hook !
+  ." <<<key-event-raw-hook" cr
+;
+
+' key-event-raw-hook-test key-event-raw-hook !
+
+USB_HID_0_STATUS_USB_TYP_KEYB USB_HID_0_STATUS_USB_TYP!
+1 USB_HID_0_KEY_MODS_LCTRL!
+
+SCANCODE-Q 8 lshift SCANCODE-P or USB_HID_0_KEYS_ADDR !
+
+key-event-raw-hook-test-fired @ 1 = ?assert
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-Q = ?assert
+dup .modifiers c@ KEYMOD-CTRL = ?assert
+dup .upndown c@ 0 = ?assert
+dup .repeat c@ 0 = ?assert
+drop
+
+keyb-poll-raw-event 0= ?assert
+
+0 USB_HID_0_KEYS_ADDR !
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-P = ?assert
+dup .modifiers c@ KEYMOD-CTRL = ?assert
+dup .upndown c@ 0<> ?assert
+dup .repeat c@ 0 = ?assert
+drop
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-Q = ?assert
+dup .modifiers c@ KEYMOD-CTRL = ?assert
+dup .upndown c@ 0<> ?assert
+dup .repeat c@ 0= ?assert
+drop
+
+SCANCODE-A USB_HID_0_KEYS_ADDR !
+1000 sleep
+0 USB_HID_0_KEYS_ADDR !
+
+." Keyboard events pending : "
+keyb-#events-pending . cr
+
+keyb-#events-pending 10 > ?assert
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-A = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+drop
+
+[: 
+  keyb-#events-pending 1- 0 do
+    keyb-get-raw-event ( event )
+    dup keyb-event. cr
+    dup .scancode c@ SCANCODE-A = ?assert
+    dup .upndown c@ 0= ?assert
+    dup .repeat c@ 0<> ?assert
+  loop
+;] execute
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-A = ?assert
+dup .upndown c@ 0<> ?assert
+dup .repeat c@ 0= ?assert
+
+keyb-poll-raw-event 0= ?assert
+
+[: 
+  100 0 do
+    SCANCODE-B USB_HID_0_KEYS_ADDR !
+    0 USB_HID_0_KEYS_ADDR !
+  loop
+  100 0 do
+    SCANCODE-B USB_HID_0_KEYS_ADDR !
+  loop
+  0 USB_HID_0_KEYS_ADDR !
+;] execute
+
+keyb-overflow? 0<> ?assert
+
+." Keyboard events pending : "
+keyb-#events-pending . cr
+
+keyb-#events-pending 10 > ?assert
+
+[: 
+  keyb-#events-pending 1- 0 do
+    keyb-get-raw-event ( event )
+    dup keyb-event. cr
+    dup .scancode c@ SCANCODE-B = ?assert
+    dup .repeat c@ 0= ?assert
+  loop
+;] execute
+
+keyb-overflow? 0= ?assert
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-B = ?assert
+dup .upndown c@ 0<> ?assert
+dup .repeat c@ 0= ?assert
+
+SCANCODE-D SCANCODE-E SCANCODE-F SCANCODE-G keyb-no-repeat-keys!
+keyb-no-repeat-keys@
+SCANCODE-G = ?assert
+SCANCODE-F = ?assert
+SCANCODE-E = ?assert
+SCANCODE-D = ?assert
+
+SCANCODE-D #24 lshift SCANCODE-F #16 lshift SCANCODE-E 8 lshift SCANCODE-G or or or USB_HID_0_KEYS_ADDR !
+1000 sleep
+0 USB_HID_0_KEYS_ADDR !
+
+." Keyboard events pending : "
+keyb-#events-pending . cr
+keyb-#events-pending 8 = ?assert
+
+keyb-get-raw-event ( event )
+dup .scancode c@ SCANCODE-G = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+
+keyb-get-raw-event ( event )
+dup .scancode c@ SCANCODE-E = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+
+keyb-get-raw-event ( event )
+dup .scancode c@ SCANCODE-F = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+
+keyb-get-raw-event ( event )
+dup .scancode c@ SCANCODE-D = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+
+keyb-get-raw-event ( event )
+dup .scancode c@ SCANCODE-G = ?assert
+dup .upndown c@ 0<> ?assert
+dup .repeat c@ 0= ?assert
+
+keyb-get-raw-event ( event )
+dup .scancode c@ SCANCODE-E = ?assert
+dup .upndown c@ 0<> ?assert
+dup .repeat c@ 0= ?assert
+
+keyb-get-raw-event ( event )
+dup .scancode c@ SCANCODE-F = ?assert
+dup .upndown c@ 0<> ?assert
+dup .repeat c@ 0= ?assert
+
+keyb-get-raw-event ( event )
+dup .scancode c@ SCANCODE-D = ?assert
+dup .upndown c@ 0<> ?assert
+dup .repeat c@ 0= ?assert
+
+0 0 0 0 keyb-no-repeat-keys!
+
+0 USB_HID_0_KEY_MODS_ADDR !
+
+1 USB_HID_0_KEY_MODS_LCTRL!
+SCANCODE-H USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+1 USB_HID_0_KEY_MODS_LSHIFT!
+SCANCODE-I USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+1 USB_HID_0_KEY_MODS_LALT!
+SCANCODE-J USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+1 USB_HID_0_KEY_MODS_LMETA!
+SCANCODE-K USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-H = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+dup .modifiers c@ KEYMOD-CTRL = ?assert
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .upndown c@ 0<> ?assert
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-I = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT or = ?assert
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .upndown c@ 0<> ?assert
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-J = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT KEYMOD-ALT or or = ?assert
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .upndown c@ 0<> ?assert
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-K = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT KEYMOD-ALT KEYMOD-WIN or or or = ?assert
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .upndown c@ 0<> ?assert
+
+0 USB_HID_0_KEY_MODS_ADDR !
+
+1 USB_HID_0_KEY_MODS_RCTRL!
+SCANCODE-H USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+1 USB_HID_0_KEY_MODS_RSHIFT!
+SCANCODE-I USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+1 USB_HID_0_KEY_MODS_RALT!
+SCANCODE-J USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+1 USB_HID_0_KEY_MODS_RMETA!
+SCANCODE-K USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-H = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+dup .modifiers c@ KEYMOD-CTRL = ?assert
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .upndown c@ 0<> ?assert
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-I = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT or = ?assert
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .upndown c@ 0<> ?assert
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-J = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT KEYMOD-ALT or or = ?assert
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .upndown c@ 0<> ?assert
+
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-K = ?assert
+dup .upndown c@ 0= ?assert
+dup .repeat c@ 0= ?assert
+dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT KEYMOD-ALT KEYMOD-WIN or or or = ?assert
+keyb-get-raw-event ( event )
+dup keyb-event. cr
+dup .upndown c@ 0<> ?assert
+
+keyb-#events-pending 0= ?assert
+
+SCANCODE-A USB_HID_0_KEYS_ADDR !
+[: 30 0 do
+    keyb-get-raw-event ( event )
+    dup keyb-event. cr
+  loop
+;] execute
+0 USB_HID_0_KEYS_ADDR !
+
+SCANCODE-B USB_HID_0_KEYS_ADDR !
+SCANCODE-C USB_HID_0_KEYS_ADDR !
+SCANCODE-D USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+keyb-#events-pending 0> ?assert
+keyb-reset
+keyb-#events-pending 0= ?assert
+
+false keyb-sw-test-mode
+keyb-sw-test-mode? 0= ?assert
+
+quit
+
+\ ------------------------------------------------------------------------
 TESTING DICTIONARY UTILITIES
 
 begin-module tst-dict-utils
