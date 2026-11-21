@@ -107,9 +107,8 @@ create key-event-raw key-event-struct-raw allot
 
 ( -- )
 : (usb-keyboard-q-hook)
-  key-event-raw usb-keyboard-event. ." IRQ" cr
   \ Pick up all 4 bytes at once.
-  \ key-event-raw .scancode @ (usb-keyboard-q) queue-push
+  key-event-raw .scancode @ (usb-keyboard-q) queue-push
 ;
 
 ' (usb-keyboard-q-hook) variable key-event-raw-hook
@@ -202,8 +201,8 @@ create key-event-raw key-event-struct-raw allot
     1 USB_HID_0_ISR_USB_REPORT!
     USB_HID_0_STATUS_USB_TYP@ USB_HID_0_STATUS_USB_TYP_KEYB = if
       1 (usb-keyboard-report-count) +!
+      (process-keyreport)
     then
-    (process-keyreport)
   then
 ;
 
@@ -317,14 +316,12 @@ create (usb-keyboard-poll-latest-event) key-event-struct-raw allot
 
 : test
   begin
-    ." Events pending: " usb-keyboard-#events-pending . cr
     usb-keyboard-overflow? if
       ." usb keyboard overflow!" cr
     then
     usb-keyboard-poll-raw-event ?dup if
       usb-keyboard-event. cr
     then
-    200 sleep
   again
 ;
 
