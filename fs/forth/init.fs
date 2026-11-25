@@ -13,7 +13,7 @@ keyb-start
 
 include /forth/keymap-azerty-be.fs
 \ include /forth/keymap-qwerty-us.fs
-\
+
 vera import
 vera-init
 

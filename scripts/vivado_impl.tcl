@@ -8,10 +8,10 @@ open_run synth_1
 
 #Route the project
 opt_design
-place_design
-phys_opt_design
-route_design
-phys_opt_design
+place_design -directive ExtraNetDelay_high
+phys_opt_design -directive Explore
+route_design -directive AggressiveExplore
+phys_opt_design -directive Explore
 
 write_checkpoint -force project_impl.dcp
 

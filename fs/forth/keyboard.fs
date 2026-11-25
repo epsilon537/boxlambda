@@ -21,12 +21,6 @@ begin-module keyboard
   50 variable keyb-repeat-start-ticks
   4 variable keyb-repeat-period-ticks
 
-  \ The scancode of the caps-lock key ( 0 for none )
-  SCANCODE-CAPSLOCK variable keyb-caps-lock
-
-  \ The scancode of the num-lock key ( 0 for none )
-  SCANCODE-NUMLOCK variable keyb-num-lock
-
   begin-structure key-event-struct-raw
     cfield: .scancode
     cfield: .modifiers
@@ -44,6 +38,7 @@ begin-module keyboard
 
   : x-keymap-not-set ." Keymap not set." cr ;
   : x-keymap-no-end  ." Keymap end sentinel not found." cr ;
+  : x-no-repeat-key-overflow ." Too many no-repeat keys." cr ;
 
   (  key-event-raw -- )
   : keyb-event.
@@ -175,7 +170,7 @@ begin-module keyboard
           dup $ff and ( check key R: upndown against )
           dup r@ find-byte-in-word 0= if ( check key R: upndown against )
             \ mismatch -> key-event.
-            dup 1 rpick false ( key upndown repeat )
+            dup 1 rpick false ( key upndown repeat R: upndown against )
             report-key-event ( check key R: upndown against )
           then
           drop 8 rshift ( check' R: upndown against )
@@ -239,17 +234,31 @@ begin-module keyboard
 
   end-module
 
-  ( k0 k1 k2 k3 -- )
-  \ Specify 4 scancodes that won't repeat on long-press. 0 is dummy value.
-  : keyb-no-repeat-keys!
-    0 ( k0 k1 k2 k3 acc )
-    4 0 do ( k0..kn acc )
-      swap ?dup if ( k0..kn-1 acc kn ) \ non-zero keys only.
-        swap 8 lshift ( k0..kn acc' )
-        or ( k0..kn-1 acc )
+  ( scancode -- )
+  \ Remove scancode from no-repeat key-list.
+  : keyb-no-repeat-key-
+    4 0 do ( scancode )
+      dup keyb-internals :: no-repeat-keys i + c@ = if ( scancode )
+        0 keyb-internals :: no-repeat-keys i + c! ( scancode )
       then
     loop
-    keyb-internals :: no-repeat-keys !
+    drop
+  ;
+
+  ( scancode -- )
+  \ Add scancode that won't repeat on long-press.
+  \ Throws x-no-repeat-key-overflow if more than 4 no-repeat keys are added.
+  : keyb-no-repeat-key+
+    \ Attempt to remove the key first, so there are no duplicates
+    dup keyb-no-repeat-key-
+    \ Now add the key.
+    4 0 do ( scancode )
+      keyb-internals :: no-repeat-keys i + c@ 0= if ( scancode )
+        keyb-internals :: no-repeat-keys i + c!
+        unloop exit
+      then
+    loop
+    ['] x-no-repeat-key-overflow ?raise
   ;
 
   ( -- k0 k1 k2 k3 )
@@ -333,8 +342,16 @@ begin-module keyboard
     0 variable keymap-#keys
     \ Increments when a keypress has no mapping.
     0 variable key-not-mapped-counter
+
+    \ The scancode of the caps-lock key ( 0 for none )
+    SCANCODE-CAPSLOCK variable caps-lock-key
+
     \ boolean
     0 variable caps-locked
+
+    \ The scancode of the num-lock key ( 0 for none )
+    SCANCODE-NUMLOCK variable num-lock-key
+
     \ boolean
     0 variable num-locked
 
@@ -349,7 +366,7 @@ begin-module keyboard
     \ event to keymap column mapping
     ( raw-event -- col )
     : event>keymap-col
-      dup keypad-num? keyb-num-lock @ 0<> and if ( raw-event )
+      dup keypad-num? num-lock-key @ 0<> and if ( raw-event )
         drop ( )
         \ num-lockabled key mapping
         num-locked @ if 1 else 0 then ( col )
@@ -375,11 +392,11 @@ begin-module keyboard
     : update-counters-flags
       dup .upndown c@ 0= if ( raw-event )
         dup .scancode c@ case ( raw-event scancode )
-          keyb-caps-lock @ of 
+          caps-lock-key @ of 
             caps-locked @ not dup caps-locked !
             led-caps-lock!
           endof
-          keyb-num-lock @ of
+          num-lock-key @ of
             num-locked @ not dup num-locked !
             led-num-lock!
           endof
@@ -467,6 +484,32 @@ begin-module keyboard
     ['] x-keymap-no-end ?raise
   ;
 
+  \ Set the key to be used to toggle num-lock.
+  ( scancode -- )
+  : keyb-num-lock-key!
+    \ Set the key as the new num-lock key.
+    keyb-internals :: num-lock-key ! ( )
+  ;
+
+  \ Get the key used to toggle num-lock.
+  ( --  scancode )
+  : keyb-num-lock-key@
+    keyb-internals :: num-lock-key @
+  ;
+
+  \ Set the key to be used to toggle caps-lock.
+  ( scancode -- )
+  : keyb-caps-lock-key!
+    \ Set the key as the new caps-lock key.
+    keyb-internals :: caps-lock-key ! ( )
+  ;
+
+  \ Get the key used to toggle caps-lock.
+  ( --  scancode )
+  : keyb-caps-lock-key@
+    keyb-internals :: caps-lock-key @
+  ;
+
   \ Non-blocking
   \ May throw keymap-not-set
   ( -- event|0 )
@@ -495,17 +538,34 @@ begin-module keyboard
     keyb-internals :: keyb-poll-latest-event ( event )
   ;
 
+  \ Non-blocking
+  \ May throw keymap-not-set
+  ( -- event|0 )
+  : keyb-poll-keydown-event
+    keyb-poll-event dup if ( event )
+      dup .upndown if drop 0 then ( event|0 )
+    then ( event|0 )
+  ;
+
+  \ Blocking
+  \ May throw keymap-not-set
+  ( -- event )
+  : keyb-get-keydown-event
+    begin
+      keyb-poll-keydown-event ( event|0)
+    until ( )
+    keyb-internals :: keyb-poll-latest-event ( event )
+  ;
+
   keyb-internals continue-module
 
     : test
       begin
-        keyb-get-event ( event )
-        dup .upndown c@ 0= if
-          dup .scancode c@ SCANCODE-ESCAPE = if ( event )
-            drop exit ( )
-          then ( event )
-          .key c@ emit
+        keyb-get-keydown-event ( event )
+        dup .scancode c@ SCANCODE-ESCAPE = if ( event )
+          drop exit ( )
         then ( event )
+        .key c@ emit
         drop ( )
       again
     ;
