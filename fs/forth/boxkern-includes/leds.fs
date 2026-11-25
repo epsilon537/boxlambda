@@ -23,7 +23,6 @@
     GPIO_RGPIO_OUT_ADDR @ and 0<>
 ;
 
-
 1 led! led-keyboard-detect!
 2 led! led-5!
 4 led! led-6!

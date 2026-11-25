@@ -1,5 +1,5 @@
 \ BoxLambda Forth
-\ USB HID dispatcher
+\ Key Mapping
 
 10 constant USB-KEYBOARD-DETECT-PERIOD
 
@@ -62,10 +62,10 @@ $10 constant KEYMOD-SPC
 
 begin-structure key-event-struct
   cfield: .scancode
-  cfield: .keycode
   cfield: .modifiers
   cfield: .upndown
   cfield: .repeat
+  cfield: .keycode
 end-structure
 
 16 constant KEY-EVENT-RING-NUM-ENTRIES

@@ -274,13 +274,15 @@ T{ teststack stack-base -> teststack stack-top }T
 \ ------------------------------------------------------------------------
 TESTING KEYBOARD
 
+\ Use software test mode for automated testing.
 true keyb-sw-test-mode
 keyb-sw-test-mode? ?assert
 
+\ No more reports incoming so keyb-present flag should go off.
 1000 sleep
-
 keyb-present @ 0= ?assert
 
+\ Verify we can hook into key-event-raw-hook
 variable key-event-prev-raw-hook
 key-event-raw-hook @ key-event-prev-raw-hook !
 variable key-event-raw-hook-test-fired
@@ -291,12 +293,13 @@ variable key-event-raw-hook-test-fired
   ." key-event-raw-hook >>>" cr
   key-event-raw keyb-event. cr
   key-event-raw .scancode c@ SCANCODE-P = ?assert
-  key-event-raw .modifiers c@ KEYMOD-CTRL = ?assert
+  key-event-raw .modifiers c@ KEYMOD-LCTRL = ?assert
   key-event-raw .upndown c@ 0= ?assert
   key-event-raw .repeat c@ 0= ?assert
 
   1 key-event-raw-hook-test-fired +!
 
+  \ Only use the hook for 1 event, then restore the original event hook.
   key-event-prev-raw-hook @ key-event-raw-hook !
   ." <<<key-event-raw-hook" cr
 ;
@@ -306,26 +309,32 @@ variable key-event-raw-hook-test-fired
 USB_HID_0_STATUS_USB_TYP_KEYB USB_HID_0_STATUS_USB_TYP!
 1 USB_HID_0_KEY_MODS_LCTRL!
 
+\ This write operation should trigger the hook
 SCANCODE-Q 8 lshift SCANCODE-P or USB_HID_0_KEYS_ADDR !
-
+\ Verify the hook was invoked, once.
 key-event-raw-hook-test-fired @ 1 = ?assert
 
+\ The test hook interecpted the P keypress.
+\ The Q keypress should have ended up in the queue.
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
-dup .modifiers c@ KEYMOD-CTRL = ?assert
+dup .modifiers c@ KEYMOD-LCTRL = ?assert
 dup .upndown c@ 0 = ?assert
 dup .repeat c@ 0 = ?assert
 drop
 
+\ The queue should be empty now.
 keyb-poll-raw-event 0= ?assert
 
+\ Trigger key release of P and Q.
 0 USB_HID_0_KEYS_ADDR !
 
+\ Verify we received both key release events.
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-P = ?assert
-dup .modifiers c@ KEYMOD-CTRL = ?assert
+dup .modifiers c@ KEYMOD-LCTRL = ?assert
 dup .upndown c@ 0<> ?assert
 dup .repeat c@ 0 = ?assert
 drop
@@ -333,11 +342,12 @@ drop
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
-dup .modifiers c@ KEYMOD-CTRL = ?assert
+dup .modifiers c@ KEYMOD-LCTRL = ?assert
 dup .upndown c@ 0<> ?assert
 dup .repeat c@ 0= ?assert
 drop
 
+\ Lean on key A for 1s, should start repeating.
 SCANCODE-A USB_HID_0_KEYS_ADDR !
 1000 sleep
 0 USB_HID_0_KEYS_ADDR !
@@ -347,6 +357,7 @@ keyb-#events-pending . cr
 
 keyb-#events-pending 10 > ?assert
 
+\ The 1st event is not a repeat event yet.
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-A = ?assert
@@ -354,6 +365,7 @@ dup .upndown c@ 0= ?assert
 dup .repeat c@ 0= ?assert
 drop
 
+\ The next events, up to the key release should be repeats.
 [: 
   keyb-#events-pending 1- 0 do
     keyb-get-raw-event ( event )
@@ -364,25 +376,30 @@ drop
   loop
 ;] execute
 
+\ The key release.
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-A = ?assert
 dup .upndown c@ 0<> ?assert
 dup .repeat c@ 0= ?assert
 
+\ Queue should be empty now.
 keyb-poll-raw-event 0= ?assert
 
+\ Overflow queue with B keypress and releases.
 [: 
   100 0 do
     SCANCODE-B USB_HID_0_KEYS_ADDR !
     0 USB_HID_0_KEYS_ADDR !
   loop
+  \ These should not make it into the queue.
   100 0 do
     SCANCODE-B USB_HID_0_KEYS_ADDR !
   loop
   0 USB_HID_0_KEYS_ADDR !
 ;] execute
 
+\ We should be in overflow state.
 keyb-overflow? 0<> ?assert
 
 ." Keyboard events pending : "
@@ -399,14 +416,17 @@ keyb-#events-pending 10 > ?assert
   loop
 ;] execute
 
+\ Not empty yet, but no longer in overflow.
 keyb-overflow? 0= ?assert
 
+\ Fetch the last evetn.
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-B = ?assert
 dup .upndown c@ 0<> ?assert
 dup .repeat c@ 0= ?assert
 
+\ Configure D, E, F and G ass no-repeat keys
 SCANCODE-D SCANCODE-E SCANCODE-F SCANCODE-G keyb-no-repeat-keys!
 keyb-no-repeat-keys@
 SCANCODE-G = ?assert
@@ -414,10 +434,12 @@ SCANCODE-F = ?assert
 SCANCODE-E = ?assert
 SCANCODE-D = ?assert
 
+\ Lean on those keys for 1s.
 SCANCODE-D #24 lshift SCANCODE-F #16 lshift SCANCODE-E 8 lshift SCANCODE-G or or or USB_HID_0_KEYS_ADDR !
 1000 sleep
 0 USB_HID_0_KEYS_ADDR !
 
+\ Should trigger exactly 4 keypresses and 4 key releases, no repeats.
 ." Keyboard events pending : "
 keyb-#events-pending . cr
 keyb-#events-pending 8 = ?assert
@@ -462,8 +484,10 @@ dup .scancode c@ SCANCODE-D = ?assert
 dup .upndown c@ 0<> ?assert
 dup .repeat c@ 0= ?assert
 
+\ Remove the no-repeat keys
 0 0 0 0 keyb-no-repeat-keys!
 
+\ Check if the keymods get picked up correctly:
 0 USB_HID_0_KEY_MODS_ADDR !
 
 1 USB_HID_0_KEY_MODS_LCTRL!
@@ -478,16 +502,18 @@ SCANCODE-I USB_HID_0_KEYS_ADDR !
 SCANCODE-J USB_HID_0_KEYS_ADDR !
 0 USB_HID_0_KEYS_ADDR !
 
+\ 4 keymods are pressed now, along with the K key
 1 USB_HID_0_KEY_MODS_LMETA!
 SCANCODE-K USB_HID_0_KEYS_ADDR !
 0 USB_HID_0_KEYS_ADDR !
 
+\ Pick up and check all the key events this generated.
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-H = ?assert
 dup .upndown c@ 0= ?assert
 dup .repeat c@ 0= ?assert
-dup .modifiers c@ KEYMOD-CTRL = ?assert
+dup .modifiers c@ KEYMOD-LCTRL = ?assert
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
@@ -497,7 +523,7 @@ dup keyb-event. cr
 dup .scancode c@ SCANCODE-I = ?assert
 dup .upndown c@ 0= ?assert
 dup .repeat c@ 0= ?assert
-dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT or = ?assert
+dup .modifiers c@ KEYMOD-LCTRL KEYMOD-LSHIFT or = ?assert
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
@@ -507,7 +533,7 @@ dup keyb-event. cr
 dup .scancode c@ SCANCODE-J = ?assert
 dup .upndown c@ 0= ?assert
 dup .repeat c@ 0= ?assert
-dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT KEYMOD-ALT or or = ?assert
+dup .modifiers c@ KEYMOD-LCTRL KEYMOD-LSHIFT KEYMOD-LALT or or = ?assert
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
@@ -517,11 +543,13 @@ dup keyb-event. cr
 dup .scancode c@ SCANCODE-K = ?assert
 dup .upndown c@ 0= ?assert
 dup .repeat c@ 0= ?assert
-dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT KEYMOD-ALT KEYMOD-WIN or or or = ?assert
+dup .modifiers c@ KEYMOD-LCTRL KEYMOD-LSHIFT KEYMOD-LALT KEYMOD-LWIN or or or = ?assert
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 
+\ Do the same thing with the right side key modifiers:
+\
 0 USB_HID_0_KEY_MODS_ADDR !
 
 1 USB_HID_0_KEY_MODS_RCTRL!
@@ -545,7 +573,7 @@ dup keyb-event. cr
 dup .scancode c@ SCANCODE-H = ?assert
 dup .upndown c@ 0= ?assert
 dup .repeat c@ 0= ?assert
-dup .modifiers c@ KEYMOD-CTRL = ?assert
+dup .modifiers c@ KEYMOD-RCTRL = ?assert
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
@@ -555,7 +583,7 @@ dup keyb-event. cr
 dup .scancode c@ SCANCODE-I = ?assert
 dup .upndown c@ 0= ?assert
 dup .repeat c@ 0= ?assert
-dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT or = ?assert
+dup .modifiers c@ KEYMOD-RCTRL KEYMOD-RSHIFT or = ?assert
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
@@ -565,7 +593,7 @@ dup keyb-event. cr
 dup .scancode c@ SCANCODE-J = ?assert
 dup .upndown c@ 0= ?assert
 dup .repeat c@ 0= ?assert
-dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT KEYMOD-ALT or or = ?assert
+dup .modifiers c@ KEYMOD-RCTRL KEYMOD-RSHIFT KEYMOD-RALT or or = ?assert
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
@@ -575,13 +603,15 @@ dup keyb-event. cr
 dup .scancode c@ SCANCODE-K = ?assert
 dup .upndown c@ 0= ?assert
 dup .repeat c@ 0= ?assert
-dup .modifiers c@ KEYMOD-CTRL KEYMOD-SHIFT KEYMOD-ALT KEYMOD-WIN or or or = ?assert
+dup .modifiers c@ KEYMOD-RCTRL KEYMOD-RSHIFT KEYMOD-RALT KEYMOD-RWIN or or or = ?assert
 keyb-get-raw-event ( event )
 dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 
+\ Starting from empty queue, lean on A...
 keyb-#events-pending 0= ?assert
 
+\ And retrieve the events. The get-raw-event operation will be blocking between repeat events.
 SCANCODE-A USB_HID_0_KEYS_ADDR !
 [: 30 0 do
     keyb-get-raw-event ( event )
@@ -590,6 +620,7 @@ SCANCODE-A USB_HID_0_KEYS_ADDR !
 ;] execute
 0 USB_HID_0_KEYS_ADDR !
 
+\ Test keyboard queue reset: push some events, then reset and check if queue is empty.
 SCANCODE-B USB_HID_0_KEYS_ADDR !
 SCANCODE-C USB_HID_0_KEYS_ADDR !
 SCANCODE-D USB_HID_0_KEYS_ADDR !
@@ -599,6 +630,7 @@ keyb-#events-pending 0> ?assert
 keyb-reset
 keyb-#events-pending 0= ?assert
 
+\ Turn off software test mode
 false keyb-sw-test-mode
 keyb-sw-test-mode? 0= ?assert
 

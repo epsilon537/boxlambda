@@ -1138,17 +1138,17 @@ Case:
 
 - Begins case structure.
 
-`of ( m -- )`
+`of ( n m -- | n )`
 
-- Compares m with n, choose this if n=m.
+- Compares n with m, if n==m selects this case and consumes n and m, otherwise consumes m and skips past `endof`.
 
-`?of ( n flag -- )`
+`?of ( n flag -- | n )`
 
-- Flag-of, for custom comparisons.
+- Flag-of, for custom comparisons. If flag, selects this case and consumes n and flag, otherwise consumes flag and skips past endof.
 
 `endof ( -- )`
 
-- End of one possibility.
+- End of one possibility. Jumps to end of entire case structure (does not execute `endcase`).
 
 `endcase ( n -- )`
 

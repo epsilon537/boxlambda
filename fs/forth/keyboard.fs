@@ -6,10 +6,14 @@ begin-module keyboard
   100 constant KEYB-DETECT-PERIOD
 
   \ keymods bitmask values
-  $1 constant KEYMOD-CTRL
-  $2 constant KEYMOD-SHIFT
-  $4 constant KEYMOD-ALT
-  $8 constant KEYMOD-WIN
+  $1 constant KEYMOD-LCTRL
+  $2 constant KEYMOD-LSHIFT
+  $4 constant KEYMOD-LALT
+  $8 constant KEYMOD-LWIN
+  $10 constant KEYMOD-RCTRL
+  $20 constant KEYMOD-RSHIFT
+  $40 constant KEYMOD-RALT
+  $80 constant KEYMOD-RWIN
 
   \ This variable is true if a USB keyboard is connected.
   false variable keyb-present
@@ -17,12 +21,29 @@ begin-module keyboard
   50 variable keyb-repeat-start-ticks
   4 variable keyb-repeat-period-ticks
 
+  \ The scancode of the caps-lock key ( 0 for none )
+  SCANCODE-CAPSLOCK variable keyb-caps-lock
+
+  \ The scancode of the num-lock key ( 0 for none )
+  SCANCODE-NUMLOCK variable keyb-num-lock
+
   begin-structure key-event-struct-raw
     cfield: .scancode
     cfield: .modifiers
     cfield: .upndown
     cfield: .repeat
   end-structure
+
+  begin-structure key-event-struct
+    cfield: .scancode
+    cfield: .modifiers
+    cfield: .upndown
+    cfield: .repeat
+    cfield: .key
+  end-structure
+
+  : x-keymap-not-set ." Keymap not set." cr ;
+  : x-keymap-no-end  ." Keymap end sentinel not found." cr ;
 
   (  key-event-raw -- )
   : keyb-event.
@@ -77,11 +98,9 @@ begin-module keyboard
 
     32 queue-create keyb-q
 
-    \ Read keymods register and fold left/right.
+    \ Read keymods register.
     ( -- keymods )
-    : read-keymods-fold
-      USB_HID_0_KEY_MODS_ADDR @ dup 4 rshift or $f and
-    ;
+    : read-keymods USB_HID_0_KEY_MODS_ADDR @ ;
 
     \ Read keys-pressed register.
     ( -- keypress )
@@ -92,7 +111,7 @@ begin-module keyboard
     ( -- )
     : update-keymods
       new-keymods @ prev-keymods !
-      read-keymods-fold new-keymods !
+      read-keymods new-keymods !
     ;
 
     ( -- )
@@ -276,7 +295,101 @@ begin-module keyboard
       prev-hook-timer @ execute
     ;
 
-    create keyb-poll-latest-event key-event-struct-raw allot
+    create keyb-poll-latest-event key-event-struct allot
+
+    : keyb-led! ( mask "name" -- )
+      create
+        \ compile-time: store the parameter in the dictionary body
+        ,
+      does> ( f pfa )
+        @ ( f mask )
+        swap if ( mask )
+          USB_HID_0_LEDS_ADDR @ or USB_HID_0_LEDS_ADDR ! ( )
+        else
+          not USB_HID_0_LEDS_ADDR @ and USB_HID_0_LEDS_ADDR ! ( )
+        then
+    ;
+
+    : keyb-led@ ( mask "name" -- )
+      create
+        \ compile-time: store the parameter in the dictionary body
+        ,
+      does> ( pfa )
+        @ ( mask )
+        USB_HID_0_LEDS_ADDR @ and 0<>
+    ;
+
+    1 keyb-led! led-num-lock!
+    2 keyb-led! led-caps-lock!
+    4 keyb-led! led-scroll-lock!
+    8 keyb-led! led-compose!
+
+    1 keyb-led@ led-num-lock@
+    2 keyb-led@ led-caps-lock@
+    4 keyb-led@ led-scroll-lock@
+    8 keyb-led@ led-compose@
+
+    0 variable keymap
+    0 variable keymap-#keys
+    \ Increments when a keypress has no mapping.
+    0 variable key-not-mapped-counter
+    \ boolean
+    0 variable caps-locked
+    \ boolean
+    0 variable num-locked
+
+    ( event -- f )
+    : keypad-num?
+      .scancode c@ ( scancode )
+      dup SCANCODE-KEYPAD-1 >= ( scancode f )
+      swap SCANCODE-KEYPAD-DOT <= ( f f )
+      and
+    ;
+
+    \ event to keymap column mapping
+    ( raw-event -- col )
+    : event>keymap-col
+      dup keypad-num? keyb-num-lock @ 0<> and if ( raw-event )
+        drop ( )
+        \ num-lockabled key mapping
+        num-locked @ if 1 else 0 then ( col )
+      else ( raw-event )
+        \ non-num-lockable key mapping
+        .modifiers c@ ( mod )
+        case
+          0 of
+            caps-locked @ if 1 else 0 then ( col )
+          endof
+          dup [ KEYMOD-LSHIFT KEYMOD-RSHIFT or ] literal and ?of
+            caps-locked @ if 0 else 1 then ( col )
+          endof
+          KEYMOD-RALT of
+            2 ( col )
+          endof
+          3 swap ( col mod )
+        endcase ( col )
+      then ( col )
+    ;
+
+    ( raw-event -- )
+    : update-counters-flags
+      dup .upndown c@ 0= if ( raw-event )
+        dup .scancode c@ case ( raw-event scancode )
+          keyb-caps-lock @ of 
+            caps-locked @ not dup caps-locked !
+            led-caps-lock!
+          endof
+          keyb-num-lock @ of
+            num-locked @ not dup num-locked !
+            led-num-lock!
+          endof
+          over .key c@ 0= if ( raw-event scancode )
+            1 key-not-mapped-counter +! ( raw-event scancode )
+          then
+        endcase ( raw-event )
+      then ( raw-event )
+      drop ( )
+    ;
 
   end-module
 
@@ -321,6 +434,8 @@ begin-module keyboard
       keyb-internals :: keyb-q queue-pop ( event-val )
       \ store all 4 bytes at once.
       keyb-internals :: keyb-poll-latest-event .scancode ! ( )
+      \ set .key to 0 for the time being
+      0 keyb-internals :: keyb-poll-latest-event .key c! ( )
       keyb-internals :: keyb-poll-latest-event ( event )
     else
       0
@@ -328,7 +443,7 @@ begin-module keyboard
   ;
 
   \ Blocking
-  ( -- event )
+  ( -- raw-event )
   : keyb-get-raw-event
     begin
       keyb-poll-raw-event ( event|0)
@@ -336,5 +451,64 @@ begin-module keyboard
     keyb-internals :: keyb-poll-latest-event ( event )
   ;
 
+
+  \ Set the keymap table
+  \ May throw x-keymap-no-end.
+  ( keymap -- )
+  : keyb-keymap!
+    #256 0 do ( keymap )
+      dup i 2 lshift + @ ( keymap keymap-row )
+      -1 = if ( keymap )
+        i keyb-internals :: keymap-#keys ! ( keymap )
+        keyb-internals :: keymap ! ( )
+        unloop exit ( )
+      then ( keymap )
+    loop
+    ['] x-keymap-no-end ?raise
+  ;
+
+  \ Non-blocking
+  \ May throw keymap-not-set
+  ( -- event|0 )
+  : keyb-poll-event
+    keyb-poll-raw-event dup if ( raw-event )
+      dup keyb-internals :: event>keymap-col ( raw-event col )
+      over .scancode c@ ( raw-event col scancode )
+      dup keyb-internals :: keymap-#keys >= if ( raw-event col scancode )
+        2drop 0 ( raw-event key|0 )
+      else
+        2 lshift keyb-internals :: keymap @ dup averts x-keymap-not-set ( raw-event col keymap )
+        + + c@ ( raw-event key|0 )
+      then
+      over .key c! ( event )
+      dup keyb-internals :: update-counters-flags ( event )
+    then
+  ;
+
+  \ Blocking
+  \ May throw keymap-not-set
+  ( -- event )
+  : keyb-get-event
+    begin
+      keyb-poll-event ( event|0)
+    until ( )
+    keyb-internals :: keyb-poll-latest-event ( event )
+  ;
+
+  keyb-internals continue-module
+
+    : test
+      begin
+        keyb-get-event ( event )
+        dup .upndown c@ 0= if
+          dup .scancode c@ SCANCODE-ESCAPE = if ( event )
+            drop exit ( )
+          then ( event )
+          .key c@ emit
+        then ( event )
+        drop ( )
+      again
+    ;
+  end-module
 end-module
 

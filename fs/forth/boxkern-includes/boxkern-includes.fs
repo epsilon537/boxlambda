@@ -51,4 +51,11 @@ boxkern_include forth/boxkern-includes/vec2.fs
 boxkern_include forth/boxkern-includes/iter.fs
 boxkern_include forth/boxkern-includes/fastboot.fs
 boxkern_include forth/boxkern-includes/vera.fs
+boxkern_include forth/boxkern-includes/scancodes.fs
+boxkern_include forth/boxkern-includes/ascii.fs
+boxkern_include forth/boxkern-includes/queue.fs
+boxkern_include forth/boxkern-includes/usb_hid_0_regs.fs
+boxkern_include forth/boxkern-includes/gpio_regs.fs
+boxkern_include forth/boxkern-includes/reset_regs.fs
+boxkern_include forth/boxkern-includes/leds.fs
 

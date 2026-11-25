@@ -7,17 +7,13 @@ include /forth/os-timer.fs
 eint
 os-timer-start
 
-include /forth/queue.fs
-include /forth/usb_hid_0_regs.fs
-include /forth/gpio_regs.fs
-include /forth/reset_regs.fs
-include /forth/leds.fs
-include /forth/scancodes.fs
 include /forth/keyboard.fs
-
 keyboard import
 keyb-start
 
+include /forth/keymap-azerty-be.fs
+\ include /forth/keymap-qwerty-us.fs
+\
 vera import
 vera-init
 
