@@ -98,6 +98,12 @@ def parse_args():
         help="Wait for given status on target.",
     )
 
+    parser.add_argument(
+        "-keyboard",
+        action="store_true",
+        help="Wait for keyboard app to connect.",
+    )
+
     return parser.parse_args()
 
 
@@ -189,6 +195,10 @@ def main():
     if args.wait_for_status:
         print(f"Waiting for target status: {args.wait_for_status}")
         openocd_cmd_list += ["-c", f"set WAIT_FOR_STATUS {args.wait_for_status}"]
+
+    if args.keyboard:
+        print("Wait for keyboard app requested")
+        openocd_cmd_list += ["-c", "set KEYBOARD 1"]
 
     # Now we execute the command lists:
 
