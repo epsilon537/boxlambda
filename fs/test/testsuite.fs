@@ -291,11 +291,11 @@ variable key-event-raw-hook-test-fired
 
 : key-event-raw-hook-test
   ." key-event-raw-hook >>>" cr
-  key-event-raw keyb-event. cr
+  key-event-raw keyb-raw-event. cr
   key-event-raw .scancode c@ SCANCODE-P = ?assert
   key-event-raw .modifiers c@ KEYMOD-LCTRL = ?assert
   key-event-raw .upndown c@ 0= ?assert
-  key-event-raw .repeat c@ 0= ?assert
+  key-event-raw .flags c@ 0= ?assert
 
   1 key-event-raw-hook-test-fired +!
 
@@ -314,14 +314,14 @@ SCANCODE-Q 8 lshift SCANCODE-P or USB_HID_0_KEYS_ADDR !
 \ Verify the hook was invoked, once.
 key-event-raw-hook-test-fired @ 1 = ?assert
 
-\ The test hook interecpted the P keypress.
+\ The test hook intercepted the P keypress.
 \ The Q keypress should have ended up in the queue.
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
 dup .modifiers c@ KEYMOD-LCTRL = ?assert
 dup .upndown c@ 0 = ?assert
-dup .repeat c@ 0 = ?assert
+dup .flags c@ 0 = ?assert
 drop
 
 \ The queue should be empty now.
@@ -332,19 +332,19 @@ keyb-poll-raw-event 0= ?assert
 
 \ Verify we received both key release events.
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-P = ?assert
 dup .modifiers c@ KEYMOD-LCTRL = ?assert
 dup .upndown c@ 0<> ?assert
-dup .repeat c@ 0 = ?assert
+dup .flags c@ 0 = ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
 dup .modifiers c@ KEYMOD-LCTRL = ?assert
 dup .upndown c@ 0<> ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 drop
 
 \ Lean on key A for 1s, should start repeating.
@@ -359,29 +359,30 @@ keyb-#events-pending 10 > ?assert
 
 \ The 1st event is not a repeat event yet.
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-A = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 drop
 
 \ The next events, up to the key release should be repeats.
 [: 
   keyb-#events-pending 1- 0 do
     keyb-get-raw-event ( event )
-    dup keyb-event. cr
+    dup keyb-raw-event. cr
     dup .scancode c@ SCANCODE-A = ?assert
     dup .upndown c@ 0= ?assert
-    dup .repeat c@ 0<> ?assert
+    dup .flags c@ KEY-FLAG-REPEAT and ?assert
   loop
 ;] execute
 
 \ The key release.
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-A = ?assert
 dup .upndown c@ 0<> ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
 \ Queue should be empty now.
 keyb-poll-raw-event 0= ?assert
@@ -410,9 +411,10 @@ keyb-#events-pending 10 > ?assert
 [: 
   keyb-#events-pending 1- 0 do
     keyb-get-raw-event ( event )
-    dup keyb-event. cr
+    dup keyb-raw-event. cr
     dup .scancode c@ SCANCODE-B = ?assert
-    dup .repeat c@ 0= ?assert
+    dup .flags c@ 0= ?assert
+    drop
   loop
 ;] execute
 
@@ -421,18 +423,32 @@ keyb-overflow? 0= ?assert
 
 \ Fetch the last evetn.
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-B = ?assert
 dup .upndown c@ 0<> ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
-\ Configure D, E, F and G ass no-repeat keys
-SCANCODE-D SCANCODE-E SCANCODE-F SCANCODE-G keyb-no-repeat-keys!
+\ Configure D, E, F and G as no-repeat keys. Insert duplicates to make sure they are ignored.
+SCANCODE-D SCANCODE-D SCANCODE-E SCANCODE-E
+SCANCODE-F SCANCODE-F SCANCODE-G SCANCODE-G
+keyb-no-repeat-key+
+keyb-no-repeat-key+
+keyb-no-repeat-key+
+keyb-no-repeat-key+
+keyb-no-repeat-key+
+keyb-no-repeat-key+
+keyb-no-repeat-key+
+keyb-no-repeat-key+
+
 keyb-no-repeat-keys@
-SCANCODE-G = ?assert
-SCANCODE-F = ?assert
-SCANCODE-E = ?assert
 SCANCODE-D = ?assert
+SCANCODE-E = ?assert
+SCANCODE-F = ?assert
+SCANCODE-G = ?assert
+
+\ Try to add one too many
+[: SCANCODE-H keyb-no-repeat-key+ ;] try ' x-no-repeat-key-overflow = ?assert
 
 \ Lean on those keys for 1s.
 SCANCODE-D #24 lshift SCANCODE-F #16 lshift SCANCODE-E 8 lshift SCANCODE-G or or or USB_HID_0_KEYS_ADDR !
@@ -447,45 +463,63 @@ keyb-#events-pending 8 = ?assert
 keyb-get-raw-event ( event )
 dup .scancode c@ SCANCODE-G = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
 keyb-get-raw-event ( event )
 dup .scancode c@ SCANCODE-E = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
 keyb-get-raw-event ( event )
 dup .scancode c@ SCANCODE-F = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
 keyb-get-raw-event ( event )
 dup .scancode c@ SCANCODE-D = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
 keyb-get-raw-event ( event )
 dup .scancode c@ SCANCODE-G = ?assert
 dup .upndown c@ 0<> ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
 keyb-get-raw-event ( event )
 dup .scancode c@ SCANCODE-E = ?assert
 dup .upndown c@ 0<> ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
 keyb-get-raw-event ( event )
 dup .scancode c@ SCANCODE-F = ?assert
 dup .upndown c@ 0<> ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
 keyb-get-raw-event ( event )
 dup .scancode c@ SCANCODE-D = ?assert
 dup .upndown c@ 0<> ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
+drop
 
-\ Remove the no-repeat keys
-0 0 0 0 keyb-no-repeat-keys!
+\ Remove the no-repeat keys again
+SCANCODE-D SCANCODE-E SCANCODE-F SCANCODE-G
+keyb-no-repeat-key-
+keyb-no-repeat-key-
+keyb-no-repeat-key-
+keyb-no-repeat-key-
+
+keyb-no-repeat-keys@
+0 = ?assert
+0 = ?assert
+0 = ?assert
+0 = ?assert
 
 \ Check if the keymods get picked up correctly:
 0 USB_HID_0_KEY_MODS_ADDR !
@@ -509,44 +543,56 @@ SCANCODE-K USB_HID_0_KEYS_ADDR !
 
 \ Pick up and check all the key events this generated.
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-H = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 dup .modifiers c@ KEYMOD-LCTRL = ?assert
-keyb-get-raw-event ( event )
-dup keyb-event. cr
-dup .upndown c@ 0<> ?assert
+drop
 
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
+dup .upndown c@ 0<> ?assert
+drop
+
+keyb-get-raw-event ( event )
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-I = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 dup .modifiers c@ KEYMOD-LCTRL KEYMOD-LSHIFT or = ?assert
-keyb-get-raw-event ( event )
-dup keyb-event. cr
-dup .upndown c@ 0<> ?assert
+drop
 
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
+dup .upndown c@ 0<> ?assert
+drop
+
+keyb-get-raw-event ( event )
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-J = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 dup .modifiers c@ KEYMOD-LCTRL KEYMOD-LSHIFT KEYMOD-LALT or or = ?assert
-keyb-get-raw-event ( event )
-dup keyb-event. cr
-dup .upndown c@ 0<> ?assert
+drop
 
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
+dup .upndown c@ 0<> ?assert
+drop
+
+keyb-get-raw-event ( event )
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-K = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 dup .modifiers c@ KEYMOD-LCTRL KEYMOD-LSHIFT KEYMOD-LALT KEYMOD-LWIN or or or = ?assert
+drop
+
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .upndown c@ 0<> ?assert
+drop
 
 \ Do the same thing with the right side key modifiers:
 \
@@ -569,44 +615,56 @@ SCANCODE-K USB_HID_0_KEYS_ADDR !
 0 USB_HID_0_KEYS_ADDR !
 
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-H = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 dup .modifiers c@ KEYMOD-RCTRL = ?assert
-keyb-get-raw-event ( event )
-dup keyb-event. cr
-dup .upndown c@ 0<> ?assert
+drop
 
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
+dup .upndown c@ 0<> ?assert
+drop
+
+keyb-get-raw-event ( event )
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-I = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 dup .modifiers c@ KEYMOD-RCTRL KEYMOD-RSHIFT or = ?assert
-keyb-get-raw-event ( event )
-dup keyb-event. cr
-dup .upndown c@ 0<> ?assert
+drop
 
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
+dup .upndown c@ 0<> ?assert
+drop
+
+keyb-get-raw-event ( event )
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-J = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 dup .modifiers c@ KEYMOD-RCTRL KEYMOD-RSHIFT KEYMOD-RALT or or = ?assert
-keyb-get-raw-event ( event )
-dup keyb-event. cr
-dup .upndown c@ 0<> ?assert
+drop
 
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
+dup .upndown c@ 0<> ?assert
+drop
+
+keyb-get-raw-event ( event )
+dup keyb-raw-event. cr
 dup .scancode c@ SCANCODE-K = ?assert
 dup .upndown c@ 0= ?assert
-dup .repeat c@ 0= ?assert
+dup .flags c@ 0= ?assert
 dup .modifiers c@ KEYMOD-RCTRL KEYMOD-RSHIFT KEYMOD-RALT KEYMOD-RWIN or or or = ?assert
+drop
+
 keyb-get-raw-event ( event )
-dup keyb-event. cr
+dup keyb-raw-event. cr
 dup .upndown c@ 0<> ?assert
+drop
 
 \ Starting from empty queue, lean on A...
 keyb-#events-pending 0= ?assert
@@ -615,7 +673,8 @@ keyb-#events-pending 0= ?assert
 SCANCODE-A USB_HID_0_KEYS_ADDR !
 [: 30 0 do
     keyb-get-raw-event ( event )
-    dup keyb-event. cr
+    dup keyb-raw-event. cr
+    drop
   loop
 ;] execute
 0 USB_HID_0_KEYS_ADDR !
@@ -629,6 +688,252 @@ SCANCODE-D USB_HID_0_KEYS_ADDR !
 keyb-#events-pending 0> ?assert
 keyb-reset
 keyb-#events-pending 0= ?assert
+
+create KEYMAP-TST
+( $00 ) 0 c, 0 c, 0 c, 0 c,
+( $01 ) 0 c, 0 c, 0 c, 0 c,
+( $02 ) 0 c, 0 c, 0 c, 0 c,
+( $03 ) 0 c, 0 c, 0 c, 0 c,
+( SCANCODE-A ) ASCII-LCASE-Q c, ASCII-UCASE-Q c, 0 c, 0 c,
+( SCANCODE-B ) ASCII-LCASE-B c, ASCII-UCASE-B c, 0 c, 0 c,
+( SCANCODE-C ) ASCII-LCASE-C c, ASCII-UCASE-C c, 0 c, 0 c,
+( SCANCODE-D ) ASCII-LCASE-D c, ASCII-UCASE-D c, 0 c, 0 c,
+( SCANCODE-E ) ASCII-LCASE-E c, ASCII-UCASE-E c, 0 c, 0 c,
+( SCANCODE-F ) ASCII-LCASE-F c, ASCII-UCASE-F c, 0 c, 0 c,
+( SCANCODE-G ) ASCII-LCASE-G c, ASCII-UCASE-G c, 0 c, 0 c,
+( SCANCODE-H ) ASCII-LCASE-H c, ASCII-UCASE-H c, 0 c, 0 c,
+( SCANCODE-I ) ASCII-LCASE-I c, ASCII-UCASE-I c, 0 c, 0 c,
+( SCANCODE-J ) ASCII-LCASE-J c, ASCII-UCASE-J c, 0 c, 0 c,
+( SCANCODE-K ) ASCII-LCASE-K c, ASCII-UCASE-K c, 0 c, 0 c,
+( SCANCODE-L ) ASCII-LCASE-L c, ASCII-UCASE-L c, 0 c, 0 c,
+( SCANCODE-M ) ASCII-COMMA c, ASCII-QUESTION c, 0 c, 0 c,
+( SCANCODE-N ) ASCII-LCASE-N c, ASCII-UCASE-N c, 0 c, 0 c,
+( SCANCODE-O ) ASCII-LCASE-O c, ASCII-UCASE-O c, 0 c, 0 c,
+( SCANCODE-P ) ASCII-LCASE-P c, ASCII-UCASE-P c, 0 c, 0 c,
+( SCANCODE-Q ) ASCII-LCASE-A c, ASCII-UCASE-A c, 0 c, 0 c,
+( SCANCODE-R ) ASCII-LCASE-R c, ASCII-UCASE-R c, 0 c, 0 c,
+( SCANCODE-S ) ASCII-LCASE-S c, ASCII-UCASE-S c, 0 c, 0 c,
+( SCANCODE-T ) ASCII-LCASE-T c, ASCII-UCASE-T c, 0 c, 0 c,
+( SCANCODE-U ) ASCII-LCASE-U c, ASCII-UCASE-U c, 0 c, 0 c,
+( SCANCODE-V ) ASCII-LCASE-V c, ASCII-UCASE-V c, 0 c, 0 c,
+( SCANCODE-W ) ASCII-LCASE-Z c, ASCII-UCASE-Z c, 0 c, 0 c,
+( SCANCODE-X ) ASCII-LCASE-X c, ASCII-UCASE-X c, 0 c, 0 c,
+( SCANCODE-Y ) ASCII-LCASE-Y c, ASCII-UCASE-Y c, 0 c, 0 c,
+( SCANCODE-Z ) ASCII-LCASE-W c, ASCII-UCASE-W c, 0 c, 0 c,
+( SCANCODE-1 ) ASCII-AMPERSAND c, ASCII-DIGIT-1 c, ASCII-PIPE c, 0 c,
+( SCANCODE-2 ) 0 c, ASCII-DIGIT-2 c, ASCII-AT c, 0 c,
+( SCANCODE-3 ) ASCII-QUOTE c, ASCII-DIGIT-3 c, ASCII-HASH c, 0 c,
+( SCANCODE-4 ) ASCII-APOSTROPHE c, ASCII-DIGIT-4 c, ASCII-LBRACE c, 0 c,
+( SCANCODE-5 ) ASCII-LPAREN c, ASCII-DIGIT-5 c, ASCII-LBRACKET c, 0 c,
+( SCANCODE-6 ) 0 c, ASCII-DIGIT-6 c, ASCII-CARET c, 0 c,
+( SCANCODE-7 ) 0 c, ASCII-DIGIT-7 c, 0 c, 0 c,
+( SCANCODE-8 ) ASCII-EXCLAMATION c, ASCII-DIGIT-8 c, 0 c, 0 c,
+( SCANCODE-9 ) 0 c, ASCII-DIGIT-9 c, ASCII-LBRACE c, 0 c,
+( SCANCODE-0 ) 0 c, ASCII-DIGIT-0 c, ASCII-RBRACE c, 0 c,
+( SCANCODE-ENTER ) ASCII-LF c, ASCII-LF c, 0 c, 0 c,
+( SCANCODE-ESCAPE ) ASCII-ESC c, ASCII-ESC c, 0 c, 0 c,
+( SCANCODE-BACKSPACE ) ASCII-BS c, ASCII-BS c, 0 c, 0 c,
+( SCANCODE-TAB ) ASCII-HT c, ASCII-HT c, 0 c, 0 c,
+( SCANCODE-SPACE ) ASCII-SPACE c, ASCII-SPACE c, 0 c, 0 c,
+( SCANCODE-MINUS ) ASCII-RPAREN c, 0 c, 0 c, 0 c,
+( SCANCODE-EQUAL ) ASCII-MINUS c, ASCII-UNDERSCORE c, 0 c, 0 c,
+( SCANCODE-LEFTBRAKE ) ASCII-CARET c, 0 c, ASCII-LBRACKET c, 0 c,
+( SCANCODE-RIGHTRACE ) ASCII-DOLLAR c, ASCII-ASTERISK c, ASCII-RBRACKET c, 0 c,
+( SCANCODE-BACKSLASH ) 0 c, ASCII-BACKTICK c, 0 c, 0 c,
+( SCANCODE-NONUS-HASH ) 0 c, 0 c, ASCII-BACKTICK c, 0 c,
+( SCANCODE-SEMICOLON ) ASCII-LCASE-M c, ASCII-UCASE-M c, 0 c, 0 c,
+( SCANCODE-APOSTROPHE ) 0 c, ASCII-PERCENT c, 0 c, 0 c,
+( SCANCODE-GRAVE ) 0 c, 0 c, ASCII-BACKTICK c, 0 c,
+( SCANCODE-COMMA ) ASCII-SEMICOLON c, ASCII-PERIOD c, 0 c, 0 c,
+( SCANCODE-DOT ) ASCII-COLON c, ASCII-SLASH c, 0 c, 0 c,
+( SCANCODE-SLASH ) ASCII-EQUAL c, ASCII-PLUS c, ASCII-TILDE c, 0 c,
+( SCANCODE-CAPSLOCK ) 0 c, 0 c, 0 c, 0 c,
+( SCANCODE-F1 ) KEY-F1 c, KEY-F1 c, KEY-F1 c, KEY-F1 c,
+( SCANCODE-F2 ) KEY-F2 c, KEY-F2 c, KEY-F2 c, KEY-F2 c,
+( SCANCODE-F3 ) KEY-F3 c, KEY-F3 c, KEY-F3 c, KEY-F3 c,
+( SCANCODE-F4 ) KEY-F4 c, KEY-F4 c, KEY-F4 c, KEY-F4 c,
+( SCANCODE-F5 ) KEY-F5 c, KEY-F5 c, KEY-F5 c, KEY-F5 c,
+( SCANCODE-F6 ) KEY-F6 c, KEY-F6 c, KEY-F6 c, KEY-F6 c,
+( SCANCODE-F7 ) KEY-F7 c, KEY-F7 c, KEY-F7 c, KEY-F7 c,
+( SCANCODE-F8 ) KEY-F8 c, KEY-F8 c, KEY-F8 c, KEY-F8 c,
+( SCANCODE-F9 ) KEY-F9 c, KEY-F9 c, KEY-F9 c, KEY-F9 c,
+( SCANCODE-F10 ) KEY-F10 c, KEY-F10 c, KEY-F10 c, KEY-F10 c,
+( SCANCODE-F11 ) KEY-F11 c, KEY-F11 c, KEY-F11 c, KEY-F11 c,
+( SCANCODE-F12 ) KEY-F12 c, KEY-F12 c, KEY-F12 c, KEY-F12 c,
+( SCANCODE-PRINTSCREEN ) KEY-PRTSCRN c, KEY-PRTSCRN c, KEY-PRTSCRN c, KEY-PRTSCRN c,
+( SCANCODE-SCROLLLOCK ) KEY-SCROLL-LOCK c, KEY-SCROLL-LOCK c, KEY-SCROLL-LOCK c, KEY-SCROLL-LOCK c,
+( SCANCODE-PAUSE ) KEY-PAUSE c, KEY-PAUSE c, KEY-PAUSE c, KEY-PAUSE c,
+( SCANCODE-INSERT ) KEY-INSERT c, KEY-INSERT c, KEY-INSERT c, KEY-INSERT c,
+( SCANCODE-HOME ) KEY-HOME c, KEY-HOME c, KEY-HOME c, KEY-HOME c,
+( SCANCODE-PAGEUP ) KEY-PGUP c, KEY-PGUP c, KEY-PGUP c, KEY-PGUP c,
+( SCANCODE-DELETE ) KEY-DELETE c, KEY-DELETE c, KEY-DELETE c, KEY-DELETE c,
+( SCANCODE-END ) KEY-END c, KEY-END c, KEY-END c, KEY-END c,
+( SCANCODE-PAGEDOWN ) KEY-PGDN c, KEY-PGDN c, KEY-PGDN c, KEY-PGDN c,
+( SCANCODE-RIGHT ) KEY-RIGHT c, KEY-RIGHT c, KEY-RIGHT c, KEY-RIGHT c,
+( SCANCODE-LEFT ) KEY-LEFT c, KEY-LEFT c, KEY-LEFT c, KEY-LEFT c,
+( SCANCODE-DOWN ) KEY-DOWN c, KEY-DOWN c, KEY-DOWN c, KEY-DOWN c,
+( SCANCODE-UP ) KEY-UP c, KEY-UP c, 0 c, 0 c,
+( SCANCODE-NUMLOCK ) 0 c, 0 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-DIVIDE ) ASCII-SLASH c, ASCII-SLASH c, 0 c, 0 c,
+( SCANCODE-KEYPAD-MULTIPLY ) ASCII-ASTERISK c, ASCII-ASTERISK c, 0 c, 0 c,
+( SCANCODE-KEYPAD-MINUS ) ASCII-MINUS c, ASCII-MINUS c, 0 c, 0 c,
+( SCANCODE-KEYPAD-PLUS ) ASCII-PLUS c, ASCII-PLUS c, 0 c, 0 c,
+( SCANCODE-KEYPAD-ENTER ) ASCII-LF c, ASCII-LF c, 0 c, 0 c,
+
+\ When a non-zero keyb-num-lock is configured, in the following section
+\ the first column is the base key, the second column is the num-lock key,
+\ the 3rd and fourth columns are not used.
+\ When keyb-num-lock is set to 0, the same keymod to column mapping is used
+\ as in the preceding section ( base, shift, altgr, the-rest )
+( SCANCODE-KEYPAD-1 ) KEY-END c, ASCII-DIGIT-1 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-2 ) KEY-DOWN c, ASCII-DIGIT-2 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-3 ) KEY-PGDN c, ASCII-DIGIT-3 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-4 ) KEY-LEFT c, ASCII-DIGIT-4 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-5 ) 0 c, ASCII-DIGIT-5 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-6 ) KEY-RIGHT c, ASCII-DIGIT-6 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-7 ) KEY-HOME c, ASCII-DIGIT-7 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-8 ) KEY-UP c, ASCII-DIGIT-8 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-9 ) KEY-PGUP c, ASCII-DIGIT-9 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-0 ) KEY-INSERT c, ASCII-DIGIT-0 c, 0 c, 0 c,
+( SCANCODE-KEYPAD-DOT ) KEY-DELETE c, ASCII-PERIOD c, 0 c, 0 c,
+
+( SCANCODE-NONUS-BACKSLASH ) ASCII-LT c, ASCII-GT c, ASCII-BACKSLASH c, 0 c,
+$ff c, $ff c, $ff c, $ff c, \ The keymap table must end with $ff-ff-ff-ff
+
+KEYMAP-TST keyb-keymap!
+SCANCODE-CAPSLOCK keyb-caps-lock-key!
+SCANCODE-NUMLOCK keyb-num-lock-key!
+
+0 USB_HID_0_KEY_MODS_ADDR !
+
+SCANCODE-Q USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-CAPSLOCK USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-Q USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-CAPSLOCK USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-Q USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-Q = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ 0= ?assert
+dup .key c@ ASCII-LCASE-A = ?assert
+drop
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-Q = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ KEY-FLAG-CAPS-LOCK and ?assert
+dup .key c@ ASCII-UCASE-A = ?assert
+drop
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-Q = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ 0= ?assert
+dup .key c@ ASCII-LCASE-A = ?assert
+drop
+
+SCANCODE-KEYPAD-1 USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-NUMLOCK USB_HID_0_KEYS_ADDR !
+100 sleep
+USB_HID_0_LEDS_NUM_LOCK@ 1 = ?assert
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-KEYPAD-1 USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-NUMLOCK USB_HID_0_KEYS_ADDR !
+100 sleep
+USB_HID_0_LEDS_NUM_LOCK@ 0 = ?assert
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-KEYPAD-1 USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-KEYPAD-1 = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ 0= ?assert
+dup .key c@ KEY-END = ?assert
+drop
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-KEYPAD-1 = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ KEY-FLAG-NUM-LOCK and ?assert
+dup .key c@ ASCII-DIGIT-1 = ?assert
+drop
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-KEYPAD-1 = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ 0= ?assert
+dup .key c@ KEY-END = ?assert
+drop
+
+1 USB_HID_0_KEY_MODS_LSHIFT!
+
+SCANCODE-Q USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-CAPSLOCK USB_HID_0_KEYS_ADDR !
+100 sleep
+USB_HID_0_LEDS_CAPS_LOCK@ 1 = ?assert
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-Q USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-CAPSLOCK USB_HID_0_KEYS_ADDR !
+100 sleep
+USB_HID_0_LEDS_CAPS_LOCK@ 0 = ?assert
+0 USB_HID_0_KEYS_ADDR !
+SCANCODE-Q USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-Q = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ 0= ?assert
+dup .key c@ ASCII-UCASE-A = ?assert
+drop
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-Q = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ KEY-FLAG-CAPS-LOCK and ?assert
+dup .key c@ ASCII-LCASE-A = ?assert
+drop
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-Q = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ 0= ?assert
+dup .key c@ ASCII-UCASE-A = ?assert
+drop
+
+0 USB_HID_0_KEY_MODS_ADDR !
+1 USB_HID_0_KEY_MODS_RALT!
+
+SCANCODE-2 USB_HID_0_KEYS_ADDR !
+0 USB_HID_0_KEYS_ADDR !
+
+keyb-get-keydown-event
+dup keyb-event. cr
+dup .scancode c@ SCANCODE-2 = ?assert
+dup .upndown c@ 0= ?assert
+dup .flags c@ 0= ?assert
+dup .key c@ ASCII-AT = ?assert
+drop
 
 \ Turn off software test mode
 false keyb-sw-test-mode

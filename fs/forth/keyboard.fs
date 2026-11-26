@@ -21,18 +21,23 @@ begin-module keyboard
   50 variable keyb-repeat-start-ticks
   4 variable keyb-repeat-period-ticks
 
+  \ .flags bit definitions
+  $1 constant KEY-FLAG-REPEAT
+  $2 constant KEY-FLAG-NUM-LOCK
+  $4 constant KEY-FLAG-CAPS-LOCK
+
   begin-structure key-event-struct-raw
     cfield: .scancode
     cfield: .modifiers
     cfield: .upndown
-    cfield: .repeat
+    cfield: .flags
   end-structure
 
   begin-structure key-event-struct
     cfield: .scancode
     cfield: .modifiers
     cfield: .upndown
-    cfield: .repeat
+    cfield: .flags
     cfield: .key
   end-structure
 
@@ -41,14 +46,24 @@ begin-module keyboard
   : x-no-repeat-key-overflow ." Too many no-repeat keys." cr ;
 
   (  key-event-raw -- )
-  : keyb-event.
+  : keyb-raw-event.
     >r
     r@ .modifiers c@ r@ .scancode c@
     s" Raw key event: scancode: $%x modifiers: $%x " printf
     r@ .upndown c@ if ." up " else ." down " then
-    r@ .repeat c@ if ." repeat" then
+    r@ .flags c@ ( flags )
+    dup KEY-FLAG-REPEAT and if ." repeat" then
+    dup KEY-FLAG-NUM-LOCK and if ." num-lock" then
+    dup KEY-FLAG-CAPS-LOCK and if ." caps-lock" then
     cr
+    drop
     rdrop
+  ;
+
+  ( key-event -- )
+  : keyb-event.
+    dup keyb-raw-event.
+    ." ascii/key code: " .key c@ hex. cr
   ;
 
   \ Enable/disable software test mode
@@ -112,14 +127,7 @@ begin-module keyboard
     ( -- )
     : update-keypress
       new-keypress @ prev-keypress !
-      keyb-q queue-#free 8 < if
-        \ If the keyboard queue is nearly full, don't process new keypresses.
-        \ Act as if all keys are released. Nearly full to allow the key release events
-        \ to go through.
-        0 new-keypress !
-      else
-        read-keypress new-keypress !
-      then
+      read-keypress new-keypress !
     ;
 
   end-module
@@ -136,14 +144,55 @@ begin-module keyboard
 
   keyb-internals continue-module
 
-    ( scancode upndown repeat -- )
+    \ The scancode of the caps-lock key ( 0 for none )
+    SCANCODE-CAPSLOCK variable caps-lock-key
+
+    \ The scancode of the num-lock key ( 0 for none )
+    SCANCODE-NUMLOCK variable num-lock-key
+
+    \ Follows the .flags bit definitions for num-lock and caps-lock
+    0 variable locked-flags
+
+    : keyb-led! ( mask "name" -- )
+      create
+        \ compile-time: store the parameter in the dictionary body
+        ,
+      does> ( f pfa )
+        @ ( f mask )
+        swap if ( mask )
+          USB_HID_0_LEDS_ADDR @ or USB_HID_0_LEDS_ADDR ! ( )
+        else
+          not USB_HID_0_LEDS_ADDR @ and USB_HID_0_LEDS_ADDR ! ( )
+        then
+    ;
+
+    : keyb-led@ ( mask "name" -- )
+      create
+        \ compile-time: store the parameter in the dictionary body
+        ,
+      does> ( pfa )
+        @ ( mask )
+        USB_HID_0_LEDS_ADDR @ and 0<>
+    ;
+
+    1 keyb-led! led-num-lock!
+    2 keyb-led! led-caps-lock!
+    4 keyb-led! led-scroll-lock!
+    8 keyb-led! led-compose!
+
+    1 keyb-led@ led-num-lock@
+    2 keyb-led@ led-caps-lock@
+    4 keyb-led@ led-scroll-lock@
+    8 keyb-led@ led-compose@
+
+    ( scancode upndown flags -- )
     : report-key-event
-      -rot ( repeat scancode upndown )
-      swap key-event-raw .scancode c! ( repeat upndown )
-      dup if prev-keymods else new-keymods then @ ( repeat upndown keymods )
-      key-event-raw .modifiers c! ( repeat upndown )
-      key-event-raw .upndown c! ( repeat )
-      key-event-raw .repeat c! ( )
+      -rot ( flags scancode upndown )
+      swap key-event-raw .scancode c! ( flags upndown )
+      dup if prev-keymods else new-keymods then @ ( flags upndown keymods )
+      key-event-raw .modifiers c! ( flags upndown )
+      key-event-raw .upndown c! ( flags )
+      key-event-raw .flags c! ( )
       key-event-raw-hook @ execute ( )
     ;
 
@@ -161,36 +210,60 @@ begin-module keyboard
       false
     ;
 
-    ( check against upndown -- )
-    : process-keychanges
-      >r ( check against R: upndown )
-      >r ( check R: upndown against )
-      begin
-        dup while ( check R: upndown against )
-          dup $ff and ( check key R: upndown against )
-          dup r@ find-byte-in-word 0= if ( check key R: upndown against )
-            \ mismatch -> key-event.
-            dup 1 rpick false ( key upndown repeat R: upndown against )
-            report-key-event ( check key R: upndown against )
-          then
-          drop 8 rshift ( check' R: upndown against )
-      repeat ( check R: upndown against )
-      drop ( R: upndown against )
-      2rdrop ( )
-    ;
-
-    ( -- )
-    : process-keyups \ Are any of the old keys no longer present in the new key-presses?
-      prev-keypress @ ( prev-keys )
-      new-keypress @ ( prev-keys new-keys )
-      true process-keychanges ( )
+    \ Returns true if give key is not the num-lock or caps-lock key
+    ( key -- f )
+    : handle-lock-key
+      case
+        num-lock-key @ of 
+          locked-flags @ KEY-FLAG-NUM-LOCK xor dup locked-flags ! ( flags )
+          KEY-FLAG-NUM-LOCK and led-num-lock! ( )
+          false
+        endof
+        caps-lock-key @ of 
+          locked-flags @ KEY-FLAG-CAPS-LOCK xor dup locked-flags !
+          KEY-FLAG-CAPS-LOCK and led-caps-lock! ( )
+          false
+        endof
+        true swap
+      endcase
     ;
 
     ( -- )
     : process-keydns \ Are any of the new keys not yet present in the old key-presses?
       new-keypress @ ( new-keys )
-      prev-keypress @ ( new-keys prev-keys )
-      false process-keychanges ( )
+      4 0 do
+        new-keypress i + c@ ( key|0 )
+        dup if ( key )
+          dup prev-keypress @ find-byte-in-word 0= if ( key ) \ mismatch -> key-event.
+            dup handle-lock-key ( key not-a-lock-key-f )
+            if ( key )
+              keyb-q queue-#free 8 >= if ( key ) \ Only report keydown event if queue not almost full.
+                dup false locked-flags @ ( key upndown flags )
+                report-key-event ( key )
+              else \ Otherwise, erase the keypress.
+                0 new-keypress i + c! ( key )
+              then
+            then ( key )
+          then ( key )
+        then ( key )
+        drop
+      loop
+    ;
+
+    ( -- )
+    : process-keyups \ Are any of the old keys no longer present in the new key-presses?
+      prev-keypress @ ( prev-keys )
+      begin
+        dup while ( check )
+          dup $ff and ( check key R: against )
+          dup new-keypress @ find-byte-in-word 0= if ( check key )
+            \ mismatch -> key-event.
+            dup true locked-flags @ ( key upndown flags )
+            report-key-event ( check key )
+          then
+          drop 8 rshift ( check' )
+      repeat ( check )
+      drop ( )
     ;
 
     ( v -- )
@@ -280,7 +353,7 @@ begin-module keyboard
           dup no-repeat-keys @ find-byte-in-word not ( keypresses key f ) \ only repeat keys
           keyb-q queue-#free 8 >= and ( keypresses key f ) \ and only if queue not full
           if ( keypresses key )
-            dup false true report-key-event ( keypresses key )
+            dup false locked-flags @ KEY-FLAG-REPEAT or report-key-event ( keypresses key )
           then
           drop
           8 rshift ( keypresses )
@@ -306,54 +379,8 @@ begin-module keyboard
 
     create keyb-poll-latest-event key-event-struct allot
 
-    : keyb-led! ( mask "name" -- )
-      create
-        \ compile-time: store the parameter in the dictionary body
-        ,
-      does> ( f pfa )
-        @ ( f mask )
-        swap if ( mask )
-          USB_HID_0_LEDS_ADDR @ or USB_HID_0_LEDS_ADDR ! ( )
-        else
-          not USB_HID_0_LEDS_ADDR @ and USB_HID_0_LEDS_ADDR ! ( )
-        then
-    ;
-
-    : keyb-led@ ( mask "name" -- )
-      create
-        \ compile-time: store the parameter in the dictionary body
-        ,
-      does> ( pfa )
-        @ ( mask )
-        USB_HID_0_LEDS_ADDR @ and 0<>
-    ;
-
-    1 keyb-led! led-num-lock!
-    2 keyb-led! led-caps-lock!
-    4 keyb-led! led-scroll-lock!
-    8 keyb-led! led-compose!
-
-    1 keyb-led@ led-num-lock@
-    2 keyb-led@ led-caps-lock@
-    4 keyb-led@ led-scroll-lock@
-    8 keyb-led@ led-compose@
-
     0 variable keymap
     0 variable keymap-#keys
-    \ Increments when a keypress has no mapping.
-    0 variable key-not-mapped-counter
-
-    \ The scancode of the caps-lock key ( 0 for none )
-    SCANCODE-CAPSLOCK variable caps-lock-key
-
-    \ boolean
-    0 variable caps-locked
-
-    \ The scancode of the num-lock key ( 0 for none )
-    SCANCODE-NUMLOCK variable num-lock-key
-
-    \ boolean
-    0 variable num-locked
 
     ( event -- f )
     : keypad-num?
@@ -366,46 +393,25 @@ begin-module keyboard
     \ event to keymap column mapping
     ( raw-event -- col )
     : event>keymap-col
-      dup keypad-num? num-lock-key @ 0<> and if ( raw-event )
-        drop ( )
-        \ num-lockabled key mapping
-        num-locked @ if 1 else 0 then ( col )
+      dup keypad-num? if ( raw-event )
+        \ num-lockable key mapping
+        .flags c@ KEY-FLAG-NUM-LOCK and if 1 else 0 then ( col )
       else ( raw-event )
         \ non-num-lockable key mapping
-        .modifiers c@ ( mod )
+        dup .modifiers c@ ( raw-event mod )
         case
-          0 of
-            caps-locked @ if 1 else 0 then ( col )
+          0 of ( raw-event )
+            .flags c@ KEY-FLAG-CAPS-LOCK and if 1 else 0 then ( col )
           endof
-          dup [ KEYMOD-LSHIFT KEYMOD-RSHIFT or ] literal and ?of
-            caps-locked @ if 0 else 1 then ( col )
+          dup [ KEYMOD-LSHIFT KEYMOD-RSHIFT or ] literal and ?of ( raw-event )
+            .flags c@ KEY-FLAG-CAPS-LOCK and if 0 else 1 then ( col )
           endof
-          KEYMOD-RALT of
-            2 ( col )
+          KEYMOD-RALT of ( raw-event )
+            drop 2 ( col )
           endof
-          3 swap ( col mod )
+          nip 3 swap ( col mod )
         endcase ( col )
       then ( col )
-    ;
-
-    ( raw-event -- )
-    : update-counters-flags
-      dup .upndown c@ 0= if ( raw-event )
-        dup .scancode c@ case ( raw-event scancode )
-          caps-lock-key @ of 
-            caps-locked @ not dup caps-locked !
-            led-caps-lock!
-          endof
-          num-lock-key @ of
-            num-locked @ not dup num-locked !
-            led-num-lock!
-          endof
-          over .key c@ 0= if ( raw-event scancode )
-            1 key-not-mapped-counter +! ( raw-event scancode )
-          then
-        endcase ( raw-event )
-      then ( raw-event )
-      drop ( )
     ;
 
   end-module
@@ -524,7 +530,6 @@ begin-module keyboard
         + + c@ ( raw-event key|0 )
       then
       over .key c! ( event )
-      dup keyb-internals :: update-counters-flags ( event )
     then
   ;
 
@@ -543,7 +548,7 @@ begin-module keyboard
   ( -- event|0 )
   : keyb-poll-keydown-event
     keyb-poll-event dup if ( event )
-      dup .upndown if drop 0 then ( event|0 )
+      dup .upndown c@ if drop 0 then ( event|0 )
     then ( event|0 )
   ;
 
@@ -559,14 +564,14 @@ begin-module keyboard
 
   keyb-internals continue-module
 
+    ( -- )
     : test
       begin
         keyb-get-keydown-event ( event )
         dup .scancode c@ SCANCODE-ESCAPE = if ( event )
           drop exit ( )
         then ( event )
-        .key c@ emit
-        drop ( )
+        .key c@ emit ( )
       again
     ;
   end-module
