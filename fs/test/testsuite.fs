@@ -291,7 +291,7 @@ variable key-event-raw-hook-test-fired
 
 : key-event-raw-hook-test
   ." key-event-raw-hook >>>" cr
-  key-event-raw keyb-raw-event. cr
+  key-event-raw keyb-event. cr
   key-event-raw .scancode c@ SCANCODE-P = ?assert
   key-event-raw .modifiers c@ KEYMOD-LCTRL = ?assert
   key-event-raw .upndown c@ 0= ?assert
@@ -317,7 +317,7 @@ key-event-raw-hook-test-fired @ 1 = ?assert
 \ The test hook intercepted the P keypress.
 \ The Q keypress should have ended up in the queue.
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
 dup .modifiers c@ KEYMOD-LCTRL = ?assert
 dup .upndown c@ 0 = ?assert
@@ -332,7 +332,7 @@ keyb-poll-raw-event 0= ?assert
 
 \ Verify we received both key release events.
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-P = ?assert
 dup .modifiers c@ KEYMOD-LCTRL = ?assert
 dup .upndown c@ 0<> ?assert
@@ -340,7 +340,7 @@ dup .flags c@ 0 = ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
 dup .modifiers c@ KEYMOD-LCTRL = ?assert
 dup .upndown c@ 0<> ?assert
@@ -359,7 +359,7 @@ keyb-#events-pending 10 > ?assert
 
 \ The 1st event is not a repeat event yet.
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-A = ?assert
 dup .upndown c@ 0= ?assert
 dup .flags c@ 0= ?assert
@@ -369,7 +369,7 @@ drop
 [: 
   keyb-#events-pending 1- 0 do
     keyb-get-raw-event ( event )
-    dup keyb-raw-event. cr
+    dup keyb-event. cr
     dup .scancode c@ SCANCODE-A = ?assert
     dup .upndown c@ 0= ?assert
     dup .flags c@ KEY-FLAG-REPEAT and ?assert
@@ -378,7 +378,7 @@ drop
 
 \ The key release.
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-A = ?assert
 dup .upndown c@ 0<> ?assert
 dup .flags c@ 0= ?assert
@@ -411,7 +411,7 @@ keyb-#events-pending 10 > ?assert
 [: 
   keyb-#events-pending 1- 0 do
     keyb-get-raw-event ( event )
-    dup keyb-raw-event. cr
+    dup keyb-event. cr
     dup .scancode c@ SCANCODE-B = ?assert
     dup .flags c@ 0= ?assert
     drop
@@ -423,7 +423,7 @@ keyb-overflow? 0= ?assert
 
 \ Fetch the last evetn.
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-B = ?assert
 dup .upndown c@ 0<> ?assert
 dup .flags c@ 0= ?assert
@@ -543,7 +543,7 @@ SCANCODE-K USB_HID_0_KEYS_ADDR !
 
 \ Pick up and check all the key events this generated.
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-H = ?assert
 dup .upndown c@ 0= ?assert
 dup .flags c@ 0= ?assert
@@ -551,12 +551,12 @@ dup .modifiers c@ KEYMOD-LCTRL = ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-I = ?assert
 dup .upndown c@ 0= ?assert
 dup .flags c@ 0= ?assert
@@ -564,12 +564,12 @@ dup .modifiers c@ KEYMOD-LCTRL KEYMOD-LSHIFT or = ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-J = ?assert
 dup .upndown c@ 0= ?assert
 dup .flags c@ 0= ?assert
@@ -577,12 +577,12 @@ dup .modifiers c@ KEYMOD-LCTRL KEYMOD-LSHIFT KEYMOD-LALT or or = ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-K = ?assert
 dup .upndown c@ 0= ?assert
 dup .flags c@ 0= ?assert
@@ -590,7 +590,7 @@ dup .modifiers c@ KEYMOD-LCTRL KEYMOD-LSHIFT KEYMOD-LALT KEYMOD-LWIN or or or = 
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 drop
 
@@ -615,7 +615,7 @@ SCANCODE-K USB_HID_0_KEYS_ADDR !
 0 USB_HID_0_KEYS_ADDR !
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-H = ?assert
 dup .upndown c@ 0= ?assert
 dup .flags c@ 0= ?assert
@@ -623,12 +623,12 @@ dup .modifiers c@ KEYMOD-RCTRL = ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-I = ?assert
 dup .upndown c@ 0= ?assert
 dup .flags c@ 0= ?assert
@@ -636,12 +636,12 @@ dup .modifiers c@ KEYMOD-RCTRL KEYMOD-RSHIFT or = ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-J = ?assert
 dup .upndown c@ 0= ?assert
 dup .flags c@ 0= ?assert
@@ -649,12 +649,12 @@ dup .modifiers c@ KEYMOD-RCTRL KEYMOD-RSHIFT KEYMOD-RALT or or = ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .scancode c@ SCANCODE-K = ?assert
 dup .upndown c@ 0= ?assert
 dup .flags c@ 0= ?assert
@@ -662,7 +662,7 @@ dup .modifiers c@ KEYMOD-RCTRL KEYMOD-RSHIFT KEYMOD-RALT KEYMOD-RWIN or or or = 
 drop
 
 keyb-get-raw-event ( event )
-dup keyb-raw-event. cr
+dup keyb-event. cr
 dup .upndown c@ 0<> ?assert
 drop
 
@@ -673,7 +673,7 @@ keyb-#events-pending 0= ?assert
 SCANCODE-A USB_HID_0_KEYS_ADDR !
 [: 30 0 do
     keyb-get-raw-event ( event )
-    dup keyb-raw-event. cr
+    dup keyb-event. cr
     drop
   loop
 ;] execute
@@ -821,7 +821,7 @@ keyb-get-keydown-event
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
 dup .upndown c@ 0= ?assert
-dup .flags c@ 0= ?assert
+dup .flags c@ KEY-FLAG-MAPPED-EVENT = ?assert
 dup .key c@ ASCII-LCASE-A = ?assert
 drop
 
@@ -837,7 +837,7 @@ keyb-get-keydown-event
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
 dup .upndown c@ 0= ?assert
-dup .flags c@ 0= ?assert
+dup .flags c@ KEY-FLAG-MAPPED-EVENT = ?assert
 dup .key c@ ASCII-LCASE-A = ?assert
 drop
 
@@ -860,7 +860,7 @@ keyb-get-keydown-event
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-KEYPAD-1 = ?assert
 dup .upndown c@ 0= ?assert
-dup .flags c@ 0= ?assert
+dup .flags c@ KEY-FLAG-MAPPED-EVENT = ?assert
 dup .key c@ KEY-END = ?assert
 drop
 
@@ -876,7 +876,7 @@ keyb-get-keydown-event
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-KEYPAD-1 = ?assert
 dup .upndown c@ 0= ?assert
-dup .flags c@ 0= ?assert
+dup .flags c@ KEY-FLAG-MAPPED-EVENT = ?assert
 dup .key c@ KEY-END = ?assert
 drop
 
@@ -901,7 +901,7 @@ keyb-get-keydown-event
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
 dup .upndown c@ 0= ?assert
-dup .flags c@ 0= ?assert
+dup .flags c@ KEY-FLAG-MAPPED-EVENT = ?assert
 dup .key c@ ASCII-UCASE-A = ?assert
 drop
 
@@ -917,7 +917,7 @@ keyb-get-keydown-event
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-Q = ?assert
 dup .upndown c@ 0= ?assert
-dup .flags c@ 0= ?assert
+dup .flags c@ KEY-FLAG-MAPPED-EVENT = ?assert
 dup .key c@ ASCII-UCASE-A = ?assert
 drop
 
@@ -931,7 +931,7 @@ keyb-get-keydown-event
 dup keyb-event. cr
 dup .scancode c@ SCANCODE-2 = ?assert
 dup .upndown c@ 0= ?assert
-dup .flags c@ 0= ?assert
+dup .flags c@ KEY-FLAG-MAPPED-EVENT = ?assert
 dup .key c@ ASCII-AT = ?assert
 drop
 
